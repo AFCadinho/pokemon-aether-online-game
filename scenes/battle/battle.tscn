@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c5qh718vudn8y"]
+
+[node name="Battle" type="Control" unique_id=423111793]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="BattlePanel" type="PanelContainer" parent="." unique_id=536817862]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

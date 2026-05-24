@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d45mhj1xs83s"]
+
+[ext_resource type="Script" uid="uid://xj4c51qeo0l2" path="res://scripts/world/world.gd" id="1_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://b65lnk8twsct" path="res://scenes/overworld/kanto/routes/kanto_route_1.tscn" id="1_rwgxs"]
+[ext_resource type="PackedScene" uid="uid://eh1d243t3uvl" path="res://scenes/player.tscn" id="2_4wyf3"]
+
+[node name="World" type="Node2D" unique_id=618561729]
+script = ExtResource("1_4wyf3")
+
+[node name="CurrentMap" type="Node2D" parent="." unique_id=1205265542 groups=["current_map"]]
+
+[node name="KantoRoute1" parent="CurrentMap" unique_id=1284880823 instance=ExtResource("1_rwgxs")]
+
+[node name="Player" parent="." unique_id=1734997832 instance=ExtResource("2_4wyf3")]
+position = Vector2(399, 1310)
