@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bsce6wvccjqik" path="res://assets/tilesets/overworld/interior/Interiors6.png" id="4_4woxn"]
 [ext_resource type="Texture2D" uid="uid://80ehka6bybdc" path="res://assets/tilesets/overworld/interior/Interiors11.png" id="4_sxk7c"]
 [ext_resource type="Texture2D" uid="uid://bocjn3eo81c1r" path="res://assets/tilesets/overworld/interior/Interiors14.png" id="5_625wd"]
+[ext_resource type="Script" uid="uid://dc87fdx313qm4" path="res://scripts/world/kanto/towns/pallet_town/oak.gd" id="6_m2ga1"]
 [ext_resource type="Texture2D" uid="uid://c11wckd63c0bu" path="res://assets/npcs/kanto/professor_rowan.png" id="7_aq02p"]
 [ext_resource type="Script" uid="uid://dguhd4ywnh3rf" path="res://scripts/world/kanto/towns/pallet_town/to_pallet_town.gd" id="8_rguhm"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
@@ -1958,6 +1959,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m2ga1"]
+size = Vector2(69, 79)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_625wd"]
 texture = ExtResource("3_16oxl")
 texture_region_size = Vector2i(32, 32)
@@ -3600,6 +3604,7 @@ y_sort_enabled = true
 
 [node name="Oak" type="Node2D" parent="Characters" unique_id=944228146]
 position = Vector2(240, 120)
+script = ExtResource("6_m2ga1")
 
 [node name="Look" type="Node2D" parent="Characters/Oak" unique_id=1526777497]
 position = Vector2(0, -38)
@@ -3607,6 +3612,12 @@ position = Vector2(0, -38)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Characters/Oak/Look" unique_id=1831722847]
 sprite_frames = SubResource("SpriteFrames_ywtjb")
 animation = &"idle_down"
+
+[node name="InteractionArea" type="Area2D" parent="Characters/Oak/Look" unique_id=236861381]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Characters/Oak/Look/InteractionArea" unique_id=161826291]
+position = Vector2(-1.5, 11.5)
+shape = SubResource("RectangleShape2D_m2ga1")
 
 [node name="Objects" type="Node2D" parent="." unique_id=1375415174]
 z_index = 3
@@ -3639,4 +3650,6 @@ z_index = -99
 tile_map_data = PackedByteArray("AAAPAP//AAABAAEAAAAOAP//AAABAAEAAAANAP//AAABAAEAAAAMAP//AAABAAEAAAALAP//AAABAAEAAAAKAP//AAABAAEAAAAJAP//AAABAAEAAAAIAP//AAABAAEAAAAHAP//AAABAAEAAAAGAP//AAABAAEAAAAFAP//AAABAAEAAAAEAP//AAABAAEAAAADAP//AAABAAEAAAACAP//AAABAAEAAAABAP//AAABAAEAAAAAAP//AAABAAEAAAD/////AAABAAEAAAD//wAAAAABAAEAAAD//wEAAAABAAEAAAD//wIAAAABAAEAAAD//w0AAAABAAEAAAD//wwAAAABAAEAAAD//wsAAAABAAEAAAD//woAAAABAAEAAAD//wkAAAABAAEAAAD//wgAAAABAAEAAAD//wcAAAABAAEAAAD//wYAAAABAAEAAAD//wUAAAABAAEAAAD//wQAAAABAAEAAAD//wMAAAABAAEAAAAAAA0AAAABAAEAAAABAA0AAAABAAEAAAACAA0AAAABAAEAAAADAA0AAAABAAEAAAAEAA0AAAABAAEAAAAFAA0AAAABAAEAAAAGAA0AAAABAAEAAAAHAA0AAAABAAEAAAAIAA0AAAABAAEAAAAJAA0AAAABAAEAAAAKAA0AAAABAAEAAAALAA0AAAABAAEAAAAMAA0AAAABAAEAAAANAA0AAAABAAEAAAAOAA0AAAABAAEAAAAPAA0AAAABAAEAAAAPAAAAAAABAAEAAAAPAAEAAAABAAEAAAAPAAIAAAABAAEAAAAPAAMAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAAAAcAAAABAAEAAAABAAcAAAABAAEAAAACAAcAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAACAAgAAAABAAEAAAABAAgAAAABAAEAAAAAAAgAAAABAAEAAAAKAAcAAAABAAEAAAALAAcAAAABAAEAAAAMAAcAAAABAAEAAAAMAAgAAAABAAEAAAANAAgAAAABAAEAAAANAAcAAAABAAEAAAALAAgAAAABAAEAAAAKAAgAAAABAAEAAAACAAUAAAABAAEAAAABAAUAAAABAAEAAAAAAAUAAAABAAEAAAAAAAQAAAABAAEAAAAAAAMAAAABAAEAAAABAAMAAAABAAEAAAACAAMAAAABAAEAAAACAAQAAAABAAEAAAABAAQAAAABAAEAAAAAAAAAAAABAAEAAAABAAAAAAABAAEAAAACAAAAAAABAAEAAAADAAAAAAABAAEAAAAEAAAAAAABAAEAAAAFAAAAAAABAAEAAAAGAAAAAAABAAEAAAAHAAAAAAABAAEAAAAIAAAAAAABAAEAAAAKAAAAAAABAAEAAAALAAAAAAABAAEAAAAMAAAAAAABAAEAAAANAAAAAAABAAEAAAAHAAMAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_fkl8t")
 
+[connection signal="body_entered" from="Characters/Oak/Look/InteractionArea" to="Characters/Oak" method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="Characters/Oak/Look/InteractionArea" to="Characters/Oak" method="_on_interaction_area_body_exited"]
 [connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]

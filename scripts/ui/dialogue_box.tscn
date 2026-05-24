@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://crrp2rnop4xdb"]
+
+[ext_resource type="Script" uid="uid://dhrsegx33ab2u" path="res://scripts/ui/dialogue_box.gd" id="1_pmm6m"]
+
+[node name="DialogueBox" type="CanvasLayer" unique_id=1341619813]
+
+[node name="Box" type="Control" parent="." unique_id=330933920]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pmm6m")
+
+[node name="PanelContainer" type="Panel" parent="Box" unique_id=724076955]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -300.0
+offset_right = -40.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Box/PanelContainer" unique_id=1439079259]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer" unique_id=627441881]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="Box/PanelContainer/MarginContainer/VBoxContainer" unique_id=276150140]
+layout_mode = 2
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Box/PanelContainer/MarginContainer/VBoxContainer" unique_id=1276683663]
+layout_mode = 2
+size_flags_vertical = 3
