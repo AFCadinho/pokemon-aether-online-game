@@ -1,4 +1,15 @@
-# Godot 4+ specific ignores
+# Godot editor cache and generated import data.
 .godot/
+
+# Local export/build output.
+/builds/*
+!/builds/web/
+/builds/web/*
+!/builds/web/.gitkeep
+
+# Android export/build output.
 /android/
-assets/sprites/
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db

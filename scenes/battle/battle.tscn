@@ -10,31 +10,12 @@
 [ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
 [ext_resource type="Texture2D" uid="uid://c4s406fdsdgxv" path="res://assets/sprites/battle_buttons/run.png" id="7_pyfix"]
 [ext_resource type="Texture2D" uid="uid://cfhy5qr6y452g" path="res://assets/sprites/pokemon/back/garchomp/frame_000.png" id="8_8eh2s"]
-[ext_resource type="Texture2D" uid="uid://c7noabeew0jms" path="res://assets/sprites/pokemon/back/garchomp/frame_004.png" id="9_e48mi"]
-[ext_resource type="Texture2D" uid="uid://2fnlm3xe8m7b" path="res://assets/sprites/pokemon/back/garchomp/frame_008.png" id="10_ueicy"]
-[ext_resource type="Texture2D" uid="uid://dovj03046vcul" path="res://assets/sprites/pokemon/back/garchomp/frame_012.png" id="11_n5ix6"]
-[ext_resource type="Texture2D" uid="uid://u6y6665eqjmf" path="res://assets/sprites/pokemon/back/garchomp/frame_016.png" id="12_tnndc"]
 [ext_resource type="Texture2D" uid="uid://dcp5q6uei1pnl" path="res://assets/sprites/pokemon/back/garchomp/frame_020.png" id="13_k6ux7"]
-[ext_resource type="Texture2D" uid="uid://cwjheocvk8qcv" path="res://assets/sprites/pokemon/back/garchomp/frame_024.png" id="14_1oulw"]
-[ext_resource type="Texture2D" uid="uid://dg7dbwrfl6t4m" path="res://assets/sprites/pokemon/back/garchomp/frame_028.png" id="15_kavl5"]
-[ext_resource type="Texture2D" uid="uid://ca7sd7jovtk6i" path="res://assets/sprites/pokemon/back/garchomp/frame_032.png" id="16_p63xb"]
 [ext_resource type="Texture2D" uid="uid://72sem1vlhnsy" path="res://assets/sprites/pokemon/back/garchomp/frame_036.png" id="17_m24mv"]
-[ext_resource type="Texture2D" uid="uid://dp02ffl762lvv" path="res://assets/sprites/pokemon/back/garchomp/frame_040.png" id="18_1x3g8"]
-[ext_resource type="Texture2D" uid="uid://bcdeu7dko823q" path="res://assets/sprites/pokemon/back/garchomp/frame_044.png" id="19_01pft"]
-[ext_resource type="Texture2D" uid="uid://dok2snrn5o7sy" path="res://assets/sprites/pokemon/back/garchomp/frame_048.png" id="20_afkbo"]
-[ext_resource type="Texture2D" uid="uid://dxcapi3ju2i38" path="res://assets/sprites/pokemon/back/garchomp/frame_052.png" id="21_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://b8hd0tvy4x4tk" path="res://assets/sprites/pokemon/back/garchomp/frame_056.png" id="22_dsauo"]
 [ext_resource type="Texture2D" uid="uid://mhtihqhejveh" path="res://assets/sprites/pokemon/front/blaziken/frame_000.png" id="23_1x3g8"]
-[ext_resource type="Texture2D" uid="uid://dqvvcyeux4evv" path="res://assets/sprites/pokemon/front/blaziken/frame_004.png" id="24_01pft"]
-[ext_resource type="Texture2D" uid="uid://damlj3pi1i14p" path="res://assets/sprites/pokemon/front/blaziken/frame_008.png" id="25_afkbo"]
-[ext_resource type="Texture2D" uid="uid://b6yxi4m3si74v" path="res://assets/sprites/pokemon/front/blaziken/frame_012.png" id="26_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://4gb2yu0xr2wn" path="res://assets/sprites/pokemon/front/blaziken/frame_016.png" id="27_dsauo"]
-[ext_resource type="Texture2D" uid="uid://bndbvf48hky33" path="res://assets/sprites/pokemon/front/blaziken/frame_020.png" id="28_ilhaa"]
-[ext_resource type="Texture2D" uid="uid://brd280k7xelb5" path="res://assets/sprites/pokemon/front/blaziken/frame_024.png" id="29_v3sqs"]
 [ext_resource type="Texture2D" uid="uid://3noc6p4tcw5v" path="res://assets/sprites/pokemon/front/blaziken/frame_028.png" id="30_m7fqn"]
-[ext_resource type="Texture2D" uid="uid://f87idd4bg5d6" path="res://assets/sprites/pokemon/front/blaziken/frame_032.png" id="31_j021e"]
-[ext_resource type="Texture2D" uid="uid://cop7l180g8l6b" path="res://assets/sprites/pokemon/front/blaziken/frame_036.png" id="32_eu6pb"]
-[ext_resource type="Texture2D" uid="uid://bfpw1nywfsxkq" path="res://assets/sprites/pokemon/front/blaziken/frame_040.png" id="33_fagrh"]
 [ext_resource type="Texture2D" uid="uid://cfsuue15y1idy" path="res://assets/sprites/pokemon/front/blaziken/frame_044.png" id="34_pqmvt"]
 [ext_resource type="Texture2D" uid="uid://c5dxctq04cn66" path="res://assets/battles/mechanics/mega-evolution.png" id="37_afkbo"]
 [ext_resource type="Texture2D" uid="uid://c2cbq02hrb073" path="res://assets/battles/mechanics/z-move.png" id="38_8h6bs"]
@@ -140,43 +121,10 @@ animations = [{
 "texture": ExtResource("8_8eh2s")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_e48mi")
-}, {
-"duration": 1.0,
-"texture": ExtResource("10_ueicy")
-}, {
-"duration": 1.0,
-"texture": ExtResource("11_n5ix6")
-}, {
-"duration": 1.0,
-"texture": ExtResource("12_tnndc")
-}, {
-"duration": 1.0,
 "texture": ExtResource("13_k6ux7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_1oulw")
-}, {
-"duration": 1.0,
-"texture": ExtResource("15_kavl5")
-}, {
-"duration": 1.0,
-"texture": ExtResource("16_p63xb")
-}, {
-"duration": 1.0,
 "texture": ExtResource("17_m24mv")
-}, {
-"duration": 1.0,
-"texture": ExtResource("18_1x3g8")
-}, {
-"duration": 1.0,
-"texture": ExtResource("19_01pft")
-}, {
-"duration": 1.0,
-"texture": ExtResource("20_afkbo")
-}, {
-"duration": 1.0,
-"texture": ExtResource("21_8h6bs")
 }, {
 "duration": 1.0,
 "texture": ExtResource("22_dsauo")
@@ -193,34 +141,10 @@ animations = [{
 "texture": ExtResource("23_1x3g8")
 }, {
 "duration": 1.0,
-"texture": ExtResource("24_01pft")
-}, {
-"duration": 1.0,
-"texture": ExtResource("25_afkbo")
-}, {
-"duration": 1.0,
-"texture": ExtResource("26_8h6bs")
-}, {
-"duration": 1.0,
 "texture": ExtResource("27_dsauo")
 }, {
 "duration": 1.0,
-"texture": ExtResource("28_ilhaa")
-}, {
-"duration": 1.0,
-"texture": ExtResource("29_v3sqs")
-}, {
-"duration": 1.0,
 "texture": ExtResource("30_m7fqn")
-}, {
-"duration": 1.0,
-"texture": ExtResource("31_j021e")
-}, {
-"duration": 1.0,
-"texture": ExtResource("32_eu6pb")
-}, {
-"duration": 1.0,
-"texture": ExtResource("33_fagrh")
 }, {
 "duration": 1.0,
 "texture": ExtResource("34_pqmvt")
