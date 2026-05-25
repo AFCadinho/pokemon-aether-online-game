@@ -1,0 +1,78 @@
+name: Post Commit Messages to Discord
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  notify:
+    name: Send commit summary
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send commits to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_TESTER_ROLE_ID: ${{ secrets.DISCORD_TESTER_ROLE_ID }}
+          COMMITS_JSON: ${{ toJson(github.event.commits) }}
+        run: |
+          test -n "${DISCORD_WEBHOOK_URL}"
+
+          python3 - <<'PY' > discord_payload.json
+          import json
+          import os
+
+          commits = json.loads(os.environ["COMMITS_JSON"])
+          tester_role_id = os.environ.get("DISCORD_TESTER_ROLE_ID", "").strip()
+
+          if not commits:
+              changes = "No commit details were provided."
+          else:
+              lines = []
+              for commit in commits[:10]:
+                  message = commit["message"].strip()
+                  lines.append(f"```text\n{message}\n```")
+
+              if len(commits) > 10:
+                  lines.append(f"- ... and {len(commits) - 10} additional commits")
+
+              changes = "\n".join(lines)
+
+          description = (
+              "A new test build is ready to play.\n"
+              "This update may include UI changes or gameplay logic updates."
+          )
+
+          payload = {
+              "username": "Pokemon Aether Online",
+              "content": f"<@&{tester_role_id}>" if tester_role_id else "",
+              "allowed_mentions": {
+                  "roles": [tester_role_id] if tester_role_id else [],
+              },
+              "embeds": [
+                  {
+                      "title": "New test build available",
+                      "description": description,
+                      "color": 5814783,
+                      "fields": [
+                          {
+                              "name": "Changes",
+                              "value": changes,
+                              "inline": False,
+                          },
+                      ],
+                  }
+              ],
+          }
+
+          print(json.dumps(payload))
+          PY
+
+          curl -sS \
+            -H "Content-Type: application/json" \
+            -d @discord_payload.json \
+            "${DISCORD_WEBHOOK_URL}"

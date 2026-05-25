@@ -1,0 +1,79 @@
+name: Deploy Web Build to itch.io
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-itch
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  GODOT_VERSION: 4.6.2
+  GODOT_RELEASE: stable
+  EXPORT_PRESET: Web Build
+  EXPORT_PATH: builds/web/index.html
+  ITCH_TARGET: afc-adinho/pokemonaetheronline:html5
+
+jobs:
+  deploy:
+    name: Export and deploy Web build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y unzip
+
+      - name: Download Godot
+        run: |
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip"
+          unzip -q godot.zip
+          mv "Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64" godot
+          chmod +x godot
+
+      - name: Install Godot export templates
+        run: |
+          curl -L -o export_templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz"
+          unzip -q export_templates.tpz -d /tmp/godot-export-templates
+          mkdir -p "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
+          mv /tmp/godot-export-templates/templates/* "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/"
+
+      - name: Import Godot assets
+        run: ./godot --headless --import --quit
+
+      - name: Export Web build
+        run: |
+          mkdir -p builds/web
+          ./godot --headless --export-release "${EXPORT_PRESET}" "${EXPORT_PATH}"
+
+      - name: Verify Web build
+        run: |
+          test -f builds/web/index.html
+          test -f builds/web/index.js
+          test -f builds/web/index.wasm
+          test -f builds/web/index.pck
+
+      - name: Upload Web build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: builds/web
+
+      - name: Download butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q butler.zip
+          chmod +x butler
+
+      - name: Deploy to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.ITCH_IO_API_KEY }}
+        run: |
+          test -n "${BUTLER_API_KEY}"
+          ./butler push builds/web "${ITCH_TARGET}"

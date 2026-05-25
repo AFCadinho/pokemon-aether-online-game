@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bqj3ifxyy7gdh"]
+
+[ext_resource type="Texture2D" uid="uid://t8r3xvxds5aj" path="res://assets/sprites/pokemon/pokemon_home/Archaludon.png" id="1_nd8rq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmnus"]
+bg_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nd8rq"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rmfdk"]
+bg_color = Color(0.3882353, 0.83137256, 0.44313726, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nd8rq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kmnus"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rmfdk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ohghb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jup6d"]
+
+[node name="PartySlot" type="PanelContainer" unique_id=899956667]
+custom_minimum_size = Vector2(260, 44)
+theme_override_styles/panel = SubResource("StyleBoxFlat_kmnus")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1270644811]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1102260050]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PokemonSprite" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=595868958]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("1_nd8rq")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1673202340]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=714565378]
+layout_mode = 2
+text = "Archaludon Lv. 100"
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1214713841]
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_nd8rq")
+theme_override_styles/fill = SubResource("StyleBoxFlat_rmfdk")
+value = 100.0
+
+[node name="ClickButton" type="Button" parent="." unique_id=2018778636]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_nd8rq")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_kmnus")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_rmfdk")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ohghb")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jup6d")
+flat = true
