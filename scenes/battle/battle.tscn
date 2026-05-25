@@ -534,14 +534,14 @@ text = "Turn: 10"
 position = Vector2(512, 340)
 scale = Vector2(2.5, 2.5)
 sprite_frames = SubResource("SpriteFrames_ilhaa")
-frame_progress = 0.5361241
+frame_progress = 0.9451756
 
 [node name="EnemySprite" type="AnimatedSprite2D" parent="BattleArena" unique_id=1776410686]
 position = Vector2(937, 219.00003)
 scale = Vector2(2.5, 2.5)
 sprite_frames = SubResource("SpriteFrames_t60p8")
 animation = &"new_animation"
-frame_progress = 0.9897592
+frame_progress = 0.103211775
 
 [node name="Participants" type="Panel" parent="BattleArena" unique_id=1993478683]
 layout_mode = 0
