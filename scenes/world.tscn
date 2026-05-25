@@ -17,6 +17,5 @@ script = ExtResource("1_4wyf3")
 position = Vector2(304, 350)
 
 [node name="DialogueBox" parent="." unique_id=1029700965 instance=ExtResource("4_k0juu")]
-visible = false
 
 [node name="UIOverlay" parent="." unique_id=2126675853 instance=ExtResource("5_71j4m")]

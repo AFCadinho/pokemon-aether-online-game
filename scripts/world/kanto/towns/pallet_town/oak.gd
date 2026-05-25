@@ -35,7 +35,7 @@ func talk() -> void:
 	
 	if PlayerSave.flags.get("received_starter", false):
 		dialogue_box.start_dialogue([
-			"Oak: Take god care of Charmander!"
+			"Take god care of Charmander!"
 		])
 		return
 	else:
@@ -44,10 +44,12 @@ func talk() -> void:
 		PlayerSave.flags["received_starter"] = true
 		
 		dialogue_box.start_dialogue([
-			"Oak: Ah, there you are!",
-			"Oak: Take this Charmander with you.",
+			"Ah, there you are!",
+			"Take this Charmander with you.",
 			"You received Charmander!"
-		])
+		],
+		"Prof. Oak"
+		)
 	
 func give_starter_pokemon(pokemon_name) -> Pokemon:
 	return Pokemon.new(

@@ -1,6 +1,23 @@
 [gd_scene format=3 uid="uid://crrp2rnop4xdb"]
 
 [ext_resource type="Script" uid="uid://dhrsegx33ab2u" path="res://scripts/ui/dialogue_box.gd" id="1_pmm6m"]
+[ext_resource type="Texture2D" uid="uid://bmainpxahsft1" path="res://assets/sprites/mugshots/prof_oak.png" id="2_bnoha"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pmm6m"]
+bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7058824)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bnoha"]
+atlas = ExtResource("2_bnoha")
+region = Rect2(0, 2, 232, 239)
 
 [node name="DialogueBox" type="CanvasLayer" unique_id=1341619813]
 
@@ -15,16 +32,15 @@ script = ExtResource("1_pmm6m")
 
 [node name="PanelContainer" type="Panel" parent="Box" unique_id=724076955]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = -300.0
-offset_right = -40.0
-offset_bottom = -120.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 120.0
+offset_right = 221.0
+offset_bottom = 310.0
 grow_horizontal = 2
-grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pmm6m")
 
 [node name="MarginContainer" type="MarginContainer" parent="Box/PanelContainer" unique_id=1439079259]
 layout_mode = 1
@@ -33,14 +49,61 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer" unique_id=627441881]
+[node name="HBoxContainer" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer" unique_id=111781305]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="Box/PanelContainer/MarginContainer/VBoxContainer" unique_id=276150140]
+[node name="Panel" type="Panel" parent="Box/PanelContainer/MarginContainer/HBoxContainer" unique_id=1970599554]
+custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
-vertical_alignment = 1
+size_flags_horizontal = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Box/PanelContainer/MarginContainer/VBoxContainer" unique_id=1276683663]
+[node name="MarginContainer" type="MarginContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel" unique_id=117443700]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer" unique_id=627441881]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=1276683663]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+text = "Leave some for me."
+fit_content = true
+scroll_active = false
+
+[node name="ConitinueArrow" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer" unique_id=1864270790]
+layout_mode = 2
+size_flags_vertical = 8
+text = "▼"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer" unique_id=720977074]
+layout_mode = 2
+
+[node name="NPCSprite" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1241935148]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = SubResource("AtlasTexture_bnoha")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NPCName" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=80748289]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Prof. Oak"
+horizontal_alignment = 1

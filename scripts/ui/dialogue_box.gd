@@ -1,7 +1,7 @@
 extends Control
 
-@onready var name_label: Label = $PanelContainer/MarginContainer/VBoxContainer/NameLabel
-@onready var text_label: RichTextLabel = $PanelContainer/MarginContainer/VBoxContainer/RichTextLabel
+@onready var name_label: Label = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/NPCName
+@onready var text_label: RichTextLabel = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RichTextLabel
 
 var is_open := false
 var just_started := false
@@ -14,7 +14,7 @@ func _ready() -> void:
 	hide_dialogue()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not is_open:
 		return
 	
