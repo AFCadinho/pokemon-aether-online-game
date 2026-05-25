@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://cir3bfnfoy4l4"]
+
+[ext_resource type="Texture2D" uid="uid://dflc5atoafbw1" path="res://assets/sprites/types/13.png" id="1_b4k6w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4k6w"]
+
+[node name="MoveSlot" type="Button" unique_id=901085712]
+custom_minimum_size = Vector2(200, 90)
+offset_right = 180.0
+offset_bottom = 80.0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_b4k6w")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1554189980]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1414571164]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TypeBanner" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=313495218]
+custom_minimum_size = Vector2(90, 22)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_b4k6w")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=296017235]
+layout_mode = 2
+
+[node name="MoveNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1649728986]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Thunderbolt"
+text_overrun_behavior = 6
+
+[node name="PPLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1696639893]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 12
+text = "24/24"
+horizontal_alignment = 2
+
+[node name="EffectivenessLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=825452079]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "super effective"

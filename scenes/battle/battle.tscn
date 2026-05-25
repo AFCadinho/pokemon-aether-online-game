@@ -1,10 +1,628 @@
 [gd_scene format=3 uid="uid://c5qh718vudn8y"]
 
+[ext_resource type="Texture2D" uid="uid://w72nkcnflkf8" path="res://assets/background/battle/PATH.png" id="1_xd4uy"]
+[ext_resource type="PackedScene" uid="uid://cir3bfnfoy4l4" path="res://scenes/battle/move_slot.tscn" id="2_h0kxc"]
+[ext_resource type="PackedScene" uid="uid://3gsmmeerkva2" path="res://scenes/battle/party_slot.tscn" id="3_fh7rg"]
+[ext_resource type="Texture2D" uid="uid://b0mdtgfn4y3qi" path="res://assets/sprites/battle_buttons/fight.png" id="4_pll4o"]
+[ext_resource type="Texture2D" uid="uid://dsbm3h77o41xr" path="res://assets/sprites/battle_buttons/bag.png" id="5_py4tk"]
+[ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
+[ext_resource type="Texture2D" uid="uid://bu15l1d48wytd" path="res://assets/sprites/pokemon/pokemon_home/Arcanine-Hisui.png" id="6_fh7rg"]
+[ext_resource type="Texture2D" uid="uid://c4s406fdsdgxv" path="res://assets/sprites/battle_buttons/run.png" id="7_pyfix"]
+[ext_resource type="Texture2D" uid="uid://cfhy5qr6y452g" path="res://assets/sprites/pokemon/back/garchomp/frame_000.png" id="8_8eh2s"]
+[ext_resource type="Texture2D" uid="uid://c7noabeew0jms" path="res://assets/sprites/pokemon/back/garchomp/frame_004.png" id="9_e48mi"]
+[ext_resource type="Texture2D" uid="uid://2fnlm3xe8m7b" path="res://assets/sprites/pokemon/back/garchomp/frame_008.png" id="10_ueicy"]
+[ext_resource type="Texture2D" uid="uid://dovj03046vcul" path="res://assets/sprites/pokemon/back/garchomp/frame_012.png" id="11_n5ix6"]
+[ext_resource type="Texture2D" uid="uid://u6y6665eqjmf" path="res://assets/sprites/pokemon/back/garchomp/frame_016.png" id="12_tnndc"]
+[ext_resource type="Texture2D" uid="uid://dcp5q6uei1pnl" path="res://assets/sprites/pokemon/back/garchomp/frame_020.png" id="13_k6ux7"]
+[ext_resource type="Texture2D" uid="uid://cwjheocvk8qcv" path="res://assets/sprites/pokemon/back/garchomp/frame_024.png" id="14_1oulw"]
+[ext_resource type="Texture2D" uid="uid://dg7dbwrfl6t4m" path="res://assets/sprites/pokemon/back/garchomp/frame_028.png" id="15_kavl5"]
+[ext_resource type="Texture2D" uid="uid://ca7sd7jovtk6i" path="res://assets/sprites/pokemon/back/garchomp/frame_032.png" id="16_p63xb"]
+[ext_resource type="Texture2D" uid="uid://72sem1vlhnsy" path="res://assets/sprites/pokemon/back/garchomp/frame_036.png" id="17_m24mv"]
+[ext_resource type="Texture2D" uid="uid://dp02ffl762lvv" path="res://assets/sprites/pokemon/back/garchomp/frame_040.png" id="18_1x3g8"]
+[ext_resource type="Texture2D" uid="uid://bcdeu7dko823q" path="res://assets/sprites/pokemon/back/garchomp/frame_044.png" id="19_01pft"]
+[ext_resource type="Texture2D" uid="uid://dok2snrn5o7sy" path="res://assets/sprites/pokemon/back/garchomp/frame_048.png" id="20_afkbo"]
+[ext_resource type="Texture2D" uid="uid://dxcapi3ju2i38" path="res://assets/sprites/pokemon/back/garchomp/frame_052.png" id="21_8h6bs"]
+[ext_resource type="Texture2D" uid="uid://b8hd0tvy4x4tk" path="res://assets/sprites/pokemon/back/garchomp/frame_056.png" id="22_dsauo"]
+[ext_resource type="Texture2D" uid="uid://mhtihqhejveh" path="res://assets/sprites/pokemon/front/blaziken/frame_000.png" id="23_1x3g8"]
+[ext_resource type="Texture2D" uid="uid://dqvvcyeux4evv" path="res://assets/sprites/pokemon/front/blaziken/frame_004.png" id="24_01pft"]
+[ext_resource type="Texture2D" uid="uid://damlj3pi1i14p" path="res://assets/sprites/pokemon/front/blaziken/frame_008.png" id="25_afkbo"]
+[ext_resource type="Texture2D" uid="uid://b6yxi4m3si74v" path="res://assets/sprites/pokemon/front/blaziken/frame_012.png" id="26_8h6bs"]
+[ext_resource type="Texture2D" uid="uid://4gb2yu0xr2wn" path="res://assets/sprites/pokemon/front/blaziken/frame_016.png" id="27_dsauo"]
+[ext_resource type="Texture2D" uid="uid://bndbvf48hky33" path="res://assets/sprites/pokemon/front/blaziken/frame_020.png" id="28_ilhaa"]
+[ext_resource type="Texture2D" uid="uid://brd280k7xelb5" path="res://assets/sprites/pokemon/front/blaziken/frame_024.png" id="29_v3sqs"]
+[ext_resource type="Texture2D" uid="uid://3noc6p4tcw5v" path="res://assets/sprites/pokemon/front/blaziken/frame_028.png" id="30_m7fqn"]
+[ext_resource type="Texture2D" uid="uid://f87idd4bg5d6" path="res://assets/sprites/pokemon/front/blaziken/frame_032.png" id="31_j021e"]
+[ext_resource type="Texture2D" uid="uid://cop7l180g8l6b" path="res://assets/sprites/pokemon/front/blaziken/frame_036.png" id="32_eu6pb"]
+[ext_resource type="Texture2D" uid="uid://bfpw1nywfsxkq" path="res://assets/sprites/pokemon/front/blaziken/frame_040.png" id="33_fagrh"]
+[ext_resource type="Texture2D" uid="uid://cfsuue15y1idy" path="res://assets/sprites/pokemon/front/blaziken/frame_044.png" id="34_pqmvt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0kxc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fh7rg"]
+bg_color = Color(0.13725491, 0.9764706, 0.07450981, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0yh6x"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.84313726, 0, 0)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ilhaa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_8eh2s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_e48mi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ueicy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_n5ix6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_tnndc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_k6ux7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_1oulw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_kavl5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_p63xb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_m24mv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_1x3g8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_01pft")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_afkbo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_8h6bs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_dsauo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t60p8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_1x3g8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_01pft")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_afkbo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_8h6bs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_dsauo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_ilhaa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_v3sqs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_m7fqn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_j021e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_eu6pb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_fagrh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_pqmvt")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 12.0
+}]
+
 [node name="Battle" type="Control" unique_id=423111793]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="BattlePanel" type="PanelContainer" parent="." unique_id=536817862]
+[node name="BattleArena" type="Control" parent="." unique_id=1414126998]
+anchors_preset = 0
+offset_left = 360.0
+offset_top = 120.0
+offset_right = 1560.0
+offset_bottom = 820.0
+
+[node name="BattleBackground" type="TextureRect" parent="BattleArena" unique_id=1857776522]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1200.0
+offset_bottom = 700.0
+texture = ExtResource("1_xd4uy")
+stretch_mode = 6
+
+[node name="EnemySpriteBox" type="Control" parent="BattleArena" unique_id=1300120455]
+anchors_preset = 0
+offset_left = 720.0
+offset_top = 80.0
+offset_right = 1100.0
+offset_bottom = 460.0
+
+[node name="PlayerSpriteBox" type="Control" parent="BattleArena" unique_id=762054145]
+anchors_preset = 0
+offset_left = 271.0
+offset_top = 206.0
+offset_right = 536.0
+offset_bottom = 484.0
+
+[node name="EnemyHudPanel" type="Panel" parent="BattleArena" unique_id=1020902616]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 29.0
+offset_right = 670.0
+offset_bottom = 109.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/EnemyHudPanel" unique_id=1449631676]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleArena/EnemyHudPanel/MarginContainer" unique_id=1872175749]
+layout_mode = 2
+
+[node name="TopRow" type="HBoxContainer" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer" unique_id=638675209]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameContainer" type="HBoxContainer" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer/TopRow" unique_id=685804980]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1926728617]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Alakazam"
+
+[node name="GenderIcon" type="TextureRect" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1416015408]
+layout_mode = 2
+
+[node name="StatusIcon" type="TextureRect" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=649163883]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer/TopRow" unique_id=273423499]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Lv. 100"
+
+[node name="HPRow" type="HBoxContainer" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer" unique_id=126118324]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HPTextLabel" type="Label" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer/HPRow" unique_id=1604542772]
+layout_mode = 2
+text = "HP"
+
+[node name="HpBar" type="ProgressBar" parent="BattleArena/EnemyHudPanel/MarginContainer/VBoxContainer/HPRow" unique_id=1173170868]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
+value = 75.0
+
+[node name="LiveBattleTextPanel" type="Panel" parent="BattleArena" unique_id=1186388833]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 673.0
+offset_right = 1204.0
+offset_bottom = 731.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/LiveBattleTextPanel" unique_id=1617825066]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="BattleArena/LiveBattleTextPanel/MarginContainer" unique_id=974153974]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Garchomp used Swors Dance"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerHudPanel" type="Panel" parent="BattleArena" unique_id=1298505426]
+layout_mode = 0
+offset_left = 845.0
+offset_top = 381.0
+offset_right = 1105.0
+offset_bottom = 461.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/PlayerHudPanel" unique_id=326429797]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleArena/PlayerHudPanel/MarginContainer" unique_id=915526702]
+layout_mode = 2
+
+[node name="TopRow" type="HBoxContainer" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer" unique_id=411250401]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameContainer" type="HBoxContainer" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer/TopRow" unique_id=1230424074]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1597341203]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Alakazam"
+
+[node name="GenderIcon" type="TextureRect" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=90728162]
+layout_mode = 2
+
+[node name="StatusIcon" type="TextureRect" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=702326090]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer/TopRow" unique_id=838048409]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Lv. 100"
+
+[node name="HPRow" type="HBoxContainer" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer" unique_id=254762004]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HPTextLabel" type="Label" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer/HPRow" unique_id=683704487]
+layout_mode = 2
+text = "HP"
+
+[node name="HpBar" type="ProgressBar" parent="BattleArena/PlayerHudPanel/MarginContainer/VBoxContainer/HPRow" unique_id=1667584194]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
+value = 75.0
+
+[node name="FieldTimers" type="Panel" parent="BattleArena" unique_id=2102942505]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 11.0
+offset_right = 257.0
+offset_bottom = 115.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/FieldTimers" unique_id=1147602651]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="BattleArena/FieldTimers/MarginContainer" unique_id=565414606]
+layout_mode = 2
+text = "Rain: 5/8 Turns
+Trick Room: 3 Turns"
+
+[node name="BattleLogPanel" type="Panel" parent="BattleArena" unique_id=1548381268]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 158.0
+offset_right = 314.0
+offset_bottom = 673.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/BattleLogPanel" unique_id=1028785479]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleArena/BattleLogPanel/MarginContainer" unique_id=1389484579]
+layout_mode = 2
+
+[node name="BattleLogLabel" type="Label" parent="BattleArena/BattleLogPanel/MarginContainer/VBoxContainer" unique_id=1076490713]
+layout_mode = 2
+text = "BATTLE LOG"
+horizontal_alignment = 1
+
+[node name="BattleLogText" type="RichTextLabel" parent="BattleArena/BattleLogPanel/MarginContainer/VBoxContainer" unique_id=1227801124]
+custom_minimum_size = Vector2(220, 250)
+layout_mode = 2
+text = "Wild Absol appeared!
+Aegislash used Iron Head!
+It was super effective!"
+
+[node name="ActionInput" type="Panel" parent="BattleArena" unique_id=66226849]
+layout_mode = 0
+offset_left = 325.0
+offset_top = 480.0
+offset_right = 805.0
+offset_bottom = 670.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0yh6x")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/ActionInput" unique_id=446054094]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MovesGrid" type="GridContainer" parent="BattleArena/ActionInput/MarginContainer" unique_id=1964814571]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="MoveSlot" parent="BattleArena/ActionInput/MarginContainer/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot2" parent="BattleArena/ActionInput/MarginContainer/MovesGrid" unique_id=165847671 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot3" parent="BattleArena/ActionInput/MarginContainer/MovesGrid" unique_id=1470595780 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot4" parent="BattleArena/ActionInput/MarginContainer/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="PartyGrid" type="GridContainer" parent="BattleArena/ActionInput/MarginContainer" unique_id=1230434731]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 3
+
+[node name="PartySlot" parent="BattleArena/ActionInput/MarginContainer/PartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+
+[node name="PartySlot2" parent="BattleArena/ActionInput/MarginContainer/PartyGrid" unique_id=873381061 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+
+[node name="PartySlot3" parent="BattleArena/ActionInput/MarginContainer/PartyGrid" unique_id=1808623893 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+
+[node name="PartySlot4" parent="BattleArena/ActionInput/MarginContainer/PartyGrid" unique_id=290563093 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+
+[node name="PartySlot5" parent="BattleArena/ActionInput/MarginContainer/PartyGrid" unique_id=1562476737 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+
+[node name="PartySlot6" parent="BattleArena/ActionInput/MarginContainer/PartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+
+[node name="ActionChoices" type="Panel" parent="BattleArena" unique_id=1472324193]
+layout_mode = 0
+offset_left = 826.0
+offset_top = 489.0
+offset_right = 1126.0
+offset_bottom = 663.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/ActionChoices" unique_id=1466474160]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="BattleArena/ActionChoices/MarginContainer" unique_id=113249736]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="BattleArena/ActionChoices/MarginContainer/CenterContainer" unique_id=1503994669]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Button" type="Button" parent="BattleArena/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=1528178288]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Fight"
+icon = ExtResource("4_pll4o")
+expand_icon = true
+
+[node name="Button2" type="Button" parent="BattleArena/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=1142791131]
+custom_minimum_size = Vector2(110, 52)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Bag"
+icon = ExtResource("5_py4tk")
+expand_icon = true
+
+[node name="Button3" type="Button" parent="BattleArena/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=1890157584]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Party"
+icon = ExtResource("6_agsc7")
+expand_icon = true
+
+[node name="Button4" type="Button" parent="BattleArena/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=1845484268]
+custom_minimum_size = Vector2(110, 52)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Run"
+icon = ExtResource("7_pyfix")
+expand_icon = true
+
+[node name="TurnCounter" type="Panel" parent="BattleArena" unique_id=578843115]
+layout_mode = 0
+offset_left = 719.0
+offset_top = 16.0
+offset_right = 845.4094
+offset_bottom = 68.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/TurnCounter" unique_id=1065966143]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TurnLabel" type="Label" parent="BattleArena/TurnCounter/MarginContainer" unique_id=1222296527]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Turn: 10"
+
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="BattleArena" unique_id=1109496283]
+position = Vector2(512, 340)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_ilhaa")
+frame_progress = 0.5361241
+
+[node name="EnemySprite" type="AnimatedSprite2D" parent="BattleArena" unique_id=1776410686]
+position = Vector2(937, 219.00003)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_t60p8")
+animation = &"new_animation"
+frame_progress = 0.9897592
+
+[node name="Participants" type="Panel" parent="BattleArena" unique_id=1993478683]
+layout_mode = 0
+offset_left = 896.0
+offset_top = 15.0
+offset_right = 1186.0
+offset_bottom = 92.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleArena/Participants" unique_id=1276615643]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleArena/Participants/MarginContainer" unique_id=1213309463]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleArena/Participants/MarginContainer/VBoxContainer" unique_id=714654779]
+layout_mode = 2
+alignment = 1
+
+[node name="Player1Label" type="Label" parent="BattleArena/Participants/MarginContainer/VBoxContainer/HBoxContainer" unique_id=485988703]
+layout_mode = 2
+text = "Adinho"
+
+[node name="VsLabel" type="Label" parent="BattleArena/Participants/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1344086768]
+layout_mode = 2
+text = "vs"
+
+[node name="Player2Label" type="Label" parent="BattleArena/Participants/MarginContainer/VBoxContainer/HBoxContainer" unique_id=887751525]
+layout_mode = 2
+text = "Sophie Rain"
+
+[node name="EnemyTeamPanel" type="HBoxContainer" parent="BattleArena/Participants/MarginContainer/VBoxContainer" unique_id=643503791]
+layout_mode = 2
+theme_override_constants/separation = -3
+
+[node name="TextureRect" type="TextureRect" parent="BattleArena/Participants/MarginContainer/VBoxContainer/EnemyTeamPanel" unique_id=1554773144]
+custom_minimum_size = Vector2(52, 55)
+layout_mode = 2
+texture = ExtResource("6_fh7rg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="BattleArena/Participants/MarginContainer/VBoxContainer/EnemyTeamPanel" unique_id=1519570579]
+custom_minimum_size = Vector2(30, 48)
+layout_mode = 2
+texture = ExtResource("6_fh7rg")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="BattleArena/Participants/MarginContainer/VBoxContainer/EnemyTeamPanel" unique_id=1093538379]
+custom_minimum_size = Vector2(30, 48)
+layout_mode = 2
+texture = ExtResource("6_fh7rg")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="BattleArena/Participants/MarginContainer/VBoxContainer/EnemyTeamPanel" unique_id=212923325]
+custom_minimum_size = Vector2(30, 48)
+layout_mode = 2
+texture = ExtResource("6_fh7rg")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="TextureRect5" type="TextureRect" parent="BattleArena/Participants/MarginContainer/VBoxContainer/EnemyTeamPanel" unique_id=1861536331]
+custom_minimum_size = Vector2(30, 48)
+layout_mode = 2
+texture = ExtResource("6_fh7rg")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="TextureRect6" type="TextureRect" parent="BattleArena/Participants/MarginContainer/VBoxContainer/EnemyTeamPanel" unique_id=2101818180]
+custom_minimum_size = Vector2(30, 48)
+layout_mode = 2
+texture = ExtResource("6_fh7rg")
+expand_mode = 2
+stretch_mode = 5

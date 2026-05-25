@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://3gsmmeerkva2"]
+
+[ext_resource type="Texture2D" uid="uid://ces4slj5wcm6p" path="res://assets/sprites/pokemon/front/azumarill/frame_000.png" id="1_u1w4d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pll4o"]
+bg_color = Color(0.6530577, 0.5983701, 0.17503297, 1)
+
+[node name="PartySlot" type="Button" unique_id=1512490557]
+custom_minimum_size = Vector2(160, 85)
+theme_override_styles/normal = SubResource("StyleBoxFlat_pll4o")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=972505069]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1282733055]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="PokemonIcon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1012592862]
+custom_minimum_size = Vector2(60, 52)
+layout_mode = 2
+texture = ExtResource("1_u1w4d")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1130419798]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1565839544]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "Alakazam"
+
+[node name="BottomRowContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=772350783]
+layout_mode = 2
+
+[node name="HPPercentLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer" unique_id=51255864]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_font_sizes/font_size = 12
+text = "74%"
+
+[node name="StatusIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer" unique_id=961072084]
+layout_mode = 2
