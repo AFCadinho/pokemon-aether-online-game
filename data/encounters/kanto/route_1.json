@@ -1,0 +1,61 @@
+{
+    "grass": {
+      "encounter_chance": 0.1,
+      "pokemon": [
+        {
+          "species": "Pidgey",
+          "min_level": 2,
+          "max_level": 4,
+          "weight": 50,
+          "item": "",
+          "ability": "Keen Eye",
+          "nature": "Hardy",
+          "evs": {
+            "hp": 0,
+            "atk": 0,
+            "def": 0,
+            "spa": 0,
+            "spd": 0,
+            "spe": 0
+          },
+          "moves": ["Tackle", "Sand Attack"]
+        },
+        {
+          "species": "Rattata",
+          "min_level": 2,
+          "max_level": 4,
+          "weight": 50,
+          "item": "",
+          "ability": "Run Away",
+          "nature": "Hardy",
+          "evs": {
+            "hp": 0,
+            "atk": 0,
+            "def": 0,
+            "spa": 0,
+            "spd": 0,
+            "spe": 0
+          },
+          "moves": ["Tackle", "Tail Whip"]
+        },
+        {
+          "species": "Mewtwo",
+          "min_level": 100,
+          "max_level": 100,
+          "weight": 40,
+          "item": "",
+          "ability": "Pressure",
+          "nature": "Timid",
+          "evs": {
+            "hp": 0,
+            "atk": 0,
+            "def": 0,
+            "spa": 0,
+            "spd": 0,
+            "spe": 0
+          },
+          "moves": ["Psystrike", "Psychic", "Recover", "Aura Sphere"]
+        }
+      ]
+    }
+  }

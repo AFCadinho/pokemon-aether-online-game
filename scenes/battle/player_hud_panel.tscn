@@ -141,5 +141,8 @@ layout_mode = 2
 
 [node name="PlayerNameLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer" unique_id=1648941801]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.47058824)
+theme_override_font_sizes/font_size = 24
 text = "Adinho"
 horizontal_alignment = 2

@@ -39,6 +39,9 @@ func start_dialogue(new_lines: Array, speaker_name := "") -> void:
 	is_open = true
 	just_started = true
 	visible = true
+	
+	GameState.lock_input()
+	
 	show_current_line()
 	
 func show_current_line() -> void:
@@ -51,3 +54,6 @@ func hide_dialogue() -> void:
 	visible = false
 	lines = []
 	current_line_index = 0
+	
+	GameState.unlock_input()
+	

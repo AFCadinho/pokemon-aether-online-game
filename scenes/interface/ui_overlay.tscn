@@ -55,18 +55,6 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j0ub1"]
-bg_color = Color(0.050980393, 0.09019608, 0.15686275, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7g5y2"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 1)
 border_width_left = 1
@@ -211,53 +199,61 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -108.0
-offset_right = 108.0
-offset_bottom = 59.0
+offset_left = -250.0
+offset_right = 250.0
+offset_bottom = 80.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8bipm")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/LocationPanel" unique_id=1429849529]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/LocationPanel/MarginContainer" unique_id=8956631]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer" unique_id=29517244]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer" unique_id=45243774]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1811752218]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 8
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer" unique_id=1440381619]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="LocationIcon" type="TextureRect" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1573324624]
+[node name="LocationIcon" type="TextureRect" parent="Control/LocationPanel/MarginContainer/HBoxContainer" unique_id=1573324624]
 custom_minimum_size = Vector2(48, 24)
 layout_mode = 2
+size_flags_horizontal = 3
 texture = ExtResource("2_2onii")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LocationLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1820518854]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/LocationPanel/MarginContainer/HBoxContainer" unique_id=2124596840]
 layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="LocationLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1820518854]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_font_sizes/font_size = 24
 text = "Pallet Town"
 vertical_alignment = 1
 
-[node name="MapButtonPanel" type="PanelContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=2111885484]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1908077234]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_j0ub1")
+alignment = 1
 
-[node name="MapButton" type="TextureButton" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer/MapButtonPanel" unique_id=1031341535]
+[node name="SunMoonIcon" type="TextureRect" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=948586774]
+layout_mode = 2
+texture = ExtResource("4_8bipm")
+expand_mode = 2
+
+[node name="TimeLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=750957603]
+layout_mode = 2
+text = "08:54 PM"
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/LocationPanel/MarginContainer/HBoxContainer" unique_id=1310940624]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="MapButton" type="TextureButton" parent="Control/LocationPanel/MarginContainer/HBoxContainer/PanelContainer" unique_id=1031341535]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Open Town Map"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_riyyd")
@@ -265,29 +261,6 @@ texture_pressed = ExtResource("3_riyyd")
 texture_hover = ExtResource("3_riyyd")
 ignore_texture_size = true
 stretch_mode = 5
-
-[node name="TimePanel" type="Panel" parent="Control/LocationPanel/MarginContainer/VBoxContainer" unique_id=1281466283]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_vertical = 6
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer/TimePanel" unique_id=1908077234]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="SunMoonIcon" type="TextureRect" parent="Control/LocationPanel/MarginContainer/VBoxContainer/TimePanel/HBoxContainer" unique_id=948586774]
-layout_mode = 2
-texture = ExtResource("4_8bipm")
-expand_mode = 2
-
-[node name="TimeLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer/TimePanel/HBoxContainer" unique_id=750957603]
-layout_mode = 2
-text = "08:54 PM"
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(180, 0)

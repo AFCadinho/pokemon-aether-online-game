@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://dpltq23uv3kvb"]
+
+[ext_resource type="Script" uid="uid://bmhi84o6rqke6" path="res://scripts/battle/battle_ui/sprite_box.gd" id="1_y2if1"]
+[ext_resource type="Texture2D" uid="uid://mhtihqhejveh" path="res://assets/sprites/pokemon/front/blaziken/frame_000.png" id="2_bgq6t"]
+[ext_resource type="Texture2D" uid="uid://4gb2yu0xr2wn" path="res://assets/sprites/pokemon/front/blaziken/frame_016.png" id="3_m1mda"]
+[ext_resource type="Texture2D" uid="uid://3noc6p4tcw5v" path="res://assets/sprites/pokemon/front/blaziken/frame_028.png" id="4_cwwsl"]
+[ext_resource type="Texture2D" uid="uid://cfsuue15y1idy" path="res://assets/sprites/pokemon/front/blaziken/frame_044.png" id="5_mf821"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t60p8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_bgq6t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_m1mda")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_cwwsl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_mf821")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 12.0
+}]
+
+[node name="SpriteBox" type="Control" unique_id=2063766200]
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -237.0
+offset_bottom = 55.5
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("1_y2if1")
+
+[node name="SingleBattleContainer" type="HBoxContainer" parent="." unique_id=1385674609]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 84.0
+offset_top = 20.0
+offset_right = 84.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="SpriteSlot" type="Control" parent="SingleBattleContainer" unique_id=226772917]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AnimatedPokemonSprite" type="AnimatedSprite2D" parent="SingleBattleContainer/SpriteSlot" unique_id=1327162242]
+position = Vector2(162, 132)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_t60p8")
+animation = &"new_animation"
+frame_progress = 0.103211775
+
+[node name="DoubleBattleContainer" type="HBoxContainer" parent="." unique_id=1340047324]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpriteSlot" type="Control" parent="DoubleBattleContainer" unique_id=1783458348]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AnimatedPokemonSprite" type="AnimatedSprite2D" parent="DoubleBattleContainer/SpriteSlot" unique_id=1776134268]
+position = Vector2(126.5, 136)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_t60p8")
+animation = &"new_animation"
+frame_progress = 0.103211775
+
+[node name="SpriteSlot2" type="Control" parent="DoubleBattleContainer" unique_id=71575196]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AnimatedPokemonSprite2" type="AnimatedSprite2D" parent="DoubleBattleContainer/SpriteSlot2" unique_id=744773559]
+position = Vector2(126.5, 136)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_t60p8")
+animation = &"new_animation"
+frame_progress = 0.103211775

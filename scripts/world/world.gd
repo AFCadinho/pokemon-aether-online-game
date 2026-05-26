@@ -1,5 +1,11 @@
 extends Node2D
 
+const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
+
+var is_in_battle := false
+var battle_layer: CanvasLayer
+var battle_instance: Node
+
 @onready var player: CharacterBody2D = $Player
 
 var is_loading_map := false
@@ -70,3 +76,35 @@ func move_player_to_map(map: Node) -> void:
 		player.get_parent().remove_child(player)
 		
 	player_parent.add_child(player)
+	
+func start_wild_battle(wild_pokemon: Pokemon) -> void:
+	if is_in_battle:
+		return
+		
+	is_in_battle = true
+	
+	player.is_moving = false
+	player.set_physics_process(false)
+	
+	print("Starting wild battle:")
+	print(wild_pokemon.to_battle_dict())
+	
+	battle_layer = CanvasLayer.new()
+	battle_layer.layer = 10
+	add_child(battle_layer)
+	
+	battle_instance = BATTLE_SCENE.instantiate()
+	battle_layer.add_child(battle_instance)
+	
+	if battle_instance.has_signal("flee_requested"):
+		battle_instance.flee_requested.connect(end_wild_battle)
+	
+func end_wild_battle() -> void:
+	if battle_layer != null:
+		battle_layer.queue_free()
+		
+	battle_layer = null
+	battle_instance = null
+	is_in_battle = false
+	
+	player.set_physics_process(true)

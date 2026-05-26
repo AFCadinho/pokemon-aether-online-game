@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const MAX_PARTY_SIZE := 6
 
+@onready var party_panel: PanelContainer = $Control/PartyPanel
 @onready var party_container: VBoxContainer = $Control/PartyPanel/MarginContainer/VBoxContainer
 @onready var party_slot_template: PanelContainer = $Control/PartyPanel/MarginContainer/VBoxContainer/PartySlot
 
@@ -32,6 +33,8 @@ func _build_party_slots() -> void:
 		party_slots.append(slot)
 		
 func _refresh_party() -> void:
+	party_panel.visible = PlayerSave.party.size() > 0
+	
 	for slot_number in range(party_slots.size()):
 		var slot = party_slots[slot_number]
 		

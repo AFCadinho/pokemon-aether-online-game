@@ -40,7 +40,7 @@ func _ready() -> void:
 	# Daardoor begint hij niet meteen ergens heen te bewegen.
 	target_position = global_position
 
-func _physics_process(delta: float) -> void:
+func _physics_process(delta: float) -> void:	
 	if is_moving:
 		# Beweeg in pixels richting de target_position.
 		# Dit is visueel vloeiend, ook al kies je targets per tile.
@@ -50,9 +50,15 @@ func _physics_process(delta: float) -> void:
 		if global_position == target_position:
 			is_moving = false
 			set_idle_frame()
+			
+			if is_standing_on_tall_grass():
+				check_for_grass_encounter()
 		return
 
-	
+	if GameState.input_locked:
+		set_idle_frame()
+		return
+		
 	# Bepaal welke richting de speler op wilt lopen.
 	var direction := Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
@@ -146,3 +152,33 @@ func refresh_map_layers() -> void:
 		
 	collision_tilemap = GameState.current_map.get_node_or_null("Collision")	
 	grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
+	
+func is_standing_on_tall_grass() -> bool:
+	if grass_tilemap == null:
+		return false
+		
+	var local_position := grass_tilemap.to_local(global_position)
+	var tile_position := grass_tilemap.local_to_map(local_position)
+	var tile_data := grass_tilemap.get_cell_tile_data(tile_position)
+	
+	return tile_data != null
+		
+func check_for_grass_encounter() -> void:
+	var current_map := GameState.current_map
+	
+	if current_map == null:
+		return
+		
+	if not current_map.has_method("try_get_wild_encounter"):
+		return
+		
+	var wild_pokemon: Pokemon = current_map.try_get_wild_encounter()
+	
+	if wild_pokemon == null:
+		return
+	
+	var world := get_tree().current_scene
+	if world.has_method("start_wild_battle"):
+		world.start_wild_battle(wild_pokemon)
+	
+	
