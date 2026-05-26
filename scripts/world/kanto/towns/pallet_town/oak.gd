@@ -40,7 +40,7 @@ func talk() -> void:
 		return
 	else:
 		var starter_pokemon = give_starter_pokemon("Charmander")
-		PlayerSave.party.append(starter_pokemon)
+		PlayerSave.add_pokemon(starter_pokemon)
 		PlayerSave.flags["received_starter"] = true
 		
 		dialogue_box.start_dialogue([

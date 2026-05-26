@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bqj3ifxyy7gdh"]
 
+[ext_resource type="Script" uid="uid://dmbromlkpmfd" path="res://scripts/ui/party_slot.gd" id="1_kmnus"]
 [ext_resource type="Texture2D" uid="uid://t8r3xvxds5aj" path="res://assets/sprites/pokemon/pokemon_home/Archaludon.png" id="1_nd8rq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmnus"]
@@ -41,6 +42,7 @@ corner_radius_bottom_left = 8
 [node name="PartySlot" type="PanelContainer" unique_id=899956667]
 custom_minimum_size = Vector2(260, 44)
 theme_override_styles/panel = SubResource("StyleBoxFlat_kmnus")
+script = ExtResource("1_kmnus")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1270644811]
 layout_mode = 2
@@ -66,11 +68,24 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=714565378]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=890851186]
 layout_mode = 2
-text = "Archaludon Lv. 100"
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1214713841]
+[node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=714565378]
+layout_mode = 2
+text = "Archaludon"
+
+[node name="Seperator" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1935279458]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.43137255, 0.65882355, 1, 0.4)
+
+[node name="LevelLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1370892322]
+layout_mode = 2
+text = "Lv.100"
+
+[node name="HPBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1214713841]
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_nd8rq")
 theme_override_styles/fill = SubResource("StyleBoxFlat_rmfdk")
