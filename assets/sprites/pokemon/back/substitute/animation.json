@@ -1,0 +1,16 @@
+{
+  "source": "/home/adinho/Desktop/pokemon_sprites/back/substitute.gif",
+  "image": "sheet.png",
+  "speed": 1.0,
+  "frame_width": 37,
+  "frame_height": 38,
+  "frames": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 37,
+      "h": 38,
+      "duration": 0.01
+    }
+  ]
+}

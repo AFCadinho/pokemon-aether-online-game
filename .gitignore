@@ -13,3 +13,7 @@
 # OS/editor noise.
 .DS_Store
 Thumbs.db
+
+.import/
+*.import
+__pycache__/

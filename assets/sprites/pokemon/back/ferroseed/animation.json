@@ -1,0 +1,16 @@
+{
+  "source": "/home/adinho/Desktop/pokemon_sprites/back/ferroseed.gif",
+  "image": "sheet.png",
+  "speed": 1.0,
+  "frame_width": 56,
+  "frame_height": 64,
+  "frames": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 56,
+      "h": 64,
+      "duration": 0.06
+    }
+  ]
+}
