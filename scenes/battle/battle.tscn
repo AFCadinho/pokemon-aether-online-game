@@ -66,6 +66,26 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kd6yx"]
+bg_color = Color(0.105882354, 0.078431375, 0.05882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1kk3"]
+bg_color = Color(0.105882354, 0.078431375, 0.05882353, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8h6bs"]
 bg_color = Color(0.14117648, 0.11372549, 0.08627451, 1)
 border_width_left = 1
@@ -356,6 +376,7 @@ text = "01:24"
 [node name="ActionSidePanel" type="Panel" parent="HBoxContainer" unique_id=910737858]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/ActionSidePanel" unique_id=2005950253]
 layout_mode = 1
@@ -371,85 +392,86 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer" unique_id=166375469]
 layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 2
+theme_override_constants/separation = 24
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=446054094]
+[node name="Label" type="Label" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=1030108819]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxFlat_t1kk3")
+text = "BATTLE ACTIONS"
+horizontal_alignment = 1
 
-[node name="MovesGrid" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer" unique_id=1964814571]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=212919001]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer" unique_id=505560000]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+alignment = 1
+
+[node name="MovesGrid" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1964814571]
 visible = false
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-theme_override_constants/h_separation = 17
-theme_override_constants/v_separation = 8
+size_flags_horizontal = 3
+size_flags_vertical = 10
+theme_override_constants/h_separation = 9
+theme_override_constants/v_separation = 10
 columns = 2
 
-[node name="MoveSlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
+[node name="MoveSlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
 layout_mode = 2
 
-[node name="MoveSlot2" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/MovesGrid" unique_id=165847671 instance=ExtResource("2_h0kxc")]
+[node name="MoveSlot2" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=165847671 instance=ExtResource("2_h0kxc")]
 layout_mode = 2
 
-[node name="MoveSlot3" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/MovesGrid" unique_id=1470595780 instance=ExtResource("2_h0kxc")]
+[node name="MoveSlot3" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=1470595780 instance=ExtResource("2_h0kxc")]
 layout_mode = 2
 
-[node name="MoveSlot4" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
+[node name="MoveSlot4" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
 layout_mode = 2
 
-[node name="PartyGrid" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer" unique_id=1230434731]
+[node name="PartyGrid" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1230434731]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 3
+size_flags_vertical = 10
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 2
 
-[node name="PartySlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/PartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
 
-[node name="PartySlot2" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/PartyGrid" unique_id=873381061 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot2" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=873381061 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
 
-[node name="PartySlot3" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/PartyGrid" unique_id=1808623893 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot3" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1808623893 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
 
-[node name="PartySlot4" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/PartyGrid" unique_id=290563093 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot4" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=290563093 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
 
-[node name="PartySlot5" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/PartyGrid" unique_id=1562476737 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot5" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1562476737 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
 
-[node name="PartySlot6" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MarginContainer/PartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot6" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
 
 [node name="ActionChoices" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=274714711]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" unique_id=1466474160]
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" unique_id=1503994669]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/MarginContainer" unique_id=113249736]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/MarginContainer/CenterContainer" unique_id=1503994669]
-layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 2
 
-[node name="FightButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=1528178288]
+[node name="FightButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=1528178288]
 custom_minimum_size = Vector2(140, 75)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
@@ -458,9 +480,10 @@ text = "Fight"
 icon = ExtResource("4_pll4o")
 expand_icon = true
 
-[node name="BagButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=1766657251]
+[node name="BagButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=1766657251]
 custom_minimum_size = Vector2(140, 75)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
@@ -469,9 +492,10 @@ text = "Bag"
 icon = ExtResource("5_py4tk")
 expand_icon = true
 
-[node name="PartyButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=564010331]
+[node name="PartyButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=564010331]
 custom_minimum_size = Vector2(140, 75)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
@@ -480,9 +504,10 @@ text = "Party"
 icon = ExtResource("6_agsc7")
 expand_icon = true
 
-[node name="RunButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/MarginContainer/CenterContainer/GridContainer" unique_id=1623517119]
+[node name="RunButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=1623517119]
 custom_minimum_size = Vector2(140, 75)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
@@ -503,12 +528,12 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer" unique_id=870879990]
+[node name="MechanicsButtons" type="HBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer" unique_id=870879990]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="MegaEvolutionIcon" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/HBoxContainer" unique_id=1460977519]
+[node name="MegaEvolutionIcon" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1460977519]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -518,7 +543,7 @@ texture_hover = ExtResource("37_afkbo")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="MegaEvolutionIcon2" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/HBoxContainer" unique_id=1001476454]
+[node name="ZMove" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1001476454]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -528,7 +553,7 @@ texture_hover = ExtResource("38_8h6bs")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="MegaEvolutionIcon3" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/HBoxContainer" unique_id=843445618]
+[node name="Terra" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=843445618]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2

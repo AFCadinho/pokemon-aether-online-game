@@ -3,9 +3,6 @@
 
 # Local export/build output.
 /builds/*
-!/builds/web/
-/builds/web/*
-!/builds/web/.gitkeep
 
 # Android export/build output.
 /android/

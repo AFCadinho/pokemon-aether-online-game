@@ -1,31 +1,52 @@
 [gd_scene format=3 uid="uid://3gsmmeerkva2"]
 
 [ext_resource type="Texture2D" uid="uid://cildhiod5k0rq" path="res://assets/sprites/pokemon/pokemon_home/Charizard.png" id="1_u1w4d"]
+[ext_resource type="Texture2D" uid="uid://dp378t40sdcy1" path="res://assets/battles/status/poisoned.png" id="2_87gny"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pll4o"]
-bg_color = Color(0.09411765, 0.078431375, 0.0627451, 0.8627451)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.56078434, 0.43529412, 0.20784314, 1)
+bg_color = Color(0.14117648, 0.07058824, 0.050980393, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8862745, 0.34509805, 0.13333334, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_87gny"]
+bg_color = Color(0.23137255, 0.17254902, 0.12156863, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u1w4d"]
-bg_color = Color(0.16470589, 0.12941177, 0.09803922, 1)
+bg_color = Color(0.19215687, 0.14117648, 0.101960786, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(1, 0.827451, 0.41568628, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qme5g"]
+bg_color = Color(0.22745098, 0.2, 0.1764706, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g7ou"]
+bg_color = Color(0.34901962, 0.78039217, 0.38039216, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [node name="PartySlot" type="Button" unique_id=1512490557]
 custom_minimum_size = Vector2(160, 85)
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_pll4o")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_87gny")
 theme_override_styles/hover = SubResource("StyleBoxFlat_u1w4d")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=972505069]
@@ -35,7 +56,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 8
+theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
@@ -50,7 +71,7 @@ custom_minimum_size = Vector2(48, 52)
 layout_mode = 2
 texture = ExtResource("1_u1w4d")
 expand_mode = 1
-stretch_mode = 5
+stretch_mode = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1130419798]
 layout_mode = 2
@@ -59,21 +80,29 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1565839544]
-custom_minimum_size = Vector2(10, 10)
+custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "Roaring Moon"
 autowrap_mode = 2
+uppercase = true
 
 [node name="BottomRowContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=772350783]
 layout_mode = 2
 
-[node name="HPPercentLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer" unique_id=51255864]
+[node name="HPPercentLabel" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer" unique_id=793604556]
+custom_minimum_size = Vector2(65, 25)
 layout_mode = 2
-size_flags_horizontal = 2
-theme_override_font_sizes/font_size = 12
-text = "74%"
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.105882354, 0.078431375, 0.05882353, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/background = SubResource("StyleBoxFlat_qme5g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_0g7ou")
+value = 60.0
 
 [node name="StatusIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer" unique_id=961072084]
 layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("2_87gny")
+expand_mode = 2

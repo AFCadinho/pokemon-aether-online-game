@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://db3id5etb8cwp"]
 
 [ext_resource type="PackedScene" uid="uid://dydjcjdd5oypk" path="res://scenes/battle/pokemon_sheet_slot.tscn" id="1_5wf7c"]
+[ext_resource type="Texture2D" uid="uid://b7jncpf4e5h86" path="res://assets/gender/female.png" id="1_23egt"]
+[ext_resource type="Texture2D" uid="uid://dp378t40sdcy1" path="res://assets/battles/status/poisoned.png" id="1_j0lgw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5wf7c"]
 bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.8235294)
@@ -73,14 +75,20 @@ size_flags_horizontal = 3
 
 [node name="NameLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=950574432]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 2
 text = "Alakazam"
 
 [node name="GenderIcon" type="TextureRect" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1892957036]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+texture = ExtResource("1_23egt")
+expand_mode = 2
+stretch_mode = 5
 
 [node name="StatusIcon" type="TextureRect" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1812683572]
 layout_mode = 2
+texture = ExtResource("1_j0lgw")
+expand_mode = 2
 
 [node name="LevelLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow" unique_id=1327934074]
 layout_mode = 2
@@ -141,8 +149,7 @@ layout_mode = 2
 
 [node name="PlayerNameLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer" unique_id=1648941801]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.47058824)
+theme_override_colors/font_color = Color(0.1254902, 0.03529412, 0.41568628, 1)
 theme_override_font_sizes/font_size = 24
 text = "Adinho"
 horizontal_alignment = 2

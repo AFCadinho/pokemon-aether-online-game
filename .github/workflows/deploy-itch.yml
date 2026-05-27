@@ -1,4 +1,4 @@
-name: Deploy Web Build to itch.io
+name: Deploy Desktop Builds to itch.io
 
 on:
   push:
@@ -14,13 +14,16 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   GODOT_VERSION: 4.6.2
   GODOT_RELEASE: stable
-  EXPORT_PRESET: Web Build
-  EXPORT_PATH: builds/web/index.html
-  ITCH_TARGET: afc-adinho/pokemonaetheronline:html5
+  WINDOWS_EXPORT_PRESET: Windows Itch Build
+  WINDOWS_EXPORT_PATH: builds/windows/Pokemon Aether Online.exe
+  WINDOWS_ITCH_TARGET: afc-adinho/pokemonaetheronline:windows
+  LINUX_EXPORT_PRESET: Linux Itch Build
+  LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
+  LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
 
 jobs:
   deploy:
-    name: Export and deploy Web build
+    name: Export and deploy desktop builds
     runs-on: ubuntu-latest
 
     steps:
@@ -47,23 +50,33 @@ jobs:
       - name: Import Godot assets
         run: ./godot --headless --import --quit
 
-      - name: Export Web build
+      - name: Export Windows build
         run: |
-          mkdir -p builds/web
-          ./godot --headless --export-release "${EXPORT_PRESET}" "${EXPORT_PATH}"
+          mkdir -p builds/windows
+          ./godot --headless --export-release "${WINDOWS_EXPORT_PRESET}" "${WINDOWS_EXPORT_PATH}"
 
-      - name: Verify Web build
+      - name: Export Linux build
         run: |
-          test -f builds/web/index.html
-          test -f builds/web/index.js
-          test -f builds/web/index.wasm
-          test -f builds/web/index.pck
+          mkdir -p builds/linux
+          ./godot --headless --export-release "${LINUX_EXPORT_PRESET}" "${LINUX_EXPORT_PATH}"
 
-      - name: Upload Web build artifact
+      - name: Verify Windows build
+        run: |
+          test -f "builds/windows/Pokemon Aether Online.exe"
+          test -f "builds/windows/Pokemon Aether Online.pck"
+
+      - name: Verify Linux build
+        run: |
+          test -f "builds/linux/Pokemon Aether Online.x86_64"
+          test -f "builds/linux/Pokemon Aether Online.pck"
+
+      - name: Upload desktop build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: web-build
-          path: builds/web
+          name: desktop-builds
+          path: |
+            builds/windows
+            builds/linux
 
       - name: Download butler
         run: |
@@ -76,4 +89,5 @@ jobs:
           BUTLER_API_KEY: ${{ secrets.ITCH_IO_API_KEY }}
         run: |
           test -n "${BUTLER_API_KEY}"
-          ./butler push builds/web "${ITCH_TARGET}"
+          ./butler push builds/windows "${WINDOWS_ITCH_TARGET}"
+          ./butler push builds/linux "${LINUX_ITCH_TARGET}"

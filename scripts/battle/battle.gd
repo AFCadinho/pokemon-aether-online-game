@@ -2,7 +2,7 @@ extends Control
 
 signal flee_requested
 
-@onready var run_button: Button = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/MarginContainer/CenterContainer/GridContainer/RunButton
+@onready var run_button: Button = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/RunButton
 @onready var battle_log_text: RichTextLabel = $BattleLogPanel/MarginContainer/VBoxContainer/ScrollContainer/BattleLogText
 
 @onready var battle_log_panel: Panel = $BattleLogPanel
