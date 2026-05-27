@@ -17,8 +17,8 @@ func _ready() -> void:
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
 	_update_battle_log_toggle_button()
 	
-	var test_player := Pokemon.new("charmander", 5)
-	var test_enemy := Pokemon.new("scizor", 100)
+	var test_player := Pokemon.new("Koraidon", 5)
+	var test_enemy := Pokemon.new("Groudon", 100)
 
 	setup_single_battle(test_player, test_enemy)
 
