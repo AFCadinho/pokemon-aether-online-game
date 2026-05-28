@@ -388,7 +388,7 @@ grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_bottom = 12
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer" unique_id=166375469]
 layout_mode = 2
@@ -530,38 +530,38 @@ theme_override_constants/margin_bottom = 8
 
 [node name="MechanicsButtons" type="HBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer" unique_id=870879990]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 25
 alignment = 1
 
 [node name="MegaEvolutionIcon" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1460977519]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(50, 55)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("37_afkbo")
 texture_pressed = ExtResource("37_afkbo")
 texture_hover = ExtResource("37_afkbo")
 ignore_texture_size = true
-stretch_mode = 5
-
-[node name="ZMove" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1001476454]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("38_8h6bs")
-texture_pressed = ExtResource("38_8h6bs")
-texture_hover = ExtResource("38_8h6bs")
-ignore_texture_size = true
-stretch_mode = 5
+stretch_mode = 0
 
 [node name="Terra" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=843445618]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(80, 55)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("39_dsauo")
 texture_pressed = ExtResource("39_dsauo")
 texture_hover = ExtResource("39_dsauo")
 ignore_texture_size = true
-stretch_mode = 5
+stretch_mode = 0
+
+[node name="ZMove" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1001476454]
+custom_minimum_size = Vector2(60, 55)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("38_8h6bs")
+texture_pressed = ExtResource("38_8h6bs")
+texture_hover = ExtResource("38_8h6bs")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="BattleLogPanel" type="Panel" parent="." unique_id=1548381268]
 custom_minimum_size = Vector2(250, 0)
