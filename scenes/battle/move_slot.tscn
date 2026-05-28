@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cir3bfnfoy4l4"]
 
 [ext_resource type="Texture2D" uid="uid://dflc5atoafbw1" path="res://assets/sprites/types/13.png" id="1_b4k6w"]
+[ext_resource type="Script" uid="uid://bu4kkesfoolbg" path="res://scripts/battle/battle_ui/move_slot.gd" id="1_g72os"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4k6w"]
 bg_color = Color(0.09411765, 0.078431375, 0.0627451, 0.8627451)
@@ -49,6 +50,7 @@ mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_b4k6w")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_nrypt")
 theme_override_styles/hover = SubResource("StyleBoxFlat_g72os")
+script = ExtResource("1_g72os")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1554189980]
 layout_mode = 1

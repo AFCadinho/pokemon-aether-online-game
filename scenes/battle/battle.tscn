@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dsbm3h77o41xr" path="res://assets/sprites/battle_buttons/bag.png" id="5_py4tk"]
 [ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
 [ext_resource type="Texture2D" uid="uid://c4s406fdsdgxv" path="res://assets/sprites/battle_buttons/run.png" id="7_pyfix"]
+[ext_resource type="Script" uid="uid://duo7cdw26ghjb" path="res://scripts/battle/action_choices.gd" id="8_t1kk3"]
 [ext_resource type="Texture2D" uid="uid://c5dxctq04cn66" path="res://assets/battles/mechanics/mega-evolution.png" id="37_afkbo"]
 [ext_resource type="Texture2D" uid="uid://c2cbq02hrb073" path="res://assets/battles/mechanics/z-move.png" id="38_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://dn8i3j64uec8i" path="res://assets/battles/mechanics/tera-icon.png" id="39_dsauo"]
@@ -460,6 +461,7 @@ layout_mode = 2
 [node name="ActionChoices" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=274714711]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("8_t1kk3")
 
 [node name="GridContainer" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" unique_id=1503994669]
 layout_mode = 2
@@ -614,3 +616,8 @@ theme_override_colors/default_color = Color(0.94509804, 0.92941177, 0.9019608, 1
 text = "Wild Absol appeared!
 Aegislash used Iron Head!
 It was super effective!"
+
+[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/FightButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_fight_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/BagButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_bag_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/PartyButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_party_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/RunButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_run_button_pressed"]
