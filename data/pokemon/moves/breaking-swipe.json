@@ -1,0 +1,10 @@
+{
+  "id": "breaking-swipe",
+  "name": "Breaking Swipe",
+  "type": "dragon",
+  "category": "physical",
+  "power": 60,
+  "accuracy": 100,
+  "pp": 15,
+  "priority": 0
+}

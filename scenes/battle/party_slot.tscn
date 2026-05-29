@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://3gsmmeerkva2"]
 
 [ext_resource type="Script" uid="uid://bbwshoebajex4" path="res://scripts/battle/battle_ui/party_slot.gd" id="1_qme5g"]
-[ext_resource type="Texture2D" uid="uid://cildhiod5k0rq" path="res://assets/sprites/pokemon/pokemon_home/Charizard.png" id="1_u1w4d"]
 [ext_resource type="Texture2D" uid="uid://dp378t40sdcy1" path="res://assets/battles/status/poisoned.png" id="2_87gny"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pll4o"]
@@ -58,20 +57,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1282733055]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 3
 alignment = 1
 
 [node name="PokemonIcon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1012592862]
-custom_minimum_size = Vector2(48, 52)
+custom_minimum_size = Vector2(55, 44)
 layout_mode = 2
-texture = ExtResource("1_u1w4d")
 expand_mode = 1
 stretch_mode = 6
 
@@ -82,19 +80,18 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1565839544]
-custom_minimum_size = Vector2(0, 5)
+custom_minimum_size = Vector2(90, 5)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
-text = "Roaring Moon"
-autowrap_mode = 2
-uppercase = true
+text = "Charmander"
+autowrap_mode = 3
 
 [node name="BottomRowContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=772350783]
 layout_mode = 2
 
 [node name="HPBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer" unique_id=793604556]
-custom_minimum_size = Vector2(65, 25)
+custom_minimum_size = Vector2(65, 20)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.105882354, 0.078431375, 0.05882353, 1)

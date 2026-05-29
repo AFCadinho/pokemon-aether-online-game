@@ -1,0 +1,10 @@
+{
+  "id": "flare-blitz",
+  "name": "Flare Blitz",
+  "type": "fire",
+  "category": "physical",
+  "power": 120,
+  "accuracy": 100,
+  "pp": 15,
+  "priority": 0
+}

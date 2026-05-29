@@ -1,0 +1,10 @@
+{
+  "id": "sunny-day",
+  "name": "Sunny Day",
+  "type": "fire",
+  "category": "status",
+  "power": null,
+  "accuracy": null,
+  "pp": 5,
+  "priority": 0
+}

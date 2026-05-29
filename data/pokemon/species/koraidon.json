@@ -1,0 +1,82 @@
+{
+  "id": 1007,
+  "name": "Koraidon",
+  "types": ["fighting", "dragon"],
+  "base_stats": {
+    "hp": 100,
+    "atk": 135,
+    "def": 115,
+    "spa": 85,
+    "spd": 100,
+    "spe": 135
+  },
+  "abilities": {
+    "primary": "orichalcum-pulse"
+  },
+  "level_up_moves": [
+    {
+      "level": 1,
+      "move": "breaking-swipe"
+    },
+    {
+      "level": 1,
+      "move": "sunny-day"
+    },
+    {
+      "level": 7,
+      "move": "rock-smash"
+    },
+    {
+      "level": 14,
+      "move": "ancient-power"
+    },
+    {
+      "level": 21,
+      "move": "drain-punch"
+    },
+    {
+      "level": 28,
+      "move": "brick-break"
+    },
+    {
+      "level": 35,
+      "move": "agility"
+    },
+    {
+      "level": 42,
+      "move": "dragon-claw"
+    },
+    {
+      "level": 49,
+      "move": "flamethrower"
+    },
+    {
+      "level": 56,
+      "move": "collision-course"
+    },
+    {
+      "level": 63,
+      "move": "screech"
+    },
+    {
+      "level": 70,
+      "move": "counter"
+    },
+    {
+      "level": 77,
+      "move": "outrage"
+    },
+    {
+      "level": 84,
+      "move": "close-combat"
+    },
+    {
+      "level": 91,
+      "move": "flare-blitz"
+    },
+    {
+      "level": 98,
+      "move": "giga-impact"
+    }
+  ]
+}

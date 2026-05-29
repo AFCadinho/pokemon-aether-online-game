@@ -28,11 +28,11 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	
 	
 func _load_pokemon_sprite(species: String) -> Texture2D:
-	var home_path := "res://assets/sprites/pokemon/pokemon_home/%s.png" % species
+	var icon_path := "res://assets/sprites/pokemon/pokemon_home/%s.png" % species
 	
-	if ResourceLoader.exists(home_path):
-		return load(home_path)
-		
+	if ResourceLoader.exists(icon_path):
+		return load(icon_path)
+			
 	var fallback_path := "res://assets/sprites/pokemon/front/%s/frame_000.png" % species.to_lower()
 	
 	if ResourceLoader.exists(fallback_path):

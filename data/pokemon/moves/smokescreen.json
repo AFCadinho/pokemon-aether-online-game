@@ -1,0 +1,10 @@
+{
+  "id": "smokescreen",
+  "name": "Smokescreen",
+  "type": "normal",
+  "category": "status",
+  "power": null,
+  "accuracy": 100,
+  "pp": 20,
+  "priority": 0
+}

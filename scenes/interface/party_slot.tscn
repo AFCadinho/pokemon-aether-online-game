@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bqj3ifxyy7gdh"]
 
 [ext_resource type="Script" uid="uid://dmbromlkpmfd" path="res://scripts/ui/party_slot.gd" id="1_kmnus"]
-[ext_resource type="Texture2D" uid="uid://t8r3xvxds5aj" path="res://assets/sprites/pokemon/pokemon_home/Archaludon.png" id="1_nd8rq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmnus"]
 bg_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
@@ -60,7 +59,6 @@ custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource("1_nd8rq")
 expand_mode = 2
 stretch_mode = 5
 

@@ -5,6 +5,16 @@ extends Button
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/HPBar
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/StatusIcon
 
+func _ready() -> void:
+	_ignore_child_mouse_input(self)
+
+func _ignore_child_mouse_input(node: Node) -> void:
+	for child in node.get_children():
+		if child is Control:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
+		_ignore_child_mouse_input(child)
+
 func set_pokemon(pokemon: Pokemon) -> void:
 	visible = true
 	disabled = false
@@ -25,15 +35,10 @@ func set_empty() -> void:
 	status_icon.visible = false
 	
 func _load_pokemon_icon(species: String) -> Texture2D:
-	var icon_path := "res://assets/sprites/pokemon/pokemon_home/icons/%s.png" % species
+	var icon_path := "res://assets/sprites/pokemon/pokemon_home/%s.png" % species
 	
 	if ResourceLoader.exists(icon_path):
 		return load(icon_path)
-	
-	var home_path := "res://assets/sprites/pokemon/pokemon_home/%s.png" % species
-	
-	if ResourceLoader.exists(home_path):
-		return load(home_path)
-	
+		
 	return null
 	

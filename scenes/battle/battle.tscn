@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cir3bfnfoy4l4" path="res://scenes/battle/move_slot.tscn" id="2_h0kxc"]
 [ext_resource type="Texture2D" uid="uid://cljbo3g4o51sw" path="res://assets/battles/field/rain.png" id="3_01pft"]
 [ext_resource type="PackedScene" uid="uid://3gsmmeerkva2" path="res://scenes/battle/party_slot.tscn" id="3_fh7rg"]
-[ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scripts/battle/battle_ui/sprite_box.tscn" id="3_kd6yx"]
+[ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scenes/battle/sprite_box.tscn" id="3_kd6yx"]
 [ext_resource type="Texture2D" uid="uid://b0mdtgfn4y3qi" path="res://assets/sprites/battle_buttons/fight.png" id="4_pll4o"]
 [ext_resource type="Texture2D" uid="uid://dsbm3h77o41xr" path="res://assets/sprites/battle_buttons/bag.png" id="5_py4tk"]
 [ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
@@ -166,7 +166,7 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -610.0
+offset_left = -710.0
 offset_top = -430.0
 offset_right = 640.0
 offset_bottom = 220.0
@@ -174,7 +174,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BattleFrame" type="Panel" parent="HBoxContainer" unique_id=153800450]
-custom_minimum_size = Vector2(900, 0)
+custom_minimum_size = Vector2(950, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sgdsx")
 
@@ -384,6 +384,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -2.5
+offset_bottom = 2.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 10
@@ -568,9 +570,8 @@ stretch_mode = 0
 [node name="BattleLogPanel" type="Panel" parent="." unique_id=1548381268]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 0
-offset_left = 100.0
 offset_top = 110.0
-offset_right = 350.0
+offset_right = 250.0
 offset_bottom = 760.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_afkbo")
 

@@ -39,7 +39,7 @@ func talk() -> void:
 		])
 		return
 	else:
-		var starter_pokemon = give_starter_pokemon("Charmander")
+		var starter_pokemon = give_starter_pokemon("Koraidon")
 		PlayerSave.add_pokemon(starter_pokemon)
 		PlayerSave.flags["received_starter"] = true
 		
@@ -51,15 +51,7 @@ func talk() -> void:
 		"Prof. Oak"
 		)
 	
-func give_starter_pokemon(pokemon_name) -> Pokemon:
-	return Pokemon.new(
-		pokemon_name,
-		5,
-		"",
-		"Blaze",
-		"Timid",
-		{"hp": 0, "atk": 0, "def": 0, "spa": 0, "spd": 0, "spe": 0},
-		["Scratch", "Growl"]
-	)
+func give_starter_pokemon(pokemon_name: String) -> Pokemon:
+	return PokemonFactory.create_pokemon(pokemon_name.to_lower(), 5)
 	
 	

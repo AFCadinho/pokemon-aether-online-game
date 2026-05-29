@@ -1,0 +1,10 @@
+{
+  "id": "growl",
+  "name": "Growl",
+  "type": "normal",
+  "category": "status",
+  "power": null,
+  "accuracy": 100,
+  "pp": 40,
+  "priority": 0
+}
