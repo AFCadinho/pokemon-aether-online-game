@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 GameState="*uid://bvq8eki10oc8g"
 PlayerSave="*uid://x788vwp521n4"
+BattleApiConfig="*uid://wra74wdmekx5"
+BattleApiClient="*uid://dwil5tlkmdb7p"
 
 [display]
 

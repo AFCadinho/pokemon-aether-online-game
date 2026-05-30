@@ -159,6 +159,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sgdsx")
 
+[node name="BattleRequest" type="HTTPRequest" parent="." unique_id=1293386490]
+
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]
 layout_mode = 1
 anchors_preset = 8
@@ -225,10 +227,17 @@ layout_mode = 1
 
 [node name="PlayerSpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=148088549 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
-offset_left = -851.0
-offset_top = -70.0
-offset_right = -401.0
-offset_bottom = 222.5
+anchors_preset = 2
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -384.0
+offset_right = 450.0
+offset_bottom = -91.5
+grow_horizontal = 1
+grow_vertical = 0
 
 [node name="PlayerHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=997269760 instance=ExtResource("2_01pft")]
 layout_mode = 1

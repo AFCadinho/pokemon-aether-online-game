@@ -26,7 +26,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	status_icon.visible = false
 
 func set_empty() -> void:
-	visible = false
+	visible = true
 	disabled = true
 	
 	name_label.text = ""

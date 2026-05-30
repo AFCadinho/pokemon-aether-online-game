@@ -39,6 +39,24 @@
           "moves": ["Tackle", "Tail Whip"]
         },
         {
+          "species": "Groudon",
+          "min_level": 80,
+          "max_level": 80,
+          "weight": 10,
+          "item": "",
+          "ability": "Drought",
+          "nature": "Adamant",
+          "evs": {
+            "hp": 0,
+            "atk": 0,
+            "def": 0,
+            "spa": 0,
+            "spd": 0,
+            "spe": 0
+          },
+          "moves": ["Precipice Blades", "Eruption", "Earthquake", "Fire Punch"]
+        },
+        {
           "species": "Mewtwo",
           "min_level": 100,
           "max_level": 100,

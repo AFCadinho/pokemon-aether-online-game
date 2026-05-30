@@ -17,9 +17,11 @@ enum ActionView {
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
 
+#Battle State
+var battle_state := BattleState.new()
+
 #Active Pokemon
 var active_player_pokemon: Pokemon
-
 
 # Action Buttons
 @onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
@@ -35,9 +37,11 @@ var active_player_pokemon: Pokemon
 @onready var enemy_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemySpriteBox
 @onready var player_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerSpriteBox
 
+# HTTP Request
+@onready var battle_request: HTTPRequest = $BattleRequest
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
 	_update_battle_log_toggle_button()
@@ -47,12 +51,6 @@ func _ready() -> void:
 	
 	if PlayerSave.party.is_empty():
 		return
-
-	var test_player: Pokemon = PlayerSave.party[0]
-	var test_enemy := Pokemon.new("Groudon", 100)
-
-	setup_single_battle(test_player, test_enemy, BattleType.WILD)
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -87,7 +85,6 @@ func setup_single_battle(player_pokemon: Pokemon, enemy_pokemon: Pokemon, type: 
 	
 	_update_move_slots()
 	_update_party_slots()
-	_show_initial_action_view()
 	
 func _reset_action_choices() -> void:
 	current_action_view = ActionView.NONE
@@ -127,14 +124,15 @@ func _show_initial_action_view() -> void:
 func _update_move_slots() -> void:
 	if active_player_pokemon == null:
 		return
-		
+	
+	var moves := battle_state.get_available_moves()
 	var slots := moves_grid.get_children()
 	
 	for idx in range(slots.size()):
 		var slot = slots[idx]
 		
-		if idx < active_player_pokemon.moves.size():
-			slot.set_move(active_player_pokemon.moves[idx])
+		if idx < moves.size():
+			slot.set_move_data(moves[idx])
 		else:
 			slot.set_empty()
 
@@ -146,5 +144,30 @@ func _update_party_slots() -> void:
 			slot.set_pokemon(PlayerSave.party[idx])
 		else:
 			slot.set_empty()
-			
-			
+
+func start_battle(player1: Dictionary, player2: Dictionary) -> void:		
+	if battle_type == BattleType.WILD:
+		await _start_wild_battle(player1, player2)
+		return
+		
+	var response = await BattleApiClient.create_battle(battle_request, player1, player2)
+	if not _apply_api_response(response):
+		return
+
+func _start_wild_battle(player1: Dictionary, player2: Dictionary) -> void:
+	var response = await BattleApiClient.create_wild_battle(battle_request, player1, player2)
+	if not _apply_api_response(response):
+		return
+		
+	_update_move_slots()
+	_show_moves()
+
+func _apply_api_response(response: Dictionary) -> bool:
+	if not response.get("success", false):
+		print("Battle API failed: ", response)
+		return false
+		
+	battle_state.load_from_api_response(response)
+	print("Battle updated: ", battle_state.battle_id)
+	print("Team preview: ", battle_state.is_team_preview("p1"))
+	return true

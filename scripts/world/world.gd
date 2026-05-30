@@ -21,7 +21,7 @@ func _ready() -> void:
 	player.refresh_map_layers()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
@@ -95,6 +95,19 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	
 	battle_instance = BATTLE_SCENE.instantiate()
 	battle_layer.add_child(battle_instance)
+	
+	# Tijdelijk voor UI
+	battle_instance.setup_single_battle(
+		PlayerSave.party[0],
+		wild_pokemon,
+		battle_instance.BattleType.WILD
+  	)
+
+
+	battle_instance.start_battle(
+		BattleApiPayloads.from_player_save(PlayerSave),
+		BattleApiPayloads.from_wild_pokemon(wild_pokemon),
+	)
 	
 	if battle_instance.has_signal("flee_requested"):
 		battle_instance.flee_requested.connect(end_wild_battle)

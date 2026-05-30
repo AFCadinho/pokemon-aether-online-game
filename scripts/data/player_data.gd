@@ -1,6 +1,6 @@
 extends Node
 
-class_name PlayerData
+class_name PlayerData # PlayerSave Autoload
 
 signal party_changed
 
@@ -9,13 +9,19 @@ var party: Array[Pokemon] = []
 var money := 0
 var flags := {}
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+func to_battle_dict() -> Dictionary:
+	return {
+		"name": player_name,
+		"team": _party_to_battle_team()
+	}
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _party_to_battle_team() -> Array:
+	var battle_team := []
+	
+	for pokemon in party:
+		battle_team.append(pokemon.to_battle_dict())
+	
+	return battle_team
 	
 func add_pokemon(pokemon: Pokemon) -> void:
 	if party.size() >= 6:
