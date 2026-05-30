@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cir3bfnfoy4l4"]
 
-[ext_resource type="Texture2D" uid="uid://dflc5atoafbw1" path="res://assets/sprites/types/13.png" id="1_b4k6w"]
 [ext_resource type="Script" uid="uid://bu4kkesfoolbg" path="res://scripts/battle/battle_ui/move_slot.gd" id="1_g72os"]
+[ext_resource type="Texture2D" uid="uid://83oyvxxcek6e" path="res://assets/sprites/types/small/electric.png" id="2_g72os"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4k6w"]
 bg_color = Color(0.09411765, 0.078431375, 0.0627451, 0.8627451)
@@ -66,38 +66,43 @@ theme_override_constants/margin_bottom = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1414571164]
 layout_mode = 2
-theme_override_constants/separation = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=296017235]
+[node name="TopRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=296017235]
 layout_mode = 2
 
-[node name="TypeBanner" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=313495218]
-custom_minimum_size = Vector2(70, 20)
-layout_mode = 2
-size_flags_horizontal = 0
-texture = ExtResource("1_b4k6w")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="PPLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1696639893]
-custom_minimum_size = Vector2(42, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_colors/font_color = Color(0.72156864, 0.72156864, 0.72156864, 1)
-theme_override_font_sizes/font_size = 12
-text = "24/24"
-horizontal_alignment = 2
-
-[node name="MoveNameLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1649728986]
+[node name="MoveNameLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow" unique_id=1649728986]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
-theme_override_font_sizes/font_size = 20
-text = "Thunderbolt"
-text_overrun_behavior = 6
+theme_override_font_sizes/font_size = 18
+text = "Breaking Swipe"
+autowrap_mode = 3
 
-[node name="EffectivenessLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=825452079]
+[node name="TypeBanner" type="TextureRect" parent="MarginContainer/VBoxContainer/TopRow" unique_id=313495218]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("2_g72os")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="BottomRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=515251981]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="EffectivenessLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomRow" unique_id=825452079]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.56078434, 0.56078434, 0.56078434, 1)
 theme_override_font_sizes/font_size = 11
 text = "super effective"
+
+[node name="PPLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomRow" unique_id=1696639893]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.72156864, 0.72156864, 0.72156864, 1)
+theme_override_font_sizes/font_size = 12
+text = "24/24"
+horizontal_alignment = 2

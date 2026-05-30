@@ -52,6 +52,6 @@ func talk() -> void:
 		)
 	
 func give_starter_pokemon(pokemon_name: String) -> Pokemon:
-	return PokemonFactory.create_pokemon(pokemon_name.to_lower(), 5)
+	return PokemonFactory.create_pokemon(pokemon_name.to_lower(), 100)
 	
 	
