@@ -16,6 +16,12 @@ func _ignore_child_mouse_input(node: Node) -> void:
 		_ignore_child_mouse_input(child)
 
 func set_pokemon(pokemon: Pokemon) -> void:
+	var types := PokemonFactory.get_species_types(pokemon.species)
+	if not types.is_empty():
+		var primary_type := str(types[0])
+		_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type))
+
+	
 	visible = true
 	disabled = false
 	
@@ -34,6 +40,12 @@ func set_empty() -> void:
 	pokemon_icon.texture = null
 	status_icon.visible = false
 	
+	remove_theme_stylebox_override("normal")
+	remove_theme_stylebox_override("hover")
+	remove_theme_stylebox_override("pressed")
+	remove_theme_stylebox_override("disabled")
+
+	
 func _load_pokemon_icon(species: String) -> Texture2D:
 	var icon_path := "res://assets/sprites/pokemon/pokemon_home/%s.png" % species
 	
@@ -41,4 +53,33 @@ func _load_pokemon_icon(species: String) -> Texture2D:
 		return load(icon_path)
 		
 	return null
+	
+func _set_color(background: Color, border: Color) -> void:
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = background
+	normal.border_color = border
+	normal.border_width_left = 1
+	normal.border_width_top = 1
+	normal.border_width_right = 1
+	normal.border_width_bottom = 1
+	
+	normal.corner_radius_top_left = 6
+	normal.corner_radius_top_right = 6
+	normal.corner_radius_bottom_left = 6
+	normal.corner_radius_bottom_right = 6
+	
+	var hover := normal.duplicate() as StyleBoxFlat
+	hover.bg_color = background.lightened(0.08)
+	
+	var pressed := normal.duplicate() as StyleBoxFlat
+	pressed.bg_color = background.darkened(0.08)
+	
+	add_theme_stylebox_override("normal", normal)
+	add_theme_stylebox_override("hover", hover)
+	add_theme_stylebox_override("pressed", pressed)
+	add_theme_stylebox_override("disabled", normal)
+	
+	
+
+	
 	

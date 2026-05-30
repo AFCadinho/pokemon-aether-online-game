@@ -1,0 +1,35 @@
+{
+  "id": 8,
+  "name": "Wartortle",
+  "types": ["water"],
+  "base_stats": {
+	"hp": 59,
+	"atk": 63,
+	"def": 80,
+	"spa": 65,
+	"spd": 80,
+	"spe": 58
+  },
+  "abilities": {
+	"primary": "torrent",
+	"hidden": "rain-dish"
+  },
+  "level_up_moves": [
+	{
+	  "level": 1,
+	  "move": "tackle"
+	},
+	{
+	  "level": 1,
+	  "move": "tail-whip"
+	},
+	{
+	  "level": 1,
+	  "move": "water-gun"
+	},
+	{
+	  "level": 9,
+	  "move": "rapid-spin"
+	}
+  ]
+}

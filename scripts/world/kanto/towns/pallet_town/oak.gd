@@ -41,6 +41,14 @@ func talk() -> void:
 	else:
 		var starter_pokemon = give_starter_pokemon("Koraidon")
 		PlayerSave.add_pokemon(starter_pokemon)
+		var starter_pokemon2 = give_starter_pokemon("Charizard")
+		PlayerSave.add_pokemon(starter_pokemon2)
+		var starter_pokemon3 = give_starter_pokemon("Blastoise")
+		PlayerSave.add_pokemon(starter_pokemon3)
+		var starter_pokemon4 = give_starter_pokemon("Venusaur")
+		PlayerSave.add_pokemon(starter_pokemon4)
+		
+		
 		PlayerSave.flags["received_starter"] = true
 		
 		dialogue_box.start_dialogue([

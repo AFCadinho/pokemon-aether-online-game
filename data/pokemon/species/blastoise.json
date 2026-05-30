@@ -1,0 +1,35 @@
+{
+  "id": 9,
+  "name": "Blastoise",
+  "types": ["water"],
+  "base_stats": {
+	"hp": 79,
+	"atk": 83,
+	"def": 100,
+	"spa": 85,
+	"spd": 105,
+	"spe": 78
+  },
+  "abilities": {
+	"primary": "torrent",
+	"hidden": "rain-dish"
+  },
+  "level_up_moves": [
+	{
+	  "level": 1,
+	  "move": "tackle"
+	},
+	{
+	  "level": 1,
+	  "move": "tail-whip"
+	},
+	{
+	  "level": 1,
+	  "move": "water-gun"
+	},
+	{
+	  "level": 24,
+	  "move": "water-pulse"
+	}
+  ]
+}

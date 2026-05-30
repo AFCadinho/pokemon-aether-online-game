@@ -1,0 +1,35 @@
+{
+  "id": 1,
+  "name": "Bulbasaur",
+  "types": ["grass", "poison"],
+  "base_stats": {
+	"hp": 45,
+	"atk": 49,
+	"def": 49,
+	"spa": 65,
+	"spd": 65,
+	"spe": 45
+  },
+  "abilities": {
+	"primary": "overgrow",
+	"hidden": "chlorophyll"
+  },
+  "level_up_moves": [
+	{
+	  "level": 1,
+	  "move": "tackle"
+	},
+	{
+	  "level": 1,
+	  "move": "growl"
+	},
+	{
+	  "level": 3,
+	  "move": "vine-whip"
+	},
+	{
+	  "level": 6,
+	  "move": "growth"
+	}
+  ]
+}

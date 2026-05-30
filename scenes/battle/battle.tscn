@@ -210,18 +210,6 @@ grow_vertical = 2
 texture = ExtResource("1_xd4uy")
 stretch_mode = 6
 
-[node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1534491104]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -18.0
-offset_right = 36.0
-offset_bottom = 18.0
-grow_vertical = 2
-text = "<"
-
 [node name="EnemySpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=2063766200 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
 
@@ -382,6 +370,20 @@ size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
 theme_override_font_sizes/font_size = 16
 text = "01:24"
+
+[node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel" unique_id=1534491104]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -390.30212
+offset_top = 280.5
+offset_right = -354.30212
+offset_bottom = 316.5
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+text = "<"
 
 [node name="ActionSidePanel" type="Panel" parent="HBoxContainer" unique_id=910737858]
 layout_mode = 2

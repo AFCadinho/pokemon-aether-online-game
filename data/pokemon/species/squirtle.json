@@ -1,0 +1,35 @@
+{
+  "id": 7,
+  "name": "Squirtle",
+  "types": ["water"],
+  "base_stats": {
+	"hp": 44,
+	"atk": 48,
+	"def": 65,
+	"spa": 50,
+	"spd": 64,
+	"spe": 43
+  },
+  "abilities": {
+	"primary": "torrent",
+	"hidden": "rain-dish"
+  },
+  "level_up_moves": [
+	{
+	  "level": 1,
+	  "move": "tackle"
+	},
+	{
+	  "level": 1,
+	  "move": "tail-whip"
+	},
+	{
+	  "level": 3,
+	  "move": "water-gun"
+	},
+	{
+	  "level": 6,
+	  "move": "withdraw"
+	}
+  ]
+}

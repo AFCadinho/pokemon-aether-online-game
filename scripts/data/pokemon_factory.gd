@@ -141,3 +141,9 @@ static func _load_move_data(move_id: String) -> Dictionary:
 		return {}
 
 	return parsed
+
+static func get_species_types(species_id: String) -> Array:
+	var species_data := _load_species_data(species_id.to_lower())
+	return species_data.get("types", [])
+	
+	

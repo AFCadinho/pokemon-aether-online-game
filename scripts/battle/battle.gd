@@ -31,7 +31,7 @@ var active_player_pokemon: Pokemon
 # Battle Log
 @onready var battle_log_text: RichTextLabel = $BattleLogPanel/MarginContainer/VBoxContainer/ScrollContainer/BattleLogText
 @onready var battle_log_panel: Panel = $BattleLogPanel
-@onready var battle_log_toggle_button: Button = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleLogButton
+@onready var battle_log_toggle_button: Button = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel/BattleLogButton
 
 # Battle Sprites
 @onready var enemy_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemySpriteBox

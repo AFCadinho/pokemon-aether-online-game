@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bbwshoebajex4" path="res://scripts/battle/battle_ui/party_slot.gd" id="1_qme5g"]
 [ext_resource type="Texture2D" uid="uid://dp378t40sdcy1" path="res://assets/battles/status/poisoned.png" id="2_87gny"]
+[ext_resource type="Texture2D" uid="uid://bk74njg025wdl" path="res://assets/sprites/pokemon/pokemon_home/Charizard.png" id="2_qme5g"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pll4o"]
 bg_color = Color(0.14117648, 0.07058824, 0.050980393, 1)
@@ -70,8 +71,8 @@ alignment = 1
 [node name="PokemonIcon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1012592862]
 custom_minimum_size = Vector2(55, 44)
 layout_mode = 2
-expand_mode = 1
-stretch_mode = 6
+texture = ExtResource("2_qme5g")
+expand_mode = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1130419798]
 layout_mode = 2

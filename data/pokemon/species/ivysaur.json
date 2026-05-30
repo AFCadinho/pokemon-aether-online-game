@@ -1,0 +1,35 @@
+{
+  "id": 2,
+  "name": "Ivysaur",
+  "types": ["grass", "poison"],
+  "base_stats": {
+	"hp": 60,
+	"atk": 62,
+	"def": 63,
+	"spa": 80,
+	"spd": 80,
+	"spe": 60
+  },
+  "abilities": {
+	"primary": "overgrow",
+	"hidden": "chlorophyll"
+  },
+  "level_up_moves": [
+	{
+	  "level": 1,
+	  "move": "tackle"
+	},
+	{
+	  "level": 1,
+	  "move": "growl"
+	},
+	{
+	  "level": 1,
+	  "move": "vine-whip"
+	},
+	{
+	  "level": 9,
+	  "move": "leech-seed"
+	}
+  ]
+}
