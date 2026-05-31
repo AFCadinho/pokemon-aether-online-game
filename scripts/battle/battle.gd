@@ -87,16 +87,6 @@ func _update_battle_log_toggle_button() -> void:
 		battle_log_toggle_button.text = ">"
 	else:
 		battle_log_toggle_button.text = "<"
-
-func setup_single_battle(player_pokemon: Pokemon, enemy_pokemon: Pokemon, type: BattleType=BattleType.WILD) -> void:
-	battle_type = type
-	active_player_pokemon = player_pokemon
-	
-	player_sprite_box.set_single_pokemon(player_pokemon, "back")
-	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
-	
-	_update_move_slots()
-	_update_party_slots()
 	
 func _reset_action_choices() -> void:
 	current_action_view = ActionView.NONE
@@ -124,14 +114,6 @@ func _open_bag() -> void:
 func _try_run() -> void:
 	battle_log_panel.add_message("Got away safely!")
 	flee_requested.emit()
-	
-func _show_initial_action_view() -> void:
-	if battle_type == BattleType.WILD:
-		_show_moves()
-	elif battle_type == BattleType.TRAINER:
-		_show_party()
-	else:
-		_reset_action_choices()
 
 func _update_move_slots() -> void:
 	if active_player_pokemon == null:
@@ -141,31 +123,6 @@ func _update_move_slots() -> void:
 
 func _update_party_slots() -> void:
 	party_grid.set_party(PlayerSave.party)
-
-func start_battle(player1: Dictionary, player2: Dictionary) -> void:		
-	if battle_type == BattleType.WILD:
-		await _start_wild_battle(player1, player2)
-		return
-		
-	var response = await BattleApiClient.create_battle(battle_request, player1, player2)
-	if not _apply_api_response(response):
-		return
-
-func _start_wild_battle(player1: Dictionary, player2: Dictionary) -> void:
-	var response = await BattleApiClient.create_wild_battle(battle_request, player1, player2)
-	if not _apply_api_response(response):
-		return
-	
-	_update_battle_status_panels()
-	_update_hud_panels()
-	_update_move_slots()
-	_show_moves()
-	
-	var player_species := battle_state.get_active_pokemon_species("p1")
-	var opponent_species := battle_state.get_active_pokemon_species("p2")
-	
-	current_action_panel.set_message("What will %s do?" % player_species)
-	battle_log_panel.add_message("A wild %s has appeared!" % opponent_species)
 
 func _apply_api_response(response: Dictionary) -> bool:	
 	if not response.get("success", false):
@@ -202,5 +159,26 @@ func _update_battle_status_panels() -> void:
 	battle_status_panel.hide_timer()
 	field_timers_panel.reset_timers()
 	
+func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
+	battle_type = BattleType.WILD
+	active_player_pokemon = player_pokemon
 	
+	player_sprite_box.set_single_pokemon(player_pokemon, "back")
+	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
+	
+	if not _apply_api_response(api_response):
+		return
+		
+	_update_battle_status_panels()
+	_update_hud_panels()
+	_update_move_slots()
+	_update_party_slots()
+	_show_moves()
+	
+	var player_species := battle_state.get_active_pokemon_species("p1")
+	var opponent_species := battle_state.get_active_pokemon_species("p2")
+	
+	current_action_panel.set_message("What will %s do?" % player_species)
+	battle_log_panel.add_message("A wild %s has appeared!" % opponent_species)
+
 	

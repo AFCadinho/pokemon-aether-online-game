@@ -17,7 +17,6 @@ jobs:
       - name: Send commits to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          DISCORD_TESTER_ROLE_ID: ${{ secrets.DISCORD_TESTER_ROLE_ID }}
           COMMITS_JSON: ${{ toJson(github.event.commits) }}
         run: |
           test -n "${DISCORD_WEBHOOK_URL}"
@@ -27,7 +26,6 @@ jobs:
           import os
 
           commits = json.loads(os.environ["COMMITS_JSON"])
-          tester_role_id = os.environ.get("DISCORD_TESTER_ROLE_ID", "").strip()
 
           if not commits:
               changes = "No commit details were provided."
@@ -49,10 +47,8 @@ jobs:
 
           payload = {
               "username": "Pokemon Aether Online",
-              "content": f"<@&{tester_role_id}>" if tester_role_id else "",
-              "allowed_mentions": {
-                  "roles": [tester_role_id] if tester_role_id else [],
-              },
+              "content": "",
+              "allowed_mentions": {"parse": []},
               "embeds": [
                   {
                       "title": "New test build available",

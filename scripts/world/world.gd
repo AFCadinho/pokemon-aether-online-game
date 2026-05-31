@@ -76,7 +76,20 @@ func move_player_to_map(map: Node) -> void:
 		player.get_parent().remove_child(player)
 		
 	player_parent.add_child(player)
+
+func create_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
+	var battle_request := HTTPRequest.new()
+	add_child(battle_request)
 	
+	var response: Dictionary = await BattleApiClient.create_wild_battle(
+		battle_request,
+		BattleApiPayloads.from_player_save(PlayerSave),
+		BattleApiPayloads.from_wild_pokemon(wild_pokemon)
+	)
+	
+	battle_request.queue_free()
+	return response
+
 func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	if is_in_battle:
 		return
@@ -89,6 +102,12 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	print("Starting wild battle:")
 	print(wild_pokemon.to_battle_dict())
 	
+	var response: Dictionary = await create_wild_battle_response(wild_pokemon)
+	if not response.get("success", false):
+		is_in_battle = false
+		player.set_physics_process(true)
+		return
+	
 	battle_layer = CanvasLayer.new()
 	battle_layer.layer = 10
 	add_child(battle_layer)
@@ -96,17 +115,10 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	battle_instance = BATTLE_SCENE.instantiate()
 	battle_layer.add_child(battle_instance)
 	
-	# Tijdelijk voor UI
-	battle_instance.setup_single_battle(
+	battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
 		wild_pokemon,
-		battle_instance.BattleType.WILD
-  	)
-
-
-	battle_instance.start_battle(
-		BattleApiPayloads.from_player_save(PlayerSave),
-		BattleApiPayloads.from_wild_pokemon(wild_pokemon),
+		response
 	)
 	
 	if battle_instance.has_signal("flee_requested"):
