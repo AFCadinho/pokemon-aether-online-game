@@ -1,0 +1,83 @@
+{
+  "id": 600,
+  "species_id": "klang",
+  "showdown_id": "klang",
+  "name": "Klang",
+  "types": [
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 80,
+    "def": 95,
+    "spa": 70,
+    "spd": 85,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "plus",
+    "hidden": "clear-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "charge",
+      "level": 1
+    },
+    {
+      "move": "gear-grind",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "vice-grip",
+      "level": 1
+    },
+    {
+      "move": "bind",
+      "level": 21
+    },
+    {
+      "move": "charge-beam",
+      "level": 26
+    },
+    {
+      "move": "autotomize",
+      "level": 31
+    },
+    {
+      "move": "mirror-shot",
+      "level": 36
+    },
+    {
+      "move": "screech",
+      "level": 40
+    },
+    {
+      "move": "discharge",
+      "level": 44
+    },
+    {
+      "move": "metal-sound",
+      "level": 48
+    },
+    {
+      "move": "shift-gear",
+      "level": 52
+    },
+    {
+      "move": "lock-on",
+      "level": 56
+    },
+    {
+      "move": "zap-cannon",
+      "level": 60
+    },
+    {
+      "move": "hyper-beam",
+      "level": 64
+    }
+  ]
+}

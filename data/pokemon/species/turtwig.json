@@ -1,0 +1,71 @@
+{
+  "id": 387,
+  "species_id": "turtwig",
+  "showdown_id": "turtwig",
+  "name": "Turtwig",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 68,
+    "def": 64,
+    "spa": 45,
+    "spd": 55,
+    "spe": 31
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "shell-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 5
+    },
+    {
+      "move": "absorb",
+      "level": 9
+    },
+    {
+      "move": "razor-leaf",
+      "level": 13
+    },
+    {
+      "move": "curse",
+      "level": 17
+    },
+    {
+      "move": "bite",
+      "level": 21
+    },
+    {
+      "move": "mega-drain",
+      "level": 25
+    },
+    {
+      "move": "leech-seed",
+      "level": 29
+    },
+    {
+      "move": "synthesis",
+      "level": 33
+    },
+    {
+      "move": "crunch",
+      "level": 37
+    },
+    {
+      "move": "giga-drain",
+      "level": 41
+    },
+    {
+      "move": "leaf-storm",
+      "level": 45
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": 614,
+  "species_id": "beartic",
+  "showdown_id": "beartic",
+  "name": "Beartic",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 130,
+    "def": 80,
+    "spa": 70,
+    "spd": 80,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "snow-cloak",
+    "hidden": "swift-swim"
+  },
+  "level_up_moves": [
+    {
+      "move": "bide",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "superpower",
+      "level": 1
+    },
+    {
+      "move": "fury-swipes",
+      "level": 17
+    },
+    {
+      "move": "brine",
+      "level": 21
+    },
+    {
+      "move": "endure",
+      "level": 25
+    },
+    {
+      "move": "swagger",
+      "level": 29
+    },
+    {
+      "move": "slash",
+      "level": 33
+    },
+    {
+      "move": "flail",
+      "level": 36
+    },
+    {
+      "move": "icicle-crash",
+      "level": 37
+    },
+    {
+      "move": "rest",
+      "level": 41
+    },
+    {
+      "move": "blizzard",
+      "level": 45
+    },
+    {
+      "move": "hail",
+      "level": 53
+    },
+    {
+      "move": "thrash",
+      "level": 59
+    },
+    {
+      "move": "sheer-cold",
+      "level": 66
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": 76,
+  "species_id": "golem",
+  "showdown_id": "golem",
+  "name": "Golem",
+  "types": [
+    "rock",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 120,
+    "def": 130,
+    "spa": 55,
+    "spd": 65,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "rock-head",
+    "hidden": "sand-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "rock-throw",
+      "level": 16
+    },
+    {
+      "move": "self-destruct",
+      "level": 21
+    },
+    {
+      "move": "harden",
+      "level": 29
+    },
+    {
+      "move": "earthquake",
+      "level": 36
+    },
+    {
+      "move": "explosion",
+      "level": 43
+    }
+  ]
+}

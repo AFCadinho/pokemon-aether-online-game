@@ -1,0 +1,64 @@
+{
+  "id": 189,
+  "species_id": "jumpluff",
+  "showdown_id": "jumpluff",
+  "name": "Jumpluff",
+  "types": [
+    "grass",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 55,
+    "def": 70,
+    "spa": 55,
+    "spd": 95,
+    "spe": 110
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "infiltrator"
+  },
+  "level_up_moves": [
+    {
+      "move": "splash",
+      "level": 1
+    },
+    {
+      "move": "synthesis",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "poison-powder",
+      "level": 13
+    },
+    {
+      "move": "stun-spore",
+      "level": 15
+    },
+    {
+      "move": "sleep-powder",
+      "level": 17
+    },
+    {
+      "move": "leech-seed",
+      "level": 22
+    },
+    {
+      "move": "cotton-spore",
+      "level": 33
+    },
+    {
+      "move": "mega-drain",
+      "level": 44
+    }
+  ]
+}

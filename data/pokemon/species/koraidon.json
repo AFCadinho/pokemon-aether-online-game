@@ -1,7 +1,12 @@
 {
   "id": 1007,
+  "species_id": "koraidon",
+  "showdown_id": "koraidon",
   "name": "Koraidon",
-  "types": ["fighting", "dragon"],
+  "types": [
+	"fighting",
+    "dragon"
+  ],
   "base_stats": {
 	"hp": 100,
 	"atk": 135,

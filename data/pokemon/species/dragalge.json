@@ -1,0 +1,96 @@
+{
+  "id": 691,
+  "species_id": "dragalge",
+  "showdown_id": "dragalge",
+  "name": "Dragalge",
+  "types": [
+    "poison",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 75,
+    "def": 90,
+    "spa": 97,
+    "spd": 123,
+    "spe": 44
+  },
+  "abilities": {
+    "primary": "poison-point",
+    "hidden": "adaptability"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "smokescreen",
+      "level": 1
+    },
+    {
+      "move": "twister",
+      "level": 1
+    },
+    {
+      "move": "dragon-tail",
+      "level": 1
+    },
+    {
+      "move": "feint-attack",
+      "level": 5
+    },
+    {
+      "move": "tail-whip",
+      "level": 9
+    },
+    {
+      "move": "bubble",
+      "level": 12
+    },
+    {
+      "move": "acid",
+      "level": 15
+    },
+    {
+      "move": "camouflage",
+      "level": 19
+    },
+    {
+      "move": "poison-tail",
+      "level": 23
+    },
+    {
+      "move": "water-pulse",
+      "level": 25
+    },
+    {
+      "move": "double-team",
+      "level": 28
+    },
+    {
+      "move": "toxic",
+      "level": 32
+    },
+    {
+      "move": "aqua-tail",
+      "level": 35
+    },
+    {
+      "move": "sludge-bomb",
+      "level": 38
+    },
+    {
+      "move": "hydro-pump",
+      "level": 42
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 53
+    }
+  ]
+}

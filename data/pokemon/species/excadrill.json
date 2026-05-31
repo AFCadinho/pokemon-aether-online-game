@@ -1,0 +1,88 @@
+{
+  "id": 530,
+  "species_id": "excadrill",
+  "showdown_id": "excadrill",
+  "name": "Excadrill",
+  "types": [
+    "ground",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 110,
+    "atk": 135,
+    "def": 60,
+    "spa": 50,
+    "spd": 65,
+    "spe": 88
+  },
+  "abilities": {
+    "primary": "sand-rush",
+    "hidden": "mold-breaker"
+  },
+  "level_up_moves": [
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "mud-sport",
+      "level": 1
+    },
+    {
+      "move": "rapid-spin",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "fury-swipes",
+      "level": 12
+    },
+    {
+      "move": "metal-claw",
+      "level": 15
+    },
+    {
+      "move": "dig",
+      "level": 19
+    },
+    {
+      "move": "hone-claws",
+      "level": 22
+    },
+    {
+      "move": "slash",
+      "level": 26
+    },
+    {
+      "move": "rock-slide",
+      "level": 29
+    },
+    {
+      "move": "horn-drill",
+      "level": 31
+    },
+    {
+      "move": "earthquake",
+      "level": 36
+    },
+    {
+      "move": "swords-dance",
+      "level": 42
+    },
+    {
+      "move": "sandstorm",
+      "level": 49
+    },
+    {
+      "move": "drill-run",
+      "level": 55
+    },
+    {
+      "move": "fissure",
+      "level": 62
+    }
+  ]
+}

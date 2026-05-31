@@ -1,0 +1,84 @@
+{
+  "id": 662,
+  "species_id": "fletchinder",
+  "showdown_id": "fletchinder",
+  "name": "Fletchinder",
+  "types": [
+    "fire",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 62,
+    "atk": 73,
+    "def": 55,
+    "spa": 56,
+    "spd": 52,
+    "spe": 84
+  },
+  "abilities": {
+    "primary": "flame-body",
+    "hidden": "gale-wings"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 6
+    },
+    {
+      "move": "peck",
+      "level": 10
+    },
+    {
+      "move": "agility",
+      "level": 13
+    },
+    {
+      "move": "flail",
+      "level": 16
+    },
+    {
+      "move": "ember",
+      "level": 17
+    },
+    {
+      "move": "roost",
+      "level": 25
+    },
+    {
+      "move": "razor-wind",
+      "level": 27
+    },
+    {
+      "move": "natural-gift",
+      "level": 31
+    },
+    {
+      "move": "flame-charge",
+      "level": 38
+    },
+    {
+      "move": "acrobatics",
+      "level": 42
+    },
+    {
+      "move": "me-first",
+      "level": 46
+    },
+    {
+      "move": "tailwind",
+      "level": 51
+    },
+    {
+      "move": "steel-wing",
+      "level": 55
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": 307,
+  "species_id": "meditite",
+  "showdown_id": "meditite",
+  "name": "Meditite",
+  "types": [
+    "fighting",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 40,
+    "def": 55,
+    "spa": 40,
+    "spd": 55,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "pure-power",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "bide",
+      "level": 1
+    },
+    {
+      "move": "meditate",
+      "level": 4
+    },
+    {
+      "move": "confusion",
+      "level": 9
+    },
+    {
+      "move": "detect",
+      "level": 12
+    },
+    {
+      "move": "hidden-power",
+      "level": 18
+    },
+    {
+      "move": "mind-reader",
+      "level": 22
+    },
+    {
+      "move": "calm-mind",
+      "level": 28
+    },
+    {
+      "move": "high-jump-kick",
+      "level": 32
+    },
+    {
+      "move": "psych-up",
+      "level": 38
+    },
+    {
+      "move": "reversal",
+      "level": 42
+    },
+    {
+      "move": "recover",
+      "level": 48
+    }
+  ]
+}

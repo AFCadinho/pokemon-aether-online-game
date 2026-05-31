@@ -1,0 +1,74 @@
+{
+  "id": 455,
+  "species_id": "carnivine",
+  "showdown_id": "carnivine",
+  "name": "Carnivine",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 74,
+    "atk": 100,
+    "def": 72,
+    "spa": 90,
+    "spd": 72,
+    "spe": 46
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "bind",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 7
+    },
+    {
+      "move": "vine-whip",
+      "level": 11
+    },
+    {
+      "move": "sweet-scent",
+      "level": 17
+    },
+    {
+      "move": "ingrain",
+      "level": 21
+    },
+    {
+      "move": "feint-attack",
+      "level": 27
+    },
+    {
+      "move": "spit-up",
+      "level": 31
+    },
+    {
+      "move": "stockpile",
+      "level": 31
+    },
+    {
+      "move": "swallow",
+      "level": 31
+    },
+    {
+      "move": "crunch",
+      "level": 37
+    },
+    {
+      "move": "wring-out",
+      "level": 41
+    },
+    {
+      "move": "power-whip",
+      "level": 47
+    }
+  ]
+}

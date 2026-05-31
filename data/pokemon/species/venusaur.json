@@ -1,35 +1,60 @@
 {
   "id": 3,
+  "species_id": "venusaur",
+  "showdown_id": "venusaur",
   "name": "Venusaur",
-  "types": ["grass", "poison"],
+  "types": [
+    "grass",
+    "poison"
+  ],
   "base_stats": {
-	"hp": 80,
-	"atk": 82,
-	"def": 83,
-	"spa": 100,
-	"spd": 100,
-	"spe": 80
+    "hp": 80,
+    "atk": 82,
+    "def": 83,
+    "spa": 100,
+    "spd": 100,
+    "spe": 80
   },
   "abilities": {
-	"primary": "overgrow",
-	"hidden": "chlorophyll"
+    "primary": "overgrow",
+    "hidden": "chlorophyll"
   },
   "level_up_moves": [
-	{
-	  "level": 1,
-	  "move": "tackle"
-	},
-	{
-	  "level": 1,
-	  "move": "growl"
-	},
-	{
-	  "level": 1,
-	  "move": "vine-whip"
-	},
-	{
-	  "level": 15,
-	  "move": "razor-leaf"
-	}
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "vine-whip",
+      "level": 1
+    },
+    {
+      "move": "poison-powder",
+      "level": 22
+    },
+    {
+      "move": "razor-leaf",
+      "level": 30
+    },
+    {
+      "move": "growth",
+      "level": 43
+    },
+    {
+      "move": "sleep-powder",
+      "level": 55
+    },
+    {
+      "move": "solar-beam",
+      "level": 65
+    }
   ]
 }

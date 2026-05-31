@@ -1,0 +1,92 @@
+{
+  "id": 642,
+  "species_id": "thundurus-incarnate",
+  "showdown_id": "thundurus",
+  "name": "Thundurus Incarnate",
+  "types": [
+    "electric",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 79,
+    "atk": 115,
+    "def": 70,
+    "spa": 125,
+    "spd": 80,
+    "spe": 111
+  },
+  "abilities": {
+    "primary": "prankster",
+    "hidden": "defiant"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "uproar",
+      "level": 1
+    },
+    {
+      "move": "swagger",
+      "level": 7
+    },
+    {
+      "move": "bite",
+      "level": 13
+    },
+    {
+      "move": "revenge",
+      "level": 19
+    },
+    {
+      "move": "shock-wave",
+      "level": 25
+    },
+    {
+      "move": "heal-block",
+      "level": 31
+    },
+    {
+      "move": "agility",
+      "level": 37
+    },
+    {
+      "move": "discharge",
+      "level": 43
+    },
+    {
+      "move": "crunch",
+      "level": 49
+    },
+    {
+      "move": "charge",
+      "level": 55
+    },
+    {
+      "move": "nasty-plot",
+      "level": 61
+    },
+    {
+      "move": "thunder",
+      "level": 67
+    },
+    {
+      "move": "dark-pulse",
+      "level": 73
+    },
+    {
+      "move": "hammer-arm",
+      "level": 79
+    },
+    {
+      "move": "thrash",
+      "level": 85
+    }
+  ]
+}

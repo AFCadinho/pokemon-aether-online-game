@@ -1,0 +1,71 @@
+{
+  "id": 263,
+  "species_id": "zigzagoon",
+  "showdown_id": "zigzagoon",
+  "name": "Zigzagoon",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 38,
+    "atk": 30,
+    "def": 41,
+    "spa": 30,
+    "spd": 41,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "pickup",
+    "hidden": "quick-feet"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 5
+    },
+    {
+      "move": "headbutt",
+      "level": 9
+    },
+    {
+      "move": "sand-attack",
+      "level": 13
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 17
+    },
+    {
+      "move": "mud-sport",
+      "level": 21
+    },
+    {
+      "move": "pin-missile",
+      "level": 25
+    },
+    {
+      "move": "covet",
+      "level": 29
+    },
+    {
+      "move": "flail",
+      "level": 33
+    },
+    {
+      "move": "rest",
+      "level": 37
+    },
+    {
+      "move": "belly-drum",
+      "level": 41
+    }
+  ]
+}

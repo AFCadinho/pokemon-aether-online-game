@@ -1,0 +1,52 @@
+{
+  "id": 176,
+  "species_id": "togetic",
+  "showdown_id": "togetic",
+  "name": "Togetic",
+  "types": [
+    "fairy",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 40,
+    "def": 85,
+    "spa": 80,
+    "spd": 105,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "hustle",
+    "hidden": "super-luck"
+  },
+  "level_up_moves": [
+    {
+      "move": "charm",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "metronome",
+      "level": 7
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 18
+    },
+    {
+      "move": "encore",
+      "level": 25
+    },
+    {
+      "move": "safeguard",
+      "level": 31
+    },
+    {
+      "move": "double-edge",
+      "level": 38
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": 119,
+  "species_id": "seaking",
+  "showdown_id": "seaking",
+  "name": "Seaking",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 92,
+    "def": 65,
+    "spa": 65,
+    "spd": 80,
+    "spe": 68
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "lightning-rod"
+  },
+  "level_up_moves": [
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "horn-attack",
+      "level": 24
+    },
+    {
+      "move": "fury-attack",
+      "level": 30
+    },
+    {
+      "move": "waterfall",
+      "level": 39
+    },
+    {
+      "move": "horn-drill",
+      "level": 48
+    },
+    {
+      "move": "agility",
+      "level": 54
+    }
+  ]
+}

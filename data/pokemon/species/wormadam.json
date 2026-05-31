@@ -1,0 +1,76 @@
+{
+  "id": 413,
+  "species_id": "wormadam",
+  "showdown_id": "wormadam",
+  "name": "Wormadam",
+  "types": [
+    "bug",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 59,
+    "def": 85,
+    "spa": 79,
+    "spd": 105,
+    "spe": 36
+  },
+  "abilities": {
+    "primary": "anticipation",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 10
+    },
+    {
+      "move": "bug-bite",
+      "level": 15
+    },
+    {
+      "move": "hidden-power",
+      "level": 20
+    },
+    {
+      "move": "confusion",
+      "level": 23
+    },
+    {
+      "move": "razor-leaf",
+      "level": 26
+    },
+    {
+      "move": "growth",
+      "level": 29
+    },
+    {
+      "move": "psybeam",
+      "level": 32
+    },
+    {
+      "move": "captivate",
+      "level": 35
+    },
+    {
+      "move": "flail",
+      "level": 38
+    },
+    {
+      "move": "attract",
+      "level": 41
+    },
+    {
+      "move": "psychic",
+      "level": 44
+    },
+    {
+      "move": "leaf-storm",
+      "level": 47
+    }
+  ]
+}

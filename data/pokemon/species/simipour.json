@@ -1,0 +1,39 @@
+{
+  "id": 516,
+  "species_id": "simipour",
+  "showdown_id": "simipour",
+  "name": "Simipour",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 98,
+    "def": 63,
+    "spa": 98,
+    "spd": 63,
+    "spe": 101
+  },
+  "abilities": {
+    "primary": "gluttony",
+    "hidden": "torrent"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-swipes",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "scald",
+      "level": 1
+    }
+  ]
+}

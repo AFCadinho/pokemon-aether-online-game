@@ -1,0 +1,67 @@
+{
+  "id": 252,
+  "species_id": "treecko",
+  "showdown_id": "treecko",
+  "name": "Treecko",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 35,
+    "spa": 65,
+    "spd": 55,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "unburden"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 6
+    },
+    {
+      "move": "quick-attack",
+      "level": 11
+    },
+    {
+      "move": "pursuit",
+      "level": 16
+    },
+    {
+      "move": "screech",
+      "level": 21
+    },
+    {
+      "move": "mega-drain",
+      "level": 26
+    },
+    {
+      "move": "agility",
+      "level": 31
+    },
+    {
+      "move": "slam",
+      "level": 36
+    },
+    {
+      "move": "detect",
+      "level": 41
+    },
+    {
+      "move": "giga-drain",
+      "level": 46
+    }
+  ]
+}

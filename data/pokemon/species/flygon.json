@@ -1,0 +1,59 @@
+{
+  "id": 330,
+  "species_id": "flygon",
+  "showdown_id": "flygon",
+  "name": "Flygon",
+  "types": [
+    "ground",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 100,
+    "def": 80,
+    "spa": 80,
+    "spd": 80,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "feint-attack",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "sand-tomb",
+      "level": 1
+    },
+    {
+      "move": "crunch",
+      "level": 33
+    },
+    {
+      "move": "dragon-breath",
+      "level": 35
+    },
+    {
+      "move": "screech",
+      "level": 41
+    },
+    {
+      "move": "sandstorm",
+      "level": 53
+    },
+    {
+      "move": "hyper-beam",
+      "level": 65
+    }
+  ]
+}

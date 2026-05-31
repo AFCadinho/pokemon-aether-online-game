@@ -1,0 +1,52 @@
+{
+  "id": 16,
+  "species_id": "pidgey",
+  "showdown_id": "pidgey",
+  "name": "Pidgey",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 40,
+    "spa": 35,
+    "spd": 35,
+    "spe": 56
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "big-pecks"
+  },
+  "level_up_moves": [
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 5
+    },
+    {
+      "move": "quick-attack",
+      "level": 12
+    },
+    {
+      "move": "whirlwind",
+      "level": 19
+    },
+    {
+      "move": "wing-attack",
+      "level": 28
+    },
+    {
+      "move": "agility",
+      "level": 36
+    },
+    {
+      "move": "mirror-move",
+      "level": 44
+    }
+  ]
+}

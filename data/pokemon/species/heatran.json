@@ -1,0 +1,76 @@
+{
+  "id": 485,
+  "species_id": "heatran",
+  "showdown_id": "heatran",
+  "name": "Heatran",
+  "types": [
+    "fire",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 91,
+    "atk": 90,
+    "def": 106,
+    "spa": 130,
+    "spd": 106,
+    "spe": 77
+  },
+  "abilities": {
+    "primary": "flash-fire",
+    "hidden": "flame-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "ancient-power",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 9
+    },
+    {
+      "move": "fire-fang",
+      "level": 17
+    },
+    {
+      "move": "metal-sound",
+      "level": 25
+    },
+    {
+      "move": "crunch",
+      "level": 33
+    },
+    {
+      "move": "scary-face",
+      "level": 41
+    },
+    {
+      "move": "lava-plume",
+      "level": 49
+    },
+    {
+      "move": "fire-spin",
+      "level": 57
+    },
+    {
+      "move": "iron-head",
+      "level": 65
+    },
+    {
+      "move": "earth-power",
+      "level": 73
+    },
+    {
+      "move": "heat-wave",
+      "level": 81
+    },
+    {
+      "move": "stone-edge",
+      "level": 88
+    },
+    {
+      "move": "magma-storm",
+      "level": 96
+    }
+  ]
+}

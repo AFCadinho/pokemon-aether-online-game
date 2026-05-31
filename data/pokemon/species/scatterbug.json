@@ -1,0 +1,39 @@
+{
+  "id": 664,
+  "species_id": "scatterbug",
+  "showdown_id": "scatterbug",
+  "name": "Scatterbug",
+  "types": [
+    "bug"
+  ],
+  "base_stats": {
+    "hp": 38,
+    "atk": 35,
+    "def": 40,
+    "spa": 27,
+    "spd": 25,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "shield-dust",
+    "hidden": "friend-guard"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "stun-spore",
+      "level": 6
+    },
+    {
+      "move": "bug-bite",
+      "level": 15
+    }
+  ]
+}

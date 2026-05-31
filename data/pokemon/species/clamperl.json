@@ -1,0 +1,39 @@
+{
+  "id": 366,
+  "species_id": "clamperl",
+  "showdown_id": "clamperl",
+  "name": "Clamperl",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 35,
+    "atk": 64,
+    "def": 85,
+    "spa": 74,
+    "spd": 55,
+    "spe": 32
+  },
+  "abilities": {
+    "primary": "shell-armor",
+    "hidden": "rattled"
+  },
+  "level_up_moves": [
+    {
+      "move": "clamp",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "whirlpool",
+      "level": 1
+    }
+  ]
+}

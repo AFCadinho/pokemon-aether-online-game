@@ -1,0 +1,79 @@
+{
+  "id": 656,
+  "species_id": "froakie",
+  "showdown_id": "froakie",
+  "name": "Froakie",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 41,
+    "atk": 56,
+    "def": 40,
+    "spa": 62,
+    "spd": 44,
+    "spe": 71
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "protean"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "bubble",
+      "level": 5
+    },
+    {
+      "move": "quick-attack",
+      "level": 8
+    },
+    {
+      "move": "lick",
+      "level": 10
+    },
+    {
+      "move": "water-pulse",
+      "level": 14
+    },
+    {
+      "move": "smokescreen",
+      "level": 18
+    },
+    {
+      "move": "round",
+      "level": 21
+    },
+    {
+      "move": "fling",
+      "level": 25
+    },
+    {
+      "move": "smack-down",
+      "level": 29
+    },
+    {
+      "move": "substitute",
+      "level": 35
+    },
+    {
+      "move": "bounce",
+      "level": 39
+    },
+    {
+      "move": "double-team",
+      "level": 43
+    },
+    {
+      "move": "hydro-pump",
+      "level": 48
+    }
+  ]
+}

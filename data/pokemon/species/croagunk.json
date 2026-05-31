@@ -1,0 +1,80 @@
+{
+  "id": 453,
+  "species_id": "croagunk",
+  "showdown_id": "croagunk",
+  "name": "Croagunk",
+  "types": [
+    "poison",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 48,
+    "atk": 61,
+    "def": 40,
+    "spa": 61,
+    "spd": 40,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "anticipation",
+    "hidden": "poison-touch"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 3
+    },
+    {
+      "move": "poison-sting",
+      "level": 8
+    },
+    {
+      "move": "taunt",
+      "level": 10
+    },
+    {
+      "move": "pursuit",
+      "level": 15
+    },
+    {
+      "move": "feint-attack",
+      "level": 17
+    },
+    {
+      "move": "revenge",
+      "level": 22
+    },
+    {
+      "move": "swagger",
+      "level": 24
+    },
+    {
+      "move": "mud-bomb",
+      "level": 29
+    },
+    {
+      "move": "sucker-punch",
+      "level": 31
+    },
+    {
+      "move": "nasty-plot",
+      "level": 36
+    },
+    {
+      "move": "poison-jab",
+      "level": 38
+    },
+    {
+      "move": "sludge-bomb",
+      "level": 43
+    },
+    {
+      "move": "flatter",
+      "level": 45
+    }
+  ]
+}

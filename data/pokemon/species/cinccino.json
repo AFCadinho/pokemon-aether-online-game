@@ -1,0 +1,47 @@
+{
+  "id": 573,
+  "species_id": "cinccino",
+  "showdown_id": "cinccino",
+  "name": "Cinccino",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 95,
+    "def": 60,
+    "spa": 65,
+    "spd": 60,
+    "spe": 115
+  },
+  "abilities": {
+    "primary": "cute-charm",
+    "hidden": "skill-link"
+  },
+  "level_up_moves": [
+    {
+      "move": "bullet-seed",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "rock-blast",
+      "level": 1
+    },
+    {
+      "move": "sing",
+      "level": 1
+    },
+    {
+      "move": "tail-slap",
+      "level": 1
+    },
+    {
+      "move": "tickle",
+      "level": 1
+    }
+  ]
+}

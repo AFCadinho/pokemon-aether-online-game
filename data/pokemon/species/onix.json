@@ -1,0 +1,52 @@
+{
+  "id": 95,
+  "species_id": "onix",
+  "showdown_id": "onix",
+  "name": "Onix",
+  "types": [
+    "rock",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 35,
+    "atk": 45,
+    "def": 160,
+    "spa": 30,
+    "spd": 45,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "rock-head",
+    "hidden": "weak-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "screech",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bind",
+      "level": 15
+    },
+    {
+      "move": "rock-throw",
+      "level": 19
+    },
+    {
+      "move": "rage",
+      "level": 25
+    },
+    {
+      "move": "slam",
+      "level": 33
+    },
+    {
+      "move": "harden",
+      "level": 43
+    }
+  ]
+}

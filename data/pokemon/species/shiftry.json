@@ -1,0 +1,40 @@
+{
+  "id": 275,
+  "species_id": "shiftry",
+  "showdown_id": "shiftry",
+  "name": "Shiftry",
+  "types": [
+    "grass",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 100,
+    "def": 60,
+    "spa": 90,
+    "spd": 60,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "pickpocket"
+  },
+  "level_up_moves": [
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "nature-power",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    }
+  ]
+}

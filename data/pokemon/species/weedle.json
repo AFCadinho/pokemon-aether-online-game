@@ -1,0 +1,32 @@
+{
+  "id": 13,
+  "species_id": "weedle",
+  "showdown_id": "weedle",
+  "name": "Weedle",
+  "types": [
+    "bug",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 35,
+    "def": 30,
+    "spa": 20,
+    "spd": 20,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "shield-dust",
+    "hidden": "run-away"
+  },
+  "level_up_moves": [
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 1
+    }
+  ]
+}

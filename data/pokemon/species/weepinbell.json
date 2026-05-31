@@ -1,0 +1,60 @@
+{
+  "id": 70,
+  "species_id": "weepinbell",
+  "showdown_id": "weepinbell",
+  "name": "Weepinbell",
+  "types": [
+    "grass",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 90,
+    "def": 50,
+    "spa": 85,
+    "spd": 45,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "gluttony"
+  },
+  "level_up_moves": [
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "vine-whip",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "poison-powder",
+      "level": 15
+    },
+    {
+      "move": "sleep-powder",
+      "level": 18
+    },
+    {
+      "move": "stun-spore",
+      "level": 23
+    },
+    {
+      "move": "acid",
+      "level": 29
+    },
+    {
+      "move": "razor-leaf",
+      "level": 38
+    },
+    {
+      "move": "slam",
+      "level": 49
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": 555,
+  "species_id": "darmanitan-standard",
+  "showdown_id": "darmanitan",
+  "name": "Darmanitan Standard",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 105,
+    "atk": 140,
+    "def": 55,
+    "spa": 30,
+    "spd": 55,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "sheer-force",
+    "hidden": "zen-mode"
+  },
+  "level_up_moves": [
+    {
+      "move": "incinerate",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 1
+    },
+    {
+      "move": "rollout",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "fire-fang",
+      "level": 11
+    },
+    {
+      "move": "headbutt",
+      "level": 14
+    },
+    {
+      "move": "swagger",
+      "level": 17
+    },
+    {
+      "move": "facade",
+      "level": 19
+    },
+    {
+      "move": "fire-punch",
+      "level": 22
+    },
+    {
+      "move": "work-up",
+      "level": 25
+    },
+    {
+      "move": "thrash",
+      "level": 27
+    },
+    {
+      "move": "belly-drum",
+      "level": 30
+    },
+    {
+      "move": "flare-blitz",
+      "level": 33
+    },
+    {
+      "move": "hammer-arm",
+      "level": 35
+    },
+    {
+      "move": "taunt",
+      "level": 39
+    },
+    {
+      "move": "superpower",
+      "level": 47
+    },
+    {
+      "move": "overheat",
+      "level": 54
+    }
+  ]
+}

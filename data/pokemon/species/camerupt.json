@@ -1,0 +1,68 @@
+{
+  "id": 323,
+  "species_id": "camerupt",
+  "showdown_id": "camerupt",
+  "name": "Camerupt",
+  "types": [
+    "fire",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 100,
+    "def": 70,
+    "spa": 105,
+    "spd": 75,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "magma-armor",
+    "hidden": "anger-point"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "magnitude",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 25
+    },
+    {
+      "move": "take-down",
+      "level": 29
+    },
+    {
+      "move": "amnesia",
+      "level": 31
+    },
+    {
+      "move": "rock-slide",
+      "level": 33
+    },
+    {
+      "move": "earthquake",
+      "level": 37
+    },
+    {
+      "move": "eruption",
+      "level": 45
+    },
+    {
+      "move": "fissure",
+      "level": 55
+    }
+  ]
+}

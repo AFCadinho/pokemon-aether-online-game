@@ -1,0 +1,63 @@
+{
+  "id": 299,
+  "species_id": "nosepass",
+  "showdown_id": "nosepass",
+  "name": "Nosepass",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 45,
+    "def": 135,
+    "spa": 45,
+    "spd": 90,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "sand-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 7
+    },
+    {
+      "move": "rock-throw",
+      "level": 13
+    },
+    {
+      "move": "block",
+      "level": 16
+    },
+    {
+      "move": "thunder-wave",
+      "level": 22
+    },
+    {
+      "move": "rock-slide",
+      "level": 28
+    },
+    {
+      "move": "sandstorm",
+      "level": 31
+    },
+    {
+      "move": "rest",
+      "level": 37
+    },
+    {
+      "move": "zap-cannon",
+      "level": 43
+    },
+    {
+      "move": "lock-on",
+      "level": 46
+    }
+  ]
+}

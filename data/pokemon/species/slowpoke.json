@@ -1,0 +1,52 @@
+{
+  "id": 79,
+  "species_id": "slowpoke",
+  "showdown_id": "slowpoke",
+  "name": "Slowpoke",
+  "types": [
+    "water",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 65,
+    "def": 65,
+    "spa": 40,
+    "spd": 40,
+    "spe": 15
+  },
+  "abilities": {
+    "primary": "oblivious",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "disable",
+      "level": 18
+    },
+    {
+      "move": "headbutt",
+      "level": 22
+    },
+    {
+      "move": "growl",
+      "level": 27
+    },
+    {
+      "move": "water-gun",
+      "level": 33
+    },
+    {
+      "move": "amnesia",
+      "level": 40
+    },
+    {
+      "move": "psychic",
+      "level": 48
+    }
+  ]
+}

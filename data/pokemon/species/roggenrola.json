@@ -1,0 +1,75 @@
+{
+  "id": 524,
+  "species_id": "roggenrola",
+  "showdown_id": "roggenrola",
+  "name": "Roggenrola",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 75,
+    "def": 85,
+    "spa": 25,
+    "spd": 25,
+    "spe": 15
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "sand-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 4
+    },
+    {
+      "move": "sand-attack",
+      "level": 7
+    },
+    {
+      "move": "headbutt",
+      "level": 10
+    },
+    {
+      "move": "rock-blast",
+      "level": 14
+    },
+    {
+      "move": "mud-slap",
+      "level": 17
+    },
+    {
+      "move": "iron-defense",
+      "level": 20
+    },
+    {
+      "move": "smack-down",
+      "level": 23
+    },
+    {
+      "move": "rock-slide",
+      "level": 27
+    },
+    {
+      "move": "stealth-rock",
+      "level": 30
+    },
+    {
+      "move": "sandstorm",
+      "level": 33
+    },
+    {
+      "move": "stone-edge",
+      "level": 36
+    },
+    {
+      "move": "explosion",
+      "level": 40
+    }
+  ]
+}

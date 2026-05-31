@@ -1,0 +1,64 @@
+{
+  "id": 187,
+  "species_id": "hoppip",
+  "showdown_id": "hoppip",
+  "name": "Hoppip",
+  "types": [
+    "grass",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 35,
+    "atk": 35,
+    "def": 40,
+    "spa": 35,
+    "spd": 55,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "infiltrator"
+  },
+  "level_up_moves": [
+    {
+      "move": "splash",
+      "level": 1
+    },
+    {
+      "move": "synthesis",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 5
+    },
+    {
+      "move": "tackle",
+      "level": 10
+    },
+    {
+      "move": "poison-powder",
+      "level": 13
+    },
+    {
+      "move": "stun-spore",
+      "level": 15
+    },
+    {
+      "move": "sleep-powder",
+      "level": 17
+    },
+    {
+      "move": "leech-seed",
+      "level": 20
+    },
+    {
+      "move": "cotton-spore",
+      "level": 25
+    },
+    {
+      "move": "mega-drain",
+      "level": 30
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": 576,
+  "species_id": "gothitelle",
+  "showdown_id": "gothitelle",
+  "name": "Gothitelle",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 55,
+    "def": 95,
+    "spa": 95,
+    "spd": 110,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "frisk",
+    "hidden": "shadow-tag"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "fake-tears",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "tickle",
+      "level": 1
+    },
+    {
+      "move": "double-slap",
+      "level": 14
+    },
+    {
+      "move": "psybeam",
+      "level": 16
+    },
+    {
+      "move": "embargo",
+      "level": 19
+    },
+    {
+      "move": "feint-attack",
+      "level": 24
+    },
+    {
+      "move": "psyshock",
+      "level": 25
+    },
+    {
+      "move": "flatter",
+      "level": 28
+    },
+    {
+      "move": "future-sight",
+      "level": 31
+    },
+    {
+      "move": "heal-block",
+      "level": 34
+    },
+    {
+      "move": "psychic",
+      "level": 39
+    },
+    {
+      "move": "telekinesis",
+      "level": 45
+    },
+    {
+      "move": "charm",
+      "level": 54
+    },
+    {
+      "move": "magic-room",
+      "level": 59
+    }
+  ]
+}

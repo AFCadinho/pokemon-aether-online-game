@@ -1,0 +1,64 @@
+{
+  "id": 443,
+  "species_id": "gible",
+  "showdown_id": "gible",
+  "name": "Gible",
+  "types": [
+    "dragon",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 58,
+    "atk": 70,
+    "def": 45,
+    "spa": 40,
+    "spd": 45,
+    "spe": 42
+  },
+  "abilities": {
+    "primary": "sand-veil",
+    "hidden": "rough-skin"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 3
+    },
+    {
+      "move": "dragon-rage",
+      "level": 7
+    },
+    {
+      "move": "sandstorm",
+      "level": 13
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "sand-tomb",
+      "level": 19
+    },
+    {
+      "move": "slash",
+      "level": 25
+    },
+    {
+      "move": "dragon-claw",
+      "level": 27
+    },
+    {
+      "move": "dig",
+      "level": 31
+    },
+    {
+      "move": "dragon-rush",
+      "level": 37
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "id": 331,
+  "species_id": "cacnea",
+  "showdown_id": "cacnea",
+  "name": "Cacnea",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 85,
+    "def": 40,
+    "spa": 85,
+    "spd": 40,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "sand-veil",
+    "hidden": "water-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 5
+    },
+    {
+      "move": "growth",
+      "level": 9
+    },
+    {
+      "move": "leech-seed",
+      "level": 13
+    },
+    {
+      "move": "sand-attack",
+      "level": 17
+    },
+    {
+      "move": "pin-missile",
+      "level": 21
+    },
+    {
+      "move": "ingrain",
+      "level": 25
+    },
+    {
+      "move": "feint-attack",
+      "level": 29
+    },
+    {
+      "move": "spikes",
+      "level": 33
+    },
+    {
+      "move": "needle-arm",
+      "level": 37
+    },
+    {
+      "move": "cotton-spore",
+      "level": 41
+    },
+    {
+      "move": "sandstorm",
+      "level": 45
+    }
+  ]
+}

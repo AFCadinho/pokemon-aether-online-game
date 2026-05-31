@@ -1,0 +1,88 @@
+{
+  "id": 537,
+  "species_id": "seismitoad",
+  "showdown_id": "seismitoad",
+  "name": "Seismitoad",
+  "types": [
+    "water",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 105,
+    "atk": 95,
+    "def": 75,
+    "spa": 85,
+    "spd": 75,
+    "spe": 74
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "water-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "round",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "bubble-beam",
+      "level": 12
+    },
+    {
+      "move": "mud-shot",
+      "level": 16
+    },
+    {
+      "move": "aqua-ring",
+      "level": 20
+    },
+    {
+      "move": "uproar",
+      "level": 23
+    },
+    {
+      "move": "muddy-water",
+      "level": 28
+    },
+    {
+      "move": "rain-dance",
+      "level": 33
+    },
+    {
+      "move": "acid",
+      "level": 36
+    },
+    {
+      "move": "flail",
+      "level": 39
+    },
+    {
+      "move": "drain-punch",
+      "level": 44
+    },
+    {
+      "move": "echoed-voice",
+      "level": 49
+    },
+    {
+      "move": "hydro-pump",
+      "level": 53
+    },
+    {
+      "move": "hyper-voice",
+      "level": 59
+    }
+  ]
+}

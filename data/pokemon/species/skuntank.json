@@ -1,0 +1,76 @@
+{
+  "id": 435,
+  "species_id": "skuntank",
+  "showdown_id": "skuntank",
+  "name": "Skuntank",
+  "types": [
+    "poison",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 103,
+    "atk": 93,
+    "def": 67,
+    "spa": 71,
+    "spd": 61,
+    "spe": 84
+  },
+  "abilities": {
+    "primary": "stench",
+    "hidden": "keen-eye"
+  },
+  "level_up_moves": [
+    {
+      "move": "focus-energy",
+      "level": 1
+    },
+    {
+      "move": "poison-gas",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "screech",
+      "level": 7
+    },
+    {
+      "move": "fury-swipes",
+      "level": 10
+    },
+    {
+      "move": "smokescreen",
+      "level": 14
+    },
+    {
+      "move": "feint",
+      "level": 18
+    },
+    {
+      "move": "toxic",
+      "level": 20
+    },
+    {
+      "move": "slash",
+      "level": 22
+    },
+    {
+      "move": "night-slash",
+      "level": 31
+    },
+    {
+      "move": "flamethrower",
+      "level": 34
+    },
+    {
+      "move": "memento",
+      "level": 41
+    },
+    {
+      "move": "explosion",
+      "level": 52
+    }
+  ]
+}

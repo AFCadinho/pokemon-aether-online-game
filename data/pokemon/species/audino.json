@@ -1,0 +1,79 @@
+{
+  "id": 531,
+  "species_id": "audino",
+  "showdown_id": "audino",
+  "name": "Audino",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 103,
+    "atk": 60,
+    "def": 86,
+    "spa": 60,
+    "spd": 86,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "healer",
+    "hidden": "klutz"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "refresh",
+      "level": 5
+    },
+    {
+      "move": "double-slap",
+      "level": 10
+    },
+    {
+      "move": "attract",
+      "level": 15
+    },
+    {
+      "move": "secret-power",
+      "level": 20
+    },
+    {
+      "move": "entrainment",
+      "level": 25
+    },
+    {
+      "move": "take-down",
+      "level": 30
+    },
+    {
+      "move": "heal-pulse",
+      "level": 35
+    },
+    {
+      "move": "after-you",
+      "level": 40
+    },
+    {
+      "move": "simple-beam",
+      "level": 45
+    },
+    {
+      "move": "double-edge",
+      "level": 50
+    },
+    {
+      "move": "last-resort",
+      "level": 55
+    }
+  ]
+}

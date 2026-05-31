@@ -1,0 +1,68 @@
+{
+  "id": 483,
+  "species_id": "dialga",
+  "showdown_id": "dialga",
+  "name": "Dialga",
+  "types": [
+    "steel",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 120,
+    "def": 120,
+    "spa": 150,
+    "spd": 100,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "pressure",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "dragon-breath",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 10
+    },
+    {
+      "move": "ancient-power",
+      "level": 20
+    },
+    {
+      "move": "dragon-claw",
+      "level": 30
+    },
+    {
+      "move": "roar-of-time",
+      "level": 40
+    },
+    {
+      "move": "heal-block",
+      "level": 50
+    },
+    {
+      "move": "earth-power",
+      "level": 60
+    },
+    {
+      "move": "slash",
+      "level": 70
+    },
+    {
+      "move": "flash-cannon",
+      "level": 80
+    },
+    {
+      "move": "aura-sphere",
+      "level": 90
+    }
+  ]
+}

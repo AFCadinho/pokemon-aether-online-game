@@ -1,0 +1,36 @@
+{
+  "id": 415,
+  "species_id": "combee",
+  "showdown_id": "combee",
+  "name": "Combee",
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 30,
+    "def": 42,
+    "spa": 30,
+    "spd": 42,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "honey-gather",
+    "hidden": "hustle"
+  },
+  "level_up_moves": [
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "sweet-scent",
+      "level": 1
+    },
+    {
+      "move": "bug-bite",
+      "level": 13
+    }
+  ]
+}

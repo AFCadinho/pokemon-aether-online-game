@@ -1,0 +1,59 @@
+{
+  "id": 105,
+  "species_id": "marowak",
+  "showdown_id": "marowak",
+  "name": "Marowak",
+  "types": [
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 80,
+    "def": 110,
+    "spa": 50,
+    "spd": 80,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "rock-head",
+    "hidden": "battle-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "bone-club",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 18
+    },
+    {
+      "move": "thrash",
+      "level": 41
+    },
+    {
+      "move": "bonemerang",
+      "level": 48
+    },
+    {
+      "move": "rage",
+      "level": 55
+    }
+  ]
+}

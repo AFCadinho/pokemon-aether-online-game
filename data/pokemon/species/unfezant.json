@@ -1,0 +1,84 @@
+{
+  "id": 521,
+  "species_id": "unfezant",
+  "showdown_id": "unfezant",
+  "name": "Unfezant",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 115,
+    "def": 80,
+    "spa": 65,
+    "spd": 55,
+    "spe": 93
+  },
+  "abilities": {
+    "primary": "big-pecks",
+    "hidden": "rivalry"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "air-cutter",
+      "level": 15
+    },
+    {
+      "move": "roost",
+      "level": 18
+    },
+    {
+      "move": "detect",
+      "level": 23
+    },
+    {
+      "move": "taunt",
+      "level": 27
+    },
+    {
+      "move": "air-slash",
+      "level": 33
+    },
+    {
+      "move": "razor-wind",
+      "level": 38
+    },
+    {
+      "move": "feather-dance",
+      "level": 44
+    },
+    {
+      "move": "swagger",
+      "level": 49
+    },
+    {
+      "move": "facade",
+      "level": 55
+    },
+    {
+      "move": "tailwind",
+      "level": 60
+    },
+    {
+      "move": "sky-attack",
+      "level": 66
+    }
+  ]
+}

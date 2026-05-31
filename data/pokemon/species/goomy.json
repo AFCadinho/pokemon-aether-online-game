@@ -1,0 +1,67 @@
+{
+  "id": 704,
+  "species_id": "goomy",
+  "showdown_id": "goomy",
+  "name": "Goomy",
+  "types": [
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 50,
+    "def": 35,
+    "spa": 55,
+    "spd": 75,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "sap-sipper",
+    "hidden": "gooey"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 5
+    },
+    {
+      "move": "protect",
+      "level": 9
+    },
+    {
+      "move": "bide",
+      "level": 13
+    },
+    {
+      "move": "dragon-breath",
+      "level": 18
+    },
+    {
+      "move": "rain-dance",
+      "level": 25
+    },
+    {
+      "move": "flail",
+      "level": 28
+    },
+    {
+      "move": "body-slam",
+      "level": 32
+    },
+    {
+      "move": "muddy-water",
+      "level": 38
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 42
+    }
+  ]
+}

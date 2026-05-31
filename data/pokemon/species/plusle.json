@@ -1,0 +1,67 @@
+{
+  "id": 311,
+  "species_id": "plusle",
+  "showdown_id": "plusle",
+  "name": "Plusle",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 50,
+    "def": 40,
+    "spa": 85,
+    "spd": 75,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "plus",
+    "hidden": "lightning-rod"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 4
+    },
+    {
+      "move": "quick-attack",
+      "level": 10
+    },
+    {
+      "move": "helping-hand",
+      "level": 13
+    },
+    {
+      "move": "spark",
+      "level": 19
+    },
+    {
+      "move": "encore",
+      "level": 22
+    },
+    {
+      "move": "fake-tears",
+      "level": 28
+    },
+    {
+      "move": "charge",
+      "level": 31
+    },
+    {
+      "move": "thunder",
+      "level": 37
+    },
+    {
+      "move": "baton-pass",
+      "level": 40
+    },
+    {
+      "move": "agility",
+      "level": 47
+    }
+  ]
+}

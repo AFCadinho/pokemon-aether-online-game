@@ -1,0 +1,84 @@
+{
+  "id": 589,
+  "species_id": "escavalier",
+  "showdown_id": "escavalier",
+  "name": "Escavalier",
+  "types": [
+    "bug",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 135,
+    "def": 105,
+    "spa": 60,
+    "spd": 105,
+    "spe": 20
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "quick-guard",
+      "level": 1
+    },
+    {
+      "move": "twineedle",
+      "level": 1
+    },
+    {
+      "move": "fury-attack",
+      "level": 16
+    },
+    {
+      "move": "headbutt",
+      "level": 20
+    },
+    {
+      "move": "false-swipe",
+      "level": 25
+    },
+    {
+      "move": "bug-buzz",
+      "level": 28
+    },
+    {
+      "move": "slash",
+      "level": 32
+    },
+    {
+      "move": "iron-head",
+      "level": 37
+    },
+    {
+      "move": "iron-defense",
+      "level": 40
+    },
+    {
+      "move": "x-scissor",
+      "level": 44
+    },
+    {
+      "move": "reversal",
+      "level": 49
+    },
+    {
+      "move": "swords-dance",
+      "level": 52
+    },
+    {
+      "move": "giga-impact",
+      "level": 56
+    }
+  ]
+}

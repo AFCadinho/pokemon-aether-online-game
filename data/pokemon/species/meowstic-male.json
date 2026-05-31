@@ -1,0 +1,103 @@
+{
+  "id": 678,
+  "species_id": "meowstic-male",
+  "showdown_id": "meowstic",
+  "name": "Meowstic",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 74,
+    "atk": 48,
+    "def": 76,
+    "spa": 83,
+    "spd": 81,
+    "spe": 104
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "prankster"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "mean-look",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "quick-guard",
+      "level": 1
+    },
+    {
+      "move": "covet",
+      "level": 5
+    },
+    {
+      "move": "confusion",
+      "level": 9
+    },
+    {
+      "move": "light-screen",
+      "level": 13
+    },
+    {
+      "move": "psybeam",
+      "level": 17
+    },
+    {
+      "move": "fake-out",
+      "level": 19
+    },
+    {
+      "move": "disarming-voice",
+      "level": 22
+    },
+    {
+      "move": "psyshock",
+      "level": 25
+    },
+    {
+      "move": "charm",
+      "level": 28
+    },
+    {
+      "move": "miracle-eye",
+      "level": 31
+    },
+    {
+      "move": "reflect",
+      "level": 35
+    },
+    {
+      "move": "psychic",
+      "level": 40
+    },
+    {
+      "move": "role-play",
+      "level": 43
+    },
+    {
+      "move": "imprison",
+      "level": 45
+    },
+    {
+      "move": "sucker-punch",
+      "level": 48
+    },
+    {
+      "move": "misty-terrain",
+      "level": 50
+    }
+  ]
+}

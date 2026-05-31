@@ -1,0 +1,75 @@
+{
+  "id": 402,
+  "species_id": "kricketune",
+  "showdown_id": "kricketune",
+  "name": "Kricketune",
+  "types": [
+    "bug"
+  ],
+  "base_stats": {
+    "hp": 77,
+    "atk": 85,
+    "def": 51,
+    "spa": 55,
+    "spd": 51,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "technician"
+  },
+  "level_up_moves": [
+    {
+      "move": "bide",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "fury-cutter",
+      "level": 10
+    },
+    {
+      "move": "leech-life",
+      "level": 14
+    },
+    {
+      "move": "sing",
+      "level": 18
+    },
+    {
+      "move": "focus-energy",
+      "level": 22
+    },
+    {
+      "move": "slash",
+      "level": 26
+    },
+    {
+      "move": "x-scissor",
+      "level": 26
+    },
+    {
+      "move": "screech",
+      "level": 30
+    },
+    {
+      "move": "bug-buzz",
+      "level": 34
+    },
+    {
+      "move": "perish-song",
+      "level": 38
+    },
+    {
+      "move": "taunt",
+      "level": 38
+    },
+    {
+      "move": "night-slash",
+      "level": 42
+    }
+  ]
+}

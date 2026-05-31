@@ -1,0 +1,94 @@
+{
+  "id": 571,
+  "species_id": "zoroark",
+  "showdown_id": "zoroark",
+  "name": "Zoroark",
+  "types": [
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 105,
+    "def": 60,
+    "spa": 120,
+    "spd": 60,
+    "spe": 105
+  },
+  "abilities": {
+    "primary": "illusion"
+  },
+  "level_up_moves": [
+    {
+      "move": "hone-claws",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "pursuit",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "u-turn",
+      "level": 1
+    },
+    {
+      "move": "fury-swipes",
+      "level": 13
+    },
+    {
+      "move": "feint-attack",
+      "level": 17
+    },
+    {
+      "move": "scary-face",
+      "level": 21
+    },
+    {
+      "move": "taunt",
+      "level": 25
+    },
+    {
+      "move": "foul-play",
+      "level": 29
+    },
+    {
+      "move": "night-slash",
+      "level": 30
+    },
+    {
+      "move": "torment",
+      "level": 34
+    },
+    {
+      "move": "agility",
+      "level": 39
+    },
+    {
+      "move": "embargo",
+      "level": 44
+    },
+    {
+      "move": "punishment",
+      "level": 49
+    },
+    {
+      "move": "nasty-plot",
+      "level": 54
+    },
+    {
+      "move": "imprison",
+      "level": 59
+    },
+    {
+      "move": "night-daze",
+      "level": 64
+    }
+  ]
+}

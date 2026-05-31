@@ -1,0 +1,52 @@
+{
+  "id": 149,
+  "species_id": "dragonite",
+  "showdown_id": "dragonite",
+  "name": "Dragonite",
+  "types": [
+    "dragon",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 91,
+    "atk": 134,
+    "def": 95,
+    "spa": 100,
+    "spd": 100,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "inner-focus",
+    "hidden": "multiscale"
+  },
+  "level_up_moves": [
+    {
+      "move": "agility",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "slam",
+      "level": 35
+    },
+    {
+      "move": "dragon-rage",
+      "level": 45
+    },
+    {
+      "move": "hyper-beam",
+      "level": 60
+    }
+  ]
+}

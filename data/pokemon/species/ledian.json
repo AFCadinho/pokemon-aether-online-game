@@ -1,0 +1,64 @@
+{
+  "id": 166,
+  "species_id": "ledian",
+  "showdown_id": "ledian",
+  "name": "Ledian",
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 35,
+    "def": 50,
+    "spa": 55,
+    "spd": 110,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "iron-fist"
+  },
+  "level_up_moves": [
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "comet-punch",
+      "level": 15
+    },
+    {
+      "move": "light-screen",
+      "level": 24
+    },
+    {
+      "move": "reflect",
+      "level": 24
+    },
+    {
+      "move": "safeguard",
+      "level": 24
+    },
+    {
+      "move": "baton-pass",
+      "level": 33
+    },
+    {
+      "move": "swift",
+      "level": 42
+    },
+    {
+      "move": "agility",
+      "level": 51
+    },
+    {
+      "move": "double-edge",
+      "level": 60
+    }
+  ]
+}

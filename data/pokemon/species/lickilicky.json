@@ -1,0 +1,83 @@
+{
+  "id": 463,
+  "species_id": "lickilicky",
+  "showdown_id": "lickilicky",
+  "name": "Lickilicky",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 110,
+    "atk": 85,
+    "def": 95,
+    "spa": 80,
+    "spd": 95,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "own-tempo",
+    "hidden": "cloud-nine"
+  },
+  "level_up_moves": [
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 5
+    },
+    {
+      "move": "defense-curl",
+      "level": 9
+    },
+    {
+      "move": "knock-off",
+      "level": 13
+    },
+    {
+      "move": "wrap",
+      "level": 17
+    },
+    {
+      "move": "stomp",
+      "level": 21
+    },
+    {
+      "move": "disable",
+      "level": 25
+    },
+    {
+      "move": "slam",
+      "level": 29
+    },
+    {
+      "move": "rollout",
+      "level": 33
+    },
+    {
+      "move": "me-first",
+      "level": 37
+    },
+    {
+      "move": "refresh",
+      "level": 41
+    },
+    {
+      "move": "screech",
+      "level": 45
+    },
+    {
+      "move": "power-whip",
+      "level": 49
+    },
+    {
+      "move": "wring-out",
+      "level": 53
+    },
+    {
+      "move": "gyro-ball",
+      "level": 57
+    }
+  ]
+}

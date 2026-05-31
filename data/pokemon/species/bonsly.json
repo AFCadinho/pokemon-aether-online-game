@@ -1,0 +1,75 @@
+{
+  "id": 438,
+  "species_id": "bonsly",
+  "showdown_id": "bonsly",
+  "name": "Bonsly",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 80,
+    "def": 95,
+    "spa": 10,
+    "spd": 45,
+    "spe": 10
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "rattled"
+  },
+  "level_up_moves": [
+    {
+      "move": "copycat",
+      "level": 1
+    },
+    {
+      "move": "fake-tears",
+      "level": 1
+    },
+    {
+      "move": "flail",
+      "level": 6
+    },
+    {
+      "move": "low-kick",
+      "level": 9
+    },
+    {
+      "move": "rock-throw",
+      "level": 14
+    },
+    {
+      "move": "mimic",
+      "level": 17
+    },
+    {
+      "move": "block",
+      "level": 22
+    },
+    {
+      "move": "feint-attack",
+      "level": 25
+    },
+    {
+      "move": "rock-tomb",
+      "level": 30
+    },
+    {
+      "move": "rock-slide",
+      "level": 33
+    },
+    {
+      "move": "slam",
+      "level": 38
+    },
+    {
+      "move": "sucker-punch",
+      "level": 41
+    },
+    {
+      "move": "double-edge",
+      "level": 46
+    }
+  ]
+}

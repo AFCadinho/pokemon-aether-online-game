@@ -1,0 +1,40 @@
+{
+  "id": 468,
+  "species_id": "togekiss",
+  "showdown_id": "togekiss",
+  "name": "Togekiss",
+  "types": [
+    "fairy",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 50,
+    "def": 95,
+    "spa": 120,
+    "spd": 115,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "hustle",
+    "hidden": "super-luck"
+  },
+  "level_up_moves": [
+    {
+      "move": "air-slash",
+      "level": 1
+    },
+    {
+      "move": "aura-sphere",
+      "level": 1
+    },
+    {
+      "move": "extreme-speed",
+      "level": 1
+    },
+    {
+      "move": "sky-attack",
+      "level": 1
+    }
+  ]
+}

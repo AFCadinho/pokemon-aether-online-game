@@ -1,0 +1,87 @@
+{
+  "id": 620,
+  "species_id": "mienshao",
+  "showdown_id": "mienshao",
+  "name": "Mienshao",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 125,
+    "def": 60,
+    "spa": 95,
+    "spd": 60,
+    "spe": 105
+  },
+  "abilities": {
+    "primary": "inner-focus",
+    "hidden": "reckless"
+  },
+  "level_up_moves": [
+    {
+      "move": "detect",
+      "level": 1
+    },
+    {
+      "move": "fake-out",
+      "level": 1
+    },
+    {
+      "move": "meditate",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "double-slap",
+      "level": 17
+    },
+    {
+      "move": "swift",
+      "level": 21
+    },
+    {
+      "move": "calm-mind",
+      "level": 25
+    },
+    {
+      "move": "force-palm",
+      "level": 29
+    },
+    {
+      "move": "drain-punch",
+      "level": 33
+    },
+    {
+      "move": "jump-kick",
+      "level": 37
+    },
+    {
+      "move": "u-turn",
+      "level": 41
+    },
+    {
+      "move": "wide-guard",
+      "level": 45
+    },
+    {
+      "move": "bounce",
+      "level": 49
+    },
+    {
+      "move": "high-jump-kick",
+      "level": 56
+    },
+    {
+      "move": "reversal",
+      "level": 63
+    },
+    {
+      "move": "aura-sphere",
+      "level": 70
+    }
+  ]
+}

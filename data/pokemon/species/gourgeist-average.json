@@ -1,0 +1,84 @@
+{
+  "id": 711,
+  "species_id": "gourgeist-average",
+  "showdown_id": "gourgeist",
+  "name": "Gourgeist",
+  "types": [
+    "ghost",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 90,
+    "def": 122,
+    "spa": 58,
+    "spd": 75,
+    "spe": 84
+  },
+  "abilities": {
+    "primary": "pickup",
+    "hidden": "insomnia"
+  },
+  "level_up_moves": [
+    {
+      "move": "confuse-ray",
+      "level": 1
+    },
+    {
+      "move": "explosion",
+      "level": 1
+    },
+    {
+      "move": "trick",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "phantom-force",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 4
+    },
+    {
+      "move": "trick-or-treat",
+      "level": 6
+    },
+    {
+      "move": "worry-seed",
+      "level": 11
+    },
+    {
+      "move": "razor-leaf",
+      "level": 16
+    },
+    {
+      "move": "leech-seed",
+      "level": 20
+    },
+    {
+      "move": "bullet-seed",
+      "level": 26
+    },
+    {
+      "move": "shadow-sneak",
+      "level": 30
+    },
+    {
+      "move": "shadow-ball",
+      "level": 36
+    },
+    {
+      "move": "pain-split",
+      "level": 42
+    },
+    {
+      "move": "seed-bomb",
+      "level": 48
+    }
+  ]
+}

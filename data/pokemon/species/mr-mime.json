@@ -1,0 +1,48 @@
+{
+  "id": 122,
+  "species_id": "mr-mime",
+  "showdown_id": "mrmime",
+  "name": "Mr. Mime",
+  "types": [
+    "psychic",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 65,
+    "spa": 100,
+    "spd": 120,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "soundproof",
+    "hidden": "technician"
+  },
+  "level_up_moves": [
+    {
+      "move": "barrier",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "light-screen",
+      "level": 23
+    },
+    {
+      "move": "double-slap",
+      "level": 31
+    },
+    {
+      "move": "meditate",
+      "level": 39
+    },
+    {
+      "move": "substitute",
+      "level": 47
+    }
+  ]
+}

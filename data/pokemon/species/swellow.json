@@ -1,0 +1,60 @@
+{
+  "id": 277,
+  "species_id": "swellow",
+  "showdown_id": "swellow",
+  "name": "Swellow",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 85,
+    "def": 60,
+    "spa": 75,
+    "spd": 50,
+    "spe": 125
+  },
+  "abilities": {
+    "primary": "guts",
+    "hidden": "scrappy"
+  },
+  "level_up_moves": [
+    {
+      "move": "focus-energy",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "wing-attack",
+      "level": 13
+    },
+    {
+      "move": "double-team",
+      "level": 19
+    },
+    {
+      "move": "endeavor",
+      "level": 28
+    },
+    {
+      "move": "aerial-ace",
+      "level": 38
+    },
+    {
+      "move": "agility",
+      "level": 49
+    }
+  ]
+}

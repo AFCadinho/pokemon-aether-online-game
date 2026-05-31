@@ -1,0 +1,83 @@
+{
+  "id": 538,
+  "species_id": "throh",
+  "showdown_id": "throh",
+  "name": "Throh",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 120,
+    "atk": 100,
+    "def": 85,
+    "spa": 30,
+    "spd": 85,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "guts",
+    "hidden": "mold-breaker"
+  },
+  "level_up_moves": [
+    {
+      "move": "bind",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "bide",
+      "level": 5
+    },
+    {
+      "move": "focus-energy",
+      "level": 9
+    },
+    {
+      "move": "seismic-toss",
+      "level": 13
+    },
+    {
+      "move": "vital-throw",
+      "level": 17
+    },
+    {
+      "move": "revenge",
+      "level": 21
+    },
+    {
+      "move": "storm-throw",
+      "level": 25
+    },
+    {
+      "move": "body-slam",
+      "level": 29
+    },
+    {
+      "move": "bulk-up",
+      "level": 33
+    },
+    {
+      "move": "circle-throw",
+      "level": 37
+    },
+    {
+      "move": "endure",
+      "level": 41
+    },
+    {
+      "move": "wide-guard",
+      "level": 45
+    },
+    {
+      "move": "superpower",
+      "level": 49
+    },
+    {
+      "move": "reversal",
+      "level": 53
+    }
+  ]
+}

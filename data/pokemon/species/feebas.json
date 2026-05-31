@@ -1,0 +1,35 @@
+{
+  "id": 349,
+  "species_id": "feebas",
+  "showdown_id": "feebas",
+  "name": "Feebas",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 20,
+    "atk": 15,
+    "def": 20,
+    "spa": 10,
+    "spd": 55,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "adaptability"
+  },
+  "level_up_moves": [
+    {
+      "move": "splash",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 15
+    },
+    {
+      "move": "flail",
+      "level": 30
+    }
+  ]
+}

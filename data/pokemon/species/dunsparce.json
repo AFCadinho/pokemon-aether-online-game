@@ -1,0 +1,51 @@
+{
+  "id": 206,
+  "species_id": "dunsparce",
+  "showdown_id": "dunsparce",
+  "name": "Dunsparce",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 70,
+    "def": 70,
+    "spa": 65,
+    "spd": 65,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "serene-grace",
+    "hidden": "rattled"
+  },
+  "level_up_moves": [
+    {
+      "move": "rage",
+      "level": 1
+    },
+    {
+      "move": "defense-curl",
+      "level": 5
+    },
+    {
+      "move": "glare",
+      "level": 13
+    },
+    {
+      "move": "spite",
+      "level": 18
+    },
+    {
+      "move": "pursuit",
+      "level": 26
+    },
+    {
+      "move": "screech",
+      "level": 30
+    },
+    {
+      "move": "take-down",
+      "level": 38
+    }
+  ]
+}

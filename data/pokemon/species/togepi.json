@@ -1,0 +1,51 @@
+{
+  "id": 175,
+  "species_id": "togepi",
+  "showdown_id": "togepi",
+  "name": "Togepi",
+  "types": [
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 35,
+    "atk": 20,
+    "def": 65,
+    "spa": 40,
+    "spd": 65,
+    "spe": 20
+  },
+  "abilities": {
+    "primary": "hustle",
+    "hidden": "super-luck"
+  },
+  "level_up_moves": [
+    {
+      "move": "charm",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "metronome",
+      "level": 7
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 18
+    },
+    {
+      "move": "encore",
+      "level": 25
+    },
+    {
+      "move": "safeguard",
+      "level": 31
+    },
+    {
+      "move": "double-edge",
+      "level": 38
+    }
+  ]
+}

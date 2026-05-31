@@ -1,0 +1,71 @@
+{
+  "id": 372,
+  "species_id": "shelgon",
+  "showdown_id": "shelgon",
+  "name": "Shelgon",
+  "types": [
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 95,
+    "def": 100,
+    "spa": 60,
+    "spd": 50,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "rock-head",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 21
+    },
+    {
+      "move": "ember",
+      "level": 25
+    },
+    {
+      "move": "protect",
+      "level": 30
+    },
+    {
+      "move": "dragon-breath",
+      "level": 38
+    },
+    {
+      "move": "scary-face",
+      "level": 47
+    },
+    {
+      "move": "crunch",
+      "level": 56
+    },
+    {
+      "move": "dragon-claw",
+      "level": 69
+    },
+    {
+      "move": "double-edge",
+      "level": 78
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": 54,
+  "species_id": "psyduck",
+  "showdown_id": "psyduck",
+  "name": "Psyduck",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 52,
+    "def": 48,
+    "spa": 65,
+    "spd": 50,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "damp",
+    "hidden": "swift-swim"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 28
+    },
+    {
+      "move": "disable",
+      "level": 31
+    },
+    {
+      "move": "confusion",
+      "level": 36
+    },
+    {
+      "move": "fury-swipes",
+      "level": 43
+    },
+    {
+      "move": "hydro-pump",
+      "level": 52
+    }
+  ]
+}

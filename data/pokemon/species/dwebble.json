@@ -1,0 +1,84 @@
+{
+  "id": 557,
+  "species_id": "dwebble",
+  "showdown_id": "dwebble",
+  "name": "Dwebble",
+  "types": [
+    "bug",
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 65,
+    "def": 85,
+    "spa": 35,
+    "spd": 35,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "weak-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-cutter",
+      "level": 1
+    },
+    {
+      "move": "rock-blast",
+      "level": 5
+    },
+    {
+      "move": "withdraw",
+      "level": 7
+    },
+    {
+      "move": "sand-attack",
+      "level": 11
+    },
+    {
+      "move": "feint-attack",
+      "level": 13
+    },
+    {
+      "move": "smack-down",
+      "level": 17
+    },
+    {
+      "move": "rock-polish",
+      "level": 19
+    },
+    {
+      "move": "bug-bite",
+      "level": 23
+    },
+    {
+      "move": "stealth-rock",
+      "level": 24
+    },
+    {
+      "move": "rock-slide",
+      "level": 29
+    },
+    {
+      "move": "slash",
+      "level": 31
+    },
+    {
+      "move": "x-scissor",
+      "level": 35
+    },
+    {
+      "move": "shell-smash",
+      "level": 37
+    },
+    {
+      "move": "flail",
+      "level": 41
+    },
+    {
+      "move": "rock-wrecker",
+      "level": 43
+    }
+  ]
+}

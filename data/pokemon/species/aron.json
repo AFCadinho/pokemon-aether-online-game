@@ -1,0 +1,72 @@
+{
+  "id": 304,
+  "species_id": "aron",
+  "showdown_id": "aron",
+  "name": "Aron",
+  "types": [
+    "steel",
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 70,
+    "def": 100,
+    "spa": 40,
+    "spd": 40,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "heavy-metal"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 4
+    },
+    {
+      "move": "mud-slap",
+      "level": 7
+    },
+    {
+      "move": "headbutt",
+      "level": 10
+    },
+    {
+      "move": "metal-claw",
+      "level": 13
+    },
+    {
+      "move": "iron-defense",
+      "level": 17
+    },
+    {
+      "move": "roar",
+      "level": 21
+    },
+    {
+      "move": "take-down",
+      "level": 25
+    },
+    {
+      "move": "iron-tail",
+      "level": 29
+    },
+    {
+      "move": "protect",
+      "level": 34
+    },
+    {
+      "move": "metal-sound",
+      "level": 39
+    },
+    {
+      "move": "double-edge",
+      "level": 44
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": 133,
+  "species_id": "eevee",
+  "showdown_id": "eevee",
+  "name": "Eevee",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 55,
+    "def": 50,
+    "spa": 45,
+    "spd": 65,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "run-away",
+    "hidden": "anticipation"
+  },
+  "level_up_moves": [
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 16
+    },
+    {
+      "move": "quick-attack",
+      "level": 23
+    },
+    {
+      "move": "bite",
+      "level": 30
+    },
+    {
+      "move": "focus-energy",
+      "level": 36
+    },
+    {
+      "move": "take-down",
+      "level": 42
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": 540,
+  "species_id": "sewaddle",
+  "showdown_id": "sewaddle",
+  "name": "Sewaddle",
+  "types": [
+    "bug",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 53,
+    "def": 70,
+    "spa": 40,
+    "spd": 60,
+    "spe": 42
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bug-bite",
+      "level": 8
+    },
+    {
+      "move": "razor-leaf",
+      "level": 15
+    },
+    {
+      "move": "struggle-bug",
+      "level": 22
+    },
+    {
+      "move": "endure",
+      "level": 29
+    },
+    {
+      "move": "bug-buzz",
+      "level": 36
+    },
+    {
+      "move": "flail",
+      "level": 43
+    }
+  ]
+}

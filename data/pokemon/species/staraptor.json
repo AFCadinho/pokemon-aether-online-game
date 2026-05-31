@@ -1,0 +1,72 @@
+{
+  "id": 398,
+  "species_id": "staraptor",
+  "showdown_id": "staraptor",
+  "name": "Staraptor",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 120,
+    "def": 70,
+    "spa": 50,
+    "spd": 60,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "intimidate",
+    "hidden": "reckless"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "wing-attack",
+      "level": 1
+    },
+    {
+      "move": "double-team",
+      "level": 13
+    },
+    {
+      "move": "endeavor",
+      "level": 18
+    },
+    {
+      "move": "whirlwind",
+      "level": 23
+    },
+    {
+      "move": "aerial-ace",
+      "level": 28
+    },
+    {
+      "move": "take-down",
+      "level": 33
+    },
+    {
+      "move": "close-combat",
+      "level": 34
+    },
+    {
+      "move": "agility",
+      "level": 41
+    },
+    {
+      "move": "brave-bird",
+      "level": 49
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": 34,
+  "species_id": "nidoking",
+  "showdown_id": "nidoking",
+  "name": "Nidoking",
+  "types": [
+    "poison",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 81,
+    "atk": 102,
+    "def": 77,
+    "spa": 85,
+    "spd": 75,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "poison-point",
+    "hidden": "sheer-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "horn-attack",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "thrash",
+      "level": 1
+    },
+    {
+      "move": "double-kick",
+      "level": 12
+    }
+  ]
+}

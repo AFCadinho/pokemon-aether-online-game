@@ -1,0 +1,67 @@
+{
+  "id": 705,
+  "species_id": "sliggoo",
+  "showdown_id": "sliggoo",
+  "name": "Sliggoo",
+  "types": [
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 68,
+    "atk": 75,
+    "def": 53,
+    "spa": 83,
+    "spd": 113,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "sap-sipper",
+    "hidden": "gooey"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 5
+    },
+    {
+      "move": "protect",
+      "level": 9
+    },
+    {
+      "move": "bide",
+      "level": 13
+    },
+    {
+      "move": "dragon-breath",
+      "level": 18
+    },
+    {
+      "move": "rain-dance",
+      "level": 25
+    },
+    {
+      "move": "flail",
+      "level": 28
+    },
+    {
+      "move": "body-slam",
+      "level": 32
+    },
+    {
+      "move": "muddy-water",
+      "level": 38
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 47
+    }
+  ]
+}

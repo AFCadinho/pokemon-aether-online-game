@@ -1,0 +1,83 @@
+{
+  "id": 651,
+  "species_id": "quilladin",
+  "showdown_id": "quilladin",
+  "name": "Quilladin",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 61,
+    "atk": 78,
+    "def": 95,
+    "spa": 56,
+    "spd": 58,
+    "spe": 57
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "bulletproof"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "vine-whip",
+      "level": 5
+    },
+    {
+      "move": "rollout",
+      "level": 8
+    },
+    {
+      "move": "bite",
+      "level": 11
+    },
+    {
+      "move": "leech-seed",
+      "level": 15
+    },
+    {
+      "move": "pin-missile",
+      "level": 20
+    },
+    {
+      "move": "needle-arm",
+      "level": 26
+    },
+    {
+      "move": "take-down",
+      "level": 30
+    },
+    {
+      "move": "seed-bomb",
+      "level": 35
+    },
+    {
+      "move": "mud-shot",
+      "level": 39
+    },
+    {
+      "move": "bulk-up",
+      "level": 44
+    },
+    {
+      "move": "body-slam",
+      "level": 48
+    },
+    {
+      "move": "pain-split",
+      "level": 52
+    },
+    {
+      "move": "wood-hammer",
+      "level": 55
+    }
+  ]
+}

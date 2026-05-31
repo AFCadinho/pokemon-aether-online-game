@@ -1,0 +1,71 @@
+{
+  "id": 262,
+  "species_id": "mightyena",
+  "showdown_id": "mightyena",
+  "name": "Mightyena",
+  "types": [
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 90,
+    "def": 70,
+    "spa": 60,
+    "spd": 60,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "intimidate",
+    "hidden": "moxie"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "howl",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 17
+    },
+    {
+      "move": "roar",
+      "level": 22
+    },
+    {
+      "move": "swagger",
+      "level": 27
+    },
+    {
+      "move": "scary-face",
+      "level": 32
+    },
+    {
+      "move": "take-down",
+      "level": 37
+    },
+    {
+      "move": "taunt",
+      "level": 42
+    },
+    {
+      "move": "crunch",
+      "level": 47
+    },
+    {
+      "move": "thief",
+      "level": 52
+    }
+  ]
+}

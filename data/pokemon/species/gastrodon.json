@@ -1,0 +1,64 @@
+{
+  "id": 423,
+  "species_id": "gastrodon",
+  "showdown_id": "gastrodon",
+  "name": "Gastrodon",
+  "types": [
+    "water",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 111,
+    "atk": 83,
+    "def": 68,
+    "spa": 92,
+    "spd": 82,
+    "spe": 39
+  },
+  "abilities": {
+    "primary": "sticky-hold",
+    "hidden": "sand-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "mud-sport",
+      "level": 1
+    },
+    {
+      "move": "water-pulse",
+      "level": 1
+    },
+    {
+      "move": "mud-bomb",
+      "level": 11
+    },
+    {
+      "move": "hidden-power",
+      "level": 16
+    },
+    {
+      "move": "rain-dance",
+      "level": 22
+    },
+    {
+      "move": "body-slam",
+      "level": 29
+    },
+    {
+      "move": "muddy-water",
+      "level": 41
+    },
+    {
+      "move": "recover",
+      "level": 54
+    }
+  ]
+}

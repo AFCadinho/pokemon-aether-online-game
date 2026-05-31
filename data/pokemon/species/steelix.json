@@ -1,0 +1,60 @@
+{
+  "id": 208,
+  "species_id": "steelix",
+  "showdown_id": "steelix",
+  "name": "Steelix",
+  "types": [
+    "steel",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 85,
+    "def": 200,
+    "spa": 55,
+    "spd": 65,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "rock-head",
+    "hidden": "sheer-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "screech",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bind",
+      "level": 10
+    },
+    {
+      "move": "rock-throw",
+      "level": 14
+    },
+    {
+      "move": "harden",
+      "level": 23
+    },
+    {
+      "move": "rage",
+      "level": 27
+    },
+    {
+      "move": "sandstorm",
+      "level": 36
+    },
+    {
+      "move": "slam",
+      "level": 40
+    },
+    {
+      "move": "crunch",
+      "level": 49
+    }
+  ]
+}

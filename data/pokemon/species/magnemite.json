@@ -1,0 +1,52 @@
+{
+  "id": 81,
+  "species_id": "magnemite",
+  "showdown_id": "magnemite",
+  "name": "Magnemite",
+  "types": [
+    "electric",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 25,
+    "atk": 35,
+    "def": 70,
+    "spa": 95,
+    "spd": 55,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "magnet-pull",
+    "hidden": "analytic"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "sonic-boom",
+      "level": 21
+    },
+    {
+      "move": "thunder-shock",
+      "level": 25
+    },
+    {
+      "move": "supersonic",
+      "level": 29
+    },
+    {
+      "move": "thunder-wave",
+      "level": 35
+    },
+    {
+      "move": "swift",
+      "level": 41
+    },
+    {
+      "move": "screech",
+      "level": 47
+    }
+  ]
+}

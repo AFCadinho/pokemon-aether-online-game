@@ -1,0 +1,87 @@
+{
+  "id": 532,
+  "species_id": "timburr",
+  "showdown_id": "timburr",
+  "name": "Timburr",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 80,
+    "def": 55,
+    "spa": 25,
+    "spd": 35,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "guts",
+    "hidden": "iron-fist"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 4
+    },
+    {
+      "move": "bide",
+      "level": 8
+    },
+    {
+      "move": "low-kick",
+      "level": 12
+    },
+    {
+      "move": "rock-throw",
+      "level": 16
+    },
+    {
+      "move": "wake-up-slap",
+      "level": 20
+    },
+    {
+      "move": "chip-away",
+      "level": 24
+    },
+    {
+      "move": "bulk-up",
+      "level": 28
+    },
+    {
+      "move": "rock-slide",
+      "level": 31
+    },
+    {
+      "move": "dynamic-punch",
+      "level": 34
+    },
+    {
+      "move": "scary-face",
+      "level": 37
+    },
+    {
+      "move": "hammer-arm",
+      "level": 40
+    },
+    {
+      "move": "stone-edge",
+      "level": 43
+    },
+    {
+      "move": "focus-punch",
+      "level": 46
+    },
+    {
+      "move": "superpower",
+      "level": 49
+    }
+  ]
+}

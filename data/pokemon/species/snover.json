@@ -1,0 +1,72 @@
+{
+  "id": 459,
+  "species_id": "snover",
+  "showdown_id": "snover",
+  "name": "Snover",
+  "types": [
+    "grass",
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 62,
+    "def": 50,
+    "spa": 62,
+    "spd": 60,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "snow-warning",
+    "hidden": "soundproof"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "razor-leaf",
+      "level": 5
+    },
+    {
+      "move": "icy-wind",
+      "level": 9
+    },
+    {
+      "move": "grass-whistle",
+      "level": 13
+    },
+    {
+      "move": "swagger",
+      "level": 17
+    },
+    {
+      "move": "mist",
+      "level": 21
+    },
+    {
+      "move": "ice-shard",
+      "level": 26
+    },
+    {
+      "move": "ingrain",
+      "level": 31
+    },
+    {
+      "move": "wood-hammer",
+      "level": 36
+    },
+    {
+      "move": "blizzard",
+      "level": 41
+    },
+    {
+      "move": "sheer-cold",
+      "level": 46
+    }
+  ]
+}

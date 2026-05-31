@@ -1,0 +1,59 @@
+{
+  "id": 243,
+  "species_id": "raikou",
+  "showdown_id": "raikou",
+  "name": "Raikou",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 85,
+    "def": 75,
+    "spa": 115,
+    "spd": 100,
+    "spe": 115
+  },
+  "abilities": {
+    "primary": "pressure",
+    "hidden": "inner-focus"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 11
+    },
+    {
+      "move": "roar",
+      "level": 21
+    },
+    {
+      "move": "quick-attack",
+      "level": 31
+    },
+    {
+      "move": "spark",
+      "level": 41
+    },
+    {
+      "move": "reflect",
+      "level": 51
+    },
+    {
+      "move": "crunch",
+      "level": 61
+    },
+    {
+      "move": "thunder",
+      "level": 71
+    }
+  ]
+}

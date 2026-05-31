@@ -1,0 +1,76 @@
+{
+  "id": 710,
+  "species_id": "pumpkaboo-average",
+  "showdown_id": "pumpkaboo",
+  "name": "Pumpkaboo",
+  "types": [
+    "ghost",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 49,
+    "atk": 66,
+    "def": 70,
+    "spa": 44,
+    "spd": 55,
+    "spe": 51
+  },
+  "abilities": {
+    "primary": "pickup",
+    "hidden": "insomnia"
+  },
+  "level_up_moves": [
+    {
+      "move": "confuse-ray",
+      "level": 1
+    },
+    {
+      "move": "trick",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 4
+    },
+    {
+      "move": "trick-or-treat",
+      "level": 6
+    },
+    {
+      "move": "worry-seed",
+      "level": 11
+    },
+    {
+      "move": "razor-leaf",
+      "level": 16
+    },
+    {
+      "move": "leech-seed",
+      "level": 20
+    },
+    {
+      "move": "bullet-seed",
+      "level": 26
+    },
+    {
+      "move": "shadow-sneak",
+      "level": 30
+    },
+    {
+      "move": "shadow-ball",
+      "level": 36
+    },
+    {
+      "move": "pain-split",
+      "level": 42
+    },
+    {
+      "move": "seed-bomb",
+      "level": 48
+    }
+  ]
+}

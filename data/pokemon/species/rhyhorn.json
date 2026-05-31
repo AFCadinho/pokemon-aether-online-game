@@ -1,0 +1,52 @@
+{
+  "id": 111,
+  "species_id": "rhyhorn",
+  "showdown_id": "rhyhorn",
+  "name": "Rhyhorn",
+  "types": [
+    "ground",
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 85,
+    "def": 95,
+    "spa": 30,
+    "spd": 30,
+    "spe": 25
+  },
+  "abilities": {
+    "primary": "lightning-rod",
+    "hidden": "reckless"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-attack",
+      "level": 1
+    },
+    {
+      "move": "horn-attack",
+      "level": 1
+    },
+    {
+      "move": "stomp",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "horn-drill",
+      "level": 45
+    },
+    {
+      "move": "leer",
+      "level": 50
+    },
+    {
+      "move": "take-down",
+      "level": 55
+    }
+  ]
+}

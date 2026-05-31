@@ -1,0 +1,83 @@
+{
+  "id": 706,
+  "species_id": "goodra",
+  "showdown_id": "goodra",
+  "name": "Goodra",
+  "types": [
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 100,
+    "def": 70,
+    "spa": 110,
+    "spd": 150,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "sap-sipper",
+    "hidden": "gooey"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "outrage",
+      "level": 1
+    },
+    {
+      "move": "feint",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 5
+    },
+    {
+      "move": "protect",
+      "level": 9
+    },
+    {
+      "move": "bide",
+      "level": 13
+    },
+    {
+      "move": "dragon-breath",
+      "level": 18
+    },
+    {
+      "move": "rain-dance",
+      "level": 25
+    },
+    {
+      "move": "flail",
+      "level": 28
+    },
+    {
+      "move": "body-slam",
+      "level": 32
+    },
+    {
+      "move": "muddy-water",
+      "level": 38
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 47
+    },
+    {
+      "move": "aqua-tail",
+      "level": 50
+    },
+    {
+      "move": "power-whip",
+      "level": 55
+    }
+  ]
+}

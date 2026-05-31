@@ -1,0 +1,68 @@
+{
+  "id": 333,
+  "species_id": "swablu",
+  "showdown_id": "swablu",
+  "name": "Swablu",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 40,
+    "def": 60,
+    "spa": 40,
+    "spd": 75,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "natural-cure",
+    "hidden": "cloud-nine"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 8
+    },
+    {
+      "move": "sing",
+      "level": 11
+    },
+    {
+      "move": "fury-attack",
+      "level": 18
+    },
+    {
+      "move": "safeguard",
+      "level": 21
+    },
+    {
+      "move": "mist",
+      "level": 28
+    },
+    {
+      "move": "take-down",
+      "level": 31
+    },
+    {
+      "move": "mirror-move",
+      "level": 38
+    },
+    {
+      "move": "refresh",
+      "level": 41
+    },
+    {
+      "move": "perish-song",
+      "level": 48
+    }
+  ]
+}

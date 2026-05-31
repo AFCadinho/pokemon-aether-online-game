@@ -1,0 +1,64 @@
+{
+  "id": 444,
+  "species_id": "gabite",
+  "showdown_id": "gabite",
+  "name": "Gabite",
+  "types": [
+    "dragon",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 68,
+    "atk": 90,
+    "def": 65,
+    "spa": 50,
+    "spd": 55,
+    "spe": 82
+  },
+  "abilities": {
+    "primary": "sand-veil",
+    "hidden": "rough-skin"
+  },
+  "level_up_moves": [
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "dragon-rage",
+      "level": 7
+    },
+    {
+      "move": "sandstorm",
+      "level": 13
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "sand-tomb",
+      "level": 19
+    },
+    {
+      "move": "slash",
+      "level": 28
+    },
+    {
+      "move": "dragon-claw",
+      "level": 33
+    },
+    {
+      "move": "dig",
+      "level": 40
+    },
+    {
+      "move": "dragon-rush",
+      "level": 49
+    }
+  ]
+}

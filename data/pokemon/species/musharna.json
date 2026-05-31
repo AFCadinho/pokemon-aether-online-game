@@ -1,0 +1,39 @@
+{
+  "id": 518,
+  "species_id": "musharna",
+  "showdown_id": "musharna",
+  "name": "Musharna",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 116,
+    "atk": 55,
+    "def": 85,
+    "spa": 107,
+    "spd": 95,
+    "spe": 29
+  },
+  "abilities": {
+    "primary": "forewarn",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "hypnosis",
+      "level": 1
+    },
+    {
+      "move": "lucky-chant",
+      "level": 1
+    },
+    {
+      "move": "psybeam",
+      "level": 1
+    }
+  ]
+}

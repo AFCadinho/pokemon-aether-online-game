@@ -1,0 +1,36 @@
+{
+  "id": 103,
+  "species_id": "exeggutor",
+  "showdown_id": "exeggutor",
+  "name": "Exeggutor",
+  "types": [
+    "grass",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 95,
+    "def": 85,
+    "spa": 125,
+    "spd": 75,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "harvest"
+  },
+  "level_up_moves": [
+    {
+      "move": "barrage",
+      "level": 1
+    },
+    {
+      "move": "hypnosis",
+      "level": 1
+    },
+    {
+      "move": "stomp",
+      "level": 28
+    }
+  ]
+}

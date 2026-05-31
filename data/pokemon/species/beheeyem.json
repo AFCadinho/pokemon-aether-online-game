@@ -1,0 +1,95 @@
+{
+  "id": 606,
+  "species_id": "beheeyem",
+  "showdown_id": "beheeyem",
+  "name": "Beheeyem",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 75,
+    "def": 75,
+    "spa": 125,
+    "spd": 95,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "telepathy",
+    "hidden": "analytic"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "heal-block",
+      "level": 1
+    },
+    {
+      "move": "miracle-eye",
+      "level": 1
+    },
+    {
+      "move": "psybeam",
+      "level": 15
+    },
+    {
+      "move": "headbutt",
+      "level": 18
+    },
+    {
+      "move": "hidden-power",
+      "level": 22
+    },
+    {
+      "move": "imprison",
+      "level": 25
+    },
+    {
+      "move": "simple-beam",
+      "level": 29
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 32
+    },
+    {
+      "move": "psych-up",
+      "level": 36
+    },
+    {
+      "move": "psychic",
+      "level": 39
+    },
+    {
+      "move": "calm-mind",
+      "level": 45
+    },
+    {
+      "move": "recover",
+      "level": 50
+    },
+    {
+      "move": "guard-split",
+      "level": 56
+    },
+    {
+      "move": "power-split",
+      "level": 58
+    },
+    {
+      "move": "synchronoise",
+      "level": 63
+    },
+    {
+      "move": "wonder-room",
+      "level": 68
+    }
+  ]
+}

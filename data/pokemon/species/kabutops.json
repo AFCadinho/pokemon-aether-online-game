@@ -1,0 +1,48 @@
+{
+  "id": 141,
+  "species_id": "kabutops",
+  "showdown_id": "kabutops",
+  "name": "Kabutops",
+  "types": [
+    "rock",
+    "water"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 115,
+    "def": 105,
+    "spa": 65,
+    "spd": 70,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "weak-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "slash",
+      "level": 39
+    },
+    {
+      "move": "leer",
+      "level": 46
+    },
+    {
+      "move": "hydro-pump",
+      "level": 53
+    }
+  ]
+}

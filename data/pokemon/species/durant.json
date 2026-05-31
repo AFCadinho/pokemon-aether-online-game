@@ -1,0 +1,84 @@
+{
+  "id": 632,
+  "species_id": "durant",
+  "showdown_id": "durant",
+  "name": "Durant",
+  "types": [
+    "bug",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 58,
+    "atk": 109,
+    "def": 112,
+    "spa": 48,
+    "spd": 48,
+    "spe": 109
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "truant"
+  },
+  "level_up_moves": [
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "vice-grip",
+      "level": 1
+    },
+    {
+      "move": "fury-cutter",
+      "level": 6
+    },
+    {
+      "move": "bite",
+      "level": 11
+    },
+    {
+      "move": "agility",
+      "level": 16
+    },
+    {
+      "move": "metal-claw",
+      "level": 21
+    },
+    {
+      "move": "bug-bite",
+      "level": 26
+    },
+    {
+      "move": "crunch",
+      "level": 31
+    },
+    {
+      "move": "iron-head",
+      "level": 36
+    },
+    {
+      "move": "dig",
+      "level": 41
+    },
+    {
+      "move": "entrainment",
+      "level": 46
+    },
+    {
+      "move": "x-scissor",
+      "level": 51
+    },
+    {
+      "move": "iron-defense",
+      "level": 56
+    },
+    {
+      "move": "guillotine",
+      "level": 61
+    },
+    {
+      "move": "metal-sound",
+      "level": 66
+    }
+  ]
+}

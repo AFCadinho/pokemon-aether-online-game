@@ -1,0 +1,64 @@
+{
+  "id": 318,
+  "species_id": "carvanha",
+  "showdown_id": "carvanha",
+  "name": "Carvanha",
+  "types": [
+    "water",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 90,
+    "def": 20,
+    "spa": 65,
+    "spd": 20,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "rough-skin",
+    "hidden": "speed-boost"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 7
+    },
+    {
+      "move": "focus-energy",
+      "level": 13
+    },
+    {
+      "move": "scary-face",
+      "level": 16
+    },
+    {
+      "move": "crunch",
+      "level": 22
+    },
+    {
+      "move": "screech",
+      "level": 28
+    },
+    {
+      "move": "take-down",
+      "level": 31
+    },
+    {
+      "move": "swagger",
+      "level": 37
+    },
+    {
+      "move": "agility",
+      "level": 43
+    }
+  ]
+}

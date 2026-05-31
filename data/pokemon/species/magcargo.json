@@ -1,0 +1,56 @@
+{
+  "id": 219,
+  "species_id": "magcargo",
+  "showdown_id": "magcargo",
+  "name": "Magcargo",
+  "types": [
+    "fire",
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 50,
+    "def": 120,
+    "spa": 90,
+    "spd": 80,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "magma-armor",
+    "hidden": "weak-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "rock-throw",
+      "level": 1
+    },
+    {
+      "move": "smog",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 22
+    },
+    {
+      "move": "amnesia",
+      "level": 29
+    },
+    {
+      "move": "flamethrower",
+      "level": 36
+    },
+    {
+      "move": "rock-slide",
+      "level": 48
+    },
+    {
+      "move": "body-slam",
+      "level": 60
+    }
+  ]
+}

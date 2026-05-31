@@ -1,0 +1,64 @@
+{
+  "id": 282,
+  "species_id": "gardevoir",
+  "showdown_id": "gardevoir",
+  "name": "Gardevoir",
+  "types": [
+    "psychic",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 68,
+    "atk": 65,
+    "def": 65,
+    "spa": 125,
+    "spd": 115,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "synchronize",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "double-team",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "teleport",
+      "level": 1
+    },
+    {
+      "move": "calm-mind",
+      "level": 21
+    },
+    {
+      "move": "psychic",
+      "level": 26
+    },
+    {
+      "move": "imprison",
+      "level": 33
+    },
+    {
+      "move": "future-sight",
+      "level": 42
+    },
+    {
+      "move": "hypnosis",
+      "level": 51
+    },
+    {
+      "move": "dream-eater",
+      "level": 60
+    }
+  ]
+}

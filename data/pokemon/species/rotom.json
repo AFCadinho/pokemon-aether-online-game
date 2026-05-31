@@ -1,0 +1,71 @@
+{
+  "id": 479,
+  "species_id": "rotom",
+  "showdown_id": "rotom",
+  "name": "Rotom",
+  "types": [
+    "electric",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 50,
+    "def": 77,
+    "spa": 95,
+    "spd": 77,
+    "spe": 91
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "confuse-ray",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 1
+    },
+    {
+      "move": "trick",
+      "level": 1
+    },
+    {
+      "move": "uproar",
+      "level": 8
+    },
+    {
+      "move": "double-team",
+      "level": 15
+    },
+    {
+      "move": "shock-wave",
+      "level": 22
+    },
+    {
+      "move": "ominous-wind",
+      "level": 29
+    },
+    {
+      "move": "substitute",
+      "level": 36
+    },
+    {
+      "move": "charge",
+      "level": 43
+    },
+    {
+      "move": "discharge",
+      "level": 50
+    }
+  ]
+}

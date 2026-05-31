@@ -1,0 +1,67 @@
+{
+  "id": 343,
+  "species_id": "baltoy",
+  "showdown_id": "baltoy",
+  "name": "Baltoy",
+  "types": [
+    "ground",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 40,
+    "def": 55,
+    "spa": 40,
+    "spd": 70,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 3
+    },
+    {
+      "move": "rapid-spin",
+      "level": 5
+    },
+    {
+      "move": "mud-slap",
+      "level": 7
+    },
+    {
+      "move": "psybeam",
+      "level": 11
+    },
+    {
+      "move": "rock-tomb",
+      "level": 15
+    },
+    {
+      "move": "self-destruct",
+      "level": 19
+    },
+    {
+      "move": "ancient-power",
+      "level": 25
+    },
+    {
+      "move": "sandstorm",
+      "level": 31
+    },
+    {
+      "move": "cosmic-power",
+      "level": 37
+    },
+    {
+      "move": "explosion",
+      "level": 45
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": 88,
+  "species_id": "grimer",
+  "showdown_id": "grimer",
+  "name": "Grimer",
+  "types": [
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 80,
+    "def": 50,
+    "spa": 40,
+    "spd": 50,
+    "spe": 25
+  },
+  "abilities": {
+    "primary": "stench",
+    "hidden": "poison-touch"
+  },
+  "level_up_moves": [
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "poison-gas",
+      "level": 30
+    },
+    {
+      "move": "minimize",
+      "level": 33
+    },
+    {
+      "move": "sludge",
+      "level": 37
+    },
+    {
+      "move": "harden",
+      "level": 42
+    },
+    {
+      "move": "screech",
+      "level": 48
+    },
+    {
+      "move": "acid-armor",
+      "level": 55
+    }
+  ]
+}

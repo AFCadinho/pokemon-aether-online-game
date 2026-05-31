@@ -1,0 +1,79 @@
+{
+  "id": 721,
+  "species_id": "volcanion",
+  "showdown_id": "volcanion",
+  "name": "Volcanion",
+  "types": [
+    "fire",
+    "water"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 110,
+    "def": 120,
+    "spa": 130,
+    "spd": 90,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "water-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "take-down",
+      "level": 1
+    },
+    {
+      "move": "flare-blitz",
+      "level": 1
+    },
+    {
+      "move": "steam-eruption",
+      "level": 1
+    },
+    {
+      "move": "mist",
+      "level": 8
+    },
+    {
+      "move": "haze",
+      "level": 11
+    },
+    {
+      "move": "flame-charge",
+      "level": 15
+    },
+    {
+      "move": "water-pulse",
+      "level": 21
+    },
+    {
+      "move": "stomp",
+      "level": 28
+    },
+    {
+      "move": "scald",
+      "level": 32
+    },
+    {
+      "move": "weather-ball",
+      "level": 40
+    },
+    {
+      "move": "body-slam",
+      "level": 46
+    },
+    {
+      "move": "hydro-pump",
+      "level": 50
+    },
+    {
+      "move": "overheat",
+      "level": 65
+    },
+    {
+      "move": "explosion",
+      "level": 76
+    }
+  ]
+}

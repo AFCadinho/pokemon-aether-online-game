@@ -1,0 +1,87 @@
+{
+  "id": 568,
+  "species_id": "trubbish",
+  "showdown_id": "trubbish",
+  "name": "Trubbish",
+  "types": [
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 50,
+    "def": 62,
+    "spa": 40,
+    "spd": 62,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "stench",
+    "hidden": "aftermath"
+  },
+  "level_up_moves": [
+    {
+      "move": "poison-gas",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "recycle",
+      "level": 3
+    },
+    {
+      "move": "toxic-spikes",
+      "level": 7
+    },
+    {
+      "move": "acid-spray",
+      "level": 12
+    },
+    {
+      "move": "double-slap",
+      "level": 14
+    },
+    {
+      "move": "sludge",
+      "level": 18
+    },
+    {
+      "move": "stockpile",
+      "level": 23
+    },
+    {
+      "move": "swallow",
+      "level": 23
+    },
+    {
+      "move": "take-down",
+      "level": 25
+    },
+    {
+      "move": "sludge-bomb",
+      "level": 29
+    },
+    {
+      "move": "clear-smog",
+      "level": 34
+    },
+    {
+      "move": "toxic",
+      "level": 36
+    },
+    {
+      "move": "amnesia",
+      "level": 40
+    },
+    {
+      "move": "gunk-shot",
+      "level": 45
+    },
+    {
+      "move": "explosion",
+      "level": 47
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": 603,
+  "species_id": "eelektrik",
+  "showdown_id": "eelektrik",
+  "name": "Eelektrik",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 85,
+    "def": 70,
+    "spa": 75,
+    "spd": 70,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "charge-beam",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 1
+    },
+    {
+      "move": "spark",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 1
+    },
+    {
+      "move": "bind",
+      "level": 9
+    },
+    {
+      "move": "acid",
+      "level": 19
+    },
+    {
+      "move": "discharge",
+      "level": 29
+    },
+    {
+      "move": "crunch",
+      "level": 39
+    },
+    {
+      "move": "thunderbolt",
+      "level": 44
+    },
+    {
+      "move": "acid-spray",
+      "level": 49
+    },
+    {
+      "move": "coil",
+      "level": 54
+    },
+    {
+      "move": "wild-charge",
+      "level": 59
+    },
+    {
+      "move": "gastro-acid",
+      "level": 64
+    },
+    {
+      "move": "zap-cannon",
+      "level": 69
+    },
+    {
+      "move": "thrash",
+      "level": 74
+    }
+  ]
+}

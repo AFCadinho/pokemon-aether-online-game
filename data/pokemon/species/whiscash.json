@@ -1,0 +1,72 @@
+{
+  "id": 340,
+  "species_id": "whiscash",
+  "showdown_id": "whiscash",
+  "name": "Whiscash",
+  "types": [
+    "water",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 110,
+    "atk": 78,
+    "def": 73,
+    "spa": 76,
+    "spd": 71,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "oblivious",
+    "hidden": "hydration"
+  },
+  "level_up_moves": [
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "mud-sport",
+      "level": 1
+    },
+    {
+      "move": "tickle",
+      "level": 1
+    },
+    {
+      "move": "water-sport",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 11
+    },
+    {
+      "move": "magnitude",
+      "level": 16
+    },
+    {
+      "move": "amnesia",
+      "level": 21
+    },
+    {
+      "move": "rest",
+      "level": 26
+    },
+    {
+      "move": "snore",
+      "level": 26
+    },
+    {
+      "move": "earthquake",
+      "level": 36
+    },
+    {
+      "move": "future-sight",
+      "level": 46
+    },
+    {
+      "move": "fissure",
+      "level": 56
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": 17,
+  "species_id": "pidgeotto",
+  "showdown_id": "pidgeotto",
+  "name": "Pidgeotto",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 63,
+    "atk": 60,
+    "def": 55,
+    "spa": 50,
+    "spd": 50,
+    "spe": 71
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "big-pecks"
+  },
+  "level_up_moves": [
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 12
+    },
+    {
+      "move": "whirlwind",
+      "level": 21
+    },
+    {
+      "move": "wing-attack",
+      "level": 31
+    },
+    {
+      "move": "agility",
+      "level": 40
+    },
+    {
+      "move": "mirror-move",
+      "level": 49
+    }
+  ]
+}

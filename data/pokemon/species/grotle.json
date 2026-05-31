@@ -1,0 +1,71 @@
+{
+  "id": 388,
+  "species_id": "grotle",
+  "showdown_id": "grotle",
+  "name": "Grotle",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 89,
+    "def": 85,
+    "spa": 55,
+    "spd": 65,
+    "spe": 36
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "shell-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 9
+    },
+    {
+      "move": "razor-leaf",
+      "level": 13
+    },
+    {
+      "move": "curse",
+      "level": 17
+    },
+    {
+      "move": "bite",
+      "level": 22
+    },
+    {
+      "move": "mega-drain",
+      "level": 27
+    },
+    {
+      "move": "leech-seed",
+      "level": 32
+    },
+    {
+      "move": "synthesis",
+      "level": 37
+    },
+    {
+      "move": "crunch",
+      "level": 42
+    },
+    {
+      "move": "giga-drain",
+      "level": 47
+    },
+    {
+      "move": "leaf-storm",
+      "level": 52
+    }
+  ]
+}

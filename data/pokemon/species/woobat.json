@@ -1,0 +1,80 @@
+{
+  "id": 527,
+  "species_id": "woobat",
+  "showdown_id": "woobat",
+  "name": "Woobat",
+  "types": [
+    "psychic",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 45,
+    "def": 43,
+    "spa": 55,
+    "spd": 43,
+    "spe": 72
+  },
+  "abilities": {
+    "primary": "unaware",
+    "hidden": "simple"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 4
+    },
+    {
+      "move": "gust",
+      "level": 8
+    },
+    {
+      "move": "assurance",
+      "level": 12
+    },
+    {
+      "move": "heart-stamp",
+      "level": 15
+    },
+    {
+      "move": "imprison",
+      "level": 19
+    },
+    {
+      "move": "air-cutter",
+      "level": 21
+    },
+    {
+      "move": "attract",
+      "level": 25
+    },
+    {
+      "move": "amnesia",
+      "level": 29
+    },
+    {
+      "move": "calm-mind",
+      "level": 29
+    },
+    {
+      "move": "air-slash",
+      "level": 32
+    },
+    {
+      "move": "future-sight",
+      "level": 36
+    },
+    {
+      "move": "psychic",
+      "level": 41
+    },
+    {
+      "move": "endeavor",
+      "level": 47
+    }
+  ]
+}

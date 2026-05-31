@@ -1,35 +1,60 @@
 {
   "id": 2,
+  "species_id": "ivysaur",
+  "showdown_id": "ivysaur",
   "name": "Ivysaur",
-  "types": ["grass", "poison"],
+  "types": [
+    "grass",
+    "poison"
+  ],
   "base_stats": {
-	"hp": 60,
-	"atk": 62,
-	"def": 63,
-	"spa": 80,
-	"spd": 80,
-	"spe": 60
+    "hp": 60,
+    "atk": 62,
+    "def": 63,
+    "spa": 80,
+    "spd": 80,
+    "spe": 60
   },
   "abilities": {
-	"primary": "overgrow",
-	"hidden": "chlorophyll"
+    "primary": "overgrow",
+    "hidden": "chlorophyll"
   },
   "level_up_moves": [
-	{
-	  "level": 1,
-	  "move": "tackle"
-	},
-	{
-	  "level": 1,
-	  "move": "growl"
-	},
-	{
-	  "level": 1,
-	  "move": "vine-whip"
-	},
-	{
-	  "level": 9,
-	  "move": "leech-seed"
-	}
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "vine-whip",
+      "level": 13
+    },
+    {
+      "move": "poison-powder",
+      "level": 22
+    },
+    {
+      "move": "razor-leaf",
+      "level": 30
+    },
+    {
+      "move": "growth",
+      "level": 38
+    },
+    {
+      "move": "sleep-powder",
+      "level": 46
+    },
+    {
+      "move": "solar-beam",
+      "level": 54
+    }
   ]
 }

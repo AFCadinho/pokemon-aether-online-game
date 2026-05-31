@@ -1,0 +1,76 @@
+{
+  "id": 426,
+  "species_id": "drifblim",
+  "showdown_id": "drifblim",
+  "name": "Drifblim",
+  "types": [
+    "ghost",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 150,
+    "atk": 80,
+    "def": 44,
+    "spa": 90,
+    "spd": 54,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "aftermath",
+    "hidden": "flare-boost"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "constrict",
+      "level": 1
+    },
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "minimize",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 14
+    },
+    {
+      "move": "payback",
+      "level": 17
+    },
+    {
+      "move": "stockpile",
+      "level": 22
+    },
+    {
+      "move": "spit-up",
+      "level": 27
+    },
+    {
+      "move": "swallow",
+      "level": 27
+    },
+    {
+      "move": "ominous-wind",
+      "level": 32
+    },
+    {
+      "move": "baton-pass",
+      "level": 37
+    },
+    {
+      "move": "shadow-ball",
+      "level": 44
+    },
+    {
+      "move": "explosion",
+      "level": 51
+    }
+  ]
+}

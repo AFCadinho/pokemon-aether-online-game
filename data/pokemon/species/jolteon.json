@@ -1,0 +1,63 @@
+{
+  "id": 135,
+  "species_id": "jolteon",
+  "showdown_id": "jolteon",
+  "name": "Jolteon",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 65,
+    "def": 60,
+    "spa": 110,
+    "spd": 95,
+    "spe": 130
+  },
+  "abilities": {
+    "primary": "volt-absorb",
+    "hidden": "quick-feet"
+  },
+  "level_up_moves": [
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "double-kick",
+      "level": 30
+    },
+    {
+      "move": "pin-missile",
+      "level": 36
+    },
+    {
+      "move": "thunder-wave",
+      "level": 40
+    },
+    {
+      "move": "agility",
+      "level": 44
+    },
+    {
+      "move": "thunder",
+      "level": 52
+    }
+  ]
+}

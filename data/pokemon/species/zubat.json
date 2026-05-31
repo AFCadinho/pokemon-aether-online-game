@@ -1,0 +1,48 @@
+{
+  "id": 41,
+  "species_id": "zubat",
+  "showdown_id": "zubat",
+  "name": "Zubat",
+  "types": [
+    "poison",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 35,
+    "spa": 30,
+    "spd": 40,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "inner-focus",
+    "hidden": "infiltrator"
+  },
+  "level_up_moves": [
+    {
+      "move": "leech-life",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 10
+    },
+    {
+      "move": "bite",
+      "level": 15
+    },
+    {
+      "move": "confuse-ray",
+      "level": 21
+    },
+    {
+      "move": "wing-attack",
+      "level": 28
+    },
+    {
+      "move": "haze",
+      "level": 36
+    }
+  ]
+}

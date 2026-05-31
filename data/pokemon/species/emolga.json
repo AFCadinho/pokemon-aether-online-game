@@ -1,0 +1,84 @@
+{
+  "id": 587,
+  "species_id": "emolga",
+  "showdown_id": "emolga",
+  "name": "Emolga",
+  "types": [
+    "electric",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 75,
+    "def": 60,
+    "spa": 75,
+    "spd": 60,
+    "spe": 103
+  },
+  "abilities": {
+    "primary": "static",
+    "hidden": "motor-drive"
+  },
+  "level_up_moves": [
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 4
+    },
+    {
+      "move": "tail-whip",
+      "level": 7
+    },
+    {
+      "move": "charge",
+      "level": 10
+    },
+    {
+      "move": "spark",
+      "level": 13
+    },
+    {
+      "move": "pursuit",
+      "level": 16
+    },
+    {
+      "move": "double-team",
+      "level": 19
+    },
+    {
+      "move": "shock-wave",
+      "level": 22
+    },
+    {
+      "move": "electro-ball",
+      "level": 26
+    },
+    {
+      "move": "acrobatics",
+      "level": 30
+    },
+    {
+      "move": "light-screen",
+      "level": 34
+    },
+    {
+      "move": "encore",
+      "level": 38
+    },
+    {
+      "move": "volt-switch",
+      "level": 42
+    },
+    {
+      "move": "agility",
+      "level": 46
+    },
+    {
+      "move": "discharge",
+      "level": 50
+    }
+  ]
+}

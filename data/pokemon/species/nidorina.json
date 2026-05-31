@@ -1,0 +1,55 @@
+{
+  "id": 30,
+  "species_id": "nidorina",
+  "showdown_id": "nidorina",
+  "name": "Nidorina",
+  "types": [
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 62,
+    "def": 67,
+    "spa": 55,
+    "spd": 55,
+    "spe": 56
+  },
+  "abilities": {
+    "primary": "poison-point",
+    "hidden": "hustle"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "double-kick",
+      "level": 12
+    },
+    {
+      "move": "poison-sting",
+      "level": 14
+    },
+    {
+      "move": "tail-whip",
+      "level": 23
+    },
+    {
+      "move": "bite",
+      "level": 32
+    },
+    {
+      "move": "fury-swipes",
+      "level": 41
+    }
+  ]
+}

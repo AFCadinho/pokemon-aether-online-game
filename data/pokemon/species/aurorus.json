@@ -1,0 +1,100 @@
+{
+  "id": 699,
+  "species_id": "aurorus",
+  "showdown_id": "aurorus",
+  "name": "Aurorus",
+  "types": [
+    "rock",
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 123,
+    "atk": 77,
+    "def": 72,
+    "spa": 99,
+    "spd": 92,
+    "spe": 58
+  },
+  "abilities": {
+    "primary": "refrigerate",
+    "hidden": "snow-warning"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "freeze-dry",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 5
+    },
+    {
+      "move": "rock-throw",
+      "level": 10
+    },
+    {
+      "move": "icy-wind",
+      "level": 13
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "mist",
+      "level": 18
+    },
+    {
+      "move": "aurora-beam",
+      "level": 20
+    },
+    {
+      "move": "ancient-power",
+      "level": 26
+    },
+    {
+      "move": "round",
+      "level": 30
+    },
+    {
+      "move": "avalanche",
+      "level": 34
+    },
+    {
+      "move": "hail",
+      "level": 38
+    },
+    {
+      "move": "nature-power",
+      "level": 43
+    },
+    {
+      "move": "encore",
+      "level": 46
+    },
+    {
+      "move": "light-screen",
+      "level": 50
+    },
+    {
+      "move": "ice-beam",
+      "level": 56
+    },
+    {
+      "move": "hyper-beam",
+      "level": 63
+    },
+    {
+      "move": "blizzard",
+      "level": 74
+    }
+  ]
+}

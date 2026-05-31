@@ -1,0 +1,70 @@
+{
+  "id": 386,
+  "species_id": "deoxys",
+  "showdown_id": "deoxys",
+  "name": "Deoxys",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 150,
+    "def": 50,
+    "spa": 150,
+    "spd": 50,
+    "spe": 150
+  },
+  "abilities": {
+    "primary": "pressure"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "night-shade",
+      "level": 5
+    },
+    {
+      "move": "teleport",
+      "level": 10
+    },
+    {
+      "move": "knock-off",
+      "level": 15
+    },
+    {
+      "move": "pursuit",
+      "level": 20
+    },
+    {
+      "move": "psychic",
+      "level": 25
+    },
+    {
+      "move": "snatch",
+      "level": 30
+    },
+    {
+      "move": "cosmic-power",
+      "level": 35
+    },
+    {
+      "move": "recover",
+      "level": 40
+    },
+    {
+      "move": "psycho-boost",
+      "level": 45
+    },
+    {
+      "move": "hyper-beam",
+      "level": 50
+    }
+  ]
+}

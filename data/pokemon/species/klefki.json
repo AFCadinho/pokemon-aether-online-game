@@ -1,0 +1,88 @@
+{
+  "id": 707,
+  "species_id": "klefki",
+  "showdown_id": "klefki",
+  "name": "Klefki",
+  "types": [
+    "steel",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 57,
+    "atk": 80,
+    "def": 91,
+    "spa": 80,
+    "spd": 87,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "prankster",
+    "hidden": "magician"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "fairy-lock",
+      "level": 1
+    },
+    {
+      "move": "fairy-wind",
+      "level": 5
+    },
+    {
+      "move": "astonish",
+      "level": 8
+    },
+    {
+      "move": "metal-sound",
+      "level": 12
+    },
+    {
+      "move": "spikes",
+      "level": 15
+    },
+    {
+      "move": "draining-kiss",
+      "level": 18
+    },
+    {
+      "move": "crafty-shield",
+      "level": 23
+    },
+    {
+      "move": "foul-play",
+      "level": 27
+    },
+    {
+      "move": "torment",
+      "level": 32
+    },
+    {
+      "move": "mirror-shot",
+      "level": 34
+    },
+    {
+      "move": "imprison",
+      "level": 36
+    },
+    {
+      "move": "recycle",
+      "level": 40
+    },
+    {
+      "move": "play-rough",
+      "level": 43
+    },
+    {
+      "move": "magic-room",
+      "level": 44
+    },
+    {
+      "move": "heal-block",
+      "level": 50
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "id": 437,
+  "species_id": "bronzong",
+  "showdown_id": "bronzong",
+  "name": "Bronzong",
+  "types": [
+    "steel",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 67,
+    "atk": 89,
+    "def": 116,
+    "spa": 79,
+    "spd": 116,
+    "spe": 33
+  },
+  "abilities": {
+    "primary": "levitate",
+    "hidden": "heavy-metal"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "hypnosis",
+      "level": 1
+    },
+    {
+      "move": "imprison",
+      "level": 1
+    },
+    {
+      "move": "rain-dance",
+      "level": 1
+    },
+    {
+      "move": "sunny-day",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "confuse-ray",
+      "level": 14
+    },
+    {
+      "move": "extrasensory",
+      "level": 19
+    },
+    {
+      "move": "iron-defense",
+      "level": 26
+    },
+    {
+      "move": "safeguard",
+      "level": 30
+    },
+    {
+      "move": "block",
+      "level": 33
+    },
+    {
+      "move": "gyro-ball",
+      "level": 38
+    },
+    {
+      "move": "future-sight",
+      "level": 43
+    },
+    {
+      "move": "feint-attack",
+      "level": 50
+    },
+    {
+      "move": "payback",
+      "level": 61
+    },
+    {
+      "move": "heal-block",
+      "level": 67
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": 106,
+  "species_id": "hitmonlee",
+  "showdown_id": "hitmonlee",
+  "name": "Hitmonlee",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 120,
+    "def": 53,
+    "spa": 35,
+    "spd": 110,
+    "spe": 87
+  },
+  "abilities": {
+    "primary": "limber",
+    "hidden": "unburden"
+  },
+  "level_up_moves": [
+    {
+      "move": "double-kick",
+      "level": 1
+    },
+    {
+      "move": "meditate",
+      "level": 1
+    },
+    {
+      "move": "rolling-kick",
+      "level": 33
+    },
+    {
+      "move": "jump-kick",
+      "level": 38
+    },
+    {
+      "move": "focus-energy",
+      "level": 43
+    },
+    {
+      "move": "high-jump-kick",
+      "level": 48
+    },
+    {
+      "move": "mega-kick",
+      "level": 53
+    }
+  ]
+}

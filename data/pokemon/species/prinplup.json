@@ -1,0 +1,79 @@
+{
+  "id": 394,
+  "species_id": "prinplup",
+  "showdown_id": "prinplup",
+  "name": "Prinplup",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 64,
+    "atk": 66,
+    "def": 68,
+    "spa": 81,
+    "spd": 76,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "competitive"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bubble",
+      "level": 8
+    },
+    {
+      "move": "water-sport",
+      "level": 11
+    },
+    {
+      "move": "peck",
+      "level": 15
+    },
+    {
+      "move": "metal-claw",
+      "level": 16
+    },
+    {
+      "move": "bide",
+      "level": 19
+    },
+    {
+      "move": "bubble-beam",
+      "level": 19
+    },
+    {
+      "move": "fury-attack",
+      "level": 28
+    },
+    {
+      "move": "brine",
+      "level": 33
+    },
+    {
+      "move": "whirlpool",
+      "level": 37
+    },
+    {
+      "move": "mist",
+      "level": 42
+    },
+    {
+      "move": "drill-peck",
+      "level": 46
+    },
+    {
+      "move": "hydro-pump",
+      "level": 51
+    }
+  ]
+}

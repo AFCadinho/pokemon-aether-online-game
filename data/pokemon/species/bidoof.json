@@ -1,0 +1,71 @@
+{
+  "id": 399,
+  "species_id": "bidoof",
+  "showdown_id": "bidoof",
+  "name": "Bidoof",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 59,
+    "atk": 45,
+    "def": 40,
+    "spa": 35,
+    "spd": 40,
+    "spe": 31
+  },
+  "abilities": {
+    "primary": "simple",
+    "hidden": "moody"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 5
+    },
+    {
+      "move": "defense-curl",
+      "level": 9
+    },
+    {
+      "move": "rollout",
+      "level": 13
+    },
+    {
+      "move": "headbutt",
+      "level": 17
+    },
+    {
+      "move": "hyper-fang",
+      "level": 21
+    },
+    {
+      "move": "yawn",
+      "level": 25
+    },
+    {
+      "move": "amnesia",
+      "level": 29
+    },
+    {
+      "move": "take-down",
+      "level": 33
+    },
+    {
+      "move": "super-fang",
+      "level": 37
+    },
+    {
+      "move": "superpower",
+      "level": 41
+    },
+    {
+      "move": "curse",
+      "level": 45
+    }
+  ]
+}

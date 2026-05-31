@@ -1,0 +1,51 @@
+{
+  "id": 99,
+  "species_id": "kingler",
+  "showdown_id": "kingler",
+  "name": "Kingler",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 130,
+    "def": 115,
+    "spa": 50,
+    "spd": 50,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "hyper-cutter",
+    "hidden": "sheer-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "vice-grip",
+      "level": 1
+    },
+    {
+      "move": "guillotine",
+      "level": 25
+    },
+    {
+      "move": "stomp",
+      "level": 34
+    },
+    {
+      "move": "crabhammer",
+      "level": 42
+    },
+    {
+      "move": "harden",
+      "level": 49
+    }
+  ]
+}

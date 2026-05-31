@@ -1,0 +1,60 @@
+{
+  "id": 205,
+  "species_id": "forretress",
+  "showdown_id": "forretress",
+  "name": "Forretress",
+  "types": [
+    "bug",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 90,
+    "def": 140,
+    "spa": 60,
+    "spd": 60,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "protect",
+      "level": 1
+    },
+    {
+      "move": "self-destruct",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "rapid-spin",
+      "level": 22
+    },
+    {
+      "move": "bide",
+      "level": 29
+    },
+    {
+      "move": "explosion",
+      "level": 39
+    },
+    {
+      "move": "spikes",
+      "level": 49
+    },
+    {
+      "move": "double-edge",
+      "level": 59
+    }
+  ]
+}

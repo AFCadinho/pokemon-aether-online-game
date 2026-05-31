@@ -1,0 +1,64 @@
+{
+  "id": 193,
+  "species_id": "yanma",
+  "showdown_id": "yanma",
+  "name": "Yanma",
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 65,
+    "def": 45,
+    "spa": 75,
+    "spd": 45,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "speed-boost",
+    "hidden": "frisk"
+  },
+  "level_up_moves": [
+    {
+      "move": "foresight",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 7
+    },
+    {
+      "move": "double-team",
+      "level": 13
+    },
+    {
+      "move": "sonic-boom",
+      "level": 19
+    },
+    {
+      "move": "detect",
+      "level": 25
+    },
+    {
+      "move": "supersonic",
+      "level": 31
+    },
+    {
+      "move": "swift",
+      "level": 37
+    },
+    {
+      "move": "wing-attack",
+      "level": 37
+    },
+    {
+      "move": "screech",
+      "level": 43
+    }
+  ]
+}

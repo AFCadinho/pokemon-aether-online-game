@@ -1,0 +1,79 @@
+{
+  "id": 681,
+  "species_id": "aegislash-shield",
+  "showdown_id": "aegislash",
+  "name": "Aegislash",
+  "types": [
+    "steel",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 50,
+    "def": 140,
+    "spa": 50,
+    "spd": 140,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "stance-change"
+  },
+  "level_up_moves": [
+    {
+      "move": "swords-dance",
+      "level": 1
+    },
+    {
+      "move": "slash",
+      "level": 1
+    },
+    {
+      "move": "fury-cutter",
+      "level": 1
+    },
+    {
+      "move": "pursuit",
+      "level": 1
+    },
+    {
+      "move": "aerial-ace",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "power-trick",
+      "level": 1
+    },
+    {
+      "move": "night-slash",
+      "level": 1
+    },
+    {
+      "move": "shadow-sneak",
+      "level": 1
+    },
+    {
+      "move": "iron-head",
+      "level": 1
+    },
+    {
+      "move": "head-smash",
+      "level": 1
+    },
+    {
+      "move": "autotomize",
+      "level": 1
+    },
+    {
+      "move": "sacred-sword",
+      "level": 1
+    },
+    {
+      "move": "kings-shield",
+      "level": 1
+    }
+  ]
+}

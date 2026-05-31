@@ -1,0 +1,42 @@
+{
+  "id": 151,
+  "species_id": "mew",
+  "showdown_id": "mew",
+  "name": "Mew",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 100,
+    "def": 100,
+    "spa": 100,
+    "spd": 100,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "synchronize"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "transform",
+      "level": 10
+    },
+    {
+      "move": "mega-punch",
+      "level": 20
+    },
+    {
+      "move": "metronome",
+      "level": 30
+    },
+    {
+      "move": "psychic",
+      "level": 40
+    }
+  ]
+}

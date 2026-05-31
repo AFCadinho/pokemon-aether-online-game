@@ -1,0 +1,92 @@
+{
+  "id": 598,
+  "species_id": "ferrothorn",
+  "showdown_id": "ferrothorn",
+  "name": "Ferrothorn",
+  "types": [
+    "grass",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 74,
+    "atk": 94,
+    "def": 131,
+    "spa": 54,
+    "spd": 116,
+    "spe": 20
+  },
+  "abilities": {
+    "primary": "iron-barbs",
+    "hidden": "anticipation"
+  },
+  "level_up_moves": [
+    {
+      "move": "curse",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "rock-climb",
+      "level": 1
+    },
+    {
+      "move": "rollout",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 14
+    },
+    {
+      "move": "pin-missile",
+      "level": 18
+    },
+    {
+      "move": "gyro-ball",
+      "level": 21
+    },
+    {
+      "move": "iron-defense",
+      "level": 26
+    },
+    {
+      "move": "mirror-shot",
+      "level": 30
+    },
+    {
+      "move": "ingrain",
+      "level": 35
+    },
+    {
+      "move": "self-destruct",
+      "level": 38
+    },
+    {
+      "move": "power-whip",
+      "level": 40
+    },
+    {
+      "move": "iron-head",
+      "level": 46
+    },
+    {
+      "move": "payback",
+      "level": 53
+    },
+    {
+      "move": "flash-cannon",
+      "level": 61
+    },
+    {
+      "move": "explosion",
+      "level": 67
+    }
+  ]
+}

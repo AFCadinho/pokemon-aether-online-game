@@ -1,0 +1,75 @@
+{
+  "id": 352,
+  "species_id": "kecleon",
+  "showdown_id": "kecleon",
+  "name": "Kecleon",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 90,
+    "def": 70,
+    "spa": 60,
+    "spd": 120,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "color-change",
+    "hidden": "protean"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "thief",
+      "level": 1
+    },
+    {
+      "move": "bind",
+      "level": 4
+    },
+    {
+      "move": "feint-attack",
+      "level": 7
+    },
+    {
+      "move": "fury-swipes",
+      "level": 12
+    },
+    {
+      "move": "psybeam",
+      "level": 17
+    },
+    {
+      "move": "screech",
+      "level": 24
+    },
+    {
+      "move": "slash",
+      "level": 31
+    },
+    {
+      "move": "substitute",
+      "level": 40
+    },
+    {
+      "move": "ancient-power",
+      "level": 49
+    }
+  ]
+}

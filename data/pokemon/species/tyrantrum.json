@@ -1,0 +1,96 @@
+{
+  "id": 697,
+  "species_id": "tyrantrum",
+  "showdown_id": "tyrantrum",
+  "name": "Tyrantrum",
+  "types": [
+    "rock",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 82,
+    "atk": 121,
+    "def": 119,
+    "spa": 69,
+    "spd": 59,
+    "spe": 71
+  },
+  "abilities": {
+    "primary": "strong-jaw",
+    "hidden": "rock-head"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "head-smash",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 6
+    },
+    {
+      "move": "stomp",
+      "level": 10
+    },
+    {
+      "move": "bide",
+      "level": 12
+    },
+    {
+      "move": "stealth-rock",
+      "level": 15
+    },
+    {
+      "move": "bite",
+      "level": 17
+    },
+    {
+      "move": "charm",
+      "level": 20
+    },
+    {
+      "move": "ancient-power",
+      "level": 26
+    },
+    {
+      "move": "dragon-tail",
+      "level": 30
+    },
+    {
+      "move": "crunch",
+      "level": 34
+    },
+    {
+      "move": "dragon-claw",
+      "level": 37
+    },
+    {
+      "move": "thrash",
+      "level": 42
+    },
+    {
+      "move": "earthquake",
+      "level": 47
+    },
+    {
+      "move": "horn-drill",
+      "level": 53
+    },
+    {
+      "move": "rock-slide",
+      "level": 68
+    },
+    {
+      "move": "giga-impact",
+      "level": 75
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": 221,
+  "species_id": "piloswine",
+  "showdown_id": "piloswine",
+  "name": "Piloswine",
+  "types": [
+    "ice",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 100,
+    "def": 80,
+    "spa": 60,
+    "spd": 60,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "oblivious",
+    "hidden": "thick-fat"
+  },
+  "level_up_moves": [
+    {
+      "move": "endure",
+      "level": 1
+    },
+    {
+      "move": "horn-attack",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "take-down",
+      "level": 28
+    },
+    {
+      "move": "fury-attack",
+      "level": 33
+    },
+    {
+      "move": "mist",
+      "level": 42
+    },
+    {
+      "move": "blizzard",
+      "level": 56
+    },
+    {
+      "move": "amnesia",
+      "level": 70
+    }
+  ]
+}

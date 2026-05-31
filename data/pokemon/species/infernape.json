@@ -1,0 +1,76 @@
+{
+  "id": 392,
+  "species_id": "infernape",
+  "showdown_id": "infernape",
+  "name": "Infernape",
+  "types": [
+    "fire",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 76,
+    "atk": 104,
+    "def": 71,
+    "spa": 104,
+    "spd": 71,
+    "spe": 108
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "iron-fist"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "taunt",
+      "level": 1
+    },
+    {
+      "move": "mach-punch",
+      "level": 14
+    },
+    {
+      "move": "fury-swipes",
+      "level": 17
+    },
+    {
+      "move": "flame-wheel",
+      "level": 21
+    },
+    {
+      "move": "feint",
+      "level": 29
+    },
+    {
+      "move": "punishment",
+      "level": 33
+    },
+    {
+      "move": "close-combat",
+      "level": 41
+    },
+    {
+      "move": "fire-spin",
+      "level": 45
+    },
+    {
+      "move": "calm-mind",
+      "level": 53
+    },
+    {
+      "move": "flare-blitz",
+      "level": 57
+    }
+  ]
+}

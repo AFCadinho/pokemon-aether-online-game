@@ -1,0 +1,39 @@
+{
+  "id": 38,
+  "species_id": "ninetales",
+  "showdown_id": "ninetales",
+  "name": "Ninetales",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 73,
+    "atk": 76,
+    "def": 75,
+    "spa": 81,
+    "spd": 100,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "flash-fire",
+    "hidden": "drought"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    }
+  ]
+}

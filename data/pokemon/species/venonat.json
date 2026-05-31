@@ -1,0 +1,64 @@
+{
+  "id": 48,
+  "species_id": "venonat",
+  "showdown_id": "venonat",
+  "name": "Venonat",
+  "types": [
+    "bug",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 55,
+    "def": 50,
+    "spa": 40,
+    "spd": 55,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "compound-eyes",
+    "hidden": "run-away"
+  },
+  "level_up_moves": [
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 11
+    },
+    {
+      "move": "confusion",
+      "level": 19
+    },
+    {
+      "move": "poison-powder",
+      "level": 22
+    },
+    {
+      "move": "leech-life",
+      "level": 27
+    },
+    {
+      "move": "stun-spore",
+      "level": 30
+    },
+    {
+      "move": "psybeam",
+      "level": 35
+    },
+    {
+      "move": "sleep-powder",
+      "level": 38
+    },
+    {
+      "move": "psychic",
+      "level": 43
+    }
+  ]
+}

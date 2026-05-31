@@ -1,0 +1,55 @@
+{
+  "id": 368,
+  "species_id": "gorebyss",
+  "showdown_id": "gorebyss",
+  "name": "Gorebyss",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 84,
+    "def": 105,
+    "spa": 114,
+    "spd": 75,
+    "spe": 52
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "hydration"
+  },
+  "level_up_moves": [
+    {
+      "move": "whirlpool",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 8
+    },
+    {
+      "move": "agility",
+      "level": 15
+    },
+    {
+      "move": "water-pulse",
+      "level": 22
+    },
+    {
+      "move": "amnesia",
+      "level": 29
+    },
+    {
+      "move": "psychic",
+      "level": 36
+    },
+    {
+      "move": "baton-pass",
+      "level": 43
+    },
+    {
+      "move": "hydro-pump",
+      "level": 50
+    }
+  ]
+}

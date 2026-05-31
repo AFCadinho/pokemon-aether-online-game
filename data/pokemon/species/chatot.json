@@ -1,0 +1,72 @@
+{
+  "id": 441,
+  "species_id": "chatot",
+  "showdown_id": "chatot",
+  "name": "Chatot",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 76,
+    "atk": 65,
+    "def": 45,
+    "spa": 92,
+    "spd": 42,
+    "spe": 91
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "big-pecks"
+  },
+  "level_up_moves": [
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 5
+    },
+    {
+      "move": "mirror-move",
+      "level": 9
+    },
+    {
+      "move": "sing",
+      "level": 13
+    },
+    {
+      "move": "fury-attack",
+      "level": 17
+    },
+    {
+      "move": "chatter",
+      "level": 21
+    },
+    {
+      "move": "taunt",
+      "level": 25
+    },
+    {
+      "move": "mimic",
+      "level": 29
+    },
+    {
+      "move": "roost",
+      "level": 33
+    },
+    {
+      "move": "uproar",
+      "level": 37
+    },
+    {
+      "move": "feather-dance",
+      "level": 41
+    },
+    {
+      "move": "hyper-voice",
+      "level": 45
+    }
+  ]
+}

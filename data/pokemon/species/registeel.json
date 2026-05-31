@@ -1,0 +1,63 @@
+{
+  "id": 379,
+  "species_id": "registeel",
+  "showdown_id": "registeel",
+  "name": "Registeel",
+  "types": [
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 75,
+    "def": 150,
+    "spa": 75,
+    "spd": 150,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "clear-body",
+    "hidden": "light-metal"
+  },
+  "level_up_moves": [
+    {
+      "move": "explosion",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 9
+    },
+    {
+      "move": "curse",
+      "level": 17
+    },
+    {
+      "move": "superpower",
+      "level": 25
+    },
+    {
+      "move": "ancient-power",
+      "level": 33
+    },
+    {
+      "move": "amnesia",
+      "level": 41
+    },
+    {
+      "move": "iron-defense",
+      "level": 41
+    },
+    {
+      "move": "zap-cannon",
+      "level": 49
+    },
+    {
+      "move": "lock-on",
+      "level": 57
+    },
+    {
+      "move": "hyper-beam",
+      "level": 65
+    }
+  ]
+}

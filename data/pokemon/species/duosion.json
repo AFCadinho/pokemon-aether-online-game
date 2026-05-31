@@ -1,0 +1,87 @@
+{
+  "id": 578,
+  "species_id": "duosion",
+  "showdown_id": "duosion",
+  "name": "Duosion",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 40,
+    "def": 50,
+    "spa": 125,
+    "spd": 60,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "overcoat",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "psywave",
+      "level": 1
+    },
+    {
+      "move": "reflect",
+      "level": 1
+    },
+    {
+      "move": "rollout",
+      "level": 1
+    },
+    {
+      "move": "snatch",
+      "level": 1
+    },
+    {
+      "move": "hidden-power",
+      "level": 14
+    },
+    {
+      "move": "light-screen",
+      "level": 16
+    },
+    {
+      "move": "charm",
+      "level": 19
+    },
+    {
+      "move": "recover",
+      "level": 24
+    },
+    {
+      "move": "psyshock",
+      "level": 25
+    },
+    {
+      "move": "endeavor",
+      "level": 28
+    },
+    {
+      "move": "future-sight",
+      "level": 31
+    },
+    {
+      "move": "pain-split",
+      "level": 34
+    },
+    {
+      "move": "psychic",
+      "level": 39
+    },
+    {
+      "move": "skill-swap",
+      "level": 43
+    },
+    {
+      "move": "heal-block",
+      "level": 50
+    },
+    {
+      "move": "wonder-room",
+      "level": 53
+    }
+  ]
+}

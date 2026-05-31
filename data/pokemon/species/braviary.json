@@ -1,0 +1,92 @@
+{
+  "id": 628,
+  "species_id": "braviary",
+  "showdown_id": "braviary",
+  "name": "Braviary",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 123,
+    "def": 75,
+    "spa": 57,
+    "spd": 75,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "defiant"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-attack",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "wing-attack",
+      "level": 1
+    },
+    {
+      "move": "hone-claws",
+      "level": 14
+    },
+    {
+      "move": "scary-face",
+      "level": 19
+    },
+    {
+      "move": "aerial-ace",
+      "level": 23
+    },
+    {
+      "move": "slash",
+      "level": 28
+    },
+    {
+      "move": "defog",
+      "level": 32
+    },
+    {
+      "move": "tailwind",
+      "level": 37
+    },
+    {
+      "move": "air-slash",
+      "level": 41
+    },
+    {
+      "move": "crush-claw",
+      "level": 46
+    },
+    {
+      "move": "sky-drop",
+      "level": 50
+    },
+    {
+      "move": "superpower",
+      "level": 51
+    },
+    {
+      "move": "whirlwind",
+      "level": 57
+    },
+    {
+      "move": "brave-bird",
+      "level": 63
+    },
+    {
+      "move": "thrash",
+      "level": 70
+    }
+  ]
+}

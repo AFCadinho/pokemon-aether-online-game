@@ -1,0 +1,55 @@
+{
+  "id": 232,
+  "species_id": "donphan",
+  "showdown_id": "donphan",
+  "name": "Donphan",
+  "types": [
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 120,
+    "def": 120,
+    "spa": 60,
+    "spd": 60,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "sand-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "horn-attack",
+      "level": 1
+    },
+    {
+      "move": "defense-curl",
+      "level": 9
+    },
+    {
+      "move": "flail",
+      "level": 17
+    },
+    {
+      "move": "fury-attack",
+      "level": 25
+    },
+    {
+      "move": "rollout",
+      "level": 33
+    },
+    {
+      "move": "rapid-spin",
+      "level": 41
+    },
+    {
+      "move": "earthquake",
+      "level": 49
+    }
+  ]
+}

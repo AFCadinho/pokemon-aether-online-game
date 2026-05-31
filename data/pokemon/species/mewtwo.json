@@ -1,0 +1,55 @@
+{
+  "id": 150,
+  "species_id": "mewtwo",
+  "showdown_id": "mewtwo",
+  "name": "Mewtwo",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 106,
+    "atk": 110,
+    "def": 90,
+    "spa": 154,
+    "spd": 90,
+    "spe": 130
+  },
+  "abilities": {
+    "primary": "pressure",
+    "hidden": "unnerve"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "psychic",
+      "level": 1
+    },
+    {
+      "move": "swift",
+      "level": 1
+    },
+    {
+      "move": "barrier",
+      "level": 63
+    },
+    {
+      "move": "recover",
+      "level": 70
+    },
+    {
+      "move": "mist",
+      "level": 75
+    },
+    {
+      "move": "amnesia",
+      "level": 81
+    }
+  ]
+}

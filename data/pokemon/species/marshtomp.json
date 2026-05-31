@@ -1,0 +1,76 @@
+{
+  "id": 259,
+  "species_id": "marshtomp",
+  "showdown_id": "marshtomp",
+  "name": "Marshtomp",
+  "types": [
+    "water",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 70,
+    "spa": 60,
+    "spd": 70,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "damp"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "bide",
+      "level": 15
+    },
+    {
+      "move": "mud-shot",
+      "level": 16
+    },
+    {
+      "move": "foresight",
+      "level": 20
+    },
+    {
+      "move": "mud-sport",
+      "level": 25
+    },
+    {
+      "move": "take-down",
+      "level": 31
+    },
+    {
+      "move": "muddy-water",
+      "level": 37
+    },
+    {
+      "move": "protect",
+      "level": 42
+    },
+    {
+      "move": "earthquake",
+      "level": 46
+    },
+    {
+      "move": "endeavor",
+      "level": 53
+    }
+  ]
+}

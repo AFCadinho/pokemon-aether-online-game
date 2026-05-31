@@ -1,0 +1,84 @@
+{
+  "id": 618,
+  "species_id": "stunfisk",
+  "showdown_id": "stunfisk",
+  "name": "Stunfisk",
+  "types": [
+    "ground",
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 109,
+    "atk": 66,
+    "def": 84,
+    "spa": 81,
+    "spd": 99,
+    "spe": 32
+  },
+  "abilities": {
+    "primary": "static",
+    "hidden": "sand-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "mud-sport",
+      "level": 1
+    },
+    {
+      "move": "bide",
+      "level": 5
+    },
+    {
+      "move": "thunder-shock",
+      "level": 9
+    },
+    {
+      "move": "mud-shot",
+      "level": 13
+    },
+    {
+      "move": "camouflage",
+      "level": 17
+    },
+    {
+      "move": "mud-bomb",
+      "level": 21
+    },
+    {
+      "move": "discharge",
+      "level": 25
+    },
+    {
+      "move": "endure",
+      "level": 30
+    },
+    {
+      "move": "bounce",
+      "level": 35
+    },
+    {
+      "move": "muddy-water",
+      "level": 40
+    },
+    {
+      "move": "thunderbolt",
+      "level": 45
+    },
+    {
+      "move": "revenge",
+      "level": 50
+    },
+    {
+      "move": "flail",
+      "level": 55
+    },
+    {
+      "move": "fissure",
+      "level": 61
+    }
+  ]
+}

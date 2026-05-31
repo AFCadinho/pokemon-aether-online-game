@@ -1,0 +1,72 @@
+{
+  "id": 306,
+  "species_id": "aggron",
+  "showdown_id": "aggron",
+  "name": "Aggron",
+  "types": [
+    "steel",
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 110,
+    "def": 180,
+    "spa": 60,
+    "spd": 60,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "sturdy",
+    "hidden": "heavy-metal"
+  },
+  "level_up_moves": [
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 13
+    },
+    {
+      "move": "iron-defense",
+      "level": 17
+    },
+    {
+      "move": "roar",
+      "level": 21
+    },
+    {
+      "move": "take-down",
+      "level": 25
+    },
+    {
+      "move": "iron-tail",
+      "level": 29
+    },
+    {
+      "move": "protect",
+      "level": 37
+    },
+    {
+      "move": "metal-sound",
+      "level": 50
+    },
+    {
+      "move": "double-edge",
+      "level": 63
+    }
+  ]
+}

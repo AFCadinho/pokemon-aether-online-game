@@ -1,0 +1,88 @@
+{
+  "id": 702,
+  "species_id": "dedenne",
+  "showdown_id": "dedenne",
+  "name": "Dedenne",
+  "types": [
+    "electric",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 67,
+    "atk": 58,
+    "def": 57,
+    "spa": 81,
+    "spd": 67,
+    "spe": 101
+  },
+  "abilities": {
+    "primary": "cheek-pouch",
+    "hidden": "plus"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 7
+    },
+    {
+      "move": "charge",
+      "level": 11
+    },
+    {
+      "move": "charm",
+      "level": 14
+    },
+    {
+      "move": "parabolic-charge",
+      "level": 17
+    },
+    {
+      "move": "nuzzle",
+      "level": 20
+    },
+    {
+      "move": "thunder-wave",
+      "level": 23
+    },
+    {
+      "move": "volt-switch",
+      "level": 26
+    },
+    {
+      "move": "rest",
+      "level": 30
+    },
+    {
+      "move": "snore",
+      "level": 31
+    },
+    {
+      "move": "charge-beam",
+      "level": 34
+    },
+    {
+      "move": "entrainment",
+      "level": 39
+    },
+    {
+      "move": "play-rough",
+      "level": 42
+    },
+    {
+      "move": "thunder",
+      "level": 45
+    },
+    {
+      "move": "discharge",
+      "level": 50
+    }
+  ]
+}

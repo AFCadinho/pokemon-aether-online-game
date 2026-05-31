@@ -1,0 +1,51 @@
+{
+  "id": 23,
+  "species_id": "ekans",
+  "showdown_id": "ekans",
+  "name": "Ekans",
+  "types": [
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 35,
+    "atk": 60,
+    "def": 44,
+    "spa": 40,
+    "spd": 54,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "intimidate",
+    "hidden": "unnerve"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 10
+    },
+    {
+      "move": "bite",
+      "level": 17
+    },
+    {
+      "move": "glare",
+      "level": 24
+    },
+    {
+      "move": "screech",
+      "level": 31
+    },
+    {
+      "move": "acid",
+      "level": 38
+    }
+  ]
+}

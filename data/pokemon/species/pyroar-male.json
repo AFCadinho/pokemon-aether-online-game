@@ -1,0 +1,88 @@
+{
+  "id": 668,
+  "species_id": "pyroar-male",
+  "showdown_id": "pyroar",
+  "name": "Pyroar",
+  "types": [
+    "fire",
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 86,
+    "atk": 68,
+    "def": 72,
+    "spa": 109,
+    "spd": 66,
+    "spe": 106
+  },
+  "abilities": {
+    "primary": "rivalry",
+    "hidden": "moxie"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "hyper-beam",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 5
+    },
+    {
+      "move": "work-up",
+      "level": 8
+    },
+    {
+      "move": "headbutt",
+      "level": 11
+    },
+    {
+      "move": "noble-roar",
+      "level": 15
+    },
+    {
+      "move": "take-down",
+      "level": 20
+    },
+    {
+      "move": "fire-fang",
+      "level": 23
+    },
+    {
+      "move": "endeavor",
+      "level": 28
+    },
+    {
+      "move": "echoed-voice",
+      "level": 33
+    },
+    {
+      "move": "flamethrower",
+      "level": 38
+    },
+    {
+      "move": "crunch",
+      "level": 42
+    },
+    {
+      "move": "hyper-voice",
+      "level": 48
+    },
+    {
+      "move": "incinerate",
+      "level": 51
+    },
+    {
+      "move": "overheat",
+      "level": 57
+    }
+  ]
+}

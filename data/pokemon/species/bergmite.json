@@ -1,0 +1,83 @@
+{
+  "id": 712,
+  "species_id": "bergmite",
+  "showdown_id": "bergmite",
+  "name": "Bergmite",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 69,
+    "def": 85,
+    "spa": 32,
+    "spd": 35,
+    "spe": 28
+  },
+  "abilities": {
+    "primary": "own-tempo",
+    "hidden": "sturdy"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 5
+    },
+    {
+      "move": "icy-wind",
+      "level": 10
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "sharpen",
+      "level": 20
+    },
+    {
+      "move": "curse",
+      "level": 22
+    },
+    {
+      "move": "ice-fang",
+      "level": 26
+    },
+    {
+      "move": "ice-ball",
+      "level": 30
+    },
+    {
+      "move": "rapid-spin",
+      "level": 35
+    },
+    {
+      "move": "avalanche",
+      "level": 39
+    },
+    {
+      "move": "blizzard",
+      "level": 43
+    },
+    {
+      "move": "recover",
+      "level": 47
+    },
+    {
+      "move": "double-edge",
+      "level": 49
+    }
+  ]
+}

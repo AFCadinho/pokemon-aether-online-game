@@ -1,0 +1,91 @@
+{
+  "id": 594,
+  "species_id": "alomomola",
+  "showdown_id": "alomomola",
+  "name": "Alomomola",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 165,
+    "atk": 75,
+    "def": 80,
+    "spa": 40,
+    "spd": 45,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "healer",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "water-sport",
+      "level": 1
+    },
+    {
+      "move": "aqua-ring",
+      "level": 5
+    },
+    {
+      "move": "aqua-jet",
+      "level": 9
+    },
+    {
+      "move": "double-slap",
+      "level": 13
+    },
+    {
+      "move": "heal-pulse",
+      "level": 17
+    },
+    {
+      "move": "protect",
+      "level": 21
+    },
+    {
+      "move": "water-pulse",
+      "level": 25
+    },
+    {
+      "move": "wake-up-slap",
+      "level": 29
+    },
+    {
+      "move": "soak",
+      "level": 33
+    },
+    {
+      "move": "wish",
+      "level": 37
+    },
+    {
+      "move": "brine",
+      "level": 41
+    },
+    {
+      "move": "safeguard",
+      "level": 45
+    },
+    {
+      "move": "helping-hand",
+      "level": 49
+    },
+    {
+      "move": "wide-guard",
+      "level": 53
+    },
+    {
+      "move": "healing-wish",
+      "level": 57
+    },
+    {
+      "move": "hydro-pump",
+      "level": 61
+    }
+  ]
+}

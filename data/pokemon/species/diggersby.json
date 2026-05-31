@@ -1,0 +1,100 @@
+{
+  "id": 660,
+  "species_id": "diggersby",
+  "showdown_id": "diggersby",
+  "name": "Diggersby",
+  "types": [
+    "normal",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 56,
+    "def": 77,
+    "spa": 50,
+    "spd": 77,
+    "spe": 78
+  },
+  "abilities": {
+    "primary": "pickup",
+    "hidden": "huge-power"
+  },
+  "level_up_moves": [
+    {
+      "move": "swords-dance",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "agility",
+      "level": 1
+    },
+    {
+      "move": "hammer-arm",
+      "level": 1
+    },
+    {
+      "move": "bulldoze",
+      "level": 1
+    },
+    {
+      "move": "rototiller",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 7
+    },
+    {
+      "move": "mud-slap",
+      "level": 13
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "mud-shot",
+      "level": 18
+    },
+    {
+      "move": "double-kick",
+      "level": 20
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 26
+    },
+    {
+      "move": "flail",
+      "level": 31
+    },
+    {
+      "move": "dig",
+      "level": 37
+    },
+    {
+      "move": "bounce",
+      "level": 42
+    },
+    {
+      "move": "super-fang",
+      "level": 48
+    },
+    {
+      "move": "facade",
+      "level": 53
+    },
+    {
+      "move": "earthquake",
+      "level": 57
+    }
+  ]
+}

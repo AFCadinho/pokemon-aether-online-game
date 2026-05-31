@@ -1,0 +1,88 @@
+{
+  "id": 624,
+  "species_id": "pawniard",
+  "showdown_id": "pawniard",
+  "name": "Pawniard",
+  "types": [
+    "dark",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 85,
+    "def": 70,
+    "spa": 40,
+    "spd": 40,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "defiant",
+    "hidden": "pressure"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 6
+    },
+    {
+      "move": "fury-cutter",
+      "level": 9
+    },
+    {
+      "move": "torment",
+      "level": 14
+    },
+    {
+      "move": "feint-attack",
+      "level": 17
+    },
+    {
+      "move": "scary-face",
+      "level": 22
+    },
+    {
+      "move": "metal-claw",
+      "level": 25
+    },
+    {
+      "move": "slash",
+      "level": 30
+    },
+    {
+      "move": "assurance",
+      "level": 33
+    },
+    {
+      "move": "metal-sound",
+      "level": 38
+    },
+    {
+      "move": "embargo",
+      "level": 41
+    },
+    {
+      "move": "iron-defense",
+      "level": 46
+    },
+    {
+      "move": "night-slash",
+      "level": 49
+    },
+    {
+      "move": "iron-head",
+      "level": 54
+    },
+    {
+      "move": "swords-dance",
+      "level": 57
+    },
+    {
+      "move": "guillotine",
+      "level": 62
+    }
+  ]
+}

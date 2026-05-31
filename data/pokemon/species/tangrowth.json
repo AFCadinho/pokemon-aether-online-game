@@ -1,0 +1,95 @@
+{
+  "id": 465,
+  "species_id": "tangrowth",
+  "showdown_id": "tangrowth",
+  "name": "Tangrowth",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 100,
+    "def": 125,
+    "spa": 110,
+    "spd": 50,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "constrict",
+      "level": 1
+    },
+    {
+      "move": "ingrain",
+      "level": 1
+    },
+    {
+      "move": "sleep-powder",
+      "level": 5
+    },
+    {
+      "move": "absorb",
+      "level": 8
+    },
+    {
+      "move": "growth",
+      "level": 12
+    },
+    {
+      "move": "poison-powder",
+      "level": 15
+    },
+    {
+      "move": "vine-whip",
+      "level": 19
+    },
+    {
+      "move": "bind",
+      "level": 22
+    },
+    {
+      "move": "mega-drain",
+      "level": 26
+    },
+    {
+      "move": "stun-spore",
+      "level": 29
+    },
+    {
+      "move": "ancient-power",
+      "level": 33
+    },
+    {
+      "move": "knock-off",
+      "level": 36
+    },
+    {
+      "move": "natural-gift",
+      "level": 40
+    },
+    {
+      "move": "slam",
+      "level": 43
+    },
+    {
+      "move": "tickle",
+      "level": 47
+    },
+    {
+      "move": "wring-out",
+      "level": 50
+    },
+    {
+      "move": "power-whip",
+      "level": 54
+    },
+    {
+      "move": "block",
+      "level": 57
+    }
+  ]
+}

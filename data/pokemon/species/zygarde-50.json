@@ -1,0 +1,95 @@
+{
+  "id": 718,
+  "species_id": "zygarde-50",
+  "showdown_id": "zygarde",
+  "name": "Zygarde",
+  "types": [
+    "dragon",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 108,
+    "atk": 100,
+    "def": 121,
+    "spa": 81,
+    "spd": 95,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "aura-break"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "glare",
+      "level": 1
+    },
+    {
+      "move": "dragon-breath",
+      "level": 1
+    },
+    {
+      "move": "bulldoze",
+      "level": 1
+    },
+    {
+      "move": "safeguard",
+      "level": 5
+    },
+    {
+      "move": "dig",
+      "level": 10
+    },
+    {
+      "move": "bind",
+      "level": 18
+    },
+    {
+      "move": "lands-wrath",
+      "level": 26
+    },
+    {
+      "move": "sandstorm",
+      "level": 35
+    },
+    {
+      "move": "haze",
+      "level": 44
+    },
+    {
+      "move": "crunch",
+      "level": 51
+    },
+    {
+      "move": "earthquake",
+      "level": 55
+    },
+    {
+      "move": "camouflage",
+      "level": 59
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 63
+    },
+    {
+      "move": "dragon-dance",
+      "level": 72
+    },
+    {
+      "move": "coil",
+      "level": 80
+    },
+    {
+      "move": "extreme-speed",
+      "level": 88
+    },
+    {
+      "move": "outrage",
+      "level": 93
+    }
+  ]
+}

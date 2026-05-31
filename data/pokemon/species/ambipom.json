@@ -1,0 +1,79 @@
+{
+  "id": 424,
+  "species_id": "ambipom",
+  "showdown_id": "ambipom",
+  "name": "Ambipom",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 100,
+    "def": 66,
+    "spa": 60,
+    "spd": 66,
+    "spe": 115
+  },
+  "abilities": {
+    "primary": "technician",
+    "hidden": "skill-link"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "baton-pass",
+      "level": 11
+    },
+    {
+      "move": "tickle",
+      "level": 15
+    },
+    {
+      "move": "fury-swipes",
+      "level": 18
+    },
+    {
+      "move": "swift",
+      "level": 22
+    },
+    {
+      "move": "screech",
+      "level": 25
+    },
+    {
+      "move": "agility",
+      "level": 29
+    },
+    {
+      "move": "double-hit",
+      "level": 32
+    },
+    {
+      "move": "fling",
+      "level": 36
+    },
+    {
+      "move": "nasty-plot",
+      "level": 39
+    },
+    {
+      "move": "last-resort",
+      "level": 43
+    }
+  ]
+}

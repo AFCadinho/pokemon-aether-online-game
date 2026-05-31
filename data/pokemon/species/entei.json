@@ -1,0 +1,59 @@
+{
+  "id": 244,
+  "species_id": "entei",
+  "showdown_id": "entei",
+  "name": "Entei",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 115,
+    "atk": 115,
+    "def": 85,
+    "spa": 90,
+    "spd": 75,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "pressure",
+    "hidden": "inner-focus"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 11
+    },
+    {
+      "move": "roar",
+      "level": 21
+    },
+    {
+      "move": "fire-spin",
+      "level": 31
+    },
+    {
+      "move": "stomp",
+      "level": 41
+    },
+    {
+      "move": "flamethrower",
+      "level": 51
+    },
+    {
+      "move": "swagger",
+      "level": 61
+    },
+    {
+      "move": "fire-blast",
+      "level": 71
+    }
+  ]
+}

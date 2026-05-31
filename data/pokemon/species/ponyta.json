@@ -1,0 +1,51 @@
+{
+  "id": 77,
+  "species_id": "ponyta",
+  "showdown_id": "ponyta",
+  "name": "Ponyta",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 85,
+    "def": 55,
+    "spa": 65,
+    "spd": 65,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "run-away",
+    "hidden": "flame-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 30
+    },
+    {
+      "move": "stomp",
+      "level": 32
+    },
+    {
+      "move": "growl",
+      "level": 35
+    },
+    {
+      "move": "fire-spin",
+      "level": 39
+    },
+    {
+      "move": "take-down",
+      "level": 43
+    },
+    {
+      "move": "agility",
+      "level": 48
+    }
+  ]
+}

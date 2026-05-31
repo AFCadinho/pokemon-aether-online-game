@@ -1,0 +1,79 @@
+{
+  "id": 471,
+  "species_id": "glaceon",
+  "showdown_id": "glaceon",
+  "name": "Glaceon",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 60,
+    "def": 110,
+    "spa": 130,
+    "spd": 95,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "snow-cloak",
+    "hidden": "ice-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 8
+    },
+    {
+      "move": "icy-wind",
+      "level": 15
+    },
+    {
+      "move": "quick-attack",
+      "level": 22
+    },
+    {
+      "move": "bite",
+      "level": 29
+    },
+    {
+      "move": "ice-shard",
+      "level": 36
+    },
+    {
+      "move": "ice-fang",
+      "level": 43
+    },
+    {
+      "move": "last-resort",
+      "level": 50
+    },
+    {
+      "move": "mirror-coat",
+      "level": 57
+    },
+    {
+      "move": "hail",
+      "level": 64
+    },
+    {
+      "move": "blizzard",
+      "level": 71
+    },
+    {
+      "move": "barrier",
+      "level": 78
+    }
+  ]
+}

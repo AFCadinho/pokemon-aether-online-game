@@ -1,0 +1,88 @@
+{
+  "id": 560,
+  "species_id": "scrafty",
+  "showdown_id": "scrafty",
+  "name": "Scrafty",
+  "types": [
+    "dark",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 90,
+    "def": 115,
+    "spa": 45,
+    "spd": 115,
+    "spe": 58
+  },
+  "abilities": {
+    "primary": "shed-skin",
+    "hidden": "intimidate"
+  },
+  "level_up_moves": [
+    {
+      "move": "feint-attack",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "low-kick",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 12
+    },
+    {
+      "move": "swagger",
+      "level": 16
+    },
+    {
+      "move": "brick-break",
+      "level": 20
+    },
+    {
+      "move": "payback",
+      "level": 23
+    },
+    {
+      "move": "chip-away",
+      "level": 27
+    },
+    {
+      "move": "high-jump-kick",
+      "level": 31
+    },
+    {
+      "move": "scary-face",
+      "level": 34
+    },
+    {
+      "move": "crunch",
+      "level": 38
+    },
+    {
+      "move": "facade",
+      "level": 45
+    },
+    {
+      "move": "rock-climb",
+      "level": 51
+    },
+    {
+      "move": "focus-punch",
+      "level": 58
+    },
+    {
+      "move": "head-smash",
+      "level": 65
+    }
+  ]
+}

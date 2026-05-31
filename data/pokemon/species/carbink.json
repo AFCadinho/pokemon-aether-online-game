@@ -1,0 +1,88 @@
+{
+  "id": 703,
+  "species_id": "carbink",
+  "showdown_id": "carbink",
+  "name": "Carbink",
+  "types": [
+    "rock",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 50,
+    "def": 150,
+    "spa": 50,
+    "spd": 150,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "clear-body",
+    "hidden": "sturdy"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "rock-throw",
+      "level": 5
+    },
+    {
+      "move": "sharpen",
+      "level": 8
+    },
+    {
+      "move": "smack-down",
+      "level": 12
+    },
+    {
+      "move": "reflect",
+      "level": 18
+    },
+    {
+      "move": "stealth-rock",
+      "level": 21
+    },
+    {
+      "move": "guard-split",
+      "level": 27
+    },
+    {
+      "move": "ancient-power",
+      "level": 31
+    },
+    {
+      "move": "flail",
+      "level": 35
+    },
+    {
+      "move": "skill-swap",
+      "level": 40
+    },
+    {
+      "move": "power-gem",
+      "level": 46
+    },
+    {
+      "move": "stone-edge",
+      "level": 49
+    },
+    {
+      "move": "moonblast",
+      "level": 50
+    },
+    {
+      "move": "light-screen",
+      "level": 60
+    },
+    {
+      "move": "safeguard",
+      "level": 70
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": 207,
+  "species_id": "gligar",
+  "showdown_id": "gligar",
+  "name": "Gligar",
+  "types": [
+    "ground",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 75,
+    "def": 105,
+    "spa": 35,
+    "spd": 65,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "hyper-cutter",
+    "hidden": "immunity"
+  },
+  "level_up_moves": [
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 6
+    },
+    {
+      "move": "harden",
+      "level": 13
+    },
+    {
+      "move": "quick-attack",
+      "level": 20
+    },
+    {
+      "move": "feint-attack",
+      "level": 28
+    },
+    {
+      "move": "slash",
+      "level": 36
+    },
+    {
+      "move": "screech",
+      "level": 44
+    },
+    {
+      "move": "guillotine",
+      "level": 52
+    }
+  ]
+}

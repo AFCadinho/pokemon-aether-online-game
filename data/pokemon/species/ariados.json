@@ -1,0 +1,68 @@
+{
+  "id": 168,
+  "species_id": "ariados",
+  "showdown_id": "ariados",
+  "name": "Ariados",
+  "types": [
+    "bug",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 90,
+    "def": 70,
+    "spa": 60,
+    "spd": 70,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "sniper"
+  },
+  "level_up_moves": [
+    {
+      "move": "constrict",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "night-shade",
+      "level": 17
+    },
+    {
+      "move": "leech-life",
+      "level": 25
+    },
+    {
+      "move": "fury-swipes",
+      "level": 34
+    },
+    {
+      "move": "spider-web",
+      "level": 43
+    },
+    {
+      "move": "agility",
+      "level": 53
+    },
+    {
+      "move": "screech",
+      "level": 53
+    },
+    {
+      "move": "psychic",
+      "level": 63
+    }
+  ]
+}

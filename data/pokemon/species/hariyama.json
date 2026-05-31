@@ -1,0 +1,75 @@
+{
+  "id": 297,
+  "species_id": "hariyama",
+  "showdown_id": "hariyama",
+  "name": "Hariyama",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 144,
+    "atk": 120,
+    "def": 60,
+    "spa": 40,
+    "spd": 60,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "thick-fat",
+    "hidden": "sheer-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "arm-thrust",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "vital-throw",
+      "level": 13
+    },
+    {
+      "move": "fake-out",
+      "level": 19
+    },
+    {
+      "move": "whirlwind",
+      "level": 22
+    },
+    {
+      "move": "knock-off",
+      "level": 29
+    },
+    {
+      "move": "smelling-salts",
+      "level": 33
+    },
+    {
+      "move": "belly-drum",
+      "level": 40
+    },
+    {
+      "move": "endure",
+      "level": 44
+    },
+    {
+      "move": "seismic-toss",
+      "level": 51
+    },
+    {
+      "move": "reversal",
+      "level": 55
+    }
+  ]
+}

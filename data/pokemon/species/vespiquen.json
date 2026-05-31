@@ -1,0 +1,88 @@
+{
+  "id": 416,
+  "species_id": "vespiquen",
+  "showdown_id": "vespiquen",
+  "name": "Vespiquen",
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 80,
+    "def": 102,
+    "spa": 80,
+    "spd": 102,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "pressure",
+    "hidden": "unnerve"
+  },
+  "level_up_moves": [
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "sweet-scent",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 3
+    },
+    {
+      "move": "confuse-ray",
+      "level": 7
+    },
+    {
+      "move": "fury-cutter",
+      "level": 9
+    },
+    {
+      "move": "defend-order",
+      "level": 13
+    },
+    {
+      "move": "pursuit",
+      "level": 15
+    },
+    {
+      "move": "fury-swipes",
+      "level": 19
+    },
+    {
+      "move": "power-gem",
+      "level": 21
+    },
+    {
+      "move": "heal-order",
+      "level": 25
+    },
+    {
+      "move": "toxic",
+      "level": 27
+    },
+    {
+      "move": "slash",
+      "level": 31
+    },
+    {
+      "move": "captivate",
+      "level": 33
+    },
+    {
+      "move": "attack-order",
+      "level": 37
+    },
+    {
+      "move": "swagger",
+      "level": 39
+    },
+    {
+      "move": "destiny-bond",
+      "level": 43
+    }
+  ]
+}

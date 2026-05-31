@@ -1,0 +1,100 @@
+{
+  "id": 658,
+  "species_id": "greninja",
+  "showdown_id": "greninja",
+  "name": "Greninja",
+  "types": [
+    "water",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 72,
+    "atk": 95,
+    "def": 67,
+    "spa": 103,
+    "spd": 71,
+    "spe": 122
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "protean"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "role-play",
+      "level": 1
+    },
+    {
+      "move": "night-slash",
+      "level": 1
+    },
+    {
+      "move": "mat-block",
+      "level": 1
+    },
+    {
+      "move": "bubble",
+      "level": 5
+    },
+    {
+      "move": "quick-attack",
+      "level": 8
+    },
+    {
+      "move": "lick",
+      "level": 10
+    },
+    {
+      "move": "water-pulse",
+      "level": 14
+    },
+    {
+      "move": "smokescreen",
+      "level": 20
+    },
+    {
+      "move": "shadow-sneak",
+      "level": 23
+    },
+    {
+      "move": "spikes",
+      "level": 28
+    },
+    {
+      "move": "feint-attack",
+      "level": 33
+    },
+    {
+      "move": "water-shuriken",
+      "level": 36
+    },
+    {
+      "move": "substitute",
+      "level": 43
+    },
+    {
+      "move": "extrasensory",
+      "level": 49
+    },
+    {
+      "move": "double-team",
+      "level": 52
+    },
+    {
+      "move": "haze",
+      "level": 56
+    },
+    {
+      "move": "hydro-pump",
+      "level": 60
+    }
+  ]
+}

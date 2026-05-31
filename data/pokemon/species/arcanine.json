@@ -1,0 +1,39 @@
+{
+  "id": 59,
+  "species_id": "arcanine",
+  "showdown_id": "arcanine",
+  "name": "Arcanine",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 110,
+    "def": 80,
+    "spa": 100,
+    "spd": 80,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "intimidate",
+    "hidden": "justified"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 1
+    },
+    {
+      "move": "take-down",
+      "level": 1
+    }
+  ]
+}

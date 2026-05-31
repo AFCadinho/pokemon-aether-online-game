@@ -1,0 +1,87 @@
+{
+  "id": 659,
+  "species_id": "bunnelby",
+  "showdown_id": "bunnelby",
+  "name": "Bunnelby",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 38,
+    "atk": 36,
+    "def": 38,
+    "spa": 32,
+    "spd": 36,
+    "spe": 57
+  },
+  "abilities": {
+    "primary": "pickup",
+    "hidden": "huge-power"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "agility",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 7
+    },
+    {
+      "move": "double-slap",
+      "level": 10
+    },
+    {
+      "move": "mud-slap",
+      "level": 13
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "mud-shot",
+      "level": 18
+    },
+    {
+      "move": "double-kick",
+      "level": 20
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 25
+    },
+    {
+      "move": "flail",
+      "level": 29
+    },
+    {
+      "move": "dig",
+      "level": 33
+    },
+    {
+      "move": "bounce",
+      "level": 38
+    },
+    {
+      "move": "super-fang",
+      "level": 42
+    },
+    {
+      "move": "facade",
+      "level": 47
+    },
+    {
+      "move": "earthquake",
+      "level": 49
+    }
+  ]
+}

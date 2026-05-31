@@ -13,7 +13,6 @@ func _process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed("interact"):
 		var dialogue_box = get_tree().current_scene.get_node("DialogueBox/Box")
-		print("Oak interact. is_open = ", dialogue_box.is_open)
 
 		if dialogue_box.is_open:
 			return

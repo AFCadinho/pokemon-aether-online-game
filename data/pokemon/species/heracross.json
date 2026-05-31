@@ -1,0 +1,60 @@
+{
+  "id": 214,
+  "species_id": "heracross",
+  "showdown_id": "heracross",
+  "name": "Heracross",
+  "types": [
+    "bug",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 125,
+    "def": 75,
+    "spa": 40,
+    "spd": 95,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "moxie"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "horn-attack",
+      "level": 6
+    },
+    {
+      "move": "endure",
+      "level": 12
+    },
+    {
+      "move": "fury-attack",
+      "level": 19
+    },
+    {
+      "move": "counter",
+      "level": 27
+    },
+    {
+      "move": "take-down",
+      "level": 35
+    },
+    {
+      "move": "reversal",
+      "level": 44
+    },
+    {
+      "move": "megahorn",
+      "level": 54
+    }
+  ]
+}

@@ -1,35 +1,56 @@
 {
   "id": 6,
+  "species_id": "charizard",
+  "showdown_id": "charizard",
   "name": "Charizard",
-  "types": ["fire", "flying"],
+  "types": [
+    "fire",
+    "flying"
+  ],
   "base_stats": {
-	"hp": 78,
-	"atk": 84,
-	"def": 78,
-	"spa": 109,
-	"spd": 85,
-	"spe": 100
+    "hp": 78,
+    "atk": 84,
+    "def": 78,
+    "spa": 109,
+    "spd": 85,
+    "spe": 100
   },
   "abilities": {
-	"primary": "blaze",
-	"hidden": "solar-power"
+    "primary": "blaze",
+    "hidden": "solar-power"
   },
   "level_up_moves": [
-	{
-	  "level": 1,
-	  "move": "scratch"
-	},
-	{
-	  "level": 1,
-	  "move": "growl"
-	},
-	{
-	  "level": 1,
-	  "move": "ember"
-	},
-	{
-	  "level": 24,
-	  "move": "flamethrower"
-	}
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 24
+    },
+    {
+      "move": "slash",
+      "level": 36
+    },
+    {
+      "move": "flamethrower",
+      "level": 46
+    },
+    {
+      "move": "fire-spin",
+      "level": 55
+    }
   ]
 }

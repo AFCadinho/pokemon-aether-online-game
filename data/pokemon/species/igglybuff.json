@@ -1,0 +1,44 @@
+{
+  "id": 174,
+  "species_id": "igglybuff",
+  "showdown_id": "igglybuff",
+  "name": "Igglybuff",
+  "types": [
+    "normal",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 30,
+    "def": 15,
+    "spa": 40,
+    "spd": 20,
+    "spe": 15
+  },
+  "abilities": {
+    "primary": "cute-charm",
+    "hidden": "friend-guard"
+  },
+  "level_up_moves": [
+    {
+      "move": "charm",
+      "level": 1
+    },
+    {
+      "move": "sing",
+      "level": 1
+    },
+    {
+      "move": "defense-curl",
+      "level": 4
+    },
+    {
+      "move": "pound",
+      "level": 9
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 14
+    }
+  ]
+}

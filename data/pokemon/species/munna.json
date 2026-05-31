@@ -1,0 +1,91 @@
+{
+  "id": 517,
+  "species_id": "munna",
+  "showdown_id": "munna",
+  "name": "Munna",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 76,
+    "atk": 25,
+    "def": 45,
+    "spa": 67,
+    "spd": 55,
+    "spe": 24
+  },
+  "abilities": {
+    "primary": "forewarn",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "psywave",
+      "level": 1
+    },
+    {
+      "move": "lucky-chant",
+      "level": 5
+    },
+    {
+      "move": "yawn",
+      "level": 7
+    },
+    {
+      "move": "psybeam",
+      "level": 11
+    },
+    {
+      "move": "imprison",
+      "level": 13
+    },
+    {
+      "move": "moonlight",
+      "level": 17
+    },
+    {
+      "move": "hypnosis",
+      "level": 19
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 23
+    },
+    {
+      "move": "synchronoise",
+      "level": 25
+    },
+    {
+      "move": "nightmare",
+      "level": 29
+    },
+    {
+      "move": "future-sight",
+      "level": 31
+    },
+    {
+      "move": "calm-mind",
+      "level": 35
+    },
+    {
+      "move": "psychic",
+      "level": 37
+    },
+    {
+      "move": "dream-eater",
+      "level": 41
+    },
+    {
+      "move": "telekinesis",
+      "level": 43
+    },
+    {
+      "move": "stored-power",
+      "level": 47
+    }
+  ]
+}

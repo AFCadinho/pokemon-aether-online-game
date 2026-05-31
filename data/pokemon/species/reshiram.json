@@ -1,0 +1,83 @@
+{
+  "id": 643,
+  "species_id": "reshiram",
+  "showdown_id": "reshiram",
+  "name": "Reshiram",
+  "types": [
+    "dragon",
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 120,
+    "def": 100,
+    "spa": 150,
+    "spd": 120,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "turboblaze"
+  },
+  "level_up_moves": [
+    {
+      "move": "dragon-rage",
+      "level": 1
+    },
+    {
+      "move": "fire-fang",
+      "level": 1
+    },
+    {
+      "move": "imprison",
+      "level": 8
+    },
+    {
+      "move": "ancient-power",
+      "level": 15
+    },
+    {
+      "move": "flamethrower",
+      "level": 22
+    },
+    {
+      "move": "dragon-breath",
+      "level": 29
+    },
+    {
+      "move": "slash",
+      "level": 36
+    },
+    {
+      "move": "extrasensory",
+      "level": 43
+    },
+    {
+      "move": "fusion-flare",
+      "level": 50
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 54
+    },
+    {
+      "move": "crunch",
+      "level": 71
+    },
+    {
+      "move": "fire-blast",
+      "level": 78
+    },
+    {
+      "move": "outrage",
+      "level": 85
+    },
+    {
+      "move": "hyper-voice",
+      "level": 92
+    },
+    {
+      "move": "blue-flare",
+      "level": 100
+    }
+  ]
+}

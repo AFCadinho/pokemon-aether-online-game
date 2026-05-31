@@ -1,0 +1,68 @@
+{
+  "id": 397,
+  "species_id": "staravia",
+  "showdown_id": "staravia",
+  "name": "Staravia",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 75,
+    "def": 50,
+    "spa": 40,
+    "spd": 40,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "intimidate",
+    "hidden": "reckless"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "wing-attack",
+      "level": 9
+    },
+    {
+      "move": "double-team",
+      "level": 13
+    },
+    {
+      "move": "endeavor",
+      "level": 18
+    },
+    {
+      "move": "whirlwind",
+      "level": 23
+    },
+    {
+      "move": "aerial-ace",
+      "level": 28
+    },
+    {
+      "move": "take-down",
+      "level": 33
+    },
+    {
+      "move": "agility",
+      "level": 38
+    },
+    {
+      "move": "brave-bird",
+      "level": 43
+    }
+  ]
+}

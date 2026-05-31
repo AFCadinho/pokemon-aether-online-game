@@ -1,0 +1,78 @@
+{
+  "id": 486,
+  "species_id": "regigigas",
+  "showdown_id": "regigigas",
+  "name": "Regigigas",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 110,
+    "atk": 160,
+    "def": 110,
+    "spa": 80,
+    "spd": 110,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "slow-start"
+  },
+  "level_up_moves": [
+    {
+      "move": "confuse-ray",
+      "level": 1
+    },
+    {
+      "move": "dizzy-punch",
+      "level": 1
+    },
+    {
+      "move": "fire-punch",
+      "level": 1
+    },
+    {
+      "move": "foresight",
+      "level": 1
+    },
+    {
+      "move": "ice-punch",
+      "level": 1
+    },
+    {
+      "move": "knock-off",
+      "level": 1
+    },
+    {
+      "move": "mega-punch",
+      "level": 1
+    },
+    {
+      "move": "stomp",
+      "level": 1
+    },
+    {
+      "move": "thunder-punch",
+      "level": 1
+    },
+    {
+      "move": "revenge",
+      "level": 25
+    },
+    {
+      "move": "superpower",
+      "level": 25
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 50
+    },
+    {
+      "move": "crush-grip",
+      "level": 75
+    },
+    {
+      "move": "giga-impact",
+      "level": 100
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": 346,
+  "species_id": "cradily",
+  "showdown_id": "cradily",
+  "name": "Cradily",
+  "types": [
+    "rock",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 86,
+    "atk": 81,
+    "def": 97,
+    "spa": 81,
+    "spd": 107,
+    "spe": 43
+  },
+  "abilities": {
+    "primary": "suction-cups",
+    "hidden": "storm-drain"
+  },
+  "level_up_moves": [
+    {
+      "move": "acid",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "constrict",
+      "level": 1
+    },
+    {
+      "move": "ingrain",
+      "level": 1
+    },
+    {
+      "move": "confuse-ray",
+      "level": 29
+    },
+    {
+      "move": "amnesia",
+      "level": 36
+    },
+    {
+      "move": "ancient-power",
+      "level": 48
+    },
+    {
+      "move": "spit-up",
+      "level": 60
+    },
+    {
+      "move": "stockpile",
+      "level": 60
+    },
+    {
+      "move": "swallow",
+      "level": 60
+    }
+  ]
+}

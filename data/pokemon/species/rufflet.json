@@ -1,0 +1,88 @@
+{
+  "id": 627,
+  "species_id": "rufflet",
+  "showdown_id": "rufflet",
+  "name": "Rufflet",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 83,
+    "def": 50,
+    "spa": 37,
+    "spd": 50,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "hustle"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "fury-attack",
+      "level": 5
+    },
+    {
+      "move": "wing-attack",
+      "level": 10
+    },
+    {
+      "move": "hone-claws",
+      "level": 14
+    },
+    {
+      "move": "scary-face",
+      "level": 19
+    },
+    {
+      "move": "aerial-ace",
+      "level": 23
+    },
+    {
+      "move": "slash",
+      "level": 28
+    },
+    {
+      "move": "defog",
+      "level": 32
+    },
+    {
+      "move": "tailwind",
+      "level": 37
+    },
+    {
+      "move": "air-slash",
+      "level": 41
+    },
+    {
+      "move": "crush-claw",
+      "level": 46
+    },
+    {
+      "move": "sky-drop",
+      "level": 50
+    },
+    {
+      "move": "whirlwind",
+      "level": 55
+    },
+    {
+      "move": "brave-bird",
+      "level": 59
+    },
+    {
+      "move": "thrash",
+      "level": 64
+    }
+  ]
+}

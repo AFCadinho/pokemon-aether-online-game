@@ -1,0 +1,84 @@
+{
+  "id": 590,
+  "species_id": "foongus",
+  "showdown_id": "foongus",
+  "name": "Foongus",
+  "types": [
+    "grass",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 69,
+    "atk": 55,
+    "def": 45,
+    "spa": 55,
+    "spd": 55,
+    "spe": 15
+  },
+  "abilities": {
+    "primary": "effect-spore",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 6
+    },
+    {
+      "move": "astonish",
+      "level": 8
+    },
+    {
+      "move": "bide",
+      "level": 12
+    },
+    {
+      "move": "mega-drain",
+      "level": 15
+    },
+    {
+      "move": "ingrain",
+      "level": 18
+    },
+    {
+      "move": "feint-attack",
+      "level": 20
+    },
+    {
+      "move": "sweet-scent",
+      "level": 24
+    },
+    {
+      "move": "giga-drain",
+      "level": 28
+    },
+    {
+      "move": "toxic",
+      "level": 32
+    },
+    {
+      "move": "synthesis",
+      "level": 35
+    },
+    {
+      "move": "clear-smog",
+      "level": 39
+    },
+    {
+      "move": "solar-beam",
+      "level": 43
+    },
+    {
+      "move": "rage-powder",
+      "level": 45
+    },
+    {
+      "move": "spore",
+      "level": 50
+    }
+  ]
+}

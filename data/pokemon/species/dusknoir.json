@@ -1,0 +1,99 @@
+{
+  "id": 477,
+  "species_id": "dusknoir",
+  "showdown_id": "dusknoir",
+  "name": "Dusknoir",
+  "types": [
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 100,
+    "def": 135,
+    "spa": 65,
+    "spd": 135,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "pressure",
+    "hidden": "frisk"
+  },
+  "level_up_moves": [
+    {
+      "move": "bind",
+      "level": 1
+    },
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "fire-punch",
+      "level": 1
+    },
+    {
+      "move": "gravity",
+      "level": 1
+    },
+    {
+      "move": "ice-punch",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "night-shade",
+      "level": 1
+    },
+    {
+      "move": "thunder-punch",
+      "level": 1
+    },
+    {
+      "move": "foresight",
+      "level": 9
+    },
+    {
+      "move": "astonish",
+      "level": 14
+    },
+    {
+      "move": "confuse-ray",
+      "level": 17
+    },
+    {
+      "move": "shadow-sneak",
+      "level": 22
+    },
+    {
+      "move": "pursuit",
+      "level": 25
+    },
+    {
+      "move": "curse",
+      "level": 30
+    },
+    {
+      "move": "will-o-wisp",
+      "level": 33
+    },
+    {
+      "move": "shadow-punch",
+      "level": 37
+    },
+    {
+      "move": "mean-look",
+      "level": 43
+    },
+    {
+      "move": "payback",
+      "level": 51
+    },
+    {
+      "move": "future-sight",
+      "level": 61
+    }
+  ]
+}

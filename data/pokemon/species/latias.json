@@ -1,0 +1,67 @@
+{
+  "id": 380,
+  "species_id": "latias",
+  "showdown_id": "latias",
+  "name": "Latias",
+  "types": [
+    "dragon",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 80,
+    "def": 90,
+    "spa": 110,
+    "spd": 130,
+    "spe": 110
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "psywave",
+      "level": 1
+    },
+    {
+      "move": "wish",
+      "level": 5
+    },
+    {
+      "move": "helping-hand",
+      "level": 10
+    },
+    {
+      "move": "safeguard",
+      "level": 15
+    },
+    {
+      "move": "dragon-breath",
+      "level": 20
+    },
+    {
+      "move": "water-sport",
+      "level": 25
+    },
+    {
+      "move": "refresh",
+      "level": 30
+    },
+    {
+      "move": "mist-ball",
+      "level": 35
+    },
+    {
+      "move": "psychic",
+      "level": 40
+    },
+    {
+      "move": "recover",
+      "level": 45
+    },
+    {
+      "move": "charm",
+      "level": 50
+    }
+  ]
+}

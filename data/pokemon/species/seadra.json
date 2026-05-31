@@ -1,0 +1,47 @@
+{
+  "id": 117,
+  "species_id": "seadra",
+  "showdown_id": "seadra",
+  "name": "Seadra",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 65,
+    "def": 95,
+    "spa": 95,
+    "spd": 45,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "poison-point",
+    "hidden": "damp"
+  },
+  "level_up_moves": [
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "smokescreen",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 24
+    },
+    {
+      "move": "water-gun",
+      "level": 30
+    },
+    {
+      "move": "agility",
+      "level": 41
+    },
+    {
+      "move": "hydro-pump",
+      "level": 52
+    }
+  ]
+}

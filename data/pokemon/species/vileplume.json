@@ -1,0 +1,44 @@
+{
+  "id": 45,
+  "species_id": "vileplume",
+  "showdown_id": "vileplume",
+  "name": "Vileplume",
+  "types": [
+    "grass",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 80,
+    "def": 85,
+    "spa": 110,
+    "spd": 90,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "effect-spore"
+  },
+  "level_up_moves": [
+    {
+      "move": "acid",
+      "level": 1
+    },
+    {
+      "move": "petal-dance",
+      "level": 1
+    },
+    {
+      "move": "sleep-powder",
+      "level": 1
+    },
+    {
+      "move": "stun-spore",
+      "level": 1
+    },
+    {
+      "move": "poison-powder",
+      "level": 15
+    }
+  ]
+}

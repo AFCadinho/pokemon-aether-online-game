@@ -1,0 +1,59 @@
+{
+  "id": 217,
+  "species_id": "ursaring",
+  "showdown_id": "ursaring",
+  "name": "Ursaring",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 130,
+    "def": 75,
+    "spa": 75,
+    "spd": 75,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "guts",
+    "hidden": "unnerve"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-swipes",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "feint-attack",
+      "level": 22
+    },
+    {
+      "move": "rest",
+      "level": 29
+    },
+    {
+      "move": "slash",
+      "level": 39
+    },
+    {
+      "move": "snore",
+      "level": 49
+    },
+    {
+      "move": "thrash",
+      "level": 59
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": 101,
+  "species_id": "electrode",
+  "showdown_id": "electrode",
+  "name": "Electrode",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 50,
+    "def": 70,
+    "spa": 80,
+    "spd": 80,
+    "spe": 150
+  },
+  "abilities": {
+    "primary": "soundproof",
+    "hidden": "aftermath"
+  },
+  "level_up_moves": [
+    {
+      "move": "screech",
+      "level": 1
+    },
+    {
+      "move": "sonic-boom",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "self-destruct",
+      "level": 22
+    },
+    {
+      "move": "light-screen",
+      "level": 29
+    },
+    {
+      "move": "swift",
+      "level": 40
+    },
+    {
+      "move": "explosion",
+      "level": 50
+    }
+  ]
+}

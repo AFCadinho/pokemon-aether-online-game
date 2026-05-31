@@ -1,0 +1,64 @@
+{
+  "id": 215,
+  "species_id": "sneasel",
+  "showdown_id": "sneasel",
+  "name": "Sneasel",
+  "types": [
+    "dark",
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 95,
+    "def": 55,
+    "spa": 35,
+    "spd": 75,
+    "spe": 115
+  },
+  "abilities": {
+    "primary": "inner-focus",
+    "hidden": "pickpocket"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 9
+    },
+    {
+      "move": "screech",
+      "level": 17
+    },
+    {
+      "move": "feint-attack",
+      "level": 25
+    },
+    {
+      "move": "fury-swipes",
+      "level": 33
+    },
+    {
+      "move": "agility",
+      "level": 41
+    },
+    {
+      "move": "slash",
+      "level": 49
+    },
+    {
+      "move": "beat-up",
+      "level": 57
+    },
+    {
+      "move": "metal-claw",
+      "level": 65
+    }
+  ]
+}

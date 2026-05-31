@@ -1,0 +1,78 @@
+{
+  "id": 493,
+  "species_id": "arceus",
+  "showdown_id": "arceus",
+  "name": "Arceus",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 120,
+    "atk": 120,
+    "def": 120,
+    "spa": 120,
+    "spd": 120,
+    "spe": 120
+  },
+  "abilities": {
+    "primary": "multitype"
+  },
+  "level_up_moves": [
+    {
+      "move": "cosmic-power",
+      "level": 1
+    },
+    {
+      "move": "natural-gift",
+      "level": 1
+    },
+    {
+      "move": "punishment",
+      "level": 1
+    },
+    {
+      "move": "seismic-toss",
+      "level": 1
+    },
+    {
+      "move": "gravity",
+      "level": 10
+    },
+    {
+      "move": "earth-power",
+      "level": 20
+    },
+    {
+      "move": "hyper-voice",
+      "level": 30
+    },
+    {
+      "move": "extreme-speed",
+      "level": 40
+    },
+    {
+      "move": "refresh",
+      "level": 50
+    },
+    {
+      "move": "future-sight",
+      "level": 60
+    },
+    {
+      "move": "recover",
+      "level": 70
+    },
+    {
+      "move": "hyper-beam",
+      "level": 80
+    },
+    {
+      "move": "perish-song",
+      "level": 90
+    },
+    {
+      "move": "judgment",
+      "level": 100
+    }
+  ]
+}

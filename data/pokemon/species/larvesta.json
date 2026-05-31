@@ -1,0 +1,72 @@
+{
+  "id": 636,
+  "species_id": "larvesta",
+  "showdown_id": "larvesta",
+  "name": "Larvesta",
+  "types": [
+    "bug",
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 85,
+    "def": 55,
+    "spa": 50,
+    "spd": 55,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "flame-body",
+    "hidden": "swarm"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "leech-life",
+      "level": 10
+    },
+    {
+      "move": "take-down",
+      "level": 20
+    },
+    {
+      "move": "flame-charge",
+      "level": 30
+    },
+    {
+      "move": "bug-bite",
+      "level": 40
+    },
+    {
+      "move": "double-edge",
+      "level": 50
+    },
+    {
+      "move": "flame-wheel",
+      "level": 60
+    },
+    {
+      "move": "bug-buzz",
+      "level": 70
+    },
+    {
+      "move": "amnesia",
+      "level": 80
+    },
+    {
+      "move": "thrash",
+      "level": 90
+    },
+    {
+      "move": "flare-blitz",
+      "level": 100
+    }
+  ]
+}

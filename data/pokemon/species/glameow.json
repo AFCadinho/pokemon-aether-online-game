@@ -1,0 +1,71 @@
+{
+  "id": 431,
+  "species_id": "glameow",
+  "showdown_id": "glameow",
+  "name": "Glameow",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 49,
+    "atk": 55,
+    "def": 42,
+    "spa": 42,
+    "spd": 37,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "limber",
+    "hidden": "keen-eye"
+  },
+  "level_up_moves": [
+    {
+      "move": "fake-out",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 5
+    },
+    {
+      "move": "growl",
+      "level": 8
+    },
+    {
+      "move": "hypnosis",
+      "level": 13
+    },
+    {
+      "move": "feint-attack",
+      "level": 17
+    },
+    {
+      "move": "fury-swipes",
+      "level": 20
+    },
+    {
+      "move": "charm",
+      "level": 25
+    },
+    {
+      "move": "assist",
+      "level": 29
+    },
+    {
+      "move": "captivate",
+      "level": 32
+    },
+    {
+      "move": "slash",
+      "level": 37
+    },
+    {
+      "move": "sucker-punch",
+      "level": 41
+    },
+    {
+      "move": "attract",
+      "level": 45
+    }
+  ]
+}

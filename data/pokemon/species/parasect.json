@@ -1,0 +1,48 @@
+{
+  "id": 47,
+  "species_id": "parasect",
+  "showdown_id": "parasect",
+  "name": "Parasect",
+  "types": [
+    "bug",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 95,
+    "def": 80,
+    "spa": 60,
+    "spd": 80,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "effect-spore",
+    "hidden": "damp"
+  },
+  "level_up_moves": [
+    {
+      "move": "leech-life",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "stun-spore",
+      "level": 1
+    },
+    {
+      "move": "spore",
+      "level": 30
+    },
+    {
+      "move": "slash",
+      "level": 39
+    },
+    {
+      "move": "growth",
+      "level": 48
+    }
+  ]
+}

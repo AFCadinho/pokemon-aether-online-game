@@ -1,0 +1,60 @@
+{
+  "id": 276,
+  "species_id": "taillow",
+  "showdown_id": "taillow",
+  "name": "Taillow",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 55,
+    "def": 30,
+    "spa": 30,
+    "spd": 30,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "guts",
+    "hidden": "scrappy"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 4
+    },
+    {
+      "move": "quick-attack",
+      "level": 8
+    },
+    {
+      "move": "wing-attack",
+      "level": 13
+    },
+    {
+      "move": "double-team",
+      "level": 19
+    },
+    {
+      "move": "endeavor",
+      "level": 26
+    },
+    {
+      "move": "aerial-ace",
+      "level": 34
+    },
+    {
+      "move": "agility",
+      "level": 43
+    }
+  ]
+}

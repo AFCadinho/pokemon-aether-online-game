@@ -1,0 +1,63 @@
+{
+  "id": 152,
+  "species_id": "chikorita",
+  "showdown_id": "chikorita",
+  "name": "Chikorita",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 49,
+    "def": 65,
+    "spa": 49,
+    "spd": 65,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "leaf-guard"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "razor-leaf",
+      "level": 8
+    },
+    {
+      "move": "reflect",
+      "level": 12
+    },
+    {
+      "move": "poison-powder",
+      "level": 15
+    },
+    {
+      "move": "synthesis",
+      "level": 22
+    },
+    {
+      "move": "body-slam",
+      "level": 29
+    },
+    {
+      "move": "light-screen",
+      "level": 36
+    },
+    {
+      "move": "safeguard",
+      "level": 43
+    },
+    {
+      "move": "solar-beam",
+      "level": 50
+    }
+  ]
+}

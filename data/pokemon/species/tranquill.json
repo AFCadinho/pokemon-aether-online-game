@@ -1,0 +1,84 @@
+{
+  "id": 520,
+  "species_id": "tranquill",
+  "showdown_id": "tranquill",
+  "name": "Tranquill",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 62,
+    "atk": 77,
+    "def": 62,
+    "spa": 50,
+    "spd": 42,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "big-pecks",
+    "hidden": "rivalry"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "air-cutter",
+      "level": 15
+    },
+    {
+      "move": "roost",
+      "level": 18
+    },
+    {
+      "move": "detect",
+      "level": 23
+    },
+    {
+      "move": "taunt",
+      "level": 27
+    },
+    {
+      "move": "air-slash",
+      "level": 32
+    },
+    {
+      "move": "razor-wind",
+      "level": 36
+    },
+    {
+      "move": "feather-dance",
+      "level": 41
+    },
+    {
+      "move": "swagger",
+      "level": 45
+    },
+    {
+      "move": "facade",
+      "level": 50
+    },
+    {
+      "move": "tailwind",
+      "level": 54
+    },
+    {
+      "move": "sky-attack",
+      "level": 59
+    }
+  ]
+}

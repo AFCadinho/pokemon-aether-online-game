@@ -1,0 +1,82 @@
+{
+  "id": 492,
+  "species_id": "shaymin",
+  "showdown_id": "shaymin",
+  "name": "Shaymin",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 100,
+    "def": 100,
+    "spa": 100,
+    "spd": 100,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "natural-cure"
+  },
+  "level_up_moves": [
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "magical-leaf",
+      "level": 10
+    },
+    {
+      "move": "leech-seed",
+      "level": 19
+    },
+    {
+      "move": "synthesis",
+      "level": 28
+    },
+    {
+      "move": "sweet-scent",
+      "level": 37
+    },
+    {
+      "move": "natural-gift",
+      "level": 46
+    },
+    {
+      "move": "worry-seed",
+      "level": 55
+    },
+    {
+      "move": "aromatherapy",
+      "level": 64
+    },
+    {
+      "move": "energy-ball",
+      "level": 73
+    },
+    {
+      "move": "grass-whistle",
+      "level": 82
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 82
+    },
+    {
+      "move": "healing-wish",
+      "level": 91
+    },
+    {
+      "move": "lucky-chant",
+      "level": 91
+    },
+    {
+      "move": "seed-flare",
+      "level": 100
+    }
+  ]
+}

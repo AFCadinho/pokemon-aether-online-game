@@ -1,0 +1,56 @@
+{
+  "id": 195,
+  "species_id": "quagsire",
+  "showdown_id": "quagsire",
+  "name": "Quagsire",
+  "types": [
+    "water",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 85,
+    "def": 85,
+    "spa": 65,
+    "spd": 65,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "damp",
+    "hidden": "unaware"
+  },
+  "level_up_moves": [
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "slam",
+      "level": 11
+    },
+    {
+      "move": "amnesia",
+      "level": 23
+    },
+    {
+      "move": "earthquake",
+      "level": 35
+    },
+    {
+      "move": "rain-dance",
+      "level": 47
+    },
+    {
+      "move": "haze",
+      "level": 59
+    },
+    {
+      "move": "mist",
+      "level": 59
+    }
+  ]
+}

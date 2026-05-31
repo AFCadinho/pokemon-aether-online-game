@@ -1,0 +1,70 @@
+{
+  "id": 488,
+  "species_id": "cresselia",
+  "showdown_id": "cresselia",
+  "name": "Cresselia",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 120,
+    "atk": 70,
+    "def": 110,
+    "spa": 75,
+    "spd": 120,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "double-team",
+      "level": 1
+    },
+    {
+      "move": "safeguard",
+      "level": 11
+    },
+    {
+      "move": "mist",
+      "level": 20
+    },
+    {
+      "move": "aurora-beam",
+      "level": 29
+    },
+    {
+      "move": "future-sight",
+      "level": 38
+    },
+    {
+      "move": "slash",
+      "level": 47
+    },
+    {
+      "move": "moonlight",
+      "level": 57
+    },
+    {
+      "move": "psycho-cut",
+      "level": 66
+    },
+    {
+      "move": "psycho-shift",
+      "level": 75
+    },
+    {
+      "move": "lunar-dance",
+      "level": 84
+    },
+    {
+      "move": "psychic",
+      "level": 93
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": 670,
+  "species_id": "floette",
+  "showdown_id": "floette",
+  "name": "Floette",
+  "types": [
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 54,
+    "atk": 45,
+    "def": 47,
+    "spa": 75,
+    "spd": 98,
+    "spe": 52
+  },
+  "abilities": {
+    "primary": "flower-veil",
+    "hidden": "symbiosis"
+  },
+  "level_up_moves": [
+    {
+      "move": "vine-whip",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "fairy-wind",
+      "level": 6
+    },
+    {
+      "move": "lucky-chant",
+      "level": 10
+    },
+    {
+      "move": "razor-leaf",
+      "level": 15
+    },
+    {
+      "move": "wish",
+      "level": 20
+    },
+    {
+      "move": "magical-leaf",
+      "level": 25
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 27
+    },
+    {
+      "move": "petal-blizzard",
+      "level": 33
+    },
+    {
+      "move": "aromatherapy",
+      "level": 38
+    },
+    {
+      "move": "misty-terrain",
+      "level": 43
+    },
+    {
+      "move": "moonblast",
+      "level": 46
+    },
+    {
+      "move": "petal-dance",
+      "level": 51
+    },
+    {
+      "move": "solar-beam",
+      "level": 58
+    }
+  ]
+}

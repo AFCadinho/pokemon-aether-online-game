@@ -1,0 +1,52 @@
+{
+  "id": 695,
+  "species_id": "heliolisk",
+  "showdown_id": "heliolisk",
+  "name": "Heliolisk",
+  "types": [
+    "electric",
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 62,
+    "atk": 55,
+    "def": 52,
+    "spa": 109,
+    "spd": 94,
+    "spe": 109
+  },
+  "abilities": {
+    "primary": "dry-skin",
+    "hidden": "solar-power"
+  },
+  "level_up_moves": [
+    {
+      "move": "razor-wind",
+      "level": 1
+    },
+    {
+      "move": "thunder",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "charge",
+      "level": 1
+    },
+    {
+      "move": "parabolic-charge",
+      "level": 1
+    },
+    {
+      "move": "electrify",
+      "level": 1
+    },
+    {
+      "move": "eerie-impulse",
+      "level": 1
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "id": 717,
+  "species_id": "yveltal",
+  "showdown_id": "yveltal",
+  "name": "Yveltal",
+  "types": [
+    "dark",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 126,
+    "atk": 131,
+    "def": 95,
+    "spa": 131,
+    "spd": 98,
+    "spe": 99
+  },
+  "abilities": {
+    "primary": "dark-aura"
+  },
+  "level_up_moves": [
+    {
+      "move": "razor-wind",
+      "level": 1
+    },
+    {
+      "move": "taunt",
+      "level": 1
+    },
+    {
+      "move": "roost",
+      "level": 1
+    },
+    {
+      "move": "hurricane",
+      "level": 1
+    },
+    {
+      "move": "double-team",
+      "level": 5
+    },
+    {
+      "move": "air-slash",
+      "level": 10
+    },
+    {
+      "move": "snarl",
+      "level": 18
+    },
+    {
+      "move": "oblivion-wing",
+      "level": 26
+    },
+    {
+      "move": "disable",
+      "level": 35
+    },
+    {
+      "move": "dark-pulse",
+      "level": 44
+    },
+    {
+      "move": "foul-play",
+      "level": 51
+    },
+    {
+      "move": "phantom-force",
+      "level": 55
+    },
+    {
+      "move": "psychic",
+      "level": 59
+    },
+    {
+      "move": "dragon-rush",
+      "level": 63
+    },
+    {
+      "move": "focus-blast",
+      "level": 72
+    },
+    {
+      "move": "sucker-punch",
+      "level": 80
+    },
+    {
+      "move": "hyper-beam",
+      "level": 88
+    },
+    {
+      "move": "sky-attack",
+      "level": 93
+    }
+  ]
+}

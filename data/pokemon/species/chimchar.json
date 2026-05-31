@@ -1,0 +1,71 @@
+{
+  "id": 390,
+  "species_id": "chimchar",
+  "showdown_id": "chimchar",
+  "name": "Chimchar",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 44,
+    "atk": 58,
+    "def": 44,
+    "spa": 58,
+    "spd": 44,
+    "spe": 61
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "iron-fist"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 7
+    },
+    {
+      "move": "taunt",
+      "level": 9
+    },
+    {
+      "move": "fury-swipes",
+      "level": 15
+    },
+    {
+      "move": "flame-wheel",
+      "level": 17
+    },
+    {
+      "move": "nasty-plot",
+      "level": 23
+    },
+    {
+      "move": "torment",
+      "level": 25
+    },
+    {
+      "move": "facade",
+      "level": 31
+    },
+    {
+      "move": "fire-spin",
+      "level": 33
+    },
+    {
+      "move": "slack-off",
+      "level": 39
+    },
+    {
+      "move": "flamethrower",
+      "level": 41
+    }
+  ]
+}

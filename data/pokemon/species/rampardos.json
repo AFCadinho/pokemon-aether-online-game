@@ -1,0 +1,71 @@
+{
+  "id": 409,
+  "species_id": "rampardos",
+  "showdown_id": "rampardos",
+  "name": "Rampardos",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 97,
+    "atk": 165,
+    "def": 60,
+    "spa": 65,
+    "spd": 50,
+    "spe": 58
+  },
+  "abilities": {
+    "primary": "mold-breaker",
+    "hidden": "sheer-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "headbutt",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 6
+    },
+    {
+      "move": "pursuit",
+      "level": 10
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "scary-face",
+      "level": 19
+    },
+    {
+      "move": "assurance",
+      "level": 24
+    },
+    {
+      "move": "ancient-power",
+      "level": 28
+    },
+    {
+      "move": "endeavor",
+      "level": 30
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 36
+    },
+    {
+      "move": "screech",
+      "level": 43
+    },
+    {
+      "move": "head-smash",
+      "level": 52
+    }
+  ]
+}

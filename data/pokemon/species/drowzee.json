@@ -1,0 +1,55 @@
+{
+  "id": 96,
+  "species_id": "drowzee",
+  "showdown_id": "drowzee",
+  "name": "Drowzee",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 48,
+    "def": 45,
+    "spa": 43,
+    "spd": 90,
+    "spe": 42
+  },
+  "abilities": {
+    "primary": "insomnia",
+    "hidden": "inner-focus"
+  },
+  "level_up_moves": [
+    {
+      "move": "hypnosis",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "disable",
+      "level": 12
+    },
+    {
+      "move": "confusion",
+      "level": 17
+    },
+    {
+      "move": "headbutt",
+      "level": 24
+    },
+    {
+      "move": "poison-gas",
+      "level": 29
+    },
+    {
+      "move": "psychic",
+      "level": 32
+    },
+    {
+      "move": "meditate",
+      "level": 37
+    }
+  ]
+}

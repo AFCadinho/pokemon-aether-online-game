@@ -1,0 +1,76 @@
+{
+  "id": 542,
+  "species_id": "leavanny",
+  "showdown_id": "leavanny",
+  "name": "Leavanny",
+  "types": [
+    "bug",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 103,
+    "def": 80,
+    "spa": 70,
+    "spd": 80,
+    "spe": 92
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "bug-bite",
+      "level": 1
+    },
+    {
+      "move": "false-swipe",
+      "level": 1
+    },
+    {
+      "move": "razor-leaf",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "struggle-bug",
+      "level": 22
+    },
+    {
+      "move": "slash",
+      "level": 29
+    },
+    {
+      "move": "helping-hand",
+      "level": 32
+    },
+    {
+      "move": "leaf-blade",
+      "level": 36
+    },
+    {
+      "move": "x-scissor",
+      "level": 39
+    },
+    {
+      "move": "entrainment",
+      "level": 43
+    },
+    {
+      "move": "swords-dance",
+      "level": 46
+    },
+    {
+      "move": "leaf-storm",
+      "level": 50
+    }
+  ]
+}

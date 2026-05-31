@@ -1,0 +1,55 @@
+{
+  "id": 157,
+  "species_id": "typhlosion",
+  "showdown_id": "typhlosion",
+  "name": "Typhlosion",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 84,
+    "def": 78,
+    "spa": 109,
+    "spd": 85,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "flash-fire"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "smokescreen",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 21
+    },
+    {
+      "move": "flame-wheel",
+      "level": 31
+    },
+    {
+      "move": "swift",
+      "level": 45
+    },
+    {
+      "move": "flamethrower",
+      "level": 60
+    }
+  ]
+}

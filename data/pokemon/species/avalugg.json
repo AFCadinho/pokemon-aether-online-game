@@ -1,0 +1,95 @@
+{
+  "id": 713,
+  "species_id": "avalugg",
+  "showdown_id": "avalugg",
+  "name": "Avalugg",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 117,
+    "def": 184,
+    "spa": 44,
+    "spd": 46,
+    "spe": 28
+  },
+  "abilities": {
+    "primary": "own-tempo",
+    "hidden": "sturdy"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "skull-bash",
+      "level": 1
+    },
+    {
+      "move": "crunch",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 5
+    },
+    {
+      "move": "icy-wind",
+      "level": 10
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "sharpen",
+      "level": 20
+    },
+    {
+      "move": "curse",
+      "level": 22
+    },
+    {
+      "move": "ice-fang",
+      "level": 26
+    },
+    {
+      "move": "ice-ball",
+      "level": 30
+    },
+    {
+      "move": "rapid-spin",
+      "level": 35
+    },
+    {
+      "move": "avalanche",
+      "level": 42
+    },
+    {
+      "move": "blizzard",
+      "level": 46
+    },
+    {
+      "move": "recover",
+      "level": 51
+    },
+    {
+      "move": "double-edge",
+      "level": 56
+    }
+  ]
+}

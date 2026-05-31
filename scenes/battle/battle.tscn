@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c1erkgucbypar" path="res://scripts/battle/battle.gd" id="1_sgdsx"]
 [ext_resource type="Texture2D" uid="uid://w72nkcnflkf8" path="res://assets/background/battle/PATH.png" id="1_xd4uy"]
-[ext_resource type="PackedScene" uid="uid://db3id5etb8cwp" path="res://scenes/battle/player_hud_panel.tscn" id="2_01pft"]
+[ext_resource type="PackedScene" uid="uid://db3id5etb8cwp" path="res://scenes/battle/pokemon_hud_panel.tscn" id="2_01pft"]
 [ext_resource type="PackedScene" uid="uid://cir3bfnfoy4l4" path="res://scenes/battle/move_slot.tscn" id="2_h0kxc"]
 [ext_resource type="Texture2D" uid="uid://cljbo3g4o51sw" path="res://assets/battles/field/rain.png" id="3_01pft"]
 [ext_resource type="PackedScene" uid="uid://3gsmmeerkva2" path="res://scenes/battle/party_slot.tscn" id="3_fh7rg"]

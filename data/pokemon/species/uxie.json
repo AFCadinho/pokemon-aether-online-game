@@ -1,0 +1,70 @@
+{
+  "id": 480,
+  "species_id": "uxie",
+  "showdown_id": "uxie",
+  "name": "Uxie",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 75,
+    "def": 130,
+    "spa": 75,
+    "spd": 130,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "rest",
+      "level": 1
+    },
+    {
+      "move": "imprison",
+      "level": 6
+    },
+    {
+      "move": "endure",
+      "level": 16
+    },
+    {
+      "move": "swift",
+      "level": 21
+    },
+    {
+      "move": "yawn",
+      "level": 31
+    },
+    {
+      "move": "future-sight",
+      "level": 36
+    },
+    {
+      "move": "amnesia",
+      "level": 46
+    },
+    {
+      "move": "extrasensory",
+      "level": 51
+    },
+    {
+      "move": "flail",
+      "level": 61
+    },
+    {
+      "move": "natural-gift",
+      "level": 66
+    },
+    {
+      "move": "memento",
+      "level": 76
+    }
+  ]
+}

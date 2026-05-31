@@ -1,0 +1,88 @@
+{
+  "id": 499,
+  "species_id": "pignite",
+  "showdown_id": "pignite",
+  "name": "Pignite",
+  "types": [
+    "fire",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 93,
+    "def": 55,
+    "spa": 70,
+    "spd": 55,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "thick-fat"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "defense-curl",
+      "level": 13
+    },
+    {
+      "move": "flame-charge",
+      "level": 15
+    },
+    {
+      "move": "arm-thrust",
+      "level": 17
+    },
+    {
+      "move": "smog",
+      "level": 20
+    },
+    {
+      "move": "rollout",
+      "level": 23
+    },
+    {
+      "move": "take-down",
+      "level": 28
+    },
+    {
+      "move": "heat-crash",
+      "level": 31
+    },
+    {
+      "move": "assurance",
+      "level": 36
+    },
+    {
+      "move": "flamethrower",
+      "level": 39
+    },
+    {
+      "move": "head-smash",
+      "level": 44
+    },
+    {
+      "move": "roar",
+      "level": 47
+    },
+    {
+      "move": "flare-blitz",
+      "level": 52
+    }
+  ]
+}

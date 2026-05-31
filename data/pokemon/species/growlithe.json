@@ -1,0 +1,51 @@
+{
+  "id": 58,
+  "species_id": "growlithe",
+  "showdown_id": "growlithe",
+  "name": "Growlithe",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 70,
+    "def": 45,
+    "spa": 70,
+    "spd": 50,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "intimidate",
+    "hidden": "justified"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 18
+    },
+    {
+      "move": "leer",
+      "level": 23
+    },
+    {
+      "move": "take-down",
+      "level": 30
+    },
+    {
+      "move": "agility",
+      "level": 39
+    },
+    {
+      "move": "flamethrower",
+      "level": 50
+    }
+  ]
+}

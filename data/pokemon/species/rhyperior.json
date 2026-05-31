@@ -1,0 +1,80 @@
+{
+  "id": 464,
+  "species_id": "rhyperior",
+  "showdown_id": "rhyperior",
+  "name": "Rhyperior",
+  "types": [
+    "ground",
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 115,
+    "atk": 140,
+    "def": 130,
+    "spa": 55,
+    "spd": 55,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "lightning-rod",
+    "hidden": "reckless"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-attack",
+      "level": 1
+    },
+    {
+      "move": "horn-attack",
+      "level": 1
+    },
+    {
+      "move": "poison-jab",
+      "level": 1
+    },
+    {
+      "move": "stomp",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 21
+    },
+    {
+      "move": "rock-blast",
+      "level": 25
+    },
+    {
+      "move": "take-down",
+      "level": 33
+    },
+    {
+      "move": "horn-drill",
+      "level": 37
+    },
+    {
+      "move": "hammer-arm",
+      "level": 42
+    },
+    {
+      "move": "stone-edge",
+      "level": 45
+    },
+    {
+      "move": "earthquake",
+      "level": 49
+    },
+    {
+      "move": "megahorn",
+      "level": 57
+    },
+    {
+      "move": "rock-wrecker",
+      "level": 61
+    }
+  ]
+}

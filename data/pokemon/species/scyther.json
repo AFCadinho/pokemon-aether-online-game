@@ -1,0 +1,56 @@
+{
+  "id": 123,
+  "species_id": "scyther",
+  "showdown_id": "scyther",
+  "name": "Scyther",
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 110,
+    "def": 80,
+    "spa": 55,
+    "spd": 80,
+    "spe": 105
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "steadfast"
+  },
+  "level_up_moves": [
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 17
+    },
+    {
+      "move": "focus-energy",
+      "level": 20
+    },
+    {
+      "move": "double-team",
+      "level": 24
+    },
+    {
+      "move": "slash",
+      "level": 29
+    },
+    {
+      "move": "swords-dance",
+      "level": 35
+    },
+    {
+      "move": "agility",
+      "level": 42
+    },
+    {
+      "move": "wing-attack",
+      "level": 50
+    }
+  ]
+}

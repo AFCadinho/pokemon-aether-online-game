@@ -1,0 +1,72 @@
+{
+  "id": 319,
+  "species_id": "sharpedo",
+  "showdown_id": "sharpedo",
+  "name": "Sharpedo",
+  "types": [
+    "water",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 120,
+    "def": 40,
+    "spa": 95,
+    "spd": 40,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "rough-skin",
+    "hidden": "speed-boost"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 16
+    },
+    {
+      "move": "crunch",
+      "level": 22
+    },
+    {
+      "move": "screech",
+      "level": 28
+    },
+    {
+      "move": "slash",
+      "level": 33
+    },
+    {
+      "move": "taunt",
+      "level": 38
+    },
+    {
+      "move": "swagger",
+      "level": 43
+    },
+    {
+      "move": "skull-bash",
+      "level": 48
+    },
+    {
+      "move": "agility",
+      "level": 53
+    }
+  ]
+}

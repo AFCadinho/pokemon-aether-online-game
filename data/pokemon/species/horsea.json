@@ -1,0 +1,47 @@
+{
+  "id": 116,
+  "species_id": "horsea",
+  "showdown_id": "horsea",
+  "name": "Horsea",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 40,
+    "def": 70,
+    "spa": 70,
+    "spd": 25,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "damp"
+  },
+  "level_up_moves": [
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "smokescreen",
+      "level": 19
+    },
+    {
+      "move": "leer",
+      "level": 24
+    },
+    {
+      "move": "water-gun",
+      "level": 30
+    },
+    {
+      "move": "agility",
+      "level": 37
+    },
+    {
+      "move": "hydro-pump",
+      "level": 45
+    }
+  ]
+}

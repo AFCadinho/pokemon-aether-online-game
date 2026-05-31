@@ -1,0 +1,71 @@
+{
+  "id": 254,
+  "species_id": "sceptile",
+  "showdown_id": "sceptile",
+  "name": "Sceptile",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 65,
+    "spa": 105,
+    "spd": 85,
+    "spe": 120
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "unburden"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "fury-cutter",
+      "level": 16
+    },
+    {
+      "move": "pursuit",
+      "level": 17
+    },
+    {
+      "move": "screech",
+      "level": 23
+    },
+    {
+      "move": "leaf-blade",
+      "level": 29
+    },
+    {
+      "move": "agility",
+      "level": 35
+    },
+    {
+      "move": "slam",
+      "level": 43
+    },
+    {
+      "move": "detect",
+      "level": 51
+    },
+    {
+      "move": "false-swipe",
+      "level": 59
+    }
+  ]
+}

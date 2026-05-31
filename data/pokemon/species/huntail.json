@@ -1,0 +1,55 @@
+{
+  "id": 367,
+  "species_id": "huntail",
+  "showdown_id": "huntail",
+  "name": "Huntail",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 104,
+    "def": 105,
+    "spa": 94,
+    "spd": 75,
+    "spe": 52
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "water-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "whirlpool",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 8
+    },
+    {
+      "move": "screech",
+      "level": 15
+    },
+    {
+      "move": "water-pulse",
+      "level": 22
+    },
+    {
+      "move": "scary-face",
+      "level": 29
+    },
+    {
+      "move": "crunch",
+      "level": 36
+    },
+    {
+      "move": "baton-pass",
+      "level": 43
+    },
+    {
+      "move": "hydro-pump",
+      "level": 50
+    }
+  ]
+}

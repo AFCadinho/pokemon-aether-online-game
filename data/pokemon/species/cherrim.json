@@ -1,0 +1,66 @@
+{
+  "id": 421,
+  "species_id": "cherrim",
+  "showdown_id": "cherrim",
+  "name": "Cherrim",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 60,
+    "def": 70,
+    "spa": 87,
+    "spd": 78,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "flower-gift"
+  },
+  "level_up_moves": [
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 10
+    },
+    {
+      "move": "helping-hand",
+      "level": 13
+    },
+    {
+      "move": "magical-leaf",
+      "level": 19
+    },
+    {
+      "move": "sunny-day",
+      "level": 22
+    },
+    {
+      "move": "petal-dance",
+      "level": 25
+    },
+    {
+      "move": "worry-seed",
+      "level": 30
+    },
+    {
+      "move": "take-down",
+      "level": 35
+    },
+    {
+      "move": "solar-beam",
+      "level": 43
+    },
+    {
+      "move": "lucky-chant",
+      "level": 48
+    }
+  ]
+}

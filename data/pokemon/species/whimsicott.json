@@ -1,0 +1,52 @@
+{
+  "id": 547,
+  "species_id": "whimsicott",
+  "showdown_id": "whimsicott",
+  "name": "Whimsicott",
+  "types": [
+    "grass",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 67,
+    "def": 85,
+    "spa": 77,
+    "spd": 75,
+    "spe": 116
+  },
+  "abilities": {
+    "primary": "prankster",
+    "hidden": "chlorophyll"
+  },
+  "level_up_moves": [
+    {
+      "move": "cotton-spore",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 1
+    },
+    {
+      "move": "mega-drain",
+      "level": 1
+    },
+    {
+      "move": "gust",
+      "level": 10
+    },
+    {
+      "move": "tailwind",
+      "level": 28
+    },
+    {
+      "move": "hurricane",
+      "level": 46
+    }
+  ]
+}

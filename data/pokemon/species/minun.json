@@ -1,0 +1,67 @@
+{
+  "id": 312,
+  "species_id": "minun",
+  "showdown_id": "minun",
+  "name": "Minun",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 40,
+    "def": 50,
+    "spa": 75,
+    "spd": 85,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "minus",
+    "hidden": "volt-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 4
+    },
+    {
+      "move": "quick-attack",
+      "level": 10
+    },
+    {
+      "move": "helping-hand",
+      "level": 13
+    },
+    {
+      "move": "spark",
+      "level": 19
+    },
+    {
+      "move": "encore",
+      "level": 22
+    },
+    {
+      "move": "charm",
+      "level": 28
+    },
+    {
+      "move": "charge",
+      "level": 31
+    },
+    {
+      "move": "thunder",
+      "level": 37
+    },
+    {
+      "move": "baton-pass",
+      "level": 40
+    },
+    {
+      "move": "agility",
+      "level": 47
+    }
+  ]
+}

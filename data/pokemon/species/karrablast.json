@@ -1,0 +1,83 @@
+{
+  "id": 588,
+  "species_id": "karrablast",
+  "showdown_id": "karrablast",
+  "name": "Karrablast",
+  "types": [
+    "bug"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 75,
+    "def": 45,
+    "spa": 40,
+    "spd": 45,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "no-guard"
+  },
+  "level_up_moves": [
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 4
+    },
+    {
+      "move": "endure",
+      "level": 8
+    },
+    {
+      "move": "fury-cutter",
+      "level": 13
+    },
+    {
+      "move": "fury-attack",
+      "level": 16
+    },
+    {
+      "move": "headbutt",
+      "level": 20
+    },
+    {
+      "move": "false-swipe",
+      "level": 25
+    },
+    {
+      "move": "bug-buzz",
+      "level": 28
+    },
+    {
+      "move": "slash",
+      "level": 32
+    },
+    {
+      "move": "take-down",
+      "level": 37
+    },
+    {
+      "move": "scary-face",
+      "level": 40
+    },
+    {
+      "move": "x-scissor",
+      "level": 44
+    },
+    {
+      "move": "flail",
+      "level": 49
+    },
+    {
+      "move": "swords-dance",
+      "level": 52
+    },
+    {
+      "move": "double-edge",
+      "level": 56
+    }
+  ]
+}

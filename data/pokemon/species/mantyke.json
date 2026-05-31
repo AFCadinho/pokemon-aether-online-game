@@ -1,0 +1,76 @@
+{
+  "id": 458,
+  "species_id": "mantyke",
+  "showdown_id": "mantyke",
+  "name": "Mantyke",
+  "types": [
+    "water",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 20,
+    "def": 50,
+    "spa": 60,
+    "spd": 120,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "water-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 4
+    },
+    {
+      "move": "bubble-beam",
+      "level": 10
+    },
+    {
+      "move": "headbutt",
+      "level": 13
+    },
+    {
+      "move": "agility",
+      "level": 19
+    },
+    {
+      "move": "wing-attack",
+      "level": 22
+    },
+    {
+      "move": "water-pulse",
+      "level": 28
+    },
+    {
+      "move": "take-down",
+      "level": 31
+    },
+    {
+      "move": "confuse-ray",
+      "level": 37
+    },
+    {
+      "move": "bounce",
+      "level": 40
+    },
+    {
+      "move": "aqua-ring",
+      "level": 46
+    },
+    {
+      "move": "hydro-pump",
+      "level": 49
+    }
+  ]
+}

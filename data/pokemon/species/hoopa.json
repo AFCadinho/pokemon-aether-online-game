@@ -1,0 +1,91 @@
+{
+  "id": 720,
+  "species_id": "hoopa",
+  "showdown_id": "hoopa",
+  "name": "Hoopa",
+  "types": [
+    "psychic",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 110,
+    "def": 60,
+    "spa": 150,
+    "spd": 130,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "magician"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "destiny-bond",
+      "level": 1
+    },
+    {
+      "move": "trick",
+      "level": 1
+    },
+    {
+      "move": "ally-switch",
+      "level": 1
+    },
+    {
+      "move": "hyperspace-hole",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 6
+    },
+    {
+      "move": "magic-coat",
+      "level": 10
+    },
+    {
+      "move": "psybeam",
+      "level": 15
+    },
+    {
+      "move": "light-screen",
+      "level": 19
+    },
+    {
+      "move": "skill-swap",
+      "level": 25
+    },
+    {
+      "move": "power-split",
+      "level": 29
+    },
+    {
+      "move": "guard-split",
+      "level": 35
+    },
+    {
+      "move": "phantom-force",
+      "level": 46
+    },
+    {
+      "move": "wonder-room",
+      "level": 50
+    },
+    {
+      "move": "trick-room",
+      "level": 55
+    },
+    {
+      "move": "shadow-ball",
+      "level": 68
+    },
+    {
+      "move": "psychic",
+      "level": 75
+    }
+  ]
+}

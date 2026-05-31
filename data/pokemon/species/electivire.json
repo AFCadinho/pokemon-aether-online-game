@@ -1,0 +1,79 @@
+{
+  "id": 466,
+  "species_id": "electivire",
+  "showdown_id": "electivire",
+  "name": "Electivire",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 123,
+    "def": 67,
+    "spa": 95,
+    "spd": 85,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "motor-drive",
+    "hidden": "vital-spirit"
+  },
+  "level_up_moves": [
+    {
+      "move": "fire-punch",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "low-kick",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "swift",
+      "level": 16
+    },
+    {
+      "move": "shock-wave",
+      "level": 19
+    },
+    {
+      "move": "light-screen",
+      "level": 25
+    },
+    {
+      "move": "thunder-punch",
+      "level": 28
+    },
+    {
+      "move": "discharge",
+      "level": 37
+    },
+    {
+      "move": "thunderbolt",
+      "level": 43
+    },
+    {
+      "move": "screech",
+      "level": 52
+    },
+    {
+      "move": "thunder",
+      "level": 58
+    },
+    {
+      "move": "giga-impact",
+      "level": 67
+    }
+  ]
+}

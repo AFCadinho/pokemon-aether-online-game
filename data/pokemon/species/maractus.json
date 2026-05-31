@@ -1,0 +1,95 @@
+{
+  "id": 556,
+  "species_id": "maractus",
+  "showdown_id": "maractus",
+  "name": "Maractus",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 86,
+    "def": 67,
+    "spa": 106,
+    "spd": 67,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "water-absorb",
+    "hidden": "storm-drain"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "sweet-scent",
+      "level": 3
+    },
+    {
+      "move": "growth",
+      "level": 6
+    },
+    {
+      "move": "pin-missile",
+      "level": 10
+    },
+    {
+      "move": "mega-drain",
+      "level": 13
+    },
+    {
+      "move": "synthesis",
+      "level": 15
+    },
+    {
+      "move": "cotton-spore",
+      "level": 18
+    },
+    {
+      "move": "needle-arm",
+      "level": 22
+    },
+    {
+      "move": "giga-drain",
+      "level": 26
+    },
+    {
+      "move": "acupressure",
+      "level": 29
+    },
+    {
+      "move": "ingrain",
+      "level": 33
+    },
+    {
+      "move": "petal-dance",
+      "level": 38
+    },
+    {
+      "move": "sucker-punch",
+      "level": 42
+    },
+    {
+      "move": "sunny-day",
+      "level": 45
+    },
+    {
+      "move": "solar-beam",
+      "level": 50
+    },
+    {
+      "move": "cotton-guard",
+      "level": 55
+    },
+    {
+      "move": "after-you",
+      "level": 57
+    }
+  ]
+}

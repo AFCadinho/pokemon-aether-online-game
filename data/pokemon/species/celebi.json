@@ -1,0 +1,59 @@
+{
+  "id": 251,
+  "species_id": "celebi",
+  "showdown_id": "celebi",
+  "name": "Celebi",
+  "types": [
+    "psychic",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 100,
+    "def": 100,
+    "spa": 100,
+    "spd": 100,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "natural-cure"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "heal-bell",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 1
+    },
+    {
+      "move": "recover",
+      "level": 1
+    },
+    {
+      "move": "safeguard",
+      "level": 10
+    },
+    {
+      "move": "ancient-power",
+      "level": 20
+    },
+    {
+      "move": "future-sight",
+      "level": 30
+    },
+    {
+      "move": "baton-pass",
+      "level": 40
+    },
+    {
+      "move": "perish-song",
+      "level": 50
+    }
+  ]
+}

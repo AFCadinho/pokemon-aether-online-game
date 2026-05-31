@@ -1,0 +1,70 @@
+{
+  "id": 482,
+  "species_id": "azelf",
+  "showdown_id": "azelf",
+  "name": "Azelf",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 125,
+    "def": 70,
+    "spa": 125,
+    "spd": 70,
+    "spe": 115
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "rest",
+      "level": 1
+    },
+    {
+      "move": "imprison",
+      "level": 6
+    },
+    {
+      "move": "detect",
+      "level": 16
+    },
+    {
+      "move": "swift",
+      "level": 21
+    },
+    {
+      "move": "uproar",
+      "level": 31
+    },
+    {
+      "move": "future-sight",
+      "level": 36
+    },
+    {
+      "move": "nasty-plot",
+      "level": 46
+    },
+    {
+      "move": "extrasensory",
+      "level": 51
+    },
+    {
+      "move": "last-resort",
+      "level": 61
+    },
+    {
+      "move": "natural-gift",
+      "level": 66
+    },
+    {
+      "move": "explosion",
+      "level": 76
+    }
+  ]
+}

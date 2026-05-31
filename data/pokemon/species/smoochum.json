@@ -1,0 +1,64 @@
+{
+  "id": 238,
+  "species_id": "smoochum",
+  "showdown_id": "smoochum",
+  "name": "Smoochum",
+  "types": [
+    "ice",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 30,
+    "def": 15,
+    "spa": 85,
+    "spd": 65,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "oblivious",
+    "hidden": "hydration"
+  },
+  "level_up_moves": [
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 9
+    },
+    {
+      "move": "powder-snow",
+      "level": 13
+    },
+    {
+      "move": "confusion",
+      "level": 21
+    },
+    {
+      "move": "sing",
+      "level": 25
+    },
+    {
+      "move": "mean-look",
+      "level": 33
+    },
+    {
+      "move": "psychic",
+      "level": 37
+    },
+    {
+      "move": "perish-song",
+      "level": 45
+    },
+    {
+      "move": "blizzard",
+      "level": 49
+    }
+  ]
+}

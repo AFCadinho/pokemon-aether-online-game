@@ -1,0 +1,67 @@
+{
+  "id": 385,
+  "species_id": "jirachi",
+  "showdown_id": "jirachi",
+  "name": "Jirachi",
+  "types": [
+    "steel",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 100,
+    "def": 100,
+    "spa": 100,
+    "spd": 100,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "serene-grace"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "wish",
+      "level": 1
+    },
+    {
+      "move": "rest",
+      "level": 5
+    },
+    {
+      "move": "swift",
+      "level": 10
+    },
+    {
+      "move": "helping-hand",
+      "level": 15
+    },
+    {
+      "move": "psychic",
+      "level": 20
+    },
+    {
+      "move": "refresh",
+      "level": 25
+    },
+    {
+      "move": "double-edge",
+      "level": 35
+    },
+    {
+      "move": "future-sight",
+      "level": 40
+    },
+    {
+      "move": "cosmic-power",
+      "level": 45
+    },
+    {
+      "move": "doom-desire",
+      "level": 50
+    }
+  ]
+}

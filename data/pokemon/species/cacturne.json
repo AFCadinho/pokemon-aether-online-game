@@ -1,0 +1,76 @@
+{
+  "id": 332,
+  "species_id": "cacturne",
+  "showdown_id": "cacturne",
+  "name": "Cacturne",
+  "types": [
+    "grass",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 115,
+    "def": 60,
+    "spa": 115,
+    "spd": 60,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "sand-veil",
+    "hidden": "water-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 13
+    },
+    {
+      "move": "sand-attack",
+      "level": 17
+    },
+    {
+      "move": "pin-missile",
+      "level": 21
+    },
+    {
+      "move": "ingrain",
+      "level": 25
+    },
+    {
+      "move": "feint-attack",
+      "level": 29
+    },
+    {
+      "move": "spikes",
+      "level": 35
+    },
+    {
+      "move": "needle-arm",
+      "level": 41
+    },
+    {
+      "move": "cotton-spore",
+      "level": 47
+    },
+    {
+      "move": "sandstorm",
+      "level": 53
+    }
+  ]
+}

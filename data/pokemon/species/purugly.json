@@ -1,0 +1,75 @@
+{
+  "id": 432,
+  "species_id": "purugly",
+  "showdown_id": "purugly",
+  "name": "Purugly",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 71,
+    "atk": 82,
+    "def": 64,
+    "spa": 64,
+    "spd": 59,
+    "spe": 112
+  },
+  "abilities": {
+    "primary": "thick-fat",
+    "hidden": "defiant"
+  },
+  "level_up_moves": [
+    {
+      "move": "fake-out",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "hypnosis",
+      "level": 13
+    },
+    {
+      "move": "feint-attack",
+      "level": 17
+    },
+    {
+      "move": "fury-swipes",
+      "level": 20
+    },
+    {
+      "move": "charm",
+      "level": 25
+    },
+    {
+      "move": "assist",
+      "level": 29
+    },
+    {
+      "move": "captivate",
+      "level": 32
+    },
+    {
+      "move": "slash",
+      "level": 37
+    },
+    {
+      "move": "swagger",
+      "level": 38
+    },
+    {
+      "move": "body-slam",
+      "level": 45
+    },
+    {
+      "move": "attract",
+      "level": 53
+    }
+  ]
+}

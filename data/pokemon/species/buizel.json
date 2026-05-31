@@ -1,0 +1,67 @@
+{
+  "id": 418,
+  "species_id": "buizel",
+  "showdown_id": "buizel",
+  "name": "Buizel",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 65,
+    "def": 35,
+    "spa": 60,
+    "spd": 30,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "water-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "sonic-boom",
+      "level": 1
+    },
+    {
+      "move": "water-sport",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 3
+    },
+    {
+      "move": "water-gun",
+      "level": 6
+    },
+    {
+      "move": "pursuit",
+      "level": 10
+    },
+    {
+      "move": "swift",
+      "level": 15
+    },
+    {
+      "move": "aqua-jet",
+      "level": 21
+    },
+    {
+      "move": "agility",
+      "level": 28
+    },
+    {
+      "move": "whirlpool",
+      "level": 36
+    },
+    {
+      "move": "razor-wind",
+      "level": 45
+    }
+  ]
+}

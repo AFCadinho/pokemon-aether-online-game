@@ -1,0 +1,59 @@
+{
+  "id": 160,
+  "species_id": "feraligatr",
+  "showdown_id": "feraligatr",
+  "name": "Feraligatr",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 105,
+    "def": 100,
+    "spa": 79,
+    "spd": 83,
+    "spe": 78
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "sheer-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 21
+    },
+    {
+      "move": "scary-face",
+      "level": 28
+    },
+    {
+      "move": "slash",
+      "level": 38
+    },
+    {
+      "move": "screech",
+      "level": 47
+    },
+    {
+      "move": "hydro-pump",
+      "level": 58
+    }
+  ]
+}

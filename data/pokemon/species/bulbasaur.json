@@ -1,35 +1,60 @@
 {
   "id": 1,
+  "species_id": "bulbasaur",
+  "showdown_id": "bulbasaur",
   "name": "Bulbasaur",
-  "types": ["grass", "poison"],
+  "types": [
+    "grass",
+    "poison"
+  ],
   "base_stats": {
-	"hp": 45,
-	"atk": 49,
-	"def": 49,
-	"spa": 65,
-	"spd": 65,
-	"spe": 45
+    "hp": 45,
+    "atk": 49,
+    "def": 49,
+    "spa": 65,
+    "spd": 65,
+    "spe": 45
   },
   "abilities": {
-	"primary": "overgrow",
-	"hidden": "chlorophyll"
+    "primary": "overgrow",
+    "hidden": "chlorophyll"
   },
   "level_up_moves": [
-	{
-	  "level": 1,
-	  "move": "tackle"
-	},
-	{
-	  "level": 1,
-	  "move": "growl"
-	},
-	{
-	  "level": 3,
-	  "move": "vine-whip"
-	},
-	{
-	  "level": 6,
-	  "move": "growth"
-	}
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 7
+    },
+    {
+      "move": "vine-whip",
+      "level": 13
+    },
+    {
+      "move": "poison-powder",
+      "level": 20
+    },
+    {
+      "move": "razor-leaf",
+      "level": 27
+    },
+    {
+      "move": "growth",
+      "level": 34
+    },
+    {
+      "move": "sleep-powder",
+      "level": 41
+    },
+    {
+      "move": "solar-beam",
+      "level": 48
+    }
   ]
 }

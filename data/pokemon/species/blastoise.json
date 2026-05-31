@@ -1,35 +1,55 @@
 {
   "id": 9,
+  "species_id": "blastoise",
+  "showdown_id": "blastoise",
   "name": "Blastoise",
-  "types": ["water"],
+  "types": [
+    "water"
+  ],
   "base_stats": {
-	"hp": 79,
-	"atk": 83,
-	"def": 100,
-	"spa": 85,
-	"spd": 105,
-	"spe": 78
+    "hp": 79,
+    "atk": 83,
+    "def": 100,
+    "spa": 85,
+    "spd": 105,
+    "spe": 78
   },
   "abilities": {
-	"primary": "torrent",
-	"hidden": "rain-dish"
+    "primary": "torrent",
+    "hidden": "rain-dish"
   },
   "level_up_moves": [
-	{
-	  "level": 1,
-	  "move": "tackle"
-	},
-	{
-	  "level": 1,
-	  "move": "tail-whip"
-	},
-	{
-	  "level": 1,
-	  "move": "water-gun"
-	},
-	{
-	  "level": 24,
-	  "move": "water-pulse"
-	}
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 24
+    },
+    {
+      "move": "withdraw",
+      "level": 31
+    },
+    {
+      "move": "skull-bash",
+      "level": 42
+    },
+    {
+      "move": "hydro-pump",
+      "level": 52
+    }
   ]
 }

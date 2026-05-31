@@ -1,0 +1,56 @@
+{
+  "id": 102,
+  "species_id": "exeggcute",
+  "showdown_id": "exeggcute",
+  "name": "Exeggcute",
+  "types": [
+    "grass",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 40,
+    "def": 80,
+    "spa": 60,
+    "spd": 45,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "harvest"
+  },
+  "level_up_moves": [
+    {
+      "move": "barrage",
+      "level": 1
+    },
+    {
+      "move": "hypnosis",
+      "level": 1
+    },
+    {
+      "move": "reflect",
+      "level": 25
+    },
+    {
+      "move": "leech-seed",
+      "level": 28
+    },
+    {
+      "move": "stun-spore",
+      "level": 32
+    },
+    {
+      "move": "poison-powder",
+      "level": 37
+    },
+    {
+      "move": "solar-beam",
+      "level": 42
+    },
+    {
+      "move": "sleep-powder",
+      "level": 48
+    }
+  ]
+}

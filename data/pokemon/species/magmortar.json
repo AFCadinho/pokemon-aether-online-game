@@ -1,0 +1,79 @@
+{
+  "id": 467,
+  "species_id": "magmortar",
+  "showdown_id": "magmortar",
+  "name": "Magmortar",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 95,
+    "def": 67,
+    "spa": 125,
+    "spd": 95,
+    "spe": 83
+  },
+  "abilities": {
+    "primary": "flame-body",
+    "hidden": "vital-spirit"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "smog",
+      "level": 1
+    },
+    {
+      "move": "smokescreen",
+      "level": 1
+    },
+    {
+      "move": "thunder-punch",
+      "level": 1
+    },
+    {
+      "move": "feint-attack",
+      "level": 16
+    },
+    {
+      "move": "fire-spin",
+      "level": 19
+    },
+    {
+      "move": "confuse-ray",
+      "level": 25
+    },
+    {
+      "move": "fire-punch",
+      "level": 28
+    },
+    {
+      "move": "lava-plume",
+      "level": 37
+    },
+    {
+      "move": "flamethrower",
+      "level": 43
+    },
+    {
+      "move": "sunny-day",
+      "level": 52
+    },
+    {
+      "move": "fire-blast",
+      "level": 58
+    },
+    {
+      "move": "hyper-beam",
+      "level": 67
+    }
+  ]
+}

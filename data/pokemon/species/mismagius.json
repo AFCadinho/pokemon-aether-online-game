@@ -1,0 +1,46 @@
+{
+  "id": 429,
+  "species_id": "mismagius",
+  "showdown_id": "mismagius",
+  "name": "Mismagius",
+  "types": [
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 60,
+    "def": 60,
+    "spa": 105,
+    "spd": 105,
+    "spe": 105
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "lucky-chant",
+      "level": 1
+    },
+    {
+      "move": "magical-leaf",
+      "level": 1
+    },
+    {
+      "move": "psywave",
+      "level": 1
+    },
+    {
+      "move": "spite",
+      "level": 1
+    }
+  ]
+}

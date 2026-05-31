@@ -1,0 +1,87 @@
+{
+  "id": 685,
+  "species_id": "slurpuff",
+  "showdown_id": "slurpuff",
+  "name": "Slurpuff",
+  "types": [
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 82,
+    "atk": 80,
+    "def": 86,
+    "spa": 85,
+    "spd": 75,
+    "spe": 72
+  },
+  "abilities": {
+    "primary": "sweet-veil",
+    "hidden": "unburden"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "sweet-scent",
+      "level": 1
+    },
+    {
+      "move": "fairy-wind",
+      "level": 5
+    },
+    {
+      "move": "play-nice",
+      "level": 8
+    },
+    {
+      "move": "fake-tears",
+      "level": 10
+    },
+    {
+      "move": "round",
+      "level": 13
+    },
+    {
+      "move": "cotton-spore",
+      "level": 17
+    },
+    {
+      "move": "endeavor",
+      "level": 21
+    },
+    {
+      "move": "aromatherapy",
+      "level": 26
+    },
+    {
+      "move": "draining-kiss",
+      "level": 31
+    },
+    {
+      "move": "energy-ball",
+      "level": 36
+    },
+    {
+      "move": "cotton-guard",
+      "level": 41
+    },
+    {
+      "move": "wish",
+      "level": 45
+    },
+    {
+      "move": "play-rough",
+      "level": 49
+    },
+    {
+      "move": "light-screen",
+      "level": 58
+    },
+    {
+      "move": "safeguard",
+      "level": 67
+    }
+  ]
+}

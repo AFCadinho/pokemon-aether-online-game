@@ -1,0 +1,56 @@
+{
+  "id": 169,
+  "species_id": "crobat",
+  "showdown_id": "crobat",
+  "name": "Crobat",
+  "types": [
+    "poison",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 90,
+    "def": 80,
+    "spa": 70,
+    "spd": 80,
+    "spe": 130
+  },
+  "abilities": {
+    "primary": "inner-focus",
+    "hidden": "infiltrator"
+  },
+  "level_up_moves": [
+    {
+      "move": "leech-life",
+      "level": 1
+    },
+    {
+      "move": "screech",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 12
+    },
+    {
+      "move": "confuse-ray",
+      "level": 19
+    },
+    {
+      "move": "wing-attack",
+      "level": 30
+    },
+    {
+      "move": "mean-look",
+      "level": 42
+    },
+    {
+      "move": "haze",
+      "level": 55
+    }
+  ]
+}

@@ -37,6 +37,10 @@ var active_player_pokemon: Pokemon
 @onready var enemy_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemySpriteBox
 @onready var player_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerSpriteBox
 
+# Pokemon HUD
+@onready var player_hud_panel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerHudPanel
+@onready var enemy_hud_panel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemyHudPanel
+
 # HTTP Request
 @onready var battle_request: HTTPRequest = $BattleRequest
 
@@ -158,16 +162,31 @@ func _start_wild_battle(player1: Dictionary, player2: Dictionary) -> void:
 	var response = await BattleApiClient.create_wild_battle(battle_request, player1, player2)
 	if not _apply_api_response(response):
 		return
-		
+	
+	_update_hud_panels()
 	_update_move_slots()
 	_show_moves()
 
-func _apply_api_response(response: Dictionary) -> bool:
+func _apply_api_response(response: Dictionary) -> bool:	
 	if not response.get("success", false):
 		print("Battle API failed: ", response)
 		return false
 		
 	battle_state.load_from_api_response(response)
-	print("Battle updated: ", battle_state.battle_id)
-	print("Team preview: ", battle_state.is_team_preview("p1"))
 	return true
+	
+func _update_hud_panels():
+	player_hud_panel.set_pokemon_data(
+		battle_state.get_active_pokemon_species("p1"),
+		battle_state.get_active_pokemon_level("p1"),
+		battle_state.get_active_pokemon_current_hp("p1"),
+		battle_state.get_active_pokemon_max_hp("p1"),
+	)
+	
+	enemy_hud_panel.set_pokemon_data(
+		battle_state.get_active_pokemon_species("p2"),
+		battle_state.get_active_pokemon_level("p2"),
+		battle_state.get_active_pokemon_current_hp("p2"),
+		battle_state.get_active_pokemon_max_hp("p2"),
+	)
+	

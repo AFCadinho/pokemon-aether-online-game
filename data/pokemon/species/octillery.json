@@ -1,0 +1,59 @@
+{
+  "id": 224,
+  "species_id": "octillery",
+  "showdown_id": "octillery",
+  "name": "Octillery",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 105,
+    "def": 75,
+    "spa": 105,
+    "spd": 75,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "suction-cups",
+    "hidden": "moody"
+  },
+  "level_up_moves": [
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "constrict",
+      "level": 11
+    },
+    {
+      "move": "aurora-beam",
+      "level": 22
+    },
+    {
+      "move": "bubble-beam",
+      "level": 22
+    },
+    {
+      "move": "psybeam",
+      "level": 22
+    },
+    {
+      "move": "octazooka",
+      "level": 25
+    },
+    {
+      "move": "focus-energy",
+      "level": 38
+    },
+    {
+      "move": "ice-beam",
+      "level": 54
+    },
+    {
+      "move": "hyper-beam",
+      "level": 70
+    }
+  ]
+}

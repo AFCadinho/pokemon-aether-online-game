@@ -1,0 +1,55 @@
+{
+  "id": 35,
+  "species_id": "clefairy",
+  "showdown_id": "clefairy",
+  "name": "Clefairy",
+  "types": [
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 45,
+    "def": 48,
+    "spa": 60,
+    "spd": 65,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "cute-charm",
+    "hidden": "friend-guard"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "sing",
+      "level": 13
+    },
+    {
+      "move": "double-slap",
+      "level": 18
+    },
+    {
+      "move": "minimize",
+      "level": 24
+    },
+    {
+      "move": "metronome",
+      "level": 31
+    },
+    {
+      "move": "defense-curl",
+      "level": 39
+    },
+    {
+      "move": "light-screen",
+      "level": 48
+    }
+  ]
+}

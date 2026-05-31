@@ -1,0 +1,87 @@
+{
+  "id": 548,
+  "species_id": "petilil",
+  "showdown_id": "petilil",
+  "name": "Petilil",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 35,
+    "def": 50,
+    "spa": 70,
+    "spd": 50,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "leaf-guard"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 4
+    },
+    {
+      "move": "leech-seed",
+      "level": 8
+    },
+    {
+      "move": "sleep-powder",
+      "level": 10
+    },
+    {
+      "move": "mega-drain",
+      "level": 13
+    },
+    {
+      "move": "synthesis",
+      "level": 17
+    },
+    {
+      "move": "magical-leaf",
+      "level": 19
+    },
+    {
+      "move": "stun-spore",
+      "level": 22
+    },
+    {
+      "move": "giga-drain",
+      "level": 26
+    },
+    {
+      "move": "aromatherapy",
+      "level": 28
+    },
+    {
+      "move": "helping-hand",
+      "level": 31
+    },
+    {
+      "move": "energy-ball",
+      "level": 35
+    },
+    {
+      "move": "entrainment",
+      "level": 37
+    },
+    {
+      "move": "sunny-day",
+      "level": 40
+    },
+    {
+      "move": "after-you",
+      "level": 44
+    },
+    {
+      "move": "leaf-storm",
+      "level": 46
+    }
+  ]
+}

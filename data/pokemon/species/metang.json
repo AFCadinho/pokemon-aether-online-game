@@ -1,0 +1,64 @@
+{
+  "id": 375,
+  "species_id": "metang",
+  "showdown_id": "metang",
+  "name": "Metang",
+  "types": [
+    "steel",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 75,
+    "def": 100,
+    "spa": 55,
+    "spd": 80,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "clear-body",
+    "hidden": "light-metal"
+  },
+  "level_up_moves": [
+    {
+      "move": "take-down",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 20
+    },
+    {
+      "move": "metal-claw",
+      "level": 20
+    },
+    {
+      "move": "scary-face",
+      "level": 26
+    },
+    {
+      "move": "pursuit",
+      "level": 32
+    },
+    {
+      "move": "psychic",
+      "level": 38
+    },
+    {
+      "move": "iron-defense",
+      "level": 44
+    },
+    {
+      "move": "meteor-mash",
+      "level": 50
+    },
+    {
+      "move": "agility",
+      "level": 56
+    },
+    {
+      "move": "hyper-beam",
+      "level": 62
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "id": 264,
+  "species_id": "linoone",
+  "showdown_id": "linoone",
+  "name": "Linoone",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 70,
+    "def": 61,
+    "spa": 50,
+    "spd": 61,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "pickup",
+    "hidden": "quick-feet"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 13
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 17
+    },
+    {
+      "move": "mud-sport",
+      "level": 23
+    },
+    {
+      "move": "fury-swipes",
+      "level": 29
+    },
+    {
+      "move": "covet",
+      "level": 35
+    },
+    {
+      "move": "slash",
+      "level": 41
+    },
+    {
+      "move": "rest",
+      "level": 47
+    },
+    {
+      "move": "belly-drum",
+      "level": 53
+    }
+  ]
+}

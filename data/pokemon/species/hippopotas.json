@@ -1,0 +1,63 @@
+{
+  "id": 449,
+  "species_id": "hippopotas",
+  "showdown_id": "hippopotas",
+  "name": "Hippopotas",
+  "types": [
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 68,
+    "atk": 72,
+    "def": 78,
+    "spa": 38,
+    "spd": 42,
+    "spe": 32
+  },
+  "abilities": {
+    "primary": "sand-stream",
+    "hidden": "sand-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 7
+    },
+    {
+      "move": "yawn",
+      "level": 13
+    },
+    {
+      "move": "take-down",
+      "level": 19
+    },
+    {
+      "move": "sand-tomb",
+      "level": 25
+    },
+    {
+      "move": "crunch",
+      "level": 31
+    },
+    {
+      "move": "earthquake",
+      "level": 37
+    },
+    {
+      "move": "double-edge",
+      "level": 44
+    },
+    {
+      "move": "fissure",
+      "level": 50
+    }
+  ]
+}

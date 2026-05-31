@@ -1,0 +1,59 @@
+{
+  "id": 56,
+  "species_id": "mankey",
+  "showdown_id": "mankey",
+  "name": "Mankey",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 80,
+    "def": 35,
+    "spa": 35,
+    "spd": 45,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "vital-spirit",
+    "hidden": "defiant"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "low-kick",
+      "level": 9
+    },
+    {
+      "move": "karate-chop",
+      "level": 15
+    },
+    {
+      "move": "fury-swipes",
+      "level": 21
+    },
+    {
+      "move": "focus-energy",
+      "level": 27
+    },
+    {
+      "move": "seismic-toss",
+      "level": 33
+    },
+    {
+      "move": "thrash",
+      "level": 39
+    },
+    {
+      "move": "screech",
+      "level": 45
+    }
+  ]
+}

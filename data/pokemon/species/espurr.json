@@ -1,0 +1,59 @@
+{
+  "id": 677,
+  "species_id": "espurr",
+  "showdown_id": "espurr",
+  "name": "Espurr",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 62,
+    "atk": 48,
+    "def": 54,
+    "spa": 63,
+    "spd": 60,
+    "spe": 68
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "own-tempo"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "covet",
+      "level": 5
+    },
+    {
+      "move": "confusion",
+      "level": 9
+    },
+    {
+      "move": "light-screen",
+      "level": 13
+    },
+    {
+      "move": "psybeam",
+      "level": 17
+    },
+    {
+      "move": "fake-out",
+      "level": 19
+    },
+    {
+      "move": "disarming-voice",
+      "level": 22
+    },
+    {
+      "move": "psyshock",
+      "level": 25
+    }
+  ]
+}

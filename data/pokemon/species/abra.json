@@ -1,0 +1,27 @@
+{
+  "id": 63,
+  "species_id": "abra",
+  "showdown_id": "abra",
+  "name": "Abra",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 25,
+    "atk": 20,
+    "def": 15,
+    "spa": 105,
+    "spd": 55,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "synchronize",
+    "hidden": "magic-guard"
+  },
+  "level_up_moves": [
+    {
+      "move": "teleport",
+      "level": 1
+    }
+  ]
+}

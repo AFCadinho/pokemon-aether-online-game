@@ -1,0 +1,59 @@
+{
+  "id": 378,
+  "species_id": "regice",
+  "showdown_id": "regice",
+  "name": "Regice",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 50,
+    "def": 100,
+    "spa": 100,
+    "spd": 200,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "clear-body",
+    "hidden": "ice-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "explosion",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 9
+    },
+    {
+      "move": "curse",
+      "level": 17
+    },
+    {
+      "move": "superpower",
+      "level": 25
+    },
+    {
+      "move": "ancient-power",
+      "level": 33
+    },
+    {
+      "move": "amnesia",
+      "level": 41
+    },
+    {
+      "move": "zap-cannon",
+      "level": 49
+    },
+    {
+      "move": "lock-on",
+      "level": 57
+    },
+    {
+      "move": "hyper-beam",
+      "level": 65
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": 417,
+  "species_id": "pachirisu",
+  "showdown_id": "pachirisu",
+  "name": "Pachirisu",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 45,
+    "def": 70,
+    "spa": 45,
+    "spd": 90,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "run-away",
+    "hidden": "volt-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "bide",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 5
+    },
+    {
+      "move": "charm",
+      "level": 9
+    },
+    {
+      "move": "spark",
+      "level": 13
+    },
+    {
+      "move": "endure",
+      "level": 17
+    },
+    {
+      "move": "swift",
+      "level": 21
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 25
+    },
+    {
+      "move": "discharge",
+      "level": 29
+    },
+    {
+      "move": "super-fang",
+      "level": 33
+    },
+    {
+      "move": "last-resort",
+      "level": 37
+    }
+  ]
+}

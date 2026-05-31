@@ -1,0 +1,92 @@
+{
+  "id": 561,
+  "species_id": "sigilyph",
+  "showdown_id": "sigilyph",
+  "name": "Sigilyph",
+  "types": [
+    "psychic",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 72,
+    "atk": 58,
+    "def": 80,
+    "spa": 103,
+    "spd": 80,
+    "spe": 97
+  },
+  "abilities": {
+    "primary": "wonder-skin",
+    "hidden": "tinted-lens"
+  },
+  "level_up_moves": [
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "miracle-eye",
+      "level": 1
+    },
+    {
+      "move": "hypnosis",
+      "level": 4
+    },
+    {
+      "move": "psywave",
+      "level": 8
+    },
+    {
+      "move": "tailwind",
+      "level": 11
+    },
+    {
+      "move": "whirlwind",
+      "level": 14
+    },
+    {
+      "move": "psybeam",
+      "level": 18
+    },
+    {
+      "move": "air-cutter",
+      "level": 21
+    },
+    {
+      "move": "light-screen",
+      "level": 24
+    },
+    {
+      "move": "reflect",
+      "level": 28
+    },
+    {
+      "move": "synchronoise",
+      "level": 31
+    },
+    {
+      "move": "mirror-move",
+      "level": 34
+    },
+    {
+      "move": "gravity",
+      "level": 38
+    },
+    {
+      "move": "air-slash",
+      "level": 41
+    },
+    {
+      "move": "psychic",
+      "level": 44
+    },
+    {
+      "move": "cosmic-power",
+      "level": 48
+    },
+    {
+      "move": "sky-attack",
+      "level": 51
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": 401,
+  "species_id": "kricketot",
+  "showdown_id": "kricketot",
+  "name": "Kricketot",
+  "types": [
+    "bug"
+  ],
+  "base_stats": {
+    "hp": 37,
+    "atk": 25,
+    "def": 41,
+    "spa": 25,
+    "spd": 41,
+    "spe": 25
+  },
+  "abilities": {
+    "primary": "shed-skin",
+    "hidden": "run-away"
+  },
+  "level_up_moves": [
+    {
+      "move": "bide",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "bug-bite",
+      "level": 16
+    }
+  ]
+}

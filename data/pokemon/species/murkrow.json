@@ -1,0 +1,48 @@
+{
+  "id": 198,
+  "species_id": "murkrow",
+  "showdown_id": "murkrow",
+  "name": "Murkrow",
+  "types": [
+    "dark",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 85,
+    "def": 42,
+    "spa": 85,
+    "spd": 42,
+    "spe": 91
+  },
+  "abilities": {
+    "primary": "insomnia",
+    "hidden": "prankster"
+  },
+  "level_up_moves": [
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "pursuit",
+      "level": 11
+    },
+    {
+      "move": "haze",
+      "level": 16
+    },
+    {
+      "move": "night-shade",
+      "level": 26
+    },
+    {
+      "move": "feint-attack",
+      "level": 31
+    },
+    {
+      "move": "mean-look",
+      "level": 41
+    }
+  ]
+}

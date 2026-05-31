@@ -1,0 +1,92 @@
+{
+  "id": 607,
+  "species_id": "litwick",
+  "showdown_id": "litwick",
+  "name": "Litwick",
+  "types": [
+    "ghost",
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 30,
+    "def": 55,
+    "spa": 65,
+    "spd": 55,
+    "spe": 20
+  },
+  "abilities": {
+    "primary": "flash-fire",
+    "hidden": "infiltrator"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "minimize",
+      "level": 3
+    },
+    {
+      "move": "smog",
+      "level": 5
+    },
+    {
+      "move": "fire-spin",
+      "level": 7
+    },
+    {
+      "move": "confuse-ray",
+      "level": 10
+    },
+    {
+      "move": "night-shade",
+      "level": 13
+    },
+    {
+      "move": "will-o-wisp",
+      "level": 16
+    },
+    {
+      "move": "flame-burst",
+      "level": 20
+    },
+    {
+      "move": "imprison",
+      "level": 24
+    },
+    {
+      "move": "hex",
+      "level": 28
+    },
+    {
+      "move": "memento",
+      "level": 33
+    },
+    {
+      "move": "inferno",
+      "level": 38
+    },
+    {
+      "move": "curse",
+      "level": 43
+    },
+    {
+      "move": "shadow-ball",
+      "level": 49
+    },
+    {
+      "move": "pain-split",
+      "level": 55
+    },
+    {
+      "move": "overheat",
+      "level": 61
+    }
+  ]
+}

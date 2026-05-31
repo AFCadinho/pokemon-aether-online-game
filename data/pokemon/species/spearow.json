@@ -1,0 +1,52 @@
+{
+  "id": 21,
+  "species_id": "spearow",
+  "showdown_id": "spearow",
+  "name": "Spearow",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 60,
+    "def": 30,
+    "spa": 31,
+    "spd": 31,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "sniper"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 9
+    },
+    {
+      "move": "fury-attack",
+      "level": 15
+    },
+    {
+      "move": "mirror-move",
+      "level": 22
+    },
+    {
+      "move": "drill-peck",
+      "level": 29
+    },
+    {
+      "move": "agility",
+      "level": 36
+    }
+  ]
+}

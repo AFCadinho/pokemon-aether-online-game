@@ -1,0 +1,67 @@
+{
+  "id": 384,
+  "species_id": "rayquaza",
+  "showdown_id": "rayquaza",
+  "name": "Rayquaza",
+  "types": [
+    "dragon",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 105,
+    "atk": 150,
+    "def": 90,
+    "spa": 150,
+    "spd": 90,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "air-lock"
+  },
+  "level_up_moves": [
+    {
+      "move": "twister",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 5
+    },
+    {
+      "move": "ancient-power",
+      "level": 15
+    },
+    {
+      "move": "dragon-claw",
+      "level": 20
+    },
+    {
+      "move": "dragon-dance",
+      "level": 30
+    },
+    {
+      "move": "crunch",
+      "level": 35
+    },
+    {
+      "move": "fly",
+      "level": 45
+    },
+    {
+      "move": "rest",
+      "level": 50
+    },
+    {
+      "move": "extreme-speed",
+      "level": 60
+    },
+    {
+      "move": "outrage",
+      "level": 65
+    },
+    {
+      "move": "hyper-beam",
+      "level": 75
+    }
+  ]
+}

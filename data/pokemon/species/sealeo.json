@@ -1,0 +1,72 @@
+{
+  "id": 364,
+  "species_id": "sealeo",
+  "showdown_id": "sealeo",
+  "name": "Sealeo",
+  "types": [
+    "ice",
+    "water"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 60,
+    "def": 70,
+    "spa": 75,
+    "spd": 70,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "thick-fat",
+    "hidden": "oblivious"
+  },
+  "level_up_moves": [
+    {
+      "move": "encore",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "ice-ball",
+      "level": 13
+    },
+    {
+      "move": "body-slam",
+      "level": 19
+    },
+    {
+      "move": "aurora-beam",
+      "level": 25
+    },
+    {
+      "move": "hail",
+      "level": 31
+    },
+    {
+      "move": "rest",
+      "level": 39
+    },
+    {
+      "move": "snore",
+      "level": 39
+    },
+    {
+      "move": "blizzard",
+      "level": 47
+    },
+    {
+      "move": "sheer-cold",
+      "level": 55
+    }
+  ]
+}

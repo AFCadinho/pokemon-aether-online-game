@@ -1,0 +1,56 @@
+{
+  "id": 283,
+  "species_id": "surskit",
+  "showdown_id": "surskit",
+  "name": "Surskit",
+  "types": [
+    "bug",
+    "water"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 30,
+    "def": 32,
+    "spa": 50,
+    "spd": 52,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "rain-dish"
+  },
+  "level_up_moves": [
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 7
+    },
+    {
+      "move": "sweet-scent",
+      "level": 13
+    },
+    {
+      "move": "water-sport",
+      "level": 19
+    },
+    {
+      "move": "bubble-beam",
+      "level": 25
+    },
+    {
+      "move": "agility",
+      "level": 31
+    },
+    {
+      "move": "haze",
+      "level": 37
+    },
+    {
+      "move": "mist",
+      "level": 37
+    }
+  ]
+}

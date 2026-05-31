@@ -1,0 +1,48 @@
+{
+  "id": 140,
+  "species_id": "kabuto",
+  "showdown_id": "kabuto",
+  "name": "Kabuto",
+  "types": [
+    "rock",
+    "water"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 80,
+    "def": 90,
+    "spa": 55,
+    "spd": 45,
+    "spe": 55
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "weak-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 34
+    },
+    {
+      "move": "slash",
+      "level": 39
+    },
+    {
+      "move": "leer",
+      "level": 44
+    },
+    {
+      "move": "hydro-pump",
+      "level": 49
+    }
+  ]
+}

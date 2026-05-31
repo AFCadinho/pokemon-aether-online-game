@@ -1,0 +1,87 @@
+{
+  "id": 584,
+  "species_id": "vanilluxe",
+  "showdown_id": "vanilluxe",
+  "name": "Vanilluxe",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 71,
+    "atk": 95,
+    "def": 85,
+    "spa": 110,
+    "spd": 95,
+    "spe": 79
+  },
+  "abilities": {
+    "primary": "ice-body",
+    "hidden": "weak-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "icicle-spear",
+      "level": 1
+    },
+    {
+      "move": "uproar",
+      "level": 1
+    },
+    {
+      "move": "weather-ball",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 13
+    },
+    {
+      "move": "mist",
+      "level": 16
+    },
+    {
+      "move": "avalanche",
+      "level": 19
+    },
+    {
+      "move": "taunt",
+      "level": 22
+    },
+    {
+      "move": "mirror-shot",
+      "level": 26
+    },
+    {
+      "move": "acid-armor",
+      "level": 31
+    },
+    {
+      "move": "ice-beam",
+      "level": 36
+    },
+    {
+      "move": "hail",
+      "level": 42
+    },
+    {
+      "move": "mirror-coat",
+      "level": 50
+    },
+    {
+      "move": "blizzard",
+      "level": 59
+    },
+    {
+      "move": "sheer-cold",
+      "level": 67
+    }
+  ]
+}

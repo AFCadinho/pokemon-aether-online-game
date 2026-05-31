@@ -1,0 +1,92 @@
+{
+  "id": 663,
+  "species_id": "talonflame",
+  "showdown_id": "talonflame",
+  "name": "Talonflame",
+  "types": [
+    "fire",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 81,
+    "def": 71,
+    "spa": 74,
+    "spd": 69,
+    "spe": 126
+  },
+  "abilities": {
+    "primary": "flame-body",
+    "hidden": "gale-wings"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "flare-blitz",
+      "level": 1
+    },
+    {
+      "move": "brave-bird",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 6
+    },
+    {
+      "move": "peck",
+      "level": 10
+    },
+    {
+      "move": "agility",
+      "level": 13
+    },
+    {
+      "move": "flail",
+      "level": 16
+    },
+    {
+      "move": "ember",
+      "level": 17
+    },
+    {
+      "move": "roost",
+      "level": 25
+    },
+    {
+      "move": "razor-wind",
+      "level": 27
+    },
+    {
+      "move": "natural-gift",
+      "level": 31
+    },
+    {
+      "move": "flame-charge",
+      "level": 39
+    },
+    {
+      "move": "acrobatics",
+      "level": 44
+    },
+    {
+      "move": "me-first",
+      "level": 49
+    },
+    {
+      "move": "tailwind",
+      "level": 55
+    },
+    {
+      "move": "steel-wing",
+      "level": 60
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "id": 715,
+  "species_id": "noivern",
+  "showdown_id": "noivern",
+  "name": "Noivern",
+  "types": [
+    "flying",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 70,
+    "def": 80,
+    "spa": 97,
+    "spd": 80,
+    "spe": 123
+  },
+  "abilities": {
+    "primary": "frisk",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "screech",
+      "level": 1
+    },
+    {
+      "move": "moonlight",
+      "level": 1
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 1
+    },
+    {
+      "move": "hurricane",
+      "level": 1
+    },
+    {
+      "move": "boomburst",
+      "level": 1
+    },
+    {
+      "move": "leech-life",
+      "level": 5
+    },
+    {
+      "move": "gust",
+      "level": 11
+    },
+    {
+      "move": "bite",
+      "level": 13
+    },
+    {
+      "move": "wing-attack",
+      "level": 16
+    },
+    {
+      "move": "agility",
+      "level": 18
+    },
+    {
+      "move": "air-cutter",
+      "level": 23
+    },
+    {
+      "move": "roost",
+      "level": 27
+    },
+    {
+      "move": "razor-wind",
+      "level": 31
+    },
+    {
+      "move": "tailwind",
+      "level": 35
+    },
+    {
+      "move": "whirlwind",
+      "level": 40
+    },
+    {
+      "move": "super-fang",
+      "level": 43
+    },
+    {
+      "move": "air-slash",
+      "level": 53
+    }
+  ]
+}

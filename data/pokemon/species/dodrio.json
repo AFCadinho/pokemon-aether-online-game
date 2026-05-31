@@ -1,0 +1,52 @@
+{
+  "id": 85,
+  "species_id": "dodrio",
+  "showdown_id": "dodrio",
+  "name": "Dodrio",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 110,
+    "def": 70,
+    "spa": 60,
+    "spd": 60,
+    "spe": 110
+  },
+  "abilities": {
+    "primary": "run-away",
+    "hidden": "tangled-feet"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-attack",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "drill-peck",
+      "level": 30
+    },
+    {
+      "move": "rage",
+      "level": 39
+    },
+    {
+      "move": "tri-attack",
+      "level": 45
+    },
+    {
+      "move": "agility",
+      "level": 51
+    }
+  ]
+}

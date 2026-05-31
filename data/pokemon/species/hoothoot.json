@@ -1,0 +1,60 @@
+{
+  "id": 163,
+  "species_id": "hoothoot",
+  "showdown_id": "hoothoot",
+  "name": "Hoothoot",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 30,
+    "def": 30,
+    "spa": 36,
+    "spd": 56,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "insomnia",
+    "hidden": "tinted-lens"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "foresight",
+      "level": 6
+    },
+    {
+      "move": "peck",
+      "level": 11
+    },
+    {
+      "move": "hypnosis",
+      "level": 16
+    },
+    {
+      "move": "reflect",
+      "level": 22
+    },
+    {
+      "move": "take-down",
+      "level": 28
+    },
+    {
+      "move": "confusion",
+      "level": 34
+    },
+    {
+      "move": "dream-eater",
+      "level": 48
+    }
+  ]
+}

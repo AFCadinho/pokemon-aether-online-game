@@ -1,0 +1,91 @@
+{
+  "id": 474,
+  "species_id": "porygon-z",
+  "showdown_id": "porygonz",
+  "name": "Porygon-Z",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 80,
+    "def": 70,
+    "spa": 135,
+    "spd": 75,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "adaptability",
+    "hidden": "analytic"
+  },
+  "level_up_moves": [
+    {
+      "move": "conversion",
+      "level": 1
+    },
+    {
+      "move": "conversion-2",
+      "level": 1
+    },
+    {
+      "move": "nasty-plot",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "trick-room",
+      "level": 1
+    },
+    {
+      "move": "psybeam",
+      "level": 7
+    },
+    {
+      "move": "agility",
+      "level": 12
+    },
+    {
+      "move": "recover",
+      "level": 18
+    },
+    {
+      "move": "magnet-rise",
+      "level": 23
+    },
+    {
+      "move": "signal-beam",
+      "level": 29
+    },
+    {
+      "move": "embargo",
+      "level": 34
+    },
+    {
+      "move": "discharge",
+      "level": 40
+    },
+    {
+      "move": "lock-on",
+      "level": 45
+    },
+    {
+      "move": "tri-attack",
+      "level": 51
+    },
+    {
+      "move": "magic-coat",
+      "level": 56
+    },
+    {
+      "move": "zap-cannon",
+      "level": 62
+    },
+    {
+      "move": "hyper-beam",
+      "level": 67
+    }
+  ]
+}

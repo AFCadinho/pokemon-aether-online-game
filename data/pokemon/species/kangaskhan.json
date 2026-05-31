@@ -1,0 +1,51 @@
+{
+  "id": 115,
+  "species_id": "kangaskhan",
+  "showdown_id": "kangaskhan",
+  "name": "Kangaskhan",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 105,
+    "atk": 95,
+    "def": 80,
+    "spa": 40,
+    "spd": 80,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "early-bird",
+    "hidden": "inner-focus"
+  },
+  "level_up_moves": [
+    {
+      "move": "comet-punch",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 26
+    },
+    {
+      "move": "tail-whip",
+      "level": 31
+    },
+    {
+      "move": "mega-punch",
+      "level": 36
+    },
+    {
+      "move": "leer",
+      "level": 41
+    },
+    {
+      "move": "dizzy-punch",
+      "level": 46
+    }
+  ]
+}

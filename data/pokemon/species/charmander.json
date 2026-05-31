@@ -1,7 +1,11 @@
 {
   "id": 4,
+  "species_id": "charmander",
+  "showdown_id": "charmander",
   "name": "Charmander",
-  "types": ["fire"],
+  "types": [
+    "fire"
+  ],
   "base_stats": {
 	"hp": 39,
 	"atk": 52,
@@ -16,20 +20,36 @@
   },
   "level_up_moves": [
 	{
-	  "level": 1,
-	  "move": "scratch"
+	  "move": "growl",
+	  "level": 1
 	},
 	{
-	  "level": 1,
-	  "move": "growl"
+	  "move": "scratch",
+	  "level": 1
 	},
 	{
-	  "level": 7,
-	  "move": "ember"
+	  "move": "ember",
+	  "level": 9
 	},
 	{
-	  "level": 10,
-	  "move": "smokescreen"
+	  "move": "leer",
+	  "level": 15
+	},
+	{
+	  "move": "rage",
+	  "level": 22
+	},
+	{
+	  "move": "slash",
+	  "level": 30
+	},
+	{
+	  "move": "flamethrower",
+	  "level": 38
+	},
+	{
+	  "move": "fire-spin",
+	  "level": 46
 	}
   ]
 }

@@ -1,0 +1,47 @@
+{
+  "id": 19,
+  "species_id": "rattata",
+  "showdown_id": "rattata",
+  "name": "Rattata",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 56,
+    "def": 35,
+    "spa": 25,
+    "spd": 35,
+    "spe": 72
+  },
+  "abilities": {
+    "primary": "run-away",
+    "hidden": "hustle"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 7
+    },
+    {
+      "move": "hyper-fang",
+      "level": 14
+    },
+    {
+      "move": "focus-energy",
+      "level": 23
+    },
+    {
+      "move": "super-fang",
+      "level": 34
+    }
+  ]
+}

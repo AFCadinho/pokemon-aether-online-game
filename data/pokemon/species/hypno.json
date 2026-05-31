@@ -1,0 +1,55 @@
+{
+  "id": 97,
+  "species_id": "hypno",
+  "showdown_id": "hypno",
+  "name": "Hypno",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 73,
+    "def": 70,
+    "spa": 73,
+    "spd": 115,
+    "spe": 67
+  },
+  "abilities": {
+    "primary": "insomnia",
+    "hidden": "inner-focus"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "hypnosis",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 24
+    },
+    {
+      "move": "poison-gas",
+      "level": 33
+    },
+    {
+      "move": "psychic",
+      "level": 37
+    },
+    {
+      "move": "meditate",
+      "level": 43
+    }
+  ]
+}

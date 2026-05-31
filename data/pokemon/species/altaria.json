@@ -1,0 +1,76 @@
+{
+  "id": 334,
+  "species_id": "altaria",
+  "showdown_id": "altaria",
+  "name": "Altaria",
+  "types": [
+    "dragon",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 70,
+    "def": 90,
+    "spa": 70,
+    "spd": 105,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "natural-cure",
+    "hidden": "cloud-nine"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "sing",
+      "level": 1
+    },
+    {
+      "move": "fury-attack",
+      "level": 18
+    },
+    {
+      "move": "safeguard",
+      "level": 21
+    },
+    {
+      "move": "mist",
+      "level": 28
+    },
+    {
+      "move": "take-down",
+      "level": 31
+    },
+    {
+      "move": "dragon-breath",
+      "level": 35
+    },
+    {
+      "move": "dragon-dance",
+      "level": 40
+    },
+    {
+      "move": "refresh",
+      "level": 45
+    },
+    {
+      "move": "perish-song",
+      "level": 54
+    },
+    {
+      "move": "sky-attack",
+      "level": 59
+    }
+  ]
+}

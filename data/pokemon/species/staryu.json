@@ -1,0 +1,55 @@
+{
+  "id": 120,
+  "species_id": "staryu",
+  "showdown_id": "staryu",
+  "name": "Staryu",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 45,
+    "def": 55,
+    "spa": 70,
+    "spd": 55,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "illuminate",
+    "hidden": "analytic"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 17
+    },
+    {
+      "move": "harden",
+      "level": 22
+    },
+    {
+      "move": "recover",
+      "level": 27
+    },
+    {
+      "move": "swift",
+      "level": 32
+    },
+    {
+      "move": "minimize",
+      "level": 37
+    },
+    {
+      "move": "light-screen",
+      "level": 42
+    },
+    {
+      "move": "hydro-pump",
+      "level": 47
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": 597,
+  "species_id": "ferroseed",
+  "showdown_id": "ferroseed",
+  "name": "Ferroseed",
+  "types": [
+    "grass",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 44,
+    "atk": 50,
+    "def": 91,
+    "spa": 24,
+    "spd": 86,
+    "spe": 10
+  },
+  "abilities": {
+    "primary": "iron-barbs"
+  },
+  "level_up_moves": [
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "rollout",
+      "level": 6
+    },
+    {
+      "move": "curse",
+      "level": 9
+    },
+    {
+      "move": "metal-claw",
+      "level": 14
+    },
+    {
+      "move": "pin-missile",
+      "level": 18
+    },
+    {
+      "move": "gyro-ball",
+      "level": 21
+    },
+    {
+      "move": "iron-defense",
+      "level": 26
+    },
+    {
+      "move": "mirror-shot",
+      "level": 30
+    },
+    {
+      "move": "ingrain",
+      "level": 35
+    },
+    {
+      "move": "self-destruct",
+      "level": 38
+    },
+    {
+      "move": "iron-head",
+      "level": 43
+    },
+    {
+      "move": "payback",
+      "level": 47
+    },
+    {
+      "move": "flash-cannon",
+      "level": 52
+    },
+    {
+      "move": "explosion",
+      "level": 55
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "id": 544,
+  "species_id": "whirlipede",
+  "showdown_id": "whirlipede",
+  "name": "Whirlipede",
+  "types": [
+    "bug",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 55,
+    "def": 99,
+    "spa": 40,
+    "spd": 79,
+    "spe": 47
+  },
+  "abilities": {
+    "primary": "poison-point",
+    "hidden": "speed-boost"
+  },
+  "level_up_moves": [
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "rollout",
+      "level": 1
+    },
+    {
+      "move": "screech",
+      "level": 1
+    },
+    {
+      "move": "pursuit",
+      "level": 12
+    },
+    {
+      "move": "protect",
+      "level": 15
+    },
+    {
+      "move": "poison-tail",
+      "level": 19
+    },
+    {
+      "move": "iron-defense",
+      "level": 22
+    },
+    {
+      "move": "bug-bite",
+      "level": 23
+    },
+    {
+      "move": "venoshock",
+      "level": 28
+    },
+    {
+      "move": "agility",
+      "level": 32
+    },
+    {
+      "move": "steamroller",
+      "level": 37
+    },
+    {
+      "move": "toxic",
+      "level": 41
+    },
+    {
+      "move": "rock-climb",
+      "level": 46
+    },
+    {
+      "move": "double-edge",
+      "level": 50
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": 675,
+  "species_id": "pangoro",
+  "showdown_id": "pangoro",
+  "name": "Pangoro",
+  "types": [
+    "fighting",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 124,
+    "def": 78,
+    "spa": 69,
+    "spd": 71,
+    "spe": 58
+  },
+  "abilities": {
+    "primary": "iron-fist",
+    "hidden": "scrappy"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "hammer-arm",
+      "level": 1
+    },
+    {
+      "move": "entrainment",
+      "level": 1
+    },
+    {
+      "move": "arm-thrust",
+      "level": 7
+    },
+    {
+      "move": "work-up",
+      "level": 10
+    },
+    {
+      "move": "karate-chop",
+      "level": 12
+    },
+    {
+      "move": "comet-punch",
+      "level": 15
+    },
+    {
+      "move": "slash",
+      "level": 20
+    },
+    {
+      "move": "circle-throw",
+      "level": 25
+    },
+    {
+      "move": "vital-throw",
+      "level": 27
+    },
+    {
+      "move": "body-slam",
+      "level": 35
+    },
+    {
+      "move": "crunch",
+      "level": 42
+    },
+    {
+      "move": "parting-shot",
+      "level": 48
+    },
+    {
+      "move": "sky-uppercut",
+      "level": 52
+    },
+    {
+      "move": "taunt",
+      "level": 65
+    },
+    {
+      "move": "low-sweep",
+      "level": 70
+    }
+  ]
+}
