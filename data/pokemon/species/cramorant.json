@@ -1,0 +1,75 @@
+{
+  "id": 845,
+  "species_id": "cramorant",
+  "showdown_id": "cramorant",
+  "name": "Cramorant",
+  "types": [
+    "flying",
+    "water"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 55,
+    "spa": 85,
+    "spd": 95,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "gulp-missile"
+  },
+  "level_up_moves": [
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "stockpile",
+      "level": 1
+    },
+    {
+      "move": "spit-up",
+      "level": 1
+    },
+    {
+      "move": "swallow",
+      "level": 1
+    },
+    {
+      "move": "belch",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 7
+    },
+    {
+      "move": "fury-attack",
+      "level": 14
+    },
+    {
+      "move": "pluck",
+      "level": 21
+    },
+    {
+      "move": "dive",
+      "level": 28
+    },
+    {
+      "move": "drill-peck",
+      "level": 35
+    },
+    {
+      "move": "amnesia",
+      "level": 42
+    },
+    {
+      "move": "thrash",
+      "level": 49
+    },
+    {
+      "move": "hydro-pump",
+      "level": 56
+    }
+  ]
+}

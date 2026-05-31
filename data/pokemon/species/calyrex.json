@@ -1,0 +1,91 @@
+{
+  "id": 898,
+  "species_id": "calyrex",
+  "showdown_id": "calyrex",
+  "name": "Calyrex",
+  "types": [
+    "psychic",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 80,
+    "def": 80,
+    "spa": 80,
+    "spd": 80,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "unnerve"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "mega-drain",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "life-dew",
+      "level": 8
+    },
+    {
+      "move": "giga-drain",
+      "level": 16
+    },
+    {
+      "move": "psyshock",
+      "level": 24
+    },
+    {
+      "move": "helping-hand",
+      "level": 32
+    },
+    {
+      "move": "aromatherapy",
+      "level": 40
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 40
+    },
+    {
+      "move": "psychic-terrain",
+      "level": 40
+    },
+    {
+      "move": "energy-ball",
+      "level": 48
+    },
+    {
+      "move": "psychic",
+      "level": 56
+    },
+    {
+      "move": "leech-seed",
+      "level": 64
+    },
+    {
+      "move": "heal-pulse",
+      "level": 72
+    },
+    {
+      "move": "solar-beam",
+      "level": 80
+    },
+    {
+      "move": "future-sight",
+      "level": 88
+    }
+  ]
+}

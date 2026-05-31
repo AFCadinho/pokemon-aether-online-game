@@ -1,0 +1,80 @@
+{
+  "id": 769,
+  "species_id": "sandygast",
+  "showdown_id": "sandygast",
+  "name": "Sandygast",
+  "types": [
+    "ghost",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 55,
+    "def": 80,
+    "spa": 70,
+    "spd": 45,
+    "spe": 15
+  },
+  "abilities": {
+    "primary": "water-compaction",
+    "hidden": "sand-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 5
+    },
+    {
+      "move": "sand-attack",
+      "level": 9
+    },
+    {
+      "move": "sand-tomb",
+      "level": 10
+    },
+    {
+      "move": "mega-drain",
+      "level": 15
+    },
+    {
+      "move": "bulldoze",
+      "level": 23
+    },
+    {
+      "move": "hypnosis",
+      "level": 27
+    },
+    {
+      "move": "iron-defense",
+      "level": 32
+    },
+    {
+      "move": "giga-drain",
+      "level": 35
+    },
+    {
+      "move": "shadow-ball",
+      "level": 41
+    },
+    {
+      "move": "earth-power",
+      "level": 45
+    },
+    {
+      "move": "shore-up",
+      "level": 50
+    },
+    {
+      "move": "sandstorm",
+      "level": 54
+    }
+  ]
+}

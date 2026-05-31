@@ -1,0 +1,80 @@
+{
+  "id": 834,
+  "species_id": "drednaw",
+  "showdown_id": "drednaw",
+  "name": "Drednaw",
+  "types": [
+    "water",
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 115,
+    "def": 90,
+    "spa": 48,
+    "spd": 68,
+    "spe": 74
+  },
+  "abilities": {
+    "primary": "strong-jaw",
+    "hidden": "swift-swim"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 1
+    },
+    {
+      "move": "crunch",
+      "level": 1
+    },
+    {
+      "move": "rock-tomb",
+      "level": 1
+    },
+    {
+      "move": "rock-polish",
+      "level": 1
+    },
+    {
+      "move": "razor-shell",
+      "level": 1
+    },
+    {
+      "move": "headbutt",
+      "level": 21
+    },
+    {
+      "move": "counter",
+      "level": 30
+    },
+    {
+      "move": "jaw-lock",
+      "level": 39
+    },
+    {
+      "move": "liquidation",
+      "level": 48
+    },
+    {
+      "move": "body-slam",
+      "level": 57
+    },
+    {
+      "move": "head-smash",
+      "level": 66
+    }
+  ]
+}

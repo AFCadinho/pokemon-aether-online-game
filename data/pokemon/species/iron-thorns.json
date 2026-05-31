@@ -1,0 +1,91 @@
+{
+  "id": 995,
+  "species_id": "iron-thorns",
+  "showdown_id": "ironthorns",
+  "name": "Iron Thorns",
+  "types": [
+    "rock",
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 134,
+    "def": 110,
+    "spa": 70,
+    "spd": 84,
+    "spe": 72
+  },
+  "abilities": {
+    "primary": "quark-drive"
+  },
+  "level_up_moves": [
+    {
+      "move": "fire-fang",
+      "level": 1
+    },
+    {
+      "move": "ice-fang",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "rock-throw",
+      "level": 1
+    },
+    {
+      "move": "thunder-fang",
+      "level": 1
+    },
+    {
+      "move": "screech",
+      "level": 7
+    },
+    {
+      "move": "rock-tomb",
+      "level": 21
+    },
+    {
+      "move": "bite",
+      "level": 28
+    },
+    {
+      "move": "charge",
+      "level": 35
+    },
+    {
+      "move": "rock-slide",
+      "level": 42
+    },
+    {
+      "move": "sandstorm",
+      "level": 49
+    },
+    {
+      "move": "wild-charge",
+      "level": 56
+    },
+    {
+      "move": "pin-missile",
+      "level": 63
+    },
+    {
+      "move": "earthquake",
+      "level": 70
+    },
+    {
+      "move": "stealth-rock",
+      "level": 77
+    },
+    {
+      "move": "stone-edge",
+      "level": 84
+    },
+    {
+      "move": "giga-impact",
+      "level": 91
+    }
+  ]
+}

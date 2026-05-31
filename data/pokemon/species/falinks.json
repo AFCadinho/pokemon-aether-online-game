@@ -1,0 +1,79 @@
+{
+  "id": 870,
+  "species_id": "falinks",
+  "showdown_id": "falinks",
+  "name": "Falinks",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 100,
+    "def": 100,
+    "spa": 70,
+    "spd": 60,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "battle-armor",
+    "hidden": "defiant"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 1
+    },
+    {
+      "move": "rock-smash",
+      "level": 5
+    },
+    {
+      "move": "focus-energy",
+      "level": 10
+    },
+    {
+      "move": "headbutt",
+      "level": 15
+    },
+    {
+      "move": "bulk-up",
+      "level": 20
+    },
+    {
+      "move": "endure",
+      "level": 25
+    },
+    {
+      "move": "reversal",
+      "level": 30
+    },
+    {
+      "move": "first-impression",
+      "level": 35
+    },
+    {
+      "move": "no-retreat",
+      "level": 40
+    },
+    {
+      "move": "iron-defense",
+      "level": 45
+    },
+    {
+      "move": "close-combat",
+      "level": 50
+    },
+    {
+      "move": "megahorn",
+      "level": 55
+    },
+    {
+      "move": "counter",
+      "level": 60
+    }
+  ]
+}

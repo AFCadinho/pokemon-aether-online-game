@@ -1,0 +1,80 @@
+{
+  "id": 732,
+  "species_id": "trumbeak",
+  "showdown_id": "trumbeak",
+  "name": "Trumbeak",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 85,
+    "def": 50,
+    "spa": 40,
+    "spd": 50,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "keen-eye",
+    "hidden": "pickup"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "rock-smash",
+      "level": 1
+    },
+    {
+      "move": "rock-blast",
+      "level": 1
+    },
+    {
+      "move": "echoed-voice",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 13
+    },
+    {
+      "move": "pluck",
+      "level": 16
+    },
+    {
+      "move": "roost",
+      "level": 21
+    },
+    {
+      "move": "fury-attack",
+      "level": 24
+    },
+    {
+      "move": "screech",
+      "level": 29
+    },
+    {
+      "move": "drill-peck",
+      "level": 32
+    },
+    {
+      "move": "bullet-seed",
+      "level": 37
+    },
+    {
+      "move": "feather-dance",
+      "level": 40
+    },
+    {
+      "move": "hyper-voice",
+      "level": 45
+    }
+  ]
+}

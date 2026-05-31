@@ -1,0 +1,76 @@
+{
+  "id": 976,
+  "species_id": "veluza",
+  "showdown_id": "veluza",
+  "name": "Veluza",
+  "types": [
+    "water",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 102,
+    "def": 73,
+    "spa": 78,
+    "spd": 65,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "mold-breaker",
+    "hidden": "sharpness"
+  },
+  "level_up_moves": [
+    {
+      "move": "aqua-jet",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "pluck",
+      "level": 7
+    },
+    {
+      "move": "water-pulse",
+      "level": 11
+    },
+    {
+      "move": "focus-energy",
+      "level": 15
+    },
+    {
+      "move": "slash",
+      "level": 20
+    },
+    {
+      "move": "aqua-cutter",
+      "level": 25
+    },
+    {
+      "move": "fillet-away",
+      "level": 30
+    },
+    {
+      "move": "night-slash",
+      "level": 35
+    },
+    {
+      "move": "psycho-cut",
+      "level": 40
+    },
+    {
+      "move": "liquidation",
+      "level": 45
+    },
+    {
+      "move": "crunch",
+      "level": 50
+    },
+    {
+      "move": "final-gambit",
+      "level": 55
+    }
+  ]
+}

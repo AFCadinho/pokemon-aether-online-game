@@ -1,0 +1,111 @@
+{
+  "id": 799,
+  "species_id": "guzzlord",
+  "showdown_id": "guzzlord",
+  "name": "Guzzlord",
+  "types": [
+    "dark",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 223,
+    "atk": 101,
+    "def": 53,
+    "spa": 97,
+    "spd": 53,
+    "spe": 43
+  },
+  "abilities": {
+    "primary": "beast-boost"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "dragon-rage",
+      "level": 1
+    },
+    {
+      "move": "stockpile",
+      "level": 1
+    },
+    {
+      "move": "swallow",
+      "level": 1
+    },
+    {
+      "move": "wide-guard",
+      "level": 1
+    },
+    {
+      "move": "dragon-tail",
+      "level": 1
+    },
+    {
+      "move": "belch",
+      "level": 1
+    },
+    {
+      "move": "stomp",
+      "level": 7
+    },
+    {
+      "move": "knock-off",
+      "level": 10
+    },
+    {
+      "move": "brutal-swing",
+      "level": 13
+    },
+    {
+      "move": "steamroller",
+      "level": 19
+    },
+    {
+      "move": "stomping-tantrum",
+      "level": 20
+    },
+    {
+      "move": "iron-tail",
+      "level": 29
+    },
+    {
+      "move": "crunch",
+      "level": 30
+    },
+    {
+      "move": "body-slam",
+      "level": 35
+    },
+    {
+      "move": "gastro-acid",
+      "level": 40
+    },
+    {
+      "move": "hammer-arm",
+      "level": 43
+    },
+    {
+      "move": "thrash",
+      "level": 47
+    },
+    {
+      "move": "heavy-slam",
+      "level": 50
+    },
+    {
+      "move": "dragon-rush",
+      "level": 55
+    },
+    {
+      "move": "wring-out",
+      "level": 67
+    },
+    {
+      "move": "giga-impact",
+      "level": 70
+    }
+  ]
+}

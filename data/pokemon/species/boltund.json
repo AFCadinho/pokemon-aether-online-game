@@ -1,0 +1,75 @@
+{
+  "id": 836,
+  "species_id": "boltund",
+  "showdown_id": "boltund",
+  "name": "Boltund",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 69,
+    "atk": 90,
+    "def": 60,
+    "spa": 90,
+    "spd": 60,
+    "spe": 121
+  },
+  "abilities": {
+    "primary": "strong-jaw",
+    "hidden": "competitive"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "electrify",
+      "level": 1
+    },
+    {
+      "move": "nuzzle",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 15
+    },
+    {
+      "move": "spark",
+      "level": 20
+    },
+    {
+      "move": "charm",
+      "level": 28
+    },
+    {
+      "move": "crunch",
+      "level": 34
+    },
+    {
+      "move": "charge",
+      "level": 41
+    },
+    {
+      "move": "wild-charge",
+      "level": 48
+    },
+    {
+      "move": "play-rough",
+      "level": 55
+    },
+    {
+      "move": "electric-terrain",
+      "level": 62
+    }
+  ]
+}

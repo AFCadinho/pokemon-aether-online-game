@@ -1,0 +1,87 @@
+{
+  "id": 985,
+  "species_id": "scream-tail",
+  "showdown_id": "screamtail",
+  "name": "Scream Tail",
+  "types": [
+    "fairy",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 115,
+    "atk": 65,
+    "def": 99,
+    "spa": 65,
+    "spd": 115,
+    "spe": 111
+  },
+  "abilities": {
+    "primary": "protosynthesis"
+  },
+  "level_up_moves": [
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "sing",
+      "level": 1
+    },
+    {
+      "move": "howl",
+      "level": 7
+    },
+    {
+      "move": "noble-roar",
+      "level": 14
+    },
+    {
+      "move": "bite",
+      "level": 21
+    },
+    {
+      "move": "body-slam",
+      "level": 28
+    },
+    {
+      "move": "rest",
+      "level": 35
+    },
+    {
+      "move": "play-rough",
+      "level": 42
+    },
+    {
+      "move": "hyper-voice",
+      "level": 49
+    },
+    {
+      "move": "psychic-fangs",
+      "level": 56
+    },
+    {
+      "move": "crunch",
+      "level": 63
+    },
+    {
+      "move": "wish",
+      "level": 70
+    },
+    {
+      "move": "gyro-ball",
+      "level": 77
+    },
+    {
+      "move": "perish-song",
+      "level": 84
+    },
+    {
+      "move": "boomburst",
+      "level": 91
+    }
+  ]
+}

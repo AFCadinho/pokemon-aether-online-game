@@ -1,0 +1,104 @@
+{
+  "id": 905,
+  "species_id": "enamorus",
+  "showdown_id": "enamorus",
+  "name": "Enamorus",
+  "types": [
+    "fairy",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 74,
+    "atk": 115,
+    "def": 70,
+    "spa": 135,
+    "spd": 80,
+    "spe": 106
+  },
+  "abilities": {
+    "primary": "cute-charm",
+    "hidden": "contrary"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "fairy-wind",
+      "level": 1
+    },
+    {
+      "move": "torment",
+      "level": 5
+    },
+    {
+      "move": "bite",
+      "level": 7
+    },
+    {
+      "move": "flatter",
+      "level": 10
+    },
+    {
+      "move": "twister",
+      "level": 11
+    },
+    {
+      "move": "draining-kiss",
+      "level": 14
+    },
+    {
+      "move": "iron-defense",
+      "level": 22
+    },
+    {
+      "move": "imprison",
+      "level": 30
+    },
+    {
+      "move": "extrasensory",
+      "level": 31
+    },
+    {
+      "move": "mystical-fire",
+      "level": 35
+    },
+    {
+      "move": "dazzling-gleam",
+      "level": 40
+    },
+    {
+      "move": "crunch",
+      "level": 41
+    },
+    {
+      "move": "moonblast",
+      "level": 47
+    },
+    {
+      "move": "uproar",
+      "level": 50
+    },
+    {
+      "move": "springtide-storm",
+      "level": 52
+    },
+    {
+      "move": "superpower",
+      "level": 55
+    },
+    {
+      "move": "healing-wish",
+      "level": 60
+    },
+    {
+      "move": "outrage",
+      "level": 70
+    }
+  ]
+}

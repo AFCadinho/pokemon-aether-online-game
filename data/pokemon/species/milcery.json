@@ -1,0 +1,75 @@
+{
+  "id": 868,
+  "species_id": "milcery",
+  "showdown_id": "milcery",
+  "name": "Milcery",
+  "types": [
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 40,
+    "def": 40,
+    "spa": 50,
+    "spd": 61,
+    "spe": 34
+  },
+  "abilities": {
+    "primary": "sweet-veil",
+    "hidden": "aroma-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "aromatic-mist",
+      "level": 1
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 5
+    },
+    {
+      "move": "sweet-scent",
+      "level": 10
+    },
+    {
+      "move": "draining-kiss",
+      "level": 15
+    },
+    {
+      "move": "charm",
+      "level": 20
+    },
+    {
+      "move": "aromatherapy",
+      "level": 20
+    },
+    {
+      "move": "attract",
+      "level": 25
+    },
+    {
+      "move": "acid-armor",
+      "level": 30
+    },
+    {
+      "move": "dazzling-gleam",
+      "level": 35
+    },
+    {
+      "move": "recover",
+      "level": 40
+    },
+    {
+      "move": "misty-terrain",
+      "level": 45
+    },
+    {
+      "move": "entrainment",
+      "level": 50
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": 770,
+  "species_id": "palossand",
+  "showdown_id": "palossand",
+  "name": "Palossand",
+  "types": [
+    "ghost",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 75,
+    "def": 110,
+    "spa": 100,
+    "spd": 75,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "water-compaction",
+    "hidden": "sand-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "sand-tomb",
+      "level": 1
+    },
+    {
+      "move": "mega-drain",
+      "level": 15
+    },
+    {
+      "move": "bulldoze",
+      "level": 23
+    },
+    {
+      "move": "hypnosis",
+      "level": 27
+    },
+    {
+      "move": "iron-defense",
+      "level": 32
+    },
+    {
+      "move": "giga-drain",
+      "level": 35
+    },
+    {
+      "move": "shadow-ball",
+      "level": 41
+    },
+    {
+      "move": "earth-power",
+      "level": 47
+    },
+    {
+      "move": "shore-up",
+      "level": 54
+    },
+    {
+      "move": "sandstorm",
+      "level": 60
+    }
+  ]
+}

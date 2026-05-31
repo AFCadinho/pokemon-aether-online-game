@@ -1,0 +1,104 @@
+{
+  "id": 787,
+  "species_id": "tapu-bulu",
+  "showdown_id": "tapubulu",
+  "name": "Tapu Bulu",
+  "types": [
+    "grass",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 130,
+    "def": 115,
+    "spa": 85,
+    "spd": 95,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "grassy-surge",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "whirlwind",
+      "level": 1
+    },
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "mean-look",
+      "level": 1
+    },
+    {
+      "move": "rock-smash",
+      "level": 1
+    },
+    {
+      "move": "superpower",
+      "level": 1
+    },
+    {
+      "move": "wood-hammer",
+      "level": 1
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 1
+    },
+    {
+      "move": "leafage",
+      "level": 1
+    },
+    {
+      "move": "horn-attack",
+      "level": 8
+    },
+    {
+      "move": "giga-drain",
+      "level": 14
+    },
+    {
+      "move": "leech-seed",
+      "level": 15
+    },
+    {
+      "move": "mega-drain",
+      "level": 20
+    },
+    {
+      "move": "scary-face",
+      "level": 20
+    },
+    {
+      "move": "horn-leech",
+      "level": 32
+    },
+    {
+      "move": "rototiller",
+      "level": 38
+    },
+    {
+      "move": "natures-madness",
+      "level": 43
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 45
+    },
+    {
+      "move": "megahorn",
+      "level": 53
+    },
+    {
+      "move": "skull-bash",
+      "level": 58
+    }
+  ]
+}

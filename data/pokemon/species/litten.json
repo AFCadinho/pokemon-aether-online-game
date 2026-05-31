@@ -1,0 +1,87 @@
+{
+  "id": 725,
+  "species_id": "litten",
+  "showdown_id": "litten",
+  "name": "Litten",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 65,
+    "def": 40,
+    "spa": 60,
+    "spd": 40,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "intimidate"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "lick",
+      "level": 6
+    },
+    {
+      "move": "roar",
+      "level": 9
+    },
+    {
+      "move": "leer",
+      "level": 11
+    },
+    {
+      "move": "fury-swipes",
+      "level": 12
+    },
+    {
+      "move": "fire-fang",
+      "level": 14
+    },
+    {
+      "move": "bite",
+      "level": 15
+    },
+    {
+      "move": "double-kick",
+      "level": 16
+    },
+    {
+      "move": "scary-face",
+      "level": 24
+    },
+    {
+      "move": "swagger",
+      "level": 25
+    },
+    {
+      "move": "flamethrower",
+      "level": 30
+    },
+    {
+      "move": "thrash",
+      "level": 32
+    },
+    {
+      "move": "flare-blitz",
+      "level": 36
+    },
+    {
+      "move": "outrage",
+      "level": 46
+    }
+  ]
+}

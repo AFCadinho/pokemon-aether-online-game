@@ -1,0 +1,95 @@
+{
+  "id": 865,
+  "species_id": "sirfetchd",
+  "showdown_id": "sirfetchd",
+  "name": "Sirfetchd",
+  "types": [
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 62,
+    "atk": 135,
+    "def": 95,
+    "spa": 68,
+    "spd": 82,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "steadfast",
+    "hidden": "scrappy"
+  },
+  "level_up_moves": [
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "fury-cutter",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "first-impression",
+      "level": 1
+    },
+    {
+      "move": "rock-smash",
+      "level": 15
+    },
+    {
+      "move": "brutal-swing",
+      "level": 20
+    },
+    {
+      "move": "detect",
+      "level": 25
+    },
+    {
+      "move": "knock-off",
+      "level": 30
+    },
+    {
+      "move": "defog",
+      "level": 35
+    },
+    {
+      "move": "brick-break",
+      "level": 40
+    },
+    {
+      "move": "swords-dance",
+      "level": 45
+    },
+    {
+      "move": "slam",
+      "level": 50
+    },
+    {
+      "move": "leaf-blade",
+      "level": 55
+    },
+    {
+      "move": "final-gambit",
+      "level": 60
+    },
+    {
+      "move": "brave-bird",
+      "level": 65
+    },
+    {
+      "move": "meteor-assault",
+      "level": 70
+    }
+  ]
+}

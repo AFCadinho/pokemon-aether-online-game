@@ -1,0 +1,95 @@
+{
+  "id": 791,
+  "species_id": "solgaleo",
+  "showdown_id": "solgaleo",
+  "name": "Solgaleo",
+  "types": [
+    "psychic",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 137,
+    "atk": 137,
+    "def": 107,
+    "spa": 113,
+    "spd": 89,
+    "spe": 97
+  },
+  "abilities": {
+    "primary": "full-metal-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "teleport",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 1
+    },
+    {
+      "move": "cosmic-power",
+      "level": 1
+    },
+    {
+      "move": "wake-up-slap",
+      "level": 1
+    },
+    {
+      "move": "noble-roar",
+      "level": 1
+    },
+    {
+      "move": "sunsteel-strike",
+      "level": 1
+    },
+    {
+      "move": "iron-head",
+      "level": 7
+    },
+    {
+      "move": "metal-sound",
+      "level": 13
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 19
+    },
+    {
+      "move": "flash-cannon",
+      "level": 23
+    },
+    {
+      "move": "morning-sun",
+      "level": 31
+    },
+    {
+      "move": "crunch",
+      "level": 37
+    },
+    {
+      "move": "metal-burst",
+      "level": 43
+    },
+    {
+      "move": "solar-beam",
+      "level": 47
+    },
+    {
+      "move": "wild-charge",
+      "level": 56
+    },
+    {
+      "move": "flare-blitz",
+      "level": 61
+    },
+    {
+      "move": "wide-guard",
+      "level": 67
+    },
+    {
+      "move": "giga-impact",
+      "level": 73
+    }
+  ]
+}

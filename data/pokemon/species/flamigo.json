@@ -1,0 +1,84 @@
+{
+  "id": 973,
+  "species_id": "flamigo",
+  "showdown_id": "flamigo",
+  "name": "Flamigo",
+  "types": [
+    "flying",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 82,
+    "atk": 115,
+    "def": 74,
+    "spa": 75,
+    "spd": 64,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "scrappy",
+    "hidden": "costar"
+  },
+  "level_up_moves": [
+    {
+      "move": "copycat",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "double-kick",
+      "level": 5
+    },
+    {
+      "move": "detect",
+      "level": 9
+    },
+    {
+      "move": "wing-attack",
+      "level": 12
+    },
+    {
+      "move": "focus-energy",
+      "level": 15
+    },
+    {
+      "move": "low-kick",
+      "level": 18
+    },
+    {
+      "move": "feint",
+      "level": 21
+    },
+    {
+      "move": "payback",
+      "level": 27
+    },
+    {
+      "move": "roost",
+      "level": 31
+    },
+    {
+      "move": "air-slash",
+      "level": 35
+    },
+    {
+      "move": "mega-kick",
+      "level": 39
+    },
+    {
+      "move": "wide-guard",
+      "level": 44
+    },
+    {
+      "move": "throat-chop",
+      "level": 48
+    },
+    {
+      "move": "brave-bird",
+      "level": 54
+    }
+  ]
+}

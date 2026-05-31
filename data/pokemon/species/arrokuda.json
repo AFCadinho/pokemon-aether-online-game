@@ -1,0 +1,67 @@
+{
+  "id": 846,
+  "species_id": "arrokuda",
+  "showdown_id": "arrokuda",
+  "name": "Arrokuda",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 41,
+    "atk": 63,
+    "def": 40,
+    "spa": 40,
+    "spd": 30,
+    "spe": 66
+  },
+  "abilities": {
+    "primary": "swift-swim",
+    "hidden": "propeller-tail"
+  },
+  "level_up_moves": [
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "aqua-jet",
+      "level": 1
+    },
+    {
+      "move": "fury-attack",
+      "level": 6
+    },
+    {
+      "move": "bite",
+      "level": 12
+    },
+    {
+      "move": "agility",
+      "level": 18
+    },
+    {
+      "move": "dive",
+      "level": 24
+    },
+    {
+      "move": "focus-energy",
+      "level": 30
+    },
+    {
+      "move": "laser-focus",
+      "level": 30
+    },
+    {
+      "move": "crunch",
+      "level": 36
+    },
+    {
+      "move": "liquidation",
+      "level": 42
+    },
+    {
+      "move": "double-edge",
+      "level": 48
+    }
+  ]
+}

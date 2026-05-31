@@ -1,0 +1,32 @@
+{
+  "id": 840,
+  "species_id": "applin",
+  "showdown_id": "applin",
+  "name": "Applin",
+  "types": [
+    "grass",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 40,
+    "def": 80,
+    "spa": 40,
+    "spd": 40,
+    "spe": 20
+  },
+  "abilities": {
+    "primary": "ripen",
+    "hidden": "bulletproof"
+  },
+  "level_up_moves": [
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    }
+  ]
+}

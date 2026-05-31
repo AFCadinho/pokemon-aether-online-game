@@ -1,0 +1,112 @@
+{
+  "id": 901,
+  "species_id": "ursaluna",
+  "showdown_id": "ursaluna",
+  "name": "Ursaluna",
+  "types": [
+    "ground",
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 130,
+    "atk": 140,
+    "def": 105,
+    "spa": 45,
+    "spd": 80,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "guts",
+    "hidden": "unnerve"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "fake-tears",
+      "level": 1
+    },
+    {
+      "move": "covet",
+      "level": 1
+    },
+    {
+      "move": "baby-doll-eyes",
+      "level": 6
+    },
+    {
+      "move": "fury-swipes",
+      "level": 8
+    },
+    {
+      "move": "bulldoze",
+      "level": 11
+    },
+    {
+      "move": "payback",
+      "level": 13
+    },
+    {
+      "move": "sweet-scent",
+      "level": 17
+    },
+    {
+      "move": "slash",
+      "level": 18
+    },
+    {
+      "move": "play-rough",
+      "level": 25
+    },
+    {
+      "move": "play-nice",
+      "level": 25
+    },
+    {
+      "move": "high-horsepower",
+      "level": 34
+    },
+    {
+      "move": "scary-face",
+      "level": 35
+    },
+    {
+      "move": "rest",
+      "level": 41
+    },
+    {
+      "move": "snore",
+      "level": 41
+    },
+    {
+      "move": "double-edge",
+      "level": 43
+    },
+    {
+      "move": "headlong-rush",
+      "level": 43
+    },
+    {
+      "move": "thrash",
+      "level": 56
+    },
+    {
+      "move": "hammer-arm",
+      "level": 64
+    }
+  ]
+}

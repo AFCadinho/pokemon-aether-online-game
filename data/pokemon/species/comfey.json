@@ -1,0 +1,107 @@
+{
+  "id": 764,
+  "species_id": "comfey",
+  "showdown_id": "comfey",
+  "name": "Comfey",
+  "types": [
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 51,
+    "atk": 52,
+    "def": 90,
+    "spa": 82,
+    "spd": 110,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "flower-veil",
+    "hidden": "natural-cure"
+  },
+  "level_up_moves": [
+    {
+      "move": "vine-whip",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "flower-shield",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 4
+    },
+    {
+      "move": "draining-kiss",
+      "level": 7
+    },
+    {
+      "move": "magical-leaf",
+      "level": 10
+    },
+    {
+      "move": "charm",
+      "level": 12
+    },
+    {
+      "move": "synthesis",
+      "level": 18
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 19
+    },
+    {
+      "move": "natural-gift",
+      "level": 22
+    },
+    {
+      "move": "grass-knot",
+      "level": 24
+    },
+    {
+      "move": "petal-blizzard",
+      "level": 25
+    },
+    {
+      "move": "floral-healing",
+      "level": 30
+    },
+    {
+      "move": "sweet-scent",
+      "level": 31
+    },
+    {
+      "move": "bind",
+      "level": 36
+    },
+    {
+      "move": "aromatherapy",
+      "level": 36
+    },
+    {
+      "move": "play-rough",
+      "level": 39
+    },
+    {
+      "move": "petal-dance",
+      "level": 40
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 46
+    }
+  ]
+}

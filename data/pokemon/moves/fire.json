@@ -1,0 +1,42 @@
+{
+  "ember": {
+    "id": "ember",
+    "name": "Ember",
+    "type": "fire",
+    "category": "special",
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0,
+    "base_power": 40
+  },
+  "flamethrower": {
+    "id": "flamethrower",
+    "name": "Flamethrower",
+    "type": "fire",
+    "category": "special",
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "base_power": 90
+  },
+  "flare-blitz": {
+    "id": "flare-blitz",
+    "name": "Flare Blitz",
+    "type": "fire",
+    "category": "physical",
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "base_power": 120
+  },
+  "sunny-day": {
+    "id": "sunny-day",
+    "name": "Sunny Day",
+    "type": "fire",
+    "category": "status",
+    "accuracy": null,
+    "pp": 5,
+    "priority": 0,
+    "base_power": null
+  }
+}

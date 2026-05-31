@@ -1,0 +1,40 @@
+{
+  "id": 825,
+  "species_id": "dottler",
+  "showdown_id": "dottler",
+  "name": "Dottler",
+  "types": [
+    "bug",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 35,
+    "def": 80,
+    "spa": 50,
+    "spd": 90,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "swarm",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "light-screen",
+      "level": 1
+    },
+    {
+      "move": "reflect",
+      "level": 1
+    },
+    {
+      "move": "struggle-bug",
+      "level": 1
+    }
+  ]
+}

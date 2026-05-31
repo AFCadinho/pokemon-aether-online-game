@@ -1,0 +1,95 @@
+{
+  "id": 949,
+  "species_id": "toedscruel",
+  "showdown_id": "toedscruel",
+  "name": "Toedscruel",
+  "types": [
+    "ground",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 70,
+    "def": 65,
+    "spa": 80,
+    "spd": 120,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "mycelium-might"
+  },
+  "level_up_moves": [
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "reflect-type",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 4
+    },
+    {
+      "move": "poison-powder",
+      "level": 8
+    },
+    {
+      "move": "stun-spore",
+      "level": 8
+    },
+    {
+      "move": "supersonic",
+      "level": 12
+    },
+    {
+      "move": "tackle",
+      "level": 15
+    },
+    {
+      "move": "mega-drain",
+      "level": 16
+    },
+    {
+      "move": "screech",
+      "level": 20
+    },
+    {
+      "move": "mud-shot",
+      "level": 24
+    },
+    {
+      "move": "hex",
+      "level": 28
+    },
+    {
+      "move": "seed-bomb",
+      "level": 34
+    },
+    {
+      "move": "spore",
+      "level": 40
+    },
+    {
+      "move": "growth",
+      "level": 44
+    },
+    {
+      "move": "giga-drain",
+      "level": 48
+    },
+    {
+      "move": "earth-power",
+      "level": 54
+    },
+    {
+      "move": "power-whip",
+      "level": 58
+    }
+  ]
+}

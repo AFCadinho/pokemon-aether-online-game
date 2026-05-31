@@ -1,0 +1,79 @@
+{
+  "id": 968,
+  "species_id": "orthworm",
+  "showdown_id": "orthworm",
+  "name": "Orthworm",
+  "types": [
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 145,
+    "spa": 60,
+    "spd": 55,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "earth-eater",
+    "hidden": "sand-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 7
+    },
+    {
+      "move": "smack-down",
+      "level": 12
+    },
+    {
+      "move": "bulldoze",
+      "level": 16
+    },
+    {
+      "move": "iron-head",
+      "level": 21
+    },
+    {
+      "move": "take-down",
+      "level": 26
+    },
+    {
+      "move": "dig",
+      "level": 30
+    },
+    {
+      "move": "sandstorm",
+      "level": 34
+    },
+    {
+      "move": "iron-defense",
+      "level": 38
+    },
+    {
+      "move": "iron-tail",
+      "level": 43
+    },
+    {
+      "move": "earthquake",
+      "level": 47
+    },
+    {
+      "move": "shed-tail",
+      "level": 52
+    }
+  ]
+}

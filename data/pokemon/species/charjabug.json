@@ -1,0 +1,79 @@
+{
+  "id": 737,
+  "species_id": "charjabug",
+  "showdown_id": "charjabug",
+  "name": "Charjabug",
+  "types": [
+    "bug",
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 57,
+    "atk": 82,
+    "def": 95,
+    "spa": 55,
+    "spd": 75,
+    "spe": 36
+  },
+  "abilities": {
+    "primary": "battery"
+  },
+  "level_up_moves": [
+    {
+      "move": "vice-grip",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "charge",
+      "level": 1
+    },
+    {
+      "move": "bug-bite",
+      "level": 1
+    },
+    {
+      "move": "spark",
+      "level": 16
+    },
+    {
+      "move": "acrobatics",
+      "level": 19
+    },
+    {
+      "move": "crunch",
+      "level": 25
+    },
+    {
+      "move": "sticky-web",
+      "level": 29
+    },
+    {
+      "move": "x-scissor",
+      "level": 31
+    },
+    {
+      "move": "dig",
+      "level": 37
+    },
+    {
+      "move": "discharge",
+      "level": 43
+    },
+    {
+      "move": "iron-defense",
+      "level": 49
+    }
+  ]
+}

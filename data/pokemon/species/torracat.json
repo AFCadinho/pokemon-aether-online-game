@@ -1,0 +1,87 @@
+{
+  "id": 726,
+  "species_id": "torracat",
+  "showdown_id": "torracat",
+  "name": "Torracat",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 85,
+    "def": 50,
+    "spa": 80,
+    "spd": 50,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "intimidate"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 9
+    },
+    {
+      "move": "leer",
+      "level": 11
+    },
+    {
+      "move": "fury-swipes",
+      "level": 12
+    },
+    {
+      "move": "fire-fang",
+      "level": 14
+    },
+    {
+      "move": "bite",
+      "level": 15
+    },
+    {
+      "move": "double-kick",
+      "level": 16
+    },
+    {
+      "move": "swagger",
+      "level": 28
+    },
+    {
+      "move": "scary-face",
+      "level": 30
+    },
+    {
+      "move": "thrash",
+      "level": 37
+    },
+    {
+      "move": "flamethrower",
+      "level": 40
+    },
+    {
+      "move": "flare-blitz",
+      "level": 50
+    },
+    {
+      "move": "outrage",
+      "level": 55
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "id": 786,
+  "species_id": "tapu-lele",
+  "showdown_id": "tapulele",
+  "name": "Tapu Lele",
+  "types": [
+    "psychic",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 75,
+    "spa": 130,
+    "spd": 115,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "psychic-surge",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "mean-look",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "aromatherapy",
+      "level": 1
+    },
+    {
+      "move": "draining-kiss",
+      "level": 1
+    },
+    {
+      "move": "aromatic-mist",
+      "level": 1
+    },
+    {
+      "move": "psychic-terrain",
+      "level": 1
+    },
+    {
+      "move": "psywave",
+      "level": 8
+    },
+    {
+      "move": "psybeam",
+      "level": 14
+    },
+    {
+      "move": "sweet-scent",
+      "level": 20
+    },
+    {
+      "move": "flatter",
+      "level": 25
+    },
+    {
+      "move": "skill-swap",
+      "level": 26
+    },
+    {
+      "move": "psyshock",
+      "level": 32
+    },
+    {
+      "move": "tickle",
+      "level": 38
+    },
+    {
+      "move": "extrasensory",
+      "level": 40
+    },
+    {
+      "move": "natures-madness",
+      "level": 43
+    },
+    {
+      "move": "moonblast",
+      "level": 58
+    }
+  ]
+}

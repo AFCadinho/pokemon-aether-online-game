@@ -1,0 +1,87 @@
+{
+  "id": 729,
+  "species_id": "brionne",
+  "showdown_id": "brionne",
+  "name": "Brionne",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 69,
+    "def": 69,
+    "spa": 91,
+    "spd": 81,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "liquid-voice"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "disarming-voice",
+      "level": 1
+    },
+    {
+      "move": "aqua-jet",
+      "level": 9
+    },
+    {
+      "move": "baby-doll-eyes",
+      "level": 11
+    },
+    {
+      "move": "icy-wind",
+      "level": 15
+    },
+    {
+      "move": "encore",
+      "level": 19
+    },
+    {
+      "move": "sing",
+      "level": 20
+    },
+    {
+      "move": "bubble-beam",
+      "level": 24
+    },
+    {
+      "move": "double-slap",
+      "level": 33
+    },
+    {
+      "move": "misty-terrain",
+      "level": 35
+    },
+    {
+      "move": "hyper-voice",
+      "level": 37
+    },
+    {
+      "move": "moonblast",
+      "level": 42
+    },
+    {
+      "move": "captivate",
+      "level": 46
+    },
+    {
+      "move": "hydro-pump",
+      "level": 50
+    }
+  ]
+}

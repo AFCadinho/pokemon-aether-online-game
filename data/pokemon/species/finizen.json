@@ -1,0 +1,74 @@
+{
+  "id": 963,
+  "species_id": "finizen",
+  "showdown_id": "finizen",
+  "name": "Finizen",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 45,
+    "def": 40,
+    "spa": 45,
+    "spd": 40,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "water-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 7
+    },
+    {
+      "move": "focus-energy",
+      "level": 10
+    },
+    {
+      "move": "aqua-jet",
+      "level": 13
+    },
+    {
+      "move": "double-hit",
+      "level": 17
+    },
+    {
+      "move": "dive",
+      "level": 21
+    },
+    {
+      "move": "charm",
+      "level": 25
+    },
+    {
+      "move": "acrobatics",
+      "level": 29
+    },
+    {
+      "move": "encore",
+      "level": 34
+    },
+    {
+      "move": "aqua-tail",
+      "level": 39
+    },
+    {
+      "move": "mist",
+      "level": 44
+    },
+    {
+      "move": "hydro-pump",
+      "level": 50
+    }
+  ]
+}

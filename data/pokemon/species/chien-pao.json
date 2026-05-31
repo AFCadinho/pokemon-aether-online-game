@@ -1,0 +1,99 @@
+{
+  "id": 1002,
+  "species_id": "chien-pao",
+  "showdown_id": "chienpao",
+  "name": "Chien-Pao",
+  "types": [
+    "dark",
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 120,
+    "def": 80,
+    "spa": 90,
+    "spd": 65,
+    "spe": 135
+  },
+  "abilities": {
+    "primary": "sword-of-ruin"
+  },
+  "level_up_moves": [
+    {
+      "move": "mean-look",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "spite",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 5
+    },
+    {
+      "move": "payback",
+      "level": 10
+    },
+    {
+      "move": "haze",
+      "level": 15
+    },
+    {
+      "move": "mist",
+      "level": 15
+    },
+    {
+      "move": "ice-shard",
+      "level": 20
+    },
+    {
+      "move": "swords-dance",
+      "level": 25
+    },
+    {
+      "move": "snowscape",
+      "level": 30
+    },
+    {
+      "move": "night-slash",
+      "level": 35
+    },
+    {
+      "move": "dark-pulse",
+      "level": 40
+    },
+    {
+      "move": "icicle-crash",
+      "level": 45
+    },
+    {
+      "move": "ruination",
+      "level": 50
+    },
+    {
+      "move": "sucker-punch",
+      "level": 55
+    },
+    {
+      "move": "sacred-sword",
+      "level": 60
+    },
+    {
+      "move": "recover",
+      "level": 65
+    },
+    {
+      "move": "throat-chop",
+      "level": 70
+    },
+    {
+      "move": "sheer-cold",
+      "level": 75
+    }
+  ]
+}

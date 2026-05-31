@@ -1,0 +1,74 @@
+{
+  "id": 874,
+  "species_id": "stonjourner",
+  "showdown_id": "stonjourner",
+  "name": "Stonjourner",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 125,
+    "def": 135,
+    "spa": 20,
+    "spd": 20,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "power-spot"
+  },
+  "level_up_moves": [
+    {
+      "move": "rock-throw",
+      "level": 1
+    },
+    {
+      "move": "block",
+      "level": 1
+    },
+    {
+      "move": "rock-polish",
+      "level": 6
+    },
+    {
+      "move": "rock-tomb",
+      "level": 12
+    },
+    {
+      "move": "gravity",
+      "level": 18
+    },
+    {
+      "move": "stomp",
+      "level": 24
+    },
+    {
+      "move": "stealth-rock",
+      "level": 30
+    },
+    {
+      "move": "rock-slide",
+      "level": 36
+    },
+    {
+      "move": "body-slam",
+      "level": 42
+    },
+    {
+      "move": "wide-guard",
+      "level": 48
+    },
+    {
+      "move": "heavy-slam",
+      "level": 54
+    },
+    {
+      "move": "stone-edge",
+      "level": 60
+    },
+    {
+      "move": "mega-kick",
+      "level": 66
+    }
+  ]
+}

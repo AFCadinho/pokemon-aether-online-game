@@ -1,0 +1,83 @@
+{
+  "id": 975,
+  "species_id": "cetitan",
+  "showdown_id": "cetitan",
+  "name": "Cetitan",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 170,
+    "atk": 113,
+    "def": 65,
+    "spa": 45,
+    "spd": 55,
+    "spe": 73
+  },
+  "abilities": {
+    "primary": "thick-fat",
+    "hidden": "sheer-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 6
+    },
+    {
+      "move": "echoed-voice",
+      "level": 9
+    },
+    {
+      "move": "ice-shard",
+      "level": 12
+    },
+    {
+      "move": "rest",
+      "level": 15
+    },
+    {
+      "move": "take-down",
+      "level": 19
+    },
+    {
+      "move": "flail",
+      "level": 25
+    },
+    {
+      "move": "avalanche",
+      "level": 27
+    },
+    {
+      "move": "bounce",
+      "level": 31
+    },
+    {
+      "move": "body-slam",
+      "level": 36
+    },
+    {
+      "move": "amnesia",
+      "level": 40
+    },
+    {
+      "move": "ice-spinner",
+      "level": 44
+    },
+    {
+      "move": "double-edge",
+      "level": 49
+    },
+    {
+      "move": "blizzard",
+      "level": 53
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": 890,
+  "species_id": "eternatus",
+  "showdown_id": "eternatus",
+  "name": "Eternatus",
+  "types": [
+    "poison",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 140,
+    "atk": 85,
+    "def": 95,
+    "spa": 145,
+    "spd": 95,
+    "spe": 130
+  },
+  "abilities": {
+    "primary": "pressure"
+  },
+  "level_up_moves": [
+    {
+      "move": "agility",
+      "level": 1
+    },
+    {
+      "move": "confuse-ray",
+      "level": 1
+    },
+    {
+      "move": "poison-tail",
+      "level": 1
+    },
+    {
+      "move": "dragon-tail",
+      "level": 1
+    },
+    {
+      "move": "toxic",
+      "level": 8
+    },
+    {
+      "move": "venoshock",
+      "level": 16
+    },
+    {
+      "move": "dragon-dance",
+      "level": 24
+    },
+    {
+      "move": "cross-poison",
+      "level": 32
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 40
+    },
+    {
+      "move": "flamethrower",
+      "level": 48
+    },
+    {
+      "move": "dynamax-cannon",
+      "level": 56
+    },
+    {
+      "move": "cosmic-power",
+      "level": 64
+    },
+    {
+      "move": "recover",
+      "level": 72
+    },
+    {
+      "move": "hyper-beam",
+      "level": 80
+    },
+    {
+      "move": "outrage",
+      "level": 88
+    },
+    {
+      "move": "eternabeam",
+      "level": 88
+    }
+  ]
+}

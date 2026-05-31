@@ -1,0 +1,63 @@
+{
+  "id": 953,
+  "species_id": "rellor",
+  "showdown_id": "rellor",
+  "name": "Rellor",
+  "types": [
+    "bug"
+  ],
+  "base_stats": {
+    "hp": 41,
+    "atk": 50,
+    "def": 60,
+    "spa": 31,
+    "spd": 58,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "compound-eyes",
+    "hidden": "shed-skin"
+  },
+  "level_up_moves": [
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 4
+    },
+    {
+      "move": "struggle-bug",
+      "level": 7
+    },
+    {
+      "move": "rollout",
+      "level": 11
+    },
+    {
+      "move": "mud-shot",
+      "level": 15
+    },
+    {
+      "move": "bug-bite",
+      "level": 20
+    },
+    {
+      "move": "take-down",
+      "level": 24
+    },
+    {
+      "move": "dig",
+      "level": 29
+    },
+    {
+      "move": "lunge",
+      "level": 35
+    }
+  ]
+}

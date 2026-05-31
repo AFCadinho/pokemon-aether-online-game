@@ -1,0 +1,84 @@
+{
+  "id": 780,
+  "species_id": "drampa",
+  "showdown_id": "drampa",
+  "name": "Drampa",
+  "types": [
+    "normal",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 60,
+    "def": 85,
+    "spa": 135,
+    "spd": 91,
+    "spe": 36
+  },
+  "abilities": {
+    "primary": "berserk",
+    "hidden": "cloud-nine"
+  },
+  "level_up_moves": [
+    {
+      "move": "echoed-voice",
+      "level": 1
+    },
+    {
+      "move": "play-nice",
+      "level": 1
+    },
+    {
+      "move": "twister",
+      "level": 5
+    },
+    {
+      "move": "protect",
+      "level": 9
+    },
+    {
+      "move": "glare",
+      "level": 13
+    },
+    {
+      "move": "light-screen",
+      "level": 17
+    },
+    {
+      "move": "safeguard",
+      "level": 20
+    },
+    {
+      "move": "dragon-rage",
+      "level": 21
+    },
+    {
+      "move": "dragon-breath",
+      "level": 25
+    },
+    {
+      "move": "natural-gift",
+      "level": 25
+    },
+    {
+      "move": "extrasensory",
+      "level": 30
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 35
+    },
+    {
+      "move": "fly",
+      "level": 45
+    },
+    {
+      "move": "hyper-voice",
+      "level": 49
+    },
+    {
+      "move": "outrage",
+      "level": 53
+    }
+  ]
+}

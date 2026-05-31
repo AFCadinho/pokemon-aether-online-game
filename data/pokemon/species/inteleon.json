@@ -1,0 +1,79 @@
+{
+  "id": 818,
+  "species_id": "inteleon",
+  "showdown_id": "inteleon",
+  "name": "Inteleon",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 65,
+    "spa": 125,
+    "spd": 65,
+    "spe": 120
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "sniper"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "bind",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "acrobatics",
+      "level": 1
+    },
+    {
+      "move": "snipe-shot",
+      "level": 1
+    },
+    {
+      "move": "water-pulse",
+      "level": 12
+    },
+    {
+      "move": "tearful-look",
+      "level": 19
+    },
+    {
+      "move": "sucker-punch",
+      "level": 24
+    },
+    {
+      "move": "u-turn",
+      "level": 30
+    },
+    {
+      "move": "liquidation",
+      "level": 38
+    },
+    {
+      "move": "soak",
+      "level": 46
+    },
+    {
+      "move": "rain-dance",
+      "level": 54
+    },
+    {
+      "move": "hydro-pump",
+      "level": 62
+    }
+  ]
+}

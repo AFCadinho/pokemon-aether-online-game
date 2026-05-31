@@ -1,0 +1,88 @@
+{
+  "id": 957,
+  "species_id": "tinkatink",
+  "showdown_id": "tinkatink",
+  "name": "Tinkatink",
+  "types": [
+    "fairy",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 45,
+    "def": 45,
+    "spa": 35,
+    "spd": 64,
+    "spe": 58
+  },
+  "abilities": {
+    "primary": "mold-breaker",
+    "hidden": "pickpocket"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "fairy-wind",
+      "level": 1
+    },
+    {
+      "move": "baby-doll-eyes",
+      "level": 5
+    },
+    {
+      "move": "metal-claw",
+      "level": 8
+    },
+    {
+      "move": "covet",
+      "level": 11
+    },
+    {
+      "move": "rock-smash",
+      "level": 14
+    },
+    {
+      "move": "draining-kiss",
+      "level": 17
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 21
+    },
+    {
+      "move": "brutal-swing",
+      "level": 24
+    },
+    {
+      "move": "slam",
+      "level": 27
+    },
+    {
+      "move": "flash-cannon",
+      "level": 31
+    },
+    {
+      "move": "play-rough",
+      "level": 35
+    },
+    {
+      "move": "fake-out",
+      "level": 39
+    },
+    {
+      "move": "flatter",
+      "level": 43
+    },
+    {
+      "move": "skitter-smack",
+      "level": 47
+    },
+    {
+      "move": "knock-off",
+      "level": 52
+    }
+  ]
+}

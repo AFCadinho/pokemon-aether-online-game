@@ -129,11 +129,11 @@ func _update_move_slots() -> void:
 	if active_player_pokemon == null:
 		return
 	
-	var moves := battle_state.get_available_moves()
-	var slots := moves_grid.get_children()
+	var moves: Array = battle_state.get_available_moves()
+	var slots: Array[Node] = moves_grid.get_children()
 	
 	for idx in range(slots.size()):
-		var slot = slots[idx]
+		var slot: Node = slots[idx]
 		
 		if idx < moves.size():
 			slot.set_move_data(moves[idx])
@@ -141,9 +141,9 @@ func _update_move_slots() -> void:
 			slot.set_empty()
 
 func _update_party_slots() -> void:
-	var slots := party_grid.get_children()
+	var slots: Array[Node] = party_grid.get_children()
 	for idx in range(slots.size()):
-		var slot = slots[idx]
+		var slot: Node = slots[idx]
 		if idx < PlayerSave.party.size():
 			slot.set_pokemon(PlayerSave.party[idx])
 		else:
@@ -175,7 +175,7 @@ func _apply_api_response(response: Dictionary) -> bool:
 	battle_state.load_from_api_response(response)
 	return true
 	
-func _update_hud_panels():
+func _update_hud_panels() -> void:
 	player_hud_panel.set_pokemon_data(
 		battle_state.get_active_pokemon_species("p1"),
 		battle_state.get_active_pokemon_level("p1"),
@@ -189,4 +189,8 @@ func _update_hud_panels():
 		battle_state.get_active_pokemon_current_hp("p2"),
 		battle_state.get_active_pokemon_max_hp("p2"),
 	)
+	
+	player_hud_panel.set_team_data(battle_state.get_player_team("p1"))
+	enemy_hud_panel.set_team_data(battle_state.get_player_team("p2"))
+
 	

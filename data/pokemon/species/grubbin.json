@@ -1,0 +1,66 @@
+{
+  "id": 736,
+  "species_id": "grubbin",
+  "showdown_id": "grubbin",
+  "name": "Grubbin",
+  "types": [
+    "bug"
+  ],
+  "base_stats": {
+    "hp": 47,
+    "atk": 62,
+    "def": 45,
+    "spa": 55,
+    "spd": 45,
+    "spe": 46
+  },
+  "abilities": {
+    "primary": "swarm"
+  },
+  "level_up_moves": [
+    {
+      "move": "vice-grip",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 4
+    },
+    {
+      "move": "bite",
+      "level": 10
+    },
+    {
+      "move": "bug-bite",
+      "level": 10
+    },
+    {
+      "move": "spark",
+      "level": 16
+    },
+    {
+      "move": "acrobatics",
+      "level": 19
+    },
+    {
+      "move": "crunch",
+      "level": 22
+    },
+    {
+      "move": "x-scissor",
+      "level": 25
+    },
+    {
+      "move": "sticky-web",
+      "level": 25
+    },
+    {
+      "move": "dig",
+      "level": 28
+    }
+  ]
+}

@@ -3,9 +3,20 @@
 This folder contains local game data generated from external sources such as PokeAPI.
 
 - `species/`: one JSON file per Pokemon species.
-- `moves/`: one JSON file per move.
+- `moves/`: JSON files grouped by move type (e.g. `fire.json`, `water.json`).
 - `abilities/`: one JSON file per ability.
 - `types/`: one JSON file per type.
+
+Move entries inside type files follow:
+
+- `id`: move id
+- `name`: human-readable display name
+- `type`: move type
+- `category`: physical / special / status
+- `base_power`: base power (or `null` for status/non-damaging moves)
+- `accuracy`: accuracy value (`null` when not applicable)
+- `pp`: power points
+- `priority`: priority modifier
 
 File-IDs and payload IDs follow this convention:
 

@@ -1,0 +1,63 @@
+{
+  "id": 761,
+  "species_id": "bounsweet",
+  "showdown_id": "bounsweet",
+  "name": "Bounsweet",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 42,
+    "atk": 30,
+    "def": 38,
+    "spa": 30,
+    "spd": 38,
+    "spe": 32
+  },
+  "abilities": {
+    "primary": "leaf-guard",
+    "hidden": "sweet-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "splash",
+      "level": 1
+    },
+    {
+      "move": "play-nice",
+      "level": 4
+    },
+    {
+      "move": "rapid-spin",
+      "level": 8
+    },
+    {
+      "move": "razor-leaf",
+      "level": 12
+    },
+    {
+      "move": "sweet-scent",
+      "level": 16
+    },
+    {
+      "move": "magical-leaf",
+      "level": 20
+    },
+    {
+      "move": "flail",
+      "level": 24
+    },
+    {
+      "move": "teeter-dance",
+      "level": 25
+    },
+    {
+      "move": "aromatic-mist",
+      "level": 32
+    },
+    {
+      "move": "aromatherapy",
+      "level": 36
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": 882,
+  "species_id": "dracovish",
+  "showdown_id": "dracovish",
+  "name": "Dracovish",
+  "types": [
+    "water",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 90,
+    "def": 100,
+    "spa": 70,
+    "spd": 80,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "water-absorb",
+    "hidden": "sand-rush"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 7
+    },
+    {
+      "move": "brutal-swing",
+      "level": 14
+    },
+    {
+      "move": "ancient-power",
+      "level": 21
+    },
+    {
+      "move": "bite",
+      "level": 28
+    },
+    {
+      "move": "dragon-breath",
+      "level": 35
+    },
+    {
+      "move": "stomp",
+      "level": 42
+    },
+    {
+      "move": "super-fang",
+      "level": 49
+    },
+    {
+      "move": "crunch",
+      "level": 56
+    },
+    {
+      "move": "fishious-rend",
+      "level": 63
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 70
+    },
+    {
+      "move": "dragon-rush",
+      "level": 77
+    }
+  ]
+}

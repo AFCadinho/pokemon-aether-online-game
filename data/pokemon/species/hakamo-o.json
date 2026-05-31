@@ -1,0 +1,92 @@
+{
+  "id": 783,
+  "species_id": "hakamo-o",
+  "showdown_id": "hakamoo",
+  "name": "Hakamo O",
+  "types": [
+    "dragon",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 75,
+    "def": 90,
+    "spa": 65,
+    "spd": 70,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "bulletproof",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "bide",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 1
+    },
+    {
+      "move": "sky-uppercut",
+      "level": 1
+    },
+    {
+      "move": "autotomize",
+      "level": 1
+    },
+    {
+      "move": "dragon-tail",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 12
+    },
+    {
+      "move": "headbutt",
+      "level": 16
+    },
+    {
+      "move": "work-up",
+      "level": 20
+    },
+    {
+      "move": "screech",
+      "level": 24
+    },
+    {
+      "move": "iron-defense",
+      "level": 28
+    },
+    {
+      "move": "dragon-claw",
+      "level": 32
+    },
+    {
+      "move": "noble-roar",
+      "level": 38
+    },
+    {
+      "move": "dragon-dance",
+      "level": 44
+    },
+    {
+      "move": "outrage",
+      "level": 50
+    },
+    {
+      "move": "close-combat",
+      "level": 56
+    }
+  ]
+}

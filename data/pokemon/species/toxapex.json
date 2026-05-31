@@ -1,0 +1,84 @@
+{
+  "id": 748,
+  "species_id": "toxapex",
+  "showdown_id": "toxapex",
+  "name": "Toxapex",
+  "types": [
+    "poison",
+    "water"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 63,
+    "def": 152,
+    "spa": 53,
+    "spd": 142,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "merciless",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "toxic-spikes",
+      "level": 1
+    },
+    {
+      "move": "wide-guard",
+      "level": 1
+    },
+    {
+      "move": "baneful-bunker",
+      "level": 1
+    },
+    {
+      "move": "venoshock",
+      "level": 15
+    },
+    {
+      "move": "recover",
+      "level": 20
+    },
+    {
+      "move": "toxic",
+      "level": 21
+    },
+    {
+      "move": "pin-missile",
+      "level": 25
+    },
+    {
+      "move": "spike-cannon",
+      "level": 29
+    },
+    {
+      "move": "liquidation",
+      "level": 35
+    },
+    {
+      "move": "poison-jab",
+      "level": 37
+    },
+    {
+      "move": "acid-spray",
+      "level": 42
+    },
+    {
+      "move": "venom-drench",
+      "level": 42
+    }
+  ]
+}

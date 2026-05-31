@@ -1,0 +1,84 @@
+{
+  "id": 823,
+  "species_id": "corviknight",
+  "showdown_id": "corviknight",
+  "name": "Corviknight",
+  "types": [
+    "flying",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 98,
+    "atk": 87,
+    "def": 105,
+    "spa": 53,
+    "spd": 85,
+    "spe": 67
+  },
+  "abilities": {
+    "primary": "pressure",
+    "hidden": "mirror-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "screech",
+      "level": 1
+    },
+    {
+      "move": "steel-wing",
+      "level": 1
+    },
+    {
+      "move": "metal-sound",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "hone-claws",
+      "level": 1
+    },
+    {
+      "move": "power-trip",
+      "level": 1
+    },
+    {
+      "move": "fury-attack",
+      "level": 12
+    },
+    {
+      "move": "pluck",
+      "level": 16
+    },
+    {
+      "move": "taunt",
+      "level": 22
+    },
+    {
+      "move": "scary-face",
+      "level": 28
+    },
+    {
+      "move": "drill-peck",
+      "level": 34
+    },
+    {
+      "move": "swagger",
+      "level": 42
+    },
+    {
+      "move": "brave-bird",
+      "level": 50
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "id": 843,
+  "species_id": "silicobra",
+  "showdown_id": "silicobra",
+  "name": "Silicobra",
+  "types": [
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 52,
+    "atk": 57,
+    "def": 75,
+    "spa": 35,
+    "spd": 50,
+    "spe": 46
+  },
+  "abilities": {
+    "primary": "sand-spit",
+    "hidden": "sand-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "sand-attack",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "minimize",
+      "level": 5
+    },
+    {
+      "move": "brutal-swing",
+      "level": 10
+    },
+    {
+      "move": "bulldoze",
+      "level": 15
+    },
+    {
+      "move": "headbutt",
+      "level": 20
+    },
+    {
+      "move": "glare",
+      "level": 25
+    },
+    {
+      "move": "dig",
+      "level": 30
+    },
+    {
+      "move": "sandstorm",
+      "level": 35
+    },
+    {
+      "move": "slam",
+      "level": 40
+    },
+    {
+      "move": "coil",
+      "level": 45
+    },
+    {
+      "move": "sand-tomb",
+      "level": 50
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": 948,
+  "species_id": "toedscool",
+  "showdown_id": "toedscool",
+  "name": "Toedscool",
+  "types": [
+    "ground",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 40,
+    "def": 35,
+    "spa": 50,
+    "spd": 100,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "mycelium-might"
+  },
+  "level_up_moves": [
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "wrap",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 4
+    },
+    {
+      "move": "poison-powder",
+      "level": 8
+    },
+    {
+      "move": "stun-spore",
+      "level": 8
+    },
+    {
+      "move": "supersonic",
+      "level": 12
+    },
+    {
+      "move": "tackle",
+      "level": 15
+    },
+    {
+      "move": "mega-drain",
+      "level": 16
+    },
+    {
+      "move": "screech",
+      "level": 20
+    },
+    {
+      "move": "mud-shot",
+      "level": 24
+    },
+    {
+      "move": "hex",
+      "level": 28
+    },
+    {
+      "move": "seed-bomb",
+      "level": 32
+    },
+    {
+      "move": "spore",
+      "level": 36
+    },
+    {
+      "move": "growth",
+      "level": 40
+    },
+    {
+      "move": "giga-drain",
+      "level": 44
+    },
+    {
+      "move": "earth-power",
+      "level": 48
+    },
+    {
+      "move": "power-whip",
+      "level": 52
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": 997,
+  "species_id": "arctibax",
+  "showdown_id": "arctibax",
+  "name": "Arctibax",
+  "types": [
+    "dragon",
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 95,
+    "def": 66,
+    "spa": 45,
+    "spd": 65,
+    "spe": 62
+  },
+  "abilities": {
+    "primary": "thermal-exchange",
+    "hidden": "ice-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "dragon-tail",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 6
+    },
+    {
+      "move": "dragon-breath",
+      "level": 12
+    },
+    {
+      "move": "focus-energy",
+      "level": 18
+    },
+    {
+      "move": "bite",
+      "level": 24
+    },
+    {
+      "move": "ice-fang",
+      "level": 29
+    },
+    {
+      "move": "take-down",
+      "level": 40
+    },
+    {
+      "move": "ice-beam",
+      "level": 45
+    },
+    {
+      "move": "crunch",
+      "level": 50
+    },
+    {
+      "move": "icicle-crash",
+      "level": 55
+    }
+  ]
+}

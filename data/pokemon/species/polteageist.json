@@ -1,0 +1,87 @@
+{
+  "id": 855,
+  "species_id": "polteageist",
+  "showdown_id": "polteageist",
+  "name": "Polteageist",
+  "types": [
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 65,
+    "def": 65,
+    "spa": 134,
+    "spd": 114,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "weak-armor",
+    "hidden": "cursed-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "mega-drain",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "aromatic-mist",
+      "level": 1
+    },
+    {
+      "move": "strength-sap",
+      "level": 1
+    },
+    {
+      "move": "teatime",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 18
+    },
+    {
+      "move": "sucker-punch",
+      "level": 24
+    },
+    {
+      "move": "sweet-scent",
+      "level": 30
+    },
+    {
+      "move": "aromatherapy",
+      "level": 30
+    },
+    {
+      "move": "giga-drain",
+      "level": 36
+    },
+    {
+      "move": "nasty-plot",
+      "level": 42
+    },
+    {
+      "move": "shadow-ball",
+      "level": 48
+    },
+    {
+      "move": "memento",
+      "level": 54
+    },
+    {
+      "move": "shell-smash",
+      "level": 60
+    },
+    {
+      "move": "curse",
+      "level": 66
+    }
+  ]
+}

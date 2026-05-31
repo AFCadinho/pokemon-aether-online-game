@@ -1,0 +1,83 @@
+{
+  "id": 776,
+  "species_id": "turtonator",
+  "showdown_id": "turtonator",
+  "name": "Turtonator",
+  "types": [
+    "fire",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 78,
+    "def": 135,
+    "spa": 91,
+    "spd": 85,
+    "spe": 36
+  },
+  "abilities": {
+    "primary": "shell-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "smog",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 8
+    },
+    {
+      "move": "endure",
+      "level": 12
+    },
+    {
+      "move": "incinerate",
+      "level": 13
+    },
+    {
+      "move": "flail",
+      "level": 16
+    },
+    {
+      "move": "iron-defense",
+      "level": 24
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 28
+    },
+    {
+      "move": "flamethrower",
+      "level": 29
+    },
+    {
+      "move": "body-slam",
+      "level": 32
+    },
+    {
+      "move": "shell-smash",
+      "level": 37
+    },
+    {
+      "move": "shell-trap",
+      "level": 40
+    },
+    {
+      "move": "overheat",
+      "level": 48
+    },
+    {
+      "move": "explosion",
+      "level": 52
+    }
+  ]
+}

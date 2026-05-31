@@ -1,0 +1,124 @@
+{
+  "id": 849,
+  "species_id": "toxtricity",
+  "showdown_id": "toxtricity",
+  "name": "Toxtricity",
+  "types": [
+    "electric",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 98,
+    "def": 70,
+    "spa": 114,
+    "spd": 70,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "punk-rock",
+    "hidden": "technician"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "acid",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "flail",
+      "level": 1
+    },
+    {
+      "move": "spark",
+      "level": 1
+    },
+    {
+      "move": "acid-spray",
+      "level": 1
+    },
+    {
+      "move": "belch",
+      "level": 1
+    },
+    {
+      "move": "noble-roar",
+      "level": 1
+    },
+    {
+      "move": "eerie-impulse",
+      "level": 1
+    },
+    {
+      "move": "nuzzle",
+      "level": 1
+    },
+    {
+      "move": "tearful-look",
+      "level": 1
+    },
+    {
+      "move": "charge",
+      "level": 4
+    },
+    {
+      "move": "shock-wave",
+      "level": 8
+    },
+    {
+      "move": "scary-face",
+      "level": 12
+    },
+    {
+      "move": "taunt",
+      "level": 16
+    },
+    {
+      "move": "venoshock",
+      "level": 20
+    },
+    {
+      "move": "screech",
+      "level": 24
+    },
+    {
+      "move": "swagger",
+      "level": 28
+    },
+    {
+      "move": "toxic",
+      "level": 32
+    },
+    {
+      "move": "discharge",
+      "level": 36
+    },
+    {
+      "move": "poison-jab",
+      "level": 40
+    },
+    {
+      "move": "overdrive",
+      "level": 44
+    },
+    {
+      "move": "boomburst",
+      "level": 48
+    },
+    {
+      "move": "shift-gear",
+      "level": 52
+    }
+  ]
+}

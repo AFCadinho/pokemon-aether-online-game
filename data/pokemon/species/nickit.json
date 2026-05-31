@@ -1,0 +1,67 @@
+{
+  "id": 827,
+  "species_id": "nickit",
+  "showdown_id": "nickit",
+  "name": "Nickit",
+  "types": [
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 28,
+    "def": 28,
+    "spa": 47,
+    "spd": 52,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "run-away",
+    "hidden": "stakeout"
+  },
+  "level_up_moves": [
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "beat-up",
+      "level": 4
+    },
+    {
+      "move": "hone-claws",
+      "level": 8
+    },
+    {
+      "move": "snarl",
+      "level": 12
+    },
+    {
+      "move": "assurance",
+      "level": 16
+    },
+    {
+      "move": "nasty-plot",
+      "level": 20
+    },
+    {
+      "move": "sucker-punch",
+      "level": 24
+    },
+    {
+      "move": "night-slash",
+      "level": 28
+    },
+    {
+      "move": "tail-slap",
+      "level": 32
+    },
+    {
+      "move": "foul-play",
+      "level": 36
+    }
+  ]
+}

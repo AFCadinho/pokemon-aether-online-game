@@ -1,0 +1,116 @@
+{
+  "id": 722,
+  "species_id": "rowlet",
+  "showdown_id": "rowlet",
+  "name": "Rowlet",
+  "types": [
+    "grass",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 68,
+    "atk": 55,
+    "def": 55,
+    "spa": 50,
+    "spd": 50,
+    "spe": 42
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "long-reach"
+  },
+  "level_up_moves": [
+    {
+      "move": "gust",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leafage",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 6
+    },
+    {
+      "move": "peck",
+      "level": 8
+    },
+    {
+      "move": "roost",
+      "level": 11
+    },
+    {
+      "move": "shadow-sneak",
+      "level": 12
+    },
+    {
+      "move": "razor-leaf",
+      "level": 14
+    },
+    {
+      "move": "ominous-wind",
+      "level": 16
+    },
+    {
+      "move": "foresight",
+      "level": 18
+    },
+    {
+      "move": "synthesis",
+      "level": 18
+    },
+    {
+      "move": "aerial-ace",
+      "level": 18
+    },
+    {
+      "move": "magical-leaf",
+      "level": 21
+    },
+    {
+      "move": "pluck",
+      "level": 21
+    },
+    {
+      "move": "nasty-plot",
+      "level": 24
+    },
+    {
+      "move": "air-slash",
+      "level": 25
+    },
+    {
+      "move": "sucker-punch",
+      "level": 27
+    },
+    {
+      "move": "fury-attack",
+      "level": 29
+    },
+    {
+      "move": "leaf-blade",
+      "level": 30
+    },
+    {
+      "move": "feather-dance",
+      "level": 33
+    },
+    {
+      "move": "brave-bird",
+      "level": 36
+    },
+    {
+      "move": "leaf-storm",
+      "level": 43
+    }
+  ]
+}

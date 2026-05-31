@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://dydjcjdd5oypk"]
 
+[ext_resource type="Texture2D" uid="uid://buje7q327bjva" path="res://assets/sprites/pokemon/pokemon_home/Archaludon.png" id="1_1gxke"]
+[ext_resource type="Script" uid="uid://doavdeq4ctpcj" path="res://scripts/battle/battle_ui/pokemon_sheet_slot.gd" id="1_ho73d"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1x3g8"]
 bg_color = Color(0.22745098, 0.22745098, 0.22745098, 1)
 corner_radius_top_left = 4
@@ -16,14 +19,16 @@ corner_radius_bottom_left = 4
 
 [node name="PokemonSheetSlot" type="VBoxContainer" unique_id=145825142]
 theme_override_constants/separation = 0
+script = ExtResource("1_ho73d")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1989692088]
+[node name="PokemonIcon" type="TextureRect" parent="." unique_id=1989692088]
 custom_minimum_size = Vector2(42, 55)
 layout_mode = 2
+texture = ExtResource("1_1gxke")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ProgressBar" type="ProgressBar" parent="." unique_id=474668165]
+[node name="HpBar" type="ProgressBar" parent="." unique_id=474668165]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_1x3g8")

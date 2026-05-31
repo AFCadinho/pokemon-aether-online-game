@@ -1,0 +1,86 @@
+{
+  "id": 746,
+  "species_id": "wishiwashi",
+  "showdown_id": "wishiwashi",
+  "name": "Wishiwashi Solo",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 20,
+    "def": 20,
+    "spa": 25,
+    "spd": 25,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "schooling"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 4
+    },
+    {
+      "move": "beat-up",
+      "level": 8
+    },
+    {
+      "move": "feint-attack",
+      "level": 9
+    },
+    {
+      "move": "brine",
+      "level": 12
+    },
+    {
+      "move": "tearful-look",
+      "level": 16
+    },
+    {
+      "move": "aqua-ring",
+      "level": 17
+    },
+    {
+      "move": "dive",
+      "level": 20
+    },
+    {
+      "move": "soak",
+      "level": 24
+    },
+    {
+      "move": "take-down",
+      "level": 25
+    },
+    {
+      "move": "uproar",
+      "level": 28
+    },
+    {
+      "move": "aqua-tail",
+      "level": 32
+    },
+    {
+      "move": "endeavor",
+      "level": 40
+    },
+    {
+      "move": "double-edge",
+      "level": 41
+    },
+    {
+      "move": "hydro-pump",
+      "level": 44
+    }
+  ]
+}

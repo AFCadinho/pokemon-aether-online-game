@@ -1,0 +1,95 @@
+{
+  "id": 734,
+  "species_id": "yungoos",
+  "showdown_id": "yungoos",
+  "name": "Yungoos",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 48,
+    "atk": 70,
+    "def": 30,
+    "spa": 30,
+    "spd": 30,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "stakeout",
+    "hidden": "adaptability"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 3
+    },
+    {
+      "move": "pursuit",
+      "level": 7
+    },
+    {
+      "move": "payback",
+      "level": 7
+    },
+    {
+      "move": "sand-attack",
+      "level": 10
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 13
+    },
+    {
+      "move": "work-up",
+      "level": 13
+    },
+    {
+      "move": "bide",
+      "level": 16
+    },
+    {
+      "move": "bite",
+      "level": 19
+    },
+    {
+      "move": "mud-slap",
+      "level": 22
+    },
+    {
+      "move": "super-fang",
+      "level": 25
+    },
+    {
+      "move": "take-down",
+      "level": 28
+    },
+    {
+      "move": "scary-face",
+      "level": 31
+    },
+    {
+      "move": "crunch",
+      "level": 34
+    },
+    {
+      "move": "hyper-fang",
+      "level": 37
+    },
+    {
+      "move": "yawn",
+      "level": 37
+    },
+    {
+      "move": "thrash",
+      "level": 40
+    },
+    {
+      "move": "rest",
+      "level": 43
+    }
+  ]
+}

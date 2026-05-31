@@ -1,0 +1,88 @@
+{
+  "id": 998,
+  "species_id": "baxcalibur",
+  "showdown_id": "baxcalibur",
+  "name": "Baxcalibur",
+  "types": [
+    "dragon",
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 115,
+    "atk": 145,
+    "def": 92,
+    "spa": 75,
+    "spd": 86,
+    "spe": 87
+  },
+  "abilities": {
+    "primary": "thermal-exchange",
+    "hidden": "ice-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "breaking-swipe",
+      "level": 1
+    },
+    {
+      "move": "dragon-tail",
+      "level": 1
+    },
+    {
+      "move": "ice-shard",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "snowscape",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 6
+    },
+    {
+      "move": "dragon-breath",
+      "level": 12
+    },
+    {
+      "move": "focus-energy",
+      "level": 18
+    },
+    {
+      "move": "bite",
+      "level": 24
+    },
+    {
+      "move": "ice-fang",
+      "level": 29
+    },
+    {
+      "move": "dragon-claw",
+      "level": 35
+    },
+    {
+      "move": "take-down",
+      "level": 42
+    },
+    {
+      "move": "ice-beam",
+      "level": 48
+    },
+    {
+      "move": "crunch",
+      "level": 55
+    },
+    {
+      "move": "icicle-crash",
+      "level": 62
+    }
+  ]
+}

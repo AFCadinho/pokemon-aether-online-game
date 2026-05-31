@@ -1,0 +1,80 @@
+{
+  "id": 1016,
+  "species_id": "fezandipiti",
+  "showdown_id": "fezandipiti",
+  "name": "Fezandipiti",
+  "types": [
+    "poison",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 88,
+    "atk": 91,
+    "def": 82,
+    "spa": 70,
+    "spd": 125,
+    "spe": 99
+  },
+  "abilities": {
+    "primary": "toxic-chain",
+    "hidden": "technician"
+  },
+  "level_up_moves": [
+    {
+      "move": "disarming-voice",
+      "level": 1
+    },
+    {
+      "move": "double-kick",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "poison-gas",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 8
+    },
+    {
+      "move": "attract",
+      "level": 16
+    },
+    {
+      "move": "wing-attack",
+      "level": 24
+    },
+    {
+      "move": "cross-poison",
+      "level": 32
+    },
+    {
+      "move": "tail-slap",
+      "level": 40
+    },
+    {
+      "move": "beat-up",
+      "level": 48
+    },
+    {
+      "move": "flatter",
+      "level": 56
+    },
+    {
+      "move": "swagger",
+      "level": 56
+    },
+    {
+      "move": "roost",
+      "level": 64
+    },
+    {
+      "move": "moonblast",
+      "level": 72
+    }
+  ]
+}

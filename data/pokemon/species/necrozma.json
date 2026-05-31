@@ -1,0 +1,98 @@
+{
+  "id": 800,
+  "species_id": "necrozma",
+  "showdown_id": "necrozma",
+  "name": "Necrozma",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 97,
+    "atk": 107,
+    "def": 101,
+    "spa": 127,
+    "spd": 89,
+    "spe": 79
+  },
+  "abilities": {
+    "primary": "prism-armor"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 1
+    },
+    {
+      "move": "morning-sun",
+      "level": 1
+    },
+    {
+      "move": "moonlight",
+      "level": 1
+    },
+    {
+      "move": "gravity",
+      "level": 1
+    },
+    {
+      "move": "mirror-shot",
+      "level": 1
+    },
+    {
+      "move": "charge-beam",
+      "level": 1
+    },
+    {
+      "move": "slash",
+      "level": 7
+    },
+    {
+      "move": "stealth-rock",
+      "level": 8
+    },
+    {
+      "move": "stored-power",
+      "level": 13
+    },
+    {
+      "move": "rock-blast",
+      "level": 19
+    },
+    {
+      "move": "night-slash",
+      "level": 23
+    },
+    {
+      "move": "psycho-cut",
+      "level": 32
+    },
+    {
+      "move": "power-gem",
+      "level": 43
+    },
+    {
+      "move": "autotomize",
+      "level": 47
+    },
+    {
+      "move": "photon-geyser",
+      "level": 50
+    },
+    {
+      "move": "iron-defense",
+      "level": 56
+    },
+    {
+      "move": "wring-out",
+      "level": 67
+    },
+    {
+      "move": "prismatic-laser",
+      "level": 73
+    }
+  ]
+}

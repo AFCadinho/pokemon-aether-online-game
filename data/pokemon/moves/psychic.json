@@ -1,0 +1,12 @@
+{
+  "agility": {
+    "id": "agility",
+    "name": "Agility",
+    "type": "psychic",
+    "category": "status",
+    "accuracy": null,
+    "pp": 30,
+    "priority": 0,
+    "base_power": null
+  }
+}

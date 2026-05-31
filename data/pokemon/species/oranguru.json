@@ -1,0 +1,84 @@
+{
+  "id": 765,
+  "species_id": "oranguru",
+  "showdown_id": "oranguru",
+  "name": "Oranguru",
+  "types": [
+    "normal",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 60,
+    "def": 80,
+    "spa": 90,
+    "spd": 110,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "inner-focus",
+    "hidden": "symbiosis"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "taunt",
+      "level": 1
+    },
+    {
+      "move": "after-you",
+      "level": 4
+    },
+    {
+      "move": "calm-mind",
+      "level": 10
+    },
+    {
+      "move": "quash",
+      "level": 11
+    },
+    {
+      "move": "stored-power",
+      "level": 15
+    },
+    {
+      "move": "psych-up",
+      "level": 18
+    },
+    {
+      "move": "feint-attack",
+      "level": 22
+    },
+    {
+      "move": "nasty-plot",
+      "level": 25
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 29
+    },
+    {
+      "move": "instruct",
+      "level": 32
+    },
+    {
+      "move": "foul-play",
+      "level": 36
+    },
+    {
+      "move": "trick-room",
+      "level": 40
+    },
+    {
+      "move": "psychic",
+      "level": 43
+    },
+    {
+      "move": "future-sight",
+      "level": 46
+    }
+  ]
+}

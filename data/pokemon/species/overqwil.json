@@ -1,0 +1,116 @@
+{
+  "id": 904,
+  "species_id": "overqwil",
+  "showdown_id": "overqwil",
+  "name": "Overqwil",
+  "types": [
+    "dark",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 85,
+    "atk": 115,
+    "def": 95,
+    "spa": 65,
+    "spd": 65,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "poison-point",
+    "hidden": "intimidate"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "poison-sting",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 4
+    },
+    {
+      "move": "spikes",
+      "level": 5
+    },
+    {
+      "move": "bite",
+      "level": 8
+    },
+    {
+      "move": "pin-missile",
+      "level": 9
+    },
+    {
+      "move": "fell-stinger",
+      "level": 12
+    },
+    {
+      "move": "barb-barrage",
+      "level": 15
+    },
+    {
+      "move": "minimize",
+      "level": 16
+    },
+    {
+      "move": "water-pulse",
+      "level": 21
+    },
+    {
+      "move": "brine",
+      "level": 24
+    },
+    {
+      "move": "dark-pulse",
+      "level": 26
+    },
+    {
+      "move": "poison-jab",
+      "level": 29
+    },
+    {
+      "move": "toxic-spikes",
+      "level": 36
+    },
+    {
+      "move": "aqua-tail",
+      "level": 37
+    },
+    {
+      "move": "stockpile",
+      "level": 40
+    },
+    {
+      "move": "spit-up",
+      "level": 40
+    },
+    {
+      "move": "toxic",
+      "level": 44
+    },
+    {
+      "move": "double-edge",
+      "level": 47
+    },
+    {
+      "move": "crunch",
+      "level": 48
+    },
+    {
+      "move": "acupressure",
+      "level": 52
+    },
+    {
+      "move": "destiny-bond",
+      "level": 56
+    },
+    {
+      "move": "self-destruct",
+      "level": 57
+    }
+  ]
+}

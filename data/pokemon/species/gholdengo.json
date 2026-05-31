@@ -1,0 +1,71 @@
+{
+  "id": 1000,
+  "species_id": "gholdengo",
+  "showdown_id": "gholdengo",
+  "name": "Gholdengo",
+  "types": [
+    "steel",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 87,
+    "atk": 60,
+    "def": 95,
+    "spa": 133,
+    "spd": 91,
+    "spe": 84
+  },
+  "abilities": {
+    "primary": "good-as-gold"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "night-shade",
+      "level": 7
+    },
+    {
+      "move": "confuse-ray",
+      "level": 14
+    },
+    {
+      "move": "substitute",
+      "level": 21
+    },
+    {
+      "move": "metal-sound",
+      "level": 28
+    },
+    {
+      "move": "shadow-ball",
+      "level": 35
+    },
+    {
+      "move": "recover",
+      "level": 42
+    },
+    {
+      "move": "power-gem",
+      "level": 49
+    },
+    {
+      "move": "make-it-rain",
+      "level": 56
+    },
+    {
+      "move": "nasty-plot",
+      "level": 63
+    },
+    {
+      "move": "memento",
+      "level": 70
+    }
+  ]
+}

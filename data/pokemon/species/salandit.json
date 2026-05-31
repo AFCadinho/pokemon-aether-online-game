@@ -1,0 +1,92 @@
+{
+  "id": 757,
+  "species_id": "salandit",
+  "showdown_id": "salandit",
+  "name": "Salandit",
+  "types": [
+    "poison",
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 48,
+    "atk": 44,
+    "def": 40,
+    "spa": 71,
+    "spd": 40,
+    "spe": 77
+  },
+  "abilities": {
+    "primary": "corrosion",
+    "hidden": "oblivious"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "poison-gas",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 5
+    },
+    {
+      "move": "smog",
+      "level": 5
+    },
+    {
+      "move": "sweet-scent",
+      "level": 8
+    },
+    {
+      "move": "dragon-rage",
+      "level": 13
+    },
+    {
+      "move": "poison-fang",
+      "level": 15
+    },
+    {
+      "move": "double-slap",
+      "level": 21
+    },
+    {
+      "move": "flame-burst",
+      "level": 24
+    },
+    {
+      "move": "nasty-plot",
+      "level": 25
+    },
+    {
+      "move": "toxic",
+      "level": 29
+    },
+    {
+      "move": "incinerate",
+      "level": 30
+    },
+    {
+      "move": "venoshock",
+      "level": 35
+    },
+    {
+      "move": "flamethrower",
+      "level": 40
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 40
+    },
+    {
+      "move": "venom-drench",
+      "level": 45
+    },
+    {
+      "move": "endeavor",
+      "level": 55
+    }
+  ]
+}

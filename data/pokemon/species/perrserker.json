@@ -1,0 +1,87 @@
+{
+  "id": 863,
+  "species_id": "perrserker",
+  "showdown_id": "perrserker",
+  "name": "Perrserker",
+  "types": [
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 110,
+    "def": 100,
+    "spa": 50,
+    "spd": 60,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "battle-armor",
+    "hidden": "steely-spirit"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "fake-out",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "metal-burst",
+      "level": 1
+    },
+    {
+      "move": "iron-head",
+      "level": 1
+    },
+    {
+      "move": "hone-claws",
+      "level": 1
+    },
+    {
+      "move": "pay-day",
+      "level": 12
+    },
+    {
+      "move": "metal-claw",
+      "level": 16
+    },
+    {
+      "move": "taunt",
+      "level": 20
+    },
+    {
+      "move": "swagger",
+      "level": 24
+    },
+    {
+      "move": "fury-swipes",
+      "level": 31
+    },
+    {
+      "move": "screech",
+      "level": 36
+    },
+    {
+      "move": "slash",
+      "level": 42
+    },
+    {
+      "move": "metal-sound",
+      "level": 48
+    },
+    {
+      "move": "thrash",
+      "level": 54
+    }
+  ]
+}

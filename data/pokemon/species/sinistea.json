@@ -1,0 +1,75 @@
+{
+  "id": 854,
+  "species_id": "sinistea",
+  "showdown_id": "sinistea",
+  "name": "Sinistea",
+  "types": [
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 45,
+    "spa": 74,
+    "spd": 54,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "weak-armor",
+    "hidden": "cursed-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "aromatic-mist",
+      "level": 6
+    },
+    {
+      "move": "mega-drain",
+      "level": 12
+    },
+    {
+      "move": "protect",
+      "level": 18
+    },
+    {
+      "move": "sucker-punch",
+      "level": 24
+    },
+    {
+      "move": "sweet-scent",
+      "level": 30
+    },
+    {
+      "move": "aromatherapy",
+      "level": 30
+    },
+    {
+      "move": "giga-drain",
+      "level": 36
+    },
+    {
+      "move": "nasty-plot",
+      "level": 42
+    },
+    {
+      "move": "shadow-ball",
+      "level": 48
+    },
+    {
+      "move": "memento",
+      "level": 54
+    },
+    {
+      "move": "shell-smash",
+      "level": 60
+    }
+  ]
+}

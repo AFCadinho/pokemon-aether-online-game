@@ -1,0 +1,84 @@
+{
+  "id": 922,
+  "species_id": "pawmo",
+  "showdown_id": "pawmo",
+  "name": "Pawmo",
+  "types": [
+    "electric",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 75,
+    "def": 40,
+    "spa": 50,
+    "spd": 40,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "volt-absorb",
+    "hidden": "iron-fist"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 3
+    },
+    {
+      "move": "quick-attack",
+      "level": 6
+    },
+    {
+      "move": "charge",
+      "level": 8
+    },
+    {
+      "move": "nuzzle",
+      "level": 12
+    },
+    {
+      "move": "dig",
+      "level": 15
+    },
+    {
+      "move": "bite",
+      "level": 19
+    },
+    {
+      "move": "spark",
+      "level": 23
+    },
+    {
+      "move": "thunder-wave",
+      "level": 27
+    },
+    {
+      "move": "slam",
+      "level": 32
+    },
+    {
+      "move": "entrainment",
+      "level": 38
+    },
+    {
+      "move": "discharge",
+      "level": 42
+    },
+    {
+      "move": "agility",
+      "level": 46
+    },
+    {
+      "move": "wild-charge",
+      "level": 52
+    }
+  ]
+}

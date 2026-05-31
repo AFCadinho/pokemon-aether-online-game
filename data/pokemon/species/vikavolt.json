@@ -1,0 +1,107 @@
+{
+  "id": 738,
+  "species_id": "vikavolt",
+  "showdown_id": "vikavolt",
+  "name": "Vikavolt",
+  "types": [
+    "bug",
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 77,
+    "atk": 70,
+    "def": 90,
+    "spa": 145,
+    "spd": 75,
+    "spe": 43
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "vice-grip",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "thunderbolt",
+      "level": 1
+    },
+    {
+      "move": "dig",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "crunch",
+      "level": 1
+    },
+    {
+      "move": "charge",
+      "level": 1
+    },
+    {
+      "move": "iron-defense",
+      "level": 1
+    },
+    {
+      "move": "air-slash",
+      "level": 1
+    },
+    {
+      "move": "x-scissor",
+      "level": 1
+    },
+    {
+      "move": "discharge",
+      "level": 1
+    },
+    {
+      "move": "bug-bite",
+      "level": 1
+    },
+    {
+      "move": "spark",
+      "level": 16
+    },
+    {
+      "move": "acrobatics",
+      "level": 19
+    },
+    {
+      "move": "guillotine",
+      "level": 25
+    },
+    {
+      "move": "sticky-web",
+      "level": 29
+    },
+    {
+      "move": "bug-buzz",
+      "level": 31
+    },
+    {
+      "move": "zap-cannon",
+      "level": 41
+    },
+    {
+      "move": "agility",
+      "level": 49
+    },
+    {
+      "move": "fly",
+      "level": 50
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": 967,
+  "species_id": "cyclizar",
+  "showdown_id": "cyclizar",
+  "name": "Cyclizar",
+  "types": [
+    "dragon",
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 95,
+    "def": 65,
+    "spa": 85,
+    "spd": 65,
+    "spe": 121
+  },
+  "abilities": {
+    "primary": "shed-skin",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "rapid-spin",
+      "level": 7
+    },
+    {
+      "move": "taunt",
+      "level": 11
+    },
+    {
+      "move": "breaking-swipe",
+      "level": 14
+    },
+    {
+      "move": "quick-attack",
+      "level": 18
+    },
+    {
+      "move": "bite",
+      "level": 23
+    },
+    {
+      "move": "u-turn",
+      "level": 27
+    },
+    {
+      "move": "shed-tail",
+      "level": 31
+    },
+    {
+      "move": "dragon-claw",
+      "level": 36
+    },
+    {
+      "move": "shift-gear",
+      "level": 40
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 45
+    },
+    {
+      "move": "double-edge",
+      "level": 51
+    },
+    {
+      "move": "dragon-rush",
+      "level": 57
+    }
+  ]
+}

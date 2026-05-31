@@ -1,0 +1,75 @@
+{
+  "id": 1025,
+  "species_id": "pecharunt",
+  "showdown_id": "pecharunt",
+  "name": "Pecharunt",
+  "types": [
+    "poison",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 88,
+    "atk": 88,
+    "def": 160,
+    "spa": 88,
+    "spd": 88,
+    "spe": 88
+  },
+  "abilities": {
+    "primary": "poison-puppeteer"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "memento",
+      "level": 1
+    },
+    {
+      "move": "poison-gas",
+      "level": 1
+    },
+    {
+      "move": "smog",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 8
+    },
+    {
+      "move": "destiny-bond",
+      "level": 16
+    },
+    {
+      "move": "fake-tears",
+      "level": 24
+    },
+    {
+      "move": "parting-shot",
+      "level": 32
+    },
+    {
+      "move": "shadow-ball",
+      "level": 40
+    },
+    {
+      "move": "malignant-chain",
+      "level": 48
+    },
+    {
+      "move": "toxic",
+      "level": 56
+    },
+    {
+      "move": "nasty-plot",
+      "level": 64
+    },
+    {
+      "move": "recover",
+      "level": 72
+    }
+  ]
+}

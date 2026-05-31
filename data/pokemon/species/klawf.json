@@ -1,0 +1,79 @@
+{
+  "id": 950,
+  "species_id": "klawf",
+  "showdown_id": "klawf",
+  "name": "Klawf",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 100,
+    "def": 115,
+    "spa": 35,
+    "spd": 55,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "anger-shell",
+    "hidden": "regenerator"
+  },
+  "level_up_moves": [
+    {
+      "move": "rock-throw",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 6
+    },
+    {
+      "move": "rock-smash",
+      "level": 9
+    },
+    {
+      "move": "rock-tomb",
+      "level": 13
+    },
+    {
+      "move": "metal-claw",
+      "level": 17
+    },
+    {
+      "move": "protect",
+      "level": 21
+    },
+    {
+      "move": "rock-blast",
+      "level": 24
+    },
+    {
+      "move": "x-scissor",
+      "level": 29
+    },
+    {
+      "move": "swords-dance",
+      "level": 33
+    },
+    {
+      "move": "flail",
+      "level": 37
+    },
+    {
+      "move": "rock-slide",
+      "level": 42
+    },
+    {
+      "move": "high-horsepower",
+      "level": 47
+    },
+    {
+      "move": "iron-defense",
+      "level": 51
+    },
+    {
+      "move": "guillotine",
+      "level": 56
+    }
+  ]
+}

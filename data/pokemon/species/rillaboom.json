@@ -1,0 +1,87 @@
+{
+  "id": 812,
+  "species_id": "rillaboom",
+  "showdown_id": "rillaboom",
+  "name": "Rillaboom",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 125,
+    "def": 90,
+    "spa": 60,
+    "spd": 70,
+    "spe": 85
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "grassy-surge"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "taunt",
+      "level": 1
+    },
+    {
+      "move": "double-hit",
+      "level": 1
+    },
+    {
+      "move": "noble-roar",
+      "level": 1
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 1
+    },
+    {
+      "move": "drum-beating",
+      "level": 1
+    },
+    {
+      "move": "branch-poke",
+      "level": 1
+    },
+    {
+      "move": "razor-leaf",
+      "level": 12
+    },
+    {
+      "move": "screech",
+      "level": 19
+    },
+    {
+      "move": "knock-off",
+      "level": 24
+    },
+    {
+      "move": "slam",
+      "level": 30
+    },
+    {
+      "move": "uproar",
+      "level": 38
+    },
+    {
+      "move": "wood-hammer",
+      "level": 46
+    },
+    {
+      "move": "endeavor",
+      "level": 54
+    },
+    {
+      "move": "boomburst",
+      "level": 62
+    }
+  ]
+}

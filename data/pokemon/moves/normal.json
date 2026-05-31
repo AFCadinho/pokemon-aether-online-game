@@ -1,0 +1,382 @@
+{
+  "giga-impact": {
+    "id": "giga-impact",
+    "name": "Giga Impact",
+    "type": "normal",
+    "category": "physical",
+    "accuracy": 90,
+    "pp": 5,
+    "priority": 0,
+    "base_power": 150
+  },
+  "growl": {
+    "id": "growl",
+    "name": "Growl",
+    "type": "normal",
+    "category": "status",
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0,
+    "base_power": null
+  },
+  "screech": {
+    "id": "screech",
+    "type": "normal",
+    "name": "Screech",
+    "category": "status",
+    "accuracy": 85,
+    "pp": 40,
+    "priority": 0,
+    "base_power": null
+  },
+  "smokescreen": {
+    "id": "smokescreen",
+    "name": "Smokescreen",
+    "type": "normal",
+    "category": "status",
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0,
+    "base_power": null
+  },
+  "bide": {
+    "id": "bide",
+    "name": "Bide",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "bite": {
+    "id": "bite",
+    "name": "Bite",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "body-slam": {
+    "id": "body-slam",
+    "name": "Body Slam",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "double-edge": {
+    "id": "double-edge",
+    "name": "Double-edge",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "double-slap": {
+    "id": "double-slap",
+    "name": "Double-slap",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "double-team": {
+    "id": "double-team",
+    "name": "Double-team",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "defense-curl": {
+    "id": "defense-curl",
+    "name": "Defense Curl",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "feint-attack": {
+    "id": "feint-attack",
+    "name": "Feint-attack",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "focus-energy": {
+    "id": "focus-energy",
+    "name": "Focus Energy",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "headbutt": {
+    "id": "headbutt",
+    "name": "Headbutt",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "hyper-beam": {
+    "id": "hyper-beam",
+    "name": "Hyper Beam",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "hyper-fang": {
+    "id": "hyper-fang",
+    "name": "Hyper Fang",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "harden": {
+    "id": "harden",
+    "name": "Harden",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "leer": {
+    "id": "leer",
+    "name": "Leer",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "metronome": {
+    "id": "metronome",
+    "name": "Metronome",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "pay-day": {
+    "id": "pay-day",
+    "name": "Pay Day",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "quick-attack": {
+    "id": "quick-attack",
+    "name": "Quick Attack",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "rapid-spin": {
+    "id": "rapid-spin",
+    "name": "Rapid Spin",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "rest": {
+    "id": "rest",
+    "name": "Rest",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "roar": {
+    "id": "roar",
+    "name": "Roar",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "scratch": {
+    "id": "scratch",
+    "name": "Scratch",
+    "type": "normal",
+    "category": "physical",
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0,
+    "base_power": 40
+  },
+  "sing": {
+    "id": "sing",
+    "name": "Sing",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "slash": {
+    "id": "slash",
+    "name": "Slash",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "soft-boiled": {
+    "id": "soft-boiled",
+    "name": "Soft-boiled",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "splash": {
+    "id": "splash",
+    "name": "Splash",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "take-down": {
+    "id": "take-down",
+    "name": "Take-down",
+    "type": "normal",
+    "category": null,
+    "accuracy": 85,
+    "pp": 20,
+    "priority": 0,
+    "base_power": null
+  },
+  "tail-whip": {
+    "id": "tail-whip",
+    "name": "Tail Whip",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "tackle": {
+    "id": "tackle",
+    "name": "Tackle",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "withdraw": {
+    "id": "withdraw",
+    "name": "Withdraw",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "sand-attack": {
+    "id": "sand-attack",
+    "name": "Sand-attack",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "supersonic": {
+    "id": "supersonic",
+    "name": "Supersonic",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "mimic": {
+    "id": "mimic",
+    "name": "Mimic",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "sweet-scent": {
+    "id": "sweet-scent",
+    "name": "Sweet-scent",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  },
+  "pound": {
+    "id": "pound",
+    "name": "Pound",
+    "type": "normal",
+    "category": null,
+    "accuracy": null,
+    "pp": 0,
+    "priority": 0,
+    "base_power": null
+  }
+}

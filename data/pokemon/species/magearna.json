@@ -1,0 +1,127 @@
+{
+  "id": 801,
+  "species_id": "magearna",
+  "showdown_id": "magearna",
+  "name": "Magearna",
+  "types": [
+    "steel",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 95,
+    "def": 115,
+    "spa": 130,
+    "spd": 115,
+    "spe": 65
+  },
+  "abilities": {
+    "primary": "soul-heart"
+  },
+  "level_up_moves": [
+    {
+      "move": "sonic-boom",
+      "level": 1
+    },
+    {
+      "move": "psybeam",
+      "level": 1
+    },
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "gyro-ball",
+      "level": 1
+    },
+    {
+      "move": "iron-head",
+      "level": 1
+    },
+    {
+      "move": "shift-gear",
+      "level": 1
+    },
+    {
+      "move": "crafty-shield",
+      "level": 1
+    },
+    {
+      "move": "gear-up",
+      "level": 1
+    },
+    {
+      "move": "lucky-chant",
+      "level": 9
+    },
+    {
+      "move": "rollout",
+      "level": 12
+    },
+    {
+      "move": "aurora-beam",
+      "level": 17
+    },
+    {
+      "move": "iron-defense",
+      "level": 18
+    },
+    {
+      "move": "magnetic-flux",
+      "level": 24
+    },
+    {
+      "move": "mirror-shot",
+      "level": 25
+    },
+    {
+      "move": "mind-reader",
+      "level": 33
+    },
+    {
+      "move": "flash-cannon",
+      "level": 41
+    },
+    {
+      "move": "lock-on",
+      "level": 42
+    },
+    {
+      "move": "fleur-cannon",
+      "level": 49
+    },
+    {
+      "move": "trick",
+      "level": 54
+    },
+    {
+      "move": "pain-split",
+      "level": 65
+    },
+    {
+      "move": "aura-sphere",
+      "level": 66
+    },
+    {
+      "move": "synchronoise",
+      "level": 73
+    },
+    {
+      "move": "zap-cannon",
+      "level": 84
+    },
+    {
+      "move": "heart-swap",
+      "level": 89
+    },
+    {
+      "move": "trump-card",
+      "level": 97
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "id": 938,
+  "species_id": "tadbulb",
+  "showdown_id": "tadbulb",
+  "name": "Tadbulb",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 61,
+    "atk": 31,
+    "def": 41,
+    "spa": 59,
+    "spd": 35,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "own-tempo",
+    "hidden": "damp"
+  },
+  "level_up_moves": [
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 7
+    },
+    {
+      "move": "water-gun",
+      "level": 11
+    },
+    {
+      "move": "charge",
+      "level": 17
+    },
+    {
+      "move": "spark",
+      "level": 21
+    },
+    {
+      "move": "mud-shot",
+      "level": 24
+    },
+    {
+      "move": "flail",
+      "level": 25
+    },
+    {
+      "move": "discharge",
+      "level": 32
+    },
+    {
+      "move": "weather-ball",
+      "level": 36
+    },
+    {
+      "move": "electric-terrain",
+      "level": 40
+    },
+    {
+      "move": "sucker-punch",
+      "level": 45
+    },
+    {
+      "move": "zap-cannon",
+      "level": 50
+    }
+  ]
+}

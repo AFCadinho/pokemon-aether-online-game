@@ -1,0 +1,92 @@
+{
+  "id": 930,
+  "species_id": "arboliva",
+  "showdown_id": "arboliva",
+  "name": "Arboliva",
+  "types": [
+    "grass",
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 69,
+    "def": 90,
+    "spa": 125,
+    "spd": 109,
+    "spe": 39
+  },
+  "abilities": {
+    "primary": "seed-sower",
+    "hidden": "harvest"
+  },
+  "level_up_moves": [
+    {
+      "move": "mirror-coat",
+      "level": 1
+    },
+    {
+      "move": "safeguard",
+      "level": 1
+    },
+    {
+      "move": "sweet-scent",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 5
+    },
+    {
+      "move": "growth",
+      "level": 7
+    },
+    {
+      "move": "razor-leaf",
+      "level": 10
+    },
+    {
+      "move": "helping-hand",
+      "level": 13
+    },
+    {
+      "move": "flail",
+      "level": 16
+    },
+    {
+      "move": "mega-drain",
+      "level": 20
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 23
+    },
+    {
+      "move": "seed-bomb",
+      "level": 29
+    },
+    {
+      "move": "energy-ball",
+      "level": 34
+    },
+    {
+      "move": "leech-seed",
+      "level": 39
+    },
+    {
+      "move": "terrain-pulse",
+      "level": 46
+    },
+    {
+      "move": "petal-blizzard",
+      "level": 52
+    },
+    {
+      "move": "petal-dance",
+      "level": 58
+    }
+  ]
+}

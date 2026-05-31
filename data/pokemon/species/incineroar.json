@@ -1,0 +1,104 @@
+{
+  "id": 727,
+  "species_id": "incineroar",
+  "showdown_id": "incineroar",
+  "name": "Incineroar",
+  "types": [
+    "fire",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 115,
+    "def": 90,
+    "spa": 80,
+    "spd": 90,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "intimidate"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "lick",
+      "level": 1
+    },
+    {
+      "move": "cross-chop",
+      "level": 1
+    },
+    {
+      "move": "bulk-up",
+      "level": 1
+    },
+    {
+      "move": "darkest-lariat",
+      "level": 1
+    },
+    {
+      "move": "throat-chop",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 9
+    },
+    {
+      "move": "leer",
+      "level": 11
+    },
+    {
+      "move": "fury-swipes",
+      "level": 12
+    },
+    {
+      "move": "fire-fang",
+      "level": 14
+    },
+    {
+      "move": "bite",
+      "level": 15
+    },
+    {
+      "move": "double-kick",
+      "level": 16
+    },
+    {
+      "move": "swagger",
+      "level": 28
+    },
+    {
+      "move": "scary-face",
+      "level": 30
+    },
+    {
+      "move": "thrash",
+      "level": 38
+    },
+    {
+      "move": "flamethrower",
+      "level": 44
+    },
+    {
+      "move": "flare-blitz",
+      "level": 55
+    },
+    {
+      "move": "outrage",
+      "level": 60
+    }
+  ]
+}

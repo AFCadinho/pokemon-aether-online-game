@@ -1,0 +1,82 @@
+{
+  "id": 895,
+  "species_id": "regidrago",
+  "showdown_id": "regidrago",
+  "name": "Regidrago",
+  "types": [
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 200,
+    "atk": 100,
+    "def": 50,
+    "spa": 100,
+    "spd": 50,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "dragons-maw"
+  },
+  "level_up_moves": [
+    {
+      "move": "vice-grip",
+      "level": 1
+    },
+    {
+      "move": "twister",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 6
+    },
+    {
+      "move": "ancient-power",
+      "level": 12
+    },
+    {
+      "move": "dragon-breath",
+      "level": 18
+    },
+    {
+      "move": "focus-energy",
+      "level": 24
+    },
+    {
+      "move": "crunch",
+      "level": 30
+    },
+    {
+      "move": "dragon-claw",
+      "level": 36
+    },
+    {
+      "move": "hammer-arm",
+      "level": 42
+    },
+    {
+      "move": "dragon-dance",
+      "level": 48
+    },
+    {
+      "move": "thrash",
+      "level": 54
+    },
+    {
+      "move": "laser-focus",
+      "level": 60
+    },
+    {
+      "move": "dragon-energy",
+      "level": 66
+    },
+    {
+      "move": "hyper-beam",
+      "level": 72
+    },
+    {
+      "move": "explosion",
+      "level": 78
+    }
+  ]
+}

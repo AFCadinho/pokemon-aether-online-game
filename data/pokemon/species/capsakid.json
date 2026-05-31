@@ -1,0 +1,71 @@
+{
+  "id": 951,
+  "species_id": "capsakid",
+  "showdown_id": "capsakid",
+  "name": "Capsakid",
+  "types": [
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 62,
+    "def": 40,
+    "spa": 62,
+    "spd": 40,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "chlorophyll",
+    "hidden": "klutz"
+  },
+  "level_up_moves": [
+    {
+      "move": "leafage",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 4
+    },
+    {
+      "move": "growth",
+      "level": 10
+    },
+    {
+      "move": "razor-leaf",
+      "level": 13
+    },
+    {
+      "move": "sunny-day",
+      "level": 17
+    },
+    {
+      "move": "bullet-seed",
+      "level": 21
+    },
+    {
+      "move": "headbutt",
+      "level": 24
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 28
+    },
+    {
+      "move": "crunch",
+      "level": 38
+    },
+    {
+      "move": "seed-bomb",
+      "level": 44
+    },
+    {
+      "move": "solar-beam",
+      "level": 48
+    }
+  ]
+}

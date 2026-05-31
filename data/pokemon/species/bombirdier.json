@@ -1,0 +1,88 @@
+{
+  "id": 962,
+  "species_id": "bombirdier",
+  "showdown_id": "bombirdier",
+  "name": "Bombirdier",
+  "types": [
+    "flying",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 103,
+    "def": 85,
+    "spa": 60,
+    "spd": 85,
+    "spe": 82
+  },
+  "abilities": {
+    "primary": "big-pecks",
+    "hidden": "rocky-payload"
+  },
+  "level_up_moves": [
+    {
+      "move": "hone-claws",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "memento",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "wing-attack",
+      "level": 1
+    },
+    {
+      "move": "thief",
+      "level": 7
+    },
+    {
+      "move": "rock-throw",
+      "level": 11
+    },
+    {
+      "move": "whirlwind",
+      "level": 16
+    },
+    {
+      "move": "pluck",
+      "level": 20
+    },
+    {
+      "move": "torment",
+      "level": 24
+    },
+    {
+      "move": "rock-tomb",
+      "level": 29
+    },
+    {
+      "move": "payback",
+      "level": 36
+    },
+    {
+      "move": "dual-wingbeat",
+      "level": 42
+    },
+    {
+      "move": "rock-slide",
+      "level": 47
+    },
+    {
+      "move": "knock-off",
+      "level": 53
+    },
+    {
+      "move": "parting-shot",
+      "level": 60
+    }
+  ]
+}

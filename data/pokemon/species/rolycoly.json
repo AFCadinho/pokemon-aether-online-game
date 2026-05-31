@@ -1,0 +1,63 @@
+{
+  "id": 837,
+  "species_id": "rolycoly",
+  "showdown_id": "rolycoly",
+  "name": "Rolycoly",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 30,
+    "atk": 40,
+    "def": 50,
+    "spa": 40,
+    "spd": 50,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "steam-engine",
+    "hidden": "flash-fire"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "smokescreen",
+      "level": 1
+    },
+    {
+      "move": "rapid-spin",
+      "level": 5
+    },
+    {
+      "move": "smack-down",
+      "level": 10
+    },
+    {
+      "move": "rock-polish",
+      "level": 15
+    },
+    {
+      "move": "ancient-power",
+      "level": 20
+    },
+    {
+      "move": "incinerate",
+      "level": 25
+    },
+    {
+      "move": "stealth-rock",
+      "level": 30
+    },
+    {
+      "move": "heat-crash",
+      "level": 35
+    },
+    {
+      "move": "rock-blast",
+      "level": 40
+    }
+  ]
+}

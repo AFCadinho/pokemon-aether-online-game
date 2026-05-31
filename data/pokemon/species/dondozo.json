@@ -1,0 +1,91 @@
+{
+  "id": 977,
+  "species_id": "dondozo",
+  "showdown_id": "dondozo",
+  "name": "Dondozo",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 150,
+    "atk": 100,
+    "def": 115,
+    "spa": 65,
+    "spd": 65,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "unaware",
+    "hidden": "water-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "tickle",
+      "level": 5
+    },
+    {
+      "move": "flail",
+      "level": 10
+    },
+    {
+      "move": "rest",
+      "level": 15
+    },
+    {
+      "move": "sleep-talk",
+      "level": 15
+    },
+    {
+      "move": "dive",
+      "level": 20
+    },
+    {
+      "move": "noble-roar",
+      "level": 25
+    },
+    {
+      "move": "soak",
+      "level": 30
+    },
+    {
+      "move": "body-slam",
+      "level": 35
+    },
+    {
+      "move": "aqua-tail",
+      "level": 40
+    },
+    {
+      "move": "rain-dance",
+      "level": 45
+    },
+    {
+      "move": "order-up",
+      "level": 50
+    },
+    {
+      "move": "heavy-slam",
+      "level": 55
+    },
+    {
+      "move": "double-edge",
+      "level": 60
+    },
+    {
+      "move": "wave-crash",
+      "level": 65
+    }
+  ]
+}

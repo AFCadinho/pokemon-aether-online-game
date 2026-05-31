@@ -1,0 +1,112 @@
+{
+  "id": 724,
+  "species_id": "decidueye",
+  "showdown_id": "decidueye",
+  "name": "Decidueye",
+  "types": [
+    "grass",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 107,
+    "def": 75,
+    "spa": 100,
+    "spd": 100,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "long-reach"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "spite",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "u-turn",
+      "level": 1
+    },
+    {
+      "move": "shadow-sneak",
+      "level": 1
+    },
+    {
+      "move": "leaf-storm",
+      "level": 1
+    },
+    {
+      "move": "phantom-force",
+      "level": 1
+    },
+    {
+      "move": "spirit-shackle",
+      "level": 1
+    },
+    {
+      "move": "leafage",
+      "level": 1
+    },
+    {
+      "move": "razor-leaf",
+      "level": 14
+    },
+    {
+      "move": "ominous-wind",
+      "level": 16
+    },
+    {
+      "move": "foresight",
+      "level": 19
+    },
+    {
+      "move": "synthesis",
+      "level": 20
+    },
+    {
+      "move": "pluck",
+      "level": 24
+    },
+    {
+      "move": "nasty-plot",
+      "level": 30
+    },
+    {
+      "move": "fury-attack",
+      "level": 33
+    },
+    {
+      "move": "sucker-punch",
+      "level": 37
+    },
+    {
+      "move": "leaf-blade",
+      "level": 44
+    },
+    {
+      "move": "feather-dance",
+      "level": 49
+    },
+    {
+      "move": "brave-bird",
+      "level": 55
+    }
+  ]
+}

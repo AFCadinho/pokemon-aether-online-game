@@ -1,0 +1,32 @@
+{
+  "breaking-swipe": {
+	"id": "breaking-swipe",
+	"name": "Breaking Swipe",
+	"type": "dragon",
+	"category": "physical",
+	"accuracy": 100,
+	"pp": 15,
+	"priority": 0,
+	"base_power": 60
+  },
+  "dragon-claw": {
+	"id": "dragon-claw",
+	"name": "Dragon Claw",
+	"type": "dragon",
+	"category": "physical",
+	"accuracy": 100,
+	"pp": 15,
+	"priority": 0,
+	"base_power": 80
+  },
+  "outrage": {
+	"id": "outrage",
+	"name": "Outrage",
+	"type": "dragon",
+	"category": "physical",
+	"accuracy": 100,
+	"pp": 10,
+	"priority": 0,
+	"base_power": 120
+  }
+}

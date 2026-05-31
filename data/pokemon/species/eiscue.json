@@ -1,0 +1,74 @@
+{
+  "id": 875,
+  "species_id": "eiscue",
+  "showdown_id": "eiscue",
+  "name": "Eiscue",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 80,
+    "def": 110,
+    "spa": 65,
+    "spd": 90,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "ice-face"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "mist",
+      "level": 6
+    },
+    {
+      "move": "weather-ball",
+      "level": 12
+    },
+    {
+      "move": "icy-wind",
+      "level": 18
+    },
+    {
+      "move": "headbutt",
+      "level": 24
+    },
+    {
+      "move": "amnesia",
+      "level": 30
+    },
+    {
+      "move": "freeze-dry",
+      "level": 36
+    },
+    {
+      "move": "hail",
+      "level": 42
+    },
+    {
+      "move": "snowscape",
+      "level": 42
+    },
+    {
+      "move": "aurora-veil",
+      "level": 48
+    },
+    {
+      "move": "surf",
+      "level": 54
+    },
+    {
+      "move": "blizzard",
+      "level": 60
+    }
+  ]
+}

@@ -14,6 +14,10 @@ class_name PokemonFactory
 ## ```
 const SPECIES_PATH := "res://data/pokemon/species/%s.json"
 const MOVE_PATH := "res://data/pokemon/moves/%s.json"
+const MOVE_TYPE_DIR := "res://data/pokemon/moves"
+
+static var _moves_by_id: Dictionary = {}
+static var _moves_loaded := false
 
 
 ## Maakt een nieuwe Pokemon op basis van species id en level.
@@ -98,7 +102,7 @@ static func _get_moves_for_level(species_data: Dictionary, level: int) -> Array[
 ## Zet move ids om naar display names.
 ##
 ## Voorbeeld:
-## `"scratch"` wordt `"Scratch"` op basis van `moves/scratch.json`.
+## `"scratch"` wordt `"Scratch"` op basis van `moves/<type>.json`.
 ##
 ## Als move-data ontbreekt, valt de functie terug op een simpele gecapitalized
 ## versie van de move id.
@@ -119,28 +123,82 @@ static func _get_move_names(move_ids: Array[String]) -> Array[String]:
 ## Laadt de JSON-data voor een move.
 ##
 ## Verwacht een bestand zoals:
-## `res://data/pokemon/moves/scratch.json`
+## `res://data/pokemon/moves/fire.json`
 ##
 ## Geeft een lege Dictionary terug wanneer het bestand mist, niet geopend kan
 ## worden, of geen geldige JSON dictionary bevat.
 static func _load_move_data(move_id: String) -> Dictionary:
-	var path := MOVE_PATH % move_id.to_lower()
+	_ensure_moves_loaded()
 
-	if not FileAccess.file_exists(path):
-		push_error("Pokemon move-data ontbreekt: " + path)
-		return {}
+	var key := move_id.to_lower()
+	var move_data: Dictionary = _moves_by_id.get(key, {})
+	if move_data.is_empty():
+		push_error("Pokemon move-data ontbreekt: " + move_id)
 
-	var file := FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		push_error("Pokemon move-data kon niet geopend worden: " + path)
-		return {}
+	return move_data
 
-	var parsed = JSON.parse_string(file.get_as_text())
-	if typeof(parsed) != TYPE_DICTIONARY:
-		push_error("Ongeldige Pokemon move JSON: " + path)
-		return {}
 
-	return parsed
+## Laadt alle move-data uit type-gegroepeerde bestanden.
+##
+## Verwacht bestanden zoals:
+## `res://data/pokemon/moves/fire.json`, `res://data/pokemon/moves/normal.json`, ...
+##
+## Elk bestand is een dictionary met move id als key en move details als value.
+static func _ensure_moves_loaded() -> void:
+	if _moves_loaded:
+		return
+
+	_moves_loaded = true
+	var dir := DirAccess.open(MOVE_TYPE_DIR)
+	if dir == null:
+		push_error("Kan move folder niet openen: " + MOVE_TYPE_DIR)
+		return
+
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if file_name.ends_with(".json"):
+			var path := MOVE_PATH % file_name.get_basename()
+			var file := FileAccess.open(path, FileAccess.READ)
+			if file == null:
+				push_error("Pokemon move-data kon niet geopend worden: " + path)
+				file_name = dir.get_next()
+				continue
+
+			var parsed = JSON.parse_string(file.get_as_text())
+			if typeof(parsed) != TYPE_DICTIONARY:
+				push_error("Ongeldige Pokemon move bucket JSON: " + path)
+				file_name = dir.get_next()
+				continue
+
+			if not _is_move_bucket_dict(parsed):
+				# Alleen map-bestanden met move-id keys worden ingeladen.
+				file_name = dir.get_next()
+				continue
+
+			for move_key in parsed.keys():
+				if typeof(parsed[move_key]) != TYPE_DICTIONARY:
+					continue
+				_moves_by_id[str(move_key).to_lower()] = parsed[move_key]
+
+		file_name = dir.get_next()
+
+	dir.list_dir_end()
+
+
+## Controleert of een JSON-object een move-type bucket is (move-id keys -> move dicts)
+static func _is_move_bucket_dict(value: Dictionary) -> bool:
+	if value.is_empty():
+		return false
+
+	for key in value.keys():
+		if typeof(value[key]) != TYPE_DICTIONARY:
+			return false
+		if typeof(key) != TYPE_STRING:
+			return false
+
+	return true
+
 
 static func get_species_types(species_id: String) -> Array:
 	var species_data := _load_species_data(species_id.to_lower())

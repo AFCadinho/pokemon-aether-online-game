@@ -1,0 +1,88 @@
+{
+  "id": 983,
+  "species_id": "kingambit",
+  "showdown_id": "kingambit",
+  "name": "Kingambit",
+  "types": [
+    "dark",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 135,
+    "def": 120,
+    "spa": 60,
+    "spd": 85,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "defiant",
+    "hidden": "pressure"
+  },
+  "level_up_moves": [
+    {
+      "move": "fury-cutter",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "metal-burst",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "torment",
+      "level": 15
+    },
+    {
+      "move": "scary-face",
+      "level": 20
+    },
+    {
+      "move": "assurance",
+      "level": 25
+    },
+    {
+      "move": "metal-sound",
+      "level": 30
+    },
+    {
+      "move": "slash",
+      "level": 35
+    },
+    {
+      "move": "night-slash",
+      "level": 40
+    },
+    {
+      "move": "iron-defense",
+      "level": 45
+    },
+    {
+      "move": "retaliate",
+      "level": 50
+    },
+    {
+      "move": "iron-head",
+      "level": 57
+    },
+    {
+      "move": "swords-dance",
+      "level": 64
+    },
+    {
+      "move": "guillotine",
+      "level": 71
+    }
+  ]
+}

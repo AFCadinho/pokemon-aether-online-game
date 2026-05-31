@@ -1,0 +1,91 @@
+{
+  "id": 1020,
+  "species_id": "gouging-fire",
+  "showdown_id": "gougingfire",
+  "name": "Gouging Fire",
+  "types": [
+    "fire",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 105,
+    "atk": 115,
+    "def": 121,
+    "spa": 65,
+    "spd": 93,
+    "spe": 91
+  },
+  "abilities": {
+    "primary": "protosynthesis"
+  },
+  "level_up_moves": [
+    {
+      "move": "incinerate",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "stomp",
+      "level": 1
+    },
+    {
+      "move": "sunny-day",
+      "level": 1
+    },
+    {
+      "move": "fire-fang",
+      "level": 7
+    },
+    {
+      "move": "howl",
+      "level": 14
+    },
+    {
+      "move": "bite",
+      "level": 21
+    },
+    {
+      "move": "dragon-claw",
+      "level": 28
+    },
+    {
+      "move": "crush-claw",
+      "level": 35
+    },
+    {
+      "move": "morning-sun",
+      "level": 42
+    },
+    {
+      "move": "burning-bulwark",
+      "level": 49
+    },
+    {
+      "move": "dragon-rush",
+      "level": 56
+    },
+    {
+      "move": "fire-blast",
+      "level": 63
+    },
+    {
+      "move": "lava-plume",
+      "level": 70
+    },
+    {
+      "move": "outrage",
+      "level": 77
+    },
+    {
+      "move": "flare-blitz",
+      "level": 84
+    },
+    {
+      "move": "raging-fury",
+      "level": 91
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "id": 944,
+  "species_id": "shroodle",
+  "showdown_id": "shroodle",
+  "name": "Shroodle",
+  "types": [
+    "poison",
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 65,
+    "def": 35,
+    "spa": 40,
+    "spd": 35,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "unburden",
+    "hidden": "prankster"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "acid-spray",
+      "level": 5
+    },
+    {
+      "move": "bite",
+      "level": 8
+    },
+    {
+      "move": "fury-swipes",
+      "level": 8
+    },
+    {
+      "move": "switcheroo",
+      "level": 11
+    },
+    {
+      "move": "poison-fang",
+      "level": 14
+    },
+    {
+      "move": "flatter",
+      "level": 18
+    },
+    {
+      "move": "slash",
+      "level": 21
+    },
+    {
+      "move": "u-turn",
+      "level": 25
+    },
+    {
+      "move": "poison-jab",
+      "level": 29
+    },
+    {
+      "move": "taunt",
+      "level": 33
+    },
+    {
+      "move": "substitute",
+      "level": 36
+    },
+    {
+      "move": "knock-off",
+      "level": 40
+    },
+    {
+      "move": "gunk-shot",
+      "level": 45
+    }
+  ]
+}

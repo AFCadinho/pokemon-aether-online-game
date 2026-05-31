@@ -23,22 +23,8 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	
-	pokemon_sprite.texture = _load_pokemon_sprite(pokemon.species)
+	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species)
 	click_button.disabled = false
-	
-	
-func _load_pokemon_sprite(species: String) -> Texture2D:
-	var icon_path := "res://assets/sprites/pokemon/pokemon_home/%s.png" % species
-	
-	if ResourceLoader.exists(icon_path):
-		return load(icon_path)
-			
-	var fallback_path := "res://assets/sprites/pokemon/front/%s/frame_000.png" % species.to_lower()
-	
-	if ResourceLoader.exists(fallback_path):
-		return load(fallback_path)
-		
-	return null
 	
 func set_empty() -> void:
 	visible = false

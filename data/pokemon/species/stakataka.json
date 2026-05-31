@@ -1,0 +1,91 @@
+{
+  "id": 805,
+  "species_id": "stakataka",
+  "showdown_id": "stakataka",
+  "name": "Stakataka",
+  "types": [
+    "rock",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 61,
+    "atk": 131,
+    "def": 211,
+    "spa": 53,
+    "spd": 101,
+    "spe": 13
+  },
+  "abilities": {
+    "primary": "beast-boost"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 1
+    },
+    {
+      "move": "rock-throw",
+      "level": 5
+    },
+    {
+      "move": "rock-slide",
+      "level": 5
+    },
+    {
+      "move": "stealth-rock",
+      "level": 11
+    },
+    {
+      "move": "stomp",
+      "level": 15
+    },
+    {
+      "move": "bide",
+      "level": 17
+    },
+    {
+      "move": "take-down",
+      "level": 19
+    },
+    {
+      "move": "block",
+      "level": 20
+    },
+    {
+      "move": "wide-guard",
+      "level": 30
+    },
+    {
+      "move": "autotomize",
+      "level": 31
+    },
+    {
+      "move": "iron-defense",
+      "level": 37
+    },
+    {
+      "move": "rock-blast",
+      "level": 40
+    },
+    {
+      "move": "iron-head",
+      "level": 43
+    },
+    {
+      "move": "magnet-rise",
+      "level": 45
+    },
+    {
+      "move": "double-edge",
+      "level": 61
+    }
+  ]
+}

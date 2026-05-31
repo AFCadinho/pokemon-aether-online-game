@@ -1,0 +1,91 @@
+{
+  "id": 1023,
+  "species_id": "iron-crown",
+  "showdown_id": "ironcrown",
+  "name": "Iron Crown",
+  "types": [
+    "steel",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 72,
+    "def": 100,
+    "spa": 122,
+    "spd": 108,
+    "spe": 98
+  },
+  "abilities": {
+    "primary": "quark-drive"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "electric-terrain",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 1
+    },
+    {
+      "move": "smart-strike",
+      "level": 7
+    },
+    {
+      "move": "slash",
+      "level": 14
+    },
+    {
+      "move": "iron-defense",
+      "level": 21
+    },
+    {
+      "move": "psyshock",
+      "level": 28
+    },
+    {
+      "move": "psycho-cut",
+      "level": 35
+    },
+    {
+      "move": "flash-cannon",
+      "level": 42
+    },
+    {
+      "move": "sacred-sword",
+      "level": 49
+    },
+    {
+      "move": "tachyon-cutter",
+      "level": 56
+    },
+    {
+      "move": "future-sight",
+      "level": 63
+    },
+    {
+      "move": "volt-switch",
+      "level": 70
+    },
+    {
+      "move": "quick-guard",
+      "level": 77
+    },
+    {
+      "move": "metal-burst",
+      "level": 84
+    },
+    {
+      "move": "hyper-beam",
+      "level": 91
+    }
+  ]
+}

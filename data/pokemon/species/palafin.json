@@ -1,0 +1,86 @@
+{
+  "id": 964,
+  "species_id": "palafin",
+  "showdown_id": "palafin",
+  "name": "Palafin",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 100,
+    "atk": 70,
+    "def": 72,
+    "spa": 53,
+    "spd": 62,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "zero-to-hero"
+  },
+  "level_up_moves": [
+    {
+      "move": "jet-punch",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 7
+    },
+    {
+      "move": "focus-energy",
+      "level": 10
+    },
+    {
+      "move": "aqua-jet",
+      "level": 13
+    },
+    {
+      "move": "double-hit",
+      "level": 17
+    },
+    {
+      "move": "dive",
+      "level": 21
+    },
+    {
+      "move": "charm",
+      "level": 25
+    },
+    {
+      "move": "acrobatics",
+      "level": 29
+    },
+    {
+      "move": "encore",
+      "level": 34
+    },
+    {
+      "move": "aqua-tail",
+      "level": 39
+    },
+    {
+      "move": "mist",
+      "level": 44
+    },
+    {
+      "move": "hydro-pump",
+      "level": 50
+    },
+    {
+      "move": "focus-punch",
+      "level": 55
+    },
+    {
+      "move": "wave-crash",
+      "level": 61
+    }
+  ]
+}

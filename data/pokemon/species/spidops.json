@@ -1,0 +1,79 @@
+{
+  "id": 918,
+  "species_id": "spidops",
+  "showdown_id": "spidops",
+  "name": "Spidops",
+  "types": [
+    "bug"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 79,
+    "def": 92,
+    "spa": 52,
+    "spd": 86,
+    "spe": 35
+  },
+  "abilities": {
+    "primary": "insomnia",
+    "hidden": "stakeout"
+  },
+  "level_up_moves": [
+    {
+      "move": "string-shot",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "struggle-bug",
+      "level": 5
+    },
+    {
+      "move": "assurance",
+      "level": 8
+    },
+    {
+      "move": "feint",
+      "level": 11
+    },
+    {
+      "move": "bug-bite",
+      "level": 14
+    },
+    {
+      "move": "block",
+      "level": 19
+    },
+    {
+      "move": "counter",
+      "level": 24
+    },
+    {
+      "move": "headbutt",
+      "level": 28
+    },
+    {
+      "move": "sticky-web",
+      "level": 33
+    },
+    {
+      "move": "gastro-acid",
+      "level": 37
+    },
+    {
+      "move": "circle-throw",
+      "level": 41
+    },
+    {
+      "move": "throat-chop",
+      "level": 45
+    },
+    {
+      "move": "skitter-smack",
+      "level": 49
+    }
+  ]
+}

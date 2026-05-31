@@ -1,0 +1,95 @@
+{
+  "id": 781,
+  "species_id": "dhelmise",
+  "showdown_id": "dhelmise",
+  "name": "Dhelmise",
+  "types": [
+    "ghost",
+    "grass"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 131,
+    "def": 100,
+    "spa": 86,
+    "spd": 90,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "steelworker"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "growth",
+      "level": 1
+    },
+    {
+      "move": "rapid-spin",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "switcheroo",
+      "level": 1
+    },
+    {
+      "move": "mega-drain",
+      "level": 5
+    },
+    {
+      "move": "wrap",
+      "level": 8
+    },
+    {
+      "move": "gyro-ball",
+      "level": 14
+    },
+    {
+      "move": "metal-sound",
+      "level": 18
+    },
+    {
+      "move": "giga-drain",
+      "level": 23
+    },
+    {
+      "move": "whirlpool",
+      "level": 27
+    },
+    {
+      "move": "anchor-shot",
+      "level": 32
+    },
+    {
+      "move": "shadow-ball",
+      "level": 36
+    },
+    {
+      "move": "heavy-slam",
+      "level": 36
+    },
+    {
+      "move": "slam",
+      "level": 40
+    },
+    {
+      "move": "energy-ball",
+      "level": 41
+    },
+    {
+      "move": "phantom-force",
+      "level": 54
+    },
+    {
+      "move": "power-whip",
+      "level": 59
+    }
+  ]
+}

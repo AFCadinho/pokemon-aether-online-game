@@ -1,0 +1,79 @@
+{
+  "id": 932,
+  "species_id": "nacli",
+  "showdown_id": "nacli",
+  "name": "Nacli",
+  "types": [
+    "rock"
+  ],
+  "base_stats": {
+    "hp": 55,
+    "atk": 55,
+    "def": 75,
+    "spa": 35,
+    "spd": 35,
+    "spe": 25
+  },
+  "abilities": {
+    "primary": "purifying-salt",
+    "hidden": "clear-body"
+  },
+  "level_up_moves": [
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "rock-throw",
+      "level": 5
+    },
+    {
+      "move": "mud-shot",
+      "level": 7
+    },
+    {
+      "move": "smack-down",
+      "level": 10
+    },
+    {
+      "move": "rock-polish",
+      "level": 13
+    },
+    {
+      "move": "headbutt",
+      "level": 16
+    },
+    {
+      "move": "iron-defense",
+      "level": 20
+    },
+    {
+      "move": "recover",
+      "level": 25
+    },
+    {
+      "move": "rock-slide",
+      "level": 30
+    },
+    {
+      "move": "stealth-rock",
+      "level": 33
+    },
+    {
+      "move": "heavy-slam",
+      "level": 35
+    },
+    {
+      "move": "earthquake",
+      "level": 40
+    },
+    {
+      "move": "stone-edge",
+      "level": 45
+    }
+  ]
+}

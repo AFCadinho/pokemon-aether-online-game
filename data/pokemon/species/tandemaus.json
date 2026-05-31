@@ -1,0 +1,79 @@
+{
+  "id": 924,
+  "species_id": "tandemaus",
+  "showdown_id": "tandemaus",
+  "name": "Tandemaus",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 50,
+    "def": 45,
+    "spa": 40,
+    "spd": 45,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "run-away",
+    "hidden": "own-tempo"
+  },
+  "level_up_moves": [
+    {
+      "move": "baby-doll-eyes",
+      "level": 1
+    },
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "echoed-voice",
+      "level": 5
+    },
+    {
+      "move": "helping-hand",
+      "level": 8
+    },
+    {
+      "move": "super-fang",
+      "level": 11
+    },
+    {
+      "move": "double-hit",
+      "level": 14
+    },
+    {
+      "move": "bullet-seed",
+      "level": 18
+    },
+    {
+      "move": "encore",
+      "level": 22
+    },
+    {
+      "move": "play-rough",
+      "level": 26
+    },
+    {
+      "move": "hyper-voice",
+      "level": 30
+    },
+    {
+      "move": "charm",
+      "level": 33
+    },
+    {
+      "move": "beat-up",
+      "level": 37
+    },
+    {
+      "move": "copycat",
+      "level": 41
+    },
+    {
+      "move": "population-bomb",
+      "level": 46
+    }
+  ]
+}

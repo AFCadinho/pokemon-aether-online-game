@@ -1,0 +1,67 @@
+{
+  "id": 813,
+  "species_id": "scorbunny",
+  "showdown_id": "scorbunny",
+  "name": "Scorbunny",
+  "types": [
+    "fire"
+  ],
+  "base_stats": {
+    "hp": 50,
+    "atk": 71,
+    "def": 40,
+    "spa": 40,
+    "spd": 40,
+    "spe": 69
+  },
+  "abilities": {
+    "primary": "blaze",
+    "hidden": "libero"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "ember",
+      "level": 6
+    },
+    {
+      "move": "quick-attack",
+      "level": 8
+    },
+    {
+      "move": "double-kick",
+      "level": 12
+    },
+    {
+      "move": "flame-charge",
+      "level": 17
+    },
+    {
+      "move": "agility",
+      "level": 20
+    },
+    {
+      "move": "headbutt",
+      "level": 24
+    },
+    {
+      "move": "counter",
+      "level": 28
+    },
+    {
+      "move": "bounce",
+      "level": 32
+    },
+    {
+      "move": "double-edge",
+      "level": 36
+    }
+  ]
+}

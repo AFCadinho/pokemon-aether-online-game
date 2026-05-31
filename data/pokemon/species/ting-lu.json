@@ -1,0 +1,95 @@
+{
+  "id": 1003,
+  "species_id": "ting-lu",
+  "showdown_id": "tinglu",
+  "name": "Ting-Lu",
+  "types": [
+    "dark",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 155,
+    "atk": 110,
+    "def": 125,
+    "spa": 55,
+    "spd": 80,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "vessel-of-ruin"
+  },
+  "level_up_moves": [
+    {
+      "move": "mean-look",
+      "level": 1
+    },
+    {
+      "move": "sand-tomb",
+      "level": 1
+    },
+    {
+      "move": "spite",
+      "level": 1
+    },
+    {
+      "move": "spikes",
+      "level": 5
+    },
+    {
+      "move": "payback",
+      "level": 10
+    },
+    {
+      "move": "stomp",
+      "level": 15
+    },
+    {
+      "move": "bulldoze",
+      "level": 20
+    },
+    {
+      "move": "whirlwind",
+      "level": 25
+    },
+    {
+      "move": "taunt",
+      "level": 30
+    },
+    {
+      "move": "thrash",
+      "level": 35
+    },
+    {
+      "move": "dark-pulse",
+      "level": 40
+    },
+    {
+      "move": "stomping-tantrum",
+      "level": 45
+    },
+    {
+      "move": "ruination",
+      "level": 50
+    },
+    {
+      "move": "throat-chop",
+      "level": 55
+    },
+    {
+      "move": "rock-slide",
+      "level": 60
+    },
+    {
+      "move": "memento",
+      "level": 65
+    },
+    {
+      "move": "earthquake",
+      "level": 70
+    },
+    {
+      "move": "fissure",
+      "level": 75
+    }
+  ]
+}

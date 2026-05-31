@@ -1,0 +1,80 @@
+{
+  "id": 1011,
+  "species_id": "dipplin",
+  "showdown_id": "dipplin",
+  "name": "Dipplin",
+  "types": [
+    "grass",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 80,
+    "def": 110,
+    "spa": 95,
+    "spd": 80,
+    "spe": 40
+  },
+  "abilities": {
+    "primary": "supersweet-syrup",
+    "hidden": "sticky-hold"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "recycle",
+      "level": 1
+    },
+    {
+      "move": "sweet-scent",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "dragon-tail",
+      "level": 4
+    },
+    {
+      "move": "growth",
+      "level": 8
+    },
+    {
+      "move": "dragon-breath",
+      "level": 12
+    },
+    {
+      "move": "protect",
+      "level": 16
+    },
+    {
+      "move": "bullet-seed",
+      "level": 20
+    },
+    {
+      "move": "syrup-bomb",
+      "level": 28
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 32
+    },
+    {
+      "move": "recover",
+      "level": 36
+    },
+    {
+      "move": "energy-ball",
+      "level": 40
+    },
+    {
+      "move": "substitute",
+      "level": 44
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "id": 954,
+  "species_id": "rabsca",
+  "showdown_id": "rabsca",
+  "name": "Rabsca",
+  "types": [
+    "bug",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 50,
+    "def": 85,
+    "spa": 115,
+    "spd": 100,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "synchronize",
+    "hidden": "telepathy"
+  },
+  "level_up_moves": [
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "defense-curl",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "sand-attack",
+      "level": 4
+    },
+    {
+      "move": "struggle-bug",
+      "level": 7
+    },
+    {
+      "move": "rollout",
+      "level": 11
+    },
+    {
+      "move": "psybeam",
+      "level": 15
+    },
+    {
+      "move": "bug-bite",
+      "level": 20
+    },
+    {
+      "move": "take-down",
+      "level": 24
+    },
+    {
+      "move": "extrasensory",
+      "level": 29
+    },
+    {
+      "move": "lunge",
+      "level": 35
+    },
+    {
+      "move": "guard-swap",
+      "level": 40
+    },
+    {
+      "move": "power-swap",
+      "level": 40
+    },
+    {
+      "move": "speed-swap",
+      "level": 40
+    },
+    {
+      "move": "bug-buzz",
+      "level": 45
+    },
+    {
+      "move": "psychic",
+      "level": 50
+    }
+  ]
+}

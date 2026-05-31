@@ -1,0 +1,94 @@
+{
+  "id": 807,
+  "species_id": "zeraora",
+  "showdown_id": "zeraora",
+  "name": "Zeraora",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 88,
+    "atk": 112,
+    "def": 75,
+    "spa": 102,
+    "spd": 80,
+    "spe": 143
+  },
+  "abilities": {
+    "primary": "volt-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "spark",
+      "level": 1
+    },
+    {
+      "move": "fake-out",
+      "level": 1
+    },
+    {
+      "move": "snarl",
+      "level": 1
+    },
+    {
+      "move": "power-up-punch",
+      "level": 1
+    },
+    {
+      "move": "hone-claws",
+      "level": 5
+    },
+    {
+      "move": "fury-swipes",
+      "level": 8
+    },
+    {
+      "move": "volt-switch",
+      "level": 15
+    },
+    {
+      "move": "quick-guard",
+      "level": 16
+    },
+    {
+      "move": "slash",
+      "level": 24
+    },
+    {
+      "move": "charge",
+      "level": 26
+    },
+    {
+      "move": "thunder-punch",
+      "level": 29
+    },
+    {
+      "move": "wild-charge",
+      "level": 36
+    },
+    {
+      "move": "plasma-fists",
+      "level": 43
+    },
+    {
+      "move": "close-combat",
+      "level": 47
+    },
+    {
+      "move": "discharge",
+      "level": 50
+    },
+    {
+      "move": "agility",
+      "level": 80
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": 928,
+  "species_id": "smoliv",
+  "showdown_id": "smoliv",
+  "name": "Smoliv",
+  "types": [
+    "grass",
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 41,
+    "atk": 35,
+    "def": 45,
+    "spa": 58,
+    "spd": 51,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "early-bird",
+    "hidden": "harvest"
+  },
+  "level_up_moves": [
+    {
+      "move": "sweet-scent",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 5
+    },
+    {
+      "move": "growth",
+      "level": 7
+    },
+    {
+      "move": "razor-leaf",
+      "level": 10
+    },
+    {
+      "move": "helping-hand",
+      "level": 13
+    },
+    {
+      "move": "flail",
+      "level": 16
+    },
+    {
+      "move": "mega-drain",
+      "level": 20
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 23
+    },
+    {
+      "move": "seed-bomb",
+      "level": 27
+    },
+    {
+      "move": "energy-ball",
+      "level": 30
+    },
+    {
+      "move": "leech-seed",
+      "level": 34
+    },
+    {
+      "move": "terrain-pulse",
+      "level": 38
+    }
+  ]
+}

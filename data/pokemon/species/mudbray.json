@@ -1,0 +1,87 @@
+{
+  "id": 749,
+  "species_id": "mudbray",
+  "showdown_id": "mudbray",
+  "name": "Mudbray",
+  "types": [
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 100,
+    "def": 70,
+    "spa": 45,
+    "spd": 55,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "own-tempo",
+    "hidden": "inner-focus"
+  },
+  "level_up_moves": [
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "rock-smash",
+      "level": 1
+    },
+    {
+      "move": "mud-sport",
+      "level": 3
+    },
+    {
+      "move": "iron-defense",
+      "level": 4
+    },
+    {
+      "move": "double-kick",
+      "level": 8
+    },
+    {
+      "move": "rototiller",
+      "level": 8
+    },
+    {
+      "move": "bulldoze",
+      "level": 10
+    },
+    {
+      "move": "stomp",
+      "level": 16
+    },
+    {
+      "move": "strength",
+      "level": 20
+    },
+    {
+      "move": "bide",
+      "level": 22
+    },
+    {
+      "move": "counter",
+      "level": 24
+    },
+    {
+      "move": "high-horsepower",
+      "level": 24
+    },
+    {
+      "move": "heavy-slam",
+      "level": 31
+    },
+    {
+      "move": "earthquake",
+      "level": 36
+    },
+    {
+      "move": "mega-kick",
+      "level": 40
+    },
+    {
+      "move": "superpower",
+      "level": 44
+    }
+  ]
+}

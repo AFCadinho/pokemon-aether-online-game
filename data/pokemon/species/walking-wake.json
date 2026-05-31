@@ -1,0 +1,67 @@
+{
+  "id": 1009,
+  "species_id": "walking-wake",
+  "showdown_id": "walkingwake",
+  "name": "Walking Wake",
+  "types": [
+    "water",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 99,
+    "atk": 83,
+    "def": 91,
+    "spa": 125,
+    "spd": 83,
+    "spe": 109
+  },
+  "abilities": {
+    "primary": "protosynthesis"
+  },
+  "level_up_moves": [
+    {
+      "move": "bite",
+      "level": 7
+    },
+    {
+      "move": "water-pulse",
+      "level": 14
+    },
+    {
+      "move": "noble-roar",
+      "level": 21
+    },
+    {
+      "move": "dragon-breath",
+      "level": 28
+    },
+    {
+      "move": "breaking-swipe",
+      "level": 35
+    },
+    {
+      "move": "dragon-rush",
+      "level": 42
+    },
+    {
+      "move": "hydro-steam",
+      "level": 56
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 63
+    },
+    {
+      "move": "outrage",
+      "level": 70
+    },
+    {
+      "move": "flamethrower",
+      "level": 77
+    },
+    {
+      "move": "hydro-pump",
+      "level": 84
+    }
+  ]
+}

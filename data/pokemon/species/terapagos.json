@@ -1,0 +1,70 @@
+{
+  "id": 1024,
+  "species_id": "terapagos",
+  "showdown_id": "terapagos",
+  "name": "Terapagos",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 65,
+    "def": 85,
+    "spa": 65,
+    "spd": 85,
+    "spe": 60
+  },
+  "abilities": {
+    "primary": "tera-shift"
+  },
+  "level_up_moves": [
+    {
+      "move": "rapid-spin",
+      "level": 1
+    },
+    {
+      "move": "tri-attack",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "ancient-power",
+      "level": 10
+    },
+    {
+      "move": "headbutt",
+      "level": 20
+    },
+    {
+      "move": "protect",
+      "level": 30
+    },
+    {
+      "move": "earth-power",
+      "level": 40
+    },
+    {
+      "move": "heavy-slam",
+      "level": 50
+    },
+    {
+      "move": "tera-starstorm",
+      "level": 60
+    },
+    {
+      "move": "double-edge",
+      "level": 70
+    },
+    {
+      "move": "rock-polish",
+      "level": 80
+    },
+    {
+      "move": "gyro-ball",
+      "level": 90
+    }
+  ]
+}

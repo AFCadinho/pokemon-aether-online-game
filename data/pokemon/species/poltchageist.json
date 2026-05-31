@@ -1,0 +1,76 @@
+{
+  "id": 1012,
+  "species_id": "poltchageist",
+  "showdown_id": "poltchageist",
+  "name": "Poltchageist",
+  "types": [
+    "grass",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 45,
+    "spa": 74,
+    "spd": 54,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "hospitality",
+    "hidden": "heatproof"
+  },
+  "level_up_moves": [
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "stun-spore",
+      "level": 1
+    },
+    {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "absorb",
+      "level": 6
+    },
+    {
+      "move": "life-dew",
+      "level": 12
+    },
+    {
+      "move": "foul-play",
+      "level": 18
+    },
+    {
+      "move": "mega-drain",
+      "level": 24
+    },
+    {
+      "move": "hex",
+      "level": 30
+    },
+    {
+      "move": "rage-powder",
+      "level": 36
+    },
+    {
+      "move": "giga-drain",
+      "level": 42
+    },
+    {
+      "move": "shadow-ball",
+      "level": 48
+    },
+    {
+      "move": "memento",
+      "level": 54
+    },
+    {
+      "move": "leaf-storm",
+      "level": 60
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": 908,
+  "species_id": "meowscarada",
+  "showdown_id": "meowscarada",
+  "name": "Meowscarada",
+  "types": [
+    "grass",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 76,
+    "atk": 110,
+    "def": 70,
+    "spa": 81,
+    "spd": 70,
+    "spe": 123
+  },
+  "abilities": {
+    "primary": "overgrow",
+    "hidden": "protean"
+  },
+  "level_up_moves": [
+    {
+      "move": "leafage",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 7
+    },
+    {
+      "move": "hone-claws",
+      "level": 10
+    },
+    {
+      "move": "magical-leaf",
+      "level": 13
+    },
+    {
+      "move": "quick-attack",
+      "level": 15
+    },
+    {
+      "move": "seed-bomb",
+      "level": 20
+    },
+    {
+      "move": "u-turn",
+      "level": 24
+    },
+    {
+      "move": "worry-seed",
+      "level": 29
+    },
+    {
+      "move": "slash",
+      "level": 33
+    },
+    {
+      "move": "night-slash",
+      "level": 38
+    },
+    {
+      "move": "energy-ball",
+      "level": 42
+    },
+    {
+      "move": "play-rough",
+      "level": 47
+    },
+    {
+      "move": "knock-off",
+      "level": 52
+    },
+    {
+      "move": "grassy-terrain",
+      "level": 58
+    },
+    {
+      "move": "leaf-storm",
+      "level": 64
+    }
+  ]
+}

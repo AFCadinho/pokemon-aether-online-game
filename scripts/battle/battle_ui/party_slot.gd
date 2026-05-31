@@ -28,7 +28,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	name_label.text = pokemon.species
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
-	pokemon_icon.texture = _load_pokemon_icon(pokemon.species)
+	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species)
 	status_icon.visible = false
 
 func set_empty() -> void:
@@ -45,15 +45,6 @@ func set_empty() -> void:
 	remove_theme_stylebox_override("pressed")
 	remove_theme_stylebox_override("disabled")
 
-	
-func _load_pokemon_icon(species: String) -> Texture2D:
-	var icon_path := "res://assets/sprites/pokemon/pokemon_home/%s.png" % species
-	
-	if ResourceLoader.exists(icon_path):
-		return load(icon_path)
-		
-	return null
-	
 func _set_color(background: Color, border: Color) -> void:
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = background

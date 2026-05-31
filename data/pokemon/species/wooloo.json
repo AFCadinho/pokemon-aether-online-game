@@ -1,0 +1,71 @@
+{
+  "id": 831,
+  "species_id": "wooloo",
+  "showdown_id": "wooloo",
+  "name": "Wooloo",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 42,
+    "atk": 40,
+    "def": 55,
+    "spa": 40,
+    "spd": 45,
+    "spe": 48
+  },
+  "abilities": {
+    "primary": "fluffy",
+    "hidden": "bulletproof"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "defense-curl",
+      "level": 4
+    },
+    {
+      "move": "copycat",
+      "level": 8
+    },
+    {
+      "move": "guard-split",
+      "level": 12
+    },
+    {
+      "move": "double-kick",
+      "level": 16
+    },
+    {
+      "move": "headbutt",
+      "level": 21
+    },
+    {
+      "move": "take-down",
+      "level": 25
+    },
+    {
+      "move": "guard-swap",
+      "level": 28
+    },
+    {
+      "move": "reversal",
+      "level": 32
+    },
+    {
+      "move": "cotton-guard",
+      "level": 36
+    },
+    {
+      "move": "double-edge",
+      "level": 40
+    }
+  ]
+}

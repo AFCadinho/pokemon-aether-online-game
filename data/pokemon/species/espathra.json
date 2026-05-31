@@ -1,0 +1,83 @@
+{
+  "id": 956,
+  "species_id": "espathra",
+  "showdown_id": "espathra",
+  "name": "Espathra",
+  "types": [
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 60,
+    "def": 60,
+    "spa": 101,
+    "spd": 60,
+    "spe": 105
+  },
+  "abilities": {
+    "primary": "opportunist",
+    "hidden": "speed-boost"
+  },
+  "level_up_moves": [
+    {
+      "move": "drill-peck",
+      "level": 1
+    },
+    {
+      "move": "feather-dance",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 5
+    },
+    {
+      "move": "baby-doll-eyes",
+      "level": 8
+    },
+    {
+      "move": "disarming-voice",
+      "level": 11
+    },
+    {
+      "move": "quick-attack",
+      "level": 15
+    },
+    {
+      "move": "psybeam",
+      "level": 19
+    },
+    {
+      "move": "pluck",
+      "level": 24
+    },
+    {
+      "move": "agility",
+      "level": 29
+    },
+    {
+      "move": "uproar",
+      "level": 34
+    },
+    {
+      "move": "dazzling-gleam",
+      "level": 43
+    },
+    {
+      "move": "psychic",
+      "level": 49
+    },
+    {
+      "move": "last-resort",
+      "level": 54
+    }
+  ]
+}

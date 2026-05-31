@@ -1,0 +1,95 @@
+{
+  "id": 867,
+  "species_id": "runerigus",
+  "showdown_id": "runerigus",
+  "name": "Runerigus",
+  "types": [
+    "ground",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 58,
+    "atk": 95,
+    "def": 145,
+    "spa": 50,
+    "spd": 105,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "wandering-spirit"
+  },
+  "level_up_moves": [
+    {
+      "move": "night-shade",
+      "level": 1
+    },
+    {
+      "move": "haze",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "shadow-claw",
+      "level": 1
+    },
+    {
+      "move": "disable",
+      "level": 12
+    },
+    {
+      "move": "brutal-swing",
+      "level": 16
+    },
+    {
+      "move": "crafty-shield",
+      "level": 20
+    },
+    {
+      "move": "hex",
+      "level": 24
+    },
+    {
+      "move": "mean-look",
+      "level": 28
+    },
+    {
+      "move": "slam",
+      "level": 32
+    },
+    {
+      "move": "curse",
+      "level": 38
+    },
+    {
+      "move": "shadow-ball",
+      "level": 44
+    },
+    {
+      "move": "earthquake",
+      "level": 50
+    },
+    {
+      "move": "guard-split",
+      "level": 56
+    },
+    {
+      "move": "power-split",
+      "level": 56
+    },
+    {
+      "move": "destiny-bond",
+      "level": 62
+    }
+  ]
+}

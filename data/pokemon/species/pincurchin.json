@@ -1,0 +1,79 @@
+{
+  "id": 871,
+  "species_id": "pincurchin",
+  "showdown_id": "pincurchin",
+  "name": "Pincurchin",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 48,
+    "atk": 101,
+    "def": 95,
+    "spa": 91,
+    "spd": 85,
+    "spe": 15
+  },
+  "abilities": {
+    "primary": "lightning-rod",
+    "hidden": "electric-surge"
+  },
+  "level_up_moves": [
+    {
+      "move": "peck",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 5
+    },
+    {
+      "move": "charge",
+      "level": 10
+    },
+    {
+      "move": "fury-attack",
+      "level": 15
+    },
+    {
+      "move": "spark",
+      "level": 20
+    },
+    {
+      "move": "bubble-beam",
+      "level": 25
+    },
+    {
+      "move": "recover",
+      "level": 30
+    },
+    {
+      "move": "curse",
+      "level": 35
+    },
+    {
+      "move": "electric-terrain",
+      "level": 40
+    },
+    {
+      "move": "poison-jab",
+      "level": 45
+    },
+    {
+      "move": "zing-zap",
+      "level": 50
+    },
+    {
+      "move": "acupressure",
+      "level": 55
+    },
+    {
+      "move": "discharge",
+      "level": 60
+    }
+  ]
+}

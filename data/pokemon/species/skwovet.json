@@ -1,0 +1,75 @@
+{
+  "id": 819,
+  "species_id": "skwovet",
+  "showdown_id": "skwovet",
+  "name": "Skwovet",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 55,
+    "def": 55,
+    "spa": 35,
+    "spd": 35,
+    "spe": 25
+  },
+  "abilities": {
+    "primary": "cheek-pouch",
+    "hidden": "gluttony"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 5
+    },
+    {
+      "move": "stuff-cheeks",
+      "level": 10
+    },
+    {
+      "move": "stockpile",
+      "level": 15
+    },
+    {
+      "move": "spit-up",
+      "level": 15
+    },
+    {
+      "move": "swallow",
+      "level": 15
+    },
+    {
+      "move": "body-slam",
+      "level": 20
+    },
+    {
+      "move": "rest",
+      "level": 25
+    },
+    {
+      "move": "counter",
+      "level": 30
+    },
+    {
+      "move": "bullet-seed",
+      "level": 35
+    },
+    {
+      "move": "super-fang",
+      "level": 40
+    },
+    {
+      "move": "belch",
+      "level": 45
+    }
+  ]
+}

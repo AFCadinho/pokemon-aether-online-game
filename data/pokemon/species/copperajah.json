@@ -1,0 +1,79 @@
+{
+  "id": 879,
+  "species_id": "copperajah",
+  "showdown_id": "copperajah",
+  "name": "Copperajah",
+  "types": [
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 122,
+    "atk": 130,
+    "def": 69,
+    "spa": 80,
+    "spd": 69,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "sheer-force",
+    "hidden": "heavy-metal"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "rollout",
+      "level": 1
+    },
+    {
+      "move": "rock-smash",
+      "level": 1
+    },
+    {
+      "move": "heavy-slam",
+      "level": 1
+    },
+    {
+      "move": "bulldoze",
+      "level": 15
+    },
+    {
+      "move": "stomp",
+      "level": 20
+    },
+    {
+      "move": "iron-defense",
+      "level": 25
+    },
+    {
+      "move": "dig",
+      "level": 30
+    },
+    {
+      "move": "strength",
+      "level": 37
+    },
+    {
+      "move": "iron-head",
+      "level": 44
+    },
+    {
+      "move": "play-rough",
+      "level": 51
+    },
+    {
+      "move": "high-horsepower",
+      "level": 58
+    },
+    {
+      "move": "superpower",
+      "level": 65
+    }
+  ]
+}

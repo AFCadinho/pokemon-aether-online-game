@@ -1,0 +1,130 @@
+{
+  "id": 773,
+  "species_id": "silvally",
+  "showdown_id": "silvally",
+  "name": "Silvally",
+  "types": [
+    "normal"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 95,
+    "def": 95,
+    "spa": 95,
+    "spd": 95,
+    "spe": 95
+  },
+  "abilities": {
+    "primary": "rks-system"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "explosion",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 1
+    },
+    {
+      "move": "imprison",
+      "level": 1
+    },
+    {
+      "move": "poison-fang",
+      "level": 1
+    },
+    {
+      "move": "aerial-ace",
+      "level": 1
+    },
+    {
+      "move": "heal-block",
+      "level": 1
+    },
+    {
+      "move": "thunder-fang",
+      "level": 1
+    },
+    {
+      "move": "ice-fang",
+      "level": 1
+    },
+    {
+      "move": "fire-fang",
+      "level": 1
+    },
+    {
+      "move": "iron-head",
+      "level": 1
+    },
+    {
+      "move": "multi-attack",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 5
+    },
+    {
+      "move": "pursuit",
+      "level": 10
+    },
+    {
+      "move": "double-hit",
+      "level": 15
+    },
+    {
+      "move": "metal-sound",
+      "level": 20
+    },
+    {
+      "move": "crush-claw",
+      "level": 25
+    },
+    {
+      "move": "air-slash",
+      "level": 30
+    },
+    {
+      "move": "tri-attack",
+      "level": 35
+    },
+    {
+      "move": "x-scissor",
+      "level": 35
+    },
+    {
+      "move": "take-down",
+      "level": 40
+    },
+    {
+      "move": "crunch",
+      "level": 45
+    },
+    {
+      "move": "double-edge",
+      "level": 55
+    },
+    {
+      "move": "parting-shot",
+      "level": 60
+    },
+    {
+      "move": "punishment",
+      "level": 65
+    },
+    {
+      "move": "razor-wind",
+      "level": 70
+    }
+  ]
+}

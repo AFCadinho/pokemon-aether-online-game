@@ -1,0 +1,79 @@
+{
+  "id": 782,
+  "species_id": "jangmo-o",
+  "showdown_id": "jangmoo",
+  "name": "Jangmo O",
+  "types": [
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 45,
+    "atk": 55,
+    "def": 65,
+    "spa": 45,
+    "spd": 45,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "bulletproof",
+    "hidden": "overcoat"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 4
+    },
+    {
+      "move": "dragon-tail",
+      "level": 8
+    },
+    {
+      "move": "bide",
+      "level": 9
+    },
+    {
+      "move": "scary-face",
+      "level": 12
+    },
+    {
+      "move": "headbutt",
+      "level": 16
+    },
+    {
+      "move": "work-up",
+      "level": 20
+    },
+    {
+      "move": "screech",
+      "level": 24
+    },
+    {
+      "move": "iron-defense",
+      "level": 28
+    },
+    {
+      "move": "dragon-claw",
+      "level": 32
+    },
+    {
+      "move": "noble-roar",
+      "level": 36
+    },
+    {
+      "move": "dragon-dance",
+      "level": 40
+    },
+    {
+      "move": "outrage",
+      "level": 44
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": 742,
+  "species_id": "cutiefly",
+  "showdown_id": "cutiefly",
+  "name": "Cutiefly",
+  "types": [
+    "bug",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 40,
+    "spa": 55,
+    "spd": 40,
+    "spe": 84
+  },
+  "abilities": {
+    "primary": "honey-gather",
+    "hidden": "sweet-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "absorb",
+      "level": 1
+    },
+    {
+      "move": "fairy-wind",
+      "level": 1
+    },
+    {
+      "move": "stun-spore",
+      "level": 6
+    },
+    {
+      "move": "struggle-bug",
+      "level": 10
+    },
+    {
+      "move": "sweet-scent",
+      "level": 12
+    },
+    {
+      "move": "silver-wind",
+      "level": 13
+    },
+    {
+      "move": "draining-kiss",
+      "level": 16
+    },
+    {
+      "move": "bug-buzz",
+      "level": 26
+    },
+    {
+      "move": "aromatherapy",
+      "level": 30
+    },
+    {
+      "move": "covet",
+      "level": 30
+    },
+    {
+      "move": "dazzling-gleam",
+      "level": 31
+    },
+    {
+      "move": "switcheroo",
+      "level": 36
+    },
+    {
+      "move": "quiver-dance",
+      "level": 41
+    }
+  ]
+}

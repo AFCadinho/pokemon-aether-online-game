@@ -1,0 +1,67 @@
+{
+  "id": 817,
+  "species_id": "drizzile",
+  "showdown_id": "drizzile",
+  "name": "Drizzile",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 60,
+    "def": 55,
+    "spa": 95,
+    "spd": 55,
+    "spe": 90
+  },
+  "abilities": {
+    "primary": "torrent",
+    "hidden": "sniper"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "bind",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "water-pulse",
+      "level": 12
+    },
+    {
+      "move": "tearful-look",
+      "level": 19
+    },
+    {
+      "move": "sucker-punch",
+      "level": 24
+    },
+    {
+      "move": "u-turn",
+      "level": 30
+    },
+    {
+      "move": "liquidation",
+      "level": 36
+    },
+    {
+      "move": "soak",
+      "level": 42
+    },
+    {
+      "move": "rain-dance",
+      "level": 48
+    }
+  ]
+}

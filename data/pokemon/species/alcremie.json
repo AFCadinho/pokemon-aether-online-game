@@ -1,0 +1,79 @@
+{
+  "id": 869,
+  "species_id": "alcremie",
+  "showdown_id": "alcremie",
+  "name": "Alcremie",
+  "types": [
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 60,
+    "def": 75,
+    "spa": 110,
+    "spd": 121,
+    "spe": 64
+  },
+  "abilities": {
+    "primary": "sweet-veil",
+    "hidden": "aroma-veil"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "sweet-kiss",
+      "level": 1
+    },
+    {
+      "move": "sweet-scent",
+      "level": 1
+    },
+    {
+      "move": "aromatic-mist",
+      "level": 1
+    },
+    {
+      "move": "decorate",
+      "level": 1
+    },
+    {
+      "move": "draining-kiss",
+      "level": 15
+    },
+    {
+      "move": "charm",
+      "level": 20
+    },
+    {
+      "move": "aromatherapy",
+      "level": 20
+    },
+    {
+      "move": "attract",
+      "level": 25
+    },
+    {
+      "move": "acid-armor",
+      "level": 30
+    },
+    {
+      "move": "dazzling-gleam",
+      "level": 35
+    },
+    {
+      "move": "recover",
+      "level": 40
+    },
+    {
+      "move": "misty-terrain",
+      "level": 45
+    },
+    {
+      "move": "entrainment",
+      "level": 50
+    }
+  ]
+}
