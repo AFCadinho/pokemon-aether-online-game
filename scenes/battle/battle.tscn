@@ -4,14 +4,19 @@
 [ext_resource type="Texture2D" uid="uid://w72nkcnflkf8" path="res://assets/background/battle/PATH.png" id="1_xd4uy"]
 [ext_resource type="PackedScene" uid="uid://db3id5etb8cwp" path="res://scenes/battle/pokemon_hud_panel.tscn" id="2_01pft"]
 [ext_resource type="PackedScene" uid="uid://cir3bfnfoy4l4" path="res://scenes/battle/move_slot.tscn" id="2_h0kxc"]
-[ext_resource type="Texture2D" uid="uid://cljbo3g4o51sw" path="res://assets/battles/field/rain.png" id="3_01pft"]
 [ext_resource type="PackedScene" uid="uid://3gsmmeerkva2" path="res://scenes/battle/party_slot.tscn" id="3_fh7rg"]
 [ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scenes/battle/sprite_box.tscn" id="3_kd6yx"]
 [ext_resource type="Texture2D" uid="uid://b0mdtgfn4y3qi" path="res://assets/sprites/battle_buttons/fight.png" id="4_pll4o"]
+[ext_resource type="PackedScene" uid="uid://dp8he2r06cu2u" path="res://scenes/battle/current_action_panel.tscn" id="5_n6gaa"]
 [ext_resource type="Texture2D" uid="uid://dsbm3h77o41xr" path="res://assets/sprites/battle_buttons/bag.png" id="5_py4tk"]
 [ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
+[ext_resource type="PackedScene" uid="uid://dv3oowqse6sjb" path="res://scenes/battle/field_timers.tscn" id="6_mvulk"]
+[ext_resource type="PackedScene" uid="uid://c2lhyxer4tw6c" path="res://scenes/battle/battle_status_panel.tscn" id="7_mvulk"]
 [ext_resource type="Texture2D" uid="uid://c4s406fdsdgxv" path="res://assets/sprites/battle_buttons/run.png" id="7_pyfix"]
 [ext_resource type="Script" uid="uid://duo7cdw26ghjb" path="res://scripts/battle/action_choices.gd" id="8_t1kk3"]
+[ext_resource type="Script" uid="uid://bxqps5iqr1llo" path="res://scripts/battle/battle_ui/moves_grid.gd" id="8_w40i5"]
+[ext_resource type="Script" uid="uid://gqodi4os4d6k" path="res://scripts/battle/battle_ui/party_grid.gd" id="10_fe4ja"]
+[ext_resource type="PackedScene" uid="uid://bfo18l7xvty5o" path="res://scenes/battle/battle_log_panel.tscn" id="17_6ofp8"]
 [ext_resource type="Texture2D" uid="uid://c5dxctq04cn66" path="res://assets/battles/mechanics/mega-evolution.png" id="37_afkbo"]
 [ext_resource type="Texture2D" uid="uid://c2cbq02hrb073" path="res://assets/battles/mechanics/z-move.png" id="38_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://dn8i3j64uec8i" path="res://assets/battles/mechanics/tera-icon.png" id="39_dsauo"]
@@ -31,41 +36,6 @@ corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v3sqs"]
-bg_color = Color(0.08627451, 0.07058824, 0.05882353, 0.8627451)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_01pft"]
-bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.74509805)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1x3g8"]
-bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.8627451)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kd6yx"]
 bg_color = Color(0.105882354, 0.078431375, 0.05882353, 1)
@@ -131,18 +101,6 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_afkbo"]
-bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.8627451)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
 border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
@@ -248,139 +206,38 @@ offset_top = 0.0
 offset_right = 311.0
 offset_bottom = 136.0
 
-[node name="CurrentActionPanel" type="Panel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1186388833]
+[node name="CurrentActionPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1149733481 instance=ExtResource("5_n6gaa")]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -390.5
-offset_top = -79.0
-offset_right = 390.5
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_v3sqs")
+offset_top = -73.0
+offset_bottom = 0.0
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel" unique_id=1617825066]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+[node name="FieldTimers" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=91068280 instance=ExtResource("6_mvulk")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 0.0
+offset_right = 158.0
+grow_horizontal = 1
 
-[node name="CurrentActionLabel" type="Label" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel/MarginContainer" unique_id=974153974]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
-theme_override_font_sizes/font_size = 48
-text = "Garchomp used Swors Dance"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="BattleStatusPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=790300356 instance=ExtResource("7_mvulk")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 0.0
+offset_right = 153.39575
+grow_horizontal = 1
 
-[node name="FieldTimers" type="PanelContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1745247852]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -158.0
-offset_bottom = 40.0
-grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_01pft")
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers" unique_id=1147602651]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 6
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers/MarginContainer" unique_id=837720855]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="FieldConditionRow" type="HBoxContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers/MarginContainer/VBoxContainer" unique_id=1419245989]
-layout_mode = 2
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers/MarginContainer/VBoxContainer/FieldConditionRow" unique_id=1382070773]
-custom_minimum_size = Vector2(18, 18)
-layout_mode = 2
-texture = ExtResource("3_01pft")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers/MarginContainer/VBoxContainer/FieldConditionRow" unique_id=744833660]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
-theme_override_font_sizes/font_size = 16
-text = "Rain: 5/8 Turns"
-
-[node name="BattleStatusPanel" type="Panel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=578843115]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -76.697876
-offset_right = 76.697876
-offset_bottom = 37.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_1x3g8")
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel" unique_id=1065966143]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel/MarginContainer" unique_id=1255251293]
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="TurnLabel" type="Label" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel/MarginContainer/HBoxContainer" unique_id=1222296527]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
-theme_override_font_sizes/font_size = 16
-text = "Turn: 10"
-
-[node name="SeperationLabel" type="Label" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel/MarginContainer/HBoxContainer" unique_id=258029868]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
-theme_override_font_sizes/font_size = 14
-text = "|"
-
-[node name="TimerLabel" type="Label" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel/MarginContainer/HBoxContainer" unique_id=856617038]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
-theme_override_font_sizes/font_size = 16
-text = "01:24"
-
-[node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel" unique_id=1534491104]
+[node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=900280603]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = -390.30212
-offset_top = 280.5
-offset_right = -354.30212
-offset_bottom = 316.5
+offset_top = -18.0
+offset_right = 36.0
+offset_bottom = 18.0
 grow_vertical = 2
 mouse_default_cursor_shape = 2
 text = "<"
@@ -432,6 +289,7 @@ size_flags_vertical = 10
 theme_override_constants/h_separation = 9
 theme_override_constants/v_separation = 10
 columns = 2
+script = ExtResource("8_w40i5")
 
 [node name="MoveSlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
 layout_mode = 2
@@ -452,6 +310,7 @@ size_flags_vertical = 10
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 2
+script = ExtResource("10_fe4ja")
 
 [node name="PartySlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
@@ -578,56 +437,14 @@ texture_hover = ExtResource("38_8h6bs")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="BattleLogPanel" type="Panel" parent="." unique_id=1548381268]
-custom_minimum_size = Vector2(250, 0)
-layout_mode = 0
-offset_top = 110.0
-offset_right = 250.0
-offset_bottom = 760.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_afkbo")
-
-[node name="MarginContainer" type="MarginContainer" parent="BattleLogPanel" unique_id=1028785479]
+[node name="BattleLogPanel" parent="." unique_id=2138858408 instance=ExtResource("17_6ofp8")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -430.0
+offset_bottom = 220.0
 grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="BattleLogPanel/MarginContainer" unique_id=1389484579]
-layout_mode = 2
-
-[node name="BattleLogTitle" type="Label" parent="BattleLogPanel/MarginContainer/VBoxContainer" unique_id=1076490713]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7647059, 0.5411765, 1)
-theme_override_font_sizes/font_size = 18
-text = "BATTLE LOG"
-horizontal_alignment = 1
-
-[node name="Divider" type="ColorRect" parent="BattleLogPanel/MarginContainer/VBoxContainer" unique_id=1654314343]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-color = Color(0.78431374, 0.6313726, 0.3529412, 0.3529412)
-
-[node name="ScrollContainer" type="ScrollContainer" parent="BattleLogPanel/MarginContainer/VBoxContainer" unique_id=702717869]
-custom_minimum_size = Vector2(0, 500)
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="BattleLogText" type="RichTextLabel" parent="BattleLogPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1227801124]
-custom_minimum_size = Vector2(225, 600)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.94509804, 0.92941177, 0.9019608, 1)
-text = "Wild Absol appeared!
-Aegislash used Iron Head!
-It was super effective!"
 
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/FightButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_fight_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/BagButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_bag_button_pressed"]

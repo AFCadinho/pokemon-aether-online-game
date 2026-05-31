@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dp8he2r06cu2u"]
+
+[ext_resource type="Script" uid="uid://c55tiehdvpmk" path="res://scripts/battle/battle_ui/current_action_panel.gd" id="1_q3jvp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v3sqs"]
+bg_color = Color(0.08627451, 0.07058824, 0.05882353, 0.8627451)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="CurrentActionPanel" type="Panel" unique_id=1149733481]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -390.5
+offset_top = -79.0
+offset_right = 390.5
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_v3sqs")
+script = ExtResource("1_q3jvp")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=214550660]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="CurrentActionLabel" type="Label" parent="MarginContainer" unique_id=2099583851]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
+theme_override_font_sizes/font_size = 48
+text = "Garchomp used Swors Dance"
+horizontal_alignment = 1
+vertical_alignment = 1

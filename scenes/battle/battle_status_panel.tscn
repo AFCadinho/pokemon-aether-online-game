@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://c2lhyxer4tw6c"]
+
+[ext_resource type="Script" uid="uid://c0caaq7m2jq86" path="res://scripts/battle/battle_ui/battle_status_panel.gd" id="1_ynoen"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1x3g8"]
+bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.8627451)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="BattleStatusPanel" type="Panel" unique_id=790300356]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -76.697876
+offset_right = 76.697876
+offset_bottom = 37.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1x3g8")
+script = ExtResource("1_ynoen")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2125510135]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=560722729]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="TurnLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1236793954]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
+theme_override_font_sizes/font_size = 16
+text = "Turn: 1"
+
+[node name="SeperationLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=969292844]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
+theme_override_font_sizes/font_size = 14
+text = "|"
+
+[node name="TimerLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=664014646]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
+theme_override_font_sizes/font_size = 16
+text = "01:24"

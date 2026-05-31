@@ -25,13 +25,12 @@ var active_player_pokemon: Pokemon
 
 # Action Buttons
 @onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
-@onready var moves_grid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid
-@onready var party_grid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid
+@onready var moves_grid: MovesGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid
+@onready var party_grid: PartyGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid
 
 # Battle Log
-@onready var battle_log_text: RichTextLabel = $BattleLogPanel/MarginContainer/VBoxContainer/ScrollContainer/BattleLogText
-@onready var battle_log_panel: Panel = $BattleLogPanel
-@onready var battle_log_toggle_button: Button = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel/BattleLogButton
+@onready var battle_log_panel: BattleLogPanel = $BattleLogPanel
+@onready var battle_log_toggle_button: Button = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleLogButton
 
 # Battle Sprites
 @onready var enemy_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemySpriteBox
@@ -40,6 +39,12 @@ var active_player_pokemon: Pokemon
 # Pokemon HUD
 @onready var player_hud_panel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerHudPanel
 @onready var enemy_hud_panel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemyHudPanel
+
+# Turn Nodes
+@onready var battle_status_panel: BattleStatusPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel
+
+@onready var field_timers_panel: FieldTimersPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers
+@onready var current_action_panel: CurrentActionPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel
 
 # HTTP Request
 @onready var battle_request: HTTPRequest = $BattleRequest
@@ -52,6 +57,9 @@ func _ready() -> void:
 	
 	# Show Moves, Party or Bag
 	_reset_action_choices()
+	_reset_battle_status_panel()
+	current_action_panel.clear_message()
+	battle_log_panel.clear_log()
 	
 	if PlayerSave.party.is_empty():
 		return
@@ -71,11 +79,11 @@ func _on_action_selected(action: String) -> void:
 		_try_run()
 	
 func _on_battle_log_toggle_pressed() -> void:
-	battle_log_panel.visible = not battle_log_panel.visible
+	battle_log_panel.toggle_log()
 	_update_battle_log_toggle_button()
 	
 func _update_battle_log_toggle_button() -> void:
-	if battle_log_panel.visible:
+	if battle_log_panel.is_open():
 		battle_log_toggle_button.text = ">"
 	else:
 		battle_log_toggle_button.text = "<"
@@ -114,7 +122,7 @@ func _open_bag() -> void:
 	party_grid.visible = false
 	
 func _try_run() -> void:
-	battle_log_text.text += "\nGot away safely!"
+	battle_log_panel.add_message("Got away safely!")
 	flee_requested.emit()
 	
 func _show_initial_action_view() -> void:
@@ -129,25 +137,10 @@ func _update_move_slots() -> void:
 	if active_player_pokemon == null:
 		return
 	
-	var moves: Array = battle_state.get_available_moves()
-	var slots: Array[Node] = moves_grid.get_children()
-	
-	for idx in range(slots.size()):
-		var slot: Node = slots[idx]
-		
-		if idx < moves.size():
-			slot.set_move_data(moves[idx])
-		else:
-			slot.set_empty()
+	moves_grid.set_moves(battle_state.get_available_moves())
 
 func _update_party_slots() -> void:
-	var slots: Array[Node] = party_grid.get_children()
-	for idx in range(slots.size()):
-		var slot: Node = slots[idx]
-		if idx < PlayerSave.party.size():
-			slot.set_pokemon(PlayerSave.party[idx])
-		else:
-			slot.set_empty()
+	party_grid.set_party(PlayerSave.party)
 
 func start_battle(player1: Dictionary, player2: Dictionary) -> void:		
 	if battle_type == BattleType.WILD:
@@ -163,9 +156,16 @@ func _start_wild_battle(player1: Dictionary, player2: Dictionary) -> void:
 	if not _apply_api_response(response):
 		return
 	
+	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_move_slots()
 	_show_moves()
+	
+	var player_species := battle_state.get_active_pokemon_species("p1")
+	var opponent_species := battle_state.get_active_pokemon_species("p2")
+	
+	current_action_panel.set_message("What will %s do?" % player_species)
+	battle_log_panel.add_message("A wild %s has appeared!" % opponent_species)
 
 func _apply_api_response(response: Dictionary) -> bool:	
 	if not response.get("success", false):
@@ -193,4 +193,14 @@ func _update_hud_panels() -> void:
 	player_hud_panel.set_team_data(battle_state.get_player_team("p1"))
 	enemy_hud_panel.set_team_data(battle_state.get_player_team("p2"))
 
+func _reset_battle_status_panel() -> void:
+	battle_status_panel.reset_status()
+	field_timers_panel.reset_timers()
+	
+func _update_battle_status_panels() -> void:
+	battle_status_panel.set_turn(battle_state.get_turn())
+	battle_status_panel.hide_timer()
+	field_timers_panel.reset_timers()
+	
+	
 	

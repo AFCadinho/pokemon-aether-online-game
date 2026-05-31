@@ -116,4 +116,8 @@ func get_active_pokemon_max_hp(player_id: String) -> int:
 	
 	return 0
 	
+## Geeft huidige turn terug
+func get_turn() -> int:
+	return int(battle_status_api.get("turn", 0))
+	
 	

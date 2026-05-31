@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dv3oowqse6sjb"]
+
+[ext_resource type="Script" uid="uid://kjese7gnf4so" path="res://scripts/battle/battle_ui/field_timers.gd" id="1_e4shc"]
+[ext_resource type="Texture2D" uid="uid://cljbo3g4o51sw" path="res://assets/battles/field/rain.png" id="1_kc18i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_01pft"]
+bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.74509805)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="FieldTimersPanel" type="PanelContainer" unique_id=91068280]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -158.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_01pft")
+script = ExtResource("1_e4shc")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1300414306]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=84905570]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="FieldConditionRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=864194724]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="ConditionIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/FieldConditionRow" unique_id=1170674223]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("1_kc18i")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ConditionLabel" type="Label" parent="MarginContainer/VBoxContainer/FieldConditionRow" unique_id=1704827279]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
+theme_override_font_sizes/font_size = 16
+text = "Rain: 5/8 Turns"
