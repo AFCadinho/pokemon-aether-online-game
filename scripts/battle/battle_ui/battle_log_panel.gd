@@ -18,3 +18,16 @@ func toggle_log() -> void:
 	
 func is_open() -> bool:
 	return visible
+
+func add_turn_header(turn: int) -> void:
+	if log_text.text != "":
+		log_text.text += "\n\n"
+		
+	log_text.text += "Turn %s" % turn
+	
+func add_blank_line() -> void:
+	if log_text.text == "":
+			return
+
+	if not log_text.text.ends_with("\n"):
+			log_text.text += "\n"

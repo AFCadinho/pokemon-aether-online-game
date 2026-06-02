@@ -1,6 +1,6 @@
 extends Control
 
-signal flee_requested
+signal battle_ended(result: Dictionary)
 
 enum BattleType {
 	WILD,
@@ -49,7 +49,7 @@ var active_player_pokemon: Pokemon
 # HTTP Request
 @onready var battle_request: HTTPRequest = $BattleRequest
 
-# Called when the node enters the scene tree for the first time.
+## Verbindt de UI-signals en zet de battle UI in de beginstand.
 func _ready() -> void:
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
@@ -64,10 +64,11 @@ func _ready() -> void:
 	if PlayerSave.party.is_empty():
 		return
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+## Doet momenteel niets per frame.
 func _process(_delta: float) -> void:
 	pass
 
+## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
 	if action == "fight":
 		_show_moves()
@@ -78,21 +79,25 @@ func _on_action_selected(action: String) -> void:
 	elif action == "run":
 		_try_run()
 	
+## Klapt de battle log open of dicht.
 func _on_battle_log_toggle_pressed() -> void:
 	battle_log_panel.toggle_log()
 	_update_battle_log_toggle_button()
 	
+## Zet de tekst van de battle log toggle op basis van de open/dicht state.
 func _update_battle_log_toggle_button() -> void:
 	if battle_log_panel.is_open():
 		battle_log_toggle_button.text = ">"
 	else:
 		battle_log_toggle_button.text = "<"
 	
+## Verbergt alle action views en reset de geselecteerde action state.
 func _reset_action_choices() -> void:
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
 	party_grid.visible = false
 	
+## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
 	current_action_view = ActionView.MOVES
 	moves_grid.visible = true
@@ -100,30 +105,36 @@ func _show_moves() -> void:
 	action_buttons.set_selected_action("fight")
 
 	
+## Toont de party keuzes in het action panel.
 func _show_party() -> void:
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
 	party_grid.visible = true
 	action_buttons.set_selected_action("party")
 	
+## Zet de UI in bag-modus.
 func _open_bag() -> void:
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
 	party_grid.visible = false
 	
+## Probeert de battle te verlaten.
 func _try_run() -> void:
 	battle_log_panel.add_message("Got away safely!")
-	flee_requested.emit()
+	battle_ended.emit({"reason": "flee"})
 
+## Vult de move slots met de huidige beschikbare moves.
 func _update_move_slots() -> void:
 	if active_player_pokemon == null:
 		return
 	
 	moves_grid.set_moves(battle_state.get_available_moves())
 
+## Vult de party slots met de huidige player party.
 func _update_party_slots() -> void:
 	party_grid.set_party(PlayerSave.party)
 
+## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
 func _apply_api_response(response: Dictionary) -> bool:	
 	if not response.get("success", false):
 		print("Battle API failed: ", response)
@@ -132,6 +143,7 @@ func _apply_api_response(response: Dictionary) -> bool:
 	battle_state.load_from_api_response(response)
 	return true
 	
+## Werkt de player en opponent HUD panels bij vanuit de battle state.
 func _update_hud_panels() -> void:
 	player_hud_panel.set_pokemon_data(
 		battle_state.get_active_pokemon_species("p1"),
@@ -150,18 +162,24 @@ func _update_hud_panels() -> void:
 	player_hud_panel.set_team_data(battle_state.get_player_team("p1"))
 	enemy_hud_panel.set_team_data(battle_state.get_player_team("p2"))
 
+## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
 	field_timers_panel.reset_timers()
 	
+## Werkt turn en field timer status bij vanuit de battle state.
 func _update_battle_status_panels() -> void:
 	battle_status_panel.set_turn(battle_state.get_turn())
 	battle_status_panel.hide_timer()
 	field_timers_panel.reset_timers()
 	
+## Initialiseert een wild battle vanuit een al gemaakte API battle response.
 func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
 	battle_type = BattleType.WILD
 	active_player_pokemon = player_pokemon
+	
+	player_hud_panel.clear_player_name()
+	enemy_hud_panel.clear_player_name()
 	
 	player_sprite_box.set_single_pokemon(player_pokemon, "back")
 	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
@@ -180,5 +198,151 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	
 	current_action_panel.set_message("What will %s do?" % player_species)
 	battle_log_panel.add_message("A wild %s has appeared!" % opponent_species)
+	battle_log_panel.add_turn_header(battle_state.get_turn())
 
+
+
+
+## Stuurt de gekozen player move door en kiest daarna automatisch een opponent move.
+func _on_moves_grid_move_selected(slot: int) -> void:
+	var player_response: Dictionary = await BattleApiClient.send_choice(
+		battle_request,
+		battle_state.battle_id,
+		"p1",
+		"move",
+		slot
+	)
+	
+	if not player_response.get("success", false):
+		print("Player choice failed: ", player_response)
+	
+	battle_state.load_from_api_response(player_response)
+	
+	var opponent_moves: Array = battle_state.get_available_moves("p2")
+	if opponent_moves.is_empty():
+		print("No opponent moves available")
+		return
+		
+	var opponent_slot := randi_range(1, opponent_moves.size())
+	
+	var opponent_response: Dictionary = await BattleApiClient.send_choice(
+		battle_request,
+		battle_state.battle_id,
+		"p2",
+		"move",
+		opponent_slot
+	)
+	
+	if not _apply_api_response(opponent_response):
+		return
+		
+	_update_battle_status_panels()
+	_update_hud_panels()
+	_update_move_slots()
+	_update_party_slots()
+	_render_battle_events(opponent_response.get("events", []))
+	
+	if battle_state.is_battle_ended():
+		await get_tree().create_timer(0.25).timeout
+		battle_ended.emit({
+			"reason": "win",
+			"winner": battle_state.get_winner()
+		})
+		return
+		
+func _render_battle_events(events: Array) -> void:
+	for event in events:
+		var event_type := str(event.get("type", ""))
+		var log_message := ""
+		var battle_message := ""
+		var add_blank_after := false
+		
+		match event_type:
+			"move":
+				var actor := _format_battle_actor(str(event.get("actor", "")))
+				var move_name := str(event.get("move", ""))
+				log_message = "%s used %s!" % [actor, move_name]
+				battle_message = log_message
+			
+			"faint":
+				var target := _format_battle_actor(str(event.get("target", "")))
+				log_message = "%s fainted!" % target
+				battle_message = ""
+				add_blank_after = true
+			
+			"win":
+				var winner := str(event.get("winner", ""))
+				log_message = "%s won!" % winner
+				battle_message = log_message
+				add_blank_after = true
+				
+			"turn":
+				var turn := int(event.get("turn", 0))
+				if turn > 0:
+					battle_log_panel.add_turn_header(turn)
+					
+			"damage":
+				var target := _format_battle_actor(str(event.get("target", "")))
+				var previous_hp := int(event.get("previousHp", 0))
+				var hp := int(event.get("hp", 0))
+				var max_hp := int(event.get("maxHp", 0))
+				
+				if previous_hp > hp and max_hp > 0:
+					var percent: int = max(1, _get_visible_hp_change(previous_hp, hp, max_hp))
+					log_message = "  - %s lost %s%% HP" % [target, percent]
+
+				else:
+					log_message = "  - %s took damage!" % target
+					
+				add_blank_after = true
+				
+			"heal":
+				var target := _format_battle_actor(str(event.get("target", "")))
+				var previous_hp := int(event.get("previousHp", 0))
+				var hp := int(event.get("hp", 0))
+				var max_hp := int(event.get("maxHp", 0))
+
+
+				if hp > previous_hp and max_hp > 0:
+					var percent: int = max(1, _get_visible_hp_change(previous_hp, hp, max_hp))
+					log_message = "  - %s restored %s%% HP!" % [target, percent]
+
+				else:
+					log_message = "  - %s restored HP!" % target
+					
+				add_blank_after = true
+			_:
+				pass
+		
+		if log_message != "":
+			battle_log_panel.add_message(log_message)
+			
+		if add_blank_after:
+			battle_log_panel.add_blank_line()
+		
+		if battle_message != "":
+			current_action_panel.set_message(battle_message)
+
+			
+## Zet echte HP om naar het zichtbare Showdown-percentage.
+func _to_visible_hp_percent(hp: int, max_hp: int) -> int:
+	if max_hp <= 0:
+		return 0
+		
+	if hp <= 0:
+		return 0
+		
+	return ceili((float(hp) / float(max_hp)) * 100.0)
+	
+## Berekent het zichtbare HP-percentageverschil tussen twee HP-waarden.
+func _get_visible_hp_change(previous_hp: int, hp: int, max_hp: int) -> int:
+	var previous_percent := _to_visible_hp_percent(previous_hp, max_hp)
+	var current_percent := _to_visible_hp_percent(hp, max_hp)
+	return abs(previous_percent - current_percent)
+
+func _format_battle_actor(actor: String) -> String:
+	if actor.contains(": "):
+		return actor.split(": ")[1]
+		
+	return actor
 	

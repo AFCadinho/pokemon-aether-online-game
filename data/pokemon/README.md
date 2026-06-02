@@ -4,7 +4,8 @@ This folder contains local game data generated from external sources such as Pok
 
 - `species/`: one JSON file per Pokemon species.
 - `moves/`: JSON files grouped by move type (e.g. `fire.json`, `water.json`).
-- `abilities/`: one JSON file per ability.
+- `abilities.json`: ability lookup table keyed by ability id.
+- `items/`: JSON item lookup tables grouped by category (e.g. `balls`, `medicine`, `held-items`).
 - `types/`: one JSON file per type.
 
 Move entries inside type files follow:
@@ -17,6 +18,22 @@ Move entries inside type files follow:
 - `accuracy`: accuracy value (`null` when not applicable)
 - `pp`: power points
 - `priority`: priority modifier
+
+Item entries inside category files follow:
+
+- `id`: item id
+- `name`: human-readable display name
+- `category`: item category matching the filename
+- `short_desc`: compact UI description
+- `desc`: full description for detail views
+- `flavor_text`: optional Pokedex-style text
+- `generation`: generation where the item was introduced
+- `is_key_item`: whether the item is a key item
+- `is_consumable`: whether use consumes the item
+- `is_holdable`: whether a Pokemon can hold the item
+- `battle_effect`: battle effect id or `null`
+- `field_effect`: field effect id or `null`
+- `data`: category/effect-specific structured values
 
 File-IDs and payload IDs follow this convention:
 

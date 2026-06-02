@@ -1,0 +1,592 @@
+{
+  "absorb": {
+    "id": "absorb",
+    "name": "Absorb",
+    "type": "grass",
+    "category": "special",
+    "base_power": 20,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0
+  },
+  "apple-acid": {
+    "id": "apple-acid",
+    "name": "Apple Acid",
+    "type": "grass",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "aromatherapy": {
+    "id": "aromatherapy",
+    "name": "Aromatherapy",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 5,
+    "priority": 0
+  },
+  "bloom-doom--physical": {
+    "id": "bloom-doom--physical",
+    "name": "Bloom Doom",
+    "type": "grass",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "bloom-doom--special": {
+    "id": "bloom-doom--special",
+    "name": "Bloom Doom",
+    "type": "grass",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "branch-poke": {
+    "id": "branch-poke",
+    "name": "Branch Poke",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0
+  },
+  "bullet-seed": {
+    "id": "bullet-seed",
+    "name": "Bullet Seed",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 25,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 0
+  },
+  "chloroblast": {
+    "id": "chloroblast",
+    "name": "Chloroblast",
+    "type": "grass",
+    "category": "special",
+    "base_power": 150,
+    "accuracy": 95,
+    "pp": 5,
+    "priority": 0
+  },
+  "cotton-guard": {
+    "id": "cotton-guard",
+    "name": "Cotton Guard",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "cotton-spore": {
+    "id": "cotton-spore",
+    "name": "Cotton Spore",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0
+  },
+  "drum-beating": {
+    "id": "drum-beating",
+    "name": "Drum Beating",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "energy-ball": {
+    "id": "energy-ball",
+    "name": "Energy Ball",
+    "type": "grass",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "flower-trick": {
+    "id": "flower-trick",
+    "name": "Flower Trick",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 70,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "forests-curse": {
+    "id": "forests-curse",
+    "name": "Forest\u2019s Curse",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "frenzy-plant": {
+    "id": "frenzy-plant",
+    "name": "Frenzy Plant",
+    "type": "grass",
+    "category": "special",
+    "base_power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "priority": 0
+  },
+  "giga-drain": {
+    "id": "giga-drain",
+    "name": "Giga Drain",
+    "type": "grass",
+    "category": "special",
+    "base_power": 75,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "grass-knot": {
+    "id": "grass-knot",
+    "name": "Grass Knot",
+    "type": "grass",
+    "category": "special",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "grass-pledge": {
+    "id": "grass-pledge",
+    "name": "Grass Pledge",
+    "type": "grass",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "grass-whistle": {
+    "id": "grass-whistle",
+    "name": "Grass Whistle",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 55,
+    "pp": 15,
+    "priority": 0
+  },
+  "grassy-glide": {
+    "id": "grassy-glide",
+    "name": "Grassy Glide",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 55,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "grassy-terrain": {
+    "id": "grassy-terrain",
+    "name": "Grassy Terrain",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "grav-apple": {
+    "id": "grav-apple",
+    "name": "Grav Apple",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "horn-leech": {
+    "id": "horn-leech",
+    "name": "Horn Leech",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 75,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "ingrain": {
+    "id": "ingrain",
+    "name": "Ingrain",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "ivy-cudgel": {
+    "id": "ivy-cudgel",
+    "name": "Ivy Cudgel",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "jungle-healing": {
+    "id": "jungle-healing",
+    "name": "Jungle Healing",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "leaf-blade": {
+    "id": "leaf-blade",
+    "name": "Leaf Blade",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "leaf-storm": {
+    "id": "leaf-storm",
+    "name": "Leaf Storm",
+    "type": "grass",
+    "category": "special",
+    "base_power": 130,
+    "accuracy": 90,
+    "pp": 5,
+    "priority": 0
+  },
+  "leaf-tornado": {
+    "id": "leaf-tornado",
+    "name": "Leaf Tornado",
+    "type": "grass",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "leafage": {
+    "id": "leafage",
+    "name": "Leafage",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0
+  },
+  "leech-seed": {
+    "id": "leech-seed",
+    "name": "Leech Seed",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "magical-leaf": {
+    "id": "magical-leaf",
+    "name": "Magical Leaf",
+    "type": "grass",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "matcha-gotcha": {
+    "id": "matcha-gotcha",
+    "name": "Matcha Gotcha",
+    "type": "grass",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 90,
+    "pp": 15,
+    "priority": 0
+  },
+  "max-overgrowth": {
+    "id": "max-overgrowth",
+    "name": "Max Overgrowth",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 10,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "mega-drain": {
+    "id": "mega-drain",
+    "name": "Mega Drain",
+    "type": "grass",
+    "category": "special",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "needle-arm": {
+    "id": "needle-arm",
+    "name": "Needle Arm",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "petal-blizzard": {
+    "id": "petal-blizzard",
+    "name": "Petal Blizzard",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "petal-dance": {
+    "id": "petal-dance",
+    "name": "Petal Dance",
+    "type": "grass",
+    "category": "special",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "power-whip": {
+    "id": "power-whip",
+    "name": "Power Whip",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0
+  },
+  "razor-leaf": {
+    "id": "razor-leaf",
+    "name": "Razor Leaf",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 55,
+    "accuracy": 95,
+    "pp": 25,
+    "priority": 0
+  },
+  "sappy-seed": {
+    "id": "sappy-seed",
+    "name": "Sappy Seed",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "seed-bomb": {
+    "id": "seed-bomb",
+    "name": "Seed Bomb",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "seed-flare": {
+    "id": "seed-flare",
+    "name": "Seed Flare",
+    "type": "grass",
+    "category": "special",
+    "base_power": 120,
+    "accuracy": 85,
+    "pp": 5,
+    "priority": 0
+  },
+  "sleep-powder": {
+    "id": "sleep-powder",
+    "name": "Sleep Powder",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 75,
+    "pp": 15,
+    "priority": 0
+  },
+  "snap-trap": {
+    "id": "snap-trap",
+    "name": "Snap Trap",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 35,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "solar-beam": {
+    "id": "solar-beam",
+    "name": "Solar Beam",
+    "type": "grass",
+    "category": "special",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "solar-blade": {
+    "id": "solar-blade",
+    "name": "Solar Blade",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 125,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "spicy-extract": {
+    "id": "spicy-extract",
+    "name": "Spicy Extract",
+    "type": "grass",
+    "category": "status",
+    "base_power": 0,
+    "accuracy": null,
+    "pp": 15,
+    "priority": 0
+  },
+  "spiky-shield": {
+    "id": "spiky-shield",
+    "name": "Spiky Shield",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 4
+  },
+  "spore": {
+    "id": "spore",
+    "name": "Spore",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "strength-sap": {
+    "id": "strength-sap",
+    "name": "Strength Sap",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "stun-spore": {
+    "id": "stun-spore",
+    "name": "Stun Spore",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 75,
+    "pp": 30,
+    "priority": 0
+  },
+  "synthesis": {
+    "id": "synthesis",
+    "name": "Synthesis",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 5,
+    "priority": 0
+  },
+  "syrup-bomb": {
+    "id": "syrup-bomb",
+    "name": "Syrup Bomb",
+    "type": "grass",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0
+  },
+  "trailblaze": {
+    "id": "trailblaze",
+    "name": "Trailblaze",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 50,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "trop-kick": {
+    "id": "trop-kick",
+    "name": "Trop Kick",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "vine-whip": {
+    "id": "vine-whip",
+    "name": "Vine Whip",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 45,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0
+  },
+  "wood-hammer": {
+    "id": "wood-hammer",
+    "name": "Wood Hammer",
+    "type": "grass",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "worry-seed": {
+    "id": "worry-seed",
+    "name": "Worry Seed",
+    "type": "grass",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  }
+}

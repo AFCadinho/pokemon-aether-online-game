@@ -1,0 +1,492 @@
+{
+  "10-000-000-volt-thunderbolt": {
+    "id": "10-000-000-volt-thunderbolt",
+    "name": "10,000,000 Volt Thunderbolt",
+    "type": "electric",
+    "category": "special",
+    "base_power": 195,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "aura-wheel": {
+    "id": "aura-wheel",
+    "name": "Aura Wheel",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 110,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "bolt-beak": {
+    "id": "bolt-beak",
+    "name": "Bolt Beak",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 85,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "bolt-strike": {
+    "id": "bolt-strike",
+    "name": "Bolt Strike",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 130,
+    "accuracy": 85,
+    "pp": 5,
+    "priority": 0
+  },
+  "buzzy-buzz": {
+    "id": "buzzy-buzz",
+    "name": "Buzzy Buzz",
+    "type": "electric",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "catastropika": {
+    "id": "catastropika",
+    "name": "Catastropika",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 210,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "charge": {
+    "id": "charge",
+    "name": "Charge",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "charge-beam": {
+    "id": "charge-beam",
+    "name": "Charge Beam",
+    "type": "electric",
+    "category": "special",
+    "base_power": 50,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "discharge": {
+    "id": "discharge",
+    "name": "Discharge",
+    "type": "electric",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "double-shock": {
+    "id": "double-shock",
+    "name": "Double Shock",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "eerie-impulse": {
+    "id": "eerie-impulse",
+    "name": "Eerie Impulse",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "electric-terrain": {
+    "id": "electric-terrain",
+    "name": "Electric Terrain",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "electrify": {
+    "id": "electrify",
+    "name": "Electrify",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "electro-ball": {
+    "id": "electro-ball",
+    "name": "Electro Ball",
+    "type": "electric",
+    "category": "special",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "electro-drift": {
+    "id": "electro-drift",
+    "name": "Electro Drift",
+    "type": "electric",
+    "category": "special",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "electro-shot": {
+    "id": "electro-shot",
+    "name": "Electro Shot",
+    "type": "electric",
+    "category": "special",
+    "base_power": 130,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "electroweb": {
+    "id": "electroweb",
+    "name": "Electroweb",
+    "type": "electric",
+    "category": "special",
+    "base_power": 55,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "fusion-bolt": {
+    "id": "fusion-bolt",
+    "name": "Fusion Bolt",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "gigavolt-havoc--physical": {
+    "id": "gigavolt-havoc--physical",
+    "name": "Gigavolt Havoc",
+    "type": "electric",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "gigavolt-havoc--special": {
+    "id": "gigavolt-havoc--special",
+    "name": "Gigavolt Havoc",
+    "type": "electric",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "ion-deluge": {
+    "id": "ion-deluge",
+    "name": "Ion Deluge",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 25,
+    "priority": 1
+  },
+  "magnet-rise": {
+    "id": "magnet-rise",
+    "name": "Magnet Rise",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "magnetic-flux": {
+    "id": "magnetic-flux",
+    "name": "Magnetic Flux",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "max-lightning": {
+    "id": "max-lightning",
+    "name": "Max Lightning",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 10,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "nuzzle": {
+    "id": "nuzzle",
+    "name": "Nuzzle",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 20,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "overdrive": {
+    "id": "overdrive",
+    "name": "Overdrive",
+    "type": "electric",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "parabolic-charge": {
+    "id": "parabolic-charge",
+    "name": "Parabolic Charge",
+    "type": "electric",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "pika-papow": {
+    "id": "pika-papow",
+    "name": "Pika Papow",
+    "type": "electric",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "plasma-fists": {
+    "id": "plasma-fists",
+    "name": "Plasma Fists",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "rising-voltage": {
+    "id": "rising-voltage",
+    "name": "Rising Voltage",
+    "type": "electric",
+    "category": "special",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "shock-wave": {
+    "id": "shock-wave",
+    "name": "Shock Wave",
+    "type": "electric",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "spark": {
+    "id": "spark",
+    "name": "Spark",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "stoked-sparksurfer": {
+    "id": "stoked-sparksurfer",
+    "name": "Stoked Sparksurfer",
+    "type": "electric",
+    "category": "special",
+    "base_power": 175,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "supercell-slam": {
+    "id": "supercell-slam",
+    "name": "Supercell Slam",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "thunder": {
+    "id": "thunder",
+    "name": "Thunder",
+    "type": "electric",
+    "category": "special",
+    "base_power": 110,
+    "accuracy": 70,
+    "pp": 10,
+    "priority": 0
+  },
+  "thunder-cage": {
+    "id": "thunder-cage",
+    "name": "Thunder Cage",
+    "type": "electric",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 90,
+    "pp": 15,
+    "priority": 0
+  },
+  "thunder-fang": {
+    "id": "thunder-fang",
+    "name": "Thunder Fang",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 65,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "thunder-punch": {
+    "id": "thunder-punch",
+    "name": "Thunder Punch",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "thunder-shock": {
+    "id": "thunder-shock",
+    "name": "Thunder Shock",
+    "type": "electric",
+    "category": "special",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 0
+  },
+  "thunder-wave": {
+    "id": "thunder-wave",
+    "name": "Thunder Wave",
+    "type": "electric",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 90,
+    "pp": 20,
+    "priority": 0
+  },
+  "thunderbolt": {
+    "id": "thunderbolt",
+    "name": "Thunderbolt",
+    "type": "electric",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "thunderclap": {
+    "id": "thunderclap",
+    "name": "Thunderclap",
+    "type": "electric",
+    "category": "special",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 1
+  },
+  "volt-switch": {
+    "id": "volt-switch",
+    "name": "Volt Switch",
+    "type": "electric",
+    "category": "special",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "volt-tackle": {
+    "id": "volt-tackle",
+    "name": "Volt Tackle",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "wild-charge": {
+    "id": "wild-charge",
+    "name": "Wild Charge",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "wildbolt-storm": {
+    "id": "wildbolt-storm",
+    "name": "Wildbolt Storm",
+    "type": "electric",
+    "category": "special",
+    "base_power": 100,
+    "accuracy": 80,
+    "pp": 10,
+    "priority": 0
+  },
+  "zap-cannon": {
+    "id": "zap-cannon",
+    "name": "Zap Cannon",
+    "type": "electric",
+    "category": "special",
+    "base_power": 120,
+    "accuracy": 50,
+    "pp": 5,
+    "priority": 0
+  },
+  "zing-zap": {
+    "id": "zing-zap",
+    "name": "Zing Zap",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "zippy-zap": {
+    "id": "zippy-zap",
+    "name": "Zippy Zap",
+    "type": "electric",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 2
+  }
+}

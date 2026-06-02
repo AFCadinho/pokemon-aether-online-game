@@ -1,0 +1,492 @@
+{
+  "aqua-cutter": {
+    "id": "aqua-cutter",
+    "name": "Aqua Cutter",
+    "type": "water",
+    "category": "physical",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "aqua-jet": {
+    "id": "aqua-jet",
+    "name": "Aqua Jet",
+    "type": "water",
+    "category": "physical",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 1
+  },
+  "aqua-ring": {
+    "id": "aqua-ring",
+    "name": "Aqua Ring",
+    "type": "water",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "aqua-step": {
+    "id": "aqua-step",
+    "name": "Aqua Step",
+    "type": "water",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "aqua-tail": {
+    "id": "aqua-tail",
+    "name": "Aqua Tail",
+    "type": "water",
+    "category": "physical",
+    "base_power": 90,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "bouncy-bubble": {
+    "id": "bouncy-bubble",
+    "name": "Bouncy Bubble",
+    "type": "water",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "brine": {
+    "id": "brine",
+    "name": "Brine",
+    "type": "water",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "bubble": {
+    "id": "bubble",
+    "name": "Bubble",
+    "type": "water",
+    "category": "special",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 0
+  },
+  "bubble-beam": {
+    "id": "bubble-beam",
+    "name": "Bubble Beam",
+    "type": "water",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "chilling-water": {
+    "id": "chilling-water",
+    "name": "Chilling Water",
+    "type": "water",
+    "category": "special",
+    "base_power": 50,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "clamp": {
+    "id": "clamp",
+    "name": "Clamp",
+    "type": "water",
+    "category": "physical",
+    "base_power": 35,
+    "accuracy": 85,
+    "pp": 15,
+    "priority": 0
+  },
+  "crabhammer": {
+    "id": "crabhammer",
+    "name": "Crabhammer",
+    "type": "water",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "dive": {
+    "id": "dive",
+    "name": "Dive",
+    "type": "water",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "fishious-rend": {
+    "id": "fishious-rend",
+    "name": "Fishious Rend",
+    "type": "water",
+    "category": "physical",
+    "base_power": 85,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "flip-turn": {
+    "id": "flip-turn",
+    "name": "Flip Turn",
+    "type": "water",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "hydro-cannon": {
+    "id": "hydro-cannon",
+    "name": "Hydro Cannon",
+    "type": "water",
+    "category": "special",
+    "base_power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "priority": 0
+  },
+  "hydro-pump": {
+    "id": "hydro-pump",
+    "name": "Hydro Pump",
+    "type": "water",
+    "category": "special",
+    "base_power": 110,
+    "accuracy": 80,
+    "pp": 5,
+    "priority": 0
+  },
+  "hydro-steam": {
+    "id": "hydro-steam",
+    "name": "Hydro Steam",
+    "type": "water",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "hydro-vortex--physical": {
+    "id": "hydro-vortex--physical",
+    "name": "Hydro Vortex",
+    "type": "water",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "hydro-vortex--special": {
+    "id": "hydro-vortex--special",
+    "name": "Hydro Vortex",
+    "type": "water",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "jet-punch": {
+    "id": "jet-punch",
+    "name": "Jet Punch",
+    "type": "water",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 1
+  },
+  "life-dew": {
+    "id": "life-dew",
+    "name": "Life Dew",
+    "type": "water",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "liquidation": {
+    "id": "liquidation",
+    "name": "Liquidation",
+    "type": "water",
+    "category": "physical",
+    "base_power": 85,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "max-geyser": {
+    "id": "max-geyser",
+    "name": "Max Geyser",
+    "type": "water",
+    "category": "physical",
+    "base_power": 10,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "muddy-water": {
+    "id": "muddy-water",
+    "name": "Muddy Water",
+    "type": "water",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0
+  },
+  "oceanic-operetta": {
+    "id": "oceanic-operetta",
+    "name": "Oceanic Operetta",
+    "type": "water",
+    "category": "special",
+    "base_power": 195,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "octazooka": {
+    "id": "octazooka",
+    "name": "Octazooka",
+    "type": "water",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0
+  },
+  "origin-pulse": {
+    "id": "origin-pulse",
+    "name": "Origin Pulse",
+    "type": "water",
+    "category": "special",
+    "base_power": 110,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0
+  },
+  "rain-dance": {
+    "id": "rain-dance",
+    "name": "Rain Dance",
+    "type": "water",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 5,
+    "priority": 0
+  },
+  "razor-shell": {
+    "id": "razor-shell",
+    "name": "Razor Shell",
+    "type": "water",
+    "category": "physical",
+    "base_power": 75,
+    "accuracy": 95,
+    "pp": 10,
+    "priority": 0
+  },
+  "scald": {
+    "id": "scald",
+    "name": "Scald",
+    "type": "water",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "snipe-shot": {
+    "id": "snipe-shot",
+    "name": "Snipe Shot",
+    "type": "water",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "soak": {
+    "id": "soak",
+    "name": "Soak",
+    "type": "water",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "sparkling-aria": {
+    "id": "sparkling-aria",
+    "name": "Sparkling Aria",
+    "type": "water",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "splishy-splash": {
+    "id": "splishy-splash",
+    "name": "Splishy Splash",
+    "type": "water",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "steam-eruption": {
+    "id": "steam-eruption",
+    "name": "Steam Eruption",
+    "type": "water",
+    "category": "special",
+    "base_power": 110,
+    "accuracy": 95,
+    "pp": 5,
+    "priority": 0
+  },
+  "surf": {
+    "id": "surf",
+    "name": "Surf",
+    "type": "water",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "surging-strikes": {
+    "id": "surging-strikes",
+    "name": "Surging Strikes",
+    "type": "water",
+    "category": "physical",
+    "base_power": 25,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "triple-dive": {
+    "id": "triple-dive",
+    "name": "Triple Dive",
+    "type": "water",
+    "category": "physical",
+    "base_power": 30,
+    "accuracy": 95,
+    "pp": 10,
+    "priority": 0
+  },
+  "water-gun": {
+    "id": "water-gun",
+    "name": "Water Gun",
+    "type": "water",
+    "category": "special",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0
+  },
+  "water-pledge": {
+    "id": "water-pledge",
+    "name": "Water Pledge",
+    "type": "water",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "water-pulse": {
+    "id": "water-pulse",
+    "name": "Water Pulse",
+    "type": "water",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "water-shuriken": {
+    "id": "water-shuriken",
+    "name": "Water Shuriken",
+    "type": "water",
+    "category": "special",
+    "base_power": 15,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 1
+  },
+  "water-sport": {
+    "id": "water-sport",
+    "name": "Water Sport",
+    "type": "water",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 15,
+    "priority": 0
+  },
+  "water-spout": {
+    "id": "water-spout",
+    "name": "Water Spout",
+    "type": "water",
+    "category": "special",
+    "base_power": 150,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "waterfall": {
+    "id": "waterfall",
+    "name": "Waterfall",
+    "type": "water",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "wave-crash": {
+    "id": "wave-crash",
+    "name": "Wave Crash",
+    "type": "water",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "whirlpool": {
+    "id": "whirlpool",
+    "name": "Whirlpool",
+    "type": "water",
+    "category": "special",
+    "base_power": 35,
+    "accuracy": 85,
+    "pp": 15,
+    "priority": 0
+  },
+  "withdraw": {
+    "id": "withdraw",
+    "name": "Withdraw",
+    "type": "water",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 40,
+    "priority": 0
+  }
+}

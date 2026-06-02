@@ -99,9 +99,6 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	player.is_moving = false
 	player.set_physics_process(false)
 	
-	print("Starting wild battle:")
-	print(wild_pokemon.to_battle_dict())
-	
 	var response: Dictionary = await create_wild_battle_response(wild_pokemon)
 	if not response.get("success", false):
 		is_in_battle = false
@@ -121,8 +118,8 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 		response
 	)
 	
-	if battle_instance.has_signal("flee_requested"):
-		battle_instance.flee_requested.connect(end_wild_battle)
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
 	
 func end_wild_battle() -> void:
 	if battle_layer != null:
@@ -133,3 +130,6 @@ func end_wild_battle() -> void:
 	is_in_battle = false
 	
 	player.set_physics_process(true)
+	
+func _on_battle_ended(_result: Dictionary) -> void:
+	end_wild_battle()

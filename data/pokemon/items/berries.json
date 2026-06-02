@@ -1,0 +1,1337 @@
+{
+  "aguav-berry": {
+    "id": "aguav-berry",
+    "name": "Aguav Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike bitter flavor.",
+    "desc": "Held in battle : When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP. If the holder dislikes bitter flavors (i.e., has a nature that lowers Special Defense), it will also become confused.",
+    "flavor_text": "If held by a Pokemon, it restores the users HP in a pinch, but it will cause confusion if the user hates the taste.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "apicot-berry": {
+    "id": "apicot-berry",
+    "name": "Apicot Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost Special Defense.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Special Defense by one stage.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, its Sp. Def stat will increase when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "aspear-berry": {
+    "id": "aspear-berry",
+    "name": "Aspear Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when frozen to cure frozen.",
+    "desc": "Held in battle : When the holder is frozen, it consumes this item to thaw itself. Used on a party Pokemon : Cures freezing.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can recover from being frozen on its own in battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "babiri-berry": {
+    "id": "babiri-berry",
+    "name": "Babiri Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Steel-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Steel-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Steel-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "belue-berry": {
+    "id": "belue-berry",
+    "name": "Belue Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Beauty, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "bluk-berry": {
+    "id": "bluk-berry",
+    "name": "Bluk Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Beauty. Its blue flesh is dry when eaten.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "charti-berry": {
+    "id": "charti-berry",
+    "name": "Charti Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Rock-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Rock-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Rock-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "cheri-berry": {
+    "id": "cheri-berry",
+    "name": "Cheri Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when paralyzed to cure paralysis.",
+    "desc": "Held in battle : When the holder is paralyzed, it consumes this item to cure the paralysis. Used on a party Pokemon : Cures paralysis.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can recover from paralysis on its own in battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "chesto-berry": {
+    "id": "chesto-berry",
+    "name": "Chesto Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when asleep to cure sleep.",
+    "desc": "Held in battle : When the holder is asleep, it consumes this item to wake up. Used on a party Pokemon : Cures sleep.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can recover from sleep on its own in battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "chilan-berry": {
+    "id": "chilan-berry",
+    "name": "Chilan Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a Normal-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take Normal-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one Normal-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "chople-berry": {
+    "id": "chople-berry",
+    "name": "Chople Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Fighting-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Fighting-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Fighting-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "coba-berry": {
+    "id": "coba-berry",
+    "name": "Coba Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Flying-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Flying-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Flying-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "colbur-berry": {
+    "id": "colbur-berry",
+    "name": "Colbur Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Dark-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Dark-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Dark-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "cornn-berry": {
+    "id": "cornn-berry",
+    "name": "Cornn Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Beauty, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "custap-berry": {
+    "id": "custap-berry",
+    "name": "Custap Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP when using a move to go first.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item. On the following turn, the holder will act first among moves with the same priority, regardless of Speed.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it will be able to move first just once when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "durin-berry": {
+    "id": "durin-berry",
+    "name": "Durin Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Cleverness, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "enigma-berry": {
+    "id": "enigma-berry",
+    "name": "Enigma Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective attack to restore 1/4 max HP.",
+    "desc": "Held in battle : When the holder takes super-effective damage, it consumes this item to restore 1/4 its max HP.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, being hit by a supereffective attack will restore its HP.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "figy-berry": {
+    "id": "figy-berry",
+    "name": "Figy Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike spicy flavor.",
+    "desc": "Held in battle : When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP. If the holder dislikes spicy flavors (i.e., has a nature that lowers Attack), it will also become confused.",
+    "flavor_text": "If held by a Pokemon, it restores the users HP in a pinch, but it will cause confusion if the user hates the taste.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "ganlon-berry": {
+    "id": "ganlon-berry",
+    "name": "Ganlon Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost Defense.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Defense by one stage.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, its Defense stat will increase when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "golden-nanab-berry": {
+    "id": "golden-nanab-berry",
+    "name": "Golden Nanab Berry",
+    "category": "berries",
+    "short_desc": "",
+    "desc": "",
+    "flavor_text": "A Berry that calms wild Pokemon youre trying to catch drastically when given to them.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 5000,
+      "fling_power": 10
+    }
+  },
+  "golden-pinap-berry": {
+    "id": "golden-pinap-berry",
+    "name": "Golden Pinap Berry",
+    "category": "berries",
+    "short_desc": "",
+    "desc": "",
+    "flavor_text": "A Berry that makes you drastically more likely to get an item when given to Pokemon youre trying to catch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 5000,
+      "fling_power": 10
+    }
+  },
+  "golden-razz-berry": {
+    "id": "golden-razz-berry",
+    "name": "Golden Razz Berry",
+    "category": "berries",
+    "short_desc": "",
+    "desc": "",
+    "flavor_text": "A Berry that makes it drastically easier to catch Pokemon when given to them.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 5000,
+      "fling_power": 10
+    }
+  },
+  "grepa-berry": {
+    "id": "grepa-berry",
+    "name": "Grepa Berry",
+    "category": "berries",
+    "short_desc": "Drops Special Defense Effort Values by 10 and raises happiness.",
+    "desc": "Used on a party Pokemon : Increases happiness by 10/5/2. Lowers Special Defense effort by 10.",
+    "flavor_text": "A Berry to be consumed by Pokemon. Using it on a Pokemon makes it more friendly but lowers its Sp. Def base points.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "haban-berry": {
+    "id": "haban-berry",
+    "name": "Haban Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Dragon-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Dragon-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Dragon-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "hondew-berry": {
+    "id": "hondew-berry",
+    "name": "Hondew Berry",
+    "category": "berries",
+    "short_desc": "Drops Special Attack Effort Values by 10 and raises happiness.",
+    "desc": "Used on a party Pokemon : Increases happiness by 10/5/2. Lowers Special Attack effort by 10.",
+    "flavor_text": "A Berry to be consumed by Pokemon. Using it on a Pokemon makes it more friendly but lowers its Sp. Atk base points.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "iapapa-berry": {
+    "id": "iapapa-berry",
+    "name": "Iapapa Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike sour flavor.",
+    "desc": "Held in battle : When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP. If the holder dislikes sour flavors (i.e., has a nature that lowers Defense), it will also become confused.",
+    "flavor_text": "If held by a Pokemon, it restores the users HP in a pinch, but it will cause confusion if the user hates the taste.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "jaboca-berry": {
+    "id": "jaboca-berry",
+    "name": "Jaboca Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed to deal 1/8 attackers max HP when holder is struck by a physical attack.",
+    "desc": "Held in battle : When the holder takes physical damage, it consumes this item to damage the attacking Pokemon for 1/8 its max HP.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a physical attack hits the Pokemon holding it, the attacker will also be hurt.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "kasib-berry": {
+    "id": "kasib-berry",
+    "name": "Kasib Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Ghost-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Ghost-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Ghost-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "kebia-berry": {
+    "id": "kebia-berry",
+    "name": "Kebia Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Poison-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Poison-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Poison-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "kee-berry": {
+    "id": "kee-berry",
+    "name": "Kee Berry",
+    "category": "berries",
+    "short_desc": "Held: When the holder is hit by a physical move, increases its Defense by one stage.",
+    "desc": "Held: When the holder is hit by a physical move, increases its Defense by one stage.",
+    "flavor_text": "If held by a Pokemon, this Berry will increase the holders Defense if its hit with a physical move.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "kelpsy-berry": {
+    "id": "kelpsy-berry",
+    "name": "Kelpsy Berry",
+    "category": "berries",
+    "short_desc": "Drops Attack Effort Values by 10 and raises happiness.",
+    "desc": "Used on a party Pokemon : Increases happiness by 10/5/2. Lowers Attack effort by 10.",
+    "flavor_text": "A Berry to be consumed by Pokemon. Using it on a Pokemon makes it more friendly but lowers its Attack base points.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "lansat-berry": {
+    "id": "lansat-berry",
+    "name": "Lansat Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost critical hit ratio by two stages.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its critical hit chance by one stage.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, its critical-hit ratio will increase when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "leppa-berry": {
+    "id": "leppa-berry",
+    "name": "Leppa Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when a move runs out of PP to restore its PP by 10.",
+    "desc": "Held in battle : When the holder is out of PP for one of its moves, it consumes this item to restore 10 of that moves PP. Used on a party Pokemon : Restores 10 PP for a selected move.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can restore 10 PP to a depleted move during battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "liechi-berry": {
+    "id": "liechi-berry",
+    "name": "Liechi Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost Attack.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Attack by one stage.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, its Attack stat will increase when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "lum-berry": {
+    "id": "lum-berry",
+    "name": "Lum Berry",
+    "category": "berries",
+    "short_desc": "Cures any status condition when held.",
+    "desc": "When held, cures the holder of any major status condition or confusion.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can recover from any status condition during battle.",
+    "generation": 3,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": "held_cure_status",
+    "field_effect": "cure_status",
+    "data": {
+      "status": "any"
+    }
+  },
+  "mago-berry": {
+    "id": "mago-berry",
+    "name": "Mago Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike sweet flavor.",
+    "desc": "Held in battle : When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP. If the holder dislikes sweet flavors (i.e., has a nature that lowers Speed), it will also become confused.",
+    "flavor_text": "If held by a Pokemon, it restores the users HP in a pinch, but it will cause confusion if the user hates the taste.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "magost-berry": {
+    "id": "magost-berry",
+    "name": "Magost Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Cuteness, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "maranga-berry": {
+    "id": "maranga-berry",
+    "name": "Maranga Berry",
+    "category": "berries",
+    "short_desc": "Held: When the holder is hit by a special move, increases its Special Defense by one stage.",
+    "desc": "Held: When the holder is hit by a special move, increases its Special Defense by one stage.",
+    "flavor_text": "If held by a Pokemon, this Berry will increase the holders Sp. Def if its hit with a special move.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "micle-berry": {
+    "id": "micle-berry",
+    "name": "Micle Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost accuracy of next move by 20%. (Gen IV: Perfect accuracy)",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item, and its next used move has 1.2 its normal accuracy.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, its accuracy will increase just once when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "nanab-berry": {
+    "id": "nanab-berry",
+    "name": "Nanab Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Cuteness. Its pink flesh is sweet when eaten.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 200,
+      "fling_power": 10
+    }
+  },
+  "nomel-berry": {
+    "id": "nomel-berry",
+    "name": "Nomel Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Toughness, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "occa-berry": {
+    "id": "occa-berry",
+    "name": "Occa Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Fire-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Fire-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Fire-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "oran-berry": {
+    "id": "oran-berry",
+    "name": "Oran Berry",
+    "category": "berries",
+    "short_desc": "Restores 10 HP when held.",
+    "desc": "When held, restores 10 HP when the holder's HP gets low.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can restore its own HP by 10 points during battle.",
+    "generation": 3,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": "held_heal_hp",
+    "field_effect": "heal_hp",
+    "data": {
+      "amount": 10
+    }
+  },
+  "pamtre-berry": {
+    "id": "pamtre-berry",
+    "name": "Pamtre Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Beauty, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "passho-berry": {
+    "id": "passho-berry",
+    "name": "Passho Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Water-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Water-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Water-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "payapa-berry": {
+    "id": "payapa-berry",
+    "name": "Payapa Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Psychic-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Psychic-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Psychic-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "pecha-berry": {
+    "id": "pecha-berry",
+    "name": "Pecha Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when poisoned to cure poison.",
+    "desc": "Held in battle : When the holder is poisoned, it consumes this item to cure the poison. Used on a party Pokemon : Cures poison.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can recover from poisoning on its own in battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "persim-berry": {
+    "id": "persim-berry",
+    "name": "Persim Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when confused to cure confusion.",
+    "desc": "Held in battle : When the holder is confused, it consumes this item to cure the confusion. Used on a party Pokemon : Cures confusion.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can recover from confusion on its own in battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "petaya-berry": {
+    "id": "petaya-berry",
+    "name": "Petaya Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost Special Attack.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Special Attack by one stage.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, its Sp. Atk stat will increase when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "pinap-berry": {
+    "id": "pinap-berry",
+    "name": "Pinap Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Toughness. Its yellow flesh is sour when eaten.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 200,
+      "fling_power": 10
+    }
+  },
+  "pomeg-berry": {
+    "id": "pomeg-berry",
+    "name": "Pomeg Berry",
+    "category": "berries",
+    "short_desc": "Drops HP Effort Values by 10 and raises happiness.",
+    "desc": "Used on a party Pokemon : Increases happiness by 10/5/2. Lowers HP effort by 10.",
+    "flavor_text": "A Berry to be consumed by Pokemon. Using it on a Pokemon makes it more friendly but lowers its HP base points.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "qualot-berry": {
+    "id": "qualot-berry",
+    "name": "Qualot Berry",
+    "category": "berries",
+    "short_desc": "Drops Defense Effort Values by 10 and raises happiness.",
+    "desc": "Used on a party Pokemon : Increases happiness by 10/5/2. Lowers Defense effort by 10.",
+    "flavor_text": "A Berry to be consumed by Pokemon. Using it on a Pokemon makes it more friendly but lowers its Defense base points.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "rabuta-berry": {
+    "id": "rabuta-berry",
+    "name": "Rabuta Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Cleverness, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "rawst-berry": {
+    "id": "rawst-berry",
+    "name": "Rawst Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when burned to cure a burn.",
+    "desc": "Held in battle : When the holder is burned, it consumes this item to cure the burn. Used on a party Pokemon : Cures a burn.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can recover from a burn on its own in battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "razz-berry": {
+    "id": "razz-berry",
+    "name": "Razz Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Coolness. Its red flesh is spicy when eaten.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 200,
+      "fling_power": 10
+    }
+  },
+  "rindo-berry": {
+    "id": "rindo-berry",
+    "name": "Rindo Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Grass-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Grass-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Grass-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "roseli-berry": {
+    "id": "roseli-berry",
+    "name": "Roseli Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Fairy-type attack to halve the damage.",
+    "desc": "Held: Consumed when struck by a super-effective Fairy-type attack to halve the damage.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Fairy-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "rowap-berry": {
+    "id": "rowap-berry",
+    "name": "Rowap Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed to deal 1/8 attackers max HP when holder is struck by a special attack.",
+    "desc": "Held in battle : When the holder takes special damage, it consumes this item to damage the attacking Pokemon for 1/8 its max HP.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a special attack hits the Pokemon holding it, the attacker will also be hurt.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "salac-berry": {
+    "id": "salac-berry",
+    "name": "Salac Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost Speed.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Speed by one stage.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, its Speed stat will increase when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "shuca-berry": {
+    "id": "shuca-berry",
+    "name": "Shuca Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Ground-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Ground-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Ground-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "silver-nanab-berry": {
+    "id": "silver-nanab-berry",
+    "name": "Silver Nanab Berry",
+    "category": "berries",
+    "short_desc": "",
+    "desc": "",
+    "flavor_text": "A Berry that calms wild Pokemon youre trying to catch when given to them.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 1000,
+      "fling_power": 10
+    }
+  },
+  "silver-pinap-berry": {
+    "id": "silver-pinap-berry",
+    "name": "Silver Pinap Berry",
+    "category": "berries",
+    "short_desc": "",
+    "desc": "",
+    "flavor_text": "A Berry that makes you more likely to get an item when given to Pokemon youre trying to catch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 1000,
+      "fling_power": 10
+    }
+  },
+  "silver-razz-berry": {
+    "id": "silver-razz-berry",
+    "name": "Silver Razz Berry",
+    "category": "berries",
+    "short_desc": "",
+    "desc": "",
+    "flavor_text": "A Berry that makes it easier to catch Pokemon when given to them.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 1000,
+      "fling_power": 10
+    }
+  },
+  "sitrus-berry": {
+    "id": "sitrus-berry",
+    "name": "Sitrus Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/2 max HP to recover 1/4 max HP.",
+    "desc": "Held in battle : When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/4 its max HP. Used on a party Pokemon : Restores 1/4 the Pokemons max HP.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, it can restore its own HP by a small amount during battle.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "spelon-berry": {
+    "id": "spelon-berry",
+    "name": "Spelon Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Cuteness, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "starf-berry": {
+    "id": "starf-berry",
+    "name": "Starf Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/4 max HP to boost a random stat by two stages.",
+    "desc": "Held in battle : When the holder has 1/4 its max HP remaining or less, it consumes this item to raise a random stat by two stages.",
+    "flavor_text": "A Berry to be consumed by Pokemon. If a Pokemon holds one, one of its stats will sharply increase when its in a pinch.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "tamato-berry": {
+    "id": "tamato-berry",
+    "name": "Tamato Berry",
+    "category": "berries",
+    "short_desc": "Drops Speed Effort Values by 10 and raises happiness.",
+    "desc": "Used on a party Pokemon : Increases happiness by 10/5/2. Lowers Speed effort by 10.",
+    "flavor_text": "A Berry to be consumed by Pokemon. Using it on a Pokemon makes it more friendly but lowers its Speed base points.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": true,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "tanga-berry": {
+    "id": "tanga-berry",
+    "name": "Tanga Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Bug-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Bug-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Bug-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "wacan-berry": {
+    "id": "wacan-berry",
+    "name": "Wacan Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Electric-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Electric-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Electric-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  },
+  "watmel-berry": {
+    "id": "watmel-berry",
+    "name": "Watmel Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Cleverness, this Berry is rare in other regions.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "wepear-berry": {
+    "id": "wepear-berry",
+    "name": "Wepear Berry",
+    "category": "berries",
+    "short_desc": "Used for creating PokeBlocks and Poffins.",
+    "desc": "No effect; only useful for planting and cooking.",
+    "flavor_text": "Used to make Pokeblocks that will enhance your Cleverness. Its green flesh is bitter when eaten.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": false,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 20,
+      "fling_power": 10
+    }
+  },
+  "wiki-berry": {
+    "id": "wiki-berry",
+    "name": "Wiki Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokemon that dislike dry flavor.",
+    "desc": "Held in battle : When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP. If the holder dislikes dry flavors (i.e., has a nature that lowers Special Attack), it will also become confused.",
+    "flavor_text": "If held by a Pokemon, it restores the users HP in a pinch, but it will cause confusion if the user hates the taste.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10,
+      "fling_effect": "berry-effect"
+    }
+  },
+  "yache-berry": {
+    "id": "yache-berry",
+    "name": "Yache Berry",
+    "category": "berries",
+    "short_desc": "Held: Consumed when struck by a super-effective Ice-type attack to halve the damage.",
+    "desc": "Held in battle : When the holder would take super-effective Ice-type damage, it consumes this item to halve the amount of damage taken.",
+    "flavor_text": "If held by a Pokemon, this Berry will lessen the damage taken from one supereffective Ice-type attack.",
+    "generation": null,
+    "is_key_item": false,
+    "is_consumable": false,
+    "is_holdable": true,
+    "battle_effect": null,
+    "field_effect": null,
+    "data": {
+      "cost": 80,
+      "fling_power": 10
+    }
+  }
+}

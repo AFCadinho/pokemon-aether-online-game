@@ -1,0 +1,522 @@
+{
+  "assurance": {
+    "id": "assurance",
+    "name": "Assurance",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "baddy-bad": {
+    "id": "baddy-bad",
+    "name": "Baddy Bad",
+    "type": "dark",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "beat-up": {
+    "id": "beat-up",
+    "name": "Beat Up",
+    "type": "dark",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "bite": {
+    "id": "bite",
+    "name": "Bite",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0
+  },
+  "black-hole-eclipse--physical": {
+    "id": "black-hole-eclipse--physical",
+    "name": "Black Hole Eclipse",
+    "type": "dark",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "black-hole-eclipse--special": {
+    "id": "black-hole-eclipse--special",
+    "name": "Black Hole Eclipse",
+    "type": "dark",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "brutal-swing": {
+    "id": "brutal-swing",
+    "name": "Brutal Swing",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "ceaseless-edge": {
+    "id": "ceaseless-edge",
+    "name": "Ceaseless Edge",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 65,
+    "accuracy": 90,
+    "pp": 15,
+    "priority": 0
+  },
+  "comeuppance": {
+    "id": "comeuppance",
+    "name": "Comeuppance",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 1,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "crunch": {
+    "id": "crunch",
+    "name": "Crunch",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "dark-pulse": {
+    "id": "dark-pulse",
+    "name": "Dark Pulse",
+    "type": "dark",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "dark-void": {
+    "id": "dark-void",
+    "name": "Dark Void",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 50,
+    "pp": 10,
+    "priority": 0
+  },
+  "darkest-lariat": {
+    "id": "darkest-lariat",
+    "name": "Darkest Lariat",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 85,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "embargo": {
+    "id": "embargo",
+    "name": "Embargo",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "fake-tears": {
+    "id": "fake-tears",
+    "name": "Fake Tears",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "false-surrender": {
+    "id": "false-surrender",
+    "name": "False Surrender",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "feint-attack": {
+    "id": "feint-attack",
+    "name": "Feint Attack",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "fiery-wrath": {
+    "id": "fiery-wrath",
+    "name": "Fiery Wrath",
+    "type": "dark",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "flatter": {
+    "id": "flatter",
+    "name": "Flatter",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "fling": {
+    "id": "fling",
+    "name": "Fling",
+    "type": "dark",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "foul-play": {
+    "id": "foul-play",
+    "name": "Foul Play",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 95,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "hone-claws": {
+    "id": "hone-claws",
+    "name": "Hone Claws",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 15,
+    "priority": 0
+  },
+  "hyperspace-fury": {
+    "id": "hyperspace-fury",
+    "name": "Hyperspace Fury",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": null,
+    "pp": 5,
+    "priority": 0
+  },
+  "jaw-lock": {
+    "id": "jaw-lock",
+    "name": "Jaw Lock",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "knock-off": {
+    "id": "knock-off",
+    "name": "Knock Off",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "kowtow-cleave": {
+    "id": "kowtow-cleave",
+    "name": "Kowtow Cleave",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 85,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "lash-out": {
+    "id": "lash-out",
+    "name": "Lash Out",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 75,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "malicious-moonsault": {
+    "id": "malicious-moonsault",
+    "name": "Malicious Moonsault",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 180,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "max-darkness": {
+    "id": "max-darkness",
+    "name": "Max Darkness",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 10,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "memento": {
+    "id": "memento",
+    "name": "Memento",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "nasty-plot": {
+    "id": "nasty-plot",
+    "name": "Nasty Plot",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "night-daze": {
+    "id": "night-daze",
+    "name": "Night Daze",
+    "type": "dark",
+    "category": "special",
+    "base_power": 85,
+    "accuracy": 95,
+    "pp": 10,
+    "priority": 0
+  },
+  "night-slash": {
+    "id": "night-slash",
+    "name": "Night Slash",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "obstruct": {
+    "id": "obstruct",
+    "name": "Obstruct",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 4
+  },
+  "parting-shot": {
+    "id": "parting-shot",
+    "name": "Parting Shot",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "payback": {
+    "id": "payback",
+    "name": "Payback",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 50,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "power-trip": {
+    "id": "power-trip",
+    "name": "Power Trip",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 20,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "punishment": {
+    "id": "punishment",
+    "name": "Punishment",
+    "type": "dark",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "pursuit": {
+    "id": "pursuit",
+    "name": "Pursuit",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "quash": {
+    "id": "quash",
+    "name": "Quash",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "ruination": {
+    "id": "ruination",
+    "name": "Ruination",
+    "type": "dark",
+    "category": "special",
+    "base_power": 1,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "snarl": {
+    "id": "snarl",
+    "name": "Snarl",
+    "type": "dark",
+    "category": "special",
+    "base_power": 55,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "snatch": {
+    "id": "snatch",
+    "name": "Snatch",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 4
+  },
+  "sucker-punch": {
+    "id": "sucker-punch",
+    "name": "Sucker Punch",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 1
+  },
+  "switcheroo": {
+    "id": "switcheroo",
+    "name": "Switcheroo",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "taunt": {
+    "id": "taunt",
+    "name": "Taunt",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "thief": {
+    "id": "thief",
+    "name": "Thief",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0
+  },
+  "throat-chop": {
+    "id": "throat-chop",
+    "name": "Throat Chop",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "topsy-turvy": {
+    "id": "topsy-turvy",
+    "name": "Topsy-Turvy",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "torment": {
+    "id": "torment",
+    "name": "Torment",
+    "type": "dark",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "wicked-blow": {
+    "id": "wicked-blow",
+    "name": "Wicked Blow",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 75,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "wicked-torque": {
+    "id": "wicked-torque",
+    "name": "Wicked Torque",
+    "type": "dark",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  }
+}

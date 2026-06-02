@@ -1,0 +1,312 @@
+{
+  "acrobatics": {
+    "id": "acrobatics",
+    "name": "Acrobatics",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 55,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "aerial-ace": {
+    "id": "aerial-ace",
+    "name": "Aerial Ace",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "aeroblast": {
+    "id": "aeroblast",
+    "name": "Aeroblast",
+    "type": "flying",
+    "category": "special",
+    "base_power": 100,
+    "accuracy": 95,
+    "pp": 5,
+    "priority": 0
+  },
+  "air-cutter": {
+    "id": "air-cutter",
+    "name": "Air Cutter",
+    "type": "flying",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": 95,
+    "pp": 25,
+    "priority": 0
+  },
+  "air-slash": {
+    "id": "air-slash",
+    "name": "Air Slash",
+    "type": "flying",
+    "category": "special",
+    "base_power": 75,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "beak-blast": {
+    "id": "beak-blast",
+    "name": "Beak Blast",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": -3
+  },
+  "bleakwind-storm": {
+    "id": "bleakwind-storm",
+    "name": "Bleakwind Storm",
+    "type": "flying",
+    "category": "special",
+    "base_power": 100,
+    "accuracy": 80,
+    "pp": 10,
+    "priority": 0
+  },
+  "bounce": {
+    "id": "bounce",
+    "name": "Bounce",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 85,
+    "accuracy": 85,
+    "pp": 5,
+    "priority": 0
+  },
+  "brave-bird": {
+    "id": "brave-bird",
+    "name": "Brave Bird",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "chatter": {
+    "id": "chatter",
+    "name": "Chatter",
+    "type": "flying",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "defog": {
+    "id": "defog",
+    "name": "Defog",
+    "type": "flying",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 15,
+    "priority": 0
+  },
+  "dragon-ascent": {
+    "id": "dragon-ascent",
+    "name": "Dragon Ascent",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "drill-peck": {
+    "id": "drill-peck",
+    "name": "Drill Peck",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "dual-wingbeat": {
+    "id": "dual-wingbeat",
+    "name": "Dual Wingbeat",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 40,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "feather-dance": {
+    "id": "feather-dance",
+    "name": "Feather Dance",
+    "type": "flying",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "floaty-fall": {
+    "id": "floaty-fall",
+    "name": "Floaty Fall",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 90,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "fly": {
+    "id": "fly",
+    "name": "Fly",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 90,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "gust": {
+    "id": "gust",
+    "name": "Gust",
+    "type": "flying",
+    "category": "special",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0
+  },
+  "hurricane": {
+    "id": "hurricane",
+    "name": "Hurricane",
+    "type": "flying",
+    "category": "special",
+    "base_power": 110,
+    "accuracy": 70,
+    "pp": 10,
+    "priority": 0
+  },
+  "max-airstream": {
+    "id": "max-airstream",
+    "name": "Max Airstream",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 10,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "mirror-move": {
+    "id": "mirror-move",
+    "name": "Mirror Move",
+    "type": "flying",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "oblivion-wing": {
+    "id": "oblivion-wing",
+    "name": "Oblivion Wing",
+    "type": "flying",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "peck": {
+    "id": "peck",
+    "name": "Peck",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 35,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0
+  },
+  "pluck": {
+    "id": "pluck",
+    "name": "Pluck",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "roost": {
+    "id": "roost",
+    "name": "Roost",
+    "type": "flying",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 5,
+    "priority": 0
+  },
+  "sky-attack": {
+    "id": "sky-attack",
+    "name": "Sky Attack",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 140,
+    "accuracy": 90,
+    "pp": 5,
+    "priority": 0
+  },
+  "sky-drop": {
+    "id": "sky-drop",
+    "name": "Sky Drop",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "supersonic-skystrike--physical": {
+    "id": "supersonic-skystrike--physical",
+    "name": "Supersonic Skystrike",
+    "type": "flying",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "supersonic-skystrike--special": {
+    "id": "supersonic-skystrike--special",
+    "name": "Supersonic Skystrike",
+    "type": "flying",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "tailwind": {
+    "id": "tailwind",
+    "name": "Tailwind",
+    "type": "flying",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 15,
+    "priority": 0
+  },
+  "wing-attack": {
+    "id": "wing-attack",
+    "name": "Wing Attack",
+    "type": "flying",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0
+  }
+}

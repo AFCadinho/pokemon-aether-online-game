@@ -1,0 +1,382 @@
+{
+  "anchor-shot": {
+    "id": "anchor-shot",
+    "name": "Anchor Shot",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "autotomize": {
+    "id": "autotomize",
+    "name": "Autotomize",
+    "type": "steel",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 15,
+    "priority": 0
+  },
+  "behemoth-bash": {
+    "id": "behemoth-bash",
+    "name": "Behemoth Bash",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "behemoth-blade": {
+    "id": "behemoth-blade",
+    "name": "Behemoth Blade",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "bullet-punch": {
+    "id": "bullet-punch",
+    "name": "Bullet Punch",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 1
+  },
+  "corkscrew-crash--physical": {
+    "id": "corkscrew-crash--physical",
+    "name": "Corkscrew Crash",
+    "type": "steel",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "corkscrew-crash--special": {
+    "id": "corkscrew-crash--special",
+    "name": "Corkscrew Crash",
+    "type": "steel",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "doom-desire": {
+    "id": "doom-desire",
+    "name": "Doom Desire",
+    "type": "steel",
+    "category": "special",
+    "base_power": 140,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "double-iron-bash": {
+    "id": "double-iron-bash",
+    "name": "Double Iron Bash",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "flash-cannon": {
+    "id": "flash-cannon",
+    "name": "Flash Cannon",
+    "type": "steel",
+    "category": "special",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "gear-grind": {
+    "id": "gear-grind",
+    "name": "Gear Grind",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 50,
+    "accuracy": 85,
+    "pp": 15,
+    "priority": 0
+  },
+  "gear-up": {
+    "id": "gear-up",
+    "name": "Gear Up",
+    "type": "steel",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "gigaton-hammer": {
+    "id": "gigaton-hammer",
+    "name": "Gigaton Hammer",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 160,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "gyro-ball": {
+    "id": "gyro-ball",
+    "name": "Gyro Ball",
+    "type": "steel",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "hard-press": {
+    "id": "hard-press",
+    "name": "Hard Press",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "heavy-slam": {
+    "id": "heavy-slam",
+    "name": "Heavy Slam",
+    "type": "steel",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "iron-defense": {
+    "id": "iron-defense",
+    "name": "Iron Defense",
+    "type": "steel",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 15,
+    "priority": 0
+  },
+  "iron-head": {
+    "id": "iron-head",
+    "name": "Iron Head",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "iron-tail": {
+    "id": "iron-tail",
+    "name": "Iron Tail",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 75,
+    "pp": 15,
+    "priority": 0
+  },
+  "kings-shield": {
+    "id": "kings-shield",
+    "name": "King\u2019s Shield",
+    "type": "steel",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 4
+  },
+  "magnet-bomb": {
+    "id": "magnet-bomb",
+    "name": "Magnet Bomb",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "make-it-rain": {
+    "id": "make-it-rain",
+    "name": "Make It Rain",
+    "type": "steel",
+    "category": "special",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "max-steelspike": {
+    "id": "max-steelspike",
+    "name": "Max Steelspike",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 10,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "metal-burst": {
+    "id": "metal-burst",
+    "name": "Metal Burst",
+    "type": "steel",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "metal-claw": {
+    "id": "metal-claw",
+    "name": "Metal Claw",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 50,
+    "accuracy": 95,
+    "pp": 35,
+    "priority": 0
+  },
+  "metal-sound": {
+    "id": "metal-sound",
+    "name": "Metal Sound",
+    "type": "steel",
+    "category": "status",
+    "base_power": null,
+    "accuracy": 85,
+    "pp": 40,
+    "priority": 0
+  },
+  "meteor-mash": {
+    "id": "meteor-mash",
+    "name": "Meteor Mash",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 90,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "mirror-shot": {
+    "id": "mirror-shot",
+    "name": "Mirror Shot",
+    "type": "steel",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0
+  },
+  "searing-sunraze-smash": {
+    "id": "searing-sunraze-smash",
+    "name": "Searing Sunraze Smash",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 200,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "shelter": {
+    "id": "shelter",
+    "name": "Shelter",
+    "type": "steel",
+    "category": "status",
+    "base_power": 0,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "shift-gear": {
+    "id": "shift-gear",
+    "name": "Shift Gear",
+    "type": "steel",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "smart-strike": {
+    "id": "smart-strike",
+    "name": "Smart Strike",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 70,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "spin-out": {
+    "id": "spin-out",
+    "name": "Spin Out",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "steel-beam": {
+    "id": "steel-beam",
+    "name": "Steel Beam",
+    "type": "steel",
+    "category": "special",
+    "base_power": 140,
+    "accuracy": 95,
+    "pp": 5,
+    "priority": 0
+  },
+  "steel-roller": {
+    "id": "steel-roller",
+    "name": "Steel Roller",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 130,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "steel-wing": {
+    "id": "steel-wing",
+    "name": "Steel Wing",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 70,
+    "accuracy": 90,
+    "pp": 25,
+    "priority": 0
+  },
+  "sunsteel-strike": {
+    "id": "sunsteel-strike",
+    "name": "Sunsteel Strike",
+    "type": "steel",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "tachyon-cutter": {
+    "id": "tachyon-cutter",
+    "name": "Tachyon Cutter",
+    "type": "steel",
+    "category": "special",
+    "base_power": 50,
+    "accuracy": 0,
+    "pp": 10,
+    "priority": 0
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "aurora-beam": {
+    "id": "aurora-beam",
+    "name": "Aurora Beam",
+    "type": "ice",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "aurora-veil": {
+    "id": "aurora-veil",
+    "name": "Aurora Veil",
+    "type": "ice",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 20,
+    "priority": 0
+  },
+  "avalanche": {
+    "id": "avalanche",
+    "name": "Avalanche",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 60,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": -4
+  },
+  "blizzard": {
+    "id": "blizzard",
+    "name": "Blizzard",
+    "type": "ice",
+    "category": "special",
+    "base_power": 110,
+    "accuracy": 70,
+    "pp": 5,
+    "priority": 0
+  },
+  "chilly-reception": {
+    "id": "chilly-reception",
+    "name": "Chilly Reception",
+    "type": "ice",
+    "category": "status",
+    "base_power": 0,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "freeze-dry": {
+    "id": "freeze-dry",
+    "name": "Freeze-Dry",
+    "type": "ice",
+    "category": "special",
+    "base_power": 70,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0
+  },
+  "freeze-shock": {
+    "id": "freeze-shock",
+    "name": "Freeze Shock",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 140,
+    "accuracy": 90,
+    "pp": 5,
+    "priority": 0
+  },
+  "freezy-frost": {
+    "id": "freezy-frost",
+    "name": "Freezy Frost",
+    "type": "ice",
+    "category": "special",
+    "base_power": 100,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "frost-breath": {
+    "id": "frost-breath",
+    "name": "Frost Breath",
+    "type": "ice",
+    "category": "special",
+    "base_power": 60,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "glacial-lance": {
+    "id": "glacial-lance",
+    "name": "Glacial Lance",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 120,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0
+  },
+  "glaciate": {
+    "id": "glaciate",
+    "name": "Glaciate",
+    "type": "ice",
+    "category": "special",
+    "base_power": 65,
+    "accuracy": 95,
+    "pp": 10,
+    "priority": 0
+  },
+  "hail": {
+    "id": "hail",
+    "name": "Hail",
+    "type": "ice",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "haze": {
+    "id": "haze",
+    "name": "Haze",
+    "type": "ice",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 30,
+    "priority": 0
+  },
+  "ice-ball": {
+    "id": "ice-ball",
+    "name": "Ice Ball",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 30,
+    "accuracy": 90,
+    "pp": 20,
+    "priority": 0
+  },
+  "ice-beam": {
+    "id": "ice-beam",
+    "name": "Ice Beam",
+    "type": "ice",
+    "category": "special",
+    "base_power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0
+  },
+  "ice-burn": {
+    "id": "ice-burn",
+    "name": "Ice Burn",
+    "type": "ice",
+    "category": "special",
+    "base_power": 140,
+    "accuracy": 90,
+    "pp": 5,
+    "priority": 0
+  },
+  "ice-fang": {
+    "id": "ice-fang",
+    "name": "Ice Fang",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 65,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "ice-hammer": {
+    "id": "ice-hammer",
+    "name": "Ice Hammer",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "ice-punch": {
+    "id": "ice-punch",
+    "name": "Ice Punch",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "ice-shard": {
+    "id": "ice-shard",
+    "name": "Ice Shard",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 1
+  },
+  "ice-spinner": {
+    "id": "ice-spinner",
+    "name": "Ice Spinner",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0
+  },
+  "icicle-crash": {
+    "id": "icicle-crash",
+    "name": "Icicle Crash",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 85,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  },
+  "icicle-spear": {
+    "id": "icicle-spear",
+    "name": "Icicle Spear",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 25,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 0
+  },
+  "icy-wind": {
+    "id": "icy-wind",
+    "name": "Icy Wind",
+    "type": "ice",
+    "category": "special",
+    "base_power": 55,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0
+  },
+  "max-hailstorm": {
+    "id": "max-hailstorm",
+    "name": "Max Hailstorm",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 10,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "mist": {
+    "id": "mist",
+    "name": "Mist",
+    "type": "ice",
+    "category": "status",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 30,
+    "priority": 0
+  },
+  "mountain-gale": {
+    "id": "mountain-gale",
+    "name": "Mountain Gale",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 100,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0
+  },
+  "powder-snow": {
+    "id": "powder-snow",
+    "name": "Powder Snow",
+    "type": "ice",
+    "category": "special",
+    "base_power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0
+  },
+  "sheer-cold": {
+    "id": "sheer-cold",
+    "name": "Sheer Cold",
+    "type": "ice",
+    "category": "special",
+    "base_power": null,
+    "accuracy": 30,
+    "pp": 5,
+    "priority": 0
+  },
+  "snowscape": {
+    "id": "snowscape",
+    "name": "Snowscape",
+    "type": "ice",
+    "category": "status",
+    "base_power": 0,
+    "accuracy": null,
+    "pp": 10,
+    "priority": 0
+  },
+  "subzero-slammer--physical": {
+    "id": "subzero-slammer--physical",
+    "name": "Subzero Slammer",
+    "type": "ice",
+    "category": "physical",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "subzero-slammer--special": {
+    "id": "subzero-slammer--special",
+    "name": "Subzero Slammer",
+    "type": "ice",
+    "category": "special",
+    "base_power": null,
+    "accuracy": null,
+    "pp": 1,
+    "priority": 0
+  },
+  "triple-axel": {
+    "id": "triple-axel",
+    "name": "Triple Axel",
+    "type": "ice",
+    "category": "physical",
+    "base_power": 20,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0
+  }
+}

@@ -34,6 +34,19 @@ func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String
 	
 	return await send_post_request(request_node, "/battles/" + battle_id + "/lead", body)
 
+func send_choice(request_node: HTTPRequest, battle_id: String, player_id: String, choice_type: String, slot: int) -> Dictionary:
+	var body := {
+		"playerId": player_id,
+		"type": choice_type,
+		"slot": slot
+	}
+	
+	return await send_post_request(
+		request_node,
+		"/battles/%s/choice" % battle_id,
+		body
+	)
+
 func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
 	var api_base_url = await BattleApiConfig.get_base_url()
 	

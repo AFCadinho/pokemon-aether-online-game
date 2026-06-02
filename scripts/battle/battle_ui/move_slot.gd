@@ -2,10 +2,15 @@ extends Button
 
 const TYPE_BANNER_PATH := "res://assets/sprites/types/small/%s.png"
 
+signal selected
+
 @onready var type_banner: TextureRect = $MarginContainer/VBoxContainer/TopRow/TypeBanner
 @onready var pp_label: Label = $MarginContainer/VBoxContainer/BottomRow/PPLabel
 @onready var move_name_label: Label = $MarginContainer/VBoxContainer/TopRow/MoveNameLabel
 @onready var effectiveness_label: Label = $MarginContainer/VBoxContainer/BottomRow/EffectivenessLabel
+
+func _ready() -> void:
+	pressed.connect(_on_pressed)
 
 func set_move_data(move_data: Dictionary) -> void:
 	visible = true
@@ -80,4 +85,11 @@ func _set_effectiveness(move_data: Dictionary) -> void:
 	else:
 		effectiveness_label.text = "effective"
 		effectiveness_label.add_theme_color_override("font_color", Color("#b8b8b8"))
+
+
+func _on_pressed() -> void:
+	if disabled:
+		return
+		
+	selected.emit()
 	

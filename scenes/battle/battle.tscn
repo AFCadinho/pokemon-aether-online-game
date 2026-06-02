@@ -132,6 +132,7 @@ offset_right = 640.0
 offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
 [node name="BattleFrame" type="Panel" parent="HBoxContainer" unique_id=153800450]
 custom_minimum_size = Vector2(950, 0)
@@ -446,6 +447,7 @@ offset_top = -430.0
 offset_bottom = 220.0
 grow_vertical = 2
 
+[connection signal="move_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" to="." method="_on_moves_grid_move_selected"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/FightButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_fight_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/BagButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_bag_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/PartyButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_party_button_pressed"]

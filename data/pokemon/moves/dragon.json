@@ -4,29 +4,309 @@
 		"name": "Breaking Swipe",
 		"type": "dragon",
 		"category": "physical",
+		"base_power": 60.0,
 		"accuracy": 100.0,
 		"pp": 15.0,
-		"priority": 0.0,
-		"base_power": 60.0
+		"priority": 0.0
+	},
+	"clanging-scales": {
+		"id": "clanging-scales",
+		"name": "Clanging Scales",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 110.0,
+		"accuracy": 100.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"clangorous-soul": {
+		"id": "clangorous-soul",
+		"name": "Clangorous Soul",
+		"type": "dragon",
+		"category": "status",
+		"base_power": null,
+		"accuracy": 100.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"clangorous-soulblaze": {
+		"id": "clangorous-soulblaze",
+		"name": "Clangorous Soulblaze",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 185.0,
+		"accuracy": null,
+		"pp": 1.0,
+		"priority": 0.0
+	},
+	"core-enforcer": {
+		"id": "core-enforcer",
+		"name": "Core Enforcer",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 100.0,
+		"accuracy": 100.0,
+		"pp": 10.0,
+		"priority": 0.0
+	},
+	"devastating-drake--physical": {
+		"id": "devastating-drake--physical",
+		"name": "Devastating Drake",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": null,
+		"accuracy": null,
+		"pp": 1.0,
+		"priority": 0.0
+	},
+	"devastating-drake--special": {
+		"id": "devastating-drake--special",
+		"name": "Devastating Drake",
+		"type": "dragon",
+		"category": "special",
+		"base_power": null,
+		"accuracy": null,
+		"pp": 1.0,
+		"priority": 0.0
+	},
+	"draco-meteor": {
+		"id": "draco-meteor",
+		"name": "Draco Meteor",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 130.0,
+		"accuracy": 90.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"dragon-breath": {
+		"id": "dragon-breath",
+		"name": "Dragon Breath",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 60.0,
+		"accuracy": 100.0,
+		"pp": 20.0,
+		"priority": 0.0
+	},
+	"dragon-cheer": {
+		"id": "dragon-cheer",
+		"name": "Dragon Cheer",
+		"type": "dragon",
+		"category": "status",
+		"base_power": 0.0,
+		"accuracy": 0.0,
+		"pp": 15.0,
+		"priority": 0.0
 	},
 	"dragon-claw": {
 		"id": "dragon-claw",
 		"name": "Dragon Claw",
 		"type": "dragon",
 		"category": "physical",
+		"base_power": 80.0,
 		"accuracy": 100.0,
 		"pp": 15.0,
-		"priority": 0.0,
-		"base_power": 80.0
+		"priority": 0.0
+	},
+	"dragon-dance": {
+		"id": "dragon-dance",
+		"name": "Dragon Dance",
+		"type": "dragon",
+		"category": "status",
+		"base_power": null,
+		"accuracy": null,
+		"pp": 20.0,
+		"priority": 0.0
+	},
+	"dragon-darts": {
+		"id": "dragon-darts",
+		"name": "Dragon Darts",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 50.0,
+		"accuracy": 100.0,
+		"pp": 10.0,
+		"priority": 0.0
+	},
+	"dragon-energy": {
+		"id": "dragon-energy",
+		"name": "Dragon Energy",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 150.0,
+		"accuracy": 100.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"dragon-hammer": {
+		"id": "dragon-hammer",
+		"name": "Dragon Hammer",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 90.0,
+		"accuracy": 100.0,
+		"pp": 15.0,
+		"priority": 0.0
+	},
+	"dragon-pulse": {
+		"id": "dragon-pulse",
+		"name": "Dragon Pulse",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 85.0,
+		"accuracy": 100.0,
+		"pp": 10.0,
+		"priority": 0.0
+	},
+	"dragon-rage": {
+		"id": "dragon-rage",
+		"name": "Dragon Rage",
+		"type": "dragon",
+		"category": "special",
+		"base_power": null,
+		"accuracy": 100.0,
+		"pp": 10.0,
+		"priority": 0.0
+	},
+	"dragon-rush": {
+		"id": "dragon-rush",
+		"name": "Dragon Rush",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 100.0,
+		"accuracy": 75.0,
+		"pp": 10.0,
+		"priority": 0.0
+	},
+	"dragon-tail": {
+		"id": "dragon-tail",
+		"name": "Dragon Tail",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 60.0,
+		"accuracy": 90.0,
+		"pp": 10.0,
+		"priority": -6.0
+	},
+	"dual-chop": {
+		"id": "dual-chop",
+		"name": "Dual Chop",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 40.0,
+		"accuracy": 90.0,
+		"pp": 15.0,
+		"priority": 0.0
+	},
+	"dynamax-cannon": {
+		"id": "dynamax-cannon",
+		"name": "Dynamax Cannon",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 100.0,
+		"accuracy": 100.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"eternabeam": {
+		"id": "eternabeam",
+		"name": "Eternabeam",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 160.0,
+		"accuracy": 90.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"fickle-beam": {
+		"id": "fickle-beam",
+		"name": "Fickle Beam",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 80.0,
+		"accuracy": 100.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"glaive-rush": {
+		"id": "glaive-rush",
+		"name": "Glaive Rush",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 120.0,
+		"accuracy": 100.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"max-wyrmwind": {
+		"id": "max-wyrmwind",
+		"name": "Max Wyrmwind",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 10.0,
+		"accuracy": null,
+		"pp": 10.0,
+		"priority": 0.0
+	},
+	"order-up": {
+		"id": "order-up",
+		"name": "Order Up",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 80.0,
+		"accuracy": 100.0,
+		"pp": 10.0,
+		"priority": 0.0
 	},
 	"outrage": {
 		"id": "outrage",
 		"name": "Outrage",
 		"type": "dragon",
 		"category": "physical",
+		"base_power": 120.0,
 		"accuracy": 100.0,
 		"pp": 10.0,
-		"priority": 0.0,
-		"base_power": 120.0
+		"priority": 0.0
+	},
+	"roar-of-time": {
+		"id": "roar-of-time",
+		"name": "Roar of Time",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 150.0,
+		"accuracy": 90.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"scale-shot": {
+		"id": "scale-shot",
+		"name": "Scale Shot",
+		"type": "dragon",
+		"category": "physical",
+		"base_power": 25.0,
+		"accuracy": 90.0,
+		"pp": 20.0,
+		"priority": 0.0
+	},
+	"spacial-rend": {
+		"id": "spacial-rend",
+		"name": "Spacial Rend",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 100.0,
+		"accuracy": 95.0,
+		"pp": 5.0,
+		"priority": 0.0
+	},
+	"twister": {
+		"id": "twister",
+		"name": "Twister",
+		"type": "dragon",
+		"category": "special",
+		"base_power": 40.0,
+		"accuracy": 100.0,
+		"pp": 20.0,
+		"priority": 0.0
 	}
 }
