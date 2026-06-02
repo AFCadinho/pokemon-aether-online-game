@@ -106,3 +106,5 @@ layout_mode = 2
 size_flags_horizontal = 8
 texture = ExtResource("2_87gny")
 expand_mode = 2
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

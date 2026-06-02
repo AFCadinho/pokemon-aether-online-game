@@ -54,13 +54,13 @@ func _ready() -> void:
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
 	_update_battle_log_toggle_button()
-	
+
 	# Show Moves, Party or Bag
 	_reset_action_choices()
 	_reset_battle_status_panel()
 	current_action_panel.clear_message()
 	battle_log_panel.clear_log()
-	
+
 	if PlayerSave.party.is_empty():
 		return
 
@@ -78,25 +78,25 @@ func _on_action_selected(action: String) -> void:
 		_show_party()
 	elif action == "run":
 		_try_run()
-	
+
 ## Klapt de battle log open of dicht.
 func _on_battle_log_toggle_pressed() -> void:
 	battle_log_panel.toggle_log()
 	_update_battle_log_toggle_button()
-	
+
 ## Zet de tekst van de battle log toggle op basis van de open/dicht state.
 func _update_battle_log_toggle_button() -> void:
 	if battle_log_panel.is_open():
 		battle_log_toggle_button.text = ">"
 	else:
 		battle_log_toggle_button.text = "<"
-	
+
 ## Verbergt alle action views en reset de geselecteerde action state.
 func _reset_action_choices() -> void:
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
 	party_grid.visible = false
-	
+
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
 	current_action_view = ActionView.MOVES
@@ -104,45 +104,49 @@ func _show_moves() -> void:
 	party_grid.visible = false
 	action_buttons.set_selected_action("fight")
 
-	
+
 ## Toont de party keuzes in het action panel.
 func _show_party() -> void:
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
 	party_grid.visible = true
 	action_buttons.set_selected_action("party")
-	
+
 ## Zet de UI in bag-modus.
 func _open_bag() -> void:
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
 	party_grid.visible = false
-	
+
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
 	battle_log_panel.add_message("Got away safely!")
-	battle_ended.emit({"reason": "flee"})
+	_finish_battle({"reason": "flee"})
 
 ## Vult de move slots met de huidige beschikbare moves.
 func _update_move_slots() -> void:
 	if active_player_pokemon == null:
 		return
-	
+
 	moves_grid.set_moves(battle_state.get_available_moves())
 
 ## Vult de party slots met de huidige player party.
 func _update_party_slots() -> void:
-	party_grid.set_party(PlayerSave.party)
+	party_grid.set_party(battle_state.get_player_team("p1"))
+
+func _finish_battle(result: Dictionary) -> void:
+	PlayerSave.apply_battle_team_state(battle_state.get_player_team("p1"))
+	battle_ended.emit(result)
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
-func _apply_api_response(response: Dictionary) -> bool:	
+func _apply_api_response(response: Dictionary) -> bool:
 	if not response.get("success", false):
 		print("Battle API failed: ", response)
 		return false
-		
+
 	battle_state.load_from_api_response(response)
 	return true
-	
+
 ## Werkt de player en opponent HUD panels bij vanuit de battle state.
 func _update_hud_panels() -> void:
 	player_hud_panel.set_pokemon_data(
@@ -151,14 +155,14 @@ func _update_hud_panels() -> void:
 		battle_state.get_active_pokemon_current_hp("p1"),
 		battle_state.get_active_pokemon_max_hp("p1"),
 	)
-	
+
 	enemy_hud_panel.set_pokemon_data(
 		battle_state.get_active_pokemon_species("p2"),
 		battle_state.get_active_pokemon_level("p2"),
 		battle_state.get_active_pokemon_current_hp("p2"),
 		battle_state.get_active_pokemon_max_hp("p2"),
 	)
-	
+
 	player_hud_panel.set_team_data(battle_state.get_player_team("p1"))
 	enemy_hud_panel.set_team_data(battle_state.get_player_team("p2"))
 
@@ -166,36 +170,36 @@ func _update_hud_panels() -> void:
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
 	field_timers_panel.reset_timers()
-	
+
 ## Werkt turn en field timer status bij vanuit de battle state.
 func _update_battle_status_panels() -> void:
 	battle_status_panel.set_turn(battle_state.get_turn())
 	battle_status_panel.hide_timer()
 	field_timers_panel.reset_timers()
-	
+
 ## Initialiseert een wild battle vanuit een al gemaakte API battle response.
 func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
 	battle_type = BattleType.WILD
 	active_player_pokemon = player_pokemon
-	
+
 	player_hud_panel.clear_player_name()
 	enemy_hud_panel.clear_player_name()
-	
+
 	player_sprite_box.set_single_pokemon(player_pokemon, "back")
 	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
-	
+
 	if not _apply_api_response(api_response):
 		return
-		
+
 	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_move_slots()
 	_update_party_slots()
 	_show_moves()
-	
+
 	var player_species := battle_state.get_active_pokemon_species("p1")
 	var opponent_species := battle_state.get_active_pokemon_species("p2")
-	
+
 	current_action_panel.set_message("What will %s do?" % player_species)
 	battle_log_panel.add_message("A wild %s has appeared!" % opponent_species)
 	battle_log_panel.add_turn_header(battle_state.get_turn())
@@ -212,19 +216,19 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		"move",
 		slot
 	)
-	
+
 	if not player_response.get("success", false):
 		print("Player choice failed: ", player_response)
-	
+
 	battle_state.load_from_api_response(player_response)
-	
+
 	var opponent_moves: Array = battle_state.get_available_moves("p2")
 	if opponent_moves.is_empty():
 		print("No opponent moves available")
 		return
-		
+
 	var opponent_slot := randi_range(1, opponent_moves.size())
-	
+
 	var opponent_response: Dictionary = await BattleApiClient.send_choice(
 		battle_request,
 		battle_state.battle_id,
@@ -232,70 +236,101 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		"move",
 		opponent_slot
 	)
-	
+
 	if not _apply_api_response(opponent_response):
 		return
-		
+
 	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_move_slots()
 	_update_party_slots()
 	_render_battle_events(opponent_response.get("events", []))
-	
+
 	if battle_state.is_battle_ended():
 		await get_tree().create_timer(0.25).timeout
-		battle_ended.emit({
+		_finish_battle({
 			"reason": "win",
 			"winner": battle_state.get_winner()
 		})
 		return
-		
+
 func _render_battle_events(events: Array) -> void:
 	for event in events:
 		var event_type := str(event.get("type", ""))
 		var log_message := ""
 		var battle_message := ""
 		var add_blank_after := false
-		
+
 		match event_type:
 			"move":
 				var actor := _format_battle_actor(str(event.get("actor", "")))
 				var move_name := str(event.get("move", ""))
 				log_message = "%s used %s!" % [actor, move_name]
 				battle_message = log_message
-			
+
+			"switch":
+				var player_id := str(event.get("playerId", ""))
+				var from_name := str(event.get("from", ""))
+				var to_name := str(event.get("to", ""))
+
+				if to_name == "":
+					to_name = _format_battle_actor(str(event.get("toIdent", "")))
+				if to_name == "":
+					to_name = _format_battle_actor(str(event.get("pokemon", "")))
+				if to_name == "":
+					to_name = "Pokemon"
+				if player_id == "p1":
+					if from_name != "":
+						log_message = "%s, come back!\nGo! %s!" % [from_name, to_name]
+					else:
+						log_message = "Go! %s!" % to_name
+				else:
+					var trainer_name := _get_player_display_name(player_id)
+
+					if from_name != "":
+						log_message = "%s withdrew %s!\n%s sent out %s!"  % [
+							trainer_name,
+							from_name,
+							trainer_name,
+							to_name
+						]
+					else:
+						log_message = "%s sent out %s!" % [trainer_name, to_name]
+				battle_message = log_message
+				add_blank_after = true
+
 			"faint":
 				var target := _format_battle_actor(str(event.get("target", "")))
 				log_message = "%s fainted!" % target
 				battle_message = ""
 				add_blank_after = true
-			
+
 			"win":
 				var winner := str(event.get("winner", ""))
 				log_message = "%s won!" % winner
 				battle_message = log_message
 				add_blank_after = true
-				
+
 			"turn":
 				var turn := int(event.get("turn", 0))
 				if turn > 0:
 					battle_log_panel.add_turn_header(turn)
-					
+
 			"damage":
 				var target := _format_battle_actor(str(event.get("target", "")))
 				var previous_hp := int(event.get("previousHp", 0))
 				var hp := int(event.get("hp", 0))
 				var max_hp := int(event.get("maxHp", 0))
-				
+
 				if previous_hp > hp and max_hp > 0:
 					var percent: int = max(1, _get_visible_hp_change(previous_hp, hp, max_hp))
 					log_message = "  - %s lost %s%% HP" % [target, percent]
 
 				else:
 					log_message = "  - %s took damage!" % target
-					
+
 				add_blank_after = true
-				
+
 			"heal":
 				var target := _format_battle_actor(str(event.get("target", "")))
 				var previous_hp := int(event.get("previousHp", 0))
@@ -309,31 +344,31 @@ func _render_battle_events(events: Array) -> void:
 
 				else:
 					log_message = "  - %s restored HP!" % target
-					
+
 				add_blank_after = true
 			_:
 				pass
-		
+
 		if log_message != "":
 			battle_log_panel.add_message(log_message)
-			
+
 		if add_blank_after:
 			battle_log_panel.add_blank_line()
-		
+
 		if battle_message != "":
 			current_action_panel.set_message(battle_message)
 
-			
+
 ## Zet echte HP om naar het zichtbare Showdown-percentage.
 func _to_visible_hp_percent(hp: int, max_hp: int) -> int:
 	if max_hp <= 0:
 		return 0
-		
+
 	if hp <= 0:
 		return 0
-		
+
 	return ceili((float(hp) / float(max_hp)) * 100.0)
-	
+
 ## Berekent het zichtbare HP-percentageverschil tussen twee HP-waarden.
 func _get_visible_hp_change(previous_hp: int, hp: int, max_hp: int) -> int:
 	var previous_percent := _to_visible_hp_percent(previous_hp, max_hp)
@@ -343,6 +378,91 @@ func _get_visible_hp_change(previous_hp: int, hp: int, max_hp: int) -> int:
 func _format_battle_actor(actor: String) -> String:
 	if actor.contains(": "):
 		return actor.split(": ")[1]
-		
+
 	return actor
-	
+
+func _on_party_grid_party_selected(slot: int) -> void:
+	if not _can_switch_to_slot(slot):
+		return
+
+	var player_response: Dictionary = await BattleApiClient.send_choice(
+		battle_request,
+		battle_state.battle_id,
+		"p1",
+		"switch",
+		slot
+	)
+
+	if not player_response.get("success", false):
+		print("Player switch failed: ", player_response)
+		return
+
+	battle_state.load_from_api_response(player_response)
+
+	var opponent_moves: Array = battle_state.get_available_moves("p2")
+	if opponent_moves.is_empty():
+		print("No opponent moves available")
+		return
+
+	var opponent_slot := randi_range(1, opponent_moves.size())
+
+	var opponent_response: Dictionary = await BattleApiClient.send_choice(
+		battle_request,
+		battle_state.battle_id,
+		"p2",
+		"move",
+		opponent_slot
+	)
+
+	if not _apply_api_response(opponent_response):
+		return
+
+	_update_battle_status_panels()
+	_update_hud_panels()
+	_update_active_sprites()
+	_update_move_slots()
+	_update_party_slots()
+	_render_battle_events(opponent_response.get("events", []))
+
+	if battle_state.is_battle_ended():
+		await get_tree().create_timer(0.25).timeout
+		_finish_battle({
+			"reason": "win",
+			"winner": battle_state.get_winner()
+		})
+		return
+
+	_show_moves()
+
+func _can_switch_to_slot(slot: int) -> bool:
+	var team := battle_state.get_player_team("p1")
+	var index := slot - 1
+	if index < 0 or index >= team.size():
+		return false
+
+	var pokemon_data = team[index]
+	if not (pokemon_data is Dictionary):
+		return false
+
+	if bool(pokemon_data.get("active", false)):
+		return false
+
+	return not str(pokemon_data.get("condition", "")).contains("fnt")
+
+func _update_active_sprites() -> void:
+	var player_species := battle_state.get_active_pokemon_species("p1")
+	var opponent_species := battle_state.get_active_pokemon_species("p2")
+
+	player_sprite_box.set_single_pokemon_species(player_species, "back")
+	enemy_sprite_box.set_single_pokemon_species(opponent_species, "front")
+
+func _get_player_display_name(player_id: String) -> String:
+	var player_data: Dictionary = battle_state.players.get(player_id, {})
+	var player_name := str(player_data.get("name", ""))
+
+	if player_name != "":
+		return player_name
+	if player_id == "p1":
+		return "Player"
+
+	return "Opponent"

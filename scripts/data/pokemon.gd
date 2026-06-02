@@ -14,7 +14,7 @@ var current_hp: int
 var max_hp: int
 
 func _init(
-	_species: String, 
+	_species: String,
 	_level: int,
 	_item := "",
 	_ability := "",
@@ -48,7 +48,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
-	
+
 func to_battle_dict() -> Dictionary:
 	return {
 		"species": species,
@@ -58,4 +58,13 @@ func to_battle_dict() -> Dictionary:
 		"nature": nature,
 		"evs": evs,
 		"moves": moves,
+		"currentHp": current_hp,
+		"maxHp": max_hp,
+		"condition": _to_battle_condition(),
 	}
+
+func _to_battle_condition() -> String:
+	if current_hp <= 0:
+		return "0 fnt"
+
+	return "%s/%s" % [current_hp, max(max_hp, 1)]

@@ -9,8 +9,11 @@ func get_base_url() -> String:
 	if cached_url != "":
 		return cached_url
 	
-	var http_request = HTTPRequest.new()
+	if not OS.has_feature("editor"):
+		cached_url = PRODUCTION_API_URL
+		return cached_url
 	
+	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	
 	var error = http_request.request(LOCAL_API_URL + "/health")
@@ -26,7 +29,5 @@ func get_base_url() -> String:
 		cached_url = PRODUCTION_API_URL
 		
 	http_request.queue_free()
-	
 	return cached_url
 	
-	return cached_url

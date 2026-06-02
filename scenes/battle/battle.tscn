@@ -448,6 +448,7 @@ offset_bottom = 220.0
 grow_vertical = 2
 
 [connection signal="move_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" to="." method="_on_moves_grid_move_selected"]
+[connection signal="party_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" to="." method="_on_party_grid_party_selected"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/FightButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_fight_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/BagButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_bag_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/PartyButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_party_button_pressed"]

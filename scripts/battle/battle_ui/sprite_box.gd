@@ -313,18 +313,7 @@ func _is_region_empty(image: Image, region: Rect2i) -> bool:
 	return true
 
 func set_single_pokemon(pokemon: Pokemon, side: String) -> void:
-	set_battle_type(false)
-
-	single_sprite.visible = true
-	var frames := _load_sprite_frames(pokemon.species, side)
-	if frames == null:
-		return
-
-	single_sprite.sprite_frames = frames
-	single_sprite.animation = IDLE_ANIMATION
-	single_sprite.frame = 0
-	_snap_sprite_to_pixel_grid(single_sprite)
-	single_sprite.play()
+	set_single_pokemon_species(pokemon.species, side)
 
 func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) -> void:
 	set_battle_type(true)
@@ -347,3 +336,17 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		double_sprite_2.frame = 0
 		_snap_sprite_to_pixel_grid(double_sprite_2)
 		double_sprite_2.play()
+
+func set_single_pokemon_species(species: String, side: String) -> void:
+	set_battle_type(false)
+	
+	single_sprite.visible = true
+	var frames := _load_sprite_frames(species, side)
+	if frames == null:
+		return
+		
+	single_sprite.sprite_frames = frames
+	single_sprite.animation = IDLE_ANIMATION
+	single_sprite.frame = 0
+	_snap_sprite_to_pixel_grid(single_sprite)
+	single_sprite.play()
