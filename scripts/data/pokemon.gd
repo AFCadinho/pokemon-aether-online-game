@@ -13,6 +13,7 @@ var moves: Array
 
 var current_hp: int
 var max_hp: int
+var has_saved_hp_state := false
 
 func _init(
 	_species: String,
@@ -22,7 +23,8 @@ func _init(
 	_nature := "Hardy",
 	_evs := {},
 	_moves := [],
-	_instance_id := ""
+	_instance_id := "",
+	_has_saved_hp_state := false
 	) -> void:
 	species = _species
 	level = _level
@@ -30,6 +32,7 @@ func _init(
 	ability = _ability
 	nature = _nature
 	instance_id = _instance_id
+	has_saved_hp_state = _has_saved_hp_state
 	evs = {
 		"hp": _evs.get("hp", 0),
 		"atk": _evs.get("atk", 0),
@@ -55,7 +58,7 @@ func _process(_delta: float) -> void:
 func to_battle_dict() -> Dictionary:
 	ensure_instance_id()
 
-	return {
+	var battle_data := {
 		"species": species,
 		"level": level,
 		"item": item,
@@ -63,11 +66,15 @@ func to_battle_dict() -> Dictionary:
 		"nature": nature,
 		"evs": evs,
 		"moves": moves,
-		"currentHp": current_hp,
-		"maxHp": max_hp,
-		"condition": _to_battle_condition(),
 		"instanceId": instance_id,
 	}
+
+	if has_saved_hp_state:
+		battle_data["currentHp"] = current_hp
+		battle_data["maxHp"] = max_hp
+		battle_data["condition"] = _to_battle_condition()
+
+	return battle_data
 
 func _to_battle_condition() -> String:
 	if current_hp <= 0:

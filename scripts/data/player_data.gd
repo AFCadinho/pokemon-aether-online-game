@@ -53,6 +53,7 @@ func apply_battle_team_state(team: Array) -> void:
 
 		pokemon.current_hp = int(hp_data.get("current_hp", pokemon.current_hp))
 		pokemon.max_hp = int(hp_data.get("max_hp", pokemon.max_hp))
+		pokemon.has_saved_hp_state = true
 
 	party_changed.emit()
 

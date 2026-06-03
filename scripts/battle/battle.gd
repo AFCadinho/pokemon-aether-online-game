@@ -182,7 +182,15 @@ func _apply_api_response(response: Dictionary) -> bool:
 		return false
 
 	battle_state.load_from_api_response(response)
+	_sync_player_save_from_battle_state()
 	return true
+
+func _sync_player_save_from_battle_state() -> void:
+	var player_team := battle_state.get_player_team("p1")
+	if player_team.is_empty():
+		return
+
+	PlayerSave.apply_battle_team_state(player_team)
 
 ## Werkt de player en opponent HUD panels bij vanuit de battle state.
 func _update_hud_panels() -> void:
@@ -256,8 +264,10 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 
 	if not player_response.get("success", false):
 		print("Player choice failed: ", player_response)
+		return
 
-	battle_state.load_from_api_response(player_response)
+	if not _apply_api_response(player_response):
+		return
 
 	var opponent_moves: Array = battle_state.get_available_moves("p2")
 	if opponent_moves.is_empty():
