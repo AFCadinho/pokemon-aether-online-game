@@ -213,22 +213,10 @@ offset_top = -73.0
 offset_bottom = 0.0
 
 [node name="FieldTimers" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=91068280 instance=ExtResource("6_mvulk")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 0.0
-offset_right = 158.0
-grow_horizontal = 1
+layout_mode = 1
 
 [node name="BattleStatusPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=790300356 instance=ExtResource("7_mvulk")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 0.0
-offset_right = 153.39575
-grow_horizontal = 1
+layout_mode = 1
 
 [node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=900280603]
 custom_minimum_size = Vector2(36, 36)

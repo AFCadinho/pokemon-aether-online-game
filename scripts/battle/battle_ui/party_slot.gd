@@ -2,6 +2,11 @@ extends Button
 
 signal selected
 
+const FAINTED_BACKGROUND := Color("#30343c")
+const FAINTED_BORDER := Color("#626a76")
+const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
+const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
+
 @onready var pokemon_icon: TextureRect = $MarginContainer/HBoxContainer/PokemonIcon
 @onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameLabel
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/HPBar
@@ -21,14 +26,12 @@ func _ignore_child_mouse_input(node: Node) -> void:
 		_ignore_child_mouse_input(child)
 
 func set_pokemon(pokemon: Pokemon) -> void:
-	var types := PokemonFactory.get_species_types(pokemon.species)
-	if not types.is_empty():
-		var primary_type := str(types[0])
-		_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type))
-
+	var is_fainted := pokemon.current_hp <= 0
+	_apply_slot_style(pokemon.species, is_fainted)
 
 	visible = true
-	disabled = false
+	disabled = is_fainted
+	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
 
 	name_label.text = pokemon.species
 	hp_bar.max_value = max(pokemon.max_hp, 1)
@@ -42,13 +45,11 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var is_active := bool(pokemon_data.get("active", false))
 	var is_fainted := bool(hp_data.get("fainted", false))
 
-	var types := PokemonFactory.get_species_types(species)
-	if not types.is_empty():
-		var primary_type := str(types[0])
-		_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type))
+	_apply_slot_style(species, is_fainted)
 
 	visible = true
 	disabled = is_active or is_fainted
+	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
 
 	name_label.text = species
 	if is_active:
@@ -90,6 +91,7 @@ func _parse_condition(condition: String) -> Dictionary:
 func set_empty() -> void:
 	visible = true
 	disabled = true
+	modulate = NORMAL_MODULATE
 
 	name_label.text = ""
 	hp_bar.value = 0
@@ -100,6 +102,22 @@ func set_empty() -> void:
 	remove_theme_stylebox_override("hover")
 	remove_theme_stylebox_override("pressed")
 	remove_theme_stylebox_override("disabled")
+
+func _apply_slot_style(species: String, is_fainted: bool) -> void:
+	if is_fainted:
+		_set_color(FAINTED_BACKGROUND, FAINTED_BORDER)
+		return
+
+	var types := PokemonFactory.get_species_types(species)
+	if types.is_empty():
+		remove_theme_stylebox_override("normal")
+		remove_theme_stylebox_override("hover")
+		remove_theme_stylebox_override("pressed")
+		remove_theme_stylebox_override("disabled")
+		return
+
+	var primary_type := str(types[0])
+	_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type))
 
 func _set_color(background: Color, border: Color) -> void:
 	var normal := StyleBoxFlat.new()

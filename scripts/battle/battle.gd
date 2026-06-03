@@ -16,6 +16,7 @@ enum ActionView {
 
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
+var battle_finished := false
 
 #Battle State
 var battle_state := BattleState.new()
@@ -68,6 +69,24 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("battle_run"):
+		_try_run()
+		return
+
+	if event.is_action_pressed("battle_move_1"):
+		_try_select_move(1)
+		return
+	if event.is_action_pressed("battle_move_2"):
+		_try_select_move(2)
+		return
+	if event.is_action_pressed("battle_move_3"):
+		_try_select_move(3)
+		return
+	if event.is_action_pressed("battle_move_4"):
+		_try_select_move(4)
+		return
+
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
 	if action == "fight":
@@ -106,7 +125,12 @@ func _show_moves() -> void:
 
 
 ## Toont de party keuzes in het action panel.
-func _show_party() -> void:
+func _show_party(force_switch := false) -> void:
+	if not force_switch and battle_state.is_active_trapped("p1"):
+		current_action_panel.set_message("Cannot switch right now!")
+		_show_moves()
+		return
+
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
 	party_grid.visible = true
@@ -120,6 +144,9 @@ func _open_bag() -> void:
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
+	if battle_finished:
+		return
+
 	battle_log_panel.add_message("Got away safely!")
 	_finish_battle({"reason": "flee"})
 
@@ -135,6 +162,10 @@ func _update_party_slots() -> void:
 	party_grid.set_party(battle_state.get_player_team("p1"))
 
 func _finish_battle(result: Dictionary) -> void:
+	if battle_finished:
+		return
+
+	battle_finished = true
 	PlayerSave.apply_battle_team_state(battle_state.get_player_team("p1"))
 	battle_ended.emit(result)
 
@@ -254,6 +285,9 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		})
 		return
 
+	if _show_force_switch_if_needed():
+		return
+
 func _render_battle_events(events: Array) -> void:
 	for event in events:
 		var event_type := str(event.get("type", ""))
@@ -282,8 +316,10 @@ func _render_battle_events(events: Array) -> void:
 				if player_id == "p1":
 					if from_name != "":
 						log_message = "%s, come back!\nGo! %s!" % [from_name, to_name]
+						battle_message = "Go! %s!" % to_name
 					else:
 						log_message = "Go! %s!" % to_name
+						battle_message = log_message
 				else:
 					var trainer_name := _get_player_display_name(player_id)
 
@@ -296,7 +332,7 @@ func _render_battle_events(events: Array) -> void:
 						]
 					else:
 						log_message = "%s sent out %s!" % [trainer_name, to_name]
-				battle_message = log_message
+					battle_message = "%s sent out %s!" % [trainer_name, to_name]
 				add_blank_after = true
 
 			"faint":
@@ -385,6 +421,8 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	if not _can_switch_to_slot(slot):
 		return
 
+	var was_force_switch := battle_state.needs_force_switch("p1")
+
 	var player_response: Dictionary = await BattleApiClient.send_choice(
 		battle_request,
 		battle_state.battle_id,
@@ -394,10 +432,36 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	)
 
 	if not player_response.get("success", false):
-		print("Player switch failed: ", player_response)
+		var error_message := str(player_response.get("error", "Cannot switch right now!"))
+		current_action_panel.set_message(error_message)
+		battle_log_panel.add_message(error_message)
+		if was_force_switch:
+			_show_party(true)
+		else:
+			_show_moves()
 		return
 
-	battle_state.load_from_api_response(player_response)
+	if not _apply_api_response(player_response):
+		return
+
+	if was_force_switch:
+		_update_battle_status_panels()
+		_update_hud_panels()
+		_update_active_sprites()
+		_update_move_slots()
+		_update_party_slots()
+		_render_battle_events(player_response.get("events", []))
+
+		if battle_state.is_battle_ended():
+			await get_tree().create_timer(0.25).timeout
+			_finish_battle({
+				"reason": "win",
+				"winner": battle_state.get_winner()
+			})
+			return
+
+		_show_moves()
+		return
 
 	var opponent_moves: Array = battle_state.get_available_moves("p2")
 	if opponent_moves.is_empty():
@@ -432,9 +496,24 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		})
 		return
 
+	if _show_force_switch_if_needed():
+		return
+
 	_show_moves()
 
+func _show_force_switch_if_needed() -> bool:
+	if not battle_state.needs_force_switch("p1") or battle_state.is_battle_ended():
+		return false
+
+	current_action_panel.set_message("Choose a Pokemon!")
+	_show_party(true)
+	return true
+
 func _can_switch_to_slot(slot: int) -> bool:
+	if battle_state.is_active_trapped("p1") and not battle_state.needs_force_switch("p1"):
+		current_action_panel.set_message("Cannot switch right now!")
+		return false
+
 	var team := battle_state.get_player_team("p1")
 	var index := slot - 1
 	if index < 0 or index >= team.size():
@@ -466,3 +545,20 @@ func _get_player_display_name(player_id: String) -> String:
 		return "Player"
 
 	return "Opponent"
+
+func _try_select_move(slot: int) -> void:
+	if battle_finished:
+		return
+
+	if current_action_view != ActionView.MOVES:
+		return
+
+	var moves := battle_state.get_available_moves()
+	if slot < 1 or slot > moves.size():
+		return
+
+	var move_data: Dictionary = moves[slot - 1]
+	if bool(move_data.get("disabled", false)):
+		return
+
+	_on_moves_grid_move_selected(slot)

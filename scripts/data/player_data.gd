@@ -31,14 +31,28 @@ func add_pokemon(pokemon: Pokemon) -> void:
 	party_changed.emit()
 
 func apply_battle_team_state(team: Array) -> void:
-	for idx in range(min(party.size(), team.size())):
-		var pokemon_data = team[idx]
+	var party_by_instance_id := {}
+
+	for pokemon in party:
+		pokemon.ensure_instance_id()
+		party_by_instance_id[pokemon.instance_id] = pokemon
+
+	for pokemon_data in team:
 		if not (pokemon_data is Dictionary):
 			continue
 
+		var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
+		if instance_id == "":
+			continue
+
+		if not party_by_instance_id.has(instance_id):
+			continue
+
+		var pokemon: Pokemon = party_by_instance_id[instance_id]
 		var hp_data := _parse_battle_condition(str(pokemon_data.get("condition", "")))
-		party[idx].current_hp = int(hp_data.get("current_hp", party[idx].current_hp))
-		party[idx].max_hp = int(hp_data.get("max_hp", party[idx].max_hp))
+
+		pokemon.current_hp = int(hp_data.get("current_hp", pokemon.current_hp))
+		pokemon.max_hp = int(hp_data.get("max_hp", pokemon.max_hp))
 
 	party_changed.emit()
 

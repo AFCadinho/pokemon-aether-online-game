@@ -18,8 +18,17 @@ func set_move_data(move_data: Dictionary) -> void:
 	
 	move_name_label.text = str(move_data.get("name", ""))
 	
-	var current_pp := int(move_data.get("pp", 0))
-	var max_pp := int(move_data.get("maxpp", current_pp))
+	var current_pp_value = move_data.get("pp", 0)
+	var current_pp := 0
+
+	if current_pp_value != null:
+		current_pp = int(current_pp_value)
+
+	var max_pp_value = move_data.get("maxpp", current_pp)
+	var max_pp := current_pp
+
+	if max_pp_value != null:
+		max_pp = int(max_pp_value)
 	
 	pp_label.text = "%s/%s" %[
 		current_pp,

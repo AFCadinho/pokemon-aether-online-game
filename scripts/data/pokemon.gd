@@ -7,6 +7,7 @@ var level: int
 var item: String
 var ability: String
 var nature: String
+var instance_id: String
 var evs: Dictionary
 var moves: Array
 
@@ -20,13 +21,15 @@ func _init(
 	_ability := "",
 	_nature := "Hardy",
 	_evs := {},
-	_moves := []
+	_moves := [],
+	_instance_id := ""
 	) -> void:
 	species = _species
 	level = _level
 	item = _item
 	ability = _ability
 	nature = _nature
+	instance_id = _instance_id
 	evs = {
 		"hp": _evs.get("hp", 0),
 		"atk": _evs.get("atk", 0),
@@ -50,6 +53,8 @@ func _process(_delta: float) -> void:
 	pass
 
 func to_battle_dict() -> Dictionary:
+	ensure_instance_id()
+
 	return {
 		"species": species,
 		"level": level,
@@ -61,6 +66,7 @@ func to_battle_dict() -> Dictionary:
 		"currentHp": current_hp,
 		"maxHp": max_hp,
 		"condition": _to_battle_condition(),
+		"instanceId": instance_id,
 	}
 
 func _to_battle_condition() -> String:
@@ -68,3 +74,9 @@ func _to_battle_condition() -> String:
 		return "0 fnt"
 
 	return "%s/%s" % [current_hp, max(max_hp, 1)]
+
+func ensure_instance_id() -> void:
+	if instance_id != "":
+		return
+
+	instance_id = "pokemon_%s_%s" % [Time.get_ticks_usec(), randi()]
