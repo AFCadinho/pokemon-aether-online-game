@@ -9,6 +9,8 @@ signal action_selected(action: String)
 	$GridContainer/BagButton
 ]
 
+var disabled_actions := {}
+
 func _select_button(active_button: Button) -> void:
 	# Zet alle knoppen terug naar hun normale staat zodra een knop is gekozen
 	for button in buttons:
@@ -18,6 +20,7 @@ func _select_button(active_button: Button) -> void:
 	# Disable de actieve knop en maak hem een beetje grijs als visueel indicatie
 	active_button.disabled = true
 	active_button.modulate = Color(0.7, 0.7, 0.7)
+	_apply_disabled_actions()
 
 func set_selected_action(action: String) -> void:
 	if action == "fight":
@@ -29,19 +32,59 @@ func set_selected_action(action: String) -> void:
 	elif action == "run":
 		_select_button($GridContainer/RunButton)
 
+func set_action_disabled(action: String, is_disabled: bool) -> void:
+	disabled_actions[action] = is_disabled
+	_apply_disabled_actions()
+
+func _apply_disabled_actions() -> void:
+	for action in disabled_actions:
+		if not bool(disabled_actions[action]):
+			continue
+
+		var button := _get_action_button(str(action))
+		if button == null:
+			continue
+
+		button.disabled = true
+		button.modulate = Color(0.7, 0.7, 0.7)
+
+func _get_action_button(action: String) -> Button:
+	if action == "fight":
+		return $GridContainer/FightButton
+	if action == "bag":
+		return $GridContainer/BagButton
+	if action == "party":
+		return $GridContainer/PartyButton
+	if action == "run":
+		return $GridContainer/RunButton
+
+	return null
+
 func _on_fight_button_pressed() -> void:
+	if bool(disabled_actions.get("fight", false)):
+		return
+
 	set_selected_action("fight")
 	action_selected.emit("fight")
 
 
 func _on_bag_button_pressed() -> void:
+	if bool(disabled_actions.get("bag", false)):
+		return
+
 	set_selected_action("bag")
 	action_selected.emit("bag")
 
 func _on_party_button_pressed() -> void:
+	if bool(disabled_actions.get("party", false)):
+		return
+
 	set_selected_action("party")
 	action_selected.emit("party")
 
 func _on_run_button_pressed() -> void:
+	if bool(disabled_actions.get("run", false)):
+		return
+
 	set_selected_action("run")
 	action_selected.emit("run")

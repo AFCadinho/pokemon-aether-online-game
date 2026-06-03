@@ -118,6 +118,9 @@ func _reset_action_choices() -> void:
 
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
+	action_buttons.set_action_disabled("fight", false)
+	action_buttons.set_action_disabled("bag", false)
+	action_buttons.set_action_disabled("run", false)
 	current_action_view = ActionView.MOVES
 	moves_grid.visible = true
 	party_grid.visible = false
@@ -131,6 +134,9 @@ func _show_party(force_switch := false) -> void:
 		_show_moves()
 		return
 
+	action_buttons.set_action_disabled("fight", force_switch)
+	action_buttons.set_action_disabled("bag", force_switch)
+	action_buttons.set_action_disabled("run", force_switch)
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
 	party_grid.visible = true
@@ -144,7 +150,7 @@ func _open_bag() -> void:
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
-	if battle_finished:
+	if battle_finished or battle_state.needs_force_switch("p1"):
 		return
 
 	battle_log_panel.add_message("Got away safely!")
@@ -403,7 +409,8 @@ func _to_visible_hp_percent(hp: int, max_hp: int) -> int:
 	if hp <= 0:
 		return 0
 
-	return ceili((float(hp) / float(max_hp)) * 100.0)
+	var clamped_hp: int = clamp(hp, 0, max_hp)
+	return clamp(ceili((float(clamped_hp) / float(max_hp)) * 100.0), 0, 100)
 
 ## Berekent het zichtbare HP-percentageverschil tussen twee HP-waarden.
 func _get_visible_hp_change(previous_hp: int, hp: int, max_hp: int) -> int:
