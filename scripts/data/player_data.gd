@@ -52,12 +52,38 @@ func apply_battle_team_state(team: Array) -> void:
 
 		var pokemon: Pokemon = party_by_instance_id[instance_id]
 		var hp_data := _parse_battle_condition(str(pokemon_data.get("condition", "")))
+		if hp_data.is_empty():
+			continue
 
-		pokemon.current_hp = int(hp_data.get("current_hp", pokemon.current_hp))
-		pokemon.max_hp = int(hp_data.get("max_hp", pokemon.max_hp))
-		pokemon.has_saved_hp_state = true
+		_apply_hp_data_to_pokemon(pokemon, hp_data)
 
 	party_changed.emit()
+
+func _apply_hp_data_to_pokemon(pokemon: Pokemon, hp_data: Dictionary) -> void:
+	var current_hp := int(hp_data.get("current_hp", pokemon.current_hp))
+	var max_hp := int(hp_data.get("max_hp", pokemon.max_hp))
+	var expected_max_hp := PokemonFactory.get_expected_max_hp(pokemon.species, pokemon.level, pokemon.evs)
+	if expected_max_hp > 0 and pokemon.max_hp != expected_max_hp:
+		var current_percent := 1.0
+		if pokemon.max_hp > 0:
+			current_percent = float(pokemon.current_hp) / float(pokemon.max_hp)
+		pokemon.max_hp = expected_max_hp
+		var clamped_percent := float(clamp(current_percent, 0.0, 1.0))
+		pokemon.current_hp = int(round(clamped_percent * float(pokemon.max_hp)))
+
+	if current_hp <= 0 and max_hp == 1:
+		pokemon.current_hp = 0
+		pokemon.has_saved_hp_state = true
+		return
+
+	if max_hp == 100 and pokemon.max_hp != 100:
+		var hp_percent := int(clamp(current_hp, 0, 100))
+		pokemon.current_hp = int(round((float(hp_percent) / 100.0) * float(pokemon.max_hp)))
+	else:
+		pokemon.max_hp = max(max_hp, 1)
+		pokemon.current_hp = int(clamp(current_hp, 0, pokemon.max_hp))
+
+	pokemon.has_saved_hp_state = true
 
 func _parse_battle_condition(condition: String) -> Dictionary:
 	var result := {}

@@ -60,6 +60,12 @@ static func create_pokemon(species_id: String, level: int, options: Dictionary =
 		_has_hp_override(options)
 	)
 
+	var ivs_value: Variant = options.get("ivs", {})
+	var ivs: Dictionary = ivs_value if ivs_value is Dictionary else {}
+	var calculated_max_hp := _calculate_max_hp(species_data, pokemon.level, pokemon.evs, ivs)
+	pokemon.max_hp = calculated_max_hp
+	pokemon.current_hp = calculated_max_hp
+
 	if _has_hp_override(options):
 		_apply_hp_options(pokemon, options)
 
@@ -83,6 +89,14 @@ static func create_pokemon_from_data(data: Dictionary) -> Pokemon:
 		print_debug("PokemonFactory.create_pokemon_from_data failed: species_id=", species_id, " level=", level, " data=", data)
 
 	return pokemon
+
+
+static func get_expected_max_hp(species_id: String, level: int, evs: Dictionary = {}, ivs: Dictionary = {}) -> int:
+	var species_data := _load_species_data(_normalize_species_id(species_id))
+	if species_data.is_empty():
+		return 0
+
+	return _calculate_max_hp(species_data, level, evs, ivs)
 
 
 static func _get_option_moves(options: Dictionary, default_moves: Array[String]) -> Array:
@@ -130,6 +144,19 @@ static func _apply_hp_options(pokemon: Pokemon, options: Dictionary) -> void:
 		current_hp = int(options.get("currentHp", options.get("current_hp", current_hp)))
 
 	pokemon.current_hp = clamp(current_hp, 0, pokemon.max_hp)
+
+
+static func _calculate_max_hp(species_data: Dictionary, level: int, evs: Dictionary, ivs: Dictionary) -> int:
+	var base_stats_value: Variant = species_data.get("base_stats", {})
+	var base_stats: Dictionary = base_stats_value if base_stats_value is Dictionary else {}
+	var base_hp := int(base_stats.get("hp", 1))
+	var hp_ev := int(evs.get("hp", 0))
+	var hp_iv := int(ivs.get("hp", 31))
+
+	if base_hp <= 1:
+		return 1
+
+	return int(floor(((2 * base_hp + hp_iv + floor(hp_ev / 4.0)) * level) / 100.0)) + level + 10
 
 
 static func _parse_condition(condition: String) -> Dictionary:

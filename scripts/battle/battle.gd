@@ -261,6 +261,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 
 	current_action_panel.set_message("What will %s do?" % player_species)
 	battle_log_panel.add_message("A wild %s has appeared!" % opponent_species)
+	battle_log_panel.add_message("Go! %s!" % player_species)
 	battle_log_panel.add_turn_header(battle_state.get_turn())
 	last_battle_log_player_id = ""
 	_render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
@@ -355,9 +356,9 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				var to_name := str(event_data.get("to", ""))
 
 				if to_name == "":
-					to_name = _format_battle_actor(str(event_data.get("toIdent", "")))
+					to_name = _format_battle_actor(str(event_data.get("toIdent", "")), false)
 				if to_name == "":
-					to_name = _format_battle_actor(str(event_data.get("pokemon", "")))
+					to_name = _format_battle_actor(str(event_data.get("pokemon", "")), false)
 				if to_name == "":
 					to_name = "Pokemon"
 				if player_id == "p1":
@@ -481,13 +482,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				var target := _format_battle_actor(str(event_data.get("target", "")))
 				var previous_hp := int(event_data.get("previousHp", 0))
 				var hp := int(event_data.get("hp", 0))
-
-				if hp > previous_hp:
-					var percent: int = max(1, _get_event_visible_hp_change(event_data))
-					log_message = "(%s restored %s%% of its health!)" % [target, percent]
-
-				else:
-					log_message = "  - %s restored HP!" % target
+				log_message = _format_heal_event(event_data, target, previous_hp, hp)
 
 				add_blank_after = true
 				recent_field_effect_source = ""
@@ -642,11 +637,16 @@ func _get_condition_visible_hp_percent(condition: String) -> int:
 	var max_hp := int(right.split(" ")[0])
 	return _to_visible_hp_percent(current_hp, max_hp)
 
-func _format_battle_actor(actor: String) -> String:
-	if actor.contains(": "):
-		return actor.split(": ")[1]
+func _format_battle_actor(actor: String, include_side_prefix := true) -> String:
+	var player_id := _get_player_id_from_ident(actor)
+	var actor_name := actor
+	if actor_name.contains(": "):
+		actor_name = actor_name.split(": ")[1]
 
-	return actor
+	if include_side_prefix and player_id == "p2" and actor_name != "":
+		return "The opposing %s" % actor_name
+
+	return actor_name
 
 func _queue_missing_field_start_events(previous_field_effect_keys: Dictionary) -> void:
 	for effect_data in battle_state.get_field_effects():
@@ -980,6 +980,21 @@ func _format_event_reason(reason: String) -> String:
 			return "being trapped"
 
 	return cleaned
+
+func _format_heal_event(event: Dictionary, target: String, previous_hp: int, hp: int) -> String:
+	var source := _normalize_event_source(str(event.get("source", "")))
+	var source_key := source.to_lower().replace(" ", "")
+
+	if source_key == "leftovers":
+		return "%s restored HP using its Leftovers!" % target
+	if source != "" and source_key != "drain":
+		return "%s restored HP with %s!" % [target, _format_compact_effect_name(source)]
+
+	if hp > previous_hp:
+		var percent: int = max(1, _get_event_visible_hp_change(event))
+		return "(%s restored %s%% of its health!)" % [target, percent]
+
+	return "  - %s restored HP!" % target
 
 func _format_indirect_damage_message(
 	event: Dictionary,

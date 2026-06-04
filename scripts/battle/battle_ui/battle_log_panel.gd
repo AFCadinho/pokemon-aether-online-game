@@ -115,16 +115,23 @@ func _format_line(line: String) -> String:
 func _is_field_line(lower: String) -> bool:
 	return (
 		lower.contains("sandstorm")
-		or lower.contains("rain")
-		or lower.contains("sun")
-		or lower.contains("hail")
-		or lower.contains("snow")
+		or _contains_word(lower, "rain")
+		or _contains_word(lower, "sun")
+		or _contains_word(lower, "hail")
+		or _contains_word(lower, "snow")
 		or lower.contains("stealth rock")
 		or lower.contains("spikes")
 		or lower.contains("leech seed")
 		or lower.contains("buffeted")
 		or lower.contains("pointed stones")
 	)
+
+func _contains_word(value: String, word: String) -> bool:
+	var normalized := value
+	for character in [".", ",", "!", "?", ":", ";", "(", ")", "-", "_"]:
+		normalized = normalized.replace(character, " ")
+
+	return (" " + normalized + " ").contains(" " + word + " ")
 
 func _escape_bbcode(value: String) -> String:
 	return value.replace("[", "[lb]").replace("]", "[rb]")
