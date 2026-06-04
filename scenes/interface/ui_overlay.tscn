@@ -189,9 +189,66 @@ theme_override_constants/separation = 6
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="DevPokemonButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow"]
+layout_mode = 2
+text = "Pokemon"
+
 [node name="SendButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow" unique_id=676409170]
 layout_mode = 2
 text = "Send"
+
+[node name="DevPokemonPopup" type="PanelContainer" parent="Control"]
+visible = false
+custom_minimum_size = Vector2(520, 420)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -210.0
+offset_right = 260.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/DevPokemonPopup"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/DevPokemonPopup/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
+theme_override_font_sizes/font_size = 18
+text = "Add Pokemon"
+
+[node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Paste Showdown/Pokepaste text here"
+
+[node name="ButtonRow" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="CloseButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow"]
+layout_mode = 2
+text = "Close"
+
+[node name="AddButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow"]
+layout_mode = 2
+text = "Add"
 
 [node name="LocationPanel" type="PanelContainer" parent="Control" unique_id=907156867]
 custom_minimum_size = Vector2(0, 44)

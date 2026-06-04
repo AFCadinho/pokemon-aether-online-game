@@ -11,8 +11,13 @@ const ADD_POKEMON_CLIPBOARD_ALIAS := "/apc"
 @onready var message_list: VBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
 @onready var chat_input: LineEdit = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/ChatInput
+@onready var dev_pokemon_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/DevPokemonButton
 @onready var send_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/SendButton
 @onready var parse_pokemon_request: HTTPRequest = $ParsePokemonRequest
+@onready var dev_pokemon_popup: PanelContainer = $Control/DevPokemonPopup
+@onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
+@onready var dev_pokemon_add_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/AddButton
+@onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
 
 var party_slots: Array = []
 
@@ -26,6 +31,10 @@ func _ready() -> void:
 
 	send_button.pressed.connect(_on_send_button_pressed)
 	chat_input.text_submitted.connect(_on_chat_text_submitted)
+	dev_pokemon_button.visible = PlayerSave.is_staff
+	dev_pokemon_button.pressed.connect(_on_dev_pokemon_button_pressed)
+	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
+	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -80,7 +89,10 @@ func _submit_chat_input() -> void:
 			return
 
 		var pokemon_text := text.substr(ADD_POKEMON_COMMAND.length()).strip_edges()
-		pokemon_text = pokemon_text.replace("\\n", "\n")
+		if pokemon_text == "":
+			_show_dev_pokemon_popup()
+			return
+
 		await _handle_add_pokemon_command(pokemon_text)
 		return
 
@@ -90,35 +102,70 @@ func _submit_chat_input() -> void:
 
 	_add_chat_message("Adinho: %s" % text)
 
-func _handle_add_pokemon_command(pokemon_text: String) -> void:
+func _handle_add_pokemon_command(pokemon_text: String) -> bool:
+	pokemon_text = _clean_pokemon_paste_text(pokemon_text)
 	if pokemon_text.strip_edges() == "":
-		_add_chat_message("Usage: /addpokemon <showdown text>, /addpokemonclip, or /apc")
-		return
+		_add_chat_message("Paste a Showdown/Pokepaste set first.")
+		return false
 
 	if PlayerSave.party.size() >= MAX_PARTY_SIZE:
 		_add_chat_message("Party is full.")
-		return
+		return false
 
 	_add_chat_message("Parsing Pokemon...")
 	var response: Dictionary = await BattleApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
-		return
+		return false
 
 	var pokemon_value: Variant = response.get("pokemon", {})
 	if not (pokemon_value is Dictionary):
 		_add_chat_message("Parse failed: response did not include Pokemon data.")
-		return
+		return false
 
 	var pokemon_data: Dictionary = pokemon_value as Dictionary
 	var pokemon := PokemonFactory.create_pokemon_from_data(pokemon_data)
 	if pokemon == null:
 		print_debug("Dev add Pokemon failed after parse. pokemon_data=", pokemon_data, " response=", response)
 		_add_chat_message("Could not create Pokemon from parsed data.")
-		return
+		return false
 
 	PlayerSave.add_pokemon(pokemon)
 	_add_chat_message("Added %s Lv. %s to party." % [pokemon.species, pokemon.level])
+	return true
+
+func _clean_pokemon_paste_text(pokemon_text: String) -> String:
+	var cleaned_text := pokemon_text.strip_edges()
+	cleaned_text = cleaned_text.replace("\\n", "\n")
+
+	for command in [ADD_POKEMON_CLIPBOARD_ALIAS, ADD_POKEMON_CLIPBOARD_COMMAND, ADD_POKEMON_COMMAND]:
+		if cleaned_text == command:
+			return ""
+		if cleaned_text.begins_with(command + " "):
+			cleaned_text = cleaned_text.substr(command.length()).strip_edges()
+			break
+
+	return cleaned_text
+
+func _on_dev_pokemon_button_pressed() -> void:
+	_show_dev_pokemon_popup()
+
+func _show_dev_pokemon_popup() -> void:
+	if not PlayerSave.is_staff:
+		return
+
+	dev_pokemon_popup.visible = true
+	dev_pokemon_text.grab_focus()
+
+func _on_dev_pokemon_add_button_pressed() -> void:
+	var added: bool = await _handle_add_pokemon_command(dev_pokemon_text.text)
+	if added:
+		dev_pokemon_text.clear()
+		dev_pokemon_popup.visible = false
+
+func _on_dev_pokemon_close_button_pressed() -> void:
+	dev_pokemon_popup.visible = false
+	chat_input.grab_focus()
 
 func _add_chat_message(text: String) -> void:
 	var entry := message_entry_template.duplicate() as RichTextLabel
