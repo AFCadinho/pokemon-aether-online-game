@@ -47,6 +47,13 @@ func send_choice(request_node: HTTPRequest, battle_id: String, player_id: String
 		body
 	)
 
+func parse_pokemon(request_node: HTTPRequest, text: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/parse_pokemon",
+		{"text": text}
+	)
+
 func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
 	var api_base_url = await BattleApiConfig.get_base_url()
 	

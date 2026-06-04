@@ -17,7 +17,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var condition := str(pokemon_data.get("condition", ""))
 	var is_fainted := condition.contains("fnt")
 
-	var species := _get_species_from_ident(str(pokemon_data.get("ident", "")))
+	var species := _get_species_from_data(pokemon_data)
 	var icon := PokemonAssets.load_party_icon(species)
 
 	if icon == null:
@@ -32,7 +32,16 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	hp_bar.max_value = max(max_hp, 1)
 	hp_bar.value = clamp(hp, 0, hp_bar.max_value)
 
-func _get_species_from_ident(ident: String) -> String:
+func _get_species_from_data(pokemon_data: Dictionary) -> String:
+	var display_species := str(pokemon_data.get("displaySpecies", ""))
+	if display_species != "":
+		return display_species
+
+	var details := str(pokemon_data.get("details", ""))
+	if details != "":
+		return str(details.split(",")[0]).strip_edges()
+
+	var ident := str(pokemon_data.get("ident", ""))
 	if ident.contains(": "):
 		return str(ident.split(": ")[1]).strip_edges()
 

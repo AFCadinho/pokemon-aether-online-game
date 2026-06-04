@@ -61,13 +61,17 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	status_icon.visible = false
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
-	var ident := str(pokemon_data.get("ident", ""))
-	if ident.contains(": "):
-		return str(ident.split(": ")[1]).strip_edges()
+	var display_species := str(pokemon_data.get("displaySpecies", ""))
+	if display_species != "":
+		return display_species
 
 	var details := str(pokemon_data.get("details", ""))
 	if details != "":
 		return str(details.split(",")[0]).strip_edges()
+
+	var ident := str(pokemon_data.get("ident", ""))
+	if ident.contains(": "):
+		return str(ident.split(": ")[1]).strip_edges()
 
 	return ""
 

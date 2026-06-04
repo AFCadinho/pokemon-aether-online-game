@@ -1,0 +1,55 @@
+{
+  "id": 10035,
+  "species_id": "charizard-megay",
+  "showdown_id": "charizardmegay",
+  "name": "Charizard Mega Y",
+  "types": [
+    "fire",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 104,
+    "def": 78,
+    "spa": 159,
+    "spd": 115,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "drought"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 24
+    },
+    {
+      "move": "slash",
+      "level": 36
+    },
+    {
+      "move": "flamethrower",
+      "level": 46
+    },
+    {
+      "move": "fire-spin",
+      "level": 55
+    }
+  ]
+}

@@ -5,6 +5,7 @@ class_name PlayerData # PlayerSave Autoload
 signal party_changed
 
 var player_name := "Player"
+var is_staff := OS.has_feature("editor")
 var party: Array[Pokemon] = []
 var money := 0
 var flags := {}
@@ -27,6 +28,7 @@ func add_pokemon(pokemon: Pokemon) -> void:
 	if party.size() >= 6:
 		return
 
+	pokemon.ensure_instance_id()
 	party.append(pokemon)
 	party_changed.emit()
 

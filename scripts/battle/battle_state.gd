@@ -8,6 +8,7 @@ var players := {}
 var requests := {}
 var battle_log := []
 var battle_status_api := {}
+var field: Dictionary = {}
 
 
 ## Laadt een volledige battle response van de API in deze state.
@@ -18,6 +19,7 @@ func load_from_api_response(response: Dictionary) -> void:
 	requests = response.get("requests", {})
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
+	field = response.get("field", {})
 
 ## Geeft de laatste request-state voor een speler terug.
 func get_player_request(player_id: String = "p1") -> Dictionary:
@@ -75,13 +77,16 @@ func get_active_pokemon_condition(player_id: String = "p1") -> String:
 
 ## Geeft de speciesnaam van de actieve Pokemon terug.
 func get_active_pokemon_species(player_id: String = "p1") -> String:
-	var ident := get_active_pokemon_ident(player_id)
-	if ident.contains(": "):
-		return str(ident.split(": ")[1]).strip_edges()
+	return get_species_from_pokemon_data(get_active_player_pokemon(player_id))
 
-	var details := get_active_pokemon_details(player_id)
+func get_species_from_pokemon_data(pokemon_data: Dictionary) -> String:
+	var details := str(pokemon_data.get("details", ""))
 	if details != "":
 		return str(details.split(",")[0]).strip_edges()
+
+	var ident := str(pokemon_data.get("ident", ""))
+	if ident.contains(": "):
+		return str(ident.split(": ")[1]).strip_edges()
 
 	return ""
 
@@ -119,6 +124,13 @@ func get_active_pokemon_max_hp(player_id: String) -> int:
 ## Geeft huidige turn terug
 func get_turn() -> int:
 	return int(battle_status_api.get("turn", 0))
+
+func get_field_effects() -> Array:
+	var effects: Variant = field.get("effects", [])
+	if effects is Array:
+		return effects as Array
+
+	return []
 
 func is_active_trapped(player_id: String = "p1", active_index: int = 0) -> bool:
 	var active_slots: Array = get_player_request(player_id).get("active", [])

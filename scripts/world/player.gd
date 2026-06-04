@@ -58,6 +58,10 @@ func _physics_process(delta: float) -> void:
 	if GameState.input_locked:
 		set_idle_frame()
 		return
+
+	if _is_ui_typing():
+		set_idle_frame()
+		return
 		
 	# Bepaal welke richting de speler op wilt lopen.
 	var direction := Vector2.ZERO
@@ -180,5 +184,9 @@ func check_for_grass_encounter() -> void:
 	var world := get_tree().current_scene
 	if world.has_method("start_wild_battle"):
 		world.start_wild_battle(wild_pokemon)
+
+func _is_ui_typing() -> bool:
+	var focused_control := get_viewport().gui_get_focus_owner()
+	return focused_control is LineEdit or focused_control is TextEdit
 	
 	

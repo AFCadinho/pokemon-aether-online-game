@@ -42,16 +42,10 @@ func try_get_wild_encounter() -> Pokemon:
 
 	var encounter := pick_weighted_encounter(pokemon_list)
 	var level := randi_range(encounter.get("min_level", 2), encounter.get("max_level", 2))
+	var pokemon_data: Dictionary = encounter.duplicate()
+	pokemon_data["level"] = level
 
-	return Pokemon.new(
-		encounter.get("species", "Unknown"),
-		level,
-		encounter.get("item", ""),
-		encounter.get("ability", ""),
-		encounter.get("nature", "Hardy"),
-		encounter.get("evs", {}),
-		encounter.get("moves", [])
-	)
+	return PokemonFactory.create_pokemon_from_data(pokemon_data)
 	
 func pick_weighted_encounter(pokemon_list: Array) -> Dictionary:
 	var total_weight := 0

@@ -11,6 +11,9 @@ func _process(_delta: float) -> void:
 	if not player_nearby:
 		return
 
+	if _is_ui_typing():
+		return
+
 	if Input.is_action_just_pressed("interact"):
 		var dialogue_box = get_tree().current_scene.get_node("DialogueBox/Box")
 
@@ -28,6 +31,10 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_nearby = false
 
+func _is_ui_typing() -> bool:
+	var focused_control := get_viewport().gui_get_focus_owner()
+	return focused_control is LineEdit or focused_control is TextEdit
+
 func talk() -> void:
 	print("Oak talk. flags = ", PlayerSave.flags)
 	var dialogue_box = get_tree().current_scene.get_node("DialogueBox/Box")
@@ -38,15 +45,8 @@ func talk() -> void:
 		])
 		return
 	else:
-		var starter_pokemon = give_starter_pokemon("Koraidon")
-		PlayerSave.add_pokemon(starter_pokemon)
-		var starter_pokemon2 = give_starter_pokemon("Charizard")
-		PlayerSave.add_pokemon(starter_pokemon2)
-		var starter_pokemon3 = give_starter_pokemon("Blastoise")
-		PlayerSave.add_pokemon(starter_pokemon3)
-		var starter_pokemon4 = give_starter_pokemon("Venusaur")
-		PlayerSave.add_pokemon(starter_pokemon4)
-		
+		var starter_pokemon = give_starter_pokemon("Charmander")
+		PlayerSave.add_pokemon(starter_pokemon)		
 		
 		PlayerSave.flags["received_starter"] = true
 		

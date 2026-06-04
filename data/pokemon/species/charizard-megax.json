@@ -1,0 +1,55 @@
+{
+  "id": 10034,
+  "species_id": "charizard-megax",
+  "showdown_id": "charizardmegax",
+  "name": "Charizard Mega X",
+  "types": [
+    "fire",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 78,
+    "atk": 130,
+    "def": 111,
+    "spa": 130,
+    "spd": 85,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "tough-claws"
+  },
+  "level_up_moves": [
+    {
+      "move": "ember",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 24
+    },
+    {
+      "move": "slash",
+      "level": 36
+    },
+    {
+      "move": "flamethrower",
+      "level": 46
+    },
+    {
+      "move": "fire-spin",
+      "level": 55
+    }
+  ]
+}

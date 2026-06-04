@@ -1,0 +1,59 @@
+{
+  "id": 10033,
+  "species_id": "venusaur-mega",
+  "showdown_id": "venusaurmega",
+  "name": "Venusaur Mega",
+  "types": [
+    "grass",
+    "poison"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 100,
+    "def": 123,
+    "spa": 122,
+    "spd": 120,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "thick-fat"
+  },
+  "level_up_moves": [
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "leech-seed",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "vine-whip",
+      "level": 1
+    },
+    {
+      "move": "poison-powder",
+      "level": 22
+    },
+    {
+      "move": "razor-leaf",
+      "level": 30
+    },
+    {
+      "move": "growth",
+      "level": 43
+    },
+    {
+      "move": "sleep-powder",
+      "level": 55
+    },
+    {
+      "move": "solar-beam",
+      "level": 65
+    }
+  ]
+}

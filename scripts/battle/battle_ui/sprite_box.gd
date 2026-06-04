@@ -42,23 +42,31 @@ func _snap_sprite_to_pixel_grid(sprite: AnimatedSprite2D) -> void:
 	sprite.global_position = sprite.global_position.round()
 
 func _load_sprite_frames(species: String, side: String) -> SpriteFrames:
-	var sheet_metadata_path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [side, species.to_lower()]
+	var asset_id := _normalize_species_asset_id(species)
+	var sheet_metadata_path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [side, asset_id]
 	var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, side, species)
 	if metadata_frames != null:
 		return metadata_frames
 
-	var folder := "res://assets/sprites/pokemon/%s/%s" % [side, species.to_lower()]
+	var folder := "res://assets/sprites/pokemon/%s/%s" % [side, asset_id]
 	var folder_frames := _load_sprite_frames_from_folder(folder)
 	if folder_frames != null:
 		return folder_frames
 
-	var sheet_path := "res://assets/sprites/pokemon/%s/%s.png" % [side, species.to_lower()]
+	var sheet_path := "res://assets/sprites/pokemon/%s/%s.png" % [side, asset_id]
 	var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
 	if sheet_frames != null:
 		return sheet_frames
 
-	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species.to_lower()])
+	push_error("Pokemon sprite assets are not found for %s/%s" % [side, asset_id])
 	return null
+
+func _normalize_species_asset_id(species: String) -> String:
+	var asset_id := species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
+	if asset_id.begins_with("tapu-"):
+		asset_id = asset_id.replace("tapu-", "tapu")
+
+	return asset_id
 
 func _load_sprite_frames_from_folder(folder: String) -> SpriteFrames:
 	if not DirAccess.dir_exists_absolute(folder):

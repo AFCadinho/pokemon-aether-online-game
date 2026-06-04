@@ -1,0 +1,54 @@
+{
+  "id": 10036,
+  "species_id": "blastoise-mega",
+  "showdown_id": "blastoisemega",
+  "name": "Blastoise Mega",
+  "types": [
+    "water"
+  ],
+  "base_stats": {
+    "hp": 79,
+    "atk": 103,
+    "def": 120,
+    "spa": 135,
+    "spd": 115,
+    "spe": 78
+  },
+  "abilities": {
+    "primary": "mega-launcher"
+  },
+  "level_up_moves": [
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "tail-whip",
+      "level": 1
+    },
+    {
+      "move": "water-gun",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 24
+    },
+    {
+      "move": "withdraw",
+      "level": 31
+    },
+    {
+      "move": "skull-bash",
+      "level": 42
+    },
+    {
+      "move": "hydro-pump",
+      "level": 52
+    }
+  ]
+}
