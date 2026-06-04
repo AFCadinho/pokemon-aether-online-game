@@ -5,7 +5,7 @@ class_name PlayerData # PlayerSave Autoload
 signal party_changed
 
 var player_name := "Player"
-var is_staff := OS.has_feature("editor")
+var is_staff := true
 var party: Array[Pokemon] = []
 var money := 0
 var flags := {}
