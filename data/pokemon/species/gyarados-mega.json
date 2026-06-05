@@ -1,0 +1,99 @@
+{
+  "id": 10041,
+  "species_id": "gyarados-mega",
+  "showdown_id": "gyaradosmega",
+  "name": "Gyarados Mega",
+  "types": [
+    "water",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 155,
+    "def": 109,
+    "spa": 70,
+    "spd": 130,
+    "spe": 81
+  },
+  "abilities": {
+    "primary": "mold-breaker"
+  },
+  "level_up_moves": [
+    {
+      "move": "bind",
+      "level": 1
+    },
+    {
+      "move": "thrash",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "dragon-rage",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 21
+    },
+    {
+      "move": "twister",
+      "level": 24
+    },
+    {
+      "move": "dragon-tail",
+      "level": 26
+    },
+    {
+      "move": "ice-fang",
+      "level": 27
+    },
+    {
+      "move": "aqua-tail",
+      "level": 30
+    },
+    {
+      "move": "waterfall",
+      "level": 31
+    },
+    {
+      "move": "scary-face",
+      "level": 33
+    },
+    {
+      "move": "crunch",
+      "level": 36
+    },
+    {
+      "move": "rain-dance",
+      "level": 38
+    },
+    {
+      "move": "hydro-pump",
+      "level": 41
+    },
+    {
+      "move": "outrage",
+      "level": 41
+    },
+    {
+      "move": "dragon-dance",
+      "level": 44
+    },
+    {
+      "move": "hyper-beam",
+      "level": 47
+    },
+    {
+      "move": "hurricane",
+      "level": 48
+    }
+  ]
+}

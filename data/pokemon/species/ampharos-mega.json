@@ -1,0 +1,107 @@
+{
+  "id": 10045,
+  "species_id": "ampharos-mega",
+  "showdown_id": "ampharosmega",
+  "name": "Ampharos Mega",
+  "types": [
+    "electric",
+    "dragon"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 95,
+    "def": 105,
+    "spa": 165,
+    "spd": 110,
+    "spe": 45
+  },
+  "abilities": {
+    "primary": "mold-breaker"
+  },
+  "level_up_moves": [
+    {
+      "move": "fire-punch",
+      "level": 1
+    },
+    {
+      "move": "thunder-punch",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 1
+    },
+    {
+      "move": "zap-cannon",
+      "level": 1
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 1
+    },
+    {
+      "move": "ion-deluge",
+      "level": 1
+    },
+    {
+      "move": "magnetic-flux",
+      "level": 1
+    },
+    {
+      "move": "cotton-spore",
+      "level": 11
+    },
+    {
+      "move": "charge",
+      "level": 16
+    },
+    {
+      "move": "take-down",
+      "level": 20
+    },
+    {
+      "move": "electro-ball",
+      "level": 25
+    },
+    {
+      "move": "confuse-ray",
+      "level": 29
+    },
+    {
+      "move": "power-gem",
+      "level": 35
+    },
+    {
+      "move": "discharge",
+      "level": 40
+    },
+    {
+      "move": "cotton-guard",
+      "level": 46
+    },
+    {
+      "move": "signal-beam",
+      "level": 51
+    },
+    {
+      "move": "light-screen",
+      "level": 57
+    },
+    {
+      "move": "thunder",
+      "level": 62
+    }
+  ]
+}

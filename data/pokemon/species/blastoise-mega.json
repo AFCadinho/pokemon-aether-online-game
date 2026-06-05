@@ -19,10 +19,6 @@
   },
   "level_up_moves": [
     {
-      "move": "bubble",
-      "level": 1
-    },
-    {
       "move": "tackle",
       "level": 1
     },
@@ -35,20 +31,68 @@
       "level": 1
     },
     {
+      "move": "withdraw",
+      "level": 1
+    },
+    {
+      "move": "bubble",
+      "level": 1
+    },
+    {
+      "move": "fake-out",
+      "level": 1
+    },
+    {
+      "move": "flash-cannon",
+      "level": 1
+    },
+    {
+      "move": "aqua-jet",
+      "level": 1
+    },
+    {
       "move": "bite",
+      "level": 16
+    },
+    {
+      "move": "rapid-spin",
+      "level": 20
+    },
+    {
+      "move": "protect",
       "level": 24
     },
     {
-      "move": "withdraw",
-      "level": 31
+      "move": "water-pulse",
+      "level": 28
+    },
+    {
+      "move": "aqua-tail",
+      "level": 32
+    },
+    {
+      "move": "bubble-beam",
+      "level": 33
     },
     {
       "move": "skull-bash",
-      "level": 42
+      "level": 39
+    },
+    {
+      "move": "iron-defense",
+      "level": 46
+    },
+    {
+      "move": "rain-dance",
+      "level": 53
+    },
+    {
+      "move": "headbutt",
+      "level": 54
     },
     {
       "move": "hydro-pump",
-      "level": 52
+      "level": 60
     }
   ]
 }

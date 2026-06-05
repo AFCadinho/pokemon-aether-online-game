@@ -22,6 +22,9 @@ func load_from_api_response(response: Dictionary) -> void:
 	field = response.get("field", {})
 	_apply_event_conditions_to_requests(response.get("events", []))
 
+func apply_event_conditions(events: Array) -> void:
+	_apply_event_conditions_to_requests(events)
+
 ## Geeft de laatste request-state voor een speler terug.
 func get_player_request(player_id: String = "p1") -> Dictionary:
 	return requests.get(player_id, {})
@@ -51,6 +54,9 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 		_set_pokemon_condition(target_ident, condition)
 
 func _get_condition_from_event(event: Dictionary) -> String:
+	if _has_percentage_only_condition(event):
+		return ""
+
 	var event_condition := str(event.get("condition", ""))
 	if event_condition != "":
 		return event_condition
@@ -67,6 +73,34 @@ func _get_condition_from_event(event: Dictionary) -> String:
 		return "%s/%s" % [hp, max_hp]
 
 	return ""
+
+func _has_percentage_only_condition(event: Dictionary) -> bool:
+	if event.has("hp"):
+		return false
+
+	var condition_snapshot: Dictionary = _parse_condition_hp_snapshot(str(event.get("condition", "")))
+	if condition_snapshot.is_empty():
+		return false
+
+	var condition_max_hp: int = int(condition_snapshot.get("max_hp", 0))
+	var event_max_hp: int = int(event.get("maxHp", 0))
+	return condition_max_hp == 100 and event_max_hp > 100
+
+func _parse_condition_hp_snapshot(condition: String) -> Dictionary:
+	if not condition.contains("/"):
+		return {}
+
+	var parts: PackedStringArray = condition.split("/")
+	if parts.size() < 2:
+		return {}
+
+	var hp: int = int(parts[0])
+	var max_hp_text: String = str(parts[1]).split(" ")[0]
+	var max_hp: int = max(int(max_hp_text), 1)
+	return {
+		"hp": hp,
+		"max_hp": max_hp,
+	}
 
 func _set_pokemon_condition(target_ident: String, condition: String) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
@@ -157,6 +191,31 @@ func get_active_pokemon_details(player_id: String = "p1") -> String:
 ## Geeft de condition-string van de actieve Pokemon terug.
 func get_active_pokemon_condition(player_id: String = "p1") -> String:
 	return str(get_active_player_pokemon(player_id).get("condition", ""))
+
+func get_active_pokemon_status(player_id: String = "p1") -> String:
+	return _get_status_from_condition(get_active_pokemon_condition(player_id))
+
+func get_active_pokemon_gender(player_id: String = "p1") -> String:
+	return _get_gender_from_details(get_active_pokemon_details(player_id))
+
+func _get_gender_from_details(details: String) -> String:
+	for part in details.split(","):
+		var trimmed: String = str(part).strip_edges()
+		match trimmed:
+			"M", "F":
+				return trimmed
+
+	return ""
+
+func _get_status_from_condition(condition: String) -> String:
+	var parts: PackedStringArray = condition.split(" ")
+	for part in parts:
+		var status: String = str(part).strip_edges().to_lower()
+		match status:
+			"psn", "tox", "brn", "par", "slp", "frz":
+				return status
+
+	return ""
 
 ## Geeft de speciesnaam van de actieve Pokemon terug.
 func get_active_pokemon_species(player_id: String = "p1") -> String:

@@ -1,0 +1,95 @@
+{
+  "id": 10070,
+  "species_id": "sharpedo-mega",
+  "showdown_id": "sharpedomega",
+  "name": "Sharpedo Mega",
+  "types": [
+    "water",
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 140,
+    "def": 70,
+    "spa": 110,
+    "spd": 65,
+    "spe": 105
+  },
+  "abilities": {
+    "primary": "strong-jaw"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "rage",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 1
+    },
+    {
+      "move": "slash",
+      "level": 1
+    },
+    {
+      "move": "feint",
+      "level": 1
+    },
+    {
+      "move": "night-slash",
+      "level": 1
+    },
+    {
+      "move": "aqua-jet",
+      "level": 11
+    },
+    {
+      "move": "assurance",
+      "level": 15
+    },
+    {
+      "move": "screech",
+      "level": 18
+    },
+    {
+      "move": "swagger",
+      "level": 22
+    },
+    {
+      "move": "ice-fang",
+      "level": 25
+    },
+    {
+      "move": "scary-face",
+      "level": 29
+    },
+    {
+      "move": "poison-fang",
+      "level": 34
+    },
+    {
+      "move": "crunch",
+      "level": 40
+    },
+    {
+      "move": "agility",
+      "level": 45
+    },
+    {
+      "move": "skull-bash",
+      "level": 51
+    },
+    {
+      "move": "taunt",
+      "level": 56
+    }
+  ]
+}

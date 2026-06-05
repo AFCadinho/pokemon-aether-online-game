@@ -12,6 +12,8 @@ const COLOR_DETAIL := "#d8d0bf"
 const COLOR_WARNING := "#ffcf8a"
 const COLOR_DIVIDER := "#8f7544"
 const COLOR_MOVE := "#fff4c2"
+const COLOR_DAMAGE := "#ff8f8f"
+const COLOR_HEAL := "#8ff0a4"
 
 var log_buffer := ""
 
@@ -88,15 +90,29 @@ func _format_line(line: String) -> String:
 	var lower := line.to_lower()
 
 	if line.begins_with("(") and line.ends_with(")"):
-		return "   [color=%s]%s[/color]" % [COLOR_DETAIL, escaped]
+		if _is_damage_line(lower):
+			return "[color=%s]%s[/color]" % [COLOR_DAMAGE, escaped]
+		if _is_heal_line(lower):
+			return "[color=%s]%s[/color]" % [COLOR_HEAL, escaped]
+
+		return "[color=%s]%s[/color]" % [COLOR_DETAIL, escaped]
 
 	if line.begins_with("- ") or line.begins_with("  - "):
 		var detail_line := line
 		while detail_line.begins_with("-") or detail_line.begins_with(" "):
 			detail_line = detail_line.substr(1).strip_edges()
 
-		var detail := _escape_bbcode(detail_line)
-		return "   [color=%s]- %s[/color]" % [COLOR_DETAIL, detail]
+		var detail: String = _escape_bbcode(detail_line)
+		var detail_lower: String = detail_line.to_lower()
+		if _is_damage_line(detail_lower):
+			return "[color=%s]- %s[/color]" % [COLOR_DAMAGE, detail]
+		if _is_heal_line(detail_lower):
+			return "[color=%s]- %s[/color]" % [COLOR_HEAL, detail]
+
+		return "[color=%s]- %s[/color]" % [COLOR_DETAIL, detail]
+
+	if _is_heal_line(lower):
+		return "[color=%s]%s[/color]" % [COLOR_HEAL, escaped]
 
 	if _is_field_line(lower):
 		return "[color=%s]%s[/color]" % [COLOR_FIELD, escaped]
@@ -111,6 +127,21 @@ func _format_line(line: String) -> String:
 		return "[color=%s]%s[/color]" % [COLOR_MUTED, escaped]
 
 	return "[color=%s]%s[/color]" % [COLOR_TEXT, escaped]
+
+func _is_damage_line(lower: String) -> bool:
+	return (
+		lower.contains("lost ")
+		or lower.contains("took damage")
+		or lower.contains("hurt")
+		or lower.contains("less than 1%")
+	)
+
+func _is_heal_line(lower: String) -> bool:
+	return (
+		lower.contains("restored")
+		or lower.contains("recovered")
+		or lower.contains("healed")
+	)
 
 func _is_field_line(lower: String) -> bool:
 	return (

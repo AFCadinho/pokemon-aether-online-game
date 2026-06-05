@@ -112,7 +112,7 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	battle_instance = BATTLE_SCENE.instantiate()
 	battle_layer.add_child(battle_instance)
 	
-	battle_instance.setup_wild_battle_from_response(
+	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
 		wild_pokemon,
 		response

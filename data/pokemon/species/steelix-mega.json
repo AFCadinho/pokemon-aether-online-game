@@ -1,0 +1,123 @@
+{
+  "id": 10072,
+  "species_id": "steelix-mega",
+  "showdown_id": "steelixmega",
+  "name": "Steelix Mega",
+  "types": [
+    "steel",
+    "ground"
+  ],
+  "base_stats": {
+    "hp": 75,
+    "atk": 125,
+    "def": 230,
+    "spa": 55,
+    "spd": 95,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "sand-force"
+  },
+  "level_up_moves": [
+    {
+      "move": "bind",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "mud-sport",
+      "level": 1
+    },
+    {
+      "move": "thunder-fang",
+      "level": 1
+    },
+    {
+      "move": "ice-fang",
+      "level": 1
+    },
+    {
+      "move": "fire-fang",
+      "level": 1
+    },
+    {
+      "move": "curse",
+      "level": 4
+    },
+    {
+      "move": "rock-throw",
+      "level": 7
+    },
+    {
+      "move": "rock-tomb",
+      "level": 10
+    },
+    {
+      "move": "rage",
+      "level": 13
+    },
+    {
+      "move": "stealth-rock",
+      "level": 16
+    },
+    {
+      "move": "autotomize",
+      "level": 19
+    },
+    {
+      "move": "gyro-ball",
+      "level": 20
+    },
+    {
+      "move": "smack-down",
+      "level": 22
+    },
+    {
+      "move": "dragon-breath",
+      "level": 25
+    },
+    {
+      "move": "slam",
+      "level": 28
+    },
+    {
+      "move": "screech",
+      "level": 31
+    },
+    {
+      "move": "rock-slide",
+      "level": 34
+    },
+    {
+      "move": "crunch",
+      "level": 37
+    },
+    {
+      "move": "iron-tail",
+      "level": 40
+    },
+    {
+      "move": "dig",
+      "level": 43
+    },
+    {
+      "move": "stone-edge",
+      "level": 46
+    },
+    {
+      "move": "double-edge",
+      "level": 49
+    },
+    {
+      "move": "sandstorm",
+      "level": 52
+    }
+  ]
+}

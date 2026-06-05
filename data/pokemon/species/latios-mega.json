@@ -1,0 +1,99 @@
+{
+  "id": 10063,
+  "species_id": "latios-mega",
+  "showdown_id": "latiosmega",
+  "name": "Latios Mega",
+  "types": [
+    "dragon",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 130,
+    "def": 100,
+    "spa": 160,
+    "spd": 120,
+    "spe": 110
+  },
+  "abilities": {
+    "primary": "levitate"
+  },
+  "level_up_moves": [
+    {
+      "move": "psywave",
+      "level": 1
+    },
+    {
+      "move": "safeguard",
+      "level": 1
+    },
+    {
+      "move": "memento",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "dragon-dance",
+      "level": 1
+    },
+    {
+      "move": "heal-block",
+      "level": 1
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 1
+    },
+    {
+      "move": "power-split",
+      "level": 1
+    },
+    {
+      "move": "telekinesis",
+      "level": 1
+    },
+    {
+      "move": "heal-pulse",
+      "level": 1
+    },
+    {
+      "move": "protect",
+      "level": 4
+    },
+    {
+      "move": "stored-power",
+      "level": 10
+    },
+    {
+      "move": "refresh",
+      "level": 13
+    },
+    {
+      "move": "dragon-breath",
+      "level": 20
+    },
+    {
+      "move": "luster-purge",
+      "level": 24
+    },
+    {
+      "move": "psycho-shift",
+      "level": 28
+    },
+    {
+      "move": "recover",
+      "level": 32
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 40
+    },
+    {
+      "move": "psychic",
+      "level": 51
+    }
+  ]
+}

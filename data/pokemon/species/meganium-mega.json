@@ -1,0 +1,22 @@
+{
+  "id": 10282,
+  "species_id": "meganium-mega",
+  "showdown_id": "meganiummega",
+  "name": "Meganium Mega",
+  "types": [
+    "grass",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 92,
+    "def": 115,
+    "spa": 143,
+    "spd": 115,
+    "spe": 80
+  },
+  "abilities": {
+    "primary": "mega-sol"
+  },
+  "level_up_moves": []
+}

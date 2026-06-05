@@ -25,6 +25,7 @@ const MOVE_TYPE_DIR := "res://data/pokemon/moves"
 
 static var _moves_by_id: Dictionary = {}
 static var _moves_loaded := false
+static var last_error_message: String = ""
 
 
 ## Maakt een nieuwe Pokemon op basis van species id en level.
@@ -41,8 +42,11 @@ static var _moves_loaded := false
 ##
 ## Geeft `null` terug als de species-data niet geladen kan worden.
 static func create_pokemon(species_id: String, level: int, options: Dictionary = {}) -> Pokemon:
-	var species_data := _load_species_data(_normalize_species_id(species_id))
+	last_error_message = ""
+	var normalized_species_id: String = _normalize_species_id(species_id)
+	var species_data: Dictionary = _load_species_data(normalized_species_id)
 	if species_data.is_empty():
+		last_error_message = "No species data available for %s." % normalized_species_id
 		print_debug("PokemonFactory.create_pokemon failed: species_id=", species_id, " level=", level, " options=", options)
 		return null
 
@@ -77,8 +81,10 @@ static func create_pokemon(species_id: String, level: int, options: Dictionary =
 ## Verwachte velden zijn bijvoorbeeld:
 ## species, level, ability, item, nature, evs, moves, currentHp/current_hp, maxHp/max_hp.
 static func create_pokemon_from_data(data: Dictionary) -> Pokemon:
+	last_error_message = ""
 	var species_id := str(data.get("species", data.get("species_id", "")))
 	if species_id == "":
+		last_error_message = "Missing species in parsed Pokemon data."
 		print_debug("PokemonFactory.create_pokemon_from_data failed: missing species. data=", data)
 		push_error("Pokemon data mist species")
 		return null

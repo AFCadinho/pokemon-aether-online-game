@@ -1,0 +1,94 @@
+{
+  "id": 10053,
+  "species_id": "aggron-mega",
+  "showdown_id": "aggronmega",
+  "name": "Aggron Mega",
+  "types": [
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 140,
+    "def": 230,
+    "spa": 60,
+    "spd": 80,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "filter"
+  },
+  "level_up_moves": [
+    {
+      "move": "headbutt",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "harden",
+      "level": 1
+    },
+    {
+      "move": "mud-slap",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 10
+    },
+    {
+      "move": "rock-tomb",
+      "level": 13
+    },
+    {
+      "move": "iron-defense",
+      "level": 15
+    },
+    {
+      "move": "protect",
+      "level": 16
+    },
+    {
+      "move": "roar",
+      "level": 18
+    },
+    {
+      "move": "take-down",
+      "level": 22
+    },
+    {
+      "move": "iron-head",
+      "level": 22
+    },
+    {
+      "move": "rock-slide",
+      "level": 25
+    },
+    {
+      "move": "metal-sound",
+      "level": 31
+    },
+    {
+      "move": "iron-tail",
+      "level": 35
+    },
+    {
+      "move": "double-edge",
+      "level": 45
+    },
+    {
+      "move": "autotomize",
+      "level": 48
+    },
+    {
+      "move": "heavy-slam",
+      "level": 57
+    },
+    {
+      "move": "metal-burst",
+      "level": 63
+    }
+  ]
+}

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://t25773jalgnl" path="res://scripts/battle/battle_ui/pokemon_hud_panel.gd" id="1_jqru5"]
 [ext_resource type="Texture2D" uid="uid://b7jncpf4e5h86" path="res://assets/gender/female.png" id="2_61bov"]
-[ext_resource type="Texture2D" uid="uid://dp378t40sdcy1" path="res://assets/battles/status/poisoned.png" id="3_8snr7"]
 [ext_resource type="PackedScene" uid="uid://dydjcjdd5oypk" path="res://scenes/battle/pokemon_sheet_slot.tscn" id="4_mvctu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5wf7c"]
@@ -73,7 +72,6 @@ theme_override_constants/separation = 8
 
 [node name="NameContainer" type="HBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow" unique_id=1896825094]
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="NameLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=950574432]
 layout_mode = 2
@@ -87,12 +85,16 @@ texture = ExtResource("2_61bov")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="StatusIcon" type="TextureRect" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1812683572]
+[node name="HBoxContainer" type="HBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow" unique_id=188024193]
 layout_mode = 2
-texture = ExtResource("3_8snr7")
-expand_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/separation = 8
 
-[node name="LevelLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow" unique_id=1327934074]
+[node name="StatusLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1945808598]
+layout_mode = 2
+text = "PSN"
+
+[node name="LevelLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1327934074]
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Lv. 100"

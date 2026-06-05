@@ -1,0 +1,94 @@
+{
+  "id": 10057,
+  "species_id": "absol-mega",
+  "showdown_id": "absolmega",
+  "name": "Absol Mega",
+  "types": [
+    "dark"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 150,
+    "def": 60,
+    "spa": 115,
+    "spd": 60,
+    "spe": 115
+  },
+  "abilities": {
+    "primary": "magic-bounce"
+  },
+  "level_up_moves": [
+    {
+      "move": "scratch",
+      "level": 1
+    },
+    {
+      "move": "razor-wind",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "perish-song",
+      "level": 1
+    },
+    {
+      "move": "detect",
+      "level": 1
+    },
+    {
+      "move": "future-sight",
+      "level": 1
+    },
+    {
+      "move": "taunt",
+      "level": 1
+    },
+    {
+      "move": "feint",
+      "level": 1
+    },
+    {
+      "move": "me-first",
+      "level": 1
+    },
+    {
+      "move": "pursuit",
+      "level": 10
+    },
+    {
+      "move": "bite",
+      "level": 16
+    },
+    {
+      "move": "double-team",
+      "level": 19
+    },
+    {
+      "move": "slash",
+      "level": 22
+    },
+    {
+      "move": "swords-dance",
+      "level": 25
+    },
+    {
+      "move": "night-slash",
+      "level": 29
+    },
+    {
+      "move": "psycho-cut",
+      "level": 37
+    },
+    {
+      "move": "sucker-punch",
+      "level": 45
+    }
+  ]
+}

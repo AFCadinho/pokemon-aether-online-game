@@ -1,0 +1,103 @@
+{
+  "id": 10068,
+  "species_id": "gallade-mega",
+  "showdown_id": "gallademega",
+  "name": "Gallade Mega",
+  "types": [
+    "psychic",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 68,
+    "atk": 165,
+    "def": 95,
+    "spa": 65,
+    "spd": 115,
+    "spe": 110
+  },
+  "abilities": {
+    "primary": "inner-focus"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "teleport",
+      "level": 1
+    },
+    {
+      "move": "double-team",
+      "level": 1
+    },
+    {
+      "move": "slash",
+      "level": 1
+    },
+    {
+      "move": "leaf-blade",
+      "level": 1
+    },
+    {
+      "move": "close-combat",
+      "level": 1
+    },
+    {
+      "move": "night-slash",
+      "level": 1
+    },
+    {
+      "move": "stored-power",
+      "level": 1
+    },
+    {
+      "move": "quick-guard",
+      "level": 11
+    },
+    {
+      "move": "fury-cutter",
+      "level": 14
+    },
+    {
+      "move": "aerial-ace",
+      "level": 17
+    },
+    {
+      "move": "heal-pulse",
+      "level": 19
+    },
+    {
+      "move": "wide-guard",
+      "level": 23
+    },
+    {
+      "move": "swords-dance",
+      "level": 26
+    },
+    {
+      "move": "psycho-cut",
+      "level": 31
+    },
+    {
+      "move": "helping-hand",
+      "level": 35
+    },
+    {
+      "move": "feint",
+      "level": 40
+    },
+    {
+      "move": "false-swipe",
+      "level": 44
+    },
+    {
+      "move": "protect",
+      "level": 49
+    }
+  ]
+}

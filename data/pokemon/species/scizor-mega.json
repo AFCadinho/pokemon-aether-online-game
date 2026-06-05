@@ -1,0 +1,95 @@
+{
+  "id": 10046,
+  "species_id": "scizor-mega",
+  "showdown_id": "scizormega",
+  "name": "Scizor Mega",
+  "types": [
+    "bug",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 150,
+    "def": 140,
+    "spa": 65,
+    "spd": 100,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "technician"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "feint",
+      "level": 1
+    },
+    {
+      "move": "bullet-punch",
+      "level": 1
+    },
+    {
+      "move": "focus-energy",
+      "level": 5
+    },
+    {
+      "move": "pursuit",
+      "level": 9
+    },
+    {
+      "move": "false-swipe",
+      "level": 13
+    },
+    {
+      "move": "agility",
+      "level": 17
+    },
+    {
+      "move": "metal-claw",
+      "level": 21
+    },
+    {
+      "move": "fury-cutter",
+      "level": 25
+    },
+    {
+      "move": "slash",
+      "level": 29
+    },
+    {
+      "move": "razor-wind",
+      "level": 33
+    },
+    {
+      "move": "iron-defense",
+      "level": 37
+    },
+    {
+      "move": "x-scissor",
+      "level": 41
+    },
+    {
+      "move": "night-slash",
+      "level": 45
+    },
+    {
+      "move": "double-hit",
+      "level": 49
+    },
+    {
+      "move": "iron-head",
+      "level": 50
+    },
+    {
+      "move": "swords-dance",
+      "level": 57
+    }
+  ]
+}

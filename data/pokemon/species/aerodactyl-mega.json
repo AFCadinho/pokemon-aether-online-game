@@ -1,0 +1,99 @@
+{
+  "id": 10042,
+  "species_id": "aerodactyl-mega",
+  "showdown_id": "aerodactylmega",
+  "name": "Aerodactyl Mega",
+  "types": [
+    "rock",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 135,
+    "def": 85,
+    "spa": 70,
+    "spd": 95,
+    "spe": 150
+  },
+  "abilities": {
+    "primary": "tough-claws"
+  },
+  "level_up_moves": [
+    {
+      "move": "wing-attack",
+      "level": 1
+    },
+    {
+      "move": "bite",
+      "level": 1
+    },
+    {
+      "move": "supersonic",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 1
+    },
+    {
+      "move": "thunder-fang",
+      "level": 1
+    },
+    {
+      "move": "ice-fang",
+      "level": 1
+    },
+    {
+      "move": "fire-fang",
+      "level": 1
+    },
+    {
+      "move": "iron-head",
+      "level": 1
+    },
+    {
+      "move": "roar",
+      "level": 7
+    },
+    {
+      "move": "agility",
+      "level": 17
+    },
+    {
+      "move": "rock-throw",
+      "level": 21
+    },
+    {
+      "move": "ancient-power",
+      "level": 25
+    },
+    {
+      "move": "crunch",
+      "level": 33
+    },
+    {
+      "move": "take-down",
+      "level": 41
+    },
+    {
+      "move": "rock-slide",
+      "level": 42
+    },
+    {
+      "move": "fly",
+      "level": 49
+    },
+    {
+      "move": "sky-drop",
+      "level": 49
+    },
+    {
+      "move": "hyper-beam",
+      "level": 63
+    },
+    {
+      "move": "giga-impact",
+      "level": 81
+    }
+  ]
+}

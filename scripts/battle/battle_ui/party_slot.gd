@@ -6,6 +6,9 @@ const FAINTED_BACKGROUND := Color("#30343c")
 const FAINTED_BORDER := Color("#626a76")
 const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
+const POISON_STATUS_TEXTURE: Texture2D = preload("res://assets/battles/status/poisoned.png")
+const POISON_STATUS_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
+const TOXIC_STATUS_MODULATE := Color("#8c58ff")
 
 @onready var pokemon_icon: TextureRect = $MarginContainer/HBoxContainer/PokemonIcon
 @onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameLabel
@@ -37,11 +40,12 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species)
-	status_icon.visible = false
+	_set_status_icon("")
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var species := _get_species_from_data(pokemon_data)
-	var hp_data := _parse_condition(str(pokemon_data.get("condition", "")))
+	var condition: String = str(pokemon_data.get("condition", ""))
+	var hp_data := _parse_condition(condition)
 	var is_active := bool(pokemon_data.get("active", false))
 	var is_fainted := bool(hp_data.get("fainted", false))
 
@@ -58,7 +62,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	hp_bar.max_value = max(int(hp_data.get("max_hp", 1)), 1)
 	hp_bar.value = clamp(int(hp_data.get("current_hp", 0)), 0, int(hp_bar.max_value))
 	pokemon_icon.texture = PokemonAssets.load_party_icon(species)
-	status_icon.visible = false
+	_set_status_icon(_parse_status(condition))
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
 	var display_species := str(pokemon_data.get("displaySpecies", ""))
@@ -92,6 +96,53 @@ func _parse_condition(condition: String) -> Dictionary:
 
 	return result
 
+func _parse_status(condition: String) -> String:
+	var parts: PackedStringArray = condition.split(" ")
+	for part in parts:
+		var status: String = str(part).strip_edges().to_lower()
+		match status:
+			"psn", "tox", "brn", "par", "slp", "frz":
+				return status
+
+	return ""
+
+func _set_status_icon(status: String) -> void:
+	status_icon.texture = _get_status_texture(status)
+	status_icon.visible = status_icon.texture != null
+	status_icon.tooltip_text = _get_status_tooltip(status) if status_icon.visible else ""
+	status_icon.modulate = _get_status_modulate(status) if status_icon.visible else NORMAL_MODULATE
+
+func _get_status_texture(status: String) -> Texture2D:
+	match status.strip_edges().to_lower():
+		"psn", "tox":
+			return POISON_STATUS_TEXTURE
+
+	return null
+
+func _get_status_tooltip(status: String) -> String:
+	match status.strip_edges().to_lower():
+		"psn":
+			return "Poisoned"
+		"tox":
+			return "Badly poisoned"
+		"brn":
+			return "Burned"
+		"par":
+			return "Paralyzed"
+		"slp":
+			return "Asleep"
+		"frz":
+			return "Frozen"
+
+	return ""
+
+func _get_status_modulate(status: String) -> Color:
+	match status.strip_edges().to_lower():
+		"tox":
+			return TOXIC_STATUS_MODULATE
+
+	return POISON_STATUS_MODULATE
+
 func set_empty() -> void:
 	visible = true
 	disabled = true
@@ -100,7 +151,7 @@ func set_empty() -> void:
 	name_label.text = ""
 	hp_bar.value = 0
 	pokemon_icon.texture = null
-	status_icon.visible = false
+	_set_status_icon("")
 
 	remove_theme_stylebox_override("normal")
 	remove_theme_stylebox_override("hover")

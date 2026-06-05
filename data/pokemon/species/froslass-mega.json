@@ -1,0 +1,22 @@
+{
+  "id": 10285,
+  "species_id": "froslass-mega",
+  "showdown_id": "froslassmega",
+  "name": "Froslass Mega",
+  "types": [
+    "ice",
+    "ghost"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 80,
+    "def": 70,
+    "spa": 140,
+    "spd": 100,
+    "spe": 120
+  },
+  "abilities": {
+    "primary": "snow-warning"
+  },
+  "level_up_moves": []
+}

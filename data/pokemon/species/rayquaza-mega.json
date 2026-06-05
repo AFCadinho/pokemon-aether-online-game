@@ -1,0 +1,75 @@
+{
+  "id": 10079,
+  "species_id": "rayquaza-mega",
+  "showdown_id": "rayquazamega",
+  "name": "Rayquaza Mega",
+  "types": [
+    "dragon",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 105,
+    "atk": 180,
+    "def": 100,
+    "spa": 180,
+    "spd": 100,
+    "spe": 115
+  },
+  "abilities": {
+    "primary": "delta-stream"
+  },
+  "level_up_moves": [
+    {
+      "move": "twister",
+      "level": 1
+    },
+    {
+      "move": "scary-face",
+      "level": 5
+    },
+    {
+      "move": "ancient-power",
+      "level": 15
+    },
+    {
+      "move": "crunch",
+      "level": 20
+    },
+    {
+      "move": "air-slash",
+      "level": 30
+    },
+    {
+      "move": "rest",
+      "level": 35
+    },
+    {
+      "move": "extreme-speed",
+      "level": 45
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 50
+    },
+    {
+      "move": "dragon-dance",
+      "level": 60
+    },
+    {
+      "move": "fly",
+      "level": 65
+    },
+    {
+      "move": "hyper-voice",
+      "level": 75
+    },
+    {
+      "move": "outrage",
+      "level": 80
+    },
+    {
+      "move": "hyper-beam",
+      "level": 90
+    }
+  ]
+}

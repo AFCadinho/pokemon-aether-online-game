@@ -1,0 +1,103 @@
+{
+  "id": 10059,
+  "species_id": "lucario-mega",
+  "showdown_id": "lucariomega",
+  "name": "Lucario Mega",
+  "types": [
+    "fighting",
+    "steel"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 145,
+    "def": 88,
+    "spa": 140,
+    "spd": 70,
+    "spe": 112
+  },
+  "abilities": {
+    "primary": "adaptability"
+  },
+  "level_up_moves": [
+    {
+      "move": "quick-attack",
+      "level": 1
+    },
+    {
+      "move": "foresight",
+      "level": 1
+    },
+    {
+      "move": "detect",
+      "level": 1
+    },
+    {
+      "move": "metal-claw",
+      "level": 1
+    },
+    {
+      "move": "extreme-speed",
+      "level": 1
+    },
+    {
+      "move": "close-combat",
+      "level": 1
+    },
+    {
+      "move": "aura-sphere",
+      "level": 1
+    },
+    {
+      "move": "dragon-pulse",
+      "level": 1
+    },
+    {
+      "move": "laser-focus",
+      "level": 1
+    },
+    {
+      "move": "counter",
+      "level": 6
+    },
+    {
+      "move": "feint",
+      "level": 11
+    },
+    {
+      "move": "power-up-punch",
+      "level": 15
+    },
+    {
+      "move": "swords-dance",
+      "level": 19
+    },
+    {
+      "move": "metal-sound",
+      "level": 24
+    },
+    {
+      "move": "bone-rush",
+      "level": 29
+    },
+    {
+      "move": "quick-guard",
+      "level": 33
+    },
+    {
+      "move": "me-first",
+      "level": 37
+    },
+    {
+      "move": "work-up",
+      "level": 42
+    },
+    {
+      "move": "calm-mind",
+      "level": 47
+    },
+    {
+      "move": "heal-pulse",
+      "level": 51
+    }
+  ]
+}

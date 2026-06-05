@@ -1,0 +1,123 @@
+{
+  "id": 10043,
+  "species_id": "mewtwo-megax",
+  "showdown_id": "mewtwomegax",
+  "name": "Mewtwo Mega X",
+  "types": [
+    "psychic",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 106,
+    "atk": 190,
+    "def": 100,
+    "spa": 154,
+    "spd": 100,
+    "spe": 130
+  },
+  "abilities": {
+    "primary": "steadfast"
+  },
+  "level_up_moves": [
+    {
+      "move": "disable",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "teleport",
+      "level": 1
+    },
+    {
+      "move": "confuse-ray",
+      "level": 1
+    },
+    {
+      "move": "psywave",
+      "level": 1
+    },
+    {
+      "move": "safeguard",
+      "level": 1
+    },
+    {
+      "move": "laser-focus",
+      "level": 1
+    },
+    {
+      "move": "swift",
+      "level": 8
+    },
+    {
+      "move": "mist",
+      "level": 11
+    },
+    {
+      "move": "future-sight",
+      "level": 15
+    },
+    {
+      "move": "psybeam",
+      "level": 22
+    },
+    {
+      "move": "psych-up",
+      "level": 22
+    },
+    {
+      "move": "miracle-eye",
+      "level": 29
+    },
+    {
+      "move": "psycho-cut",
+      "level": 36
+    },
+    {
+      "move": "power-swap",
+      "level": 43
+    },
+    {
+      "move": "guard-swap",
+      "level": 43
+    },
+    {
+      "move": "amnesia",
+      "level": 44
+    },
+    {
+      "move": "recover",
+      "level": 50
+    },
+    {
+      "move": "psychic",
+      "level": 57
+    },
+    {
+      "move": "barrier",
+      "level": 64
+    },
+    {
+      "move": "aura-sphere",
+      "level": 70
+    },
+    {
+      "move": "agility",
+      "level": 88
+    },
+    {
+      "move": "me-first",
+      "level": 93
+    },
+    {
+      "move": "calm-mind",
+      "level": 99
+    },
+    {
+      "move": "psystrike",
+      "level": 100
+    }
+  ]
+}

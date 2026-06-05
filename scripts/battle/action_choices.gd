@@ -10,8 +10,11 @@ signal action_selected(action: String)
 ]
 
 var disabled_actions := {}
+var all_actions_disabled := false
+var selected_action := ""
 
 func _select_button(active_button: Button) -> void:
+	selected_action = _get_action_for_button(active_button)
 	# Zet alle knoppen terug naar hun normale staat zodra een knop is gekozen
 	for button in buttons:
 		button.disabled = false
@@ -36,7 +39,27 @@ func set_action_disabled(action: String, is_disabled: bool) -> void:
 	disabled_actions[action] = is_disabled
 	_apply_disabled_actions()
 
+func set_all_actions_disabled(is_disabled: bool) -> void:
+	all_actions_disabled = is_disabled
+	_apply_disabled_actions()
+
 func _apply_disabled_actions() -> void:
+	for button in buttons:
+		button.disabled = false
+		button.modulate = Color(1, 1, 1)
+
+	if all_actions_disabled:
+		for button in buttons:
+			button.disabled = true
+			button.modulate = Color(0.7, 0.7, 0.7)
+
+		return
+
+	var selected_button := _get_action_button(selected_action)
+	if selected_button != null:
+		selected_button.disabled = true
+		selected_button.modulate = Color(0.7, 0.7, 0.7)
+
 	for action in disabled_actions:
 		if not bool(disabled_actions[action]):
 			continue
@@ -60,7 +83,21 @@ func _get_action_button(action: String) -> Button:
 
 	return null
 
+func _get_action_for_button(button: Button) -> String:
+	if button == $GridContainer/FightButton:
+		return "fight"
+	if button == $GridContainer/BagButton:
+		return "bag"
+	if button == $GridContainer/PartyButton:
+		return "party"
+	if button == $GridContainer/RunButton:
+		return "run"
+
+	return ""
+
 func _on_fight_button_pressed() -> void:
+	if all_actions_disabled:
+		return
 	if bool(disabled_actions.get("fight", false)):
 		return
 
@@ -69,6 +106,8 @@ func _on_fight_button_pressed() -> void:
 
 
 func _on_bag_button_pressed() -> void:
+	if all_actions_disabled:
+		return
 	if bool(disabled_actions.get("bag", false)):
 		return
 
@@ -76,6 +115,8 @@ func _on_bag_button_pressed() -> void:
 	action_selected.emit("bag")
 
 func _on_party_button_pressed() -> void:
+	if all_actions_disabled:
+		return
 	if bool(disabled_actions.get("party", false)):
 		return
 
@@ -83,6 +124,8 @@ func _on_party_button_pressed() -> void:
 	action_selected.emit("party")
 
 func _on_run_button_pressed() -> void:
+	if all_actions_disabled:
+		return
 	if bool(disabled_actions.get("run", false)):
 		return
 

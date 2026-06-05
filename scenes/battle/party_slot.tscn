@@ -42,7 +42,7 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [node name="PartySlot" type="Button" unique_id=1512490557]
-custom_minimum_size = Vector2(160, 85)
+custom_minimum_size = Vector2(160, 75)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_default_cursor_shape = 2
@@ -56,6 +56,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 6
@@ -73,6 +75,7 @@ custom_minimum_size = Vector2(55, 44)
 layout_mode = 2
 texture = ExtResource("2_qme5g")
 expand_mode = 4
+stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1130419798]
 layout_mode = 2

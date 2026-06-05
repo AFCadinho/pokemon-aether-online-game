@@ -1,0 +1,82 @@
+{
+  "id": 10074,
+  "species_id": "glalie-mega",
+  "showdown_id": "glaliemega",
+  "name": "Glalie Mega",
+  "types": [
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 120,
+    "def": 80,
+    "spa": 120,
+    "spd": 80,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "refrigerate"
+  },
+  "level_up_moves": [
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "double-team",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "sheer-cold",
+      "level": 1
+    },
+    {
+      "move": "ice-shard",
+      "level": 1
+    },
+    {
+      "move": "freeze-dry",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 14
+    },
+    {
+      "move": "bite",
+      "level": 19
+    },
+    {
+      "move": "ice-fang",
+      "level": 23
+    },
+    {
+      "move": "headbutt",
+      "level": 28
+    },
+    {
+      "move": "protect",
+      "level": 32
+    },
+    {
+      "move": "frost-breath",
+      "level": 37
+    },
+    {
+      "move": "crunch",
+      "level": 41
+    },
+    {
+      "move": "blizzard",
+      "level": 48
+    },
+    {
+      "move": "hail",
+      "level": 54
+    }
+  ]
+}

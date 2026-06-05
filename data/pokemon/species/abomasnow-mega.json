@@ -1,0 +1,75 @@
+{
+  "id": 10060,
+  "species_id": "abomasnow-mega",
+  "showdown_id": "abomasnowmega",
+  "name": "Abomasnow Mega",
+  "types": [
+    "grass",
+    "ice"
+  ],
+  "base_stats": {
+    "hp": 90,
+    "atk": 132,
+    "def": 105,
+    "spa": 132,
+    "spd": 105,
+    "spe": 30
+  },
+  "abilities": {
+    "primary": "snow-warning"
+  },
+  "level_up_moves": [
+    {
+      "move": "ice-punch",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "razor-leaf",
+      "level": 1
+    },
+    {
+      "move": "powder-snow",
+      "level": 1
+    },
+    {
+      "move": "icy-wind",
+      "level": 1
+    },
+    {
+      "move": "grass-whistle",
+      "level": 13
+    },
+    {
+      "move": "swagger",
+      "level": 17
+    },
+    {
+      "move": "mist",
+      "level": 21
+    },
+    {
+      "move": "ice-shard",
+      "level": 26
+    },
+    {
+      "move": "ingrain",
+      "level": 31
+    },
+    {
+      "move": "wood-hammer",
+      "level": 36
+    },
+    {
+      "move": "blizzard",
+      "level": 47
+    },
+    {
+      "move": "sheer-cold",
+      "level": 58
+    }
+  ]
+}

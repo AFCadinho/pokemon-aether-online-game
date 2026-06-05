@@ -1,0 +1,107 @@
+{
+  "id": 10054,
+  "species_id": "medicham-mega",
+  "showdown_id": "medichammega",
+  "name": "Medicham Mega",
+  "types": [
+    "fighting",
+    "psychic"
+  ],
+  "base_stats": {
+    "hp": 60,
+    "atk": 100,
+    "def": 85,
+    "spa": 80,
+    "spd": 85,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "pure-power"
+  },
+  "level_up_moves": [
+    {
+      "move": "fire-punch",
+      "level": 1
+    },
+    {
+      "move": "ice-punch",
+      "level": 1
+    },
+    {
+      "move": "thunder-punch",
+      "level": 1
+    },
+    {
+      "move": "confusion",
+      "level": 1
+    },
+    {
+      "move": "meditate",
+      "level": 1
+    },
+    {
+      "move": "bide",
+      "level": 1
+    },
+    {
+      "move": "detect",
+      "level": 1
+    },
+    {
+      "move": "zen-headbutt",
+      "level": 1
+    },
+    {
+      "move": "endure",
+      "level": 12
+    },
+    {
+      "move": "hidden-power",
+      "level": 15
+    },
+    {
+      "move": "feint",
+      "level": 15
+    },
+    {
+      "move": "force-palm",
+      "level": 17
+    },
+    {
+      "move": "mind-reader",
+      "level": 18
+    },
+    {
+      "move": "calm-mind",
+      "level": 23
+    },
+    {
+      "move": "high-jump-kick",
+      "level": 28
+    },
+    {
+      "move": "psych-up",
+      "level": 31
+    },
+    {
+      "move": "acupressure",
+      "level": 33
+    },
+    {
+      "move": "power-trick",
+      "level": 36
+    },
+    {
+      "move": "reversal",
+      "level": 42
+    },
+    {
+      "move": "recover",
+      "level": 47
+    },
+    {
+      "move": "counter",
+      "level": 53
+    }
+  ]
+}

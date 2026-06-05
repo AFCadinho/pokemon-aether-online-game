@@ -1,0 +1,22 @@
+{
+  "id": 10281,
+  "species_id": "dragonite-mega",
+  "showdown_id": "dragonitemega",
+  "name": "Dragonite Mega",
+  "types": [
+    "dragon",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 91,
+    "atk": 124,
+    "def": 115,
+    "spa": 145,
+    "spd": 125,
+    "spe": 100
+  },
+  "abilities": {
+    "primary": "multiscale"
+  },
+  "level_up_moves": []
+}

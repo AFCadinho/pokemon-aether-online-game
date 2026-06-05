@@ -1,0 +1,22 @@
+{
+  "id": 10284,
+  "species_id": "skarmory-mega",
+  "showdown_id": "skarmorymega",
+  "name": "Skarmory Mega",
+  "types": [
+    "steel",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 65,
+    "atk": 140,
+    "def": 110,
+    "spa": 40,
+    "spd": 100,
+    "spe": 110
+  },
+  "abilities": {
+    "primary": "stalwart"
+  },
+  "level_up_moves": []
+}

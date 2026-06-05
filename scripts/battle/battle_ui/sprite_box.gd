@@ -9,6 +9,12 @@ const MAX_SHEET_FRAME_SIZE := Vector2i(256, 256)
 const FRAME_ANIMATION_SPEED := 3.0
 const SHEET_ANIMATION_SPEED := 10.0
 const BATTLE_SPRITE_SCALE := Vector2(2, 2)
+const ATTACK_TWEEN_OFFSET := Vector2(28, -6)
+const DAMAGE_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
+const HEAL_FLASH_COLOR := Color(0.45, 1.0, 0.55, 1.0)
+const STAT_RAISE_FLASH_COLOR := Color(0.35, 0.75, 1.0, 1.0)
+const STAT_DROP_FLASH_COLOR := Color(0.8, 0.45, 1.0, 1.0)
+const FAINT_TWEEN_OFFSET := Vector2(0, 34)
 
 @onready var single_container: Control = $SingleBattleContainer
 @onready var double_container: Control = $DoubleBattleContainer
@@ -17,10 +23,14 @@ const BATTLE_SPRITE_SCALE := Vector2(2, 2)
 @onready var double_sprite_1: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite
 @onready var double_sprite_2: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2
 
+var active_tween: Tween
+var base_sprite_positions: Dictionary = {}
+
 func _ready() -> void:
 	_set_sprite_filter(single_sprite)
 	_set_sprite_filter(double_sprite_1)
 	_set_sprite_filter(double_sprite_2)
+	_cache_base_sprite_positions()
 	set_battle_type(default_is_double_battle)
 	_snap_all_sprites_to_pixel_grid.call_deferred()
 
@@ -32,6 +42,28 @@ func _set_sprite_filter(sprite: AnimatedSprite2D) -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite.scale = BATTLE_SPRITE_SCALE
 
+func _cache_base_sprite_positions() -> void:
+	for sprite in _get_all_sprites():
+		base_sprite_positions[_get_sprite_key(sprite)] = sprite.position
+
+func _get_all_sprites() -> Array[AnimatedSprite2D]:
+	return [
+		single_sprite,
+		double_sprite_1,
+		double_sprite_2,
+	]
+
+func _get_visible_sprites() -> Array[AnimatedSprite2D]:
+	var sprites: Array[AnimatedSprite2D] = []
+	for sprite in _get_all_sprites():
+		if sprite.visible and sprite.is_visible_in_tree():
+			sprites.append(sprite)
+
+	return sprites
+
+func _get_sprite_key(sprite: AnimatedSprite2D) -> String:
+	return str(sprite.get_path())
+
 func _snap_all_sprites_to_pixel_grid() -> void:
 	_snap_sprite_to_pixel_grid(single_sprite)
 	_snap_sprite_to_pixel_grid(double_sprite_1)
@@ -41,25 +73,176 @@ func _snap_sprite_to_pixel_grid(sprite: AnimatedSprite2D) -> void:
 	sprite.scale = BATTLE_SPRITE_SCALE
 	sprite.global_position = sprite.global_position.round()
 
+func reset_battle_pose() -> void:
+	_stop_active_tween()
+	for sprite in _get_all_sprites():
+		_reset_sprite_pose(sprite)
+
+func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		var base_position := _get_base_sprite_position(sprite)
+		active_tween.tween_property(sprite, "position", base_position + offset, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "position", base_position, 0.12).set_delay(0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
+func play_damage_tween() -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		var base_position := _get_base_sprite_position(sprite)
+		active_tween.tween_property(sprite, "modulate", DAMAGE_FLASH_COLOR, 0.04)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.08).set_delay(0.04)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(-8, 0), 0.04)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(8, 0), 0.04).set_delay(0.04)
+		active_tween.tween_property(sprite, "position", base_position, 0.05).set_delay(0.08)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
+func play_heal_tween() -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		active_tween.tween_property(sprite, "modulate", HEAL_FLASH_COLOR, 0.08)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.14).set_delay(0.08)
+		active_tween.tween_property(sprite, "scale", BATTLE_SPRITE_SCALE * 1.06, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "scale", BATTLE_SPRITE_SCALE, 0.14).set_delay(0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
+func play_stat_raise_tween() -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		var base_position := _get_base_sprite_position(sprite)
+		active_tween.tween_property(sprite, "modulate", STAT_RAISE_FLASH_COLOR, 0.08)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.16).set_delay(0.08)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(0, -10), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "position", base_position, 0.14).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
+func play_stat_drop_tween() -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		var base_position := _get_base_sprite_position(sprite)
+		active_tween.tween_property(sprite, "modulate", STAT_DROP_FLASH_COLOR, 0.08)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.16).set_delay(0.08)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(0, 8), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "position", base_position, 0.14).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
+func play_faint_tween() -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		var base_position := _get_base_sprite_position(sprite)
+		active_tween.tween_property(sprite, "position", base_position + FAINT_TWEEN_OFFSET, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		active_tween.tween_property(sprite, "modulate:a", 0.0, 0.28)
+
+	await active_tween.finished
+
+func _stop_active_tween() -> void:
+	if active_tween != null and active_tween.is_valid():
+		active_tween.kill()
+
+	active_tween = null
+
+func _reset_sprites_pose(sprites: Array[AnimatedSprite2D]) -> void:
+	for sprite in sprites:
+		_reset_sprite_pose(sprite)
+
+func _reset_sprite_pose(sprite: AnimatedSprite2D) -> void:
+	sprite.position = _get_base_sprite_position(sprite)
+	sprite.scale = BATTLE_SPRITE_SCALE
+	sprite.modulate = Color.WHITE
+
+func _get_base_sprite_position(sprite: AnimatedSprite2D) -> Vector2:
+	var base_position_value: Variant = base_sprite_positions.get(_get_sprite_key(sprite), sprite.position)
+	if base_position_value is Vector2:
+		return base_position_value
+
+	return sprite.position
+
 func _load_sprite_frames(species: String, side: String) -> SpriteFrames:
-	var asset_id := _normalize_species_asset_id(species)
-	var sheet_metadata_path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [side, asset_id]
-	var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, side, species)
-	if metadata_frames != null:
-		return metadata_frames
+	for asset_id in _get_species_asset_id_candidates(species):
+		var sheet_metadata_path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [side, asset_id]
+		var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, side, species)
+		if metadata_frames != null:
+			return metadata_frames
 
-	var folder := "res://assets/sprites/pokemon/%s/%s" % [side, asset_id]
-	var folder_frames := _load_sprite_frames_from_folder(folder)
-	if folder_frames != null:
-		return folder_frames
+		var folder := "res://assets/sprites/pokemon/%s/%s" % [side, asset_id]
+		var folder_frames := _load_sprite_frames_from_folder(folder)
+		if folder_frames != null:
+			return folder_frames
 
-	var sheet_path := "res://assets/sprites/pokemon/%s/%s.png" % [side, asset_id]
-	var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
-	if sheet_frames != null:
-		return sheet_frames
+		var sheet_path := "res://assets/sprites/pokemon/%s/%s.png" % [side, asset_id]
+		var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
+		if sheet_frames != null:
+			return sheet_frames
 
-	push_error("Pokemon sprite assets are not found for %s/%s" % [side, asset_id])
+	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
 	return null
+
+func _get_species_asset_id_candidates(species: String) -> Array[String]:
+	var asset_id: String = _normalize_species_asset_id(species)
+	var candidates: Array[String] = [asset_id]
+	var compact_asset_id: String = asset_id.replace("-", "")
+	if compact_asset_id != asset_id:
+		candidates.append(compact_asset_id)
+
+	return candidates
 
 func _normalize_species_asset_id(species: String) -> String:
 	var asset_id := species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
@@ -330,6 +513,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 	var frames_2 := _load_sprite_frames(pokemon_2.species, side)
 
 	double_sprite_1.visible = true
+	_reset_sprite_pose(double_sprite_1)
 	if frames_1 != null:
 		double_sprite_1.sprite_frames = frames_1
 		double_sprite_1.animation = IDLE_ANIMATION
@@ -338,6 +522,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		double_sprite_1.play()
 
 	double_sprite_2.visible = true
+	_reset_sprite_pose(double_sprite_2)
 	if frames_2 != null:
 		double_sprite_2.sprite_frames = frames_2
 		double_sprite_2.animation = IDLE_ANIMATION
@@ -349,6 +534,7 @@ func set_single_pokemon_species(species: String, side: String) -> void:
 	set_battle_type(false)
 	
 	single_sprite.visible = true
+	_reset_sprite_pose(single_sprite)
 	var frames := _load_sprite_frames(species, side)
 	if frames == null:
 		return

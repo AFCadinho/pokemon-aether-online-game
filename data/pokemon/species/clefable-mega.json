@@ -1,0 +1,22 @@
+{
+  "id": 10278,
+  "species_id": "clefable-mega",
+  "showdown_id": "clefablemega",
+  "name": "Clefable Mega",
+  "types": [
+    "fairy",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 95,
+    "atk": 80,
+    "def": 93,
+    "spa": 135,
+    "spd": 110,
+    "spe": 70
+  },
+  "abilities": {
+    "primary": "magic-bounce"
+  },
+  "level_up_moves": []
+}

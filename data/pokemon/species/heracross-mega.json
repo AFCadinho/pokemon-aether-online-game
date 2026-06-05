@@ -1,0 +1,95 @@
+{
+  "id": 10047,
+  "species_id": "heracross-mega",
+  "showdown_id": "heracrossmega",
+  "name": "Heracross Mega",
+  "types": [
+    "bug",
+    "fighting"
+  ],
+  "base_stats": {
+    "hp": 80,
+    "atk": 185,
+    "def": 115,
+    "spa": 40,
+    "spd": 105,
+    "spe": 75
+  },
+  "abilities": {
+    "primary": "skill-link"
+  },
+  "level_up_moves": [
+    {
+      "move": "horn-attack",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "endure",
+      "level": 1
+    },
+    {
+      "move": "arm-thrust",
+      "level": 1
+    },
+    {
+      "move": "bullet-seed",
+      "level": 1
+    },
+    {
+      "move": "night-slash",
+      "level": 1
+    },
+    {
+      "move": "fury-attack",
+      "level": 7
+    },
+    {
+      "move": "feint",
+      "level": 7
+    },
+    {
+      "move": "aerial-ace",
+      "level": 10
+    },
+    {
+      "move": "chip-away",
+      "level": 16
+    },
+    {
+      "move": "counter",
+      "level": 19
+    },
+    {
+      "move": "brick-break",
+      "level": 25
+    },
+    {
+      "move": "take-down",
+      "level": 28
+    },
+    {
+      "move": "pin-missile",
+      "level": 31
+    },
+    {
+      "move": "close-combat",
+      "level": 34
+    },
+    {
+      "move": "megahorn",
+      "level": 37
+    },
+    {
+      "move": "reversal",
+      "level": 43
+    }
+  ]
+}

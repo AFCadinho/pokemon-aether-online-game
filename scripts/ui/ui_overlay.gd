@@ -4,6 +4,9 @@ const MAX_PARTY_SIZE := 6
 const ADD_POKEMON_COMMAND := "/addpokemon"
 const ADD_POKEMON_CLIPBOARD_COMMAND := "/addpokemonclip"
 const ADD_POKEMON_CLIPBOARD_ALIAS := "/apc"
+const START_ENCOUNTER_COMMAND := "/encounter"
+const START_ENCOUNTER_CLIPBOARD_COMMAND := "/encounterclip"
+const START_ENCOUNTER_CLIPBOARD_ALIAS := "/ec"
 
 @onready var party_panel: PanelContainer = $Control/PartyPanel
 @onready var party_container: VBoxContainer = $Control/PartyPanel/MarginContainer/VBoxContainer
@@ -31,14 +34,33 @@ func _ready() -> void:
 
 	send_button.pressed.connect(_on_send_button_pressed)
 	chat_input.text_submitted.connect(_on_chat_text_submitted)
-	dev_pokemon_button.visible = PlayerSave.is_staff
-	dev_pokemon_button.pressed.connect(_on_dev_pokemon_button_pressed)
+	dev_pokemon_button.visible = false
+	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
+
+func _input(event: InputEvent) -> void:
+	if not chat_input.has_focus():
+		return
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if not mouse_event.pressed or mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if _is_point_inside_control(chat_input, mouse_event.position):
+		return
+	if _is_point_inside_control(send_button, mouse_event.position):
+		return
+
+	chat_input.release_focus()
+
+func _is_point_inside_control(control: Control, point: Vector2) -> bool:
+	return control.get_global_rect().has_point(point)
 
 func _build_party_slots() -> void:
 	party_slots.clear()
@@ -75,6 +97,23 @@ func _submit_chat_input() -> void:
 
 	chat_input.clear()
 	chat_input.release_focus()
+	if text == START_ENCOUNTER_CLIPBOARD_COMMAND or text == START_ENCOUNTER_CLIPBOARD_ALIAS:
+		if not PlayerSave.is_staff:
+			_add_chat_message("Command not recognized.")
+			return
+
+		await _handle_start_encounter_command(DisplayServer.clipboard_get())
+		return
+
+	if text == START_ENCOUNTER_COMMAND or text.begins_with(START_ENCOUNTER_COMMAND + " "):
+		if not PlayerSave.is_staff:
+			_add_chat_message("Command not recognized.")
+			return
+
+		var encounter_text := text.substr(START_ENCOUNTER_COMMAND.length()).strip_edges()
+		await _handle_start_encounter_command(encounter_text)
+		return
+
 	if text == ADD_POKEMON_CLIPBOARD_COMMAND or text == ADD_POKEMON_CLIPBOARD_ALIAS:
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
@@ -83,7 +122,7 @@ func _submit_chat_input() -> void:
 		await _handle_add_pokemon_command(DisplayServer.clipboard_get())
 		return
 
-	if text.begins_with(ADD_POKEMON_COMMAND):
+	if text == ADD_POKEMON_COMMAND or text.begins_with(ADD_POKEMON_COMMAND + " "):
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
 			return
@@ -101,6 +140,47 @@ func _submit_chat_input() -> void:
 		return
 
 	_add_chat_message("Adinho: %s" % text)
+
+func _handle_start_encounter_command(pokemon_text: String) -> bool:
+	pokemon_text = _clean_encounter_paste_text(pokemon_text)
+	if pokemon_text.strip_edges() == "":
+		_add_chat_message("Paste a Showdown/Pokepaste set first.")
+		return false
+
+	if PlayerSave.party.is_empty():
+		_add_chat_message("You need a Pokemon in your party first.")
+		return false
+
+	var world := get_tree().current_scene
+	if world == null or not world.has_method("start_wild_battle"):
+		_add_chat_message("Cannot start a wild battle from here.")
+		return false
+
+	_add_chat_message("Parsing wild Pokemon...")
+	var response: Dictionary = await BattleApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
+	if not bool(response.get("success", false)):
+		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
+		return false
+
+	var pokemon_value: Variant = response.get("pokemon", {})
+	if not (pokemon_value is Dictionary):
+		_add_chat_message("Parse failed: response did not include Pokemon data.")
+		return false
+
+	var pokemon_data: Dictionary = pokemon_value as Dictionary
+	var pokemon := PokemonFactory.create_pokemon_from_data(pokemon_data)
+	if pokemon == null:
+		print_debug("Dev encounter Pokemon failed after parse. pokemon_data=", pokemon_data, " response=", response)
+		var reason: String = PokemonFactory.last_error_message
+		if reason == "":
+			reason = "Unknown reason."
+
+		_add_chat_message("Could not create wild Pokemon. Reason: %s" % reason)
+		return false
+
+	_add_chat_message("Starting wild encounter: %s Lv. %s." % [pokemon.species, pokemon.level])
+	await world.start_wild_battle(pokemon)
+	return true
 
 func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 	pokemon_text = _clean_pokemon_paste_text(pokemon_text)
@@ -127,7 +207,11 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 	var pokemon := PokemonFactory.create_pokemon_from_data(pokemon_data)
 	if pokemon == null:
 		print_debug("Dev add Pokemon failed after parse. pokemon_data=", pokemon_data, " response=", response)
-		_add_chat_message("Could not create Pokemon from parsed data.")
+		var reason: String = PokemonFactory.last_error_message
+		if reason == "":
+			reason = "Unknown reason."
+
+		_add_chat_message("Could not create Pokemon from parsed data. Reason: %s" % reason)
 		return false
 
 	PlayerSave.add_pokemon(pokemon)
@@ -139,6 +223,19 @@ func _clean_pokemon_paste_text(pokemon_text: String) -> String:
 	cleaned_text = cleaned_text.replace("\\n", "\n")
 
 	for command in [ADD_POKEMON_CLIPBOARD_ALIAS, ADD_POKEMON_CLIPBOARD_COMMAND, ADD_POKEMON_COMMAND]:
+		if cleaned_text == command:
+			return ""
+		if cleaned_text.begins_with(command + " "):
+			cleaned_text = cleaned_text.substr(command.length()).strip_edges()
+			break
+
+	return cleaned_text
+
+func _clean_encounter_paste_text(pokemon_text: String) -> String:
+	var cleaned_text := pokemon_text.strip_edges()
+	cleaned_text = cleaned_text.replace("\\n", "\n")
+
+	for command in [START_ENCOUNTER_CLIPBOARD_ALIAS, START_ENCOUNTER_CLIPBOARD_COMMAND, START_ENCOUNTER_COMMAND]:
 		if cleaned_text == command:
 			return ""
 		if cleaned_text.begins_with(command + " "):

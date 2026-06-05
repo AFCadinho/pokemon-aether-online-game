@@ -20,6 +20,14 @@
   },
   "level_up_moves": [
     {
+      "move": "vine-whip",
+      "level": 1
+    },
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
       "move": "growl",
       "level": 1
     },
@@ -28,32 +36,60 @@
       "level": 1
     },
     {
-      "move": "tackle",
+      "move": "petal-dance",
       "level": 1
     },
     {
-      "move": "vine-whip",
+      "move": "amnesia",
+      "level": 1
+    },
+    {
+      "move": "power-whip",
       "level": 1
     },
     {
       "move": "poison-powder",
-      "level": 22
-    },
-    {
-      "move": "razor-leaf",
-      "level": 30
-    },
-    {
-      "move": "growth",
-      "level": 43
+      "level": 13
     },
     {
       "move": "sleep-powder",
-      "level": 55
+      "level": 13
+    },
+    {
+      "move": "take-down",
+      "level": 15
+    },
+    {
+      "move": "razor-leaf",
+      "level": 20
+    },
+    {
+      "move": "sweet-scent",
+      "level": 23
+    },
+    {
+      "move": "growth",
+      "level": 28
+    },
+    {
+      "move": "double-edge",
+      "level": 31
+    },
+    {
+      "move": "worry-seed",
+      "level": 39
+    },
+    {
+      "move": "synthesis",
+      "level": 45
+    },
+    {
+      "move": "petal-blizzard",
+      "level": 50
     },
     {
       "move": "solar-beam",
-      "level": 65
+      "level": 53
     }
   ]
 }

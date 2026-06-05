@@ -1,0 +1,99 @@
+{
+  "id": 10069,
+  "species_id": "audino-mega",
+  "showdown_id": "audinomega",
+  "name": "Audino Mega",
+  "types": [
+    "normal",
+    "fairy"
+  ],
+  "base_stats": {
+    "hp": 103,
+    "atk": 60,
+    "def": 126,
+    "spa": 80,
+    "spd": 126,
+    "spe": 50
+  },
+  "abilities": {
+    "primary": "healer"
+  },
+  "level_up_moves": [
+    {
+      "move": "pound",
+      "level": 1
+    },
+    {
+      "move": "growl",
+      "level": 1
+    },
+    {
+      "move": "helping-hand",
+      "level": 1
+    },
+    {
+      "move": "hyper-voice",
+      "level": 1
+    },
+    {
+      "move": "last-resort",
+      "level": 1
+    },
+    {
+      "move": "misty-terrain",
+      "level": 1
+    },
+    {
+      "move": "play-nice",
+      "level": 1
+    },
+    {
+      "move": "baby-doll-eyes",
+      "level": 5
+    },
+    {
+      "move": "refresh",
+      "level": 9
+    },
+    {
+      "move": "disarming-voice",
+      "level": 13
+    },
+    {
+      "move": "double-slap",
+      "level": 17
+    },
+    {
+      "move": "attract",
+      "level": 21
+    },
+    {
+      "move": "secret-power",
+      "level": 25
+    },
+    {
+      "move": "entrainment",
+      "level": 29
+    },
+    {
+      "move": "take-down",
+      "level": 33
+    },
+    {
+      "move": "heal-pulse",
+      "level": 37
+    },
+    {
+      "move": "after-you",
+      "level": 41
+    },
+    {
+      "move": "simple-beam",
+      "level": 45
+    },
+    {
+      "move": "double-edge",
+      "level": 49
+    }
+  ]
+}

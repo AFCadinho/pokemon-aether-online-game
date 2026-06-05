@@ -1,0 +1,86 @@
+{
+  "id": 10055,
+  "species_id": "manectric-mega",
+  "showdown_id": "manectricmega",
+  "name": "Manectric Mega",
+  "types": [
+    "electric"
+  ],
+  "base_stats": {
+    "hp": 70,
+    "atk": 75,
+    "def": 80,
+    "spa": 135,
+    "spd": 80,
+    "spe": 135
+  },
+  "abilities": {
+    "primary": "intimidate"
+  },
+  "level_up_moves": [
+    {
+      "move": "tackle",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 1
+    },
+    {
+      "move": "thunder-wave",
+      "level": 1
+    },
+    {
+      "move": "howl",
+      "level": 1
+    },
+    {
+      "move": "fire-fang",
+      "level": 1
+    },
+    {
+      "move": "electric-terrain",
+      "level": 1
+    },
+    {
+      "move": "quick-attack",
+      "level": 10
+    },
+    {
+      "move": "spark",
+      "level": 13
+    },
+    {
+      "move": "odor-sleuth",
+      "level": 16
+    },
+    {
+      "move": "thunder-fang",
+      "level": 19
+    },
+    {
+      "move": "bite",
+      "level": 24
+    },
+    {
+      "move": "discharge",
+      "level": 30
+    },
+    {
+      "move": "roar",
+      "level": 36
+    },
+    {
+      "move": "wild-charge",
+      "level": 42
+    },
+    {
+      "move": "charge",
+      "level": 48
+    },
+    {
+      "move": "thunder",
+      "level": 54
+    }
+  ]
+}

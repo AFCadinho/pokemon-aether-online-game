@@ -1,0 +1,107 @@
+{
+  "id": 10020,
+  "species_id": "thundurus-therian",
+  "showdown_id": "thundurustherian",
+  "name": "Thundurus Therian",
+  "types": [
+    "electric",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 79,
+    "atk": 105,
+    "def": 70,
+    "spa": 145,
+    "spd": 80,
+    "spe": 101
+  },
+  "abilities": {
+    "primary": "volt-absorb"
+  },
+  "level_up_moves": [
+    {
+      "move": "thrash",
+      "level": 1
+    },
+    {
+      "move": "thunder-shock",
+      "level": 1
+    },
+    {
+      "move": "swagger",
+      "level": 1
+    },
+    {
+      "move": "uproar",
+      "level": 1
+    },
+    {
+      "move": "charge",
+      "level": 1
+    },
+    {
+      "move": "astonish",
+      "level": 1
+    },
+    {
+      "move": "hammer-arm",
+      "level": 1
+    },
+    {
+      "move": "nasty-plot",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 5
+    },
+    {
+      "move": "bite",
+      "level": 7
+    },
+    {
+      "move": "revenge",
+      "level": 13
+    },
+    {
+      "move": "shock-wave",
+      "level": 19
+    },
+    {
+      "move": "agility",
+      "level": 25
+    },
+    {
+      "move": "heal-block",
+      "level": 25
+    },
+    {
+      "move": "volt-switch",
+      "level": 35
+    },
+    {
+      "move": "discharge",
+      "level": 37
+    },
+    {
+      "move": "crunch",
+      "level": 40
+    },
+    {
+      "move": "rain-dance",
+      "level": 60
+    },
+    {
+      "move": "thunder",
+      "level": 61
+    },
+    {
+      "move": "dark-pulse",
+      "level": 67
+    },
+    {
+      "move": "wildbolt-storm",
+      "level": 75
+    }
+  ]
+}

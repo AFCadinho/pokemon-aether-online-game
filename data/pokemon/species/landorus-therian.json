@@ -1,0 +1,107 @@
+{
+  "id": 10021,
+  "species_id": "landorus-therian",
+  "showdown_id": "landorustherian",
+  "name": "Landorus Therian",
+  "types": [
+    "ground",
+    "flying"
+  ],
+  "base_stats": {
+    "hp": 89,
+    "atk": 145,
+    "def": 90,
+    "spa": 105,
+    "spd": 80,
+    "spe": 91
+  },
+  "abilities": {
+    "primary": "intimidate"
+  },
+  "level_up_moves": [
+    {
+      "move": "rock-throw",
+      "level": 1
+    },
+    {
+      "move": "fissure",
+      "level": 1
+    },
+    {
+      "move": "outrage",
+      "level": 1
+    },
+    {
+      "move": "imprison",
+      "level": 1
+    },
+    {
+      "move": "rock-tomb",
+      "level": 1
+    },
+    {
+      "move": "sand-tomb",
+      "level": 1
+    },
+    {
+      "move": "block",
+      "level": 1
+    },
+    {
+      "move": "mud-shot",
+      "level": 1
+    },
+    {
+      "move": "hammer-arm",
+      "level": 1
+    },
+    {
+      "move": "smack-down",
+      "level": 1
+    },
+    {
+      "move": "leer",
+      "level": 5
+    },
+    {
+      "move": "punishment",
+      "level": 7
+    },
+    {
+      "move": "bulldoze",
+      "level": 13
+    },
+    {
+      "move": "swords-dance",
+      "level": 25
+    },
+    {
+      "move": "extrasensory",
+      "level": 25
+    },
+    {
+      "move": "rock-slide",
+      "level": 35
+    },
+    {
+      "move": "earth-power",
+      "level": 37
+    },
+    {
+      "move": "earthquake",
+      "level": 49
+    },
+    {
+      "move": "stone-edge",
+      "level": 50
+    },
+    {
+      "move": "sandstorm",
+      "level": 55
+    },
+    {
+      "move": "sandsear-storm",
+      "level": 80
+    }
+  ]
+}
