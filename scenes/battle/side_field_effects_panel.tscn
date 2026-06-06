@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://dbkdm7jcvlhqp"]
+
+[ext_resource type="Texture2D" uid="uid://7j16r3xclt3m" path="res://assets/battles/effect/spikes.png" id="1_menk3"]
+[ext_resource type="Script" path="res://scripts/battle/battle_ui/side_field_effects_panel.gd" id="1_vyowf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menk3"]
+bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.8235294)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="SideFieldEffectsPanel" type="PanelContainer" unique_id=35532174]
+offset_right = 42.0
+offset_bottom = 23.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_menk3")
+script = ExtResource("1_vyowf")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1162063764]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2132250053]
+layout_mode = 2
+
+[node name="FieldEffectRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1969953174]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="EffectIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=1590265083]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("1_menk3")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="EffectLabel" type="Label" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=1491164831]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_font_sizes/font_size = 12
+text = "Spikes"
+
+[node name="EffectAmount" type="Label" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=53707715]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 12
+text = "2x"

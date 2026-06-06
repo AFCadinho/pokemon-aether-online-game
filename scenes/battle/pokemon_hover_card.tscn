@@ -1,0 +1,175 @@
+[gd_scene format=3 uid="uid://b4jvhxavag7g1"]
+
+[ext_resource type="Texture2D" uid="uid://cywaugqetruwa" path="res://assets/sprites/types/dragon.png" id="1_coc2k"]
+[ext_resource type="Texture2D" uid="uid://btouikxymfepk" path="res://assets/sprites/types/ground.png" id="2_0ctgl"]
+[ext_resource type="Script" uid="uid://difx3fgx4t7ww" path="res://scripts/battle/battle_ui/pokemon_hover_card.gd" id="3_t0lal"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coc2k"]
+bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.74509805)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="PokemonHoverCard" type="PanelContainer" unique_id=1550796656]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_coc2k")
+script = ExtResource("3_t0lal")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=35791659]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1192944808]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1842225213]
+custom_minimum_size = Vector2(100, 24)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Garchomp"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1341035607]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TypeIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=2027095556]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+texture = ExtResource("1_coc2k")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TypeIcon2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1273583006]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+texture = ExtResource("2_0ctgl")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SeperationLabel" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=81609701]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1098483528]
+layout_mode = 2
+
+[node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1950549048]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Possible abilities: "
+
+[node name="AbilityLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=41440541]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Sand Veil / Rough Skin"
+
+[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=915833458]
+layout_mode = 2
+text = "Item: None (Loaded dice was knocked off)"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=304412376]
+layout_mode = 2
+
+[node name="BoostsLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1465091699]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Boosts: "
+
+[node name="BoostsLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1993788108]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.3882353, 0.83137256, 0.44313726, 1)
+text = "SpA +1 / SpD +1 / Spe +1"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=3297071]
+layout_mode = 2
+
+[node name="DropsLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1751777009]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Drops: "
+
+[node name="DropsLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer5" unique_id=838798042]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.9372549, 0.26666668, 0.26666668, 1)
+text = "Def -1"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1698634679]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=895068706]
+layout_mode = 2
+text = "Speed: "
+
+[node name="LowestSpeedLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=2116590592]
+layout_mode = 2
+text = "188"
+
+[node name="Speedseperator" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1166917710]
+layout_mode = 2
+text = "•"
+
+[node name="LowestNeutralSpeedlabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=298000330]
+layout_mode = 2
+text = "240"
+
+[node name="Speedseperator2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=488021168]
+layout_mode = 2
+text = "•"
+
+[node name="HighestNeutralSpeedLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=575955872]
+layout_mode = 2
+text = "303"
+
+[node name="Speedseperator3" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1973567137]
+layout_mode = 2
+text = "•"
+
+[node name="HighestSpeedLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=31372898]
+layout_mode = 2
+text = "333"
+
+[node name="SeperationLabel3" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=1381870562]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=884435233]
+layout_mode = 2
+
+[node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1620503498]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+text = "• Swords Dance"
+
+[node name="MoveLabel2" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1036820844]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+text = "• Scale Shot"
+
+[node name="MoveLabel3" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=674428113]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+text = "• Earthquake"
+
+[node name="MoveLabel4" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=578760249]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+text = "• Fire Fang"

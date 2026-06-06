@@ -2,7 +2,7 @@ extends Panel
 
 class_name BattleLogPanel
 
-@onready var log_text: RichTextLabel = $MarginContainer/VBoxContainer/ScrollContainer/BattleLogText
+@onready var log_text: RichTextLabel = $MarginContainer/VBoxContainer/BattleLogText
 
 const COLOR_TEXT := "#f1ede6"
 const COLOR_MUTED := "#c7bda8"

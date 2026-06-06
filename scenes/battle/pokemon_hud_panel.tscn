@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://db3id5etb8cwp"]
 
 [ext_resource type="Script" uid="uid://t25773jalgnl" path="res://scripts/battle/battle_ui/pokemon_hud_panel.gd" id="1_jqru5"]
-[ext_resource type="Texture2D" uid="uid://b7jncpf4e5h86" path="res://assets/gender/female.png" id="2_61bov"]
+[ext_resource type="PackedScene" uid="uid://bbpta6p7kugpi" path="res://scenes/battle/pokemon_info_hud.tscn" id="2_t87uo"]
 [ext_resource type="PackedScene" uid="uid://dydjcjdd5oypk" path="res://scenes/battle/pokemon_sheet_slot.tscn" id="4_mvctu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5wf7c"]
@@ -16,144 +16,56 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0kxc"]
-bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fh7rg"]
-bg_color = Color(0.22352941, 0.9019608, 0.12156863, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j0lgw"]
-bg_color = Color(0.05882353, 0.047058824, 0.03529412, 0.47058824)
-corner_detail = 4
-
-[node name="PokemonHudPanel" type="Panel" unique_id=997269760]
+[node name="PokemonHudPanel" type="PanelContainer" unique_id=754506686]
 z_index = 10
 offset_left = 13.0
 offset_top = 447.0
-offset_right = 324.0
-offset_bottom = 583.0
+offset_right = 253.0
+offset_bottom = 522.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_5wf7c")
 script = ExtResource("1_jqru5")
 
-[node name="PokemonInfo" type="MarginContainer" parent="." unique_id=1843626116]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 0.5
-offset_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="PokemonInfo" unique_id=460423532]
-layout_mode = 2
-
-[node name="HBoxContainer" type="VBoxContainer" parent="PokemonInfo/VBoxContainer" unique_id=1339715393]
-layout_mode = 2
-theme_override_constants/separation = -11
-
-[node name="MarginContainer" type="MarginContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer" unique_id=2140787721]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1843626116]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_bottom = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer" unique_id=1286806276]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=460423532]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="PokemonInfoHud" parent="MarginContainer/VBoxContainer" unique_id=523398377 instance=ExtResource("2_t87uo")]
 layout_mode = 2
 
-[node name="TopRow" type="HBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=1241209722]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="NameContainer" type="HBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow" unique_id=1896825094]
+[node name="PokemonInfoHud2" parent="MarginContainer/VBoxContainer" unique_id=988017049 instance=ExtResource("2_t87uo")]
+visible = false
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=950574432]
+[node name="HBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=118558548]
 layout_mode = 2
-size_flags_horizontal = 2
-text = "Alakazam"
 
-[node name="GenderIcon" type="TextureRect" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1892957036]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-texture = ExtResource("2_61bov")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow" unique_id=188024193]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_constants/separation = 8
-
-[node name="StatusLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1945808598]
-layout_mode = 2
-text = "PSN"
-
-[node name="LevelLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1327934074]
-layout_mode = 2
-size_flags_horizontal = 8
-text = "Lv. 100"
-
-[node name="HPRow" type="HBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=872340196]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="HPTextLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HPRow" unique_id=525742959]
-layout_mode = 2
-text = "HP"
-
-[node name="HpBar" type="ProgressBar" parent="PokemonInfo/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/HPRow" unique_id=1425304025]
-custom_minimum_size = Vector2(0, 12)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
-theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
-value = 75.0
-
-[node name="Panel" type="Panel" parent="PokemonInfo/VBoxContainer/HBoxContainer" unique_id=1580659270]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_j0lgw")
-
-[node name="HBoxContainer" type="VBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel" unique_id=118558548]
-layout_mode = 0
-offset_left = -7.0
-offset_top = 6.5
-offset_right = 305.0
-offset_bottom = 96.5
-
-[node name="PlayerTeamPanel" type="HBoxContainer" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer" unique_id=1014468197]
+[node name="PlayerTeamPanel" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1014468197]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="PokemonSheetSlot" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer/PlayerTeamPanel" unique_id=145825142 instance=ExtResource("4_mvctu")]
+[node name="PokemonSheetSlot" parent="MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel" unique_id=145825142 instance=ExtResource("4_mvctu")]
 layout_mode = 2
 
-[node name="PokemonSheetSlot2" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer/PlayerTeamPanel" unique_id=367569503 instance=ExtResource("4_mvctu")]
+[node name="PokemonSheetSlot2" parent="MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel" unique_id=367569503 instance=ExtResource("4_mvctu")]
 layout_mode = 2
 
-[node name="PokemonSheetSlot3" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer/PlayerTeamPanel" unique_id=2003378195 instance=ExtResource("4_mvctu")]
+[node name="PokemonSheetSlot3" parent="MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel" unique_id=2003378195 instance=ExtResource("4_mvctu")]
 layout_mode = 2
 
-[node name="PokemonSheetSlot4" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer/PlayerTeamPanel" unique_id=80569448 instance=ExtResource("4_mvctu")]
+[node name="PokemonSheetSlot4" parent="MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel" unique_id=80569448 instance=ExtResource("4_mvctu")]
 layout_mode = 2
 
-[node name="PokemonSheetSlot5" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer/PlayerTeamPanel" unique_id=210161099 instance=ExtResource("4_mvctu")]
+[node name="PokemonSheetSlot5" parent="MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel" unique_id=210161099 instance=ExtResource("4_mvctu")]
 layout_mode = 2
 
-[node name="PokemonSheetSlot6" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer/PlayerTeamPanel" unique_id=1186711797 instance=ExtResource("4_mvctu")]
+[node name="PokemonSheetSlot6" parent="MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel" unique_id=1186711797 instance=ExtResource("4_mvctu")]
 layout_mode = 2
-
-[node name="PlayerNameLabel" type="Label" parent="PokemonInfo/VBoxContainer/HBoxContainer/Panel/HBoxContainer" unique_id=1648941801]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.1254902, 0.03529412, 0.41568628, 1)
-theme_override_font_sizes/font_size = 24
-text = "Adinho"
-horizontal_alignment = 2

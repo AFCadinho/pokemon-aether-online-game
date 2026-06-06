@@ -3,17 +3,24 @@ extends Button
 const TYPE_BANNER_PATH := "res://assets/sprites/types/small/%s.png"
 
 signal selected
+signal hovered(move_data: Dictionary, slot_rect: Rect2)
+signal unhovered
 
 @onready var type_banner: TextureRect = $MarginContainer/VBoxContainer/TopRow/TypeBanner
 @onready var pp_label: Label = $MarginContainer/VBoxContainer/BottomRow/PPLabel
 @onready var move_name_label: Label = $MarginContainer/VBoxContainer/TopRow/MoveNameLabel
 @onready var effectiveness_label: Label = $MarginContainer/VBoxContainer/BottomRow/EffectivenessLabel
 
+var current_move_data: Dictionary = {}
+
 func _ready() -> void:
 	pressed.connect(_on_pressed)
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
 
 func set_move_data(move_data: Dictionary) -> void:
 	visible = true
+	current_move_data = move_data.duplicate(true)
 	disabled = move_data.get("disabled", false) == true
 	
 	move_name_label.text = str(move_data.get("name", ""))
@@ -58,6 +65,7 @@ func _set_type_banner(move_type: String) -> void:
 	
 func set_empty() -> void:
 	visible = true
+	current_move_data = {}
 	disabled = true
 	move_name_label.text = "Empty"
 	pp_label.text = "--/--"
@@ -101,4 +109,15 @@ func _on_pressed() -> void:
 		return
 		
 	selected.emit()
+
+
+func _on_mouse_entered() -> void:
+	if current_move_data.is_empty():
+		return
+
+	hovered.emit(current_move_data, get_global_rect())
+
+
+func _on_mouse_exited() -> void:
+	unhovered.emit()
 	

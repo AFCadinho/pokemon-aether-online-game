@@ -56,8 +56,6 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
 
 	name_label.text = species
-	if is_active:
-		name_label.text = "%s (Active)" % species
 
 	hp_bar.max_value = max(int(hp_data.get("max_hp", 1)), 1)
 	hp_bar.value = clamp(int(hp_data.get("current_hp", 0)), 0, int(hp_bar.max_value))

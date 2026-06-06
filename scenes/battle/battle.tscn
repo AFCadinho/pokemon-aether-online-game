@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://c5qh718vudn8y"]
 
 [ext_resource type="Script" uid="uid://c1erkgucbypar" path="res://scripts/battle/battle.gd" id="1_sgdsx"]
-[ext_resource type="Texture2D" uid="uid://w72nkcnflkf8" path="res://assets/background/battle/PATH.png" id="1_xd4uy"]
 [ext_resource type="PackedScene" uid="uid://db3id5etb8cwp" path="res://scenes/battle/pokemon_hud_panel.tscn" id="2_01pft"]
 [ext_resource type="PackedScene" uid="uid://cir3bfnfoy4l4" path="res://scenes/battle/move_slot.tscn" id="2_h0kxc"]
+[ext_resource type="Texture2D" uid="uid://diu5e64u5vwh8" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="2_sgdsx"]
+[ext_resource type="PackedScene" uid="uid://bt1b4mxyftlk7" path="res://scenes/battle/battle_platform.tscn" id="3_8eh2s"]
 [ext_resource type="PackedScene" uid="uid://3gsmmeerkva2" path="res://scenes/battle/party_slot.tscn" id="3_fh7rg"]
 [ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scenes/battle/sprite_box.tscn" id="3_kd6yx"]
 [ext_resource type="Texture2D" uid="uid://b0mdtgfn4y3qi" path="res://assets/sprites/battle_buttons/fight.png" id="4_pll4o"]
@@ -15,8 +16,12 @@
 [ext_resource type="Texture2D" uid="uid://c4s406fdsdgxv" path="res://assets/sprites/battle_buttons/run.png" id="7_pyfix"]
 [ext_resource type="Script" uid="uid://duo7cdw26ghjb" path="res://scripts/battle/action_choices.gd" id="8_t1kk3"]
 [ext_resource type="Script" uid="uid://bxqps5iqr1llo" path="res://scripts/battle/battle_ui/moves_grid.gd" id="8_w40i5"]
+[ext_resource type="PackedScene" uid="uid://conldqooxdm32" path="res://scenes/battle/vs_panel_container.tscn" id="9_pyfix"]
+[ext_resource type="PackedScene" uid="uid://dbkdm7jcvlhqp" path="res://scenes/battle/side_field_effects_panel.tscn" id="10_8eh2s"]
 [ext_resource type="Script" uid="uid://gqodi4os4d6k" path="res://scripts/battle/battle_ui/party_grid.gd" id="10_fe4ja"]
 [ext_resource type="PackedScene" uid="uid://bfo18l7xvty5o" path="res://scenes/battle/battle_log_panel.tscn" id="17_6ofp8"]
+[ext_resource type="PackedScene" uid="uid://b4jvhxavag7g1" path="res://scenes/battle/pokemon_hover_card.tscn" id="21_sgdsx"]
+[ext_resource type="PackedScene" uid="uid://qshhy8kj3xu8" path="res://scenes/battle/move_hover_card.tscn" id="23_156m4"]
 [ext_resource type="Texture2D" uid="uid://c5dxctq04cn66" path="res://assets/battles/mechanics/mega-evolution.png" id="37_afkbo"]
 [ext_resource type="Texture2D" uid="uid://c2cbq02hrb073" path="res://assets/battles/mechanics/z-move.png" id="38_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://dn8i3j64uec8i" path="res://assets/battles/mechanics/tera-icon.png" id="39_dsauo"]
@@ -119,6 +124,10 @@ script = ExtResource("1_sgdsx")
 
 [node name="BattleRequest" type="HTTPRequest" parent="." unique_id=1293386490]
 
+[node name="PokemonInfoRequest" type="HTTPRequest" parent="." unique_id=1866409350]
+
+[node name="PokemonStatsRequest" type="HTTPRequest" parent="." unique_id=1728073764]
+
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]
 layout_mode = 1
 anchors_preset = 8
@@ -127,15 +136,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -680.0
-offset_top = -430.0
-offset_right = 620.0
-offset_bottom = 220.0
+offset_top = -455.0
+offset_right = 650.0
+offset_bottom = 195.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="BattleFrame" type="Panel" parent="HBoxContainer" unique_id=153800450]
-custom_minimum_size = Vector2(900, 0)
+custom_minimum_size = Vector2(975, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sgdsx")
 
@@ -166,11 +175,35 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_xd4uy")
+texture = ExtResource("2_sgdsx")
 stretch_mode = 6
+
+[node name="BattlePlatform" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1225323237 instance=ExtResource("3_8eh2s")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -324.0
+offset_bottom = -74.0
+grow_vertical = 0
+script = null
+
+[node name="BattlePlatform2" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=507540366 instance=ExtResource("3_8eh2s")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 435.0
+offset_top = -544.0
+offset_right = 1035.0
+offset_bottom = -294.0
+grow_vertical = 0
+script = null
 
 [node name="EnemySpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=2063766200 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
+offset_top = -242.0
+offset_bottom = 51.0
 
 [node name="PlayerSpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=148088549 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
@@ -188,24 +221,21 @@ grow_vertical = 0
 
 [node name="PlayerHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=997269760 instance=ExtResource("2_01pft")]
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -311.0
-offset_top = -264.0
+offset_left = -312.0
+offset_top = 340.0
 offset_right = 0.0
-offset_bottom = -128.0
+offset_bottom = 489.0
 grow_horizontal = 0
-grow_vertical = 0
 
 [node name="EnemyHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1632045920 instance=ExtResource("2_01pft")]
 layout_mode = 1
 offset_left = 0.0
-offset_top = 0.0
-offset_right = 311.0
-offset_bottom = 136.0
+offset_top = 44.0
+offset_right = 312.0
+offset_bottom = 193.0
 
 [node name="CurrentActionPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1149733481 instance=ExtResource("5_n6gaa")]
 layout_mode = 1
@@ -219,6 +249,12 @@ offset_bottom = 40.0
 
 [node name="BattleStatusPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=790300356 instance=ExtResource("7_mvulk")]
 layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 0.0
+offset_right = 153.39575
+grow_horizontal = 1
 
 [node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=900280603]
 custom_minimum_size = Vector2(36, 36)
@@ -232,6 +268,28 @@ offset_bottom = 18.0
 grow_vertical = 2
 mouse_default_cursor_shape = 2
 text = "<"
+
+[node name="VSPanelContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1039531441 instance=ExtResource("9_pyfix")]
+layout_mode = 1
+offset_left = -80.5
+offset_right = 80.5
+
+[node name="SideFieldEffectsPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1939591853 instance=ExtResource("10_8eh2s")]
+layout_mode = 1
+offset_top = 350.0
+offset_right = 72.0
+offset_bottom = 373.0
+
+[node name="SideFieldEffectsPanel2" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=35532174 instance=ExtResource("10_8eh2s")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -72.0
+offset_top = 160.0
+offset_right = 0.0
+offset_bottom = 183.0
+grow_horizontal = 0
 
 [node name="ActionSidePanel" type="Panel" parent="HBoxContainer" unique_id=910737858]
 layout_mode = 2
@@ -429,13 +487,25 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="BattleLogPanel" parent="." unique_id=2138858408 instance=ExtResource("17_6ofp8")]
+z_index = 99
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -430.0
-offset_bottom = 220.0
+offset_top = -455.0
+offset_bottom = 195.0
 grow_vertical = 2
+
+[node name="PokemonHoverCard" parent="." unique_id=1550796656 instance=ExtResource("21_sgdsx")]
+visible = false
+z_index = 100
+layout_mode = 0
+
+[node name="MoveHoverCard" parent="." unique_id=969617656 instance=ExtResource("23_156m4")]
+visible = false
+z_index = 101
+layout_mode = 0
+offset_right = 300.0
 
 [connection signal="move_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" to="." method="_on_moves_grid_move_selected"]
 [connection signal="party_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" to="." method="_on_party_grid_party_selected"]

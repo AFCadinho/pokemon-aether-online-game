@@ -15,10 +15,12 @@ const HEAL_FLASH_COLOR := Color(0.45, 1.0, 0.55, 1.0)
 const STAT_RAISE_FLASH_COLOR := Color(0.35, 0.75, 1.0, 1.0)
 const STAT_DROP_FLASH_COLOR := Color(0.8, 0.45, 1.0, 1.0)
 const FAINT_TWEEN_OFFSET := Vector2(0, 34)
+const SPRITE_HOVER_PADDING := Vector2(8, 8)
 
 @onready var single_container: Control = $SingleBattleContainer
 @onready var double_container: Control = $DoubleBattleContainer
 
+@onready var single_sprite_slot: Control = $SingleBattleContainer/SpriteSlot
 @onready var single_sprite: AnimatedSprite2D = $SingleBattleContainer/SpriteSlot/AnimatedPokemonSprite
 @onready var double_sprite_1: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite
 @onready var double_sprite_2: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2
@@ -38,9 +40,42 @@ func set_battle_type(is_double_battle: bool) -> void:
 	single_container.visible = not is_double_battle
 	double_container.visible = is_double_battle
 
+func get_single_sprite_slot() -> Control:
+	return single_sprite_slot
+
+func is_mouse_over_single_sprite(mouse_position: Vector2) -> bool:
+	return get_single_sprite_hover_rect().has_point(mouse_position)
+
+func get_single_sprite_hover_rect() -> Rect2:
+	return _get_sprite_hover_rect(single_sprite)
+
 func _set_sprite_filter(sprite: AnimatedSprite2D) -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite.scale = BATTLE_SPRITE_SCALE
+
+func _get_sprite_hover_rect(sprite: AnimatedSprite2D) -> Rect2:
+	var texture: Texture2D = _get_current_sprite_texture(sprite)
+	var frame_size: Vector2 = Vector2(DEFAULT_SHEET_FRAME_SIZE)
+	if texture != null:
+		frame_size = texture.get_size()
+
+	var sprite_scale := Vector2(abs(sprite.scale.x), abs(sprite.scale.y))
+	var hitbox_size: Vector2 = frame_size * sprite_scale
+	var hitbox_position: Vector2 = sprite.global_position - (hitbox_size * 0.5) - SPRITE_HOVER_PADDING
+	return Rect2(hitbox_position, hitbox_size + (SPRITE_HOVER_PADDING * 2.0))
+
+func _get_current_sprite_texture(sprite: AnimatedSprite2D) -> Texture2D:
+	if sprite.sprite_frames == null:
+		return null
+	if not sprite.sprite_frames.has_animation(sprite.animation):
+		return null
+
+	var frame_count: int = sprite.sprite_frames.get_frame_count(sprite.animation)
+	if frame_count <= 0:
+		return null
+
+	var frame_index: int = min(max(sprite.frame, 0), frame_count - 1)
+	return sprite.sprite_frames.get_frame_texture(sprite.animation, frame_index)
 
 func _cache_base_sprite_positions() -> void:
 	for sprite in _get_all_sprites():

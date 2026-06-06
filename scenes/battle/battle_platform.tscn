@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://bt1b4mxyftlk7"]
+
+[ext_resource type="Texture2D" uid="uid://ci832f108wt70" path="res://assets/background/platform/grass_platform.png" id="1_ik1kv"]
+[ext_resource type="Script" uid="uid://df0if3qvwsnl7" path="res://scripts/battle/battle_ui/battle_platform.gd" id="1_um0dl"]
+[ext_resource type="Texture2D" uid="uid://bwk26vj7w2gj0" path="res://assets/background/hazards/stealth_rock.png" id="2_vchu0"]
+[ext_resource type="Texture2D" uid="uid://cd8et1gg6sriw" path="res://assets/background/hazards/sticky_webs.png" id="2_vllko"]
+[ext_resource type="Texture2D" uid="uid://4uomfvbjfexk" path="res://assets/background/hazards/spikes.png" id="3_7758y"]
+[ext_resource type="Texture2D" uid="uid://0bvlblife2ur" path="res://assets/background/hazards/toxic_spikes.png" id="4_sluh8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ik1kv"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="BattlePlatform" type="Panel" unique_id=41255823]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -150.0
+offset_right = 600.0
+offset_bottom = 150.0
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ik1kv")
+script = ExtResource("1_um0dl")
+
+[node name="PlatformImage" type="TextureRect" parent="." unique_id=2058549199]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 300.0
+texture = ExtResource("1_ik1kv")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="StickyWebsImage" type="TextureRect" parent="." unique_id=1500884817]
+visible = false
+layout_mode = 0
+offset_left = -70.0
+offset_top = 47.0
+offset_right = 667.0
+offset_bottom = 347.0
+texture = ExtResource("2_vllko")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="StealthRockImage" type="TextureRect" parent="." unique_id=546901975]
+visible = false
+layout_mode = 0
+offset_left = -78.0
+offset_top = 34.0
+offset_right = 659.0
+offset_bottom = 334.0
+texture = ExtResource("2_vchu0")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="SpikesImage" type="TextureRect" parent="." unique_id=1656478977]
+visible = false
+layout_mode = 0
+offset_left = -84.0
+offset_top = 72.0
+offset_right = 653.0
+offset_bottom = 372.0
+texture = ExtResource("3_7758y")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ToxicSpikesImage" type="TextureRect" parent="." unique_id=1425852049]
+visible = false
+layout_mode = 0
+offset_left = -65.0
+offset_top = 75.0
+offset_right = 672.0
+offset_bottom = 375.0
+texture = ExtResource("4_sluh8")
+expand_mode = 3
+stretch_mode = 5

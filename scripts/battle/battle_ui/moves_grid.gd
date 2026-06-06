@@ -3,6 +3,8 @@ extends GridContainer
 class_name MovesGrid
 
 signal move_selected(slot: int)
+signal move_hovered(move_data: Dictionary, slot_rect: Rect2)
+signal move_unhovered
 
 var input_disabled := false
 var previous_disabled_by_slot: Dictionary = {}
@@ -14,6 +16,10 @@ func _ready() -> void:
 		var slot: Node = slots[idx]
 		if slot.has_signal("selected"):
 			slot.selected.connect(_on_slot_selected.bind(idx + 1))
+		if slot.has_signal("hovered"):
+			slot.hovered.connect(_on_slot_hovered)
+		if slot.has_signal("unhovered"):
+			slot.unhovered.connect(_on_slot_unhovered)
 
 func set_moves(moves: Array) -> void:
 	var slots: Array[Node] = get_children()
@@ -74,3 +80,11 @@ func _on_slot_selected(slot: int) -> void:
 		return
 
 	move_selected.emit(slot)
+
+
+func _on_slot_hovered(move_data: Dictionary, slot_rect: Rect2) -> void:
+	move_hovered.emit(move_data, slot_rect)
+
+
+func _on_slot_unhovered() -> void:
+	move_unhovered.emit()

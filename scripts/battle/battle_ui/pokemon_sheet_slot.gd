@@ -1,24 +1,40 @@
 extends VBoxContainer
 
+signal pokemon_hovered(pokemon_data: Dictionary)
+signal pokemon_unhovered
+
 const NORMAL_ICON_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_ICON_MODULATE := Color(0.45, 0.45, 0.45, 0.75)
 
 @onready var pokemon_icon: TextureRect = $PokemonIcon
 @onready var hp_bar: ProgressBar = $HpBar
 
+var current_pokemon_data: Dictionary = {}
+
+func _ready() -> void:
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
+	for child in get_children():
+		if child is Control:
+			var control: Control = child as Control
+			control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 func set_empty() -> void:
 	visible = false
+	current_pokemon_data = {}
 	pokemon_icon.texture = null
 	pokemon_icon.modulate = NORMAL_ICON_MODULATE
 	hp_bar.value = 0
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	visible = true
-	var condition := str(pokemon_data.get("condition", ""))
-	var is_fainted := condition.contains("fnt")
+	current_pokemon_data = pokemon_data
+	var condition: String = str(pokemon_data.get("condition", ""))
+	var is_fainted: bool = condition.contains("fnt")
 
-	var species := _get_species_from_data(pokemon_data)
-	var icon := PokemonAssets.load_party_icon(species)
+	var species: String = _get_species_from_data(pokemon_data)
+	var icon: Texture2D = PokemonAssets.load_party_icon(species)
 
 	if icon == null:
 		icon = PokemonAssets.load_unknown_icon()
@@ -26,8 +42,8 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	pokemon_icon.texture = icon
 	pokemon_icon.modulate = FAINTED_ICON_MODULATE if is_fainted else NORMAL_ICON_MODULATE
 
-	var hp := _parse_current_hp(condition)
-	var max_hp := _parse_max_hp(condition)
+	var hp: int = _parse_current_hp(condition)
+	var max_hp: int = _parse_max_hp(condition)
 
 	hp_bar.max_value = max(max_hp, 1)
 	hp_bar.value = clamp(hp, 0, hp_bar.max_value)
@@ -58,3 +74,12 @@ func _parse_max_hp(condition: String) -> int:
 		var right := str(condition.split("/")[1])
 		return int(right.split(" ")[0])
 	return 0
+
+func _on_mouse_entered() -> void:
+	if current_pokemon_data.is_empty():
+		return
+
+	pokemon_hovered.emit(current_pokemon_data)
+
+func _on_mouse_exited() -> void:
+	pokemon_unhovered.emit()

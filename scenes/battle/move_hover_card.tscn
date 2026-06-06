@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://qshhy8kj3xu8"]
+
+[ext_resource type="Texture2D" uid="uid://dj8nlogupekrt" path="res://assets/sprites/types/Tera/electric.png" id="1_lxb1c"]
+[ext_resource type="Texture2D" uid="uid://bo5d3jdwxeqaf" path="res://assets/battles/special_move.png" id="2_p4xhr"]
+[ext_resource type="Script" uid="uid://bjaktpp5s0npe" path="res://scripts/battle/battle_ui/move_hover_card.gd" id="3_0qubl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qo38n"]
+bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.74509805)
+shadow_color = Color(0, 0, 0, 0.39215687)
+shadow_size = 4
+
+[node name="MoveHoverCard" type="PanelContainer" unique_id=969617656]
+custom_minimum_size = Vector2(300, 0)
+offset_right = 250.0
+offset_bottom = 146.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qo38n")
+script = ExtResource("3_0qubl")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1144519224]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=284190702]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1523645198]
+layout_mode = 2
+text = "Thunderbolt"
+
+[node name="MetaRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1708902655]
+layout_mode = 2
+
+[node name="TypeLabel" type="TextureRect" parent="MarginContainer/VBoxContainer/MetaRow" unique_id=273289124]
+custom_minimum_size = Vector2(64, 24)
+layout_mode = 2
+texture = ExtResource("1_lxb1c")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="TypeLabel2" type="TextureRect" parent="MarginContainer/VBoxContainer/MetaRow" unique_id=103069799]
+custom_minimum_size = Vector2(24, 32)
+layout_mode = 2
+texture = ExtResource("2_p4xhr")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=649887386]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+
+[node name="BasePowerRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=528535618]
+layout_mode = 2
+
+[node name="PowerLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow" unique_id=1735035573]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Base Power:"
+
+[node name="PowerValueLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow" unique_id=1180221303]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "90"
+
+[node name="BasePowerRow2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=945434555]
+layout_mode = 2
+
+[node name="AccuracyLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow2" unique_id=1997790715]
+layout_mode = 2
+text = "Accuracy:"
+
+[node name="AccuracyLabel2" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow2" unique_id=574118617]
+layout_mode = 2
+text = "100%"
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=457702315]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+
+[node name="DescriptionLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=2055747726]
+custom_minimum_size = Vector2(290, 10)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72156864, 0.69803923, 0.6666667, 1)
+theme_override_font_sizes/font_size = 12
+text = "10% Chance to paralyze the target"
+autowrap_mode = 3
