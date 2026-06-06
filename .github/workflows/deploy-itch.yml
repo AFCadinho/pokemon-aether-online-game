@@ -20,6 +20,7 @@ env:
   LINUX_EXPORT_PRESET: Linux Itch Build
   LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
   LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
+  SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v1
 
 jobs:
   deploy:
@@ -47,7 +48,15 @@ jobs:
           mkdir -p "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
           mv /tmp/godot-export-templates/templates/* "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/"
 
+      - name: Cache Pokemon sprite asset bundle
+        id: pokemon-sprite-assets-cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/pokemon-sprite-assets.zip
+          key: ${{ runner.os }}-${{ env.SPRITE_ASSET_CACHE_KEY }}
+
       - name: Download Pokemon sprite assets
+        if: steps.pokemon-sprite-assets-cache.outputs.cache-hit != 'true'
         env:
           SPRITE_ASSET_URLS: ${{ secrets.SPRITE_ASSET_URLS }}
         run: |
@@ -57,7 +66,16 @@ jobs:
             megadl --path /tmp/pokemon-sprite-assets "${asset_url}"
           done
           cat /tmp/pokemon-sprite-assets/pokemon-sprite-assets-basic.zip.part-* > /tmp/pokemon-sprite-assets.zip
+
+      - name: Extract Pokemon sprite assets
+        run: |
           unzip -q /tmp/pokemon-sprite-assets.zip -d .
+
+      - name: Cache Godot imported assets
+        uses: actions/cache@v4
+        with:
+          path: .godot/imported
+          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ env.SPRITE_ASSET_CACHE_KEY }}-${{ hashFiles('project.godot', 'export_presets.cfg') }}
 
       - name: Import Godot assets
         run: ./godot --headless --import --quit
