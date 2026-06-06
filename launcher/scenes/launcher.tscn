@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://bqpcnejhsgi3k"]
+
+[ext_resource type="Script" uid="uid://sejde4y7ji6v" path="res://scripts/launcher.gd" id="1_launcher"]
+
+[node name="Launcher" type="Control" unique_id=125608026]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_launcher")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1023563146]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=680284006]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="Layout" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1422734400]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/Layout" unique_id=835523053]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Pokemon Aether Online"
+
+[node name="VersionLabel" type="Label" parent="Panel/MarginContainer/Layout" unique_id=673926926]
+layout_mode = 2
+text = "Version: unknown"
+
+[node name="StatusLabel" type="Label" parent="Panel/MarginContainer/Layout" unique_id=231627275]
+layout_mode = 2
+text = "Ready."
+autowrap_mode = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="Panel/MarginContainer/Layout" unique_id=1652690282]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="LogLabel" type="RichTextLabel" parent="Panel/MarginContainer/Layout" unique_id=488285657]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="ButtonRow" type="HBoxContainer" parent="Panel/MarginContainer/Layout" unique_id=85606896]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="CheckButton" type="Button" parent="Panel/MarginContainer/Layout/ButtonRow" unique_id=1040375614]
+layout_mode = 2
+text = "Check updates"
+
+[node name="UpdateButton" type="Button" parent="Panel/MarginContainer/Layout/ButtonRow" unique_id=1700270267]
+layout_mode = 2
+disabled = true
+text = "Update"
+
+[node name="PlayButton" type="Button" parent="Panel/MarginContainer/Layout/ButtonRow" unique_id=1011669971]
+layout_mode = 2
+disabled = true
+text = "Play"
+
+[node name="HttpRequest" type="HTTPRequest" parent="." unique_id=2012601374]

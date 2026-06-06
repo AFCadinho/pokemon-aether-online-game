@@ -7,6 +7,10 @@
 # Large generated Pokemon sprite assets are bundled outside git for builds.
 /assets/sprites/pokemon/
 
+# Launcher local editor cache and generated test archives.
+/launcher/.godot/
+/launcher/test_server/*.zip
+
 # Android export/build output.
 /android/
 

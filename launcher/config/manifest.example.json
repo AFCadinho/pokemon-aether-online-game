@@ -1,0 +1,17 @@
+{
+  "gameVersion": "0.1.0",
+  "game": {
+    "version": "0.1.0",
+    "url": "https://example.com/pokemon-aether/builds/windows/game-v0.1.0.zip",
+    "sha256": "",
+    "executable": "Pokemon Aether Online.exe"
+  },
+  "assetPacks": [
+    {
+      "id": "pokemon-sprites-basic",
+      "version": "v1",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-sprite-assets-basic-v1.zip",
+      "sha256": ""
+    }
+  ]
+}
