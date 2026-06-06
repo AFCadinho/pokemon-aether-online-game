@@ -250,25 +250,34 @@ func _get_base_sprite_position(sprite: AnimatedSprite2D) -> Vector2:
 
 	return sprite.position
 
-func _load_sprite_frames(species: String, side: String) -> SpriteFrames:
-	for asset_id in _get_species_asset_id_candidates(species):
-		var sheet_metadata_path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [side, asset_id]
-		var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, side, species)
-		if metadata_frames != null:
-			return metadata_frames
+func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
+	for sprite_root in _get_sprite_asset_roots(side, is_shiny):
+		for asset_id in _get_species_asset_id_candidates(species):
+			var sheet_metadata_path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [sprite_root, asset_id]
+			var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, sprite_root, species)
+			if metadata_frames != null:
+				return metadata_frames
 
-		var folder := "res://assets/sprites/pokemon/%s/%s" % [side, asset_id]
-		var folder_frames := _load_sprite_frames_from_folder(folder)
-		if folder_frames != null:
-			return folder_frames
+			var folder := "res://assets/sprites/pokemon/%s/%s" % [sprite_root, asset_id]
+			var folder_frames := _load_sprite_frames_from_folder(folder)
+			if folder_frames != null:
+				return folder_frames
 
-		var sheet_path := "res://assets/sprites/pokemon/%s/%s.png" % [side, asset_id]
-		var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
-		if sheet_frames != null:
-			return sheet_frames
+			var sheet_path := "res://assets/sprites/pokemon/%s/%s.png" % [sprite_root, asset_id]
+			var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
+			if sheet_frames != null:
+				return sheet_frames
 
 	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
 	return null
+
+func _get_sprite_asset_roots(side: String, is_shiny: bool) -> Array[String]:
+	var roots: Array[String] = []
+	if is_shiny:
+		roots.append("shiny_%s" % side)
+
+	roots.append(side)
+	return roots
 
 func _get_species_asset_id_candidates(species: String) -> Array[String]:
 	var asset_id: String = _normalize_species_asset_id(species)
@@ -539,13 +548,13 @@ func _is_region_empty(image: Image, region: Rect2i) -> bool:
 	return true
 
 func set_single_pokemon(pokemon: Pokemon, side: String) -> void:
-	set_single_pokemon_species(pokemon.species, side)
+	set_single_pokemon_species(pokemon.species, side, pokemon.shiny)
 
 func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) -> void:
 	set_battle_type(true)
 
-	var frames_1 := _load_sprite_frames(pokemon_1.species, side)
-	var frames_2 := _load_sprite_frames(pokemon_2.species, side)
+	var frames_1 := _load_sprite_frames(pokemon_1.species, side, pokemon_1.shiny)
+	var frames_2 := _load_sprite_frames(pokemon_2.species, side, pokemon_2.shiny)
 
 	double_sprite_1.visible = true
 	_reset_sprite_pose(double_sprite_1)
@@ -565,12 +574,12 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		_snap_sprite_to_pixel_grid(double_sprite_2)
 		double_sprite_2.play()
 
-func set_single_pokemon_species(species: String, side: String) -> void:
+func set_single_pokemon_species(species: String, side: String, is_shiny: bool = false) -> void:
 	set_battle_type(false)
 	
 	single_sprite.visible = true
 	_reset_sprite_pose(single_sprite)
-	var frames := _load_sprite_frames(species, side)
+	var frames := _load_sprite_frames(species, side, is_shiny)
 	if frames == null:
 		return
 		

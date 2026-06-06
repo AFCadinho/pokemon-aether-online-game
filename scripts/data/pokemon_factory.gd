@@ -61,6 +61,7 @@ static func create_pokemon(species_id: String, level: int, options: Dictionary =
 		options.get("evs", {}),
 		_get_option_moves(options, move_names),
 		str(options.get("instanceId", options.get("instance_id", ""))),
+		_get_bool_option(options, ["shiny", "isShiny", "is_shiny"]),
 		_has_hp_override(options)
 	)
 
@@ -117,6 +118,25 @@ static func _get_option_moves(options: Dictionary, default_moves: Array[String])
 		return moves
 
 	return moves.slice(0, 4)
+
+
+static func _get_bool_option(options: Dictionary, keys: Array, default_value: bool = false) -> bool:
+	for key in keys:
+		if not options.has(key):
+			continue
+
+		var value: Variant = options.get(key)
+		if value is bool:
+			return bool(value)
+
+		var text_value: String = str(value).strip_edges().to_lower()
+		match text_value:
+			"true", "yes", "1", "y":
+				return true
+			"false", "no", "0", "n":
+				return false
+
+	return default_value
 
 
 static func _has_hp_override(options: Dictionary) -> bool:

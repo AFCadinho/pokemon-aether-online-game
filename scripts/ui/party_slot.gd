@@ -23,7 +23,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	
-	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species)
+	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	click_button.disabled = false
 	
 func set_empty() -> void:

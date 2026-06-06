@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://cd8et1gg6sriw" path="res://assets/background/hazards/sticky_webs.png" id="2_vllko"]
 [ext_resource type="Texture2D" uid="uid://4uomfvbjfexk" path="res://assets/background/hazards/spikes.png" id="3_7758y"]
 [ext_resource type="Texture2D" uid="uid://0bvlblife2ur" path="res://assets/background/hazards/toxic_spikes.png" id="4_sluh8"]
+[ext_resource type="Texture2D" uid="uid://bht2tgee4wdja" path="res://assets/background/screens/light_screen.png" id="7_1jvj1"]
+[ext_resource type="Texture2D" uid="uid://cw37m8pnxmc4c" path="res://assets/background/screens/aurora_veil.png" id="7_cuh4d"]
+[ext_resource type="Texture2D" uid="uid://c2qg6ngypb6on" path="res://assets/background/screens/reflect.png" id="8_cy83y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ik1kv"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -31,9 +34,11 @@ texture = ExtResource("1_ik1kv")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="StickyWebsImage" type="TextureRect" parent="." unique_id=1500884817]
+[node name="Hazards" type="Node2D" parent="." unique_id=1694198764]
 visible = false
-layout_mode = 0
+
+[node name="StickyWebsImage" type="TextureRect" parent="Hazards" unique_id=1500884817]
+visible = false
 offset_left = -70.0
 offset_top = 47.0
 offset_right = 667.0
@@ -42,9 +47,8 @@ texture = ExtResource("2_vllko")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="StealthRockImage" type="TextureRect" parent="." unique_id=546901975]
+[node name="StealthRockImage" type="TextureRect" parent="Hazards" unique_id=546901975]
 visible = false
-layout_mode = 0
 offset_left = -78.0
 offset_top = 34.0
 offset_right = 659.0
@@ -53,9 +57,8 @@ texture = ExtResource("2_vchu0")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="SpikesImage" type="TextureRect" parent="." unique_id=1656478977]
+[node name="SpikesImage" type="TextureRect" parent="Hazards" unique_id=1656478977]
 visible = false
-layout_mode = 0
 offset_left = -84.0
 offset_top = 72.0
 offset_right = 653.0
@@ -64,13 +67,86 @@ texture = ExtResource("3_7758y")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="ToxicSpikesImage" type="TextureRect" parent="." unique_id=1425852049]
+[node name="ToxicSpikesImage" type="TextureRect" parent="Hazards" unique_id=1425852049]
 visible = false
-layout_mode = 0
 offset_left = -65.0
 offset_top = 75.0
 offset_right = 672.0
 offset_bottom = 375.0
 texture = ExtResource("4_sluh8")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="PlayerScreens" type="Node2D" parent="." unique_id=1469271923]
+visible = false
+position = Vector2(132, 106)
+
+[node name="AuroraVeilImage" type="TextureRect" parent="PlayerScreens" unique_id=2016597738]
+visible = false
+offset_left = 82.00692
+offset_top = -78.0
+offset_right = 532.0069
+offset_bottom = 72.0
+rotation = 0.056720145
+texture = ExtResource("7_cuh4d")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LightScreenImage" type="TextureRect" parent="PlayerScreens" unique_id=289518310]
+visible = false
+offset_left = 68.00692
+offset_top = -68.0
+offset_right = 518.0069
+offset_bottom = 82.0
+rotation = 0.056720145
+texture = ExtResource("7_1jvj1")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ReflectImage" type="TextureRect" parent="PlayerScreens" unique_id=1033374092]
+visible = false
+offset_left = 62.00692
+offset_top = -43.0
+offset_right = 512.0069
+offset_bottom = 107.0
+rotation = 0.056720145
+texture = ExtResource("8_cy83y")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="EnemyScreens" type="Node2D" parent="." unique_id=2451335]
+visible = false
+position = Vector2(98, 61)
+
+[node name="AuroraVeilImage" type="TextureRect" parent="EnemyScreens" unique_id=1562032052]
+visible = false
+offset_left = -154.49654
+offset_top = 27.0
+offset_right = 295.50342
+offset_bottom = 177.0
+rotation = 0.056720145
+texture = ExtResource("7_cuh4d")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LightScreenImage" type="TextureRect" parent="EnemyScreens" unique_id=2109468842]
+visible = false
+offset_left = -168.49654
+offset_top = 37.0
+offset_right = 281.50342
+offset_bottom = 187.0
+rotation = 0.056720145
+texture = ExtResource("7_1jvj1")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ReflectImage" type="TextureRect" parent="EnemyScreens" unique_id=1566483548]
+visible = false
+offset_left = -174.49654
+offset_top = 62.0
+offset_right = 275.50342
+offset_bottom = 212.0
+rotation = 0.056720145
+texture = ExtResource("8_cy83y")
 expand_mode = 3
 stretch_mode = 5

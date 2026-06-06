@@ -8,6 +8,7 @@ var item: String
 var ability: String
 var nature: String
 var instance_id: String
+var shiny: bool
 var evs: Dictionary
 var moves: Array
 
@@ -24,6 +25,7 @@ func _init(
 	_evs := {},
 	_moves := [],
 	_instance_id := "",
+	_shiny: bool = false,
 	_has_saved_hp_state := false
 	) -> void:
 	species = _species
@@ -32,6 +34,7 @@ func _init(
 	ability = _ability
 	nature = _nature
 	instance_id = _instance_id
+	shiny = _shiny
 	has_saved_hp_state = _has_saved_hp_state
 	evs = {
 		"hp": _evs.get("hp", 0),
@@ -67,6 +70,7 @@ func to_battle_dict() -> Dictionary:
 		"evs": evs,
 		"moves": moves,
 		"instanceId": instance_id,
+		"shiny": shiny,
 	}
 
 	if has_saved_hp_state:

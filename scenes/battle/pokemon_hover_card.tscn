@@ -57,27 +57,6 @@ texture = ExtResource("2_0ctgl")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SeperationLabel" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=81609701]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1098483528]
-layout_mode = 2
-
-[node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1950549048]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
-text = "Possible abilities: "
-
-[node name="AbilityLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=41440541]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
-text = "Sand Veil / Rough Skin"
-
-[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=915833458]
-layout_mode = 2
-text = "Item: None (Loaded dice was knocked off)"
-
 [node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=304412376]
 layout_mode = 2
 
@@ -111,6 +90,27 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.9372549, 0.26666668, 0.26666668, 1)
 text = "Def -1"
+
+[node name="SeperationLabel" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=81609701]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1098483528]
+layout_mode = 2
+
+[node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1950549048]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Possible abilities: "
+
+[node name="AbilityLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=41440541]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Sand Veil / Rough Skin"
+
+[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=915833458]
+layout_mode = 2
+text = "Item: None (Loaded dice was knocked off)"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1698634679]
 layout_mode = 2

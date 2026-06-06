@@ -39,7 +39,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	name_label.text = pokemon.species
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
-	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species)
+	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	_set_status_icon("")
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
@@ -59,7 +59,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 
 	hp_bar.max_value = max(int(hp_data.get("max_hp", 1)), 1)
 	hp_bar.value = clamp(int(hp_data.get("current_hp", 0)), 0, int(hp_bar.max_value))
-	pokemon_icon.texture = PokemonAssets.load_party_icon(species)
+	pokemon_icon.texture = PokemonAssets.load_party_icon(species, _get_shiny_from_data(pokemon_data))
 	_set_status_icon(_parse_status(condition))
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
@@ -76,6 +76,24 @@ func _get_species_from_data(pokemon_data: Dictionary) -> String:
 		return str(ident.split(": ")[1]).strip_edges()
 
 	return ""
+
+func _get_shiny_from_data(pokemon_data: Dictionary) -> bool:
+	for key in ["shiny", "isShiny", "is_shiny"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var value: Variant = pokemon_data.get(key)
+		if value is bool:
+			return bool(value)
+
+		var text_value: String = str(value).strip_edges().to_lower()
+		match text_value:
+			"true", "yes", "1", "y":
+				return true
+			"false", "no", "0", "n":
+				return false
+
+	return false
 
 func _parse_condition(condition: String) -> Dictionary:
 	var result := {

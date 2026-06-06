@@ -34,7 +34,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var is_fainted: bool = condition.contains("fnt")
 
 	var species: String = _get_species_from_data(pokemon_data)
-	var icon: Texture2D = PokemonAssets.load_party_icon(species)
+	var icon: Texture2D = PokemonAssets.load_party_icon(species, _get_shiny_from_data(pokemon_data))
 
 	if icon == null:
 		icon = PokemonAssets.load_unknown_icon()
@@ -62,6 +62,24 @@ func _get_species_from_data(pokemon_data: Dictionary) -> String:
 		return str(ident.split(": ")[1]).strip_edges()
 
 	return ident
+
+func _get_shiny_from_data(pokemon_data: Dictionary) -> bool:
+	for key in ["shiny", "isShiny", "is_shiny"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var value: Variant = pokemon_data.get(key)
+		if value is bool:
+			return bool(value)
+
+		var text_value: String = str(value).strip_edges().to_lower()
+		match text_value:
+			"true", "yes", "1", "y":
+				return true
+			"false", "no", "0", "n":
+				return false
+
+	return false
 
 func _parse_current_hp(condition: String) -> int:
 	if condition.contains("/"):

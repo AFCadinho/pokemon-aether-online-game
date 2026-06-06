@@ -3,10 +3,17 @@ extends RefCounted
 class_name PokemonAssets
 
 const HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home/%s.png"
+const SHINY_HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home_shiny/%s.png"
 const FRONT_FRAME_PATH := "res://assets/sprites/pokemon/front/%s/frame_000.png"
 const UNKNOWN_HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home/unknown.png"
 
-static func load_home_sprite(species: String) -> Texture2D:
+static func load_home_sprite(species: String, is_shiny: bool = false) -> Texture2D:
+	if is_shiny:
+		for sprite_name in _get_home_sprite_names(species):
+			var shiny_path := SHINY_HOME_SPRITE_PATH % sprite_name
+			if ResourceLoader.exists(shiny_path):
+				return load(shiny_path)
+
 	for sprite_name in _get_home_sprite_names(species):
 		var path := HOME_SPRITE_PATH % sprite_name
 		if ResourceLoader.exists(path):
@@ -23,8 +30,8 @@ static func _get_home_sprite_names(species: String) -> Array[String]:
 
 	return names
 
-static func load_party_icon(species: String) -> Texture2D:
-	var icon := load_home_sprite(species)
+static func load_party_icon(species: String, is_shiny: bool = false) -> Texture2D:
+	var icon := load_home_sprite(species, is_shiny)
 	if icon != null:
 		return icon
 

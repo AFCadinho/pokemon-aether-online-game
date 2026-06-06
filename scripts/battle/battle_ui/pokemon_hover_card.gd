@@ -4,8 +4,8 @@ class_name PokemonHoverCard
 
 const TYPE_ICON_DIR := "res://assets/sprites/types"
 const SPECIES_PATH := "res://data/pokemon/species/%s.json"
-const LOW_SPEED_COLOR := Color(0.3882353, 0.72156864, 1.0, 1.0)
-const HIGH_SPEED_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
+const LOW_SPEED_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
+const HIGH_SPEED_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 
 @onready var name_label: Label = $MarginContainer/VBoxContainer/NameLabel
 @onready var type_icon_1: TextureRect = $MarginContainer/VBoxContainer/HBoxContainer/TypeIcon

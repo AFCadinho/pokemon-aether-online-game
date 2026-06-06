@@ -186,7 +186,6 @@ anchor_bottom = 1.0
 offset_top = -324.0
 offset_bottom = -74.0
 grow_vertical = 0
-script = null
 
 [node name="BattlePlatform2" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=507540366 instance=ExtResource("3_8eh2s")]
 layout_mode = 1
@@ -198,7 +197,7 @@ offset_top = -544.0
 offset_right = 1035.0
 offset_bottom = -294.0
 grow_vertical = 0
-script = null
+platform_side = 1
 
 [node name="EnemySpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=2063766200 instance=ExtResource("3_kd6yx")]
 layout_mode = 1

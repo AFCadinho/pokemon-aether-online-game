@@ -27,9 +27,14 @@ var active_side_condition_effects: Dictionary = {
 	"p1": {},
 	"p2": {},
 }
+var previous_side_condition_effects_before_response: Dictionary = {
+	"p1": {},
+	"p2": {},
+}
 var pending_field_start_events: Array[Dictionary] = []
 var last_battle_log_player_id := ""
 var active_residual_pokemon_effects := {}
+var public_confirmed_abilities_by_ident := {}
 var current_sprite_hover_player_id := ""
 var pokemon_hover_request_token := 0
 var is_hud_slot_hover_active := false
@@ -43,9 +48,11 @@ const STAT_CHANGE_EVENT_HOLD_SECONDS := 0.85
 const BATTLE_MESSAGE_HOLD_SECONDS := 0.35
 const DEBUG_BATTLE_HP_EVENTS := true
 const DEBUG_BATTLE_MOVE_EVENTS := true
+const DEBUG_SIDE_CONDITION_EFFECTS := false
 
 #Active Pokemon
 var active_player_pokemon: Pokemon
+var active_enemy_pokemon: Pokemon
 
 # Action Buttons
 @onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
@@ -100,6 +107,7 @@ func _ready() -> void:
 
 	# Show Moves, Party or Bag
 	_reset_action_choices()
+	_reset_battle_effect_tracking()
 	_reset_battle_status_panel()
 	current_action_panel.clear_message()
 	battle_log_panel.clear_log()
@@ -231,7 +239,7 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 
 	var confirmed_moves: Array = _get_confirmed_info_moves(pokemon_info)
 	var confirmed_item: String = _get_optional_known_info_string(pokemon_info, "confirmedItem")
-	var confirmed_ability: String = _get_optional_known_info_string(pokemon_info, "confirmedAbility")
+	var confirmed_ability: String = _get_confirmed_ability_for_hover(pokemon_info, pokemon_data)
 	var stat_changes: Dictionary = _get_confirmed_info_stat_changes(pokemon_info)
 	var speed_data: Dictionary = _get_hover_speed_data(pokemon_stats)
 	_debug_battle_move("pokemon-info parsed player=%s moves=%s item=%s ability=%s statChanges=%s speed=%s info=%s" % [
@@ -351,6 +359,17 @@ func _get_hover_known_info_viewer_id(ident: String) -> String:
 			return "p1"
 
 	return ""
+
+func _get_confirmed_ability_for_hover(pokemon_info: Dictionary, pokemon_data: Dictionary) -> String:
+	var confirmed_ability: String = _get_optional_known_info_string(pokemon_info, "confirmedAbility")
+	if confirmed_ability != "":
+		return confirmed_ability
+
+	var ident_key: String = _normalize_battle_ident(str(pokemon_data.get("ident", "")))
+	if ident_key == "":
+		return ""
+
+	return str(public_confirmed_abilities_by_ident.get(ident_key, ""))
 
 func _get_confirmed_info_moves(pokemon_info: Dictionary) -> Array:
 	var moves_value: Variant = pokemon_info.get("confirmedMoves", pokemon_info.get("confirmed_moves", []))
@@ -535,6 +554,7 @@ func _apply_api_response(response: Dictionary) -> bool:
 
 	var previous_field_effect_keys: Dictionary = known_field_effect_keys.duplicate()
 	_fill_missing_previous_event_conditions(response)
+	_remember_public_confirmed_abilities_from_response(response)
 	_remember_field_effect_start_turns_from_response(response)
 	battle_state.load_from_api_response(response)
 	_remember_side_condition_effects_from_field_snapshot()
@@ -578,6 +598,70 @@ func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
 	field_timers_panel.reset_timers()
 	_update_side_condition_ui()
+
+func _reset_battle_effect_tracking() -> void:
+	known_field_effect_keys.clear()
+	field_effect_started_turns.clear()
+	pending_field_start_events.clear()
+	public_confirmed_abilities_by_ident.clear()
+	active_side_condition_effects = {
+		"p1": {},
+		"p2": {},
+	}
+	previous_side_condition_effects_before_response = {
+		"p1": {},
+		"p2": {},
+	}
+
+func _remember_public_confirmed_abilities_from_response(response: Dictionary) -> void:
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return
+
+	var events: Array = events_value as Array
+	for event_value in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		var ability: String = _get_public_confirmed_ability_from_event(event)
+		if ability == "":
+			continue
+
+		var ident: String = _get_public_confirmed_ability_ident_from_event(event)
+		var ident_key: String = _normalize_battle_ident(ident)
+		if ident_key == "":
+			continue
+
+		public_confirmed_abilities_by_ident[ident_key] = ability
+
+func _get_public_confirmed_ability_from_event(event: Dictionary) -> String:
+	var event_type: String = str(event.get("type", ""))
+	match event_type:
+		"ability":
+			return str(event.get("ability", event.get("abilityName", ""))).strip_edges()
+		"fieldEffect":
+			return _get_ability_name_from_source(str(event.get("source", "")))
+		"pokemonEffect":
+			return _get_ability_name_from_source(str(event.get("effect", "")))
+
+	return _get_ability_name_from_source(str(event.get("source", "")))
+
+func _get_public_confirmed_ability_ident_from_event(event: Dictionary) -> String:
+	match str(event.get("type", "")):
+		"fieldEffect":
+			return _get_first_event_text_value(event, ["sourceTarget", "sourcePokemon", "actor", "target", "pokemon"])
+		"ability", "pokemonEffect":
+			return _get_first_event_text_value(event, ["target", "actor", "pokemon", "sourceTarget", "sourcePokemon"])
+
+	return _get_first_event_text_value(event, ["sourceTarget", "sourcePokemon", "target", "actor", "pokemon"])
+
+func _get_ability_name_from_source(source: String) -> String:
+	var cleaned: String = source.strip_edges()
+	if not cleaned.to_lower().begins_with("ability:"):
+		return ""
+
+	return cleaned.split(":", false, 1)[1].strip_edges()
 
 ## Werkt turn en field timer status bij vanuit de battle state.
 func _update_battle_status_panels() -> void:
@@ -664,11 +748,38 @@ func _remember_side_condition_effects_from_response(response: Dictionary) -> voi
 			continue
 
 		var side_effects: Dictionary = active_side_condition_effects[side_id] as Dictionary
+		var previous_side_effects_value: Variant = previous_side_condition_effects_before_response.get(side_id, {})
+		var previous_side_effects: Dictionary = {}
+		if previous_side_effects_value is Dictionary:
+			previous_side_effects = previous_side_effects_value as Dictionary
+
 		var state: String = str(event.get("state", ""))
 		if state == "end":
+			_debug_side_condition("event end side=%s key=%s event=%s" % [
+				side_id,
+				effect_key,
+				JSON.stringify(event),
+			])
 			side_effects.erase(effect_key)
 		else:
-			side_effects[effect_key] = _get_side_condition_effect_with_layers(event, side_effects.get(effect_key, {}), effect_key, state)
+			var current_layers_before_event: int = _get_side_condition_layer_count_from_value(side_effects.get(effect_key, {}))
+			side_effects[effect_key] = _get_side_condition_effect_with_layers(
+				event,
+				previous_side_effects.get(effect_key, {}),
+				side_effects.get(effect_key, {}),
+				effect_key,
+				state
+			)
+			_debug_side_condition("event set side=%s key=%s state=%s previous=%s current=%s incoming=%s stored=%s event=%s" % [
+				side_id,
+				effect_key,
+				state,
+				_get_side_condition_layer_count_from_value(previous_side_effects.get(effect_key, {})),
+				current_layers_before_event,
+				_get_side_condition_layer_count(event),
+				_get_side_condition_layer_count_from_value(side_effects.get(effect_key, {})),
+				JSON.stringify(event),
+			])
 
 func _remember_side_condition_effects_from_field_snapshot() -> void:
 	var previous_side_condition_effects: Dictionary = {}
@@ -680,6 +791,8 @@ func _remember_side_condition_effects_from_field_snapshot() -> void:
 			previous_side_condition_effects[side_id] = {}
 
 		active_side_condition_effects[side_id] = {}
+
+	previous_side_condition_effects_before_response = previous_side_condition_effects.duplicate(true)
 
 	for effect_value in battle_state.get_field_effects():
 		if not (effect_value is Dictionary):
@@ -700,6 +813,14 @@ func _remember_side_condition_effects_from_field_snapshot() -> void:
 		var side_effects: Dictionary = active_side_condition_effects[side_id] as Dictionary
 		var previous_side_effects: Dictionary = previous_side_condition_effects.get(side_id, {}) as Dictionary
 		side_effects[effect_key] = _get_side_condition_effect_with_preserved_layers(effect_data, previous_side_effects.get(effect_key, {}), effect_key)
+		_debug_side_condition("snapshot set side=%s key=%s previous=%s incoming=%s stored=%s effect=%s" % [
+			side_id,
+			effect_key,
+			_get_side_condition_layer_count_from_value(previous_side_effects.get(effect_key, {})),
+			_get_side_condition_layer_count(effect_data),
+			_get_side_condition_layer_count_from_value(side_effects.get(effect_key, {})),
+			JSON.stringify(effect_data),
+		])
 
 func _get_active_side_condition_effects(side_id: String) -> Array:
 	var side_effects_value: Variant = active_side_condition_effects.get(side_id, {})
@@ -707,7 +828,20 @@ func _get_active_side_condition_effects(side_id: String) -> Array:
 		return []
 
 	var side_effects: Dictionary = side_effects_value as Dictionary
-	return side_effects.values()
+	var effects_with_started_turns: Array = []
+	for effect_value in side_effects.values():
+		if not (effect_value is Dictionary):
+			effects_with_started_turns.append(effect_value)
+			continue
+
+		var effect_data: Dictionary = (effect_value as Dictionary).duplicate()
+		var effect_key: String = _get_field_effect_key(effect_data)
+		if field_effect_started_turns.has(effect_key):
+			effect_data["startedTurn"] = int(field_effect_started_turns.get(effect_key, effect_data.get("startedTurn", 0)))
+
+		effects_with_started_turns.append(effect_data)
+
+	return effects_with_started_turns
 
 func _is_side_condition_effect(effect_data: Dictionary) -> bool:
 	var effect_type: String = str(effect_data.get("effectType", ""))
@@ -741,48 +875,59 @@ func _is_entry_hazard_effect(effect_data: Dictionary) -> bool:
 
 	return false
 
-func _get_side_condition_effect_with_layers(effect_data: Dictionary, previous_effect_value: Variant, effect_key: String, state: String) -> Dictionary:
-	var next_effect: Dictionary = _get_merged_side_condition_effect_data(effect_data, previous_effect_value)
+func _get_side_condition_effect_with_layers(effect_data: Dictionary, previous_effect_value: Variant, current_effect_value: Variant, effect_key: String, state: String) -> Dictionary:
+	var next_effect: Dictionary = _get_merged_side_condition_effect_data(effect_data, current_effect_value, false)
 	if not _is_layered_side_condition_key(effect_key):
 		return next_effect
 
-	if _get_side_condition_layer_count(next_effect) > 0:
+	var max_layers: int = _get_side_condition_max_layers(effect_key)
+	var previous_layers: int = _get_side_condition_layer_count_from_value(previous_effect_value)
+	var current_layers: int = _get_side_condition_layer_count_from_value(current_effect_value)
+	var incoming_layers: int = _get_side_condition_layer_count(effect_data)
+	if state == "start":
+		if incoming_layers > previous_layers:
+			next_effect["layers"] = clamp(incoming_layers, 1, max_layers)
+		else:
+			next_effect["layers"] = clamp(previous_layers + 1, 1, max_layers)
 		return next_effect
 
-	var previous_layers: int = _get_side_condition_layer_count_from_value(previous_effect_value)
-	if state == "start":
-		next_effect["layers"] = clamp(previous_layers + 1, 1, _get_side_condition_max_layers(effect_key))
+	if current_layers > 0:
+		next_effect["layers"] = clamp(current_layers, 1, max_layers)
+	elif incoming_layers > 0:
+		next_effect["layers"] = clamp(incoming_layers, 1, max_layers)
 	elif previous_layers > 0:
-		next_effect["layers"] = previous_layers
+		next_effect["layers"] = clamp(previous_layers, 1, max_layers)
 	else:
 		next_effect["layers"] = 1
 
 	return next_effect
 
 func _get_side_condition_effect_with_preserved_layers(effect_data: Dictionary, previous_effect_value: Variant, effect_key: String) -> Dictionary:
-	var next_effect: Dictionary = _get_merged_side_condition_effect_data(effect_data, previous_effect_value)
+	var next_effect: Dictionary = _get_merged_side_condition_effect_data(effect_data, previous_effect_value, true)
 	if not _is_layered_side_condition_key(effect_key):
 		return next_effect
 
-	if _get_side_condition_layer_count(next_effect) > 0:
-		return next_effect
-
+	var incoming_layers: int = _get_side_condition_layer_count(effect_data)
 	var previous_layers: int = _get_side_condition_layer_count_from_value(previous_effect_value)
 	if previous_layers > 0:
-		next_effect["layers"] = previous_layers
+		next_effect["layers"] = clamp(previous_layers, 1, _get_side_condition_max_layers(effect_key))
+	elif incoming_layers > 0:
+		next_effect["layers"] = clamp(incoming_layers, 1, _get_side_condition_max_layers(effect_key))
 
 	return next_effect
 
-func _get_merged_side_condition_effect_data(effect_data: Dictionary, previous_effect_value: Variant) -> Dictionary:
+func _get_merged_side_condition_effect_data(effect_data: Dictionary, previous_effect_value: Variant, preserve_layer_counts: bool = true) -> Dictionary:
 	var next_effect: Dictionary = effect_data.duplicate()
 	if not (previous_effect_value is Dictionary):
 		return next_effect
 
 	var previous_effect: Dictionary = previous_effect_value as Dictionary
+	if preserve_layer_counts:
+		for key in ["layers", "layer", "count"]:
+			if not next_effect.has(key) and previous_effect.has(key):
+				next_effect[key] = previous_effect.get(key)
+
 	for key in [
-		"layers",
-		"layer",
-		"count",
 		"startedTurn",
 		"minDuration",
 		"maxDuration",
@@ -796,6 +941,13 @@ func _get_merged_side_condition_effect_data(effect_data: Dictionary, previous_ef
 			next_effect[key] = previous_effect.get(key)
 
 	return next_effect
+
+func _has_side_condition_layer_count(effect_data: Dictionary) -> bool:
+	for key in ["layers", "layer", "count"]:
+		if effect_data.has(key) and int(effect_data.get(key, 0)) > 0:
+			return true
+
+	return false
 
 func _is_layered_side_condition_key(effect_key: String) -> bool:
 	match effect_key:
@@ -840,7 +992,9 @@ func _get_side_condition_effect_key(effect_data: Dictionary) -> String:
 func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
 	battle_type = BattleType.WILD
 	active_player_pokemon = player_pokemon
+	active_enemy_pokemon = enemy_pokemon
 	active_residual_pokemon_effects.clear()
+	_reset_battle_effect_tracking()
 
 	player_hud_panel.clear_player_name()
 	enemy_hud_panel.clear_player_name()
@@ -1729,6 +1883,10 @@ func _debug_battle_hp(message: String) -> void:
 func _debug_battle_move(message: String) -> void:
 	if DEBUG_BATTLE_MOVE_EVENTS:
 		print("[battle-move] " + message)
+
+func _debug_side_condition(message: String) -> void:
+	if DEBUG_SIDE_CONDITION_EFFECTS:
+		print("[side-effects] " + message)
 
 func _parse_condition_hp_snapshot(condition: String) -> Dictionary:
 	if not condition.contains("/"):
@@ -2780,8 +2938,8 @@ func _update_active_sprites() -> void:
 	var player_species := _get_active_display_species("p1")
 	var opponent_species := _get_active_display_species("p2")
 
-	player_sprite_box.set_single_pokemon_species(player_species, "back")
-	enemy_sprite_box.set_single_pokemon_species(opponent_species, "front")
+	player_sprite_box.set_single_pokemon_species(player_species, "back", _get_active_pokemon_is_shiny("p1"))
+	enemy_sprite_box.set_single_pokemon_species(opponent_species, "front", _get_active_pokemon_is_shiny("p2"))
 
 func _update_battle_presentation() -> void:
 	_update_battle_status_panels()
@@ -2821,6 +2979,43 @@ func _get_active_display_species(player_id: String) -> String:
 
 	return battle_state.get_active_pokemon_species(player_id)
 
+func _get_active_pokemon_is_shiny(player_id: String) -> bool:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+	var instance_id: String = str(active_pokemon.get("instanceId", active_pokemon.get("instance_id", "")))
+	var saved_pokemon: Pokemon = _get_player_save_pokemon_by_instance_id(instance_id)
+	if saved_pokemon != null and _saved_species_matches_battle_data(saved_pokemon, active_pokemon):
+		return saved_pokemon.shiny
+
+	if _pokemon_data_has_shiny_value(active_pokemon):
+		return _get_pokemon_data_shiny_value(active_pokemon)
+
+	if player_id == "p2" and battle_type == BattleType.WILD and active_enemy_pokemon != null:
+		if _saved_species_matches_battle_data(active_enemy_pokemon, active_pokemon):
+			return active_enemy_pokemon.shiny
+
+	return false
+
+func _pokemon_data_has_shiny_value(pokemon_data: Dictionary) -> bool:
+	return pokemon_data.has("shiny") or pokemon_data.has("isShiny") or pokemon_data.has("is_shiny")
+
+func _get_pokemon_data_shiny_value(pokemon_data: Dictionary) -> bool:
+	for key in ["shiny", "isShiny", "is_shiny"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var value: Variant = pokemon_data.get(key)
+		if value is bool:
+			return bool(value)
+
+		var text_value: String = str(value).strip_edges().to_lower()
+		match text_value:
+			"true", "yes", "1", "y":
+				return true
+			"false", "no", "0", "n":
+				return false
+
+	return false
+
 func _get_display_team_data(player_id: String) -> Array:
 	var team := battle_state.get_player_team(player_id)
 	if player_id != "p1":
@@ -2837,6 +3032,7 @@ func _get_display_team_data(player_id: String) -> Array:
 		var saved_pokemon := _get_player_save_pokemon_by_instance_id(instance_id)
 		if saved_pokemon != null and _saved_species_matches_battle_data(saved_pokemon, display_data):
 			display_data["displaySpecies"] = saved_pokemon.species
+			display_data["shiny"] = saved_pokemon.shiny
 
 		display_team.append(display_data)
 
