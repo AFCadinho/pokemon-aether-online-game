@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install system packages
-        run: sudo apt-get update && sudo apt-get install -y unzip
+        run: sudo apt-get update && sudo apt-get install -y unzip megatools
 
       - name: Download Godot
         run: |
@@ -46,6 +46,18 @@ jobs:
           unzip -q export_templates.tpz -d /tmp/godot-export-templates
           mkdir -p "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
           mv /tmp/godot-export-templates/templates/* "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/"
+
+      - name: Download Pokemon sprite assets
+        env:
+          SPRITE_ASSET_URLS: ${{ secrets.SPRITE_ASSET_URLS }}
+        run: |
+          test -n "${SPRITE_ASSET_URLS}"
+          mkdir -p /tmp/pokemon-sprite-assets
+          for asset_url in ${SPRITE_ASSET_URLS}; do
+            megadl --path /tmp/pokemon-sprite-assets "${asset_url}"
+          done
+          cat /tmp/pokemon-sprite-assets/pokemon-sprite-assets-basic.zip.part-* > /tmp/pokemon-sprite-assets.zip
+          unzip -q /tmp/pokemon-sprite-assets.zip -d .
 
       - name: Import Godot assets
         run: ./godot --headless --import --quit

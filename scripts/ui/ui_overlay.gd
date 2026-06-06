@@ -11,6 +11,7 @@ const ADD_TEAM_CLIPBOARD_ALIAS := "/atc"
 const START_ENCOUNTER_COMMAND := "/encounter"
 const START_ENCOUNTER_CLIPBOARD_COMMAND := "/encounterclip"
 const START_ENCOUNTER_CLIPBOARD_ALIAS := "/ec"
+const SPAWN_COMMAND := "/spawn"
 
 enum DevPokemonPopupMode {
 	POKEMON,
@@ -123,6 +124,15 @@ func _submit_chat_input() -> void:
 
 		var encounter_text := text.substr(START_ENCOUNTER_COMMAND.length()).strip_edges()
 		await _handle_start_encounter_command(encounter_text)
+		return
+
+	if text == SPAWN_COMMAND or text.begins_with(SPAWN_COMMAND + " "):
+		if not PlayerSave.is_staff:
+			_add_chat_message("Command not recognized.")
+			return
+
+		var spawn_text := text.substr(SPAWN_COMMAND.length()).strip_edges()
+		await _handle_start_encounter_command(spawn_text)
 		return
 
 	if text == ADD_POKEMON_CLIPBOARD_COMMAND or text == ADD_POKEMON_CLIPBOARD_ALIAS:
@@ -350,7 +360,7 @@ func _clean_encounter_paste_text(pokemon_text: String) -> String:
 	var cleaned_text := pokemon_text.strip_edges()
 	cleaned_text = cleaned_text.replace("\\n", "\n")
 
-	for command in [START_ENCOUNTER_CLIPBOARD_ALIAS, START_ENCOUNTER_CLIPBOARD_COMMAND, START_ENCOUNTER_COMMAND]:
+	for command in [START_ENCOUNTER_CLIPBOARD_ALIAS, START_ENCOUNTER_CLIPBOARD_COMMAND, START_ENCOUNTER_COMMAND, SPAWN_COMMAND]:
 		if cleaned_text == command:
 			return ""
 		if cleaned_text.begins_with(command + " "):

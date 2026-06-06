@@ -201,8 +201,8 @@ platform_side = 1
 
 [node name="EnemySpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=2063766200 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
-offset_top = -242.0
-offset_bottom = 51.0
+offset_top = -250.0
+offset_bottom = 43.0
 
 [node name="PlayerSpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=148088549 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
@@ -211,10 +211,10 @@ anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 0.0
 anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = -384.0
-offset_right = 450.0
-offset_bottom = -91.5
+offset_left = -1.0
+offset_top = -360.0
+offset_right = 449.0
+offset_bottom = -67.5
 grow_horizontal = 1
 grow_vertical = 0
 

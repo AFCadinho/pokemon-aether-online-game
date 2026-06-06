@@ -9,6 +9,10 @@ const MAX_SHEET_FRAME_SIZE := Vector2i(256, 256)
 const FRAME_ANIMATION_SPEED := 3.0
 const SHEET_ANIMATION_SPEED := 10.0
 const BATTLE_SPRITE_SCALE := Vector2(2, 2)
+const BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 0.85
+const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
+const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
+const HOME_SPRITE_RENDER_SCALE := 2.0
 const ATTACK_TWEEN_OFFSET := Vector2(28, -6)
 const DAMAGE_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
 const HEAL_FLASH_COLOR := Color(0.45, 1.0, 0.55, 1.0)
@@ -27,6 +31,8 @@ const SPRITE_HOVER_PADDING := Vector2(8, 8)
 
 var active_tween: Tween
 var base_sprite_positions: Dictionary = {}
+var sprite_target_scales: Dictionary = {}
+var sprite_frames_render_scales: Dictionary = {}
 
 func _ready() -> void:
 	_set_sprite_filter(single_sprite)
@@ -50,7 +56,7 @@ func get_single_sprite_hover_rect() -> Rect2:
 	return _get_sprite_hover_rect(single_sprite)
 
 func _set_sprite_filter(sprite: AnimatedSprite2D) -> void:
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.texture_filter = BATTLE_SPRITE_TEXTURE_FILTER
 	sprite.scale = BATTLE_SPRITE_SCALE
 
 func _get_sprite_hover_rect(sprite: AnimatedSprite2D) -> Rect2:
@@ -105,8 +111,7 @@ func _snap_all_sprites_to_pixel_grid() -> void:
 	_snap_sprite_to_pixel_grid(double_sprite_2)
 
 func _snap_sprite_to_pixel_grid(sprite: AnimatedSprite2D) -> void:
-	sprite.scale = BATTLE_SPRITE_SCALE
-	sprite.global_position = sprite.global_position.round()
+	sprite.scale = _get_sprite_target_scale(sprite)
 
 func reset_battle_pose() -> void:
 	_stop_active_tween()
@@ -163,10 +168,11 @@ func play_heal_tween() -> void:
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
+		var target_scale: Vector2 = _get_sprite_target_scale(sprite)
 		active_tween.tween_property(sprite, "modulate", HEAL_FLASH_COLOR, 0.08)
 		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.14).set_delay(0.08)
-		active_tween.tween_property(sprite, "scale", BATTLE_SPRITE_SCALE * 1.06, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		active_tween.tween_property(sprite, "scale", BATTLE_SPRITE_SCALE, 0.14).set_delay(0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		active_tween.tween_property(sprite, "scale", target_scale * 1.06, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "scale", target_scale, 0.14).set_delay(0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
@@ -240,7 +246,7 @@ func _reset_sprites_pose(sprites: Array[AnimatedSprite2D]) -> void:
 
 func _reset_sprite_pose(sprite: AnimatedSprite2D) -> void:
 	sprite.position = _get_base_sprite_position(sprite)
-	sprite.scale = BATTLE_SPRITE_SCALE
+	sprite.scale = _get_sprite_target_scale(sprite)
 	sprite.modulate = Color.WHITE
 
 func _get_base_sprite_position(sprite: AnimatedSprite2D) -> Vector2:
@@ -249,6 +255,39 @@ func _get_base_sprite_position(sprite: AnimatedSprite2D) -> Vector2:
 		return base_position_value
 
 	return sprite.position
+
+func _set_sprite_target_scale_from_frames(sprite: AnimatedSprite2D, sprite_frames: SpriteFrames) -> void:
+	var render_scale: float = _get_sprite_frames_render_scale(sprite_frames)
+	if render_scale <= 0.0:
+		sprite_target_scales[_get_sprite_key(sprite)] = BATTLE_SPRITE_SCALE
+		return
+
+	sprite_target_scales[_get_sprite_key(sprite)] = (BATTLE_SPRITE_SCALE / render_scale) * BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER
+
+func _get_sprite_target_scale(sprite: AnimatedSprite2D) -> Vector2:
+	var target_scale_value: Variant = sprite_target_scales.get(_get_sprite_key(sprite), BATTLE_SPRITE_SCALE)
+	if target_scale_value is Vector2:
+		return target_scale_value
+
+	return BATTLE_SPRITE_SCALE
+
+func _set_sprite_frames_render_scale(sprite_frames: SpriteFrames, render_scale: float) -> void:
+	sprite_frames_render_scales[_get_sprite_frames_key(sprite_frames)] = max(render_scale, 1.0)
+
+func _get_sprite_frames_render_scale(sprite_frames: SpriteFrames) -> float:
+	var render_scale_value: Variant = sprite_frames_render_scales.get(_get_sprite_frames_key(sprite_frames), 1.0)
+	if render_scale_value is float:
+		return render_scale_value
+	if render_scale_value is int:
+		return float(render_scale_value)
+
+	return 1.0
+
+func _get_sprite_frames_key(sprite_frames: SpriteFrames) -> String:
+	if sprite_frames == null:
+		return ""
+
+	return str(sprite_frames.get_instance_id())
 
 func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
 	for sprite_root in _get_sprite_asset_roots(side, is_shiny):
@@ -268,16 +307,39 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 			if sheet_frames != null:
 				return sheet_frames
 
+	var home_frames := _load_sprite_frames_from_home_sprite(species, is_shiny)
+	if home_frames != null:
+		return home_frames
+
 	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
 	return null
 
 func _get_sprite_asset_roots(side: String, is_shiny: bool) -> Array[String]:
 	var roots: Array[String] = []
-	if is_shiny:
-		roots.append("shiny_%s" % side)
+	for style in BATTLE_SPRITE_STYLE_ORDER:
+		roots.append_array(_get_sprite_asset_roots_for_style(style, side, is_shiny))
 
-	roots.append(side)
 	return roots
+
+func _get_sprite_asset_roots_for_style(style: String, side: String, is_shiny: bool) -> Array[String]:
+	var roots: Array[String] = []
+	var side_folder: String = _get_sprite_side_folder(side, is_shiny)
+
+	match style:
+		"showdown":
+			roots.append("showdown/%s" % side_folder)
+		"gen5":
+			roots.append("gen5/%s" % side_folder)
+		"legacy_showdown":
+			roots.append(side_folder)
+
+	return roots
+
+func _get_sprite_side_folder(side: String, is_shiny: bool) -> String:
+	if is_shiny:
+		return "shiny_%s" % side
+
+	return side
 
 func _get_species_asset_id_candidates(species: String) -> Array[String]:
 	var asset_id: String = _normalize_species_asset_id(species)
@@ -423,7 +485,22 @@ func _load_sprite_frames_from_sheet_metadata(metadata_path: String, side: String
 		push_error("Pokemon spritesheet metadata produced no frames: " + metadata_path)
 		return null
 
+	_set_sprite_frames_render_scale(sprite_frames, _get_metadata_render_scale(metadata, side))
 	return sprite_frames
+
+func _get_metadata_render_scale(metadata: Dictionary, side: String) -> float:
+	if metadata.has("render_scale"):
+		return max(float(metadata.get("render_scale", 1.0)), 1.0)
+	if metadata.has("scale"):
+		return max(float(metadata.get("scale", 1.0)), 1.0)
+
+	var frame_width := float(metadata.get("frame_width", 0.0))
+	var frame_height := float(metadata.get("frame_height", 0.0))
+	var is_front_sprite := side == "front" or side == "shiny_front"
+	if is_front_sprite and max(frame_width, frame_height) >= 160.0:
+		return 2.0
+
+	return 1.0
 
 func _load_sprite_frames_from_sheet(sheet_path: String) -> SpriteFrames:
 	if not ResourceLoader.exists(sheet_path):
@@ -471,6 +548,16 @@ func _load_sprite_frames_from_sheet(sheet_path: String) -> SpriteFrames:
 		push_error("No visible sprite frames found in spritesheet: " + sheet_path)
 		return null
 
+	return sprite_frames
+
+func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> SpriteFrames:
+	var texture: Texture2D = PokemonAssets.load_home_sprite(species, is_shiny)
+	if texture == null:
+		return null
+
+	var sprite_frames := _create_idle_sprite_frames(1.0)
+	sprite_frames.add_frame(IDLE_ANIMATION, texture)
+	_set_sprite_frames_render_scale(sprite_frames, HOME_SPRITE_RENDER_SCALE)
 	return sprite_frames
 
 func _create_idle_sprite_frames(animation_speed: float) -> SpriteFrames:
@@ -562,6 +649,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		double_sprite_1.sprite_frames = frames_1
 		double_sprite_1.animation = IDLE_ANIMATION
 		double_sprite_1.frame = 0
+		_set_sprite_target_scale_from_frames(double_sprite_1, frames_1)
 		_snap_sprite_to_pixel_grid(double_sprite_1)
 		double_sprite_1.play()
 
@@ -571,6 +659,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		double_sprite_2.sprite_frames = frames_2
 		double_sprite_2.animation = IDLE_ANIMATION
 		double_sprite_2.frame = 0
+		_set_sprite_target_scale_from_frames(double_sprite_2, frames_2)
 		_snap_sprite_to_pixel_grid(double_sprite_2)
 		double_sprite_2.play()
 
@@ -586,5 +675,6 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	single_sprite.sprite_frames = frames
 	single_sprite.animation = IDLE_ANIMATION
 	single_sprite.frame = 0
+	_set_sprite_target_scale_from_frames(single_sprite, frames)
 	_snap_sprite_to_pixel_grid(single_sprite)
 	single_sprite.play()
