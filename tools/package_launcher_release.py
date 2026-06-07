@@ -46,6 +46,16 @@ def main() -> None:
         help="Public URL folder where the generated zip files will be hosted.",
     )
     parser.add_argument(
+        "--game-prefix",
+        default="",
+        help="Optional public URL path prefix for game zips, for example game.",
+    )
+    parser.add_argument(
+        "--asset-prefix",
+        default="",
+        help="Optional public URL path prefix for asset pack zips, for example assets.",
+    )
+    parser.add_argument(
         "--output-dir",
         default=str(PROJECT_ROOT / "builds" / "launcher"),
         help="Folder where release zips and manifests are written.",
@@ -76,7 +86,9 @@ def main() -> None:
 
     base_url = args.base_url.rstrip("/")
     platform_names = ["windows", "linux"] if args.platform == "all" else [args.platform]
-    asset_packs = [_build_asset_pack(entry, base_url, output_dir) for entry in args.asset_pack]
+    game_prefix = args.game_prefix.strip("/")
+    asset_prefix = args.asset_prefix.strip("/")
+    asset_packs = [_build_asset_pack(entry, base_url, asset_prefix, output_dir) for entry in args.asset_pack]
 
     manifests: dict[str, dict] = {}
     for platform_name in platform_names:
@@ -92,7 +104,7 @@ def main() -> None:
             "gameVersion": args.version,
             "game": {
                 "version": args.version,
-                "url": f"{base_url}/{zip_name}",
+                "url": _build_url(base_url, game_prefix, zip_name),
                 "sha256": _sha256(zip_path),
                 "sizeBytes": zip_path.stat().st_size,
                 "executable": platform_config["executable"],
@@ -122,7 +134,7 @@ def _assert_required_files(build_dir: Path, required_files: list[str]) -> None:
         raise SystemExit(f"Missing required build files in {build_dir}: {missing_list}")
 
 
-def _build_asset_pack(entry: str, base_url: str, output_dir: Path) -> dict:
+def _build_asset_pack(entry: str, base_url: str, asset_prefix: str, output_dir: Path) -> dict:
     parts = entry.split(":", 2)
     if len(parts) != 3:
         raise SystemExit("--asset-pack must use ID:VERSION:PATH")
@@ -141,10 +153,18 @@ def _build_asset_pack(entry: str, base_url: str, output_dir: Path) -> dict:
     return {
         "id": pack_id,
         "version": version,
-        "url": f"{base_url}/{target_path.name}",
+        "url": _build_url(base_url, asset_prefix, target_path.name),
         "sha256": _sha256(target_path),
         "sizeBytes": target_path.stat().st_size,
     }
+
+
+def _build_url(base_url: str, prefix: str, file_name: str) -> str:
+    parts = [base_url.rstrip("/")]
+    if prefix:
+        parts.append(prefix.strip("/"))
+    parts.append(file_name)
+    return "/".join(parts)
 
 
 def _zip_directory(source_dir: Path, zip_path: Path) -> None:

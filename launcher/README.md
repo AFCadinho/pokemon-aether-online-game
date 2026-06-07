@@ -66,7 +66,32 @@ launcher/test_server/manifest-linux.json
 launcher/test_server/manifest.json
 ```
 
-For a public release, use the real hosted URL as `--base-url`.
+For a public release, use the real hosted URL as `--base-url` and the production URL prefixes:
+
+```bash
+python3 tools/package_launcher_release.py \
+  --version 0.1.0 \
+  --base-url https://updates.pokemonaetheronline.com \
+  --game-prefix game \
+  --asset-prefix assets \
+  --output-dir builds/launcher \
+  --default-platform linux
+```
+
+The production R2 bucket uses this layout:
+
+```text
+manifest.json
+manifest-linux.json
+manifest-windows.json
+game/game-0.1.0-linux.zip
+game/game-0.1.0-windows.zip
+assets/pokemon-front-v1.zip
+assets/pokemon-back-v1.zip
+assets/pokemon-shiny-front-v1.zip
+assets/pokemon-shiny-back-v1.zip
+assets/pokemon-home-v1.zip
+```
 
 ## Upload To R2
 
@@ -83,6 +108,12 @@ Then upload the generated release files:
 
 ```bash
 python3 tools/upload_launcher_release.py builds/launcher
+```
+
+For the production bucket layout, upload with:
+
+```bash
+python3 tools/upload_launcher_release.py builds/launcher --layout updates
 ```
 
 GitHub Actions can upload to R2 automatically when these repository secrets are configured:

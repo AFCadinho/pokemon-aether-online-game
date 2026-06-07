@@ -36,6 +36,12 @@ def main() -> None:
         default="",
         help="Optional object key prefix in the bucket, for example releases/0.1.0.",
     )
+    parser.add_argument(
+        "--layout",
+        choices=["flat", "updates"],
+        default="flat",
+        help="Object key layout. 'updates' stores game zips under game/ and asset packs under assets/.",
+    )
     args = parser.parse_args()
 
     config = _load_config()
@@ -49,7 +55,7 @@ def main() -> None:
         if not file_path.is_file():
             raise SystemExit(f"Missing release file: {file_path}")
 
-        key = "/".join(part for part in [args.prefix.strip("/"), file_name] if part)
+        key = _build_object_key(file_name, args.prefix, args.layout)
         print(f"Uploading {file_path.name} ({file_path.stat().st_size} bytes) -> s3://{config.bucket}/{key}", flush=True)
         _upload_file(config, file_path, key)
         print(f"Uploaded {file_path.name} -> s3://{config.bucket}/{key}", flush=True)
@@ -95,6 +101,17 @@ def _discover_release_files(release_dir: Path) -> list[str]:
         or file_path.suffix == ".zip"
         )
     )
+
+
+def _build_object_key(file_name: str, prefix: str, layout: str) -> str:
+    object_parts: list[str] = [part for part in [prefix.strip("/")] if part]
+    if layout == "updates":
+        if file_name.startswith("game-") and file_name.endswith(".zip"):
+            object_parts.append("game")
+        elif file_name.startswith("pokemon-") and file_name.endswith(".zip"):
+            object_parts.append("assets")
+    object_parts.append(file_name)
+    return "/".join(object_parts)
 
 
 def _upload_file(config: R2Config, file_path: Path, key: str) -> None:

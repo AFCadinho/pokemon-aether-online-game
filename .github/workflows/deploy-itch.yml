@@ -157,6 +157,8 @@ jobs:
           python3 tools/package_launcher_release.py \
             --version "${LAUNCHER_RELEASE_VERSION}" \
             --base-url "${UPDATE_BASE_URL}" \
+            --game-prefix game \
+            --asset-prefix assets \
             --output-dir builds/launcher \
             --default-platform windows \
             $(cat /tmp/asset_pack_args.txt)
@@ -183,7 +185,7 @@ jobs:
             echo "Skipping R2 upload because one or more R2 secrets are not configured."
             exit 0
           fi
-          python3 tools/upload_launcher_release.py builds/launcher
+          python3 tools/upload_launcher_release.py builds/launcher --layout updates
 
       - name: Upload desktop build artifacts
         uses: actions/upload-artifact@v4
