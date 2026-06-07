@@ -50,6 +50,9 @@ func _physics_process(delta: float) -> void:
 		if global_position == target_position:
 			is_moving = false
 			set_idle_frame()
+
+			if check_for_map_exit():
+				return
 			
 			if is_standing_on_tall_grass():
 				check_for_grass_encounter()
@@ -127,6 +130,10 @@ func can_move_to(check_position: Vector2) -> bool:
 	# Vraag tiledata op voor die tile.
 	# In deze setup betekent: geen tile_data = geen collision tile = vrij lopen.
 	# Wel tile_data = er ligt een collision tile = blokkeren.
+	var source_id: int = collision_tilemap.get_cell_source_id(tile_position)
+	if source_id != -1:
+		return false
+
 	var tile_data := collision_tilemap.get_cell_tile_data(tile_position)
 
 	return tile_data == null
@@ -194,6 +201,47 @@ func check_for_grass_encounter() -> void:
 func _is_ui_typing() -> bool:
 	var focused_control := get_viewport().gui_get_focus_owner()
 	return focused_control is LineEdit or focused_control is TextEdit
+
+func check_for_map_exit() -> bool:
+	var current_map: Node = _resolve_current_map()
+	if current_map == null:
+		return false
+
+	var exits := current_map.get_node_or_null("Exits")
+	if exits == null:
+		return false
+
+	for exit_node: Node in exits.get_children():
+		if not (exit_node is Area2D):
+			continue
+
+		var exit_area := exit_node as Area2D
+		if _is_inside_exit_area(exit_area):
+			print("Player entered map exit: %s" % exit_area.name)
+			if exit_area.has_method("_on_body_entered"):
+				exit_area.call("_on_body_entered", self)
+				return true
+
+	return false
+
+func _is_inside_exit_area(exit_area: Area2D) -> bool:
+	for child: Node in exit_area.get_children():
+		if not (child is CollisionShape2D):
+			continue
+
+		var shape_node := child as CollisionShape2D
+		if shape_node.disabled:
+			continue
+
+		var shape: Shape2D = shape_node.shape
+		if shape is RectangleShape2D:
+			var rectangle_shape := shape as RectangleShape2D
+			var local_position := shape_node.to_local(global_position)
+			var shape_rect := Rect2(-rectangle_shape.size * 0.5, rectangle_shape.size)
+			if shape_rect.has_point(local_position):
+				return true
+
+	return false
 
 func _resolve_current_map() -> Node:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
