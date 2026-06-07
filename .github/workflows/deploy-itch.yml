@@ -25,7 +25,7 @@ env:
   LINUX_EXPORT_PRESET: Linux Itch Build
   LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
   LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
-  SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v2
+  SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v3
   POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-v1
   POKEMON_BACK_ASSET_VERSION: pokemon-back-v1
