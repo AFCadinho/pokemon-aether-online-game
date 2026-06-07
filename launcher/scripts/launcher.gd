@@ -37,15 +37,23 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if http_request.get_http_client_status() == HTTPClient.STATUS_BODY:
 		var downloaded_bytes: int = http_request.get_downloaded_bytes()
-		var total_bytes: int = http_request.get_body_size()
-		if total_bytes > downloaded_bytes:
+		var expected_bytes: int = 0
+		if not current_download.is_empty():
+			expected_bytes = int(current_download.get("size_bytes", 0))
+
+		var total_bytes: int = expected_bytes
+		if total_bytes <= 0:
+			total_bytes = http_request.get_body_size()
+
+		if total_bytes > 0:
+			var visible_downloaded_bytes: int = mini(downloaded_bytes, total_bytes)
 			var percent: float = minf((float(downloaded_bytes) / float(total_bytes)) * 100.0, 99.0)
 			progress_bar.value = percent
 			if not current_download.is_empty():
 				_set_status(
 					"Downloading %s... %s / %s (%d%%)" % [
 						str(current_download.get("label", "download")),
-						_format_bytes(downloaded_bytes),
+						_format_bytes(visible_downloaded_bytes),
 						_format_bytes(total_bytes),
 						int(percent),
 					]
@@ -237,6 +245,7 @@ func _build_download_queue() -> void:
 			"version": remote_game_version,
 			"url": str(game_data.get("url", "")),
 			"sha256": str(game_data.get("sha256", "")),
+			"size_bytes": int(game_data.get("sizeBytes", 0)),
 			"file_name": "game-%s.zip" % remote_game_version,
 			"label": "game %s" % remote_game_version,
 		})
@@ -266,8 +275,9 @@ func _build_download_queue() -> void:
 			"version": pack_version,
 			"url": str(asset_pack.get("url", "")),
 			"sha256": str(asset_pack.get("sha256", "")),
+			"size_bytes": int(asset_pack.get("sizeBytes", 0)),
 			"file_name": "%s-%s.zip" % [pack_id, pack_version],
-			"label": "%s %s" % [pack_id, pack_version],
+			"label": pack_id,
 		})
 
 	var filtered_downloads: Array[Dictionary] = []

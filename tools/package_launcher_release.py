@@ -94,6 +94,7 @@ def main() -> None:
                 "version": args.version,
                 "url": f"{base_url}/{zip_name}",
                 "sha256": _sha256(zip_path),
+                "sizeBytes": zip_path.stat().st_size,
                 "executable": platform_config["executable"],
             },
             "assetPacks": asset_packs,
@@ -142,6 +143,7 @@ def _build_asset_pack(entry: str, base_url: str, output_dir: Path) -> dict:
         "version": version,
         "url": f"{base_url}/{target_path.name}",
         "sha256": _sha256(target_path),
+        "sizeBytes": target_path.stat().st_size,
     }
 
 
