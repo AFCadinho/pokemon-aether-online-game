@@ -14,9 +14,11 @@ func _process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
+	print("ToRoute1 body entered: %s" % body.name)
 	if body.name != "Player":
 		return
 		
 	var world := get_tree().current_scene
+	print("ToRoute1 loading map: %s -> %s" % [target_scene_path, target_spawn_name])
 	world.load_map(target_scene_path, target_spawn_name)
 	

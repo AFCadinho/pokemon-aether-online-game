@@ -121,7 +121,8 @@ jobs:
             --version "${LAUNCHER_RELEASE_VERSION}" \
             --base-url "${UPDATE_BASE_URL}" \
             --output-dir builds/launcher \
-            --default-platform windows
+            --default-platform windows \
+            --asset-pack "pokemon-sprites-basic:${SPRITE_ASSET_CACHE_KEY}:/tmp/pokemon-sprite-assets.zip"
 
       - name: Verify launcher release size
         run: |
@@ -159,7 +160,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: launcher-release
-          path: builds/launcher
+          path: |
+            builds/launcher/game-*.zip
+            builds/launcher/manifest*.json
 
       - name: Download butler
         run: |

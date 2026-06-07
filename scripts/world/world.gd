@@ -27,16 +27,19 @@ func _process(_delta: float) -> void:
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	if is_loading_map:
+		print("World.load_map ignored because a map is already loading: %s" % target_scene_path)
 		return
 
 	is_loading_map = true
 
 	if target_scene_path == "":
+		push_error("World.load_map failed: target_scene_path is empty.")
 		is_loading_map = false
 		return
 
 	var target_scene := load(target_scene_path) as PackedScene
 	if target_scene == null:
+		push_error("World.load_map failed: could not load scene %s" % target_scene_path)
 		is_loading_map = false
 		return
 
@@ -55,6 +58,8 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	var spawn := new_map.get_node_or_null("Spawns/" + target_spawn_name)
 	if spawn != null:
 		spawn_position = spawn.global_position
+	else:
+		push_warning("World.load_map: spawn '%s' not found in %s. Using Vector2.ZERO." % [target_spawn_name, target_scene_path])
 
 	player.global_position = spawn_position
 	player.target_position = spawn_position

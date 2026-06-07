@@ -292,20 +292,20 @@ func _get_sprite_frames_key(sprite_frames: SpriteFrames) -> String:
 func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
 	for sprite_root in _get_sprite_asset_roots(side, is_shiny):
 		for asset_id in _get_species_asset_id_candidates(species):
-			var sheet_metadata_path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [sprite_root, asset_id]
-			var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, sprite_root, species)
-			if metadata_frames != null:
-				return metadata_frames
+			for sheet_metadata_path in PokemonAssets.build_pokemon_sprite_path("%s/%s/animation.json" % [sprite_root, asset_id]):
+				var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, sprite_root, species)
+				if metadata_frames != null:
+					return metadata_frames
 
-			var folder := "res://assets/sprites/pokemon/%s/%s" % [sprite_root, asset_id]
-			var folder_frames := _load_sprite_frames_from_folder(folder)
-			if folder_frames != null:
-				return folder_frames
+			for folder in PokemonAssets.build_pokemon_sprite_path("%s/%s" % [sprite_root, asset_id]):
+				var folder_frames := _load_sprite_frames_from_folder(folder)
+				if folder_frames != null:
+					return folder_frames
 
-			var sheet_path := "res://assets/sprites/pokemon/%s/%s.png" % [sprite_root, asset_id]
-			var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
-			if sheet_frames != null:
-				return sheet_frames
+			for sheet_path in PokemonAssets.build_pokemon_sprite_path("%s/%s.png" % [sprite_root, asset_id]):
+				var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
+				if sheet_frames != null:
+					return sheet_frames
 
 	var home_frames := _load_sprite_frames_from_home_sprite(species, is_shiny)
 	if home_frames != null:
@@ -388,7 +388,7 @@ func _load_sprite_frames_from_folder(folder: String) -> SpriteFrames:
 	var sprite_frames := _create_idle_sprite_frames(timing["speed"])
 	for index in frame_files.size():
 		var frame_file := frame_files[index]
-		var texture := load(folder + "/" + frame_file)
+		var texture := PokemonAssets.load_texture(folder + "/" + frame_file)
 		if texture != null:
 			sprite_frames.add_frame(IDLE_ANIMATION, texture, timing["durations"][index])
 
@@ -449,7 +449,7 @@ func _load_sprite_frames_from_sheet_metadata(metadata_path: String, side: String
 
 	var image_name := str(metadata.get("image", "sheet.png"))
 	var sheet_path := metadata_path.get_base_dir() + "/" + image_name
-	var sheet_texture := load(sheet_path) as Texture2D
+	var sheet_texture := PokemonAssets.load_texture(sheet_path)
 	if sheet_texture == null:
 		push_error("Could not load Pokemon spritesheet from metadata: " + sheet_path)
 		return null
@@ -503,10 +503,12 @@ func _get_metadata_render_scale(metadata: Dictionary, side: String) -> float:
 	return 1.0
 
 func _load_sprite_frames_from_sheet(sheet_path: String) -> SpriteFrames:
-	if not ResourceLoader.exists(sheet_path):
+	if sheet_path.begins_with("res://") and not ResourceLoader.exists(sheet_path):
+		return null
+	if not sheet_path.begins_with("res://") and not FileAccess.file_exists(sheet_path):
 		return null
 
-	var sheet_texture := load(sheet_path) as Texture2D
+	var sheet_texture := PokemonAssets.load_texture(sheet_path)
 	if sheet_texture == null:
 		push_error("Could not load Pokemon spritesheet: " + sheet_path)
 		return null

@@ -88,9 +88,9 @@ def _discover_release_files(release_dir: Path) -> list[str]:
         for file_path in release_dir.iterdir()
         if file_path.is_file()
         and (
-            file_path.name == "manifest.json"
-            or file_path.name.startswith("manifest-")
-            or (file_path.name.startswith("game-") and file_path.suffix == ".zip")
+        file_path.name == "manifest.json"
+        or file_path.name.startswith("manifest-")
+        or file_path.suffix == ".zip"
         )
     )
 
