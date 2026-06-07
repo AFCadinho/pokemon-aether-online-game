@@ -17,5 +17,9 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.name != "Player":
 		return
 		
-	var world = get_tree().current_scene
+	var world := GameState.get_world()
+	if world == null or not world.has_method("load_map"):
+		push_error("ToOaksLab failed: could not resolve World.")
+		return
+
 	world.load_map(target_scene_path, target_spawn_name)

@@ -193,7 +193,7 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		_add_chat_message("You need a Pokemon in your party first.")
 		return false
 
-	var world := get_tree().current_scene
+	var world := GameState.get_world()
 	if world == null or not world.has_method("start_wild_battle"):
 		_add_chat_message("Cannot start a wild battle from here.")
 		return false

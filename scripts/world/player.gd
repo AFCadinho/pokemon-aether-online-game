@@ -110,9 +110,10 @@ func play_walk_animation(direction: Vector2) -> void:
 func can_move_to(check_position: Vector2) -> bool:
 
 	if collision_tilemap == null:
-		# Zonder collision map kunnen we niets blokkeren.
-		# Daarom laat deze fallback beweging toe.
-		return true
+		refresh_map_layers()
+		if collision_tilemap == null:
+			push_warning("Player.can_move_to: Collision TileMapLayer is missing; allowing movement as fallback.")
+			return true
 
 	# check_position is een global/world pixelpositie.
 	# TileMapLayer.local_to_map() verwacht juist een lokale positie binnen die TileMapLayer.
@@ -149,13 +150,18 @@ func set_idle_frame():
 		
 		
 func refresh_map_layers() -> void:
-	if GameState.current_map == null:
+	var current_map: Node = _resolve_current_map()
+	if current_map == null:
 		collision_tilemap = null
 		grass_tilemap = null	
+		push_warning("Player.refresh_map_layers: could not resolve current map.")
 		return
-		
-	collision_tilemap = GameState.current_map.get_node_or_null("Collision")	
-	grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
+
+	GameState.current_map = current_map
+	collision_tilemap = current_map.get_node_or_null("Collision")
+	grass_tilemap = current_map.get_node_or_null("TallGrass")
+	if collision_tilemap == null:
+		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
 	
 func is_standing_on_tall_grass() -> bool:
 	if grass_tilemap == null:
@@ -181,12 +187,25 @@ func check_for_grass_encounter() -> void:
 	if wild_pokemon == null:
 		return
 	
-	var world := get_tree().current_scene
-	if world.has_method("start_wild_battle"):
+	var world := GameState.get_world()
+	if world != null and world.has_method("start_wild_battle"):
 		world.start_wild_battle(wild_pokemon)
 
 func _is_ui_typing() -> bool:
 	var focused_control := get_viewport().gui_get_focus_owner()
 	return focused_control is LineEdit or focused_control is TextEdit
+
+func _resolve_current_map() -> Node:
+	if GameState.current_map != null and is_instance_valid(GameState.current_map):
+		return GameState.current_map
+
+	var parent_node := get_parent()
+	while parent_node != null:
+		if parent_node.get_node_or_null("Collision") != null or parent_node.get_node_or_null("TallGrass") != null:
+			return parent_node
+
+		parent_node = parent_node.get_parent()
+
+	return null
 	
 	

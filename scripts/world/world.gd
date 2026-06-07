@@ -13,6 +13,7 @@ var is_loading_map := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	add_to_group("world")
 	var first_map := $CurrentMap.get_child(0)
 	GameState.current_map = first_map
 	
