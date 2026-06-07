@@ -83,7 +83,14 @@ jobs:
           test -n "${SPRITE_ASSET_URLS}"
           mkdir -p /tmp/pokemon-sprite-assets
           for asset_url in ${SPRITE_ASSET_URLS}; do
-            megadl --path /tmp/pokemon-sprite-assets "${asset_url}"
+            if printf '%s' "${asset_url}" | grep -q 'mega.nz'; then
+              megadl --path /tmp/pokemon-sprite-assets "${asset_url}"
+            else
+              file_name="$(basename "${asset_url%%\?*}")"
+              curl -L --fail --retry 3 --retry-delay 5 \
+                -o "/tmp/pokemon-sprite-assets/${file_name}" \
+                "${asset_url}"
+            fi
           done
           cat /tmp/pokemon-sprite-assets/pokemon-sprite-assets-basic.zip.part-* > /tmp/pokemon-sprite-assets.zip
 
