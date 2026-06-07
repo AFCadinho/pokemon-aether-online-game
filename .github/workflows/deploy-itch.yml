@@ -27,6 +27,7 @@ env:
   LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
   SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v1
   UPDATE_BASE_URL: https://updates.pokemonaetheronline.com
+  MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
 
 jobs:
   deploy:
@@ -121,6 +122,17 @@ jobs:
             --base-url "${UPDATE_BASE_URL}" \
             --output-dir builds/launcher \
             --default-platform windows
+
+      - name: Verify launcher release size
+        run: |
+          for file in builds/launcher/game-*.zip; do
+            size="$(stat -c%s "${file}")"
+            echo "${file}: ${size} bytes"
+            if [ "${size}" -gt "${MAX_LAUNCHER_GAME_ZIP_BYTES}" ]; then
+              echo "::error ::${file} is too large for launcher delivery."
+              exit 1
+            fi
+          done
 
       - name: Upload launcher release to R2
         env:

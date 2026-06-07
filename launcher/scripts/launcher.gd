@@ -37,14 +37,32 @@ func _process(_delta: float) -> void:
 	if http_request.get_http_client_status() == HTTPClient.STATUS_BODY:
 		var downloaded_bytes: int = http_request.get_downloaded_bytes()
 		var total_bytes: int = http_request.get_body_size()
-		if total_bytes > 0:
-			progress_bar.value = float(downloaded_bytes) / float(total_bytes)
+		if total_bytes > downloaded_bytes:
+			var percent: float = minf((float(downloaded_bytes) / float(total_bytes)) * 100.0, 99.0)
+			progress_bar.value = percent
+			if not current_download.is_empty():
+				_set_status(
+					"Downloading %s... %s / %s (%d%%)" % [
+						str(current_download.get("label", "download")),
+						_format_bytes(downloaded_bytes),
+						_format_bytes(total_bytes),
+						int(percent),
+					]
+				)
+		elif not current_download.is_empty():
+			progress_bar.value = 0.0
+			_set_status(
+				"Downloading %s... %s" % [
+					str(current_download.get("label", "download")),
+					_format_bytes(downloaded_bytes),
+				]
+			)
 
 
 func check_for_updates() -> void:
 	_set_busy(true)
 	_set_status("Checking for updates...")
-	_log("Downloading manifest from %s." % manifest_url)
+	_log("Checking for updates.")
 	http_request.download_file = ""
 	var error_code: Error = http_request.request(manifest_url)
 	if error_code != OK:
@@ -73,7 +91,13 @@ func start_update() -> void:
 
 func launch_game() -> void:
 	var game_data: Dictionary = _get_dictionary(manifest, "game")
-	var executable_path := str(game_data.get("executable", "Pokemon Aether Online.exe"))
+	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
+	if executable_path.is_empty():
+		if OS.get_name() == "Windows":
+			executable_path = "Pokemon Aether Online.exe"
+		else:
+			executable_path = "Pokemon Aether Online.x86_64"
+
 	var absolute_executable_path := ProjectSettings.globalize_path(INSTALL_DIR.path_join(executable_path))
 
 	if not FileAccess.file_exists(absolute_executable_path):
@@ -87,17 +111,18 @@ func launch_game() -> void:
 		_log_error("Could not set executable permissions: %s" % error_string(permission_error))
 		return
 
-	_log("Starting game: %s" % absolute_executable_path)
+	_log("Starting game.")
 	var process_id: int = OS.create_process(absolute_executable_path, PackedStringArray())
 	if process_id <= 0:
 		_set_status("Could not start game.")
 		_log_error("OS.create_process failed.")
 		return
 
-	_log("Started process id: %s" % process_id)
+	print("Started game process id: %s" % process_id)
 
 
 func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	progress_bar.value = 100.0
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
 		_set_busy(false)
 		_set_status("Download failed.")
@@ -134,15 +159,25 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 func _handle_download_response() -> void:
 	var file_path := str(current_download.get("file_path", ""))
 	var sha256 := str(current_download.get("sha256", ""))
-	if not sha256.is_empty() and FileAccess.get_sha256(file_path) != sha256:
+	if not FileAccess.file_exists(file_path):
 		_set_busy(false)
-		_set_status("Downloaded file checksum failed.")
-		_log_error("Checksum failed for %s" % file_path)
+		_set_status("Downloaded file is missing.")
+		_log_error("Downloaded file is missing.")
 		current_download.clear()
 		return
 
-	_set_status("Extracting %s..." % str(current_download.get("label", "download")))
-	_log("Extracting %s." % file_path)
+	if not sha256.is_empty() and FileAccess.get_sha256(file_path) != sha256:
+		_set_busy(false)
+		_set_status("Downloaded file checksum failed.")
+		_log_error("Downloaded file checksum failed.")
+		current_download.clear()
+		return
+
+	var download_label: String = str(current_download.get("label", "download"))
+	_set_status("Extracting %s..." % download_label)
+	_log("Extracting %s." % download_label)
+	await get_tree().process_frame
+
 	var extract_error: Error = _extract_zip(file_path, INSTALL_DIR)
 	if extract_error != OK:
 		_set_busy(false)
@@ -169,13 +204,15 @@ func _start_next_download() -> void:
 	current_download = pending_downloads.pop_front()
 	var url := str(current_download.get("url", ""))
 	var file_name := str(current_download.get("file_name", "download.zip"))
-	var target_path := TEMP_DIR.path_join(file_name)
+	var unique_file_name := "%s-%s.zip" % [file_name.get_basename(), Time.get_ticks_msec()]
+	var target_path := TEMP_DIR.path_join(unique_file_name)
 	current_download["file_path"] = target_path
 	progress_bar.value = 0.0
 
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(TEMP_DIR))
-	_set_status("Downloading %s..." % str(current_download.get("label", file_name)))
-	_log("Downloading %s." % url)
+	var download_label: String = str(current_download.get("label", file_name))
+	_set_status("Downloading %s..." % download_label)
+	_log("Downloading %s." % download_label)
 	http_request.download_file = target_path
 	var error_code: Error = http_request.request(url)
 	if error_code != OK:
@@ -244,6 +281,8 @@ func _mark_download_installed(download: Dictionary) -> void:
 	var download_type := str(download.get("type", ""))
 	if download_type == "game":
 		local_versions["gameVersion"] = str(download.get("version", ""))
+		var game_data: Dictionary = _get_dictionary(manifest, "game")
+		local_versions["gameExecutable"] = str(game_data.get("executable", ""))
 	elif download_type == "asset_pack":
 		var local_asset_packs: Dictionary = _get_dictionary(local_versions, "assetPacks")
 		local_asset_packs[str(download.get("id", ""))] = str(download.get("version", ""))
@@ -273,6 +312,16 @@ func _extract_zip(zip_path: String, target_dir: String) -> Error:
 
 	reader.close()
 	return OK
+
+
+func _delete_existing_download(download_path: String) -> void:
+	if not FileAccess.file_exists(download_path):
+		return
+
+	var absolute_download_path := ProjectSettings.globalize_path(download_path)
+	var remove_error: Error = DirAccess.remove_absolute(absolute_download_path)
+	if remove_error != OK:
+		_log_error("Could not remove old download: %s" % error_string(remove_error))
 
 
 func _ensure_executable_permissions(absolute_executable_path: String) -> Error:
@@ -381,7 +430,7 @@ func _refresh_status() -> void:
 	if local_game_version.is_empty():
 		local_game_version = "not installed"
 	version_label.text = "Installed version: %s" % local_game_version
-	play_button.disabled = local_game_version == "" or local_game_version == "not installed"
+	play_button.disabled = not _has_installed_game()
 	update_button.disabled = not update_required
 	check_button.disabled = false
 	if update_required:
@@ -395,11 +444,39 @@ func _refresh_status() -> void:
 func _set_busy(is_busy: bool) -> void:
 	check_button.disabled = is_busy
 	update_button.disabled = is_busy or not update_required
-	play_button.disabled = is_busy or str(local_versions.get("gameVersion", "")).is_empty()
+	play_button.disabled = is_busy or not _has_installed_game()
+
+
+func _has_installed_game() -> bool:
+	if str(local_versions.get("gameVersion", "")).is_empty():
+		return false
+
+	var game_data: Dictionary = _get_dictionary(manifest, "game")
+	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
+	if executable_path.is_empty():
+		if OS.get_name() == "Windows":
+			executable_path = "Pokemon Aether Online.exe"
+		else:
+			executable_path = "Pokemon Aether Online.x86_64"
+
+	var absolute_executable_path := ProjectSettings.globalize_path(INSTALL_DIR.path_join(executable_path))
+	return FileAccess.file_exists(absolute_executable_path)
 
 
 func _set_status(message: String) -> void:
 	status_label.text = message
+
+
+func _format_bytes(byte_count: int) -> String:
+	var byte_count_float := float(byte_count)
+	if byte_count_float >= 1024.0 * 1024.0 * 1024.0:
+		return "%.2f GB" % (byte_count_float / 1024.0 / 1024.0 / 1024.0)
+	if byte_count_float >= 1024.0 * 1024.0:
+		return "%.1f MB" % (byte_count_float / 1024.0 / 1024.0)
+	if byte_count_float >= 1024.0:
+		return "%.1f KB" % (byte_count_float / 1024.0)
+
+	return "%d B" % byte_count
 
 
 func _log(message: String) -> void:
