@@ -7,6 +7,7 @@ var player_direction: Vector2 = Vector2.DOWN
 var current_map: Node = null
 
 var input_locked := false
+var world_debug_enabled := true
 
 func lock_input() -> void:
 	input_locked = true
@@ -28,3 +29,27 @@ func get_world() -> Node:
 		return current_scene
 
 	return null
+
+func reset_world_debug_log() -> void:
+	if not world_debug_enabled:
+		return
+
+	var file := FileAccess.open("user://world_debug.log", FileAccess.WRITE)
+	if file == null:
+		return
+
+	file.store_line("world debug started")
+
+func debug_world(message: String) -> void:
+	if not world_debug_enabled:
+		return
+
+	var full_message := "[world-debug] %s" % message
+	print(full_message)
+
+	var file := FileAccess.open("user://world_debug.log", FileAccess.READ_WRITE)
+	if file == null:
+		return
+
+	file.seek_end()
+	file.store_line(full_message)

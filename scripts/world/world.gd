@@ -13,9 +13,21 @@ var is_loading_map := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	GameState.reset_world_debug_log()
 	add_to_group("world")
+	GameState.debug_world("World ready executable=%s res=%s user=%s current_scene=%s" % [
+		OS.get_executable_path(),
+		ProjectSettings.globalize_path("res://"),
+		ProjectSettings.globalize_path("user://"),
+		str(get_tree().current_scene),
+	])
 	var first_map := $CurrentMap.get_child(0)
 	GameState.current_map = first_map
+	GameState.debug_world("Initial map=%s path=%s child_count=%d" % [
+		first_map.name,
+		str(first_map.get_path()),
+		first_map.get_child_count(),
+	])
 	
 	move_player_to_map(first_map)
 	
@@ -27,6 +39,11 @@ func _process(_delta: float) -> void:
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
+	GameState.debug_world("load_map requested scene=%s spawn=%s loading=%s" % [
+		target_scene_path,
+		target_spawn_name,
+		str(is_loading_map),
+	])
 	if is_loading_map:
 		print("World.load_map ignored because a map is already loading: %s" % target_scene_path)
 		return
@@ -40,6 +57,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 	var target_scene := load(target_scene_path) as PackedScene
 	if target_scene == null:
+		GameState.debug_world("load_map failed: could not load scene=%s" % target_scene_path)
 		push_error("World.load_map failed: could not load scene %s" % target_scene_path)
 		is_loading_map = false
 		return
@@ -54,6 +72,10 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	$CurrentMap.add_child(new_map)
 
 	GameState.current_map = new_map
+	GameState.debug_world("load_map instantiated map=%s path=%s" % [
+		new_map.name,
+		str(new_map.get_path()),
+	])
 
 	var spawn_position := Vector2.ZERO
 	var spawn := new_map.get_node_or_null("Spawns/" + target_spawn_name)
@@ -77,6 +99,10 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 func move_player_to_map(map: Node) -> void:
 	var characters := map.get_node_or_null("Characters")
 	var player_parent := characters if characters != null else map
+	GameState.debug_world("move_player_to_map map=%s player_parent=%s" % [
+		map.name,
+		str(player_parent.get_path()),
+	])
 		
 	if player.get_parent() != null:
 		player.get_parent().remove_child(player)
