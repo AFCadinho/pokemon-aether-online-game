@@ -81,11 +81,20 @@ func launch_game() -> void:
 		_log_error("Missing executable: %s" % absolute_executable_path)
 		return
 
-	_log("Starting game.")
+	var permission_error: Error = _ensure_executable_permissions(absolute_executable_path)
+	if permission_error != OK:
+		_set_status("Could not prepare game executable.")
+		_log_error("Could not set executable permissions: %s" % error_string(permission_error))
+		return
+
+	_log("Starting game: %s" % absolute_executable_path)
 	var process_id: int = OS.create_process(absolute_executable_path, PackedStringArray())
 	if process_id <= 0:
 		_set_status("Could not start game.")
 		_log_error("OS.create_process failed.")
+		return
+
+	_log("Started process id: %s" % process_id)
 
 
 func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
@@ -266,6 +275,19 @@ func _extract_zip(zip_path: String, target_dir: String) -> Error:
 	return OK
 
 
+func _ensure_executable_permissions(absolute_executable_path: String) -> Error:
+	var os_name := OS.get_name()
+	if os_name != "Linux" and os_name != "macOS" and os_name != "FreeBSD" and os_name != "NetBSD" and os_name != "OpenBSD" and os_name != "BSD":
+		return OK
+
+	var chmod_args := PackedStringArray(["755", absolute_executable_path])
+	var exit_code: int = OS.execute("chmod", chmod_args)
+	if exit_code != 0:
+		return FAILED
+
+	return OK
+
+
 func _load_local_versions() -> void:
 	if not FileAccess.file_exists(VERSION_FILE):
 		local_versions = {
@@ -302,9 +324,39 @@ func _load_launcher_config() -> void:
 		return
 
 	var config: Dictionary = parsed_json
+	var configured_manifest_urls: Dictionary = _get_dictionary(config, "manifestUrls")
+	var platform_manifest_url := _get_platform_manifest_url(configured_manifest_urls)
+	if not platform_manifest_url.is_empty():
+		manifest_url = platform_manifest_url
+		return
+
 	var configured_manifest_url := str(config.get("manifestUrl", ""))
 	if not configured_manifest_url.is_empty():
 		manifest_url = configured_manifest_url
+
+
+func _get_platform_manifest_url(manifest_urls: Dictionary) -> String:
+	if manifest_urls.is_empty():
+		return ""
+
+	var os_name := OS.get_name()
+	var candidates := PackedStringArray([
+		os_name,
+		os_name.to_lower(),
+	])
+	if os_name == "macOS":
+		candidates.append("MacOS")
+		candidates.append("macos")
+	elif os_name == "Linux" or os_name == "FreeBSD" or os_name == "NetBSD" or os_name == "OpenBSD" or os_name == "BSD":
+		candidates.append("linux")
+
+	for candidate: String in candidates:
+		var manifest_url_variant: Variant = manifest_urls.get(candidate, "")
+		var platform_manifest_url := str(manifest_url_variant)
+		if not platform_manifest_url.is_empty():
+			return platform_manifest_url
+
+	return ""
 
 
 func _get_dictionary(source: Dictionary, key: String) -> Dictionary:

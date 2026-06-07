@@ -16,6 +16,17 @@ Update `config/launcher_config.json`.
 
 The manifest shape is documented in `config/manifest.example.json`.
 
+The launcher can pick a manifest per OS:
+
+```json
+{
+  "manifestUrls": {
+    "Windows": "https://updates.pokemonaetheronline.com/manifest-windows.json",
+    "Linux": "https://updates.pokemonaetheronline.com/manifest-linux.json"
+  }
+}
+```
+
 ## Local Test
 
 Start the local test server from the `launcher/test_server` folder:
@@ -56,6 +67,32 @@ launcher/test_server/manifest.json
 ```
 
 For a public release, use the real hosted URL as `--base-url`.
+
+## Upload To R2
+
+Set R2 credentials in your shell:
+
+```bash
+export R2_ACCOUNT_ID="64ea7ddcb5e97df8500c33b8cb48f921"
+export R2_BUCKET="pokemon-aether-updates"
+export R2_ACCESS_KEY_ID="..."
+export R2_SECRET_ACCESS_KEY="..."
+```
+
+Then upload the generated release files:
+
+```bash
+python3 tools/upload_launcher_release.py builds/launcher
+```
+
+GitHub Actions can upload to R2 automatically when these repository secrets are configured:
+
+```text
+R2_ACCOUNT_ID
+R2_BUCKET
+R2_ACCESS_KEY_ID
+R2_SECRET_ACCESS_KEY
+```
 
 ## Notes
 

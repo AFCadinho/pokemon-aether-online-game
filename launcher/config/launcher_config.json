@@ -1,3 +1,6 @@
 {
-  "manifestUrl": "http://127.0.0.1:8000/manifest.json"
+  "manifestUrls": {
+	"Windows": "https://updates.pokemonaetheronline.com/manifest-windows.json",
+	"Linux": "https://updates.pokemonaetheronline.com/manifest-linux.json"
+  }
 }
