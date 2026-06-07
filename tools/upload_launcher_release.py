@@ -50,8 +50,9 @@ def main() -> None:
             raise SystemExit(f"Missing release file: {file_path}")
 
         key = "/".join(part for part in [args.prefix.strip("/"), file_name] if part)
+        print(f"Uploading {file_path.name} ({file_path.stat().st_size} bytes) -> s3://{config.bucket}/{key}", flush=True)
         _upload_file(config, file_path, key)
-        print(f"Uploaded {file_path.name} -> s3://{config.bucket}/{key}")
+        print(f"Uploaded {file_path.name} -> s3://{config.bucket}/{key}", flush=True)
 
 
 class R2Config:
@@ -90,6 +91,7 @@ def _discover_release_files(release_dir: Path) -> list[str]:
         and (
         file_path.name == "manifest.json"
         or file_path.name.startswith("manifest-")
+        or ".zip.part-" in file_path.name
         or file_path.suffix == ".zip"
         )
     )
@@ -147,7 +149,7 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
         f"Signature={signature}"
     )
 
-    connection = http.client.HTTPSConnection(host, timeout=120)
+    connection = http.client.HTTPSConnection(host, timeout=600)
     try:
         with file_path.open("rb") as file:
             connection.request("PUT", canonical_uri, body=file, headers=headers)
