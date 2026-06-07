@@ -111,12 +111,11 @@ func play_walk_animation(direction: Vector2) -> void:
 	hair_sprite.play(animation_name)
 
 func can_move_to(check_position: Vector2) -> bool:
+	refresh_map_layers()
 
 	if collision_tilemap == null:
-		refresh_map_layers()
-		if collision_tilemap == null:
-			push_warning("Player.can_move_to: Collision TileMapLayer is missing; allowing movement as fallback.")
-			return true
+		push_warning("Player.can_move_to: Collision TileMapLayer is missing; allowing movement as fallback.")
+		return true
 
 	# check_position is een global/world pixelpositie.
 	# TileMapLayer.local_to_map() verwacht juist een lokale positie binnen die TileMapLayer.
@@ -171,6 +170,9 @@ func refresh_map_layers() -> void:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
 	
 func is_standing_on_tall_grass() -> bool:
+	if grass_tilemap == null:
+		refresh_map_layers()
+
 	if grass_tilemap == null:
 		return false
 		
@@ -244,15 +246,15 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 	return false
 
 func _resolve_current_map() -> Node:
-	if GameState.current_map != null and is_instance_valid(GameState.current_map):
-		return GameState.current_map
-
 	var parent_node := get_parent()
 	while parent_node != null:
 		if parent_node.get_node_or_null("Collision") != null or parent_node.get_node_or_null("TallGrass") != null:
 			return parent_node
 
 		parent_node = parent_node.get_parent()
+
+	if GameState.current_map != null and is_instance_valid(GameState.current_map):
+		return GameState.current_map
 
 	return null
 	
