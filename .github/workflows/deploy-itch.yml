@@ -25,7 +25,7 @@ env:
   LINUX_EXPORT_PRESET: Linux Itch Build
   LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
   LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
-  SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v1
+  SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v2
   POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-v1
   POKEMON_BACK_ASSET_VERSION: pokemon-back-v1
@@ -122,11 +122,28 @@ jobs:
 
       - name: Package Pokemon sprite asset packs
         run: |
-          python3 tools/package_asset_pack.py "/tmp/${POKEMON_HOME_ASSET_VERSION}.zip" assets/sprites/pokemon/pokemon_home
-          python3 tools/package_asset_pack.py "/tmp/${POKEMON_FRONT_ASSET_VERSION}.zip" assets/sprites/pokemon/front
-          python3 tools/package_asset_pack.py "/tmp/${POKEMON_BACK_ASSET_VERSION}.zip" assets/sprites/pokemon/back
-          python3 tools/package_asset_pack.py "/tmp/${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" assets/sprites/pokemon/shiny_front
-          python3 tools/package_asset_pack.py "/tmp/${POKEMON_SHINY_BACK_ASSET_VERSION}.zip" assets/sprites/pokemon/shiny_back
+          : > /tmp/asset_pack_args.txt
+
+          package_pack() {
+            pack_id="$1"
+            pack_version="$2"
+            source_path="$3"
+            output_path="/tmp/${pack_version}.zip"
+
+            if [ ! -e "${source_path}" ]; then
+              echo "::warning ::Skipping ${pack_id}; missing ${source_path}"
+              return 0
+            fi
+
+            python3 tools/package_asset_pack.py "${output_path}" "${source_path}"
+            printf '%s\n' "--asset-pack" "${pack_id}:${pack_version}:${output_path}" >> /tmp/asset_pack_args.txt
+          }
+
+          package_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" assets/sprites/pokemon/pokemon_home
+          package_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" assets/sprites/pokemon/front
+          package_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" assets/sprites/pokemon/back
+          package_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" assets/sprites/pokemon/shiny_front
+          package_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" assets/sprites/pokemon/shiny_back
 
       - name: Package launcher release
         run: |
@@ -135,11 +152,7 @@ jobs:
             --base-url "${UPDATE_BASE_URL}" \
             --output-dir builds/launcher \
             --default-platform windows \
-            --asset-pack "pokemon-home:${POKEMON_HOME_ASSET_VERSION}:/tmp/${POKEMON_HOME_ASSET_VERSION}.zip" \
-            --asset-pack "pokemon-front:${POKEMON_FRONT_ASSET_VERSION}:/tmp/${POKEMON_FRONT_ASSET_VERSION}.zip" \
-            --asset-pack "pokemon-back:${POKEMON_BACK_ASSET_VERSION}:/tmp/${POKEMON_BACK_ASSET_VERSION}.zip" \
-            --asset-pack "pokemon-shiny-front:${POKEMON_SHINY_FRONT_ASSET_VERSION}:/tmp/${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" \
-            --asset-pack "pokemon-shiny-back:${POKEMON_SHINY_BACK_ASSET_VERSION}:/tmp/${POKEMON_SHINY_BACK_ASSET_VERSION}.zip"
+            $(cat /tmp/asset_pack_args.txt)
 
       - name: Verify launcher release size
         run: |
