@@ -5,6 +5,7 @@ const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const INSTALL_DIR := "user://game"
 const VERSION_FILE := "user://versions.json"
 const TEMP_DIR := "user://downloads"
+const EXTRACT_PROGRESS_BATCH_SIZE := 25
 
 @onready var version_label: Label = $Panel/MarginContainer/Layout/VersionLabel
 @onready var status_label: Label = $Panel/MarginContainer/Layout/StatusLabel
@@ -178,7 +179,7 @@ func _handle_download_response() -> void:
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
 
-	var extract_error: Error = _extract_zip(file_path, INSTALL_DIR)
+	var extract_error: Error = await _extract_zip(file_path, INSTALL_DIR, download_label)
 	if extract_error != OK:
 		_set_busy(false)
 		_set_status("Could not extract update.")
@@ -289,15 +290,36 @@ func _mark_download_installed(download: Dictionary) -> void:
 		local_versions["assetPacks"] = local_asset_packs
 
 
-func _extract_zip(zip_path: String, target_dir: String) -> Error:
+func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
 	var reader := ZIPReader.new()
 	var open_error: Error = reader.open(zip_path)
 	if open_error != OK:
 		return open_error
 
-	for packed_file_path: String in reader.get_files():
+	var packed_file_paths: PackedStringArray = reader.get_files()
+	var file_count: int = packed_file_paths.size()
+	var extracted_file_count: int = 0
+	progress_bar.value = 0.0
+
+	for packed_file_path: String in packed_file_paths:
 		if packed_file_path.ends_with("/"):
 			continue
+
+		extracted_file_count += 1
+		if extracted_file_count == 1 or extracted_file_count % EXTRACT_PROGRESS_BATCH_SIZE == 0:
+			var percent: float = 0.0
+			if file_count > 0:
+				percent = minf((float(extracted_file_count) / float(file_count)) * 100.0, 99.0)
+			progress_bar.value = percent
+			_set_status(
+				"Extracting %s... %d / %d files (%d%%)" % [
+					label,
+					extracted_file_count,
+					file_count,
+					int(percent),
+				]
+			)
+			await get_tree().process_frame
 
 		var output_path := target_dir.path_join(packed_file_path)
 		var absolute_output_path := ProjectSettings.globalize_path(output_path)
@@ -311,6 +333,7 @@ func _extract_zip(zip_path: String, target_dir: String) -> Error:
 		output_file.store_buffer(reader.read_file(packed_file_path))
 
 	reader.close()
+	progress_bar.value = 100.0
 	return OK
 
 
