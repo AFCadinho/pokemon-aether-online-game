@@ -1,6 +1,6 @@
 extends Node2D
 
-const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
+const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 
 var is_in_battle := false
 var battle_layer: CanvasLayer
@@ -141,7 +141,16 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	battle_layer.layer = 10
 	add_child(battle_layer)
 	
-	battle_instance = BATTLE_SCENE.instantiate()
+	var battle_scene := load(BATTLE_SCENE_PATH) as PackedScene
+	if battle_scene == null:
+		push_error("World.start_wild_battle failed: could not load battle scene.")
+		battle_layer.queue_free()
+		battle_layer = null
+		is_in_battle = false
+		player.set_physics_process(true)
+		return
+
+	battle_instance = battle_scene.instantiate()
 	battle_layer.add_child(battle_instance)
 	
 	await battle_instance.setup_wild_battle_from_response(
