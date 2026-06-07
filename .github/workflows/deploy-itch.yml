@@ -26,6 +26,11 @@ env:
   LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
   LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
   SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v1
+  POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
+  POKEMON_FRONT_ASSET_VERSION: pokemon-front-v1
+  POKEMON_BACK_ASSET_VERSION: pokemon-back-v1
+  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-v1
+  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-v1
   UPDATE_BASE_URL: https://updates.pokemonaetheronline.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
 
@@ -115,6 +120,14 @@ jobs:
           test -f "builds/linux/Pokemon Aether Online.x86_64"
           test -f "builds/linux/Pokemon Aether Online.pck"
 
+      - name: Package Pokemon sprite asset packs
+        run: |
+          python3 tools/package_asset_pack.py "/tmp/${POKEMON_HOME_ASSET_VERSION}.zip" assets/sprites/pokemon/pokemon_home
+          python3 tools/package_asset_pack.py "/tmp/${POKEMON_FRONT_ASSET_VERSION}.zip" assets/sprites/pokemon/front
+          python3 tools/package_asset_pack.py "/tmp/${POKEMON_BACK_ASSET_VERSION}.zip" assets/sprites/pokemon/back
+          python3 tools/package_asset_pack.py "/tmp/${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" assets/sprites/pokemon/shiny_front
+          python3 tools/package_asset_pack.py "/tmp/${POKEMON_SHINY_BACK_ASSET_VERSION}.zip" assets/sprites/pokemon/shiny_back
+
       - name: Package launcher release
         run: |
           python3 tools/package_launcher_release.py \
@@ -122,7 +135,11 @@ jobs:
             --base-url "${UPDATE_BASE_URL}" \
             --output-dir builds/launcher \
             --default-platform windows \
-            --asset-pack "pokemon-sprites-basic:${SPRITE_ASSET_CACHE_KEY}:/tmp/pokemon-sprite-assets.zip"
+            --asset-pack "pokemon-home:${POKEMON_HOME_ASSET_VERSION}:/tmp/${POKEMON_HOME_ASSET_VERSION}.zip" \
+            --asset-pack "pokemon-front:${POKEMON_FRONT_ASSET_VERSION}:/tmp/${POKEMON_FRONT_ASSET_VERSION}.zip" \
+            --asset-pack "pokemon-back:${POKEMON_BACK_ASSET_VERSION}:/tmp/${POKEMON_BACK_ASSET_VERSION}.zip" \
+            --asset-pack "pokemon-shiny-front:${POKEMON_SHINY_FRONT_ASSET_VERSION}:/tmp/${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" \
+            --asset-pack "pokemon-shiny-back:${POKEMON_SHINY_BACK_ASSET_VERSION}:/tmp/${POKEMON_SHINY_BACK_ASSET_VERSION}.zip"
 
       - name: Verify launcher release size
         run: |
