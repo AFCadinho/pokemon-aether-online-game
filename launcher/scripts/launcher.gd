@@ -121,13 +121,31 @@ func launch_game() -> void:
 		return
 
 	_log("Starting game.")
-	var process_id: int = OS.create_process(absolute_executable_path, PackedStringArray())
+	var process_id: int = _create_game_process(absolute_executable_path)
 	if process_id <= 0:
 		_set_status("Could not start game.")
 		_log_error("OS.create_process failed.")
 		return
 
 	print("Started game process id: %s" % process_id)
+
+
+func _create_game_process(absolute_executable_path: String) -> int:
+	var game_dir: String = absolute_executable_path.get_base_dir()
+	var executable_name: String = absolute_executable_path.get_file()
+	var os_name: String = OS.get_name()
+	if os_name == "Windows":
+		var command: String = "cd /D %s && %s" % [
+			_quote_windows_shell(game_dir),
+			_quote_windows_shell(executable_name),
+		]
+		return OS.create_process("cmd.exe", PackedStringArray(["/C", command]))
+
+	if os_name == "Linux" or os_name == "macOS" or os_name == "FreeBSD" or os_name == "NetBSD" or os_name == "OpenBSD" or os_name == "BSD":
+		var command: String = "cd \"$1\" && exec \"./$2\""
+		return OS.create_process("/bin/sh", PackedStringArray(["-c", command, "pokemon-aether-launcher", game_dir, executable_name]))
+
+	return OS.create_process(absolute_executable_path, PackedStringArray())
 
 
 func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
@@ -368,6 +386,10 @@ func _ensure_executable_permissions(absolute_executable_path: String) -> Error:
 		return FAILED
 
 	return OK
+
+
+func _quote_windows_shell(value: String) -> String:
+	return "\"%s\"" % value.replace("\"", "\"\"")
 
 
 func _load_local_versions() -> void:
