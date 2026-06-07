@@ -353,9 +353,17 @@ func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
 		var absolute_output_path := ProjectSettings.globalize_path(output_path)
 		DirAccess.make_dir_recursive_absolute(absolute_output_path.get_base_dir())
 
+		if FileAccess.file_exists(absolute_output_path):
+			var remove_error: Error = DirAccess.remove_absolute(absolute_output_path)
+			if remove_error != OK:
+				reader.close()
+				_log_error("Could not replace existing file: %s (%s)" % [absolute_output_path, error_string(remove_error)])
+				return remove_error
+
 		var output_file := FileAccess.open(absolute_output_path, FileAccess.WRITE)
 		if output_file == null:
 			reader.close()
+			_log_error("Could not create extracted file: %s" % absolute_output_path)
 			return ERR_CANT_CREATE
 
 		output_file.store_buffer(reader.read_file(packed_file_path))
