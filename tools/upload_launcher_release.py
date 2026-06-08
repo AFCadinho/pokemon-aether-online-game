@@ -124,6 +124,7 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
     payload_hash = _sha256_hex(file_path)
     content_length = file_path.stat().st_size
     content_type = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
+    cache_control = _get_cache_control_for_key(key)
 
     now = dt.datetime.now(dt.UTC)
     amz_date = now.strftime("%Y%m%dT%H%M%SZ")
@@ -131,6 +132,7 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
     credential_scope = f"{date_stamp}/auto/s3/aws4_request"
 
     headers = {
+        "Cache-Control": cache_control,
         "Content-Length": str(content_length),
         "Content-Type": content_type,
         "Host": host,
@@ -183,6 +185,14 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
 def _canonical_uri(bucket: str, key: str) -> str:
     parts = [bucket] + [part for part in key.split("/") if part]
     return "/" + "/".join(quote(part, safe="-_.~") for part in parts)
+
+
+def _get_cache_control_for_key(key: str) -> str:
+    file_name = key.rsplit("/", 1)[-1]
+    if key.startswith("launcher/latest/") or file_name == "manifest.json" or file_name.startswith("manifest-"):
+        return "no-cache, max-age=0"
+
+    return "public, max-age=31536000, immutable"
 
 
 def _sha256_hex(file_path: Path) -> str:
