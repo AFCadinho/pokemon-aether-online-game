@@ -79,6 +79,13 @@ def main() -> None:
         metavar="ID:VERSION:PATH",
         help="Optional asset pack to include in each manifest.",
     )
+    parser.add_argument(
+        "--external-asset-pack",
+        action="append",
+        default=[],
+        metavar="ID:VERSION:FILE_NAME",
+        help="Existing hosted asset pack to include in each manifest without copying or hashing it.",
+    )
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir).resolve()
@@ -89,6 +96,7 @@ def main() -> None:
     game_prefix = args.game_prefix.strip("/")
     asset_prefix = args.asset_prefix.strip("/")
     asset_packs = [_build_asset_pack(entry, base_url, asset_prefix, output_dir) for entry in args.asset_pack]
+    asset_packs += [_build_external_asset_pack(entry, base_url, asset_prefix) for entry in args.external_asset_pack]
 
     manifests: dict[str, dict] = {}
     for platform_name in platform_names:
@@ -156,6 +164,27 @@ def _build_asset_pack(entry: str, base_url: str, asset_prefix: str, output_dir: 
         "url": _build_url(base_url, asset_prefix, target_path.name),
         "sha256": _sha256(target_path),
         "sizeBytes": target_path.stat().st_size,
+    }
+
+
+def _build_external_asset_pack(entry: str, base_url: str, asset_prefix: str) -> dict:
+    parts = entry.split(":", 2)
+    if len(parts) != 3:
+        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME")
+
+    pack_id, version, file_name = parts
+    if not pack_id or not version or not file_name:
+        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME")
+
+    if "/" in file_name or "\\" in file_name:
+        raise SystemExit("--external-asset-pack FILE_NAME must be a file name, not a path")
+
+    return {
+        "id": pack_id,
+        "version": version,
+        "url": _build_url(base_url, asset_prefix, file_name),
+        "sha256": "",
+        "sizeBytes": 0,
     }
 
 

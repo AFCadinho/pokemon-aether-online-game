@@ -44,6 +44,7 @@ var news_url := DEFAULT_NEWS_URL
 var discord_url := DEFAULT_DISCORD_URL
 var install_dir := DEFAULT_INSTALL_DIR
 var news_items: Array[Dictionary] = []
+var progress_is_indeterminate := false
 
 
 func _draw() -> void:
@@ -219,24 +220,48 @@ func _process(_delta: float) -> void:
 			total_bytes = http_request.get_body_size()
 
 		if total_bytes > 0:
-			var visible_downloaded_bytes: int = mini(downloaded_bytes, total_bytes)
+			var progress_is_reliable := downloaded_bytes >= 0 and downloaded_bytes <= total_bytes
+			if not progress_is_reliable:
+				progress_is_indeterminate = true
+				progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
+				if not current_download.is_empty():
+					_set_status(
+						"Downloading %s... Large download in progress (%s)" % [
+							str(current_download.get("label", "download")),
+							_format_bytes(total_bytes),
+						]
+					)
+				return
+
+			progress_is_indeterminate = false
 			var percent: float = minf((float(downloaded_bytes) / float(total_bytes)) * 100.0, 99.0)
 			progress_bar.value = percent
 			if not current_download.is_empty():
 				_set_status(
 					"Downloading %s... %s / %s (%d%%)" % [
 						str(current_download.get("label", "download")),
-						_format_bytes(visible_downloaded_bytes),
+						_format_bytes(downloaded_bytes),
 						_format_bytes(total_bytes),
 						int(percent),
 					]
 				)
 		elif not current_download.is_empty():
+			if downloaded_bytes < 0:
+				progress_is_indeterminate = true
+				progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
+				_set_status(
+					"Downloading %s... Large download in progress" % [
+						str(current_download.get("label", "download")),
+					]
+				)
+				return
+
+			progress_is_indeterminate = false
 			progress_bar.value = 0.0
 			_set_status(
 				"Downloading %s... %s" % [
 					str(current_download.get("label", "download")),
-					_format_bytes(downloaded_bytes),
+					_format_bytes(maxi(downloaded_bytes, 0)),
 				]
 			)
 
@@ -371,6 +396,7 @@ func _create_game_process(absolute_executable_path: String) -> int:
 
 
 func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	progress_is_indeterminate = false
 	progress_bar.value = 100.0
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
 		_set_busy(false)
@@ -478,6 +504,7 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 
 
 func _handle_download_response() -> void:
+	progress_is_indeterminate = false
 	var file_path := str(current_download.get("file_path", ""))
 	var sha256 := str(current_download.get("sha256", ""))
 	if not FileAccess.file_exists(file_path):
@@ -525,6 +552,7 @@ func _handle_download_response() -> void:
 
 func _start_next_download() -> void:
 	if pending_downloads.is_empty():
+		progress_is_indeterminate = false
 		_save_local_versions()
 		update_required = false
 		_set_busy(false)
@@ -539,6 +567,7 @@ func _start_next_download() -> void:
 	var unique_file_name := "%s-%s.zip" % [file_name.get_basename(), Time.get_ticks_msec()]
 	var target_path := TEMP_DIR.path_join(unique_file_name)
 	current_download["file_path"] = target_path
+	progress_is_indeterminate = false
 	progress_bar.value = 0.0
 
 	DirAccess.make_dir_recursive_absolute(_globalize_storage_path(TEMP_DIR))
@@ -633,6 +662,7 @@ func _mark_download_installed(download: Dictionary) -> void:
 
 
 func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
+	progress_is_indeterminate = false
 	var reader := ZIPReader.new()
 	var open_error: Error = reader.open(zip_path)
 	if open_error != OK:
@@ -1014,6 +1044,10 @@ func _set_status(message: String) -> void:
 
 
 func _update_progress_percent() -> void:
+	if progress_is_indeterminate:
+		progress_percent_label.text = ""
+		return
+
 	progress_percent_label.text = "%d%%" % int(round(progress_bar.value))
 
 

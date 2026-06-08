@@ -35,10 +35,10 @@ env:
   LINUX_LAUNCHER_EXPORT_PATH: builds/launcher-app/linux/Pokemon Aether Launcher.x86_64
   SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v4
   POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
-  POKEMON_FRONT_ASSET_VERSION: pokemon-front-v1
-  POKEMON_BACK_ASSET_VERSION: pokemon-back-v1
-  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-v1
-  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-v1
+  POKEMON_FRONT_ASSET_VERSION: pokemon-front-ship64-v1
+  POKEMON_BACK_ASSET_VERSION: pokemon-back-ship64-v1
+  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-ship64-v1
+  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-ship64-v1
   UPDATE_BASE_URL: https://updates.pokemonaetheronline.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
 
@@ -192,7 +192,7 @@ jobs:
         run: |
           : > /tmp/asset_pack_args.txt
 
-          package_pack() {
+          package_local_pack() {
             pack_id="$1"
             pack_version="$2"
             source_path="$3"
@@ -207,11 +207,18 @@ jobs:
             printf '%s\n' "--asset-pack" "${pack_id}:${pack_version}:${output_path}" >> /tmp/asset_pack_args.txt
           }
 
-          package_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" assets/sprites/pokemon/pokemon_home
-          package_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" assets/sprites/pokemon/front
-          package_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" assets/sprites/pokemon/back
-          package_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" assets/sprites/pokemon/shiny_front
-          package_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" assets/sprites/pokemon/shiny_back
+          package_external_pack() {
+            pack_id="$1"
+            pack_version="$2"
+            file_name="$3"
+            printf '%s\n' "--external-asset-pack" "${pack_id}:${pack_version}:${file_name}" >> /tmp/asset_pack_args.txt
+          }
+
+          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" assets/sprites/pokemon/pokemon_home
+          package_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_VERSION}.zip"
+          package_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_VERSION}.zip"
+          package_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip"
+          package_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_VERSION}.zip"
 
       - name: Package launcher release
         run: |
