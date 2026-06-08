@@ -47,6 +47,8 @@ var discord_url := DEFAULT_DISCORD_URL
 var install_dir := DEFAULT_INSTALL_DIR
 var news_items: Array[Dictionary] = []
 var progress_is_indeterminate := false
+var asset_pack_download_total := 0
+var current_asset_pack_download_index := 0
 
 
 func _draw() -> void:
@@ -230,7 +232,7 @@ func _process(_delta: float) -> void:
 				if not current_download.is_empty():
 					_set_status(
 						"Downloading %s... Large download in progress (%s)" % [
-							str(current_download.get("label", "download")),
+							_get_current_download_display_label(),
 							_format_bytes(total_bytes),
 						]
 					)
@@ -242,7 +244,7 @@ func _process(_delta: float) -> void:
 			if not current_download.is_empty():
 				_set_status(
 					"Downloading %s... %s / %s (%d%%)" % [
-						str(current_download.get("label", "download")),
+						_get_current_download_display_label(),
 						_format_bytes(downloaded_bytes),
 						_format_bytes(total_bytes),
 						int(percent),
@@ -254,7 +256,7 @@ func _process(_delta: float) -> void:
 				progress_bar.value = fmod(float(Time.get_ticks_msec()) / 18.0, 100.0)
 				_set_status(
 					"Downloading %s... Large download in progress" % [
-						str(current_download.get("label", "download")),
+						_get_current_download_display_label(),
 					]
 				)
 				return
@@ -263,7 +265,7 @@ func _process(_delta: float) -> void:
 			progress_bar.value = 0.0
 			_set_status(
 				"Downloading %s... %s" % [
-					str(current_download.get("label", "download")),
+					_get_current_download_display_label(),
 					_format_bytes(maxi(downloaded_bytes, 0)),
 				]
 			)
@@ -298,6 +300,7 @@ func start_update() -> void:
 		return
 
 	_build_download_queue()
+	_reset_download_progress_counters()
 	if pending_downloads.is_empty():
 		update_required = false
 		_set_status("Already up to date.")
@@ -525,7 +528,7 @@ func _handle_download_response() -> void:
 		current_download.clear()
 		return
 
-	var download_label: String = str(current_download.get("label", "download"))
+	var download_label: String = _get_current_download_display_label()
 	_set_status("Extracting %s..." % download_label)
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
@@ -557,6 +560,7 @@ func _handle_download_response() -> void:
 func _start_next_download() -> void:
 	if pending_downloads.is_empty():
 		progress_is_indeterminate = false
+		_reset_download_progress_counters()
 		_save_local_versions()
 		update_required = false
 		_set_busy(false)
@@ -566,6 +570,7 @@ func _start_next_download() -> void:
 		return
 
 	current_download = pending_downloads.pop_front()
+	_prepare_current_download_progress()
 	var url := str(current_download.get("url", ""))
 	var file_name := str(current_download.get("file_name", "download.zip"))
 	var unique_file_name := "%s-%s.zip" % [file_name.get_basename(), Time.get_ticks_msec()]
@@ -575,7 +580,7 @@ func _start_next_download() -> void:
 	progress_bar.value = 0.0
 
 	DirAccess.make_dir_recursive_absolute(_globalize_storage_path(TEMP_DIR))
-	var download_label: String = str(current_download.get("label", file_name))
+	var download_label: String = _get_current_download_display_label()
 	_set_status("Downloading %s..." % download_label)
 	_log("Downloading %s." % download_label)
 	http_request.download_file = target_path
@@ -643,6 +648,36 @@ func _build_download_queue() -> void:
 			filtered_downloads.append(download)
 
 	pending_downloads = filtered_downloads
+
+
+func _reset_download_progress_counters() -> void:
+	asset_pack_download_total = 0
+	current_asset_pack_download_index = 0
+	for download: Dictionary in pending_downloads:
+		if str(download.get("type", "")) == "asset_pack":
+			asset_pack_download_total += 1
+
+
+func _prepare_current_download_progress() -> void:
+	if str(current_download.get("type", "")) != "asset_pack":
+		return
+
+	current_asset_pack_download_index += 1
+	current_download["asset_pack_index"] = current_asset_pack_download_index
+	current_download["asset_pack_total"] = asset_pack_download_total
+
+
+func _get_current_download_display_label() -> String:
+	var label: String = str(current_download.get("label", current_download.get("file_name", "download")))
+	if str(current_download.get("type", "")) != "asset_pack":
+		return label
+
+	var asset_pack_index: int = int(current_download.get("asset_pack_index", current_asset_pack_download_index))
+	var asset_pack_total: int = int(current_download.get("asset_pack_total", asset_pack_download_total))
+	if asset_pack_total <= 0:
+		return "asset pack: %s" % label
+
+	return "asset pack %d/%d: %s" % [asset_pack_index, asset_pack_total, label]
 
 
 func _get_download_extract_dir(download: Dictionary) -> String:
