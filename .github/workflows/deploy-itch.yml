@@ -22,9 +22,13 @@ env:
   WINDOWS_EXPORT_PRESET: Windows Itch Build
   WINDOWS_EXPORT_PATH: builds/windows/Pokemon Aether Online.exe
   WINDOWS_ITCH_TARGET: afc-adinho/pokemonaetheronline:windows
+  WINDOWS_LAUNCHER_EXPORT_PRESET: Windows Launcher
+  WINDOWS_LAUNCHER_EXPORT_PATH: builds/launcher-app/windows/Pokemon Aether Launcher.exe
   LINUX_EXPORT_PRESET: Linux Itch Build
   LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
   LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
+  LINUX_LAUNCHER_EXPORT_PRESET: Linux Launcher
+  LINUX_LAUNCHER_EXPORT_PATH: builds/launcher-app/linux/Pokemon Aether Launcher.x86_64
   SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v4
   POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-v1
@@ -107,6 +111,11 @@ jobs:
       - name: Import Godot assets
         run: ./godot --headless --import --quit
 
+      - name: Import launcher assets
+        run: |
+          cd launcher
+          ../godot --headless --import --quit
+
       - name: Export Windows build
         run: |
           mkdir -p builds/windows
@@ -126,6 +135,27 @@ jobs:
         run: |
           test -f "builds/linux/Pokemon Aether Online.x86_64"
           test -f "builds/linux/Pokemon Aether Online.pck"
+
+      - name: Export Windows launcher
+        run: |
+          mkdir -p builds/launcher-app/windows
+          cd launcher
+          ../godot --headless --export-release "${WINDOWS_LAUNCHER_EXPORT_PRESET}" "../${WINDOWS_LAUNCHER_EXPORT_PATH}"
+
+      - name: Export Linux launcher
+        run: |
+          mkdir -p builds/launcher-app/linux
+          cd launcher
+          ../godot --headless --export-release "${LINUX_LAUNCHER_EXPORT_PRESET}" "../${LINUX_LAUNCHER_EXPORT_PATH}"
+
+      - name: Package launcher app downloads
+        run: |
+          test -f "builds/launcher-app/windows/Pokemon Aether Launcher.exe"
+          test -f "builds/launcher-app/windows/Pokemon Aether Launcher.pck"
+          test -f "builds/launcher-app/linux/Pokemon Aether Launcher.x86_64"
+          test -f "builds/launcher-app/linux/Pokemon Aether Launcher.pck"
+          python3 tools/package_directory_zip.py builds/launcher-app/windows builds/launcher-app/PokemonAetherLauncher-windows.zip
+          python3 tools/package_directory_zip.py builds/launcher-app/linux builds/launcher-app/PokemonAetherLauncher-linux.zip
 
       - name: Package Pokemon sprite asset packs
         run: |
@@ -186,6 +216,14 @@ jobs:
             exit 0
           fi
           python3 tools/upload_launcher_release.py builds/launcher --layout updates
+          python3 tools/upload_launcher_release.py builds/launcher-app \
+            --prefix launcher/latest \
+            --file PokemonAetherLauncher-windows.zip \
+            --file PokemonAetherLauncher-linux.zip
+          python3 tools/upload_launcher_release.py builds/launcher-app \
+            --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
+            --file PokemonAetherLauncher-windows.zip \
+            --file PokemonAetherLauncher-linux.zip
 
       - name: Upload desktop build artifacts
         uses: actions/upload-artifact@v4
@@ -202,6 +240,7 @@ jobs:
           path: |
             builds/launcher/game-*.zip
             builds/launcher/manifest*.json
+            builds/launcher-app/PokemonAetherLauncher-*.zip
 
       - name: Download butler
         run: |

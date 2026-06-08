@@ -84,6 +84,10 @@ The production R2 bucket uses this layout:
 manifest.json
 manifest-linux.json
 manifest-windows.json
+launcher/latest/PokemonAetherLauncher-linux.zip
+launcher/latest/PokemonAetherLauncher-windows.zip
+launcher/0.1.0/PokemonAetherLauncher-linux.zip
+launcher/0.1.0/PokemonAetherLauncher-windows.zip
 game/game-0.1.0-linux.zip
 game/game-0.1.0-windows.zip
 assets/pokemon-front-v1.zip
@@ -114,6 +118,13 @@ For the production bucket layout, upload with:
 
 ```bash
 python3 tools/upload_launcher_release.py builds/launcher --layout updates
+```
+
+The CI workflow also uploads launcher app downloads to stable public URLs:
+
+```text
+https://updates.pokemonaetheronline.com/launcher/latest/PokemonAetherLauncher-windows.zip
+https://updates.pokemonaetheronline.com/launcher/latest/PokemonAetherLauncher-linux.zip
 ```
 
 GitHub Actions can upload to R2 automatically when these repository secrets are configured:
