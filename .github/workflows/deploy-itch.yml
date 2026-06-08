@@ -10,6 +10,10 @@ on:
         description: Launcher release version. Leave empty to use 0.1.<run number>.
         required: false
         default: ""
+      build_launcher:
+        description: Force rebuilding and uploading launcher downloads.
+        required: false
+        default: "false"
 
 concurrency:
   group: deploy-itch
@@ -46,6 +50,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set launcher release version
         run: |
@@ -54,6 +60,27 @@ jobs:
           else
             echo "LAUNCHER_RELEASE_VERSION=0.1.${GITHUB_RUN_NUMBER}" >> "${GITHUB_ENV}"
           fi
+
+      - name: Detect launcher changes
+        run: |
+          build_launcher=false
+
+          if [ "${{ github.event.inputs.build_launcher }}" = "true" ]; then
+            build_launcher=true
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+              changed_files="$(git diff --name-only HEAD~1 HEAD)"
+            else
+              changed_files="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")"
+            fi
+
+            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_directory_zip.py|\.github/workflows/deploy-itch.yml)' >/dev/null; then
+              build_launcher=true
+            fi
+          fi
+
+          echo "BUILD_LAUNCHER=${build_launcher}" >> "${GITHUB_ENV}"
+          echo "Build launcher: ${build_launcher}"
 
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y unzip megatools
@@ -112,6 +139,7 @@ jobs:
         run: ./godot --headless --import --quit
 
       - name: Import launcher assets
+        if: env.BUILD_LAUNCHER == 'true'
         run: |
           cd launcher
           ../godot --headless --import --quit
@@ -137,18 +165,21 @@ jobs:
           test -f "builds/linux/Pokemon Aether Online.pck"
 
       - name: Export Windows launcher
+        if: env.BUILD_LAUNCHER == 'true'
         run: |
           mkdir -p builds/launcher-app/windows
           cd launcher
           ../godot --headless --export-release "${WINDOWS_LAUNCHER_EXPORT_PRESET}" "../${WINDOWS_LAUNCHER_EXPORT_PATH}"
 
       - name: Export Linux launcher
+        if: env.BUILD_LAUNCHER == 'true'
         run: |
           mkdir -p builds/launcher-app/linux
           cd launcher
           ../godot --headless --export-release "${LINUX_LAUNCHER_EXPORT_PRESET}" "../${LINUX_LAUNCHER_EXPORT_PATH}"
 
       - name: Package launcher app downloads
+        if: env.BUILD_LAUNCHER == 'true'
         run: |
           test -f "builds/launcher-app/windows/Pokemon Aether Launcher.exe"
           test -f "builds/launcher-app/windows/Pokemon Aether Launcher.pck"
@@ -216,14 +247,18 @@ jobs:
             exit 0
           fi
           python3 tools/upload_launcher_release.py builds/launcher --layout updates
-          python3 tools/upload_launcher_release.py builds/launcher-app \
-            --prefix launcher/latest \
-            --file PokemonAetherLauncher-windows.zip \
-            --file PokemonAetherLauncher-linux.zip
-          python3 tools/upload_launcher_release.py builds/launcher-app \
-            --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
-            --file PokemonAetherLauncher-windows.zip \
-            --file PokemonAetherLauncher-linux.zip
+          if [ "${BUILD_LAUNCHER}" = "true" ]; then
+            python3 tools/upload_launcher_release.py builds/launcher-app \
+              --prefix launcher/latest \
+              --file PokemonAetherLauncher-windows.zip \
+              --file PokemonAetherLauncher-linux.zip
+            python3 tools/upload_launcher_release.py builds/launcher-app \
+              --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
+              --file PokemonAetherLauncher-windows.zip \
+              --file PokemonAetherLauncher-linux.zip
+          else
+            echo "Skipping launcher download upload because BUILD_LAUNCHER=false."
+          fi
 
       - name: Upload desktop build artifacts
         uses: actions/upload-artifact@v4
@@ -234,6 +269,7 @@ jobs:
             builds/linux
 
       - name: Upload launcher release artifacts
+        if: env.BUILD_LAUNCHER == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: launcher-release
