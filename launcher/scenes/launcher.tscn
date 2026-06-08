@@ -1,8 +1,14 @@
 [gd_scene format=3 uid="uid://bqpcnejhsgi3k"]
 
 [ext_resource type="Script" uid="uid://sejde4y7ji6v" path="res://scripts/launcher.gd" id="1_launcher"]
+[ext_resource type="Texture2D" uid="uid://da4x4pta7v7o4" path="res://assets/ui/launcher_hero_clean.png" id="2_hero"]
+[ext_resource type="Texture2D" uid="uid://bdnq1ysb18lkt" path="res://assets/ui/logo.png" id="3_logo"]
+[ext_resource type="Texture2D" uid="uid://tvvwj514bct" path="res://assets/ui/discord.svg" id="4_discord"]
 
-[node name="Launcher" type="Control" unique_id=125608026]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wr5gk"]
+load_path = "res://.godot/imported/pao_text_logo.png-fef76664bf29104b4db10aacc1bf4d3e.ctex"
+
+[node name="Launcher" type="Control" unique_id=1777332781]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,68 +17,387 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_launcher")
 
-[node name="Panel" type="PanelContainer" parent="." unique_id=1023563146]
+[node name="HeroBackground" type="TextureRect" parent="." unique_id=1683445941]
+modulate = Color(0.54, 0.58, 0.72, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_hero")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=680284006]
+[node name="BackgroundShade" type="ColorRect" parent="." unique_id=671056615]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.012, 0.025, 0.42)
+
+[node name="Shell" type="PanelContainer" parent="." unique_id=529573549]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainSplit" type="HBoxContainer" parent="Shell" unique_id=134364159]
 layout_mode = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 28
+theme_override_constants/separation = 0
+
+[node name="Sidebar" type="PanelContainer" parent="Shell/MainSplit" unique_id=1824810322]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="SidebarMargin" type="MarginContainer" parent="Shell/MainSplit/Sidebar" unique_id=1829532926]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 24
 
-[node name="Layout" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1422734400]
+[node name="SidebarLayout" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin" unique_id=2020976424]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 26
 
-[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/Layout" unique_id=835523053]
+[node name="BrandRow" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=1721467597]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Pokemon Aether Online"
+theme_override_constants/separation = 12
+alignment = 1
 
-[node name="VersionLabel" type="Label" parent="Panel/MarginContainer/Layout" unique_id=673926926]
+[node name="BrandMark" type="PanelContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow" unique_id=1644328401]
+custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
-text = "Version: unknown"
 
-[node name="StatusLabel" type="Label" parent="Panel/MarginContainer/Layout" unique_id=231627275]
+[node name="BrandMarkTexture" type="TextureRect" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandMark" unique_id=1985617991]
 layout_mode = 2
+texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BrandText" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow" unique_id=1502598816]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="BrandTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandText" unique_id=1486406648]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 25
+text = "AETHER"
+
+[node name="BrandSubtitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandText" unique_id=325813364]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.42, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "LAUNCHER"
+
+[node name="Nav" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=1579431840]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HomeButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=2116909041]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+text = "  Home"
+flat = true
+
+[node name="PatchNotesButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=253278925]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+disabled = true
+text = "  Patch Notes"
+flat = true
+
+[node name="GameFolderButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1480444040]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "  Game Folder"
+flat = true
+
+[node name="SidebarSpacer" type="Control" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=550067109]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SocialSection" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=785079313]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SocialTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection" unique_id=904809699]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+theme_override_font_sizes/font_size = 13
+text = "SOCIALS"
+horizontal_alignment = 1
+
+[node name="SocialRow" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection" unique_id=331476173]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DiscordButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow" unique_id=855388307]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+tooltip_text = "Join Discord"
+theme_override_constants/icon_max_width = 20
+icon = ExtResource("4_discord")
+flat = true
+
+[node name="ServerCard" type="PanelContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=75090192]
+layout_mode = 2
+
+[node name="ServerMargin" type="MarginContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard" unique_id=620258447]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="ServerLayout" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin" unique_id=538514409]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ServerStatus" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=25484390]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+text = "Server Status"
+
+[node name="ServerOnline" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=284687951]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.16, 0.94, 0.66, 1)
+text = "Online"
+
+[node name="LauncherVersionTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=1974187876]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+text = "Launcher Version"
+
+[node name="LauncherVersionValue" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=520326899]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+text = "1.0.0"
+
+[node name="Content" type="MarginContainer" parent="Shell/MainSplit" unique_id=1084134119]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 30
+
+[node name="ContentLayout" type="HBoxContainer" parent="Shell/MainSplit/Content" unique_id=171063793]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="CenterColumn" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout" unique_id=2113551366]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="MetaCard" type="PanelContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn" unique_id=1437169945]
+custom_minimum_size = Vector2(0, 86)
+layout_mode = 2
+
+[node name="MetaMargin" type="MarginContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard" unique_id=1908313770]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 16
+
+[node name="MetaGrid" type="GridContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin" unique_id=1433763925]
+layout_mode = 2
+theme_override_constants/h_separation = 35
+columns = 3
+
+[node name="VersionBlock" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid" unique_id=1173354727]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="VersionTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/VersionBlock" unique_id=1537581666]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.59, 0.7, 1)
+theme_override_font_sizes/font_size = 13
+text = "VERSION"
+
+[node name="VersionLabel" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/VersionBlock" unique_id=1594700107]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.48, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "unknown"
+
+[node name="StatusBlock" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid" unique_id=502163193]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="StatusTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/StatusBlock" unique_id=786751102]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.59, 0.7, 1)
+theme_override_font_sizes/font_size = 13
+text = "STATUS"
+
+[node name="StatusValueLabel" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/StatusBlock" unique_id=76837560]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.16, 0.94, 0.66, 1)
+theme_override_font_sizes/font_size = 16
 text = "Ready."
-autowrap_mode = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="Panel/MarginContainer/Layout" unique_id=1652690282]
+[node name="LastCheckBlock" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid" unique_id=653901964]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-max_value = 1.0
+theme_override_constants/separation = 5
+
+[node name="LastCheckTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/LastCheckBlock" unique_id=1437692441]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.59, 0.7, 1)
+theme_override_font_sizes/font_size = 13
+text = "LAST CHECK"
+
+[node name="LastCheckLabel" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/LastCheckBlock" unique_id=1763378872]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.71, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+text = "Never"
+
+[node name="ShowcaseGap" type="Control" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn" unique_id=1485963702]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="PaoTextLogo" type="TextureRect" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ShowcaseGap" unique_id=705951139]
+modulate = Color(1, 1, 1, 0.96)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -18.0
+offset_right = -24.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("CompressedTexture2D_wr5gk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProgressCard" type="PanelContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn" unique_id=395438603]
+custom_minimum_size = Vector2(0, 116)
+layout_mode = 2
+
+[node name="ProgressMargin" type="MarginContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard" unique_id=550031480]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 16
+
+[node name="ProgressLayout" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin" unique_id=13100956]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ProgressHeader" type="HBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout" unique_id=1801433696]
+layout_mode = 2
+
+[node name="ProgressTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader" unique_id=1149407082]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.83, 0.84, 0.91, 1)
+theme_override_font_sizes/font_size = 13
+text = "PROGRESS"
+
+[node name="ProgressPercentLabel" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader" unique_id=643818305]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "0%"
+horizontal_alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout" unique_id=1545343033]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
 step = 0.001
 show_percentage = false
 
-[node name="LogLabel" type="RichTextLabel" parent="Panel/MarginContainer/Layout" unique_id=488285657]
+[node name="StatusLabel" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout" unique_id=1780591717]
 layout_mode = 2
-size_flags_vertical = 3
-bbcode_enabled = true
-scroll_following = true
+theme_override_colors/font_color = Color(0.81, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "Ready to check for updates."
+autowrap_mode = 3
 
-[node name="ButtonRow" type="HBoxContainer" parent="Panel/MarginContainer/Layout" unique_id=85606896]
+[node name="ButtonRow" type="HBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn" unique_id=1109571568]
 layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 2
+theme_override_constants/separation = 14
 
-[node name="CheckButton" type="Button" parent="Panel/MarginContainer/Layout/ButtonRow" unique_id=1040375614]
+[node name="CheckButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1666491337]
+custom_minimum_size = Vector2(155, 62)
 layout_mode = 2
 text = "Check updates"
 
-[node name="UpdateButton" type="Button" parent="Panel/MarginContainer/Layout/ButtonRow" unique_id=1700270267]
+[node name="UpdateButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=142758839]
+custom_minimum_size = Vector2(155, 62)
 layout_mode = 2
 disabled = true
 text = "Update"
 
-[node name="PlayButton" type="Button" parent="Panel/MarginContainer/Layout/ButtonRow" unique_id=1011669971]
+[node name="PlayButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1383115794]
+custom_minimum_size = Vector2(155, 62)
 layout_mode = 2
+size_flags_horizontal = 3
 disabled = true
 text = "Play"
 
-[node name="HttpRequest" type="HTTPRequest" parent="." unique_id=2012601374]
+[node name="NewsCard" type="PanelContainer" parent="Shell/MainSplit/Content/ContentLayout" unique_id=983230417]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="NewsMargin" type="MarginContainer" parent="Shell/MainSplit/Content/ContentLayout/NewsCard" unique_id=586066121]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 16
+
+[node name="NewsLayout" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin" unique_id=1832220344]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NewsTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout" unique_id=217464752]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.42, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "NEWS"
+
+[node name="LogLabel" type="RichTextLabel" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout" unique_id=1891686890]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "No news available."
+fit_content = true
+scroll_following = true
+
+[node name="HttpRequest" type="HTTPRequest" parent="." unique_id=342281023]
+
+[node name="NewsRequest" type="HTTPRequest" parent="." unique_id=131167291]
+
+[node name="InstallFolderDialog" type="FileDialog" parent="." unique_id=1382789245]
+title = "Open a Directory"
+size = Vector2i(900, 620)
+file_mode = 2
+access = 2

@@ -27,10 +27,14 @@ static func get_external_pokemon_sprite_root() -> String:
 		return external_sprite_root
 
 	var executable_dir := OS.get_executable_path().get_base_dir()
-	var candidate := executable_dir.path_join(POKEMON_SPRITE_RELATIVE_ROOT)
-	if DirAccess.dir_exists_absolute(candidate):
-		external_sprite_root = candidate
-		return external_sprite_root
+	var candidates: Array[String] = [
+		executable_dir.path_join(POKEMON_SPRITE_RELATIVE_ROOT),
+		executable_dir.get_base_dir().path_join(POKEMON_SPRITE_RELATIVE_ROOT),
+	]
+	for candidate: String in candidates:
+		if DirAccess.dir_exists_absolute(candidate):
+			external_sprite_root = candidate
+			return external_sprite_root
 
 	return ""
 

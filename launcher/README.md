@@ -7,8 +7,14 @@ Small Godot launcher project for Pokemon Aether Online.
 1. Downloads `manifest.json`.
 2. Compares remote versions with `user://versions.json`.
 3. Downloads missing or outdated zip files.
-4. Extracts them into `user://game`.
-5. Starts the configured game executable.
+4. Extracts the game build into `user://game/game`.
+5. Extracts asset packs into `user://game/assets`.
+6. Replaces `user://game/game` on each game update while keeping unchanged asset packs.
+7. Starts the configured game executable.
+
+The default install folder is `user://game`. Players can choose a custom install folder from the launcher Game Folder button; that choice is saved in `user://launcher_settings.json`.
+
+Launcher news is loaded separately from the update manifest through `newsUrl` in `config/launcher_config.json`. The expected shape is documented in `config/news.example.json`.
 
 ## Configure
 

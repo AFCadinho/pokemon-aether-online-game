@@ -1,20 +1,38 @@
 extends Control
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokemon-aether/manifest.json"
+const DEFAULT_NEWS_URL := "https://updates.pokemonaetheronline.com/news.json"
+const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
-const INSTALL_DIR := "user://game"
+const DEFAULT_INSTALL_DIR := "user://game"
+const GAME_INSTALL_SUBDIR := "game"
+const LAUNCHER_SETTINGS_FILE := "user://launcher_settings.json"
 const VERSION_FILE := "user://versions.json"
 const TEMP_DIR := "user://downloads"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
 
-@onready var version_label: Label = $Panel/MarginContainer/Layout/VersionLabel
-@onready var status_label: Label = $Panel/MarginContainer/Layout/StatusLabel
-@onready var progress_bar: ProgressBar = $Panel/MarginContainer/Layout/ProgressBar
-@onready var log_label: RichTextLabel = $Panel/MarginContainer/Layout/LogLabel
-@onready var check_button: Button = $Panel/MarginContainer/Layout/ButtonRow/CheckButton
-@onready var update_button: Button = $Panel/MarginContainer/Layout/ButtonRow/UpdateButton
-@onready var play_button: Button = $Panel/MarginContainer/Layout/ButtonRow/PlayButton
+@onready var shell_panel: PanelContainer = $Shell
+@onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
+@onready var brand_mark: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandMark
+@onready var server_card: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard
+@onready var meta_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard
+@onready var progress_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard
+@onready var news_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/NewsCard
+@onready var version_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/VersionBlock/VersionLabel
+@onready var status_value_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/StatusBlock/StatusValueLabel
+@onready var last_check_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/LastCheckBlock/LastCheckLabel
+@onready var status_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/StatusLabel
+@onready var progress_bar: ProgressBar = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressBar
+@onready var progress_percent_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader/ProgressPercentLabel
+@onready var log_label: RichTextLabel = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/LogLabel
+@onready var check_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/CheckButton
+@onready var update_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/UpdateButton
+@onready var play_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/PlayButton
+@onready var game_folder_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton
+@onready var discord_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton
+@onready var install_folder_dialog: FileDialog = $InstallFolderDialog
 @onready var http_request: HTTPRequest = $HttpRequest
+@onready var news_request: HTTPRequest = $NewsRequest
 
 var manifest: Dictionary = {}
 var local_versions: Dictionary = {}
@@ -22,19 +40,174 @@ var pending_downloads: Array[Dictionary] = []
 var current_download: Dictionary = {}
 var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
+var news_url := DEFAULT_NEWS_URL
+var discord_url := DEFAULT_DISCORD_URL
+var install_dir := DEFAULT_INSTALL_DIR
+var news_items: Array[Dictionary] = []
+
+
+func _draw() -> void:
+	var viewport_size := size
+	draw_rect(Rect2(Vector2.ZERO, viewport_size), Color(0.018, 0.019, 0.036))
+	draw_rect(Rect2(Vector2(viewport_size.x * 0.23, 0.0), Vector2(viewport_size.x * 0.77, viewport_size.y * 0.45)), Color(0.055, 0.035, 0.12, 0.76))
+	draw_rect(Rect2(Vector2(viewport_size.x * 0.62, 0.0), Vector2(viewport_size.x * 0.38, viewport_size.y * 0.38)), Color(0.23, 0.07, 0.48, 0.34))
+
+	var star_points := [
+		Vector2(0.41, 0.08), Vector2(0.58, 0.09), Vector2(0.72, 0.08), Vector2(0.83, 0.10),
+		Vector2(0.47, 0.14), Vector2(0.64, 0.15), Vector2(0.78, 0.16), Vector2(0.91, 0.15),
+		Vector2(0.37, 0.21), Vector2(0.52, 0.20), Vector2(0.69, 0.22), Vector2(0.87, 0.23),
+	]
+	for point: Vector2 in star_points:
+		var star_position := Vector2(viewport_size.x * point.x, viewport_size.y * point.y)
+		draw_circle(star_position, 1.6, Color(0.78, 0.45, 1.0, 0.9))
+		draw_circle(star_position, 4.0, Color(0.78, 0.45, 1.0, 0.18))
+
+	var moon_center := Vector2(viewport_size.x * 0.78, viewport_size.y * 0.14)
+	draw_circle(moon_center, 31.0, Color(0.42, 0.13, 0.82, 0.44))
+	draw_circle(moon_center + Vector2(-13, -3), 31.0, Color(0.055, 0.035, 0.12, 0.92))
+
+	var mountain_y := viewport_size.y * 0.39
+	draw_polygon(PackedVector2Array([
+		Vector2(viewport_size.x * 0.24, mountain_y + 22),
+		Vector2(viewport_size.x * 0.40, mountain_y - 52),
+		Vector2(viewport_size.x * 0.55, mountain_y + 22),
+	]), PackedColorArray([
+		Color(0.04, 0.06, 0.14, 0.72),
+		Color(0.04, 0.06, 0.14, 0.72),
+		Color(0.04, 0.06, 0.14, 0.72),
+	]))
+	draw_polygon(PackedVector2Array([
+		Vector2(viewport_size.x * 0.45, mountain_y + 24),
+		Vector2(viewport_size.x * 0.61, mountain_y - 36),
+		Vector2(viewport_size.x * 0.78, mountain_y + 24),
+	]), PackedColorArray([
+		Color(0.05, 0.07, 0.17, 0.78),
+		Color(0.05, 0.07, 0.17, 0.78),
+		Color(0.05, 0.07, 0.17, 0.78),
+	]))
+	draw_rect(Rect2(Vector2(viewport_size.x * 0.23, mountain_y + 8), Vector2(viewport_size.x * 0.77, viewport_size.y - mountain_y)), Color(0.018, 0.022, 0.046, 0.72))
+
+	var mascot_center := Vector2(viewport_size.x * 0.89, viewport_size.y * 0.25)
+	draw_circle(mascot_center, 58.0, Color(0.012, 0.016, 0.036, 0.96))
+	draw_polygon(PackedVector2Array([
+		mascot_center + Vector2(-46, -39),
+		mascot_center + Vector2(-28, -96),
+		mascot_center + Vector2(-8, -48),
+	]), PackedColorArray([
+		Color(0.012, 0.016, 0.036, 0.96),
+		Color(0.012, 0.016, 0.036, 0.96),
+		Color(0.012, 0.016, 0.036, 0.96),
+	]))
+	draw_polygon(PackedVector2Array([
+		mascot_center + Vector2(33, -42),
+		mascot_center + Vector2(63, -92),
+		mascot_center + Vector2(48, -29),
+	]), PackedColorArray([
+		Color(0.012, 0.016, 0.036, 0.96),
+		Color(0.012, 0.016, 0.036, 0.96),
+		Color(0.012, 0.016, 0.036, 0.96),
+	]))
+	draw_arc(mascot_center + Vector2(0, 8), 30.0, 0.05, PI - 0.05, 24, Color(0.73, 0.42, 1.0, 0.92), 10.0)
 
 
 func _ready() -> void:
+	_apply_visual_style()
 	_load_launcher_config()
+	_load_launcher_settings()
 	check_button.pressed.connect(check_for_updates)
 	update_button.pressed.connect(start_update)
 	play_button.pressed.connect(launch_game)
+	game_folder_button.pressed.connect(open_install_folder_dialog)
+	discord_button.pressed.connect(open_discord)
+	install_folder_dialog.dir_selected.connect(_on_install_folder_selected)
 	http_request.request_completed.connect(_on_request_completed)
+	if news_request != null:
+		news_request.request_completed.connect(_on_news_request_completed)
+	log_label.meta_clicked.connect(_on_news_meta_clicked)
 	_load_local_versions()
 	_refresh_status()
+	_sync_button_cursors()
+	check_for_updates.call_deferred()
+	fetch_news.call_deferred()
+	queue_redraw()
+
+
+func _apply_visual_style() -> void:
+	add_theme_font_size_override("font_size", 16)
+
+	shell_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.03, 0.034, 0.062, 0.24), Color(0.22, 0.23, 0.34, 0.68), 12, 1))
+	sidebar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.03, 0.055, 0.78), Color(0.18, 0.19, 0.29, 0.7), 10, 1))
+	brand_mark.add_theme_stylebox_override("panel", _panel_style(Color(0.48, 0.22, 0.96, 1.0), Color(0.72, 0.48, 1.0, 0.55), 28, 0))
+	server_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.095, 0.72), Color(0.22, 0.23, 0.34, 0.82), 10, 1))
+	meta_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.1, 0.58), Color(0.24, 0.25, 0.36, 0.72), 14, 1))
+	progress_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.1, 0.62), Color(0.22, 0.23, 0.34, 0.72), 14, 1))
+	news_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.1, 0.60), Color(0.22, 0.23, 0.34, 0.72), 14, 1))
+
+	var nav_active := _panel_style(Color(0.18, 0.13, 0.34, 0.92), Color(0.48, 0.25, 0.92, 0.9), 8, 1)
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("normal", nav_active)
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("hover", nav_active)
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_color_override("font_color", Color(0.96, 0.96, 1.0))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.82), Color(0.42, 0.22, 0.82, 0.72), 8, 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton.add_theme_color_override("font_color", Color(0.76, 0.78, 0.88, 1.0))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("normal", _panel_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 8, 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 8, 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("pressed", _panel_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 8, 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_constant_override("icon_max_width", 20)
+
+	for nav_button in [
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton,
+	]:
+		nav_button.add_theme_stylebox_override("disabled", _panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 8, 0))
+		nav_button.add_theme_color_override("font_disabled_color", Color(0.68, 0.70, 0.80, 0.82))
+
+	_apply_button_style(check_button, false)
+	_apply_button_style(update_button, false)
+	_apply_button_style(play_button, true)
+
+	progress_bar.add_theme_stylebox_override("background", _panel_style(Color(0.14, 0.16, 0.27, 0.86), Color(0, 0, 0, 0), 7, 0))
+	progress_bar.add_theme_stylebox_override("fill", _panel_style(Color(0.55, 0.26, 0.96, 1.0), Color(0, 0, 0, 0), 7, 0))
+	log_label.add_theme_color_override("default_color", Color(0.80, 0.81, 0.88))
+
+
+func _panel_style(background_color: Color, border_color: Color, radius: int, border_width: int) -> StyleBoxFlat:
+	var style_box := StyleBoxFlat.new()
+	style_box.bg_color = background_color
+	style_box.border_color = border_color
+	style_box.border_width_left = border_width
+	style_box.border_width_top = border_width
+	style_box.border_width_right = border_width
+	style_box.border_width_bottom = border_width
+	style_box.corner_radius_top_left = radius
+	style_box.corner_radius_top_right = radius
+	style_box.corner_radius_bottom_right = radius
+	style_box.corner_radius_bottom_left = radius
+	style_box.shadow_color = Color(0.0, 0.0, 0.0, 0.25)
+	style_box.shadow_size = 12
+	style_box.shadow_offset = Vector2(0, 6)
+	return style_box
+
+
+func _apply_button_style(button: Button, is_primary: bool) -> void:
+	var normal_color := Color(0.075, 0.08, 0.13, 0.92)
+	var border_color := Color(0.52, 0.26, 0.96, 0.95)
+	if is_primary:
+		normal_color = Color(0.48, 0.22, 0.92, 1.0)
+		border_color = Color(0.72, 0.47, 1.0, 0.8)
+
+	button.add_theme_stylebox_override("normal", _panel_style(normal_color, border_color, 8, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(normal_color.lightened(0.08), border_color.lightened(0.08), 8, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(normal_color.darkened(0.08), border_color, 8, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color(0.08, 0.085, 0.14, 0.72), Color(0.26, 0.27, 0.4, 0.9), 8, 1))
+	button.add_theme_color_override("font_color", Color(0.98, 0.98, 1.0))
+	button.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
+	button.add_theme_color_override("font_pressed_color", Color(0.91, 0.86, 1.0))
+	button.add_theme_color_override("font_disabled_color", Color(0.45, 0.46, 0.56))
+	button.add_theme_font_size_override("font_size", 17)
 
 
 func _process(_delta: float) -> void:
+	_update_progress_percent()
+	_sync_button_cursors()
 	if http_request.get_http_client_status() == HTTPClient.STATUS_BODY:
 		var downloaded_bytes: int = http_request.get_downloaded_bytes()
 		var expected_bytes: int = 0
@@ -80,6 +253,17 @@ func check_for_updates() -> void:
 		_log_error("Manifest request failed: %s" % error_string(error_code))
 
 
+func fetch_news() -> void:
+	if news_request == null or news_url.is_empty():
+		_render_news_items([])
+		return
+
+	var error_code: Error = news_request.request(news_url)
+	if error_code != OK:
+		_render_news_items([])
+		_log_error("News request failed: %s" % error_string(error_code))
+
+
 func start_update() -> void:
 	if manifest.is_empty():
 		check_for_updates()
@@ -100,15 +284,7 @@ func start_update() -> void:
 
 func launch_game() -> void:
 	var game_data: Dictionary = _get_dictionary(manifest, "game")
-	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
-	if executable_path.is_empty():
-		if OS.get_name() == "Windows":
-			executable_path = "Pokemon Aether Online.exe"
-		else:
-			executable_path = "Pokemon Aether Online.x86_64"
-
-	var absolute_executable_path := ProjectSettings.globalize_path(INSTALL_DIR.path_join(executable_path))
-
+	var absolute_executable_path := _get_game_executable_path(game_data)
 	if not FileAccess.file_exists(absolute_executable_path):
 		_set_status("Game executable not found. Run update first.")
 		_log_error("Missing executable: %s" % absolute_executable_path)
@@ -128,6 +304,52 @@ func launch_game() -> void:
 		return
 
 	print("Started game process id: %s" % process_id)
+
+
+func open_install_folder_dialog() -> void:
+	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		_set_status("Wait until the current launcher task is finished.")
+		return
+
+	install_folder_dialog.current_dir = _globalize_storage_path(install_dir)
+	install_folder_dialog.popup_centered()
+
+
+func open_discord() -> void:
+	if discord_url.is_empty():
+		_set_status("Discord link is not configured.")
+		return
+
+	var open_error: Error = OS.shell_open(discord_url)
+	if open_error != OK:
+		_set_status("Could not open Discord link.")
+		_log_error("Could not open Discord link: %s" % error_string(open_error))
+
+
+func _on_install_folder_selected(selected_path: String) -> void:
+	var selected_install_dir := selected_path.strip_edges()
+	if selected_install_dir.is_empty():
+		return
+
+	var write_error := _ensure_install_dir_is_writable(selected_install_dir)
+	if write_error != OK:
+		_set_status("Selected install folder is not writable.")
+		_log_error("Install folder is not writable: %s (%s)" % [selected_install_dir, error_string(write_error)])
+		return
+
+	if selected_install_dir == install_dir:
+		_set_status("Install folder unchanged.")
+		return
+
+	install_dir = selected_install_dir
+	_reset_local_versions()
+	_save_launcher_settings()
+	_save_local_versions()
+	_build_download_queue()
+	update_required = not pending_downloads.is_empty()
+	_refresh_status()
+	_set_status("Install folder changed. Run update to install there.")
+	_log("Install folder changed: %s" % selected_install_dir)
 
 
 func _create_game_process(absolute_executable_path: String) -> int:
@@ -162,6 +384,77 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 		_handle_download_response()
 
 
+func _on_news_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		_render_news_items([])
+		_log_error("Could not load news. result=%s status=%s" % [result, response_code])
+		return
+
+	var news_text := body.get_string_from_utf8()
+	var parsed_json: Variant = JSON.parse_string(news_text)
+	if typeof(parsed_json) != TYPE_DICTIONARY:
+		_render_news_items([])
+		_log_error("News JSON must be an object.")
+		return
+
+	var news_data: Dictionary = parsed_json
+	var parsed_items: Array[Dictionary] = []
+	var item_variants: Variant = news_data.get("items", [])
+	if typeof(item_variants) == TYPE_ARRAY:
+		for item_variant: Variant in item_variants:
+			if typeof(item_variant) != TYPE_DICTIONARY:
+				continue
+
+			var item: Dictionary = item_variant
+			var title := str(item.get("title", "")).strip_edges()
+			if title.is_empty():
+				continue
+
+			parsed_items.append({
+				"title": title,
+				"description": str(item.get("description", "")).strip_edges(),
+				"url": str(item.get("url", "")).strip_edges(),
+			})
+
+	_render_news_items(parsed_items)
+
+
+func _render_news_items(items: Array[Dictionary]) -> void:
+	news_items = items
+	log_label.clear()
+	if news_items.is_empty():
+		log_label.text = "No news available."
+		return
+
+	for index in range(mini(news_items.size(), 5)):
+		var item := news_items[index]
+		var title := _escape_bbcode(str(item.get("title", "")))
+		var description := _escape_bbcode(str(item.get("description", "")))
+		var url := str(item.get("url", ""))
+		if not url.is_empty():
+			log_label.append_text("[url=%d][color=#b779ff]%s[/color][/url]\n" % [index, title])
+		else:
+			log_label.append_text("[color=#b779ff]%s[/color]\n" % title)
+
+		if not description.is_empty():
+			log_label.append_text("[color=#cfd2df]%s[/color]\n" % description)
+
+		if index < mini(news_items.size(), 5) - 1:
+			log_label.append_text("\n")
+
+
+func _on_news_meta_clicked(meta: Variant) -> void:
+	var index := int(meta)
+	if index < 0 or index >= news_items.size():
+		return
+
+	var url := str(news_items[index].get("url", ""))
+	if url.is_empty():
+		return
+
+	OS.shell_open(url)
+
+
 func _handle_manifest_response(body: PackedByteArray) -> void:
 	var manifest_text := body.get_string_from_utf8()
 	var parsed_json: Variant = JSON.parse_string(manifest_text)
@@ -172,6 +465,7 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 		return
 
 	manifest = parsed_json
+	last_check_label.text = _format_last_check_time()
 	_build_download_queue()
 	update_required = not pending_downloads.is_empty()
 	_set_busy(false)
@@ -205,7 +499,17 @@ func _handle_download_response() -> void:
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
 
-	var extract_error: Error = await _extract_zip(file_path, INSTALL_DIR, download_label)
+	var extract_target_dir: String = _get_download_extract_dir(current_download)
+	if str(current_download.get("type", "")) == "game":
+		var clear_error: Error = _clear_directory(extract_target_dir)
+		if clear_error != OK:
+			_set_busy(false)
+			_set_status("Could not prepare game folder.")
+			_log_error("Could not clear game folder: %s" % error_string(clear_error))
+			current_download.clear()
+			return
+
+	var extract_error: Error = await _extract_zip(file_path, extract_target_dir, download_label)
 	if extract_error != OK:
 		_set_busy(false)
 		_set_status("Could not extract update.")
@@ -213,6 +517,7 @@ func _handle_download_response() -> void:
 		current_download.clear()
 		return
 
+	_delete_existing_download(file_path)
 	_mark_download_installed(current_download)
 	current_download.clear()
 	_start_next_download()
@@ -236,7 +541,7 @@ func _start_next_download() -> void:
 	current_download["file_path"] = target_path
 	progress_bar.value = 0.0
 
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(TEMP_DIR))
+	DirAccess.make_dir_recursive_absolute(_globalize_storage_path(TEMP_DIR))
 	var download_label: String = str(current_download.get("label", file_name))
 	_set_status("Downloading %s..." % download_label)
 	_log("Downloading %s." % download_label)
@@ -256,7 +561,8 @@ func _build_download_queue() -> void:
 
 	var game_data: Dictionary = _get_dictionary(manifest, "game")
 	var remote_game_version := str(game_data.get("version", manifest.get("gameVersion", "")))
-	if remote_game_version != "" and str(local_versions.get("gameVersion", "")) != remote_game_version:
+	var local_game_missing := not _has_installed_game_for_manifest(game_data)
+	if remote_game_version != "" and (str(local_versions.get("gameVersion", "")) != remote_game_version or local_game_missing):
 		pending_downloads.append({
 			"type": "game",
 			"id": "game",
@@ -306,6 +612,14 @@ func _build_download_queue() -> void:
 	pending_downloads = filtered_downloads
 
 
+func _get_download_extract_dir(download: Dictionary) -> String:
+	var download_type := str(download.get("type", ""))
+	if download_type == "game":
+		return _get_game_install_dir()
+
+	return install_dir
+
+
 func _mark_download_installed(download: Dictionary) -> void:
 	var download_type := str(download.get("type", ""))
 	if download_type == "game":
@@ -350,7 +664,7 @@ func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
 			await get_tree().process_frame
 
 		var output_path := target_dir.path_join(packed_file_path)
-		var absolute_output_path := ProjectSettings.globalize_path(output_path)
+		var absolute_output_path := _globalize_storage_path(output_path)
 		DirAccess.make_dir_recursive_absolute(absolute_output_path.get_base_dir())
 
 		if FileAccess.file_exists(absolute_output_path):
@@ -373,11 +687,54 @@ func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
 	return OK
 
 
+func _clear_directory(target_dir: String) -> Error:
+	var absolute_target_dir: String = _globalize_storage_path(target_dir)
+	if not DirAccess.dir_exists_absolute(absolute_target_dir):
+		return DirAccess.make_dir_recursive_absolute(absolute_target_dir)
+
+	var clear_error: Error = _remove_directory_contents(absolute_target_dir)
+	if clear_error != OK:
+		return clear_error
+
+	return DirAccess.make_dir_recursive_absolute(absolute_target_dir)
+
+
+func _remove_directory_contents(absolute_dir: String) -> Error:
+	var directory: DirAccess = DirAccess.open(absolute_dir)
+	if directory == null:
+		return ERR_CANT_OPEN
+
+	directory.list_dir_begin()
+	var entry_name: String = directory.get_next()
+	while not entry_name.is_empty():
+		if entry_name == "." or entry_name == "..":
+			entry_name = directory.get_next()
+			continue
+
+		var entry_path: String = absolute_dir.path_join(entry_name)
+		var remove_error: Error = OK
+		if directory.current_is_dir():
+			remove_error = _remove_directory_contents(entry_path)
+			if remove_error == OK:
+				remove_error = DirAccess.remove_absolute(entry_path)
+		else:
+			remove_error = DirAccess.remove_absolute(entry_path)
+
+		if remove_error != OK:
+			directory.list_dir_end()
+			return remove_error
+
+		entry_name = directory.get_next()
+
+	directory.list_dir_end()
+	return OK
+
+
 func _delete_existing_download(download_path: String) -> void:
 	if not FileAccess.file_exists(download_path):
 		return
 
-	var absolute_download_path := ProjectSettings.globalize_path(download_path)
+	var absolute_download_path := _globalize_storage_path(download_path)
 	var remove_error: Error = DirAccess.remove_absolute(absolute_download_path)
 	if remove_error != OK:
 		_log_error("Could not remove old download: %s" % error_string(remove_error))
@@ -440,11 +797,82 @@ func _load_launcher_config() -> void:
 	var platform_manifest_url := _get_platform_manifest_url(configured_manifest_urls)
 	if not platform_manifest_url.is_empty():
 		manifest_url = platform_manifest_url
+	else:
+		var configured_manifest_url := str(config.get("manifestUrl", ""))
+		if not configured_manifest_url.is_empty():
+			manifest_url = configured_manifest_url
+
+	var configured_news_url := str(config.get("newsUrl", ""))
+	if not configured_news_url.is_empty():
+		news_url = configured_news_url
+
+	var configured_discord_url := str(config.get("discordUrl", ""))
+	if not configured_discord_url.is_empty():
+		discord_url = configured_discord_url
+
+
+func _load_launcher_settings() -> void:
+	if not FileAccess.file_exists(LAUNCHER_SETTINGS_FILE):
 		return
 
-	var configured_manifest_url := str(config.get("manifestUrl", ""))
-	if not configured_manifest_url.is_empty():
-		manifest_url = configured_manifest_url
+	var file := FileAccess.open(LAUNCHER_SETTINGS_FILE, FileAccess.READ)
+	if file == null:
+		return
+
+	var parsed_json: Variant = JSON.parse_string(file.get_as_text())
+	if typeof(parsed_json) != TYPE_DICTIONARY:
+		return
+
+	var settings: Dictionary = parsed_json
+	var configured_install_dir := str(settings.get("installDir", ""))
+	if not configured_install_dir.is_empty():
+		install_dir = configured_install_dir
+
+
+func _save_launcher_settings() -> void:
+	var file := FileAccess.open(LAUNCHER_SETTINGS_FILE, FileAccess.WRITE)
+	if file == null:
+		_log_error("Could not write launcher settings.")
+		return
+
+	file.store_string(JSON.stringify({
+		"installDir": install_dir,
+	}, "\t"))
+
+
+func _ensure_install_dir_is_writable(target_dir: String) -> Error:
+	var absolute_target_dir := _globalize_storage_path(target_dir)
+	var make_dir_error: Error = DirAccess.make_dir_recursive_absolute(absolute_target_dir)
+	if make_dir_error != OK:
+		return make_dir_error
+
+	var test_file_path := absolute_target_dir.path_join(".aether_write_test")
+	var test_file := FileAccess.open(test_file_path, FileAccess.WRITE)
+	if test_file == null:
+		return ERR_CANT_CREATE
+
+	test_file.store_string("ok")
+	test_file = null
+	var remove_error: Error = DirAccess.remove_absolute(test_file_path)
+	if remove_error != OK:
+		return remove_error
+
+	return OK
+
+
+func _reset_local_versions() -> void:
+	local_versions = {
+		"gameVersion": "",
+		"gameExecutable": "",
+		"assetPacks": {},
+	}
+
+
+func _globalize_storage_path(path: String) -> String:
+	if path.begins_with("user://") or path.begins_with("res://"):
+		return ProjectSettings.globalize_path(path)
+
+	return path
 
 
 func _get_platform_manifest_url(manifest_urls: Dictionary) -> String:
@@ -471,6 +899,17 @@ func _get_platform_manifest_url(manifest_urls: Dictionary) -> String:
 	return ""
 
 
+func _format_last_check_time() -> String:
+	var datetime := Time.get_datetime_dict_from_system()
+	return "%02d-%02d-%04d %02d:%02d" % [
+		int(datetime.get("day", 0)),
+		int(datetime.get("month", 0)),
+		int(datetime.get("year", 0)),
+		int(datetime.get("hour", 0)),
+		int(datetime.get("minute", 0)),
+	]
+
+
 func _get_dictionary(source: Dictionary, key: String) -> Dictionary:
 	var value: Variant = source.get(key, {})
 	if typeof(value) == TYPE_DICTIONARY:
@@ -492,8 +931,8 @@ func _refresh_status() -> void:
 	var local_game_version := str(local_versions.get("gameVersion", ""))
 	if local_game_version.is_empty():
 		local_game_version = "not installed"
-	version_label.text = "Installed version: %s" % local_game_version
-	play_button.disabled = not _has_installed_game()
+	version_label.text = local_game_version
+	play_button.disabled = update_required or not _has_installed_game()
 	update_button.disabled = not update_required
 	check_button.disabled = false
 	if update_required:
@@ -502,12 +941,21 @@ func _refresh_status() -> void:
 		_set_status("Game is not installed.")
 	else:
 		_set_status("Ready to play.")
+	_sync_button_cursors()
 
 
 func _set_busy(is_busy: bool) -> void:
 	check_button.disabled = is_busy
 	update_button.disabled = is_busy or not update_required
-	play_button.disabled = is_busy or not _has_installed_game()
+	play_button.disabled = is_busy or update_required or not _has_installed_game()
+	_sync_button_cursors()
+
+
+func _sync_button_cursors() -> void:
+	for button: Button in [check_button, update_button, play_button]:
+		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
+	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
 func _has_installed_game() -> bool:
@@ -515,6 +963,10 @@ func _has_installed_game() -> bool:
 		return false
 
 	var game_data: Dictionary = _get_dictionary(manifest, "game")
+	return _has_installed_game_for_manifest(game_data)
+
+
+func _has_installed_game_for_manifest(game_data: Dictionary) -> bool:
 	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
 	if executable_path.is_empty():
 		if OS.get_name() == "Windows":
@@ -522,12 +974,47 @@ func _has_installed_game() -> bool:
 		else:
 			executable_path = "Pokemon Aether Online.x86_64"
 
-	var absolute_executable_path := ProjectSettings.globalize_path(INSTALL_DIR.path_join(executable_path))
+	var absolute_executable_path := _globalize_storage_path(_get_game_install_dir().path_join(executable_path))
 	return FileAccess.file_exists(absolute_executable_path)
+
+
+func _get_game_executable_path(game_data: Dictionary) -> String:
+	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
+	if executable_path.is_empty():
+		if OS.get_name() == "Windows":
+			executable_path = "Pokemon Aether Online.exe"
+		else:
+			executable_path = "Pokemon Aether Online.x86_64"
+
+	return _globalize_storage_path(_get_game_install_dir().path_join(executable_path))
+
+
+func _get_game_install_dir() -> String:
+	return install_dir.path_join(GAME_INSTALL_SUBDIR)
 
 
 func _set_status(message: String) -> void:
 	status_label.text = message
+	var lowered_message := message.to_lower()
+	if lowered_message.contains("failed") or lowered_message.contains("could not") or lowered_message.contains("missing") or lowered_message.contains("invalid"):
+		status_value_label.text = "Error"
+		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.38, 0.45))
+	elif lowered_message.contains("not installed"):
+		status_value_label.text = "Not installed"
+		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.34))
+	elif lowered_message.contains("update available"):
+		status_value_label.text = "Update needed"
+		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.34))
+	elif lowered_message.contains("download") or lowered_message.contains("extract") or lowered_message.contains("checking"):
+		status_value_label.text = "Updating"
+		status_value_label.add_theme_color_override("font_color", Color(0.70, 0.45, 1.0))
+	else:
+		status_value_label.text = "Ready."
+		status_value_label.add_theme_color_override("font_color", Color(0.16, 0.94, 0.66))
+
+
+func _update_progress_percent() -> void:
+	progress_percent_label.text = "%d%%" % int(round(progress_bar.value))
 
 
 func _format_bytes(byte_count: int) -> String:
@@ -542,9 +1029,13 @@ func _format_bytes(byte_count: int) -> String:
 	return "%d B" % byte_count
 
 
+func _escape_bbcode(value: String) -> String:
+	return value.replace("[", "[lb]").replace("]", "[rb]")
+
+
 func _log(message: String) -> void:
-	log_label.append_text("%s\n" % message)
+	print(message)
 
 
 func _log_error(message: String) -> void:
-	log_label.append_text("[color=#ff6b6b]%s[/color]\n" % message)
+	print("ERROR: %s" % message)

@@ -2,5 +2,7 @@
   "manifestUrls": {
 	"Windows": "https://updates.pokemonaetheronline.com/manifest-windows.json",
 	"Linux": "https://updates.pokemonaetheronline.com/manifest-linux.json"
-  }
+  },
+  "newsUrl": "https://updates.pokemonaetheronline.com/news.json",
+  "discordUrl": "https://discord.com/invite/b6WexWT8HX"
 }
