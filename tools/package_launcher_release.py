@@ -83,7 +83,7 @@ def main() -> None:
         "--external-asset-pack",
         action="append",
         default=[],
-        metavar="ID:VERSION:FILE_NAME",
+        metavar="ID:VERSION:FILE_NAME[:SIZE_BYTES]",
         help="Existing hosted asset pack to include in each manifest without copying or hashing it.",
     )
     args = parser.parse_args()
@@ -168,23 +168,33 @@ def _build_asset_pack(entry: str, base_url: str, asset_prefix: str, output_dir: 
 
 
 def _build_external_asset_pack(entry: str, base_url: str, asset_prefix: str) -> dict:
-    parts = entry.split(":", 2)
-    if len(parts) != 3:
-        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME")
+    parts = entry.split(":", 3)
+    if len(parts) not in (3, 4):
+        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME[:SIZE_BYTES]")
 
-    pack_id, version, file_name = parts
+    pack_id, version, file_name = parts[:3]
     if not pack_id or not version or not file_name:
-        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME")
+        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME[:SIZE_BYTES]")
 
     if "/" in file_name or "\\" in file_name:
         raise SystemExit("--external-asset-pack FILE_NAME must be a file name, not a path")
+
+    size_bytes = 0
+    if len(parts) == 4 and parts[3]:
+        try:
+            size_bytes = int(parts[3])
+        except ValueError:
+            raise SystemExit("--external-asset-pack SIZE_BYTES must be an integer") from None
+
+        if size_bytes < 0:
+            raise SystemExit("--external-asset-pack SIZE_BYTES cannot be negative")
 
     return {
         "id": pack_id,
         "version": version,
         "url": _build_url(base_url, asset_prefix, file_name),
         "sha256": "",
-        "sizeBytes": 0,
+        "sizeBytes": size_bytes,
     }
 
 

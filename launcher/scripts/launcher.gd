@@ -8,6 +8,7 @@ const DEFAULT_INSTALL_DIR := "user://game"
 const GAME_INSTALL_SUBDIR := "game"
 const LAUNCHER_SETTINGS_FILE := "user://launcher_settings.json"
 const VERSION_FILE := "user://versions.json"
+const ERROR_LOG_FILE := "user://launcher_error.log"
 const TEMP_DIR := "user://downloads"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
 
@@ -21,6 +22,7 @@ const EXTRACT_PROGRESS_BATCH_SIZE := 25
 @onready var version_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/VersionBlock/VersionLabel
 @onready var status_value_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/StatusBlock/StatusValueLabel
 @onready var last_check_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/LastCheckBlock/LastCheckLabel
+@onready var launcher_version_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/LauncherVersionValue
 @onready var status_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/StatusLabel
 @onready var progress_bar: ProgressBar = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressBar
 @onready var progress_percent_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader/ProgressPercentLabel
@@ -126,6 +128,7 @@ func _ready() -> void:
 		news_request.request_completed.connect(_on_news_request_completed)
 	log_label.meta_clicked.connect(_on_news_meta_clicked)
 	_load_local_versions()
+	_refresh_launcher_version()
 	_refresh_status()
 	_sync_button_cursors()
 	check_for_updates.call_deferred()
@@ -400,8 +403,9 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 	progress_bar.value = 100.0
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
 		_set_busy(false)
-		_set_status("Download failed.")
-		_log_error("Request failed. result=%s status=%s" % [result, response_code])
+		var request_failure_message: String = _format_request_failure(result, response_code)
+		_set_status(request_failure_message)
+		_log_error("%s url=%s" % [request_failure_message, _get_active_request_url()])
 		return
 
 	if current_download.is_empty():
@@ -940,6 +944,53 @@ func _format_last_check_time() -> String:
 	]
 
 
+func _format_request_failure(result: int, response_code: int) -> String:
+	var task_label: String = "manifest"
+	if not current_download.is_empty():
+		task_label = str(current_download.get("label", current_download.get("file_name", "download")))
+
+	var reason: String = _get_request_failure_reason(result, response_code)
+	return "Download failed: %s (%s). See launcher_error.log." % [task_label, reason]
+
+
+func _get_request_failure_reason(result: int, response_code: int) -> String:
+	if response_code > 0:
+		return "HTTP %d" % response_code
+
+	match result:
+		HTTPRequest.RESULT_CHUNKED_BODY_SIZE_MISMATCH:
+			return "size mismatch"
+		HTTPRequest.RESULT_CANT_CONNECT:
+			return "cannot connect"
+		HTTPRequest.RESULT_CANT_RESOLVE:
+			return "cannot resolve host"
+		HTTPRequest.RESULT_CONNECTION_ERROR:
+			return "connection error"
+		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
+			return "TLS error"
+		HTTPRequest.RESULT_BODY_SIZE_LIMIT_EXCEEDED:
+			return "size limit exceeded"
+		HTTPRequest.RESULT_BODY_DECOMPRESS_FAILED:
+			return "decompress failed"
+		HTTPRequest.RESULT_DOWNLOAD_FILE_CANT_OPEN:
+			return "cannot open download file"
+		HTTPRequest.RESULT_DOWNLOAD_FILE_WRITE_ERROR:
+			return "download write error"
+		HTTPRequest.RESULT_REDIRECT_LIMIT_REACHED:
+			return "redirect limit reached"
+		HTTPRequest.RESULT_TIMEOUT:
+			return "timeout"
+		_:
+			return "result %d" % result
+
+
+func _get_active_request_url() -> String:
+	if not current_download.is_empty():
+		return str(current_download.get("url", ""))
+
+	return manifest_url
+
+
 func _get_dictionary(source: Dictionary, key: String) -> Dictionary:
 	var value: Variant = source.get(key, {})
 	if typeof(value) == TYPE_DICTIONARY:
@@ -972,6 +1023,14 @@ func _refresh_status() -> void:
 	else:
 		_set_status("Ready to play.")
 	_sync_button_cursors()
+
+
+func _refresh_launcher_version() -> void:
+	var launcher_version: String = str(ProjectSettings.get_setting("application/config/version", "dev")).strip_edges()
+	if launcher_version.is_empty():
+		launcher_version = "dev"
+
+	launcher_version_label.text = launcher_version
 
 
 func _set_busy(is_busy: bool) -> void:
@@ -1073,3 +1132,11 @@ func _log(message: String) -> void:
 
 func _log_error(message: String) -> void:
 	print("ERROR: %s" % message)
+	var file: FileAccess = FileAccess.open(ERROR_LOG_FILE, FileAccess.READ_WRITE)
+	if file == null:
+		file = FileAccess.open(ERROR_LOG_FILE, FileAccess.WRITE)
+	if file == null:
+		return
+
+	file.seek_end()
+	file.store_line("%s ERROR: %s" % [_format_last_check_time(), message])

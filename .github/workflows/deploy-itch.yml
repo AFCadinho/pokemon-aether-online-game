@@ -39,6 +39,10 @@ env:
   POKEMON_BACK_ASSET_VERSION: pokemon-back-ship64-v1
   POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-ship64-v1
   POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-ship64-v1
+  POKEMON_FRONT_ASSET_SIZE_BYTES: 2289542712
+  POKEMON_BACK_ASSET_SIZE_BYTES: 1928262998
+  POKEMON_SHINY_FRONT_ASSET_SIZE_BYTES: 2281718807
+  POKEMON_SHINY_BACK_ASSET_SIZE_BYTES: 1909532222
   UPDATE_BASE_URL: https://updates.pokemonaetheronline.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
 
@@ -74,13 +78,21 @@ jobs:
               changed_files="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")"
             fi
 
-            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_directory_zip.py|tools/package_launcher_release.py|tools/upload_launcher_release.py|\.github/workflows/deploy-itch.yml)' >/dev/null; then
+            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_directory_zip.py|tools/package_launcher_release.py|tools/stamp_godot_version.py|tools/upload_launcher_release.py|\.github/workflows/deploy-itch.yml)' >/dev/null; then
               build_launcher=true
             fi
           fi
 
           echo "BUILD_LAUNCHER=${build_launcher}" >> "${GITHUB_ENV}"
           echo "Build launcher: ${build_launcher}"
+
+      - name: Stamp launcher version
+        if: env.BUILD_LAUNCHER == 'true'
+        run: |
+          python3 tools/stamp_godot_version.py \
+            --project launcher/project.godot \
+            --export-presets launcher/export_presets.cfg \
+            --version "${LAUNCHER_RELEASE_VERSION}"
 
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y unzip megatools
@@ -211,14 +223,15 @@ jobs:
             pack_id="$1"
             pack_version="$2"
             file_name="$3"
-            printf '%s\n' "--external-asset-pack" "${pack_id}:${pack_version}:${file_name}" >> /tmp/asset_pack_args.txt
+            size_bytes="$4"
+            printf '%s\n' "--external-asset-pack" "${pack_id}:${pack_version}:${file_name}:${size_bytes}" >> /tmp/asset_pack_args.txt
           }
 
           package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" assets/sprites/pokemon/pokemon_home
-          package_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_VERSION}.zip"
-          package_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_VERSION}.zip"
-          package_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip"
-          package_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_VERSION}.zip"
+          package_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_VERSION}.zip" "${POKEMON_FRONT_ASSET_SIZE_BYTES}"
+          package_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_VERSION}.zip" "${POKEMON_BACK_ASSET_SIZE_BYTES}"
+          package_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_SHINY_FRONT_ASSET_SIZE_BYTES}"
+          package_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_VERSION}.zip" "${POKEMON_SHINY_BACK_ASSET_SIZE_BYTES}"
 
       - name: Package launcher release
         run: |
