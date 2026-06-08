@@ -74,7 +74,7 @@ jobs:
               changed_files="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")"
             fi
 
-            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_directory_zip.py|\.github/workflows/deploy-itch.yml)' >/dev/null; then
+            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_directory_zip.py|tools/package_launcher_release.py|tools/upload_launcher_release.py|\.github/workflows/deploy-itch.yml)' >/dev/null; then
               build_launcher=true
             fi
           fi
