@@ -335,6 +335,7 @@ func launch_game() -> void:
 		return
 
 	print("Started game process id: %s" % process_id)
+	get_tree().quit()
 
 
 func open_install_folder_dialog() -> void:
