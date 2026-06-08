@@ -13,7 +13,7 @@ config_version=5
 config/name="Pokemon Aether Online"
 run/main_scene="uid://d45mhj1xs83s"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/ui/logo.png"
 
 [autoload]
 
