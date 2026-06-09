@@ -1,7 +1,7 @@
 extends Node
 
-const LOCAL_API_URL = "http://localhost:3001"
-const PRODUCTION_API_URL = "https://showdown-api.afcadinho.com"
+const LOCAL_API_URL = "http://localhost:8000"
+const PRODUCTION_API_URL = "https://api.pokemonaetheronline.com"
 
 var cached_url := ""
 
