@@ -31,12 +31,12 @@ env:
   LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
   LINUX_LAUNCHER_EXPORT_PRESET: Linux Launcher
   LINUX_LAUNCHER_EXPORT_PATH: builds/launcher-app/linux/Pokemon Aether Launcher.x86_64
-  SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v4
   POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-v1
   POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-v1
   POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-v1
   POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-scale1-128-v1
+  POKEMON_HOME_ASSET_SIZE_BYTES: 61327194
   POKEMON_FRONT_ASSET_SIZE_BYTES: 90099039
   POKEMON_BACK_ASSET_SIZE_BYTES: 78450869
   POKEMON_SHINY_FRONT_ASSET_SIZE_BYTES: 88077401
@@ -93,7 +93,7 @@ jobs:
             --version "${LAUNCHER_RELEASE_VERSION}"
 
       - name: Install system packages
-        run: sudo apt-get update && sudo apt-get install -y unzip megatools
+        run: sudo apt-get update && sudo apt-get install -y unzip
 
       - name: Download Godot
         run: |
@@ -109,41 +109,11 @@ jobs:
           mkdir -p "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
           mv /tmp/godot-export-templates/templates/* "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/"
 
-      - name: Cache Pokemon sprite asset bundle
-        id: pokemon-sprite-assets-cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/pokemon-sprite-assets.zip
-          key: ${{ runner.os }}-${{ env.SPRITE_ASSET_CACHE_KEY }}
-
-      - name: Download Pokemon sprite assets
-        if: steps.pokemon-sprite-assets-cache.outputs.cache-hit != 'true'
-        env:
-          SPRITE_ASSET_URLS: ${{ secrets.SPRITE_ASSET_URLS }}
-        run: |
-          test -n "${SPRITE_ASSET_URLS}"
-          mkdir -p /tmp/pokemon-sprite-assets
-          for asset_url in ${SPRITE_ASSET_URLS}; do
-            if printf '%s' "${asset_url}" | grep -q 'mega.nz'; then
-              megadl --path /tmp/pokemon-sprite-assets "${asset_url}"
-            else
-              file_name="$(basename "${asset_url%%\?*}")"
-              curl -L --fail --retry 3 --retry-delay 5 \
-                -o "/tmp/pokemon-sprite-assets/${file_name}" \
-                "${asset_url}"
-            fi
-          done
-          cat /tmp/pokemon-sprite-assets/pokemon-sprite-assets-basic.zip.part-* > /tmp/pokemon-sprite-assets.zip
-
-      - name: Extract Pokemon sprite assets
-        run: |
-          unzip -q /tmp/pokemon-sprite-assets.zip -d .
-
       - name: Cache Godot imported assets
         uses: actions/cache@v4
         with:
           path: .godot/imported
-          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ env.SPRITE_ASSET_CACHE_KEY }}-${{ hashFiles('project.godot', 'export_presets.cfg') }}
+          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg') }}
 
       - name: Import Godot assets
         run: ./godot --headless --import --quit
@@ -202,21 +172,6 @@ jobs:
         run: |
           : > /tmp/asset_pack_args.txt
 
-          package_local_pack() {
-            pack_id="$1"
-            pack_version="$2"
-            source_path="$3"
-            output_path="/tmp/${pack_version}.zip"
-
-            if [ ! -e "${source_path}" ]; then
-              echo "::warning ::Skipping ${pack_id}; missing ${source_path}"
-              return 0
-            fi
-
-            python3 tools/package_asset_pack.py "${output_path}" "${source_path}"
-            printf '%s\n' "--asset-pack" "${pack_id}:${pack_version}:${output_path}" >> /tmp/asset_pack_args.txt
-          }
-
           package_external_pack() {
             pack_id="$1"
             pack_version="$2"
@@ -225,7 +180,7 @@ jobs:
             printf '%s\n' "--external-asset-pack" "${pack_id}:${pack_version}:${file_name}:${size_bytes}" >> /tmp/asset_pack_args.txt
           }
 
-          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" assets/sprites/pokemon/pokemon_home
+          package_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "${POKEMON_HOME_ASSET_VERSION}.zip" "${POKEMON_HOME_ASSET_SIZE_BYTES}"
           package_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_VERSION}.zip" "${POKEMON_FRONT_ASSET_SIZE_BYTES}"
           package_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_VERSION}.zip" "${POKEMON_BACK_ASSET_SIZE_BYTES}"
           package_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_SHINY_FRONT_ASSET_SIZE_BYTES}"
