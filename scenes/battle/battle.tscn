@@ -42,6 +42,167 @@ corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
+[sub_resource type="Gradient" id="Gradient_grassy_terrain"]
+offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
+colors = PackedColorArray(0.28, 1, 0.18, 0, 0.44, 1, 0.18, 0.72, 0.78, 1, 0.38, 0.86, 0.28, 1, 0.18, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_grassy_terrain"]
+gradient = SubResource("Gradient_grassy_terrain")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_grassy_terrain"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(155, 14, 1)
+direction = Vector3(0, -1, 0)
+spread = 34.0
+initial_velocity_min = 82.0
+initial_velocity_max = 155.0
+gravity = Vector3(5, 32, 0)
+scale_min = 2.4
+scale_max = 5.2
+color_initial_ramp = SubResource("GradientTexture1D_grassy_terrain")
+
+[sub_resource type="Gradient" id="Gradient_misty_terrain"]
+offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
+colors = PackedColorArray(1, 0.62, 0.98, 0, 1, 0.58, 0.95, 0.66, 0.72, 0.88, 1, 0.82, 1, 0.62, 0.98, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_misty_terrain"]
+gradient = SubResource("Gradient_misty_terrain")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_misty_terrain"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(155, 14, 1)
+direction = Vector3(0, -1, 0)
+spread = 42.0
+initial_velocity_min = 68.0
+initial_velocity_max = 132.0
+gravity = Vector3(-4, 22, 0)
+scale_min = 2.6
+scale_max = 5.6
+color_initial_ramp = SubResource("GradientTexture1D_misty_terrain")
+
+[sub_resource type="Gradient" id="Gradient_psychic_terrain"]
+offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
+colors = PackedColorArray(0.96, 0.28, 1, 0, 0.9, 0.26, 1, 0.7, 0.55, 0.34, 1, 0.88, 0.96, 0.28, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_psychic_terrain"]
+gradient = SubResource("Gradient_psychic_terrain")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_psychic_terrain"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(155, 14, 1)
+direction = Vector3(0, -1, 0)
+spread = 30.0
+initial_velocity_min = 88.0
+initial_velocity_max = 162.0
+gravity = Vector3(8, 28, 0)
+scale_min = 2.4
+scale_max = 5.2
+color_initial_ramp = SubResource("GradientTexture1D_psychic_terrain")
+
+[sub_resource type="Gradient" id="Gradient_sun_sparkles"]
+offsets = PackedFloat32Array(0, 0.35, 0.72, 1)
+colors = PackedColorArray(1, 0.9, 0.38, 0, 1, 0.83, 0.2, 0.5, 1, 0.96, 0.58, 0.75, 1, 0.8, 0.25, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sun_sparkles"]
+gradient = SubResource("Gradient_sun_sparkles")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sun_sparkles"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(450, 230, 1)
+direction = Vector3(0.08, -0.1, 0)
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 30.0
+gravity = Vector3(6, -10, 0)
+scale_min = 0.7
+scale_max = 1.8
+color_initial_ramp = SubResource("GradientTexture1D_sun_sparkles")
+
+[sub_resource type="Gradient" id="Gradient_8eh2s"]
+offsets = PackedFloat32Array(0, 0.2, 0.75, 1)
+colors = PackedColorArray(0.82, 0.94, 1, 0.08, 0.86, 0.96, 1, 0.58, 0.96, 1, 1, 0.78, 0.82, 0.94, 1, 0.12)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_e48mi"]
+gradient = SubResource("Gradient_8eh2s")
+
+[sub_resource type="Curve" id="Curve_8eh2s"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_e48mi"]
+_limits = [0.0, 26.0, 0.0, 1.0]
+_data = [Vector2(0, 16), 0.0, 0.0, 0, 0, Vector2(0.18, 26), 0.0, 0.0, 0, 0, Vector2(1, 26), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_ueicy"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_n5ix6"]
+curve_x = SubResource("Curve_8eh2s")
+curve_y = SubResource("Curve_e48mi")
+curve_z = SubResource("Curve_ueicy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8eh2s"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(610, 8, 1)
+direction = Vector3(-0.28, 0.96, 0)
+spread = 6.0
+initial_velocity_min = 520.0
+initial_velocity_max = 760.0
+gravity = Vector3(-45, 80, 0)
+scale_min = 0.24
+scale_max = 0.42
+scale_over_velocity_curve = SubResource("CurveXYZTexture_n5ix6")
+color_initial_ramp = SubResource("GradientTexture1D_e48mi")
+
+[sub_resource type="Gradient" id="Gradient_sandstorm"]
+offsets = PackedFloat32Array(0, 0.18, 0.68, 1)
+colors = PackedColorArray(0.68, 0.5, 0.26, 0.04, 0.76, 0.58, 0.32, 0.5, 0.95, 0.78, 0.48, 0.72, 0.68, 0.5, 0.26, 0.08)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sandstorm"]
+gradient = SubResource("Gradient_sandstorm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sandstorm"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(620, 270, 1)
+direction = Vector3(-0.96, 0.28, 0)
+spread = 24.0
+initial_velocity_min = 360.0
+initial_velocity_max = 620.0
+gravity = Vector3(-80, 15, 0)
+scale_min = 0.85
+scale_max = 2.3
+color_initial_ramp = SubResource("GradientTexture1D_sandstorm")
+
+[sub_resource type="Gradient" id="Gradient_sandstorm_swirl"]
+offsets = PackedFloat32Array(0, 0.25, 0.7, 1)
+colors = PackedColorArray(0.68, 0.48, 0.24, 0, 0.82, 0.64, 0.36, 0.42, 1, 0.82, 0.48, 0.62, 0.7, 0.48, 0.24, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sandstorm_swirl"]
+gradient = SubResource("Gradient_sandstorm_swirl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sandstorm_swirl"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(24, 95, 1)
+direction = Vector3(0.25, -0.97, 0)
+spread = 105.0
+initial_velocity_min = 55.0
+initial_velocity_max = 135.0
+gravity = Vector3(-16, -28, 0)
+scale_min = 1.1
+scale_max = 3.2
+color_initial_ramp = SubResource("GradientTexture1D_sandstorm_swirl")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kd6yx"]
 bg_color = Color(0.105882354, 0.078431375, 0.05882353, 1)
 border_width_left = 2
@@ -177,6 +338,432 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_sgdsx")
 stretch_mode = 6
+
+[node name="WeatherTint" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1569297772]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="TerrainTint" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=87759034]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.22, 0.84, 0.16, 0.025)
+
+[node name="WeatherLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1611221281]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GrassyTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=306554720]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyGrassyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=1285121570]
+color = Color(0.28, 1, 0.18, 0.07)
+polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+
+[node name="PlayerGrassyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=14259470]
+color = Color(0.28, 1, 0.18, 0.075)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="EnemyGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=1517290756]
+position = Vector2(670, 292)
+amount = 150
+lifetime = 1.35
+preprocess = 1.35
+visibility_rect = Rect2(-210, -225, 420, 250)
+process_material = SubResource("ParticleProcessMaterial_grassy_terrain")
+
+[node name="PlayerGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=1806907282]
+position = Vector2(305, 548)
+amount = 270
+lifetime = 1.45
+preprocess = 1.45
+visibility_rect = Rect2(-250, -245, 500, 270)
+process_material = SubResource("ParticleProcessMaterial_grassy_terrain")
+
+[node name="MistyTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1583618454]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyMistyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=705431344]
+color = Color(1, 0.58, 0.95, 0.075)
+polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+
+[node name="PlayerMistyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=1872648792]
+color = Color(1, 0.58, 0.95, 0.08)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="EnemyMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=1671770084]
+position = Vector2(670, 292)
+amount = 140
+lifetime = 1.5
+preprocess = 1.5
+visibility_rect = Rect2(-210, -225, 420, 250)
+process_material = SubResource("ParticleProcessMaterial_misty_terrain")
+
+[node name="PlayerMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=1291941903]
+position = Vector2(305, 548)
+amount = 255
+lifetime = 1.6
+preprocess = 1.6
+visibility_rect = Rect2(-250, -245, 500, 270)
+process_material = SubResource("ParticleProcessMaterial_misty_terrain")
+
+[node name="PsychicTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1401285031]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyPsychicGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=441248764]
+color = Color(0.9, 0.25, 1, 0.075)
+polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+
+[node name="PlayerPsychicGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=1708233847]
+color = Color(0.9, 0.25, 1, 0.08)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="EnemyPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=1482305682]
+position = Vector2(670, 292)
+amount = 150
+lifetime = 1.35
+preprocess = 1.35
+visibility_rect = Rect2(-210, -225, 420, 250)
+process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
+
+[node name="PlayerPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=2133068261]
+position = Vector2(305, 548)
+amount = 270
+lifetime = 1.45
+preprocess = 1.45
+visibility_rect = Rect2(-250, -245, 500, 270)
+process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
+
+[node name="TrickRoomLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1043846889]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TrickRoomOverlay" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1190876912]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2, 0.04, 0.46, 0.085)
+
+[node name="TopWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1079378405]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 72.0
+offset_right = 892.0
+offset_bottom = 126.0
+mouse_filter = 2
+color = Color(0.7, 0.18, 1, 0.085)
+
+[node name="BottomWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=465451865]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 506.0
+offset_right = 892.0
+offset_bottom = 563.0
+mouse_filter = 2
+color = Color(0.7, 0.18, 1, 0.075)
+
+[node name="LeftWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1460598171]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 126.0
+offset_right = 158.0
+offset_bottom = 506.0
+mouse_filter = 2
+color = Color(0.28, 0.78, 1, 0.06)
+
+[node name="RightWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1332363611]
+layout_mode = 0
+offset_left = 818.0
+offset_top = 126.0
+offset_right = 892.0
+offset_bottom = 506.0
+mouse_filter = 2
+color = Color(0.28, 0.78, 1, 0.06)
+
+[node name="OuterTop" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=624866434]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 72.0
+offset_right = 892.0
+offset_bottom = 75.0
+mouse_filter = 2
+color = Color(0.85, 0.28, 1, 0.36)
+
+[node name="OuterBottom" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=464754310]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 560.0
+offset_right = 892.0
+offset_bottom = 563.0
+mouse_filter = 2
+color = Color(0.85, 0.28, 1, 0.32)
+
+[node name="OuterLeft" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1885787438]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 72.0
+offset_right = 87.0
+offset_bottom = 563.0
+mouse_filter = 2
+color = Color(0.85, 0.28, 1, 0.28)
+
+[node name="OuterRight" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1513824411]
+layout_mode = 0
+offset_left = 889.0
+offset_top = 72.0
+offset_right = 892.0
+offset_bottom = 563.0
+mouse_filter = 2
+color = Color(0.85, 0.28, 1, 0.28)
+
+[node name="InnerTop" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1616701175]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 126.0
+offset_right = 818.0
+offset_bottom = 128.0
+mouse_filter = 2
+color = Color(0.24, 0.9, 1, 0.22)
+
+[node name="InnerBottom" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1551239806]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 504.0
+offset_right = 818.0
+offset_bottom = 506.0
+mouse_filter = 2
+color = Color(0.24, 0.9, 1, 0.18)
+
+[node name="InnerLeft" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=840283909]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 126.0
+offset_right = 160.0
+offset_bottom = 506.0
+mouse_filter = 2
+color = Color(0.24, 0.9, 1, 0.18)
+
+[node name="InnerRight" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1691735061]
+layout_mode = 0
+offset_left = 816.0
+offset_top = 126.0
+offset_right = 818.0
+offset_bottom = 506.0
+mouse_filter = 2
+color = Color(0.24, 0.9, 1, 0.18)
+
+[node name="Block1" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=170954248]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 116.0
+offset_right = 190.0
+offset_bottom = 164.0
+mouse_filter = 2
+color = Color(0.78, 0.22, 1, 0.13)
+
+[node name="Block2" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1964000797]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 88.0
+offset_right = 326.0
+offset_bottom = 132.0
+mouse_filter = 2
+color = Color(0.22, 0.82, 1, 0.1)
+
+[node name="Block3" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=637788640]
+layout_mode = 0
+offset_left = 444.0
+offset_top = 132.0
+offset_right = 520.0
+offset_bottom = 184.0
+mouse_filter = 2
+color = Color(0.78, 0.22, 1, 0.12)
+
+[node name="Block4" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1415304533]
+layout_mode = 0
+offset_left = 708.0
+offset_top = 104.0
+offset_right = 792.0
+offset_bottom = 152.0
+mouse_filter = 2
+color = Color(0.22, 0.82, 1, 0.105)
+
+[node name="Block5" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=327872262]
+layout_mode = 0
+offset_left = 154.0
+offset_top = 360.0
+offset_right = 232.0
+offset_bottom = 420.0
+mouse_filter = 2
+color = Color(0.22, 0.82, 1, 0.09)
+
+[node name="Block6" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=2114639049]
+layout_mode = 0
+offset_left = 342.0
+offset_top = 292.0
+offset_right = 428.0
+offset_bottom = 354.0
+mouse_filter = 2
+color = Color(0.78, 0.22, 1, 0.105)
+
+[node name="Block7" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=420892729]
+layout_mode = 0
+offset_left = 604.0
+offset_top = 336.0
+offset_right = 694.0
+offset_bottom = 398.0
+mouse_filter = 2
+color = Color(0.22, 0.82, 1, 0.09)
+
+[node name="Block8" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=889051205]
+layout_mode = 0
+offset_left = 774.0
+offset_top = 438.0
+offset_right = 858.0
+offset_bottom = 498.0
+mouse_filter = 2
+color = Color(0.78, 0.22, 1, 0.11)
+
+[node name="SunRays" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=773526708]
+visible = false
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Ray1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=10477820]
+color = Color(1, 0.93, 0.5, 0.09)
+polygon = PackedVector2Array(90, 0, 155, 0, 0, 465, 0, 330)
+
+[node name="Ray2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=1564584135]
+color = Color(1, 0.86, 0.34, 0.11)
+polygon = PackedVector2Array(260, 0, 340, 0, 175, 650, 45, 650)
+
+[node name="Ray3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=938167579]
+color = Color(1, 0.96, 0.66, 0.1)
+polygon = PackedVector2Array(475, 0, 565, 0, 470, 650, 315, 650)
+
+[node name="Ray4" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=1149656651]
+color = Color(1, 0.88, 0.38, 0.1)
+polygon = PackedVector2Array(650, 0, 735, 0, 765, 650, 620, 650)
+
+[node name="Ray5" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=1207213241]
+color = Color(1, 0.93, 0.5, 0.08)
+polygon = PackedVector2Array(850, 0, 915, 0, 975, 390, 975, 545)
+
+[node name="SunSparkles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1906947186]
+visible = false
+position = Vector2(480, 245)
+amount = 70
+lifetime = 2.4
+preprocess = 2.4
+visibility_rect = Rect2(-520, -330, 1120, 720)
+process_material = SubResource("ParticleProcessMaterial_sun_sparkles")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1668435119]
+visible = false
+position = Vector2(480, -12)
+amount = 760
+lifetime = 0.82
+preprocess = 0.82
+visibility_rect = Rect2(-680, -80, 1420, 760)
+process_material = SubResource("ParticleProcessMaterial_8eh2s")
+
+[node name="SandstormParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1890257023]
+visible = false
+position = Vector2(555, 245)
+amount = 560
+lifetime = 1.4
+preprocess = 1.4
+visibility_rect = Rect2(-760, -360, 1520, 820)
+process_material = SubResource("ParticleProcessMaterial_sandstorm")
+
+[node name="SandstormSwirls" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=379911399]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Swirl1" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls" unique_id=1073769643]
+position = Vector2(245, 455)
+amount = 95
+lifetime = 1.6
+preprocess = 1.6
+visibility_rect = Rect2(-90, -180, 180, 260)
+process_material = SubResource("ParticleProcessMaterial_sandstorm_swirl")
+
+[node name="Swirl2" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls" unique_id=369620609]
+position = Vector2(505, 315)
+amount = 75
+lifetime = 1.45
+preprocess = 1.45
+visibility_rect = Rect2(-90, -180, 180, 260)
+process_material = SubResource("ParticleProcessMaterial_sandstorm_swirl")
+
+[node name="Swirl3" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls" unique_id=1462631029]
+position = Vector2(760, 405)
+amount = 90
+lifetime = 1.7
+preprocess = 1.7
+visibility_rect = Rect2(-90, -180, 180, 260)
+process_material = SubResource("ParticleProcessMaterial_sandstorm_swirl")
 
 [node name="BattlePlatform" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1225323237 instance=ExtResource("3_8eh2s")]
 layout_mode = 1

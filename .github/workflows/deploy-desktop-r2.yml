@@ -1,4 +1,4 @@
-name: Deploy Desktop Builds to itch.io
+name: Deploy Desktop Builds to R2
 
 on:
   push:
@@ -16,7 +16,7 @@ on:
         default: "false"
 
 concurrency:
-  group: deploy-itch
+  group: deploy-desktop-r2
   cancel-in-progress: true
 
 env:
@@ -25,12 +25,10 @@ env:
   GODOT_RELEASE: stable
   WINDOWS_EXPORT_PRESET: Windows Itch Build
   WINDOWS_EXPORT_PATH: builds/windows/Pokemon Aether Online.exe
-  WINDOWS_ITCH_TARGET: afc-adinho/pokemonaetheronline:windows
   WINDOWS_LAUNCHER_EXPORT_PRESET: Windows Launcher
   WINDOWS_LAUNCHER_EXPORT_PATH: builds/launcher-app/windows/Pokemon Aether Launcher.exe
   LINUX_EXPORT_PRESET: Linux Itch Build
   LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
-  LINUX_ITCH_TARGET: afc-adinho/pokemonaetheronline:linux
   LINUX_LAUNCHER_EXPORT_PRESET: Linux Launcher
   LINUX_LAUNCHER_EXPORT_PATH: builds/launcher-app/linux/Pokemon Aether Launcher.x86_64
   SPRITE_ASSET_CACHE_KEY: pokemon-sprites-basic-v4
@@ -48,7 +46,7 @@ env:
 
 jobs:
   deploy:
-    name: Export and deploy desktop builds
+    name: Export and upload desktop builds
     runs-on: ubuntu-latest
 
     steps:
@@ -78,7 +76,7 @@ jobs:
               changed_files="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")"
             fi
 
-            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_directory_zip.py|tools/package_launcher_release.py|tools/stamp_godot_version.py|tools/upload_launcher_release.py|\.github/workflows/deploy-itch.yml)' >/dev/null; then
+            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_directory_zip.py|tools/package_launcher_release.py|tools/stamp_godot_version.py|tools/upload_launcher_release.py|\.github/workflows/deploy-desktop-r2.yml)' >/dev/null; then
               build_launcher=true
             fi
           fi
@@ -297,17 +295,3 @@ jobs:
             builds/launcher/game-*.zip
             builds/launcher/manifest*.json
             builds/launcher-app/PokemonAetherLauncher-*.zip
-
-      - name: Download butler
-        run: |
-          curl -L -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
-          unzip -q butler.zip
-          chmod +x butler
-
-      - name: Deploy to itch.io
-        env:
-          BUTLER_API_KEY: ${{ secrets.ITCH_IO_API_KEY }}
-        run: |
-          test -n "${BUTLER_API_KEY}"
-          ./butler push builds/windows "${WINDOWS_ITCH_TARGET}"
-          ./butler push builds/linux "${LINUX_ITCH_TARGET}"

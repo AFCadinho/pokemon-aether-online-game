@@ -114,6 +114,9 @@ static func _get_option_moves(options: Dictionary, default_moves: Array[String])
 	for move in options.get("moves", []):
 		moves.append(str(move))
 
+	if moves.is_empty():
+		return default_moves
+
 	if moves.size() <= 4:
 		return moves
 
