@@ -1160,13 +1160,7 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_hide_move_hover()
 	_set_battle_input_locked(true)
 	moves_grid.visible = false
-	var player_response: Dictionary = await BattleApiClient.send_choice(
-		battle_request,
-		battle_state.battle_id,
-		"p1",
-		"move",
-		slot
-	)
+	var player_response: Dictionary = await _submit_player_choice("move", slot)
 
 	if not player_response.get("success", false):
 		print("Player choice failed: ", player_response)
@@ -1184,21 +1178,11 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		_set_battle_input_locked(false)
 		return
 
-	if battle_state.is_battle_ended():
-		await get_tree().create_timer(0.25).timeout
-		_finish_battle({
-			"reason": "win",
-			"winner": battle_state.get_winner()
-		})
+	if await _finish_if_battle_ended():
 		return
 
 	if await _auto_force_switch_opponent_if_needed():
-		if battle_state.is_battle_ended():
-			await get_tree().create_timer(0.25).timeout
-			_finish_battle({
-				"reason": "win",
-				"winner": battle_state.get_winner()
-			})
+		if await _finish_if_battle_ended():
 			return
 
 	if _show_force_switch_if_needed():
@@ -2544,13 +2528,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	var was_force_switch := battle_state.needs_force_switch("p1")
 	party_grid.visible = false
 
-	var player_response: Dictionary = await BattleApiClient.send_choice(
-		battle_request,
-		battle_state.battle_id,
-		"p1",
-		"switch",
-		slot
-	)
+	var player_response: Dictionary = await _submit_player_choice("switch", slot)
 
 	if not player_response.get("success", false):
 		var error_message := str(player_response.get("error", "Cannot switch right now!"))
@@ -2579,12 +2557,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		_rewind_party_slots_for_events(player_events)
 		await _render_battle_events(player_events)
 
-		if battle_state.is_battle_ended():
-			await get_tree().create_timer(0.25).timeout
-			_finish_battle({
-				"reason": "win",
-				"winner": battle_state.get_winner()
-			})
+		if await _finish_if_battle_ended():
 			return
 
 		_show_moves()
@@ -2595,21 +2568,11 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		_set_battle_input_locked(false)
 		return
 
-	if battle_state.is_battle_ended():
-		await get_tree().create_timer(0.25).timeout
-		_finish_battle({
-			"reason": "win",
-			"winner": battle_state.get_winner()
-		})
+	if await _finish_if_battle_ended():
 		return
 
 	if await _auto_force_switch_opponent_if_needed():
-		if battle_state.is_battle_ended():
-			await get_tree().create_timer(0.25).timeout
-			_finish_battle({
-				"reason": "win",
-				"winner": battle_state.get_winner()
-			})
+		if await _finish_if_battle_ended():
 			return
 
 	if _show_force_switch_if_needed():
@@ -2626,6 +2589,26 @@ func _show_force_switch_if_needed() -> bool:
 	current_action_panel.set_message("Choose a Pokemon!")
 	_show_party(true)
 	return true
+
+func _finish_if_battle_ended() -> bool:
+	if not battle_state.is_battle_ended():
+		return false
+
+	await get_tree().create_timer(0.25).timeout
+	_finish_battle({
+		"reason": "win",
+		"winner": battle_state.get_winner()
+	})
+	return true
+
+func _submit_player_choice(choice_type: String, slot: int) -> Dictionary:
+	return await BattleApiClient.send_choice(
+		battle_request,
+		battle_state.battle_id,
+		"p1",
+		choice_type,
+		slot
+	)
 
 func _auto_force_switch_opponent_if_needed() -> bool:
 	if battle_state.is_battle_ended() or not battle_state.needs_force_switch("p2"):
