@@ -52,6 +52,7 @@ const MOVE_EVENT_HOLD_SECONDS := 0.35
 const DAMAGE_EVENT_HOLD_SECONDS := 0.25
 const STAT_CHANGE_EVENT_HOLD_SECONDS := 0.85
 const BATTLE_MESSAGE_HOLD_SECONDS := 0.35
+const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
 const DEBUG_BATTLE_HP_EVENTS := true
 const DEBUG_BATTLE_MOVE_EVENTS := true
 const DEBUG_SIDE_CONDITION_EFFECTS := false
@@ -1386,6 +1387,12 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				battle_message = log_message
 				add_blank_after = log_message != ""
 
+			"effectiveness":
+				recent_ability_event = false
+				log_message = event_text_formatter.format_effectiveness_event(event_data)
+				battle_message = log_message
+				add_blank_after = log_message != ""
+
 			"turn":
 				var turn := int(event_data.get("turn", 0))
 				if render_turn_headers and turn > 0:
@@ -1473,17 +1480,6 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 		if battle_message != "":
 			current_action_panel.set_message(battle_message)
 
-		var has_timed_animation: bool = (
-			attack_actor_ident != ""
-			or damage_target_ident != ""
-			or heal_target_ident != ""
-			or stat_change_target_ident != ""
-			or ability_boost_target_ident != ""
-			or faint_target_ident != ""
-		)
-		if battle_message != "" and not has_timed_animation:
-			await get_tree().create_timer(BATTLE_MESSAGE_HOLD_SECONDS).timeout
-
 		if attack_actor_ident != "":
 			await _play_attack_tween_for_actor(attack_actor_ident)
 			await get_tree().create_timer(MOVE_EVENT_HOLD_SECONDS).timeout
@@ -1504,6 +1500,8 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			await get_tree().create_timer(STAT_CHANGE_EVENT_HOLD_SECONDS).timeout
 		if faint_target_ident != "":
 			await _play_faint_tween_for_target(faint_target_ident)
+		if battle_message != "":
+			await get_tree().create_timer(BATTLE_MESSAGE_HOLD_SECONDS).timeout
 
 	_update_hud_panels()
 	_update_party_slots()
@@ -2617,16 +2615,7 @@ func _auto_force_switch_opponent_if_needed() -> bool:
 	return await _submit_npc_choice_and_render()
 
 func _submit_npc_choice_and_render() -> bool:
-	var opponent_name: String = _get_vs_player_name("p2")
-	if opponent_name == "":
-		opponent_name = "Opponent"
-	current_action_panel.set_message("%s is choosing..." % opponent_name)
-
-	var opponent_response: Dictionary = await BattleApiClient.send_npc_choice(
-		battle_request,
-		battle_state.battle_id,
-		"p2"
-	)
+	var opponent_response: Dictionary = await _submit_npc_choice()
 
 	if not bool(opponent_response.get("success", false)):
 		print("NPC choice failed: ", opponent_response)
@@ -2635,12 +2624,26 @@ func _submit_npc_choice_and_render() -> bool:
 	if not _apply_api_response(opponent_response):
 		return false
 
+	await _render_opponent_response(opponent_response)
+	await _hold_opponent_response_message()
+	return true
+
+func _submit_npc_choice() -> Dictionary:
+	return await BattleApiClient.send_npc_choice(
+		battle_request,
+		battle_state.battle_id,
+		"p2"
+	)
+
+func _render_opponent_response(opponent_response: Dictionary) -> void:
 	_update_battle_presentation()
 	var opponent_events: Array = opponent_response.get("events", [])
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
 	await _render_battle_events(opponent_events)
-	return true
+
+func _hold_opponent_response_message() -> void:
+	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
 
 func _can_switch_to_slot(slot: int) -> bool:
 	if battle_state.is_active_trapped("p1") and not battle_state.needs_force_switch("p1"):

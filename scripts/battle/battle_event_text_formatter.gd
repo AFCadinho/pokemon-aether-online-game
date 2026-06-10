@@ -184,6 +184,17 @@ func format_miss_event(event: Dictionary) -> String:
 
 	return "The attack missed!"
 
+func format_effectiveness_event(event: Dictionary) -> String:
+	match str(event.get("effectiveness", "")):
+		"super":
+			return "It's super effective!"
+		"resisted":
+			return "It's not very effective..."
+		"immune":
+			return "It had no effect!"
+
+	return ""
+
 func format_field_effect_event(event: Dictionary) -> String:
 	var effect_name := _format_field_effect_name(str(event.get("effect", "")))
 	if effect_name == "":
