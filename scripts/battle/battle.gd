@@ -21,6 +21,8 @@ var battle_input_locked := false
 
 #Battle State
 var battle_state := BattleState.new()
+var pokemon_hover_service := preload("res://scripts/battle/battle_pokemon_hover_service.gd").new()
+var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
 var known_field_effect_keys := {}
 var field_effect_started_turns := {}
 var active_side_condition_effects: Dictionary = {
@@ -39,7 +41,6 @@ var current_sprite_hover_player_id := ""
 var pokemon_hover_request_token := 0
 var is_hud_slot_hover_active := false
 var current_hover_pokemon_ident := ""
-var pokemon_stats_cache: Dictionary = {}
 var current_move_hover_rect := Rect2()
 var sun_weather_time := 0.0
 var sandstorm_weather_time := 0.0
@@ -239,7 +240,7 @@ func _show_hud_pokemon_hover(pokemon_data: Dictionary) -> void:
 	is_hud_slot_hover_active = true
 	current_sprite_hover_player_id = ""
 	current_hover_pokemon_ident = str(pokemon_data.get("ident", ""))
-	await _show_pokemon_hover(pokemon_data, _get_player_id_from_pokemon_data(pokemon_data))
+	await _show_pokemon_hover(pokemon_data, _get_player_id_from_ident(current_hover_pokemon_ident))
 
 func _hide_hud_pokemon_hover() -> void:
 	is_hud_slot_hover_active = false
@@ -252,10 +253,13 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 	var request_token: int = pokemon_hover_request_token
 	pokemon_info_request.cancel_request()
 	pokemon_stats_request.cancel_request()
-	var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(pokemon_data)
-	if request_token != pokemon_hover_request_token:
-		return
-	var pokemon_stats: Dictionary = await _fetch_hover_pokemon_stats(pokemon_data)
+	var hover_data: Dictionary = await pokemon_hover_service.get_hover_card_data(
+		battle_state,
+		pokemon_info_request,
+		pokemon_stats_request,
+		pokemon_data,
+		public_confirmed_abilities_by_ident
+	)
 	if request_token != pokemon_hover_request_token:
 		return
 	if is_hud_slot_hover_active and current_hover_pokemon_ident != hover_ident:
@@ -263,11 +267,11 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 	if not is_hud_slot_hover_active and current_sprite_hover_player_id != hover_owner_player_id:
 		return
 
-	var confirmed_moves: Array = _get_confirmed_info_moves(pokemon_info)
-	var confirmed_item: String = _get_optional_known_info_string(pokemon_info, "confirmedItem")
-	var confirmed_ability: String = _get_confirmed_ability_for_hover(pokemon_info, pokemon_data)
-	var stat_changes: Dictionary = _get_confirmed_info_stat_changes(pokemon_info)
-	var speed_data: Dictionary = _get_hover_speed_data(pokemon_stats)
+	var confirmed_moves: Array = hover_data.get("confirmed_moves", [])
+	var confirmed_item: String = str(hover_data.get("confirmed_item", ""))
+	var confirmed_ability: String = str(hover_data.get("confirmed_ability", ""))
+	var stat_changes: Dictionary = hover_data.get("stat_changes", {})
+	var speed_data: Dictionary = hover_data.get("speed_data", {})
 	_debug_battle_move("pokemon-info parsed player=%s moves=%s item=%s ability=%s statChanges=%s speed=%s info=%s" % [
 		hover_owner_player_id,
 		JSON.stringify(confirmed_moves),
@@ -275,7 +279,7 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 		confirmed_ability,
 		JSON.stringify(stat_changes),
 		JSON.stringify(speed_data),
-		JSON.stringify(pokemon_info),
+		JSON.stringify(hover_data.get("pokemon_info", {})),
 	])
 	if pokemon_hover_card.has_method("show_for_pokemon"):
 		pokemon_hover_card.call("show_for_pokemon", pokemon_data, confirmed_moves, confirmed_item, confirmed_ability, stat_changes, speed_data)
@@ -298,143 +302,6 @@ func _hide_pokemon_hover_card() -> void:
 		pokemon_hover_card.call("hide_card")
 	else:
 		pokemon_hover_card.visible = false
-
-func _fetch_hover_pokemon_info(pokemon_data: Dictionary) -> Dictionary:
-	var battle_id: String = battle_state.battle_id
-	var ident: String = str(pokemon_data.get("ident", ""))
-	if battle_id == "" or ident == "":
-		_debug_battle_move("pokemon-info skipped battle_id=%s ident=%s pokemon=%s" % [
-			battle_id,
-			ident,
-			JSON.stringify(pokemon_data),
-		])
-		return {}
-
-	var viewer_id: String = _get_hover_known_info_viewer_id(ident)
-	if viewer_id == "":
-		return {}
-
-	_debug_battle_move("pokemon-info request viewerId=%s ident=%s battleId=%s" % [viewer_id, ident, battle_id])
-	var response: Dictionary = await BattleApiClient.get_pokemon_info(
-		pokemon_info_request,
-		battle_id,
-		viewer_id,
-		ident
-	)
-	_debug_battle_move("pokemon-info response=%s" % JSON.stringify(response))
-	if not bool(response.get("success", false)):
-		return {}
-
-	var pokemon_value: Variant = response.get("pokemon", {})
-	if pokemon_value is Dictionary:
-		return pokemon_value
-
-	return {}
-
-func _fetch_hover_pokemon_stats(pokemon_data: Dictionary) -> Dictionary:
-	var species: String = battle_state.get_species_from_pokemon_data(pokemon_data)
-	var level: int = _get_level_from_pokemon_data(pokemon_data)
-	if species == "" or level <= 0:
-		return {}
-
-	var cache_key: String = "%s|%s" % [species.to_lower(), level]
-	var cached_value: Variant = pokemon_stats_cache.get(cache_key, {})
-	if cached_value is Dictionary and not cached_value.is_empty():
-		return cached_value as Dictionary
-
-	_debug_battle_move("pokemon-stats request species=%s level=%s" % [species, str(level)])
-	var response: Dictionary = await PokemonDataApiClient.get_pokemon_stats(
-		pokemon_stats_request,
-		species,
-		level
-	)
-	_debug_battle_move("pokemon-stats response=%s" % JSON.stringify(response))
-	if not bool(response.get("success", false)):
-		return {}
-
-	var pokemon_value: Variant = response.get("pokemon", {})
-	if pokemon_value is Dictionary:
-		var pokemon_stats: Dictionary = pokemon_value as Dictionary
-		pokemon_stats_cache[cache_key] = pokemon_stats
-		return pokemon_stats
-
-	return {}
-
-func _get_level_from_pokemon_data(pokemon_data: Dictionary) -> int:
-	var level_value: Variant = pokemon_data.get("level", null)
-	if level_value != null:
-		return int(level_value)
-
-	var details: String = str(pokemon_data.get("details", ""))
-	for part in details.split(","):
-		var trimmed: String = str(part).strip_edges()
-		if trimmed.begins_with("L"):
-			return int(trimmed.substr(1))
-
-	return 100
-
-func _get_player_id_from_pokemon_data(pokemon_data: Dictionary) -> String:
-	var ident: String = str(pokemon_data.get("ident", ""))
-	return _get_player_id_from_ident(ident)
-
-func _get_hover_known_info_viewer_id(ident: String) -> String:
-	match _get_player_id_from_ident(ident):
-		"p1":
-			return "p2"
-		"p2":
-			return "p1"
-
-	return ""
-
-func _get_confirmed_ability_for_hover(pokemon_info: Dictionary, pokemon_data: Dictionary) -> String:
-	var confirmed_ability: String = _get_optional_known_info_string(pokemon_info, "confirmedAbility")
-	if confirmed_ability != "":
-		return confirmed_ability
-
-	var ident_key: String = _normalize_battle_ident(str(pokemon_data.get("ident", "")))
-	if ident_key == "":
-		return ""
-
-	return str(public_confirmed_abilities_by_ident.get(ident_key, ""))
-
-func _get_confirmed_info_moves(pokemon_info: Dictionary) -> Array:
-	var moves_value: Variant = pokemon_info.get("confirmedMoves", pokemon_info.get("confirmed_moves", []))
-	if moves_value is Array:
-		return moves_value
-
-	return []
-
-func _get_confirmed_info_stat_changes(pokemon_info: Dictionary) -> Dictionary:
-	var stat_changes_value: Variant = pokemon_info.get("statChanges", pokemon_info.get("stat_changes", {}))
-	if stat_changes_value is Dictionary:
-		return stat_changes_value
-
-	return {}
-
-func _get_hover_speed_data(pokemon_stats: Dictionary) -> Dictionary:
-	var speed_value: Variant = pokemon_stats.get("speed", {})
-	if speed_value is Dictionary:
-		return speed_value as Dictionary
-
-	return {}
-
-func _get_optional_known_info_string(pokemon_info: Dictionary, key: String) -> String:
-	var snake_key: String = _to_snake_case_key(key)
-	var value: Variant = pokemon_info.get(key, pokemon_info.get(snake_key, ""))
-	if value == null:
-		return ""
-
-	return str(value)
-
-func _to_snake_case_key(key: String) -> String:
-	var result: String = ""
-	for index in range(key.length()):
-		var character: String = key.substr(index, 1)
-		if index > 0 and character == character.to_upper() and character != character.to_lower():
-			result += "_"
-		result += character.to_lower()
-
-	return result
 
 func _disable_unimplemented_mechanics() -> void:
 	for button in mechanic_buttons:
@@ -684,10 +551,20 @@ func _get_public_confirmed_ability_ident_from_event(event: Dictionary) -> String
 
 func _get_ability_name_from_source(source: String) -> String:
 	var cleaned: String = source.strip_edges()
-	if not cleaned.to_lower().begins_with("ability:"):
+	var cleaned_lower: String = cleaned.to_lower()
+	if cleaned_lower.begins_with("ability:"):
+		return cleaned.split(":", false, 1)[1].strip_edges()
+
+	if cleaned_lower.begins_with("move:") or cleaned_lower.begins_with("item:"):
 		return ""
 
-	return cleaned.split(":", false, 1)[1].strip_edges()
+	match cleaned_lower.replace("-", " ").replace("_", " "):
+		"grassy surge", "electric surge", "misty surge", "psychic surge":
+			return cleaned
+		"drizzle", "drought", "sand stream", "snow warning":
+			return cleaned
+
+	return ""
 
 ## Werkt turn en field timer status bij vanuit de battle state.
 func _update_battle_status_panels() -> void:
@@ -1370,7 +1247,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				])
 				var actor := _format_battle_actor(str(event_data.get("actor", "")))
 				var move_name := str(event_data.get("move", ""))
-				pre_log_message = _format_move_source_message(event_data, actor)
+				pre_log_message = event_text_formatter.format_move_source_message(event_data, actor)
 				if pre_log_message != "":
 					battle_message = pre_log_message
 					attack_actor_ident = ""
@@ -1441,7 +1318,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 					str(event_data.get("sourceTarget", "")),
 					JSON.stringify(event_data),
 				])
-				log_message = _format_field_effect_event(event_data)
+				log_message = event_text_formatter.format_field_effect_event(event_data)
 				add_blank_after = log_message != ""
 				recent_field_effect_source = str(event_data.get("effect", ""))
 				_remove_pending_field_start_event(event_data)
@@ -1464,10 +1341,10 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 					str(event_data.get("source", "")),
 					JSON.stringify(event_data),
 				])
-				log_message = _format_ability_event(event_data)
+				log_message = event_text_formatter.format_ability_event(event_data)
 				battle_message = log_message
 				add_blank_after = log_message != ""
-				if _is_ability_boost_event(event_data):
+				if event_text_formatter.is_ability_boost_event(event_data):
 					ability_boost_target_ident = str(event_data.get("target", event_data.get("actor", "")))
 				recent_ability_event = log_message != ""
 
@@ -1475,9 +1352,9 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				recent_move_event = false
 				stat_change_target_ident = str(event_data.get("target", ""))
 				stat_change_amount = int(event_data.get("amount", 0))
-				var is_ability_detail := recent_ability_event or _is_stat_change_from_ability(event_data)
-				log_message = _format_stat_change_event(event_data, is_ability_detail)
-				battle_message = _format_stat_change_battle_message(event_data)
+				var is_ability_detail := recent_ability_event or event_text_formatter.is_stat_change_from_ability(event_data)
+				log_message = event_text_formatter.format_stat_change_event(event_data, is_ability_detail)
+				battle_message = event_text_formatter.format_stat_change_battle_message(event_data)
 				add_blank_after = log_message != ""
 				suppress_player_gap = is_ability_detail
 
@@ -1491,7 +1368,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 					str(event_data.get("source", "")),
 					JSON.stringify(event_data),
 				])
-				log_message = _format_status_event(event_data)
+				log_message = event_text_formatter.format_status_event(event_data)
 				battle_message = log_message
 				add_blank_after = log_message != ""
 
@@ -1505,7 +1382,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 					str(event_data.get("source", "")),
 					JSON.stringify(event_data),
 				])
-				log_message = _format_fail_event(event_data)
+				log_message = event_text_formatter.format_fail_event(event_data)
 				battle_message = log_message
 				add_blank_after = log_message != ""
 
@@ -1513,7 +1390,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				recent_field_effect_source = ""
 				recent_ability_event = false
 				recent_move_event = false
-				log_message = _format_cant_event(event_data)
+				log_message = event_text_formatter.format_cant_event(event_data)
 				battle_message = log_message
 				add_blank_after = log_message != ""
 
@@ -1521,7 +1398,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				recent_field_effect_source = ""
 				recent_ability_event = false
 				recent_move_event = false
-				log_message = _format_miss_event(event_data)
+				log_message = event_text_formatter.format_miss_event(event_data)
 				battle_message = log_message
 				add_blank_after = log_message != ""
 
@@ -2330,7 +2207,7 @@ func _remove_pending_field_start_event(event: Dictionary) -> void:
 
 func _render_pending_field_start_events() -> void:
 	for event in pending_field_start_events:
-		var log_message: String = _format_field_effect_event(event)
+		var log_message: String = event_text_formatter.format_field_effect_event(event)
 		if log_message == "":
 			continue
 
@@ -2371,51 +2248,6 @@ func _get_normalized_field_effect_key(effect: String) -> String:
 			return "TrickRoom"
 
 	return cleaned
-
-func _format_ability_event(event: Dictionary) -> String:
-	var actor := _format_ability_event_actor(event)
-	var ability := _format_ability_name(_get_first_event_text_value(event, [
-		"ability",
-		"abilityName",
-		"sourceName",
-		"source",
-	]))
-	if ability == "":
-		return ""
-
-	if _is_ability_boost_event(event):
-		var stat: String = _format_stat_name(str(event.get("stat", "")))
-		if actor == "":
-			return "%s boosted %s!" % [ability, stat]
-
-		return "%s's %s boosted its %s!" % [actor, ability, stat]
-
-	if actor == "":
-		return "%s activated!" % ability
-
-	return "%s's %s activated!" % [actor, ability]
-
-func _is_ability_boost_event(event: Dictionary) -> bool:
-	var effect: String = str(event.get("effect", "")).to_lower()
-	var stat: String = _format_stat_name(str(event.get("stat", "")))
-	return effect == "boost" and stat != ""
-
-func _format_ability_event_actor(event: Dictionary) -> String:
-	var actor := _format_battle_actor(_get_first_event_text_value(event, [
-		"target",
-		"actor",
-		"pokemon",
-		"sourcePokemon",
-		"sourceTarget",
-	]))
-	return actor
-
-func _format_ability_name(ability: String) -> String:
-	var cleaned := _normalize_event_source(ability)
-	if cleaned == "":
-		return ""
-
-	return _format_compact_effect_name(cleaned)
 
 func _format_pokemon_effect_event(event: Dictionary) -> String:
 	var target := _format_battle_actor(str(event.get("target", event.get("pokemon", ""))))
@@ -2462,20 +2294,6 @@ func _format_pokemon_effect_event(event: Dictionary) -> String:
 			return "%s is no longer affected by %s." % [target, effect]
 
 	return "%s's %s changed." % [target, effect]
-
-func _format_move_source_message(event: Dictionary, actor: String) -> String:
-	var raw_source := str(event.get("source", ""))
-	if raw_source == "" or actor == "":
-		return ""
-
-	var source_name := _format_pokemon_effect_name(raw_source)
-	if source_name == "":
-		return ""
-
-	if _is_reflection_effect(raw_source, source_name):
-		return "%s's %s reflected the move!" % [actor, source_name]
-
-	return ""
 
 func _is_reflection_effect(raw_effect: String, effect: String) -> bool:
 	var source_kind := ""
@@ -2570,99 +2388,6 @@ func _normalize_battle_ident(ident: String) -> String:
 
 	return cleaned.to_lower()
 
-func _format_stat_change_event(event: Dictionary, as_detail := false) -> String:
-	var target := _format_battle_actor(_get_first_event_text_value(event, [
-		"target",
-		"pokemon",
-		"actor",
-	]))
-	var stat := _format_stat_name(_get_first_event_text_value(event, [
-		"stat",
-		"statName",
-	]))
-	var amount: int = _get_stat_change_amount(event)
-	if target == "" or stat == "" or amount == 0:
-		return ""
-
-	var action: String = _format_stat_change_action(amount)
-	if action == "":
-		return ""
-
-	var message := "%s's %s %s!" % [target, stat, action]
-	if as_detail:
-		return "- %s" % message
-
-	return message
-
-func _format_stat_change_battle_message(event: Dictionary) -> String:
-	var target := _format_battle_actor(_get_first_event_text_value(event, [
-		"target",
-		"pokemon",
-		"actor",
-	]))
-	var stat := _format_stat_name(_get_first_event_text_value(event, [
-		"stat",
-		"statName",
-	]))
-	var amount := _get_stat_change_amount(event)
-	if target == "" or stat == "" or amount == 0:
-		return ""
-
-	var action := _format_stat_change_action(amount)
-	if action == "":
-		return ""
-
-	var source: String = _format_stat_change_source(event)
-	if source != "":
-		return "%s's %s %s because of %s!" % [target, stat, action, source]
-
-	return "%s's %s %s!" % [target, stat, action]
-
-func _format_stat_change_source(event: Dictionary) -> String:
-	var source := _normalize_event_source(str(event.get("source", "")))
-	if source == "":
-		return ""
-
-	return _format_compact_effect_name(source)
-
-func _is_stat_change_from_ability(event: Dictionary) -> bool:
-	var source := str(event.get("source", "")).strip_edges()
-	if source.begins_with("[from] "):
-		source = source.substr("[from] ".length()).strip_edges()
-
-	return source.to_lower().begins_with("ability:")
-
-func _get_stat_change_amount(event: Dictionary) -> int:
-	for key in ["amount", "change", "stages", "stageChange"]:
-		if event.has(key):
-			return int(event.get(key, 0))
-
-	var direction := str(event.get("direction", event.get("kind", ""))).to_lower()
-	var amount := int(event.get("stage", event.get("value", 1)))
-	if direction == "down" or direction == "fall" or direction == "fell" or direction == "unboost":
-		return -abs(amount)
-	if direction == "up" or direction == "rise" or direction == "rose" or direction == "boost":
-		return abs(amount)
-
-	return 0
-
-func _format_stat_change_action(amount: int) -> String:
-	match amount:
-		1:
-			return "rose"
-		2:
-			return "rose sharply"
-		3, 4, 5, 6:
-			return "rose drastically"
-		-1:
-			return "fell"
-		-2:
-			return "harshly fell"
-		-3, -4, -5, -6:
-			return "severely fell"
-
-	return ""
-
 func _format_stat_name(stat: String) -> String:
 	match stat.to_lower().replace(" ", ""):
 		"atk", "attack":
@@ -2721,124 +2446,6 @@ func _split_camel_case_text(value: String) -> String:
 		result += character
 
 	return result
-
-func _format_fail_event(event: Dictionary) -> String:
-	var ability_message: String = _format_fail_ability_source_event(event)
-	if ability_message != "":
-		return ability_message
-
-	var reason := _format_event_reason(str(event.get("reason", event.get("source", ""))))
-	if reason != "":
-		return "But it failed! (%s)" % reason
-
-	return "But it failed!"
-
-func _format_fail_ability_source_event(event: Dictionary) -> String:
-	var source: String = str(event.get("source", ""))
-	if not source.to_lower().begins_with("ability:"):
-		return ""
-
-	var target: String = _format_battle_actor(str(event.get("target", event.get("pokemon", ""))))
-	var ability: String = _format_ability_name(source)
-	if target == "" or ability == "":
-		return ""
-
-	return "%s's %s activated!" % [target, ability]
-
-func _format_status_event(event: Dictionary) -> String:
-	var target: String = _format_battle_actor(str(event.get("target", event.get("pokemon", ""))))
-	var status: String = _format_status_name(_get_first_event_text_value(event, [
-		"status",
-		"statusName",
-		"condition",
-	]))
-	if target == "" or status == "":
-		return ""
-
-	var state: String = str(event.get("state", "start")).to_lower()
-	match state:
-		"end", "cure", "cured":
-			return "%s was cured of %s!" % [target, status]
-
-	match status.to_lower():
-		"poison":
-			return "%s was poisoned!" % target
-		"toxic poison":
-			return "%s was badly poisoned!" % target
-		"burn":
-			return "%s was burned!" % target
-		"paralysis":
-			return "%s was paralyzed!" % target
-		"sleep":
-			return "%s fell asleep!" % target
-		"freeze":
-			return "%s was frozen!" % target
-
-	return "%s became affected by %s!" % [target, status]
-
-func _format_status_name(status: String) -> String:
-	var cleaned: String = _normalize_event_source(status).to_lower().replace(" ", "")
-	match cleaned:
-		"psn", "poison", "poisoned":
-			return "poison"
-		"tox", "toxic", "badlypoisoned":
-			return "toxic poison"
-		"brn", "burn", "burned":
-			return "burn"
-		"par", "paralysis", "paralyzed":
-			return "paralysis"
-		"slp", "sleep", "asleep":
-			return "sleep"
-		"frz", "freeze", "frozen":
-			return "freeze"
-
-	if cleaned == "":
-		return ""
-
-	return _format_compact_effect_name(cleaned)
-
-func _format_cant_event(event: Dictionary) -> String:
-	var actor := _format_battle_actor(str(event.get("actor", event.get("target", ""))))
-	var reason := _format_event_reason(str(event.get("reason", event.get("source", ""))))
-	if actor != "" and reason != "":
-		return "%s couldn't move because of %s!" % [actor, reason]
-	if actor != "":
-		return "%s couldn't move!" % actor
-	if reason != "":
-		return "It couldn't move because of %s!" % reason
-
-	return "It couldn't move!"
-
-func _format_miss_event(event: Dictionary) -> String:
-	var actor: String = _format_battle_actor(str(event.get("actor", "")))
-	var target: String = _format_battle_actor(str(event.get("target", "")))
-	if target != "":
-		return "%s avoided the attack!" % target
-	if actor != "":
-		return "%s's attack missed!" % actor
-
-	return "The attack missed!"
-
-func _format_event_reason(reason: String) -> String:
-	var cleaned := _normalize_event_source(reason)
-	if cleaned == "":
-		return ""
-
-	match cleaned.to_lower().replace(" ", ""):
-		"slp", "sleep":
-			return "sleep"
-		"frz", "freeze":
-			return "freeze"
-		"par", "paralysis":
-			return "paralysis"
-		"flinch":
-			return "flinching"
-		"recharge":
-			return "recharging"
-		"trapped":
-			return "being trapped"
-
-	return cleaned
 
 func _format_heal_event(event: Dictionary, target: String, previous_hp: int, hp: int) -> String:
 	var source := _normalize_event_source(str(event.get("source", "")))
@@ -2923,121 +2530,6 @@ func _normalize_event_source(source: String) -> String:
 
 	if cleaned.contains(": "):
 		cleaned = cleaned.split(": ")[1]
-
-	return cleaned.strip_edges()
-
-func _format_field_effect_event(event: Dictionary) -> String:
-	var effect_name := _format_field_effect_name(str(event.get("effect", "")))
-	if effect_name == "":
-		return ""
-
-	var state := str(event.get("state", ""))
-	match state:
-		"start":
-			var source_message := _format_field_effect_start_source_message(event, effect_name)
-			if source_message != "":
-				return source_message
-
-			return "%s became active!" % effect_name
-		"upkeep":
-			return "%s continues." % effect_name
-		"end":
-			return "%s ended." % effect_name
-
-	return "%s changed." % effect_name
-
-func _format_field_effect_start_source_message(event: Dictionary, effect_name: String) -> String:
-	var source_name := _get_field_effect_source_name(event)
-	if source_name == "":
-		return ""
-
-	var actor := _format_field_effect_source_actor(event)
-	var source_kind := _get_field_effect_source_kind(event)
-	if source_kind == "ability":
-		return _format_ability_field_effect_message(actor, source_name, effect_name)
-
-	if actor != "" and source_name != effect_name:
-		return "%s's %s activated %s!" % [actor, source_name, effect_name]
-
-	return ""
-
-func _get_field_effect_source_name(event: Dictionary) -> String:
-	var source_name := str(event.get("sourceName", ""))
-	if source_name != "":
-		return _normalize_event_source(source_name)
-
-	return _normalize_event_source(str(event.get("source", "")))
-
-func _get_field_effect_source_kind(event: Dictionary) -> String:
-	var source := str(event.get("source", "")).strip_edges()
-	if source.begins_with("[from] "):
-		source = source.substr("[from] ".length()).strip_edges()
-
-	if source.contains(": "):
-		return str(source.split(": ")[0]).strip_edges().to_lower()
-
-	return ""
-
-func _format_field_effect_source_actor(event: Dictionary) -> String:
-	var source_actor := str(event.get("sourcePokemon", ""))
-	if source_actor == "":
-		source_actor = str(event.get("sourceTarget", ""))
-	if source_actor == "":
-		source_actor = str(event.get("actor", ""))
-
-	return _format_battle_actor(source_actor)
-
-func _format_ability_field_effect_message(actor: String, ability: String, effect_name: String) -> String:
-	var action := _get_field_effect_start_action(effect_name)
-	if action == "":
-		action = "activated %s" % effect_name
-
-	return _format_ability_weather_message(actor, ability, action)
-
-func _get_field_effect_start_action(effect_name: String) -> String:
-	match effect_name.to_lower().replace(" ", ""):
-		"sun":
-			return "intensified the sun"
-		"rain":
-			return "made it rain"
-		"sandstorm":
-			return "whipped up a sandstorm"
-		"hail":
-			return "summoned hail"
-		"snow":
-			return "summoned snow"
-
-	return ""
-
-func _format_ability_weather_message(actor: String, ability: String, action: String) -> String:
-	if actor == "":
-		return "%s %s!" % [ability, action]
-
-	return "%s's %s %s!" % [actor, ability, action]
-
-func _format_field_effect_name(effect: String) -> String:
-	var cleaned := effect
-	if cleaned.contains(": "):
-		cleaned = cleaned.split(": ")[1]
-
-	match cleaned:
-		"RainDance":
-			return "Rain"
-		"SunnyDay":
-			return "Sun"
-		"Sandstorm":
-			return "Sandstorm"
-		"Hail":
-			return "Hail"
-		"Snow":
-			return "Snow"
-
-	cleaned = cleaned.replace("Dance", " Dance")
-	cleaned = cleaned.replace("Room", " Room")
-	cleaned = cleaned.replace("Terrain", " Terrain")
-	cleaned = cleaned.replace("Rock", " Rock")
-	cleaned = cleaned.replace("Web", " Web")
-	cleaned = cleaned.replace("Spikes", " Spikes")
 
 	return cleaned.strip_edges()
 
