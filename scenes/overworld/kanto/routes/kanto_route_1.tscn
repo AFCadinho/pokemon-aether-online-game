@@ -3566,7 +3566,6 @@ sight_range_tiles = 4
 [node name="GaryTrainerNPC" parent="Entities/NPCs" unique_id=874508670 instance=ExtResource("8_lmnv3")]
 position = Vector2(272, 944)
 trainer_id = "route_1_gary_1"
-fallback_trainer_name = "Gary Oak"
 sight_range_tiles = 3
 trainer_sprite_frames = ExtResource("9_y4850")
 mugshot = ExtResource("10_6o5ht")

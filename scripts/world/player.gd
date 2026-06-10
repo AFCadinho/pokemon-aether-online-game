@@ -203,17 +203,20 @@ func check_for_grass_encounter() -> void:
 	if current_map == null:
 		return
 		
-	if not current_map.has_method("try_get_wild_encounter"):
+	if not current_map.has_method("get_wild_encounter_area_id"):
 		return
 		
-	var wild_pokemon: Pokemon = current_map.try_get_wild_encounter()
-	
-	if wild_pokemon == null:
+	var area_id: String = str(current_map.call("get_wild_encounter_area_id"))
+	if area_id == "":
 		return
+
+	if current_map.has_method("should_trigger_wild_encounter"):
+		if not bool(current_map.call("should_trigger_wild_encounter", "grass")):
+			return
 	
 	var world := GameState.get_world()
-	if world != null and world.has_method("start_wild_battle"):
-		world.start_wild_battle(wild_pokemon)
+	if world != null and world.has_method("start_triggered_wild_battle_for_area"):
+		world.start_triggered_wild_battle_for_area(area_id, "grass")
 
 func _is_ui_typing() -> bool:
 	var focused_control := get_viewport().gui_get_focus_owner()

@@ -100,47 +100,32 @@ func create_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	battle_request.queue_free()
 	return response
 
-func create_trainer_battle_response(trainer_data: Dictionary) -> Dictionary:
+func create_triggered_wild_battle_response(area_id: String, encounter_type: String = "grass") -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
 
-	var response: Dictionary = await BattleApiClient.create_battle(
+	var response: Dictionary = await BattleApiClient.create_triggered_wild_battle(
 		battle_request,
 		BattleApiPayloads.from_player_save(PlayerSave),
-		BattleApiPayloads.from_trainer_data(trainer_data)
-	)
-
-	if not response.get("success", false):
-		battle_request.queue_free()
-		return response
-
-	var battle_id := str(response.get("battleId", ""))
-	if battle_id == "":
-		battle_request.queue_free()
-		return {
-			"success": false,
-			"error": "Trainer battle response is missing battle id."
-		}
-
-	var player_lead_response: Dictionary = await BattleApiClient.choose_lead(
-		battle_request,
-		battle_id,
-		"p1",
-		1
-	)
-	if not player_lead_response.get("success", false):
-		battle_request.queue_free()
-		return player_lead_response
-
-	var trainer_lead_response: Dictionary = await BattleApiClient.choose_lead(
-		battle_request,
-		battle_id,
-		"p2",
-		1
+		area_id,
+		encounter_type
 	)
 
 	battle_request.queue_free()
-	return trainer_lead_response
+	return response
+
+func create_trainer_battle_response(trainer_id: String) -> Dictionary:
+	var battle_request := HTTPRequest.new()
+	add_child(battle_request)
+
+	var response: Dictionary = await BattleApiClient.create_trainer_battle(
+		battle_request,
+		BattleApiPayloads.from_player_save(PlayerSave),
+		trainer_id
+	)
+
+	battle_request.queue_free()
+	return response
 
 func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	if is_in_battle:
@@ -182,13 +167,8 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
 
-func start_trainer_battle(trainer_data: Dictionary) -> void:
+func start_triggered_wild_battle_for_area(area_id: String, encounter_type: String = "grass") -> void:
 	if is_in_battle:
-		return
-
-	var trainer_team: Array = trainer_data.get("team", [])
-	if trainer_team.is_empty():
-		push_warning("World.start_trainer_battle failed: trainer has no team.")
 		return
 
 	is_in_battle = true
@@ -196,7 +176,60 @@ func start_trainer_battle(trainer_data: Dictionary) -> void:
 	player.is_moving = false
 	player.set_physics_process(false)
 
-	var response: Dictionary = await create_trainer_battle_response(trainer_data)
+	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type)
+	if not response.get("success", false):
+		is_in_battle = false
+		player.set_physics_process(true)
+		return
+
+	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
+	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_data(wild_pokemon_data)
+	if wild_pokemon == null:
+		push_warning("World.start_triggered_wild_battle_for_area failed: backend wild Pokemon could not be loaded locally for display.")
+		is_in_battle = false
+		player.set_physics_process(true)
+		return
+
+	battle_layer = CanvasLayer.new()
+	battle_layer.layer = 10
+	add_child(battle_layer)
+
+	var battle_scene := BATTLE_SCENE
+	if battle_scene == null:
+		push_error("World.start_triggered_wild_battle_for_area failed: could not load battle scene.")
+		battle_layer.queue_free()
+		battle_layer = null
+		is_in_battle = false
+		player.set_physics_process(true)
+		return
+
+	battle_instance = battle_scene.instantiate()
+	battle_layer.add_child(battle_instance)
+
+	await battle_instance.setup_wild_battle_from_response(
+		PlayerSave.party[0],
+		wild_pokemon,
+		response
+	)
+
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
+
+func start_trainer_battle(trainer_data: Dictionary) -> void:
+	if is_in_battle:
+		return
+
+	var trainer_id := str(trainer_data.get("id", ""))
+	if trainer_id == "":
+		push_warning("World.start_trainer_battle failed: trainer has no id.")
+		return
+
+	is_in_battle = true
+
+	player.is_moving = false
+	player.set_physics_process(false)
+
+	var response: Dictionary = await create_trainer_battle_response(trainer_id)
 	if not response.get("success", false):
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		is_in_battle = false

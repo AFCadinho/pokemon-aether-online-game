@@ -23,7 +23,7 @@ BattleApiConfig="*uid://wra74wdmekx5"
 BattleApiClient="*uid://dwil5tlkmdb7p"
 WindowFit="*res://scripts/core/window_fit.gd"
 GatewayApiConfig="*res://scripts/services/gateway_api_config.gd"
-TrainerDataService="*res://scripts/services/trainer_data_service.gd"
+TrainerMetadataService="*res://scripts/services/trainer_metadata_service.gd"
 
 [display]
 

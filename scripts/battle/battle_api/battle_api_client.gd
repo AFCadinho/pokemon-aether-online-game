@@ -21,10 +21,39 @@ func create_wild_battle(request_node: HTTPRequest, player: Dictionary, opponent:
 	
 	return await send_post_request(request_node, "/battle/wild", body)
 
+func create_triggered_wild_battle(
+	request_node: HTTPRequest,
+	player: Dictionary,
+	area_id: String,
+	encounter_type: String = "grass"
+) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/wild-encounter",
+		{
+			"player": player,
+			"areaId": area_id,
+			"encounterType": encounter_type,
+			"formatId": FORMAT_ID,
+		}
+	)
+
 func create_battle(request_node: HTTPRequest, player: Dictionary, opponent: Dictionary) -> Dictionary:
 	var body := create_battle_body(player, opponent)
 	
 	return await send_post_request(request_node, "/battle/create", body)
+
+func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, trainer_id: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/trainer",
+		{
+			"player": player,
+			"trainerId": trainer_id,
+			"formatId": FORMAT_ID,
+			"playerLeadSlot": 1,
+		}
+	)
 
 func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String, slot: int) -> Dictionary:
 	var body = {
@@ -33,6 +62,23 @@ func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String
 	}
 	
 	return await send_post_request(request_node, "/battle/" + battle_id + "/lead", body)
+
+func send_npc_lead(
+	request_node: HTTPRequest,
+	battle_id: String,
+	player_id: String,
+	strategy: String = "basic"
+) -> Dictionary:
+	var body := {
+		"playerId": player_id,
+		"strategy": strategy
+	}
+
+	return await send_post_request(
+		request_node,
+		"/battle/%s/npc/lead" % battle_id,
+		body
+	)
 
 func send_choice(request_node: HTTPRequest, battle_id: String, player_id: String, choice_type: String, slot: int) -> Dictionary:
 	var body := {
@@ -44,6 +90,23 @@ func send_choice(request_node: HTTPRequest, battle_id: String, player_id: String
 	return await send_post_request(
 		request_node,
 		"/battle/%s/choice" % battle_id,
+		body
+	)
+
+func send_npc_choice(
+	request_node: HTTPRequest,
+	battle_id: String,
+	player_id: String,
+	strategy: String = "basic"
+) -> Dictionary:
+	var body := {
+		"playerId": player_id,
+		"strategy": strategy
+	}
+
+	return await send_post_request(
+		request_node,
+		"/battle/%s/npc/choice" % battle_id,
 		body
 	)
 

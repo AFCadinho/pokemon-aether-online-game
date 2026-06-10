@@ -1,11 +1,6 @@
 extends Node2D
 
 @export var trainer_id := "route_1_bug_catcher_1"
-@export var fallback_trainer_name := "Bug Catcher"
-@export var fallback_dialogue_before_battle: Array[String] = [
-	"Hey!, You have Pokemon!",
-	"Come on, let's battle!"
-]
 @export var sight_direction := Vector2.DOWN
 @export var sight_range_tiles := 5
 @export var trainer_sprite_frames: SpriteFrames
@@ -27,6 +22,7 @@ var player_nearby := false
 var nearby_player: Node2D
 var is_interacting := false
 var vision_candidate: Node2D
+var auto_trigger_failed := false
 
 func _ready() -> void:
 	if trainer_sprite_frames != null:
@@ -169,42 +165,54 @@ func show_intro_dialogue() -> void:
 		GameState.input_locked = false
 		return
 	
-	var trainer_data: Dictionary = await TrainerDataService.get_trainer_data(trainer_id, _get_fallback_trainer_data())
-	var speaker_name := str(trainer_data.get("name", fallback_trainer_name))
-	var dialogue_lines := _get_dialogue_lines_from_trainer_data(trainer_data)
+	var metadata_response: Dictionary = await TrainerMetadataService.get_trainer_metadata(trainer_id)
+	if not metadata_response.get("success", false):
+		_fail_trainer_metadata("Trainer metadata failed for %s: %s" % [
+			trainer_id,
+			str(metadata_response.get("error", "Unknown API error")),
+		])
+		return
+
+	var trainer_metadata: Dictionary = metadata_response.get("metadata", {})
+	var speaker_name := str(trainer_metadata.get("name", ""))
+	if speaker_name == "":
+		_fail_trainer_metadata("Trainer metadata for %s is missing name." % trainer_id)
+		return
+
+	var dialogue_lines := _get_dialogue_lines_from_trainer_metadata(trainer_metadata)
+	if dialogue_lines.is_empty():
+		_fail_trainer_metadata("Trainer metadata for %s is missing dialogue_before_battle." % trainer_id)
+		return
 	
 	dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
 	
-	start_trainer_battle(trainer_data)
+	start_trainer_battle(trainer_metadata)
 	
-func start_trainer_battle(trainer_data: Dictionary) -> void:
+func start_trainer_battle(trainer_metadata: Dictionary) -> void:
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_trainer_battle"):
 		push_warning("TrainerNPC: World cannot start trainer battle.")
 		GameState.input_locked = false
 		return
 
-	await world.start_trainer_battle(trainer_data)
+	await world.start_trainer_battle(trainer_metadata)
 
-func _get_fallback_trainer_data() -> Dictionary:
-	return {
-		"id": trainer_id,
-		"name": fallback_trainer_name,
-		"dialogue_before_battle": fallback_dialogue_before_battle,
-	}
-
-func _get_dialogue_lines_from_trainer_data(trainer_data: Dictionary) -> Array[String]:
+func _get_dialogue_lines_from_trainer_metadata(trainer_metadata: Dictionary) -> Array[String]:
 	var dialogue_lines: Array[String] = []
-	var dialogue_value: Variant = trainer_data.get("dialogue_before_battle", fallback_dialogue_before_battle)
+	var dialogue_value: Variant = trainer_metadata.get("dialogue_before_battle", [])
 	if dialogue_value is Array:
 		for item: Variant in dialogue_value:
 			dialogue_lines.append(str(item))
 	
-	if dialogue_lines.is_empty():
-		dialogue_lines = fallback_dialogue_before_battle.duplicate()
-	
 	return dialogue_lines
+
+func _fail_trainer_metadata(message: String) -> void:
+	push_error("TrainerNPC: %s" % message)
+	auto_trigger_failed = true
+	triggered = false
+	vision_candidate = null
+	GameState.input_locked = false
 	
 
 func _on_vision_area_body_entered(body: Node2D) -> void:
@@ -219,6 +227,9 @@ func _on_vision_area_body_entered(body: Node2D) -> void:
 
 func _try_trigger_vision(body: Node2D) -> void:
 	if triggered:
+		return
+
+	if auto_trigger_failed:
 		return
 	
 	if body == null or body.name != "Player":

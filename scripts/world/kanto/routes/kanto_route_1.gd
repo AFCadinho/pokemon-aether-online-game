@@ -1,67 +1,55 @@
 extends Node2D
 
-@export_file("*.json") var encounter_data_path = "res://data/encounters/kanto/route_1.json"
+@export var encounter_area_id := "kanto_route_1"
+@export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.1
 
-var encounter_data: Dictionary = {}
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	encounter_data = load_encounter_data()
+	await _load_encounter_area_metadata()
 
-func load_encounter_data() -> Dictionary:
-	if not FileAccess.file_exists(encounter_data_path):
-		push_error("Encounter data not found: " + encounter_data_path)
+func get_wild_encounter_area_id() -> String:
+	return encounter_area_id
+
+func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
+	if encounter_type != "grass":
+		return false
+
+	return randf() <= grass_encounter_chance
+
+func _load_encounter_area_metadata() -> void:
+	var metadata := await _fetch_encounter_area_metadata()
+	var encounter_types: Dictionary = metadata.get("encounterTypes", {})
+	var grass_metadata: Dictionary = encounter_types.get("grass", {})
+	grass_encounter_chance = clampf(float(grass_metadata.get("encounterChance", grass_encounter_chance)), 0.0, 1.0)
+
+func _fetch_encounter_area_metadata() -> Dictionary:
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var request := HTTPRequest.new()
+	add_child(request)
+	request.timeout = 3.0
+
+	var url := "%s/encounters/areas/%s" % [base_url, encounter_area_id.uri_encode()]
+	var error := request.request(url, PackedStringArray(["Accept: application/json"]))
+	if error != OK:
+		request.queue_free()
 		return {}
 
-	var file := FileAccess.open(encounter_data_path, FileAccess.READ)
-	var text := file.get_as_text()
-	var parsed = JSON.parse_string(text)
+	var result: Array = await request.request_completed
+	request.queue_free()
 
-	if typeof(parsed) != TYPE_DICTIONARY:
-		push_error("Invalid encounter JSON: " + encounter_data_path)
+	var response_code := int(result[1])
+	if response_code < 200 or response_code >= 300:
 		return {}
 
-	return parsed
+	var body: PackedByteArray = result[3]
+	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
+	if not (parsed is Dictionary):
+		return {}
 
-func try_get_wild_encounter() -> Pokemon:
-	var grass_data: Dictionary = encounter_data.get("grass", {})
+	var parsed_dictionary := parsed as Dictionary
+	if parsed_dictionary.has("area") and parsed_dictionary["area"] is Dictionary:
+		return parsed_dictionary["area"]
 
-	if grass_data.is_empty():
-		return null
-
-	var encounter_chance: float = grass_data.get("encounter_chance", 0.0)
-
-	if randf() > encounter_chance:
-		return null
-
-	var pokemon_list: Array = grass_data.get("pokemon", [])
-
-	if pokemon_list.is_empty():
-		return null
-
-	var encounter := pick_weighted_encounter(pokemon_list)
-	var level := randi_range(encounter.get("min_level", 2), encounter.get("max_level", 2))
-	var pokemon_data: Dictionary = encounter.duplicate()
-	pokemon_data["level"] = level
-
-	return PokemonFactory.create_pokemon_from_data(pokemon_data)
-	
-func pick_weighted_encounter(pokemon_list: Array) -> Dictionary:
-	var total_weight := 0
-
-	for pokemon_entry in pokemon_list:
-		total_weight += pokemon_entry.get("weight", 1)
-
-	var roll := randi_range(1, total_weight)
-	var running_total := 0
-
-	for pokemon_entry in pokemon_list:
-		running_total += pokemon_entry.get("weight", 1)
-
-		if roll <= running_total:
-			return pokemon_entry
-
-	return pokemon_list[0]
+	return parsed_dictionary
 
 func is_position_blocked_by_character(world_position: Vector2) -> bool:
 	var npcs: Node = get_node_or_null("Entities/NPCs")
