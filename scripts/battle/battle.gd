@@ -343,7 +343,7 @@ func _fetch_hover_pokemon_stats(pokemon_data: Dictionary) -> Dictionary:
 		return cached_value as Dictionary
 
 	_debug_battle_move("pokemon-stats request species=%s level=%s" % [species, str(level)])
-	var response: Dictionary = await BattleApiClient.get_pokemon_stats(
+	var response: Dictionary = await PokemonDataApiClient.get_pokemon_stats(
 		pokemon_stats_request,
 		species,
 		level

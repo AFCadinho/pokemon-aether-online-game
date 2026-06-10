@@ -199,7 +199,7 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		return false
 
 	_add_chat_message("Parsing wild Pokemon...")
-	var response: Dictionary = await BattleApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
+	var response: Dictionary = await PokemonDataApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
 		return false
@@ -235,7 +235,7 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 		return false
 
 	_add_chat_message("Parsing Pokemon...")
-	var response: Dictionary = await BattleApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
+	var response: Dictionary = await PokemonDataApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
 		return false
@@ -272,7 +272,7 @@ func _handle_add_team_command(team_text: String) -> bool:
 		return false
 
 	_add_chat_message("Parsing team...")
-	var response: Dictionary = await BattleApiClient.parse_team(parse_pokemon_request, team_text)
+	var response: Dictionary = await PokemonDataApiClient.parse_team(parse_pokemon_request, team_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
 		return false

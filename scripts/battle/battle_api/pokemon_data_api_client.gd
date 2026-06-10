@@ -1,111 +1,29 @@
 extends Node
 
 const JSON_HEADERS = ["Content-Type: application/json"]
-const FORMAT_ID = "gen9nationaldex"
 
-func create_triggered_wild_battle(
-	request_node: HTTPRequest,
-	player: Dictionary,
-	area_id: String,
-	encounter_type: String = "grass"
-) -> Dictionary:
+func parse_pokemon(request_node: HTTPRequest, text: String) -> Dictionary:
 	return await send_post_request(
 		request_node,
-		"/battle/wild-encounter",
-		{
-			"player": player,
-			"areaId": area_id,
-			"encounterType": encounter_type,
-			"formatId": FORMAT_ID,
-		}
+		"/pokemon/parse",
+		{"text": text}
 	)
 
-func create_dev_wild_battle(request_node: HTTPRequest, player: Dictionary, pokemon: Dictionary) -> Dictionary:
+func parse_team(request_node: HTTPRequest, text: String) -> Dictionary:
 	return await send_post_request(
 		request_node,
-		"/battle/dev/wild",
-		{
-			"player": player,
-			"pokemon": pokemon,
-			"formatId": FORMAT_ID,
-		}
+		"/team/parse",
+		{"text": text}
 	)
 
-func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, trainer_id: String) -> Dictionary:
-	return await send_post_request(
-		request_node,
-		"/battle/trainer",
-		{
-			"player": player,
-			"trainerId": trainer_id,
-			"formatId": FORMAT_ID,
-			"playerLeadSlot": 1,
-		}
-	)
-
-func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String, slot: int) -> Dictionary:
-	var body = {
-		"playerId": player_id,
-		"slot": slot
-	}
-	
-	return await send_post_request(request_node, "/battle/" + battle_id + "/lead", body)
-
-func send_npc_lead(
-	request_node: HTTPRequest,
-	battle_id: String,
-	player_id: String,
-	strategy: String = "basic"
-) -> Dictionary:
-	var body := {
-		"playerId": player_id,
-		"strategy": strategy
-	}
-
-	return await send_post_request(
-		request_node,
-		"/battle/%s/npc/lead" % battle_id,
-		body
-	)
-
-func send_choice(request_node: HTTPRequest, battle_id: String, player_id: String, choice_type: String, slot: int) -> Dictionary:
-	var body := {
-		"playerId": player_id,
-		"type": choice_type,
-		"slot": slot
-	}
-	
-	return await send_post_request(
-		request_node,
-		"/battle/%s/choice" % battle_id,
-		body
-	)
-
-func send_npc_choice(
-	request_node: HTTPRequest,
-	battle_id: String,
-	player_id: String,
-	strategy: String = "basic"
-) -> Dictionary:
-	var body := {
-		"playerId": player_id,
-		"strategy": strategy
-	}
-
-	return await send_post_request(
-		request_node,
-		"/battle/%s/npc/choice" % battle_id,
-		body
-	)
-
-func get_pokemon_info(request_node: HTTPRequest, battle_id: String, viewer_id: String, ident: String) -> Dictionary:
-	var query: String = "?viewerId=%s&ident=%s" % [
-		viewer_id.uri_encode(),
-		ident.uri_encode(),
+func get_pokemon_stats(request_node: HTTPRequest, species: String, level: int = 100) -> Dictionary:
+	var query: String = "?species=%s&level=%s" % [
+		species.uri_encode(),
+		str(level).uri_encode(),
 	]
 	return await send_get_request(
 		request_node,
-		"/battle/%s/pokemon-info%s" % [battle_id, query]
+		"/pokemon/stats%s" % query
 	)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
@@ -131,7 +49,7 @@ func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary
 	
 	var error: int = request_node.request(
 		api_base_url + path,
-		JSON_HEADERS, 
+		JSON_HEADERS,
 		HTTPClient.METHOD_POST,
 		JSON.stringify(body)
 	)
