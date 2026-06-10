@@ -3,24 +3,6 @@ extends Node
 const JSON_HEADERS = ["Content-Type: application/json"]
 const FORMAT_ID = "gen9nationaldex"
 
-func create_battle_body(player: Dictionary, opponent: Dictionary) -> Dictionary:
-	return {
-		"formatId": FORMAT_ID,
-		"p1": {
-			"name": player["name"],
-			"team": player["team"],
-		},
-		"p2": {
-			"name": opponent["name"],
-			"team": opponent["team"]
-		}
-	}
-
-func create_wild_battle(request_node: HTTPRequest, player: Dictionary, opponent: Dictionary) -> Dictionary:
-	var body := create_battle_body(player, opponent)
-	
-	return await send_post_request(request_node, "/battle/wild", body)
-
 func create_triggered_wild_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,
@@ -38,10 +20,16 @@ func create_triggered_wild_battle(
 		}
 	)
 
-func create_battle(request_node: HTTPRequest, player: Dictionary, opponent: Dictionary) -> Dictionary:
-	var body := create_battle_body(player, opponent)
-	
-	return await send_post_request(request_node, "/battle/create", body)
+func create_dev_wild_battle(request_node: HTTPRequest, player: Dictionary, pokemon: Dictionary) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/dev/wild",
+		{
+			"player": player,
+			"pokemon": pokemon,
+			"formatId": FORMAT_ID,
+		}
+	)
 
 func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, trainer_id: String) -> Dictionary:
 	return await send_post_request(

@@ -87,14 +87,14 @@ func move_player_to_map(map: Node) -> void:
 		
 	player_parent.add_child(player)
 
-func create_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
+func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
 	
-	var response: Dictionary = await BattleApiClient.create_wild_battle(
+	var response: Dictionary = await BattleApiClient.create_dev_wild_battle(
 		battle_request,
 		BattleApiPayloads.from_player_save(PlayerSave),
-		BattleApiPayloads.from_wild_pokemon(wild_pokemon)
+		wild_pokemon.to_battle_dict()
 	)
 	
 	battle_request.queue_free()
@@ -127,7 +127,7 @@ func create_trainer_battle_response(trainer_id: String) -> Dictionary:
 	battle_request.queue_free()
 	return response
 
-func start_wild_battle(wild_pokemon: Pokemon) -> void:
+func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	if is_in_battle:
 		return
 		
@@ -136,10 +136,12 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	player.is_moving = false
 	player.set_physics_process(false)
 	
-	var response: Dictionary = await create_wild_battle_response(wild_pokemon)
+	var response: Dictionary = await create_dev_wild_battle_response(wild_pokemon)
 	if not response.get("success", false):
+		push_warning("World.start_dev_wild_battle failed: %s" % str(response.get("error", "Unknown error")))
 		is_in_battle = false
 		player.set_physics_process(true)
+		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	
 	battle_layer = CanvasLayer.new()
@@ -148,11 +150,12 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	
 	var battle_scene := BATTLE_SCENE
 	if battle_scene == null:
-		push_error("World.start_wild_battle failed: could not load battle scene.")
+		push_error("World.start_dev_wild_battle failed: could not load battle scene.")
 		battle_layer.queue_free()
 		battle_layer = null
 		is_in_battle = false
 		player.set_physics_process(true)
+		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
 	battle_instance = battle_scene.instantiate()
@@ -178,8 +181,10 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type)
 	if not response.get("success", false):
+		push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
 		is_in_battle = false
 		player.set_physics_process(true)
+		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
 	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
@@ -188,6 +193,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		push_warning("World.start_triggered_wild_battle_for_area failed: backend wild Pokemon could not be loaded locally for display.")
 		is_in_battle = false
 		player.set_physics_process(true)
+		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
 	battle_layer = CanvasLayer.new()
@@ -201,6 +207,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		battle_layer = null
 		is_in_battle = false
 		player.set_physics_process(true)
+		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
 	battle_instance = battle_scene.instantiate()
@@ -215,14 +222,14 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
 
-func start_trainer_battle(trainer_data: Dictionary) -> void:
+func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	if is_in_battle:
-		return
+		return false
 
 	var trainer_id := str(trainer_data.get("id", ""))
 	if trainer_id == "":
 		push_warning("World.start_trainer_battle failed: trainer has no id.")
-		return
+		return false
 
 	is_in_battle = true
 
@@ -234,7 +241,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> void:
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		is_in_battle = false
 		player.set_physics_process(true)
-		return
+		return false
 
 	battle_layer = CanvasLayer.new()
 	battle_layer.layer = 10
@@ -247,7 +254,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> void:
 		battle_layer = null
 		is_in_battle = false
 		player.set_physics_process(true)
-		return
+		return false
 
 	battle_instance = battle_scene.instantiate()
 	battle_layer.add_child(battle_instance)
@@ -260,6 +267,8 @@ func start_trainer_battle(trainer_data: Dictionary) -> void:
 
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
+
+	return true
 	
 func end_wild_battle() -> void:
 	if battle_layer != null:

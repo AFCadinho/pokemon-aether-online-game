@@ -167,7 +167,7 @@ func show_intro_dialogue() -> void:
 	
 	var metadata_response: Dictionary = await TrainerMetadataService.get_trainer_metadata(trainer_id)
 	if not metadata_response.get("success", false):
-		_fail_trainer_metadata("Trainer metadata failed for %s: %s" % [
+		await _fail_trainer_metadata(dialogue_box, "Trainer metadata failed for %s: %s" % [
 			trainer_id,
 			str(metadata_response.get("error", "Unknown API error")),
 		])
@@ -176,27 +176,29 @@ func show_intro_dialogue() -> void:
 	var trainer_metadata: Dictionary = metadata_response.get("metadata", {})
 	var speaker_name := str(trainer_metadata.get("name", ""))
 	if speaker_name == "":
-		_fail_trainer_metadata("Trainer metadata for %s is missing name." % trainer_id)
+		await _fail_trainer_metadata(dialogue_box, "Trainer metadata for %s is missing name." % trainer_id)
 		return
 
 	var dialogue_lines := _get_dialogue_lines_from_trainer_metadata(trainer_metadata)
 	if dialogue_lines.is_empty():
-		_fail_trainer_metadata("Trainer metadata for %s is missing dialogue_before_battle." % trainer_id)
+		await _fail_trainer_metadata(dialogue_box, "Trainer metadata for %s is missing dialogue_before_battle." % trainer_id)
 		return
 	
 	dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
 	
-	start_trainer_battle(trainer_metadata)
+	var battle_started := await start_trainer_battle(trainer_metadata)
+	if not battle_started:
+		await _show_generic_trainer_error_dialogue(dialogue_box)
 	
-func start_trainer_battle(trainer_metadata: Dictionary) -> void:
+func start_trainer_battle(trainer_metadata: Dictionary) -> bool:
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_trainer_battle"):
 		push_warning("TrainerNPC: World cannot start trainer battle.")
 		GameState.input_locked = false
-		return
+		return false
 
-	await world.start_trainer_battle(trainer_metadata)
+	return await world.start_trainer_battle(trainer_metadata)
 
 func _get_dialogue_lines_from_trainer_metadata(trainer_metadata: Dictionary) -> Array[String]:
 	var dialogue_lines: Array[String] = []
@@ -207,12 +209,15 @@ func _get_dialogue_lines_from_trainer_metadata(trainer_metadata: Dictionary) -> 
 	
 	return dialogue_lines
 
-func _fail_trainer_metadata(message: String) -> void:
+func _fail_trainer_metadata(dialogue_box: Node, message: String) -> void:
 	push_error("TrainerNPC: %s" % message)
 	auto_trigger_failed = true
 	triggered = false
 	vision_candidate = null
-	GameState.input_locked = false
+	await _show_generic_trainer_error_dialogue(dialogue_box)
+
+func _show_generic_trainer_error_dialogue(dialogue_box: Node) -> void:
+	await GameErrorDialogService.show_report_to_staff_message(dialogue_box)
 	
 
 func _on_vision_area_body_entered(body: Node2D) -> void:

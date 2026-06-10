@@ -194,7 +194,7 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		return false
 
 	var world := GameState.get_world()
-	if world == null or not world.has_method("start_wild_battle"):
+	if world == null or not world.has_method("start_dev_wild_battle"):
 		_add_chat_message("Cannot start a wild battle from here.")
 		return false
 
@@ -221,7 +221,7 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		return false
 
 	_add_chat_message("Starting wild encounter: %s Lv. %s." % [pokemon.species, pokemon.level])
-	await world.start_wild_battle(pokemon)
+	await world.start_dev_wild_battle(pokemon)
 	return true
 
 func _handle_add_pokemon_command(pokemon_text: String) -> bool:
