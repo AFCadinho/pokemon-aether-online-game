@@ -23,7 +23,6 @@ func load_encounter_data() -> Dictionary:
 
 	return parsed
 
-
 func try_get_wild_encounter() -> Pokemon:
 	var grass_data: Dictionary = encounter_data.get("grass", {})
 
@@ -63,3 +62,15 @@ func pick_weighted_encounter(pokemon_list: Array) -> Dictionary:
 			return pokemon_entry
 
 	return pokemon_list[0]
+
+func is_position_blocked_by_character(world_position: Vector2) -> bool:
+	var npcs: Node = get_node_or_null("Entities/NPCs")
+	if npcs == null:
+		return false
+		
+	for npc: Node in npcs.get_children():
+		if npc.has_method("blocks_world_position"):
+			if npc.blocks_world_position(world_position):
+				return true
+		
+	return false 

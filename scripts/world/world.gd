@@ -14,21 +14,9 @@ var is_loading_map := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	GameState.reset_world_debug_log()
 	add_to_group("world")
-	GameState.debug_world("World ready executable=%s res=%s user=%s current_scene=%s" % [
-		OS.get_executable_path(),
-		ProjectSettings.globalize_path("res://"),
-		ProjectSettings.globalize_path("user://"),
-		str(get_tree().current_scene),
-	])
 	var first_map := $CurrentMap.get_child(0)
 	GameState.current_map = first_map
-	GameState.debug_world("Initial map=%s path=%s child_count=%d" % [
-		first_map.name,
-		str(first_map.get_path()),
-		first_map.get_child_count(),
-	])
 	
 	move_player_to_map(first_map)
 	
@@ -40,13 +28,8 @@ func _process(_delta: float) -> void:
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
-	GameState.debug_world("load_map requested scene=%s spawn=%s loading=%s" % [
-		target_scene_path,
-		target_spawn_name,
-		str(is_loading_map),
-	])
 	if is_loading_map:
-		print("World.load_map ignored because a map is already loading: %s" % target_scene_path)
+		push_warning("World.load_map ignored because a map is already loading: %s" % target_scene_path)
 		return
 
 	is_loading_map = true
@@ -58,7 +41,6 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 	var target_scene := load(target_scene_path) as PackedScene
 	if target_scene == null:
-		GameState.debug_world("load_map failed: could not load scene=%s" % target_scene_path)
 		push_error("World.load_map failed: could not load scene %s" % target_scene_path)
 		is_loading_map = false
 		return
@@ -73,10 +55,6 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	$CurrentMap.add_child(new_map)
 
 	GameState.current_map = new_map
-	GameState.debug_world("load_map instantiated map=%s path=%s" % [
-		new_map.name,
-		str(new_map.get_path()),
-	])
 
 	var spawn_position := Vector2.ZERO
 	var spawn := new_map.get_node_or_null("Spawns/" + target_spawn_name)
@@ -98,12 +76,11 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	is_loading_map = false
 
 func move_player_to_map(map: Node) -> void:
-	var characters := map.get_node_or_null("Characters")
-	var player_parent := characters if characters != null else map
-	GameState.debug_world("move_player_to_map map=%s player_parent=%s" % [
-		map.name,
-		str(player_parent.get_path()),
-	])
+	var players := map.get_node_or_null("Entities/Players")
+	if players == null:
+		players = map.get_node_or_null("Characters")
+
+	var player_parent := players if players != null else map
 		
 	if player.get_parent() != null:
 		player.get_parent().remove_child(player)
@@ -122,6 +99,48 @@ func create_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	
 	battle_request.queue_free()
 	return response
+
+func create_trainer_battle_response(trainer_data: Dictionary) -> Dictionary:
+	var battle_request := HTTPRequest.new()
+	add_child(battle_request)
+
+	var response: Dictionary = await BattleApiClient.create_battle(
+		battle_request,
+		BattleApiPayloads.from_player_save(PlayerSave),
+		BattleApiPayloads.from_trainer_data(trainer_data)
+	)
+
+	if not response.get("success", false):
+		battle_request.queue_free()
+		return response
+
+	var battle_id := str(response.get("battleId", ""))
+	if battle_id == "":
+		battle_request.queue_free()
+		return {
+			"success": false,
+			"error": "Trainer battle response is missing battle id."
+		}
+
+	var player_lead_response: Dictionary = await BattleApiClient.choose_lead(
+		battle_request,
+		battle_id,
+		"p1",
+		1
+	)
+	if not player_lead_response.get("success", false):
+		battle_request.queue_free()
+		return player_lead_response
+
+	var trainer_lead_response: Dictionary = await BattleApiClient.choose_lead(
+		battle_request,
+		battle_id,
+		"p2",
+		1
+	)
+
+	battle_request.queue_free()
+	return trainer_lead_response
 
 func start_wild_battle(wild_pokemon: Pokemon) -> void:
 	if is_in_battle:
@@ -160,6 +179,52 @@ func start_wild_battle(wild_pokemon: Pokemon) -> void:
 		response
 	)
 	
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
+
+func start_trainer_battle(trainer_data: Dictionary) -> void:
+	if is_in_battle:
+		return
+
+	var trainer_team: Array = trainer_data.get("team", [])
+	if trainer_team.is_empty():
+		push_warning("World.start_trainer_battle failed: trainer has no team.")
+		return
+
+	is_in_battle = true
+
+	player.is_moving = false
+	player.set_physics_process(false)
+
+	var response: Dictionary = await create_trainer_battle_response(trainer_data)
+	if not response.get("success", false):
+		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
+		is_in_battle = false
+		player.set_physics_process(true)
+		return
+
+	battle_layer = CanvasLayer.new()
+	battle_layer.layer = 10
+	add_child(battle_layer)
+
+	var battle_scene := BATTLE_SCENE
+	if battle_scene == null:
+		push_error("World.start_trainer_battle failed: could not load battle scene.")
+		battle_layer.queue_free()
+		battle_layer = null
+		is_in_battle = false
+		player.set_physics_process(true)
+		return
+
+	battle_instance = battle_scene.instantiate()
+	battle_layer.add_child(battle_instance)
+
+	await battle_instance.setup_trainer_battle_from_response(
+		PlayerSave.party[0],
+		trainer_data,
+		response
+	)
+
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
 	

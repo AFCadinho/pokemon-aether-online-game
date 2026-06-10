@@ -1,0 +1,50 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://36b8nbn22y3h"]
+
+[ext_resource type="Texture2D" uid="uid://bob7wrroirs44" path="res://assets/npcs/trainer/bug-catcher.png" id="1_bug_catcher"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle"]
+atlas = ExtResource("1_bug_catcher")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_center"]
+atlas = ExtResource("1_bug_catcher")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_left"]
+atlas = ExtResource("1_bug_catcher")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_right"]
+atlas = ExtResource("1_bug_catcher")
+region = Rect2(128, 128, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_center")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_left")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_center")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_right")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_center")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 5.0
+}]

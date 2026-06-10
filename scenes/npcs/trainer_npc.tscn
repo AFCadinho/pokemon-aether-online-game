@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://dv2jhka7evdtn"]
+
+[ext_resource type="Script" uid="uid://g5lyh8pa5lwx" path="res://scripts/world/npcs/trainer_npc.gd" id="1_svfxf"]
+[ext_resource type="SpriteFrames" uid="uid://36b8nbn22y3h" path="res://assets/npcs/trainer/bug_catcher_sprite_frames.tres" id="2_nv5hx"]
+[ext_resource type="Texture2D" uid="uid://dwvvxwf252nxg" path="res://assets/sprites/mugshots/bug_catcher.png" id="3_twekd"]
+[ext_resource type="Texture2D" uid="uid://bob7wrroirs44" path="res://assets/npcs/trainer/bug-catcher.png" id="4_die14"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6o5ht"]
+atlas = ExtResource("4_die14")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmnv3"]
+atlas = ExtResource("4_die14")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y4850"]
+atlas = ExtResource("4_die14")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_coq5q"]
+atlas = ExtResource("4_die14")
+region = Rect2(128, 128, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_coq5q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6o5ht")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmnv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y4850")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmnv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_coq5q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmnv3")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mjhtk"]
+size = Vector2(96, 97)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wndwb"]
+size = Vector2(32, 144.5)
+
+[node name="TrainerNPC" type="Node2D" unique_id=168052101]
+script = ExtResource("1_svfxf")
+trainer_sprite_frames = ExtResource("2_nv5hx")
+mugshot = ExtResource("3_twekd")
+
+[node name="Look" type="Node2D" parent="." unique_id=1960480917]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=1206939988]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_coq5q")
+animation = &"walk_down"
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1734542775]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=234687814]
+shape = SubResource("RectangleShape2D_mjhtk")
+
+[node name="VisionArea" type="Area2D" parent="." unique_id=1516766621]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea" unique_id=1059219779]
+position = Vector2(0, 64)
+shape = SubResource("RectangleShape2D_wndwb")
+
+[node name="FeetMarker" type="Marker2D" parent="." unique_id=102093140]
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
+[connection signal="body_exited" from="VisionArea" to="." method="_on_vision_area_body_exited"]

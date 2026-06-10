@@ -1236,6 +1236,42 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
 	_show_current_action_prompt()
 
+func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
+	battle_type = BattleType.TRAINER
+	active_player_pokemon = player_pokemon
+	active_enemy_pokemon = null
+	active_residual_pokemon_effects.clear()
+	_reset_battle_effect_tracking()
+
+	player_hud_panel.clear_player_name()
+	enemy_hud_panel.clear_player_name()
+
+	if not _apply_api_response(api_response):
+		return
+
+	_update_battle_status_panels()
+	_update_hud_panels()
+	_update_active_sprites()
+	_update_move_slots()
+	_update_party_slots()
+	_update_vs_panel_names()
+	_show_moves()
+
+	var player_species := _get_active_display_species("p1")
+	var opponent_species := _get_active_display_species("p2")
+	var trainer_name := str(trainer_data.get("name", _get_player_display_name("p2")))
+	if trainer_name == "":
+		trainer_name = "Trainer"
+
+	current_action_panel.set_message("What will %s do?" % player_species)
+	battle_log_panel.add_message("%s wants to battle!" % trainer_name)
+	battle_log_panel.add_message("%s sent out %s!" % [trainer_name, opponent_species])
+	battle_log_panel.add_message("Go! %s!" % player_species)
+	battle_log_panel.add_turn_header(battle_state.get_turn())
+	last_battle_log_player_id = ""
+	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
+	_show_current_action_prompt()
+
 
 
 
@@ -1304,6 +1340,15 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 			"winner": battle_state.get_winner()
 		})
 		return
+
+	if await _auto_force_switch_opponent_if_needed():
+		if battle_state.is_battle_ended():
+			await get_tree().create_timer(0.25).timeout
+			_finish_battle({
+				"reason": "win",
+				"winner": battle_state.get_winner()
+			})
+			return
 
 	if _show_force_switch_if_needed():
 		_set_battle_input_locked(false)
@@ -3114,6 +3159,15 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		})
 		return
 
+	if await _auto_force_switch_opponent_if_needed():
+		if battle_state.is_battle_ended():
+			await get_tree().create_timer(0.25).timeout
+			_finish_battle({
+				"reason": "win",
+				"winner": battle_state.get_winner()
+			})
+			return
+
 	if _show_force_switch_if_needed():
 		_set_battle_input_locked(false)
 		return
@@ -3128,6 +3182,70 @@ func _show_force_switch_if_needed() -> bool:
 	current_action_panel.set_message("Choose a Pokemon!")
 	_show_party(true)
 	return true
+
+func _auto_force_switch_opponent_if_needed() -> bool:
+	if battle_state.is_battle_ended() or not battle_state.needs_force_switch("p2"):
+		return false
+
+	var switch_slot: int = _get_first_available_switch_slot("p2")
+	if switch_slot <= 0:
+		print("Opponent force switch needed, but no valid switch slot was found.")
+		return false
+
+	var opponent_name: String = _get_vs_player_name("p2")
+	if opponent_name == "":
+		opponent_name = "Opponent"
+	current_action_panel.set_message("%s is choosing a Pokemon..." % opponent_name)
+
+	var opponent_response: Dictionary = await BattleApiClient.send_choice(
+		battle_request,
+		battle_state.battle_id,
+		"p2",
+		"switch",
+		switch_slot
+	)
+
+	if not bool(opponent_response.get("success", false)):
+		print("Opponent force switch failed: ", opponent_response)
+		return false
+
+	if not _apply_api_response(opponent_response):
+		return false
+
+	_update_battle_presentation()
+	var opponent_events: Array = opponent_response.get("events", [])
+	_rewind_active_hud_hp_for_events(opponent_events)
+	_rewind_party_slots_for_events(opponent_events)
+	await _render_battle_events(opponent_events)
+	return true
+
+func _get_first_available_switch_slot(player_id: String) -> int:
+	var team: Array = battle_state.get_player_team(player_id)
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if bool(pokemon_data.get("active", false)):
+			continue
+		if _is_battle_pokemon_fainted(pokemon_data):
+			continue
+
+		return index + 1
+
+	return 0
+
+func _is_battle_pokemon_fainted(pokemon_data: Dictionary) -> bool:
+	var condition: String = str(pokemon_data.get("condition", "")).strip_edges().to_lower()
+	if condition == "":
+		return false
+	if condition.contains("fnt"):
+		return true
+	if condition.begins_with("0/"):
+		return true
+
+	return false
 
 func _can_switch_to_slot(slot: int) -> bool:
 	if battle_state.is_active_trapped("p1") and not battle_state.needs_force_switch("p1"):

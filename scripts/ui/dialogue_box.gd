@@ -1,7 +1,12 @@
 extends Control
 
+signal dialogue_finished
+
 @onready var name_label: Label = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/NPCName
+@onready var npc_sprite: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/NPCSprite
 @onready var text_label: RichTextLabel = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RichTextLabel
+
+var default_mugshot: Texture2D
 
 var is_open := false
 var just_started := false
@@ -11,6 +16,7 @@ var current_line_index := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	default_mugshot = npc_sprite.texture
 	hide_dialogue()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,10 +36,11 @@ func _process(_delta: float) -> void:
 		else:
 			show_current_line()
 	
-func start_dialogue(new_lines: Array, speaker_name := "") -> void:
+func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = null) -> void:
 	lines = new_lines
 	name_label.text = speaker_name
 	name_label.visible = speaker_name != ""
+	npc_sprite.texture = mugshot if mugshot != null else default_mugshot
 	
 	current_line_index = 0
 	is_open = true
@@ -49,6 +56,8 @@ func show_current_line() -> void:
 		
 	
 func hide_dialogue() -> void:
+	var was_open := is_open
+	
 	is_open = false
 	just_started = false
 	visible = false
@@ -56,4 +65,7 @@ func hide_dialogue() -> void:
 	current_line_index = 0
 	
 	GameState.unlock_input()
+	
+	if was_open:
+		dialogue_finished.emit()
 	

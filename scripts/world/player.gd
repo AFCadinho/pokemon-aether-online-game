@@ -2,9 +2,12 @@ extends CharacterBody2D
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 160.0
+const SORT_Z_MIN := -256
+const SORT_Z_MAX := 256
 
 @onready var body_sprite: AnimatedSprite2D = $Look/BodySprite
 @onready var hair_sprite: AnimatedSprite2D = $Look/HairSprite
+@onready var feet_marker: Marker2D = $FeetMarker
 
 # TileMapLayer nodes die speciale map-informatie bevatten.
 # Collision bevat de onzichtbare/blokkerende tegels.
@@ -23,7 +26,21 @@ var target_position := Vector2.ZERO
 
 # Onthoudt de laatste kijkrichting, zodat de idle frame goed blijft staan.
 var last_direction := Vector2.DOWN
-var last_debugged_map_path := NodePath("")
+
+func get_feet_position() -> Vector2:
+	return feet_marker.global_position
+
+func face_world_position(world_position: Vector2) -> void:
+	var delta := world_position - get_feet_position()
+	if delta == Vector2.ZERO:
+		return
+	
+	if abs(delta.x) > abs(delta.y):
+		last_direction = Vector2.RIGHT if delta.x > 0 else Vector2.LEFT
+	else:
+		last_direction = Vector2.DOWN if delta.y > 0 else Vector2.UP
+	
+	set_idle_frame()
 
 func _ready() -> void:
 	# Haal de TileMapLayer nodes uit de huidige map op.
@@ -40,12 +57,16 @@ func _ready() -> void:
 	# De eerste target is waar de speler nu al staat.
 	# Daardoor begint hij niet meteen ergens heen te bewegen.
 	target_position = global_position
+	_update_sort_z()
 
 func _physics_process(delta: float) -> void:	
+	_update_sort_z()
+
 	if is_moving:
 		# Beweeg in pixels richting de target_position.
 		# Dit is visueel vloeiend, ook al kies je targets per tile.
 		global_position = global_position.move_toward(target_position, MOVE_SPEED * delta)
+		_update_sort_z()
 
 		# Als de bestemming is bereikt.
 		if global_position == target_position:
@@ -93,8 +114,6 @@ func _physics_process(delta: float) -> void:
 			is_moving = true
 		else:
 			set_idle_frame()
-			
-
 
 func play_walk_animation(direction: Vector2) -> void:
 	var animation_name := ""
@@ -115,14 +134,14 @@ func can_move_to(check_position: Vector2) -> bool:
 	refresh_map_layers()
 
 	if collision_tilemap == null:
-		GameState.debug_world("can_move_to no collision map parent=%s position=%s target=%s" % [
-			_get_parent_path_for_debug(),
-			str(global_position),
-			str(check_position),
-		])
 		push_warning("Player.can_move_to: Collision TileMapLayer is missing; allowing movement as fallback.")
 		return true
-
+	
+	var current_map: Node = _resolve_current_map()
+	if current_map != null and current_map.has_method("is_position_blocked_by_character"):
+		if current_map.is_position_blocked_by_character(check_position):
+			return false
+	
 	# check_position is een global/world pixelpositie.
 	# TileMapLayer.local_to_map() verwacht juist een lokale positie binnen die TileMapLayer.
 	# Daarom zetten we eerst world -> local om.
@@ -136,17 +155,6 @@ func can_move_to(check_position: Vector2) -> bool:
 	# In deze setup betekent: geen tile_data = geen collision tile = vrij lopen.
 	# Wel tile_data = er ligt een collision tile = blokkeren.
 	var source_id: int = collision_tilemap.get_cell_source_id(tile_position)
-	var debug_map_name := "null"
-	if GameState.current_map != null:
-		debug_map_name = GameState.current_map.name
-	GameState.debug_world("can_move_to map=%s collision=%s position=%s target=%s tile=%s source_id=%d" % [
-		debug_map_name,
-		str(collision_tilemap.get_path()),
-		str(global_position),
-		str(check_position),
-		str(tile_position),
-		source_id,
-	])
 	if source_id != -1:
 		return false
 
@@ -158,19 +166,8 @@ func set_idle_frame():
 	body_sprite.stop()
 	hair_sprite.stop()
 	
-	if last_direction == Vector2.RIGHT:
-		body_sprite.animation = "walk_right"
-		hair_sprite.animation = "walk_right"
-	elif last_direction == Vector2.LEFT:
-		body_sprite.animation = "walk_left"
-		hair_sprite.animation = "walk_left"
-	elif last_direction == Vector2.DOWN:
-		body_sprite.animation = "walk_down"
-		hair_sprite.animation = "walk_down"
-	elif last_direction == Vector2.UP:
-		body_sprite.animation = "walk_up"
-		hair_sprite.animation = "walk_up"
-		
+	_set_idle_animation(body_sprite, last_direction)
+	_set_idle_animation(hair_sprite, last_direction)
 		
 func refresh_map_layers() -> void:
 	var current_map: Node = _resolve_current_map()
@@ -183,28 +180,8 @@ func refresh_map_layers() -> void:
 	GameState.current_map = current_map
 	collision_tilemap = current_map.get_node_or_null("Collision")
 	grass_tilemap = current_map.get_node_or_null("TallGrass")
-	var current_map_path := current_map.get_path()
-	if current_map_path != last_debugged_map_path:
-		last_debugged_map_path = current_map_path
-		var collision_path := "null"
-		if collision_tilemap != null:
-			collision_path = str(collision_tilemap.get_path())
-		var grass_path := "null"
-		if grass_tilemap != null:
-			grass_path = str(grass_tilemap.get_path())
-		GameState.debug_world("refresh_map_layers map=%s path=%s collision=%s grass=%s player_parent=%s" % [
-			current_map.name,
-			str(current_map_path),
-			collision_path,
-			grass_path,
-			_get_parent_path_for_debug(),
-		])
 
 	if collision_tilemap == null:
-		GameState.debug_world("refresh_map_layers missing collision map=%s children=%s" % [
-			current_map.name,
-			str(_get_child_names(current_map)),
-		])
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
 	
 func is_standing_on_tall_grass() -> bool:
@@ -245,33 +222,18 @@ func _is_ui_typing() -> bool:
 func check_for_map_exit() -> bool:
 	var current_map: Node = _resolve_current_map()
 	if current_map == null:
-		GameState.debug_world("check_for_map_exit no current map parent=%s position=%s" % [
-			_get_parent_path_for_debug(),
-			str(global_position),
-		])
 		return false
 
 	var exits := current_map.get_node_or_null("Exits")
 	if exits == null:
-		GameState.debug_world("check_for_map_exit no exits map=%s position=%s" % [
-			current_map.name,
-			str(global_position),
-		])
 		return false
 
-	GameState.debug_world("check_for_map_exit map=%s exits=%d position=%s" % [
-		current_map.name,
-		exits.get_child_count(),
-		str(global_position),
-	])
 	for exit_node: Node in exits.get_children():
 		if not (exit_node is Area2D):
 			continue
 
 		var exit_area := exit_node as Area2D
 		if _is_inside_exit_area(exit_area):
-			GameState.debug_world("entered exit=%s" % exit_area.name)
-			print("Player entered map exit: %s" % exit_area.name)
 			if exit_area.has_method("_on_body_entered"):
 				exit_area.call("_on_body_entered", self)
 				return true
@@ -292,13 +254,6 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 			var rectangle_shape := shape as RectangleShape2D
 			var local_position := shape_node.to_local(global_position)
 			var shape_rect := Rect2(-rectangle_shape.size * 0.5, rectangle_shape.size)
-			GameState.debug_world("exit_check exit=%s shape=%s local=%s rect=%s inside=%s" % [
-				exit_area.name,
-				str(shape_node.get_path()),
-				str(local_position),
-				str(shape_rect),
-				str(shape_rect.has_point(local_position)),
-			])
 			if shape_rect.has_point(local_position):
 				return true
 
@@ -317,17 +272,42 @@ func _resolve_current_map() -> Node:
 
 	return null
 
-func _get_parent_path_for_debug() -> String:
-	if get_parent() == null:
-		return "null"
+func _update_sort_z() -> void:
+	z_index = clampi(floori(get_feet_position().y / TILE_SIZE), SORT_Z_MIN, SORT_Z_MAX)
 
-	return str(get_parent().get_path())
-
-func _get_child_names(node: Node) -> PackedStringArray:
-	var names := PackedStringArray()
-	for child: Node in node.get_children():
-		names.append(str(child.name))
-
-	return names
+func _set_idle_animation(sprite: AnimatedSprite2D, direction: Vector2) -> void:
+	var animation_name := _get_idle_animation_name(direction)
+	if animation_name != "" and sprite.sprite_frames.has_animation(animation_name):
+		sprite.play(animation_name)
+		sprite.stop()
+		return
 	
+	animation_name = _get_walk_animation_name(direction)
+	if animation_name != "" and sprite.sprite_frames.has_animation(animation_name):
+		sprite.animation = animation_name
+		sprite.frame = 0
+		sprite.stop()
+
+func _get_idle_animation_name(direction: Vector2) -> String:
+	if direction == Vector2.DOWN:
+		return "idle_down"
+	if direction == Vector2.UP:
+		return "idle_up"
+	if direction == Vector2.LEFT:
+		return "idle_left"
+	if direction == Vector2.RIGHT:
+		return "idle_right"
 	
+	return ""
+
+func _get_walk_animation_name(direction: Vector2) -> String:
+	if direction == Vector2.DOWN:
+		return "walk_down"
+	if direction == Vector2.UP:
+		return "walk_up"
+	if direction == Vector2.LEFT:
+		return "walk_left"
+	if direction == Vector2.RIGHT:
+		return "walk_right"
+	
+	return ""

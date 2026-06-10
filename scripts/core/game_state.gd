@@ -7,7 +7,7 @@ var player_direction: Vector2 = Vector2.DOWN
 var current_map: Node = null
 
 var input_locked := false
-var world_debug_enabled := true
+var world_debug_enabled := false
 
 func lock_input() -> void:
 	input_locked = true

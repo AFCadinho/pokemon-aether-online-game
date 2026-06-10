@@ -82,7 +82,7 @@ func get_pokemon_stats(request_node: HTTPRequest, species: String, level: int = 
 	)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
-	var api_base_url: String = await BattleApiConfig.get_base_url()
+	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
 	var error: int = request_node.request(
 		api_base_url + path,
@@ -100,7 +100,7 @@ func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	return await _read_json_response(request_node)
 
 func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
-	var api_base_url: String = await BattleApiConfig.get_base_url()
+	var api_base_url: String = await GatewayApiConfig.get_base_url()
 	
 	var error: int = request_node.request(
 		api_base_url + path,
@@ -140,7 +140,7 @@ func _read_json_response(request_node: HTTPRequest) -> Dictionary:
 		return {
 			"success": false,
 			"status": response_code, 
-			"error": "Invalid JSON response",
+			"error": _get_invalid_json_error_message(response_code, response_text),
 			"raw": response_text
 		}
 	var response: Dictionary = parsed as Dictionary
@@ -148,6 +148,19 @@ func _read_json_response(request_node: HTTPRequest) -> Dictionary:
 	if not response.has("error") and response.has("detail"):
 		response["error"] = str(response["detail"])
 	return response
+
+func _get_invalid_json_error_message(response_code: int, response_text: String) -> String:
+	var message := "Invalid JSON response"
+	if response_code > 0:
+		message += " (status %s)" % response_code
+
+	var response_excerpt := response_text.strip_edges().replace("\n", " ")
+	if response_excerpt.length() > 160:
+		response_excerpt = response_excerpt.substr(0, 160) + "..."
+	if response_excerpt != "":
+		message += ": %s" % response_excerpt
+
+	return message
 
 func _get_request_error_message(request_result: int) -> String:
 	match request_result:

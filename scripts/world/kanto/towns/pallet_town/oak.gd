@@ -36,7 +36,6 @@ func _is_ui_typing() -> bool:
 	return focused_control is LineEdit or focused_control is TextEdit
 
 func talk() -> void:
-	print("Oak talk. flags = ", PlayerSave.flags)
 	var dialogue_box = get_tree().current_scene.get_node("DialogueBox/Box")
 	
 	if PlayerSave.flags.get("received_starter", false):
