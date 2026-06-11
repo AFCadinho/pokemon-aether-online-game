@@ -30,9 +30,9 @@ var hp_event_helper := preload("res://scripts/battle/battle_hp_event_helper.gd")
 var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new()
 var action_flow := preload("res://scripts/battle/battle_action_flow.gd").new()
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
+var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var last_battle_log_player_id := ""
-var active_residual_pokemon_effects := {}
 var public_confirmed_abilities_by_ident := {}
 var current_sprite_hover_player_id := ""
 var pokemon_hover_request_token := 0
@@ -110,6 +110,13 @@ func _ready() -> void:
 	_setup_weather_presentation()
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
+	event_presentation.setup(
+		event_text_formatter,
+		hp_event_helper,
+		Callable(self, "_format_battle_actor"),
+		Callable(self, "_get_player_display_name")
+	)
+	event_presentation.debug_enabled = DEBUG_BATTLE_MOVE_EVENTS
 	animation_router.setup(player_sprite_box, enemy_sprite_box)
 	_disable_unimplemented_mechanics()
 	_update_battle_log_toggle_button()
@@ -124,7 +131,6 @@ func _ready() -> void:
 	current_action_panel.clear_message()
 	battle_log_panel.clear_log()
 	last_battle_log_player_id = ""
-	active_residual_pokemon_effects.clear()
 
 	if PlayerSave.party.is_empty():
 		return
@@ -493,6 +499,7 @@ func _reset_battle_status_panel() -> void:
 
 func _reset_battle_effect_tracking() -> void:
 	public_confirmed_abilities_by_ident.clear()
+	event_presentation.reset()
 
 func _remember_public_confirmed_abilities_from_response(response: Dictionary) -> void:
 	var events_value: Variant = response.get("events", [])
@@ -629,7 +636,6 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	battle_type = BattleType.WILD
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = enemy_pokemon
-	active_residual_pokemon_effects.clear()
 	_reset_battle_effect_tracking()
 
 	player_hud_panel.clear_player_name()
@@ -663,7 +669,6 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	battle_type = BattleType.TRAINER
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = null
-	active_residual_pokemon_effects.clear()
 	_reset_battle_effect_tracking()
 
 	player_hud_panel.clear_player_name()
@@ -742,271 +747,33 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_show_moves()
 
 func _render_battle_events(events: Array, render_turn_headers := true) -> void:
-	var recent_field_effect_source := ""
-	var recent_ability_event := false
-	var recent_move_event := false
+	event_presentation.reset_recent_context()
 
 	for event in events:
 		if not (event is Dictionary):
 			continue
 
 		var event_data: Dictionary = event as Dictionary
-		var event_type := str(event_data.get("type", ""))
-		var pre_log_message := ""
-		var log_message := ""
-		var battle_message := ""
-		var add_blank_after := false
-		var suppress_player_gap := false
-		var attack_actor_ident := ""
-		var damage_target_ident := ""
-		var heal_target_ident := ""
-		var faint_target_ident := ""
-		var stat_change_target_ident := ""
-		var stat_change_amount: int = 0
-		var ability_boost_target_ident := ""
+		var presentation: Dictionary = event_presentation.build(event_data)
+		var turn := int(presentation.get("turn", 0))
+		if turn > 0:
+			if render_turn_headers:
+				battle_log_panel.add_turn_header(turn)
+				last_battle_log_player_id = ""
+			continue
 
-		match event_type:
-			"move":
-				recent_field_effect_source = ""
-				recent_ability_event = false
-				recent_move_event = true
-				attack_actor_ident = str(event_data.get("actor", ""))
-				_debug_battle_move("move event actor=%s move=%s target=%s source=%s event=%s" % [
-					attack_actor_ident,
-					str(event_data.get("move", "")),
-					str(event_data.get("target", "")),
-					str(event_data.get("source", "")),
-					JSON.stringify(event_data),
-				])
-				var actor := _format_battle_actor(str(event_data.get("actor", "")))
-				var move_name := str(event_data.get("move", ""))
-				pre_log_message = event_text_formatter.format_move_source_message(event_data, actor)
-				if pre_log_message != "":
-					battle_message = pre_log_message
-					attack_actor_ident = ""
-				else:
-					log_message = event_text_formatter.format_move_event(actor, move_name)
-					battle_message = log_message
-
-			"switch":
-				recent_field_effect_source = ""
-				recent_ability_event = false
-				recent_move_event = false
-				var player_id := str(event_data.get("playerId", ""))
-				var from_name := str(event_data.get("from", ""))
-				var to_name := str(event_data.get("to", ""))
-
-				if to_name == "":
-					to_name = _format_battle_actor(str(event_data.get("toIdent", "")), false)
-				if to_name == "":
-					to_name = _format_battle_actor(str(event_data.get("pokemon", "")), false)
-				if to_name == "":
-					to_name = "Pokemon"
-				if player_id == "p1":
-					log_message = event_text_formatter.format_player_switch_log_message(from_name, to_name)
-					battle_message = event_text_formatter.format_player_switch_battle_message(from_name, to_name)
-				else:
-					var trainer_name := _get_player_display_name(player_id)
-					log_message = event_text_formatter.format_opponent_switch_log_message(trainer_name, from_name, to_name)
-					battle_message = event_text_formatter.format_opponent_switch_battle_message(trainer_name, to_name)
-				add_blank_after = true
-
-			"faint":
-				recent_ability_event = false
-				recent_move_event = false
-				faint_target_ident = str(event_data.get("target", ""))
-				var target := _format_battle_actor(faint_target_ident)
-				log_message = event_text_formatter.format_faint_event(target)
-				battle_message = ""
-				add_blank_after = true
-
-			"win":
-				recent_ability_event = false
-				recent_move_event = false
-				var winner := str(event_data.get("winner", ""))
-				log_message = event_text_formatter.format_win_event(winner)
-				battle_message = log_message
-				add_blank_after = true
-
-			"fieldEffect":
-				recent_ability_event = false
-				recent_move_event = false
-				_debug_battle_move("fieldEffect event effect=%s state=%s source=%s sourceTarget=%s event=%s" % [
-					str(event_data.get("effect", "")),
-					str(event_data.get("state", "")),
-					str(event_data.get("source", "")),
-					str(event_data.get("sourceTarget", "")),
-					JSON.stringify(event_data),
-				])
-				log_message = event_text_formatter.format_field_effect_event(event_data)
-				add_blank_after = log_message != ""
-				recent_field_effect_source = str(event_data.get("effect", ""))
-
-			"pokemonEffect":
-				recent_ability_event = false
-				recent_move_event = false
-				_track_pokemon_effect_event(event_data)
-				log_message = event_text_formatter.format_pokemon_effect_event(event_data)
-				add_blank_after = log_message != ""
-
-			"ability":
-				recent_field_effect_source = ""
-				recent_move_event = false
-				_debug_battle_move("ability event target=%s ability=%s effect=%s stat=%s source=%s event=%s" % [
-					str(event_data.get("target", event_data.get("actor", ""))),
-					str(event_data.get("ability", "")),
-					str(event_data.get("effect", "")),
-					str(event_data.get("stat", "")),
-					str(event_data.get("source", "")),
-					JSON.stringify(event_data),
-				])
-				log_message = event_text_formatter.format_ability_event(event_data)
-				battle_message = log_message
-				add_blank_after = log_message != ""
-				if event_text_formatter.is_ability_boost_event(event_data):
-					ability_boost_target_ident = str(event_data.get("target", event_data.get("actor", "")))
-				recent_ability_event = log_message != ""
-
-			"statChange":
-				recent_move_event = false
-				stat_change_target_ident = str(event_data.get("target", ""))
-				stat_change_amount = int(event_data.get("amount", 0))
-				var is_ability_detail := recent_ability_event or event_text_formatter.is_stat_change_from_ability(event_data)
-				log_message = event_text_formatter.format_stat_change_event(event_data, is_ability_detail)
-				battle_message = event_text_formatter.format_stat_change_battle_message(event_data)
-				add_blank_after = log_message != ""
-				suppress_player_gap = is_ability_detail
-
-			"status":
-				recent_field_effect_source = ""
-				recent_ability_event = false
-				recent_move_event = false
-				_debug_battle_move("status event target=%s status=%s source=%s event=%s" % [
-					str(event_data.get("target", event_data.get("pokemon", ""))),
-					_get_first_event_text_value(event_data, ["status", "statusName", "condition"]),
-					str(event_data.get("source", "")),
-					JSON.stringify(event_data),
-				])
-				log_message = event_text_formatter.format_status_event(event_data)
-				battle_message = log_message
-				add_blank_after = log_message != ""
-
-			"fail":
-				recent_field_effect_source = ""
-				recent_ability_event = false
-				recent_move_event = false
-				_debug_battle_move("fail event target=%s reason=%s source=%s event=%s" % [
-					str(event_data.get("target", event_data.get("pokemon", ""))),
-					str(event_data.get("reason", "")),
-					str(event_data.get("source", "")),
-					JSON.stringify(event_data),
-				])
-				log_message = event_text_formatter.format_fail_event(event_data)
-				battle_message = log_message
-				add_blank_after = log_message != ""
-
-			"cant":
-				recent_field_effect_source = ""
-				recent_ability_event = false
-				recent_move_event = false
-				log_message = event_text_formatter.format_cant_event(event_data)
-				battle_message = log_message
-				add_blank_after = log_message != ""
-
-			"miss":
-				recent_field_effect_source = ""
-				recent_ability_event = false
-				recent_move_event = false
-				log_message = event_text_formatter.format_miss_event(event_data)
-				battle_message = log_message
-				add_blank_after = log_message != ""
-
-			"effectiveness":
-				recent_ability_event = false
-				log_message = event_text_formatter.format_effectiveness_event(event_data)
-				battle_message = log_message
-				add_blank_after = log_message != ""
-
-			"turn":
-				var turn := int(event_data.get("turn", 0))
-				if render_turn_headers and turn > 0:
-					battle_log_panel.add_turn_header(turn)
-					last_battle_log_player_id = ""
-					recent_ability_event = false
-					recent_move_event = false
-
-			"damage":
-				recent_ability_event = false
-				damage_target_ident = str(event_data.get("target", ""))
-				_debug_battle_move("damage event target=%s previous_snapshot=%s final_snapshot=%s has_hp_loss=%s visible_change=%s event=%s" % [
-					damage_target_ident,
-					JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, true)),
-					JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, false)),
-					str(hp_event_helper.event_has_hp_loss(event_data)),
-					str(hp_event_helper.get_event_visible_hp_change(event_data)),
-					JSON.stringify(event_data),
-				])
-				var target := _format_battle_actor(damage_target_ident)
-				var has_hp_loss: bool = hp_event_helper.event_has_hp_loss(event_data)
-				var has_sub_percent_hp_loss: bool = hp_event_helper.event_has_sub_percent_hp_loss(event_data)
-				var active_effect := ""
-				if not recent_move_event:
-					active_effect = _get_active_residual_pokemon_effect(damage_target_ident)
-				var source_message := event_text_formatter.format_indirect_damage_message(
-					event_data,
-					target,
-					recent_field_effect_source,
-					active_effect,
-					not recent_move_event
-				)
-				_debug_battle_move("damage formatted target=%s source=%s fallback_source=%s recent_move=%s source_message=%s has_hp_loss=%s sub_percent=%s" % [
-					damage_target_ident,
-					str(event_data.get("source", "")),
-					recent_field_effect_source,
-					str(recent_move_event),
-					source_message,
-					str(has_hp_loss),
-					str(has_sub_percent_hp_loss),
-				])
-
-				if source_message != "" and (has_hp_loss or has_sub_percent_hp_loss):
-					log_message = source_message
-				else:
-					log_message = event_text_formatter.format_direct_damage_message(
-						target,
-						hp_event_helper.get_event_visible_hp_change(event_data),
-						has_hp_loss,
-						has_sub_percent_hp_loss
-					)
-					if log_message == "":
-						damage_target_ident = ""
-
-				add_blank_after = log_message != ""
-				recent_field_effect_source = ""
-				recent_move_event = false
-
-			"heal":
-				recent_ability_event = false
-				recent_move_event = false
-				heal_target_ident = str(event_data.get("target", ""))
-				var target := _format_battle_actor(heal_target_ident)
-				var previous_hp := int(event_data.get("previousHp", 0))
-				var hp := int(event_data.get("hp", 0))
-				log_message = event_text_formatter.format_heal_event(
-					event_data,
-					target,
-					previous_hp,
-					hp,
-					hp_event_helper.get_event_visible_hp_change(event_data)
-				)
-				battle_message = event_text_formatter.format_heal_battle_message(event_data, target, previous_hp, hp)
-
-				add_blank_after = true
-				recent_field_effect_source = ""
-			_:
-				recent_ability_event = false
-				recent_move_event = false
-				pass
+		var pre_log_message := str(presentation.get("pre_log_message", ""))
+		var log_message := str(presentation.get("log_message", ""))
+		var battle_message := str(presentation.get("battle_message", ""))
+		var add_blank_after := bool(presentation.get("add_blank_after", false))
+		var suppress_player_gap := bool(presentation.get("suppress_player_gap", false))
+		var attack_actor_ident := str(presentation.get("attack_actor_ident", ""))
+		var damage_target_ident := str(presentation.get("damage_target_ident", ""))
+		var heal_target_ident := str(presentation.get("heal_target_ident", ""))
+		var faint_target_ident := str(presentation.get("faint_target_ident", ""))
+		var stat_change_target_ident := str(presentation.get("stat_change_target_ident", ""))
+		var stat_change_amount := int(presentation.get("stat_change_amount", 0))
+		var ability_boost_target_ident := str(presentation.get("ability_boost_target_ident", ""))
 
 		if pre_log_message != "":
 			if not suppress_player_gap:
@@ -1222,28 +989,6 @@ func _format_battle_actor(actor: String, include_side_prefix := true) -> String:
 		return "The opposing %s" % actor_name
 
 	return actor_name
-
-func _track_pokemon_effect_event(event: Dictionary) -> void:
-	var target_key := _get_pokemon_effect_target_key(event)
-	var effect := event_text_formatter.format_pokemon_effect_name(str(event.get("effect", "")))
-	if target_key == "" or not event_text_formatter.is_trapping_pokemon_effect(effect):
-		return
-
-	match str(event.get("state", "")).to_lower():
-		"start", "activate":
-			active_residual_pokemon_effects[target_key] = effect
-		"end":
-			active_residual_pokemon_effects.erase(target_key)
-
-func _get_pokemon_effect_target_key(event: Dictionary) -> String:
-	return _normalize_battle_ident(str(event.get("target", event.get("pokemon", ""))))
-
-func _get_active_residual_pokemon_effect(target_ident: String) -> String:
-	var target_key := _normalize_battle_ident(target_ident)
-	if target_key == "":
-		return ""
-
-	return str(active_residual_pokemon_effects.get(target_key, ""))
 
 func _normalize_battle_ident(ident: String) -> String:
 	var cleaned := ident.strip_edges()
