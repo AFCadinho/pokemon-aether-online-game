@@ -645,58 +645,25 @@ func _update_battle_platform_hazards() -> void:
 
 ## Initialiseert een wild battle vanuit een al gemaakte API battle response.
 func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
-	battle_type = BattleType.WILD
-	active_player_pokemon = player_pokemon
-	active_enemy_pokemon = enemy_pokemon
-	display_data_presenter.set_battle_context(BattleType.WILD, active_enemy_pokemon)
-	_reset_battle_effect_tracking()
-
-	player_hud_panel.clear_player_name()
-	enemy_hud_panel.clear_player_name()
+	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon)
 
 	player_sprite_box.set_single_pokemon(player_pokemon, "back")
 	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
 
-	if not _apply_api_response(api_response):
+	if not _apply_initial_battle_response(api_response):
 		return
-
-	_update_battle_status_panels()
-	_update_hud_panels()
-	_update_active_sprites()
-	_update_move_slots()
-	_update_party_slots()
-	_update_vs_panel_names()
-	_show_moves()
 
 	var player_species := _get_active_display_species("p1")
 	var opponent_species := _get_active_display_species("p2")
 
-	_show_current_action_prompt()
 	_add_battle_log_messages(event_text_formatter.format_wild_battle_start_messages(player_species, opponent_species))
-	event_renderer.add_turn_header(battle_state.get_turn())
-	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
-	_show_current_action_prompt()
+	await _render_initial_battle_events(api_response)
 
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
-	battle_type = BattleType.TRAINER
-	active_player_pokemon = player_pokemon
-	active_enemy_pokemon = null
-	display_data_presenter.set_battle_context(BattleType.TRAINER, active_enemy_pokemon)
-	_reset_battle_effect_tracking()
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
 
-	player_hud_panel.clear_player_name()
-	enemy_hud_panel.clear_player_name()
-
-	if not _apply_api_response(api_response):
+	if not _apply_initial_battle_response(api_response):
 		return
-
-	_update_battle_status_panels()
-	_update_hud_panels()
-	_update_active_sprites()
-	_update_move_slots()
-	_update_party_slots()
-	_update_vs_panel_names()
-	_show_moves()
 
 	var player_species := _get_active_display_species("p1")
 	var opponent_species := _get_active_display_species("p2")
@@ -704,12 +671,32 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	if trainer_name == "":
 		trainer_name = "Trainer"
 
-	_show_current_action_prompt()
 	_add_battle_log_messages(event_text_formatter.format_trainer_battle_start_messages(
 		player_species,
 		opponent_species,
 		trainer_name
 	))
+	await _render_initial_battle_events(api_response)
+
+func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
+	battle_type = type
+	active_player_pokemon = player_pokemon
+	active_enemy_pokemon = enemy_pokemon
+	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
+	_reset_battle_effect_tracking()
+	player_hud_panel.clear_player_name()
+	enemy_hud_panel.clear_player_name()
+
+func _apply_initial_battle_response(api_response: Dictionary) -> bool:
+	if not _apply_api_response(api_response):
+		return false
+
+	_update_battle_presentation()
+	_show_moves()
+	_show_current_action_prompt()
+	return true
+
+func _render_initial_battle_events(api_response: Dictionary) -> void:
 	event_renderer.add_turn_header(battle_state.get_turn())
 	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
 	_show_current_action_prompt()
