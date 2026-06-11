@@ -30,6 +30,7 @@ var hp_event_helper := preload("res://scripts/battle/battle_hp_event_helper.gd")
 var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new()
 var action_flow := preload("res://scripts/battle/battle_action_flow.gd").new()
 var force_switch_flow := preload("res://scripts/battle/battle_force_switch_flow.gd").new()
+var display_data_presenter := preload("res://scripts/battle/battle_display_data_presenter.gd").new()
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
@@ -112,6 +113,7 @@ func _ready() -> void:
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
 	force_switch_flow.setup(battle_state)
+	display_data_presenter.setup(battle_state)
 	event_presentation.setup(
 		event_text_formatter,
 		hp_event_helper,
@@ -646,6 +648,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	battle_type = BattleType.WILD
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = enemy_pokemon
+	display_data_presenter.set_battle_context(BattleType.WILD, active_enemy_pokemon)
 	_reset_battle_effect_tracking()
 
 	player_hud_panel.clear_player_name()
@@ -678,6 +681,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	battle_type = BattleType.TRAINER
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = null
+	display_data_presenter.set_battle_context(BattleType.TRAINER, active_enemy_pokemon)
 	_reset_battle_effect_tracking()
 
 	player_hud_panel.clear_player_name()
@@ -1123,115 +1127,16 @@ func _get_vs_player_name(player_id: String) -> String:
 	return _get_player_display_name(player_id)
 
 func _get_active_display_species(player_id: String) -> String:
-	if player_id == "p1":
-		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
-		var instance_id := str(active_pokemon.get("instanceId", active_pokemon.get("instance_id", "")))
-		var saved_pokemon := _get_player_save_pokemon_by_instance_id(instance_id)
-		if saved_pokemon != null and _saved_species_matches_battle_data(saved_pokemon, active_pokemon):
-			return saved_pokemon.species
-
-	return battle_state.get_active_pokemon_species(player_id)
+	return display_data_presenter.get_active_display_species(player_id)
 
 func _get_active_pokemon_is_shiny(player_id: String) -> bool:
-	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
-	var instance_id: String = str(active_pokemon.get("instanceId", active_pokemon.get("instance_id", "")))
-	var saved_pokemon: Pokemon = _get_player_save_pokemon_by_instance_id(instance_id)
-	if saved_pokemon != null and _saved_species_matches_battle_data(saved_pokemon, active_pokemon):
-		return saved_pokemon.shiny
-
-	if _pokemon_data_has_shiny_value(active_pokemon):
-		return _get_pokemon_data_shiny_value(active_pokemon)
-
-	if player_id == "p2" and battle_type == BattleType.WILD and active_enemy_pokemon != null:
-		if _saved_species_matches_battle_data(active_enemy_pokemon, active_pokemon):
-			return active_enemy_pokemon.shiny
-
-	return false
-
-func _pokemon_data_has_shiny_value(pokemon_data: Dictionary) -> bool:
-	return pokemon_data.has("shiny") or pokemon_data.has("isShiny") or pokemon_data.has("is_shiny")
-
-func _get_pokemon_data_shiny_value(pokemon_data: Dictionary) -> bool:
-	for key in ["shiny", "isShiny", "is_shiny"]:
-		if not pokemon_data.has(key):
-			continue
-
-		var value: Variant = pokemon_data.get(key)
-		if value is bool:
-			return bool(value)
-
-		var text_value: String = str(value).strip_edges().to_lower()
-		match text_value:
-			"true", "yes", "1", "y":
-				return true
-			"false", "no", "0", "n":
-				return false
-
-	return false
+	return display_data_presenter.get_active_pokemon_is_shiny(player_id)
 
 func _get_display_team_data(player_id: String) -> Array:
-	var team := battle_state.get_player_team(player_id)
-	var display_team: Array = []
-	for pokemon_data in team:
-		if not (pokemon_data is Dictionary):
-			display_team.append(pokemon_data)
-			continue
-
-		display_team.append(_get_display_pokemon_data(player_id, pokemon_data as Dictionary))
-
-	return display_team
+	return display_data_presenter.get_display_team_data(player_id)
 
 func _get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Dictionary:
-	var display_data := pokemon_data.duplicate()
-	match player_id:
-		"p1":
-			_enrich_display_data_from_player_save(display_data)
-		"p2":
-			_enrich_display_data_from_wild_pokemon(display_data)
-
-	return display_data
-
-func _enrich_display_data_from_player_save(display_data: Dictionary) -> void:
-	var instance_id := str(display_data.get("instanceId", display_data.get("instance_id", "")))
-	var saved_pokemon := _get_player_save_pokemon_by_instance_id(instance_id)
-	if saved_pokemon == null or not _saved_species_matches_battle_data(saved_pokemon, display_data):
-		return
-
-	display_data["displaySpecies"] = saved_pokemon.species
-	display_data["shiny"] = saved_pokemon.shiny
-	display_data["types"] = saved_pokemon.types
-	display_data["possibleAbilities"] = saved_pokemon.possible_abilities
-
-func _enrich_display_data_from_wild_pokemon(display_data: Dictionary) -> void:
-	if battle_type != BattleType.WILD or active_enemy_pokemon == null:
-		return
-	if not _saved_species_matches_battle_data(active_enemy_pokemon, display_data):
-		return
-
-	display_data["displaySpecies"] = active_enemy_pokemon.species
-	display_data["shiny"] = active_enemy_pokemon.shiny
-	display_data["types"] = active_enemy_pokemon.types
-	display_data["possibleAbilities"] = active_enemy_pokemon.possible_abilities
-
-func _get_player_save_pokemon_by_instance_id(instance_id: String) -> Pokemon:
-	if instance_id == "":
-		return null
-
-	for pokemon in PlayerSave.party:
-		if pokemon.instance_id == instance_id:
-			return pokemon
-
-	return null
-
-func _saved_species_matches_battle_data(saved_pokemon: Pokemon, pokemon_data: Dictionary) -> bool:
-	var battle_species := battle_state.get_species_from_pokemon_data(pokemon_data)
-	if battle_species == "":
-		return true
-
-	return _normalize_species_for_compare(saved_pokemon.species) == _normalize_species_for_compare(battle_species)
-
-func _normalize_species_for_compare(species: String) -> String:
-	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
+	return display_data_presenter.get_display_pokemon_data(player_id, pokemon_data)
 
 func _get_player_display_name(player_id: String) -> String:
 	var player_data: Dictionary = battle_state.players.get(player_id, {})
