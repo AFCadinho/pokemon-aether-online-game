@@ -18,6 +18,7 @@ var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
 var battle_finished := false
 var battle_input_locked := false
+var defer_force_switch_active_hide := false
 
 #Battle State
 var battle_state := BattleState.new()
@@ -25,18 +26,12 @@ var pokemon_hover_service := preload("res://scripts/battle/battle_pokemon_hover_
 var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
 var weather_presentation := preload("res://scripts/battle/battle_weather_presentation.gd").new()
 var side_condition_presentation := preload("res://scripts/battle/battle_side_condition_presentation.gd").new()
+var side_condition_tracker := preload("res://scripts/battle/battle_side_condition_tracker.gd").new()
+var field_effect_tracker := preload("res://scripts/battle/battle_field_effect_tracker.gd").new()
 var hp_event_helper := preload("res://scripts/battle/battle_hp_event_helper.gd").new()
-var known_field_effect_keys := {}
-var field_effect_started_turns := {}
-var active_side_condition_effects: Dictionary = {
-	"p1": {},
-	"p2": {},
-}
-var previous_side_condition_effects_before_response: Dictionary = {
-	"p1": {},
-	"p2": {},
-}
-var pending_field_start_events: Array[Dictionary] = []
+var event_condition_helper := preload("res://scripts/battle/battle_event_condition_helper.gd").new()
+var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new()
+var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var last_battle_log_player_id := ""
 var active_residual_pokemon_effects := {}
 var public_confirmed_abilities_by_ident := {}
@@ -50,8 +45,8 @@ const DAMAGE_EVENT_HOLD_SECONDS := 0.25
 const STAT_CHANGE_EVENT_HOLD_SECONDS := 0.85
 const BATTLE_MESSAGE_HOLD_SECONDS := 0.35
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
-const DEBUG_BATTLE_HP_EVENTS := true
-const DEBUG_BATTLE_MOVE_EVENTS := true
+const DEBUG_BATTLE_HP_EVENTS := false
+const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 
 #Active Pokemon
@@ -119,6 +114,8 @@ func _ready() -> void:
 	_connect_move_hover_signals()
 	_setup_weather_presentation()
 	_setup_side_condition_presentation()
+	animation_router.setup(player_sprite_box, enemy_sprite_box)
+	event_condition_helper.debug_enabled = DEBUG_BATTLE_HP_EVENTS
 	_disable_unimplemented_mechanics()
 	_update_battle_log_toggle_button()
 
@@ -153,6 +150,7 @@ func _setup_weather_presentation() -> void:
 	)
 
 func _setup_side_condition_presentation() -> void:
+	side_condition_tracker.debug_enabled = DEBUG_SIDE_CONDITION_EFFECTS
 	side_condition_presentation.setup(
 		player_battle_platform,
 		enemy_battle_platform,
@@ -458,15 +456,15 @@ func _apply_api_response(response: Dictionary) -> bool:
 		print("Battle API failed: ", response)
 		return false
 
-	var previous_field_effect_keys: Dictionary = known_field_effect_keys.duplicate()
-	_fill_missing_previous_event_conditions(response)
+	var previous_field_effect_keys: Dictionary = field_effect_tracker.get_known_keys()
+	event_condition_helper.fill_missing_previous_event_conditions(response, battle_state)
 	_remember_public_confirmed_abilities_from_response(response)
-	_remember_field_effect_start_turns_from_response(response)
+	field_effect_tracker.remember_start_turns_from_response(response)
 	battle_state.load_from_api_response(response)
-	_remember_side_condition_effects_from_field_snapshot()
-	_remember_side_condition_effects_from_response(response)
-	_queue_missing_field_start_events(previous_field_effect_keys)
-	_remember_current_field_effects()
+	side_condition_tracker.remember_from_field_snapshot(battle_state.get_field_effects())
+	side_condition_tracker.remember_from_response(response)
+	field_effect_tracker.queue_missing_start_events(battle_state.get_field_effects(), previous_field_effect_keys, battle_state.get_turn())
+	field_effect_tracker.remember_current(battle_state.get_field_effects())
 	return true
 
 func _sync_player_save_from_battle_state() -> void:
@@ -506,18 +504,9 @@ func _reset_battle_status_panel() -> void:
 	_update_side_condition_ui()
 
 func _reset_battle_effect_tracking() -> void:
-	known_field_effect_keys.clear()
-	field_effect_started_turns.clear()
-	pending_field_start_events.clear()
+	field_effect_tracker.reset()
 	public_confirmed_abilities_by_ident.clear()
-	active_side_condition_effects = {
-		"p1": {},
-		"p2": {},
-	}
-	previous_side_condition_effects_before_response = {
-		"p1": {},
-		"p2": {},
-	}
+	side_condition_tracker.reset()
 
 func _remember_public_confirmed_abilities_from_response(response: Dictionary) -> void:
 	var events_value: Variant = response.get("events", [])
@@ -583,331 +572,19 @@ func _get_ability_name_from_source(source: String) -> String:
 func _update_battle_status_panels() -> void:
 	battle_status_panel.set_turn(battle_state.get_turn())
 	battle_status_panel.hide_timer()
-	field_timers_panel.set_effects(_get_field_effects_with_started_turns(), battle_state.get_turn())
+	field_timers_panel.set_effects(field_effect_tracker.get_effects_with_started_turns(battle_state.get_field_effects()), battle_state.get_turn())
 	_update_side_condition_ui()
-	weather_presentation.update_weather(_get_active_weather_effect())
-	weather_presentation.update_terrain(_get_active_terrain_effect())
-	weather_presentation.update_trick_room(_is_trick_room_active())
-
-func _get_active_weather_effect() -> String:
-	for effect_value in battle_state.get_field_effects():
-		if not (effect_value is Dictionary):
-			continue
-
-		var effect_data: Dictionary = effect_value as Dictionary
-		var normalized_effect: String = _get_normalized_field_effect_key(str(effect_data.get("effect", "")))
-		if str(effect_data.get("effectType", "")) != "weather" and not _is_weather_effect_key(normalized_effect):
-			continue
-
-		return normalized_effect
-
-	return ""
-
-func _is_weather_effect_key(effect_key: String) -> bool:
-	return effect_key in ["RainDance", "SunnyDay", "Sandstorm", "Hail", "Snow"]
-
-func _get_active_terrain_effect() -> String:
-	for effect_value in battle_state.get_field_effects():
-		if not (effect_value is Dictionary):
-			continue
-
-		var effect_data: Dictionary = effect_value as Dictionary
-		var normalized_effect: String = _get_normalized_field_effect_key(str(effect_data.get("effect", "")))
-		var is_terrain_group: bool = str(effect_data.get("effectGroup", "")) == "terrain"
-		if not is_terrain_group and not _is_terrain_effect_key(normalized_effect):
-			continue
-
-		return normalized_effect
-
-	return ""
-
-func _is_terrain_effect_key(effect_key: String) -> bool:
-	return effect_key in ["GrassyTerrain", "ElectricTerrain", "MistyTerrain", "PsychicTerrain"]
-
-func _is_trick_room_active() -> bool:
-	for effect_value in battle_state.get_field_effects():
-		if not (effect_value is Dictionary):
-			continue
-
-		var effect_data: Dictionary = effect_value as Dictionary
-		var normalized_effect: String = _get_normalized_field_effect_key(str(effect_data.get("effect", "")))
-		if normalized_effect == "TrickRoom":
-			return true
-
-	return false
+	weather_presentation.update_weather(field_effect_tracker.get_active_weather_effect(battle_state.get_field_effects()))
+	weather_presentation.update_terrain(field_effect_tracker.get_active_terrain_effect(battle_state.get_field_effects()))
+	weather_presentation.update_trick_room(field_effect_tracker.is_trick_room_active(battle_state.get_field_effects()))
 
 func _update_side_condition_ui() -> void:
-	var player_side_effects: Array = _get_active_side_condition_effects("p1")
-	var enemy_side_effects: Array = _get_active_side_condition_effects("p2")
+	var player_side_effects: Array = side_condition_tracker.get_active_effects("p1", field_effect_tracker.get_started_turns())
+	var enemy_side_effects: Array = side_condition_tracker.get_active_effects("p2", field_effect_tracker.get_started_turns())
 	side_condition_presentation.update(player_side_effects, enemy_side_effects, battle_state.get_turn())
 
 func _update_battle_platform_hazards() -> void:
 	_update_side_condition_ui()
-
-func _remember_side_condition_effects_from_response(response: Dictionary) -> void:
-	var events_value: Variant = response.get("events", [])
-	if not (events_value is Array):
-		return
-
-	var events: Array = events_value as Array
-	for event_value in events:
-		if not (event_value is Dictionary):
-			continue
-
-		var event: Dictionary = event_value as Dictionary
-		if str(event.get("type", "")) != "fieldEffect":
-			continue
-		if not _is_side_condition_effect(event):
-			continue
-
-		var side_id: String = _get_side_condition_side_id(event)
-		if not active_side_condition_effects.has(side_id):
-			continue
-
-		var effect_key: String = _get_side_condition_effect_key(event)
-		if effect_key == "":
-			continue
-
-		var side_effects: Dictionary = active_side_condition_effects[side_id] as Dictionary
-		var previous_side_effects_value: Variant = previous_side_condition_effects_before_response.get(side_id, {})
-		var previous_side_effects: Dictionary = {}
-		if previous_side_effects_value is Dictionary:
-			previous_side_effects = previous_side_effects_value as Dictionary
-
-		var state: String = str(event.get("state", ""))
-		if state == "end":
-			_debug_side_condition("event end side=%s key=%s event=%s" % [
-				side_id,
-				effect_key,
-				JSON.stringify(event),
-			])
-			side_effects.erase(effect_key)
-		else:
-			var current_layers_before_event: int = _get_side_condition_layer_count_from_value(side_effects.get(effect_key, {}))
-			side_effects[effect_key] = _get_side_condition_effect_with_layers(
-				event,
-				previous_side_effects.get(effect_key, {}),
-				side_effects.get(effect_key, {}),
-				effect_key,
-				state
-			)
-			_debug_side_condition("event set side=%s key=%s state=%s previous=%s current=%s incoming=%s stored=%s event=%s" % [
-				side_id,
-				effect_key,
-				state,
-				_get_side_condition_layer_count_from_value(previous_side_effects.get(effect_key, {})),
-				current_layers_before_event,
-				_get_side_condition_layer_count(event),
-				_get_side_condition_layer_count_from_value(side_effects.get(effect_key, {})),
-				JSON.stringify(event),
-			])
-
-func _remember_side_condition_effects_from_field_snapshot() -> void:
-	var previous_side_condition_effects: Dictionary = {}
-	for side_id in active_side_condition_effects.keys():
-		var previous_side_effects_value: Variant = active_side_condition_effects.get(side_id, {})
-		if previous_side_effects_value is Dictionary:
-			previous_side_condition_effects[side_id] = (previous_side_effects_value as Dictionary).duplicate()
-		else:
-			previous_side_condition_effects[side_id] = {}
-
-		active_side_condition_effects[side_id] = {}
-
-	previous_side_condition_effects_before_response = previous_side_condition_effects.duplicate(true)
-
-	for effect_value in battle_state.get_field_effects():
-		if not (effect_value is Dictionary):
-			continue
-
-		var effect_data: Dictionary = effect_value as Dictionary
-		if not _is_side_condition_effect(effect_data):
-			continue
-
-		var side_id: String = _get_side_condition_side_id(effect_data)
-		if not active_side_condition_effects.has(side_id):
-			continue
-
-		var effect_key: String = _get_side_condition_effect_key(effect_data)
-		if effect_key == "":
-			continue
-
-		var side_effects: Dictionary = active_side_condition_effects[side_id] as Dictionary
-		var previous_side_effects: Dictionary = previous_side_condition_effects.get(side_id, {}) as Dictionary
-		side_effects[effect_key] = _get_side_condition_effect_with_preserved_layers(effect_data, previous_side_effects.get(effect_key, {}), effect_key)
-		_debug_side_condition("snapshot set side=%s key=%s previous=%s incoming=%s stored=%s effect=%s" % [
-			side_id,
-			effect_key,
-			_get_side_condition_layer_count_from_value(previous_side_effects.get(effect_key, {})),
-			_get_side_condition_layer_count(effect_data),
-			_get_side_condition_layer_count_from_value(side_effects.get(effect_key, {})),
-			JSON.stringify(effect_data),
-		])
-
-func _get_active_side_condition_effects(side_id: String) -> Array:
-	var side_effects_value: Variant = active_side_condition_effects.get(side_id, {})
-	if not (side_effects_value is Dictionary):
-		return []
-
-	var side_effects: Dictionary = side_effects_value as Dictionary
-	var effects_with_started_turns: Array = []
-	for effect_value in side_effects.values():
-		if not (effect_value is Dictionary):
-			effects_with_started_turns.append(effect_value)
-			continue
-
-		var effect_data: Dictionary = (effect_value as Dictionary).duplicate()
-		var effect_key: String = _get_field_effect_key(effect_data)
-		if field_effect_started_turns.has(effect_key):
-			effect_data["startedTurn"] = int(field_effect_started_turns.get(effect_key, effect_data.get("startedTurn", 0)))
-
-		effects_with_started_turns.append(effect_data)
-
-	return effects_with_started_turns
-
-func _is_side_condition_effect(effect_data: Dictionary) -> bool:
-	var effect_type: String = str(effect_data.get("effectType", ""))
-	if effect_type == "sideCondition":
-		return true
-
-	if str(effect_data.get("scope", "")) == "side":
-		return true
-
-	return _is_entry_hazard_effect(effect_data)
-
-func _get_side_condition_side_id(effect_data: Dictionary) -> String:
-	var side_id: String = str(effect_data.get("side", ""))
-	if side_id == "p1" or side_id == "p2":
-		return side_id
-
-	var source_ident: String = str(effect_data.get("sourceTarget", effect_data.get("sourcePokemon", effect_data.get("actor", ""))))
-	var source_player_id: String = _get_player_id_from_ident(source_ident)
-	if source_player_id == "p1":
-		return "p2"
-	if source_player_id == "p2":
-		return "p1"
-
-	var target_ident: String = str(effect_data.get("target", ""))
-	return _get_player_id_from_ident(target_ident)
-
-func _is_entry_hazard_effect(effect_data: Dictionary) -> bool:
-	match _get_side_condition_effect_key(effect_data):
-		"stealthrock", "spikes", "toxicspikes", "stickyweb", "stickywebs":
-			return true
-
-	return false
-
-func _get_side_condition_effect_with_layers(effect_data: Dictionary, previous_effect_value: Variant, current_effect_value: Variant, effect_key: String, state: String) -> Dictionary:
-	var next_effect: Dictionary = _get_merged_side_condition_effect_data(effect_data, current_effect_value, false)
-	if not _is_layered_side_condition_key(effect_key):
-		return next_effect
-
-	var max_layers: int = _get_side_condition_max_layers(effect_key)
-	var previous_layers: int = _get_side_condition_layer_count_from_value(previous_effect_value)
-	var current_layers: int = _get_side_condition_layer_count_from_value(current_effect_value)
-	var incoming_layers: int = _get_side_condition_layer_count(effect_data)
-	if state == "start":
-		if incoming_layers > previous_layers:
-			next_effect["layers"] = clamp(incoming_layers, 1, max_layers)
-		else:
-			next_effect["layers"] = clamp(previous_layers + 1, 1, max_layers)
-		return next_effect
-
-	if current_layers > 0:
-		next_effect["layers"] = clamp(current_layers, 1, max_layers)
-	elif incoming_layers > 0:
-		next_effect["layers"] = clamp(incoming_layers, 1, max_layers)
-	elif previous_layers > 0:
-		next_effect["layers"] = clamp(previous_layers, 1, max_layers)
-	else:
-		next_effect["layers"] = 1
-
-	return next_effect
-
-func _get_side_condition_effect_with_preserved_layers(effect_data: Dictionary, previous_effect_value: Variant, effect_key: String) -> Dictionary:
-	var next_effect: Dictionary = _get_merged_side_condition_effect_data(effect_data, previous_effect_value, true)
-	if not _is_layered_side_condition_key(effect_key):
-		return next_effect
-
-	var incoming_layers: int = _get_side_condition_layer_count(effect_data)
-	var previous_layers: int = _get_side_condition_layer_count_from_value(previous_effect_value)
-	if previous_layers > 0:
-		next_effect["layers"] = clamp(previous_layers, 1, _get_side_condition_max_layers(effect_key))
-	elif incoming_layers > 0:
-		next_effect["layers"] = clamp(incoming_layers, 1, _get_side_condition_max_layers(effect_key))
-
-	return next_effect
-
-func _get_merged_side_condition_effect_data(effect_data: Dictionary, previous_effect_value: Variant, preserve_layer_counts: bool = true) -> Dictionary:
-	var next_effect: Dictionary = effect_data.duplicate()
-	if not (previous_effect_value is Dictionary):
-		return next_effect
-
-	var previous_effect: Dictionary = previous_effect_value as Dictionary
-	if preserve_layer_counts:
-		for key in ["layers", "layer", "count"]:
-			if not next_effect.has(key) and previous_effect.has(key):
-				next_effect[key] = previous_effect.get(key)
-
-	for key in [
-		"startedTurn",
-		"minDuration",
-		"maxDuration",
-		"duration",
-		"minRemainingTurns",
-		"maxRemainingTurns",
-		"remainingTurns",
-		"turns",
-	]:
-		if not next_effect.has(key) and previous_effect.has(key):
-			next_effect[key] = previous_effect.get(key)
-
-	return next_effect
-
-func _has_side_condition_layer_count(effect_data: Dictionary) -> bool:
-	for key in ["layers", "layer", "count"]:
-		if effect_data.has(key) and int(effect_data.get(key, 0)) > 0:
-			return true
-
-	return false
-
-func _is_layered_side_condition_key(effect_key: String) -> bool:
-	match effect_key:
-		"spikes", "toxicspikes":
-			return true
-
-	return false
-
-func _get_side_condition_max_layers(effect_key: String) -> int:
-	match effect_key:
-		"spikes":
-			return 3
-		"toxicspikes":
-			return 2
-
-	return 1
-
-func _get_side_condition_layer_count_from_value(effect_value: Variant) -> int:
-	if not (effect_value is Dictionary):
-		return 0
-
-	return _get_side_condition_layer_count(effect_value as Dictionary)
-
-func _get_side_condition_layer_count(effect_data: Dictionary) -> int:
-	for key in ["layers", "layer", "count"]:
-		if effect_data.has(key):
-			return int(effect_data.get(key, 0))
-
-	return 0
-
-func _get_side_condition_effect_key(effect_data: Dictionary) -> String:
-	var effect: String = str(effect_data.get("effect", ""))
-	if effect == "":
-		return ""
-
-	if effect.contains(": "):
-		effect = effect.split(": ")[1]
-
-	return effect.to_lower().replace(" ", "").replace("_", "").replace("-", "")
 
 ## Initialiseert een wild battle vanuit een al gemaakte API battle response.
 func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
@@ -1281,7 +958,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				recent_ability_event = false
 				recent_move_event = false
 				heal_target_ident = str(event_data.get("target", ""))
-				_fill_missing_leftovers_heal_snapshot(event_data, heal_target_ident)
+				event_condition_helper.fill_missing_leftovers_heal_snapshot(event_data, heal_target_ident, battle_state)
 				var target := _format_battle_actor(heal_target_ident)
 				var previous_hp := int(event_data.get("previousHp", 0))
 				var hp := int(event_data.get("hp", 0))
@@ -1318,25 +995,25 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			current_action_panel.set_message(battle_message)
 
 		if attack_actor_ident != "":
-			await _play_attack_tween_for_actor(attack_actor_ident)
+			await animation_router.play_attack_tween_for_actor(attack_actor_ident)
 			await get_tree().create_timer(MOVE_EVENT_HOLD_SECONDS).timeout
 		if damage_target_ident != "":
 			_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
-			await _play_damage_tween_for_target(damage_target_ident)
+			await animation_router.play_damage_tween_for_target(damage_target_ident)
 			_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 			await get_tree().create_timer(DAMAGE_EVENT_HOLD_SECONDS).timeout
 		if heal_target_ident != "":
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
-			await _play_heal_tween_for_target(heal_target_ident)
+			await animation_router.play_heal_tween_for_target(heal_target_ident)
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
 		if stat_change_target_ident != "":
-			await _play_stat_change_tween_for_target(stat_change_target_ident, stat_change_amount)
+			await animation_router.play_stat_change_tween_for_target(stat_change_target_ident, stat_change_amount)
 			await get_tree().create_timer(STAT_CHANGE_EVENT_HOLD_SECONDS).timeout
 		if ability_boost_target_ident != "":
-			await _play_stat_change_tween_for_target(ability_boost_target_ident, 1)
+			await animation_router.play_stat_change_tween_for_target(ability_boost_target_ident, 1)
 			await get_tree().create_timer(STAT_CHANGE_EVENT_HOLD_SECONDS).timeout
 		if faint_target_ident != "":
-			await _play_faint_tween_for_target(faint_target_ident)
+			await animation_router.play_faint_tween_for_target(faint_target_ident)
 		if battle_message != "":
 			await get_tree().create_timer(BATTLE_MESSAGE_HOLD_SECONDS).timeout
 
@@ -1359,75 +1036,6 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 				start_events.append(event_data)
 
 	return start_events
-
-func _fill_missing_previous_event_conditions(response: Dictionary) -> void:
-	var events_value: Variant = response.get("events", [])
-	if not (events_value is Array):
-		return
-
-	var events: Array = events_value as Array
-	var current_conditions_by_ident: Dictionary = {}
-	for event_value in events:
-		if not (event_value is Dictionary):
-			continue
-
-		var event: Dictionary = event_value as Dictionary
-		var event_type: String = str(event.get("type", ""))
-		if event_type != "damage" and event_type != "heal" and event_type != "faint":
-			continue
-
-		var target_ident: String = str(event.get("target", ""))
-		if target_ident == "":
-			continue
-
-		if str(event.get("previousCondition", "")) != "":
-			var known_condition: String = _get_condition_from_event_data(event)
-			if known_condition != "" and not hp_event_helper.is_percentage_only_condition_event(event, false):
-				current_conditions_by_ident[target_ident] = known_condition
-			continue
-
-		var previous_condition: String = str(current_conditions_by_ident.get(target_ident, ""))
-		if previous_condition == "":
-			previous_condition = _get_battle_condition_for_ident(target_ident)
-		if previous_condition == "":
-			_debug_battle_move("could not fill previousCondition target=%s event=%s" % [
-				target_ident,
-				JSON.stringify(event),
-			])
-			continue
-
-		event["previousCondition"] = previous_condition
-		var previous_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(previous_condition)
-		if not previous_snapshot.is_empty():
-			event["previousHp"] = int(previous_snapshot.get("hp", 0))
-			if not event.has("maxHp"):
-				event["maxHp"] = int(previous_snapshot.get("max_hp", 1))
-		var current_condition: String = _get_condition_from_event_data(event)
-		if current_condition != "" and not hp_event_helper.is_percentage_only_condition_event(event, false):
-			current_conditions_by_ident[target_ident] = current_condition
-		_debug_battle_move("filled previousCondition target=%s previousCondition=%s event=%s" % [
-			target_ident,
-			previous_condition,
-			JSON.stringify(event),
-		])
-
-func _get_condition_from_event_data(event: Dictionary) -> String:
-	var condition: String = str(event.get("condition", ""))
-	if condition != "":
-		return condition
-
-	if str(event.get("type", "")) == "faint":
-		return "0 fnt"
-
-	if event.has("hp") and event.has("maxHp"):
-		var hp: int = int(event.get("hp", 0))
-		var max_hp: int = max(int(event.get("maxHp", 1)), 1)
-		if hp <= 0:
-			return "0 fnt"
-
-		return "%s/%s" % [hp, max_hp]
-
-	return ""
 
 func _add_battle_log_player_gap(event: Dictionary) -> void:
 	var player_id := _get_battle_log_event_player_id(event)
@@ -1503,50 +1111,6 @@ func _get_player_id_from_ident(ident: String) -> String:
 
 	return ""
 
-func _play_attack_tween_for_actor(actor_ident: String) -> void:
-	match _get_player_id_from_ident(actor_ident):
-		"p1":
-			await player_sprite_box.play_attack_tween(Vector2(28, -6))
-		"p2":
-			await enemy_sprite_box.play_attack_tween(Vector2(-28, 6))
-
-func _play_damage_tween_for_target(target_ident: String) -> void:
-	match _get_player_id_from_ident(target_ident):
-		"p1":
-			await player_sprite_box.play_damage_tween()
-		"p2":
-			await enemy_sprite_box.play_damage_tween()
-
-func _play_heal_tween_for_target(target_ident: String) -> void:
-	match _get_player_id_from_ident(target_ident):
-		"p1":
-			await player_sprite_box.play_heal_tween()
-		"p2":
-			await enemy_sprite_box.play_heal_tween()
-
-func _play_faint_tween_for_target(target_ident: String) -> void:
-	match _get_player_id_from_ident(target_ident):
-		"p1":
-			await player_sprite_box.play_faint_tween()
-		"p2":
-			await enemy_sprite_box.play_faint_tween()
-
-func _play_stat_change_tween_for_target(target_ident: String, amount: int) -> void:
-	if amount == 0:
-		return
-
-	match _get_player_id_from_ident(target_ident):
-		"p1":
-			if amount > 0:
-				await player_sprite_box.play_stat_raise_tween()
-			else:
-				await player_sprite_box.play_stat_drop_tween()
-		"p2":
-			if amount > 0:
-				await enemy_sprite_box.play_stat_raise_tween()
-			else:
-				await enemy_sprite_box.play_stat_drop_tween()
-
 func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_previous_hp: bool) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
 	if player_id == "":
@@ -1613,170 +1177,14 @@ func _rewind_active_hud_hp_for_events(events: Array) -> void:
 		rewound_player_ids[player_id] = true
 
 func _rewind_party_slots_for_events(events: Array) -> void:
-	var player_team: Array = _get_rewound_display_team_data_for_events("p1", events)
+	var player_team: Array = rewind_helper.get_rewound_team_data_for_events("p1", _get_display_team_data("p1"), events)
 	if not player_team.is_empty():
 		player_hud_panel.set_team_data(player_team)
 		party_grid.set_party(player_team)
 
-	var enemy_team: Array = _get_rewound_display_team_data_for_events("p2", events)
+	var enemy_team: Array = rewind_helper.get_rewound_team_data_for_events("p2", _get_display_team_data("p2"), events)
 	if not enemy_team.is_empty():
 		enemy_hud_panel.set_team_data(enemy_team)
-
-func _get_rewound_display_team_data_for_events(player_id: String, events: Array) -> Array:
-	var previous_conditions_by_name: Dictionary = _get_previous_conditions_by_pokemon_name_for_events(player_id, events)
-	var team: Array = _get_display_team_data(player_id)
-	if previous_conditions_by_name.is_empty():
-		return team
-
-	var rewound_team: Array = []
-	for pokemon_value in team:
-		if not (pokemon_value is Dictionary):
-			rewound_team.append(pokemon_value)
-			continue
-
-		var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate()
-		var pokemon_name: String = _get_ident_pokemon_name(str(pokemon_data.get("ident", "")))
-		if previous_conditions_by_name.has(pokemon_name):
-			pokemon_data["condition"] = str(previous_conditions_by_name.get(pokemon_name, pokemon_data.get("condition", "")))
-
-		rewound_team.append(pokemon_data)
-
-	return rewound_team
-
-func _get_previous_conditions_by_pokemon_name_for_events(player_id: String, events: Array) -> Dictionary:
-	var previous_conditions_by_name: Dictionary = {}
-	for event_value in events:
-		if not (event_value is Dictionary):
-			continue
-
-		var event: Dictionary = event_value as Dictionary
-		var event_type: String = str(event.get("type", ""))
-		if event_type != "damage" and event_type != "heal" and event_type != "faint":
-			continue
-
-		var target_ident: String = str(event.get("target", ""))
-		if _get_player_id_from_ident(target_ident) != player_id:
-			continue
-
-		var pokemon_name: String = _get_ident_pokemon_name(target_ident)
-		var previous_condition: String = str(event.get("previousCondition", ""))
-		if pokemon_name == "" or previous_condition == "" or previous_conditions_by_name.has(pokemon_name):
-			continue
-
-		previous_conditions_by_name[pokemon_name] = previous_condition
-
-	return previous_conditions_by_name
-
-func _fill_missing_leftovers_heal_snapshot(event: Dictionary, target_ident: String) -> void:
-	if target_ident == "":
-		return
-
-	var source_key: String = _normalize_event_source(str(event.get("source", ""))).to_lower().replace(" ", "")
-	_debug_battle_hp("Checking heal snapshot target=%s source=%s source_key=%s event=%s" % [
-		target_ident,
-		str(event.get("source", "")),
-		source_key,
-		JSON.stringify(event),
-	])
-	if source_key != "leftovers":
-		return
-
-	var final_snapshot: Dictionary = hp_event_helper.get_event_hp_snapshot(event, false)
-	var previous_snapshot: Dictionary = hp_event_helper.get_event_hp_snapshot(event, true)
-	if not final_snapshot.is_empty() and not previous_snapshot.is_empty():
-		var final_hp: int = int(final_snapshot.get("hp", 0))
-		var previous_event_hp: int = int(previous_snapshot.get("hp", 0))
-		if final_hp > previous_event_hp:
-			_debug_battle_hp("Leftovers heal already has valid final snapshot target=%s event=%s" % [
-				target_ident,
-				JSON.stringify(event),
-			])
-			return
-
-		_debug_battle_hp("Leftovers final snapshot has no healing; using fallback target=%s previous_hp=%s final_hp=%s event=%s" % [
-			target_ident,
-			str(previous_event_hp),
-			str(final_hp),
-			JSON.stringify(event),
-		])
-
-	_debug_battle_hp("Leftovers previous snapshot from event target=%s snapshot=%s" % [
-		target_ident,
-		JSON.stringify(previous_snapshot),
-	])
-	if previous_snapshot.is_empty():
-		previous_snapshot = _get_battle_hp_snapshot_for_ident(target_ident)
-		_debug_battle_hp("Leftovers previous snapshot from battle_state target=%s snapshot=%s" % [
-			target_ident,
-			JSON.stringify(previous_snapshot),
-		])
-	if previous_snapshot.is_empty():
-		_debug_battle_hp("Leftovers fallback failed: no previous snapshot target=%s event=%s" % [
-			target_ident,
-			JSON.stringify(event),
-		])
-		return
-
-	var previous_hp: int = int(previous_snapshot.get("hp", 0))
-	var max_hp: int = max(int(previous_snapshot.get("max_hp", 1)), 1)
-	if previous_hp <= 0 or previous_hp >= max_hp:
-		_debug_battle_hp("Leftovers fallback skipped: previous_hp=%s max_hp=%s target=%s" % [
-			str(previous_hp),
-			str(max_hp),
-			target_ident,
-		])
-		return
-
-	var heal_amount: int = max(1, int(floor(float(max_hp) / 16.0)))
-	var hp: int = min(previous_hp + heal_amount, max_hp)
-	event["previousHp"] = previous_hp
-	event["hp"] = hp
-	event["maxHp"] = max_hp
-	event["previousCondition"] = "%s/%s" % [previous_hp, max_hp]
-	event["condition"] = "%s/%s" % [hp, max_hp]
-	battle_state.apply_event_conditions([event])
-	_debug_battle_hp("Leftovers fallback applied target=%s previous_hp=%s hp=%s max_hp=%s heal_amount=%s event=%s" % [
-		target_ident,
-		str(previous_hp),
-		str(hp),
-		str(max_hp),
-		str(heal_amount),
-		JSON.stringify(event),
-	])
-
-func _get_battle_hp_snapshot_for_ident(target_ident: String) -> Dictionary:
-	var condition: String = _get_battle_condition_for_ident(target_ident)
-	if condition == "":
-		return {}
-
-	return hp_event_helper.parse_condition_hp_snapshot(condition)
-
-func _get_battle_condition_for_ident(target_ident: String) -> String:
-	var player_id: String = _get_player_id_from_ident(target_ident)
-	if player_id == "":
-		return ""
-
-	var target_name: String = _get_ident_pokemon_name(target_ident)
-	if target_name == "":
-		return ""
-
-	for pokemon_value in battle_state.get_player_team(player_id):
-		if not (pokemon_value is Dictionary):
-			continue
-
-		var pokemon_data: Dictionary = pokemon_value as Dictionary
-		if _get_ident_pokemon_name(str(pokemon_data.get("ident", ""))) != target_name:
-			continue
-
-		return str(pokemon_data.get("condition", ""))
-
-	return ""
-
-func _get_ident_pokemon_name(ident: String) -> String:
-	if not ident.contains(": "):
-		return ""
-
-	return str(ident.split(": ")[1]).strip_edges().to_lower()
 
 func _debug_battle_hp(message: String) -> void:
 	if DEBUG_BATTLE_HP_EVENTS:
@@ -1785,10 +1193,6 @@ func _debug_battle_hp(message: String) -> void:
 func _debug_battle_move(message: String) -> void:
 	if DEBUG_BATTLE_MOVE_EVENTS:
 		print("[battle-move] " + message)
-
-func _debug_side_condition(message: String) -> void:
-	if DEBUG_SIDE_CONDITION_EFFECTS:
-		print("[side-effects] " + message)
 
 func _format_battle_actor(actor: String, include_side_prefix := true) -> String:
 	var player_id := _get_player_id_from_ident(actor)
@@ -1801,159 +1205,17 @@ func _format_battle_actor(actor: String, include_side_prefix := true) -> String:
 
 	return actor_name
 
-func _queue_missing_field_start_events(previous_field_effect_keys: Dictionary) -> void:
-	for effect_data in battle_state.get_field_effects():
-		if not (effect_data is Dictionary):
-			continue
-
-		var effect_dict: Dictionary = effect_data as Dictionary
-		var effect_key: String = _get_field_effect_key(effect_dict)
-		if effect_key == "" or previous_field_effect_keys.has(effect_key):
-			continue
-
-		var start_event: Dictionary = effect_dict.duplicate()
-		start_event["type"] = "fieldEffect"
-		start_event["state"] = "start"
-		var started_turn: int = max(battle_state.get_turn() - 1, 1)
-		start_event["startedTurn"] = started_turn
-		field_effect_started_turns[effect_key] = started_turn
-		pending_field_start_events.append(start_event)
-
-func _remember_current_field_effects() -> void:
-	known_field_effect_keys.clear()
-	var active_field_effect_keys: Dictionary = {}
-
-	for effect_data in battle_state.get_field_effects():
-		if not (effect_data is Dictionary):
-			continue
-
-		var effect_dict: Dictionary = effect_data as Dictionary
-		var effect_key: String = _get_field_effect_key(effect_dict)
-		if effect_key != "":
-			known_field_effect_keys[effect_key] = true
-			active_field_effect_keys[effect_key] = true
-
-	for effect_key in field_effect_started_turns.keys():
-		if not active_field_effect_keys.has(effect_key):
-			field_effect_started_turns.erase(effect_key)
-
-func _remember_field_effect_start_turns_from_response(response: Dictionary) -> void:
-	var events_value: Variant = response.get("events", [])
-	if not (events_value is Array):
-		return
-
-	var events: Array = events_value as Array
-	var event_turn: int = _get_initial_event_turn(response, events)
-	for event_value in events:
-		if not (event_value is Dictionary):
-			continue
-
-		var event: Dictionary = event_value as Dictionary
-		var event_type: String = str(event.get("type", ""))
-		if event_type == "turn":
-			event_turn = max(int(event.get("turn", event_turn)), 1)
-			continue
-
-		if event_type != "fieldEffect":
-			continue
-
-		var event_key: String = _get_field_effect_key(event)
-		if event_key == "":
-			continue
-
-		var state: String = str(event.get("state", ""))
-		if state == "start":
-			field_effect_started_turns[event_key] = max(event_turn, 1)
-		elif state == "end":
-			field_effect_started_turns.erase(event_key)
-
-func _get_initial_event_turn(response: Dictionary, events: Array) -> int:
-	for event_value in events:
-		if not (event_value is Dictionary):
-			continue
-
-		var event: Dictionary = event_value as Dictionary
-		if str(event.get("type", "")) == "turn":
-			return max(int(event.get("turn", 1)) - 1, 1)
-
-	var state_value: Variant = response.get("state", {})
-	if state_value is Dictionary:
-		var state: Dictionary = state_value as Dictionary
-		return max(int(state.get("turn", 1)) - 1, 1)
-
-	return max(battle_state.get_turn(), 1)
-
-func _get_field_effects_with_started_turns() -> Array:
-	var effects_with_started_turns: Array = []
-	for effect_value in battle_state.get_field_effects():
-		if not (effect_value is Dictionary):
-			effects_with_started_turns.append(effect_value)
-			continue
-
-		var effect_data: Dictionary = (effect_value as Dictionary).duplicate()
-		var effect_key: String = _get_field_effect_key(effect_data)
-		if field_effect_started_turns.has(effect_key):
-			effect_data["startedTurn"] = int(field_effect_started_turns.get(effect_key, effect_data.get("startedTurn", 0)))
-
-		effects_with_started_turns.append(effect_data)
-
-	return effects_with_started_turns
-
 func _remove_pending_field_start_event(event: Dictionary) -> void:
-	if str(event.get("state", "")) != "start":
-		return
-
-	var event_key: String = _get_field_effect_key(event)
-	if event_key == "":
-		return
-
-	for idx in range(pending_field_start_events.size() - 1, -1, -1):
-		if _get_field_effect_key(pending_field_start_events[idx]) == event_key:
-			pending_field_start_events.remove_at(idx)
+	field_effect_tracker.remove_pending_start_event(event)
 
 func _render_pending_field_start_events() -> void:
-	for event in pending_field_start_events:
+	for event in field_effect_tracker.consume_pending_start_events():
 		var log_message: String = event_text_formatter.format_field_effect_event(event)
 		if log_message == "":
 			continue
 
 		_add_battle_log_player_gap(event)
 		battle_log_panel.add_message(log_message)
-
-	pending_field_start_events.clear()
-
-func _get_field_effect_key(effect_data: Dictionary) -> String:
-	var effect := _get_normalized_field_effect_key(str(effect_data.get("effect", "")))
-	if effect == "":
-		return ""
-
-	var key_parts := PackedStringArray([
-		str(effect_data.get("side", "")),
-		effect,
-	])
-	return "|".join(key_parts)
-
-func _get_normalized_field_effect_key(effect: String) -> String:
-	var cleaned: String = _normalize_event_source(effect)
-	cleaned = cleaned.replace(" ", "")
-
-	match cleaned:
-		"Rain", "RainDance":
-			return "RainDance"
-		"Sun", "SunnyDay":
-			return "SunnyDay"
-		"GrassyTerrain":
-			return "GrassyTerrain"
-		"ElectricTerrain":
-			return "ElectricTerrain"
-		"MistyTerrain":
-			return "MistyTerrain"
-		"PsychicTerrain":
-			return "PsychicTerrain"
-		"TrickRoom":
-			return "TrickRoom"
-
-	return cleaned
 
 func _track_pokemon_effect_event(event: Dictionary) -> void:
 	var target_key := _get_pokemon_effect_target_key(event)
@@ -2176,11 +1438,14 @@ func _submit_npc_choice() -> Dictionary:
 	)
 
 func _render_opponent_response(opponent_response: Dictionary) -> void:
+	defer_force_switch_active_hide = true
 	_update_battle_presentation()
+	defer_force_switch_active_hide = false
 	var opponent_events: Array = opponent_response.get("events", [])
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
 	await _render_battle_events(opponent_events)
+	_update_active_sprites()
 
 func _hold_opponent_response_message() -> void:
 	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
@@ -2221,7 +1486,13 @@ func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String
 	)
 
 func _should_hide_active_pokemon_for_force_switch(player_id: String) -> bool:
-	return battle_state.needs_force_switch(player_id) and _is_active_pokemon_fainted(player_id)
+	if defer_force_switch_active_hide:
+		return false
+
+	if not _is_active_pokemon_fainted(player_id):
+		return false
+
+	return battle_state.needs_force_switch(player_id) or battle_state.is_battle_ended()
 
 func _is_active_pokemon_fainted(player_id: String) -> bool:
 	return str(battle_state.get_active_pokemon_condition(player_id)).contains("fnt")
