@@ -31,8 +31,8 @@ var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new
 var action_flow := preload("res://scripts/battle/battle_action_flow.gd").new()
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
+var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
-var last_battle_log_player_id := ""
 var public_confirmed_abilities_by_ident := {}
 var current_sprite_hover_player_id := ""
 var pokemon_hover_request_token := 0
@@ -118,6 +118,14 @@ func _ready() -> void:
 	)
 	event_presentation.debug_enabled = DEBUG_BATTLE_MOVE_EVENTS
 	animation_router.setup(player_sprite_box, enemy_sprite_box)
+	event_renderer.setup(
+		battle_log_panel,
+		current_action_panel,
+		animation_router,
+		message_timing,
+		self,
+		Callable(self, "_set_active_hud_hp_from_event")
+	)
 	_disable_unimplemented_mechanics()
 	_update_battle_log_toggle_button()
 
@@ -130,7 +138,7 @@ func _ready() -> void:
 	weather_presentation.update_trick_room(false)
 	current_action_panel.clear_message()
 	battle_log_panel.clear_log()
-	last_battle_log_player_id = ""
+	event_renderer.reset_battle_log_player_gap()
 
 	if PlayerSave.party.is_empty():
 		return
@@ -660,8 +668,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 
 	_show_current_action_prompt()
 	_add_battle_log_messages(event_text_formatter.format_wild_battle_start_messages(player_species, opponent_species))
-	battle_log_panel.add_turn_header(battle_state.get_turn())
-	last_battle_log_player_id = ""
+	event_renderer.add_turn_header(battle_state.get_turn())
 	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
 	_show_current_action_prompt()
 
@@ -697,8 +704,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		opponent_species,
 		trainer_name
 	))
-	battle_log_panel.add_turn_header(battle_state.get_turn())
-	last_battle_log_player_id = ""
+	event_renderer.add_turn_header(battle_state.get_turn())
 	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
 	_show_current_action_prompt()
 
@@ -758,61 +764,10 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
 			if render_turn_headers:
-				battle_log_panel.add_turn_header(turn)
-				last_battle_log_player_id = ""
+				event_renderer.add_turn_header(turn)
 			continue
 
-		var pre_log_message := str(presentation.get("pre_log_message", ""))
-		var log_message := str(presentation.get("log_message", ""))
-		var battle_message := str(presentation.get("battle_message", ""))
-		var add_blank_after := bool(presentation.get("add_blank_after", false))
-		var suppress_player_gap := bool(presentation.get("suppress_player_gap", false))
-		var attack_actor_ident := str(presentation.get("attack_actor_ident", ""))
-		var damage_target_ident := str(presentation.get("damage_target_ident", ""))
-		var heal_target_ident := str(presentation.get("heal_target_ident", ""))
-		var faint_target_ident := str(presentation.get("faint_target_ident", ""))
-		var stat_change_target_ident := str(presentation.get("stat_change_target_ident", ""))
-		var stat_change_amount := int(presentation.get("stat_change_amount", 0))
-		var ability_boost_target_ident := str(presentation.get("ability_boost_target_ident", ""))
-
-		if pre_log_message != "":
-			if not suppress_player_gap:
-				_add_battle_log_player_gap(event_data)
-			battle_log_panel.add_message(pre_log_message)
-
-		if log_message != "":
-			if not suppress_player_gap:
-				_add_battle_log_player_gap(event_data)
-			battle_log_panel.add_message(log_message)
-
-		if add_blank_after:
-			battle_log_panel.add_blank_line()
-
-		if battle_message != "":
-			current_action_panel.set_message(battle_message)
-
-		if attack_actor_ident != "":
-			await animation_router.play_attack_tween_for_actor(attack_actor_ident)
-			await get_tree().create_timer(message_timing.get_move_animation_hold_seconds()).timeout
-		if damage_target_ident != "":
-			_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
-			await animation_router.play_damage_tween_for_target(damage_target_ident)
-			_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
-			await get_tree().create_timer(message_timing.get_damage_animation_hold_seconds()).timeout
-		if heal_target_ident != "":
-			_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
-			await animation_router.play_heal_tween_for_target(heal_target_ident)
-			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
-		if stat_change_target_ident != "":
-			await animation_router.play_stat_change_tween_for_target(stat_change_target_ident, stat_change_amount)
-			await get_tree().create_timer(message_timing.get_stat_change_animation_hold_seconds()).timeout
-		if ability_boost_target_ident != "":
-			await animation_router.play_stat_change_tween_for_target(ability_boost_target_ident, 1)
-			await get_tree().create_timer(message_timing.get_stat_change_animation_hold_seconds()).timeout
-		if faint_target_ident != "":
-			await animation_router.play_faint_tween_for_target(faint_target_ident)
-		if battle_message != "":
-			await get_tree().create_timer(message_timing.get_battle_message_hold_seconds(event_data, battle_message)).timeout
+		await event_renderer.render_event(event_data, presentation)
 
 	_update_hud_panels()
 	_update_party_slots()
@@ -832,71 +787,6 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 				start_events.append(event_data)
 
 	return start_events
-
-func _add_battle_log_player_gap(event: Dictionary) -> void:
-	var player_id := _get_battle_log_event_player_id(event)
-	if player_id == "":
-		return
-
-	if last_battle_log_player_id != "" and last_battle_log_player_id != player_id:
-		battle_log_panel.add_gap()
-
-	last_battle_log_player_id = player_id
-
-func _get_battle_log_event_player_id(event: Dictionary) -> String:
-	var event_type := str(event.get("type", ""))
-	match event_type:
-		"switch":
-			return str(event.get("playerId", ""))
-		"move", "cant", "fail", "miss":
-			return _get_player_id_from_ident(str(event.get("actor", "")))
-		"ability":
-			return _get_ability_event_player_id(event)
-		"statChange":
-			return _get_stat_change_event_player_id(event)
-		"status":
-			return _get_player_id_from_ident(str(event.get("target", event.get("pokemon", ""))))
-		"pokemonEffect":
-			return _get_pokemon_effect_event_player_id(event)
-		"fieldEffect":
-			return _get_field_effect_event_player_id(event)
-
-	return ""
-
-func _get_field_effect_event_player_id(event: Dictionary) -> String:
-	var player_id := _get_player_id_from_ident(str(event.get("sourcePokemon", "")))
-	if player_id != "":
-		return player_id
-
-	player_id = _get_player_id_from_ident(str(event.get("sourceTarget", "")))
-	if player_id != "":
-		return player_id
-
-	return _get_player_id_from_ident(str(event.get("actor", "")))
-
-func _get_ability_event_player_id(event: Dictionary) -> String:
-	for key in ["target", "actor", "pokemon", "sourcePokemon", "sourceTarget"]:
-		var player_id := _get_player_id_from_ident(str(event.get(str(key), "")))
-		if player_id != "":
-			return player_id
-
-	return ""
-
-func _get_stat_change_event_player_id(event: Dictionary) -> String:
-	for key in ["target", "pokemon", "actor", "sourceTarget"]:
-		var player_id := _get_player_id_from_ident(str(event.get(str(key), "")))
-		if player_id != "":
-			return player_id
-
-	return ""
-
-func _get_pokemon_effect_event_player_id(event: Dictionary) -> String:
-	for key in ["target", "pokemon", "actor"]:
-		var player_id := _get_player_id_from_ident(str(event.get(str(key), "")))
-		if player_id != "":
-			return player_id
-
-	return ""
 
 func _get_player_id_from_ident(ident: String) -> String:
 	if ident.begins_with("p1"):
