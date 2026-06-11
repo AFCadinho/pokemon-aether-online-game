@@ -107,10 +107,24 @@ func _fetch_hover_pokemon_stats(
 	var pokemon_value: Variant = response.get("pokemon", {})
 	if pokemon_value is Dictionary:
 		var pokemon_stats: Dictionary = pokemon_value as Dictionary
+		if not _pokemon_stats_match_requested_species(pokemon_stats, species):
+			_debug_battle_move("pokemon-stats ignored mismatched response requested=%s response=%s" % [
+				species,
+				JSON.stringify(pokemon_stats),
+			])
+			return {}
+
 		pokemon_stats_cache[cache_key] = pokemon_stats
 		return pokemon_stats
 
 	return {}
+
+func _pokemon_stats_match_requested_species(pokemon_stats: Dictionary, requested_species: String) -> bool:
+	var response_species := str(pokemon_stats.get("species", ""))
+	if response_species == "":
+		return true
+
+	return _normalize_species_for_compare(response_species) == _normalize_species_for_compare(requested_species)
 
 func _get_level_from_pokemon_data(pokemon_data: Dictionary) -> int:
 	var level_value: Variant = pokemon_data.get("level", null)
@@ -200,6 +214,9 @@ func _normalize_battle_ident(ident: String) -> String:
 		return "%s:%s" % [player_id, pokemon_name.to_lower()]
 
 	return cleaned.to_lower()
+
+func _normalize_species_for_compare(species: String) -> String:
+	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
 
 func _debug_battle_move(message: String) -> void:
 	if not OS.is_debug_build():

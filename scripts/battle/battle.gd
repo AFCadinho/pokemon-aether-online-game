@@ -23,6 +23,7 @@ var defer_force_switch_active_hide := false
 #Battle State
 var battle_state := BattleState.new()
 var pokemon_hover_service := preload("res://scripts/battle/battle_pokemon_hover_service.gd").new()
+var hover_state := preload("res://scripts/battle/battle_hover_state.gd").new()
 var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
 var weather_presentation := preload("res://scripts/battle/battle_weather_presentation.gd").new()
 var side_condition_presentation := preload("res://scripts/battle/battle_side_condition_presentation.gd").new()
@@ -36,10 +37,6 @@ var event_presentation := preload("res://scripts/battle/battle_event_presentatio
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var public_confirmed_abilities_by_ident := {}
-var current_sprite_hover_player_id := ""
-var pokemon_hover_request_token := 0
-var is_hud_slot_hover_active := false
-var current_hover_pokemon_ident := ""
 var current_move_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
 const DEBUG_BATTLE_HP_EVENTS := false
@@ -106,6 +103,7 @@ var active_enemy_pokemon: Pokemon
 func _ready() -> void:
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
+	hover_state.setup(pokemon_info_request, pokemon_stats_request)
 	_connect_pokemon_hover_signals()
 	_connect_hud_team_hover_signals()
 	_connect_move_hover_signals()
@@ -171,7 +169,7 @@ func _setup_side_condition_presentation() -> void:
 	)
 
 func _process(delta: float) -> void:
-	if not is_hud_slot_hover_active:
+	if hover_state.should_poll_sprite_hover():
 		_update_sprite_hover()
 	if pokemon_hover_card.visible:
 		_position_pokemon_hover_card()
@@ -228,10 +226,10 @@ func _position_move_hover_card() -> void:
 
 func _update_sprite_hover() -> void:
 	var hovered_player_id: String = _get_hovered_sprite_player_id()
-	if hovered_player_id == current_sprite_hover_player_id:
+	if hovered_player_id == hover_state.get_sprite_hover_player():
 		return
 
-	current_sprite_hover_player_id = hovered_player_id
+	hover_state.set_sprite_hover_player(hovered_player_id)
 	if hovered_player_id == "":
 		_hide_pokemon_hover_card()
 		return
@@ -263,23 +261,18 @@ func _show_active_pokemon_hover(player_id: String) -> void:
 	await _show_pokemon_hover(_get_display_pokemon_data(player_id, pokemon_data), player_id)
 
 func _show_hud_pokemon_hover(pokemon_data: Dictionary) -> void:
-	is_hud_slot_hover_active = true
-	current_sprite_hover_player_id = ""
-	current_hover_pokemon_ident = str(pokemon_data.get("ident", ""))
-	var player_id := _get_player_id_from_ident(current_hover_pokemon_ident)
+	var hover_ident := str(pokemon_data.get("ident", ""))
+	hover_state.begin_hud_hover(hover_ident)
+	var player_id := _get_player_id_from_ident(hover_ident)
 	await _show_pokemon_hover(_get_display_pokemon_data(player_id, pokemon_data), player_id)
 
 func _hide_hud_pokemon_hover() -> void:
-	is_hud_slot_hover_active = false
-	current_hover_pokemon_ident = ""
+	hover_state.end_hud_hover()
 	_hide_pokemon_hover()
 
 func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String) -> void:
 	var hover_ident: String = str(pokemon_data.get("ident", ""))
-	pokemon_hover_request_token += 1
-	var request_token: int = pokemon_hover_request_token
-	pokemon_info_request.cancel_request()
-	pokemon_stats_request.cancel_request()
+	var request_token: int = hover_state.begin_hover_request()
 	var hover_data: Dictionary = await pokemon_hover_service.get_hover_card_data(
 		battle_state,
 		pokemon_info_request,
@@ -287,11 +280,7 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 		pokemon_data,
 		public_confirmed_abilities_by_ident
 	)
-	if request_token != pokemon_hover_request_token:
-		return
-	if is_hud_slot_hover_active and current_hover_pokemon_ident != hover_ident:
-		return
-	if not is_hud_slot_hover_active and current_sprite_hover_player_id != hover_owner_player_id:
+	if not hover_state.is_hover_request_current(request_token, hover_ident, hover_owner_player_id):
 		return
 
 	var confirmed_moves: Array = hover_data.get("confirmed_moves", [])
@@ -313,11 +302,7 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 	_position_pokemon_hover_card()
 
 func _hide_pokemon_hover() -> void:
-	current_sprite_hover_player_id = ""
-	current_hover_pokemon_ident = ""
-	pokemon_hover_request_token += 1
-	pokemon_info_request.cancel_request()
-	pokemon_stats_request.cancel_request()
+	hover_state.invalidate_hover()
 	_hide_pokemon_hover_card()
 
 func _position_pokemon_hover_card() -> void:
@@ -661,6 +646,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
 
 	if not _apply_initial_battle_response(api_response):
 		return

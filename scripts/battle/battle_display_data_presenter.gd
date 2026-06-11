@@ -3,10 +3,12 @@ extends RefCounted
 class_name BattleDisplayDataPresenter
 
 const BATTLE_TYPE_WILD := 0
+const BATTLE_TYPE_TRAINER := 1
 
 var battle_state: BattleState
 var battle_type := BATTLE_TYPE_WILD
 var active_enemy_pokemon: Pokemon
+var trainer_enemy_team: Array = []
 
 
 func setup(state: BattleState) -> void:
@@ -16,6 +18,12 @@ func setup(state: BattleState) -> void:
 func set_battle_context(type_value: int, enemy_pokemon: Pokemon) -> void:
 	battle_type = type_value
 	active_enemy_pokemon = enemy_pokemon
+	if battle_type != BATTLE_TYPE_TRAINER:
+		trainer_enemy_team = []
+
+
+func set_trainer_team(team: Array) -> void:
+	trainer_enemy_team = team.duplicate(true)
 
 
 func get_active_display_species(player_id: String) -> String:
@@ -75,6 +83,7 @@ func get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Di
 			_enrich_display_data_from_player_save(display_data)
 		"p2":
 			_enrich_display_data_from_wild_pokemon(display_data)
+			_enrich_display_data_from_trainer_team(display_data)
 
 	return display_data
 
@@ -86,6 +95,7 @@ func _enrich_display_data_from_player_save(display_data: Dictionary) -> void:
 		return
 
 	display_data["displaySpecies"] = saved_pokemon.species
+	display_data["species"] = saved_pokemon.species
 	display_data["shiny"] = saved_pokemon.shiny
 	display_data["types"] = saved_pokemon.types
 	display_data["possibleAbilities"] = saved_pokemon.possible_abilities
@@ -98,9 +108,50 @@ func _enrich_display_data_from_wild_pokemon(display_data: Dictionary) -> void:
 		return
 
 	display_data["displaySpecies"] = active_enemy_pokemon.species
+	display_data["species"] = active_enemy_pokemon.species
 	display_data["shiny"] = active_enemy_pokemon.shiny
 	display_data["types"] = active_enemy_pokemon.types
 	display_data["possibleAbilities"] = active_enemy_pokemon.possible_abilities
+
+
+func _enrich_display_data_from_trainer_team(display_data: Dictionary) -> void:
+	if battle_type != BATTLE_TYPE_TRAINER or trainer_enemy_team.is_empty():
+		return
+
+	var trainer_pokemon := _find_trainer_team_pokemon_for_display_data(display_data)
+	if trainer_pokemon.is_empty():
+		return
+
+	_copy_backend_pokemon_metadata(display_data, trainer_pokemon)
+
+
+func _find_trainer_team_pokemon_for_display_data(display_data: Dictionary) -> Dictionary:
+	var display_species := battle_state.get_species_from_pokemon_data(display_data)
+	var normalized_display_species := normalize_species_for_compare(display_species)
+	if normalized_display_species == "":
+		return {}
+
+	for pokemon_value in trainer_enemy_team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var trainer_pokemon: Dictionary = pokemon_value as Dictionary
+		var trainer_species := str(trainer_pokemon.get("species", trainer_pokemon.get("displaySpecies", "")))
+		if normalize_species_for_compare(trainer_species) == normalized_display_species:
+			return trainer_pokemon
+
+	return {}
+
+
+func _copy_backend_pokemon_metadata(display_data: Dictionary, backend_pokemon: Dictionary) -> void:
+	var species := str(backend_pokemon.get("species", backend_pokemon.get("displaySpecies", "")))
+	if species != "":
+		display_data["displaySpecies"] = species
+		display_data["species"] = species
+
+	for key in ["shiny", "types", "possibleAbilities"]:
+		if backend_pokemon.has(key):
+			display_data[key] = backend_pokemon.get(key)
 
 
 func get_player_save_pokemon_by_instance_id(instance_id: String) -> Pokemon:
