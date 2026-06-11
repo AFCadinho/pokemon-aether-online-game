@@ -23,6 +23,7 @@ var battle_input_locked := false
 var battle_state := BattleState.new()
 var pokemon_hover_service := preload("res://scripts/battle/battle_pokemon_hover_service.gd").new()
 var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
+var weather_presentation := preload("res://scripts/battle/battle_weather_presentation.gd").new()
 var known_field_effect_keys := {}
 var field_effect_started_turns := {}
 var active_side_condition_effects: Dictionary = {
@@ -42,12 +43,6 @@ var pokemon_hover_request_token := 0
 var is_hud_slot_hover_active := false
 var current_hover_pokemon_ident := ""
 var current_move_hover_rect := Rect2()
-var sun_weather_time := 0.0
-var sandstorm_weather_time := 0.0
-var grassy_terrain_time := 0.0
-var trick_room_time := 0.0
-var active_terrain_effect := ""
-
 const MOVE_EVENT_HOLD_SECONDS := 0.35
 const DAMAGE_EVENT_HOLD_SECONDS := 0.25
 const STAT_CHANGE_EVENT_HOLD_SECONDS := 0.85
@@ -120,6 +115,7 @@ func _ready() -> void:
 	_connect_pokemon_hover_signals()
 	_connect_hud_team_hover_signals()
 	_connect_move_hover_signals()
+	_setup_weather_presentation()
 	_disable_unimplemented_mechanics()
 	_update_battle_log_toggle_button()
 
@@ -127,9 +123,9 @@ func _ready() -> void:
 	_reset_action_choices()
 	_reset_battle_effect_tracking()
 	_reset_battle_status_panel()
-	_update_weather_particles("")
-	_update_terrain_effects("")
-	_update_trick_room_effect(false)
+	weather_presentation.update_weather("")
+	weather_presentation.update_terrain("")
+	weather_presentation.update_trick_room(false)
 	current_action_panel.clear_message()
 	battle_log_panel.clear_log()
 	last_battle_log_player_id = ""
@@ -138,6 +134,21 @@ func _ready() -> void:
 	if PlayerSave.party.is_empty():
 		return
 
+func _setup_weather_presentation() -> void:
+	weather_presentation.setup(
+		weather_particles,
+		weather_tint,
+		sun_rays,
+		sun_sparkles,
+		sandstorm_particles,
+		sandstorm_swirls,
+		terrain_tint,
+		grassy_terrain_layer,
+		misty_terrain_layer,
+		psychic_terrain_layer,
+		trick_room_layer
+	)
+
 func _process(delta: float) -> void:
 	if not is_hud_slot_hover_active:
 		_update_sprite_hover()
@@ -145,14 +156,7 @@ func _process(delta: float) -> void:
 		_position_pokemon_hover_card()
 	if move_hover_card.visible:
 		_position_move_hover_card()
-	if sun_rays != null and sun_rays.visible:
-		_animate_sun_weather(delta)
-	if sandstorm_swirls != null and sandstorm_swirls.visible:
-		_animate_sandstorm_weather(delta)
-	if terrain_tint != null and terrain_tint.visible:
-		_animate_terrain_effects(delta)
-	if trick_room_layer != null and trick_room_layer.visible:
-		_animate_trick_room_effect(delta)
+	weather_presentation.animate(delta)
 
 func _connect_pokemon_hover_signals() -> void:
 	if not player_sprite_box.has_method("get_single_sprite_slot"):
@@ -570,9 +574,9 @@ func _update_battle_status_panels() -> void:
 	battle_status_panel.hide_timer()
 	field_timers_panel.set_effects(_get_field_effects_with_started_turns(), battle_state.get_turn())
 	_update_side_condition_ui()
-	_update_weather_particles(_get_active_weather_effect())
-	_update_terrain_effects(_get_active_terrain_effect())
-	_update_trick_room_effect(_is_trick_room_active())
+	weather_presentation.update_weather(_get_active_weather_effect())
+	weather_presentation.update_terrain(_get_active_terrain_effect())
+	weather_presentation.update_trick_room(_is_trick_room_active())
 
 func _get_active_weather_effect() -> String:
 	for effect_value in battle_state.get_field_effects():
@@ -620,142 +624,6 @@ func _is_trick_room_active() -> bool:
 			return true
 
 	return false
-
-func _update_weather_particles(weather_effect: String) -> void:
-	_update_weather_tint(weather_effect)
-
-	var should_emit_rain := weather_effect == "RainDance"
-	if weather_particles != null:
-		weather_particles.visible = should_emit_rain
-		weather_particles.emitting = should_emit_rain
-
-	var should_show_sun := weather_effect == "SunnyDay"
-	if sun_rays != null:
-		sun_rays.visible = should_show_sun
-		if not should_show_sun:
-			sun_rays.position = Vector2.ZERO
-			sun_rays.modulate = Color.WHITE
-			sun_weather_time = 0.0
-	if sun_sparkles != null:
-		sun_sparkles.visible = should_show_sun
-		sun_sparkles.emitting = should_show_sun
-
-	var should_emit_sandstorm := weather_effect == "Sandstorm"
-	if sandstorm_particles != null:
-		sandstorm_particles.visible = should_emit_sandstorm
-		sandstorm_particles.emitting = should_emit_sandstorm
-	if sandstorm_swirls != null:
-		sandstorm_swirls.visible = should_emit_sandstorm
-		_set_child_particles_emitting(sandstorm_swirls, should_emit_sandstorm)
-		if not should_emit_sandstorm:
-			sandstorm_swirls.position = Vector2.ZERO
-			sandstorm_swirls.modulate = Color.WHITE
-			sandstorm_weather_time = 0.0
-
-func _update_weather_tint(weather_effect: String) -> void:
-	if weather_tint == null:
-		return
-
-	var tint_color := Color.TRANSPARENT
-	var should_show_tint := true
-	match weather_effect:
-		"RainDance":
-			tint_color = Color(0.24, 0.46, 0.9, 0.12)
-		"SunnyDay":
-			tint_color = Color(1.0, 0.76, 0.18, 0.1)
-		"Sandstorm":
-			tint_color = Color(0.68, 0.47, 0.22, 0.14)
-		"Hail", "Snow":
-			tint_color = Color(0.72, 0.88, 1.0, 0.1)
-		_:
-			should_show_tint = false
-
-	weather_tint.visible = should_show_tint
-	if should_show_tint:
-		weather_tint.color = tint_color
-
-func _update_terrain_effects(terrain_effect: String) -> void:
-	var should_show_grassy_terrain := terrain_effect == "GrassyTerrain"
-	var should_show_misty_terrain := terrain_effect == "MistyTerrain"
-	var should_show_psychic_terrain := terrain_effect == "PsychicTerrain"
-	var should_show_terrain := should_show_grassy_terrain or should_show_misty_terrain or should_show_psychic_terrain
-	active_terrain_effect = terrain_effect
-	if terrain_tint != null:
-		terrain_tint.visible = should_show_terrain
-		if should_show_terrain:
-			terrain_tint.color = _get_terrain_tint_color(terrain_effect, 0.025)
-		else:
-			terrain_tint.color = Color(0.22, 0.84, 0.16, 0.025)
-			grassy_terrain_time = 0.0
-
-	if grassy_terrain_layer != null:
-		grassy_terrain_layer.visible = should_show_grassy_terrain
-		_set_child_particles_emitting(grassy_terrain_layer, should_show_grassy_terrain)
-	if misty_terrain_layer != null:
-		misty_terrain_layer.visible = should_show_misty_terrain
-		_set_child_particles_emitting(misty_terrain_layer, should_show_misty_terrain)
-	if psychic_terrain_layer != null:
-		psychic_terrain_layer.visible = should_show_psychic_terrain
-		_set_child_particles_emitting(psychic_terrain_layer, should_show_psychic_terrain)
-
-func _update_trick_room_effect(is_active: bool) -> void:
-	if trick_room_layer == null:
-		return
-
-	trick_room_layer.visible = is_active
-	if not is_active:
-		trick_room_layer.position = Vector2.ZERO
-		trick_room_layer.modulate = Color.WHITE
-		trick_room_time = 0.0
-
-func _get_terrain_tint_color(terrain_effect: String, alpha: float) -> Color:
-	match terrain_effect:
-		"GrassyTerrain":
-			return Color(0.24, 0.88, 0.18, alpha)
-		"MistyTerrain":
-			return Color(0.9, 0.48, 0.95, alpha)
-		"PsychicTerrain":
-			return Color(0.72, 0.28, 1.0, alpha)
-
-	return Color.TRANSPARENT
-
-func _animate_sun_weather(delta: float) -> void:
-	sun_weather_time += delta
-	var drift_x := sin(sun_weather_time * 0.45) * 14.0
-	var drift_y := sin(sun_weather_time * 0.32) * 5.0
-	var alpha := 0.78 + (sin(sun_weather_time * 0.8) * 0.18)
-
-	sun_rays.position = Vector2(drift_x, drift_y)
-	sun_rays.modulate = Color(1.0, 1.0, 1.0, alpha)
-
-func _animate_sandstorm_weather(delta: float) -> void:
-	sandstorm_weather_time += delta
-	var drift_x: float = sin(sandstorm_weather_time * 0.72) * 9.0
-	var drift_y: float = sin(sandstorm_weather_time * 0.48) * 4.0
-	var alpha: float = 0.82 + (sin(sandstorm_weather_time * 1.05) * 0.16)
-
-	sandstorm_swirls.position = Vector2(drift_x, drift_y)
-	sandstorm_swirls.modulate = Color(1.0, 1.0, 1.0, alpha)
-
-func _animate_terrain_effects(delta: float) -> void:
-	grassy_terrain_time += delta
-	var alpha: float = 0.022 + (sin(grassy_terrain_time * 0.9) * 0.008)
-	terrain_tint.color = _get_terrain_tint_color(active_terrain_effect, alpha)
-
-func _animate_trick_room_effect(delta: float) -> void:
-	trick_room_time += delta
-	var drift_x: float = sin(trick_room_time * 0.55) * 4.0
-	var drift_y: float = sin(trick_room_time * 0.72) * 3.0
-	var alpha: float = 0.72 + (sin(trick_room_time * 1.25) * 0.18)
-
-	trick_room_layer.position = Vector2(drift_x, drift_y)
-	trick_room_layer.modulate = Color(1.0, 1.0, 1.0, alpha)
-
-func _set_child_particles_emitting(container: Node, emitting: bool) -> void:
-	for child: Node in container.get_children():
-		if child is GPUParticles2D:
-			var particle_node: GPUParticles2D = child as GPUParticles2D
-			particle_node.emitting = emitting
 
 func _update_side_condition_ui() -> void:
 	var player_side_effects: Array = _get_active_side_condition_effects("p1")
