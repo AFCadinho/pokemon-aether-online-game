@@ -260,31 +260,44 @@ func _show_active_pokemon_hover(player_id: String) -> void:
 	if pokemon_data.is_empty():
 		return
 
-	await _show_pokemon_hover(_get_display_pokemon_data(player_id, pokemon_data), player_id)
+	var display_pokemon_data: Dictionary = _get_display_pokemon_data(player_id, pokemon_data)
+	await _show_pokemon_hover(pokemon_data, display_pokemon_data, player_id)
 
 func _show_hud_pokemon_hover(pokemon_data: Dictionary) -> void:
 	var hover_ident := str(pokemon_data.get("ident", ""))
 	hover_state.begin_hud_hover(hover_ident)
 	var player_id := _get_player_id_from_ident(hover_ident)
-	await _show_pokemon_hover(_get_display_pokemon_data(player_id, pokemon_data), player_id)
+	if player_id == "":
+		return
+
+	var source_pokemon_data: Dictionary = _get_player_team_pokemon_data(player_id, hover_ident)
+	if source_pokemon_data.is_empty():
+		source_pokemon_data = pokemon_data
+
+	var display_pokemon_data: Dictionary = _get_display_pokemon_data(player_id, source_pokemon_data)
+	await _show_pokemon_hover(source_pokemon_data, display_pokemon_data, player_id)
 
 func _hide_hud_pokemon_hover() -> void:
 	hover_state.end_hud_hover()
 	_hide_pokemon_hover()
 
-func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String) -> void:
-	var hover_ident: String = str(pokemon_data.get("ident", ""))
+func _show_pokemon_hover(
+	request_pokemon_data: Dictionary,
+	display_pokemon_data: Dictionary,
+	hover_owner_player_id: String
+) -> void:
+	var hover_ident: String = str(request_pokemon_data.get("ident", ""))
 	var request_token: int = hover_state.begin_hover_request()
 	var hover_data: Dictionary = await pokemon_hover_service.get_hover_card_data(
 		battle_state,
 		pokemon_info_request,
 		pokemon_stats_request,
-		pokemon_data,
+		request_pokemon_data,
 		public_confirmed_abilities_by_ident
 	)
 	if not hover_state.is_hover_request_current(request_token, hover_ident, hover_owner_player_id):
 		return
-	if not _hover_data_matches_pokemon_request(hover_data, pokemon_data):
+	if not _hover_data_matches_pokemon_request(hover_data, request_pokemon_data):
 		return
 
 	var confirmed_moves: Array = hover_data.get("confirmed_moves", [])
@@ -301,9 +314,35 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 		JSON.stringify(speed_data),
 		JSON.stringify(hover_data.get("pokemon_info", {})),
 	])
+	var display_data: Dictionary = display_pokemon_data.duplicate()
+	display_data["ident"] = str(request_pokemon_data.get("ident", ""))
+	var display_species := battle_state.get_species_from_pokemon_data(request_pokemon_data)
+	if display_species != "":
+		display_data["species"] = display_species
+		display_data["displaySpecies"] = display_species
+
 	if pokemon_hover_card.has_method("show_for_pokemon"):
-		pokemon_hover_card.call("show_for_pokemon", pokemon_data, confirmed_moves, confirmed_item, confirmed_ability, stat_changes, speed_data)
+		pokemon_hover_card.call(
+			"show_for_pokemon",
+			display_data,
+			confirmed_moves,
+			confirmed_item,
+			confirmed_ability,
+			stat_changes,
+			speed_data
+		)
 	_position_pokemon_hover_card()
+
+func _get_player_team_pokemon_data(player_id: String, ident: String) -> Dictionary:
+	for pokemon_value in battle_state.get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if str(pokemon_data.get("ident", "")) == ident:
+			return pokemon_data
+
+	return {}
 
 func _hover_data_matches_pokemon_request(hover_data: Dictionary, pokemon_data: Dictionary) -> bool:
 	var requested_ident := str(hover_data.get("requested_ident", ""))
