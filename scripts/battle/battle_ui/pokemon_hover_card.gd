@@ -3,11 +3,11 @@ extends PanelContainer
 class_name PokemonHoverCard
 
 const TYPE_ICON_DIR := "res://assets/sprites/types"
-const SPECIES_PATH := "res://data/pokemon/species/%s.json"
 const LOW_SPEED_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const HIGH_SPEED_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 
 @onready var name_label: Label = $MarginContainer/VBoxContainer/NameLabel
+@onready var hp_label: Label = $MarginContainer/VBoxContainer/HpLabel
 @onready var type_icon_1: TextureRect = $MarginContainer/VBoxContainer/HBoxContainer/TypeIcon
 @onready var type_icon_2: TextureRect = $MarginContainer/VBoxContainer/HBoxContainer/TypeIcon2
 @onready var ability_row: HBoxContainer = $MarginContainer/VBoxContainer/HBoxContainer2
@@ -66,9 +66,10 @@ func set_pokemon_data(
 ) -> void:
 	var species_name: String = _get_species_name(pokemon_data)
 	name_label.text = species_name if species_name != "" else "Unknown"
+	_set_hp_label(pokemon_data)
 
-	_set_type_icons(PokemonFactory.get_species_types(species_name))
-	_set_abilities(_get_possible_abilities(species_name), confirmed_ability)
+	_set_type_icons(_get_types_from_data(pokemon_data, species_name))
+	_set_abilities(_get_possible_abilities(pokemon_data, species_name), confirmed_ability)
 	_set_item(confirmed_item)
 	_set_stat_changes(stat_changes)
 	_set_speed_data(speed_data)
@@ -89,9 +90,9 @@ func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> voi
 
 
 func _get_species_name(pokemon_data: Dictionary) -> String:
-	var details: String = str(pokemon_data.get("details", ""))
-	if details != "":
-		return details.split(",")[0].strip_edges()
+	var display_species: String = str(pokemon_data.get("displaySpecies", ""))
+	if display_species != "":
+		return display_species
 
 	var species: String = str(pokemon_data.get("species", ""))
 	if species != "":
@@ -102,6 +103,43 @@ func _get_species_name(pokemon_data: Dictionary) -> String:
 		return ident.split(":", false, 1)[1].strip_edges()
 
 	return ident.strip_edges()
+
+
+func _set_hp_label(pokemon_data: Dictionary) -> void:
+	if bool(pokemon_data.get("fainted", false)):
+		hp_label.visible = true
+		hp_label.text = "HP: fnt"
+		return
+
+	if not pokemon_data.has("hp") or not pokemon_data.has("maxHp"):
+		hp_label.visible = false
+		hp_label.text = ""
+		return
+
+	var hp: int = int(pokemon_data.get("hp", 0))
+	var max_hp: int = int(pokemon_data.get("maxHp", 0))
+	if max_hp <= 0:
+		hp_label.visible = false
+		hp_label.text = ""
+		return
+
+	var hp_percent: int = int(round((float(hp) / float(max_hp)) * 100.0))
+	hp_label.visible = true
+	hp_label.text = "HP: %s%%" % clamp(hp_percent, 0, 100)
+
+
+func _get_types_from_data(pokemon_data: Dictionary, species_name: String) -> Array:
+	var types: Array = []
+	var types_value: Variant = pokemon_data.get("types", [])
+	if types_value is Array:
+		for type_name in types_value:
+			types.append(str(type_name))
+
+	if not types.is_empty():
+		return types
+
+	push_warning("PokemonHoverCard missing type metadata for %s. Backend payload should include types." % species_name)
+	return []
 
 
 func _set_type_icons(types: Array) -> void:
@@ -143,23 +181,28 @@ func _set_abilities(abilities: Array[String], confirmed_ability: String = "") ->
 	ability_value_label.text = " / ".join(ability_text)
 
 
-func _get_possible_abilities(species_name: String) -> Array[String]:
-	var species_data: Dictionary = _load_species_data(species_name)
+func _get_possible_abilities(pokemon_data: Dictionary, species_name: String) -> Array[String]:
 	var abilities: Array[String] = []
-	var abilities_value: Variant = species_data.get("abilities", {})
+	var payload_abilities := _get_possible_abilities_from_data(pokemon_data)
+	if not payload_abilities.is_empty():
+		for ability in payload_abilities:
+			abilities.append(ability)
+		return abilities
 
-	if abilities_value is Dictionary:
-		var ability_data: Dictionary = abilities_value
-		for key in ["primary", "secondary", "hidden"]:
-			var ability_name: String = _format_display_name(str(ability_data.get(key, "")))
-			if ability_name != "" and not abilities.has(ability_name):
-				abilities.append(ability_name)
-	elif abilities_value is Array:
-		var ability_array: Array = abilities_value
-		for ability in ability_array:
-			var ability_name: String = _format_display_name(str(ability))
-			if ability_name != "" and not abilities.has(ability_name):
-				abilities.append(ability_name)
+	push_warning("PokemonHoverCard missing possibleAbilities metadata for %s. Backend payload should include possibleAbilities." % species_name)
+	return abilities
+
+
+func _get_possible_abilities_from_data(pokemon_data: Dictionary) -> Array:
+	var abilities: Array = []
+	var abilities_value: Variant = pokemon_data.get("possibleAbilities", pokemon_data.get("possible_abilities", []))
+	if not (abilities_value is Array):
+		return abilities
+
+	for ability in abilities_value:
+		var ability_name: String = _format_display_name(str(ability))
+		if ability_name != "" and not abilities.has(ability_name):
+			abilities.append(ability_name)
 
 	return abilities
 
@@ -285,25 +328,6 @@ func _get_first_dictionary_value(data: Dictionary, keys: Array[String]) -> Varia
 
 	return null
 
-
-func _load_species_data(species_name: String) -> Dictionary:
-	var normalized_species_id: String = _normalize_species_id(species_name)
-	if normalized_species_id == "":
-		return {}
-
-	var path := SPECIES_PATH % normalized_species_id
-	if not FileAccess.file_exists(path):
-		return {}
-
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if parsed is Dictionary:
-		return parsed
-
-	return {}
-
-
-func _normalize_species_id(species_name: String) -> String:
-	return species_name.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
 
 
 func _format_display_name(raw_value: String) -> String:

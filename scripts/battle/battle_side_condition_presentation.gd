@@ -51,7 +51,7 @@ func _set_battle_platform_side_effects(platform: Control, side_effects: Array) -
 			continue
 
 		var effect_data: Dictionary = effect_value as Dictionary
-		match _get_side_condition_effect_key(effect_data):
+		match str(effect_data.get("effectId", "")):
 			"stickyweb", "stickywebs":
 				_set_platform_hazard_image_visible(platform, "StickyWebsImage", true)
 			"stealthrock":
@@ -65,13 +65,3 @@ func _set_platform_hazard_image_visible(platform: Control, node_name: String, is
 	var hazard_image := platform.get_node_or_null(node_name) as CanvasItem
 	if hazard_image != null:
 		hazard_image.visible = is_visible
-
-func _get_side_condition_effect_key(effect_data: Dictionary) -> String:
-	var effect: String = str(effect_data.get("effect", ""))
-	if effect == "":
-		return ""
-
-	if effect.contains(": "):
-		effect = effect.split(": ")[1]
-
-	return effect.to_lower().replace(" ", "").replace("_", "").replace("-", "")

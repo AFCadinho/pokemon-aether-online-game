@@ -188,9 +188,9 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		return
 
 	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
-	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_data(wild_pokemon_data)
+	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
 	if wild_pokemon == null:
-		push_warning("World.start_triggered_wild_battle_for_area failed: backend wild Pokemon could not be loaded locally for display.")
+		push_warning("World.start_triggered_wild_battle_for_area failed: backend wild Pokemon payload could not be loaded for display.")
 		is_in_battle = false
 		player.set_physics_process(true)
 		await GameErrorDialogService.show_report_to_staff_message()

@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name BattleRewindHelper
 
+var hp_event_helper := BattleHpEventHelper.new()
 
 func get_rewound_team_data_for_events(player_id: String, team: Array, events: Array) -> Array:
 	var previous_conditions_by_name: Dictionary = get_previous_conditions_by_pokemon_name_for_events(player_id, events)
@@ -17,7 +18,9 @@ func get_rewound_team_data_for_events(player_id: String, team: Array, events: Ar
 		var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate()
 		var pokemon_name: String = get_ident_pokemon_name(str(pokemon_data.get("ident", "")))
 		if previous_conditions_by_name.has(pokemon_name):
-			pokemon_data["condition"] = str(previous_conditions_by_name.get(pokemon_name, pokemon_data.get("condition", "")))
+			var previous_condition := str(previous_conditions_by_name.get(pokemon_name, pokemon_data.get("condition", "")))
+			pokemon_data["condition"] = previous_condition
+			hp_event_helper.apply_condition_fields(pokemon_data, previous_condition)
 
 		rewound_team.append(pokemon_data)
 

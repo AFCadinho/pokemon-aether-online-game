@@ -112,6 +112,10 @@ func _format_effect_label(effect_data: Dictionary, current_turn: int) -> String:
 	return effect
 
 func _get_remaining_turns(effect_data: Dictionary, current_turn: int, remaining_key: String, duration_key: String) -> int:
+	var remaining := int(effect_data.get(remaining_key, 0))
+	if remaining > 0:
+		return remaining
+
 	var started_turn := int(effect_data.get("startedTurn", 0))
 	var duration := int(effect_data.get(duration_key, 0))
 	if duration > 0 and current_turn > 0:
@@ -120,14 +124,6 @@ func _get_remaining_turns(effect_data: Dictionary, current_turn: int, remaining_
 		var effective_started_turn: int = max(started_turn, 1) if started_turn > 0 else max(cached_started_turn, 1)
 		var elapsed: int = max(current_turn - effective_started_turn, 0)
 		return max(duration - elapsed, 0)
-
-	var remaining := int(effect_data.get(remaining_key, 0))
-	if remaining > 0:
-		var remaining_cache_entry: Dictionary = _get_or_create_timer_cache_entry(effect_data, current_turn, remaining_key, duration_key)
-		var first_turn: int = int(remaining_cache_entry.get("first_turn", current_turn))
-		var initial_remaining: int = int(remaining_cache_entry.get("initial_remaining", remaining))
-		var elapsed: int = max(current_turn - first_turn, 0)
-		return max(initial_remaining - elapsed, 0)
 
 	return 0
 

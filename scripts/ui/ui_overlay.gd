@@ -198,21 +198,21 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		_add_chat_message("Cannot start a wild battle from here.")
 		return false
 
-	_add_chat_message("Parsing wild Pokemon...")
-	var response: Dictionary = await PokemonDataApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
+	_add_chat_message("Creating wild Pokemon...")
+	var response: Dictionary = await PokemonDataApiClient.create_pokemon_from_text(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
-		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
+		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
 		return false
 
 	var pokemon_value: Variant = response.get("pokemon", {})
 	if not (pokemon_value is Dictionary):
-		_add_chat_message("Parse failed: response did not include Pokemon data.")
+		_add_chat_message("Create failed: response did not include Pokemon data.")
 		return false
 
 	var pokemon_data: Dictionary = pokemon_value as Dictionary
-	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_data(pokemon_data)
+	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_data)
 	if pokemon == null:
-		print_debug("Dev encounter Pokemon failed after parse. pokemon_data=", pokemon_data, " response=", response)
+		print_debug("Dev encounter Pokemon failed after backend create. pokemon_data=", pokemon_data, " response=", response)
 		var reason: String = PokemonFactory.last_error_message
 		if reason == "":
 			reason = "Unknown reason."
@@ -234,26 +234,26 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 		_add_chat_message("Party is full.")
 		return false
 
-	_add_chat_message("Parsing Pokemon...")
-	var response: Dictionary = await PokemonDataApiClient.parse_pokemon(parse_pokemon_request, pokemon_text)
+	_add_chat_message("Creating Pokemon...")
+	var response: Dictionary = await PokemonDataApiClient.create_pokemon_from_text(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
-		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
+		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
 		return false
 
 	var pokemon_value: Variant = response.get("pokemon", {})
 	if not (pokemon_value is Dictionary):
-		_add_chat_message("Parse failed: response did not include Pokemon data.")
+		_add_chat_message("Create failed: response did not include Pokemon data.")
 		return false
 
 	var pokemon_data: Dictionary = pokemon_value as Dictionary
-	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_data(pokemon_data)
+	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_data)
 	if pokemon == null:
-		print_debug("Dev add Pokemon failed after parse. pokemon_data=", pokemon_data, " response=", response)
+		print_debug("Dev add Pokemon failed after backend create. pokemon_data=", pokemon_data, " response=", response)
 		var reason: String = PokemonFactory.last_error_message
 		if reason == "":
 			reason = "Unknown reason."
 
-		_add_chat_message("Could not create Pokemon from parsed data. Reason: %s" % reason)
+		_add_chat_message("Could not create Pokemon from backend data. Reason: %s" % reason)
 		return false
 
 	PlayerSave.add_pokemon(pokemon)
@@ -271,20 +271,20 @@ func _handle_add_team_command(team_text: String) -> bool:
 		_add_chat_message("Party is full.")
 		return false
 
-	_add_chat_message("Parsing team...")
-	var response: Dictionary = await PokemonDataApiClient.parse_team(parse_pokemon_request, team_text)
+	_add_chat_message("Creating team...")
+	var response: Dictionary = await PokemonDataApiClient.create_team_from_text(parse_pokemon_request, team_text)
 	if not bool(response.get("success", false)):
-		_add_chat_message("Parse failed: %s" % str(response.get("error", "Unknown error")))
+		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
 		return false
 
 	var team_value: Variant = response.get("team", [])
 	if not (team_value is Array):
-		_add_chat_message("Parse failed: response did not include team data.")
+		_add_chat_message("Create failed: response did not include team data.")
 		return false
 
 	var team_data: Array = team_value as Array
 	if team_data.is_empty():
-		_add_chat_message("Parse failed: team was empty.")
+		_add_chat_message("Create failed: team was empty.")
 		return false
 	if team_data.size() > open_slots:
 		_add_chat_message("Not enough party space. Open slots: %s, parsed Pokemon: %s." % [open_slots, team_data.size()])
@@ -298,9 +298,9 @@ func _handle_add_team_command(team_text: String) -> bool:
 			return false
 
 		var pokemon_data: Dictionary = pokemon_value as Dictionary
-		var pokemon: Pokemon = PokemonFactory.create_pokemon_from_data(pokemon_data)
+		var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_data)
 		if pokemon == null:
-			print_debug("Dev add team Pokemon failed after parse. index=", index, " pokemon_data=", pokemon_data, " response=", response)
+			print_debug("Dev add team Pokemon failed after backend create. index=", index, " pokemon_data=", pokemon_data, " response=", response)
 			var reason: String = PokemonFactory.last_error_message
 			if reason == "":
 				reason = "Unknown reason."

@@ -30,8 +30,7 @@ func set_empty() -> void:
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	visible = true
 	current_pokemon_data = pokemon_data
-	var condition: String = str(pokemon_data.get("condition", ""))
-	var is_fainted: bool = condition.contains("fnt")
+	var is_fainted: bool = bool(pokemon_data.get("fainted", false))
 
 	var species: String = _get_species_from_data(pokemon_data)
 	var icon: Texture2D = PokemonAssets.load_party_icon(species, _get_shiny_from_data(pokemon_data))
@@ -42,8 +41,8 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	pokemon_icon.texture = icon
 	pokemon_icon.modulate = FAINTED_ICON_MODULATE if is_fainted else NORMAL_ICON_MODULATE
 
-	var hp: int = _parse_current_hp(condition)
-	var max_hp: int = _parse_max_hp(condition)
+	var hp: int = int(pokemon_data.get("hp", 0))
+	var max_hp: int = int(pokemon_data.get("maxHp", 0))
 
 	hp_bar.max_value = max(max_hp, 1)
 	hp_bar.value = clamp(hp, 0, hp_bar.max_value)
@@ -53,9 +52,9 @@ func _get_species_from_data(pokemon_data: Dictionary) -> String:
 	if display_species != "":
 		return display_species
 
-	var details := str(pokemon_data.get("details", ""))
-	if details != "":
-		return str(details.split(",")[0]).strip_edges()
+	var species := str(pokemon_data.get("species", ""))
+	if species != "":
+		return species
 
 	var ident := str(pokemon_data.get("ident", ""))
 	if ident.contains(": "):
@@ -80,18 +79,6 @@ func _get_shiny_from_data(pokemon_data: Dictionary) -> bool:
 				return false
 
 	return false
-
-func _parse_current_hp(condition: String) -> int:
-	if condition.contains("/"):
-		return int(condition.split("/")[0])
-
-	return 0
-
-func _parse_max_hp(condition: String) -> int:
-	if condition.contains("/"):
-		var right := str(condition.split("/")[1])
-		return int(right.split(" ")[0])
-	return 0
 
 func _on_mouse_entered() -> void:
 	if current_pokemon_data.is_empty():

@@ -13,6 +13,10 @@ func get_event_hp_snapshot(event: Dictionary, use_previous_hp: bool) -> Dictiona
 	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
 	return parse_condition_hp_snapshot(str(event.get(condition_key, "")))
 
+func get_event_status(event: Dictionary, use_previous_hp: bool) -> String:
+	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
+	return get_status_from_condition(str(event.get(condition_key, "")))
+
 func is_percentage_only_condition_event(event: Dictionary, use_previous_hp: bool) -> bool:
 	var hp_key: String = "previousHp" if use_previous_hp else "hp"
 	if event.has(hp_key):
@@ -54,6 +58,31 @@ func parse_condition_hp_snapshot(condition: String) -> Dictionary:
 		"hp": hp,
 		"max_hp": max_hp,
 	}
+
+func apply_condition_fields(pokemon_data: Dictionary, condition: String) -> void:
+	pokemon_data["status"] = get_status_from_condition(condition)
+	pokemon_data["fainted"] = condition.contains("fnt")
+
+	if bool(pokemon_data["fainted"]):
+		pokemon_data["hp"] = 0
+		return
+
+	var hp_snapshot := parse_condition_hp_snapshot(condition)
+	if hp_snapshot.is_empty():
+		return
+
+	pokemon_data["hp"] = int(hp_snapshot.get("hp", 0))
+	pokemon_data["maxHp"] = int(hp_snapshot.get("max_hp", 0))
+
+func get_status_from_condition(condition: String) -> String:
+	var parts: PackedStringArray = condition.split(" ")
+	for part in parts:
+		var status: String = str(part).strip_edges().to_lower()
+		match status:
+			"psn", "tox", "brn", "par", "slp", "frz":
+				return status
+
+	return ""
 
 func to_visible_hp_percent(hp: int, max_hp: int) -> int:
 	if max_hp <= 0:

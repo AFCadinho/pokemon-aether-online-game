@@ -119,14 +119,6 @@ func _get_level_from_pokemon_data(pokemon_data: Dictionary) -> int:
 		if parsed_level > 0:
 			return parsed_level
 
-	var details: String = str(pokemon_data.get("details", ""))
-	for part in details.split(","):
-		var trimmed: String = str(part).strip_edges()
-		if trimmed.begins_with("L"):
-			var parsed_details_level := int(trimmed.substr(1))
-			if parsed_details_level > 0:
-				return parsed_details_level
-
 	return 100
 
 func _get_hover_known_info_viewer_id(ident: String) -> String:

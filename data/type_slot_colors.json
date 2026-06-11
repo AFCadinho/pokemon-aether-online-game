@@ -1,92 +1,92 @@
 {
   "normal": {
-    "background": "#1e1d19",
-    "border": "#a8a77a",
-    "accent": "#d8d5a4"
+	"background": "#1e1d19",
+	"border": "#a8a77a",
+	"accent": "#d8d5a4"
   },
   "fire": {
-    "background": "#24120d",
-    "border": "#e25822",
-    "accent": "#ff7a3d"
+	"background": "#24120d",
+	"border": "#e25822",
+	"accent": "#ff7a3d"
   },
   "water": {
-    "background": "#0b1628",
-    "border": "#6390f0",
-    "accent": "#8fb3ff"
+	"background": "#0b1628",
+	"border": "#6390f0",
+	"accent": "#8fb3ff"
   },
   "electric": {
-    "background": "#241f0d",
-    "border": "#facc15",
-    "accent": "#facc15"
+	"background": "#241f0d",
+	"border": "#facc15",
+	"accent": "#facc15"
   },
   "grass": {
-    "background": "#0f2014",
-    "border": "#7ac74c",
-    "accent": "#a7e582"
+	"background": "#0f2014",
+	"border": "#7ac74c",
+	"accent": "#a7e582"
   },
   "ice": {
-    "background": "#0c2021",
-    "border": "#96d9d6",
-    "accent": "#c4fffb"
+	"background": "#0c2021",
+	"border": "#96d9d6",
+	"accent": "#c4fffb"
   },
   "fighting": {
-    "background": "#24110f",
-    "border": "#c22e28",
-    "accent": "#ef6a5f"
+	"background": "#24110f",
+	"border": "#c22e28",
+	"accent": "#ef6a5f"
   },
   "poison": {
-    "background": "#1d1024",
-    "border": "#a855f7",
-    "accent": "#c084fc"
+	"background": "#1d1024",
+	"border": "#a855f7",
+	"accent": "#c084fc"
   },
   "ground": {
-    "background": "#21190d",
-    "border": "#e2bf65",
-    "accent": "#f3d98b"
+	"background": "#21190d",
+	"border": "#e2bf65",
+	"accent": "#f3d98b"
   },
   "flying": {
-    "background": "#15162a",
-    "border": "#a98ff3",
-    "accent": "#c9b8ff"
+	"background": "#15162a",
+	"border": "#a98ff3",
+	"accent": "#c9b8ff"
   },
   "psychic": {
-    "background": "#24101a",
-    "border": "#f95587",
-    "accent": "#ff8caf"
+	"background": "#24101a",
+	"border": "#f95587",
+	"accent": "#ff8caf"
   },
   "bug": {
-    "background": "#1b200d",
-    "border": "#a6b91a",
-    "accent": "#d2e84a"
+	"background": "#1b200d",
+	"border": "#a6b91a",
+	"accent": "#d2e84a"
   },
   "rock": {
-    "background": "#211d10",
-    "border": "#b6a136",
-    "accent": "#e0ce65"
+	"background": "#211d10",
+	"border": "#b6a136",
+	"accent": "#e0ce65"
   },
   "ghost": {
-    "background": "#171326",
-    "border": "#735797",
-    "accent": "#a58ad0"
+	"background": "#171326",
+	"border": "#735797",
+	"accent": "#a58ad0"
   },
   "dragon": {
-    "background": "#11142c",
-    "border": "#6f35fc",
-    "accent": "#9b74ff"
+	"background": "#11142c",
+	"border": "#6f35fc",
+	"accent": "#9b74ff"
   },
   "dark": {
-    "background": "#12100f",
-    "border": "#705746",
-    "accent": "#a78b75"
+	"background": "#12100f",
+	"border": "#705746",
+	"accent": "#a78b75"
   },
   "steel": {
-    "background": "#181a20",
-    "border": "#b7b7ce",
-    "accent": "#ddddf0"
+	"background": "#181a20",
+	"border": "#b7b7ce",
+	"accent": "#ddddf0"
   },
   "fairy": {
-    "background": "#24131f",
-    "border": "#d685ad",
-    "accent": "#f5b4d2"
+	"background": "#24131f",
+	"border": "#d685ad",
+	"accent": "#f5b4d2"
   }
 }

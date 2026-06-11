@@ -30,7 +30,7 @@ func _ignore_child_mouse_input(node: Node) -> void:
 
 func set_pokemon(pokemon: Pokemon) -> void:
 	var is_fainted := pokemon.current_hp <= 0
-	_apply_slot_style(pokemon.species, is_fainted)
+	_apply_slot_style(pokemon.species, is_fainted, pokemon.types)
 
 	visible = true
 	disabled = is_fainted
@@ -44,12 +44,13 @@ func set_pokemon(pokemon: Pokemon) -> void:
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var species := _get_species_from_data(pokemon_data)
-	var condition: String = str(pokemon_data.get("condition", ""))
-	var hp_data := _parse_condition(condition)
+	var types := _get_types_from_data(pokemon_data)
 	var is_active := bool(pokemon_data.get("active", false))
-	var is_fainted := bool(hp_data.get("fainted", false))
+	var is_fainted := bool(pokemon_data.get("fainted", false))
+	var max_hp: int = max(int(pokemon_data.get("maxHp", 1)), 1)
+	var current_hp: int = int(pokemon_data.get("hp", 0))
 
-	_apply_slot_style(species, is_fainted)
+	_apply_slot_style(species, is_fainted, types)
 
 	visible = true
 	disabled = is_active or is_fainted
@@ -57,19 +58,19 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 
 	name_label.text = species
 
-	hp_bar.max_value = max(int(hp_data.get("max_hp", 1)), 1)
-	hp_bar.value = clamp(int(hp_data.get("current_hp", 0)), 0, int(hp_bar.max_value))
+	hp_bar.max_value = max_hp
+	hp_bar.value = clamp(current_hp, 0, int(hp_bar.max_value))
 	pokemon_icon.texture = PokemonAssets.load_party_icon(species, _get_shiny_from_data(pokemon_data))
-	_set_status_icon(_parse_status(condition))
+	_set_status_icon(str(pokemon_data.get("status", "")))
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
 	var display_species := str(pokemon_data.get("displaySpecies", ""))
 	if display_species != "":
 		return display_species
 
-	var details := str(pokemon_data.get("details", ""))
-	if details != "":
-		return str(details.split(",")[0]).strip_edges()
+	var species := str(pokemon_data.get("species", ""))
+	if species != "":
+		return species
 
 	var ident := str(pokemon_data.get("ident", ""))
 	if ident.contains(": "):
@@ -95,32 +96,16 @@ func _get_shiny_from_data(pokemon_data: Dictionary) -> bool:
 
 	return false
 
-func _parse_condition(condition: String) -> Dictionary:
-	var result := {
-		"current_hp": 0,
-		"max_hp": 1,
-		"fainted": false,
-	}
+func _get_types_from_data(pokemon_data: Dictionary) -> Array:
+	var types: Array = []
+	var types_value: Variant = pokemon_data.get("types", [])
+	if not (types_value is Array):
+		return types
 
-	if condition.contains("fnt"):
-		result["fainted"] = true
+	for type_name in types_value:
+		types.append(str(type_name))
 
-	if condition.contains("/"):
-		var parts := condition.split("/")
-		result["current_hp"] = int(parts[0])
-		result["max_hp"] = max(int(str(parts[1]).split(" ")[0]), 1)
-
-	return result
-
-func _parse_status(condition: String) -> String:
-	var parts: PackedStringArray = condition.split(" ")
-	for part in parts:
-		var status: String = str(part).strip_edges().to_lower()
-		match status:
-			"psn", "tox", "brn", "par", "slp", "frz":
-				return status
-
-	return ""
+	return types
 
 func _set_status_icon(status: String) -> void:
 	status_icon.texture = _get_status_texture(status)
@@ -174,20 +159,21 @@ func set_empty() -> void:
 	remove_theme_stylebox_override("pressed")
 	remove_theme_stylebox_override("disabled")
 
-func _apply_slot_style(species: String, is_fainted: bool) -> void:
+func _apply_slot_style(species: String, is_fainted: bool, types: Array = []) -> void:
 	if is_fainted:
 		_set_color(FAINTED_BACKGROUND, FAINTED_BORDER)
 		return
 
-	var types := PokemonFactory.get_species_types(species)
-	if types.is_empty():
+	var display_types := types
+	if display_types.is_empty():
+		push_warning("PartySlot missing type metadata for %s. Backend payload should include types." % species)
 		remove_theme_stylebox_override("normal")
 		remove_theme_stylebox_override("hover")
 		remove_theme_stylebox_override("pressed")
 		remove_theme_stylebox_override("disabled")
 		return
 
-	var primary_type := str(types[0])
+	var primary_type := str(display_types[0])
 	_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type))
 
 func _set_color(background: Color, border: Color) -> void:

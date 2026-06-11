@@ -3562,7 +3562,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=394772807]
 
 [node name="BugCatcherTrainerNPC" parent="Entities/NPCs" unique_id=168052101 instance=ExtResource("8_lmnv3")]
-position = Vector2(368, 944)
+position = Vector2(369, 965)
 sight_range_tiles = 4
 
 [node name="GaryTrainerNPC" parent="Entities/NPCs" unique_id=874508670 instance=ExtResource("8_lmnv3")]

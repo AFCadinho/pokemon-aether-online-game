@@ -11,6 +11,8 @@ var instance_id: String
 var shiny: bool
 var evs: Dictionary
 var moves: Array
+var types: Array
+var possible_abilities: Array
 
 var current_hp: int
 var max_hp: int
@@ -26,7 +28,9 @@ func _init(
 	_moves := [],
 	_instance_id := "",
 	_shiny: bool = false,
-	_has_saved_hp_state := false
+	_has_saved_hp_state := false,
+	_types := [],
+	_possible_abilities := []
 	) -> void:
 	species = _species
 	level = _level
@@ -45,6 +49,8 @@ func _init(
 		"spe": _evs.get("spe", 0),
 	}
 	moves = _moves
+	types = _normalize_types(_types)
+	possible_abilities = _normalize_string_array(_possible_abilities)
 
 	max_hp = 20
 	current_hp = max_hp
@@ -69,6 +75,8 @@ func to_battle_dict() -> Dictionary:
 		"nature": nature,
 		"evs": evs,
 		"moves": moves,
+		"types": types,
+		"possibleAbilities": possible_abilities,
 		"instanceId": instance_id,
 		"shiny": shiny,
 	}
@@ -91,3 +99,16 @@ func ensure_instance_id() -> void:
 		return
 
 	instance_id = "pokemon_%s_%s" % [Time.get_ticks_usec(), randi()]
+
+func _normalize_types(value: Variant) -> Array:
+	return _normalize_string_array(value)
+
+func _normalize_string_array(value: Variant) -> Array:
+	var normalized_values: Array = []
+	if not (value is Array):
+		return normalized_values
+
+	for item in value:
+		normalized_values.append(str(item))
+
+	return normalized_values

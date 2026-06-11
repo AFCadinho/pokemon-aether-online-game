@@ -16,6 +16,27 @@ func parse_team(request_node: HTTPRequest, text: String) -> Dictionary:
 		{"text": text}
 	)
 
+func create_pokemon_from_text(request_node: HTTPRequest, text: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/pokemon/create-from-text",
+		{"text": text}
+	)
+
+func create_pokemon(request_node: HTTPRequest, pokemon_data: Dictionary) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/pokemon/create",
+		{"pokemon": pokemon_data}
+	)
+
+func create_team_from_text(request_node: HTTPRequest, text: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/team/create-from-text",
+		{"text": text}
+	)
+
 func get_pokemon_stats(request_node: HTTPRequest, species: String, level: int = 100) -> Dictionary:
 	var query: String = "?species=%s&level=%s" % [
 		species.uri_encode(),
