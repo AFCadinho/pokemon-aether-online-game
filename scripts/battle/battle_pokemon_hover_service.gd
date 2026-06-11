@@ -82,6 +82,11 @@ func _fetch_hover_pokemon_stats(
 	var species: String = battle_state.get_species_from_pokemon_data(pokemon_data)
 	var level: int = _get_level_from_pokemon_data(pokemon_data)
 	if species == "" or level <= 0:
+		_debug_battle_move("pokemon-stats skipped species=%s level=%s pokemon=%s" % [
+			species,
+			str(level),
+			JSON.stringify(pokemon_data),
+		])
 		return {}
 
 	var cache_key: String = "%s|%s" % [species.to_lower(), level]
@@ -110,13 +115,17 @@ func _fetch_hover_pokemon_stats(
 func _get_level_from_pokemon_data(pokemon_data: Dictionary) -> int:
 	var level_value: Variant = pokemon_data.get("level", null)
 	if level_value != null:
-		return int(level_value)
+		var parsed_level := int(level_value)
+		if parsed_level > 0:
+			return parsed_level
 
 	var details: String = str(pokemon_data.get("details", ""))
 	for part in details.split(","):
 		var trimmed: String = str(part).strip_edges()
 		if trimmed.begins_with("L"):
-			return int(trimmed.substr(1))
+			var parsed_details_level := int(trimmed.substr(1))
+			if parsed_details_level > 0:
+				return parsed_details_level
 
 	return 100
 

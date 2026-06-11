@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://s6yudwt884a8" path="res://scripts/world/kanto/routes/to_pallet_town.gd" id="8_odd7f"]
 [ext_resource type="SpriteFrames" uid="uid://cdhwckc46pvrl" path="res://assets/npcs/rivals/gary.tres" id="9_y4850"]
 [ext_resource type="Texture2D" uid="uid://d4c0skpe6wmsw" path="res://assets/sprites/mugshots/gary.png" id="10_6o5ht"]
+[ext_resource type="SpriteFrames" uid="uid://bsixgiph5mscp" path="res://assets/npcs/main/cynthia.tres" id="11_coq5q"]
+[ext_resource type="Texture2D" uid="uid://y0rea10fmcdi" path="res://assets/sprites/mugshots/cynthia.png" id="12_mjhtk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_coq5q"]
 texture = ExtResource("1_428bq")
@@ -3569,6 +3571,14 @@ trainer_id = "route_1_gary_1"
 sight_range_tiles = 3
 trainer_sprite_frames = ExtResource("9_y4850")
 mugshot = ExtResource("10_6o5ht")
+
+[node name="CynthiaNPC" parent="Entities/NPCs" unique_id=1292990089 instance=ExtResource("8_lmnv3")]
+position = Vector2(592, 880)
+trainer_id = "route_1_cynthia_1"
+sight_direction = Vector2(-1, 0)
+sight_range_tiles = 3
+trainer_sprite_frames = ExtResource("11_coq5q")
+mugshot = ExtResource("12_mjhtk")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1572197135]
 

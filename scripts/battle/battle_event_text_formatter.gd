@@ -30,6 +30,12 @@ func is_ability_boost_event(event: Dictionary) -> bool:
 	var stat: String = _format_stat_name(str(event.get("stat", "")))
 	return effect == "boost" and stat != ""
 
+func format_move_event(actor: String, move_name: String) -> String:
+	if actor == "" or move_name == "":
+		return ""
+
+	return "%s used %s!" % [actor, move_name]
+
 func format_move_source_message(event: Dictionary, actor: String) -> String:
 	var raw_source := str(event.get("source", ""))
 	if raw_source == "" or actor == "":
@@ -43,6 +49,95 @@ func format_move_source_message(event: Dictionary, actor: String) -> String:
 		return "%s's %s reflected the move!" % [actor, source_name]
 
 	return ""
+
+func format_player_switch_log_message(from_name: String, to_name: String) -> String:
+	if to_name == "":
+		to_name = "Pokemon"
+
+	if from_name != "":
+		return "%s, come back!\nGo! %s!" % [from_name, to_name]
+
+	return "Go! %s!" % to_name
+
+func format_player_switch_battle_message(from_name: String, to_name: String) -> String:
+	if to_name == "":
+		to_name = "Pokemon"
+
+	if from_name != "":
+		return "Go! %s!" % to_name
+
+	return format_player_switch_log_message(from_name, to_name)
+
+func format_opponent_switch_log_message(trainer_name: String, from_name: String, to_name: String) -> String:
+	if trainer_name == "":
+		trainer_name = "The opposing Trainer"
+	if to_name == "":
+		to_name = "Pokemon"
+
+	if from_name != "":
+		return "%s withdrew %s!\n%s sent out %s!" % [
+			trainer_name,
+			from_name,
+			trainer_name,
+			to_name
+		]
+
+	return "%s sent out %s!" % [trainer_name, to_name]
+
+func format_opponent_switch_battle_message(trainer_name: String, to_name: String) -> String:
+	if trainer_name == "":
+		trainer_name = "The opposing Trainer"
+	if to_name == "":
+		to_name = "Pokemon"
+
+	return "%s sent out %s!" % [trainer_name, to_name]
+
+func format_faint_event(target: String) -> String:
+	if target == "":
+		target = "Pokemon"
+
+	return "%s fainted!" % target
+
+func format_win_event(winner: String) -> String:
+	if winner == "":
+		return "The battle ended!"
+
+	return "%s won!" % winner
+
+func format_wild_battle_start_messages(player_species: String, opponent_species: String) -> Array[String]:
+	if player_species == "":
+		player_species = "Pokemon"
+	if opponent_species == "":
+		opponent_species = "Pokemon"
+
+	return [
+		"A wild %s has appeared!" % opponent_species,
+		"Go! %s!" % player_species,
+	]
+
+func format_trainer_battle_start_messages(
+	player_species: String,
+	opponent_species: String,
+	trainer_name: String
+	) -> Array[String]:
+	if player_species == "":
+		player_species = "Pokemon"
+	if opponent_species == "":
+		opponent_species = "Pokemon"
+	if trainer_name == "":
+		trainer_name = "Trainer"
+
+	return [
+		"%s wants to battle!" % trainer_name,
+		"%s sent out %s!" % [trainer_name, opponent_species],
+		"Go! %s!" % player_species,
+	]
+
+func format_action_prompt(player_species: String) -> String:
+	if player_species == "":
+		player_species = "Pokemon"
+
+	return "What will %s do?" % player_species
 
 func _format_pokemon_effect_name(effect: String) -> String:
 	var cleaned := _normalize_event_source(effect)
@@ -195,6 +290,99 @@ func format_effectiveness_event(event: Dictionary) -> String:
 
 	return ""
 
+func format_direct_damage_message(
+	target: String,
+	visible_hp_change: int,
+	has_hp_loss: bool,
+	has_sub_percent_hp_loss: bool
+	) -> String:
+	if has_hp_loss:
+		var percent: int = max(1, visible_hp_change)
+		return "(%s lost %s%% of its health!)" % [target, percent]
+	if has_sub_percent_hp_loss:
+		return "(%s lost less than 1%% of its health!)" % target
+
+	return ""
+
+func format_indirect_damage_message(
+	event: Dictionary,
+	target: String,
+	fallback_source: String = "",
+	active_effect: String = "",
+	allow_active_effect_fallback := true
+	) -> String:
+	var source := _normalize_event_source(str(event.get("source", "")))
+	if source == "":
+		source = _normalize_event_source(fallback_source)
+
+	if source == "":
+		if allow_active_effect_fallback and active_effect != "":
+			return "%s is hurt by %s!" % [target, active_effect]
+		return ""
+
+	match source.to_lower().replace(" ", ""):
+		"sandstorm":
+			return "%s is buffeted by the sandstorm!" % target
+		"hail":
+			return "%s is buffeted by the hail!" % target
+		"bind", "clamp", "firespin", "infestation", "magmastorm", "sandtomb", "snaptrap", "whirlpool", "wrap":
+			return "%s is hurt by %s!" % [target, _format_compact_effect_name(source)]
+		"stealthrock":
+			return "Pointed stones dug into %s!" % target
+		"spikes":
+			return "%s was hurt by spikes!" % target
+		"toxicspikes":
+			return "%s was hurt by poison spikes!" % target
+		"leechseed":
+			return "%s's health is sapped by Leech Seed!" % target
+		"brn", "burn":
+			return "%s was hurt by its burn!" % target
+		"psn", "poison":
+			return "%s was hurt by poison!" % target
+		"tox", "toxic":
+			return "%s was hurt by poison!" % target
+		"curse":
+			return "%s is afflicted by the curse!" % target
+
+	if allow_active_effect_fallback and active_effect != "":
+		return "%s is hurt by %s!" % [target, active_effect]
+
+	return ""
+
+func format_heal_event(
+	event: Dictionary,
+	target: String,
+	previous_hp: int,
+	hp: int,
+	visible_hp_change: int
+	) -> String:
+	var source := _normalize_event_source(str(event.get("source", "")))
+	var source_key := source.to_lower().replace(" ", "")
+
+	if source_key == "leftovers":
+		return "%s restored HP using its Leftovers!" % target
+	if source != "" and source_key != "drain":
+		return "%s restored HP with %s!" % [target, _format_compact_effect_name(source)]
+
+	if hp > previous_hp:
+		var percent: int = max(1, visible_hp_change)
+		return "(%s restored %s%% of its health!)" % [target, percent]
+
+	return "  - %s restored HP!" % target
+
+func format_heal_battle_message(event: Dictionary, target: String, previous_hp: int, hp: int) -> String:
+	var source := _normalize_event_source(str(event.get("source", "")))
+	var source_key := source.to_lower().replace(" ", "")
+
+	if source_key == "leftovers":
+		return "%s restored HP using its Leftovers!" % target
+	if source != "" and source_key != "drain":
+		return "%s restored HP with %s!" % [target, _format_compact_effect_name(source)]
+	if hp > previous_hp:
+		return "%s restored HP!" % target
+
+	return ""
+
 func format_field_effect_event(event: Dictionary) -> String:
 	var effect_name := _format_field_effect_name(str(event.get("effect", "")))
 	if effect_name == "":
@@ -217,6 +405,64 @@ func format_field_effect_event(event: Dictionary) -> String:
 
 func format_field_effect_name(effect: String) -> String:
 	return _format_field_effect_name(effect)
+
+func format_pokemon_effect_event(event: Dictionary) -> String:
+	var target := _format_battle_actor(str(event.get("target", event.get("pokemon", ""))))
+	var raw_effect := str(event.get("effect", ""))
+	var effect := format_pokemon_effect_name(raw_effect)
+	if target == "" or effect == "":
+		return ""
+
+	var state := str(event.get("state", "")).to_lower()
+	if state == "activate" and _is_reflection_effect(raw_effect, effect):
+		return "%s's %s reflected the move!" % [target, effect]
+
+	var ability_stat_message := _format_ability_stat_pokemon_effect(target, raw_effect)
+	if ability_stat_message != "":
+		return ability_stat_message
+
+	if _is_ability_like_pokemon_effect(raw_effect, effect):
+		match state:
+			"start", "activate":
+				return "%s's %s activated!" % [target, effect]
+			"end":
+				return "%s's %s ended." % [target, effect]
+
+	if effect.to_lower() == "confusion":
+		match state:
+			"start":
+				return "%s became confused!" % target
+			"activate":
+				return "%s is confused!" % target
+			"end":
+				return "%s snapped out of confusion!" % target
+
+	if is_trapping_pokemon_effect(effect):
+		match state:
+			"start", "activate":
+				return "%s is trapped by %s!" % [target, effect]
+			"end":
+				return "%s was freed from %s!" % [target, effect]
+
+	match state:
+		"start":
+			return "%s became affected by %s!" % [target, effect]
+		"activate":
+			return "%s is affected by %s!" % [target, effect]
+		"end":
+			return "%s is no longer affected by %s." % [target, effect]
+
+	return "%s's %s changed." % [target, effect]
+
+func format_pokemon_effect_name(effect: String) -> String:
+	return _format_pokemon_effect_name(effect)
+
+func is_trapping_pokemon_effect(effect: String) -> bool:
+	match effect.to_lower().replace(" ", ""):
+		"bind", "clamp", "firespin", "infestation", "magmastorm", "sandtomb", "snaptrap", "whirlpool", "wrap":
+			return true
+
+	return false
 
 func _format_ability_event_actor(event: Dictionary) -> String:
 	var actor := _format_battle_actor(_get_first_event_text_value(event, [
@@ -248,6 +494,40 @@ func _is_reflection_effect(raw_effect: String, effect: String) -> bool:
 		(source_kind == "ability" and effect_key == "magicbounce")
 		or (source_kind == "move" and effect_key == "magiccoat")
 	)
+
+func _is_ability_like_pokemon_effect(raw_effect: String, effect: String) -> bool:
+	var cleaned_raw: String = raw_effect.strip_edges()
+	if cleaned_raw.begins_with("[from] "):
+		cleaned_raw = cleaned_raw.substr("[from] ".length()).strip_edges()
+
+	if cleaned_raw.to_lower().begins_with("ability:"):
+		return true
+
+	match effect.to_lower().replace(" ", ""):
+		"protosynthesis", "quarkdrive":
+			return true
+
+	return false
+
+func _format_ability_stat_pokemon_effect(target: String, raw_effect: String) -> String:
+	var effect_key: String = _normalize_event_source(raw_effect).to_lower().replace(" ", "")
+	var ability_name: String = ""
+	var stat_key: String = ""
+
+	for ability_key in ["protosynthesis", "quarkdrive"]:
+		if effect_key.begins_with(ability_key) and effect_key.length() > ability_key.length():
+			ability_name = _format_compact_effect_name(ability_key)
+			stat_key = effect_key.substr(ability_key.length())
+			break
+
+	if ability_name == "" or stat_key == "":
+		return ""
+
+	var stat_name: String = _format_stat_name(stat_key)
+	if stat_name == "":
+		return "%s's %s activated!" % [target, ability_name]
+
+	return "%s's %s was boosted by %s!" % [target, stat_name, ability_name]
 
 func _format_stat_change_source(event: Dictionary) -> String:
 	var source := _normalize_event_source(str(event.get("source", "")))
