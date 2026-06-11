@@ -29,6 +29,7 @@ var side_condition_presentation := preload("res://scripts/battle/battle_side_con
 var hp_event_helper := preload("res://scripts/battle/battle_hp_event_helper.gd").new()
 var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new()
 var action_flow := preload("res://scripts/battle/battle_action_flow.gd").new()
+var force_switch_flow := preload("res://scripts/battle/battle_force_switch_flow.gd").new()
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
@@ -110,6 +111,7 @@ func _ready() -> void:
 	_setup_weather_presentation()
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
+	force_switch_flow.setup(battle_state)
 	event_presentation.setup(
 		event_text_formatter,
 		hp_event_helper,
@@ -413,7 +415,7 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 
 ## Toont de party keuzes in het action panel.
 func _show_party(force_switch := false) -> void:
-	if not force_switch and battle_state.is_active_trapped("p1"):
+	if not force_switch and force_switch_flow.is_player_trapped_outside_force_switch("p1"):
 		current_action_panel.set_message("Cannot switch right now!")
 		_show_moves()
 		return
@@ -434,7 +436,7 @@ func _open_bag() -> void:
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
-	if battle_finished or battle_input_locked or battle_state.needs_force_switch("p1"):
+	if battle_finished or battle_input_locked or force_switch_flow.player_needs_force_switch("p1"):
 		return
 
 	battle_log_panel.add_message("Got away safely!")
@@ -966,7 +968,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		return
 
 	_set_battle_input_locked(true)
-	var was_force_switch := battle_state.needs_force_switch("p1")
+	var was_force_switch := force_switch_flow.player_needs_force_switch("p1")
 	party_grid.visible = false
 
 	var player_response: Dictionary = await _submit_player_choice("switch", slot)
@@ -1016,7 +1018,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	_show_moves()
 
 func _show_force_switch_if_needed() -> bool:
-	if not battle_state.needs_force_switch("p1") or battle_state.is_battle_ended():
+	if not force_switch_flow.should_show_player_force_switch():
 		return false
 
 	current_action_panel.set_message("Choose a Pokemon!")
@@ -1038,7 +1040,7 @@ func _submit_player_choice(choice_type: String, slot: int) -> Dictionary:
 	return await action_flow.submit_player_choice(choice_type, slot)
 
 func _auto_force_switch_opponent_if_needed() -> bool:
-	if battle_state.is_battle_ended() or not battle_state.needs_force_switch("p2"):
+	if not force_switch_flow.opponent_needs_auto_force_switch():
 		return false
 
 	return await _submit_npc_choice_and_render()
@@ -1067,23 +1069,11 @@ func _hold_opponent_response_message() -> void:
 	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
 
 func _can_switch_to_slot(slot: int) -> bool:
-	if battle_state.is_active_trapped("p1") and not battle_state.needs_force_switch("p1"):
+	if force_switch_flow.is_player_trapped_outside_force_switch("p1"):
 		current_action_panel.set_message("Cannot switch right now!")
 		return false
 
-	var team := battle_state.get_player_team("p1")
-	var index := slot - 1
-	if index < 0 or index >= team.size():
-		return false
-
-	var pokemon_data = team[index]
-	if not (pokemon_data is Dictionary):
-		return false
-
-	if bool(pokemon_data.get("active", false)):
-		return false
-
-	return not bool(pokemon_data.get("fainted", false))
+	return force_switch_flow.can_switch_to_slot(slot, "p1")
 
 func _update_active_sprites() -> void:
 	_update_active_sprite_box("p1", player_sprite_box, "back")
@@ -1102,16 +1092,7 @@ func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String
 	)
 
 func _should_hide_active_pokemon_for_force_switch(player_id: String) -> bool:
-	if defer_force_switch_active_hide:
-		return false
-
-	if not _is_active_pokemon_fainted(player_id):
-		return false
-
-	return battle_state.needs_force_switch(player_id) or battle_state.is_battle_ended()
-
-func _is_active_pokemon_fainted(player_id: String) -> bool:
-	return battle_state.is_active_pokemon_fainted(player_id)
+	return force_switch_flow.should_hide_active_pokemon(player_id, defer_force_switch_active_hide)
 
 func _update_battle_presentation() -> void:
 	_update_battle_status_panels()
