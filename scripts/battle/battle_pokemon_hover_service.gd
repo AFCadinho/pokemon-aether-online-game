@@ -39,6 +39,7 @@ func get_hover_card_data(
 		),
 		"stat_changes": _get_confirmed_info_stat_changes(pokemon_info),
 		"speed_data": _get_hover_speed_data(pokemon_stats),
+		"species_metadata": _get_hover_species_metadata(pokemon_stats),
 		"pokemon_info": pokemon_info,
 	}
 
@@ -191,6 +192,14 @@ func _get_hover_speed_data(pokemon_stats: Dictionary) -> Dictionary:
 		return speed_value as Dictionary
 
 	return {}
+
+func _get_hover_species_metadata(pokemon_stats: Dictionary) -> Dictionary:
+	var species_metadata := {}
+	for key in ["species", "types", "possibleAbilities"]:
+		if pokemon_stats.has(key):
+			species_metadata[key] = pokemon_stats.get(key)
+
+	return species_metadata
 
 func _get_optional_known_info_string(pokemon_info: Dictionary, key: String) -> String:
 	var snake_key: String = _to_snake_case_key(key)

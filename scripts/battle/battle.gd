@@ -260,7 +260,11 @@ func _show_active_pokemon_hover(player_id: String) -> void:
 	if pokemon_data.is_empty():
 		return
 
-	var display_pokemon_data: Dictionary = _get_display_pokemon_data(player_id, pokemon_data)
+	var source_pokemon_data: Dictionary = _get_team_pokemon_data_for_hover(player_id, pokemon_data)
+	if source_pokemon_data.is_empty():
+		source_pokemon_data = pokemon_data
+
+	var display_pokemon_data: Dictionary = _get_display_pokemon_data(player_id, source_pokemon_data)
 	await _show_pokemon_hover(pokemon_data, display_pokemon_data, player_id)
 
 func _show_hud_pokemon_hover(pokemon_data: Dictionary) -> void:
@@ -270,7 +274,7 @@ func _show_hud_pokemon_hover(pokemon_data: Dictionary) -> void:
 	if player_id == "":
 		return
 
-	var source_pokemon_data: Dictionary = _get_player_team_pokemon_data(player_id, hover_ident)
+	var source_pokemon_data: Dictionary = _get_team_pokemon_data_for_hover(player_id, pokemon_data)
 	if source_pokemon_data.is_empty():
 		source_pokemon_data = pokemon_data
 
@@ -305,6 +309,7 @@ func _show_pokemon_hover(
 	var confirmed_ability: String = str(hover_data.get("confirmed_ability", ""))
 	var stat_changes: Dictionary = hover_data.get("stat_changes", {})
 	var speed_data: Dictionary = hover_data.get("speed_data", {})
+	var species_metadata: Dictionary = hover_data.get("species_metadata", {})
 	_debug_battle_move("pokemon-info parsed player=%s moves=%s item=%s ability=%s statChanges=%s speed=%s info=%s" % [
 		hover_owner_player_id,
 		JSON.stringify(confirmed_moves),
@@ -316,6 +321,7 @@ func _show_pokemon_hover(
 	])
 	var display_data: Dictionary = display_pokemon_data.duplicate()
 	display_data["ident"] = str(request_pokemon_data.get("ident", ""))
+	_apply_hover_species_metadata(display_data, species_metadata)
 	var display_species := battle_state.get_species_from_pokemon_data(request_pokemon_data)
 	if display_species != "":
 		display_data["species"] = display_species
@@ -331,7 +337,19 @@ func _show_pokemon_hover(
 			stat_changes,
 			speed_data
 		)
-	_position_pokemon_hover_card()
+		_position_pokemon_hover_card()
+
+func _apply_hover_species_metadata(display_data: Dictionary, species_metadata: Dictionary) -> void:
+	if species_metadata.is_empty():
+		return
+
+	for key in ["species", "types", "possibleAbilities"]:
+		if species_metadata.has(key):
+			display_data[key] = species_metadata.get(key)
+
+	var species := str(species_metadata.get("species", ""))
+	if species != "":
+		display_data["displaySpecies"] = species
 
 func _get_player_team_pokemon_data(player_id: String, ident: String) -> Dictionary:
 	for pokemon_value in battle_state.get_player_team(player_id):
@@ -341,6 +359,36 @@ func _get_player_team_pokemon_data(player_id: String, ident: String) -> Dictiona
 		var pokemon_data: Dictionary = pokemon_value as Dictionary
 		if str(pokemon_data.get("ident", "")) == ident:
 			return pokemon_data
+
+	return {}
+
+func _get_team_pokemon_data_for_hover(player_id: String, pokemon_data: Dictionary) -> Dictionary:
+	var hover_ident: String = str(pokemon_data.get("ident", ""))
+	if hover_ident != "":
+		var team_pokemon_data: Dictionary = _get_player_team_pokemon_data(player_id, hover_ident)
+		if not team_pokemon_data.is_empty():
+			return team_pokemon_data
+
+	var hover_instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
+	if hover_instance_id != "":
+		for pokemon_value in battle_state.get_player_team(player_id):
+			if not (pokemon_value is Dictionary):
+				continue
+
+			var team_pokemon_data: Dictionary = pokemon_value as Dictionary
+			var team_instance_id := str(team_pokemon_data.get("instanceId", team_pokemon_data.get("instance_id", "")))
+			if team_instance_id == hover_instance_id:
+				return team_pokemon_data
+
+	var metadata_slot: int = int(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", 0)))
+	if metadata_slot > 0:
+		for pokemon_value in battle_state.get_player_team(player_id):
+			if not (pokemon_value is Dictionary):
+				continue
+
+			var team_pokemon_data: Dictionary = pokemon_value as Dictionary
+			if int(team_pokemon_data.get("metadataSlot", team_pokemon_data.get("metadata_slot", 0))) == metadata_slot:
+				return team_pokemon_data
 
 	return {}
 

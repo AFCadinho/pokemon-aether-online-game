@@ -147,7 +147,8 @@ func _find_trainer_team_pokemon_for_display_data(display_data: Dictionary) -> Di
 
 		var trainer_pokemon: Dictionary = pokemon_value as Dictionary
 		var trainer_species := str(trainer_pokemon.get("species", trainer_pokemon.get("displaySpecies", "")))
-		if normalize_species_for_compare(trainer_species) == normalized_display_species:
+		var normalized_trainer_species := normalize_species_for_compare(trainer_species)
+		if normalized_trainer_species == normalized_display_species:
 			return trainer_pokemon
 
 	return {}
