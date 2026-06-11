@@ -42,6 +42,9 @@ func _connect_team_slot_hover_signals() -> void:
 func set_pokemon_data(species: String, level: int, current_hp: int, max_hp: int, status: String = "", gender: String = "") -> void:
 	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender)
 
+func clear_active_pokemon_data() -> void:
+	_set_active_info_row_visible(0, false)
+
 func _set_active_info_row_data(
 	row_index: int,
 	species: String,

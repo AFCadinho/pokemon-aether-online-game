@@ -24,6 +24,8 @@ var battle_state := BattleState.new()
 var pokemon_hover_service := preload("res://scripts/battle/battle_pokemon_hover_service.gd").new()
 var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
 var weather_presentation := preload("res://scripts/battle/battle_weather_presentation.gd").new()
+var side_condition_presentation := preload("res://scripts/battle/battle_side_condition_presentation.gd").new()
+var hp_event_helper := preload("res://scripts/battle/battle_hp_event_helper.gd").new()
 var known_field_effect_keys := {}
 var field_effect_started_turns := {}
 var active_side_condition_effects: Dictionary = {
@@ -116,6 +118,7 @@ func _ready() -> void:
 	_connect_hud_team_hover_signals()
 	_connect_move_hover_signals()
 	_setup_weather_presentation()
+	_setup_side_condition_presentation()
 	_disable_unimplemented_mechanics()
 	_update_battle_log_toggle_button()
 
@@ -147,6 +150,14 @@ func _setup_weather_presentation() -> void:
 		misty_terrain_layer,
 		psychic_terrain_layer,
 		trick_room_layer
+	)
+
+func _setup_side_condition_presentation() -> void:
+	side_condition_presentation.setup(
+		player_battle_platform,
+		enemy_battle_platform,
+		player_side_effects_panel,
+		enemy_side_effects_panel
 	)
 
 func _process(delta: float) -> void:
@@ -467,26 +478,26 @@ func _sync_player_save_from_battle_state() -> void:
 
 ## Werkt de player en opponent HUD panels bij vanuit de battle state.
 func _update_hud_panels() -> void:
-	player_hud_panel.set_pokemon_data(
-		_get_active_display_species("p1"),
-		battle_state.get_active_pokemon_level("p1"),
-		battle_state.get_active_pokemon_current_hp("p1"),
-		battle_state.get_active_pokemon_max_hp("p1"),
-		battle_state.get_active_pokemon_status("p1"),
-		battle_state.get_active_pokemon_gender("p1"),
-	)
-
-	enemy_hud_panel.set_pokemon_data(
-		_get_active_display_species("p2"),
-		battle_state.get_active_pokemon_level("p2"),
-		battle_state.get_active_pokemon_current_hp("p2"),
-		battle_state.get_active_pokemon_max_hp("p2"),
-		battle_state.get_active_pokemon_status("p2"),
-		battle_state.get_active_pokemon_gender("p2"),
-	)
+	_update_active_hud_panel("p1", player_hud_panel)
+	_update_active_hud_panel("p2", enemy_hud_panel)
 
 	player_hud_panel.set_team_data(_get_display_team_data("p1"))
 	enemy_hud_panel.set_team_data(battle_state.get_player_team("p2"))
+
+func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
+	if _should_hide_active_pokemon_for_force_switch(player_id):
+		if hud_panel.has_method("clear_active_pokemon_data"):
+			hud_panel.call("clear_active_pokemon_data")
+		return
+
+	hud_panel.set_pokemon_data(
+		_get_active_display_species(player_id),
+		battle_state.get_active_pokemon_level(player_id),
+		battle_state.get_active_pokemon_current_hp(player_id),
+		battle_state.get_active_pokemon_max_hp(player_id),
+		battle_state.get_active_pokemon_status(player_id),
+		battle_state.get_active_pokemon_gender(player_id),
+	)
 
 ## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
@@ -628,55 +639,10 @@ func _is_trick_room_active() -> bool:
 func _update_side_condition_ui() -> void:
 	var player_side_effects: Array = _get_active_side_condition_effects("p1")
 	var enemy_side_effects: Array = _get_active_side_condition_effects("p2")
-	_set_battle_platform_side_effects(player_battle_platform, player_side_effects)
-	_set_battle_platform_side_effects(enemy_battle_platform, enemy_side_effects)
-	_set_side_effects_panel_data(player_side_effects_panel, player_side_effects)
-	_set_side_effects_panel_data(enemy_side_effects_panel, enemy_side_effects)
+	side_condition_presentation.update(player_side_effects, enemy_side_effects, battle_state.get_turn())
 
 func _update_battle_platform_hazards() -> void:
 	_update_side_condition_ui()
-
-func _set_side_effects_panel_data(panel: Control, side_effects: Array) -> void:
-	if panel == null:
-		return
-
-	if panel.has_method("set_side_effects"):
-		panel.call("set_side_effects", side_effects, battle_state.get_turn())
-	else:
-		panel.visible = not side_effects.is_empty()
-
-func _set_battle_platform_side_effects(platform: Control, side_effects: Array) -> void:
-	if platform == null:
-		return
-
-	if platform.has_method("set_side_effects"):
-		platform.call("set_side_effects", side_effects)
-		return
-
-	_set_platform_hazard_image_visible(platform, "StickyWebsImage", false)
-	_set_platform_hazard_image_visible(platform, "StealthRockImage", false)
-	_set_platform_hazard_image_visible(platform, "SpikesImage", false)
-	_set_platform_hazard_image_visible(platform, "ToxicSpikesImage", false)
-
-	for effect_value in side_effects:
-		if not (effect_value is Dictionary):
-			continue
-
-		var effect_data: Dictionary = effect_value as Dictionary
-		match _get_side_condition_effect_key(effect_data):
-			"stickyweb", "stickywebs":
-				_set_platform_hazard_image_visible(platform, "StickyWebsImage", true)
-			"stealthrock":
-				_set_platform_hazard_image_visible(platform, "StealthRockImage", true)
-			"spikes":
-				_set_platform_hazard_image_visible(platform, "SpikesImage", true)
-			"toxicspikes":
-				_set_platform_hazard_image_visible(platform, "ToxicSpikesImage", true)
-
-func _set_platform_hazard_image_visible(platform: Control, node_name: String, is_visible: bool) -> void:
-	var image_node: CanvasItem = platform.get_node_or_null(node_name) as CanvasItem
-	if image_node != null:
-		image_node.visible = is_visible
 
 func _remember_side_condition_effects_from_response(response: Dictionary) -> void:
 	var events_value: Variant = response.get("events", [])
@@ -1266,15 +1232,15 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				damage_target_ident = str(event_data.get("target", ""))
 				_debug_battle_move("damage event target=%s previous_snapshot=%s final_snapshot=%s has_hp_loss=%s visible_change=%s event=%s" % [
 					damage_target_ident,
-					JSON.stringify(_get_event_hp_snapshot(event_data, true)),
-					JSON.stringify(_get_event_hp_snapshot(event_data, false)),
-					str(_event_has_hp_loss(event_data)),
-					str(_get_event_visible_hp_change(event_data)),
+					JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, true)),
+					JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, false)),
+					str(hp_event_helper.event_has_hp_loss(event_data)),
+					str(hp_event_helper.get_event_visible_hp_change(event_data)),
 					JSON.stringify(event_data),
 				])
 				var target := _format_battle_actor(damage_target_ident)
-				var has_hp_loss: bool = _event_has_hp_loss(event_data)
-				var has_sub_percent_hp_loss: bool = _event_has_sub_percent_hp_loss(event_data)
+				var has_hp_loss: bool = hp_event_helper.event_has_hp_loss(event_data)
+				var has_sub_percent_hp_loss: bool = hp_event_helper.event_has_sub_percent_hp_loss(event_data)
 				var active_effect := ""
 				if not recent_move_event:
 					active_effect = _get_active_residual_pokemon_effect(damage_target_ident)
@@ -1300,7 +1266,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				else:
 					log_message = event_text_formatter.format_direct_damage_message(
 						target,
-						_get_event_visible_hp_change(event_data),
+						hp_event_helper.get_event_visible_hp_change(event_data),
 						has_hp_loss,
 						has_sub_percent_hp_loss
 					)
@@ -1324,7 +1290,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 					target,
 					previous_hp,
 					hp,
-					_get_event_visible_hp_change(event_data)
+					hp_event_helper.get_event_visible_hp_change(event_data)
 				)
 				battle_message = event_text_formatter.format_heal_battle_message(event_data, target, previous_hp, hp)
 
@@ -1416,7 +1382,7 @@ func _fill_missing_previous_event_conditions(response: Dictionary) -> void:
 
 		if str(event.get("previousCondition", "")) != "":
 			var known_condition: String = _get_condition_from_event_data(event)
-			if known_condition != "" and not _is_percentage_only_condition_event(event, false):
+			if known_condition != "" and not hp_event_helper.is_percentage_only_condition_event(event, false):
 				current_conditions_by_ident[target_ident] = known_condition
 			continue
 
@@ -1431,13 +1397,13 @@ func _fill_missing_previous_event_conditions(response: Dictionary) -> void:
 			continue
 
 		event["previousCondition"] = previous_condition
-		var previous_snapshot: Dictionary = _parse_condition_hp_snapshot(previous_condition)
+		var previous_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(previous_condition)
 		if not previous_snapshot.is_empty():
 			event["previousHp"] = int(previous_snapshot.get("hp", 0))
 			if not event.has("maxHp"):
 				event["maxHp"] = int(previous_snapshot.get("max_hp", 1))
 		var current_condition: String = _get_condition_from_event_data(event)
-		if current_condition != "" and not _is_percentage_only_condition_event(event, false):
+		if current_condition != "" and not hp_event_helper.is_percentage_only_condition_event(event, false):
 			current_conditions_by_ident[target_ident] = current_condition
 		_debug_battle_move("filled previousCondition target=%s previousCondition=%s event=%s" % [
 			target_ident,
@@ -1586,7 +1552,7 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	if player_id == "":
 		return
 
-	var hp_data: Dictionary = _get_event_hp_snapshot(event, use_previous_hp)
+	var hp_data: Dictionary = hp_event_helper.get_event_hp_snapshot(event, use_previous_hp)
 	if hp_data.is_empty():
 		_debug_battle_hp("HUD hp event missing snapshot target=%s previous=%s event=%s" % [
 			target_ident,
@@ -1701,31 +1667,6 @@ func _get_previous_conditions_by_pokemon_name_for_events(player_id: String, even
 
 	return previous_conditions_by_name
 
-func _get_event_hp_snapshot(event: Dictionary, use_previous_hp: bool) -> Dictionary:
-	var hp_key: String = "previousHp" if use_previous_hp else "hp"
-	if event.has(hp_key) and event.has("maxHp"):
-		return {
-			"hp": int(event.get(hp_key, 0)),
-			"max_hp": max(int(event.get("maxHp", 1)), 1),
-		}
-
-	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
-	return _parse_condition_hp_snapshot(str(event.get(condition_key, "")))
-
-func _is_percentage_only_condition_event(event: Dictionary, use_previous_hp: bool) -> bool:
-	var hp_key: String = "previousHp" if use_previous_hp else "hp"
-	if event.has(hp_key):
-		return false
-
-	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
-	var condition_snapshot: Dictionary = _parse_condition_hp_snapshot(str(event.get(condition_key, "")))
-	if condition_snapshot.is_empty():
-		return false
-
-	var condition_max_hp: int = int(condition_snapshot.get("max_hp", 0))
-	var event_max_hp: int = int(event.get("maxHp", 0))
-	return condition_max_hp == 100 and event_max_hp > 100
-
 func _fill_missing_leftovers_heal_snapshot(event: Dictionary, target_ident: String) -> void:
 	if target_ident == "":
 		return
@@ -1740,8 +1681,8 @@ func _fill_missing_leftovers_heal_snapshot(event: Dictionary, target_ident: Stri
 	if source_key != "leftovers":
 		return
 
-	var final_snapshot: Dictionary = _get_event_hp_snapshot(event, false)
-	var previous_snapshot: Dictionary = _get_event_hp_snapshot(event, true)
+	var final_snapshot: Dictionary = hp_event_helper.get_event_hp_snapshot(event, false)
+	var previous_snapshot: Dictionary = hp_event_helper.get_event_hp_snapshot(event, true)
 	if not final_snapshot.is_empty() and not previous_snapshot.is_empty():
 		var final_hp: int = int(final_snapshot.get("hp", 0))
 		var previous_event_hp: int = int(previous_snapshot.get("hp", 0))
@@ -1808,7 +1749,7 @@ func _get_battle_hp_snapshot_for_ident(target_ident: String) -> Dictionary:
 	if condition == "":
 		return {}
 
-	return _parse_condition_hp_snapshot(condition)
+	return hp_event_helper.parse_condition_hp_snapshot(condition)
 
 func _get_battle_condition_for_ident(target_ident: String) -> String:
 	var player_id: String = _get_player_id_from_ident(target_ident)
@@ -1848,94 +1789,6 @@ func _debug_battle_move(message: String) -> void:
 func _debug_side_condition(message: String) -> void:
 	if DEBUG_SIDE_CONDITION_EFFECTS:
 		print("[side-effects] " + message)
-
-func _parse_condition_hp_snapshot(condition: String) -> Dictionary:
-	if not condition.contains("/"):
-		if condition.ends_with(" fnt") or condition == "0 fnt":
-			return {
-				"hp": 0,
-				"max_hp": 1,
-			}
-
-		return {}
-
-	var parts: PackedStringArray = condition.split("/")
-	if parts.size() < 2:
-		return {}
-
-	var hp: int = int(parts[0])
-	var max_hp_text: String = str(parts[1]).split(" ")[0]
-	var max_hp: int = max(int(max_hp_text), 1)
-	return {
-		"hp": hp,
-		"max_hp": max_hp,
-	}
-
-
-## Zet echte HP om naar het zichtbare Showdown-percentage.
-func _to_visible_hp_percent(hp: int, max_hp: int) -> int:
-	if max_hp <= 0:
-		return 0
-
-	if hp <= 0:
-		return 0
-
-	var clamped_hp: int = clamp(hp, 0, max_hp)
-	return clamp(ceili((float(clamped_hp) / float(max_hp)) * 100.0), 0, 100)
-
-## Berekent het zichtbare HP-percentageverschil tussen twee HP-waarden.
-func _get_visible_hp_change(previous_hp: int, hp: int, max_hp: int) -> int:
-	var previous_percent := _to_visible_hp_percent(previous_hp, max_hp)
-	var current_percent := _to_visible_hp_percent(hp, max_hp)
-	return abs(previous_percent - current_percent)
-
-func _get_event_visible_hp_change(event: Dictionary) -> int:
-	var previous_condition := str(event.get("previousCondition", ""))
-	var condition := str(event.get("condition", ""))
-	var previous_percent: int = _get_condition_visible_hp_percent(previous_condition)
-	var current_percent: int = _get_condition_visible_hp_percent(condition)
-
-	if previous_percent >= 0 and current_percent >= 0:
-		return abs(previous_percent - current_percent)
-
-	var previous_hp: int = int(event.get("previousHp", 0))
-	var hp: int = int(event.get("hp", 0))
-	var max_hp: int = int(event.get("maxHp", 0))
-	if max_hp > 0:
-		return _get_visible_hp_change(previous_hp, hp, max_hp)
-
-	return 0
-
-func _event_has_hp_loss(event: Dictionary) -> bool:
-	if _is_percentage_only_condition_event(event, false):
-		return false
-
-	var previous_snapshot: Dictionary = _get_event_hp_snapshot(event, true)
-	var snapshot: Dictionary = _get_event_hp_snapshot(event, false)
-	if not previous_snapshot.is_empty() and not snapshot.is_empty():
-		return int(previous_snapshot.get("hp", 0)) > int(snapshot.get("hp", 0))
-
-	return false
-
-func _event_has_sub_percent_hp_loss(event: Dictionary) -> bool:
-	var amount: int = int(event.get("amount", 0))
-	var max_hp: int = int(event.get("maxHp", 0))
-	if amount <= 0 or max_hp <= 0:
-		return false
-
-	return _to_visible_hp_percent(amount, max_hp) <= 1
-
-func _get_condition_visible_hp_percent(condition: String) -> int:
-	if condition.contains("fnt"):
-		return 0
-
-	if not condition.contains("/"):
-		return -1
-
-	var current_hp := int(condition.split("/")[0])
-	var right := str(condition.split("/")[1])
-	var max_hp := int(right.split(" ")[0])
-	return _to_visible_hp_percent(current_hp, max_hp)
 
 func _format_battle_actor(actor: String, include_side_prefix := true) -> String:
 	var player_id := _get_player_id_from_ident(actor)
@@ -2352,11 +2205,26 @@ func _can_switch_to_slot(slot: int) -> bool:
 	return not str(pokemon_data.get("condition", "")).contains("fnt")
 
 func _update_active_sprites() -> void:
-	var player_species := _get_active_display_species("p1")
-	var opponent_species := _get_active_display_species("p2")
+	_update_active_sprite_box("p1", player_sprite_box, "back")
+	_update_active_sprite_box("p2", enemy_sprite_box, "front")
 
-	player_sprite_box.set_single_pokemon_species(player_species, "back", _get_active_pokemon_is_shiny("p1"))
-	enemy_sprite_box.set_single_pokemon_species(opponent_species, "front", _get_active_pokemon_is_shiny("p2"))
+func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String) -> void:
+	if _should_hide_active_pokemon_for_force_switch(player_id):
+		if sprite_box.has_method("clear_pokemon"):
+			sprite_box.call("clear_pokemon")
+		return
+
+	sprite_box.set_single_pokemon_species(
+		_get_active_display_species(player_id),
+		side,
+		_get_active_pokemon_is_shiny(player_id)
+	)
+
+func _should_hide_active_pokemon_for_force_switch(player_id: String) -> bool:
+	return battle_state.needs_force_switch(player_id) and _is_active_pokemon_fainted(player_id)
+
+func _is_active_pokemon_fainted(player_id: String) -> bool:
+	return str(battle_state.get_active_pokemon_condition(player_id)).contains("fnt")
 
 func _update_battle_presentation() -> void:
 	_update_battle_status_panels()

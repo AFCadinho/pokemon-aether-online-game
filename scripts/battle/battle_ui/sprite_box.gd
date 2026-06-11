@@ -118,6 +118,13 @@ func reset_battle_pose() -> void:
 	for sprite in _get_all_sprites():
 		_reset_sprite_pose(sprite)
 
+func clear_pokemon() -> void:
+	_stop_active_tween()
+	set_battle_type(false)
+	for sprite in _get_all_sprites():
+		_reset_sprite_pose(sprite)
+		sprite.visible = false
+
 func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
