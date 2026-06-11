@@ -130,6 +130,12 @@ func _enrich_display_data_from_trainer_team(display_data: Dictionary) -> void:
 
 
 func _find_trainer_team_pokemon_for_display_data(display_data: Dictionary) -> Dictionary:
+	var metadata_slot := int(display_data.get("metadataSlot", display_data.get("metadata_slot", 0)))
+	if metadata_slot > 0:
+		var trainer_pokemon_by_slot := _find_trainer_team_pokemon_by_metadata_slot(metadata_slot)
+		if not trainer_pokemon_by_slot.is_empty():
+			return trainer_pokemon_by_slot
+
 	var display_species := battle_state.get_species_from_pokemon_data(display_data)
 	var normalized_display_species := normalize_species_for_compare(display_species)
 	if normalized_display_species == "":
@@ -142,6 +148,18 @@ func _find_trainer_team_pokemon_for_display_data(display_data: Dictionary) -> Di
 		var trainer_pokemon: Dictionary = pokemon_value as Dictionary
 		var trainer_species := str(trainer_pokemon.get("species", trainer_pokemon.get("displaySpecies", "")))
 		if normalize_species_for_compare(trainer_species) == normalized_display_species:
+			return trainer_pokemon
+
+	return {}
+
+
+func _find_trainer_team_pokemon_by_metadata_slot(metadata_slot: int) -> Dictionary:
+	for pokemon_value in trainer_enemy_team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var trainer_pokemon: Dictionary = pokemon_value as Dictionary
+		if int(trainer_pokemon.get("metadataSlot", trainer_pokemon.get("metadata_slot", 0))) == metadata_slot:
 			return trainer_pokemon
 
 	return {}

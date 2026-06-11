@@ -36,6 +36,7 @@ var message_timing := preload("res://scripts/battle/battle_message_timing.gd").n
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
+var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var public_confirmed_abilities_by_ident := {}
 var current_move_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -104,6 +105,7 @@ func _ready() -> void:
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
 	hover_state.setup(pokemon_info_request, pokemon_stats_request)
+	setup_flow.setup(event_text_formatter)
 	_connect_pokemon_hover_signals()
 	_connect_hud_team_hover_signals()
 	_connect_move_hover_signals()
@@ -659,7 +661,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	var player_species := _get_active_display_species("p1")
 	var opponent_species := _get_active_display_species("p2")
 
-	_add_battle_log_messages(event_text_formatter.format_wild_battle_start_messages(player_species, opponent_species))
+	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	await _render_initial_battle_events(api_response)
 
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
@@ -671,14 +673,11 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 
 	var player_species := _get_active_display_species("p1")
 	var opponent_species := _get_active_display_species("p2")
-	var trainer_name := str(trainer_data.get("name", _get_player_display_name("p2")))
-	if trainer_name == "":
-		trainer_name = "Trainer"
-
-	_add_battle_log_messages(event_text_formatter.format_trainer_battle_start_messages(
+	_add_battle_log_messages(setup_flow.get_trainer_battle_start_messages(
 		player_species,
 		opponent_species,
-		trainer_name
+		trainer_data,
+		_get_player_display_name("p2")
 	))
 	await _render_initial_battle_events(api_response)
 
