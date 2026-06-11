@@ -282,6 +282,8 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 	)
 	if not hover_state.is_hover_request_current(request_token, hover_ident, hover_owner_player_id):
 		return
+	if not _hover_data_matches_pokemon_request(hover_data, pokemon_data):
+		return
 
 	var confirmed_moves: Array = hover_data.get("confirmed_moves", [])
 	var confirmed_item: String = str(hover_data.get("confirmed_item", ""))
@@ -300,6 +302,22 @@ func _show_pokemon_hover(pokemon_data: Dictionary, hover_owner_player_id: String
 	if pokemon_hover_card.has_method("show_for_pokemon"):
 		pokemon_hover_card.call("show_for_pokemon", pokemon_data, confirmed_moves, confirmed_item, confirmed_ability, stat_changes, speed_data)
 	_position_pokemon_hover_card()
+
+func _hover_data_matches_pokemon_request(hover_data: Dictionary, pokemon_data: Dictionary) -> bool:
+	var requested_ident := str(hover_data.get("requested_ident", ""))
+	var current_ident := str(pokemon_data.get("ident", ""))
+	if requested_ident != current_ident:
+		return false
+
+	var requested_species := str(hover_data.get("requested_species", ""))
+	var current_species := battle_state.get_species_from_pokemon_data(pokemon_data)
+	if requested_species == "" or current_species == "":
+		return true
+
+	return _normalize_species_for_compare(requested_species) == _normalize_species_for_compare(current_species)
+
+func _normalize_species_for_compare(species: String) -> String:
+	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
 
 func _hide_pokemon_hover() -> void:
 	hover_state.invalidate_hover()

@@ -14,6 +14,8 @@ func get_hover_card_data(
 	pokemon_data: Dictionary,
 	public_confirmed_abilities_by_ident: Dictionary
 ) -> Dictionary:
+	var requested_ident := str(pokemon_data.get("ident", ""))
+	var requested_species := battle_state.get_species_from_pokemon_data(pokemon_data)
 	var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(
 		battle_state,
 		pokemon_info_request,
@@ -26,6 +28,8 @@ func get_hover_card_data(
 	)
 
 	return {
+		"requested_ident": requested_ident,
+		"requested_species": requested_species,
 		"confirmed_moves": _get_confirmed_info_moves(pokemon_info),
 		"confirmed_item": _get_optional_known_info_string(pokemon_info, "confirmedItem"),
 		"confirmed_ability": _get_confirmed_ability_for_hover(
