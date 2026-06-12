@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://ckxxmxljf2eer"]
+
+[ext_resource type="Texture2D" uid="uid://cqehbr5u75uy2" path="res://assets/sprites/pokemon/front/koraidon/sheet.png" id="1_2ygrx"]
+[ext_resource type="Script" uid="uid://cm7dbce4gxp76" path="res://scripts/battle/battle_ui/team_preview_layer.gd" id="1_u5ars"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ueicy"]
+atlas = ExtResource("1_2ygrx")
+region = Rect2(0, 0, 147, 111)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n5ix6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ueicy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="TeamPreviewLayer" type="Node2D" unique_id=53601656]
+script = ExtResource("1_u5ars")
+
+[node name="Slot1" type="Node2D" parent="." unique_id=1829743610]
+position = Vector2(-8, -12)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Slot1" unique_id=2135551106]
+sprite_frames = SubResource("SpriteFrames_n5ix6")
+
+[node name="Slot2" type="Node2D" parent="." unique_id=195857652]
+position = Vector2(-111, -8)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Slot2" unique_id=750887372]
+sprite_frames = SubResource("SpriteFrames_n5ix6")
+
+[node name="Slot3" type="Node2D" parent="." unique_id=414049132]
+position = Vector2(90, -16)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Slot3" unique_id=1141821787]
+sprite_frames = SubResource("SpriteFrames_n5ix6")
+
+[node name="Slot4" type="Node2D" parent="." unique_id=1493139927]
+position = Vector2(-67, 9)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Slot4" unique_id=427236855]
+sprite_frames = SubResource("SpriteFrames_n5ix6")
+
+[node name="Slot5" type="Node2D" parent="." unique_id=1210824084]
+position = Vector2(51, 10)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Slot5" unique_id=2140056670]
+sprite_frames = SubResource("SpriteFrames_n5ix6")
+
+[node name="Slot6" type="Node2D" parent="." unique_id=1392058870]
+position = Vector2(-13, 28)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Slot6" unique_id=2031336470]
+sprite_frames = SubResource("SpriteFrames_n5ix6")

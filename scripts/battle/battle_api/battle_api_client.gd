@@ -39,7 +39,6 @@ func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, traine
 			"player": player,
 			"trainerId": trainer_id,
 			"formatId": FORMAT_ID,
-			"playerLeadSlot": 1,
 		}
 	)
 

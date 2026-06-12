@@ -19,6 +19,7 @@ var current_action_view: ActionView = ActionView.NONE
 var battle_finished := false
 var battle_input_locked := false
 var defer_force_switch_active_hide := false
+var team_preview_lead_selection_active := false
 
 #Battle State
 var battle_state := BattleState.new()
@@ -67,6 +68,8 @@ var active_enemy_pokemon: Pokemon
 @onready var enemy_battle_platform: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattlePlatform2
 @onready var enemy_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemySpriteBox
 @onready var player_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerSpriteBox
+@onready var enemy_team_preview_layer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemyTeamPreviewLayer
+@onready var player_team_preview_layer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerTeamPreviewLayer
 @onready var pokemon_hover_card: Control = $PokemonHoverCard
 @onready var move_hover_card: Control = $MoveHoverCard
 
@@ -530,6 +533,9 @@ func _open_bag() -> void:
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
+	if team_preview_lead_selection_active:
+		return
+
 	if battle_finished or battle_input_locked or force_switch_flow.player_needs_force_switch("p1"):
 		return
 
@@ -755,7 +761,11 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
 	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
 
-	if not _apply_initial_battle_response(api_response):
+	if not _apply_team_preview_battle_response(api_response):
+		return
+
+	var lead_response := await _run_trainer_lead_selection(api_response)
+	if lead_response.is_empty():
 		return
 
 	var player_species := _get_active_display_species("p1")
@@ -766,7 +776,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		trainer_data,
 		_get_player_display_name("p2")
 	))
-	await _render_initial_battle_events(api_response)
+	await _render_initial_battle_events(lead_response)
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type
@@ -786,10 +796,139 @@ func _apply_initial_battle_response(api_response: Dictionary) -> bool:
 	_show_current_action_prompt()
 	return true
 
+func _apply_team_preview_battle_response(api_response: Dictionary) -> bool:
+	if not _apply_api_response(api_response):
+		return false
+
+	_update_battle_status_panels()
+	player_hud_panel.clear_active_pokemon_data()
+	enemy_hud_panel.clear_active_pokemon_data()
+	player_hud_panel.set_team_data(_get_display_team_data("p1"))
+	enemy_hud_panel.set_team_data(_get_display_team_data("p2"))
+	_update_party_slots()
+	_update_vs_panel_names()
+	return true
+
 func _render_initial_battle_events(api_response: Dictionary) -> void:
 	event_renderer.add_turn_header(battle_state.get_turn())
 	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
 	_show_current_action_prompt()
+
+func _run_trainer_lead_selection(api_response: Dictionary) -> Dictionary:
+	if _should_show_team_preview(api_response):
+		return await _run_trainer_team_preview_lead_selection()
+
+	return await _run_default_trainer_lead_selection()
+
+func _should_show_team_preview(api_response: Dictionary) -> bool:
+	var battle_options_value: Variant = api_response.get("battleOptions", {})
+	if not (battle_options_value is Dictionary):
+		return false
+
+	var battle_options: Dictionary = battle_options_value as Dictionary
+	return bool(battle_options.get("teamPreview", false))
+
+func _run_default_trainer_lead_selection() -> Dictionary:
+	_set_battle_input_locked(true)
+	var player_lead_response := await _submit_lead("p1", 1)
+	if not bool(player_lead_response.get("success", false)):
+		var error_message := str(player_lead_response.get("error", "Cannot choose player lead!"))
+		current_action_panel.set_message(error_message)
+		battle_log_panel.add_message(error_message)
+		_set_battle_input_locked(false)
+		return {}
+
+	var npc_lead_response := await _submit_lead("p2", 1)
+	if not bool(npc_lead_response.get("success", false)):
+		var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
+		current_action_panel.set_message(error_message)
+		battle_log_panel.add_message(error_message)
+		_set_battle_input_locked(false)
+		return {}
+
+	_set_battle_input_locked(false)
+	_update_battle_presentation()
+	_show_moves()
+	return npc_lead_response
+
+func _run_trainer_team_preview_lead_selection() -> Dictionary:
+	team_preview_lead_selection_active = true
+	_show_team_preview_layers()
+	current_action_panel.set_message("Choose Lead")
+	current_action_view = ActionView.PARTY
+	moves_grid.visible = false
+	party_grid.set_party(_get_lead_selection_team_data("p1"))
+	party_grid.visible = true
+	action_buttons.set_action_disabled("fight", true)
+	action_buttons.set_action_disabled("bag", true)
+	action_buttons.set_action_disabled("run", true)
+	action_buttons.set_selected_action("party")
+
+	while team_preview_lead_selection_active:
+		var selected_slot: int = int(await party_grid.party_selected)
+		if not _can_choose_lead_slot(selected_slot):
+			current_action_panel.set_message("Choose another Pokemon!")
+			continue
+
+		_set_battle_input_locked(true)
+		var lead_response := await _submit_lead("p1", selected_slot)
+		if not bool(lead_response.get("success", false)):
+			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
+			current_action_panel.set_message(error_message)
+			battle_log_panel.add_message(error_message)
+			_set_battle_input_locked(false)
+			continue
+
+		var npc_lead_response := await _submit_lead("p2", 1)
+		if not bool(npc_lead_response.get("success", false)):
+			var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
+			current_action_panel.set_message(error_message)
+			battle_log_panel.add_message(error_message)
+			_set_battle_input_locked(false)
+			continue
+
+		team_preview_lead_selection_active = false
+		_hide_team_preview_layers()
+		party_grid.visible = false
+		_set_battle_input_locked(false)
+		_update_battle_presentation()
+		_show_moves()
+		return npc_lead_response
+
+	return {}
+
+func _show_team_preview_layers() -> void:
+	player_sprite_box.visible = false
+	enemy_sprite_box.visible = false
+
+	if player_team_preview_layer.has_method("show_team"):
+		player_team_preview_layer.call("show_team", _get_display_team_data("p1"), "back")
+	if enemy_team_preview_layer.has_method("show_team"):
+		enemy_team_preview_layer.call("show_team", _get_display_team_data("p2"), "front")
+
+
+func _hide_team_preview_layers() -> void:
+	if player_team_preview_layer.has_method("clear"):
+		player_team_preview_layer.call("clear")
+	if enemy_team_preview_layer.has_method("clear"):
+		enemy_team_preview_layer.call("clear")
+
+	player_team_preview_layer.visible = false
+	enemy_team_preview_layer.visible = false
+	player_sprite_box.visible = true
+	enemy_sprite_box.visible = true
+
+func _get_lead_selection_team_data(player_id: String) -> Array:
+	var lead_team: Array = []
+	for pokemon_value in _get_display_team_data(player_id):
+		if pokemon_value is Dictionary:
+			var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate(true)
+			pokemon_data["active"] = false
+			lead_team.append(pokemon_data)
+		else:
+			lead_team.append(pokemon_value)
+
+	return lead_team
 
 func _add_battle_log_messages(messages: Array[String]) -> void:
 	for message in messages:
@@ -1042,6 +1181,9 @@ func _normalize_event_source(source: String) -> String:
 	return cleaned.strip_edges()
 
 func _on_party_grid_party_selected(slot: int) -> void:
+	if team_preview_lead_selection_active:
+		return
+
 	if battle_input_locked:
 		return
 
@@ -1120,6 +1262,21 @@ func _finish_if_battle_ended() -> bool:
 func _submit_player_choice(choice_type: String, slot: int) -> Dictionary:
 	return await action_flow.submit_player_choice(choice_type, slot)
 
+func _submit_lead(player_id: String, slot: int) -> Dictionary:
+	var response: Dictionary = await BattleApiClient.choose_lead(
+		battle_request,
+		battle_state.battle_id,
+		player_id,
+		slot
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	if not _apply_api_response(response):
+		return response
+
+	return response
+
 func _auto_force_switch_opponent_if_needed() -> bool:
 	if not force_switch_flow.opponent_needs_auto_force_switch():
 		return false
@@ -1155,6 +1312,22 @@ func _can_switch_to_slot(slot: int) -> bool:
 		return false
 
 	return force_switch_flow.can_switch_to_slot(slot, "p1")
+
+func _can_choose_lead_slot(slot: int) -> bool:
+	var team := battle_state.get_player_team("p1")
+	if slot < 1 or slot > team.size():
+		return false
+
+	var pokemon_value: Variant = team[slot - 1]
+	if not (pokemon_value is Dictionary):
+		return false
+
+	var pokemon_data: Dictionary = pokemon_value as Dictionary
+	if bool(pokemon_data.get("fainted", false)):
+		return false
+
+	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
+	return condition != "0 fnt" and not condition.ends_with(" fnt")
 
 func _update_active_sprites() -> void:
 	_update_active_sprite_box("p1", player_sprite_box, "back")

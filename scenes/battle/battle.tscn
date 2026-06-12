@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://conldqooxdm32" path="res://scenes/battle/vs_panel_container.tscn" id="9_pyfix"]
 [ext_resource type="PackedScene" uid="uid://dbkdm7jcvlhqp" path="res://scenes/battle/side_field_effects_panel.tscn" id="10_8eh2s"]
 [ext_resource type="Script" uid="uid://gqodi4os4d6k" path="res://scripts/battle/battle_ui/party_grid.gd" id="10_fe4ja"]
+[ext_resource type="PackedScene" uid="uid://ckxxmxljf2eer" path="res://scenes/battle/team_preview_layer.tscn" id="11_e48mi"]
 [ext_resource type="PackedScene" uid="uid://bfo18l7xvty5o" path="res://scenes/battle/battle_log_panel.tscn" id="17_6ofp8"]
 [ext_resource type="PackedScene" uid="uid://b4jvhxavag7g1" path="res://scenes/battle/pokemon_hover_card.tscn" id="21_sgdsx"]
 [ext_resource type="PackedScene" uid="uid://qshhy8kj3xu8" path="res://scenes/battle/move_hover_card.tscn" id="23_156m4"]
@@ -876,6 +877,13 @@ offset_top = 160.0
 offset_right = 0.0
 offset_bottom = 183.0
 grow_horizontal = 0
+
+[node name="EnemyTeamPreviewLayer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=53601656 instance=ExtResource("11_e48mi")]
+position = Vector2(745, 231)
+
+[node name="PlayerTeamPreviewLayer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=585843366 instance=ExtResource("11_e48mi")]
+visible = false
+position = Vector2(315, 435)
 
 [node name="ActionSidePanel" type="Panel" parent="HBoxContainer" unique_id=910737858]
 layout_mode = 2
