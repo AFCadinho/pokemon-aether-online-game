@@ -18,8 +18,11 @@ var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
 var battle_finished := false
 var battle_input_locked := false
+var battle_actions_ready := false
+var queued_battle_action: Dictionary = {}
 var defer_force_switch_active_hide := false
 var team_preview_lead_selection_active := false
+var forfeit_return_action_view: ActionView = ActionView.NONE
 
 #Battle State
 var battle_state := BattleState.new()
@@ -97,6 +100,7 @@ var active_enemy_pokemon: Pokemon
 
 @onready var field_timers_panel: FieldTimersPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers
 @onready var current_action_panel: CurrentActionPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel
+@onready var forfeit_confirm_dialog: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/ForfeitConfirmDialog
 
 # HTTP Request
 @onready var battle_request: HTTPRequest = $BattleRequest
@@ -112,6 +116,7 @@ func _ready() -> void:
 	_connect_pokemon_hover_signals()
 	_connect_hud_team_hover_signals()
 	_connect_move_hover_signals()
+	_connect_forfeit_confirm_dialog_signals()
 	_setup_weather_presentation()
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
@@ -209,6 +214,12 @@ func _connect_move_hover_signals() -> void:
 		moves_grid.move_hovered.connect(_show_move_hover)
 	if moves_grid.has_signal("move_unhovered"):
 		moves_grid.move_unhovered.connect(_hide_move_hover)
+
+func _connect_forfeit_confirm_dialog_signals() -> void:
+	if forfeit_confirm_dialog.has_signal("confirmed"):
+		forfeit_confirm_dialog.confirmed.connect(_on_forfeit_confirmed)
+	if forfeit_confirm_dialog.has_signal("cancelled"):
+		forfeit_confirm_dialog.cancelled.connect(_on_forfeit_cancelled)
 
 func _show_move_hover(move_data: Dictionary, slot_rect: Rect2) -> void:
 	current_move_hover_rect = slot_rect
@@ -437,24 +448,49 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("battle_run"):
+		if not battle_actions_ready:
+			_queue_battle_action("run")
+			return
+
 		_try_run()
 		return
 
 	if event.is_action_pressed("battle_move_1"):
+		if not battle_actions_ready:
+			_queue_battle_action("move", 1)
+			return
+
 		_try_select_move(1)
 		return
 	if event.is_action_pressed("battle_move_2"):
+		if not battle_actions_ready:
+			_queue_battle_action("move", 2)
+			return
+
 		_try_select_move(2)
 		return
 	if event.is_action_pressed("battle_move_3"):
+		if not battle_actions_ready:
+			_queue_battle_action("move", 3)
+			return
+
 		_try_select_move(3)
 		return
 	if event.is_action_pressed("battle_move_4"):
+		if not battle_actions_ready:
+			_queue_battle_action("move", 4)
+			return
+
 		_try_select_move(4)
 		return
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
+	if not battle_actions_ready and not team_preview_lead_selection_active:
+		if action == "run":
+			_queue_battle_action("run")
+		return
+
 	if battle_input_locked:
 		return
 
@@ -509,6 +545,33 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 	if party_grid.has_method("set_input_disabled"):
 		party_grid.set_input_disabled(is_locked)
 
+func _set_battle_actions_ready(is_ready: bool) -> void:
+	battle_actions_ready = is_ready
+	if battle_actions_ready:
+		_process_queued_battle_action()
+
+func _queue_battle_action(action_type: String, slot := 0) -> void:
+	if team_preview_lead_selection_active or battle_finished:
+		return
+
+	queued_battle_action = {
+		"type": action_type,
+		"slot": slot,
+	}
+
+func _process_queued_battle_action() -> void:
+	if queued_battle_action.is_empty():
+		return
+
+	var action := queued_battle_action.duplicate()
+	queued_battle_action.clear()
+
+	var action_type := str(action.get("type", ""))
+	if action_type == "run":
+		_try_run()
+	elif action_type == "move":
+		_try_select_move(int(action.get("slot", 0)))
+
 
 ## Toont de party keuzes in het action panel.
 func _show_party(force_switch := false) -> void:
@@ -533,14 +596,44 @@ func _open_bag() -> void:
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
+	if not battle_actions_ready:
+		return
+
 	if team_preview_lead_selection_active:
 		return
 
 	if battle_finished or battle_input_locked or force_switch_flow.player_needs_force_switch("p1"):
 		return
 
+	if battle_type != BattleType.WILD:
+		_show_forfeit_confirm_dialog()
+		return
+
 	battle_log_panel.add_message("Got away safely!")
 	_finish_battle({"reason": "flee"})
+
+func _show_forfeit_confirm_dialog() -> void:
+	forfeit_return_action_view = current_action_view
+	_set_battle_input_locked(true)
+	if forfeit_confirm_dialog.has_method("show_dialog"):
+		forfeit_confirm_dialog.call("show_dialog")
+	else:
+		forfeit_confirm_dialog.visible = true
+
+func _on_forfeit_confirmed() -> void:
+	_set_battle_input_locked(false)
+	battle_log_panel.add_message("You forfeited the battle.")
+	_finish_battle({"reason": "forfeit"})
+
+func _on_forfeit_cancelled() -> void:
+	_set_battle_input_locked(false)
+	if forfeit_return_action_view == ActionView.PARTY:
+		_show_party()
+	elif forfeit_return_action_view == ActionView.BAG:
+		_open_bag()
+	else:
+		_show_moves()
+	forfeit_return_action_view = ActionView.NONE
 
 ## Vult de move slots met de huidige beschikbare moves.
 func _update_move_slots() -> void:
@@ -756,6 +849,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	await _render_initial_battle_events(api_response)
+	_set_battle_actions_ready(true)
 
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
@@ -777,9 +871,12 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		_get_player_display_name("p2")
 	))
 	await _render_initial_battle_events(lead_response)
+	_set_battle_actions_ready(true)
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type
+	_set_battle_actions_ready(false)
+	queued_battle_action.clear()
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = enemy_pokemon
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
@@ -838,7 +935,7 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 		_set_battle_input_locked(false)
 		return {}
 
-	var npc_lead_response := await _submit_lead("p2", 1)
+	var npc_lead_response := await _submit_npc_lead()
 	if not bool(npc_lead_response.get("success", false)):
 		var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
 		current_action_panel.set_message(error_message)
@@ -853,6 +950,7 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 
 func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	team_preview_lead_selection_active = true
+	queued_battle_action.clear()
 	_show_team_preview_layers()
 	current_action_panel.set_message("Choose Lead")
 	current_action_view = ActionView.PARTY
@@ -879,7 +977,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 			_set_battle_input_locked(false)
 			continue
 
-		var npc_lead_response := await _submit_lead("p2", 1)
+		var npc_lead_response := await _submit_npc_lead()
 		if not bool(npc_lead_response.get("success", false)):
 			var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
 			current_action_panel.set_message(error_message)
@@ -1277,6 +1375,20 @@ func _submit_lead(player_id: String, slot: int) -> Dictionary:
 
 	return response
 
+func _submit_npc_lead() -> Dictionary:
+	var response: Dictionary = await BattleApiClient.send_npc_lead(
+		battle_request,
+		battle_state.battle_id,
+		"p2"
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	if not _apply_api_response(response):
+		return response
+
+	return response
+
 func _auto_force_switch_opponent_if_needed() -> bool:
 	if not force_switch_flow.opponent_needs_auto_force_switch():
 		return false
@@ -1400,6 +1512,9 @@ func _get_player_display_name(player_id: String) -> String:
 	return "Opponent"
 
 func _try_select_move(slot: int) -> void:
+	if not battle_actions_ready:
+		return
+
 	if battle_finished or battle_input_locked:
 		return
 

@@ -160,15 +160,15 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 
 	battle_instance = battle_scene.instantiate()
 	battle_layer.add_child(battle_instance)
+
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
 	
 	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
 		wild_pokemon,
 		response
 	)
-	
-	if battle_instance.has_signal("battle_ended"):
-		battle_instance.battle_ended.connect(_on_battle_ended)
 
 func start_triggered_wild_battle_for_area(area_id: String, encounter_type: String = "grass") -> void:
 	if is_in_battle:
@@ -213,14 +213,14 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	battle_instance = battle_scene.instantiate()
 	battle_layer.add_child(battle_instance)
 
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
+
 	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
 		wild_pokemon,
 		response
 	)
-
-	if battle_instance.has_signal("battle_ended"):
-		battle_instance.battle_ended.connect(_on_battle_ended)
 
 func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	if is_in_battle:
@@ -259,14 +259,14 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	battle_instance = battle_scene.instantiate()
 	battle_layer.add_child(battle_instance)
 
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
+
 	await battle_instance.setup_trainer_battle_from_response(
 		PlayerSave.party[0],
 		trainer_data,
 		response
 	)
-
-	if battle_instance.has_signal("battle_ended"):
-		battle_instance.battle_ended.connect(_on_battle_ended)
 
 	return true
 	
