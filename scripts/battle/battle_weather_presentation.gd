@@ -46,6 +46,10 @@ func setup(
 	trick_room_layer = trick_room_layer_node
 
 func update_weather(weather_effect: String) -> void:
+	if not SettingsManager.weather_effects:
+		_hide_weather_effects()
+		return
+
 	_update_weather_tint(weather_effect)
 
 	var should_emit_rain := weather_effect == "RainDance"
@@ -77,6 +81,9 @@ func update_weather(weather_effect: String) -> void:
 			sandstorm_weather_time = 0.0
 
 func animate(delta: float) -> void:
+	if not SettingsManager.weather_effects and not SettingsManager.terrain_effects:
+		return
+
 	if sun_rays != null and sun_rays.visible:
 		_animate_sun_weather(delta)
 	if sandstorm_swirls != null and sandstorm_swirls.visible:
@@ -87,6 +94,10 @@ func animate(delta: float) -> void:
 		_animate_trick_room_effect(delta)
 
 func update_terrain(terrain_effect: String) -> void:
+	if not SettingsManager.terrain_effects:
+		_hide_terrain_effects()
+		return
+
 	var should_show_grassy_terrain := terrain_effect == "GrassyTerrain"
 	var should_show_misty_terrain := terrain_effect == "MistyTerrain"
 	var should_show_psychic_terrain := terrain_effect == "PsychicTerrain"
@@ -115,6 +126,9 @@ func update_trick_room(is_active: bool) -> void:
 	if trick_room_layer == null:
 		return
 
+	if not SettingsManager.terrain_effects:
+		is_active = false
+
 	trick_room_layer.visible = is_active
 	if not is_active:
 		trick_room_layer.position = Vector2.ZERO
@@ -142,6 +156,49 @@ func _update_weather_tint(weather_effect: String) -> void:
 	weather_tint.visible = should_show_tint
 	if should_show_tint:
 		weather_tint.color = tint_color
+
+func _hide_weather_effects() -> void:
+	if weather_tint != null:
+		weather_tint.visible = false
+	if weather_particles != null:
+		weather_particles.visible = false
+		weather_particles.emitting = false
+	if sun_rays != null:
+		sun_rays.visible = false
+		sun_rays.position = Vector2.ZERO
+		sun_rays.modulate = Color.WHITE
+	if sun_sparkles != null:
+		sun_sparkles.visible = false
+		sun_sparkles.emitting = false
+	if sandstorm_particles != null:
+		sandstorm_particles.visible = false
+		sandstorm_particles.emitting = false
+	if sandstorm_swirls != null:
+		sandstorm_swirls.visible = false
+		_set_child_particles_emitting(sandstorm_swirls, false)
+		sandstorm_swirls.position = Vector2.ZERO
+		sandstorm_swirls.modulate = Color.WHITE
+	sun_weather_time = 0.0
+	sandstorm_weather_time = 0.0
+
+func _hide_terrain_effects() -> void:
+	if terrain_tint != null:
+		terrain_tint.visible = false
+	if grassy_terrain_layer != null:
+		grassy_terrain_layer.visible = false
+		_set_child_particles_emitting(grassy_terrain_layer, false)
+	if misty_terrain_layer != null:
+		misty_terrain_layer.visible = false
+		_set_child_particles_emitting(misty_terrain_layer, false)
+	if psychic_terrain_layer != null:
+		psychic_terrain_layer.visible = false
+		_set_child_particles_emitting(psychic_terrain_layer, false)
+	if trick_room_layer != null:
+		trick_room_layer.visible = false
+		trick_room_layer.position = Vector2.ZERO
+		trick_room_layer.modulate = Color.WHITE
+	grassy_terrain_time = 0.0
+	trick_room_time = 0.0
 
 func _animate_sun_weather(delta: float) -> void:
 	sun_weather_time += delta

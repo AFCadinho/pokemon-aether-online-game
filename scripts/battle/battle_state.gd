@@ -10,6 +10,7 @@ var battle_log := []
 var battle_status_api := {}
 var field: Dictionary = {}
 var hp_event_helper := BattleHpEventHelper.new()
+var transformed_species_by_ident: Dictionary = {}
 
 
 ## Laadt een volledige battle response van de API in deze state.
@@ -21,6 +22,7 @@ func load_from_api_response(response: Dictionary) -> void:
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
 	field = response.get("field", {})
+	_apply_transformed_species_to_requests()
 	_apply_event_conditions_to_requests(response.get("events", []))
 
 func apply_event_conditions(events: Array) -> void:
@@ -44,6 +46,17 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 
 		var event: Dictionary = event_value as Dictionary
 		var event_type := str(event.get("type", ""))
+		if event_type == "switch":
+			_clear_transform_event_from_requests(event)
+			continue
+
+		if event_type == "transform":
+			_apply_transform_event_to_requests(event)
+			continue
+
+		if event_type == "faint":
+			_clear_transformed_species_for_ident(str(event.get("target", "")))
+
 		if event_type != "damage" and event_type != "heal" and event_type != "faint":
 			continue
 
@@ -111,6 +124,120 @@ func _set_pokemon_condition(target_ident: String, condition: String) -> void:
 			pokemon_data["condition"] = condition
 			_apply_condition_fields(pokemon_data, condition)
 			return
+
+func _apply_transform_event_to_requests(event: Dictionary) -> void:
+	var target_ident := str(event.get("target", ""))
+	var species := str(event.get("species", ""))
+	if target_ident == "" or species == "":
+		return
+
+	var transform_key := _get_transform_key_from_ident(target_ident)
+	if transform_key != "":
+		transformed_species_by_ident[transform_key] = species
+
+	var pokemon_data := _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		return
+
+	pokemon_data["displaySpecies"] = species
+	pokemon_data["transformedSpecies"] = species
+
+func _clear_transform_event_from_requests(event: Dictionary) -> void:
+	_clear_transformed_species_for_ident(str(event.get("fromIdent", "")))
+	_clear_transformed_species_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
+
+func _clear_transformed_species_for_ident(ident: String) -> void:
+	var transform_key := _get_transform_key_from_ident(ident)
+	if transform_key == "":
+		return
+
+	var transformed_species := str(transformed_species_by_ident.get(transform_key, ""))
+	var pokemon_data := _get_side_pokemon_by_transform_key(transform_key)
+	if not pokemon_data.is_empty():
+		pokemon_data.erase("transformedSpecies")
+		if transformed_species != "" and str(pokemon_data.get("displaySpecies", "")) == transformed_species:
+			pokemon_data.erase("displaySpecies")
+
+	transformed_species_by_ident.erase(transform_key)
+
+func _apply_transformed_species_to_requests() -> void:
+	for transform_key in transformed_species_by_ident.keys():
+		var species := str(transformed_species_by_ident.get(transform_key, ""))
+		if species == "":
+			continue
+
+		var pokemon_data := _get_side_pokemon_by_transform_key(str(transform_key))
+		if pokemon_data.is_empty():
+			continue
+
+		pokemon_data["displaySpecies"] = species
+		pokemon_data["transformedSpecies"] = species
+
+func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
+	var player_id := _get_player_id_from_ident(target_ident)
+	var target_name := _get_pokemon_name_from_ident(target_ident)
+	if player_id == "" or target_name == "":
+		return {}
+
+	var request_value: Variant = requests.get(player_id, {})
+	if not (request_value is Dictionary):
+		return {}
+
+	var request: Dictionary = request_value as Dictionary
+	var side_value: Variant = request.get("side", {})
+	if not (side_value is Dictionary):
+		return {}
+
+	var side: Dictionary = side_value as Dictionary
+	var team_value: Variant = side.get("pokemon", [])
+	if not (team_value is Array):
+		return {}
+
+	var team: Array = team_value as Array
+	for pokemon_value in team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if _get_pokemon_name_from_ident(str(pokemon_data.get("ident", ""))) == target_name:
+			return pokemon_data
+
+	return {}
+
+func _get_side_pokemon_by_transform_key(transform_key: String) -> Dictionary:
+	for player_id in ["p1", "p2"]:
+		var request_value: Variant = requests.get(player_id, {})
+		if not (request_value is Dictionary):
+			continue
+
+		var request: Dictionary = request_value as Dictionary
+		var side_value: Variant = request.get("side", {})
+		if not (side_value is Dictionary):
+			continue
+
+		var side: Dictionary = side_value as Dictionary
+		var team_value: Variant = side.get("pokemon", [])
+		if not (team_value is Array):
+			continue
+
+		var team: Array = team_value as Array
+		for pokemon_value in team:
+			if not (pokemon_value is Dictionary):
+				continue
+
+			var pokemon_data: Dictionary = pokemon_value as Dictionary
+			if _get_transform_key_from_ident(str(pokemon_data.get("ident", ""))) == transform_key:
+				return pokemon_data
+
+	return {}
+
+func _get_transform_key_from_ident(ident: String) -> String:
+	var player_id := _get_player_id_from_ident(ident)
+	var pokemon_name := _get_pokemon_name_from_ident(ident)
+	if player_id == "" or pokemon_name == "":
+		return ""
+
+	return "%s:%s" % [player_id, pokemon_name]
 
 func _get_player_id_from_ident(ident: String) -> String:
 	if ident.begins_with("p1"):

@@ -101,6 +101,19 @@ assets/pokemon-back-v1.zip
 assets/pokemon-shiny-front-v1.zip
 assets/pokemon-shiny-back-v1.zip
 assets/pokemon-home-v1.zip
+assets/pokemon-gen5-front-v2.zip
+assets/pokemon-gen5-back-v2.zip
+assets/pokemon-gen5-shiny-front-v2.zip
+assets/pokemon-gen5-shiny-back-v2.zip
+```
+
+The gen5 packs should extract into these folders:
+
+```text
+assets/sprites/pokemon/gen5/front
+assets/sprites/pokemon/gen5/back
+assets/sprites/pokemon/gen5/shiny_front
+assets/sprites/pokemon/gen5/shiny_back
 ```
 
 ## Upload To R2

@@ -1,12 +1,20 @@
 extends CharacterBody2D
 
 const TILE_SIZE := 32
-const MOVE_SPEED := 160.0
+const TILE_MOVE_DURATION := 0.22
+const MOVE_EASE_AMOUNT := 0.0
+const INPUT_BUFFER_DURATION := 0.14
+const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
 const SORT_Z_MIN := -256
 const SORT_Z_MAX := 256
+const IDLE_ANIMATION_SPEED := 5.0
+const WALK_ANIMATION_SPEED := 7.5
+const MOVE_ACTIONS := ["move_right", "move_left", "move_down", "move_up"]
+const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
+const BASE_SPRITE_OFFSET_META := "base_sprite_offset"
+const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
 
-@onready var body_sprite: AnimatedSprite2D = $Look/BodySprite
-@onready var hair_sprite: AnimatedSprite2D = $Look/HairSprite
+@onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
 
 # TileMapLayer nodes die speciale map-informatie bevatten.
@@ -21,11 +29,20 @@ var grass_tilemap: TileMapLayer
 var is_moving := false
 
 # target_position is een wereldpositie in pixels.
-# De speler beweegt hier soepel naartoe met move_toward().
 var target_position := Vector2.ZERO
+var move_start_position := Vector2.ZERO
+var move_elapsed := 0.0
 
 # Onthoudt de laatste kijkrichting, zodat de idle frame goed blijft staan.
 var last_direction := Vector2.DOWN
+var input_action_priority := ["move_right", "move_left", "move_down", "move_up"]
+var buffered_direction := Vector2.ZERO
+var input_buffer_time_left := 0.0
+var held_direction := Vector2.ZERO
+var held_direction_time := 0.0
+var frame_opaque_center_y_cache := {}
+var appearance_sprites: Array[AnimatedSprite2D] = []
+var master_appearance_sprite: AnimatedSprite2D
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
@@ -49,6 +66,8 @@ func face_world_position(world_position: Vector2) -> void:
 	set_idle_frame()
 
 func _ready() -> void:
+	_cache_appearance_sprites()
+
 	# Haal de TileMapLayer nodes uit de huidige map op.
 	# Dit werkt alleen als GameState.current_map al naar de actieve map wijst.
 	if GameState.current_map != null:
@@ -63,78 +82,189 @@ func _ready() -> void:
 	# De eerste target is waar de speler nu al staat.
 	# Daardoor begint hij niet meteen ergens heen te bewegen.
 	target_position = global_position
+	move_start_position = global_position
 	_update_sort_z()
 
-func _physics_process(delta: float) -> void:	
+func _process(delta: float) -> void:
 	_update_sort_z()
+	_sync_appearance_sprite_frames()
+
+	if _can_accept_movement_input():
+		_update_input_priority()
+		_update_held_direction(delta)
+		_update_input_buffer(delta)
+	else:
+		_clear_input_buffer()
+		_clear_held_direction()
 
 	if is_moving:
-		# Beweeg in pixels richting de target_position.
-		# Dit is visueel vloeiend, ook al kies je targets per tile.
-		global_position = global_position.move_toward(target_position, MOVE_SPEED * delta)
+		# Beweeg per render-frame naar de volgende tile.
+		# De tile-logica blijft deterministisch; alleen de visual interpolation is soepeler.
+		move_elapsed = minf(move_elapsed + delta, TILE_MOVE_DURATION)
+		var move_progress := move_elapsed / TILE_MOVE_DURATION
+		global_position = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
 		_update_sort_z()
 
 		# Als de bestemming is bereikt.
-		if global_position == target_position:
+		if _has_reached_target():
+			global_position = target_position
 			is_moving = false
-			set_idle_frame()
 
 			if check_for_map_exit():
 				return
 			
 			if is_standing_on_tall_grass():
 				check_for_grass_encounter()
+
+			if _can_accept_movement_input():
+				var next_direction := _get_next_movement_direction()
+				if next_direction != Vector2.ZERO and _try_start_move(next_direction):
+					return
+
+			set_idle_frame()
 		return
 
-	if GameState.input_locked:
+	if not _can_accept_movement_input():
 		set_idle_frame()
 		return
 
-	if _is_ui_typing():
-		set_idle_frame()
-		return
-		
-	# Bepaal welke richting de speler op wilt lopen.
-	var direction := Vector2.ZERO
-	if Input.is_action_pressed("move_right"):
-		direction = Vector2.RIGHT
-	elif Input.is_action_pressed("move_left"):
-		direction = Vector2.LEFT
-	elif Input.is_action_pressed("move_down"):
-		direction = Vector2.DOWN
-	elif  Input.is_action_pressed("move_up"):
-		direction = Vector2.UP
+	var direction := _get_next_movement_direction()
 
 	if direction != Vector2.ZERO:
-		last_direction = direction
-		play_walk_animation(direction)
-
-		# Bepaal de volgende wereldpositie.
-		# Voorbeeld: Vector2.RIGHT * 32 = Vector2(32, 0), dus 1 tile naar rechts.
-		var new_target_position := global_position + (direction * TILE_SIZE)
-
-		# Check eerst of de target tile vrij is.
-		# Alleen als can_move_to true teruggeeft, starten we de beweging.
-		if can_move_to(new_target_position):
-			target_position = new_target_position
-			is_moving = true
-		else:
+		if not _try_start_move(direction):
 			set_idle_frame()
 
+func _can_accept_movement_input() -> bool:
+	return not GameState.input_locked and not _is_ui_typing()
+
+func _update_input_priority() -> void:
+	for action_name in MOVE_ACTIONS:
+		if Input.is_action_just_pressed(action_name):
+			input_action_priority.erase(action_name)
+			input_action_priority.insert(0, action_name)
+
+func _update_held_direction(delta: float) -> void:
+	var direction := _get_input_direction()
+	if direction == Vector2.ZERO:
+		_clear_held_direction()
+		return
+
+	if direction != held_direction:
+		held_direction = direction
+		held_direction_time = 0.0
+		return
+
+	held_direction_time += delta
+
+func _update_input_buffer(delta: float) -> void:
+	if input_buffer_time_left > 0.0:
+		input_buffer_time_left = maxf(input_buffer_time_left - delta, 0.0)
+		if input_buffer_time_left == 0.0:
+			buffered_direction = Vector2.ZERO
+
+	for action_name in input_action_priority:
+		if not Input.is_action_just_pressed(action_name):
+			continue
+
+		buffered_direction = _get_action_direction(action_name)
+		input_buffer_time_left = INPUT_BUFFER_DURATION
+		return
+
+func _get_next_movement_direction() -> Vector2:
+	var direction := _consume_buffered_direction()
+	if direction != Vector2.ZERO:
+		return direction
+
+	if held_direction_time >= CONTINUOUS_MOVE_HOLD_DELAY:
+		return held_direction
+
+	return Vector2.ZERO
+
+func _consume_buffered_direction() -> Vector2:
+	if input_buffer_time_left <= 0.0:
+		buffered_direction = Vector2.ZERO
+		return Vector2.ZERO
+
+	var direction := buffered_direction
+	buffered_direction = Vector2.ZERO
+	input_buffer_time_left = 0.0
+	return direction
+
+func _clear_input_buffer() -> void:
+	buffered_direction = Vector2.ZERO
+	input_buffer_time_left = 0.0
+
+func _clear_held_direction() -> void:
+	held_direction = Vector2.ZERO
+	held_direction_time = 0.0
+
+func _has_reached_target() -> bool:
+	return move_elapsed >= TILE_MOVE_DURATION
+
+func _get_move_interpolation(progress: float) -> float:
+	var linear_progress := clampf(progress, 0.0, 1.0)
+	if MOVE_EASE_AMOUNT <= 0.0:
+		return linear_progress
+
+	var eased_progress := linear_progress * linear_progress * (3.0 - (2.0 * linear_progress))
+	return linear_progress + ((eased_progress - linear_progress) * MOVE_EASE_AMOUNT)
+
+func _get_input_direction() -> Vector2:
+	for action_name in input_action_priority:
+		if Input.is_action_pressed(action_name):
+			return _get_action_direction(action_name)
+
+	return Vector2.ZERO
+
+func _get_action_direction(action_name: String) -> Vector2:
+	match action_name:
+		"move_right":
+			return Vector2.RIGHT
+		"move_left":
+			return Vector2.LEFT
+		"move_down":
+			return Vector2.DOWN
+		"move_up":
+			return Vector2.UP
+
+	return Vector2.ZERO
+
+func _try_start_move(direction: Vector2) -> bool:
+	last_direction = direction
+
+	# Bepaal de volgende wereldpositie.
+	# Voorbeeld: Vector2.RIGHT * 32 = Vector2(32, 0), dus 1 tile naar rechts.
+	var new_target_position := global_position + (direction * TILE_SIZE)
+
+	# Check eerst of de target tile vrij is.
+	# Alleen als can_move_to true teruggeeft, starten we de beweging.
+	if not can_move_to(new_target_position):
+		return false
+
+	target_position = new_target_position
+	move_start_position = global_position
+	move_elapsed = 0.0
+	is_moving = true
+	play_walk_animation(direction)
+	return true
+
 func play_walk_animation(direction: Vector2) -> void:
-	var animation_name := ""
+	var animation_name := _get_walk_animation_name(direction)
+	var should_restart_animation := master_appearance_sprite == null \
+		or master_appearance_sprite.animation != animation_name \
+		or not master_appearance_sprite.is_playing()
 
-	if direction == Vector2.RIGHT:
-		animation_name = "walk_right"
-	elif direction == Vector2.LEFT:
-		animation_name = "walk_left"
-	elif direction == Vector2.DOWN:
-		animation_name = "walk_down"
-	elif direction == Vector2.UP:
-		animation_name = "walk_up"
-
-	body_sprite.play(animation_name)
-	hair_sprite.play(animation_name)
+	for sprite in appearance_sprites:
+		if _sprite_has_animation(sprite, animation_name):
+			_restore_layer_visibility_if_needed(sprite)
+			sprite.animation = animation_name
+			if should_restart_animation:
+				sprite.frame = 0
+				sprite.frame_progress = 0.0
+			_apply_face_gear_frame_alignment(sprite)
+			sprite.play(animation_name)
+		else:
+			_hide_layer_for_missing_animation(sprite)
 
 func can_move_to(check_position: Vector2) -> bool:
 	refresh_map_layers()
@@ -168,13 +298,11 @@ func can_move_to(check_position: Vector2) -> bool:
 
 	return tile_data == null
 	
-func set_idle_frame():
-	body_sprite.stop()
-	hair_sprite.stop()
+func set_idle_frame() -> void:
+	for sprite in appearance_sprites:
+		sprite.stop()
+		_set_idle_animation(sprite, last_direction)
 	
-	_set_idle_animation(body_sprite, last_direction)
-	_set_idle_animation(hair_sprite, last_direction)
-		
 func refresh_map_layers() -> void:
 	var current_map: Node = _resolve_current_map()
 	if current_map == null:
@@ -284,18 +412,182 @@ func _resolve_current_map() -> Node:
 func _update_sort_z() -> void:
 	z_index = clampi(floori(get_feet_position().y / TILE_SIZE), SORT_Z_MIN, SORT_Z_MAX)
 
+func _cache_appearance_sprites() -> void:
+	appearance_sprites.clear()
+	_collect_appearance_sprites(look_node)
+	master_appearance_sprite = _get_master_appearance_sprite()
+	_sync_appearance_animation_speeds()
+
+func _collect_appearance_sprites(parent: Node) -> void:
+	for child: Node in parent.get_children():
+		var sprite: AnimatedSprite2D = child as AnimatedSprite2D
+		if sprite != null:
+			appearance_sprites.append(sprite)
+
+		_collect_appearance_sprites(child)
+
+func _get_master_appearance_sprite() -> AnimatedSprite2D:
+	for sprite in appearance_sprites:
+		if sprite.name == "BodySprite":
+			return sprite
+
+	if appearance_sprites.is_empty():
+		return null
+
+	return appearance_sprites[0]
+
+func _sync_appearance_sprite_frames() -> void:
+	if master_appearance_sprite == null or not master_appearance_sprite.is_playing():
+		return
+
+	var animation_name: StringName = master_appearance_sprite.animation
+	var frame: int = master_appearance_sprite.frame
+	var frame_progress: float = master_appearance_sprite.frame_progress
+
+	for sprite in appearance_sprites:
+		if sprite == master_appearance_sprite:
+			continue
+		if not _sprite_has_animation(sprite, animation_name):
+			_hide_layer_for_missing_animation(sprite)
+			continue
+
+		_restore_layer_visibility_if_needed(sprite)
+		sprite.animation = animation_name
+		var frame_count: int = sprite.sprite_frames.get_frame_count(animation_name)
+		if frame_count <= 0:
+			continue
+
+		sprite.frame = mini(frame, frame_count - 1)
+		sprite.frame_progress = frame_progress
+		_apply_face_gear_frame_alignment(sprite)
+		if not sprite.is_playing():
+			sprite.play(animation_name)
+
+func _sync_appearance_animation_speeds() -> void:
+	var idle_animation_names: Array[String] = ["idle_down", "idle_left", "idle_right", "idle_up"]
+	var walk_animation_names: Array[String] = ["walk_down", "walk_left", "walk_right", "walk_up"]
+
+	for sprite in appearance_sprites:
+		if sprite.sprite_frames == null:
+			continue
+
+		for animation_name: String in idle_animation_names:
+			if sprite.sprite_frames.has_animation(animation_name):
+				sprite.sprite_frames.set_animation_speed(animation_name, IDLE_ANIMATION_SPEED)
+
+		for animation_name: String in walk_animation_names:
+			if sprite.sprite_frames.has_animation(animation_name):
+				sprite.sprite_frames.set_animation_speed(animation_name, WALK_ANIMATION_SPEED)
+
 func _set_idle_animation(sprite: AnimatedSprite2D, direction: Vector2) -> void:
 	var animation_name := _get_idle_animation_name(direction)
-	if animation_name != "" and sprite.sprite_frames.has_animation(animation_name):
+	if _sprite_has_animation(sprite, animation_name):
+		_restore_layer_visibility_if_needed(sprite)
 		sprite.play(animation_name)
 		sprite.stop()
+		_apply_face_gear_frame_alignment(sprite)
 		return
 	
 	animation_name = _get_walk_animation_name(direction)
-	if animation_name != "" and sprite.sprite_frames.has_animation(animation_name):
+	if _sprite_has_animation(sprite, animation_name):
+		_restore_layer_visibility_if_needed(sprite)
 		sprite.animation = animation_name
 		sprite.frame = 0
 		sprite.stop()
+		_apply_face_gear_frame_alignment(sprite)
+		return
+
+	_hide_layer_for_missing_animation(sprite)
+
+func _apply_face_gear_frame_alignment(sprite: AnimatedSprite2D) -> void:
+	if sprite == null or sprite.name != FACE_GEAR_SPRITE_NAME or sprite.sprite_frames == null:
+		return
+
+	if master_appearance_sprite == null or master_appearance_sprite.sprite_frames == null:
+		return
+
+	if not sprite.has_meta(BASE_SPRITE_OFFSET_META):
+		sprite.set_meta(BASE_SPRITE_OFFSET_META, sprite.offset)
+
+	var animation_name: StringName = sprite.animation
+	if not sprite.sprite_frames.has_animation(animation_name):
+		return
+
+	if not master_appearance_sprite.sprite_frames.has_animation(animation_name):
+		return
+
+	var frame_count := sprite.sprite_frames.get_frame_count(animation_name)
+	var master_frame_count := master_appearance_sprite.sprite_frames.get_frame_count(animation_name)
+	if frame_count <= 0 or master_frame_count <= 0:
+		return
+
+	var frame_index := clampi(sprite.frame, 0, frame_count - 1)
+	var master_frame_index := clampi(master_appearance_sprite.frame, 0, master_frame_count - 1)
+
+	var reference_face_center_y := _get_frame_opaque_center_y(sprite.sprite_frames, animation_name, 0)
+	var current_face_center_y := _get_frame_opaque_center_y(sprite.sprite_frames, animation_name, frame_index)
+	var reference_body_center_y := _get_frame_opaque_center_y(master_appearance_sprite.sprite_frames, animation_name, 0)
+	var current_body_center_y := _get_frame_opaque_center_y(master_appearance_sprite.sprite_frames, animation_name, master_frame_index)
+	if reference_face_center_y < 0.0 or current_face_center_y < 0.0:
+		return
+	if reference_body_center_y < 0.0 or current_body_center_y < 0.0:
+		return
+
+	var base_offset: Vector2 = sprite.get_meta(BASE_SPRITE_OFFSET_META)
+	var body_bob_y := current_body_center_y - reference_body_center_y
+	sprite.offset = base_offset + Vector2(0.0, reference_face_center_y + body_bob_y - current_face_center_y)
+
+func _get_frame_opaque_center_y(sprite_frames: SpriteFrames, animation_name: StringName, frame_index: int) -> float:
+	var cache_key := "%s:%s:%d" % [str(sprite_frames.get_instance_id()), str(animation_name), frame_index]
+	if frame_opaque_center_y_cache.has(cache_key):
+		return float(frame_opaque_center_y_cache[cache_key])
+
+	var texture := sprite_frames.get_frame_texture(animation_name, frame_index)
+	if texture == null:
+		frame_opaque_center_y_cache[cache_key] = -1.0
+		return -1.0
+
+	var image := texture.get_image()
+	if image == null:
+		frame_opaque_center_y_cache[cache_key] = -1.0
+		return -1.0
+
+	var top_y := image.get_height()
+	var bottom_y := -1
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			if image.get_pixel(x, y).a > 0.05:
+				top_y = mini(top_y, y)
+				bottom_y = maxi(bottom_y, y)
+
+	if bottom_y < top_y:
+		frame_opaque_center_y_cache[cache_key] = -1.0
+		return -1.0
+
+	var center_y := (float(top_y) + float(bottom_y)) * 0.5
+	frame_opaque_center_y_cache[cache_key] = center_y
+	return center_y
+
+func _hide_layer_for_missing_animation(sprite: AnimatedSprite2D) -> void:
+	if sprite == null or sprite == master_appearance_sprite:
+		return
+
+	if sprite.visible:
+		sprite.set_meta(HIDDEN_FOR_MISSING_ANIMATION_META, true)
+		sprite.visible = false
+
+	sprite.stop()
+
+func _restore_layer_visibility_if_needed(sprite: AnimatedSprite2D) -> void:
+	if sprite == null:
+		return
+
+	if sprite.get_meta(HIDDEN_FOR_MISSING_ANIMATION_META, false) == true:
+		sprite.visible = true
+		sprite.set_meta(HIDDEN_FOR_MISSING_ANIMATION_META, false)
+
+func _sprite_has_animation(sprite: AnimatedSprite2D, animation_name: StringName) -> bool:
+	return sprite != null and sprite.sprite_frames != null and str(animation_name) != "" and sprite.sprite_frames.has_animation(animation_name)
 
 func _get_idle_animation_name(direction: Vector2) -> String:
 	if direction == Vector2.DOWN:

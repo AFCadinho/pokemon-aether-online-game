@@ -2,16 +2,37 @@ extends RefCounted
 
 class_name BattleAnimationRouter
 
+const MOVE_ANIMATION_CATALOG_PATH := "res://data/battle_move_animations.json"
+const EFFECT_ANIMATION_CATALOG_PATH := "res://data/battle_effect_animations.json"
+const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/normaldamage.ogg"
+const EFFECT_SOURCE_PLAYER_POSITION := Vector2(128, 224)
+const EFFECT_SOURCE_ENEMY_POSITION := Vector2(384, 96)
+
 var player_sprite_box: Node
 var enemy_sprite_box: Node
+var animation_parent: Node
+var move_animation_configs: Dictionary = {}
+var loaded_move_animation_configs: Dictionary = {}
+var effect_animation_configs: Dictionary = {}
+var effect_animation_aliases: Dictionary = {}
+var loaded_effect_animation_configs: Dictionary = {}
+var animation_resource_cache: Dictionary = {}
+var animation_data_cache: Dictionary = {}
+var resource_cache: Dictionary = {}
+var threaded_resource_requests: Dictionary = {}
+var sound_stream_cache: Dictionary = {}
 
 
-func setup(player_box: Node, enemy_box: Node) -> void:
+func setup(player_box: Node, enemy_box: Node, parent_node: Node = null) -> void:
 	player_sprite_box = player_box
 	enemy_sprite_box = enemy_box
+	animation_parent = parent_node
 
 
 func play_attack_tween_for_actor(actor_ident: String) -> void:
+	if not SettingsManager.battle_animations:
+		return
+
 	match _get_player_id_from_ident(actor_ident):
 		"p1":
 			await player_sprite_box.play_attack_tween(Vector2(28, -6))
@@ -19,7 +40,466 @@ func play_attack_tween_for_actor(actor_ident: String) -> void:
 			await enemy_sprite_box.play_attack_tween(Vector2(-28, 6))
 
 
+func play_move_animation(move_name: String, _actor_ident: String = "", _target_ident: String = "") -> void:
+	if not SettingsManager.battle_animations:
+		return
+
+	var move_key: String = _normalize_move_name(move_name)
+	var config: Dictionary = _get_move_animation_config(move_key)
+	if config.is_empty():
+		return
+
+	await _play_animation_config(config)
+
+
+func play_effect_animation(effect_key: String, target_ident: String = "") -> void:
+	if not SettingsManager.battle_animations:
+		return
+
+	var config: Dictionary = _get_effect_animation_config(_normalize_animation_key(effect_key))
+	if config.is_empty():
+		return
+
+	await _play_animation_config(config, target_ident)
+
+
+func _play_animation_config(config: Dictionary, target_ident: String = "") -> void:
+	var parent_node: Node = animation_parent
+	if parent_node == null:
+		parent_node = player_sprite_box.get_parent()
+	if parent_node == null:
+		return
+
+	if not _animation_assets_available(config):
+		return
+
+	var resources: Dictionary = _get_animation_resources(config)
+	if resources.is_empty():
+		return
+
+	var animation_node: MoveAnimationPlayer = _create_move_animation_node(config, resources)
+
+	var overlay: Control = _create_animation_overlay(parent_node)
+	if overlay != null:
+		parent_node.add_child(overlay)
+		_fit_animation_to_parent(animation_node, overlay)
+		_apply_effect_target_offset(animation_node, target_ident)
+		overlay.add_child(animation_node)
+		await _wait_for_animation_node(animation_node, overlay)
+		if is_instance_valid(overlay):
+			overlay.queue_free()
+		return
+
+	animation_node.z_index = 50
+	_fit_animation_to_parent(animation_node, parent_node)
+	_apply_effect_target_offset(animation_node, target_ident)
+	parent_node.add_child(animation_node)
+	await _wait_for_animation_node(animation_node, parent_node)
+
+
+func prewarm_move_animations(move_names: Array) -> void:
+	if not SettingsManager.battle_animations:
+		return
+
+	for move_name_value: Variant in move_names:
+		var move_key: String = _normalize_move_name(str(move_name_value))
+		if move_key == "":
+			continue
+
+		var config: Dictionary = _get_move_animation_config(move_key)
+		if not config.is_empty():
+			_prewarm_animation_assets(config)
+
+
+func prewarm_effect_animations(effect_keys: Array) -> void:
+	if not SettingsManager.battle_animations:
+		return
+
+	for effect_key_value: Variant in effect_keys:
+		var effect_key: String = _normalize_animation_key(str(effect_key_value))
+		if effect_key == "":
+			continue
+
+		var config: Dictionary = _get_effect_animation_config(effect_key)
+		if not config.is_empty():
+			_prewarm_animation_assets(config)
+
+
+func prewarm_common_battle_sounds() -> void:
+	if not SettingsManager.battle_animations:
+		return
+
+	_request_threaded_resource(TAKE_DAMAGE_SOUND_PATH)
+
+
+func has_move_animation(move_name: String) -> bool:
+	return not _get_move_animation_config(_normalize_move_name(move_name)).is_empty()
+
+
+func has_effect_animation(effect_key: String) -> bool:
+	return not _get_effect_animation_config(_normalize_animation_key(effect_key)).is_empty()
+
+
+func clear_move_animation_cache() -> void:
+	move_animation_configs.clear()
+	loaded_move_animation_configs.clear()
+	effect_animation_configs.clear()
+	effect_animation_aliases.clear()
+	loaded_effect_animation_configs.clear()
+	animation_resource_cache.clear()
+	animation_data_cache.clear()
+	resource_cache.clear()
+	threaded_resource_requests.clear()
+	sound_stream_cache.clear()
+
+
+func _get_move_animation_config(move_key: String) -> Dictionary:
+	if loaded_move_animation_configs.has(move_key):
+		return loaded_move_animation_configs[move_key] as Dictionary
+
+	_load_move_animation_catalog()
+	if not move_animation_configs.has(move_key):
+		return {}
+
+	var config: Dictionary = (move_animation_configs[move_key] as Dictionary).duplicate(true)
+	loaded_move_animation_configs[move_key] = config
+	return config
+
+
+func _load_move_animation_catalog() -> void:
+	if not move_animation_configs.is_empty():
+		return
+
+	var parsed_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(MOVE_ANIMATION_CATALOG_PATH))
+	if parsed_data == null or not parsed_data is Dictionary:
+		push_error("Could not read move animation catalog: %s" % MOVE_ANIMATION_CATALOG_PATH)
+		return
+
+	var catalog: Dictionary = parsed_data as Dictionary
+	var moves_value: Variant = catalog.get("moves", {})
+	if not moves_value is Dictionary:
+		push_error("Move animation catalog has no moves dictionary: %s" % MOVE_ANIMATION_CATALOG_PATH)
+		return
+
+	move_animation_configs = moves_value as Dictionary
+
+
+func _get_effect_animation_config(effect_key: String) -> Dictionary:
+	if loaded_effect_animation_configs.has(effect_key):
+		return loaded_effect_animation_configs[effect_key] as Dictionary
+
+	_load_effect_animation_catalog()
+	var resolved_key: String = str(effect_animation_aliases.get(effect_key, effect_key))
+	if not effect_animation_configs.has(resolved_key):
+		return {}
+
+	var config: Dictionary = (effect_animation_configs[resolved_key] as Dictionary).duplicate(true)
+	loaded_effect_animation_configs[effect_key] = config
+	return config
+
+
+func _load_effect_animation_catalog() -> void:
+	if not effect_animation_configs.is_empty():
+		return
+
+	var parsed_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(EFFECT_ANIMATION_CATALOG_PATH))
+	if parsed_data == null or not parsed_data is Dictionary:
+		push_error("Could not read effect animation catalog: %s" % EFFECT_ANIMATION_CATALOG_PATH)
+		return
+
+	var catalog: Dictionary = parsed_data as Dictionary
+	var effects_value: Variant = catalog.get("effects", {})
+	if not effects_value is Dictionary:
+		push_error("Effect animation catalog has no effects dictionary: %s" % EFFECT_ANIMATION_CATALOG_PATH)
+		return
+
+	effect_animation_configs = effects_value as Dictionary
+	var aliases_value: Variant = catalog.get("aliases", {})
+	if aliases_value is Dictionary:
+		effect_animation_aliases = aliases_value as Dictionary
+
+
+func _create_move_animation_node(config: Dictionary, resources: Dictionary = {}) -> MoveAnimationPlayer:
+	var animation_node: MoveAnimationPlayer = MoveAnimationPlayer.new()
+	animation_node.data_path = str(config.get("data_path", ""))
+	animation_node.sheet_path = str(config.get("sheet_path", ""))
+	animation_node.background_path = str(config.get("background_path", ""))
+	animation_node.foreground_path = str(config.get("foreground_path", ""))
+	var sound_paths: Dictionary = (config.get("sound_paths", {}) as Dictionary).duplicate(true)
+	animation_node.sound_paths = sound_paths
+	if not resources.is_empty():
+		animation_node.data_override = resources.get("data", {}) as Dictionary
+		animation_node.sheet_texture_override = resources.get("sheet_texture", null) as Texture2D
+		animation_node.background_texture_override = resources.get("background_texture", null) as Texture2D
+		animation_node.foreground_texture_override = resources.get("foreground_texture", null) as Texture2D
+		animation_node.sound_streams = resources.get("sound_streams", {}) as Dictionary
+	animation_node.speed_scale = float(config.get("speed_scale", 1.0))
+	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
+	animation_node.pattern_override = int(config.get("pattern_override", -1))
+	animation_node.loop = false
+	animation_node.free_on_finish = true
+	animation_node.show_timing_backgrounds = bool(config.get("show_timing_backgrounds", false))
+	animation_node.show_timing_foregrounds = bool(config.get("show_timing_foregrounds", false))
+	animation_node.show_pink_visual = bool(config.get("show_pink_visual", false))
+	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
+	animation_node.sprite_tint = _color_from_config(config.get("sprite_tint", [1.0, 1.0, 1.0, 1.0]), Color.WHITE)
+	animation_node.overlay_peak_alpha = float(config.get("overlay_peak_alpha", 0.20))
+	animation_node.sparkle_count = int(config.get("sparkle_count", 14))
+	return animation_node
+
+
+func _color_from_config(value: Variant, fallback: Color) -> Color:
+	if not value is Array:
+		return fallback
+
+	var channels: Array = value as Array
+	if channels.size() < 3:
+		return fallback
+
+	var alpha: float = 1.0
+	if channels.size() >= 4:
+		alpha = float(channels[3])
+	return Color(float(channels[0]), float(channels[1]), float(channels[2]), alpha)
+
+
+func _prewarm_animation_assets(config: Dictionary) -> void:
+	if not _animation_assets_available(config):
+		return
+
+	_get_animation_data(config)
+	_request_animation_resources(config)
+
+
+func _get_animation_resources(config: Dictionary) -> Dictionary:
+	var cache_key: String = _animation_cache_key(config)
+	if animation_resource_cache.has(cache_key):
+		return animation_resource_cache[cache_key] as Dictionary
+
+	var resource_path_keys: Array[String] = ["data_path", "sheet_path", "background_path", "foreground_path"]
+	var resources: Dictionary = {}
+	var animation_data: Dictionary = _get_animation_data(config)
+	if animation_data.is_empty():
+		return {}
+	resources["data"] = animation_data
+	_request_animation_resources(config)
+
+	for path_key: String in resource_path_keys:
+		var resource_path: String = str(config.get(path_key, ""))
+		if resource_path == "" or path_key == "data_path":
+			continue
+
+		var resource: Resource = _get_cached_resource(resource_path)
+		if resource == null:
+			return {}
+		if path_key == "sheet_path":
+			if not resource is Texture2D:
+				push_warning("Could not preload animation sheet: %s" % resource_path)
+				return {}
+			resources["sheet_texture"] = resource as Texture2D
+		elif path_key == "background_path":
+			resources["background_texture"] = resource as Texture2D
+		elif path_key == "foreground_path":
+			resources["foreground_texture"] = resource as Texture2D
+
+	var sound_paths: Dictionary = config.get("sound_paths", {}) as Dictionary
+	var sound_streams: Dictionary = {}
+	for sound_path_value: Variant in sound_paths.values():
+		var sound_path: String = str(sound_path_value)
+		if sound_path != "":
+			var stream: AudioStream = _get_cached_sound_stream(sound_path)
+			if stream == null:
+				return {}
+			if stream != null:
+				sound_streams[_sound_name_for_path(sound_paths, sound_path)] = stream
+	resources["sound_streams"] = sound_streams
+
+	animation_resource_cache[cache_key] = resources
+	return resources
+
+
+func _get_animation_data(config: Dictionary) -> Dictionary:
+	var data_path: String = str(config.get("data_path", ""))
+	if animation_data_cache.has(data_path):
+		return animation_data_cache[data_path] as Dictionary
+
+	var parsed_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(data_path))
+	if parsed_data == null or not parsed_data is Dictionary:
+		push_warning("Could not preload animation data: %s" % data_path)
+		return {}
+
+	var animation_data: Dictionary = parsed_data as Dictionary
+	if not _animation_data_is_valid(animation_data):
+		push_warning("Animation data is incomplete: %s" % data_path)
+		return {}
+
+	animation_data_cache[data_path] = animation_data
+	return animation_data
+
+
+func _request_animation_resources(config: Dictionary) -> void:
+	var resource_path_keys: Array[String] = ["sheet_path", "background_path", "foreground_path"]
+	for path_key: String in resource_path_keys:
+		var resource_path: String = str(config.get(path_key, ""))
+		if resource_path != "":
+			_request_threaded_resource(resource_path)
+
+	var sound_paths: Dictionary = config.get("sound_paths", {}) as Dictionary
+	for sound_path_value: Variant in sound_paths.values():
+		var sound_path: String = str(sound_path_value)
+		if sound_path != "":
+			_request_threaded_resource(sound_path)
+
+
+func _animation_data_is_valid(animation_data: Dictionary) -> bool:
+	var frames_value: Variant = animation_data.get("frames", [])
+	if not frames_value is Array or (frames_value as Array).is_empty():
+		return false
+
+	var tile_size_value: Variant = animation_data.get("tile_size", [])
+	if not tile_size_value is Array or (tile_size_value as Array).size() < 2:
+		return false
+
+	if float(animation_data.get("fps", 20.0)) <= 0.0:
+		return false
+
+	return true
+
+
+func _animation_cache_key(config: Dictionary) -> String:
+	return str(config.get("data_path", ""))
+
+
+func _sound_name_for_path(sound_paths: Dictionary, sound_path: String) -> String:
+	for sound_name: Variant in sound_paths.keys():
+		if str(sound_paths.get(sound_name, "")) == sound_path:
+			return str(sound_name)
+
+	return sound_path
+
+
+func _request_threaded_resource(resource_path: String) -> void:
+	if resource_path == "":
+		return
+	if resource_cache.has(resource_path) or threaded_resource_requests.has(resource_path):
+		return
+	if not ResourceLoader.exists(resource_path):
+		return
+
+	var error: Error = ResourceLoader.load_threaded_request(resource_path)
+	if error == OK or error == ERR_BUSY:
+		threaded_resource_requests[resource_path] = true
+
+
+func _get_cached_resource(resource_path: String) -> Resource:
+	if resource_path == "":
+		return null
+	if resource_cache.has(resource_path):
+		return resource_cache[resource_path] as Resource
+	if not ResourceLoader.exists(resource_path):
+		return null
+
+	if not threaded_resource_requests.has(resource_path):
+		_request_threaded_resource(resource_path)
+		return null
+
+	var status: int = ResourceLoader.load_threaded_get_status(resource_path)
+	match status:
+		ResourceLoader.THREAD_LOAD_LOADED:
+			var resource: Resource = ResourceLoader.load_threaded_get(resource_path)
+			if resource != null:
+				resource_cache[resource_path] = resource
+			threaded_resource_requests.erase(resource_path)
+			return resource
+		ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			threaded_resource_requests.erase(resource_path)
+
+	return null
+
+
+func _animation_assets_available(config: Dictionary) -> bool:
+	var data_path: String = str(config.get("data_path", ""))
+	var sheet_path: String = str(config.get("sheet_path", ""))
+	if data_path == "" or sheet_path == "":
+		return false
+	if not FileAccess.file_exists(data_path):
+		return false
+	if not ResourceLoader.exists(sheet_path):
+		return false
+
+	var optional_resource_path_keys: Array[String] = ["background_path", "foreground_path"]
+	for path_key: String in optional_resource_path_keys:
+		var resource_path: String = str(config.get(path_key, ""))
+		if resource_path != "" and not ResourceLoader.exists(resource_path):
+			return false
+
+	var sound_paths: Dictionary = config.get("sound_paths", {}) as Dictionary
+	for sound_path_value: Variant in sound_paths.values():
+		var sound_path: String = str(sound_path_value)
+		if sound_path != "" and not ResourceLoader.exists(sound_path):
+			return false
+
+	return true
+
+
+func _create_animation_overlay(parent_node: Node) -> Control:
+	if not parent_node is Control:
+		return null
+
+	var parent_control: Control = parent_node as Control
+	var overlay: Control = Control.new()
+	overlay.name = "MoveAnimationOverlay"
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	overlay.clip_contents = true
+	overlay.z_index = 50
+	overlay.anchor_left = 0.0
+	overlay.anchor_top = 0.0
+	overlay.anchor_right = 0.0
+	overlay.anchor_bottom = 0.0
+	overlay.position = Vector2.ZERO
+	overlay.custom_minimum_size = parent_control.size
+	overlay.size = parent_control.size
+	return overlay
+
+
+func _fit_animation_to_parent(animation_node: Node2D, parent_node: Node) -> void:
+	const SOURCE_SIZE := Vector2(512, 384)
+	if parent_node is Control:
+		var parent_control: Control = parent_node as Control
+		var available_size: Vector2 = parent_control.size
+		var cover_scale: float = maxf(available_size.x / SOURCE_SIZE.x, available_size.y / SOURCE_SIZE.y)
+		animation_node.scale = Vector2(cover_scale, cover_scale)
+		animation_node.position = (available_size - SOURCE_SIZE * cover_scale) * 0.5
+		return
+
+	animation_node.position = Vector2.ZERO
+
+
+func _apply_effect_target_offset(animation_node: Node2D, target_ident: String) -> void:
+	if target_ident == "":
+		return
+
+	if _get_player_id_from_ident(target_ident) != "p2":
+		return
+
+	var source_offset: Vector2 = EFFECT_SOURCE_ENEMY_POSITION - EFFECT_SOURCE_PLAYER_POSITION
+	animation_node.position += Vector2(source_offset.x * animation_node.scale.x, source_offset.y * animation_node.scale.y)
+
+
+func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void:
+	if not animation_node.has_signal("animation_finished"):
+		await parent_node.get_tree().create_timer(3.0).timeout
+		if is_instance_valid(animation_node):
+			animation_node.queue_free()
+		return
+
+	await animation_node.tree_exited
+
+
 func play_damage_tween_for_target(target_ident: String) -> void:
+	if not SettingsManager.battle_animations:
+		return
+
+	_play_one_shot_sound(TAKE_DAMAGE_SOUND_PATH)
 	match _get_player_id_from_ident(target_ident):
 		"p1":
 			await player_sprite_box.play_damage_tween()
@@ -27,7 +507,41 @@ func play_damage_tween_for_target(target_ident: String) -> void:
 			await enemy_sprite_box.play_damage_tween()
 
 
+func _play_one_shot_sound(sound_path: String) -> void:
+	var stream: AudioStream = _get_cached_sound_stream(sound_path)
+	if stream == null:
+		return
+
+	var parent_node: Node = animation_parent
+	if parent_node == null and player_sprite_box != null:
+		parent_node = player_sprite_box.get_parent()
+	if parent_node == null:
+		return
+
+	var player: AudioStreamPlayer = AudioStreamPlayer.new()
+	player.stream = stream
+	player.bus = SettingsManager.SFX_BUS
+	player.finished.connect(player.queue_free)
+	parent_node.add_child(player)
+	player.play()
+
+
+func _get_cached_sound_stream(sound_path: String) -> AudioStream:
+	if sound_path == "":
+		return null
+	if sound_stream_cache.has(sound_path):
+		return sound_stream_cache[sound_path] as AudioStream
+
+	var stream: AudioStream = _get_cached_resource(sound_path) as AudioStream
+	if stream != null:
+		sound_stream_cache[sound_path] = stream
+	return stream
+
+
 func play_heal_tween_for_target(target_ident: String) -> void:
+	if not SettingsManager.battle_animations:
+		return
+
 	match _get_player_id_from_ident(target_ident):
 		"p1":
 			await player_sprite_box.play_heal_tween()
@@ -36,6 +550,9 @@ func play_heal_tween_for_target(target_ident: String) -> void:
 
 
 func play_faint_tween_for_target(target_ident: String) -> void:
+	if not SettingsManager.battle_animations:
+		return
+
 	match _get_player_id_from_ident(target_ident):
 		"p1":
 			await player_sprite_box.play_faint_tween()
@@ -44,6 +561,9 @@ func play_faint_tween_for_target(target_ident: String) -> void:
 
 
 func play_stat_change_tween_for_target(target_ident: String, amount: int) -> void:
+	if not SettingsManager.battle_animations:
+		return
+
 	if amount == 0:
 		return
 
@@ -58,6 +578,14 @@ func play_stat_change_tween_for_target(target_ident: String, amount: int) -> voi
 				await enemy_sprite_box.play_stat_raise_tween()
 			else:
 				await enemy_sprite_box.play_stat_drop_tween()
+
+
+func _normalize_move_name(move_name: String) -> String:
+	return move_name.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
+
+
+func _normalize_animation_key(value: String) -> String:
+	return value.strip_edges().to_lower().replace(" ", "_").replace("-", "_")
 
 
 func _get_player_id_from_ident(ident: String) -> String:

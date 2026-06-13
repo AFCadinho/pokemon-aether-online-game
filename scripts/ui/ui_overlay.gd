@@ -32,6 +32,8 @@ enum DevPokemonPopupMode {
 @onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
 @onready var dev_pokemon_add_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/AddButton
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
+@onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
+@onready var settings_menu: PanelContainer = $Control/SettingsMenu
 
 var party_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
@@ -50,12 +52,20 @@ func _ready() -> void:
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
+	settings_button.pressed.connect(_on_settings_button_pressed)
+	if settings_menu.has_signal("closed"):
+		settings_menu.closed.connect(_on_settings_menu_closed)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
 
 func _input(event: InputEvent) -> void:
+	if _is_settings_toggle_event(event):
+		_toggle_settings_menu()
+		get_viewport().set_input_as_handled()
+		return
+
 	if not chat_input.has_focus():
 		return
 	if not (event is InputEventMouseButton):
@@ -73,6 +83,25 @@ func _input(event: InputEvent) -> void:
 
 func _is_point_inside_control(control: Control, point: Vector2) -> bool:
 	return control.get_global_rect().has_point(point)
+
+func _is_settings_toggle_event(event: InputEvent) -> bool:
+	if not (event is InputEventKey):
+		return false
+
+	var key_event: InputEventKey = event as InputEventKey
+	return key_event.pressed and not key_event.echo and key_event.keycode == KEY_ESCAPE
+
+func _toggle_settings_menu() -> void:
+	if settings_menu.visible:
+		if settings_menu.has_method("close"):
+			settings_menu.call("close")
+			return
+
+		settings_menu.visible = false
+		_on_settings_menu_closed()
+		return
+
+	_on_settings_button_pressed()
 
 func _build_party_slots() -> void:
 	party_slots.clear()
@@ -406,6 +435,16 @@ func _on_dev_pokemon_close_button_pressed() -> void:
 	dev_pokemon_popup.visible = false
 	dev_pokemon_popup_mode = DevPokemonPopupMode.POKEMON
 	chat_input.grab_focus()
+
+func _on_settings_button_pressed() -> void:
+	if settings_menu.has_method("open"):
+		settings_menu.call("open")
+		return
+
+	settings_menu.visible = true
+
+func _on_settings_menu_closed() -> void:
+	settings_button.grab_focus()
 
 func _add_chat_message(text: String) -> void:
 	var entry := message_entry_template.duplicate() as RichTextLabel

@@ -1,0 +1,194 @@
+{
+  "version": 1,
+  "moves": {
+    "moonblast": {
+      "template": "imported_sheet",
+      "overlay_peak_alpha": 0.2,
+      "sprite_tint": [
+        1.0,
+        0.78,
+        1.0,
+        1.0
+      ],
+      "show_timing_backgrounds": false,
+      "category": "beam",
+      "show_timing_foregrounds": false,
+      "visual_color": [
+        1.0,
+        0.2,
+        0.75,
+        1.0
+      ],
+      "sparkle_count": 14,
+      "show_pink_visual": true,
+      "speed_scale": 1.35,
+      "data_path": "res://assets/battles/animations/moonblast/moonblast.json",
+      "sheet_path": "res://assets/battles/animations/moonblast/PRAS- Moonblast.png",
+      "background_path": "res://assets/battles/animations/moonblast/PRAS- Starry BG.png",
+      "foreground_path": "res://assets/battles/animations/moonblast/PRAS- Moonblast FG.png",
+      "sound_paths": {
+        "PRSFX- Moonblast1.wav": "res://assets/battles/animations/moonblast/PRSFX- Moonblast1.wav",
+        "PRSFX- Moonblast2.wav": "res://assets/battles/animations/moonblast/PRSFX- Moonblast2.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "icebeam": {
+      "show_pink_visual": true,
+      "speed_scale": 1.35,
+      "category": "beam",
+      "show_timing_foregrounds": false,
+      "sprite_tint": [
+        0.82,
+        0.97,
+        1.0,
+        1.0
+      ],
+      "show_timing_backgrounds": false,
+      "sparkle_count": 8,
+      "overlay_peak_alpha": 0.12,
+      "visual_color": [
+        0.45,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "template": "imported_sheet",
+      "data_path": "res://assets/battles/animations/icebeam/icebeam.json",
+      "sheet_path": "res://assets/battles/animations/icebeam/PRAS- Ice.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Ice Beam.wav": "res://assets/battles/animations/icebeam/PRSFX- Ice Beam.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": 2
+    },
+    "flamethrower": {
+      "template": "imported_sheet",
+      "visual_color": [
+        1.0,
+        0.28,
+        0.08,
+        1.0
+      ],
+      "category": "beam",
+      "show_timing_backgrounds": false,
+      "sparkle_count": 0,
+      "overlay_peak_alpha": 0.0,
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "show_timing_foregrounds": false,
+      "speed_scale": 1.25,
+      "show_pink_visual": false,
+      "data_path": "res://assets/battles/animations/flamethrower/flamethrower.json",
+      "sheet_path": "res://assets/battles/animations/flamethrower/PRAS- Fire.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Flamethrower.wav": "res://assets/battles/animations/flamethrower/PRSFX- Flamethrower.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": 2
+    },
+    "thunderbolt": {
+      "category": "beam",
+      "show_timing_foregrounds": false,
+      "sparkle_count": 8,
+      "show_timing_backgrounds": false,
+      "template": "imported_sheet",
+      "visual_color": [
+        1.0,
+        0.86,
+        0.18,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.96,
+        0.62,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.08,
+      "show_pink_visual": true,
+      "speed_scale": 1.25,
+      "data_path": "res://assets/battles/animations/thunderbolt/thunderbolt.json",
+      "sheet_path": "res://assets/battles/animations/thunderbolt/PRAS- Electric.png",
+      "background_path": "res://assets/battles/animations/thunderbolt/PRAS- Black BG.png",
+      "foreground_path": "res://assets/battles/animations/thunderbolt/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Thunderbolt1.wav": "res://assets/battles/animations/thunderbolt/PRSFX- Thunderbolt1.wav",
+        "PRSFX- Thunderbolt2.wav": "res://assets/battles/animations/thunderbolt/PRSFX- Thunderbolt2.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "quickattack": {
+      "speed_scale": 1.55,
+      "show_timing_foregrounds": false,
+      "overlay_peak_alpha": 0.0,
+      "show_timing_backgrounds": false,
+      "sparkle_count": 0,
+      "template": "imported_sheet",
+      "show_pink_visual": false,
+      "visual_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "category": "physical_contact",
+      "data_path": "res://assets/battles/animations/quickattack/quickattack.json",
+      "sheet_path": "res://assets/battles/animations/quickattack/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Quick Attack.wav": "res://assets/battles/animations/quickattack/PRSFX- Quick Attack.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "swordsdance": {
+      "show_timing_foregrounds": false,
+      "category": "status_buff",
+      "speed_scale": 1.25,
+      "sparkle_count": 10,
+      "visual_color": [
+        0.55,
+        0.72,
+        1.0,
+        1.0
+      ],
+      "show_timing_backgrounds": false,
+      "template": "imported_sheet",
+      "sprite_tint": [
+        0.86,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "show_pink_visual": true,
+      "overlay_peak_alpha": 0.12,
+      "data_path": "res://assets/battles/animations/swordsdance/swordsdance.json",
+      "sheet_path": "res://assets/battles/animations/swordsdance/PRAS- Swords Dance + Signal Beam.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Swords Dance1.wav": "res://assets/battles/animations/swordsdance/PRSFX- Swords Dance1.wav",
+        "PRSFX- Swords Dance2.wav": "res://assets/battles/animations/swordsdance/PRSFX- Swords Dance2.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    }
+  }
+}

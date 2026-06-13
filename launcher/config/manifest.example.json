@@ -8,10 +8,67 @@
   },
   "assetPacks": [
     {
-      "id": "pokemon-sprites-basic",
-      "version": "v1",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-sprite-assets-basic-v1.zip",
-      "sha256": ""
+      "id": "pokemon-home",
+      "version": "pokemon-home-v1",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-home-v1.zip",
+      "sha256": "",
+      "sizeBytes": 61327194
+    },
+    {
+      "id": "pokemon-front",
+      "version": "pokemon-front-scale1-128-v1",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-front-scale1-128-v1.zip",
+      "sha256": "",
+      "sizeBytes": 90099039
+    },
+    {
+      "id": "pokemon-back",
+      "version": "pokemon-back-scale1-128-v1",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-back-scale1-128-v1.zip",
+      "sha256": "",
+      "sizeBytes": 78450869
+    },
+    {
+      "id": "pokemon-shiny-front",
+      "version": "pokemon-shiny-front-scale1-128-v1",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-shiny-front-scale1-128-v1.zip",
+      "sha256": "",
+      "sizeBytes": 88077401
+    },
+    {
+      "id": "pokemon-shiny-back",
+      "version": "pokemon-shiny-back-scale1-128-v1",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-shiny-back-scale1-128-v1.zip",
+      "sha256": "",
+      "sizeBytes": 72477263
+    },
+    {
+      "id": "pokemon-gen5-front",
+      "version": "pokemon-gen5-front-v2",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-front-v2.zip",
+      "sha256": "",
+      "sizeBytes": 315362253
+    },
+    {
+      "id": "pokemon-gen5-back",
+      "version": "pokemon-gen5-back-v2",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-back-v2.zip",
+      "sha256": "",
+      "sizeBytes": 248810078
+    },
+    {
+      "id": "pokemon-gen5-shiny-front",
+      "version": "pokemon-gen5-shiny-front-v2",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-front-v2.zip",
+      "sha256": "",
+      "sizeBytes": 318368865
+    },
+    {
+      "id": "pokemon-gen5-shiny-back",
+      "version": "pokemon-gen5-shiny-back-v2",
+      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-back-v2.zip",
+      "sha256": "",
+      "sizeBytes": 251913753
     }
   ]
 }

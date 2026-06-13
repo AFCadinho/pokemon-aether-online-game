@@ -11,6 +11,7 @@ const VERSION_FILE := "user://versions.json"
 const ERROR_LOG_FILE := "user://launcher_error.log"
 const TEMP_DIR := "user://downloads"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
+const USER_AGENT_HEADER := "User-Agent: PokemonAetherLauncher/1.0"
 
 @onready var shell_panel: PanelContainer = $Shell
 @onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
@@ -276,7 +277,7 @@ func check_for_updates() -> void:
 	_set_status("Checking for updates...")
 	_log("Checking for updates.")
 	http_request.download_file = ""
-	var error_code: Error = http_request.request(manifest_url)
+	var error_code: Error = http_request.request(manifest_url, _request_headers())
 	if error_code != OK:
 		_set_busy(false)
 		_set_status("Could not request manifest.")
@@ -288,7 +289,7 @@ func fetch_news() -> void:
 		_render_news_items([])
 		return
 
-	var error_code: Error = news_request.request(news_url)
+	var error_code: Error = news_request.request(news_url, _request_headers())
 	if error_code != OK:
 		_render_news_items([])
 		_log_error("News request failed: %s" % error_string(error_code))
@@ -585,12 +586,16 @@ func _start_next_download() -> void:
 	_set_status("Downloading %s..." % download_label)
 	_log("Downloading %s." % download_label)
 	http_request.download_file = target_path
-	var error_code: Error = http_request.request(url)
+	var error_code: Error = http_request.request(url, _request_headers())
 	if error_code != OK:
 		_set_busy(false)
 		_set_status("Could not start download.")
 		_log_error("Download request failed: %s" % error_string(error_code))
 		current_download.clear()
+
+
+func _request_headers() -> PackedStringArray:
+	return PackedStringArray([USER_AGENT_HEADER])
 
 
 func _build_download_queue() -> void:

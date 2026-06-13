@@ -12,6 +12,7 @@ const BATTLE_SPRITE_SCALE := Vector2(2, 2)
 const BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 0.85
 const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
+const PIXEL_SPRITE_STYLE_ORDER: Array[String] = ["gen5", "legacy_showdown", "showdown"]
 const HOME_SPRITE_RENDER_SCALE := 2.0
 const ATTACK_TWEEN_OFFSET := Vector2(28, -6)
 const DAMAGE_FLASH_COLOR := Color(1.0, 0.18, 0.18, 1.0)
@@ -343,7 +344,11 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 
 func _get_sprite_asset_roots(side: String, is_shiny: bool) -> Array[String]:
 	var roots: Array[String] = []
-	for style in BATTLE_SPRITE_STYLE_ORDER:
+	var style_order: Array[String] = BATTLE_SPRITE_STYLE_ORDER
+	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_PIXEL:
+		style_order = PIXEL_SPRITE_STYLE_ORDER
+
+	for style in style_order:
 		roots.append_array(_get_sprite_asset_roots_for_style(style, side, is_shiny))
 
 	return roots
@@ -682,7 +687,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		_set_sprite_target_scale_from_frames(double_sprite_1, frames_1)
 		_snap_sprite_to_pixel_grid(double_sprite_1)
 		double_sprite_1.visible = true
-		double_sprite_1.play()
+		_apply_sprite_playback_mode(double_sprite_1)
 
 	_reset_sprite_pose(double_sprite_2)
 	if frames_2 != null:
@@ -692,7 +697,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		_set_sprite_target_scale_from_frames(double_sprite_2, frames_2)
 		_snap_sprite_to_pixel_grid(double_sprite_2)
 		double_sprite_2.visible = true
-		double_sprite_2.play()
+		_apply_sprite_playback_mode(double_sprite_2)
 
 func set_single_pokemon_species(species: String, side: String, is_shiny: bool = false) -> void:
 	set_battle_type(false)
@@ -709,8 +714,16 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	_set_sprite_target_scale_from_frames(single_sprite, frames)
 	_snap_sprite_to_pixel_grid(single_sprite)
 	single_sprite.visible = true
-	single_sprite.play()
+	_apply_sprite_playback_mode(single_sprite)
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
+func _apply_sprite_playback_mode(sprite: AnimatedSprite2D) -> void:
+	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_STATIC:
+		sprite.stop()
+		sprite.frame = 0
+		return
+
+	sprite.play()
 
 func set_stat_stages(stages: Dictionary) -> void:
 	if single_stat_stage_panel != null and single_stat_stage_panel.has_method("set_stat_stages"):

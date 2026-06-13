@@ -17,6 +17,7 @@ func _ready() -> void:
 	add_to_group("world")
 	var first_map := $CurrentMap.get_child(0)
 	GameState.current_map = first_map
+	MusicManager.play_map_music(first_map)
 	
 	move_player_to_map(first_map)
 	
@@ -55,6 +56,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	$CurrentMap.add_child(new_map)
 
 	GameState.current_map = new_map
+	MusicManager.play_map_music(new_map)
 
 	var spawn_position := Vector2.ZERO
 	var spawn := new_map.get_node_or_null("Spawns/" + target_spawn_name)
@@ -132,15 +134,12 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		return
 		
 	is_in_battle = true
-	
-	player.is_moving = false
-	player.set_physics_process(false)
+	_lock_overworld_for_battle()
 	
 	var response: Dictionary = await create_dev_wild_battle_response(wild_pokemon)
 	if not response.get("success", false):
 		push_warning("World.start_dev_wild_battle failed: %s" % str(response.get("error", "Unknown error")))
-		is_in_battle = false
-		player.set_physics_process(true)
+		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	
@@ -153,8 +152,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		push_error("World.start_dev_wild_battle failed: could not load battle scene.")
 		battle_layer.queue_free()
 		battle_layer = null
-		is_in_battle = false
-		player.set_physics_process(true)
+		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -163,6 +161,8 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
+
+	MusicManager.play_battle_music()
 	
 	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
@@ -175,15 +175,12 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		return
 
 	is_in_battle = true
-
-	player.is_moving = false
-	player.set_physics_process(false)
+	_lock_overworld_for_battle()
 
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type)
 	if not response.get("success", false):
 		push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
-		is_in_battle = false
-		player.set_physics_process(true)
+		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -191,8 +188,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
 	if wild_pokemon == null:
 		push_warning("World.start_triggered_wild_battle_for_area failed: backend wild Pokemon payload could not be loaded for display.")
-		is_in_battle = false
-		player.set_physics_process(true)
+		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -205,8 +201,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		push_error("World.start_triggered_wild_battle_for_area failed: could not load battle scene.")
 		battle_layer.queue_free()
 		battle_layer = null
-		is_in_battle = false
-		player.set_physics_process(true)
+		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -215,6 +210,8 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
+
+	MusicManager.play_battle_music()
 
 	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
@@ -232,15 +229,12 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 		return false
 
 	is_in_battle = true
-
-	player.is_moving = false
-	player.set_physics_process(false)
+	_lock_overworld_for_battle()
 
 	var response: Dictionary = await create_trainer_battle_response(trainer_id)
 	if not response.get("success", false):
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
-		is_in_battle = false
-		player.set_physics_process(true)
+		_abort_battle_start()
 		return false
 
 	battle_layer = CanvasLayer.new()
@@ -252,8 +246,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 		push_error("World.start_trainer_battle failed: could not load battle scene.")
 		battle_layer.queue_free()
 		battle_layer = null
-		is_in_battle = false
-		player.set_physics_process(true)
+		_abort_battle_start()
 		return false
 
 	battle_instance = battle_scene.instantiate()
@@ -261,6 +254,8 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
+
+	MusicManager.play_battle_music()
 
 	await battle_instance.setup_trainer_battle_from_response(
 		PlayerSave.party[0],
@@ -277,8 +272,28 @@ func end_wild_battle() -> void:
 	battle_layer = null
 	battle_instance = null
 	is_in_battle = false
-	
-	player.set_physics_process(true)
+	_unlock_overworld_after_battle()
+	MusicManager.play_overworld_music()
 	
 func _on_battle_ended(_result: Dictionary) -> void:
 	end_wild_battle()
+
+func _lock_overworld_for_battle() -> void:
+	GameState.lock_input()
+	player.is_moving = false
+	player.target_position = player.global_position
+	player.move_start_position = player.global_position
+	player.move_elapsed = 0.0
+	player.set_process(false)
+	player.set_physics_process(false)
+	player.set_idle_frame()
+
+func _unlock_overworld_after_battle() -> void:
+	player.set_process(true)
+	player.set_physics_process(true)
+	GameState.unlock_input()
+
+func _abort_battle_start() -> void:
+	is_in_battle = false
+	_unlock_overworld_after_battle()
+	MusicManager.play_overworld_music()

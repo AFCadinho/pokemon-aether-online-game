@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "effects": {
+    "health_up": {
+      "template": "imported_sheet",
+      "source": "Common:HealthUp",
+      "category": "recovery",
+      "data_path": "res://assets/battles/animations/common/healthup/healthup.json",
+      "sheet_path": "res://assets/battles/animations/common/healthup/PRAS- Recovery.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Health Up.wav": "res://assets/battles/animations/common/healthup/PRSFX- Health Up.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "visual_color": [
+        0.45,
+        1.0,
+        0.55,
+        1.0
+      ],
+      "sprite_tint": [
+        0.72,
+        1.0,
+        0.74,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.1,
+      "sparkle_count": 8,
+      "speed_scale": 1.25,
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "grassy_terrain_start": {
+      "template": "imported_sheet",
+      "source": "Common:GrassyTerrain",
+      "category": "field_start",
+      "data_path": "res://assets/battles/animations/common/grassyterrain/grassyterrain.json",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Grassy Terrain.wav": "res://assets/battles/animations/common/grassyterrain/PRSFX- Grassy Terrain.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "visual_color": [
+        0.35,
+        1.0,
+        0.25,
+        1.0
+      ],
+      "sprite_tint": [
+        0.75,
+        1.0,
+        0.72,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.12,
+      "sparkle_count": 12,
+      "speed_scale": 1.15,
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "stat_up": {
+      "template": "imported_sheet",
+      "source": "Common:StatUp",
+      "category": "stat_change",
+      "data_path": "res://assets/battles/animations/common/statup/statup.json",
+      "sheet_path": "res://assets/battles/animations/common/statup/PRAS- Stats.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Stat Up.wav": "res://assets/battles/animations/common/statup/PRSFX- Stat Up.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "visual_color": [
+        0.45,
+        0.72,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.78,
+        0.88,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.08,
+      "sparkle_count": 8,
+      "speed_scale": 1.2,
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "stat_down": {
+      "template": "imported_sheet",
+      "source": "Common:StatDown",
+      "category": "stat_change",
+      "data_path": "res://assets/battles/animations/common/statdown/statdown.json",
+      "sheet_path": "res://assets/battles/animations/common/statdown/PRAS- Stats.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Stat Down.wav": "res://assets/battles/animations/common/statdown/PRSFX- Stat Down.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "visual_color": [
+        0.9,
+        0.38,
+        0.55,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.72,
+        0.82,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.08,
+      "sparkle_count": 8,
+      "speed_scale": 1.2,
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "use_item": {
+      "template": "imported_sheet",
+      "source": "Common:UseItem",
+      "category": "item",
+      "data_path": "res://assets/battles/animations/common/useitem/useitem.json",
+      "sheet_path": "res://assets/battles/animations/common/useitem/Custom_Use Item.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "UseItem": "res://assets/battles/animations/common/useitem/UseItem.ogg"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "visual_color": [
+        0.7,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.9,
+        0.96,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.07,
+      "sparkle_count": 6,
+      "speed_scale": 1.15,
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "eat_berry": {
+      "template": "imported_sheet",
+      "source": "Common:EatBerry",
+      "category": "item",
+      "data_path": "res://assets/battles/animations/common/eatberry/eatberry.json",
+      "sheet_path": "res://assets/battles/animations/common/eatberry/GEN8- Eat Berry.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Bite": "res://assets/battles/animations/common/eatberry/PRSFX- Bite.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "visual_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "speed_scale": 1.1,
+      "pattern_offset": 0,
+      "pattern_override": -1
+    }
+  },
+  "aliases": {
+    "leftovers_recovery": "health_up",
+    "grassy_terrain_heal": "health_up",
+    "aqua_ring_heal": "health_up",
+    "leech_seed_heal": "health_up",
+    "recover_heal": "health_up",
+    "generic_heal": "health_up",
+    "move_grassyterrain": "grassy_terrain_start",
+    "common_grassyterrain": "grassy_terrain_start",
+    "attack_up": "stat_up",
+    "attack_down": "stat_down",
+    "defense_up": "stat_up",
+    "defense_down": "stat_down",
+    "spatk_up": "stat_up",
+    "spatk_down": "stat_down",
+    "spdef_up": "stat_up",
+    "spdef_down": "stat_down",
+    "speed_up": "stat_up",
+    "speed_down": "stat_down",
+    "accuracy_up": "stat_up",
+    "accuracy_down": "stat_down",
+    "evasion_up": "stat_up",
+    "evasion_down": "stat_down",
+    "stat_boost": "stat_up",
+    "stat_raise": "stat_up",
+    "generic_stat_up": "stat_up",
+    "stat_drop": "stat_down",
+    "stat_lower": "stat_down",
+    "generic_stat_down": "stat_down",
+    "item_use": "use_item",
+    "useitem": "use_item",
+    "use_item": "use_item",
+    "generic_item": "use_item",
+    "potion_use": "use_item",
+    "eatberry": "eat_berry",
+    "eat_berry": "eat_berry",
+    "berry": "eat_berry",
+    "berry_eat": "eat_berry",
+    "berry_use": "eat_berry"
+  }
+}

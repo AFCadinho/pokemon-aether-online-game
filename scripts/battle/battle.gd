@@ -126,6 +126,8 @@ func _ready() -> void:
 	_connect_move_hover_signals()
 	_connect_party_hover_signals()
 	_connect_forfeit_confirm_dialog_signals()
+	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
+		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_setup_weather_presentation()
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
@@ -138,7 +140,7 @@ func _ready() -> void:
 		Callable(self, "_get_player_display_name")
 	)
 	event_presentation.debug_enabled = DEBUG_BATTLE_MOVE_EVENTS
-	animation_router.setup(player_sprite_box, enemy_sprite_box)
+	animation_router.setup(player_sprite_box, enemy_sprite_box, player_sprite_box.get_parent())
 	event_renderer.setup(
 		battle_log_panel,
 		current_action_panel,
@@ -186,6 +188,10 @@ func _setup_side_condition_presentation() -> void:
 		player_side_effects_panel,
 		enemy_side_effects_panel
 	)
+
+func _on_settings_changed() -> void:
+	_update_battle_status_panels()
+	_update_active_sprites()
 
 func _process(delta: float) -> void:
 	if hover_state.should_poll_sprite_hover():
@@ -836,8 +842,90 @@ func _apply_api_response(response: Dictionary) -> bool:
 	var success: bool = action_flow.apply_response(response)
 	if success:
 		_remember_active_player_party_moves()
+		_prewarm_current_battle_move_animations()
 
 	return success
+
+func _prewarm_current_battle_move_animations() -> void:
+	var move_names: Array[String] = []
+	_append_available_move_names(move_names, "p1")
+	_append_available_move_names(move_names, "p2")
+	_append_team_move_names(move_names, battle_state.get_player_team("p1"))
+	_append_team_move_names(move_names, battle_state.get_player_team("p2"))
+	_append_saved_party_move_names(move_names)
+
+	animation_router.prewarm_move_animations(move_names)
+
+func _append_available_move_names(move_names: Array[String], player_id: String) -> void:
+	for move_value: Variant in battle_state.get_available_moves(player_id):
+		_append_move_name_from_value(move_names, move_value)
+
+func _append_team_move_names(move_names: Array[String], team: Array) -> void:
+	for pokemon_value: Variant in team:
+		if pokemon_value is Dictionary:
+			var pokemon_data: Dictionary = pokemon_value as Dictionary
+			_append_move_names_from_value(move_names, pokemon_data.get("moves", []))
+			_append_move_names_from_value(move_names, pokemon_data.get("moveSlots", []))
+			_append_move_names_from_value(move_names, pokemon_data.get("baseMoves", []))
+		elif pokemon_value is Pokemon:
+			var pokemon: Pokemon = pokemon_value as Pokemon
+			_append_move_names_from_value(move_names, pokemon.moves)
+
+func _append_saved_party_move_names(move_names: Array[String]) -> void:
+	for pokemon_value: Variant in PlayerSave.party:
+		if not pokemon_value is Pokemon:
+			continue
+
+		var pokemon: Pokemon = pokemon_value as Pokemon
+		_append_move_names_from_value(move_names, pokemon.moves)
+
+func _append_move_names_from_value(move_names: Array[String], moves_value: Variant) -> void:
+	if moves_value is Array:
+		for move_value: Variant in moves_value:
+			_append_move_name_from_value(move_names, move_value)
+		return
+
+	_append_move_name_from_value(move_names, moves_value)
+
+func _append_move_name_from_value(move_names: Array[String], move_value: Variant) -> void:
+	var move_name: String = ""
+	if move_value is Dictionary:
+		var move_data: Dictionary = move_value as Dictionary
+		move_name = str(move_data.get("name", move_data.get("move", move_data.get("id", ""))))
+	else:
+		move_name = str(move_value)
+
+	move_name = move_name.strip_edges()
+	if move_name == "" or move_names.has(move_name):
+		return
+
+	move_names.append(move_name)
+
+func _prewarm_battle_event_animations(events: Array) -> void:
+	var move_names: Array[String] = []
+	var effect_keys: Array[String] = []
+	var needs_damage_sound: bool = false
+
+	for event_value: Variant in events:
+		if not event_value is Dictionary:
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		var preload_keys: Dictionary = event_presentation.get_animation_preload_keys_for_event(event_data)
+		for move_name_value: Variant in preload_keys.get("move_names", []):
+			var move_name: String = str(move_name_value)
+			if move_name != "":
+				move_names.append(move_name)
+		for effect_key_value: Variant in preload_keys.get("effect_keys", []):
+			var effect_key: String = str(effect_key_value)
+			if effect_key != "":
+				effect_keys.append(effect_key)
+		needs_damage_sound = needs_damage_sound or bool(preload_keys.get("needs_damage_sound", false))
+
+	animation_router.prewarm_move_animations(move_names)
+	animation_router.prewarm_effect_animations(effect_keys)
+	if needs_damage_sound:
+		animation_router.prewarm_common_battle_sounds()
 
 func _remember_active_player_party_moves() -> void:
 	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
@@ -1274,10 +1362,11 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	if not _apply_initial_battle_response(api_response):
 		return
 
-	var player_species := _get_active_display_species("p1")
+	var player_species := _get_original_active_player_species(player_pokemon.species)
 	var opponent_species := _get_active_display_species("p2")
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
+	_show_original_player_lead_before_initial_events(player_species)
 	await _render_initial_battle_events(api_response)
 	_set_battle_actions_ready(true)
 
@@ -1292,7 +1381,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	if lead_response.is_empty():
 		return
 
-	var player_species := _get_active_display_species("p1")
+	var player_species := _get_original_active_player_species(player_pokemon.species)
 	var opponent_species := _get_active_display_species("p2")
 	_add_battle_log_messages(setup_flow.get_trainer_battle_start_messages(
 		player_species,
@@ -1300,6 +1389,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		trainer_data,
 		_get_player_display_name("p2")
 	))
+	_show_original_player_lead_before_initial_events(player_species)
 	await _render_initial_battle_events(lead_response)
 	_set_battle_actions_ready(true)
 
@@ -1338,8 +1428,94 @@ func _apply_team_preview_battle_response(api_response: Dictionary) -> bool:
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
 	event_renderer.add_turn_header(battle_state.get_turn())
-	await _render_battle_events(_get_wild_battle_start_events(api_response.get("events", [])), false)
+	var start_events := _get_wild_battle_start_events(api_response.get("events", []))
+	_show_original_transform_targets_before_initial_events(start_events)
+	await _render_battle_events(start_events, false)
 	_show_current_action_prompt()
+
+func _show_original_player_lead_before_initial_events(species: String) -> void:
+	if species == "":
+		return
+
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
+	var level: int = battle_state.get_active_pokemon_level("p1")
+	var hp: int = battle_state.get_active_pokemon_current_hp("p1")
+	var max_hp: int = max(battle_state.get_active_pokemon_max_hp("p1"), 1)
+	var status: String = battle_state.get_active_pokemon_status("p1")
+	var gender: String = battle_state.get_active_pokemon_gender("p1")
+	var is_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
+
+	player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+
+func _show_original_transform_targets_before_initial_events(events: Array) -> void:
+	for event_value in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		if str(event.get("type", "")) != "transform":
+			continue
+
+		var target_ident := str(event.get("target", ""))
+		var player_id := _get_player_id_from_ident(target_ident)
+		var original_species := _get_species_from_ident(target_ident)
+		if player_id == "" or original_species == "":
+			continue
+
+		_show_original_active_pokemon_for_player(player_id, original_species)
+
+func _show_original_active_pokemon_for_player(player_id: String, species: String) -> void:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+	var level: int = battle_state.get_active_pokemon_level(player_id)
+	var hp: int = battle_state.get_active_pokemon_current_hp(player_id)
+	var max_hp: int = max(battle_state.get_active_pokemon_max_hp(player_id), 1)
+	var status: String = battle_state.get_active_pokemon_status(player_id)
+	var gender: String = battle_state.get_active_pokemon_gender(player_id)
+	var is_shiny := _get_active_pokemon_is_shiny(player_id)
+
+	if player_id == "p1":
+		var saved_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
+		is_shiny = saved_shiny
+		player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+	elif player_id == "p2":
+		enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+		enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+
+func _get_original_active_player_species(fallback_species: String = "") -> String:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
+	var saved_pokemon := _get_saved_pokemon_for_active_data(active_pokemon)
+	if saved_pokemon != null:
+		return saved_pokemon.species
+
+	var ident := str(active_pokemon.get("ident", ""))
+	if ident.contains(": "):
+		return str(ident.split(": ")[1]).strip_edges()
+
+	return fallback_species
+
+func _get_saved_pokemon_shiny_for_active_data(active_pokemon: Dictionary) -> bool:
+	var saved_pokemon := _get_saved_pokemon_for_active_data(active_pokemon)
+	if saved_pokemon == null:
+		return false
+
+	return saved_pokemon.shiny
+
+func _get_saved_pokemon_for_active_data(active_pokemon: Dictionary) -> Pokemon:
+	var instance_id := str(active_pokemon.get("instanceId", active_pokemon.get("instance_id", ""))).strip_edges()
+	if instance_id == "":
+		return null
+
+	for pokemon_value in PlayerSave.party:
+		var pokemon: Pokemon = pokemon_value as Pokemon
+		if pokemon == null:
+			continue
+
+		if pokemon.instance_id == instance_id:
+			return pokemon
+
+	return null
 
 func _run_trainer_lead_selection(api_response: Dictionary) -> Dictionary:
 	if _should_show_team_preview(api_response):
@@ -1503,6 +1679,7 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_show_moves()
 
 func _render_battle_events(events: Array, render_turn_headers := true) -> void:
+	_prewarm_battle_event_animations(events)
 	event_presentation.reset_recent_context()
 
 	for event in events:
@@ -1511,6 +1688,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 
 		var event_data: Dictionary = event as Dictionary
 		_remember_battle_modifier_event(event_data)
+
 		var presentation: Dictionary = event_presentation.build(event_data)
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
@@ -1519,6 +1697,9 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			continue
 
 		await event_renderer.render_event(event_data, presentation)
+		if str(event_data.get("type", "")) == "transform":
+			_update_hud_panels()
+			_update_active_sprites()
 
 	_update_hud_panels()
 	_update_party_slots()
@@ -1534,7 +1715,7 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 
 		var event_data: Dictionary = event as Dictionary
 		match str(event_data.get("type", "")):
-			"fieldEffect", "pokemonEffect", "ability", "statChange":
+			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform":
 				start_events.append(event_data)
 
 	return start_events
@@ -1548,12 +1729,22 @@ func _get_player_id_from_ident(ident: String) -> String:
 
 	return ""
 
+func _get_species_from_ident(ident: String) -> String:
+	if not ident.contains(": "):
+		return ""
+
+	return str(ident.split(": ")[1]).strip_edges()
+
 func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_previous_hp: bool) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
 	if player_id == "":
 		return
 
 	var hp_data: Dictionary = hp_event_helper.get_event_hp_snapshot(event, use_previous_hp)
+	if hp_data.is_empty():
+		hp_data = _get_event_hp_snapshot_with_state_fallback(event, player_id, use_previous_hp)
+	if hp_data.is_empty() and not use_previous_hp:
+		hp_data = _get_active_state_hp_snapshot(player_id)
 	if hp_data.is_empty():
 		_debug_battle_hp("HUD hp event missing snapshot target=%s previous=%s event=%s" % [
 			target_ident,
@@ -1574,6 +1765,39 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
 		"p2":
 			enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+
+func _get_event_hp_snapshot_with_state_fallback(event: Dictionary, player_id: String, use_previous_hp: bool) -> Dictionary:
+	var hp_key: String = "previousHp" if use_previous_hp else "hp"
+	if not event.has(hp_key):
+		return {}
+
+	var state_hp_data: Dictionary = _get_active_state_hp_snapshot(player_id)
+	if state_hp_data.is_empty():
+		return {}
+
+	return {
+		"hp": int(event.get(hp_key, 0)),
+		"max_hp": max(int(state_hp_data.get("max_hp", 1)), 1),
+	}
+
+func _get_active_state_hp_snapshot(player_id: String) -> Dictionary:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+	if active_pokemon.is_empty():
+		return {}
+
+	var condition_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(str(active_pokemon.get("condition", "")))
+	if not condition_snapshot.is_empty():
+		return condition_snapshot
+
+	var hp: int = int(active_pokemon.get("hp", active_pokemon.get("currentHp", 0)))
+	var max_hp: int = int(active_pokemon.get("maxHp", active_pokemon.get("max_hp", 0)))
+	if max_hp <= 0:
+		return {}
+
+	return {
+		"hp": hp,
+		"max_hp": max_hp,
+	}
 
 func _get_status_from_event_or_state(event: Dictionary, player_id: String, use_previous_hp: bool) -> String:
 	var event_status: String = hp_event_helper.get_event_status(event, use_previous_hp)

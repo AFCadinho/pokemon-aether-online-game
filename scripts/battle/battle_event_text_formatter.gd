@@ -104,6 +104,14 @@ func format_win_event(winner: String) -> String:
 
 	return "%s won!" % winner
 
+func format_transform_event(actor: String, species: String) -> String:
+	if actor == "":
+		actor = "Pokemon"
+	if species == "":
+		species = "Pokemon"
+
+	return "%s transformed into %s!" % [actor, species]
+
 func format_wild_battle_start_messages(player_species: String, opponent_species: String) -> Array[String]:
 	if player_species == "":
 		player_species = "Pokemon"

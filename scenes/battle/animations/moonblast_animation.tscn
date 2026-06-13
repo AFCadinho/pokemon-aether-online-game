@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cd0hivakyjrjl"]
+
+[ext_resource type="Script" uid="uid://cqx4l8t24tkf8" path="res://scripts/battle/animations/move_animation_player.gd" id="1_move_animation"]
+
+[node name="MoonblastAnimation" type="Node2D" unique_id=1350913901]
+script = ExtResource("1_move_animation")
+data_path = "res://assets/battles/animations/moonblast/moonblast.json"
+sheet_path = "res://assets/battles/animations/moonblast/PRAS- Moonblast.png"
+background_path = "res://assets/battles/animations/moonblast/PRAS- Starry BG.png"
+foreground_path = "res://assets/battles/animations/moonblast/PRAS- Moonblast FG.png"
+sound_paths = {
+"PRSFX- Moonblast1.wav": "res://assets/battles/animations/moonblast/PRSFX- Moonblast1.wav",
+"PRSFX- Moonblast2.wav": "res://assets/battles/animations/moonblast/PRSFX- Moonblast2.wav"
+}
+speed_scale = 1.35

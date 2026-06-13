@@ -36,6 +36,38 @@ func reset_recent_context() -> void:
 	recent_move_event = false
 
 
+func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
+	var move_names: Array[String] = []
+	var effect_keys: Array[String] = []
+	var needs_damage_sound: bool = false
+
+	match str(event_data.get("type", "")):
+		"move":
+			var move_name: String = str(event_data.get("move", ""))
+			if move_name != "":
+				move_names.append(move_name)
+		"fieldEffect":
+			var field_effect_key: String = _get_field_effect_animation_key(event_data)
+			if field_effect_key != "":
+				effect_keys.append(field_effect_key)
+		"heal":
+			var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
+			if heal_effect_key != "":
+				effect_keys.append(heal_effect_key)
+		"statChange":
+			var stat_effect_key: String = _get_stat_change_effect_animation_key(int(event_data.get("amount", 0)))
+			if stat_effect_key != "":
+				effect_keys.append(stat_effect_key)
+		"damage":
+			needs_damage_sound = true
+
+	return {
+		"move_names": move_names,
+		"effect_keys": effect_keys,
+		"needs_damage_sound": needs_damage_sound,
+	}
+
+
 func build(event_data: Dictionary) -> Dictionary:
 	var event_type := str(event_data.get("type", ""))
 	var presentation := _new_presentation()
@@ -55,6 +87,9 @@ func build(event_data: Dictionary) -> Dictionary:
 			])
 			var actor := _format_actor(str(event_data.get("actor", "")))
 			var move_name := str(event_data.get("move", ""))
+			presentation["move_animation_name"] = move_name
+			presentation["move_animation_actor_ident"] = str(event_data.get("actor", ""))
+			presentation["move_animation_target_ident"] = str(event_data.get("target", ""))
 			presentation["pre_log_message"] = event_text_formatter.format_move_source_message(event_data, actor)
 			if str(presentation["pre_log_message"]) != "":
 				presentation["battle_message"] = str(presentation["pre_log_message"])
@@ -102,6 +137,16 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = true
 
+		"transform":
+			recent_field_effect_source = ""
+			recent_ability_event = false
+			recent_move_event = false
+			var actor := _format_actor(str(event_data.get("target", "")))
+			var species := str(event_data.get("species", ""))
+			presentation["log_message"] = event_text_formatter.format_transform_event(actor, species)
+			presentation["battle_message"] = str(presentation["log_message"])
+			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+
 		"fieldEffect":
 			recent_ability_event = false
 			recent_move_event = false
@@ -114,6 +159,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			])
 			presentation["log_message"] = event_text_formatter.format_field_effect_event(event_data)
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+			presentation["effect_animation_key"] = _get_field_effect_animation_key(event_data)
+			presentation["effect_animation_target_ident"] = str(event_data.get("sourceTarget", event_data.get("sourcePokemon", "")))
 			recent_field_effect_source = str(event_data.get("effect", ""))
 
 		"pokemonEffect":
@@ -145,6 +192,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			presentation["stat_change_target_ident"] = str(event_data.get("target", ""))
 			presentation["stat_change_amount"] = int(event_data.get("amount", 0))
+			presentation["effect_animation_key"] = _get_stat_change_effect_animation_key(int(presentation["stat_change_amount"]))
+			presentation["effect_animation_target_ident"] = str(presentation["stat_change_target_ident"])
 			var is_ability_detail := recent_ability_event or event_text_formatter.is_stat_change_from_ability(event_data)
 			presentation["log_message"] = event_text_formatter.format_stat_change_event(event_data, is_ability_detail)
 			presentation["battle_message"] = event_text_formatter.format_stat_change_battle_message(event_data)
@@ -267,6 +316,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_ability_event = false
 			recent_move_event = false
 			presentation["heal_target_ident"] = str(event_data.get("target", ""))
+			presentation["effect_animation_key"] = _get_heal_effect_animation_key(event_data)
+			presentation["effect_animation_target_ident"] = str(presentation["heal_target_ident"])
 			var target := _format_actor(str(presentation["heal_target_ident"]))
 			var previous_hp := int(event_data.get("previousHp", 0))
 			var hp := int(event_data.get("hp", 0))
@@ -296,14 +347,57 @@ func _new_presentation() -> Dictionary:
 		"add_blank_after": false,
 		"suppress_player_gap": false,
 		"attack_actor_ident": "",
+		"move_animation_name": "",
+		"move_animation_actor_ident": "",
+		"move_animation_target_ident": "",
 		"damage_target_ident": "",
 		"heal_target_ident": "",
 		"faint_target_ident": "",
 		"stat_change_target_ident": "",
 		"stat_change_amount": 0,
 		"ability_boost_target_ident": "",
+		"effect_animation_key": "",
+		"effect_animation_target_ident": "",
 		"turn": 0,
 	}
+
+
+func _get_stat_change_effect_animation_key(amount: int) -> String:
+	if amount > 0:
+		return "stat_up"
+	if amount < 0:
+		return "stat_down"
+	return ""
+
+
+func _get_field_effect_animation_key(event: Dictionary) -> String:
+	var state: String = str(event.get("state", "")).strip_edges().to_lower()
+	if state != "start" and state != "activate":
+		return ""
+
+	var effect_key: String = _normalize_animation_key(str(event.get("effect", "")))
+	match effect_key:
+		"grassyterrain", "grassy_terrain":
+			return "grassy_terrain_start"
+
+	return ""
+
+
+func _get_heal_effect_animation_key(event: Dictionary) -> String:
+	var source_key: String = _normalize_animation_key(str(event.get("source", "")))
+	match source_key:
+		"leftovers":
+			return "leftovers_recovery"
+		"grassyterrain", "grassy_terrain":
+			return "grassy_terrain_heal"
+		"aquaring", "aqua_ring":
+			return "aqua_ring_heal"
+		"leechseed", "leech_seed":
+			return "leech_seed_heal"
+		"recover":
+			return "recover_heal"
+
+	return "generic_heal"
 
 
 func _track_pokemon_effect_event(event: Dictionary) -> void:
@@ -339,6 +433,10 @@ func _normalize_battle_ident(ident: String) -> String:
 		return "%s:%s" % [player_id, pokemon_name.to_lower()]
 
 	return cleaned.to_lower()
+
+
+func _normalize_animation_key(value: String) -> String:
+	return value.strip_edges().to_lower().replace(" ", "_").replace("-", "_")
 
 
 func _format_actor(actor: String, include_side_prefix := true) -> String:

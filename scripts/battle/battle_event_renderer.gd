@@ -46,12 +46,17 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	var add_blank_after := bool(presentation.get("add_blank_after", false))
 	var suppress_player_gap := bool(presentation.get("suppress_player_gap", false))
 	var attack_actor_ident := str(presentation.get("attack_actor_ident", ""))
+	var move_animation_name := str(presentation.get("move_animation_name", ""))
+	var move_animation_actor_ident := str(presentation.get("move_animation_actor_ident", ""))
+	var move_animation_target_ident := str(presentation.get("move_animation_target_ident", ""))
 	var damage_target_ident := str(presentation.get("damage_target_ident", ""))
 	var heal_target_ident := str(presentation.get("heal_target_ident", ""))
 	var faint_target_ident := str(presentation.get("faint_target_ident", ""))
 	var stat_change_target_ident := str(presentation.get("stat_change_target_ident", ""))
 	var stat_change_amount := int(presentation.get("stat_change_amount", 0))
 	var ability_boost_target_ident := str(presentation.get("ability_boost_target_ident", ""))
+	var effect_animation_key: String = str(presentation.get("effect_animation_key", ""))
+	var effect_animation_target_ident: String = str(presentation.get("effect_animation_target_ident", ""))
 
 	if pre_log_message != "":
 		if not suppress_player_gap:
@@ -69,8 +74,12 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	if battle_message != "":
 		current_action_panel.set_message(battle_message)
 
+	if effect_animation_key != "" and heal_target_ident == "":
+		await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
 	if attack_actor_ident != "":
 		await animation_router.play_attack_tween_for_actor(attack_actor_ident)
+		if move_animation_name != "":
+			await animation_router.play_move_animation(move_animation_name, move_animation_actor_ident, move_animation_target_ident)
 		await _wait(message_timing.get_move_animation_hold_seconds())
 	if damage_target_ident != "":
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
@@ -79,6 +88,8 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		await _wait(message_timing.get_damage_animation_hold_seconds())
 	if heal_target_ident != "":
 		_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
+		if effect_animation_key != "":
+			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
 		await animation_router.play_heal_tween_for_target(heal_target_ident)
 		_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
 	if stat_change_target_ident != "":

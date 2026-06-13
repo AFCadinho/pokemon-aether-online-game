@@ -1,0 +1,214 @@
+[gd_scene format=3 uid="uid://banqvdsruep1l"]
+
+[ext_resource type="Script" uid="uid://h0i7cgi6v30o" path="res://scripts/ui/settings_menu.gd" id="1_5f1cv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6lvd4"]
+bg_color = Color(0.09019608, 0.07058824, 0.050980393, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5f1cv"]
+bg_color = Color(0.14117648, 0.105882354, 0.078431375, 1)
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+
+[node name="SettingsMenu" type="PanelContainer" unique_id=435978622]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6lvd4")
+script = ExtResource("1_5f1cv")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1468344949]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2090709235]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1425384229]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 20
+text = "SETTINGS"
+
+[node name="BattleAnimationsCheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=2079479511]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Enable Move Animations"
+
+[node name="WeatherEffectsCheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=490678384]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Enable Weather Effects"
+
+[node name="TerrainEffectsCheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=688905417]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Enable Terrain Effects"
+
+[node name="SpriteStyleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1195442675]
+layout_mode = 2
+text = "Sprite Style"
+
+[node name="SpriteStyleOptionsButton" type="OptionButton" parent="MarginContainer/VBoxContainer" unique_id=788772248]
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "Animated Sprites"
+popup/item_0/id = 0
+popup/item_1/text = "Static Sprites"
+popup/item_1/id = 1
+popup/item_2/text = "Pixel Sprites"
+popup/item_2/id = 2
+
+[node name="DisplayLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Display"
+
+[node name="FullscreenCheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Fullscreen"
+
+[node name="ResolutionLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Window Resolution"
+
+[node name="ResolutionOptionsButton" type="OptionButton" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 3
+selected = 1
+popup/item_0/text = "1280x720"
+popup/item_0/id = 0
+popup/item_1/text = "1600x900"
+popup/item_1/id = 1
+popup/item_2/text = "1920x1080"
+popup/item_2/id = 2
+
+[node name="AudioLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+text = "Audio"
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MasterVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/MasterVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Master"
+
+[node name="MasterVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/MasterVolumeRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+step = 1.0
+value = 80.0
+
+[node name="MasterVolumeValueLabel" type="Label" parent="MarginContainer/VBoxContainer/MasterVolumeRow"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+horizontal_alignment = 2
+text = "80%"
+
+[node name="MusicVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MusicVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/MusicVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "Music"
+
+[node name="MusicVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/MusicVolumeRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+step = 1.0
+value = 55.0
+
+[node name="MusicVolumeValueLabel" type="Label" parent="MarginContainer/VBoxContainer/MusicVolumeRow"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+horizontal_alignment = 2
+text = "55%"
+
+[node name="BattleMusicLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Battle Music"
+
+[node name="BattleMusicOptionsButton" type="OptionButton" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SfxVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SfxVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/SfxVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "SFX"
+
+[node name="SfxVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/SfxVolumeRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+step = 1.0
+value = 75.0
+
+[node name="SfxVolumeValueLabel" type="Label" parent="MarginContainer/VBoxContainer/SfxVolumeRow"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+horizontal_alignment = 2
+text = "75%"
+
+[node name="UiVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UiVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/UiVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "UI"
+
+[node name="UiVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/UiVolumeRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+step = 1.0
+value = 75.0
+
+[node name="UiVolumeValueLabel" type="Label" parent="MarginContainer/VBoxContainer/UiVolumeRow"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+horizontal_alignment = 2
+text = "75%"
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=419436035]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_5f1cv")
+text = "Close"
