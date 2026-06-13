@@ -12,6 +12,7 @@ const ERROR_LOG_FILE := "user://launcher_error.log"
 const TEMP_DIR := "user://downloads"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
 const USER_AGENT_HEADER := "User-Agent: PokemonAetherLauncher/1.0"
+const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
 
 @onready var shell_panel: PanelContainer = $Shell
 @onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
@@ -30,6 +31,7 @@ const USER_AGENT_HEADER := "User-Agent: PokemonAetherLauncher/1.0"
 @onready var log_label: RichTextLabel = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/LogLabel
 @onready var check_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/CheckButton
 @onready var update_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/UpdateButton
+@onready var gen5_sprites_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/Gen5SpritesButton
 @onready var play_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/PlayButton
 @onready var game_folder_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton
 @onready var discord_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton
@@ -122,6 +124,7 @@ func _ready() -> void:
 	_load_launcher_settings()
 	check_button.pressed.connect(check_for_updates)
 	update_button.pressed.connect(start_update)
+	gen5_sprites_button.pressed.connect(download_gen5_animated_sprites)
 	play_button.pressed.connect(launch_game)
 	game_folder_button.pressed.connect(open_install_folder_dialog)
 	discord_button.pressed.connect(open_discord)
@@ -169,6 +172,7 @@ func _apply_visual_style() -> void:
 
 	_apply_button_style(check_button, false)
 	_apply_button_style(update_button, false)
+	_apply_button_style(gen5_sprites_button, false)
 	_apply_button_style(play_button, true)
 
 	progress_bar.add_theme_stylebox_override("background", _panel_style(Color(0.14, 0.16, 0.27, 0.86), Color(0, 0, 0, 0), 7, 0))
@@ -311,6 +315,30 @@ func start_update() -> void:
 	_set_busy(true)
 	update_button.disabled = true
 	play_button.disabled = true
+	_start_next_download()
+
+
+func download_gen5_animated_sprites() -> void:
+	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		_set_status("Wait until the current launcher task is finished.")
+		return
+
+	if manifest.is_empty():
+		_set_status("Check for updates first.")
+		check_for_updates()
+		return
+
+	_build_optional_gen5_download_queue()
+	_reset_download_progress_counters()
+	if pending_downloads.is_empty():
+		_set_status("Gen 5 Animated sprites are already installed or unavailable.")
+		_refresh_status()
+		return
+
+	_set_busy(true)
+	update_button.disabled = true
+	play_button.disabled = true
+	gen5_sprites_button.disabled = true
 	_start_next_download()
 
 
@@ -629,6 +657,9 @@ func _build_download_queue() -> void:
 			continue
 
 		var asset_pack: Dictionary = asset_pack_variant
+		if _is_optional_asset_pack(asset_pack):
+			continue
+
 		var pack_id := str(asset_pack.get("id", ""))
 		var pack_version := str(asset_pack.get("version", ""))
 		if pack_id.is_empty() or pack_version.is_empty():
@@ -654,6 +685,62 @@ func _build_download_queue() -> void:
 			filtered_downloads.append(download)
 
 	pending_downloads = filtered_downloads
+
+
+func _build_optional_gen5_download_queue() -> void:
+	pending_downloads.clear()
+	if manifest.is_empty():
+		return
+
+	var local_asset_packs: Dictionary = _get_dictionary(local_versions, "assetPacks")
+	for asset_pack: Dictionary in _get_gen5_asset_packs():
+		var pack_id := str(asset_pack.get("id", ""))
+		var pack_version := str(asset_pack.get("version", ""))
+		if pack_id.is_empty() or pack_version.is_empty():
+			continue
+
+		if str(local_asset_packs.get(pack_id, "")) == pack_version:
+			continue
+
+		var pack_url := str(asset_pack.get("url", ""))
+		if pack_url.is_empty():
+			continue
+
+		pending_downloads.append({
+			"type": "asset_pack",
+			"id": pack_id,
+			"version": pack_version,
+			"url": pack_url,
+			"sha256": str(asset_pack.get("sha256", "")),
+			"size_bytes": int(asset_pack.get("sizeBytes", 0)),
+			"file_name": "%s-%s.zip" % [pack_id, pack_version],
+			"label": str(asset_pack.get("label", "Gen 5 Animated Sprites")),
+		})
+
+
+func _get_gen5_asset_packs() -> Array[Dictionary]:
+	var packs: Array[Dictionary] = []
+	var asset_packs_variant: Variant = manifest.get("assetPacks", [])
+	if typeof(asset_packs_variant) != TYPE_ARRAY:
+		return packs
+
+	for asset_pack_variant: Variant in asset_packs_variant:
+		if typeof(asset_pack_variant) != TYPE_DICTIONARY:
+			continue
+
+		var asset_pack: Dictionary = asset_pack_variant
+		if _is_gen5_asset_pack(asset_pack):
+			packs.append(asset_pack)
+
+	return packs
+
+
+func _is_optional_asset_pack(asset_pack: Dictionary) -> bool:
+	return bool(asset_pack.get("optional", false)) or _is_gen5_asset_pack(asset_pack)
+
+
+func _is_gen5_asset_pack(asset_pack: Dictionary) -> bool:
+	return str(asset_pack.get("id", "")).begins_with(GEN5_OPTIONAL_ASSET_PACK_PREFIX)
 
 
 func _reset_download_progress_counters() -> void:
@@ -1057,6 +1144,7 @@ func _refresh_status() -> void:
 	play_button.disabled = update_required or not _has_installed_game()
 	update_button.disabled = not update_required
 	check_button.disabled = false
+	_refresh_gen5_sprites_button()
 	if update_required:
 		_set_status("Update available.")
 	elif local_game_version == "" or local_game_version == "not installed":
@@ -1077,15 +1165,52 @@ func _refresh_launcher_version() -> void:
 func _set_busy(is_busy: bool) -> void:
 	check_button.disabled = is_busy
 	update_button.disabled = is_busy or not update_required
+	gen5_sprites_button.disabled = is_busy or not _can_download_gen5_sprites()
 	play_button.disabled = is_busy or update_required or not _has_installed_game()
 	_sync_button_cursors()
 
 
 func _sync_button_cursors() -> void:
-	for button: Button in [check_button, update_button, play_button]:
+	for button: Button in [check_button, update_button, gen5_sprites_button, play_button]:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+func _refresh_gen5_sprites_button() -> void:
+	if manifest.is_empty():
+		gen5_sprites_button.text = "Gen 5 Sprites"
+		gen5_sprites_button.disabled = true
+		return
+
+	if _are_gen5_sprites_installed():
+		gen5_sprites_button.text = "Gen 5 Installed"
+		gen5_sprites_button.disabled = true
+		return
+
+	gen5_sprites_button.text = "Download Gen 5"
+	gen5_sprites_button.disabled = not _can_download_gen5_sprites()
+
+
+func _can_download_gen5_sprites() -> bool:
+	return not manifest.is_empty() and not _are_gen5_sprites_installed() and not _get_gen5_asset_packs().is_empty()
+
+
+func _are_gen5_sprites_installed() -> bool:
+	var gen5_asset_packs: Array[Dictionary] = _get_gen5_asset_packs()
+	if gen5_asset_packs.is_empty():
+		return false
+
+	var local_asset_packs: Dictionary = _get_dictionary(local_versions, "assetPacks")
+	for asset_pack: Dictionary in gen5_asset_packs:
+		var pack_id := str(asset_pack.get("id", ""))
+		var pack_version := str(asset_pack.get("version", ""))
+		if pack_id.is_empty() or pack_version.is_empty():
+			return false
+		if str(local_asset_packs.get(pack_id, "")) != pack_version:
+			return false
+
+	return true
 
 
 func _has_installed_game() -> bool:

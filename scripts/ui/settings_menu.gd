@@ -12,11 +12,13 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 	"static": 1,
 	"pixel": 2,
 }
+const GEN5_SPRITE_MISSING_MESSAGE := "Gen 5 Animated sprites are not installed. Download them from the launcher."
 
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
 @onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
+@onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
 @onready var resolution_options_button: OptionButton = $MarginContainer/VBoxContainer/ResolutionOptionsButton
 @onready var master_volume_slider: HSlider = $MarginContainer/VBoxContainer/MasterVolumeRow/MasterVolumeSlider
@@ -71,6 +73,7 @@ func _apply_settings_to_controls() -> void:
 	var option_index: int = sprite_style_options_button.get_item_index(option_id)
 	if option_index >= 0:
 		sprite_style_options_button.select(option_index)
+	_update_sprite_style_status_label("")
 
 	fullscreen_check_box.button_pressed = SettingsManager.fullscreen
 	_apply_resolution_options_to_control()
@@ -112,7 +115,12 @@ func _on_sprite_style_selected(index: int) -> void:
 
 	var option_id: int = sprite_style_options_button.get_item_id(index)
 	var sprite_style: String = str(SPRITE_STYLE_BY_OPTION_ID.get(option_id, "animated"))
-	SettingsManager.set_sprite_style(sprite_style)
+	if not SettingsManager.set_sprite_style(sprite_style):
+		_select_current_sprite_style()
+		_update_sprite_style_status_label(GEN5_SPRITE_MISSING_MESSAGE)
+		return
+
+	_update_sprite_style_status_label("")
 
 
 func _on_fullscreen_toggled(enabled: bool) -> void:
@@ -181,6 +189,24 @@ func _set_volume_control(slider: HSlider, value_label: Label, value: float) -> v
 
 func _set_volume_value_label(label: Label, value: float) -> void:
 	label.text = "%d%%" % int(roundf(value))
+
+
+func _select_current_sprite_style() -> void:
+	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
+	var option_index: int = sprite_style_options_button.get_item_index(option_id)
+	if option_index >= 0:
+		sprite_style_options_button.select(option_index)
+
+
+func _update_sprite_style_status_label(message: String) -> void:
+	if sprite_style_status_label == null:
+		return
+
+	if message.is_empty() and not SettingsManager.is_gen5_animated_sprites_installed():
+		message = "Gen 5 Animated sprites can be downloaded from the launcher."
+
+	sprite_style_status_label.text = message
+	sprite_style_status_label.visible = not message.is_empty()
 
 
 func _apply_battle_music_options_to_control() -> void:

@@ -185,7 +185,8 @@ jobs:
             pack_version="$2"
             file_name="$3"
             size_bytes="$4"
-            printf '%s\n' "--external-asset-pack" "${pack_id}:${pack_version}:${file_name}:${size_bytes}" >> /tmp/asset_pack_args.txt
+            optional="${5:-false}"
+            printf '%s\n' "--external-asset-pack" "${pack_id}:${pack_version}:${file_name}:${size_bytes}:${optional}" >> /tmp/asset_pack_args.txt
           }
 
           package_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "${POKEMON_HOME_ASSET_VERSION}.zip" "${POKEMON_HOME_ASSET_SIZE_BYTES}"
@@ -193,10 +194,10 @@ jobs:
           package_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_VERSION}.zip" "${POKEMON_BACK_ASSET_SIZE_BYTES}"
           package_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_SHINY_FRONT_ASSET_SIZE_BYTES}"
           package_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_VERSION}.zip" "${POKEMON_SHINY_BACK_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_FRONT_ASSET_VERSION}.zip" "${POKEMON_GEN5_FRONT_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_BACK_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE_BYTES}"
+          package_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_FRONT_ASSET_VERSION}.zip" "${POKEMON_GEN5_FRONT_ASSET_SIZE_BYTES}" "true"
+          package_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_BACK_ASSET_SIZE_BYTES}" "true"
+          package_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE_BYTES}" "true"
+          package_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE_BYTES}" "true"
 
       - name: Package launcher release
         run: |

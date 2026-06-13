@@ -8,6 +8,7 @@ const FRONT_FRAME_PATH := "res://assets/sprites/pokemon/front/%s/frame_000.png"
 const UNKNOWN_HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home/unknown.png"
 const POKEMON_SPRITE_RES_ROOT := "res://assets/sprites/pokemon"
 const POKEMON_SPRITE_RELATIVE_ROOT := "assets/sprites/pokemon"
+const GEN5_SPRITE_ROOT := "gen5"
 const PARTY_ICON_CROP_PADDING := 4
 const PARTY_ICON_ALPHA_THRESHOLD := 0.01
 
@@ -44,6 +45,19 @@ static func build_pokemon_sprite_path(relative_path: String) -> Array[String]:
 		paths.append(root.path_join(relative_path))
 
 	return paths
+
+static func has_optional_gen5_animated_sprites() -> bool:
+	for root: String in get_pokemon_sprite_roots():
+		if _has_gen5_battle_sprite_dirs(root):
+			return true
+
+	return false
+
+static func _has_gen5_battle_sprite_dirs(root: String) -> bool:
+	return (
+		DirAccess.dir_exists_absolute(root.path_join(GEN5_SPRITE_ROOT).path_join("front"))
+		and DirAccess.dir_exists_absolute(root.path_join(GEN5_SPRITE_ROOT).path_join("back"))
+	)
 
 static func load_texture(path: String) -> Texture2D:
 	if path.begins_with("res://"):

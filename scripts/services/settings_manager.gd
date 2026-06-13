@@ -6,6 +6,7 @@ const SETTINGS_PATH := "user://settings.json"
 const SPRITE_STYLE_ANIMATED := "animated"
 const SPRITE_STYLE_STATIC := "static"
 const SPRITE_STYLE_PIXEL := "pixel"
+const SPRITE_STYLE_GEN5_ANIMATED := SPRITE_STYLE_PIXEL
 const BATTLE_MUSIC_DEFAULT := "default"
 const MASTER_BUS := "Master"
 const MUSIC_BUS := "Music"
@@ -115,13 +116,20 @@ func set_terrain_effects(enabled: bool) -> void:
 	_save_and_emit()
 
 
-func set_sprite_style(style: String) -> void:
+func set_sprite_style(style: String) -> bool:
 	var validated_style: String = _validated_sprite_style(style)
+	if style == SPRITE_STYLE_GEN5_ANIMATED and validated_style != SPRITE_STYLE_GEN5_ANIMATED:
+		return false
 	if sprite_style == validated_style:
-		return
+		return true
 
 	sprite_style = validated_style
 	_save_and_emit()
+	return true
+
+
+func is_gen5_animated_sprites_installed() -> bool:
+	return PokemonAssets.has_optional_gen5_animated_sprites()
 
 
 func set_fullscreen(enabled: bool) -> void:
@@ -201,8 +209,12 @@ func _save_and_emit() -> void:
 
 func _validated_sprite_style(style: String) -> String:
 	match style:
-		SPRITE_STYLE_ANIMATED, SPRITE_STYLE_STATIC, SPRITE_STYLE_PIXEL:
+		SPRITE_STYLE_ANIMATED, SPRITE_STYLE_STATIC:
 			return style
+		SPRITE_STYLE_GEN5_ANIMATED:
+			if is_gen5_animated_sprites_installed():
+				return style
+			return SPRITE_STYLE_ANIMATED
 		_:
 			return SPRITE_STYLE_ANIMATED
 

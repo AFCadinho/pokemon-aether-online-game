@@ -47,28 +47,32 @@
       "version": "pokemon-gen5-front-v2",
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-front-v2.zip",
       "sha256": "",
-      "sizeBytes": 315362253
+      "sizeBytes": 315362253,
+      "optional": true
     },
     {
       "id": "pokemon-gen5-back",
       "version": "pokemon-gen5-back-v2",
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-back-v2.zip",
       "sha256": "",
-      "sizeBytes": 248810078
+      "sizeBytes": 248810078,
+      "optional": true
     },
     {
       "id": "pokemon-gen5-shiny-front",
       "version": "pokemon-gen5-shiny-front-v2",
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-front-v2.zip",
       "sha256": "",
-      "sizeBytes": 318368865
+      "sizeBytes": 318368865,
+      "optional": true
     },
     {
       "id": "pokemon-gen5-shiny-back",
       "version": "pokemon-gen5-shiny-back-v2",
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-back-v2.zip",
       "sha256": "",
-      "sizeBytes": 251913753
+      "sizeBytes": 251913753,
+      "optional": true
     }
   ]
 }

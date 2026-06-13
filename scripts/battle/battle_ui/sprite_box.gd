@@ -345,7 +345,10 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 func _get_sprite_asset_roots(side: String, is_shiny: bool) -> Array[String]:
 	var roots: Array[String] = []
 	var style_order: Array[String] = BATTLE_SPRITE_STYLE_ORDER
-	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_PIXEL:
+	if (
+		SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_GEN5_ANIMATED
+		and SettingsManager.is_gen5_animated_sprites_installed()
+	):
 		style_order = PIXEL_SPRITE_STYLE_ORDER
 
 	for style in style_order:

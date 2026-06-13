@@ -12,6 +12,8 @@ Small Godot launcher project for Pokemon Aether Online.
 6. Replaces `user://game/game` on each game update while keeping unchanged asset packs.
 7. Starts the configured game executable.
 
+Asset packs marked with `"optional": true` are skipped by the normal update flow. Gen 5 animated Pokemon sprites are optional and can be installed separately with the launcher `Download Gen 5` button.
+
 The default install folder is `user://game`. Players can choose a custom install folder from the launcher Game Folder button; that choice is saved in `user://launcher_settings.json`.
 
 Launcher news is loaded separately from the update manifest through `newsUrl` in `config/launcher_config.json`. The expected shape is documented in `config/news.example.json`.

@@ -354,6 +354,12 @@ layout_mode = 2
 disabled = true
 text = "Update"
 
+[node name="Gen5SpritesButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow"]
+custom_minimum_size = Vector2(155, 62)
+layout_mode = 2
+disabled = true
+text = "Gen 5 Sprites"
+
 [node name="PlayButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1383115794]
 custom_minimum_size = Vector2(155, 62)
 layout_mode = 2

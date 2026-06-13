@@ -83,7 +83,7 @@ def main() -> None:
         "--external-asset-pack",
         action="append",
         default=[],
-        metavar="ID:VERSION:FILE_NAME[:SIZE_BYTES]",
+        metavar="ID:VERSION:FILE_NAME[:SIZE_BYTES[:OPTIONAL]]",
         help="Existing hosted asset pack to include in each manifest without copying or hashing it.",
     )
     args = parser.parse_args()
@@ -168,19 +168,19 @@ def _build_asset_pack(entry: str, base_url: str, asset_prefix: str, output_dir: 
 
 
 def _build_external_asset_pack(entry: str, base_url: str, asset_prefix: str) -> dict:
-    parts = entry.split(":", 3)
-    if len(parts) not in (3, 4):
-        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME[:SIZE_BYTES]")
+    parts = entry.split(":", 4)
+    if len(parts) not in (3, 4, 5):
+        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME[:SIZE_BYTES[:OPTIONAL]]")
 
     pack_id, version, file_name = parts[:3]
     if not pack_id or not version or not file_name:
-        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME[:SIZE_BYTES]")
+        raise SystemExit("--external-asset-pack must use ID:VERSION:FILE_NAME[:SIZE_BYTES[:OPTIONAL]]")
 
     if "/" in file_name or "\\" in file_name:
         raise SystemExit("--external-asset-pack FILE_NAME must be a file name, not a path")
 
     size_bytes = 0
-    if len(parts) == 4 and parts[3]:
+    if len(parts) >= 4 and parts[3]:
         try:
             size_bytes = int(parts[3])
         except ValueError:
@@ -189,13 +189,18 @@ def _build_external_asset_pack(entry: str, base_url: str, asset_prefix: str) -> 
         if size_bytes < 0:
             raise SystemExit("--external-asset-pack SIZE_BYTES cannot be negative")
 
-    return {
+    optional = len(parts) == 5 and parts[4].strip().lower() in {"1", "true", "yes", "optional"}
+    asset_pack = {
         "id": pack_id,
         "version": version,
         "url": _build_url(base_url, asset_prefix, file_name),
         "sha256": "",
         "sizeBytes": size_bytes,
     }
+    if optional:
+        asset_pack["optional"] = True
+
+    return asset_pack
 
 
 def _build_url(base_url: str, prefix: str, file_name: str) -> str:
