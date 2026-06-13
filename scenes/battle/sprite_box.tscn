@@ -1,29 +1,7 @@
 [gd_scene format=3 uid="uid://dpltq23uv3kvb"]
 
 [ext_resource type="Script" uid="uid://bmhi84o6rqke6" path="res://scripts/battle/battle_ui/sprite_box.gd" id="1_y2if1"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_t60p8"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": null
-}, {
-"duration": 1.0,
-"texture": null
-}, {
-"duration": 1.0,
-"texture": null
-}, {
-"duration": 1.0,
-"texture": null
-}, {
-"duration": 1.0,
-"texture": null
-}],
-"loop": true,
-"name": &"new_animation",
-"speed": 12.0
-}]
+[ext_resource type="PackedScene" uid="uid://c25tthf13ru45" path="res://scenes/battle/stat_stage_panel.tscn" id="3_k7f1y"]
 
 [node name="SpriteBox" type="Control" unique_id=2063766200]
 layout_mode = 3
@@ -58,11 +36,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AnimatedPokemonSprite" type="AnimatedSprite2D" parent="SingleBattleContainer/SpriteSlot" unique_id=1327162242]
+visible = false
 position = Vector2(162, 132)
 scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_t60p8")
-animation = &"new_animation"
-frame_progress = 0.103211775
+
+[node name="StatStagePanel" parent="SingleBattleContainer/SpriteSlot" unique_id=43555645 instance=ExtResource("3_k7f1y")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+grow_horizontal = 1
 
 [node name="DoubleBattleContainer" type="HBoxContainer" parent="." unique_id=1340047324]
 visible = false
@@ -79,11 +62,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AnimatedPokemonSprite" type="AnimatedSprite2D" parent="DoubleBattleContainer/SpriteSlot" unique_id=1776134268]
+visible = false
 position = Vector2(126, 136)
 scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_t60p8")
-animation = &"new_animation"
-frame_progress = 0.103211775
 
 [node name="SpriteSlot2" type="Control" parent="DoubleBattleContainer" unique_id=71575196]
 layout_mode = 2
@@ -91,8 +72,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AnimatedPokemonSprite2" type="AnimatedSprite2D" parent="DoubleBattleContainer/SpriteSlot2" unique_id=744773559]
+visible = false
 position = Vector2(126, 136)
 scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_t60p8")
-animation = &"new_animation"
-frame_progress = 0.103211775

@@ -2,11 +2,11 @@ extends Panel
 
 class_name CurrentActionPanel
 
-const MAX_FONT_SIZE := 48
-const MEDIUM_FONT_SIZE := 40
-const SMALL_FONT_SIZE := 32
-const MEDIUM_TEXT_LENGTH := 28
-const SMALL_TEXT_LENGTH := 38
+const MAX_FONT_SIZE := 42
+const MEDIUM_FONT_SIZE := 34
+const SMALL_FONT_SIZE := 28
+const MEDIUM_TEXT_LENGTH := 24
+const SMALL_TEXT_LENGTH := 34
 
 @onready var message_label: Label = $MarginContainer/CurrentActionLabel
 

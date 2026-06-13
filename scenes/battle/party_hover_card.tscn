@@ -1,0 +1,323 @@
+[gd_scene format=3 uid="uid://c17yqguyag8vb"]
+
+[ext_resource type="Script" uid="uid://7vltest80wm2" path="res://scripts/battle/battle_ui/party_hover_card.gd" id="1_euoy7"]
+[ext_resource type="Texture2D" uid="uid://cywaugqetruwa" path="res://assets/sprites/types/dragon.png" id="1_kp0wq"]
+[ext_resource type="Texture2D" uid="uid://btouikxymfepk" path="res://assets/sprites/types/ground.png" id="2_euoy7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_euoy7"]
+bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.9411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 10.0
+expand_margin_top = 8.0
+expand_margin_right = 10.0
+expand_margin_bottom = 8.0
+
+[node name="PartyHoverCard" type="PanelContainer" unique_id=1623525152]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_euoy7")
+script = ExtResource("1_euoy7")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=10842402]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=540790064]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=834307233]
+custom_minimum_size = Vector2(100, 24)
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "Garchomp"
+
+[node name="TypeBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=455388023]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TypeIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/TypeBoxContainer" unique_id=779884772]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+texture = ExtResource("1_kp0wq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TypeIcon2" type="TextureRect" parent="MarginContainer/VBoxContainer/TypeBoxContainer" unique_id=34308310]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+texture = ExtResource("2_euoy7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SeperationLabel" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=105208322]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+
+[node name="HPBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=123070169]
+layout_mode = 2
+
+[node name="HpContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HPBoxContainer" unique_id=336614218]
+layout_mode = 2
+
+[node name="HpLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/HpContainer" unique_id=1549592447]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "HP:"
+
+[node name="HpPercentLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/HpContainer" unique_id=1424716853]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_font_sizes/font_size = 14
+text = "100%"
+
+[node name="HpValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/HpContainer" unique_id=2006246769]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_font_sizes/font_size = 14
+text = "(12/12)"
+
+[node name="AbilityBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1385344729]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/AbilityBoxContainer" unique_id=482248]
+layout_mode = 2
+
+[node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer" unique_id=2136584497]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "Ability:"
+
+[node name="AbilityValueLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer" unique_id=664881057]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_font_sizes/font_size = 14
+text = "Rough Skin"
+
+[node name="SeperationLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer" unique_id=286594063]
+layout_mode = 2
+text = "/"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/AbilityBoxContainer" unique_id=2146121021]
+layout_mode = 2
+
+[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer2" unique_id=53441853]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "@"
+
+[node name="ItemValueLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer2" unique_id=1418138783]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Choice Scarf"
+
+[node name="StatsBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=871422526]
+layout_mode = 2
+
+[node name="AttackContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=1774601935]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="StatLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/AttackContainer" unique_id=130275729]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "Atk "
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/AttackContainer" unique_id=1437858402]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "6"
+
+[node name="Speedseperator3" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=583256896]
+layout_mode = 2
+text = "•"
+
+[node name="DefContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=20176445]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="StatLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/DefContainer" unique_id=2042236824]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "Def "
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/DefContainer" unique_id=1925922144]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "6"
+
+[node name="Speedseperator5" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=1651644091]
+layout_mode = 2
+text = "•"
+
+[node name="SpAContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=218369678]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StatLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpAContainer" unique_id=312828641]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "SpA"
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpAContainer" unique_id=735811040]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "6"
+
+[node name="Speedseperator4" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=58398009]
+layout_mode = 2
+text = "•"
+
+[node name="SpDContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=1758376379]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StatLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpDContainer" unique_id=1461021292]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "SpD"
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpDContainer" unique_id=1369626662]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "6"
+
+[node name="Speedseperator6" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=1469106446]
+layout_mode = 2
+text = "•"
+
+[node name="SpeContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/StatsBoxContainer" unique_id=275019355]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="StatLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpeContainer" unique_id=1097645767]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "Spe "
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/StatsBoxContainer/SpeContainer" unique_id=2020724211]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "6"
+
+[node name="SeperationLabel2" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=415937999]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=337735829]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=735381780]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1860600940]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "• Swords Dance"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=367502554]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "13/15"
+horizontal_alignment = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1931422379]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=87306254]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "• Swords Dance"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1670997195]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "13/15"
+horizontal_alignment = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1703012252]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=754662230]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "• Swords Dance"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=857354779]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "13/15"
+horizontal_alignment = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=159137242]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=873293342]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_font_sizes/font_size = 14
+text = "• Swords Dance"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=991153146]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "13/15"
+horizontal_alignment = 2

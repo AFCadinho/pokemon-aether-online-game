@@ -30,6 +30,12 @@ var last_direction := Vector2.DOWN
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
 
+func get_target_feet_position() -> Vector2:
+	return target_position + (feet_marker.global_position - global_position)
+
+func is_tile_moving() -> bool:
+	return is_moving
+
 func face_world_position(world_position: Vector2) -> void:
 	var delta := world_position - get_feet_position()
 	if delta == Vector2.ZERO:

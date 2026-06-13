@@ -1,6 +1,8 @@
 extends Button
 
 signal selected
+signal pokemon_hovered(pokemon_data: Dictionary, slot_rect: Rect2)
+signal pokemon_unhovered
 
 const FAINTED_BACKGROUND := Color("#30343c")
 const FAINTED_BORDER := Color("#626a76")
@@ -15,9 +17,13 @@ const TOXIC_STATUS_MODULATE := Color("#8c58ff")
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/HPBar
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/StatusIcon
 
+var current_pokemon_data: Dictionary = {}
+
 func _ready() -> void:
 	_ignore_child_mouse_input(self)
 	pressed.connect(_on_pressed)
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
 
 func _ignore_child_mouse_input(node: Node) -> void:
 	for child in node.get_children():
@@ -29,6 +35,7 @@ func _ignore_child_mouse_input(node: Node) -> void:
 		_ignore_child_mouse_input(child)
 
 func set_pokemon(pokemon: Pokemon) -> void:
+	current_pokemon_data = pokemon.to_battle_dict()
 	var is_fainted := pokemon.current_hp <= 0
 	_apply_slot_style(pokemon.species, is_fainted, pokemon.types)
 
@@ -43,6 +50,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	_set_status_icon("")
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
+	current_pokemon_data = pokemon_data.duplicate(true)
 	var species := _get_species_from_data(pokemon_data)
 	var types := _get_types_from_data(pokemon_data)
 	var is_active := bool(pokemon_data.get("active", false))
@@ -145,6 +153,7 @@ func _get_status_modulate(status: String) -> Color:
 	return POISON_STATUS_MODULATE
 
 func set_empty() -> void:
+	current_pokemon_data = {}
 	visible = true
 	disabled = true
 	modulate = NORMAL_MODULATE
@@ -205,3 +214,12 @@ func _on_pressed() -> void:
 	if disabled:
 		return
 	selected.emit()
+
+func _on_mouse_entered() -> void:
+	if current_pokemon_data.is_empty():
+		return
+
+	pokemon_hovered.emit(current_pokemon_data, Rect2(global_position, size))
+
+func _on_mouse_exited() -> void:
+	pokemon_unhovered.emit()

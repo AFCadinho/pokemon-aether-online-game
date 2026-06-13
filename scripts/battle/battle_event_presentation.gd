@@ -201,6 +201,13 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
 
+		"hitCount":
+			recent_ability_event = false
+			recent_move_event = false
+			presentation["log_message"] = event_text_formatter.format_hit_count_event(event_data)
+			presentation["battle_message"] = str(presentation["log_message"])
+			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+
 		"turn":
 			presentation["turn"] = int(event_data.get("turn", 0))
 			recent_ability_event = false

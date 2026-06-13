@@ -63,11 +63,11 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	else:
 		push_warning("World.load_map: spawn '%s' not found in %s. Using Vector2.ZERO." % [target_spawn_name, target_scene_path])
 
+	move_player_to_map(new_map)
+
 	player.global_position = spawn_position
 	player.target_position = spawn_position
 	player.is_moving = false
-
-	move_player_to_map(new_map)
 
 	player.set_idle_frame()
 	player.refresh_map_layers()

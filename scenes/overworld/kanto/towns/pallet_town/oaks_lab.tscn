@@ -3618,6 +3618,7 @@ animation = &"idle_down"
 [node name="InteractionArea" type="Area2D" parent="Entities/NPCs/Oak" unique_id=236861381]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/NPCs/Oak/InteractionArea" unique_id=161826291]
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_m2ga1")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]

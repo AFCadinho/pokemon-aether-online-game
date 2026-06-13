@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://bfo18l7xvty5o" path="res://scenes/battle/battle_log_panel.tscn" id="17_6ofp8"]
 [ext_resource type="PackedScene" uid="uid://b4jvhxavag7g1" path="res://scenes/battle/pokemon_hover_card.tscn" id="21_sgdsx"]
 [ext_resource type="PackedScene" uid="uid://qshhy8kj3xu8" path="res://scenes/battle/move_hover_card.tscn" id="23_156m4"]
+[ext_resource type="PackedScene" uid="uid://c17yqguyag8vb" path="res://scenes/battle/party_hover_card.tscn" id="28_n5ix6"]
 [ext_resource type="Texture2D" uid="uid://c5dxctq04cn66" path="res://assets/battles/mechanics/mega-evolution.png" id="37_afkbo"]
 [ext_resource type="Texture2D" uid="uid://c2cbq02hrb073" path="res://assets/battles/mechanics/z-move.png" id="38_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://dn8i3j64uec8i" path="res://assets/battles/mechanics/tera-icon.png" id="39_dsauo"]
@@ -827,7 +828,7 @@ offset_bottom = 193.0
 
 [node name="CurrentActionPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1149733481 instance=ExtResource("5_n6gaa")]
 layout_mode = 1
-offset_top = -73.0
+offset_top = -60.0
 offset_bottom = 0.0
 
 [node name="FieldTimers" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=91068280 instance=ExtResource("6_mvulk")]
@@ -1100,15 +1101,17 @@ offset_bottom = 195.0
 grow_vertical = 2
 
 [node name="PokemonHoverCard" parent="." unique_id=1550796656 instance=ExtResource("21_sgdsx")]
-visible = false
 z_index = 100
 layout_mode = 0
 
 [node name="MoveHoverCard" parent="." unique_id=969617656 instance=ExtResource("23_156m4")]
-visible = false
 z_index = 101
 layout_mode = 0
 offset_right = 300.0
+
+[node name="PartyHoverCard" parent="." unique_id=1623525152 instance=ExtResource("28_n5ix6")]
+z_index = 102
+layout_mode = 0
 
 [connection signal="move_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" to="." method="_on_moves_grid_move_selected"]
 [connection signal="party_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" to="." method="_on_party_grid_party_selected"]

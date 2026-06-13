@@ -3,6 +3,8 @@ extends GridContainer
 class_name PartyGrid
 
 signal party_selected(slot: int)
+signal pokemon_hovered(pokemon_data: Dictionary, slot_rect: Rect2)
+signal pokemon_unhovered
 
 var input_disabled := false
 var previous_disabled_by_slot: Dictionary = {}
@@ -12,6 +14,10 @@ func _ready() -> void:
 		var slot := get_child(idx)
 		if slot.has_signal("selected"):
 			slot.selected.connect(_on_party_selected.bind(idx + 1))
+		if slot.has_signal("pokemon_hovered"):
+			slot.pokemon_hovered.connect(_on_pokemon_hovered)
+		if slot.has_signal("pokemon_unhovered"):
+			slot.pokemon_unhovered.connect(_on_pokemon_unhovered)
 
 func set_party(party: Array) -> void:
 	var slots: Array[Node] = get_children()
@@ -76,3 +82,9 @@ func _on_party_selected(slot: int) -> void:
 		return
 
 	party_selected.emit(slot)
+
+func _on_pokemon_hovered(pokemon_data: Dictionary, slot_rect: Rect2) -> void:
+	pokemon_hovered.emit(pokemon_data, slot_rect)
+
+func _on_pokemon_unhovered() -> void:
+	pokemon_unhovered.emit()

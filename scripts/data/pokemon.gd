@@ -10,6 +10,7 @@ var nature: String
 var instance_id: String
 var shiny: bool
 var evs: Dictionary
+var stats: Dictionary
 var moves: Array
 var types: Array
 var possible_abilities: Array
@@ -25,6 +26,7 @@ func _init(
 	_ability := "",
 	_nature := "Hardy",
 	_evs := {},
+	_stats := {},
 	_moves := [],
 	_instance_id := "",
 	_shiny: bool = false,
@@ -48,6 +50,7 @@ func _init(
 		"spd": _evs.get("spd", 0),
 		"spe": _evs.get("spe", 0),
 	}
+	stats = _normalize_stat_dict(_stats, 0)
 	moves = _moves
 	types = _normalize_types(_types)
 	possible_abilities = _normalize_string_array(_possible_abilities)
@@ -74,6 +77,7 @@ func to_battle_dict() -> Dictionary:
 		"ability": ability,
 		"nature": nature,
 		"evs": evs,
+		"stats": stats,
 		"moves": moves,
 		"types": types,
 		"possibleAbilities": possible_abilities,
@@ -102,6 +106,20 @@ func ensure_instance_id() -> void:
 
 func _normalize_types(value: Variant) -> Array:
 	return _normalize_string_array(value)
+
+func _normalize_stat_dict(value: Variant, default_value: int) -> Dictionary:
+	var source: Dictionary = {}
+	if value is Dictionary:
+		source = value as Dictionary
+
+	return {
+		"hp": int(source.get("hp", default_value)),
+		"atk": int(source.get("atk", default_value)),
+		"def": int(source.get("def", default_value)),
+		"spa": int(source.get("spa", default_value)),
+		"spd": int(source.get("spd", default_value)),
+		"spe": int(source.get("spe", default_value)),
+	}
 
 func _normalize_string_array(value: Variant) -> Array:
 	var normalized_values: Array = []

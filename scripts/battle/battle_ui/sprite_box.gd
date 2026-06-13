@@ -14,10 +14,14 @@ const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
 const HOME_SPRITE_RENDER_SCALE := 2.0
 const ATTACK_TWEEN_OFFSET := Vector2(28, -6)
-const DAMAGE_FLASH_COLOR := Color(1.0, 0.35, 0.35, 1.0)
+const DAMAGE_FLASH_COLOR := Color(1.0, 0.18, 0.18, 1.0)
+const DAMAGE_IMPACT_COLOR := Color(1.0, 1.0, 1.0, 1.0)
 const HEAL_FLASH_COLOR := Color(0.45, 1.0, 0.55, 1.0)
-const STAT_RAISE_FLASH_COLOR := Color(0.35, 0.75, 1.0, 1.0)
-const STAT_DROP_FLASH_COLOR := Color(0.8, 0.45, 1.0, 1.0)
+const STAT_RAISE_FLASH_COLOR := Color(0.38, 1.0, 0.48, 1.0)
+const STAT_RAISE_SECONDARY_COLOR := Color(0.72, 1.0, 0.86, 1.0)
+const STAT_DROP_FLASH_COLOR := Color(1.0, 0.22, 0.42, 1.0)
+const STAT_DROP_SECONDARY_COLOR := Color(0.62, 0.35, 0.95, 1.0)
+const STAT_STAGE_PANEL_GAP := 8.0
 const FAINT_TWEEN_OFFSET := Vector2(0, 34)
 const SPRITE_HOVER_PADDING := Vector2(8, 8)
 
@@ -26,6 +30,7 @@ const SPRITE_HOVER_PADDING := Vector2(8, 8)
 
 @onready var single_sprite_slot: Control = $SingleBattleContainer/SpriteSlot
 @onready var single_sprite: AnimatedSprite2D = $SingleBattleContainer/SpriteSlot/AnimatedPokemonSprite
+@onready var single_stat_stage_panel: Control = get_node_or_null("SingleBattleContainer/SpriteSlot/StatStagePanel") as Control
 @onready var double_sprite_1: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite
 @onready var double_sprite_2: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2
 
@@ -40,6 +45,7 @@ func _ready() -> void:
 	_set_sprite_filter(double_sprite_2)
 	_cache_base_sprite_positions()
 	set_battle_type(default_is_double_battle)
+	clear_stat_stages()
 	_snap_all_sprites_to_pixel_grid.call_deferred()
 
 func set_battle_type(is_double_battle: bool) -> void:
@@ -109,6 +115,7 @@ func _snap_all_sprites_to_pixel_grid() -> void:
 	_snap_sprite_to_pixel_grid(single_sprite)
 	_snap_sprite_to_pixel_grid(double_sprite_1)
 	_snap_sprite_to_pixel_grid(double_sprite_2)
+	_update_stat_stage_panel_positions()
 
 func _snap_sprite_to_pixel_grid(sprite: AnimatedSprite2D) -> void:
 	sprite.scale = _get_sprite_target_scale(sprite)
@@ -117,10 +124,12 @@ func reset_battle_pose() -> void:
 	_stop_active_tween()
 	for sprite in _get_all_sprites():
 		_reset_sprite_pose(sprite)
+	_update_stat_stage_panel_positions()
 
 func clear_pokemon() -> void:
 	_stop_active_tween()
 	set_battle_type(false)
+	clear_stat_stages()
 	for sprite in _get_all_sprites():
 		_reset_sprite_pose(sprite)
 		sprite.visible = false
@@ -155,11 +164,13 @@ func play_damage_tween() -> void:
 
 	for sprite in sprites:
 		var base_position := _get_base_sprite_position(sprite)
-		active_tween.tween_property(sprite, "modulate", DAMAGE_FLASH_COLOR, 0.04)
-		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.08).set_delay(0.04)
-		active_tween.tween_property(sprite, "position", base_position + Vector2(-8, 0), 0.04)
-		active_tween.tween_property(sprite, "position", base_position + Vector2(8, 0), 0.04).set_delay(0.04)
-		active_tween.tween_property(sprite, "position", base_position, 0.05).set_delay(0.08)
+		active_tween.tween_property(sprite, "modulate", DAMAGE_IMPACT_COLOR, 0.03)
+		active_tween.tween_property(sprite, "modulate", DAMAGE_FLASH_COLOR, 0.05).set_delay(0.03)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.08).set_delay(0.08)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(-12, 0), 0.035)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(10, 0), 0.04).set_delay(0.035)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(-5, 0), 0.035).set_delay(0.075)
+		active_tween.tween_property(sprite, "position", base_position, 0.05).set_delay(0.11)
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
@@ -196,10 +207,14 @@ func play_stat_raise_tween() -> void:
 
 	for sprite in sprites:
 		var base_position := _get_base_sprite_position(sprite)
+		var target_scale: Vector2 = _get_sprite_target_scale(sprite)
 		active_tween.tween_property(sprite, "modulate", STAT_RAISE_FLASH_COLOR, 0.08)
-		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.16).set_delay(0.08)
-		active_tween.tween_property(sprite, "position", base_position + Vector2(0, -10), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		active_tween.tween_property(sprite, "position", base_position, 0.14).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		active_tween.tween_property(sprite, "modulate", STAT_RAISE_SECONDARY_COLOR, 0.08).set_delay(0.08)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.14).set_delay(0.16)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(0, -14), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "position", base_position, 0.16).set_delay(0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		active_tween.tween_property(sprite, "scale", target_scale * 1.12, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "scale", target_scale, 0.18).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
@@ -216,10 +231,14 @@ func play_stat_drop_tween() -> void:
 
 	for sprite in sprites:
 		var base_position := _get_base_sprite_position(sprite)
+		var target_scale: Vector2 = _get_sprite_target_scale(sprite)
 		active_tween.tween_property(sprite, "modulate", STAT_DROP_FLASH_COLOR, 0.08)
-		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.16).set_delay(0.08)
-		active_tween.tween_property(sprite, "position", base_position + Vector2(0, 8), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		active_tween.tween_property(sprite, "position", base_position, 0.14).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		active_tween.tween_property(sprite, "modulate", STAT_DROP_SECONDARY_COLOR, 0.08).set_delay(0.08)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.16).set_delay(0.16)
+		active_tween.tween_property(sprite, "position", base_position + Vector2(0, 12), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "position", base_position, 0.18).set_delay(0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		active_tween.tween_property(sprite, "scale", target_scale * 0.9, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "scale", target_scale, 0.2).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
@@ -250,6 +269,7 @@ func _stop_active_tween() -> void:
 func _reset_sprites_pose(sprites: Array[AnimatedSprite2D]) -> void:
 	for sprite in sprites:
 		_reset_sprite_pose(sprite)
+	_update_stat_stage_panel_positions()
 
 func _reset_sprite_pose(sprite: AnimatedSprite2D) -> void:
 	sprite.position = _get_base_sprite_position(sprite)
@@ -648,11 +668,12 @@ func set_single_pokemon(pokemon: Pokemon, side: String) -> void:
 
 func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) -> void:
 	set_battle_type(true)
+	double_sprite_1.visible = false
+	double_sprite_2.visible = false
 
 	var frames_1 := _load_sprite_frames(pokemon_1.species, side, pokemon_1.shiny)
 	var frames_2 := _load_sprite_frames(pokemon_2.species, side, pokemon_2.shiny)
 
-	double_sprite_1.visible = true
 	_reset_sprite_pose(double_sprite_1)
 	if frames_1 != null:
 		double_sprite_1.sprite_frames = frames_1
@@ -660,9 +681,9 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		double_sprite_1.frame = 0
 		_set_sprite_target_scale_from_frames(double_sprite_1, frames_1)
 		_snap_sprite_to_pixel_grid(double_sprite_1)
+		double_sprite_1.visible = true
 		double_sprite_1.play()
 
-	double_sprite_2.visible = true
 	_reset_sprite_pose(double_sprite_2)
 	if frames_2 != null:
 		double_sprite_2.sprite_frames = frames_2
@@ -670,12 +691,13 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		double_sprite_2.frame = 0
 		_set_sprite_target_scale_from_frames(double_sprite_2, frames_2)
 		_snap_sprite_to_pixel_grid(double_sprite_2)
+		double_sprite_2.visible = true
 		double_sprite_2.play()
 
 func set_single_pokemon_species(species: String, side: String, is_shiny: bool = false) -> void:
 	set_battle_type(false)
 	
-	single_sprite.visible = true
+	single_sprite.visible = false
 	_reset_sprite_pose(single_sprite)
 	var frames := _load_sprite_frames(species, side, is_shiny)
 	if frames == null:
@@ -686,4 +708,53 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	single_sprite.frame = 0
 	_set_sprite_target_scale_from_frames(single_sprite, frames)
 	_snap_sprite_to_pixel_grid(single_sprite)
+	single_sprite.visible = true
 	single_sprite.play()
+	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
+func set_stat_stages(stages: Dictionary) -> void:
+	if single_stat_stage_panel != null and single_stat_stage_panel.has_method("set_stat_stages"):
+		single_stat_stage_panel.call("set_stat_stages", stages)
+
+	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
+func set_stat_stage_badges(badges: Array) -> void:
+	if single_stat_stage_panel != null and single_stat_stage_panel.has_method("set_badges"):
+		single_stat_stage_panel.call("set_badges", badges)
+
+	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
+func clear_stat_stages() -> void:
+	if single_stat_stage_panel == null:
+		return
+
+	if single_stat_stage_panel.has_method("clear"):
+		single_stat_stage_panel.call("clear")
+	else:
+		single_stat_stage_panel.visible = false
+
+func _update_stat_stage_panel_positions() -> void:
+	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
+func _position_stat_stage_panel(sprite: AnimatedSprite2D, panel: Control) -> void:
+	if sprite == null or panel == null:
+		return
+	if not sprite.visible:
+		panel.visible = false
+		return
+	if panel.get_child_count() == 0:
+		return
+
+	panel.reset_size()
+	var panel_size: Vector2 = panel.size
+	var sprite_size: Vector2 = _get_sprite_display_size(sprite)
+	var top_center: Vector2 = sprite.position - Vector2(0, sprite_size.y * 0.5)
+	panel.position = top_center - Vector2(panel_size.x * 0.5, panel_size.y + STAT_STAGE_PANEL_GAP)
+
+func _get_sprite_display_size(sprite: AnimatedSprite2D) -> Vector2:
+	var texture: Texture2D = _get_current_sprite_texture(sprite)
+	var frame_size: Vector2 = Vector2(DEFAULT_SHEET_FRAME_SIZE)
+	if texture != null:
+		frame_size = texture.get_size()
+
+	return frame_size * Vector2(abs(sprite.scale.x), abs(sprite.scale.y))

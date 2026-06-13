@@ -23,6 +23,7 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		str(data.get("ability", "")),
 		str(data.get("nature", "Hardy")),
 		data.get("evs", {}),
+		data.get("stats", {}),
 		_get_payload_moves(data),
 		str(data.get("instanceId", data.get("instance_id", ""))),
 		_get_bool_option(data, ["shiny", "isShiny", "is_shiny"]),

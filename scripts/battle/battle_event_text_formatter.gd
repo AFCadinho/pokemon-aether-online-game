@@ -290,6 +290,13 @@ func format_effectiveness_event(event: Dictionary) -> String:
 
 	return ""
 
+func format_hit_count_event(event: Dictionary) -> String:
+	var count: int = int(event.get("count", 0))
+	if count <= 1:
+		return ""
+
+	return "Hit %s times!" % count
+
 func format_direct_damage_message(
 	target: String,
 	visible_hp_change: int,

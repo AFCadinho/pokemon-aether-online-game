@@ -42,11 +42,18 @@ var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").n
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var public_confirmed_abilities_by_ident := {}
+var stat_stages_by_ident: Dictionary = {}
+var ability_stat_modifiers_by_ident: Dictionary = {}
+var player_party_moves_by_key: Dictionary = {}
 var current_move_hover_rect := Rect2()
+var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
+const STAT_STAGE_BADGE_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
+const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
+const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 
 #Active Pokemon
 var active_player_pokemon: Pokemon
@@ -75,6 +82,7 @@ var active_enemy_pokemon: Pokemon
 @onready var player_team_preview_layer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerTeamPreviewLayer
 @onready var pokemon_hover_card: Control = $PokemonHoverCard
 @onready var move_hover_card: Control = $MoveHoverCard
+@onready var party_hover_card: Control = $PartyHoverCard
 
 # Pokemon HUD
 @onready var player_hud_panel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerHudPanel
@@ -116,6 +124,7 @@ func _ready() -> void:
 	_connect_pokemon_hover_signals()
 	_connect_hud_team_hover_signals()
 	_connect_move_hover_signals()
+	_connect_party_hover_signals()
 	_connect_forfeit_confirm_dialog_signals()
 	_setup_weather_presentation()
 	_setup_side_condition_presentation()
@@ -185,6 +194,8 @@ func _process(delta: float) -> void:
 		_position_pokemon_hover_card()
 	if move_hover_card.visible:
 		_position_move_hover_card()
+	if party_hover_card.visible:
+		_position_party_hover_card()
 	weather_presentation.animate(delta)
 
 func _connect_pokemon_hover_signals() -> void:
@@ -215,6 +226,12 @@ func _connect_move_hover_signals() -> void:
 	if moves_grid.has_signal("move_unhovered"):
 		moves_grid.move_unhovered.connect(_hide_move_hover)
 
+func _connect_party_hover_signals() -> void:
+	if party_grid.has_signal("pokemon_hovered"):
+		party_grid.pokemon_hovered.connect(_show_party_hover)
+	if party_grid.has_signal("pokemon_unhovered"):
+		party_grid.pokemon_unhovered.connect(_hide_party_hover)
+
 func _connect_forfeit_confirm_dialog_signals() -> void:
 	if forfeit_confirm_dialog.has_signal("confirmed"):
 		forfeit_confirm_dialog.confirmed.connect(_on_forfeit_confirmed)
@@ -234,6 +251,162 @@ func _hide_move_hover() -> void:
 	else:
 		move_hover_card.visible = false
 
+func _show_party_hover(pokemon_data: Dictionary, slot_rect: Rect2) -> void:
+	if pokemon_data.is_empty():
+		return
+
+	_hide_pokemon_hover()
+	current_party_hover_rect = slot_rect
+	var hover_data := _get_owned_party_hover_data(pokemon_data)
+	if party_hover_card.has_method("show_for_pokemon"):
+		party_hover_card.call("show_for_pokemon", hover_data)
+	else:
+		party_hover_card.visible = true
+	_position_party_hover_card()
+
+func _hide_party_hover() -> void:
+	current_party_hover_rect = Rect2()
+	if party_hover_card.has_method("hide_card"):
+		party_hover_card.call("hide_card")
+	else:
+		party_hover_card.visible = false
+
+func _position_party_hover_card() -> void:
+	if current_party_hover_rect.size != Vector2.ZERO and party_hover_card.has_method("position_near_rect"):
+		party_hover_card.call("position_near_rect", current_party_hover_rect, get_viewport_rect().size)
+	elif party_hover_card.has_method("position_near_mouse"):
+		party_hover_card.call("position_near_mouse", get_global_mouse_position(), get_viewport_rect().size)
+
+func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
+	var display_data: Dictionary = _get_display_pokemon_data("p1", pokemon_data).duplicate(true)
+	var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
+	if saved_pokemon == null:
+		return display_data
+
+	var hover_data := saved_pokemon.to_battle_dict()
+	for key in [
+		"ident",
+		"active",
+		"hp",
+		"maxHp",
+		"currentHp",
+		"status",
+		"condition",
+		"fainted",
+		"gender",
+		"metadataSlot",
+		"metadata_slot",
+	]:
+		if display_data.has(key):
+			hover_data[key] = display_data.get(key)
+
+	if not hover_data.has("hp") and hover_data.has("currentHp"):
+		hover_data["hp"] = hover_data.get("currentHp")
+	if not hover_data.has("maxHp") and hover_data.has("max_hp"):
+		hover_data["maxHp"] = hover_data.get("max_hp")
+	if not hover_data.has("hp"):
+		hover_data["hp"] = saved_pokemon.current_hp
+	if not hover_data.has("maxHp"):
+		hover_data["maxHp"] = saved_pokemon.max_hp
+	var stat_stages := _get_active_stat_stages_for_party_hover(display_data)
+	if not stat_stages.is_empty():
+		hover_data["statStages"] = stat_stages
+
+	var moves: Array = _get_party_hover_moves(display_data, hover_data)
+	if not moves.is_empty():
+		hover_data["moves"] = moves
+
+	return hover_data
+
+func _get_party_hover_moves(display_data: Dictionary, fallback_data: Dictionary) -> Array:
+	if bool(display_data.get("active", false)):
+		var available_moves: Array = battle_state.get_available_moves("p1")
+		if not available_moves.is_empty():
+			return available_moves
+
+	var cached_moves: Array = _get_cached_party_moves(display_data)
+	if not cached_moves.is_empty():
+		return cached_moves
+
+	var display_moves_value: Variant = display_data.get("moves", [])
+	if display_moves_value is Array:
+		var display_moves: Array = display_moves_value as Array
+		if not display_moves.is_empty():
+			return _with_default_pp_for_moves(display_moves)
+
+	var moves_value: Variant = fallback_data.get("moves", [])
+	if moves_value is Array:
+		return moves_value as Array
+
+	return []
+
+func _get_cached_party_moves(pokemon_data: Dictionary) -> Array:
+	for key in _get_party_move_cache_keys(pokemon_data):
+		var cached_value: Variant = player_party_moves_by_key.get(key, [])
+		if cached_value is Array:
+			var cached_moves: Array = cached_value as Array
+			if not cached_moves.is_empty():
+				return cached_moves.duplicate(true)
+
+	return []
+
+func _get_party_move_cache_keys(pokemon_data: Dictionary) -> Array[String]:
+	var keys: Array[String] = []
+	var instance_id: String = str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
+	if instance_id != "":
+		keys.append("instance:%s" % instance_id)
+
+	var ident_key: String = _normalize_battle_ident(str(pokemon_data.get("ident", "")))
+	if ident_key != "":
+		keys.append("ident:%s" % ident_key)
+
+	var metadata_slot: int = int(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", -1)))
+	if metadata_slot >= 0:
+		keys.append("slot:%s" % metadata_slot)
+
+	return keys
+
+func _with_default_pp_for_moves(moves: Array) -> Array:
+	var normalized_moves: Array = []
+	for move_value in moves:
+		if not (move_value is Dictionary):
+			normalized_moves.append(move_value)
+			continue
+
+		var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
+		if not move_data.has("maxpp") and move_data.has("pp"):
+			var max_pp: int = _calculate_max_pp(int(move_data.get("pp", 0)))
+			move_data["maxpp"] = max_pp
+			move_data["pp"] = max_pp
+
+		normalized_moves.append(move_data)
+
+	return normalized_moves
+
+func _calculate_max_pp(base_pp: int) -> int:
+	if base_pp <= 1:
+		return max(base_pp, 0)
+
+	return int(floor(float(base_pp) * 1.6))
+
+func _get_player_save_pokemon_for_hover(pokemon_data: Dictionary) -> Pokemon:
+	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
+	if instance_id != "":
+		for pokemon in PlayerSave.party:
+			if pokemon.instance_id == instance_id:
+				return pokemon
+
+	var display_species := battle_state.get_species_from_pokemon_data(pokemon_data)
+	var normalized_display_species := _normalize_species_for_compare(display_species)
+	if normalized_display_species == "":
+		return null
+
+	for pokemon in PlayerSave.party:
+		if _normalize_species_for_compare(pokemon.species) == normalized_display_species:
+			return pokemon
+
+	return null
+
 func _position_move_hover_card() -> void:
 	if current_move_hover_rect.size != Vector2.ZERO and move_hover_card.has_method("position_near_rect"):
 		move_hover_card.call("position_near_rect", current_move_hover_rect, get_viewport_rect().size)
@@ -248,6 +421,7 @@ func _update_sprite_hover() -> void:
 	hover_state.set_sprite_hover_player(hovered_player_id)
 	if hovered_player_id == "":
 		_hide_pokemon_hover_card()
+		_hide_party_hover()
 		return
 
 	_show_active_pokemon_hover(hovered_player_id)
@@ -520,6 +694,7 @@ func _reset_action_choices() -> void:
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
 	party_grid.visible = false
+	_hide_party_hover()
 
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
@@ -529,6 +704,7 @@ func _show_moves() -> void:
 	current_action_view = ActionView.MOVES
 	moves_grid.visible = true
 	party_grid.visible = false
+	_hide_party_hover()
 	action_buttons.set_selected_action("fight")
 	_show_current_action_prompt()
 
@@ -593,6 +769,7 @@ func _open_bag() -> void:
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
 	party_grid.visible = false
+	_hide_party_hover()
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
@@ -656,7 +833,24 @@ func _finish_battle(result: Dictionary) -> void:
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
 func _apply_api_response(response: Dictionary) -> bool:
-	return action_flow.apply_response(response)
+	var success: bool = action_flow.apply_response(response)
+	if success:
+		_remember_active_player_party_moves()
+
+	return success
+
+func _remember_active_player_party_moves() -> void:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
+	if active_pokemon.is_empty():
+		return
+
+	var available_moves: Array = battle_state.get_available_moves("p1")
+	if available_moves.is_empty():
+		return
+
+	var moves: Array = available_moves.duplicate(true)
+	for key in _get_party_move_cache_keys(active_pokemon):
+		player_party_moves_by_key[key] = moves
 
 func _sync_player_save_from_battle_state() -> void:
 	var player_team := battle_state.get_player_team("p1")
@@ -702,6 +896,10 @@ func _reset_battle_status_panel() -> void:
 
 func _reset_battle_effect_tracking() -> void:
 	public_confirmed_abilities_by_ident.clear()
+	stat_stages_by_ident.clear()
+	ability_stat_modifiers_by_ident.clear()
+	player_party_moves_by_key.clear()
+	_update_stat_stage_panels()
 	event_presentation.reset()
 
 func _remember_public_confirmed_abilities_from_response(response: Dictionary) -> void:
@@ -725,6 +923,238 @@ func _remember_public_confirmed_abilities_from_response(response: Dictionary) ->
 			continue
 
 		public_confirmed_abilities_by_ident[ident_key] = ability
+
+func _remember_battle_modifier_event(event: Dictionary) -> void:
+	match str(event.get("type", "")):
+		"switch":
+			_clear_stat_stages_for_ident(str(event.get("fromIdent", "")))
+			_clear_stat_stages_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
+			_clear_ability_stat_modifier_for_ident(str(event.get("fromIdent", "")))
+			_clear_ability_stat_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
+		"faint":
+			_clear_stat_stages_for_ident(str(event.get("target", "")))
+			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
+		"pokemonEffect":
+			_apply_pokemon_effect_modifier_event(event)
+		"ability":
+			_apply_ability_stat_modifier_event(event)
+		"statChange":
+			_apply_stat_stage_event(event)
+
+func _apply_stat_stage_event(event: Dictionary) -> void:
+	var ident_key: String = _normalize_battle_ident(str(event.get("target", "")))
+	if ident_key == "":
+		return
+
+	var stat_key: String = _normalize_stat_stage_key(str(event.get("stat", "")))
+	if stat_key == "":
+		return
+
+	var stages: Dictionary = {}
+	var stages_value: Variant = stat_stages_by_ident.get(ident_key, {})
+	if stages_value is Dictionary:
+		stages = (stages_value as Dictionary).duplicate()
+
+	var current_stage: int = int(stages.get(stat_key, 0))
+	var new_stage: int = mini(maxi(current_stage + int(event.get("amount", 0)), -6), 6)
+	if new_stage == 0:
+		stages.erase(stat_key)
+	else:
+		stages[stat_key] = new_stage
+
+	if stages.is_empty():
+		stat_stages_by_ident.erase(ident_key)
+	else:
+		stat_stages_by_ident[ident_key] = stages
+
+	_update_stat_stage_panels()
+
+func _clear_stat_stages_for_ident(ident: String) -> void:
+	var ident_key: String = _normalize_battle_ident(ident)
+	if ident_key == "":
+		return
+
+	stat_stages_by_ident.erase(ident_key)
+	_update_stat_stage_panels()
+
+func _apply_ability_stat_modifier_event(event: Dictionary) -> void:
+	if str(event.get("effect", "")) != "boost":
+		return
+
+	var ability_name: String = str(event.get("ability", event.get("abilityName", ""))).strip_edges()
+	if not _is_ability_stat_modifier_name(ability_name):
+		return
+
+	var stat_key: String = _normalize_stat_stage_key(str(event.get("stat", "")))
+	if stat_key == "":
+		return
+
+	var ident_key: String = _normalize_battle_ident(str(event.get("target", event.get("actor", ""))))
+	if ident_key == "":
+		return
+
+	ability_stat_modifiers_by_ident[ident_key] = {
+		"ability": ability_name,
+		"stat": stat_key,
+	}
+	_update_stat_stage_panels()
+
+func _apply_pokemon_effect_modifier_event(event: Dictionary) -> void:
+	var modifier: Dictionary = _get_ability_stat_modifier_from_effect(str(event.get("effect", "")))
+	if modifier.is_empty():
+		return
+
+	var state: String = str(event.get("state", ""))
+	if state == "activate" or state == "start":
+		var ident_key: String = _normalize_battle_ident(str(event.get("target", event.get("actor", ""))))
+		if ident_key == "":
+			return
+
+		ability_stat_modifiers_by_ident[ident_key] = modifier
+		_update_stat_stage_panels()
+		return
+
+	if state == "end":
+		_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
+
+func _clear_ability_stat_modifier_for_ident(ident: String) -> void:
+	var ident_key: String = _normalize_battle_ident(ident)
+	if ident_key == "":
+		return
+
+	ability_stat_modifiers_by_ident.erase(ident_key)
+	_update_stat_stage_panels()
+
+func _get_active_stat_stages_for_party_hover(pokemon_data: Dictionary) -> Dictionary:
+	if not bool(pokemon_data.get("active", false)):
+		return {}
+
+	var ident_key: String = _normalize_battle_ident(str(pokemon_data.get("ident", "")))
+	if ident_key == "":
+		return {}
+
+	var stages_value: Variant = stat_stages_by_ident.get(ident_key, {})
+	if stages_value is Dictionary:
+		return (stages_value as Dictionary).duplicate()
+
+	return {}
+
+func _normalize_stat_stage_key(stat: String) -> String:
+	match stat.to_lower().replace(" ", ""):
+		"atk", "attack":
+			return "atk"
+		"def", "defense", "defence":
+			return "def"
+		"spa", "spatk", "specialattack":
+			return "spa"
+		"spd", "spdef", "specialdefense", "specialdefence":
+			return "spd"
+		"spe", "speed":
+			return "spe"
+
+	return ""
+
+func _update_stat_stage_panels() -> void:
+	_update_stat_stage_panel_for_player("p1", player_sprite_box)
+	_update_stat_stage_panel_for_player("p2", enemy_sprite_box)
+
+func _update_stat_stage_panel_for_player(player_id: String, sprite_box: Node) -> void:
+	if sprite_box == null:
+		return
+
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+	var ident_key: String = _normalize_battle_ident(str(active_pokemon.get("ident", "")))
+	if ident_key == "":
+		_set_sprite_box_stat_stage_badges(sprite_box, [])
+		return
+
+	_set_sprite_box_stat_stage_badges(sprite_box, _get_stat_stage_badges_for_ident(ident_key))
+
+func _set_sprite_box_stat_stage_badges(sprite_box: Node, badges: Array) -> void:
+	if sprite_box.has_method("set_stat_stage_badges"):
+		sprite_box.call("set_stat_stage_badges", badges)
+	elif sprite_box.has_method("set_stat_stages"):
+		sprite_box.call("set_stat_stages", {})
+
+func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
+	var badges: Array[Dictionary] = []
+	var stages_value: Variant = stat_stages_by_ident.get(ident_key, {})
+	if stages_value is Dictionary:
+		var stages: Dictionary = stages_value as Dictionary
+		for stat_key in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]:
+			var stage_value: int = int(stages.get(stat_key, 0))
+			if stage_value == 0:
+				continue
+
+			badges.append({
+				"label": _format_stat_badge_name(stat_key),
+				"value": _format_stat_stage_badge_value(stage_value),
+				"color": STAT_STAGE_BADGE_BOOST_COLOR if stage_value > 0 else STAT_STAGE_BADGE_DROP_COLOR,
+			})
+
+	var modifier_value: Variant = ability_stat_modifiers_by_ident.get(ident_key, {})
+	if modifier_value is Dictionary:
+		var modifier: Dictionary = modifier_value as Dictionary
+		var ability_name: String = str(modifier.get("ability", "")).strip_edges()
+		var stat_key: String = _normalize_stat_stage_key(str(modifier.get("stat", "")))
+		if ability_name != "" and stat_key != "":
+			badges.append({
+				"label": "%s:" % ability_name,
+				"value": _format_stat_badge_name(stat_key),
+				"color": STAT_STAGE_BADGE_BOOST_COLOR,
+				"line": STAT_STAGE_BADGE_LINE_MODIFIER,
+			})
+
+	return badges
+
+func _format_stat_badge_name(stat_key: String) -> String:
+	match stat_key:
+		"atk":
+			return "Atk"
+		"def":
+			return "Def"
+		"spa":
+			return "SpA"
+		"spd":
+			return "SpD"
+		"spe":
+			return "Spe"
+		"accuracy":
+			return "Acc"
+		"evasion":
+			return "Eva"
+
+	return stat_key.capitalize()
+
+func _format_stat_stage_badge_value(stage_value: int) -> String:
+	if stage_value > 0:
+		return "+%s" % stage_value
+
+	return str(stage_value)
+
+func _is_ability_stat_modifier_name(ability_name: String) -> bool:
+	match ability_name.to_lower().replace(" ", "").replace("-", ""):
+		"quarkdrive", "protosynthesis":
+			return true
+
+	return false
+
+func _get_ability_stat_modifier_from_effect(effect: String) -> Dictionary:
+	var effect_key: String = effect.to_lower().replace(" ", "").replace("-", "")
+	for ability_key in ["protosynthesis", "quarkdrive"]:
+		if not effect_key.begins_with(ability_key):
+			continue
+
+		var stat_key: String = _normalize_stat_stage_key(effect_key.substr(ability_key.length()))
+		if stat_key == "":
+			return {}
+
+		return {
+			"ability": "Quark Drive" if ability_key == "quarkdrive" else "Protosynthesis",
+			"stat": stat_key,
+		}
+
+	return {}
 
 func _get_public_confirmed_ability_from_event(event: Dictionary) -> String:
 	var event_type: String = str(event.get("type", ""))
@@ -952,7 +1382,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	team_preview_lead_selection_active = true
 	queued_battle_action.clear()
 	_show_team_preview_layers()
-	current_action_panel.set_message("Choose Lead")
+	current_action_panel.set_message("Choose your Lead")
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
 	party_grid.set_party(_get_lead_selection_team_data("p1"))
@@ -1080,6 +1510,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			continue
 
 		var event_data: Dictionary = event as Dictionary
+		_remember_battle_modifier_event(event_data)
 		var presentation: Dictionary = event_presentation.build(event_data)
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
@@ -1291,6 +1722,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	_set_battle_input_locked(true)
 	var was_force_switch := force_switch_flow.player_needs_force_switch("p1")
 	party_grid.visible = false
+	_hide_party_hover()
 
 	var player_response: Dictionary = await _submit_player_choice("switch", slot)
 
@@ -1444,6 +1876,7 @@ func _can_choose_lead_slot(slot: int) -> bool:
 func _update_active_sprites() -> void:
 	_update_active_sprite_box("p1", player_sprite_box, "back")
 	_update_active_sprite_box("p2", enemy_sprite_box, "front")
+	_update_stat_stage_panels()
 
 func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String) -> void:
 	if _should_hide_active_pokemon_for_force_switch(player_id):

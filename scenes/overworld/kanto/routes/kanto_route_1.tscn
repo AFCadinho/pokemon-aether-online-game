@@ -3402,6 +3402,7 @@ sources/0 = SubResource("TileSetAtlasSource_y4850")
 size = Vector2(72, 36)
 
 [node name="KantoRoute1" type="Node2D" unique_id=1284880823]
+position = Vector2(16, 16)
 script = ExtResource("1_7kpb1")
 
 [node name="Ground" type="TileMapLayer" parent="." unique_id=35623719]
@@ -3562,7 +3563,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=394772807]
 
 [node name="BugCatcherTrainerNPC" parent="Entities/NPCs" unique_id=168052101 instance=ExtResource("8_lmnv3")]
-position = Vector2(369, 965)
+position = Vector2(400, 976)
 sight_range_tiles = 4
 
 [node name="GaryTrainerNPC" parent="Entities/NPCs" unique_id=874508670 instance=ExtResource("8_lmnv3")]
@@ -3602,6 +3603,6 @@ visible = false
 [node name="Spawns" type="Node2D" parent="." unique_id=1226721215]
 
 [node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=609805199]
-position = Vector2(432, 1456)
+position = Vector2(400, 1424)
 
 [connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]

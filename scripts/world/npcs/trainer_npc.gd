@@ -38,21 +38,21 @@ func get_feet_position() -> Vector2:
 	return feet_marker.global_position
 	
 func _to_tile(world_position: Vector2) -> Vector2i:
+	var local_position := world_position - _get_map_origin()
 	return Vector2i(
-		floori(world_position.x / TILE_SIZE),
-		floori(world_position.y / TILE_SIZE)
+		floori(local_position.x / TILE_SIZE),
+		floori(local_position.y / TILE_SIZE)
 	)
 	
 
 func walk_to_player(body: Node2D) -> void:
-	var player_tile := _to_tile(_get_body_feet_position(body))
+	var player_tile := _to_tile(_get_body_target_feet_position(body))
 	var npc_tile := _to_tile(get_feet_position())
-	var direction := _get_step_direction_from_tiles(npc_tile, player_tile)
+	var direction := _get_cardinal_direction(sight_direction)
 	if direction == Vector2.ZERO:
-		_set_idle_frame(direction)
 		return
 	
-	var stop_tile := player_tile - Vector2i(int(direction.x), int(direction.y))
+	var stop_tile := _get_straight_line_stop_tile(npc_tile, player_tile, direction)
 	if npc_tile == stop_tile:
 		_set_idle_frame(direction)
 		return
@@ -70,10 +70,21 @@ func walk_to_player(body: Node2D) -> void:
 	
 	_set_idle_frame(direction)
 
+func _get_straight_line_stop_tile(npc_tile: Vector2i, player_tile: Vector2i, direction: Vector2) -> Vector2i:
+	if direction.x != 0:
+		return Vector2i(player_tile.x - int(direction.x), npc_tile.y)
+
+	return Vector2i(npc_tile.x, player_tile.y - int(direction.y))
+
 func _get_body_feet_position(body: Node2D) -> Vector2:
 	if body.has_method("get_feet_position"):
 		return body.get_feet_position()
 	return body.global_position
+
+func _get_body_target_feet_position(body: Node2D) -> Vector2:
+	if body.has_method("get_target_feet_position"):
+		return body.get_target_feet_position()
+	return _get_body_feet_position(body)
 
 func _get_step_direction_from_positions(from_position: Vector2, to_position: Vector2) -> Vector2:
 	var delta := to_position - from_position
@@ -88,30 +99,17 @@ func _get_step_direction_from_positions(from_position: Vector2, to_position: Vec
 	
 	return Vector2.ZERO
 
-func _get_step_direction_from_tiles(from_tile: Vector2i, to_tile: Vector2i) -> Vector2:
-	var delta := to_tile - from_tile
-	if abs(delta.x) > abs(delta.y):
-		return Vector2(sign(delta.x), 0)
-	
-	if delta.y != 0:
-		return Vector2(0, sign(delta.y))
-	
-	if delta.x != 0:
-		return Vector2(sign(delta.x), 0)
-	
-	return Vector2.ZERO
-
-func _get_stop_position_before_player(player_position: Vector2, direction: Vector2) -> Vector2:
-	if direction.x != 0:
-		return Vector2(player_position.x - direction.x * TILE_SIZE, global_position.y)
-	
-	return Vector2(global_position.x, player_position.y - direction.y * TILE_SIZE)
-
 func _tile_to_world(tile_position: Vector2i) -> Vector2:
-	return Vector2(
+	return _get_map_origin() + Vector2(
 		tile_position.x * TILE_SIZE + TILE_SIZE * 0.5,
 		tile_position.y * TILE_SIZE + TILE_SIZE * 0.5
 	)
+
+func _get_map_origin() -> Vector2:
+	if GameState.current_map != null:
+		return GameState.current_map.global_position
+
+	return Vector2.ZERO
 
 func _play_walk_animation(direction: Vector2) -> void:
 	var animation_name := _get_walk_animation_name(direction)
@@ -245,6 +243,12 @@ func _try_trigger_vision(body: Node2D) -> void:
 	
 	triggered = true
 	GameState.input_locked = true
+	await _wait_for_body_tile_movement(body)
+	if not _is_body_in_sight_range(body):
+		triggered = false
+		GameState.input_locked = false
+		return
+
 	await walk_to_player(body)
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
@@ -310,6 +314,10 @@ func _face_body(body: Node2D) -> void:
 	var direction := _get_step_direction_from_positions(get_feet_position(), _get_body_feet_position(body))
 	_set_idle_frame(direction)
 
+func _wait_for_body_tile_movement(body: Node2D) -> void:
+	while body != null and body.has_method("is_tile_moving") and body.is_tile_moving():
+		await get_tree().process_frame
+
 func _is_ui_typing() -> bool:
 	var focused_control := get_viewport().gui_get_focus_owner()
 	return focused_control is LineEdit or focused_control is TextEdit
@@ -324,7 +332,7 @@ func _is_body_in_sight_range(body: Node2D) -> bool:
 	
 	var direction := _get_cardinal_direction(sight_direction)
 	var npc_tile := _to_tile(get_feet_position())
-	var body_tile := _to_tile(_get_body_feet_position(body))
+	var body_tile := _to_tile(_get_body_target_feet_position(body))
 	var delta := body_tile - npc_tile
 	
 	if direction.x != 0:
