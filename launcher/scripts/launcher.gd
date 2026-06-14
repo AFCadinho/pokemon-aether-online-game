@@ -1009,36 +1009,46 @@ set "LAUNCHER_EXE_BAK=%s"
 set "LAUNCHER_DIR=%s"
 set "UPDATE_DIR=%s"
 set "LAUNCHER_EXE_NAME=%s"
+set "UPDATE_LOG=%%~dp0launcher_update_windows.log"
+
+echo [launcher] updater started > "%UPDATE_LOG%"
+echo [launcher] launcher exe: %LAUNCHER_EXE% >> "%UPDATE_LOG%"
+echo [launcher] update dir: %UPDATE_DIR% >> "%UPDATE_LOG%"
 
 :WAIT
 tasklist /FI "IMAGENAME eq %%LAUNCHER_EXE_NAME%%" | find /I "%%LAUNCHER_EXE_NAME%%" >nul
 if %%ERRORLEVEL%%==0 (
+	echo [launcher] waiting for launcher process to exit... >> "%UPDATE_LOG%"
 	timeout /t 1 /nobreak >nul
 	goto WAIT
 )
 
 if not exist "%UPDATE_DIR%" (
+	echo [launcher] update directory not found: %UPDATE_DIR% >> "%UPDATE_LOG%"
 	exit /b 1
 )
 
 if not exist "%LAUNCHER_EXE%" (
-	echo [launcher] launcher executable not found: %LAUNCHER_EXE%
+	echo [launcher] launcher executable not found: %LAUNCHER_EXE% >> "%UPDATE_LOG%"
 	exit /b 1
 )
 
+echo [launcher] copying update files... >> "%UPDATE_LOG%"
 copy /Y "%LAUNCHER_EXE%" "%LAUNCHER_EXE_BAK%" >nul
 xcopy "%UPDATE_DIR%\\*" "%LAUNCHER_DIR%\\" /E /I /Y >nul
 if errorlevel 1 (
 	copy /Y "%LAUNCHER_EXE_BAK%" "%LAUNCHER_EXE%" >nul
 	del /F /Q "%LAUNCHER_EXE_BAK%" >nul 2>nul
-	echo [launcher] copy failed, restoring launcher executable.
+	echo [launcher] copy failed, restoring launcher executable. >> "%UPDATE_LOG%"
 	start "" "%LAUNCHER_EXE%"
 	rmdir /S /Q "%UPDATE_DIR%" >nul 2>nul
 	exit /b 1
 )
 del /F /Q "%LAUNCHER_EXE_BAK%" >nul 2>nul
+echo [launcher] starting updated launcher... >> "%UPDATE_LOG%"
 start "" "%LAUNCHER_EXE%"
 rmdir /S /Q "%UPDATE_DIR%" >nul 2>nul
+echo [launcher] updater finished. >> "%UPDATE_LOG%"
 exit /b 0
 """ % [launcher_binary_path, launcher_exe_backup, target_dir, staging_dir, executable_name]
 	else:
@@ -1082,7 +1092,7 @@ rm -rf \"$UPDATE_DIR\"
 	var exec_args := PackedStringArray()
 	var launcher_command := ""
 	if os_name == "Windows":
-		exec_args = PackedStringArray(["/C", "\"%s\"" % script_path])
+		exec_args = PackedStringArray(["/C", "start", "\"\"", "/MIN", "cmd.exe", "/C", "call \"%s\"" % script_path])
 		launcher_command = "cmd.exe"
 	else:
 		_exec_make_executable(script_path)
