@@ -105,16 +105,16 @@ def _discover_release_files(release_dir: Path) -> list[str]:
 
 def _build_object_key(file_name: str, prefix: str, layout: str) -> str:
     object_parts: list[str] = [part for part in [prefix.strip("/")] if part]
-	if layout == "updates":
-		if file_name.startswith("game-") and file_name.endswith(".zip"):
-			object_parts.append("game")
-		elif file_name.startswith("pokemon-") and file_name.endswith(".zip"):
-			object_parts.append("assets")
-		elif file_name.startswith("PokemonAetherLauncher-") and file_name.endswith(".zip"):
-			object_parts.append("launcher")
-			object_parts.append("latest")
-	object_parts.append(file_name)
-	return "/".join(object_parts)
+    if layout == "updates":
+        if file_name.startswith("game-") and file_name.endswith(".zip"):
+            object_parts.append("game")
+        elif file_name.startswith("pokemon-") and file_name.endswith(".zip"):
+            object_parts.append("assets")
+        elif file_name.startswith("PokemonAetherLauncher-") and file_name.endswith(".zip"):
+            object_parts.append("launcher")
+            object_parts.append("latest")
+    object_parts.append(file_name)
+    return "/".join(object_parts)
 
 
 def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
