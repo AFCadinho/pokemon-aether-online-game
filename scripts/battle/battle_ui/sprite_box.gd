@@ -41,6 +41,9 @@ var base_sprite_positions: Dictionary = {}
 var sprite_target_scales: Dictionary = {}
 var sprite_frames_render_scales: Dictionary = {}
 var sprite_frames_display_scale_multipliers: Dictionary = {}
+var sprite_frames_position_offsets: Dictionary = {}
+var sprite_frames_anchors: Dictionary = {}
+var sprite_frames_frame_sizes: Dictionary = {}
 
 func _ready() -> void:
 	_set_sprite_filter(single_sprite)
@@ -69,15 +72,8 @@ func _set_sprite_filter(sprite: AnimatedSprite2D) -> void:
 	sprite.scale = BATTLE_SPRITE_SCALE
 
 func _get_sprite_hover_rect(sprite: AnimatedSprite2D) -> Rect2:
-	var texture: Texture2D = _get_current_sprite_texture(sprite)
-	var frame_size: Vector2 = Vector2(DEFAULT_SHEET_FRAME_SIZE)
-	if texture != null:
-		frame_size = texture.get_size()
-
-	var sprite_scale := Vector2(abs(sprite.scale.x), abs(sprite.scale.y))
-	var hitbox_size: Vector2 = frame_size * sprite_scale
-	var hitbox_position: Vector2 = sprite.global_position - (hitbox_size * 0.5) - SPRITE_HOVER_PADDING
-	return Rect2(hitbox_position, hitbox_size + (SPRITE_HOVER_PADDING * 2.0))
+	var visual_rect := _get_sprite_visual_rect_global(sprite)
+	return Rect2(visual_rect.position - SPRITE_HOVER_PADDING, visual_rect.size + (SPRITE_HOVER_PADDING * 2.0))
 
 func _get_current_sprite_texture(sprite: AnimatedSprite2D) -> Texture2D:
 	if sprite.sprite_frames == null:
@@ -121,7 +117,9 @@ func _snap_all_sprites_to_pixel_grid() -> void:
 	_update_stat_stage_panel_positions()
 
 func _snap_sprite_to_pixel_grid(sprite: AnimatedSprite2D) -> void:
+	sprite.position = _get_base_sprite_position(sprite)
 	sprite.scale = _get_sprite_target_scale(sprite)
+	_apply_sprite_anchor(sprite)
 
 func reset_battle_pose() -> void:
 	_stop_active_tween()
@@ -277,14 +275,16 @@ func _reset_sprites_pose(sprites: Array[AnimatedSprite2D]) -> void:
 func _reset_sprite_pose(sprite: AnimatedSprite2D) -> void:
 	sprite.position = _get_base_sprite_position(sprite)
 	sprite.scale = _get_sprite_target_scale(sprite)
+	_apply_sprite_anchor(sprite)
 	sprite.modulate = Color.WHITE
 
 func _get_base_sprite_position(sprite: AnimatedSprite2D) -> Vector2:
 	var base_position_value: Variant = base_sprite_positions.get(_get_sprite_key(sprite), sprite.position)
 	if base_position_value is Vector2:
-		return base_position_value
+		var base_position := base_position_value as Vector2
+		return base_position + _get_sprite_frames_position_offset(sprite.sprite_frames)
 
-	return sprite.position
+	return sprite.position + _get_sprite_frames_position_offset(sprite.sprite_frames)
 
 func _set_sprite_target_scale_from_frames(sprite: AnimatedSprite2D, sprite_frames: SpriteFrames) -> void:
 	var render_scale: float = _get_sprite_frames_render_scale(sprite_frames)
@@ -308,6 +308,20 @@ func _set_sprite_frames_render_scale(sprite_frames: SpriteFrames, render_scale: 
 func _set_sprite_frames_display_scale_multiplier(sprite_frames: SpriteFrames, multiplier: float) -> void:
 	sprite_frames_display_scale_multipliers[_get_sprite_frames_key(sprite_frames)] = max(multiplier, 1.0)
 
+func _set_sprite_frames_position_offset(sprite_frames: SpriteFrames, position_offset: Vector2) -> void:
+	sprite_frames_position_offsets[_get_sprite_frames_key(sprite_frames)] = position_offset
+
+func _set_sprite_frames_anchor(sprite_frames: SpriteFrames, anchor: Vector2, frame_size: Vector2) -> void:
+	var key := _get_sprite_frames_key(sprite_frames)
+	sprite_frames_anchors[key] = anchor
+	sprite_frames_frame_sizes[key] = frame_size
+
+func _set_sprite_frames_frame_size(sprite_frames: SpriteFrames, frame_size: Vector2) -> void:
+	sprite_frames_frame_sizes[_get_sprite_frames_key(sprite_frames)] = frame_size
+
+func _sprite_frames_has_anchor(sprite_frames: SpriteFrames) -> bool:
+	return sprite_frames_anchors.has(_get_sprite_frames_key(sprite_frames))
+
 func _get_sprite_frames_render_scale(sprite_frames: SpriteFrames) -> float:
 	var render_scale_value: Variant = sprite_frames_render_scales.get(_get_sprite_frames_key(sprite_frames), 1.0)
 	if render_scale_value is float:
@@ -325,6 +339,49 @@ func _get_sprite_frames_display_scale_multiplier(sprite_frames: SpriteFrames) ->
 		return float(multiplier_value)
 
 	return 1.0
+
+func _get_sprite_frames_position_offset(sprite_frames: SpriteFrames) -> Vector2:
+	var offset_value: Variant = sprite_frames_position_offsets.get(_get_sprite_frames_key(sprite_frames), Vector2.ZERO)
+	if offset_value is Vector2:
+		return offset_value
+
+	return Vector2.ZERO
+
+func _get_sprite_frames_anchor(sprite_frames: SpriteFrames) -> Vector2:
+	var key := _get_sprite_frames_key(sprite_frames)
+	var anchor_value: Variant = sprite_frames_anchors.get(key, Vector2.ZERO)
+	if anchor_value is Vector2:
+		return anchor_value
+
+	var frame_size := _get_sprite_frames_frame_size(sprite_frames)
+	return Vector2(frame_size.x * 0.5, frame_size.y)
+
+func _get_sprite_frames_frame_size(sprite_frames: SpriteFrames) -> Vector2:
+	var key := _get_sprite_frames_key(sprite_frames)
+	var frame_size_value: Variant = sprite_frames_frame_sizes.get(key, Vector2.ZERO)
+	if frame_size_value is Vector2:
+		return frame_size_value
+
+	if sprite_frames != null and sprite_frames.has_animation(IDLE_ANIMATION) and sprite_frames.get_frame_count(IDLE_ANIMATION) > 0:
+		var texture := sprite_frames.get_frame_texture(IDLE_ANIMATION, 0)
+		if texture != null:
+			return texture.get_size()
+
+	return Vector2(DEFAULT_SHEET_FRAME_SIZE)
+
+func _apply_sprite_anchor(sprite: AnimatedSprite2D) -> void:
+	if sprite == null or sprite.sprite_frames == null:
+		return
+
+	if not sprite_frames_anchors.has(_get_sprite_frames_key(sprite.sprite_frames)):
+		sprite.centered = true
+		sprite.offset = Vector2.ZERO
+		return
+
+	var frame_size := _get_sprite_frames_frame_size(sprite.sprite_frames)
+	var anchor := _get_sprite_frames_anchor(sprite.sprite_frames)
+	sprite.centered = true
+	sprite.offset = (frame_size * 0.5) - anchor
 
 func _get_sprite_frames_key(sprite_frames: SpriteFrames) -> String:
 	if sprite_frames == null:
@@ -447,11 +504,17 @@ func _load_sprite_frames_from_folder(folder: String) -> SpriteFrames:
 
 	var timing := _load_frame_timing(folder, frame_files.size())
 	var sprite_frames := _create_idle_sprite_frames(timing["speed"])
+	var first_frame_size := Vector2.ZERO
 	for index in frame_files.size():
 		var frame_file := frame_files[index]
 		var texture := PokemonAssets.load_texture(folder + "/" + frame_file)
 		if texture != null:
+			if first_frame_size == Vector2.ZERO:
+				first_frame_size = texture.get_size()
 			sprite_frames.add_frame(IDLE_ANIMATION, texture, timing["durations"][index])
+
+	if first_frame_size != Vector2.ZERO:
+		_set_sprite_frames_frame_size(sprite_frames, first_frame_size)
 
 	return sprite_frames
 
@@ -526,6 +589,10 @@ func _load_sprite_frames_from_sheet_metadata(metadata_path: String, side: String
 		return null
 
 	var sprite_frames := _create_idle_sprite_frames(float(metadata.get("speed", 1.0)))
+	var metadata_frame_size := Vector2(
+		float(metadata.get("frame_width", 0.0)),
+		float(metadata.get("frame_height", 0.0))
+	)
 	for frame in frames:
 		if typeof(frame) != TYPE_DICTIONARY:
 			continue
@@ -546,8 +613,50 @@ func _load_sprite_frames_from_sheet_metadata(metadata_path: String, side: String
 		push_error("Pokemon spritesheet metadata produced no frames: " + metadata_path)
 		return null
 
+	if metadata_frame_size.x <= 0.0 or metadata_frame_size.y <= 0.0:
+		metadata_frame_size = _get_sprite_frames_frame_size(sprite_frames)
+
 	_set_sprite_frames_render_scale(sprite_frames, _get_metadata_render_scale(metadata, side))
+	if metadata.has("position_offset"):
+		_set_sprite_frames_position_offset(sprite_frames, _get_metadata_position_offset(metadata))
+	if _metadata_has_anchor(metadata):
+		_set_sprite_frames_anchor(sprite_frames, _get_metadata_anchor(metadata, metadata_frame_size), metadata_frame_size)
+	else:
+		_set_sprite_frames_frame_size(sprite_frames, metadata_frame_size)
 	return sprite_frames
+
+func _metadata_has_anchor(metadata: Dictionary) -> bool:
+	return metadata.has("anchor")
+
+func _get_metadata_anchor(metadata: Dictionary, frame_size: Vector2) -> Vector2:
+	var anchor_value: Variant = metadata.get("anchor", {})
+	if anchor_value is Dictionary:
+		var anchor_dictionary := anchor_value as Dictionary
+		return Vector2(
+			float(anchor_dictionary.get("x", frame_size.x * 0.5)),
+			float(anchor_dictionary.get("y", frame_size.y))
+		)
+	if anchor_value is Array:
+		var anchor_array := anchor_value as Array
+		if anchor_array.size() >= 2:
+			return Vector2(float(anchor_array[0]), float(anchor_array[1]))
+
+	return Vector2(frame_size.x * 0.5, frame_size.y)
+
+func _get_metadata_position_offset(metadata: Dictionary) -> Vector2:
+	var offset_value: Variant = metadata.get("position_offset", {})
+	if offset_value is Dictionary:
+		var offset_dictionary := offset_value as Dictionary
+		return Vector2(
+			float(offset_dictionary.get("x", 0.0)),
+			float(offset_dictionary.get("y", 0.0))
+		)
+	if offset_value is Array:
+		var offset_array := offset_value as Array
+		if offset_array.size() >= 2:
+			return Vector2(float(offset_array[0]), float(offset_array[1]))
+
+	return Vector2.ZERO
 
 func _get_metadata_render_scale(metadata: Dictionary, side: String) -> float:
 	if metadata.has("render_scale"):
@@ -611,6 +720,7 @@ func _load_sprite_frames_from_sheet(sheet_path: String) -> SpriteFrames:
 		push_error("No visible sprite frames found in spritesheet: " + sheet_path)
 		return null
 
+	_set_sprite_frames_frame_size(sprite_frames, Vector2(frame_size))
 	return sprite_frames
 
 func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> SpriteFrames:
@@ -620,6 +730,8 @@ func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> Sp
 
 	var sprite_frames := _create_idle_sprite_frames(1.0)
 	sprite_frames.add_frame(IDLE_ANIMATION, texture)
+	var frame_size := texture.get_size()
+	_set_sprite_frames_frame_size(sprite_frames, frame_size)
 	_set_sprite_frames_render_scale(sprite_frames, HOME_SPRITE_RENDER_SCALE)
 	return sprite_frames
 
@@ -789,14 +901,27 @@ func _position_stat_stage_panel(sprite: AnimatedSprite2D, panel: Control) -> voi
 
 	panel.reset_size()
 	var panel_size: Vector2 = panel.size
-	var sprite_size: Vector2 = _get_sprite_display_size(sprite)
-	var top_center: Vector2 = sprite.position - Vector2(0, sprite_size.y * 0.5)
+	var visual_rect := _get_sprite_visual_rect_in_parent(sprite)
+	var top_center := Vector2(visual_rect.position.x + (visual_rect.size.x * 0.5), visual_rect.position.y)
 	panel.position = top_center - Vector2(panel_size.x * 0.5, panel_size.y + STAT_STAGE_PANEL_GAP)
 
 func _get_sprite_display_size(sprite: AnimatedSprite2D) -> Vector2:
+	return _get_sprite_visual_rect_in_parent(sprite).size
+
+func _get_sprite_visual_rect_global(sprite: AnimatedSprite2D) -> Rect2:
+	var local_rect := _get_sprite_visual_rect_in_parent(sprite)
+	var parent_canvas := sprite.get_parent() as CanvasItem
+	if parent_canvas == null:
+		return Rect2(sprite.global_position, local_rect.size)
+
+	return Rect2(parent_canvas.get_global_transform() * local_rect.position, local_rect.size)
+
+func _get_sprite_visual_rect_in_parent(sprite: AnimatedSprite2D) -> Rect2:
 	var texture: Texture2D = _get_current_sprite_texture(sprite)
 	var frame_size: Vector2 = Vector2(DEFAULT_SHEET_FRAME_SIZE)
 	if texture != null:
 		frame_size = texture.get_size()
 
-	return frame_size * Vector2(abs(sprite.scale.x), abs(sprite.scale.y))
+	var sprite_scale := Vector2(abs(sprite.scale.x), abs(sprite.scale.y))
+	var top_left := sprite.position + ((sprite.offset - (frame_size * 0.5)) * sprite_scale)
+	return Rect2(top_left, frame_size * sprite_scale)

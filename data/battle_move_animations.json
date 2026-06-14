@@ -21,6 +21,46 @@
       ],
       "sparkle_count": 14,
       "show_pink_visual": true,
+      "show_sheet_sprites": false,
+      "projectile": {
+        "enabled": true,
+        "texture_region": [
+          0,
+          0,
+          192,
+          192
+        ],
+        "fade_in": 0.12,
+        "fade_out": 0.18,
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              130,
+              230
+            ],
+            "scale": 0.42
+          },
+          {
+            "at": 0.68,
+            "position": [
+              130,
+              92
+            ],
+            "scale": 0.72,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              382,
+              98
+            ],
+            "scale": 0.58,
+            "ease": "smoothstep"
+          }
+        ]
+      },
       "speed_scale": 1.35,
       "data_path": "res://assets/battles/animations/moonblast/moonblast.json",
       "sheet_path": "res://assets/battles/animations/moonblast/PRAS- Moonblast.png",

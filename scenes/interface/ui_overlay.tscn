@@ -438,7 +438,7 @@ anchor_right = 1.0
 offset_left = -226.0
 offset_top = 78.0
 offset_right = -16.0
-offset_bottom = 218.0
+offset_bottom = 262.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -460,6 +460,7 @@ mouse_default_cursor_shape = 2
 text = "Create Pokemon"
 
 [node name="AddTeamButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=367149496]
+visible = false
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -470,6 +471,12 @@ custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Spawn Pokemon"
+
+[node name="ClearPartyButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=758281915]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Clear Party"
 
 [node name="CloseButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=770877213]
 custom_minimum_size = Vector2(0, 32)

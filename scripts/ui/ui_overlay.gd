@@ -48,16 +48,19 @@ enum DevPokemonPopupMode {
 @onready var dev_add_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddPokemonButton
 @onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
 @onready var dev_spawn_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/SpawnPokemonButton
+@onready var dev_clear_party_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/ClearPartyButton
 @onready var dev_actions_close_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/CloseButton
 
 var party_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
+var clear_party_confirm_dialog: ConfirmationDialog
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_build_party_slots()
 	_setup_collapsible_panels()
+	_setup_clear_party_confirm_dialog()
 	_refresh_party()
 	
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
@@ -74,13 +77,25 @@ func _ready() -> void:
 	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
 	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
-	dev_add_team_button.pressed.connect(_on_dev_add_team_button_pressed)
+	dev_add_team_button.visible = false
+	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
+	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
 	dev_actions_button.visible = PlayerSave.is_staff
 	dev_actions_popup.visible = false
 	if settings_menu.has_signal("closed"):
 		settings_menu.closed.connect(_on_settings_menu_closed)
+
+func _setup_clear_party_confirm_dialog() -> void:
+	clear_party_confirm_dialog = ConfirmationDialog.new()
+	clear_party_confirm_dialog.title = "Clear Party"
+	clear_party_confirm_dialog.dialog_text = "This will remove every Pokemon from your party. This cannot be undone."
+	clear_party_confirm_dialog.exclusive = true
+	clear_party_confirm_dialog.ok_button_text = "Clear Party"
+	clear_party_confirm_dialog.cancel_button_text = "Cancel"
+	clear_party_confirm_dialog.confirmed.connect(_on_clear_party_confirmed)
+	add_child(clear_party_confirm_dialog)
 
 func _process(_delta: float) -> void:
 	_position_collapsible_buttons()
@@ -562,7 +577,7 @@ func _on_dev_actions_button_pressed() -> void:
 
 func _on_dev_add_pokemon_button_pressed() -> void:
 	dev_actions_popup.visible = false
-	_show_dev_pokemon_popup(DevPokemonPopupMode.POKEMON)
+	_show_dev_pokemon_popup(DevPokemonPopupMode.TEAM)
 
 func _on_dev_add_team_button_pressed() -> void:
 	dev_actions_popup.visible = false
@@ -571,6 +586,21 @@ func _on_dev_add_team_button_pressed() -> void:
 func _on_dev_spawn_pokemon_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	_show_dev_pokemon_popup(DevPokemonPopupMode.SPAWN)
+
+func _on_dev_clear_party_button_pressed() -> void:
+	if not PlayerSave.is_staff:
+		return
+
+	clear_party_confirm_dialog.popup_centered(Vector2i(460, 150))
+
+func _on_clear_party_confirmed() -> void:
+	if not PlayerSave.is_staff:
+		return
+
+	PlayerSave.party.clear()
+	PlayerSave.party_changed.emit()
+	dev_actions_popup.visible = false
+	_add_chat_message("Party cleared.")
 
 func _on_dev_actions_close_button_pressed() -> void:
 	dev_actions_popup.visible = false
@@ -582,9 +612,9 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 	dev_pokemon_popup_mode = mode
 	match dev_pokemon_popup_mode:
 		DevPokemonPopupMode.TEAM:
-			dev_pokemon_title.text = "Add Team"
-			dev_pokemon_add_button.text = "Add Team"
-			dev_pokemon_text.placeholder_text = "Paste Showdown/Pokepaste team here"
+			dev_pokemon_title.text = "Create Pokemon"
+			dev_pokemon_add_button.text = "Create"
+			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team here"
 		DevPokemonPopupMode.SPAWN:
 			dev_pokemon_title.text = "Spawn Pokemon"
 			dev_pokemon_add_button.text = "Spawn"

@@ -15,6 +15,8 @@ signal animation_finished
 @export var show_timing_backgrounds: bool = false
 @export var show_timing_foregrounds: bool = false
 @export var show_pink_visual: bool = true
+@export var show_sheet_sprites: bool = true
+@export var projectile_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
 @export var sprite_tint: Color = Color(1.0, 0.78, 1.0, 1.0)
 @export_range(0.0, 0.5, 0.01) var overlay_peak_alpha: float = 0.20
@@ -39,6 +41,7 @@ var sheet_texture_override: Texture2D
 var background_texture_override: Texture2D
 var foreground_texture_override: Texture2D
 var sound_streams: Dictionary = {}
+var projectile_sprite: Sprite2D
 
 @onready var bg: Sprite2D = Sprite2D.new()
 @onready var fg: Sprite2D = Sprite2D.new()
@@ -168,6 +171,15 @@ func _build_nodes() -> void:
 		sprites.append(sprite)
 		add_child(sprite)
 
+	if _projectile_enabled():
+		projectile_sprite = Sprite2D.new()
+		projectile_sprite.texture = sheet_texture
+		projectile_sprite.region_enabled = true
+		projectile_sprite.region_rect = _get_projectile_texture_region()
+		projectile_sprite.centered = true
+		projectile_sprite.visible = false
+		add_child(projectile_sprite)
+
 	if foreground_texture_override != null:
 		fg.texture = foreground_texture_override
 	elif foreground_path != "":
@@ -216,6 +228,10 @@ func _apply_frame(index: int) -> void:
 	for sprite: Sprite2D in sprites:
 		sprite.visible = false
 
+	_update_projectile(index)
+	if not show_sheet_sprites:
+		return
+
 	var tile_size: Array = data["tile_size"] as Array
 	var tile_w: int = int(tile_size[0])
 	var tile_h: int = int(tile_size[1])
@@ -248,6 +264,119 @@ func _apply_frame(index: int) -> void:
 		sprite.modulate = Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, alpha) if show_pink_visual else Color(1.0, 1.0, 1.0, alpha)
 		sprite.visible = true
 		sprite_i += 1
+
+func _projectile_enabled() -> bool:
+	return bool(projectile_config.get("enabled", not projectile_config.is_empty()))
+
+func _get_projectile_texture_region() -> Rect2:
+	var region_value: Variant = projectile_config.get("texture_region", [0, 0, 96, 96])
+	if not region_value is Array:
+		return Rect2(0, 0, 96, 96)
+
+	var region_array := region_value as Array
+	if region_array.size() < 4:
+		return Rect2(0, 0, 96, 96)
+
+	return Rect2(
+		float(region_array[0]),
+		float(region_array[1]),
+		float(region_array[2]),
+		float(region_array[3])
+	)
+
+func _update_projectile(index: int) -> void:
+	if projectile_sprite == null:
+		return
+
+	var frames: Array = data["frames"] as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(index) / float(total_frames), 0.0, 1.0)
+	var projectile_state: Dictionary = _get_projectile_state(progress)
+	var position: Vector2 = projectile_state.get("position", Vector2.ZERO) as Vector2
+	var scale_value: float = float(projectile_state.get("scale", 1.0))
+	projectile_sprite.position = position
+	projectile_sprite.scale = Vector2(scale_value, scale_value)
+	var fade_in_seconds: float = maxf(float(projectile_config.get("fade_in", 0.12)), 0.001)
+	var fade_out_seconds: float = maxf(float(projectile_config.get("fade_out", 0.18)), 0.001)
+	var fade_in: float = clampf(progress / fade_in_seconds, 0.0, 1.0)
+	var fade_out: float = clampf((1.0 - progress) / fade_out_seconds, 0.0, 1.0)
+	var alpha: float = minf(fade_in, fade_out)
+	projectile_sprite.modulate = Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, alpha)
+	projectile_sprite.visible = alpha > 0.02
+
+func _get_projectile_state(progress: float) -> Dictionary:
+	var path_value: Variant = projectile_config.get("path", [])
+	if not path_value is Array:
+		return {"position": Vector2.ZERO, "scale": 1.0}
+
+	var path := path_value as Array
+	if path.is_empty():
+		return {"position": Vector2.ZERO, "scale": 1.0}
+
+	var first_point: Dictionary = _get_projectile_path_point(path[0])
+	if path.size() == 1 or progress <= float(first_point.get("at", 0.0)):
+		return {
+			"position": first_point.get("position", Vector2.ZERO),
+			"scale": float(first_point.get("scale", 1.0)),
+		}
+
+	for index in range(1, path.size()):
+		var previous_point: Dictionary = _get_projectile_path_point(path[index - 1])
+		var next_point: Dictionary = _get_projectile_path_point(path[index])
+		var previous_at: float = float(previous_point.get("at", 0.0))
+		var next_at: float = float(next_point.get("at", 1.0))
+		if progress > next_at and index < path.size() - 1:
+			continue
+
+		var segment_length: float = maxf(next_at - previous_at, 0.001)
+		var segment_progress: float = clampf((progress - previous_at) / segment_length, 0.0, 1.0)
+		var eased_progress: float = _ease_projectile_progress(segment_progress, str(next_point.get("ease", "linear")))
+		var previous_position: Vector2 = previous_point.get("position", Vector2.ZERO) as Vector2
+		var next_position: Vector2 = next_point.get("position", Vector2.ZERO) as Vector2
+		var previous_scale: float = float(previous_point.get("scale", 1.0))
+		var next_scale: float = float(next_point.get("scale", 1.0))
+		return {
+			"position": previous_position.lerp(next_position, eased_progress),
+			"scale": lerpf(previous_scale, next_scale, segment_progress),
+		}
+
+	var last_point: Dictionary = _get_projectile_path_point(path[path.size() - 1])
+	return {
+		"position": last_point.get("position", Vector2.ZERO),
+		"scale": float(last_point.get("scale", 1.0)),
+	}
+
+func _get_projectile_path_point(value: Variant) -> Dictionary:
+	if not value is Dictionary:
+		return {}
+
+	var point := value as Dictionary
+	return {
+		"at": float(point.get("at", 0.0)),
+		"position": _vector2_from_value(point.get("position", [0.0, 0.0])),
+		"scale": float(point.get("scale", 1.0)),
+		"ease": str(point.get("ease", "linear")),
+	}
+
+func _ease_projectile_progress(progress: float, ease: String) -> float:
+	match ease:
+		"ease_out_quad":
+			return 1.0 - pow(1.0 - progress, 2.0)
+		"smoothstep":
+			return progress * progress * (3.0 - (2.0 * progress))
+		_:
+			return progress
+
+func _vector2_from_value(value: Variant) -> Vector2:
+	if value is Dictionary:
+		var dictionary := value as Dictionary
+		return Vector2(float(dictionary.get("x", 0.0)), float(dictionary.get("y", 0.0)))
+	if value is Array:
+		var array := value as Array
+		if array.size() >= 2:
+			return Vector2(float(array[0]), float(array[1]))
+
+	return Vector2.ZERO
 
 
 func _update_pink_visual(index: int) -> void:
