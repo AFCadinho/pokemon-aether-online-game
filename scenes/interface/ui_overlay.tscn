@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bihiytl8kxop5" path="res://assets/ui/sun.png" id="4_8bipm"]
 [ext_resource type="Texture2D" uid="uid://c7goexdnbj60q" path="res://assets/ui/bag-icon.svg" id="5_j0ub1"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="6_settings"]
-[ext_resource type="Texture2D" path="res://assets/ui/settings-icon.svg" id="7_settings_icon"]
+[ext_resource type="Texture2D" uid="uid://5ixth4h1adwb" path="res://assets/ui/settings-icon.svg" id="7_settings_icon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -45,18 +45,6 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.16470589, 0.2627451, 0.39607844, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8bipm"]
-bg_color = Color(0.050980393, 0.09019608, 0.15686275, 0.74509805)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7g5y2"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 1)
 border_width_left = 1
@@ -68,6 +56,18 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8bipm"]
+bg_color = Color(0.050980393, 0.09019608, 0.15686275, 0.74509805)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jwbg5"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 1)
@@ -191,7 +191,7 @@ theme_override_constants/separation = 6
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DevPokemonButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow"]
+[node name="DevPokemonButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/InputRow" unique_id=2075498917]
 layout_mode = 2
 text = "Pokemon"
 
@@ -199,7 +199,7 @@ text = "Pokemon"
 layout_mode = 2
 text = "Send"
 
-[node name="DevPokemonPopup" type="PanelContainer" parent="Control"]
+[node name="DevPokemonPopup" type="PanelContainer" parent="Control" unique_id=1288104280]
 visible = false
 custom_minimum_size = Vector2(520, 420)
 layout_mode = 1
@@ -216,39 +216,39 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/DevPokemonPopup"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/DevPokemonPopup" unique_id=1001866330]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/DevPokemonPopup/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/DevPokemonPopup/MarginContainer" unique_id=158355187]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=476478871]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_font_sizes/font_size = 18
 text = "Add Pokemon"
 
-[node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+[node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
 custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "Paste Showdown/Pokepaste text here"
 
-[node name="ButtonRow" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+[node name="ButtonRow" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=1480530736]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
-[node name="CloseButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow"]
+[node name="CloseButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1066928572]
 layout_mode = 2
 text = "Close"
 
-[node name="AddButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow"]
+[node name="AddButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1635496109]
 layout_mode = 2
 text = "Add"
 
@@ -356,12 +356,12 @@ texture_focused = ExtResource("5_j0ub1")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="SettingsSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+[node name="SettingsSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=798433036]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="SettingsButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot"]
+[node name="SettingsButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot" unique_id=302294960]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -373,8 +373,9 @@ texture_focused = ExtResource("7_settings_icon")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="SettingsMenu" parent="Control" instance=ExtResource("6_settings")]
+[node name="SettingsMenu" parent="Control" unique_id=1857705427 instance=ExtResource("6_settings")]
 visible = false
+z_index = 100
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -387,7 +388,6 @@ offset_right = 220.0
 offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 100
 
 [node name="OptionsPanel2" type="Panel" parent="Control" unique_id=1164557573]
 visible = false

@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://bit8o5jxr48nl" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/NPC08.png" id="13_wndwb"]
 [ext_resource type="Texture2D" uid="uid://bdga4xqfsnt6j" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trBenga.png" id="14_khy7p"]
 [ext_resource type="Texture2D" uid="uid://b7qtop3j1j5da" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trMotorcyclist.png" id="15_x56le"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="16_bnyo4"]
+[ext_resource type="Texture2D" uid="uid://bywpecaqt7jd3" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trChampion01.png" id="17_cd607"]
 [ext_resource type="Texture2D" uid="uid://ydeq0ashdvoi" path="res://assets/tilesets/da5h3mn-180d5fbd-2009-494d-8302-b394efb10c92.png" id="17_qqtdo"]
 [ext_resource type="Texture2D" uid="uid://yq32rn0d77iy" path="res://assets/tilesets/Custom Outside tileset.png" id="18_8kkc8"]
 [ext_resource type="Texture2D" uid="uid://bp4fdpeow1m4y" path="res://assets/tilesets/Gen 4 Pack/Autotiles/grass.png" id="19_4m8jl"]
@@ -3545,6 +3547,21 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_down",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3lll"]
+atlas = ExtResource("17_cd607")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bnyo4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3lll")
+}],
+"loop": true,
+"name": &"idle_down",
 "speed": 5.0
 }]
 
@@ -12565,7 +12582,7 @@ sight_range_tiles = 4
 position = Vector2(272, 944)
 trainer_id = "route_1_gary_1"
 sight_range_tiles = 3
-trainer_sprite_frames = ExtResource("9_y4850")
+npc_sprite_frames = ExtResource("9_y4850")
 mugshot = ExtResource("10_6o5ht")
 
 [node name="CynthiaNPC" parent="Entities/NPCs" unique_id=1292990089 instance=ExtResource("8_lmnv3")]
@@ -12573,21 +12590,21 @@ position = Vector2(592, 880)
 trainer_id = "route_1_cynthia_1"
 sight_direction = Vector2(-1, 0)
 sight_range_tiles = 3
-trainer_sprite_frames = ExtResource("11_coq5q")
+npc_sprite_frames = ExtResource("11_coq5q")
 mugshot = ExtResource("12_mjhtk")
 
 [node name="CynthiaNPC2" parent="Entities/NPCs" unique_id=1475636253 instance=ExtResource("8_lmnv3")]
 position = Vector2(560, 80)
 trainer_id = "route_1_cynthia_1"
 sight_range_tiles = 3
-trainer_sprite_frames = SubResource("SpriteFrames_mjhtk")
+npc_sprite_frames = SubResource("SpriteFrames_mjhtk")
 mugshot = ExtResource("12_mjhtk")
 
 [node name="CynthiaNPC3" parent="Entities/NPCs" unique_id=1727741597 instance=ExtResource("8_lmnv3")]
 position = Vector2(176, 80)
 trainer_id = "route_1_cynthia_1"
 sight_range_tiles = 3
-trainer_sprite_frames = SubResource("SpriteFrames_gxjlh")
+npc_sprite_frames = SubResource("SpriteFrames_gxjlh")
 mugshot = ExtResource("12_mjhtk")
 
 [node name="CynthiaNPC4" parent="Entities/NPCs" unique_id=1818946094 instance=ExtResource("8_lmnv3")]
@@ -12595,8 +12612,16 @@ position = Vector2(688, 304)
 trainer_id = "route_1_cynthia_1"
 sight_direction = Vector2(-1, 0)
 sight_range_tiles = 3
-trainer_sprite_frames = SubResource("SpriteFrames_f3lll")
+npc_sprite_frames = SubResource("SpriteFrames_f3lll")
 mugshot = ExtResource("12_mjhtk")
+
+[node name="Dialogue" type="Node2D" parent="Entities/NPCs" unique_id=1893184129]
+
+[node name="DialogueNPC" parent="Entities/NPCs/Dialogue" unique_id=674634290 instance=ExtResource("16_bnyo4")]
+position = Vector2(976, 240)
+npc_id = "kanto_r1_alder"
+display_name = "Champion Alder"
+npc_sprite_frames = SubResource("SpriteFrames_bnyo4")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1572197135]
 

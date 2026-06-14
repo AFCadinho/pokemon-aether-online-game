@@ -40,6 +40,7 @@ var buffered_direction := Vector2.ZERO
 var input_buffer_time_left := 0.0
 var held_direction := Vector2.ZERO
 var held_direction_time := 0.0
+var route_gate_interaction_in_progress := false
 var frame_opaque_center_y_cache := {}
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var master_appearance_sprite: AnimatedSprite2D
@@ -236,6 +237,10 @@ func _try_start_move(direction: Vector2) -> bool:
 	# Voorbeeld: Vector2.RIGHT * 32 = Vector2(32, 0), dus 1 tile naar rechts.
 	var new_target_position := global_position + (direction * TILE_SIZE)
 
+	if _try_trigger_route_gate(new_target_position):
+		set_idle_frame()
+		return false
+
 	# Check eerst of de target tile vrij is.
 	# Alleen als can_move_to true teruggeeft, starten we de beweging.
 	if not can_move_to(new_target_position):
@@ -297,6 +302,28 @@ func can_move_to(check_position: Vector2) -> bool:
 	var tile_data := collision_tilemap.get_cell_tile_data(tile_position)
 
 	return tile_data == null
+
+func _try_trigger_route_gate(check_position: Vector2) -> bool:
+	if route_gate_interaction_in_progress:
+		return true
+
+	var current_map: Node = _resolve_current_map()
+	if current_map == null or not current_map.has_method("get_closed_route_gate_npc"):
+		return false
+
+	var gate_npc: Node = current_map.get_closed_route_gate_npc(check_position)
+	if gate_npc == null:
+		return false
+
+	route_gate_interaction_in_progress = true
+	Callable(self, "_handle_route_gate_interaction").call_deferred(gate_npc)
+	return true
+
+func _handle_route_gate_interaction(gate_npc: Node) -> void:
+	if gate_npc.has_method("on_route_gate_blocked"):
+		await gate_npc.on_route_gate_blocked(self)
+
+	route_gate_interaction_in_progress = false
 	
 func set_idle_frame() -> void:
 	for sprite in appearance_sprites:

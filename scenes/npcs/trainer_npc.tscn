@@ -60,7 +60,7 @@ size = Vector2(32, 144.5)
 
 [node name="TrainerNPC" type="Node2D" unique_id=168052101]
 script = ExtResource("1_svfxf")
-trainer_sprite_frames = ExtResource("2_nv5hx")
+npc_sprite_frames = ExtResource("2_nv5hx")
 mugshot = ExtResource("3_twekd")
 
 [node name="Look" type="Node2D" parent="." unique_id=1960480917]

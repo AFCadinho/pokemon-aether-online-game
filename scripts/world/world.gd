@@ -3,6 +3,8 @@ extends Node2D
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 
+@export var initial_spawn_name := "FromRoute1"
+
 var is_in_battle := false
 var battle_layer: CanvasLayer
 var battle_instance: Node
@@ -20,6 +22,8 @@ func _ready() -> void:
 	MusicManager.play_map_music(first_map)
 	
 	move_player_to_map(first_map)
+	if not GameState.has_player_position:
+		_position_player_at_spawn(first_map, initial_spawn_name, player.global_position)
 	
 	player.refresh_map_layers()
 
@@ -58,21 +62,8 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	GameState.current_map = new_map
 	MusicManager.play_map_music(new_map)
 
-	var spawn_position := Vector2.ZERO
-	var spawn := new_map.get_node_or_null("Spawns/" + target_spawn_name)
-	if spawn != null:
-		spawn_position = spawn.global_position
-	else:
-		push_warning("World.load_map: spawn '%s' not found in %s. Using Vector2.ZERO." % [target_spawn_name, target_scene_path])
-
 	move_player_to_map(new_map)
-
-	player.global_position = spawn_position
-	player.target_position = spawn_position
-	player.is_moving = false
-
-	player.set_idle_frame()
-	player.refresh_map_layers()
+	_position_player_at_spawn(new_map, target_spawn_name, Vector2.ZERO)
 
 	await get_tree().physics_frame
 	is_loading_map = false
@@ -88,6 +79,21 @@ func move_player_to_map(map: Node) -> void:
 		player.get_parent().remove_child(player)
 		
 	player_parent.add_child(player)
+
+func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position: Vector2) -> void:
+	var spawn_position := fallback_position
+	var spawn := map.get_node_or_null("Spawns/" + spawn_name)
+	if spawn != null:
+		spawn_position = spawn.global_position
+	else:
+		push_warning("World: spawn '%s' not found in %s. Using fallback position." % [spawn_name, map.name])
+
+	player.global_position = spawn_position
+	player.target_position = spawn_position
+	player.move_start_position = spawn_position
+	player.is_moving = false
+	player.set_idle_frame()
+	player.refresh_map_layers()
 
 func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var battle_request := HTTPRequest.new()

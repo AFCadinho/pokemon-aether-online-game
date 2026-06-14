@@ -34,13 +34,8 @@ func _load_encounter_area_metadata() -> void:
 	grass_encounter_chance = clampf(float(grass_metadata.get("encounterChance", grass_encounter_chance)), 0.0, 1.0)
 
 func is_position_blocked_by_character(world_position: Vector2) -> bool:
-	var npcs: Node = get_node_or_null("Entities/NPCs")
-	if npcs == null:
-		return false
-		
-	for npc: Node in npcs.get_children():
-		if npc.has_method("blocks_world_position"):
-			if npc.blocks_world_position(world_position):
-				return true
-		
-	return false 
+	return MapCharacterBlocking.is_position_blocked_by_character(self, world_position)
+
+
+func get_closed_route_gate_npc(world_position: Vector2) -> Node:
+	return MapCharacterBlocking.get_closed_route_gate_npc(self, world_position)
