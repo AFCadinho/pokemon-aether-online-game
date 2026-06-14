@@ -3,6 +3,7 @@ extends Control
 const DEFAULT_MANIFEST_URL := "https://example.com/pokemon-aether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokemonaetheronline.com/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
+const DEFAULT_PATCH_NOTES_URL := "https://pokemonaetheronline.com/patch-notes"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const DEFAULT_INSTALL_DIR := "user://game"
 const GAME_INSTALL_SUBDIR := "game"
@@ -13,6 +14,17 @@ const TEMP_DIR := "user://downloads"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
 const USER_AGENT_HEADER := "User-Agent: PokemonAetherLauncher/1.0"
 const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
+const GEN5_SPRITES_FOLDER_PATH := "assets/sprites/pokemon/gen5"
+const LAUNCHER_UPDATE_TEMP_DIR := "user://launcher_update"
+const LAUNCHER_UPDATE_STAGING_SUBDIR := "staging"
+const LAUNCHER_UPDATE_WINDOWS_SCRIPT := "apply_launcher_update.bat"
+const LAUNCHER_UPDATE_UNIX_SCRIPT := "apply_launcher_update.sh"
+const LAUNCHER_UPDATE_ZIP_NAME_PREFIX := "pokemon-aether-launcher-update"
+const WINDOWS_LAUNCHER_BINARY := "Pokemon Aether Launcher.exe"
+const LINUX_LAUNCHER_BINARY := "Pokemon Aether Launcher.x86_64"
+const MAX_VERSION_SEGMENTS := 4
+
+const KNOWN_URL_SCHEMES: Array[String] = ["http://", "https://"]
 
 @onready var shell_panel: PanelContainer = $Shell
 @onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
@@ -34,8 +46,13 @@ const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
 @onready var gen5_sprites_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/Gen5SpritesButton
 @onready var play_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/PlayButton
 @onready var game_folder_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton
+@onready var patch_notes_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton
+@onready var uninstall_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton
 @onready var discord_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton
 @onready var install_folder_dialog: FileDialog = $InstallFolderDialog
+@onready var uninstall_confirm_dialog: ConfirmationDialog = $UninstallConfirmDialog
+@onready var launcher_update_confirm_dialog: ConfirmationDialog = $LauncherUpdateConfirmDialog
+@onready var launcher_update_http_request: HTTPRequest = $LauncherUpdateHttpRequest
 @onready var http_request: HTTPRequest = $HttpRequest
 @onready var news_request: HTTPRequest = $NewsRequest
 
@@ -47,7 +64,13 @@ var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
 var discord_url := DEFAULT_DISCORD_URL
+var patch_notes_url := DEFAULT_PATCH_NOTES_URL
 var install_dir := DEFAULT_INSTALL_DIR
+var launcher_update_info: Dictionary = {}
+var launcher_update_busy := false
+var launcher_update_in_progress := false
+var launcher_update_pending := false
+var launcher_update_shown := false
 var news_items: Array[Dictionary] = []
 var progress_is_indeterminate := false
 var asset_pack_download_total := 0
@@ -127,8 +150,13 @@ func _ready() -> void:
 	gen5_sprites_button.pressed.connect(download_gen5_animated_sprites)
 	play_button.pressed.connect(launch_game)
 	game_folder_button.pressed.connect(open_install_folder_dialog)
+	patch_notes_button.pressed.connect(open_patch_notes)
+	uninstall_button.pressed.connect(_on_uninstall_button_pressed)
+	launcher_update_confirm_dialog.confirmed.connect(_start_launcher_update_download)
+	launcher_update_http_request.request_completed.connect(_on_launcher_update_request_completed)
 	discord_button.pressed.connect(open_discord)
 	install_folder_dialog.dir_selected.connect(_on_install_folder_selected)
+	uninstall_confirm_dialog.confirmed.connect(_uninstall_game_folder)
 	http_request.request_completed.connect(_on_request_completed)
 	if news_request != null:
 		news_request.request_completed.connect(_on_news_request_completed)
@@ -171,9 +199,13 @@ func _apply_visual_style() -> void:
 		nav_button.add_theme_color_override("font_disabled_color", Color(0.68, 0.70, 0.80, 0.82))
 
 	_apply_button_style(check_button, false)
+	_apply_refresh_button_style(check_button)
 	_apply_button_style(update_button, false)
 	_apply_button_style(gen5_sprites_button, false)
 	_apply_button_style(play_button, true)
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton.add_theme_color_override("font_color", Color(1.0, 0.68, 0.68, 1.0))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton.add_theme_color_override("font_hover_color", Color(1.0, 0.74, 0.74, 1.0))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton.add_theme_color_override("font_pressed_color", Color(1.0, 0.56, 0.56, 1.0))
 
 	progress_bar.add_theme_stylebox_override("background", _panel_style(Color(0.14, 0.16, 0.27, 0.86), Color(0, 0, 0, 0), 7, 0))
 	progress_bar.add_theme_stylebox_override("fill", _panel_style(Color(0.55, 0.26, 0.96, 1.0), Color(0, 0, 0, 0), 7, 0))
@@ -214,6 +246,16 @@ func _apply_button_style(button: Button, is_primary: bool) -> void:
 	button.add_theme_color_override("font_pressed_color", Color(0.91, 0.86, 1.0))
 	button.add_theme_color_override("font_disabled_color", Color(0.45, 0.46, 0.56))
 	button.add_theme_font_size_override("font_size", 17)
+
+
+func _apply_refresh_button_style(button: Button) -> void:
+	button.custom_minimum_size = Vector2(58, 62)
+	button.add_theme_stylebox_override("normal", _panel_style(Color(0.065, 0.08, 0.13, 0.65), Color(0.20, 0.24, 0.40, 0.45), 10, 0))
+	button.add_theme_stylebox_override("hover", _panel_style(Color(0.09, 0.11, 0.17, 0.78), Color(0.35, 0.22, 0.70, 0.7), 10, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color(0.12, 0.15, 0.2, 0.82), Color(0.5, 0.24, 1.0, 0.85), 10, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color(0.06, 0.07, 0.11, 0.45), Color(0.13, 0.14, 0.2, 0.4), 10, 0))
+	button.add_theme_constant_override("icon_max_width", 24)
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 
 func _process(_delta: float) -> void:
@@ -377,14 +419,121 @@ func open_install_folder_dialog() -> void:
 
 
 func open_discord() -> void:
-	if discord_url.is_empty():
+	var normalized_discord_url := _normalize_url(discord_url)
+	if normalized_discord_url.is_empty():
 		_set_status("Discord link is not configured.")
 		return
 
-	var open_error: Error = OS.shell_open(discord_url)
+	var open_error: Error = OS.shell_open(normalized_discord_url)
 	if open_error != OK:
 		_set_status("Could not open Discord link.")
-		_log_error("Could not open Discord link: %s" % error_string(open_error))
+		_log_error("Could not open Discord link '%s': %s" % [normalized_discord_url, error_string(open_error)])
+
+
+func open_patch_notes() -> void:
+	var normalized_patch_notes_url := _normalize_url(patch_notes_url)
+	if normalized_patch_notes_url.is_empty():
+		_set_status("Patch notes link is not configured.")
+		return
+
+	var open_error: Error = OS.shell_open(normalized_patch_notes_url)
+	if open_error != OK:
+		_set_status("Could not open patch notes link.")
+		_log_error("Could not open patch notes link '%s': %s" % [normalized_patch_notes_url, error_string(open_error)])
+
+
+func _start_launcher_update_download() -> void:
+	if launcher_update_busy or launcher_update_in_progress:
+		_set_status("Launcher update already in progress.")
+		return
+
+	if launcher_update_http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		_set_status("Wait until the current launcher task is finished.")
+		return
+
+	var launcher_data: Dictionary = launcher_update_info
+	if not launcher_update_pending:
+		_set_status("No launcher update is available.")
+		return
+
+	if launcher_data.is_empty() or str(launcher_data.get("url", "")).is_empty():
+		_set_status("Launcher update information is unavailable.")
+		return
+
+	var temp_dir := _globalize_storage_path(LAUNCHER_UPDATE_TEMP_DIR)
+	var create_dir_error: Error = DirAccess.make_dir_recursive_absolute(temp_dir)
+	if create_dir_error != OK:
+		_set_status("Could not prepare launcher update temp folder.")
+		_log_error("Could not create launcher update temp folder: %s" % error_string(create_dir_error))
+		return
+
+	var now_suffix := str(Time.get_ticks_msec())
+	var update_file_name := "%s-%s.zip" % [LAUNCHER_UPDATE_ZIP_NAME_PREFIX, now_suffix]
+	var download_path := temp_dir.path_join(update_file_name)
+	launcher_update_http_request.download_file = download_path
+	launcher_update_busy = true
+	launcher_update_in_progress = false
+	_set_busy(true)
+	_set_status("Downloading launcher update...")
+	var error_code: Error = launcher_update_http_request.request(str(launcher_data.get("url", "")), _request_headers())
+	if error_code != OK:
+		launcher_update_busy = false
+		_set_status("Could not start launcher update download.")
+		_log_error("Launcher update request failed: %s" % error_string(error_code))
+		_set_busy(false)
+
+
+func _on_uninstall_button_pressed() -> void:
+	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		_set_status("Wait until the current launcher task is finished.")
+		return
+
+	var game_install_dir := _get_game_install_dir()
+	var absolute_game_install_dir := _globalize_storage_path(game_install_dir)
+	if not DirAccess.dir_exists_absolute(absolute_game_install_dir):
+		_set_status("No installed game folder found.")
+		_refresh_uninstall_button()
+		return
+
+	uninstall_confirm_dialog.dialog_text = "This will permanently remove the game folder:\n%s\n\nContinue?" % absolute_game_install_dir
+	uninstall_confirm_dialog.popup_centered()
+
+
+func _uninstall_game_folder() -> void:
+	var game_install_dir := _get_game_install_dir()
+	var absolute_game_install_dir := _globalize_storage_path(game_install_dir)
+	if not DirAccess.dir_exists_absolute(absolute_game_install_dir):
+		_set_status("No installed game folder found.")
+		_refresh_uninstall_button()
+		_refresh_status()
+		return
+
+	_set_busy(true)
+	_set_status("Uninstalling game folder...")
+
+	var remove_error: Error = _remove_directory_contents(absolute_game_install_dir)
+	if remove_error == OK:
+		remove_error = DirAccess.remove_absolute(absolute_game_install_dir)
+
+	if remove_error != OK:
+		_set_busy(false)
+		_set_status("Could not uninstall game.")
+		_log_error("Could not remove game folder %s: %s" % [absolute_game_install_dir, error_string(remove_error)])
+		_build_download_queue()
+		update_required = not pending_downloads.is_empty()
+		_refresh_uninstall_button()
+		_refresh_status()
+		return
+
+	_reset_local_versions()
+	_save_local_versions()
+	_build_download_queue()
+	update_required = not pending_downloads.is_empty()
+	_set_status("Game folder removed.")
+	_set_busy(false)
+	_refresh_uninstall_button()
+	_refresh_status()
+	_log("Game folder removed: %s" % absolute_game_install_dir)
 
 
 func _on_install_folder_selected(selected_path: String) -> void:
@@ -511,11 +660,31 @@ func _on_news_meta_clicked(meta: Variant) -> void:
 	if index < 0 or index >= news_items.size():
 		return
 
-	var url := str(news_items[index].get("url", ""))
+	var url := _normalize_url(str(news_items[index].get("url", "")))
 	if url.is_empty():
 		return
 
-	OS.shell_open(url)
+	var open_error: Error = OS.shell_open(url)
+	if open_error != OK:
+		_log_error("Could not open news link '%s': %s" % [url, error_string(open_error)])
+
+
+func _normalize_url(value: String) -> String:
+	var normalized := value.strip_edges()
+	if normalized.is_empty():
+		return ""
+
+	for scheme in KNOWN_URL_SCHEMES:
+		if normalized.begins_with(scheme):
+			return normalized
+
+	if normalized.find("://") != -1:
+		return normalized
+
+	if normalized.begins_with("www."):
+		return "https://%s" % normalized
+
+	return ""
 
 
 func _handle_manifest_response(body: PackedByteArray) -> void:
@@ -529,15 +698,476 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 
 	manifest = parsed_json
 	last_check_label.text = _format_last_check_time()
+	launcher_update_info = _get_launcher_update_info()
 	_build_download_queue()
 	update_required = not pending_downloads.is_empty()
 	_set_busy(false)
 	_refresh_status()
+	_refresh_launcher_update_status()
+	if launcher_update_pending and not launcher_update_shown:
+		launcher_update_shown = true
+		launcher_update_confirm_dialog.dialog_text = "A new launcher version (%s) is available. Install it now?" % str(
+			launcher_update_info.get("version", "unknown")
+		)
+		launcher_update_confirm_dialog.popup_centered()
+	elif not launcher_update_pending:
+		launcher_update_shown = false
 
 	if update_required:
 		_log("Update available.")
 	else:
 		_log("Everything is up to date.")
+
+
+func _on_launcher_update_request_completed(result: int, response_code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:
+	if not launcher_update_busy:
+		return
+
+	launcher_update_busy = false
+	_set_busy(false)
+	var url := str(launcher_update_info.get("url", ""))
+	var expected_sha256 := str(launcher_update_info.get("sha256", "")).to_lower()
+	var downloaded_path := str(launcher_update_http_request.download_file)
+	if downloaded_path.is_empty():
+		_set_status("Launcher update failed: missing downloaded file path.")
+		_log_error("Launcher update path missing for url=%s" % url)
+		launch_restart_check_failed("Launcher update file path is missing.")
+		return
+
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		_set_status("Launcher update download failed.")
+		_log_error("Launcher update download failed. result=%s status=%s url=%s" % [result, response_code, url])
+		launch_restart_check_failed("Could not download launcher update.")
+		return
+
+	var downloaded_file := FileAccess.open(downloaded_path, FileAccess.READ)
+	if downloaded_file == null:
+		_set_status("Launcher update failed: could not open downloaded file.")
+		_log_error("Launcher update downloaded file could not be opened: %s" % downloaded_path)
+		launch_restart_check_failed("Downloaded launcher file could not be opened.")
+		return
+
+	var downloaded_size: int = downloaded_file.get_length()
+	downloaded_file.close()
+	downloaded_file = null
+	var expected_size: int = int(
+		launcher_update_info.get("sizeBytes", launcher_update_info.get("size_bytes", 0))
+	)
+	if expected_size > 0 and downloaded_size != expected_size:
+		_set_status("Launcher update download incomplete.")
+		_log_error("Launcher update size mismatch for %s. expected=%s actual=%s" % [downloaded_path, expected_size, downloaded_size])
+		launch_restart_check_failed("Launcher update download incomplete.")
+		return
+
+	if not expected_sha256.is_empty() and expected_sha256 != FileAccess.get_sha256(downloaded_path).to_lower():
+		_set_status("Launcher update checksum failed.")
+		_log_error("Launcher update checksum mismatch.")
+		launch_restart_check_failed("Launcher update checksum failed.")
+		return
+
+	launcher_update_in_progress = true
+	_set_status("Applying launcher update...")
+	var applied: bool = _write_and_run_launcher_update_script(downloaded_path)
+	if not applied:
+		launcher_update_in_progress = false
+		_set_status("Could not start launcher updater.")
+		launch_restart_check_failed("Could not start launcher updater script.")
+		return
+
+	_set_status("Launcher update downloaded. Restarting launcher...")
+	get_tree().quit()
+
+
+func _refresh_launcher_update_status() -> void:
+	var local_launcher_version := _get_local_launcher_version()
+	var remote_version := str(launcher_update_info.get("version", ""))
+	var remote_url := str(launcher_update_info.get("url", ""))
+
+	launcher_update_pending = false
+	if remote_version.is_empty() or remote_url.is_empty():
+		launcher_update_shown = false
+		return
+
+	launcher_update_pending = _is_newer_version(remote_version, local_launcher_version)
+	if launcher_update_pending:
+		_log("Launcher update available: %s -> %s" % [local_launcher_version, remote_version])
+	else:
+		launcher_update_shown = false
+
+
+func _get_launcher_update_info() -> Dictionary:
+	var update_data := _get_dictionary(manifest, "launcher")
+	if update_data.is_empty():
+		update_data = _get_dictionary(manifest, "launcherUpdate")
+	if update_data.is_empty():
+		update_data = _get_dictionary(manifest, "launcher_update")
+
+	if update_data.is_empty():
+		update_data = {}
+
+	var fallback_version := str(manifest.get("launcherVersion", manifest.get("launcher_version", "")))
+	var fallback_url := str(manifest.get("launcherUrl", manifest.get("launcher_url", "")))
+	var fallback_sha := str(manifest.get("launcherSha256", manifest.get("launcherHash", "")))
+	var fallback_size := int(manifest.get("launcherSizeBytes", manifest.get("launcherSize", 0)))
+	var fallback_manifest_value: Variant = manifest.get("launcher", "")
+	if typeof(fallback_manifest_value) == TYPE_STRING:
+		var fallback_url_candidate := str(fallback_manifest_value).strip_edges()
+		if not fallback_url_candidate.is_empty():
+			fallback_url = fallback_url_candidate
+
+	var package_data := _get_dictionary(manifest, "package")
+	if update_data.is_empty() and not package_data.is_empty():
+		update_data = package_data
+
+	var update_version := _read_first_string(update_data, ["version", "launcherVersion", "launcher_version"])
+	if update_version.is_empty():
+		update_version = fallback_version.strip_edges()
+
+	var update_url := _read_first_string(update_data, ["url", "downloadUrl", "download_url", "uri", "path"])
+	var platform_urls := _get_dictionary(update_data, "urls")
+	if update_url.is_empty():
+		update_url = _get_platform_manifest_url(platform_urls)
+	if update_url.is_empty():
+		update_url = _get_platform_manifest_url(_get_dictionary(update_data, "platformUrls"))
+	if update_url.is_empty():
+		update_url = _read_first_string(update_data, ["urlWindows", "urlLinux", "urlMacOS"])
+	if update_url.is_empty():
+		update_url = fallback_url.strip_edges()
+
+	var update_binary := _read_first_string(
+		update_data,
+		["binary", "executable", "launcherBinary", "binaryName", "file", "filename"]
+	)
+	if update_binary.is_empty():
+		update_binary = _read_first_string(package_data, ["binary", "executable", "launcherBinary"])
+
+	var update_size := _read_first_int(update_data, ["sizeBytes", "size_bytes", "size"])
+	if update_size <= 0:
+		update_size = _read_first_int(package_data, ["sizeBytes", "size_bytes", "size"])
+	if update_size <= 0:
+		update_size = fallback_size
+
+	var update_sha := _read_first_string(update_data, ["sha256", "sha", "checksum", "hash", "digest"])
+	if update_sha.is_empty():
+		update_sha = _read_first_string(package_data, ["sha256", "sha", "checksum", "hash", "digest"])
+	if update_sha.is_empty():
+		update_sha = fallback_sha
+
+	return {
+		"version": update_version.strip_edges(),
+		"url": _normalize_url(update_url),
+		"sha256": update_sha.to_lower(),
+		"sizeBytes": update_size,
+		"binary": update_binary.strip_edges(),
+	}
+
+
+func _read_first_string(value_map: Dictionary, keys: Array) -> String:
+	for key_index: int in range(keys.size()):
+		var key: Variant = keys[key_index]
+		var candidate: Variant = value_map.get(key, "")
+		var candidate_text := str(candidate).strip_edges()
+		if not candidate_text.is_empty():
+			return candidate_text
+	return ""
+
+
+func _read_first_int(value_map: Dictionary, keys: Array) -> int:
+	for key_index: int in range(keys.size()):
+		var key: Variant = keys[key_index]
+		var candidate: Variant = value_map.get(key, 0)
+		if typeof(candidate) == TYPE_INT:
+			return int(candidate)
+		if typeof(candidate) == TYPE_FLOAT:
+			return int(candidate)
+
+		var candidate_text := str(candidate).strip_edges()
+		if candidate_text.is_empty():
+			continue
+
+		var matcher := RegEx.create_from_string("\\d+")
+		var search := matcher.search(candidate_text)
+		if search != null:
+			return int(search.get_string())
+		if candidate_text.is_valid_int():
+			return candidate_text.to_int()
+	return 0
+
+
+func _is_newer_version(remote_version: String, local_version: String) -> bool:
+	var compare_result := _compare_version_parts(_parse_version(remote_version), _parse_version(local_version))
+	return compare_result > 0
+
+
+func _parse_version(version: String) -> PackedInt32Array:
+	var parsed: PackedInt32Array = PackedInt32Array()
+	var raw_parts := version.strip_edges().split(".")
+	for raw_part in raw_parts:
+		if parsed.size() >= MAX_VERSION_SEGMENTS:
+			break
+
+		var normalized_part := str(raw_part).strip_edges()
+		var matcher := RegEx.create_from_string("\\d+")
+		var match := matcher.search(normalized_part)
+		if match == null:
+			parsed.append(0)
+			continue
+
+		parsed.append(int(match.get_string()))
+
+	while parsed.size() < MAX_VERSION_SEGMENTS:
+		parsed.append(0)
+
+	return parsed
+
+
+func _compare_version_parts(left: PackedInt32Array, right: PackedInt32Array) -> int:
+	var index_count := maxi(left.size(), right.size())
+	for index in range(index_count):
+		var left_value := left[index] if index < left.size() else 0
+		var right_value := right[index] if index < right.size() else 0
+		if left_value > right_value:
+			return 1
+		if left_value < right_value:
+			return -1
+
+	return 0
+
+
+func _get_local_launcher_version() -> String:
+	var local_version := str(ProjectSettings.get_setting("application/config/version", "0.0.0")).strip_edges()
+	if local_version.is_empty():
+		return "0.0.0"
+
+	return local_version
+
+
+func launch_restart_check_failed(reason: String) -> void:
+	launcher_update_busy = false
+	launcher_update_in_progress = false
+	_set_status("%s You can retry from launcher update prompt." % reason)
+	_cleanup_launcher_update_files()
+	_set_busy(false)
+
+
+func _cleanup_launcher_update_files() -> void:
+	_delete_existing_download(str(launcher_update_http_request.download_file))
+	launcher_update_shown = false
+	var temp_dir := _globalize_storage_path(LAUNCHER_UPDATE_TEMP_DIR)
+	if DirAccess.dir_exists_absolute(temp_dir):
+		_remove_directory_contents(temp_dir)
+
+
+func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
+	if not FileAccess.file_exists(downloaded_path):
+		_log_error("Launcher update package missing before launch: %s" % downloaded_path)
+		return false
+
+	var launcher_binary_path := _globalize_storage_path(OS.get_executable_path())
+	if launcher_binary_path.is_empty():
+		_log_error("Could not resolve running launcher executable path.")
+		return false
+
+	var target_dir := launcher_binary_path.get_base_dir()
+	var temp_dir := _globalize_storage_path(LAUNCHER_UPDATE_TEMP_DIR)
+	var staging_dir := temp_dir.path_join(LAUNCHER_UPDATE_STAGING_SUBDIR)
+
+	var make_dir_error: Error = _clear_directory(staging_dir)
+	if make_dir_error != OK:
+		_log_error("Could not prepare launcher staging dir: %s" % error_string(make_dir_error))
+		return false
+
+	var extract_error: Error = _extract_launcher_update_zip(downloaded_path, staging_dir)
+	if extract_error != OK:
+		_log_error("Could not extract launcher update package: %s" % error_string(extract_error))
+		_cleanup_launcher_update_files()
+		return false
+
+	var launcher_binary_name := _read_first_string(launcher_update_info, ["binary"])
+	if launcher_binary_name.is_empty():
+		launcher_binary_name = _derive_launcher_binary_name()
+	launcher_binary_name = launcher_binary_name.get_file()
+	var packaged_binary_path := _find_file_case_insensitive(staging_dir, launcher_binary_name)
+	if packaged_binary_path.is_empty():
+		_log_error("Could not find launcher binary in update package.")
+		_cleanup_launcher_update_files()
+		return false
+
+	var os_name := OS.get_name()
+	var script_path := temp_dir.path_join(LAUNCHER_UPDATE_UNIX_SCRIPT)
+	if os_name == "Windows":
+		script_path = temp_dir.path_join(LAUNCHER_UPDATE_WINDOWS_SCRIPT)
+
+	var script_text := ""
+	if os_name == "Windows":
+		var executable_name := launcher_binary_path.get_file()
+		var launcher_exe_backup := "%s.bak" % launcher_binary_path
+		script_text = """@echo off
+setlocal
+set "LAUNCHER_EXE=%s"
+set "LAUNCHER_EXE_BAK=%s"
+set "LAUNCHER_DIR=%s"
+set "UPDATE_DIR=%s"
+set "LAUNCHER_EXE_NAME=%s"
+
+:WAIT
+tasklist /FI "IMAGENAME eq %%LAUNCHER_EXE_NAME%%" | find /I "%%LAUNCHER_EXE_NAME%%" >nul
+if %%ERRORLEVEL%%==0 (
+	timeout /t 1 /nobreak >nul
+	goto WAIT
+)
+
+if not exist "%UPDATE_DIR%" (
+	exit /b 1
+)
+
+if not exist "%LAUNCHER_EXE%" (
+	echo [launcher] launcher executable not found: %LAUNCHER_EXE%
+	exit /b 1
+)
+
+copy /Y "%LAUNCHER_EXE%" "%LAUNCHER_EXE_BAK%" >nul
+xcopy "%UPDATE_DIR%\\*" "%LAUNCHER_DIR%\\" /E /I /Y >nul
+if errorlevel 1 (
+	copy /Y "%LAUNCHER_EXE_BAK%" "%LAUNCHER_EXE%" >nul
+	del /F /Q "%LAUNCHER_EXE_BAK%" >nul 2>nul
+	echo [launcher] copy failed, restoring launcher executable.
+	start "" "%LAUNCHER_EXE%"
+	rmdir /S /Q "%UPDATE_DIR%" >nul 2>nul
+	exit /b 1
+)
+del /F /Q "%LAUNCHER_EXE_BAK%" >nul 2>nul
+start "" "%LAUNCHER_EXE%"
+rmdir /S /Q "%UPDATE_DIR%" >nul 2>nul
+exit /b 0
+""" % [launcher_binary_path, launcher_exe_backup, target_dir, staging_dir, executable_name]
+	else:
+		var launcher_exe_backup := "%s.bak" % launcher_binary_path
+		script_text = """#!/bin/sh
+LAUNCHER_EXE=\"%s\"
+LAUNCHER_EXE_BAK=\"%s\"
+LAUNCHER_DIR=\"%s\"
+UPDATE_DIR=\"%s\"
+
+sleep 1
+if [ ! -d \"$UPDATE_DIR\" ]; then
+  echo \"[launcher] update directory not found: $UPDATE_DIR\"
+  exit 1
+fi
+
+cp -f \"$LAUNCHER_EXE\" \"$LAUNCHER_EXE_BAK\"
+if ! cp -a \"$UPDATE_DIR\"/. \"$LAUNCHER_DIR\"/; then
+  if [ -f \"$LAUNCHER_EXE_BAK\" ]; then
+    cp -a \"$LAUNCHER_EXE_BAK\" \"$LAUNCHER_EXE\"
+    rm -f \"$LAUNCHER_EXE_BAK\"
+  fi
+  echo \"[launcher] copy failed, restoring executable.\"
+  exec \"$LAUNCHER_EXE\"
+fi
+
+rm -f \"$LAUNCHER_EXE_BAK\"
+chmod +x \"$LAUNCHER_EXE\"
+\"$LAUNCHER_EXE\" &
+rm -rf \"$UPDATE_DIR\"
+""" % [launcher_binary_path, launcher_exe_backup, target_dir, staging_dir]
+
+	var script_file := FileAccess.open(script_path, FileAccess.WRITE)
+	if script_file == null:
+		_log_error("Could not write launcher update script.")
+		return false
+
+	script_file.store_string(script_text)
+	script_file = null
+
+	var exec_args := PackedStringArray()
+	var launcher_command := ""
+	if os_name == "Windows":
+		exec_args = PackedStringArray(["/C", script_path])
+		launcher_command = "cmd.exe"
+	else:
+		_exec_make_executable(script_path)
+		exec_args = PackedStringArray(["-c", "\"%s\"" % script_path])
+		launcher_command = "/bin/sh"
+
+	var process_id: int = OS.create_process(launcher_command, exec_args)
+	if process_id <= 0:
+		_log_error("Could not start launcher update process.")
+		_cleanup_launcher_update_files()
+		return false
+
+	_log("Launcher updater started with process_id=%s." % process_id)
+	return true
+
+
+func _derive_launcher_binary_name() -> String:
+	if OS.get_name() == "Windows":
+		return WINDOWS_LAUNCHER_BINARY
+	return LINUX_LAUNCHER_BINARY
+
+
+func _find_file_case_insensitive(root_path: String, file_name: String) -> String:
+	var queue: Array[String] = [root_path]
+	while not queue.is_empty():
+		var current_dir: String = queue.pop_front()
+		var directory := DirAccess.open(current_dir)
+		if directory == null:
+			continue
+
+		directory.list_dir_begin()
+		var entry_name: String = directory.get_next()
+		while not entry_name.is_empty():
+			if entry_name == "." or entry_name == "..":
+				entry_name = directory.get_next()
+				continue
+
+			var entry_path: String = current_dir.path_join(entry_name)
+			if directory.current_is_dir():
+				queue.append(entry_path)
+			elif entry_name.to_lower() == file_name.to_lower():
+				return entry_path
+
+			entry_name = directory.get_next()
+		directory.list_dir_end()
+
+	return ""
+
+
+func _extract_launcher_update_zip(zip_path: String, target_dir: String) -> Error:
+	var reader := ZIPReader.new()
+	var open_error: Error = reader.open(zip_path)
+	if open_error != OK:
+		return open_error
+
+	var packed_file_paths: PackedStringArray = reader.get_files()
+	for packed_file_path: String in packed_file_paths:
+		if packed_file_path.ends_with("/"):
+			continue
+
+		var output_path := target_dir.path_join(packed_file_path)
+		var absolute_output_path := _globalize_storage_path(output_path)
+		DirAccess.make_dir_recursive_absolute(absolute_output_path.get_base_dir())
+
+		if FileAccess.file_exists(absolute_output_path):
+			var remove_error: Error = DirAccess.remove_absolute(absolute_output_path)
+			if remove_error != OK:
+				reader.close()
+				return remove_error
+
+		var output_file := FileAccess.open(absolute_output_path, FileAccess.WRITE)
+		if output_file == null:
+			reader.close()
+			return ERR_CANT_CREATE
+
+		output_file.store_buffer(reader.read_file(packed_file_path))
+		output_file.close()
+	reader.close()
+	return OK
+
+
+func _exec_make_executable(path: String) -> void:
+	if OS.get_name() == "Windows":
+		return
+	OS.execute("chmod", PackedStringArray(["+x", path]), [])
 
 
 func _handle_download_response() -> void:
@@ -657,7 +1287,7 @@ func _build_download_queue() -> void:
 			continue
 
 		var asset_pack: Dictionary = asset_pack_variant
-		if _is_optional_asset_pack(asset_pack):
+		if _is_optional_asset_pack(asset_pack) and not _should_auto_update_optional_asset_pack(asset_pack):
 			continue
 
 		var pack_id := str(asset_pack.get("id", ""))
@@ -967,10 +1597,24 @@ func _load_launcher_config() -> void:
 	var configured_news_url := str(config.get("newsUrl", ""))
 	if not configured_news_url.is_empty():
 		news_url = configured_news_url
+	manifest_url = _normalize_url(manifest_url)
+	news_url = _normalize_url(news_url)
+	if manifest_url.is_empty():
+		manifest_url = DEFAULT_MANIFEST_URL
 
 	var configured_discord_url := str(config.get("discordUrl", ""))
 	if not configured_discord_url.is_empty():
 		discord_url = configured_discord_url
+
+	var configured_patch_notes_url := str(config.get("patchNotesUrl", ""))
+	if not configured_patch_notes_url.is_empty():
+		patch_notes_url = configured_patch_notes_url
+	discord_url = _normalize_url(discord_url)
+	patch_notes_url = _normalize_url(patch_notes_url)
+	if discord_url.is_empty():
+		discord_url = DEFAULT_DISCORD_URL
+	if patch_notes_url.is_empty():
+		patch_notes_url = DEFAULT_PATCH_NOTES_URL
 
 
 func _load_launcher_settings() -> void:
@@ -988,7 +1632,7 @@ func _load_launcher_settings() -> void:
 	var settings: Dictionary = parsed_json
 	var configured_install_dir := str(settings.get("installDir", ""))
 	if not configured_install_dir.is_empty():
-		install_dir = configured_install_dir
+		install_dir = configured_install_dir.strip_edges()
 
 
 func _save_launcher_settings() -> void:
@@ -1056,7 +1700,7 @@ func _get_platform_manifest_url(manifest_urls: Dictionary) -> String:
 		var manifest_url_variant: Variant = manifest_urls.get(candidate, "")
 		var platform_manifest_url := str(manifest_url_variant)
 		if not platform_manifest_url.is_empty():
-			return platform_manifest_url
+			return _normalize_url(platform_manifest_url)
 
 	return ""
 
@@ -1145,6 +1789,7 @@ func _refresh_status() -> void:
 	update_button.disabled = not update_required
 	check_button.disabled = false
 	_refresh_gen5_sprites_button()
+	_refresh_uninstall_button()
 	if update_required:
 		_set_status("Update available.")
 	elif local_game_version == "" or local_game_version == "not installed":
@@ -1163,37 +1808,96 @@ func _refresh_launcher_version() -> void:
 
 
 func _set_busy(is_busy: bool) -> void:
-	check_button.disabled = is_busy
-	update_button.disabled = is_busy or not update_required
-	gen5_sprites_button.disabled = is_busy or not _can_download_gen5_sprites()
-	play_button.disabled = is_busy or update_required or not _has_installed_game()
+	var locked := is_busy or launcher_update_busy or launcher_update_in_progress
+	check_button.disabled = locked
+	update_button.disabled = locked or not update_required
+	gen5_sprites_button.disabled = locked or not _can_download_gen5_sprites()
+	play_button.disabled = locked or update_required or not _has_installed_game()
+	uninstall_button.disabled = locked or not _has_game_install_folder()
 	_sync_button_cursors()
 
 
 func _sync_button_cursors() -> void:
-	for button: Button in [check_button, update_button, gen5_sprites_button, play_button]:
+	for button: Button in [check_button, update_button, gen5_sprites_button, play_button, patch_notes_button, uninstall_button]:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	patch_notes_button.tooltip_text = "Open patch notes"
+	uninstall_button.tooltip_text = "Remove installed game folder"
 
 
 func _refresh_gen5_sprites_button() -> void:
+	if _has_gen5_sprites_folder():
+		gen5_sprites_button.visible = false
+		gen5_sprites_button.disabled = true
+		gen5_sprites_button.tooltip_text = "Gen 5 Animated Sprites are already installed."
+		return
+
+	gen5_sprites_button.visible = true
 	if manifest.is_empty():
 		gen5_sprites_button.text = "Gen 5 Sprites"
 		gen5_sprites_button.disabled = true
+		gen5_sprites_button.tooltip_text = "Download Gen 5 Animated sprites after launcher manifest is available."
 		return
 
 	if _are_gen5_sprites_installed():
 		gen5_sprites_button.text = "Gen 5 Installed"
 		gen5_sprites_button.disabled = true
+		gen5_sprites_button.tooltip_text = "Gen 5 Animated Sprites are already installed."
 		return
 
 	gen5_sprites_button.text = "Download Gen 5"
 	gen5_sprites_button.disabled = not _can_download_gen5_sprites()
+	gen5_sprites_button.tooltip_text = "Download Gen 5 Animated Sprites."
+
+
+func _has_gen5_sprites_folder() -> bool:
+	if _are_gen5_sprites_installed():
+		return true
+
+	var gen5_root := _globalize_storage_path(install_dir.path_join(GEN5_SPRITES_FOLDER_PATH))
+	return _directory_has_contents(gen5_root)
+
+
+func _directory_has_contents(path: String) -> bool:
+	var directory: DirAccess = DirAccess.open(path)
+	if directory == null:
+		return false
+
+	directory.list_dir_begin()
+	var entry_name: String = directory.get_next()
+	while not entry_name.is_empty():
+		if entry_name != "." and entry_name != "..":
+			directory.list_dir_end()
+			return true
+		entry_name = directory.get_next()
+
+	directory.list_dir_end()
+	return false
+
+
+func _should_auto_update_optional_asset_pack(asset_pack: Dictionary) -> bool:
+	if not _is_optional_asset_pack(asset_pack):
+		return true
+
+	if bool(asset_pack.get("autoUpdateIfInstalled", false)):
+		return _is_gen5_asset_pack(asset_pack) and _has_gen5_sprites_folder()
+
+	return false
 
 
 func _can_download_gen5_sprites() -> bool:
 	return not manifest.is_empty() and not _are_gen5_sprites_installed() and not _get_gen5_asset_packs().is_empty()
+
+
+func _refresh_uninstall_button() -> void:
+	var has_game_install_folder := _has_game_install_folder()
+	uninstall_button.visible = has_game_install_folder
+	uninstall_button.disabled = not has_game_install_folder
+	if has_game_install_folder:
+		uninstall_button.tooltip_text = "Remove installed game folder"
+	else:
+		uninstall_button.tooltip_text = "No game folder to remove"
 
 
 func _are_gen5_sprites_installed() -> bool:
@@ -1211,6 +1915,10 @@ func _are_gen5_sprites_installed() -> bool:
 			return false
 
 	return true
+
+
+func _has_game_install_folder() -> bool:
+	return DirAccess.dir_exists_absolute(_globalize_storage_path(_get_game_install_dir()))
 
 
 func _has_installed_game() -> bool:

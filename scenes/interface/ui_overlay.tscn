@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://c7goexdnbj60q" path="res://assets/ui/bag-icon.svg" id="5_j0ub1"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="6_settings"]
 [ext_resource type="Texture2D" uid="uid://5ixth4h1adwb" path="res://assets/ui/settings-icon.svg" id="7_settings_icon"]
+[ext_resource type="Texture2D" uid="uid://b85ladmwqi0go" path="res://assets/ui/repel_icon.svg" id="8_iv6uh"]
+[ext_resource type="Texture2D" uid="uid://sroenj42pc1x" path="res://assets/ui/dev_icon.svg" id="9_s0khl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -76,6 +78,18 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repel_active"]
+bg_color = Color(0.09019608, 0.42745098, 0.1764706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34509805, 0.8509804, 0.4392157, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -372,6 +386,96 @@ texture_disabled = ExtResource("7_settings_icon")
 texture_focused = ExtResource("7_settings_icon")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="ActionsPanel" type="PanelContainer" parent="Control" unique_id=1107239222]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -148.0
+offset_bottom = 68.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/ActionsPanel" unique_id=1183886420]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/ActionsPanel/MarginContainer" unique_id=1259684015]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="RepelToggle" type="Button" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=2085702693]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+tooltip_text = "Repel"
+mouse_default_cursor_shape = 2
+theme_override_styles/pressed = SubResource("StyleBoxFlat_repel_active")
+toggle_mode = true
+icon = ExtResource("8_iv6uh")
+expand_icon = true
+
+[node name="DevActionsButton" type="Button" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=1939088199]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+tooltip_text = "Developer Menu"
+mouse_default_cursor_shape = 2
+icon = ExtResource("9_s0khl")
+expand_icon = true
+
+[node name="DevActionsPopup" type="PanelContainer" parent="Control" unique_id=1029961477]
+visible = false
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -226.0
+offset_top = 78.0
+offset_right = -16.0
+offset_bottom = 218.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/DevActionsPopup" unique_id=1624036833]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/DevActionsPopup/MarginContainer" unique_id=1320109860]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AddPokemonButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=1616350742]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Create Pokemon"
+
+[node name="AddTeamButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=367149496]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Create Team"
+
+[node name="SpawnPokemonButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=1162333859]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Spawn Pokemon"
+
+[node name="CloseButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=770877213]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Close"
 
 [node name="SettingsMenu" parent="Control" unique_id=1857705427 instance=ExtResource("6_settings")]
 visible = false

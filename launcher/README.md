@@ -12,7 +12,7 @@ Small Godot launcher project for Pokemon Aether Online.
 6. Replaces `user://game/game` on each game update while keeping unchanged asset packs.
 7. Starts the configured game executable.
 
-Asset packs marked with `"optional": true` are skipped by the normal update flow. Gen 5 animated Pokemon sprites are optional and can be installed separately with the launcher `Download Gen 5` button.
+Asset packs marked with `"optional": true` are skipped by the normal update flow. For Gen 5 animated Pokemon sprites, set `"autoUpdateIfInstalled": true` in the manifest when a user already has the Gen 5 folder installed; then the launcher will auto-update those packs on startup while still keeping the manual install button hidden when the folder is already present.
 
 The default install folder is `user://game`. Players can choose a custom install folder from the launcher Game Folder button; that choice is saved in `user://launcher_settings.json`.
 
@@ -70,6 +70,7 @@ This writes launcher-ready files such as:
 
 ```text
 launcher/test_server/game-0.1.0-linux.zip
+launcher/test_server/PokemonAetherLauncher-linux.zip (with --include-launcher)
 launcher/test_server/manifest-linux.json
 launcher/test_server/manifest.json
 ```
@@ -82,6 +83,8 @@ python3 tools/package_launcher_release.py \
   --base-url https://updates.pokemonaetheronline.com \
   --game-prefix game \
   --asset-prefix assets \
+  --include-launcher \
+  --launcher-prefix launcher/latest \
   --output-dir builds/launcher \
   --default-platform linux
 ```
@@ -160,5 +163,5 @@ R2_SECRET_ACCESS_KEY
 ## Notes
 
 - This is intentionally a first-pass launcher.
-- Launcher self-update is not implemented yet.
+- Launcher self-update is implemented via launcher metadata in the manifest.
 - Delta patching is not implemented yet.

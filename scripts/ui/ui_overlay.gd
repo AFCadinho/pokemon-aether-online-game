@@ -12,15 +12,23 @@ const START_ENCOUNTER_COMMAND := "/encounter"
 const START_ENCOUNTER_CLIPBOARD_COMMAND := "/encounterclip"
 const START_ENCOUNTER_CLIPBOARD_ALIAS := "/ec"
 const SPAWN_COMMAND := "/spawn"
+const COLLAPSE_BUTTON_SIZE := Vector2(28, 28)
+const COLLAPSE_BUTTON_MARGIN := 6.0
 
 enum DevPokemonPopupMode {
 	POKEMON,
 	TEAM,
+	SPAWN,
 }
 
+@onready var root_control: Control = $Control
 @onready var party_panel: PanelContainer = $Control/PartyPanel
 @onready var party_container: VBoxContainer = $Control/PartyPanel/MarginContainer/VBoxContainer
 @onready var party_slot_template: PanelContainer = $Control/PartyPanel/MarginContainer/VBoxContainer/PartySlot
+@onready var chat_panel: PanelContainer = $Control/ChatPanel
+@onready var location_panel: PanelContainer = $Control/LocationPanel
+@onready var options_panel: PanelContainer = $Control/OptionsPanel
+@onready var actions_panel: PanelContainer = $Control/ActionsPanel
 @onready var message_list: VBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
 @onready var chat_input: LineEdit = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/ChatInput
@@ -34,13 +42,22 @@ enum DevPokemonPopupMode {
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
 @onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
+@onready var repel_toggle_button: Button = $Control/ActionsPanel/MarginContainer/HBoxContainer/RepelToggle
+@onready var dev_actions_button: Button = $Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsButton
+@onready var dev_actions_popup: PanelContainer = $Control/DevActionsPopup
+@onready var dev_add_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddPokemonButton
+@onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
+@onready var dev_spawn_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/SpawnPokemonButton
+@onready var dev_actions_close_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/CloseButton
 
 var party_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
+var collapsible_panels: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_build_party_slots()
+	_setup_collapsible_panels()
 	_refresh_party()
 	
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
@@ -53,12 +70,20 @@ func _ready() -> void:
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
+	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
+	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
+	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
+	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
+	dev_add_team_button.pressed.connect(_on_dev_add_team_button_pressed)
+	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
+	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
+	dev_actions_button.visible = PlayerSave.is_staff
+	dev_actions_popup.visible = false
 	if settings_menu.has_signal("closed"):
 		settings_menu.closed.connect(_on_settings_menu_closed)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	_position_collapsible_buttons()
 
 func _input(event: InputEvent) -> void:
 	if _is_settings_toggle_event(event):
@@ -83,6 +108,129 @@ func _input(event: InputEvent) -> void:
 
 func _is_point_inside_control(control: Control, point: Vector2) -> bool:
 	return control.get_global_rect().has_point(point)
+
+func _setup_collapsible_panels() -> void:
+	_register_collapsible_panel("chat", chat_panel, "left")
+	_register_collapsible_panel("party", party_panel, "left")
+	_register_collapsible_panel("location", location_panel, "right_center")
+	_register_collapsible_panel("options", options_panel, "right")
+	_register_collapsible_panel("actions", actions_panel, "left")
+	_position_collapsible_buttons()
+
+func _register_collapsible_panel(panel_id: String, panel: Control, side: String) -> void:
+	var button := Button.new()
+	button.custom_minimum_size = COLLAPSE_BUTTON_SIZE
+	button.size = COLLAPSE_BUTTON_SIZE
+	button.text = "-"
+	button.tooltip_text = "Collapse"
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.z_index = 200
+	button.pressed.connect(_on_collapsible_panel_button_pressed.bind(panel_id))
+	root_control.add_child(button)
+
+	collapsible_panels[panel_id] = {
+		"panel": panel,
+		"button": button,
+		"side": side,
+		"collapsed": false,
+		"available": true,
+	}
+
+func _on_collapsible_panel_button_pressed(panel_id: String) -> void:
+	var state: Dictionary = collapsible_panels.get(panel_id, {})
+	if state.is_empty():
+		return
+
+	var collapsed := not bool(state.get("collapsed", false))
+	state["collapsed"] = collapsed
+	collapsible_panels[panel_id] = state
+	_apply_collapsible_panel_state(panel_id)
+
+func _set_collapsible_panel_available(panel_id: String, available: bool) -> void:
+	var state: Dictionary = collapsible_panels.get(panel_id, {})
+	if state.is_empty():
+		return
+
+	state["available"] = available
+	collapsible_panels[panel_id] = state
+	_apply_collapsible_panel_state(panel_id)
+
+func _apply_collapsible_panel_state(panel_id: String) -> void:
+	var state: Dictionary = collapsible_panels.get(panel_id, {})
+	if state.is_empty():
+		return
+
+	var panel: Control = state.get("panel") as Control
+	var button: Button = state.get("button") as Button
+	if panel == null or button == null:
+		return
+
+	var available := bool(state.get("available", true))
+	var collapsed := bool(state.get("collapsed", false))
+	panel.visible = available and not collapsed
+	button.visible = available
+	button.text = "+" if collapsed else "-"
+	button.tooltip_text = "Expand" if collapsed else "Collapse"
+	if collapsed and panel_id == "actions":
+		dev_actions_popup.visible = false
+	_position_collapsible_button(panel_id)
+
+func _position_collapsible_buttons() -> void:
+	for panel_id_value: Variant in collapsible_panels.keys():
+		var panel_id := str(panel_id_value)
+		_position_collapsible_button(panel_id)
+
+func _position_collapsible_button(panel_id: String) -> void:
+	var state: Dictionary = collapsible_panels.get(panel_id, {})
+	if state.is_empty():
+		return
+
+	var panel: Control = state.get("panel") as Control
+	var button: Button = state.get("button") as Button
+	if panel == null or button == null:
+		return
+
+	var side := str(state.get("side", "right"))
+	var collapsed := bool(state.get("collapsed", false))
+	var rect := panel.get_rect()
+	var position := rect.position
+	if collapsed:
+		match side:
+			"left":
+				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x
+				position.y = rect.position.y
+			"right":
+				position.x = rect.position.x
+				position.y = rect.position.y
+			"right_center":
+				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x
+				position.y = rect.position.y
+			"bottom":
+				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x
+				position.y = rect.position.y
+			_:
+				position.x = rect.position.x
+				position.y = rect.position.y
+	else:
+		match side:
+			"left":
+				position.x = rect.position.x - COLLAPSE_BUTTON_SIZE.x - COLLAPSE_BUTTON_MARGIN
+				position.y = rect.position.y
+			"right":
+				position.x = rect.position.x + rect.size.x + COLLAPSE_BUTTON_MARGIN
+				position.y = rect.position.y
+			"right_center":
+				position.x = rect.position.x + rect.size.x + COLLAPSE_BUTTON_MARGIN
+				position.y = rect.position.y + ((rect.size.y - COLLAPSE_BUTTON_SIZE.y) / 2.0)
+			"bottom":
+				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x
+				position.y = rect.position.y + rect.size.y + COLLAPSE_BUTTON_MARGIN
+			_:
+				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x
+				position.y = rect.position.y
+
+	button.position = position
+	button.size = COLLAPSE_BUTTON_SIZE
 
 func _is_settings_toggle_event(event: InputEvent) -> bool:
 	if not (event is InputEventKey):
@@ -115,7 +263,7 @@ func _build_party_slots() -> void:
 		party_slots.append(slot)
 		
 func _refresh_party() -> void:
-	party_panel.visible = PlayerSave.party.size() > 0
+	_set_collapsible_panel_available("party", PlayerSave.party.size() > 0)
 	
 	for slot_number in range(party_slots.size()):
 		var slot = party_slots[slot_number]
@@ -401,6 +549,32 @@ func _clean_encounter_paste_text(pokemon_text: String) -> String:
 func _on_dev_pokemon_button_pressed() -> void:
 	_show_dev_pokemon_popup(DevPokemonPopupMode.POKEMON)
 
+func _on_repel_toggle_toggled(toggled_on: bool) -> void:
+	GameState.repel_enabled = toggled_on
+	var state_text := "enabled" if GameState.repel_enabled else "disabled"
+	_add_chat_message("Repel %s." % state_text)
+
+func _on_dev_actions_button_pressed() -> void:
+	if not PlayerSave.is_staff:
+		return
+
+	dev_actions_popup.visible = not dev_actions_popup.visible
+
+func _on_dev_add_pokemon_button_pressed() -> void:
+	dev_actions_popup.visible = false
+	_show_dev_pokemon_popup(DevPokemonPopupMode.POKEMON)
+
+func _on_dev_add_team_button_pressed() -> void:
+	dev_actions_popup.visible = false
+	_show_dev_pokemon_popup(DevPokemonPopupMode.TEAM)
+
+func _on_dev_spawn_pokemon_button_pressed() -> void:
+	dev_actions_popup.visible = false
+	_show_dev_pokemon_popup(DevPokemonPopupMode.SPAWN)
+
+func _on_dev_actions_close_button_pressed() -> void:
+	dev_actions_popup.visible = false
+
 func _show_dev_pokemon_popup(mode: int) -> void:
 	if not PlayerSave.is_staff:
 		return
@@ -411,6 +585,10 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 			dev_pokemon_title.text = "Add Team"
 			dev_pokemon_add_button.text = "Add Team"
 			dev_pokemon_text.placeholder_text = "Paste Showdown/Pokepaste team here"
+		DevPokemonPopupMode.SPAWN:
+			dev_pokemon_title.text = "Spawn Pokemon"
+			dev_pokemon_add_button.text = "Spawn"
+			dev_pokemon_text.placeholder_text = "Enter a Pokemon name, Showdown set, or Pokepaste"
 		_:
 			dev_pokemon_title.text = "Add Pokemon"
 			dev_pokemon_add_button.text = "Add"
@@ -424,6 +602,8 @@ func _on_dev_pokemon_add_button_pressed() -> void:
 	match dev_pokemon_popup_mode:
 		DevPokemonPopupMode.TEAM:
 			added = await _handle_add_team_command(dev_pokemon_text.text)
+		DevPokemonPopupMode.SPAWN:
+			added = await _handle_start_encounter_command(dev_pokemon_text.text)
 		_:
 			added = await _handle_add_pokemon_command(dev_pokemon_text.text)
 

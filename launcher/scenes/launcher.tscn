@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://da4x4pta7v7o4" path="res://assets/ui/launcher_hero_clean.png" id="2_hero"]
 [ext_resource type="Texture2D" uid="uid://bdnq1ysb18lkt" path="res://assets/ui/logo.png" id="3_logo"]
 [ext_resource type="Texture2D" uid="uid://tvvwj514bct" path="res://assets/ui/discord.svg" id="4_discord"]
+[ext_resource type="Texture2D" uid="uid://c5pw2xpavwgib" path="res://assets/ui/refresh.svg" id="5_refresh"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wr5gk"]
 load_path = "res://.godot/imported/pao_text_logo.png-fef76664bf29104b4db10aacc1bf4d3e.ctex"
@@ -115,7 +116,6 @@ flat = true
 [node name="PatchNotesButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=253278925]
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
-disabled = true
 text = "  Patch Notes"
 flat = true
 
@@ -123,6 +123,12 @@ flat = true
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 text = "  Game Folder"
+flat = true
+
+[node name="UninstallButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1789910227]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "  Uninstall"
 flat = true
 
 [node name="SidebarSpacer" type="Control" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=550067109]
@@ -342,30 +348,32 @@ autowrap_mode = 3
 [node name="ButtonRow" type="HBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn" unique_id=1109571568]
 layout_mode = 2
 theme_override_constants/separation = 14
+alignment = 1
 
 [node name="CheckButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1666491337]
-custom_minimum_size = Vector2(155, 62)
+custom_minimum_size = Vector2(58, 62)
 layout_mode = 2
-text = "Check updates"
-
-[node name="UpdateButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=142758839]
-custom_minimum_size = Vector2(155, 62)
-layout_mode = 2
-disabled = true
-text = "Update"
-
-[node name="Gen5SpritesButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow"]
-custom_minimum_size = Vector2(155, 62)
-layout_mode = 2
-disabled = true
-text = "Gen 5 Sprites"
+tooltip_text = "Check for updates"
+icon = ExtResource("5_refresh")
 
 [node name="PlayButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1383115794]
-custom_minimum_size = Vector2(155, 62)
+custom_minimum_size = Vector2(180, 62)
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "Play"
+
+[node name="UpdateButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=142758839]
+custom_minimum_size = Vector2(136, 62)
+layout_mode = 2
+disabled = true
+text = "Update"
+
+[node name="Gen5SpritesButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1366749803]
+custom_minimum_size = Vector2(150, 62)
+layout_mode = 2
+disabled = true
+text = "Gen 5 Sprites"
 
 [node name="NewsCard" type="PanelContainer" parent="Shell/MainSplit/Content/ContentLayout" unique_id=983230417]
 custom_minimum_size = Vector2(240, 0)
@@ -407,3 +415,21 @@ title = "Open a Directory"
 size = Vector2i(900, 620)
 file_mode = 2
 access = 2
+
+[node name="UninstallConfirmDialog" type="ConfirmationDialog" parent="." unique_id=184500129]
+title = "Uninstall Game"
+size = Vector2i(560, 170)
+ok_button_text = "Uninstall"
+dialog_text = "This will permanently remove the selected game folder and all downloaded files.
+
+Continue?"
+
+[node name="LauncherUpdateConfirmDialog" type="ConfirmationDialog" parent="." unique_id=2139269494]
+title = "Launcher Update"
+size = Vector2i(560, 170)
+ok_button_text = "Update"
+dialog_text = "A launcher update is available.
+
+Install it now?"
+
+[node name="LauncherUpdateHttpRequest" type="HTTPRequest" parent="." unique_id=476340097]

@@ -7,9 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://80ehka6bybdc" path="res://assets/tilesets/overworld/interior/Interiors11.png" id="4_sxk7c"]
 [ext_resource type="Texture2D" uid="uid://bocjn3eo81c1r" path="res://assets/tilesets/overworld/interior/Interiors14.png" id="5_625wd"]
 [ext_resource type="Script" uid="uid://dc87fdx313qm4" path="res://scripts/world/kanto/towns/pallet_town/oak.gd" id="6_m2ga1"]
-[ext_resource type="Texture2D" uid="uid://c11wckd63c0bu" path="res://assets/npcs/kanto/professor_rowan.png" id="7_aq02p"]
 [ext_resource type="Script" uid="uid://dguhd4ywnh3rf" path="res://scripts/world/kanto/towns/pallet_town/to_pallet_town.gd" id="8_rguhm"]
+[ext_resource type="Texture2D" uid="uid://coa5lp430b8p8" path="res://assets/npcs/gen4-ow-sprites/phone001.png" id="8_ywtjb"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="10_7ad88"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uqvyo"]
 texture = ExtResource("1_y0n1h")
@@ -1944,23 +1945,56 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_m2ga1")
 sources/1 = SubResource("TileSetAtlasSource_jksq5")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rguhm"]
-atlas = ExtResource("7_aq02p")
-region = Rect2(64, 128, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_jksq5"]
+atlas = ExtResource("8_ywtjb")
+region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_ywtjb"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8t41f"]
+atlas = ExtResource("8_ywtjb")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkl8t"]
+atlas = ExtResource("8_ywtjb")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w27ym"]
+atlas = ExtResource("8_ywtjb")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_aw12e"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_rguhm")
+"texture": SubResource("AtlasTexture_jksq5")
 }],
 "loop": true,
 "name": &"idle_down",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8t41f")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fkl8t")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w27ym")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
 }]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_m2ga1"]
-size = Vector2(64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_625wd"]
 texture = ExtResource("3_16oxl")
@@ -3604,22 +3638,12 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1406348437]
 
-[node name="Oak" type="Node2D" parent="Entities/NPCs" unique_id=944228146]
+[node name="Oak" parent="Entities/NPCs" unique_id=944228146 instance=ExtResource("10_7ad88")]
 position = Vector2(240, 80)
 script = ExtResource("6_m2ga1")
-
-[node name="Look" type="Node2D" parent="Entities/NPCs/Oak" unique_id=1526777497]
-position = Vector2(0, -16)
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Entities/NPCs/Oak/Look" unique_id=1831722847]
-sprite_frames = SubResource("SpriteFrames_ywtjb")
-animation = &"idle_down"
-
-[node name="InteractionArea" type="Area2D" parent="Entities/NPCs/Oak" unique_id=236861381]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/NPCs/Oak/InteractionArea" unique_id=161826291]
-position = Vector2(0, -16)
-shape = SubResource("RectangleShape2D_m2ga1")
+npc_id = "kanto_oaklab_oak_1"
+display_name = "Prof. Oak"
+npc_sprite_frames = SubResource("SpriteFrames_aw12e")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]
 
@@ -3651,9 +3675,7 @@ shape = SubResource("RectangleShape2D_10jo1")
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=420087276]
 z_index = -99
-tile_map_data = PackedByteArray("AAAPAP//AAABAAEAAAAOAP//AAABAAEAAAANAP//AAABAAEAAAAMAP//AAABAAEAAAALAP//AAABAAEAAAAKAP//AAABAAEAAAAJAP//AAABAAEAAAAIAP//AAABAAEAAAAHAP//AAABAAEAAAAGAP//AAABAAEAAAAFAP//AAABAAEAAAAEAP//AAABAAEAAAADAP//AAABAAEAAAACAP//AAABAAEAAAABAP//AAABAAEAAAAAAP//AAABAAEAAAD/////AAABAAEAAAD//wAAAAABAAEAAAD//wEAAAABAAEAAAD//wIAAAABAAEAAAD//w0AAAABAAEAAAD//wwAAAABAAEAAAD//wsAAAABAAEAAAD//woAAAABAAEAAAD//wkAAAABAAEAAAD//wgAAAABAAEAAAD//wcAAAABAAEAAAD//wYAAAABAAEAAAD//wUAAAABAAEAAAD//wQAAAABAAEAAAD//wMAAAABAAEAAAAAAA0AAAABAAEAAAABAA0AAAABAAEAAAACAA0AAAABAAEAAAADAA0AAAABAAEAAAAEAA0AAAABAAEAAAAFAA0AAAABAAEAAAAGAA0AAAABAAEAAAAHAA0AAAABAAEAAAAIAA0AAAABAAEAAAAJAA0AAAABAAEAAAAKAA0AAAABAAEAAAALAA0AAAABAAEAAAAMAA0AAAABAAEAAAANAA0AAAABAAEAAAAOAA0AAAABAAEAAAAPAA0AAAABAAEAAAAPAAAAAAABAAEAAAAPAAEAAAABAAEAAAAPAAIAAAABAAEAAAAPAAMAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAAAAcAAAABAAEAAAABAAcAAAABAAEAAAACAAcAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAACAAgAAAABAAEAAAABAAgAAAABAAEAAAAAAAgAAAABAAEAAAAKAAcAAAABAAEAAAALAAcAAAABAAEAAAAMAAcAAAABAAEAAAAMAAgAAAABAAEAAAANAAgAAAABAAEAAAANAAcAAAABAAEAAAALAAgAAAABAAEAAAAKAAgAAAABAAEAAAACAAUAAAABAAEAAAABAAUAAAABAAEAAAAAAAUAAAABAAEAAAAAAAQAAAABAAEAAAAAAAMAAAABAAEAAAABAAMAAAABAAEAAAACAAMAAAABAAEAAAACAAQAAAABAAEAAAABAAQAAAABAAEAAAAAAAAAAAABAAEAAAABAAAAAAABAAEAAAACAAAAAAABAAEAAAADAAAAAAABAAEAAAAEAAAAAAABAAEAAAAFAAAAAAABAAEAAAAGAAAAAAABAAEAAAAHAAAAAAABAAEAAAAIAAAAAAABAAEAAAAKAAAAAAABAAEAAAALAAAAAAABAAEAAAAMAAAAAAABAAEAAAANAAAAAAABAAEAAAAHAAMAAAABAAEAAAA=")
+tile_map_data = PackedByteArray("AAAPAP//AAABAAEAAAAOAP//AAABAAEAAAANAP//AAABAAEAAAAMAP//AAABAAEAAAALAP//AAABAAEAAAAKAP//AAABAAEAAAAJAP//AAABAAEAAAAIAP//AAABAAEAAAAHAP//AAABAAEAAAAGAP//AAABAAEAAAAFAP//AAABAAEAAAAEAP//AAABAAEAAAADAP//AAABAAEAAAACAP//AAABAAEAAAABAP//AAABAAEAAAAAAP//AAABAAEAAAD/////AAABAAEAAAD//wAAAAABAAEAAAD//wEAAAABAAEAAAD//wIAAAABAAEAAAD//w0AAAABAAEAAAD//wwAAAABAAEAAAD//wsAAAABAAEAAAD//woAAAABAAEAAAD//wkAAAABAAEAAAD//wgAAAABAAEAAAD//wcAAAABAAEAAAD//wYAAAABAAEAAAD//wUAAAABAAEAAAD//wQAAAABAAEAAAD//wMAAAABAAEAAAAAAA0AAAABAAEAAAABAA0AAAABAAEAAAACAA0AAAABAAEAAAADAA0AAAABAAEAAAAEAA0AAAABAAEAAAAFAA0AAAABAAEAAAAGAA0AAAABAAEAAAAHAA0AAAABAAEAAAAIAA0AAAABAAEAAAAJAA0AAAABAAEAAAAKAA0AAAABAAEAAAALAA0AAAABAAEAAAAMAA0AAAABAAEAAAANAA0AAAABAAEAAAAOAA0AAAABAAEAAAAPAA0AAAABAAEAAAAPAAAAAAABAAEAAAAPAAEAAAABAAEAAAAPAAIAAAABAAEAAAAPAAMAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAAAAcAAAABAAEAAAABAAcAAAABAAEAAAACAAcAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAACAAgAAAABAAEAAAABAAgAAAABAAEAAAAAAAgAAAABAAEAAAAKAAcAAAABAAEAAAALAAcAAAABAAEAAAAMAAcAAAABAAEAAAAMAAgAAAABAAEAAAANAAgAAAABAAEAAAANAAcAAAABAAEAAAALAAgAAAABAAEAAAAKAAgAAAABAAEAAAACAAUAAAABAAEAAAABAAUAAAABAAEAAAAAAAUAAAABAAEAAAAAAAQAAAABAAEAAAAAAAMAAAABAAEAAAABAAMAAAABAAEAAAACAAMAAAABAAEAAAACAAQAAAABAAEAAAABAAQAAAABAAEAAAAAAAAAAAABAAEAAAABAAAAAAABAAEAAAACAAAAAAABAAEAAAADAAAAAAABAAEAAAAEAAAAAAABAAEAAAAFAAAAAAABAAEAAAAGAAAAAAABAAEAAAAHAAAAAAABAAEAAAAIAAAAAAABAAEAAAAKAAAAAAABAAEAAAALAAAAAAABAAEAAAAMAAAAAAABAAEAAAANAAAAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_fkl8t")
 
-[connection signal="body_entered" from="Entities/NPCs/Oak/InteractionArea" to="Entities/NPCs/Oak" method="_on_interaction_area_body_entered"]
-[connection signal="body_exited" from="Entities/NPCs/Oak/InteractionArea" to="Entities/NPCs/Oak" method="_on_interaction_area_body_exited"]
 [connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]

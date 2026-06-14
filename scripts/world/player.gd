@@ -54,6 +54,15 @@ func get_target_feet_position() -> Vector2:
 func is_tile_moving() -> bool:
 	return is_moving
 
+func reset_movement_state() -> void:
+	is_moving = false
+	target_position = global_position
+	move_start_position = global_position
+	move_elapsed = 0.0
+	_clear_input_buffer()
+	_clear_held_direction()
+	set_idle_frame()
+
 func face_world_position(world_position: Vector2) -> void:
 	var delta := world_position - get_feet_position()
 	if delta == Vector2.ZERO:
@@ -136,7 +145,7 @@ func _process(delta: float) -> void:
 			set_idle_frame()
 
 func _can_accept_movement_input() -> bool:
-	return not GameState.input_locked and not _is_ui_typing()
+	return not GameState.is_overworld_input_locked() and not _is_ui_typing()
 
 func _update_input_priority() -> void:
 	for action_name in MOVE_ACTIONS:
@@ -279,8 +288,14 @@ func can_move_to(check_position: Vector2) -> bool:
 		return true
 	
 	var current_map: Node = _resolve_current_map()
-	if current_map != null and current_map.has_method("is_position_blocked_by_character"):
-		if current_map.is_position_blocked_by_character(check_position):
+	if current_map != null:
+		var is_blocked_by_character := false
+		if current_map.has_method("is_position_blocked_by_character"):
+			is_blocked_by_character = bool(current_map.is_position_blocked_by_character(check_position))
+		else:
+			is_blocked_by_character = MapCharacterBlocking.is_position_blocked_by_character(current_map, check_position)
+
+		if is_blocked_by_character:
 			return false
 	
 	# check_position is een global/world pixelpositie.
@@ -369,6 +384,9 @@ func check_for_grass_encounter() -> void:
 		
 	var area_id: String = str(current_map.call("get_wild_encounter_area_id"))
 	if area_id == "":
+		return
+
+	if GameState.repel_enabled:
 		return
 
 	if current_map.has_method("should_trigger_wild_encounter"):

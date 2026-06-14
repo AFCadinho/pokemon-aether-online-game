@@ -74,7 +74,11 @@ func _get_preview_scale_for_frames(frames: SpriteFrames) -> Vector2:
 	if sprite_loader.has_method("_get_sprite_frames_render_scale"):
 		render_scale = float(sprite_loader.call("_get_sprite_frames_render_scale", frames))
 
-	return PREVIEW_SPRITE_SCALE / max(render_scale, 1.0)
+	var display_scale_multiplier := 1.0
+	if sprite_loader.has_method("_get_sprite_frames_display_scale_multiplier"):
+		display_scale_multiplier = float(sprite_loader.call("_get_sprite_frames_display_scale_multiplier", frames))
+
+	return (PREVIEW_SPRITE_SCALE / max(render_scale, 1.0)) * display_scale_multiplier
 
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:

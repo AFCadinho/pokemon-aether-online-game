@@ -70,9 +70,6 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 func move_player_to_map(map: Node) -> void:
 	var players := map.get_node_or_null("Entities/Players")
-	if players == null:
-		players = map.get_node_or_null("Characters")
-
 	var player_parent := players if players != null else map
 		
 	if player.get_parent() != null:
@@ -285,19 +282,18 @@ func _on_battle_ended(_result: Dictionary) -> void:
 	end_wild_battle()
 
 func _lock_overworld_for_battle() -> void:
-	GameState.lock_input()
-	player.is_moving = false
-	player.target_position = player.global_position
-	player.move_start_position = player.global_position
-	player.move_elapsed = 0.0
+	GameState.lock_overworld_input()
+	if player.has_method("reset_movement_state"):
+		player.reset_movement_state()
 	player.set_process(false)
 	player.set_physics_process(false)
-	player.set_idle_frame()
 
 func _unlock_overworld_after_battle() -> void:
+	if player.has_method("reset_movement_state"):
+		player.reset_movement_state()
 	player.set_process(true)
 	player.set_physics_process(true)
-	GameState.unlock_input()
+	GameState.unlock_overworld_input()
 
 func _abort_battle_start() -> void:
 	is_in_battle = false

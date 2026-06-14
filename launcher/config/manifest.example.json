@@ -6,6 +6,13 @@
     "sha256": "",
     "executable": "Pokemon Aether Online.exe"
   },
+  "launcher": {
+    "version": "0.1.0",
+    "url": "https://example.com/pokemon-aether/builds/launcher/latest/PokemonAetherLauncher-windows.zip",
+    "sha256": "",
+    "sizeBytes": 12345678,
+    "binary": "Pokemon Aether Launcher.exe"
+  },
   "assetPacks": [
     {
       "id": "pokemon-home",
@@ -48,7 +55,8 @@
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-front-v2.zip",
       "sha256": "",
       "sizeBytes": 315362253,
-      "optional": true
+      "optional": true,
+      "autoUpdateIfInstalled": true
     },
     {
       "id": "pokemon-gen5-back",
@@ -56,7 +64,8 @@
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-back-v2.zip",
       "sha256": "",
       "sizeBytes": 248810078,
-      "optional": true
+      "optional": true,
+      "autoUpdateIfInstalled": true
     },
     {
       "id": "pokemon-gen5-shiny-front",
@@ -64,7 +73,8 @@
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-front-v2.zip",
       "sha256": "",
       "sizeBytes": 318368865,
-      "optional": true
+      "optional": true,
+      "autoUpdateIfInstalled": true
     },
     {
       "id": "pokemon-gen5-shiny-back",
@@ -72,7 +82,8 @@
       "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-back-v2.zip",
       "sha256": "",
       "sizeBytes": 251913753,
-      "optional": true
+      "optional": true,
+      "autoUpdateIfInstalled": true
     }
   ]
 }

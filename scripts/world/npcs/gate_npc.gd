@@ -23,14 +23,14 @@ func is_gate_open() -> bool:
 
 
 func on_route_gate_blocked(player: Node2D) -> void:
-	GameState.input_locked = true
+	GameState.lock_overworld_input()
 	_face_body(player)
 	if player.has_method("face_world_position"):
 		player.face_world_position(get_feet_position())
 
 	await show_gate_dialogue()
 	_set_idle_frame(_get_cardinal_direction(facing_direction))
-	GameState.input_locked = false
+	GameState.unlock_overworld_input()
 
 
 func interact_with_player(_player: Node2D) -> void:

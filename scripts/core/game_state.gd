@@ -7,13 +7,38 @@ var player_direction: Vector2 = Vector2.DOWN
 var current_map: Node = null
 
 var input_locked := false
+var overworld_input_locked := false
+var ui_input_locked := false
 var world_debug_enabled := false
+var repel_enabled := false
 
 func lock_input() -> void:
 	input_locked = true
+	overworld_input_locked = true
+	ui_input_locked = true
 	
 func unlock_input() -> void:
 	input_locked = false
+	overworld_input_locked = false
+	ui_input_locked = false
+
+func lock_overworld_input() -> void:
+	overworld_input_locked = true
+
+func unlock_overworld_input() -> void:
+	overworld_input_locked = false
+
+func lock_ui_input() -> void:
+	ui_input_locked = true
+
+func unlock_ui_input() -> void:
+	ui_input_locked = false
+
+func is_overworld_input_locked() -> bool:
+	return input_locked or overworld_input_locked
+
+func is_ui_input_locked() -> bool:
+	return ui_input_locked
 
 func get_world() -> Node:
 	var tree := get_tree()

@@ -4,7 +4,6 @@ class_name MapCharacterBlocking
 
 const NPC_CONTAINER_PATHS: Array[String] = [
 	"Entities/NPCs",
-	"Characters/NPCs",
 ]
 const ROUTE_GATES_LAYER_NAME := "RouteGates"
 

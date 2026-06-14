@@ -1377,6 +1377,9 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	if not _apply_team_preview_battle_response(api_response):
 		return
 
+	if not _should_show_team_preview(api_response):
+		_show_default_trainer_leads_before_selection(player_pokemon, api_response)
+
 	var lead_response := await _run_trainer_lead_selection(api_response)
 	if lead_response.is_empty():
 		return
@@ -1425,6 +1428,41 @@ func _apply_team_preview_battle_response(api_response: Dictionary) -> bool:
 	_update_party_slots()
 	_update_vs_panel_names()
 	return true
+
+func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_response: Dictionary) -> void:
+	player_sprite_box.set_single_pokemon(player_pokemon, "back")
+	player_hud_panel.set_pokemon_data(
+		player_pokemon.species,
+		player_pokemon.level,
+		player_pokemon.current_hp,
+		max(player_pokemon.max_hp, 1)
+	)
+
+	var trainer_team_value: Variant = api_response.get("trainerTeam", [])
+	if not (trainer_team_value is Array):
+		return
+
+	var trainer_team: Array = trainer_team_value as Array
+	if trainer_team.is_empty():
+		return
+
+	var lead_value: Variant = trainer_team[0]
+	if not (lead_value is Dictionary):
+		return
+
+	var lead_data: Dictionary = lead_value as Dictionary
+	var species: String = str(lead_data.get("displaySpecies", lead_data.get("species", "")))
+	if species == "":
+		return
+
+	var level: int = int(lead_data.get("level", 100))
+	var max_hp: int = max(int(lead_data.get("maxHp", lead_data.get("max_hp", 1))), 1)
+	var hp: int = int(lead_data.get("hp", lead_data.get("currentHp", lead_data.get("current_hp", max_hp))))
+	var status: String = str(lead_data.get("status", ""))
+	var gender: String = str(lead_data.get("gender", ""))
+	var is_shiny: bool = bool(lead_data.get("shiny", false))
+	enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+	enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
 	event_renderer.add_turn_header(battle_state.get_turn())

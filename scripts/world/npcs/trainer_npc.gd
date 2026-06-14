@@ -2,8 +2,7 @@ extends BaseNPC
 
 class_name TrainerNPC
 
-@export var trainer_id := "route_1_bug_catcher_1"
-@export var sight_direction := Vector2.DOWN
+@export var trainer_id := "kanto_route_1_bug_catcher_1"
 @export var sight_range_tiles := 5
 
 @onready var vision_collision_shape: CollisionShape2D = $VisionArea/CollisionShape2D
@@ -20,7 +19,7 @@ func _ready() -> void:
 func walk_to_player(body: Node2D) -> void:
 	var player_tile := _to_tile(_get_body_target_feet_position(body))
 	var npc_tile := _to_tile(get_feet_position())
-	var direction := _get_cardinal_direction(sight_direction)
+	var direction := _get_cardinal_direction(facing_direction)
 	if direction == Vector2.ZERO:
 		return
 	
@@ -52,7 +51,7 @@ func show_intro_dialogue() -> void:
 	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box")
 	if dialogue_box == null:
 		push_warning("TrainerNPC: DialogueBox/Box not found.")
-		GameState.input_locked = false
+		GameState.unlock_overworld_input()
 		return
 	
 	var metadata_response: Dictionary = await TrainerMetadataService.get_trainer_metadata(trainer_id)
@@ -85,7 +84,7 @@ func start_trainer_battle(trainer_metadata: Dictionary) -> bool:
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_trainer_battle"):
 		push_warning("TrainerNPC: World cannot start trainer battle.")
-		GameState.input_locked = false
+		GameState.unlock_overworld_input()
 		return false
 
 	return await world.start_trainer_battle(trainer_metadata)
@@ -134,11 +133,11 @@ func _try_trigger_vision(body: Node2D) -> void:
 		return
 	
 	triggered = true
-	GameState.input_locked = true
+	GameState.lock_overworld_input()
 	await _wait_for_body_tile_movement(body)
 	if not _is_body_in_sight_range(body):
 		triggered = false
-		GameState.input_locked = false
+		GameState.unlock_overworld_input()
 		return
 
 	await walk_to_player(body)
@@ -170,7 +169,7 @@ func _is_body_in_sight_range(body: Node2D) -> bool:
 	if range_tiles == 0:
 		return false
 	
-	var direction := _get_cardinal_direction(sight_direction)
+	var direction := _get_cardinal_direction(facing_direction)
 	var npc_tile := _to_tile(get_feet_position())
 	var body_tile := _to_tile(_get_body_target_feet_position(body))
 	var delta := body_tile - npc_tile
@@ -189,7 +188,7 @@ func _configure_vision_area() -> void:
 		vision_collision_shape.disabled = true
 		return
 	
-	var direction := _get_cardinal_direction(sight_direction)
+	var direction := _get_cardinal_direction(facing_direction)
 	var shape := RectangleShape2D.new()
 	var range_pixels := float(range_tiles * TILE_SIZE)
 	

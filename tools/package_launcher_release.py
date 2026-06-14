@@ -17,6 +17,13 @@ PLATFORMS = {
         "zip_name": "game-{version}-windows.zip",
         "manifest_name": "manifest-windows.json",
         "executable": "Pokemon Aether Online.exe",
+        "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "windows",
+        "launcher_zip_name": "PokemonAetherLauncher-windows.zip",
+        "launcher_executable": "Pokemon Aether Launcher.exe",
+        "launcher_required_files": [
+            "Pokemon Aether Launcher.exe",
+            "Pokemon Aether Launcher.pck",
+        ],
         "required_files": [
             "Pokemon Aether Online.exe",
             "Pokemon Aether Online.pck",
@@ -27,6 +34,13 @@ PLATFORMS = {
         "zip_name": "game-{version}-linux.zip",
         "manifest_name": "manifest-linux.json",
         "executable": "Pokemon Aether Online.x86_64",
+        "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "linux",
+        "launcher_zip_name": "PokemonAetherLauncher-linux.zip",
+        "launcher_executable": "Pokemon Aether Launcher.x86_64",
+        "launcher_required_files": [
+            "Pokemon Aether Launcher.x86_64",
+            "Pokemon Aether Launcher.pck",
+        ],
         "required_files": [
             "Pokemon Aether Online.x86_64",
             "Pokemon Aether Online.pck",
@@ -86,6 +100,16 @@ def main() -> None:
         metavar="ID:VERSION:FILE_NAME[:SIZE_BYTES[:OPTIONAL]]",
         help="Existing hosted asset pack to include in each manifest without copying or hashing it.",
     )
+    parser.add_argument(
+        "--include-launcher",
+        action="store_true",
+        help="Include launcher self-update metadata in each platform manifest.",
+    )
+    parser.add_argument(
+        "--launcher-prefix",
+        default="launcher/latest",
+        help="Public URL path prefix for launcher zip URLs.",
+    )
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir).resolve()
@@ -108,6 +132,22 @@ def main() -> None:
         zip_path = output_dir / zip_name
         _zip_directory(build_dir, zip_path)
 
+        launcher_data: dict[str, object] = {}
+        if args.include_launcher:
+            launcher_build_dir = platform_config["launcher_build_dir"]
+            _assert_required_files(launcher_build_dir, platform_config["launcher_required_files"])
+            launcher_zip_name = platform_config["launcher_zip_name"]
+            launcher_zip_path = output_dir / launcher_zip_name
+            _zip_directory(launcher_build_dir, launcher_zip_path)
+
+            launcher_data = {
+                "version": args.version,
+                "url": _build_url(base_url, args.launcher_prefix, launcher_zip_name),
+                "sha256": _sha256(launcher_zip_path),
+                "sizeBytes": launcher_zip_path.stat().st_size,
+                "binary": platform_config["launcher_executable"],
+            }
+
         manifest = {
             "gameVersion": args.version,
             "game": {
@@ -119,10 +159,14 @@ def main() -> None:
             },
             "assetPacks": asset_packs,
         }
+        if launcher_data:
+            manifest["launcher"] = launcher_data
         manifests[platform_name] = manifest
 
         manifest_path = output_dir / platform_config["manifest_name"]
         _write_json(manifest_path, manifest)
+        if args.include_launcher:
+            print(f"Wrote {_display_path(launcher_zip_path)}")
         print(f"Wrote {_display_path(zip_path)}")
         print(f"Wrote {_display_path(manifest_path)}")
 

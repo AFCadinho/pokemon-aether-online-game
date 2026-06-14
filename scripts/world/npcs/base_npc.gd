@@ -246,7 +246,7 @@ func _can_start_manual_interaction() -> bool:
 	if not player_nearby or nearby_player == null:
 		return false
 
-	if GameState.input_locked:
+	if GameState.is_overworld_input_locked():
 		return false
 
 	if _is_ui_typing():
@@ -264,13 +264,13 @@ func _can_start_manual_interaction() -> bool:
 
 func _start_manual_interaction(body: Node2D) -> void:
 	is_interacting = true
-	GameState.input_locked = true
+	GameState.lock_overworld_input()
 	_face_body(body)
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
 
 	await interact_with_player(body)
-	GameState.input_locked = false
+	GameState.unlock_overworld_input()
 	is_interacting = false
 
 

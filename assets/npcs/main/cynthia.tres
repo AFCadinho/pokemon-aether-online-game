@@ -20,12 +20,27 @@ region = Rect2(128, 192, 64, 64)
 
 [resource]
 animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mjhtk")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_up",
 "speed": 5.0
 }, {
 "frames": [{

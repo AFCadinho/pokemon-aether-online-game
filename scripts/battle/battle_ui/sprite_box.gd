@@ -10,6 +10,7 @@ const FRAME_ANIMATION_SPEED := 3.0
 const SHEET_ANIMATION_SPEED := 10.0
 const BATTLE_SPRITE_SCALE := Vector2(2, 2)
 const BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 0.85
+const GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 1.25
 const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
 const PIXEL_SPRITE_STYLE_ORDER: Array[String] = ["gen5", "legacy_showdown", "showdown"]
@@ -39,6 +40,7 @@ var active_tween: Tween
 var base_sprite_positions: Dictionary = {}
 var sprite_target_scales: Dictionary = {}
 var sprite_frames_render_scales: Dictionary = {}
+var sprite_frames_display_scale_multipliers: Dictionary = {}
 
 func _ready() -> void:
 	_set_sprite_filter(single_sprite)
@@ -290,7 +292,8 @@ func _set_sprite_target_scale_from_frames(sprite: AnimatedSprite2D, sprite_frame
 		sprite_target_scales[_get_sprite_key(sprite)] = BATTLE_SPRITE_SCALE
 		return
 
-	sprite_target_scales[_get_sprite_key(sprite)] = (BATTLE_SPRITE_SCALE / render_scale) * BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER
+	var display_scale_multiplier: float = BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER * _get_sprite_frames_display_scale_multiplier(sprite_frames)
+	sprite_target_scales[_get_sprite_key(sprite)] = (BATTLE_SPRITE_SCALE / render_scale) * display_scale_multiplier
 
 func _get_sprite_target_scale(sprite: AnimatedSprite2D) -> Vector2:
 	var target_scale_value: Variant = sprite_target_scales.get(_get_sprite_key(sprite), BATTLE_SPRITE_SCALE)
@@ -302,12 +305,24 @@ func _get_sprite_target_scale(sprite: AnimatedSprite2D) -> Vector2:
 func _set_sprite_frames_render_scale(sprite_frames: SpriteFrames, render_scale: float) -> void:
 	sprite_frames_render_scales[_get_sprite_frames_key(sprite_frames)] = max(render_scale, 1.0)
 
+func _set_sprite_frames_display_scale_multiplier(sprite_frames: SpriteFrames, multiplier: float) -> void:
+	sprite_frames_display_scale_multipliers[_get_sprite_frames_key(sprite_frames)] = max(multiplier, 1.0)
+
 func _get_sprite_frames_render_scale(sprite_frames: SpriteFrames) -> float:
 	var render_scale_value: Variant = sprite_frames_render_scales.get(_get_sprite_frames_key(sprite_frames), 1.0)
 	if render_scale_value is float:
 		return render_scale_value
 	if render_scale_value is int:
 		return float(render_scale_value)
+
+	return 1.0
+
+func _get_sprite_frames_display_scale_multiplier(sprite_frames: SpriteFrames) -> float:
+	var multiplier_value: Variant = sprite_frames_display_scale_multipliers.get(_get_sprite_frames_key(sprite_frames), 1.0)
+	if multiplier_value is float:
+		return multiplier_value
+	if multiplier_value is int:
+		return float(multiplier_value)
 
 	return 1.0
 
@@ -323,16 +338,19 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 			for sheet_metadata_path in PokemonAssets.build_pokemon_sprite_path("%s/%s/animation.json" % [sprite_root, asset_id]):
 				var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, sprite_root, species)
 				if metadata_frames != null:
+					_apply_sprite_source_display_scale(metadata_frames, sheet_metadata_path)
 					return metadata_frames
 
 			for folder in PokemonAssets.build_pokemon_sprite_path("%s/%s" % [sprite_root, asset_id]):
 				var folder_frames := _load_sprite_frames_from_folder(folder)
 				if folder_frames != null:
+					_apply_sprite_source_display_scale(folder_frames, folder)
 					return folder_frames
 
 			for sheet_path in PokemonAssets.build_pokemon_sprite_path("%s/%s.png" % [sprite_root, asset_id]):
 				var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
 				if sheet_frames != null:
+					_apply_sprite_source_display_scale(sheet_frames, sheet_path)
 					return sheet_frames
 
 	var home_frames := _load_sprite_frames_from_home_sprite(species, is_shiny)
@@ -341,6 +359,14 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 
 	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
 	return null
+
+func _apply_sprite_source_display_scale(sprite_frames: SpriteFrames, source_path: String) -> void:
+	if _is_gen5_sprite_path(source_path):
+		_set_sprite_frames_display_scale_multiplier(sprite_frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
+
+func _is_gen5_sprite_path(source_path: String) -> bool:
+	var normalized_path := source_path.replace("\\", "/").to_lower()
+	return normalized_path.contains("/gen5/")
 
 func _get_sprite_asset_roots(side: String, is_shiny: bool) -> Array[String]:
 	var roots: Array[String] = []

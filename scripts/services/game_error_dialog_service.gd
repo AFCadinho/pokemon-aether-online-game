@@ -14,7 +14,7 @@ func show_report_to_staff_message(dialogue_box: Node = null) -> void:
 		target_dialogue_box = _get_dialogue_box()
 
 	if target_dialogue_box == null or not target_dialogue_box.has_method("start_dialogue"):
-		GameState.input_locked = false
+		GameState.unlock_input()
 		return
 
 	target_dialogue_box.start_dialogue(REPORT_TO_STAFF_LINES, DEFAULT_SPEAKER)

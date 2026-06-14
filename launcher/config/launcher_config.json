@@ -4,5 +4,6 @@
 	"Linux": "https://updates.pokemonaetheronline.com/manifest-linux.json"
   },
   "newsUrl": "https://updates.pokemonaetheronline.com/news.json",
-  "discordUrl": "https://discord.com/invite/b6WexWT8HX"
+  "discordUrl": "https://discord.com/invite/b6WexWT8HX",
+  "patchNotesUrl": "https://pokemonaetheronline.com/patch-notes"
 }

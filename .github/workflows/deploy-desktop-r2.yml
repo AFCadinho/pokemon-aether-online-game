@@ -201,6 +201,11 @@ jobs:
 
       - name: Package launcher release
         run: |
+          launcher_args=()
+          if [ "${BUILD_LAUNCHER}" = "true" ]; then
+            launcher_args+=(--include-launcher)
+          fi
+
           python3 tools/package_launcher_release.py \
             --version "${LAUNCHER_RELEASE_VERSION}" \
             --base-url "${UPDATE_BASE_URL}" \
@@ -208,6 +213,7 @@ jobs:
             --asset-prefix assets \
             --output-dir builds/launcher \
             --default-platform windows \
+            "${launcher_args[@]}" \
             $(cat /tmp/asset_pack_args.txt)
 
       - name: Verify launcher release size
