@@ -1082,7 +1082,7 @@ rm -rf \"$UPDATE_DIR\"
 	var exec_args := PackedStringArray()
 	var launcher_command := ""
 	if os_name == "Windows":
-		exec_args = PackedStringArray(["/C", script_path])
+		exec_args = PackedStringArray(["/C", "\"%s\"" % script_path])
 		launcher_command = "cmd.exe"
 	else:
 		_exec_make_executable(script_path)
