@@ -3,7 +3,7 @@ extends Node
 class_name GatewayApiConfigNode
 
 const LOCAL_GATEWAY_URL := "http://localhost:8000"
-const PRODUCTION_GATEWAY_URL := "https://api.pokemonaetheronline.com"
+const PRODUCTION_GATEWAY_URL := "https://api.pokeaether.com"
 
 var cached_url := ""
 

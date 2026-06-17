@@ -16,34 +16,34 @@ PLATFORMS = {
         "build_dir": PROJECT_ROOT / "builds" / "windows",
         "zip_name": "game-{version}-windows.zip",
         "manifest_name": "manifest-windows.json",
-        "executable": "Pokemon Aether Online.exe",
+        "executable": "PokeAether.exe",
         "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "windows",
-        "launcher_zip_name": "PokemonAetherLauncher-windows.zip",
-        "launcher_executable": "Pokemon Aether Launcher.exe",
+        "launcher_zip_name": "PokeAetherLauncher-windows.zip",
+        "launcher_executable": "PokeAether Launcher.exe",
         "launcher_required_files": [
-            "Pokemon Aether Launcher.exe",
-            "Pokemon Aether Launcher.pck",
+            "PokeAether Launcher.exe",
+            "PokeAether Launcher.pck",
         ],
         "required_files": [
-            "Pokemon Aether Online.exe",
-            "Pokemon Aether Online.pck",
+            "PokeAether.exe",
+            "PokeAether.pck",
         ],
     },
     "linux": {
         "build_dir": PROJECT_ROOT / "builds" / "linux",
         "zip_name": "game-{version}-linux.zip",
         "manifest_name": "manifest-linux.json",
-        "executable": "Pokemon Aether Online.x86_64",
+        "executable": "PokeAether.x86_64",
         "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "linux",
-        "launcher_zip_name": "PokemonAetherLauncher-linux.zip",
-        "launcher_executable": "Pokemon Aether Launcher.x86_64",
+        "launcher_zip_name": "PokeAetherLauncher-linux.zip",
+        "launcher_executable": "PokeAether Launcher.x86_64",
         "launcher_required_files": [
-            "Pokemon Aether Launcher.x86_64",
-            "Pokemon Aether Launcher.pck",
+            "PokeAether Launcher.x86_64",
+            "PokeAether Launcher.pck",
         ],
         "required_files": [
-            "Pokemon Aether Online.x86_64",
-            "Pokemon Aether Online.pck",
+            "PokeAether.x86_64",
+            "PokeAether.pck",
         ],
     },
 }
@@ -51,7 +51,7 @@ PLATFORMS = {
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Package exported Godot builds for the Pokemon Aether launcher."
+        description="Package exported Godot builds for the PokeAether launcher."
     )
     parser.add_argument("--version", required=True, help="Release version, for example 0.1.0.")
     parser.add_argument(

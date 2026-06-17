@@ -19,13 +19,14 @@ atlas = ExtResource("1_bug_catcher")
 region = Rect2(128, 128, 64, 64)
 
 [resource]
+resource_local_to_scene = true
 animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e8kmq")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"default",
 "speed": 5.0
 }, {
 "frames": [{

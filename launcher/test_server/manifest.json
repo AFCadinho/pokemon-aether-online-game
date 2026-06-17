@@ -4,7 +4,7 @@
     "version": "0.1.0-test",
     "url": "http://127.0.0.1:8000/game-v0.1.0-test-v3.zip",
     "sha256": "",
-    "executable": "PokemonAetherOnline.exe"
+    "executable": "PokeAether.exe"
   },
   "assetPacks": [
     {

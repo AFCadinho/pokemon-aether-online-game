@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Pokemon Aether Online"
-run/main_scene="uid://d45mhj1xs83s"
+config/name="PokeAether"
+run/main_scene="uid://duw5e076ulb3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"
 
@@ -30,6 +30,7 @@ GameErrorDialogService="*res://scripts/services/game_error_dialog_service.gd"
 PokemonDataApiClient="*res://scripts/battle/battle_api/pokemon_data_api_client.gd"
 SettingsManager="*res://scripts/services/settings_manager.gd"
 MusicManager="*res://scripts/services/music_manager.gd"
+AuthService="*res://scripts/services/auth_service.gd"
 
 [display]
 

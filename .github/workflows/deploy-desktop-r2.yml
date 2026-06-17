@@ -24,13 +24,13 @@ env:
   GODOT_VERSION: 4.6.2
   GODOT_RELEASE: stable
   WINDOWS_EXPORT_PRESET: Windows Itch Build
-  WINDOWS_EXPORT_PATH: builds/windows/Pokemon Aether Online.exe
+  WINDOWS_EXPORT_PATH: builds/windows/PokeAether.exe
   WINDOWS_LAUNCHER_EXPORT_PRESET: Windows Launcher
-  WINDOWS_LAUNCHER_EXPORT_PATH: builds/launcher-app/windows/Pokemon Aether Launcher.exe
+  WINDOWS_LAUNCHER_EXPORT_PATH: builds/launcher-app/windows/PokeAether Launcher.exe
   LINUX_EXPORT_PRESET: Linux Itch Build
-  LINUX_EXPORT_PATH: builds/linux/Pokemon Aether Online.x86_64
+  LINUX_EXPORT_PATH: builds/linux/PokeAether.x86_64
   LINUX_LAUNCHER_EXPORT_PRESET: Linux Launcher
-  LINUX_LAUNCHER_EXPORT_PATH: builds/launcher-app/linux/Pokemon Aether Launcher.x86_64
+  LINUX_LAUNCHER_EXPORT_PATH: builds/launcher-app/linux/PokeAether Launcher.x86_64
   POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-v1
   POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-v1
@@ -49,7 +49,7 @@ env:
   POKEMON_GEN5_BACK_ASSET_SIZE_BYTES: 248810078
   POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE_BYTES: 318368865
   POKEMON_GEN5_SHINY_BACK_ASSET_SIZE_BYTES: 251913753
-  UPDATE_BASE_URL: https://updates.pokemonaetheronline.com
+  UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
 
 jobs:
@@ -144,13 +144,13 @@ jobs:
 
       - name: Verify Windows build
         run: |
-          test -f "builds/windows/Pokemon Aether Online.exe"
-          test -f "builds/windows/Pokemon Aether Online.pck"
+          test -f "builds/windows/PokeAether.exe"
+          test -f "builds/windows/PokeAether.pck"
 
       - name: Verify Linux build
         run: |
-          test -f "builds/linux/Pokemon Aether Online.x86_64"
-          test -f "builds/linux/Pokemon Aether Online.pck"
+          test -f "builds/linux/PokeAether.x86_64"
+          test -f "builds/linux/PokeAether.pck"
 
       - name: Export Windows launcher
         if: env.BUILD_LAUNCHER == 'true'
@@ -169,12 +169,12 @@ jobs:
       - name: Package launcher app downloads
         if: env.BUILD_LAUNCHER == 'true'
         run: |
-          test -f "builds/launcher-app/windows/Pokemon Aether Launcher.exe"
-          test -f "builds/launcher-app/windows/Pokemon Aether Launcher.pck"
-          test -f "builds/launcher-app/linux/Pokemon Aether Launcher.x86_64"
-          test -f "builds/launcher-app/linux/Pokemon Aether Launcher.pck"
-          python3 tools/package_directory_zip.py builds/launcher-app/windows builds/launcher-app/PokemonAetherLauncher-windows.zip
-          python3 tools/package_directory_zip.py builds/launcher-app/linux builds/launcher-app/PokemonAetherLauncher-linux.zip
+          test -f "builds/launcher-app/windows/PokeAether Launcher.exe"
+          test -f "builds/launcher-app/windows/PokeAether Launcher.pck"
+          test -f "builds/launcher-app/linux/PokeAether Launcher.x86_64"
+          test -f "builds/launcher-app/linux/PokeAether Launcher.pck"
+          python3 tools/package_directory_zip.py builds/launcher-app/windows builds/launcher-app/PokeAetherLauncher-windows.zip
+          python3 tools/package_directory_zip.py builds/launcher-app/linux builds/launcher-app/PokeAetherLauncher-linux.zip
 
       - name: Package Pokemon sprite asset packs
         run: |
@@ -242,12 +242,12 @@ jobs:
           if [ "${BUILD_LAUNCHER}" = "true" ]; then
             python3 tools/upload_launcher_release.py builds/launcher-app \
               --prefix launcher/latest \
-              --file PokemonAetherLauncher-windows.zip \
-              --file PokemonAetherLauncher-linux.zip
+              --file PokeAetherLauncher-windows.zip \
+              --file PokeAetherLauncher-linux.zip
             python3 tools/upload_launcher_release.py builds/launcher-app \
               --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
-              --file PokemonAetherLauncher-windows.zip \
-              --file PokemonAetherLauncher-linux.zip
+              --file PokeAetherLauncher-windows.zip \
+              --file PokeAetherLauncher-linux.zip
           else
             echo "Skipping launcher download upload because BUILD_LAUNCHER=false."
           fi
@@ -268,4 +268,4 @@ jobs:
           path: |
             builds/launcher/game-*.zip
             builds/launcher/manifest*.json
-            builds/launcher-app/PokemonAetherLauncher-*.zip
+            builds/launcher-app/PokeAetherLauncher-*.zip

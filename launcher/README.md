@@ -1,6 +1,6 @@
-# Pokemon Aether Launcher
+# PokeAether Launcher
 
-Small Godot launcher project for Pokemon Aether Online.
+Small Godot launcher project for PokeAether.
 
 ## Current flow
 
@@ -29,8 +29,8 @@ The launcher can pick a manifest per OS:
 ```json
 {
   "manifestUrls": {
-    "Windows": "https://updates.pokemonaetheronline.com/manifest-windows.json",
-    "Linux": "https://updates.pokemonaetheronline.com/manifest-linux.json"
+    "Windows": "https://updates.pokeaether.com/manifest-windows.json",
+    "Linux": "https://updates.pokeaether.com/manifest-linux.json"
   }
 }
 ```
@@ -70,7 +70,7 @@ This writes launcher-ready files such as:
 
 ```text
 launcher/test_server/game-0.1.0-linux.zip
-launcher/test_server/PokemonAetherLauncher-linux.zip (with --include-launcher)
+launcher/test_server/PokeAetherLauncher-linux.zip (with --include-launcher)
 launcher/test_server/manifest-linux.json
 launcher/test_server/manifest.json
 ```
@@ -80,7 +80,7 @@ For a public release, use the real hosted URL as `--base-url` and the production
 ```bash
 python3 tools/package_launcher_release.py \
   --version 0.1.0 \
-  --base-url https://updates.pokemonaetheronline.com \
+  --base-url https://updates.pokeaether.com \
   --game-prefix game \
   --asset-prefix assets \
   --include-launcher \
@@ -95,10 +95,10 @@ The production R2 bucket uses this layout:
 manifest.json
 manifest-linux.json
 manifest-windows.json
-launcher/latest/PokemonAetherLauncher-linux.zip
-launcher/latest/PokemonAetherLauncher-windows.zip
-launcher/0.1.0/PokemonAetherLauncher-linux.zip
-launcher/0.1.0/PokemonAetherLauncher-windows.zip
+launcher/latest/PokeAetherLauncher-linux.zip
+launcher/latest/PokeAetherLauncher-windows.zip
+launcher/0.1.0/PokeAetherLauncher-linux.zip
+launcher/0.1.0/PokeAetherLauncher-windows.zip
 game/game-0.1.0-linux.zip
 game/game-0.1.0-windows.zip
 assets/pokemon-front-v1.zip
@@ -127,7 +127,7 @@ Set R2 credentials in your shell:
 
 ```bash
 export R2_ACCOUNT_ID="64ea7ddcb5e97df8500c33b8cb48f921"
-export R2_BUCKET="pokemon-aether-updates"
+export R2_BUCKET="pokeaether-updates"
 export R2_ACCESS_KEY_ID="..."
 export R2_SECRET_ACCESS_KEY="..."
 ```
@@ -147,8 +147,8 @@ python3 tools/upload_launcher_release.py builds/launcher --layout updates
 The CI workflow also uploads launcher app downloads to stable public URLs:
 
 ```text
-https://updates.pokemonaetheronline.com/launcher/latest/PokemonAetherLauncher-windows.zip
-https://updates.pokemonaetheronline.com/launcher/latest/PokemonAetherLauncher-linux.zip
+https://updates.pokeaether.com/launcher/latest/PokeAetherLauncher-windows.zip
+https://updates.pokeaether.com/launcher/latest/PokeAetherLauncher-linux.zip
 ```
 
 GitHub Actions can upload to R2 automatically when these repository secrets are configured:

@@ -110,7 +110,7 @@ def _build_object_key(file_name: str, prefix: str, layout: str) -> str:
             object_parts.append("game")
         elif file_name.startswith("pokemon-") and file_name.endswith(".zip"):
             object_parts.append("assets")
-        elif file_name.startswith("PokemonAetherLauncher-") and file_name.endswith(".zip"):
+        elif file_name.startswith("PokeAetherLauncher-") and file_name.endswith(".zip"):
             object_parts.append("launcher")
             object_parts.append("latest")
     object_parts.append(file_name)

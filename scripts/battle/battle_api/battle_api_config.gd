@@ -1,7 +1,7 @@
 extends Node
 
 const LOCAL_API_URL = "http://localhost:8000"
-const PRODUCTION_API_URL = "https://api.pokemonaetheronline.com"
+const PRODUCTION_API_URL = "https://api.pokeaether.com"
 
 var cached_url := ""
 

@@ -46,7 +46,7 @@ jobs:
           )
 
           payload = {
-              "username": "Pokemon Aether Online",
+              "username": "PokeAether",
               "content": "",
               "allowed_mentions": {"parse": []},
               "embeds": [

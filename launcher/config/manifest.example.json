@@ -2,57 +2,57 @@
   "gameVersion": "0.1.0",
   "game": {
     "version": "0.1.0",
-    "url": "https://example.com/pokemon-aether/builds/windows/game-v0.1.0.zip",
+    "url": "https://example.com/pokeaether/builds/windows/game-v0.1.0.zip",
     "sha256": "",
-    "executable": "Pokemon Aether Online.exe"
+    "executable": "PokeAether.exe"
   },
   "launcher": {
     "version": "0.1.0",
-    "url": "https://example.com/pokemon-aether/builds/launcher/latest/PokemonAetherLauncher-windows.zip",
+    "url": "https://example.com/pokeaether/builds/launcher/latest/PokeAetherLauncher-windows.zip",
     "sha256": "",
     "sizeBytes": 12345678,
-    "binary": "Pokemon Aether Launcher.exe"
+    "binary": "PokeAether Launcher.exe"
   },
   "assetPacks": [
     {
       "id": "pokemon-home",
       "version": "pokemon-home-v1",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-home-v1.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-home-v1.zip",
       "sha256": "",
       "sizeBytes": 61327194
     },
     {
       "id": "pokemon-front",
       "version": "pokemon-front-scale1-128-v1",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-front-scale1-128-v1.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-front-scale1-128-v1.zip",
       "sha256": "",
       "sizeBytes": 90099039
     },
     {
       "id": "pokemon-back",
       "version": "pokemon-back-scale1-128-v1",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-back-scale1-128-v1.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-back-scale1-128-v1.zip",
       "sha256": "",
       "sizeBytes": 78450869
     },
     {
       "id": "pokemon-shiny-front",
       "version": "pokemon-shiny-front-scale1-128-v1",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-shiny-front-scale1-128-v1.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-shiny-front-scale1-128-v1.zip",
       "sha256": "",
       "sizeBytes": 88077401
     },
     {
       "id": "pokemon-shiny-back",
       "version": "pokemon-shiny-back-scale1-128-v1",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-shiny-back-scale1-128-v1.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-shiny-back-scale1-128-v1.zip",
       "sha256": "",
       "sizeBytes": 72477263
     },
     {
       "id": "pokemon-gen5-front",
       "version": "pokemon-gen5-front-v2",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-front-v2.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-gen5-front-v2.zip",
       "sha256": "",
       "sizeBytes": 315362253,
       "optional": true,
@@ -61,7 +61,7 @@
     {
       "id": "pokemon-gen5-back",
       "version": "pokemon-gen5-back-v2",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-back-v2.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-gen5-back-v2.zip",
       "sha256": "",
       "sizeBytes": 248810078,
       "optional": true,
@@ -70,7 +70,7 @@
     {
       "id": "pokemon-gen5-shiny-front",
       "version": "pokemon-gen5-shiny-front-v2",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-front-v2.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-gen5-shiny-front-v2.zip",
       "sha256": "",
       "sizeBytes": 318368865,
       "optional": true,
@@ -79,7 +79,7 @@
     {
       "id": "pokemon-gen5-shiny-back",
       "version": "pokemon-gen5-shiny-back-v2",
-      "url": "https://example.com/pokemon-aether/assets/pokemon-gen5-shiny-back-v2.zip",
+      "url": "https://example.com/pokeaether/assets/pokemon-gen5-shiny-back-v2.zip",
       "sha256": "",
       "sizeBytes": 251913753,
       "optional": true,

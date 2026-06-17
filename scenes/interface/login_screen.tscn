@@ -378,6 +378,12 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
 placeholder_text = "password"
 secret = true
 
+[node name="RememberMeCheckbox" type="CheckBox" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=216259224]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 13
+text = "Remember me"
+
 [node name="StatusLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1342839935]
 visible = false
 layout_mode = 2
