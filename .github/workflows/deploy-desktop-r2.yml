@@ -166,16 +166,6 @@ jobs:
           cd launcher
           ../godot --headless --export-release "${LINUX_LAUNCHER_EXPORT_PRESET}" "../${LINUX_LAUNCHER_EXPORT_PATH}"
 
-      - name: Package launcher app downloads
-        if: env.BUILD_LAUNCHER == 'true'
-        run: |
-          test -f "builds/launcher-app/windows/PokeAether Launcher.exe"
-          test -f "builds/launcher-app/windows/PokeAether Launcher.pck"
-          test -f "builds/launcher-app/linux/PokeAether Launcher.x86_64"
-          test -f "builds/launcher-app/linux/PokeAether Launcher.pck"
-          python3 tools/package_directory_zip.py builds/launcher-app/windows builds/launcher-app/PokeAetherLauncher-windows.zip
-          python3 tools/package_directory_zip.py builds/launcher-app/linux builds/launcher-app/PokeAetherLauncher-linux.zip
-
       - name: Package Pokemon sprite asset packs
         run: |
           : > /tmp/asset_pack_args.txt
@@ -240,11 +230,7 @@ jobs:
           fi
           python3 tools/upload_launcher_release.py builds/launcher --layout updates
           if [ "${BUILD_LAUNCHER}" = "true" ]; then
-            python3 tools/upload_launcher_release.py builds/launcher-app \
-              --prefix launcher/latest \
-              --file PokeAetherLauncher-windows.zip \
-              --file PokeAetherLauncher-linux.zip
-            python3 tools/upload_launcher_release.py builds/launcher-app \
+            python3 tools/upload_launcher_release.py builds/launcher \
               --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
               --file PokeAetherLauncher-windows.zip \
               --file PokeAetherLauncher-linux.zip
@@ -268,4 +254,4 @@ jobs:
           path: |
             builds/launcher/game-*.zip
             builds/launcher/manifest*.json
-            builds/launcher-app/PokeAetherLauncher-*.zip
+            builds/launcher/PokeAetherLauncher-*.zip
