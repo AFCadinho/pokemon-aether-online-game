@@ -1003,6 +1003,9 @@ func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
 		_cleanup_launcher_update_files()
 		return false
 
+	var packaged_binary_relative_path := _get_relative_path(packaged_binary_path, staging_dir)
+	var updated_launcher_path := target_dir.path_join(packaged_binary_relative_path)
+
 	var os_name := OS.get_name()
 	var script_path := temp_dir.path_join(LAUNCHER_UPDATE_UNIX_SCRIPT)
 	if os_name == "Windows":
@@ -1012,10 +1015,13 @@ func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
 	if os_name == "Windows":
 		var executable_name := launcher_binary_path.get_file()
 		var launcher_exe_backup := "%s.bak" % launcher_binary_path
+		var launcher_pck_path := launcher_binary_path.get_basename() + ".pck"
 		script_text = """@echo off
 setlocal
 set "LAUNCHER_EXE=%s"
 set "LAUNCHER_EXE_BAK=%s"
+set "LAUNCHER_PCK=%s"
+set "UPDATED_LAUNCHER_EXE=%s"
 set "LAUNCHER_DIR=%s"
 set "UPDATE_DIR=%s"
 set "LAUNCHER_EXE_NAME=%s"
@@ -1056,16 +1062,28 @@ if errorlevel 1 (
 )
 del /F /Q "%%LAUNCHER_EXE_BAK%%" >nul 2>nul
 echo [launcher] starting updated launcher... >> "%%UPDATE_LOG%%"
-start "" "%%LAUNCHER_EXE%%"
+if exist "%%UPDATED_LAUNCHER_EXE%%" (
+	if /I not "%%LAUNCHER_EXE%%"=="%%UPDATED_LAUNCHER_EXE%%" (
+		del /F /Q "%%LAUNCHER_EXE%%" >nul 2>nul
+		del /F /Q "%%LAUNCHER_PCK%%" >nul 2>nul
+	)
+	start "" "%%UPDATED_LAUNCHER_EXE%%"
+) else (
+	echo [launcher] updated launcher path missing, starting original path. >> "%%UPDATE_LOG%%"
+	start "" "%%LAUNCHER_EXE%%"
+)
 rmdir /S /Q "%%UPDATE_DIR%%" >nul 2>nul
 echo [launcher] updater finished. >> "%%UPDATE_LOG%%"
 exit /b 0
-""" % [launcher_binary_path, launcher_exe_backup, target_dir, staging_dir, executable_name]
+""" % [launcher_binary_path, launcher_exe_backup, launcher_pck_path, updated_launcher_path, target_dir, staging_dir, executable_name]
 	else:
 		var launcher_exe_backup := "%s.bak" % launcher_binary_path
+		var launcher_pck_path := launcher_binary_path.get_basename() + ".pck"
 		script_text = """#!/bin/sh
 LAUNCHER_EXE=\"%s\"
 LAUNCHER_EXE_BAK=\"%s\"
+LAUNCHER_PCK=\"%s\"
+UPDATED_LAUNCHER_EXE=\"%s\"
 LAUNCHER_DIR=\"%s\"
 UPDATE_DIR=\"%s\"
 
@@ -1086,10 +1104,18 @@ if ! cp -a \"$UPDATE_DIR\"/. \"$LAUNCHER_DIR\"/; then
 fi
 
 rm -f \"$LAUNCHER_EXE_BAK\"
-chmod +x \"$LAUNCHER_EXE\"
-\"$LAUNCHER_EXE\" &
+if [ -f \"$UPDATED_LAUNCHER_EXE\" ]; then
+  chmod +x \"$UPDATED_LAUNCHER_EXE\"
+  if [ \"$LAUNCHER_EXE\" != \"$UPDATED_LAUNCHER_EXE\" ]; then
+    rm -f \"$LAUNCHER_EXE\" \"$LAUNCHER_PCK\"
+  fi
+  \"$UPDATED_LAUNCHER_EXE\" &
+else
+  chmod +x \"$LAUNCHER_EXE\"
+  \"$LAUNCHER_EXE\" &
+fi
 rm -rf \"$UPDATE_DIR\"
-""" % [launcher_binary_path, launcher_exe_backup, target_dir, staging_dir]
+""" % [launcher_binary_path, launcher_exe_backup, launcher_pck_path, updated_launcher_path, target_dir, staging_dir]
 
 	var script_file := FileAccess.open(script_path, FileAccess.WRITE)
 	if script_file == null:
@@ -1117,6 +1143,18 @@ rm -rf \"$UPDATE_DIR\"
 
 	_log("Launcher updater started with process_id=%s." % process_id)
 	return true
+
+
+func _get_relative_path(path: String, base_path: String) -> String:
+	var normalized_path := path.replace("\\", "/")
+	var normalized_base := base_path.replace("\\", "/")
+	while normalized_base.ends_with("/"):
+		normalized_base = normalized_base.substr(0, normalized_base.length() - 1)
+	var prefix := normalized_base + "/"
+	if normalized_path.begins_with(prefix):
+		return normalized_path.substr(prefix.length())
+
+	return path.get_file()
 
 
 func _derive_launcher_binary_name() -> String:

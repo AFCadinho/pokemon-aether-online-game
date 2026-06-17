@@ -24,6 +24,16 @@ PLATFORMS = {
             "PokeAether Launcher.exe",
             "PokeAether Launcher.pck",
         ],
+        "launcher_aliases": [
+            ("PokeAether Launcher.exe", "PokeAether.exe"),
+            ("PokeAether Launcher.pck", "PokeAether.pck"),
+            ("PokeAether Launcher.exe", "PokemonAetherOnline.exe"),
+            ("PokeAether Launcher.pck", "PokemonAetherOnline.pck"),
+            ("PokeAether Launcher.exe", "Pokemon Aether Online.exe"),
+            ("PokeAether Launcher.pck", "Pokemon Aether Online.pck"),
+            ("PokeAether Launcher.exe", "PokeAether Legacy Placeholder.exe"),
+            ("PokeAether Launcher.pck", "PokeAether Legacy Placeholder.pck"),
+        ],
         "required_files": [
             "PokeAether.exe",
             "PokeAether.pck",
@@ -40,6 +50,12 @@ PLATFORMS = {
         "launcher_required_files": [
             "PokeAether Launcher.x86_64",
             "PokeAether Launcher.pck",
+        ],
+        "launcher_aliases": [
+            ("PokeAether Launcher.x86_64", "PokeAether.x86_64"),
+            ("PokeAether Launcher.pck", "PokeAether.pck"),
+            ("PokeAether Launcher.x86_64", "PokemonAetherOnline.x86_64"),
+            ("PokeAether Launcher.pck", "PokemonAetherOnline.pck"),
         ],
         "required_files": [
             "PokeAether.x86_64",
@@ -138,7 +154,7 @@ def main() -> None:
             _assert_required_files(launcher_build_dir, platform_config["launcher_required_files"])
             launcher_zip_name = platform_config["launcher_zip_name"]
             launcher_zip_path = output_dir / launcher_zip_name
-            _zip_directory(launcher_build_dir, launcher_zip_path)
+            _zip_launcher_directory(launcher_build_dir, launcher_zip_path, platform_config["launcher_aliases"])
 
             launcher_data = {
                 "version": args.version,
@@ -265,6 +281,32 @@ def _zip_directory(source_dir: Path, zip_path: Path) -> None:
                 continue
 
             relative_path = file_path.relative_to(source_dir).as_posix()
+            info = ZipInfo.from_file(file_path, relative_path)
+            info.compress_type = ZIP_DEFLATED
+            info.external_attr = (file_path.stat().st_mode & 0xFFFF) << 16
+            with file_path.open("rb") as file:
+                archive.writestr(info, file.read())
+
+
+def _zip_launcher_directory(source_dir: Path, zip_path: Path, aliases: list[tuple[str, str]]) -> None:
+    if zip_path.exists():
+        zip_path.unlink()
+
+    archive_entries: dict[str, Path] = {}
+    for file_path in sorted(source_dir.rglob("*")):
+        if file_path.is_dir():
+            continue
+
+        relative_path = file_path.relative_to(source_dir).as_posix()
+        archive_entries[relative_path] = file_path
+
+    for source_name, alias_name in aliases:
+        source_path = source_dir / source_name
+        if source_path.is_file() and alias_name not in archive_entries:
+            archive_entries[alias_name] = source_path
+
+    with ZipFile(zip_path, "w", ZIP_DEFLATED) as archive:
+        for relative_path, file_path in sorted(archive_entries.items()):
             info = ZipInfo.from_file(file_path, relative_path)
             info.compress_type = ZIP_DEFLATED
             info.external_attr = (file_path.stat().st_mode & 0xFFFF) << 16
