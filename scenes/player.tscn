@@ -1509,6 +1509,5 @@ position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_g2els")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1756193768]
-zoom = Vector2(1.5, 1.5)
 
 [node name="FeetMarker" type="Marker2D" parent="." unique_id=1018231315]

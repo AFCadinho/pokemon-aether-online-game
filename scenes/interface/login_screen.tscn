@@ -484,12 +484,12 @@ custom_minimum_size = Vector2(170, 132)
 layout_mode = 2
 size_flags_horizontal = 4
 stretch = true
-stretch_shrink = 1
 
 [node name="PlayerPreviewViewport" type="SubViewport" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/PlayerPreviewViewportContainer" unique_id=1524054212]
 transparent_bg = true
+handle_input_locally = false
 size = Vector2i(170, 132)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="SavedStatusLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=1625871027]
 visible = false

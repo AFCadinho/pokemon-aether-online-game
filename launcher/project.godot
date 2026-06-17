@@ -13,6 +13,7 @@ config_version=5
 config/name="PokeAether Launcher"
 config/version="dev"
 run/main_scene="res://scenes/launcher.tscn"
+config/icon="res://assets/ui/logo.png"
 config/features=PackedStringArray("4.6", "Forward Plus")
 
 [display]
