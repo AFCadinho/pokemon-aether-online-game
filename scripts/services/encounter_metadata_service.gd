@@ -26,7 +26,7 @@ func _fetch_encounter_area_metadata(area_id: String) -> Dictionary:
 	request.timeout = 3.0
 
 	var url := "%s/encounters/areas/%s" % [base_url, area_id.uri_encode()]
-	var error := request.request(url, PackedStringArray(["Accept: application/json"]))
+	var error := request.request(url, GatewayApiConfig.get_accept_headers())
 	if error != OK:
 		request.queue_free()
 		return {

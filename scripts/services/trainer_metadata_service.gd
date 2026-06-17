@@ -32,7 +32,7 @@ func _fetch_trainer_metadata(trainer_id: String) -> Dictionary:
 	add_child(request)
 	request.timeout = 3.0
 	
-	var error := request.request(url, PackedStringArray(["Accept: application/json"]))
+	var error := request.request(url, GatewayApiConfig.get_accept_headers())
 	if error != OK:
 		request.queue_free()
 		return {

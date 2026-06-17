@@ -2,6 +2,8 @@ extends Node2D
 
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
+const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
+const POSITION_SAVE_EPSILON := 1.0
 
 @export var initial_spawn_name := "FromRoute1"
 
@@ -12,24 +14,37 @@ var battle_instance: Node
 @onready var player: CharacterBody2D = $Player
 
 var is_loading_map := false
+var position_autosave_elapsed := 0.0
+var is_saving_player_position := false
+var last_saved_position_signature := ""
+
+
+func _enter_tree() -> void:
+	visible = false
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
-	var first_map := $CurrentMap.get_child(0)
-	GameState.current_map = first_map
-	MusicManager.play_map_music(first_map)
-	
-	move_player_to_map(first_map)
-	if not GameState.has_player_position:
-		_position_player_at_spawn(first_map, initial_spawn_name, player.global_position)
-	
-	player.refresh_map_layers()
+	await _setup_initial_world_state()
+	visible = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+func _process(delta: float) -> void:
+	if is_in_battle or is_loading_map:
+		return
+
+	position_autosave_elapsed += delta
+	if position_autosave_elapsed < POSITION_AUTOSAVE_INTERVAL_SECONDS:
+		return
+
+	position_autosave_elapsed = 0.0
+	await _save_current_player_position_if_changed()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_save_current_player_position_if_changed(true)
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
@@ -44,7 +59,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		is_loading_map = false
 		return
 
-	var target_scene := load(target_scene_path) as PackedScene
+	var target_scene: PackedScene = load(target_scene_path) as PackedScene
 	if target_scene == null:
 		push_error("World.load_map failed: could not load scene %s" % target_scene_path)
 		is_loading_map = false
@@ -56,7 +71,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	for child in $CurrentMap.get_children():
 		child.queue_free()
 
-	var new_map := target_scene.instantiate()
+	var new_map: Node = target_scene.instantiate()
 	$CurrentMap.add_child(new_map)
 
 	GameState.current_map = new_map
@@ -67,10 +82,11 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 	await get_tree().physics_frame
 	is_loading_map = false
+	await _save_current_player_position_if_changed(true, target_spawn_name)
 
 func move_player_to_map(map: Node) -> void:
-	var players := map.get_node_or_null("Entities/Players")
-	var player_parent := players if players != null else map
+	var players: Node = map.get_node_or_null("Entities/Players")
+	var player_parent: Node = players if players != null else map
 		
 	if player.get_parent() != null:
 		player.get_parent().remove_child(player)
@@ -78,8 +94,8 @@ func move_player_to_map(map: Node) -> void:
 	player_parent.add_child(player)
 
 func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position: Vector2) -> void:
-	var spawn_position := fallback_position
-	var spawn := map.get_node_or_null("Spawns/" + spawn_name)
+	var spawn_position: Vector2 = fallback_position
+	var spawn: Node = map.get_node_or_null("Spawns/" + spawn_name)
 	if spawn != null:
 		spawn_position = spawn.global_position
 	else:
@@ -91,6 +107,164 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	player.is_moving = false
 	player.set_idle_frame()
 	player.refresh_map_layers()
+
+func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
+	var position_data: Dictionary = _dictionary_from_value(state.get("position", {}))
+	var saved_position: Vector2 = Vector2(
+		float(position_data.get("x", player.global_position.x)),
+		float(position_data.get("y", player.global_position.y))
+	)
+
+	player.global_position = saved_position
+	player.target_position = saved_position
+	player.move_start_position = saved_position
+	player.is_moving = false
+	player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
+	player.set_idle_frame()
+	player.refresh_map_layers()
+	GameState.player_position = saved_position
+	GameState.player_direction = player.last_direction
+	GameState.has_player_position = true
+
+
+func _setup_initial_world_state() -> void:
+	var first_map: Node = $CurrentMap.get_child(0)
+	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+	var saved_state: Dictionary = {}
+	if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
+		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
+	elif not bool(saved_state_response.get("success", false)):
+		push_warning("World: player position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
+
+	var initial_map: Node = first_map
+	var saved_scene_path: String = str(saved_state.get("mapScenePath", ""))
+	if saved_scene_path != "" and saved_scene_path != _get_map_scene_path(first_map):
+		var saved_map: Node = _instantiate_map(saved_scene_path)
+		if saved_map != null:
+			_clear_current_map()
+			$CurrentMap.add_child(saved_map)
+			initial_map = saved_map
+		else:
+			push_warning("World: saved map '%s' could not be loaded. Falling back to initial map." % saved_scene_path)
+
+	GameState.current_map = initial_map
+	MusicManager.play_map_music(initial_map)
+	move_player_to_map(initial_map)
+
+	if not saved_state.is_empty():
+		_position_player_at_saved_state(initial_map, saved_state)
+		last_saved_position_signature = _get_current_player_position_signature()
+	elif not GameState.has_player_position:
+		_position_player_at_spawn(initial_map, initial_spawn_name, player.global_position)
+		await _save_current_player_position_if_changed(true, initial_spawn_name)
+
+	player.refresh_map_layers()
+
+
+func _instantiate_map(scene_path: String) -> Node:
+	var target_scene: PackedScene = load(scene_path) as PackedScene
+	if target_scene == null:
+		return null
+	return target_scene.instantiate()
+
+
+func _clear_current_map() -> void:
+	for child in $CurrentMap.get_children():
+		$CurrentMap.remove_child(child)
+		child.queue_free()
+
+
+func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
+	if not AuthService.is_authenticated() or player == null:
+		return
+	if is_saving_player_position:
+		return
+
+	var signature: String = _get_current_player_position_signature()
+	if not force and signature == last_saved_position_signature:
+		return
+
+	await _save_current_player_position(signature, spawn_marker)
+
+
+func _save_current_player_position(signature: String, spawn_marker: String) -> void:
+	is_saving_player_position = true
+	var state: Dictionary = _build_current_player_position_state(spawn_marker)
+	var result: Dictionary = await PlayerGameStateService.save_player_position(state)
+	if bool(result.get("success", false)):
+		last_saved_position_signature = signature
+	else:
+		push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
+	is_saving_player_position = false
+
+
+func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
+	var current_map: Node = GameState.current_map
+	var position: Vector2 = player.global_position
+	return {
+		"mapId": _get_map_id(current_map),
+		"mapScenePath": _get_map_scene_path(current_map),
+		"position": {
+			"x": position.x,
+			"y": position.y,
+		},
+		"facingDirection": _direction_to_name(player.last_direction),
+		"spawnMarker": spawn_marker,
+	}
+
+
+func _get_current_player_position_signature() -> String:
+	var current_map: Node = GameState.current_map
+	var position: Vector2 = player.global_position
+	return "%s|%s|%0.1f|%0.1f|%s" % [
+		_get_map_id(current_map),
+		_get_map_scene_path(current_map),
+		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
+		roundf(position.y / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
+		_direction_to_name(player.last_direction),
+	]
+
+
+func _get_map_id(map: Node) -> String:
+	if map == null:
+		return ""
+	if map.has_method("get_map_id"):
+		return str(map.call("get_map_id"))
+	var scene_path: String = _get_map_scene_path(map)
+	if scene_path != "":
+		return scene_path
+	return str(map.name)
+
+
+func _get_map_scene_path(map: Node) -> String:
+	if map == null:
+		return ""
+	return str(map.scene_file_path)
+
+
+func _direction_to_name(direction: Vector2) -> String:
+	if abs(direction.x) > abs(direction.y):
+		return "right" if direction.x > 0.0 else "left"
+	return "down" if direction.y >= 0.0 else "up"
+
+
+func _direction_from_name(direction_name: String) -> Vector2:
+	match direction_name.to_lower():
+		"right":
+			return Vector2.RIGHT
+		"left":
+			return Vector2.LEFT
+		"up":
+			return Vector2.UP
+		_:
+			return Vector2.DOWN
+
+
+func _dictionary_from_value(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY:
+		return {}
+	var dictionary: Dictionary = value
+	return dictionary
 
 func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var battle_request := HTTPRequest.new()

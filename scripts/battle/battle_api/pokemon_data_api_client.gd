@@ -1,7 +1,5 @@
 extends Node
 
-const JSON_HEADERS = ["Content-Type: application/json"]
-
 func parse_pokemon(request_node: HTTPRequest, text: String) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -52,7 +50,7 @@ func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 
 	var error: int = request_node.request(
 		api_base_url + path,
-		JSON_HEADERS,
+		GatewayApiConfig.get_accept_headers(),
 		HTTPClient.METHOD_GET
 	)
 
@@ -70,7 +68,7 @@ func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary
 	
 	var error: int = request_node.request(
 		api_base_url + path,
-		JSON_HEADERS,
+		GatewayApiConfig.get_json_headers(),
 		HTTPClient.METHOD_POST,
 		JSON.stringify(body)
 	)

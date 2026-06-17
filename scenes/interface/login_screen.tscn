@@ -409,6 +409,113 @@ theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628
 theme_override_font_sizes/font_size = 12
 text = "No account yet? Sign up here"
 
+[node name="SavedSessionCard" type="PanelContainer" parent="Background/Shell/MainSplit/LoginColumn" unique_id=1267162580]
+visible = false
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="SavedSessionMargin" type="MarginContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard" unique_id=1720223413]
+layout_mode = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 42
+theme_override_constants/margin_bottom = 38
+
+[node name="SavedSessionLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin" unique_id=264898318]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="SavedTitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=611675276]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Welcome Back"
+
+[node name="SavedSubtitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=718989212]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+theme_override_font_sizes/font_size = 14
+text = "Continue with your saved trainer session."
+
+[node name="TrainerCard" type="PanelContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=773413421]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_status")
+
+[node name="TrainerMargin" type="MarginContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard" unique_id=2123599326]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="TrainerLayout" type="HBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin" unique_id=957417509]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TrainerInfoLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout" unique_id=349809283]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 7
+
+[node name="LoggedInLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout" unique_id=815988210]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+theme_override_font_sizes/font_size = 13
+text = "LOGGED IN AS"
+
+[node name="SavedDisplayNameLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout" unique_id=236107840]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "Trainer"
+
+[node name="SavedUsernameLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout" unique_id=832646234]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "@trainer"
+
+[node name="PlayerPreviewViewportContainer" type="SubViewportContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout" unique_id=1587898040]
+custom_minimum_size = Vector2(170, 132)
+layout_mode = 2
+size_flags_horizontal = 4
+stretch = true
+stretch_shrink = 1
+
+[node name="PlayerPreviewViewport" type="SubViewport" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/PlayerPreviewViewportContainer" unique_id=1524054212]
+transparent_bg = true
+size = Vector2i(170, 132)
+render_target_update_mode = 4
+
+[node name="SavedStatusLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=1625871027]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.42, 0.42, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=793231538]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Continue"
+
+[node name="LogoutButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=688356913]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 14
+text = "Logout"
+
 [node name="FormSpacerRight" type="Control" parent="Background/Shell/MainSplit" unique_id=1699297983]
 layout_mode = 2
 size_flags_horizontal = 3

@@ -97,7 +97,10 @@ func me() -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	current_user = _dictionary_from_value(body.get("user", {}))
+	if body.has("user"):
+		current_user = _dictionary_from_value(body.get("user", {}))
+	else:
+		current_user = body
 	if body.has("expiresAt"):
 		expires_at = str(body.get("expiresAt", ""))
 
