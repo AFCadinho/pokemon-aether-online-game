@@ -1,0 +1,408 @@
+[gd_scene format=3 uid="uid://duw5e076ulb3"]
+
+[ext_resource type="Script" uid="uid://cnuvn2omox1om" path="res://scripts/ui/login_screen.gd" id="1_login"]
+[ext_resource type="Texture2D" uid="uid://bjptubqhypeuh" path="res://assets/ui/logo.png" id="2_logo"]
+[ext_resource type="Texture2D" uid="uid://diu5e64u5vwh8" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="3_hero"]
+[ext_resource type="Texture2D" uid="uid://bucvn1i17alpn" path="res://assets/ui/pokeaether_text_logo.png" id="4_text_logo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shell"]
+bg_color = Color(0.019607844, 0.024, 0.043, 0.74)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.48)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_side"]
+bg_color = Color(0.019607844, 0.023529412, 0.039215688, 0.78)
+border_width_right = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.32)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brand_mark"]
+bg_color = Color(0.02745098, 0.03137255, 0.05490196, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.56)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_status"]
+bg_color = Color(0.015686275, 0.023529412, 0.03529412, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.39215687, 0.60784316, 0.8784314, 0.34)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.02745098, 0.03137255, 0.05490196, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.64)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+content_margin_left = 14.0
+content_margin_top = 9.0
+content_margin_right = 14.0
+content_margin_bottom = 9.0
+bg_color = Color(0.019607844, 0.023529412, 0.039215688, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35686275, 0.3764706, 0.5058824, 0.6)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+content_margin_left = 14.0
+content_margin_top = 9.0
+content_margin_right = 14.0
+content_margin_bottom = 9.0
+bg_color = Color(0.023529412, 0.02745098, 0.047058824, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.39215687, 0.60784316, 0.8784314, 0.95)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.39215687, 0.60784316, 0.8784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.69, 0.84, 1, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+bg_color = Color(0.21568628, 0.39215687, 0.64705884, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.69, 0.84, 1, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0.5019608, 0.73333335, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.82, 0.9, 1, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="LoginScreen" type="Control" unique_id=480662146]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_login")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1770437423]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.011764706, 0.015686275, 0.03137255, 1)
+
+[node name="HeroBackground" type="TextureRect" parent="Background" unique_id=1200546010]
+modulate = Color(0.78, 0.82, 0.96, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_hero")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HeroShade" type="ColorRect" parent="Background" unique_id=1135999407]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.006, 0.008, 0.018, 0.54)
+
+[node name="AetherGlow" type="ColorRect" parent="Background" unique_id=1525358796]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 280.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.39215687, 0.60784316, 0.8784314, 0.18)
+
+[node name="Shell" type="PanelContainer" parent="Background" unique_id=1213791378]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_shell")
+
+[node name="MainSplit" type="HBoxContainer" parent="Background/Shell" unique_id=353847825]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="BrandPanel" type="PanelContainer" parent="Background/Shell/MainSplit" unique_id=1244643311]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_side")
+
+[node name="BrandMargin" type="MarginContainer" parent="Background/Shell/MainSplit/BrandPanel" unique_id=1095931933]
+layout_mode = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 44
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 38
+
+[node name="BrandLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin" unique_id=1583259593]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="BrandHeader" type="HBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=947319662]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BrandMark" type="PanelContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader" unique_id=419317588]
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_brand_mark")
+
+[node name="Logo" type="TextureRect" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader/BrandMark" unique_id=1607800628]
+layout_mode = 2
+texture = ExtResource("2_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BrandText" type="VBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader" unique_id=647963236]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader/BrandText" unique_id=140159727]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "PokeAether"
+
+[node name="Subtitle" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader/BrandText" unique_id=2133762446]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 13
+text = "ONLINE"
+
+[node name="SpacerTop" type="Control" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=340243640]
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+
+[node name="Headline" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=799300216]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_font_sizes/font_size = 46
+text = "Enter PokeAether"
+
+[node name="Body" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=604320417]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 16
+text = "Continue your journey, manage your trainer profile, and return to the world where you left off."
+autowrap_mode = 3
+
+[node name="AccentLine" type="ColorRect" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=1239468972]
+custom_minimum_size = Vector2(96, 3)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+
+[node name="BrandSpacer" type="Control" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=717858600]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatusCard" type="PanelContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=2142424476]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_status")
+
+[node name="StatusMargin" type="MarginContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard" unique_id=445487381]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="StatusLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin" unique_id=394299556]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StatusTitle" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin/StatusLayout" unique_id=529729589]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+theme_override_font_sizes/font_size = 13
+text = "WORLD STATUS"
+
+[node name="StatusValue" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin/StatusLayout" unique_id=1123683599]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.16, 0.94, 0.66, 1)
+theme_override_font_sizes/font_size = 16
+text = "PokeAether Gateway Online"
+
+[node name="FormSpacerLeft" type="Control" parent="Background/Shell/MainSplit" unique_id=1533438422]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoginColumn" type="VBoxContainer" parent="Background/Shell/MainSplit" unique_id=2027706209]
+custom_minimum_size = Vector2(680, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="TextLogo" type="TextureRect" parent="Background/Shell/MainSplit/LoginColumn" unique_id=1583107376]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_text_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LoginCard" type="PanelContainer" parent="Background/Shell/MainSplit/LoginColumn" unique_id=1053201854]
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="LoginMargin" type="MarginContainer" parent="Background/Shell/MainSplit/LoginColumn/LoginCard" unique_id=1367776914]
+layout_mode = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 42
+theme_override_constants/margin_bottom = 38
+
+[node name="LoginLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin" unique_id=1935653813]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LoginTitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=4891666]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "Trainer Login"
+
+[node name="LoginSubtitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1418968257]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+theme_override_font_sizes/font_size = 14
+text = "Enter your account details to start playing."
+
+[node name="FormFields" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1618537617]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="UsernameLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=1973812493]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 13
+text = "USERNAME"
+
+[node name="UsernameInput" type="LineEdit" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=1075642155]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_colors/font_placeholder_color = Color(0.45, 0.47, 0.58, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "username"
+clear_button_enabled = true
+
+[node name="PasswordLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=1092767495]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 13
+text = "PASSWORD"
+
+[node name="PasswordInput" type="LineEdit" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=454606900]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_colors/font_placeholder_color = Color(0.45, 0.47, 0.58, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "password"
+secret = true
+
+[node name="StatusLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1342839935]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.42, 0.42, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+autowrap_mode = 3
+
+[node name="LoginButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=317175019]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Sign In"
+
+[node name="RegisterLinkButton" type="LinkButton" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=2059007361]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.84, 1, 1)
+theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 12
+text = "No account yet? Sign up here"
+
+[node name="FormSpacerRight" type="Control" parent="Background/Shell/MainSplit" unique_id=1699297983]
+layout_mode = 2
+size_flags_horizontal = 3

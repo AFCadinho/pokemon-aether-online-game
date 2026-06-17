@@ -1,9 +1,12 @@
 extends Control
 
-const DEFAULT_MANIFEST_URL := "https://example.com/pokemon-aether/manifest.json"
-const DEFAULT_NEWS_URL := "https://updates.pokemonaetheronline.com/news.json"
+const LauncherServerHealthService := preload("res://scripts/server_health_service.gd")
+
+const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
+const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
-const DEFAULT_PATCH_NOTES_URL := "https://pokemonaetheronline.com/patch-notes"
+const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
+const DEFAULT_HEALTH_URL := "https://pokeaether.com/health"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const DEFAULT_INSTALL_DIR := "user://game"
 const GAME_INSTALL_SUBDIR := "game"
@@ -12,24 +15,28 @@ const VERSION_FILE := "user://versions.json"
 const ERROR_LOG_FILE := "user://launcher_error.log"
 const TEMP_DIR := "user://downloads"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
-const USER_AGENT_HEADER := "User-Agent: PokemonAetherLauncher/1.0"
+const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
 const GEN5_SPRITES_FOLDER_PATH := "assets/sprites/pokemon/gen5"
 const LAUNCHER_UPDATE_TEMP_DIR := "user://launcher_update"
 const LAUNCHER_UPDATE_STAGING_SUBDIR := "staging"
 const LAUNCHER_UPDATE_WINDOWS_SCRIPT := "apply_launcher_update.bat"
 const LAUNCHER_UPDATE_UNIX_SCRIPT := "apply_launcher_update.sh"
-const LAUNCHER_UPDATE_ZIP_NAME_PREFIX := "pokemon-aether-launcher-update"
-const WINDOWS_LAUNCHER_BINARY := "Pokemon Aether Launcher.exe"
-const LINUX_LAUNCHER_BINARY := "Pokemon Aether Launcher.x86_64"
+const LAUNCHER_UPDATE_ZIP_NAME_PREFIX := "pokeaether-launcher-update"
+const WINDOWS_LAUNCHER_BINARY := "PokeAether Launcher.exe"
+const LINUX_LAUNCHER_BINARY := "PokeAether Launcher.x86_64"
 const MAX_VERSION_SEGMENTS := 4
 
 const KNOWN_URL_SCHEMES: Array[String] = ["http://", "https://"]
+const SERVER_ONLINE_COLOR := Color(0.16, 0.94, 0.66, 1.0)
+const SERVER_OFFLINE_COLOR := Color(1.0, 0.38, 0.45, 1.0)
+const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 
 @onready var shell_panel: PanelContainer = $Shell
 @onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
 @onready var brand_mark: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandMark
 @onready var server_card: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard
+@onready var server_online_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/ServerOnline
 @onready var meta_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard
 @onready var progress_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard
 @onready var news_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/NewsCard
@@ -63,6 +70,7 @@ var current_download: Dictionary = {}
 var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
+var health_url := DEFAULT_HEALTH_URL
 var discord_url := DEFAULT_DISCORD_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
 var install_dir := DEFAULT_INSTALL_DIR
@@ -164,7 +172,9 @@ func _ready() -> void:
 	_load_local_versions()
 	_refresh_launcher_version()
 	_refresh_status()
+	_set_server_health_checking()
 	_sync_button_cursors()
+	_refresh_server_health.call_deferred()
 	check_for_updates.call_deferred()
 	fetch_news.call_deferred()
 	queue_redraw()
@@ -575,7 +585,7 @@ func _create_game_process(absolute_executable_path: String) -> int:
 
 	if os_name == "Linux" or os_name == "macOS" or os_name == "FreeBSD" or os_name == "NetBSD" or os_name == "OpenBSD" or os_name == "BSD":
 		var command: String = "cd \"$1\" && exec \"./$2\""
-		return OS.create_process("/bin/sh", PackedStringArray(["-c", command, "pokemon-aether-launcher", game_dir, executable_name]))
+		return OS.create_process("/bin/sh", PackedStringArray(["-c", command, "pokeaether-launcher", game_dir, executable_name]))
 
 	return OS.create_process(absolute_executable_path, PackedStringArray())
 
@@ -1607,10 +1617,16 @@ func _load_launcher_config() -> void:
 	var configured_news_url := str(config.get("newsUrl", ""))
 	if not configured_news_url.is_empty():
 		news_url = configured_news_url
+	var configured_health_url := str(config.get("healthUrl", ""))
+	if not configured_health_url.is_empty():
+		health_url = configured_health_url
 	manifest_url = _normalize_url(manifest_url)
 	news_url = _normalize_url(news_url)
+	health_url = _normalize_url(health_url)
 	if manifest_url.is_empty():
 		manifest_url = DEFAULT_MANIFEST_URL
+	if health_url.is_empty():
+		health_url = DEFAULT_HEALTH_URL
 
 	var configured_discord_url := str(config.get("discordUrl", ""))
 	if not configured_discord_url.is_empty():
@@ -1817,6 +1833,21 @@ func _refresh_launcher_version() -> void:
 	launcher_version_label.text = launcher_version
 
 
+func _refresh_server_health() -> void:
+	var result: Dictionary = await LauncherServerHealthService.check_async(self, health_url)
+	if bool(result.get("online", false)):
+		server_online_label.text = "Online"
+		server_online_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
+	else:
+		server_online_label.text = "Offline"
+		server_online_label.add_theme_color_override("font_color", SERVER_OFFLINE_COLOR)
+
+
+func _set_server_health_checking() -> void:
+	server_online_label.text = "Checking..."
+	server_online_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
+
+
 func _set_busy(is_busy: bool) -> void:
 	var locked := is_busy or launcher_update_busy or launcher_update_in_progress
 	check_button.disabled = locked
@@ -1943,9 +1974,9 @@ func _has_installed_game_for_manifest(game_data: Dictionary) -> bool:
 	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
 	if executable_path.is_empty():
 		if OS.get_name() == "Windows":
-			executable_path = "Pokemon Aether Online.exe"
+			executable_path = "PokeAether.exe"
 		else:
-			executable_path = "Pokemon Aether Online.x86_64"
+			executable_path = "PokeAether.x86_64"
 
 	var absolute_executable_path := _globalize_storage_path(_get_game_install_dir().path_join(executable_path))
 	return FileAccess.file_exists(absolute_executable_path)
@@ -1955,9 +1986,9 @@ func _get_game_executable_path(game_data: Dictionary) -> String:
 	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
 	if executable_path.is_empty():
 		if OS.get_name() == "Windows":
-			executable_path = "Pokemon Aether Online.exe"
+			executable_path = "PokeAether.exe"
 		else:
-			executable_path = "Pokemon Aether Online.x86_64"
+			executable_path = "PokeAether.x86_64"
 
 	return _globalize_storage_path(_get_game_install_dir().path_join(executable_path))
 
