@@ -14,16 +14,23 @@ var transformed_species_by_ident: Dictionary = {}
 
 
 ## Laadt een volledige battle response van de API in deze state.
-func load_from_api_response(response: Dictionary) -> void:
-	battle_id = str(response.get("battleId", ""))
+func load_from_api_response(response: Dictionary, apply_event_conditions: bool = true) -> void:
+	var next_battle_id := str(response.get("battleId", ""))
+	if battle_id != "" and next_battle_id != battle_id:
+		transformed_species_by_ident.clear()
+
+	battle_id = next_battle_id
 	format_id = str(response.get("formatId", ""))
 	players = response.get("players", {})
 	requests = response.get("requests", {})
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
 	field = response.get("field", {})
-	_apply_transformed_species_to_requests()
-	_apply_event_conditions_to_requests(response.get("events", []))
+	if apply_event_conditions:
+		_apply_transformed_species_to_requests()
+		_apply_event_conditions_to_requests(response.get("events", []))
+	else:
+		_remove_deferred_transform_fields_from_requests(response.get("events", []))
 
 func apply_event_conditions(events: Array) -> void:
 	_apply_event_conditions_to_requests(events)
@@ -142,6 +149,29 @@ func _apply_transform_event_to_requests(event: Dictionary) -> void:
 	pokemon_data["displaySpecies"] = species
 	pokemon_data["transformedSpecies"] = species
 
+func _remove_deferred_transform_fields_from_requests(events_value: Variant) -> void:
+	if not (events_value is Array):
+		return
+
+	for event_value in events_value:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		if str(event.get("type", "")) != "transform":
+			continue
+
+		var target_ident := str(event.get("target", ""))
+		var original_species := _get_original_species_from_ident(target_ident)
+		var pokemon_data := _get_side_pokemon_by_ident(target_ident)
+		if pokemon_data.is_empty():
+			continue
+
+		pokemon_data.erase("transformedSpecies")
+		pokemon_data.erase("displaySpecies")
+		if original_species != "":
+			pokemon_data["species"] = original_species
+
 func _clear_transform_event_from_requests(event: Dictionary) -> void:
 	_clear_transformed_species_for_ident(str(event.get("fromIdent", "")))
 	_clear_transformed_species_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
@@ -238,6 +268,12 @@ func _get_transform_key_from_ident(ident: String) -> String:
 		return ""
 
 	return "%s:%s" % [player_id, pokemon_name]
+
+func _get_original_species_from_ident(ident: String) -> String:
+	if not ident.contains(": "):
+		return ""
+
+	return str(ident.split(": ")[1]).strip_edges()
 
 func _get_player_id_from_ident(ident: String) -> String:
 	if ident.begins_with("p1"):

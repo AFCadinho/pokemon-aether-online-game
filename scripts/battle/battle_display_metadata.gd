@@ -29,6 +29,8 @@ func set_trainer_team(team: Array) -> void:
 func get_player_save_pokemon_for_battle_data(pokemon_data: Dictionary) -> Pokemon:
 	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
 	var saved_pokemon := get_player_save_pokemon_by_instance_id(instance_id)
+	if saved_pokemon != null and str(pokemon_data.get("transformedSpecies", "")) != "":
+		return saved_pokemon
 	if saved_pokemon == null or not saved_species_matches_battle_data(saved_pokemon, pokemon_data):
 		return null
 

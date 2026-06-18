@@ -51,6 +51,8 @@ const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
+const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
+const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
 const STAT_STAGE_BADGE_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
@@ -839,8 +841,8 @@ func _finish_battle(result: Dictionary) -> void:
 	battle_ended.emit(result)
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
-func _apply_api_response(response: Dictionary) -> bool:
-	var success: bool = action_flow.apply_response(response)
+func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true) -> bool:
+	var success: bool = action_flow.apply_response(response, apply_event_conditions)
 	if success:
 		_remember_active_player_party_moves()
 		_prewarm_current_battle_move_animations()
@@ -921,6 +923,8 @@ func _prewarm_battle_event_animations(events: Array) -> void:
 			var effect_key: String = str(effect_key_value)
 			if effect_key != "":
 				effect_keys.append(effect_key)
+		if str(event_data.get("type", "")) == "switch" and not effect_keys.has(SHINY_ENTRANCE_EFFECT_KEY):
+			effect_keys.append(SHINY_ENTRANCE_EFFECT_KEY)
 		needs_damage_sound = needs_damage_sound or bool(preload_keys.get("needs_damage_sound", false))
 
 	animation_router.prewarm_move_animations(move_names)
@@ -965,6 +969,7 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 			max(battle_state.get_active_pokemon_max_hp(player_id), 1),
 			battle_state.get_active_pokemon_status(player_id),
 			battle_state.get_active_pokemon_gender(player_id),
+			_get_active_pokemon_is_shiny(player_id),
 		)
 		return
 
@@ -975,6 +980,7 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 		battle_state.get_active_pokemon_max_hp(player_id),
 		battle_state.get_active_pokemon_status(player_id),
 		battle_state.get_active_pokemon_gender(player_id),
+		_get_active_pokemon_is_shiny(player_id),
 	)
 
 ## Reset de battle status UI naar een lege beginstand.
@@ -1369,6 +1375,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	_show_original_player_lead_before_initial_events(player_species)
 	await _render_initial_battle_events(api_response)
+	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
 func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: Dictionary, api_response: Dictionary) -> void:
@@ -1395,6 +1402,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	))
 	_show_original_player_lead_before_initial_events(player_species)
 	await _render_initial_battle_events(lead_response)
+	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
@@ -1405,16 +1413,17 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	active_enemy_pokemon = enemy_pokemon
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
 	_reset_battle_effect_tracking()
+	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY])
 	player_hud_panel.clear_player_name()
 	enemy_hud_panel.clear_player_name()
 
 func _apply_initial_battle_response(api_response: Dictionary) -> bool:
-	if not _apply_api_response(api_response):
+	if not _apply_api_response(api_response, false):
 		return false
 
-	_update_battle_presentation()
-	_show_moves()
-	_show_current_action_prompt()
+	_update_battle_status_panels()
+	_update_party_slots()
+	_update_vs_panel_names()
 	return true
 
 func _apply_team_preview_battle_response(api_response: Dictionary) -> bool:
@@ -1436,7 +1445,10 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 		player_pokemon.species,
 		player_pokemon.level,
 		player_pokemon.current_hp,
-		max(player_pokemon.max_hp, 1)
+		max(player_pokemon.max_hp, 1),
+		"",
+		"",
+		player_pokemon.shiny
 	)
 
 	var trainer_team_value: Variant = api_response.get("trainerTeam", [])
@@ -1463,13 +1475,20 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 	var gender: String = str(lead_data.get("gender", ""))
 	var is_shiny: bool = bool(lead_data.get("shiny", false))
 	enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
-	enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+	enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
 	event_renderer.add_turn_header(battle_state.get_turn())
 	var start_events := _get_wild_battle_start_events(api_response.get("events", []))
-	_show_original_transform_targets_before_initial_events(start_events)
+	if _show_original_transform_targets_before_initial_events(start_events):
+		await get_tree().process_frame
+		await get_tree().create_timer(INITIAL_TRANSFORM_REVEAL_SECONDS).timeout
+	await _play_initial_shiny_entrance_effects()
 	await _render_battle_events(start_events, false)
+
+func _show_battle_controls_after_initial_events() -> void:
+	_update_battle_presentation()
+	_show_moves()
 	_show_current_action_prompt()
 
 func _show_original_player_lead_before_initial_events(species: String) -> void:
@@ -1485,9 +1504,11 @@ func _show_original_player_lead_before_initial_events(species: String) -> void:
 	var is_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
 
 	player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
-	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
-func _show_original_transform_targets_before_initial_events(events: Array) -> void:
+func _show_original_transform_targets_before_initial_events(events: Array) -> bool:
+	var showed_original_target := false
+
 	for event_value in events:
 		if not (event_value is Dictionary):
 			continue
@@ -1503,6 +1524,9 @@ func _show_original_transform_targets_before_initial_events(events: Array) -> vo
 			continue
 
 		_show_original_active_pokemon_for_player(player_id, original_species)
+		showed_original_target = true
+
+	return showed_original_target
 
 func _show_original_active_pokemon_for_player(player_id: String, species: String) -> void:
 	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
@@ -1517,10 +1541,10 @@ func _show_original_active_pokemon_for_player(player_id: String, species: String
 		var saved_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
 		is_shiny = saved_shiny
 		player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
-		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 	elif player_id == "p2":
 		enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
-		enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+		enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
 func _get_original_active_player_species(fallback_species: String = "") -> String:
 	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
@@ -1589,8 +1613,6 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 		return {}
 
 	_set_battle_input_locked(false)
-	_update_battle_presentation()
-	_show_moves()
 	return npc_lead_response
 
 func _run_trainer_team_preview_lead_selection() -> Dictionary:
@@ -1634,8 +1656,6 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 		_hide_team_preview_layers()
 		party_grid.visible = false
 		_set_battle_input_locked(false)
-		_update_battle_presentation()
-		_show_moves()
 		return npc_lead_response
 
 	return {}
@@ -1736,7 +1756,16 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			continue
 
 		await event_renderer.render_event(event_data, presentation)
-		if str(event_data.get("type", "")) == "transform":
+		var event_type: String = str(event_data.get("type", ""))
+		if event_type == "damage" or event_type == "heal" or event_type == "faint":
+			battle_state.apply_event_conditions([event_data])
+		if event_type == "switch":
+			battle_state.apply_event_conditions([event_data])
+			_update_hud_panels()
+			_update_active_sprites()
+			await _play_shiny_entrance_if_needed(event_data)
+		if event_type == "transform":
+			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_active_sprites()
 
@@ -1768,6 +1797,42 @@ func _get_player_id_from_ident(ident: String) -> String:
 
 	return ""
 
+func _play_shiny_entrance_if_needed(event_data: Dictionary) -> void:
+	var player_id := str(event_data.get("playerId", ""))
+	if player_id == "":
+		player_id = _get_player_id_from_ident(str(event_data.get("toIdent", event_data.get("pokemon", ""))))
+	if player_id == "":
+		return
+
+	var target_ident := str(event_data.get("toIdent", ""))
+	if target_ident == "":
+		target_ident = str(event_data.get("pokemon", ""))
+
+	await _play_shiny_entrance_for_player(player_id, target_ident)
+
+func _play_initial_shiny_entrance_effects() -> void:
+	await _play_shiny_entrance_for_player("p2")
+	await _play_shiny_entrance_for_player("p1")
+
+func _play_shiny_entrance_for_player(player_id: String, target_ident := "") -> void:
+	if player_id == "":
+		return
+	if not _get_active_pokemon_is_shiny_for_entrance(player_id):
+		return
+
+	if _get_player_id_from_ident(target_ident) == "":
+		target_ident = "%sa: %s" % [player_id, _get_active_display_species(player_id)]
+
+	await animation_router.play_effect_animation(SHINY_ENTRANCE_EFFECT_KEY, target_ident)
+
+func _get_active_pokemon_is_shiny_for_entrance(player_id: String) -> bool:
+	if player_id == "p1":
+		var saved_pokemon := _get_saved_pokemon_for_active_data(battle_state.get_active_player_pokemon(player_id))
+		if saved_pokemon != null:
+			return saved_pokemon.shiny
+
+	return _get_active_pokemon_is_shiny(player_id)
+
 func _get_species_from_ident(ident: String) -> String:
 	if not ident.contains(": "):
 		return ""
@@ -1798,12 +1863,13 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	var level: int = battle_state.get_active_pokemon_level(player_id)
 	var status: String = _get_status_from_event_or_state(event, player_id, use_previous_hp)
 	var gender: String = battle_state.get_active_pokemon_gender(player_id)
+	var is_shiny: bool = _get_active_pokemon_is_shiny(player_id)
 
 	match player_id:
 		"p1":
-			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 		"p2":
-			enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender)
+			enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
 func _get_event_hp_snapshot_with_state_fallback(event: Dictionary, player_id: String, use_previous_hp: bool) -> Dictionary:
 	var hp_key: String = "previousHp" if use_previous_hp else "hp"
@@ -2065,7 +2131,7 @@ func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
 
-	if not _apply_api_response(response):
+	if not _apply_api_response(response, false):
 		return response
 
 	return response
@@ -2079,7 +2145,7 @@ func _submit_npc_lead() -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
 
-	if not _apply_api_response(response):
+	if not _apply_api_response(response, false):
 		return response
 
 	return response

@@ -305,6 +305,9 @@ func format_hit_count_event(event: Dictionary) -> String:
 
 	return "Hit %s times!" % count
 
+func format_critical_hit_event(_event: Dictionary) -> String:
+	return "A critical hit!"
+
 func format_direct_damage_message(
 	target: String,
 	visible_hp_change: int,

@@ -83,7 +83,7 @@ func _play_animation_config(config: Dictionary, target_ident: String = "") -> vo
 	if overlay != null:
 		parent_node.add_child(overlay)
 		_fit_animation_to_parent(animation_node, overlay)
-		_apply_effect_target_offset(animation_node, target_ident)
+		_apply_effect_target_offset(animation_node, target_ident, config)
 		overlay.add_child(animation_node)
 		await _wait_for_animation_node(animation_node, overlay)
 		if is_instance_valid(overlay):
@@ -92,7 +92,7 @@ func _play_animation_config(config: Dictionary, target_ident: String = "") -> vo
 
 	animation_node.z_index = 50
 	_fit_animation_to_parent(animation_node, parent_node)
-	_apply_effect_target_offset(animation_node, target_ident)
+	_apply_effect_target_offset(animation_node, target_ident, config)
 	parent_node.add_child(animation_node)
 	await _wait_for_animation_node(animation_node, parent_node)
 
@@ -234,6 +234,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {})
 		animation_node.foreground_texture_override = resources.get("foreground_texture", null) as Texture2D
 		animation_node.sound_streams = resources.get("sound_streams", {}) as Dictionary
 	animation_node.speed_scale = float(config.get("speed_scale", 1.0))
+	animation_node.sprite_zoom_multiplier = float(config.get("sprite_zoom_multiplier", 1.0))
 	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
 	animation_node.pattern_override = int(config.get("pattern_override", -1))
 	animation_node.loop = false
@@ -242,11 +243,15 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {})
 	animation_node.show_timing_foregrounds = bool(config.get("show_timing_foregrounds", false))
 	animation_node.show_pink_visual = bool(config.get("show_pink_visual", false))
 	animation_node.show_sheet_sprites = bool(config.get("show_sheet_sprites", true))
+	animation_node.overlay_fill_enabled = bool(config.get("overlay_fill_enabled", true))
 	animation_node.projectile_config = (config.get("projectile", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
 	animation_node.sprite_tint = _color_from_config(config.get("sprite_tint", [1.0, 1.0, 1.0, 1.0]), Color.WHITE)
 	animation_node.overlay_peak_alpha = float(config.get("overlay_peak_alpha", 0.20))
 	animation_node.sparkle_count = int(config.get("sparkle_count", 14))
+	animation_node.sparkle_center = _vector2_from_config_value(config.get("sparkle_center", [256.0, 188.0]), Vector2(256, 188))
+	animation_node.sparkle_radius_min = float(config.get("sparkle_radius_min", 26.0))
+	animation_node.sparkle_radius_max = float(config.get("sparkle_radius_max", 78.0))
 	return animation_node
 
 
@@ -262,6 +267,44 @@ func _color_from_config(value: Variant, fallback: Color) -> Color:
 	if channels.size() >= 4:
 		alpha = float(channels[3])
 	return Color(float(channels[0]), float(channels[1]), float(channels[2]), alpha)
+
+
+func _vector2_from_config_value(value: Variant, fallback: Vector2) -> Vector2:
+	if value is Array:
+		var channels: Array = value as Array
+		if channels.size() >= 2:
+			return Vector2(float(channels[0]), float(channels[1]))
+	if value is Dictionary:
+		var dictionary: Dictionary = value as Dictionary
+		return Vector2(float(dictionary.get("x", fallback.x)), float(dictionary.get("y", fallback.y)))
+
+	return fallback
+
+
+func _prepare_animation_sheet_texture(texture: Texture2D, config: Dictionary) -> Texture2D:
+	if not config.has("chroma_key_color"):
+		return texture
+
+	var image: Image = texture.get_image()
+	if image == null:
+		return texture
+
+	image.convert(Image.FORMAT_RGBA8)
+	var key_color: Color = _color_from_config(config.get("chroma_key_color", [0.0, 1.0, 0.0, 1.0]), Color.GREEN)
+	var tolerance: float = maxf(float(config.get("chroma_key_tolerance", 0.05)), 0.0)
+
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			var pixel: Color = image.get_pixel(x, y)
+			if (
+				absf(pixel.r - key_color.r) <= tolerance
+				and absf(pixel.g - key_color.g) <= tolerance
+				and absf(pixel.b - key_color.b) <= tolerance
+			):
+				pixel.a = 0.0
+				image.set_pixel(x, y, pixel)
+
+	return ImageTexture.create_from_image(image)
 
 
 func _prewarm_animation_assets(config: Dictionary) -> void:
@@ -297,7 +340,7 @@ func _get_animation_resources(config: Dictionary) -> Dictionary:
 			if not resource is Texture2D:
 				push_warning("Could not preload animation sheet: %s" % resource_path)
 				return {}
-			resources["sheet_texture"] = resource as Texture2D
+			resources["sheet_texture"] = _prepare_animation_sheet_texture(resource as Texture2D, config)
 		elif path_key == "background_path":
 			resources["background_texture"] = resource as Texture2D
 		elif path_key == "foreground_path":
@@ -476,15 +519,27 @@ func _fit_animation_to_parent(animation_node: Node2D, parent_node: Node) -> void
 	animation_node.position = Vector2.ZERO
 
 
-func _apply_effect_target_offset(animation_node: Node2D, target_ident: String) -> void:
+func _apply_effect_target_offset(animation_node: Node2D, target_ident: String, config: Dictionary) -> void:
 	if target_ident == "":
 		return
 
-	if _get_player_id_from_ident(target_ident) != "p2":
+	var target_anchor: Vector2 = _get_effect_anchor_position(_get_player_id_from_ident(target_ident))
+	if target_anchor == Vector2.ZERO:
 		return
 
-	var source_offset: Vector2 = EFFECT_SOURCE_ENEMY_POSITION - EFFECT_SOURCE_PLAYER_POSITION
+	var source_anchor: Vector2 = _get_effect_anchor_position(str(config.get("source_anchor", "player")))
+	var source_offset: Vector2 = target_anchor - source_anchor
 	animation_node.position += Vector2(source_offset.x * animation_node.scale.x, source_offset.y * animation_node.scale.y)
+
+
+func _get_effect_anchor_position(anchor: String) -> Vector2:
+	match anchor.strip_edges().to_lower():
+		"p1", "player", "source":
+			return EFFECT_SOURCE_PLAYER_POSITION
+		"p2", "enemy", "target":
+			return EFFECT_SOURCE_ENEMY_POSITION
+		_:
+			return Vector2.ZERO
 
 
 func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void:

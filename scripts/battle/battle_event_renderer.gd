@@ -134,7 +134,7 @@ func _get_battle_log_event_player_id(event: Dictionary) -> String:
 			return str(event.get("playerId", ""))
 		"move", "cant", "fail", "miss":
 			return _get_player_id_from_ident(str(event.get("actor", "")))
-		"hitCount":
+		"hitCount", "criticalHit":
 			return _get_player_id_from_ident(str(event.get("target", "")))
 		"ability":
 			return _get_ability_event_player_id(event)

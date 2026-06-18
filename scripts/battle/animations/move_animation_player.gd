@@ -16,12 +16,17 @@ signal animation_finished
 @export var show_timing_foregrounds: bool = false
 @export var show_pink_visual: bool = true
 @export var show_sheet_sprites: bool = true
+@export var overlay_fill_enabled: bool = true
 @export var projectile_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
 @export var sprite_tint: Color = Color(1.0, 0.78, 1.0, 1.0)
 @export_range(0.0, 0.5, 0.01) var overlay_peak_alpha: float = 0.20
 @export_range(0, 48, 1) var sparkle_count: int = 14
 @export_range(0.25, 4.0, 0.05) var speed_scale: float = 1.0
+@export_range(0.1, 2.0, 0.05) var sprite_zoom_multiplier: float = 1.0
+@export var sparkle_center: Vector2 = Vector2(256, 188)
+@export_range(8.0, 180.0, 1.0) var sparkle_radius_min: float = 26.0
+@export_range(8.0, 220.0, 1.0) var sparkle_radius_max: float = 78.0
 @export_range(-8, 8, 1) var pattern_offset: int = 0
 @export_range(-1, 999, 1) var pattern_override: int = -1
 
@@ -209,13 +214,21 @@ func _draw() -> void:
 	if not show_pink_visual or pink_overlay_alpha <= 0.0:
 		return
 
-	draw_rect(Rect2(Vector2.ZERO, Vector2(512, 384)), Color(visual_color.r, visual_color.g, visual_color.b, pink_overlay_alpha), true)
+	if overlay_fill_enabled:
+		draw_rect(Rect2(Vector2.ZERO, Vector2(512, 384)), Color(visual_color.r, visual_color.g, visual_color.b, pink_overlay_alpha), true)
 	for i: int in range(sparkle_count):
-		var angle: float = float(i) * 0.85 + float(frame_index) * 0.18
-		var radius: float = 44.0 + float((i * 17) % 85)
-		var center: Vector2 = Vector2(256, 188) + Vector2(cos(angle), sin(angle * 1.27)) * radius
+		var angle: float = float(i) * 0.85 + float(frame_index) * 0.24
+		var radius_span: float = maxf(sparkle_radius_max - sparkle_radius_min, 1.0)
+		var radius: float = sparkle_radius_min + fmod(float(i * 17), radius_span)
+		var center: Vector2 = sparkle_center + Vector2(cos(angle), sin(angle * 1.27)) * radius
 		var sparkle_alpha: float = pink_overlay_alpha * (0.35 + 0.45 * absf(sin(angle)))
-		draw_circle(center, 2.5 + float(i % 3), Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, sparkle_alpha))
+		var sparkle_size: float = 3.0 + float(i % 3)
+		var sparkle_color := Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, sparkle_alpha)
+		draw_line(center + Vector2(-sparkle_size, 0.0), center + Vector2(sparkle_size, 0.0), sparkle_color, 1.4)
+		draw_line(center + Vector2(0.0, -sparkle_size), center + Vector2(0.0, sparkle_size), sparkle_color, 1.4)
+		draw_line(center + Vector2(-sparkle_size * 0.7, -sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, sparkle_size * 0.7), sparkle_color, 1.0)
+		draw_line(center + Vector2(-sparkle_size * 0.7, sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, -sparkle_size * 0.7), sparkle_color, 1.0)
+		draw_circle(center, sparkle_size * 0.38, sparkle_color)
 
 
 func _apply_frame(index: int) -> void:
@@ -257,7 +270,7 @@ func _apply_frame(index: int) -> void:
 			tile_h
 		)
 		sprite.position = Vector2(float(cell["x"]), float(cell["y"]))
-		var zoom: float = float(cell["zoom"]) / 100.0
+		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
 		sprite.rotation_degrees = float(cell["angle"])
 		var alpha: float = float(cell["opacity"]) / 255.0

@@ -13,7 +13,8 @@ const POISON_STATUS_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const TOXIC_STATUS_MODULATE := Color("#8c58ff")
 
 @onready var pokemon_icon: TextureRect = $MarginContainer/HBoxContainer/PokemonIcon
-@onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameLabel
+@onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/ShinyBadge
+@onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/NameLabel
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/HPBar
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/StatusIcon
 
@@ -44,6 +45,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
 
 	name_label.text = pokemon.species
+	shiny_badge.visible = pokemon.shiny
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
@@ -65,6 +67,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
 
 	name_label.text = species
+	shiny_badge.visible = _get_shiny_from_data(pokemon_data)
 
 	hp_bar.max_value = max_hp
 	hp_bar.value = clamp(current_hp, 0, int(hp_bar.max_value))
@@ -159,6 +162,7 @@ func set_empty() -> void:
 	modulate = NORMAL_MODULATE
 
 	name_label.text = ""
+	shiny_badge.visible = false
 	hp_bar.value = 0
 	pokemon_icon.texture = null
 	_set_status_icon("")
@@ -198,9 +202,16 @@ func _set_color(background: Color, border: Color) -> void:
 	normal.corner_radius_top_right = 6
 	normal.corner_radius_bottom_left = 6
 	normal.corner_radius_bottom_right = 6
+	normal.shadow_color = Color(0, 0, 0, 0.22)
+	normal.shadow_size = 6
+	normal.shadow_offset = Vector2(0, 2)
 
 	var hover := normal.duplicate() as StyleBoxFlat
 	hover.bg_color = background.lightened(0.08)
+	hover.border_color = border.lightened(0.18)
+	hover.shadow_color = Color(0.40784314, 0.6156863, 0.9019608, 0.18)
+	hover.shadow_size = 10
+	hover.shadow_offset = Vector2(0, 3)
 
 	var pressed := normal.duplicate() as StyleBoxFlat
 	pressed.bg_color = background.darkened(0.08)

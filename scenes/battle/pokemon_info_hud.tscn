@@ -27,6 +27,18 @@ theme_override_constants/separation = 8
 
 [node name="NameContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopRow" unique_id=1598553531]
 layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ShinyBadge" type="Label" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=843612097]
+visible = false
+layout_mode = 2
+tooltip_text = "Shiny Pokemon"
+theme_override_colors/font_color = Color(1, 0.84313726, 0.3529412, 1)
+theme_override_colors/font_outline_color = Color(0.2784314, 0.14901961, 0.019607844, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 18
+text = "S"
+vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1266734243]
 layout_mode = 2

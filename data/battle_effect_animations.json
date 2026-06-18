@@ -192,6 +192,48 @@
       "speed_scale": 1.1,
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "shiny_sparkle": {
+      "template": "imported_sheet",
+      "source": "Common:Shiny",
+      "source_anchor": "enemy",
+      "category": "entrance",
+      "data_path": "res://assets/battles/animations/common/shiny/shiny.json",
+      "sheet_path": "res://assets/battles/animations/common/shiny/leech-seed.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "Shiny sparkle": "res://assets/battles/animations/common/shiny/Shiny sparkle.ogg"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.78,
+        0.16,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.68,
+      "sparkle_count": 30,
+      "speed_scale": 1.25,
+      "sprite_zoom_multiplier": 0.35,
+      "sparkle_center": [
+        384.0,
+        96.0
+      ],
+      "sparkle_radius_min": 12.0,
+      "sparkle_radius_max": 72.0,
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   },
   "aliases": {
@@ -232,6 +274,11 @@
     "eat_berry": "eat_berry",
     "berry": "eat_berry",
     "berry_eat": "eat_berry",
-    "berry_use": "eat_berry"
+    "berry_use": "eat_berry",
+    "shiny": "shiny_sparkle",
+    "shiny_sparkle": "shiny_sparkle",
+    "shiny_entrance": "shiny_sparkle",
+    "common_shiny": "shiny_sparkle",
+    "sparkle_shiny": "shiny_sparkle"
   }
 }

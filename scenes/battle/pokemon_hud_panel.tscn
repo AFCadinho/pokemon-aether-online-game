@@ -5,16 +5,19 @@
 [ext_resource type="PackedScene" uid="uid://dydjcjdd5oypk" path="res://scenes/battle/pokemon_sheet_slot.tscn" id="4_mvctu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5wf7c"]
-bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.8235294)
+bg_color = Color(0.008, 0.018, 0.033, 0.88)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.88)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.34)
+shadow_size = 12
+shadow_offset = Vector2(0, 5)
 
 [node name="PokemonHudPanel" type="PanelContainer" unique_id=754506686]
 z_index = 10

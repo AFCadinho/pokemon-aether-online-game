@@ -39,8 +39,16 @@ func _connect_team_slot_hover_signals() -> void:
 		if slot.has_signal("pokemon_unhovered"):
 			slot.pokemon_unhovered.connect(_on_team_slot_pokemon_unhovered)
 
-func set_pokemon_data(species: String, level: int, current_hp: int, max_hp: int, status: String = "", gender: String = "") -> void:
-	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender)
+func set_pokemon_data(
+	species: String,
+	level: int,
+	current_hp: int,
+	max_hp: int,
+	status: String = "",
+	gender: String = "",
+	is_shiny: bool = false
+) -> void:
+	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny)
 
 func clear_active_pokemon_data() -> void:
 	_set_active_info_row_visible(0, false)
@@ -52,7 +60,8 @@ func _set_active_info_row_data(
 	current_hp: int,
 	max_hp: int,
 	status: String = "",
-	gender: String = ""
+	gender: String = "",
+	is_shiny: bool = false
 ) -> void:
 	if row_index < 0 or row_index >= active_info_rows.size():
 		return
@@ -64,6 +73,7 @@ func _set_active_info_row_data(
 	if name_label != null:
 		name_label.text = species
 
+	_set_shiny_badge(row, is_shiny)
 	var level_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/LevelLabel") as Label
 	if level_label != null:
 		level_label.text = "Lv. " + str(level)
@@ -76,6 +86,13 @@ func _set_active_info_row_data(
 
 	_set_gender(row, gender)
 	_set_status(row, status)
+
+func _set_shiny_badge(row: Node, is_shiny: bool) -> void:
+	var shiny_badge: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/ShinyBadge") as Label
+	if shiny_badge == null:
+		return
+
+	shiny_badge.visible = is_shiny
 
 func _set_active_info_row_visible(row_index: int, is_visible: bool) -> void:
 	if row_index < 0 or row_index >= active_info_rows.size():

@@ -23,8 +23,12 @@ func get_active_display_species(player_id: String) -> String:
 	if battle_state == null:
 		return ""
 
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	var transformed_species := str(active_pokemon.get("transformedSpecies", active_pokemon.get("displaySpecies", "")))
+	if transformed_species != "":
+		return transformed_species
+
 	if player_id == "p1":
-		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
 		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
 		if saved_pokemon != null:
 			return saved_pokemon.species
