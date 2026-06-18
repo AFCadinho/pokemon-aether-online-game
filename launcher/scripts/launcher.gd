@@ -7,6 +7,7 @@ const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_HEALTH_URL := "https://pokeaether.com/health"
+const DEFAULT_PRESENCE_URL := "https://admin.pokeaether.com/presence/online-count"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const DEFAULT_INSTALL_DIR := "user://game"
 const GAME_INSTALL_SUBDIR := "game"
@@ -37,6 +38,7 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var brand_mark: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandMark
 @onready var server_card: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard
 @onready var server_online_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/ServerOnline
+@onready var online_players_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/OnlinePlayers
 @onready var meta_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard
 @onready var progress_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard
 @onready var news_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/NewsCard
@@ -71,6 +73,7 @@ var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
 var health_url := DEFAULT_HEALTH_URL
+var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
 var install_dir := DEFAULT_INSTALL_DIR
@@ -1658,13 +1661,19 @@ func _load_launcher_config() -> void:
 	var configured_health_url := str(config.get("healthUrl", ""))
 	if not configured_health_url.is_empty():
 		health_url = configured_health_url
+	var configured_presence_url := str(config.get("presenceUrl", ""))
+	if not configured_presence_url.is_empty():
+		presence_url = configured_presence_url
 	manifest_url = _normalize_url(manifest_url)
 	news_url = _normalize_url(news_url)
 	health_url = _normalize_url(health_url)
+	presence_url = _normalize_url(presence_url)
 	if manifest_url.is_empty():
 		manifest_url = DEFAULT_MANIFEST_URL
 	if health_url.is_empty():
 		health_url = DEFAULT_HEALTH_URL
+	if presence_url.is_empty():
+		presence_url = DEFAULT_PRESENCE_URL
 
 	var configured_discord_url := str(config.get("discordUrl", ""))
 	if not configured_discord_url.is_empty():
@@ -1876,14 +1885,31 @@ func _refresh_server_health() -> void:
 	if bool(result.get("online", false)):
 		server_online_label.text = "Online"
 		server_online_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
+		await _refresh_online_players()
 	else:
 		server_online_label.text = "Offline"
 		server_online_label.add_theme_color_override("font_color", SERVER_OFFLINE_COLOR)
+		online_players_label.text = "Players online unavailable"
+		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 
 
 func _set_server_health_checking() -> void:
 	server_online_label.text = "Checking..."
 	server_online_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
+	online_players_label.text = "Checking players online..."
+	online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
+
+
+func _refresh_online_players() -> void:
+	var result: Dictionary = await LauncherServerHealthService.request_presence_async(self, presence_url)
+	if not bool(result.get("success", false)):
+		online_players_label.text = "Players online unavailable"
+		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
+		return
+
+	var online_players: int = int(result.get("onlineUsers", 0))
+	online_players_label.text = "%s %s online" % [online_players, "player" if online_players == 1 else "players"]
+	online_players_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
 
 
 func _set_busy(is_busy: bool) -> void:

@@ -13,7 +13,10 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 	"pixel": 2,
 }
 const GEN5_SPRITE_MISSING_MESSAGE := "Gen 5 Animated sprites are not installed. Download them from the launcher."
+const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
+const MINIMUM_MENU_SIZE := Vector2(440, 540)
 
+@onready var settings_layout: VBoxContainer = $MarginContainer/VBoxContainer
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
@@ -33,9 +36,17 @@ const GEN5_SPRITE_MISSING_MESSAGE := "Gen 5 Animated sprites are not installed. 
 @onready var close_button: Button = $MarginContainer/VBoxContainer/CloseButton
 
 var loading_controls := false
+var logging_out := false
+var tab_container: TabContainer
+var account_user_label: Label
+var logout_button: Button
+var logout_confirm_dialog: ConfirmationDialog
 
 
 func _ready() -> void:
+	custom_minimum_size = MINIMUM_MENU_SIZE
+	_setup_tabs()
+	_setup_logout_confirm_dialog()
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
@@ -47,6 +58,7 @@ func _ready() -> void:
 	battle_music_options_button.item_selected.connect(_on_battle_music_selected)
 	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
 	ui_volume_slider.value_changed.connect(_on_ui_volume_changed)
+	logout_button.pressed.connect(_on_logout_button_pressed)
 	close_button.pressed.connect(close)
 	_apply_settings_to_controls()
 	visible = false
@@ -54,6 +66,7 @@ func _ready() -> void:
 
 func open() -> void:
 	_apply_settings_to_controls()
+	_refresh_account_tab()
 	visible = true
 	close_button.grab_focus()
 
@@ -86,6 +99,129 @@ func _apply_settings_to_controls() -> void:
 	_set_volume_control(ui_volume_slider, ui_volume_value_label, SettingsManager.ui_volume)
 
 	loading_controls = false
+
+
+func _setup_tabs() -> void:
+	if tab_container != null:
+		return
+
+	tab_container = TabContainer.new()
+	tab_container.name = "SettingsTabs"
+	tab_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tab_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	settings_layout.add_child(tab_container)
+	settings_layout.move_child(tab_container, 1)
+
+	var general_tab: VBoxContainer = _create_tab_content("General")
+	var graphics_tab: VBoxContainer = _create_tab_content("Graphics")
+	var sound_tab: VBoxContainer = _create_tab_content("Sound")
+	var account_tab: VBoxContainer = _create_tab_content("Account")
+
+	_move_nodes_to_container(general_tab, [
+		battle_animations_check_box,
+		weather_effects_check_box,
+		terrain_effects_check_box,
+	])
+	_move_nodes_to_container(graphics_tab, [
+		sprite_style_options_button.get_node("../SpriteStyleLabel"),
+		sprite_style_options_button,
+		sprite_style_status_label,
+		fullscreen_check_box.get_node("../DisplayLabel"),
+		fullscreen_check_box,
+		resolution_options_button.get_node("../ResolutionLabel"),
+		resolution_options_button,
+	])
+	_move_nodes_to_container(sound_tab, [
+		master_volume_slider.get_node("../../AudioLabel"),
+		master_volume_slider.get_node(".."),
+		music_volume_slider.get_node(".."),
+		battle_music_options_button.get_node("../BattleMusicLabel"),
+		battle_music_options_button,
+		sfx_volume_slider.get_node(".."),
+		ui_volume_slider.get_node(".."),
+	])
+	_build_account_tab(account_tab)
+
+
+func _create_tab_content(tab_name: String) -> VBoxContainer:
+	var margin := MarginContainer.new()
+	margin.name = tab_name
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	margin.add_theme_constant_override("margin_left", 4)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 4)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	tab_container.add_child(margin)
+
+	var content := VBoxContainer.new()
+	content.name = "%sContent" % tab_name
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation", 12)
+	margin.add_child(content)
+	return content
+
+
+func _move_nodes_to_container(container: VBoxContainer, nodes: Array) -> void:
+	for node_value: Variant in nodes:
+		var node := node_value as Node
+		if node == null:
+			continue
+		var current_parent := node.get_parent()
+		if current_parent != null:
+			current_parent.remove_child(node)
+		container.add_child(node)
+
+
+func _build_account_tab(account_tab: VBoxContainer) -> void:
+	var account_label := Label.new()
+	account_label.text = "Account"
+	account_label.add_theme_color_override("font_color", Color(0.84705883, 0.7058824, 0.41568628, 1))
+	account_tab.add_child(account_label)
+
+	account_user_label = Label.new()
+	account_user_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_user_label.add_theme_color_override("font_color", Color(0.8980392, 0.8627451, 0.8117647, 1))
+	account_tab.add_child(account_user_label)
+
+	var account_note := Label.new()
+	account_note.text = "Return to the login screen without ending your saved session."
+	account_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_note.add_theme_color_override("font_color", Color(0.64, 0.66, 0.77, 1))
+	account_note.add_theme_font_size_override("font_size", 12)
+	account_tab.add_child(account_note)
+
+	logout_button = Button.new()
+	logout_button.text = "Return to Login"
+	logout_button.add_theme_color_override("font_color", Color(1.0, 0.42, 0.42, 1))
+	account_tab.add_child(logout_button)
+
+
+func _setup_logout_confirm_dialog() -> void:
+	logout_confirm_dialog = ConfirmationDialog.new()
+	logout_confirm_dialog.title = "Return to Login"
+	logout_confirm_dialog.dialog_text = "Return to the login screen? Your saved session stays active."
+	logout_confirm_dialog.ok_button_text = "Return"
+	logout_confirm_dialog.cancel_button_text = "Cancel"
+	logout_confirm_dialog.exclusive = true
+	logout_confirm_dialog.confirmed.connect(_logout_confirmed)
+	add_child(logout_confirm_dialog)
+
+
+func _refresh_account_tab() -> void:
+	if account_user_label == null:
+		return
+
+	var display_name: String = AuthService.get_display_name()
+	var username: String = str(AuthService.current_user.get("username", ""))
+	if display_name == "" and username == "":
+		account_user_label.text = "No active account."
+		return
+	if username != "" and username != display_name:
+		account_user_label.text = "Logged in as %s (@%s)" % [display_name, username]
+		return
+	account_user_label.text = "Logged in as %s" % display_name
 
 
 func _on_battle_animations_toggled(enabled: bool) -> void:
@@ -180,6 +316,26 @@ func _on_ui_volume_changed(value: float) -> void:
 		return
 
 	SettingsManager.set_ui_volume(value)
+
+
+func _on_logout_button_pressed() -> void:
+	if logging_out:
+		return
+	logout_confirm_dialog.popup_centered()
+
+
+func _logout_confirmed() -> void:
+	if logging_out:
+		return
+	logging_out = true
+	logout_button.disabled = true
+	close_button.disabled = true
+	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+	if error != OK:
+		logging_out = false
+		logout_button.disabled = false
+		close_button.disabled = false
+		push_warning("Could not return to login screen: %s" % error_string(error))
 
 
 func _set_volume_control(slider: HSlider, value_label: Label, value: float) -> void:

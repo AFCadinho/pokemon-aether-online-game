@@ -185,6 +185,12 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.94, 0.66, 1)
 text = "Online"
 
+[node name="OnlinePlayers" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=759019384]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.34, 1)
+theme_override_font_sizes/font_size = 13
+text = "Checking players online..."
+
 [node name="LauncherVersionTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=1974187876]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)

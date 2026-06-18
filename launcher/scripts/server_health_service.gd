@@ -60,6 +60,65 @@ static func check_async(parent: Node, health_url: String = DEFAULT_HEALTH_URL) -
 	}
 
 
+static func request_presence_async(parent: Node, presence_url: String) -> Dictionary:
+	var request := HTTPRequest.new()
+	request.timeout = REQUEST_TIMEOUT_SECONDS
+	parent.add_child(request)
+
+	var error: Error = request.request(
+		presence_url,
+		[USER_AGENT_HEADER],
+		HTTPClient.METHOD_GET
+	)
+	if error != OK:
+		request.queue_free()
+		return {
+			"success": false,
+			"onlineUsers": 0,
+			"error": "Could not start presence request: %s" % error_string(error),
+		}
+
+	var result: Array = await request.request_completed
+	request.queue_free()
+
+	var request_result: int = int(result[0])
+	var response_code: int = int(result[1])
+	var body: PackedByteArray = result[3]
+
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"onlineUsers": 0,
+			"status": response_code,
+			"error": _request_result_message(request_result),
+		}
+
+	if response_code < 200 or response_code >= 300:
+		return {
+			"success": false,
+			"onlineUsers": 0,
+			"status": response_code,
+			"error": "Presence request returned HTTP %s." % response_code,
+		}
+
+	var parsed_body: Variant = JSON.parse_string(body.get_string_from_utf8())
+	if typeof(parsed_body) != TYPE_DICTIONARY:
+		return {
+			"success": false,
+			"onlineUsers": 0,
+			"status": response_code,
+			"error": "Presence response is invalid.",
+		}
+
+	var response: Dictionary = parsed_body
+	return {
+		"success": true,
+		"onlineUsers": int(response.get("onlineUsers", 0)),
+		"connections": int(response.get("connections", 0)),
+		"status": response_code,
+	}
+
+
 static func _request_result_message(result: int) -> String:
 	match result:
 		HTTPRequest.RESULT_CANT_CONNECT:
