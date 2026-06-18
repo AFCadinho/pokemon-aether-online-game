@@ -83,6 +83,9 @@ enum DevPokemonPopupMode {
 @onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
 @onready var dev_pokemon_add_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/AddButton
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
+@onready var bag_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot
+@onready var bag_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot/BagButton
+@onready var settings_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot
 @onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
 @onready var map_button: Button = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapButton
@@ -140,6 +143,8 @@ func _ready() -> void:
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
+	_setup_icon_slot_hover(bag_slot, bag_button)
+	_setup_icon_slot_hover(settings_slot, settings_button)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
 	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
@@ -517,6 +522,34 @@ func _apply_text_edit_style(text_edit: TextEdit) -> void:
 func _apply_slot_panel_style(panel: PanelContainer) -> void:
 	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
 
+func _apply_icon_slot_hover_style(panel: PanelContainer, hovered: bool) -> void:
+	var background_color := Color("#151f36f2") if hovered else UI_SLOT_BG
+	var border_color := UI_BORDER if hovered else UI_BORDER_SOFT
+	var style := _make_panel_style(background_color, border_color, 8, 1)
+	if hovered:
+		style.shadow_color = Color(UI_BORDER.r, UI_BORDER.g, UI_BORDER.b, 0.34)
+		style.shadow_size = 10
+		style.shadow_offset = Vector2.ZERO
+	panel.add_theme_stylebox_override("panel", style)
+
+func _setup_icon_slot_hover(panel: PanelContainer, button: TextureButton) -> void:
+	_apply_icon_slot_hover_style(panel, false)
+	if not panel.mouse_entered.is_connected(_on_icon_slot_mouse_entered.bind(panel)):
+		panel.mouse_entered.connect(_on_icon_slot_mouse_entered.bind(panel))
+	if not panel.mouse_exited.is_connected(_on_icon_slot_mouse_exited.bind(panel)):
+		panel.mouse_exited.connect(_on_icon_slot_mouse_exited.bind(panel))
+	if not button.mouse_entered.is_connected(_on_icon_slot_mouse_entered.bind(panel)):
+		button.mouse_entered.connect(_on_icon_slot_mouse_entered.bind(panel))
+	if not button.mouse_exited.is_connected(_on_icon_slot_mouse_exited.bind(panel)):
+		button.mouse_exited.connect(_on_icon_slot_mouse_exited.bind(panel))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+func _on_icon_slot_mouse_entered(panel: PanelContainer) -> void:
+	_apply_icon_slot_hover_style(panel, true)
+
+func _on_icon_slot_mouse_exited(panel: PanelContainer) -> void:
+	_apply_icon_slot_hover_style(panel, false)
+
 func _apply_premium_overlay_styles() -> void:
 	party_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
 	chat_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
@@ -545,12 +578,10 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(dev_actions_button)
 	repel_toggle_button.add_theme_stylebox_override("pressed", _make_button_style(UI_REPEL_BG, Color("#58d970"), 8, 1))
 
-	var bag_slot := get_node_or_null("Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot") as PanelContainer
 	if bag_slot != null:
-		_apply_slot_panel_style(bag_slot)
-	var settings_slot := get_node_or_null("Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot") as PanelContainer
+		_apply_icon_slot_hover_style(bag_slot, false)
 	if settings_slot != null:
-		_apply_slot_panel_style(settings_slot)
+		_apply_icon_slot_hover_style(settings_slot, false)
 
 	for panel_id_value: Variant in collapsible_panels.keys():
 		var panel_id := str(panel_id_value)
