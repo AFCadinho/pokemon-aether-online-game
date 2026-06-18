@@ -1,11 +1,23 @@
 extends Node2D
 
+@export var map_id := "kanto_route_1"
+@export var map_region_name := "Kanto"
+@export var map_display_name := "Route 1"
 @export var encounter_area_id := "kanto_route_1"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.1
 @export_file("*.ogg") var music_track_path := "res://assets/audio/music/overworld/overworld_theme.ogg"
 
 func _ready() -> void:
 	await _load_encounter_area_metadata()
+
+func get_map_id() -> String:
+	return map_id
+
+func get_map_display_name() -> String:
+	return map_display_name
+
+func get_map_region_name() -> String:
+	return map_region_name
 
 func get_wild_encounter_area_id() -> String:
 	return encounter_area_id

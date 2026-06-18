@@ -15,6 +15,42 @@ const SPAWN_COMMAND := "/spawn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const COLLAPSE_BUTTON_SIZE := Vector2(28, 28)
 const COLLAPSE_BUTTON_MARGIN := 6.0
+const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
+const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
+const CHAT_SEPARATOR_COLOR := "#778194"
+const CHAT_MESSAGE_COLOR := "#d7dce8"
+const CHAT_SYSTEM_LABEL_COLOR := "#d8b767"
+const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
+const CHAT_TAB_GENERAL := "general"
+const CHAT_TAB_SYSTEM := "system"
+const CHAT_CATEGORY_USER := "user"
+const CHAT_CATEGORY_SYSTEM := "system"
+const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
+const PLAYER_STATUS_CARD_SIZE := Vector2(248, 86)
+const PLAYER_STATUS_CARD_MARGIN := Vector2(16, 16)
+const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(76, 76)
+const PLAYER_STATUS_AVATAR_POSITION := Vector2(38, 52)
+const PLAYER_STATUS_AVATAR_SCALE := Vector2(1.5, 1.5)
+const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
+const UI_BG := Color("#070b14e6")
+const UI_BG_STRONG := Color("#05070bf2")
+const UI_SLOT_BG := Color("#0d1625e6")
+const UI_INPUT_BG := Color("#050912e8")
+const UI_BORDER := Color("#d8b767")
+const UI_BORDER_SOFT := Color("#315070")
+const UI_BORDER_FOCUS := Color("#7aa7f4")
+const UI_TEXT := Color("#f4f0de")
+const UI_MUTED_TEXT := Color("#aeb8c5")
+const UI_MONEY := Color("#ffd45a")
+const UI_PURPLE_HOVER := Color("#b980ff")
+const UI_DANGER := Color("#ff6b74")
+const UI_DANGER_BG := Color("#2a1015e8")
+const UI_REPEL_BG := Color("#155f2be8")
+const PLAYER_STATUS_CARD_BACKGROUND := UI_BG
+const PLAYER_STATUS_CARD_BORDER := UI_BORDER
+const PLAYER_STATUS_CARD_TEXT := UI_TEXT
+const PLAYER_STATUS_MONEY_COLOR := UI_MONEY
+const PLAYER_STATUS_MONEY_ICON := "$"
 
 enum DevPokemonPopupMode {
 	POKEMON,
@@ -28,11 +64,16 @@ enum DevPokemonPopupMode {
 @onready var party_slot_template: PanelContainer = $Control/PartyPanel/MarginContainer/VBoxContainer/PartySlot
 @onready var chat_panel: PanelContainer = $Control/ChatPanel
 @onready var location_panel: PanelContainer = $Control/LocationPanel
+@onready var region_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/RegionLabel
+@onready var location_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/LocationLabel
+@onready var time_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/TimeLabel
 @onready var options_panel: PanelContainer = $Control/OptionsPanel
 @onready var actions_panel: PanelContainer = $Control/ActionsPanel
 @onready var message_scroll: ScrollContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll
 @onready var message_list: VBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
+@onready var general_chat_tab_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/TabBarPanel/TabRow/GeneralButton
+@onready var system_chat_tab_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/TabBarPanel/TabRow/SystemButton
 @onready var chat_input: LineEdit = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/ChatInput
 @onready var dev_pokemon_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/DevPokemonButton
 @onready var send_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/SendButton
@@ -44,6 +85,7 @@ enum DevPokemonPopupMode {
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
 @onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
+@onready var map_button: Button = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapButton
 @onready var repel_toggle_button: Button = $Control/ActionsPanel/MarginContainer/HBoxContainer/RepelToggle
 @onready var dev_actions_button: Button = $Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsButton
 @onready var dev_actions_popup: PanelContainer = $Control/DevActionsPopup
@@ -57,12 +99,24 @@ var party_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
 var clear_party_confirm_dialog: ConfirmationDialog
+var chat_submit_in_progress: bool = false
+var active_chat_tab: String = CHAT_TAB_GENERAL
+var player_status_panel: PanelContainer
+var player_status_name_label: Label
+var player_status_money_label: Label
+var displayed_money: int = -1
+var displayed_location_map: Node
+var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	_setup_player_status_card()
 	_build_party_slots()
 	_setup_collapsible_panels()
 	_setup_clear_party_confirm_dialog()
+	_apply_premium_overlay_styles()
+	_refresh_location_label()
+	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_party()
 	
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
@@ -74,7 +128,14 @@ func _ready() -> void:
 	ChatRealtimeService.connect_chat.call_deferred()
 
 	send_button.pressed.connect(_on_send_button_pressed)
+	send_button.focus_mode = Control.FOCUS_NONE
+	chat_input.keep_editing_on_text_submit = true
 	chat_input.text_submitted.connect(_on_chat_text_submitted)
+	general_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GENERAL))
+	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
+	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
@@ -104,10 +165,74 @@ func _setup_clear_party_confirm_dialog() -> void:
 	clear_party_confirm_dialog.confirmed.connect(_on_clear_party_confirmed)
 	add_child(clear_party_confirm_dialog)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_position_collapsible_buttons()
+	_refresh_player_status_card_if_needed()
+	_refresh_location_label_if_needed()
+	_refresh_utc_time_label(delta)
+
+func _refresh_location_label_if_needed() -> void:
+	var current_map: Node = GameState.current_map as Node
+	if displayed_location_map == current_map:
+		return
+	_refresh_location_label()
+
+func _refresh_location_label() -> void:
+	displayed_location_map = GameState.current_map as Node
+	if region_label != null:
+		region_label.text = _get_current_map_region_name().to_upper()
+	if location_label != null:
+		location_label.text = _get_current_map_display_name()
+
+func _get_current_map_region_name() -> String:
+	var current_map: Node = GameState.current_map as Node
+	if current_map == null:
+		return "Unknown"
+	if current_map.has_method("get_map_region_name"):
+		var region_name: String = str(current_map.call("get_map_region_name")).strip_edges()
+		if region_name != "":
+			return region_name
+	return "Unknown"
+
+func _get_current_map_display_name() -> String:
+	var current_map: Node = GameState.current_map as Node
+	if current_map == null:
+		return "Unknown Location"
+	if current_map.has_method("get_map_display_name"):
+		var display_name: String = str(current_map.call("get_map_display_name")).strip_edges()
+		if display_name != "":
+			return display_name
+	return _format_map_name(str(current_map.name))
+
+func _format_map_name(raw_name: String) -> String:
+	var readable: String = raw_name.replace("_", " ").strip_edges()
+	if readable == "":
+		return "Unknown Location"
+	return readable
+
+func _refresh_utc_time_label(delta: float, force := false) -> void:
+	utc_time_refresh_elapsed += delta
+	if not force and utc_time_refresh_elapsed < UTC_TIME_REFRESH_INTERVAL_SECONDS:
+		return
+	utc_time_refresh_elapsed = 0.0
+	if time_label == null:
+		return
+
+	var date_time: Dictionary = Time.get_datetime_dict_from_system(true)
+	var hour: int = int(date_time.get("hour", 0))
+	var minute: int = int(date_time.get("minute", 0))
+	var period: String = "AM" if hour < 12 else "PM"
+	var display_hour: int = hour % 12
+	if display_hour == 0:
+		display_hour = 12
+	time_label.text = "%02d:%02d %s" % [display_hour, minute, period]
 
 func _input(event: InputEvent) -> void:
+	if chat_input.has_focus() and _is_settings_toggle_event(event):
+		chat_input.release_focus()
+		get_viewport().set_input_as_handled()
+		return
+
 	if _is_settings_toggle_event(event):
 		_toggle_settings_menu()
 		get_viewport().set_input_as_handled()
@@ -131,8 +256,312 @@ func _input(event: InputEvent) -> void:
 func _is_point_inside_control(control: Control, point: Vector2) -> bool:
 	return control.get_global_rect().has_point(point)
 
+func _setup_player_status_card() -> void:
+	player_status_panel = PanelContainer.new()
+	player_status_panel.name = "PlayerStatusPanel"
+	player_status_panel.custom_minimum_size = PLAYER_STATUS_CARD_SIZE
+	player_status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	player_status_panel.anchor_left = 0.0
+	player_status_panel.anchor_top = 1.0
+	player_status_panel.anchor_right = 0.0
+	player_status_panel.anchor_bottom = 1.0
+	player_status_panel.offset_left = PLAYER_STATUS_CARD_MARGIN.x
+	player_status_panel.offset_top = -PLAYER_STATUS_CARD_SIZE.y - PLAYER_STATUS_CARD_MARGIN.y
+	player_status_panel.offset_right = PLAYER_STATUS_CARD_MARGIN.x + PLAYER_STATUS_CARD_SIZE.x
+	player_status_panel.offset_bottom = -PLAYER_STATUS_CARD_MARGIN.y
+	player_status_panel.add_theme_stylebox_override("panel", _make_panel_style(
+		PLAYER_STATUS_CARD_BACKGROUND,
+		PLAYER_STATUS_CARD_BORDER,
+		14,
+		1
+	))
+	root_control.add_child(player_status_panel)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 12)
+	margin_container.add_theme_constant_override("margin_top", 10)
+	margin_container.add_theme_constant_override("margin_right", 12)
+	margin_container.add_theme_constant_override("margin_bottom", 10)
+	player_status_panel.add_child(margin_container)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	margin_container.add_child(row)
+
+	row.add_child(_create_player_status_avatar())
+
+	var info_layout := VBoxContainer.new()
+	info_layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_layout.alignment = BoxContainer.ALIGNMENT_CENTER
+	info_layout.add_theme_constant_override("separation", 7)
+	row.add_child(info_layout)
+
+	player_status_name_label = Label.new()
+	player_status_name_label.text = PlayerSave.player_name
+	player_status_name_label.add_theme_font_size_override("font_size", 17)
+	player_status_name_label.add_theme_color_override("font_color", PLAYER_STATUS_CARD_TEXT)
+	player_status_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	info_layout.add_child(player_status_name_label)
+
+	var money_row := HBoxContainer.new()
+	money_row.add_theme_constant_override("separation", 8)
+	info_layout.add_child(money_row)
+
+	var money_icon := PanelContainer.new()
+	money_icon.custom_minimum_size = Vector2(24, 24)
+	money_icon.add_theme_stylebox_override("panel", _make_panel_style(PLAYER_STATUS_MONEY_COLOR, Color("#fff1a8"), 12, 1))
+	money_row.add_child(money_icon)
+
+	var money_icon_label := Label.new()
+	money_icon_label.text = PLAYER_STATUS_MONEY_ICON
+	money_icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	money_icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	money_icon_label.add_theme_color_override("font_color", Color("#5b3f00"))
+	money_icon_label.add_theme_font_size_override("font_size", 15)
+	money_icon.add_child(money_icon_label)
+
+	player_status_money_label = Label.new()
+	player_status_money_label.add_theme_font_size_override("font_size", 22)
+	player_status_money_label.add_theme_color_override("font_color", PLAYER_STATUS_MONEY_COLOR)
+	player_status_money_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	money_row.add_child(player_status_money_label)
+
+	_refresh_player_status_card()
+
+func _create_player_status_avatar() -> Control:
+	var avatar_frame := PanelContainer.new()
+	avatar_frame.custom_minimum_size = Vector2(68, 68)
+	avatar_frame.add_theme_stylebox_override("panel", _make_panel_style(UI_BG_STRONG, Color("#f4ecd5"), 34, 2))
+
+	var avatar_viewport_container := SubViewportContainer.new()
+	avatar_viewport_container.custom_minimum_size = Vector2(68, 68)
+	avatar_viewport_container.stretch = false
+	avatar_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	avatar_frame.add_child(avatar_viewport_container)
+
+	var avatar_viewport := SubViewport.new()
+	avatar_viewport.transparent_bg = true
+	avatar_viewport.size = PLAYER_STATUS_AVATAR_VIEWPORT_SIZE
+	avatar_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	avatar_viewport_container.add_child(avatar_viewport)
+
+	var avatar_visual := _create_player_status_avatar_visual()
+	if avatar_visual != null:
+		avatar_viewport.add_child(avatar_visual)
+		avatar_visual.position = PLAYER_STATUS_AVATAR_POSITION
+		avatar_visual.scale = PLAYER_STATUS_AVATAR_SCALE
+		_disable_avatar_preview_processing(avatar_visual)
+		_set_avatar_preview_idle_frame(avatar_visual)
+
+	return avatar_frame
+
+func _create_player_status_avatar_visual() -> Node2D:
+	var source_player: Node2D = PLAYER_PREVIEW_SCENE.instantiate() as Node2D
+	if source_player == null:
+		return null
+
+	var visual_root := Node2D.new()
+	var source_look: Node2D = source_player.get_node_or_null("Look") as Node2D
+	if source_look != null:
+		var visual_look: Node2D = source_look.duplicate() as Node2D
+		if visual_look != null:
+			visual_look.position = Vector2.ZERO
+			visual_root.add_child(visual_look)
+
+	source_player.free()
+	if visual_root.get_child_count() == 0:
+		visual_root.free()
+		return null
+
+	return visual_root
+
+func _disable_avatar_preview_processing(node: Node) -> void:
+	node.set_process(false)
+	node.set_physics_process(false)
+	node.set_process_input(false)
+	node.set_process_unhandled_input(false)
+	node.set_process_unhandled_key_input(false)
+
+	for child_node: Node in node.get_children():
+		_disable_avatar_preview_processing(child_node)
+
+func _set_avatar_preview_idle_frame(node: Node) -> void:
+	if node is AnimatedSprite2D:
+		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(&"idle_down"):
+			sprite.animation = &"idle_down"
+		sprite.frame = 0
+		sprite.stop()
+
+	for child_node: Node in node.get_children():
+		_set_avatar_preview_idle_frame(child_node)
+
+func _refresh_player_status_card_if_needed() -> void:
+	if player_status_money_label == null:
+		return
+
+	var current_money: int = _get_player_money_value()
+	if displayed_money != current_money:
+		_refresh_player_status_card()
+
+func _refresh_player_status_card() -> void:
+	displayed_money = _get_player_money_value()
+	if player_status_name_label != null:
+		player_status_name_label.text = PlayerSave.player_name
+	if player_status_money_label != null:
+		player_status_money_label.text = _format_money(displayed_money)
+
+func _get_player_money_value() -> int:
+	return max(int(PlayerSave.money), 0)
+
+func _format_money(value: int) -> String:
+	var value_text := str(max(value, 0))
+	var formatted := ""
+	var counter := 0
+
+	for index in range(value_text.length() - 1, -1, -1):
+		if counter > 0 and counter % 3 == 0:
+			formatted = "," + formatted
+		formatted = value_text.substr(index, 1) + formatted
+		counter += 1
+
+	return formatted
+
+func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background_color
+	style.border_color = border_color
+	style.border_width_left = border_width
+	style.border_width_top = border_width
+	style.border_width_right = border_width
+	style.border_width_bottom = border_width
+	style.corner_radius_top_left = corner_radius
+	style.corner_radius_top_right = corner_radius
+	style.corner_radius_bottom_left = corner_radius
+	style.corner_radius_bottom_right = corner_radius
+	return style
+
+func _make_glass_panel_style(corner_radius: int = 10, border_width: int = 1) -> StyleBoxFlat:
+	var style := _make_panel_style(UI_BG, UI_BORDER_SOFT, corner_radius, border_width)
+	style.shadow_color = Color(0, 0, 0, 0.38)
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 4)
+	return style
+
+func _make_gold_panel_style(corner_radius: int = 12, border_width: int = 1) -> StyleBoxFlat:
+	var style := _make_panel_style(UI_BG, UI_BORDER, corner_radius, border_width)
+	style.shadow_color = Color(0, 0, 0, 0.34)
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(0, 4)
+	return style
+
+func _make_button_style(background_color: Color, border_color: Color, corner_radius: int = 8, border_width: int = 1) -> StyleBoxFlat:
+	var style := _make_panel_style(background_color, border_color, corner_radius, border_width)
+	style.content_margin_left = 12
+	style.content_margin_right = 12
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	return style
+
+func _apply_button_style(button: Button, variant: String = "default") -> void:
+	var normal_bg := UI_SLOT_BG
+	var hover_bg := Color("#151f36f2")
+	var pressed_bg := Color("#080d18f2")
+	var border := UI_BORDER_SOFT
+	var hover_border := UI_BORDER
+	var font_color := UI_TEXT
+
+	if variant == "primary":
+		normal_bg = Color("#152447ee")
+		hover_bg = Color("#1d3268f2")
+		pressed_bg = Color("#0d1730f2")
+		border = UI_BORDER_FOCUS
+		hover_border = UI_PURPLE_HOVER
+	elif variant == "danger":
+		normal_bg = UI_DANGER_BG
+		hover_bg = Color("#3a151cee")
+		pressed_bg = Color("#19090dee")
+		border = Color("#7a2b33")
+		hover_border = UI_DANGER
+		font_color = UI_DANGER
+
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.45))
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
+	button.add_theme_stylebox_override("focus", _make_button_style(Color("#0e1a30ee"), UI_BORDER_FOCUS, 8, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+func _apply_line_edit_style(line_edit: LineEdit) -> void:
+	line_edit.add_theme_color_override("font_color", UI_TEXT)
+	line_edit.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
+	line_edit.add_theme_stylebox_override("normal", _make_button_style(UI_INPUT_BG, UI_BORDER_SOFT, 8, 1))
+	line_edit.add_theme_stylebox_override("focus", _make_button_style(UI_INPUT_BG, UI_BORDER_FOCUS, 8, 1))
+	line_edit.add_theme_stylebox_override("read_only", _make_button_style(
+		Color(UI_INPUT_BG.r, UI_INPUT_BG.g, UI_INPUT_BG.b, 0.58),
+		Color(UI_BORDER_SOFT.r, UI_BORDER_SOFT.g, UI_BORDER_SOFT.b, 0.55),
+		8,
+		1
+	))
+
+func _apply_text_edit_style(text_edit: TextEdit) -> void:
+	text_edit.add_theme_color_override("font_color", UI_TEXT)
+	text_edit.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
+	text_edit.add_theme_stylebox_override("normal", _make_button_style(UI_INPUT_BG, UI_BORDER_SOFT, 8, 1))
+	text_edit.add_theme_stylebox_override("focus", _make_button_style(UI_INPUT_BG, UI_BORDER_FOCUS, 8, 1))
+
+func _apply_slot_panel_style(panel: PanelContainer) -> void:
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
+
+func _apply_premium_overlay_styles() -> void:
+	party_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	chat_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	location_panel.add_theme_stylebox_override("panel", _make_glass_panel_style(12))
+	options_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	actions_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	dev_pokemon_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(12, 1))
+	dev_actions_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	if player_status_panel != null:
+		player_status_panel.add_theme_stylebox_override("panel", _make_gold_panel_style(14, 1))
+
+	_apply_line_edit_style(chat_input)
+	_apply_text_edit_style(dev_pokemon_text)
+
+	_apply_button_style(general_chat_tab_button, "primary")
+	_apply_button_style(system_chat_tab_button, "primary")
+	_apply_button_style(send_button, "primary")
+	_apply_button_style(dev_pokemon_add_button, "primary")
+	_apply_button_style(dev_pokemon_close_button)
+	_apply_button_style(map_button)
+	_apply_button_style(dev_add_pokemon_button, "primary")
+	_apply_button_style(dev_spawn_pokemon_button, "primary")
+	_apply_button_style(dev_clear_party_button, "danger")
+	_apply_button_style(dev_actions_close_button)
+	_apply_button_style(repel_toggle_button)
+	_apply_button_style(dev_actions_button)
+	repel_toggle_button.add_theme_stylebox_override("pressed", _make_button_style(UI_REPEL_BG, Color("#58d970"), 8, 1))
+
+	var bag_slot := get_node_or_null("Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot") as PanelContainer
+	if bag_slot != null:
+		_apply_slot_panel_style(bag_slot)
+	var settings_slot := get_node_or_null("Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot") as PanelContainer
+	if settings_slot != null:
+		_apply_slot_panel_style(settings_slot)
+
+	for panel_id_value: Variant in collapsible_panels.keys():
+		var panel_id := str(panel_id_value)
+		var state: Dictionary = collapsible_panels.get(panel_id, {})
+		var button: Button = state.get("button") as Button
+		if button != null:
+			_apply_button_style(button)
+
 func _setup_collapsible_panels() -> void:
 	_register_collapsible_panel("chat", chat_panel, "left")
+	_register_collapsible_panel("player_status", player_status_panel, "right")
 	_register_collapsible_panel("party", party_panel, "left")
 	_register_collapsible_panel("location", location_panel, "right_center")
 	_register_collapsible_panel("options", options_panel, "right")
@@ -296,92 +725,174 @@ func _refresh_party() -> void:
 			slot.set_empty()
 
 func _on_send_button_pressed() -> void:
-	await _submit_chat_input()
+	if active_chat_tab != CHAT_TAB_GENERAL:
+		return
+
+	_submit_chat_input_deferred()
 
 func _on_chat_text_submitted(_text: String) -> void:
-	await _submit_chat_input()
+	if active_chat_tab != CHAT_TAB_GENERAL:
+		return
 
-func _submit_chat_input() -> void:
+	_submit_chat_input_deferred()
+
+func _on_chat_tab_pressed(tab_id: String) -> void:
+	if active_chat_tab == tab_id:
+		return
+
+	active_chat_tab = tab_id
+	_apply_chat_tab_state()
+
+func _apply_chat_tab_state() -> void:
+	var general_active: bool = active_chat_tab == CHAT_TAB_GENERAL
+	general_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if general_active else CHAT_MESSAGE_COLOR))
+	system_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_SYSTEM else CHAT_MESSAGE_COLOR))
+	chat_input.editable = general_active
+	chat_input.placeholder_text = "" if general_active else "System messages only"
+	send_button.disabled = not general_active
+	if not general_active:
+		chat_input.release_focus()
+	_refresh_chat_message_visibility()
+	_scroll_chat_to_bottom.call_deferred()
+
+func _refresh_chat_message_visibility() -> void:
+	for child: Node in message_list.get_children():
+		if child == message_entry_template:
+			continue
+
+		var category: String = str(child.get_meta("chat_category", CHAT_CATEGORY_USER))
+		child.visible = active_chat_tab == CHAT_TAB_GENERAL or category == CHAT_CATEGORY_SYSTEM
+
+func _submit_chat_input_deferred() -> void:
+	if chat_submit_in_progress:
+		return
+
+	chat_submit_in_progress = true
+	_submit_chat_input_async.call_deferred()
+
+func _submit_chat_input_async() -> void:
 	var text := chat_input.text.strip_edges()
 	if text == "":
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	chat_input.clear()
-	chat_input.release_focus()
 	if text == START_ENCOUNTER_CLIPBOARD_COMMAND or text == START_ENCOUNTER_CLIPBOARD_ALIAS:
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
 			return
 
 		await _handle_start_encounter_command(DisplayServer.clipboard_get())
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if text == START_ENCOUNTER_COMMAND or text.begins_with(START_ENCOUNTER_COMMAND + " "):
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
 			return
 
 		var encounter_text := text.substr(START_ENCOUNTER_COMMAND.length()).strip_edges()
 		await _handle_start_encounter_command(encounter_text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if text == SPAWN_COMMAND or text.begins_with(SPAWN_COMMAND + " "):
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
 			return
 
 		var spawn_text := text.substr(SPAWN_COMMAND.length()).strip_edges()
 		await _handle_start_encounter_command(spawn_text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if text == ADD_POKEMON_CLIPBOARD_COMMAND or text == ADD_POKEMON_CLIPBOARD_ALIAS:
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
 			return
 
 		await _handle_add_pokemon_command(DisplayServer.clipboard_get())
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if text == ADD_POKEMON_COMMAND or text.begins_with(ADD_POKEMON_COMMAND + " "):
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
 			return
 
 		var pokemon_text := text.substr(ADD_POKEMON_COMMAND.length()).strip_edges()
 		if pokemon_text == "":
+			chat_submit_in_progress = false
 			_show_dev_pokemon_popup(DevPokemonPopupMode.POKEMON)
 			return
 
 		await _handle_add_pokemon_command(pokemon_text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if text == ADD_TEAM_CLIPBOARD_COMMAND or text == ADD_TEAM_CLIPBOARD_ALIAS:
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
 			return
 
 		await _handle_add_team_command(DisplayServer.clipboard_get())
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if _is_command_with_text(text, ADD_TEAM_COMMAND) or _is_command_with_text(text, ADD_TEAM_ALIAS):
 		if not PlayerSave.is_staff:
 			_add_chat_message("Command not recognized.")
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
 			return
 
 		var team_text: String = _strip_first_matching_command(text, [ADD_TEAM_ALIAS, ADD_TEAM_COMMAND])
 		if team_text == "":
+			chat_submit_in_progress = false
 			_show_dev_pokemon_popup(DevPokemonPopupMode.TEAM)
 			return
 
 		await _handle_add_team_command(team_text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if text.begins_with("/"):
 		_add_chat_message("Command not recognized.")
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
 		return
 
 	if not ChatRealtimeService.send_chat_message(text):
 		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
+	chat_submit_in_progress = false
+	_keep_chat_input_focused()
+
+func _keep_chat_input_focused() -> void:
+	_restore_chat_input_focus.call_deferred()
+
+func _restore_chat_input_focus() -> void:
+	chat_input.grab_focus()
+	chat_input.caret_column = chat_input.text.length()
 
 func _handle_start_encounter_command(pokemon_text: String) -> bool:
 	pokemon_text = _clean_encounter_paste_text(pokemon_text)
@@ -673,16 +1184,33 @@ func _on_settings_button_pressed() -> void:
 func _on_settings_menu_closed() -> void:
 	settings_button.grab_focus()
 
-func _add_chat_message(text: String) -> void:
+func _add_chat_message(text: String, use_bbcode: bool = false) -> void:
 	var entry := message_entry_template.duplicate() as RichTextLabel
 	message_list.add_child(entry)
-	entry.visible = true
-	entry.text = text
+	entry.set_meta("chat_category", CHAT_CATEGORY_SYSTEM)
+	entry.visible = _should_show_chat_category(CHAT_CATEGORY_SYSTEM)
+	entry.bbcode_enabled = true
+	entry.clear()
+	if use_bbcode:
+		entry.append_text(text)
+	else:
+		entry.append_text(_format_system_chat_message(text))
 	entry.fit_content = true
 	entry.scroll_active = false
 	_scroll_chat_to_bottom.call_deferred()
 
+
+func _format_system_chat_message(text: String) -> String:
+	return "[color=%s][b]SYSTEM[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
+		CHAT_SYSTEM_LABEL_COLOR,
+		CHAT_SEPARATOR_COLOR,
+		CHAT_SYSTEM_MESSAGE_COLOR,
+		_escape_bbcode(text),
+	]
+
 func _scroll_chat_to_bottom() -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
 	var vertical_scroll_bar: VScrollBar = message_scroll.get_v_scroll_bar()
 	message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
 
@@ -700,7 +1228,146 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if text == "":
 		return
 
-	_add_chat_message("%s: %s" % [display_name, text])
+	_add_user_chat_message(user, display_name, text)
+
+
+func _add_user_chat_message(user: Dictionary, display_name: String, text: String) -> void:
+	var role: Dictionary = _get_primary_visible_chat_role(user)
+	var role_color: String = str(role.get("color", "#d8b767"))
+	var name_color: String = role_color if not role.is_empty() else CHAT_DEFAULT_NAME_COLOR
+
+	var row: HBoxContainer = HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	row.add_theme_constant_override("separation", 4)
+	row.set_meta("chat_category", CHAT_CATEGORY_USER)
+	row.visible = _should_show_chat_category(CHAT_CATEGORY_USER)
+	message_list.add_child(row)
+
+	if not role.is_empty():
+		var role_name: String = str(role.get("badge", "")).strip_edges()
+		if not role_name.is_empty():
+			row.add_child(_create_chat_role_badge(role_name, role_color))
+
+	var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
+	row.add_child(entry)
+	entry.visible = true
+	entry.bbcode_enabled = true
+	entry.clear()
+	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
+		_sanitize_hex_color(name_color, "#dfe4f2"),
+		_escape_bbcode(display_name),
+		CHAT_SEPARATOR_COLOR,
+		CHAT_MESSAGE_COLOR,
+		_escape_bbcode(text),
+	])
+	entry.fit_content = true
+	entry.scroll_active = false
+	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_scroll_chat_to_bottom.call_deferred()
+
+
+func _should_show_chat_category(category: String) -> bool:
+	return active_chat_tab == CHAT_TAB_GENERAL or category == CHAT_CATEGORY_SYSTEM
+
+
+func _create_chat_role_badge(role_name: String, role_color: String) -> PanelContainer:
+	var badge: PanelContainer = PanelContainer.new()
+	badge.custom_minimum_size = Vector2(28, 16)
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color(_sanitize_hex_color(role_color, "#d8b767"))
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_left = 8
+	style.corner_radius_bottom_right = 8
+	style.content_margin_left = 6
+	style.content_margin_right = 6
+	style.content_margin_top = 2
+	style.content_margin_bottom = 2
+	badge.add_theme_stylebox_override("panel", style)
+
+	var label: Label = Label.new()
+	label.text = role_name
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", CHAT_BADGE_TEXT_COLOR)
+	label.add_theme_font_size_override("font_size", 10)
+	badge.add_child(label)
+	return badge
+
+
+func _get_primary_visible_chat_role(user: Dictionary) -> Dictionary:
+	var roles_value: Variant = user.get("roles", [])
+	if not roles_value is Array:
+		return {}
+
+	var roles: Array = roles_value as Array
+	var primary_role: Dictionary = {}
+	var primary_priority: int = -999999
+	for role_value: Variant in roles:
+		if not role_value is Dictionary:
+			continue
+
+		var role: Dictionary = role_value as Dictionary
+		var role_id: String = str(role.get("id", ""))
+		var badge: String = _get_chat_role_badge(role_id)
+		if badge.is_empty():
+			continue
+
+		role["badge"] = badge
+		role["color"] = _get_chat_role_color(role_id, str(role.get("color", "#d8b767")))
+		var priority: int = int(role.get("priority", 0))
+		if primary_role.is_empty() or priority > primary_priority:
+			primary_role = role
+			primary_priority = priority
+
+	return primary_role
+
+
+func _get_chat_role_badge(role_id: String) -> String:
+	match role_id:
+		"gamemaster":
+			return "GM"
+		"developer":
+			return "DEV"
+		"moderator":
+			return "MOD"
+		_:
+			return ""
+
+
+func _get_chat_role_color(role_id: String, fallback: String) -> String:
+	match role_id:
+		"gamemaster":
+			return "#00bfff"
+		"developer":
+			return "#00e5a8"
+		"moderator":
+			return "#7b2cbf"
+		_:
+			return fallback
+
+
+func _sanitize_hex_color(color: String, fallback: String) -> String:
+	var trimmed: String = color.strip_edges()
+	if trimmed.length() == 7 and trimmed.begins_with("#"):
+		return trimmed
+	return fallback
+
+
+func _escape_bbcode(text: String) -> String:
+	var escaped: String = ""
+	for index: int in range(text.length()):
+		var character: String = text.substr(index, 1)
+		if character == "[":
+			escaped += "[lb]"
+		elif character == "]":
+			escaped += "[rb]"
+		else:
+			escaped += character
+	return escaped
 
 
 func _on_chat_session_invalid(_reason: String) -> void:

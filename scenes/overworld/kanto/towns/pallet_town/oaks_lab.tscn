@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://coa5lp430b8p8" path="res://assets/npcs/gen4-ow-sprites/phone001.png" id="8_ywtjb"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="10_7ad88"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="11_map_meta"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uqvyo"]
 texture = ExtResource("1_y0n1h")
@@ -3614,6 +3615,10 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_8t41f")
 
 [node name="OaksLab" type="Node2D" unique_id=1366477630]
+script = ExtResource("11_map_meta")
+map_id = "kanto_oaks_lab"
+map_region_name = "Kanto"
+map_display_name = "Oak's Lab"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=676273194]
 

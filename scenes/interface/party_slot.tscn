@@ -3,26 +3,26 @@
 [ext_resource type="Script" uid="uid://dmbromlkpmfd" path="res://scripts/ui/party_slot.gd" id="1_kmnus"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmnus"]
-bg_color = Color(0.06666667, 0.09411765, 0.15294118, 1)
+bg_color = Color(0.050980393, 0.08235294, 0.13725491, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 1)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nd8rq"]
-bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+bg_color = Color(0.105882354, 0.14509805, 0.21176471, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rmfdk"]
-bg_color = Color(0.3882353, 0.83137256, 0.44313726, 1)
+bg_color = Color(0.34509805, 0.8509804, 0.4392157, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -39,7 +39,7 @@ corner_radius_bottom_left = 8
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jup6d"]
 
 [node name="PartySlot" type="PanelContainer" unique_id=899956667]
-custom_minimum_size = Vector2(260, 44)
+custom_minimum_size = Vector2(260, 70)
 theme_override_styles/panel = SubResource("StyleBoxFlat_kmnus")
 script = ExtResource("1_kmnus")
 
@@ -52,10 +52,10 @@ theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1102260050]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="PokemonSprite" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=595868958]
-custom_minimum_size = Vector2(56, 56)
+custom_minimum_size = Vector2(54, 54)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -64,27 +64,44 @@ stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1673202340]
 layout_mode = 2
-theme_override_constants/separation = 4
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=890851186]
 layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ShinyBadge" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1535304865]
+visible = false
+layout_mode = 2
+tooltip_text = "Shiny Pokemon"
+theme_override_colors/font_color = Color(1, 0.84313726, 0.3529412, 1)
+theme_override_font_sizes/font_size = 14
+text = "S"
+vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=714565378]
-layout_mode = 2
-text = "Archaludon"
-
-[node name="Seperator" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1935279458]
-custom_minimum_size = Vector2(1, 0)
+custom_minimum_size = Vector2(118, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-color = Color(0.43137255, 0.65882355, 1, 0.4)
+text = "Archaludon"
+text_overrun_behavior = 3
+
+[node name="Seperator" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1935279458]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="LevelLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1370892322]
+custom_minimum_size = Vector2(46, 0)
 layout_mode = 2
+size_flags_horizontal = 8
 text = "Lv.100"
+horizontal_alignment = 2
 
 [node name="HPBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1214713841]
+custom_minimum_size = Vector2(160, 22)
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_nd8rq")
 theme_override_styles/fill = SubResource("StyleBoxFlat_rmfdk")
 value = 100.0

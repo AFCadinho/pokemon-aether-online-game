@@ -15,6 +15,18 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 const GEN5_SPRITE_MISSING_MESSAGE := "Gen 5 Animated sprites are not installed. Download them from the launcher."
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const MINIMUM_MENU_SIZE := Vector2(440, 540)
+const UI_BG := Color("#070b14f2")
+const UI_SLOT_BG := Color("#0d1625e6")
+const UI_INPUT_BG := Color("#050912e8")
+const UI_BORDER := Color("#d8b767")
+const UI_BORDER_SOFT := Color("#315070")
+const UI_BORDER_FOCUS := Color("#7aa7f4")
+const UI_TEXT := Color("#f4f0de")
+const UI_MUTED_TEXT := Color("#aeb8c5")
+const UI_SECTION_TEXT := Color("#d8b767")
+const UI_PURPLE_HOVER := Color("#b980ff")
+const UI_DANGER := Color("#ff6b74")
+const UI_DANGER_BG := Color("#2a1015e8")
 
 @onready var settings_layout: VBoxContainer = $MarginContainer/VBoxContainer
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
@@ -38,6 +50,7 @@ const MINIMUM_MENU_SIZE := Vector2(440, 540)
 var loading_controls := false
 var logging_out := false
 var tab_container: TabContainer
+var account_tab_root: Control
 var account_user_label: Label
 var logout_button: Button
 var logout_confirm_dialog: ConfirmationDialog
@@ -47,6 +60,7 @@ func _ready() -> void:
 	custom_minimum_size = MINIMUM_MENU_SIZE
 	_setup_tabs()
 	_setup_logout_confirm_dialog()
+	_apply_premium_styles()
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
@@ -64,9 +78,9 @@ func _ready() -> void:
 	visible = false
 
 
-func open() -> void:
+func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
-	_refresh_account_tab()
+	_apply_context(context)
 	visible = true
 	close_button.grab_focus()
 
@@ -116,6 +130,7 @@ func _setup_tabs() -> void:
 	var graphics_tab: VBoxContainer = _create_tab_content("Graphics")
 	var sound_tab: VBoxContainer = _create_tab_content("Sound")
 	var account_tab: VBoxContainer = _create_tab_content("Account")
+	account_tab_root = account_tab.get_parent() as Control
 
 	_move_nodes_to_container(general_tab, [
 		battle_animations_check_box,
@@ -141,6 +156,22 @@ func _setup_tabs() -> void:
 		ui_volume_slider.get_node(".."),
 	])
 	_build_account_tab(account_tab)
+
+
+func _apply_context(context: String) -> void:
+	var show_account_tab := context != "login"
+	if account_tab_root != null:
+		account_tab_root.visible = show_account_tab
+		var account_tab_index: int = account_tab_root.get_index()
+		if tab_container != null and tab_container.has_method("set_tab_hidden"):
+			tab_container.call("set_tab_hidden", account_tab_index, not show_account_tab)
+
+	if show_account_tab:
+		_refresh_account_tab()
+		return
+
+	if tab_container != null:
+		tab_container.current_tab = 0
 
 
 func _create_tab_content(tab_name: String) -> VBoxContainer:
@@ -177,24 +208,20 @@ func _move_nodes_to_container(container: VBoxContainer, nodes: Array) -> void:
 func _build_account_tab(account_tab: VBoxContainer) -> void:
 	var account_label := Label.new()
 	account_label.text = "Account"
-	account_label.add_theme_color_override("font_color", Color(0.84705883, 0.7058824, 0.41568628, 1))
 	account_tab.add_child(account_label)
 
 	account_user_label = Label.new()
 	account_user_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	account_user_label.add_theme_color_override("font_color", Color(0.8980392, 0.8627451, 0.8117647, 1))
 	account_tab.add_child(account_user_label)
 
 	var account_note := Label.new()
 	account_note.text = "Return to the login screen without ending your saved session."
 	account_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	account_note.add_theme_color_override("font_color", Color(0.64, 0.66, 0.77, 1))
 	account_note.add_theme_font_size_override("font_size", 12)
 	account_tab.add_child(account_note)
 
 	logout_button = Button.new()
 	logout_button.text = "Return to Login"
-	logout_button.add_theme_color_override("font_color", Color(1.0, 0.42, 0.42, 1))
 	account_tab.add_child(logout_button)
 
 
@@ -207,6 +234,116 @@ func _setup_logout_confirm_dialog() -> void:
 	logout_confirm_dialog.exclusive = true
 	logout_confirm_dialog.confirmed.connect(_logout_confirmed)
 	add_child(logout_confirm_dialog)
+
+
+func _apply_premium_styles() -> void:
+	add_theme_stylebox_override("panel", _make_gold_panel_style(12, 1))
+	if tab_container != null:
+		tab_container.add_theme_stylebox_override("panel", _make_panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 0))
+		tab_container.add_theme_stylebox_override("tab_selected", _make_button_style(Color("#152447ee"), UI_BORDER, 8, 1))
+		tab_container.add_theme_stylebox_override("tab_hovered", _make_button_style(Color("#1d3268f2"), UI_PURPLE_HOVER, 8, 1))
+		tab_container.add_theme_stylebox_override("tab_unselected", _make_button_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
+		tab_container.add_theme_color_override("font_selected_color", UI_TEXT)
+		tab_container.add_theme_color_override("font_unselected_color", UI_MUTED_TEXT)
+		tab_container.add_theme_color_override("font_hovered_color", UI_TEXT)
+
+	_apply_styles_recursive(self)
+	if logout_button != null:
+		_apply_button_style(logout_button, "danger")
+	_apply_button_style(close_button)
+
+
+func _apply_styles_recursive(node: Node) -> void:
+	if node is Label:
+		_apply_label_style(node as Label)
+	elif node is CheckBox:
+		_apply_checkbox_style(node as CheckBox)
+	elif node is OptionButton:
+		_apply_button_style(node as Button)
+	elif node is Button:
+		_apply_button_style(node as Button)
+
+	for child_node: Node in node.get_children():
+		_apply_styles_recursive(child_node)
+
+
+func _apply_label_style(label: Label) -> void:
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	var text_value := label.text.strip_edges()
+	if label.name == "TitleLabel":
+		label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+		label.add_theme_font_size_override("font_size", 21)
+		return
+	if text_value in ["Sprite Style", "Display", "Window Resolution", "Audio", "Battle Music", "Account"]:
+		label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+		label.add_theme_font_size_override("font_size", 14)
+
+
+func _apply_checkbox_style(check_box: CheckBox) -> void:
+	check_box.add_theme_color_override("font_color", UI_TEXT)
+	check_box.add_theme_color_override("font_hover_color", UI_TEXT)
+	check_box.add_theme_color_override("font_pressed_color", UI_TEXT)
+	check_box.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.45))
+
+
+func _apply_button_style(button: Button, variant: String = "default") -> void:
+	var normal_bg := UI_SLOT_BG
+	var hover_bg := Color("#151f36f2")
+	var pressed_bg := Color("#080d18f2")
+	var border := UI_BORDER_SOFT
+	var hover_border := UI_BORDER
+	var font_color := UI_TEXT
+
+	if variant == "danger":
+		normal_bg = UI_DANGER_BG
+		hover_bg = Color("#3a151cee")
+		pressed_bg = Color("#19090dee")
+		border = Color("#7a2b33")
+		hover_border = UI_DANGER
+		font_color = UI_DANGER
+
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.45))
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
+	button.add_theme_stylebox_override("focus", _make_button_style(UI_INPUT_BG, UI_BORDER_FOCUS, 8, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background_color
+	style.border_color = border_color
+	style.border_width_left = border_width
+	style.border_width_top = border_width
+	style.border_width_right = border_width
+	style.border_width_bottom = border_width
+	style.corner_radius_top_left = corner_radius
+	style.corner_radius_top_right = corner_radius
+	style.corner_radius_bottom_left = corner_radius
+	style.corner_radius_bottom_right = corner_radius
+	return style
+
+
+func _make_gold_panel_style(corner_radius: int, border_width: int) -> StyleBoxFlat:
+	var style := _make_panel_style(UI_BG, UI_BORDER, corner_radius, border_width)
+	style.shadow_color = Color(0, 0, 0, 0.38)
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(0, 4)
+	return style
+
+
+func _make_button_style(background_color: Color, border_color: Color, corner_radius: int = 8, border_width: int = 1) -> StyleBoxFlat:
+	var style := _make_panel_style(background_color, border_color, corner_radius, border_width)
+	style.content_margin_left = 12
+	style.content_margin_right = 12
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	return style
 
 
 func _refresh_account_tab() -> void:

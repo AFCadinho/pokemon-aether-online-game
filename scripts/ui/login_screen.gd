@@ -149,7 +149,7 @@ func _on_register_link_pressed() -> void:
 func _on_options_button_pressed() -> void:
 	_center_settings_menu()
 	if settings_menu.has_method("open"):
-		settings_menu.call("open")
+		settings_menu.call("open", "login")
 	else:
 		settings_menu.visible = true
 
