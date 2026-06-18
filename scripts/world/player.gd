@@ -9,6 +9,7 @@ const SORT_Z_MIN := -256
 const SORT_Z_MAX := 256
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
+const PLAYER_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const MOVE_ACTIONS := ["move_right", "move_left", "move_down", "move_up"]
 const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const BASE_SPRITE_OFFSET_META := "base_sprite_offset"
@@ -56,6 +57,7 @@ func is_tile_moving() -> bool:
 
 func reset_movement_state() -> void:
 	is_moving = false
+	global_position = _snap_world_position(global_position)
 	target_position = global_position
 	move_start_position = global_position
 	move_elapsed = 0.0
@@ -78,21 +80,23 @@ func face_world_position(world_position: Vector2) -> void:
 func _ready() -> void:
 	_cache_appearance_sprites()
 
-	# Haal de TileMapLayer nodes uit de huidige map op.
-	# Dit werkt alleen als GameState.current_map al naar de actieve map wijst.
-	if GameState.current_map != null:
-		grass_tilemap = GameState.current_map.get_node("TallGrass")
-		collision_tilemap = GameState.current_map.get_node("Collision")
+	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
+	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
+	# even naar die node wijst.
+	if GameState.current_map != null and is_instance_valid(GameState.current_map):
+		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
+		collision_tilemap = GameState.current_map.get_node_or_null("Collision")
 	
 	# Zet speler terug op laatst bekende positie in de juiste richting.
 	if GameState.has_player_position:
-		global_position = GameState.player_position
+		global_position = _snap_world_position(GameState.player_position)
 		last_direction = GameState.player_direction
 	
 	# De eerste target is waar de speler nu al staat.
 	# Daardoor begint hij niet meteen ergens heen te bewegen.
-	target_position = global_position
-	move_start_position = global_position
+	target_position = _snap_world_position(global_position)
+	move_start_position = target_position
+	global_position = target_position
 	_update_sort_z()
 
 func _process(delta: float) -> void:
@@ -112,12 +116,13 @@ func _process(delta: float) -> void:
 		# De tile-logica blijft deterministisch; alleen de visual interpolation is soepeler.
 		move_elapsed = minf(move_elapsed + delta, TILE_MOVE_DURATION)
 		var move_progress := move_elapsed / TILE_MOVE_DURATION
-		global_position = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
+		var interpolated_position: Vector2 = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
+		global_position = _snap_world_position(interpolated_position)
 		_update_sort_z()
 
 		# Als de bestemming is bereikt.
 		if _has_reached_target():
-			global_position = target_position
+			global_position = _snap_world_position(target_position)
 			is_moving = false
 
 			if check_for_map_exit():
@@ -219,6 +224,9 @@ func _get_move_interpolation(progress: float) -> float:
 	var eased_progress := linear_progress * linear_progress * (3.0 - (2.0 * linear_progress))
 	return linear_progress + ((eased_progress - linear_progress) * MOVE_EASE_AMOUNT)
 
+func _snap_world_position(position: Vector2) -> Vector2:
+	return Vector2(roundf(position.x), roundf(position.y))
+
 func _get_input_direction() -> Vector2:
 	for action_name in input_action_priority:
 		if Input.is_action_pressed(action_name):
@@ -244,7 +252,7 @@ func _try_start_move(direction: Vector2) -> bool:
 
 	# Bepaal de volgende wereldpositie.
 	# Voorbeeld: Vector2.RIGHT * 32 = Vector2(32, 0), dus 1 tile naar rechts.
-	var new_target_position := global_position + (direction * TILE_SIZE)
+	var new_target_position := _snap_world_position(global_position) + (direction * TILE_SIZE)
 
 	if _try_trigger_route_gate(new_target_position):
 		set_idle_frame()
@@ -255,8 +263,9 @@ func _try_start_move(direction: Vector2) -> bool:
 	if not can_move_to(new_target_position):
 		return false
 
-	target_position = new_target_position
-	move_start_position = global_position
+	target_position = _snap_world_position(new_target_position)
+	move_start_position = _snap_world_position(global_position)
+	global_position = move_start_position
 	move_elapsed = 0.0
 	is_moving = true
 	play_walk_animation(direction)
@@ -467,6 +476,7 @@ func _collect_appearance_sprites(parent: Node) -> void:
 	for child: Node in parent.get_children():
 		var sprite: AnimatedSprite2D = child as AnimatedSprite2D
 		if sprite != null:
+			sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 			appearance_sprites.append(sprite)
 
 		_collect_appearance_sprites(child)

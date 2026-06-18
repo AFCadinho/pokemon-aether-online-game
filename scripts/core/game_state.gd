@@ -5,6 +5,7 @@ var has_player_position := false
 var player_direction: Vector2 = Vector2.DOWN
 
 var current_map: Node = null
+var prepared_world_state: Dictionary = {}
 
 var input_locked := false
 var overworld_input_locked := false
@@ -21,6 +22,22 @@ func unlock_input() -> void:
 	input_locked = false
 	overworld_input_locked = false
 	ui_input_locked = false
+
+func clear_world_runtime_state() -> void:
+	current_map = null
+	prepared_world_state = {}
+	unlock_input()
+
+func set_prepared_world_state(state: Dictionary) -> void:
+	prepared_world_state = state
+
+func consume_prepared_world_state() -> Dictionary:
+	var state := prepared_world_state
+	prepared_world_state = {}
+	return state
+
+func has_prepared_world_state() -> bool:
+	return not prepared_world_state.is_empty()
 
 func lock_overworld_input() -> void:
 	overworld_input_locked = true

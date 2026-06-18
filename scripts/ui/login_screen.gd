@@ -4,7 +4,7 @@ signal login_submitted(username: String, password: String)
 
 const REGISTER_URL := "https://pokeaether.com/register"
 const NEWS_URL := "https://updates.pokeaether.com/news.json"
-const WORLD_SCENE_PATH := "res://scenes/world.tscn"
+const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const USER_AGENT_HEADER := "User-Agent: PokeAether/1.0"
 const ONLINE_COLOR := Color(0.16, 0.94, 0.66)
 const OFFLINE_COLOR := Color(1.0, 0.42, 0.42)
@@ -383,10 +383,10 @@ func _enter_world() -> void:
 	if display_name != "":
 		PlayerSave.player_name = display_name
 
-	var error: Error = get_tree().change_scene_to_file(WORLD_SCENE_PATH)
+	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
 		show_status("Could not enter the world. Please contact staff.", true)
-		push_error("LoginScreen: failed to load world scene: %s" % error_string(error))
+		push_error("LoginScreen: failed to load loading scene: %s" % error_string(error))
 
 
 func _get_idle_login_button_text() -> String:

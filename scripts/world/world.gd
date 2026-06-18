@@ -18,16 +18,15 @@ var position_autosave_elapsed := 0.0
 var is_saving_player_position := false
 var last_saved_position_signature := ""
 
-
-func _enter_tree() -> void:
-	visible = false
+func _exit_tree() -> void:
+	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
+		GameState.clear_world_runtime_state()
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
 	await _setup_initial_world_state()
-	visible = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -101,6 +100,7 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	else:
 		push_warning("World: spawn '%s' not found in %s. Using fallback position." % [spawn_name, map.name])
 
+	spawn_position = _snap_world_position(spawn_position)
 	player.global_position = spawn_position
 	player.target_position = spawn_position
 	player.move_start_position = spawn_position
@@ -114,6 +114,7 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 		float(position_data.get("x", player.global_position.x)),
 		float(position_data.get("y", player.global_position.y))
 	)
+	saved_position = _snap_world_position(saved_position)
 
 	player.global_position = saved_position
 	player.target_position = saved_position
@@ -129,13 +130,18 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 
 func _setup_initial_world_state() -> void:
 	var first_map: Node = $CurrentMap.get_child(0)
-	await _load_player_party_state()
-	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
 	var saved_state: Dictionary = {}
-	if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
-		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
-	elif not bool(saved_state_response.get("success", false)):
-		push_warning("World: player position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
+	if GameState.has_prepared_world_state():
+		var prepared_state: Dictionary = GameState.consume_prepared_world_state()
+		if bool(prepared_state.get("hasSavedState", false)):
+			saved_state = _dictionary_from_value(prepared_state.get("savedState", {}))
+	else:
+		await _load_player_party_state()
+		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
+			saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
+		elif not bool(saved_state_response.get("success", false)):
+			push_warning("World: player position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
 
 	var initial_map: Node = first_map
 	var saved_scene_path: String = str(saved_state.get("mapScenePath", ""))
@@ -157,7 +163,7 @@ func _setup_initial_world_state() -> void:
 		last_saved_position_signature = _get_current_player_position_signature()
 	elif not GameState.has_player_position:
 		_position_player_at_spawn(initial_map, initial_spawn_name, player.global_position)
-		await _save_current_player_position_if_changed(true, initial_spawn_name)
+		_save_current_player_position_if_changed.call_deferred(true, initial_spawn_name)
 
 	player.refresh_map_layers()
 
@@ -266,6 +272,10 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 		return {}
 	var dictionary: Dictionary = value
 	return dictionary
+
+
+func _snap_world_position(position: Vector2) -> Vector2:
+	return Vector2(roundf(position.x), roundf(position.y))
 
 
 func _load_player_party_state() -> void:
