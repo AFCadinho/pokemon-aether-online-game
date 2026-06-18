@@ -4,8 +4,11 @@ class_name ChatRealtimeServiceNode
 
 signal message_received(message: Dictionary)
 signal connection_changed(connected: bool)
+signal session_invalid(reason: String)
 
 const RECONNECT_DELAY_SECONDS := 4.0
+const SESSION_CHECK_INTERVAL_SECONDS := 10.0
+const SESSION_INVALID_CLOSE_CODE := 1008
 const MAX_MESSAGE_LENGTH := 300
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
@@ -13,6 +16,8 @@ var connected: bool = false
 var connecting: bool = false
 var should_reconnect: bool = false
 var reconnect_timer: float = 0.0
+var session_check_timer: float = SESSION_CHECK_INTERVAL_SECONDS
+var session_invalid_handled: bool = false
 
 
 func _process(delta: float) -> void:
@@ -21,6 +26,9 @@ func _process(delta: float) -> void:
 		_process_packets()
 
 	var ready_state: int = websocket.get_ready_state()
+	if ready_state == WebSocketPeer.STATE_CLOSED:
+		_handle_closed_socket()
+
 	var is_connected: bool = ready_state == WebSocketPeer.STATE_OPEN
 	if connected != is_connected:
 		connected = is_connected
@@ -28,6 +36,11 @@ func _process(delta: float) -> void:
 
 	if ready_state == WebSocketPeer.STATE_OPEN:
 		connecting = false
+		session_invalid_handled = false
+		session_check_timer -= delta
+		if session_check_timer <= 0.0:
+			session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
+			_send_session_check()
 		return
 
 	if ready_state == WebSocketPeer.STATE_CONNECTING:
@@ -51,6 +64,8 @@ func connect_chat() -> void:
 
 	should_reconnect = true
 	connecting = true
+	session_invalid_handled = false
+	session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
 	_connect_chat_async.call_deferred()
 
 
@@ -97,6 +112,34 @@ func send_chat_message(text: String) -> bool:
 	}
 	var error: Error = websocket.send_text(JSON.stringify(payload))
 	return error == OK
+
+
+func _send_session_check() -> void:
+	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		return
+
+	var payload: Dictionary = {
+		"type": "ping",
+	}
+	var error: Error = websocket.send_text(JSON.stringify(payload))
+	if error != OK:
+		push_warning("ChatRealtimeService: could not send session check: %s" % error_string(error))
+
+
+func _handle_closed_socket() -> void:
+	if session_invalid_handled:
+		return
+
+	var close_code: int = websocket.get_close_code()
+	if close_code != SESSION_INVALID_CLOSE_CODE:
+		return
+	if not AuthService.is_authenticated():
+		return
+
+	session_invalid_handled = true
+	should_reconnect = false
+	connecting = false
+	session_invalid.emit("Your session is no longer valid.")
 
 
 func _process_packets() -> void:

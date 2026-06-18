@@ -12,6 +12,7 @@ const START_ENCOUNTER_COMMAND := "/encounter"
 const START_ENCOUNTER_CLIPBOARD_COMMAND := "/encounterclip"
 const START_ENCOUNTER_CLIPBOARD_ALIAS := "/ec"
 const SPAWN_COMMAND := "/spawn"
+const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const COLLAPSE_BUTTON_SIZE := Vector2(28, 28)
 const COLLAPSE_BUTTON_MARGIN := 6.0
 
@@ -68,6 +69,8 @@ func _ready() -> void:
 		PlayerSave.party_changed.connect(_refresh_party)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
+	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
+		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
 	ChatRealtimeService.connect_chat.call_deferred()
 
 	send_button.pressed.connect(_on_send_button_pressed)
@@ -698,3 +701,11 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 
 	_add_chat_message("%s: %s" % [display_name, text])
+
+
+func _on_chat_session_invalid(_reason: String) -> void:
+	_add_chat_message("Your session is no longer valid. Please sign in again.")
+	AuthService.clear_session()
+	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+	if error != OK:
+		push_warning("Could not return to login screen after session invalidation: %s" % error_string(error))

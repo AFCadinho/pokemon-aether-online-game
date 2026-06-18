@@ -9410,10 +9410,10 @@ tile_set = SubResource("TileSet_66okb")
 [node name="Spawns" type="Node2D" parent="." unique_id=1454965346]
 
 [node name="FromRoute1" type="Marker2D" parent="Spawns" unique_id=1105260285]
-position = Vector2(530, 46)
+position = Vector2(528, 80)
 
 [node name="FromOaksLab" type="Marker2D" parent="Spawns" unique_id=682812935]
-position = Vector2(785, 689)
+position = Vector2(784, 720)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1482608450]
 
