@@ -71,7 +71,7 @@ popup/item_1/id = 1
 popup/item_2/text = "Gen 5 Animated"
 popup/item_2/id = 2
 
-[node name="SpriteStyleStatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="SpriteStyleStatusLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=267852424]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94, 0.72, 0.36, 1)

@@ -380,6 +380,7 @@ secret = true
 
 [node name="RememberMeCheckbox" type="CheckBox" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields" unique_id=216259224]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
 theme_override_font_sizes/font_size = 13
 text = "Remember me"
@@ -395,6 +396,7 @@ autowrap_mode = 3
 [node name="LoginButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=317175019]
 custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
@@ -502,6 +504,7 @@ autowrap_mode = 3
 [node name="ContinueButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=793231538]
 custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
@@ -512,6 +515,7 @@ text = "Continue"
 [node name="LogoutButton" type="Button" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=688356913]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
 theme_override_font_sizes/font_size = 14
 text = "Logout"

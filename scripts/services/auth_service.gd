@@ -128,6 +128,10 @@ func logout() -> Dictionary:
 
 
 func clear_session() -> void:
+	var chat_service: Object = get_node_or_null("/root/ChatRealtimeService")
+	if chat_service != null and chat_service.has_method("disconnect_chat"):
+		chat_service.call("disconnect_chat")
+
 	session_token = ""
 	expires_at = ""
 	current_user.clear()

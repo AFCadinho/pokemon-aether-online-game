@@ -32,6 +32,8 @@ SettingsManager="*res://scripts/services/settings_manager.gd"
 MusicManager="*res://scripts/services/music_manager.gd"
 AuthService="*res://scripts/services/auth_service.gd"
 PlayerGameStateService="*res://scripts/services/player_game_state_service.gd"
+PlayerPartyStateService="*res://scripts/services/player_party_state_service.gd"
+ChatRealtimeService="*res://scripts/services/chat_realtime_service.gd"
 
 [display]
 

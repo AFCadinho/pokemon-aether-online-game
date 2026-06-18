@@ -129,6 +129,7 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 
 func _setup_initial_world_state() -> void:
 	var first_map: Node = $CurrentMap.get_child(0)
+	await _load_player_party_state()
 	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
 	var saved_state: Dictionary = {}
 	if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
@@ -265,6 +266,21 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 		return {}
 	var dictionary: Dictionary = value
 	return dictionary
+
+
+func _load_player_party_state() -> void:
+	var party_response: Dictionary = await PlayerPartyStateService.load_party()
+	if not bool(party_response.get("success", false)):
+		push_warning("World: player party load failed: %s" % str(party_response.get("error", "Unknown error")))
+		return
+	if not bool(party_response.get("hasParty", false)):
+		return
+
+	var party_value: Variant = party_response.get("party", [])
+	if not (party_value is Array):
+		return
+
+	PlayerSave.replace_party_from_state(party_value as Array)
 
 func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var battle_request := HTTPRequest.new()

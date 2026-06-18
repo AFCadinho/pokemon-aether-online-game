@@ -32,6 +32,37 @@ func add_pokemon(pokemon: Pokemon) -> void:
 	party.append(pokemon)
 	party_changed.emit()
 
+func to_party_state() -> Dictionary:
+	var party_data: Array = []
+	for pokemon in party:
+		if pokemon == null:
+			continue
+		party_data.append(pokemon.to_persistence_dict())
+
+	return {
+		"party": party_data,
+	}
+
+func replace_party_from_state(party_data: Array) -> void:
+	var loaded_party: Array[Pokemon] = []
+	for pokemon_value: Variant in party_data:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_data)
+		if pokemon == null:
+			push_warning("PlayerSave: skipped persisted Pokemon: %s" % PokemonFactory.last_error_message)
+			continue
+
+		pokemon.ensure_instance_id()
+		loaded_party.append(pokemon)
+		if loaded_party.size() >= 6:
+			break
+
+	party = loaded_party
+	party_changed.emit()
+
 func apply_battle_team_state(team: Array) -> void:
 	var party_by_instance_id := {}
 

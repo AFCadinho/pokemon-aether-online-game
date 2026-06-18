@@ -92,6 +92,13 @@ func to_battle_dict() -> Dictionary:
 
 	return battle_data
 
+func to_persistence_dict() -> Dictionary:
+	var pokemon_data := to_battle_dict()
+	pokemon_data["currentHp"] = current_hp
+	pokemon_data["maxHp"] = max_hp
+	pokemon_data["condition"] = _to_battle_condition()
+	return pokemon_data
+
 func _to_battle_condition() -> String:
 	if current_hp <= 0:
 		return "0 fnt"

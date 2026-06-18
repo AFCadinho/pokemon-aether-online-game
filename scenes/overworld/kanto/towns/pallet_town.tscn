@@ -13,13 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://c3bns56o1s6es" path="res://assets/tilesets/overworld/buildings/28.png" id="6_rqoxd"]
 [ext_resource type="Texture2D" uid="uid://dgvhjpghervgq" path="res://assets/sprites/mugshots/ace_trainer.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
-[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_0ke4d"]
 [ext_resource type="Texture2D" uid="uid://bnoygjdsan3p1" path="res://assets/tilesets/overworld/buildings/7.png" id="8_b5jff"]
 [ext_resource type="Texture2D" uid="uid://ckuih8fdbjcwv" path="res://assets/tilesets/overworld/nature/flowers/Outdoor1.png" id="8_rqoxd"]
-[ext_resource type="Texture2D" uid="uid://bnwj18f2msnt3" path="res://assets/npcs/rivals/gary.png" id="9_0ke4d"]
-[ext_resource type="Texture2D" uid="uid://cjpkstu2di8wc" path="res://assets/player/body/3_4_1.png" id="9_mg5ba"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="10_mg5ba"]
-[ext_resource type="Texture2D" uid="uid://dcy28p7xx357d" path="res://assets/npcs/main/cynthia.png" id="11_q5721"]
 [ext_resource type="Script" uid="uid://dq0ewnc8ojowx" path="res://scenes/overworld/kanto/towns/pallet_town/to_route_1.gd" id="13_l40au"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
 [ext_resource type="Script" uid="uid://m4vb50fr7pno" path="res://scripts/world/kanto/towns/pallet_town/to_oaks_lab.gd" id="14_voysl"]
@@ -1183,188 +1178,6 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xkurw"]
-atlas = ExtResource("9_0ke4d")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mg5ba"]
-atlas = ExtResource("9_0ke4d")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0ke4d"]
-atlas = ExtResource("9_0ke4d")
-region = Rect2(64, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q5721"]
-atlas = ExtResource("9_0ke4d")
-region = Rect2(64, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c0tmp"]
-atlas = ExtResource("9_0ke4d")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_c0tmp"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xkurw")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mg5ba")
-}],
-"loop": true,
-"name": &"idle_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0ke4d")
-}],
-"loop": true,
-"name": &"idle_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q5721")
-}],
-"loop": true,
-"name": &"idle_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c0tmp")
-}],
-"loop": true,
-"name": &"idle_up",
-"speed": 5.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wln13"]
-atlas = ExtResource("11_q5721")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nj4js"]
-atlas = ExtResource("11_q5721")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bk0wu"]
-atlas = ExtResource("11_q5721")
-region = Rect2(64, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hpxyi"]
-atlas = ExtResource("11_q5721")
-region = Rect2(64, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_powcu"]
-atlas = ExtResource("11_q5721")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_wln13"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wln13")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nj4js")
-}],
-"loop": true,
-"name": &"idle_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bk0wu")
-}],
-"loop": true,
-"name": &"idle_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hpxyi")
-}],
-"loop": true,
-"name": &"idle_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_powcu")
-}],
-"loop": true,
-"name": &"idle_up",
-"speed": 5.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b56vh"]
-atlas = ExtResource("9_mg5ba")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_02b88"]
-atlas = ExtResource("9_mg5ba")
-region = Rect2(64, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ja805"]
-atlas = ExtResource("9_mg5ba")
-region = Rect2(64, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cs72g"]
-atlas = ExtResource("9_mg5ba")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_xu20h"]
-animations = [{
-"frames": [],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b56vh")
-}],
-"loop": true,
-"name": &"idle_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_02b88")
-}],
-"loop": true,
-"name": &"idle_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ja805")
-}],
-"loop": true,
-"name": &"idle_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cs72g")
-}],
-"loop": true,
-"name": &"idle_up",
 "speed": 5.0
 }]
 
@@ -9383,20 +9196,6 @@ npc_id = "kanto_pallet_town_johny_sins_1"
 display_name = "Johny Sins"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
 mugshot = ExtResource("7_66okb")
-
-[node name="TrainerNPC" parent="Entities/NPCs" unique_id=168052101 instance=ExtResource("8_0ke4d")]
-position = Vector2(544, 256)
-npc_sprite_frames = SubResource("SpriteFrames_c0tmp")
-
-[node name="DialogueNPC" parent="Entities/NPCs" unique_id=1370869921 instance=ExtResource("10_mg5ba")]
-position = Vector2(496, 256)
-npc_id = "kanto_pallet_town_johny_sins_1"
-npc_sprite_frames = SubResource("SpriteFrames_wln13")
-
-[node name="DialogueNPC2" parent="Entities/NPCs" unique_id=1993038395 instance=ExtResource("10_mg5ba")]
-position = Vector2(544, 352)
-npc_id = "kanto_pallet_town_johny_sins_1"
-npc_sprite_frames = SubResource("SpriteFrames_xu20h")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
 

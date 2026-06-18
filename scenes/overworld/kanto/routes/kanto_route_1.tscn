@@ -11,9 +11,11 @@
 [ext_resource type="Script" uid="uid://s6yudwt884a8" path="res://scripts/world/kanto/routes/to_pallet_town.gd" id="8_odd7f"]
 [ext_resource type="Texture2D" uid="uid://bk6vp4prd8wbj" path="res://assets/npcs/gen4-ow-sprites/trchar017.png" id="9_qefnj"]
 [ext_resource type="Texture2D" uid="uid://d4c0skpe6wmsw" path="res://assets/sprites/mugshots/gary.png" id="10_6o5ht"]
+[ext_resource type="Texture2D" uid="uid://b5gghkoggsglg" path="res://assets/npcs/gen5-ow-pack/Ultimate Gen 5 Overworlds Pack/BW_082.png" id="10_gd1nu"]
 [ext_resource type="Texture2D" uid="uid://eaiyuihpfhda" path="res://assets/npcs/gen4-ow-sprites/NPC 57.png" id="10_qefnj"]
-[ext_resource type="Texture2D" uid="uid://bb2rbsd7p2wxa" path="res://assets/npcs/gen4-ow-sprites/NPC 82.png" id="11_cd607"]
+[ext_resource type="Texture2D" uid="uid://bsmvsjjqehaau" path="res://assets/npcs/gen5-ow-pack/Ultimate Gen 5 Overworlds Pack/BW_188_Champion_Blue_Oak.png" id="11_bc3mu"]
 [ext_resource type="Texture2D" uid="uid://y0rea10fmcdi" path="res://assets/sprites/mugshots/cynthia.png" id="12_mjhtk"]
+[ext_resource type="Texture2D" uid="uid://dhwfy74folxqd" path="res://assets/npcs/gen5-ow-pack/Ultimate Gen 5 Overworlds Pack/BW_192_Champion_Cynthia.png" id="12_qefnj"]
 [ext_resource type="Texture2D" uid="uid://bit8o5jxr48nl" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/NPC08.png" id="13_wndwb"]
 [ext_resource type="Texture2D" uid="uid://bdga4xqfsnt6j" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trBenga.png" id="14_khy7p"]
 [ext_resource type="Texture2D" uid="uid://b7qtop3j1j5da" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trMotorcyclist.png" id="15_x56le"]
@@ -3407,8 +3409,8 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_y4850")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_m8cit"]
-atlas = ExtResource("9_qefnj")
+[sub_resource type="AtlasTexture" id="AtlasTexture_14rri"]
+atlas = ExtResource("10_gd1nu")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a43pa"]
@@ -3443,7 +3445,7 @@ region = Rect2(192, 0, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_m8cit")
+"texture": SubResource("AtlasTexture_14rri")
 }],
 "loop": true,
 "name": &"idle_down",
@@ -3491,8 +3493,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_y12x5"]
-atlas = ExtResource("10_qefnj")
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8cit"]
+atlas = ExtResource("11_bc3mu")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_73st8"]
@@ -3527,7 +3529,7 @@ region = Rect2(192, 0, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_y12x5")
+"texture": SubResource("AtlasTexture_m8cit")
 }],
 "loop": true,
 "name": &"idle_down",
@@ -3576,35 +3578,35 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rsiae"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xlabm"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8lngs"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(0, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gmegt"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(0, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hjeao"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8eevg"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(64, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bedxd"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(128, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eypur"]
-atlas = ExtResource("11_cd607")
+atlas = ExtResource("12_qefnj")
 region = Rect2(192, 64, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_m8cit"]
@@ -12841,7 +12843,7 @@ mugshot = ExtResource("10_6o5ht")
 
 [node name="CynthiaNPC" parent="Entities/NPCs" unique_id=1292990089 instance=ExtResource("8_lmnv3")]
 position = Vector2(592, 880)
-trainer_id = "route_1_cynthia_1"
+trainer_id = "kanto_route_1_cynthia_1"
 sight_range_tiles = 3
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_m8cit")

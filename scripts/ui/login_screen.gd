@@ -8,6 +8,9 @@ const ONLINE_COLOR := Color(0.16, 0.94, 0.66)
 const OFFLINE_COLOR := Color(1.0, 0.42, 0.42)
 const CHECKING_COLOR := Color(0.847, 0.706, 0.416)
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
+const PLAYER_PREVIEW_VIEWPORT_SIZE := Vector2i(170, 132)
+const PLAYER_PREVIEW_POSITION := Vector2(85, 70)
+const PLAYER_PREVIEW_SCALE := Vector2(1.8, 1.8)
 
 @onready var username_input: LineEdit = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/UsernameInput
 @onready var password_input: LineEdit = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/PasswordInput
@@ -238,26 +241,62 @@ func _show_saved_session_card() -> void:
 
 func _setup_player_preview() -> void:
 	player_preview_viewport.transparent_bg = true
-	player_preview_viewport.size = Vector2i(170, 132)
+	player_preview_viewport.size = PLAYER_PREVIEW_VIEWPORT_SIZE
+	player_preview_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 
-	player_preview_instance = PLAYER_PREVIEW_SCENE.instantiate() as Node2D
+	player_preview_instance = _create_player_preview_visual()
 	if player_preview_instance == null:
 		return
 
 	player_preview_viewport.add_child(player_preview_instance)
-	player_preview_instance.position = Vector2(85, 100)
-	player_preview_instance.scale = Vector2(2.3, 2.3)
-	player_preview_instance.set_process(false)
-	player_preview_instance.set_physics_process(false)
-	player_preview_instance.set_process_input(false)
-	player_preview_instance.set_process_unhandled_input(false)
-	player_preview_instance.set_process_unhandled_key_input(false)
+	player_preview_instance.position = PLAYER_PREVIEW_POSITION
+	player_preview_instance.scale = PLAYER_PREVIEW_SCALE
+	_disable_preview_processing(player_preview_instance)
+	_set_preview_idle_frame(player_preview_instance)
 
-	if player_preview_instance.has_method("reset_movement_state"):
-		player_preview_instance.call("reset_movement_state")
-	player_preview_instance.set("last_direction", Vector2.DOWN)
-	if player_preview_instance.has_method("set_idle_frame"):
-		player_preview_instance.call("set_idle_frame")
+
+func _create_player_preview_visual() -> Node2D:
+	var source_player: Node2D = PLAYER_PREVIEW_SCENE.instantiate() as Node2D
+	if source_player == null:
+		return null
+
+	var visual_root := Node2D.new()
+	var source_look: Node2D = source_player.get_node_or_null("Look") as Node2D
+	if source_look != null:
+		var visual_look: Node2D = source_look.duplicate() as Node2D
+		if visual_look != null:
+			visual_look.position = Vector2.ZERO
+			visual_root.add_child(visual_look)
+
+	source_player.free()
+	if visual_root.get_child_count() == 0:
+		visual_root.free()
+		return null
+
+	return visual_root
+
+
+func _disable_preview_processing(node: Node) -> void:
+	node.set_process(false)
+	node.set_physics_process(false)
+	node.set_process_input(false)
+	node.set_process_unhandled_input(false)
+	node.set_process_unhandled_key_input(false)
+
+	for child_node: Node in node.get_children():
+		_disable_preview_processing(child_node)
+
+
+func _set_preview_idle_frame(node: Node) -> void:
+	if node is AnimatedSprite2D:
+		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(&"idle_down"):
+			sprite.animation = &"idle_down"
+		sprite.frame = 0
+		sprite.stop()
+
+	for child_node: Node in node.get_children():
+		_set_preview_idle_frame(child_node)
 
 
 func _get_login_error_message(result: Dictionary) -> String:

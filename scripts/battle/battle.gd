@@ -835,6 +835,7 @@ func _finish_battle(result: Dictionary) -> void:
 
 	battle_finished = true
 	PlayerSave.apply_battle_team_state(battle_state.get_player_team("p1"))
+	PlayerPartyStateService.save_current_party_deferred()
 	battle_ended.emit(result)
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.

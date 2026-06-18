@@ -29,6 +29,7 @@ enum DevPokemonPopupMode {
 @onready var location_panel: PanelContainer = $Control/LocationPanel
 @onready var options_panel: PanelContainer = $Control/OptionsPanel
 @onready var actions_panel: PanelContainer = $Control/ActionsPanel
+@onready var message_scroll: ScrollContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll
 @onready var message_list: VBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
 @onready var chat_input: LineEdit = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/ChatInput
@@ -65,6 +66,9 @@ func _ready() -> void:
 	
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
 		PlayerSave.party_changed.connect(_refresh_party)
+	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
+		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
+	ChatRealtimeService.connect_chat.call_deferred()
 
 	send_button.pressed.connect(_on_send_button_pressed)
 	chat_input.text_submitted.connect(_on_chat_text_submitted)
@@ -373,7 +377,8 @@ func _submit_chat_input() -> void:
 		_add_chat_message("Command not recognized.")
 		return
 
-	_add_chat_message("Adinho: %s" % text)
+	if not ChatRealtimeService.send_chat_message(text):
+		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
 
 func _handle_start_encounter_command(pokemon_text: String) -> bool:
 	pokemon_text = _clean_encounter_paste_text(pokemon_text)
@@ -449,6 +454,7 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 		return false
 
 	PlayerSave.add_pokemon(pokemon)
+	await _save_party_state_after_change()
 	_add_chat_message("Added %s Lv. %s to party." % [pokemon.species, pokemon.level])
 	return true
 
@@ -505,6 +511,7 @@ func _handle_add_team_command(team_text: String) -> bool:
 	for pokemon in parsed_pokemon:
 		PlayerSave.add_pokemon(pokemon)
 
+	await _save_party_state_after_change()
 	_add_chat_message("Added %s Pokemon to party." % parsed_pokemon.size())
 	return true
 
@@ -599,8 +606,15 @@ func _on_clear_party_confirmed() -> void:
 
 	PlayerSave.party.clear()
 	PlayerSave.party_changed.emit()
+	await _save_party_state_after_change()
 	dev_actions_popup.visible = false
 	_add_chat_message("Party cleared.")
+
+func _save_party_state_after_change() -> void:
+	var result: Dictionary = await PlayerPartyStateService.save_current_party()
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not save party. Please report this to staff.")
+		push_warning("UIOverlay: party save failed: %s" % str(result.get("error", "Unknown error")))
 
 func _on_dev_actions_close_button_pressed() -> void:
 	dev_actions_popup.visible = false
@@ -663,3 +677,24 @@ func _add_chat_message(text: String) -> void:
 	entry.text = text
 	entry.fit_content = true
 	entry.scroll_active = false
+	_scroll_chat_to_bottom.call_deferred()
+
+func _scroll_chat_to_bottom() -> void:
+	var vertical_scroll_bar: VScrollBar = message_scroll.get_v_scroll_bar()
+	message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
+
+func _on_chat_realtime_message_received(message: Dictionary) -> void:
+	if str(message.get("type", "")) != "chat":
+		return
+
+	var user: Dictionary = {}
+	var user_value: Variant = message.get("user", {})
+	if user_value is Dictionary:
+		user = user_value as Dictionary
+
+	var display_name: String = str(user.get("displayName", user.get("username", "Trainer")))
+	var text: String = str(message.get("text", "")).strip_edges()
+	if text == "":
+		return
+
+	_add_chat_message("%s: %s" % [display_name, text])
