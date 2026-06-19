@@ -251,7 +251,7 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 		seen_user_ids[user_key] = true
 		var avatar: Node2D = remote_player_avatars.get(user_key, null)
 		if avatar == null or not is_instance_valid(avatar):
-			var new_avatar := REMOTE_PLAYER_AVATAR_SCRIPT.new()
+			var new_avatar: Variant = REMOTE_PLAYER_AVATAR_SCRIPT.new()
 			if not new_avatar is Node2D:
 				push_warning("World: remote player avatar script did not create a Node2D.")
 				continue
