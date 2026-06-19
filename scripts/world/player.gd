@@ -115,6 +115,7 @@ func _ready() -> void:
 	z_as_relative = false
 	_apply_body_appearance(PlayerSave.appearance_body_id)
 	_cache_appearance_sprites()
+	set_display_name(PlayerSave.player_name, true)
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
