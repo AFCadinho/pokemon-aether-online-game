@@ -4,12 +4,28 @@ class_name CharacterAppearanceService
 
 const BODY_DIRECTORY := "res://assets/player/body"
 const DEFAULT_BODY_ID := "boy_run"
+const BODY_IDS: Array[String] = [
+	"Gen4_Base_v1",
+	"boy_run",
+	"boy_run_1",
+	"female",
+	"gen5_player_style",
+	"trProtag_BoyRun",
+	"trProtag_BoyWalk",
+	"trProtag_GirlRun",
+	"trProtag_GirlWalk",
+	"trchar000_1",
+]
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
 
 static var _body_frames_cache: Dictionary = {}
+
+
+static func get_available_body_ids() -> Array[String]:
+	return BODY_IDS.duplicate()
 
 
 static func get_body_frames(body_id: String) -> SpriteFrames:

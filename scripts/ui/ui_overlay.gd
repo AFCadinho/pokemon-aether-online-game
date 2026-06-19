@@ -39,7 +39,6 @@ const TRAINER_CARD_SIZE := Vector2(560, 390)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.8, 2.8)
-const TRAINER_CARD_BODY_PATH := "res://assets/player/body"
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
 const UI_BG := Color("#070b14e6")
 const UI_BG_STRONG := Color("#05070bf2")
@@ -710,21 +709,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	return tab
 
 func _get_body_appearance_ids() -> Array[String]:
-	var ids: Array[String] = []
-	var dir := DirAccess.open(TRAINER_CARD_BODY_PATH)
-	if dir == null:
-		ids.append(CharacterAppearanceService.DEFAULT_BODY_ID)
-		return ids
-
-	dir.list_dir_begin()
-	var file_name := dir.get_next()
-	while file_name != "":
-		if not dir.current_is_dir() and file_name.get_extension().to_lower() == "png":
-			ids.append(file_name.get_basename())
-		file_name = dir.get_next()
-	dir.list_dir_end()
-	ids.sort()
-
+	var ids: Array[String] = CharacterAppearanceService.get_available_body_ids()
 	if ids.is_empty():
 		ids.append(CharacterAppearanceService.DEFAULT_BODY_ID)
 	return ids
