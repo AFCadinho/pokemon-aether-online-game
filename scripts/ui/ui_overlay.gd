@@ -29,6 +29,7 @@ const CHAT_TAB_GENERAL := "general"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const PLAYER_STATUS_CARD_SIZE := Vector2(248, 86)
 const PLAYER_STATUS_CARD_MARGIN := Vector2(16, 16)

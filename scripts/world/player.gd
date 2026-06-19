@@ -15,10 +15,26 @@ const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const BASE_SPRITE_OFFSET_META := "base_sprite_offset"
 const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
 const BODY_SPRITE_NAME := "BodySprite"
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const ROLE_BADGE_COLORS := {
+	"gamemaster": Color(0.0, 0.749, 1.0),
+	"developer": Color(0.0, 0.898, 0.659),
+	"moderator": Color(0.482, 0.173, 0.749),
+}
+const NAMEPLATE_WIDTH := 164.0
+const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
+const NAMEPLATE_TEXT_PADDING := 6.0
+const ROLE_BADGE_GAP := -5.0
+const ROLE_BADGE_DEFAULT_WIDTH := 20.0
+const NAMEPLATE_MIN_NAME_WIDTH := 44.0
+const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
-@onready var nameplate_label: Label = $Nameplate
+@onready var nameplate: Control = $Nameplate
+@onready var nameplate_label: Label = $Nameplate/NameLabel
+@onready var role_badge_panel: Panel = $Nameplate/RoleBadgePanel
+@onready var role_badge_label: Label = $Nameplate/RoleBadgePanel/RoleBadge
 
 # TileMapLayer nodes die speciale map-informatie bevatten.
 # Collision bevat de onzichtbare/blokkerende tegels.
@@ -69,7 +85,28 @@ func set_display_name(display_name: String, visible: bool = true) -> void:
 		return
 
 	nameplate_label.text = display_name.strip_edges()
-	nameplate_label.visible = visible and nameplate_label.text != ""
+	_sync_nameplate_visibility(visible)
+
+func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 0.404)) -> void:
+	if role_badge_label == null:
+		return
+
+	role_badge_label.text = role_badge.strip_edges()
+	if role_badge_panel != null:
+		role_badge_panel.visible = role_badge_label.text != ""
+	role_badge_label.add_theme_color_override("font_color", role_color)
+	_sync_nameplate_visibility(nameplate_label != null and nameplate_label.text != "")
+
+func set_role_from_user(user: Dictionary) -> void:
+	var primary_role: Dictionary = _get_primary_visible_role(user)
+	if primary_role.is_empty():
+		set_role_badge("")
+		return
+
+	set_role_badge(
+		str(primary_role.get("badge", "")),
+		_get_role_color(str(primary_role.get("id", "")), str(primary_role.get("color", "")))
+	)
 
 func get_network_movement_state() -> Dictionary:
 	return {
@@ -116,6 +153,7 @@ func _ready() -> void:
 	_apply_body_appearance(PlayerSave.appearance_body_id)
 	_cache_appearance_sprites()
 	set_display_name(PlayerSave.player_name, true)
+	set_role_from_user(AuthService.current_user)
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
@@ -136,6 +174,105 @@ func _ready() -> void:
 	global_position = target_position
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
+
+func _sync_nameplate_visibility(visible: bool) -> void:
+	if nameplate == null or nameplate_label == null:
+		return
+
+	_sync_nameplate_layout()
+	nameplate_label.visible = visible and nameplate_label.text != ""
+	nameplate.visible = visible and nameplate_label.text != ""
+
+func _sync_nameplate_layout() -> void:
+	if nameplate_label == null:
+		return
+
+	var has_role_badge: bool = role_badge_panel != null and role_badge_label != null and role_badge_label.text.strip_edges() != ""
+	var name_width: float = clampf(
+		_get_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
+		NAMEPLATE_MIN_NAME_WIDTH,
+		NAMEPLATE_MAX_NAME_WIDTH
+	)
+	nameplate_label.offset_left = NAMEPLATE_CENTER_X - (name_width * 0.5)
+	nameplate_label.offset_right = nameplate_label.offset_left + name_width
+	nameplate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if has_role_badge:
+		var badge_width: float = _get_role_badge_width(role_badge_label.text)
+		var start_x: float = nameplate_label.offset_left - ROLE_BADGE_GAP - badge_width
+		role_badge_panel.offset_left = start_x
+		role_badge_panel.offset_right = start_x + badge_width
+		role_badge_panel.offset_top = 5.0
+		role_badge_panel.offset_bottom = 16.0
+		role_badge_label.offset_left = 1.0
+		role_badge_label.offset_right = badge_width - 1.0
+		role_badge_label.offset_top = 0.0
+		role_badge_label.offset_bottom = 11.0
+
+func _get_label_text_width(label: Label) -> float:
+	var text: String = label.text.strip_edges()
+	if text == "":
+		return 0.0
+
+	var font: Font = label.get_theme_font("font")
+	var font_size: int = label.get_theme_font_size("font_size")
+	if font == null:
+		return float(text.length() * max(font_size, 10) * 0.6)
+	return font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+
+func _get_role_badge_width(badge_text: String) -> float:
+	match badge_text.strip_edges():
+		"GM":
+			return 16.0
+		"DEV", "MOD":
+			return 20.0
+		_:
+			return ROLE_BADGE_DEFAULT_WIDTH
+
+func _get_primary_visible_role(user: Dictionary) -> Dictionary:
+	var roles_value: Variant = user.get("roles", [])
+	if not roles_value is Array:
+		return {}
+
+	var roles: Array = roles_value as Array
+	var primary_role: Dictionary = {}
+	var primary_priority: int = -999999
+	for role_value: Variant in roles:
+		if not role_value is Dictionary:
+			continue
+
+		var role: Dictionary = role_value as Dictionary
+		var role_id: String = str(role.get("id", ""))
+		var badge: String = _get_role_badge(role_id)
+		if badge.is_empty():
+			continue
+
+		var role_with_badge: Dictionary = role.duplicate()
+		role_with_badge["badge"] = badge
+		var priority: int = int(role_with_badge.get("priority", 0))
+		if primary_role.is_empty() or priority > primary_priority:
+			primary_role = role_with_badge
+			primary_priority = priority
+
+	return primary_role
+
+func _get_role_badge(role_id: String) -> String:
+	match role_id:
+		"gamemaster":
+			return "GM"
+		"developer":
+			return "DEV"
+		"moderator":
+			return "MOD"
+		_:
+			return ""
+
+func _get_role_color(role_id: String, fallback: String) -> Color:
+	if ROLE_BADGE_COLORS.has(role_id):
+		var role_color: Color = ROLE_BADGE_COLORS[role_id]
+		return role_color
+	if fallback.begins_with("#"):
+		return Color(fallback)
+	return Color(0.847, 0.718, 0.404)
 
 func _process(delta: float) -> void:
 	_update_sort_z()

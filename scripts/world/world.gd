@@ -338,6 +338,7 @@ func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
 		"facingDirection": _direction_to_name(player.last_direction),
 		"spawnMarker": spawn_marker,
 		"appearance": _get_current_appearance_presence_state(),
+		"roles": _get_current_role_presence_state(),
 	}
 	if player.has_method("get_network_movement_state"):
 		state["movement"] = player.call("get_network_movement_state")
@@ -349,6 +350,27 @@ func _get_current_appearance_presence_state() -> Dictionary:
 	return {
 		"body": PlayerSave.appearance_body_id,
 	}
+
+
+func _get_current_role_presence_state() -> Array:
+	var roles_value: Variant = AuthService.current_user.get("roles", [])
+	if not roles_value is Array:
+		return []
+
+	var roles: Array = roles_value as Array
+	var presence_roles: Array = []
+	for role_value: Variant in roles:
+		if not role_value is Dictionary:
+			continue
+
+		var role: Dictionary = role_value as Dictionary
+		presence_roles.append({
+			"id": str(role.get("id", "")),
+			"color": str(role.get("color", "")),
+			"priority": int(role.get("priority", 0)),
+		})
+
+	return presence_roles
 
 
 func _get_current_follower_presence_state() -> Dictionary:

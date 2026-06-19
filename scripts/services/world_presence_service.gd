@@ -110,6 +110,7 @@ func update_position(state: Dictionary) -> bool:
 		"movement": state.get("movement", {}),
 		"follower": state.get("follower", {}),
 		"appearance": state.get("appearance", {}),
+		"roles": state.get("roles", []),
 	}
 	last_position_payload = payload
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:

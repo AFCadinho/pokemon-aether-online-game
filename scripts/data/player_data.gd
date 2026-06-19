@@ -2,6 +2,8 @@ extends Node
 
 class_name PlayerData # PlayerSave Autoload
 
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+
 signal party_changed
 
 var player_name := "Player"
