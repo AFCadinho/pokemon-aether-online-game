@@ -31,6 +31,13 @@ const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
+const APPEARANCE_CATEGORIES := [
+	{"id": "body", "label": "Body"},
+	{"id": "hair", "label": "Hair"},
+	{"id": "legs", "label": "Legs"},
+	{"id": "feet", "label": "Feet"},
+	{"id": "facegear", "label": "Facegear"},
+]
 const PLAYER_STATUS_CARD_SIZE := Vector2(248, 86)
 const PLAYER_STATUS_CARD_MARGIN := Vector2(16, 16)
 const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(76, 76)
@@ -675,19 +682,72 @@ func _create_trainer_card_appearance_tab() -> Control:
 	tab.add_theme_constant_override("margin_right", 12)
 	tab.add_theme_constant_override("margin_bottom", 12)
 
-	var layout := VBoxContainer.new()
+	var layout := HBoxContainer.new()
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
 	tab.add_child(layout)
 
+	var sidebar := VBoxContainer.new()
+	sidebar.custom_minimum_size = Vector2(92, 0)
+	sidebar.add_theme_constant_override("separation", 6)
+	layout.add_child(sidebar)
+
+	var content_stack := VBoxContainer.new()
+	content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_stack.add_theme_constant_override("separation", 8)
+	layout.add_child(content_stack)
+
+	for category_value: Variant in APPEARANCE_CATEGORIES:
+		if not category_value is Dictionary:
+			continue
+
+		var category: Dictionary = category_value as Dictionary
+		var category_id: String = str(category.get("id", ""))
+		var category_label: String = str(category.get("label", category_id.capitalize()))
+		var side_button := Button.new()
+		side_button.text = category_label
+		side_button.focus_mode = Control.FOCUS_NONE
+		side_button.custom_minimum_size = Vector2(0, 28)
+		side_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		side_button.toggle_mode = true
+		side_button.button_pressed = category_id == "body"
+		side_button.pressed.connect(_on_trainer_card_appearance_category_selected.bind(side_button, content_stack, category_id))
+		sidebar.add_child(side_button)
+		_apply_button_style(side_button, "primary" if category_id == "body" else "default")
+
+	_create_trainer_card_body_appearance_content(content_stack)
+	return tab
+
+func _on_trainer_card_appearance_category_selected(button: Button, content_stack: VBoxContainer, category_id: String) -> void:
+	var sidebar: Node = button.get_parent()
+	if sidebar != null:
+		for child: Node in sidebar.get_children():
+			if not child is Button:
+				continue
+			var side_button: Button = child as Button
+			var selected: bool = side_button == button
+			side_button.button_pressed = selected
+			_apply_button_style(side_button, "primary" if selected else "default")
+
+	_clear_container_children(content_stack)
+	if category_id == "body":
+		_create_trainer_card_body_appearance_content(content_stack)
+	else:
+		_create_trainer_card_empty_appearance_content(content_stack, category_id)
+
+func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) -> void:
 	var body_label := Label.new()
-	body_label.text = "Body Sprite"
+	body_label.text = "Body"
 	body_label.add_theme_font_size_override("font_size", 16)
 	body_label.add_theme_color_override("font_color", UI_TEXT)
-	layout.add_child(body_label)
+	content_stack.add_child(body_label)
 
 	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_child(scroll)
+	content_stack.add_child(scroll)
 
 	var grid := GridContainer.new()
 	grid.columns = 2
@@ -707,7 +767,28 @@ func _create_trainer_card_appearance_tab() -> Control:
 		trainer_card_body_buttons[body_id] = body_button
 
 	_refresh_trainer_card_body_buttons()
-	return tab
+
+func _create_trainer_card_empty_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
+	var title := Label.new()
+	title.text = _format_body_appearance_name(category_id)
+	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	content_stack.add_child(title)
+
+	var empty_state := Label.new()
+	empty_state.text = "Coming soon"
+	empty_state.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	empty_state.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	empty_state.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	empty_state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	empty_state.add_theme_font_size_override("font_size", 14)
+	empty_state.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	content_stack.add_child(empty_state)
+
+func _clear_container_children(container: Container) -> void:
+	for child: Node in container.get_children():
+		container.remove_child(child)
+		child.queue_free()
 
 func _get_body_appearance_ids() -> Array[String]:
 	var ids: Array[String] = CharacterAppearanceService.get_available_body_ids()
@@ -754,6 +835,12 @@ func _show_trainer_card() -> void:
 
 	_refresh_trainer_card_body_buttons()
 	_refresh_avatar_previews()
+	_save_current_world_state_after_appearance_change()
+
+func _save_current_world_state_after_appearance_change() -> void:
+	var world := GameState.get_world()
+	if world != null and world.has_method("save_current_player_state"):
+		world.call("save_current_player_state")
 	trainer_card_popup.visible = true
 	trainer_card_popup.move_to_front()
 

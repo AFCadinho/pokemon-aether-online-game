@@ -90,6 +90,10 @@ func disconnect_chat() -> void:
 	connecting = false
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
+	websocket = WebSocketPeer.new()
+	session_invalid_handled = false
+	reconnect_timer = 0.0
+	session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
 	if connected:
 		connected = false
 		connection_changed.emit(false)

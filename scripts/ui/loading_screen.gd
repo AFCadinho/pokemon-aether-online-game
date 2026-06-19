@@ -88,6 +88,7 @@ func _prepare_world() -> void:
 	var saved_state: Dictionary = {}
 	if bool(position_response.get("success", false)) and bool(position_response.get("hasState", false)):
 		saved_state = _dictionary_from_value(position_response.get("state", {}))
+		_apply_saved_appearance_state(saved_state)
 	elif not bool(position_response.get("success", false)):
 		push_warning("LoadingScreen: player position load failed: %s" % str(position_response.get("error", "Unknown error")))
 
@@ -115,6 +116,14 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 		return {}
 	var dictionary: Dictionary = value
 	return dictionary
+
+func _apply_saved_appearance_state(state: Dictionary) -> void:
+	var appearance: Dictionary = _dictionary_from_value(state.get("appearance", {}))
+	var body_id: String = str(appearance.get("body", "")).strip_edges()
+	if body_id == "":
+		return
+
+	PlayerSave.appearance_body_id = body_id
 
 
 func _create_panel_style() -> StyleBoxFlat:

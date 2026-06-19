@@ -467,6 +467,7 @@ func _logout_confirmed() -> void:
 	logging_out = true
 	logout_button.disabled = true
 	close_button.disabled = true
+	AuthService.clear_session()
 	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		logging_out = false

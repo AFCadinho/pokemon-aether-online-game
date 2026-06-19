@@ -56,6 +56,9 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_save_current_player_position_if_changed(true)
 
+func save_current_player_state() -> void:
+	_save_current_player_position_if_changed.call_deferred(true)
+
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	if is_loading_map:
@@ -157,6 +160,7 @@ func _setup_initial_world_state() -> void:
 		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
 		if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
 			saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
+			_apply_saved_appearance_state(saved_state)
 		elif not bool(saved_state_response.get("success", false)):
 			push_warning("World: player position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
 
@@ -176,6 +180,7 @@ func _setup_initial_world_state() -> void:
 	move_player_to_map(initial_map)
 
 	if not saved_state.is_empty():
+		_apply_saved_appearance_state(saved_state)
 		_position_player_at_saved_state(initial_map, saved_state)
 		last_saved_position_signature = _get_current_player_position_signature()
 	elif not GameState.has_player_position:
@@ -350,6 +355,16 @@ func _get_current_appearance_presence_state() -> Dictionary:
 	return {
 		"body": PlayerSave.appearance_body_id,
 	}
+
+func _apply_saved_appearance_state(state: Dictionary) -> void:
+	var appearance: Dictionary = _dictionary_from_value(state.get("appearance", {}))
+	var body_id: String = str(appearance.get("body", "")).strip_edges()
+	if body_id == "":
+		return
+
+	PlayerSave.appearance_body_id = body_id
+	if player != null and player.has_method("set_body_appearance"):
+		player.call("set_body_appearance", body_id)
 
 
 func _get_current_role_presence_state() -> Array:

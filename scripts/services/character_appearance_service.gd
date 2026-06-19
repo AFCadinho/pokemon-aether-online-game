@@ -3,19 +3,7 @@ extends RefCounted
 class_name CharacterAppearanceService
 
 const BODY_DIRECTORY := "res://assets/player/body"
-const DEFAULT_BODY_ID := "boy_run"
-const BODY_IDS: Array[String] = [
-	"Gen4_Base_v1",
-	"boy_run",
-	"boy_run_1",
-	"female",
-	"gen5_player_style",
-	"trProtag_BoyRun",
-	"trProtag_BoyWalk",
-	"trProtag_GirlRun",
-	"trProtag_GirlWalk",
-	"trchar000_1",
-]
+const DEFAULT_BODY_ID := "gen4_pa_base_boy"
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
@@ -25,13 +13,31 @@ static var _body_frames_cache: Dictionary = {}
 
 
 static func get_available_body_ids() -> Array[String]:
-	return BODY_IDS.duplicate()
+	var body_ids: Array[String] = []
+	var directory := DirAccess.open(BODY_DIRECTORY)
+	if directory == null:
+		return body_ids
+
+	for file_name: String in directory.get_files():
+		if not file_name.ends_with(".png"):
+			continue
+
+		var body_id: String = file_name.trim_suffix(".png")
+		if body_id == "":
+			continue
+		body_ids.append(body_id)
+
+	body_ids.sort()
+	if body_ids.has(DEFAULT_BODY_ID):
+		body_ids.erase(DEFAULT_BODY_ID)
+		body_ids.push_front(DEFAULT_BODY_ID)
+	return body_ids
 
 
 static func get_body_frames(body_id: String) -> SpriteFrames:
 	var normalized_body_id: String = _normalize_body_id(body_id)
 	if normalized_body_id == "":
-		normalized_body_id = DEFAULT_BODY_ID
+		normalized_body_id = _get_fallback_body_id()
 
 	if _body_frames_cache.has(normalized_body_id):
 		var cached_value: Variant = _body_frames_cache[normalized_body_id]
@@ -40,8 +46,9 @@ static func get_body_frames(body_id: String) -> SpriteFrames:
 		return null
 
 	var texture: Texture2D = _load_body_texture(normalized_body_id)
-	if texture == null and normalized_body_id != DEFAULT_BODY_ID:
-		texture = _load_body_texture(DEFAULT_BODY_ID)
+	var fallback_body_id: String = _get_fallback_body_id()
+	if texture == null and normalized_body_id != fallback_body_id:
+		texture = _load_body_texture(fallback_body_id)
 	if texture == null:
 		_body_frames_cache[normalized_body_id] = null
 		return null
@@ -56,6 +63,16 @@ static func _load_body_texture(body_id: String) -> Texture2D:
 	if ResourceLoader.exists(path):
 		return ResourceLoader.load(path) as Texture2D
 	return null
+
+
+static func _get_fallback_body_id() -> String:
+	if ResourceLoader.exists("%s/%s.png" % [BODY_DIRECTORY, DEFAULT_BODY_ID]):
+		return DEFAULT_BODY_ID
+
+	var body_ids: Array[String] = get_available_body_ids()
+	if body_ids.is_empty():
+		return DEFAULT_BODY_ID
+	return body_ids[0]
 
 
 static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
