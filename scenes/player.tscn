@@ -5,6 +5,12 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(32, 30.5)
 
+[sub_resource type="LabelSettings" id="LabelSettings_nameplate"]
+font_size = 10
+font_color = Color(1, 1, 1, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 0.78)
+
 [node name="Player" type="CharacterBody2D" unique_id=1734997832]
 script = ExtResource("1_qhqgy")
 metadata/_edit_vertical_guides_ = [-211.0]
@@ -13,6 +19,19 @@ metadata/_edit_vertical_guides_ = [-211.0]
 position = Vector2(0, -16)
 
 [node name="BodySprite" type="AnimatedSprite2D" parent="Look" unique_id=2078077717]
+
+[node name="Nameplate" type="Label" parent="." unique_id=1400626741]
+visible = false
+z_index = 512
+offset_left = -64.0
+offset_top = -68.0
+offset_right = 64.0
+offset_bottom = -50.0
+mouse_filter = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+label_settings = SubResource("LabelSettings_nameplate")
 
 [node name="DetectionShape" type="CollisionShape2D" parent="." unique_id=1504927595]
 position = Vector2(0, -0.75)

@@ -27,6 +27,7 @@ var is_replaying_tile_move := false
 var pending_tile_moves: Array[Dictionary] = []
 var last_direction := Vector2.DOWN
 var appearance_sprites: Array[AnimatedSprite2D] = []
+var nameplate_label: Label
 var pokemon_follower: PokemonFollower
 var current_follower_species := ""
 var current_follower_shiny := false
@@ -64,6 +65,7 @@ func apply_state(state: Dictionary) -> void:
 	username = str(state.get("username", username))
 	var display_name_value: Variant = state.get("displayName", display_name)
 	display_name = username if display_name_value == null else str(display_name_value)
+	_update_nameplate()
 
 	var position_data := _dictionary_from_value(state.get("position", {}))
 	var new_target_position := Vector2(
@@ -353,7 +355,35 @@ func _create_visual() -> void:
 	add_child(look_copy)
 	_collect_appearance_sprites(look_copy)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_BODY_ID})
+	_create_nameplate_from_player_scene(player_instance)
 	player_instance.queue_free()
+
+
+func _create_nameplate_from_player_scene(player_instance: Node) -> void:
+	var source_nameplate: Node = player_instance.get_node_or_null("Nameplate")
+	if source_nameplate == null:
+		return
+
+	var nameplate_copy: Node = source_nameplate.duplicate()
+	add_child(nameplate_copy)
+	nameplate_label = nameplate_copy as Label
+	if nameplate_label == null:
+		nameplate_copy.queue_free()
+		return
+
+	nameplate_label.visible = false
+	_update_nameplate()
+
+
+func _update_nameplate() -> void:
+	if nameplate_label == null:
+		return
+
+	var name_text: String = display_name.strip_edges()
+	if name_text == "":
+		name_text = username.strip_edges()
+	nameplate_label.text = name_text
+	nameplate_label.visible = name_text != ""
 
 
 func _collect_appearance_sprites(node: Node) -> void:

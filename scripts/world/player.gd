@@ -18,6 +18,7 @@ const BODY_SPRITE_NAME := "BodySprite"
 
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
+@onready var nameplate_label: Label = $Nameplate
 
 # TileMapLayer nodes die speciale map-informatie bevatten.
 # Collision bevat de onzichtbare/blokkerende tegels.
@@ -62,6 +63,13 @@ func set_body_appearance(body_id: String) -> void:
 	_apply_body_appearance(body_id)
 	_cache_appearance_sprites()
 	set_idle_frame()
+
+func set_display_name(display_name: String, visible: bool = true) -> void:
+	if nameplate_label == null:
+		return
+
+	nameplate_label.text = display_name.strip_edges()
+	nameplate_label.visible = visible and nameplate_label.text != ""
 
 func get_network_movement_state() -> Dictionary:
 	return {
