@@ -8,11 +8,15 @@ const IDLE_ANIMATION_SPEED := 4.0
 const WALK_ANIMATION_SPEED := 7.0
 
 const NORMAL_FOLLOWER_DIRECTORIES: Array[String] = [
+	"user://assets/folowers",
+	"res://assets/folowers",
 	"user://assets/followers",
 	"res://assets/followers",
 ]
 
 const SHINY_FOLLOWER_DIRECTORIES: Array[String] = [
+	"user://assets/folowers_shiny",
+	"res://assets/folowers_shiny",
 	"user://assets/followers_shiny",
 	"res://assets/followers_shiny",
 ]
