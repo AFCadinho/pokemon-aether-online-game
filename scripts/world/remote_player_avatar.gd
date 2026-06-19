@@ -67,31 +67,33 @@ func apply_state(state: Dictionary) -> void:
 		float(position_data.get("y", target_position.y))
 	)
 	var movement_data := _dictionary_from_value(state.get("movement", {}))
+	var packet_direction := _direction_from_name(str(state.get("facingDirection", "down")))
 	if not has_position:
 		target_position = new_target_position
 		if bool(movement_data.get("isMoving", false)):
 			global_position = _vector2_from_payload(movement_data.get("startPosition", {}), target_position)
 			_reset_position_samples(global_position)
 			has_position = true
-			_apply_tile_movement_state(movement_data)
+			_apply_tile_movement_state(movement_data, packet_direction)
 		else:
 			global_position = target_position
 			_reset_position_samples(target_position)
 			has_position = true
+			last_direction = packet_direction
 	else:
 		target_position = new_target_position
 		if bool(movement_data.get("isMoving", false)):
-			_apply_tile_movement_state(movement_data)
+			_apply_tile_movement_state(movement_data, packet_direction)
 		else:
 			if not is_replaying_tile_move and pending_tile_moves.is_empty():
+				last_direction = packet_direction
 				_add_position_sample(target_position)
 
-	last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
 	_update_animation(_is_visually_moving(false))
 	_update_sort_z()
 
 
-func _apply_tile_movement_state(movement_data: Dictionary) -> void:
+func _apply_tile_movement_state(movement_data: Dictionary, packet_direction: Vector2) -> void:
 	var start_position := _vector2_from_payload(movement_data.get("startPosition", {}), global_position)
 	var move_target_position := _vector2_from_payload(movement_data.get("targetPosition", {}), target_position)
 	var duration := maxf(float(movement_data.get("duration", TILE_MOVE_DURATION)), 0.001)
@@ -102,6 +104,7 @@ func _apply_tile_movement_state(movement_data: Dictionary) -> void:
 		"start": start_position,
 		"target": move_target_position,
 		"duration": duration,
+		"direction": _get_move_direction(start_position, move_target_position, packet_direction),
 	})
 	position_samples.clear()
 	walk_animation_hold_timer = WALK_ANIMATION_HOLD_DURATION
@@ -139,6 +142,7 @@ func _start_next_pending_tile_move() -> void:
 	var move: Dictionary = move_value
 	var start_position := _get_sample_position({"position": move.get("start", global_position)}, global_position)
 	var move_target_position := _get_sample_position({"position": move.get("target", target_position)}, target_position)
+	var move_direction := _get_direction_from_value(move.get("direction", last_direction), last_direction)
 	if global_position.distance_to(start_position) > SNAP_DISTANCE:
 		global_position = start_position
 
@@ -147,6 +151,7 @@ func _start_next_pending_tile_move() -> void:
 	tile_move_duration = maxf(float(move.get("duration", TILE_MOVE_DURATION)), 0.001)
 	tile_move_elapsed = 0.0
 	is_replaying_tile_move = true
+	last_direction = move_direction
 
 
 func _update_replayed_tile_move(delta: float) -> void:
@@ -248,6 +253,21 @@ func _vector2_from_payload(value: Variant, fallback: Vector2) -> Vector2:
 		float(dictionary.get("x", fallback.x)),
 		float(dictionary.get("y", fallback.y))
 	)
+
+
+func _get_move_direction(start_position: Vector2, target_position_value: Vector2, fallback: Vector2) -> Vector2:
+	var delta := target_position_value - start_position
+	if abs(delta.x) > abs(delta.y):
+		return Vector2.RIGHT if delta.x > 0.0 else Vector2.LEFT
+	if abs(delta.y) > 0.0:
+		return Vector2.DOWN if delta.y > 0.0 else Vector2.UP
+	return fallback
+
+
+func _get_direction_from_value(value: Variant, fallback: Vector2) -> Vector2:
+	if value is Vector2:
+		return value as Vector2
+	return fallback
 
 
 func _snap_world_position(position: Vector2) -> Vector2:
