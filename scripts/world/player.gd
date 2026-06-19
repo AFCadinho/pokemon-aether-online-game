@@ -105,14 +105,6 @@ func _ready() -> void:
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
 
-func _exit_tree() -> void:
-	var refresh_callable: Callable = Callable(self, "refresh_pokemon_follower")
-	if PlayerSave.party_changed.is_connected(refresh_callable):
-		PlayerSave.party_changed.disconnect(refresh_callable)
-	if pokemon_follower != null and is_instance_valid(pokemon_follower):
-		pokemon_follower.queue_free()
-	pokemon_follower = null
-
 func _process(delta: float) -> void:
 	_update_sort_z()
 	_sync_appearance_sprite_frames()
@@ -164,7 +156,8 @@ func _process(delta: float) -> void:
 			set_idle_frame()
 
 func refresh_pokemon_follower() -> void:
-	if pokemon_follower == null:
+	_ensure_pokemon_follower_parent()
+	if pokemon_follower == null or not is_instance_valid(pokemon_follower):
 		return
 
 	var lead_pokemon: Pokemon = null
@@ -178,26 +171,50 @@ func set_show_follower(show_follower: bool) -> void:
 	refresh_pokemon_follower()
 
 func reset_pokemon_follower_position() -> void:
-	if pokemon_follower != null:
+	_ensure_pokemon_follower_parent()
+	if pokemon_follower != null and is_instance_valid(pokemon_follower):
 		pokemon_follower.reset_follow_position()
 
 func _setup_pokemon_follower() -> void:
-	if pokemon_follower != null:
+	if pokemon_follower != null and is_instance_valid(pokemon_follower):
+		_ensure_pokemon_follower_parent()
 		return
 
 	pokemon_follower = PokemonFollower.new()
 	pokemon_follower.name = "PokemonFollower"
-	var follower_parent := get_parent()
-	if follower_parent != null:
-		follower_parent.add_child(pokemon_follower)
-	else:
-		add_child(pokemon_follower)
+	_get_pokemon_follower_parent().add_child(pokemon_follower)
 	pokemon_follower.setup(self)
 	refresh_pokemon_follower()
 
 	var refresh_callable: Callable = Callable(self, "refresh_pokemon_follower")
 	if not PlayerSave.party_changed.is_connected(refresh_callable):
 		PlayerSave.party_changed.connect(refresh_callable)
+
+func _ensure_pokemon_follower_parent() -> void:
+	if pokemon_follower != null and not is_instance_valid(pokemon_follower):
+		pokemon_follower = null
+	if pokemon_follower == null:
+		_setup_pokemon_follower()
+		return
+
+	var follower_parent := _get_pokemon_follower_parent()
+	if pokemon_follower.get_parent() == follower_parent:
+		return
+
+	var follower_position := pokemon_follower.global_position
+	if pokemon_follower.get_parent() != null:
+		pokemon_follower.get_parent().remove_child(pokemon_follower)
+	follower_parent.add_child(pokemon_follower)
+	pokemon_follower.global_position = follower_position
+
+func _get_pokemon_follower_parent() -> Node:
+	var world := GameState.get_world()
+	if world != null and is_instance_valid(world):
+		return world
+	var parent := get_parent()
+	if parent != null:
+		return parent
+	return self
 
 func _can_accept_movement_input() -> bool:
 	return not GameState.is_overworld_input_locked() and not _is_ui_typing()

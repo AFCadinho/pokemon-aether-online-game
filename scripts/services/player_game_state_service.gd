@@ -3,6 +3,7 @@ extends Node
 class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
+const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -54,6 +55,32 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"success": true,
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
+	}
+
+
+func load_map_players() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + MAP_PLAYERS_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var players_value: Variant = body.get("players", [])
+	var players: Array = players_value if players_value is Array else []
+	return {
+		"success": true,
+		"players": players,
 	}
 
 

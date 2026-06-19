@@ -132,6 +132,10 @@ func clear_session() -> void:
 	if chat_service != null and chat_service.has_method("disconnect_chat"):
 		chat_service.call("disconnect_chat")
 
+	var world_presence_service: Object = get_node_or_null("/root/WorldPresenceService")
+	if world_presence_service != null and world_presence_service.has_method("disconnect_presence"):
+		world_presence_service.call("disconnect_presence")
+
 	session_token = ""
 	expires_at = ""
 	current_user.clear()

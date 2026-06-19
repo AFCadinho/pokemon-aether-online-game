@@ -32,6 +32,7 @@ var npc_metadata_load_failed := false
 
 
 func _ready_base_npc() -> void:
+	z_as_relative = false
 	if npc_sprite_frames != null:
 		sprite.sprite_frames = _get_directional_sprite_frames(npc_sprite_frames)
 	sprite.position = sprite_offset

@@ -2,7 +2,9 @@ extends Node2D
 
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
+const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
+const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.75
 const POSITION_SAVE_EPSILON := 1.0
 
 @export var initial_spawn_name := "FromRoute1"
@@ -15,8 +17,12 @@ var battle_instance: Node
 
 var is_loading_map := false
 var position_autosave_elapsed := 0.0
+var position_presence_elapsed := 0.0
 var is_saving_player_position := false
 var last_saved_position_signature := ""
+var last_presence_position_signature := ""
+var remote_players_container: Node2D
+var remote_player_avatars: Dictionary = {}
 
 func _exit_tree() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
@@ -26,6 +32,8 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	_ensure_remote_players_container()
+	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -33,12 +41,15 @@ func _process(delta: float) -> void:
 	if is_in_battle or is_loading_map:
 		return
 
-	position_autosave_elapsed += delta
-	if position_autosave_elapsed < POSITION_AUTOSAVE_INTERVAL_SECONDS:
-		return
+	position_presence_elapsed += delta
+	if position_presence_elapsed >= POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS:
+		position_presence_elapsed = 0.0
+		_publish_world_presence()
 
-	position_autosave_elapsed = 0.0
-	await _save_current_player_position_if_changed()
+	position_autosave_elapsed += delta
+	if position_autosave_elapsed >= POSITION_AUTOSAVE_INTERVAL_SECONDS:
+		position_autosave_elapsed = 0.0
+		await _save_current_player_position_if_changed(true)
 
 
 func _notification(what: int) -> void:
@@ -52,6 +63,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		return
 
 	is_loading_map = true
+	_clear_remote_players()
 
 	if target_scene_path == "":
 		push_error("World.load_map failed: target_scene_path is empty.")
@@ -82,6 +94,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	await get_tree().physics_frame
 	is_loading_map = false
 	await _save_current_player_position_if_changed(true, target_spawn_name)
+	_publish_world_presence(true)
 
 func move_player_to_map(map: Node) -> void:
 	var players: Node = map.get_node_or_null("Entities/Players")
@@ -170,6 +183,8 @@ func _setup_initial_world_state() -> void:
 		_save_current_player_position_if_changed.call_deferred(true, initial_spawn_name)
 
 	player.refresh_map_layers()
+	WorldPresenceService.connect_presence.call_deferred()
+	_publish_world_presence.call_deferred(true)
 
 
 func _instantiate_map(scene_path: String) -> Node:
@@ -183,6 +198,107 @@ func _clear_current_map() -> void:
 	for child in $CurrentMap.get_children():
 		$CurrentMap.remove_child(child)
 		child.queue_free()
+
+
+func _ensure_remote_players_container() -> void:
+	if remote_players_container != null and is_instance_valid(remote_players_container):
+		return
+
+	remote_players_container = Node2D.new()
+	remote_players_container.name = "RemotePlayers"
+	add_child(remote_players_container)
+
+
+func _connect_world_presence_signals() -> void:
+	if not WorldPresenceService.snapshot_received.is_connected(_on_world_presence_snapshot_received):
+		WorldPresenceService.snapshot_received.connect(_on_world_presence_snapshot_received)
+	if not WorldPresenceService.player_update_received.is_connected(_on_world_presence_player_update_received):
+		WorldPresenceService.player_update_received.connect(_on_world_presence_player_update_received)
+	if not WorldPresenceService.player_left_received.is_connected(_on_world_presence_player_left_received):
+		WorldPresenceService.player_left_received.connect(_on_world_presence_player_left_received)
+
+
+func _publish_world_presence(force := false) -> void:
+	if not AuthService.is_authenticated() or player == null or GameState.current_map == null:
+		return
+
+	var signature := _get_current_player_position_signature()
+	if not force and signature == last_presence_position_signature:
+		return
+
+	last_presence_position_signature = signature
+	WorldPresenceService.update_position(_build_current_player_position_state(""))
+
+
+func _apply_remote_player_states(player_states: Array, prune_missing := true) -> void:
+	_ensure_remote_players_container()
+
+	var seen_user_ids := {}
+	var current_map_id := _get_map_id(GameState.current_map)
+	for player_state_value in player_states:
+		if typeof(player_state_value) != TYPE_DICTIONARY:
+			continue
+
+		var player_state: Dictionary = player_state_value
+		if str(player_state.get("mapId", "")) != current_map_id:
+			continue
+
+		var user_id := int(player_state.get("userId", 0))
+		if user_id <= 0:
+			continue
+
+		var user_key := str(user_id)
+		seen_user_ids[user_key] = true
+		var avatar: Node2D = remote_player_avatars.get(user_key, null)
+		if avatar == null or not is_instance_valid(avatar):
+			var new_avatar := REMOTE_PLAYER_AVATAR_SCRIPT.new()
+			if not new_avatar is Node2D:
+				push_warning("World: remote player avatar script did not create a Node2D.")
+				continue
+			avatar = new_avatar as Node2D
+			remote_player_avatars[user_key] = avatar
+			remote_players_container.add_child(avatar)
+
+		avatar.call("apply_state", player_state)
+
+	if not prune_missing:
+		return
+
+	for user_key in remote_player_avatars.keys():
+		if seen_user_ids.has(user_key):
+			continue
+
+		var avatar: Node2D = remote_player_avatars.get(user_key, null)
+		remote_player_avatars.erase(user_key)
+		if avatar != null and is_instance_valid(avatar):
+			avatar.queue_free()
+
+
+func _clear_remote_players() -> void:
+	for avatar in remote_player_avatars.values():
+		if avatar != null and is_instance_valid(avatar):
+			avatar.queue_free()
+	remote_player_avatars.clear()
+
+
+func _remove_remote_player(user_id: int) -> void:
+	var user_key := str(user_id)
+	var avatar: Node2D = remote_player_avatars.get(user_key, null)
+	remote_player_avatars.erase(user_key)
+	if avatar != null and is_instance_valid(avatar):
+		avatar.queue_free()
+
+
+func _on_world_presence_snapshot_received(players: Array) -> void:
+	_apply_remote_player_states(players, true)
+
+
+func _on_world_presence_player_update_received(player_state: Dictionary) -> void:
+	_apply_remote_player_states([player_state], false)
+
+
+func _on_world_presence_player_left_received(user_id: int) -> void:
+	_remove_remote_player(user_id)
 
 
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
