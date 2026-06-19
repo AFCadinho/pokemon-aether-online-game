@@ -10,13 +10,11 @@ const WALK_ANIMATION_SPEED := 7.0
 const NORMAL_FOLLOWER_DIRECTORIES: Array[String] = [
 	"user://assets/followers",
 	"res://assets/followers",
-	"/home/adinho/Documents/gen9_asset_pack/Graphics/Characters/Followers",
 ]
 
 const SHINY_FOLLOWER_DIRECTORIES: Array[String] = [
 	"user://assets/followers_shiny",
 	"res://assets/followers_shiny",
-	"/home/adinho/Documents/gen9_asset_pack/Graphics/Characters/Followers shiny",
 ]
 
 static var _sprite_frames_cache: Dictionary = {}
