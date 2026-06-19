@@ -104,6 +104,9 @@ static func _load_texture(file_path: String) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 static func _file_exists(file_path: String) -> bool:
+	if file_path.begins_with("res://") and ResourceLoader.exists(file_path):
+		return true
+
 	return FileAccess.file_exists(_to_global_path(file_path))
 
 static func _to_global_path(file_path: String) -> String:
