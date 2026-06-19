@@ -121,7 +121,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .godot/imported
-          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png') }}
+          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png', 'assets/player/body/**/*.png') }}
 
       - name: Import Godot assets
         run: ./godot --headless --import --quit
@@ -148,6 +148,7 @@ jobs:
           test -f "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/windows/PokeAether.pck"
+          grep -a -q "assets/player/body/boy_run.png" "builds/windows/PokeAether.pck"
 
       - name: Verify Linux build
         run: |
@@ -155,6 +156,7 @@ jobs:
           test -f "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/linux/PokeAether.pck"
+          grep -a -q "assets/player/body/boy_run.png" "builds/linux/PokeAether.pck"
 
       - name: Export Windows launcher
         if: env.BUILD_LAUNCHER == 'true'

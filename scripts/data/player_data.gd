@@ -5,9 +5,11 @@ class_name PlayerData # PlayerSave Autoload
 signal party_changed
 
 var player_name := "Player"
+var player_id := ""
 var is_staff := true
 var party: Array[Pokemon] = []
 var money := 0
+var appearance_body_id: String = CharacterAppearanceService.DEFAULT_BODY_ID
 var flags := {}
 
 func to_battle_dict() -> Dictionary:

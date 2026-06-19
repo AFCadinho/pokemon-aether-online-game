@@ -27,6 +27,10 @@ var is_replaying_tile_move := false
 var pending_tile_moves: Array[Dictionary] = []
 var last_direction := Vector2.DOWN
 var appearance_sprites: Array[AnimatedSprite2D] = []
+var pokemon_follower: PokemonFollower
+var current_follower_species := ""
+var current_follower_shiny := false
+var current_body_id := ""
 var has_position := false
 
 
@@ -90,7 +94,13 @@ func apply_state(state: Dictionary) -> void:
 				_add_position_sample(target_position)
 
 	_update_animation(_is_visually_moving(false))
+	_apply_appearance_state(_dictionary_from_value(state.get("appearance", {})))
+	_apply_follower_state(_dictionary_from_value(state.get("follower", {})))
 	_update_sort_z()
+
+
+func get_feet_position() -> Vector2:
+	return global_position
 
 
 func _apply_tile_movement_state(movement_data: Dictionary, packet_direction: Vector2) -> void:
@@ -111,6 +121,63 @@ func _apply_tile_movement_state(movement_data: Dictionary, packet_direction: Vec
 
 	if not is_replaying_tile_move:
 		_start_next_pending_tile_move()
+
+
+func _apply_follower_state(follower_state: Dictionary) -> void:
+	if not bool(follower_state.get("visible", false)):
+		current_follower_species = ""
+		current_follower_shiny = false
+		if pokemon_follower != null and is_instance_valid(pokemon_follower):
+			pokemon_follower.set_pokemon(null)
+		return
+
+	var species: String = str(follower_state.get("species", "")).strip_edges()
+	var shiny: bool = bool(follower_state.get("shiny", false))
+	if species == "":
+		return
+
+	_ensure_pokemon_follower()
+	if pokemon_follower == null or not is_instance_valid(pokemon_follower):
+		return
+	if current_follower_species == species and current_follower_shiny == shiny:
+		return
+
+	current_follower_species = species
+	current_follower_shiny = shiny
+	var follower_pokemon: Pokemon = Pokemon.new(species, 100, "", "", "Hardy", {}, {}, [], "", shiny)
+	pokemon_follower.set_pokemon(follower_pokemon)
+	pokemon_follower.reset_follow_position()
+
+
+func _apply_appearance_state(appearance_state: Dictionary) -> void:
+	var body_id: String = str(appearance_state.get("body", CharacterAppearanceService.DEFAULT_BODY_ID)).strip_edges()
+	if body_id == "":
+		body_id = CharacterAppearanceService.DEFAULT_BODY_ID
+	if body_id == current_body_id:
+		return
+
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id)
+	if body_frames == null:
+		return
+
+	for sprite in appearance_sprites:
+		if sprite.name != "BodySprite":
+			continue
+		sprite.sprite_frames = body_frames
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		current_body_id = body_id
+		_update_animation(_is_visually_moving(false))
+		return
+
+
+func _ensure_pokemon_follower() -> void:
+	if pokemon_follower != null and is_instance_valid(pokemon_follower):
+		return
+
+	pokemon_follower = PokemonFollower.new()
+	pokemon_follower.name = "RemotePokemonFollower"
+	add_child(pokemon_follower)
+	pokemon_follower.setup(self)
 
 
 func _has_tile_move(start_position: Vector2, target_position_value: Vector2) -> bool:
@@ -285,6 +352,7 @@ func _create_visual() -> void:
 	var look_copy := source_look.duplicate()
 	add_child(look_copy)
 	_collect_appearance_sprites(look_copy)
+	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_BODY_ID})
 	player_instance.queue_free()
 
 

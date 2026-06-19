@@ -35,6 +35,11 @@ const PLAYER_STATUS_CARD_MARGIN := Vector2(16, 16)
 const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(76, 76)
 const PLAYER_STATUS_AVATAR_POSITION := Vector2(38, 52)
 const PLAYER_STATUS_AVATAR_SCALE := Vector2(1.5, 1.5)
+const TRAINER_CARD_SIZE := Vector2(560, 390)
+const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
+const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
+const TRAINER_CARD_AVATAR_SCALE := Vector2(2.8, 2.8)
+const TRAINER_CARD_BODY_PATH := "res://assets/player/body"
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
 const UI_BG := Color("#070b14e6")
 const UI_BG_STRONG := Color("#05070bf2")
@@ -126,6 +131,10 @@ var active_chat_tab: String = CHAT_TAB_GENERAL
 var player_status_panel: PanelContainer
 var player_status_name_label: Label
 var player_status_money_label: Label
+var player_status_avatar_viewport: SubViewport
+var trainer_card_popup: PanelContainer
+var trainer_card_avatar_viewport: SubViewport
+var trainer_card_body_buttons: Dictionary = {}
 var displayed_money: int = -1
 var displayed_location_map: Node
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
@@ -133,6 +142,7 @@ var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_setup_player_status_card()
+	_setup_trainer_card_popup()
 	_build_party_slots()
 	_setup_collapsible_panels()
 	_setup_chat_resize_button()
@@ -275,6 +285,11 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if _is_settings_toggle_event(event):
+		if trainer_card_popup != null and trainer_card_popup.visible:
+			trainer_card_popup.visible = false
+			get_viewport().set_input_as_handled()
+			return
+
 		_toggle_settings_menu()
 		get_viewport().set_input_as_handled()
 		return
@@ -319,7 +334,8 @@ func _setup_player_status_card() -> void:
 	player_status_panel = PanelContainer.new()
 	player_status_panel.name = "PlayerStatusPanel"
 	player_status_panel.custom_minimum_size = PLAYER_STATUS_CARD_SIZE
-	player_status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	player_status_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	player_status_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	player_status_panel.anchor_left = 0.0
 	player_status_panel.anchor_top = 1.0
 	player_status_panel.anchor_right = 0.0
@@ -335,6 +351,7 @@ func _setup_player_status_card() -> void:
 		1
 	))
 	root_control.add_child(player_status_panel)
+	player_status_panel.gui_input.connect(_on_player_status_panel_gui_input)
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 12)
@@ -403,14 +420,9 @@ func _create_player_status_avatar() -> Control:
 	avatar_viewport.size = PLAYER_STATUS_AVATAR_VIEWPORT_SIZE
 	avatar_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	avatar_viewport_container.add_child(avatar_viewport)
+	player_status_avatar_viewport = avatar_viewport
 
-	var avatar_visual := _create_player_status_avatar_visual()
-	if avatar_visual != null:
-		avatar_viewport.add_child(avatar_visual)
-		avatar_visual.position = PLAYER_STATUS_AVATAR_POSITION
-		avatar_visual.scale = PLAYER_STATUS_AVATAR_SCALE
-		_disable_avatar_preview_processing(avatar_visual)
-		_set_avatar_preview_idle_frame(avatar_visual)
+	_populate_avatar_preview(avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
 
 	return avatar_frame
 
@@ -432,7 +444,41 @@ func _create_player_status_avatar_visual() -> Node2D:
 		visual_root.free()
 		return null
 
+	_apply_avatar_preview_body(visual_root)
 	return visual_root
+
+func _populate_avatar_preview(viewport: SubViewport, preview_position: Vector2, preview_scale: Vector2) -> void:
+	if viewport == null:
+		return
+
+	for child_node: Node in viewport.get_children():
+		child_node.queue_free()
+
+	var avatar_visual := _create_player_status_avatar_visual()
+	if avatar_visual == null:
+		return
+
+	viewport.add_child(avatar_visual)
+	avatar_visual.position = preview_position
+	avatar_visual.scale = preview_scale
+	_disable_avatar_preview_processing(avatar_visual)
+	_set_avatar_preview_idle_frame(avatar_visual)
+
+func _refresh_avatar_previews() -> void:
+	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
+	_populate_avatar_preview(trainer_card_avatar_viewport, TRAINER_CARD_AVATAR_POSITION, TRAINER_CARD_AVATAR_SCALE)
+
+func _apply_avatar_preview_body(node: Node) -> void:
+	if node is AnimatedSprite2D:
+		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
+		if sprite.name == "BodySprite":
+			var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id)
+			if body_frames != null:
+				sprite.sprite_frames = body_frames
+				sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+
+	for child_node: Node in node.get_children():
+		_apply_avatar_preview_body(child_node)
 
 func _disable_avatar_preview_processing(node: Node) -> void:
 	node.set_process(false)
@@ -469,6 +515,275 @@ func _refresh_player_status_card() -> void:
 		player_status_name_label.text = PlayerSave.player_name
 	if player_status_money_label != null:
 		player_status_money_label.text = _format_money(displayed_money)
+
+func _setup_trainer_card_popup() -> void:
+	trainer_card_popup = PanelContainer.new()
+	trainer_card_popup.name = "TrainerCardPopup"
+	trainer_card_popup.visible = false
+	trainer_card_popup.custom_minimum_size = TRAINER_CARD_SIZE
+	trainer_card_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	trainer_card_popup.z_index = 320
+	trainer_card_popup.anchor_left = 0.5
+	trainer_card_popup.anchor_top = 0.5
+	trainer_card_popup.anchor_right = 0.5
+	trainer_card_popup.anchor_bottom = 0.5
+	trainer_card_popup.offset_left = -TRAINER_CARD_SIZE.x * 0.5
+	trainer_card_popup.offset_top = -TRAINER_CARD_SIZE.y * 0.5
+	trainer_card_popup.offset_right = TRAINER_CARD_SIZE.x * 0.5
+	trainer_card_popup.offset_bottom = TRAINER_CARD_SIZE.y * 0.5
+	trainer_card_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(trainer_card_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 12)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 16)
+	trainer_card_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
+	layout.add_child(header)
+
+	var title := Label.new()
+	title.text = "Trainer Card"
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_color_override("font_color", UI_MONEY)
+	header.add_child(title)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_trainer_card)
+	_apply_button_style(close_button, "danger")
+	header.add_child(close_button)
+
+	var content := HBoxContainer.new()
+	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation", 14)
+	layout.add_child(content)
+
+	content.add_child(_create_trainer_card_avatar_panel())
+
+	var tabs := TabContainer.new()
+	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.add_theme_font_size_override("font_size", 14)
+	tabs.add_child(_create_trainer_card_stats_tab())
+	tabs.add_child(_create_trainer_card_appearance_tab())
+	content.add_child(tabs)
+
+func _create_trainer_card_avatar_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(180, 0)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_BG_STRONG, UI_BORDER_SOFT, 8, 1))
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 10)
+	margin_container.add_theme_constant_override("margin_top", 10)
+	margin_container.add_theme_constant_override("margin_right", 10)
+	margin_container.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.alignment = BoxContainer.ALIGNMENT_CENTER
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var viewport_frame := PanelContainer.new()
+	viewport_frame.custom_minimum_size = Vector2(160, 160)
+	viewport_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#04070df2"), UI_BORDER_FOCUS, 80, 2))
+	layout.add_child(viewport_frame)
+
+	var viewport_container := SubViewportContainer.new()
+	viewport_container.custom_minimum_size = Vector2(160, 160)
+	viewport_container.stretch = false
+	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	viewport_frame.add_child(viewport_container)
+
+	trainer_card_avatar_viewport = SubViewport.new()
+	trainer_card_avatar_viewport.transparent_bg = true
+	trainer_card_avatar_viewport.size = TRAINER_CARD_AVATAR_VIEWPORT_SIZE
+	trainer_card_avatar_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport_container.add_child(trainer_card_avatar_viewport)
+	_populate_avatar_preview(trainer_card_avatar_viewport, TRAINER_CARD_AVATAR_POSITION, TRAINER_CARD_AVATAR_SCALE)
+
+	var name_label := Label.new()
+	name_label.text = PlayerSave.player_name
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(name_label)
+
+	return panel
+
+func _create_trainer_card_stats_tab() -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Trainer"
+	tab.add_theme_constant_override("margin_left", 12)
+	tab.add_theme_constant_override("margin_top", 12)
+	tab.add_theme_constant_override("margin_right", 12)
+	tab.add_theme_constant_override("margin_bottom", 12)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	tab.add_child(layout)
+
+	layout.add_child(_create_trainer_card_stat_row("Name", PlayerSave.player_name))
+	layout.add_child(_create_trainer_card_stat_row("ID", str(PlayerSave.player_id)))
+	layout.add_child(_create_trainer_card_stat_row("Money", _format_money(_get_player_money_value())))
+
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(spacer)
+
+	return tab
+
+func _create_trainer_card_stat_row(label_text: String, value_text: String) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+
+	var label := Label.new()
+	label.text = "%s:" % label_text
+	label.custom_minimum_size = Vector2(82, 0)
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
+
+	var value := Label.new()
+	value.text = value_text
+	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	value.add_theme_font_size_override("font_size", 16)
+	value.add_theme_color_override("font_color", Color("#00f5ff"))
+	value.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	row.add_child(value)
+
+	return row
+
+func _create_trainer_card_appearance_tab() -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Appearance"
+	tab.add_theme_constant_override("margin_left", 12)
+	tab.add_theme_constant_override("margin_top", 12)
+	tab.add_theme_constant_override("margin_right", 12)
+	tab.add_theme_constant_override("margin_bottom", 12)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	tab.add_child(layout)
+
+	var body_label := Label.new()
+	body_label.text = "Body Sprite"
+	body_label.add_theme_font_size_override("font_size", 16)
+	body_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(body_label)
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(scroll)
+
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	scroll.add_child(grid)
+
+	trainer_card_body_buttons.clear()
+	for body_id: String in _get_body_appearance_ids():
+		var body_button := Button.new()
+		body_button.text = _format_body_appearance_name(body_id)
+		body_button.focus_mode = Control.FOCUS_NONE
+		body_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		body_button.pressed.connect(_on_trainer_card_body_selected.bind(body_id))
+		grid.add_child(body_button)
+		trainer_card_body_buttons[body_id] = body_button
+
+	_refresh_trainer_card_body_buttons()
+	return tab
+
+func _get_body_appearance_ids() -> Array[String]:
+	var ids: Array[String] = []
+	var dir := DirAccess.open(TRAINER_CARD_BODY_PATH)
+	if dir == null:
+		ids.append(CharacterAppearanceService.DEFAULT_BODY_ID)
+		return ids
+
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir() and file_name.get_extension().to_lower() == "png":
+			ids.append(file_name.get_basename())
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	ids.sort()
+
+	if ids.is_empty():
+		ids.append(CharacterAppearanceService.DEFAULT_BODY_ID)
+	return ids
+
+func _format_body_appearance_name(body_id: String) -> String:
+	var text := body_id.replace("_", " ").replace("-", " ").strip_edges()
+	if text == "":
+		return body_id
+	return text.capitalize()
+
+func _refresh_trainer_card_body_buttons() -> void:
+	for body_id_value: Variant in trainer_card_body_buttons.keys():
+		var body_id: String = str(body_id_value)
+		var button: Button = trainer_card_body_buttons.get(body_id) as Button
+		if button == null:
+			continue
+
+		var display_name: String = _format_body_appearance_name(body_id)
+		var is_selected: bool = body_id == String(PlayerSave.appearance_body_id)
+		if is_selected:
+			button.text = "%s  *" % display_name
+			_apply_button_style(button, "primary")
+		else:
+			button.text = display_name
+			_apply_button_style(button)
+
+func _on_player_status_panel_gui_input(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return
+
+	_show_trainer_card()
+	get_viewport().set_input_as_handled()
+
+func _show_trainer_card() -> void:
+	if trainer_card_popup == null:
+		return
+
+	_refresh_trainer_card_body_buttons()
+	_refresh_avatar_previews()
+	trainer_card_popup.visible = true
+	trainer_card_popup.move_to_front()
+
+func _hide_trainer_card() -> void:
+	if trainer_card_popup != null:
+		trainer_card_popup.visible = false
+
+func _on_trainer_card_body_selected(body_id: String) -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and player.has_method("set_body_appearance"):
+		player.call("set_body_appearance", body_id)
+	else:
+		PlayerSave.appearance_body_id = body_id
+
+	_refresh_trainer_card_body_buttons()
+	_refresh_avatar_previews()
 
 func _get_player_money_value() -> int:
 	return max(int(PlayerSave.money), 0)

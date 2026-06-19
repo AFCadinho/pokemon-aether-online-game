@@ -14,6 +14,7 @@ const MOVE_ACTIONS := ["move_right", "move_left", "move_down", "move_up"]
 const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const BASE_SPRITE_OFFSET_META := "base_sprite_offset"
 const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
+const BODY_SPRITE_NAME := "BodySprite"
 
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -55,6 +56,12 @@ func get_target_feet_position() -> Vector2:
 
 func is_tile_moving() -> bool:
 	return is_moving
+
+func set_body_appearance(body_id: String) -> void:
+	PlayerSave.appearance_body_id = body_id
+	_apply_body_appearance(body_id)
+	_cache_appearance_sprites()
+	set_idle_frame()
 
 func get_network_movement_state() -> Dictionary:
 	return {
@@ -98,6 +105,7 @@ func face_world_position(world_position: Vector2) -> void:
 func _ready() -> void:
 	add_to_group("player")
 	z_as_relative = false
+	_apply_body_appearance(PlayerSave.appearance_body_id)
 	_cache_appearance_sprites()
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
@@ -565,13 +573,27 @@ func _collect_appearance_sprites(parent: Node) -> void:
 
 func _get_master_appearance_sprite() -> AnimatedSprite2D:
 	for sprite in appearance_sprites:
-		if sprite.name == "BodySprite":
+		if sprite.name == BODY_SPRITE_NAME:
 			return sprite
 
 	if appearance_sprites.is_empty():
 		return null
 
 	return appearance_sprites[0]
+
+func _apply_body_appearance(body_id: String) -> void:
+	var body_sprite := look_node.get_node_or_null(BODY_SPRITE_NAME) as AnimatedSprite2D
+	if body_sprite == null:
+		push_warning("Player: BodySprite node is missing.")
+		return
+
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id)
+	if body_frames == null:
+		push_warning("Player: body appearance '%s' could not be loaded." % body_id)
+		return
+
+	body_sprite.sprite_frames = body_frames
+	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 
 func _sync_appearance_sprite_frames() -> void:
 	if master_appearance_sprite == null or not master_appearance_sprite.is_playing():

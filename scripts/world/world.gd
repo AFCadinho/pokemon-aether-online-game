@@ -337,21 +337,50 @@ func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
 		},
 		"facingDirection": _direction_to_name(player.last_direction),
 		"spawnMarker": spawn_marker,
+		"appearance": _get_current_appearance_presence_state(),
 	}
 	if player.has_method("get_network_movement_state"):
 		state["movement"] = player.call("get_network_movement_state")
+	state["follower"] = _get_current_follower_presence_state()
 	return state
+
+
+func _get_current_appearance_presence_state() -> Dictionary:
+	return {
+		"body": PlayerSave.appearance_body_id,
+	}
+
+
+func _get_current_follower_presence_state() -> Dictionary:
+	if not GameState.show_follower or PlayerSave.party.is_empty():
+		return {"visible": false}
+
+	var lead_pokemon: Pokemon = PlayerSave.party[0]
+	if lead_pokemon == null or lead_pokemon.species == "":
+		return {"visible": false}
+
+	return {
+		"visible": true,
+		"species": lead_pokemon.species,
+		"shiny": lead_pokemon.shiny,
+	}
 
 
 func _get_current_player_position_signature() -> String:
 	var current_map: Node = GameState.current_map
 	var position: Vector2 = player.global_position
-	return "%s|%s|%0.1f|%0.1f|%s" % [
+	var follower_state := _get_current_follower_presence_state()
+	var appearance_state := _get_current_appearance_presence_state()
+	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s" % [
 		_get_map_id(current_map),
 		_get_map_scene_path(current_map),
 		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
 		roundf(position.y / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
 		_direction_to_name(player.last_direction),
+		str(follower_state.get("visible", false)),
+		str(follower_state.get("species", "")),
+		str(follower_state.get("shiny", false)),
+		str(appearance_state.get("body", "")),
 	]
 
 

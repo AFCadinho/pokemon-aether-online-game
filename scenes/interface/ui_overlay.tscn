@@ -118,6 +118,7 @@ theme_override_constants/separation = 8
 alignment = 1
 
 [node name="PartySlot" parent="Control/PartyPanel/MarginContainer/VBoxContainer" unique_id=899956667 instance=ExtResource("1_grslb")]
+custom_minimum_size = Vector2(260, 44)
 layout_mode = 2
 
 [node name="ChatTabsPanel" type="Control" parent="Control" unique_id=1039747907]
