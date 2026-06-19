@@ -56,6 +56,21 @@ func get_target_feet_position() -> Vector2:
 func is_tile_moving() -> bool:
 	return is_moving
 
+func get_network_movement_state() -> Dictionary:
+	return {
+		"isMoving": is_moving,
+		"startPosition": {
+			"x": move_start_position.x,
+			"y": move_start_position.y,
+		},
+		"targetPosition": {
+			"x": target_position.x,
+			"y": target_position.y,
+		},
+		"elapsed": move_elapsed,
+		"duration": TILE_MOVE_DURATION,
+	}
+
 func reset_movement_state() -> void:
 	is_moving = false
 	global_position = _snap_world_position(global_position)

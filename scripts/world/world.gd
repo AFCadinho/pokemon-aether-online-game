@@ -4,7 +4,7 @@ const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
-const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.75
+const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
 
 @export var initial_spawn_name := "FromRoute1"
@@ -328,7 +328,7 @@ func _save_current_player_position(signature: String, spawn_marker: String) -> v
 func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
 	var current_map: Node = GameState.current_map
 	var position: Vector2 = player.global_position
-	return {
+	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
 		"mapScenePath": _get_map_scene_path(current_map),
 		"position": {
@@ -338,6 +338,9 @@ func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
 		"facingDirection": _direction_to_name(player.last_direction),
 		"spawnMarker": spawn_marker,
 	}
+	if player.has_method("get_network_movement_state"):
+		state["movement"] = player.call("get_network_movement_state")
+	return state
 
 
 func _get_current_player_position_signature() -> String:
