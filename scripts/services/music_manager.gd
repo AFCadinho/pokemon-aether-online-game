@@ -1,11 +1,14 @@
 extends Node
 
-const DEFAULT_OVERWORLD_MUSIC_PATH := "res://assets/audio/music/overworld/overworld_theme.ogg"
+const DEFAULT_OVERWORLD_MUSIC_PATH := "res://assets/music/overworld/kanto/routes/route1.ogg"
+const LOGIN_MUSIC_PATH := "res://assets/music/login/lugia_theme_lofi.ogg"
+const MUSIC_RES_ROOT := "res://assets/music"
+const MUSIC_RELATIVE_ROOT := "assets/music"
 const DEFAULT_BATTLE_MUSIC_ID := "default"
 const BATTLE_MUSIC_TRACKS := {
 	"default": {
 		"label": "Default Battle Theme",
-		"path": "res://assets/audio/music/battle/battle_theme.ogg",
+		"path": "res://assets/music/overworld/kanto/routes/route1.ogg",
 	},
 }
 const FADE_SECONDS := 0.35
@@ -14,6 +17,7 @@ var music_player: AudioStreamPlayer
 var current_track_path := ""
 var current_map_music_path := DEFAULT_OVERWORLD_MUSIC_PATH
 var current_tween: Tween
+var external_music_root := ""
 
 
 func _ready() -> void:
@@ -26,6 +30,10 @@ func _ready() -> void:
 
 func play_overworld_music() -> void:
 	play_music(current_map_music_path)
+
+
+func play_login_music() -> void:
+	play_music(LOGIN_MUSIC_PATH)
 
 
 func play_map_music(map_node: Node) -> void:
@@ -83,11 +91,7 @@ func play_music(track_path: String) -> void:
 	if current_track_path == track_path and music_player.playing:
 		return
 
-	if not ResourceLoader.exists(track_path):
-		push_warning("Music track does not exist: %s" % track_path)
-		return
-
-	var stream: AudioStream = load(track_path) as AudioStream
+	var stream: AudioStream = _load_music_stream(track_path)
 	if stream == null:
 		push_warning("Could not load music track: %s" % track_path)
 		return
@@ -129,3 +133,57 @@ func _on_music_finished() -> void:
 		return
 
 	music_player.play()
+
+
+func _load_music_stream(track_path: String) -> AudioStream:
+	for candidate_path: String in _build_music_track_paths(track_path):
+		var stream: AudioStream = _load_music_stream_from_path(candidate_path)
+		if stream != null:
+			return stream
+
+	return null
+
+
+func _build_music_track_paths(track_path: String) -> Array[String]:
+	var paths: Array[String] = []
+	if track_path.begins_with(MUSIC_RES_ROOT):
+		var relative_path: String = track_path.trim_prefix("res://")
+		for root: String in _get_external_music_roots():
+			paths.append(root.path_join(relative_path.trim_prefix(MUSIC_RELATIVE_ROOT + "/")))
+
+	paths.append(track_path)
+	return paths
+
+
+func _get_external_music_roots() -> Array[String]:
+	if not external_music_root.is_empty():
+		return [external_music_root]
+
+	var executable_dir := OS.get_executable_path().get_base_dir()
+	var candidates: Array[String] = [
+		executable_dir.path_join(MUSIC_RELATIVE_ROOT),
+		executable_dir.get_base_dir().path_join(MUSIC_RELATIVE_ROOT),
+	]
+	for candidate: String in candidates:
+		if DirAccess.dir_exists_absolute(candidate):
+			external_music_root = candidate
+			return [external_music_root]
+
+	return []
+
+
+func _load_music_stream_from_path(path: String) -> AudioStream:
+	if path.begins_with("res://"):
+		if ResourceLoader.exists(path):
+			return load(path) as AudioStream
+		return null
+
+	if not FileAccess.file_exists(path):
+		return null
+
+	match path.get_extension().to_lower():
+		"ogg":
+			return AudioStreamOggVorbis.load_from_file(path)
+		_:
+			push_warning("Unsupported external music format: %s" % path)
+			return null

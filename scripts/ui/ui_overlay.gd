@@ -797,7 +797,7 @@ func _get_body_appearance_ids() -> Array[String]:
 	return ids
 
 func _format_body_appearance_name(body_id: String) -> String:
-	var text := body_id.replace("_", " ").replace("-", " ").strip_edges()
+	var text := body_id.replace("/", " ").replace("_", " ").replace("-", " ").strip_edges()
 	if text == "":
 		return body_id
 	return text.capitalize()

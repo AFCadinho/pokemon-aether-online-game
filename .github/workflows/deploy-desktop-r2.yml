@@ -40,6 +40,7 @@ env:
   POKEMON_GEN5_BACK_ASSET_VERSION: pokemon-gen5-back-v2
   POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-v2
   POKEMON_GEN5_SHINY_BACK_ASSET_VERSION: pokemon-gen5-shiny-back-v2
+  MUSIC_ASSET_VERSION: music-v1
   POKEMON_HOME_ASSET_SIZE_BYTES: 61327194
   POKEMON_FRONT_ASSET_SIZE_BYTES: 90099039
   POKEMON_BACK_ASSET_SIZE_BYTES: 78450869
@@ -148,9 +149,10 @@ jobs:
           test -f "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/windows/PokeAether.pck"
-          git ls-files 'assets/player/body/*.png' | while read -r asset_path; do
+          git ls-files 'assets/player/body/**/*.png' | while read -r asset_path; do
             grep -a -q "$asset_path" "builds/windows/PokeAether.pck"
           done
+          grep -a -q "assets/player/body/body_manifest.json" "builds/windows/PokeAether.pck"
 
       - name: Verify Linux build
         run: |
@@ -158,9 +160,10 @@ jobs:
           test -f "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/linux/PokeAether.pck"
-          git ls-files 'assets/player/body/*.png' | while read -r asset_path; do
+          git ls-files 'assets/player/body/**/*.png' | while read -r asset_path; do
             grep -a -q "$asset_path" "builds/linux/PokeAether.pck"
           done
+          grep -a -q "assets/player/body/body_manifest.json" "builds/linux/PokeAether.pck"
 
       - name: Export Windows launcher
         if: env.BUILD_LAUNCHER == 'true'
@@ -198,6 +201,32 @@ jobs:
           package_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_BACK_ASSET_SIZE_BYTES}" "true"
           package_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE_BYTES}" "true"
           package_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE_BYTES}" "true"
+          printf '%s\n' "--asset-pack" "music:${MUSIC_ASSET_VERSION}:builds/music/${MUSIC_ASSET_VERSION}.zip" >> /tmp/asset_pack_args.txt
+
+      - name: Package music asset pack
+        run: |
+          mkdir -p builds/music
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
+          import os
+
+          source_dir = Path("assets/music")
+          zip_path = Path("builds/music") / f"{os.environ['MUSIC_ASSET_VERSION']}.zip"
+          if zip_path.exists():
+              zip_path.unlink()
+
+          with ZipFile(zip_path, "w", ZIP_DEFLATED) as archive:
+              for path in sorted(source_dir.rglob("*")):
+                  if not path.is_file() or path.suffix == ".import":
+                      continue
+                  archive_path = path.as_posix()
+                  info = ZipInfo(archive_path)
+                  info.compress_type = ZIP_DEFLATED
+                  info.external_attr = 0o644 << 16
+                  archive.writestr(info, path.read_bytes())
+          print(f"Wrote {zip_path} ({zip_path.stat().st_size} bytes)")
+          PY
 
       - name: Package launcher release
         run: |

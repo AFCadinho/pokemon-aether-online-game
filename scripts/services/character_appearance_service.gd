@@ -3,6 +3,7 @@ extends RefCounted
 class_name CharacterAppearanceService
 
 const BODY_DIRECTORY := "res://assets/player/body"
+const BODY_MANIFEST_PATH := "res://assets/player/body/body_manifest.json"
 const DEFAULT_BODY_ID := "gen4_pa_base_boy"
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
@@ -13,10 +14,19 @@ static var _body_frames_cache: Dictionary = {}
 
 
 static func get_available_body_ids() -> Array[String]:
+	var manifest_body_ids: Array[String] = _get_manifest_body_ids()
+	if not manifest_body_ids.is_empty():
+		return _sort_body_ids(manifest_body_ids)
+
 	var body_ids: Array[String] = []
-	var directory := DirAccess.open(BODY_DIRECTORY)
+	_collect_body_ids_from_directory(BODY_DIRECTORY, "", body_ids)
+	return _sort_body_ids(body_ids)
+
+
+static func _collect_body_ids_from_directory(directory_path: String, prefix: String, body_ids: Array[String]) -> void:
+	var directory := DirAccess.open(directory_path)
 	if directory == null:
-		return body_ids
+		return
 
 	for file_name: String in directory.get_files():
 		if not file_name.ends_with(".png"):
@@ -25,8 +35,37 @@ static func get_available_body_ids() -> Array[String]:
 		var body_id: String = file_name.trim_suffix(".png")
 		if body_id == "":
 			continue
-		body_ids.append(body_id)
+		body_ids.append(prefix + body_id)
 
+	for subdirectory: String in directory.get_directories():
+		if subdirectory.begins_with("."):
+			continue
+		_collect_body_ids_from_directory("%s/%s" % [directory_path, subdirectory], "%s%s/" % [prefix, subdirectory], body_ids)
+
+
+static func _get_manifest_body_ids() -> Array[String]:
+	if not FileAccess.file_exists(BODY_MANIFEST_PATH):
+		return []
+
+	var file := FileAccess.open(BODY_MANIFEST_PATH, FileAccess.READ)
+	if file == null:
+		return []
+
+	var parsed_body: Variant = JSON.parse_string(file.get_as_text())
+	if not parsed_body is Array:
+		return []
+
+	var body_ids: Array[String] = []
+	var parsed_ids: Array = parsed_body as Array
+	for body_id_value: Variant in parsed_ids:
+		var body_id: String = _normalize_body_id(str(body_id_value))
+		if body_id == "":
+			continue
+		body_ids.append(body_id)
+	return body_ids
+
+
+static func _sort_body_ids(body_ids: Array[String]) -> Array[String]:
 	body_ids.sort()
 	if body_ids.has(DEFAULT_BODY_ID):
 		body_ids.erase(DEFAULT_BODY_ID)
@@ -134,7 +173,11 @@ static func _make_frame_texture(texture: Texture2D, frame_size: Vector2, column:
 
 
 static func _normalize_body_id(body_id: String) -> String:
-	var normalized: String = body_id.strip_edges()
-	normalized = normalized.replace("/", "")
-	normalized = normalized.replace("\\", "")
-	return normalized
+	var normalized: String = body_id.strip_edges().replace("\\", "/")
+	var normalized_parts: Array[String] = []
+	for part: String in normalized.split("/", false):
+		var normalized_part: String = part.strip_edges()
+		if normalized_part == "" or normalized_part == "." or normalized_part == "..":
+			return ""
+		normalized_parts.append(normalized_part)
+	return "/".join(normalized_parts)

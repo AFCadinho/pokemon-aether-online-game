@@ -2,21 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dgvg8ufaw2fbs" path="res://scripts/world/player.gd" id="1_qhqgy"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(32, 30.5)
-
-[sub_resource type="LabelSettings" id="LabelSettings_nameplate"]
-font_size = 12
-font_color = Color(1, 0.952941, 0.698039, 1)
-outline_size = 5
-outline_color = Color(0.0313726, 0.0392157, 0.0627451, 0.95)
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.7)
-
-[sub_resource type="LabelSettings" id="LabelSettings_nameplate_role"]
-font_size = 7
-font_color = Color(0, 0.898039, 0.658824, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_role_badge"]
 bg_color = Color(0.0156863, 0.0235294, 0.0431373, 0.9)
 border_width_left = 1
@@ -28,6 +13,21 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_nameplate_role"]
+font_size = 7
+font_color = Color(0, 0.898039, 0.658824, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nameplate"]
+font_size = 12
+font_color = Color(1, 0.952941, 0.698039, 1)
+outline_size = 5
+outline_color = Color(0.0313726, 0.0392157, 0.0627451, 0.95)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
+size = Vector2(32, 30.5)
 
 [node name="Player" type="CharacterBody2D" unique_id=1734997832]
 script = ExtResource("1_qhqgy")
@@ -41,13 +41,15 @@ position = Vector2(0, -16)
 [node name="Nameplate" type="Control" parent="." unique_id=1400626741]
 visible = false
 z_index = 512
+layout_mode = 3
+anchors_preset = 0
 offset_left = -82.0
 offset_top = -80.0
 offset_right = 82.0
 offset_bottom = -56.0
 mouse_filter = 2
 
-[node name="RoleBadgePanel" type="Panel" parent="Nameplate"]
+[node name="RoleBadgePanel" type="Panel" parent="Nameplate" unique_id=1565155837]
 visible = false
 layout_mode = 0
 offset_left = 48.0
@@ -57,26 +59,23 @@ offset_bottom = 16.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_role_badge")
 
-[node name="RoleBadge" type="Label" parent="Nameplate/RoleBadgePanel"]
+[node name="RoleBadge" type="Label" parent="Nameplate/RoleBadgePanel" unique_id=30648506]
 layout_mode = 0
 offset_left = 1.0
 offset_right = 19.0
 offset_bottom = 11.0
-mouse_filter = 2
+label_settings = SubResource("LabelSettings_nameplate_role")
 horizontal_alignment = 1
 vertical_alignment = 1
-label_settings = SubResource("LabelSettings_nameplate_role")
 
-[node name="NameLabel" type="Label" parent="Nameplate"]
+[node name="NameLabel" type="Label" parent="Nameplate" unique_id=1544517454]
 layout_mode = 0
 offset_left = 44.0
 offset_right = 164.0
 offset_bottom = 22.0
-mouse_filter = 2
-horizontal_alignment = 0
+label_settings = SubResource("LabelSettings_nameplate")
 vertical_alignment = 1
 text_overrun_behavior = 3
-label_settings = SubResource("LabelSettings_nameplate")
 
 [node name="DetectionShape" type="CollisionShape2D" parent="." unique_id=1504927595]
 position = Vector2(0, -0.75)

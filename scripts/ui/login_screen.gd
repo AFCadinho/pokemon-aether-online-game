@@ -45,6 +45,7 @@ var player_preview_instance: Node2D
 var news_items: Array[Dictionary] = []
 
 func _ready() -> void:
+	MusicManager.play_login_music()
 	login_button.pressed.connect(_on_login_button_pressed)
 	register_link_button.pressed.connect(_on_register_link_pressed)
 	continue_button.pressed.connect(_on_continue_button_pressed)

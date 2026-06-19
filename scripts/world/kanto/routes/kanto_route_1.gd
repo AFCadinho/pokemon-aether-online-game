@@ -5,7 +5,7 @@ extends Node2D
 @export var map_display_name := "Route 1"
 @export var encounter_area_id := "kanto_route_1"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.1
-@export_file("*.ogg") var music_track_path := "res://assets/audio/music/overworld/overworld_theme.ogg"
+@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/routes/route1.ogg"
 
 func _ready() -> void:
 	await _load_encounter_area_metadata()

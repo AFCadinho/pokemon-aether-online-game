@@ -3,7 +3,7 @@ extends Node2D
 @export var map_id := ""
 @export var map_region_name := ""
 @export var map_display_name := ""
-@export_file("*.ogg") var music_track_path := "res://assets/audio/music/overworld/overworld_theme.ogg"
+@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/routes/route1.ogg"
 
 
 func get_map_id() -> String:
