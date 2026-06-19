@@ -12,6 +12,7 @@ const SWITCH_MESSAGE_HOLD_SECONDS := 0.75
 const RESULT_MESSAGE_HOLD_SECONDS := 0.90
 const EFFECT_MESSAGE_HOLD_SECONDS := 0.85
 const HEAL_MESSAGE_HOLD_SECONDS := 0.90
+const MEGA_MESSAGE_HOLD_SECONDS := 1.10
 
 
 func get_move_animation_hold_seconds() -> float:
@@ -37,6 +38,8 @@ func get_battle_message_hold_seconds(event: Dictionary, battle_message: String) 
 			return SWITCH_MESSAGE_HOLD_SECONDS
 		"heal":
 			return HEAL_MESSAGE_HOLD_SECONDS
+		"mega":
+			return MEGA_MESSAGE_HOLD_SECONDS
 		"fieldEffect", "pokemonEffect", "ability", "statChange", "status", "fail", "cant", "miss", "effectiveness", "hitCount", "criticalHit":
 			return EFFECT_MESSAGE_HOLD_SECONDS
 		"win":

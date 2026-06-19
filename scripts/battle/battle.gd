@@ -23,6 +23,9 @@ var queued_battle_action: Dictionary = {}
 var defer_force_switch_active_hide := false
 var team_preview_lead_selection_active := false
 var forfeit_return_action_view: ActionView = ActionView.NONE
+var mega_evolution_selected := false
+var mega_evolution_pulse_tween: Tween
+var pending_mega_species_by_ident: Dictionary = {}
 
 #Battle State
 var battle_state := BattleState.new()
@@ -65,6 +68,7 @@ var active_enemy_pokemon: Pokemon
 @onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
 @onready var moves_grid: MovesGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid
 @onready var party_grid: PartyGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid
+@onready var mega_evolution_button: TextureButton = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon
 @onready var mechanic_buttons: Array[TextureButton] = [
 	$HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon,
 	$HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/Terra,
@@ -122,6 +126,7 @@ func _ready() -> void:
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
 	hover_state.setup(pokemon_info_request, pokemon_stats_request)
+	pokemon_hover_service.debug_enabled = DEBUG_BATTLE_MOVE_EVENTS
 	setup_flow.setup(event_text_formatter)
 	_connect_pokemon_hover_signals()
 	_connect_hud_team_hover_signals()
@@ -151,7 +156,7 @@ func _ready() -> void:
 		self,
 		Callable(self, "_set_active_hud_hp_from_event")
 	)
-	_disable_unimplemented_mechanics()
+	_setup_mechanic_buttons()
 	_update_battle_log_toggle_button()
 
 	# Show Moves, Party or Bag
@@ -618,12 +623,97 @@ func _hide_pokemon_hover_card() -> void:
 	else:
 		pokemon_hover_card.visible = false
 
-func _disable_unimplemented_mechanics() -> void:
+func _setup_mechanic_buttons() -> void:
 	for button in mechanic_buttons:
 		button.disabled = true
 		button.modulate = Color(0.45, 0.45, 0.45, 0.65)
 		button.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
 		button.tooltip_text = "Not implemented yet"
+	if mega_evolution_button != null:
+		mega_evolution_button.pressed.connect(_on_mega_evolution_pressed)
+		mega_evolution_button.tooltip_text = "Mega Evolution"
+	_update_mechanic_button_states()
+
+func _on_mega_evolution_pressed() -> void:
+	if not _can_toggle_mega_evolution():
+		return
+
+	mega_evolution_selected = not mega_evolution_selected
+	_update_mechanic_button_states()
+	if mega_evolution_selected:
+		current_action_panel.set_message("Mega Evolution ready. Choose a move!")
+	elif current_action_view == ActionView.MOVES:
+		_show_current_action_prompt()
+
+func _clear_mega_evolution_selection() -> void:
+	if not mega_evolution_selected:
+		return
+
+	mega_evolution_selected = false
+	_update_mechanic_button_states()
+
+func _can_toggle_mega_evolution() -> bool:
+	return (
+		battle_actions_ready
+		and not battle_input_locked
+		and not battle_finished
+		and not team_preview_lead_selection_active
+		and not force_switch_flow.player_needs_force_switch("p1")
+		and battle_state.can_active_pokemon_mega_evolve("p1")
+	)
+
+func _update_mechanic_button_states() -> void:
+	if mega_evolution_button == null:
+		return
+
+	var can_use_mega := _can_toggle_mega_evolution()
+	mega_evolution_button.disabled = not can_use_mega
+	mega_evolution_button.mouse_default_cursor_shape = (
+		Control.CURSOR_POINTING_HAND if can_use_mega else Control.CURSOR_FORBIDDEN
+	)
+	if not can_use_mega:
+		mega_evolution_selected = false
+		mega_evolution_button.modulate = Color(0.45, 0.45, 0.45, 0.65)
+		mega_evolution_button.tooltip_text = "Mega Evolution unavailable"
+		_stop_mega_evolution_pulse()
+	elif mega_evolution_selected:
+		mega_evolution_button.modulate = Color(1.0, 0.82, 0.2, 1.0)
+		mega_evolution_button.tooltip_text = "Mega Evolution ready"
+		_start_mega_evolution_pulse()
+	else:
+		mega_evolution_button.modulate = Color(1.0, 1.0, 1.0, 0.95)
+		mega_evolution_button.tooltip_text = "Mega Evolution"
+		_stop_mega_evolution_pulse()
+
+func _start_mega_evolution_pulse() -> void:
+	if mega_evolution_button == null:
+		return
+	if mega_evolution_pulse_tween != null and mega_evolution_pulse_tween.is_valid():
+		return
+
+	mega_evolution_button.pivot_offset = mega_evolution_button.size * 0.5
+	mega_evolution_button.scale = Vector2(1.06, 1.06)
+	mega_evolution_pulse_tween = create_tween()
+	mega_evolution_pulse_tween.set_loops()
+	mega_evolution_pulse_tween.tween_property(
+		mega_evolution_button,
+		"scale",
+		Vector2(1.18, 1.18),
+		0.35
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	mega_evolution_pulse_tween.tween_property(
+		mega_evolution_button,
+		"scale",
+		Vector2(1.06, 1.06),
+		0.35
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func _stop_mega_evolution_pulse() -> void:
+	if mega_evolution_pulse_tween != null and mega_evolution_pulse_tween.is_valid():
+		mega_evolution_pulse_tween.kill()
+	mega_evolution_pulse_tween = null
+	if mega_evolution_button != null:
+		mega_evolution_button.scale = Vector2.ONE
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _is_ui_typing():
@@ -703,6 +793,8 @@ func _reset_action_choices() -> void:
 	moves_grid.visible = false
 	party_grid.visible = false
 	_hide_party_hover()
+	_clear_mega_evolution_selection()
+	_update_mechanic_button_states()
 
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
@@ -715,6 +807,7 @@ func _show_moves() -> void:
 	_hide_party_hover()
 	action_buttons.set_selected_action("fight")
 	_show_current_action_prompt()
+	_update_mechanic_button_states()
 
 func _show_current_action_prompt() -> void:
 	var player_species: String = _get_active_display_species("p1")
@@ -728,9 +821,11 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 		moves_grid.set_input_disabled(is_locked)
 	if party_grid.has_method("set_input_disabled"):
 		party_grid.set_input_disabled(is_locked)
+	_update_mechanic_button_states()
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
 	battle_actions_ready = is_ready
+	_update_mechanic_button_states()
 	if battle_actions_ready:
 		_process_queued_battle_action()
 
@@ -764,6 +859,7 @@ func _show_party(force_switch := false) -> void:
 		_show_moves()
 		return
 
+	_clear_mega_evolution_selection()
 	action_buttons.set_action_disabled("fight", force_switch)
 	action_buttons.set_action_disabled("bag", force_switch)
 	action_buttons.set_action_disabled("run", force_switch)
@@ -771,13 +867,16 @@ func _show_party(force_switch := false) -> void:
 	moves_grid.visible = false
 	party_grid.visible = true
 	action_buttons.set_selected_action("party")
+	_update_mechanic_button_states()
 
 ## Zet de UI in bag-modus.
 func _open_bag() -> void:
+	_clear_mega_evolution_selection()
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
 	party_grid.visible = false
 	_hide_party_hover()
+	_update_mechanic_button_states()
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
@@ -791,9 +890,11 @@ func _try_run() -> void:
 		return
 
 	if battle_type != BattleType.WILD:
+		_clear_mega_evolution_selection()
 		_show_forfeit_confirm_dialog()
 		return
 
+	_clear_mega_evolution_selection()
 	battle_log_panel.add_message("Got away safely!")
 	_finish_battle({"reason": "flee"})
 
@@ -836,6 +937,7 @@ func _finish_battle(result: Dictionary) -> void:
 		return
 
 	battle_finished = true
+	pending_mega_species_by_ident.clear()
 	PlayerSave.apply_battle_team_state(battle_state.get_player_team("p1"))
 	PlayerPartyStateService.save_current_party_deferred()
 	battle_ended.emit(result)
@@ -1413,6 +1515,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	active_enemy_pokemon = enemy_pokemon
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
 	_reset_battle_effect_tracking()
+	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY])
 	player_hud_panel.clear_player_name()
 	enemy_hud_panel.clear_player_name()
@@ -1483,6 +1586,8 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 	if _show_original_transform_targets_before_initial_events(start_events):
 		await get_tree().process_frame
 		await get_tree().create_timer(INITIAL_TRANSFORM_REVEAL_SECONDS).timeout
+	else:
+		await get_tree().process_frame
 	await _play_initial_shiny_entrance_effects()
 	await _render_battle_events(start_events, false)
 
@@ -1708,17 +1813,23 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	if battle_input_locked:
 		return
 
+	var use_mega := mega_evolution_selected
+	var pending_player_choice_events: Array = _build_pending_player_mega_events(use_mega)
 	_hide_move_hover()
 	_set_battle_input_locked(true)
 	moves_grid.visible = false
-	var player_response: Dictionary = await _submit_player_choice("move", slot)
+	_clear_mega_evolution_selection()
+	var player_response: Dictionary = await _submit_player_choice("move", slot, use_mega)
 
 	if not player_response.get("success", false):
+		_clear_pending_mega_species_for_events(pending_player_choice_events)
 		_show_moves()
 		_set_battle_input_locked(false)
 		return
 
-	if not await _submit_npc_choice_and_render():
+	pending_player_choice_events = _get_pending_player_choice_events(player_response, pending_player_choice_events)
+	if not await _submit_npc_choice_and_render({}, pending_player_choice_events):
+		_clear_pending_mega_species_for_events(pending_player_choice_events)
 		_show_moves()
 		_set_battle_input_locked(false)
 		return
@@ -1738,15 +1849,23 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_show_moves()
 
 func _render_battle_events(events: Array, render_turn_headers := true) -> void:
-	_prewarm_battle_event_animations(events)
+	var ordered_events: Array = _order_form_change_events_before_moves(events)
+	_prewarm_battle_event_animations(ordered_events)
 	event_presentation.reset_recent_context()
 
-	for event in events:
+	for event in ordered_events:
 		if not (event is Dictionary):
 			continue
 
 		var event_data: Dictionary = event as Dictionary
 		_remember_battle_modifier_event(event_data)
+
+		var event_type: String = str(event_data.get("type", ""))
+		if event_type == "mega":
+			_fill_mega_event_species(event_data)
+			battle_state.apply_event_conditions([event_data])
+			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
+			_clear_pending_mega_species_for_event(event_data)
 
 		var presentation: Dictionary = event_presentation.build(event_data)
 		var turn := int(presentation.get("turn", 0))
@@ -1756,7 +1875,6 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			continue
 
 		await event_renderer.render_event(event_data, presentation)
-		var event_type: String = str(event_data.get("type", ""))
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			battle_state.apply_event_conditions([event_data])
 		if event_type == "switch":
@@ -1774,6 +1892,296 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 	_update_vs_panel_names()
 	_sync_player_save_from_battle_state()
 
+func _fill_mega_event_species(event_data: Dictionary) -> void:
+	var mega_species := battle_state.resolve_mega_species_for_event(event_data)
+	if mega_species == "":
+		mega_species = _get_pending_mega_species_for_event(event_data)
+	if mega_species != "":
+		event_data["species"] = mega_species
+
+func _build_pending_player_mega_events(use_mega: bool) -> Array:
+	var pending_events: Array = []
+	if not use_mega:
+		return pending_events
+
+	var target_ident := battle_state.get_active_pokemon_ident("p1")
+	var mega_species := battle_state.resolve_active_mega_species("p1")
+	if target_ident == "" or mega_species == "":
+		return pending_events
+
+	var event_data: Dictionary = {
+		"type": "mega",
+		"target": target_ident,
+		"species": mega_species,
+	}
+	_remember_pending_mega_species(event_data)
+	pending_events.append(event_data)
+	return pending_events
+
+func _get_pending_player_choice_events(response: Dictionary, fallback_events: Array) -> Array:
+	var pending_events: Array = _get_pending_mega_events_from_response(response.get("events", []))
+	if pending_events.is_empty():
+		return fallback_events
+
+	for event_value: Variant in pending_events:
+		if event_value is Dictionary:
+			var event_data: Dictionary = event_value as Dictionary
+			_fill_mega_event_species(event_data)
+			_remember_pending_mega_species(event_data)
+
+	return pending_events
+
+func _get_pending_mega_events_from_response(events_value: Variant) -> Array:
+	var pending_events: Array = []
+	if not (events_value is Array):
+		return pending_events
+
+	var events: Array = events_value as Array
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if str(event_data.get("type", "")) == "mega":
+			pending_events.append(event_data.duplicate(true))
+
+	return pending_events
+
+func _merge_pending_player_choice_events(pending_events: Array, turn_events: Array) -> Array:
+	var merged_events: Array = []
+	for event_value: Variant in turn_events:
+		if event_value is Dictionary:
+			merged_events.append((event_value as Dictionary).duplicate(true))
+		else:
+			merged_events.append(event_value)
+
+	if pending_events.is_empty():
+		return merged_events
+
+	var pending_by_key: Dictionary = {}
+	for pending_value: Variant in pending_events:
+		if not (pending_value is Dictionary):
+			continue
+
+		var pending_event: Dictionary = (pending_value as Dictionary).duplicate(true)
+		if str(pending_event.get("type", "")) != "mega":
+			continue
+
+		_fill_mega_event_species(pending_event)
+		var pending_key := _get_pending_mega_key_from_event(pending_event)
+		if pending_key == "":
+			continue
+
+		pending_by_key[pending_key] = pending_event
+
+	if pending_by_key.is_empty():
+		return merged_events
+
+	var matched_keys: Dictionary = {}
+	for index: int in range(merged_events.size()):
+		var event_value: Variant = merged_events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if str(event_data.get("type", "")) != "mega":
+			continue
+
+		_fill_mega_event_species(event_data)
+		var event_key := _get_pending_mega_key_from_event(event_data)
+		if event_key == "" or not pending_by_key.has(event_key):
+			continue
+
+		var pending_event_for_key: Dictionary = pending_by_key[event_key] as Dictionary
+		_merge_mega_event_data(event_data, pending_event_for_key)
+		matched_keys[event_key] = true
+
+	var insert_index := _get_form_change_insert_index(merged_events)
+	var pending_keys: Array = pending_by_key.keys()
+	pending_keys.sort()
+	for key_value: Variant in pending_keys:
+		var pending_key := str(key_value)
+		if matched_keys.has(pending_key):
+			continue
+
+		var pending_event_to_insert: Dictionary = pending_by_key[pending_key] as Dictionary
+		merged_events.insert(insert_index, pending_event_to_insert)
+		insert_index += 1
+
+	return merged_events
+
+func _merge_mega_event_data(event_data: Dictionary, pending_event: Dictionary) -> void:
+	var event_species := str(event_data.get("species", "")).strip_edges()
+	var pending_species := str(pending_event.get("species", "")).strip_edges()
+	if pending_species != "" and not event_species.to_lower().contains("mega"):
+		event_data["species"] = pending_species
+	if str(event_data.get("target", "")) == "":
+		event_data["target"] = str(pending_event.get("target", ""))
+
+func _get_form_change_insert_index(events: Array) -> int:
+	var insert_index := 0
+	while insert_index < events.size():
+		var event_value: Variant = events[insert_index]
+		if not (event_value is Dictionary):
+			break
+
+		var event_type := str((event_value as Dictionary).get("type", ""))
+		if event_type != "turn":
+			break
+
+		insert_index += 1
+
+	return insert_index
+
+func _filter_already_rendered_events(events_value: Variant, rendered_event_keys: Dictionary) -> Array:
+	var filtered_events: Array = []
+	if not (events_value is Array):
+		return filtered_events
+
+	var events: Array = events_value as Array
+	for event_value in events:
+		if event_value is Dictionary:
+			var event_data: Dictionary = event_value as Dictionary
+			var event_key := _get_battle_event_key(event_data)
+			if event_key != "" and rendered_event_keys.has(event_key):
+				continue
+
+		filtered_events.append(event_value)
+
+	return filtered_events
+
+func _get_battle_event_key(event_data: Dictionary) -> String:
+	if str(event_data.get("type", "")) == "mega":
+		return "mega|%s" % str(event_data.get("target", ""))
+
+	return "%s|%s|%s|%s|%s" % [
+		str(event_data.get("type", "")),
+		str(event_data.get("target", "")),
+		str(event_data.get("actor", "")),
+		str(event_data.get("species", "")),
+		str(event_data.get("to", "")),
+	]
+
+func _remember_pending_mega_species(event_data: Dictionary) -> void:
+	var pending_key := _get_pending_mega_key_from_event(event_data)
+	var species := str(event_data.get("species", "")).strip_edges()
+	if pending_key == "" or species == "":
+		return
+
+	pending_mega_species_by_ident[pending_key] = species
+
+func _get_pending_mega_species_for_event(event_data: Dictionary) -> String:
+	var pending_key := _get_pending_mega_key_from_event(event_data)
+	if pending_key == "":
+		return ""
+
+	return str(pending_mega_species_by_ident.get(pending_key, ""))
+
+func _clear_pending_mega_species_for_event(event_data: Dictionary) -> void:
+	var pending_key := _get_pending_mega_key_from_event(event_data)
+	if pending_key == "":
+		return
+
+	pending_mega_species_by_ident.erase(pending_key)
+
+func _clear_pending_mega_species_for_events(events: Array) -> void:
+	for event_value: Variant in events:
+		if event_value is Dictionary:
+			_clear_pending_mega_species_for_event(event_value as Dictionary)
+
+func _get_pending_mega_key_from_event(event_data: Dictionary) -> String:
+	var ident := str(event_data.get("target", ""))
+	if ident == "":
+		ident = str(event_data.get("actor", event_data.get("pokemon", "")))
+
+	return _get_pending_mega_key(ident)
+
+func _get_pending_mega_key(ident: String) -> String:
+	var player_id := _get_player_id_from_ident(ident)
+	var pokemon_name := _get_pokemon_name_from_ident_for_key(ident)
+	if player_id == "" or pokemon_name == "":
+		return ""
+
+	return "%s|%s" % [player_id, pokemon_name]
+
+func _get_pokemon_name_from_ident_for_key(ident: String) -> String:
+	if not ident.contains(": "):
+		return ""
+
+	var pokemon_name := str(ident.split(": ")[1]).strip_edges().to_lower()
+	pokemon_name = pokemon_name.replace("-mega-x", "")
+	pokemon_name = pokemon_name.replace("-mega-y", "")
+	pokemon_name = pokemon_name.replace("-mega", "")
+	return pokemon_name
+
+func _update_active_pokemon_presentation_for_ident(ident: String) -> void:
+	var player_id := _get_player_id_from_ident(ident)
+	match player_id:
+		"p1":
+			_update_active_hud_panel("p1", player_hud_panel)
+			_update_active_sprite_box("p1", player_sprite_box, "back")
+		"p2":
+			_update_active_hud_panel("p2", enemy_hud_panel)
+			_update_active_sprite_box("p2", enemy_sprite_box, "front")
+
+	_update_stat_stage_panels()
+
+func _order_form_change_events_before_moves(events: Array) -> Array:
+	var ordered_events: Array = []
+	var consumed_indexes: Dictionary = {}
+
+	for index: int in range(events.size()):
+		if consumed_indexes.has(index):
+			continue
+
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			ordered_events.append(event_value)
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if str(event_data.get("type", "")) == "move":
+			var actor_ident: String = str(event_data.get("actor", ""))
+			var form_change_index: int = _find_next_form_change_event_index(events, index + 1, actor_ident, consumed_indexes)
+			if form_change_index >= 0:
+				ordered_events.append(events[form_change_index])
+				consumed_indexes[form_change_index] = true
+
+		ordered_events.append(event_data)
+
+	return ordered_events
+
+func _find_next_form_change_event_index(
+	events: Array,
+	start_index: int,
+	actor_ident: String,
+	consumed_indexes: Dictionary
+) -> int:
+	if actor_ident == "":
+		return -1
+
+	var actor_player_id: String = _get_player_id_from_ident(actor_ident)
+	for index: int in range(start_index, events.size()):
+		if consumed_indexes.has(index):
+			continue
+
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		var event_type: String = str(event_data.get("type", ""))
+		if event_type != "mega":
+			continue
+
+		var target_ident: String = str(event_data.get("target", ""))
+		if target_ident == actor_ident:
+			return index
+		if actor_player_id != "" and _get_player_id_from_ident(target_ident) == actor_player_id:
+			return index
+
+	return -1
+
 func _get_wild_battle_start_events(events: Array) -> Array:
 	var start_events: Array = []
 
@@ -1783,7 +2191,7 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 
 		var event_data: Dictionary = event as Dictionary
 		match str(event_data.get("type", "")):
-			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform":
+			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega":
 				start_events.append(event_data)
 
 	return start_events
@@ -2118,8 +2526,8 @@ func _finish_if_battle_ended() -> bool:
 	})
 	return true
 
-func _submit_player_choice(choice_type: String, slot: int) -> Dictionary:
-	return await action_flow.submit_player_choice(choice_type, slot)
+func _submit_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
+	return await action_flow.submit_player_choice(choice_type, slot, mega)
 
 func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	var response: Dictionary = await BattleApiClient.choose_lead(
@@ -2156,21 +2564,29 @@ func _auto_force_switch_opponent_if_needed() -> bool:
 
 	return await _submit_npc_choice_and_render()
 
-func _submit_npc_choice_and_render() -> bool:
+func _submit_npc_choice_and_render(
+	rendered_event_keys: Dictionary = {},
+	pending_player_choice_events: Array = []
+) -> bool:
 	var opponent_response: Dictionary = await action_flow.submit_npc_choice("p2")
 
 	if not bool(opponent_response.get("success", false)):
 		return false
 
-	await _render_opponent_response(opponent_response)
+	await _render_opponent_response(opponent_response, rendered_event_keys, pending_player_choice_events)
 	await _hold_opponent_response_message()
 	return true
 
-func _render_opponent_response(opponent_response: Dictionary) -> void:
+func _render_opponent_response(
+	opponent_response: Dictionary,
+	rendered_event_keys: Dictionary = {},
+	pending_player_choice_events: Array = []
+) -> void:
 	defer_force_switch_active_hide = true
 	_update_battle_presentation()
 	defer_force_switch_active_hide = false
-	var opponent_events: Array = opponent_response.get("events", [])
+	var filtered_events: Array = _filter_already_rendered_events(opponent_response.get("events", []), rendered_event_keys)
+	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
 	await _render_battle_events(opponent_events)
@@ -2229,6 +2645,7 @@ func _update_battle_presentation() -> void:
 	_update_move_slots()
 	_update_party_slots()
 	_update_vs_panel_names()
+	_update_mechanic_button_states()
 
 func _update_vs_panel_names() -> void:
 	if vs_player_1_label != null:

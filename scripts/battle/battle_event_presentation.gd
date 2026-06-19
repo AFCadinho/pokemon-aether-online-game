@@ -58,6 +58,8 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var stat_effect_key: String = _get_stat_change_effect_animation_key(int(event_data.get("amount", 0)))
 			if stat_effect_key != "":
 				effect_keys.append(stat_effect_key)
+		"mega":
+			effect_keys.append("mega_evolution")
 		"damage":
 			needs_damage_sound = true
 
@@ -146,6 +148,18 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["log_message"] = event_text_formatter.format_transform_event(actor, species)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+
+		"mega":
+			recent_field_effect_source = ""
+			recent_ability_event = false
+			recent_move_event = false
+			var actor := _format_actor(str(event_data.get("target", "")))
+			var species := str(event_data.get("species", ""))
+			presentation["log_message"] = event_text_formatter.format_mega_event(actor, species)
+			presentation["battle_message"] = str(presentation["log_message"])
+			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+			presentation["effect_animation_key"] = "mega_evolution"
+			presentation["effect_animation_target_ident"] = str(event_data.get("target", ""))
 
 		"fieldEffect":
 			recent_ability_event = false
@@ -304,6 +318,8 @@ func build(event_data: Dictionary) -> Dictionary:
 
 			if source_message != "" and (has_hp_loss or has_sub_percent_hp_loss):
 				presentation["log_message"] = source_message
+				if event_text_formatter.should_show_indirect_damage_in_battle_text(event_data):
+					presentation["battle_message"] = source_message
 			else:
 				presentation["log_message"] = event_text_formatter.format_direct_damage_message(
 					target,

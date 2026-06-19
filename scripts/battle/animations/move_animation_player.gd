@@ -18,12 +18,14 @@ signal animation_finished
 @export var show_sheet_sprites: bool = true
 @export var overlay_fill_enabled: bool = true
 @export var projectile_config: Dictionary = {}
+@export var orb_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
 @export var sprite_tint: Color = Color(1.0, 0.78, 1.0, 1.0)
 @export_range(0.0, 0.5, 0.01) var overlay_peak_alpha: float = 0.20
 @export_range(0, 48, 1) var sparkle_count: int = 14
 @export_range(0.25, 4.0, 0.05) var speed_scale: float = 1.0
 @export_range(0.1, 2.0, 0.05) var sprite_zoom_multiplier: float = 1.0
+@export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
 @export var sparkle_center: Vector2 = Vector2(256, 188)
 @export_range(8.0, 180.0, 1.0) var sparkle_radius_min: float = 26.0
 @export_range(8.0, 220.0, 1.0) var sparkle_radius_max: float = 78.0
@@ -216,19 +218,107 @@ func _draw() -> void:
 
 	if overlay_fill_enabled:
 		draw_rect(Rect2(Vector2.ZERO, Vector2(512, 384)), Color(visual_color.r, visual_color.g, visual_color.b, pink_overlay_alpha), true)
+	_draw_orb_visual()
 	for i: int in range(sparkle_count):
 		var angle: float = float(i) * 0.85 + float(frame_index) * 0.24
 		var radius_span: float = maxf(sparkle_radius_max - sparkle_radius_min, 1.0)
 		var radius: float = sparkle_radius_min + fmod(float(i * 17), radius_span)
 		var center: Vector2 = sparkle_center + Vector2(cos(angle), sin(angle * 1.27)) * radius
 		var sparkle_alpha: float = pink_overlay_alpha * (0.35 + 0.45 * absf(sin(angle)))
-		var sparkle_size: float = 3.0 + float(i % 3)
+		var sparkle_size: float = (3.0 + float(i % 3)) * sparkle_size_multiplier
 		var sparkle_color := Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, sparkle_alpha)
 		draw_line(center + Vector2(-sparkle_size, 0.0), center + Vector2(sparkle_size, 0.0), sparkle_color, 1.4)
 		draw_line(center + Vector2(0.0, -sparkle_size), center + Vector2(0.0, sparkle_size), sparkle_color, 1.4)
 		draw_line(center + Vector2(-sparkle_size * 0.7, -sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, sparkle_size * 0.7), sparkle_color, 1.0)
 		draw_line(center + Vector2(-sparkle_size * 0.7, sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, -sparkle_size * 0.7), sparkle_color, 1.0)
 		draw_circle(center, sparkle_size * 0.38, sparkle_color)
+
+
+func _draw_orb_visual() -> void:
+	if not bool(orb_config.get("enabled", false)):
+		return
+
+	var center: Vector2 = _vector2_from_value(orb_config.get("center", [256.0, 188.0]))
+	var base_radius: float = float(orb_config.get("radius", 96.0))
+	var pulse: float = 0.08 * sin(float(frame_index) * 0.45)
+	var radius: float = base_radius * (1.0 + pulse)
+	var alpha_scale: float = float(orb_config.get("alpha", 1.0)) * pink_overlay_alpha
+	var fill_color := Color(visual_color.r, visual_color.g, visual_color.b, 0.18 * alpha_scale)
+	var ring_color := Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, 0.75 * alpha_scale)
+	var highlight_color := Color(1.0, 0.94, 1.0, 0.5 * alpha_scale)
+
+	draw_circle(center, radius, fill_color)
+	for ring_index: int in range(3):
+		var ring_radius: float = radius + float(ring_index) * 7.0
+		draw_arc(center, ring_radius, 0.0, TAU, 96, ring_color, 2.5 - float(ring_index) * 0.45)
+
+	var sweep_start: float = float(frame_index) * 0.22
+	draw_arc(center, radius * 0.82, sweep_start, sweep_start + PI * 0.85, 48, highlight_color, 3.0)
+	draw_arc(center, radius * 1.08, -sweep_start, -sweep_start + PI * 0.65, 48, highlight_color, 2.0)
+	_draw_dna_orb_visual(center, radius, alpha_scale)
+
+
+func _draw_dna_orb_visual(center: Vector2, radius: float, alpha_scale: float) -> void:
+	var dna_value: Variant = orb_config.get("dna", {})
+	if not dna_value is Dictionary:
+		return
+
+	var dna_config: Dictionary = dna_value as Dictionary
+	if not bool(dna_config.get("enabled", false)):
+		return
+
+	var segments: int = maxi(18, int(dna_config.get("segments", 72)))
+	var strand_width: float = float(dna_config.get("strand_width", 3.2))
+	var connector_width: float = float(dna_config.get("connector_width", 1.8))
+	var vertical_squash: float = float(dna_config.get("vertical_squash", 0.72))
+	var separation: float = float(dna_config.get("separation", 10.0))
+	var wave_count: float = float(dna_config.get("wave_count", 3.0))
+	var spin: float = float(frame_index) * float(dna_config.get("spin_speed", 0.12))
+	var strand_alpha: float = float(dna_config.get("alpha", 1.0)) * alpha_scale
+	var connector_alpha: float = strand_alpha * 0.42
+	var strand_a: Color = _color_from_value(dna_config.get("strand_a", [0.02, 0.72, 1.0, 1.0]), Color(0.02, 0.72, 1.0, 1.0))
+	var strand_b: Color = _color_from_value(dna_config.get("strand_b", [0.95, 0.22, 1.0, 1.0]), Color(0.95, 0.22, 1.0, 1.0))
+	var connector_color: Color = _color_from_value(dna_config.get("connector_color", [0.94, 1.0, 0.32, 1.0]), Color(0.94, 1.0, 0.32, 1.0))
+	strand_a.a *= strand_alpha
+	strand_b.a *= strand_alpha
+	connector_color.a *= connector_alpha
+
+	var previous_outer := Vector2.ZERO
+	var previous_inner := Vector2.ZERO
+	for segment_index: int in range(segments + 1):
+		var progress: float = float(segment_index) / float(segments)
+		var angle: float = progress * TAU
+		var wave: float = sin((angle * wave_count) + spin) * separation
+		var outer: Vector2 = _ellipse_ring_point(center, angle, radius + wave, vertical_squash)
+		var inner: Vector2 = _ellipse_ring_point(center, angle, radius - wave, vertical_squash)
+
+		if segment_index > 0:
+			draw_line(previous_outer, outer, strand_a, strand_width)
+			draw_line(previous_inner, inner, strand_b, strand_width)
+
+		if segment_index % 6 == 0:
+			draw_line(inner, outer, connector_color, connector_width)
+
+		previous_outer = outer
+		previous_inner = inner
+
+
+func _ellipse_ring_point(center: Vector2, angle: float, radius: float, vertical_squash: float) -> Vector2:
+	return center + Vector2(cos(angle) * radius, sin(angle) * radius * vertical_squash)
+
+
+func _color_from_value(value: Variant, fallback: Color) -> Color:
+	if not value is Array:
+		return fallback
+
+	var channels: Array = value as Array
+	if channels.size() < 3:
+		return fallback
+
+	var alpha: float = 1.0
+	if channels.size() >= 4:
+		alpha = float(channels[3])
+	return Color(float(channels[0]), float(channels[1]), float(channels[2]), alpha)
 
 
 func _apply_frame(index: int) -> void:

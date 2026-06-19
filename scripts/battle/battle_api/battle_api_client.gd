@@ -66,12 +66,21 @@ func send_npc_lead(
 		body
 	)
 
-func send_choice(request_node: HTTPRequest, battle_id: String, player_id: String, choice_type: String, slot: int) -> Dictionary:
+func send_choice(
+	request_node: HTTPRequest,
+	battle_id: String,
+	player_id: String,
+	choice_type: String,
+	slot: int,
+	mega := false
+) -> Dictionary:
 	var body := {
 		"playerId": player_id,
 		"type": choice_type,
 		"slot": slot
 	}
+	if mega:
+		body["mega"] = true
 	
 	return await send_post_request(
 		request_node,

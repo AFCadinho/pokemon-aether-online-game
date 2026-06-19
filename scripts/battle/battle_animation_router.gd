@@ -73,6 +73,8 @@ func _play_animation_config(config: Dictionary, target_ident: String = "") -> vo
 	if not _animation_assets_available(config):
 		return
 
+	_request_animation_resources(config)
+	await _wait_for_animation_resources(parent_node, config)
 	var resources: Dictionary = _get_animation_resources(config)
 	if resources.is_empty():
 		return
@@ -235,6 +237,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {})
 		animation_node.sound_streams = resources.get("sound_streams", {}) as Dictionary
 	animation_node.speed_scale = float(config.get("speed_scale", 1.0))
 	animation_node.sprite_zoom_multiplier = float(config.get("sprite_zoom_multiplier", 1.0))
+	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))
 	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
 	animation_node.pattern_override = int(config.get("pattern_override", -1))
 	animation_node.loop = false
@@ -245,6 +248,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {})
 	animation_node.show_sheet_sprites = bool(config.get("show_sheet_sprites", true))
 	animation_node.overlay_fill_enabled = bool(config.get("overlay_fill_enabled", true))
 	animation_node.projectile_config = (config.get("projectile", {}) as Dictionary).duplicate(true)
+	animation_node.orb_config = (config.get("orb", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
 	animation_node.sprite_tint = _color_from_config(config.get("sprite_tint", [1.0, 1.0, 1.0, 1.0]), Color.WHITE)
 	animation_node.overlay_peak_alpha = float(config.get("overlay_peak_alpha", 0.20))
@@ -395,6 +399,57 @@ func _request_animation_resources(config: Dictionary) -> void:
 			_request_threaded_resource(sound_path)
 
 
+func _wait_for_animation_resources(parent_node: Node, config: Dictionary) -> void:
+	if parent_node == null or parent_node.get_tree() == null:
+		return
+
+	var timeout_seconds: float = 1.5
+	var started_msec: int = Time.get_ticks_msec()
+	while not _animation_resources_finished_loading(config):
+		var elapsed_seconds: float = float(Time.get_ticks_msec() - started_msec) / 1000.0
+		if elapsed_seconds >= timeout_seconds:
+			return
+		await parent_node.get_tree().process_frame
+
+
+func _animation_resources_finished_loading(config: Dictionary) -> bool:
+	var resource_paths: Array[String] = _get_animation_resource_paths(config)
+	for resource_path: String in resource_paths:
+		if resource_cache.has(resource_path):
+			continue
+		if not ResourceLoader.exists(resource_path):
+			return false
+		if not threaded_resource_requests.has(resource_path):
+			_request_threaded_resource(resource_path)
+			return false
+
+		var status: int = ResourceLoader.load_threaded_get_status(resource_path)
+		match status:
+			ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				continue
+			_:
+				return false
+
+	return true
+
+
+func _get_animation_resource_paths(config: Dictionary) -> Array[String]:
+	var resource_paths: Array[String] = []
+	var resource_path_keys: Array[String] = ["sheet_path", "background_path", "foreground_path"]
+	for path_key: String in resource_path_keys:
+		var resource_path: String = str(config.get(path_key, ""))
+		if resource_path != "":
+			resource_paths.append(resource_path)
+
+	var sound_paths: Dictionary = config.get("sound_paths", {}) as Dictionary
+	for sound_path_value: Variant in sound_paths.values():
+		var sound_path: String = str(sound_path_value)
+		if sound_path != "":
+			resource_paths.append(sound_path)
+
+	return resource_paths
+
+
 func _animation_data_is_valid(animation_data: Dictionary) -> bool:
 	var frames_value: Variant = animation_data.get("frames", [])
 	if not frames_value is Array or (frames_value as Array).is_empty():
@@ -530,6 +585,9 @@ func _apply_effect_target_offset(animation_node: Node2D, target_ident: String, c
 	var source_anchor: Vector2 = _get_effect_anchor_position(str(config.get("source_anchor", "player")))
 	var source_offset: Vector2 = target_anchor - source_anchor
 	animation_node.position += Vector2(source_offset.x * animation_node.scale.x, source_offset.y * animation_node.scale.y)
+
+	var effect_offset: Vector2 = _vector2_from_config_value(config.get("effect_position_offset", [0.0, 0.0]), Vector2.ZERO)
+	animation_node.position += Vector2(effect_offset.x * animation_node.scale.x, effect_offset.y * animation_node.scale.y)
 
 
 func _get_effect_anchor_position(anchor: String) -> Vector2:

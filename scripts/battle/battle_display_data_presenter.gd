@@ -42,6 +42,12 @@ func get_active_pokemon_is_shiny(player_id: String) -> bool:
 
 	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id).duplicate()
 	display_metadata.enrich_display_data(player_id, active_pokemon)
+	if player_id == "p1":
+		var instance_id := str(active_pokemon.get("instanceId", active_pokemon.get("instance_id", "")))
+		var saved_by_instance: Pokemon = display_metadata.get_player_save_pokemon_by_instance_id(instance_id)
+		if saved_by_instance != null:
+			return saved_by_instance.shiny
+
 	var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
 	if saved_pokemon != null:
 		return saved_pokemon.shiny

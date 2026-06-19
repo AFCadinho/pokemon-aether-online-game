@@ -30,10 +30,47 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 		_apply_transformed_species_to_requests()
 		_apply_event_conditions_to_requests(response.get("events", []))
 	else:
-		_remove_deferred_transform_fields_from_requests(response.get("events", []))
+		_remove_deferred_display_fields_from_requests(response.get("events", []))
 
 func apply_event_conditions(events: Array) -> void:
 	_apply_event_conditions_to_requests(events)
+
+func resolve_active_mega_species(player_id: String = "p1") -> String:
+	var request_mega_species := _get_active_mega_species_from_request_slot(player_id)
+	if request_mega_species != "":
+		return request_mega_species
+
+	return _get_mega_species_for_pokemon_data(get_active_player_pokemon(player_id))
+
+func resolve_mega_species_for_event(event: Dictionary) -> String:
+	var event_species := str(event.get("species", "")).strip_edges()
+	if _is_mega_species(event_species):
+		return event_species
+
+	var target_ident := str(event.get("target", ""))
+	if target_ident == "":
+		return ""
+
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+	if pokemon_data.is_empty():
+		return ""
+
+	var base_species := _strip_mega_suffix(event_species)
+	if base_species == "":
+		base_species = _strip_mega_suffix(get_species_from_pokemon_data(pokemon_data))
+
+	var event_item := str(event.get("item", ""))
+	var species_from_event_item := _get_mega_species_for_base_and_item(base_species, event_item)
+	if species_from_event_item != "":
+		return species_from_event_item
+
+	var species_from_pokemon_data := _get_mega_species_for_pokemon_data(pokemon_data)
+	if species_from_pokemon_data != "":
+		return species_from_pokemon_data
+
+	return _get_active_mega_species_from_request_slot(_get_player_id_from_ident(target_ident))
 
 ## Geeft de laatste request-state voor een speler terug.
 func get_player_request(player_id: String = "p1") -> Dictionary:
@@ -59,6 +96,10 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 
 		if event_type == "transform":
 			_apply_transform_event_to_requests(event)
+			continue
+
+		if event_type == "mega":
+			_apply_mega_event_to_requests(event)
 			continue
 
 		if event_type == "faint":
@@ -142,14 +183,79 @@ func _apply_transform_event_to_requests(event: Dictionary) -> void:
 	if transform_key != "":
 		transformed_species_by_ident[transform_key] = species
 
-	var pokemon_data := _get_side_pokemon_by_ident(target_ident)
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
 	if pokemon_data.is_empty():
 		return
 
 	pokemon_data["displaySpecies"] = species
 	pokemon_data["transformedSpecies"] = species
 
-func _remove_deferred_transform_fields_from_requests(events_value: Variant) -> void:
+func _apply_mega_event_to_requests(event: Dictionary) -> void:
+	var target_ident := str(event.get("target", ""))
+	if target_ident == "":
+		return
+
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+	if pokemon_data.is_empty():
+		return
+
+	var species := resolve_mega_species_for_event(event)
+	if species == "":
+		species = _get_mega_species_for_pokemon_data(pokemon_data)
+	if species == "":
+		return
+
+	pokemon_data["displaySpecies"] = species
+	pokemon_data["megaSpecies"] = species
+
+func _get_mega_species_for_pokemon_data(pokemon_data: Dictionary) -> String:
+	var base_species := _strip_mega_suffix(get_species_from_pokemon_data(pokemon_data))
+	return _get_mega_species_for_base_and_item(base_species, str(pokemon_data.get("item", "")))
+
+func _get_mega_species_for_base_and_item(base_species: String, item: String) -> String:
+	var cleaned_base_species := _strip_mega_suffix(base_species)
+	if cleaned_base_species == "":
+		return ""
+
+	var item_key := item.to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	if item_key == "":
+		return ""
+
+	if item_key == "charizarditex":
+		return "Charizard-Mega-X"
+	if item_key == "charizarditey":
+		return "Charizard-Mega-Y"
+	if item_key == "mewtwonitex":
+		return "Mewtwo-Mega-X"
+	if item_key == "mewtwonitey":
+		return "Mewtwo-Mega-Y"
+	if item_key.ends_with("ite"):
+		return "%s-Mega" % cleaned_base_species
+
+	return ""
+
+func _is_mega_species(species: String) -> bool:
+	return species.to_lower().contains("mega")
+
+func _get_active_mega_species_from_request_slot(player_id: String, active_index := 0) -> String:
+	var active_slots: Array = get_player_request(player_id).get("active", [])
+	if active_index < 0 or active_index >= active_slots.size():
+		return ""
+
+	var active_data: Variant = active_slots[active_index]
+	if not (active_data is Dictionary):
+		return ""
+
+	var can_mega_value: Variant = (active_data as Dictionary).get("canMegaEvo", "")
+	var can_mega_species := str(can_mega_value).strip_edges()
+	if _is_mega_species(can_mega_species):
+		return can_mega_species
+
+	return ""
+
+func _remove_deferred_display_fields_from_requests(events_value: Variant) -> void:
 	if not (events_value is Array):
 		return
 
@@ -158,19 +264,42 @@ func _remove_deferred_transform_fields_from_requests(events_value: Variant) -> v
 			continue
 
 		var event: Dictionary = event_value as Dictionary
-		if str(event.get("type", "")) != "transform":
-			continue
+		var event_type := str(event.get("type", ""))
+		match event_type:
+			"transform":
+				_remove_deferred_transform_fields_from_requests(event)
+			"mega":
+				_remove_deferred_mega_fields_from_requests(event)
 
-		var target_ident := str(event.get("target", ""))
-		var original_species := _get_original_species_from_ident(target_ident)
-		var pokemon_data := _get_side_pokemon_by_ident(target_ident)
-		if pokemon_data.is_empty():
-			continue
+func _remove_deferred_transform_fields_from_requests(event: Dictionary) -> void:
+	var target_ident := str(event.get("target", ""))
+	var original_species := _get_original_species_from_ident(target_ident)
+	var pokemon_data := _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		return
 
-		pokemon_data.erase("transformedSpecies")
-		pokemon_data.erase("displaySpecies")
-		if original_species != "":
-			pokemon_data["species"] = original_species
+	pokemon_data.erase("transformedSpecies")
+	pokemon_data.erase("displaySpecies")
+	if original_species != "":
+		pokemon_data["species"] = original_species
+
+func _remove_deferred_mega_fields_from_requests(event: Dictionary) -> void:
+	var target_ident := str(event.get("target", ""))
+	var original_species := _get_original_species_from_ident(target_ident)
+	var pokemon_data := _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+	if pokemon_data.is_empty():
+		return
+	if original_species != "":
+		original_species = _strip_mega_suffix(original_species)
+	if original_species == "":
+		original_species = _strip_mega_suffix(str(pokemon_data.get("species", pokemon_data.get("displaySpecies", ""))))
+
+	pokemon_data.erase("megaSpecies")
+	pokemon_data.erase("displaySpecies")
+	if original_species != "":
+		pokemon_data["species"] = original_species
 
 func _clear_transform_event_from_requests(event: Dictionary) -> void:
 	_clear_transformed_species_for_ident(str(event.get("fromIdent", "")))
@@ -261,6 +390,35 @@ func _get_side_pokemon_by_transform_key(transform_key: String) -> Dictionary:
 
 	return {}
 
+func _get_active_side_pokemon(player_id: String) -> Dictionary:
+	if player_id == "":
+		return {}
+
+	var request_value: Variant = requests.get(player_id, {})
+	if not (request_value is Dictionary):
+		return {}
+
+	var request: Dictionary = request_value as Dictionary
+	var side_value: Variant = request.get("side", {})
+	if not (side_value is Dictionary):
+		return {}
+
+	var side: Dictionary = side_value as Dictionary
+	var team_value: Variant = side.get("pokemon", [])
+	if not (team_value is Array):
+		return {}
+
+	var team: Array = team_value as Array
+	for pokemon_value in team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if bool(pokemon_data.get("active", false)):
+			return pokemon_data
+
+	return {}
+
 func _get_transform_key_from_ident(ident: String) -> String:
 	var player_id := _get_player_id_from_ident(ident)
 	var pokemon_name := _get_pokemon_name_from_ident(ident)
@@ -274,6 +432,15 @@ func _get_original_species_from_ident(ident: String) -> String:
 		return ""
 
 	return str(ident.split(": ")[1]).strip_edges()
+
+func _strip_mega_suffix(species: String) -> String:
+	var cleaned := species.strip_edges()
+	var mega_suffixes: Array[String] = ["-Mega-X", "-Mega-Y", "-Mega"]
+	for suffix: String in mega_suffixes:
+		if cleaned.ends_with(suffix):
+			return cleaned.substr(0, cleaned.length() - suffix.length())
+
+	return cleaned
 
 func _get_player_id_from_ident(ident: String) -> String:
 	if ident.begins_with("p1"):
@@ -309,6 +476,17 @@ func get_available_moves(player_id: String = "p1", active_index=0) -> Array:
 		return []
 
 	return active_moves_slots[active_index].get("moves", [])
+
+func can_active_pokemon_mega_evolve(player_id: String = "p1", active_index := 0) -> bool:
+	var active_slots: Array = get_player_request(player_id).get("active", [])
+	if active_index < 0 or active_index >= active_slots.size():
+		return false
+
+	var active_data: Variant = active_slots[active_index]
+	if not (active_data is Dictionary):
+		return false
+
+	return bool((active_data as Dictionary).get("canMegaEvo", false))
 
 ## Geeft terug of de speler nog in team preview zit.
 func is_team_preview(player_id: String = "p1") -> bool:

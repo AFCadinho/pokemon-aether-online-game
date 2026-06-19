@@ -112,6 +112,17 @@ func format_transform_event(actor: String, species: String) -> String:
 
 	return "%s transformed into %s!" % [actor, species]
 
+func format_mega_event(actor: String, species: String) -> String:
+	if actor == "":
+		actor = "Pokemon"
+
+	var normalized_actor := actor.to_lower().replace(" ", "").replace("-", "")
+	var normalized_species := species.to_lower().replace(" ", "").replace("-", "")
+	if species != "" and normalized_species.contains("mega") and normalized_species != normalized_actor:
+		return "%s has Mega Evolved into %s!" % [actor, species]
+
+	return "%s has Mega Evolved!" % actor
+
 func format_wild_battle_start_messages(player_species: String, opponent_species: String) -> Array[String]:
 	if player_species == "":
 		player_species = "Pokemon"
@@ -361,11 +372,18 @@ func format_indirect_damage_message(
 			return "%s was hurt by poison!" % target
 		"curse":
 			return "%s is afflicted by the curse!" % target
+		"rockyhelmet":
+			return "%s was hurt by Rocky Helmet!" % target
 
 	if allow_active_effect_fallback and active_effect != "":
 		return "%s is hurt by %s!" % [target, active_effect]
 
 	return ""
+
+func should_show_indirect_damage_in_battle_text(event: Dictionary) -> bool:
+	var source := _normalize_event_source(str(event.get("source", "")))
+	var source_key := source.to_lower().replace(" ", "")
+	return source_key == "rockyhelmet"
 
 func format_heal_event(
 	event: Dictionary,

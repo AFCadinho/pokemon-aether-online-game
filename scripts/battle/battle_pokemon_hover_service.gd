@@ -3,6 +3,7 @@ extends RefCounted
 class_name BattlePokemonHoverService
 
 var pokemon_stats_cache: Dictionary = {}
+var debug_enabled := false
 
 func clear_cache() -> void:
 	pokemon_stats_cache.clear()
@@ -232,7 +233,7 @@ func _normalize_species_for_compare(species: String) -> String:
 	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
 
 func _debug_battle_move(message: String) -> void:
-	if not OS.is_debug_build():
+	if not debug_enabled:
 		return
 
 	print("[battle-move] " + message)

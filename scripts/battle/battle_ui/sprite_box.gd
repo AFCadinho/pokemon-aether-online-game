@@ -44,6 +44,9 @@ var sprite_frames_display_scale_multipliers: Dictionary = {}
 var sprite_frames_position_offsets: Dictionary = {}
 var sprite_frames_anchors: Dictionary = {}
 var sprite_frames_frame_sizes: Dictionary = {}
+var current_single_species := ""
+var current_single_side := ""
+var current_single_is_shiny := false
 
 func _ready() -> void:
 	_set_sprite_filter(single_sprite)
@@ -131,6 +134,9 @@ func clear_pokemon() -> void:
 	_stop_active_tween()
 	set_battle_type(false)
 	clear_stat_stages()
+	current_single_species = ""
+	current_single_side = ""
+	current_single_is_shiny = false
 	for sprite in _get_all_sprites():
 		_reset_sprite_pose(sprite)
 		sprite.visible = false
@@ -814,6 +820,9 @@ func set_single_pokemon(pokemon: Pokemon, side: String) -> void:
 
 func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) -> void:
 	set_battle_type(true)
+	current_single_species = ""
+	current_single_side = ""
+	current_single_is_shiny = false
 	double_sprite_1.visible = false
 	double_sprite_2.visible = false
 
@@ -842,13 +851,28 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 
 func set_single_pokemon_species(species: String, side: String, is_shiny: bool = false) -> void:
 	set_battle_type(false)
-	
+
+	if (
+		single_sprite.visible
+		and current_single_species == species
+		and current_single_side == side
+		and current_single_is_shiny == is_shiny
+	):
+		_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+		return
+
 	single_sprite.visible = false
 	_reset_sprite_pose(single_sprite)
 	var frames := _load_sprite_frames(species, side, is_shiny)
 	if frames == null:
+		current_single_species = ""
+		current_single_side = ""
+		current_single_is_shiny = false
 		return
-		
+
+	current_single_species = species
+	current_single_side = side
+	current_single_is_shiny = is_shiny
 	single_sprite.sprite_frames = frames
 	single_sprite.animation = IDLE_ANIMATION
 	single_sprite.frame = 0

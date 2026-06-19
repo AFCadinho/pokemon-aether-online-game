@@ -29,13 +29,13 @@ func apply_response(response: Dictionary, apply_event_conditions: bool = true) -
 	return true
 
 
-func submit_player_choice(choice_type: String, slot: int) -> Dictionary:
-	var response: Dictionary = await send_player_choice(choice_type, slot)
+func submit_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
+	var response: Dictionary = await send_player_choice(choice_type, slot, mega)
 	if not _is_successful_response(response):
 		print("Player choice failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_transform_event(response)):
+	if not apply_response(response, not _response_has_deferred_display_event(response)):
 		return response
 
 	return response
@@ -47,19 +47,20 @@ func submit_npc_choice(player_id: String = "p2") -> Dictionary:
 		print("NPC choice failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_transform_event(response)):
+	if not apply_response(response, not _response_has_deferred_display_event(response)):
 		return response
 
 	return response
 
 
-func send_player_choice(choice_type: String, slot: int) -> Dictionary:
+func send_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
 	return await BattleApiClient.send_choice(
 		request_node,
 		battle_state.battle_id,
 		"p1",
 		choice_type,
-		slot
+		slot,
+		mega
 	)
 
 
@@ -74,7 +75,7 @@ func send_npc_choice(player_id: String = "p2") -> Dictionary:
 func _is_successful_response(response: Dictionary) -> bool:
 	return bool(response.get("success", false))
 
-func _response_has_transform_event(response: Dictionary) -> bool:
+func _response_has_deferred_display_event(response: Dictionary) -> bool:
 	var events_value: Variant = response.get("events", [])
 	if not (events_value is Array):
 		return false
@@ -85,7 +86,8 @@ func _response_has_transform_event(response: Dictionary) -> bool:
 			continue
 
 		var event: Dictionary = event_value as Dictionary
-		if str(event.get("type", "")) == "transform":
+		var event_type := str(event.get("type", ""))
+		if event_type == "transform" or event_type == "mega":
 			return true
 
 	return false

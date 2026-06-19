@@ -196,7 +196,7 @@
     "shiny_sparkle": {
       "template": "imported_sheet",
       "source": "Common:Shiny",
-      "source_anchor": "enemy",
+      "source_anchor": "player",
       "category": "entrance",
       "data_path": "res://assets/battles/animations/common/shiny/shiny.json",
       "sheet_path": "res://assets/battles/animations/common/shiny/leech-seed.png",
@@ -222,16 +222,99 @@
         0.16,
         1.0
       ],
-      "overlay_peak_alpha": 0.68,
-      "sparkle_count": 30,
-      "speed_scale": 1.25,
+      "overlay_peak_alpha": 1.0,
+      "sparkle_count": 54,
+      "speed_scale": 1.0,
       "sprite_zoom_multiplier": 0.35,
+      "sparkle_size_multiplier": 1.85,
       "sparkle_center": [
-        384.0,
-        96.0
+        128.0,
+        224.0
       ],
-      "sparkle_radius_min": 12.0,
-      "sparkle_radius_max": 72.0,
+      "sparkle_radius_min": 16.0,
+      "sparkle_radius_max": 88.0,
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "mega_evolution": {
+      "template": "imported_sheet",
+      "source": "Common:MegaEvolution2",
+      "source_anchor": "player",
+      "category": "transformation",
+      "data_path": "res://assets/battles/animations/common/megaevolution/megaevolution.json",
+      "sheet_path": "res://assets/battles/animations/common/megaevolution/GEN8- MegaEvolution.png",
+      "background_path": "",
+      "foreground_path": "res://assets/battles/animations/common/megaevolution/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Mega Evolution2.wav": "res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution2.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "show_sheet_sprites": false,
+      "visual_color": [
+        0.72,
+        0.48,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.92,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.28,
+      "sparkle_count": 18,
+      "speed_scale": 1.0,
+      "sparkle_center": [
+        128.0,
+        224.0
+      ],
+      "effect_position_offset": [
+        8.0,
+        -8.0
+      ],
+      "sparkle_radius_min": 18.0,
+      "sparkle_radius_max": 86.0,
+      "orb": {
+        "enabled": true,
+        "center": [
+          128.0,
+          224.0
+        ],
+        "radius": 86.0,
+        "alpha": 1.0,
+        "dna": {
+          "enabled": true,
+          "segments": 84,
+          "strand_width": 3.2,
+          "connector_width": 1.6,
+          "vertical_squash": 0.74,
+          "separation": 9.0,
+          "wave_count": 3.0,
+          "spin_speed": 0.16,
+          "alpha": 1.1,
+          "strand_a": [
+            0.0,
+            0.78,
+            1.0,
+            1.0
+          ],
+          "strand_b": [
+            0.96,
+            0.18,
+            1.0,
+            1.0
+          ],
+          "connector_color": [
+            0.9,
+            1.0,
+            0.18,
+            1.0
+          ]
+        }
+      },
       "pattern_offset": 0,
       "pattern_override": -1
     }
@@ -279,6 +362,11 @@
     "shiny_sparkle": "shiny_sparkle",
     "shiny_entrance": "shiny_sparkle",
     "common_shiny": "shiny_sparkle",
-    "sparkle_shiny": "shiny_sparkle"
+    "sparkle_shiny": "shiny_sparkle",
+    "mega": "mega_evolution",
+    "mega_evolution": "mega_evolution",
+    "megaevolution": "mega_evolution",
+    "common_megaevolution": "mega_evolution",
+    "mega_evolve": "mega_evolution"
   }
 }

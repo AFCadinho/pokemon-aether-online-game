@@ -29,7 +29,7 @@ func set_trainer_team(team: Array) -> void:
 func get_player_save_pokemon_for_battle_data(pokemon_data: Dictionary) -> Pokemon:
 	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
 	var saved_pokemon := get_player_save_pokemon_by_instance_id(instance_id)
-	if saved_pokemon != null and str(pokemon_data.get("transformedSpecies", "")) != "":
+	if saved_pokemon != null and _has_temporary_battle_display_form(pokemon_data):
 		return saved_pokemon
 	if saved_pokemon == null or not saved_species_matches_battle_data(saved_pokemon, pokemon_data):
 		return null
@@ -100,11 +100,23 @@ func _enrich_display_data_from_player_save(display_data: Dictionary) -> void:
 	if saved_pokemon == null:
 		return
 
+	if _has_temporary_battle_display_form(display_data):
+		display_data["shiny"] = saved_pokemon.shiny
+		if not display_data.has("possibleAbilities"):
+			display_data["possibleAbilities"] = saved_pokemon.possible_abilities
+		return
+
 	display_data["displaySpecies"] = saved_pokemon.species
 	display_data["species"] = saved_pokemon.species
 	display_data["shiny"] = saved_pokemon.shiny
 	display_data["types"] = saved_pokemon.types
 	display_data["possibleAbilities"] = saved_pokemon.possible_abilities
+
+func _has_temporary_battle_display_form(display_data: Dictionary) -> bool:
+	return (
+		str(display_data.get("megaSpecies", "")) != ""
+		or str(display_data.get("transformedSpecies", "")) != ""
+	)
 
 
 func _enrich_display_data_from_wild_pokemon(display_data: Dictionary) -> void:
