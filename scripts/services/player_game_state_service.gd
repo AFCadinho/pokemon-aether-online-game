@@ -3,6 +3,7 @@ extends Node
 class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
+const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -53,6 +54,54 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"success": true,
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
+	}
+
+
+func load_player_preferences() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_PREFERENCES_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"preferences": _dictionary_from_value(body.get("preferences", {})),
+	}
+
+
+func save_player_preferences(preferences: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_PREFERENCES_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(preferences)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"preferences": _dictionary_from_value(body.get("preferences", {})),
 	}
 
 

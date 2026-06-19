@@ -1,0 +1,53 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M96 72L224 38L352 72L416 52C439 45 462 62 462 86V396C462 412 452 426 436 431L352 456L224 422L96 456L76 462C53 469 30 452 30 428V118C30 102 40 88 56 83L96 72Z" fill="#F7F2E7"/>
+  <path d="M96 72V456M224 38V422M352 72V456" stroke="#B8A98E" stroke-width="10" stroke-linecap="round" opacity="0.75"/>
+  <path d="M56 83L96 72L224 38L352 72L416 52C439 45 462 62 462 86V396C462 412 452 426 436 431L352 456L224 422L96 456L76 462C53 469 30 452 30 428V118C30 102 40 88 56 83Z" stroke="#3E314E" stroke-width="14" stroke-linejoin="round"/>
+
+  <!-- water -->
+  <path d="M32 324C67 298 99 311 128 334C158 358 193 371 230 342C267 313 306 316 336 343C367 370 411 373 462 336V396C462 412 452 426 436 431L352 456L224 422L96 456L76 462C53 469 30 452 30 428V327L32 324Z" fill="#87CDEB" opacity="0.9"/>
+  <path d="M55 350C84 336 109 344 134 362M250 365C280 347 307 351 334 373M375 397C401 391 423 379 449 360" stroke="#4AA9CF" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- roads -->
+  <path d="M78 192C130 181 171 184 217 209C259 232 309 245 385 216" stroke="#D6B26D" stroke-width="36" stroke-linecap="round"/>
+  <path d="M82 192C134 181 173 184 217 209C259 232 309 245 385 216" stroke="#FFF3C8" stroke-width="20" stroke-linecap="round"/>
+  <path d="M257 112C242 158 238 207 252 252C264 291 284 323 309 364" stroke="#D6B26D" stroke-width="34" stroke-linecap="round"/>
+  <path d="M257 112C242 158 238 207 252 252C264 291 284 323 309 364" stroke="#FFF3C8" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- forest / routes -->
+  <circle cx="114" cy="123" r="18" fill="#67B96F" stroke="#2F6B43" stroke-width="6"/>
+  <circle cx="145" cy="113" r="16" fill="#67B96F" stroke="#2F6B43" stroke-width="6"/>
+  <circle cx="397" cy="139" r="18" fill="#67B96F" stroke="#2F6B43" stroke-width="6"/>
+  <circle cx="421" cy="171" r="16" fill="#67B96F" stroke="#2F6B43" stroke-width="6"/>
+  <circle cx="95" cy="275" r="16" fill="#67B96F" stroke="#2F6B43" stroke-width="6"/>
+  <circle cx="133" cy="283" r="14" fill="#67B96F" stroke="#2F6B43" stroke-width="6"/>
+
+  <!-- towns -->
+  <g stroke="#3E314E" stroke-width="7" stroke-linejoin="round">
+    <path d="M155 229H211V281H155V229Z" fill="#FFFFFF"/>
+    <path d="M146 230L183 197L220 230H146Z" fill="#7D58D8"/>
+    <path d="M179 249H190V281H179V249Z" fill="#D8B48E"/>
+
+    <path d="M309 160H367V214H309V160Z" fill="#FFFFFF"/>
+    <path d="M300 161L338 128L376 161H300Z" fill="#E65F5C"/>
+    <path d="M334 180H345V214H334V180Z" fill="#D8B48E"/>
+
+    <path d="M295 281H353V335H295V281Z" fill="#FFFFFF"/>
+    <path d="M286 282L324 249L362 282H286Z" fill="#5F8CE6"/>
+    <path d="M320 301H331V335H320V301Z" fill="#D8B48E"/>
+  </g>
+
+  <!-- special location marker -->
+  <path d="M235 119C235 93 256 72 282 72C308 72 329 93 329 119C329 151 282 188 282 188C282 188 235 151 235 119Z" fill="#8E5CF7" stroke="#3E314E" stroke-width="8"/>
+  <circle cx="282" cy="119" r="17" fill="#FFFFFF"/>
+  <path d="M282 101L287 114L301 114L290 123L294 137L282 129L270 137L274 123L263 114L277 114L282 101Z" fill="#8E5CF7"/>
+
+  <!-- dotted route -->
+  <path d="M102 394C142 373 179 373 221 392C260 410 301 412 341 390" stroke="#3E314E" stroke-width="9" stroke-linecap="round" stroke-dasharray="1 24" opacity="0.6"/>
+
+  <!-- compass -->
+  <g transform="translate(396 257)">
+    <circle cx="0" cy="0" r="36" fill="#FFFFFF" stroke="#3E314E" stroke-width="7"/>
+    <path d="M0 -25L9 0L0 25L-9 0L0 -25Z" fill="#7D58D8"/>
+    <path d="M-25 0L0 -9L25 0L0 9L-25 0Z" fill="#D6B26D"/>
+  </g>
+</svg>

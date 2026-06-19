@@ -40,7 +40,7 @@ func play_attack_tween_for_actor(actor_ident: String) -> void:
 			await enemy_sprite_box.play_attack_tween(Vector2(-28, 6))
 
 
-func play_move_animation(move_name: String, _actor_ident: String = "", _target_ident: String = "") -> void:
+func play_move_animation(move_name: String, actor_ident: String = "", _target_ident: String = "") -> void:
 	if not SettingsManager.battle_animations:
 		return
 
@@ -49,7 +49,7 @@ func play_move_animation(move_name: String, _actor_ident: String = "", _target_i
 	if config.is_empty():
 		return
 
-	await _play_animation_config(config)
+	await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2")
 
 
 func play_effect_animation(effect_key: String, target_ident: String = "") -> void:
@@ -63,7 +63,7 @@ func play_effect_animation(effect_key: String, target_ident: String = "") -> voi
 	await _play_animation_config(config, target_ident)
 
 
-func _play_animation_config(config: Dictionary, target_ident: String = "") -> void:
+func _play_animation_config(config: Dictionary, target_ident: String = "", reverse_battlefield: bool = false) -> void:
 	var parent_node: Node = animation_parent
 	if parent_node == null:
 		parent_node = player_sprite_box.get_parent()
@@ -79,7 +79,7 @@ func _play_animation_config(config: Dictionary, target_ident: String = "") -> vo
 	if resources.is_empty():
 		return
 
-	var animation_node: MoveAnimationPlayer = _create_move_animation_node(config, resources)
+	var animation_node: MoveAnimationPlayer = _create_move_animation_node(config, resources, reverse_battlefield)
 
 	var overlay: Control = _create_animation_overlay(parent_node)
 	if overlay != null:
@@ -221,7 +221,7 @@ func _load_effect_animation_catalog() -> void:
 		effect_animation_aliases = aliases_value as Dictionary
 
 
-func _create_move_animation_node(config: Dictionary, resources: Dictionary = {}) -> MoveAnimationPlayer:
+func _create_move_animation_node(config: Dictionary, resources: Dictionary = {}, reverse_battlefield: bool = false) -> MoveAnimationPlayer:
 	var animation_node: MoveAnimationPlayer = MoveAnimationPlayer.new()
 	animation_node.data_path = str(config.get("data_path", ""))
 	animation_node.sheet_path = str(config.get("sheet_path", ""))
@@ -249,8 +249,10 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {})
 	animation_node.overlay_fill_enabled = bool(config.get("overlay_fill_enabled", true))
 	animation_node.projectile_config = (config.get("projectile", {}) as Dictionary).duplicate(true)
 	animation_node.orb_config = (config.get("orb", {}) as Dictionary).duplicate(true)
+	animation_node.orb_projectile_config = (config.get("orb_projectile", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
 	animation_node.sprite_tint = _color_from_config(config.get("sprite_tint", [1.0, 1.0, 1.0, 1.0]), Color.WHITE)
+	animation_node.reverse_battlefield = reverse_battlefield
 	animation_node.overlay_peak_alpha = float(config.get("overlay_peak_alpha", 0.20))
 	animation_node.sparkle_count = int(config.get("sparkle_count", 14))
 	animation_node.sparkle_center = _vector2_from_config_value(config.get("sparkle_center", [256.0, 188.0]), Vector2(256, 188))

@@ -45,6 +45,7 @@ var route_gate_interaction_in_progress := false
 var frame_opaque_center_y_cache := {}
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var master_appearance_sprite: AnimatedSprite2D
+var pokemon_follower: PokemonFollower
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
@@ -64,6 +65,8 @@ func reset_movement_state() -> void:
 	_clear_input_buffer()
 	_clear_held_direction()
 	set_idle_frame()
+	if pokemon_follower != null:
+		pokemon_follower.reset_follow_position()
 
 func face_world_position(world_position: Vector2) -> void:
 	var delta := world_position - get_feet_position()
@@ -78,6 +81,8 @@ func face_world_position(world_position: Vector2) -> void:
 	set_idle_frame()
 
 func _ready() -> void:
+	add_to_group("player")
+	z_as_relative = false
 	_cache_appearance_sprites()
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
@@ -98,6 +103,15 @@ func _ready() -> void:
 	move_start_position = target_position
 	global_position = target_position
 	_update_sort_z()
+	_setup_pokemon_follower.call_deferred()
+
+func _exit_tree() -> void:
+	var refresh_callable: Callable = Callable(self, "refresh_pokemon_follower")
+	if PlayerSave.party_changed.is_connected(refresh_callable):
+		PlayerSave.party_changed.disconnect(refresh_callable)
+	if pokemon_follower != null and is_instance_valid(pokemon_follower):
+		pokemon_follower.queue_free()
+	pokemon_follower = null
 
 func _process(delta: float) -> void:
 	_update_sort_z()
@@ -148,6 +162,42 @@ func _process(delta: float) -> void:
 	if direction != Vector2.ZERO:
 		if not _try_start_move(direction):
 			set_idle_frame()
+
+func refresh_pokemon_follower() -> void:
+	if pokemon_follower == null:
+		return
+
+	var lead_pokemon: Pokemon = null
+	if GameState.show_follower and not PlayerSave.party.is_empty():
+		lead_pokemon = PlayerSave.party[0]
+
+	pokemon_follower.set_pokemon(lead_pokemon)
+
+func set_show_follower(show_follower: bool) -> void:
+	GameState.show_follower = show_follower
+	refresh_pokemon_follower()
+
+func reset_pokemon_follower_position() -> void:
+	if pokemon_follower != null:
+		pokemon_follower.reset_follow_position()
+
+func _setup_pokemon_follower() -> void:
+	if pokemon_follower != null:
+		return
+
+	pokemon_follower = PokemonFollower.new()
+	pokemon_follower.name = "PokemonFollower"
+	var follower_parent := get_parent()
+	if follower_parent != null:
+		follower_parent.add_child(pokemon_follower)
+	else:
+		add_child(pokemon_follower)
+	pokemon_follower.setup(self)
+	refresh_pokemon_follower()
+
+	var refresh_callable: Callable = Callable(self, "refresh_pokemon_follower")
+	if not PlayerSave.party_changed.is_connected(refresh_callable):
+		PlayerSave.party_changed.connect(refresh_callable)
 
 func _can_accept_movement_input() -> bool:
 	return not GameState.is_overworld_input_locked() and not _is_ui_typing()

@@ -19,8 +19,10 @@ signal animation_finished
 @export var overlay_fill_enabled: bool = true
 @export var projectile_config: Dictionary = {}
 @export var orb_config: Dictionary = {}
+@export var orb_projectile_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
 @export var sprite_tint: Color = Color(1.0, 0.78, 1.0, 1.0)
+@export var reverse_battlefield: bool = false
 @export_range(0.0, 0.5, 0.01) var overlay_peak_alpha: float = 0.20
 @export_range(0, 48, 1) var sparkle_count: int = 14
 @export_range(0.25, 4.0, 0.05) var speed_scale: float = 1.0
@@ -52,6 +54,8 @@ var projectile_sprite: Sprite2D
 
 @onready var bg: Sprite2D = Sprite2D.new()
 @onready var fg: Sprite2D = Sprite2D.new()
+
+const REVERSED_BATTLEFIELD_AXIS := Vector2(512.0, 320.0)
 
 
 func _ready() -> void:
@@ -213,32 +217,34 @@ func _build_nodes() -> void:
 
 
 func _draw() -> void:
-	if not show_pink_visual or pink_overlay_alpha <= 0.0:
-		return
+	var should_draw_overlay: bool = show_pink_visual and pink_overlay_alpha > 0.0
 
-	if overlay_fill_enabled:
+	if should_draw_overlay and overlay_fill_enabled:
 		draw_rect(Rect2(Vector2.ZERO, Vector2(512, 384)), Color(visual_color.r, visual_color.g, visual_color.b, pink_overlay_alpha), true)
-	_draw_orb_visual()
-	for i: int in range(sparkle_count):
-		var angle: float = float(i) * 0.85 + float(frame_index) * 0.24
-		var radius_span: float = maxf(sparkle_radius_max - sparkle_radius_min, 1.0)
-		var radius: float = sparkle_radius_min + fmod(float(i * 17), radius_span)
-		var center: Vector2 = sparkle_center + Vector2(cos(angle), sin(angle * 1.27)) * radius
-		var sparkle_alpha: float = pink_overlay_alpha * (0.35 + 0.45 * absf(sin(angle)))
-		var sparkle_size: float = (3.0 + float(i % 3)) * sparkle_size_multiplier
-		var sparkle_color := Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, sparkle_alpha)
-		draw_line(center + Vector2(-sparkle_size, 0.0), center + Vector2(sparkle_size, 0.0), sparkle_color, 1.4)
-		draw_line(center + Vector2(0.0, -sparkle_size), center + Vector2(0.0, sparkle_size), sparkle_color, 1.4)
-		draw_line(center + Vector2(-sparkle_size * 0.7, -sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, sparkle_size * 0.7), sparkle_color, 1.0)
-		draw_line(center + Vector2(-sparkle_size * 0.7, sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, -sparkle_size * 0.7), sparkle_color, 1.0)
-		draw_circle(center, sparkle_size * 0.38, sparkle_color)
+	if should_draw_overlay:
+		_draw_orb_visual()
+		for i: int in range(sparkle_count):
+			var angle: float = float(i) * 0.85 + float(frame_index) * 0.24
+			var radius_span: float = maxf(sparkle_radius_max - sparkle_radius_min, 1.0)
+			var radius: float = sparkle_radius_min + fmod(float(i * 17), radius_span)
+			var center: Vector2 = sparkle_center + Vector2(cos(angle), sin(angle * 1.27)) * radius
+			center = _battlefield_position(center)
+			var sparkle_alpha: float = pink_overlay_alpha * (0.35 + 0.45 * absf(sin(angle)))
+			var sparkle_size: float = (3.0 + float(i % 3)) * sparkle_size_multiplier
+			var sparkle_color := Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, sparkle_alpha)
+			draw_line(center + Vector2(-sparkle_size, 0.0), center + Vector2(sparkle_size, 0.0), sparkle_color, 1.4)
+			draw_line(center + Vector2(0.0, -sparkle_size), center + Vector2(0.0, sparkle_size), sparkle_color, 1.4)
+			draw_line(center + Vector2(-sparkle_size * 0.7, -sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, sparkle_size * 0.7), sparkle_color, 1.0)
+			draw_line(center + Vector2(-sparkle_size * 0.7, sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, -sparkle_size * 0.7), sparkle_color, 1.0)
+			draw_circle(center, sparkle_size * 0.38, sparkle_color)
+	_draw_orb_projectile_visual()
 
 
 func _draw_orb_visual() -> void:
 	if not bool(orb_config.get("enabled", false)):
 		return
 
-	var center: Vector2 = _vector2_from_value(orb_config.get("center", [256.0, 188.0]))
+	var center: Vector2 = _battlefield_position(_vector2_from_value(orb_config.get("center", [256.0, 188.0])))
 	var base_radius: float = float(orb_config.get("radius", 96.0))
 	var pulse: float = 0.08 * sin(float(frame_index) * 0.45)
 	var radius: float = base_radius * (1.0 + pulse)
@@ -307,6 +313,94 @@ func _ellipse_ring_point(center: Vector2, angle: float, radius: float, vertical_
 	return center + Vector2(cos(angle) * radius, sin(angle) * radius * vertical_squash)
 
 
+func _draw_orb_projectile_visual() -> void:
+	if not _orb_projectile_enabled():
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var projectile_state: Dictionary = _get_projectile_state_from_config(progress, orb_projectile_config)
+	var center: Vector2 = _projectile_battlefield_position(projectile_state.get("position", Vector2.ZERO) as Vector2, orb_projectile_config)
+	var scale_value: float = float(projectile_state.get("scale", 1.0))
+	var base_radius: float = float(orb_projectile_config.get("radius", 18.0))
+	var radius: float = base_radius * scale_value
+	var alpha: float = _get_orb_projectile_alpha(progress)
+	if alpha <= 0.02:
+		return
+
+	var trail_count: int = maxi(0, int(orb_projectile_config.get("trail_count", 4)))
+	var trail_spacing: float = float(orb_projectile_config.get("trail_spacing", 0.035))
+	for trail_index: int in range(trail_count, 0, -1):
+		var trail_progress: float = clampf(progress - float(trail_index) * trail_spacing, 0.0, 1.0)
+		var trail_visibility_alpha: float = _get_orb_projectile_visibility_alpha(trail_progress)
+		if trail_visibility_alpha <= 0.02:
+			continue
+		var trail_state: Dictionary = _get_projectile_state_from_config(trail_progress, orb_projectile_config)
+		var trail_center: Vector2 = _projectile_battlefield_position(trail_state.get("position", Vector2.ZERO) as Vector2, orb_projectile_config)
+		var trail_scale: float = float(trail_state.get("scale", 1.0))
+		var trail_alpha: float = alpha * trail_visibility_alpha * (0.12 / float(trail_index))
+		var trail_radius: float = base_radius * trail_scale * (1.0 + float(trail_index) * 0.12)
+		draw_circle(trail_center, trail_radius, Color(visual_color.r, visual_color.g, visual_color.b, trail_alpha))
+
+	var fill_color := Color(visual_color.r, visual_color.g, visual_color.b, alpha * 0.82)
+	var inner_color := Color(1.0, 1.0, 1.0, alpha * 0.78)
+	var ring_color := Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, alpha)
+	var shadow_color := Color(0.08, 0.15, 0.22, alpha * 0.32)
+	draw_circle(center + Vector2(radius * 0.12, radius * 0.18), radius * 1.06, shadow_color)
+	draw_circle(center, radius, fill_color)
+	draw_circle(center + Vector2(-radius * 0.24, -radius * 0.26), radius * 0.38, inner_color)
+	draw_arc(center, radius * 1.08, 0.0, TAU, 64, ring_color, maxf(1.5, radius * 0.12))
+
+	var sparkle_alpha: float = alpha * 0.8
+	for sparkle_index: int in range(3):
+		var angle: float = float(frame_index) * 0.22 + float(sparkle_index) * TAU / 3.0
+		var projectile_sparkle_center: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * 1.35
+		var sparkle_size: float = maxf(2.0, radius * 0.16)
+		var sparkle_color := Color(1.0, 1.0, 1.0, sparkle_alpha * (0.65 - float(sparkle_index) * 0.12))
+		draw_line(projectile_sparkle_center + Vector2(-sparkle_size, 0.0), projectile_sparkle_center + Vector2(sparkle_size, 0.0), sparkle_color, 1.2)
+		draw_line(projectile_sparkle_center + Vector2(0.0, -sparkle_size), projectile_sparkle_center + Vector2(0.0, sparkle_size), sparkle_color, 1.2)
+
+
+func _orb_projectile_enabled() -> bool:
+	return bool(orb_projectile_config.get("enabled", false))
+
+
+func _get_orb_projectile_alpha(progress: float) -> float:
+	var fade_in: float = maxf(float(orb_projectile_config.get("fade_in", 0.10)), 0.001)
+	var fade_out: float = maxf(float(orb_projectile_config.get("fade_out", 0.14)), 0.001)
+	return minf(
+		clampf(progress / fade_in, 0.0, 1.0),
+		clampf((1.0 - progress) / fade_out, 0.0, 1.0)
+	) * _get_orb_projectile_visibility_alpha(progress)
+
+
+func _get_orb_projectile_visibility_alpha(progress: float) -> float:
+	var windows_value: Variant = orb_projectile_config.get("visible_windows", [])
+	if not windows_value is Array or (windows_value as Array).is_empty():
+		return 1.0
+
+	var windows: Array = windows_value as Array
+	var feather: float = maxf(float(orb_projectile_config.get("visible_window_feather", 0.025)), 0.001)
+	for window_value: Variant in windows:
+		if not window_value is Array:
+			continue
+		var window: Array = window_value as Array
+		if window.size() < 2:
+			continue
+
+		var start: float = clampf(float(window[0]), 0.0, 1.0)
+		var end: float = clampf(float(window[1]), 0.0, 1.0)
+		if progress < start or progress > end:
+			continue
+
+		var fade_in_alpha: float = clampf((progress - start) / feather, 0.0, 1.0)
+		var fade_out_alpha: float = clampf((end - progress) / feather, 0.0, 1.0)
+		return minf(fade_in_alpha, fade_out_alpha)
+
+	return 0.0
+
+
 func _color_from_value(value: Variant, fallback: Color) -> Color:
 	if not value is Array:
 		return fallback
@@ -359,7 +453,7 @@ func _apply_frame(index: int) -> void:
 			tile_w,
 			tile_h
 		)
-		sprite.position = Vector2(float(cell["x"]), float(cell["y"]))
+		sprite.position = _battlefield_position(Vector2(float(cell["x"]), float(cell["y"])))
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
 		sprite.rotation_degrees = float(cell["angle"])
@@ -397,7 +491,7 @@ func _update_projectile(index: int) -> void:
 	var projectile_state: Dictionary = _get_projectile_state(progress)
 	var position: Vector2 = projectile_state.get("position", Vector2.ZERO) as Vector2
 	var scale_value: float = float(projectile_state.get("scale", 1.0))
-	projectile_sprite.position = position
+	projectile_sprite.position = _projectile_battlefield_position(position, projectile_config)
 	projectile_sprite.scale = Vector2(scale_value, scale_value)
 	var fade_in_seconds: float = maxf(float(projectile_config.get("fade_in", 0.12)), 0.001)
 	var fade_out_seconds: float = maxf(float(projectile_config.get("fade_out", 0.18)), 0.001)
@@ -408,7 +502,36 @@ func _update_projectile(index: int) -> void:
 	projectile_sprite.visible = alpha > 0.02
 
 func _get_projectile_state(progress: float) -> Dictionary:
-	var path_value: Variant = projectile_config.get("path", [])
+	return _get_projectile_state_from_config(progress, projectile_config)
+
+
+func _battlefield_position(position: Vector2) -> Vector2:
+	if not reverse_battlefield:
+		return position
+
+	return Vector2(
+		REVERSED_BATTLEFIELD_AXIS.x - position.x,
+		REVERSED_BATTLEFIELD_AXIS.y - position.y
+	)
+
+
+func _projectile_battlefield_position(position: Vector2, config: Dictionary) -> Vector2:
+	if _uses_explicit_reverse_path(config):
+		return position
+
+	return _battlefield_position(position)
+
+
+func _uses_explicit_reverse_path(config: Dictionary) -> bool:
+	if not reverse_battlefield:
+		return false
+
+	var reverse_path_value: Variant = config.get("reverse_path", [])
+	return reverse_path_value is Array and not (reverse_path_value as Array).is_empty()
+
+
+func _get_projectile_state_from_config(progress: float, config: Dictionary) -> Dictionary:
+	var path_value: Variant = config.get("reverse_path", []) if _uses_explicit_reverse_path(config) else config.get("path", [])
 	if not path_value is Array:
 		return {"position": Vector2.ZERO, "scale": 1.0}
 

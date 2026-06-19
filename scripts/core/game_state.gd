@@ -12,6 +12,7 @@ var overworld_input_locked := false
 var ui_input_locked := false
 var world_debug_enabled := false
 var repel_enabled := false
+var show_follower := true
 
 func lock_input() -> void:
 	input_locked = true

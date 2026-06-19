@@ -3,28 +3,16 @@
 [ext_resource type="Script" uid="uid://xe31cfj4j1g6" path="res://scripts/ui/ui_overlay.gd" id="1_7g5y2"]
 [ext_resource type="PackedScene" uid="uid://bqj3ifxyy7gdh" path="res://scenes/interface/party_slot.tscn" id="1_grslb"]
 [ext_resource type="Texture2D" uid="uid://bh3hhhb58uh2g" path="res://assets/ui/location.png" id="2_2onii"]
-[ext_resource type="Texture2D" uid="uid://brlmc2wddxdnj" path="res://assets/ui/town_map.png" id="3_riyyd"]
-[ext_resource type="Texture2D" uid="uid://bihiytl8kxop5" path="res://assets/ui/sun.png" id="4_8bipm"]
+[ext_resource type="Texture2D" uid="uid://b8qwcsde8a7l7" path="res://assets/ui/town_map.svg" id="3_riyyd"]
 [ext_resource type="Texture2D" uid="uid://c7goexdnbj60q" path="res://assets/ui/bag-icon.svg" id="5_j0ub1"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="6_settings"]
 [ext_resource type="Texture2D" uid="uid://5ixth4h1adwb" path="res://assets/ui/settings-icon.svg" id="7_settings_icon"]
 [ext_resource type="Texture2D" uid="uid://b85ladmwqi0go" path="res://assets/ui/repel_icon.svg" id="8_iv6uh"]
 [ext_resource type="Texture2D" uid="uid://sroenj42pc1x" path="res://assets/ui/dev_icon.svg" id="9_s0khl"]
+[ext_resource type="Texture2D" uid="uid://bhpfhnb5of576" path="res://assets/ui/follower_icon.svg" id="10_follower"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2onii"]
-bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7058824)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -46,6 +34,18 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.16470589, 0.2627451, 0.39607844, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2onii"]
+bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7058824)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7g5y2"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 1)
@@ -78,18 +78,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repel_active"]
-bg_color = Color(0.09019608, 0.42745098, 0.1764706, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.34509805, 0.8509804, 0.4392157, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -132,8 +120,46 @@ alignment = 1
 [node name="PartySlot" parent="Control/PartyPanel/MarginContainer/VBoxContainer" unique_id=899956667 instance=ExtResource("1_grslb")]
 layout_mode = 2
 
+[node name="ChatTabsPanel" type="Control" parent="Control" unique_id=1039747907]
+custom_minimum_size = Vector2(152, 32)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -550.0
+offset_top = -315.0
+offset_right = -398.0
+offset_bottom = -283.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="TabRow" type="HBoxContainer" parent="Control/ChatTabsPanel" unique_id=2136300024]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="GeneralButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=1167186300]
+custom_minimum_size = Vector2(70, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
+text = "General"
+
+[node name="SystemButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=1479272996]
+custom_minimum_size = Vector2(70, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
+text = "System"
+
 [node name="ChatPanel" type="PanelContainer" parent="Control" unique_id=228485371]
-custom_minimum_size = Vector2(12, 0)
+custom_minimum_size = Vector2(360, 190)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -151,33 +177,6 @@ layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/ChatPanel/MarginContainer" unique_id=1516286588]
 layout_mode = 2
-
-[node name="TabBarPanel" type="Panel" parent="Control/ChatPanel/MarginContainer/VBoxContainer" unique_id=1437425555]
-custom_minimum_size = Vector2(0, 36)
-layout_mode = 2
-
-[node name="TabRow" type="HBoxContainer" parent="Control/ChatPanel/MarginContainer/VBoxContainer/TabBarPanel" unique_id=2136300024]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 4
-
-[node name="GeneralButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/TabBarPanel/TabRow" unique_id=1167186300]
-custom_minimum_size = Vector2(70, 26)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "General"
-
-[node name="SystemButton" type="Button" parent="Control/ChatPanel/MarginContainer/VBoxContainer/TabBarPanel/TabRow" unique_id=1479272996]
-custom_minimum_size = Vector2(70, 26)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
-text = "System"
 
 [node name="MessageScroll" type="ScrollContainer" parent="Control/ChatPanel/MarginContainer/VBoxContainer" unique_id=1532264051]
 layout_mode = 2
@@ -280,23 +279,29 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -220.0
-offset_right = 220.0
-offset_bottom = 80.0
+offset_left = -170.0
+offset_right = 170.0
+offset_bottom = 64.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8bipm")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/LocationPanel" unique_id=1429849529]
 layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer" unique_id=29517244]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 14
+alignment = 1
 
 [node name="LocationIcon" type="TextureRect" parent="Control/LocationPanel/MarginContainer/HBoxContainer" unique_id=1573324624]
-custom_minimum_size = Vector2(48, 24)
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 size_flags_horizontal = 0
+size_flags_vertical = 4
 texture = ExtResource("2_2onii")
 expand_mode = 1
 stretch_mode = 5
@@ -305,38 +310,32 @@ stretch_mode = 5
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
-theme_override_constants/separation = 1
+theme_override_constants/separation = 2
 
-[node name="RegionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1201685693]
+[node name="MetaRow" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1040323592]
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="RegionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow" unique_id=1201685693]
+layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
 theme_override_font_sizes/font_size = 11
 text = "KANTO"
-horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow" unique_id=750957603]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6901961, 0.72156864, 0.7764706, 1)
+theme_override_font_sizes/font_size = 11
+text = "08:54 AM"
 
 [node name="LocationLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1820518854]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 20
 text = "Pallet Town"
-horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1908077234]
-layout_mode = 2
-alignment = 1
-
-[node name="SunMoonIcon" type="TextureRect" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=948586774]
-layout_mode = 2
-texture = ExtResource("4_8bipm")
-expand_mode = 2
-
-[node name="TimeLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=750957603]
-layout_mode = 2
-text = "08:54 PM"
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(196, 0)
@@ -356,13 +355,23 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="MapButton" type="Button" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=1031341535]
+[node name="MapSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=577193638]
 custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="MapButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot" unique_id=1031341535]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Open Town Map"
 mouse_default_cursor_shape = 2
-icon = ExtResource("3_riyyd")
-expand_icon = true
+texture_normal = ExtResource("3_riyyd")
+texture_pressed = ExtResource("3_riyyd")
+texture_hover = ExtResource("3_riyyd")
+texture_disabled = ExtResource("3_riyyd")
+texture_focused = ExtResource("3_riyyd")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="BagSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=1506839726]
 custom_minimum_size = Vector2(52, 52)
@@ -399,12 +408,12 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="ActionsPanel" type="PanelContainer" parent="Control" unique_id=1107239222]
-custom_minimum_size = Vector2(132, 0)
+custom_minimum_size = Vector2(196, 0)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -148.0
+offset_left = -212.0
 offset_bottom = 68.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
@@ -421,23 +430,61 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
-[node name="RepelToggle" type="Button" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=2085702693]
+[node name="RepelSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=628803434]
 custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="RepelToggle" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/RepelSlot" unique_id=2085702693]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Repel"
 mouse_default_cursor_shape = 2
-theme_override_styles/pressed = SubResource("StyleBoxFlat_repel_active")
 toggle_mode = true
-icon = ExtResource("8_iv6uh")
-expand_icon = true
+texture_normal = ExtResource("8_iv6uh")
+texture_pressed = ExtResource("8_iv6uh")
+texture_hover = ExtResource("8_iv6uh")
+texture_disabled = ExtResource("8_iv6uh")
+texture_focused = ExtResource("8_iv6uh")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="DevActionsButton" type="Button" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=1939088199]
+[node name="FollowerSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=344868481]
 custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="FollowerToggle" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/FollowerSlot" unique_id=1273127839]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Show Follower"
+mouse_default_cursor_shape = 2
+toggle_mode = true
+texture_normal = ExtResource("10_follower")
+texture_pressed = ExtResource("10_follower")
+texture_hover = ExtResource("10_follower")
+texture_disabled = ExtResource("10_follower")
+texture_focused = ExtResource("10_follower")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DevActionsSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=96186774]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="DevActionsButton" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot" unique_id=1939088199]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Developer Menu"
 mouse_default_cursor_shape = 2
-icon = ExtResource("9_s0khl")
-expand_icon = true
+texture_normal = ExtResource("9_s0khl")
+texture_pressed = ExtResource("9_s0khl")
+texture_hover = ExtResource("9_s0khl")
+texture_disabled = ExtResource("9_s0khl")
+texture_focused = ExtResource("9_s0khl")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="DevActionsPopup" type="PanelContainer" parent="Control" unique_id=1029961477]
 visible = false

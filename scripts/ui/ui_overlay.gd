@@ -14,7 +14,11 @@ const START_ENCOUNTER_CLIPBOARD_ALIAS := "/ec"
 const SPAWN_COMMAND := "/spawn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const COLLAPSE_BUTTON_SIZE := Vector2(28, 28)
-const COLLAPSE_BUTTON_MARGIN := 6.0
+const COLLAPSE_BUTTON_MARGIN := 10.0
+const CHAT_MIN_SIZE := Vector2(360, 190)
+const CHAT_MAX_SIZE := Vector2(760, 520)
+const CHAT_RESIZE_BUTTON_GAP := 10.0
+const CHAT_TABS_GAP := 8.0
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
 const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
 const CHAT_SEPARATOR_COLOR := "#778194"
@@ -64,16 +68,17 @@ enum DevPokemonPopupMode {
 @onready var party_slot_template: PanelContainer = $Control/PartyPanel/MarginContainer/VBoxContainer/PartySlot
 @onready var chat_panel: PanelContainer = $Control/ChatPanel
 @onready var location_panel: PanelContainer = $Control/LocationPanel
-@onready var region_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/RegionLabel
+@onready var region_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/LocationLabel
-@onready var time_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/TimeLabel
+@onready var time_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow/TimeLabel
 @onready var options_panel: PanelContainer = $Control/OptionsPanel
 @onready var actions_panel: PanelContainer = $Control/ActionsPanel
 @onready var message_scroll: ScrollContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll
 @onready var message_list: VBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
-@onready var general_chat_tab_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/TabBarPanel/TabRow/GeneralButton
-@onready var system_chat_tab_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/TabBarPanel/TabRow/SystemButton
+@onready var chat_tabs_panel: Control = $Control/ChatTabsPanel
+@onready var general_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/GeneralButton
+@onready var system_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/SystemButton
 @onready var chat_input: LineEdit = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/ChatInput
 @onready var dev_pokemon_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/DevPokemonButton
 @onready var send_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/SendButton
@@ -88,9 +93,14 @@ enum DevPokemonPopupMode {
 @onready var settings_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot
 @onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
-@onready var map_button: Button = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapButton
-@onready var repel_toggle_button: Button = $Control/ActionsPanel/MarginContainer/HBoxContainer/RepelToggle
-@onready var dev_actions_button: Button = $Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsButton
+@onready var map_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot
+@onready var map_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot/MapButton
+@onready var repel_slot: PanelContainer = $Control/ActionsPanel/MarginContainer/HBoxContainer/RepelSlot
+@onready var repel_toggle_button: TextureButton = $Control/ActionsPanel/MarginContainer/HBoxContainer/RepelSlot/RepelToggle
+@onready var follower_slot: PanelContainer = $Control/ActionsPanel/MarginContainer/HBoxContainer/FollowerSlot
+@onready var follower_toggle_button: TextureButton = $Control/ActionsPanel/MarginContainer/HBoxContainer/FollowerSlot/FollowerToggle
+@onready var dev_actions_slot: PanelContainer = $Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot
+@onready var dev_actions_button: TextureButton = $Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot/DevActionsButton
 @onready var dev_actions_popup: PanelContainer = $Control/DevActionsPopup
 @onready var dev_add_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddPokemonButton
 @onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
@@ -101,6 +111,15 @@ enum DevPokemonPopupMode {
 var party_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
+var chat_resize_button: Button
+var chat_resize_dragging := false
+var chat_resize_drag_start_mouse := Vector2.ZERO
+var chat_resize_drag_start_rect := Rect2()
+var party_drag_start_index := -1
+var party_dragging := false
+var party_drag_visual: Control
+var party_drag_source_slot: Control
+var party_drag_pointer_offset := Vector2.ZERO
 var clear_party_confirm_dialog: ConfirmationDialog
 var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
@@ -116,12 +135,13 @@ func _ready() -> void:
 	_setup_player_status_card()
 	_build_party_slots()
 	_setup_collapsible_panels()
+	_setup_chat_resize_button()
 	_setup_clear_party_confirm_dialog()
 	_apply_premium_overlay_styles()
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_party()
-	
+
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
 		PlayerSave.party_changed.connect(_refresh_party)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
@@ -143,11 +163,18 @@ func _ready() -> void:
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
+	_setup_icon_slot_hover(map_slot, map_button)
 	_setup_icon_slot_hover(bag_slot, bag_button)
 	_setup_icon_slot_hover(settings_slot, settings_button)
+	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
+	_setup_icon_slot_hover(follower_slot, follower_toggle_button)
+	_setup_icon_slot_hover(dev_actions_slot, dev_actions_button)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
 	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
+	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
+	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
+	_load_follower_preference.call_deferred()
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
 	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
 	dev_add_team_button.visible = false
@@ -155,6 +182,7 @@ func _ready() -> void:
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
+	dev_actions_slot.visible = PlayerSave.is_staff
 	dev_actions_button.visible = PlayerSave.is_staff
 	dev_actions_popup.visible = false
 	if settings_menu.has_signal("closed"):
@@ -233,6 +261,14 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	time_label.text = "%02d:%02d %s" % [display_hour, minute, period]
 
 func _input(event: InputEvent) -> void:
+	if party_dragging:
+		_handle_party_drag_input(event)
+		return
+
+	if chat_resize_dragging:
+		_handle_chat_resize_drag(event)
+		return
+
 	if chat_input.has_focus() and _is_settings_toggle_event(event):
 		chat_input.release_focus()
 		get_viewport().set_input_as_handled()
@@ -257,6 +293,24 @@ func _input(event: InputEvent) -> void:
 		return
 
 	chat_input.release_focus()
+
+func _handle_chat_resize_drag(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		var mouse_position := root_control.get_local_mouse_position()
+		var delta := mouse_position - chat_resize_drag_start_mouse
+		var new_size := Vector2(
+			clampf(chat_resize_drag_start_rect.size.x - delta.x, CHAT_MIN_SIZE.x, CHAT_MAX_SIZE.x),
+			clampf(chat_resize_drag_start_rect.size.y - delta.y, CHAT_MIN_SIZE.y, CHAT_MAX_SIZE.y)
+		)
+		_set_chat_panel_size(new_size)
+		get_viewport().set_input_as_handled()
+		return
+
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			chat_resize_dragging = false
+			get_viewport().set_input_as_handled()
 
 func _is_point_inside_control(control: Control, point: Vector2) -> bool:
 	return control.get_global_rect().has_point(point)
@@ -523,8 +577,15 @@ func _apply_slot_panel_style(panel: PanelContainer) -> void:
 	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
 
 func _apply_icon_slot_hover_style(panel: PanelContainer, hovered: bool) -> void:
-	var background_color := Color("#151f36f2") if hovered else UI_SLOT_BG
-	var border_color := UI_BORDER if hovered else UI_BORDER_SOFT
+	var active := bool(panel.get_meta("active", false))
+	var background_color := UI_SLOT_BG
+	var border_color := UI_BORDER_SOFT
+	if active:
+		background_color = UI_REPEL_BG
+		border_color = Color("#58d96f")
+	if hovered:
+		background_color = Color("#1b6f34e8") if active else Color("#151f36f2")
+		border_color = Color("#72f28a") if active else UI_BORDER
 	var style := _make_panel_style(background_color, border_color, 8, 1)
 	if hovered:
 		style.shadow_color = Color(UI_BORDER.r, UI_BORDER.g, UI_BORDER.b, 0.34)
@@ -543,6 +604,10 @@ func _setup_icon_slot_hover(panel: PanelContainer, button: TextureButton) -> voi
 	if not button.mouse_exited.is_connected(_on_icon_slot_mouse_exited.bind(panel)):
 		button.mouse_exited.connect(_on_icon_slot_mouse_exited.bind(panel))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+func _set_icon_slot_active(panel: PanelContainer, active: bool) -> void:
+	panel.set_meta("active", active)
+	_apply_icon_slot_hover_style(panel, false)
 
 func _on_icon_slot_mouse_entered(panel: PanelContainer) -> void:
 	_apply_icon_slot_hover_style(panel, true)
@@ -569,19 +634,23 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(send_button, "primary")
 	_apply_button_style(dev_pokemon_add_button, "primary")
 	_apply_button_style(dev_pokemon_close_button)
-	_apply_button_style(map_button)
 	_apply_button_style(dev_add_pokemon_button, "primary")
 	_apply_button_style(dev_spawn_pokemon_button, "primary")
 	_apply_button_style(dev_clear_party_button, "danger")
 	_apply_button_style(dev_actions_close_button)
-	_apply_button_style(repel_toggle_button)
-	_apply_button_style(dev_actions_button)
-	repel_toggle_button.add_theme_stylebox_override("pressed", _make_button_style(UI_REPEL_BG, Color("#58d970"), 8, 1))
 
+	if map_slot != null:
+		_apply_icon_slot_hover_style(map_slot, false)
 	if bag_slot != null:
 		_apply_icon_slot_hover_style(bag_slot, false)
 	if settings_slot != null:
 		_apply_icon_slot_hover_style(settings_slot, false)
+	if repel_slot != null:
+		_set_icon_slot_active(repel_slot, GameState.repel_enabled)
+	if follower_slot != null:
+		_set_icon_slot_active(follower_slot, GameState.show_follower)
+	if dev_actions_slot != null:
+		_apply_icon_slot_hover_style(dev_actions_slot, false)
 
 	for panel_id_value: Variant in collapsible_panels.keys():
 		var panel_id := str(panel_id_value)
@@ -589,6 +658,8 @@ func _apply_premium_overlay_styles() -> void:
 		var button: Button = state.get("button") as Button
 		if button != null:
 			_apply_button_style(button)
+	if chat_resize_button != null:
+		_apply_button_style(chat_resize_button)
 
 func _setup_collapsible_panels() -> void:
 	_register_collapsible_panel("chat", chat_panel, "left")
@@ -598,6 +669,34 @@ func _setup_collapsible_panels() -> void:
 	_register_collapsible_panel("options", options_panel, "right")
 	_register_collapsible_panel("actions", actions_panel, "left")
 	_position_collapsible_buttons()
+
+func _setup_chat_resize_button() -> void:
+	chat_panel.custom_minimum_size = CHAT_MIN_SIZE
+	chat_resize_button = Button.new()
+	chat_resize_button.custom_minimum_size = COLLAPSE_BUTTON_SIZE
+	chat_resize_button.size = COLLAPSE_BUTTON_SIZE
+	chat_resize_button.text = "[]"
+	chat_resize_button.tooltip_text = "Resize chat"
+	chat_resize_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	chat_resize_button.focus_mode = Control.FOCUS_NONE
+	chat_resize_button.z_index = 200
+	chat_resize_button.gui_input.connect(_on_chat_resize_button_gui_input)
+	root_control.add_child(chat_resize_button)
+	_position_chat_resize_button()
+
+func _on_chat_resize_button_gui_input(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		chat_resize_dragging = true
+		chat_resize_drag_start_mouse = root_control.get_local_mouse_position()
+		chat_resize_drag_start_rect = chat_panel.get_rect()
+		get_viewport().set_input_as_handled()
 
 func _register_collapsible_panel(panel_id: String, panel: Control, side: String) -> void:
 	var button := Button.new()
@@ -655,12 +754,18 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 	button.tooltip_text = "Expand" if collapsed else "Collapse"
 	if collapsed and panel_id == "actions":
 		dev_actions_popup.visible = false
+	if panel_id == "chat":
+		chat_tabs_panel.visible = available and not collapsed
+		_position_chat_tabs_panel()
+		_position_chat_resize_button()
 	_position_collapsible_button(panel_id)
 
 func _position_collapsible_buttons() -> void:
 	for panel_id_value: Variant in collapsible_panels.keys():
 		var panel_id := str(panel_id_value)
 		_position_collapsible_button(panel_id)
+	_position_chat_tabs_panel()
+	_position_chat_resize_button()
 
 func _position_collapsible_button(panel_id: String) -> void:
 	var state: Dictionary = collapsible_panels.get(panel_id, {})
@@ -714,6 +819,51 @@ func _position_collapsible_button(panel_id: String) -> void:
 	button.position = position
 	button.size = COLLAPSE_BUTTON_SIZE
 
+func _position_chat_resize_button() -> void:
+	if chat_resize_button == null:
+		return
+
+	var state: Dictionary = collapsible_panels.get("chat", {})
+	if state.is_empty():
+		chat_resize_button.visible = false
+		return
+
+	var collapse_button: Button = state.get("button") as Button
+	var available := bool(state.get("available", true))
+	var collapsed := bool(state.get("collapsed", false))
+	chat_resize_button.visible = available and not collapsed
+	if not chat_resize_button.visible or collapse_button == null:
+		return
+
+	chat_resize_button.position = collapse_button.position + Vector2(0.0, COLLAPSE_BUTTON_SIZE.y + CHAT_RESIZE_BUTTON_GAP)
+	chat_resize_button.size = COLLAPSE_BUTTON_SIZE
+
+func _position_chat_tabs_panel() -> void:
+	if chat_tabs_panel == null or chat_panel == null:
+		return
+
+	var state: Dictionary = collapsible_panels.get("chat", {})
+	var available := bool(state.get("available", true))
+	var collapsed := bool(state.get("collapsed", false))
+	chat_tabs_panel.visible = available and not collapsed
+	if not chat_tabs_panel.visible:
+		return
+
+	var tabs_size := chat_tabs_panel.get_combined_minimum_size()
+	chat_tabs_panel.size = tabs_size
+	chat_tabs_panel.position = chat_panel.position + Vector2(0.0, -tabs_size.y - CHAT_TABS_GAP)
+
+func _set_chat_panel_size(size: Vector2) -> void:
+	var clamped_size := Vector2(
+		clampf(size.x, CHAT_MIN_SIZE.x, CHAT_MAX_SIZE.x),
+		clampf(size.y, CHAT_MIN_SIZE.y, CHAT_MAX_SIZE.y)
+	)
+	chat_panel.offset_left = chat_panel.offset_right - clamped_size.x
+	chat_panel.offset_top = chat_panel.offset_bottom - clamped_size.y
+	_position_chat_tabs_panel()
+	_position_collapsible_button("chat")
+	_position_chat_resize_button()
+
 func _is_settings_toggle_event(event: InputEvent) -> bool:
 	if not (event is InputEventKey):
 		return false
@@ -735,25 +885,141 @@ func _toggle_settings_menu() -> void:
 
 func _build_party_slots() -> void:
 	party_slots.clear()
-	
+
 	party_slot_template.visible = false
 	party_slots.append(party_slot_template)
-	
+	_register_party_slot_drag_handlers(party_slot_template, 0)
+
 	for i in range(MAX_PARTY_SIZE - 1):
 		var slot := party_slot_template.duplicate()
 		party_container.add_child(slot)
 		party_slots.append(slot)
-		
+		_register_party_slot_drag_handlers(slot, i + 1)
+
 func _refresh_party() -> void:
 	_set_collapsible_panel_available("party", PlayerSave.party.size() > 0)
-	
+
 	for slot_number in range(party_slots.size()):
 		var slot = party_slots[slot_number]
-		
+		slot.set("slot_index", slot_number)
+
 		if slot_number < PlayerSave.party.size():
 			slot.set_pokemon(PlayerSave.party[slot_number])
 		else:
 			slot.set_empty()
+
+func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
+	slot.set("slot_index", slot_index)
+	var drag_started_callable := Callable(self, "_on_party_slot_drag_started")
+	var drag_released_callable := Callable(self, "_on_party_slot_drag_released")
+	if slot.has_signal("drag_started") and not slot.is_connected("drag_started", drag_started_callable):
+		slot.connect("drag_started", drag_started_callable)
+	if slot.has_signal("drag_released") and not slot.is_connected("drag_released", drag_released_callable):
+		slot.connect("drag_released", drag_released_callable)
+
+func _on_party_slot_drag_started(slot_index: int) -> void:
+	if slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+
+	party_drag_start_index = slot_index
+	party_dragging = true
+	_start_party_drag_visual(slot_index)
+
+func _on_party_slot_drag_released(_slot_index: int, global_position: Vector2) -> void:
+	if not party_dragging:
+		return
+
+	_finish_party_drag(global_position)
+
+func _handle_party_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		_update_party_drag_visual_position()
+		get_viewport().set_input_as_handled()
+		return
+
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			_finish_party_drag(mouse_event.global_position)
+			get_viewport().set_input_as_handled()
+
+func _start_party_drag_visual(slot_index: int) -> void:
+	_clear_party_drag_visual()
+
+	party_drag_source_slot = party_slots[slot_index] as Control
+	if party_drag_source_slot == null:
+		return
+
+	var source_global_rect := party_drag_source_slot.get_global_rect()
+	party_drag_pointer_offset = party_drag_source_slot.get_global_mouse_position() - source_global_rect.position
+	party_drag_source_slot.modulate = Color(1.0, 1.0, 1.0, 0.35)
+
+	party_drag_visual = party_drag_source_slot.duplicate() as Control
+	if party_drag_visual == null:
+		return
+
+	party_drag_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	party_drag_visual.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	party_drag_visual.custom_minimum_size = source_global_rect.size
+	party_drag_visual.size = source_global_rect.size
+	party_drag_visual.z_index = 500
+	party_drag_visual.modulate = Color(1.0, 1.0, 1.0, 0.92)
+	_set_control_tree_mouse_filter(party_drag_visual, Control.MOUSE_FILTER_IGNORE)
+	root_control.add_child(party_drag_visual)
+	_update_party_drag_visual_position()
+
+func _update_party_drag_visual_position() -> void:
+	if party_drag_visual == null:
+		return
+
+	var local_mouse_position := root_control.get_local_mouse_position()
+	party_drag_visual.position = local_mouse_position - party_drag_pointer_offset
+
+func _finish_party_drag(global_position: Vector2) -> void:
+	if not party_dragging:
+		return
+
+	party_dragging = false
+	var target_index := _get_party_slot_index_at_position(global_position)
+	if target_index < 0 or target_index >= PlayerSave.party.size() or target_index == party_drag_start_index:
+		party_drag_start_index = -1
+		_clear_party_drag_visual()
+		return
+
+	var dragged_pokemon: Pokemon = PlayerSave.party[party_drag_start_index]
+	PlayerSave.party[party_drag_start_index] = PlayerSave.party[target_index]
+	PlayerSave.party[target_index] = dragged_pokemon
+	party_drag_start_index = -1
+	_clear_party_drag_visual()
+	PlayerSave.party_changed.emit()
+	await _save_party_state_after_change()
+
+func _clear_party_drag_visual() -> void:
+	if party_drag_source_slot != null:
+		party_drag_source_slot.modulate = Color.WHITE
+	party_drag_source_slot = null
+
+	if party_drag_visual != null:
+		party_drag_visual.queue_free()
+	party_drag_visual = null
+
+func _set_control_tree_mouse_filter(node: Node, mouse_filter_value: int) -> void:
+	if node is Control:
+		var control := node as Control
+		control.mouse_filter = mouse_filter_value
+
+	for child: Node in node.get_children():
+		_set_control_tree_mouse_filter(child, mouse_filter_value)
+
+func _get_party_slot_index_at_position(global_position: Vector2) -> int:
+	for slot_index in range(party_slots.size()):
+		var slot := party_slots[slot_index] as Control
+		if slot == null or not slot.visible:
+			continue
+		if slot.get_global_rect().has_point(global_position):
+			return slot_index
+
+	return -1
 
 func _on_send_button_pressed() -> void:
 	if active_chat_tab != CHAT_TAB_GENERAL:
@@ -1118,8 +1384,48 @@ func _on_dev_pokemon_button_pressed() -> void:
 
 func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 	GameState.repel_enabled = toggled_on
+	_set_icon_slot_active(repel_slot, GameState.repel_enabled)
 	var state_text := "enabled" if GameState.repel_enabled else "disabled"
 	_add_chat_message("Repel %s." % state_text)
+
+func _load_follower_preference() -> void:
+	var result: Dictionary = await PlayerGameStateService.load_player_preferences()
+	if not bool(result.get("success", false)):
+		push_warning("UIOverlay: follower preference load failed: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var preferences_value: Variant = result.get("preferences", {})
+	var preferences: Dictionary = preferences_value if preferences_value is Dictionary else {}
+	GameState.show_follower = bool(preferences.get("showFollower", true))
+	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
+	_set_icon_slot_active(follower_slot, GameState.show_follower)
+	_refresh_world_follower_visibility()
+
+func _on_follower_toggle_toggled(toggled_on: bool) -> void:
+	GameState.show_follower = toggled_on
+	_set_icon_slot_active(follower_slot, GameState.show_follower)
+	_refresh_world_follower_visibility()
+
+	var result: Dictionary = await PlayerGameStateService.save_player_preferences({
+		"showFollower": GameState.show_follower,
+	})
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not save follower setting. Please contact staff.")
+		push_warning("UIOverlay: follower preference save failed: %s" % str(result.get("error", "Unknown error")))
+
+func _refresh_world_follower_visibility() -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+
+	var player := tree.get_first_node_in_group("player")
+	if player == null:
+		var world := GameState.get_world()
+		if world != null:
+			player = world.get_node_or_null("Player")
+
+	if player != null and player.has_method("set_show_follower"):
+		player.call("set_show_follower", GameState.show_follower)
 
 func _on_dev_actions_button_pressed() -> void:
 	if not PlayerSave.is_staff:
