@@ -91,6 +91,11 @@ static func _make_frame_texture(texture: Texture2D, column: int, row: int) -> At
 	return frame_texture
 
 static func _load_texture(file_path: String) -> Texture2D:
+	if file_path.begins_with("res://"):
+		var imported_texture := ResourceLoader.load(file_path) as Texture2D
+		if imported_texture != null:
+			return imported_texture
+
 	var image := Image.new()
 	var error: int = image.load(_to_global_path(file_path))
 	if error != OK:
