@@ -148,7 +148,9 @@ jobs:
           test -f "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/windows/PokeAether.pck"
-          grep -a -q "assets/player/body/boy_run.png" "builds/windows/PokeAether.pck"
+          git ls-files 'assets/player/body/*.png' | while read -r asset_path; do
+            grep -a -q "$asset_path" "builds/windows/PokeAether.pck"
+          done
 
       - name: Verify Linux build
         run: |
@@ -156,7 +158,9 @@ jobs:
           test -f "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/linux/PokeAether.pck"
-          grep -a -q "assets/player/body/boy_run.png" "builds/linux/PokeAether.pck"
+          git ls-files 'assets/player/body/*.png' | while read -r asset_path; do
+            grep -a -q "$asset_path" "builds/linux/PokeAether.pck"
+          done
 
       - name: Export Windows launcher
         if: env.BUILD_LAUNCHER == 'true'
