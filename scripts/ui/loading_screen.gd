@@ -74,23 +74,24 @@ func _prepare_world() -> void:
 		_return_to_login("Your session expired. Please sign in again.")
 		return
 
-	status_label.text = "Loading your party..."
-	var party_response: Dictionary = await PlayerPartyStateService.load_party()
-	if not bool(party_response.get("success", false)):
-		push_warning("LoadingScreen: player party load failed: %s" % str(party_response.get("error", "Unknown error")))
-	elif bool(party_response.get("hasParty", false)):
-		var party_value: Variant = party_response.get("party", [])
-		if party_value is Array:
-			PlayerSave.replace_party_from_state(party_value as Array)
-
-	status_label.text = "Loading your location..."
-	var position_response: Dictionary = await PlayerGameStateService.load_player_position()
+	status_label.text = "Loading your trainer profile..."
+	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	var saved_state: Dictionary = {}
-	if bool(position_response.get("success", false)) and bool(position_response.get("hasState", false)):
-		saved_state = _dictionary_from_value(position_response.get("state", {}))
-		_apply_saved_appearance_state(saved_state)
-	elif not bool(position_response.get("success", false)):
-		push_warning("LoadingScreen: player position load failed: %s" % str(position_response.get("error", "Unknown error")))
+	if bool(profile_response.get("success", false)):
+		_apply_profile_response(profile_response)
+		var position_response: Dictionary = _dictionary_from_value(profile_response.get("position", {}))
+		if bool(position_response.get("hasState", false)):
+			saved_state = _dictionary_from_value(position_response.get("state", {}))
+			_apply_saved_appearance_state(saved_state)
+	else:
+		push_warning("LoadingScreen: player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
+		await _load_legacy_world_state()
+		var position_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if bool(position_response.get("success", false)) and bool(position_response.get("hasState", false)):
+			saved_state = _dictionary_from_value(position_response.get("state", {}))
+			_apply_saved_appearance_state(saved_state)
+		elif not bool(position_response.get("success", false)):
+			push_warning("LoadingScreen: player position load failed: %s" % str(position_response.get("error", "Unknown error")))
 
 	GameState.set_prepared_world_state({
 		"savedState": saved_state,
@@ -117,13 +118,42 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 	var dictionary: Dictionary = value
 	return dictionary
 
+
+func _apply_profile_response(profile_response: Dictionary) -> void:
+	var party_response: Dictionary = _dictionary_from_value(profile_response.get("party", {}))
+	if bool(party_response.get("hasParty", false)):
+		var party_value: Variant = party_response.get("party", [])
+		if party_value is Array:
+			PlayerSave.replace_party_from_state(party_value as Array)
+	else:
+		PlayerSave.replace_party_from_state([])
+
+	var preferences: Dictionary = _dictionary_from_value(profile_response.get("preferences", {}))
+	GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
+
+
+func _load_legacy_world_state() -> void:
+	status_label.text = "Loading your party..."
+	var party_response: Dictionary = await PlayerPartyStateService.load_party()
+	if not bool(party_response.get("success", false)):
+		push_warning("LoadingScreen: player party load failed: %s" % str(party_response.get("error", "Unknown error")))
+	elif bool(party_response.get("hasParty", false)):
+		var party_value: Variant = party_response.get("party", [])
+		if party_value is Array:
+			PlayerSave.replace_party_from_state(party_value as Array)
+	else:
+		PlayerSave.replace_party_from_state([])
+
+	status_label.text = "Loading your location..."
+
+
 func _apply_saved_appearance_state(state: Dictionary) -> void:
 	var appearance: Dictionary = _dictionary_from_value(state.get("appearance", {}))
+	PlayerSave.apply_appearance_state(appearance)
+
 	var body_id: String = str(appearance.get("body", "")).strip_edges()
 	if body_id == "":
 		return
-
-	PlayerSave.appearance_body_id = body_id
 
 
 func _create_panel_style() -> StyleBoxFlat:

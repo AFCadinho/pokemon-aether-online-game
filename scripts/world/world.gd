@@ -352,17 +352,16 @@ func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
 
 
 func _get_current_appearance_presence_state() -> Dictionary:
-	return {
-		"body": PlayerSave.appearance_body_id,
-	}
+	return PlayerSave.to_appearance_state()
 
 func _apply_saved_appearance_state(state: Dictionary) -> void:
 	var appearance: Dictionary = _dictionary_from_value(state.get("appearance", {}))
+	PlayerSave.apply_appearance_state(appearance)
+
 	var body_id: String = str(appearance.get("body", "")).strip_edges()
 	if body_id == "":
 		return
 
-	PlayerSave.appearance_body_id = body_id
 	if player != null and player.has_method("set_body_appearance"):
 		player.call("set_body_appearance", body_id)
 

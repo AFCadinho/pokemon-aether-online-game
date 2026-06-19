@@ -12,6 +12,10 @@ var is_staff := true
 var party: Array[Pokemon] = []
 var money := 0
 var appearance_body_id: String = CharacterAppearanceService.DEFAULT_BODY_ID
+var appearance_hair_id := ""
+var appearance_legs_id := ""
+var appearance_feet_id := ""
+var appearance_facegear_id := ""
 var flags := {}
 
 func to_battle_dict() -> Dictionary:
@@ -66,6 +70,25 @@ func replace_party_from_state(party_data: Array) -> void:
 
 	party = loaded_party
 	party_changed.emit()
+
+func to_appearance_state() -> Dictionary:
+	return {
+		"body": appearance_body_id,
+		"hair": appearance_hair_id,
+		"legs": appearance_legs_id,
+		"feet": appearance_feet_id,
+		"facegear": appearance_facegear_id,
+	}
+
+func apply_appearance_state(appearance_state: Dictionary) -> void:
+	var body_id := str(appearance_state.get("body", "")).strip_edges()
+	if body_id != "":
+		appearance_body_id = body_id
+
+	appearance_hair_id = str(appearance_state.get("hair", appearance_hair_id)).strip_edges()
+	appearance_legs_id = str(appearance_state.get("legs", appearance_legs_id)).strip_edges()
+	appearance_feet_id = str(appearance_state.get("feet", appearance_feet_id)).strip_edges()
+	appearance_facegear_id = str(appearance_state.get("facegear", appearance_facegear_id)).strip_edges()
 
 func apply_battle_team_state(team: Array) -> void:
 	var party_by_instance_id := {}
