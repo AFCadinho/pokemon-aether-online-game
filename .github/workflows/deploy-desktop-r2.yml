@@ -89,7 +89,7 @@ jobs:
               changed_files="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")"
             fi
 
-            if printf '%s\n' "${changed_files}" | grep -E '^launcher/' >/dev/null; then
+            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_launcher_release\.py|tools/upload_launcher_release\.py|\.github/workflows/deploy-desktop-r2\.yml$)' >/dev/null; then
               build_launcher=true
             fi
           fi
@@ -316,6 +316,13 @@ jobs:
             --default-platform windows \
             "${launcher_args[@]}" \
             $(cat /tmp/asset_pack_args.txt)
+
+          ls -lah builds/launcher
+          if [ "${BUILD_LAUNCHER}" = "true" ]; then
+            test -f builds/launcher/PokeAetherLauncher-windows.zip
+            test -f builds/launcher/PokeAetherLauncher-linux.zip
+            test -f builds/launcher/PokeAetherLauncher-macos.zip
+          fi
 
       - name: Verify launcher release size
         run: |
