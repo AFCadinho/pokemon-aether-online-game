@@ -38,15 +38,29 @@ const APPEARANCE_CATEGORIES := [
 	{"id": "feet", "label": "Feet"},
 	{"id": "facegear", "label": "Facegear"},
 ]
+const KANTO_BADGES := [
+	{"id": "boulder", "name": "Boulder Badge", "texture": "res://assets/gym_badges/kanto_badges/Boulder_Badge.png", "unlocked": false},
+	{"id": "cascade", "name": "Cascade Badge", "texture": "res://assets/gym_badges/kanto_badges/Cascade_Badge.png", "unlocked": false},
+	{"id": "thunder", "name": "Thunder Badge", "texture": "res://assets/gym_badges/kanto_badges/Thunder_Badge.png", "unlocked": false},
+	{"id": "rainbow", "name": "Rainbow Badge", "texture": "res://assets/gym_badges/kanto_badges/Rainbow_Badge.png", "unlocked": false},
+	{"id": "soul", "name": "Soul Badge", "texture": "res://assets/gym_badges/kanto_badges/Soul_Badge.png", "unlocked": false},
+	{"id": "marsh", "name": "Marsh Badge", "texture": "res://assets/gym_badges/kanto_badges/Marsh_Badge.png", "unlocked": false},
+	{"id": "volcano", "name": "Volcano Badge", "texture": "res://assets/gym_badges/kanto_badges/Volcano_Badge.png", "unlocked": false},
+	{"id": "earth", "name": "Earth Badge", "texture": "res://assets/gym_badges/kanto_badges/Earth_Badge.png", "unlocked": false},
+]
 const PLAYER_STATUS_CARD_SIZE := Vector2(248, 86)
 const PLAYER_STATUS_CARD_MARGIN := Vector2(16, 16)
 const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(76, 76)
 const PLAYER_STATUS_AVATAR_POSITION := Vector2(38, 52)
 const PLAYER_STATUS_AVATAR_SCALE := Vector2(1.5, 1.5)
-const TRAINER_CARD_SIZE := Vector2(560, 390)
+const TRAINER_CARD_SIZE := Vector2(700, 430)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
-const TRAINER_CARD_AVATAR_SCALE := Vector2(2.8, 2.8)
+const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
+const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
+const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
+const TRAINER_CARD_CYAN := Color("#00f5ff")
+const TRAINER_CARD_GREEN := Color("#4cff76")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
 const UI_BG := Color("#070b14e6")
 const UI_BG_STRONG := Color("#05070bf2")
@@ -140,14 +154,20 @@ var player_status_name_label: Label
 var player_status_money_label: Label
 var player_status_avatar_viewport: SubViewport
 var trainer_card_popup: PanelContainer
-var trainer_card_avatar_viewport: SubViewport
+var trainer_card_avatar_viewports: Array[SubViewport] = []
+var trainer_card_money_label: Label
+var trainer_card_playtime_label: Label
+var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
+var trainer_card_dragging: bool = false
+var trainer_card_drag_offset := Vector2.ZERO
 var displayed_money: int = -1
 var displayed_location_map: Node
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	add_to_group("ui_overlay")
 	_setup_player_status_card()
 	_setup_trainer_card_popup()
 	_build_party_slots()
@@ -218,6 +238,7 @@ func _setup_clear_party_confirm_dialog() -> void:
 func _process(delta: float) -> void:
 	_position_collapsible_buttons()
 	_refresh_player_status_card_if_needed()
+	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
 	_refresh_utc_time_label(delta)
 
@@ -284,6 +305,10 @@ func _input(event: InputEvent) -> void:
 
 	if chat_resize_dragging:
 		_handle_chat_resize_drag(event)
+		return
+
+	if trainer_card_dragging:
+		_handle_trainer_card_drag_input(event)
 		return
 
 	if chat_input.has_focus() and _is_settings_toggle_event(event):
@@ -359,6 +384,8 @@ func _setup_player_status_card() -> void:
 	))
 	root_control.add_child(player_status_panel)
 	player_status_panel.gui_input.connect(_on_player_status_panel_gui_input)
+	player_status_panel.mouse_entered.connect(_on_player_status_panel_mouse_entered)
+	player_status_panel.mouse_exited.connect(_on_player_status_panel_mouse_exited)
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 12)
@@ -388,6 +415,7 @@ func _setup_player_status_card() -> void:
 
 	var money_row := HBoxContainer.new()
 	money_row.add_theme_constant_override("separation", 8)
+	money_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	info_layout.add_child(money_row)
 
 	var money_icon := PanelContainer.new()
@@ -404,10 +432,22 @@ func _setup_player_status_card() -> void:
 	money_icon.add_child(money_icon_label)
 
 	player_status_money_label = Label.new()
-	player_status_money_label.add_theme_font_size_override("font_size", 22)
+	player_status_money_label.custom_minimum_size = Vector2(70, 24)
+	player_status_money_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	player_status_money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	player_status_money_label.add_theme_font_size_override("font_size", 19)
 	player_status_money_label.add_theme_color_override("font_color", PLAYER_STATUS_MONEY_COLOR)
 	player_status_money_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	money_row.add_child(player_status_money_label)
+
+	var open_indicator := Label.new()
+	open_indicator.text = ">"
+	open_indicator.custom_minimum_size = Vector2(14, 0)
+	open_indicator.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	open_indicator.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	open_indicator.add_theme_font_size_override("font_size", 18)
+	open_indicator.add_theme_color_override("font_color", Color("#9fc7ff"))
+	row.add_child(open_indicator)
 
 	_refresh_player_status_card()
 
@@ -473,13 +513,16 @@ func _populate_avatar_preview(viewport: SubViewport, preview_position: Vector2, 
 
 func _refresh_avatar_previews() -> void:
 	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
-	_populate_avatar_preview(trainer_card_avatar_viewport, TRAINER_CARD_AVATAR_POSITION, TRAINER_CARD_AVATAR_SCALE)
+	for viewport: SubViewport in trainer_card_avatar_viewports:
+		var preview_position: Vector2 = viewport.get_meta("preview_position", TRAINER_CARD_AVATAR_POSITION) as Vector2
+		var preview_scale: Vector2 = viewport.get_meta("preview_scale", TRAINER_CARD_AVATAR_SCALE) as Vector2
+		_populate_avatar_preview(viewport, preview_position, preview_scale)
 
 func _apply_avatar_preview_body(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
 		if sprite.name == "BodySprite":
-			var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id)
+			var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id, PlayerSave.gender)
 			if body_frames != null:
 				sprite.sprite_frames = body_frames
 				sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -516,12 +559,23 @@ func _refresh_player_status_card_if_needed() -> void:
 	if displayed_money != current_money:
 		_refresh_player_status_card()
 
+func _refresh_trainer_card_playtime_if_needed() -> void:
+	if trainer_card_popup == null or not trainer_card_popup.visible or trainer_card_playtime_label == null:
+		return
+	trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
+
 func _refresh_player_status_card() -> void:
 	displayed_money = _get_player_money_value()
 	if player_status_name_label != null:
 		player_status_name_label.text = PlayerSave.player_name
+	if trainer_card_name_label != null:
+		trainer_card_name_label.text = PlayerSave.player_name
 	if player_status_money_label != null:
 		player_status_money_label.text = _format_money(displayed_money)
+	if trainer_card_money_label != null:
+		trainer_card_money_label.text = _format_money(displayed_money)
+	if trainer_card_playtime_label != null:
+		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
 
 func _setup_trainer_card_popup() -> void:
 	trainer_card_popup = PanelContainer.new()
@@ -545,22 +599,33 @@ func _setup_trainer_card_popup() -> void:
 	margin_container.add_theme_constant_override("margin_left", 16)
 	margin_container.add_theme_constant_override("margin_top", 12)
 	margin_container.add_theme_constant_override("margin_right", 16)
-	margin_container.add_theme_constant_override("margin_bottom", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 14)
 	trainer_card_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 6)
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 10)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.gui_input.connect(_on_trainer_card_header_gui_input)
 	layout.add_child(header)
+
+	var header_spacer := Control.new()
+	header_spacer.custom_minimum_size = Vector2(90, 0)
+	header.add_child(header_spacer)
 
 	var title := Label.new()
 	title.text = "Trainer Card"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 24)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.add_theme_font_size_override("font_size", 28)
 	title.add_theme_color_override("font_color", UI_MONEY)
+	title.add_theme_color_override("font_shadow_color", Color("#000000"))
+	title.add_theme_constant_override("shadow_offset_x", 3)
+	title.add_theme_constant_override("shadow_offset_y", 3)
 	header.add_child(title)
 
 	var close_button := Button.new()
@@ -571,41 +636,38 @@ func _setup_trainer_card_popup() -> void:
 	_apply_button_style(close_button, "danger")
 	header.add_child(close_button)
 
-	var content := HBoxContainer.new()
-	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content.add_theme_constant_override("separation", 14)
-	layout.add_child(content)
-
-	content.add_child(_create_trainer_card_avatar_panel())
-
 	var tabs := TabContainer.new()
 	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.add_theme_font_size_override("font_size", 14)
 	tabs.add_child(_create_trainer_card_stats_tab())
 	tabs.add_child(_create_trainer_card_appearance_tab())
-	content.add_child(tabs)
+	tabs.add_child(_create_trainer_card_badges_tab())
+	layout.add_child(tabs)
 
-func _create_trainer_card_avatar_panel() -> Control:
+func _create_trainer_card_avatar_panel(
+	preview_position: Vector2 = TRAINER_CARD_AVATAR_POSITION,
+	preview_scale: Vector2 = TRAINER_CARD_AVATAR_SCALE
+) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(180, 0)
+	panel.custom_minimum_size = Vector2(210, 198)
 	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_BG_STRONG, UI_BORDER_SOFT, 8, 1))
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 10)
+	margin_container.add_theme_constant_override("margin_left", 12)
 	margin_container.add_theme_constant_override("margin_top", 10)
-	margin_container.add_theme_constant_override("margin_right", 10)
+	margin_container.add_theme_constant_override("margin_right", 12)
 	margin_container.add_theme_constant_override("margin_bottom", 10)
 	panel.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
 	layout.alignment = BoxContainer.ALIGNMENT_CENTER
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 6)
 	margin_container.add_child(layout)
 
 	var viewport_frame := PanelContainer.new()
 	viewport_frame.custom_minimum_size = Vector2(160, 160)
-	viewport_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#04070df2"), UI_BORDER_FOCUS, 80, 2))
+	viewport_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#03060cf2"), Color("#2ea7ff"), 80, 4))
 	layout.add_child(viewport_frame)
 
 	var viewport_container := SubViewportContainer.new()
@@ -614,18 +676,22 @@ func _create_trainer_card_avatar_panel() -> Control:
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	viewport_frame.add_child(viewport_container)
 
-	trainer_card_avatar_viewport = SubViewport.new()
+	var trainer_card_avatar_viewport := SubViewport.new()
 	trainer_card_avatar_viewport.transparent_bg = true
 	trainer_card_avatar_viewport.size = TRAINER_CARD_AVATAR_VIEWPORT_SIZE
 	trainer_card_avatar_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	trainer_card_avatar_viewport.set_meta("preview_position", preview_position)
+	trainer_card_avatar_viewport.set_meta("preview_scale", preview_scale)
 	viewport_container.add_child(trainer_card_avatar_viewport)
-	_populate_avatar_preview(trainer_card_avatar_viewport, TRAINER_CARD_AVATAR_POSITION, TRAINER_CARD_AVATAR_SCALE)
+	trainer_card_avatar_viewports.append(trainer_card_avatar_viewport)
+	_populate_avatar_preview(trainer_card_avatar_viewport, preview_position, preview_scale)
 
 	var name_label := Label.new()
 	name_label.text = PlayerSave.player_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.add_theme_font_size_override("font_size", 16)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
+	trainer_card_name_label = name_label
 	layout.add_child(name_label)
 
 	return panel
@@ -633,18 +699,45 @@ func _create_trainer_card_avatar_panel() -> Control:
 func _create_trainer_card_stats_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Trainer"
-	tab.add_theme_constant_override("margin_left", 12)
-	tab.add_theme_constant_override("margin_top", 12)
-	tab.add_theme_constant_override("margin_right", 12)
-	tab.add_theme_constant_override("margin_bottom", 12)
+	tab.add_theme_constant_override("margin_left", 8)
+	tab.add_theme_constant_override("margin_top", 8)
+	tab.add_theme_constant_override("margin_right", 8)
+	tab.add_theme_constant_override("margin_bottom", 8)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 10)
 	tab.add_child(layout)
 
-	layout.add_child(_create_trainer_card_stat_row("Name", PlayerSave.player_name))
-	layout.add_child(_create_trainer_card_stat_row("ID", str(PlayerSave.player_id)))
-	layout.add_child(_create_trainer_card_stat_row("Money", _format_money(_get_player_money_value())))
+	var top_row := HBoxContainer.new()
+	top_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_row.add_theme_constant_override("separation", 12)
+	layout.add_child(top_row)
+
+	top_row.add_child(_create_trainer_card_avatar_panel())
+	top_row.add_child(_create_trainer_card_identity_panel())
+
+	var stats_row := HBoxContainer.new()
+	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stats_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stats_row.add_theme_constant_override("separation", 12)
+	layout.add_child(stats_row)
+
+	var adventure_rows: Array[Dictionary] = [
+		{"label": "Join Date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
+		{"label": "Playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
+		{"label": "Pokemon Caught", "value": _get_trainer_stat_text("pokemon_caught", "0")},
+		{"label": "Pokemon Seen", "value": _get_trainer_stat_text("pokemon_seen", "0")},
+	]
+	var battle_rows: Array[Dictionary] = [
+		{"label": "Victories", "value": _get_trainer_stat_text("victories", "0")},
+		{"label": "Defeats", "value": _get_trainer_stat_text("defeats", "0")},
+		{"label": "Disconnects", "value": _get_trainer_stat_text("disconnects", "0")},
+		{"label": "Money", "value": _format_money(_get_player_money_value()), "money": true},
+	]
+	stats_row.add_child(_create_trainer_card_stat_panel("Adventure Stats", adventure_rows))
+	stats_row.add_child(_create_trainer_card_stat_panel("Battle Stats", battle_rows))
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -652,25 +745,104 @@ func _create_trainer_card_stats_tab() -> Control:
 
 	return tab
 
-func _create_trainer_card_stat_row(label_text: String, value_text: String) -> Control:
+func _create_trainer_card_identity_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.custom_minimum_size = Vector2(0, 116)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b5872"), 8, 2))
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 10)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin_container)
+
+	var rows := VBoxContainer.new()
+	rows.alignment = BoxContainer.ALIGNMENT_CENTER
+	rows.add_theme_constant_override("separation", 4)
+	margin_container.add_child(rows)
+
+	rows.add_child(_create_trainer_card_stat_row("Name", PlayerSave.player_name, 104, 22, TRAINER_CARD_CYAN))
+	rows.add_child(_create_trainer_card_stat_row("ID", _get_trainer_id_text(), 104, 22, TRAINER_CARD_CYAN))
+	rows.add_child(_create_trainer_card_stat_row("Guild", _get_trainer_stat_text("guild", "-"), 104, 22, TRAINER_CARD_CYAN))
+	return panel
+
+func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b5872"), 8, 2))
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 14)
+	margin_container.add_theme_constant_override("margin_top", 6)
+	margin_container.add_theme_constant_override("margin_right", 14)
+	margin_container.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 6)
+	margin_container.add_child(layout)
+
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 22)
+	title.add_theme_color_override("font_color", Color("#1ea8ff"))
+	title.add_theme_color_override("font_shadow_color", Color("#001427"))
+	title.add_theme_constant_override("shadow_offset_x", 2)
+	title.add_theme_constant_override("shadow_offset_y", 2)
+	layout.add_child(title)
+
+	var row_stack := VBoxContainer.new()
+	row_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	row_stack.alignment = BoxContainer.ALIGNMENT_END
+	row_stack.add_theme_constant_override("separation", 2)
+	layout.add_child(row_stack)
+
+	for row_value: Dictionary in rows:
+		var label_text: String = str(row_value.get("label", ""))
+		var value_text: String = str(row_value.get("value", ""))
+		var value_color: Color = TRAINER_CARD_GREEN if bool(row_value.get("money", false)) else TRAINER_CARD_CYAN
+		row_stack.add_child(_create_trainer_card_stat_row(label_text, value_text, 130, 15, value_color))
+
+	return panel
+
+func _create_trainer_card_stat_row(
+	label_text: String,
+	value_text: String,
+	label_width: float = 82.0,
+	font_size: int = 16,
+	value_color: Color = TRAINER_CARD_CYAN
+) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 
 	var label := Label.new()
 	label.text = "%s:" % label_text
-	label.custom_minimum_size = Vector2(82, 0)
-	label.add_theme_font_size_override("font_size", 16)
+	label.custom_minimum_size = Vector2(label_width, 0)
+	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", UI_TEXT)
+	label.add_theme_color_override("font_shadow_color", Color("#000000"))
+	label.add_theme_constant_override("shadow_offset_x", 1)
+	label.add_theme_constant_override("shadow_offset_y", 1)
 	row.add_child(label)
 
 	var value := Label.new()
 	value.text = value_text
 	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	value.add_theme_font_size_override("font_size", 16)
-	value.add_theme_color_override("font_color", Color("#00f5ff"))
+	value.add_theme_font_size_override("font_size", font_size)
+	value.add_theme_color_override("font_color", value_color)
+	value.add_theme_color_override("font_shadow_color", Color("#000000"))
+	value.add_theme_constant_override("shadow_offset_x", 1)
+	value.add_theme_constant_override("shadow_offset_y", 1)
 	value.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	row.add_child(value)
+	if label_text == "Money":
+		trainer_card_money_label = value
+	elif label_text == "Playtime":
+		trainer_card_playtime_label = value
 
 	return row
 
@@ -687,6 +859,11 @@ func _create_trainer_card_appearance_tab() -> Control:
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
 	tab.add_child(layout)
+
+	layout.add_child(_create_trainer_card_avatar_panel(
+		TRAINER_CARD_APPEARANCE_AVATAR_POSITION,
+		TRAINER_CARD_APPEARANCE_AVATAR_SCALE
+	))
 
 	var sidebar := VBoxContainer.new()
 	sidebar.custom_minimum_size = Vector2(92, 0)
@@ -719,6 +896,263 @@ func _create_trainer_card_appearance_tab() -> Control:
 
 	_create_trainer_card_body_appearance_content(content_stack)
 	return tab
+
+func _create_trainer_card_badges_tab() -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Badges"
+	tab.add_theme_constant_override("margin_left", 12)
+	tab.add_theme_constant_override("margin_top", 10)
+	tab.add_theme_constant_override("margin_right", 12)
+	tab.add_theme_constant_override("margin_bottom", 12)
+
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#0a0f19e8"), Color("#26344a"), 8, 1))
+	tab.add_child(panel)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 10)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 14)
+	panel.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_theme_constant_override("separation", 12)
+	layout.add_child(header)
+
+	var badge_mark := Control.new()
+	badge_mark.custom_minimum_size = Vector2(76, 76)
+	badge_mark.draw.connect(_on_trainer_card_region_mark_draw.bind(badge_mark))
+	header.add_child(badge_mark)
+
+	var header_spacer := Control.new()
+	header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(header_spacer)
+
+	var region_select := OptionButton.new()
+	region_select.custom_minimum_size = Vector2(132, 32)
+	region_select.focus_mode = Control.FOCUS_NONE
+	region_select.add_item("Kanto")
+	region_select.selected = 0
+	_apply_button_style(region_select, "default")
+	header.add_child(region_select)
+
+	var badge_grid_panel := PanelContainer.new()
+	badge_grid_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	badge_grid_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	badge_grid_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#303744"), 8, 2))
+	layout.add_child(badge_grid_panel)
+
+	var grid_margin := MarginContainer.new()
+	grid_margin.add_theme_constant_override("margin_left", 18)
+	grid_margin.add_theme_constant_override("margin_top", 12)
+	grid_margin.add_theme_constant_override("margin_right", 18)
+	grid_margin.add_theme_constant_override("margin_bottom", 12)
+	badge_grid_panel.add_child(grid_margin)
+
+	var badge_grid := GridContainer.new()
+	badge_grid.columns = 4
+	badge_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	badge_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	badge_grid.add_theme_constant_override("h_separation", 18)
+	badge_grid.add_theme_constant_override("v_separation", 10)
+	grid_margin.add_child(badge_grid)
+
+	for badge_value: Variant in KANTO_BADGES:
+		if badge_value is Dictionary:
+			badge_grid.add_child(_create_trainer_card_badge_slot(badge_value as Dictionary))
+
+	return tab
+
+func _create_trainer_card_badge_slot(badge: Dictionary) -> Control:
+	var slot := PanelContainer.new()
+	slot.custom_minimum_size = Vector2(128, 96)
+	slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	slot.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	slot.tooltip_text = str(badge.get("name", "Badge"))
+	slot.add_theme_stylebox_override("panel", _make_panel_style(Color("#07101dcc"), Color("#17263a"), 8, 1))
+
+	var center := CenterContainer.new()
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	slot.add_child(center)
+
+	var texture_rect := TextureRect.new()
+	texture_rect.custom_minimum_size = Vector2(82, 82)
+	texture_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var texture_path: String = str(badge.get("texture", ""))
+	if ResourceLoader.exists(texture_path):
+		texture_rect.texture = load(texture_path) as Texture2D
+	if not bool(badge.get("unlocked", false)):
+		texture_rect.modulate = Color("#ffffffbf")
+	center.add_child(texture_rect)
+	return slot
+
+func _on_trainer_card_region_mark_draw(mark: Control) -> void:
+	var center := mark.size * 0.5
+	var needle_color := Color("#f5f7ff")
+	var shadow_color := Color("#00000099")
+	var red_color := Color("#f0282f")
+	var outline_color := Color("#05070b")
+
+	mark.draw_circle(center + Vector2(-12, -10), 32, outline_color)
+	mark.draw_arc(center + Vector2(-12, -10), 27, PI, TAU * 1.32, 20, red_color, 13.0, true)
+	mark.draw_arc(center + Vector2(-12, -10), 27, 0.0, PI, 20, Color("#ffffff"), 13.0, true)
+	mark.draw_circle(center + Vector2(-12, -10), 12, outline_color)
+	mark.draw_circle(center + Vector2(-12, -10), 7, Color("#dfe6f3"))
+
+	var shadow_points: PackedVector2Array = PackedVector2Array([
+		center + Vector2(2, 1),
+		center + Vector2(40, -30),
+		center + Vector2(18, 44),
+	])
+	mark.draw_colored_polygon(shadow_points, shadow_color)
+	var points: PackedVector2Array = PackedVector2Array([
+		center + Vector2(-2, -3),
+		center + Vector2(36, -34),
+		center + Vector2(14, 40),
+	])
+	mark.draw_colored_polygon(points, needle_color)
+	mark.draw_polyline(points, outline_color, 3.0, true)
+
+func _on_trainer_card_badge_icon_draw(icon: Control, badge: Dictionary) -> void:
+	var unlocked: bool = bool(badge.get("unlocked", false))
+	var base_color: Color = badge.get("color", Color.WHITE) as Color
+	var accent_color: Color = badge.get("accent", Color.GRAY) as Color
+	var shape: String = str(badge.get("shape", "coin"))
+	if not unlocked:
+		base_color = base_color.darkened(0.28)
+		accent_color = accent_color.darkened(0.35)
+
+	match shape:
+		"rock":
+			_draw_trainer_badge_rock(icon, base_color, accent_color)
+		"drop":
+			_draw_trainer_badge_drop(icon, base_color, accent_color)
+		"sun":
+			_draw_trainer_badge_sun(icon, base_color, accent_color)
+		"rainbow":
+			_draw_trainer_badge_rainbow(icon)
+		"heart":
+			_draw_trainer_badge_heart(icon, base_color, accent_color)
+		"flame":
+			_draw_trainer_badge_flame(icon, base_color, accent_color)
+		"leaf":
+			_draw_trainer_badge_leaf(icon, base_color, accent_color)
+		_:
+			_draw_trainer_badge_coin(icon, base_color, accent_color)
+
+func _draw_trainer_badge_rock(icon: Control, base_color: Color, accent_color: Color) -> void:
+	var center := icon.size * 0.5
+	var points: PackedVector2Array = PackedVector2Array()
+	for index in range(8):
+		var angle := -PI * 0.5 + float(index) * TAU / 8.0
+		var radius := 37.0 if index % 2 == 0 else 32.0
+		points.append(center + Vector2(cos(angle), sin(angle)) * radius)
+	icon.draw_colored_polygon(points, base_color)
+	icon.draw_polyline(points, Color("#1a1d22"), 4.0, true)
+	icon.draw_line(center + Vector2(-24, -10), center + Vector2(24, -22), accent_color, 5.0)
+	icon.draw_line(center + Vector2(-18, 22), center + Vector2(28, 6), accent_color, 5.0)
+
+func _draw_trainer_badge_drop(icon: Control, base_color: Color, accent_color: Color) -> void:
+	var center := icon.size * 0.5
+	var points: PackedVector2Array = PackedVector2Array([
+		center + Vector2(0, -40),
+		center + Vector2(28, -4),
+		center + Vector2(22, 30),
+		center + Vector2(0, 40),
+		center + Vector2(-22, 30),
+		center + Vector2(-28, -4),
+	])
+	icon.draw_colored_polygon(points, base_color)
+	icon.draw_polyline(points, accent_color, 5.0, true)
+	icon.draw_circle(center + Vector2(12, -4), 9, Color("#ffffffcc"))
+	icon.draw_circle(center + Vector2(4, 18), 4, Color("#ffffff55"))
+
+func _draw_trainer_badge_sun(icon: Control, base_color: Color, accent_color: Color) -> void:
+	var center := icon.size * 0.5
+	for index in range(10):
+		var angle := float(index) * TAU / 10.0
+		var point_a := center + Vector2(cos(angle - 0.16), sin(angle - 0.16)) * 24.0
+		var point_b := center + Vector2(cos(angle), sin(angle)) * 42.0
+		var point_c := center + Vector2(cos(angle + 0.16), sin(angle + 0.16)) * 24.0
+		icon.draw_colored_polygon(PackedVector2Array([point_a, point_b, point_c]), base_color)
+	icon.draw_circle(center, 29, base_color)
+	icon.draw_circle(center, 19, accent_color)
+	icon.draw_circle(center, 13, base_color.lightened(0.08))
+
+func _draw_trainer_badge_rainbow(icon: Control) -> void:
+	var center := icon.size * 0.5
+	var colors: Array[Color] = [
+		Color("#ff3333"), Color("#ff9a2c"), Color("#fff248"), Color("#62e84f"),
+		Color("#36d7ff"), Color("#3559ff"), Color("#df4cff"), Color("#ffffff"),
+	]
+	for index in range(colors.size()):
+		var angle := -PI * 0.5 + float(index) * TAU / float(colors.size())
+		var point_a := center + Vector2(cos(angle - 0.28), sin(angle - 0.28)) * 16.0
+		var point_b := center + Vector2(cos(angle), sin(angle)) * 39.0
+		var point_c := center + Vector2(cos(angle + 0.28), sin(angle + 0.28)) * 16.0
+		icon.draw_colored_polygon(PackedVector2Array([point_a, point_b, point_c]), colors[index])
+	icon.draw_circle(center, 18, Color("#d9dde6"))
+	icon.draw_circle(center, 8, Color("#6c7280"))
+
+func _draw_trainer_badge_heart(icon: Control, base_color: Color, accent_color: Color) -> void:
+	var center := icon.size * 0.5
+	icon.draw_circle(center + Vector2(-15, -8), 21, base_color)
+	icon.draw_circle(center + Vector2(15, -8), 21, base_color)
+	icon.draw_colored_polygon(PackedVector2Array([
+		center + Vector2(-34, 0),
+		center + Vector2(34, 0),
+		center + Vector2(0, 42),
+	]), base_color)
+	icon.draw_arc(center + Vector2(-15, -8), 21, PI * 0.86, TAU * 1.1, 24, accent_color, 4.0, true)
+	icon.draw_circle(center + Vector2(14, -17), 8, Color("#ffffff99"))
+
+func _draw_trainer_badge_coin(icon: Control, base_color: Color, accent_color: Color) -> void:
+	var center := icon.size * 0.5
+	icon.draw_circle(center, 39, accent_color)
+	icon.draw_circle(center, 32, base_color)
+	icon.draw_circle(center, 20, Color("#ffbf32"))
+	icon.draw_arc(center, 21, 0.0, TAU, 48, Color("#9b5b10"), 3.0, true)
+
+func _draw_trainer_badge_flame(icon: Control, base_color: Color, accent_color: Color) -> void:
+	var center := icon.size * 0.5
+	var points: PackedVector2Array = PackedVector2Array([
+		center + Vector2(0, -42),
+		center + Vector2(22, -14),
+		center + Vector2(30, 20),
+		center + Vector2(0, 42),
+		center + Vector2(-30, 20),
+		center + Vector2(-22, -14),
+	])
+	icon.draw_colored_polygon(points, base_color)
+	icon.draw_polyline(points, accent_color, 5.0, true)
+	icon.draw_colored_polygon(PackedVector2Array([
+		center + Vector2(0, -18),
+		center + Vector2(14, 12),
+		center + Vector2(0, 28),
+		center + Vector2(-14, 12),
+	]), Color("#ffd0d9aa"))
+
+func _draw_trainer_badge_leaf(icon: Control, base_color: Color, accent_color: Color) -> void:
+	var center := icon.size * 0.5
+	icon.draw_circle(center + Vector2(-12, -10), 18, base_color)
+	icon.draw_circle(center + Vector2(10, 4), 26, base_color)
+	icon.draw_colored_polygon(PackedVector2Array([
+		center + Vector2(-36, 26),
+		center + Vector2(38, -28),
+		center + Vector2(22, 32),
+	]), base_color)
+	icon.draw_line(center + Vector2(-26, 24), center + Vector2(36, -26), accent_color, 5.0)
+	icon.draw_line(center + Vector2(4, 12), center + Vector2(26, 16), accent_color, 4.0)
 
 func _on_trainer_card_appearance_category_selected(button: Button, content_stack: VBoxContainer, category_id: String) -> void:
 	var sidebar: Node = button.get_parent()
@@ -791,10 +1225,60 @@ func _clear_container_children(container: Container) -> void:
 		child.queue_free()
 
 func _get_body_appearance_ids() -> Array[String]:
-	var ids: Array[String] = CharacterAppearanceService.get_available_body_ids()
+	var ids: Array[String] = CharacterAppearanceService.get_available_body_ids(PlayerSave.gender)
 	if ids.is_empty():
-		ids.append(CharacterAppearanceService.DEFAULT_BODY_ID)
+		ids.append(CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID)
 	return ids
+
+func _get_trainer_id_text() -> String:
+	var player_id_text: String = str(PlayerSave.player_id).strip_edges()
+	if player_id_text == "":
+		return "-"
+	return player_id_text
+
+func _get_trainer_stat_text(stat_key: String, fallback: String) -> String:
+	if PlayerSave.flags.has("trainer_stats"):
+		var stats_value: Variant = PlayerSave.flags.get("trainer_stats")
+		if stats_value is Dictionary:
+			var stats: Dictionary = stats_value as Dictionary
+			if stats.has(stat_key):
+				return str(stats.get(stat_key, fallback))
+
+	if PlayerSave.flags.has(stat_key):
+		return str(PlayerSave.flags.get(stat_key, fallback))
+
+	return fallback
+
+func _get_formatted_trainer_stat_text(stat_key: String, fallback: String) -> String:
+	var stat_text: String = _get_trainer_stat_text(stat_key, fallback)
+	if stat_key == "join_date":
+		return _format_join_date_text(stat_text, fallback)
+	return stat_text
+
+func _format_join_date_text(raw_text: String, fallback: String) -> String:
+	var date_text: String = raw_text.strip_edges()
+	if date_text == "" or date_text == fallback:
+		return fallback
+
+	var date_part: String = date_text
+	var date_time_separator_index: int = date_text.find("T")
+	if date_time_separator_index >= 0:
+		date_part = date_text.substr(0, date_time_separator_index)
+	else:
+		var space_separator_index: int = date_text.find(" ")
+		if space_separator_index >= 0:
+			date_part = date_text.substr(0, space_separator_index)
+
+	date_part = date_part.strip_edges()
+	var date_parts: PackedStringArray = date_part.split("-", false, 0)
+	if date_parts.size() >= 3:
+		var year: String = date_parts[0].strip_edges()
+		var month: String = date_parts[1].strip_edges()
+		var day: String = date_parts[2].strip_edges()
+		if year.length() == 4 and year.is_valid_int() and month.is_valid_int() and day.is_valid_int():
+			return "%02d-%02d-%04d" % [int(day), int(month), int(year)]
+
+	return date_part if date_part != "" else fallback
 
 func _format_body_appearance_name(body_id: String) -> String:
 	var text := body_id.replace("/", " ").replace("_", " ").replace("-", " ").strip_edges()
@@ -829,12 +1313,85 @@ func _on_player_status_panel_gui_input(event: InputEvent) -> void:
 	_show_trainer_card()
 	get_viewport().set_input_as_handled()
 
+func _on_player_status_panel_mouse_entered() -> void:
+	_apply_player_status_panel_hover_style(true)
+
+func _on_player_status_panel_mouse_exited() -> void:
+	_apply_player_status_panel_hover_style(false)
+
+func _apply_player_status_panel_hover_style(hovered: bool) -> void:
+	if player_status_panel == null:
+		return
+
+	var background_color := Color("#0b121fee") if hovered else PLAYER_STATUS_CARD_BACKGROUND
+	var border_color := Color("#f1c95f") if hovered else PLAYER_STATUS_CARD_BORDER
+	var style := _make_panel_style(background_color, border_color, 14, 1)
+	if hovered:
+		style.shadow_color = Color(UI_MONEY.r, UI_MONEY.g, UI_MONEY.b, 0.30)
+		style.shadow_size = 12
+		style.shadow_offset = Vector2.ZERO
+	player_status_panel.add_theme_stylebox_override("panel", style)
+
+func _on_trainer_card_header_gui_input(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		trainer_card_dragging = true
+		trainer_card_drag_offset = mouse_event.global_position - trainer_card_popup.global_position
+		trainer_card_popup.move_to_front()
+		get_viewport().set_input_as_handled()
+
+func _handle_trainer_card_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			trainer_card_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+
+	if not (event is InputEventMouseMotion):
+		return
+
+	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+	_move_trainer_card_to_global_position(motion_event.global_position - trainer_card_drag_offset)
+	get_viewport().set_input_as_handled()
+
+func _move_trainer_card_to_global_position(global_top_left: Vector2) -> void:
+	if trainer_card_popup == null:
+		return
+
+	var parent_control: Control = trainer_card_popup.get_parent_control()
+	if parent_control == null:
+		return
+
+	var card_size: Vector2 = trainer_card_popup.size
+	var parent_size: Vector2 = parent_control.size
+	var clamped_position := Vector2(
+		clamp(global_top_left.x, 0.0, max(parent_size.x - card_size.x, 0.0)),
+		clamp(global_top_left.y, 0.0, max(parent_size.y - card_size.y, 0.0))
+	)
+	var anchor_point := Vector2(
+		parent_size.x * trainer_card_popup.anchor_left,
+		parent_size.y * trainer_card_popup.anchor_top
+	)
+	var local_offset: Vector2 = clamped_position - anchor_point
+	trainer_card_popup.offset_left = local_offset.x
+	trainer_card_popup.offset_top = local_offset.y
+	trainer_card_popup.offset_right = local_offset.x + card_size.x
+	trainer_card_popup.offset_bottom = local_offset.y + card_size.y
+
 func _show_trainer_card() -> void:
 	if trainer_card_popup == null:
 		return
 
 	_refresh_trainer_card_body_buttons()
 	_refresh_avatar_previews()
+	_refresh_player_status_card()
 	_save_current_world_state_after_appearance_change()
 
 func _save_current_world_state_after_appearance_change() -> void:
@@ -873,6 +1430,11 @@ func _format_money(value: int) -> String:
 		counter += 1
 
 	return formatted
+
+func _format_playtime(total_seconds: int) -> String:
+	var safe_seconds: int = max(total_seconds, 0)
+	var hours: int = safe_seconds / 3600
+	return "%s H." % hours
 
 func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
@@ -1923,6 +2485,14 @@ func _add_chat_message(text: String, use_bbcode: bool = false) -> void:
 	entry.fit_content = true
 	entry.scroll_active = false
 	_scroll_chat_to_bottom.call_deferred()
+
+
+func add_system_message(text: String) -> void:
+	_add_chat_message(text)
+
+
+func refresh_money_display() -> void:
+	_refresh_player_status_card()
 
 
 func _format_system_chat_message(text: String) -> String:

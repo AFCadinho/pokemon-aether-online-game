@@ -25,6 +25,7 @@ const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const NAMEPLATE_TEXT_PADDING := 6.0
 const ROLE_BADGE_GAP := -5.0
+const ROLE_BADGE_TEXT_HEIGHT := 11.0
 const ROLE_BADGE_DEFAULT_WIDTH := 20.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
@@ -198,15 +199,16 @@ func _sync_nameplate_layout() -> void:
 	nameplate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
+		var name_center_y: float = (nameplate_label.offset_top + nameplate_label.offset_bottom) / 2.0
 		var start_x: float = nameplate_label.offset_left - ROLE_BADGE_GAP - badge_width
 		role_badge_panel.offset_left = start_x
 		role_badge_panel.offset_right = start_x + badge_width
-		role_badge_panel.offset_top = 5.0
-		role_badge_panel.offset_bottom = 16.0
+		role_badge_panel.offset_top = name_center_y - (ROLE_BADGE_TEXT_HEIGHT * 0.5)
+		role_badge_panel.offset_bottom = name_center_y + (ROLE_BADGE_TEXT_HEIGHT * 0.5)
 		role_badge_label.offset_left = 1.0
 		role_badge_label.offset_right = badge_width - 1.0
 		role_badge_label.offset_top = 0.0
-		role_badge_label.offset_bottom = 11.0
+		role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
 
 func _get_label_text_width(label: Label) -> float:
 	var text: String = label.text.strip_edges()
@@ -700,7 +702,7 @@ func _resolve_current_map() -> Node:
 	return null
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(get_feet_position().y / TILE_SIZE), SORT_Z_MIN, SORT_Z_MAX)
+	z_index = clampi(floori(get_feet_position().y / TILE_SIZE) + 1, SORT_Z_MIN, SORT_Z_MAX)
 
 func _cache_appearance_sprites() -> void:
 	appearance_sprites.clear()
@@ -733,7 +735,7 @@ func _apply_body_appearance(body_id: String) -> void:
 		push_warning("Player: BodySprite node is missing.")
 		return
 
-	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id)
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id, PlayerSave.gender)
 	if body_frames == null:
 		push_warning("Player: body appearance '%s' could not be loaded." % body_id)
 		return

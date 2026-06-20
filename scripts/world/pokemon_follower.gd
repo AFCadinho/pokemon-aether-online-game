@@ -214,29 +214,18 @@ func _get_player_follow_position() -> Vector2:
 	return player.global_position
 
 func _update_sort_z() -> void:
-	var follower_sort_y := _get_sort_y()
-	var sort_z := floori(follower_sort_y / TILE_SIZE)
+	var follower_sort_y := global_position.y
+	var sort_z := floori(follower_sort_y / TILE_SIZE) + 1
 	if player != null and is_instance_valid(player) and player.has_method("get_feet_position"):
 		var player_feet_position: Variant = player.call("get_feet_position")
 		if player_feet_position is Vector2:
 			var player_sort_y: float = (player_feet_position as Vector2).y
 			var player_sort_z := player.z_index
-			if follower_sort_y >= player_sort_y:
+			if follower_sort_y > player_sort_y:
 				sort_z = maxi(sort_z, player_sort_z + 1)
-			else:
+			elif follower_sort_y < player_sort_y:
 				sort_z = mini(sort_z, player_sort_z - 1)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
-
-func _get_sort_y() -> float:
-	if sprite == null or sprite.sprite_frames == null:
-		return global_position.y
-
-	var frame_texture := sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
-	if frame_texture == null:
-		return global_position.y + sprite.position.y
-
-	var half_frame_height := frame_texture.get_size().y * absf(sprite.scale.y) * 0.5
-	return global_position.y + sprite.position.y + half_frame_height
 
 func _get_idle_animation_name(direction: Vector2) -> String:
 	if direction == Vector2.UP:

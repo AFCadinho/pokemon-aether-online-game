@@ -8,9 +8,11 @@ signal party_changed
 
 var player_name := "Player"
 var player_id := ""
+var gender := "male"
 var is_staff := true
 var party: Array[Pokemon] = []
 var money := 0
+var playtime_seconds := 0
 var appearance_body_id: String = CharacterAppearanceService.DEFAULT_BODY_ID
 var appearance_hair_id := ""
 var appearance_legs_id := ""
@@ -89,6 +91,13 @@ func apply_appearance_state(appearance_state: Dictionary) -> void:
 	appearance_legs_id = str(appearance_state.get("legs", appearance_legs_id)).strip_edges()
 	appearance_feet_id = str(appearance_state.get("feet", appearance_feet_id)).strip_edges()
 	appearance_facegear_id = str(appearance_state.get("facegear", appearance_facegear_id)).strip_edges()
+	ensure_body_matches_gender()
+
+func ensure_body_matches_gender() -> void:
+	var body_ids: Array[String] = CharacterAppearanceService.get_available_body_ids(gender)
+	if body_ids.has(appearance_body_id):
+		return
+	appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
 
 func apply_battle_team_state(team: Array) -> void:
 	var party_by_instance_id := {}

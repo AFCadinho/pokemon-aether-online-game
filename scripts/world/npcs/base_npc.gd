@@ -399,7 +399,7 @@ func _is_ui_typing() -> bool:
 
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(get_feet_position().y / TILE_SIZE), SORT_Z_MIN, SORT_Z_MAX)
+	z_index = clampi(floori(get_feet_position().y / TILE_SIZE) + 1, SORT_Z_MIN, SORT_Z_MAX)
 
 
 func _get_cardinal_direction(direction: Vector2) -> Vector2:

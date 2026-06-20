@@ -6,6 +6,11 @@ const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
+const PLAYTIME_FLUSH_INTERVAL_SECONDS := 60.0
+const TILE_SIZE := 32.0
+const TREE_LAYER_ROOT_NAME := "Trees"
+const TREE_LAYER_Z_MIN := -256
+const TREE_LAYER_Z_MAX := 256
 
 @export var initial_spawn_name := "FromRoute1"
 
@@ -18,11 +23,17 @@ var battle_instance: Node
 var is_loading_map := false
 var position_autosave_elapsed := 0.0
 var position_presence_elapsed := 0.0
+var playtime_elapsed := 0.0
+var unflushed_playtime_seconds := 0
+var is_flushing_playtime := false
 var is_saving_player_position := false
 var last_saved_position_signature := ""
 var last_presence_position_signature := ""
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var active_battle_kind := ""
+var active_battle_id := ""
+var active_wild_pokemon_species := ""
 
 func _exit_tree() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
@@ -38,6 +49,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	_track_playtime(delta)
+
 	if is_in_battle or is_loading_map:
 		return
 
@@ -55,9 +68,11 @@ func _process(delta: float) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_save_current_player_position_if_changed(true)
+		_flush_playtime_if_needed.call_deferred(true)
 
 func save_current_player_state() -> void:
 	_save_current_player_position_if_changed.call_deferred(true)
+	_flush_playtime_if_needed.call_deferred(true)
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
@@ -89,6 +104,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	$CurrentMap.add_child(new_map)
 
 	GameState.current_map = new_map
+	_normalize_map_tree_layer_z_indices(new_map)
 	MusicManager.play_map_music(new_map)
 
 	move_player_to_map(new_map)
@@ -176,6 +192,7 @@ func _setup_initial_world_state() -> void:
 			push_warning("World: saved map '%s' could not be loaded. Falling back to initial map." % saved_scene_path)
 
 	GameState.current_map = initial_map
+	_normalize_map_tree_layer_z_indices(initial_map)
 	MusicManager.play_map_music(initial_map)
 	move_player_to_map(initial_map)
 
@@ -203,6 +220,25 @@ func _clear_current_map() -> void:
 	for child in $CurrentMap.get_children():
 		$CurrentMap.remove_child(child)
 		child.queue_free()
+
+func _normalize_map_tree_layer_z_indices(map: Node) -> void:
+	var trees_root: Node = map.get_node_or_null(TREE_LAYER_ROOT_NAME)
+	if trees_root == null:
+		return
+
+	_normalize_tree_layer_z_indices_recursive(trees_root)
+
+func _normalize_tree_layer_z_indices_recursive(node: Node) -> void:
+	if node is TileMapLayer:
+		var tile_map_layer: TileMapLayer = node as TileMapLayer
+		var used_rect: Rect2i = tile_map_layer.get_used_rect()
+		if used_rect.size != Vector2i.ZERO:
+			var layer_bottom_y: float = tile_map_layer.global_position.y + float(used_rect.position.y + used_rect.size.y) * TILE_SIZE
+			tile_map_layer.z_as_relative = false
+			tile_map_layer.z_index = clampi(floori(layer_bottom_y / TILE_SIZE), TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
+
+	for child: Node in node.get_children():
+		_normalize_tree_layer_z_indices_recursive(child)
 
 
 func _ensure_remote_players_container() -> void:
@@ -233,6 +269,42 @@ func _publish_world_presence(force := false) -> void:
 
 	last_presence_position_signature = signature
 	WorldPresenceService.update_position(_build_current_player_position_state(""))
+
+func _track_playtime(delta: float) -> void:
+	if not AuthService.is_authenticated() or is_loading_map:
+		return
+
+	playtime_elapsed += delta
+	if playtime_elapsed < 1.0:
+		return
+
+	var elapsed_seconds: int = floori(playtime_elapsed)
+	playtime_elapsed -= float(elapsed_seconds)
+	unflushed_playtime_seconds += elapsed_seconds
+	PlayerSave.playtime_seconds += elapsed_seconds
+	if float(unflushed_playtime_seconds) >= PLAYTIME_FLUSH_INTERVAL_SECONDS:
+		_flush_playtime_if_needed.call_deferred(false)
+
+
+func _flush_playtime_if_needed(force: bool = false) -> void:
+	if is_flushing_playtime or not AuthService.is_authenticated():
+		return
+	if unflushed_playtime_seconds <= 0:
+		return
+	if not force and float(unflushed_playtime_seconds) < PLAYTIME_FLUSH_INTERVAL_SECONDS:
+		return
+
+	is_flushing_playtime = true
+	var delta_seconds: int = mini(unflushed_playtime_seconds, 120)
+	var result: Dictionary = await PlayerStatsService.add_playtime(delta_seconds)
+	if bool(result.get("success", false)):
+		unflushed_playtime_seconds = maxi(unflushed_playtime_seconds - delta_seconds, 0)
+		PlayerStatsService.apply_stats_result(result)
+	else:
+		push_warning("World: playtime save failed: %s" % str(result.get("error", "Unknown error")))
+	is_flushing_playtime = false
+	if unflushed_playtime_seconds >= int(PLAYTIME_FLUSH_INTERVAL_SECONDS):
+		_flush_playtime_if_needed.call_deferred(false)
 
 
 func _apply_remote_player_states(player_states: Array, prune_missing := true) -> void:
@@ -525,6 +597,9 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		return
 		
 	is_in_battle = true
+	active_battle_kind = "wild"
+	active_battle_id = ""
+	active_wild_pokemon_species = wild_pokemon.species if wild_pokemon != null else "wild Pokemon"
 	_lock_overworld_for_battle()
 	
 	var response: Dictionary = await create_dev_wild_battle_response(wild_pokemon)
@@ -533,6 +608,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	active_battle_id = str(response.get("battleId", ""))
 	
 	battle_layer = CanvasLayer.new()
 	battle_layer.layer = 10
@@ -566,6 +642,9 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		return
 
 	is_in_battle = true
+	active_battle_kind = "wild"
+	active_battle_id = ""
+	active_wild_pokemon_species = "wild Pokemon"
 	_lock_overworld_for_battle()
 
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type)
@@ -574,6 +653,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	active_battle_id = str(response.get("battleId", ""))
 
 	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
 	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
@@ -582,6 +662,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	active_wild_pokemon_species = wild_pokemon.species
 
 	battle_layer = CanvasLayer.new()
 	battle_layer.layer = 10
@@ -620,6 +701,9 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 		return false
 
 	is_in_battle = true
+	active_battle_kind = "trainer"
+	active_battle_id = ""
+	active_wild_pokemon_species = ""
 	_lock_overworld_for_battle()
 
 	var response: Dictionary = await create_trainer_battle_response(trainer_id)
@@ -627,6 +711,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 		push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		_abort_battle_start()
 		return false
+	active_battle_id = str(response.get("battleId", ""))
 
 	battle_layer = CanvasLayer.new()
 	battle_layer.layer = 10
@@ -663,11 +748,79 @@ func end_wild_battle() -> void:
 	battle_layer = null
 	battle_instance = null
 	is_in_battle = false
+	active_battle_kind = ""
+	active_battle_id = ""
+	active_wild_pokemon_species = ""
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
 	
-func _on_battle_ended(_result: Dictionary) -> void:
+func _on_battle_ended(result: Dictionary) -> void:
+	var should_claim_wild_reward := _should_claim_wild_battle_reward(result)
+	var reward_battle_id := active_battle_id
+	var reward_species := active_wild_pokemon_species
 	end_wild_battle()
+	if should_claim_wild_reward and reward_battle_id != "":
+		await _award_wild_battle_money(reward_battle_id, reward_species)
+
+func _should_claim_wild_battle_reward(result: Dictionary) -> bool:
+	if active_battle_kind != "wild":
+		return false
+	if str(result.get("reason", "")) != "win":
+		return false
+	if not _is_player_battle_winner(str(result.get("winner", ""))):
+		return false
+
+	return true
+
+func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> void:
+	var previous_money: int = max(int(PlayerSave.money), 0)
+	var wallet_result: Dictionary = await PlayerWalletService.award_wild_battle_money(battle_id)
+	if bool(wallet_result.get("success", false)):
+		PlayerWalletService.apply_wallet_result(wallet_result)
+		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
+	else:
+		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
+
+func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
+	if money_awarded <= 0:
+		return
+
+	var species_text := pokemon_species.strip_edges()
+	if species_text == "":
+		species_text = "wild Pokemon"
+
+	var message := "You fainted %s and earned $%s." % [species_text, _format_money_amount(money_awarded)]
+	get_tree().call_group("ui_overlay", "refresh_money_display")
+	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _format_money_amount(value: int) -> String:
+	var value_text := str(max(value, 0))
+	var formatted := ""
+	var counter := 0
+	for index in range(value_text.length() - 1, -1, -1):
+		if counter > 0 and counter % 3 == 0:
+			formatted = "," + formatted
+		formatted = value_text.substr(index, 1) + formatted
+		counter += 1
+	return formatted
+
+func _is_player_battle_winner(winner: String) -> bool:
+	var normalized_winner := winner.strip_edges().to_lower()
+	if normalized_winner == "":
+		return false
+	if normalized_winner == "player 1":
+		return true
+
+	var player_names: Array[String] = [
+		PlayerSave.player_name,
+		AuthService.get_display_name(),
+		str(AuthService.current_user.get("username", "")),
+	]
+	for player_name: String in player_names:
+		if player_name.strip_edges() != "" and normalized_winner == player_name.strip_edges().to_lower():
+			return true
+
+	return false
 
 func _lock_overworld_for_battle() -> void:
 	GameState.lock_overworld_input()
@@ -685,5 +838,8 @@ func _unlock_overworld_after_battle() -> void:
 
 func _abort_battle_start() -> void:
 	is_in_battle = false
+	active_battle_kind = ""
+	active_battle_id = ""
+	active_wild_pokemon_species = ""
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()

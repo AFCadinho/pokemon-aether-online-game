@@ -30,6 +30,8 @@ func load_player_profile() -> Dictionary:
 	var position: Dictionary = _dictionary_from_value(body.get("position", {}))
 	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
 	var preferences: Dictionary = _dictionary_from_value(body.get("preferences", {}))
+	var wallet: Dictionary = _dictionary_from_value(body.get("wallet", {}))
+	var stats: Dictionary = _dictionary_from_value(body.get("stats", {}))
 	return {
 		"success": true,
 		"user": _dictionary_from_value(body.get("user", {})),
@@ -42,6 +44,10 @@ func load_player_profile() -> Dictionary:
 			"party": _array_from_value(party.get("party", [])),
 		},
 		"preferences": _dictionary_from_value(preferences.get("preferences", {})),
+		"wallet": _dictionary_from_value(wallet.get("wallet", {})),
+		"stats": {
+			"stats": _dictionary_from_value(stats.get("stats", {})),
+		},
 	}
 
 

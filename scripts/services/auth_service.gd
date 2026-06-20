@@ -146,6 +146,34 @@ func get_display_name() -> String:
 	return str(current_user.get("displayName", current_user.get("username", "")))
 
 
+func get_user_id_text() -> String:
+	for key: String in ["id", "userId", "user_id"]:
+		var value: Variant = current_user.get(key, "")
+		var user_id_text: String = str(value).strip_edges()
+		if user_id_text != "":
+			if user_id_text.is_valid_int():
+				return str(int(user_id_text))
+			if user_id_text.is_valid_float():
+				return str(int(float(user_id_text)))
+			return user_id_text
+	return ""
+
+
+func get_created_at_text() -> String:
+	for key: String in ["createdAt", "created_at"]:
+		var created_at_text: String = str(current_user.get(key, "")).strip_edges()
+		if created_at_text != "":
+			return created_at_text
+	return ""
+
+
+func get_gender() -> String:
+	var gender_text: String = str(current_user.get("gender", "male")).strip_edges().to_lower()
+	if gender_text == "female":
+		return "female"
+	return "male"
+
+
 func _apply_auth_response(body: Dictionary) -> void:
 	session_token = str(body.get("token", ""))
 	expires_at = str(body.get("expiresAt", ""))

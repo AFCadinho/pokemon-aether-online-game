@@ -22,6 +22,7 @@ const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const NAMEPLATE_TEXT_PADDING := 6.0
 const ROLE_BADGE_GAP := -5.0
+const ROLE_BADGE_TEXT_HEIGHT := 11.0
 const ROLE_BADGE_DEFAULT_WIDTH := 20.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
@@ -49,6 +50,8 @@ var pokemon_follower: PokemonFollower
 var current_follower_species := ""
 var current_follower_shiny := false
 var current_body_id := ""
+var current_body_gender := ""
+var current_gender := "male"
 var has_position := false
 
 
@@ -82,6 +85,9 @@ func apply_state(state: Dictionary) -> void:
 	username = str(state.get("username", username))
 	var display_name_value: Variant = state.get("displayName", display_name)
 	display_name = username if display_name_value == null else str(display_name_value)
+	current_gender = CharacterAppearanceService.normalize_gender(str(state.get("gender", current_gender)))
+	if current_gender == "":
+		current_gender = "male"
 	var roles_value: Variant = state.get("roles", roles)
 	if roles_value is Array:
 		roles = roles_value as Array
@@ -174,13 +180,14 @@ func _apply_follower_state(follower_state: Dictionary) -> void:
 
 
 func _apply_appearance_state(appearance_state: Dictionary) -> void:
-	var body_id: String = str(appearance_state.get("body", CharacterAppearanceService.DEFAULT_BODY_ID)).strip_edges()
+	var fallback_body_id: String = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if current_gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+	var body_id: String = str(appearance_state.get("body", fallback_body_id)).strip_edges()
 	if body_id == "":
-		body_id = CharacterAppearanceService.DEFAULT_BODY_ID
-	if body_id == current_body_id:
+		body_id = fallback_body_id
+	if body_id == current_body_id and current_gender == current_body_gender:
 		return
 
-	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id)
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id, current_gender)
 	if body_frames == null:
 		return
 
@@ -190,6 +197,7 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 		sprite.sprite_frames = body_frames
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		current_body_id = body_id
+		current_body_gender = current_gender
 		_update_animation(_is_visually_moving(false))
 		return
 
@@ -376,7 +384,7 @@ func _create_visual() -> void:
 	var look_copy := source_look.duplicate()
 	add_child(look_copy)
 	_collect_appearance_sprites(look_copy)
-	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_BODY_ID})
+	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
 	player_instance.queue_free()
 
@@ -454,15 +462,16 @@ func _sync_nameplate_layout() -> void:
 	nameplate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
+		var name_center_y: float = (nameplate_label.offset_top + nameplate_label.offset_bottom) / 2.0
 		var start_x: float = nameplate_label.offset_left - ROLE_BADGE_GAP - badge_width
 		role_badge_panel.offset_left = start_x
 		role_badge_panel.offset_right = start_x + badge_width
-		role_badge_panel.offset_top = 5.0
-		role_badge_panel.offset_bottom = 16.0
+		role_badge_panel.offset_top = name_center_y - (ROLE_BADGE_TEXT_HEIGHT * 0.5)
+		role_badge_panel.offset_bottom = name_center_y + (ROLE_BADGE_TEXT_HEIGHT * 0.5)
 		role_badge_label.offset_left = 1.0
 		role_badge_label.offset_right = badge_width - 1.0
 		role_badge_label.offset_top = 0.0
-		role_badge_label.offset_bottom = 11.0
+		role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
 
 
 func _get_label_text_width(label: Label) -> float:
@@ -554,7 +563,7 @@ func _update_animation(is_moving: bool) -> void:
 
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(global_position.y / TILE_SIZE), SORT_Z_MIN, SORT_Z_MAX)
+	z_index = clampi(floori(global_position.y / TILE_SIZE) + 1, SORT_Z_MIN, SORT_Z_MAX)
 
 
 func _get_idle_animation_name(direction: Vector2) -> StringName:

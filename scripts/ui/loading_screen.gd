@@ -2,6 +2,7 @@ extends Control
 
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const LOGO_TEXTURE := preload("res://assets/ui/pokeaether_text_logo.png")
 const BACKGROUND_TEXTURE := preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 
@@ -120,6 +121,11 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 
 
 func _apply_profile_response(profile_response: Dictionary) -> void:
+	var user: Dictionary = _dictionary_from_value(profile_response.get("user", {}))
+	var gender_text: String = CharacterAppearanceService.normalize_gender(str(user.get("gender", AuthService.get_gender())))
+	PlayerSave.gender = "female" if gender_text == "female" else "male"
+	PlayerSave.ensure_body_matches_gender()
+
 	var party_response: Dictionary = _dictionary_from_value(profile_response.get("party", {}))
 	if bool(party_response.get("hasParty", false)):
 		var party_value: Variant = party_response.get("party", [])
@@ -130,6 +136,13 @@ func _apply_profile_response(profile_response: Dictionary) -> void:
 
 	var preferences: Dictionary = _dictionary_from_value(profile_response.get("preferences", {}))
 	GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
+
+	var wallet: Dictionary = _dictionary_from_value(profile_response.get("wallet", {}))
+	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
+
+	var stats_response: Dictionary = _dictionary_from_value(profile_response.get("stats", {}))
+	var stats: Dictionary = _dictionary_from_value(stats_response.get("stats", {}))
+	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
 
 
 func _load_legacy_world_state() -> void:

@@ -319,9 +319,7 @@ func _submit_login() -> void:
 		password_input.grab_focus()
 		return
 
-	var display_name: String = AuthService.get_display_name()
-	if display_name != "":
-		PlayerSave.player_name = display_name
+	_apply_authenticated_player_profile()
 
 	login_submitted.emit(username, password)
 	_enter_world()
@@ -370,8 +368,7 @@ func _restore_saved_session() -> void:
 	var display_name: String = AuthService.get_display_name()
 	if username != "":
 		username_input.text = username
-	if display_name != "":
-		PlayerSave.player_name = display_name
+	_apply_authenticated_player_profile()
 
 	password_input.clear()
 	remember_me_checkbox.button_pressed = true
@@ -380,14 +377,25 @@ func _restore_saved_session() -> void:
 
 
 func _enter_world() -> void:
-	var display_name: String = AuthService.get_display_name()
-	if display_name != "":
-		PlayerSave.player_name = display_name
+	_apply_authenticated_player_profile()
 
 	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
 		show_status("Could not enter the world. Please contact staff.", true)
 		push_error("LoginScreen: failed to load loading scene: %s" % error_string(error))
+
+
+func _apply_authenticated_player_profile() -> void:
+	var display_name: String = AuthService.get_display_name()
+	if display_name != "":
+		PlayerSave.player_name = display_name
+	var user_id_text: String = AuthService.get_user_id_text()
+	if user_id_text != "":
+		PlayerSave.player_id = user_id_text
+	var join_date_text: String = AuthService.get_created_at_text()
+	if join_date_text != "":
+		PlayerSave.flags["join_date"] = join_date_text
+	PlayerSave.gender = AuthService.get_gender()
 
 
 func _get_idle_login_button_text() -> String:
