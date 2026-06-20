@@ -195,7 +195,12 @@ def _canonical_uri(bucket: str, key: str) -> str:
 
 def _get_cache_control_for_key(key: str) -> str:
     file_name = key.rsplit("/", 1)[-1]
-    if key.startswith("launcher/latest/") or file_name == "manifest.json" or file_name.startswith("manifest-"):
+    if (
+        key.startswith("launcher/latest/")
+        or key.startswith("game/latest/")
+        or file_name == "manifest.json"
+        or file_name.startswith("manifest-")
+    ):
         return "no-cache, max-age=0"
 
     return "public, max-age=31536000, immutable"

@@ -347,6 +347,14 @@ jobs:
             exit 0
           fi
           python3 tools/upload_launcher_release.py builds/launcher --layout updates
+          cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-windows.zip" builds/launcher/PokeAether-windows.zip
+          cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-linux.zip" builds/launcher/PokeAether-linux.zip
+          cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-macos.zip" builds/launcher/PokeAether-macos.zip
+          python3 tools/upload_launcher_release.py builds/launcher \
+            --prefix "game/latest" \
+            --file PokeAether-windows.zip \
+            --file PokeAether-linux.zip \
+            --file PokeAether-macos.zip
           if [ "${BUILD_LAUNCHER}" = "true" ]; then
             python3 tools/upload_launcher_release.py builds/launcher \
               --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
