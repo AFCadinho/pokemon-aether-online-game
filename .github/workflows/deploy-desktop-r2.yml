@@ -31,6 +31,10 @@ env:
   LINUX_EXPORT_PATH: builds/linux/PokeAether.x86_64
   LINUX_LAUNCHER_EXPORT_PRESET: Linux Launcher
   LINUX_LAUNCHER_EXPORT_PATH: builds/launcher-app/linux/PokeAether Launcher.x86_64
+  MACOS_EXPORT_PRESET: macOS Itch Build
+  MACOS_EXPORT_PATH: builds/macos/PokeAether.app
+  MACOS_LAUNCHER_EXPORT_PRESET: macOS Launcher
+  MACOS_LAUNCHER_EXPORT_PATH: builds/launcher-app/macos/PokeAether Launcher.app
   POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-v1
   POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-v1
@@ -143,6 +147,11 @@ jobs:
           mkdir -p builds/linux
           ./godot --headless --export-release "${LINUX_EXPORT_PRESET}" "${LINUX_EXPORT_PATH}"
 
+      - name: Export macOS build
+        run: |
+          mkdir -p builds/macos
+          ./godot --headless --export-release "${MACOS_EXPORT_PRESET}" "${MACOS_EXPORT_PATH}"
+
       - name: Verify Windows build
         run: |
           test -f "builds/windows/PokeAether.exe"
@@ -164,6 +173,22 @@ jobs:
             grep -a -q "$asset_path" "builds/linux/PokeAether.pck"
           done
           grep -a -q "assets/player/body/body_manifest.json" "builds/linux/PokeAether.pck"
+
+      - name: Verify macOS build
+        run: |
+          test -d "builds/macos/PokeAether.app"
+          test -f "builds/macos/PokeAether.app/Contents/MacOS/PokeAether"
+          if [ ! -f "builds/macos/PokeAether.pck" ] && [ ! -f "builds/macos/PokeAether.app/Contents/Resources/PokeAether.pck" ]; then
+            echo "::error::MacOS build missing expected PokeAether.pck"
+            exit 1
+          fi
+
+      - name: Export macOS launcher
+        if: env.BUILD_LAUNCHER == 'true'
+        run: |
+          mkdir -p builds/launcher-app/macos
+          cd launcher
+          ../godot --headless --export-release "${MACOS_LAUNCHER_EXPORT_PRESET}" "../${MACOS_LAUNCHER_EXPORT_PATH}"
 
       - name: Export Windows launcher
         if: env.BUILD_LAUNCHER == 'true'
@@ -272,7 +297,8 @@ jobs:
             python3 tools/upload_launcher_release.py builds/launcher \
               --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
               --file PokeAetherLauncher-windows.zip \
-              --file PokeAetherLauncher-linux.zip
+              --file PokeAetherLauncher-linux.zip \
+              --file PokeAetherLauncher-macos.zip
           else
             echo "Skipping launcher download upload because BUILD_LAUNCHER=false."
           fi
@@ -284,6 +310,7 @@ jobs:
           path: |
             builds/windows
             builds/linux
+            builds/macos
 
       - name: Upload launcher release artifacts
         if: env.BUILD_LAUNCHER == 'true'

@@ -30,7 +30,8 @@ The launcher can pick a manifest per OS:
 {
   "manifestUrls": {
     "Windows": "https://updates.pokeaether.com/manifest-windows.json",
-    "Linux": "https://updates.pokeaether.com/manifest-linux.json"
+    "Linux": "https://updates.pokeaether.com/manifest-linux.json",
+    "macOS": "https://updates.pokeaether.com/manifest-macos.json"
   }
 }
 ```
@@ -94,12 +95,16 @@ The production R2 bucket uses this layout:
 ```text
 manifest.json
 manifest-linux.json
+manifest-macos.json
 manifest-windows.json
 launcher/latest/PokeAetherLauncher-linux.zip
+launcher/latest/PokeAetherLauncher-macos.zip
 launcher/latest/PokeAetherLauncher-windows.zip
 launcher/0.1.0/PokeAetherLauncher-linux.zip
+launcher/0.1.0/PokeAetherLauncher-macos.zip
 launcher/0.1.0/PokeAetherLauncher-windows.zip
 game/game-0.1.0-linux.zip
+game/game-0.1.0-macos.zip
 game/game-0.1.0-windows.zip
 assets/pokemon-front-v1.zip
 assets/pokemon-back-v1.zip

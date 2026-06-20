@@ -1,7 +1,9 @@
 {
   "manifestUrls": {
 	"Windows": "https://updates.pokeaether.com/manifest-windows.json",
-	"Linux": "https://updates.pokeaether.com/manifest-linux.json"
+	"Linux": "https://updates.pokeaether.com/manifest-linux.json",
+	"macOS": "https://updates.pokeaether.com/manifest-macos.json",
+	"macos": "https://updates.pokeaether.com/manifest-macos.json"
   },
   "newsUrl": "https://updates.pokeaether.com/news.json",
   "healthUrl": "https://pokeaether.com/health",

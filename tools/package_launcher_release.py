@@ -46,6 +46,21 @@ PLATFORMS = {
             "PokeAether.pck",
         ],
     },
+    "macos": {
+        "build_dir": PROJECT_ROOT / "builds" / "macos",
+        "zip_name": "game-{version}-macos.zip",
+        "manifest_name": "manifest-macos.json",
+        "executable": "PokeAether.app/Contents/MacOS/PokeAether",
+        "launcher_build_dir": PROJECT_ROOT / "builds" / "launcher-app" / "macos",
+        "launcher_zip_name": "PokeAetherLauncher-macos.zip",
+        "launcher_executable": "PokeAether Launcher.app/Contents/MacOS/PokeAether Launcher",
+        "launcher_required_files": [
+            "PokeAether Launcher.app",
+        ],
+        "required_files": [
+            "PokeAether.app",
+        ],
+    },
 }
 
 
@@ -76,13 +91,13 @@ def main() -> None:
     )
     parser.add_argument(
         "--platform",
-        choices=["windows", "linux", "all"],
+        choices=["windows", "linux", "macos", "all"],
         default="all",
         help="Which platform build to package.",
     )
     parser.add_argument(
         "--default-platform",
-        choices=["windows", "linux"],
+        choices=["windows", "linux", "macos"],
         default="windows",
         help="Which platform manifest is also copied to manifest.json.",
     )
@@ -116,7 +131,7 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     base_url = args.base_url.rstrip("/")
-    platform_names = ["windows", "linux"] if args.platform == "all" else [args.platform]
+    platform_names = ["windows", "linux", "macos"] if args.platform == "all" else [args.platform]
     game_prefix = args.game_prefix.strip("/")
     asset_prefix = args.asset_prefix.strip("/")
     asset_packs = [_build_asset_pack(entry, base_url, asset_prefix, output_dir) for entry in args.asset_pack]

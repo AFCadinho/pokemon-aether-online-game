@@ -26,6 +26,10 @@ const LAUNCHER_UPDATE_UNIX_SCRIPT := "apply_launcher_update.sh"
 const LAUNCHER_UPDATE_ZIP_NAME_PREFIX := "pokeaether-launcher-update"
 const WINDOWS_LAUNCHER_BINARY := "PokeAether Launcher.exe"
 const LINUX_LAUNCHER_BINARY := "PokeAether Launcher.x86_64"
+const MACOS_LAUNCHER_BINARY := "PokeAether Launcher.app/Contents/MacOS/PokeAether Launcher"
+const WINDOWS_GAME_BINARY := "PokeAether.exe"
+const LINUX_GAME_BINARY := "PokeAether.x86_64"
+const MACOS_GAME_BINARY := "PokeAether.app/Contents/MacOS/PokeAether"
 const MAX_VERSION_SEGMENTS := 4
 
 const KNOWN_URL_SCHEMES: Array[String] = ["http://", "https://"]
@@ -999,8 +1003,11 @@ func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
 	var launcher_binary_name := _read_first_string(launcher_update_info, ["binary"])
 	if launcher_binary_name.is_empty():
 		launcher_binary_name = _derive_launcher_binary_name()
-	launcher_binary_name = launcher_binary_name.get_file()
-	var packaged_binary_path := _find_file_case_insensitive(staging_dir, launcher_binary_name)
+	var packaged_binary_path := ""
+	if launcher_binary_name.find("/") != -1 or launcher_binary_name.find("\\") != -1:
+		packaged_binary_path = staging_dir.path_join(launcher_binary_name)
+	else:
+		packaged_binary_path = _find_file_case_insensitive(staging_dir, launcher_binary_name)
 	if packaged_binary_path.is_empty():
 		_log_error("Could not find launcher binary in update package.")
 		_cleanup_launcher_update_files()
@@ -1163,6 +1170,8 @@ func _get_relative_path(path: String, base_path: String) -> String:
 func _derive_launcher_binary_name() -> String:
 	if OS.get_name() == "Windows":
 		return WINDOWS_LAUNCHER_BINARY
+	if OS.get_name() == "macOS":
+		return MACOS_LAUNCHER_BINARY
 	return LINUX_LAUNCHER_BINARY
 
 
@@ -2037,10 +2046,7 @@ func _has_installed_game() -> bool:
 func _has_installed_game_for_manifest(game_data: Dictionary) -> bool:
 	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
 	if executable_path.is_empty():
-		if OS.get_name() == "Windows":
-			executable_path = "PokeAether.exe"
-		else:
-			executable_path = "PokeAether.x86_64"
+		executable_path = _get_default_game_executable_name()
 
 	var absolute_executable_path := _globalize_storage_path(_get_game_install_dir().path_join(executable_path))
 	return FileAccess.file_exists(absolute_executable_path)
@@ -2049,12 +2055,18 @@ func _has_installed_game_for_manifest(game_data: Dictionary) -> bool:
 func _get_game_executable_path(game_data: Dictionary) -> String:
 	var executable_path := str(game_data.get("executable", local_versions.get("gameExecutable", "")))
 	if executable_path.is_empty():
-		if OS.get_name() == "Windows":
-			executable_path = "PokeAether.exe"
-		else:
-			executable_path = "PokeAether.x86_64"
+		executable_path = _get_default_game_executable_name()
 
 	return _globalize_storage_path(_get_game_install_dir().path_join(executable_path))
+
+
+func _get_default_game_executable_name() -> String:
+	match OS.get_name():
+		"Windows":
+			return WINDOWS_GAME_BINARY
+		"macOS":
+			return MACOS_GAME_BINARY
+	return LINUX_GAME_BINARY
 
 
 func _get_game_install_dir() -> String:
