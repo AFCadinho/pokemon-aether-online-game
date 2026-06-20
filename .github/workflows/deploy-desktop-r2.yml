@@ -126,7 +126,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .godot/imported
-          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png', 'assets/player/body/**/*.png') }}
+          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png', 'assets/player/male/body/**/*.png', 'assets/player/female/body/**/*.png') }}
 
       - name: Import Godot assets
         run: ./godot --headless --import --quit
@@ -158,10 +158,11 @@ jobs:
           test -f "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/windows/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/windows/PokeAether.pck"
-          git ls-files 'assets/player/body/**/*.png' | while read -r asset_path; do
+          git ls-files 'assets/player/male/body/**/*.png' 'assets/player/female/body/**/*.png' | while read -r asset_path; do
             grep -a -q "$asset_path" "builds/windows/PokeAether.pck"
           done
-          grep -a -q "assets/player/body/body_manifest.json" "builds/windows/PokeAether.pck"
+          grep -a -q "assets/player/male/body/body_manifest.json" "builds/windows/PokeAether.pck"
+          grep -a -q "assets/player/female/body/body_manifest.json" "builds/windows/PokeAether.pck"
 
       - name: Verify Linux build
         run: |
@@ -169,10 +170,11 @@ jobs:
           test -f "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers/CHARIZARD.png" "builds/linux/PokeAether.pck"
           grep -a -q "assets/followers_shiny/CHARIZARD.png" "builds/linux/PokeAether.pck"
-          git ls-files 'assets/player/body/**/*.png' | while read -r asset_path; do
+          git ls-files 'assets/player/male/body/**/*.png' 'assets/player/female/body/**/*.png' | while read -r asset_path; do
             grep -a -q "$asset_path" "builds/linux/PokeAether.pck"
           done
-          grep -a -q "assets/player/body/body_manifest.json" "builds/linux/PokeAether.pck"
+          grep -a -q "assets/player/male/body/body_manifest.json" "builds/linux/PokeAether.pck"
+          grep -a -q "assets/player/female/body/body_manifest.json" "builds/linux/PokeAether.pck"
 
       - name: Verify macOS build
         run: |
@@ -182,6 +184,16 @@ jobs:
             echo "::error::MacOS build missing expected PokeAether.pck"
             exit 1
           fi
+          if [ -f "builds/macos/PokeAether.pck" ]; then
+            macos_pck="builds/macos/PokeAether.pck"
+          else
+            macos_pck="builds/macos/PokeAether.app/Contents/Resources/PokeAether.pck"
+          fi
+          git ls-files 'assets/player/male/body/**/*.png' 'assets/player/female/body/**/*.png' | while read -r asset_path; do
+            grep -a -q "$asset_path" "$macos_pck"
+          done
+          grep -a -q "assets/player/male/body/body_manifest.json" "$macos_pck"
+          grep -a -q "assets/player/female/body/body_manifest.json" "$macos_pck"
 
       - name: Export macOS launcher
         if: env.BUILD_LAUNCHER == 'true'
