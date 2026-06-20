@@ -138,13 +138,13 @@ custom_minimum_size = Vector2(260, 44)
 layout_mode = 2
 
 [node name="ChatTabsPanel" type="Control" parent="Control" unique_id=1039747907]
-custom_minimum_size = Vector2(152, 32)
+custom_minimum_size = Vector2(232, 32)
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -300.0
-offset_right = 180.0
+offset_right = 260.0
 offset_bottom = -268.0
 grow_vertical = 0
 
@@ -163,6 +163,13 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
 text = "General"
+
+[node name="TradeButton" type="Button" parent="Control/ChatTabsPanel/TabRow"]
+custom_minimum_size = Vector2(70, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
+text = "Trade"
 
 [node name="SystemButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=1479272996]
 custom_minimum_size = Vector2(70, 28)

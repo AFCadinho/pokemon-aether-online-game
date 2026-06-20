@@ -34,6 +34,7 @@ var remote_player_avatars: Dictionary = {}
 var active_battle_kind := ""
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
+var active_trainer_name := ""
 
 func _exit_tree() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
@@ -704,6 +705,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	active_battle_kind = "trainer"
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_trainer_name = str(trainer_data.get("name", "Trainer"))
 	_lock_overworld_for_battle()
 
 	var response: Dictionary = await create_trainer_battle_response(trainer_id)
@@ -751,19 +753,34 @@ func end_wild_battle() -> void:
 	active_battle_kind = ""
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_trainer_name = ""
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
 	
 func _on_battle_ended(result: Dictionary) -> void:
 	var should_claim_wild_reward := _should_claim_wild_battle_reward(result)
+	var should_claim_trainer_reward := _should_claim_trainer_battle_reward(result)
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
+	var reward_trainer_name := active_trainer_name
 	end_wild_battle()
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
+	if should_claim_trainer_reward and reward_battle_id != "":
+		await _award_trainer_battle_rewards(reward_battle_id, reward_trainer_name)
 
 func _should_claim_wild_battle_reward(result: Dictionary) -> bool:
 	if active_battle_kind != "wild":
+		return false
+	if str(result.get("reason", "")) != "win":
+		return false
+	if not _is_player_battle_winner(str(result.get("winner", ""))):
+		return false
+
+	return true
+
+func _should_claim_trainer_battle_reward(result: Dictionary) -> bool:
+	if active_battle_kind != "trainer":
 		return false
 	if str(result.get("reason", "")) != "win":
 		return false
@@ -781,6 +798,17 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 	else:
 		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
 
+func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> void:
+	var previous_money: int = max(int(PlayerSave.money), 0)
+	var reward_result: Dictionary = await PlayerWalletService.award_trainer_battle_rewards(battle_id)
+	if bool(reward_result.get("success", false)):
+		PlayerWalletService.apply_wallet_result(reward_result)
+		var reward: Dictionary = reward_result.get("reward", {}) as Dictionary
+		var money_awarded: int = max(int(reward.get("money", max(int(PlayerSave.money), 0) - previous_money)), 0)
+		_notify_trainer_battle_rewards_awarded(trainer_name, money_awarded)
+	else:
+		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
+
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
 	if money_awarded <= 0:
 		return
@@ -790,6 +818,18 @@ func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: i
 		species_text = "wild Pokemon"
 
 	var message := "You fainted %s and earned $%s." % [species_text, _format_money_amount(money_awarded)]
+	get_tree().call_group("ui_overlay", "refresh_money_display")
+	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded: int) -> void:
+	if money_awarded <= 0:
+		return
+
+	var trainer_text := trainer_name.strip_edges()
+	if trainer_text == "":
+		trainer_text = "the Trainer"
+
+	var message := "You defeated %s and earned $%s." % [trainer_text, _format_money_amount(money_awarded)]
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
 
@@ -841,5 +881,6 @@ func _abort_battle_start() -> void:
 	active_battle_kind = ""
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
+	active_trainer_name = ""
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()

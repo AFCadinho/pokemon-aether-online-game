@@ -4,6 +4,7 @@ class_name PlayerWalletServiceNode
 
 const PLAYER_WALLET_ENDPOINT := "/game/wallet"
 const WILD_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/wild-battle"
+const TRAINER_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/trainer-battle"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -48,6 +49,30 @@ func award_wild_battle_money(battle_id: String) -> Dictionary:
 	return _wallet_result_from_response(response)
 
 
+func award_trainer_battle_rewards(battle_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if battle_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing battle id.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + TRAINER_BATTLE_REWARD_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"battleId": battle_id,
+		})
+	)
+	return _reward_claim_result_from_response(response)
+
+
 func apply_wallet_result(result: Dictionary) -> void:
 	if not bool(result.get("success", false)):
 		return
@@ -64,6 +89,18 @@ func _wallet_result_from_response(response: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"wallet": _dictionary_from_value(body.get("wallet", {})),
+	}
+
+
+func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"wallet": _dictionary_from_value(body.get("wallet", {})),
+		"reward": _dictionary_from_value(body.get("reward", {})),
 	}
 
 

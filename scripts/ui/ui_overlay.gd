@@ -26,9 +26,12 @@ const CHAT_MESSAGE_COLOR := "#d7dce8"
 const CHAT_SYSTEM_LABEL_COLOR := "#d8b767"
 const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
 const CHAT_TAB_GENERAL := "general"
+const CHAT_TAB_TRADE := "trade"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
+const CHAT_CHANNEL_GLOBAL := "global"
+const CHAT_CHANNEL_TRADE := "trade"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const APPEARANCE_CATEGORIES := [
@@ -57,6 +60,19 @@ const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
+const BAG_SIZE := Vector2(920, 620)
+const BAG_ICON_ROOT := "res://assets/items/icons/"
+const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.png")
+const BAG_CATEGORIES := [
+	{"id": "general", "label": "General"},
+	{"id": "pokeball", "label": "Pokeball"},
+	{"id": "medicine", "label": "Medicine"},
+	{"id": "machines", "label": "Machines"},
+	{"id": "held_items", "label": "Held Items"},
+	{"id": "power_stones", "label": "Mega & Z"},
+	{"id": "cosmetics", "label": "Skin & Mounts"},
+	{"id": "currency", "label": "Currency"},
+]
 const TRAINER_CARD_CYAN := Color("#00f5ff")
 const TRAINER_CARD_GREEN := Color("#4cff76")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
@@ -99,6 +115,7 @@ enum DevPokemonPopupMode {
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
 @onready var chat_tabs_panel: Control = $Control/ChatTabsPanel
 @onready var general_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/GeneralButton
+@onready var trade_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/TradeButton
 @onready var system_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/SystemButton
 @onready var chat_input: LineEdit = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/ChatInput
 @onready var dev_pokemon_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/DevPokemonButton
@@ -149,6 +166,8 @@ var party_drag_visual: Control
 var party_drag_source_slot: Control
 var party_drag_pointer_offset := Vector2.ZERO
 var clear_party_confirm_dialog: ConfirmationDialog
+var clear_inventory_confirm_dialog: ConfirmationDialog
+var dev_clear_menu_popup: PanelContainer
 var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
 var hotkey_sidebar_dragging := false
@@ -161,6 +180,36 @@ var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
 var trainer_card_dragging: bool = false
 var trainer_card_drag_offset := Vector2.ZERO
+var bag_popup: PanelContainer
+var bag_item_grid: GridContainer
+var bag_search_input: LineEdit
+var bag_category_buttons: Dictionary = {}
+var active_bag_category := "general"
+var bag_dragging := false
+var bag_drag_offset := Vector2.ZERO
+var bag_inventory_items: Array[Dictionary] = []
+var bag_inventory_loaded := false
+var bag_inventory_loading := false
+var dev_add_item_button: Button
+var dev_add_item_popup: PanelContainer
+var dev_item_search_input: LineEdit
+var dev_item_results_list: VBoxContainer
+var dev_item_quantity_spinbox: SpinBox
+var dev_item_confirm_button: Button
+var dev_item_catalog: Array[Dictionary] = []
+var dev_selected_item: Dictionary = {}
+var dev_item_search_request_id := 0
+var item_dex_slot: PanelContainer
+var item_dex_button: TextureButton
+var item_dex_popup: PanelContainer
+var item_dex_search_input: LineEdit
+var item_dex_results_list: VBoxContainer
+var item_dex_icon: TextureRect
+var item_dex_name_label: Label
+var item_dex_meta_label: Label
+var item_dex_description_label: Label
+var item_dex_sources_label: Label
+var item_dex_search_request_id := 0
 var displayed_money: int = -1
 var displayed_location_map: Node
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
@@ -170,10 +219,16 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	_setup_player_status_card()
 	_setup_trainer_card_popup()
+	_setup_bag_popup()
 	_build_party_slots()
 	_setup_collapsible_panels()
 	_setup_chat_resize_button()
 	_setup_clear_party_confirm_dialog()
+	_setup_clear_inventory_confirm_dialog()
+	_setup_dev_clear_menu_popup()
+	_setup_dev_add_item_tools()
+	_setup_item_dex_button()
+	_setup_item_dex_popup()
 	_apply_premium_overlay_styles()
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
@@ -192,8 +247,10 @@ func _ready() -> void:
 	chat_input.keep_editing_on_text_submit = true
 	chat_input.text_submitted.connect(_on_chat_text_submitted)
 	general_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GENERAL))
+	trade_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_TRADE))
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
@@ -206,8 +263,10 @@ func _ready() -> void:
 	_setup_icon_slot_hover(settings_slot, settings_button)
 	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
 	_setup_icon_slot_hover(follower_slot, follower_toggle_button)
+	_setup_icon_slot_hover(item_dex_slot, item_dex_button)
 	_setup_icon_slot_hover(dev_actions_slot, dev_actions_button)
 	_disable_icon_button_focus()
+	bag_button.pressed.connect(_on_bag_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
@@ -218,11 +277,13 @@ func _ready() -> void:
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
 	_load_follower_preference.call_deferred()
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
+	item_dex_button.pressed.connect(_on_item_dex_button_pressed)
 	hotkey_sidebar_panel.gui_input.connect(_on_hotkey_sidebar_gui_input)
 	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
 	dev_add_team_button.visible = false
 	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
+	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
 	dev_actions_slot.visible = PlayerSave.is_staff
@@ -240,6 +301,317 @@ func _setup_clear_party_confirm_dialog() -> void:
 	clear_party_confirm_dialog.cancel_button_text = "Cancel"
 	clear_party_confirm_dialog.confirmed.connect(_on_clear_party_confirmed)
 	add_child(clear_party_confirm_dialog)
+
+func _setup_clear_inventory_confirm_dialog() -> void:
+	clear_inventory_confirm_dialog = ConfirmationDialog.new()
+	clear_inventory_confirm_dialog.title = "Clear Inventory"
+	clear_inventory_confirm_dialog.dialog_text = "This will remove every item from your inventory. This cannot be undone."
+	clear_inventory_confirm_dialog.exclusive = true
+	clear_inventory_confirm_dialog.ok_button_text = "Clear Inventory"
+	clear_inventory_confirm_dialog.cancel_button_text = "Cancel"
+	clear_inventory_confirm_dialog.confirmed.connect(_on_clear_inventory_confirmed)
+	add_child(clear_inventory_confirm_dialog)
+
+func _setup_dev_clear_menu_popup() -> void:
+	dev_clear_menu_popup = PanelContainer.new()
+	dev_clear_menu_popup.name = "DevClearMenuPopup"
+	dev_clear_menu_popup.visible = false
+	dev_clear_menu_popup.custom_minimum_size = Vector2(220, 126)
+	dev_clear_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	dev_clear_menu_popup.z_index = 365
+	dev_clear_menu_popup.anchor_left = 0.5
+	dev_clear_menu_popup.anchor_top = 0.5
+	dev_clear_menu_popup.anchor_right = 0.5
+	dev_clear_menu_popup.anchor_bottom = 0.5
+	dev_clear_menu_popup.offset_left = -110
+	dev_clear_menu_popup.offset_top = -63
+	dev_clear_menu_popup.offset_right = 110
+	dev_clear_menu_popup.offset_bottom = 63
+	dev_clear_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(dev_clear_menu_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 12)
+	margin_container.add_theme_constant_override("margin_top", 12)
+	margin_container.add_theme_constant_override("margin_right", 12)
+	margin_container.add_theme_constant_override("margin_bottom", 12)
+	dev_clear_menu_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin_container.add_child(layout)
+
+	var party_button := Button.new()
+	party_button.text = "Party"
+	party_button.focus_mode = Control.FOCUS_NONE
+	party_button.pressed.connect(_on_dev_clear_party_option_pressed)
+	layout.add_child(party_button)
+
+	var inventory_button := Button.new()
+	inventory_button.text = "Inventory"
+	inventory_button.focus_mode = Control.FOCUS_NONE
+	inventory_button.pressed.connect(_on_dev_clear_inventory_option_pressed)
+	layout.add_child(inventory_button)
+
+	_apply_button_style(party_button, "danger")
+	_apply_button_style(inventory_button, "danger")
+
+func _setup_dev_add_item_tools() -> void:
+	dev_add_item_button = Button.new()
+	dev_add_item_button.text = "Add Item"
+	dev_add_item_button.custom_minimum_size = Vector2(190, 34)
+	dev_add_item_button.focus_mode = Control.FOCUS_NONE
+	var dev_actions_container := dev_clear_party_button.get_parent()
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_add_item_button)
+		dev_actions_container.move_child(dev_add_item_button, dev_clear_party_button.get_index())
+
+	dev_add_item_popup = PanelContainer.new()
+	dev_add_item_popup.name = "DevAddItemPopup"
+	dev_add_item_popup.visible = false
+	dev_add_item_popup.custom_minimum_size = Vector2(460, 430)
+	dev_add_item_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	dev_add_item_popup.z_index = 370
+	dev_add_item_popup.anchor_left = 0.5
+	dev_add_item_popup.anchor_top = 0.5
+	dev_add_item_popup.anchor_right = 0.5
+	dev_add_item_popup.anchor_bottom = 0.5
+	dev_add_item_popup.offset_left = -230
+	dev_add_item_popup.offset_top = -215
+	dev_add_item_popup.offset_right = 230
+	dev_add_item_popup.offset_bottom = 215
+	dev_add_item_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(dev_add_item_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 14)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 16)
+	dev_add_item_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	var title_label := Label.new()
+	title_label.text = "Add Item"
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.add_theme_font_size_override("font_size", 18)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(title_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_dev_add_item_popup)
+	header.add_child(close_button)
+
+	dev_item_search_input = LineEdit.new()
+	dev_item_search_input.placeholder_text = "Search item..."
+	dev_item_search_input.text_changed.connect(_on_dev_item_search_changed)
+	layout.add_child(dev_item_search_input)
+
+	var results_scroll := ScrollContainer.new()
+	results_scroll.custom_minimum_size = Vector2(0, 220)
+	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(results_scroll)
+
+	dev_item_results_list = VBoxContainer.new()
+	dev_item_results_list.add_theme_constant_override("separation", 6)
+	dev_item_results_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	results_scroll.add_child(dev_item_results_list)
+
+	var quantity_row := HBoxContainer.new()
+	quantity_row.add_theme_constant_override("separation", 8)
+	layout.add_child(quantity_row)
+
+	var quantity_label := Label.new()
+	quantity_label.text = "Amount"
+	quantity_label.custom_minimum_size = Vector2(96, 0)
+	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quantity_label.add_theme_color_override("font_color", UI_TEXT)
+	quantity_row.add_child(quantity_label)
+
+	dev_item_quantity_spinbox = SpinBox.new()
+	dev_item_quantity_spinbox.min_value = 1
+	dev_item_quantity_spinbox.max_value = 999999
+	dev_item_quantity_spinbox.value = 1
+	dev_item_quantity_spinbox.step = 1
+	dev_item_quantity_spinbox.custom_minimum_size = Vector2(130, 0)
+	dev_item_quantity_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	quantity_row.add_child(dev_item_quantity_spinbox)
+
+	dev_item_confirm_button = Button.new()
+	dev_item_confirm_button.text = "Confirm"
+	dev_item_confirm_button.custom_minimum_size = Vector2(0, 36)
+	dev_item_confirm_button.disabled = true
+	dev_item_confirm_button.focus_mode = Control.FOCUS_NONE
+	dev_item_confirm_button.pressed.connect(_on_dev_item_confirm_pressed)
+	layout.add_child(dev_item_confirm_button)
+
+	_apply_button_style(close_button)
+	_apply_line_edit_style(dev_item_search_input)
+	_apply_button_style(dev_item_confirm_button, "primary")
+
+func _setup_item_dex_button() -> void:
+	item_dex_slot = PanelContainer.new()
+	item_dex_slot.name = "ItemDexSlot"
+	item_dex_slot.custom_minimum_size = Vector2(52, 52)
+	item_dex_slot.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
+
+	item_dex_button = TextureButton.new()
+	item_dex_button.name = "ItemDexButton"
+	item_dex_button.custom_minimum_size = Vector2(32, 32)
+	item_dex_button.tooltip_text = "Item Dex"
+	item_dex_button.texture_normal = ITEM_DEX_ICON
+	item_dex_button.texture_pressed = ITEM_DEX_ICON
+	item_dex_button.texture_hover = ITEM_DEX_ICON
+	item_dex_button.texture_disabled = ITEM_DEX_ICON
+	item_dex_button.texture_focused = ITEM_DEX_ICON
+	item_dex_button.ignore_texture_size = true
+	item_dex_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	item_dex_button.focus_mode = Control.FOCUS_NONE
+	item_dex_slot.add_child(item_dex_button)
+
+	var actions_row := running_shoes_slot.get_parent()
+	if actions_row != null:
+		actions_row.add_child(item_dex_slot)
+		actions_row.move_child(item_dex_slot, dev_actions_slot.get_index())
+
+func _setup_item_dex_popup() -> void:
+	item_dex_popup = PanelContainer.new()
+	item_dex_popup.name = "ItemDexPopup"
+	item_dex_popup.visible = false
+	item_dex_popup.custom_minimum_size = Vector2(560, 430)
+	item_dex_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	item_dex_popup.z_index = 365
+	item_dex_popup.anchor_left = 0.5
+	item_dex_popup.anchor_top = 0.5
+	item_dex_popup.anchor_right = 0.5
+	item_dex_popup.anchor_bottom = 0.5
+	item_dex_popup.offset_left = -280
+	item_dex_popup.offset_top = -215
+	item_dex_popup.offset_right = 280
+	item_dex_popup.offset_bottom = 215
+	item_dex_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(item_dex_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 14)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 16)
+	item_dex_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	var title_label := Label.new()
+	title_label.text = "Item Dex"
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.add_theme_font_size_override("font_size", 18)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(title_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_item_dex_popup)
+	header.add_child(close_button)
+
+	item_dex_search_input = LineEdit.new()
+	item_dex_search_input.placeholder_text = "Search item..."
+	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
+	layout.add_child(item_dex_search_input)
+
+	var content_row := HBoxContainer.new()
+	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_row.add_theme_constant_override("separation", 12)
+	layout.add_child(content_row)
+
+	var results_scroll := ScrollContainer.new()
+	results_scroll.custom_minimum_size = Vector2(240, 0)
+	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	content_row.add_child(results_scroll)
+
+	item_dex_results_list = VBoxContainer.new()
+	item_dex_results_list.add_theme_constant_override("separation", 6)
+	item_dex_results_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	results_scroll.add_child(item_dex_results_list)
+
+	var summary_panel := PanelContainer.new()
+	summary_panel.custom_minimum_size = Vector2(250, 0)
+	summary_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	summary_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), UI_BORDER_SOFT, 8, 1))
+	content_row.add_child(summary_panel)
+
+	var summary_margin := MarginContainer.new()
+	summary_margin.add_theme_constant_override("margin_left", 14)
+	summary_margin.add_theme_constant_override("margin_top", 14)
+	summary_margin.add_theme_constant_override("margin_right", 14)
+	summary_margin.add_theme_constant_override("margin_bottom", 14)
+	summary_panel.add_child(summary_margin)
+
+	var summary_layout := VBoxContainer.new()
+	summary_layout.add_theme_constant_override("separation", 10)
+	summary_layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	summary_margin.add_child(summary_layout)
+
+	item_dex_icon = TextureRect.new()
+	item_dex_icon.custom_minimum_size = Vector2(72, 72)
+	item_dex_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	item_dex_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	summary_layout.add_child(item_dex_icon)
+
+	item_dex_name_label = Label.new()
+	item_dex_name_label.text = "Select an item"
+	item_dex_name_label.add_theme_font_size_override("font_size", 16)
+	item_dex_name_label.add_theme_color_override("font_color", UI_TEXT)
+	summary_layout.add_child(item_dex_name_label)
+
+	item_dex_meta_label = Label.new()
+	item_dex_meta_label.text = "Category: -\nBase price: Unknown"
+	item_dex_meta_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	item_dex_meta_label.add_theme_font_size_override("font_size", 12)
+	item_dex_meta_label.add_theme_color_override("font_color", UI_MONEY)
+	summary_layout.add_child(item_dex_meta_label)
+
+	item_dex_description_label = Label.new()
+	item_dex_description_label.text = "Search and select an item to view its summary."
+	item_dex_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	item_dex_description_label.add_theme_font_size_override("font_size", 13)
+	item_dex_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	summary_layout.add_child(item_dex_description_label)
+
+	var sources_scroll := ScrollContainer.new()
+	sources_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sources_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	summary_layout.add_child(sources_scroll)
+
+	item_dex_sources_label = Label.new()
+	item_dex_sources_label.text = "Where to get\nNo item selected."
+	item_dex_sources_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	item_dex_sources_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_dex_sources_label.add_theme_font_size_override("font_size", 12)
+	item_dex_sources_label.add_theme_color_override("font_color", UI_TEXT)
+	sources_scroll.add_child(item_dex_sources_label)
+
+	_apply_button_style(close_button)
+	_apply_line_edit_style(item_dex_search_input)
 
 func _process(delta: float) -> void:
 	_position_collapsible_buttons()
@@ -317,6 +689,10 @@ func _input(event: InputEvent) -> void:
 		_handle_trainer_card_drag_input(event)
 		return
 
+	if bag_dragging:
+		_handle_bag_drag_input(event)
+		return
+
 	if hotkey_sidebar_dragging:
 		_handle_hotkey_sidebar_drag_input(event)
 		return
@@ -327,6 +703,11 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if _is_settings_toggle_event(event):
+		if bag_popup != null and bag_popup.visible:
+			bag_popup.visible = false
+			get_viewport().set_input_as_handled()
+			return
+
 		if trainer_card_popup != null and trainer_card_popup.visible:
 			trainer_card_popup.visible = false
 			get_viewport().set_input_as_handled()
@@ -1364,6 +1745,365 @@ func _on_trainer_card_body_selected(body_id: String) -> void:
 func _get_player_money_value() -> int:
 	return max(int(PlayerSave.money), 0)
 
+func _setup_bag_popup() -> void:
+	bag_popup = PanelContainer.new()
+	bag_popup.name = "BagPopup"
+	bag_popup.visible = false
+	bag_popup.custom_minimum_size = BAG_SIZE
+	bag_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	bag_popup.z_index = 360
+	bag_popup.anchor_left = 0.5
+	bag_popup.anchor_top = 0.5
+	bag_popup.anchor_right = 0.5
+	bag_popup.anchor_bottom = 0.5
+	bag_popup.offset_left = -BAG_SIZE.x * 0.5
+	bag_popup.offset_top = -BAG_SIZE.y * 0.5
+	bag_popup.offset_right = BAG_SIZE.x * 0.5
+	bag_popup.offset_bottom = BAG_SIZE.y * 0.5
+	bag_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(bag_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 14)
+	margin_container.add_theme_constant_override("margin_top", 10)
+	margin_container.add_theme_constant_override("margin_right", 14)
+	margin_container.add_theme_constant_override("margin_bottom", 12)
+	bag_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.gui_input.connect(_on_bag_header_gui_input)
+	layout.add_child(header)
+
+	var title_label := Label.new()
+	title_label.text = "Bag"
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.add_theme_font_size_override("font_size", 20)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(title_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_bag_popup)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+
+	bag_search_input = LineEdit.new()
+	bag_search_input.placeholder_text = ""
+	bag_search_input.custom_minimum_size = Vector2(420, 30)
+	bag_search_input.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	bag_search_input.text_changed.connect(_on_bag_search_changed)
+	_apply_line_edit_style(bag_search_input)
+	layout.add_child(bag_search_input)
+
+	var content_row := HBoxContainer.new()
+	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_row.add_theme_constant_override("separation", 14)
+	layout.add_child(content_row)
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	content_row.add_child(scroll)
+
+	bag_item_grid = GridContainer.new()
+	bag_item_grid.columns = 7
+	bag_item_grid.add_theme_constant_override("h_separation", 10)
+	bag_item_grid.add_theme_constant_override("v_separation", 10)
+	scroll.add_child(bag_item_grid)
+
+	var category_column := VBoxContainer.new()
+	category_column.custom_minimum_size = Vector2(150, 0)
+	category_column.add_theme_constant_override("separation", 10)
+	content_row.add_child(category_column)
+
+	for category_value: Variant in BAG_CATEGORIES:
+		var category: Dictionary = category_value as Dictionary
+		var category_id := str(category.get("id", ""))
+		var category_button := Button.new()
+		category_button.text = str(category.get("label", category_id))
+		category_button.custom_minimum_size = Vector2(140, 44)
+		category_button.focus_mode = Control.FOCUS_NONE
+		category_button.pressed.connect(_on_bag_category_selected.bind(category_id))
+		category_column.add_child(category_button)
+		bag_category_buttons[category_id] = category_button
+
+	_refresh_bag_category_buttons()
+	_refresh_bag_items()
+
+func _refresh_bag_items() -> void:
+	if bag_item_grid == null:
+		return
+	for child: Node in bag_item_grid.get_children():
+		child.queue_free()
+
+	var search_text := ""
+	if bag_search_input != null:
+		search_text = bag_search_input.text.strip_edges().to_lower()
+
+	if bag_inventory_loading:
+		bag_item_grid.add_child(_create_bag_empty_state("Loading bag..."))
+		return
+
+	if not bag_inventory_loaded:
+		bag_item_grid.add_child(_create_bag_empty_state("Open your bag to load items."))
+		return
+
+	var visible_count := 0
+	for item_value: Variant in bag_inventory_items:
+		var item: Dictionary = item_value as Dictionary
+		var item_category := str(item.get("category", "general"))
+		var item_name := str(item.get("name", ""))
+		var item_id := str(item.get("id", ""))
+		if active_bag_category != "general" and item_category != active_bag_category:
+			continue
+		if search_text != "" and not item_name.to_lower().contains(search_text) and not item_id.to_lower().contains(search_text):
+			continue
+		bag_item_grid.add_child(_create_bag_item_slot(item))
+		visible_count += 1
+
+	if visible_count <= 0:
+		bag_item_grid.add_child(_create_bag_empty_state("No items in this tab."))
+
+func _create_bag_empty_state(text: String) -> Control:
+	var label := Label.new()
+	label.text = text
+	label.custom_minimum_size = Vector2(360, 80)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 15)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	return label
+
+func _create_bag_item_slot(item: Dictionary) -> Control:
+	var slot := PanelContainer.new()
+	slot.custom_minimum_size = Vector2(78, 92)
+	slot.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), Color("#557999"), 8, 1))
+	slot.mouse_filter = Control.MOUSE_FILTER_STOP
+	slot.tooltip_text = str(item.get("name", "Item"))
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 5)
+	margin_container.add_theme_constant_override("margin_top", 5)
+	margin_container.add_theme_constant_override("margin_right", 5)
+	margin_container.add_theme_constant_override("margin_bottom", 5)
+	slot.add_child(margin_container)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 2)
+	margin_container.add_child(stack)
+
+	var icon_wrap := Control.new()
+	icon_wrap.custom_minimum_size = Vector2(64, 44)
+	stack.add_child(icon_wrap)
+
+	var icon := TextureRect.new()
+	icon.anchor_right = 1.0
+	icon.anchor_bottom = 1.0
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = _load_item_icon(str(item.get("id", "")))
+	icon_wrap.add_child(icon)
+
+	var quantity_label := Label.new()
+	quantity_label.text = "x%s" % max(int(item.get("quantity", 1)), 1)
+	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	quantity_label.add_theme_font_size_override("font_size", 11)
+	quantity_label.add_theme_color_override("font_color", UI_MONEY)
+	stack.add_child(quantity_label)
+
+	var name_label := Label.new()
+	name_label.text = _ellipsize_text(str(item.get("name", "Item")), 12)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 10)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(name_label)
+	return slot
+
+func _load_item_icon(item_id: String) -> Texture2D:
+	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
+	var candidates: Array[String] = [
+		BAG_ICON_ROOT + normalized + ".png",
+		BAG_ICON_ROOT + item_id.strip_edges() + ".png",
+		BAG_ICON_ROOT + "000.png",
+	]
+	for path: String in candidates:
+		if ResourceLoader.exists(path):
+			return load(path) as Texture2D
+	return null
+
+func _ellipsize_text(value: String, max_length: int) -> String:
+	if value.length() <= max_length:
+		return value
+	return value.substr(0, max(max_length - 3, 1)) + "..."
+
+func _on_bag_button_pressed() -> void:
+	_toggle_bag_popup()
+
+func _toggle_bag_popup() -> void:
+	if bag_popup == null:
+		return
+	bag_popup.visible = not bag_popup.visible
+	if bag_popup.visible:
+		bag_popup.move_to_front()
+		_load_bag_inventory()
+		if bag_button.has_focus():
+			bag_button.release_focus()
+
+func _load_bag_inventory() -> void:
+	if bag_inventory_loading:
+		return
+
+	bag_inventory_loading = true
+	_refresh_bag_items()
+
+	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	bag_inventory_loading = false
+	if bool(inventory_result.get("success", false)):
+		bag_inventory_items = _normalize_bag_inventory_items(inventory_result.get("items", []))
+		bag_inventory_loaded = true
+	else:
+		bag_inventory_items = []
+		bag_inventory_loaded = true
+		push_warning("Bag inventory failed to load: %s" % str(inventory_result.get("error", "Unknown error")))
+	_refresh_bag_items()
+
+func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
+	var normalized_items: Array[Dictionary] = []
+	if typeof(items_value) != TYPE_ARRAY:
+		return normalized_items
+
+	var items: Array = items_value
+	for item_value: Variant in items:
+		if typeof(item_value) != TYPE_DICTIONARY:
+			continue
+		var item: Dictionary = item_value
+		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges()
+		if item_id == "":
+			continue
+		normalized_items.append({
+			"id": item_id,
+			"name": _item_name_from_id(item_id),
+			"category": _guess_bag_category(item_id),
+			"quantity": max(int(item.get("quantity", 1)), 1),
+		})
+	return normalized_items
+
+func _item_name_from_id(item_id: String) -> String:
+	var words := item_id.replace("_", "-").split("-")
+	var formatted_words: Array[String] = []
+	for word: String in words:
+		if word == "":
+			continue
+		formatted_words.append(word.substr(0, 1).to_upper() + word.substr(1).to_lower())
+	return " ".join(formatted_words)
+
+func _guess_bag_category(item_id: String) -> String:
+	var normalized := item_id.strip_edges().to_lower()
+	if normalized.ends_with("ball") or normalized.contains("-ball"):
+		return "pokeball"
+	if normalized.contains("potion") or normalized.contains("heal") or normalized.contains("revive") or normalized.contains("medicine"):
+		return "medicine"
+	if normalized.begins_with("tm") or normalized.begins_with("hm"):
+		return "machines"
+	if normalized.ends_with("ite") or normalized.ends_with("-z") or normalized.ends_with("ium-z"):
+		return "power_stones"
+	if normalized.contains("leftovers") or normalized.contains("choice-") or normalized.contains("scarf") or normalized.contains("band") or normalized.contains("orb") or normalized.contains("vest"):
+		return "held_items"
+	if normalized.contains("skin") or normalized.contains("outfit") or normalized.contains("cosmetic") or normalized.contains("mount") or normalized.contains("ride"):
+		return "cosmetics"
+	if normalized.contains("coin") or normalized.contains("token") or normalized.contains("currency"):
+		return "currency"
+	return "general"
+
+func _hide_bag_popup() -> void:
+	if bag_popup != null:
+		bag_popup.visible = false
+	if bag_button.has_focus():
+		bag_button.release_focus()
+
+func _on_bag_category_selected(category_id: String) -> void:
+	active_bag_category = category_id
+	_refresh_bag_category_buttons()
+	_refresh_bag_items()
+
+func _on_bag_search_changed(_new_text: String) -> void:
+	_refresh_bag_items()
+
+func _refresh_bag_category_buttons() -> void:
+	for category_id_value: Variant in bag_category_buttons.keys():
+		var category_id := str(category_id_value)
+		var category_button: Button = bag_category_buttons.get(category_id) as Button
+		if category_button == null:
+			continue
+		_apply_button_style(category_button, "primary" if category_id == active_bag_category else "default")
+
+func _on_bag_header_gui_input(event: InputEvent) -> void:
+	if bag_popup == null:
+		return
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		bag_dragging = true
+		bag_drag_offset = mouse_event.global_position - bag_popup.global_position
+		bag_popup.move_to_front()
+	else:
+		bag_dragging = false
+	get_viewport().set_input_as_handled()
+
+func _handle_bag_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			bag_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+
+	if not (event is InputEventMouseMotion):
+		return
+
+	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+	_move_bag_to_global_position(motion_event.global_position - bag_drag_offset)
+	get_viewport().set_input_as_handled()
+
+func _move_bag_to_global_position(global_top_left: Vector2) -> void:
+	if bag_popup == null:
+		return
+
+	var parent_control: Control = bag_popup.get_parent_control()
+	if parent_control == null:
+		return
+
+	var parent_size: Vector2 = parent_control.size
+	var popup_size: Vector2 = bag_popup.size
+	var clamped_position := Vector2(
+		clamp(global_top_left.x, 0.0, max(parent_size.x - popup_size.x, 0.0)),
+		clamp(global_top_left.y, 0.0, max(parent_size.y - popup_size.y, 0.0))
+	)
+	var anchor_offset := Vector2(
+		parent_size.x * bag_popup.anchor_left,
+		parent_size.y * bag_popup.anchor_top
+	)
+	var local_offset := clamped_position - anchor_offset
+	bag_popup.offset_left = local_offset.x
+	bag_popup.offset_top = local_offset.y
+	bag_popup.offset_right = local_offset.x + popup_size.x
+	bag_popup.offset_bottom = local_offset.y + popup_size.y
+
 func _format_money(value: int) -> String:
 	var value_text := str(max(value, 0))
 	var formatted := ""
@@ -1526,13 +2266,17 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_text_edit_style(dev_pokemon_text)
 
 	_apply_button_style(general_chat_tab_button, "primary")
+	_apply_button_style(trade_chat_tab_button, "primary")
 	_apply_button_style(system_chat_tab_button, "primary")
 	_apply_button_style(send_button, "primary")
 	_apply_button_style(dev_pokemon_add_button, "primary")
 	_apply_button_style(dev_pokemon_close_button)
 	_apply_button_style(dev_add_pokemon_button, "primary")
 	_apply_button_style(dev_spawn_pokemon_button, "primary")
+	if dev_add_item_button != null:
+		_apply_button_style(dev_add_item_button, "primary")
 	_apply_button_style(dev_clear_party_button, "danger")
+	dev_clear_party_button.text = "Clear"
 	_apply_button_style(dev_actions_close_button)
 
 	if map_slot != null:
@@ -1547,6 +2291,8 @@ func _apply_premium_overlay_styles() -> void:
 		_set_icon_slot_active(follower_slot, GameState.show_follower)
 	if dev_actions_slot != null:
 		_apply_icon_slot_hover_style(dev_actions_slot, false)
+	if item_dex_slot != null:
+		_apply_icon_slot_hover_style(item_dex_slot, false)
 
 	for panel_id_value: Variant in collapsible_panels.keys():
 		var panel_id := str(panel_id_value)
@@ -1919,13 +2665,13 @@ func _get_party_slot_index_at_position(global_position: Vector2) -> int:
 	return -1
 
 func _on_send_button_pressed() -> void:
-	if active_chat_tab != CHAT_TAB_GENERAL:
+	if active_chat_tab == CHAT_TAB_SYSTEM:
 		return
 
 	_submit_chat_input_deferred()
 
 func _on_chat_text_submitted(_text: String) -> void:
-	if active_chat_tab != CHAT_TAB_GENERAL:
+	if active_chat_tab == CHAT_TAB_SYSTEM:
 		return
 
 	_submit_chat_input_deferred()
@@ -1938,13 +2684,15 @@ func _on_chat_tab_pressed(tab_id: String) -> void:
 	_apply_chat_tab_state()
 
 func _apply_chat_tab_state() -> void:
+	var input_active: bool = active_chat_tab != CHAT_TAB_SYSTEM
 	var general_active: bool = active_chat_tab == CHAT_TAB_GENERAL
 	general_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if general_active else CHAT_MESSAGE_COLOR))
+	trade_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_TRADE else CHAT_MESSAGE_COLOR))
 	system_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_SYSTEM else CHAT_MESSAGE_COLOR))
-	chat_input.editable = general_active
-	chat_input.placeholder_text = "" if general_active else "System messages only"
-	send_button.disabled = not general_active
-	if not general_active:
+	chat_input.editable = input_active
+	chat_input.placeholder_text = "Trade chat has a 2 minute cooldown" if active_chat_tab == CHAT_TAB_TRADE else ("" if input_active else "System messages only")
+	send_button.disabled = not input_active
+	if not input_active:
 		chat_input.release_focus()
 	_refresh_chat_message_visibility()
 	_scroll_chat_to_bottom.call_deferred()
@@ -1955,7 +2703,7 @@ func _refresh_chat_message_visibility() -> void:
 			continue
 
 		var category: String = str(child.get_meta("chat_category", CHAT_CATEGORY_USER))
-		child.visible = active_chat_tab == CHAT_TAB_GENERAL or category == CHAT_CATEGORY_SYSTEM
+		child.visible = _should_show_chat_category(category)
 
 func _submit_chat_input_deferred() -> void:
 	if chat_submit_in_progress:
@@ -2076,10 +2824,15 @@ func _submit_chat_input_async() -> void:
 		_keep_chat_input_focused()
 		return
 
-	if not ChatRealtimeService.send_chat_message(text):
+	if not ChatRealtimeService.send_chat_message(text, _get_active_chat_channel()):
 		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
 	chat_submit_in_progress = false
 	_keep_chat_input_focused()
+
+func _get_active_chat_channel() -> String:
+	if active_chat_tab == CHAT_TAB_TRADE:
+		return CHAT_CHANNEL_TRADE
+	return CHAT_CHANNEL_GLOBAL
 
 func _keep_chat_input_focused() -> void:
 	_restore_chat_input_focus.call_deferred()
@@ -2330,6 +3083,153 @@ func _on_dev_actions_button_pressed() -> void:
 
 	dev_actions_popup.visible = not dev_actions_popup.visible
 
+func _on_item_dex_button_pressed() -> void:
+	await _show_item_dex_popup()
+
+func _show_item_dex_popup() -> void:
+	item_dex_popup.visible = true
+	item_dex_popup.move_to_front()
+	item_dex_search_input.grab_focus.call_deferred()
+	await _refresh_item_dex_results()
+
+func _hide_item_dex_popup() -> void:
+	item_dex_popup.visible = false
+
+func _on_item_dex_search_changed(_text: String) -> void:
+	_refresh_item_dex_results()
+
+func _refresh_item_dex_results() -> void:
+	if item_dex_results_list == null:
+		return
+	for child: Node in item_dex_results_list.get_children():
+		child.queue_free()
+
+	var query := ""
+	if item_dex_search_input != null:
+		query = item_dex_search_input.text.strip_edges().to_lower()
+
+	var loading_label := Label.new()
+	loading_label.text = "Searching..."
+	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	item_dex_results_list.add_child(loading_label)
+
+	item_dex_search_request_id += 1
+	var request_id := item_dex_search_request_id
+	var search_result: Dictionary = await InventoryService.search_items(query)
+	if request_id != item_dex_search_request_id:
+		return
+
+	for child: Node in item_dex_results_list.get_children():
+		child.queue_free()
+
+	if not bool(search_result.get("success", false)):
+		var error_label := Label.new()
+		error_label.text = "Could not load items."
+		error_label.add_theme_color_override("font_color", UI_DANGER)
+		item_dex_results_list.add_child(error_label)
+		return
+
+	var items := _normalize_dev_item_results(search_result.get("items", []))
+	var count := 0
+	for item_value: Variant in items:
+		var item: Dictionary = item_value as Dictionary
+		item_dex_results_list.add_child(_create_item_dex_result_button(item))
+		count += 1
+		if count >= 8:
+			break
+
+	if count == 0:
+		var empty_label := Label.new()
+		empty_label.text = "No item results."
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		item_dex_results_list.add_child(empty_label)
+
+func _create_item_dex_result_button(item: Dictionary) -> Control:
+	var item_id := str(item.get("id", ""))
+	var item_name := str(item.get("name", item_id))
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 46)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.tooltip_text = str(item.get("shortDesc", item.get("desc", "")))
+	button.pressed.connect(_on_item_dex_result_selected.bind(item))
+	_apply_button_style(button)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.anchor_right = 1.0
+	row.anchor_bottom = 1.0
+	row.add_theme_constant_override("separation", 10)
+	button.add_child(row)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(36, 36)
+	icon.texture = _load_item_icon(item_id)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(icon)
+
+	var label := Label.new()
+	label.text = item_name
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
+	return button
+
+func _on_item_dex_result_selected(item: Dictionary) -> void:
+	var item_id := str(item.get("id", ""))
+	item_dex_icon.texture = _load_item_icon(item_id)
+	item_dex_name_label.text = str(item.get("name", item_id))
+	item_dex_meta_label.text = _format_item_dex_meta(item)
+	var description := str(item.get("shortDesc", ""))
+	if description == "":
+		description = str(item.get("desc", ""))
+	if description == "":
+		description = "No item summary available yet."
+	item_dex_description_label.text = description
+	item_dex_sources_label.text = _format_item_dex_sources(item)
+
+func _format_item_dex_meta(item: Dictionary) -> String:
+	var category := str(item.get("category", "-"))
+	var cost_value: Variant = item.get("cost", null)
+	var cost_text := "Unknown"
+	if cost_value != null:
+		cost_text = "$%s" % _format_money(int(cost_value))
+	return "Category: %s\nBase price: %s" % [category, cost_text]
+
+func _format_item_dex_sources(item: Dictionary) -> String:
+	var summary_value: Variant = item.get("sourceSummary", [])
+	if typeof(summary_value) != TYPE_ARRAY:
+		return "Where to get\nNo known repeatable ways yet."
+
+	var summaries: Array = summary_value
+	if summaries.is_empty():
+		return "Where to get\nNo known repeatable ways yet."
+
+	var lines: Array[String] = ["Where to get"]
+	for summary_value_item: Variant in summaries:
+		if typeof(summary_value_item) != TYPE_DICTIONARY:
+			continue
+		var summary: Dictionary = summary_value_item
+		var label := str(summary.get("label", summary.get("type", "Source")))
+		var count: int = int(summary.get("count", 0))
+		lines.append("%s (%s)" % [label, count])
+
+		var preview_value: Variant = summary.get("preview", [])
+		if typeof(preview_value) != TYPE_ARRAY:
+			continue
+
+		var previews: Array = preview_value
+		for preview_item: Variant in previews:
+			lines.append("- %s" % str(preview_item))
+
+		var hidden_count: int = count - previews.size()
+		if hidden_count > 0:
+			lines.append("+%s more" % hidden_count)
+	return "\n".join(lines)
+
 func _on_dev_add_pokemon_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	_show_dev_pokemon_popup(DevPokemonPopupMode.TEAM)
@@ -2342,11 +3242,213 @@ func _on_dev_spawn_pokemon_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	_show_dev_pokemon_popup(DevPokemonPopupMode.SPAWN)
 
+func _on_dev_add_item_button_pressed() -> void:
+	if not PlayerSave.is_staff:
+		return
+
+	dev_actions_popup.visible = false
+	await _show_dev_add_item_popup()
+
+func _show_dev_add_item_popup() -> void:
+	dev_selected_item = {}
+	dev_item_confirm_button.disabled = true
+	dev_item_quantity_spinbox.value = 1
+	dev_item_search_input.clear()
+	dev_add_item_popup.visible = true
+	dev_add_item_popup.move_to_front()
+	dev_item_search_input.grab_focus.call_deferred()
+	await _refresh_dev_item_results()
+
+func _hide_dev_add_item_popup() -> void:
+	dev_add_item_popup.visible = false
+	dev_selected_item = {}
+
+func _load_dev_item_catalog() -> void:
+	dev_item_catalog.clear()
+	var directory := DirAccess.open(BAG_ICON_ROOT)
+	if directory == null:
+		push_warning("Dev Add Item: could not open item icon directory.")
+		return
+
+	directory.list_dir_begin()
+	while true:
+		var file_name := directory.get_next()
+		if file_name == "":
+			break
+		if directory.current_is_dir():
+			continue
+		if not file_name.to_lower().ends_with(".png"):
+			continue
+		if file_name.to_lower() == "back.png" or file_name == "000.png":
+			continue
+
+		var file_stem := file_name.get_basename()
+		var item_id := _dev_item_id_from_icon_stem(file_stem)
+		dev_item_catalog.append({
+			"id": item_id,
+			"name": _item_name_from_id(item_id),
+			"icon": BAG_ICON_ROOT + file_name,
+		})
+	directory.list_dir_end()
+	dev_item_catalog.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return str(a.get("name", "")) < str(b.get("name", ""))
+	)
+
+func _dev_item_id_from_icon_stem(file_stem: String) -> String:
+	return file_stem.strip_edges().to_lower()
+
+func _on_dev_item_search_changed(_text: String) -> void:
+	dev_selected_item = {}
+	dev_item_confirm_button.disabled = true
+	_refresh_dev_item_results()
+
+func _refresh_dev_item_results() -> void:
+	if dev_item_results_list == null:
+		return
+	for child: Node in dev_item_results_list.get_children():
+		child.queue_free()
+
+	var query := ""
+	if dev_item_search_input != null:
+		query = dev_item_search_input.text.strip_edges().to_lower()
+
+	var loading_label := Label.new()
+	loading_label.text = "Searching..."
+	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	dev_item_results_list.add_child(loading_label)
+
+	dev_item_search_request_id += 1
+	var request_id := dev_item_search_request_id
+	var search_result: Dictionary = await InventoryService.search_dev_items(query)
+	if request_id != dev_item_search_request_id:
+		return
+
+	for child: Node in dev_item_results_list.get_children():
+		child.queue_free()
+
+	if not bool(search_result.get("success", false)):
+		var error_label := Label.new()
+		error_label.text = "Could not load items."
+		error_label.add_theme_color_override("font_color", UI_DANGER)
+		dev_item_results_list.add_child(error_label)
+		return
+
+	dev_item_catalog = _normalize_dev_item_results(search_result.get("items", []))
+	var count := 0
+	for item_value: Variant in dev_item_catalog:
+		var item: Dictionary = item_value as Dictionary
+		dev_item_results_list.add_child(_create_dev_item_result_button(item))
+		count += 1
+		if count >= 8:
+			break
+
+	if count == 0:
+		var empty_label := Label.new()
+		empty_label.text = "No item results."
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		dev_item_results_list.add_child(empty_label)
+
+func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
+	var normalized_items: Array[Dictionary] = []
+	if typeof(items_value) != TYPE_ARRAY:
+		return normalized_items
+
+	var items: Array = items_value
+	for item_value: Variant in items:
+		if typeof(item_value) != TYPE_DICTIONARY:
+			continue
+		var item: Dictionary = item_value
+		var item_id := str(item.get("id", "")).strip_edges()
+		if item_id == "":
+			continue
+		normalized_items.append({
+			"id": item_id,
+			"name": str(item.get("name", _item_name_from_id(item_id))),
+			"category": str(item.get("category", "")),
+			"shortDesc": str(item.get("shortDesc", "")),
+			"desc": str(item.get("desc", "")),
+			"cost": item.get("cost", null),
+			"sources": item.get("sources", []),
+			"sourceSummary": item.get("sourceSummary", []),
+		})
+	return normalized_items
+
+func _create_dev_item_result_button(item: Dictionary) -> Control:
+	var item_id := str(item.get("id", ""))
+	var item_name := str(item.get("name", item_id))
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 46)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.tooltip_text = str(item.get("shortDesc", item.get("desc", "")))
+	button.pressed.connect(_on_dev_item_result_selected.bind(item))
+	_apply_button_style(button, "primary" if item_id == str(dev_selected_item.get("id", "")) else "default")
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.anchor_right = 1.0
+	row.anchor_bottom = 1.0
+	row.add_theme_constant_override("separation", 10)
+	button.add_child(row)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(36, 36)
+	icon.texture = _load_item_icon(item_id)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(icon)
+
+	var label := Label.new()
+	label.text = item_name
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
+	return button
+
+func _on_dev_item_result_selected(item: Dictionary) -> void:
+	dev_selected_item = item.duplicate(true)
+	dev_item_confirm_button.disabled = false
+	for child: Node in dev_item_results_list.get_children():
+		if child is Button:
+			var button: Button = child as Button
+			_apply_button_style(button, "primary" if button.tooltip_text == str(dev_selected_item.get("shortDesc", dev_selected_item.get("desc", ""))) else "default")
+
+func _on_dev_item_confirm_pressed() -> void:
+	if dev_selected_item.is_empty():
+		return
+	var item_id := str(dev_selected_item.get("id", ""))
+	var quantity: int = max(int(dev_item_quantity_spinbox.value), 1)
+	dev_item_confirm_button.disabled = true
+	var result: Dictionary = await InventoryService.dev_add_item(item_id, quantity)
+	dev_item_confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not add item: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	_add_chat_message("Added %sx %s." % [quantity, str(dev_selected_item.get("name", item_id))])
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("items", []))
+	bag_inventory_loaded = true
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
+	_hide_dev_add_item_popup()
+
 func _on_dev_clear_party_button_pressed() -> void:
 	if not PlayerSave.is_staff:
 		return
 
+	dev_actions_popup.visible = false
+	dev_clear_menu_popup.visible = true
+	dev_clear_menu_popup.move_to_front()
+
+func _on_dev_clear_party_option_pressed() -> void:
+	dev_clear_menu_popup.visible = false
 	clear_party_confirm_dialog.popup_centered(Vector2i(460, 150))
+
+func _on_dev_clear_inventory_option_pressed() -> void:
+	dev_clear_menu_popup.visible = false
+	clear_inventory_confirm_dialog.popup_centered(Vector2i(460, 150))
 
 func _on_clear_party_confirmed() -> void:
 	if not PlayerSave.is_staff:
@@ -2357,6 +3459,21 @@ func _on_clear_party_confirmed() -> void:
 	await _save_party_state_after_change()
 	dev_actions_popup.visible = false
 	_add_chat_message("Party cleared.")
+
+func _on_clear_inventory_confirmed() -> void:
+	if not PlayerSave.is_staff:
+		return
+
+	var result: Dictionary = await InventoryService.dev_clear_inventory()
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not clear inventory: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	bag_inventory_items = []
+	bag_inventory_loaded = true
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
+	_add_chat_message("Inventory cleared.")
 
 func _save_party_state_after_change() -> void:
 	var result: Dictionary = await PlayerPartyStateService.save_current_party()
@@ -2478,6 +3595,11 @@ func _scroll_chat_to_bottom() -> void:
 	message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
+	if str(message.get("type", "")) == "chat_error":
+		var error_text: String = str(message.get("message", "Chat message could not be sent."))
+		_add_chat_message(error_text)
+		return
+
 	if str(message.get("type", "")) != "chat":
 		return
 
@@ -2491,10 +3613,11 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if text == "":
 		return
 
-	_add_user_chat_message(user, display_name, text)
+	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
+	_add_user_chat_message(user, display_name, text, channel)
 
 
-func _add_user_chat_message(user: Dictionary, display_name: String, text: String) -> void:
+func _add_user_chat_message(user: Dictionary, display_name: String, text: String, channel: String = CHAT_CHANNEL_GLOBAL) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
 	var name_color: String = role_color if not role.is_empty() else CHAT_DEFAULT_NAME_COLOR
@@ -2503,8 +3626,9 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	row.add_theme_constant_override("separation", 4)
-	row.set_meta("chat_category", CHAT_CATEGORY_USER)
-	row.visible = _should_show_chat_category(CHAT_CATEGORY_USER)
+	var chat_category: String = CHAT_CHANNEL_TRADE if channel == CHAT_CHANNEL_TRADE else CHAT_CHANNEL_GLOBAL
+	row.set_meta("chat_category", chat_category)
+	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
 
 	if not role.is_empty():
@@ -2531,7 +3655,13 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 
 
 func _should_show_chat_category(category: String) -> bool:
-	return active_chat_tab == CHAT_TAB_GENERAL or category == CHAT_CATEGORY_SYSTEM
+	if category == CHAT_CATEGORY_SYSTEM:
+		return true
+	if active_chat_tab == CHAT_TAB_GENERAL:
+		return category == CHAT_CHANNEL_GLOBAL or category == CHAT_CATEGORY_USER
+	if active_chat_tab == CHAT_TAB_TRADE:
+		return category == CHAT_CHANNEL_TRADE
+	return false
 
 
 func _create_chat_role_badge(role_name: String, role_color: String) -> PanelContainer:

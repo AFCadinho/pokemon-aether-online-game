@@ -99,7 +99,7 @@ func disconnect_chat() -> void:
 		connection_changed.emit(false)
 
 
-func send_chat_message(text: String) -> bool:
+func send_chat_message(text: String, channel: String = "global") -> bool:
 	var cleaned_text: String = text.strip_edges()
 	if cleaned_text.is_empty():
 		return true
@@ -112,6 +112,7 @@ func send_chat_message(text: String) -> bool:
 
 	var payload: Dictionary = {
 		"type": "chat",
+		"channel": channel,
 		"text": cleaned_text,
 	}
 	var error: Error = websocket.send_text(JSON.stringify(payload))
