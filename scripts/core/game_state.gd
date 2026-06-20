@@ -13,6 +13,7 @@ var ui_input_locked := false
 var world_debug_enabled := false
 var repel_enabled := false
 var show_follower := true
+var running_shoes_enabled := false
 
 func lock_input() -> void:
 	input_locked = true

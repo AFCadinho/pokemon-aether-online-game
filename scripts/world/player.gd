@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
+const RUN_TILE_MOVE_DURATION := 0.14
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
@@ -9,8 +10,10 @@ const SORT_Z_MIN := -256
 const SORT_Z_MAX := 256
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
+const RUN_WALK_ANIMATION_SPEED := 11.5
 const PLAYER_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const MOVE_ACTIONS := ["move_right", "move_left", "move_down", "move_up"]
+const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
 const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const BASE_SPRITE_OFFSET_META := "base_sprite_offset"
 const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
@@ -42,6 +45,10 @@ const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 # TallGrass kan later gebruikt worden voor encounters/effects.
 var collision_tilemap: TileMapLayer
 var grass_tilemap: TileMapLayer
+var ledge_down_tilemap: TileMapLayer
+var ledge_up_tilemap: TileMapLayer
+var ledge_left_tilemap: TileMapLayer
+var ledge_right_tilemap: TileMapLayer
 
 # Movement state.
 # is_moving voorkomt dat je nieuwe input verwerkt terwijl de speler nog naar
@@ -52,6 +59,7 @@ var is_moving := false
 var target_position := Vector2.ZERO
 var move_start_position := Vector2.ZERO
 var move_elapsed := 0.0
+var move_duration := TILE_MOVE_DURATION
 
 # Onthoudt de laatste kijkrichting, zodat de idle frame goed blijft staan.
 var last_direction := Vector2.DOWN
@@ -65,6 +73,7 @@ var frame_opaque_center_y_cache := {}
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var master_appearance_sprite: AnimatedSprite2D
 var pokemon_follower: PokemonFollower
+var body_sprite_frames_movement_style := ""
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
@@ -75,8 +84,17 @@ func get_target_feet_position() -> Vector2:
 func is_tile_moving() -> bool:
 	return is_moving
 
+func get_current_move_duration() -> float:
+	return move_duration if is_moving else _get_current_tile_move_duration()
+
+func set_running_shoes_enabled(enabled: bool) -> void:
+	GameState.running_shoes_enabled = enabled
+	_sync_body_sprite_frames_for_movement()
+	_sync_appearance_animation_speeds()
+
 func set_body_appearance(body_id: String) -> void:
 	PlayerSave.appearance_body_id = body_id
+	body_sprite_frames_movement_style = ""
 	_apply_body_appearance(body_id)
 	_cache_appearance_sprites()
 	set_idle_frame()
@@ -121,7 +139,7 @@ func get_network_movement_state() -> Dictionary:
 			"y": target_position.y,
 		},
 		"elapsed": move_elapsed,
-		"duration": TILE_MOVE_DURATION,
+		"duration": move_duration,
 	}
 
 func reset_movement_state() -> void:
@@ -130,6 +148,7 @@ func reset_movement_state() -> void:
 	target_position = global_position
 	move_start_position = global_position
 	move_elapsed = 0.0
+	move_duration = _get_current_tile_move_duration()
 	_clear_input_buffer()
 	_clear_held_direction()
 	set_idle_frame()
@@ -162,6 +181,10 @@ func _ready() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
 		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
 		collision_tilemap = GameState.current_map.get_node_or_null("Collision")
+		ledge_down_tilemap = GameState.current_map.get_node_or_null("LedgeDown")
+		ledge_up_tilemap = GameState.current_map.get_node_or_null("LedgeUp")
+		ledge_left_tilemap = GameState.current_map.get_node_or_null("LedgeLeft")
+		ledge_right_tilemap = GameState.current_map.get_node_or_null("LedgeRight")
 	
 	# Zet speler terug op laatst bekende positie in de juiste richting.
 	if GameState.has_player_position:
@@ -172,6 +195,7 @@ func _ready() -> void:
 	# Daardoor begint hij niet meteen ergens heen te bewegen.
 	target_position = _snap_world_position(global_position)
 	move_start_position = target_position
+	move_duration = _get_current_tile_move_duration()
 	global_position = target_position
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
@@ -278,6 +302,7 @@ func _get_role_color(role_id: String, fallback: String) -> Color:
 
 func _process(delta: float) -> void:
 	_update_sort_z()
+	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
 
 	if _can_accept_movement_input():
@@ -291,8 +316,8 @@ func _process(delta: float) -> void:
 	if is_moving:
 		# Beweeg per render-frame naar de volgende tile.
 		# De tile-logica blijft deterministisch; alleen de visual interpolation is soepeler.
-		move_elapsed = minf(move_elapsed + delta, TILE_MOVE_DURATION)
-		var move_progress := move_elapsed / TILE_MOVE_DURATION
+		move_elapsed = minf(move_elapsed + delta, move_duration)
+		var move_progress := move_elapsed / move_duration
 		var interpolated_position: Vector2 = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
 		global_position = _snap_world_position(interpolated_position)
 		_update_sort_z()
@@ -452,7 +477,13 @@ func _clear_held_direction() -> void:
 	held_direction_time = 0.0
 
 func _has_reached_target() -> bool:
-	return move_elapsed >= TILE_MOVE_DURATION
+	return move_elapsed >= move_duration
+
+func _get_current_tile_move_duration() -> float:
+	return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
+
+func _get_current_walk_animation_speed() -> float:
+	return RUN_WALK_ANIMATION_SPEED if GameState.running_shoes_enabled else WALK_ANIMATION_SPEED
 
 func _get_move_interpolation(progress: float) -> float:
 	var linear_progress := clampf(progress, 0.0, 1.0)
@@ -491,20 +522,29 @@ func _try_start_move(direction: Vector2) -> bool:
 	# Bepaal de volgende wereldpositie.
 	# Voorbeeld: Vector2.RIGHT * 32 = Vector2(32, 0), dus 1 tile naar rechts.
 	var new_target_position := _snap_world_position(global_position) + (direction * TILE_SIZE)
+	var movement_target_position := new_target_position
 
 	if _try_trigger_route_gate(new_target_position):
 		set_idle_frame()
 		return false
 
+	var ledge_direction: Vector2 = _get_ledge_direction_for_tile(new_target_position)
+	if ledge_direction != Vector2.ZERO:
+		if direction != ledge_direction:
+			return false
+
+		movement_target_position = _snap_world_position(new_target_position + (ledge_direction * TILE_SIZE))
+
 	# Check eerst of de target tile vrij is.
 	# Alleen als can_move_to true teruggeeft, starten we de beweging.
-	if not can_move_to(new_target_position):
+	if not can_move_to(movement_target_position):
 		return false
 
-	target_position = _snap_world_position(new_target_position)
+	target_position = _snap_world_position(movement_target_position)
 	move_start_position = _snap_world_position(global_position)
 	global_position = move_start_position
 	move_elapsed = 0.0
+	move_duration = _get_current_tile_move_duration()
 	is_moving = true
 	play_walk_animation(direction)
 	return true
@@ -565,6 +605,33 @@ func can_move_to(check_position: Vector2) -> bool:
 
 	return tile_data == null
 
+func _get_ledge_direction_for_tile(check_position: Vector2) -> Vector2:
+	refresh_map_layers()
+
+	if _tilemap_has_tile_at(ledge_down_tilemap, check_position):
+		return Vector2.DOWN
+	if _tilemap_has_tile_at(ledge_up_tilemap, check_position):
+		return Vector2.UP
+	if _tilemap_has_tile_at(ledge_left_tilemap, check_position):
+		return Vector2.LEFT
+	if _tilemap_has_tile_at(ledge_right_tilemap, check_position):
+		return Vector2.RIGHT
+
+	return Vector2.ZERO
+
+func _tilemap_has_tile_at(tilemap: TileMapLayer, check_position: Vector2) -> bool:
+	if tilemap == null:
+		return false
+
+	var local_position: Vector2 = tilemap.to_local(check_position)
+	var tile_position: Vector2i = tilemap.local_to_map(local_position)
+	var source_id: int = tilemap.get_cell_source_id(tile_position)
+	if source_id != -1:
+		return true
+
+	var tile_data: TileData = tilemap.get_cell_tile_data(tile_position)
+	return tile_data != null
+
 func _try_trigger_route_gate(check_position: Vector2) -> bool:
 	if route_gate_interaction_in_progress:
 		return true
@@ -597,12 +664,20 @@ func refresh_map_layers() -> void:
 	if current_map == null:
 		collision_tilemap = null
 		grass_tilemap = null	
+		ledge_down_tilemap = null
+		ledge_up_tilemap = null
+		ledge_left_tilemap = null
+		ledge_right_tilemap = null
 		push_warning("Player.refresh_map_layers: could not resolve current map.")
 		return
 
 	GameState.current_map = current_map
 	collision_tilemap = current_map.get_node_or_null("Collision")
 	grass_tilemap = current_map.get_node_or_null("TallGrass")
+	ledge_down_tilemap = current_map.get_node_or_null("LedgeDown")
+	ledge_up_tilemap = current_map.get_node_or_null("LedgeUp")
+	ledge_left_tilemap = current_map.get_node_or_null("LedgeLeft")
+	ledge_right_tilemap = current_map.get_node_or_null("LedgeRight")
 
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
@@ -645,8 +720,28 @@ func check_for_grass_encounter() -> void:
 		world.start_triggered_wild_battle_for_area(area_id, "grass")
 
 func _is_ui_typing() -> bool:
-	var focused_control := get_viewport().gui_get_focus_owner()
-	return focused_control is LineEdit or focused_control is TextEdit
+	if _is_text_input_control(get_viewport().gui_get_focus_owner()):
+		return true
+
+	var tree := get_tree()
+	if tree == null:
+		return false
+
+	for node: Node in tree.get_nodes_in_group(TEXT_INPUT_WINDOW_GROUP):
+		if not (node is Window):
+			continue
+
+		var window := node as Window
+		if not window.visible:
+			continue
+
+		if _is_text_input_control(window.gui_get_focus_owner()):
+			return true
+
+	return false
+
+func _is_text_input_control(control: Control) -> bool:
+	return control is LineEdit or control is TextEdit
 
 func check_for_map_exit() -> bool:
 	var current_map: Node = _resolve_current_map()
@@ -735,13 +830,60 @@ func _apply_body_appearance(body_id: String) -> void:
 		push_warning("Player: BodySprite node is missing.")
 		return
 
-	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id, PlayerSave.gender)
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
+		body_id,
+		PlayerSave.gender,
+		CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	)
 	if body_frames == null:
 		push_warning("Player: body appearance '%s' could not be loaded." % body_id)
 		return
 
 	body_sprite.sprite_frames = body_frames
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
+	body_sprite_frames_movement_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+
+func _sync_body_sprite_frames_for_movement() -> void:
+	var body_sprite := look_node.get_node_or_null(BODY_SPRITE_NAME) as AnimatedSprite2D
+	if body_sprite == null:
+		return
+
+	var movement_style: String = CharacterAppearanceService.BODY_MOVEMENT_RUN \
+		if GameState.running_shoes_enabled \
+		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	if movement_style == body_sprite_frames_movement_style:
+		return
+
+	var current_animation: StringName = body_sprite.animation
+	var current_frame: int = body_sprite.frame
+	var current_frame_progress: float = body_sprite.frame_progress
+	var was_playing: bool = body_sprite.is_playing()
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
+		PlayerSave.appearance_body_id,
+		PlayerSave.gender,
+		movement_style
+	)
+	if body_frames == null:
+		return
+
+	body_sprite.sprite_frames = body_frames
+	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
+	body_sprite_frames_movement_style = movement_style
+	_sync_appearance_animation_speeds()
+
+	if body_frames.has_animation(current_animation):
+		body_sprite.animation = current_animation
+		var frame_count: int = body_frames.get_frame_count(current_animation)
+		if frame_count > 0:
+			body_sprite.frame = mini(current_frame, frame_count - 1)
+			body_sprite.frame_progress = current_frame_progress
+		if was_playing:
+			body_sprite.play(current_animation)
+		else:
+			body_sprite.stop()
+		return
+
+	set_idle_frame()
 
 func _sync_appearance_sprite_frames() -> void:
 	if master_appearance_sprite == null or not master_appearance_sprite.is_playing():
@@ -784,7 +926,7 @@ func _sync_appearance_animation_speeds() -> void:
 
 		for animation_name: String in walk_animation_names:
 			if sprite.sprite_frames.has_animation(animation_name):
-				sprite.sprite_frames.set_animation_speed(animation_name, WALK_ANIMATION_SPEED)
+				sprite.sprite_frames.set_animation_speed(animation_name, _get_current_walk_animation_speed())
 
 func _set_idle_animation(sprite: AnimatedSprite2D, direction: Vector2) -> void:
 	var animation_name := _get_idle_animation_name(direction)

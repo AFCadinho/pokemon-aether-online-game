@@ -3,13 +3,16 @@
 [ext_resource type="Script" uid="uid://xe31cfj4j1g6" path="res://scripts/ui/ui_overlay.gd" id="1_7g5y2"]
 [ext_resource type="PackedScene" uid="uid://bqj3ifxyy7gdh" path="res://scenes/interface/party_slot.tscn" id="1_grslb"]
 [ext_resource type="Texture2D" uid="uid://bh3hhhb58uh2g" path="res://assets/ui/location.png" id="2_2onii"]
+[ext_resource type="PackedScene" uid="uid://cnvx5qmbwl27m" path="res://scenes/interface/hotkey_sidebar.tscn" id="2_hotkeys"]
 [ext_resource type="Texture2D" uid="uid://b8qwcsde8a7l7" path="res://assets/ui/town_map.svg" id="3_riyyd"]
+[ext_resource type="PackedScene" path="res://scenes/interface/player_status_card.tscn" id="4_status"]
 [ext_resource type="Texture2D" uid="uid://c7goexdnbj60q" path="res://assets/ui/bag-icon.svg" id="5_j0ub1"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="6_settings"]
 [ext_resource type="Texture2D" uid="uid://5ixth4h1adwb" path="res://assets/ui/settings-icon.svg" id="7_settings_icon"]
 [ext_resource type="Texture2D" uid="uid://b85ladmwqi0go" path="res://assets/ui/repel_icon.svg" id="8_iv6uh"]
 [ext_resource type="Texture2D" uid="uid://sroenj42pc1x" path="res://assets/ui/dev_icon.svg" id="9_s0khl"]
 [ext_resource type="Texture2D" uid="uid://bhpfhnb5of576" path="res://assets/ui/follower_icon.svg" id="10_follower"]
+[ext_resource type="Texture2D" uid="uid://b3vkhs04ulhs4" path="res://assets/ui/running_shoe.svg" id="11_running_shoe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -94,6 +97,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="HotkeySidebar" parent="Control" unique_id=1290422948 instance=ExtResource("2_hotkeys")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 0.0
+offset_top = -409.5
+offset_right = 62.0
+offset_bottom = 0.5
+grow_vertical = 2
+
+[node name="PlayerStatusPanel" parent="Control" unique_id=2085471070 instance=ExtResource("4_status")]
+
 [node name="PartyPanel" type="PanelContainer" parent="Control" unique_id=1949206887]
 layout_mode = 1
 anchors_preset = 1
@@ -124,16 +140,12 @@ layout_mode = 2
 [node name="ChatTabsPanel" type="Control" parent="Control" unique_id=1039747907]
 custom_minimum_size = Vector2(152, 32)
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -550.0
-offset_top = -315.0
-offset_right = -398.0
-offset_bottom = -283.0
-grow_horizontal = 0
+offset_top = -300.0
+offset_right = 180.0
+offset_bottom = -268.0
 grow_vertical = 0
 
 [node name="TabRow" type="HBoxContainer" parent="Control/ChatTabsPanel" unique_id=2136300024]
@@ -162,14 +174,11 @@ text = "System"
 [node name="ChatPanel" type="PanelContainer" parent="Control" unique_id=228485371]
 custom_minimum_size = Vector2(360, 190)
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -550.0
-offset_top = -275.0
-grow_horizontal = 0
+offset_top = -259.0
+offset_right = 550.0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_2onii")
 
@@ -409,12 +418,12 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="ActionsPanel" type="PanelContainer" parent="Control" unique_id=1107239222]
-custom_minimum_size = Vector2(196, 0)
+custom_minimum_size = Vector2(248, 0)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -212.0
+offset_left = -264.0
 offset_bottom = 68.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
@@ -430,6 +439,25 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
+
+[node name="RunningShoesSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=1027882535]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="RunningShoesButton" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot" unique_id=9405703]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Running Shoes"
+mouse_default_cursor_shape = 2
+toggle_mode = true
+texture_normal = ExtResource("11_running_shoe")
+texture_pressed = ExtResource("11_running_shoe")
+texture_hover = ExtResource("11_running_shoe")
+texture_disabled = ExtResource("11_running_shoe")
+texture_focused = ExtResource("11_running_shoe")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="RepelSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=628803434]
 custom_minimum_size = Vector2(52, 52)

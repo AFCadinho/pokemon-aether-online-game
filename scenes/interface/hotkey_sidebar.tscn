@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://cnvx5qmbwl27m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.02745098, 0.043137256, 0.078431375, 0.9019608)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.38)
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
+bg_color = Color(0.050980393, 0.08627451, 0.14509805, 0.9019608)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="HotkeySidebar" type="PanelContainer" unique_id=311861686]
+custom_minimum_size = Vector2(60, 408)
+offset_left = 16.0
+offset_top = 104.0
+offset_right = 76.0
+offset_bottom = 512.0
+mouse_default_cursor_shape = 13
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=461936207]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 7
+
+[node name="SlotStack" type="VBoxContainer" parent="MarginContainer" unique_id=971448359]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Slot1" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1484403079]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 1"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot1" unique_id=1178574102]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "1"
+
+[node name="Slot2" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2061791274]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 2"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot2" unique_id=48082752]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "2"
+
+[node name="Slot3" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2066504344]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 3"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot3" unique_id=1002914978]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "3"
+
+[node name="Slot4" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1251088391]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 4"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot4" unique_id=1247120994]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "4"
+
+[node name="Slot5" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=182856113]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 5"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot5" unique_id=1094944983]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "5"
+
+[node name="Slot6" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1240713832]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 6"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot6" unique_id=389905510]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "6"
+
+[node name="Slot7" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=238380532]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 7"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot7" unique_id=761348058]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "7"
+
+[node name="Slot8" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=298868661]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+tooltip_text = "Hotkey 8"
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot8" unique_id=466349960]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
+theme_override_font_sizes/font_size = 11
+text = "8"

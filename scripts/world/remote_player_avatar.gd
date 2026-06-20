@@ -10,6 +10,8 @@ const SORT_Z_MIN := -256
 const SORT_Z_MAX := 256
 const SNAP_DISTANCE := 96.0
 const REMOTE_MOVE_SPEED := 150.0
+const IDLE_ANIMATION_SPEED := 5.0
+const WALK_ANIMATION_SPEED := 7.5
 const WALK_ANIMATION_HOLD_DURATION := 0.18
 const INTERPOLATION_DELAY_SECONDS := 0.16
 const MAX_POSITION_SAMPLES := 8
@@ -51,6 +53,7 @@ var current_follower_species := ""
 var current_follower_shiny := false
 var current_body_id := ""
 var current_body_gender := ""
+var current_body_movement_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 var current_gender := "male"
 var has_position := false
 
@@ -133,6 +136,10 @@ func get_feet_position() -> Vector2:
 	return global_position
 
 
+func get_current_move_duration() -> float:
+	return tile_move_duration if is_replaying_tile_move else TILE_MOVE_DURATION
+
+
 func _apply_tile_movement_state(movement_data: Dictionary, packet_direction: Vector2) -> void:
 	var start_position := _vector2_from_payload(movement_data.get("startPosition", {}), global_position)
 	var move_target_position := _vector2_from_payload(movement_data.get("targetPosition", {}), target_position)
@@ -187,19 +194,7 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 	if body_id == current_body_id and current_gender == current_body_gender:
 		return
 
-	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(body_id, current_gender)
-	if body_frames == null:
-		return
-
-	for sprite in appearance_sprites:
-		if sprite.name != "BodySprite":
-			continue
-		sprite.sprite_frames = body_frames
-		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		current_body_id = body_id
-		current_body_gender = current_gender
-		_update_animation(_is_visually_moving(false))
-		return
+	_apply_body_frames(body_id, current_gender, current_body_movement_style)
 
 
 func _ensure_pokemon_follower() -> void:
@@ -251,6 +246,8 @@ func _start_next_pending_tile_move() -> void:
 	tile_move_elapsed = 0.0
 	is_replaying_tile_move = true
 	last_direction = move_direction
+	_sync_body_frames_for_move_duration(tile_move_duration)
+	_sync_appearance_animation_speeds(tile_move_duration)
 
 
 func _update_replayed_tile_move(delta: float) -> void:
@@ -261,6 +258,7 @@ func _update_replayed_tile_move(delta: float) -> void:
 		global_position = tile_move_target_position
 		target_position = tile_move_target_position
 		is_replaying_tile_move = false
+		_sync_body_frames_for_move_duration(TILE_MOVE_DURATION)
 		_reset_position_samples(global_position)
 		if not pending_tile_moves.is_empty():
 			_start_next_pending_tile_move()
@@ -548,6 +546,80 @@ func _collect_appearance_sprites(node: Node) -> void:
 
 	for child in node.get_children():
 		_collect_appearance_sprites(child)
+
+
+func _sync_appearance_animation_speeds(move_duration: float = TILE_MOVE_DURATION) -> void:
+	var idle_animation_names: Array[String] = ["idle_down", "idle_left", "idle_right", "idle_up"]
+	var walk_animation_names: Array[String] = ["walk_down", "walk_left", "walk_right", "walk_up"]
+	var walk_speed := WALK_ANIMATION_SPEED * (TILE_MOVE_DURATION / maxf(move_duration, 0.001))
+
+	for sprite in appearance_sprites:
+		if sprite.sprite_frames == null:
+			continue
+
+		for animation_name: String in idle_animation_names:
+			if sprite.sprite_frames.has_animation(animation_name):
+				sprite.sprite_frames.set_animation_speed(animation_name, IDLE_ANIMATION_SPEED)
+
+		for animation_name: String in walk_animation_names:
+			if sprite.sprite_frames.has_animation(animation_name):
+				sprite.sprite_frames.set_animation_speed(animation_name, walk_speed)
+
+
+func _sync_body_frames_for_move_duration(move_duration: float) -> void:
+	var movement_style: String = CharacterAppearanceService.BODY_MOVEMENT_RUN \
+		if move_duration < TILE_MOVE_DURATION \
+		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	if movement_style == current_body_movement_style:
+		return
+	_apply_body_frames(current_body_id, current_body_gender, movement_style)
+
+
+func _apply_body_frames(body_id: String, gender: String, movement_style: String) -> void:
+	var normalized_gender: String = CharacterAppearanceService.normalize_gender(gender)
+	var fallback_body_id: String = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID \
+		if normalized_gender == "female" \
+		else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+	var normalized_body_id: String = body_id.strip_edges()
+	if normalized_body_id == "":
+		normalized_body_id = fallback_body_id
+
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
+		normalized_body_id,
+		normalized_gender,
+		movement_style
+	)
+	if body_frames == null:
+		return
+
+	for sprite in appearance_sprites:
+		if sprite.name != "BodySprite":
+			continue
+
+		var current_animation: StringName = sprite.animation
+		var current_frame: int = sprite.frame
+		var current_frame_progress: float = sprite.frame_progress
+		var was_playing: bool = sprite.is_playing()
+		sprite.sprite_frames = body_frames
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		current_body_id = normalized_body_id
+		current_body_gender = normalized_gender
+		current_body_movement_style = movement_style
+		_sync_appearance_animation_speeds(tile_move_duration if is_replaying_tile_move else TILE_MOVE_DURATION)
+
+		if body_frames.has_animation(current_animation):
+			sprite.animation = current_animation
+			var frame_count: int = body_frames.get_frame_count(current_animation)
+			if frame_count > 0:
+				sprite.frame = mini(current_frame, frame_count - 1)
+				sprite.frame_progress = current_frame_progress
+			if was_playing:
+				sprite.play(current_animation)
+			else:
+				sprite.stop()
+		else:
+			_update_animation(_is_visually_moving(false))
+		return
 
 
 func _update_animation(is_moving: bool) -> void:

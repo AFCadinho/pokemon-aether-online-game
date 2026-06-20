@@ -13,6 +13,9 @@ const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
+const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running"]
+const BODY_MOVEMENT_DEFAULT := "walk"
+const BODY_MOVEMENT_RUN := "run"
 
 static var _body_frames_cache: Dictionary = {}
 
@@ -53,10 +56,15 @@ static func _collect_body_ids_from_directory(directory_path: String, prefix: Str
 		var body_id: String = file_name.trim_suffix(".png")
 		if body_id == "":
 			continue
-		body_ids.append(prefix + body_id)
+		var prefixed_body_id: String = prefix + body_id
+		if not _is_selectable_body_id(prefixed_body_id):
+			continue
+		body_ids.append(prefixed_body_id)
 
 	for subdirectory: String in directory.get_directories():
 		if subdirectory.begins_with("."):
+			continue
+		if NON_SELECTABLE_BODY_DIRECTORIES.has(subdirectory.to_lower()):
 			continue
 		_collect_body_ids_from_directory("%s/%s" % [directory_path, subdirectory], "%s%s/" % [prefix, subdirectory], body_ids)
 
@@ -80,6 +88,8 @@ static func _get_manifest_body_ids(directory_path: String = BODY_DIRECTORY) -> A
 		var body_id: String = _normalize_body_id(str(body_id_value))
 		if body_id == "":
 			continue
+		if not _is_selectable_body_id(body_id):
+			continue
 		body_ids.append(body_id)
 	return body_ids
 
@@ -92,23 +102,24 @@ static func _sort_body_ids(body_ids: Array[String]) -> Array[String]:
 	return body_ids
 
 
-static func get_body_frames(body_id: String, gender: String = "") -> SpriteFrames:
+static func get_body_frames(body_id: String, gender: String = "", movement_style: String = BODY_MOVEMENT_DEFAULT) -> SpriteFrames:
 	var normalized_gender: String = normalize_gender(gender)
 	var normalized_body_id: String = _normalize_body_id(body_id)
 	if normalized_body_id == "":
 		normalized_body_id = _get_fallback_body_id(normalized_gender)
+	var normalized_movement_style: String = _normalize_movement_style(movement_style)
 
-	var cache_key: String = "%s:%s" % [normalized_gender, normalized_body_id]
+	var cache_key: String = "%s:%s:%s" % [normalized_gender, normalized_body_id, normalized_movement_style]
 	if _body_frames_cache.has(cache_key):
 		var cached_value: Variant = _body_frames_cache[cache_key]
 		if cached_value is SpriteFrames:
 			return cached_value as SpriteFrames
 		return null
 
-	var texture: Texture2D = _load_body_texture(normalized_body_id, normalized_gender)
+	var texture: Texture2D = _load_body_texture_for_movement(normalized_body_id, normalized_gender, normalized_movement_style)
 	var fallback_body_id: String = _get_fallback_body_id(normalized_gender)
 	if texture == null and normalized_body_id != fallback_body_id:
-		texture = _load_body_texture(fallback_body_id, normalized_gender)
+		texture = _load_body_texture_for_movement(fallback_body_id, normalized_gender, normalized_movement_style)
 	if texture == null:
 		_body_frames_cache[cache_key] = null
 		return null
@@ -116,6 +127,36 @@ static func get_body_frames(body_id: String, gender: String = "") -> SpriteFrame
 	var sprite_frames: SpriteFrames = _build_sprite_frames(texture)
 	_body_frames_cache[cache_key] = sprite_frames
 	return sprite_frames
+
+
+static func _normalize_movement_style(movement_style: String) -> String:
+	var normalized: String = movement_style.strip_edges().to_lower()
+	if normalized == BODY_MOVEMENT_RUN:
+		return BODY_MOVEMENT_RUN
+	return BODY_MOVEMENT_DEFAULT
+
+
+static func _load_body_texture_for_movement(body_id: String, gender: String, movement_style: String) -> Texture2D:
+	if movement_style == BODY_MOVEMENT_RUN:
+		var run_texture: Texture2D = _load_body_texture(_get_run_body_id(body_id), gender)
+		if run_texture != null:
+			return run_texture
+
+	return _load_body_texture(body_id, gender)
+
+
+static func _get_run_body_id(body_id: String) -> String:
+	var normalized_body_id: String = _normalize_body_id(body_id)
+	if normalized_body_id == "":
+		return ""
+
+	var slash_index: int = normalized_body_id.rfind("/")
+	if slash_index >= 0:
+		var directory_path: String = normalized_body_id.substr(0, slash_index)
+		var file_id: String = normalized_body_id.substr(slash_index + 1)
+		return "%s/%s/%s_run" % [directory_path, BODY_MOVEMENT_RUN, file_id]
+
+	return "%s/%s_run" % [BODY_MOVEMENT_RUN, normalized_body_id]
 
 
 static func _load_body_texture(body_id: String, gender: String = "") -> Texture2D:
@@ -185,6 +226,14 @@ static func _body_id_matches_gender(body_id: String, gender: String) -> bool:
 		return is_female_body
 	if gender == "male":
 		return not is_female_body or is_male_body
+	return true
+
+
+static func _is_selectable_body_id(body_id: String) -> bool:
+	var normalized_body_id: String = _normalize_body_id(body_id).to_lower()
+	for body_path_part: String in normalized_body_id.split("/", false):
+		if NON_SELECTABLE_BODY_DIRECTORIES.has(body_path_part):
+			return false
 	return true
 
 

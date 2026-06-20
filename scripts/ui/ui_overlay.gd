@@ -48,8 +48,6 @@ const KANTO_BADGES := [
 	{"id": "volcano", "name": "Volcano Badge", "texture": "res://assets/gym_badges/kanto_badges/Volcano_Badge.png", "unlocked": false},
 	{"id": "earth", "name": "Earth Badge", "texture": "res://assets/gym_badges/kanto_badges/Earth_Badge.png", "unlocked": false},
 ]
-const PLAYER_STATUS_CARD_SIZE := Vector2(248, 86)
-const PLAYER_STATUS_CARD_MARGIN := Vector2(16, 16)
 const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(76, 76)
 const PLAYER_STATUS_AVATAR_POSITION := Vector2(38, 52)
 const PLAYER_STATUS_AVATAR_SCALE := Vector2(1.5, 1.5)
@@ -78,9 +76,6 @@ const UI_DANGER_BG := Color("#2a1015e8")
 const UI_REPEL_BG := Color("#155f2be8")
 const PLAYER_STATUS_CARD_BACKGROUND := UI_BG
 const PLAYER_STATUS_CARD_BORDER := UI_BORDER
-const PLAYER_STATUS_CARD_TEXT := UI_TEXT
-const PLAYER_STATUS_MONEY_COLOR := UI_MONEY
-const PLAYER_STATUS_MONEY_ICON := "$"
 
 enum DevPokemonPopupMode {
 	POKEMON,
@@ -121,12 +116,19 @@ enum DevPokemonPopupMode {
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
 @onready var map_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot
 @onready var map_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot/MapButton
+@onready var running_shoes_slot: PanelContainer = $Control/ActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot
+@onready var running_shoes_button: TextureButton = $Control/ActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot/RunningShoesButton
 @onready var repel_slot: PanelContainer = $Control/ActionsPanel/MarginContainer/HBoxContainer/RepelSlot
 @onready var repel_toggle_button: TextureButton = $Control/ActionsPanel/MarginContainer/HBoxContainer/RepelSlot/RepelToggle
 @onready var follower_slot: PanelContainer = $Control/ActionsPanel/MarginContainer/HBoxContainer/FollowerSlot
 @onready var follower_toggle_button: TextureButton = $Control/ActionsPanel/MarginContainer/HBoxContainer/FollowerSlot/FollowerToggle
 @onready var dev_actions_slot: PanelContainer = $Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot
 @onready var dev_actions_button: TextureButton = $Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot/DevActionsButton
+@onready var hotkey_sidebar_panel: PanelContainer = $Control/HotkeySidebar
+@onready var player_status_panel: PanelContainer = $Control/PlayerStatusPanel
+@onready var player_status_name_label: Label = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/NameLabel
+@onready var player_status_money_label: Label = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/MoneyRow/MoneyLabel
+@onready var player_status_avatar_viewport: SubViewport = $Control/PlayerStatusPanel/MarginContainer/Row/AvatarFrame/ViewportContainer/AvatarViewport
 @onready var dev_actions_popup: PanelContainer = $Control/DevActionsPopup
 @onready var dev_add_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddPokemonButton
 @onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
@@ -149,10 +151,8 @@ var party_drag_pointer_offset := Vector2.ZERO
 var clear_party_confirm_dialog: ConfirmationDialog
 var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
-var player_status_panel: PanelContainer
-var player_status_name_label: Label
-var player_status_money_label: Label
-var player_status_avatar_viewport: SubViewport
+var hotkey_sidebar_dragging := false
+var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
 var trainer_card_avatar_viewports: Array[SubViewport] = []
 var trainer_card_money_label: Label
@@ -201,18 +201,24 @@ func _ready() -> void:
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
 	_setup_icon_slot_hover(map_slot, map_button)
+	_setup_icon_slot_hover(running_shoes_slot, running_shoes_button)
 	_setup_icon_slot_hover(bag_slot, bag_button)
 	_setup_icon_slot_hover(settings_slot, settings_button)
 	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
 	_setup_icon_slot_hover(follower_slot, follower_toggle_button)
 	_setup_icon_slot_hover(dev_actions_slot, dev_actions_button)
+	_disable_icon_button_focus()
 	settings_button.pressed.connect(_on_settings_button_pressed)
+	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
+	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
+	running_shoes_button.toggled.connect(_on_running_shoes_toggled)
 	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
 	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
 	_load_follower_preference.call_deferred()
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
+	hotkey_sidebar_panel.gui_input.connect(_on_hotkey_sidebar_gui_input)
 	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
 	dev_add_team_button.visible = false
 	dev_add_team_button.disabled = true
@@ -311,6 +317,10 @@ func _input(event: InputEvent) -> void:
 		_handle_trainer_card_drag_input(event)
 		return
 
+	if hotkey_sidebar_dragging:
+		_handle_hotkey_sidebar_drag_input(event)
+		return
+
 	if chat_input.has_focus() and _is_settings_toggle_event(event):
 		chat_input.release_focus()
 		get_viewport().set_input_as_handled()
@@ -346,7 +356,7 @@ func _handle_chat_resize_drag(event: InputEvent) -> void:
 		var mouse_position := root_control.get_local_mouse_position()
 		var delta := mouse_position - chat_resize_drag_start_mouse
 		var new_size := Vector2(
-			clampf(chat_resize_drag_start_rect.size.x - delta.x, CHAT_MIN_SIZE.x, CHAT_MAX_SIZE.x),
+			clampf(chat_resize_drag_start_rect.size.x + delta.x, CHAT_MIN_SIZE.x, CHAT_MAX_SIZE.x),
 			clampf(chat_resize_drag_start_rect.size.y - delta.y, CHAT_MIN_SIZE.y, CHAT_MAX_SIZE.y)
 		)
 		_set_chat_panel_size(new_size)
@@ -362,116 +372,52 @@ func _handle_chat_resize_drag(event: InputEvent) -> void:
 func _is_point_inside_control(control: Control, point: Vector2) -> bool:
 	return control.get_global_rect().has_point(point)
 
+func _on_hotkey_sidebar_gui_input(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		hotkey_sidebar_dragging = true
+		hotkey_sidebar_drag_offset = root_control.get_local_mouse_position() - hotkey_sidebar_panel.position
+		get_viewport().set_input_as_handled()
+
+func _handle_hotkey_sidebar_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		var target_position := root_control.get_local_mouse_position() - hotkey_sidebar_drag_offset
+		_set_hotkey_sidebar_position(target_position)
+		get_viewport().set_input_as_handled()
+		return
+
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			hotkey_sidebar_dragging = false
+			_position_collapsible_button("hotkey_sidebar")
+			get_viewport().set_input_as_handled()
+
+func _set_hotkey_sidebar_position(position: Vector2) -> void:
+	if hotkey_sidebar_panel == null:
+		return
+
+	var root_size := root_control.size
+	var panel_size := hotkey_sidebar_panel.size
+	var clamped_position := Vector2(
+		clampf(position.x, 8.0, maxf(8.0, root_size.x - panel_size.x - 8.0)),
+		clampf(position.y, 8.0, maxf(8.0, root_size.y - panel_size.y - 8.0))
+	)
+	hotkey_sidebar_panel.position = clamped_position
+	_position_collapsible_button("hotkey_sidebar")
+
 func _setup_player_status_card() -> void:
-	player_status_panel = PanelContainer.new()
-	player_status_panel.name = "PlayerStatusPanel"
-	player_status_panel.custom_minimum_size = PLAYER_STATUS_CARD_SIZE
-	player_status_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	player_status_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	player_status_panel.anchor_left = 0.0
-	player_status_panel.anchor_top = 1.0
-	player_status_panel.anchor_right = 0.0
-	player_status_panel.anchor_bottom = 1.0
-	player_status_panel.offset_left = PLAYER_STATUS_CARD_MARGIN.x
-	player_status_panel.offset_top = -PLAYER_STATUS_CARD_SIZE.y - PLAYER_STATUS_CARD_MARGIN.y
-	player_status_panel.offset_right = PLAYER_STATUS_CARD_MARGIN.x + PLAYER_STATUS_CARD_SIZE.x
-	player_status_panel.offset_bottom = -PLAYER_STATUS_CARD_MARGIN.y
-	player_status_panel.add_theme_stylebox_override("panel", _make_panel_style(
-		PLAYER_STATUS_CARD_BACKGROUND,
-		PLAYER_STATUS_CARD_BORDER,
-		14,
-		1
-	))
-	root_control.add_child(player_status_panel)
 	player_status_panel.gui_input.connect(_on_player_status_panel_gui_input)
 	player_status_panel.mouse_entered.connect(_on_player_status_panel_mouse_entered)
 	player_status_panel.mouse_exited.connect(_on_player_status_panel_mouse_exited)
-
-	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 12)
-	margin_container.add_theme_constant_override("margin_top", 10)
-	margin_container.add_theme_constant_override("margin_right", 12)
-	margin_container.add_theme_constant_override("margin_bottom", 10)
-	player_status_panel.add_child(margin_container)
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	margin_container.add_child(row)
-
-	row.add_child(_create_player_status_avatar())
-
-	var info_layout := VBoxContainer.new()
-	info_layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_layout.alignment = BoxContainer.ALIGNMENT_CENTER
-	info_layout.add_theme_constant_override("separation", 7)
-	row.add_child(info_layout)
-
-	player_status_name_label = Label.new()
-	player_status_name_label.text = PlayerSave.player_name
-	player_status_name_label.add_theme_font_size_override("font_size", 17)
-	player_status_name_label.add_theme_color_override("font_color", PLAYER_STATUS_CARD_TEXT)
-	player_status_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	info_layout.add_child(player_status_name_label)
-
-	var money_row := HBoxContainer.new()
-	money_row.add_theme_constant_override("separation", 8)
-	money_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_layout.add_child(money_row)
-
-	var money_icon := PanelContainer.new()
-	money_icon.custom_minimum_size = Vector2(24, 24)
-	money_icon.add_theme_stylebox_override("panel", _make_panel_style(PLAYER_STATUS_MONEY_COLOR, Color("#fff1a8"), 12, 1))
-	money_row.add_child(money_icon)
-
-	var money_icon_label := Label.new()
-	money_icon_label.text = PLAYER_STATUS_MONEY_ICON
-	money_icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	money_icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	money_icon_label.add_theme_color_override("font_color", Color("#5b3f00"))
-	money_icon_label.add_theme_font_size_override("font_size", 15)
-	money_icon.add_child(money_icon_label)
-
-	player_status_money_label = Label.new()
-	player_status_money_label.custom_minimum_size = Vector2(70, 24)
-	player_status_money_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	player_status_money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	player_status_money_label.add_theme_font_size_override("font_size", 19)
-	player_status_money_label.add_theme_color_override("font_color", PLAYER_STATUS_MONEY_COLOR)
-	player_status_money_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	money_row.add_child(player_status_money_label)
-
-	var open_indicator := Label.new()
-	open_indicator.text = ">"
-	open_indicator.custom_minimum_size = Vector2(14, 0)
-	open_indicator.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	open_indicator.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	open_indicator.add_theme_font_size_override("font_size", 18)
-	open_indicator.add_theme_color_override("font_color", Color("#9fc7ff"))
-	row.add_child(open_indicator)
-
+	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
 	_refresh_player_status_card()
-
-func _create_player_status_avatar() -> Control:
-	var avatar_frame := PanelContainer.new()
-	avatar_frame.custom_minimum_size = Vector2(68, 68)
-	avatar_frame.add_theme_stylebox_override("panel", _make_panel_style(UI_BG_STRONG, Color("#f4ecd5"), 34, 2))
-
-	var avatar_viewport_container := SubViewportContainer.new()
-	avatar_viewport_container.custom_minimum_size = Vector2(68, 68)
-	avatar_viewport_container.stretch = false
-	avatar_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	avatar_frame.add_child(avatar_viewport_container)
-
-	var avatar_viewport := SubViewport.new()
-	avatar_viewport.transparent_bg = true
-	avatar_viewport.size = PLAYER_STATUS_AVATAR_VIEWPORT_SIZE
-	avatar_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	avatar_viewport_container.add_child(avatar_viewport)
-	player_status_avatar_viewport = avatar_viewport
-
-	_populate_avatar_preview(avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
-
-	return avatar_frame
 
 func _create_player_status_avatar_visual() -> Node2D:
 	var source_player: Node2D = PLAYER_PREVIEW_SCENE.instantiate() as Node2D
@@ -1612,8 +1558,9 @@ func _apply_premium_overlay_styles() -> void:
 		_apply_button_style(chat_resize_button)
 
 func _setup_collapsible_panels() -> void:
-	_register_collapsible_panel("chat", chat_panel, "left")
-	_register_collapsible_panel("player_status", player_status_panel, "right")
+	_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "right_center")
+	_register_collapsible_panel("chat", chat_panel, "right")
+	_register_collapsible_panel("player_status", player_status_panel, "left")
 	_register_collapsible_panel("party", party_panel, "left")
 	_register_collapsible_panel("location", location_panel, "right_center")
 	_register_collapsible_panel("options", options_panel, "right")
@@ -1808,7 +1755,7 @@ func _set_chat_panel_size(size: Vector2) -> void:
 		clampf(size.x, CHAT_MIN_SIZE.x, CHAT_MAX_SIZE.x),
 		clampf(size.y, CHAT_MIN_SIZE.y, CHAT_MAX_SIZE.y)
 	)
-	chat_panel.offset_left = chat_panel.offset_right - clamped_size.x
+	chat_panel.offset_right = chat_panel.offset_left + clamped_size.x
 	chat_panel.offset_top = chat_panel.offset_bottom - clamped_size.y
 	_position_chat_tabs_panel()
 	_position_collapsible_button("chat")
@@ -2468,8 +2415,29 @@ func _on_settings_button_pressed() -> void:
 
 	settings_menu.visible = true
 
+func _on_running_shoes_toggled(enabled: bool) -> void:
+	GameState.running_shoes_enabled = enabled
+	_set_icon_slot_active(running_shoes_slot, enabled)
+	var player_node := get_tree().get_first_node_in_group("player")
+	if player_node != null and player_node.has_method("set_running_shoes_enabled"):
+		player_node.call("set_running_shoes_enabled", enabled)
+
 func _on_settings_menu_closed() -> void:
-	settings_button.grab_focus()
+	if settings_button.has_focus():
+		settings_button.release_focus()
+
+func _disable_icon_button_focus() -> void:
+	for button: BaseButton in [
+		map_button,
+		running_shoes_button,
+		bag_button,
+		settings_button,
+		repel_toggle_button,
+		follower_toggle_button,
+		dev_actions_button,
+	]:
+		if button != null:
+			button.focus_mode = Control.FOCUS_NONE
 
 func _add_chat_message(text: String, use_bbcode: bool = false) -> void:
 	var entry := message_entry_template.duplicate() as RichTextLabel

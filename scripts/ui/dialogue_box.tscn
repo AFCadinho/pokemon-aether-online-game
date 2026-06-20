@@ -4,16 +4,42 @@
 [ext_resource type="Texture2D" uid="uid://bmainpxahsft1" path="res://assets/sprites/mugshots/prof_oak.png" id="2_bnoha"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pmm6m"]
-bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7058824)
+bg_color = Color(0.02745098, 0.04313726, 0.07450981, 0.95686275)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+border_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_text_panel"]
+bg_color = Color(0.050980393, 0.08627451, 0.14509805, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_portrait_panel"]
+bg_color = Color(0.015686275, 0.02745098, 0.047058824, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2784314, 0.46666667, 0.6627451, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bnoha"]
 atlas = ExtResource("2_bnoha")
@@ -35,10 +61,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -400.0
-offset_top = 120.0
-offset_right = 221.0
-offset_bottom = 310.0
+offset_left = -380.0
+offset_top = 92.0
+offset_right = 380.0
+offset_bottom = 262.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pmm6m")
 
@@ -49,18 +75,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer" unique_id=111781305]
 layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="Panel" type="Panel" parent="Box/PanelContainer/MarginContainer/HBoxContainer" unique_id=1970599554]
-custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_text_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel" unique_id=117443700]
 layout_mode = 1
@@ -69,20 +96,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 36
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer" unique_id=627441881]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 16
+theme_override_constants/separation = 10
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=1276683663]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 20
+theme_override_colors/default_color = Color(0.95686275, 0.9411765, 0.87058824, 1)
+theme_override_font_sizes/normal_font_size = 18
 text = "Leave some for me."
 fit_content = true
 scroll_active = false
@@ -90,13 +118,34 @@ scroll_active = false
 [node name="ConitinueArrow" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer" unique_id=1864270790]
 layout_mode = 2
 size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_font_sizes/font_size = 18
 text = "▼"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer" unique_id=720977074]
+custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="NPCSprite" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1241935148]
-custom_minimum_size = Vector2(128, 128)
+[node name="PortraitPanel" type="Panel" parent="Box/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=569410267]
+custom_minimum_size = Vector2(112, 112)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_portrait_panel")
+
+[node name="PortraitMargin" type="MarginContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel" unique_id=2133460348]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="NPCSprite" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel/PortraitMargin" unique_id=1241935148]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = SubResource("AtlasTexture_bnoha")
 expand_mode = 1
@@ -105,5 +154,6 @@ stretch_mode = 5
 [node name="NPCName" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=80748289]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 15
 text = "Prof. Oak"
 horizontal_alignment = 1

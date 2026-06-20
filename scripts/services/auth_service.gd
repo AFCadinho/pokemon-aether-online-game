@@ -127,6 +127,41 @@ func logout() -> Dictionary:
 	return response
 
 
+func update_account_details(display_name: String, current_password: String, new_password: String) -> Dictionary:
+	if session_token == "":
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var payload: Dictionary = {
+		"displayName": display_name,
+	}
+	if new_password.strip_edges() != "":
+		payload["currentPassword"] = current_password
+		payload["newPassword"] = new_password
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/account",
+		HTTPClient.METHOD_PUT,
+		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()]),
+		JSON.stringify(payload)
+	)
+
+	if not bool(response.get("success", false)):
+		return response
+
+	current_user = _dictionary_from_value(response.get("body", {}))
+	if session_token != "":
+		_save_session()
+
+	return {
+		"success": true,
+		"user": current_user,
+	}
+
+
 func clear_session() -> void:
 	var chat_service: Object = get_node_or_null("/root/ChatRealtimeService")
 	if chat_service != null and chat_service.has_method("disconnect_chat"):

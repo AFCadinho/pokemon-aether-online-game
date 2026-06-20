@@ -11,6 +11,7 @@ const SORT_Z_MAX := 256
 const SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const SIDE_SPRITE_VISUAL_OFFSET := Vector2(0.0, -16.0)
 const VERTICAL_SPRITE_VISUAL_OFFSET := Vector2(0.0, -12.0)
+const BASE_FOLLOWER_FRAME_HEIGHT := 64.0
 const SHINY_SPARKLE_COLOR := Color(1.0, 0.82, 0.22, 0.88)
 const SHINY_SPARKLE_CENTER_OFFSET := Vector2(0.0, -20.0)
 const SHINY_SPARKLE_RADIUS := 20.0
@@ -139,14 +140,36 @@ func _follow_target(delta: float) -> void:
 	var distance: float = global_position.distance_to(target_position)
 	if distance <= 1.0:
 		global_position = target_position
-		_play_idle_animation()
+		if _should_keep_walk_animation():
+			_play_walk_animation(last_animation_direction)
+		else:
+			_play_idle_animation()
 		return
 
-	var speed: float = TILE_SIZE / 0.22
+	var speed: float = TILE_SIZE / _get_follow_move_duration()
 	var previous_position: Vector2 = global_position
 	global_position = global_position.move_toward(target_position, speed * delta)
 	var movement_delta: Vector2 = global_position - previous_position
 	_play_walk_animation(movement_delta)
+
+func _get_follow_move_duration() -> float:
+	if player != null and is_instance_valid(player) and player.has_method("get_current_move_duration"):
+		return maxf(float(player.call("get_current_move_duration")), 0.001)
+	return 0.22
+
+func _should_keep_walk_animation() -> bool:
+	if position_history.size() > FOLLOW_DISTANCE_TILES + 1:
+		return true
+	if player == null or not is_instance_valid(player):
+		return false
+	if player.has_method("is_tile_moving"):
+		return bool(player.call("is_tile_moving"))
+
+	var remote_moving_value: Variant = player.get("is_replaying_tile_move")
+	if remote_moving_value is bool:
+		return bool(remote_moving_value)
+
+	return false
 
 func _play_walk_animation(movement_delta: Vector2) -> void:
 	var direction: Vector2 = _direction_from_delta(movement_delta)
@@ -185,9 +208,26 @@ func _get_shiny_sparkle_center() -> Vector2:
 	return _get_sprite_visual_offset(last_animation_direction) + SHINY_SPARKLE_CENTER_OFFSET
 
 func _get_sprite_visual_offset(direction: Vector2) -> Vector2:
+	var large_sprite_offset := Vector2(0.0, -maxf(_get_current_frame_size().y - BASE_FOLLOWER_FRAME_HEIGHT, 0.0) * 0.5)
 	if direction == Vector2.LEFT or direction == Vector2.RIGHT:
-		return SIDE_SPRITE_VISUAL_OFFSET
-	return VERTICAL_SPRITE_VISUAL_OFFSET
+		return SIDE_SPRITE_VISUAL_OFFSET + large_sprite_offset
+	return VERTICAL_SPRITE_VISUAL_OFFSET + large_sprite_offset
+
+func _get_current_frame_size() -> Vector2:
+	if sprite == null or sprite.sprite_frames == null:
+		return Vector2(BASE_FOLLOWER_FRAME_HEIGHT, BASE_FOLLOWER_FRAME_HEIGHT)
+
+	var animation_name := _get_idle_animation_name(last_animation_direction)
+	if not sprite.sprite_frames.has_animation(animation_name):
+		return Vector2(BASE_FOLLOWER_FRAME_HEIGHT, BASE_FOLLOWER_FRAME_HEIGHT)
+	if sprite.sprite_frames.get_frame_count(animation_name) <= 0:
+		return Vector2(BASE_FOLLOWER_FRAME_HEIGHT, BASE_FOLLOWER_FRAME_HEIGHT)
+
+	var frame_texture := sprite.sprite_frames.get_frame_texture(animation_name, 0)
+	if frame_texture == null:
+		return Vector2(BASE_FOLLOWER_FRAME_HEIGHT, BASE_FOLLOWER_FRAME_HEIGHT)
+
+	return frame_texture.get_size()
 
 func _direction_from_delta(delta: Vector2) -> Vector2:
 	if abs(delta.x) > abs(delta.y):

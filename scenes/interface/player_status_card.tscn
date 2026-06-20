@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://dni4uwhy5b3in"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.02745098, 0.043137256, 0.078431375, 0.9019608)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.34)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar"]
+bg_color = Color(0.019607844, 0.02745098, 0.043137256, 0.9490196)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95686275, 0.9254902, 0.8352941, 1)
+corner_radius_top_left = 34
+corner_radius_top_right = 34
+corner_radius_bottom_right = 34
+corner_radius_bottom_left = 34
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_money"]
+bg_color = Color(1, 0.83137256, 0.3529412, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.94509804, 0.65882355, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="PlayerStatusPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(248, 86)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -264.0
+offset_top = -102.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="Row" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AvatarFrame" type="PanelContainer" parent="MarginContainer/Row"]
+custom_minimum_size = Vector2(68, 68)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avatar")
+
+[node name="ViewportContainer" type="SubViewportContainer" parent="MarginContainer/Row/AvatarFrame"]
+custom_minimum_size = Vector2(68, 68)
+layout_mode = 2
+mouse_filter = 2
+stretch = false
+
+[node name="AvatarViewport" type="SubViewport" parent="MarginContainer/Row/AvatarFrame/ViewportContainer"]
+transparent_bg = true
+size = Vector2i(76, 76)
+render_target_update_mode = 3
+
+[node name="InfoLayout" type="VBoxContainer" parent="MarginContainer/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 7
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="MarginContainer/Row/InfoLayout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95686275, 0.9411765, 0.87058824, 1)
+theme_override_font_sizes/font_size = 17
+text = "Trainer"
+text_overrun_behavior = 3
+
+[node name="MoneyRow" type="HBoxContainer" parent="MarginContainer/Row/InfoLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="MoneyIcon" type="PanelContainer" parent="MarginContainer/Row/InfoLayout/MoneyRow"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_money")
+
+[node name="IconLabel" type="Label" parent="MarginContainer/Row/InfoLayout/MoneyRow/MoneyIcon"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35686275, 0.24705882, 0, 1)
+theme_override_font_sizes/font_size = 15
+text = "$"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="MarginContainer/Row/InfoLayout/MoneyRow"]
+custom_minimum_size = Vector2(70, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.83137256, 0.3529412, 1)
+theme_override_font_sizes/font_size = 19
+text = "0"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="OpenIndicator" type="Label" parent="MarginContainer/Row"]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62352943, 0.78039217, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "<"
+horizontal_alignment = 1
+vertical_alignment = 1

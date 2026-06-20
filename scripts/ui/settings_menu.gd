@@ -27,6 +27,7 @@ const UI_SECTION_TEXT := Color("#d8b767")
 const UI_PURPLE_HOVER := Color("#b980ff")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
+const ACCOUNT_DIALOG_STATUS_HEIGHT := 30.0
 
 @onready var settings_layout: VBoxContainer = $MarginContainer/VBoxContainer
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
@@ -52,8 +53,19 @@ var logging_out := false
 var tab_container: TabContainer
 var account_tab_root: Control
 var account_user_label: Label
+var account_status_label: Label
+var edit_account_button: Button
 var logout_button: Button
 var logout_confirm_dialog: ConfirmationDialog
+var account_details_dialog: PanelContainer
+var account_details_panel: PanelContainer
+var account_dialog_status_label: Label
+var account_confirm_button: Button
+var account_cancel_button: Button
+var account_display_name_input: LineEdit
+var account_current_password_input: LineEdit
+var account_new_password_input: LineEdit
+var account_confirm_password_input: LineEdit
 
 
 func _ready() -> void:
@@ -72,7 +84,14 @@ func _ready() -> void:
 	battle_music_options_button.item_selected.connect(_on_battle_music_selected)
 	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
 	ui_volume_slider.value_changed.connect(_on_ui_volume_changed)
+	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
+	edit_account_button.gui_input.connect(_on_account_button_gui_input.bind("edit"))
 	logout_button.pressed.connect(_on_logout_button_pressed)
+	logout_button.gui_input.connect(_on_account_button_gui_input.bind("logout"))
+	print("[settings] account buttons connected. edit=%s logout=%s" % [
+		str(edit_account_button != null),
+		str(logout_button != null),
+	])
 	close_button.pressed.connect(close)
 	_apply_settings_to_controls()
 	visible = false
@@ -86,6 +105,8 @@ func open(context: String = "game") -> void:
 
 
 func close() -> void:
+	if account_details_dialog != null:
+		_hide_account_details_dialog()
 	visible = false
 	closed.emit()
 
@@ -214,6 +235,19 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_user_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	account_tab.add_child(account_user_label)
 
+	edit_account_button = Button.new()
+	edit_account_button.text = "Edit Account Details"
+	account_tab.add_child(edit_account_button)
+
+	_setup_account_details_dialog()
+	account_tab.add_child(account_details_dialog)
+
+	account_status_label = Label.new()
+	account_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_status_label.add_theme_font_size_override("font_size", 12)
+	account_status_label.visible = false
+	account_tab.add_child(account_status_label)
+
 	var account_note := Label.new()
 	account_note.text = "Return to the login screen without ending your saved session."
 	account_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -236,6 +270,101 @@ func _setup_logout_confirm_dialog() -> void:
 	add_child(logout_confirm_dialog)
 
 
+func _setup_account_details_dialog() -> void:
+	account_details_dialog = PanelContainer.new()
+	account_details_dialog.name = "AccountDetailsPopup"
+	account_details_dialog.visible = false
+	account_details_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
+	account_details_dialog.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	account_details_panel = account_details_dialog
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	account_details_dialog.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
+	margin.add_child(layout)
+
+	var title_row := HBoxContainer.new()
+	layout.add_child(title_row)
+
+	var title_label := Label.new()
+	title_label.text = "Edit Account Details"
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.add_theme_font_size_override("font_size", 16)
+	title_row.add_child(title_label)
+
+	var close_dialog_button := Button.new()
+	close_dialog_button.text = "X"
+	close_dialog_button.custom_minimum_size = Vector2(30, 28)
+	close_dialog_button.pressed.connect(_hide_account_details_dialog)
+	title_row.add_child(close_dialog_button)
+
+	var display_hint := Label.new()
+	display_hint.text = "Display name must match your username. Only casing can change."
+	display_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	display_hint.add_theme_font_size_override("font_size", 11)
+	layout.add_child(display_hint)
+
+	account_display_name_input = _create_account_line_edit("Display name", false)
+	layout.add_child(account_display_name_input)
+
+	var password_hint := Label.new()
+	password_hint.text = "Leave password fields empty if you only want to update your display name."
+	password_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	password_hint.add_theme_font_size_override("font_size", 11)
+	layout.add_child(password_hint)
+
+	account_current_password_input = _create_account_line_edit("Current password", true)
+	layout.add_child(account_current_password_input)
+
+	account_new_password_input = _create_account_line_edit("New password", true)
+	layout.add_child(account_new_password_input)
+
+	account_confirm_password_input = _create_account_line_edit("Confirm new password", true)
+	layout.add_child(account_confirm_password_input)
+
+	account_dialog_status_label = Label.new()
+	account_dialog_status_label.custom_minimum_size = Vector2(0, ACCOUNT_DIALOG_STATUS_HEIGHT)
+	account_dialog_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_dialog_status_label.add_theme_font_size_override("font_size", 12)
+	layout.add_child(account_dialog_status_label)
+
+	var button_row := HBoxContainer.new()
+	button_row.add_theme_constant_override("separation", 8)
+	layout.add_child(button_row)
+
+	var button_spacer := Control.new()
+	button_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button_row.add_child(button_spacer)
+
+	account_cancel_button = Button.new()
+	account_cancel_button.text = "Cancel"
+	account_cancel_button.custom_minimum_size = Vector2(92, 32)
+	account_cancel_button.pressed.connect(_hide_account_details_dialog)
+	button_row.add_child(account_cancel_button)
+
+	account_confirm_button = Button.new()
+	account_confirm_button.text = "Confirm"
+	account_confirm_button.custom_minimum_size = Vector2(104, 32)
+	account_confirm_button.pressed.connect(_account_details_confirmed)
+	button_row.add_child(account_confirm_button)
+
+
+func _create_account_line_edit(placeholder: String, secret: bool) -> LineEdit:
+	var input := LineEdit.new()
+	input.placeholder_text = placeholder
+	input.custom_minimum_size = Vector2(300, 32)
+	input.secret = secret
+	input.clear_button_enabled = true
+	return input
+
+
 func _apply_premium_styles() -> void:
 	add_theme_stylebox_override("panel", _make_gold_panel_style(12, 1))
 	if tab_container != null:
@@ -251,6 +380,7 @@ func _apply_premium_styles() -> void:
 	if logout_button != null:
 		_apply_button_style(logout_button, "danger")
 	_apply_button_style(close_button)
+	_apply_account_dialog_style()
 
 
 func _apply_styles_recursive(node: Node) -> void:
@@ -314,6 +444,40 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
+func _apply_line_edit_style(input: LineEdit) -> void:
+	input.add_theme_color_override("font_color", UI_TEXT)
+	input.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.7))
+	input.add_theme_color_override("caret_color", UI_SECTION_TEXT)
+	input.add_theme_font_size_override("font_size", 14)
+	input.add_theme_stylebox_override("normal", _make_input_style(UI_INPUT_BG, UI_BORDER_SOFT))
+	input.add_theme_stylebox_override("focus", _make_input_style(Color("#071225f2"), UI_BORDER_FOCUS, 2))
+	input.add_theme_stylebox_override("read_only", _make_input_style(Color("#090d16d8"), UI_BORDER_SOFT))
+
+
+func _apply_account_dialog_style() -> void:
+	if account_details_dialog == null:
+		return
+
+	_apply_styles_recursive(account_details_dialog)
+	account_details_dialog.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+
+	if account_confirm_button != null:
+		_apply_button_style(account_confirm_button)
+	if account_cancel_button != null:
+		_apply_button_style(account_cancel_button, "danger")
+	if account_dialog_status_label != null:
+		account_dialog_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+	for input: LineEdit in [
+		account_display_name_input,
+		account_current_password_input,
+		account_new_password_input,
+		account_confirm_password_input,
+	]:
+		if input != null:
+			_apply_line_edit_style(input)
+
+
 func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = background_color
@@ -346,15 +510,32 @@ func _make_button_style(background_color: Color, border_color: Color, corner_rad
 	return style
 
 
+func _make_input_style(background_color: Color, border_color: Color, border_width: int = 1) -> StyleBoxFlat:
+	var style := _make_panel_style(background_color, border_color, 7, border_width)
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	return style
+
+
 func _refresh_account_tab() -> void:
 	if account_user_label == null:
 		return
 
+	_set_account_status("")
 	var display_name: String = AuthService.get_display_name()
 	var username: String = str(AuthService.current_user.get("username", ""))
+	print("[settings] refresh account tab. display=%s username=%s" % [display_name, username])
 	if display_name == "" and username == "":
 		account_user_label.text = "No active account."
+		if edit_account_button != null:
+			edit_account_button.disabled = true
+			print("[settings] edit account disabled: no active account")
 		return
+	if edit_account_button != null:
+		edit_account_button.disabled = false
+		print("[settings] edit account enabled")
 	if username != "" and username != display_name:
 		account_user_label.text = "Logged in as %s (@%s)" % [display_name, username]
 		return
@@ -456,9 +637,160 @@ func _on_ui_volume_changed(value: float) -> void:
 
 
 func _on_logout_button_pressed() -> void:
+	print("[settings] return to login pressed. logging_out=%s dialog_parent=%s" % [
+		str(logging_out),
+		str(logout_confirm_dialog.get_parent() if logout_confirm_dialog != null else null),
+	])
 	if logging_out:
 		return
 	logout_confirm_dialog.popup_centered()
+
+
+func _on_account_button_gui_input(event: InputEvent, button_id: String) -> void:
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return
+
+	var target_button: Button = edit_account_button if button_id == "edit" else logout_button
+	print("[settings] %s button raw click. disabled=%s visible=%s rect=%s mouse_filter=%s overlay_visible=%s overlay_filter=%s" % [
+		button_id,
+		str(target_button.disabled if target_button != null else true),
+		str(target_button.visible if target_button != null else false),
+		str(target_button.get_global_rect() if target_button != null else Rect2()),
+		str(target_button.mouse_filter if target_button != null else -1),
+		str(account_details_dialog.visible if account_details_dialog != null else false),
+		str(account_details_dialog.mouse_filter if account_details_dialog != null else -1),
+	])
+
+
+func _on_edit_account_button_pressed() -> void:
+	print("[settings] edit account pressed. dialog_parent=%s visible=%s disabled=%s" % [
+		str(account_details_dialog.get_parent() if account_details_dialog != null else null),
+		str(account_details_dialog.visible if account_details_dialog != null else false),
+		str(edit_account_button.disabled if edit_account_button != null else true),
+	])
+	var display_name: String = AuthService.get_display_name()
+	var username: String = str(AuthService.current_user.get("username", ""))
+	account_display_name_input.text = display_name if display_name != "" else username
+	account_current_password_input.clear()
+	account_new_password_input.clear()
+	account_confirm_password_input.clear()
+	_set_account_dialog_status("")
+	_popup_account_details_dialog()
+	account_display_name_input.grab_focus()
+
+
+func _popup_account_details_dialog() -> void:
+	if account_details_dialog == null:
+		print("[settings] account details popup aborted: dialog is null")
+		return
+
+	account_details_dialog.visible = true
+	account_details_dialog.move_to_front()
+	print("[settings] account details shown inline. parent=%s pos=%s size=%s visible=%s" % [
+		str(account_details_dialog.get_parent()),
+		str(account_details_dialog.global_position),
+		str(account_details_dialog.size),
+		str(account_details_dialog.visible),
+	])
+
+
+func _hide_account_details_dialog() -> void:
+	if account_details_dialog == null:
+		return
+
+	print("[settings] account details hidden")
+	account_details_dialog.visible = false
+
+
+func _account_details_confirmed() -> void:
+	var display_name: String = account_display_name_input.text.strip_edges()
+	var username: String = str(AuthService.current_user.get("username", "")).strip_edges()
+	var current_password: String = account_current_password_input.text
+	var new_password: String = account_new_password_input.text
+	var confirm_password: String = account_confirm_password_input.text
+
+	if username == "":
+		_set_account_dialog_status("No active account.", true)
+		return
+	if display_name == "":
+		_set_account_dialog_status("Display name is required.", true)
+		return
+	if display_name.to_lower() != username.to_lower():
+		_set_account_dialog_status("Display name must match your username. Only casing can change.", true)
+		return
+	if new_password != "" or confirm_password != "" or current_password != "":
+		if current_password == "":
+			_set_account_dialog_status("Enter your current password to change your password.", true)
+			return
+		if new_password.length() < 8:
+			_set_account_dialog_status("New password must be at least 8 characters.", true)
+			return
+		if new_password != confirm_password:
+			_set_account_dialog_status("New passwords do not match.", true)
+			return
+
+	_set_account_controls_disabled(true)
+	_set_account_dialog_status("Saving account details...")
+	var result: Dictionary = await AuthService.update_account_details(display_name, current_password, new_password)
+	_set_account_controls_disabled(false)
+
+	if not bool(result.get("success", false)):
+		_set_account_dialog_status(str(result.get("error", "Could not update account details.")), true)
+		return
+
+	PlayerSave.player_name = AuthService.get_display_name()
+	var player_node: Node = get_tree().get_first_node_in_group("player")
+	if player_node != null and player_node.has_method("set_display_name"):
+		player_node.call("set_display_name", PlayerSave.player_name, true)
+
+	_refresh_account_tab()
+	_hide_account_details_dialog()
+	_set_account_status("Account details updated.")
+
+
+func _set_account_dialog_status(message: String, is_error: bool = false) -> void:
+	if account_dialog_status_label == null:
+		return
+
+	account_dialog_status_label.text = message
+	account_dialog_status_label.add_theme_color_override("font_color", UI_DANGER if is_error else UI_MUTED_TEXT)
+
+
+func _set_account_controls_disabled(disabled: bool) -> void:
+	if edit_account_button != null:
+		edit_account_button.disabled = disabled
+	if logout_button != null:
+		logout_button.disabled = disabled
+	if close_button != null:
+		close_button.disabled = disabled
+	if account_confirm_button != null:
+		account_confirm_button.disabled = disabled
+	if account_cancel_button != null:
+		account_cancel_button.disabled = disabled
+
+	for input: LineEdit in [
+		account_display_name_input,
+		account_current_password_input,
+		account_new_password_input,
+		account_confirm_password_input,
+	]:
+		if input != null:
+			input.editable = not disabled
+
+
+func _set_account_status(message: String, is_error: bool = false) -> void:
+	if account_status_label == null:
+		return
+	account_status_label.text = message
+	account_status_label.visible = message != ""
+	if is_error:
+		account_status_label.add_theme_color_override("font_color", UI_DANGER)
+	else:
+		account_status_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
 
 
 func _logout_confirmed() -> void:

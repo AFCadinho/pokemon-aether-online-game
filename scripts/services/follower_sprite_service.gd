@@ -3,7 +3,7 @@ extends RefCounted
 class_name FollowerSpriteService
 
 const FRAME_COLUMNS := 4
-const FRAME_SIZE := Vector2i(64, 64)
+const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 4.0
 const WALK_ANIMATION_SPEED := 7.0
 
@@ -58,36 +58,44 @@ static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
 	if sprite_frames.has_animation(&"default"):
 		sprite_frames.remove_animation(&"default")
 
-	_add_idle_animation(sprite_frames, texture, "idle_down", 0)
-	_add_idle_animation(sprite_frames, texture, "idle_left", 1)
-	_add_idle_animation(sprite_frames, texture, "idle_right", 2)
-	_add_idle_animation(sprite_frames, texture, "idle_up", 3)
+	var frame_size := _get_frame_size(texture)
 
-	_add_walk_animation(sprite_frames, texture, "walk_down", 0)
-	_add_walk_animation(sprite_frames, texture, "walk_left", 1)
-	_add_walk_animation(sprite_frames, texture, "walk_right", 2)
-	_add_walk_animation(sprite_frames, texture, "walk_up", 3)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_down", 0)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_left", 1)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_right", 2)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_up", 3)
+
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_down", 0)
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_left", 1)
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_right", 2)
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_up", 3)
 
 	return sprite_frames
 
-static func _add_idle_animation(sprite_frames: SpriteFrames, texture: Texture2D, animation_name: String, row: int) -> void:
+static func _get_frame_size(texture: Texture2D) -> Vector2i:
+	return Vector2i(
+		maxi(texture.get_width() / FRAME_COLUMNS, 1),
+		maxi(texture.get_height() / FRAME_ROWS, 1)
+	)
+
+static func _add_idle_animation(sprite_frames: SpriteFrames, texture: Texture2D, frame_size: Vector2i, animation_name: String, row: int) -> void:
 	sprite_frames.add_animation(animation_name)
 	sprite_frames.set_animation_speed(animation_name, IDLE_ANIMATION_SPEED)
 	sprite_frames.set_animation_loop(animation_name, true)
-	sprite_frames.add_frame(animation_name, _make_frame_texture(texture, 0, row))
+	sprite_frames.add_frame(animation_name, _make_frame_texture(texture, frame_size, 0, row))
 
-static func _add_walk_animation(sprite_frames: SpriteFrames, texture: Texture2D, animation_name: String, row: int) -> void:
+static func _add_walk_animation(sprite_frames: SpriteFrames, texture: Texture2D, frame_size: Vector2i, animation_name: String, row: int) -> void:
 	sprite_frames.add_animation(animation_name)
 	sprite_frames.set_animation_speed(animation_name, WALK_ANIMATION_SPEED)
 	sprite_frames.set_animation_loop(animation_name, true)
 
 	for column: int in range(FRAME_COLUMNS):
-		sprite_frames.add_frame(animation_name, _make_frame_texture(texture, column, row))
+		sprite_frames.add_frame(animation_name, _make_frame_texture(texture, frame_size, column, row))
 
-static func _make_frame_texture(texture: Texture2D, column: int, row: int) -> AtlasTexture:
+static func _make_frame_texture(texture: Texture2D, frame_size: Vector2i, column: int, row: int) -> AtlasTexture:
 	var frame_texture := AtlasTexture.new()
 	frame_texture.atlas = texture
-	frame_texture.region = Rect2(Vector2(column * FRAME_SIZE.x, row * FRAME_SIZE.y), FRAME_SIZE)
+	frame_texture.region = Rect2(Vector2(column * frame_size.x, row * frame_size.y), frame_size)
 	return frame_texture
 
 static func _load_texture(file_path: String) -> Texture2D:
