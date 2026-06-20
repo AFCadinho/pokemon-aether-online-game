@@ -121,6 +121,41 @@ jobs:
           unzip -q export_templates.tpz -d /tmp/godot-export-templates
           mkdir -p "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
           mv /tmp/godot-export-templates/templates/* "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/"
+          python3 - <<'PY'
+          import os
+          import shutil
+          import zipfile
+
+          templates_dir = os.path.expanduser(
+              os.path.join(
+                  "~",
+                  ".local/share/godot/export_templates",
+                  os.environ["GODOT_VERSION"] + "." + os.environ["GODOT_RELEASE"],
+              )
+          )
+          macos_zip = os.path.join(templates_dir, "macos.zip")
+          repack_dir = "/tmp/godot-macos-template-repack"
+          shutil.rmtree(repack_dir, ignore_errors=True)
+          os.makedirs(repack_dir, exist_ok=True)
+          with zipfile.ZipFile(macos_zip, "r") as archive:
+              archive.extractall(repack_dir)
+          with zipfile.ZipFile(macos_zip, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+              for base, dirs, files in os.walk(repack_dir):
+                  dirs.sort()
+                  files.sort()
+                  rel_dir = os.path.relpath(base, repack_dir)
+                  if rel_dir != ".":
+                      archive.write(base, rel_dir.rstrip("/") + "/")
+                  for file_name in files:
+                      path = os.path.join(base, file_name)
+                      rel_path = os.path.relpath(path, repack_dir)
+                      info = zipfile.ZipInfo.from_file(path, rel_path)
+                      info.compress_type = zipfile.ZIP_DEFLATED
+                      if file_name.startswith("godot_macos_"):
+                          info.external_attr = (0o100755 & 0xFFFF) << 16
+                      with open(path, "rb") as file:
+                          archive.writestr(info, file.read())
+          PY
 
       - name: Cache Godot imported assets
         uses: actions/cache@v4
