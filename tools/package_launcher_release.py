@@ -141,7 +141,7 @@ def main() -> None:
     for platform_name in platform_names:
         platform_config = PLATFORMS[platform_name]
         build_dir = platform_config["build_dir"]
-        _assert_required_files(build_dir, platform_config["required_files"])
+        _assert_required_paths(build_dir, platform_config["required_files"])
 
         zip_name = platform_config["zip_name"].format(version=args.version)
         zip_path = output_dir / zip_name
@@ -150,7 +150,7 @@ def main() -> None:
         launcher_data: dict[str, object] = {}
         if args.include_launcher:
             launcher_build_dir = platform_config["launcher_build_dir"]
-            _assert_required_files(launcher_build_dir, platform_config["launcher_required_files"])
+            _assert_required_paths(launcher_build_dir, platform_config["launcher_required_files"])
             launcher_zip_name = platform_config["launcher_zip_name"]
             launcher_zip_path = output_dir / launcher_zip_name
             _zip_directory(launcher_build_dir, launcher_zip_path)
@@ -191,13 +191,13 @@ def main() -> None:
         print(f"Wrote {_display_path(default_manifest_path)}")
 
 
-def _assert_required_files(build_dir: Path, required_files: list[str]) -> None:
+def _assert_required_paths(build_dir: Path, required_paths: list[str]) -> None:
     if not build_dir.is_dir():
         raise SystemExit(f"Missing build directory: {build_dir}")
 
-    missing_files = [file_name for file_name in required_files if not (build_dir / file_name).is_file()]
-    if missing_files:
-        missing_list = ", ".join(missing_files)
+    missing_paths = [path_name for path_name in required_paths if not (build_dir / path_name).exists()]
+    if missing_paths:
+        missing_list = ", ".join(missing_paths)
         raise SystemExit(f"Missing required build files in {build_dir}: {missing_list}")
 
 
