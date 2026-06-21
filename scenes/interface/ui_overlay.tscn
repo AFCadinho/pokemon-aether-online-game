@@ -11,12 +11,14 @@
 [ext_resource type="Texture2D" uid="uid://5ixth4h1adwb" path="res://assets/ui/settings-icon.svg" id="7_settings_icon"]
 [ext_resource type="Texture2D" uid="uid://b85ladmwqi0go" path="res://assets/ui/repel_icon.svg" id="8_iv6uh"]
 [ext_resource type="Texture2D" uid="uid://sroenj42pc1x" path="res://assets/ui/dev_icon.svg" id="9_s0khl"]
-[ext_resource type="Texture2D" uid="uid://bhpfhnb5of576" path="res://assets/ui/follower_icon.svg" id="10_follower"]
+[ext_resource type="Texture2D" uid="uid://tt6pdhwld62t" path="res://assets/ui/follower.png" id="10_follower"]
 [ext_resource type="Texture2D" uid="uid://b3vkhs04ulhs4" path="res://assets/ui/running_shoe.svg" id="11_running_shoe"]
 [ext_resource type="Texture2D" uid="uid://c2fh07ixkbd7r" path="res://assets/ui/item_dex.png" id="12_item_dex"]
+[ext_resource type="Texture2D" uid="uid://b8eogooab7wv7" path="res://assets/ui/friendlist.svg" id="13_friendlist"]
 [ext_resource type="Texture2D" uid="uid://doiwun2mh6m6c" path="res://assets/ui/staff_tools.svg" id="13_staff_tools"]
 [ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
 [ext_resource type="Texture2D" uid="uid://dpgqsawas4xna" path="res://assets/ui/content_creator.svg" id="15_content_creator"]
+[ext_resource type="Texture2D" path="res://assets/ui/guild.svg" id="16_guild"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -359,9 +361,9 @@ text = "Pallet Town"
 vertical_alignment = 1
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
-custom_minimum_size = Vector2(196, 0)
+custom_minimum_size = Vector2(308, 0)
 layout_mode = 1
-offset_right = 196.0
+offset_right = 308.0
 offset_bottom = 57.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -411,6 +413,42 @@ texture_focused = ExtResource("5_j0ub1")
 ignore_texture_size = true
 stretch_mode = 5
 
+[node name="FriendListSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="FriendListButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/FriendListSlot"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Friend List"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13_friendlist")
+texture_pressed = ExtResource("13_friendlist")
+texture_hover = ExtResource("13_friendlist")
+texture_disabled = ExtResource("13_friendlist")
+texture_focused = ExtResource("13_friendlist")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="GuildSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="GuildButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Guild"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("16_guild")
+texture_pressed = ExtResource("16_guild")
+texture_hover = ExtResource("16_guild")
+texture_disabled = ExtResource("16_guild")
+texture_focused = ExtResource("16_guild")
+ignore_texture_size = true
+stretch_mode = 5
+
 [node name="SettingsSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=798433036]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
@@ -451,25 +489,6 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
-[node name="RunningShoesSlot" type="PanelContainer" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer" unique_id=1027882535]
-custom_minimum_size = Vector2(52, 52)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
-
-[node name="RunningShoesButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot" unique_id=9405703]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-tooltip_text = "Running Shoes"
-mouse_default_cursor_shape = 2
-toggle_mode = true
-texture_normal = ExtResource("11_running_shoe")
-texture_pressed = ExtResource("11_running_shoe")
-texture_hover = ExtResource("11_running_shoe")
-texture_disabled = ExtResource("11_running_shoe")
-texture_focused = ExtResource("11_running_shoe")
-ignore_texture_size = true
-stretch_mode = 5
-
 [node name="RepelSlot" type="PanelContainer" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer" unique_id=628803434]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
@@ -486,6 +505,25 @@ texture_pressed = ExtResource("8_iv6uh")
 texture_hover = ExtResource("8_iv6uh")
 texture_disabled = ExtResource("8_iv6uh")
 texture_focused = ExtResource("8_iv6uh")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="RunningShoesSlot" type="PanelContainer" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer" unique_id=1027882535]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="RunningShoesButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot" unique_id=9405703]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Running Shoes"
+mouse_default_cursor_shape = 2
+toggle_mode = true
+texture_normal = ExtResource("11_running_shoe")
+texture_pressed = ExtResource("11_running_shoe")
+texture_hover = ExtResource("11_running_shoe")
+texture_disabled = ExtResource("11_running_shoe")
+texture_focused = ExtResource("11_running_shoe")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -545,24 +583,6 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
-[node name="ItemDexSlot" type="PanelContainer" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer" unique_id=966466504]
-custom_minimum_size = Vector2(52, 52)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
-
-[node name="ItemDexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot" unique_id=496092701]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-tooltip_text = "Item Dex"
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("12_item_dex")
-texture_pressed = ExtResource("12_item_dex")
-texture_hover = ExtResource("12_item_dex")
-texture_disabled = ExtResource("12_item_dex")
-texture_focused = ExtResource("12_item_dex")
-ignore_texture_size = true
-stretch_mode = 5
-
 [node name="PokedexSlot" type="PanelContainer" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer" unique_id=472739654]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
@@ -578,6 +598,24 @@ texture_pressed = ExtResource("14_pokedex")
 texture_hover = ExtResource("14_pokedex")
 texture_disabled = ExtResource("14_pokedex")
 texture_focused = ExtResource("14_pokedex")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ItemDexSlot" type="PanelContainer" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer" unique_id=966466504]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="ItemDexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot" unique_id=496092701]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Item Dex"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("12_item_dex")
+texture_pressed = ExtResource("12_item_dex")
+texture_hover = ExtResource("12_item_dex")
+texture_disabled = ExtResource("12_item_dex")
+texture_focused = ExtResource("12_item_dex")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -619,6 +657,24 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
+[node name="ContentCreatorToolsSlot" type="PanelContainer" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer" unique_id=1612199246]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="ContentCreatorToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot" unique_id=1492568340]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Content Creator Tools"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("15_content_creator")
+texture_pressed = ExtResource("15_content_creator")
+texture_hover = ExtResource("15_content_creator")
+texture_disabled = ExtResource("15_content_creator")
+texture_focused = ExtResource("15_content_creator")
+ignore_texture_size = true
+stretch_mode = 5
+
 [node name="StaffToolsSlot" type="PanelContainer" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer" unique_id=1489797566]
 visible = false
 custom_minimum_size = Vector2(52, 52)
@@ -635,24 +691,6 @@ texture_pressed = ExtResource("13_staff_tools")
 texture_hover = ExtResource("13_staff_tools")
 texture_disabled = ExtResource("13_staff_tools")
 texture_focused = ExtResource("13_staff_tools")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="ContentCreatorToolsSlot" type="PanelContainer" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer" unique_id=1612199246]
-custom_minimum_size = Vector2(52, 52)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
-
-[node name="ContentCreatorToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot" unique_id=1492568340]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-tooltip_text = "Content Creator Tools"
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("15_content_creator")
-texture_pressed = ExtResource("15_content_creator")
-texture_hover = ExtResource("15_content_creator")
-texture_disabled = ExtResource("15_content_creator")
-texture_focused = ExtResource("15_content_creator")
 ignore_texture_size = true
 stretch_mode = 5
 

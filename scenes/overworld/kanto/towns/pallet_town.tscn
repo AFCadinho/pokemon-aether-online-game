@@ -8985,7 +8985,7 @@ sources/0 = SubResource("TileSetAtlasSource_n6c5k")
 size = Vector2(212, 31)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3e7rq"]
-size = Vector2(49, 50)
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3e7rq"]
 texture = ExtResource("14_2e47g")
@@ -9425,11 +9425,10 @@ position = Vector2(542, -15)
 shape = SubResource("RectangleShape2D_b5jff")
 
 [node name="ToOaksLab" type="Area2D" parent="Exits" unique_id=534349301]
-position = Vector2(0, -19)
 script = ExtResource("14_voysl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOaksLab" unique_id=550005627]
-position = Vector2(784, 640)
+position = Vector2(784, 656)
 shape = SubResource("RectangleShape2D_3e7rq")
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=136807931]

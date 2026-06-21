@@ -145,6 +145,10 @@ enum DevPokemonPopupMode {
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
 @onready var bag_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot
 @onready var bag_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot/BagButton
+@onready var friend_list_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/FriendListSlot
+@onready var friend_list_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/FriendListSlot/FriendListButton
+@onready var guild_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot
+@onready var guild_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot/GuildButton
 @onready var settings_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot
 @onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
@@ -325,6 +329,8 @@ func _ready() -> void:
 	_setup_icon_slot_hover(map_slot, map_button)
 	_setup_icon_slot_hover(running_shoes_slot, running_shoes_button)
 	_setup_icon_slot_hover(bag_slot, bag_button)
+	_setup_icon_slot_hover(friend_list_slot, friend_list_button)
+	_setup_icon_slot_hover(guild_slot, guild_button)
 	_setup_icon_slot_hover(settings_slot, settings_button)
 	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
 	_setup_icon_slot_hover(follower_slot, follower_toggle_button)
@@ -334,7 +340,10 @@ func _ready() -> void:
 	_setup_icon_slot_hover(staff_tools_slot, staff_tools_button)
 	_setup_icon_slot_hover(content_creator_tools_slot, content_creator_tools_button)
 	_disable_icon_button_focus()
+	map_button.pressed.connect(_on_map_button_pressed)
 	bag_button.pressed.connect(_on_bag_button_pressed)
+	friend_list_button.pressed.connect(_on_friend_list_button_pressed)
+	guild_button.pressed.connect(_on_guild_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
@@ -4844,23 +4853,29 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 
 func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	var user: Dictionary = _staff_dictionary_from_variant(profile_response.get("user", {}))
-	var profile: Dictionary = _staff_dictionary_from_variant(profile_response.get("profile", {}))
-	var stats: Dictionary = _staff_dictionary_from_variant(profile_response.get("stats", {}))
 	var preferences: Dictionary = _staff_dictionary_from_variant(profile_response.get("preferences", {}))
+	var party_response: Dictionary = _staff_dictionary_from_variant(profile_response.get("party", {}))
+	var position_response: Dictionary = _staff_dictionary_from_variant(profile_response.get("position", {}))
+	var wallet: Dictionary = _staff_dictionary_from_variant(profile_response.get("wallet", {}))
+	var stats_response: Dictionary = _staff_dictionary_from_variant(profile_response.get("stats", {}))
+	var stats: Dictionary = _staff_dictionary_from_variant(stats_response.get("stats", {}))
 
 	PlayerSave.player_name = str(user.get("displayName", user.get("username", PlayerSave.player_name)))
-	PlayerSave.gender = CharacterAppearanceService.normalize_gender(str(profile.get("gender", PlayerSave.gender)))
-	PlayerSave.money = int(profile.get("money", PlayerSave.money))
-	PlayerSave.playtime_seconds = int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds))
+	PlayerSave.gender = CharacterAppearanceService.normalize_gender(str(user.get("gender", PlayerSave.gender)))
+	PlayerSave.ensure_body_matches_gender()
+	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
+	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
+	_apply_impersonated_saved_world_state(position_response)
 
-	var party_value: Variant = profile.get("party", [])
-	if party_value is Array:
-		PlayerSave.replace_party_from_state(party_value as Array)
+	if bool(party_response.get("hasParty", false)):
+		var party_value: Variant = party_response.get("party", [])
+		if party_value is Array:
+			PlayerSave.replace_party_from_state(party_value as Array)
+		else:
+			PlayerSave.replace_party_from_state([])
 	else:
 		PlayerSave.replace_party_from_state([])
 
-	if profile.has("badges") and profile.get("badges") is Array:
-		PlayerSave.badges = profile.get("badges").duplicate(true)
 	if preferences.has("textSpeed"):
 		PlayerSave.text_speed = str(preferences.get("textSpeed"))
 	if preferences.has("battleStyle"):
@@ -4869,6 +4884,137 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 		PlayerSave.sound_volume = float(preferences.get("soundVolume"))
 	if preferences.has("musicVolume"):
 		PlayerSave.music_volume = float(preferences.get("musicVolume"))
+	if preferences.has("showFollower"):
+		GameState.show_follower = bool(preferences.get("showFollower"))
+		_set_icon_slot_active(follower_slot, GameState.show_follower)
+		_refresh_world_follower_visibility()
+
+	_refresh_player_status_card()
+	_refresh_avatar_previews()
+	_refresh_world_player_display_name()
+	_reset_impersonated_account_caches()
+	if trainer_card_popup != null and trainer_card_popup.visible:
+		_rebuild_trainer_card_popup(true)
+
+func _refresh_world_player_display_name() -> void:
+	var player_node := get_tree().get_first_node_in_group("player")
+	if player_node == null:
+		var world := GameState.get_world()
+		if world != null:
+			player_node = world.get_node_or_null("Player")
+	if player_node != null and player_node.has_method("set_display_name"):
+		player_node.call("set_display_name", PlayerSave.player_name, true)
+	if player_node != null and player_node.has_method("set_body_appearance"):
+		player_node.call("set_body_appearance", PlayerSave.appearance_body_id)
+	if player_node != null and player_node.has_method("set_role_from_user"):
+		player_node.call("set_role_from_user", AuthService.current_user)
+
+func _reset_impersonated_account_caches() -> void:
+	bag_inventory_items = []
+	bag_inventory_loaded = false
+	bag_inventory_loading = false
+	if bag_popup != null and bag_popup.visible:
+		_load_bag_inventory()
+
+	var world := GameState.get_world()
+	if world != null and world.has_method("_publish_world_presence"):
+		world.call("_publish_world_presence", true)
+
+func _apply_impersonated_saved_world_state(position_response: Dictionary) -> void:
+	if not bool(position_response.get("hasState", false)):
+		_reset_impersonated_appearance_to_defaults()
+		GameState.set_prepared_world_state({})
+		return
+	var state: Dictionary = _staff_dictionary_from_variant(position_response.get("state", {}))
+	var appearance: Dictionary = _staff_dictionary_from_variant(state.get("appearance", {}))
+	if not appearance.is_empty():
+		PlayerSave.apply_appearance_state(appearance)
+	else:
+		_reset_impersonated_appearance_to_defaults()
+
+	GameState.set_prepared_world_state({
+		"savedState": state,
+		"hasSavedState": not state.is_empty(),
+	})
+
+	var position_data: Dictionary = _staff_dictionary_from_variant(state.get("position", {}))
+	if position_data.is_empty():
+		return
+
+	var saved_position := Vector2(
+		float(position_data.get("x", GameState.player_position.x)),
+		float(position_data.get("y", GameState.player_position.y))
+	)
+	GameState.player_position = saved_position
+	GameState.has_player_position = true
+
+	var saved_scene_path := str(state.get("mapScenePath", "")).strip_edges()
+	var current_scene_path := ""
+	if GameState.current_map != null:
+		current_scene_path = str(GameState.current_map.scene_file_path).strip_edges()
+	if saved_scene_path != "" and current_scene_path != "" and saved_scene_path != current_scene_path:
+		return
+
+	var player_node := get_tree().get_first_node_in_group("player")
+	if player_node == null:
+		var world := GameState.get_world()
+		if world != null:
+			player_node = world.get_node_or_null("Player")
+	if player_node == null:
+		return
+
+	player_node.global_position = saved_position
+	player_node.set("target_position", saved_position)
+	player_node.set("move_start_position", saved_position)
+	var facing_direction := _direction_from_name(str(state.get("facingDirection", "")))
+	if facing_direction != Vector2.ZERO:
+		GameState.player_direction = facing_direction
+		player_node.set("last_direction", facing_direction)
+
+func _direction_from_name(direction_name: String) -> Vector2:
+	match direction_name.strip_edges().to_lower():
+		"up":
+			return Vector2.UP
+		"down":
+			return Vector2.DOWN
+		"left":
+			return Vector2.LEFT
+		"right":
+			return Vector2.RIGHT
+		_:
+			return Vector2.ZERO
+
+func _reset_impersonated_appearance_to_defaults() -> void:
+	PlayerSave.appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+	PlayerSave.appearance_hair_id = ""
+	PlayerSave.appearance_legs_id = ""
+	PlayerSave.appearance_feet_id = ""
+	PlayerSave.appearance_facegear_id = ""
+	PlayerSave.ensure_body_matches_gender()
+
+func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
+	if trainer_card_popup == null:
+		return
+
+	var old_offset_left := trainer_card_popup.offset_left
+	var old_offset_top := trainer_card_popup.offset_top
+	var old_offset_right := trainer_card_popup.offset_right
+	var old_offset_bottom := trainer_card_popup.offset_bottom
+	trainer_card_popup.queue_free()
+	trainer_card_popup = null
+	trainer_card_avatar_viewports.clear()
+	trainer_card_body_buttons.clear()
+	trainer_card_money_label = null
+	trainer_card_playtime_label = null
+	trainer_card_name_label = null
+	_setup_trainer_card_popup()
+	trainer_card_popup.offset_left = old_offset_left
+	trainer_card_popup.offset_top = old_offset_top
+	trainer_card_popup.offset_right = old_offset_right
+	trainer_card_popup.offset_bottom = old_offset_bottom
+	trainer_card_popup.visible = keep_visible
+	if keep_visible:
+		_activate_ui_panel(trainer_card_popup)
 
 func _staff_dictionary_from_variant(value: Variant) -> Dictionary:
 	if value is Dictionary:
@@ -5365,6 +5511,15 @@ func _on_settings_button_pressed() -> void:
 
 	settings_menu.visible = true
 	_activate_ui_panel(settings_menu)
+
+func _on_friend_list_button_pressed() -> void:
+	_add_chat_message("Friend list is not implemented yet.")
+
+func _on_guild_button_pressed() -> void:
+	_add_chat_message("Guild is not implemented yet.")
+
+func _on_map_button_pressed() -> void:
+	_add_chat_message("Town Map is not implemented yet.")
 
 func _on_running_shoes_toggled(enabled: bool) -> void:
 	GameState.running_shoes_enabled = enabled

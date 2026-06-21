@@ -11,6 +11,7 @@ const OFFLINE_COLOR := Color(1.0, 0.42, 0.42)
 const CHECKING_COLOR := Color(0.847, 0.706, 0.416)
 const NEWS_LINK_COLOR := "#bd8cff"
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PLAYER_PREVIEW_VIEWPORT_SIZE := Vector2i(190, 154)
 const PLAYER_PREVIEW_POSITION := Vector2(95, 92)
 const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
@@ -369,11 +370,29 @@ func _restore_saved_session() -> void:
 	if username != "":
 		username_input.text = username
 	_apply_authenticated_player_profile()
+	await _apply_saved_session_preview_state()
 
 	password_input.clear()
 	remember_me_checkbox.button_pressed = true
 	login_button.text = _get_idle_login_button_text()
 	_show_saved_session_card()
+
+
+func _apply_saved_session_preview_state() -> void:
+	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+	if not bool(profile_response.get("success", false)):
+		return
+
+	var position_response: Dictionary = _dictionary_from_value(profile_response.get("position", {}))
+	if not bool(position_response.get("hasState", false)):
+		return
+
+	var saved_state: Dictionary = _dictionary_from_value(position_response.get("state", {}))
+	var appearance: Dictionary = _dictionary_from_value(saved_state.get("appearance", {}))
+	if appearance.is_empty():
+		return
+
+	PlayerSave.apply_appearance_state(appearance)
 
 
 func _enter_world() -> void:
@@ -416,6 +435,7 @@ func _show_saved_session_card() -> void:
 	saved_username_label.text = "@%s" % username if username != "" else ""
 	login_card.visible = false
 	saved_session_card.visible = true
+	_refresh_player_preview()
 	show_status("")
 	show_saved_status("")
 	continue_button.grab_focus()
@@ -435,6 +455,25 @@ func _setup_player_preview() -> void:
 	player_preview_instance.scale = PLAYER_PREVIEW_SCALE
 	_disable_preview_processing(player_preview_instance)
 	_set_preview_idle_frame(player_preview_instance)
+	_apply_player_preview_body(player_preview_instance)
+
+
+func _refresh_player_preview() -> void:
+	if player_preview_viewport == null:
+		return
+	for child: Node in player_preview_viewport.get_children():
+		child.queue_free()
+
+	player_preview_instance = _create_player_preview_visual()
+	if player_preview_instance == null:
+		return
+
+	player_preview_viewport.add_child(player_preview_instance)
+	player_preview_instance.position = PLAYER_PREVIEW_POSITION
+	player_preview_instance.scale = PLAYER_PREVIEW_SCALE
+	_disable_preview_processing(player_preview_instance)
+	_set_preview_idle_frame(player_preview_instance)
+	_apply_player_preview_body(player_preview_instance)
 
 
 func _create_player_preview_visual() -> Node2D:
@@ -479,6 +518,23 @@ func _set_preview_idle_frame(node: Node) -> void:
 
 	for child_node: Node in node.get_children():
 		_set_preview_idle_frame(child_node)
+
+
+func _apply_player_preview_body(node: Node) -> void:
+	if node is AnimatedSprite2D:
+		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
+		var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id, PlayerSave.gender)
+		if body_frames != null:
+			sprite.sprite_frames = body_frames
+
+	for child_node: Node in node.get_children():
+		_apply_player_preview_body(child_node)
+
+
+func _dictionary_from_value(value: Variant) -> Dictionary:
+	if value is Dictionary:
+		return value as Dictionary
+	return {}
 
 
 func _get_login_error_message(result: Dictionary) -> String:
