@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="crownBlue" x1="80" y1="70" x2="430" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8feaff"/>
+      <stop offset="45%" stop-color="#2f8cff"/>
+      <stop offset="100%" stop-color="#123a9f"/>
+    </linearGradient>
+    <linearGradient id="darkBlue" x1="120" y1="260" x2="410" y2="460" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1d66d8"/>
+      <stop offset="100%" stop-color="#061840"/>
+    </linearGradient>
+    <linearGradient id="gem" x1="210" y1="150" x2="310" y2="270" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#eaffff"/>
+      <stop offset="50%" stop-color="#4ce0ff"/>
+      <stop offset="100%" stop-color="#0b62e8"/>
+    </linearGradient>
+    <linearGradient id="outline" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#14233f"/>
+      <stop offset="100%" stop-color="#050914"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- transparent background -->
+
+  <g filter="url(#shadow)" stroke="url(#outline)" stroke-width="18" stroke-linejoin="round" stroke-linecap="round">
+    <!-- crown peaks -->
+    <path d="M68 170
+             L156 265
+             L200 108
+             L256 238
+             L312 108
+             L356 265
+             L444 170
+             L404 360
+             H108 Z"
+          fill="url(#crownBlue)"/>
+
+    <!-- base band -->
+    <path d="M108 342
+             C150 318 362 318 404 342
+             V408
+             C350 432 162 432 108 408 Z"
+          fill="url(#darkBlue)"/>
+
+    <!-- center gem -->
+    <path d="M256 172 L310 234 L256 304 L202 234 Z" fill="url(#gem)"/>
+
+    <!-- side gems -->
+    <path d="M113 184 L151 222 L142 272 L92 235 Z" fill="url(#gem)"/>
+    <path d="M399 184 L361 222 L370 272 L420 235 Z" fill="url(#gem)"/>
+
+    <!-- dark inner base -->
+    <ellipse cx="256" cy="405" rx="128" ry="34" fill="#06112d"/>
+  </g>
+
+  <!-- highlights -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M116 194 L158 242 L194 134" stroke="#c9f6ff" stroke-width="10" opacity="0.55"/>
+    <path d="M318 132 L354 242 L396 194" stroke="#c9f6ff" stroke-width="10" opacity="0.55"/>
+    <path d="M142 354 C198 334 314 334 370 354" stroke="#b8ecff" stroke-width="10" opacity="0.6"/>
+    <path d="M230 232 L256 192 L282 232" stroke="#ffffff" stroke-width="8" opacity="0.65"/>
+  </g>
+</svg>

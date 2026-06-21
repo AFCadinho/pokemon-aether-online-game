@@ -38,6 +38,7 @@ InventoryService="*res://scripts/services/inventory_service.gd"
 PlayerStatsService="*res://scripts/services/player_stats_service.gd"
 ChatRealtimeService="*res://scripts/services/chat_realtime_service.gd"
 WorldPresenceService="*res://scripts/services/world_presence_service.gd"
+MailService="*res://scripts/services/mail_service.gd"
 
 [display]
 

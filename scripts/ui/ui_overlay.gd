@@ -61,13 +61,14 @@ const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
 const BAG_SIZE := Vector2(920, 620)
-const POKEMON_SUMMARY_SIZE := Vector2(860, 540)
-const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 310.0
-const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 430.0
-const POKEMON_SUMMARY_CONTENT_PANEL_WIDTH := 430.0
+const MAIL_POPUP_SIZE := Vector2(760, 500)
+const POKEMON_SUMMARY_SIZE := Vector2(880, 500)
+const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 270.0
+const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 470.0
+const POKEMON_SUMMARY_CONTENT_PANEL_WIDTH := 470.0
 const POKEMON_SUMMARY_TAB_COLUMN_WIDTH := 60.0
-const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(250, 250)
-const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(210, 190)
+const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(220, 180)
+const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(180, 150)
 const POKEMON_SUMMARY_SPRITE_MIN_SCALE := 1.0
 const POKEMON_SUMMARY_SPRITE_MAX_SCALE := 3.0
 const POKEMON_TYPE_ICON_ROOT := "res://assets/sprites/types/small/"
@@ -134,6 +135,7 @@ enum DevPokemonPopupMode {
 @onready var general_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/GeneralButton
 @onready var trade_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/TradeButton
 @onready var system_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/SystemButton
+@onready var chat_input_row: HBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow
 @onready var chat_input: LineEdit = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/ChatInput
 @onready var dev_pokemon_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/DevPokemonButton
 @onready var send_button: Button = $Control/ChatPanel/MarginContainer/VBoxContainer/InputRow/SendButton
@@ -145,13 +147,43 @@ enum DevPokemonPopupMode {
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
 @onready var bag_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot
 @onready var bag_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot/BagButton
-@onready var friend_list_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/FriendListSlot
-@onready var friend_list_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/FriendListSlot/FriendListButton
+@onready var socials_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot
+@onready var socials_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot/SocialsButton
 @onready var guild_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot
 @onready var guild_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot/GuildButton
 @onready var settings_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot
 @onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
+@onready var socials_menu: PanelContainer = $Control/SocialsMenu
+@onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
+@onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
+@onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/CloseButton
+@onready var mail_popup: PanelContainer = $Control/MailPopup
+@onready var mail_compose_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/ComposeButton
+@onready var mail_close_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/CloseButton
+@onready var mail_inbox_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow/InboxButton
+@onready var mail_sent_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow/SentButton
+@onready var mail_list: VBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList
+@onready var mail_empty_inbox_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList/EmptyInboxLabel
+@onready var mail_subject_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/SubjectLabel
+@onready var mail_sender_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/SenderLabel
+@onready var mail_body_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll/BodyLabel
+@onready var mail_attachment_list: VBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll/AttachmentList
+@onready var mail_claim_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/ClaimButton
+@onready var mail_delete_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/DeleteButton
+@onready var mail_compose_popup: PanelContainer = $Control/MailComposePopup
+@onready var mail_compose_recipient_input: LineEdit = $Control/MailComposePopup/MarginContainer/VBoxContainer/RecipientInput
+@onready var mail_compose_subject_input: LineEdit = $Control/MailComposePopup/MarginContainer/VBoxContainer/SubjectInput
+@onready var mail_compose_body_input: TextEdit = $Control/MailComposePopup/MarginContainer/VBoxContainer/BodyInput
+@onready var mail_item_search_input: LineEdit = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow/ItemSearchInput
+@onready var mail_item_quantity: SpinBox = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow/ItemQuantity
+@onready var mail_add_item_button: Button = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow/AddItemButton
+@onready var mail_item_suggestions: VBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemSuggestions
+@onready var mail_pokemon_option: OptionButton = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow/PokemonOption
+@onready var mail_add_pokemon_button: Button = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow/AddPokemonButton
+@onready var mail_selected_attachments_list: VBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll/SelectedAttachmentsList
+@onready var mail_compose_send_button: Button = $Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow/SendButton
+@onready var mail_compose_close_button: Button = $Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
 @onready var map_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot
 @onready var map_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot/MapButton
 @onready var running_shoes_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot
@@ -205,6 +237,8 @@ var staff_impersonate_token_input: LineEdit
 var staff_impersonate_confirm_button: Button
 var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
+var pending_chat_pokemon_attachments: Array[Dictionary] = []
+var chat_pokemon_attachment_buttons: Array[Button] = []
 var hotkey_sidebar_dragging := false
 var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
@@ -225,6 +259,18 @@ var bag_drag_offset := Vector2.ZERO
 var bag_inventory_items: Array[Dictionary] = []
 var bag_inventory_loaded := false
 var bag_inventory_loading := false
+var mailbox_messages: Array[Dictionary] = []
+var selected_mail_id := -1
+var active_mail_box := "inbox"
+var mail_dragging := false
+var mail_drag_offset := Vector2.ZERO
+var mail_compose_inventory_items: Array[Dictionary] = []
+var mail_compose_party_pokemon: Array[Pokemon] = []
+var mail_selected_item_attachments: Array[Dictionary] = []
+var mail_selected_pokemon_ids: Array[int] = []
+var mail_selected_item_for_attachment: Dictionary = {}
+var mail_compose_help_button: Button
+var mail_compose_help_popup: PanelContainer
 var pokemon_summary_popup: PanelContainer
 var pokemon_summary_left_panel: PanelContainer
 var pokemon_summary_right_area: HBoxContainer
@@ -254,6 +300,15 @@ var pokemon_summary_stats_list: VBoxContainer
 var pokemon_summary_moves_list: VBoxContainer
 var pokemon_summary_item_picker: PanelContainer
 var pokemon_summary_item_list: VBoxContainer
+var pokemon_summary_ev_allocate_popup: PanelContainer
+var pokemon_summary_ev_allocate_stat_label: Label
+var pokemon_summary_ev_allocate_current_label: Label
+var pokemon_summary_ev_allocate_input: SpinBox
+var pokemon_summary_ev_allocate_status_label: Label
+var pokemon_summary_ev_allocate_confirm_button: Button
+var pokemon_summary_ev_allocate_stat_id := ""
+var pokemon_summary_preview_pokemon: Pokemon
+var pokemon_summary_mode := "interactive"
 var pokemon_summary_selected_slot := -1
 var pokemon_summary_dragging := false
 var pokemon_summary_drag_offset := Vector2.ZERO
@@ -263,6 +318,10 @@ var dev_item_search_input: LineEdit
 var dev_item_results_list: VBoxContainer
 var dev_item_quantity_spinbox: SpinBox
 var dev_item_confirm_button: Button
+var dev_add_money_button: Button
+var dev_add_money_popup: PanelContainer
+var dev_money_amount_spinbox: SpinBox
+var dev_money_confirm_button: Button
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
 var dev_item_search_request_id := 0
@@ -287,9 +346,11 @@ func _ready() -> void:
 	_setup_trainer_card_popup()
 	_setup_bag_popup()
 	_setup_pokemon_summary_popup()
+	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
 	_setup_collapsible_panels()
 	_setup_chat_resize_button()
+	_setup_chat_pokemon_attachment_preview()
 	_setup_clear_party_confirm_dialog()
 	_setup_clear_inventory_confirm_dialog()
 	_setup_dev_clear_menu_popup()
@@ -299,6 +360,7 @@ func _ready() -> void:
 	_setup_item_dex_popup()
 	_apply_ui_z_index_policy()
 	_apply_premium_overlay_styles()
+	_apply_mail_ui_styles()
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_party()
@@ -329,7 +391,7 @@ func _ready() -> void:
 	_setup_icon_slot_hover(map_slot, map_button)
 	_setup_icon_slot_hover(running_shoes_slot, running_shoes_button)
 	_setup_icon_slot_hover(bag_slot, bag_button)
-	_setup_icon_slot_hover(friend_list_slot, friend_list_button)
+	_setup_icon_slot_hover(socials_slot, socials_button)
 	_setup_icon_slot_hover(guild_slot, guild_button)
 	_setup_icon_slot_hover(settings_slot, settings_button)
 	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
@@ -342,7 +404,21 @@ func _ready() -> void:
 	_disable_icon_button_focus()
 	map_button.pressed.connect(_on_map_button_pressed)
 	bag_button.pressed.connect(_on_bag_button_pressed)
-	friend_list_button.pressed.connect(_on_friend_list_button_pressed)
+	socials_button.pressed.connect(_on_socials_button_pressed)
+	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
+	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
+	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
+	mail_inbox_button.pressed.connect(_on_mail_box_selected.bind("inbox"))
+	mail_sent_button.pressed.connect(_on_mail_box_selected.bind("sent"))
+	mail_compose_button.pressed.connect(_on_mail_compose_button_pressed)
+	mail_close_button.pressed.connect(_on_mail_close_button_pressed)
+	mail_claim_button.pressed.connect(_on_mail_claim_button_pressed)
+	mail_delete_button.pressed.connect(_on_mail_delete_button_pressed)
+	mail_item_search_input.text_changed.connect(_on_mail_item_search_changed)
+	mail_add_item_button.pressed.connect(_on_mail_add_item_attachment_pressed)
+	mail_add_pokemon_button.pressed.connect(_on_mail_add_pokemon_attachment_pressed)
+	mail_compose_send_button.pressed.connect(_on_mail_compose_send_button_pressed)
+	mail_compose_close_button.pressed.connect(_on_mail_compose_close_button_pressed)
 	guild_button.pressed.connect(_on_guild_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
@@ -364,6 +440,7 @@ func _ready() -> void:
 	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
+	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
 	dev_actions_popup.visible = false
@@ -424,6 +501,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if dev_add_item_button != null:
 		dev_add_item_button.visible = can_use_dev_tools
 		dev_add_item_button.disabled = not can_use_dev_tools
+	if dev_add_money_button != null:
+		dev_add_money_button.visible = can_use_dev_tools
+		dev_add_money_button.disabled = not can_use_dev_tools
 	if staff_impersonate_button != null:
 		staff_impersonate_button.visible = can_impersonate
 		staff_impersonate_button.disabled = not can_impersonate
@@ -437,6 +517,8 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_pokemon_popup.visible = false
 		if dev_add_item_popup != null:
 			dev_add_item_popup.visible = false
+		if dev_add_money_popup != null:
+			dev_add_money_popup.visible = false
 		if dev_clear_menu_popup != null:
 			dev_clear_menu_popup.visible = false
 	if not can_impersonate and staff_impersonate_popup != null:
@@ -444,6 +526,147 @@ func _refresh_dev_tools_visibility() -> void:
 	_refresh_action_bar_layouts()
 	_set_collapsible_panel_available("dex_actions", true)
 	_set_collapsible_panel_available("staff_actions", can_use_staff_tools or can_use_dev_tools)
+
+func _apply_mail_ui_styles() -> void:
+	mail_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
+	mail_compose_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
+	_setup_mail_compose_help_button()
+	_set_mail_popup_size()
+	var mail_header_row: Control = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow
+	mail_header_row.mouse_filter = Control.MOUSE_FILTER_STOP
+	if not mail_header_row.gui_input.is_connected(_on_mail_header_gui_input):
+		mail_header_row.gui_input.connect(_on_mail_header_gui_input)
+	var mail_list_panel: PanelContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel
+	var mail_detail_panel: PanelContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel
+	mail_list_panel.add_theme_stylebox_override("panel", _make_mail_inner_style())
+	mail_detail_panel.add_theme_stylebox_override("panel", _make_mail_inner_style())
+	mail_subject_label.add_theme_color_override("font_color", UI_TEXT)
+	mail_subject_label.add_theme_color_override("font_shadow_color", Color("#000000aa"))
+	mail_subject_label.add_theme_constant_override("shadow_offset_x", 1)
+	mail_subject_label.add_theme_constant_override("shadow_offset_y", 1)
+	mail_sender_label.add_theme_color_override("font_color", Color("#f2cf78"))
+	mail_body_label.add_theme_color_override("font_color", UI_TEXT)
+	_apply_button_style(mail_compose_button, "primary")
+	_apply_button_style(mail_close_button)
+	_apply_button_style(mail_inbox_button, "primary")
+	_apply_button_style(mail_sent_button)
+	_apply_button_style(mail_claim_button, "primary")
+	_apply_button_style(mail_delete_button, "danger")
+	_apply_button_style(mail_add_item_button, "primary")
+	_apply_button_style(mail_add_pokemon_button, "primary")
+	_apply_button_style(mail_compose_send_button, "primary")
+	_apply_button_style(mail_compose_close_button)
+	_apply_line_edit_style(mail_compose_recipient_input)
+	_apply_line_edit_style(mail_compose_subject_input)
+	_apply_line_edit_style(mail_item_search_input)
+	_apply_text_edit_style(mail_compose_body_input)
+
+func _setup_mail_compose_help_button() -> void:
+	if mail_compose_help_button != null:
+		return
+
+	var layout: VBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer
+	var title_label: Label = $Control/MailComposePopup/MarginContainer/VBoxContainer/Title
+	var title_index: int = title_label.get_index()
+	layout.remove_child(title_label)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+	layout.move_child(header, title_index)
+
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title_label)
+
+	mail_compose_help_button = Button.new()
+	mail_compose_help_button.text = "?"
+	mail_compose_help_button.custom_minimum_size = Vector2(32, 30)
+	mail_compose_help_button.focus_mode = Control.FOCUS_NONE
+	mail_compose_help_button.tooltip_text = "Mail rules\nFee without attachments: 50\nFee with attachments: 400\nCooldown: 2 minutes\nMax item stacks: 5\nMax Pokemon: 5\nPokemon attachments cannot hold items."
+	mail_compose_help_button.pressed.connect(_toggle_mail_compose_help_popup)
+	header.add_child(mail_compose_help_button)
+	_apply_button_style(mail_compose_help_button, "primary")
+	_setup_mail_compose_help_popup()
+
+func _setup_mail_compose_help_popup() -> void:
+	if mail_compose_help_popup != null:
+		return
+
+	mail_compose_help_popup = PanelContainer.new()
+	mail_compose_help_popup.name = "MailComposeHelpPopup"
+	mail_compose_help_popup.visible = false
+	mail_compose_help_popup.custom_minimum_size = Vector2(320, 220)
+	mail_compose_help_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	mail_compose_help_popup.z_index = UI_BASE_Z_INDEX + 2
+	mail_compose_help_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
+	root_control.add_child(mail_compose_help_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	mail_compose_help_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	title.text = "Mail Rules"
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", Color("#f5df9a"))
+	layout.add_child(title)
+
+	for line in [
+		"Base fee: 50",
+		"With attachments: 400",
+		"Cooldown: 2 minutes",
+		"Max item stacks: 5",
+		"Max Pokemon: 5",
+		"Pokemon cannot hold items.",
+	]:
+		var label := Label.new()
+		label.text = line
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.add_theme_font_size_override("font_size", 13)
+		label.add_theme_color_override("font_color", UI_TEXT)
+		layout.add_child(label)
+
+	var close_button := Button.new()
+	close_button.text = "Close"
+	close_button.custom_minimum_size = Vector2(0, 32)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_mail_compose_help_popup)
+	layout.add_child(close_button)
+	_apply_button_style(close_button)
+
+func _toggle_mail_compose_help_popup() -> void:
+	if mail_compose_help_popup == null:
+		return
+	mail_compose_help_popup.visible = not mail_compose_help_popup.visible
+	if mail_compose_help_popup.visible:
+		_position_mail_compose_help_popup()
+		_activate_ui_panel(mail_compose_help_popup)
+	else:
+		_deactivate_ui_panel(mail_compose_help_popup)
+
+func _hide_mail_compose_help_popup() -> void:
+	if mail_compose_help_popup != null:
+		mail_compose_help_popup.visible = false
+		_deactivate_ui_panel(mail_compose_help_popup)
+
+func _position_mail_compose_help_popup() -> void:
+	var parent_control: Control = mail_compose_help_popup.get_parent_control()
+	if parent_control == null:
+		return
+	var target_position: Vector2 = mail_compose_popup.global_position + Vector2(mail_compose_popup.size.x - mail_compose_help_popup.custom_minimum_size.x, 42)
+	var parent_size: Vector2 = parent_control.size
+	var popup_size: Vector2 = mail_compose_help_popup.custom_minimum_size
+	target_position.x = clamp(target_position.x, 0.0, max(parent_size.x - popup_size.x, 0.0))
+	target_position.y = clamp(target_position.y, 0.0, max(parent_size.y - popup_size.y, 0.0))
+	mail_compose_help_popup.global_position = target_position
+	mail_compose_help_popup.size = popup_size
 
 func _refresh_action_bar_layouts() -> void:
 	_refresh_action_bar_layout(actions_panel)
@@ -497,6 +720,7 @@ func _apply_ui_z_index_policy() -> void:
 		dev_pokemon_popup,
 		dev_clear_menu_popup,
 		dev_add_item_popup,
+		dev_add_money_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		item_dex_popup,
@@ -599,6 +823,14 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_add_item_button)
 		dev_actions_container.move_child(dev_add_item_button, dev_clear_party_button.get_index())
 
+	dev_add_money_button = Button.new()
+	dev_add_money_button.text = "Add Money"
+	dev_add_money_button.custom_minimum_size = Vector2(190, 34)
+	dev_add_money_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_add_money_button)
+		dev_actions_container.move_child(dev_add_money_button, dev_clear_party_button.get_index())
+
 	dev_add_item_popup = PanelContainer.new()
 	dev_add_item_popup.name = "DevAddItemPopup"
 	dev_add_item_popup.visible = false
@@ -692,6 +924,81 @@ func _setup_dev_add_item_tools() -> void:
 	_apply_button_style(close_button)
 	_apply_line_edit_style(dev_item_search_input)
 	_apply_button_style(dev_item_confirm_button, "primary")
+
+	dev_add_money_popup = PanelContainer.new()
+	dev_add_money_popup.name = "DevAddMoneyPopup"
+	dev_add_money_popup.visible = false
+	dev_add_money_popup.custom_minimum_size = Vector2(360, 190)
+	dev_add_money_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	dev_add_money_popup.z_index = UI_BASE_Z_INDEX
+	dev_add_money_popup.anchor_left = 0.5
+	dev_add_money_popup.anchor_top = 0.5
+	dev_add_money_popup.anchor_right = 0.5
+	dev_add_money_popup.anchor_bottom = 0.5
+	dev_add_money_popup.offset_left = -180
+	dev_add_money_popup.offset_top = -95
+	dev_add_money_popup.offset_right = 180
+	dev_add_money_popup.offset_bottom = 95
+	dev_add_money_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(dev_add_money_popup)
+
+	var money_margin := MarginContainer.new()
+	money_margin.add_theme_constant_override("margin_left", 16)
+	money_margin.add_theme_constant_override("margin_top", 14)
+	money_margin.add_theme_constant_override("margin_right", 16)
+	money_margin.add_theme_constant_override("margin_bottom", 16)
+	dev_add_money_popup.add_child(money_margin)
+
+	var money_layout := VBoxContainer.new()
+	money_layout.add_theme_constant_override("separation", 10)
+	money_margin.add_child(money_layout)
+
+	var money_header := HBoxContainer.new()
+	money_header.add_theme_constant_override("separation", 8)
+	money_layout.add_child(money_header)
+
+	var money_title := Label.new()
+	money_title.text = "Add Money"
+	money_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	money_title.add_theme_font_size_override("font_size", 18)
+	money_title.add_theme_color_override("font_color", UI_TEXT)
+	money_header.add_child(money_title)
+
+	var money_close_button := Button.new()
+	money_close_button.text = "X"
+	money_close_button.custom_minimum_size = Vector2(34, 30)
+	money_close_button.focus_mode = Control.FOCUS_NONE
+	money_close_button.pressed.connect(_hide_dev_add_money_popup)
+	money_header.add_child(money_close_button)
+
+	var money_row := HBoxContainer.new()
+	money_row.add_theme_constant_override("separation", 8)
+	money_layout.add_child(money_row)
+
+	var money_label := Label.new()
+	money_label.text = "Amount"
+	money_label.custom_minimum_size = Vector2(96, 0)
+	money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	money_label.add_theme_color_override("font_color", UI_TEXT)
+	money_row.add_child(money_label)
+
+	dev_money_amount_spinbox = SpinBox.new()
+	dev_money_amount_spinbox.min_value = 1
+	dev_money_amount_spinbox.max_value = 999999999
+	dev_money_amount_spinbox.value = 1000
+	dev_money_amount_spinbox.step = 1
+	dev_money_amount_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	money_row.add_child(dev_money_amount_spinbox)
+
+	dev_money_confirm_button = Button.new()
+	dev_money_confirm_button.text = "Confirm"
+	dev_money_confirm_button.custom_minimum_size = Vector2(0, 36)
+	dev_money_confirm_button.focus_mode = Control.FOCUS_NONE
+	dev_money_confirm_button.pressed.connect(_on_dev_money_confirm_pressed)
+	money_layout.add_child(dev_money_confirm_button)
+
+	_apply_button_style(money_close_button)
+	_apply_button_style(dev_money_confirm_button, "primary")
 
 func _setup_staff_impersonation_tools() -> void:
 	if staff_tools_popup != null:
@@ -1038,6 +1345,10 @@ func _input(event: InputEvent) -> void:
 
 	if pokemon_summary_dragging:
 		_handle_pokemon_summary_drag_input(event)
+		return
+
+	if mail_dragging:
+		_handle_mail_drag_input(event)
 		return
 
 	if hotkey_sidebar_dragging:
@@ -2316,6 +2627,14 @@ func _setup_pokemon_summary_popup() -> void:
 	)
 	left_stack.add_child(sprite_frame)
 
+	var sprite_stage_background := TextureRect.new()
+	sprite_stage_background.texture = BATTLE_SUMMARY_SLOT_BG_TEXTURE
+	sprite_stage_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sprite_stage_background.stretch_mode = TextureRect.STRETCH_SCALE
+	sprite_stage_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_frame.add_child(sprite_stage_background)
+	sprite_stage_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
 	var sprite_backdrop := PanelContainer.new()
 	sprite_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_backdrop.add_theme_stylebox_override("panel", _make_pokemon_summary_sprite_stage_style())
@@ -2493,10 +2812,19 @@ func _setup_pokemon_summary_popup() -> void:
 	summary_content_margin.add_theme_constant_override("margin_bottom", 14)
 	summary_content_panel.add_child(summary_content_margin)
 
+	var summary_content_scroll := ScrollContainer.new()
+	summary_content_scroll.custom_minimum_size = Vector2(0, 0)
+	summary_content_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	summary_content_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	summary_content_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	summary_content_margin.add_child(summary_content_scroll)
+
 	pokemon_summary_content_stack = VBoxContainer.new()
-	pokemon_summary_content_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_summary_content_stack.custom_minimum_size = Vector2(0, 0)
+	pokemon_summary_content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_content_stack.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	pokemon_summary_content_stack.add_theme_constant_override("separation", 9)
-	summary_content_margin.add_child(pokemon_summary_content_stack)
+	summary_content_scroll.add_child(pokemon_summary_content_stack)
 
 	var tab_frame := PanelContainer.new()
 	tab_frame.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#050912f8"), Color("#d8b767")))
@@ -2526,6 +2854,80 @@ func _setup_pokemon_summary_popup() -> void:
 	tab_column.add_child(iv_tab)
 	tab_column.add_child(ev_tab)
 	tab_column.add_child(moves_tab)
+
+func _setup_pokemon_summary_ev_allocate_popup() -> void:
+	pokemon_summary_ev_allocate_popup = PanelContainer.new()
+	pokemon_summary_ev_allocate_popup.name = "PokemonSummaryEvAllocatePopup"
+	pokemon_summary_ev_allocate_popup.visible = false
+	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(300, 210)
+	pokemon_summary_ev_allocate_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	pokemon_summary_ev_allocate_popup.z_index = UI_BASE_Z_INDEX + 2
+	pokemon_summary_ev_allocate_popup.anchor_left = 0.5
+	pokemon_summary_ev_allocate_popup.anchor_top = 0.5
+	pokemon_summary_ev_allocate_popup.anchor_right = 0.5
+	pokemon_summary_ev_allocate_popup.anchor_bottom = 0.5
+	pokemon_summary_ev_allocate_popup.offset_left = -150
+	pokemon_summary_ev_allocate_popup.offset_top = -105
+	pokemon_summary_ev_allocate_popup.offset_right = 150
+	pokemon_summary_ev_allocate_popup.offset_bottom = 105
+	pokemon_summary_ev_allocate_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
+	root_control.add_child(pokemon_summary_ev_allocate_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	pokemon_summary_ev_allocate_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	pokemon_summary_ev_allocate_stat_label = Label.new()
+	pokemon_summary_ev_allocate_stat_label.text = "Allocate EVs"
+	pokemon_summary_ev_allocate_stat_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_ev_allocate_stat_label.add_theme_font_size_override("font_size", 16)
+	pokemon_summary_ev_allocate_stat_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	header.add_child(pokemon_summary_ev_allocate_stat_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_pokemon_summary_ev_allocate_popup)
+	header.add_child(close_button)
+	_apply_button_style(close_button)
+
+	pokemon_summary_ev_allocate_current_label = Label.new()
+	pokemon_summary_ev_allocate_current_label.add_theme_font_size_override("font_size", 12)
+	pokemon_summary_ev_allocate_current_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(pokemon_summary_ev_allocate_current_label)
+
+	pokemon_summary_ev_allocate_input = SpinBox.new()
+	pokemon_summary_ev_allocate_input.min_value = 0
+	pokemon_summary_ev_allocate_input.max_value = 252
+	pokemon_summary_ev_allocate_input.step = 1
+	pokemon_summary_ev_allocate_input.value_changed.connect(_on_summary_ev_allocate_value_changed)
+	layout.add_child(pokemon_summary_ev_allocate_input)
+
+	pokemon_summary_ev_allocate_status_label = Label.new()
+	pokemon_summary_ev_allocate_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pokemon_summary_ev_allocate_status_label.add_theme_font_size_override("font_size", 11)
+	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(pokemon_summary_ev_allocate_status_label)
+
+	pokemon_summary_ev_allocate_confirm_button = Button.new()
+	pokemon_summary_ev_allocate_confirm_button.text = "Confirm"
+	pokemon_summary_ev_allocate_confirm_button.custom_minimum_size = Vector2(0, 34)
+	pokemon_summary_ev_allocate_confirm_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_ev_allocate_confirm_button.pressed.connect(_on_summary_ev_allocate_confirm_pressed)
+	layout.add_child(pokemon_summary_ev_allocate_confirm_button)
+	_apply_button_style(pokemon_summary_ev_allocate_confirm_button, "primary")
 
 func _create_pokemon_summary_tab_button(tab_id: String, label_text: String, accent_color: Color) -> Button:
 	var button := Button.new()
@@ -2992,6 +3394,8 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	if slot_index < 0 or slot_index >= PlayerSave.party.size():
 		return
 
+	pokemon_summary_preview_pokemon = null
+	pokemon_summary_mode = "interactive"
 	pokemon_summary_selected_slot = slot_index
 	pokemon_summary_item_picker.visible = false
 	_set_pokemon_summary_popup_size()
@@ -3003,16 +3407,24 @@ func _hide_pokemon_summary_popup() -> void:
 	if pokemon_summary_popup != null:
 		pokemon_summary_popup.visible = false
 		_deactivate_ui_panel(pokemon_summary_popup)
+	_hide_pokemon_summary_ev_allocate_popup()
+	pokemon_summary_preview_pokemon = null
+	pokemon_summary_mode = "interactive"
 	pokemon_summary_selected_slot = -1
 	pokemon_summary_dragging = false
 
 func _refresh_pokemon_summary() -> void:
-	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+	var pokemon: Pokemon = pokemon_summary_preview_pokemon
+	if pokemon == null:
+		if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+			_hide_pokemon_summary_popup()
+			return
+		pokemon = PlayerSave.party[pokemon_summary_selected_slot]
+	if pokemon == null:
 		_hide_pokemon_summary_popup()
 		return
 
 	_set_pokemon_summary_popup_size()
-	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
 	pokemon_summary_title_label.text = pokemon.species
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
@@ -3027,6 +3439,9 @@ func _refresh_pokemon_summary() -> void:
 	_refresh_pokemon_summary_type_icons(pokemon)
 
 	_set_pokemon_summary_held_item_slot(pokemon)
+	if _is_pokemon_summary_readonly():
+		_hide_pokemon_summary_ev_allocate_popup()
+		pokemon_summary_item_picker.visible = false
 	pokemon_summary_hp_bar.max_value = max(pokemon.max_hp, 1)
 	pokemon_summary_hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_summary_hp_label.text = "HP %s / %s" % [max(pokemon.current_hp, 0), max(pokemon.max_hp, 1)]
@@ -3208,9 +3623,40 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	_add_summary_section_title("General Info", Color("#f2cf78"))
 	pokemon_summary_content_stack.add_child(_create_summary_info_row("Ability", _default_text(pokemon.ability), Color("#ffb15f")))
 	pokemon_summary_content_stack.add_child(_create_summary_info_row("Nature", _default_text(pokemon.nature), Color("#f2cf78")))
-	pokemon_summary_content_stack.add_child(_create_summary_info_row("Location", _default_text(pokemon.location), Color("#62d7ff")))
-	_add_summary_section_title("Battle Stats", Color("#f2cf78"))
+	pokemon_summary_content_stack.add_child(_create_summary_info_row("Location", _get_pokemon_origin_summary_text(pokemon), Color("#62d7ff")))
 	_render_stat_bar_list(pokemon.stats, 260, true)
+
+func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
+	var origin: Dictionary = pokemon.origin
+	var location_name: String = str(origin.get("locationName", pokemon.location)).strip_edges()
+	var method: String = str(origin.get("method", "")).strip_edges()
+	var met_level: int = int(origin.get("metLevel", 0))
+	if location_name == "":
+		location_name = pokemon.location.strip_edges()
+	if location_name == "":
+		location_name = "Unknown Location"
+
+	var parts: Array[String] = [location_name]
+	if method != "":
+		parts.append(_format_pokemon_origin_method(method))
+	if met_level > 0:
+		parts.append("Lv %s" % met_level)
+	return " - ".join(parts)
+
+func _format_pokemon_origin_method(method: String) -> String:
+	match method.strip_edges().to_lower():
+		"gift":
+			return "Gift"
+		"caught":
+			return "Caught"
+		"generated":
+			return "Generated"
+		"npc_trade":
+			return "NPC Trade"
+		"chest":
+			return "Chest"
+		_:
+			return method.capitalize()
 
 func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
 	_add_summary_section_title("Individual Values", Color("#62d7ff"))
@@ -3227,7 +3673,7 @@ func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
 		grid.add_child(_create_summary_value_orb(str(stat.get("label", stat_id)), value, 31, stat.get("color", UI_BORDER_FOCUS) as Color))
 
 func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
-	_add_summary_section_title("Effort Values", Color("#ffcc7a"))
+	_add_summary_section_title("Allocated EVs", Color("#ffcc7a"))
 	var grid := GridContainer.new()
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 10)
@@ -3237,20 +3683,22 @@ func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 		var stat: Dictionary = stat_value
 		var stat_id: String = str(stat.get("id", ""))
 		var value: int = int(pokemon.evs.get(stat_id, 0))
-		grid.add_child(_create_summary_ev_box(str(stat.get("label", stat_id)), value, stat.get("color", UI_BORDER_FOCUS) as Color))
-	_add_summary_section_title("Distribution", Color("#ffcc7a"))
-	_render_stat_bar_list(pokemon.evs, 252, false)
+		grid.add_child(_create_summary_ev_box(stat_id, str(stat.get("label", stat_id)), value, stat.get("color", UI_BORDER_FOCUS) as Color))
+	_add_summary_section_title("Stored EVs", Color("#ffcc7a"))
+	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.evs, pokemon.stored_evs))
 
 func _render_pokemon_summary_moves_tab(pokemon: Pokemon) -> void:
 	_add_summary_section_title("Moves", Color("#f2cf78"))
 	for move_index in range(4):
 		var move_name: String = "-"
 		var pp_text: String = "--/--"
+		var move_type: String = ""
 		if move_index < pokemon.moves.size():
 			var move_value: Variant = pokemon.moves[move_index]
 			move_name = _get_summary_move_name(move_value)
 			pp_text = _get_summary_move_pp_text(move_value)
-		pokemon_summary_content_stack.add_child(_create_summary_move_card(move_index + 1, move_name, pp_text))
+			move_type = _get_summary_move_type(move_value)
+		pokemon_summary_content_stack.add_child(_create_summary_move_card(move_index + 1, move_name, pp_text, move_type))
 
 func _add_summary_section_title(title_text: String, color: Color) -> void:
 	var panel := PanelContainer.new()
@@ -3334,28 +3782,198 @@ func _create_summary_value_orb(label_text: String, value: int, max_value: int, c
 	stack.add_child(bar)
 	return panel
 
-func _create_summary_ev_box(label_text: String, value: int, color: Color) -> Control:
-	var panel := PanelContainer.new()
+func _create_summary_ev_box(stat_id: String, label_text: String, value: int, color: Color) -> Control:
+	var panel: Control = PanelContainer.new() if _is_pokemon_summary_readonly() else Button.new()
 	panel.custom_minimum_size = Vector2(128, 58)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76766"), 10, 1))
+	if panel is Button:
+		var button: Button = panel as Button
+		button.focus_mode = Control.FOCUS_NONE
+		button.tooltip_text = "Allocate %s EVs" % label_text
+		button.pressed.connect(_on_summary_allocated_ev_pressed.bind(stat_id, label_text))
+		button.add_theme_stylebox_override("normal", _make_panel_style(Color("#081321ef"), Color("#d8b76766"), 10, 1))
+		button.add_theme_stylebox_override("hover", _make_panel_style(Color("#10243cf2"), color, 10, 1))
+		button.add_theme_stylebox_override("pressed", _make_panel_style(Color("#050912f4"), color, 10, 1))
+	else:
+		(panel as PanelContainer).add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76766"), 10, 1))
 	var stack := VBoxContainer.new()
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(stack)
+	stack.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var label := Label.new()
 	label.text = label_text
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_font_size_override("font_size", 11)
 	label.add_theme_color_override("font_color", color)
 	stack.add_child(label)
 	var value_label := Label.new()
 	value_label.text = str(value)
+	value_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	value_label.add_theme_font_size_override("font_size", 14)
 	value_label.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(value_label)
 	return panel
 
-func _create_summary_move_card(move_number: int, move_name: String, pp_text: String) -> Control:
+func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 82)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76766"), 10, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 6)
+	margin.add_child(stack)
+
+	var allocated_total: int = 0
+	var stored_total: int = 0
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		var stat_id: String = str(stat.get("id", ""))
+		allocated_total += int(allocated_evs.get(stat_id, 0))
+		stored_total += int(stored_evs.get(stat_id, 0))
+
+	var total_label := Label.new()
+	total_label.text = "AVAILABLE: %s    CAPACITY: %s / 756" % [stored_total, allocated_total + stored_total]
+	total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	total_label.add_theme_font_size_override("font_size", 11)
+	total_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	stack.add_child(total_label)
+
+	var grid := GridContainer.new()
+	grid.columns = 6
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 4)
+	stack.add_child(grid)
+
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		var stat_id: String = str(stat.get("id", ""))
+		var label_text: String = str(stat.get("label", stat_id))
+		var color: Color = stat.get("color", UI_BORDER_FOCUS) as Color
+		var value: int = int(stored_evs.get(stat_id, 0))
+		grid.add_child(_create_summary_stored_ev_chip(label_text, value, color))
+
+	return panel
+
+func _create_summary_stored_ev_chip(label_text: String, value: int, color: Color) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(54, 34)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color(color.r, color.g, color.b, 0.55), 8, 1))
+
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 0)
+	panel.add_child(stack)
+
+	var label := Label.new()
+	label.text = label_text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", color)
+	stack.add_child(label)
+
+	var value_label := Label.new()
+	value_label.text = str(value)
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	value_label.add_theme_font_size_override("font_size", 12)
+	value_label.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(value_label)
+
+	return panel
+
+func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String) -> void:
+	if _is_pokemon_summary_readonly():
+		return
+	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+		return
+
+	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
+	var current_value: int = int(pokemon.evs.get(stat_id, 0))
+	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
+	var stored_total: int = _get_summary_ev_total(pokemon.stored_evs)
+	var total_room: int = max(510 - allocated_total, 0)
+	var max_value: int = min(252, current_value + stored_total, current_value + total_room)
+
+	pokemon_summary_ev_allocate_stat_id = stat_id
+	pokemon_summary_ev_allocate_stat_label.text = "Allocate %s EVs" % label_text
+	pokemon_summary_ev_allocate_current_label.text = "Current: %s    Allocated: %s / 510    Stored: %s" % [current_value, allocated_total, stored_total]
+	pokemon_summary_ev_allocate_input.min_value = current_value
+	pokemon_summary_ev_allocate_input.max_value = max(current_value, max_value)
+	pokemon_summary_ev_allocate_input.value = current_value
+	pokemon_summary_ev_allocate_popup.visible = true
+	_activate_ui_panel(pokemon_summary_ev_allocate_popup)
+	_refresh_summary_ev_allocate_status()
+
+func _hide_pokemon_summary_ev_allocate_popup() -> void:
+	if pokemon_summary_ev_allocate_popup != null:
+		pokemon_summary_ev_allocate_popup.visible = false
+		_deactivate_ui_panel(pokemon_summary_ev_allocate_popup)
+	pokemon_summary_ev_allocate_stat_id = ""
+
+func _on_summary_ev_allocate_value_changed(_value: float) -> void:
+	_refresh_summary_ev_allocate_status()
+
+func _on_summary_ev_allocate_confirm_pressed() -> void:
+	if pokemon_summary_ev_allocate_confirm_button.disabled:
+		return
+
+	pokemon_summary_ev_allocate_status_label.text = "EV allocation mutation is not implemented yet."
+	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", Color("#ffcc7a"))
+
+func _refresh_summary_ev_allocate_status() -> void:
+	if pokemon_summary_ev_allocate_popup == null or not pokemon_summary_ev_allocate_popup.visible:
+		return
+	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+		pokemon_summary_ev_allocate_confirm_button.disabled = true
+		return
+
+	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
+	var stat_id: String = pokemon_summary_ev_allocate_stat_id
+	var current_value: int = int(pokemon.evs.get(stat_id, 0))
+	var requested_value: int = int(pokemon_summary_ev_allocate_input.value)
+	var added_value: int = requested_value - current_value
+	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
+	var stored_total: int = _get_summary_ev_total(pokemon.stored_evs)
+	var requested_allocated_total: int = allocated_total + max(added_value, 0)
+	var error_text := ""
+
+	if requested_value < current_value:
+		error_text = "Value cannot be lower than the current allocated EVs."
+	elif requested_value > 252:
+		error_text = "A stat cannot exceed 252 EVs."
+	elif requested_allocated_total > 510:
+		error_text = "Allocated EVs cannot exceed 510 total."
+	elif added_value > stored_total:
+		error_text = "Not enough stored EVs available."
+
+	if error_text != "":
+		pokemon_summary_ev_allocate_status_label.text = error_text
+		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
+		pokemon_summary_ev_allocate_confirm_button.disabled = true
+		return
+
+	pokemon_summary_ev_allocate_status_label.text = "Will allocate +%s EVs. New allocated total: %s / 510." % [max(added_value, 0), requested_allocated_total]
+	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pokemon_summary_ev_allocate_confirm_button.disabled = added_value <= 0
+
+func _get_summary_ev_total(evs: Dictionary) -> int:
+	var total := 0
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		total += int(evs.get(str(stat.get("id", "")), 0))
+	return total
+
+func _create_summary_move_card(move_number: int, move_name: String, pp_text: String, move_type: String = "") -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 62)
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76777"), 12, 1))
@@ -3385,6 +4003,16 @@ func _create_summary_move_card(move_number: int, move_name: String, pp_text: Str
 	move_label.add_theme_font_size_override("font_size", 15)
 	move_label.add_theme_color_override("font_color", Color("#f5df9a"))
 	row.add_child(move_label)
+	var type_icon_texture: Texture2D = _load_pokemon_type_icon(move_type)
+	if type_icon_texture != null:
+		var type_icon := TextureRect.new()
+		type_icon.custom_minimum_size = Vector2(28, 28)
+		type_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		type_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		type_icon.texture = type_icon_texture
+		type_icon.tooltip_text = move_type.capitalize()
+		type_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(type_icon)
 	var pp_label := Label.new()
 	pp_label.text = pp_text
 	pp_label.custom_minimum_size = Vector2(54, 0)
@@ -3518,6 +4146,8 @@ func _create_summary_move_row(move_number: int, move_name: String, pp_text: Stri
 	return panel
 
 func _on_pokemon_summary_held_item_slot_pressed() -> void:
+	if _is_pokemon_summary_readonly():
+		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
 		_add_chat_message("This Pokemon is missing an ownership id.")
@@ -3555,11 +4185,14 @@ func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 		icon_texture = _load_item_icon(held_item_id)
 		pokemon_summary_held_item_slot_name_label.text = _item_name_from_id(held_item_id)
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "Click to take held item."
+			pokemon_summary_held_item_slot_button.tooltip_text = "Read-only preview." if _is_pokemon_summary_readonly() else "Click to take held item."
 	else:
 		pokemon_summary_held_item_slot_name_label.text = "No held item"
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "Click to give a held item."
+			pokemon_summary_held_item_slot_button.tooltip_text = "Read-only preview." if _is_pokemon_summary_readonly() else "Click to give a held item."
+	if pokemon_summary_held_item_slot_button != null:
+		pokemon_summary_held_item_slot_button.disabled = _is_pokemon_summary_readonly()
+		pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
 
 	pokemon_summary_held_item_slot_icon.texture = icon_texture
 	if icon_texture == null:
@@ -3599,6 +4232,8 @@ func _create_summary_item_choice(item: Dictionary) -> Control:
 	return button
 
 func _on_pokemon_summary_item_selected(item_id: String) -> void:
+	if _is_pokemon_summary_readonly():
+		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
 		_add_chat_message("This Pokemon is missing an ownership id.")
@@ -3630,6 +4265,9 @@ func _get_selected_summary_pokemon() -> Variant:
 		return null
 	return PlayerSave.party[pokemon_summary_selected_slot]
 
+func _is_pokemon_summary_readonly() -> bool:
+	return pokemon_summary_mode == "readonly"
+
 func _get_pokemon_held_item_id(pokemon: Pokemon) -> String:
 	var item_id: String = pokemon.item.strip_edges().to_lower()
 	return item_id
@@ -3653,6 +4291,26 @@ func _get_summary_move_name(move_value: Variant) -> String:
 		return _format_move_name(str(move_data.get("id", move_data.get("move", ""))))
 
 	return _format_move_name(str(move_value))
+
+func _get_summary_move_type(move_value: Variant) -> String:
+	if not (move_value is Dictionary):
+		return ""
+
+	var move_data: Dictionary = move_value as Dictionary
+	for key in ["type", "moveType", "move_type"]:
+		var type_text: String = str(move_data.get(key, "")).strip_edges()
+		if type_text != "":
+			return type_text
+
+	var metadata_value: Variant = move_data.get("metadata", move_data.get("data", {}))
+	if metadata_value is Dictionary:
+		var metadata: Dictionary = metadata_value as Dictionary
+		for key in ["type", "moveType", "move_type"]:
+			var type_text: String = str(metadata.get(key, "")).strip_edges()
+			if type_text != "":
+				return type_text
+
+	return ""
 
 func _get_summary_move_pp_text(move_value: Variant) -> String:
 	if not (move_value is Dictionary):
@@ -3770,6 +4428,75 @@ func _set_pokemon_summary_popup_size() -> void:
 		pokemon_summary_tab_column.custom_minimum_size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, 0)
 		pokemon_summary_tab_column.size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, pokemon_summary_tab_column.size.y)
 
+func _set_mail_popup_size() -> void:
+	if mail_popup == null:
+		return
+
+	var global_top_left: Vector2 = mail_popup.global_position
+	mail_popup.grow_horizontal = Control.GROW_DIRECTION_END
+	mail_popup.grow_vertical = Control.GROW_DIRECTION_END
+	mail_popup.custom_minimum_size = MAIL_POPUP_SIZE
+	mail_popup.size = MAIL_POPUP_SIZE
+	_move_mail_to_global_position(global_top_left)
+
+func _on_mail_header_gui_input(event: InputEvent) -> void:
+	if mail_popup == null:
+		return
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		mail_dragging = true
+		mail_drag_offset = mouse_event.global_position - mail_popup.global_position
+		_activate_ui_panel(mail_popup)
+	else:
+		mail_dragging = false
+	get_viewport().set_input_as_handled()
+
+func _handle_mail_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			mail_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+
+	if not (event is InputEventMouseMotion):
+		return
+
+	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+	_move_mail_to_global_position(motion_event.global_position - mail_drag_offset)
+	get_viewport().set_input_as_handled()
+
+func _move_mail_to_global_position(global_top_left: Vector2) -> void:
+	if mail_popup == null:
+		return
+
+	var parent_control: Control = mail_popup.get_parent_control()
+	if parent_control == null:
+		return
+
+	var parent_size: Vector2 = parent_control.size
+	var popup_size: Vector2 = MAIL_POPUP_SIZE
+	var clamped_position: Vector2 = Vector2(
+		clamp(global_top_left.x, 0.0, max(parent_size.x - popup_size.x, 0.0)),
+		clamp(global_top_left.y, 0.0, max(parent_size.y - popup_size.y, 0.0))
+	)
+	var anchor_offset: Vector2 = Vector2(
+		parent_size.x * mail_popup.anchor_left,
+		parent_size.y * mail_popup.anchor_top
+	)
+	var local_offset: Vector2 = clamped_position - anchor_offset
+	mail_popup.offset_left = local_offset.x
+	mail_popup.offset_top = local_offset.y
+	mail_popup.offset_right = local_offset.x + popup_size.x
+	mail_popup.offset_bottom = local_offset.y + popup_size.y
+	mail_popup.size = popup_size
+
 func _format_money(value: int) -> String:
 	var value_text := str(max(value, 0))
 	var formatted := ""
@@ -3832,7 +4559,7 @@ func _make_pokemon_summary_header_frame_style() -> StyleBoxFlat:
 	return style
 
 func _make_pokemon_summary_sprite_stage_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#edf7f0f3"), Color("#d8b767"), 18, 2)
+	var style := _make_panel_style(Color("#00000000"), Color("#d8b767"), 18, 2)
 	style.shadow_color = Color("#8fd7ff44")
 	style.shadow_size = 16
 	style.shadow_offset = Vector2.ZERO
@@ -4034,6 +4761,8 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(dev_spawn_pokemon_button, "primary")
 	if dev_add_item_button != null:
 		_apply_button_style(dev_add_item_button, "primary")
+	if dev_add_money_button != null:
+		_apply_button_style(dev_add_money_button, "primary")
 	_apply_button_style(dev_clear_party_button, "danger")
 	dev_clear_party_button.text = "Clear"
 	_apply_button_style(dev_actions_close_button)
@@ -4412,6 +5141,11 @@ func _finish_party_drag(global_position: Vector2) -> void:
 		return
 
 	party_dragging = false
+	if _try_attach_party_drag_to_chat(global_position):
+		party_drag_start_index = -1
+		_clear_party_drag_visual()
+		return
+
 	var target_index := _get_party_slot_index_at_position(global_position)
 	if target_index == party_drag_start_index and party_drag_start_mouse_position.distance_to(global_position) <= 8.0:
 		var clicked_slot_index := party_drag_start_index
@@ -4448,6 +5182,69 @@ func _clear_party_drag_visual() -> void:
 	if party_drag_visual != null:
 		party_drag_visual.queue_free()
 	party_drag_visual = null
+
+func _setup_chat_pokemon_attachment_preview() -> void:
+	_refresh_pending_chat_pokemon_attachment_preview()
+
+func _try_attach_party_drag_to_chat(global_position: Vector2) -> bool:
+	if party_drag_start_index < 0 or party_drag_start_index >= PlayerSave.party.size():
+		return false
+	if chat_panel == null or not chat_panel.visible:
+		return false
+	if not chat_panel.get_global_rect().has_point(global_position):
+		return false
+
+	var pokemon: Pokemon = PlayerSave.party[party_drag_start_index]
+	pending_chat_pokemon_attachments.append(pokemon.to_persistence_dict())
+	_refresh_pending_chat_pokemon_attachment_preview()
+	chat_input.grab_focus()
+	return true
+
+func _refresh_pending_chat_pokemon_attachment_preview() -> void:
+	for button: Button in chat_pokemon_attachment_buttons:
+		if button != null:
+			button.queue_free()
+	chat_pokemon_attachment_buttons.clear()
+
+	for index in range(pending_chat_pokemon_attachments.size()):
+		var pokemon_payload: Dictionary = pending_chat_pokemon_attachments[index]
+		var button := _create_pending_chat_pokemon_button(pokemon_payload, index)
+		chat_input_row.add_child(button)
+		chat_input_row.move_child(button, chat_input.get_index())
+		chat_pokemon_attachment_buttons.append(button)
+
+func _create_pending_chat_pokemon_button(pokemon_payload: Dictionary, index: int) -> Button:
+	var species: String = str(pokemon_payload.get("species", "Pokemon"))
+	var shiny: bool = bool(pokemon_payload.get("shiny", false))
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(44, 34)
+	button.focus_mode = Control.FOCUS_NONE
+	button.tooltip_text = "Attached: %s. Click to remove." % species
+	button.pressed.connect(_remove_pending_chat_pokemon_attachment.bind(index))
+	_apply_button_style(button)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(30, 30)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = PokemonAssets.load_home_sprite(species, shiny)
+	if icon.texture == null:
+		icon.texture = PokemonAssets.load_party_icon(species, shiny)
+	button.add_child(icon)
+	return button
+
+func _remove_pending_chat_pokemon_attachment(index: int) -> void:
+	if index >= 0 and index < pending_chat_pokemon_attachments.size():
+		pending_chat_pokemon_attachments.remove_at(index)
+	_refresh_pending_chat_pokemon_attachment_preview()
+	if pending_chat_pokemon_attachments.is_empty():
+		_apply_chat_tab_state()
+
+func _clear_pending_chat_pokemon_attachments() -> void:
+	pending_chat_pokemon_attachments.clear()
+	_refresh_pending_chat_pokemon_attachment_preview()
+	_apply_chat_tab_state()
 
 func _set_control_tree_mouse_filter(node: Node, mouse_filter_value: int) -> void:
 	if node is Control:
@@ -4517,7 +5314,14 @@ func _submit_chat_input_deferred() -> void:
 
 func _submit_chat_input_async() -> void:
 	var text := chat_input.text.strip_edges()
-	if text == "":
+	if text.to_lower() == "/team":
+		await _share_party_to_chat()
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
+		return
+
+	var pokemon_attachments: Array[Dictionary] = pending_chat_pokemon_attachments.duplicate(true)
+	if text == "" and pokemon_attachments.is_empty():
 		chat_submit_in_progress = false
 		_keep_chat_input_focused()
 		return
@@ -4529,10 +5333,26 @@ func _submit_chat_input_async() -> void:
 		_keep_chat_input_focused()
 		return
 
-	if not ChatRealtimeService.send_chat_message(text, _get_active_chat_channel()):
+	if not ChatRealtimeService.send_chat_message(text, _get_active_chat_channel(), pokemon_attachments):
 		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
+	else:
+		_clear_pending_chat_pokemon_attachments()
 	chat_submit_in_progress = false
 	_keep_chat_input_focused()
+
+func _share_party_to_chat() -> void:
+	if PlayerSave.party.is_empty():
+		_add_chat_message("You need a Pokemon in your party first.")
+		return
+
+	var attachments: Array[Dictionary] = []
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon != null:
+			attachments.append(pokemon.to_persistence_dict())
+
+	chat_input.clear()
+	if not ChatRealtimeService.send_chat_message("", _get_active_chat_channel(), attachments):
+		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
 
 func _get_active_chat_channel() -> String:
 	if active_chat_tab == CHAT_TAB_TRADE:
@@ -5203,6 +6023,13 @@ func _on_dev_add_item_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	await _show_dev_add_item_popup()
 
+func _on_dev_add_money_button_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	dev_actions_popup.visible = false
+	_show_dev_add_money_popup()
+
 func _show_dev_add_item_popup() -> void:
 	if not _can_use_dev_tools():
 		return
@@ -5219,6 +6046,35 @@ func _show_dev_add_item_popup() -> void:
 func _hide_dev_add_item_popup() -> void:
 	dev_add_item_popup.visible = false
 	dev_selected_item = {}
+
+func _show_dev_add_money_popup() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	dev_money_amount_spinbox.value = 1000
+	dev_add_money_popup.visible = true
+	_activate_ui_panel(dev_add_money_popup)
+	dev_money_amount_spinbox.grab_focus.call_deferred()
+
+func _hide_dev_add_money_popup() -> void:
+	dev_add_money_popup.visible = false
+
+func _on_dev_money_confirm_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	dev_money_confirm_button.disabled = true
+	var result: Dictionary = await PlayerWalletService.dev_add_money(amount)
+	dev_money_confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not add money: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	PlayerWalletService.apply_wallet_result(result)
+	refresh_money_display()
+	_add_chat_message("Added %s." % _format_money(amount))
+	_hide_dev_add_money_popup()
 
 func _load_dev_item_catalog() -> void:
 	dev_item_catalog.clear()
@@ -5512,8 +6368,632 @@ func _on_settings_button_pressed() -> void:
 	settings_menu.visible = true
 	_activate_ui_panel(settings_menu)
 
-func _on_friend_list_button_pressed() -> void:
+func _on_socials_button_pressed() -> void:
+	if socials_menu.visible:
+		_hide_socials_menu()
+		return
+
+	socials_menu.visible = true
+	_position_socials_menu()
+	_activate_ui_panel(socials_menu)
+
+func _position_socials_menu() -> void:
+	if socials_menu == null or socials_slot == null:
+		return
+
+	var slot_rect: Rect2 = socials_slot.get_global_rect()
+	var menu_size: Vector2 = socials_menu.get_combined_minimum_size()
+	if menu_size == Vector2.ZERO:
+		menu_size = socials_menu.size
+
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var target_position := Vector2(slot_rect.position.x, slot_rect.position.y + slot_rect.size.y + 8.0)
+	if target_position.x + menu_size.x > viewport_size.x - 12.0:
+		target_position.x = viewport_size.x - menu_size.x - 12.0
+	target_position.x = max(target_position.x, 12.0)
+	socials_menu.position = target_position
+
+func _hide_socials_menu() -> void:
+	socials_menu.visible = false
+	_deactivate_ui_panel(socials_menu)
+
+func _on_socials_friend_list_button_pressed() -> void:
 	_add_chat_message("Friend list is not implemented yet.")
+
+func _on_socials_mail_button_pressed() -> void:
+	_hide_socials_menu()
+	_set_mail_popup_size()
+	mail_popup.visible = true
+	_activate_ui_panel(mail_popup)
+	_load_mailbox()
+
+func _on_socials_close_button_pressed() -> void:
+	_hide_socials_menu()
+
+func _on_mail_compose_button_pressed() -> void:
+	mail_compose_recipient_input.clear()
+	mail_compose_subject_input.clear()
+	mail_compose_body_input.clear()
+	mail_selected_item_attachments.clear()
+	mail_selected_pokemon_ids.clear()
+	mail_selected_item_for_attachment = {}
+	_prepare_mail_attachment_options()
+	mail_compose_popup.visible = true
+	_activate_ui_panel(mail_compose_popup)
+	mail_compose_recipient_input.grab_focus()
+
+func _on_mail_close_button_pressed() -> void:
+	mail_popup.visible = false
+	_deactivate_ui_panel(mail_popup)
+	mail_dragging = false
+
+func _on_mail_box_selected(box: String) -> void:
+	active_mail_box = "sent" if box == "sent" else "inbox"
+	selected_mail_id = -1
+	_apply_button_style(mail_inbox_button, "primary" if active_mail_box == "inbox" else "default")
+	_apply_button_style(mail_sent_button, "primary" if active_mail_box == "sent" else "default")
+	_load_mailbox()
+
+func _on_mail_claim_button_pressed() -> void:
+	if selected_mail_id <= 0:
+		return
+
+	var result: Dictionary = await MailService.claim_mail(selected_mail_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not claim mail: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var party_value: Variant = result.get("party", [])
+	if party_value is Array:
+		PlayerSave.replace_party_from_state(party_value as Array)
+	var inventory_value: Variant = result.get("inventory", [])
+	if inventory_value is Array:
+		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
+		bag_inventory_loaded = true
+		_refresh_bag_items()
+
+	_add_chat_message("Mail attachments claimed.")
+	await _load_mailbox()
+
+func _on_mail_delete_button_pressed() -> void:
+	if selected_mail_id <= 0:
+		return
+
+	var result: Dictionary = await MailService.delete_mail(selected_mail_id, active_mail_box)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not delete mail: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	selected_mail_id = -1
+	mailbox_messages = _normalize_mailbox_messages(result.get("mail", []))
+	if not mailbox_messages.is_empty():
+		selected_mail_id = int(mailbox_messages[0].get("id", -1))
+	_refresh_mailbox()
+	_add_chat_message("Mail deleted.")
+
+func _prepare_mail_attachment_options() -> void:
+	mail_compose_inventory_items.clear()
+	mail_compose_party_pokemon.clear()
+	_refresh_mail_attachment_summary()
+	_refresh_mail_pokemon_attachment_options()
+	_load_mail_item_attachment_options()
+
+func _load_mail_item_attachment_options() -> void:
+	mail_item_search_input.text = "Loading bag..."
+	mail_item_search_input.editable = false
+	mail_add_item_button.disabled = true
+	_clear_mail_item_suggestions()
+
+	var result: Dictionary = await InventoryService.load_inventory()
+	if not bool(result.get("success", false)):
+		mail_item_search_input.text = ""
+		mail_item_search_input.placeholder_text = "Could not load bag"
+		return
+
+	mail_compose_inventory_items = _normalize_bag_inventory_items(result.get("items", []))
+	mail_item_search_input.text = ""
+	mail_item_search_input.editable = true
+	mail_item_search_input.placeholder_text = "Search items in your bag" if not mail_compose_inventory_items.is_empty() else "No items in bag"
+	mail_add_item_button.disabled = true
+
+func _on_mail_item_search_changed(_text: String) -> void:
+	mail_selected_item_for_attachment = {}
+	mail_add_item_button.disabled = true
+	_refresh_mail_item_suggestions()
+
+func _refresh_mail_item_suggestions() -> void:
+	_clear_mail_item_suggestions()
+
+	var query: String = mail_item_search_input.text.strip_edges().to_lower()
+	if query == "":
+		return
+
+	var added_count := 0
+	for item: Dictionary in mail_compose_inventory_items:
+		if not _is_mail_tradeable_bag_item(item):
+			continue
+		var item_id: String = str(item.get("id", "")).strip_edges()
+		if _is_mail_item_already_attached(item_id):
+			continue
+		var item_name: String = str(item.get("name", _item_name_from_id(item_id))).strip_edges()
+		var haystack: String = ("%s %s" % [item_id, item_name]).to_lower()
+		if not haystack.contains(query):
+			continue
+
+		var button := Button.new()
+		button.text = "%s x%s" % [item_name, int(item.get("quantity", 1))]
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.focus_mode = Control.FOCUS_NONE
+		button.custom_minimum_size = Vector2(0, 30)
+		_apply_mail_card_style(button, false, false)
+		button.pressed.connect(_on_mail_item_suggestion_pressed.bind(item))
+		mail_item_suggestions.add_child(button)
+		added_count += 1
+		if added_count >= 6:
+			break
+
+func _clear_mail_item_suggestions() -> void:
+	for child: Node in mail_item_suggestions.get_children():
+		child.queue_free()
+
+func _on_mail_item_suggestion_pressed(item: Dictionary) -> void:
+	mail_selected_item_for_attachment = item.duplicate(true)
+	var item_id: String = str(item.get("id", "")).strip_edges()
+	mail_item_search_input.text = str(item.get("name", _item_name_from_id(item_id)))
+	mail_item_quantity.max_value = max(int(item.get("quantity", 1)), 1)
+	mail_item_quantity.value = 1
+	mail_add_item_button.disabled = false
+	_clear_mail_item_suggestions()
+
+func _is_mail_tradeable_bag_item(item: Dictionary) -> bool:
+	var category: String = str(item.get("category", "")).strip_edges().to_lower()
+	return category not in ["key_items", "key-items", "important"]
+
+func _is_mail_item_already_attached(item_id: String) -> bool:
+	var normalized_item_id: String = item_id.strip_edges().to_lower()
+	for attachment: Dictionary in mail_selected_item_attachments:
+		if str(attachment.get("itemId", "")).strip_edges().to_lower() == normalized_item_id:
+			return true
+	return false
+
+func _refresh_mail_pokemon_attachment_options() -> void:
+	mail_compose_party_pokemon.clear()
+	mail_pokemon_option.clear()
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon == null:
+			continue
+		if pokemon.owned_pokemon_id <= 0:
+			continue
+		if not pokemon.tradable:
+			continue
+		if _get_pokemon_held_item_id(pokemon) != "":
+			continue
+		if mail_selected_pokemon_ids.has(pokemon.owned_pokemon_id):
+			continue
+		mail_compose_party_pokemon.append(pokemon)
+		mail_pokemon_option.add_item("%s Lv. %s" % [pokemon.species, pokemon.level], mail_compose_party_pokemon.size() - 1)
+
+	if mail_compose_party_pokemon.is_empty():
+		mail_pokemon_option.add_item("No eligible Pokemon", -1)
+		mail_pokemon_option.disabled = true
+		mail_add_pokemon_button.disabled = true
+	else:
+		mail_pokemon_option.disabled = false
+		mail_add_pokemon_button.disabled = mail_selected_pokemon_ids.size() >= 5 or mail_selected_pokemon_ids.size() >= max(PlayerSave.party.size() - 1, 0)
+
+func _on_mail_add_item_attachment_pressed() -> void:
+	if mail_selected_item_for_attachment.is_empty():
+		return
+	if mail_selected_item_attachments.size() >= 5:
+		_add_chat_message("You can attach up to 5 item stacks.")
+		return
+
+	var item: Dictionary = mail_selected_item_for_attachment
+	var available_quantity: int = int(item.get("quantity", 1))
+	var quantity: int = clampi(int(mail_item_quantity.value), 1, available_quantity)
+	var item_id: String = str(item.get("id", "")).strip_edges()
+	if item_id == "":
+		return
+
+	for attachment: Dictionary in mail_selected_item_attachments:
+		if str(attachment.get("itemId", "")) == item_id:
+			attachment["quantity"] = min(int(attachment.get("quantity", 1)) + quantity, available_quantity)
+			_refresh_mail_attachment_summary()
+			return
+
+	mail_selected_item_attachments.append({
+		"itemId": item_id,
+		"name": str(item.get("name", _item_name_from_id(item_id))),
+		"quantity": quantity,
+	})
+	mail_selected_item_for_attachment = {}
+	mail_item_search_input.clear()
+	mail_add_item_button.disabled = true
+	_refresh_mail_attachment_summary()
+
+func _on_mail_add_pokemon_attachment_pressed() -> void:
+	if mail_selected_pokemon_ids.size() >= 5:
+		_add_chat_message("You can attach up to 5 Pokemon.")
+		return
+	if mail_selected_pokemon_ids.size() >= max(PlayerSave.party.size() - 1, 0):
+		_add_chat_message("You must keep at least one Pokemon in your party.")
+		return
+
+	var selected_index: int = mail_pokemon_option.selected
+	if selected_index < 0 or selected_index >= mail_compose_party_pokemon.size():
+		return
+
+	var pokemon: Pokemon = mail_compose_party_pokemon[selected_index]
+	if pokemon == null or pokemon.owned_pokemon_id <= 0:
+		return
+
+	mail_selected_pokemon_ids.append(pokemon.owned_pokemon_id)
+	_refresh_mail_pokemon_attachment_options()
+	_refresh_mail_attachment_summary()
+
+func _refresh_mail_attachment_summary() -> void:
+	for child: Node in mail_selected_attachments_list.get_children():
+		child.queue_free()
+
+	var has_attachments: bool = not mail_selected_item_attachments.is_empty() or not mail_selected_pokemon_ids.is_empty()
+	for attachment: Dictionary in mail_selected_item_attachments:
+		_add_mail_summary_text("%sx %s" % [
+			int(attachment.get("quantity", 1)),
+			str(attachment.get("name", attachment.get("itemId", "Item"))),
+		])
+	for pokemon_id: int in mail_selected_pokemon_ids:
+		var pokemon: Pokemon = _get_party_pokemon_by_owned_id(pokemon_id)
+		if pokemon != null:
+			_add_mail_summary_text("%s Lv. %s" % [pokemon.species, pokemon.level])
+	if not has_attachments:
+		_add_mail_summary_text("Selected attachments: none")
+	_add_mail_summary_divider()
+	_add_mail_summary_text("Item attachments: %s / 5" % mail_selected_item_attachments.size())
+	_add_mail_summary_text("Pokemon attachments: %s / 5" % mail_selected_pokemon_ids.size())
+	_add_mail_summary_text("Party kept: %s Pokemon" % max(PlayerSave.party.size() - mail_selected_pokemon_ids.size(), 0))
+
+func _add_mail_summary_text(text: String) -> void:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	mail_selected_attachments_list.add_child(label)
+
+func _add_mail_summary_divider() -> void:
+	var divider := ColorRect.new()
+	divider.custom_minimum_size = Vector2(0, 1)
+	divider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	divider.color = Color("#d8b76766")
+	mail_selected_attachments_list.add_child(divider)
+
+func _get_party_pokemon_by_owned_id(owned_pokemon_id: int) -> Pokemon:
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon != null and pokemon.owned_pokemon_id == owned_pokemon_id:
+			return pokemon
+	return null
+
+func _on_mail_compose_send_button_pressed() -> void:
+	if not mail_selected_pokemon_ids.is_empty() and mail_selected_pokemon_ids.size() >= PlayerSave.party.size():
+		_add_chat_message("You must keep at least one Pokemon in your party.")
+		return
+
+	var result: Dictionary = await MailService.send_mail(
+		mail_compose_recipient_input.text,
+		mail_compose_subject_input.text,
+		mail_compose_body_input.text,
+		mail_selected_item_attachments,
+		mail_selected_pokemon_ids
+	)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not send mail: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var party_value: Variant = result.get("party", [])
+	if party_value is Array:
+		PlayerSave.replace_party_from_state(party_value as Array)
+	var inventory_value: Variant = result.get("inventory", [])
+	if inventory_value is Array:
+		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
+		bag_inventory_loaded = true
+		_refresh_bag_items()
+	var wallet_value: Variant = result.get("wallet", {})
+	if wallet_value is Dictionary:
+		PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet_value})
+		refresh_money_display()
+
+	mail_selected_item_attachments.clear()
+	mail_selected_pokemon_ids.clear()
+	mail_compose_popup.visible = false
+	_deactivate_ui_panel(mail_compose_popup)
+	var sent_mail: Dictionary = result.get("sent", {}) as Dictionary
+	var fee_paid: int = int(sent_mail.get("feePaid", sent_mail.get("fee_paid", 0)))
+	if fee_paid > 0:
+		_add_chat_message("Mail sent. Paid %s." % _format_money(fee_paid))
+	else:
+		_add_chat_message("Mail sent.")
+	_load_mailbox()
+
+func _on_mail_compose_close_button_pressed() -> void:
+	mail_compose_popup.visible = false
+	_deactivate_ui_panel(mail_compose_popup)
+	_hide_mail_compose_help_popup()
+
+func _load_mailbox() -> void:
+	var result: Dictionary = await MailService.load_mail(active_mail_box)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not load mail: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	mailbox_messages = _normalize_mailbox_messages(result.get("mail", []))
+	if selected_mail_id > 0 and _get_mail_by_id(selected_mail_id).is_empty():
+		selected_mail_id = -1
+	if selected_mail_id <= 0 and not mailbox_messages.is_empty():
+		selected_mail_id = int(mailbox_messages[0].get("id", -1))
+	_refresh_mailbox()
+
+func _normalize_mailbox_messages(value: Variant) -> Array[Dictionary]:
+	var normalized: Array[Dictionary] = []
+	if not (value is Array):
+		return normalized
+
+	for mail_value: Variant in value:
+		if not (mail_value is Dictionary):
+			continue
+		normalized.append((mail_value as Dictionary).duplicate(true))
+	return normalized
+
+func _refresh_mailbox() -> void:
+	_refresh_mail_list()
+	_refresh_mail_detail()
+	_set_mail_popup_size.call_deferred()
+
+func _refresh_mail_list() -> void:
+	if mail_list == null:
+		return
+
+	for child: Node in mail_list.get_children():
+		if child == mail_empty_inbox_label or child.name == "InboxLabel":
+			continue
+		child.queue_free()
+
+	mail_empty_inbox_label.visible = mailbox_messages.is_empty()
+	mail_empty_inbox_label.text = "No sent mail yet." if active_mail_box == "sent" else "No mail yet."
+	for mail: Dictionary in mailbox_messages:
+		var button := Button.new()
+		var mail_id: int = int(mail.get("id", -1))
+		var subject: String = str(mail.get("subject", "Mail")).strip_edges()
+		var sender: String = str(mail.get("senderDisplayName", mail.get("senderUsername", "Unknown"))).strip_edges()
+		var recipient: String = str(mail.get("recipientUsername", "Unknown")).strip_edges()
+		var attachment_count: int = _array_from_variant(mail.get("attachments", [])).size()
+		button.text = "%s\n%s %s%s" % [
+			subject if subject != "" else "Mail",
+			"To:" if active_mail_box == "sent" else "From:",
+			(recipient if recipient != "" else "Unknown") if active_mail_box == "sent" else (sender if sender != "" else "Unknown"),
+			" - %s attachment(s)" % attachment_count if attachment_count > 0 else "",
+		]
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		button.custom_minimum_size = Vector2(0, 54)
+		button.focus_mode = Control.FOCUS_NONE
+		button.disabled = mail_id <= 0
+		_apply_mail_card_style(button, mail_id == selected_mail_id, attachment_count > 0)
+		button.pressed.connect(_on_mail_selected.bind(mail_id))
+		mail_list.add_child(button)
+
+func _on_mail_selected(mail_id: int) -> void:
+	selected_mail_id = mail_id
+	_refresh_mailbox()
+
+func _refresh_mail_detail() -> void:
+	var mail: Dictionary = _get_mail_by_id(selected_mail_id)
+	if mail.is_empty():
+		mail_subject_label.text = "Select a mail"
+		mail_sender_label.text = "Sender: -"
+		mail_body_label.text = "Mail messages and reward attachments will appear here."
+		_render_mail_attachments([])
+		mail_claim_button.visible = true
+		mail_claim_button.text = "Claim Attachments" if active_mail_box == "inbox" else "No Claim Action"
+		mail_claim_button.disabled = true
+		mail_delete_button.disabled = true
+		return
+
+	mail_subject_label.text = str(mail.get("subject", "Mail"))
+	if active_mail_box == "sent":
+		mail_sender_label.text = "To: @%s" % str(mail.get("recipientUsername", "-"))
+	else:
+		mail_sender_label.text = "Sender: %s (@%s)" % [
+			str(mail.get("senderDisplayName", "Unknown")),
+			str(mail.get("senderUsername", "-")),
+		]
+	mail_body_label.text = str(mail.get("body", ""))
+	if mail_body_label.text.strip_edges() == "":
+		mail_body_label.text = "(No message)"
+
+	var attachments: Array = _array_from_variant(mail.get("attachments", []))
+	_render_mail_attachments(attachments)
+	mail_claim_button.visible = true
+	mail_claim_button.text = "Claim Attachments" if active_mail_box == "inbox" else "No Claim Action"
+	mail_claim_button.disabled = active_mail_box != "inbox" or not _mail_has_unclaimed_attachments(attachments)
+	mail_delete_button.disabled = active_mail_box == "inbox" and _mail_has_unclaimed_attachments(attachments)
+
+func _get_mail_by_id(mail_id: int) -> Dictionary:
+	for mail: Dictionary in mailbox_messages:
+		if int(mail.get("id", -1)) == mail_id:
+			return mail
+	return {}
+
+func _render_mail_attachments(attachments: Array) -> void:
+	for child: Node in mail_attachment_list.get_children():
+		child.queue_free()
+
+	if attachments.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "None"
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		mail_attachment_list.add_child(empty_label)
+		return
+
+	for attachment_value: Variant in attachments:
+		if not (attachment_value is Dictionary):
+			continue
+		var attachment: Dictionary = attachment_value as Dictionary
+		var payload: Dictionary = {}
+		if attachment.get("payload", {}) is Dictionary:
+			payload = attachment.get("payload", {}) as Dictionary
+		var claimed: bool = _mail_attachment_is_claimed(attachment)
+		var suffix := " (claimed)" if claimed else ""
+		match str(attachment.get("type", "")):
+			"item":
+				mail_attachment_list.add_child(_create_mail_attachment_row(
+					_load_item_icon(str(payload.get("itemId", ""))),
+					"%sx %s%s" % [
+					int(payload.get("quantity", 1)),
+					str(payload.get("name", payload.get("itemId", "Item"))),
+					suffix,
+					]
+				))
+			"pokemon":
+				var pokemon_payload: Dictionary = {}
+				if payload.get("pokemon", {}) is Dictionary:
+					pokemon_payload = payload.get("pokemon", {}) as Dictionary
+				var species: String = str(pokemon_payload.get("species", "Pokemon"))
+				var shiny: bool = bool(pokemon_payload.get("shiny", false))
+				mail_attachment_list.add_child(_create_mail_attachment_row(
+					PokemonAssets.load_party_icon(species, shiny),
+					"%s Lv. %s%s" % [
+					species,
+					int(pokemon_payload.get("level", 1)),
+					suffix,
+					],
+					pokemon_payload
+				))
+			_:
+				mail_attachment_list.add_child(_create_mail_attachment_row(null, "Attachment%s" % suffix))
+
+func _create_mail_attachment_row(icon_texture: Texture2D, text: String, pokemon_payload: Dictionary = {}) -> Control:
+	var panel: Control = Button.new() if not pokemon_payload.is_empty() else PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 42)
+	if panel is Button:
+		var button: Button = panel as Button
+		button.focus_mode = Control.FOCUS_NONE
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.tooltip_text = "View Pokemon summary"
+		button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
+		button.add_theme_stylebox_override("normal", _make_mail_attachment_style())
+		button.add_theme_stylebox_override("hover", _make_panel_style(Color("#162840f2"), Color("#e6c777"), 8, 1))
+		button.add_theme_stylebox_override("pressed", _make_panel_style(Color("#081321f2"), Color("#e6c777"), 8, 1))
+	else:
+		(panel as PanelContainer).add_theme_stylebox_override("panel", _make_mail_attachment_style())
+
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+
+	var icon := TextureRect.new()
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.custom_minimum_size = Vector2(30, 30)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = icon_texture
+	row.add_child(icon)
+
+	var label := Label.new()
+	label.text = text
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
+	return panel
+
+func _on_mail_pokemon_attachment_pressed(pokemon_payload: Dictionary) -> void:
+	_open_readonly_pokemon_summary(pokemon_payload)
+
+func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
+	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_payload)
+	if pokemon == null:
+		_add_chat_message("Could not open Pokemon summary: %s" % PokemonFactory.last_error_message)
+		return
+
+	pokemon_summary_preview_pokemon = pokemon
+	pokemon_summary_mode = "readonly"
+	pokemon_summary_selected_slot = -1
+	pokemon_summary_item_picker.visible = false
+	_set_pokemon_summary_popup_size()
+	_refresh_pokemon_summary()
+	pokemon_summary_popup.visible = true
+	_activate_ui_panel(pokemon_summary_popup)
+
+func _make_mail_outer_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#07101bf4"), Color("#e6c777"), 12, 1)
+	style.shadow_color = Color("#00000088")
+	style.shadow_size = 18
+	style.shadow_offset = Vector2(0, 8)
+	style.content_margin_left = 2
+	style.content_margin_top = 2
+	style.content_margin_right = 2
+	style.content_margin_bottom = 2
+	return style
+
+func _make_mail_inner_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#0a1423e8"), Color("#315070"), 8, 1)
+	style.shadow_color = Color("#00000044")
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 3)
+	return style
+
+func _make_mail_attachment_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#101b2cf0"), Color("#d8b76755"), 8, 1)
+	style.shadow_color = Color("#00000044")
+	style.shadow_size = 5
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+func _apply_mail_card_style(button: Button, selected: bool, has_attachments: bool) -> void:
+	var border := Color("#d8b767") if selected else Color("#315070")
+	if has_attachments and not selected:
+		border = Color("#7aa7f4")
+	var normal_bg := Color("#172234f2") if selected else Color("#101724e8")
+	var hover_bg := Color("#1f2b42f2")
+	var pressed_bg := Color("#0b1322f2")
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, UI_BORDER, 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, UI_BORDER, 7, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 7, 1))
+	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+
+func _mail_has_unclaimed_attachments(attachments: Array) -> bool:
+	for attachment_value: Variant in attachments:
+		if not (attachment_value is Dictionary):
+			continue
+		var attachment: Dictionary = attachment_value as Dictionary
+		if not _mail_attachment_is_claimed(attachment):
+			return true
+	return false
+
+func _mail_attachment_is_claimed(attachment: Dictionary) -> bool:
+	var claimed_at: Variant = attachment.get("claimedAt", null)
+	if claimed_at == null:
+		return false
+	return str(claimed_at).strip_edges() != ""
+
+func _array_from_variant(value: Variant) -> Array:
+	if value is Array:
+		return value as Array
+	return []
 
 func _on_guild_button_pressed() -> void:
 	_add_chat_message("Guild is not implemented yet.")
@@ -5599,14 +7079,15 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 
 	var display_name: String = str(user.get("displayName", user.get("username", "Trainer")))
 	var text: String = str(message.get("text", "")).strip_edges()
-	if text == "":
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
+	if text == "" and pokemon_attachments.is_empty():
 		return
 
 	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
-	_add_user_chat_message(user, display_name, text, channel)
+	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments)
 
 
-func _add_user_chat_message(user: Dictionary, display_name: String, text: String, channel: String = CHAT_CHANNEL_GLOBAL) -> void:
+func _add_user_chat_message(user: Dictionary, display_name: String, text: String, channel: String = CHAT_CHANNEL_GLOBAL, pokemon_attachments: Array[Dictionary] = []) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
 	var name_color: String = role_color if not role.is_empty() else CHAT_DEFAULT_NAME_COLOR
@@ -5625,22 +7106,45 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 		if not role_name.is_empty():
 			row.add_child(_create_chat_role_badge(role_name, role_color))
 
-	var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
-	row.add_child(entry)
-	entry.visible = true
-	entry.bbcode_enabled = true
-	entry.clear()
-	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
-		_sanitize_hex_color(name_color, "#dfe4f2"),
-		_escape_bbcode(display_name),
-		CHAT_SEPARATOR_COLOR,
-		CHAT_MESSAGE_COLOR,
-		_escape_bbcode(text),
-	])
-	entry.fit_content = true
-	entry.scroll_active = false
-	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var name_label := Label.new()
+	name_label.text = "%s:" % display_name
+	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	name_label.clip_text = false
+	name_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	name_label.add_theme_color_override("font_color", Color(_sanitize_hex_color(name_color, "#dfe4f2")))
+	name_label.add_theme_font_size_override("font_size", 14)
+	row.add_child(name_label)
+	for pokemon_payload: Dictionary in pokemon_attachments:
+		row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
+	if text != "":
+		var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
+		row.add_child(entry)
+		entry.visible = true
+		entry.bbcode_enabled = true
+		entry.clear()
+		entry.append_text("[color=%s]%s[/color]" % [
+			CHAT_MESSAGE_COLOR,
+			_escape_bbcode(text),
+		])
+		entry.fit_content = true
+		entry.scroll_active = false
+		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll_chat_to_bottom.call_deferred()
+
+func _get_chat_pokemon_attachments(message: Dictionary) -> Array[Dictionary]:
+	var attachments: Array[Dictionary] = []
+	var attachments_value: Variant = message.get("pokemonAttachments", [])
+	if attachments_value is Array:
+		for attachment_value: Variant in attachments_value:
+			if attachment_value is Dictionary:
+				attachments.append((attachment_value as Dictionary).duplicate(true))
+		return attachments
+
+	var legacy_value: Variant = message.get("pokemonAttachment", {})
+	if legacy_value is Dictionary:
+		attachments.append((legacy_value as Dictionary).duplicate(true))
+	return attachments
 
 
 func _should_show_chat_category(category: String) -> bool:
@@ -5678,6 +7182,33 @@ func _create_chat_role_badge(role_name: String, role_color: String) -> PanelCont
 	label.add_theme_font_size_override("font_size", 10)
 	badge.add_child(label)
 	return badge
+
+func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Control:
+	var button := Button.new()
+	var species: String = str(pokemon_payload.get("species", "Pokemon"))
+	var shiny: bool = bool(pokemon_payload.get("shiny", false))
+	button.custom_minimum_size = Vector2(36, 36)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.tooltip_text = "View %s summary" % species
+	button.pressed.connect(_open_readonly_pokemon_summary.bind(pokemon_payload))
+	var transparent_style := _make_button_style(Color("#00000000"), Color("#00000000"), 0, 0)
+	button.add_theme_stylebox_override("normal", transparent_style)
+	button.add_theme_stylebox_override("hover", transparent_style)
+	button.add_theme_stylebox_override("pressed", transparent_style)
+	button.add_theme_stylebox_override("focus", transparent_style)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(36, 36)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = PokemonAssets.load_party_icon(species, shiny)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(icon)
+
+	return button
 
 
 func _get_primary_visible_chat_role(user: Dictionary) -> Dictionary:

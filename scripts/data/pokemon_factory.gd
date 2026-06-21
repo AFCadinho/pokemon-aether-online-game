@@ -32,7 +32,10 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		_has_hp_override(data),
 		_get_payload_types(data),
 		_get_payload_possible_abilities(data),
-		_get_string_option(data, ["location", "caughtLocation", "caught_location", "metLocation", "met_location", "encounterArea", "encounter_area"])
+		_get_origin_location(data),
+		_get_origin_payload(data),
+		_get_bool_option(data, ["tradable", "isTradable", "is_tradable"], true),
+		_get_stored_evs_payload(data)
 	)
 
 	pokemon.max_hp = max(int(data.get("maxHp", data.get("max_hp", pokemon.max_hp))), 1)
@@ -62,6 +65,38 @@ static func _get_payload_types(data: Dictionary) -> Array:
 
 static func _get_payload_possible_abilities(data: Dictionary) -> Array:
 	return _normalize_string_array(data.get("possibleAbilities", data.get("possible_abilities", [])))
+
+
+static func _get_stored_evs_payload(data: Dictionary) -> Dictionary:
+	for key in ["storedEvs", "stored_evs", "pendingEvs", "pending_evs"]:
+		var value: Variant = data.get(key, {})
+		if value is Dictionary:
+			return (value as Dictionary).duplicate(true)
+
+	return {}
+
+
+static func _get_origin_payload(data: Dictionary) -> Dictionary:
+	var origin_value: Variant = data.get("origin", {})
+	if origin_value is Dictionary:
+		return (origin_value as Dictionary).duplicate(true)
+
+	var location_name: String = _get_string_option(data, ["location", "caughtLocation", "caught_location", "metLocation", "met_location", "encounterArea", "encounter_area"])
+	if location_name == "":
+		return {}
+
+	return {
+		"locationName": location_name,
+	}
+
+
+static func _get_origin_location(data: Dictionary) -> String:
+	var origin: Dictionary = _get_origin_payload(data)
+	var location_name: String = str(origin.get("locationName", origin.get("location", ""))).strip_edges()
+	if location_name != "":
+		return location_name
+
+	return _get_string_option(data, ["location", "caughtLocation", "caught_location", "metLocation", "met_location", "encounterArea", "encounter_area"])
 
 
 static func _normalize_type_array(value: Variant) -> Array:

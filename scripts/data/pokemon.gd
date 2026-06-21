@@ -8,15 +8,18 @@ var item: String
 var ability: String
 var nature: String
 var location: String
+var origin: Dictionary
 var instance_id: String
 var owned_pokemon_id: int
 var shiny: bool
 var evs: Dictionary
+var stored_evs: Dictionary
 var ivs: Dictionary
 var stats: Dictionary
 var moves: Array
 var types: Array
 var possible_abilities: Array
+var tradable: bool
 
 var current_hp: int
 var max_hp: int
@@ -38,7 +41,10 @@ func _init(
 	_has_saved_hp_state := false,
 	_types := [],
 	_possible_abilities := [],
-	_location: String = ""
+	_location: String = "",
+	_origin := {},
+	_tradable: bool = true,
+	_stored_evs := {}
 	) -> void:
 	species = _species
 	level = _level
@@ -46,6 +52,7 @@ func _init(
 	ability = _ability
 	nature = _nature
 	location = _location
+	origin = _normalize_origin(_origin, location)
 	instance_id = _instance_id
 	owned_pokemon_id = _owned_pokemon_id
 	shiny = _shiny
@@ -57,6 +64,14 @@ func _init(
 		"spa": _evs.get("spa", 0),
 		"spd": _evs.get("spd", 0),
 		"spe": _evs.get("spe", 0),
+	}
+	stored_evs = {
+		"hp": _stored_evs.get("hp", 0),
+		"atk": _stored_evs.get("atk", 0),
+		"def": _stored_evs.get("def", 0),
+		"spa": _stored_evs.get("spa", 0),
+		"spd": _stored_evs.get("spd", 0),
+		"spe": _stored_evs.get("spe", 0),
 	}
 	ivs = {
 		"hp": _ivs.get("hp", 31),
@@ -70,6 +85,7 @@ func _init(
 	moves = _moves
 	types = _normalize_types(_types)
 	possible_abilities = _normalize_string_array(_possible_abilities)
+	tradable = _tradable
 
 	max_hp = 20
 	current_hp = max_hp
@@ -93,6 +109,7 @@ func to_battle_dict() -> Dictionary:
 		"ability": ability,
 		"nature": nature,
 		"evs": evs,
+		"storedEvs": stored_evs,
 		"ivs": ivs,
 		"stats": stats,
 		"moves": _moves_to_battle_list(),
@@ -136,6 +153,9 @@ func to_persistence_dict() -> Dictionary:
 		pokemon_data["ownedPokemonId"] = owned_pokemon_id
 	if location.strip_edges() != "":
 		pokemon_data["location"] = location
+	if not origin.is_empty():
+		pokemon_data["origin"] = origin.duplicate(true)
+	pokemon_data["tradable"] = tradable
 	pokemon_data["currentHp"] = current_hp
 	pokemon_data["maxHp"] = max_hp
 	pokemon_data["condition"] = _to_battle_condition()
@@ -208,3 +228,13 @@ func _normalize_string_array(value: Variant) -> Array:
 		normalized_values.append(str(item))
 
 	return normalized_values
+
+func _normalize_origin(value: Variant, fallback_location: String = "") -> Dictionary:
+	var normalized_origin: Dictionary = {}
+	if value is Dictionary:
+		normalized_origin = (value as Dictionary).duplicate(true)
+
+	if normalized_origin.is_empty() and fallback_location.strip_edges() != "":
+		normalized_origin["locationName"] = fallback_location.strip_edges()
+
+	return normalized_origin

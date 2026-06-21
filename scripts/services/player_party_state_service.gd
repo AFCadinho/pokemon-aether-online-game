@@ -151,12 +151,12 @@ func clear_party_slot(slot: int) -> Dictionary:
 	return result
 
 
-func create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
-	return await _create_owned_pokemon("/game/pokemon", pokemon_data, add_to_party)
+func create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true, origin_method: String = "gift") -> Dictionary:
+	return await _create_owned_pokemon("/game/pokemon", _with_current_origin(pokemon_data, origin_method), add_to_party)
 
 
 func dev_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
-	return await _create_owned_pokemon("/game/dev/pokemon", pokemon_data, add_to_party)
+	return await _create_owned_pokemon("/game/dev/pokemon", _with_current_origin(pokemon_data, "generated"), add_to_party)
 
 
 func _create_owned_pokemon(endpoint: String, pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
@@ -179,6 +179,59 @@ func _create_owned_pokemon(endpoint: String, pokemon_data: Dictionary, add_to_pa
 	var result: Dictionary = _pokemon_create_result_from_response(response)
 	_apply_party_response(result)
 	return result
+
+
+func _with_current_origin(pokemon_data: Dictionary, method: String) -> Dictionary:
+	var payload: Dictionary = pokemon_data.duplicate(true)
+	var origin_value: Variant = payload.get("origin", {})
+	if origin_value is Dictionary and not (origin_value as Dictionary).is_empty():
+		return payload
+
+	var origin: Dictionary = _get_current_location_origin(method, int(payload.get("level", 0)))
+	payload["origin"] = origin
+	payload["location"] = str(origin.get("locationName", "")).strip_edges()
+	return payload
+
+
+func _get_current_location_origin(method: String, met_level: int = 0) -> Dictionary:
+	var current_map: Node = GameState.current_map as Node
+	var metadata: Dictionary = {}
+	if current_map != null and current_map.has_method("get_location_metadata"):
+		var metadata_value: Variant = current_map.call("get_location_metadata")
+		if metadata_value is Dictionary:
+			metadata = metadata_value as Dictionary
+
+	var map_id := ""
+	var location_name := ""
+	var region_id := ""
+	var region_name := ""
+	if current_map != null:
+		if current_map.has_method("get_map_id"):
+			map_id = str(current_map.call("get_map_id")).strip_edges()
+		if current_map.has_method("get_map_display_name"):
+			location_name = str(current_map.call("get_map_display_name")).strip_edges()
+		if current_map.has_method("get_map_region_name"):
+			region_name = str(current_map.call("get_map_region_name")).strip_edges()
+
+	var origin := {
+		"locationId": str(metadata.get("locationId", map_id)).strip_edges(),
+		"locationName": str(metadata.get("locationName", location_name)).strip_edges(),
+		"regionId": str(metadata.get("regionId", region_name.to_lower().replace(" ", "_"))).strip_edges(),
+		"regionName": str(metadata.get("regionName", region_name)).strip_edges(),
+		"mapId": str(metadata.get("mapId", map_id)).strip_edges(),
+		"method": method,
+	}
+	if origin["locationId"] == "":
+		origin["locationId"] = "unknown"
+	if origin["locationName"] == "":
+		origin["locationName"] = "Unknown Location"
+	if origin["regionId"] == "":
+		origin["regionId"] = "unknown"
+	if origin["regionName"] == "":
+		origin["regionName"] = origin["regionId"]
+	if met_level > 0:
+		origin["metLevel"] = met_level
+	return origin
 
 
 func give_pokemon_held_item(pokemon_id: int, item_id: String) -> Dictionary:

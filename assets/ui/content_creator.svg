@@ -1,46 +1,44 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="80" y1="56" x2="432" y2="456" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#1B7CFF"/>
-      <stop offset="1" stop-color="#7A32FF"/>
+    <linearGradient id="screen" x1="90" y1="95" x2="420" y2="390" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8b5cff"/>
+      <stop offset="50%" stop-color="#4b7cff"/>
+      <stop offset="100%" stop-color="#173680"/>
     </linearGradient>
-    <linearGradient id="cam" x1="130" y1="152" x2="380" y2="350" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#B9C7D9"/>
+    <linearGradient id="red" x1="150" y1="150" x2="350" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ff5b6a"/>
+      <stop offset="100%" stop-color="#d7193f"/>
     </linearGradient>
-    <linearGradient id="play" x1="224" y1="204" x2="304" y2="300" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FF4E8A"/>
-      <stop offset="1" stop-color="#FFB84A"/>
+    <linearGradient id="dark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#14233f"/>
+      <stop offset="100%" stop-color="#050914"/>
     </linearGradient>
-    <filter id="shadow" x="34" y="34" width="444" height="444" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000000" flood-opacity="0.45"/>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.35"/>
     </filter>
   </defs>
 
-  <!-- transparent background -->
-  <g filter="url(#shadow)">
-    <path d="M96 106C96 80 117 59 143 59H369C395 59 416 80 416 106V406C416 432 395 453 369 453H143C117 453 96 432 96 406V106Z" fill="#071827"/>
-    <path d="M114 120C114 94 135 73 161 73H351C377 73 398 94 398 120V392C398 418 377 439 351 439H161C135 439 114 418 114 392V120Z" fill="url(#bg)"/>
-    <path d="M134 140C134 119 151 102 172 102H340C361 102 378 119 378 140V372C378 393 361 410 340 410H172C151 410 134 393 134 372V140Z" fill="#0A1827" stroke="#64C7FF" stroke-width="10"/>
+  <g filter="url(#shadow)" stroke="url(#dark)" stroke-width="16" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="76" y="98" width="360" height="250" rx="42" fill="url(#screen)"/>
+    <rect x="112" y="132" width="288" height="182" rx="24" fill="#0b1428" opacity="0.45"/>
 
-    <!-- camera body -->
-    <path d="M150 218C150 197 167 180 188 180H280L306 152H352C373 152 390 169 390 190V314C390 335 373 352 352 352H188C167 352 150 335 150 314V218Z" fill="#07101D"/>
-    <path d="M164 224C164 207 178 194 194 194H286L312 166H348C365 166 378 180 378 196V308C378 325 365 338 348 338H194C178 338 164 325 164 308V224Z" fill="url(#cam)"/>
-    <path d="M178 224H276L300 198H344C351 198 356 203 356 210V238H178V224Z" fill="#F7FAFF" opacity="0.7"/>
+    <rect x="155" y="168" width="155" height="104" rx="30" fill="url(#red)"/>
+    <path d="M218 192 L218 248 L267 220 Z" fill="#ffffff"/>
 
-    <!-- lens/play -->
-    <circle cx="256" cy="270" r="74" fill="#071827"/>
-    <circle cx="256" cy="270" r="58" fill="#1D3552" stroke="#EAF6FF" stroke-width="10"/>
-    <path d="M238 231C238 224 246 220 252 224L310 260C316 264 316 276 310 280L252 316C246 320 238 316 238 309V231Z" fill="url(#play)" stroke="#071827" stroke-width="8"/>
+    <path d="M306 186 H392 C412 186 426 200 426 220 V274 C426 294 412 308 392 308 H354 L316 342 V308 H306 C286 308 272 294 272 274 V220 C272 200 286 186 306 186 Z"
+          fill="#7b4dff"/>
 
-    <!-- magic/content sparkles -->
-    <path d="M372 104L384 134L414 146L384 158L372 188L360 158L330 146L360 134L372 104Z" fill="#FFE66B" stroke="#071827" stroke-width="8" stroke-linejoin="round"/>
-    <path d="M130 150L140 174L164 184L140 194L130 218L120 194L96 184L120 174L130 150Z" fill="#FF5CCD" stroke="#071827" stroke-width="7" stroke-linejoin="round"/>
+    <circle cx="326" cy="247" r="9" fill="#ffffff"/>
+    <circle cx="354" cy="247" r="9" fill="#ffffff"/>
+    <circle cx="382" cy="247" r="9" fill="#ffffff"/>
 
-    <!-- small tool/wand pencil -->
-    <path d="M332 354L392 414" stroke="#071827" stroke-width="22" stroke-linecap="round"/>
-    <path d="M332 354L392 414" stroke="#FFD36E" stroke-width="12" stroke-linecap="round"/>
-    <path d="M316 338L344 366" stroke="#071827" stroke-width="18" stroke-linecap="round"/>
-    <path d="M316 338L344 366" stroke="#FF5CCD" stroke-width="10" stroke-linecap="round"/>
+    <path d="M226 348 H286 V412 H226 Z" fill="#5c6d88"/>
+    <path d="M174 412 H338 V450 H174 Z" fill="#5c6d88"/>
+
+    <circle cx="126" cy="144" r="12" fill="#ff3f55"/>
+    <path d="M123 370 L139 408 L177 424 L139 440 L123 478 L107 440 L69 424 L107 408 Z" fill="#ffe066"/>
   </g>
+
+  <path d="M122 126 H330" stroke="#b7d4ff" stroke-width="10" stroke-linecap="round" opacity="0.45"/>
+  <path d="M165 174 H260" stroke="#ff9ca6" stroke-width="8" stroke-linecap="round" opacity="0.45"/>
 </svg>

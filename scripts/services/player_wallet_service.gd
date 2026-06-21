@@ -3,6 +3,7 @@ extends Node
 class_name PlayerWalletServiceNode
 
 const PLAYER_WALLET_ENDPOINT := "/game/wallet"
+const DEV_ADD_MONEY_ENDPOINT := "/game/dev/wallet/money"
 const WILD_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/wild-battle"
 const TRAINER_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/trainer-battle"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -21,6 +22,30 @@ func load_wallet() -> Dictionary:
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
+	)
+	return _wallet_result_from_response(response)
+
+
+func dev_add_money(amount: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if amount <= 0:
+		return {
+			"success": false,
+			"error": "Amount must be positive.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_ADD_MONEY_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"amount": amount,
+		})
 	)
 	return _wallet_result_from_response(response)
 
