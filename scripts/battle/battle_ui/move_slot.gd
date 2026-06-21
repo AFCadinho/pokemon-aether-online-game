@@ -31,8 +31,10 @@ func set_move_data(move_data: Dictionary) -> void:
 	if current_pp_value != null:
 		current_pp = int(current_pp_value)
 
-	var max_pp_value = move_data.get("maxpp", current_pp)
+	var max_pp_value = _get_first_dictionary_value(move_data, ["maxpp", "maxPp", "maxPP", "max_pp"], current_pp)
 	var max_pp := current_pp
+	if max_pp < 0:
+		max_pp = 0
 
 	if max_pp_value != null:
 		max_pp = int(max_pp_value)
@@ -102,6 +104,14 @@ func _set_effectiveness(move_data: Dictionary) -> void:
 	else:
 		effectiveness_label.text = "effective"
 		effectiveness_label.add_theme_color_override("font_color", Color("#b8b8b8"))
+
+
+func _get_first_dictionary_value(data: Dictionary, keys: Array[String], fallback: Variant) -> Variant:
+	for key in keys:
+		if data.has(key):
+			return data.get(key)
+
+	return fallback
 
 
 func _on_pressed() -> void:

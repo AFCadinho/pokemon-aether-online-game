@@ -864,6 +864,7 @@ func _show_party(force_switch := false) -> void:
 	action_buttons.set_action_disabled("bag", force_switch)
 	action_buttons.set_action_disabled("run", force_switch)
 	current_action_view = ActionView.PARTY
+	_update_party_slots()
 	moves_grid.visible = false
 	party_grid.visible = true
 	action_buttons.set_selected_action("party")
@@ -938,18 +939,29 @@ func _finish_battle(result: Dictionary) -> void:
 
 	battle_finished = true
 	pending_mega_species_by_ident.clear()
-	PlayerSave.apply_battle_team_state(battle_state.get_player_team("p1"))
-	PlayerPartyStateService.save_current_party_deferred()
+	_sync_player_save_from_battle_state()
+	PlayerPartyStateService.save_current_battle_party_state_deferred()
 	battle_ended.emit(result)
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
 func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true) -> bool:
 	var success: bool = action_flow.apply_response(response, apply_event_conditions)
 	if success:
+		_apply_party_state_from_api_response(response)
 		_remember_active_player_party_moves()
 		_prewarm_current_battle_move_animations()
 
 	return success
+
+func _apply_party_state_from_api_response(response: Dictionary) -> void:
+	if not response.has("party"):
+		return
+
+	var party_value: Variant = response.get("party")
+	if party_value is Array:
+		var party_data: Array = party_value as Array
+		if not party_data.is_empty():
+			PlayerSave.replace_party_from_state(party_data)
 
 func _prewarm_current_battle_move_animations() -> void:
 	var move_names: Array[String] = []
@@ -1052,7 +1064,154 @@ func _sync_player_save_from_battle_state() -> void:
 	if player_team.is_empty():
 		return
 
+	if not _team_has_move_pp_data(player_team):
+		var player_request: Dictionary = battle_state.get_player_request("p1")
+		var active_slots_value: Variant = player_request.get("active", [])
+		if active_slots_value is Array:
+			var active_slots: Array = active_slots_value as Array
+			if not active_slots.is_empty():
+				player_team = _inject_player_active_moves(player_team, active_slots)
+
 	PlayerSave.apply_battle_team_state(player_team)
+
+func _team_has_move_pp_data(team: Array) -> bool:
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var moves_value: Variant = pokemon_data.get("moves", [])
+		if not (moves_value is Array):
+			continue
+
+		for move_value: Variant in moves_value:
+			if not (move_value is Dictionary):
+				continue
+
+			var move_data: Dictionary = move_value as Dictionary
+			if move_data.has("pp") or move_data.has("currentPp") or move_data.has("currentPP") or move_data.has("current_pp"):
+				return true
+
+	return false
+
+func _inject_player_active_moves(team: Array, active_slots: Array) -> Array:
+	var team_copy: Array = []
+	for pokemon_value: Variant in team:
+		if pokemon_value is Dictionary:
+			team_copy.append((pokemon_value as Dictionary).duplicate(true))
+		else:
+			team_copy.append(pokemon_value)
+
+	var active_team_indices: Array[int] = []
+	for pokemon_index in range(team_copy.size()):
+		var pokemon_value: Variant = team_copy[pokemon_index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var team_pokemon: Dictionary = pokemon_value as Dictionary
+		if bool(team_pokemon.get("active", false)):
+			active_team_indices.append(pokemon_index)
+
+	var used_active_indices: Dictionary = {}
+	for active_index in range(active_slots.size()):
+		var active_slot_value: Variant = active_slots[active_index]
+		if not (active_slot_value is Dictionary):
+			continue
+
+		var active_slot: Dictionary = active_slot_value as Dictionary
+		var active_moves: Array = _get_active_slot_moves(active_slot)
+		if active_moves.is_empty():
+			continue
+
+		var team_index: int = -1
+		if active_index < active_team_indices.size():
+			team_index = active_team_indices[active_index]
+
+		if team_index < 0 or team_index >= team_copy.size():
+			team_index = _find_matching_team_index_for_active_slot(team_copy, active_slot)
+
+		if team_index < 0 or team_index >= team_copy.size():
+			continue
+
+		if used_active_indices.has(team_index):
+			continue
+
+		var team_pokemon: Dictionary = team_copy[team_index] as Dictionary
+		team_pokemon["moves"] = active_moves
+		used_active_indices[team_index] = true
+
+	return team_copy
+
+func _get_active_slot_moves(active_slot: Dictionary) -> Array:
+	var moves_value: Variant = active_slot.get("moves", [])
+	if moves_value is Array:
+		return (moves_value as Array).duplicate(true)
+
+	return []
+
+func _find_matching_team_index_for_active_slot(team: Array, active_slot: Dictionary) -> int:
+	var candidate_index: int = -1
+	var candidate_names: Array[String] = []
+	for key in ["activeIdent", "ident", "pokemon", "species", "name", "displaySpecies"]:
+		var raw_candidate: String = str(active_slot.get(key, "")).strip_edges()
+		if raw_candidate != "":
+			candidate_names.append(_normalize_species_for_compare(_normalize_active_ident_to_species(raw_candidate)))
+
+	var active_mega_slot: int = _safe_int(active_slot.get("slot", -1), -1)
+	if active_mega_slot > 0 and active_mega_slot <= team.size():
+		return active_mega_slot - 1
+
+	for pokemon_index in range(team.size()):
+		var pokemon_value: Variant = team[pokemon_index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var team_pokemon: Dictionary = pokemon_value as Dictionary
+		var team_species_value: String = str(team_pokemon.get("species", team_pokemon.get("ident", "")))
+		var team_species: String = _normalize_species_for_compare(_normalize_active_ident_to_species(team_species_value))
+		if team_species == "":
+			continue
+
+		for candidate_name in candidate_names:
+			if candidate_name != "" and team_species == candidate_name:
+				candidate_index = pokemon_index if candidate_index == -1 else candidate_index
+
+	if candidate_index >= 0:
+		return candidate_index
+
+	var metadata_slot_value: Variant = active_slot.get("slot", active_slot.get("metadataSlot", active_slot.get("metadata_slot", 0)))
+	var metadata_slot: int = _safe_int(metadata_slot_value, -1)
+	if metadata_slot > 0:
+		for pokemon_index in range(team.size()):
+			var pokemon_value: Variant = team[pokemon_index]
+			if not (pokemon_value is Dictionary):
+				continue
+
+			var team_pokemon: Dictionary = pokemon_value as Dictionary
+			if int(team_pokemon.get("metadataSlot", team_pokemon.get("metadata_slot", 0))) == metadata_slot:
+				return pokemon_index
+
+	return -1
+
+func _normalize_active_ident_to_species(raw_ident: String) -> String:
+	if raw_ident == "":
+		return ""
+
+	if raw_ident.contains(": "):
+		return raw_ident.split(": ", false)[1]
+
+	return raw_ident
+
+func _safe_int(value: Variant, fallback: int) -> int:
+	if value is int:
+		return int(value)
+	if value is float:
+		return int(value)
+	if value is String:
+		var text: String = value.strip_edges()
+		if text.is_valid_int():
+			return text.to_int()
+	return fallback
 
 ## Werkt de player en opponent HUD panels bij vanuit de battle state.
 func _update_hud_panels() -> void:

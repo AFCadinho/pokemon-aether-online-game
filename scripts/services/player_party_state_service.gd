@@ -3,6 +3,7 @@ extends Node
 class_name PlayerPartyStateServiceNode
 
 const PLAYER_PARTY_ENDPOINT := "/game/party"
+const PLAYER_PARTY_BATTLE_ENDPOINT := "/game/party/battle-state"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -56,14 +57,193 @@ func save_party(party_state: Dictionary) -> Dictionary:
 	}
 
 
+func save_battle_state(battle_state: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_PARTY_BATTLE_ENDPOINT,
+		HTTPClient.METHOD_PATCH,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(battle_state)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"hasParty": bool(body.get("hasParty", false)),
+		"party": _array_from_value(body.get("party", [])),
+	}
+
+
 func save_current_party() -> Dictionary:
-	return await save_party(PlayerSave.to_party_state())
+	var result: Dictionary = await save_party(PlayerSave.to_party_state())
+	_apply_party_response(result)
+	return result
+
+
+func swap_party_slots(from_slot: int, to_slot: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_PARTY_ENDPOINT + "/swap",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"fromSlot": from_slot,
+			"toSlot": to_slot,
+		})
+	)
+	var result: Dictionary = _party_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
+func set_party_slot(slot: int, pokemon_id: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_PARTY_ENDPOINT + "/set-slot",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"slot": slot,
+			"pokemonId": pokemon_id,
+		})
+	)
+	var result: Dictionary = _party_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
+func clear_party_slot(slot: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_PARTY_ENDPOINT + "/%s" % slot,
+		HTTPClient.METHOD_DELETE,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	var result: Dictionary = _party_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
+func create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
+	return await _create_owned_pokemon("/game/pokemon", pokemon_data, add_to_party)
+
+
+func dev_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
+	return await _create_owned_pokemon("/game/dev/pokemon", pokemon_data, add_to_party)
+
+
+func _create_owned_pokemon(endpoint: String, pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + endpoint,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"pokemon": pokemon_data,
+			"addToParty": add_to_party,
+		})
+	)
+	var result: Dictionary = _pokemon_create_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
+func give_pokemon_held_item(pokemon_id: int, item_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0 or item_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing Pokemon or item.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/held-item" % pokemon_id,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"itemId": item_id,
+		})
+	)
+	var result: Dictionary = _pokemon_item_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
+func take_pokemon_held_item(pokemon_id: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0:
+		return {
+			"success": false,
+			"error": "Missing Pokemon.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/held-item" % pokemon_id,
+		HTTPClient.METHOD_DELETE,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	var result: Dictionary = _pokemon_item_result_from_response(response)
+	_apply_party_response(result)
+	return result
 
 
 func save_current_party_deferred() -> void:
-	var result: Dictionary = await save_current_party()
+	var result: Dictionary = await save_party(PlayerSave.to_party_state())
 	if not bool(result.get("success", false)):
 		push_warning("PlayerPartyStateService: party save failed: %s" % str(result.get("error", "Unknown error")))
+
+
+func save_current_battle_party_state_deferred() -> void:
+	var result: Dictionary = await save_battle_state(PlayerSave.to_battle_state())
+	if not bool(result.get("success", false)):
+		push_warning("PlayerPartyStateService: battle party save failed: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	_apply_party_response(result)
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:
@@ -114,6 +294,58 @@ func _request_json(url: String, method: HTTPClient.Method, headers: PackedString
 		"status": response_code,
 		"body": body_dictionary,
 	}
+
+
+func _party_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"hasParty": bool(body.get("hasParty", false)),
+		"party": _array_from_value(body.get("party", [])),
+	}
+
+
+func _pokemon_item_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
+	return {
+		"success": true,
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"inventory": _array_from_value(inventory.get("items", [])),
+		"hasParty": bool(party.get("hasParty", false)),
+		"party": _array_from_value(party.get("party", [])),
+	}
+
+
+func _pokemon_create_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	var pokemon: Dictionary = _dictionary_from_value(body.get("pokemon", {}))
+	return {
+		"success": true,
+		"pokemon": pokemon,
+		"hasParty": bool(party.get("hasParty", false)),
+		"party": _array_from_value(party.get("party", [])),
+	}
+
+
+func _apply_party_response(result: Dictionary) -> void:
+	if not bool(result.get("success", false)):
+		return
+
+	var party_value: Variant = result.get("party", [])
+	if party_value is Array:
+		PlayerSave.replace_party_from_state(party_value as Array)
 
 
 func _extract_error(body: Dictionary, response_code: int) -> String:

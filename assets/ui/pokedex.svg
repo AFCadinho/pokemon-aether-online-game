@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="redBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff4b4b"/>
+      <stop offset="45%" stop-color="#e51f35"/>
+      <stop offset="100%" stop-color="#9e0f24"/>
+    </linearGradient>
+    <linearGradient id="darkRed" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b8182d"/>
+      <stop offset="100%" stop-color="#5b0715"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9df7ff"/>
+      <stop offset="55%" stop-color="#31bce8"/>
+      <stop offset="100%" stop-color="#126ca3"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#c9d3df"/>
+      <stop offset="100%" stop-color="#687789"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Transparent background -->
+
+  <!-- outer device -->
+  <g filter="url(#shadow)" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M122 54h240c28 0 50 22 50 50v304c0 28-22 50-50 50H122c-28 0-50-22-50-50V104c0-28 22-50 50-50z"
+          fill="#130b22" stroke="#05030a" stroke-width="18"/>
+
+    <path d="M124 70h236c20 0 36 16 36 36v300c0 20-16 36-36 36H124c-20 0-36-16-36-36V106c0-20 16-36 36-36z"
+          fill="url(#redBody)" stroke="#3c0714" stroke-width="10"/>
+
+    <!-- left hinge/spine -->
+    <path d="M92 122h54v266H92z" fill="url(#darkRed)" stroke="#3c0714" stroke-width="8"/>
+    <path d="M114 94v320" stroke="#ff7a7a" stroke-width="10" opacity="0.55"/>
+
+    <!-- top shine -->
+    <path d="M136 88h190c24 0 44 20 44 44" fill="none" stroke="#ff9c9c" stroke-width="12" opacity="0.5"/>
+
+    <!-- screen -->
+    <rect x="162" y="110" width="194" height="126" rx="18"
+          fill="url(#screen)" stroke="#07162b" stroke-width="12"/>
+    <rect x="184" y="130" width="150" height="84" rx="10"
+          fill="#b9fbff" opacity="0.22"/>
+    <path d="M194 154h92M194 182h56" stroke="#ffffff" stroke-width="12" opacity="0.65"/>
+
+    <!-- divider -->
+    <path d="M104 262h286" stroke="#480b18" stroke-width="14"/>
+    <path d="M122 258h240" stroke="#ff7777" stroke-width="5" opacity="0.55"/>
+
+    <!-- pokeball control -->
+    <circle cx="256" cy="348" r="66" fill="#f5f7fb" stroke="#09070d" stroke-width="12"/>
+    <path d="M196 348h120c0-33-27-60-60-60s-60 27-60 60z" fill="#e21c34"/>
+    <path d="M196 348h120" stroke="#09070d" stroke-width="12"/>
+    <circle cx="256" cy="348" r="24" fill="url(#metal)" stroke="#09070d" stroke-width="10"/>
+    <circle cx="256" cy="348" r="8" fill="#ffffff"/>
+
+    <!-- buttons -->
+    <circle cx="348" cy="312" r="20" fill="#23324a" stroke="#05030a" stroke-width="8"/>
+    <circle cx="348" cy="382" r="20" fill="#23324a" stroke="#05030a" stroke-width="8"/>
+    <path d="M145 328h-18v-18h-26v18H83v26h18v18h26v-18h18z"
+          fill="#28374f" stroke="#05030a" stroke-width="8"/>
+
+    <!-- bottom accent -->
+    <path d="M132 426h220" stroke="#3c0714" stroke-width="12"/>
+    <path d="M160 426h150" stroke="#ff8c8c" stroke-width="5" opacity="0.45"/>
+  </g>
+</svg>

@@ -56,6 +56,35 @@ func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	}
 
 
+func impersonate_with_token(token: String) -> Dictionary:
+	var normalized_token := token.strip_edges()
+	if normalized_token == "":
+		return {
+			"success": false,
+			"error": "Missing impersonation token.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/impersonate/consume",
+		HTTPClient.METHOD_POST,
+		PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER]),
+		JSON.stringify({"token": normalized_token})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	_apply_auth_response(body)
+	_clear_session_file()
+
+	return {
+		"success": true,
+		"user": current_user,
+		"expiresAt": expires_at,
+	}
+
+
 func restore_saved_session() -> Dictionary:
 	var saved_session: Dictionary = _load_session_file()
 	var saved_token := str(saved_session.get("token", ""))

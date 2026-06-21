@@ -23,13 +23,16 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		str(data.get("ability", "")),
 		str(data.get("nature", "Hardy")),
 		data.get("evs", {}),
+		data.get("ivs", {}),
 		data.get("stats", {}),
 		_get_payload_moves(data),
 		str(data.get("instanceId", data.get("instance_id", ""))),
+		_get_int_option(data, ["ownedPokemonId", "owned_pokemon_id", "pokemonId", "pokemon_id"]),
 		_get_bool_option(data, ["shiny", "isShiny", "is_shiny"]),
 		_has_hp_override(data),
 		_get_payload_types(data),
-		_get_payload_possible_abilities(data)
+		_get_payload_possible_abilities(data),
+		_get_string_option(data, ["location", "caughtLocation", "caught_location", "metLocation", "met_location", "encounterArea", "encounter_area"])
 	)
 
 	pokemon.max_hp = max(int(data.get("maxHp", data.get("max_hp", pokemon.max_hp))), 1)
@@ -40,8 +43,15 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 
 static func _get_payload_moves(data: Dictionary) -> Array:
 	var moves: Array = []
-	for move in data.get("moves", []):
-		moves.append(str(move))
+	var moves_value: Variant = data.get("moves", [])
+	if not (moves_value is Array):
+		return moves
+
+	for move: Variant in moves_value:
+		if move is Dictionary:
+			moves.append((move as Dictionary).duplicate(true))
+		else:
+			moves.append(str(move))
 
 	return moves.slice(0, 4)
 
@@ -84,6 +94,36 @@ static func _get_bool_option(options: Dictionary, keys: Array, default_value: bo
 				return true
 			"false", "no", "0", "n":
 				return false
+
+	return default_value
+
+
+static func _get_int_option(options: Dictionary, keys: Array, default_value: int = 0) -> int:
+	for key in keys:
+		if not options.has(key):
+			continue
+
+		var value: Variant = options.get(key)
+		if value is int:
+			return max(int(value), 0)
+		if value is float:
+			return max(int(value), 0)
+
+		var text_value: String = str(value).strip_edges()
+		if text_value.is_valid_int():
+			return max(int(text_value), 0)
+
+	return default_value
+
+
+static func _get_string_option(options: Dictionary, keys: Array, default_value: String = "") -> String:
+	for key in keys:
+		if not options.has(key):
+			continue
+
+		var text_value: String = str(options.get(key)).strip_edges()
+		if text_value != "":
+			return text_value
 
 	return default_value
 

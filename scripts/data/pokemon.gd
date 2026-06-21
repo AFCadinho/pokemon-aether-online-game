@@ -7,9 +7,12 @@ var level: int
 var item: String
 var ability: String
 var nature: String
+var location: String
 var instance_id: String
+var owned_pokemon_id: int
 var shiny: bool
 var evs: Dictionary
+var ivs: Dictionary
 var stats: Dictionary
 var moves: Array
 var types: Array
@@ -26,20 +29,25 @@ func _init(
 	_ability := "",
 	_nature := "Hardy",
 	_evs := {},
+	_ivs := {},
 	_stats := {},
 	_moves := [],
 	_instance_id := "",
+	_owned_pokemon_id: int = 0,
 	_shiny: bool = false,
 	_has_saved_hp_state := false,
 	_types := [],
-	_possible_abilities := []
+	_possible_abilities := [],
+	_location: String = ""
 	) -> void:
 	species = _species
 	level = _level
 	item = _item
 	ability = _ability
 	nature = _nature
+	location = _location
 	instance_id = _instance_id
+	owned_pokemon_id = _owned_pokemon_id
 	shiny = _shiny
 	has_saved_hp_state = _has_saved_hp_state
 	evs = {
@@ -49,6 +57,14 @@ func _init(
 		"spa": _evs.get("spa", 0),
 		"spd": _evs.get("spd", 0),
 		"spe": _evs.get("spe", 0),
+	}
+	ivs = {
+		"hp": _ivs.get("hp", 31),
+		"atk": _ivs.get("atk", 31),
+		"def": _ivs.get("def", 31),
+		"spa": _ivs.get("spa", 31),
+		"spd": _ivs.get("spd", 31),
+		"spe": _ivs.get("spe", 31),
 	}
 	stats = _normalize_stat_dict(_stats, 0)
 	moves = _moves
@@ -77,8 +93,10 @@ func to_battle_dict() -> Dictionary:
 		"ability": ability,
 		"nature": nature,
 		"evs": evs,
+		"ivs": ivs,
 		"stats": stats,
-		"moves": moves,
+		"moves": _moves_to_battle_list(),
+		"savedMoves": _moves_to_persistence_list(),
 		"types": types,
 		"possibleAbilities": possible_abilities,
 		"instanceId": instance_id,
@@ -92,12 +110,65 @@ func to_battle_dict() -> Dictionary:
 
 	return battle_data
 
+
+func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
+	ensure_instance_id()
+
+	var battle_state := {
+		"species": species,
+		"ownedPokemonId": owned_pokemon_id,
+		"instanceId": instance_id,
+		"currentHp": current_hp,
+		"maxHp": max_hp,
+		"moves": _moves_to_persistence_list(),
+		"condition": _to_battle_condition(),
+	}
+	if metadata_slot > 0:
+		battle_state["metadataSlot"] = metadata_slot
+
+	return battle_state
+
 func to_persistence_dict() -> Dictionary:
 	var pokemon_data := to_battle_dict()
+	pokemon_data.erase("savedMoves")
+	pokemon_data["moves"] = _moves_to_persistence_list()
+	if owned_pokemon_id > 0:
+		pokemon_data["ownedPokemonId"] = owned_pokemon_id
+	if location.strip_edges() != "":
+		pokemon_data["location"] = location
 	pokemon_data["currentHp"] = current_hp
 	pokemon_data["maxHp"] = max_hp
 	pokemon_data["condition"] = _to_battle_condition()
 	return pokemon_data
+
+func _moves_to_battle_list() -> Array:
+	var battle_moves: Array = []
+	for move_value: Variant in moves:
+		if move_value is Dictionary:
+			var move_data: Dictionary = move_value as Dictionary
+			var move_name: String = str(move_data.get("name", "")).strip_edges()
+			if move_name == "":
+				move_name = str(move_data.get("id", move_data.get("move", ""))).strip_edges()
+			if move_name != "":
+				battle_moves.append(move_name)
+		else:
+			var move_text: String = str(move_value).strip_edges()
+			if move_text != "":
+				battle_moves.append(move_text)
+
+	return battle_moves.slice(0, 4)
+
+func _moves_to_persistence_list() -> Array:
+	var persisted_moves: Array = []
+	for move_value: Variant in moves:
+		if move_value is Dictionary:
+			persisted_moves.append((move_value as Dictionary).duplicate(true))
+		else:
+			var move_text: String = str(move_value).strip_edges()
+			if move_text != "":
+				persisted_moves.append(move_text)
+
+	return persisted_moves.slice(0, 4)
 
 func _to_battle_condition() -> String:
 	if current_hp <= 0:

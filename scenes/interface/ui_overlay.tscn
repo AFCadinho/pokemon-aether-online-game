@@ -13,6 +13,10 @@
 [ext_resource type="Texture2D" uid="uid://sroenj42pc1x" path="res://assets/ui/dev_icon.svg" id="9_s0khl"]
 [ext_resource type="Texture2D" uid="uid://bhpfhnb5of576" path="res://assets/ui/follower_icon.svg" id="10_follower"]
 [ext_resource type="Texture2D" uid="uid://b3vkhs04ulhs4" path="res://assets/ui/running_shoe.svg" id="11_running_shoe"]
+[ext_resource type="Texture2D" uid="uid://c2fh07ixkbd7r" path="res://assets/ui/item_dex.png" id="12_item_dex"]
+[ext_resource type="Texture2D" uid="uid://doiwun2mh6m6c" path="res://assets/ui/staff_tools.svg" id="13_staff_tools"]
+[ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
+[ext_resource type="Texture2D" uid="uid://dpgqsawas4xna" path="res://assets/ui/content_creator.svg" id="15_content_creator"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -116,8 +120,8 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -282.0
-offset_top = 100.0
-offset_bottom = 196.0
+offset_top = 275.0
+offset_bottom = 371.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_grslb")
 
@@ -164,7 +168,7 @@ theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_riyyd")
 text = "General"
 
-[node name="TradeButton" type="Button" parent="Control/ChatTabsPanel/TabRow"]
+[node name="TradeButton" type="Button" parent="Control/ChatTabsPanel/TabRow" unique_id=609304235]
 custom_minimum_size = Vector2(70, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
@@ -424,7 +428,7 @@ texture_focused = ExtResource("7_settings_icon")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ActionsPanel" type="PanelContainer" parent="Control" unique_id=1107239222]
+[node name="ToggleActionsPanel" type="PanelContainer" parent="Control" unique_id=1107239222]
 custom_minimum_size = Vector2(248, 0)
 layout_mode = 1
 anchors_preset = 1
@@ -435,24 +439,24 @@ offset_bottom = 68.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/ActionsPanel" unique_id=1183886420]
+[node name="MarginContainer" type="MarginContainer" parent="Control/ToggleActionsPanel" unique_id=1183886420]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/ActionsPanel/MarginContainer" unique_id=1259684015]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/ToggleActionsPanel/MarginContainer" unique_id=1259684015]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
-[node name="RunningShoesSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=1027882535]
+[node name="RunningShoesSlot" type="PanelContainer" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer" unique_id=1027882535]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="RunningShoesButton" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot" unique_id=9405703]
+[node name="RunningShoesButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot" unique_id=9405703]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Running Shoes"
@@ -466,12 +470,12 @@ texture_focused = ExtResource("11_running_shoe")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="RepelSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=628803434]
+[node name="RepelSlot" type="PanelContainer" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer" unique_id=628803434]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="RepelToggle" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/RepelSlot" unique_id=2085702693]
+[node name="RepelToggle" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot" unique_id=2085702693]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Repel"
@@ -485,12 +489,12 @@ texture_focused = ExtResource("8_iv6uh")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="FollowerSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=344868481]
+[node name="FollowerSlot" type="PanelContainer" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer" unique_id=344868481]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="FollowerToggle" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/FollowerSlot" unique_id=1273127839]
+[node name="FollowerToggle" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot" unique_id=1273127839]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Show Follower"
@@ -504,12 +508,161 @@ texture_focused = ExtResource("10_follower")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="DevActionsSlot" type="PanelContainer" parent="Control/ActionsPanel/MarginContainer/HBoxContainer" unique_id=96186774]
+[node name="ToggleActionsCollapseButton" type="Button" parent="Control" unique_id=1699696868]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -292.0
+offset_right = -264.0
+offset_bottom = 28.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+text = "-"
+
+[node name="DexActionsPanel" type="PanelContainer" parent="Control" unique_id=1944597878]
+custom_minimum_size = Vector2(248, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 76.0
+offset_bottom = 144.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/DexActionsPanel" unique_id=1652238249]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/DexActionsPanel/MarginContainer" unique_id=92414865]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="ItemDexSlot" type="PanelContainer" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer" unique_id=966466504]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="DevActionsButton" type="TextureButton" parent="Control/ActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot" unique_id=1939088199]
+[node name="ItemDexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot" unique_id=496092701]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Item Dex"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("12_item_dex")
+texture_pressed = ExtResource("12_item_dex")
+texture_hover = ExtResource("12_item_dex")
+texture_disabled = ExtResource("12_item_dex")
+texture_focused = ExtResource("12_item_dex")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="PokedexSlot" type="PanelContainer" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer" unique_id=472739654]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="PokedexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/PokedexSlot" unique_id=1188406318]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Pokedex"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("14_pokedex")
+texture_pressed = ExtResource("14_pokedex")
+texture_hover = ExtResource("14_pokedex")
+texture_disabled = ExtResource("14_pokedex")
+texture_focused = ExtResource("14_pokedex")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DexActionsCollapseButton" type="Button" parent="Control" unique_id=187874073]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -292.0
+offset_top = 76.0
+offset_right = -264.0
+offset_bottom = 104.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+text = "-"
+
+[node name="StaffActionsPanel" type="PanelContainer" parent="Control" unique_id=747754312]
+custom_minimum_size = Vector2(248, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 152.0
+offset_bottom = 220.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/StaffActionsPanel" unique_id=1951185166]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/StaffActionsPanel/MarginContainer" unique_id=1398000884]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="StaffToolsSlot" type="PanelContainer" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer" unique_id=1489797566]
+visible = false
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="StaffToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/StaffToolsSlot" unique_id=309118989]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Staff Tools"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13_staff_tools")
+texture_pressed = ExtResource("13_staff_tools")
+texture_hover = ExtResource("13_staff_tools")
+texture_disabled = ExtResource("13_staff_tools")
+texture_focused = ExtResource("13_staff_tools")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ContentCreatorToolsSlot" type="PanelContainer" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer" unique_id=1612199246]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="ContentCreatorToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot" unique_id=1492568340]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Content Creator Tools"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("15_content_creator")
+texture_pressed = ExtResource("15_content_creator")
+texture_hover = ExtResource("15_content_creator")
+texture_disabled = ExtResource("15_content_creator")
+texture_focused = ExtResource("15_content_creator")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DevActionsSlot" type="PanelContainer" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer" unique_id=96186774]
+visible = false
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="DevActionsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot" unique_id=1939088199]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Developer Menu"
@@ -521,6 +674,20 @@ texture_disabled = ExtResource("9_s0khl")
 texture_focused = ExtResource("9_s0khl")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="StaffActionsCollapseButton" type="Button" parent="Control" unique_id=1893457]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -292.0
+offset_top = 152.0
+offset_right = -264.0
+offset_bottom = 180.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+text = "-"
 
 [node name="DevActionsPopup" type="PanelContainer" parent="Control" unique_id=1029961477]
 visible = false

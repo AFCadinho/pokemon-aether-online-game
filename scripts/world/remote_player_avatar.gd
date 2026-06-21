@@ -181,7 +181,7 @@ func _apply_follower_state(follower_state: Dictionary) -> void:
 
 	current_follower_species = species
 	current_follower_shiny = shiny
-	var follower_pokemon: Pokemon = Pokemon.new(species, 100, "", "", "Hardy", {}, {}, [], "", shiny)
+	var follower_pokemon: Pokemon = Pokemon.new(species, 100, "", "", "Hardy", {}, {}, {}, [], "", 0, shiny)
 	pokemon_follower.set_pokemon(follower_pokemon)
 	pokemon_follower.reset_follow_position()
 

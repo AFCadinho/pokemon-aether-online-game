@@ -32,7 +32,6 @@ func interact_with_player(_player: Node2D) -> void:
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
-	PlayerSave.add_pokemon(starter_pokemon)
 	PlayerSave.flags["received_starter"] = true
 
 	await show_dialogue([
@@ -62,6 +61,22 @@ func give_starter_pokemon(pokemon_name: String) -> Pokemon:
 	if pokemon == null:
 		push_warning("Oak.give_starter_pokemon failed: backend Pokemon payload could not be loaded.")
 		return null
+
+	var create_result: Dictionary = await PlayerPartyStateService.create_pokemon(pokemon_value as Dictionary, true)
+	if not bool(create_result.get("success", false)):
+		push_warning("Oak.give_starter_pokemon failed: Pokemon could not be saved: %s" % str(create_result.get("error", "Unknown error")))
+		return null
+
+	var owned_pokemon_response: Dictionary = {}
+	var owned_pokemon_response_value: Variant = create_result.get("pokemon", {})
+	if owned_pokemon_response_value is Dictionary:
+		owned_pokemon_response = owned_pokemon_response_value as Dictionary
+
+	var owned_pokemon_value: Variant = owned_pokemon_response.get("pokemon", {})
+	if owned_pokemon_value is Dictionary:
+		var owned_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(owned_pokemon_value as Dictionary)
+		if owned_pokemon != null:
+			return owned_pokemon
 
 	return pokemon
 	

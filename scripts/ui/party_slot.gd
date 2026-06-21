@@ -2,6 +2,7 @@ extends PanelContainer
 
 signal drag_started(slot_index: int)
 signal drag_released(slot_index: int, global_position: Vector2)
+signal clicked(slot_index: int)
 
 @onready var pokemon_sprite: TextureRect = $MarginContainer/HBoxContainer/PokemonSprite
 @onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShinyBadge
@@ -12,6 +13,7 @@ signal drag_released(slot_index: int, global_position: Vector2)
 @onready var level_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LevelLabel
 
 var slot_index := -1
+var press_global_position := Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -50,7 +52,10 @@ func _on_click_button_gui_input(event: InputEvent) -> void:
 		return
 
 	if mouse_event.pressed:
+		press_global_position = mouse_event.global_position
 		drag_started.emit(slot_index)
 	else:
+		if press_global_position.distance_to(mouse_event.global_position) <= 6.0:
+			clicked.emit(slot_index)
 		drag_released.emit(slot_index, mouse_event.global_position)
 	
