@@ -1008,6 +1008,12 @@ mouse_default_cursor_shape = 2
 disabled = true
 text = "Claim Attachments"
 
+[node name="ReplyButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Reply"
+
 [node name="DeleteButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2

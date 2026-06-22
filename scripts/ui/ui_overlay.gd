@@ -170,6 +170,7 @@ enum DevPokemonPopupMode {
 @onready var mail_body_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll/BodyLabel
 @onready var mail_attachment_list: VBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll/AttachmentList
 @onready var mail_claim_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/ClaimButton
+@onready var mail_reply_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/ReplyButton
 @onready var mail_delete_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/DeleteButton
 @onready var mail_compose_popup: PanelContainer = $Control/MailComposePopup
 @onready var mail_compose_recipient_input: LineEdit = $Control/MailComposePopup/MarginContainer/VBoxContainer/RecipientInput
@@ -413,6 +414,7 @@ func _ready() -> void:
 	mail_compose_button.pressed.connect(_on_mail_compose_button_pressed)
 	mail_close_button.pressed.connect(_on_mail_close_button_pressed)
 	mail_claim_button.pressed.connect(_on_mail_claim_button_pressed)
+	mail_reply_button.pressed.connect(_on_mail_reply_button_pressed)
 	mail_delete_button.pressed.connect(_on_mail_delete_button_pressed)
 	mail_item_search_input.text_changed.connect(_on_mail_item_search_changed)
 	mail_add_item_button.pressed.connect(_on_mail_add_item_attachment_pressed)
@@ -551,6 +553,7 @@ func _apply_mail_ui_styles() -> void:
 	_apply_button_style(mail_inbox_button, "primary")
 	_apply_button_style(mail_sent_button)
 	_apply_button_style(mail_claim_button, "primary")
+	_apply_button_style(mail_reply_button)
 	_apply_button_style(mail_delete_button, "danger")
 	_apply_button_style(mail_add_item_button, "primary")
 	_apply_button_style(mail_add_pokemon_button, "primary")
@@ -6411,9 +6414,14 @@ func _on_socials_close_button_pressed() -> void:
 	_hide_socials_menu()
 
 func _on_mail_compose_button_pressed() -> void:
+	_open_mail_compose_popup("", "")
+
+func _open_mail_compose_popup(recipient: String = "", subject: String = "") -> void:
 	mail_compose_recipient_input.clear()
 	mail_compose_subject_input.clear()
 	mail_compose_body_input.clear()
+	mail_compose_recipient_input.text = recipient.strip_edges()
+	mail_compose_subject_input.text = subject.strip_edges()
 	mail_selected_item_attachments.clear()
 	mail_selected_pokemon_ids.clear()
 	mail_selected_item_for_attachment = {}
@@ -6437,6 +6445,8 @@ func _on_mail_box_selected(box: String) -> void:
 func _on_mail_claim_button_pressed() -> void:
 	if selected_mail_id <= 0:
 		return
+	var selected_mail := _get_mail_by_id(selected_mail_id)
+	var previous_attachments: Array = _array_from_variant(selected_mail.get("attachments", []))
 
 	var result: Dictionary = await MailService.claim_mail(selected_mail_id)
 	if not bool(result.get("success", false)):
@@ -6452,8 +6462,86 @@ func _on_mail_claim_button_pressed() -> void:
 		bag_inventory_loaded = true
 		_refresh_bag_items()
 
-	_add_chat_message("Mail attachments claimed.")
+	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
+	_emit_mail_claim_messages(previous_attachments, claimed_mail)
 	await _load_mailbox()
+
+
+func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
+	if selected_mail_id <= 0:
+		return
+	if active_mail_box != "inbox":
+		return
+	var selected_mail := _get_mail_by_id(selected_mail_id)
+	var previous_attachments: Array = _array_from_variant(selected_mail.get("attachments", []))
+
+	var result: Dictionary = await MailService.claim_mail_attachment(selected_mail_id, attachment_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not claim attachment: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var party_value: Variant = result.get("party", [])
+	if party_value is Array:
+		PlayerSave.replace_party_from_state(party_value as Array)
+	var inventory_value: Variant = result.get("inventory", [])
+	if inventory_value is Array:
+		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
+		bag_inventory_loaded = true
+		_refresh_bag_items()
+
+	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
+	_emit_mail_claim_messages(previous_attachments, claimed_mail)
+	await _load_mailbox()
+
+func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictionary) -> void:
+	var after_attachments: Array = _array_from_variant(claimed_mail.get("attachments", []))
+	var attachment_map: Dictionary = {}
+	for attachment_value: Variant in after_attachments:
+		if not (attachment_value is Dictionary):
+			continue
+		var attachment: Dictionary = attachment_value as Dictionary
+		var attachment_id: int = int(attachment.get("id", -1))
+		if attachment_id > 0:
+			attachment_map[attachment_id] = attachment
+
+	for previous_attachment_value: Variant in previous_attachments:
+		if not (previous_attachment_value is Dictionary):
+			continue
+		var previous_attachment: Dictionary = previous_attachment_value as Dictionary
+		var attachment_id: int = int(previous_attachment.get("id", -1))
+		if attachment_id <= 0:
+			continue
+		if _mail_attachment_is_claimed(previous_attachment):
+			continue
+
+		var after_attachment: Variant = attachment_map.get(attachment_id, {})
+		if not (after_attachment is Dictionary):
+			continue
+		var attachment: Dictionary = after_attachment as Dictionary
+		if not _mail_attachment_is_claimed(attachment):
+			continue
+
+		var attachment_type: String = str(attachment.get("type", ""))
+		var payload: Dictionary = {}
+		var payload_value: Variant = attachment.get("payload", {})
+		if payload_value is Dictionary:
+			payload = payload_value as Dictionary
+
+		match attachment_type:
+			"item":
+				var item_name: String = str(payload.get("name", payload.get("itemId", "Item")))
+				var quantity: int = int(payload.get("quantity", 1))
+				_add_chat_message("Received %sx %s." % [quantity, item_name])
+			"pokemon":
+				var pokemon_payload: Dictionary = {}
+				var pokemon_value: Variant = payload.get("pokemon", {})
+				if pokemon_value is Dictionary:
+					pokemon_payload = pokemon_value as Dictionary
+				var species: String = str(pokemon_payload.get("species", "Pokemon"))
+				var level: int = int(pokemon_payload.get("level", 1))
+				_add_chat_message("Received Pokemon: %s (Lv. %s)." % [species, level])
+			_:
+				_add_chat_message("Mail attachment claimed.")
 
 func _on_mail_delete_button_pressed() -> void:
 	if selected_mail_id <= 0:
@@ -6636,15 +6724,31 @@ func _refresh_mail_attachment_summary() -> void:
 		child.queue_free()
 
 	var has_attachments: bool = not mail_selected_item_attachments.is_empty() or not mail_selected_pokemon_ids.is_empty()
+	var has_item_attachments: bool = not mail_selected_item_attachments.is_empty()
+	var has_pokemon_attachments: bool = not mail_selected_pokemon_ids.is_empty()
+
+	_add_mail_summary_text("Attachment Overview")
+	_add_mail_summary_divider()
+
+	_add_mail_summary_text("Items")
 	for attachment: Dictionary in mail_selected_item_attachments:
 		_add_mail_summary_text("%sx %s" % [
 			int(attachment.get("quantity", 1)),
 			str(attachment.get("name", attachment.get("itemId", "Item"))),
 		])
+	if not has_item_attachments:
+		_add_mail_summary_text("None")
+
+	if has_item_attachments and has_pokemon_attachments:
+		_add_mail_summary_divider()
+	_add_mail_summary_text("Pokemon")
 	for pokemon_id: int in mail_selected_pokemon_ids:
 		var pokemon: Pokemon = _get_party_pokemon_by_owned_id(pokemon_id)
 		if pokemon != null:
 			_add_mail_summary_text("%s Lv. %s" % [pokemon.species, pokemon.level])
+	if not has_pokemon_attachments:
+		_add_mail_summary_text("None")
+
 	if not has_attachments:
 		_add_mail_summary_text("Selected attachments: none")
 	_add_mail_summary_divider()
@@ -6794,6 +6898,7 @@ func _refresh_mail_detail() -> void:
 		mail_body_label.text = "Mail messages and reward attachments will appear here."
 		_render_mail_attachments([])
 		mail_claim_button.visible = true
+		mail_reply_button.visible = false
 		mail_claim_button.text = "Claim Attachments" if active_mail_box == "inbox" else "No Claim Action"
 		mail_claim_button.disabled = true
 		mail_delete_button.disabled = true
@@ -6814,9 +6919,47 @@ func _refresh_mail_detail() -> void:
 	var attachments: Array = _array_from_variant(mail.get("attachments", []))
 	_render_mail_attachments(attachments)
 	mail_claim_button.visible = true
+	mail_reply_button.visible = _mail_can_reply(mail)
 	mail_claim_button.text = "Claim Attachments" if active_mail_box == "inbox" else "No Claim Action"
 	mail_claim_button.disabled = active_mail_box != "inbox" or not _mail_has_unclaimed_attachments(attachments)
 	mail_delete_button.disabled = active_mail_box == "inbox" and _mail_has_unclaimed_attachments(attachments)
+
+func _on_mail_reply_button_pressed() -> void:
+	if selected_mail_id <= 0:
+		return
+
+	var selected_mail: Dictionary = _get_mail_by_id(selected_mail_id)
+	if selected_mail.is_empty():
+		return
+
+	var raw_subject: String = str(selected_mail.get("subject", "")).strip_edges()
+	var subject: String = _format_reply_subject(raw_subject)
+
+	var recipient: String = str(
+		selected_mail.get("senderUsername", "")
+		if active_mail_box != "sent"
+		else selected_mail.get("recipientUsername", "")
+	).strip_edges().to_lower()
+	if recipient == "":
+		return
+
+	_open_mail_compose_popup(recipient, subject)
+
+func _format_reply_subject(subject: String) -> String:
+	var normalized: String = subject.strip_edges()
+	if normalized == "":
+		return "Re: "
+	if normalized.to_lower().begins_with("re:"):
+		return normalized
+	return "Re: %s" % normalized
+
+func _mail_can_reply(mail: Dictionary) -> bool:
+	if mail.is_empty():
+		return false
+
+	var can_reply_as_sender: bool = str(mail.get("senderUsername", "")).strip_edges() != ""
+	var can_reply_as_recipient: bool = str(mail.get("recipientUsername", "")).strip_edges() != ""
+	return can_reply_as_sender if active_mail_box != "sent" else can_reply_as_recipient
 
 func _get_mail_by_id(mail_id: int) -> Dictionary:
 	for mail: Dictionary in mailbox_messages:
@@ -6844,6 +6987,8 @@ func _render_mail_attachments(attachments: Array) -> void:
 			payload = attachment.get("payload", {}) as Dictionary
 		var claimed: bool = _mail_attachment_is_claimed(attachment)
 		var suffix := " (claimed)" if claimed else ""
+		var attachment_id: int = int(attachment.get("id", -1))
+		var can_claim: bool = active_mail_box == "inbox" and attachment_id > 0 and not claimed
 		match str(attachment.get("type", "")):
 			"item":
 				mail_attachment_list.add_child(_create_mail_attachment_row(
@@ -6852,7 +6997,10 @@ func _render_mail_attachments(attachments: Array) -> void:
 					int(payload.get("quantity", 1)),
 					str(payload.get("name", payload.get("itemId", "Item"))),
 					suffix,
-					]
+					],
+					{},
+					attachment_id,
+					can_claim
 				))
 			"pokemon":
 				var pokemon_payload: Dictionary = {}
@@ -6867,25 +7015,29 @@ func _render_mail_attachments(attachments: Array) -> void:
 					int(pokemon_payload.get("level", 1)),
 					suffix,
 					],
-					pokemon_payload
+					pokemon_payload,
+					attachment_id,
+					can_claim
 				))
 			_:
-				mail_attachment_list.add_child(_create_mail_attachment_row(null, "Attachment%s" % suffix))
+				mail_attachment_list.add_child(_create_mail_attachment_row(
+					null,
+					"Attachment%s" % suffix,
+					{},
+					attachment_id,
+					can_claim
+				))
 
-func _create_mail_attachment_row(icon_texture: Texture2D, text: String, pokemon_payload: Dictionary = {}) -> Control:
-	var panel: Control = Button.new() if not pokemon_payload.is_empty() else PanelContainer.new()
+func _create_mail_attachment_row(
+	icon_texture: Texture2D,
+	text: String,
+	pokemon_payload: Dictionary = {},
+	attachment_id: int = -1,
+	can_claim: bool = false
+) -> Control:
+	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 42)
-	if panel is Button:
-		var button: Button = panel as Button
-		button.focus_mode = Control.FOCUS_NONE
-		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.tooltip_text = "View Pokemon summary"
-		button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
-		button.add_theme_stylebox_override("normal", _make_mail_attachment_style())
-		button.add_theme_stylebox_override("hover", _make_panel_style(Color("#162840f2"), Color("#e6c777"), 8, 1))
-		button.add_theme_stylebox_override("pressed", _make_panel_style(Color("#081321f2"), Color("#e6c777"), 8, 1))
-	else:
-		(panel as PanelContainer).add_theme_stylebox_override("panel", _make_mail_attachment_style())
+	panel.add_theme_stylebox_override("panel", _make_mail_attachment_style())
 
 	var margin := MarginContainer.new()
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -6915,6 +7067,29 @@ func _create_mail_attachment_row(icon_texture: Texture2D, text: String, pokemon_
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(label)
+
+	if not pokemon_payload.is_empty():
+		var summary_button := Button.new()
+		summary_button.text = "Summary"
+		summary_button.custom_minimum_size = Vector2(74, 26)
+		summary_button.focus_mode = Control.FOCUS_NONE
+		summary_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		summary_button.tooltip_text = "View Pokemon summary"
+		summary_button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
+		_apply_button_style(summary_button)
+		row.add_child(summary_button)
+
+	if can_claim:
+		var claim_button := Button.new()
+		claim_button.text = "Claim"
+		claim_button.custom_minimum_size = Vector2(58, 26)
+		claim_button.focus_mode = Control.FOCUS_NONE
+		claim_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		claim_button.disabled = active_mail_box != "inbox"
+		claim_button.pressed.connect(_on_mail_attachment_claim_pressed.bind(attachment_id))
+		_apply_button_style(claim_button, "primary")
+		row.add_child(claim_button)
+
 	return panel
 
 func _on_mail_pokemon_attachment_pressed(pokemon_payload: Dictionary) -> void:
@@ -6990,6 +7165,11 @@ func _mail_attachment_is_claimed(attachment: Dictionary) -> bool:
 		return false
 	return str(claimed_at).strip_edges() != ""
 
+func _mail_dictionary_from_variant(value: Variant) -> Dictionary:
+	if value is Dictionary:
+		return value
+	return {}
+
 func _array_from_variant(value: Variant) -> Array:
 	if value is Array:
 		return value as Array
@@ -7058,9 +7238,21 @@ func _format_system_chat_message(text: String) -> String:
 	]
 
 func _scroll_chat_to_bottom() -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	if not is_inside_tree() or message_scroll == null:
+		return
+	tree = get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	if not is_inside_tree() or message_scroll == null:
+		return
 	var vertical_scroll_bar: VScrollBar = message_scroll.get_v_scroll_bar()
+	if vertical_scroll_bar == null:
+		return
 	message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
@@ -7286,6 +7478,9 @@ func _escape_bbcode(text: String) -> String:
 func _on_chat_session_invalid(_reason: String) -> void:
 	_add_chat_message("Your session is no longer valid. Please sign in again.")
 	AuthService.clear_session()
-	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+	var tree := get_tree()
+	if tree == null:
+		return
+	var error: Error = tree.change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		push_warning("Could not return to login screen after session invalidation: %s" % error_string(error))
