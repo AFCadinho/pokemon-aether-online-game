@@ -161,6 +161,21 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["effect_animation_key"] = "mega_evolution"
 			presentation["effect_animation_target_ident"] = str(event_data.get("target", ""))
 
+		"item":
+			recent_field_effect_source = ""
+			recent_ability_event = false
+			recent_move_event = false
+			var actor := _format_actor(str(event_data.get("target", "")))
+			var item_name := str(event_data.get("item", "")).strip_edges()
+			var item_state := str(event_data.get("state", ""))
+			if actor != "" and item_name != "":
+				if item_state == "end":
+					presentation["log_message"] = "%s's %s got knocked off!" % [actor, item_name]
+				else:
+					presentation["log_message"] = "%s's %s was revealed!" % [actor, item_name]
+				presentation["battle_message"] = str(presentation["log_message"])
+				presentation["add_blank_after"] = true
+
 		"fieldEffect":
 			recent_ability_event = false
 			recent_move_event = false

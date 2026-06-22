@@ -11,6 +11,8 @@ var battle_status_api := {}
 var field: Dictionary = {}
 var hp_event_helper := BattleHpEventHelper.new()
 var transformed_species_by_ident: Dictionary = {}
+var mega_species_by_ident: Dictionary = {}
+var hp_snapshot_by_ident: Dictionary = {}
 
 
 ## Laadt een volledige battle response van de API in deze state.
@@ -18,22 +20,245 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	var next_battle_id := str(response.get("battleId", ""))
 	if battle_id != "" and next_battle_id != battle_id:
 		transformed_species_by_ident.clear()
+		mega_species_by_ident.clear()
+		hp_snapshot_by_ident.clear()
 
 	battle_id = next_battle_id
 	format_id = str(response.get("formatId", ""))
 	players = response.get("players", {})
-	requests = response.get("requests", {})
+	_remember_hp_fields_from_requests(requests)
+	var next_requests: Variant = response.get("requests", {})
+	if next_requests is Dictionary:
+		var next_requests_dictionary: Dictionary = next_requests as Dictionary
+		_preserve_missing_hp_fields_in_requests(next_requests_dictionary)
+	requests = next_requests
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
 	field = response.get("field", {})
 	if apply_event_conditions:
+		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
 		_apply_event_conditions_to_requests(response.get("events", []))
 	else:
+		_apply_mega_species_to_requests()
 		_remove_deferred_display_fields_from_requests(response.get("events", []))
+	_remember_hp_fields_from_requests(requests)
 
 func apply_event_conditions(events: Array) -> void:
 	_apply_event_conditions_to_requests(events)
+
+func _preserve_missing_hp_fields_in_requests(next_requests: Dictionary) -> void:
+	if requests.is_empty() or next_requests.is_empty():
+		return
+
+	for player_id_value: Variant in next_requests.keys():
+		var player_id: String = str(player_id_value)
+		var next_request_value: Variant = next_requests.get(player_id, {})
+		var previous_request_value: Variant = requests.get(player_id, {})
+		if not (next_request_value is Dictionary) or not (previous_request_value is Dictionary):
+			continue
+
+		var next_request_dictionary: Dictionary = next_request_value as Dictionary
+		var previous_request_dictionary: Dictionary = previous_request_value as Dictionary
+		_preserve_missing_hp_fields_in_request(
+			next_request_dictionary,
+			previous_request_dictionary
+		)
+
+func _preserve_missing_hp_fields_in_request(next_request: Dictionary, previous_request: Dictionary) -> void:
+	var next_side_value: Variant = next_request.get("side", {})
+	var previous_side_value: Variant = previous_request.get("side", {})
+	if not (next_side_value is Dictionary) or not (previous_side_value is Dictionary):
+		return
+
+	var next_team_value: Variant = (next_side_value as Dictionary).get("pokemon", [])
+	var previous_team_value: Variant = (previous_side_value as Dictionary).get("pokemon", [])
+	if not (next_team_value is Array) or not (previous_team_value is Array):
+		return
+
+	var next_team: Array = next_team_value as Array
+	var previous_team: Array = previous_team_value as Array
+	var previous_by_ident: Dictionary = {}
+	for previous_value: Variant in previous_team:
+		if not (previous_value is Dictionary):
+			continue
+
+		var previous_pokemon: Dictionary = previous_value as Dictionary
+		var previous_ident: String = str(previous_pokemon.get("ident", ""))
+		if previous_ident == "":
+			continue
+
+		previous_by_ident[previous_ident] = previous_pokemon
+
+	for next_value: Variant in next_team:
+		if not (next_value is Dictionary):
+			continue
+
+		var next_pokemon: Dictionary = next_value as Dictionary
+		var next_ident: String = str(next_pokemon.get("ident", ""))
+		if next_ident == "":
+			continue
+
+		var previous_pokemon: Dictionary = previous_by_ident[next_ident] as Dictionary if previous_by_ident.has(next_ident) else {}
+		_preserve_missing_hp_fields_in_pokemon(next_pokemon, previous_pokemon)
+
+func _preserve_missing_hp_fields_in_pokemon(next_pokemon: Dictionary, previous_pokemon: Dictionary) -> void:
+	var memory_snapshot_value: Variant = hp_snapshot_by_ident.get(str(next_pokemon.get("ident", "")), {})
+	var memory_snapshot: Dictionary = memory_snapshot_value as Dictionary if memory_snapshot_value is Dictionary else {}
+	if _should_preserve_remembered_hp_snapshot(next_pokemon, memory_snapshot):
+		var remembered_hp := int(memory_snapshot.get("hp", 0))
+		var remembered_max_hp: int = max(int(memory_snapshot.get("max_hp", 1)), 1)
+		var remembered_condition := str(memory_snapshot.get("condition", ""))
+		if remembered_condition == "":
+			remembered_condition = "0 fnt" if remembered_hp <= 0 else "%s/%s" % [remembered_hp, remembered_max_hp]
+
+		next_pokemon["hp"] = remembered_hp
+		next_pokemon["maxHp"] = remembered_max_hp
+		next_pokemon["condition"] = remembered_condition
+		next_pokemon["fainted"] = remembered_hp <= 0
+		return
+
+	if bool(next_pokemon.get("fainted", false)):
+		next_pokemon["hp"] = 0
+		var fainted_previous_snapshot: Dictionary = _get_pokemon_hp_snapshot(previous_pokemon)
+		var fainted_previous_max_hp: int = int(previous_pokemon.get("maxHp", fainted_previous_snapshot.get("max_hp", 0)))
+		if fainted_previous_max_hp <= 0 and not memory_snapshot.is_empty():
+			fainted_previous_max_hp = int(memory_snapshot.get("max_hp", 0))
+		if fainted_previous_max_hp > 0:
+			next_pokemon["maxHp"] = fainted_previous_max_hp
+		next_pokemon["condition"] = "0 fnt"
+		return
+
+	var previous_condition: String = str(previous_pokemon.get("condition", ""))
+	var previous_snapshot: Dictionary = _get_pokemon_hp_snapshot(previous_pokemon)
+	var previous_hp: int = int(previous_pokemon.get("hp", previous_snapshot.get("hp", 0)))
+	var previous_max_hp: int = int(previous_pokemon.get("maxHp", previous_snapshot.get("max_hp", 0)))
+	if not memory_snapshot.is_empty():
+		previous_hp = int(memory_snapshot.get("hp", previous_hp))
+		previous_max_hp = int(memory_snapshot.get("max_hp", previous_max_hp))
+		if previous_condition == "":
+			previous_condition = str(memory_snapshot.get("condition", ""))
+	if previous_max_hp <= 0:
+		return
+
+	if _pokemon_has_valid_hp_snapshot(next_pokemon) and not _pokemon_uses_percentage_hp_snapshot(next_pokemon, previous_max_hp):
+		return
+
+	next_pokemon["hp"] = previous_hp
+	next_pokemon["maxHp"] = previous_max_hp
+	if previous_condition != "" and (
+		not _condition_has_valid_hp_snapshot(str(next_pokemon.get("condition", "")))
+		or _pokemon_uses_percentage_hp_snapshot(next_pokemon, previous_max_hp)
+	):
+		next_pokemon["condition"] = previous_condition
+
+func _pokemon_has_valid_hp_snapshot(pokemon_data: Dictionary) -> bool:
+	if _condition_has_valid_hp_snapshot(str(pokemon_data.get("condition", ""))):
+		return true
+
+	return int(pokemon_data.get("maxHp", 0)) > 0
+
+func _pokemon_uses_percentage_hp_snapshot(pokemon_data: Dictionary, previous_max_hp: int) -> bool:
+	if previous_max_hp <= 100:
+		return false
+
+	var snapshot: Dictionary = _get_pokemon_hp_snapshot(pokemon_data)
+	if snapshot.is_empty():
+		return false
+
+	return int(snapshot.get("max_hp", 0)) == 100
+
+func _should_preserve_remembered_hp_snapshot(pokemon_data: Dictionary, memory_snapshot: Dictionary) -> bool:
+	if memory_snapshot.is_empty():
+		return false
+
+	var remembered_max_hp := int(memory_snapshot.get("max_hp", 0))
+	if remembered_max_hp <= 0:
+		return false
+
+	var remembered_hp := int(memory_snapshot.get("hp", remembered_max_hp))
+	if remembered_hp >= remembered_max_hp:
+		return false
+
+	var incoming_snapshot: Dictionary = _get_pokemon_hp_snapshot(pokemon_data)
+	if incoming_snapshot.is_empty():
+		return true
+
+	var incoming_hp := int(incoming_snapshot.get("hp", 0))
+	var incoming_max_hp := int(incoming_snapshot.get("max_hp", 0))
+	return incoming_hp >= incoming_max_hp and incoming_max_hp > 0
+
+func _get_pokemon_hp_snapshot(pokemon_data: Dictionary) -> Dictionary:
+	var condition_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(str(pokemon_data.get("condition", "")))
+	if not condition_snapshot.is_empty():
+		return condition_snapshot
+
+	var max_hp := int(pokemon_data.get("maxHp", 0))
+	if max_hp <= 0:
+		return {}
+
+	return {
+		"hp": int(pokemon_data.get("hp", 0)),
+		"max_hp": max_hp,
+	}
+
+func _condition_has_valid_hp_snapshot(condition: String) -> bool:
+	return not hp_event_helper.parse_condition_hp_snapshot(condition).is_empty()
+
+func _remember_hp_fields_from_requests(requests_value: Variant) -> void:
+	if not (requests_value is Dictionary):
+		return
+
+	for request_value: Variant in (requests_value as Dictionary).values():
+		if not (request_value is Dictionary):
+			continue
+
+		var side_value: Variant = (request_value as Dictionary).get("side", {})
+		if not (side_value is Dictionary):
+			continue
+
+		var team_value: Variant = (side_value as Dictionary).get("pokemon", [])
+		if not (team_value is Array):
+			continue
+
+		for pokemon_value: Variant in team_value:
+			if not (pokemon_value is Dictionary):
+				continue
+
+			var pokemon: Dictionary = pokemon_value as Dictionary
+			var ident := str(pokemon.get("ident", ""))
+			if ident == "":
+				continue
+
+			if bool(pokemon.get("fainted", false)):
+				var previous_snapshot_value: Variant = hp_snapshot_by_ident.get(ident, {})
+				var previous_snapshot: Dictionary = previous_snapshot_value as Dictionary if previous_snapshot_value is Dictionary else {}
+				var previous_max_hp := int(previous_snapshot.get("max_hp", int(pokemon.get("maxHp", 0))))
+				hp_snapshot_by_ident[ident] = {
+					"hp": 0,
+					"max_hp": previous_max_hp,
+					"condition": "0 fnt",
+				}
+				continue
+
+			var snapshot: Dictionary = _get_pokemon_hp_snapshot(pokemon)
+			if snapshot.is_empty():
+				continue
+
+			var max_hp := int(snapshot.get("max_hp", 0))
+			if max_hp <= 0:
+				continue
+
+			var previous_memory_value: Variant = hp_snapshot_by_ident.get(ident, {})
+			var previous_memory: Dictionary = previous_memory_value as Dictionary if previous_memory_value is Dictionary else {}
+			if max_hp == 100 and int(previous_memory.get("max_hp", 0)) > 100:
+				continue
+
+			hp_snapshot_by_ident[ident] = {
+				"hp": int(snapshot.get("hp", 0)),
+				"max_hp": max_hp,
+				"condition": str(pokemon.get("condition", "")),
+			}
 
 func resolve_active_mega_species(player_id: String = "p1") -> String:
 	var request_mega_species := _get_active_mega_species_from_request_slot(player_id)
@@ -207,6 +432,10 @@ func _apply_mega_event_to_requests(event: Dictionary) -> void:
 	if species == "":
 		return
 
+	var mega_key := _get_transform_key_from_ident(target_ident)
+	if mega_key != "":
+		mega_species_by_ident[mega_key] = species
+
 	pokemon_data["displaySpecies"] = species
 	pokemon_data["megaSpecies"] = species
 
@@ -249,9 +478,40 @@ func _get_active_mega_species_from_request_slot(player_id: String, active_index 
 		return ""
 
 	var can_mega_value: Variant = (active_data as Dictionary).get("canMegaEvo", "")
+	var active_pokemon := get_active_player_pokemon(player_id)
+	var active_species := _strip_mega_suffix(get_species_from_pokemon_data(active_pokemon)).to_lower().strip_edges()
+	var mega_species := _get_mega_species_for_pokemon_data(active_pokemon)
 	var can_mega_species := str(can_mega_value).strip_edges()
+
+	if can_mega_value is bool:
+		if can_mega_value:
+			return mega_species
+		return ""
+
+	if can_mega_value is int:
+		return mega_species if can_mega_value != 0 else ""
+
+	if can_mega_value is float:
+		return mega_species if not is_equal_approx(can_mega_value, 0.0) else ""
+
+	var normalized_can_mega := can_mega_species.to_lower()
+	if normalized_can_mega in ["false", "0", "off", "no"]:
+		return ""
+
+	if normalized_can_mega in ["true", "1", "on", "yes"]:
+		return mega_species
+
+	if normalized_can_mega == "":
+		return ""
+
 	if _is_mega_species(can_mega_species):
-		return can_mega_species
+		var canonical_can_mega := _strip_mega_suffix(can_mega_species).to_lower().strip_edges()
+		if active_species == "" or canonical_can_mega == active_species:
+			return can_mega_species
+		return ""
+
+	if mega_species != "":
+		return mega_species
 
 	return ""
 
@@ -331,6 +591,19 @@ func _apply_transformed_species_to_requests() -> void:
 
 		pokemon_data["displaySpecies"] = species
 		pokemon_data["transformedSpecies"] = species
+
+func _apply_mega_species_to_requests() -> void:
+	for mega_key in mega_species_by_ident.keys():
+		var species := str(mega_species_by_ident.get(mega_key, ""))
+		if species == "":
+			continue
+
+		var pokemon_data := _get_side_pokemon_by_transform_key(str(mega_key))
+		if pokemon_data.is_empty():
+			continue
+
+		pokemon_data["displaySpecies"] = species
+		pokemon_data["megaSpecies"] = species
 
 func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
 	var player_id := _get_player_id_from_ident(target_ident)
@@ -486,7 +759,7 @@ func can_active_pokemon_mega_evolve(player_id: String = "p1", active_index := 0)
 	if not (active_data is Dictionary):
 		return false
 
-	return bool((active_data as Dictionary).get("canMegaEvo", false))
+	return _get_active_mega_species_from_request_slot(player_id, active_index) != ""
 
 ## Geeft terug of de speler nog in team preview zit.
 func is_team_preview(player_id: String = "p1") -> bool:
@@ -558,7 +831,14 @@ func get_active_pokemon_max_hp(player_id: String) -> int:
 
 func is_active_pokemon_fainted(player_id: String = "p1") -> bool:
 	var pokemon_data := get_active_player_pokemon(player_id)
-	return bool(pokemon_data.get("fainted", false))
+	if bool(pokemon_data.get("fainted", false)):
+		return true
+
+	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
+	if condition == "0 fnt" or condition.ends_with(" fnt"):
+		return true
+
+	return int(pokemon_data.get("hp", 1)) <= 0 and int(pokemon_data.get("maxHp", 0)) > 0
 
 func _apply_condition_fields(pokemon_data: Dictionary, condition: String) -> void:
 	hp_event_helper.apply_condition_fields(pokemon_data, condition)

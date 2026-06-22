@@ -64,12 +64,16 @@ func get_display_team_data(player_id: String) -> Array:
 
 	var team := battle_state.get_player_team(player_id)
 	var display_team: Array = []
-	for pokemon_data in team:
+	for index in range(team.size()):
+		var pokemon_data: Variant = team[index]
 		if not (pokemon_data is Dictionary):
 			display_team.append(pokemon_data)
 			continue
 
-		display_team.append(get_display_pokemon_data(player_id, pokemon_data as Dictionary))
+		var display_data: Dictionary = get_display_pokemon_data(player_id, pokemon_data as Dictionary)
+		if player_id == "p1":
+			_enrich_player_display_slot_from_save(display_data, index)
+		display_team.append(display_data)
 
 	return display_team
 
@@ -78,3 +82,21 @@ func get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Di
 	var display_data := pokemon_data.duplicate()
 	display_metadata.enrich_display_data(player_id, display_data)
 	return display_data
+
+func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int) -> void:
+	if index < 0 or index >= PlayerSave.party.size():
+		return
+
+	var saved_pokemon: Pokemon = PlayerSave.party[index] as Pokemon
+	if saved_pokemon == null:
+		return
+
+	var types_value: Variant = display_data.get("types", [])
+	if not display_data.has("types") or not (types_value is Array) or (types_value as Array).is_empty():
+		display_data["types"] = saved_pokemon.types
+	if not display_data.has("possibleAbilities"):
+		display_data["possibleAbilities"] = saved_pokemon.possible_abilities
+	if not display_data.has("shiny"):
+		display_data["shiny"] = saved_pokemon.shiny
+	if not display_data.has("instanceId") and saved_pokemon.instance_id != "":
+		display_data["instanceId"] = saved_pokemon.instance_id

@@ -243,9 +243,11 @@ var pvp_create_room_button: Button
 var pvp_join_room_button: Button
 var pvp_copy_code_button: Button
 var pvp_poll_timer: Timer
+var pvp_poll_request: HTTPRequest
 var pvp_active_room_code := ""
 var pvp_poll_in_flight := false
 var pvp_polling_active := false
+var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
 var staff_tools_popup: PanelContainer
 var staff_impersonate_button: Button
@@ -958,6 +960,10 @@ func _setup_pvp_room_popup() -> void:
 	pvp_poll_timer.timeout.connect(_on_pvp_poll_timeout)
 	add_child(pvp_poll_timer)
 
+	pvp_poll_request = HTTPRequest.new()
+	pvp_poll_request.request_completed.connect(_on_pvp_room_poll_completed)
+	add_child(pvp_poll_request)
+
 func _setup_dev_add_item_tools() -> void:
 	dev_add_item_button = Button.new()
 	dev_add_item_button.text = "Add Item"
@@ -1400,6 +1406,18 @@ func _process(delta: float) -> void:
 	_refresh_location_label_if_needed()
 	_refresh_utc_time_label(delta)
 	_refresh_staff_tools_visibility_if_needed()
+	_refresh_pvp_room_polling(delta)
+
+func _refresh_pvp_room_polling(delta: float) -> void:
+	if not pvp_polling_active or pvp_active_room_code == "" or pvp_battle_starting:
+		return
+
+	pvp_poll_elapsed -= delta
+	if pvp_poll_elapsed > 0.0:
+		return
+
+	pvp_poll_elapsed = 1.0
+	_request_pvp_room_poll()
 
 func _refresh_staff_tools_visibility_if_needed() -> void:
 	var next_key := _get_staff_tools_visibility_key()
@@ -7549,6 +7567,7 @@ func _hide_pvp_room_popup() -> void:
 	if pvp_poll_timer != null:
 		pvp_poll_timer.stop()
 	pvp_polling_active = false
+	pvp_poll_elapsed = 0.0
 	pvp_room_popup.visible = false
 	_deactivate_ui_panel(pvp_room_popup)
 
@@ -7617,8 +7636,7 @@ func _start_pvp_room_polling() -> void:
 	if pvp_polling_active:
 		return
 	pvp_polling_active = true
-	if pvp_poll_timer != null:
-		pvp_poll_timer.start(0.1)
+	pvp_poll_elapsed = 0.0
 
 func _poll_pvp_room() -> void:
 	if pvp_poll_in_flight or pvp_active_room_code == "":
@@ -7638,6 +7656,57 @@ func _poll_pvp_room() -> void:
 		_set_pvp_status("Waiting for another player...")
 		return
 
+	await _start_pvp_battle_from_response(response)
+
+func _request_pvp_room_poll() -> void:
+	if pvp_poll_in_flight or pvp_active_room_code == "" or pvp_poll_request == null:
+		return
+
+	pvp_poll_in_flight = true
+	var api_base_url := str(GatewayApiConfig.cached_url).strip_edges()
+	if api_base_url == "":
+		api_base_url = GatewayApiConfig.LOCAL_GATEWAY_URL if OS.has_feature("editor") else GatewayApiConfig.PRODUCTION_GATEWAY_URL
+
+	var path := "/battle/pvp/rooms/%s?playerId=p1" % pvp_active_room_code.uri_encode()
+	var error := pvp_poll_request.request(
+		api_base_url.rstrip("/") + path,
+		GatewayApiConfig.get_accept_headers(),
+		HTTPClient.METHOD_GET
+	)
+	if error != OK:
+		pvp_poll_in_flight = false
+		_set_pvp_status("Room check failed to start: %s" % error_string(error))
+
+func _on_pvp_room_poll_completed(
+	result: int,
+	response_code: int,
+	_headers: PackedStringArray,
+	body: PackedByteArray
+) -> void:
+	pvp_poll_in_flight = false
+	if not pvp_polling_active or pvp_active_room_code == "" or pvp_battle_starting:
+		return
+
+	if result != HTTPRequest.RESULT_SUCCESS:
+		_set_pvp_status("Room check failed: %s" % result)
+		return
+
+	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
+	if not (parsed is Dictionary):
+		_set_pvp_status("Room check failed: invalid response (%s)." % response_code)
+		return
+
+	var response: Dictionary = parsed as Dictionary
+	if not bool(response.get("success", false)):
+		_set_pvp_status("Room check failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
+		return
+
+	var status := str(response.get("status", "waiting"))
+	if status != "started":
+		_set_pvp_status("Waiting for another player... (%s)" % status)
+		return
+
+	_set_pvp_status("Opponent joined. Starting battle...")
 	await _start_pvp_battle_from_response(response)
 
 func _start_pvp_battle_from_response(response: Dictionary) -> void:
@@ -7663,6 +7732,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	_hide_pvp_room_popup()
 	pvp_active_room_code = ""
 	pvp_polling_active = false
+	pvp_poll_elapsed = 0.0
 	pvp_room_code_label.text = "Room Code: -"
 	pvp_copy_code_button.disabled = true
 	pvp_battle_starting = false

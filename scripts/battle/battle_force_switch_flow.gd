@@ -53,7 +53,11 @@ func can_switch_to_slot(slot: int, player_id := "p1") -> bool:
 	if bool(pokemon_data.get("active", false)):
 		return false
 
-	return not bool(pokemon_data.get("fainted", false))
+	if bool(pokemon_data.get("fainted", false)):
+		return false
+
+	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
+	return condition != "0 fnt" and not condition.ends_with(" fnt")
 
 
 func should_hide_active_pokemon(player_id: String, defer_force_switch_active_hide: bool) -> bool:

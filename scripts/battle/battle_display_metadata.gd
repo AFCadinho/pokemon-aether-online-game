@@ -182,7 +182,7 @@ func _find_trainer_team_pokemon_by_metadata_slot(metadata_slot: int) -> Dictiona
 
 func _copy_backend_pokemon_metadata(display_data: Dictionary, backend_pokemon: Dictionary) -> void:
 	var species := str(backend_pokemon.get("species", backend_pokemon.get("displaySpecies", "")))
-	if species != "":
+	if species != "" and not _has_temporary_battle_display_form(display_data):
 		display_data["displaySpecies"] = species
 		display_data["species"] = species
 

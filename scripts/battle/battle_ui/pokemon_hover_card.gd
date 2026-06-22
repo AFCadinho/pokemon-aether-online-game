@@ -209,7 +209,14 @@ func _get_possible_abilities_from_data(pokemon_data: Dictionary) -> Array:
 
 func _set_item(item: String) -> void:
 	item_label.visible = item != ""
-	item_label.text = "Item: %s" % _format_display_name(item)
+	item_label.text = "Item: %s" % _format_item_display_name(item)
+
+func _format_item_display_name(item: String) -> String:
+	var knocked_suffix := " (Knocked off)"
+	if item.ends_with(knocked_suffix):
+		return "%s%s" % [_format_display_name(item.substr(0, item.length() - knocked_suffix.length())), knocked_suffix]
+
+	return _format_display_name(item)
 
 
 func _set_stat_changes(stat_changes: Dictionary) -> void:

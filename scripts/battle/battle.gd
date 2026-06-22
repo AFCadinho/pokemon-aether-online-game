@@ -27,6 +27,9 @@ var mega_evolution_selected := false
 var mega_evolution_pulse_tween: Tween
 var pending_mega_species_by_ident: Dictionary = {}
 var pvp_room_code := ""
+var pvp_realtime_updates: Array[Dictionary] = []
+var pvp_realtime_deferred_updates: Array[Dictionary] = []
+var pvp_last_applied_server_seq := 0
 
 #Battle State
 var battle_state := BattleState.new()
@@ -46,12 +49,15 @@ var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").n
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var public_confirmed_abilities_by_ident := {}
+var public_confirmed_items_by_ident := {}
+var pending_knock_off_targets_by_ident := {}
 var stat_stages_by_ident: Dictionary = {}
 var ability_stat_modifiers_by_ident: Dictionary = {}
 var player_party_moves_by_key: Dictionary = {}
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
+const DEBUG_PVP_REALTIME := true
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
@@ -499,7 +505,8 @@ func _show_pokemon_hover(
 		pokemon_info_request,
 		pokemon_stats_request,
 		request_pokemon_data,
-		public_confirmed_abilities_by_ident
+		public_confirmed_abilities_by_ident,
+		public_confirmed_items_by_ident
 	)
 	if not hover_state.is_hover_request_current(request_token, hover_ident, hover_owner_player_id):
 		return
@@ -654,14 +661,25 @@ func _clear_mega_evolution_selection() -> void:
 	_update_mechanic_button_states()
 
 func _can_toggle_mega_evolution() -> bool:
+	var local_state_player_id := _get_local_state_player_id()
 	return (
 		battle_actions_ready
 		and not battle_input_locked
 		and not battle_finished
 		and not team_preview_lead_selection_active
-		and not force_switch_flow.player_needs_force_switch("p1")
-		and battle_state.can_active_pokemon_mega_evolve("p1")
+		and not force_switch_flow.player_needs_force_switch(local_state_player_id)
+		and battle_state.can_active_pokemon_mega_evolve(local_state_player_id)
 	)
+
+func _get_local_state_player_id() -> String:
+	if not _is_pvp_battle():
+		return action_flow.local_player_id
+
+	return "p1" if action_flow.local_player_id == "p2" else action_flow.local_player_id
+
+func _get_opponent_state_player_id() -> String:
+	var local_state_player_id := _get_local_state_player_id()
+	return "p2" if local_state_player_id == "p1" else "p1"
 
 func _update_mechanic_button_states() -> void:
 	if mega_evolution_button == null:
@@ -799,6 +817,17 @@ func _reset_action_choices() -> void:
 
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
+	if _is_pvp_battle():
+		if _local_player_needs_force_switch_ui():
+			_show_force_switch_if_needed()
+			return
+		if _opponent_player_needs_force_switch_ui():
+			moves_grid.visible = false
+			party_grid.visible = false
+			_hide_party_hover()
+			current_action_panel.set_message("Waiting for opponent switch...")
+			return
+
 	action_buttons.set_action_disabled("fight", false)
 	action_buttons.set_action_disabled("bag", false)
 	action_buttons.set_action_disabled("run", false)
@@ -855,7 +884,8 @@ func _process_queued_battle_action() -> void:
 
 ## Toont de party keuzes in het action panel.
 func _show_party(force_switch := false) -> void:
-	if not force_switch and force_switch_flow.is_player_trapped_outside_force_switch("p1"):
+	var local_state_player_id := _get_local_state_player_id()
+	if not force_switch and force_switch_flow.is_player_trapped_outside_force_switch(local_state_player_id):
 		current_action_panel.set_message("Cannot switch right now!")
 		_show_moves()
 		return
@@ -882,13 +912,14 @@ func _open_bag() -> void:
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
+	var local_state_player_id := _get_local_state_player_id()
 	if not battle_actions_ready:
 		return
 
 	if team_preview_lead_selection_active:
 		return
 
-	if battle_finished or battle_input_locked or force_switch_flow.player_needs_force_switch("p1"):
+	if battle_finished or battle_input_locked or force_switch_flow.player_needs_force_switch(local_state_player_id):
 		return
 
 	if battle_type != BattleType.WILD:
@@ -940,6 +971,8 @@ func _finish_battle(result: Dictionary) -> void:
 
 	battle_finished = true
 	pending_mega_species_by_ident.clear()
+	if _is_pvp_battle():
+		PvpBattleRealtimeService.disconnect_room()
 	_sync_player_save_from_battle_state()
 	PlayerPartyStateService.save_current_battle_party_state_deferred()
 	battle_ended.emit(result)
@@ -951,6 +984,7 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		_apply_party_state_from_api_response(response)
 		_remember_active_player_party_moves()
 		_prewarm_current_battle_move_animations()
+		_mark_pvp_response_applied(response)
 
 	return success
 
@@ -1253,6 +1287,8 @@ func _reset_battle_status_panel() -> void:
 
 func _reset_battle_effect_tracking() -> void:
 	public_confirmed_abilities_by_ident.clear()
+	public_confirmed_items_by_ident.clear()
+	pending_knock_off_targets_by_ident.clear()
 	stat_stages_by_ident.clear()
 	ability_stat_modifiers_by_ident.clear()
 	player_party_moves_by_key.clear()
@@ -1270,6 +1306,7 @@ func _remember_public_confirmed_abilities_from_response(response: Dictionary) ->
 			continue
 
 		var event: Dictionary = event_value as Dictionary
+		_remember_public_confirmed_item_from_event(event)
 		var ability: String = _get_public_confirmed_ability_from_event(event)
 		if ability == "":
 			continue
@@ -1281,7 +1318,40 @@ func _remember_public_confirmed_abilities_from_response(response: Dictionary) ->
 
 		public_confirmed_abilities_by_ident[ident_key] = ability
 
+func _remember_public_confirmed_item_from_event(event: Dictionary) -> void:
+	var event_type := str(event.get("type", ""))
+	if event_type == "move" and _normalize_item_key(str(event.get("move", ""))) == "knockoff":
+		var knock_target_key := _normalize_battle_ident(str(event.get("target", "")))
+		if knock_target_key != "":
+			pending_knock_off_targets_by_ident[knock_target_key] = true
+			if public_confirmed_items_by_ident.has(knock_target_key):
+				public_confirmed_items_by_ident[knock_target_key] = _mark_item_knocked_off(str(public_confirmed_items_by_ident.get(knock_target_key, "")))
+		return
+
+	var item_ident := _get_public_confirmed_item_ident_from_event(event)
+	var item_name := _get_public_confirmed_item_from_event(event)
+	var ident_key := _normalize_battle_ident(item_ident)
+	if ident_key == "" or item_name == "":
+		return
+
+	var target_key := _normalize_battle_ident(str(event.get("target", "")))
+	if target_key != "" and target_key != ident_key and not public_confirmed_items_by_ident.has(target_key):
+		public_confirmed_items_by_ident[target_key] = ""
+
+	if event_type == "item" and str(event.get("state", "")) == "end":
+		public_confirmed_items_by_ident[ident_key] = _mark_item_knocked_off(item_name)
+		pending_knock_off_targets_by_ident.erase(ident_key)
+		return
+
+	if pending_knock_off_targets_by_ident.has(ident_key):
+		public_confirmed_items_by_ident[ident_key] = _mark_item_knocked_off(item_name)
+		pending_knock_off_targets_by_ident.erase(ident_key)
+		return
+
+	public_confirmed_items_by_ident[ident_key] = item_name
+
 func _remember_battle_modifier_event(event: Dictionary) -> void:
+	_remember_public_confirmed_item_from_event(event)
 	match str(event.get("type", "")):
 		"switch":
 			_clear_stat_stages_for_ident(str(event.get("fromIdent", "")))
@@ -1513,6 +1583,77 @@ func _get_ability_stat_modifier_from_effect(effect: String) -> Dictionary:
 
 	return {}
 
+func _events_have_explicit_item_events(events: Array) -> bool:
+	for event_value: Variant in events:
+		if event_value is Dictionary and str((event_value as Dictionary).get("type", "")) == "item":
+			return true
+
+	return false
+
+func _get_fallback_knock_off_item_message(event: Dictionary) -> String:
+	var item_ident := _get_public_confirmed_item_ident_from_event(event)
+	var ident_key := _normalize_battle_ident(item_ident)
+	if ident_key == "":
+		return ""
+
+	var item_name := _get_public_confirmed_item_from_event(event)
+	if item_name == "":
+		return ""
+
+	var current_item := str(public_confirmed_items_by_ident.get(ident_key, ""))
+	if not pending_knock_off_targets_by_ident.has(ident_key) and not current_item.to_lower().contains("knocked off"):
+		return ""
+
+	return "%s's %s got knocked off!" % [_get_public_item_display_name(item_ident), item_name]
+
+func _get_public_confirmed_item_from_event(event: Dictionary) -> String:
+	match str(event.get("type", "")):
+		"item":
+			return str(event.get("item", "")).strip_edges()
+		"damage", "heal", "status", "fieldEffect", "pokemonEffect":
+			return _get_item_name_from_source(str(event.get("source", "")))
+
+	return _get_item_name_from_source(str(event.get("source", "")))
+
+func _get_public_confirmed_item_ident_from_event(event: Dictionary) -> String:
+	if str(event.get("type", "")) == "item":
+		return str(event.get("target", ""))
+
+	var item_name := _get_item_name_from_source(str(event.get("source", "")))
+	if item_name == "":
+		return ""
+
+	var source_target := str(event.get("sourceTarget", ""))
+	if source_target != "":
+		return source_target
+
+	return _get_first_event_text_value(event, ["target", "pokemon", "actor", "sourcePokemon"])
+
+func _get_item_name_from_source(source: String) -> String:
+	var cleaned := source.strip_edges()
+	if not cleaned.to_lower().begins_with("item:"):
+		return ""
+
+	return cleaned.split(":", false, 1)[1].strip_edges()
+
+func _mark_item_knocked_off(item_name: String) -> String:
+	var cleaned := item_name.strip_edges()
+	if cleaned == "":
+		return ""
+	if cleaned.to_lower().contains("knocked off"):
+		return cleaned
+
+	return "%s (Knocked off)" % cleaned
+
+func _normalize_item_key(item_name: String) -> String:
+	return item_name.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "")
+
+func _get_public_item_display_name(ident: String) -> String:
+	if ident.contains(": "):
+		return str(ident.split(": ", false, 1)[1]).strip_edges()
+
+	return ident.strip_edges()
+
 func _get_public_confirmed_ability_from_event(event: Dictionary) -> String:
 	var event_type: String = str(event.get("type", ""))
 	match event_type:
@@ -1671,18 +1812,19 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	var local_player_id := str(api_response.get("playerId", "p1"))
 	action_flow.set_local_player_id(local_player_id)
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
+	_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
 
 	var lead_response: Dictionary = display_response
 	if _should_show_team_preview(display_response):
-		if not _apply_team_preview_battle_response(display_response):
+		if not _apply_team_preview_battle_response(api_response):
 			return
 		lead_response = await _run_pvp_team_preview_lead_selection(local_player_id)
 		if lead_response.is_empty():
 			return
 	else:
-		if not _apply_initial_battle_response(display_response):
+		if not _apply_initial_battle_response(api_response):
 			return
 		_show_default_trainer_leads_before_selection(player_pokemon, display_response)
 
@@ -1882,11 +2024,25 @@ func _run_trainer_lead_selection(api_response: Dictionary) -> Dictionary:
 
 func _should_show_team_preview(api_response: Dictionary) -> bool:
 	var battle_options_value: Variant = api_response.get("battleOptions", {})
-	if not (battle_options_value is Dictionary):
+	if battle_options_value is Dictionary:
+		var battle_options: Dictionary = battle_options_value as Dictionary
+		if bool(battle_options.get("teamPreview", false)):
+			return true
+
+	var requests_value: Variant = api_response.get("requests", {})
+	if not (requests_value is Dictionary):
 		return false
 
-	var battle_options: Dictionary = battle_options_value as Dictionary
-	return bool(battle_options.get("teamPreview", false))
+	var requests: Dictionary = requests_value as Dictionary
+	for request_value: Variant in requests.values():
+		if not (request_value is Dictionary):
+			continue
+
+		var request: Dictionary = request_value as Dictionary
+		if bool(request.get("teamPreview", false)):
+			return true
+
+	return false
 
 func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)
@@ -1985,7 +2141,7 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 
 		if _should_show_team_preview(lead_response):
 			current_action_panel.set_message("Waiting for the other player...")
-			lead_response = await _poll_pvp_room_until_team_preview_complete(local_player_id)
+			lead_response = await _wait_for_pvp_team_preview_complete(local_player_id)
 			if lead_response.is_empty():
 				_set_battle_input_locked(false)
 				continue
@@ -1996,6 +2152,35 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 		_set_battle_input_locked(false)
 		return lead_response
 
+	return {}
+
+func _wait_for_pvp_team_preview_complete(local_player_id: String) -> Dictionary:
+	if pvp_room_code == "":
+		return {}
+
+	for _attempt in range(600):
+		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.1)
+		if message.is_empty():
+			continue
+		if str(message.get("action", "")) != "choose_lead":
+			continue
+		if str(message.get("playerId", "")) == local_player_id:
+			continue
+
+		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		if response.is_empty():
+			continue
+
+		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+		if _should_show_team_preview(display_response):
+			continue
+
+		if not _apply_api_response(response, false):
+			return {}
+
+		return display_response
+
+	current_action_panel.set_message("Opponent lead timed out.")
 	return {}
 
 func _poll_pvp_room_until_team_preview_complete(local_player_id: String) -> Dictionary:
@@ -2009,14 +2194,13 @@ func _poll_pvp_room_until_team_preview_complete(local_player_id: String) -> Dict
 			current_action_panel.set_message(str(response.get("error", "Waiting for the other player...")))
 			continue
 
-		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
-		if _should_show_team_preview(display_response):
+		if _should_show_team_preview(action_flow.map_response_for_local_player(response)):
 			continue
 
-		if not _apply_api_response(display_response, false):
+		if not _apply_api_response(response, false):
 			return {}
 
-		return display_response
+		return action_flow.map_response_for_local_player(response)
 
 	return {}
 
@@ -2043,15 +2227,37 @@ func _hide_team_preview_layers() -> void:
 
 func _get_lead_selection_team_data(player_id: String) -> Array:
 	var lead_team: Array = []
-	for pokemon_value in _get_display_team_data(player_id):
+	var display_team: Array = _get_display_team_data(player_id)
+	for index in range(display_team.size()):
+		var pokemon_value: Variant = display_team[index]
 		if pokemon_value is Dictionary:
 			var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate(true)
+			_enrich_lead_selection_slot_data(pokemon_data, index)
 			pokemon_data["active"] = false
 			lead_team.append(pokemon_data)
 		else:
 			lead_team.append(pokemon_value)
 
 	return lead_team
+
+func _enrich_lead_selection_slot_data(pokemon_data: Dictionary, index: int) -> void:
+	if index < 0 or index >= PlayerSave.party.size():
+		return
+
+	var saved_pokemon: Pokemon = PlayerSave.party[index] as Pokemon
+	if saved_pokemon == null:
+		return
+
+	var types_value: Variant = pokemon_data.get("types", [])
+	var missing_types := not (types_value is Array) or (types_value as Array).is_empty()
+	if not pokemon_data.has("types") or missing_types:
+		pokemon_data["types"] = saved_pokemon.types
+	if not pokemon_data.has("possibleAbilities"):
+		pokemon_data["possibleAbilities"] = saved_pokemon.possible_abilities
+	if not pokemon_data.has("shiny"):
+		pokemon_data["shiny"] = saved_pokemon.shiny
+	if not pokemon_data.has("instanceId") and saved_pokemon.instance_id != "":
+		pokemon_data["instanceId"] = saved_pokemon.instance_id
 
 func _add_battle_log_messages(messages: Array[String]) -> void:
 	for message in messages:
@@ -2083,6 +2289,37 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		return
 
 	pending_player_choice_events = _get_pending_player_choice_events(player_response, pending_player_choice_events)
+	if _is_pvp_battle():
+		if _response_has_renderable_battle_events(player_response):
+			await _render_opponent_response(player_response, {}, pending_player_choice_events)
+			await _hold_opponent_response_message()
+		else:
+			if not await _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events):
+				_clear_pending_mega_species_for_events(pending_player_choice_events)
+				_show_moves()
+				_set_battle_input_locked(false)
+				return
+
+		if await _finish_if_battle_ended():
+			return
+
+		if _opponent_player_needs_force_switch_ui():
+			if not await _wait_for_pvp_opponent_force_switch_and_render():
+				_show_moves()
+				_set_battle_input_locked(false)
+				return
+
+			if await _finish_if_battle_ended():
+				return
+
+		if _show_force_switch_if_needed():
+			_set_battle_input_locked(false)
+			return
+
+		_set_battle_input_locked(false)
+		_show_moves()
+		return
+
 	if not await _submit_npc_choice_and_render({}, pending_player_choice_events):
 		_clear_pending_mega_species_for_events(pending_player_choice_events)
 		_show_moves()
@@ -2105,6 +2342,7 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 
 func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 	var ordered_events: Array = _order_form_change_events_before_moves(events)
+	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
 	_prewarm_battle_event_animations(ordered_events)
 	event_presentation.reset_recent_context()
 
@@ -2113,6 +2351,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			continue
 
 		var event_data: Dictionary = event as Dictionary
+		var fallback_knock_off_message := _get_fallback_knock_off_item_message(event_data) if not has_explicit_item_events else ""
 		_remember_battle_modifier_event(event_data)
 
 		var event_type: String = str(event_data.get("type", ""))
@@ -2130,12 +2369,16 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			continue
 
 		await event_renderer.render_event(event_data, presentation)
+		if fallback_knock_off_message != "":
+			battle_log_panel.add_message(fallback_knock_off_message)
+			current_action_panel.set_message(fallback_knock_off_message)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			battle_state.apply_event_conditions([event_data])
 		if event_type == "switch":
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_active_sprites()
+			_show_switch_event_active_pokemon(event_data)
 			await _play_shiny_entrance_if_needed(event_data)
 		if event_type == "transform":
 			battle_state.apply_event_conditions([event_data])
@@ -2159,8 +2402,9 @@ func _build_pending_player_mega_events(use_mega: bool) -> Array:
 	if not use_mega:
 		return pending_events
 
-	var target_ident := battle_state.get_active_pokemon_ident("p1")
-	var mega_species := battle_state.resolve_active_mega_species("p1")
+	var local_state_player_id := _get_local_state_player_id()
+	var target_ident := battle_state.get_active_pokemon_ident(local_state_player_id)
+	var mega_species := battle_state.resolve_active_mega_species(local_state_player_id)
 	if target_ident == "" or mega_species == "":
 		return pending_events
 
@@ -2712,7 +2956,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		return
 
 	_set_battle_input_locked(true)
-	var was_force_switch := force_switch_flow.player_needs_force_switch("p1")
+	var was_force_switch := force_switch_flow.player_needs_force_switch(_get_local_state_player_id())
 	party_grid.visible = false
 	_hide_party_hover()
 
@@ -2740,8 +2984,51 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		if await _finish_if_battle_ended():
 			return
 
+		if _is_pvp_battle() and _response_has_opponent_force_switch(player_response):
+			if not await _wait_for_pvp_opponent_force_switch_and_render():
+				_show_party(true)
+				_set_battle_input_locked(false)
+				return
+
+			if await _finish_if_battle_ended():
+				return
+
+			if _show_force_switch_if_needed():
+				_set_battle_input_locked(false)
+				return
+
 		_show_moves()
 		_set_battle_input_locked(false)
+		return
+
+	if _is_pvp_battle():
+		if _response_has_renderable_battle_events(player_response):
+			await _render_opponent_response(player_response)
+			await _hold_opponent_response_message()
+		else:
+			if not await _wait_for_pvp_opponent_choice_and_render():
+				_show_moves()
+				_set_battle_input_locked(false)
+				return
+
+		if await _finish_if_battle_ended():
+			return
+
+		if _opponent_player_needs_force_switch_ui():
+			if not await _wait_for_pvp_opponent_force_switch_and_render():
+				_show_moves()
+				_set_battle_input_locked(false)
+				return
+
+			if await _finish_if_battle_ended():
+				return
+
+		if _show_force_switch_if_needed():
+			_set_battle_input_locked(false)
+			return
+
+		_set_battle_input_locked(false)
+		_show_moves()
 		return
 
 	if not await _submit_npc_choice_and_render():
@@ -2763,12 +3050,55 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	_show_moves()
 
 func _show_force_switch_if_needed() -> bool:
-	if not force_switch_flow.should_show_player_force_switch():
+	if not _local_player_needs_force_switch_ui():
 		return false
 
 	current_action_panel.set_message("Choose a Pokemon!")
 	_show_party(true)
 	return true
+
+func _local_player_needs_force_switch_ui() -> bool:
+	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
+	for player_id in candidate_player_ids:
+		if force_switch_flow.player_needs_force_switch(player_id):
+			return true
+
+		if _player_active_fainted_with_available_switch(player_id):
+			return true
+
+	return false
+
+func _opponent_player_needs_force_switch_ui() -> bool:
+	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
+	for player_id in candidate_player_ids:
+		if force_switch_flow.player_needs_force_switch(player_id):
+			return true
+
+		if _player_active_fainted_with_available_switch(player_id):
+			return true
+
+	return false
+
+func _get_force_switch_candidate_player_ids(primary_player_id: String, display_fallback_player_id: String) -> Array[String]:
+	var candidate_player_ids: Array[String] = []
+	if primary_player_id != "":
+		candidate_player_ids.append(primary_player_id)
+	if display_fallback_player_id != "" and not candidate_player_ids.has(display_fallback_player_id):
+		candidate_player_ids.append(display_fallback_player_id)
+	return candidate_player_ids
+
+func _player_active_fainted_with_available_switch(player_id: String) -> bool:
+	if battle_state.is_battle_ended():
+		return false
+	if not battle_state.is_active_pokemon_fainted(player_id):
+		return false
+
+	var team: Array = battle_state.get_player_team(player_id)
+	for slot_index in range(team.size()):
+		if force_switch_flow.can_switch_to_slot(slot_index + 1, player_id):
+			return true
+
+	return false
 
 func _finish_if_battle_ended() -> bool:
 	if not battle_state.is_battle_ended():
@@ -2782,9 +3112,29 @@ func _finish_if_battle_ended() -> bool:
 	return true
 
 func _submit_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
+	var local_state_player_id := _get_local_state_player_id()
+	if choice_type == "move" and mega and not battle_state.can_active_pokemon_mega_evolve(local_state_player_id):
+		if _is_pvp_battle() and DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Ignoring stale mega selection",
+				"choice_type=%s slot=%s api_player=%s state_player=%s" % [
+					choice_type,
+					slot,
+					action_flow.local_player_id,
+					local_state_player_id,
+				]
+			)
+		if mega_evolution_selected:
+			_clear_mega_evolution_selection()
+		mega = false
+	if _is_pvp_battle():
+		return await _submit_pvp_realtime_choice(choice_type, slot, mega)
 	return await action_flow.submit_player_choice(choice_type, slot, mega)
 
 func _submit_lead(player_id: String, slot: int) -> Dictionary:
+	if _is_pvp_battle():
+		return await _submit_pvp_realtime_lead(player_id, slot)
+
 	var response: Dictionary = await BattleApiClient.choose_lead(
 		battle_request,
 		battle_state.battle_id,
@@ -2794,11 +3144,10 @@ func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
 
-	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
-	if not _apply_api_response(display_response, false):
-		return display_response
+	if not _apply_api_response(response, false):
+		return action_flow.map_response_for_local_player(response)
 
-	return display_response
+	return action_flow.map_response_for_local_player(response)
 
 func _submit_npc_lead() -> Dictionary:
 	var response: Dictionary = await BattleApiClient.send_npc_lead(
@@ -2815,10 +3164,903 @@ func _submit_npc_lead() -> Dictionary:
 	return response
 
 func _auto_force_switch_opponent_if_needed() -> bool:
-	if not force_switch_flow.opponent_needs_auto_force_switch():
+	if _is_pvp_battle():
+		return false
+	if not force_switch_flow.player_needs_force_switch(_get_opponent_state_player_id()):
 		return false
 
 	return await _submit_npc_choice_and_render()
+
+func _is_pvp_battle() -> bool:
+	return pvp_room_code.strip_edges() != ""
+
+func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Connecting PvP realtime room",
+			"local_player_id=%s battle_id=%s room=%s" % [local_player_id, battle_id, pvp_room_code]
+		)
+	pvp_realtime_updates.clear()
+	pvp_realtime_deferred_updates.clear()
+	pvp_last_applied_server_seq = 0
+	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
+		PvpBattleRealtimeService.battle_update_received.connect(_on_pvp_realtime_battle_update)
+	PvpBattleRealtimeService.connect_room(pvp_room_code, local_player_id, battle_id)
+
+func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
+	var room_code := str(message.get("roomCode", "")).strip_edges().to_upper()
+	if room_code != "" and room_code != pvp_room_code.strip_edges().to_upper():
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Skipping PvP realtime update due room mismatch",
+				"message_room=%s current_room=%s type=%s" % [room_code, pvp_room_code, str(message.get("type", ""))]
+			)
+		return
+	if _is_stale_pvp_realtime_message(message):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Skipping stale PvP realtime update",
+				"message=%s last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_server_seq]
+			)
+		return
+
+	pvp_realtime_updates.append(message.duplicate(true))
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Queued PvP realtime update",
+			"queue_size=%d message=%s" % [pvp_realtime_updates.size(), _describe_pvp_realtime_message(message)]
+		)
+
+func _submit_pvp_realtime_lead(player_id: String, slot: int) -> Dictionary:
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime("Submitting PvP realtime lead", "player_id=%s slot=%s" % [player_id, slot])
+	var response: Dictionary = await _send_pvp_realtime_action_and_wait("choose_lead", player_id, slot)
+	if not bool(response.get("success", false)):
+		return response
+	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if _should_show_team_preview(display_response):
+		return display_response
+	if not _apply_api_response(response, false):
+		return display_response
+	return display_response
+
+func _submit_pvp_realtime_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
+	var action := "choose_switch" if choice_type == "switch" else "choose_move"
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Submitting PvP realtime choice",
+			"choice_type=%s action=%s slot=%s mega=%s local_player_id=%s" % [choice_type, action, slot, mega, action_flow.local_player_id]
+		)
+	var response: Dictionary = await _send_pvp_realtime_action_and_wait(action, action_flow.local_player_id, slot, mega)
+	if not bool(response.get("success", false)):
+		return response
+	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
+		return display_response
+	return display_response
+
+func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot: int, mega := false) -> Dictionary:
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime("Preparing PvP realtime action wait", "action=%s player_id=%s slot=%s mega=%s" % [action, player_id, slot, mega])
+	for _ready_attempt in range(40):
+		if PvpBattleRealtimeService.connected and PvpBattleRealtimeService.joined:
+			break
+		await get_tree().create_timer(0.05).timeout
+
+	if not PvpBattleRealtimeService.connected or not PvpBattleRealtimeService.joined:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime("PvP realtime room not ready", "connected=%s joined=%s" % [PvpBattleRealtimeService.connected, PvpBattleRealtimeService.joined])
+		return {
+			"success": false,
+			"error": "PvP realtime room is not ready.",
+		}
+
+	var request_id := PvpBattleRealtimeService.send_action(action, battle_state.battle_id, player_id, slot, mega)
+	if request_id == "":
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime("PvP realtime action send failed", "action=%s" % action)
+		return {
+			"success": false,
+			"error": "PvP realtime connection is not ready.",
+		}
+	_log_pvp_realtime("PvP realtime action sent", "action=%s request_id=%s" % [action, request_id])
+
+	var expected_player_id := "p2" if player_id == "p2" else "p1"
+	var signal_match: Dictionary = {}
+	var listener := func(received_request_id: String, message: Dictionary) -> void:
+		if received_request_id != request_id:
+			return
+		var response_value: Variant = message.get("response", {})
+		if response_value is Dictionary:
+			signal_match = message.duplicate(true)
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Realtime signal callback matched request",
+					"request_id=%s message=%s" % [request_id, _describe_pvp_realtime_message(message)]
+				)
+
+	PvpBattleRealtimeService.action_response_received.connect(listener)
+
+	var queue_start := pvp_realtime_updates.size()
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime("Realtime queue start", "request_id=%s queue_start=%d" % [request_id, queue_start])
+	for _attempt in range(120):
+		if DEBUG_PVP_REALTIME and _attempt % 20 == 0:
+			_log_pvp_realtime(
+				"Realtime wait attempt",
+				"request_id=%s attempt=%d queue=%d" % [request_id, _attempt, pvp_realtime_updates.size()]
+			)
+		if not signal_match.is_empty():
+			if PvpBattleRealtimeService.action_response_received.is_connected(listener):
+				PvpBattleRealtimeService.action_response_received.disconnect(listener)
+			var signal_response: Dictionary = _response_from_pvp_realtime_message(signal_match)
+			if not signal_response.is_empty():
+				if DEBUG_PVP_REALTIME:
+					_log_pvp_realtime(
+						"Returning matched signal response",
+						"request_id=%s response=%s" % [request_id, JSON.stringify(signal_response)]
+					)
+				_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
+				return signal_response
+			_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
+			return {
+				"success": false,
+				"error": "Invalid PvP realtime response.",
+			}
+
+		var matching_message: Dictionary = _pop_matching_pvp_action_response_from_queue(
+			request_id,
+			action,
+			expected_player_id,
+			queue_start,
+		)
+		if not matching_message.is_empty():
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Returning matched queue response",
+					"request_id=%s message=%s" % [request_id, _describe_pvp_realtime_message(matching_message)]
+				)
+			if PvpBattleRealtimeService.action_response_received.is_connected(listener):
+				PvpBattleRealtimeService.action_response_received.disconnect(listener)
+			_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
+			var queued_response: Dictionary = _response_from_pvp_realtime_message(matching_message)
+			if not queued_response.is_empty():
+				return queued_response
+			return {
+				"success": false,
+				"error": "Invalid PvP realtime response.",
+			}
+		if DEBUG_PVP_REALTIME and _attempt % 20 == 0:
+			_log_pvp_realtime(
+				"No realtime match yet",
+				"request_id=%s action=%s player_id=%s queue_size=%d" % [request_id, action, player_id, pvp_realtime_updates.size()]
+			)
+		await get_tree().create_timer(0.1).timeout
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"PvP realtime response timed out",
+			"action=%s request_id=%s queue_remaining=%d" % [action, request_id, pvp_realtime_updates.size()]
+		)
+
+	if PvpBattleRealtimeService.action_response_received.is_connected(listener):
+		PvpBattleRealtimeService.action_response_received.disconnect(listener)
+
+	_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
+	return {
+		"success": false,
+		"error": "PvP realtime response timed out.",
+	}
+
+func _discard_realtime_updates_for_request(
+	request_id: String,
+	action: String,
+	expected_player_id: String,
+	expected_battle_id: String,
+) -> void:
+	if request_id == "":
+		return
+
+	var removed_count := 0
+	removed_count += _discard_realtime_updates_for_request_from_queue(
+		pvp_realtime_updates,
+		request_id,
+		action,
+		expected_player_id,
+		expected_battle_id
+	)
+	removed_count += _discard_realtime_updates_for_request_from_queue(
+		pvp_realtime_deferred_updates,
+		request_id,
+		action,
+		expected_player_id,
+		expected_battle_id
+	)
+
+	if DEBUG_PVP_REALTIME and removed_count > 0:
+		_log_pvp_realtime(
+			"Discarded realtime updates for request",
+			"request_id=%s action=%s player=%s removed=%d" % [request_id, action, expected_player_id, removed_count]
+		)
+
+func _discard_realtime_updates_for_request_from_queue(
+	queue: Array[Dictionary],
+	request_id: String,
+	action: String,
+	expected_player_id: String,
+	expected_battle_id: String,
+) -> int:
+	var removed_count := 0
+	var index := 0
+	while index < queue.size():
+		var message_value: Variant = queue[index]
+		if not (message_value is Dictionary):
+			index += 1
+			continue
+
+		var message := message_value as Dictionary
+		var message_request_id := str(message.get("requestId", ""))
+		if message_request_id != request_id:
+			index += 1
+			continue
+
+		if str(message.get("action", "")) != action:
+			index += 1
+			continue
+
+		if str(message.get("playerId", "")) != expected_player_id:
+			index += 1
+			continue
+
+		var message_battle_id := str(message.get("battleId", ""))
+		if message_battle_id != "" and expected_battle_id != "" and message_battle_id != expected_battle_id:
+			index += 1
+			continue
+
+		queue.remove_at(index)
+		removed_count += 1
+
+	return removed_count
+
+func _pop_matching_pvp_action_response_from_queue(
+	request_id: String,
+	action: String,
+	player_id: String,
+	start_index: int,
+) -> Dictionary:
+	var expected_player_id := "p2" if player_id == "p2" else "p1"
+	var battle_id := battle_state.battle_id
+	var index: int = max(0, start_index)
+
+	while index < pvp_realtime_updates.size():
+		var message: Dictionary = pvp_realtime_updates[index]
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Checking queued message",
+				"index=%d request_id=%s action=%s expected_player=%s message=%s" % [index, request_id, action, expected_player_id, _describe_pvp_realtime_message(message)]
+			)
+		if _is_matching_pvp_action_update_message(message, request_id, action, expected_player_id, battle_id):
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Matched queued message and removing",
+					"index=%d message=%s" % [index, _describe_pvp_realtime_message(message)]
+				)
+			pvp_realtime_updates.remove_at(index)
+			return message
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime("Queued message did not match", "index=%d" % index)
+		index += 1
+	return {}
+
+func _is_matching_pvp_action_update_message(
+	message: Dictionary,
+	request_id: String,
+	action: String,
+	expected_player_id: String,
+	expected_battle_id: String,
+) -> bool:
+	if _is_stale_pvp_realtime_message(message):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Match rejected: stale realtime message",
+				"request_id=%s message=%s last_seq=%d" % [request_id, _describe_pvp_realtime_message(message), pvp_last_applied_server_seq]
+			)
+		return false
+
+	var message_request_id: String = str(message.get("requestId", "")).strip_edges()
+	var expected_request_id: String = request_id.strip_edges()
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Match rejected: response is not dictionary",
+				"expected_request_id=%s message=%s" % [expected_request_id, _describe_pvp_realtime_message(message)]
+			)
+		return false
+
+	if message_request_id != "":
+		if message_request_id == expected_request_id:
+			if str(message.get("battleId", "")) != "" and expected_battle_id != "" and str(message.get("battleId", "")) != expected_battle_id:
+				if DEBUG_PVP_REALTIME:
+					_log_pvp_realtime(
+						"Match rejected: requestId matches but battleId mismatch",
+						"expected_request_id=%s message_request_id=%s expected_battle_id=%s message_battle_id=%s" % [expected_request_id, message_request_id, expected_battle_id, str(message.get("battleId", ""))]
+					)
+				return false
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Match by requestId",
+					"request_id=%s action=%s player=%s" % [message_request_id, str(message.get("action", "")), str(message.get("playerId", ""))]
+				)
+			return true
+
+		# Fallback for rare request-id drift in live responses.
+		if str(message.get("action", "")) == action and str(message.get("playerId", "")) == expected_player_id:
+			if str(message.get("battleId", "")) != "" and expected_battle_id != "" and str(message.get("battleId", "")) != expected_battle_id:
+				if DEBUG_PVP_REALTIME:
+					_log_pvp_realtime(
+						"Match rejected: fallback action+player matched but battleId mismatch",
+						"request_id=%s expected_request_id=%s message_battle_id=%s expected_battle_id=%s action=%s player=%s" % [message_request_id, expected_request_id, str(message.get("battleId", "")), expected_battle_id, str(message.get("action", "")), str(message.get("playerId", ""))]
+					)
+				return false
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Match by fallback action+player",
+					"request_id=%s expected_request_id=%s action=%s player=%s" % [message_request_id, expected_request_id, str(message.get("action", "")), str(message.get("playerId", ""))]
+				)
+			return true
+
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Match rejected: requestId mismatch",
+				"request_id=%s message_request_id=%s action=%s player=%s expected_action=%s expected_player=%s" % [expected_request_id, message_request_id, str(message.get("action", "")), str(message.get("playerId", "")), action, expected_player_id]
+			)
+
+		return false
+
+	var message_type: String = str(message.get("type", ""))
+	if message_type != "pvp.battle_update":
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime("Match rejected: unsupported message type", "request_id=%s type=%s" % [expected_request_id, message_type])
+		return false
+
+	if str(message.get("action", "")) != action:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Match rejected: action mismatch",
+				"request_id=%s expected_action=%s actual_action=%s" % [expected_request_id, action, str(message.get("action", ""))]
+			)
+		return false
+	if str(message.get("playerId", "")) != expected_player_id:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Match rejected: player mismatch",
+				"request_id=%s expected_player=%s actual_player=%s" % [expected_request_id, expected_player_id, str(message.get("playerId", ""))]
+			)
+		return false
+
+	var message_battle_id := str(message.get("battleId", ""))
+	if message_battle_id != "" and expected_battle_id != "" and message_battle_id != expected_battle_id:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Match rejected: battleId mismatch",
+				"request_id=%s expected_battle_id=%s message_battle_id=%s" % [expected_request_id, expected_battle_id, message_battle_id]
+			)
+		return false
+	return message_type == "pvp.battle_update"
+
+func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Array = []) -> bool:
+	if pvp_room_code == "":
+		return false
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime("Waiting for opponent move/switch", "local_player_id=%s" % action_flow.local_player_id)
+
+	current_action_panel.set_message("Waiting for opponent...")
+	for _attempt in range(600):
+		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.1)
+		if message.is_empty():
+			continue
+		if _is_stale_pvp_realtime_message(message):
+			continue
+		var message_type := str(message.get("type", "")).strip_edges()
+		if message_type == "pvp.snapshot":
+			if _apply_pvp_realtime_battle_update(message):
+				_log_pvp_realtime(
+					"Applied snapshot while waiting for opponent action",
+					"attempt=%d battle=%s" % [_attempt, battle_state.battle_id]
+				)
+			if _opponent_player_needs_force_switch_ui():
+				if not await _wait_for_pvp_opponent_force_switch_and_render():
+					return false
+				if DEBUG_PVP_REALTIME:
+					_log_pvp_realtime(
+						"Opponent force-switch resolved while waiting for opponent action",
+						"attempt=%d" % _attempt
+					)
+				return true
+			continue
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Opponent move/switch wait received message",
+				"attempt=%d message=%s" % [_attempt, _describe_pvp_realtime_message(message)]
+			)
+		if not (str(message.get("action", "")) in ["choose_move", "choose_switch"]):
+			continue
+		if str(message.get("playerId", "")) == action_flow.local_player_id:
+			continue
+
+		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		if response.is_empty():
+			continue
+
+		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+		if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
+			return false
+		if _response_has_opponent_force_switch(display_response):
+			if not await _wait_for_pvp_opponent_force_switch_after_choice_response(display_response, pending_player_choice_events):
+				return false
+			return true
+
+		if not _response_has_renderable_battle_events(display_response):
+			_update_battle_presentation()
+			return true
+
+		await _render_opponent_response(display_response, {}, pending_player_choice_events)
+		await _hold_opponent_response_message()
+		return true
+
+	current_action_panel.set_message("Opponent response timed out.")
+	return false
+
+func _wait_for_pvp_opponent_force_switch_after_choice_response(
+	display_response: Dictionary,
+	pending_player_choice_events: Array = []
+) -> bool:
+	var response_events_value: Variant = display_response.get("events", [])
+	var response_events: Array = response_events_value as Array if response_events_value is Array else []
+	if not response_events.is_empty():
+		await _render_opponent_response(display_response, {}, pending_player_choice_events)
+		await _hold_opponent_response_message()
+	else:
+		_update_battle_presentation()
+
+	if not await _wait_for_pvp_opponent_force_switch_and_render():
+		return false
+
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Opponent force-switch sequence resolved after choice response",
+			"battle=%s" % battle_state.battle_id
+		)
+	return true
+
+func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
+	if pvp_room_code == "":
+		return false
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime("Waiting for opponent force-switch", "local_player_id=%s" % action_flow.local_player_id)
+
+	current_action_panel.set_message("Waiting for opponent switch...")
+	for _attempt in range(600):
+		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.1, false)
+		if message.is_empty():
+			continue
+		if _is_stale_pvp_realtime_message(message):
+			continue
+		var message_type := str(message.get("type", "")).strip_edges()
+		if message_type == "pvp.snapshot":
+			if _apply_pvp_realtime_battle_update(message):
+				if DEBUG_PVP_REALTIME:
+					_log_pvp_realtime(
+						"Applied snapshot while waiting for opponent force-switch",
+						"attempt=%d battle=%s" % [_attempt, battle_state.battle_id]
+					)
+			continue
+		var message_action := str(message.get("action", ""))
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Opponent force-switch wait received message",
+				"attempt=%d message=%s" % [_attempt, _describe_pvp_realtime_message(message)]
+			)
+		if message_action != "choose_switch" and message_action != "choose_move":
+			continue
+		if str(message.get("playerId", "")) == action_flow.local_player_id:
+			continue
+
+		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		if response.is_empty():
+			continue
+		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+
+		var opponent_requests_force_switch := _response_has_opponent_force_switch(display_response)
+		if message_action == "choose_move" and not opponent_requests_force_switch:
+			_defer_pvp_realtime_update(message, "Opponent move received while waiting for force-switch")
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Opponent move deferred while waiting for force-switch",
+					"request=%s" % str(message.get("requestId", ""))
+				)
+			continue
+
+		if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
+			return false
+
+		if _response_has_opponent_force_switch(display_response):
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Opponent still needs force-switch after update",
+					"attempt=%d message=%s" % [_attempt, _describe_pvp_realtime_message(message)]
+				)
+			var events_value: Variant = display_response.get("events", [])
+			var events: Array = events_value as Array if events_value is Array else []
+			if not events.is_empty():
+				await _render_opponent_response(display_response)
+				await _hold_opponent_response_message()
+			else:
+				_update_battle_presentation()
+			current_action_panel.set_message("Waiting for opponent switch...")
+			continue
+
+		if message_action == "choose_switch":
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Opponent force-switch resolved",
+					"request=%s" % str(message.get("requestId", ""))
+				)
+
+		var events_value: Variant = display_response.get("events", [])
+		var events: Array = events_value as Array if events_value is Array else []
+		if not events.is_empty():
+			await _render_opponent_response(display_response)
+			await _hold_opponent_response_message()
+		else:
+			_update_battle_presentation()
+
+		return true
+
+	current_action_panel.set_message("Opponent switch timed out.")
+	return false
+
+func _defer_pvp_realtime_update(message: Dictionary, context: String = "") -> void:
+	if message.is_empty():
+		return
+
+	pvp_realtime_deferred_updates.append(message.duplicate(true))
+	if not DEBUG_PVP_REALTIME:
+		return
+
+	var log_context := context if context != "" else "deferred"
+	_log_pvp_realtime(
+		"Requeued PvP realtime update for later processing",
+		"context=%s message=%s deferred_queue_size=%d" % [log_context, _describe_pvp_realtime_message(message), pvp_realtime_deferred_updates.size()]
+	)
+
+func _wait_for_next_pvp_realtime_update(timeout_seconds: float, include_deferred := true) -> Dictionary:
+	if not pvp_realtime_updates.is_empty():
+		var queued_message: Variant = pvp_realtime_updates.pop_front()
+		if queued_message is Dictionary:
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Dequeued realtime update immediately",
+					"message=%s" % _describe_pvp_realtime_message(queued_message)
+				)
+			return queued_message as Dictionary
+		return {}
+	if include_deferred and not pvp_realtime_deferred_updates.is_empty():
+		var deferred_message: Variant = pvp_realtime_deferred_updates.pop_front()
+		if deferred_message is Dictionary:
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Dequeued deferred realtime update",
+					"message=%s" % _describe_pvp_realtime_message(deferred_message)
+				)
+			return deferred_message as Dictionary
+		return {}
+
+	await get_tree().create_timer(timeout_seconds).timeout
+	if not pvp_realtime_updates.is_empty():
+		var received_message: Variant = pvp_realtime_updates.pop_front()
+		if received_message is Dictionary:
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Dequeued realtime update after wait",
+					"message=%s" % _describe_pvp_realtime_message(received_message)
+				)
+			return received_message as Dictionary
+		return {}
+	if include_deferred and not pvp_realtime_deferred_updates.is_empty():
+		var delayed_deferred_message: Variant = pvp_realtime_deferred_updates.pop_front()
+		if delayed_deferred_message is Dictionary:
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Dequeued deferred realtime update after wait",
+					"message=%s" % _describe_pvp_realtime_message(delayed_deferred_message)
+				)
+			return delayed_deferred_message as Dictionary
+		return {}
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime("Realtime queue empty after wait", "timeout=%s seconds" % timeout_seconds)
+
+	return {}
+
+func _describe_pvp_realtime_message(message: Dictionary) -> String:
+	var message_type := str(message.get("type", ""))
+	var action := str(message.get("action", ""))
+	var player_id := str(message.get("playerId", ""))
+	var battle_id := str(message.get("battleId", ""))
+	var request_id := str(message.get("requestId", ""))
+	var server_seq := _get_pvp_message_server_seq(message)
+	var has_response := message.has("response")
+	return "type=%s action=%s player=%s battle=%s request=%s seq=%d has_response=%s" % [
+		message_type,
+		action,
+		player_id,
+		battle_id,
+		request_id,
+		server_seq,
+		has_response
+	]
+
+func _log_pvp_realtime(tag: String, details: String = "") -> void:
+	if not DEBUG_PVP_REALTIME:
+		return
+	if details == "":
+		print("[PvPRealtime] %s" % tag)
+	else:
+		print("[PvPRealtime] %s | %s" % [tag, details])
+
+func _response_from_pvp_realtime_message(message: Dictionary) -> Dictionary:
+	var response_value: Variant = message.get("response", {})
+	if response_value is Dictionary:
+		var response: Dictionary = (response_value as Dictionary).duplicate(true)
+		var server_seq := _get_pvp_message_server_seq(message)
+		if server_seq > 0:
+			response["pvpServerSeq"] = server_seq
+		return response
+	return {}
+
+func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
+	if message.is_empty():
+		return false
+
+	var update_payload: Dictionary = {}
+	var message_type := str(message.get("type", "")).strip_edges()
+	if message_type == "pvp.snapshot" or (message.has("response") and (message.get("response") is Dictionary)):
+		update_payload = _response_from_pvp_realtime_message(message)
+	else:
+		update_payload = message.duplicate(true)
+
+	if update_payload.is_empty():
+		return false
+
+	var mapped_update := action_flow.map_response_for_local_player(update_payload)
+	if mapped_update.is_empty():
+		return false
+	if _is_stale_pvp_realtime_response(mapped_update):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Skipping stale PvP realtime payload apply",
+				"seq=%d last_seq=%d turn=%d current_turn=%d" % [
+					_get_pvp_response_server_seq(mapped_update),
+					pvp_last_applied_server_seq,
+					_get_pvp_response_turn(mapped_update),
+					battle_state.get_turn(),
+				]
+			)
+		return false
+
+	battle_state.load_from_api_response(mapped_update, true)
+	_remember_active_player_party_moves()
+	_apply_party_state_from_api_response(mapped_update)
+	_update_battle_presentation()
+	_prewarm_current_battle_move_animations()
+	_mark_pvp_response_applied(mapped_update)
+	return true
+
+func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:
+	var server_seq := _get_pvp_message_server_seq(message)
+	if server_seq > 0 and server_seq <= pvp_last_applied_server_seq:
+		return true
+
+	var response: Dictionary = _response_from_pvp_realtime_message(message)
+	if response.is_empty():
+		return false
+
+	return _is_stale_pvp_realtime_response(action_flow.map_response_for_local_player(response))
+
+func _is_stale_pvp_realtime_response(response: Dictionary) -> bool:
+	if response.is_empty():
+		return false
+
+	var response_battle_id := str(response.get("battleId", "")).strip_edges()
+	if battle_state.battle_id != "" and response_battle_id != "" and response_battle_id != battle_state.battle_id:
+		return true
+
+	var server_seq := _get_pvp_response_server_seq(response)
+	if server_seq > 0 and server_seq <= pvp_last_applied_server_seq:
+		return true
+
+	var response_turn := _get_pvp_response_turn(response)
+	var current_turn := battle_state.get_turn()
+	if response_turn > 0 and current_turn > 0 and response_turn < current_turn:
+		return true
+
+	if _response_has_any_team_preview(response) and not _battle_state_has_any_team_preview():
+		return true
+
+	return false
+
+func _mark_pvp_response_applied(response: Dictionary) -> void:
+	if not _is_pvp_battle():
+		return
+
+	var server_seq := _get_pvp_response_server_seq(response)
+	if server_seq > pvp_last_applied_server_seq:
+		pvp_last_applied_server_seq = server_seq
+
+func _get_pvp_message_server_seq(message: Dictionary) -> int:
+	var server_seq := _get_int_from_variant(message.get("serverSeq", 0))
+	if server_seq > 0:
+		return server_seq
+
+	var response_value: Variant = message.get("response", {})
+	if response_value is Dictionary:
+		return _get_pvp_response_server_seq((response_value as Dictionary))
+
+	return 0
+
+func _get_pvp_response_server_seq(response: Dictionary) -> int:
+	var server_seq := _get_int_from_variant(response.get("pvpServerSeq", 0))
+	if server_seq > 0:
+		return server_seq
+	return _get_int_from_variant(response.get("serverSeq", 0))
+
+func _get_pvp_response_turn(response: Dictionary) -> int:
+	var state_value: Variant = response.get("state", {})
+	if state_value is Dictionary:
+		var state_turn := _get_int_from_variant((state_value as Dictionary).get("turn", 0))
+		if state_turn > 0:
+			return state_turn
+
+	return _get_int_from_variant(response.get("turn", 0))
+
+func _get_int_from_variant(value: Variant, fallback := 0) -> int:
+	if value is int:
+		return int(value)
+	if value is float:
+		return int(value)
+
+	var text_value := str(value).strip_edges()
+	if text_value.is_valid_int():
+		return int(text_value)
+
+	return fallback
+
+func _response_has_any_team_preview(response: Dictionary) -> bool:
+	var requests_value: Variant = response.get("requests", {})
+	if not (requests_value is Dictionary):
+		return false
+
+	var requests: Dictionary = requests_value as Dictionary
+	for request_value: Variant in requests.values():
+		if request_value is Dictionary and bool((request_value as Dictionary).get("teamPreview", false)):
+			return true
+
+	return false
+
+func _battle_state_has_any_team_preview() -> bool:
+	for player_id in ["p1", "p2"]:
+		if battle_state.is_team_preview(str(player_id)):
+			return true
+
+	return false
+
+func _response_has_renderable_battle_events(response: Dictionary) -> bool:
+	var events_value: Variant = response.get("events", [])
+	var events: Array = events_value as Array if events_value is Array else []
+	if not events.is_empty():
+		return true
+
+	var state_value: Variant = response.get("state", {})
+	var state: Dictionary = state_value as Dictionary if state_value is Dictionary else {}
+	return bool(state.get("ended", false))
+
+func _response_has_opponent_force_switch(response: Dictionary) -> bool:
+	var requests_value: Variant = response.get("requests", {})
+	if not (requests_value is Dictionary):
+		return false
+
+	var requests: Dictionary = requests_value as Dictionary
+	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
+	for opponent_player_id in candidate_player_ids:
+		var opponent_request_value: Variant = requests.get(opponent_player_id, {})
+		if not (opponent_request_value is Dictionary):
+			continue
+
+		var opponent_request: Dictionary = opponent_request_value as Dictionary
+		var force_switch_value: Variant = opponent_request.get("forceSwitch", [])
+		if force_switch_value is Array:
+			var force_switches: Array = force_switch_value as Array
+			for value: Variant in force_switches:
+				if bool(value):
+					if not _response_player_active_is_non_fainted(response, opponent_player_id):
+						return true
+
+		if _response_player_active_fainted_with_available_switch(response, opponent_player_id):
+			return true
+
+	return false
+
+func _response_player_active_is_non_fainted(response: Dictionary, player_id: String) -> bool:
+	var requests_value: Variant = response.get("requests", {})
+	if not (requests_value is Dictionary):
+		return false
+
+	var requests: Dictionary = requests_value as Dictionary
+	var request_value: Variant = requests.get(player_id, {})
+	if not (request_value is Dictionary):
+		return false
+
+	var side_value: Variant = (request_value as Dictionary).get("side", {})
+	if not (side_value is Dictionary):
+		return false
+
+	var team_value: Variant = (side_value as Dictionary).get("pokemon", [])
+	if not (team_value is Array):
+		return false
+
+	for pokemon_value: Variant in team_value:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if not bool(pokemon.get("active", false)):
+			continue
+
+		var condition := str(pokemon.get("condition", "")).strip_edges().to_lower()
+		var is_fainted := bool(pokemon.get("fainted", false)) or condition == "0 fnt" or condition.ends_with(" fnt")
+		if not is_fainted and int(pokemon.get("hp", 1)) <= 0 and int(pokemon.get("maxHp", 0)) > 0:
+			is_fainted = true
+		return not is_fainted
+
+	return false
+
+func _response_player_active_fainted_with_available_switch(response: Dictionary, player_id: String) -> bool:
+	var requests_value: Variant = response.get("requests", {})
+	if not (requests_value is Dictionary):
+		return false
+
+	var requests: Dictionary = requests_value as Dictionary
+	var request_value: Variant = requests.get(player_id, {})
+	if not (request_value is Dictionary):
+		return false
+
+	var request: Dictionary = request_value as Dictionary
+	var side_value: Variant = request.get("side", {})
+	if not (side_value is Dictionary):
+		return false
+
+	var team_value: Variant = (side_value as Dictionary).get("pokemon", [])
+	if not (team_value is Array):
+		return false
+
+	var active_fainted := false
+	var has_switch_target := false
+	for pokemon_value: Variant in team_value:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		var is_fainted := bool(pokemon.get("fainted", false)) or str(pokemon.get("condition", "")).strip_edges().to_lower().ends_with(" fnt")
+		if bool(pokemon.get("active", false)):
+			active_fainted = is_fainted
+			continue
+
+		if is_fainted:
+			continue
+
+		has_switch_target = true
+
+	return active_fainted and has_switch_target
 
 func _submit_npc_choice_and_render(
 	rendered_event_keys: Dictionary = {},
@@ -2838,25 +4080,164 @@ func _render_opponent_response(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> void:
-	defer_force_switch_active_hide = true
-	_update_battle_presentation()
-	defer_force_switch_active_hide = false
 	var filtered_events: Array = _filter_already_rendered_events(opponent_response.get("events", []), rendered_event_keys)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
+	defer_force_switch_active_hide = true
+	_prepare_switch_in_presentation_for_events(opponent_events)
+	_update_battle_presentation()
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
 	await _render_battle_events(opponent_events)
+	defer_force_switch_active_hide = false
 	_update_active_sprites()
+
+func _prepare_switch_in_presentation_for_events(events: Array) -> void:
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if str(event_data.get("type", "")) != "switch":
+			continue
+
+		var switch_ident := _get_switch_event_ident(event_data)
+		if switch_ident == "":
+			continue
+
+		var condition := _get_switch_event_condition(event_data, switch_ident)
+		_set_temporary_switch_in_condition(switch_ident, condition)
+
+func _get_switch_event_ident(event_data: Dictionary) -> String:
+	for key in ["toIdent", "target", "pokemon", "ident"]:
+		var ident := str(event_data.get(key, ""))
+		if _get_player_id_from_ident(ident) != "":
+			return ident
+
+	var player_id := str(event_data.get("playerId", ""))
+	var species := str(event_data.get("species", event_data.get("to", event_data.get("pokemon", "")))).strip_edges()
+	if player_id == "" or species == "":
+		return ""
+
+	return "%sa: %s" % [player_id, species]
+
+func _get_switch_event_condition(event_data: Dictionary, switch_ident: String) -> String:
+	var condition := str(event_data.get("condition", event_data.get("toCondition", ""))).strip_edges()
+	if condition != "" and not condition.ends_with(" fnt"):
+		return condition
+
+	if event_data.has("hp") and event_data.has("maxHp"):
+		var event_hp := int(event_data.get("hp", 0))
+		var event_max_hp: int = max(int(event_data.get("maxHp", 1)), 1)
+		if event_hp > 0:
+			return "%s/%s" % [event_hp, event_max_hp]
+
+	var player_id := _get_player_id_from_ident(switch_ident)
+	var target_key := _get_pending_mega_key(switch_ident)
+	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if _get_pending_mega_key(str(pokemon.get("ident", ""))) != target_key:
+			continue
+
+		var max_hp: int = max(int(pokemon.get("maxHp", 1)), 1)
+		var hp: int = int(pokemon.get("hp", max_hp))
+		if hp <= 0:
+			hp = max_hp
+		return "%s/%s" % [hp, max_hp]
+
+	return "1/1"
+
+func _set_temporary_switch_in_condition(switch_ident: String, condition: String) -> void:
+	var player_id := _get_player_id_from_ident(switch_ident)
+	var target_key := _get_pending_mega_key(switch_ident)
+	if player_id == "" or target_key == "":
+		return
+
+	var hp_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)
+	var hp: int = max(int(hp_snapshot.get("hp", 1)), 1)
+	var max_hp: int = max(int(hp_snapshot.get("max_hp", hp)), 1)
+	if condition == "" or condition.ends_with(" fnt"):
+		condition = "%s/%s" % [hp, max_hp]
+
+	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		var pokemon_key := _get_pending_mega_key(str(pokemon.get("ident", "")))
+		var is_target := pokemon_key == target_key
+		pokemon["active"] = is_target
+		if not is_target:
+			continue
+
+		pokemon["condition"] = condition
+		pokemon["hp"] = hp
+		pokemon["maxHp"] = max_hp
+		pokemon["fainted"] = false
+
+func _show_switch_event_active_pokemon(event_data: Dictionary) -> void:
+	var switch_ident := _get_switch_event_ident(event_data)
+	var player_id := str(event_data.get("playerId", ""))
+	if player_id == "":
+		player_id = _get_player_id_from_ident(switch_ident)
+	if player_id == "":
+		return
+
+	var species := _get_switch_event_species(event_data, switch_ident)
+	if species == "":
+		return
+
+	var is_shiny := _get_switch_event_is_shiny(player_id, switch_ident, species)
+	match player_id:
+		"p1":
+			player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+		"p2":
+			enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+
+func _get_switch_event_species(event_data: Dictionary, switch_ident: String) -> String:
+	for key in ["to", "species", "displaySpecies"]:
+		var species := str(event_data.get(key, "")).strip_edges()
+		if species != "":
+			return species
+
+	if switch_ident.contains(": "):
+		return str(switch_ident.split(": ")[1]).strip_edges()
+
+	var pokemon_text := str(event_data.get("pokemon", "")).strip_edges()
+	if pokemon_text.contains(": "):
+		return str(pokemon_text.split(": ")[1]).strip_edges()
+
+	return pokemon_text
+
+func _get_switch_event_is_shiny(player_id: String, switch_ident: String, species: String) -> bool:
+	var target_key := _get_pending_mega_key(switch_ident)
+	var normalized_species := _normalize_species_for_compare(species)
+	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if target_key != "" and _get_pending_mega_key(str(pokemon.get("ident", ""))) == target_key:
+			return bool(pokemon.get("shiny", pokemon.get("isShiny", false)))
+
+		var pokemon_species := _normalize_species_for_compare(str(pokemon.get("species", pokemon.get("displaySpecies", ""))))
+		if normalized_species != "" and pokemon_species == normalized_species:
+			return bool(pokemon.get("shiny", pokemon.get("isShiny", false)))
+
+	return false
 
 func _hold_opponent_response_message() -> void:
 	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
 
 func _can_switch_to_slot(slot: int) -> bool:
-	if force_switch_flow.is_player_trapped_outside_force_switch("p1"):
+	var local_state_player_id := _get_local_state_player_id()
+	if force_switch_flow.is_player_trapped_outside_force_switch(local_state_player_id):
 		current_action_panel.set_message("Cannot switch right now!")
 		return false
 
-	return force_switch_flow.can_switch_to_slot(slot, "p1")
+	return force_switch_flow.can_switch_to_slot(slot, local_state_player_id)
 
 func _can_choose_lead_slot(slot: int) -> bool:
 	var team := battle_state.get_player_team("p1")

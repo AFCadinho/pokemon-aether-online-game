@@ -48,7 +48,7 @@ func submit_player_choice(choice_type: String, slot: int, mega := false) -> Dict
 	if not apply_response(response, not _response_has_deferred_display_event(response)):
 		return response
 
-	return response
+	return map_response_for_local_player(response)
 
 
 func submit_npc_choice(player_id: String = "p2") -> Dictionary:
@@ -60,7 +60,7 @@ func submit_npc_choice(player_id: String = "p2") -> Dictionary:
 	if not apply_response(response, not _response_has_deferred_display_event(response)):
 		return response
 
-	return response
+	return map_response_for_local_player(response)
 
 
 func send_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:

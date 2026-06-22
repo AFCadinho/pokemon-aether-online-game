@@ -14,9 +14,12 @@ signal unhovered
 var current_move_data: Dictionary = {}
 
 func _ready() -> void:
-	pressed.connect(_on_pressed)
-	mouse_entered.connect(_on_mouse_entered)
-	mouse_exited.connect(_on_mouse_exited)
+	if not pressed.is_connected(_on_pressed):
+		pressed.connect(_on_pressed)
+	if not mouse_entered.is_connected(_on_mouse_entered):
+		mouse_entered.connect(_on_mouse_entered)
+	if not mouse_exited.is_connected(_on_mouse_exited):
+		mouse_exited.connect(_on_mouse_exited)
 
 func set_move_data(move_data: Dictionary) -> void:
 	visible = true

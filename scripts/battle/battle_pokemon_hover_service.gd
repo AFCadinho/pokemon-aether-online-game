@@ -13,7 +13,8 @@ func get_hover_card_data(
 	pokemon_info_request: HTTPRequest,
 	pokemon_stats_request: HTTPRequest,
 	pokemon_data: Dictionary,
-	public_confirmed_abilities_by_ident: Dictionary
+	public_confirmed_abilities_by_ident: Dictionary,
+	public_confirmed_items_by_ident: Dictionary = {}
 ) -> Dictionary:
 	var requested_ident := str(pokemon_data.get("ident", ""))
 	var requested_species := battle_state.get_species_from_pokemon_data(pokemon_data)
@@ -32,7 +33,11 @@ func get_hover_card_data(
 		"requested_ident": requested_ident,
 		"requested_species": requested_species,
 		"confirmed_moves": _get_confirmed_info_moves(pokemon_info),
-		"confirmed_item": _get_optional_known_info_string(pokemon_info, "confirmedItem"),
+		"confirmed_item": _get_confirmed_item_for_hover(
+			pokemon_info,
+			pokemon_data,
+			public_confirmed_items_by_ident
+		),
 		"confirmed_ability": _get_confirmed_ability_for_hover(
 			pokemon_info,
 			pokemon_data,
@@ -172,6 +177,17 @@ func _get_confirmed_ability_for_hover(
 		return ""
 
 	return str(public_confirmed_abilities_by_ident.get(ident_key, ""))
+
+func _get_confirmed_item_for_hover(
+	pokemon_info: Dictionary,
+	pokemon_data: Dictionary,
+	public_confirmed_items_by_ident: Dictionary
+) -> String:
+	var ident_key: String = _normalize_battle_ident(str(pokemon_data.get("ident", "")))
+	if ident_key != "" and public_confirmed_items_by_ident.has(ident_key):
+		return str(public_confirmed_items_by_ident.get(ident_key, ""))
+
+	return _get_optional_known_info_string(pokemon_info, "confirmedItem")
 
 func _get_confirmed_info_moves(pokemon_info: Dictionary) -> Array:
 	var moves_value: Variant = pokemon_info.get("confirmedMoves", pokemon_info.get("confirmed_moves", []))
