@@ -3,6 +3,7 @@ extends Node
 class_name ChatRealtimeServiceNode
 
 signal message_received(message: Dictionary)
+signal mail_received(mail_id: int)
 signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
 
@@ -157,6 +158,12 @@ func _process_packets() -> void:
 			continue
 
 		var message: Dictionary = parsed_body
+		var message_type: String = str(message.get("type", "")).to_lower().strip_edges()
+		if message_type == "mail.received":
+			var mail_id: int = int(message.get("mailId", message.get("mail_id", -1)))
+			if mail_id > 0:
+				mail_received.emit(mail_id)
+			continue
 		message_received.emit(message)
 
 

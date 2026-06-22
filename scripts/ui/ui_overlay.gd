@@ -275,7 +275,7 @@ var mail_selected_item_for_attachment: Dictionary = {}
 var socials_attention_sources: Dictionary = {}
 var known_mail_ids: Dictionary = {}
 var mail_ids_initialized: bool = false
-var play_existing_mail_notification_on_next_inbox_load: bool = true
+var play_existing_mail_notification_on_next_inbox_load: bool = false
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pokemon_summary_popup: PanelContainer
@@ -381,6 +381,8 @@ func _ready() -> void:
 		PlayerSave.party_changed.connect(_refresh_party)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
+	if not ChatRealtimeService.mail_received.is_connected(_on_realtime_mail_received):
+		ChatRealtimeService.mail_received.connect(_on_realtime_mail_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
 	ChatRealtimeService.connect_chat.call_deferred()
@@ -6504,17 +6506,21 @@ func _on_socials_close_button_pressed() -> void:
 	_hide_socials_menu()
 
 func _update_mail_attention_session_state() -> bool:
-	if active_mail_box != "inbox":
+	return _update_mail_attention_session_state_for_messages(mailbox_messages, active_mail_box == "inbox")
+
+
+func _update_mail_attention_session_state_for_messages(messages: Array[Dictionary], respect_active_box: bool = true) -> bool:
+	if respect_active_box and active_mail_box != "inbox":
 		return false
 
 	var has_new_inbox_mail := false
 	var has_any_inbox_mail := false
 
-	for mail_value: Variant in mailbox_messages:
-		if not (mail_value is Dictionary):
+	for message_value: Variant in messages:
+		if not (message_value is Dictionary):
 			continue
-		var mail: Dictionary = mail_value as Dictionary
-		var mail_id: int = int(mail.get("id", -1))
+		var message: Dictionary = message_value as Dictionary
+		var mail_id: int = int(message.get("id", -1))
 		if mail_id <= 0:
 			continue
 		has_any_inbox_mail = true
@@ -6528,6 +6534,20 @@ func _update_mail_attention_session_state() -> bool:
 	if not mail_ids_initialized:
 		mail_ids_initialized = true
 	return has_new_inbox_mail and has_any_inbox_mail
+
+
+func _refresh_mail_attention_from_inbox() -> void:
+	var result: Dictionary = await MailService.load_mail("inbox")
+	if not bool(result.get("success", false)):
+		return
+
+	var inbox_messages: Array[Dictionary] = _normalize_mailbox_messages(result.get("mail", []))
+	var has_new_inbox_mail: bool = _update_mail_attention_session_state_for_messages(inbox_messages, false)
+	var has_mail_attention: bool = _mail_messages_need_attention(inbox_messages)
+	if has_new_inbox_mail and has_mail_attention:
+		_play_mail_notification_sound()
+	_set_socials_attention("mail", has_mail_attention)
+
 
 func _refresh_mail_attention_from_messages(messages: Array[Dictionary]) -> void:
 	if active_mail_box != "inbox":
@@ -6984,9 +7004,9 @@ func _load_mailbox() -> void:
 	if active_mail_box == "inbox":
 		has_mail_attention = _mail_messages_need_attention(mailbox_messages)
 		has_new_inbox_mail = _update_mail_attention_session_state()
-		if has_mail_attention and (has_new_inbox_mail or play_existing_mail_notification_on_next_inbox_load):
+		if has_mail_attention and has_new_inbox_mail and not play_existing_mail_notification_on_next_inbox_load:
 			_play_mail_notification_sound()
-		play_existing_mail_notification_on_next_inbox_load = false
+	play_existing_mail_notification_on_next_inbox_load = false
 	if mail_popup != null and mail_popup.visible:
 		if selected_mail_id > 0 and _get_mail_by_id(selected_mail_id).is_empty():
 			selected_mail_id = -1
@@ -7479,6 +7499,13 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 
 	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
 	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments)
+
+
+func _on_realtime_mail_received(mail_id: int) -> void:
+	if active_mail_box == "inbox":
+		await _load_mailbox()
+	else:
+		await _refresh_mail_attention_from_inbox()
 
 
 func _add_user_chat_message(user: Dictionary, display_name: String, text: String, channel: String = CHAT_CHANNEL_GLOBAL, pokemon_attachments: Array[Dictionary] = []) -> void:
