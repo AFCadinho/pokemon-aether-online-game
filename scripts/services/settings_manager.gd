@@ -12,6 +12,7 @@ const MASTER_BUS := "Master"
 const MUSIC_BUS := "Music"
 const SFX_BUS := "SFX"
 const UI_BUS := "UI"
+const NOTIFICATION_BUS := "Notifications"
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
 const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
@@ -29,6 +30,7 @@ var master_volume := 80.0
 var music_volume := 55.0
 var sfx_volume := 75.0
 var ui_volume := 75.0
+var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
 
 
@@ -60,6 +62,7 @@ func load_settings() -> void:
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
 	sfx_volume = _validated_volume(data.get("sfx_volume", sfx_volume))
 	ui_volume = _validated_volume(data.get("ui_volume", ui_volume))
+	notification_volume = _validated_volume(data.get("notification_volume", notification_volume))
 	battle_music_track = str(data.get("battle_music_track", battle_music_track)).strip_edges()
 	if battle_music_track == "":
 		battle_music_track = BATTLE_MUSIC_DEFAULT
@@ -81,6 +84,7 @@ func save_settings() -> void:
 		"music_volume": music_volume,
 		"sfx_volume": sfx_volume,
 		"ui_volume": ui_volume,
+		"notification_volume": notification_volume,
 		"battle_music_track": battle_music_track,
 	}
 
@@ -191,6 +195,16 @@ func set_ui_volume(volume: float) -> void:
 	_save_and_emit()
 
 
+func set_notification_volume(volume: float) -> void:
+	var validated_volume: float = _validated_volume(volume)
+	if is_equal_approx(notification_volume, validated_volume):
+		return
+
+	notification_volume = validated_volume
+	_apply_audio_bus_volume(NOTIFICATION_BUS, notification_volume)
+	_save_and_emit()
+
+
 func set_battle_music_track(track_id: String) -> void:
 	var validated_track_id: String = track_id.strip_edges()
 	if validated_track_id == "":
@@ -258,6 +272,7 @@ func _ensure_audio_buses() -> void:
 	_ensure_audio_bus(MUSIC_BUS)
 	_ensure_audio_bus(SFX_BUS)
 	_ensure_audio_bus(UI_BUS)
+	_ensure_audio_bus(NOTIFICATION_BUS)
 
 
 func _ensure_audio_bus(bus_name: String) -> void:
@@ -280,6 +295,7 @@ func _apply_audio_settings() -> void:
 	_apply_audio_bus_volume(MUSIC_BUS, music_volume)
 	_apply_audio_bus_volume(SFX_BUS, sfx_volume)
 	_apply_audio_bus_volume(UI_BUS, ui_volume)
+	_apply_audio_bus_volume(NOTIFICATION_BUS, notification_volume)
 
 
 func _apply_audio_bus_volume(bus_name: String, volume: float) -> void:

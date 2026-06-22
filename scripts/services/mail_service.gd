@@ -117,6 +117,35 @@ func claim_mail(mail_id: int) -> Dictionary:
 	}
 
 
+func mark_mail_read(mail_id: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if mail_id <= 0:
+		return {
+			"success": false,
+			"error": "Missing mail id.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + MAIL_ENDPOINT + "/%s/read" % mail_id,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"mail": _dictionary_from_value(body.get("mail", {})),
+	}
+
+
 func claim_mail_attachment(mail_id: int, attachment_id: int) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {

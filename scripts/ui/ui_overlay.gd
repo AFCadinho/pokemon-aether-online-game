@@ -149,6 +149,7 @@ enum DevPokemonPopupMode {
 @onready var bag_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot/BagButton
 @onready var socials_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot
 @onready var socials_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot/SocialsButton
+@onready var socials_attention_badge: Panel = $Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot/SocialsAttentionBadge
 @onready var guild_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot
 @onready var guild_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot/GuildButton
 @onready var settings_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot
@@ -203,6 +204,7 @@ enum DevPokemonPopupMode {
 @onready var content_creator_tools_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot/ContentCreatorToolsButton
 @onready var dev_actions_slot: PanelContainer = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot
 @onready var dev_actions_button: TextureButton = $Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot/DevActionsButton
+@onready var mail_notification_sound: AudioStreamPlayer = $Control/MailNotificationSound
 @onready var hotkey_sidebar_panel: PanelContainer = $Control/HotkeySidebar
 @onready var player_status_panel: PanelContainer = $Control/PlayerStatusPanel
 @onready var player_status_name_label: Label = $Control/PlayerStatusPanel/MarginContainer/Row/InfoLayout/NameLabel
@@ -270,6 +272,10 @@ var mail_compose_party_pokemon: Array[Pokemon] = []
 var mail_selected_item_attachments: Array[Dictionary] = []
 var mail_selected_pokemon_ids: Array[int] = []
 var mail_selected_item_for_attachment: Dictionary = {}
+var socials_attention_sources: Dictionary = {}
+var known_mail_ids: Dictionary = {}
+var mail_ids_initialized: bool = false
+var play_existing_mail_notification_on_next_inbox_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pokemon_summary_popup: PanelContainer
@@ -362,9 +368,14 @@ func _ready() -> void:
 	_apply_ui_z_index_policy()
 	_apply_premium_overlay_styles()
 	_apply_mail_ui_styles()
+	_setup_socials_attention_badge()
+	if mail_notification_sound != null and AudioServer.get_bus_index(SettingsManager.NOTIFICATION_BUS) >= 0:
+		mail_notification_sound.bus = SettingsManager.NOTIFICATION_BUS
+	_set_socials_attention("mail", false)
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_party()
+	_load_mailbox.call_deferred()
 
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
 		PlayerSave.party_changed.connect(_refresh_party)
@@ -449,6 +460,13 @@ func _ready() -> void:
 	_refresh_dev_tools_visibility()
 	if settings_menu.has_signal("closed"):
 		settings_menu.closed.connect(_on_settings_menu_closed)
+
+func _play_mail_notification_sound() -> void:
+	if mail_notification_sound == null:
+		return
+	if mail_notification_sound.playing:
+		mail_notification_sound.stop()
+	mail_notification_sound.play()
 
 func _can_use_dev_tools() -> bool:
 	return _has_user_permission(DEV_TOOLS_PERMISSION)
@@ -5715,7 +5733,11 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	_refresh_player_status_card()
 	_refresh_avatar_previews()
 	_refresh_world_player_display_name()
+	mail_ids_initialized = false
+	play_existing_mail_notification_on_next_inbox_load = true
+	known_mail_ids.clear()
 	_reset_impersonated_account_caches()
+	_load_mailbox.call_deferred()
 	if trainer_card_popup != null and trainer_card_popup.visible:
 		_rebuild_trainer_card_popup(true)
 
@@ -6366,6 +6388,7 @@ func _on_dev_pokemon_close_button_pressed() -> void:
 func _on_settings_button_pressed() -> void:
 	if settings_menu.has_method("open"):
 		settings_menu.call("open")
+		_activate_ui_panel(settings_menu)
 		return
 
 	settings_menu.visible = true
@@ -6410,8 +6433,130 @@ func _on_socials_mail_button_pressed() -> void:
 	_activate_ui_panel(mail_popup)
 	_load_mailbox()
 
+
+func _setup_socials_attention_badge() -> void:
+	if socials_attention_badge == null:
+		return
+
+	var overlay_root := $Control as Control
+	var current_parent := socials_attention_badge.get_parent()
+	if overlay_root != null and current_parent != overlay_root:
+		if current_parent != null:
+			current_parent.remove_child(socials_attention_badge)
+		overlay_root.add_child(socials_attention_badge)
+
+	socials_attention_badge.set_as_top_level(false)
+	socials_attention_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	socials_attention_badge.custom_minimum_size = Vector2.ZERO
+	socials_attention_badge.set_anchors_preset(Control.PRESET_TOP_LEFT, false)
+	socials_attention_badge.size = Vector2(12, 12)
+	socials_attention_badge.z_index = 100
+	socials_attention_badge.add_theme_stylebox_override("panel", _make_attention_badge_style())
+	_update_socials_attention_badge_position.call_deferred()
+
+
+func _make_attention_badge_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#ff3434")
+	style.border_color = Color("#ff8a8a")
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_right = 8
+	style.corner_radius_bottom_left = 8
+	style.shadow_color = Color("#ff343499")
+	style.shadow_size = 6
+	style.shadow_offset = Vector2.ZERO
+	return style
+
+
+func _update_socials_attention_badge_position() -> void:
+	if socials_attention_badge == null or socials_slot == null:
+		return
+
+	var badge_size := Vector2(12, 12)
+	socials_attention_badge.size = badge_size
+	socials_attention_badge.global_position = socials_slot.global_position + Vector2(socials_slot.size.x - badge_size.x + 1.0, -1.0)
+
+
+func _set_socials_attention(source: String, active: bool) -> void:
+	var normalized_source := source.strip_edges().to_lower()
+	if normalized_source == "":
+		return
+	socials_attention_sources[normalized_source] = active
+	_refresh_socials_attention_badge()
+
+func _refresh_socials_attention_badge() -> void:
+	if socials_attention_badge == null:
+		return
+
+	for value: Variant in socials_attention_sources.values():
+		if bool(value):
+			_update_socials_attention_badge_position()
+			socials_attention_badge.visible = true
+			return
+	socials_attention_badge.visible = false
+
 func _on_socials_close_button_pressed() -> void:
 	_hide_socials_menu()
+
+func _update_mail_attention_session_state() -> bool:
+	if active_mail_box != "inbox":
+		return false
+
+	var has_new_inbox_mail := false
+	var has_any_inbox_mail := false
+
+	for mail_value: Variant in mailbox_messages:
+		if not (mail_value is Dictionary):
+			continue
+		var mail: Dictionary = mail_value as Dictionary
+		var mail_id: int = int(mail.get("id", -1))
+		if mail_id <= 0:
+			continue
+		has_any_inbox_mail = true
+		if not mail_ids_initialized:
+			known_mail_ids[mail_id] = true
+			continue
+		if not known_mail_ids.has(mail_id):
+			known_mail_ids[mail_id] = true
+			has_new_inbox_mail = true
+
+	if not mail_ids_initialized:
+		mail_ids_initialized = true
+	return has_new_inbox_mail and has_any_inbox_mail
+
+func _refresh_mail_attention_from_messages(messages: Array[Dictionary]) -> void:
+	if active_mail_box != "inbox":
+		return
+
+	_set_socials_attention("mail", _mail_messages_need_attention(messages))
+
+
+func _mail_messages_need_attention(messages: Array[Dictionary]) -> bool:
+	var has_attention := false
+	for message_value: Variant in messages:
+		if not (message_value is Dictionary):
+			continue
+		var message: Dictionary = message_value as Dictionary
+		if not _mail_message_is_read(message):
+			has_attention = true
+			break
+
+		if _mail_has_unclaimed_attachments(_array_from_variant(message.get("attachments", []))):
+			has_attention = true
+			break
+	return has_attention
+
+
+func _mail_message_is_read(message: Dictionary) -> bool:
+	var read_at: Variant = message.get("readAt", message.get("read_at", null))
+	if read_at == null:
+		return false
+	return str(read_at).strip_edges() != ""
 
 func _on_mail_compose_button_pressed() -> void:
 	_open_mail_compose_popup("", "")
@@ -6465,6 +6610,7 @@ func _on_mail_claim_button_pressed() -> void:
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
 	_emit_mail_claim_messages(previous_attachments, claimed_mail)
 	await _load_mailbox()
+	_refresh_mail_attention_from_messages(mailbox_messages)
 
 
 func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
@@ -6492,6 +6638,7 @@ func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
 	_emit_mail_claim_messages(previous_attachments, claimed_mail)
 	await _load_mailbox()
+	_refresh_mail_attention_from_messages(mailbox_messages)
 
 func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictionary) -> void:
 	var after_attachments: Array = _array_from_variant(claimed_mail.get("attachments", []))
@@ -6557,6 +6704,7 @@ func _on_mail_delete_button_pressed() -> void:
 	if not mailbox_messages.is_empty():
 		selected_mail_id = int(mailbox_messages[0].get("id", -1))
 	_refresh_mailbox()
+	_refresh_mail_attention_from_messages(mailbox_messages)
 	_add_chat_message("Mail deleted.")
 
 func _prepare_mail_attachment_options() -> void:
@@ -6831,10 +6979,23 @@ func _load_mailbox() -> void:
 		return
 
 	mailbox_messages = _normalize_mailbox_messages(result.get("mail", []))
-	if selected_mail_id > 0 and _get_mail_by_id(selected_mail_id).is_empty():
+	var has_new_inbox_mail := false
+	var has_mail_attention := false
+	if active_mail_box == "inbox":
+		has_mail_attention = _mail_messages_need_attention(mailbox_messages)
+		has_new_inbox_mail = _update_mail_attention_session_state()
+		if has_mail_attention and (has_new_inbox_mail or play_existing_mail_notification_on_next_inbox_load):
+			_play_mail_notification_sound()
+		play_existing_mail_notification_on_next_inbox_load = false
+	if mail_popup != null and mail_popup.visible:
+		if selected_mail_id > 0 and _get_mail_by_id(selected_mail_id).is_empty():
+			selected_mail_id = -1
+		if selected_mail_id <= 0 and not mailbox_messages.is_empty():
+			selected_mail_id = int(mailbox_messages[0].get("id", -1))
+			_mark_selected_mail_read()
+	else:
 		selected_mail_id = -1
-	if selected_mail_id <= 0 and not mailbox_messages.is_empty():
-		selected_mail_id = int(mailbox_messages[0].get("id", -1))
+	_refresh_mail_attention_from_messages(mailbox_messages)
 	_refresh_mailbox()
 
 func _normalize_mailbox_messages(value: Variant) -> Array[Dictionary]:
@@ -6889,6 +7050,47 @@ func _refresh_mail_list() -> void:
 func _on_mail_selected(mail_id: int) -> void:
 	selected_mail_id = mail_id
 	_refresh_mailbox()
+	_refresh_mail_attention_from_messages(mailbox_messages)
+	_mark_selected_mail_read()
+
+
+func _mark_selected_mail_read() -> void:
+	if active_mail_box != "inbox" or selected_mail_id <= 0:
+		return
+
+	var selected_mail: Dictionary = _get_mail_by_id(selected_mail_id)
+	if selected_mail.is_empty() or _mail_message_is_read(selected_mail):
+		return
+
+	_set_mail_read_locally(selected_mail_id, Time.get_datetime_string_from_system(true))
+	_refresh_mail_attention_from_messages(mailbox_messages)
+	var result: Dictionary = await MailService.mark_mail_read(selected_mail_id)
+	if not bool(result.get("success", false)):
+		return
+
+	var mail_value: Variant = result.get("mail", {})
+	if mail_value is Dictionary:
+		_replace_mailbox_message(mail_value as Dictionary)
+		_refresh_mailbox()
+		_refresh_mail_attention_from_messages(mailbox_messages)
+
+
+func _set_mail_read_locally(mail_id: int, read_at: String) -> void:
+	for index: int in range(mailbox_messages.size()):
+		if int(mailbox_messages[index].get("id", -1)) != mail_id:
+			continue
+		mailbox_messages[index]["readAt"] = read_at
+		return
+
+
+func _replace_mailbox_message(mail: Dictionary) -> void:
+	var mail_id: int = int(mail.get("id", -1))
+	if mail_id <= 0:
+		return
+	for index: int in range(mailbox_messages.size()):
+		if int(mailbox_messages[index].get("id", -1)) == mail_id:
+			mailbox_messages[index] = mail.duplicate(true)
+			return
 
 func _refresh_mail_detail() -> void:
 	var mail: Dictionary = _get_mail_by_id(selected_mail_id)
@@ -7160,7 +7362,7 @@ func _mail_has_unclaimed_attachments(attachments: Array) -> bool:
 	return false
 
 func _mail_attachment_is_claimed(attachment: Dictionary) -> bool:
-	var claimed_at: Variant = attachment.get("claimedAt", null)
+	var claimed_at: Variant = attachment.get("claimedAt", attachment.get("claimed_at", null))
 	if claimed_at == null:
 		return false
 	return str(claimed_at).strip_edges() != ""

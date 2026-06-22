@@ -46,10 +46,13 @@ const ACCOUNT_DIALOG_STATUS_HEIGHT := 30.0
 @onready var sfx_volume_value_label: Label = $MarginContainer/VBoxContainer/SfxVolumeRow/SfxVolumeValueLabel
 @onready var ui_volume_slider: HSlider = $MarginContainer/VBoxContainer/UiVolumeRow/UiVolumeSlider
 @onready var ui_volume_value_label: Label = $MarginContainer/VBoxContainer/UiVolumeRow/UiVolumeValueLabel
+@onready var notification_volume_slider: HSlider = $MarginContainer/VBoxContainer/NotificationVolumeRow/NotificationVolumeSlider
+@onready var notification_volume_value_label: Label = $MarginContainer/VBoxContainer/NotificationVolumeRow/NotificationVolumeValueLabel
 @onready var close_button: Button = $MarginContainer/VBoxContainer/CloseButton
 
 var loading_controls := false
 var logging_out := false
+var logout_confirmation_requested := false
 var tab_container: TabContainer
 var account_tab_root: Control
 var account_user_label: Label
@@ -70,6 +73,7 @@ var account_confirm_password_input: LineEdit
 
 func _ready() -> void:
 	custom_minimum_size = MINIMUM_MENU_SIZE
+	mouse_filter = Control.MOUSE_FILTER_STOP
 	_setup_tabs()
 	_setup_logout_confirm_dialog()
 	_apply_premium_styles()
@@ -84,14 +88,9 @@ func _ready() -> void:
 	battle_music_options_button.item_selected.connect(_on_battle_music_selected)
 	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
 	ui_volume_slider.value_changed.connect(_on_ui_volume_changed)
+	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
-	edit_account_button.gui_input.connect(_on_account_button_gui_input.bind("edit"))
 	logout_button.pressed.connect(_on_logout_button_pressed)
-	logout_button.gui_input.connect(_on_account_button_gui_input.bind("logout"))
-	print("[settings] account buttons connected. edit=%s logout=%s" % [
-		str(edit_account_button != null),
-		str(logout_button != null),
-	])
 	close_button.pressed.connect(close)
 	_apply_settings_to_controls()
 	visible = false
@@ -107,6 +106,9 @@ func open(context: String = "game") -> void:
 func close() -> void:
 	if account_details_dialog != null:
 		_hide_account_details_dialog()
+	logout_confirmation_requested = false
+	if logout_confirm_dialog != null:
+		logout_confirm_dialog.hide()
 	visible = false
 	closed.emit()
 
@@ -132,6 +134,7 @@ func _apply_settings_to_controls() -> void:
 	_apply_battle_music_options_to_control()
 	_set_volume_control(sfx_volume_slider, sfx_volume_value_label, SettingsManager.sfx_volume)
 	_set_volume_control(ui_volume_slider, ui_volume_value_label, SettingsManager.ui_volume)
+	_set_volume_control(notification_volume_slider, notification_volume_value_label, SettingsManager.notification_volume)
 
 	loading_controls = false
 
@@ -175,6 +178,7 @@ func _setup_tabs() -> void:
 		battle_music_options_button,
 		sfx_volume_slider.get_node(".."),
 		ui_volume_slider.get_node(".."),
+		notification_volume_slider.get_node(".."),
 	])
 	_build_account_tab(account_tab)
 
@@ -237,6 +241,7 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 
 	edit_account_button = Button.new()
 	edit_account_button.text = "Edit Account Details"
+	edit_account_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(edit_account_button)
 
 	_setup_account_details_dialog()
@@ -256,6 +261,7 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 
 	logout_button = Button.new()
 	logout_button.text = "Return to Login"
+	logout_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(logout_button)
 
 
@@ -636,34 +642,25 @@ func _on_ui_volume_changed(value: float) -> void:
 	SettingsManager.set_ui_volume(value)
 
 
-func _on_logout_button_pressed() -> void:
-	print("[settings] return to login pressed. logging_out=%s dialog_parent=%s" % [
-		str(logging_out),
-		str(logout_confirm_dialog.get_parent() if logout_confirm_dialog != null else null),
-	])
-	if logging_out:
+func _on_notification_volume_changed(value: float) -> void:
+	_set_volume_value_label(notification_volume_value_label, value)
+	if loading_controls:
 		return
+
+	SettingsManager.set_notification_volume(value)
+
+
+func _on_logout_button_pressed() -> void:
+	if logging_out or not visible or not _is_account_tab_active():
+		return
+	logout_confirmation_requested = true
 	logout_confirm_dialog.popup_centered()
 
 
-func _on_account_button_gui_input(event: InputEvent, button_id: String) -> void:
-	if not (event is InputEventMouseButton):
-		return
-
-	var mouse_event := event as InputEventMouseButton
-	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
-		return
-
-	var target_button: Button = edit_account_button if button_id == "edit" else logout_button
-	print("[settings] %s button raw click. disabled=%s visible=%s rect=%s mouse_filter=%s overlay_visible=%s overlay_filter=%s" % [
-		button_id,
-		str(target_button.disabled if target_button != null else true),
-		str(target_button.visible if target_button != null else false),
-		str(target_button.get_global_rect() if target_button != null else Rect2()),
-		str(target_button.mouse_filter if target_button != null else -1),
-		str(account_details_dialog.visible if account_details_dialog != null else false),
-		str(account_details_dialog.mouse_filter if account_details_dialog != null else -1),
-	])
+func _is_account_tab_active() -> bool:
+	if tab_container == null or account_tab_root == null or not account_tab_root.visible:
+		return false
+	return tab_container.current_tab == account_tab_root.get_index()
 
 
 func _on_edit_account_button_pressed() -> void:
@@ -794,8 +791,9 @@ func _set_account_status(message: String, is_error: bool = false) -> void:
 
 
 func _logout_confirmed() -> void:
-	if logging_out:
+	if logging_out or not logout_confirmation_requested:
 		return
+	logout_confirmation_requested = false
 	logging_out = true
 	logout_button.disabled = true
 	close_button.disabled = true
