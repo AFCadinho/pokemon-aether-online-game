@@ -942,6 +942,26 @@ func _show_forfeit_confirm_dialog() -> void:
 func _on_forfeit_confirmed() -> void:
 	_set_battle_input_locked(false)
 	battle_log_panel.add_message("You forfeited the battle.")
+	if not _is_pvp_battle():
+		_finish_battle({"reason": "forfeit"})
+		return
+
+	_set_battle_input_locked(true)
+	var response: Dictionary = await _submit_pvp_realtime_forfeit()
+	_set_battle_input_locked(false)
+	if not bool(response.get("success", false)):
+		var error_message := str(response.get("error", "Could not forfeit the battle."))
+		current_action_panel.set_message(error_message)
+		battle_log_panel.add_message(error_message)
+		return
+
+	if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
+		_finish_battle({"reason": "forfeit"})
+		return
+
+	if await _finish_if_battle_ended():
+		return
+
 	_finish_battle({"reason": "forfeit"})
 
 func _on_forfeit_cancelled() -> void:
@@ -2303,6 +2323,10 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		if await _finish_if_battle_ended():
 			return
 
+		if _show_force_switch_if_needed():
+			_set_battle_input_locked(false)
+			return
+
 		if _opponent_player_needs_force_switch_ui():
 			if not await _wait_for_pvp_opponent_force_switch_and_render():
 				_show_moves()
@@ -2311,10 +2335,6 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 
 			if await _finish_if_battle_ended():
 				return
-
-		if _show_force_switch_if_needed():
-			_set_battle_input_locked(false)
-			return
 
 		_set_battle_input_locked(false)
 		_show_moves()
@@ -2984,6 +3004,10 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		if await _finish_if_battle_ended():
 			return
 
+		if _show_force_switch_if_needed():
+			_set_battle_input_locked(false)
+			return
+
 		if _is_pvp_battle() and _response_has_opponent_force_switch(player_response):
 			if not await _wait_for_pvp_opponent_force_switch_and_render():
 				_show_party(true)
@@ -2991,10 +3015,6 @@ func _on_party_grid_party_selected(slot: int) -> void:
 				return
 
 			if await _finish_if_battle_ended():
-				return
-
-			if _show_force_switch_if_needed():
-				_set_battle_input_locked(false)
 				return
 
 		_show_moves()
@@ -3014,6 +3034,10 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		if await _finish_if_battle_ended():
 			return
 
+		if _show_force_switch_if_needed():
+			_set_battle_input_locked(false)
+			return
+
 		if _opponent_player_needs_force_switch_ui():
 			if not await _wait_for_pvp_opponent_force_switch_and_render():
 				_show_moves()
@@ -3022,10 +3046,6 @@ func _on_party_grid_party_selected(slot: int) -> void:
 
 			if await _finish_if_battle_ended():
 				return
-
-		if _show_force_switch_if_needed():
-			_set_battle_input_locked(false)
-			return
 
 		_set_battle_input_locked(false)
 		_show_moves()
@@ -3204,6 +3224,10 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 			)
 		return
 
+	if _should_apply_pvp_realtime_end_immediately(message):
+		_finish_pvp_realtime_battle_from_message.call_deferred(message.duplicate(true))
+		return
+
 	pvp_realtime_updates.append(message.duplicate(true))
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
@@ -3238,6 +3262,12 @@ func _submit_pvp_realtime_choice(choice_type: String, slot: int, mega := false) 
 	if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
 		return display_response
 	return display_response
+
+func _submit_pvp_realtime_forfeit() -> Dictionary:
+	var response: Dictionary = await _send_pvp_realtime_action_and_wait("forfeit", action_flow.local_player_id, 1, false)
+	if not bool(response.get("success", false)):
+		return response
+	return response
 
 func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot: int, mega := false) -> Dictionary:
 	if DEBUG_PVP_REALTIME:
@@ -3578,17 +3608,39 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 					)
 				return true
 			continue
+		var message_action := str(message.get("action", ""))
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Opponent move/switch wait received message",
 				"attempt=%d message=%s" % [_attempt, _describe_pvp_realtime_message(message)]
 			)
-		if not (str(message.get("action", "")) in ["choose_move", "choose_switch"]):
+		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
+			if not response.is_empty():
+				var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+				if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
+					_finish_battle({"reason": "forfeit"})
+					return true
+
+				if _response_has_renderable_battle_events(display_response):
+					await _render_opponent_response(display_response)
+					await _hold_opponent_response_message()
+				else:
+					_update_battle_presentation()
+
+				if await _finish_if_battle_ended():
+					return true
+
+				_finish_battle({"reason": "forfeit"})
+				return true
+			continue
+
+		if not (message_action in ["choose_move", "choose_switch"]):
 			continue
 		if str(message.get("playerId", "")) == action_flow.local_player_id:
 			continue
 
-		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		response = _response_from_pvp_realtime_message(message)
 		if response.is_empty():
 			continue
 
@@ -3661,12 +3713,32 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 				"Opponent force-switch wait received message",
 				"attempt=%d message=%s" % [_attempt, _describe_pvp_realtime_message(message)]
 			)
+		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
+			if not response.is_empty():
+				var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+				if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
+					_finish_battle({"reason": "forfeit"})
+					return true
+
+				if _response_has_renderable_battle_events(display_response):
+					await _render_opponent_response(display_response)
+					await _hold_opponent_response_message()
+				else:
+					_update_battle_presentation()
+
+				if await _finish_if_battle_ended():
+					return true
+
+				_finish_battle({"reason": "forfeit"})
+			return true
+
 		if message_action != "choose_switch" and message_action != "choose_move":
 			continue
 		if str(message.get("playerId", "")) == action_flow.local_player_id:
 			continue
 
-		var response: Dictionary = _response_from_pvp_realtime_message(message)
+		response = _response_from_pvp_realtime_message(message)
 		if response.is_empty():
 			continue
 		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
@@ -3817,6 +3889,55 @@ func _response_from_pvp_realtime_message(message: Dictionary) -> Dictionary:
 			response["pvpServerSeq"] = server_seq
 		return response
 	return {}
+
+func _should_apply_pvp_realtime_end_immediately(message: Dictionary) -> bool:
+	if battle_finished:
+		return false
+
+	var response: Dictionary = _response_from_pvp_realtime_message(message)
+	if response.is_empty():
+		return false
+
+	var message_action := str(message.get("action", "")).strip_edges().to_lower()
+	var message_player_id := str(message.get("playerId", "")).strip_edges()
+	if message_action == "forfeit" and message_player_id == action_flow.local_player_id:
+		return false
+	if message_action == "forfeit" and message_player_id != "" and message_player_id != action_flow.local_player_id:
+		return true
+
+	var mapped_response := action_flow.map_response_for_local_player(response)
+	var state_value: Variant = mapped_response.get("state", {})
+	if state_value is Dictionary and bool((state_value as Dictionary).get("ended", false)):
+		return true
+
+	return false
+
+func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
+	if battle_finished:
+		return
+
+	var response: Dictionary = _response_from_pvp_realtime_message(message)
+	if response.is_empty():
+		return
+
+	var mapped_response := action_flow.map_response_for_local_player(response)
+	if not _apply_api_response(response, not action_flow._response_has_deferred_display_event(response)):
+		_finish_battle({"reason": "forfeit"})
+		return
+
+	if _response_has_renderable_battle_events(mapped_response):
+		await _render_opponent_response(mapped_response)
+		await _hold_opponent_response_message()
+	else:
+		_update_battle_presentation()
+
+	if await _finish_if_battle_ended():
+		return
+
+	_finish_battle({
+		"reason": "forfeit",
+		"winner": battle_state.get_winner(),
+	})
 
 func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 	if message.is_empty():

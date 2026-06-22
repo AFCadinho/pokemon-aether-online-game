@@ -236,11 +236,6 @@ func _handle_closed_socket() -> void:
 		return
 
 	var close_code := websocket.get_close_code()
-	if DEBUG_PVP_REALTIME:
-		_log_realtime(
-			"Pvp websocket closed",
-			"close_code=%s" % close_code
-		)
 	if close_code != SESSION_INVALID_CLOSE_CODE:
 		return
 	if not AuthService.is_authenticated():

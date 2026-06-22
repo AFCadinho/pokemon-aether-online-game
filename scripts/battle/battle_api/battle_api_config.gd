@@ -15,6 +15,7 @@ func get_base_url() -> String:
 	
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
+	http_request.timeout = 1.0
 	
 	var error = http_request.request(LOCAL_API_URL + "/health")
 	if error == OK:
