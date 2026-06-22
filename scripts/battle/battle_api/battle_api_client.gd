@@ -51,10 +51,13 @@ func create_pvp_room(request_node: HTTPRequest, player: Dictionary) -> Dictionar
 		}
 	)
 
-func get_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictionary:
+func get_pvp_room(request_node: HTTPRequest, room_code: String, player_id: String = "p1") -> Dictionary:
 	return await send_get_request(
 		request_node,
-		"/battle/pvp/rooms/%s" % room_code.strip_edges().uri_encode()
+		"/battle/pvp/rooms/%s?playerId=%s" % [
+			room_code.strip_edges().uri_encode(),
+			player_id.strip_edges().uri_encode()
+		]
 	)
 
 func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Dictionary) -> Dictionary:

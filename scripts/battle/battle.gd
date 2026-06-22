@@ -26,6 +26,7 @@ var forfeit_return_action_view: ActionView = ActionView.NONE
 var mega_evolution_selected := false
 var mega_evolution_pulse_tween: Tween
 var pending_mega_species_by_ident: Dictionary = {}
+var pvp_room_code := ""
 
 #Battle State
 var battle_state := BattleState.new()
@@ -1669,11 +1670,21 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dictionary) -> void:
 	var local_player_id := str(api_response.get("playerId", "p1"))
 	action_flow.set_local_player_id(local_player_id)
+	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
 
-	if not _apply_initial_battle_response(display_response):
-		return
+	var lead_response: Dictionary = display_response
+	if _should_show_team_preview(display_response):
+		if not _apply_team_preview_battle_response(display_response):
+			return
+		lead_response = await _run_pvp_team_preview_lead_selection(local_player_id)
+		if lead_response.is_empty():
+			return
+	else:
+		if not _apply_initial_battle_response(display_response):
+			return
+		_show_default_trainer_leads_before_selection(player_pokemon, display_response)
 
 	_add_battle_log_messages([
 		"%s wants to battle!" % _get_player_display_name("p2"),
@@ -1681,7 +1692,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_species("p2")],
 	])
 	_show_original_player_lead_before_initial_events(_get_original_active_player_species(_get_active_display_species("p1")))
-	await _render_initial_battle_events(display_response)
+	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
@@ -1940,6 +1951,72 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 		party_grid.visible = false
 		_set_battle_input_locked(false)
 		return npc_lead_response
+
+	return {}
+
+func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary:
+	team_preview_lead_selection_active = true
+	queued_battle_action.clear()
+	_show_team_preview_layers()
+	current_action_panel.set_message("Choose your Lead")
+	current_action_view = ActionView.PARTY
+	moves_grid.visible = false
+	party_grid.set_party(_get_lead_selection_team_data("p1"))
+	party_grid.visible = true
+	action_buttons.set_action_disabled("fight", true)
+	action_buttons.set_action_disabled("bag", true)
+	action_buttons.set_action_disabled("run", true)
+	action_buttons.set_selected_action("party")
+
+	while team_preview_lead_selection_active:
+		var selected_slot: int = int(await party_grid.party_selected)
+		if not _can_choose_lead_slot(selected_slot):
+			current_action_panel.set_message("Choose another Pokemon!")
+			continue
+
+		_set_battle_input_locked(true)
+		var lead_response: Dictionary = await _submit_lead(local_player_id, selected_slot)
+		if not bool(lead_response.get("success", false)):
+			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
+			current_action_panel.set_message(error_message)
+			battle_log_panel.add_message(error_message)
+			_set_battle_input_locked(false)
+			continue
+
+		if _should_show_team_preview(lead_response):
+			current_action_panel.set_message("Waiting for the other player...")
+			lead_response = await _poll_pvp_room_until_team_preview_complete(local_player_id)
+			if lead_response.is_empty():
+				_set_battle_input_locked(false)
+				continue
+
+		team_preview_lead_selection_active = false
+		_hide_team_preview_layers()
+		party_grid.visible = false
+		_set_battle_input_locked(false)
+		return lead_response
+
+	return {}
+
+func _poll_pvp_room_until_team_preview_complete(local_player_id: String) -> Dictionary:
+	if pvp_room_code == "":
+		return {}
+
+	while team_preview_lead_selection_active:
+		await get_tree().create_timer(1.0).timeout
+		var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, local_player_id)
+		if not bool(response.get("success", false)):
+			current_action_panel.set_message(str(response.get("error", "Waiting for the other player...")))
+			continue
+
+		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+		if _should_show_team_preview(display_response):
+			continue
+
+		if not _apply_api_response(display_response, false):
+			return {}
+
+		return display_response
 
 	return {}
 
@@ -2717,10 +2794,11 @@ func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
 
-	if not _apply_api_response(response, false):
-		return response
+	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if not _apply_api_response(display_response, false):
+		return display_response
 
-	return response
+	return display_response
 
 func _submit_npc_lead() -> Dictionary:
 	var response: Dictionary = await BattleApiClient.send_npc_lead(
