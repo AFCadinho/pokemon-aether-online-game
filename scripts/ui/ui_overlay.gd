@@ -152,6 +152,8 @@ enum DevPokemonPopupMode {
 @onready var socials_attention_badge: Panel = $Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot/SocialsAttentionBadge
 @onready var guild_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot
 @onready var guild_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot/GuildButton
+@onready var pvp_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot
+@onready var pvp_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton
 @onready var settings_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot
 @onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
@@ -233,6 +235,17 @@ var party_drag_start_mouse_position := Vector2.ZERO
 var clear_party_confirm_dialog: ConfirmationDialog
 var clear_inventory_confirm_dialog: ConfirmationDialog
 var dev_clear_menu_popup: PanelContainer
+var pvp_room_popup: PanelContainer
+var pvp_room_code_label: Label
+var pvp_room_status_label: Label
+var pvp_room_code_input: LineEdit
+var pvp_create_room_button: Button
+var pvp_join_room_button: Button
+var pvp_copy_code_button: Button
+var pvp_poll_timer: Timer
+var pvp_active_room_code := ""
+var pvp_poll_in_flight := false
+var pvp_battle_starting := false
 var staff_tools_popup: PanelContainer
 var staff_impersonate_button: Button
 var staff_impersonate_popup: PanelContainer
@@ -275,7 +288,7 @@ var mail_selected_item_for_attachment: Dictionary = {}
 var socials_attention_sources: Dictionary = {}
 var known_mail_ids: Dictionary = {}
 var mail_ids_initialized: bool = false
-var play_existing_mail_notification_on_next_inbox_load: bool = false
+var play_existing_mail_notification_on_next_inbox_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pokemon_summary_popup: PanelContainer
@@ -361,6 +374,7 @@ func _ready() -> void:
 	_setup_clear_party_confirm_dialog()
 	_setup_clear_inventory_confirm_dialog()
 	_setup_dev_clear_menu_popup()
+	_setup_pvp_room_popup()
 	_setup_dev_add_item_tools()
 	_setup_staff_impersonation_tools()
 	_setup_item_dex_button()
@@ -407,6 +421,7 @@ func _ready() -> void:
 	_setup_icon_slot_hover(bag_slot, bag_button)
 	_setup_icon_slot_hover(socials_slot, socials_button)
 	_setup_icon_slot_hover(guild_slot, guild_button)
+	_setup_icon_slot_hover(pvp_slot, pvp_button)
 	_setup_icon_slot_hover(settings_slot, settings_button)
 	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
 	_setup_icon_slot_hover(follower_slot, follower_toggle_button)
@@ -435,6 +450,7 @@ func _ready() -> void:
 	mail_compose_send_button.pressed.connect(_on_mail_compose_send_button_pressed)
 	mail_compose_close_button.pressed.connect(_on_mail_compose_close_button_pressed)
 	guild_button.pressed.connect(_on_guild_button_pressed)
+	pvp_button.pressed.connect(_on_pvp_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
@@ -742,6 +758,7 @@ func _apply_ui_z_index_policy() -> void:
 		dev_actions_popup,
 		dev_pokemon_popup,
 		dev_clear_menu_popup,
+		pvp_room_popup,
 		dev_add_item_popup,
 		dev_add_money_popup,
 		staff_tools_popup,
@@ -835,6 +852,110 @@ func _setup_dev_clear_menu_popup() -> void:
 
 	_apply_button_style(party_button, "danger")
 	_apply_button_style(inventory_button, "danger")
+
+func _setup_pvp_room_popup() -> void:
+	pvp_room_popup = PanelContainer.new()
+	pvp_room_popup.name = "PvpRoomPopup"
+	pvp_room_popup.visible = false
+	pvp_room_popup.custom_minimum_size = Vector2(360, 220)
+	pvp_room_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	pvp_room_popup.z_index = UI_BASE_Z_INDEX
+	pvp_room_popup.anchor_left = 0.5
+	pvp_room_popup.anchor_top = 0.5
+	pvp_room_popup.anchor_right = 0.5
+	pvp_room_popup.anchor_bottom = 0.5
+	pvp_room_popup.offset_left = -180
+	pvp_room_popup.offset_top = -110
+	pvp_room_popup.offset_right = 180
+	pvp_room_popup.offset_bottom = 110
+	pvp_room_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(pvp_room_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 14)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 14)
+	pvp_room_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin_container.add_child(layout)
+
+	var title := Label.new()
+	title.text = "PvP Battles"
+	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_color_override("font_color", Color("#f5df9a"))
+	layout.add_child(title)
+
+	var description := Label.new()
+	description.text = "Create a room code or join one from another player."
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(description)
+
+	pvp_room_code_label = Label.new()
+	pvp_room_code_label.text = "Room Code: -"
+	pvp_room_code_label.add_theme_font_size_override("font_size", 18)
+	pvp_room_code_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	layout.add_child(pvp_room_code_label)
+
+	pvp_room_status_label = Label.new()
+	pvp_room_status_label.text = "Ready."
+	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(pvp_room_status_label)
+
+	pvp_room_code_input = LineEdit.new()
+	pvp_room_code_input.placeholder_text = "Room code"
+	pvp_room_code_input.max_length = 12
+	pvp_room_code_input.custom_minimum_size = Vector2(0, 34)
+	layout.add_child(pvp_room_code_input)
+	_apply_line_edit_style(pvp_room_code_input)
+
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+
+	pvp_create_room_button = Button.new()
+	pvp_create_room_button.text = "Create Room"
+	pvp_create_room_button.custom_minimum_size = Vector2(112, 34)
+	pvp_create_room_button.focus_mode = Control.FOCUS_NONE
+	pvp_create_room_button.pressed.connect(_on_pvp_create_room_pressed)
+	actions.add_child(pvp_create_room_button)
+
+	pvp_join_room_button = Button.new()
+	pvp_join_room_button.text = "Join Room"
+	pvp_join_room_button.custom_minimum_size = Vector2(100, 34)
+	pvp_join_room_button.focus_mode = Control.FOCUS_NONE
+	pvp_join_room_button.pressed.connect(_on_pvp_join_room_pressed)
+	actions.add_child(pvp_join_room_button)
+
+	pvp_copy_code_button = Button.new()
+	pvp_copy_code_button.text = "Copy"
+	pvp_copy_code_button.custom_minimum_size = Vector2(72, 34)
+	pvp_copy_code_button.focus_mode = Control.FOCUS_NONE
+	pvp_copy_code_button.disabled = true
+	pvp_copy_code_button.pressed.connect(_on_pvp_copy_code_pressed)
+	actions.add_child(pvp_copy_code_button)
+
+	var close_button := Button.new()
+	close_button.text = "Close"
+	close_button.custom_minimum_size = Vector2(0, 32)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_pvp_room_popup)
+	layout.add_child(close_button)
+
+	_apply_button_style(pvp_create_room_button, "primary")
+	_apply_button_style(pvp_join_room_button)
+	_apply_button_style(pvp_copy_code_button)
+	_apply_button_style(close_button)
+
+	pvp_poll_timer = Timer.new()
+	pvp_poll_timer.wait_time = 2.0
+	pvp_poll_timer.one_shot = false
+	pvp_poll_timer.timeout.connect(_on_pvp_poll_timeout)
+	add_child(pvp_poll_timer)
 
 func _setup_dev_add_item_tools() -> void:
 	dev_add_item_button = Button.new()
@@ -6544,7 +6665,7 @@ func _refresh_mail_attention_from_inbox() -> void:
 	var inbox_messages: Array[Dictionary] = _normalize_mailbox_messages(result.get("mail", []))
 	var has_new_inbox_mail: bool = _update_mail_attention_session_state_for_messages(inbox_messages, false)
 	var has_mail_attention: bool = _mail_messages_need_attention(inbox_messages)
-	if has_new_inbox_mail and has_mail_attention:
+	if has_new_inbox_mail and _mail_messages_have_unread(inbox_messages):
 		_play_mail_notification_sound()
 	_set_socials_attention("mail", has_mail_attention)
 
@@ -6570,6 +6691,16 @@ func _mail_messages_need_attention(messages: Array[Dictionary]) -> bool:
 			has_attention = true
 			break
 	return has_attention
+
+
+func _mail_messages_have_unread(messages: Array[Dictionary]) -> bool:
+	for message_value: Variant in messages:
+		if not (message_value is Dictionary):
+			continue
+		var message: Dictionary = message_value as Dictionary
+		if not _mail_message_is_read(message):
+			return true
+	return false
 
 
 func _mail_message_is_read(message: Dictionary) -> bool:
@@ -7001,10 +7132,12 @@ func _load_mailbox() -> void:
 	mailbox_messages = _normalize_mailbox_messages(result.get("mail", []))
 	var has_new_inbox_mail := false
 	var has_mail_attention := false
+	var has_unread_mail := false
 	if active_mail_box == "inbox":
 		has_mail_attention = _mail_messages_need_attention(mailbox_messages)
+		has_unread_mail = _mail_messages_have_unread(mailbox_messages)
 		has_new_inbox_mail = _update_mail_attention_session_state()
-		if has_mail_attention and has_new_inbox_mail and not play_existing_mail_notification_on_next_inbox_load:
+		if has_unread_mail and (has_new_inbox_mail or play_existing_mail_notification_on_next_inbox_load):
 			_play_mail_notification_sound()
 	play_existing_mail_notification_on_next_inbox_load = false
 	if mail_popup != null and mail_popup.visible:
@@ -7400,6 +7533,143 @@ func _array_from_variant(value: Variant) -> Array:
 func _on_guild_button_pressed() -> void:
 	_add_chat_message("Guild is not implemented yet.")
 
+func _on_pvp_button_pressed() -> void:
+	if pvp_room_popup == null:
+		return
+	if pvp_room_popup.visible:
+		_hide_pvp_room_popup()
+		return
+	pvp_room_popup.visible = true
+	_activate_ui_panel(pvp_room_popup)
+
+func _hide_pvp_room_popup() -> void:
+	if pvp_room_popup == null:
+		return
+	if pvp_poll_timer != null:
+		pvp_poll_timer.stop()
+	pvp_room_popup.visible = false
+	_deactivate_ui_panel(pvp_room_popup)
+
+func _on_pvp_create_room_pressed() -> void:
+	if pvp_battle_starting:
+		return
+	_set_pvp_room_busy(true, "Creating room...")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.create_pvp_room(
+		request,
+		BattleApiPayloads.from_player_save(PlayerSave)
+	)
+	request.queue_free()
+	_set_pvp_room_busy(false)
+
+	if not bool(response.get("success", false)):
+		_set_pvp_status("Could not create room: %s" % str(response.get("error", "Unknown error")))
+		return
+
+	pvp_active_room_code = str(response.get("roomCode", "")).strip_edges()
+	pvp_room_code_label.text = "Room Code: %s" % pvp_active_room_code
+	pvp_copy_code_button.disabled = pvp_active_room_code == ""
+	_set_pvp_status("Waiting for another player...")
+	if pvp_active_room_code != "":
+		pvp_poll_timer.start()
+
+func _on_pvp_join_room_pressed() -> void:
+	if pvp_battle_starting:
+		return
+	var room_code := pvp_room_code_input.text.strip_edges().to_upper()
+	if room_code == "":
+		_set_pvp_status("Enter a room code first.")
+		return
+
+	_set_pvp_room_busy(true, "Joining room...")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.join_pvp_room(
+		request,
+		room_code,
+		BattleApiPayloads.from_player_save(PlayerSave)
+	)
+	request.queue_free()
+	_set_pvp_room_busy(false)
+
+	if not bool(response.get("success", false)):
+		_set_pvp_status("Could not join room: %s" % str(response.get("error", "Unknown error")))
+		return
+
+	pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
+	pvp_room_code_label.text = "Room Code: %s" % pvp_active_room_code
+	pvp_copy_code_button.disabled = pvp_active_room_code == ""
+	await _start_pvp_battle_from_response(response)
+
+func _on_pvp_copy_code_pressed() -> void:
+	if pvp_active_room_code == "":
+		return
+	DisplayServer.clipboard_set(pvp_active_room_code)
+	_set_pvp_status("Room code copied.")
+
+func _on_pvp_poll_timeout() -> void:
+	if pvp_poll_in_flight or pvp_active_room_code == "" or pvp_battle_starting:
+		return
+	await _poll_pvp_room()
+
+func _poll_pvp_room() -> void:
+	pvp_poll_in_flight = true
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_pvp_room(request, pvp_active_room_code)
+	request.queue_free()
+	pvp_poll_in_flight = false
+
+	if not bool(response.get("success", false)):
+		_set_pvp_status("Room check failed: %s" % str(response.get("error", "Unknown error")))
+		return
+
+	var status := str(response.get("status", "waiting"))
+	if status != "started":
+		_set_pvp_status("Waiting for another player...")
+		return
+
+	await _start_pvp_battle_from_response(response)
+
+func _start_pvp_battle_from_response(response: Dictionary) -> void:
+	if pvp_battle_starting:
+		return
+	pvp_battle_starting = true
+	if pvp_poll_timer != null:
+		pvp_poll_timer.stop()
+	_set_pvp_status("Starting battle...")
+
+	var world := get_tree().get_first_node_in_group("world")
+	if world == null or not world.has_method("start_pvp_battle_from_response"):
+		_set_pvp_status("Could not start PvP battle from this scene.")
+		pvp_battle_starting = false
+		return
+
+	var started: bool = await world.start_pvp_battle_from_response(response)
+	if not started:
+		_set_pvp_status("Could not start PvP battle.")
+		pvp_battle_starting = false
+		return
+
+	_hide_pvp_room_popup()
+	pvp_active_room_code = ""
+	pvp_room_code_label.text = "Room Code: -"
+	pvp_copy_code_button.disabled = true
+	pvp_battle_starting = false
+
+func _create_pvp_request_node() -> HTTPRequest:
+	var request := HTTPRequest.new()
+	add_child(request)
+	return request
+
+func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
+	pvp_create_room_button.disabled = is_busy
+	pvp_join_room_button.disabled = is_busy
+	if message != "":
+		_set_pvp_status(message)
+
+func _set_pvp_status(message: String) -> void:
+	if pvp_room_status_label != null:
+		pvp_room_status_label.text = message
+
 func _on_map_button_pressed() -> void:
 	_add_chat_message("Town Map is not implemented yet.")
 
@@ -7419,6 +7689,9 @@ func _disable_icon_button_focus() -> void:
 		map_button,
 		running_shoes_button,
 		bag_button,
+		socials_button,
+		guild_button,
+		pvp_button,
 		settings_button,
 		repel_toggle_button,
 		follower_toggle_button,

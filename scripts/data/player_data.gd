@@ -22,6 +22,7 @@ var flags := {}
 
 func to_battle_dict() -> Dictionary:
 	return {
+		"playerId": player_id,
 		"name": player_name,
 		"team": _party_to_battle_team()
 	}

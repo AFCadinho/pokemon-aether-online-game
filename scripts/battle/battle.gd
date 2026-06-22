@@ -1666,6 +1666,25 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
+func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dictionary) -> void:
+	var local_player_id := str(api_response.get("playerId", "p1"))
+	action_flow.set_local_player_id(local_player_id)
+	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+
+	if not _apply_initial_battle_response(display_response):
+		return
+
+	_add_battle_log_messages([
+		"%s wants to battle!" % _get_player_display_name("p2"),
+		"Go! %s!" % _get_active_display_species("p1"),
+		"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_species("p2")],
+	])
+	_show_original_player_lead_before_initial_events(_get_original_active_player_species(_get_active_display_species("p1")))
+	await _render_initial_battle_events(display_response)
+	_show_battle_controls_after_initial_events()
+	_set_battle_actions_ready(true)
+
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type
 	_set_battle_actions_ready(false)

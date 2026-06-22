@@ -41,6 +41,32 @@ func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, traine
 		}
 	)
 
+func create_pvp_room(request_node: HTTPRequest, player: Dictionary) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/pvp/rooms",
+		{
+			"player": player,
+			"formatId": FORMAT_ID,
+		}
+	)
+
+func get_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictionary:
+	return await send_get_request(
+		request_node,
+		"/battle/pvp/rooms/%s" % room_code.strip_edges().uri_encode()
+	)
+
+func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Dictionary) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/pvp/rooms/%s/join" % room_code.strip_edges().uri_encode(),
+		{
+			"player": player,
+			"formatId": FORMAT_ID,
+		}
+	)
+
 func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String, slot: int) -> Dictionary:
 	var body = {
 		"playerId": player_id,

@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://dpgqsawas4xna" path="res://assets/ui/content_creator.svg" id="15_content_creator"]
 [ext_resource type="Texture2D" path="res://assets/ui/guild.svg" id="16_guild"]
 [ext_resource type="AudioStream" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
+[ext_resource type="Texture2D" path="res://assets/battles/poke_ball_svg.png" id="18_pvp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -377,9 +378,9 @@ text = "Pallet Town"
 vertical_alignment = 1
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
-custom_minimum_size = Vector2(308, 0)
+custom_minimum_size = Vector2(368, 0)
 layout_mode = 1
-offset_right = 308.0
+offset_right = 368.0
 offset_bottom = 57.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -479,6 +480,24 @@ texture_pressed = ExtResource("16_guild")
 texture_hover = ExtResource("16_guild")
 texture_disabled = ExtResource("16_guild")
 texture_focused = ExtResource("16_guild")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="PvpSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="PvpButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "PvP Battles"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("18_pvp")
+texture_pressed = ExtResource("18_pvp")
+texture_hover = ExtResource("18_pvp")
+texture_disabled = ExtResource("18_pvp")
+texture_focused = ExtResource("18_pvp")
 ignore_texture_size = true
 stretch_mode = 5
 

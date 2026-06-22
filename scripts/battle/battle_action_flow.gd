@@ -5,6 +5,7 @@ class_name BattleActionFlow
 var battle_state: BattleState
 var request_node: HTTPRequest
 var ability_response_handler: Callable
+var local_player_id := "p1"
 
 
 func setup(
@@ -16,17 +17,26 @@ func setup(
 	request_node = http_request
 	ability_response_handler = on_successful_response
 
+func set_local_player_id(player_id: String) -> void:
+	local_player_id = "p2" if player_id == "p2" else "p1"
+
 
 func apply_response(response: Dictionary, apply_event_conditions: bool = true) -> bool:
 	if not bool(response.get("success", false)):
 		print("Battle API failed: ", response)
 		return false
 
+	var display_response := map_response_for_local_player(response)
 	if ability_response_handler.is_valid():
-		ability_response_handler.call(response)
+		ability_response_handler.call(display_response)
 
-	battle_state.load_from_api_response(response, apply_event_conditions)
+	battle_state.load_from_api_response(display_response, apply_event_conditions)
 	return true
+
+func map_response_for_local_player(response: Dictionary) -> Dictionary:
+	if local_player_id != "p2":
+		return response
+	return _swap_pokemon_sides(response.duplicate(true)) as Dictionary
 
 
 func submit_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
@@ -57,7 +67,7 @@ func send_player_choice(choice_type: String, slot: int, mega := false) -> Dictio
 	return await BattleApiClient.send_choice(
 		request_node,
 		battle_state.battle_id,
-		"p1",
+		local_player_id,
 		choice_type,
 		slot,
 		mega
@@ -70,6 +80,28 @@ func send_npc_choice(player_id: String = "p2") -> Dictionary:
 		battle_state.battle_id,
 		player_id
 	)
+
+func _swap_pokemon_sides(value: Variant) -> Variant:
+	match typeof(value):
+		TYPE_DICTIONARY:
+			var source: Dictionary = value as Dictionary
+			var result := {}
+			for key: Variant in source.keys():
+				result[_swap_pokemon_sides(key)] = _swap_pokemon_sides(source[key])
+			return result
+		TYPE_ARRAY:
+			var source_array: Array = value as Array
+			var result_array := []
+			for item: Variant in source_array:
+				result_array.append(_swap_pokemon_sides(item))
+			return result_array
+		TYPE_STRING:
+			return _swap_side_tokens(str(value))
+		_:
+			return value
+
+func _swap_side_tokens(value: String) -> String:
+	return value.replace("p1", "__PAO_P1__").replace("p2", "p1").replace("__PAO_P1__", "p2")
 
 
 func _is_successful_response(response: Dictionary) -> bool:

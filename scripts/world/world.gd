@@ -742,6 +742,45 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	)
 
 	return true
+
+func start_pvp_battle_from_response(response: Dictionary) -> bool:
+	if is_in_battle:
+		return false
+	if not bool(response.get("success", false)):
+		push_warning("World.start_pvp_battle_from_response failed: %s" % str(response.get("error", "Unknown error")))
+		return false
+
+	is_in_battle = true
+	active_battle_kind = "pvp"
+	active_battle_id = str(response.get("battleId", ""))
+	active_wild_pokemon_species = ""
+	active_trainer_name = ""
+	_lock_overworld_for_battle()
+
+	battle_layer = CanvasLayer.new()
+	battle_layer.layer = 10
+	add_child(battle_layer)
+
+	var battle_scene := BATTLE_SCENE
+	if battle_scene == null:
+		push_error("World.start_pvp_battle_from_response failed: could not load battle scene.")
+		battle_layer.queue_free()
+		battle_layer = null
+		_abort_battle_start()
+		return false
+
+	battle_instance = battle_scene.instantiate()
+	battle_layer.add_child(battle_instance)
+
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
+
+	MusicManager.play_battle_music()
+	await battle_instance.setup_pvp_battle_from_response(
+		PlayerSave.party[0] if not PlayerSave.party.is_empty() else null,
+		response
+	)
+	return true
 	
 func end_wild_battle() -> void:
 	if battle_layer != null:
