@@ -245,6 +245,7 @@ var pvp_copy_code_button: Button
 var pvp_poll_timer: Timer
 var pvp_active_room_code := ""
 var pvp_poll_in_flight := false
+var pvp_polling_active := false
 var pvp_battle_starting := false
 var staff_tools_popup: PanelContainer
 var staff_impersonate_button: Button
@@ -7547,6 +7548,7 @@ func _hide_pvp_room_popup() -> void:
 		return
 	if pvp_poll_timer != null:
 		pvp_poll_timer.stop()
+	pvp_polling_active = false
 	pvp_room_popup.visible = false
 	_deactivate_ui_panel(pvp_room_popup)
 
@@ -7571,7 +7573,7 @@ func _on_pvp_create_room_pressed() -> void:
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	_set_pvp_status("Waiting for another player...")
 	if pvp_active_room_code != "":
-		pvp_poll_timer.start()
+		_start_pvp_room_polling()
 
 func _on_pvp_join_room_pressed() -> void:
 	if pvp_battle_starting:
@@ -7607,11 +7609,20 @@ func _on_pvp_copy_code_pressed() -> void:
 	_set_pvp_status("Room code copied.")
 
 func _on_pvp_poll_timeout() -> void:
-	if pvp_poll_in_flight or pvp_active_room_code == "" or pvp_battle_starting:
+	if not pvp_polling_active or pvp_poll_in_flight or pvp_active_room_code == "" or pvp_battle_starting:
 		return
 	await _poll_pvp_room()
 
+func _start_pvp_room_polling() -> void:
+	if pvp_polling_active:
+		return
+	pvp_polling_active = true
+	if pvp_poll_timer != null:
+		pvp_poll_timer.start(0.1)
+
 func _poll_pvp_room() -> void:
+	if pvp_poll_in_flight or pvp_active_room_code == "":
+		return
 	pvp_poll_in_flight = true
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.get_pvp_room(request, pvp_active_room_code, "p1")
@@ -7651,6 +7662,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 
 	_hide_pvp_room_popup()
 	pvp_active_room_code = ""
+	pvp_polling_active = false
 	pvp_room_code_label.text = "Room Code: -"
 	pvp_copy_code_button.disabled = true
 	pvp_battle_starting = false
