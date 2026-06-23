@@ -335,6 +335,8 @@ var pokemon_summary_mode := "interactive"
 var pokemon_summary_selected_slot := -1
 var pokemon_summary_dragging := false
 var pokemon_summary_drag_offset := Vector2.ZERO
+var dev_add_button: Button
+var dev_add_menu_popup: PanelContainer
 var dev_add_item_button: Button
 var dev_add_item_popup: PanelContainer
 var dev_item_search_input: LineEdit
@@ -345,6 +347,7 @@ var dev_add_money_button: Button
 var dev_add_money_popup: PanelContainer
 var dev_money_amount_spinbox: SpinBox
 var dev_money_confirm_button: Button
+var dev_heal_party_button: Button
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
 var dev_item_search_request_id := 0
@@ -473,6 +476,8 @@ func _ready() -> void:
 	dev_add_team_button.visible = false
 	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
+	dev_add_button.pressed.connect(_on_dev_add_button_pressed)
+	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
@@ -536,6 +541,12 @@ func _refresh_dev_tools_visibility() -> void:
 	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.visible = can_use_dev_tools
 	dev_spawn_pokemon_button.disabled = not can_use_dev_tools
+	if dev_add_button != null:
+		dev_add_button.visible = can_use_dev_tools
+		dev_add_button.disabled = not can_use_dev_tools
+	if dev_heal_party_button != null:
+		dev_heal_party_button.visible = can_use_dev_tools
+		dev_heal_party_button.disabled = not can_use_dev_tools
 	dev_clear_party_button.visible = can_use_dev_tools
 	dev_clear_party_button.disabled = not can_use_dev_tools
 	dev_pokemon_add_button.disabled = not can_use_dev_tools
@@ -556,6 +567,8 @@ func _refresh_dev_tools_visibility() -> void:
 	if not can_use_dev_tools:
 		dev_actions_popup.visible = false
 		dev_pokemon_popup.visible = false
+		if dev_add_menu_popup != null:
+			dev_add_menu_popup.visible = false
 		if dev_add_item_popup != null:
 			dev_add_item_popup.visible = false
 		if dev_add_money_popup != null:
@@ -764,6 +777,7 @@ func _apply_ui_z_index_policy() -> void:
 		pvp_room_popup,
 		dev_add_item_popup,
 		dev_add_money_popup,
+		dev_add_menu_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		item_dex_popup,
@@ -819,14 +833,14 @@ func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup.custom_minimum_size = Vector2(220, 126)
 	dev_clear_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	dev_clear_menu_popup.z_index = UI_BASE_Z_INDEX
-	dev_clear_menu_popup.anchor_left = 0.5
-	dev_clear_menu_popup.anchor_top = 0.5
-	dev_clear_menu_popup.anchor_right = 0.5
-	dev_clear_menu_popup.anchor_bottom = 0.5
-	dev_clear_menu_popup.offset_left = -110
-	dev_clear_menu_popup.offset_top = -63
-	dev_clear_menu_popup.offset_right = 110
-	dev_clear_menu_popup.offset_bottom = 63
+	dev_clear_menu_popup.anchor_left = 0.0
+	dev_clear_menu_popup.anchor_top = 0.0
+	dev_clear_menu_popup.anchor_right = 0.0
+	dev_clear_menu_popup.anchor_bottom = 0.0
+	dev_clear_menu_popup.offset_left = 0.0
+	dev_clear_menu_popup.offset_top = 0.0
+	dev_clear_menu_popup.offset_right = 220.0
+	dev_clear_menu_popup.offset_bottom = 126.0
 	dev_clear_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	root_control.add_child(dev_clear_menu_popup)
 
@@ -965,22 +979,76 @@ func _setup_pvp_room_popup() -> void:
 	add_child(pvp_poll_request)
 
 func _setup_dev_add_item_tools() -> void:
+	var dev_actions_container := dev_clear_party_button.get_parent()
+
+	dev_add_button = Button.new()
+	dev_add_button.text = "Add"
+	dev_add_button.custom_minimum_size = Vector2(190, 34)
+	dev_add_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_add_button)
+		dev_actions_container.move_child(dev_add_button, dev_clear_party_button.get_index())
+
+	dev_heal_party_button = Button.new()
+	dev_heal_party_button.text = "Heal"
+	dev_heal_party_button.custom_minimum_size = Vector2(190, 34)
+	dev_heal_party_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_heal_party_button)
+		dev_actions_container.move_child(dev_heal_party_button, dev_clear_party_button.get_index())
+
+	dev_add_menu_popup = PanelContainer.new()
+	dev_add_menu_popup.name = "DevAddMenuPopup"
+	dev_add_menu_popup.visible = false
+	dev_add_menu_popup.custom_minimum_size = Vector2(220, 168)
+	dev_add_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	dev_add_menu_popup.z_index = UI_BASE_Z_INDEX
+	dev_add_menu_popup.anchor_left = 0.0
+	dev_add_menu_popup.anchor_top = 0.0
+	dev_add_menu_popup.anchor_right = 0.0
+	dev_add_menu_popup.anchor_bottom = 0.0
+	dev_add_menu_popup.offset_left = 0.0
+	dev_add_menu_popup.offset_top = 0.0
+	dev_add_menu_popup.offset_right = 220.0
+	dev_add_menu_popup.offset_bottom = 168.0
+	dev_add_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(dev_add_menu_popup)
+
+	var add_margin_container := MarginContainer.new()
+	add_margin_container.add_theme_constant_override("margin_left", 12)
+	add_margin_container.add_theme_constant_override("margin_top", 12)
+	add_margin_container.add_theme_constant_override("margin_right", 12)
+	add_margin_container.add_theme_constant_override("margin_bottom", 12)
+	dev_add_menu_popup.add_child(add_margin_container)
+
+	var add_layout := VBoxContainer.new()
+	add_layout.add_theme_constant_override("separation", 8)
+	add_margin_container.add_child(add_layout)
+
 	dev_add_item_button = Button.new()
 	dev_add_item_button.text = "Add Item"
 	dev_add_item_button.custom_minimum_size = Vector2(190, 34)
 	dev_add_item_button.focus_mode = Control.FOCUS_NONE
-	var dev_actions_container := dev_clear_party_button.get_parent()
-	if dev_actions_container != null:
-		dev_actions_container.add_child(dev_add_item_button)
-		dev_actions_container.move_child(dev_add_item_button, dev_clear_party_button.get_index())
+	add_layout.add_child(dev_add_item_button)
 
 	dev_add_money_button = Button.new()
 	dev_add_money_button.text = "Add Money"
 	dev_add_money_button.custom_minimum_size = Vector2(190, 34)
 	dev_add_money_button.focus_mode = Control.FOCUS_NONE
-	if dev_actions_container != null:
-		dev_actions_container.add_child(dev_add_money_button)
-		dev_actions_container.move_child(dev_add_money_button, dev_clear_party_button.get_index())
+	add_layout.add_child(dev_add_money_button)
+
+	var add_close_button := Button.new()
+	add_close_button.text = "Close"
+	add_close_button.custom_minimum_size = Vector2(190, 34)
+	add_close_button.focus_mode = Control.FOCUS_NONE
+	add_close_button.pressed.connect(_hide_dev_add_menu_popup)
+	add_layout.add_child(add_close_button)
+
+	_apply_button_style(dev_add_button, "primary")
+	_apply_button_style(dev_heal_party_button, "primary")
+	_apply_button_style(dev_add_item_button, "primary")
+	_apply_button_style(dev_add_money_button, "primary")
+	_apply_button_style(add_close_button)
 
 	dev_add_item_popup = PanelContainer.new()
 	dev_add_item_popup.name = "DevAddItemPopup"
@@ -4922,6 +4990,10 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(dev_pokemon_close_button)
 	_apply_button_style(dev_add_pokemon_button, "primary")
 	_apply_button_style(dev_spawn_pokemon_button, "primary")
+	if dev_add_button != null:
+		_apply_button_style(dev_add_button, "primary")
+	if dev_heal_party_button != null:
+		_apply_button_style(dev_heal_party_button, "primary")
 	if dev_add_item_button != null:
 		_apply_button_style(dev_add_item_button, "primary")
 	if dev_add_money_button != null:
@@ -6183,10 +6255,59 @@ func _on_dev_spawn_pokemon_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	_show_dev_pokemon_popup(DevPokemonPopupMode.SPAWN)
 
+func _on_dev_add_button_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	dev_actions_popup.visible = false
+	dev_add_menu_popup.visible = not dev_add_menu_popup.visible
+	if dev_add_menu_popup.visible:
+		_position_dev_add_menu_popup()
+		_activate_ui_panel(dev_add_menu_popup)
+	else:
+		_deactivate_ui_panel(dev_add_menu_popup)
+
+func _position_dev_add_menu_popup() -> void:
+	_position_dev_slot_popup(dev_add_menu_popup)
+
+func _position_dev_clear_menu_popup() -> void:
+	_position_dev_slot_popup(dev_clear_menu_popup)
+
+func _position_dev_slot_popup(popup: Control) -> void:
+	if popup == null or dev_actions_slot == null:
+		return
+
+	var parent_control: Control = popup.get_parent_control()
+	if parent_control == null:
+		return
+
+	var slot_rect: Rect2 = dev_actions_slot.get_global_rect()
+	var popup_size: Vector2 = popup.get_combined_minimum_size()
+	if popup_size == Vector2.ZERO:
+		popup_size = popup.custom_minimum_size
+
+	var parent_size: Vector2 = parent_control.size
+	var parent_global_position: Vector2 = parent_control.global_position
+	var target_position: Vector2 = slot_rect.position + Vector2(0.0, slot_rect.size.y + 8.0) - parent_global_position
+	if target_position.y + popup_size.y > parent_size.y - 12.0:
+		target_position.y = slot_rect.position.y - parent_global_position.y - popup_size.y - 8.0
+
+	target_position.x = clamp(target_position.x, 12.0, max(parent_size.x - popup_size.x - 12.0, 12.0))
+	target_position.y = clamp(target_position.y, 12.0, max(parent_size.y - popup_size.y - 12.0, 12.0))
+	popup.position = target_position
+
+func _hide_dev_add_menu_popup() -> void:
+	if dev_add_menu_popup == null:
+		return
+
+	dev_add_menu_popup.visible = false
+	_deactivate_ui_panel(dev_add_menu_popup)
+
 func _on_dev_add_item_button_pressed() -> void:
 	if not _can_use_dev_tools():
 		return
 
+	_hide_dev_add_menu_popup()
 	dev_actions_popup.visible = false
 	await _show_dev_add_item_popup()
 
@@ -6194,8 +6315,69 @@ func _on_dev_add_money_button_pressed() -> void:
 	if not _can_use_dev_tools():
 		return
 
+	_hide_dev_add_menu_popup()
 	dev_actions_popup.visible = false
 	_show_dev_add_money_popup()
+
+func _on_dev_heal_party_button_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	if PlayerSave.party.is_empty():
+		_add_chat_message("No Pokemon to heal.")
+		return
+
+	dev_actions_popup.visible = false
+	_hide_dev_add_menu_popup()
+	dev_heal_party_button.disabled = true
+	for pokemon: Pokemon in PlayerSave.party:
+		_heal_dev_party_pokemon(pokemon)
+
+	PlayerSave.party_changed.emit()
+	var result: Dictionary = await PlayerPartyStateService.save_current_party()
+	dev_heal_party_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not save healed party: %s" % str(result.get("error", "Unknown error")))
+		push_warning("UIOverlay: dev heal party save failed: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	_refresh_party()
+	if pokemon_summary_popup != null and pokemon_summary_popup.visible:
+		_refresh_pokemon_summary()
+	_add_chat_message("Party healed.")
+
+func _heal_dev_party_pokemon(pokemon: Pokemon) -> void:
+	if pokemon == null:
+		return
+
+	var restored_max_hp: int = max(pokemon.max_hp, int(pokemon.stats.get("hp", pokemon.max_hp)), 1)
+	pokemon.max_hp = restored_max_hp
+	pokemon.current_hp = restored_max_hp
+	pokemon.has_saved_hp_state = true
+
+	for move_index in range(pokemon.moves.size()):
+		pokemon.moves[move_index] = _heal_dev_party_move(pokemon.moves[move_index])
+
+func _heal_dev_party_move(move_value: Variant) -> Variant:
+	if not (move_value is Dictionary):
+		return move_value
+
+	var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
+	var max_pp: int = int(_get_first_dictionary_value(
+		move_data,
+		["maxPp", "maxpp", "maxPP", "max_pp", "pp"],
+		0
+	))
+	if max_pp <= 0:
+		return move_data
+
+	move_data["pp"] = max_pp
+	move_data["currentPp"] = max_pp
+	move_data["currentPP"] = max_pp
+	move_data["current_pp"] = max_pp
+	move_data["maxPp"] = max_pp
+	move_data["maxpp"] = max_pp
+	return move_data
 
 func _show_dev_add_item_popup() -> void:
 	if not _can_use_dev_tools():
@@ -6431,7 +6613,9 @@ func _on_dev_clear_party_button_pressed() -> void:
 		return
 
 	dev_actions_popup.visible = false
+	_hide_dev_add_menu_popup()
 	dev_clear_menu_popup.visible = true
+	_position_dev_clear_menu_popup()
 	_activate_ui_panel(dev_clear_menu_popup)
 
 func _on_dev_clear_party_option_pressed() -> void:
@@ -6481,6 +6665,7 @@ func _save_party_state_after_change() -> void:
 
 func _on_dev_actions_close_button_pressed() -> void:
 	dev_actions_popup.visible = false
+	_hide_dev_add_menu_popup()
 
 func _show_dev_pokemon_popup(mode: int) -> void:
 	if not _can_use_dev_tools():

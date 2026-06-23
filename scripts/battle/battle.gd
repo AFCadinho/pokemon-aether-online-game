@@ -40,6 +40,7 @@ var pvp_last_phase_update_batch_id := ""
 var pvp_last_phase_update_phase := ""
 var pvp_rendered_event_count := 0
 var pvp_allow_setup_animation := false
+var pvp_victory_message_added := false
 var last_rendered_event_seq := -1
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 
@@ -1000,13 +1001,19 @@ func _on_forfeit_confirmed() -> void:
 		return
 
 	if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_submit", not action_flow._response_has_deferred_display_event(response)):
-		_finish_battle({"reason": "forfeit"})
+		_finish_battle({
+			"reason": "forfeit",
+			"forfeitingPlayerId": _get_local_state_player_id(),
+		})
 		return
 
 	if await _finish_if_battle_ended():
 		return
 
-	_finish_battle({"reason": "forfeit"})
+	_finish_battle({
+		"reason": "forfeit",
+		"forfeitingPlayerId": _get_local_state_player_id(),
+	})
 
 func _on_forfeit_cancelled() -> void:
 	_set_battle_input_locked(false)
@@ -1034,6 +1041,7 @@ func _finish_battle(result: Dictionary) -> void:
 		return
 
 	_warn_if_pvp_finish_has_pending_render_work(result)
+	_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
 	pending_mega_species_by_ident.clear()
 	if _is_pvp_battle():
@@ -1062,6 +1070,72 @@ func _warn_if_pvp_finish_has_pending_render_work(result: Dictionary) -> void:
 			pvp_event_queue.last_rendered_seq,
 		]
 	)
+
+func _add_pvp_victory_message_if_needed(result: Dictionary) -> void:
+	if not _is_pvp_battle():
+		return
+	if pvp_victory_message_added:
+		return
+
+	var winner_name := _resolve_pvp_winner_name(result)
+	if winner_name == "":
+		return
+
+	var message := "🏆 %s won the battle!" % winner_name
+	battle_log_panel.add_message(message)
+	_add_pvp_victory_system_chat_message(_format_pvp_victory_system_chat_message(result, winner_name))
+	pvp_victory_message_added = true
+
+func _add_pvp_victory_system_chat_message(message: String) -> void:
+	if message == "":
+		return
+	var tree := get_tree()
+	if tree == null:
+		return
+	tree.call_group("ui_overlay", "add_system_message", message)
+
+func _format_pvp_victory_system_chat_message(result: Dictionary, winner_name: String) -> String:
+	var loser_name := _resolve_pvp_loser_name(result, winner_name)
+	if loser_name == "":
+		return "🏆 %s won the battle!" % winner_name
+	return "%s has defeated %s in battle." % [winner_name, loser_name]
+
+func _resolve_pvp_winner_name(result: Dictionary) -> String:
+	var winner_name := str(result.get("winner", "")).strip_edges()
+	if winner_name == "":
+		winner_name = battle_state.get_winner().strip_edges()
+
+	if winner_name in ["p1", "p2"]:
+		return _get_player_display_name(winner_name)
+	if winner_name != "":
+		return winner_name
+
+	var forfeiting_player_id := str(result.get("forfeitingPlayerId", "")).strip_edges()
+	if forfeiting_player_id == "p1":
+		return _get_player_display_name("p2")
+	if forfeiting_player_id == "p2":
+		return _get_player_display_name("p1")
+
+	return ""
+
+func _resolve_pvp_loser_name(result: Dictionary, winner_name: String) -> String:
+	var forfeiting_player_id := str(result.get("forfeitingPlayerId", "")).strip_edges()
+	if forfeiting_player_id in ["p1", "p2"]:
+		return _get_player_display_name(forfeiting_player_id)
+
+	for player_id in ["p1", "p2"]:
+		var player_name := _get_player_display_name(player_id)
+		if player_name != "" and player_name != winner_name:
+			return player_name
+
+	return ""
+
+func _get_pvp_state_player_id_for_raw_player_id(player_id: String) -> String:
+	if player_id != "p1" and player_id != "p2":
+		return ""
+	if not _is_pvp_battle() or action_flow.local_player_id != "p2":
+		return player_id
+	return "p1" if player_id == "p2" else "p2"
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
 func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true, source: String = "") -> bool:
@@ -3803,11 +3877,13 @@ func _finish_if_battle_ended() -> bool:
 	if not battle_state.is_battle_ended():
 		return false
 
-	await get_tree().create_timer(0.25).timeout
-	_finish_battle({
+	var finish_result := {
 		"reason": "win",
 		"winner": battle_state.get_winner()
-	})
+	}
+	_add_pvp_victory_message_if_needed(finish_result)
+	await get_tree().create_timer(0.25).timeout
+	_finish_battle(finish_result)
 	return true
 
 func _submit_player_choice(
@@ -3897,6 +3973,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	pvp_last_applied_server_seq = 0
 	pvp_last_applied_snapshot_server_seq = 0
 	pvp_rendered_event_count = 0
+	pvp_victory_message_added = false
 	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
 		PvpBattleRealtimeService.battle_update_received.connect(_on_pvp_realtime_battle_update)
 	PvpBattleRealtimeService.connect_room(pvp_room_code, local_player_id, battle_id)
@@ -4483,10 +4560,16 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 				continue
 
 			if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_during_choice", not action_flow._response_has_deferred_display_event(response)):
-				_finish_battle({"reason": "forfeit"})
+				_finish_battle({
+					"reason": "forfeit",
+					"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
+				})
 				return true
 
-			_finish_battle({"reason": "forfeit"})
+			_finish_battle({
+				"reason": "forfeit",
+				"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
+			})
 			return true
 
 		if not (message_action in ["choose_move", "choose_switch"]):
@@ -4586,10 +4669,16 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
 			if not response.is_empty():
 				if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_during_force_switch", not action_flow._response_has_deferred_display_event(response)):
-					_finish_battle({"reason": "forfeit"})
+					_finish_battle({
+						"reason": "forfeit",
+						"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
+					})
 					return true
 
-				_finish_battle({"reason": "forfeit"})
+				_finish_battle({
+					"reason": "forfeit",
+					"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
+				})
 			return true
 
 		if message_action != "choose_switch" and message_action != "choose_move":
@@ -4767,7 +4856,10 @@ func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 		return
 
 	if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_end", not action_flow._response_has_deferred_display_event(response)):
-		_finish_battle({"reason": "forfeit"})
+		_finish_battle({
+			"reason": "forfeit",
+			"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
+		})
 		return
 
 	if await _finish_if_battle_ended():
@@ -4776,6 +4868,7 @@ func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 	_finish_battle({
 		"reason": "forfeit",
 		"winner": battle_state.get_winner(),
+		"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
 	})
 
 func _finish_pvp_realtime_battle_from_snapshot(message: Dictionary) -> void:
@@ -4799,6 +4892,7 @@ func _finish_pvp_realtime_battle_from_snapshot(message: Dictionary) -> void:
 	_finish_battle({
 		"reason": "forfeit",
 		"winner": battle_state.get_winner(),
+		"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
 	})
 
 func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
