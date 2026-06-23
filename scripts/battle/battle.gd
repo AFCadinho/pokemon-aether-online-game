@@ -29,6 +29,8 @@ var pending_mega_species_by_ident: Dictionary = {}
 var pvp_room_code := ""
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
+var pvp_pending_reconciliation_snapshot: Dictionary = {}
+var pvp_retrying_reconciliation_snapshot := false
 var pvp_last_applied_server_seq := 0
 var pvp_last_phase := ""
 var pvp_last_next_phase := ""
@@ -1109,14 +1111,11 @@ func _enqueue_pvp_battle_response(response: Dictionary, source: String, apply_ev
 
 	if not response is Dictionary:
 		return false
-	_debug_log_ability_heal_events("enqueue raw response", response, {
-		"source": source,
-		"apply_event_conditions": apply_event_conditions,
-		"local_player_id": action_flow.local_player_id,
-	})
 
 	var queue_result: Dictionary = pvp_event_queue.enqueue_response(response.duplicate(true), source, apply_event_conditions, metadata)
 	if not bool(queue_result.get("enqueued", false)):
+		if bool(queue_result.get("duplicate", false)) and bool(queue_result.get("dropped", false)):
+			return true
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Failed enqueueing PvP battle response",
@@ -1143,25 +1142,11 @@ func _drain_pvp_event_queue() -> bool:
 		var queue_response: Dictionary = queue_entry.get("response", {})
 		if not (queue_response is Dictionary):
 			continue
-		_debug_log_ability_heal_events("drain queue response before apply", queue_response, {
-			"source": str(queue_entry.get("source", "")),
-			"local_player_id": action_flow.local_player_id,
-		})
 
 		var apply_event_conditions := bool(queue_entry.get("apply_event_conditions", true))
 		var skip_render := bool(queue_entry.get("skip_render", false))
 		var source := str(queue_entry.get("source", ""))
 		var metadata: Variant = queue_entry.get("metadata", {})
-		if DEBUG_PVP_REALTIME:
-			_log_pvp_realtime(
-				"Drain PvP queue before apply",
-				"source=%s skip_render=%s responseForceSwitch=%s stateForceSwitch=%s" % [
-					source,
-					skip_render,
-					_describe_response_force_switches(queue_response),
-					_describe_state_force_switches(),
-				]
-			)
 		var success := _apply_api_response(queue_response, apply_event_conditions, source)
 		if success and _should_process_pvp_choice_queue_entry(source, metadata):
 			var entry_metadata: Dictionary = {}
@@ -1171,20 +1156,6 @@ func _drain_pvp_event_queue() -> bool:
 				success = false
 		elif not success and DEBUG_PVP_REALTIME:
 			_log_pvp_realtime("Failed applying queued PvP battle response", "source=%s" % source)
-
-		if DEBUG_PVP_REALTIME:
-			_log_pvp_realtime(
-				"Drain PvP queue after apply",
-				"source=%s skip_render=%s responseForceSwitch=%s stateForceSwitch=%s success=%s" % [
-					source,
-					skip_render,
-					_describe_response_force_switches(queue_response),
-					_describe_state_force_switches(),
-					success,
-				]
-			)
-		elif skip_render and DEBUG_PVP_REALTIME:
-			_log_pvp_realtime("Skipped duplicate PvP battle render", "source=%s" % source)
 
 		all_success = all_success and success
 
@@ -1204,12 +1175,6 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 	var pending_player_choice_events: Array = pending_player_choice_events_value as Array if pending_player_choice_events_value is Array else []
 
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
-	_debug_log_ability_heal_events("process choice display response", display_response, {
-		"source": source,
-		"choice_type": choice_type,
-		"is_local_choice": is_local_choice,
-		"local_player_id": action_flow.local_player_id,
-	})
 	pending_player_choice_events = _get_pending_player_choice_events(display_response, pending_player_choice_events)
 
 	if choice_type == "switch":
@@ -1618,9 +1583,6 @@ func _remember_public_confirmed_abilities_from_response(response: Dictionary) ->
 	if not (events_value is Array):
 		return
 
-	_debug_log_ability_heal_events("confirmed ability raw response events", response, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var events: Array = events_value as Array
 	for event_value in events:
 		if not (event_value is Dictionary):
@@ -1638,26 +1600,6 @@ func _remember_public_confirmed_abilities_from_response(response: Dictionary) ->
 			continue
 
 		public_confirmed_abilities_by_ident[ident_key] = ability
-		if _is_ability_heal_event(event):
-			print(
-				"[RegeneratorDebug][client] confirmed ability from ability heal ",
-				{
-					"local_player_id": action_flow.local_player_id,
-					"ident": ident,
-					"ident_key": ident_key,
-					"ability": ability,
-					"event": event,
-				}
-			)
-			_log_pvp_realtime(
-				"[RegeneratorDebug][client] confirmed ability from ability heal",
-				"local_player_id=%s ident=%s ident_key=%s ability=%s" % [
-					action_flow.local_player_id,
-					ident,
-					ident_key,
-					ability,
-				]
-			)
 
 func _remember_public_confirmed_item_from_event(event: Dictionary) -> void:
 	var event_type := str(event.get("type", ""))
@@ -2712,14 +2654,7 @@ func _warn_if_pvp_render_bypasses_runner(source := "") -> void:
 
 func _render_battle_events(events: Array, render_turn_headers := true, source := "") -> void:
 	_warn_if_pvp_render_bypasses_runner(source)
-	_debug_log_ability_heal_event_array("render battle events input", events, {
-		"local_player_id": action_flow.local_player_id,
-		"render_turn_headers": render_turn_headers,
-	})
 	var ordered_events: Array = _order_switch_out_heals_before_switches(_order_form_change_events_before_moves(events))
-	_debug_log_ability_heal_event_array("render battle events ordered", ordered_events, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
 	_prewarm_battle_event_animations(ordered_events)
 	event_presentation.reset_recent_context()
@@ -2753,20 +2688,6 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_log_panel.add_message(fallback_knock_off_message)
 			current_action_panel.set_message(fallback_knock_off_message)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
-			if _is_ability_heal_event(event_data):
-				_log_pvp_realtime(
-					"[RegeneratorDebug][client] applying ability heal event conditions",
-					"local_player_id=%s target=%s sourceAbility=%s source=%s hp=%s maxHp=%s condition=%s event=%s" % [
-						action_flow.local_player_id,
-						str(event_data.get("target", "")),
-						str(event_data.get("sourceAbility", "")),
-						str(event_data.get("source", "")),
-						str(event_data.get("hp", "")),
-						str(event_data.get("maxHp", "")),
-						str(event_data.get("condition", "")),
-						JSON.stringify(event_data),
-					]
-				)
 			battle_state.apply_event_conditions([event_data])
 		if event_type == "switch":
 			battle_state.apply_event_conditions([event_data])
@@ -2976,21 +2897,11 @@ func _filter_already_rendered_events(events_value: Variant, rendered_event_keys:
 func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
 	var events_value: Variant = response.get("events", [])
 	var events: Array = events_value as Array if events_value is Array else []
-	_debug_log_ability_heal_events("filter incremental raw response", response, {
-		"local_player_id": action_flow.local_player_id,
-		"last_rendered_event_seq": last_rendered_event_seq,
-	})
 	if _is_pvp_battle() or events.is_empty():
-		_debug_log_ability_heal_event_array("filter incremental output pvp/raw", events, {
-			"local_player_id": action_flow.local_player_id,
-		})
 		return events
 
 	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
 	if response_event_seq < 0:
-		_debug_log_ability_heal_event_array("filter incremental output no eventSeq", events, {
-			"local_player_id": action_flow.local_player_id,
-		})
 		return events
 
 	var first_event_seq := response_event_seq - events.size() + 1
@@ -3000,10 +2911,6 @@ func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
 		if event_seq > last_rendered_event_seq:
 			filtered_events.append(events[index])
 
-	_debug_log_ability_heal_event_array("filter incremental output filtered", filtered_events, {
-		"local_player_id": action_flow.local_player_id,
-		"response_event_seq": response_event_seq,
-	})
 	return filtered_events
 
 func _filter_unrendered_pvp_events(events: Array) -> Array:
@@ -3421,22 +3328,6 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	var status: String = _get_status_from_event_or_state(event, player_id, use_previous_hp)
 	var gender: String = battle_state.get_active_pokemon_gender(player_id)
 	var is_shiny: bool = _get_active_pokemon_is_shiny(player_id)
-	var event_type := str(event.get("type", ""))
-	if event_type == "damage" or event_type == "heal":
-		var active_snapshot := _get_active_state_hp_snapshot(player_id)
-		print("[RegeneratorDebug][client] active HUD HP from event ", {
-			"target_ident": target_ident,
-			"player_id": player_id,
-			"event_type": event_type,
-			"use_previous_hp": use_previous_hp,
-			"hud_hp": hp,
-			"hud_max_hp": max_hp,
-			"event_previousHp": event.get("previousHp", ""),
-			"event_hp": event.get("hp", ""),
-			"event_maxHp": event.get("maxHp", ""),
-			"event_condition": event.get("condition", ""),
-			"active_state_snapshot": active_snapshot,
-		})
 
 	match player_id:
 		"p1":
@@ -3517,74 +3408,6 @@ func _rewind_party_slots_for_events(events: Array) -> void:
 func _debug_battle_hp(message: String) -> void:
 	if DEBUG_BATTLE_HP_EVENTS:
 		print("[battle-hp] " + message)
-
-func _debug_log_ability_heal_events(label: String, response: Dictionary, context: Dictionary = {}) -> void:
-	var events_value: Variant = response.get("events", [])
-	var events: Array = events_value as Array if events_value is Array else []
-	_debug_log_ability_heal_event_array(label, events, _with_response_event_context(response, context))
-
-func _debug_log_ability_heal_event_array(label: String, events: Array, context: Dictionary = {}) -> void:
-	var ability_heals: Array = []
-	var response_event_seq := _get_int_from_variant(context.get("eventSeq", -1), -1)
-	var first_event_seq := response_event_seq - events.size() + 1 if response_event_seq >= 0 else -1
-	for index: int in range(events.size()):
-		var event_value: Variant = events[index]
-		if not (event_value is Dictionary):
-			continue
-
-		var event_data: Dictionary = event_value as Dictionary
-		if not _is_ability_heal_event(event_data):
-			continue
-
-		ability_heals.append({
-			"index": index,
-			"seq": first_event_seq + index if first_event_seq >= 0 else -1,
-			"target": str(event_data.get("target", "")),
-			"source": str(event_data.get("source", "")),
-			"sourceAbility": str(event_data.get("sourceAbility", "")),
-			"hp": str(event_data.get("hp", "")),
-			"maxHp": str(event_data.get("maxHp", "")),
-			"condition": str(event_data.get("condition", "")),
-		})
-
-	if ability_heals.is_empty():
-		return
-
-	print("[RegeneratorDebug][client] %s " % label, {
-		"context": context,
-		"abilityHeals": ability_heals,
-	})
-	if not DEBUG_PVP_REALTIME:
-		return
-
-	_log_pvp_realtime(
-		"[RegeneratorDebug][client] %s" % label,
-		"context=%s abilityHeals=%s" % [JSON.stringify(context), JSON.stringify(ability_heals)]
-	)
-
-func _with_response_event_context(response: Dictionary, context: Dictionary) -> Dictionary:
-	var merged := context.duplicate(true)
-	for key in ["battleId", "eventSeq", "batchSeq", "phase", "nextPhase", "pvpServerSeq"]:
-		if response.has(key):
-			merged[key] = response.get(key)
-
-	var event_batches_value: Variant = response.get("eventBatches", [])
-	if event_batches_value is Array:
-		var batch_summary: Array = []
-		var event_batches: Array = event_batches_value as Array
-		for batch_value: Variant in event_batches:
-			if not (batch_value is Dictionary):
-				continue
-			var batch: Dictionary = batch_value as Dictionary
-			batch_summary.append({
-				"batchSeq": batch.get("batchSeq", -1),
-				"eventBatchId": str(batch.get("eventBatchId", "")),
-				"eventSeqStart": batch.get("eventSeqStart", -1),
-				"eventSeqEnd": batch.get("eventSeqEnd", -1),
-			})
-		merged["eventBatches"] = batch_summary
-
-	return merged
 
 func _is_ability_heal_event(event_data: Dictionary) -> bool:
 	if str(event_data.get("type", "")) != "heal":
@@ -3908,6 +3731,8 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 		)
 	pvp_realtime_updates.clear()
 	pvp_realtime_deferred_updates.clear()
+	pvp_pending_reconciliation_snapshot.clear()
+	pvp_retrying_reconciliation_snapshot = false
 	pvp_last_applied_server_seq = 0
 	pvp_rendered_event_count = 0
 	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
@@ -3915,19 +3740,8 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	PvpBattleRealtimeService.connect_room(pvp_room_code, local_player_id, battle_id)
 
 func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
-	if not DEBUG_PVP_REALTIME:
-		return
-	_log_pvp_realtime(
-		"PvP render batch completed",
-		"id=%s source=%s success=%s batchSeq=%d eventSeqEnd=%d lastRenderedSeq=%d" % [
-			str(completion.get("event_batch_id", "")),
-			str(completion.get("source", "")),
-			str(completion.get("success", false)),
-			_get_int_from_variant(completion.get("batch_seq", -1), -1),
-			_get_int_from_variant(completion.get("event_seq_end", -1), -1),
-			_get_int_from_variant(completion.get("last_rendered_seq", -1), -1),
-		]
-	)
+	if bool(completion.get("success", false)):
+		_retry_pending_pvp_reconciliation_snapshot.call_deferred()
 
 func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	var room_code := str(message.get("roomCode", "")).strip_edges().to_upper()
@@ -3947,6 +3761,11 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 
 	if _should_apply_pvp_realtime_end_immediately(message):
+		if DEBUG_PVP_REALTIME and _get_pvp_realtime_message_kind(message) == "snapshot":
+			_log_pvp_realtime(
+				"Applying PvP snapshot recovery bypass",
+				"message=%s" % _describe_pvp_realtime_message(message)
+			)
 		_finish_pvp_realtime_battle_from_message.call_deferred(message.duplicate(true))
 		return
 
@@ -4569,44 +4388,6 @@ func _log_pvp_realtime(tag: String, details: String = "") -> void:
 	else:
 		print("[PvPRealtime] %s | %s" % [tag, details])
 
-func _describe_response_force_switches(response: Dictionary) -> String:
-	return "p1=%s p2=%s" % [
-		_describe_response_force_switch(response, "p1"),
-		_describe_response_force_switch(response, "p2"),
-	]
-
-func _describe_response_force_switch(response: Dictionary, player_id: String) -> String:
-	var requests_value: Variant = response.get("requests", {})
-	if not (requests_value is Dictionary):
-		return "missing"
-
-	var request_value: Variant = (requests_value as Dictionary).get(player_id, {})
-	if not (request_value is Dictionary):
-		return "missing"
-
-	var force_switch_value: Variant = (request_value as Dictionary).get("forceSwitch", [])
-	if force_switch_value is Array:
-		return str(force_switch_value)
-
-	return str(force_switch_value)
-
-func _describe_state_force_switches() -> String:
-	return "p1=%s p2=%s" % [
-		_describe_state_force_switch("p1"),
-		_describe_state_force_switch("p2"),
-	]
-
-func _describe_state_force_switch(player_id: String) -> String:
-	var request_value: Variant = battle_state.requests.get(player_id, {})
-	if not (request_value is Dictionary):
-		return "missing"
-
-	var force_switch_value: Variant = (request_value as Dictionary).get("forceSwitch", [])
-	if force_switch_value is Array:
-		return str(force_switch_value)
-
-	return str(force_switch_value)
-
 func _response_from_pvp_realtime_message(message: Dictionary) -> Dictionary:
 	var response_value: Variant = message.get("response", {})
 	if response_value is Dictionary:
@@ -4665,7 +4446,8 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 
 	var update_payload: Dictionary = {}
 	var message_type := str(message.get("type", "")).strip_edges()
-	if message_type == "pvp.snapshot" or (message.has("response") and (message.get("response") is Dictionary)):
+	var realtime_message_kind := _get_pvp_realtime_message_kind(message)
+	if realtime_message_kind == "snapshot" or (message.has("response") and (message.get("response") is Dictionary)):
 		update_payload = _response_from_pvp_realtime_message(message)
 	else:
 		update_payload = message.duplicate(true)
@@ -4676,6 +4458,8 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 	var mapped_update := action_flow.map_response_for_local_player(update_payload)
 	if mapped_update.is_empty():
 		return false
+	if realtime_message_kind == "snapshot":
+		return await _apply_pvp_realtime_snapshot_when_safe(message, mapped_update)
 	if _is_stale_pvp_realtime_response(mapped_update):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
@@ -4689,10 +4473,180 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 		)
 		return false
 
+	_warn_if_pvp_battle_update_event_gap(mapped_update)
 	if not await _enqueue_pvp_battle_response(mapped_update, "pvp_realtime_update"):
 		return false
 
 	return true
+
+func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: Dictionary) -> bool:
+	if mapped_update.is_empty():
+		return false
+
+	if _is_stale_pvp_realtime_response(mapped_update):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Skipping stale PvP snapshot",
+				"message=%s last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_server_seq]
+			)
+		return false
+
+	var snapshot_event_seq := _get_pvp_response_event_seq_end(mapped_update)
+	var last_rendered_seq := pvp_event_queue.last_rendered_seq
+	if _is_initial_pvp_snapshot(message, mapped_update):
+		pvp_pending_reconciliation_snapshot.clear()
+		return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_bootstrap", true, {"drop_duplicate": true})
+
+	if _is_pvp_snapshot_recovery_bypass(mapped_update):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Applying PvP snapshot recovery bypass",
+				"snapshotEventSeq=%d lastRenderedSeq=%d ended=%s" % [
+					snapshot_event_seq,
+					last_rendered_seq,
+					str(_pvp_response_state_ended(mapped_update)),
+				]
+		)
+		pvp_pending_reconciliation_snapshot.clear()
+		return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_recovery", true, {"drop_duplicate": true})
+
+	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
+			_buffer_pvp_reconciliation_snapshot(message, mapped_update, snapshot_event_seq, last_rendered_seq)
+			return false
+
+	pvp_pending_reconciliation_snapshot.clear()
+	return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_reconciliation", true, {"drop_duplicate": true})
+
+func _buffer_pvp_reconciliation_snapshot(message: Dictionary, mapped_update: Dictionary, snapshot_event_seq: int, last_rendered_seq: int) -> void:
+	var existing_response_value: Variant = pvp_pending_reconciliation_snapshot.get("mapped_update", {})
+	var existing_response: Dictionary = existing_response_value as Dictionary if existing_response_value is Dictionary else {}
+	var existing_server_seq := _get_pvp_response_server_seq(existing_response)
+	var incoming_server_seq := _get_pvp_response_server_seq(mapped_update)
+	if not pvp_pending_reconciliation_snapshot.is_empty() and incoming_server_seq > 0 and existing_server_seq > incoming_server_seq:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Skipping older buffered PvP snapshot",
+				"incomingServerSeq=%d existingServerSeq=%d snapshotEventSeq=%d lastRenderedSeq=%d" % [
+					incoming_server_seq,
+					existing_server_seq,
+					snapshot_event_seq,
+					last_rendered_seq,
+				]
+			)
+		return
+
+	pvp_pending_reconciliation_snapshot = {
+		"message": message.duplicate(true),
+		"mapped_update": mapped_update.duplicate(true),
+		"snapshot_event_seq": snapshot_event_seq,
+	}
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Buffered PvP snapshot ahead of render",
+			"snapshotEventSeq=%d lastRenderedSeq=%d message=%s" % [
+				snapshot_event_seq,
+				last_rendered_seq,
+				_describe_pvp_realtime_message(message),
+			]
+		)
+
+func _retry_pending_pvp_reconciliation_snapshot() -> void:
+	if pvp_retrying_reconciliation_snapshot:
+		return
+	if pvp_pending_reconciliation_snapshot.is_empty():
+		return
+
+	pvp_retrying_reconciliation_snapshot = true
+	var pending_snapshot := pvp_pending_reconciliation_snapshot.duplicate(true)
+	var mapped_update_value: Variant = pending_snapshot.get("mapped_update", {})
+	var mapped_update: Dictionary = mapped_update_value as Dictionary if mapped_update_value is Dictionary else {}
+	var message_value: Variant = pending_snapshot.get("message", {})
+	var message: Dictionary = message_value as Dictionary if message_value is Dictionary else {}
+	var snapshot_event_seq := _get_int_from_variant(
+		pending_snapshot.get("snapshot_event_seq", _get_pvp_response_event_seq_end(mapped_update)),
+		-1
+	)
+	var last_rendered_seq := pvp_event_queue.last_rendered_seq
+	if mapped_update.is_empty():
+		pvp_pending_reconciliation_snapshot.clear()
+		pvp_retrying_reconciliation_snapshot = false
+		return
+
+	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Pending PvP snapshot still ahead after render",
+				"snapshotEventSeq=%d lastRenderedSeq=%d" % [snapshot_event_seq, last_rendered_seq]
+			)
+		pvp_retrying_reconciliation_snapshot = false
+		return
+
+	if _is_stale_pvp_realtime_response(mapped_update):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Discarding stale buffered PvP snapshot after render",
+				"snapshotEventSeq=%d lastRenderedSeq=%d message=%s" % [
+					snapshot_event_seq,
+					last_rendered_seq,
+					_describe_pvp_realtime_message(message),
+				]
+			)
+		pvp_pending_reconciliation_snapshot.clear()
+		pvp_retrying_reconciliation_snapshot = false
+		return
+
+	pvp_pending_reconciliation_snapshot.clear()
+
+	if not await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_reconciliation_retry", true, {"drop_duplicate": true}):
+		pvp_pending_reconciliation_snapshot = pending_snapshot
+	pvp_retrying_reconciliation_snapshot = false
+
+func _get_pvp_realtime_message_kind(message: Dictionary) -> String:
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "pvp.snapshot":
+		return "snapshot"
+	if message_type == "pvp.battle_update":
+		return "battle_update"
+	return message_type
+
+func _is_initial_pvp_snapshot(message: Dictionary, response: Dictionary) -> bool:
+	if _get_pvp_realtime_message_kind(message) != "snapshot":
+		return false
+	if _get_pvp_message_server_seq(message) > 0:
+		return false
+	if pvp_last_applied_server_seq > 0:
+		return false
+	if pvp_event_queue.last_rendered_seq >= 0:
+		return false
+	return true
+
+func _is_pvp_snapshot_recovery_bypass(response: Dictionary) -> bool:
+	return _pvp_response_state_ended(response)
+
+func _pvp_response_state_ended(response: Dictionary) -> bool:
+	var state_value: Variant = response.get("state", {})
+	return state_value is Dictionary and bool((state_value as Dictionary).get("ended", false))
+
+func _warn_if_pvp_battle_update_event_gap(response: Dictionary) -> void:
+	if not DEBUG_PVP_REALTIME:
+		return
+	var last_rendered_seq := pvp_event_queue.last_rendered_seq
+	if last_rendered_seq < 0:
+		return
+
+	var first_event_seq := _get_pvp_response_first_event_seq(response)
+	if first_event_seq < 0:
+		return
+	if first_event_seq > last_rendered_seq + 1:
+		_log_pvp_realtime(
+			"PvP event gap warning",
+			"firstEventSeq=%d lastRenderedSeq=%d eventSeq=%d batchSeq=%d" % [
+				first_event_seq,
+				last_rendered_seq,
+				_get_pvp_response_event_seq_end(response),
+				_get_int_from_variant(response.get("batchSeq", -1), -1),
+			]
+		)
 
 func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:
 	var server_seq := _get_pvp_message_server_seq(message)
@@ -4751,6 +4705,49 @@ func _get_pvp_response_server_seq(response: Dictionary) -> int:
 	if server_seq > 0:
 		return server_seq
 	return _get_int_from_variant(response.get("serverSeq", 0))
+
+func _get_pvp_response_event_seq_end(response: Dictionary) -> int:
+	var event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+	if event_seq >= 0:
+		return event_seq
+
+	var event_batches_value: Variant = response.get("eventBatches", [])
+	if event_batches_value is Array:
+		var event_batches: Array = event_batches_value as Array
+		for index: int in range(event_batches.size() - 1, -1, -1):
+			var batch_value: Variant = event_batches[index]
+			if not (batch_value is Dictionary):
+				continue
+			var batch: Dictionary = batch_value as Dictionary
+			var event_seq_end := _get_int_from_variant(batch.get("eventSeqEnd", -1), -1)
+			if event_seq_end >= 0:
+				return event_seq_end
+
+	return -1
+
+func _get_pvp_response_first_event_seq(response: Dictionary) -> int:
+	var event_batches_value: Variant = response.get("eventBatches", [])
+	if event_batches_value is Array:
+		var event_batches: Array = event_batches_value as Array
+		for batch_value: Variant in event_batches:
+			if not (batch_value is Dictionary):
+				continue
+			var batch: Dictionary = batch_value as Dictionary
+			var event_seq_start := _get_int_from_variant(batch.get("eventSeqStart", -1), -1)
+			if event_seq_start >= 0:
+				return event_seq_start
+
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return -1
+	var events: Array = events_value as Array
+	if events.is_empty():
+		return -1
+
+	var event_seq_end := _get_pvp_response_event_seq_end(response)
+	if event_seq_end < 0:
+		return -1
+	return event_seq_end - events.size() + 1
 
 func _get_pvp_response_turn(response: Dictionary) -> int:
 	var state_value: Variant = response.get("state", {})
@@ -4949,21 +4946,9 @@ func _render_pvp_opponent_response(
 	pending_player_choice_events: Array = [],
 	source := "pvp_opponent_response"
 ) -> bool:
-	_debug_log_ability_heal_events("render pvp opponent response raw", opponent_response, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
-	_debug_log_ability_heal_event_array("render pvp opponent response incremental", response_events, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys)
-	_debug_log_ability_heal_event_array("render pvp opponent response filtered", filtered_events, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
-	_debug_log_ability_heal_event_array("render pvp opponent response merged", opponent_events, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
 	_update_battle_presentation()
@@ -4979,21 +4964,9 @@ func _render_opponent_response(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> void:
-	_debug_log_ability_heal_events("render opponent response raw", opponent_response, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
-	_debug_log_ability_heal_event_array("render opponent response incremental", response_events, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys)
-	_debug_log_ability_heal_event_array("render opponent response filtered", filtered_events, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
-	_debug_log_ability_heal_event_array("render opponent response merged", opponent_events, {
-		"local_player_id": action_flow.local_player_id,
-	})
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
 	_update_battle_presentation()

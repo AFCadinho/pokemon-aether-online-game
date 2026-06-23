@@ -112,7 +112,6 @@ func _is_successful_response(response: Dictionary) -> bool:
 
 func _response_has_deferred_display_event(response: Dictionary, since_event_seq := -1) -> bool:
 	var events: Array = _get_unrendered_response_events(response, since_event_seq)
-	_log_ability_heal_deferred_check(response, events, since_event_seq)
 	for event_value: Variant in events:
 		if not (event_value is Dictionary):
 			continue
@@ -123,42 +122,6 @@ func _response_has_deferred_display_event(response: Dictionary, since_event_seq 
 			return true
 
 	return false
-
-func _log_ability_heal_deferred_check(response: Dictionary, events: Array, since_event_seq := -1) -> void:
-	var ability_heals: Array = []
-	for index: int in range(events.size()):
-		var event_value: Variant = events[index]
-		if not (event_value is Dictionary):
-			continue
-
-		var event: Dictionary = event_value as Dictionary
-		if str(event.get("type", "")) != "heal":
-			continue
-		var source_ability := str(event.get("sourceAbility", "")).strip_edges()
-		var source := str(event.get("source", "")).strip_edges()
-		if source_ability == "" and not source.to_lower().begins_with("ability:"):
-			continue
-
-		ability_heals.append({
-			"index": index,
-			"target": str(event.get("target", "")),
-			"source": source,
-			"sourceAbility": source_ability,
-			"hp": str(event.get("hp", "")),
-			"maxHp": str(event.get("maxHp", "")),
-			"condition": str(event.get("condition", "")),
-		})
-
-	if ability_heals.is_empty():
-		return
-
-	print("[RegeneratorDebug][client][BattleActionFlow] deferred display check ", {
-		"local_player_id": local_player_id,
-		"since_event_seq": since_event_seq,
-		"eventSeq": response.get("eventSeq", -1),
-		"batchSeq": response.get("batchSeq", -1),
-		"abilityHealEvents": ability_heals,
-	})
 
 func _get_unrendered_response_events(response: Dictionary, since_event_seq := -1) -> Array:
 	var events_value: Variant = response.get("events", [])

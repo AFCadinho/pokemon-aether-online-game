@@ -190,15 +190,6 @@ func _should_preserve_remembered_hp_snapshot(pokemon_data: Dictionary, memory_sn
 		return true
 
 	if incoming_max_hp == remembered_max_hp and incoming_hp < remembered_hp:
-		print("[RegeneratorDebug][client][BattleState] preserving newer HP memory over stale incoming snapshot ", {
-			"ident": str(pokemon_data.get("ident", "")),
-			"incoming_condition": str(pokemon_data.get("condition", "")),
-			"incoming_hp": incoming_hp,
-			"incoming_max_hp": incoming_max_hp,
-			"remembered_condition": str(memory_snapshot.get("condition", "")),
-			"remembered_hp": remembered_hp,
-			"remembered_max_hp": remembered_max_hp,
-		})
 		return true
 
 	return false
@@ -409,18 +400,6 @@ func _has_percentage_only_condition(event: Dictionary) -> bool:
 func _set_pokemon_condition(target_ident: String, condition: String, source_event: Dictionary = {}) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
 	var target_name := _get_pokemon_name_from_ident(target_ident)
-	var debug_ability_heal := _is_debug_ability_heal_event(source_event)
-	if debug_ability_heal:
-		print("[RegeneratorDebug][client][BattleState] condition event received ", {
-			"target_ident": target_ident,
-			"player_id": player_id,
-			"target_name": target_name,
-			"condition": condition,
-			"source": source_event.get("source", ""),
-			"sourceAbility": source_event.get("sourceAbility", ""),
-			"hp": source_event.get("hp", ""),
-			"maxHp": source_event.get("maxHp", ""),
-		})
 	if player_id == "" or target_name == "":
 		return
 
@@ -446,47 +425,11 @@ func _set_pokemon_condition(target_ident: String, condition: String, source_even
 		var pokemon_data: Dictionary = pokemon_value as Dictionary
 		var candidate_ident := str(pokemon_data.get("ident", ""))
 		var candidate_name := _get_pokemon_name_from_ident(candidate_ident)
-		if debug_ability_heal:
-			print("[RegeneratorDebug][client][BattleState] condition candidate ", {
-				"target_ident": target_ident,
-				"target_name": target_name,
-				"candidate_ident": candidate_ident,
-				"candidate_name": candidate_name,
-				"active": pokemon_data.get("active", false),
-				"condition": pokemon_data.get("condition", ""),
-				"hp": pokemon_data.get("hp", ""),
-				"maxHp": pokemon_data.get("maxHp", ""),
-			})
 		if candidate_name == target_name:
 			pokemon_data["condition"] = condition
 			_apply_condition_fields(pokemon_data, condition)
 			_remember_hp_snapshot_for_condition_event(target_ident, pokemon_data, condition)
-			if debug_ability_heal:
-				print("[RegeneratorDebug][client][BattleState] condition matched ", {
-					"target_ident": target_ident,
-					"candidate_ident": candidate_ident,
-					"condition": condition,
-					"hp": pokemon_data.get("hp", ""),
-					"maxHp": pokemon_data.get("maxHp", ""),
-				})
 			return
-	if debug_ability_heal:
-		print("[RegeneratorDebug][client][BattleState] condition did not match team pokemon ", {
-			"target_ident": target_ident,
-			"target_name": target_name,
-			"player_id": player_id,
-			"condition": condition,
-		})
-
-func _is_debug_ability_heal_event(event: Dictionary) -> bool:
-	if str(event.get("type", "")) != "heal":
-		return false
-	if str(event.get("sourceAbility", "")).strip_edges() != "":
-		return true
-	var source := str(event.get("source", "")).strip_edges().to_lower()
-	if source.begins_with("[from] "):
-		source = source.substr("[from] ".length()).strip_edges()
-	return source.begins_with("ability:")
 
 func _remember_hp_snapshot_for_condition_event(target_ident: String, pokemon_data: Dictionary, condition: String) -> void:
 	var snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)

@@ -54,14 +54,6 @@ func begin_render_batch(response: Dictionary, source: String = "") -> Dictionary
 	current_batch_seq = batch_seq
 	current_event_seq_end = event_seq_end
 
-	if debug_enabled:
-		print("[BattleEventQueue] begin render batch id=%s batchSeq=%d eventSeqEnd=%d source=%s" % [
-			current_event_batch_id,
-			current_batch_seq,
-			current_event_seq_end,
-			source,
-		])
-
 	return {
 		"started": true,
 		"event_batch_id": current_event_batch_id,
@@ -90,13 +82,6 @@ func complete_render_batch(context: Dictionary, success := true) -> void:
 	if render_completed_callback.is_valid():
 		render_completed_callback.call(completion)
 
-	if debug_enabled:
-		print("[BattleEventQueue] complete render batch id=%s success=%s lastRenderedSeq=%d" % [
-			context_batch_id,
-			str(success),
-			last_rendered_seq,
-		])
-
 	if context_batch_id == "" or context_batch_id == current_event_batch_id:
 		current_event_batch_id = ""
 		current_batch_seq = -1
@@ -119,6 +104,19 @@ func enqueue_response(response: Dictionary, source: String, apply_event_conditio
 	_next_id += 1
 
 	if dedupe.should_drop:
+		if bool(entry_metadata.get("drop_duplicate", false)):
+			return {
+				"enqueued": false,
+				"duplicate": true,
+				"dropped": true,
+				"key": dedupe.key,
+				"reason": dedupe.reason,
+				"source": source,
+				"skip_render": true,
+				"apply_event_conditions": apply_event_conditions,
+				"id": queue_id,
+			}
+
 		var duplicate_entry := {
 			"id": queue_id,
 			"source": source,
@@ -128,15 +126,6 @@ func enqueue_response(response: Dictionary, source: String, apply_event_conditio
 			"metadata": entry_metadata,
 		}
 		pending_updates.append(duplicate_entry)
-		if debug_enabled:
-			print("[BattleEventQueue] enqueue source=%s skip_render=true batchSeq=%d eventSeq=%d p1ForceSwitch=%s p2ForceSwitch=%s duplicate_reason=%s" % [
-				source,
-				_get_batch_seq(normalized_response),
-				_get_event_seq(normalized_response),
-				_describe_response_force_switch(normalized_response, "p1"),
-				_describe_response_force_switch(normalized_response, "p2"),
-				str(dedupe.reason),
-			])
 		return {
 			"enqueued": true,
 			"duplicate": true,
@@ -166,15 +155,6 @@ func enqueue_response(response: Dictionary, source: String, apply_event_conditio
 		"metadata": entry_metadata,
 	}
 	pending_updates.append(entry)
-
-	if debug_enabled:
-		print("[BattleEventQueue] enqueue source=%s skip_render=false batchSeq=%d eventSeq=%d p1ForceSwitch=%s p2ForceSwitch=%s" % [
-			source,
-			_get_batch_seq(normalized_response),
-			_get_event_seq(normalized_response),
-			_describe_response_force_switch(normalized_response, "p1"),
-			_describe_response_force_switch(normalized_response, "p2"),
-		])
 
 	return {
 		"enqueued": true,
@@ -293,18 +273,3 @@ func _get_event_seq(response: Dictionary) -> int:
 				return last_event_seq
 
 	return 0
-
-func _describe_response_force_switch(response: Dictionary, player_id: String) -> String:
-	var requests_value: Variant = response.get("requests", {})
-	if not (requests_value is Dictionary):
-		return "missing"
-
-	var request_value: Variant = (requests_value as Dictionary).get(player_id, {})
-	if not (request_value is Dictionary):
-		return "missing"
-
-	var force_switch_value: Variant = (request_value as Dictionary).get("forceSwitch", [])
-	if force_switch_value is Array:
-		return str(force_switch_value)
-
-	return str(force_switch_value)
