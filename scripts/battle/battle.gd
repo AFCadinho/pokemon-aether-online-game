@@ -1218,7 +1218,8 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 				var player_events: Array = _filter_already_rendered_events(display_response.get("events", []), {})
 				_rewind_active_hud_hp_for_events(player_events)
 				_rewind_party_slots_for_events(player_events)
-				await _render_battle_events(player_events)
+				if not await _render_pvp_event_batch(display_response, player_events, true, source):
+					return false
 
 			if await _finish_if_battle_ended():
 				return true
@@ -1242,7 +1243,8 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 			return true
 
 		if not skip_render and _response_has_renderable_battle_events(display_response):
-			await _render_opponent_response(display_response)
+			if not await _render_pvp_opponent_response(display_response, {}, [], source):
+				return false
 			await _hold_opponent_response_message()
 		elif is_local_choice:
 			if not await _wait_for_pvp_opponent_choice_and_render():
@@ -1273,7 +1275,8 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 		return true
 
 	if not skip_render and _response_has_renderable_battle_events(display_response):
-		await _render_opponent_response(display_response, {}, pending_player_choice_events)
+		if not await _render_pvp_opponent_response(display_response, {}, pending_player_choice_events, source):
+			return false
 		await _hold_opponent_response_message()
 	elif is_local_choice:
 		if not await _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events):
@@ -2661,6 +2664,30 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 
 	_set_battle_input_locked(false)
 	_show_moves()
+
+func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_headers := true, source := "") -> bool:
+	if not _is_pvp_battle():
+		await _render_battle_events(events, render_turn_headers)
+		return true
+
+	var batch_context: Dictionary = pvp_event_queue.begin_render_batch(response, source)
+	if not bool(batch_context.get("started", false)):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"PvP render batch rejected",
+				"source=%s current=%s reason=%s" % [
+					source,
+					str(batch_context.get("current_event_batch_id", "")),
+					str(batch_context.get("reason", "")),
+				]
+			)
+		return false
+
+	var success := true
+	await _render_battle_events(events, render_turn_headers)
+	_mark_pvp_response_events_rendered(response)
+	pvp_event_queue.complete_render_batch(batch_context, success)
+	return success
 
 func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 	_debug_log_ability_heal_event_array("render battle events input", events, {
@@ -4135,7 +4162,8 @@ func _wait_for_pvp_opponent_force_switch_after_choice_response(
 	var response_events_value: Variant = display_response.get("events", [])
 	var response_events: Array = response_events_value as Array if response_events_value is Array else []
 	if not response_events.is_empty():
-		await _render_opponent_response(display_response, {}, pending_player_choice_events)
+		if not await _render_pvp_opponent_response(display_response, {}, pending_player_choice_events, "pvp_force_switch_after_choice"):
+			return false
 		await _hold_opponent_response_message()
 	else:
 		_update_battle_presentation()
@@ -4691,6 +4719,37 @@ func _submit_npc_choice_and_render(
 	await _render_opponent_response(opponent_response, rendered_event_keys, pending_player_choice_events)
 	await _hold_opponent_response_message()
 	return true
+
+func _render_pvp_opponent_response(
+	opponent_response: Dictionary,
+	rendered_event_keys: Dictionary = {},
+	pending_player_choice_events: Array = [],
+	source := "pvp_opponent_response"
+) -> bool:
+	_debug_log_ability_heal_events("render pvp opponent response raw", opponent_response, {
+		"local_player_id": action_flow.local_player_id,
+	})
+	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
+	_debug_log_ability_heal_event_array("render pvp opponent response incremental", response_events, {
+		"local_player_id": action_flow.local_player_id,
+	})
+	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys)
+	_debug_log_ability_heal_event_array("render pvp opponent response filtered", filtered_events, {
+		"local_player_id": action_flow.local_player_id,
+	})
+	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
+	_debug_log_ability_heal_event_array("render pvp opponent response merged", opponent_events, {
+		"local_player_id": action_flow.local_player_id,
+	})
+	defer_force_switch_active_hide = true
+	_prepare_switch_in_presentation_for_events(opponent_events)
+	_update_battle_presentation()
+	_rewind_active_hud_hp_for_events(opponent_events)
+	_rewind_party_slots_for_events(opponent_events)
+	var success := await _render_pvp_event_batch(opponent_response, opponent_events, true, source)
+	defer_force_switch_active_hide = false
+	_update_active_sprites()
+	return success
 
 func _render_opponent_response(
 	opponent_response: Dictionary,

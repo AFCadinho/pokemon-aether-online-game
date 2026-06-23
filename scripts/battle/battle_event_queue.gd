@@ -6,6 +6,10 @@ var pending_updates: Array[Dictionary] = []
 var seen_event_batch_ids: Dictionary = {}
 var seen_batch_seqs: Dictionary = {}
 var last_event_seq := -1
+var current_event_batch_id := ""
+var current_batch_seq := -1
+var current_event_seq_end := -1
+var last_rendered_seq := -1
 var debug_enabled := false
 var _next_id := 1
 
@@ -15,9 +19,80 @@ func clear() -> void:
 	seen_event_batch_ids.clear()
 	seen_batch_seqs.clear()
 	last_event_seq = -1
+	current_event_batch_id = ""
+	current_batch_seq = -1
+	current_event_seq_end = -1
+	last_rendered_seq = -1
 
 func has_pending() -> bool:
 	return not pending_updates.is_empty()
+
+func begin_render_batch(response: Dictionary, source: String = "") -> Dictionary:
+	if current_event_batch_id != "":
+		if debug_enabled:
+			print("[BattleEventQueue] render batch already active current=%s source=%s" % [
+				current_event_batch_id,
+				source,
+			])
+		return {
+			"started": false,
+			"reason": "render batch already active",
+			"current_event_batch_id": current_event_batch_id,
+		}
+
+	var event_batch_id := get_response_event_batch_id(response)
+	var batch_seq := get_response_batch_seq(response)
+	var event_seq_end := get_response_event_seq_end(response)
+	if event_batch_id == "":
+		event_batch_id = "%s:%d:%d" % [source if source != "" else "pvp_render", batch_seq, event_seq_end]
+
+	current_event_batch_id = event_batch_id
+	current_batch_seq = batch_seq
+	current_event_seq_end = event_seq_end
+
+	if debug_enabled:
+		print("[BattleEventQueue] begin render batch id=%s batchSeq=%d eventSeqEnd=%d source=%s" % [
+			current_event_batch_id,
+			current_batch_seq,
+			current_event_seq_end,
+			source,
+		])
+
+	return {
+		"started": true,
+		"event_batch_id": current_event_batch_id,
+		"batch_seq": current_batch_seq,
+		"event_seq_end": current_event_seq_end,
+		"source": source,
+	}
+
+func complete_render_batch(context: Dictionary, success := true) -> void:
+	var context_batch_id := str(context.get("event_batch_id", ""))
+	var context_event_seq_end := int(context.get("event_seq_end", -1))
+
+	if success and context_event_seq_end > last_rendered_seq:
+		last_rendered_seq = context_event_seq_end
+
+	if debug_enabled:
+		print("[BattleEventQueue] complete render batch id=%s success=%s lastRenderedSeq=%d" % [
+			context_batch_id,
+			str(success),
+			last_rendered_seq,
+		])
+
+	if context_batch_id == "" or context_batch_id == current_event_batch_id:
+		current_event_batch_id = ""
+		current_batch_seq = -1
+		current_event_seq_end = -1
+
+func get_response_event_batch_id(response: Dictionary) -> String:
+	return _get_event_batch_id(response)
+
+func get_response_batch_seq(response: Dictionary) -> int:
+	return _get_batch_seq(response)
+
+func get_response_event_seq_end(response: Dictionary) -> int:
+	return _get_event_seq(response)
 
 func enqueue_response(response: Dictionary, source: String, apply_event_conditions := true, metadata: Dictionary = {}) -> Dictionary:
 	var normalized_response: Dictionary = response.duplicate(true)

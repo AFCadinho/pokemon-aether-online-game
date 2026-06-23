@@ -481,6 +481,18 @@ func _normalize_species_asset_id(species: String) -> String:
 
 	return asset_id
 
+func is_showing_species(species: String) -> bool:
+	if double_container != null and double_container.visible:
+		return true
+	if single_sprite != null and not single_sprite.visible:
+		return false
+	if species.strip_edges() == "":
+		return false
+	if current_single_species.strip_edges() == "":
+		return false
+
+	return _normalize_species_asset_id(current_single_species) == _normalize_species_asset_id(species)
+
 func _load_sprite_frames_from_folder(folder: String) -> SpriteFrames:
 	if not DirAccess.dir_exists_absolute(folder):
 		return null

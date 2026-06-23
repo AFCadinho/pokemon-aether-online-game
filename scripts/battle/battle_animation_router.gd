@@ -658,6 +658,8 @@ func _get_cached_sound_stream(sound_path: String) -> AudioStream:
 func play_heal_tween_for_target(target_ident: String) -> void:
 	if not SettingsManager.battle_animations:
 		return
+	if not is_target_ident_currently_visible(target_ident):
+		return
 
 	match _get_player_id_from_ident(target_ident):
 		"p1":
@@ -703,6 +705,37 @@ func _normalize_move_name(move_name: String) -> String:
 
 func _normalize_animation_key(value: String) -> String:
 	return value.strip_edges().to_lower().replace(" ", "_").replace("-", "_")
+
+
+func is_target_ident_currently_visible(target_ident: String) -> bool:
+	var species := _get_species_from_ident(target_ident)
+	if species == "":
+		return true
+
+	var sprite_box := _get_sprite_box_for_ident(target_ident)
+	if sprite_box == null:
+		return true
+	if not sprite_box.has_method("is_showing_species"):
+		return true
+
+	return bool(sprite_box.call("is_showing_species", species))
+
+
+func _get_sprite_box_for_ident(ident: String) -> Node:
+	match _get_player_id_from_ident(ident):
+		"p1":
+			return player_sprite_box
+		"p2":
+			return enemy_sprite_box
+
+	return null
+
+
+func _get_species_from_ident(ident: String) -> String:
+	if not ident.contains(": "):
+		return ""
+
+	return str(ident.split(": ")[1]).strip_edges()
 
 
 func _get_player_id_from_ident(ident: String) -> String:

@@ -87,11 +87,15 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 		await _wait(message_timing.get_damage_animation_hold_seconds())
 	if heal_target_ident != "":
-		_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
-		if effect_animation_key != "":
-			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
-		await animation_router.play_heal_tween_for_target(heal_target_ident)
-		_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
+		var heal_target_visible := true
+		if animation_router != null:
+			heal_target_visible = animation_router.is_target_ident_currently_visible(heal_target_ident)
+		if heal_target_visible:
+			_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
+			if effect_animation_key != "":
+				await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
+			await animation_router.play_heal_tween_for_target(heal_target_ident)
+			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
 	if stat_change_target_ident != "":
 		await animation_router.play_stat_change_tween_for_target(stat_change_target_ident, stat_change_amount)
 		await _wait(message_timing.get_stat_change_animation_hold_seconds())
