@@ -3515,10 +3515,12 @@ func _on_party_grid_party_selected(slot: int) -> void:
 
 	if was_force_switch:
 		if not _is_pvp_battle():
-			var player_events: Array = _filter_already_rendered_events(player_response.get("events", []), {})
+			var response_events: Array = _filter_incremental_non_pvp_response_events(player_response)
+			var player_events: Array = _filter_already_rendered_events(response_events, {})
 			_rewind_active_hud_hp_for_events(player_events)
 			_rewind_party_slots_for_events(player_events)
 			await _render_battle_events(player_events)
+			_mark_non_pvp_response_events_rendered(player_response, player_events)
 
 			if await _finish_if_battle_ended():
 				return
@@ -3527,6 +3529,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 				_set_battle_input_locked(false)
 				return
 
+			_update_move_slots()
 			_show_moves()
 			_set_battle_input_locked(false)
 		return
