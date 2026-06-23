@@ -1016,6 +1016,7 @@ func _finish_battle(result: Dictionary) -> void:
 	if battle_finished:
 		return
 
+	_warn_if_pvp_finish_has_pending_render_work(result)
 	battle_finished = true
 	pending_mega_species_by_ident.clear()
 	if _is_pvp_battle():
@@ -1023,6 +1024,27 @@ func _finish_battle(result: Dictionary) -> void:
 	_sync_player_save_from_battle_state()
 	PlayerPartyStateService.save_current_battle_party_state_deferred()
 	battle_ended.emit(result)
+
+func _warn_if_pvp_finish_has_pending_render_work(result: Dictionary) -> void:
+	if not _is_pvp_battle():
+		return
+
+	var current_batch_id := str(pvp_event_queue.current_event_batch_id)
+	var has_pending := pvp_event_queue.has_pending()
+	if current_batch_id == "" and not has_pending:
+		return
+
+	push_warning(
+		"PvP battle finished with render work still active. reason=%s winner=%s currentBatch=%s pending=%s phase=%s nextPhase=%s lastRenderedSeq=%d" % [
+			str(result.get("reason", "")),
+			str(result.get("winner", "")),
+			current_batch_id if current_batch_id != "" else "none",
+			str(has_pending),
+			pvp_last_phase if pvp_last_phase != "" else "unknown",
+			pvp_last_next_phase if pvp_last_next_phase != "" else "unknown",
+			pvp_event_queue.last_rendered_seq,
+		]
+	)
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
 func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true, source: String = "") -> bool:
@@ -2635,25 +2657,28 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 	pvp_event_queue.complete_render_batch(batch_context, success)
 	return success
 
-func _warn_if_pvp_render_bypasses_runner(source := "") -> void:
+func _guard_pvp_render_runner(source := "") -> bool:
 	if not _is_pvp_battle():
-		return
-	if pvp_event_queue.current_event_batch_id != "":
-		return
+		return true
+	var current_batch_id := str(pvp_event_queue.current_event_batch_id)
+	if current_batch_id != "":
+		return true
 
 	var context := source if source != "" else "unknown"
 	_log_pvp_realtime(
 		"PvP render bypassed BattleEventQueue runner",
-		"source=%s batchSeq=%d eventSeqEnd=%d lastRenderedSeq=%d" % [
+		"source=%s phase=%s nextPhase=%s currentBatch=%s lastRenderedSeq=%d" % [
 			context,
-			pvp_event_queue.current_batch_seq,
-			pvp_event_queue.current_event_seq_end,
+			pvp_last_phase if pvp_last_phase != "" else "unknown",
+			pvp_last_next_phase if pvp_last_next_phase != "" else "unknown",
+			current_batch_id if current_batch_id != "" else "none",
 			pvp_event_queue.last_rendered_seq,
 		]
 	)
+	return false
 
 func _render_battle_events(events: Array, render_turn_headers := true, source := "") -> void:
-	_warn_if_pvp_render_bypasses_runner(source)
+	_guard_pvp_render_runner(source)
 	var ordered_events: Array = _order_switch_out_heals_before_switches(_order_form_change_events_before_moves(events))
 	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
 	_prewarm_battle_event_animations(ordered_events)
@@ -4408,14 +4433,9 @@ func _should_apply_pvp_realtime_end_immediately(message: Dictionary) -> bool:
 
 	var message_action := str(message.get("action", "")).strip_edges().to_lower()
 	var message_player_id := str(message.get("playerId", "")).strip_edges()
-	if message_action == "forfeit" and message_player_id == action_flow.local_player_id:
+	if message_action in ["forfeit", "disconnect", "abandon"] and message_player_id == action_flow.local_player_id:
 		return false
-	if message_action == "forfeit" and message_player_id != "" and message_player_id != action_flow.local_player_id:
-		return true
-
-	var mapped_response := action_flow.map_response_for_local_player(response)
-	var state_value: Variant = mapped_response.get("state", {})
-	if state_value is Dictionary and bool((state_value as Dictionary).get("ended", false)):
+	if message_action in ["forfeit", "disconnect", "abandon"] and message_player_id != "" and message_player_id != action_flow.local_player_id:
 		return true
 
 	return false
@@ -4497,6 +4517,10 @@ func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: 
 		pvp_pending_reconciliation_snapshot.clear()
 		return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_bootstrap", true, {"drop_duplicate": true})
 
+	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
+		_buffer_pvp_reconciliation_snapshot(message, mapped_update, snapshot_event_seq, last_rendered_seq)
+		return false
+
 	if _is_pvp_snapshot_recovery_bypass(mapped_update):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
@@ -4509,10 +4533,6 @@ func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: 
 		)
 		pvp_pending_reconciliation_snapshot.clear()
 		return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_recovery", true, {"drop_duplicate": true})
-
-	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
-			_buffer_pvp_reconciliation_snapshot(message, mapped_update, snapshot_event_seq, last_rendered_seq)
-			return false
 
 	pvp_pending_reconciliation_snapshot.clear()
 	return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_reconciliation", true, {"drop_duplicate": true})
