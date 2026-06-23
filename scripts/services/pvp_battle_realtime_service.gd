@@ -186,6 +186,66 @@ func send_action(action: String, battle_id: String, player_id: String, slot: int
 	return request_id if error == OK else ""
 
 
+func send_render_ack(
+	battle_id: String,
+	player_id: String,
+	event_batch_id: String,
+	batch_seq: int,
+	last_rendered_seq: int,
+	turn := -1,
+	phase := ""
+) -> bool:
+	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		if DEBUG_PVP_REALTIME:
+			_log_realtime(
+				"send_render_ack blocked because socket is not open",
+				"state=%s room=%s player=%s battle=%s batch=%s lastRenderedSeq=%d" % [
+					websocket.get_ready_state(),
+					active_room_code,
+					player_id,
+					battle_id,
+					event_batch_id,
+					last_rendered_seq,
+				]
+			)
+		connect_room(active_room_code, active_player_id, active_battle_id)
+		return false
+
+	var normalized_player_id := "p2" if player_id == "p2" else "p1"
+	var payload := {
+		"type": "render_ack",
+		"battleId": battle_id,
+		"roomCode": active_room_code,
+		"playerId": normalized_player_id,
+		"eventBatchId": event_batch_id,
+		"batchSeq": batch_seq,
+		"lastRenderedSeq": last_rendered_seq,
+	}
+	if turn >= 0:
+		payload["turn"] = turn
+	if phase.strip_edges() != "":
+		payload["phase"] = phase.strip_edges()
+
+	if DEBUG_PVP_REALTIME:
+		_log_realtime(
+			"Sending render ACK",
+			"battle=%s player=%s batch=%s batchSeq=%d lastRenderedSeq=%d turn=%d phase=%s" % [
+				battle_id,
+				normalized_player_id,
+				event_batch_id,
+				batch_seq,
+				last_rendered_seq,
+				turn,
+				phase,
+			]
+		)
+
+	var error := websocket.send_text(JSON.stringify(payload))
+	if DEBUG_PVP_REALTIME:
+		_log_realtime("send_render_ack result", "batch=%s error=%s" % [event_batch_id, error])
+	return error == OK
+
+
 func _process_packets() -> void:
 	while websocket.get_available_packet_count() > 0:
 		var packet := websocket.get_packet()
@@ -210,7 +270,16 @@ func _process_packets() -> void:
 			if request_id != "":
 				action_response_received.emit(request_id, message)
 			continue
+		if message_type == "pvp.render_batch":
+			var request_id := str(message.get("requestId", ""))
+			battle_update_received.emit(message)
+			if request_id != "":
+				action_response_received.emit(request_id, message)
+			continue
 		if message_type == "pvp.snapshot":
+			battle_update_received.emit(message)
+			continue
+		if message_type == "pvp.phase_update":
 			battle_update_received.emit(message)
 			continue
 		if message_type == "pvp.error":

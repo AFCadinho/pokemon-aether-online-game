@@ -47,6 +47,8 @@ func begin_render_batch(response: Dictionary, source: String = "") -> Dictionary
 	var event_batch_id := get_response_event_batch_id(response)
 	var batch_seq := get_response_batch_seq(response)
 	var event_seq_end := get_response_event_seq_end(response)
+	var turn := _get_response_turn(response)
+	var phase := str(response.get("phase", "")).strip_edges()
 	if event_batch_id == "":
 		event_batch_id = "%s:%d:%d" % [source if source != "" else "pvp_render", batch_seq, event_seq_end]
 
@@ -59,6 +61,8 @@ func begin_render_batch(response: Dictionary, source: String = "") -> Dictionary
 		"event_batch_id": current_event_batch_id,
 		"batch_seq": current_batch_seq,
 		"event_seq_end": current_event_seq_end,
+		"turn": turn,
+		"phase": phase,
 		"source": source,
 	}
 
@@ -67,6 +71,8 @@ func complete_render_batch(context: Dictionary, success := true) -> void:
 	var context_event_seq_end := int(context.get("event_seq_end", -1))
 	var context_batch_seq := int(context.get("batch_seq", -1))
 	var context_source := str(context.get("source", ""))
+	var context_turn := int(context.get("turn", -1))
+	var context_phase := str(context.get("phase", "")).strip_edges()
 
 	if success and context_event_seq_end > last_rendered_seq:
 		last_rendered_seq = context_event_seq_end
@@ -76,6 +82,8 @@ func complete_render_batch(context: Dictionary, success := true) -> void:
 		"batch_seq": context_batch_seq,
 		"event_seq_end": context_event_seq_end,
 		"last_rendered_seq": last_rendered_seq,
+		"turn": context_turn,
+		"phase": context_phase,
 		"source": context_source,
 		"success": success,
 	}
@@ -259,8 +267,10 @@ func _get_batch_seq(response: Dictionary) -> int:
 	return 0
 
 func _get_event_seq(response: Dictionary) -> int:
-	var event_seq := int(response.get("eventSeq", 0))
-	if event_seq > 0:
+	var event_seq := -1
+	if response.has("eventSeq"):
+		event_seq = int(response.get("eventSeq", -1))
+	if event_seq >= 0:
 		return event_seq
 
 	var event_batches: Variant = response.get("eventBatches", [])
@@ -268,8 +278,19 @@ func _get_event_seq(response: Dictionary) -> int:
 		var batches: Array = event_batches as Array
 		if not batches.is_empty():
 			var last_batch: Dictionary = batches[batches.size() - 1] if (batches[batches.size() - 1] is Dictionary) else {}
-			var last_event_seq := int(last_batch.get("eventSeqEnd", 0))
-			if last_event_seq > 0:
+			var last_event_seq := int(last_batch.get("eventSeqEnd", -1))
+			if last_event_seq >= 0:
 				return last_event_seq
 
-	return 0
+	return -1
+
+func _get_response_turn(response: Dictionary) -> int:
+	var turn := int(response.get("turn", -1))
+	if turn >= 0:
+		return turn
+
+	var state_value: Variant = response.get("state", {})
+	if state_value is Dictionary:
+		return int((state_value as Dictionary).get("turn", -1))
+
+	return -1
