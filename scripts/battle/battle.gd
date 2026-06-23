@@ -33,6 +33,7 @@ var pvp_last_applied_server_seq := 0
 var pvp_last_phase := ""
 var pvp_last_next_phase := ""
 var pvp_rendered_event_count := 0
+var last_rendered_event_seq := -1
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 
 #Battle State
@@ -1108,6 +1109,11 @@ func _enqueue_pvp_battle_response(response: Dictionary, source: String, apply_ev
 
 	if not response is Dictionary:
 		return false
+	_debug_log_ability_heal_events("enqueue raw response", response, {
+		"source": source,
+		"apply_event_conditions": apply_event_conditions,
+		"local_player_id": action_flow.local_player_id,
+	})
 
 	var queue_result: Dictionary = pvp_event_queue.enqueue_response(response.duplicate(true), source, apply_event_conditions, metadata)
 	if not bool(queue_result.get("enqueued", false)):
@@ -1137,6 +1143,10 @@ func _drain_pvp_event_queue() -> bool:
 		var queue_response: Dictionary = queue_entry.get("response", {})
 		if not (queue_response is Dictionary):
 			continue
+		_debug_log_ability_heal_events("drain queue response before apply", queue_response, {
+			"source": str(queue_entry.get("source", "")),
+			"local_player_id": action_flow.local_player_id,
+		})
 
 		var apply_event_conditions := bool(queue_entry.get("apply_event_conditions", true))
 		var skip_render := bool(queue_entry.get("skip_render", false))
@@ -1194,6 +1204,12 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 	var pending_player_choice_events: Array = pending_player_choice_events_value as Array if pending_player_choice_events_value is Array else []
 
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	_debug_log_ability_heal_events("process choice display response", display_response, {
+		"source": source,
+		"choice_type": choice_type,
+		"is_local_choice": is_local_choice,
+		"local_player_id": action_flow.local_player_id,
+	})
 	pending_player_choice_events = _get_pending_player_choice_events(display_response, pending_player_choice_events)
 
 	if choice_type == "switch":
@@ -1599,6 +1615,9 @@ func _remember_public_confirmed_abilities_from_response(response: Dictionary) ->
 	if not (events_value is Array):
 		return
 
+	_debug_log_ability_heal_events("confirmed ability raw response events", response, {
+		"local_player_id": action_flow.local_player_id,
+	})
 	var events: Array = events_value as Array
 	for event_value in events:
 		if not (event_value is Dictionary):
@@ -1616,6 +1635,26 @@ func _remember_public_confirmed_abilities_from_response(response: Dictionary) ->
 			continue
 
 		public_confirmed_abilities_by_ident[ident_key] = ability
+		if _is_ability_heal_event(event):
+			print(
+				"[RegeneratorDebug][client] confirmed ability from ability heal ",
+				{
+					"local_player_id": action_flow.local_player_id,
+					"ident": ident,
+					"ident_key": ident_key,
+					"ability": ability,
+					"event": event,
+				}
+			)
+			_log_pvp_realtime(
+				"[RegeneratorDebug][client] confirmed ability from ability heal",
+				"local_player_id=%s ident=%s ident_key=%s ability=%s" % [
+					action_flow.local_player_id,
+					ident,
+					ident_key,
+					ability,
+				]
+			)
 
 func _remember_public_confirmed_item_from_event(event: Dictionary) -> void:
 	var event_type := str(event.get("type", ""))
@@ -1954,6 +1993,11 @@ func _get_public_item_display_name(ident: String) -> String:
 	return ident.strip_edges()
 
 func _get_public_confirmed_ability_from_event(event: Dictionary) -> String:
+	for key in ["sourceAbility", "ability", "abilityName"]:
+		var ability_name := str(event.get(key, "")).strip_edges()
+		if ability_name != "":
+			return ability_name
+
 	var event_type: String = str(event.get("type", ""))
 	match event_type:
 		"ability":
@@ -1976,6 +2020,8 @@ func _get_public_confirmed_ability_ident_from_event(event: Dictionary) -> String
 
 func _get_ability_name_from_source(source: String) -> String:
 	var cleaned: String = source.strip_edges()
+	if cleaned.to_lower().begins_with("[from] "):
+		cleaned = cleaned.substr("[from] ".length()).strip_edges()
 	var cleaned_lower: String = cleaned.to_lower()
 	if cleaned_lower.begins_with("ability:"):
 		return cleaned.split(":", false, 1)[1].strip_edges()
@@ -2143,6 +2189,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	queued_battle_action.clear()
 	pvp_last_phase = ""
 	pvp_last_next_phase = ""
+	last_rendered_event_seq = -1
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = enemy_pokemon
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
@@ -2223,6 +2270,7 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 	await _play_initial_shiny_entrance_effects()
 	await _render_battle_events(start_events, false)
 	_mark_pvp_response_events_rendered(api_response)
+	_mark_non_pvp_response_event_seq_consumed(api_response)
 
 func _show_battle_controls_after_initial_events() -> void:
 	_update_battle_presentation()
@@ -2615,7 +2663,14 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_show_moves()
 
 func _render_battle_events(events: Array, render_turn_headers := true) -> void:
+	_debug_log_ability_heal_event_array("render battle events input", events, {
+		"local_player_id": action_flow.local_player_id,
+		"render_turn_headers": render_turn_headers,
+	})
 	var ordered_events: Array = _order_form_change_events_before_moves(events)
+	_debug_log_ability_heal_event_array("render battle events ordered", ordered_events, {
+		"local_player_id": action_flow.local_player_id,
+	})
 	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
 	_prewarm_battle_event_animations(ordered_events)
 	event_presentation.reset_recent_context()
@@ -2647,6 +2702,20 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 			battle_log_panel.add_message(fallback_knock_off_message)
 			current_action_panel.set_message(fallback_knock_off_message)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
+			if _is_ability_heal_event(event_data):
+				_log_pvp_realtime(
+					"[RegeneratorDebug][client] applying ability heal event conditions",
+					"local_player_id=%s target=%s sourceAbility=%s source=%s hp=%s maxHp=%s condition=%s event=%s" % [
+						action_flow.local_player_id,
+						str(event_data.get("target", "")),
+						str(event_data.get("sourceAbility", "")),
+						str(event_data.get("source", "")),
+						str(event_data.get("hp", "")),
+						str(event_data.get("maxHp", "")),
+						str(event_data.get("condition", "")),
+						JSON.stringify(event_data),
+					]
+				)
 			battle_state.apply_event_conditions([event_data])
 		if event_type == "switch":
 			battle_state.apply_event_conditions([event_data])
@@ -2692,7 +2761,8 @@ func _build_pending_player_mega_events(use_mega: bool) -> Array:
 	return pending_events
 
 func _get_pending_player_choice_events(response: Dictionary, fallback_events: Array) -> Array:
-	var pending_events: Array = _get_pending_mega_events_from_response(response.get("events", []))
+	var response_events: Array = _filter_incremental_non_pvp_response_events(response)
+	var pending_events: Array = _get_pending_mega_events_from_response(response_events)
 	if pending_events.is_empty():
 		return fallback_events
 
@@ -2826,6 +2896,39 @@ func _filter_already_rendered_events(events_value: Variant, rendered_event_keys:
 
 	return filtered_events
 
+func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
+	var events_value: Variant = response.get("events", [])
+	var events: Array = events_value as Array if events_value is Array else []
+	_debug_log_ability_heal_events("filter incremental raw response", response, {
+		"local_player_id": action_flow.local_player_id,
+		"last_rendered_event_seq": last_rendered_event_seq,
+	})
+	if _is_pvp_battle() or events.is_empty():
+		_debug_log_ability_heal_event_array("filter incremental output pvp/raw", events, {
+			"local_player_id": action_flow.local_player_id,
+		})
+		return events
+
+	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+	if response_event_seq < 0:
+		_debug_log_ability_heal_event_array("filter incremental output no eventSeq", events, {
+			"local_player_id": action_flow.local_player_id,
+		})
+		return events
+
+	var first_event_seq := response_event_seq - events.size() + 1
+	var filtered_events: Array = []
+	for index: int in range(events.size()):
+		var event_seq := first_event_seq + index
+		if event_seq > last_rendered_event_seq:
+			filtered_events.append(events[index])
+
+	_debug_log_ability_heal_event_array("filter incremental output filtered", filtered_events, {
+		"local_player_id": action_flow.local_player_id,
+		"response_event_seq": response_event_seq,
+	})
+	return filtered_events
+
 func _filter_unrendered_pvp_events(events: Array) -> Array:
 	var filtered_events: Array = []
 	if events.size() <= pvp_rendered_event_count:
@@ -2848,6 +2951,22 @@ func _mark_pvp_response_events_rendered(response: Dictionary) -> void:
 
 	var events: Array = events_value as Array
 	pvp_rendered_event_count = max(pvp_rendered_event_count, events.size())
+
+func _mark_non_pvp_response_events_rendered(response: Dictionary, rendered_events: Array) -> void:
+	if _is_pvp_battle() or rendered_events.is_empty():
+		return
+
+	_mark_non_pvp_response_event_seq_consumed(response)
+
+func _mark_non_pvp_response_event_seq_consumed(response: Dictionary) -> void:
+	if _is_pvp_battle():
+		return
+
+	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+	if response_event_seq < 0:
+		return
+
+	last_rendered_event_seq = max(last_rendered_event_seq, response_event_seq)
 
 func _get_battle_event_key(event_data: Dictionary) -> String:
 	if str(event_data.get("type", "")) == "mega":
@@ -3071,6 +3190,22 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	var status: String = _get_status_from_event_or_state(event, player_id, use_previous_hp)
 	var gender: String = battle_state.get_active_pokemon_gender(player_id)
 	var is_shiny: bool = _get_active_pokemon_is_shiny(player_id)
+	var event_type := str(event.get("type", ""))
+	if event_type == "damage" or event_type == "heal":
+		var active_snapshot := _get_active_state_hp_snapshot(player_id)
+		print("[RegeneratorDebug][client] active HUD HP from event ", {
+			"target_ident": target_ident,
+			"player_id": player_id,
+			"event_type": event_type,
+			"use_previous_hp": use_previous_hp,
+			"hud_hp": hp,
+			"hud_max_hp": max_hp,
+			"event_previousHp": event.get("previousHp", ""),
+			"event_hp": event.get("hp", ""),
+			"event_maxHp": event.get("maxHp", ""),
+			"event_condition": event.get("condition", ""),
+			"active_state_snapshot": active_snapshot,
+		})
 
 	match player_id:
 		"p1":
@@ -3151,6 +3286,84 @@ func _rewind_party_slots_for_events(events: Array) -> void:
 func _debug_battle_hp(message: String) -> void:
 	if DEBUG_BATTLE_HP_EVENTS:
 		print("[battle-hp] " + message)
+
+func _debug_log_ability_heal_events(label: String, response: Dictionary, context: Dictionary = {}) -> void:
+	var events_value: Variant = response.get("events", [])
+	var events: Array = events_value as Array if events_value is Array else []
+	_debug_log_ability_heal_event_array(label, events, _with_response_event_context(response, context))
+
+func _debug_log_ability_heal_event_array(label: String, events: Array, context: Dictionary = {}) -> void:
+	var ability_heals: Array = []
+	var response_event_seq := _get_int_from_variant(context.get("eventSeq", -1), -1)
+	var first_event_seq := response_event_seq - events.size() + 1 if response_event_seq >= 0 else -1
+	for index: int in range(events.size()):
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if not _is_ability_heal_event(event_data):
+			continue
+
+		ability_heals.append({
+			"index": index,
+			"seq": first_event_seq + index if first_event_seq >= 0 else -1,
+			"target": str(event_data.get("target", "")),
+			"source": str(event_data.get("source", "")),
+			"sourceAbility": str(event_data.get("sourceAbility", "")),
+			"hp": str(event_data.get("hp", "")),
+			"maxHp": str(event_data.get("maxHp", "")),
+			"condition": str(event_data.get("condition", "")),
+		})
+
+	if ability_heals.is_empty():
+		return
+
+	print("[RegeneratorDebug][client] %s " % label, {
+		"context": context,
+		"abilityHeals": ability_heals,
+	})
+	if not DEBUG_PVP_REALTIME:
+		return
+
+	_log_pvp_realtime(
+		"[RegeneratorDebug][client] %s" % label,
+		"context=%s abilityHeals=%s" % [JSON.stringify(context), JSON.stringify(ability_heals)]
+	)
+
+func _with_response_event_context(response: Dictionary, context: Dictionary) -> Dictionary:
+	var merged := context.duplicate(true)
+	for key in ["battleId", "eventSeq", "batchSeq", "phase", "nextPhase", "pvpServerSeq"]:
+		if response.has(key):
+			merged[key] = response.get(key)
+
+	var event_batches_value: Variant = response.get("eventBatches", [])
+	if event_batches_value is Array:
+		var batch_summary: Array = []
+		var event_batches: Array = event_batches_value as Array
+		for batch_value: Variant in event_batches:
+			if not (batch_value is Dictionary):
+				continue
+			var batch: Dictionary = batch_value as Dictionary
+			batch_summary.append({
+				"batchSeq": batch.get("batchSeq", -1),
+				"eventBatchId": str(batch.get("eventBatchId", "")),
+				"eventSeqStart": batch.get("eventSeqStart", -1),
+				"eventSeqEnd": batch.get("eventSeqEnd", -1),
+			})
+		merged["eventBatches"] = batch_summary
+
+	return merged
+
+func _is_ability_heal_event(event_data: Dictionary) -> bool:
+	if str(event_data.get("type", "")) != "heal":
+		return false
+	if str(event_data.get("sourceAbility", "")).strip_edges() != "":
+		return true
+	var source := str(event_data.get("source", "")).strip_edges().to_lower()
+	if source.begins_with("[from] "):
+		source = source.substr("[from] ".length()).strip_edges()
+	return source.begins_with("ability:")
 
 func _debug_battle_move(message: String) -> void:
 	if DEBUG_BATTLE_MOVE_EVENTS:
@@ -3402,7 +3615,7 @@ func _submit_player_choice(
 		mega = false
 	if _is_pvp_battle():
 		return await _submit_pvp_realtime_choice(choice_type, slot, mega, pending_player_choice_events)
-	return await action_flow.submit_player_choice(choice_type, slot, mega)
+	return await action_flow.submit_player_choice(choice_type, slot, mega, last_rendered_event_seq)
 
 func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	if _is_pvp_battle():
@@ -3412,7 +3625,8 @@ func _submit_lead(player_id: String, slot: int) -> Dictionary:
 		battle_request,
 		battle_state.battle_id,
 		player_id,
-		slot
+		slot,
+		last_rendered_event_seq
 	)
 	if not bool(response.get("success", false)):
 		return response
@@ -3426,7 +3640,9 @@ func _submit_npc_lead() -> Dictionary:
 	var response: Dictionary = await BattleApiClient.send_npc_lead(
 		battle_request,
 		battle_state.battle_id,
-		"p2"
+		"p2",
+		"basic",
+		last_rendered_event_seq
 	)
 	if not bool(response.get("success", false)):
 		return response
@@ -4467,7 +4683,7 @@ func _submit_npc_choice_and_render(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> bool:
-	var opponent_response: Dictionary = await action_flow.submit_npc_choice("p2")
+	var opponent_response: Dictionary = await action_flow.submit_npc_choice("p2", last_rendered_event_seq)
 
 	if not bool(opponent_response.get("success", false)):
 		return false
@@ -4481,14 +4697,28 @@ func _render_opponent_response(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> void:
-	var filtered_events: Array = _filter_already_rendered_events(opponent_response.get("events", []), rendered_event_keys)
+	_debug_log_ability_heal_events("render opponent response raw", opponent_response, {
+		"local_player_id": action_flow.local_player_id,
+	})
+	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
+	_debug_log_ability_heal_event_array("render opponent response incremental", response_events, {
+		"local_player_id": action_flow.local_player_id,
+	})
+	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys)
+	_debug_log_ability_heal_event_array("render opponent response filtered", filtered_events, {
+		"local_player_id": action_flow.local_player_id,
+	})
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
+	_debug_log_ability_heal_event_array("render opponent response merged", opponent_events, {
+		"local_player_id": action_flow.local_player_id,
+	})
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
 	_update_battle_presentation()
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
 	await _render_battle_events(opponent_events)
+	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
 	defer_force_switch_active_hide = false
 	_update_active_sprites()
 

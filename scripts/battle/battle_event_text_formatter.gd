@@ -392,11 +392,13 @@ func format_heal_event(
 	hp: int,
 	visible_hp_change: int
 	) -> String:
-	var source := _normalize_event_source(str(event.get("source", "")))
+	var source := _get_heal_source_name(event)
 	var source_key := source.to_lower().replace(" ", "")
 
 	if source_key == "leftovers":
 		return "%s restored HP using its Leftovers!" % target
+	if _is_heal_from_ability(event) and source != "":
+		return "%s's %s restored its HP!" % [target, _format_compact_effect_name(source)]
 	if source != "" and source_key != "drain":
 		return "%s restored HP with %s!" % [target, _format_compact_effect_name(source)]
 
@@ -407,17 +409,35 @@ func format_heal_event(
 	return "  - %s restored HP!" % target
 
 func format_heal_battle_message(event: Dictionary, target: String, previous_hp: int, hp: int) -> String:
-	var source := _normalize_event_source(str(event.get("source", "")))
+	var source := _get_heal_source_name(event)
 	var source_key := source.to_lower().replace(" ", "")
 
 	if source_key == "leftovers":
 		return "%s restored HP using its Leftovers!" % target
+	if _is_heal_from_ability(event) and source != "":
+		return "%s's %s restored its HP!" % [target, _format_compact_effect_name(source)]
 	if source != "" and source_key != "drain":
 		return "%s restored HP with %s!" % [target, _format_compact_effect_name(source)]
 	if hp > previous_hp:
 		return "%s restored HP!" % target
 
 	return ""
+
+func _get_heal_source_name(event: Dictionary) -> String:
+	var source_ability := str(event.get("sourceAbility", event.get("ability", event.get("abilityName", "")))).strip_edges()
+	if source_ability != "":
+		return source_ability
+
+	return _normalize_event_source(str(event.get("source", "")))
+
+func _is_heal_from_ability(event: Dictionary) -> bool:
+	if str(event.get("sourceAbility", event.get("ability", event.get("abilityName", "")))).strip_edges() != "":
+		return true
+
+	var source := str(event.get("source", "")).strip_edges().to_lower()
+	if source.begins_with("[from] "):
+		source = source.substr("[from] ".length()).strip_edges()
+	return source.begins_with("ability:")
 
 func format_field_effect_event(event: Dictionary) -> String:
 	var effect_name := _format_field_effect_name(str(event.get("effect", "")))

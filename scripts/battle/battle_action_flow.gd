@@ -39,46 +39,49 @@ func map_response_for_local_player(response: Dictionary) -> Dictionary:
 	return _swap_pokemon_sides(response.duplicate(true)) as Dictionary
 
 
-func submit_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
-	var response: Dictionary = await send_player_choice(choice_type, slot, mega)
+func submit_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
+	var response: Dictionary = await send_player_choice(choice_type, slot, mega, since_event_seq)
 	if not _is_successful_response(response):
 		print("Player choice failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response)):
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
 		return response
 
 	return map_response_for_local_player(response)
 
 
-func submit_npc_choice(player_id: String = "p2") -> Dictionary:
-	var response: Dictionary = await send_npc_choice(player_id)
+func submit_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Dictionary:
+	var response: Dictionary = await send_npc_choice(player_id, since_event_seq)
 	if not _is_successful_response(response):
 		print("NPC choice failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response)):
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
 		return response
 
 	return map_response_for_local_player(response)
 
 
-func send_player_choice(choice_type: String, slot: int, mega := false) -> Dictionary:
+func send_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
 	return await BattleApiClient.send_choice(
 		request_node,
 		battle_state.battle_id,
 		local_player_id,
 		choice_type,
 		slot,
-		mega
+		mega,
+		since_event_seq
 	)
 
 
-func send_npc_choice(player_id: String = "p2") -> Dictionary:
+func send_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Dictionary:
 	return await BattleApiClient.send_npc_choice(
 		request_node,
 		battle_state.battle_id,
-		player_id
+		player_id,
+		"basic",
+		since_event_seq
 	)
 
 func _swap_pokemon_sides(value: Variant) -> Variant:
@@ -107,12 +110,9 @@ func _swap_side_tokens(value: String) -> String:
 func _is_successful_response(response: Dictionary) -> bool:
 	return bool(response.get("success", false))
 
-func _response_has_deferred_display_event(response: Dictionary) -> bool:
-	var events_value: Variant = response.get("events", [])
-	if not (events_value is Array):
-		return false
-
-	var events: Array = events_value as Array
+func _response_has_deferred_display_event(response: Dictionary, since_event_seq := -1) -> bool:
+	var events: Array = _get_unrendered_response_events(response, since_event_seq)
+	_log_ability_heal_deferred_check(response, events, since_event_seq)
 	for event_value: Variant in events:
 		if not (event_value is Dictionary):
 			continue
@@ -123,3 +123,61 @@ func _response_has_deferred_display_event(response: Dictionary) -> bool:
 			return true
 
 	return false
+
+func _log_ability_heal_deferred_check(response: Dictionary, events: Array, since_event_seq := -1) -> void:
+	var ability_heals: Array = []
+	for index: int in range(events.size()):
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		if str(event.get("type", "")) != "heal":
+			continue
+		var source_ability := str(event.get("sourceAbility", "")).strip_edges()
+		var source := str(event.get("source", "")).strip_edges()
+		if source_ability == "" and not source.to_lower().begins_with("ability:"):
+			continue
+
+		ability_heals.append({
+			"index": index,
+			"target": str(event.get("target", "")),
+			"source": source,
+			"sourceAbility": source_ability,
+			"hp": str(event.get("hp", "")),
+			"maxHp": str(event.get("maxHp", "")),
+			"condition": str(event.get("condition", "")),
+		})
+
+	if ability_heals.is_empty():
+		return
+
+	print("[RegeneratorDebug][client][BattleActionFlow] deferred display check ", {
+		"local_player_id": local_player_id,
+		"since_event_seq": since_event_seq,
+		"eventSeq": response.get("eventSeq", -1),
+		"batchSeq": response.get("batchSeq", -1),
+		"abilityHealEvents": ability_heals,
+	})
+
+func _get_unrendered_response_events(response: Dictionary, since_event_seq := -1) -> Array:
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return []
+
+	var events: Array = events_value as Array
+	if since_event_seq < 0:
+		return events
+
+	var response_event_seq := int(response.get("eventSeq", -1))
+	if response_event_seq < 0:
+		return events
+
+	var first_event_seq := response_event_seq - events.size() + 1
+	var unrendered_events: Array = []
+	for index: int in range(events.size()):
+		var event_seq := first_event_seq + index
+		if event_seq > since_event_seq:
+			unrendered_events.append(events[index])
+
+	return unrendered_events

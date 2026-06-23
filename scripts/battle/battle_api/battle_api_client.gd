@@ -70,19 +70,24 @@ func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Diction
 		}
 	)
 
-func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String, slot: int) -> Dictionary:
+func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String, slot: int, since_event_seq := -1) -> Dictionary:
 	var body = {
 		"playerId": player_id,
 		"slot": slot
 	}
 	
-	return await send_post_request(request_node, "/battle/" + battle_id + "/lead", body)
+	return await send_post_request(
+		request_node,
+		_append_since_event_seq_query("/battle/" + battle_id + "/lead", since_event_seq),
+		body
+	)
 
 func send_npc_lead(
 	request_node: HTTPRequest,
 	battle_id: String,
 	player_id: String,
-	strategy: String = "basic"
+	strategy: String = "basic",
+	since_event_seq := -1
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -91,7 +96,7 @@ func send_npc_lead(
 
 	return await send_post_request(
 		request_node,
-		"/battle/%s/npc/lead" % battle_id,
+		_append_since_event_seq_query("/battle/%s/npc/lead" % battle_id, since_event_seq),
 		body
 	)
 
@@ -101,7 +106,8 @@ func send_choice(
 	player_id: String,
 	choice_type: String,
 	slot: int,
-	mega := false
+	mega := false,
+	since_event_seq := -1
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -113,7 +119,7 @@ func send_choice(
 	
 	return await send_post_request(
 		request_node,
-		"/battle/%s/choice" % battle_id,
+		_append_since_event_seq_query("/battle/%s/choice" % battle_id, since_event_seq),
 		body
 	)
 
@@ -121,7 +127,8 @@ func send_npc_choice(
 	request_node: HTTPRequest,
 	battle_id: String,
 	player_id: String,
-	strategy: String = "basic"
+	strategy: String = "basic",
+	since_event_seq := -1
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -130,9 +137,16 @@ func send_npc_choice(
 
 	return await send_post_request(
 		request_node,
-		"/battle/%s/npc/choice" % battle_id,
+		_append_since_event_seq_query("/battle/%s/npc/choice" % battle_id, since_event_seq),
 		body
 	)
+
+func _append_since_event_seq_query(path: String, since_event_seq: int) -> String:
+	if since_event_seq < 0:
+		return path
+
+	var separator := "&" if path.contains("?") else "?"
+	return "%s%ssinceEventSeq=%d" % [path, separator, since_event_seq]
 
 func get_pokemon_info(request_node: HTTPRequest, battle_id: String, viewer_id: String, ident: String) -> Dictionary:
 	var query: String = "?viewerId=%s&ident=%s" % [

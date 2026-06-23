@@ -186,7 +186,22 @@ func _should_preserve_remembered_hp_snapshot(pokemon_data: Dictionary, memory_sn
 
 	var incoming_hp := int(incoming_snapshot.get("hp", 0))
 	var incoming_max_hp := int(incoming_snapshot.get("max_hp", 0))
-	return incoming_hp >= incoming_max_hp and incoming_max_hp > 0
+	if incoming_hp >= incoming_max_hp and incoming_max_hp > 0:
+		return true
+
+	if incoming_max_hp == remembered_max_hp and incoming_hp < remembered_hp:
+		print("[RegeneratorDebug][client][BattleState] preserving newer HP memory over stale incoming snapshot ", {
+			"ident": str(pokemon_data.get("ident", "")),
+			"incoming_condition": str(pokemon_data.get("condition", "")),
+			"incoming_hp": incoming_hp,
+			"incoming_max_hp": incoming_max_hp,
+			"remembered_condition": str(memory_snapshot.get("condition", "")),
+			"remembered_hp": remembered_hp,
+			"remembered_max_hp": remembered_max_hp,
+		})
+		return true
+
+	return false
 
 func _get_pokemon_hp_snapshot(pokemon_data: Dictionary) -> Dictionary:
 	var condition_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(str(pokemon_data.get("condition", "")))
@@ -338,11 +353,19 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 		if target_ident == "" or condition == "":
 			continue
 
-		_set_pokemon_condition(target_ident, condition)
+		_set_pokemon_condition(target_ident, condition, event)
 
 func _get_condition_from_event(event: Dictionary) -> String:
 	if _has_percentage_only_condition(event):
 		return ""
+
+	if event.has("hp") and event.has("maxHp"):
+		var hp := int(event.get("hp", 0))
+		var max_hp: int = max(int(event.get("maxHp", 1)), 1)
+		if hp <= 0:
+			return "0 fnt"
+
+		return _format_hp_condition(hp, max_hp, str(event.get("condition", "")))
 
 	var event_condition := str(event.get("condition", ""))
 	if event_condition != "":
@@ -351,13 +374,22 @@ func _get_condition_from_event(event: Dictionary) -> String:
 	if str(event.get("type", "")) == "faint":
 		return "0 fnt"
 
-	if event.has("hp") and event.has("maxHp"):
-		var hp := int(event.get("hp", 0))
-		var max_hp: int = max(int(event.get("maxHp", 1)), 1)
-		if hp <= 0:
-			return "0 fnt"
+	return ""
 
+func _format_hp_condition(hp: int, max_hp: int, fallback_condition: String) -> String:
+	var suffix := _get_condition_status_suffix(fallback_condition)
+	if suffix == "":
 		return "%s/%s" % [hp, max_hp]
+
+	return "%s/%s %s" % [hp, max_hp, suffix]
+
+func _get_condition_status_suffix(condition: String) -> String:
+	var parts: PackedStringArray = condition.split(" ", false)
+	for part_value: String in parts:
+		var part := part_value.strip_edges().to_lower()
+		match part:
+			"psn", "tox", "brn", "par", "slp", "frz":
+				return part
 
 	return ""
 
@@ -367,9 +399,21 @@ func _has_percentage_only_condition(event: Dictionary) -> bool:
 
 	return hp_event_helper.is_percentage_only_condition_event(event, false)
 
-func _set_pokemon_condition(target_ident: String, condition: String) -> void:
+func _set_pokemon_condition(target_ident: String, condition: String, source_event: Dictionary = {}) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
 	var target_name := _get_pokemon_name_from_ident(target_ident)
+	var debug_ability_heal := _is_debug_ability_heal_event(source_event)
+	if debug_ability_heal:
+		print("[RegeneratorDebug][client][BattleState] condition event received ", {
+			"target_ident": target_ident,
+			"player_id": player_id,
+			"target_name": target_name,
+			"condition": condition,
+			"source": source_event.get("source", ""),
+			"sourceAbility": source_event.get("sourceAbility", ""),
+			"hp": source_event.get("hp", ""),
+			"maxHp": source_event.get("maxHp", ""),
+		})
 	if player_id == "" or target_name == "":
 		return
 
@@ -393,10 +437,88 @@ func _set_pokemon_condition(target_ident: String, condition: String) -> void:
 			continue
 
 		var pokemon_data: Dictionary = pokemon_value as Dictionary
-		if _get_pokemon_name_from_ident(str(pokemon_data.get("ident", ""))) == target_name:
+		var candidate_ident := str(pokemon_data.get("ident", ""))
+		var candidate_name := _get_pokemon_name_from_ident(candidate_ident)
+		if debug_ability_heal:
+			print("[RegeneratorDebug][client][BattleState] condition candidate ", {
+				"target_ident": target_ident,
+				"target_name": target_name,
+				"candidate_ident": candidate_ident,
+				"candidate_name": candidate_name,
+				"active": pokemon_data.get("active", false),
+				"condition": pokemon_data.get("condition", ""),
+				"hp": pokemon_data.get("hp", ""),
+				"maxHp": pokemon_data.get("maxHp", ""),
+			})
+		if candidate_name == target_name:
 			pokemon_data["condition"] = condition
 			_apply_condition_fields(pokemon_data, condition)
+			_remember_hp_snapshot_for_condition_event(target_ident, pokemon_data, condition)
+			if debug_ability_heal:
+				print("[RegeneratorDebug][client][BattleState] condition matched ", {
+					"target_ident": target_ident,
+					"candidate_ident": candidate_ident,
+					"condition": condition,
+					"hp": pokemon_data.get("hp", ""),
+					"maxHp": pokemon_data.get("maxHp", ""),
+				})
 			return
+	if debug_ability_heal:
+		print("[RegeneratorDebug][client][BattleState] condition did not match team pokemon ", {
+			"target_ident": target_ident,
+			"target_name": target_name,
+			"player_id": player_id,
+			"condition": condition,
+		})
+
+func _is_debug_ability_heal_event(event: Dictionary) -> bool:
+	if str(event.get("type", "")) != "heal":
+		return false
+	if str(event.get("sourceAbility", "")).strip_edges() != "":
+		return true
+	var source := str(event.get("source", "")).strip_edges().to_lower()
+	if source.begins_with("[from] "):
+		source = source.substr("[from] ".length()).strip_edges()
+	return source.begins_with("ability:")
+
+func _remember_hp_snapshot_for_condition_event(target_ident: String, pokemon_data: Dictionary, condition: String) -> void:
+	var snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)
+	if snapshot.is_empty():
+		return
+
+	var ident := str(pokemon_data.get("ident", target_ident))
+	if ident == "":
+		ident = target_ident
+	if ident == "":
+		return
+
+	var hp := int(snapshot.get("hp", 0))
+	var max_hp := int(snapshot.get("max_hp", 0))
+	if condition.contains("fnt"):
+		var previous_snapshot_value: Variant = hp_snapshot_by_ident.get(ident, hp_snapshot_by_ident.get(target_ident, {}))
+		var previous_snapshot: Dictionary = previous_snapshot_value as Dictionary if previous_snapshot_value is Dictionary else {}
+		var previous_max_hp := int(previous_snapshot.get("max_hp", int(pokemon_data.get("maxHp", max_hp))))
+		if previous_max_hp > 0:
+			max_hp = previous_max_hp
+	elif max_hp == 100:
+		var previous_memory_value: Variant = hp_snapshot_by_ident.get(ident, hp_snapshot_by_ident.get(target_ident, {}))
+		var previous_memory: Dictionary = previous_memory_value as Dictionary if previous_memory_value is Dictionary else {}
+		if int(previous_memory.get("max_hp", 0)) > 100:
+			return
+
+	if max_hp <= 0:
+		return
+
+	var remembered_condition := condition
+	if condition.contains("fnt"):
+		remembered_condition = "0 fnt"
+	hp_snapshot_by_ident[ident] = {
+		"hp": hp,
+		"max_hp": max_hp,
+		"condition": remembered_condition,
+	}
+	if target_ident != "" and target_ident != ident:
+		hp_snapshot_by_ident[target_ident] = hp_snapshot_by_ident[ident]
 
 func _apply_transform_event_to_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))
@@ -637,6 +759,10 @@ func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
 	return {}
 
 func _get_side_pokemon_by_transform_key(transform_key: String) -> Dictionary:
+	var normalized_transform_key := _normalize_transform_key(transform_key)
+	if normalized_transform_key == "":
+		return {}
+
 	for player_id in ["p1", "p2"]:
 		var request_value: Variant = requests.get(player_id, {})
 		if not (request_value is Dictionary):
@@ -658,7 +784,7 @@ func _get_side_pokemon_by_transform_key(transform_key: String) -> Dictionary:
 				continue
 
 			var pokemon_data: Dictionary = pokemon_value as Dictionary
-			if _get_transform_key_from_ident(str(pokemon_data.get("ident", ""))) == transform_key:
+			if _get_transform_key_from_ident(str(pokemon_data.get("ident", ""))) == normalized_transform_key:
 				return pokemon_data
 
 	return {}
@@ -694,7 +820,19 @@ func _get_active_side_pokemon(player_id: String) -> Dictionary:
 
 func _get_transform_key_from_ident(ident: String) -> String:
 	var player_id := _get_player_id_from_ident(ident)
-	var pokemon_name := _get_pokemon_name_from_ident(ident)
+	var pokemon_name := _get_base_pokemon_name_from_ident(ident)
+	if player_id == "" or pokemon_name == "":
+		return ""
+
+	return "%s:%s" % [player_id, pokemon_name]
+
+func _normalize_transform_key(transform_key: String) -> String:
+	var parts := transform_key.split(":", false, 1)
+	if parts.size() != 2:
+		return ""
+
+	var player_id := str(parts[0]).strip_edges()
+	var pokemon_name := _normalize_transform_key_pokemon_name(str(parts[1]))
 	if player_id == "" or pokemon_name == "":
 		return ""
 
@@ -728,6 +866,16 @@ func _get_pokemon_name_from_ident(ident: String) -> String:
 		return ""
 
 	return str(ident.split(": ")[1]).strip_edges().to_lower()
+
+func _get_base_pokemon_name_from_ident(ident: String) -> String:
+	return _normalize_transform_key_pokemon_name(_get_pokemon_name_from_ident(ident))
+
+func _normalize_transform_key_pokemon_name(pokemon_name: String) -> String:
+	var normalized := pokemon_name.strip_edges().to_lower()
+	normalized = normalized.replace("-mega-x", "")
+	normalized = normalized.replace("-mega-y", "")
+	normalized = normalized.replace("-mega", "")
+	return normalized
 
 ## Geeft alle Pokemon op de side van een speler terug.
 func get_player_team(player_id: String = "p1") -> Array:
