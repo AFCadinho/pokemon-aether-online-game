@@ -19,10 +19,11 @@ func clear() -> void:
 func has_pending() -> bool:
 	return not pending_updates.is_empty()
 
-func enqueue_response(response: Dictionary, source: String, apply_event_conditions := true) -> Dictionary:
-	var normalized_response := response.duplicate(true)
-	var dedupe := _dedupe_metadata_for_response(normalized_response)
-	var queue_id := _next_id
+func enqueue_response(response: Dictionary, source: String, apply_event_conditions := true, metadata: Dictionary = {}) -> Dictionary:
+	var normalized_response: Dictionary = response.duplicate(true)
+	var dedupe: Dictionary = _dedupe_metadata_for_response(normalized_response)
+	var entry_metadata: Dictionary = metadata.duplicate(true)
+	var queue_id: int = _next_id
 	_next_id += 1
 
 	if dedupe.should_drop:
@@ -32,6 +33,7 @@ func enqueue_response(response: Dictionary, source: String, apply_event_conditio
 			"response": normalized_response,
 			"apply_event_conditions": apply_event_conditions,
 			"skip_render": true,
+			"metadata": entry_metadata,
 		}
 		pending_updates.append(duplicate_entry)
 		if debug_enabled:
@@ -69,6 +71,7 @@ func enqueue_response(response: Dictionary, source: String, apply_event_conditio
 		"response": normalized_response,
 		"apply_event_conditions": apply_event_conditions,
 		"skip_render": false,
+		"metadata": entry_metadata,
 	}
 	pending_updates.append(entry)
 
