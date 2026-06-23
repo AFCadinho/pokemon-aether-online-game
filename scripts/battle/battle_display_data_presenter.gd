@@ -28,6 +28,14 @@ func get_active_display_species(player_id: String) -> String:
 	if transformed_species != "":
 		return transformed_species
 
+	var mega_species := str(active_pokemon.get("megaSpecies", ""))
+	if mega_species != "":
+		return mega_species
+
+	var persisted_mega_species := battle_state.resolve_persisted_mega_species_for_ident(str(active_pokemon.get("ident", "")))
+	if persisted_mega_species != "":
+		return persisted_mega_species
+
 	if player_id == "p1":
 		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
 		if saved_pokemon != null:

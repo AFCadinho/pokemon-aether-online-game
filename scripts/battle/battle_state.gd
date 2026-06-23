@@ -282,6 +282,13 @@ func resolve_active_mega_species(player_id: String = "p1") -> String:
 
 	return _get_mega_species_for_pokemon_data(get_active_player_pokemon(player_id))
 
+func resolve_persisted_mega_species_for_ident(ident: String) -> String:
+	var mega_key := _get_transform_key_from_ident(ident)
+	if mega_key == "":
+		return ""
+
+	return str(mega_species_by_ident.get(mega_key, "")).strip_edges()
+
 func resolve_mega_species_for_event(event: Dictionary) -> String:
 	var event_species := str(event.get("species", "")).strip_edges()
 	if _is_mega_species(event_species):

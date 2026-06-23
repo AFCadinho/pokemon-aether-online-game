@@ -11,6 +11,7 @@ var current_batch_seq := -1
 var current_event_seq_end := -1
 var last_rendered_seq := -1
 var debug_enabled := false
+var render_completed_callback: Callable = Callable()
 var _next_id := 1
 
 func clear() -> void:
@@ -26,6 +27,9 @@ func clear() -> void:
 
 func has_pending() -> bool:
 	return not pending_updates.is_empty()
+
+func set_render_completed_callback(callback: Callable) -> void:
+	render_completed_callback = callback
 
 func begin_render_batch(response: Dictionary, source: String = "") -> Dictionary:
 	if current_event_batch_id != "":
@@ -69,9 +73,22 @@ func begin_render_batch(response: Dictionary, source: String = "") -> Dictionary
 func complete_render_batch(context: Dictionary, success := true) -> void:
 	var context_batch_id := str(context.get("event_batch_id", ""))
 	var context_event_seq_end := int(context.get("event_seq_end", -1))
+	var context_batch_seq := int(context.get("batch_seq", -1))
+	var context_source := str(context.get("source", ""))
 
 	if success and context_event_seq_end > last_rendered_seq:
 		last_rendered_seq = context_event_seq_end
+
+	var completion := {
+		"event_batch_id": context_batch_id,
+		"batch_seq": context_batch_seq,
+		"event_seq_end": context_event_seq_end,
+		"last_rendered_seq": last_rendered_seq,
+		"source": context_source,
+		"success": success,
+	}
+	if render_completed_callback.is_valid():
+		render_completed_callback.call(completion)
 
 	if debug_enabled:
 		print("[BattleEventQueue] complete render batch id=%s success=%s lastRenderedSeq=%d" % [

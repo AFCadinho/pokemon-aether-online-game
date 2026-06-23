@@ -2271,9 +2271,11 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 	else:
 		await get_tree().process_frame
 	await _play_initial_shiny_entrance_effects()
-	await _render_battle_events(start_events, false)
-	_mark_pvp_response_events_rendered(api_response)
-	_mark_non_pvp_response_event_seq_consumed(api_response)
+	if _is_pvp_battle():
+		await _render_pvp_event_batch(api_response, start_events, false, "initial_battle_events")
+	else:
+		await _render_battle_events(start_events, false, "initial_battle_events")
+		_mark_non_pvp_response_event_seq_consumed(api_response)
 
 func _show_battle_controls_after_initial_events() -> void:
 	_update_battle_presentation()
@@ -2667,7 +2669,7 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 
 func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_headers := true, source := "") -> bool:
 	if not _is_pvp_battle():
-		await _render_battle_events(events, render_turn_headers)
+		await _render_battle_events(events, render_turn_headers, source)
 		return true
 
 	var batch_context: Dictionary = pvp_event_queue.begin_render_batch(response, source)
@@ -2683,18 +2685,38 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 			)
 		return false
 
-	var success := true
-	await _render_battle_events(events, render_turn_headers)
-	_mark_pvp_response_events_rendered(response)
+	var success := false
+	await _render_battle_events(events, render_turn_headers, "pvp_event_batch:%s" % source)
+	success = true
+	if success:
+		_mark_pvp_response_events_rendered(response)
 	pvp_event_queue.complete_render_batch(batch_context, success)
 	return success
 
-func _render_battle_events(events: Array, render_turn_headers := true) -> void:
+func _warn_if_pvp_render_bypasses_runner(source := "") -> void:
+	if not _is_pvp_battle():
+		return
+	if pvp_event_queue.current_event_batch_id != "":
+		return
+
+	var context := source if source != "" else "unknown"
+	_log_pvp_realtime(
+		"PvP render bypassed BattleEventQueue runner",
+		"source=%s batchSeq=%d eventSeqEnd=%d lastRenderedSeq=%d" % [
+			context,
+			pvp_event_queue.current_batch_seq,
+			pvp_event_queue.current_event_seq_end,
+			pvp_event_queue.last_rendered_seq,
+		]
+	)
+
+func _render_battle_events(events: Array, render_turn_headers := true, source := "") -> void:
+	_warn_if_pvp_render_bypasses_runner(source)
 	_debug_log_ability_heal_event_array("render battle events input", events, {
 		"local_player_id": action_flow.local_player_id,
 		"render_turn_headers": render_turn_headers,
 	})
-	var ordered_events: Array = _order_form_change_events_before_moves(events)
+	var ordered_events: Array = _order_switch_out_heals_before_switches(_order_form_change_events_before_moves(events))
 	_debug_log_ability_heal_event_array("render battle events ordered", ordered_events, {
 		"local_player_id": action_flow.local_player_id,
 	})
@@ -2702,7 +2724,8 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 	_prewarm_battle_event_animations(ordered_events)
 	event_presentation.reset_recent_context()
 
-	for event in ordered_events:
+	for event_index: int in range(ordered_events.size()):
+		var event: Variant = ordered_events[event_index]
 		if not (event is Dictionary):
 			continue
 
@@ -2724,6 +2747,7 @@ func _render_battle_events(events: Array, render_turn_headers := true) -> void:
 				event_renderer.add_turn_header(turn)
 			continue
 
+		_show_switch_out_heal_target_if_needed(event_data, ordered_events, event_index)
 		await event_renderer.render_event(event_data, presentation)
 		if fallback_knock_off_message != "":
 			battle_log_panel.add_message(fallback_knock_off_message)
@@ -2788,7 +2812,7 @@ func _build_pending_player_mega_events(use_mega: bool) -> Array:
 	return pending_events
 
 func _get_pending_player_choice_events(response: Dictionary, fallback_events: Array) -> Array:
-	var response_events: Array = _filter_incremental_non_pvp_response_events(response)
+	var response_events: Array = _filter_pvp_pending_player_choice_events(response) if _is_pvp_battle() else _filter_incremental_non_pvp_response_events(response)
 	var pending_events: Array = _get_pending_mega_events_from_response(response_events)
 	if pending_events.is_empty():
 		return fallback_events
@@ -2800,6 +2824,32 @@ func _get_pending_player_choice_events(response: Dictionary, fallback_events: Ar
 			_remember_pending_mega_species(event_data)
 
 	return pending_events
+
+func _filter_pvp_pending_player_choice_events(response: Dictionary) -> Array:
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return []
+
+	var events: Array = events_value as Array
+	if events.is_empty():
+		return []
+
+	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+	var last_rendered_seq := pvp_event_queue.last_rendered_seq
+	if response_event_seq >= 0 and last_rendered_seq >= 0:
+		var first_event_seq := response_event_seq - events.size() + 1
+		var filtered_by_seq: Array = []
+		for index: int in range(events.size()):
+			var event_seq := first_event_seq + index
+			if event_seq > last_rendered_seq:
+				filtered_by_seq.append(events[index])
+		return filtered_by_seq
+
+	var filtered_by_count: Array = []
+	var start_index: int = max(pvp_rendered_event_count, 0)
+	for index: int in range(start_index, events.size()):
+		filtered_by_count.append(events[index])
+	return filtered_by_count
 
 func _get_pending_mega_events_from_response(events_value: Variant) -> Array:
 	var pending_events: Array = []
@@ -3095,6 +3145,160 @@ func _order_form_change_events_before_moves(events: Array) -> Array:
 		ordered_events.append(event_data)
 
 	return ordered_events
+
+func _order_switch_out_heals_before_switches(events: Array) -> Array:
+	var ordered_events: Array = []
+	var consumed_indexes: Dictionary = {}
+
+	for index: int in range(events.size()):
+		if consumed_indexes.has(index):
+			continue
+
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			ordered_events.append(event_value)
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if str(event_data.get("type", "")) == "switch":
+			var heal_index := _find_next_switch_out_heal_event_index(events, index + 1, event_data, consumed_indexes)
+			if heal_index >= 0:
+				ordered_events.append(events[heal_index])
+				consumed_indexes[heal_index] = true
+
+		ordered_events.append(event_data)
+
+	return ordered_events
+
+func _find_next_switch_out_heal_event_index(
+	events: Array,
+	start_index: int,
+	switch_event: Dictionary,
+	consumed_indexes: Dictionary
+) -> int:
+	var switch_out_ident := _normalize_battle_ident(str(switch_event.get("fromIdent", "")))
+	if switch_out_ident == "":
+		return -1
+
+	for index: int in range(start_index, events.size()):
+		if consumed_indexes.has(index):
+			continue
+
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		var event_type := str(event_data.get("type", ""))
+		if event_type == "turn" or event_type == "switch":
+			return -1
+		if not bool(event_data.get("synthetic", false)):
+			continue
+		if not _is_ability_heal_event(event_data):
+			continue
+
+		var heal_target := _normalize_battle_ident(str(event_data.get("target", "")))
+		if heal_target == switch_out_ident:
+			return index
+
+	return -1
+
+func _show_switch_out_heal_target_if_needed(event_data: Dictionary, ordered_events: Array, event_index: int) -> void:
+	if not bool(event_data.get("synthetic", false)):
+		return
+	if not _is_ability_heal_event(event_data):
+		return
+
+	var target_ident := str(event_data.get("target", ""))
+	var target_key := _normalize_battle_ident(target_ident)
+	if target_key == "":
+		return
+	if animation_router != null and animation_router.is_target_ident_currently_visible(target_ident):
+		return
+
+	var matching_switch := _get_next_matching_switch_event(ordered_events, event_index + 1, target_key)
+	if matching_switch.is_empty():
+		return
+	if not _is_pivot_switch_event(matching_switch, ordered_events, event_index):
+		return
+
+	var player_id := _get_player_id_from_ident(target_ident)
+	var species := _get_species_from_ident(target_ident)
+	if player_id == "" or species == "":
+		return
+
+	var is_shiny := _get_switch_event_is_shiny(player_id, target_ident, species)
+	match player_id:
+		"p1":
+			player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+		"p2":
+			enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+
+func _get_next_matching_switch_event(events: Array, start_index: int, switch_out_ident: String) -> Dictionary:
+	for index: int in range(start_index, events.size()):
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		var event_type := str(event_data.get("type", ""))
+		if event_type == "turn":
+			return {}
+		if event_type != "switch":
+			continue
+
+		var from_ident := _normalize_battle_ident(str(event_data.get("fromIdent", "")))
+		if from_ident == switch_out_ident:
+			return event_data
+		return {}
+
+	return {}
+
+func _is_pivot_switch_event(switch_event: Dictionary, ordered_events: Array, heal_event_index: int) -> bool:
+	for key in ["source", "from", "fromMove", "move"]:
+		if _is_pivot_move_name(str(switch_event.get(key, ""))):
+			return true
+
+	var switch_player_id := str(switch_event.get("playerId", ""))
+	if switch_player_id == "":
+		switch_player_id = _get_player_id_from_ident(str(switch_event.get("toIdent", switch_event.get("pokemon", ""))))
+	if switch_player_id == "":
+		return false
+
+	for index: int in range(heal_event_index - 1, -1, -1):
+		var event_value: Variant = ordered_events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		var event_type := str(event_data.get("type", ""))
+		if event_type == "turn" or event_type == "switch":
+			return false
+		if event_type != "move":
+			continue
+
+		var actor_player_id := _get_player_id_from_ident(str(event_data.get("actor", "")))
+		if actor_player_id == switch_player_id and _is_pivot_move_name(str(event_data.get("move", ""))):
+			return true
+
+	return false
+
+func _is_pivot_move_name(move_name: String) -> bool:
+	var normalized := move_name.strip_edges()
+	if normalized.begins_with("[from] "):
+		normalized = normalized.substr("[from] ".length()).strip_edges()
+	if normalized.begins_with("move:"):
+		normalized = normalized.substr("move:".length()).strip_edges()
+	normalized = normalized.to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	return normalized in [
+		"uturn",
+		"flipturn",
+		"chillyreception",
+		"voltswitch",
+		"batonpass",
+		"partingshot",
+		"teleport",
+	]
 
 func _find_next_form_change_event_index(
 	events: Array,
@@ -3519,7 +3723,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 			var player_events: Array = _filter_already_rendered_events(response_events, {})
 			_rewind_active_hud_hp_for_events(player_events)
 			_rewind_party_slots_for_events(player_events)
-			await _render_battle_events(player_events)
+			await _render_battle_events(player_events, true, "force_switch_player_non_pvp")
 			_mark_non_pvp_response_events_rendered(player_response, player_events)
 
 			if await _finish_if_battle_ended():
@@ -3695,6 +3899,7 @@ func _is_pvp_battle() -> bool:
 
 func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	pvp_event_queue.debug_enabled = DEBUG_PVP_REALTIME
+	pvp_event_queue.set_render_completed_callback(Callable(self, "_on_pvp_render_batch_completed"))
 	pvp_event_queue.clear()
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
@@ -3708,6 +3913,21 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
 		PvpBattleRealtimeService.battle_update_received.connect(_on_pvp_realtime_battle_update)
 	PvpBattleRealtimeService.connect_room(pvp_room_code, local_player_id, battle_id)
+
+func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
+	if not DEBUG_PVP_REALTIME:
+		return
+	_log_pvp_realtime(
+		"PvP render batch completed",
+		"id=%s source=%s success=%s batchSeq=%d eventSeqEnd=%d lastRenderedSeq=%d" % [
+			str(completion.get("event_batch_id", "")),
+			str(completion.get("source", "")),
+			str(completion.get("success", false)),
+			_get_int_from_variant(completion.get("batch_seq", -1), -1),
+			_get_int_from_variant(completion.get("event_seq_end", -1), -1),
+			_get_int_from_variant(completion.get("last_rendered_seq", -1), -1),
+		]
+	)
 
 func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	var room_code := str(message.get("roomCode", "")).strip_edges().to_upper()
@@ -4779,7 +4999,7 @@ func _render_opponent_response(
 	_update_battle_presentation()
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
-	await _render_battle_events(opponent_events)
+	await _render_battle_events(opponent_events, true, "opponent_response_non_pvp")
 	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
 	defer_force_switch_active_hide = false
 	_update_active_sprites()
@@ -4890,6 +5110,10 @@ func _show_switch_event_active_pokemon(event_data: Dictionary) -> void:
 			enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
 
 func _get_switch_event_species(event_data: Dictionary, switch_ident: String) -> String:
+	var persisted_mega_species := battle_state.resolve_persisted_mega_species_for_ident(switch_ident)
+	if persisted_mega_species != "":
+		return persisted_mega_species
+
 	for key in ["to", "species", "displaySpecies"]:
 		var species := str(event_data.get(key, "")).strip_edges()
 		if species != "":
