@@ -21,16 +21,20 @@ var animation_data_cache: Dictionary = {}
 var resource_cache: Dictionary = {}
 var threaded_resource_requests: Dictionary = {}
 var sound_stream_cache: Dictionary = {}
+var animation_guard: Callable
 
 
-func setup(player_box: Node, enemy_box: Node, parent_node: Node = null) -> void:
+func setup(player_box: Node, enemy_box: Node, parent_node: Node = null, animation_guard_callback: Callable = Callable()) -> void:
 	player_sprite_box = player_box
 	enemy_sprite_box = enemy_box
 	animation_parent = parent_node
+	animation_guard = animation_guard_callback
 
 
 func play_attack_tween_for_actor(actor_ident: String) -> void:
 	if not SettingsManager.battle_animations:
+		return
+	if not _can_start_battle_animation("router.attack_tween", {"actor": actor_ident}):
 		return
 
 	match _get_player_id_from_ident(actor_ident):
@@ -43,6 +47,12 @@ func play_attack_tween_for_actor(actor_ident: String) -> void:
 func play_move_animation(move_name: String, actor_ident: String = "", _target_ident: String = "") -> void:
 	if not SettingsManager.battle_animations:
 		return
+	if not _can_start_battle_animation("router.move_animation", {
+		"move": move_name,
+		"actor": actor_ident,
+		"target": _target_ident,
+	}):
+		return
 
 	var move_key: String = _normalize_move_name(move_name)
 	var config: Dictionary = _get_move_animation_config(move_key)
@@ -54,6 +64,11 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 
 func play_effect_animation(effect_key: String, target_ident: String = "") -> void:
 	if not SettingsManager.battle_animations:
+		return
+	if not _can_start_battle_animation("router.effect_animation", {
+		"effect": effect_key,
+		"target": target_ident,
+	}):
 		return
 
 	var config: Dictionary = _get_effect_animation_config(_normalize_animation_key(effect_key))
@@ -615,6 +630,8 @@ func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void
 func play_damage_tween_for_target(target_ident: String) -> void:
 	if not SettingsManager.battle_animations:
 		return
+	if not _can_start_battle_animation("router.damage_tween", {"target": target_ident}):
+		return
 
 	_play_one_shot_sound(TAKE_DAMAGE_SOUND_PATH)
 	match _get_player_id_from_ident(target_ident):
@@ -625,6 +642,9 @@ func play_damage_tween_for_target(target_ident: String) -> void:
 
 
 func _play_one_shot_sound(sound_path: String) -> void:
+	if not _can_start_battle_animation("router.render_sound", {"sound": sound_path}):
+		return
+
 	var stream: AudioStream = _get_cached_sound_stream(sound_path)
 	if stream == null:
 		return
@@ -658,6 +678,8 @@ func _get_cached_sound_stream(sound_path: String) -> AudioStream:
 func play_heal_tween_for_target(target_ident: String) -> void:
 	if not SettingsManager.battle_animations:
 		return
+	if not _can_start_battle_animation("router.heal_tween", {"target": target_ident}):
+		return
 	if not is_target_ident_currently_visible(target_ident):
 		return
 
@@ -671,6 +693,8 @@ func play_heal_tween_for_target(target_ident: String) -> void:
 func play_faint_tween_for_target(target_ident: String) -> void:
 	if not SettingsManager.battle_animations:
 		return
+	if not _can_start_battle_animation("router.faint_tween", {"target": target_ident}):
+		return
 
 	match _get_player_id_from_ident(target_ident):
 		"p1":
@@ -681,6 +705,11 @@ func play_faint_tween_for_target(target_ident: String) -> void:
 
 func play_stat_change_tween_for_target(target_ident: String, amount: int) -> void:
 	if not SettingsManager.battle_animations:
+		return
+	if not _can_start_battle_animation("router.stat_change_tween", {
+		"target": target_ident,
+		"amount": amount,
+	}):
 		return
 
 	if amount == 0:
@@ -701,6 +730,13 @@ func play_stat_change_tween_for_target(target_ident: String, amount: int) -> voi
 
 func _normalize_move_name(move_name: String) -> String:
 	return move_name.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
+
+
+func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bool:
+	if not animation_guard.is_valid():
+		return true
+
+	return bool(animation_guard.call(source, details))
 
 
 func _normalize_animation_key(value: String) -> String:

@@ -8,6 +8,7 @@ var animation_router: BattleAnimationRouter
 var message_timing: BattleMessageTiming
 var host_node: Node
 var set_active_hud_hp_from_event: Callable
+var animation_guard: Callable
 var last_battle_log_player_id := ""
 
 
@@ -17,7 +18,8 @@ func setup(
 	router: BattleAnimationRouter,
 	timing: BattleMessageTiming,
 	host: Node,
-	hp_event_callback: Callable
+	hp_event_callback: Callable,
+	animation_guard_callback: Callable = Callable()
 ) -> void:
 	battle_log_panel = battle_log
 	current_action_panel = action_panel
@@ -25,6 +27,7 @@ func setup(
 	message_timing = timing
 	host_node = host
 	set_active_hud_hp_from_event = hp_event_callback
+	animation_guard = animation_guard_callback
 
 
 func reset_battle_log_player_gap() -> void:
@@ -74,16 +77,41 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	if battle_message != "":
 		current_action_panel.set_message(battle_message)
 
+	var has_animation_action := (
+		effect_animation_key != ""
+		or attack_actor_ident != ""
+		or move_animation_name != ""
+		or damage_target_ident != ""
+		or heal_target_ident != ""
+		or faint_target_ident != ""
+		or stat_change_target_ident != ""
+		or ability_boost_target_ident != ""
+	)
+	var animations_allowed := true
+	if has_animation_action:
+		animations_allowed = _can_start_battle_animation("event_renderer.render_event", {
+			"event_type": str(event_data.get("type", "")),
+			"attack_actor": attack_actor_ident,
+			"move": move_animation_name,
+			"effect": effect_animation_key,
+			"damage_target": damage_target_ident,
+			"heal_target": heal_target_ident,
+			"faint_target": faint_target_ident,
+			"stat_target": stat_change_target_ident,
+		})
 	if effect_animation_key != "" and heal_target_ident == "":
-		await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
+		if animations_allowed:
+			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
 	if attack_actor_ident != "":
-		await animation_router.play_attack_tween_for_actor(attack_actor_ident)
-		if move_animation_name != "":
+		if animations_allowed:
+			await animation_router.play_attack_tween_for_actor(attack_actor_ident)
+		if animations_allowed and move_animation_name != "":
 			await animation_router.play_move_animation(move_animation_name, move_animation_actor_ident, move_animation_target_ident)
 		await _wait(message_timing.get_move_animation_hold_seconds())
 	if damage_target_ident != "":
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
-		await animation_router.play_damage_tween_for_target(damage_target_ident)
+		if animations_allowed:
+			await animation_router.play_damage_tween_for_target(damage_target_ident)
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 		await _wait(message_timing.get_damage_animation_hold_seconds())
 	if heal_target_ident != "":
@@ -92,17 +120,18 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			heal_target_visible = animation_router.is_target_ident_currently_visible(heal_target_ident)
 		if heal_target_visible:
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
-			if effect_animation_key != "":
+			if animations_allowed and effect_animation_key != "":
 				await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
-			await animation_router.play_heal_tween_for_target(heal_target_ident)
+			if animations_allowed:
+				await animation_router.play_heal_tween_for_target(heal_target_ident)
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
-	if stat_change_target_ident != "":
+	if animations_allowed and stat_change_target_ident != "":
 		await animation_router.play_stat_change_tween_for_target(stat_change_target_ident, stat_change_amount)
 		await _wait(message_timing.get_stat_change_animation_hold_seconds())
-	if ability_boost_target_ident != "":
+	if animations_allowed and ability_boost_target_ident != "":
 		await animation_router.play_stat_change_tween_for_target(ability_boost_target_ident, 1)
 		await _wait(message_timing.get_stat_change_animation_hold_seconds())
-	if faint_target_ident != "":
+	if animations_allowed and faint_target_ident != "":
 		await animation_router.play_faint_tween_for_target(faint_target_ident)
 	if battle_message != "":
 		await _wait(message_timing.get_battle_message_hold_seconds(event_data, battle_message))
@@ -118,6 +147,13 @@ func _wait(seconds: float) -> void:
 		return
 
 	await host_node.get_tree().create_timer(seconds).timeout
+
+
+func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bool:
+	if not animation_guard.is_valid():
+		return true
+
+	return bool(animation_guard.call(source, details))
 
 
 func _add_battle_log_player_gap(event: Dictionary) -> void:

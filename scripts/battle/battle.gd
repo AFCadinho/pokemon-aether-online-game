@@ -39,6 +39,7 @@ var pvp_last_phase_update_server_seq := 0
 var pvp_last_phase_update_batch_id := ""
 var pvp_last_phase_update_phase := ""
 var pvp_rendered_event_count := 0
+var pvp_allow_setup_animation := false
 var last_rendered_event_seq := -1
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 
@@ -165,14 +166,20 @@ func _ready() -> void:
 		Callable(self, "_get_player_display_name")
 	)
 	event_presentation.debug_enabled = DEBUG_BATTLE_MOVE_EVENTS
-	animation_router.setup(player_sprite_box, enemy_sprite_box, player_sprite_box.get_parent())
+	animation_router.setup(
+		player_sprite_box,
+		enemy_sprite_box,
+		player_sprite_box.get_parent(),
+		Callable(self, "_can_start_pvp_render_animation")
+	)
 	event_renderer.setup(
 		battle_log_panel,
 		current_action_panel,
 		animation_router,
 		message_timing,
 		self,
-		Callable(self, "_set_active_hud_hp_from_event")
+		Callable(self, "_set_active_hud_hp_from_event"),
+		Callable(self, "_can_start_pvp_render_animation")
 	)
 	_setup_mechanic_buttons()
 	_update_battle_log_toggle_button()
@@ -216,7 +223,7 @@ func _setup_side_condition_presentation() -> void:
 
 func _on_settings_changed() -> void:
 	_update_battle_status_panels()
-	_update_active_sprites()
+	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
 	if hover_state.should_poll_sprite_hover():
@@ -2260,7 +2267,7 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 	var status: String = str(lead_data.get("status", ""))
 	var gender: String = str(lead_data.get("gender", ""))
 	var is_shiny: bool = bool(lead_data.get("shiny", false))
-	enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+	_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "initial_setup")
 	enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
@@ -2271,7 +2278,13 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 		await get_tree().create_timer(INITIAL_TRANSFORM_REVEAL_SECONDS).timeout
 	else:
 		await get_tree().process_frame
-	await _play_initial_shiny_entrance_effects()
+	if _is_pvp_battle():
+		# Initial shiny entrances are setup-only presentation before the first render batch exists.
+		pvp_allow_setup_animation = true
+		await _play_initial_shiny_entrance_effects()
+		pvp_allow_setup_animation = false
+	else:
+		await _play_initial_shiny_entrance_effects()
 	if _is_pvp_battle():
 		await _render_pvp_event_batch(api_response, start_events, false, "initial_battle_events")
 	else:
@@ -2279,7 +2292,7 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 		_mark_non_pvp_response_event_seq_consumed(api_response)
 
 func _show_battle_controls_after_initial_events() -> void:
-	_update_battle_presentation()
+	_update_battle_presentation("initial_setup")
 	_show_moves()
 	_show_current_action_prompt()
 
@@ -2295,7 +2308,7 @@ func _show_original_player_lead_before_initial_events(species: String) -> void:
 	var gender: String = battle_state.get_active_pokemon_gender("p1")
 	var is_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
 
-	player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+	_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
 	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
 func _show_original_transform_targets_before_initial_events(events: Array) -> bool:
@@ -2332,10 +2345,10 @@ func _show_original_active_pokemon_for_player(player_id: String, species: String
 	if player_id == "p1":
 		var saved_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
 		is_shiny = saved_shiny
-		player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+		_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
 		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 	elif player_id == "p2":
-		enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+		_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "initial_setup")
 		enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
 func _get_original_active_player_species(fallback_species: String = "") -> String:
@@ -2702,20 +2715,71 @@ func _guard_pvp_render_runner(source := "") -> bool:
 		return true
 
 	var context := source if source != "" else "unknown"
-	_log_pvp_realtime(
-		"PvP render bypassed BattleEventQueue runner",
-		"source=%s phase=%s nextPhase=%s currentBatch=%s lastRenderedSeq=%d" % [
-			context,
-			pvp_last_phase if pvp_last_phase != "" else "unknown",
-			pvp_last_next_phase if pvp_last_next_phase != "" else "unknown",
-			current_batch_id if current_batch_id != "" else "none",
-			pvp_event_queue.last_rendered_seq,
-		]
-	)
+	var details := "source=%s phase=%s nextPhase=%s currentBatch=%s lastRenderedSeq=%d" % [
+		context,
+		pvp_last_phase if pvp_last_phase != "" else "unknown",
+		pvp_last_next_phase if pvp_last_next_phase != "" else "unknown",
+		current_batch_id if current_batch_id != "" else "none",
+		pvp_event_queue.last_rendered_seq,
+	]
+	push_warning("PvP render bypassed BattleEventQueue runner; skipping render. %s" % details)
+	_log_pvp_realtime("PvP render bypassed BattleEventQueue runner", details)
 	return false
 
+func _can_start_pvp_render_animation(source: String, details: Dictionary = {}) -> bool:
+	if not _is_pvp_battle():
+		return true
+	if str(pvp_event_queue.current_event_batch_id) != "":
+		return true
+	if pvp_allow_setup_animation:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime("Allowed PvP setup animation outside render batch", "source=%s details=%s" % [source, str(details)])
+		return true
+
+	var warning_details := "source=%s details=%s phase=%s nextPhase=%s lastRenderedSeq=%d" % [
+		source,
+		str(details),
+		pvp_last_phase if pvp_last_phase != "" else "unknown",
+		pvp_last_next_phase if pvp_last_next_phase != "" else "unknown",
+		pvp_event_queue.last_rendered_seq,
+	]
+	push_warning("Unauthorized PvP animation outside active render batch; skipping. %s" % warning_details)
+	_log_pvp_realtime("Unauthorized PvP animation outside active render batch", warning_details)
+	return false
+
+func _set_single_pokemon_species_with_pvp_warning(
+	sprite_box: Node,
+	species: String,
+	side: String,
+	is_shiny: bool,
+	context: String
+) -> void:
+	_warn_if_pvp_species_change_outside_batch(sprite_box, species, context)
+	sprite_box.set_single_pokemon_species(species, side, is_shiny)
+
+func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String, context: String) -> void:
+	if not _is_pvp_battle():
+		return
+	if str(pvp_event_queue.current_event_batch_id) != "":
+		return
+	if context in ["initial_setup", "team_preview_setup", "snapshot_reconciliation", "settings_sprite_refresh"]:
+		return
+	if sprite_box != null and sprite_box.has_method("is_showing_species") and bool(sprite_box.call("is_showing_species", species)):
+		return
+
+	var details := "context=%s species=%s phase=%s nextPhase=%s lastRenderedSeq=%d" % [
+		context,
+		species,
+		pvp_last_phase if pvp_last_phase != "" else "unknown",
+		pvp_last_next_phase if pvp_last_next_phase != "" else "unknown",
+		pvp_event_queue.last_rendered_seq,
+	]
+	push_warning("PvP sprite species changed outside active render batch. %s" % details)
+	_log_pvp_realtime("PvP sprite species changed outside active render batch", details)
+
 func _render_battle_events(events: Array, render_turn_headers := true, source := "") -> void:
-	_guard_pvp_render_runner(source)
+	if not _guard_pvp_render_runner(source):
+		return
 	var ordered_events: Array = _order_switch_out_heals_before_switches(_order_form_change_events_before_moves(events))
 	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
 	_prewarm_battle_event_animations(ordered_events)
@@ -3199,9 +3263,9 @@ func _show_switch_out_heal_target_if_needed(event_data: Dictionary, ordered_even
 	var is_shiny := _get_switch_event_is_shiny(player_id, target_ident, species)
 	match player_id:
 		"p1":
-			player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+			_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "switch_out_heal_target")
 		"p2":
-			enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+			_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "switch_out_heal_target")
 
 func _get_next_matching_switch_event(events: Array, start_index: int, switch_out_ident: String) -> Dictionary:
 	for index: int in range(start_index, events.size()):
@@ -4839,7 +4903,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 	_apply_party_state_from_api_response(reconciliation)
 	_remember_active_player_party_moves()
 	_prewarm_current_battle_move_animations()
-	_update_battle_presentation()
+	_update_battle_presentation("snapshot_reconciliation")
 
 	var snapshot_server_seq := _get_pvp_response_server_seq(reconciliation)
 	if snapshot_server_seq > pvp_last_applied_snapshot_server_seq:
@@ -5453,9 +5517,9 @@ func _show_switch_event_active_pokemon(event_data: Dictionary) -> void:
 	var is_shiny := _get_switch_event_is_shiny(player_id, switch_ident, species)
 	match player_id:
 		"p1":
-			player_sprite_box.set_single_pokemon_species(species, "back", is_shiny)
+			_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "switch_event")
 		"p2":
-			enemy_sprite_box.set_single_pokemon_species(species, "front", is_shiny)
+			_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "switch_event")
 
 func _get_switch_event_species(event_data: Dictionary, switch_ident: String) -> String:
 	var persisted_mega_species := battle_state.resolve_persisted_mega_species_for_ident(switch_ident)
@@ -5520,30 +5584,32 @@ func _can_choose_lead_slot(slot: int) -> bool:
 	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
 	return condition != "0 fnt" and not condition.ends_with(" fnt")
 
-func _update_active_sprites() -> void:
-	_update_active_sprite_box("p1", player_sprite_box, "back")
-	_update_active_sprite_box("p2", enemy_sprite_box, "front")
+func _update_active_sprites(context := "sprite_refresh") -> void:
+	_update_active_sprite_box("p1", player_sprite_box, "back", context)
+	_update_active_sprite_box("p2", enemy_sprite_box, "front", context)
 	_update_stat_stage_panels()
 
-func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String) -> void:
+func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String, context := "sprite_refresh") -> void:
 	if _should_hide_active_pokemon_for_force_switch(player_id):
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
 		return
 
-	sprite_box.set_single_pokemon_species(
+	_set_single_pokemon_species_with_pvp_warning(
+		sprite_box,
 		_get_active_display_species(player_id),
 		side,
-		_get_active_pokemon_is_shiny(player_id)
+		_get_active_pokemon_is_shiny(player_id),
+		context
 	)
 
 func _should_hide_active_pokemon_for_force_switch(player_id: String) -> bool:
 	return force_switch_flow.should_hide_active_pokemon(player_id, defer_force_switch_active_hide)
 
-func _update_battle_presentation() -> void:
+func _update_battle_presentation(sprite_context := "sprite_refresh") -> void:
 	_update_battle_status_panels()
 	_update_hud_panels()
-	_update_active_sprites()
+	_update_active_sprites(sprite_context)
 	_update_move_slots()
 	_update_party_slots()
 	_update_vs_panel_names()
