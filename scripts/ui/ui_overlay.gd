@@ -289,6 +289,8 @@ var mail_selected_item_attachments: Array[Dictionary] = []
 var mail_selected_pokemon_ids: Array[int] = []
 var mail_selected_item_for_attachment: Dictionary = {}
 var socials_attention_sources: Dictionary = {}
+var socials_friend_list_attention_badge: Panel
+var socials_mail_attention_badge: Panel
 var known_mail_ids: Dictionary = {}
 var mail_ids_initialized: bool = false
 var play_existing_mail_notification_on_next_inbox_load: bool = true
@@ -5136,6 +5138,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 		chat_tabs_panel.visible = available and not collapsed
 		_position_chat_tabs_panel()
 		_position_chat_resize_button()
+	if panel_id == "options":
+		_refresh_socials_attention_badge()
 	_position_collapsible_button(panel_id)
 
 func _position_collapsible_buttons() -> void:
@@ -6765,21 +6769,20 @@ func _setup_socials_attention_badge() -> void:
 	if socials_attention_badge == null:
 		return
 
-	var overlay_root := $Control as Control
-	var current_parent := socials_attention_badge.get_parent()
-	if overlay_root != null and current_parent != overlay_root:
+	if socials_button != null and socials_attention_badge.get_parent() != socials_button:
+		var current_parent := socials_attention_badge.get_parent()
 		if current_parent != null:
 			current_parent.remove_child(socials_attention_badge)
-		overlay_root.add_child(socials_attention_badge)
-
+		socials_button.add_child(socials_attention_badge)
 	socials_attention_badge.set_as_top_level(false)
 	socials_attention_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	socials_attention_badge.custom_minimum_size = Vector2.ZERO
-	socials_attention_badge.set_anchors_preset(Control.PRESET_TOP_LEFT, false)
-	socials_attention_badge.size = Vector2(12, 12)
+	_position_attention_badge_in_parent(socials_attention_badge, 0.0, 2.0)
 	socials_attention_badge.z_index = 100
 	socials_attention_badge.add_theme_stylebox_override("panel", _make_attention_badge_style())
-	_update_socials_attention_badge_position.call_deferred()
+	socials_friend_list_attention_badge = _create_socials_menu_attention_badge(socials_friend_list_button)
+	socials_mail_attention_badge = _create_socials_menu_attention_badge(socials_mail_button)
+	_refresh_socials_attention_badge()
 
 
 func _make_attention_badge_style() -> StyleBoxFlat:
@@ -6800,13 +6803,32 @@ func _make_attention_badge_style() -> StyleBoxFlat:
 	return style
 
 
-func _update_socials_attention_badge_position() -> void:
-	if socials_attention_badge == null or socials_slot == null:
+func _position_attention_badge_in_parent(badge: Panel, right_offset: float = 2.0, top_offset: float = 2.0) -> void:
+	if badge == null:
 		return
-
 	var badge_size := Vector2(12, 12)
-	socials_attention_badge.size = badge_size
-	socials_attention_badge.global_position = socials_slot.global_position + Vector2(socials_slot.size.x - badge_size.x + 1.0, -1.0)
+	badge.set_anchors_preset(Control.PRESET_TOP_RIGHT, false)
+	badge.offset_left = -badge_size.x - right_offset
+	badge.offset_top = top_offset
+	badge.offset_right = -right_offset
+	badge.offset_bottom = top_offset + badge_size.y
+	badge.size = badge_size
+
+
+func _create_socials_menu_attention_badge(button: Button) -> Panel:
+	if button == null:
+		return null
+
+	var badge := Panel.new()
+	badge.name = "AttentionBadge"
+	badge.visible = false
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.custom_minimum_size = Vector2.ZERO
+	badge.z_index = 100
+	badge.add_theme_stylebox_override("panel", _make_attention_badge_style())
+	button.add_child(badge)
+	_position_attention_badge_in_parent(badge, 6.0, 4.0)
+	return badge
 
 
 func _set_socials_attention(source: String, active: bool) -> void:
@@ -6817,15 +6839,20 @@ func _set_socials_attention(source: String, active: bool) -> void:
 	_refresh_socials_attention_badge()
 
 func _refresh_socials_attention_badge() -> void:
-	if socials_attention_badge == null:
-		return
+	var has_attention := _has_socials_attention()
+	if socials_attention_badge != null:
+		socials_attention_badge.visible = has_attention and options_panel != null and options_panel.visible and socials_slot != null and socials_slot.visible
+	if socials_mail_attention_badge != null:
+		socials_mail_attention_badge.visible = bool(socials_attention_sources.get("mail", false))
+	if socials_friend_list_attention_badge != null:
+		socials_friend_list_attention_badge.visible = bool(socials_attention_sources.get("friend_list", false))
 
+
+func _has_socials_attention() -> bool:
 	for value: Variant in socials_attention_sources.values():
 		if bool(value):
-			_update_socials_attention_badge_position()
-			socials_attention_badge.visible = true
-			return
-	socials_attention_badge.visible = false
+			return true
+	return false
 
 func _on_socials_close_button_pressed() -> void:
 	_hide_socials_menu()
