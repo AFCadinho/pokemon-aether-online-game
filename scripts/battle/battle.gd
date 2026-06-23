@@ -32,6 +32,7 @@ var pvp_realtime_deferred_updates: Array[Dictionary] = []
 var pvp_pending_reconciliation_snapshot: Dictionary = {}
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_last_applied_server_seq := 0
+var pvp_last_applied_snapshot_server_seq := 0
 var pvp_last_phase := ""
 var pvp_last_next_phase := ""
 var pvp_last_phase_update_server_seq := 0
@@ -800,6 +801,9 @@ func _on_action_selected(action: String) -> void:
 	elif action == "bag":
 		_open_bag()
 	elif action == "party":
+		if _is_pvp_opponent_force_switch_waiting():
+			_show_pvp_opponent_force_switch_wait()
+			return
 		_show_party()
 	elif action == "run":
 		_try_run()
@@ -854,13 +858,11 @@ func _show_moves() -> void:
 			_show_force_switch_if_needed()
 			return
 		if opponent_needs_force_switch:
-			moves_grid.visible = false
-			party_grid.visible = false
-			_hide_party_hover()
-			current_action_panel.set_message("Waiting for opponent switch...")
+			_show_pvp_opponent_force_switch_wait()
 			return
 
 	action_buttons.set_action_disabled("fight", false)
+	action_buttons.set_action_disabled("party", false)
 	action_buttons.set_action_disabled("bag", false)
 	action_buttons.set_action_disabled("run", false)
 	current_action_view = ActionView.MOVES
@@ -917,6 +919,9 @@ func _process_queued_battle_action() -> void:
 ## Toont de party keuzes in het action panel.
 func _show_party(force_switch := false) -> void:
 	var local_state_player_id := _get_local_state_player_id()
+	if not force_switch and _is_pvp_opponent_force_switch_waiting():
+		_show_pvp_opponent_force_switch_wait()
+		return
 	if not force_switch and force_switch_flow.is_player_trapped_outside_force_switch(local_state_player_id):
 		current_action_panel.set_message("Cannot switch right now!")
 		_show_moves()
@@ -3576,6 +3581,11 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	if battle_input_locked:
 		return
 
+	if _is_pvp_battle() and not _can_submit_pvp_switch_choice():
+		if _opponent_player_needs_force_switch_ui():
+			_show_pvp_opponent_force_switch_wait()
+		return
+
 	if not _can_switch_to_slot(slot):
 		return
 
@@ -3653,6 +3663,34 @@ func _show_force_switch_if_needed() -> bool:
 	current_action_panel.set_message("Choose a Pokemon!")
 	_show_party(true)
 	return true
+
+func _is_pvp_opponent_force_switch_waiting() -> bool:
+	return (
+		_is_pvp_battle()
+		and pvp_last_phase == "awaiting_force_switch"
+		and not _local_player_needs_force_switch_ui()
+		and _opponent_player_needs_force_switch_ui()
+	)
+
+func _show_pvp_opponent_force_switch_wait() -> void:
+	moves_grid.visible = false
+	party_grid.visible = false
+	_hide_party_hover()
+	current_action_view = ActionView.NONE
+	current_action_panel.set_message("Waiting for opponent switch...")
+	action_buttons.set_action_disabled("fight", true)
+	action_buttons.set_action_disabled("party", true)
+	action_buttons.set_action_disabled("bag", true)
+	_set_battle_input_locked(true)
+
+func _can_submit_pvp_switch_choice() -> bool:
+	if not _is_pvp_battle():
+		return true
+
+	if pvp_last_phase == "awaiting_force_switch":
+		return _local_player_needs_force_switch_ui()
+
+	return pvp_last_phase == "turn_open"
 
 func _local_player_needs_force_switch_ui() -> bool:
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
@@ -3793,6 +3831,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	pvp_pending_reconciliation_snapshot.clear()
 	pvp_retrying_reconciliation_snapshot = false
 	pvp_last_applied_server_seq = 0
+	pvp_last_applied_snapshot_server_seq = 0
 	pvp_rendered_event_count = 0
 	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
 		PvpBattleRealtimeService.battle_update_received.connect(_on_pvp_realtime_battle_update)
@@ -3850,8 +3889,23 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 				"Skipping PvP realtime update due room mismatch",
 				"message_room=%s current_room=%s type=%s" % [room_code, pvp_room_code, str(message.get("type", ""))]
 			)
-		return
-	if _is_stale_pvp_realtime_message(message):
+			return
+
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	var is_snapshot_message := message_type == "pvp.snapshot"
+	if is_snapshot_message:
+		var snapshot_response: Dictionary = _response_from_pvp_realtime_message(message)
+		var mapped_snapshot: Dictionary = {}
+		if not snapshot_response.is_empty():
+			mapped_snapshot = action_flow.map_response_for_local_player(snapshot_response)
+		if _is_stale_pvp_snapshot_response(message, mapped_snapshot):
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Snapshot ignored as stale",
+					"message=%s snapshot_last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_snapshot_server_seq]
+				)
+			return
+	elif _is_stale_pvp_realtime_message(message):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Skipping stale PvP realtime update",
@@ -3859,7 +3913,6 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 			)
 		return
 
-	var message_type := str(message.get("type", "")).strip_edges().to_lower()
 	if message_type == "pvp.phase_update":
 		_apply_pvp_phase_update(message)
 		return
@@ -3867,10 +3920,13 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	if _should_apply_pvp_realtime_end_immediately(message):
 		if DEBUG_PVP_REALTIME and _get_pvp_realtime_message_kind(message) == "snapshot":
 			_log_pvp_realtime(
-				"Applying PvP snapshot recovery bypass",
+				"Explicit ended/forfeit recovery path used",
 				"message=%s" % _describe_pvp_realtime_message(message)
 			)
-		_finish_pvp_realtime_battle_from_message.call_deferred(message.duplicate(true))
+		if _get_pvp_realtime_message_kind(message) == "snapshot":
+			_finish_pvp_realtime_battle_from_snapshot.call_deferred(message.duplicate(true))
+		else:
+			_finish_pvp_realtime_battle_from_message.call_deferred(message.duplicate(true))
 		return
 
 	pvp_realtime_updates.append(message.duplicate(true))
@@ -3936,9 +3992,16 @@ func _open_pvp_released_phase(phase: String) -> void:
 		return
 
 	if phase == "awaiting_force_switch":
-		_set_battle_input_locked(false)
-		if not _show_force_switch_if_needed():
-			current_action_panel.set_message("Waiting for opponent switch...")
+		var local_needs_force_switch := _local_player_needs_force_switch_ui()
+		var opponent_needs_force_switch := _opponent_player_needs_force_switch_ui()
+		if local_needs_force_switch:
+			_set_battle_input_locked(false)
+			_show_force_switch_if_needed()
+			return
+		if opponent_needs_force_switch:
+			_show_pvp_opponent_force_switch_wait()
+			return
+		current_action_panel.set_message("Waiting for opponent switch...")
 		return
 
 func _has_newer_pvp_phase_update(wait_start_server_seq: int, accepted_phases: Array) -> bool:
@@ -4651,6 +4714,29 @@ func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 		"winner": battle_state.get_winner(),
 	})
 
+func _finish_pvp_realtime_battle_from_snapshot(message: Dictionary) -> void:
+	if battle_finished:
+		return
+
+	var response: Dictionary = _response_from_pvp_realtime_message(message)
+	if response.is_empty():
+		return
+
+	var mapped_update: Dictionary = action_flow.map_response_for_local_player(response)
+	if mapped_update.is_empty():
+		return
+
+	if not _apply_pvp_realtime_snapshot_when_safe(message, mapped_update):
+		return
+
+	if await _finish_if_battle_ended():
+		return
+
+	_finish_battle({
+		"reason": "forfeit",
+		"winner": battle_state.get_winner(),
+	})
+
 func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 	if message.is_empty():
 		return false
@@ -4694,11 +4780,11 @@ func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: 
 	if mapped_update.is_empty():
 		return false
 
-	if _is_stale_pvp_realtime_response(mapped_update):
+	if _is_stale_pvp_snapshot_response(message, mapped_update):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
-				"Skipping stale PvP snapshot",
-				"message=%s last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_server_seq]
+				"Snapshot ignored as stale",
+				"message=%s snapshot_last_seq=%d" % [_describe_pvp_realtime_message(message), pvp_last_applied_snapshot_server_seq]
 			)
 		return false
 
@@ -4706,27 +4792,72 @@ func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: 
 	var last_rendered_seq := pvp_event_queue.last_rendered_seq
 	if _is_initial_pvp_snapshot(message, mapped_update):
 		pvp_pending_reconciliation_snapshot.clear()
-		return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_bootstrap", true, {"drop_duplicate": true})
-
-	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
-		_buffer_pvp_reconciliation_snapshot(message, mapped_update, snapshot_event_seq, last_rendered_seq)
-		return false
+		return _apply_pvp_snapshot_reconciliation(message, mapped_update, "pvp_snapshot_bootstrap")
 
 	if _is_pvp_snapshot_recovery_bypass(mapped_update):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
-				"Applying PvP snapshot recovery bypass",
+				"Explicit ended/forfeit recovery path used",
 				"snapshotEventSeq=%d lastRenderedSeq=%d ended=%s" % [
 					snapshot_event_seq,
 					last_rendered_seq,
 					str(_pvp_response_state_ended(mapped_update)),
 				]
-		)
+			)
 		pvp_pending_reconciliation_snapshot.clear()
-		return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_recovery", true, {"drop_duplicate": true})
+		return _apply_pvp_snapshot_reconciliation(message, mapped_update, "pvp_snapshot_recovery")
+
+	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
+		_buffer_pvp_reconciliation_snapshot(message, mapped_update, snapshot_event_seq, last_rendered_seq)
+		return false
+
+	if snapshot_event_seq < 0:
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Snapshot blocked due missing eventSeq",
+				"message=%s lastRenderedSeq=%d" % [_describe_pvp_realtime_message(message), last_rendered_seq]
+			)
+		return false
 
 	pvp_pending_reconciliation_snapshot.clear()
-	return await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_reconciliation", true, {"drop_duplicate": true})
+	return _apply_pvp_snapshot_reconciliation(message, mapped_update, "pvp_snapshot_reconciliation")
+
+func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dictionary, source: String) -> bool:
+	var reconciliation := mapped_update.duplicate(true)
+	reconciliation["events"] = []
+	reconciliation["eventBatches"] = []
+
+	if not bool(reconciliation.get("success", false)):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Snapshot reconciliation skipped",
+				"source=%s message=%s reason=unsuccessful_response" % [source, _describe_pvp_realtime_message(message)]
+			)
+		return false
+
+	battle_state.load_from_api_response(reconciliation, false)
+	_apply_party_state_from_api_response(reconciliation)
+	_remember_active_player_party_moves()
+	_prewarm_current_battle_move_animations()
+	_update_battle_presentation()
+
+	var snapshot_server_seq := _get_pvp_response_server_seq(reconciliation)
+	if snapshot_server_seq > pvp_last_applied_snapshot_server_seq:
+		pvp_last_applied_snapshot_server_seq = snapshot_server_seq
+
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Snapshot reconciliation applied",
+			"source=%s snapshotEventSeq=%d lastRenderedSeq=%d snapshotServerSeq=%d phase=%s ended=%s" % [
+				source,
+				_get_pvp_response_event_seq_end(mapped_update),
+				pvp_event_queue.last_rendered_seq,
+				snapshot_server_seq,
+				str(mapped_update.get("phase", "")),
+				str(_pvp_response_state_ended(mapped_update)),
+			]
+		)
+	return true
 
 func _buffer_pvp_reconciliation_snapshot(message: Dictionary, mapped_update: Dictionary, snapshot_event_seq: int, last_rendered_seq: int) -> void:
 	var existing_response_value: Variant = pvp_pending_reconciliation_snapshot.get("mapped_update", {})
@@ -4792,7 +4923,7 @@ func _retry_pending_pvp_reconciliation_snapshot() -> void:
 		pvp_retrying_reconciliation_snapshot = false
 		return
 
-	if _is_stale_pvp_realtime_response(mapped_update):
+	if _is_stale_pvp_snapshot_response(message, mapped_update):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Discarding stale buffered PvP snapshot after render",
@@ -4808,7 +4939,7 @@ func _retry_pending_pvp_reconciliation_snapshot() -> void:
 
 	pvp_pending_reconciliation_snapshot.clear()
 
-	if not await _enqueue_pvp_battle_response(mapped_update, "pvp_snapshot_reconciliation_retry", true, {"drop_duplicate": true}):
+	if not _apply_pvp_snapshot_reconciliation(message, mapped_update, "pvp_snapshot_reconciliation_retry"):
 		pvp_pending_reconciliation_snapshot = pending_snapshot
 	pvp_retrying_reconciliation_snapshot = false
 
@@ -4826,6 +4957,8 @@ func _is_initial_pvp_snapshot(message: Dictionary, response: Dictionary) -> bool
 	if _get_pvp_message_server_seq(message) > 0:
 		return false
 	if pvp_last_applied_server_seq > 0:
+		return false
+	if pvp_last_applied_snapshot_server_seq > 0:
 		return false
 	if pvp_event_queue.last_rendered_seq >= 0:
 		return false
@@ -4860,6 +4993,13 @@ func _warn_if_pvp_battle_update_event_gap(response: Dictionary) -> void:
 		)
 
 func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:
+	if _get_pvp_realtime_message_kind(message) == "snapshot":
+		var snapshot_response: Dictionary = _response_from_pvp_realtime_message(message)
+		var mapped_snapshot: Dictionary = {}
+		if not snapshot_response.is_empty():
+			mapped_snapshot = action_flow.map_response_for_local_player(snapshot_response)
+		return _is_stale_pvp_snapshot_response(message, mapped_snapshot)
+
 	var server_seq := _get_pvp_message_server_seq(message)
 	if server_seq > 0 and server_seq <= pvp_last_applied_server_seq:
 		return true
@@ -4869,6 +5009,30 @@ func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:
 		return false
 
 	return _is_stale_pvp_realtime_response(action_flow.map_response_for_local_player(response))
+
+func _is_stale_pvp_snapshot_response(message: Dictionary, response: Dictionary) -> bool:
+	if response.is_empty():
+		return false
+
+	var response_battle_id := str(response.get("battleId", "")).strip_edges()
+	if battle_state.battle_id != "" and response_battle_id != "" and response_battle_id != battle_state.battle_id:
+		return true
+
+	var server_seq := _get_pvp_message_server_seq(message)
+	if server_seq <= 0:
+		server_seq = _get_pvp_response_server_seq(response)
+	if server_seq > 0 and server_seq <= pvp_last_applied_snapshot_server_seq:
+		return true
+
+	var response_turn := _get_pvp_response_turn(response)
+	var current_turn := battle_state.get_turn()
+	if response_turn > 0 and current_turn > 0 and response_turn < current_turn:
+		return true
+
+	if _response_has_any_team_preview(response) and not _battle_state_has_any_team_preview():
+		return true
+
+	return false
 
 func _is_stale_pvp_realtime_response(response: Dictionary) -> bool:
 	if response.is_empty():
