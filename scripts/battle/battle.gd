@@ -30,6 +30,8 @@ var pvp_room_code := ""
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
 var pvp_last_applied_server_seq := 0
+var pvp_last_phase := ""
+var pvp_last_next_phase := ""
 var pvp_rendered_event_count := 0
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 
@@ -824,6 +826,11 @@ func _show_moves() -> void:
 		var opponent_state_player_id := _get_opponent_state_player_id()
 		var local_needs_force_switch := _local_player_needs_force_switch_ui()
 		var opponent_needs_force_switch := _opponent_player_needs_force_switch_ui()
+		if pvp_last_phase != "turn_open":
+			_log_pvp_realtime(
+				"Phase contract warning",
+				"source=_show_moves phase=%s expected=turn_open" % pvp_last_phase
+			)
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Show moves force-switch check",
@@ -1015,15 +1022,85 @@ func _finish_battle(result: Dictionary) -> void:
 	battle_ended.emit(result)
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
-func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true) -> bool:
+func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true, source: String = "") -> bool:
 	var success: bool = action_flow.apply_response(response, apply_event_conditions)
 	if success:
 		_apply_party_state_from_api_response(response)
 		_remember_active_player_party_moves()
 		_prewarm_current_battle_move_animations()
+		_update_pvp_phase_contract_from_response(response, source)
 		_mark_pvp_response_applied(response)
 
 	return success
+
+func _update_pvp_phase_contract_from_response(response: Dictionary, source: String = "") -> void:
+	if not _is_pvp_battle():
+		return
+	if not (response is Dictionary):
+		return
+
+	var current_phase := str(response.get("phase", "")).strip_edges()
+	var current_next_phase := str(response.get("nextPhase", current_phase)).strip_edges()
+	if current_phase == "":
+		return
+
+	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1))
+	var response_batch_seq := _get_int_from_variant(response.get("batchSeq", -1))
+
+	if pvp_last_phase != current_phase or pvp_last_next_phase != current_next_phase:
+		_log_pvp_realtime(
+			"PvP phase transition",
+			"old=%s new=%s next=%s source=%s eventSeq=%d batchSeq=%d" % [
+				pvp_last_phase if pvp_last_phase != "" else "unknown",
+				current_phase,
+				current_next_phase,
+				source,
+				response_event_seq,
+				response_batch_seq,
+			]
+		)
+
+	if _response_has_renderable_battle_events(response) and current_phase != "rendering_events":
+		_log_pvp_phase_warning(
+			"Renderable events present while phase is not rendering_events",
+			"phase=%s source=%s eventSeq=%d batchSeq=%d" % [
+				current_phase,
+				source,
+				response_event_seq,
+				response_batch_seq,
+			]
+		)
+
+	var state_value: Variant = response.get("state", {})
+	if state_value is Dictionary and bool((state_value as Dictionary).get("ended", false)) and current_phase != "ended":
+		_log_pvp_phase_warning(
+			"Battle state ended while phase is not ended",
+			"phase=%s source=%s eventSeq=%d batchSeq=%d" % [
+				current_phase,
+				source,
+				response_event_seq,
+				response_batch_seq,
+			]
+		)
+
+	if _response_has_force_switch_request(response) and current_phase != "awaiting_force_switch":
+		_log_pvp_phase_warning(
+			"Force-switch request present while phase is not awaiting_force_switch",
+			"phase=%s source=%s eventSeq=%d batchSeq=%d" % [
+				current_phase,
+				source,
+				response_event_seq,
+				response_batch_seq,
+			]
+		)
+
+	pvp_last_phase = current_phase
+	pvp_last_next_phase = current_next_phase
+
+func _log_pvp_phase_warning(message: String, details: String) -> void:
+	if not DEBUG_PVP_REALTIME:
+		return
+	_log_pvp_realtime("Phase contract warning", "%s | %s" % [message, details])
 
 func _enqueue_pvp_battle_response(response: Dictionary, source: String, apply_event_conditions: bool = true, metadata: Dictionary = {}) -> bool:
 	if not _is_pvp_battle():
@@ -1074,8 +1151,8 @@ func _drain_pvp_event_queue() -> bool:
 					_describe_response_force_switches(queue_response),
 					_describe_state_force_switches(),
 				]
-		)
-		var success := _apply_api_response(queue_response, apply_event_conditions)
+			)
+		var success := _apply_api_response(queue_response, apply_event_conditions, source)
 		if success and _should_process_pvp_choice_queue_entry(source, metadata):
 			var entry_metadata: Dictionary = {}
 			if metadata is Dictionary:
@@ -2064,6 +2141,8 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	battle_type = type
 	_set_battle_actions_ready(false)
 	queued_battle_action.clear()
+	pvp_last_phase = ""
+	pvp_last_next_phase = ""
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = enemy_pokemon
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
@@ -3236,6 +3315,11 @@ func _on_party_grid_party_selected(slot: int) -> void:
 func _show_force_switch_if_needed() -> bool:
 	if not _local_player_needs_force_switch_ui():
 		return false
+	if pvp_last_phase != "awaiting_force_switch":
+		_log_pvp_realtime(
+			"Phase contract warning",
+			"source=_show_force_switch_if_needed phase=%s expected=awaiting_force_switch" % pvp_last_phase
+		)
 
 	current_action_panel.set_message("Choose a Pokemon!")
 	_show_party(true)
@@ -4285,6 +4369,25 @@ func _response_has_opponent_force_switch(response: Dictionary) -> bool:
 
 		if _response_player_active_fainted_with_available_switch(response, opponent_player_id):
 			return true
+
+	return false
+
+func _response_has_force_switch_request(response: Dictionary) -> bool:
+	var requests_value: Variant = response.get("requests", {})
+	if not (requests_value is Dictionary):
+		return false
+
+	var requests: Dictionary = requests_value as Dictionary
+	for request_value: Variant in requests.values():
+		if not (request_value is Dictionary):
+			continue
+
+		var request_data: Dictionary = request_value as Dictionary
+		var force_switch_value: Variant = request_data.get("forceSwitch", [])
+		if force_switch_value is Array:
+			for value: Variant in force_switch_value as Array:
+				if bool(value):
+					return true
 
 	return false
 
