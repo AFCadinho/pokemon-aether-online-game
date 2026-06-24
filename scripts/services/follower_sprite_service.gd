@@ -17,6 +17,18 @@ const SHINY_FOLLOWER_DIRECTORIES: Array[String] = [
 	"res://assets/followers_shiny",
 ]
 
+const FORM_FOLLOWER_SPRITE_ALIASES := {
+	"AEGISLASH_SHIELD": ["AEGISLASH"],
+	"HOOPA_UNBOUND": ["HOOPA_1"],
+	"LYCANROC_DUSK": ["LYCANROC_2"],
+	"LYCANROC_MIDNIGHT": ["LYCANROC_1"],
+	"MELOETTA_PIROUETTE": ["MELOETTA_1"],
+	"SLOWBRO_GALAR": ["SLOWBRO_1"],
+	"SLOWKING_GALAR": ["SLOWKING_1"],
+	"TOXTRICITY_LOW_KEY": ["TOXTRICITY_1"],
+	"URSHIFU_RAPID_STRIKE": ["URSHIFU_1"],
+}
+
 static var _sprite_frames_cache: Dictionary = {}
 
 static func get_sprite_frames(species: String, shiny: bool) -> SpriteFrames:
@@ -130,6 +142,7 @@ static func _get_species_file_candidates(species: String) -> Array[String]:
 
 	_append_candidate(candidates, normalized_key)
 	_append_candidate(candidates, compact_key)
+	_append_alias_candidates(candidates, normalized_key)
 
 	if normalized_key.contains("_"):
 		var parts := normalized_key.split("_")
@@ -137,6 +150,14 @@ static func _get_species_file_candidates(species: String) -> Array[String]:
 			_append_candidate(candidates, str(parts[0]))
 
 	return candidates
+
+static func _append_alias_candidates(candidates: Array[String], normalized_key: String) -> void:
+	var aliases: Variant = FORM_FOLLOWER_SPRITE_ALIASES.get(normalized_key, [])
+	if not (aliases is Array):
+		return
+
+	for alias: Variant in aliases:
+		_append_candidate(candidates, str(alias))
 
 static func _append_candidate(candidates: Array[String], candidate: String) -> void:
 	if candidate == "" or candidates.has(candidate):

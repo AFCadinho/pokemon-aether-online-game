@@ -45,6 +45,29 @@ func get_pokemon_stats(request_node: HTTPRequest, species: String, level: int = 
 		"/pokemon/stats%s" % query
 	)
 
+func search_damage_calc_items(request_node: HTTPRequest, q: String, limit: int = 30) -> Dictionary:
+	var normalized_limit: int = max(1, min(int(limit), 100))
+	var query: String = "?q=%s&limit=%s" % [
+		q.uri_encode(),
+		str(normalized_limit).uri_encode(),
+	]
+	return await send_get_request(
+		request_node,
+		"/damage-calc/catalog/items%s" % query
+	)
+
+func search_damage_calc_abilities(request_node: HTTPRequest, q: String, species: String = "", limit: int = 30) -> Dictionary:
+	var normalized_limit: int = max(1, min(int(limit), 100))
+	var query: String = "?q=%s&species=%s&limit=%s" % [
+		q.uri_encode(),
+		str(species).uri_encode(),
+		str(normalized_limit).uri_encode(),
+	]
+	return await send_get_request(
+		request_node,
+		"/damage-calc/catalog/abilities%s" % query
+	)
+
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 

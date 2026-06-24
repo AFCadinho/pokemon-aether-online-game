@@ -76,6 +76,9 @@ var player_party_moves_by_key: Dictionary = {}
 var damage_calc_request_token := 0
 var damage_calc_request_in_flight := false
 var damage_calc_refresh_queued := false
+var damage_calc_matchup_key := ""
+var damage_calc_defender_assumptions: Dictionary = {}
+var damage_calc_assumption_edited_fields: Dictionary = {}
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -172,6 +175,8 @@ func _ready() -> void:
 	_connect_move_hover_signals()
 	_connect_party_hover_signals()
 	_connect_forfeit_confirm_dialog_signals()
+	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
+		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_setup_weather_presentation()
@@ -216,6 +221,7 @@ func _ready() -> void:
 	battle_log_panel.clear_log()
 	mini_battle_feed.clear()
 	event_renderer.reset_battle_log_player_gap()
+	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
 	calc_panel.show_idle()
 
 	if PlayerSave.party.is_empty():
@@ -945,6 +951,7 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 	current_action_panel_mode = mode
 	if previous_mode == BattleActionsPanelMode.CALC and mode != BattleActionsPanelMode.CALC:
 		damage_calc_request_token += 1
+		calc_panel.close_assumption_popover()
 	_sync_action_panel_mode_visibility()
 	if mode == BattleActionsPanelMode.CALC:
 		_refresh_damage_calc_results()
@@ -978,6 +985,7 @@ func _sync_action_panel_mode_visibility() -> void:
 func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
 		return
+	_sync_damage_calc_matchup_assumptions()
 	if battle_finished:
 		calc_panel.show_error("Battle has ended.")
 		return
@@ -987,6 +995,7 @@ func _refresh_damage_calc_results() -> void:
 
 	if damage_calc_request_in_flight:
 		damage_calc_refresh_queued = true
+		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
 		calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
 		return
 
@@ -994,6 +1003,7 @@ func _refresh_damage_calc_results() -> void:
 	var request_token := damage_calc_request_token
 	damage_calc_request_in_flight = true
 	damage_calc_refresh_queued = false
+	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
 	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
 
 	var response: Dictionary = await BattleApiClient.calculate_battle_damage(
@@ -1001,7 +1011,7 @@ func _refresh_damage_calc_results() -> void:
 		battle_state.battle_id,
 		action_flow.local_player_id,
 		"own-to-opponent",
-		{}
+		_get_damage_calc_defender_assumptions_payload()
 	)
 
 	damage_calc_request_in_flight = false
@@ -1019,6 +1029,50 @@ func _refresh_damage_calc_results() -> void:
 		calc_panel.show_response(response)
 	else:
 		calc_panel.show_error(str(response.get("error", "Damage calculation failed.")))
+
+func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary) -> void:
+	_sync_damage_calc_matchup_assumptions()
+	damage_calc_defender_assumptions = assumptions.duplicate(true)
+	damage_calc_assumption_edited_fields = edited_fields.duplicate(true)
+	if damage_calc_request_in_flight:
+		damage_calc_request_token += 1
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		_refresh_damage_calc_results()
+
+func _sync_damage_calc_matchup_assumptions() -> void:
+	var matchup_key := _get_damage_calc_matchup_key()
+	if matchup_key == damage_calc_matchup_key:
+		return
+
+	damage_calc_matchup_key = matchup_key
+	_reset_damage_calc_assumptions()
+
+func _reset_damage_calc_assumptions() -> void:
+	damage_calc_defender_assumptions.clear()
+	damage_calc_assumption_edited_fields.clear()
+	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
+
+func _get_damage_calc_matchup_key() -> String:
+	return "%s|%s|%s|%s" % [
+		battle_state.battle_id,
+		action_flow.local_player_id,
+		_get_damage_calc_active_key("p1"),
+		_get_damage_calc_active_key("p2"),
+	]
+
+func _get_damage_calc_active_key(player_id: String) -> String:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+	var species := str(active_pokemon.get("species", "")).strip_edges()
+	if species == "":
+		species = _get_active_display_species(player_id)
+	var ident := _normalize_battle_ident(str(active_pokemon.get("ident", "")))
+	if ident != "":
+		return "%s:%s" % [ident, species.strip_edges().to_lower()]
+
+	return "%s:%s" % [player_id, species.strip_edges().to_lower()]
+
+func _get_damage_calc_defender_assumptions_payload() -> Dictionary:
+	return damage_calc_defender_assumptions.duplicate(true)
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
@@ -1302,6 +1356,7 @@ func _finish_battle(result: Dictionary) -> void:
 	_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
 	pending_mega_species_by_ident.clear()
+	_reset_damage_calc_assumptions()
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
 	_sync_player_save_from_battle_state()
