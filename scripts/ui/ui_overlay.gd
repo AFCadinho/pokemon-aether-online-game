@@ -32,6 +32,7 @@ const CHAT_CHANNEL_TRADE := "trade"
 const STAFF_TOOLS_ROLE_IDS := ["staff", "admin", "owner", "developer", "moderator", "gamemaster"]
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
+const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
@@ -105,7 +106,7 @@ const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const UI_REPEL_BG := Color("#155f2be8")
 const PLAYER_STATUS_CARD_BACKGROUND := UI_BG
-const PLAYER_STATUS_CARD_BORDER := UI_BORDER
+const PLAYER_STATUS_CARD_BORDER := UI_BORDER_SOFT
 
 enum DevPokemonPopupMode {
 	POKEMON,
@@ -511,6 +512,9 @@ func _play_mail_notification_sound() -> void:
 func _can_use_dev_tools() -> bool:
 	return _has_user_permission(DEV_TOOLS_PERMISSION)
 
+func _can_use_content_creator_tools() -> bool:
+	return _has_user_permission(CONTENT_CREATOR_TOOLS_PERMISSION)
+
 func _can_use_staff_tools() -> bool:
 	var roles_value: Variant = AuthService.current_user.get("roles", [])
 	if roles_value is Array:
@@ -541,15 +545,22 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_use_staff_tools: bool = _can_use_staff_tools()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_impersonate: bool = _can_impersonate_accounts()
+	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
+	var has_visible_staff_action: bool = can_impersonate or can_use_dev_tools or can_use_content_creator_tools
 	PlayerSave.is_staff = can_use_staff_tools
-	dev_actions_slot.visible = can_use_staff_tools
-	dev_actions_button.visible = can_use_staff_tools
-	dev_actions_button.disabled = not can_use_staff_tools
+	if content_creator_tools_slot != null:
+		content_creator_tools_slot.visible = can_use_staff_tools and can_use_content_creator_tools
+	if content_creator_tools_button != null:
+		content_creator_tools_button.visible = can_use_staff_tools and can_use_content_creator_tools
+		content_creator_tools_button.disabled = not can_use_content_creator_tools
+	dev_actions_slot.visible = can_use_staff_tools and can_use_dev_tools
+	dev_actions_button.visible = can_use_staff_tools and can_use_dev_tools
+	dev_actions_button.disabled = not can_use_dev_tools
 	if staff_tools_slot != null:
-		staff_tools_slot.visible = can_use_staff_tools
+		staff_tools_slot.visible = can_use_staff_tools and can_impersonate
 	if staff_tools_button != null:
-		staff_tools_button.visible = can_use_staff_tools
-		staff_tools_button.disabled = not can_use_staff_tools
+		staff_tools_button.visible = can_use_staff_tools and can_impersonate
+		staff_tools_button.disabled = not can_impersonate
 	dev_add_pokemon_button.visible = can_use_dev_tools
 	dev_add_pokemon_button.disabled = not can_use_dev_tools
 	dev_add_team_button.disabled = true
@@ -573,7 +584,7 @@ func _refresh_dev_tools_visibility() -> void:
 	if staff_impersonate_button != null:
 		staff_impersonate_button.visible = can_impersonate
 		staff_impersonate_button.disabled = not can_impersonate
-	if not can_use_staff_tools:
+	if not can_impersonate:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
 		if staff_impersonate_popup != null:
@@ -593,7 +604,7 @@ func _refresh_dev_tools_visibility() -> void:
 		staff_impersonate_popup.visible = false
 	_refresh_action_bar_layouts()
 	_set_collapsible_panel_available("dex_actions", true)
-	_set_collapsible_panel_available("staff_actions", can_use_staff_tools or can_use_dev_tools)
+	_set_collapsible_panel_available("staff_actions", can_use_staff_tools and has_visible_staff_action)
 
 func _apply_mail_ui_styles() -> void:
 	mail_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
@@ -1393,7 +1404,7 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_popup = PanelContainer.new()
 	staff_tools_popup.name = "StaffToolsPopup"
 	staff_tools_popup.visible = false
-	staff_tools_popup.custom_minimum_size = Vector2(230, 160)
+	staff_tools_popup.custom_minimum_size = Vector2(230, 128)
 	staff_tools_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	staff_tools_popup.z_index = UI_BASE_Z_INDEX
 	staff_tools_popup.anchor_left = 0.5
@@ -1401,10 +1412,10 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_popup.anchor_right = 0.5
 	staff_tools_popup.anchor_bottom = 0.5
 	staff_tools_popup.offset_left = -115
-	staff_tools_popup.offset_top = -80
+	staff_tools_popup.offset_top = -64
 	staff_tools_popup.offset_right = 115
-	staff_tools_popup.offset_bottom = 80
-	staff_tools_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	staff_tools_popup.offset_bottom = 64
+	staff_tools_popup.add_theme_stylebox_override("panel", _make_glass_panel_style(10, 1))
 	root_control.add_child(staff_tools_popup)
 
 	var tools_margin := MarginContainer.new()
@@ -1415,12 +1426,19 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_popup.add_child(tools_margin)
 
 	var tools_layout := VBoxContainer.new()
-	tools_layout.add_theme_constant_override("separation", 8)
+	tools_layout.add_theme_constant_override("separation", 7)
 	tools_margin.add_child(tools_layout)
+
+	var staff_tools_title: Label = Label.new()
+	staff_tools_title.text = "Staff Tools"
+	staff_tools_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	staff_tools_title.add_theme_font_size_override("font_size", 16)
+	staff_tools_title.add_theme_color_override("font_color", UI_BORDER)
+	tools_layout.add_child(staff_tools_title)
 
 	staff_impersonate_button = Button.new()
 	staff_impersonate_button.text = "Impersonate"
-	staff_impersonate_button.custom_minimum_size = Vector2(190, 34)
+	staff_impersonate_button.custom_minimum_size = Vector2(190, 32)
 	staff_impersonate_button.focus_mode = Control.FOCUS_NONE
 	staff_impersonate_button.pressed.connect(_on_staff_impersonate_button_pressed)
 	tools_layout.add_child(staff_impersonate_button)
@@ -1496,7 +1514,7 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_impersonate_confirm_button.pressed.connect(_on_staff_impersonate_confirm_pressed)
 	layout.add_child(staff_impersonate_confirm_button)
 
-	_apply_button_style(staff_impersonate_button)
+	_apply_button_style(staff_impersonate_button, "primary")
 	_apply_button_style(staff_tools_close_button)
 	_apply_button_style(close_button)
 	_apply_line_edit_style(staff_impersonate_token_input)
@@ -2755,12 +2773,12 @@ func _apply_player_status_panel_hover_style(hovered: bool) -> void:
 		return
 
 	var background_color := Color("#0b121fee") if hovered else PLAYER_STATUS_CARD_BACKGROUND
-	var border_color := Color("#f1c95f") if hovered else PLAYER_STATUS_CARD_BORDER
+	var border_color := UI_BORDER if hovered else PLAYER_STATUS_CARD_BORDER
 	var style := _make_panel_style(background_color, border_color, 14, 1)
 	if hovered:
-		style.shadow_color = Color(UI_MONEY.r, UI_MONEY.g, UI_MONEY.b, 0.30)
-		style.shadow_size = 12
-		style.shadow_offset = Vector2.ZERO
+		style.shadow_color = Color(UI_BORDER.r, UI_BORDER.g, UI_BORDER.b, 0.18)
+		style.shadow_size = 8
+		style.shadow_offset = Vector2(0, 3)
 	player_status_panel.add_theme_stylebox_override("panel", style)
 
 func _on_trainer_card_header_gui_input(event: InputEvent) -> void:
@@ -5517,7 +5535,7 @@ func _apply_premium_overlay_styles() -> void:
 	dev_pokemon_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(12, 1))
 	dev_actions_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	if player_status_panel != null:
-		player_status_panel.add_theme_stylebox_override("panel", _make_gold_panel_style(14, 1))
+		player_status_panel.add_theme_stylebox_override("panel", _make_glass_panel_style(14, 1))
 
 	_apply_line_edit_style(chat_input)
 	_apply_text_edit_style(dev_pokemon_text)
@@ -6385,7 +6403,7 @@ func _refresh_world_follower_visibility() -> void:
 		player.call("set_show_follower", GameState.show_follower)
 
 func _on_dev_actions_button_pressed() -> void:
-	if not _can_use_staff_tools():
+	if not _can_use_dev_tools():
 		return
 
 	dev_actions_popup.visible = not dev_actions_popup.visible
@@ -6395,7 +6413,7 @@ func _on_dev_actions_button_pressed() -> void:
 		_deactivate_ui_panel(dev_actions_popup)
 
 func _on_staff_tools_button_pressed() -> void:
-	if not _can_use_staff_tools():
+	if not _can_impersonate_accounts():
 		return
 	if staff_tools_popup == null:
 		return
@@ -6647,6 +6665,8 @@ func _on_pokedex_button_pressed() -> void:
 	_add_chat_message("Pokedex is not implemented yet.")
 
 func _on_content_creator_tools_button_pressed() -> void:
+	if not _can_use_content_creator_tools():
+		return
 	_add_chat_message("Content Creator Tools are not implemented yet.")
 
 func _show_item_dex_popup() -> void:
