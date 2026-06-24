@@ -79,6 +79,8 @@ const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
 const STAT_STAGE_BADGE_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
+const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
+const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
 
 #Active Pokemon
 var active_player_pokemon: Pokemon
@@ -97,6 +99,7 @@ var active_enemy_pokemon: Pokemon
 
 # Battle Log
 @onready var battle_log_panel: BattleLogPanel = $BattleLogPanel
+@onready var mini_battle_feed: MiniBattleFeed = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/MiniBattleFeed
 @onready var battle_log_toggle_button: Button = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleLogButton
 
 # Battle Sprites
@@ -127,6 +130,7 @@ var active_enemy_pokemon: Pokemon
 @onready var sun_sparkles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunSparkles") as GPUParticles2D
 @onready var sandstorm_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormParticles") as GPUParticles2D
 @onready var sandstorm_swirls: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls") as Control
+@onready var snow_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SnowParticles") as GPUParticles2D
 @onready var grassy_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer") as Control
 @onready var misty_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer") as Control
 @onready var psychic_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer") as Control
@@ -143,6 +147,7 @@ var active_enemy_pokemon: Pokemon
 
 ## Verbindt de UI-signals en zet de battle UI in de beginstand.
 func _ready() -> void:
+	_setup_battle_focus_surfaces()
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
 	hover_state.setup(pokemon_info_request, pokemon_stats_request)
@@ -175,6 +180,7 @@ func _ready() -> void:
 	)
 	event_renderer.setup(
 		battle_log_panel,
+		mini_battle_feed,
 		current_action_panel,
 		animation_router,
 		message_timing,
@@ -194,10 +200,74 @@ func _ready() -> void:
 	weather_presentation.update_trick_room(false)
 	current_action_panel.clear_message()
 	battle_log_panel.clear_log()
+	mini_battle_feed.clear()
 	event_renderer.reset_battle_log_player_gap()
 
 	if PlayerSave.party.is_empty():
 		return
+
+func _focus_battle_ui_layer() -> void:
+	get_tree().call_group("ui_overlay", "focus_battle_ui_layer")
+
+func _setup_battle_focus_surfaces() -> void:
+	_create_battle_scene_focus_surface()
+	var focus_surface_paths: Array[NodePath] = [
+		^"HBoxContainer/BattleFrame",
+		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena",
+		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground",
+		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel",
+		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel/MarginContainer",
+		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel/MarginContainer/CurrentActionLabel",
+		^"HBoxContainer/ActionSidePanel",
+		^"HBoxContainer/ActionSidePanel/MarginContainer",
+		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer",
+		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer",
+		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel",
+		^"BattleLogPanel",
+		^"BattleLogPanel/MarginContainer",
+		^"BattleLogPanel/MarginContainer/VBoxContainer",
+		^"BattleLogPanel/MarginContainer/VBoxContainer/BattleLogTitle",
+		^"BattleLogPanel/MarginContainer/VBoxContainer/BattleLogText",
+	]
+	for surface_path: NodePath in focus_surface_paths:
+		_register_battle_focus_surface(get_node_or_null(surface_path) as Control)
+
+func _create_battle_scene_focus_surface() -> void:
+	var battle_arena: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena") as Control
+	var battle_background: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground") as Control
+	if battle_arena == null or battle_background == null:
+		return
+
+	var existing_surface: Control = battle_arena.get_node_or_null(^"BattleSceneFocusSurface") as Control
+	if existing_surface != null:
+		_register_battle_focus_surface(existing_surface)
+		return
+
+	var focus_surface: Control = Control.new()
+	focus_surface.name = "BattleSceneFocusSurface"
+	focus_surface.set_anchors_preset(Control.PRESET_FULL_RECT)
+	focus_surface.mouse_filter = Control.MOUSE_FILTER_STOP
+	battle_arena.add_child(focus_surface)
+	battle_arena.move_child(focus_surface, battle_background.get_index() + 1)
+	_register_battle_focus_surface(focus_surface)
+
+func _register_battle_focus_surface(surface: Control) -> void:
+	if surface == null:
+		return
+
+	if surface.name == "BattleSceneFocusSurface":
+		surface.mouse_filter = Control.MOUSE_FILTER_STOP
+	else:
+		surface.mouse_filter = Control.MOUSE_FILTER_PASS
+	var focus_callable: Callable = Callable(self, "_on_battle_focus_surface_gui_input")
+	if not surface.gui_input.is_connected(focus_callable):
+		surface.gui_input.connect(focus_callable)
+
+func _on_battle_focus_surface_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			_focus_battle_ui_layer()
 
 func _setup_weather_presentation() -> void:
 	weather_presentation.setup(
@@ -211,7 +281,8 @@ func _setup_weather_presentation() -> void:
 		grassy_terrain_layer,
 		misty_terrain_layer,
 		psychic_terrain_layer,
-		trick_room_layer
+		trick_room_layer,
+		snow_particles
 	)
 
 func _setup_side_condition_presentation() -> void:
@@ -662,6 +733,7 @@ func _setup_mechanic_buttons() -> void:
 	_update_mechanic_button_states()
 
 func _on_mega_evolution_pressed() -> void:
+	_focus_battle_ui_layer()
 	if not _can_toggle_mega_evolution():
 		return
 
@@ -753,11 +825,16 @@ func _stop_mega_evolution_pulse() -> void:
 	if mega_evolution_button != null:
 		mega_evolution_button.scale = Vector2.ONE
 
+func _input(event: InputEvent) -> void:
+	if _try_focus_battle_from_background_click(event):
+		return
+
 func _unhandled_input(event: InputEvent) -> void:
 	if _is_ui_typing():
 		return
 
 	if event.is_action_pressed("battle_run"):
+		_focus_battle_ui_layer()
 		if not battle_actions_ready:
 			_queue_battle_action("run")
 			return
@@ -766,6 +843,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("battle_move_1"):
+		_focus_battle_ui_layer()
 		if not battle_actions_ready:
 			_queue_battle_action("move", 1)
 			return
@@ -773,6 +851,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_try_select_move(1)
 		return
 	if event.is_action_pressed("battle_move_2"):
+		_focus_battle_ui_layer()
 		if not battle_actions_ready:
 			_queue_battle_action("move", 2)
 			return
@@ -780,6 +859,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_try_select_move(2)
 		return
 	if event.is_action_pressed("battle_move_3"):
+		_focus_battle_ui_layer()
 		if not battle_actions_ready:
 			_queue_battle_action("move", 3)
 			return
@@ -787,6 +867,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_try_select_move(3)
 		return
 	if event.is_action_pressed("battle_move_4"):
+		_focus_battle_ui_layer()
 		if not battle_actions_ready:
 			_queue_battle_action("move", 4)
 			return
@@ -794,8 +875,49 @@ func _unhandled_input(event: InputEvent) -> void:
 		_try_select_move(4)
 		return
 
+func _try_focus_battle_from_background_click(event: InputEvent) -> bool:
+	if not (event is InputEventMouseButton):
+		return false
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return false
+
+	if not _is_point_inside_battle_scene(mouse_event.global_position):
+		return false
+
+	if _is_point_over_visible_overlay_ui(mouse_event.global_position):
+		return false
+
+	_focus_battle_ui_layer()
+	return true
+
+func _is_point_inside_battle_scene(global_position: Vector2) -> bool:
+	var battle_arena: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena") as Control
+	if battle_arena != null and battle_arena.get_global_rect().has_point(global_position):
+		return true
+
+	var battle_background: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground") as Control
+	if battle_background != null and battle_background.get_global_rect().has_point(global_position):
+		return true
+
+	var battle_frame: Control = get_node_or_null(^"HBoxContainer/BattleFrame") as Control
+	return battle_frame != null and battle_frame.get_global_rect().has_point(global_position)
+
+func _is_point_over_visible_overlay_ui(global_position: Vector2) -> bool:
+	if mini_battle_feed != null and mini_battle_feed.visible and mini_battle_feed.get_global_rect().has_point(global_position):
+		return true
+
+	for node: Node in get_tree().get_nodes_in_group("ui_overlay"):
+		if node != null and node.has_method("is_point_over_visible_ui"):
+			if bool(node.call("is_point_over_visible_ui", global_position)):
+				return true
+
+	return false
+
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
+	_focus_battle_ui_layer()
 	if not battle_actions_ready and not team_preview_lead_selection_active:
 		if action == "run":
 			_queue_battle_action("run")
@@ -807,6 +929,10 @@ func _on_action_selected(action: String) -> void:
 	if action == "fight":
 		_show_moves()
 	elif action == "bag":
+		if not _can_use_bag_in_current_battle():
+			current_action_panel.set_message("Bag cannot be used in this battle.")
+			_refresh_bag_action_disabled()
+			return
 		_open_bag()
 	elif action == "party":
 		if _is_pvp_opponent_force_switch_waiting():
@@ -818,6 +944,7 @@ func _on_action_selected(action: String) -> void:
 
 ## Klapt de battle log open of dicht.
 func _on_battle_log_toggle_pressed() -> void:
+	_focus_battle_ui_layer()
 	battle_log_panel.toggle_log()
 	_update_battle_log_toggle_button()
 
@@ -825,8 +952,12 @@ func _on_battle_log_toggle_pressed() -> void:
 func _update_battle_log_toggle_button() -> void:
 	if battle_log_panel.is_open():
 		battle_log_toggle_button.text = ">"
+		if mini_battle_feed != null:
+			mini_battle_feed.set_feed_enabled(false)
 	else:
 		battle_log_toggle_button.text = "<"
+		if mini_battle_feed != null:
+			mini_battle_feed.set_feed_enabled(true)
 
 ## Verbergt alle action views en reset de geselecteerde action state.
 func _reset_action_choices() -> void:
@@ -839,6 +970,10 @@ func _reset_action_choices() -> void:
 
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
+	if not _is_pvp_battle() and _local_player_needs_force_switch_ui():
+		_show_force_switch_if_needed()
+		return
+
 	if _is_pvp_battle():
 		var local_state_player_id := _get_local_state_player_id()
 		var opponent_state_player_id := _get_opponent_state_player_id()
@@ -871,7 +1006,7 @@ func _show_moves() -> void:
 
 	action_buttons.set_action_disabled("fight", false)
 	action_buttons.set_action_disabled("party", false)
-	action_buttons.set_action_disabled("bag", false)
+	_refresh_bag_action_disabled()
 	action_buttons.set_action_disabled("run", false)
 	current_action_view = ActionView.MOVES
 	moves_grid.visible = true
@@ -893,6 +1028,8 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 		moves_grid.set_input_disabled(is_locked)
 	if party_grid.has_method("set_input_disabled"):
 		party_grid.set_input_disabled(is_locked)
+	if not is_locked:
+		_refresh_bag_action_disabled()
 	_update_mechanic_button_states()
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
@@ -937,7 +1074,7 @@ func _show_party(force_switch := false) -> void:
 
 	_clear_mega_evolution_selection()
 	action_buttons.set_action_disabled("fight", force_switch)
-	action_buttons.set_action_disabled("bag", force_switch)
+	action_buttons.set_action_disabled("bag", force_switch or not _can_use_bag_in_current_battle())
 	action_buttons.set_action_disabled("run", force_switch)
 	current_action_view = ActionView.PARTY
 	_update_party_slots()
@@ -948,12 +1085,23 @@ func _show_party(force_switch := false) -> void:
 
 ## Zet de UI in bag-modus.
 func _open_bag() -> void:
+	if not _can_use_bag_in_current_battle():
+		current_action_panel.set_message("Bag cannot be used in this battle.")
+		_refresh_bag_action_disabled()
+		return
+
 	_clear_mega_evolution_selection()
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
 	party_grid.visible = false
 	_hide_party_hover()
 	_update_mechanic_button_states()
+
+func _can_use_bag_in_current_battle() -> bool:
+	return battle_type == BattleType.WILD and not _is_pvp_battle()
+
+func _refresh_bag_action_disabled() -> void:
+	action_buttons.set_action_disabled("bag", not _can_use_bag_in_current_battle())
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
@@ -973,7 +1121,7 @@ func _try_run() -> void:
 		return
 
 	_clear_mega_evolution_selection()
-	battle_log_panel.add_message("Got away safely!")
+	_add_battle_log_message("Got away safely!")
 	_finish_battle({"reason": "flee"})
 
 func _show_forfeit_confirm_dialog() -> void:
@@ -986,7 +1134,7 @@ func _show_forfeit_confirm_dialog() -> void:
 
 func _on_forfeit_confirmed() -> void:
 	_set_battle_input_locked(false)
-	battle_log_panel.add_message("You forfeited the battle.")
+	_add_battle_log_message("You forfeited the battle.")
 	if not _is_pvp_battle():
 		_finish_battle({"reason": "forfeit"})
 		return
@@ -997,7 +1145,7 @@ func _on_forfeit_confirmed() -> void:
 	if not bool(response.get("success", false)):
 		var error_message := str(response.get("error", "Could not forfeit the battle."))
 		current_action_panel.set_message(error_message)
-		battle_log_panel.add_message(error_message)
+		_add_battle_log_message(error_message)
 		return
 
 	if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_submit", not action_flow._response_has_deferred_display_event(response)):
@@ -1082,7 +1230,7 @@ func _add_pvp_victory_message_if_needed(result: Dictionary) -> void:
 		return
 
 	var message := "🏆 %s won the battle!" % winner_name
-	battle_log_panel.add_message(message)
+	_add_battle_log_message(message)
 	_add_pvp_victory_system_chat_message(_format_pvp_victory_system_chat_message(result, winner_name))
 	pvp_victory_message_added = true
 
@@ -1843,6 +1991,7 @@ func _apply_ability_stat_modifier_event(event: Dictionary) -> void:
 	ability_stat_modifiers_by_ident[ident_key] = {
 		"ability": ability_name,
 		"stat": stat_key,
+		"source": _get_ability_stat_modifier_source(event),
 	}
 	_update_stat_stage_panels()
 
@@ -1857,6 +2006,7 @@ func _apply_pokemon_effect_modifier_event(event: Dictionary) -> void:
 		if ident_key == "":
 			return
 
+		modifier["source"] = _get_ability_stat_modifier_source(event)
 		ability_stat_modifiers_by_ident[ident_key] = modifier
 		_update_stat_stage_panels()
 		return
@@ -2003,6 +2153,20 @@ func _get_ability_stat_modifier_from_effect(effect: String) -> Dictionary:
 
 	return {}
 
+func _get_ability_stat_modifier_source(event: Dictionary) -> String:
+	if _event_mentions_booster_energy(event):
+		return ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY
+
+	return ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION
+
+func _event_mentions_booster_energy(event: Dictionary) -> bool:
+	for key in ["source", "sourceName", "item", "itemName", "effect", "from"]:
+		var value: String = str(event.get(key, ""))
+		if _normalize_field_effect_key(value).contains("boosterenergy"):
+			return true
+
+	return false
+
 func _events_have_explicit_item_events(events: Array) -> bool:
 	for event_value: Variant in events:
 		if event_value is Dictionary and str((event_value as Dictionary).get("type", "")) == "item":
@@ -2124,6 +2288,7 @@ func _update_battle_status_panels() -> void:
 	battle_status_panel.set_turn(battle_state.get_turn())
 	battle_status_panel.hide_timer()
 	var field_effects := battle_state.get_field_effects()
+	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, battle_state.get_turn())
 	_update_side_condition_ui()
 	weather_presentation.update_weather(_get_active_weather_effect_id(field_effects))
@@ -2160,9 +2325,16 @@ func _get_active_weather_effect_id(field_effects: Array) -> String:
 
 		var effect_data: Dictionary = effect_value as Dictionary
 		if str(effect_data.get("effectType", "")) == "weather":
-			return str(effect_data.get("effectId", ""))
+			return _get_field_effect_identifier(effect_data)
 
 	return ""
+
+func _get_field_effect_identifier(effect_data: Dictionary) -> String:
+	var effect_id := str(effect_data.get("effectId", "")).strip_edges()
+	if effect_id != "":
+		return effect_id
+
+	return str(effect_data.get("effect", "")).strip_edges()
 
 func _get_active_terrain_effect_id(field_effects: Array) -> String:
 	for effect_value in field_effects:
@@ -2185,6 +2357,61 @@ func _is_trick_room_active(field_effects: Array) -> bool:
 			return true
 
 	return false
+
+func _prune_inactive_field_condition_ability_modifiers(field_effects: Array) -> void:
+	if ability_stat_modifiers_by_ident.is_empty():
+		return
+
+	var has_sun: bool = _field_effects_include_any_key(field_effects, ["sun", "sunnyday", "harshsun", "desolateland"])
+	var has_electric_terrain: bool = _field_effects_include_any_key(field_effects, ["electricterrain"])
+	var changed: bool = false
+	var ident_keys: Array = ability_stat_modifiers_by_ident.keys()
+	for ident_key_value in ident_keys:
+		var ident_key: String = str(ident_key_value)
+		var modifier_value: Variant = ability_stat_modifiers_by_ident.get(ident_key, {})
+		if not (modifier_value is Dictionary):
+			continue
+
+		var modifier: Dictionary = modifier_value as Dictionary
+		var ability_key: String = _normalize_ability_stat_modifier_key(str(modifier.get("ability", "")))
+		var modifier_source: String = str(modifier.get("source", ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION))
+		if modifier_source != ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION:
+			continue
+
+		if ability_key == "protosynthesis" and not has_sun:
+			ability_stat_modifiers_by_ident.erase(ident_key)
+			changed = true
+		elif ability_key == "quarkdrive" and not has_electric_terrain:
+			ability_stat_modifiers_by_ident.erase(ident_key)
+			changed = true
+
+	if changed:
+		_update_stat_stage_panels()
+
+func _field_effects_include_any_key(field_effects: Array, expected_keys: Array) -> bool:
+	for effect_value in field_effects:
+		if not (effect_value is Dictionary):
+			continue
+
+		var effect_data: Dictionary = effect_value as Dictionary
+		for key in ["effectId", "effect", "name"]:
+			var effect_key: String = _normalize_field_effect_key(str(effect_data.get(key, "")))
+			if effect_key != "" and expected_keys.has(effect_key):
+				return true
+
+	return false
+
+func _normalize_field_effect_key(effect: String) -> String:
+	var cleaned: String = effect.strip_edges()
+	if cleaned.to_lower().begins_with("[from] "):
+		cleaned = cleaned.substr("[from] ".length()).strip_edges()
+	if cleaned.contains(":"):
+		cleaned = str(cleaned.split(":", false, 1)[1]).strip_edges()
+
+	return cleaned.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "")
+
+func _normalize_ability_stat_modifier_key(ability_name: String) -> String:
+	return ability_name.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "")
 
 func _update_battle_platform_hazards() -> void:
 	_update_side_condition_ui()
@@ -2493,7 +2720,7 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 	if not bool(player_lead_response.get("success", false)):
 		var error_message := str(player_lead_response.get("error", "Cannot choose player lead!"))
 		current_action_panel.set_message(error_message)
-		battle_log_panel.add_message(error_message)
+		_add_battle_log_message(error_message)
 		_set_battle_input_locked(false)
 		return {}
 
@@ -2501,7 +2728,7 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 	if not bool(npc_lead_response.get("success", false)):
 		var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
 		current_action_panel.set_message(error_message)
-		battle_log_panel.add_message(error_message)
+		_add_battle_log_message(error_message)
 		_set_battle_input_locked(false)
 		return {}
 
@@ -2533,7 +2760,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 		if not bool(lead_response.get("success", false)):
 			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
 			current_action_panel.set_message(error_message)
-			battle_log_panel.add_message(error_message)
+			_add_battle_log_message(error_message)
 			_set_battle_input_locked(false)
 			continue
 
@@ -2541,7 +2768,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 		if not bool(npc_lead_response.get("success", false)):
 			var error_message := str(npc_lead_response.get("error", "The trainer could not choose a lead!"))
 			current_action_panel.set_message(error_message)
-			battle_log_panel.add_message(error_message)
+			_add_battle_log_message(error_message)
 			_set_battle_input_locked(false)
 			continue
 
@@ -2578,7 +2805,7 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 		if not bool(lead_response.get("success", false)):
 			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
 			current_action_panel.set_message(error_message)
-			battle_log_panel.add_message(error_message)
+			_add_battle_log_message(error_message)
 			_set_battle_input_locked(false)
 			continue
 
@@ -2707,13 +2934,22 @@ func _add_battle_log_messages(messages: Array[String]) -> void:
 		if message == "":
 			continue
 
-		battle_log_panel.add_message(message)
+		_add_battle_log_message(message)
+
+func _add_battle_log_message(message: String) -> void:
+	if message == "":
+		return
+
+	battle_log_panel.add_message(message)
+	if mini_battle_feed != null:
+		mini_battle_feed.add_message(message)
 
 
 
 
 ## Stuurt de gekozen player move door en laat de backend de NPC-keuze verwerken.
 func _on_moves_grid_move_selected(slot: int) -> void:
+	_focus_battle_ui_layer()
 	if battle_input_locked:
 		return
 
@@ -2885,7 +3121,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		_show_switch_out_heal_target_if_needed(event_data, ordered_events, event_index)
 		await event_renderer.render_event(event_data, presentation)
 		if fallback_knock_off_message != "":
-			battle_log_panel.add_message(fallback_knock_off_message)
+			_add_battle_log_message(fallback_knock_off_message)
 			current_action_panel.set_message(fallback_knock_off_message)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			battle_state.apply_event_conditions([event_data])
@@ -2900,6 +3136,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_update_hud_panels()
 			_update_active_sprites()
 
+	_prune_inactive_field_condition_ability_modifiers(battle_state.get_field_effects())
 	_update_hud_panels()
 	_update_party_slots()
 	_update_vs_panel_names()
@@ -3713,6 +3950,7 @@ func _normalize_event_source(source: String) -> String:
 	return cleaned.strip_edges()
 
 func _on_party_grid_party_selected(slot: int) -> void:
+	_focus_battle_ui_layer()
 	if team_preview_lead_selection_active:
 		return
 
@@ -3737,7 +3975,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	if not player_response.get("success", false):
 		var error_message := str(player_response.get("error", "Cannot switch right now!"))
 		current_action_panel.set_message(error_message)
-		battle_log_panel.add_message(error_message)
+		_add_battle_log_message(error_message)
 		if was_force_switch:
 			_show_party(true)
 		else:
@@ -3790,7 +4028,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 func _show_force_switch_if_needed() -> bool:
 	if not _local_player_needs_force_switch_ui():
 		return false
-	if pvp_last_phase != "awaiting_force_switch":
+	if _is_pvp_battle() and pvp_last_phase != "awaiting_force_switch":
 		_log_pvp_realtime(
 			"Blocked PvP force-switch open",
 			"source=_show_force_switch_if_needed phase=%s expected=awaiting_force_switch" % pvp_last_phase
@@ -3892,6 +4130,12 @@ func _submit_player_choice(
 	mega := false,
 	pending_player_choice_events: Array = []
 ) -> Dictionary:
+	if (choice_type == "item" or choice_type == "bag") and not _can_use_bag_in_current_battle():
+		return {
+			"success": false,
+			"error": "Bag cannot be used in this battle.",
+		}
+
 	var local_state_player_id := _get_local_state_player_id()
 	if choice_type == "move" and mega and not battle_state.can_active_pokemon_mega_evolve(local_state_player_id):
 		if _is_pvp_battle() and DEBUG_PVP_REALTIME:
@@ -5753,6 +5997,7 @@ func _get_player_display_name(player_id: String) -> String:
 	return "Opponent"
 
 func _try_select_move(slot: int) -> void:
+	_focus_battle_ui_layer()
 	if not battle_actions_ready:
 		return
 

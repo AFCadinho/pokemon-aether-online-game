@@ -378,9 +378,9 @@ text = "Pallet Town"
 vertical_alignment = 1
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
-custom_minimum_size = Vector2(368, 0)
+custom_minimum_size = Vector2(308, 0)
 layout_mode = 1
-offset_right = 368.0
+offset_right = 308.0
 offset_bottom = 57.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -394,24 +394,6 @@ theme_override_constants/margin_bottom = 8
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/OptionsPanel/MarginContainer" unique_id=1025196923]
 layout_mode = 2
 theme_override_constants/separation = 8
-
-[node name="MapSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=577193638]
-custom_minimum_size = Vector2(52, 52)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
-
-[node name="MapButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/MapSlot" unique_id=1031341535]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-tooltip_text = "Open Town Map"
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("3_riyyd")
-texture_pressed = ExtResource("3_riyyd")
-texture_hover = ExtResource("3_riyyd")
-texture_disabled = ExtResource("3_riyyd")
-texture_focused = ExtResource("3_riyyd")
-ignore_texture_size = true
-stretch_mode = 5
 
 [node name="BagSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=1506839726]
 custom_minimum_size = Vector2(52, 52)
@@ -634,6 +616,24 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
+
+[node name="MapSlot" type="PanelContainer" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer" unique_id=577193638]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="MapButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/MapSlot" unique_id=1031341535]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Open Town Map"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("3_riyyd")
+texture_pressed = ExtResource("3_riyyd")
+texture_hover = ExtResource("3_riyyd")
+texture_disabled = ExtResource("3_riyyd")
+texture_focused = ExtResource("3_riyyd")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="PokedexSlot" type="PanelContainer" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer" unique_id=472739654]
 custom_minimum_size = Vector2(52, 52)

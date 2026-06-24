@@ -28,7 +28,7 @@ script = ExtResource("1_um0dl")
 
 [node name="PlatformImage" type="TextureRect" parent="." unique_id=2058549199]
 layout_mode = 0
-offset_right = 600.0
+offset_right = 500.0
 offset_bottom = 300.0
 texture = ExtResource("1_ik1kv")
 expand_mode = 1

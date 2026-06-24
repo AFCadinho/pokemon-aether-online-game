@@ -2,6 +2,13 @@ extends PanelContainer
 
 signal action_selected(action: String)
 
+const ACTION_ACTIVE_BG := Color("#101b2cf2")
+const ACTION_ACTIVE_BG_HOVER := Color("#142238f6")
+const ACTION_ACTIVE_BORDER := Color("#b99a52")
+const ACTION_ACTIVE_BORDER_SOFT := Color("#5b83a8")
+const ACTION_ACTIVE_TEXT := Color("#ead9a8")
+const ACTION_DISABLED_MODULATE := Color(0.52, 0.52, 0.52, 0.72)
+
 @onready var buttons: Array[Button] = [
 	$GridContainer/FightButton,
 	$GridContainer/PartyButton,
@@ -12,17 +19,14 @@ signal action_selected(action: String)
 var disabled_actions := {}
 var all_actions_disabled := false
 var selected_action := ""
+var base_button_styles: Dictionary = {}
+
+func _ready() -> void:
+	_capture_base_button_styles()
+	_apply_disabled_actions()
 
 func _select_button(active_button: Button) -> void:
 	selected_action = _get_action_for_button(active_button)
-	# Zet alle knoppen terug naar hun normale staat zodra een knop is gekozen
-	for button in buttons:
-		button.disabled = false
-		button.modulate = Color(1, 1, 1)
-	
-	# Disable de actieve knop en maak hem een beetje grijs als visueel indicatie
-	active_button.disabled = true
-	active_button.modulate = Color(0.7, 0.7, 0.7)
 	_apply_disabled_actions()
 
 func set_selected_action(action: String) -> void:
@@ -44,21 +48,23 @@ func set_all_actions_disabled(is_disabled: bool) -> void:
 	_apply_disabled_actions()
 
 func _apply_disabled_actions() -> void:
+	if base_button_styles.is_empty():
+		_capture_base_button_styles()
+
 	for button in buttons:
 		button.disabled = false
-		button.modulate = Color(1, 1, 1)
+		_apply_button_default_state(button)
 
 	if all_actions_disabled:
 		for button in buttons:
 			button.disabled = true
-			button.modulate = Color(0.7, 0.7, 0.7)
+			_apply_button_disabled_state(button)
 
 		return
 
 	var selected_button := _get_action_button(selected_action)
 	if selected_button != null:
-		selected_button.disabled = true
-		selected_button.modulate = Color(0.7, 0.7, 0.7)
+		_apply_button_selected_state(selected_button)
 
 	for action in disabled_actions:
 		if not bool(disabled_actions[action]):
@@ -69,7 +75,71 @@ func _apply_disabled_actions() -> void:
 			continue
 
 		button.disabled = true
-		button.modulate = Color(0.7, 0.7, 0.7)
+		_apply_button_disabled_state(button)
+
+func _capture_base_button_styles() -> void:
+	base_button_styles.clear()
+	for button: Button in buttons:
+		var action: String = _get_action_for_button(button)
+		base_button_styles[action] = {
+			"normal": button.get_theme_stylebox("normal").duplicate(),
+			"hover": button.get_theme_stylebox("hover").duplicate(),
+			"pressed": button.get_theme_stylebox("pressed").duplicate(),
+			"disabled": button.get_theme_stylebox("disabled").duplicate(),
+			"focus": button.get_theme_stylebox("focus").duplicate(),
+		}
+
+func _apply_button_default_state(button: Button) -> void:
+	var action: String = _get_action_for_button(button)
+	var styles: Dictionary = base_button_styles.get(action, {})
+	button.modulate = Color.WHITE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	for style_name: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+		if styles.has(style_name):
+			var style_box: StyleBox = styles.get(style_name) as StyleBox
+			if style_box != null:
+				button.add_theme_stylebox_override(style_name, style_box)
+	button.remove_theme_color_override("font_color")
+	button.remove_theme_color_override("font_hover_color")
+	button.remove_theme_color_override("font_pressed_color")
+
+func _apply_button_selected_state(button: Button) -> void:
+	button.modulate = Color.WHITE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_stylebox_override("normal", _make_selected_button_style(ACTION_ACTIVE_BG, ACTION_ACTIVE_BORDER))
+	button.add_theme_stylebox_override("hover", _make_selected_button_style(ACTION_ACTIVE_BG_HOVER, ACTION_ACTIVE_BORDER))
+	button.add_theme_stylebox_override("pressed", _make_selected_button_style(ACTION_ACTIVE_BG_HOVER, ACTION_ACTIVE_BORDER_SOFT))
+	button.add_theme_stylebox_override("focus", _make_selected_button_style(ACTION_ACTIVE_BG, ACTION_ACTIVE_BORDER_SOFT))
+	button.add_theme_color_override("font_color", ACTION_ACTIVE_TEXT)
+	button.add_theme_color_override("font_hover_color", ACTION_ACTIVE_TEXT)
+	button.add_theme_color_override("font_pressed_color", ACTION_ACTIVE_TEXT)
+
+func _apply_button_disabled_state(button: Button) -> void:
+	var action: String = _get_action_for_button(button)
+	var styles: Dictionary = base_button_styles.get(action, {})
+	button.modulate = ACTION_DISABLED_MODULATE
+	button.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
+	if styles.has("disabled"):
+		var disabled_style: StyleBox = styles.get("disabled") as StyleBox
+		if disabled_style != null:
+			button.add_theme_stylebox_override("disabled", disabled_style)
+
+func _make_selected_button_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = background_color
+	style.border_color = border_color
+	style.border_width_left = 2
+	style.border_width_top = 2
+	style.border_width_right = 2
+	style.border_width_bottom = 2
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_right = 6
+	style.corner_radius_bottom_left = 6
+	style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.10)
+	style.shadow_size = 3
+	style.shadow_offset = Vector2.ZERO
+	return style
 
 func _get_action_button(action: String) -> Button:
 	if action == "fight":

@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://d2j3mgh8bjsdy"]
+
+[ext_resource type="Script" path="res://scripts/battle/battle_ui/mini_battle_feed.gd" id="1_8eh2s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8eh2s"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.011764706, 0.023529412, 0.039215688, 0.76)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.24)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
+[node name="MiniBattleFeed" type="PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(315, 92)
+offset_right = 315.0
+offset_bottom = 92.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_8eh2s")
+script = ExtResource("1_8eh2s")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 7
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+horizontal_scroll_mode = 0
+
+[node name="Lines" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 2

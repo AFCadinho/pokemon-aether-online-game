@@ -8,6 +8,7 @@ var sun_rays: Control
 var sun_sparkles: GPUParticles2D
 var sandstorm_particles: GPUParticles2D
 var sandstorm_swirls: Control
+var snow_particles: GPUParticles2D
 var terrain_tint: ColorRect
 var grassy_terrain_layer: Control
 var misty_terrain_layer: Control
@@ -31,7 +32,8 @@ func setup(
 	grassy_terrain_layer_node: Control,
 	misty_terrain_layer_node: Control,
 	psychic_terrain_layer_node: Control,
-	trick_room_layer_node: Control
+	trick_room_layer_node: Control,
+	snow_particles_node: GPUParticles2D = null
 ) -> void:
 	weather_particles = weather_particles_node
 	weather_tint = weather_tint_node
@@ -39,6 +41,7 @@ func setup(
 	sun_sparkles = sun_sparkles_node
 	sandstorm_particles = sandstorm_particles_node
 	sandstorm_swirls = sandstorm_swirls_node
+	snow_particles = snow_particles_node
 	terrain_tint = terrain_tint_node
 	grassy_terrain_layer = grassy_terrain_layer_node
 	misty_terrain_layer = misty_terrain_layer_node
@@ -52,12 +55,13 @@ func update_weather(weather_effect: String) -> void:
 
 	_update_weather_tint(weather_effect)
 
-	var should_emit_rain := weather_effect == "RainDance"
+	var weather_key := _normalize_weather_key(weather_effect)
+	var should_emit_rain := weather_key == "raindance" or weather_key == "rain"
 	if weather_particles != null:
 		weather_particles.visible = should_emit_rain
 		weather_particles.emitting = should_emit_rain
 
-	var should_show_sun := weather_effect == "SunnyDay"
+	var should_show_sun := weather_key == "sunnyday" or weather_key == "sun" or weather_key == "harshsun"
 	if sun_rays != null:
 		sun_rays.visible = should_show_sun
 		if not should_show_sun:
@@ -68,7 +72,7 @@ func update_weather(weather_effect: String) -> void:
 		sun_sparkles.visible = should_show_sun
 		sun_sparkles.emitting = should_show_sun
 
-	var should_emit_sandstorm := weather_effect == "Sandstorm"
+	var should_emit_sandstorm := weather_key == "sandstorm"
 	if sandstorm_particles != null:
 		sandstorm_particles.visible = should_emit_sandstorm
 		sandstorm_particles.emitting = should_emit_sandstorm
@@ -79,6 +83,11 @@ func update_weather(weather_effect: String) -> void:
 			sandstorm_swirls.position = Vector2.ZERO
 			sandstorm_swirls.modulate = Color.WHITE
 			sandstorm_weather_time = 0.0
+
+	var should_emit_snow := _is_snow_weather_key(weather_key)
+	if snow_particles != null:
+		snow_particles.visible = should_emit_snow
+		snow_particles.emitting = should_emit_snow
 
 func animate(delta: float) -> void:
 	if not SettingsManager.weather_effects and not SettingsManager.terrain_effects:
@@ -141,14 +150,15 @@ func _update_weather_tint(weather_effect: String) -> void:
 
 	var tint_color := Color.TRANSPARENT
 	var should_show_tint := true
-	match weather_effect:
-		"RainDance":
+	var weather_key := _normalize_weather_key(weather_effect)
+	match weather_key:
+		"raindance", "rain":
 			tint_color = Color(0.24, 0.46, 0.9, 0.12)
-		"SunnyDay":
+		"sunnyday", "sun", "harshsun":
 			tint_color = Color(1.0, 0.76, 0.18, 0.1)
-		"Sandstorm":
+		"sandstorm":
 			tint_color = Color(0.68, 0.47, 0.22, 0.14)
-		"Hail", "Snow":
+		"hail", "snow", "snowscape":
 			tint_color = Color(0.72, 0.88, 1.0, 0.1)
 		_:
 			should_show_tint = false
@@ -178,6 +188,9 @@ func _hide_weather_effects() -> void:
 		_set_child_particles_emitting(sandstorm_swirls, false)
 		sandstorm_swirls.position = Vector2.ZERO
 		sandstorm_swirls.modulate = Color.WHITE
+	if snow_particles != null:
+		snow_particles.visible = false
+		snow_particles.emitting = false
 	sun_weather_time = 0.0
 	sandstorm_weather_time = 0.0
 
@@ -248,3 +261,14 @@ func _set_child_particles_emitting(container: Node, emitting: bool) -> void:
 		if child is GPUParticles2D:
 			var particle_node: GPUParticles2D = child as GPUParticles2D
 			particle_node.emitting = emitting
+
+func _normalize_weather_key(weather_effect: String) -> String:
+	var cleaned := weather_effect.strip_edges()
+	var separator_index := cleaned.find(":")
+	if separator_index >= 0:
+		cleaned = cleaned.substr(separator_index + 1).strip_edges()
+
+	return cleaned.to_lower().replace(" ", "").replace("_", "").replace("-", "")
+
+func _is_snow_weather_key(weather_key: String) -> bool:
+	return weather_key == "snow" or weather_key == "hail" or weather_key == "snowscape"

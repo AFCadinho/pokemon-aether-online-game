@@ -1,7 +1,23 @@
 [gd_scene format=3 uid="uid://dpltq23uv3kvb"]
 
 [ext_resource type="Script" uid="uid://bmhi84o6rqke6" path="res://scripts/battle/battle_ui/sprite_box.gd" id="1_y2if1"]
+[ext_resource type="Texture2D" uid="uid://hyxuexi6m5ke" path="res://assets/sprites/pokemon/front/aerodactyl-mega/sheet.png" id="2_k7f1y"]
 [ext_resource type="PackedScene" uid="uid://c25tthf13ru45" path="res://scenes/battle/stat_stage_panel.tscn" id="3_k7f1y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qn183"]
+atlas = ExtResource("2_k7f1y")
+region = Rect2(0, 280, 173, 140)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_odqyv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qn183")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="SpriteBox" type="Control" unique_id=2063766200]
 layout_mode = 3
@@ -39,6 +55,7 @@ size_flags_vertical = 3
 visible = false
 position = Vector2(162, 132)
 scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_odqyv")
 
 [node name="StatStagePanel" parent="SingleBattleContainer/SpriteSlot" unique_id=43555645 instance=ExtResource("3_k7f1y")]
 layout_mode = 0

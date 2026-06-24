@@ -3,6 +3,7 @@ extends RefCounted
 class_name BattleEventRenderer
 
 var battle_log_panel: BattleLogPanel
+var mini_battle_feed: MiniBattleFeed
 var current_action_panel: CurrentActionPanel
 var animation_router: BattleAnimationRouter
 var message_timing: BattleMessageTiming
@@ -14,6 +15,7 @@ var last_battle_log_player_id := ""
 
 func setup(
 	battle_log: BattleLogPanel,
+	mini_feed: MiniBattleFeed,
 	action_panel: CurrentActionPanel,
 	router: BattleAnimationRouter,
 	timing: BattleMessageTiming,
@@ -22,6 +24,7 @@ func setup(
 	animation_guard_callback: Callable = Callable()
 ) -> void:
 	battle_log_panel = battle_log
+	mini_battle_feed = mini_feed
 	current_action_panel = action_panel
 	animation_router = router
 	message_timing = timing
@@ -39,6 +42,8 @@ func add_turn_header(turn: int) -> void:
 		return
 
 	battle_log_panel.add_turn_header(turn)
+	if mini_battle_feed != null:
+		mini_battle_feed.add_turn_header(turn)
 	reset_battle_log_player_gap()
 
 
@@ -64,12 +69,12 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	if pre_log_message != "":
 		if not suppress_player_gap:
 			_add_battle_log_player_gap(event_data)
-		battle_log_panel.add_message(pre_log_message)
+		_add_log_message(pre_log_message)
 
 	if log_message != "":
 		if not suppress_player_gap:
 			_add_battle_log_player_gap(event_data)
-		battle_log_panel.add_message(log_message)
+		_add_log_message(log_message)
 
 	if add_blank_after:
 		battle_log_panel.add_blank_line()
@@ -140,6 +145,12 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_previous_hp: bool) -> void:
 	if set_active_hud_hp_from_event.is_valid():
 		set_active_hud_hp_from_event.call(target_ident, event, use_previous_hp)
+
+func _add_log_message(message: String) -> void:
+	if battle_log_panel != null:
+		battle_log_panel.add_message(message)
+	if mini_battle_feed != null:
+		mini_battle_feed.add_message(message)
 
 
 func _wait(seconds: float) -> void:

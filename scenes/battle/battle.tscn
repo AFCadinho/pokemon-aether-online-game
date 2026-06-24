@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://ckxxmxljf2eer" path="res://scenes/battle/team_preview_layer.tscn" id="11_e48mi"]
 [ext_resource type="PackedScene" uid="uid://ccyyhwxeftxem" path="res://scenes/battle/forfeit_confirm_dialog.tscn" id="12_ueicy"]
 [ext_resource type="PackedScene" uid="uid://bfo18l7xvty5o" path="res://scenes/battle/battle_log_panel.tscn" id="17_6ofp8"]
+[ext_resource type="PackedScene" uid="uid://d2j3mgh8bjsdy" path="res://scenes/battle/mini_battle_feed.tscn" id="18_mini"]
 [ext_resource type="PackedScene" uid="uid://b4jvhxavag7g1" path="res://scenes/battle/pokemon_hover_card.tscn" id="21_sgdsx"]
 [ext_resource type="PackedScene" uid="uid://qshhy8kj3xu8" path="res://scenes/battle/move_hover_card.tscn" id="23_156m4"]
 [ext_resource type="PackedScene" uid="uid://c17yqguyag8vb" path="res://scenes/battle/party_hover_card.tscn" id="28_n5ix6"]
@@ -168,6 +169,26 @@ scale_min = 0.24
 scale_max = 0.42
 scale_over_velocity_curve = SubResource("CurveXYZTexture_n5ix6")
 color_initial_ramp = SubResource("GradientTexture1D_e48mi")
+
+[sub_resource type="Gradient" id="Gradient_snow"]
+offsets = PackedFloat32Array(0, 0.24, 0.74, 1)
+colors = PackedColorArray(0.86, 0.95, 1, 0.08, 0.9, 0.98, 1, 0.58, 1, 1, 1, 0.82, 0.82, 0.94, 1, 0.12)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_snow"]
+gradient = SubResource("Gradient_snow")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_snow"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(640, 18, 1)
+direction = Vector3(-0.18, 0.98, 0)
+spread = 18.0
+initial_velocity_min = 95.0
+initial_velocity_max = 175.0
+gravity = Vector3(-18, 32, 0)
+scale_min = 0.75
+scale_max = 2.2
+color_initial_ramp = SubResource("GradientTexture1D_snow")
 
 [sub_resource type="Gradient" id="Gradient_sandstorm"]
 offsets = PackedFloat32Array(0, 0.18, 0.68, 1)
@@ -319,9 +340,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -627.5
+offset_left = -577.5
 offset_top = -455.0
-offset_right = 627.5
+offset_right = 577.5
 offset_bottom = 195.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -329,7 +350,7 @@ mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="BattleFrame" type="Panel" parent="HBoxContainer" unique_id=153800450]
-custom_minimum_size = Vector2(900, 0)
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sgdsx")
@@ -751,6 +772,15 @@ preprocess = 0.82
 visibility_rect = Rect2(-680, -80, 1420, 760)
 process_material = SubResource("ParticleProcessMaterial_8eh2s")
 
+[node name="SnowParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1372362631]
+visible = false
+position = Vector2(480, -24)
+amount = 430
+lifetime = 2.6
+preprocess = 2.6
+visibility_rect = Rect2(-720, -120, 1500, 820)
+process_material = SubResource("ParticleProcessMaterial_snow")
+
 [node name="SandstormParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1890257023]
 visible = false
 position = Vector2(555, 245)
@@ -799,10 +829,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = -58.0
-offset_top = -321.0
-offset_right = 542.0
-offset_bottom = -71.0
+offset_left = -47.5
+offset_top = -329.0
+offset_right = 552.5
+offset_bottom = -79.0
 grow_vertical = 0
 
 [node name="BattlePlatform2" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=507540366 instance=ExtResource("3_8eh2s")]
@@ -810,17 +840,19 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 380.0
-offset_top = -549.0
-offset_right = 980.0
-offset_bottom = -299.0
+offset_left = 359.5
+offset_top = -538.0
+offset_right = 959.5
+offset_bottom = -288.0
 grow_vertical = 0
 platform_side = 1
 
 [node name="EnemySpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=2063766200 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
-offset_top = -236.5
-offset_bottom = 56.5
+offset_left = -419.5
+offset_top = -243.0
+offset_right = 30.5
+offset_bottom = 50.0
 
 [node name="PlayerSpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=148088549 instance=ExtResource("3_kd6yx")]
 layout_mode = 1
@@ -829,10 +861,10 @@ anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 0.0
 anchor_bottom = 1.0
-offset_left = -27.0
-offset_top = -361.0
-offset_right = 423.0
-offset_bottom = -68.5
+offset_left = -36.5
+offset_top = -366.0
+offset_right = 413.5
+offset_bottom = -73.5
 grow_horizontal = 1
 grow_vertical = 0
 
@@ -858,6 +890,11 @@ offset_bottom = 193.0
 layout_mode = 1
 offset_top = -60.0
 offset_bottom = 0.0
+
+[node name="MiniBattleFeed" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1377941626 instance=ExtResource("18_mini")]
+layout_mode = 1
+offset_top = 205.0
+offset_bottom = 281.0
 
 [node name="FieldTimers" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=91068280 instance=ExtResource("6_mvulk")]
 layout_mode = 1
@@ -888,8 +925,9 @@ text = "<"
 
 [node name="VSPanelContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1039531441 instance=ExtResource("9_pyfix")]
 layout_mode = 1
-offset_left = -80.5
-offset_right = 80.5
+offset_left = -95.5
+offset_right = 95.5
+offset_bottom = 42.0
 
 [node name="SideFieldEffectsPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1939591853 instance=ExtResource("10_8eh2s")]
 layout_mode = 1
@@ -909,10 +947,10 @@ offset_bottom = 183.0
 grow_horizontal = 0
 
 [node name="EnemyTeamPreviewLayer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=53601656 instance=ExtResource("11_e48mi")]
-position = Vector2(697, 229)
+position = Vector2(632.5, 226)
 
 [node name="PlayerTeamPreviewLayer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=585843366 instance=ExtResource("11_e48mi")]
-position = Vector2(264, 441)
+position = Vector2(198.5, 440)
 
 [node name="ForfeitConfirmDialog" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=433129307 instance=ExtResource("12_ueicy")]
 visible = false
@@ -1127,9 +1165,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 50.0
+offset_left = 100.0
 offset_top = -455.0
-offset_right = 335.0
+offset_right = 385.0
 offset_bottom = 195.0
 grow_vertical = 2
 
