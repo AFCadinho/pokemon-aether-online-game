@@ -73,6 +73,9 @@ var pending_knock_off_targets_by_ident := {}
 var stat_stages_by_ident: Dictionary = {}
 var ability_stat_modifiers_by_ident: Dictionary = {}
 var player_party_moves_by_key: Dictionary = {}
+var damage_calc_request_token := 0
+var damage_calc_request_in_flight := false
+var damage_calc_refresh_queued := false
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -98,7 +101,7 @@ var active_enemy_pokemon: Pokemon
 @onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
 @onready var moves_grid: MovesGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid
 @onready var party_grid: PartyGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid
-@onready var calc_panel: Control = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel
+@onready var calc_panel: BattleDamageCalcPanel = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel
 @onready var mechanics_panel: Control = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel
 @onready var mega_evolution_button: TextureButton = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon
 @onready var mechanic_buttons: Array[TextureButton] = [
@@ -154,6 +157,7 @@ var active_enemy_pokemon: Pokemon
 @onready var battle_request: HTTPRequest = $BattleRequest
 @onready var pokemon_info_request: HTTPRequest = $PokemonInfoRequest
 @onready var pokemon_stats_request: HTTPRequest = $PokemonStatsRequest
+@onready var damage_calc_request: HTTPRequest = $DamageCalcRequest
 
 ## Verbindt de UI-signals en zet de battle UI in de beginstand.
 func _ready() -> void:
@@ -212,6 +216,7 @@ func _ready() -> void:
 	battle_log_panel.clear_log()
 	mini_battle_feed.clear()
 	event_renderer.reset_battle_log_player_gap()
+	calc_panel.show_idle()
 
 	if PlayerSave.party.is_empty():
 		return
@@ -936,8 +941,13 @@ func _on_calc_mode_button_pressed() -> void:
 	_set_action_panel_mode(BattleActionsPanelMode.CALC)
 
 func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
+	var previous_mode := current_action_panel_mode
 	current_action_panel_mode = mode
+	if previous_mode == BattleActionsPanelMode.CALC and mode != BattleActionsPanelMode.CALC:
+		damage_calc_request_token += 1
 	_sync_action_panel_mode_visibility()
+	if mode == BattleActionsPanelMode.CALC:
+		_refresh_damage_calc_results()
 
 func _sync_action_panel_mode_visibility() -> void:
 	var is_calc_mode := current_action_panel_mode == BattleActionsPanelMode.CALC
@@ -964,6 +974,51 @@ func _sync_action_panel_mode_visibility() -> void:
 		_:
 			moves_grid.visible = false
 			party_grid.visible = false
+
+func _refresh_damage_calc_results() -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if battle_finished:
+		calc_panel.show_error("Battle has ended.")
+		return
+	if battle_state.battle_id.strip_edges() == "":
+		calc_panel.show_error("Battle is not ready yet.")
+		return
+
+	if damage_calc_request_in_flight:
+		damage_calc_refresh_queued = true
+		calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+		return
+
+	damage_calc_request_token += 1
+	var request_token := damage_calc_request_token
+	damage_calc_request_in_flight = true
+	damage_calc_refresh_queued = false
+	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+
+	var response: Dictionary = await BattleApiClient.calculate_battle_damage(
+		damage_calc_request,
+		battle_state.battle_id,
+		action_flow.local_player_id,
+		"own-to-opponent",
+		{}
+	)
+
+	damage_calc_request_in_flight = false
+	if request_token != damage_calc_request_token:
+		if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
+			_refresh_damage_calc_results()
+		return
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if damage_calc_refresh_queued:
+		_refresh_damage_calc_results()
+		return
+
+	if bool(response.get("success", false)):
+		calc_panel.show_response(response)
+	else:
+		calc_panel.show_error(str(response.get("error", "Damage calculation failed.")))
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
@@ -1349,6 +1404,7 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		_prewarm_current_battle_move_animations()
 		_update_pvp_phase_contract_from_response(response, source)
 		_mark_pvp_response_applied(response)
+		_refresh_damage_calc_results()
 
 	return success
 
@@ -6013,6 +6069,7 @@ func _update_battle_presentation(sprite_context := "sprite_refresh") -> void:
 	_update_party_slots()
 	_update_vs_panel_names()
 	_update_mechanic_button_states()
+	_refresh_damage_calc_results()
 
 func _update_vs_panel_names() -> void:
 	if vs_player_1_label != null:
