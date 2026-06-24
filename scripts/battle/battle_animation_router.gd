@@ -59,7 +59,7 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 	if config.is_empty():
 		return
 
-	await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2")
+	await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2", actor_ident, _target_ident)
 
 
 func play_effect_animation(effect_key: String, target_ident: String = "") -> void:
@@ -78,7 +78,13 @@ func play_effect_animation(effect_key: String, target_ident: String = "") -> voi
 	await _play_animation_config(config, target_ident)
 
 
-func _play_animation_config(config: Dictionary, target_ident: String = "", reverse_battlefield: bool = false) -> void:
+func _play_animation_config(
+	config: Dictionary,
+	target_ident: String = "",
+	reverse_battlefield: bool = false,
+	move_actor_ident: String = "",
+	move_target_ident: String = ""
+) -> void:
 	var parent_node: Node = animation_parent
 	if parent_node == null:
 		parent_node = player_sprite_box.get_parent()
@@ -100,7 +106,8 @@ func _play_animation_config(config: Dictionary, target_ident: String = "", rever
 	if overlay != null:
 		parent_node.add_child(overlay)
 		_fit_animation_to_parent(animation_node, overlay)
-		_apply_effect_target_offset(animation_node, target_ident, config)
+		_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, overlay)
+		_apply_effect_target_offset(animation_node, target_ident, config, overlay)
 		overlay.add_child(animation_node)
 		await _wait_for_animation_node(animation_node, overlay)
 		if is_instance_valid(overlay):
@@ -109,7 +116,8 @@ func _play_animation_config(config: Dictionary, target_ident: String = "", rever
 
 	animation_node.z_index = 50
 	_fit_animation_to_parent(animation_node, parent_node)
-	_apply_effect_target_offset(animation_node, target_ident, config)
+	_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, parent_node)
+	_apply_effect_target_offset(animation_node, target_ident, config, parent_node)
 	parent_node.add_child(animation_node)
 	await _wait_for_animation_node(animation_node, parent_node)
 
@@ -591,20 +599,100 @@ func _fit_animation_to_parent(animation_node: Node2D, parent_node: Node) -> void
 	animation_node.position = Vector2.ZERO
 
 
-func _apply_effect_target_offset(animation_node: Node2D, target_ident: String, config: Dictionary) -> void:
+func _apply_effect_target_offset(animation_node: Node2D, target_ident: String, config: Dictionary, parent_node: Node) -> void:
 	if target_ident == "":
 		return
 
-	var target_anchor: Vector2 = _get_effect_anchor_position(_get_player_id_from_ident(target_ident))
-	if target_anchor == Vector2.ZERO:
+	var source_anchor: Vector2 = _get_effect_anchor_position(str(config.get("source_anchor", "player")))
+	var target_anchor: Vector2 = _get_effect_target_anchor_in_parent(_get_player_id_from_ident(target_ident), parent_node)
+	if target_anchor == Vector2.ZERO or source_anchor == Vector2.ZERO:
 		return
 
-	var source_anchor: Vector2 = _get_effect_anchor_position(str(config.get("source_anchor", "player")))
-	var source_offset: Vector2 = target_anchor - source_anchor
-	animation_node.position += Vector2(source_offset.x * animation_node.scale.x, source_offset.y * animation_node.scale.y)
+	var source_anchor_in_parent := animation_node.position + Vector2(source_anchor.x * animation_node.scale.x, source_anchor.y * animation_node.scale.y)
+	animation_node.position += target_anchor - source_anchor_in_parent
 
 	var effect_offset: Vector2 = _vector2_from_config_value(config.get("effect_position_offset", [0.0, 0.0]), Vector2.ZERO)
 	animation_node.position += Vector2(effect_offset.x * animation_node.scale.x, effect_offset.y * animation_node.scale.y)
+
+
+func _apply_move_projectile_endpoint_anchors(
+	animation_node: MoveAnimationPlayer,
+	actor_ident: String,
+	target_ident: String,
+	parent_node: Node
+) -> void:
+	if actor_ident == "" or animation_node == null:
+		return
+
+	var actor_id := _get_player_id_from_ident(actor_ident)
+	if actor_id == "":
+		return
+
+	var target_id := _get_player_id_from_ident(target_ident)
+	if target_id == "":
+		target_id = "p2" if actor_id == "p1" else "p1"
+
+	var actor_anchor_parent := _get_effect_target_anchor_in_parent(actor_id, parent_node)
+	var target_anchor_parent := _get_effect_target_anchor_in_parent(target_id, parent_node)
+	if actor_anchor_parent == Vector2.ZERO or target_anchor_parent == Vector2.ZERO:
+		return
+
+	var actor_anchor := _parent_position_to_animation_source(animation_node, actor_anchor_parent)
+	var target_anchor := _parent_position_to_animation_source(animation_node, target_anchor_parent)
+	animation_node.projectile_config = _with_projectile_endpoint_anchors(
+		animation_node.projectile_config,
+		actor_anchor,
+		target_anchor
+	)
+	animation_node.orb_projectile_config = _with_projectile_endpoint_anchors(
+		animation_node.orb_projectile_config,
+		actor_anchor,
+		target_anchor
+	)
+
+
+func _with_projectile_endpoint_anchors(config: Dictionary, actor_anchor: Vector2, target_anchor: Vector2) -> Dictionary:
+	if config.is_empty():
+		return config
+
+	var updated_config: Dictionary = config.duplicate(true)
+	if updated_config.has("path"):
+		_set_projectile_path_endpoints(updated_config, "path", actor_anchor, target_anchor)
+	if updated_config.has("reverse_path"):
+		_set_projectile_path_endpoints(updated_config, "reverse_path", actor_anchor, target_anchor)
+	return updated_config
+
+
+func _set_projectile_path_endpoints(config: Dictionary, path_key: String, actor_anchor: Vector2, target_anchor: Vector2) -> void:
+	var path_value: Variant = config.get(path_key, [])
+	if not path_value is Array:
+		return
+
+	var path: Array = (path_value as Array).duplicate(true)
+	if path.is_empty():
+		return
+
+	if path[0] is Dictionary:
+		var first_point: Dictionary = (path[0] as Dictionary).duplicate(true)
+		first_point["position"] = [actor_anchor.x, actor_anchor.y]
+		path[0] = first_point
+
+	var last_index: int = path.size() - 1
+	if path[last_index] is Dictionary:
+		var last_point: Dictionary = (path[last_index] as Dictionary).duplicate(true)
+		last_point["position"] = [target_anchor.x, target_anchor.y]
+		path[last_index] = last_point
+
+	config[path_key] = path
+
+
+func _parent_position_to_animation_source(animation_node: Node2D, parent_position: Vector2) -> Vector2:
+	var scale_x: float = animation_node.scale.x if absf(animation_node.scale.x) > 0.001 else 1.0
+	var scale_y: float = animation_node.scale.y if absf(animation_node.scale.y) > 0.001 else 1.0
+	return Vector2(
+		(parent_position.x - animation_node.position.x) / scale_x,
+		(parent_position.y - animation_node.position.y) / scale_y
+	)
 
 
 func _get_effect_anchor_position(anchor: String) -> Vector2:
@@ -615,6 +703,24 @@ func _get_effect_anchor_position(anchor: String) -> Vector2:
 			return EFFECT_SOURCE_ENEMY_POSITION
 		_:
 			return Vector2.ZERO
+
+
+func _get_effect_target_anchor_in_parent(player_id: String, parent_node: Node) -> Vector2:
+	if player_id != "p1" and player_id != "p2":
+		return Vector2.ZERO
+
+	var target_box: Node = player_sprite_box if player_id == "p1" else enemy_sprite_box
+	if target_box != null and parent_node is CanvasItem and target_box.has_method("get_single_animation_anchor_in_node"):
+		var animation_anchor: Variant = target_box.call("get_single_animation_anchor_in_node", parent_node as CanvasItem)
+		if animation_anchor is Vector2 and animation_anchor != Vector2.ZERO:
+			return animation_anchor as Vector2
+
+	if target_box != null and parent_node is CanvasItem and target_box.has_method("get_single_battle_anchor_in_node"):
+		var dynamic_anchor: Variant = target_box.call("get_single_battle_anchor_in_node", parent_node as CanvasItem)
+		if dynamic_anchor is Vector2 and dynamic_anchor != Vector2.ZERO:
+			return dynamic_anchor as Vector2
+
+	return _get_effect_anchor_position(player_id)
 
 
 func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void:

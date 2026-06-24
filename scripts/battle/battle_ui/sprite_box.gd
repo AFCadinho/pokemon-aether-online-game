@@ -15,6 +15,10 @@ const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
 const PIXEL_SPRITE_STYLE_ORDER: Array[String] = ["gen5", "legacy_showdown", "showdown"]
 const HOME_SPRITE_RENDER_SCALE := 2.0
+const SPECIES_POSITION_OFFSETS := {
+	"back:charizard": Vector2(-46, -10),
+	"shiny_back:charizard": Vector2(-46, -10),
+}
 const ATTACK_TWEEN_OFFSET := Vector2(28, -6)
 const DAMAGE_FLASH_COLOR := Color(1.0, 0.18, 0.18, 1.0)
 const DAMAGE_IMPACT_COLOR := Color(1.0, 1.0, 1.0, 1.0)
@@ -26,6 +30,7 @@ const STAT_DROP_SECONDARY_COLOR := Color(0.62, 0.35, 0.95, 1.0)
 const STAT_STAGE_PANEL_GAP := 8.0
 const FAINT_TWEEN_OFFSET := Vector2(0, 34)
 const SPRITE_HOVER_PADDING := Vector2(8, 8)
+const SPRITE_ALPHA_BOUNDS_THRESHOLD := 0.02
 
 @onready var single_container: Control = $SingleBattleContainer
 @onready var double_container: Control = $DoubleBattleContainer
@@ -44,6 +49,7 @@ var sprite_frames_display_scale_multipliers: Dictionary = {}
 var sprite_frames_position_offsets: Dictionary = {}
 var sprite_frames_anchors: Dictionary = {}
 var sprite_frames_frame_sizes: Dictionary = {}
+var sprite_frames_visual_bounds: Dictionary = {}
 var current_single_species := ""
 var current_single_side := ""
 var current_single_is_shiny := false
@@ -325,6 +331,74 @@ func _set_sprite_frames_anchor(sprite_frames: SpriteFrames, anchor: Vector2, fra
 func _set_sprite_frames_frame_size(sprite_frames: SpriteFrames, frame_size: Vector2) -> void:
 	sprite_frames_frame_sizes[_get_sprite_frames_key(sprite_frames)] = frame_size
 
+func _set_sprite_frames_visual_bounds(sprite_frames: SpriteFrames, visual_bounds: Rect2) -> void:
+	sprite_frames_visual_bounds[_get_sprite_frames_key(sprite_frames)] = visual_bounds
+
+func _set_sprite_frames_auto_anchor(sprite_frames: SpriteFrames, frame_size: Vector2) -> void:
+	if sprite_frames == null:
+		return
+
+	var visual_bounds := _calculate_sprite_frames_visual_bounds(sprite_frames, frame_size)
+	_set_sprite_frames_visual_bounds(sprite_frames, visual_bounds)
+	_set_sprite_frames_anchor(sprite_frames, _get_visual_bounds_horizontal_anchor(visual_bounds, frame_size), frame_size)
+
+func _calculate_sprite_frames_visual_bounds(sprite_frames: SpriteFrames, frame_size: Vector2) -> Rect2:
+	if sprite_frames == null or not sprite_frames.has_animation(IDLE_ANIMATION):
+		return Rect2(Vector2.ZERO, frame_size)
+
+	var frame_count: int = sprite_frames.get_frame_count(IDLE_ANIMATION)
+	var merged_bounds := Rect2()
+	var has_bounds := false
+	for frame_index: int in range(frame_count):
+		var texture := sprite_frames.get_frame_texture(IDLE_ANIMATION, frame_index)
+		var bounds := _calculate_texture_alpha_bounds(texture)
+		if bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
+			continue
+
+		if has_bounds:
+			merged_bounds = merged_bounds.merge(bounds)
+		else:
+			merged_bounds = bounds
+			has_bounds = true
+
+	if not has_bounds:
+		return Rect2(Vector2.ZERO, frame_size)
+
+	return merged_bounds
+
+func _calculate_texture_alpha_bounds(texture: Texture2D) -> Rect2:
+	if texture == null:
+		return Rect2()
+
+	var image := texture.get_image()
+	if image == null:
+		return Rect2()
+
+	var min_x: int = image.get_width()
+	var min_y: int = image.get_height()
+	var max_x: int = -1
+	var max_y: int = -1
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a <= SPRITE_ALPHA_BOUNDS_THRESHOLD:
+				continue
+
+			min_x = mini(min_x, x)
+			min_y = mini(min_y, y)
+			max_x = maxi(max_x, x)
+			max_y = maxi(max_y, y)
+
+	if max_x < min_x or max_y < min_y:
+		return Rect2()
+
+	return Rect2(Vector2(min_x, min_y), Vector2(max_x - min_x + 1, max_y - min_y + 1))
+
+func _get_visual_bounds_horizontal_anchor(visual_bounds: Rect2, frame_size: Vector2) -> Vector2:
+	if visual_bounds.size.x <= 0.0 or visual_bounds.size.y <= 0.0:
+		return frame_size * 0.5
+
+	return Vector2(visual_bounds.position.x + (visual_bounds.size.x * 0.5), frame_size.y * 0.5)
+
 func _sprite_frames_has_anchor(sprite_frames: SpriteFrames) -> bool:
 	return sprite_frames_anchors.has(_get_sprite_frames_key(sprite_frames))
 
@@ -375,6 +449,17 @@ func _get_sprite_frames_frame_size(sprite_frames: SpriteFrames) -> Vector2:
 
 	return Vector2(DEFAULT_SHEET_FRAME_SIZE)
 
+func _get_sprite_frames_visual_bounds(sprite_frames: SpriteFrames) -> Rect2:
+	var key := _get_sprite_frames_key(sprite_frames)
+	var visual_bounds_value: Variant = sprite_frames_visual_bounds.get(key, Rect2())
+	if visual_bounds_value is Rect2:
+		var visual_bounds := visual_bounds_value as Rect2
+		if visual_bounds.size.x > 0.0 and visual_bounds.size.y > 0.0:
+			return visual_bounds
+
+	var frame_size := _get_sprite_frames_frame_size(sprite_frames)
+	return Rect2(Vector2.ZERO, frame_size)
+
 func _apply_sprite_anchor(sprite: AnimatedSprite2D) -> void:
 	if sprite == null or sprite.sprite_frames == null:
 		return
@@ -389,6 +474,50 @@ func _apply_sprite_anchor(sprite: AnimatedSprite2D) -> void:
 	sprite.centered = true
 	sprite.offset = (frame_size * 0.5) - anchor
 
+func get_single_battle_anchor_global_position() -> Vector2:
+	return _get_sprite_battle_anchor_global_position(single_sprite)
+
+func get_single_animation_anchor_global_position() -> Vector2:
+	return _get_sprite_animation_anchor_global_position(single_sprite)
+
+func _get_sprite_battle_anchor_global_position(sprite: AnimatedSprite2D) -> Vector2:
+	if sprite == null or not sprite.visible:
+		return Vector2.ZERO
+
+	var visual_rect := _get_sprite_visual_rect_global(sprite)
+	var bottom_center := Vector2(
+		visual_rect.position.x + (visual_rect.size.x * 0.5),
+		visual_rect.position.y + visual_rect.size.y
+	)
+	return bottom_center
+
+func _get_sprite_animation_anchor_global_position(sprite: AnimatedSprite2D) -> Vector2:
+	if sprite == null or not sprite.visible:
+		return Vector2.ZERO
+
+	var visual_rect := _get_sprite_visual_rect_global(sprite)
+	return visual_rect.position + (visual_rect.size * 0.5)
+
+func get_single_battle_anchor_in_node(target_node: CanvasItem) -> Vector2:
+	if target_node == null:
+		return Vector2.ZERO
+
+	var global_anchor := get_single_battle_anchor_global_position()
+	if global_anchor == Vector2.ZERO:
+		return Vector2.ZERO
+
+	return target_node.get_global_transform().affine_inverse() * global_anchor
+
+func get_single_animation_anchor_in_node(target_node: CanvasItem) -> Vector2:
+	if target_node == null:
+		return Vector2.ZERO
+
+	var global_anchor := get_single_animation_anchor_global_position()
+	if global_anchor == Vector2.ZERO:
+		return Vector2.ZERO
+
+	return target_node.get_global_transform().affine_inverse() * global_anchor
+
 func _get_sprite_frames_key(sprite_frames: SpriteFrames) -> String:
 	if sprite_frames == null:
 		return ""
@@ -402,22 +531,26 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 				var metadata_frames := _load_sprite_frames_from_sheet_metadata(sheet_metadata_path, sprite_root, species)
 				if metadata_frames != null:
 					_apply_sprite_source_display_scale(metadata_frames, sheet_metadata_path)
+					_apply_species_position_offset(metadata_frames, species, side, is_shiny)
 					return metadata_frames
 
 			for folder in PokemonAssets.build_pokemon_sprite_path("%s/%s" % [sprite_root, asset_id]):
 				var folder_frames := _load_sprite_frames_from_folder(folder)
 				if folder_frames != null:
 					_apply_sprite_source_display_scale(folder_frames, folder)
+					_apply_species_position_offset(folder_frames, species, side, is_shiny)
 					return folder_frames
 
 			for sheet_path in PokemonAssets.build_pokemon_sprite_path("%s/%s.png" % [sprite_root, asset_id]):
 				var sheet_frames := _load_sprite_frames_from_sheet(sheet_path)
 				if sheet_frames != null:
 					_apply_sprite_source_display_scale(sheet_frames, sheet_path)
+					_apply_species_position_offset(sheet_frames, species, side, is_shiny)
 					return sheet_frames
 
 	var home_frames := _load_sprite_frames_from_home_sprite(species, is_shiny)
 	if home_frames != null:
+		_apply_species_position_offset(home_frames, species, side, is_shiny)
 		return home_frames
 
 	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
@@ -426,6 +559,14 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 func _apply_sprite_source_display_scale(sprite_frames: SpriteFrames, source_path: String) -> void:
 	if _is_gen5_sprite_path(source_path):
 		_set_sprite_frames_display_scale_multiplier(sprite_frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
+
+func _apply_species_position_offset(sprite_frames: SpriteFrames, species: String, side: String, is_shiny: bool) -> void:
+	var side_key := _get_sprite_side_folder(side, is_shiny)
+	var species_key := _normalize_species_asset_id(species)
+	var offset_value: Variant = SPECIES_POSITION_OFFSETS.get("%s:%s" % [side_key, species_key], Vector2.ZERO)
+	if offset_value is Vector2 and offset_value != Vector2.ZERO:
+		var existing_offset := _get_sprite_frames_position_offset(sprite_frames)
+		_set_sprite_frames_position_offset(sprite_frames, existing_offset + (offset_value as Vector2))
 
 func _is_gen5_sprite_path(source_path: String) -> bool:
 	var normalized_path := source_path.replace("\\", "/").to_lower()
@@ -532,7 +673,7 @@ func _load_sprite_frames_from_folder(folder: String) -> SpriteFrames:
 			sprite_frames.add_frame(IDLE_ANIMATION, texture, timing["durations"][index])
 
 	if first_frame_size != Vector2.ZERO:
-		_set_sprite_frames_frame_size(sprite_frames, first_frame_size)
+		_set_sprite_frames_auto_anchor(sprite_frames, first_frame_size)
 
 	return sprite_frames
 
@@ -635,12 +776,13 @@ func _load_sprite_frames_from_sheet_metadata(metadata_path: String, side: String
 		metadata_frame_size = _get_sprite_frames_frame_size(sprite_frames)
 
 	_set_sprite_frames_render_scale(sprite_frames, _get_metadata_render_scale(metadata, side))
+	_set_sprite_frames_visual_bounds(sprite_frames, _calculate_sprite_frames_visual_bounds(sprite_frames, metadata_frame_size))
 	if metadata.has("position_offset"):
 		_set_sprite_frames_position_offset(sprite_frames, _get_metadata_position_offset(metadata))
 	if _metadata_has_anchor(metadata):
 		_set_sprite_frames_anchor(sprite_frames, _get_metadata_anchor(metadata, metadata_frame_size), metadata_frame_size)
 	else:
-		_set_sprite_frames_frame_size(sprite_frames, metadata_frame_size)
+		_set_sprite_frames_auto_anchor(sprite_frames, metadata_frame_size)
 	return sprite_frames
 
 func _metadata_has_anchor(metadata: Dictionary) -> bool:
@@ -738,7 +880,7 @@ func _load_sprite_frames_from_sheet(sheet_path: String) -> SpriteFrames:
 		push_error("No visible sprite frames found in spritesheet: " + sheet_path)
 		return null
 
-	_set_sprite_frames_frame_size(sprite_frames, Vector2(frame_size))
+	_set_sprite_frames_auto_anchor(sprite_frames, Vector2(frame_size))
 	return sprite_frames
 
 func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> SpriteFrames:
@@ -749,7 +891,7 @@ func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> Sp
 	var sprite_frames := _create_idle_sprite_frames(1.0)
 	sprite_frames.add_frame(IDLE_ANIMATION, texture)
 	var frame_size := texture.get_size()
-	_set_sprite_frames_frame_size(sprite_frames, frame_size)
+	_set_sprite_frames_auto_anchor(sprite_frames, frame_size)
 	_set_sprite_frames_render_scale(sprite_frames, HOME_SPRITE_RENDER_SCALE)
 	return sprite_frames
 
@@ -958,6 +1100,13 @@ func _get_sprite_visual_rect_in_parent(sprite: AnimatedSprite2D) -> Rect2:
 	if texture != null:
 		frame_size = texture.get_size()
 
+	if sprite.sprite_frames != null:
+		frame_size = _get_sprite_frames_frame_size(sprite.sprite_frames)
+
+	var visual_bounds := Rect2(Vector2.ZERO, frame_size)
+	if sprite.sprite_frames != null:
+		visual_bounds = _get_sprite_frames_visual_bounds(sprite.sprite_frames)
+
 	var sprite_scale := Vector2(abs(sprite.scale.x), abs(sprite.scale.y))
-	var top_left := sprite.position + ((sprite.offset - (frame_size * 0.5)) * sprite_scale)
-	return Rect2(top_left, frame_size * sprite_scale)
+	var top_left := sprite.position + ((sprite.offset - (frame_size * 0.5) + visual_bounds.position) * sprite_scale)
+	return Rect2(top_left, visual_bounds.size * sprite_scale)
