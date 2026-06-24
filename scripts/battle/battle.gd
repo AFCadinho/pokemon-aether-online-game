@@ -14,8 +14,14 @@ enum ActionView {
 	BAG
 }
 
+enum BattleActionsPanelMode {
+	BATTLE,
+	CALC
+}
+
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
+var current_action_panel_mode: BattleActionsPanelMode = BattleActionsPanelMode.BATTLE
 var battle_finished := false
 var battle_input_locked := false
 var battle_actions_ready := false
@@ -87,9 +93,13 @@ var active_player_pokemon: Pokemon
 var active_enemy_pokemon: Pokemon
 
 # Action Buttons
+@onready var battle_mode_button: Button = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/BattleModeButton
+@onready var calc_mode_button: Button = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/CalcModeButton
 @onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
 @onready var moves_grid: MovesGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid
 @onready var party_grid: PartyGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid
+@onready var calc_panel: Control = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel
+@onready var mechanics_panel: Control = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel
 @onready var mega_evolution_button: TextureButton = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon
 @onready var mechanic_buttons: Array[TextureButton] = [
 	$HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon,
@@ -221,7 +231,9 @@ func _setup_battle_focus_surfaces() -> void:
 		^"HBoxContainer/ActionSidePanel",
 		^"HBoxContainer/ActionSidePanel/MarginContainer",
 		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer",
+		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow",
 		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer",
+		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel",
 		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel",
 		^"BattleLogPanel",
 		^"BattleLogPanel/MarginContainer",
@@ -915,9 +927,50 @@ func _is_point_over_visible_overlay_ui(global_position: Vector2) -> bool:
 
 	return false
 
+func _on_battle_mode_button_pressed() -> void:
+	_focus_battle_ui_layer()
+	_set_action_panel_mode(BattleActionsPanelMode.BATTLE)
+
+func _on_calc_mode_button_pressed() -> void:
+	_focus_battle_ui_layer()
+	_set_action_panel_mode(BattleActionsPanelMode.CALC)
+
+func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
+	current_action_panel_mode = mode
+	_sync_action_panel_mode_visibility()
+
+func _sync_action_panel_mode_visibility() -> void:
+	var is_calc_mode := current_action_panel_mode == BattleActionsPanelMode.CALC
+	battle_mode_button.button_pressed = not is_calc_mode
+	calc_mode_button.button_pressed = is_calc_mode
+	calc_panel.visible = is_calc_mode
+	action_buttons.visible = not is_calc_mode
+	mechanics_panel.visible = not is_calc_mode
+
+	if is_calc_mode:
+		moves_grid.visible = false
+		party_grid.visible = false
+		_hide_party_hover()
+		_hide_move_hover()
+		return
+
+	match current_action_view:
+		ActionView.MOVES:
+			moves_grid.visible = true
+			party_grid.visible = false
+		ActionView.PARTY:
+			moves_grid.visible = false
+			party_grid.visible = true
+		_:
+			moves_grid.visible = false
+			party_grid.visible = false
+
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
 	_focus_battle_ui_layer()
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		return
+
 	if not battle_actions_ready and not team_preview_lead_selection_active:
 		if action == "run":
 			_queue_battle_action("run")
@@ -962,10 +1015,9 @@ func _update_battle_log_toggle_button() -> void:
 ## Verbergt alle action views en reset de geselecteerde action state.
 func _reset_action_choices() -> void:
 	current_action_view = ActionView.NONE
-	moves_grid.visible = false
-	party_grid.visible = false
 	_hide_party_hover()
 	_clear_mega_evolution_selection()
+	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
 
 ## Toont de move keuzes in het action panel.
@@ -1014,6 +1066,7 @@ func _show_moves() -> void:
 	_hide_party_hover()
 	action_buttons.set_selected_action("fight")
 	_show_current_action_prompt()
+	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
 
 func _show_current_action_prompt() -> void:
@@ -1081,6 +1134,7 @@ func _show_party(force_switch := false) -> void:
 	moves_grid.visible = false
 	party_grid.visible = true
 	action_buttons.set_selected_action("party")
+	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
 
 ## Zet de UI in bag-modus.
@@ -1095,6 +1149,7 @@ func _open_bag() -> void:
 	moves_grid.visible = false
 	party_grid.visible = false
 	_hide_party_hover()
+	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
 
 func _can_use_bag_in_current_battle() -> bool:
@@ -2950,6 +3005,9 @@ func _add_battle_log_message(message: String) -> void:
 ## Stuurt de gekozen player move door en laat de backend de NPC-keuze verwerken.
 func _on_moves_grid_move_selected(slot: int) -> void:
 	_focus_battle_ui_layer()
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		return
+
 	if battle_input_locked:
 		return
 
@@ -3951,6 +4009,9 @@ func _normalize_event_source(source: String) -> String:
 
 func _on_party_grid_party_selected(slot: int) -> void:
 	_focus_battle_ui_layer()
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		return
+
 	if team_preview_lead_selection_active:
 		return
 
@@ -5998,6 +6059,9 @@ func _get_player_display_name(player_id: String) -> String:
 
 func _try_select_move(slot: int) -> void:
 	_focus_battle_ui_layer()
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		return
+
 	if not battle_actions_ready:
 		return
 

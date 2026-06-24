@@ -158,6 +158,31 @@ func get_pokemon_info(request_node: HTTPRequest, battle_id: String, viewer_id: S
 		"/battle/%s/pokemon-info%s" % [battle_id, query]
 	)
 
+# Backend first pass supports direction "own-to-opponent". Defender assumptions
+# are user-provided calc inputs and are echoed by the backend as assumptions.
+func calculate_battle_damage(
+	request_node: HTTPRequest,
+	battle_id: String,
+	viewer_id: String = "p1",
+	direction: String = "own-to-opponent",
+	defender_assumptions: Dictionary = {}
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "":
+		return {
+			"success": false,
+			"error": "battleId is required",
+			"code": "invalid_battle_id",
+		}
+
+	var payload := _build_damage_calc_payload(viewer_id, direction, defender_assumptions)
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/damage-calc" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return _normalize_damage_calc_response(response)
+
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
@@ -253,3 +278,96 @@ func _get_request_error_message(request_result: int) -> String:
 			return "API gateway request timed out."
 		_:
 			return "API gateway request failed."
+
+func _build_damage_calc_payload(viewer_id: String, direction: String, defender_assumptions: Dictionary) -> Dictionary:
+	var payload := {
+		"viewerId": viewer_id.strip_edges(),
+		"direction": direction.strip_edges(),
+		"defender": {
+			"side": "opponent",
+			"slot": "active",
+			"assumptions": _normalize_damage_calc_assumptions(defender_assumptions),
+		},
+	}
+	return payload
+
+func _normalize_damage_calc_assumptions(defender_assumptions: Dictionary) -> Dictionary:
+	var assumptions := {}
+	if defender_assumptions.has("item"):
+		assumptions["item"] = defender_assumptions.get("item")
+	if defender_assumptions.has("ability"):
+		assumptions["ability"] = defender_assumptions.get("ability")
+	if defender_assumptions.has("nature"):
+		assumptions["nature"] = str(defender_assumptions.get("nature", "Hardy")).strip_edges()
+	if defender_assumptions.has("evs"):
+		assumptions["evs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("evs"))
+	if defender_assumptions.has("ivs"):
+		assumptions["ivs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("ivs"))
+	return assumptions
+
+func _normalize_damage_calc_stat_table(value: Variant) -> Dictionary:
+	if not (value is Dictionary):
+		return {}
+
+	var source: Dictionary = value as Dictionary
+	var result := {}
+	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		if not source.has(key):
+			continue
+		var stat_value: Variant = source.get(key)
+		if typeof(stat_value) == TYPE_INT or typeof(stat_value) == TYPE_FLOAT:
+			result[key] = int(stat_value)
+		elif typeof(stat_value) == TYPE_STRING and str(stat_value).strip_edges().is_valid_int():
+			result[key] = int(str(stat_value).strip_edges())
+	return result
+
+func _normalize_damage_calc_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return {
+			"success": false,
+			"status": int(response.get("status", 0)),
+			"error": str(response.get("error", "Damage calculator request failed")),
+			"code": response.get("code", response.get("status", "")),
+			"raw": response.get("raw", ""),
+			"detail": response.get("detail", null),
+		}
+
+	if not (response.get("attacker") is Dictionary):
+		return _make_malformed_damage_calc_response(response, "attacker")
+	if not (response.get("defender") is Dictionary):
+		return _make_malformed_damage_calc_response(response, "defender")
+	if not (response.get("results") is Array):
+		return _make_malformed_damage_calc_response(response, "results")
+
+	var normalized := {
+		"success": true,
+		"status": int(response.get("status", 200)),
+		"battleId": str(response.get("battleId", "")),
+		"turn": int(response.get("turn", -1)),
+		"direction": str(response.get("direction", "")),
+		"attacker": response.get("attacker", {}),
+		"defender": response.get("defender", {}),
+		"results": response.get("results", []),
+		"warnings": _as_array(response.get("warnings", [])),
+		"emptyReason": str(response.get("emptyReason", "")),
+	}
+
+	if response.has("formatId"):
+		normalized["formatId"] = response.get("formatId")
+	if response.has("field"):
+		normalized["field"] = response.get("field")
+	return normalized
+
+func _make_malformed_damage_calc_response(response: Dictionary, missing_field: String) -> Dictionary:
+	return {
+		"success": false,
+		"status": int(response.get("status", 0)),
+		"error": "Malformed damage calculator response: missing %s" % missing_field,
+		"code": "malformed_response",
+		"raw": response,
+	}
+
+func _as_array(value: Variant) -> Array:
+	if value is Array:
+		return value as Array
+	return []

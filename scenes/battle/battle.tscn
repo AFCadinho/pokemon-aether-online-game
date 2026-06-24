@@ -987,13 +987,39 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
 
-[node name="Label" type="Label" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=1030108819]
+[node name="HeaderRow" type="HBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=754794856]
 layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow" unique_id=1030108819]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 theme_override_styles/focus = SubResource("StyleBoxFlat_t1kk3")
 text = "BATTLE ACTIONS"
-horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ModeTabs" type="HBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow" unique_id=935732861]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 4
+
+[node name="BattleModeButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs" unique_id=2124453404]
+custom_minimum_size = Vector2(72, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+toggle_mode = true
+button_pressed = true
+text = "Battle"
+
+[node name="CalcModeButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs" unique_id=2031729883]
+custom_minimum_size = Vector2(58, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+toggle_mode = true
+text = "Calc"
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=212919001]
 layout_mode = 2
@@ -1051,6 +1077,43 @@ layout_mode = 2
 
 [node name="PartySlot6" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+
+[node name="CalcPanel" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=125224096]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel" unique_id=500652918]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="DirectionLabel" type="Label" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel/VBoxContainer" unique_id=760010907]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72156864, 0.72156864, 0.72156864, 1)
+theme_override_font_sizes/font_size = 13
+text = "Your Damage"
+horizontal_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel/VBoxContainer" unique_id=2072361031]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Damage Calc"
+horizontal_alignment = 1
+
+[node name="PlaceholderLabel" type="Label" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel/VBoxContainer" unique_id=1163020122]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72156864, 0.72156864, 0.72156864, 1)
+theme_override_font_sizes/font_size = 14
+text = "Calculator results will appear here."
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="ActionChoices" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=274714711]
 layout_mode = 2
@@ -1184,6 +1247,8 @@ offset_right = 300.0
 z_index = 102
 layout_mode = 0
 
+[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/BattleModeButton" to="." method="_on_battle_mode_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/CalcModeButton" to="." method="_on_calc_mode_button_pressed"]
 [connection signal="move_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" to="." method="_on_moves_grid_move_selected"]
 [connection signal="party_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" to="." method="_on_party_grid_party_selected"]
 [connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/FightButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_fight_button_pressed"]
