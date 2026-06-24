@@ -76,6 +76,7 @@ var player_party_moves_by_key: Dictionary = {}
 var damage_calc_request_token := 0
 var damage_calc_request_in_flight := false
 var damage_calc_refresh_queued := false
+var damage_calc_catalog_request_token := 0
 var damage_calc_matchup_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
 var damage_calc_assumption_edited_fields: Dictionary = {}
@@ -177,6 +178,8 @@ func _ready() -> void:
 	_connect_forfeit_confirm_dialog_signals()
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
+	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
+		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_setup_weather_presentation()
@@ -951,6 +954,7 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 	current_action_panel_mode = mode
 	if previous_mode == BattleActionsPanelMode.CALC and mode != BattleActionsPanelMode.CALC:
 		damage_calc_request_token += 1
+		damage_calc_catalog_request_token += 1
 		calc_panel.close_assumption_popover()
 	_sync_action_panel_mode_visibility()
 	if mode == BattleActionsPanelMode.CALC:
@@ -1039,6 +1043,42 @@ func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
 		_refresh_damage_calc_results()
 
+func _on_calc_panel_assumption_catalog_requested(kind: String, query: String, species: String) -> void:
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+
+	damage_calc_catalog_request_token += 1
+	var request_token := damage_calc_catalog_request_token
+	calc_panel.show_assumption_catalog_loading(kind, query)
+
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+
+	var response: Dictionary = {}
+	match kind:
+		"item":
+			response = await PokemonDataApiClient.search_damage_calc_items(request_node, query, 30)
+		"ability":
+			response = await PokemonDataApiClient.search_damage_calc_abilities(request_node, query, species, 30)
+		_:
+			response = {
+				"success": false,
+				"error": "Unsupported assumption catalog.",
+			}
+
+	request_node.queue_free()
+	if request_token != damage_calc_catalog_request_token:
+		return
+	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		return
+	if not calc_panel.is_assumption_catalog_request_current(kind, query):
+		return
+
+	if bool(response.get("success", false)):
+		calc_panel.show_assumption_catalog_response(kind, response)
+	else:
+		calc_panel.show_assumption_catalog_error(kind, str(response.get("error", "Could not load assumptions.")))
+
 func _sync_damage_calc_matchup_assumptions() -> void:
 	var matchup_key := _get_damage_calc_matchup_key()
 	if matchup_key == damage_calc_matchup_key:
@@ -1072,7 +1112,11 @@ func _get_damage_calc_active_key(player_id: String) -> String:
 	return "%s:%s" % [player_id, species.strip_edges().to_lower()]
 
 func _get_damage_calc_defender_assumptions_payload() -> Dictionary:
-	return damage_calc_defender_assumptions.duplicate(true)
+	var payload: Dictionary = damage_calc_defender_assumptions.duplicate(true)
+	for key: String in ["item", "ability"]:
+		if str(payload.get(key, "")).strip_edges() == "":
+			payload.erase(key)
+	return payload
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:

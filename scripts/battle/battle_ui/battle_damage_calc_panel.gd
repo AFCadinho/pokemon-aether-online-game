@@ -3,6 +3,7 @@ extends MarginContainer
 class_name BattleDamageCalcPanel
 
 signal defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary)
+signal assumption_catalog_requested(kind: String, query: String, species: String)
 
 const TEXT_PRIMARY := Color(0.95686275, 0.94509804, 0.91764706, 1.0)
 const TEXT_SECONDARY := Color(0.72156864, 0.72156864, 0.72156864, 1.0)
@@ -22,8 +23,12 @@ const SUSPICIOUS_PERCENT_LIMIT := 999.0
 const KO_COLUMN_WIDTH := 104.0
 const SUBTAB_YOUR_DAMAGE := "your"
 const SUBTAB_THEIR_DAMAGE := "their"
+const SELECTOR_NONE := ""
+const SELECTOR_ITEM := "item"
+const SELECTOR_ABILITY := "ability"
 const EV_TOTAL_LIMIT := 508
 const ASSUMPTION_CHANGE_DEBOUNCE_SECONDS := 0.35
+const CATALOG_SEARCH_DEBOUNCE_SECONDS := 0.3
 const NATURE_OPTIONS := ["Hardy", "Adamant", "Modest", "Jolly", "Timid", "Bold", "Calm", "Impish", "Careful"]
 const EV_PRESETS := [
 	{"label": "EVs 0", "chip": "EVs 0", "evs": {}},
@@ -49,7 +54,16 @@ var live_ev_spinboxes: Dictionary = {}
 var live_ev_total_label: Label
 var live_ev_focus_stat := ""
 var live_ev_focus_caret := -1
+var item_assumption_input: LineEdit
+var ability_assumption_input: LineEdit
+var catalog_suggestions_box: VBoxContainer
 var assumption_change_timer: Timer
+var catalog_search_timer: Timer
+var active_selector: String = SELECTOR_NONE
+var selector_query: String = ""
+var selector_results: Array = []
+var selector_loading: bool = false
+var selector_error: String = ""
 var is_syncing_assumption_controls := false
 
 
@@ -62,6 +76,11 @@ func _ready() -> void:
 	assumption_change_timer.wait_time = ASSUMPTION_CHANGE_DEBOUNCE_SECONDS
 	assumption_change_timer.timeout.connect(_emit_defender_assumptions_changed)
 	add_child(assumption_change_timer)
+	catalog_search_timer = Timer.new()
+	catalog_search_timer.one_shot = true
+	catalog_search_timer.wait_time = CATALOG_SEARCH_DEBOUNCE_SECONDS
+	catalog_search_timer.timeout.connect(_request_active_catalog)
+	add_child(catalog_search_timer)
 
 
 func show_idle() -> void:
@@ -80,6 +99,8 @@ func show_loading(attacker_name: String = "", defender_name: String = "") -> voi
 	loading_attacker_name = attacker_name
 	loading_defender_name = defender_name
 	last_error = ""
+	if active_selector != SELECTOR_NONE and catalog_suggestions_box != null:
+		return
 	_render_current_state()
 
 
@@ -105,12 +126,16 @@ func show_response(response: Dictionary) -> void:
 	else:
 		last_response = response
 
+	if active_selector != SELECTOR_NONE and catalog_suggestions_box != null:
+		return
 	_render_current_state()
 
 
 func set_defender_assumptions(assumptions: Dictionary, edited_fields: Dictionary = {}) -> void:
 	defender_assumptions = _duplicate_dictionary(assumptions)
 	edited_assumption_fields = _duplicate_dictionary(edited_fields)
+	if active_selector != SELECTOR_NONE and catalog_suggestions_box != null:
+		return
 	if is_inside_tree():
 		_render_current_state()
 
@@ -118,10 +143,20 @@ func set_defender_assumptions(assumptions: Dictionary, edited_fields: Dictionary
 func close_assumption_popover() -> void:
 	if assumption_change_timer != null:
 		assumption_change_timer.stop()
+	if catalog_search_timer != null:
+		catalog_search_timer.stop()
 	live_ev_spinboxes.clear()
 	live_ev_total_label = null
 	live_ev_focus_stat = ""
 	live_ev_focus_caret = -1
+	item_assumption_input = null
+	ability_assumption_input = null
+	catalog_suggestions_box = null
+	active_selector = SELECTOR_NONE
+	selector_query = ""
+	selector_results = []
+	selector_loading = false
+	selector_error = ""
 
 
 func _render_current_state() -> void:
@@ -399,19 +434,22 @@ func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.clip_contents = true
-	row.add_theme_constant_override("separation", 6)
+	row.add_theme_constant_override("separation", 5)
 	box.add_child(row)
 
-	var item := _make_chip(_get_named_assumption_label(assumptions, "item", "Item ?"))
-	item.modulate = Color(1, 1, 1, 0.72)
-	row.add_child(item)
+	row.add_child(_make_catalog_assumption_field(SELECTOR_ITEM, assumptions))
 
-	var ability := _make_chip(_get_named_assumption_label(assumptions, "ability", "Ability ?"))
-	ability.modulate = Color(1, 1, 1, 0.72)
-	row.add_child(ability)
+	row.add_child(_make_catalog_assumption_field(SELECTOR_ABILITY, assumptions))
 
 	var reset_button := _make_small_button("Reset", _reset_live_assumptions)
 	row.add_child(reset_button)
+
+	catalog_suggestions_box = VBoxContainer.new()
+	catalog_suggestions_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	catalog_suggestions_box.clip_contents = true
+	catalog_suggestions_box.add_theme_constant_override("separation", 3)
+	box.add_child(catalog_suggestions_box)
+	_refresh_assumption_suggestions()
 
 	var label := _make_label("Nature", 12, TEXT_SECONDARY)
 	label.custom_minimum_size = Vector2(52, 0)
@@ -518,6 +556,51 @@ func _make_small_button(text: String, pressed_callback: Callable) -> Button:
 	return button
 
 
+func _make_catalog_assumption_field(kind: String, assumptions: Dictionary) -> Control:
+	var box := VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.clip_contents = true
+	box.add_theme_constant_override("separation", 2)
+
+	var key_label := "Item" if kind == SELECTOR_ITEM else "Ability"
+	if bool(edited_assumption_fields.get(kind, false)):
+		key_label += "*"
+	var label := _make_label(key_label, 10, TEXT_MUTED)
+	box.add_child(label)
+
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.clip_contents = true
+	row.add_theme_constant_override("separation", 3)
+	box.add_child(row)
+
+	var input := LineEdit.new()
+	input.text = _get_catalog_assumption_value(assumptions, kind)
+	input.placeholder_text = "Item ?" if kind == SELECTOR_ITEM else "Ability ?"
+	input.custom_minimum_size = Vector2(0, 24)
+	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	input.add_theme_font_size_override("font_size", 11)
+	input.focus_entered.connect(_on_catalog_assumption_focus_entered.bind(kind))
+	input.focus_exited.connect(_on_catalog_assumption_focus_exited)
+	input.text_changed.connect(_on_catalog_assumption_text_changed.bind(kind))
+	row.add_child(input)
+
+	var clear_button := _make_small_button("x", _on_catalog_assumption_clear_pressed.bind(kind))
+	clear_button.custom_minimum_size = Vector2(24, 22)
+	row.add_child(clear_button)
+
+	if kind == SELECTOR_ITEM:
+		item_assumption_input = input
+	else:
+		ability_assumption_input = input
+	return box
+
+
+func _get_catalog_assumption_value(assumptions: Dictionary, kind: String) -> String:
+	var value: String = str(assumptions.get(kind, "")).strip_edges()
+	return "" if value == "<null>" else value
+
+
 func _on_live_nature_selected(index: int, dropdown: OptionButton) -> void:
 	if is_syncing_assumption_controls:
 		return
@@ -611,11 +694,228 @@ func _update_live_ev_total() -> void:
 
 func _reset_live_assumptions() -> void:
 	defender_assumptions.clear()
+	defender_assumptions["item"] = ""
+	defender_assumptions["ability"] = ""
+	defender_assumptions["nature"] = "Hardy"
+	defender_assumptions["evs"] = {}
 	edited_assumption_fields.clear()
 	if assumption_change_timer != null:
 		assumption_change_timer.stop()
 	_emit_defender_assumptions_changed()
 	_render_current_state()
+
+
+func show_assumption_catalog_loading(kind: String, query: String) -> void:
+	if kind != active_selector:
+		return
+	selector_query = query
+	selector_loading = true
+	selector_error = ""
+	selector_results = []
+	_refresh_assumption_suggestions()
+
+
+func show_assumption_catalog_response(kind: String, response: Dictionary) -> void:
+	if kind != active_selector:
+		return
+	selector_loading = false
+	if not bool(response.get("success", false)):
+		selector_error = str(response.get("error", "Could not load assumptions."))
+		selector_results = []
+		_refresh_assumption_suggestions()
+		return
+
+	selector_error = str(response.get("warning", ""))
+	if kind == SELECTOR_ITEM:
+		selector_results = _as_array(response.get("items", []))
+	else:
+		selector_results = _as_array(response.get("abilities", []))
+	_refresh_assumption_suggestions()
+
+
+func show_assumption_catalog_error(kind: String, message: String) -> void:
+	if kind != active_selector:
+		return
+	selector_loading = false
+	selector_error = _fallback_text(message, "Could not load assumptions.")
+	selector_results = []
+	_refresh_assumption_suggestions()
+
+
+func is_assumption_catalog_request_current(kind: String, query: String) -> bool:
+	return kind == active_selector and query == selector_query
+
+
+func _make_selector_result_button(title: String, subtitle: String, pressed_callback: Callable) -> Button:
+	var button := Button.new()
+	button.text = title if subtitle == "" else "%s  %s" % [title, subtitle]
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(0, 24)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.clip_text = true
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_color_override("font_color", TEXT_PRIMARY)
+	button.add_theme_stylebox_override("normal", _make_stylebox(ROW_BG, ROW_BORDER, 4, 6.0, 3.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), ROW_BORDER.lightened(0.1), 4, 6.0, 3.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, ROW_BORDER.lightened(0.18), 4, 6.0, 3.0))
+	button.pressed.connect(pressed_callback)
+	return button
+
+
+func _add_selector_status(parent: VBoxContainer, text: String, color: Color) -> void:
+	var label := _make_label(text, 11, color)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	parent.add_child(label)
+
+
+func _on_catalog_assumption_focus_entered(kind: String) -> void:
+	if catalog_search_timer != null:
+		catalog_search_timer.stop()
+	active_selector = kind
+	selector_query = _get_catalog_input_text(kind)
+	selector_results = []
+	selector_error = ""
+	selector_loading = true
+	_refresh_assumption_suggestions()
+	_request_active_catalog()
+
+
+func _on_catalog_assumption_focus_exited() -> void:
+	call_deferred("_close_assumption_suggestions_if_focus_left")
+
+
+func _close_assumption_suggestions_if_focus_left() -> void:
+	var focus_owner: Control = get_viewport().gui_get_focus_owner()
+	if focus_owner == item_assumption_input or focus_owner == ability_assumption_input:
+		return
+	if catalog_suggestions_box != null and focus_owner != null and catalog_suggestions_box.is_ancestor_of(focus_owner):
+		return
+	_close_assumption_suggestions()
+
+
+func _close_assumption_suggestions() -> void:
+	if catalog_search_timer != null:
+		catalog_search_timer.stop()
+	active_selector = SELECTOR_NONE
+	selector_query = ""
+	selector_results = []
+	selector_loading = false
+	selector_error = ""
+	_refresh_assumption_suggestions()
+
+
+func _on_catalog_assumption_text_changed(text: String, kind: String) -> void:
+	if is_syncing_assumption_controls:
+		return
+	active_selector = kind
+	selector_query = text
+	if catalog_search_timer == null:
+		_request_active_catalog()
+		return
+	catalog_search_timer.start()
+
+
+func _request_active_catalog() -> void:
+	if active_selector == SELECTOR_NONE:
+		return
+	selector_loading = true
+	selector_error = ""
+	selector_results = []
+	_refresh_assumption_suggestions()
+	assumption_catalog_requested.emit(active_selector, selector_query, _get_selector_species())
+
+
+func _on_catalog_assumption_clear_pressed(kind: String) -> void:
+	var key: String = kind
+	defender_assumptions[key] = ""
+	edited_assumption_fields.erase(key)
+	_set_catalog_input_text(kind, "")
+	_close_assumption_suggestions()
+	_emit_defender_assumptions_changed()
+
+
+func _on_selector_result_pressed(result: Dictionary) -> void:
+	if active_selector == SELECTOR_NONE:
+		return
+	var calc_name: String = str(result.get("calcName", result.get("name", ""))).strip_edges()
+	if calc_name == "":
+		return
+	var key: String = active_selector
+	defender_assumptions[key] = calc_name
+	edited_assumption_fields[key] = true
+	_set_catalog_input_text(key, calc_name)
+	_close_assumption_suggestions()
+	_emit_defender_assumptions_changed()
+
+
+func _refresh_assumption_suggestions() -> void:
+	if catalog_suggestions_box == null:
+		return
+	for child: Node in catalog_suggestions_box.get_children():
+		catalog_suggestions_box.remove_child(child)
+		child.queue_free()
+
+	catalog_suggestions_box.visible = active_selector != SELECTOR_NONE
+	if active_selector == SELECTOR_NONE:
+		return
+
+	var clear_button := _make_selector_result_button("Unknown / None", "Clear", Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector))
+	catalog_suggestions_box.add_child(clear_button)
+
+	if selector_loading:
+		_add_selector_status(catalog_suggestions_box, "Loading...", TEXT_SECONDARY)
+		return
+
+	if selector_error != "":
+		_add_selector_status(catalog_suggestions_box, selector_error, TEXT_MUTED)
+
+	if selector_results.is_empty():
+		_add_selector_status(catalog_suggestions_box, "No results.", TEXT_SECONDARY)
+		return
+
+	var result_count: int = mini(selector_results.size(), 4)
+	for index in range(result_count):
+		var result: Dictionary = _as_dictionary(selector_results[index])
+		var name: String = str(result.get("name", result.get("calcName", ""))).strip_edges()
+		var short_desc: String = str(result.get("shortDesc", "")).strip_edges()
+		catalog_suggestions_box.add_child(_make_selector_result_button(
+			_fallback_text(name, "Unknown"),
+			short_desc,
+			Callable(self, "_on_selector_result_pressed").bind(result)
+		))
+
+
+func _get_catalog_input_text(kind: String) -> String:
+	var input: LineEdit = _get_catalog_input(kind)
+	return input.text.strip_edges() if input != null else ""
+
+
+func _set_catalog_input_text(kind: String, value: String) -> void:
+	var input: LineEdit = _get_catalog_input(kind)
+	if input == null:
+		return
+	input.text = value
+	input.caret_column = input.text.length()
+
+
+func _get_catalog_input(kind: String) -> LineEdit:
+	if kind == SELECTOR_ITEM:
+		return item_assumption_input
+	if kind == SELECTOR_ABILITY:
+		return ability_assumption_input
+	return null
+
+
+func _get_selector_species() -> String:
+	if last_response.is_empty():
+		return ""
+	var defender: Dictionary = _as_dictionary(last_response.get("defender", {}))
+	for key: String in ["speciesId", "species", "displayName", "name"]:
+		var value: String = str(defender.get(key, "")).strip_edges()
+		if value != "":
+			return value
+	return ""
 
 
 func _queue_defender_assumptions_changed() -> void:
@@ -811,6 +1111,13 @@ func _get_named_assumption_label(assumptions: Dictionary, key: String, fallback:
 	return fallback if value == "" or value == "<null>" else value
 
 
+func _get_assumption_chip_label(assumptions: Dictionary, key: String, fallback: String) -> String:
+	var label := _get_named_assumption_label(assumptions, key, fallback)
+	if label == fallback:
+		return label
+	return "%s*" % label if bool(edited_assumption_fields.get(key, false)) else label
+
+
 func _get_display_assumptions(defender: Dictionary) -> Dictionary:
 	var assumptions := _as_dictionary(defender.get("assumptions", {})).duplicate(true)
 	for key: Variant in defender_assumptions.keys():
@@ -836,8 +1143,8 @@ func _get_evs_chip_label(evs: Dictionary) -> String:
 
 func _get_assumptions_summary_label(assumptions: Dictionary) -> String:
 	var parts: Array[String] = [
-		_get_named_assumption_label(assumptions, "item", "Item ?"),
-		_get_named_assumption_label(assumptions, "ability", "Ability ?"),
+		_get_assumption_chip_label(assumptions, "item", "Item ?"),
+		_get_assumption_chip_label(assumptions, "ability", "Ability ?"),
 		_get_nature_chip_label(assumptions),
 		_get_evs_chip_label(_as_dictionary(assumptions.get("evs", {}))),
 		_get_ivs_label(_as_dictionary(assumptions.get("ivs", {}))),
