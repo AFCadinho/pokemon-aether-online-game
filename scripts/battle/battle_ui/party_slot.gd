@@ -11,6 +11,9 @@ const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
 const POISON_STATUS_TEXTURE: Texture2D = preload("res://assets/battles/status/poisoned.png")
 const POISON_STATUS_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const TOXIC_STATUS_MODULATE := Color("#8c58ff")
+const NAME_FONT_SIZE := 14
+const LONG_NAME_FONT_SIZE := 12
+const VERY_LONG_NAME_FONT_SIZE := 11
 
 @onready var pokemon_icon: TextureRect = $MarginContainer/HBoxContainer/PokemonIcon
 @onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/ShinyBadge
@@ -47,8 +50,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	disabled = is_fainted
 	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
 
-	name_label.text = pokemon.species
-	shiny_badge.visible = pokemon.shiny
+	_set_species_name(pokemon.species, pokemon.shiny)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
@@ -69,12 +71,12 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	disabled = is_active or is_fainted
 	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
 
-	name_label.text = species
-	shiny_badge.visible = _get_shiny_from_data(pokemon_data)
+	var is_shiny := _get_shiny_from_data(pokemon_data)
+	_set_species_name(species, is_shiny)
 
 	hp_bar.max_value = max_hp
 	hp_bar.value = clamp(current_hp, 0, int(hp_bar.max_value))
-	pokemon_icon.texture = PokemonAssets.load_party_icon(species, _get_shiny_from_data(pokemon_data))
+	pokemon_icon.texture = PokemonAssets.load_party_icon(species, is_shiny)
 	_set_status_icon(str(pokemon_data.get("status", "")))
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
@@ -165,7 +167,9 @@ func set_empty() -> void:
 	modulate = NORMAL_MODULATE
 
 	name_label.text = ""
-	shiny_badge.visible = false
+	name_label.add_theme_font_size_override("font_size", NAME_FONT_SIZE)
+	shiny_badge.text = ""
+	shiny_badge.tooltip_text = ""
 	hp_bar.value = 0
 	pokemon_icon.texture = null
 	_set_status_icon("")
@@ -223,6 +227,21 @@ func _set_color(background: Color, border: Color) -> void:
 	add_theme_stylebox_override("hover", hover)
 	add_theme_stylebox_override("pressed", pressed)
 	add_theme_stylebox_override("disabled", normal)
+
+func _set_species_name(species: String, is_shiny: bool) -> void:
+	name_label.text = species
+	name_label.add_theme_font_size_override("font_size", _get_name_font_size(species))
+	shiny_badge.text = "S" if is_shiny else ""
+	shiny_badge.tooltip_text = "Shiny Pokemon" if is_shiny else ""
+
+func _get_name_font_size(species: String) -> int:
+	var compact_name := species.replace(" ", "")
+	if compact_name.length() >= 11:
+		return VERY_LONG_NAME_FONT_SIZE
+	if compact_name.length() >= 9:
+		return LONG_NAME_FONT_SIZE
+
+	return NAME_FONT_SIZE
 
 func _on_pressed() -> void:
 	if disabled:

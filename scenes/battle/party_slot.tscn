@@ -80,45 +80,51 @@ theme_override_constants/separation = 3
 alignment = 1
 
 [node name="PokemonIcon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1012592862]
-custom_minimum_size = Vector2(55, 44)
+custom_minimum_size = Vector2(50, 46)
 layout_mode = 2
 expand_mode = 4
 stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1130419798]
+custom_minimum_size = Vector2(92, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 alignment = 1
 
 [node name="NameRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=948631274]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 theme_override_constants/separation = 4
+alignment = 1
 
 [node name="ShinyBadge" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/NameRow" unique_id=571002889]
-visible = false
+custom_minimum_size = Vector2(12, 20)
 layout_mode = 2
 tooltip_text = "Shiny Pokemon"
 theme_override_colors/font_color = Color(1, 0.84313726, 0.3529412, 1)
 theme_override_colors/font_outline_color = Color(0.2784314, 0.14901961, 0.019607844, 1)
 theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 15
 text = "S"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/NameRow" unique_id=1565839544]
-custom_minimum_size = Vector2(90, 5)
+custom_minimum_size = Vector2(72, 24)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
 text = "Charmander"
-autowrap_mode = 3
+text_overrun_behavior = 3
+vertical_alignment = 1
 
 [node name="BottomRowContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=772350783]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="HPBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer" unique_id=793604556]
-custom_minimum_size = Vector2(65, 20)
+custom_minimum_size = Vector2(76, 20)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.105882354, 0.078431375, 0.05882353, 1)
