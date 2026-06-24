@@ -68,6 +68,17 @@ func search_damage_calc_abilities(request_node: HTTPRequest, q: String, species:
 		"/damage-calc/catalog/abilities%s" % query
 	)
 
+func search_damage_calc_natures(request_node: HTTPRequest, q: String = "", limit: int = 30) -> Dictionary:
+	var normalized_limit: int = max(1, min(int(limit), 100))
+	var query: String = "?q=%s&limit=%s" % [
+		q.uri_encode(),
+		str(normalized_limit).uri_encode(),
+	]
+	return await send_get_request(
+		request_node,
+		"/damage-calc/catalog/natures%s" % query
+	)
+
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 

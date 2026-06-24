@@ -105,7 +105,7 @@ def main() -> None:
         "--asset-pack",
         action="append",
         default=[],
-        metavar="ID:VERSION:PATH",
+        metavar="ID:VERSION:PATH[:OPTIONAL]",
         help="Optional asset pack to include in each manifest.",
     )
     parser.add_argument(
@@ -202,11 +202,11 @@ def _assert_required_paths(build_dir: Path, required_paths: list[str]) -> None:
 
 
 def _build_asset_pack(entry: str, base_url: str, asset_prefix: str, output_dir: Path) -> dict:
-    parts = entry.split(":", 2)
-    if len(parts) != 3:
-        raise SystemExit("--asset-pack must use ID:VERSION:PATH")
+    parts = entry.split(":", 3)
+    if len(parts) not in (3, 4):
+        raise SystemExit("--asset-pack must use ID:VERSION:PATH[:OPTIONAL]")
 
-    pack_id, version, source_path_text = parts
+    pack_id, version, source_path_text = parts[:3]
     source_path = Path(source_path_text)
     if not source_path.is_absolute():
         source_path = PROJECT_ROOT / source_path
@@ -217,13 +217,18 @@ def _build_asset_pack(entry: str, base_url: str, asset_prefix: str, output_dir: 
     if source_path.resolve() != target_path.resolve():
         target_path.write_bytes(source_path.read_bytes())
 
-    return {
+    optional = len(parts) == 4 and parts[3].strip().lower() in {"1", "true", "yes", "optional"}
+    asset_pack = {
         "id": pack_id,
         "version": version,
         "url": _build_url(base_url, asset_prefix, target_path.name),
         "sha256": _sha256(target_path),
         "sizeBytes": target_path.stat().st_size,
     }
+    if optional:
+        asset_pack["optional"] = True
+
+    return asset_pack
 
 
 def _build_external_asset_pack(entry: str, base_url: str, asset_prefix: str) -> dict:

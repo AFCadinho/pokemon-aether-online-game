@@ -35,25 +35,16 @@ env:
   MACOS_EXPORT_PATH: builds/macos/PokeAether.app
   MACOS_LAUNCHER_EXPORT_PRESET: macOS Launcher
   MACOS_LAUNCHER_EXPORT_PATH: builds/launcher-app/macos/PokeAether Launcher.app
-  POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
-  POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-v1
-  POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-v1
-  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-v1
-  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-scale1-128-v1
-  POKEMON_GEN5_FRONT_ASSET_VERSION: pokemon-gen5-front-v2
-  POKEMON_GEN5_BACK_ASSET_VERSION: pokemon-gen5-back-v2
-  POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-v2
-  POKEMON_GEN5_SHINY_BACK_ASSET_VERSION: pokemon-gen5-shiny-back-v2
-  MUSIC_ASSET_VERSION: music-v1
-  POKEMON_HOME_ASSET_SIZE_BYTES: 61327194
-  POKEMON_FRONT_ASSET_SIZE_BYTES: 90099039
-  POKEMON_BACK_ASSET_SIZE_BYTES: 78450869
-  POKEMON_SHINY_FRONT_ASSET_SIZE_BYTES: 88077401
-  POKEMON_SHINY_BACK_ASSET_SIZE_BYTES: 72477263
-  POKEMON_GEN5_FRONT_ASSET_SIZE_BYTES: 315362253
-  POKEMON_GEN5_BACK_ASSET_SIZE_BYTES: 248810078
-  POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE_BYTES: 318368865
-  POKEMON_GEN5_SHINY_BACK_ASSET_SIZE_BYTES: 251913753
+  POKEMON_HOME_ASSET_VERSION_PREFIX: pokemon-home
+  POKEMON_FRONT_ASSET_VERSION_PREFIX: pokemon-front-scale1-128
+  POKEMON_BACK_ASSET_VERSION_PREFIX: pokemon-back-scale1-128
+  POKEMON_SHINY_FRONT_ASSET_VERSION_PREFIX: pokemon-shiny-front-scale1-128
+  POKEMON_SHINY_BACK_ASSET_VERSION_PREFIX: pokemon-shiny-back-scale1-128
+  POKEMON_GEN5_FRONT_ASSET_VERSION_PREFIX: pokemon-gen5-front
+  POKEMON_GEN5_BACK_ASSET_VERSION_PREFIX: pokemon-gen5-back
+  POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION_PREFIX: pokemon-gen5-shiny-front
+  POKEMON_GEN5_SHINY_BACK_ASSET_VERSION_PREFIX: pokemon-gen5-shiny-back
+  MUSIC_ASSET_VERSION_PREFIX: music
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
 
@@ -255,25 +246,31 @@ jobs:
         run: |
           : > /tmp/asset_pack_args.txt
 
-          package_external_pack() {
+          package_local_pack() {
             pack_id="$1"
-            pack_version="$2"
-            file_name="$3"
-            size_bytes="$4"
-            optional="${5:-false}"
-            printf '%s\n' "--external-asset-pack" "${pack_id}:${pack_version}:${file_name}:${size_bytes}:${optional}" >> /tmp/asset_pack_args.txt
+            pack_version_prefix="$2"
+            source_path="$3"
+            optional="${4:-false}"
+            pack_hash="$(find "${source_path}" -type f ! -name '*.import' -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-12)"
+            pack_version="${pack_version_prefix}-${pack_hash}"
+            zip_path="builds/asset-packs/${pack_version}.zip"
+            python3 tools/package_asset_pack.py "${zip_path}" "${source_path}"
+            asset_pack_arg="${pack_id}:${pack_version}:${zip_path}"
+            if [ "${optional}" = "true" ]; then
+              asset_pack_arg="${asset_pack_arg}:true"
+            fi
+            printf '%s\n' "--asset-pack" "${asset_pack_arg}" >> /tmp/asset_pack_args.txt
           }
 
-          package_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "${POKEMON_HOME_ASSET_VERSION}.zip" "${POKEMON_HOME_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_VERSION}.zip" "${POKEMON_FRONT_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_VERSION}.zip" "${POKEMON_BACK_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_SHINY_FRONT_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_VERSION}.zip" "${POKEMON_SHINY_BACK_ASSET_SIZE_BYTES}"
-          package_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_FRONT_ASSET_VERSION}.zip" "${POKEMON_GEN5_FRONT_ASSET_SIZE_BYTES}" "true"
-          package_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_BACK_ASSET_SIZE_BYTES}" "true"
-          package_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE_BYTES}" "true"
-          package_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}.zip" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE_BYTES}" "true"
-          printf '%s\n' "--asset-pack" "music:${MUSIC_ASSET_VERSION}:builds/music/${MUSIC_ASSET_VERSION}.zip" >> /tmp/asset_pack_args.txt
+          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/pokemon_home"
+          package_local_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/front"
+          package_local_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/back"
+          package_local_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_front"
+          package_local_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_back"
+          package_local_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/front" "true"
+          package_local_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/back" "true"
+          package_local_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_front" "true"
+          package_local_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_back" "true"
 
       - name: Package music asset pack
         run: |
@@ -284,7 +281,17 @@ jobs:
           import os
 
           source_dir = Path("assets/music")
-          zip_path = Path("builds/music") / f"{os.environ['MUSIC_ASSET_VERSION']}.zip"
+          hash_input = []
+          for path in sorted(source_dir.rglob("*")):
+              if path.is_file() and path.suffix != ".import":
+                  hash_input.append(path.relative_to(source_dir).as_posix().encode("utf-8"))
+                  hash_input.append(path.read_bytes())
+          import hashlib
+          digest = hashlib.sha256()
+          for value in hash_input:
+              digest.update(value)
+          version = f"{os.environ['MUSIC_ASSET_VERSION_PREFIX']}-{digest.hexdigest()[:12]}"
+          zip_path = Path("builds/music") / f"{version}.zip"
           if zip_path.exists():
               zip_path.unlink()
 
@@ -298,6 +305,9 @@ jobs:
                   info.external_attr = 0o644 << 16
                   archive.writestr(info, path.read_bytes())
           print(f"Wrote {zip_path} ({zip_path.stat().st_size} bytes)")
+          with Path("/tmp/asset_pack_args.txt").open("a", encoding="utf-8") as args_file:
+              args_file.write("--asset-pack\n")
+              args_file.write(f"music:{version}:{zip_path.as_posix()}\n")
           PY
 
       - name: Package launcher release

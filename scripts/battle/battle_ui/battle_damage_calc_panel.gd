@@ -10,26 +10,31 @@ const TEXT_SECONDARY := Color(0.72156864, 0.72156864, 0.72156864, 1.0)
 const TEXT_MUTED := Color(0.56, 0.6, 0.68, 1.0)
 const TEXT_ACCENT := Color(0.84705883, 0.7058824, 0.41568628, 1.0)
 const TEXT_ERROR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
-const ROW_BG := Color(0.014, 0.023, 0.043, 0.94)
-const ROW_BORDER := Color(0.1764706, 0.3372549, 0.5568628, 0.82)
+const ROW_BG := Color(0.018, 0.028, 0.05, 0.96)
+const ROW_BORDER := Color(0.12, 0.23, 0.38, 0.62)
 const PROFILE_BG := Color(0.026, 0.039, 0.07, 0.92)
-const PROFILE_BORDER := Color(0.13, 0.24, 0.4, 0.78)
+const PROFILE_BORDER := Color(0.13, 0.24, 0.4, 0.62)
 const CHIP_BG := Color(0.035, 0.052, 0.088, 0.92)
-const CHIP_BORDER := Color(0.1764706, 0.3372549, 0.5568628, 0.85)
+const CHIP_BORDER := Color(0.16, 0.28, 0.44, 0.76)
+const CHIP_EDITED_BORDER := Color(0.62, 0.48, 0.23, 0.9)
+const KO_BG := Color(0.115, 0.086, 0.034, 0.9)
+const KO_BORDER := Color(0.62, 0.48, 0.23, 0.82)
 const TAB_BG := Color(0.024, 0.036, 0.062, 0.92)
 const TAB_ACTIVE_BG := Color(0.124, 0.203, 0.332, 0.98)
 const TAB_BORDER := Color(0.19, 0.31, 0.48, 0.9)
 const SUSPICIOUS_PERCENT_LIMIT := 999.0
-const KO_COLUMN_WIDTH := 104.0
+const KO_COLUMN_WIDTH := 82.0
 const SUBTAB_YOUR_DAMAGE := "your"
 const SUBTAB_THEIR_DAMAGE := "their"
 const SELECTOR_NONE := ""
 const SELECTOR_ITEM := "item"
 const SELECTOR_ABILITY := "ability"
+const SELECTOR_NATURE := "nature"
+const SELECTOR_EVS := "evs"
 const EV_TOTAL_LIMIT := 508
 const ASSUMPTION_CHANGE_DEBOUNCE_SECONDS := 0.35
 const CATALOG_SEARCH_DEBOUNCE_SECONDS := 0.3
-const NATURE_OPTIONS := ["Hardy", "Adamant", "Modest", "Jolly", "Timid", "Bold", "Calm", "Impish", "Careful"]
+const FALLBACK_NATURE_OPTIONS := ["Hardy", "Adamant", "Modest", "Jolly", "Timid", "Bold", "Calm", "Impish", "Careful"]
 const EV_PRESETS := [
 	{"label": "EVs 0", "chip": "EVs 0", "evs": {}},
 	{"label": "252 HP", "chip": "EVs HP", "evs": {"hp": 252}},
@@ -50,13 +55,14 @@ var last_response: Dictionary = {}
 var last_error := ""
 var defender_assumptions: Dictionary = {}
 var edited_assumption_fields: Dictionary = {}
-var live_ev_spinboxes: Dictionary = {}
+var live_ev_inputs: Dictionary = {}
 var live_ev_total_label: Label
 var live_ev_focus_stat := ""
 var live_ev_focus_caret := -1
 var item_assumption_input: LineEdit
 var ability_assumption_input: LineEdit
 var catalog_suggestions_box: VBoxContainer
+var catalog_results_box: VBoxContainer
 var assumption_change_timer: Timer
 var catalog_search_timer: Timer
 var active_selector: String = SELECTOR_NONE
@@ -64,6 +70,7 @@ var selector_query: String = ""
 var selector_results: Array = []
 var selector_loading: bool = false
 var selector_error: String = ""
+var nature_catalog_options: Array = []
 var is_syncing_assumption_controls := false
 
 
@@ -99,7 +106,7 @@ func show_loading(attacker_name: String = "", defender_name: String = "") -> voi
 	loading_attacker_name = attacker_name
 	loading_defender_name = defender_name
 	last_error = ""
-	if active_selector != SELECTOR_NONE and catalog_suggestions_box != null:
+	if _is_catalog_search_active():
 		return
 	_render_current_state()
 
@@ -126,7 +133,7 @@ func show_response(response: Dictionary) -> void:
 	else:
 		last_response = response
 
-	if active_selector != SELECTOR_NONE and catalog_suggestions_box != null:
+	if _is_catalog_search_active():
 		return
 	_render_current_state()
 
@@ -134,29 +141,41 @@ func show_response(response: Dictionary) -> void:
 func set_defender_assumptions(assumptions: Dictionary, edited_fields: Dictionary = {}) -> void:
 	defender_assumptions = _duplicate_dictionary(assumptions)
 	edited_assumption_fields = _duplicate_dictionary(edited_fields)
-	if active_selector != SELECTOR_NONE and catalog_suggestions_box != null:
+	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
 		_render_current_state()
 
 
 func close_assumption_popover() -> void:
+	_flush_pending_assumption_changes()
 	if assumption_change_timer != null:
 		assumption_change_timer.stop()
 	if catalog_search_timer != null:
 		catalog_search_timer.stop()
-	live_ev_spinboxes.clear()
+	live_ev_inputs.clear()
 	live_ev_total_label = null
 	live_ev_focus_stat = ""
 	live_ev_focus_caret = -1
 	item_assumption_input = null
 	ability_assumption_input = null
 	catalog_suggestions_box = null
+	catalog_results_box = null
 	active_selector = SELECTOR_NONE
 	selector_query = ""
 	selector_results = []
 	selector_loading = false
 	selector_error = ""
+
+
+func _flush_pending_assumption_changes() -> void:
+	if assumption_change_timer == null or assumption_change_timer.is_stopped():
+		return
+	var evs: Dictionary = _as_dictionary(defender_assumptions.get("evs", {}))
+	if _get_evs_total(evs) > EV_TOTAL_LIMIT:
+		assumption_change_timer.stop()
+		return
+	_emit_defender_assumptions_changed()
 
 
 func _render_current_state() -> void:
@@ -195,6 +214,13 @@ func _render_current_state() -> void:
 	_render_your_damage_response(last_response)
 
 
+func _is_catalog_search_active() -> bool:
+	return (
+		catalog_suggestions_box != null
+		and (active_selector == SELECTOR_ITEM or active_selector == SELECTOR_ABILITY)
+	)
+
+
 func _render_your_damage_response(response: Dictionary) -> void:
 	var attacker: Dictionary = _as_dictionary(response.get("attacker", {}))
 	var defender: Dictionary = _as_dictionary(response.get("defender", {}))
@@ -202,7 +228,8 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_pokemon_label(attacker, "Your Pokemon"),
 		_get_pokemon_label(defender, "Opponent"),
 		_get_hp_label(defender),
-		_get_level_label(defender)
+		_get_level_label(defender),
+		_get_boosts_label(attacker)
 	)
 	_add_assumption_chips(defender, response)
 
@@ -237,22 +264,22 @@ func _make_subtab_button(text: String, tab_id: String) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_NONE
-	button.custom_minimum_size = Vector2(0, 24)
+	button.custom_minimum_size = Vector2(0, 23)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_font_size_override("font_size", 11)
 	button.add_theme_color_override("font_color", TEXT_PRIMARY if active_subtab == tab_id else TEXT_SECONDARY)
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_stylebox(TAB_ACTIVE_BG if active_subtab == tab_id else TAB_BG, TAB_BORDER, 4, 5.0, 2.0)
+		_make_stylebox(TAB_ACTIVE_BG if active_subtab == tab_id else TAB_BG, TAB_BORDER, 4, 5.0, 1.0)
 	)
 	button.add_theme_stylebox_override(
 		"hover",
-		_make_stylebox(TAB_ACTIVE_BG.lightened(0.08), TAB_BORDER.lightened(0.1), 4, 5.0, 2.0)
+		_make_stylebox(TAB_ACTIVE_BG.lightened(0.08), TAB_BORDER.lightened(0.1), 4, 5.0, 1.0)
 	)
 	button.add_theme_stylebox_override(
 		"pressed",
-		_make_stylebox(TAB_ACTIVE_BG, TAB_BORDER.lightened(0.18), 4, 5.0, 2.0)
+		_make_stylebox(TAB_ACTIVE_BG, TAB_BORDER.lightened(0.18), 4, 5.0, 1.0)
 	)
 	if tab_id == SUBTAB_YOUR_DAMAGE:
 		button.pressed.connect(_on_your_damage_tab_pressed)
@@ -277,11 +304,11 @@ func _on_their_damage_tab_pressed() -> void:
 	_render_current_state()
 
 
-func _add_profile_summary(attacker_name: String, defender_name: String, hp_label: String, level_label: String) -> void:
+func _add_profile_summary(attacker_name: String, defender_name: String, hp_label: String, level_label: String, boosts_label: String = "") -> void:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 5, 7.0, 4.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 5, 7.0, 3.0))
 	content.add_child(panel)
 
 	var box := VBoxContainer.new()
@@ -295,7 +322,7 @@ func _add_profile_summary(attacker_name: String, defender_name: String, hp_label
 			_fallback_text(attacker_name, "Your Pokemon"),
 			_fallback_text(defender_name, "Opponent"),
 		],
-		13,
+		12,
 		TEXT_PRIMARY
 	)
 	matchup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -305,11 +332,16 @@ func _add_profile_summary(attacker_name: String, defender_name: String, hp_label
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	info.alignment = BoxContainer.ALIGNMENT_CENTER
 	info.clip_contents = true
-	info.add_theme_constant_override("separation", 10)
+	info.add_theme_constant_override("separation", 8)
 	box.add_child(info)
 
 	info.add_child(_make_info_label(_fallback_text(hp_label, "HP ?")))
 	info.add_child(_make_info_label(_fallback_text(level_label, "Lv ?")))
+
+	if boosts_label.strip_edges() != "":
+		var boosts := _make_label(boosts_label, 10, TEXT_ACCENT)
+		boosts.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		box.add_child(boosts)
 
 
 func _add_status(text: String, color: Color) -> void:
@@ -332,12 +364,12 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(ROW_BG, ROW_BORDER, 5, 6.0, 4.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(ROW_BG, ROW_BORDER, 5, 6.0, 3.0))
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.clip_contents = true
-	box.add_theme_constant_override("separation", 1)
+	box.add_theme_constant_override("separation", 2)
 	panel.add_child(box)
 
 	var top := HBoxContainer.new()
@@ -347,14 +379,13 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 	box.add_child(top)
 
 	var move_name := _get_move_name(result)
-	var move_label := _make_label(_fallback_text(move_name, "Unknown move"), 13, TEXT_PRIMARY)
+	var move_label := _make_label(_fallback_text(move_name, "Unknown move"), 12, TEXT_PRIMARY)
 	move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(move_label)
 
-	var ko_label := _make_label(_get_primary_result_label(result, defender), 12, TEXT_ACCENT)
+	var ko_label := _make_result_badge(_get_primary_result_label(result, defender))
 	ko_label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 0)
 	ko_label.size_flags_horizontal = Control.SIZE_SHRINK_END
-	ko_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top.add_child(ko_label)
 
 	var percent_label := _get_percent_label(result)
@@ -367,12 +398,12 @@ func _add_move_result_row(result: Dictionary, defender: Dictionary) -> void:
 		box.add_child(bottom)
 
 		if percent_label != "" and percent_label != "--":
-			var percent := _make_label(percent_label, 12, TEXT_SECONDARY)
+			var percent := _make_label(percent_label, 11, TEXT_SECONDARY)
 			percent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			bottom.add_child(percent)
 
 		if meta != "":
-			var meta_label := _make_label(meta, 10, TEXT_MUTED)
+			var meta_label := _make_label(meta, 9, TEXT_MUTED)
 			meta_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			bottom.add_child(meta_label)
@@ -402,6 +433,16 @@ func _make_info_label(text: String) -> Label:
 	return label
 
 
+func _make_result_badge(text: String) -> Label:
+	var label := _make_label(_get_compact_result_label(text), 10, TEXT_ACCENT)
+	label.custom_minimum_size = Vector2(KO_COLUMN_WIDTH, 19)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_END
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_stylebox_override("normal", _make_stylebox(KO_BG, KO_BORDER, 4, 5.0, 1.0))
+	return label
+
+
 func _make_label(text: String, font_size: int, color: Color) -> Label:
 	var label := Label.new()
 	label.text = text
@@ -417,92 +458,52 @@ func _make_label(text: String, font_size: int, color: Color) -> Label:
 
 func _add_live_assumption_controls(assumptions: Dictionary) -> void:
 	is_syncing_assumption_controls = true
-	live_ev_spinboxes.clear()
+	live_ev_inputs.clear()
 	live_ev_total_label = null
+	item_assumption_input = null
+	ability_assumption_input = null
+	catalog_results_box = null
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.clip_contents = true
-	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 5, 6.0, 5.0))
+	panel.add_theme_stylebox_override("panel", _make_stylebox(PROFILE_BG, PROFILE_BORDER, 5, 6.0, 4.0))
 	content.add_child(panel)
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.clip_contents = true
-	box.add_theme_constant_override("separation", 5)
+	box.add_theme_constant_override("separation", 4)
 	panel.add_child(box)
 
-	var row := HBoxContainer.new()
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.clip_contents = true
-	row.add_theme_constant_override("separation", 5)
-	box.add_child(row)
+	var primary_row := HBoxContainer.new()
+	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	primary_row.clip_contents = true
+	primary_row.add_theme_constant_override("separation", 4)
+	box.add_child(primary_row)
 
-	row.add_child(_make_catalog_assumption_field(SELECTOR_ITEM, assumptions))
+	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "item", "Item ?"), SELECTOR_ITEM))
+	primary_row.add_child(_make_assumption_summary_button(_get_assumption_chip_label(assumptions, "ability", "Ability ?"), SELECTOR_ABILITY))
 
-	row.add_child(_make_catalog_assumption_field(SELECTOR_ABILITY, assumptions))
+	var secondary_row := HBoxContainer.new()
+	secondary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	secondary_row.clip_contents = true
+	secondary_row.add_theme_constant_override("separation", 4)
+	box.add_child(secondary_row)
+
+	secondary_row.add_child(_make_assumption_summary_button(_get_nature_chip_label(assumptions), SELECTOR_NATURE))
+	secondary_row.add_child(_make_assumption_summary_button(_get_evs_summary_chip_label(_as_dictionary(assumptions.get("evs", {}))), SELECTOR_EVS))
 
 	var reset_button := _make_small_button("Reset", _reset_live_assumptions)
-	row.add_child(reset_button)
+	reset_button.custom_minimum_size = Vector2(42, 22)
+	secondary_row.add_child(reset_button)
 
 	catalog_suggestions_box = VBoxContainer.new()
 	catalog_suggestions_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	catalog_suggestions_box.clip_contents = true
 	catalog_suggestions_box.add_theme_constant_override("separation", 3)
 	box.add_child(catalog_suggestions_box)
-	_refresh_assumption_suggestions()
+	_render_active_assumption_editor(assumptions)
 
-	var label := _make_label("Nature", 12, TEXT_SECONDARY)
-	label.custom_minimum_size = Vector2(52, 0)
-	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-
-	var dropdown := OptionButton.new()
-	dropdown.focus_mode = Control.FOCUS_NONE
-	dropdown.custom_minimum_size = Vector2(0, 26)
-	dropdown.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	dropdown.clip_text = true
-	dropdown.add_theme_font_size_override("font_size", 12)
-	var selected_nature: String = _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
-	for index in range(NATURE_OPTIONS.size()):
-		var nature := str(NATURE_OPTIONS[index])
-		dropdown.add_item(nature, index)
-		if nature == selected_nature:
-			dropdown.select(index)
-	dropdown.item_selected.connect(_on_live_nature_selected.bind(dropdown))
-
-	var nature_row := HBoxContainer.new()
-	nature_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	nature_row.clip_contents = true
-	nature_row.add_theme_constant_override("separation", 6)
-	box.add_child(nature_row)
-	nature_row.add_child(label)
-	nature_row.add_child(dropdown)
-
-	var ev_header := HBoxContainer.new()
-	ev_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	ev_header.clip_contents = true
-	box.add_child(ev_header)
-
-	var title := _make_label("EVs", 12, TEXT_SECONDARY)
-	ev_header.add_child(title)
-
-	live_ev_total_label = _make_label("", 11, TEXT_MUTED)
-	live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	ev_header.add_child(live_ev_total_label)
-
-	var evs: Dictionary = _as_dictionary(assumptions.get("evs", {}))
-	for pair_value: Variant in EV_INPUT_ROWS:
-		var pair: Array = pair_value as Array
-		var ev_row := HBoxContainer.new()
-		ev_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		ev_row.clip_contents = true
-		ev_row.add_theme_constant_override("separation", 8)
-		box.add_child(ev_row)
-		for stat_key_value: Variant in pair:
-			var stat_key: String = str(stat_key_value)
-			ev_row.add_child(_make_live_ev_input(stat_key, int(evs.get(stat_key, 0))))
-
-	_update_live_ev_total()
 	is_syncing_assumption_controls = false
 	if live_ev_focus_stat != "":
 		call_deferred("_restore_live_ev_input_focus")
@@ -512,88 +513,62 @@ func _make_live_ev_input(stat_key: String, value: int) -> Control:
 	var row := HBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.clip_contents = true
-	row.add_theme_constant_override("separation", 5)
+	row.add_theme_constant_override("separation", 2)
 
 	var label := _make_label(_get_ev_display_name(stat_key), 10, TEXT_MUTED)
-	label.custom_minimum_size = Vector2(30, 0)
+	label.custom_minimum_size = Vector2(24, 0)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	row.add_child(label)
 
-	var input := SpinBox.new()
-	input.min_value = 0
-	input.max_value = 252
-	input.step = 4
-	input.value = clampi(value, 0, 252)
-	input.custom_minimum_size = Vector2(58, 24)
+	var input := LineEdit.new()
+	input.text = str(clampi(value, 0, 252))
+	input.placeholder_text = "0"
+	input.custom_minimum_size = Vector2(36, 24)
 	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	input.allow_greater = false
-	input.allow_lesser = false
-	input.rounded = true
+	input.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	input.max_length = 3
 	input.add_theme_font_size_override("font_size", 11)
-	input.value_changed.connect(_on_live_ev_changed.bind(stat_key))
-	var line_edit: LineEdit = input.get_line_edit()
-	if line_edit != null:
-		line_edit.text_changed.connect(_on_live_ev_text_changed.bind(stat_key))
-	live_ev_spinboxes[stat_key] = input
+	input.focus_entered.connect(_remember_live_ev_input_focus.bind(stat_key))
+	input.text_changed.connect(_on_live_ev_text_changed.bind(stat_key))
+	live_ev_inputs[stat_key] = input
 	row.add_child(input)
+
+	row.add_child(_make_ev_quick_button("0", _on_live_ev_quick_value_pressed.bind(stat_key, 0)))
+	row.add_child(_make_ev_quick_button("252", _on_live_ev_quick_value_pressed.bind(stat_key, 252)))
 	return row
+
+
+func _make_ev_quick_button(text: String, pressed_callback: Callable) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_NONE
+	button.custom_minimum_size = Vector2(28, 22)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 9)
+	button.add_theme_color_override("font_color", TEXT_SECONDARY)
+	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 3.0, 1.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), CHIP_BORDER.lightened(0.12), 4, 3.0, 1.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.18), 4, 3.0, 1.0))
+	button.pressed.connect(pressed_callback)
+	return button
 
 
 func _make_small_button(text: String, pressed_callback: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_NONE
-	button.custom_minimum_size = Vector2(52, 22)
+	button.custom_minimum_size = Vector2(48, 21)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.clip_text = true
-	button.add_theme_font_size_override("font_size", 10)
-	button.add_theme_color_override("font_color", TEXT_SECONDARY)
-	button.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 4, 5.0, 2.0))
-	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), CHIP_BORDER.lightened(0.12), 4, 5.0, 2.0))
-	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.18), 4, 5.0, 2.0))
+	button.add_theme_font_size_override("font_size", 9)
+	button.add_theme_color_override("font_color", TEXT_MUTED)
+	button.add_theme_stylebox_override("normal", _make_stylebox(Color(CHIP_BG.r, CHIP_BG.g, CHIP_BG.b, 0.62), Color(CHIP_BORDER.r, CHIP_BORDER.g, CHIP_BORDER.b, 0.52), 4, 5.0, 1.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.06), CHIP_BORDER.lightened(0.1), 4, 5.0, 1.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.18), 4, 5.0, 1.0))
 	button.pressed.connect(pressed_callback)
 	return button
-
-
-func _make_catalog_assumption_field(kind: String, assumptions: Dictionary) -> Control:
-	var box := VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.clip_contents = true
-	box.add_theme_constant_override("separation", 2)
-
-	var key_label := "Item" if kind == SELECTOR_ITEM else "Ability"
-	if bool(edited_assumption_fields.get(kind, false)):
-		key_label += "*"
-	var label := _make_label(key_label, 10, TEXT_MUTED)
-	box.add_child(label)
-
-	var row := HBoxContainer.new()
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.clip_contents = true
-	row.add_theme_constant_override("separation", 3)
-	box.add_child(row)
-
-	var input := LineEdit.new()
-	input.text = _get_catalog_assumption_value(assumptions, kind)
-	input.placeholder_text = "Item ?" if kind == SELECTOR_ITEM else "Ability ?"
-	input.custom_minimum_size = Vector2(0, 24)
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	input.add_theme_font_size_override("font_size", 11)
-	input.focus_entered.connect(_on_catalog_assumption_focus_entered.bind(kind))
-	input.focus_exited.connect(_on_catalog_assumption_focus_exited)
-	input.text_changed.connect(_on_catalog_assumption_text_changed.bind(kind))
-	row.add_child(input)
-
-	var clear_button := _make_small_button("x", _on_catalog_assumption_clear_pressed.bind(kind))
-	clear_button.custom_minimum_size = Vector2(24, 22)
-	row.add_child(clear_button)
-
-	if kind == SELECTOR_ITEM:
-		item_assumption_input = input
-	else:
-		ability_assumption_input = input
-	return box
 
 
 func _get_catalog_assumption_value(assumptions: Dictionary, kind: String) -> String:
@@ -601,19 +576,180 @@ func _get_catalog_assumption_value(assumptions: Dictionary, kind: String) -> Str
 	return "" if value == "<null>" else value
 
 
-func _on_live_nature_selected(index: int, dropdown: OptionButton) -> void:
-	if is_syncing_assumption_controls:
+func _make_assumption_summary_button(text: String, editor_kind: String) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_NONE
+	button.custom_minimum_size = Vector2(0, 22)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 10)
+	var is_active := active_selector == editor_kind
+	var is_edited := text.ends_with("*")
+	var chip_border := CHIP_EDITED_BORDER if is_edited else CHIP_BORDER
+	var font_color := TEXT_SECONDARY
+	if is_active:
+		font_color = TEXT_PRIMARY
+	elif is_edited:
+		font_color = TEXT_ACCENT
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_stylebox_override(
+		"normal",
+		_make_stylebox(TAB_ACTIVE_BG if is_active else CHIP_BG, chip_border, 4, 5.0, 1.0)
+	)
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), chip_border.lightened(0.12), 4, 5.0, 1.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, chip_border.lightened(0.18), 4, 5.0, 1.0))
+	button.pressed.connect(_on_assumption_summary_pressed.bind(editor_kind))
+	return button
+
+
+func _on_assumption_summary_pressed(editor_kind: String) -> void:
+	if active_selector == editor_kind:
+		_close_assumption_suggestions()
+		_render_current_state()
 		return
-	defender_assumptions["nature"] = dropdown.get_item_text(index)
+	active_selector = editor_kind
+	selector_query = ""
+	selector_results = []
+	selector_loading = false
+	selector_error = ""
+	live_ev_focus_stat = ""
+	live_ev_focus_caret = -1
+	_render_current_state()
+	if editor_kind == SELECTOR_ITEM or editor_kind == SELECTOR_ABILITY or editor_kind == SELECTOR_NATURE:
+		selector_query = _get_catalog_input_text(editor_kind)
+		selector_loading = true
+		if editor_kind == SELECTOR_ITEM or editor_kind == SELECTOR_ABILITY:
+			_refresh_catalog_results()
+		_request_active_catalog()
+
+
+func _render_active_assumption_editor(assumptions: Dictionary) -> void:
+	if catalog_suggestions_box == null:
+		return
+	for child: Node in catalog_suggestions_box.get_children():
+		catalog_suggestions_box.remove_child(child)
+		child.queue_free()
+
+	catalog_suggestions_box.visible = active_selector != SELECTOR_NONE
+	if active_selector == SELECTOR_NONE:
+		return
+
+	match active_selector:
+		SELECTOR_ITEM, SELECTOR_ABILITY:
+			_render_catalog_assumption_editor(active_selector, assumptions)
+		SELECTOR_NATURE:
+			_render_nature_assumption_editor(assumptions)
+		SELECTOR_EVS:
+			_render_evs_assumption_editor(_as_dictionary(assumptions.get("evs", {})))
+
+
+func _render_catalog_assumption_editor(kind: String, assumptions: Dictionary) -> void:
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.clip_contents = true
+	row.add_theme_constant_override("separation", 4)
+	catalog_suggestions_box.add_child(row)
+
+	var input := LineEdit.new()
+	input.text = _get_catalog_assumption_value(assumptions, kind)
+	input.placeholder_text = "Search item..." if kind == SELECTOR_ITEM else "Search ability..."
+	input.custom_minimum_size = Vector2(0, 24)
+	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	input.add_theme_font_size_override("font_size", 11)
+	input.focus_entered.connect(_on_catalog_assumption_focus_entered.bind(kind))
+	input.focus_exited.connect(_on_catalog_assumption_focus_exited.bind(kind))
+	input.text_changed.connect(_on_catalog_assumption_text_changed.bind(kind))
+	row.add_child(input)
+
+	var clear_button := _make_small_button("None", _on_catalog_assumption_clear_pressed.bind(kind))
+	clear_button.custom_minimum_size = Vector2(46, 22)
+	row.add_child(clear_button)
+
+	if kind == SELECTOR_ITEM:
+		item_assumption_input = input
+	else:
+		ability_assumption_input = input
+
+	catalog_results_box = VBoxContainer.new()
+	catalog_results_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	catalog_results_box.clip_contents = true
+	catalog_results_box.add_theme_constant_override("separation", 2)
+	catalog_suggestions_box.add_child(catalog_results_box)
+	_refresh_catalog_results()
+	input.call_deferred("grab_focus")
+	input.caret_column = input.text.length()
+
+
+func _render_nature_assumption_editor(assumptions: Dictionary) -> void:
+	if selector_loading and selector_results.is_empty() and nature_catalog_options.is_empty():
+		_add_selector_status(catalog_suggestions_box, "Loading natures...", TEXT_SECONDARY)
+		return
+	if selector_error != "" and nature_catalog_options.is_empty():
+		_add_selector_status(catalog_suggestions_box, selector_error, TEXT_MUTED)
+
+	var selected_nature: String = _fallback_text(str(assumptions.get("nature", "")).strip_edges(), "Hardy")
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.clip_contents = true
+	grid.add_theme_constant_override("h_separation", 3)
+	grid.add_theme_constant_override("v_separation", 3)
+	catalog_suggestions_box.add_child(grid)
+	for nature_value: Variant in _get_nature_option_names():
+		var nature: String = str(nature_value)
+		var button := _make_compact_option_button(nature, nature == selected_nature, _on_nature_option_pressed.bind(nature))
+		grid.add_child(button)
+
+
+func _render_evs_assumption_editor(evs: Dictionary) -> void:
+	var header := VBoxContainer.new()
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.clip_contents = true
+	header.add_theme_constant_override("separation", 3)
+	catalog_suggestions_box.add_child(header)
+
+	live_ev_total_label = _make_label("", 11, TEXT_MUTED)
+	live_ev_total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	header.add_child(live_ev_total_label)
+
+	_update_live_ev_total()
+
+	for pair_value: Variant in EV_INPUT_ROWS:
+		var pair: Array = pair_value as Array
+		var ev_row := HBoxContainer.new()
+		ev_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		ev_row.clip_contents = true
+		ev_row.add_theme_constant_override("separation", 6)
+		catalog_suggestions_box.add_child(ev_row)
+		for stat_key_value: Variant in pair:
+			var stat_key: String = str(stat_key_value)
+			ev_row.add_child(_make_live_ev_input(stat_key, int(evs.get(stat_key, 0))))
+	_update_live_ev_total()
+
+
+func _make_compact_option_button(text: String, selected: bool, pressed_callback: Callable) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_NONE
+	button.custom_minimum_size = Vector2(0, 22)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_color_override("font_color", TEXT_PRIMARY if selected else TEXT_SECONDARY)
+	button.add_theme_stylebox_override("normal", _make_stylebox(TAB_ACTIVE_BG if selected else CHIP_BG, CHIP_BORDER, 4, 4.0, 2.0))
+	button.add_theme_stylebox_override("hover", _make_stylebox(TAB_ACTIVE_BG.lightened(0.08), CHIP_BORDER.lightened(0.12), 4, 4.0, 2.0))
+	button.add_theme_stylebox_override("pressed", _make_stylebox(TAB_ACTIVE_BG, CHIP_BORDER.lightened(0.18), 4, 4.0, 2.0))
+	button.pressed.connect(pressed_callback)
+	return button
+
+
+func _on_nature_option_pressed(nature: String) -> void:
+	defender_assumptions["nature"] = nature
 	edited_assumption_fields["nature"] = true
+	_close_assumption_suggestions()
 	_emit_defender_assumptions_changed()
-
-
-func _on_live_ev_changed(value: float, stat_key: String) -> void:
-	if is_syncing_assumption_controls:
-		return
-	_remember_live_ev_input_focus(stat_key)
-	_apply_live_ev_value(stat_key, int(round(value)), true)
+	_render_current_state()
 
 
 func _on_live_ev_text_changed(text: String, stat_key: String) -> void:
@@ -629,19 +765,20 @@ func _on_live_ev_text_changed(text: String, stat_key: String) -> void:
 	_apply_live_ev_value(stat_key, parsed_value, false)
 
 
-func _apply_live_ev_value(stat_key: String, raw_value: int, sync_spinbox_value: bool) -> void:
-	var evs: Dictionary = _as_dictionary(defender_assumptions.get("evs", {})).duplicate(true)
-	var other_total: int = 0
-	for other_stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-		if other_stat == stat_key:
-			continue
-		other_total += clampi(int(evs.get(other_stat, 0)), 0, 252)
+func _on_live_ev_quick_value_pressed(stat_key: String, value: int) -> void:
+	if is_syncing_assumption_controls:
+		return
+	_remember_live_ev_input_focus(stat_key)
+	_apply_live_ev_value(stat_key, value, true)
 
-	var remaining_budget: int = maxi(EV_TOTAL_LIMIT - other_total, 0)
-	var clamped_value: int = mini(clampi(raw_value, 0, 252), remaining_budget)
-	var spinbox: SpinBox = live_ev_spinboxes.get(stat_key) as SpinBox
-	if sync_spinbox_value and spinbox != null and not is_equal_approx(spinbox.value, float(clamped_value)):
-		spinbox.value = clamped_value
+
+func _apply_live_ev_value(stat_key: String, raw_value: int, sync_input_text: bool) -> void:
+	var evs: Dictionary = _as_dictionary(defender_assumptions.get("evs", {})).duplicate(true)
+	var clamped_value: int = clampi(raw_value, 0, 252)
+	var input: LineEdit = live_ev_inputs.get(stat_key) as LineEdit
+	if (sync_input_text or raw_value != clamped_value) and input != null and input.text != str(clamped_value):
+		input.text = str(clamped_value)
+		input.caret_column = input.text.length()
 
 	if clamped_value <= 0:
 		evs.erase(stat_key)
@@ -650,33 +787,30 @@ func _apply_live_ev_value(stat_key: String, raw_value: int, sync_spinbox_value: 
 	defender_assumptions["evs"] = evs
 	edited_assumption_fields["evs"] = true
 	_update_live_ev_total()
-	_queue_defender_assumptions_changed()
+	if _get_evs_total(evs) <= EV_TOTAL_LIMIT:
+		_queue_defender_assumptions_changed()
+	elif assumption_change_timer != null:
+		assumption_change_timer.stop()
 
 
 func _remember_live_ev_input_focus(stat_key: String) -> void:
 	live_ev_focus_stat = stat_key
 	live_ev_focus_caret = -1
-	var spinbox: SpinBox = live_ev_spinboxes.get(stat_key) as SpinBox
-	if spinbox == null:
+	var input: LineEdit = live_ev_inputs.get(stat_key) as LineEdit
+	if input == null:
 		return
-	var line_edit: LineEdit = spinbox.get_line_edit()
-	if line_edit != null:
-		live_ev_focus_caret = line_edit.caret_column
+	live_ev_focus_caret = input.caret_column
 
 
 func _restore_live_ev_input_focus() -> void:
 	if live_ev_focus_stat == "":
 		return
-	var spinbox: SpinBox = live_ev_spinboxes.get(live_ev_focus_stat) as SpinBox
-	if spinbox == null:
+	var input: LineEdit = live_ev_inputs.get(live_ev_focus_stat) as LineEdit
+	if input == null:
 		return
-	var line_edit: LineEdit = spinbox.get_line_edit()
-	if line_edit == null:
-		spinbox.grab_focus()
-		return
-	line_edit.grab_focus()
+	input.grab_focus()
 	if live_ev_focus_caret >= 0:
-		line_edit.caret_column = mini(live_ev_focus_caret, line_edit.text.length())
+		input.caret_column = mini(live_ev_focus_caret, input.text.length())
 
 
 func _update_live_ev_total() -> void:
@@ -701,6 +835,13 @@ func _reset_live_assumptions() -> void:
 	edited_assumption_fields.clear()
 	if assumption_change_timer != null:
 		assumption_change_timer.stop()
+	if catalog_search_timer != null:
+		catalog_search_timer.stop()
+	active_selector = SELECTOR_NONE
+	selector_query = ""
+	selector_results = []
+	selector_loading = false
+	selector_error = ""
 	_emit_defender_assumptions_changed()
 	_render_current_state()
 
@@ -712,7 +853,10 @@ func show_assumption_catalog_loading(kind: String, query: String) -> void:
 	selector_loading = true
 	selector_error = ""
 	selector_results = []
-	_refresh_assumption_suggestions()
+	if kind == SELECTOR_ITEM or kind == SELECTOR_ABILITY:
+		_refresh_catalog_results()
+	elif kind == SELECTOR_NATURE:
+		_render_current_state()
 
 
 func show_assumption_catalog_response(kind: String, response: Dictionary) -> void:
@@ -722,15 +866,21 @@ func show_assumption_catalog_response(kind: String, response: Dictionary) -> voi
 	if not bool(response.get("success", false)):
 		selector_error = str(response.get("error", "Could not load assumptions."))
 		selector_results = []
-		_refresh_assumption_suggestions()
+		_refresh_catalog_results()
 		return
 
 	selector_error = str(response.get("warning", ""))
 	if kind == SELECTOR_ITEM:
 		selector_results = _as_array(response.get("items", []))
-	else:
+	elif kind == SELECTOR_ABILITY:
 		selector_results = _as_array(response.get("abilities", []))
-	_refresh_assumption_suggestions()
+	elif kind == SELECTOR_NATURE:
+		selector_results = _as_array(response.get("natures", []))
+		nature_catalog_options = selector_results.duplicate(true)
+	if kind == SELECTOR_ITEM or kind == SELECTOR_ABILITY:
+		_refresh_catalog_results()
+	elif kind == SELECTOR_NATURE:
+		_render_current_state()
 
 
 func show_assumption_catalog_error(kind: String, message: String) -> void:
@@ -739,7 +889,10 @@ func show_assumption_catalog_error(kind: String, message: String) -> void:
 	selector_loading = false
 	selector_error = _fallback_text(message, "Could not load assumptions.")
 	selector_results = []
-	_refresh_assumption_suggestions()
+	if kind == SELECTOR_ITEM or kind == SELECTOR_ABILITY:
+		_refresh_catalog_results()
+	elif kind == SELECTOR_NATURE:
+		_render_current_state()
 
 
 func is_assumption_catalog_request_current(kind: String, query: String) -> bool:
@@ -772,20 +925,25 @@ func _add_selector_status(parent: VBoxContainer, text: String, color: Color) -> 
 func _on_catalog_assumption_focus_entered(kind: String) -> void:
 	if catalog_search_timer != null:
 		catalog_search_timer.stop()
+	var input_text: String = _get_catalog_input_text(kind)
+	if active_selector == kind and selector_query == input_text and selector_loading:
+		return
 	active_selector = kind
-	selector_query = _get_catalog_input_text(kind)
+	selector_query = input_text
 	selector_results = []
 	selector_error = ""
 	selector_loading = true
-	_refresh_assumption_suggestions()
+	_refresh_catalog_results()
 	_request_active_catalog()
 
 
-func _on_catalog_assumption_focus_exited() -> void:
-	call_deferred("_close_assumption_suggestions_if_focus_left")
+func _on_catalog_assumption_focus_exited(kind: String) -> void:
+	call_deferred("_close_assumption_suggestions_if_focus_left", kind)
 
 
-func _close_assumption_suggestions_if_focus_left() -> void:
+func _close_assumption_suggestions_if_focus_left(kind: String) -> void:
+	if active_selector != kind:
+		return
 	var focus_owner: Control = get_viewport().gui_get_focus_owner()
 	if focus_owner == item_assumption_input or focus_owner == ability_assumption_input:
 		return
@@ -802,7 +960,7 @@ func _close_assumption_suggestions() -> void:
 	selector_results = []
 	selector_loading = false
 	selector_error = ""
-	_refresh_assumption_suggestions()
+	_render_current_state()
 
 
 func _on_catalog_assumption_text_changed(text: String, kind: String) -> void:
@@ -822,7 +980,7 @@ func _request_active_catalog() -> void:
 	selector_loading = true
 	selector_error = ""
 	selector_results = []
-	_refresh_assumption_suggestions()
+	_refresh_catalog_results()
 	assumption_catalog_requested.emit(active_selector, selector_query, _get_selector_species())
 
 
@@ -849,39 +1007,38 @@ func _on_selector_result_pressed(result: Dictionary) -> void:
 	_emit_defender_assumptions_changed()
 
 
-func _refresh_assumption_suggestions() -> void:
-	if catalog_suggestions_box == null:
+func _refresh_catalog_results() -> void:
+	if catalog_results_box == null:
 		return
-	for child: Node in catalog_suggestions_box.get_children():
-		catalog_suggestions_box.remove_child(child)
+	for child: Node in catalog_results_box.get_children():
+		catalog_results_box.remove_child(child)
 		child.queue_free()
 
-	catalog_suggestions_box.visible = active_selector != SELECTOR_NONE
-	if active_selector == SELECTOR_NONE:
+	catalog_results_box.visible = active_selector == SELECTOR_ITEM or active_selector == SELECTOR_ABILITY
+	if not catalog_results_box.visible:
 		return
 
 	var clear_button := _make_selector_result_button("Unknown / None", "Clear", Callable(self, "_on_catalog_assumption_clear_pressed").bind(active_selector))
-	catalog_suggestions_box.add_child(clear_button)
+	catalog_results_box.add_child(clear_button)
 
 	if selector_loading:
-		_add_selector_status(catalog_suggestions_box, "Loading...", TEXT_SECONDARY)
+		_add_selector_status(catalog_results_box, "Loading...", TEXT_SECONDARY)
 		return
 
 	if selector_error != "":
-		_add_selector_status(catalog_suggestions_box, selector_error, TEXT_MUTED)
+		_add_selector_status(catalog_results_box, selector_error, TEXT_MUTED)
 
 	if selector_results.is_empty():
-		_add_selector_status(catalog_suggestions_box, "No results.", TEXT_SECONDARY)
+		_add_selector_status(catalog_results_box, "No results.", TEXT_SECONDARY)
 		return
 
 	var result_count: int = mini(selector_results.size(), 4)
 	for index in range(result_count):
 		var result: Dictionary = _as_dictionary(selector_results[index])
 		var name: String = str(result.get("name", result.get("calcName", ""))).strip_edges()
-		var short_desc: String = str(result.get("shortDesc", "")).strip_edges()
-		catalog_suggestions_box.add_child(_make_selector_result_button(
+		catalog_results_box.add_child(_make_selector_result_button(
 			_fallback_text(name, "Unknown"),
-			short_desc,
+			"",
 			Callable(self, "_on_selector_result_pressed").bind(result)
 		))
 
@@ -1061,6 +1218,10 @@ func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> Stri
 	if _is_status_result(result):
 		return "Status"
 
+	var ko_summary_label := str(result.get("koSummaryLabel", "")).strip_edges()
+	if ko_summary_label != "":
+		return ko_summary_label
+
 	var hp_percent_value: Variant = _get_defender_hp_percent(defender)
 	var min_percent_value: Variant = _get_percent_number(result.get("minPercent"))
 	var max_percent_value: Variant = _get_percent_number(result.get("maxPercent"))
@@ -1086,6 +1247,28 @@ func _get_primary_result_label(result: Dictionary, defender: Dictionary) -> Stri
 
 	var hko_label := _get_hko_label(result)
 	return hko_label
+
+
+func _get_compact_result_label(text: String) -> String:
+	var label := text.strip_edges()
+	if label == "":
+		return ""
+	match label:
+		"Guaranteed OHKO":
+			return "OHKO"
+		"Possible OHKO":
+			return "Chance"
+		"Already KO":
+			return "KO'd"
+		"No KO":
+			return "No KO"
+	if label.begins_with("100% "):
+		return label.substr(5)
+	if label.contains(" chance to "):
+		label = label.replace(" chance to ", " ")
+	label = label.replace("Guaranteed ", "")
+	label = label.replace("Possible ", "")
+	return label
 
 
 func _get_hko_label(result: Dictionary) -> String:
@@ -1141,6 +1324,29 @@ func _get_evs_chip_label(evs: Dictionary) -> String:
 	return "%s*" % label if bool(edited_assumption_fields.get("evs", false)) else label
 
 
+func _get_evs_summary_chip_label(evs: Dictionary) -> String:
+	var label: String = "EVs %d/%d" % [_get_evs_total(evs), EV_TOTAL_LIMIT]
+	return "%s*" % label if bool(edited_assumption_fields.get("evs", false)) else label
+
+
+func _get_nature_option_names() -> Array[String]:
+	var source: Array = []
+	if active_selector == SELECTOR_NATURE and not selector_results.is_empty():
+		source = selector_results
+	else:
+		source = nature_catalog_options
+	var names: Array[String] = []
+	for nature_value: Variant in source:
+		var nature: Dictionary = _as_dictionary(nature_value)
+		var name: String = str(nature.get("calcName", nature.get("name", ""))).strip_edges()
+		if name != "" and not names.has(name):
+			names.append(name)
+	if names.is_empty():
+		for fallback_name: Variant in FALLBACK_NATURE_OPTIONS:
+			names.append(str(fallback_name))
+	return names
+
+
 func _get_assumptions_summary_label(assumptions: Dictionary) -> String:
 	var parts: Array[String] = [
 		_get_assumption_chip_label(assumptions, "item", "Item ?"),
@@ -1168,6 +1374,21 @@ func _get_evs_label(evs: Dictionary) -> String:
 		if number_value != null:
 			total += int(number_value)
 	return "EVs %d" % total if total > 0 else "EVs 0"
+
+
+func _get_evs_total(evs: Dictionary) -> int:
+	var total: int = 0
+	for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		total += clampi(int(evs.get(stat_key, 0)), 0, 252)
+	return total
+
+
+func _is_custom_evs(evs: Dictionary) -> bool:
+	for preset_value: Variant in EV_PRESETS:
+		var preset: Dictionary = preset_value as Dictionary
+		if _evs_equal(evs, _as_dictionary(preset.get("evs", {}))):
+			return false
+	return not evs.is_empty()
 
 
 func _get_ivs_label(ivs: Dictionary) -> String:
@@ -1201,14 +1422,49 @@ func _get_defender_hp_percent(defender: Dictionary) -> Variant:
 	return _get_percent_number(hp.get("percent"))
 
 
+func _get_boosts_label(pokemon: Dictionary) -> String:
+	var boosts := _as_dictionary(pokemon.get("boosts", {}))
+	if boosts.is_empty():
+		return ""
+	var parts: Array[String] = []
+	for stat_key: String in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]:
+		if not boosts.has(stat_key):
+			continue
+		var amount := clampi(int(boosts.get(stat_key, 0)), -6, 6)
+		if amount == 0:
+			continue
+		parts.append("%s %s%d" % [_format_boost_stat_name(stat_key), "+" if amount > 0 else "", amount])
+	if parts.is_empty():
+		return ""
+	return "Boosts: %s" % " / ".join(parts)
+
+
+func _format_boost_stat_name(stat_key: String) -> String:
+	match stat_key:
+		"atk":
+			return "Atk"
+		"def":
+			return "Def"
+		"spa":
+			return "SpA"
+		"spd":
+			return "SpD"
+		"spe":
+			return "Spe"
+		"accuracy":
+			return "Acc"
+		"evasion":
+			return "Eva"
+		_:
+			return stat_key.capitalize()
+
+
 func _format_percent_value(value: Variant) -> String:
 	var number_value: Variant = _get_percent_number(value)
 	if number_value == null:
 		return "--"
 
 	var number := float(number_value)
-	if is_equal_approx(number, round(number)):
-		return str(int(round(number)))
 	return "%.1f" % number
 
 
