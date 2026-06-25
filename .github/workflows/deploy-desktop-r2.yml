@@ -251,6 +251,14 @@ jobs:
             pack_version_prefix="$2"
             source_path="$3"
             optional="${4:-false}"
+            if [ ! -d "${source_path}" ]; then
+              if [ "${optional}" = "true" ]; then
+                echo "Skipping optional asset pack ${pack_id}; missing source path: ${source_path}"
+                return 0
+              fi
+              echo "Missing required asset pack source path: ${source_path}" >&2
+              return 1
+            fi
             pack_hash="$(find "${source_path}" -type f ! -name '*.import' -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-12)"
             pack_version="${pack_version_prefix}-${pack_hash}"
             zip_path="builds/asset-packs/${pack_version}.zip"
@@ -262,7 +270,7 @@ jobs:
             printf '%s\n' "--asset-pack" "${asset_pack_arg}" >> /tmp/asset_pack_args.txt
           }
 
-          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/pokemon_home"
+          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/pokemon_home" "true"
           package_local_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/front"
           package_local_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/back"
           package_local_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_front"
