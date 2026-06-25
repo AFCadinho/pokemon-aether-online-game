@@ -5,6 +5,7 @@ class_name PokemonHoverCard
 const TYPE_ICON_DIR := "res://assets/sprites/types"
 const LOW_SPEED_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const HIGH_SPEED_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
+const MIN_CARD_WIDTH := 220.0
 
 @onready var name_label: Label = $MarginContainer/VBoxContainer/NameLabel
 @onready var hp_label: Label = $MarginContainer/VBoxContainer/HpLabel
@@ -24,6 +25,7 @@ const HIGH_SPEED_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 @onready var highest_neutral_speed_label: Label = $MarginContainer/VBoxContainer/HBoxContainer3/HighestNeutralSpeedLabel
 @onready var highest_speed_label: Label = $MarginContainer/VBoxContainer/HBoxContainer3/HighestSpeedLabel
 @onready var moves_separator: ColorRect = $MarginContainer/VBoxContainer/SeperationLabel3
+@onready var moves_container: VBoxContainer = $MarginContainer/VBoxContainer/VBoxContainer
 @onready var move_label_1: Label = $MarginContainer/VBoxContainer/VBoxContainer/MoveLabel
 @onready var move_label_2: Label = $MarginContainer/VBoxContainer/VBoxContainer/MoveLabel2
 @onready var move_label_3: Label = $MarginContainer/VBoxContainer/VBoxContainer/MoveLabel3
@@ -34,6 +36,7 @@ var move_labels: Array[Label] = []
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	custom_minimum_size = Vector2(MIN_CARD_WIDTH, 0.0)
 	move_labels = [move_label_1, move_label_2, move_label_3, move_label_4]
 	lowest_speed_label.add_theme_color_override("font_color", LOW_SPEED_COLOR)
 	highest_speed_label.add_theme_color_override("font_color", HIGH_SPEED_COLOR)
@@ -49,6 +52,7 @@ func show_for_pokemon(
 	speed_data: Dictionary = {}
 ) -> void:
 	set_pokemon_data(pokemon_data, confirmed_moves, confirmed_item, confirmed_ability, stat_changes, speed_data)
+	_resize_to_content()
 	visible = true
 
 
@@ -74,6 +78,7 @@ func set_pokemon_data(
 	_set_stat_changes(stat_changes)
 	_set_speed_data(speed_data)
 	_set_moves(_get_display_moves(confirmed_moves))
+	_resize_to_content()
 
 
 func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> void:
@@ -208,7 +213,12 @@ func _get_possible_abilities_from_data(pokemon_data: Dictionary) -> Array:
 
 
 func _set_item(item: String) -> void:
-	item_label.visible = item != ""
+	if item == "":
+		item_label.visible = false
+		item_label.text = ""
+		return
+
+	item_label.visible = true
 	item_label.text = "Item: %s" % _format_item_display_name(item)
 
 func _format_item_display_name(item: String) -> String:
@@ -287,6 +297,7 @@ func _get_display_moves(confirmed_moves: Array) -> Array:
 func _set_moves(moves: Array) -> void:
 	var has_moves := not moves.is_empty()
 	moves_separator.visible = has_moves
+	moves_container.visible = has_moves
 
 	for index in range(move_labels.size()):
 		var label: Label = move_labels[index]
@@ -297,6 +308,12 @@ func _set_moves(moves: Array) -> void:
 
 		label.visible = true
 		label.text = _format_move_text(moves[index])
+
+
+func _resize_to_content() -> void:
+	update_minimum_size()
+	var content_size: Vector2 = get_combined_minimum_size()
+	size = Vector2(maxf(MIN_CARD_WIDTH, content_size.x), content_size.y)
 
 
 func _format_move_text(move_value: Variant) -> String:

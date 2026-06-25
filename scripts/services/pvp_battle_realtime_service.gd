@@ -6,6 +6,7 @@ signal connection_changed(connected: bool)
 signal battle_update_received(message: Dictionary)
 signal action_response_received(request_id: String, message: Dictionary)
 signal room_joined(room_code: String, player_id: String, battle_id: String)
+signal room_ready(room_code: String, battle_id: String)
 signal session_invalid(reason: String)
 
 const RECONNECT_DELAY_SECONDS := 3.0
@@ -23,6 +24,7 @@ var active_player_id := "p1"
 var active_battle_id := ""
 var request_counter := 0
 var joined := false
+var room_is_ready := false
 
 
 func _process(delta: float) -> void:
@@ -64,6 +66,7 @@ func connect_room(room_code: String, player_id: String, battle_id: String) -> vo
 	active_player_id = "p2" if player_id == "p2" else "p1"
 	active_battle_id = battle_id.strip_edges()
 	joined = false
+	room_is_ready = false
 	if active_room_code == "" or not AuthService.is_authenticated():
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
@@ -141,6 +144,7 @@ func disconnect_room() -> void:
 	should_reconnect = false
 	connecting = false
 	joined = false
+	room_is_ready = false
 	active_room_code = ""
 	active_player_id = "p1"
 	active_battle_id = ""
@@ -259,10 +263,18 @@ func _process_packets() -> void:
 			_log_realtime("Incoming packet", "type=%s request=%s battle=%s player=%s action=%s room=%s" % [message_type, str(message.get("requestId", "")), str(message.get("battleId", "")), str(message.get("playerId", "")), str(message.get("action", "")), str(message.get("roomCode", ""))])
 		if message_type == "pvp.joined":
 			joined = true
+			room_is_ready = false
 			active_room_code = str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
 			active_player_id = "p2" if str(message.get("playerId", active_player_id)) == "p2" else "p1"
 			active_battle_id = str(message.get("battleId", active_battle_id)).strip_edges()
 			room_joined.emit(active_room_code, active_player_id, active_battle_id)
+			continue
+		if message_type == "pvp.room_ready":
+			var message_room := str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
+			var message_battle := str(message.get("battleId", active_battle_id)).strip_edges()
+			if message_room == active_room_code and (active_battle_id == "" or message_battle == active_battle_id):
+				room_is_ready = true
+				room_ready.emit(message_room, message_battle)
 			continue
 		if message_type == "pvp.battle_update":
 			var request_id := str(message.get("requestId", ""))

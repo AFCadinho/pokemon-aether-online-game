@@ -14,14 +14,18 @@ func get_hover_card_data(
 	pokemon_stats_request: HTTPRequest,
 	pokemon_data: Dictionary,
 	public_confirmed_abilities_by_ident: Dictionary,
-	public_confirmed_items_by_ident: Dictionary = {}
+	public_confirmed_items_by_ident: Dictionary = {},
+	viewer_id_override: String = "",
+	ident_override: String = ""
 ) -> Dictionary:
 	var requested_ident := str(pokemon_data.get("ident", ""))
 	var requested_species := battle_state.get_species_from_pokemon_data(pokemon_data)
 	var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(
 		battle_state,
 		pokemon_info_request,
-		pokemon_data
+		pokemon_data,
+		viewer_id_override,
+		ident_override
 	)
 	var pokemon_stats: Dictionary = await _fetch_hover_pokemon_stats(
 		battle_state,
@@ -52,10 +56,14 @@ func get_hover_card_data(
 func _fetch_hover_pokemon_info(
 	battle_state: BattleState,
 	request_node: HTTPRequest,
-	pokemon_data: Dictionary
+	pokemon_data: Dictionary,
+	viewer_id_override: String = "",
+	ident_override: String = ""
 ) -> Dictionary:
 	var battle_id: String = battle_state.battle_id
-	var ident: String = str(pokemon_data.get("ident", ""))
+	var ident: String = ident_override.strip_edges()
+	if ident == "":
+		ident = str(pokemon_data.get("ident", ""))
 	if battle_id == "" or ident == "":
 		_debug_battle_move("pokemon-info skipped battle_id=%s ident=%s pokemon=%s" % [
 			battle_id,
@@ -64,7 +72,9 @@ func _fetch_hover_pokemon_info(
 		])
 		return {}
 
-	var viewer_id: String = _get_hover_known_info_viewer_id(ident)
+	var viewer_id: String = viewer_id_override.strip_edges()
+	if viewer_id == "":
+		viewer_id = _get_hover_known_info_viewer_id(ident)
 	if viewer_id == "":
 		return {}
 

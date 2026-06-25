@@ -78,8 +78,10 @@ var damage_calc_request_in_flight := false
 var damage_calc_refresh_queued := false
 var damage_calc_catalog_request_token := 0
 var damage_calc_matchup_key := ""
+var damage_calc_defender_species_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
 var damage_calc_assumption_edited_fields: Dictionary = {}
+var damage_calc_saved_assumptions: Dictionary = {}
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -94,6 +96,8 @@ const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.
 const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
 const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
+const DAMAGE_CALC_ASSUMPTIONS_PATH := "user://damage_calc_assumptions.json"
+const DAMAGE_CALC_ASSUMPTIONS_VERSION := 1
 
 #Active Pokemon
 var active_player_pokemon: Pokemon
@@ -165,6 +169,7 @@ var active_enemy_pokemon: Pokemon
 
 ## Verbindt de UI-signals en zet de battle UI in de beginstand.
 func _ready() -> void:
+	_load_damage_calc_saved_assumptions()
 	_setup_battle_focus_surfaces()
 	action_buttons.action_selected.connect(_on_action_selected)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
@@ -622,7 +627,9 @@ func _show_pokemon_hover(
 		pokemon_stats_request,
 		request_pokemon_data,
 		public_confirmed_abilities_by_ident,
-		public_confirmed_items_by_ident
+		public_confirmed_items_by_ident,
+		_get_raw_pvp_hover_viewer_id(),
+		_get_raw_pvp_hover_ident(hover_ident)
 	)
 	if not hover_state.is_hover_request_current(request_token, hover_ident, hover_owner_player_id):
 		return
@@ -729,6 +736,26 @@ func _hover_data_matches_pokemon_request(hover_data: Dictionary, pokemon_data: D
 		return true
 
 	return _normalize_species_for_compare(requested_species) == _normalize_species_for_compare(current_species)
+
+func _get_raw_pvp_hover_viewer_id() -> String:
+	if not _is_pvp_battle():
+		return ""
+
+	return action_flow.local_player_id
+
+func _get_raw_pvp_hover_ident(display_ident: String) -> String:
+	var normalized_ident := display_ident.strip_edges()
+	if not _is_pvp_battle():
+		return ""
+	if action_flow.local_player_id != "p2":
+		return normalized_ident
+
+	if normalized_ident.begins_with("p1"):
+		return "p2%s" % normalized_ident.substr(2)
+	if normalized_ident.begins_with("p2"):
+		return "p1%s" % normalized_ident.substr(2)
+
+	return normalized_ident
 
 func _normalize_species_for_compare(species: String) -> String:
 	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
@@ -990,6 +1017,7 @@ func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
 		return
 	_sync_damage_calc_matchup_assumptions()
+	_apply_known_damage_calc_defender_info()
 	if battle_finished:
 		calc_panel.show_error("Battle has ended.")
 		return
@@ -1038,6 +1066,7 @@ func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited
 	_sync_damage_calc_matchup_assumptions()
 	damage_calc_defender_assumptions = assumptions.duplicate(true)
 	damage_calc_assumption_edited_fields = edited_fields.duplicate(true)
+	_persist_current_damage_calc_assumptions()
 	if damage_calc_request_in_flight:
 		damage_calc_request_token += 1
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
@@ -1087,12 +1116,205 @@ func _sync_damage_calc_matchup_assumptions() -> void:
 		return
 
 	damage_calc_matchup_key = matchup_key
-	_reset_damage_calc_assumptions()
+	damage_calc_defender_species_key = _get_damage_calc_defender_species_key()
+	_load_damage_calc_assumptions_for_current_defender()
 
 func _reset_damage_calc_assumptions() -> void:
 	damage_calc_defender_assumptions.clear()
 	damage_calc_assumption_edited_fields.clear()
 	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
+
+func _load_damage_calc_assumptions_for_current_defender() -> void:
+	damage_calc_defender_assumptions.clear()
+	damage_calc_assumption_edited_fields.clear()
+	if damage_calc_defender_species_key == "":
+		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
+		return
+
+	var saved_entry: Dictionary = _damage_calc_as_dictionary(damage_calc_saved_assumptions.get(damage_calc_defender_species_key, {}))
+	if not saved_entry.is_empty():
+		damage_calc_defender_assumptions = _sanitize_damage_calc_assumptions(saved_entry)
+		damage_calc_assumption_edited_fields = _build_damage_calc_edited_fields(damage_calc_defender_assumptions)
+	_apply_known_damage_calc_defender_info(false)
+	calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
+
+func _apply_known_damage_calc_defender_info(update_panel: bool = true) -> void:
+	var changed: bool = false
+	if not bool(damage_calc_assumption_edited_fields.get("item", false)):
+		var known_item: String = _get_known_damage_calc_defender_item()
+		var current_item: String = str(damage_calc_defender_assumptions.get("item", "")).strip_edges()
+		if known_item != "" and current_item != known_item:
+			damage_calc_defender_assumptions["item"] = known_item
+			changed = true
+
+	if not bool(damage_calc_assumption_edited_fields.get("ability", false)):
+		var known_ability: String = _get_known_damage_calc_defender_ability()
+		var current_ability: String = str(damage_calc_defender_assumptions.get("ability", "")).strip_edges()
+		if known_ability != "" and current_ability != known_ability:
+			damage_calc_defender_assumptions["ability"] = known_ability
+			changed = true
+
+	if changed and update_panel:
+		calc_panel.set_defender_assumptions(damage_calc_defender_assumptions, damage_calc_assumption_edited_fields)
+
+func _persist_current_damage_calc_assumptions() -> void:
+	if damage_calc_defender_species_key == "":
+		return
+
+	var sanitized: Dictionary = _get_persistable_damage_calc_assumptions(
+		damage_calc_defender_assumptions,
+		damage_calc_assumption_edited_fields
+	)
+	if _should_store_damage_calc_assumptions(sanitized, damage_calc_assumption_edited_fields):
+		damage_calc_saved_assumptions[damage_calc_defender_species_key] = sanitized
+	else:
+		damage_calc_saved_assumptions.erase(damage_calc_defender_species_key)
+	_save_damage_calc_saved_assumptions()
+
+func _load_damage_calc_saved_assumptions() -> void:
+	damage_calc_saved_assumptions.clear()
+	if not FileAccess.file_exists(DAMAGE_CALC_ASSUMPTIONS_PATH):
+		return
+
+	var file_text: String = FileAccess.get_file_as_string(DAMAGE_CALC_ASSUMPTIONS_PATH)
+	var parsed_data: Variant = JSON.parse_string(file_text)
+	if not (parsed_data is Dictionary):
+		return
+
+	var data: Dictionary = parsed_data as Dictionary
+	var species_data: Dictionary = _damage_calc_as_dictionary(data.get("species", data))
+	for key_value: Variant in species_data.keys():
+		var species_key: String = str(key_value).strip_edges()
+		if species_key == "":
+			continue
+		var assumptions: Dictionary = _sanitize_damage_calc_assumptions(_damage_calc_as_dictionary(species_data.get(key_value, {})))
+		if not assumptions.is_empty():
+			damage_calc_saved_assumptions[species_key] = assumptions
+
+func _save_damage_calc_saved_assumptions() -> void:
+	var file: FileAccess = FileAccess.open(DAMAGE_CALC_ASSUMPTIONS_PATH, FileAccess.WRITE)
+	if file == null:
+		push_warning("Could not save damage calc assumptions to %s" % DAMAGE_CALC_ASSUMPTIONS_PATH)
+		return
+
+	file.store_string(JSON.stringify({
+		"version": DAMAGE_CALC_ASSUMPTIONS_VERSION,
+		"species": damage_calc_saved_assumptions,
+	}, "\t"))
+
+func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
+	var sanitized: Dictionary = {}
+	var item: String = str(assumptions.get("item", "")).strip_edges()
+	if item != "" and item != "<null>":
+		sanitized["item"] = item
+
+	var ability: String = str(assumptions.get("ability", "")).strip_edges()
+	if ability != "" and ability != "<null>":
+		sanitized["ability"] = ability
+
+	var nature: String = str(assumptions.get("nature", "")).strip_edges()
+	if nature != "" and nature != "<null>":
+		sanitized["nature"] = nature
+
+	var evs: Dictionary = _sanitize_damage_calc_stat_table(_damage_calc_as_dictionary(assumptions.get("evs", {})), false)
+	if not evs.is_empty():
+		sanitized["evs"] = evs
+
+	var ivs: Dictionary = _sanitize_damage_calc_stat_table(_damage_calc_as_dictionary(assumptions.get("ivs", {})), true)
+	if not ivs.is_empty():
+		sanitized["ivs"] = ivs
+
+	return sanitized
+
+func _get_persistable_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> Dictionary:
+	var edited_assumptions: Dictionary = {}
+	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+		if bool(edited_fields.get(key, false)) and assumptions.has(key):
+			edited_assumptions[key] = assumptions.get(key)
+	return _sanitize_damage_calc_assumptions(edited_assumptions)
+
+func _sanitize_damage_calc_stat_table(stats: Dictionary, omit_default_ivs: bool) -> Dictionary:
+	var sanitized: Dictionary = {}
+	for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		if not stats.has(stat_key):
+			continue
+		var value: int = clampi(int(stats.get(stat_key, 0)), 0, 31 if omit_default_ivs else 252)
+		if omit_default_ivs and value == 31:
+			continue
+		if not omit_default_ivs and value == 0:
+			continue
+		sanitized[stat_key] = value
+	return sanitized
+
+func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
+	var edited: Dictionary = {}
+	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+		if not assumptions.has(key):
+			continue
+		var value: Variant = assumptions.get(key)
+		if value is Dictionary and (value as Dictionary).is_empty():
+			continue
+		if str(value).strip_edges() == "":
+			continue
+		edited[key] = true
+	return edited
+
+func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> bool:
+	for key: String in ["item", "ability", "nature", "evs", "ivs"]:
+		if not bool(edited_fields.get(key, false)):
+			continue
+		if not assumptions.has(key):
+			continue
+		var value: Variant = assumptions.get(key)
+		if value is Dictionary:
+			if not (value as Dictionary).is_empty():
+				return true
+		elif str(value).strip_edges() != "":
+			return true
+	return false
+
+func _get_damage_calc_defender_species_key() -> String:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
+	var species: String = str(active_pokemon.get("species", "")).strip_edges()
+	if species == "":
+		species = _get_active_display_species("p2")
+	return _slugify_damage_calc_species(species)
+
+func _slugify_damage_calc_species(species: String) -> String:
+	return species.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "").replace(".", "")
+
+func _get_known_damage_calc_defender_item() -> String:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
+	var ident_key: String = _normalize_battle_ident(str(active_pokemon.get("ident", "")))
+	if ident_key != "" and public_confirmed_items_by_ident.has(ident_key):
+		var confirmed_item: String = str(public_confirmed_items_by_ident.get(ident_key, "")).strip_edges()
+		if confirmed_item != "":
+			return confirmed_item
+
+	for key: String in ["confirmedItem", "confirmed_item", "revealedItem", "revealed_item", "publicItem", "public_item"]:
+		var value: String = str(active_pokemon.get(key, "")).strip_edges()
+		if value != "":
+			return value
+	return ""
+
+func _get_known_damage_calc_defender_ability() -> String:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
+	var ident_key: String = _normalize_battle_ident(str(active_pokemon.get("ident", "")))
+	if ident_key != "" and public_confirmed_abilities_by_ident.has(ident_key):
+		var confirmed_ability: String = str(public_confirmed_abilities_by_ident.get(ident_key, "")).strip_edges()
+		if confirmed_ability != "":
+			return confirmed_ability
+
+	for key: String in ["confirmedAbility", "confirmed_ability", "revealedAbility", "revealed_ability", "publicAbility", "public_ability"]:
+		var value: String = str(active_pokemon.get(key, "")).strip_edges()
+		if value != "":
+			return value
+	return ""
+
+func _damage_calc_as_dictionary(value: Variant) -> Dictionary:
+	if value is Dictionary:
+		return value as Dictionary
+	return {}
 
 func _get_damage_calc_matchup_key() -> String:
 	return "%s|%s|%s|%s" % [
@@ -3023,6 +3245,9 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 
 		if _should_show_team_preview(lead_response):
 			current_action_panel.set_message("Waiting for the other player...")
+			current_action_view = ActionView.NONE
+			moves_grid.visible = false
+			party_grid.visible = false
 			lead_response = await _wait_for_pvp_team_preview_complete(local_player_id)
 			if lead_response.is_empty():
 				_set_battle_input_locked(false)
@@ -3229,6 +3454,7 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 	success = true
 	if success:
 		_mark_pvp_response_events_rendered(response)
+		_update_battle_status_panels()
 	pvp_event_queue.complete_render_batch(batch_context, success)
 	return success
 
@@ -4658,13 +4884,20 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime("Preparing PvP realtime action wait", "action=%s player_id=%s slot=%s mega=%s" % [action, player_id, slot, mega])
 	for _ready_attempt in range(40):
-		if PvpBattleRealtimeService.connected and PvpBattleRealtimeService.joined:
+		if PvpBattleRealtimeService.connected and PvpBattleRealtimeService.joined and PvpBattleRealtimeService.room_is_ready:
 			break
 		await get_tree().create_timer(0.05).timeout
 
-	if not PvpBattleRealtimeService.connected or not PvpBattleRealtimeService.joined:
+	if not PvpBattleRealtimeService.connected or not PvpBattleRealtimeService.joined or not PvpBattleRealtimeService.room_is_ready:
 		if DEBUG_PVP_REALTIME:
-			_log_pvp_realtime("PvP realtime room not ready", "connected=%s joined=%s" % [PvpBattleRealtimeService.connected, PvpBattleRealtimeService.joined])
+			_log_pvp_realtime(
+				"PvP realtime room not ready",
+				"connected=%s joined=%s ready=%s" % [
+					PvpBattleRealtimeService.connected,
+					PvpBattleRealtimeService.joined,
+					PvpBattleRealtimeService.room_is_ready,
+				]
+			)
 		return {
 			"success": false,
 			"error": "PvP realtime room is not ready.",
