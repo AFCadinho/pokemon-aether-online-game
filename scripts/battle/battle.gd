@@ -6219,7 +6219,7 @@ func _prepare_switch_in_presentation_for_events(events: Array) -> void:
 			continue
 
 		var condition := _get_switch_event_condition(event_data, switch_ident)
-		_set_temporary_switch_in_condition(switch_ident, condition)
+		_set_temporary_switch_in_condition(switch_ident, condition, event_data)
 
 func _get_switch_event_ident(event_data: Dictionary) -> String:
 	for key in ["toIdent", "target", "pokemon", "ident"]:
@@ -6246,15 +6246,14 @@ func _get_switch_event_condition(event_data: Dictionary, switch_ident: String) -
 			return "%s/%s" % [event_hp, event_max_hp]
 
 	var player_id := _get_player_id_from_ident(switch_ident)
-	var target_key := _get_pending_mega_key(switch_ident)
-	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+	var team := battle_state.get_player_team(player_id)
+	var target_index := _find_temporary_switch_target_index(team, switch_ident, event_data)
+	if target_index >= 0 and target_index < team.size():
+		var pokemon_value: Variant = team[target_index]
 		if not (pokemon_value is Dictionary):
-			continue
+			return "1/1"
 
 		var pokemon: Dictionary = pokemon_value as Dictionary
-		if _get_pending_mega_key(str(pokemon.get("ident", ""))) != target_key:
-			continue
-
 		var max_hp: int = max(int(pokemon.get("maxHp", 1)), 1)
 		var hp: int = int(pokemon.get("hp", max_hp))
 		if hp <= 0:
@@ -6263,10 +6262,14 @@ func _get_switch_event_condition(event_data: Dictionary, switch_ident: String) -
 
 	return "1/1"
 
-func _set_temporary_switch_in_condition(switch_ident: String, condition: String) -> void:
+func _set_temporary_switch_in_condition(switch_ident: String, condition: String, event_data: Dictionary = {}) -> void:
 	var player_id := _get_player_id_from_ident(switch_ident)
-	var target_key := _get_pending_mega_key(switch_ident)
-	if player_id == "" or target_key == "":
+	if player_id == "":
+		return
+
+	var team := battle_state.get_player_team(player_id)
+	var target_index := _find_temporary_switch_target_index(team, switch_ident, event_data)
+	if target_index < 0:
 		return
 
 	var hp_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)
@@ -6275,13 +6278,13 @@ func _set_temporary_switch_in_condition(switch_ident: String, condition: String)
 	if condition == "" or condition.ends_with(" fnt"):
 		condition = "%s/%s" % [hp, max_hp]
 
-	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
 		if not (pokemon_value is Dictionary):
 			continue
 
 		var pokemon: Dictionary = pokemon_value as Dictionary
-		var pokemon_key := _get_pending_mega_key(str(pokemon.get("ident", "")))
-		var is_target := pokemon_key == target_key
+		var is_target := index == target_index
 		pokemon["active"] = is_target
 		if not is_target:
 			continue
@@ -6290,6 +6293,110 @@ func _set_temporary_switch_in_condition(switch_ident: String, condition: String)
 		pokemon["hp"] = hp
 		pokemon["maxHp"] = max_hp
 		pokemon["fainted"] = false
+
+
+func _find_temporary_switch_target_index(team: Array, switch_ident: String, event_data: Dictionary) -> int:
+	var event_slot := _get_switch_event_metadata_slot(event_data)
+	if event_slot > 0:
+		var slot_index := _find_unique_team_index_by_metadata_slot(team, event_slot)
+		if slot_index >= 0:
+			return slot_index
+		if slot_index == -2:
+			return -1
+
+	var target_ident := _normalize_battle_ident(switch_ident)
+	if target_ident != "":
+		var ident_index := _find_unique_team_index_by_ident(team, target_ident)
+		if ident_index >= 0:
+			return ident_index
+		if ident_index == -2:
+			return -1
+
+	var target_key := _get_pending_mega_key(switch_ident)
+	if target_key == "":
+		return -1
+
+	var species_index := _find_unique_team_index_by_species_key(team, target_key)
+	return species_index if species_index >= 0 else -1
+
+
+func _find_unique_team_index_by_metadata_slot(team: Array, metadata_slot: int) -> int:
+	var found_index := -1
+	var any_explicit_slot := false
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if not pokemon.has("metadataSlot") and not pokemon.has("metadata_slot"):
+			continue
+
+		any_explicit_slot = true
+		if int(pokemon.get("metadataSlot", pokemon.get("metadata_slot", 0))) != metadata_slot:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	if found_index < 0 and not any_explicit_slot:
+		var slot_index := metadata_slot - 1
+		if slot_index >= 0 and slot_index < team.size():
+			return slot_index
+
+	return found_index
+
+
+func _find_unique_team_index_by_ident(team: Array, normalized_ident: String) -> int:
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if _normalize_battle_ident(str(pokemon.get("ident", ""))) != normalized_ident:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
+
+
+func _find_unique_team_index_by_species_key(team: Array, target_key: String) -> int:
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if _get_pending_mega_key(str(pokemon.get("ident", ""))) != target_key:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
+
+
+func _get_switch_event_metadata_slot(event_data: Dictionary) -> int:
+	for key in ["metadataSlot", "metadata_slot", "slot", "position"]:
+		if not event_data.has(key):
+			continue
+
+		var slot := _safe_int(event_data.get(key), -1)
+		if slot > 0:
+			return slot
+
+	return -1
 
 func _show_switch_event_active_pokemon(event_data: Dictionary) -> void:
 	var switch_ident := _get_switch_event_ident(event_data)

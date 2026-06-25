@@ -78,32 +78,35 @@ func _preserve_missing_hp_fields_in_request(next_request: Dictionary, previous_r
 
 	var next_team: Array = next_team_value as Array
 	var previous_team: Array = previous_team_value as Array
-	var previous_by_ident: Dictionary = {}
-	for previous_value: Variant in previous_team:
+	var previous_by_key: Dictionary = {}
+	for previous_index in range(previous_team.size()):
+		var previous_value: Variant = previous_team[previous_index]
 		if not (previous_value is Dictionary):
 			continue
 
 		var previous_pokemon: Dictionary = previous_value as Dictionary
-		var previous_ident: String = str(previous_pokemon.get("ident", ""))
-		if previous_ident == "":
+		var previous_key := _get_party_hp_snapshot_key(previous_pokemon, previous_index)
+		if previous_key == "":
 			continue
 
-		previous_by_ident[previous_ident] = previous_pokemon
+		previous_by_key[previous_key] = previous_pokemon
 
-	for next_value: Variant in next_team:
+	for next_index in range(next_team.size()):
+		var next_value: Variant = next_team[next_index]
 		if not (next_value is Dictionary):
 			continue
 
 		var next_pokemon: Dictionary = next_value as Dictionary
-		var next_ident: String = str(next_pokemon.get("ident", ""))
-		if next_ident == "":
+		var next_key := _get_party_hp_snapshot_key(next_pokemon, next_index)
+		if next_key == "":
 			continue
 
-		var previous_pokemon: Dictionary = previous_by_ident[next_ident] as Dictionary if previous_by_ident.has(next_ident) else {}
-		_preserve_missing_hp_fields_in_pokemon(next_pokemon, previous_pokemon)
+		var previous_pokemon: Dictionary = previous_by_key[next_key] as Dictionary if previous_by_key.has(next_key) else {}
+		_preserve_missing_hp_fields_in_pokemon(next_pokemon, previous_pokemon, next_key)
 
-func _preserve_missing_hp_fields_in_pokemon(next_pokemon: Dictionary, previous_pokemon: Dictionary) -> void:
-	var memory_snapshot_value: Variant = hp_snapshot_by_ident.get(str(next_pokemon.get("ident", "")), {})
+func _preserve_missing_hp_fields_in_pokemon(next_pokemon: Dictionary, previous_pokemon: Dictionary, memory_key := "") -> void:
+	var snapshot_key := memory_key if memory_key != "" else _get_party_hp_snapshot_key(next_pokemon)
+	var memory_snapshot_value: Variant = hp_snapshot_by_ident.get(snapshot_key, {})
 	var memory_snapshot: Dictionary = memory_snapshot_value as Dictionary if memory_snapshot_value is Dictionary else {}
 	if _should_preserve_remembered_hp_snapshot(next_pokemon, memory_snapshot):
 		var remembered_hp := int(memory_snapshot.get("hp", 0))
@@ -227,20 +230,21 @@ func _remember_hp_fields_from_requests(requests_value: Variant) -> void:
 		if not (team_value is Array):
 			continue
 
-		for pokemon_value: Variant in team_value:
+		for pokemon_index in range((team_value as Array).size()):
+			var pokemon_value: Variant = (team_value as Array)[pokemon_index]
 			if not (pokemon_value is Dictionary):
 				continue
 
 			var pokemon: Dictionary = pokemon_value as Dictionary
-			var ident := str(pokemon.get("ident", ""))
-			if ident == "":
+			var snapshot_key := _get_party_hp_snapshot_key(pokemon, pokemon_index)
+			if snapshot_key == "":
 				continue
 
 			if bool(pokemon.get("fainted", false)):
-				var previous_snapshot_value: Variant = hp_snapshot_by_ident.get(ident, {})
+				var previous_snapshot_value: Variant = hp_snapshot_by_ident.get(snapshot_key, {})
 				var previous_snapshot: Dictionary = previous_snapshot_value as Dictionary if previous_snapshot_value is Dictionary else {}
 				var previous_max_hp := int(previous_snapshot.get("max_hp", int(pokemon.get("maxHp", 0))))
-				hp_snapshot_by_ident[ident] = {
+				hp_snapshot_by_ident[snapshot_key] = {
 					"hp": 0,
 					"max_hp": previous_max_hp,
 					"condition": "0 fnt",
@@ -255,12 +259,12 @@ func _remember_hp_fields_from_requests(requests_value: Variant) -> void:
 			if max_hp <= 0:
 				continue
 
-			var previous_memory_value: Variant = hp_snapshot_by_ident.get(ident, {})
+			var previous_memory_value: Variant = hp_snapshot_by_ident.get(snapshot_key, {})
 			var previous_memory: Dictionary = previous_memory_value as Dictionary if previous_memory_value is Dictionary else {}
 			if max_hp == 100 and int(previous_memory.get("max_hp", 0)) > 100:
 				continue
 
-			hp_snapshot_by_ident[ident] = {
+			hp_snapshot_by_ident[snapshot_key] = {
 				"hp": int(snapshot.get("hp", 0)),
 				"max_hp": max_hp,
 				"condition": str(pokemon.get("condition", "")),
@@ -329,6 +333,7 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 		var event: Dictionary = event_value as Dictionary
 		var event_type := str(event.get("type", ""))
 		if event_type == "switch":
+			_apply_switch_event_to_requests(event)
 			_clear_transform_event_from_requests(event)
 			continue
 
@@ -352,6 +357,50 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 			continue
 
 		_set_pokemon_condition(target_ident, condition, event)
+
+func _apply_switch_event_to_requests(event: Dictionary) -> void:
+	var switch_ident := _get_switch_event_ident(event)
+	if switch_ident == "":
+		return
+
+	var player_id := _get_player_id_from_ident(switch_ident)
+	if player_id == "":
+		return
+
+	var team := get_player_team(player_id)
+	var target_index := _find_party_target_index(team, switch_ident, event, false)
+	if target_index < 0 or target_index >= team.size():
+		return
+
+	var condition := _get_condition_from_event(event)
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var is_target := index == target_index
+		pokemon_data["active"] = is_target
+		if not is_target or condition == "":
+			continue
+
+		pokemon_data["condition"] = condition
+		_apply_condition_fields(pokemon_data, condition)
+		pokemon_data["fainted"] = false
+		_remember_hp_snapshot_for_condition_event(switch_ident, pokemon_data, condition, index)
+
+func _get_switch_event_ident(event: Dictionary) -> String:
+	for key in ["toIdent", "target", "pokemon", "ident"]:
+		var ident := str(event.get(key, ""))
+		if _get_player_id_from_ident(ident) != "":
+			return ident
+
+	var player_id := str(event.get("playerId", ""))
+	var species := str(event.get("species", event.get("to", event.get("pokemon", "")))).strip_edges()
+	if player_id == "" or species == "":
+		return ""
+
+	return "%sa: %s" % [player_id, species]
 
 func _get_condition_from_event(event: Dictionary) -> String:
 	if _has_percentage_only_condition(event):
@@ -399,59 +448,42 @@ func _has_percentage_only_condition(event: Dictionary) -> bool:
 
 func _set_pokemon_condition(target_ident: String, condition: String, source_event: Dictionary = {}) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
-	var target_name := _get_pokemon_name_from_ident(target_ident)
-	if player_id == "" or target_name == "":
+	if player_id == "":
 		return
 
-	var request_value: Variant = requests.get(player_id, {})
-	if not (request_value is Dictionary):
+	var team := get_player_team(player_id)
+	var target_index := _find_party_target_index(team, target_ident, source_event, true)
+	if target_index < 0 or target_index >= team.size():
 		return
 
-	var request: Dictionary = request_value as Dictionary
-	var side_value: Variant = request.get("side", {})
-	if not (side_value is Dictionary):
+	var pokemon_value: Variant = team[target_index]
+	if not (pokemon_value is Dictionary):
 		return
 
-	var side: Dictionary = side_value as Dictionary
-	var team_value: Variant = side.get("pokemon", [])
-	if not (team_value is Array):
-		return
+	var pokemon_data: Dictionary = pokemon_value as Dictionary
+	pokemon_data["condition"] = condition
+	_apply_condition_fields(pokemon_data, condition)
+	_remember_hp_snapshot_for_condition_event(target_ident, pokemon_data, condition, target_index)
 
-	var team: Array = team_value as Array
-	for pokemon_value in team:
-		if not (pokemon_value is Dictionary):
-			continue
-
-		var pokemon_data: Dictionary = pokemon_value as Dictionary
-		var candidate_ident := str(pokemon_data.get("ident", ""))
-		var candidate_name := _get_pokemon_name_from_ident(candidate_ident)
-		if candidate_name == target_name:
-			pokemon_data["condition"] = condition
-			_apply_condition_fields(pokemon_data, condition)
-			_remember_hp_snapshot_for_condition_event(target_ident, pokemon_data, condition)
-			return
-
-func _remember_hp_snapshot_for_condition_event(target_ident: String, pokemon_data: Dictionary, condition: String) -> void:
+func _remember_hp_snapshot_for_condition_event(target_ident: String, pokemon_data: Dictionary, condition: String, team_index := -1) -> void:
 	var snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)
 	if snapshot.is_empty():
 		return
 
-	var ident := str(pokemon_data.get("ident", target_ident))
-	if ident == "":
-		ident = target_ident
-	if ident == "":
+	var snapshot_key := _get_party_hp_snapshot_key(pokemon_data, team_index, target_ident)
+	if snapshot_key == "":
 		return
 
 	var hp := int(snapshot.get("hp", 0))
 	var max_hp := int(snapshot.get("max_hp", 0))
 	if condition.contains("fnt"):
-		var previous_snapshot_value: Variant = hp_snapshot_by_ident.get(ident, hp_snapshot_by_ident.get(target_ident, {}))
+		var previous_snapshot_value: Variant = hp_snapshot_by_ident.get(snapshot_key, hp_snapshot_by_ident.get(target_ident, {}))
 		var previous_snapshot: Dictionary = previous_snapshot_value as Dictionary if previous_snapshot_value is Dictionary else {}
 		var previous_max_hp := int(previous_snapshot.get("max_hp", int(pokemon_data.get("maxHp", max_hp))))
 		if previous_max_hp > 0:
 			max_hp = previous_max_hp
 	elif max_hp == 100:
-		var previous_memory_value: Variant = hp_snapshot_by_ident.get(ident, hp_snapshot_by_ident.get(target_ident, {}))
+		var previous_memory_value: Variant = hp_snapshot_by_ident.get(snapshot_key, hp_snapshot_by_ident.get(target_ident, {}))
 		var previous_memory: Dictionary = previous_memory_value as Dictionary if previous_memory_value is Dictionary else {}
 		if int(previous_memory.get("max_hp", 0)) > 100:
 			return
@@ -462,13 +494,35 @@ func _remember_hp_snapshot_for_condition_event(target_ident: String, pokemon_dat
 	var remembered_condition := condition
 	if condition.contains("fnt"):
 		remembered_condition = "0 fnt"
-	hp_snapshot_by_ident[ident] = {
+	hp_snapshot_by_ident[snapshot_key] = {
 		"hp": hp,
 		"max_hp": max_hp,
 		"condition": remembered_condition,
 	}
-	if target_ident != "" and target_ident != ident:
-		hp_snapshot_by_ident[target_ident] = hp_snapshot_by_ident[ident]
+	if target_ident != "" and target_ident != snapshot_key and _should_remember_collapsed_hp_snapshot_alias(target_ident):
+		hp_snapshot_by_ident[target_ident] = hp_snapshot_by_ident[snapshot_key]
+
+func _should_remember_collapsed_hp_snapshot_alias(target_ident: String) -> bool:
+	var player_id := _get_player_id_from_ident(target_ident)
+	var target_name := _get_pokemon_name_from_ident(target_ident)
+	if player_id == "" or target_name == "":
+		return true
+
+	var team := get_player_team(player_id)
+	var matches := 0
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if _get_pokemon_name_from_ident(str(pokemon.get("ident", ""))) != target_name:
+			continue
+
+		matches += 1
+		if matches > 1:
+			return false
+
+	return true
 
 func _apply_transform_event_to_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))
@@ -679,34 +733,203 @@ func _apply_mega_species_to_requests() -> void:
 
 func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
 	var player_id := _get_player_id_from_ident(target_ident)
+	if player_id == "":
+		return {}
+
+	var team := get_player_team(player_id)
+	var target_index := _find_party_target_index(team, target_ident, {}, true)
+	if target_index < 0 or target_index >= team.size():
+		return {}
+
+	var pokemon_value: Variant = team[target_index]
+	if not (pokemon_value is Dictionary):
+		return {}
+
+	return pokemon_value as Dictionary
+
+
+func _find_party_target_index(team: Array, target_ident: String, source_event: Dictionary = {}, prefer_active := false) -> int:
+	var event_slot := _get_event_metadata_slot(source_event)
+	if event_slot > 0:
+		var slot_index := _find_unique_team_index_by_metadata_slot(team, event_slot)
+		if slot_index >= 0:
+			return slot_index
+		return -1
+
+	var normalized_ident := _normalize_battle_ident(target_ident)
+	if normalized_ident != "":
+		var ident_index := _find_unique_team_index_by_ident(team, normalized_ident)
+		if ident_index >= 0:
+			return ident_index
+
+	if prefer_active:
+		var active_index := _find_unique_active_team_index(team, target_ident)
+		if active_index >= 0:
+			return active_index
+
 	var target_name := _get_pokemon_name_from_ident(target_ident)
-	if player_id == "" or target_name == "":
-		return {}
+	if target_name == "":
+		return -1
 
-	var request_value: Variant = requests.get(player_id, {})
-	if not (request_value is Dictionary):
-		return {}
+	var species_index := _find_unique_team_index_by_pokemon_name(team, target_name)
+	return species_index if species_index >= 0 else -1
 
-	var request: Dictionary = request_value as Dictionary
-	var side_value: Variant = request.get("side", {})
-	if not (side_value is Dictionary):
-		return {}
 
-	var side: Dictionary = side_value as Dictionary
-	var team_value: Variant = side.get("pokemon", [])
-	if not (team_value is Array):
-		return {}
+func _get_event_metadata_slot(event_data: Dictionary) -> int:
+	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
+		if not event_data.has(key):
+			continue
 
-	var team: Array = team_value as Array
-	for pokemon_value in team:
+		var slot := _safe_int(event_data.get(key), -1)
+		if slot > 0:
+			return slot
+
+	return -1
+
+
+func _find_unique_team_index_by_metadata_slot(team: Array, metadata_slot: int) -> int:
+	var found_index := -1
+	var any_explicit_slot := false
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
 		if not (pokemon_value is Dictionary):
 			continue
 
-		var pokemon_data: Dictionary = pokemon_value as Dictionary
-		if _get_pokemon_name_from_ident(str(pokemon_data.get("ident", ""))) == target_name:
-			return pokemon_data
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
+			if not pokemon.has(key):
+				continue
 
-	return {}
+			any_explicit_slot = true
+			if _safe_int(pokemon.get(key), -1) != metadata_slot:
+				continue
+
+			if found_index >= 0:
+				return -2
+
+			found_index = index
+
+	if found_index < 0 and not any_explicit_slot:
+		var slot_index := metadata_slot - 1
+		if slot_index >= 0 and slot_index < team.size():
+			return slot_index
+
+	return found_index
+
+
+func _find_unique_team_index_by_ident(team: Array, normalized_ident: String) -> int:
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if _normalize_battle_ident(str(pokemon.get("ident", ""))) != normalized_ident:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
+
+
+func _find_unique_active_team_index(team: Array, target_ident: String) -> int:
+	var target_name := _get_pokemon_name_from_ident(target_ident)
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if not bool(pokemon.get("active", false)):
+			continue
+
+		if target_name != "" and _get_pokemon_name_from_ident(str(pokemon.get("ident", ""))) != target_name:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
+
+
+func _find_unique_team_index_by_pokemon_name(team: Array, target_name: String) -> int:
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if _get_pokemon_name_from_ident(str(pokemon.get("ident", ""))) != target_name:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
+
+
+func _get_party_hp_snapshot_key(pokemon_data: Dictionary, team_index := -1, fallback_ident := "") -> String:
+	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var slot := _safe_int(pokemon_data.get(key), -1)
+		if slot >= 0:
+			return "slot:%s" % slot
+
+	for key in ["instanceId", "instance_id", "ownedPokemonId", "owned_pokemon_id", "pokemonId", "pokemon_id"]:
+		var value := str(pokemon_data.get(key, "")).strip_edges()
+		if value != "":
+			return "%s:%s" % [key, value]
+
+	if team_index >= 0:
+		return "index:%s" % team_index
+
+	var ident := _normalize_battle_ident(str(pokemon_data.get("ident", fallback_ident)))
+	if ident != "":
+		return "ident:%s" % ident
+
+	return ""
+
+
+func _normalize_battle_ident(ident: String) -> String:
+	var cleaned := ident.strip_edges()
+	if cleaned.contains(": "):
+		var player_id := cleaned.split(": ")[0].substr(0, 2)
+		var pokemon_name := cleaned.split(": ")[1]
+		return "%s:%s" % [player_id, pokemon_name.to_lower()]
+
+	return cleaned.to_lower()
+
+
+func _safe_int(value: Variant, fallback := 0) -> int:
+	if value == null:
+		return fallback
+
+	if value is int:
+		return int(value)
+
+	if value is float:
+		return int(value)
+
+	var text := str(value).strip_edges()
+	if text == "":
+		return fallback
+
+	if not text.is_valid_int():
+		return fallback
+
+	return int(text)
 
 func _get_side_pokemon_by_transform_key(transform_key: String) -> Dictionary:
 	var normalized_transform_key := _normalize_transform_key(transform_key)
