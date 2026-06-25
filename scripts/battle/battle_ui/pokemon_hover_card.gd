@@ -65,7 +65,7 @@ func set_pokemon_data(
 	confirmed_moves: Array = [],
 	confirmed_item: String = "",
 	confirmed_ability: String = "",
-	stat_changes: Dictionary = {},
+	_stat_changes: Dictionary = {},
 	speed_data: Dictionary = {}
 ) -> void:
 	var species_name: String = _get_species_name(pokemon_data)
@@ -75,7 +75,7 @@ func set_pokemon_data(
 	_set_type_icons(_get_types_from_data(pokemon_data, species_name))
 	_set_abilities(_get_possible_abilities(pokemon_data, species_name), confirmed_ability)
 	_set_item(confirmed_item)
-	_set_stat_changes(stat_changes)
+	_hide_stat_changes()
 	_set_speed_data(speed_data)
 	_set_moves(_get_display_moves(confirmed_moves))
 	_resize_to_content()
@@ -226,29 +226,18 @@ func _format_item_display_name(item: String) -> String:
 	if item.ends_with(knocked_suffix):
 		return "%s%s" % [_format_display_name(item.substr(0, item.length() - knocked_suffix.length())), knocked_suffix]
 
+	var consumed_suffix := " (Consumed)"
+	if item.ends_with(consumed_suffix):
+		return "%s%s" % [_format_display_name(item.substr(0, item.length() - consumed_suffix.length())), consumed_suffix]
+
 	return _format_display_name(item)
 
 
-func _set_stat_changes(stat_changes: Dictionary) -> void:
-	var boost_parts: PackedStringArray = []
-	var drop_parts: PackedStringArray = []
-	for stat_key in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]:
-		if not stat_changes.has(stat_key):
-			continue
-
-		var amount: int = int(stat_changes.get(stat_key, 0))
-		if amount == 0:
-			continue
-
-		if amount > 0:
-			boost_parts.append("%s +%s" % [_format_stat_name(stat_key), amount])
-		else:
-			drop_parts.append("%s %s" % [_format_stat_name(stat_key), amount])
-
-	boosts_row.visible = not boost_parts.is_empty()
-	boosts_value_label.text = " / ".join(boost_parts)
-	drops_row.visible = not drop_parts.is_empty()
-	drops_value_label.text = " / ".join(drop_parts)
+func _hide_stat_changes() -> void:
+	boosts_row.visible = false
+	boosts_value_label.text = ""
+	drops_row.visible = false
+	drops_value_label.text = ""
 
 
 func _set_speed_data(speed_data: Dictionary) -> void:
@@ -268,26 +257,6 @@ func _format_speed_value(value: Variant) -> String:
 		return ""
 
 	return str(int(value))
-
-
-func _format_stat_name(stat_key: String) -> String:
-	match stat_key.strip_edges().to_lower():
-		"atk":
-			return "Atk"
-		"def":
-			return "Def"
-		"spa":
-			return "SpA"
-		"spd":
-			return "SpD"
-		"spe":
-			return "Spe"
-		"accuracy":
-			return "Acc"
-		"evasion":
-			return "Eva"
-
-	return _format_display_name(stat_key)
 
 
 func _get_display_moves(confirmed_moves: Array) -> Array:

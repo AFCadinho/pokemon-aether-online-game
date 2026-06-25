@@ -170,7 +170,12 @@ func build(event_data: Dictionary) -> Dictionary:
 			var item_state := str(event_data.get("state", ""))
 			if actor != "" and item_name != "":
 				if item_state == "end":
-					presentation["log_message"] = "%s's %s got knocked off!" % [actor, item_name]
+					if _is_knock_off_item_end_event(event_data):
+						presentation["log_message"] = "%s's %s got knocked off!" % [actor, item_name]
+					elif _normalize_item_key(item_name) == "boosterenergy":
+						presentation["log_message"] = "%s's %s activated!" % [actor, item_name]
+					else:
+						presentation["log_message"] = "%s used its %s!" % [actor, item_name]
 				else:
 					presentation["log_message"] = "%s's %s was revealed!" % [actor, item_name]
 				presentation["battle_message"] = str(presentation["log_message"])
@@ -474,6 +479,14 @@ func _normalize_battle_ident(ident: String) -> String:
 
 func _normalize_animation_key(value: String) -> String:
 	return value.strip_edges().to_lower().replace(" ", "_").replace("-", "_")
+
+
+func _is_knock_off_item_end_event(event: Dictionary) -> bool:
+	return _normalize_item_key(str(event.get("source", ""))) == "moveknockoff"
+
+
+func _normalize_item_key(item_name: String) -> String:
+	return item_name.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "").replace(":", "")
 
 
 func _format_actor(actor: String, include_side_prefix := true) -> String:

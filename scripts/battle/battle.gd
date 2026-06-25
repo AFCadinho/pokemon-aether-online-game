@@ -70,6 +70,7 @@ var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var public_confirmed_abilities_by_ident := {}
 var public_confirmed_items_by_ident := {}
 var pending_knock_off_targets_by_ident := {}
+var pending_booster_energy_modifier_targets_by_ident := {}
 var stat_stages_by_ident: Dictionary = {}
 var ability_stat_modifiers_by_ident: Dictionary = {}
 var player_party_moves_by_key: Dictionary = {}
@@ -2291,6 +2292,7 @@ func _reset_battle_effect_tracking() -> void:
 	public_confirmed_abilities_by_ident.clear()
 	public_confirmed_items_by_ident.clear()
 	pending_knock_off_targets_by_ident.clear()
+	pending_booster_energy_modifier_targets_by_ident.clear()
 	stat_stages_by_ident.clear()
 	ability_stat_modifiers_by_ident.clear()
 	player_party_moves_by_key.clear()
@@ -2341,7 +2343,12 @@ func _remember_public_confirmed_item_from_event(event: Dictionary) -> void:
 		public_confirmed_items_by_ident[target_key] = ""
 
 	if event_type == "item" and str(event.get("state", "")) == "end":
-		public_confirmed_items_by_ident[ident_key] = _mark_item_knocked_off(item_name)
+		if _is_knock_off_item_end_event(event):
+			public_confirmed_items_by_ident[ident_key] = _mark_item_knocked_off(item_name)
+		else:
+			public_confirmed_items_by_ident[ident_key] = _mark_item_consumed(item_name)
+			if _normalize_item_key(item_name) == "boosterenergy":
+				pending_booster_energy_modifier_targets_by_ident[ident_key] = true
 		pending_knock_off_targets_by_ident.erase(ident_key)
 		return
 
@@ -2360,9 +2367,12 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_stat_stages_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_ability_stat_modifier_for_ident(str(event.get("fromIdent", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
+			_clear_pending_booster_energy_modifier_for_ident(str(event.get("fromIdent", "")))
+			_clear_pending_booster_energy_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 		"faint":
 			_clear_stat_stages_for_ident(str(event.get("target", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
+			_clear_pending_booster_energy_modifier_for_ident(str(event.get("target", "")))
 		"pokemonEffect":
 			_apply_pokemon_effect_modifier_event(event)
 		"ability":
@@ -2455,6 +2465,13 @@ func _clear_ability_stat_modifier_for_ident(ident: String) -> void:
 
 	ability_stat_modifiers_by_ident.erase(ident_key)
 	_update_stat_stage_panels()
+
+func _clear_pending_booster_energy_modifier_for_ident(ident: String) -> void:
+	var ident_key: String = _normalize_battle_ident(ident)
+	if ident_key == "":
+		return
+
+	pending_booster_energy_modifier_targets_by_ident.erase(ident_key)
 
 func _get_active_stat_stages_for_party_hover(pokemon_data: Dictionary) -> Dictionary:
 	if not bool(pokemon_data.get("active", false)):
@@ -2591,6 +2608,11 @@ func _get_ability_stat_modifier_source(event: Dictionary) -> String:
 	if _event_mentions_booster_energy(event):
 		return ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY
 
+	var ident_key: String = _normalize_battle_ident(str(event.get("target", event.get("actor", ""))))
+	if ident_key != "" and pending_booster_energy_modifier_targets_by_ident.has(ident_key):
+		pending_booster_energy_modifier_targets_by_ident.erase(ident_key)
+		return ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY
+
 	return ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION
 
 func _event_mentions_booster_energy(event: Dictionary) -> bool:
@@ -2663,8 +2685,23 @@ func _mark_item_knocked_off(item_name: String) -> String:
 
 	return "%s (Knocked off)" % cleaned
 
+func _mark_item_consumed(item_name: String) -> String:
+	var cleaned := item_name.strip_edges()
+	if cleaned == "":
+		return ""
+	if cleaned.to_lower().contains("consumed"):
+		return cleaned
+
+	return "%s (Consumed)" % cleaned
+
+func _is_knock_off_item_end_event(event: Dictionary) -> bool:
+	return _normalize_item_source_key(str(event.get("source", ""))) == "moveknockoff"
+
 func _normalize_item_key(item_name: String) -> String:
 	return item_name.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "")
+
+func _normalize_item_source_key(source: String) -> String:
+	return _normalize_item_key(source).replace(":", "")
 
 func _get_public_item_display_name(ident: String) -> String:
 	if ident.contains(": "):
