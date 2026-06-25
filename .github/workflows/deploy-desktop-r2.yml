@@ -251,9 +251,10 @@ jobs:
             pack_version_prefix="$2"
             source_path="$3"
             optional="${4:-false}"
+            skip_missing="${5:-false}"
             if [ ! -d "${source_path}" ]; then
-              if [ "${optional}" = "true" ]; then
-                echo "Skipping optional asset pack ${pack_id}; missing source path: ${source_path}"
+              if [ "${skip_missing}" = "true" ]; then
+                echo "Skipping asset pack ${pack_id}; missing source path: ${source_path}"
                 return 0
               fi
               echo "Missing required asset pack source path: ${source_path}" >&2
@@ -270,15 +271,15 @@ jobs:
             printf '%s\n' "--asset-pack" "${asset_pack_arg}" >> /tmp/asset_pack_args.txt
           }
 
-          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/pokemon_home" "true"
-          package_local_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/front"
-          package_local_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/back"
-          package_local_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_front"
-          package_local_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_back"
-          package_local_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/front" "true"
-          package_local_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/back" "true"
-          package_local_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_front" "true"
-          package_local_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_back" "true"
+          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/pokemon_home" "false" "true"
+          package_local_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/front" "false" "true"
+          package_local_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/back" "false" "true"
+          package_local_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_front" "false" "true"
+          package_local_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_back" "false" "true"
+          package_local_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/front" "true" "true"
+          package_local_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/back" "true" "true"
+          package_local_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_front" "true" "true"
+          package_local_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_back" "true" "true"
 
       - name: Package music asset pack
         run: |
