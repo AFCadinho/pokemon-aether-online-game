@@ -4443,15 +4443,17 @@ func _on_party_grid_party_selected(slot: int) -> void:
 			_show_pvp_opponent_force_switch_wait()
 		return
 
-	if not _can_switch_to_slot(slot):
+	var selected_pokemon_data := _get_party_grid_selected_pokemon_data(slot)
+	if not _can_switch_to_selected_pokemon(slot, selected_pokemon_data):
 		return
 
+	var submit_slot := _get_canonical_switch_submit_slot(slot, selected_pokemon_data)
 	_set_battle_input_locked(true)
 	var was_force_switch := force_switch_flow.player_needs_force_switch(_get_local_state_player_id())
 	party_grid.visible = false
 	_hide_party_hover()
 
-	var player_response: Dictionary = await _submit_player_choice("switch", slot)
+	var player_response: Dictionary = await _submit_player_choice("switch", submit_slot)
 
 	if not player_response.get("success", false):
 		var error_message := str(player_response.get("error", "Cannot switch right now!"))
@@ -6500,6 +6502,57 @@ func _can_switch_to_slot(slot: int) -> bool:
 		return false
 
 	return force_switch_flow.can_switch_to_slot(slot, local_state_player_id)
+
+func _can_switch_to_selected_pokemon(visual_slot: int, pokemon_data: Dictionary) -> bool:
+	var local_state_player_id := _get_local_state_player_id()
+	if force_switch_flow.is_player_trapped_outside_force_switch(local_state_player_id):
+		current_action_panel.set_message("Cannot switch right now!")
+		return false
+
+	if not pokemon_data.is_empty():
+		return force_switch_flow.can_switch_to_pokemon_data(pokemon_data, local_state_player_id)
+
+	return force_switch_flow.can_switch_to_slot(visual_slot, local_state_player_id)
+
+func _get_party_grid_selected_pokemon_data(visual_slot: int) -> Dictionary:
+	if party_grid != null and party_grid.has_method("get_pokemon_data_for_visual_slot"):
+		return party_grid.get_pokemon_data_for_visual_slot(visual_slot)
+
+	return {}
+
+func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+	if canonical_slot > 0:
+		return canonical_slot
+
+	if _is_pvp_battle() and not pokemon_data.is_empty():
+		push_warning(
+			"PvP switch selection has no canonical party slot; falling back to visual slot %d pokemonKey=%s" % [
+				visual_slot,
+				str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))),
+			]
+		)
+
+	return visual_slot
+
+func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
+	for key in ["partySlot", "party_slot", "metadataSlot", "metadata_slot"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var parsed_slot := _safe_int(pokemon_data.get(key), -1)
+		if parsed_slot > 0:
+			return parsed_slot
+
+	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
+	var slot_marker := ":slot:"
+	if pokemon_key.contains(slot_marker):
+		var slot_text := pokemon_key.split(slot_marker)[1]
+		var key_slot := _safe_int(slot_text, -1)
+		if key_slot > 0:
+			return key_slot
+
+	return -1
 
 func _can_choose_lead_slot(slot: int) -> bool:
 	var team := battle_state.get_player_team("p1")

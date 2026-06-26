@@ -784,6 +784,15 @@ func _get_event_metadata_slot(event_data: Dictionary) -> int:
 		if slot > 0:
 			return slot
 
+	for ref_key in ["targetRef", "target_ref", "toRef", "to_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_slot := _get_event_metadata_slot(ref_value as Dictionary)
+		if ref_slot > 0:
+			return ref_slot
+
 	return -1
 
 

@@ -8,6 +8,7 @@ signal pokemon_unhovered
 
 var input_disabled := false
 var previous_disabled_by_slot: Dictionary = {}
+var current_party_data: Array = []
 
 func _ready() -> void:
 	for idx in range(get_child_count()):
@@ -20,6 +21,7 @@ func _ready() -> void:
 			slot.pokemon_unhovered.connect(_on_pokemon_unhovered)
 
 func set_party(party: Array) -> void:
+	current_party_data = party.duplicate(true)
 	var slots: Array[Node] = get_children()
 
 	for idx in range(slots.size()):
@@ -39,9 +41,21 @@ func set_party(party: Array) -> void:
 		_disable_current_buttons()
 
 func clear_party() -> void:
+	current_party_data.clear()
 	for slot: Node in get_children():
 		if slot.has_method("set_empty"):
 			slot.set_empty()
+
+func get_pokemon_data_for_visual_slot(slot: int) -> Dictionary:
+	var index := slot - 1
+	if index < 0 or index >= current_party_data.size():
+		return {}
+
+	var pokemon_value: Variant = current_party_data[index]
+	if pokemon_value is Dictionary:
+		return (pokemon_value as Dictionary).duplicate(true)
+
+	return {}
 
 func set_input_disabled(is_disabled: bool) -> void:
 	if input_disabled == is_disabled:

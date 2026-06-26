@@ -38,9 +38,6 @@ func can_switch_to_slot(slot: int, player_id := "p1") -> bool:
 	if battle_state == null:
 		return false
 
-	if is_player_trapped_outside_force_switch(player_id):
-		return false
-
 	var team := battle_state.get_player_team(player_id)
 	var index := slot - 1
 	if index < 0 or index >= team.size():
@@ -48,6 +45,16 @@ func can_switch_to_slot(slot: int, player_id := "p1") -> bool:
 
 	var pokemon_data = team[index]
 	if not (pokemon_data is Dictionary):
+		return false
+
+	return can_switch_to_pokemon_data(pokemon_data as Dictionary, player_id)
+
+
+func can_switch_to_pokemon_data(pokemon_data: Dictionary, player_id := "p1") -> bool:
+	if battle_state == null:
+		return false
+
+	if is_player_trapped_outside_force_switch(player_id):
 		return false
 
 	if bool(pokemon_data.get("active", false)):
