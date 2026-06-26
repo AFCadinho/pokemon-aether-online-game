@@ -106,8 +106,14 @@ func get_response_event_seq_end(response: Dictionary) -> int:
 
 func enqueue_response(response: Dictionary, source: String, apply_event_conditions := true, metadata: Dictionary = {}) -> Dictionary:
 	var normalized_response: Dictionary = response.duplicate(true)
-	var dedupe: Dictionary = _dedupe_metadata_for_response(normalized_response)
 	var entry_metadata: Dictionary = metadata.duplicate(true)
+	var dedupe: Dictionary = {
+		"should_drop": false,
+		"was_recorded": false,
+		"key": "",
+	}
+	if not bool(entry_metadata.get("defer_event_dedupe", false)):
+		dedupe = _dedupe_metadata_for_response(normalized_response)
 	var queue_id: int = _next_id
 	_next_id += 1
 
