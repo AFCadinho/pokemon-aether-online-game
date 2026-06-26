@@ -504,7 +504,7 @@ func _ready() -> void:
 	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
-	_load_follower_preference.call_deferred()
+	_load_toggle_preferences.call_deferred()
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
 	staff_tools_button.pressed.connect(_on_staff_tools_button_pressed)
 	item_dex_button.pressed.connect(_on_item_dex_button_pressed)
@@ -6910,31 +6910,51 @@ func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 	_set_icon_slot_active(repel_slot, GameState.repel_enabled)
 	var state_text := "enabled" if GameState.repel_enabled else "disabled"
 	_add_chat_message("Repel %s." % state_text)
+	await _save_toggle_preferences()
 
-func _load_follower_preference() -> void:
+func _load_toggle_preferences() -> void:
 	var result: Dictionary = await PlayerGameStateService.load_player_preferences()
 	if not bool(result.get("success", false)):
-		push_warning("UIOverlay: follower preference load failed: %s" % str(result.get("error", "Unknown error")))
+		push_warning("UIOverlay: toggle preference load failed: %s" % str(result.get("error", "Unknown error")))
 		return
 
 	var preferences_value: Variant = result.get("preferences", {})
 	var preferences: Dictionary = preferences_value if preferences_value is Dictionary else {}
 	GameState.show_follower = bool(preferences.get("showFollower", true))
+	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
+	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
+	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
+	_set_icon_slot_active(repel_slot, GameState.repel_enabled)
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	_set_icon_slot_active(follower_slot, GameState.show_follower)
+	_refresh_world_running_shoes_state()
 	_refresh_world_follower_visibility()
 
 func _on_follower_toggle_toggled(toggled_on: bool) -> void:
 	GameState.show_follower = toggled_on
 	_set_icon_slot_active(follower_slot, GameState.show_follower)
 	_refresh_world_follower_visibility()
+	await _save_toggle_preferences()
 
+func _save_toggle_preferences() -> void:
 	var result: Dictionary = await PlayerGameStateService.save_player_preferences({
 		"showFollower": GameState.show_follower,
+		"showRepel": GameState.repel_enabled,
+		"runningShoes": GameState.running_shoes_enabled,
 	})
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not save follower setting. Please contact staff.")
-		push_warning("UIOverlay: follower preference save failed: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message("Could not save toggle settings. Please contact staff.")
+		push_warning("UIOverlay: toggle preference save failed: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var preferences_value: Variant = result.get("preferences", {})
+	if preferences_value is Dictionary:
+		var preferences: Dictionary = preferences_value as Dictionary
+		GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
+		GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+		GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
 
 func _refresh_world_follower_visibility() -> void:
 	var tree := get_tree()
@@ -6949,6 +6969,15 @@ func _refresh_world_follower_visibility() -> void:
 
 	if player != null and player.has_method("set_show_follower"):
 		player.call("set_show_follower", GameState.show_follower)
+
+func _refresh_world_running_shoes_state() -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+
+	var player_node := tree.get_first_node_in_group("player")
+	if player_node != null and player_node.has_method("set_running_shoes_enabled"):
+		player_node.call("set_running_shoes_enabled", GameState.running_shoes_enabled)
 
 func _on_dev_actions_button_pressed() -> void:
 	if not _can_use_dev_tools():
@@ -7067,8 +7096,18 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 		PlayerSave.music_volume = float(preferences.get("musicVolume"))
 	if preferences.has("showFollower"):
 		GameState.show_follower = bool(preferences.get("showFollower"))
+		follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 		_set_icon_slot_active(follower_slot, GameState.show_follower)
 		_refresh_world_follower_visibility()
+	if preferences.has("showRepel"):
+		GameState.repel_enabled = bool(preferences.get("showRepel"))
+		repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
+		_set_icon_slot_active(repel_slot, GameState.repel_enabled)
+	if preferences.has("runningShoes"):
+		GameState.running_shoes_enabled = bool(preferences.get("runningShoes"))
+		running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
+		_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
+		_refresh_world_running_shoes_state()
 
 	_refresh_player_status_card()
 	_refresh_avatar_previews()
@@ -9115,9 +9154,8 @@ func _on_map_button_pressed() -> void:
 func _on_running_shoes_toggled(enabled: bool) -> void:
 	GameState.running_shoes_enabled = enabled
 	_set_icon_slot_active(running_shoes_slot, enabled)
-	var player_node := get_tree().get_first_node_in_group("player")
-	if player_node != null and player_node.has_method("set_running_shoes_enabled"):
-		player_node.call("set_running_shoes_enabled", enabled)
+	_refresh_world_running_shoes_state()
+	await _save_toggle_preferences()
 
 func _on_settings_menu_closed() -> void:
 	if settings_button.has_focus():

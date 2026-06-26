@@ -1884,7 +1884,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 							"source=%s batch=%s" % [source, pvp_event_queue.get_response_event_batch_id(response)]
 						)
 					return true
-				var player_events: Array = _filter_already_rendered_events(display_response.get("events", []), {})
+				var player_events: Array = _filter_already_rendered_events(display_response.get("events", []), {}, display_response)
 				_rewind_active_hud_hp_for_events(player_events)
 				_rewind_party_slots_for_events(player_events)
 				if not await _render_pvp_event_batch(display_response, player_events, true, source):
@@ -3473,6 +3473,9 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 		await _render_battle_events(events, render_turn_headers, source)
 		return true
 
+	if events.is_empty():
+		return true
+
 	var batch_context: Dictionary = pvp_event_queue.begin_render_batch(response, source)
 	if not bool(batch_context.get("started", false)):
 		if DEBUG_PVP_REALTIME:
@@ -3590,6 +3593,13 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_clear_pending_mega_species_for_event(event_data)
 
 		var presentation: Dictionary = event_presentation.build(event_data)
+		if event_type == "damage":
+			print("[pvp-damage-debug] render.damage presentation target=%s log=%s battle=%s event=%s" % [
+				str(presentation.get("damage_target_ident", "")),
+				str(presentation.get("log_message", "")),
+				str(presentation.get("battle_message", "")),
+				JSON.stringify(event_data),
+			])
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
 			if render_turn_headers:
@@ -3603,6 +3613,12 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			current_action_panel.set_message(fallback_knock_off_message)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			battle_state.apply_event_conditions([event_data])
+			if event_type == "damage":
+				print("[pvp-damage-debug] render.damage after_apply target=%s p1=%s p2=%s" % [
+					str(event_data.get("target", "")),
+					JSON.stringify(_debug_team_identity_snapshot("p1")),
+					JSON.stringify(_debug_team_identity_snapshot("p2")),
+				])
 		if event_type == "switch":
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
@@ -3789,14 +3805,14 @@ func _get_form_change_insert_index(events: Array) -> int:
 
 	return insert_index
 
-func _filter_already_rendered_events(events_value: Variant, rendered_event_keys: Dictionary) -> Array:
+func _filter_already_rendered_events(events_value: Variant, rendered_event_keys: Dictionary, response: Dictionary = {}) -> Array:
 	var filtered_events: Array = []
 	if not (events_value is Array):
 		return filtered_events
 
 	var events: Array = events_value as Array
 	if _is_pvp_battle() and rendered_event_keys.is_empty():
-		return _filter_unrendered_pvp_events(events)
+		return _filter_unrendered_pvp_events(events, response)
 
 	for event_value in events:
 		if event_value is Dictionary:
@@ -3828,11 +3844,20 @@ func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
 
 	return filtered_events
 
-func _filter_unrendered_pvp_events(events: Array) -> Array:
+func _filter_unrendered_pvp_events(events: Array, response: Dictionary = {}) -> Array:
 	var filtered_events: Array = []
-	if events.size() <= pvp_rendered_event_count:
+	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+	var last_rendered_seq := pvp_event_queue.last_rendered_seq
+	if response_event_seq >= 0 and last_rendered_seq >= 0:
+		var first_event_seq := response_event_seq - events.size() + 1
+		for index: int in range(events.size()):
+			var event_seq := first_event_seq + index
+			if event_seq > last_rendered_seq:
+				filtered_events.append(events[index])
 		return filtered_events
 
+	if events.size() <= pvp_rendered_event_count:
+		return filtered_events
 	var start_index: int = max(pvp_rendered_event_count, 0)
 	for index: int in range(start_index, events.size()):
 		filtered_events.append(events[index])
@@ -4221,14 +4246,28 @@ func _get_species_from_ident(ident: String) -> String:
 func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_previous_hp: bool) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
 	if player_id == "":
+		print("[pvp-damage-debug] hud_hp skipped: no player id target=%s event=%s" % [
+			target_ident,
+			JSON.stringify(event),
+		])
 		return
 
 	var hp_data: Dictionary = hp_event_helper.get_event_hp_snapshot(event, use_previous_hp)
+	var hp_source := "event"
 	if hp_data.is_empty():
 		hp_data = _get_event_hp_snapshot_with_state_fallback(event, player_id, use_previous_hp)
+		hp_source = "event_with_state_fallback"
 	if hp_data.is_empty() and not use_previous_hp:
 		hp_data = _get_active_state_hp_snapshot(player_id)
+		hp_source = "active_state_fallback"
 	if hp_data.is_empty():
+		print("[pvp-damage-debug] hud_hp missing snapshot target=%s player=%s previous=%s active=%s event=%s" % [
+			target_ident,
+			player_id,
+			str(use_previous_hp),
+			JSON.stringify(battle_state.get_active_player_pokemon(player_id)),
+			JSON.stringify(event),
+		])
 		_debug_battle_hp("HUD hp event missing snapshot target=%s previous=%s event=%s" % [
 			target_ident,
 			str(use_previous_hp),
@@ -4243,6 +4282,20 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	var status: String = _get_status_from_event_or_state(event, player_id, use_previous_hp)
 	var gender: String = battle_state.get_active_pokemon_gender(player_id)
 	var is_shiny: bool = _get_active_pokemon_is_shiny(player_id)
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	print("[pvp-damage-debug] hud_hp apply target=%s player=%s previous=%s source=%s hp=%d max=%d species=%s activeKey=%s activeSlot=%s activeCondition=%s event=%s" % [
+		target_ident,
+		player_id,
+		str(use_previous_hp),
+		hp_source,
+		hp,
+		max_hp,
+		species,
+		str(active_pokemon.get("pokemonKey", active_pokemon.get("pokemon_key", ""))),
+		str(active_pokemon.get("partySlot", active_pokemon.get("metadataSlot", ""))),
+		str(active_pokemon.get("condition", "")),
+		JSON.stringify(event),
+	])
 
 	match player_id:
 		"p1":
@@ -4323,6 +4376,26 @@ func _rewind_party_slots_for_events(events: Array) -> void:
 func _debug_battle_hp(message: String) -> void:
 	if DEBUG_BATTLE_HP_EVENTS:
 		print("[battle-hp] " + message)
+
+func _debug_team_identity_snapshot(player_id: String) -> Array:
+	var snapshot: Array = []
+	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		snapshot.append({
+			"key": str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))),
+			"slot": pokemon.get("partySlot", pokemon.get("metadataSlot", "")),
+			"ident": str(pokemon.get("ident", "")),
+			"active": bool(pokemon.get("active", false)),
+			"condition": str(pokemon.get("condition", "")),
+			"hp": pokemon.get("hp", ""),
+			"maxHp": pokemon.get("maxHp", ""),
+			"fainted": bool(pokemon.get("fainted", false)),
+		})
+
+	return snapshot
 
 func _is_ability_heal_event(event_data: Dictionary) -> bool:
 	if str(event_data.get("type", "")) != "heal":
@@ -5663,7 +5736,7 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 		return false
 
 	_warn_if_pvp_battle_update_event_gap(mapped_update)
-	if not await _enqueue_pvp_battle_response(mapped_update, "pvp_realtime_update"):
+	if not await _enqueue_pvp_battle_response(update_payload, "pvp_realtime_update"):
 		return false
 
 	return true
@@ -6214,7 +6287,7 @@ func _render_pvp_opponent_response(
 	source := "pvp_opponent_response"
 ) -> bool:
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
-	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys)
+	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
@@ -6232,7 +6305,7 @@ func _render_opponent_response(
 	pending_player_choice_events: Array = []
 ) -> void:
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
-	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys)
+	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
@@ -6335,6 +6408,14 @@ func _set_temporary_switch_in_condition(switch_ident: String, condition: String,
 
 
 func _find_temporary_switch_target_index(team: Array, switch_ident: String, event_data: Dictionary) -> int:
+	var event_pokemon_key := _get_switch_event_pokemon_key(event_data)
+	if event_pokemon_key != "":
+		var key_index := _find_unique_team_index_by_pokemon_key(team, event_pokemon_key)
+		if key_index >= 0:
+			return key_index
+		if key_index == -2:
+			return -1
+
 	var event_slot := _get_switch_event_metadata_slot(event_data)
 	if event_slot > 0:
 		var slot_index := _find_unique_team_index_by_metadata_slot(team, event_slot)
@@ -6357,6 +6438,44 @@ func _find_temporary_switch_target_index(team: Array, switch_ident: String, even
 
 	var species_index := _find_unique_team_index_by_species_key(team, target_key)
 	return species_index if species_index >= 0 else -1
+
+
+func _get_switch_event_pokemon_key(event_data: Dictionary) -> String:
+	for key in ["pokemonKey", "pokemon_key"]:
+		var value := str(event_data.get(key, "")).strip_edges()
+		if value != "":
+			return value
+
+	for ref_key in ["toRef", "to_ref", "targetRef", "target_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_key_value := _get_switch_event_pokemon_key(ref_value as Dictionary)
+		if ref_key_value != "":
+			return ref_key_value
+
+	return ""
+
+
+func _find_unique_team_index_by_pokemon_key(team: Array, pokemon_key: String) -> int:
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		var current_key := str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))).strip_edges()
+		if current_key == "" or current_key != pokemon_key:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
 
 
 func _find_unique_team_index_by_metadata_slot(team: Array, metadata_slot: int) -> int:
@@ -6427,13 +6546,22 @@ func _find_unique_team_index_by_species_key(team: Array, target_key: String) -> 
 
 
 func _get_switch_event_metadata_slot(event_data: Dictionary) -> int:
-	for key in ["metadataSlot", "metadata_slot", "slot", "position"]:
+	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
 		if not event_data.has(key):
 			continue
 
 		var slot := _safe_int(event_data.get(key), -1)
 		if slot > 0:
 			return slot
+
+	for ref_key in ["toRef", "to_ref", "targetRef", "target_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_slot := _get_switch_event_metadata_slot(ref_value as Dictionary)
+		if ref_slot > 0:
+			return ref_slot
 
 	return -1
 
@@ -6536,14 +6664,6 @@ func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionar
 	return visual_slot
 
 func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
-	for key in ["partySlot", "party_slot", "metadataSlot", "metadata_slot"]:
-		if not pokemon_data.has(key):
-			continue
-
-		var parsed_slot := _safe_int(pokemon_data.get(key), -1)
-		if parsed_slot > 0:
-			return parsed_slot
-
 	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
 	var slot_marker := ":slot:"
 	if pokemon_key.contains(slot_marker):
@@ -6551,6 +6671,14 @@ func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
 		var key_slot := _safe_int(slot_text, -1)
 		if key_slot > 0:
 			return key_slot
+
+	for key in ["partySlot", "party_slot", "metadataSlot", "metadata_slot"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var parsed_slot := _safe_int(pokemon_data.get(key), -1)
+		if parsed_slot > 0:
+			return parsed_slot
 
 	return -1
 

@@ -179,15 +179,17 @@ func dequeue_next() -> Dictionary:
 	return pending_updates.pop_front()
 
 func _dedupe_metadata_for_response(response: Dictionary) -> Dictionary:
-	var event_batch_id := _get_event_batch_id(response)
-	if event_batch_id != "":
-		if seen_event_batch_ids.has(event_batch_id):
+	var has_event_payload := _response_has_event_payload(response)
+	if has_event_payload:
+		var event_batch_id := _get_event_batch_id(response)
+		if event_batch_id != "":
+			if seen_event_batch_ids.has(event_batch_id):
+				return {
+					"should_drop": true,
+					"reason": "eventBatchId already seen",
+					"key": event_batch_id,
+				}
 			return {
-				"should_drop": true,
-				"reason": "eventBatchId already seen",
-				"key": event_batch_id,
-			}
-		return {
 				"should_drop": false,
 				"was_recorded": true,
 				"kind": "event_batch_id",
@@ -195,22 +197,29 @@ func _dedupe_metadata_for_response(response: Dictionary) -> Dictionary:
 				"key": event_batch_id,
 			}
 
-	var batch_seq := _get_batch_seq(response)
-	if batch_seq > 0:
-		var batch_seq_key := str(batch_seq)
-		if seen_batch_seqs.has(batch_seq_key):
+		var batch_seq := _get_batch_seq(response)
+		if batch_seq > 0:
+			var batch_seq_key := str(batch_seq)
+			if seen_batch_seqs.has(batch_seq_key):
+				return {
+					"should_drop": true,
+					"reason": "batchSeq already seen",
+					"key": batch_seq_key,
+				}
 			return {
-				"should_drop": true,
-				"reason": "batchSeq already seen",
-				"key": batch_seq_key,
-			}
-		return {
 				"should_drop": false,
 				"was_recorded": true,
 				"kind": "batch_seq",
 				"value": batch_seq,
 				"key": batch_seq_key,
 			}
+
+	if not has_event_payload:
+		return {
+			"should_drop": false,
+			"was_recorded": false,
+			"key": "",
+		}
 
 	var event_seq := _get_event_seq(response)
 	if event_seq > 0:
@@ -221,18 +230,26 @@ func _dedupe_metadata_for_response(response: Dictionary) -> Dictionary:
 				"key": str(event_seq),
 			}
 		return {
-				"should_drop": false,
-				"was_recorded": true,
-				"kind": "event_seq",
-				"value": event_seq,
-				"key": str(event_seq),
-			}
+			"should_drop": false,
+			"was_recorded": true,
+			"kind": "event_seq",
+			"value": event_seq,
+			"key": str(event_seq),
+		}
 
 	return {
 		"should_drop": false,
 		"was_recorded": false,
 		"key": "",
-		}
+	}
+
+func _response_has_event_payload(response: Dictionary) -> bool:
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return false
+
+	var events: Array = events_value as Array
+	return not events.is_empty()
 
 func _get_event_batch_id(response: Dictionary) -> String:
 	var event_batch_id := str(response.get("eventBatchId", "")).strip_edges()

@@ -106,25 +106,89 @@ func get_event_visible_hp_change(event: Dictionary) -> int:
 	var current_percent: int = get_condition_visible_hp_percent(condition)
 
 	if previous_percent >= 0 and current_percent >= 0:
-		return abs(previous_percent - current_percent)
+		var condition_change: int = abs(previous_percent - current_percent)
+		print("[pvp-damage-debug] hp_helper.visible_change condition previous=%s current=%s change=%d event=%s" % [
+			previous_condition,
+			condition,
+			condition_change,
+			JSON.stringify(event),
+		])
+		return condition_change
 
 	var previous_hp: int = int(event.get("previousHp", 0))
 	var hp: int = int(event.get("hp", 0))
 	var max_hp: int = int(event.get("maxHp", 0))
 	if max_hp > 0:
-		return get_visible_hp_change(previous_hp, hp, max_hp)
+		var amount: int = int(event.get("amount", 0))
+		if amount > 0 and (previous_hp <= 0 or hp <= 0):
+			var amount_change: int = get_visible_hp_change(amount, 0, max_hp)
+			print("[pvp-damage-debug] hp_helper.visible_change amount amount=%d max=%d change=%d event=%s" % [
+				amount,
+				max_hp,
+				amount_change,
+				JSON.stringify(event),
+			])
+			return amount_change
 
+		var hp_change: int = get_visible_hp_change(previous_hp, hp, max_hp)
+		print("[pvp-damage-debug] hp_helper.visible_change hp previous=%d hp=%d max=%d change=%d event=%s" % [
+			previous_hp,
+			hp,
+			max_hp,
+			hp_change,
+			JSON.stringify(event),
+		])
+		return hp_change
+
+	if current_percent >= 0:
+		var current_only_change: int = abs(100 - current_percent)
+		print("[pvp-damage-debug] hp_helper.visible_change current_only condition=%s change=%d event=%s" % [
+			condition,
+			current_only_change,
+			JSON.stringify(event),
+		])
+		return current_only_change
+
+	print("[pvp-damage-debug] hp_helper.visible_change zero event=%s" % JSON.stringify(event))
 	return 0
 
 func event_has_hp_loss(event: Dictionary) -> bool:
 	if is_percentage_only_condition_event(event, false):
+		print("[pvp-damage-debug] hp_helper.has_loss false percentage_only event=%s" % JSON.stringify(event))
 		return false
 
 	var previous_snapshot: Dictionary = get_event_hp_snapshot(event, true)
 	var snapshot: Dictionary = get_event_hp_snapshot(event, false)
 	if not previous_snapshot.is_empty() and not snapshot.is_empty():
-		return int(previous_snapshot.get("hp", 0)) > int(snapshot.get("hp", 0))
+		var snapshot_loss: bool = int(previous_snapshot.get("hp", 0)) > int(snapshot.get("hp", 0))
+		print("[pvp-damage-debug] hp_helper.has_loss snapshots previous=%s current=%s result=%s event=%s" % [
+			JSON.stringify(previous_snapshot),
+			JSON.stringify(snapshot),
+			str(snapshot_loss),
+			JSON.stringify(event),
+		])
+		return snapshot_loss
 
+	var amount: int = int(event.get("amount", 0))
+	var max_hp: int = int(event.get("maxHp", 0))
+	if amount > 0 and max_hp > 0:
+		print("[pvp-damage-debug] hp_helper.has_loss true amount amount=%d max=%d event=%s" % [
+			amount,
+			max_hp,
+			JSON.stringify(event),
+		])
+		return true
+
+	if not snapshot.is_empty():
+		var current_loss: bool = int(snapshot.get("hp", 0)) < int(snapshot.get("max_hp", 0))
+		print("[pvp-damage-debug] hp_helper.has_loss current_snapshot current=%s result=%s event=%s" % [
+			JSON.stringify(snapshot),
+			str(current_loss),
+			JSON.stringify(event),
+		])
+		return current_loss
+
+	print("[pvp-damage-debug] hp_helper.has_loss false no_snapshot event=%s" % JSON.stringify(event))
 	return false
 
 func event_has_sub_percent_hp_loss(event: Dictionary) -> bool:
@@ -142,7 +206,7 @@ func get_condition_visible_hp_percent(condition: String) -> int:
 	if not condition.contains("/"):
 		return -1
 
-	var current_hp := int(condition.split("/")[0])
-	var right := str(condition.split("/")[1])
-	var max_hp := int(right.split(" ")[0])
+	var current_hp: int = int(condition.split("/")[0])
+	var right: String = str(condition.split("/")[1])
+	var max_hp: int = int(right.split(" ")[0])
 	return to_visible_hp_percent(current_hp, max_hp)

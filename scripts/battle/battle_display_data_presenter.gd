@@ -83,7 +83,7 @@ func get_display_team_data(player_id: String) -> Array:
 			_enrich_player_display_slot_from_save(display_data, index)
 		display_team.append(display_data)
 
-	return display_team
+	return _sort_display_team_by_canonical_party_slot(display_team)
 
 
 func get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Dictionary:
@@ -108,3 +108,55 @@ func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int)
 		display_data["shiny"] = saved_pokemon.shiny
 	if not display_data.has("instanceId") and saved_pokemon.instance_id != "":
 		display_data["instanceId"] = saved_pokemon.instance_id
+
+func _sort_display_team_by_canonical_party_slot(display_team: Array) -> Array:
+	if display_team.size() <= 1:
+		return display_team
+
+	var by_slot: Dictionary = {}
+	for pokemon_value: Variant in display_team:
+		if not (pokemon_value is Dictionary):
+			return display_team
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var slot := _get_canonical_party_slot(pokemon_data)
+		if slot <= 0 or by_slot.has(slot):
+			return display_team
+
+		by_slot[slot] = pokemon_data
+
+	var sorted_team: Array = []
+	var sorted_slots: Array = by_slot.keys()
+	sorted_slots.sort()
+	for slot_value: Variant in sorted_slots:
+		sorted_team.append(by_slot.get(slot_value))
+
+	return sorted_team
+
+func _get_canonical_party_slot(pokemon_data: Dictionary) -> int:
+	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
+	var slot_marker := ":slot:"
+	if pokemon_key.contains(slot_marker):
+		var slot_text := pokemon_key.split(slot_marker)[1]
+		if slot_text.is_valid_int():
+			var key_slot := int(slot_text)
+			if key_slot > 0:
+				return key_slot
+
+	for key in ["partySlot", "party_slot", "metadataSlot", "metadata_slot"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var slot_value: Variant = pokemon_data.get(key)
+		if slot_value is int and int(slot_value) > 0:
+			return int(slot_value)
+		if slot_value is float and int(slot_value) > 0:
+			return int(slot_value)
+
+		var explicit_slot_text := str(slot_value).strip_edges()
+		if explicit_slot_text.is_valid_int():
+			var parsed_slot := int(explicit_slot_text)
+			if parsed_slot > 0:
+				return parsed_slot
+
+	return -1

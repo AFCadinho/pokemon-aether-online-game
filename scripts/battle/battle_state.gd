@@ -35,6 +35,7 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
 	field = response.get("field", {})
+	_debug_print_damage_response_snapshot(response, "after_assign_before_events")
 	if apply_event_conditions:
 		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
@@ -43,9 +44,34 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 		_apply_mega_species_to_requests()
 		_remove_deferred_display_fields_from_requests(response.get("events", []))
 	_remember_hp_fields_from_requests(requests)
+	_debug_print_damage_response_snapshot(response, "after_events")
 
 func apply_event_conditions(events: Array) -> void:
 	_apply_event_conditions_to_requests(events)
+
+func _debug_print_damage_response_snapshot(response: Dictionary, label: String) -> void:
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return
+
+	var has_damage := false
+	var events: Array = events_value as Array
+	for event_value: Variant in events:
+		if event_value is Dictionary and str((event_value as Dictionary).get("type", "")) == "damage":
+			has_damage = true
+			break
+
+	if not has_damage:
+		return
+
+	print("[pvp-damage-debug] state.load %s battle=%s eventSeq=%s p1=%s p2=%s events=%s" % [
+		label,
+		str(response.get("battleId", "")),
+		str(response.get("eventSeq", "")),
+		JSON.stringify(_debug_team_identity_snapshot(get_player_team("p1"))),
+		JSON.stringify(_debug_team_identity_snapshot(get_player_team("p2"))),
+		JSON.stringify(events),
+	])
 
 func _preserve_missing_hp_fields_in_requests(next_requests: Dictionary) -> void:
 	if requests.is_empty() or next_requests.is_empty():
@@ -449,21 +475,56 @@ func _has_percentage_only_condition(event: Dictionary) -> bool:
 func _set_pokemon_condition(target_ident: String, condition: String, source_event: Dictionary = {}) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
 	if player_id == "":
+		print("[pvp-damage-debug] state.condition skipped: no player id target=%s condition=%s event=%s" % [
+			target_ident,
+			condition,
+			JSON.stringify(source_event),
+		])
 		return
 
 	var team := get_player_team(player_id)
 	var target_index := _find_party_target_index(team, target_ident, source_event, true)
 	if target_index < 0 or target_index >= team.size():
+		print("[pvp-damage-debug] state.condition skipped: no target index player=%s target=%s condition=%s eventKey=%s eventSlot=%s team=%s event=%s" % [
+			player_id,
+			target_ident,
+			condition,
+			_get_event_pokemon_key(source_event),
+			str(_get_event_metadata_slot(source_event)),
+			JSON.stringify(_debug_team_identity_snapshot(team)),
+			JSON.stringify(source_event),
+		])
 		return
 
 	var pokemon_value: Variant = team[target_index]
 	if not (pokemon_value is Dictionary):
+		print("[pvp-damage-debug] state.condition skipped: target is not dictionary player=%s target=%s index=%d event=%s" % [
+			player_id,
+			target_ident,
+			target_index,
+			JSON.stringify(source_event),
+		])
 		return
 
 	var pokemon_data: Dictionary = pokemon_value as Dictionary
+	print("[pvp-damage-debug] state.condition apply before player=%s target=%s index=%d key=%s slot=%s previous=%s next=%s event=%s" % [
+		player_id,
+		target_ident,
+		target_index,
+		str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))),
+		str(pokemon_data.get("partySlot", pokemon_data.get("metadataSlot", ""))),
+		str(pokemon_data.get("condition", "")),
+		condition,
+		JSON.stringify(source_event),
+	])
 	pokemon_data["condition"] = condition
 	_apply_condition_fields(pokemon_data, condition)
 	_remember_hp_snapshot_for_condition_event(target_ident, pokemon_data, condition, target_index)
+	print("[pvp-damage-debug] state.condition apply after player=%s index=%d pokemon=%s" % [
+		player_id,
+		target_index,
+		JSON.stringify(pokemon_data),
+	])
 
 func _remember_hp_snapshot_for_condition_event(target_ident: String, pokemon_data: Dictionary, condition: String, team_index := -1) -> void:
 	var snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)
@@ -749,6 +810,13 @@ func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
 
 
 func _find_party_target_index(team: Array, target_ident: String, source_event: Dictionary = {}, prefer_active := false) -> int:
+	var event_pokemon_key := _get_event_pokemon_key(source_event)
+	if event_pokemon_key != "":
+		var pokemon_key_index := _find_unique_team_index_by_pokemon_key(team, event_pokemon_key)
+		if pokemon_key_index >= 0:
+			return pokemon_key_index
+		return -1
+
 	var event_slot := _get_event_metadata_slot(source_event)
 	if event_slot > 0:
 		var slot_index := _find_unique_team_index_by_metadata_slot(team, event_slot)
@@ -775,6 +843,24 @@ func _find_party_target_index(team: Array, target_ident: String, source_event: D
 	return species_index if species_index >= 0 else -1
 
 
+func _get_event_pokemon_key(event_data: Dictionary) -> String:
+	for key in ["pokemonKey", "pokemon_key"]:
+		var value := str(event_data.get(key, "")).strip_edges()
+		if value != "":
+			return value
+
+	for ref_key in ["targetRef", "target_ref", "toRef", "to_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_key_value := _get_event_pokemon_key(ref_value as Dictionary)
+		if ref_key_value != "":
+			return ref_key_value
+
+	return ""
+
+
 func _get_event_metadata_slot(event_data: Dictionary) -> int:
 	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
 		if not event_data.has(key):
@@ -794,6 +880,26 @@ func _get_event_metadata_slot(event_data: Dictionary) -> int:
 			return ref_slot
 
 	return -1
+
+
+func _find_unique_team_index_by_pokemon_key(team: Array, pokemon_key: String) -> int:
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		var current_key := str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))).strip_edges()
+		if current_key == "" or current_key != pokemon_key:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
 
 
 func _find_unique_team_index_by_metadata_slot(team: Array, metadata_slot: int) -> int:
@@ -887,7 +993,32 @@ func _find_unique_team_index_by_pokemon_name(team: Array, target_name: String) -
 	return found_index
 
 
+func _debug_team_identity_snapshot(team: Array) -> Array:
+	var snapshot: Array = []
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		snapshot.append({
+			"key": str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))),
+			"slot": pokemon.get("partySlot", pokemon.get("metadataSlot", "")),
+			"ident": str(pokemon.get("ident", "")),
+			"active": bool(pokemon.get("active", false)),
+			"condition": str(pokemon.get("condition", "")),
+			"hp": pokemon.get("hp", ""),
+			"maxHp": pokemon.get("maxHp", ""),
+			"fainted": bool(pokemon.get("fainted", false)),
+		})
+
+	return snapshot
+
+
 func _get_party_hp_snapshot_key(pokemon_data: Dictionary, team_index := -1, fallback_ident := "") -> String:
+	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
+	if pokemon_key != "":
+		return "pokemonKey:%s" % pokemon_key
+
 	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
 		if not pokemon_data.has(key):
 			continue

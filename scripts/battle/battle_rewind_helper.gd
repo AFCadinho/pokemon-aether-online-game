@@ -56,6 +56,13 @@ func get_previous_conditions_by_party_index_for_events(player_id: String, team: 
 
 
 func _find_party_target_index(team: Array, target_ident: String, source_event: Dictionary = {}, prefer_active := false) -> int:
+	var event_pokemon_key := _get_event_pokemon_key(source_event)
+	if event_pokemon_key != "":
+		var pokemon_key_index := _find_unique_team_index_by_pokemon_key(team, event_pokemon_key)
+		if pokemon_key_index >= 0:
+			return pokemon_key_index
+		return -1
+
 	var event_slot := _get_event_metadata_slot(source_event)
 	if event_slot > 0:
 		var slot_index := _find_unique_team_index_by_metadata_slot(team, event_slot)
@@ -82,6 +89,24 @@ func _find_party_target_index(team: Array, target_ident: String, source_event: D
 	return species_index if species_index >= 0 else -1
 
 
+func _get_event_pokemon_key(event_data: Dictionary) -> String:
+	for key in ["pokemonKey", "pokemon_key"]:
+		var value := str(event_data.get(key, "")).strip_edges()
+		if value != "":
+			return value
+
+	for ref_key in ["targetRef", "target_ref", "toRef", "to_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_key_value := _get_event_pokemon_key(ref_value as Dictionary)
+		if ref_key_value != "":
+			return ref_key_value
+
+	return ""
+
+
 func _get_event_metadata_slot(event_data: Dictionary) -> int:
 	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
 		if not event_data.has(key):
@@ -91,7 +116,36 @@ func _get_event_metadata_slot(event_data: Dictionary) -> int:
 		if slot > 0:
 			return slot
 
+	for ref_key in ["targetRef", "target_ref", "toRef", "to_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_slot := _get_event_metadata_slot(ref_value as Dictionary)
+		if ref_slot > 0:
+			return ref_slot
+
 	return -1
+
+
+func _find_unique_team_index_by_pokemon_key(team: Array, pokemon_key: String) -> int:
+	var found_index := -1
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		var current_key := str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))).strip_edges()
+		if current_key == "" or current_key != pokemon_key:
+			continue
+
+		if found_index >= 0:
+			return -2
+
+		found_index = index
+
+	return found_index
 
 
 func _find_unique_team_index_by_metadata_slot(team: Array, metadata_slot: int) -> int:
