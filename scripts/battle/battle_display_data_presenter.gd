@@ -118,15 +118,29 @@ func _get_player_save_pokemon_for_display_data(display_data: Dictionary, fallbac
 		var slot_index := canonical_slot - 1
 		if slot_index >= 0 and slot_index < PlayerSave.party.size():
 			var slot_pokemon: Pokemon = PlayerSave.party[slot_index] as Pokemon
-			if slot_pokemon != null:
+			if _saved_pokemon_matches_display_species(slot_pokemon, display_data):
 				return slot_pokemon
 
 	if fallback_index >= 0 and fallback_index < PlayerSave.party.size():
 		var fallback_pokemon: Pokemon = PlayerSave.party[fallback_index] as Pokemon
-		if fallback_pokemon != null:
+		if _saved_pokemon_matches_display_species(fallback_pokemon, display_data):
 			return fallback_pokemon
 
 	return _get_unique_player_save_pokemon_by_species(display_data)
+
+func _saved_pokemon_matches_display_species(saved_pokemon: Pokemon, display_data: Dictionary) -> bool:
+	if saved_pokemon == null:
+		return false
+	if battle_state == null:
+		return true
+
+	var display_species := battle_state.get_species_from_pokemon_data(display_data)
+	if display_species == "":
+		display_species = str(display_data.get("species", display_data.get("displaySpecies", "")))
+	if display_species == "":
+		return true
+
+	return _normalize_species_for_compare(saved_pokemon.species) == _normalize_species_for_compare(display_species)
 
 func _get_unique_player_save_pokemon_by_species(display_data: Dictionary) -> Pokemon:
 	var display_species := ""

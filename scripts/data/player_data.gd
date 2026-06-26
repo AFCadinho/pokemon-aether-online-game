@@ -226,7 +226,11 @@ func _find_party_pokemon_for_team_entry(pokemon_data: Dictionary, used_fallback_
 		var slot_index := metadata_slot - 1
 		if slot_index >= 0 and slot_index < party.size():
 			var slot_pokemon: Pokemon = party[slot_index]
-			if slot_pokemon != null and not used_fallback_instances.has(slot_pokemon.instance_id):
+			if (
+				slot_pokemon != null
+				and not used_fallback_instances.has(slot_pokemon.instance_id)
+				and _party_pokemon_matches_team_entry_species(slot_pokemon, pokemon_data)
+			):
 				return slot_pokemon
 
 	var species := str(pokemon_data.get("species", pokemon_data.get("species_id", pokemon_data.get("name", "")))).strip_edges().to_lower()
@@ -238,12 +242,29 @@ func _find_party_pokemon_for_team_entry(pokemon_data: Dictionary, used_fallback_
 	for slot_pokemon in party:
 		if used_fallback_instances.has(slot_pokemon.instance_id):
 			continue
-		if species != "" and slot_pokemon.species.to_lower() != species:
+		if species != "" and _normalize_species_for_battle_compare(slot_pokemon.species) != _normalize_species_for_battle_compare(species):
 			continue
 
 		return slot_pokemon
 
 	return null
+
+func _party_pokemon_matches_team_entry_species(pokemon: Pokemon, pokemon_data: Dictionary) -> bool:
+	if pokemon == null:
+		return false
+
+	var species := str(pokemon_data.get("species", pokemon_data.get("species_id", pokemon_data.get("displaySpecies", pokemon_data.get("name", ""))))).strip_edges()
+	if species == "":
+		species = str(pokemon_data.get("ident", "")).strip_edges()
+		if species.contains(": "):
+			species = species.split(": ", false)[1]
+	if species == "":
+		return true
+
+	return _normalize_species_for_battle_compare(pokemon.species) == _normalize_species_for_battle_compare(species)
+
+func _normalize_species_for_battle_compare(species: String) -> String:
+	return species.strip_edges().to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
 
 func _has_battle_move_data(pokemon_data: Variant) -> bool:
 	if not (pokemon_data is Dictionary):
