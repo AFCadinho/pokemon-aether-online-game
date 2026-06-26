@@ -3782,6 +3782,10 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 					JSON.stringify(_debug_team_identity_snapshot("p1")),
 					JSON.stringify(_debug_team_identity_snapshot("p2")),
 				])
+		if event_type == "status":
+			battle_state.apply_event_conditions([event_data])
+			_update_hud_panels()
+			_update_party_slots()
 		if event_type == "switch":
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()

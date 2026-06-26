@@ -374,6 +374,10 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 		if event_type == "faint":
 			_clear_transformed_species_for_ident(str(event.get("target", "")))
 
+		if event_type == "status":
+			_apply_status_event_to_requests(event)
+			continue
+
 		if event_type != "damage" and event_type != "heal" and event_type != "faint":
 			continue
 
@@ -383,6 +387,41 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 			continue
 
 		_set_pokemon_condition(target_ident, condition, event)
+
+func _apply_status_event_to_requests(event: Dictionary) -> void:
+	var target_ident := str(event.get("target", ""))
+	if target_ident == "":
+		return
+
+	var player_id := _get_player_id_from_ident(target_ident)
+	if player_id == "":
+		return
+
+	var team := get_player_team(player_id)
+	var target_index := _find_party_target_index(team, target_ident, event, true)
+	if target_index < 0 or target_index >= team.size():
+		return
+
+	var pokemon_value: Variant = team[target_index]
+	if not (pokemon_value is Dictionary):
+		return
+
+	var pokemon_data: Dictionary = pokemon_value as Dictionary
+	var status := _normalize_status(str(event.get("status", "")))
+	if status == "":
+		return
+
+	var state := str(event.get("state", "start")).strip_edges().to_lower()
+	if state == "end" or state == "cure" or state == "cured":
+		pokemon_data["status"] = ""
+		pokemon_data["condition"] = _remove_status_from_condition(str(pokemon_data.get("condition", "")), status)
+	else:
+		pokemon_data["status"] = status
+		pokemon_data["condition"] = _append_status_to_condition(str(pokemon_data.get("condition", "")), status, pokemon_data)
+
+	var condition := str(pokemon_data.get("condition", ""))
+	if condition != "":
+		_apply_condition_fields(pokemon_data, condition)
 
 func _apply_switch_event_to_requests(event: Dictionary) -> void:
 	var switch_ident := _get_switch_event_ident(event)
@@ -459,10 +498,61 @@ func _format_hp_condition(hp: int, max_hp: int, fallback_condition: String) -> S
 func _get_condition_status_suffix(condition: String) -> String:
 	var parts: PackedStringArray = condition.split(" ", false)
 	for part_value: String in parts:
-		var part := part_value.strip_edges().to_lower()
-		match part:
-			"psn", "tox", "brn", "par", "slp", "frz":
-				return part
+		var part := _normalize_status(part_value)
+		if part != "":
+			return part
+
+	return ""
+
+func _append_status_to_condition(condition: String, status: String, pokemon_data: Dictionary) -> String:
+	var normalized_status := _normalize_status(status)
+	if normalized_status == "":
+		return condition
+
+	var normalized_condition := condition.strip_edges()
+	if normalized_condition == "" and int(pokemon_data.get("maxHp", 0)) > 0:
+		normalized_condition = "%s/%s" % [
+			max(int(pokemon_data.get("hp", 0)), 0),
+			max(int(pokemon_data.get("maxHp", 1)), 1),
+		]
+
+	if normalized_condition == "" or normalized_condition.ends_with(" fnt"):
+		return normalized_condition
+
+	var parts: PackedStringArray = normalized_condition.split(" ", false)
+	var output_parts: Array[String] = []
+	var replaced := false
+	for part_value: String in parts:
+		var part := part_value.strip_edges()
+		if _normalize_status(part) != "":
+			output_parts.append(normalized_status)
+			replaced = true
+		else:
+			output_parts.append(part)
+
+	if not replaced:
+		output_parts.append(normalized_status)
+
+	return " ".join(output_parts)
+
+func _remove_status_from_condition(condition: String, status: String) -> String:
+	var normalized_status := _normalize_status(status)
+	if normalized_status == "":
+		return condition
+
+	var output_parts: Array[String] = []
+	for part_value: String in condition.strip_edges().split(" ", false):
+		var part := part_value.strip_edges()
+		if _normalize_status(part) == normalized_status:
+			continue
+		output_parts.append(part)
+
+	return " ".join(output_parts)
+
+func _normalize_status(status: String) -> String:
+	match status.strip_edges().to_lower():
+		"psn", "tox", "brn", "par", "slp", "frz":
+			return status.strip_edges().to_lower()
 
 	return ""
 

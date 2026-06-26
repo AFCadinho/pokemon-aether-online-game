@@ -258,6 +258,8 @@ func format_status_event(event: Dictionary) -> String:
 	var state: String = str(event.get("state", "start")).to_lower()
 	match state:
 		"end", "cure", "cured":
+			if status.to_lower() == "freeze":
+				return "%s thawed out!" % target
 			return "%s was cured of %s!" % [target, status]
 
 	match status.to_lower():
