@@ -6,9 +6,38 @@ const PLAYER_DIRECTORY := "res://assets/player"
 const BODY_CATEGORY := "body"
 const BODY_DIRECTORY := "res://assets/player/body"
 const BODY_MANIFEST_PATH := "res://assets/player/body/body_manifest.json"
-const DEFAULT_BODY_ID := "gen4_pa_base_boy"
-const DEFAULT_MALE_BODY_ID := "gen4_pa_base_boy"
-const DEFAULT_FEMALE_BODY_ID := "gen4_pa_base_girl"
+const HAIR_CATEGORY := "hair"
+const HEADGEAR_CATEGORY := "headgear"
+const FACEGEAR_CATEGORY := "facegear"
+const TOP_CATEGORY := "top"
+const BOTTOM_CATEGORY := "bottom"
+const SHOES_CATEGORY := "shoes"
+const EYES_CATEGORY := "eyes"
+const EYEBROWS_CATEGORY := "eyebrows"
+const UNEQUIPPED_PART_ID := "__none__"
+const PRESENCE_BODY_APPEARANCE_SEPARATOR := "#appearance="
+const DEFAULT_BODY_ID := "Gen4_Base_v1"
+const DEFAULT_MALE_BODY_ID := "Gen4_Base_v1"
+const DEFAULT_FEMALE_BODY_ID := "Gen4_Base_F_v1"
+const DEFAULT_MALE_HAIR_ID := "Hair"
+const DEFAULT_MALE_HEADGEAR_ID := "Cap"
+const DEFAULT_MALE_FACEGEAR_ID := ""
+const DEFAULT_MALE_TOP_ID := "Shirt"
+const DEFAULT_MALE_BOTTOM_ID := "Trousers"
+const DEFAULT_MALE_SHOES_ID := "Shoes"
+const DEFAULT_MALE_EYES_ID := "Eyes"
+const DEFAULT_MALE_EYEBROWS_ID := "Eyebrows"
+const DEFAULT_FEMALE_HAIR_ID := "Hair"
+const DEFAULT_FEMALE_HEADGEAR_ID := "Cap"
+const DEFAULT_FEMALE_FACEGEAR_ID := ""
+const DEFAULT_FEMALE_TOP_ID := "Shirt"
+const DEFAULT_FEMALE_BOTTOM_ID := "Trousers"
+const DEFAULT_FEMALE_SHOES_ID := "Shoes"
+const DEFAULT_FEMALE_EYES_ID := "Eyes"
+const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
+const DEFAULT_HAIR_COLOR := "#ffffff"
+const DEFAULT_SKIN_TONE := "#ffffff"
+const DEFAULT_EYE_COLOR := "#0fff00"
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
@@ -16,8 +45,261 @@ const WALK_ANIMATION_SPEED := 7.5
 const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running"]
 const BODY_MOVEMENT_DEFAULT := "walk"
 const BODY_MOVEMENT_RUN := "run"
+const LAYERED_PART_CATEGORIES: Array[String] = [
+	HAIR_CATEGORY,
+	HEADGEAR_CATEGORY,
+	FACEGEAR_CATEGORY,
+	TOP_CATEGORY,
+	BOTTOM_CATEGORY,
+	SHOES_CATEGORY,
+	EYES_CATEGORY,
+	EYEBROWS_CATEGORY,
+]
+const DEFAULT_LAYERED_MALE_BODY_IDS: Array[String] = [
+	"Gen4_Base_v1",
+	"Gen4_Base_M_Dark",
+	"Gen4_Base_M_Tan",
+]
+const DEFAULT_LAYERED_FEMALE_BODY_IDS: Array[String] = [
+	"Gen4_Base_F_v1",
+	"Gen4_Base_F_Dark",
+	"Gen4_Base_F_Tan",
+]
 
 static var _body_frames_cache: Dictionary = {}
+static var _part_frames_cache: Dictionary = {}
+static var _tinted_part_frames_cache: Dictionary = {}
+
+
+static func get_default_appearance(gender: String = "") -> Dictionary:
+	var normalized_gender: String = normalize_gender(gender)
+	var body_id: String = DEFAULT_FEMALE_BODY_ID if normalized_gender == "female" else DEFAULT_MALE_BODY_ID
+	var appearance := {
+		"body": body_id,
+		"hair": "",
+		"headgear": "",
+		"facegear": "",
+		"top": "",
+		"bottom": "",
+		"shoes": "",
+		"hair_color": DEFAULT_HAIR_COLOR,
+		"skin_tone": DEFAULT_SKIN_TONE,
+		"eye_color": DEFAULT_EYE_COLOR,
+	}
+	if body_supports_layered_parts(body_id, normalized_gender):
+		for category: String in LAYERED_PART_CATEGORIES:
+			if category == EYES_CATEGORY or category == EYEBROWS_CATEGORY:
+				continue
+			appearance[category] = get_default_part_id(category, normalized_gender)
+	return appearance
+
+
+static func body_supports_layered_parts(body_id: String, gender: String = "") -> bool:
+	var normalized_gender: String = normalize_gender(gender)
+	var normalized_body_id: String = _normalize_body_id(body_id)
+	if normalized_gender == "female":
+		return DEFAULT_LAYERED_FEMALE_BODY_IDS.has(normalized_body_id)
+	return DEFAULT_LAYERED_MALE_BODY_IDS.has(normalized_body_id)
+
+
+static func get_default_part_id(category: String, gender: String = "") -> String:
+	var normalized_gender: String = normalize_gender(gender)
+	match normalize_part_category(category):
+		HAIR_CATEGORY:
+			return DEFAULT_FEMALE_HAIR_ID if normalized_gender == "female" else DEFAULT_MALE_HAIR_ID
+		HEADGEAR_CATEGORY:
+			return DEFAULT_FEMALE_HEADGEAR_ID if normalized_gender == "female" else DEFAULT_MALE_HEADGEAR_ID
+		FACEGEAR_CATEGORY:
+			return DEFAULT_FEMALE_FACEGEAR_ID if normalized_gender == "female" else DEFAULT_MALE_FACEGEAR_ID
+		TOP_CATEGORY:
+			return DEFAULT_FEMALE_TOP_ID if normalized_gender == "female" else DEFAULT_MALE_TOP_ID
+		BOTTOM_CATEGORY:
+			return DEFAULT_FEMALE_BOTTOM_ID if normalized_gender == "female" else DEFAULT_MALE_BOTTOM_ID
+		SHOES_CATEGORY:
+			return DEFAULT_FEMALE_SHOES_ID if normalized_gender == "female" else DEFAULT_MALE_SHOES_ID
+		EYES_CATEGORY:
+			return DEFAULT_FEMALE_EYES_ID if normalized_gender == "female" else DEFAULT_MALE_EYES_ID
+		EYEBROWS_CATEGORY:
+			return DEFAULT_FEMALE_EYEBROWS_ID if normalized_gender == "female" else DEFAULT_MALE_EYEBROWS_ID
+		_:
+			return ""
+
+
+static func normalize_part_category(category: String) -> String:
+	var normalized: String = category.strip_edges().to_lower().replace("_", "")
+	match normalized:
+		"hair":
+			return HAIR_CATEGORY
+		"headgear", "headwear", "hat", "cap":
+			return HEADGEAR_CATEGORY
+		"facegear", "facewear", "faceaccessory", "faceaccessories", "glasses", "mask":
+			return FACEGEAR_CATEGORY
+		"top", "shirt", "upper":
+			return TOP_CATEGORY
+		"bottom", "legs", "trousers", "pants":
+			return BOTTOM_CATEGORY
+		"shoes", "feet", "footwear":
+			return SHOES_CATEGORY
+		"eyes":
+			return EYES_CATEGORY
+		"eyebrows", "brows":
+			return EYEBROWS_CATEGORY
+		_:
+			return normalized
+
+
+static func serialize_part_id(part_id: String) -> String:
+	var normalized_part_id: String = part_id.strip_edges()
+	return UNEQUIPPED_PART_ID if _is_empty_presence_part_id(normalized_part_id) else normalized_part_id
+
+
+static func deserialize_part_id(part_id: String) -> String:
+	var normalized_part_id: String = part_id.strip_edges()
+	if _is_empty_presence_part_id(normalized_part_id):
+		return ""
+	return normalized_part_id
+
+
+static func _is_empty_presence_part_id(part_id: String) -> bool:
+	var normalized_part_id: String = part_id.strip_edges().to_lower()
+	return ["", UNEQUIPPED_PART_ID, "<null>", "null", "none"].has(normalized_part_id)
+
+
+static func encode_presence_body_with_appearance(body_id: String, appearance: Dictionary) -> String:
+	var base_body_id: String = get_presence_body_base_id(body_id)
+	if base_body_id == "":
+		base_body_id = str(appearance.get("body", "")).strip_edges()
+	if base_body_id == "":
+		return ""
+
+	var appearance_payload: Dictionary = appearance.duplicate()
+	appearance_payload["body"] = base_body_id
+	return "%s%s%s" % [
+		base_body_id,
+		PRESENCE_BODY_APPEARANCE_SEPARATOR,
+		JSON.stringify(appearance_payload).uri_encode(),
+	]
+
+
+static func decode_presence_body_appearance(body_id: String) -> Dictionary:
+	var encoded_body_id: String = body_id.strip_edges()
+	var separator_index: int = encoded_body_id.find(PRESENCE_BODY_APPEARANCE_SEPARATOR)
+	if separator_index < 0:
+		return {}
+
+	var encoded_payload: String = encoded_body_id.substr(separator_index + PRESENCE_BODY_APPEARANCE_SEPARATOR.length())
+	var parsed_payload: Variant = JSON.parse_string(encoded_payload.uri_decode())
+	if not parsed_payload is Dictionary:
+		return {}
+
+	var appearance_payload: Dictionary = parsed_payload as Dictionary
+	appearance_payload["body"] = get_presence_body_base_id(encoded_body_id)
+	return appearance_payload
+
+
+static func get_presence_body_base_id(body_id: String) -> String:
+	var encoded_body_id: String = body_id.strip_edges()
+	var separator_index: int = encoded_body_id.find(PRESENCE_BODY_APPEARANCE_SEPARATOR)
+	if separator_index < 0:
+		return encoded_body_id
+	return encoded_body_id.substr(0, separator_index)
+
+
+static func get_available_part_ids(category: String, gender: String = "") -> Array[String]:
+	var normalized_category: String = normalize_part_category(category)
+	if not LAYERED_PART_CATEGORIES.has(normalized_category):
+		return []
+
+	var normalized_gender: String = normalize_gender(gender)
+	var part_directory: String = _get_gender_part_directory(normalized_gender, normalized_category)
+	var manifest_ids: Array[String] = _get_manifest_part_ids(part_directory)
+	if FileAccess.file_exists("%s/parts_manifest.json" % part_directory):
+		return _sort_part_ids(manifest_ids, normalized_category, normalized_gender)
+	if not manifest_ids.is_empty():
+		return _sort_part_ids(manifest_ids, normalized_category, normalized_gender)
+
+	var part_ids: Array[String] = []
+	_collect_part_ids_from_directory(part_directory, part_ids)
+	return _sort_part_ids(part_ids, normalized_category, normalized_gender)
+
+
+static func get_part_frames(category: String, part_id: String, gender: String = "", movement_style: String = BODY_MOVEMENT_DEFAULT) -> SpriteFrames:
+	var normalized_category: String = normalize_part_category(category)
+	var normalized_part_id: String = _normalize_body_id(part_id)
+	if normalized_category == "" or normalized_part_id == "":
+		return null
+	if not LAYERED_PART_CATEGORIES.has(normalized_category):
+		return null
+
+	var normalized_gender: String = normalize_gender(gender)
+	var normalized_movement_style: String = _normalize_movement_style(movement_style)
+	var cache_key: String = "%s:%s:%s:%s" % [
+		normalized_gender,
+		normalized_category,
+		normalized_part_id,
+		normalized_movement_style,
+	]
+	if _part_frames_cache.has(cache_key):
+		var cached_value: Variant = _part_frames_cache[cache_key]
+		if cached_value is SpriteFrames:
+			return cached_value as SpriteFrames
+		return null
+
+	var texture: Texture2D = _load_part_texture_for_movement(normalized_category, normalized_part_id, normalized_gender, normalized_movement_style)
+	if texture == null:
+		_part_frames_cache[cache_key] = null
+		return null
+
+	var sprite_frames: SpriteFrames = _build_sprite_frames(texture)
+	_part_frames_cache[cache_key] = sprite_frames
+	return sprite_frames
+
+
+static func get_tinted_part_frames(
+	category: String,
+	part_id: String,
+	gender: String = "",
+	movement_style: String = BODY_MOVEMENT_DEFAULT,
+	tint_color: Color = Color.WHITE,
+	preserve_luminance: bool = false
+) -> SpriteFrames:
+	var normalized_category: String = normalize_part_category(category)
+	var normalized_part_id: String = _normalize_body_id(part_id)
+	if normalized_category == "" or normalized_part_id == "":
+		return null
+	if not LAYERED_PART_CATEGORIES.has(normalized_category):
+		return null
+
+	var normalized_gender: String = normalize_gender(gender)
+	var normalized_movement_style: String = _normalize_movement_style(movement_style)
+	var color_key: String = tint_color.to_html(true)
+	var cache_key: String = "%s:%s:%s:%s:%s:%s" % [
+		normalized_gender,
+		normalized_category,
+		normalized_part_id,
+		normalized_movement_style,
+		color_key,
+		"luma" if preserve_luminance else "alpha",
+	]
+	if _tinted_part_frames_cache.has(cache_key):
+		var cached_value: Variant = _tinted_part_frames_cache[cache_key]
+		if cached_value is SpriteFrames:
+			return cached_value as SpriteFrames
+		return null
+
+	var base_frames: SpriteFrames = get_part_frames(
+		normalized_category,
+		normalized_part_id,
+		normalized_gender,
+		normalized_movement_style
+	)
+	if base_frames == null:
+		_tinted_part_frames_cache[cache_key] = null
+		return null
+
+	var tinted_frames: SpriteFrames = _build_tinted_sprite_frames(base_frames, tint_color, preserve_luminance)
+	_tinted_part_frames_cache[cache_key] = tinted_frames
+	return tinted_frames
 
 
 static func get_available_body_ids(gender: String = "") -> Array[String]:
@@ -191,8 +473,25 @@ static func _get_fallback_body_id(gender: String = "") -> String:
 
 static func normalize_gender(gender: String) -> String:
 	var normalized: String = gender.strip_edges().to_lower()
-	if normalized == "male" or normalized == "female":
-		return normalized
+	if normalized == "male" or normalized == "m" or normalized == "boy":
+		return "male"
+	if normalized == "female" or normalized == "f" or normalized == "girl":
+		return "female"
+	return ""
+
+
+static func infer_gender_from_body_id(body_id: String) -> String:
+	var normalized_body_id: String = _normalize_body_id(body_id).to_lower()
+	if normalized_body_id == "":
+		return ""
+	if normalized_body_id.contains("_f_") \
+			or normalized_body_id.contains("female") \
+			or normalized_body_id.contains("girl"):
+		return "female"
+	if normalized_body_id.contains("_m_") \
+			or normalized_body_id.contains("male") \
+			or normalized_body_id.contains("boy"):
+		return "male"
 	return ""
 
 
@@ -237,6 +536,85 @@ static func _is_selectable_body_id(body_id: String) -> bool:
 	return true
 
 
+static func _load_part_texture_for_movement(category: String, part_id: String, gender: String, movement_style: String) -> Texture2D:
+	if movement_style == BODY_MOVEMENT_RUN:
+		var run_part_id: String = _get_run_body_id(part_id)
+		var run_texture: Texture2D = _load_part_texture(category, run_part_id, gender)
+		if run_texture != null:
+			return run_texture
+	return _load_part_texture(category, part_id, gender)
+
+
+static func _load_part_texture(category: String, part_id: String, gender: String = "") -> Texture2D:
+	var normalized_category: String = normalize_part_category(category)
+	var normalized_part_id: String = _normalize_body_id(part_id)
+	if normalized_category == "" or normalized_part_id == "":
+		return null
+
+	var normalized_gender: String = normalize_gender(gender)
+	if normalized_gender != "":
+		var gender_path: String = "%s/%s.png" % [_get_gender_part_directory(normalized_gender, normalized_category), normalized_part_id]
+		if ResourceLoader.exists(gender_path):
+			return ResourceLoader.load(gender_path) as Texture2D
+
+	var path: String = "%s/%s/%s.png" % [PLAYER_DIRECTORY, normalized_category, normalized_part_id]
+	if ResourceLoader.exists(path):
+		return ResourceLoader.load(path) as Texture2D
+	return null
+
+
+static func _get_gender_part_directory(gender: String, category: String) -> String:
+	var normalized_gender: String = normalize_gender(gender)
+	var normalized_category: String = normalize_part_category(category)
+	if normalized_gender == "":
+		return "%s/%s" % [PLAYER_DIRECTORY, normalized_category]
+	return "%s/%s/%s" % [PLAYER_DIRECTORY, normalized_gender, normalized_category]
+
+
+static func _get_manifest_part_ids(directory_path: String) -> Array[String]:
+	var manifest_path: String = "%s/parts_manifest.json" % directory_path
+	if not FileAccess.file_exists(manifest_path):
+		return []
+
+	var file := FileAccess.open(manifest_path, FileAccess.READ)
+	if file == null:
+		return []
+
+	var parsed_body: Variant = JSON.parse_string(file.get_as_text())
+	if not parsed_body is Array:
+		return []
+
+	var part_ids: Array[String] = []
+	var parsed_ids: Array = parsed_body as Array
+	for part_id_value: Variant in parsed_ids:
+		var part_id: String = _normalize_body_id(str(part_id_value))
+		if part_id != "":
+			part_ids.append(part_id)
+	return part_ids
+
+
+static func _collect_part_ids_from_directory(directory_path: String, part_ids: Array[String]) -> void:
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return
+
+	for file_name: String in directory.get_files():
+		if not file_name.ends_with(".png"):
+			continue
+		var part_id: String = file_name.trim_suffix(".png")
+		if part_id != "":
+			part_ids.append(part_id)
+
+
+static func _sort_part_ids(part_ids: Array[String], category: String, gender: String) -> Array[String]:
+	part_ids.sort()
+	var default_part_id: String = get_default_part_id(category, gender)
+	if default_part_id != "" and part_ids.has(default_part_id):
+		part_ids.erase(default_part_id)
+		part_ids.push_front(default_part_id)
+	return part_ids
+
+
 static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
 	var texture_size: Vector2 = texture.get_size()
 	var frame_size: Vector2 = Vector2(
@@ -258,6 +636,78 @@ static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
 	_add_walk_animation(sprite_frames, texture, frame_size, "walk_up", 3)
 
 	return sprite_frames
+
+
+static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: Color, preserve_luminance: bool) -> SpriteFrames:
+	var sprite_frames := SpriteFrames.new()
+	if sprite_frames.has_animation(&"default"):
+		sprite_frames.remove_animation(&"default")
+
+	for animation_name_text: String in base_frames.get_animation_names():
+		var animation_name := StringName(animation_name_text)
+		if not sprite_frames.has_animation(animation_name):
+			sprite_frames.add_animation(animation_name)
+		sprite_frames.set_animation_speed(animation_name, base_frames.get_animation_speed(animation_name))
+		sprite_frames.set_animation_loop(animation_name, base_frames.get_animation_loop(animation_name))
+
+		var frame_count: int = base_frames.get_frame_count(animation_name)
+		for frame_index: int in range(frame_count):
+			var frame_texture: Texture2D = base_frames.get_frame_texture(animation_name, frame_index)
+			var frame_duration: float = base_frames.get_frame_duration(animation_name, frame_index)
+			var tinted_texture: Texture2D = _make_tinted_texture(frame_texture, tint_color, preserve_luminance)
+			sprite_frames.add_frame(animation_name, tinted_texture, frame_duration)
+
+	return sprite_frames
+
+
+static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve_luminance: bool) -> Texture2D:
+	if texture == null:
+		return null
+
+	var source_image: Image = _get_texture_image(texture)
+	if source_image == null:
+		return texture
+
+	var width: int = source_image.get_width()
+	var height: int = source_image.get_height()
+	var tinted_image := Image.create(width, height, false, Image.FORMAT_RGBA8)
+	for y: int in range(height):
+		for x: int in range(width):
+			var source_pixel: Color = source_image.get_pixel(x, y)
+			var alpha: float = source_pixel.a * tint_color.a
+			if preserve_luminance:
+				var luminance: float = clampf(
+					(source_pixel.r * 0.2126) + (source_pixel.g * 0.7152) + (source_pixel.b * 0.0722),
+					0.0,
+					1.0
+				)
+				var normalized_luminance: float = clampf((luminance - 0.05) / 0.43, 0.0, 1.0)
+				var shade_value: float = lerpf(0.45, 1.15, pow(normalized_luminance, 0.85))
+				var tinted_value: float = clampf(tint_color.v * shade_value, 0.0, 1.0)
+				tinted_image.set_pixel(x, y, Color.from_hsv(tint_color.h, tint_color.s, tinted_value, alpha))
+			else:
+				tinted_image.set_pixel(x, y, Color(tint_color.r, tint_color.g, tint_color.b, alpha))
+
+	return ImageTexture.create_from_image(tinted_image)
+
+
+static func _get_texture_image(texture: Texture2D) -> Image:
+	if texture is AtlasTexture:
+		var atlas_texture := texture as AtlasTexture
+		if atlas_texture.atlas == null:
+			return null
+		var atlas_image: Image = atlas_texture.atlas.get_image()
+		if atlas_image == null:
+			return null
+		var region: Rect2 = atlas_texture.region
+		return atlas_image.get_region(Rect2i(
+			int(region.position.x),
+			int(region.position.y),
+			int(region.size.x),
+			int(region.size.y)
+		))
+
+	return texture.get_image()
 
 
 static func _add_idle_animation(
@@ -296,7 +746,7 @@ static func _make_frame_texture(texture: Texture2D, frame_size: Vector2, column:
 
 
 static func _normalize_body_id(body_id: String) -> String:
-	var normalized: String = body_id.strip_edges().replace("\\", "/")
+	var normalized: String = get_presence_body_base_id(body_id).strip_edges().replace("\\", "/")
 	var normalized_parts: Array[String] = []
 	for part: String in normalized.split("/", false):
 		var normalized_part: String = part.strip_edges()

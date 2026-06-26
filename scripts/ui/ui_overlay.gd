@@ -40,9 +40,28 @@ const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const APPEARANCE_CATEGORIES := [
 	{"id": "body", "label": "Body"},
 	{"id": "hair", "label": "Hair"},
-	{"id": "legs", "label": "Legs"},
-	{"id": "feet", "label": "Feet"},
+	{"id": "headgear", "label": "Headgear"},
 	{"id": "facegear", "label": "Facegear"},
+	{"id": "top", "label": "Top"},
+	{"id": "bottom", "label": "Bottom"},
+	{"id": "shoes", "label": "Shoes"},
+]
+const HAIR_COLOR_SWATCHES := [
+	{"id": "#ffffff", "label": "White", "color": Color("#ffffff")},
+	{"id": "#2a2421", "label": "Black", "color": Color("#2a2421")},
+	{"id": "#5a3728", "label": "Brown", "color": Color("#5a3728")},
+	{"id": "#f4d77a", "label": "Blond", "color": Color("#f4d77a")},
+	{"id": "#8a3030", "label": "Red", "color": Color("#8a3030")},
+	{"id": "#5d49a8", "label": "Violet", "color": Color("#5d49a8")},
+	{"id": "#2f6f7a", "label": "Teal", "color": Color("#2f6f7a")},
+]
+const EYE_COLOR_SWATCHES := [
+	{"id": "#0fff00", "label": "Green", "color": Color("#0fff00")},
+	{"id": "#3da5ff", "label": "Blue", "color": Color("#3da5ff")},
+	{"id": "#7a4b2a", "label": "Brown", "color": Color("#7a4b2a")},
+	{"id": "#6f50c9", "label": "Violet", "color": Color("#6f50c9")},
+	{"id": "#f2d24b", "label": "Gold", "color": Color("#f2d24b")},
+	{"id": "#e83b3b", "label": "Red", "color": Color("#e83b3b")},
 ]
 const KANTO_BADGES := [
 	{"id": "boulder", "name": "Boulder Badge", "texture": "res://assets/gym_badges/kanto_badges/Boulder_Badge.png", "unlocked": false},
@@ -270,6 +289,12 @@ var trainer_card_money_label: Label
 var trainer_card_playtime_label: Label
 var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
+var trainer_card_part_buttons: Dictionary = {}
+var trainer_card_color_buttons: Dictionary = {}
+var trainer_card_appearance_save_button: Button
+var trainer_card_appearance_status_label: Label
+var trainer_card_has_unsaved_appearance_changes := false
+var trainer_card_is_saving_appearance := false
 var trainer_card_dragging: bool = false
 var trainer_card_drag_offset := Vector2.ZERO
 var bag_popup: PanelContainer
@@ -1940,7 +1965,7 @@ func _create_player_status_avatar_visual() -> Node2D:
 		visual_root.free()
 		return null
 
-	_apply_avatar_preview_body(visual_root)
+	_apply_avatar_preview_appearance(visual_root)
 	return visual_root
 
 func _populate_avatar_preview(viewport: SubViewport, preview_position: Vector2, preview_scale: Vector2) -> void:
@@ -1967,7 +1992,7 @@ func _refresh_avatar_previews() -> void:
 		var preview_scale: Vector2 = viewport.get_meta("preview_scale", TRAINER_CARD_AVATAR_SCALE) as Vector2
 		_populate_avatar_preview(viewport, preview_position, preview_scale)
 
-func _apply_avatar_preview_body(node: Node) -> void:
+func _apply_avatar_preview_appearance(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
 		if sprite.name == "BodySprite":
@@ -1975,9 +2000,123 @@ func _apply_avatar_preview_body(node: Node) -> void:
 			if body_frames != null:
 				sprite.sprite_frames = body_frames
 				sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+				sprite.modulate = _get_avatar_preview_body_modulate()
+		else:
+			_apply_avatar_preview_part(sprite)
 
 	for child_node: Node in node.get_children():
-		_apply_avatar_preview_body(child_node)
+		_apply_avatar_preview_appearance(child_node)
+
+func _apply_avatar_preview_part(sprite: AnimatedSprite2D) -> void:
+	var category_id: String = _get_appearance_category_for_sprite(sprite.name)
+	if category_id == "":
+		return
+	if not CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender):
+		sprite.visible = false
+		sprite.sprite_frames = null
+		sprite.material = null
+		return
+
+	var part_id: String = _get_preview_part_id(category_id)
+	if part_id == "":
+		sprite.visible = false
+		sprite.sprite_frames = null
+		sprite.material = null
+		return
+
+	var part_frames: SpriteFrames = _get_avatar_preview_part_frames(category_id, part_id)
+	if part_frames == null:
+		sprite.visible = false
+		sprite.sprite_frames = null
+		sprite.material = null
+		return
+
+	sprite.sprite_frames = part_frames
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_apply_avatar_preview_part_visuals(sprite, category_id)
+	sprite.visible = true
+
+func _get_appearance_category_for_sprite(sprite_name: String) -> String:
+	match sprite_name:
+		"HairSprite":
+			return "hair"
+		"HeadgearSprite":
+			return "headgear"
+		"FaceGearSprite":
+			return "facegear"
+		"TopSprite":
+			return "top"
+		"BottomSprite":
+			return "bottom"
+		"ShoesSprite":
+			return "shoes"
+		"EyesSprite":
+			return "eyes"
+		"EyebrowsSprite":
+			return "eyebrows"
+		_:
+			return ""
+
+func _get_preview_part_id(category_id: String) -> String:
+	match CharacterAppearanceService.normalize_part_category(category_id):
+		"hair":
+			return PlayerSave.appearance_hair_id
+		"headgear":
+			return PlayerSave.appearance_headgear_id
+		"facegear":
+			return PlayerSave.appearance_facegear_id
+		"top":
+			return PlayerSave.appearance_top_id
+		"bottom":
+			return PlayerSave.appearance_bottom_id
+		"shoes":
+			return PlayerSave.appearance_shoes_id
+		"eyes":
+			return CharacterAppearanceService.get_default_part_id("eyes", PlayerSave.gender)
+		"eyebrows":
+			return CharacterAppearanceService.get_default_part_id("eyebrows", PlayerSave.gender)
+		_:
+			return ""
+
+func _get_avatar_preview_body_modulate() -> Color:
+	if CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender):
+		return _parse_appearance_color(PlayerSave.appearance_skin_tone, Color.WHITE)
+	return Color.WHITE
+
+func _get_preview_part_modulate(category_id: String) -> Color:
+	return Color.WHITE
+
+func _apply_avatar_preview_part_visuals(sprite: AnimatedSprite2D, category_id: String) -> void:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	sprite.material = null
+	sprite.modulate = _get_preview_part_modulate(normalized_category)
+
+func _get_avatar_preview_part_frames(category_id: String, part_id: String) -> SpriteFrames:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	if normalized_category == "eyes":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_appearance_color(PlayerSave.appearance_eye_color, Color.WHITE)
+		)
+	if normalized_category == "hair" or normalized_category == "eyebrows":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_appearance_color(PlayerSave.appearance_hair_color, Color.WHITE),
+			true
+		)
+	return CharacterAppearanceService.get_part_frames(category_id, part_id, PlayerSave.gender)
+
+func _parse_appearance_color(color_text: String, fallback: Color) -> Color:
+	var normalized_color: String = color_text.strip_edges()
+	if normalized_color == "" or not normalized_color.begins_with("#"):
+		return fallback
+	return Color(normalized_color)
 
 func _disable_avatar_preview_processing(node: Node) -> void:
 	node.set_process(false)
@@ -2319,11 +2458,17 @@ func _create_trainer_card_appearance_tab() -> Control:
 	sidebar.add_theme_constant_override("separation", 6)
 	layout.add_child(sidebar)
 
+	var editor_stack := VBoxContainer.new()
+	editor_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	editor_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	editor_stack.add_theme_constant_override("separation", 8)
+	layout.add_child(editor_stack)
+
 	var content_stack := VBoxContainer.new()
 	content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content_stack.add_theme_constant_override("separation", 8)
-	layout.add_child(content_stack)
+	editor_stack.add_child(content_stack)
 
 	for category_value: Variant in APPEARANCE_CATEGORIES:
 		if not category_value is Dictionary:
@@ -2344,7 +2489,30 @@ func _create_trainer_card_appearance_tab() -> Control:
 		_apply_button_style(side_button, "primary" if category_id == "body" else "default")
 
 	_create_trainer_card_body_appearance_content(content_stack)
+	editor_stack.add_child(_create_trainer_card_appearance_save_row())
+	_update_trainer_card_appearance_save_state()
 	return tab
+
+func _create_trainer_card_appearance_save_row() -> Control:
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 8)
+
+	trainer_card_appearance_status_label = Label.new()
+	trainer_card_appearance_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	trainer_card_appearance_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	trainer_card_appearance_status_label.add_theme_font_size_override("font_size", 13)
+	trainer_card_appearance_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(trainer_card_appearance_status_label)
+
+	trainer_card_appearance_save_button = Button.new()
+	trainer_card_appearance_save_button.text = "Save"
+	trainer_card_appearance_save_button.custom_minimum_size = Vector2(92, 30)
+	trainer_card_appearance_save_button.focus_mode = Control.FOCUS_NONE
+	trainer_card_appearance_save_button.pressed.connect(_on_trainer_card_appearance_save_pressed)
+	_apply_button_style(trainer_card_appearance_save_button, "primary")
+	row.add_child(trainer_card_appearance_save_button)
+	return row
 
 func _create_trainer_card_badges_tab() -> Control:
 	var tab := MarginContainer.new()
@@ -2615,10 +2783,12 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 			_apply_button_style(side_button, "primary" if selected else "default")
 
 	_clear_container_children(content_stack)
+	trainer_card_part_buttons.clear()
+	trainer_card_color_buttons.clear()
 	if category_id == "body":
 		_create_trainer_card_body_appearance_content(content_stack)
 	else:
-		_create_trainer_card_empty_appearance_content(content_stack, category_id)
+		_create_trainer_card_part_appearance_content(content_stack, category_id)
 
 func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) -> void:
 	var body_label := Label.new()
@@ -2626,6 +2796,10 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	body_label.add_theme_font_size_override("font_size", 16)
 	body_label.add_theme_color_override("font_color", UI_TEXT)
 	content_stack.add_child(body_label)
+
+	var search_input := _create_trainer_card_appearance_search_input("Search bodies")
+	search_input.text_changed.connect(_filter_trainer_card_body_buttons)
+	content_stack.add_child(search_input)
 
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2642,7 +2816,7 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	trainer_card_body_buttons.clear()
 	for body_id: String in _get_body_appearance_ids():
 		var body_button := Button.new()
-		body_button.text = _format_body_appearance_name(body_id)
+		body_button.text = _format_appearance_option_name("body", body_id)
 		body_button.focus_mode = Control.FOCUS_NONE
 		body_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		body_button.pressed.connect(_on_trainer_card_body_selected.bind(body_id))
@@ -2650,23 +2824,98 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 		trainer_card_body_buttons[body_id] = body_button
 
 	_refresh_trainer_card_body_buttons()
+	_create_trainer_card_color_palette(content_stack, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
 
-func _create_trainer_card_empty_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
+func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
 	var title := Label.new()
-	title.text = _format_body_appearance_name(category_id)
+	title.text = _format_appearance_category_name(normalized_category)
 	title.add_theme_font_size_override("font_size", 16)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	content_stack.add_child(title)
 
-	var empty_state := Label.new()
-	empty_state.text = "Coming soon"
-	empty_state.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	empty_state.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	empty_state.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	empty_state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	empty_state.add_theme_font_size_override("font_size", 14)
-	empty_state.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	content_stack.add_child(empty_state)
+	var search_input := _create_trainer_card_appearance_search_input("Search %s" % _format_appearance_category_name(normalized_category).to_lower())
+	search_input.text_changed.connect(_filter_trainer_card_part_buttons)
+	content_stack.add_child(search_input)
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_stack.add_child(scroll)
+
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	scroll.add_child(grid)
+
+	var none_button := Button.new()
+	none_button.text = "None"
+	none_button.focus_mode = Control.FOCUS_NONE
+	none_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	none_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, ""))
+	grid.add_child(none_button)
+	trainer_card_part_buttons["%s:" % normalized_category] = none_button
+
+	for part_id: String in CharacterAppearanceService.get_available_part_ids(normalized_category, PlayerSave.gender):
+		var part_button := Button.new()
+		part_button.text = _format_appearance_option_name(normalized_category, part_id)
+		part_button.focus_mode = Control.FOCUS_NONE
+		part_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		part_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, part_id))
+		grid.add_child(part_button)
+		trainer_card_part_buttons["%s:%s" % [normalized_category, part_id]] = part_button
+
+	_refresh_trainer_card_part_buttons()
+	if normalized_category == "hair":
+		_create_trainer_card_color_palette(content_stack, "Hair Color", "hair_color", HAIR_COLOR_SWATCHES)
+
+func _create_trainer_card_color_palette(
+	content_stack: VBoxContainer,
+	title_text: String,
+	color_key: String,
+	swatches: Array
+) -> void:
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	content_stack.add_child(title)
+
+	var grid := GridContainer.new()
+	grid.columns = 6
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	content_stack.add_child(grid)
+
+	for swatch_value: Variant in swatches:
+		if not swatch_value is Dictionary:
+			continue
+		var swatch: Dictionary = swatch_value as Dictionary
+		var color_id: String = str(swatch.get("id", ""))
+		var swatch_color: Color = swatch.get("color", Color.WHITE) as Color
+		var button := Button.new()
+		button.text = ""
+		button.tooltip_text = str(swatch.get("label", color_id))
+		button.custom_minimum_size = Vector2(30, 24)
+		button.focus_mode = Control.FOCUS_NONE
+		button.pressed.connect(_on_trainer_card_color_selected.bind(color_key, color_id))
+		grid.add_child(button)
+		trainer_card_color_buttons["%s:%s" % [color_key, color_id]] = {
+			"button": button,
+			"color": swatch_color,
+		}
+		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_id)
+
+func _create_trainer_card_appearance_search_input(placeholder: String) -> LineEdit:
+	var search_input := LineEdit.new()
+	search_input.placeholder_text = placeholder
+	search_input.clear_button_enabled = true
+	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_line_edit_style(search_input)
+	return search_input
 
 func _clear_container_children(container: Container) -> void:
 	for child: Node in container.get_children():
@@ -2729,20 +2978,101 @@ func _format_join_date_text(raw_text: String, fallback: String) -> String:
 
 	return date_part if date_part != "" else fallback
 
-func _format_body_appearance_name(body_id: String) -> String:
-	var text := body_id.replace("/", " ").replace("_", " ").replace("-", " ").strip_edges()
+func _format_appearance_category_name(category_id: String) -> String:
+	match CharacterAppearanceService.normalize_part_category(category_id):
+		"body":
+			return "Body"
+		"hair":
+			return "Hair"
+		"headgear":
+			return "Headgear"
+		"facegear":
+			return "Facegear"
+		"top":
+			return "Top"
+		"bottom":
+			return "Bottom"
+		"shoes":
+			return "Shoes"
+		_:
+			return _humanize_appearance_id(category_id)
+
+func _format_appearance_option_name(category_id: String, part_id: String) -> String:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	var normalized_part_id: String = part_id.strip_edges()
+	if normalized_category == "body":
+		match normalized_part_id:
+			"Gen4_Base_v1", "Gen4_Base_F_v1":
+				return "Default"
+			"Gen4_Base_M_Tan", "Gen4_Base_F_Tan":
+				return "Tan"
+			"Gen4_Base_M_Dark", "Gen4_Base_F_Dark":
+				return "Dark"
+	if normalized_category != "body":
+		match normalized_part_id:
+			"Hair":
+				return "Starter Hair"
+			"Cap":
+				return "Starter Cap"
+			"Shirt":
+				return "Starter Shirt"
+			"Trousers":
+				return "Starter Trousers"
+			"Shoes":
+				return "Starter Shoes"
+			"Eyes":
+				return "Starter Eyes"
+			"Eyebrows":
+				return "Starter Eyebrows"
+	return _humanize_appearance_id(normalized_part_id)
+
+func _humanize_appearance_id(raw_id: String) -> String:
+	var text := raw_id.replace("/", " ").replace("_", " ").replace("-", " ").strip_edges()
 	if text == "":
-		return body_id
+		return raw_id
 	return text.capitalize()
 
-func _refresh_trainer_card_body_buttons() -> void:
+func _matches_appearance_search(label_text: String, raw_id: String, search_text: String) -> bool:
+	var normalized_search: String = search_text.strip_edges().to_lower()
+	if normalized_search == "":
+		return true
+	return label_text.to_lower().contains(normalized_search) or raw_id.to_lower().contains(normalized_search)
+
+func _filter_trainer_card_body_buttons(search_text: String) -> void:
 	for body_id_value: Variant in trainer_card_body_buttons.keys():
 		var body_id: String = str(body_id_value)
 		var button: Button = trainer_card_body_buttons.get(body_id) as Button
 		if button == null:
 			continue
+		button.visible = _matches_appearance_search(_format_appearance_option_name("body", body_id), body_id, search_text)
 
-		var display_name: String = _format_body_appearance_name(body_id)
+func _filter_trainer_card_part_buttons(search_text: String) -> void:
+	for key_value: Variant in trainer_card_part_buttons.keys():
+		var key: String = str(key_value)
+		var button: Button = trainer_card_part_buttons.get(key) as Button
+		if button == null:
+			continue
+		var separator_index: int = key.find(":")
+		if separator_index < 0:
+			continue
+		var category_id: String = key.substr(0, separator_index)
+		var part_id: String = key.substr(separator_index + 1)
+		var label_text: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		button.visible = _matches_appearance_search(label_text, part_id, search_text)
+
+func _refresh_trainer_card_body_buttons() -> void:
+	for body_id_value: Variant in trainer_card_body_buttons.keys():
+		var body_id: String = str(body_id_value)
+		var button_value: Variant = trainer_card_body_buttons.get(body_id)
+		if not is_instance_valid(button_value):
+			trainer_card_body_buttons.erase(body_id)
+			continue
+		var button: Button = button_value as Button
+		if button == null:
+			trainer_card_body_buttons.erase(body_id)
+			continue
+
+		var display_name: String = _format_appearance_option_name("body", body_id)
 		var is_selected: bool = body_id == String(PlayerSave.appearance_body_id)
 		if is_selected:
 			button.text = "%s  *" % display_name
@@ -2750,6 +3080,72 @@ func _refresh_trainer_card_body_buttons() -> void:
 		else:
 			button.text = display_name
 			_apply_button_style(button)
+
+func _refresh_trainer_card_part_buttons() -> void:
+	for key_value: Variant in trainer_card_part_buttons.keys():
+		var key: String = str(key_value)
+		var button_value: Variant = trainer_card_part_buttons.get(key)
+		if not is_instance_valid(button_value):
+			trainer_card_part_buttons.erase(key)
+			continue
+		var button: Button = button_value as Button
+		if button == null:
+			trainer_card_part_buttons.erase(key)
+			continue
+		var separator_index: int = key.find(":")
+		if separator_index < 0:
+			continue
+		var category_id: String = key.substr(0, separator_index)
+		var part_id: String = key.substr(separator_index + 1)
+		var selected_part_id: String = _get_preview_part_id(category_id)
+		var display_name: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		if part_id == selected_part_id:
+			button.text = "%s  *" % display_name
+			_apply_button_style(button, "primary")
+		else:
+			button.text = display_name
+			_apply_button_style(button)
+
+func _apply_color_swatch_button_style(button: Button, color: Color, selected: bool) -> void:
+	var border_color := Color("#f4d78a") if selected else Color("#4b5872")
+	var border_width := 3 if selected else 1
+	button.add_theme_stylebox_override("normal", _make_panel_style(color, border_color, 5, border_width))
+	button.add_theme_stylebox_override("hover", _make_panel_style(color.lightened(0.12), Color("#62d7ff"), 5, 2))
+	button.add_theme_stylebox_override("pressed", _make_panel_style(color.darkened(0.12), Color("#f4d78a"), 5, 2))
+	button.add_theme_stylebox_override("focus", _make_panel_style(color, border_color, 5, border_width))
+
+func _get_player_save_color_value(color_key: String) -> String:
+	match color_key:
+		"hair_color":
+			return PlayerSave.appearance_hair_color
+		"eye_color":
+			return PlayerSave.appearance_eye_color
+		_:
+			return ""
+
+func _refresh_trainer_card_color_buttons() -> void:
+	for key_value: Variant in trainer_card_color_buttons.keys():
+		var key: String = str(key_value)
+		var entry_value: Variant = trainer_card_color_buttons.get(key)
+		if not entry_value is Dictionary:
+			trainer_card_color_buttons.erase(key)
+			continue
+		var entry: Dictionary = entry_value as Dictionary
+		var button_value: Variant = entry.get("button")
+		if not is_instance_valid(button_value):
+			trainer_card_color_buttons.erase(key)
+			continue
+		var button: Button = button_value as Button
+		if button == null:
+			trainer_card_color_buttons.erase(key)
+			continue
+		var separator_index: int = key.find(":")
+		if separator_index < 0:
+			continue
+		var color_key: String = key.substr(0, separator_index)
+		var color_value: String = key.substr(separator_index + 1)
+		var swatch_color: Color = entry.get("color", Color.WHITE) as Color
+		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_value)
 
 func _on_player_status_panel_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):
@@ -2841,28 +3237,180 @@ func _show_trainer_card() -> void:
 	_refresh_trainer_card_body_buttons()
 	_refresh_avatar_previews()
 	_refresh_player_status_card()
-	_save_current_world_state_after_appearance_change()
-
-func _save_current_world_state_after_appearance_change() -> void:
-	var world := GameState.get_world()
-	if world != null and world.has_method("save_current_player_state"):
-		world.call("save_current_player_state")
+	_update_trainer_card_appearance_save_state()
 	trainer_card_popup.visible = true
 	_activate_ui_panel(trainer_card_popup)
+
+func _mark_trainer_card_appearance_dirty() -> void:
+	trainer_card_has_unsaved_appearance_changes = true
+	_update_trainer_card_appearance_save_state()
+	var world := GameState.get_world()
+	if world != null and world.has_method("_publish_world_presence"):
+		world.call("_publish_world_presence", true)
+
+func _update_trainer_card_appearance_save_state(message: String = "") -> void:
+	if trainer_card_appearance_save_button != null:
+		trainer_card_appearance_save_button.disabled = trainer_card_is_saving_appearance or not trainer_card_has_unsaved_appearance_changes
+		if trainer_card_is_saving_appearance:
+			trainer_card_appearance_save_button.text = "Saving..."
+		elif trainer_card_has_unsaved_appearance_changes:
+			trainer_card_appearance_save_button.text = "Save"
+		else:
+			trainer_card_appearance_save_button.text = "Saved"
+		_apply_button_style(trainer_card_appearance_save_button, "primary" if trainer_card_has_unsaved_appearance_changes else "default")
+
+	if trainer_card_appearance_status_label == null:
+		return
+	if message != "":
+		trainer_card_appearance_status_label.text = message
+	elif trainer_card_is_saving_appearance:
+		trainer_card_appearance_status_label.text = "Saving appearance..."
+	elif trainer_card_has_unsaved_appearance_changes:
+		trainer_card_appearance_status_label.text = "Unsaved appearance changes"
+	else:
+		trainer_card_appearance_status_label.text = "Appearance saved"
+
+	var status_color := UI_MUTED_TEXT
+	if trainer_card_is_saving_appearance:
+		status_color = UI_BORDER_FOCUS
+	elif trainer_card_has_unsaved_appearance_changes:
+		status_color = UI_MONEY
+	trainer_card_appearance_status_label.add_theme_color_override("font_color", status_color)
+
+func _on_trainer_card_appearance_save_pressed() -> void:
+	if trainer_card_is_saving_appearance:
+		return
+
+	trainer_card_is_saving_appearance = true
+	_update_trainer_card_appearance_save_state()
+	var result: Dictionary = await _save_trainer_card_appearance_to_backend()
+	trainer_card_is_saving_appearance = false
+
+	if not bool(result.get("success", false)):
+		trainer_card_has_unsaved_appearance_changes = true
+		_update_trainer_card_appearance_save_state("Save failed: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	if not _save_response_matches_current_appearance(result):
+		trainer_card_has_unsaved_appearance_changes = true
+		_update_trainer_card_appearance_save_state("Save failed: server did not persist all appearance parts")
+		return
+
+	trainer_card_has_unsaved_appearance_changes = false
+	_update_trainer_card_appearance_save_state("Appearance saved")
+
+func _save_trainer_card_appearance_to_backend() -> Dictionary:
+	var world := GameState.get_world()
+	if world == null or not world.has_method("save_current_player_state_now"):
+		return {
+			"success": false,
+			"error": "World is not ready.",
+		}
+
+	var result_value: Variant = await world.call("save_current_player_state_now")
+	if result_value is Dictionary:
+		return result_value as Dictionary
+	return {
+		"success": false,
+		"error": "Invalid save response.",
+	}
+
+func _save_response_matches_current_appearance(result: Dictionary) -> bool:
+	var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
+	var appearance: Dictionary = _staff_dictionary_from_variant(state.get("appearance", {}))
+	if appearance.is_empty():
+		return false
+
+	var current_appearance: Dictionary = PlayerSave.to_appearance_state()
+	var keys: Array[String] = [
+		"body",
+		"hair",
+		"headgear",
+		"facegear",
+		"top",
+		"bottom",
+		"shoes",
+		"hair_color",
+		"skin_tone",
+		"eye_color",
+	]
+	for key: String in keys:
+		if str(appearance.get(key, "")).strip_edges() != str(current_appearance.get(key, "")).strip_edges():
+			return false
+
+	return int(appearance.get("hair_style_index", 0)) == int(current_appearance.get("hair_style_index", 0))
 
 func _hide_trainer_card() -> void:
 	if trainer_card_popup != null:
 		trainer_card_popup.visible = false
 
 func _on_trainer_card_body_selected(body_id: String) -> void:
+	var was_layered_body: bool = CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender)
 	var player := get_tree().get_first_node_in_group("player")
 	if player != null and player.has_method("set_body_appearance"):
 		player.call("set_body_appearance", body_id)
 	else:
 		PlayerSave.appearance_body_id = body_id
+		PlayerSave.ensure_layered_appearance_defaults(not was_layered_body)
 
 	_refresh_trainer_card_body_buttons()
+	_refresh_trainer_card_part_buttons()
 	_refresh_avatar_previews()
+	_mark_trainer_card_appearance_dirty()
+
+func _on_trainer_card_part_selected(category_id: String, part_id: String) -> void:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	_ensure_layered_body_for_part_selection()
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and player.has_method("set_appearance_part"):
+		player.call("set_appearance_part", normalized_category, part_id)
+	else:
+		_apply_player_save_appearance_part(normalized_category, part_id)
+
+	_refresh_trainer_card_part_buttons()
+	_refresh_avatar_previews()
+	_mark_trainer_card_appearance_dirty()
+
+func _on_trainer_card_color_selected(color_key: String, color_value: String) -> void:
+	_ensure_layered_body_for_part_selection()
+	match color_key:
+		"hair_color":
+			PlayerSave.appearance_hair_color = color_value
+		"eye_color":
+			PlayerSave.appearance_eye_color = color_value
+		_:
+			return
+
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and player.has_method("refresh_appearance"):
+		player.call("refresh_appearance")
+
+	_refresh_trainer_card_color_buttons()
+	_refresh_avatar_previews()
+	_mark_trainer_card_appearance_dirty()
+
+func _ensure_layered_body_for_part_selection() -> void:
+	if CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender):
+		return
+	PlayerSave.appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+	PlayerSave.ensure_layered_appearance_defaults()
+
+func _apply_player_save_appearance_part(category_id: String, part_id: String) -> void:
+	var normalized_part_id: String = part_id.strip_edges()
+	match CharacterAppearanceService.normalize_part_category(category_id):
+		"hair":
+			PlayerSave.appearance_hair_id = normalized_part_id
+			PlayerSave.sync_hair_style_index_from_id()
+		"headgear":
+			PlayerSave.appearance_headgear_id = normalized_part_id
+		"facegear":
+			PlayerSave.appearance_facegear_id = normalized_part_id
+		"top":
+			PlayerSave.appearance_top_id = normalized_part_id
+		"bottom":
+			PlayerSave.appearance_bottom_id = normalized_part_id
+		"shoes":
+			PlayerSave.appearance_shoes_id = normalized_part_id
 
 func _get_player_money_value() -> int:
 	return max(int(PlayerSave.money), 0)
@@ -6541,7 +7089,9 @@ func _refresh_world_player_display_name() -> void:
 			player_node = world.get_node_or_null("Player")
 	if player_node != null and player_node.has_method("set_display_name"):
 		player_node.call("set_display_name", PlayerSave.player_name, true)
-	if player_node != null and player_node.has_method("set_body_appearance"):
+	if player_node != null and player_node.has_method("refresh_appearance"):
+		player_node.call("refresh_appearance")
+	elif player_node != null and player_node.has_method("set_body_appearance"):
 		player_node.call("set_body_appearance", PlayerSave.appearance_body_id)
 	if player_node != null and player_node.has_method("set_role_from_user"):
 		player_node.call("set_role_from_user", AuthService.current_user)
@@ -6623,10 +7173,16 @@ func _direction_from_name(direction_name: String) -> Vector2:
 
 func _reset_impersonated_appearance_to_defaults() -> void:
 	PlayerSave.appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
-	PlayerSave.appearance_hair_id = ""
-	PlayerSave.appearance_legs_id = ""
-	PlayerSave.appearance_feet_id = ""
-	PlayerSave.appearance_facegear_id = ""
+	PlayerSave.appearance_hair_id = CharacterAppearanceService.get_default_part_id("hair", PlayerSave.gender)
+	PlayerSave.appearance_headgear_id = CharacterAppearanceService.get_default_part_id("headgear", PlayerSave.gender)
+	PlayerSave.appearance_facegear_id = CharacterAppearanceService.get_default_part_id("facegear", PlayerSave.gender)
+	PlayerSave.appearance_top_id = CharacterAppearanceService.get_default_part_id("top", PlayerSave.gender)
+	PlayerSave.appearance_bottom_id = CharacterAppearanceService.get_default_part_id("bottom", PlayerSave.gender)
+	PlayerSave.appearance_shoes_id = CharacterAppearanceService.get_default_part_id("shoes", PlayerSave.gender)
+	PlayerSave.sync_hair_style_index_from_id()
+	PlayerSave.appearance_hair_color = CharacterAppearanceService.DEFAULT_HAIR_COLOR
+	PlayerSave.appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
+	PlayerSave.appearance_eye_color = CharacterAppearanceService.DEFAULT_EYE_COLOR
 	PlayerSave.ensure_body_matches_gender()
 
 func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
@@ -6641,6 +7197,10 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_popup = null
 	trainer_card_avatar_viewports.clear()
 	trainer_card_body_buttons.clear()
+	trainer_card_part_buttons.clear()
+	trainer_card_color_buttons.clear()
+	trainer_card_appearance_save_button = null
+	trainer_card_appearance_status_label = null
 	trainer_card_money_label = null
 	trainer_card_playtime_label = null
 	trainer_card_name_label = null

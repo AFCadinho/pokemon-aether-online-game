@@ -523,12 +523,135 @@ func _set_preview_idle_frame(node: Node) -> void:
 func _apply_player_preview_body(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
-		var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id, PlayerSave.gender)
-		if body_frames != null:
-			sprite.sprite_frames = body_frames
+		if sprite.name == "BodySprite":
+			var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id, PlayerSave.gender)
+			if body_frames != null:
+				sprite.sprite_frames = body_frames
+				sprite.modulate = _get_player_preview_body_modulate()
+				_set_preview_sprite_idle_down(sprite)
+		else:
+			_apply_player_preview_part(sprite)
 
 	for child_node: Node in node.get_children():
 		_apply_player_preview_body(child_node)
+
+func _apply_player_preview_part(sprite: AnimatedSprite2D) -> void:
+	var category_id: String = _get_player_preview_category_for_sprite(sprite.name)
+	if category_id == "":
+		return
+	if not CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender):
+		sprite.visible = false
+		sprite.sprite_frames = null
+		sprite.material = null
+		return
+
+	var part_id: String = _get_player_preview_part_id(category_id)
+	if part_id == "":
+		sprite.visible = false
+		sprite.sprite_frames = null
+		sprite.material = null
+		return
+
+	var part_frames: SpriteFrames = _get_player_preview_part_frames(category_id, part_id)
+	if part_frames == null:
+		sprite.visible = false
+		sprite.sprite_frames = null
+		sprite.material = null
+		return
+
+	sprite.sprite_frames = part_frames
+	_apply_player_preview_part_visuals(sprite, category_id)
+	sprite.visible = true
+	_set_preview_sprite_idle_down(sprite)
+
+func _set_preview_sprite_idle_down(sprite: AnimatedSprite2D) -> void:
+	if sprite.sprite_frames == null or not sprite.sprite_frames.has_animation(&"idle_down"):
+		return
+	sprite.animation = &"idle_down"
+	sprite.frame = 0
+	sprite.stop()
+
+func _get_player_preview_category_for_sprite(sprite_name: String) -> String:
+	match sprite_name:
+		"HairSprite":
+			return "hair"
+		"HeadgearSprite":
+			return "headgear"
+		"FaceGearSprite":
+			return "facegear"
+		"TopSprite":
+			return "top"
+		"BottomSprite":
+			return "bottom"
+		"ShoesSprite":
+			return "shoes"
+		"EyesSprite":
+			return "eyes"
+		"EyebrowsSprite":
+			return "eyebrows"
+		_:
+			return ""
+
+func _get_player_preview_part_id(category_id: String) -> String:
+	match CharacterAppearanceService.normalize_part_category(category_id):
+		"hair":
+			return PlayerSave.appearance_hair_id
+		"headgear":
+			return PlayerSave.appearance_headgear_id
+		"facegear":
+			return PlayerSave.appearance_facegear_id
+		"top":
+			return PlayerSave.appearance_top_id
+		"bottom":
+			return PlayerSave.appearance_bottom_id
+		"shoes":
+			return PlayerSave.appearance_shoes_id
+		"eyes":
+			return CharacterAppearanceService.get_default_part_id("eyes", PlayerSave.gender)
+		"eyebrows":
+			return CharacterAppearanceService.get_default_part_id("eyebrows", PlayerSave.gender)
+		_:
+			return ""
+
+func _get_player_preview_body_modulate() -> Color:
+	if CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender):
+		return _parse_player_preview_color(PlayerSave.appearance_skin_tone, Color.WHITE)
+	return Color.WHITE
+
+func _get_player_preview_part_modulate(category_id: String) -> Color:
+	return Color.WHITE
+
+func _apply_player_preview_part_visuals(sprite: AnimatedSprite2D, category_id: String) -> void:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	sprite.material = null
+	sprite.modulate = _get_player_preview_part_modulate(normalized_category)
+
+func _get_player_preview_part_frames(category_id: String, part_id: String) -> SpriteFrames:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	if normalized_category == "eyes":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_player_preview_color(PlayerSave.appearance_eye_color, Color.WHITE)
+		)
+	if normalized_category == "hair" or normalized_category == "eyebrows":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_player_preview_color(PlayerSave.appearance_hair_color, Color.WHITE),
+			true
+		)
+	return CharacterAppearanceService.get_part_frames(category_id, part_id, PlayerSave.gender)
+
+func _parse_player_preview_color(color_text: String, fallback: Color) -> Color:
+	var normalized_color: String = color_text.strip_edges()
+	if normalized_color == "" or not normalized_color.begins_with("#"):
+		return fallback
+	return Color(normalized_color)
 
 
 func _dictionary_from_value(value: Variant) -> Dictionary:

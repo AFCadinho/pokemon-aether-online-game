@@ -27,8 +27,10 @@ var playtime_elapsed := 0.0
 var unflushed_playtime_seconds := 0
 var is_flushing_playtime := false
 var is_saving_player_position := false
+var has_pending_player_position_save := false
 var last_saved_position_signature := ""
 var last_presence_position_signature := ""
+var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
 var active_battle_kind := ""
@@ -74,6 +76,29 @@ func _notification(what: int) -> void:
 func save_current_player_state() -> void:
 	_save_current_player_position_if_changed.call_deferred(true)
 	_flush_playtime_if_needed.call_deferred(true)
+	_publish_world_presence.call_deferred(true)
+
+func save_current_player_state_now() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if player == null or GameState.current_map == null:
+		return {
+			"success": false,
+			"error": "World is not ready.",
+		}
+
+	while is_saving_player_position:
+		await get_tree().process_frame
+
+	var signature: String = _get_current_player_position_signature(false)
+	var result: Dictionary = await _save_current_player_position(signature, "", false, true)
+	if bool(result.get("success", false)):
+		_publish_world_presence(true)
+	_flush_playtime_if_needed.call_deferred(true)
+	return result
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
@@ -200,7 +225,7 @@ func _setup_initial_world_state() -> void:
 	if not saved_state.is_empty():
 		_apply_saved_appearance_state(saved_state)
 		_position_player_at_saved_state(initial_map, saved_state)
-		last_saved_position_signature = _get_current_player_position_signature()
+		last_saved_position_signature = _get_current_player_position_signature(true)
 	elif not GameState.has_player_position:
 		_position_player_at_spawn(initial_map, initial_spawn_name, player.global_position)
 		_save_current_player_position_if_changed.call_deferred(true, initial_spawn_name)
@@ -383,29 +408,46 @@ func _save_current_player_position_if_changed(force := false, spawn_marker := ""
 	if not AuthService.is_authenticated() or player == null:
 		return
 	if is_saving_player_position:
+		has_pending_player_position_save = true
 		return
 
-	var signature: String = _get_current_player_position_signature()
+	var signature: String = _get_current_player_position_signature(true)
 	if not force and signature == last_saved_position_signature:
 		return
 
-	await _save_current_player_position(signature, spawn_marker)
+	await _save_current_player_position(signature, spawn_marker, true)
 
 
-func _save_current_player_position(signature: String, spawn_marker: String) -> void:
+func _save_current_player_position(
+	signature: String,
+	spawn_marker: String,
+	use_confirmed_appearance: bool = false,
+	mark_current_appearance_confirmed: bool = false
+) -> Dictionary:
 	is_saving_player_position = true
-	var state: Dictionary = _build_current_player_position_state(spawn_marker)
+	var state: Dictionary = _build_current_player_position_state(spawn_marker, use_confirmed_appearance)
 	var result: Dictionary = await PlayerGameStateService.save_player_position(state)
 	if bool(result.get("success", false)):
 		last_saved_position_signature = signature
+		if mark_current_appearance_confirmed:
+			confirmed_appearance_state = PlayerSave.to_appearance_state().duplicate(true)
+		elif confirmed_appearance_state.is_empty():
+			var appearance_value: Variant = state.get("appearance", {})
+			if appearance_value is Dictionary:
+				confirmed_appearance_state = (appearance_value as Dictionary).duplicate(true)
 	else:
 		push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
 	is_saving_player_position = false
+	if has_pending_player_position_save:
+		has_pending_player_position_save = false
+		_save_current_player_position_if_changed.call_deferred(true)
+	return result
 
 
-func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
+func _build_current_player_position_state(spawn_marker: String, use_confirmed_appearance: bool = false) -> Dictionary:
 	var current_map: Node = GameState.current_map
 	var position: Vector2 = player.global_position
+	var appearance_state: Dictionary = _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
 	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
 		"mapScenePath": _get_map_scene_path(current_map),
@@ -413,9 +455,10 @@ func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
 			"x": position.x,
 			"y": position.y,
 		},
+		"gender": PlayerSave.gender,
 		"facingDirection": _direction_to_name(player.last_direction),
 		"spawnMarker": spawn_marker,
-		"appearance": _get_current_appearance_presence_state(),
+		"appearance": appearance_state,
 		"roles": _get_current_role_presence_state(),
 	}
 	if player.has_method("get_network_movement_state"):
@@ -427,15 +470,23 @@ func _build_current_player_position_state(spawn_marker: String) -> Dictionary:
 func _get_current_appearance_presence_state() -> Dictionary:
 	return PlayerSave.to_appearance_state()
 
+func _get_confirmed_appearance_state() -> Dictionary:
+	if confirmed_appearance_state.is_empty():
+		return _get_current_appearance_presence_state()
+	return confirmed_appearance_state.duplicate(true)
+
 func _apply_saved_appearance_state(state: Dictionary) -> void:
 	var appearance: Dictionary = _dictionary_from_value(state.get("appearance", {}))
 	PlayerSave.apply_appearance_state(appearance)
+	confirmed_appearance_state = PlayerSave.to_appearance_state().duplicate(true)
 
 	var body_id: String = str(appearance.get("body", "")).strip_edges()
 	if body_id == "":
 		return
 
-	if player != null and player.has_method("set_body_appearance"):
+	if player != null and player.has_method("refresh_appearance"):
+		player.call("refresh_appearance")
+	elif player != null and player.has_method("set_body_appearance"):
 		player.call("set_body_appearance", body_id)
 
 
@@ -475,21 +526,32 @@ func _get_current_follower_presence_state() -> Dictionary:
 	}
 
 
-func _get_current_player_position_signature() -> String:
+func _get_current_player_position_signature(use_confirmed_appearance: bool = false) -> String:
 	var current_map: Node = GameState.current_map
 	var position: Vector2 = player.global_position
 	var follower_state := _get_current_follower_presence_state()
-	var appearance_state := _get_current_appearance_presence_state()
-	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s" % [
+	var appearance_state := _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
+	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_get_map_id(current_map),
 		_get_map_scene_path(current_map),
 		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
 		roundf(position.y / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
+		PlayerSave.gender,
 		_direction_to_name(player.last_direction),
 		str(follower_state.get("visible", false)),
 		str(follower_state.get("species", "")),
 		str(follower_state.get("shiny", false)),
 		str(appearance_state.get("body", "")),
+		str(appearance_state.get("hair", "")),
+		str(appearance_state.get("hair_style_index", "")),
+		str(appearance_state.get("headgear", "")),
+		str(appearance_state.get("facegear", "")),
+		str(appearance_state.get("top", "")),
+		str(appearance_state.get("bottom", "")),
+		str(appearance_state.get("shoes", "")),
+		str(appearance_state.get("hair_color", "")),
+		str(appearance_state.get("skin_tone", "")),
+		str(appearance_state.get("eye_color", "")),
 	]
 
 

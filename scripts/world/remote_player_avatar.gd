@@ -28,6 +28,18 @@ const ROLE_BADGE_TEXT_HEIGHT := 11.0
 const ROLE_BADGE_DEFAULT_WIDTH := 20.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
+const BODY_SPRITE_NAME := "BodySprite"
+const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
+const APPEARANCE_PART_SPRITES := {
+	"hair": "HairSprite",
+	"headgear": "HeadgearSprite",
+	"facegear": "FaceGearSprite",
+	"top": "TopSprite",
+	"bottom": "BottomSprite",
+	"shoes": "ShoesSprite",
+	"eyes": "EyesSprite",
+	"eyebrows": "EyebrowsSprite",
+}
 
 var user_id := 0
 var username := ""
@@ -55,6 +67,8 @@ var current_body_id := ""
 var current_body_gender := ""
 var current_body_movement_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 var current_gender := "male"
+var current_appearance_state: Dictionary = {}
+var current_appearance_signature := ""
 var has_position := false
 
 
@@ -88,7 +102,8 @@ func apply_state(state: Dictionary) -> void:
 	username = str(state.get("username", username))
 	var display_name_value: Variant = state.get("displayName", display_name)
 	display_name = username if display_name_value == null else str(display_name_value)
-	current_gender = CharacterAppearanceService.normalize_gender(str(state.get("gender", current_gender)))
+	var appearance_state: Dictionary = _get_appearance_state_from_presence(state)
+	current_gender = _resolve_state_gender(state, appearance_state)
 	if current_gender == "":
 		current_gender = "male"
 	var roles_value: Variant = state.get("roles", roles)
@@ -127,9 +142,86 @@ func apply_state(state: Dictionary) -> void:
 				_add_position_sample(target_position)
 
 	_update_animation(_is_visually_moving(false))
-	_apply_appearance_state(_dictionary_from_value(state.get("appearance", {})))
+	_apply_appearance_state(appearance_state)
 	_apply_follower_state(_dictionary_from_value(state.get("follower", {})))
 	_update_sort_z()
+
+
+func _resolve_state_gender(state: Dictionary, appearance_state: Dictionary) -> String:
+	var normalized_gender: String = CharacterAppearanceService.normalize_gender(str(state.get("gender", "")))
+	if normalized_gender != "":
+		return normalized_gender
+
+	normalized_gender = CharacterAppearanceService.normalize_gender(str(appearance_state.get("gender", "")))
+	if normalized_gender != "":
+		return normalized_gender
+
+	normalized_gender = CharacterAppearanceService.infer_gender_from_body_id(str(appearance_state.get("body", "")))
+	if normalized_gender != "":
+		return normalized_gender
+
+	return current_gender
+
+
+func _get_appearance_state_from_presence(state: Dictionary) -> Dictionary:
+	var appearance_state: Dictionary = _dictionary_from_value(state.get("appearance", {}))
+	_merge_appearance_alias(appearance_state, "hair_style_index", "hairStyleIndex")
+	_merge_appearance_alias(appearance_state, "hair_color", "hairColor")
+	_merge_appearance_alias(appearance_state, "skin_tone", "skinTone")
+	_merge_appearance_alias(appearance_state, "eye_color", "eyeColor")
+	_merge_presence_appearance_values_from_container(appearance_state, state)
+	var movement_state: Dictionary = _dictionary_from_value(state.get("movement", {}))
+	var movement_appearance: Dictionary = _dictionary_from_value(movement_state.get("appearance", {}))
+	if not movement_appearance.is_empty():
+		for key: Variant in movement_appearance.keys():
+			appearance_state[key] = movement_appearance[key]
+		_merge_appearance_alias(appearance_state, "hair_style_index", "hairStyleIndex")
+		_merge_appearance_alias(appearance_state, "hair_color", "hairColor")
+		_merge_appearance_alias(appearance_state, "skin_tone", "skinTone")
+		_merge_appearance_alias(appearance_state, "eye_color", "eyeColor")
+	_merge_presence_appearance_values_from_container(appearance_state, movement_state)
+	_merge_encoded_body_appearance(appearance_state)
+	return appearance_state
+
+
+func _merge_appearance_alias(appearance_state: Dictionary, appearance_key: String, alias_key: String) -> void:
+	if not appearance_state.has(appearance_key) and appearance_state.has(alias_key):
+		appearance_state[appearance_key] = appearance_state.get(alias_key)
+
+
+func _merge_presence_appearance_value(appearance_state: Dictionary, state: Dictionary, appearance_key: String, top_level_keys: Array) -> void:
+	for top_level_key: String in top_level_keys:
+		if state.has(top_level_key):
+			appearance_state[appearance_key] = state.get(top_level_key)
+			return
+
+
+func _merge_presence_appearance_values_from_container(appearance_state: Dictionary, container: Dictionary) -> void:
+	_merge_presence_appearance_value(appearance_state, container, "body", ["appearanceBody", "body"])
+	_merge_presence_appearance_value(appearance_state, container, "hair", ["appearanceHair", "hair"])
+	_merge_presence_appearance_value(appearance_state, container, "hair_style_index", ["appearanceHairStyleIndex", "hair_style_index", "hairStyleIndex"])
+	_merge_presence_appearance_value(appearance_state, container, "headgear", ["appearanceHeadgear", "headgear"])
+	_merge_presence_appearance_value(appearance_state, container, "facegear", ["appearanceFacegear", "facegear"])
+	_merge_presence_appearance_value(appearance_state, container, "top", ["appearanceTop", "top"])
+	_merge_presence_appearance_value(appearance_state, container, "bottom", ["appearanceBottom", "bottom", "legs"])
+	_merge_presence_appearance_value(appearance_state, container, "shoes", ["appearanceShoes", "shoes", "feet"])
+	_merge_presence_appearance_value(appearance_state, container, "hair_color", ["appearanceHairColor", "hair_color", "hairColor"])
+	_merge_presence_appearance_value(appearance_state, container, "skin_tone", ["appearanceSkinTone", "skin_tone", "skinTone"])
+	_merge_presence_appearance_value(appearance_state, container, "eye_color", ["appearanceEyeColor", "eye_color", "eyeColor"])
+
+
+func _merge_encoded_body_appearance(appearance_state: Dictionary) -> void:
+	var encoded_body: String = str(appearance_state.get("body", "")).strip_edges()
+	if encoded_body == "":
+		return
+
+	var decoded_appearance: Dictionary = CharacterAppearanceService.decode_presence_body_appearance(encoded_body)
+	if decoded_appearance.is_empty():
+		appearance_state["body"] = CharacterAppearanceService.get_presence_body_base_id(encoded_body)
+		return
+
+	for key: Variant in decoded_appearance.keys():
+		appearance_state[key] = decoded_appearance[key]
 
 
 func get_feet_position() -> Vector2:
@@ -191,10 +283,18 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 	var body_id: String = str(appearance_state.get("body", fallback_body_id)).strip_edges()
 	if body_id == "":
 		body_id = fallback_body_id
-	if body_id == current_body_id and current_gender == current_body_gender:
+	var next_appearance_state: Dictionary = appearance_state.duplicate()
+	next_appearance_state["body"] = body_id
+	var signature: String = _get_appearance_signature(next_appearance_state)
+	if signature == current_appearance_signature and current_gender == current_body_gender:
 		return
 
-	_apply_body_frames(body_id, current_gender, current_body_movement_style)
+	current_appearance_state = next_appearance_state
+	current_appearance_signature = signature
+	if body_id != current_body_id or current_gender != current_body_gender:
+		_apply_body_frames(body_id, current_gender, current_body_movement_style)
+	else:
+		_apply_appearance_parts(current_body_movement_style)
 
 
 func _ensure_pokemon_follower() -> void:
@@ -583,6 +683,9 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 	var normalized_body_id: String = body_id.strip_edges()
 	if normalized_body_id == "":
 		normalized_body_id = fallback_body_id
+	var available_body_ids: Array[String] = CharacterAppearanceService.get_available_body_ids(normalized_gender)
+	if not available_body_ids.has(normalized_body_id):
+		normalized_body_id = fallback_body_id
 
 	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
 		normalized_body_id,
@@ -602,9 +705,11 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 		var was_playing: bool = sprite.is_playing()
 		sprite.sprite_frames = body_frames
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		_apply_body_modulate(sprite, normalized_body_id, normalized_gender)
 		current_body_id = normalized_body_id
 		current_body_gender = normalized_gender
 		current_body_movement_style = movement_style
+		_apply_appearance_parts(movement_style)
 		_sync_appearance_animation_speeds(tile_move_duration if is_replaying_tile_move else TILE_MOVE_DURATION)
 
 		if body_frames.has_animation(current_animation):
@@ -619,12 +724,221 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 				sprite.stop()
 		else:
 			_update_animation(_is_visually_moving(false))
+		_sync_all_part_sprites_to_body()
 		return
+
+
+func _apply_appearance_parts(movement_style: String) -> void:
+	if not CharacterAppearanceService.body_supports_layered_parts(current_body_id, current_body_gender):
+		for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+			_clear_appearance_part_sprite(str(category_value))
+		return
+
+	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+		var category: String = str(category_value)
+		var part_id: String = _get_appearance_part_id(category)
+		_apply_appearance_part(category, part_id, movement_style)
+
+
+func _get_appearance_part_id(category: String) -> String:
+	match CharacterAppearanceService.normalize_part_category(category):
+		"hair":
+			return _get_appearance_hair_id()
+		"headgear":
+			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("headgear", CharacterAppearanceService.get_default_part_id("headgear", current_body_gender))))
+		"facegear":
+			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("facegear", "")))
+		"top":
+			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("top", CharacterAppearanceService.get_default_part_id("top", current_body_gender))))
+		"bottom":
+			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("bottom", current_appearance_state.get("legs", CharacterAppearanceService.get_default_part_id("bottom", current_body_gender)))))
+		"shoes":
+			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("shoes", current_appearance_state.get("feet", CharacterAppearanceService.get_default_part_id("shoes", current_body_gender)))))
+		"eyes":
+			return CharacterAppearanceService.get_default_part_id("eyes", current_body_gender)
+		"eyebrows":
+			return CharacterAppearanceService.get_default_part_id("eyebrows", current_body_gender)
+		_:
+			return ""
+
+
+func _get_appearance_hair_id() -> String:
+	var hair_id: String = CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("hair", "")))
+	if current_appearance_state.has("hair"):
+		return hair_id
+
+	var hair_ids: Array[String] = CharacterAppearanceService.get_available_part_ids("hair", current_body_gender)
+	if hair_ids.is_empty():
+		return CharacterAppearanceService.get_default_part_id("hair", current_body_gender)
+
+	var hair_style_index: int = clampi(int(current_appearance_state.get("hair_style_index", 0)), 0, hair_ids.size() - 1)
+	return hair_ids[hair_style_index]
+
+
+func _apply_appearance_part(category: String, part_id: String, movement_style: String) -> void:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
+	if not APPEARANCE_PART_SPRITES.has(normalized_category):
+		return
+
+	var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[normalized_category]))
+	if sprite == null:
+		return
+
+	var normalized_part_id: String = part_id.strip_edges()
+	if normalized_part_id == "":
+		_clear_appearance_part_sprite(normalized_category)
+		return
+
+	var part_frames: SpriteFrames = _get_appearance_part_frames(normalized_category, normalized_part_id, movement_style)
+	if part_frames == null:
+		_clear_appearance_part_sprite(normalized_category)
+		return
+
+	sprite.sprite_frames = part_frames
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.set_meta(UNEQUIPPED_APPEARANCE_PART_META, false)
+	_apply_appearance_part_visuals(sprite, normalized_category)
+	sprite.visible = true
+	_sync_sprite_to_body(sprite)
+
+
+func _get_appearance_sprite(sprite_name: String) -> AnimatedSprite2D:
+	for sprite in appearance_sprites:
+		if sprite.name == sprite_name:
+			return sprite
+	return null
+
+
+func _get_body_sprite() -> AnimatedSprite2D:
+	return _get_appearance_sprite(BODY_SPRITE_NAME)
+
+
+func _sync_all_part_sprites_to_body() -> void:
+	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+		var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[str(category_value)]))
+		_sync_sprite_to_body(sprite)
+
+
+func _sync_sprite_to_body(sprite: AnimatedSprite2D) -> void:
+	var body_sprite := _get_body_sprite()
+	if sprite == null or body_sprite == null or sprite == body_sprite:
+		return
+	if _is_unequipped_appearance_part_sprite(sprite):
+		sprite.visible = false
+		sprite.stop()
+		return
+	if sprite.sprite_frames == null:
+		return
+
+	var animation_name: StringName = body_sprite.animation
+	if not sprite.sprite_frames.has_animation(animation_name):
+		sprite.visible = false
+		sprite.stop()
+		return
+
+	sprite.visible = true
+	sprite.animation = animation_name
+	var frame_count: int = sprite.sprite_frames.get_frame_count(animation_name)
+	if frame_count > 0:
+		sprite.frame = mini(body_sprite.frame, frame_count - 1)
+		sprite.frame_progress = body_sprite.frame_progress
+	if body_sprite.is_playing():
+		sprite.play(animation_name)
+	else:
+		sprite.stop()
+
+
+func _clear_appearance_part_sprite(category: String) -> void:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
+	if not APPEARANCE_PART_SPRITES.has(normalized_category):
+		return
+	var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[normalized_category]))
+	if sprite == null:
+		return
+	sprite.stop()
+	sprite.sprite_frames = null
+	sprite.visible = false
+	sprite.modulate = Color.WHITE
+	sprite.material = null
+	sprite.set_meta(UNEQUIPPED_APPEARANCE_PART_META, true)
+
+
+func _apply_body_modulate(body_sprite: AnimatedSprite2D, body_id: String, gender: String) -> void:
+	if body_sprite == null:
+		return
+	if CharacterAppearanceService.body_supports_layered_parts(body_id, gender):
+		body_sprite.modulate = _parse_appearance_color(str(current_appearance_state.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE)), Color.WHITE)
+	else:
+		body_sprite.modulate = Color.WHITE
+
+
+func _get_appearance_part_modulate(category: String) -> Color:
+	return Color.WHITE
+
+
+func _apply_appearance_part_visuals(sprite: AnimatedSprite2D, category: String) -> void:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
+	sprite.material = null
+	sprite.modulate = _get_appearance_part_modulate(normalized_category)
+
+
+func _get_appearance_part_frames(category: String, part_id: String, movement_style: String) -> SpriteFrames:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
+	if normalized_category == "eyes":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			current_body_gender,
+			movement_style,
+			_parse_appearance_color(str(current_appearance_state.get("eye_color", CharacterAppearanceService.DEFAULT_EYE_COLOR)), Color.WHITE)
+		)
+	if normalized_category == "hair" or normalized_category == "eyebrows":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			current_body_gender,
+			movement_style,
+			_parse_appearance_color(str(current_appearance_state.get("hair_color", CharacterAppearanceService.DEFAULT_HAIR_COLOR)), Color.WHITE),
+			true
+		)
+	return CharacterAppearanceService.get_part_frames(
+		category,
+		part_id,
+		current_body_gender,
+		movement_style
+	)
+
+
+func _parse_appearance_color(color_text: String, fallback: Color) -> Color:
+	var normalized_color: String = color_text.strip_edges()
+	if normalized_color == "" or not normalized_color.begins_with("#"):
+		return fallback
+	return Color(normalized_color)
+
+
+func _get_appearance_signature(appearance_state: Dictionary) -> String:
+	return "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+		str(appearance_state.get("body", "")),
+		str(appearance_state.get("hair", "")),
+		str(appearance_state.get("hair_style_index", "")),
+		str(appearance_state.get("headgear", "")),
+		str(appearance_state.get("facegear", "")),
+		str(appearance_state.get("top", "")),
+		str(appearance_state.get("bottom", appearance_state.get("legs", ""))),
+		str(appearance_state.get("shoes", appearance_state.get("feet", ""))),
+		str(appearance_state.get("hair_color", "")),
+		str(appearance_state.get("skin_tone", "")),
+		str(appearance_state.get("eye_color", "")),
+	]
 
 
 func _update_animation(is_moving: bool) -> void:
 	var animation_name := _get_walk_animation_name(last_direction) if is_moving else _get_idle_animation_name(last_direction)
 	for sprite in appearance_sprites:
+		if _is_unequipped_appearance_part_sprite(sprite):
+			sprite.visible = false
+			sprite.stop()
+			continue
 		if sprite.sprite_frames == null or not sprite.sprite_frames.has_animation(animation_name):
 			continue
 		if sprite.animation != animation_name:
@@ -632,6 +946,11 @@ func _update_animation(is_moving: bool) -> void:
 		elif not is_moving:
 			sprite.frame = 0
 			sprite.stop()
+	_sync_all_part_sprites_to_body()
+
+
+func _is_unequipped_appearance_part_sprite(sprite: AnimatedSprite2D) -> bool:
+	return sprite != null and bool(sprite.get_meta(UNEQUIPPED_APPEARANCE_PART_META, false))
 
 
 func _update_sort_z() -> void:
