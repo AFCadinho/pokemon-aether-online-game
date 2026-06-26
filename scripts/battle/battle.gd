@@ -1662,7 +1662,32 @@ func _update_move_slots() -> void:
 
 ## Vult de party slots met de huidige player party.
 func _update_party_slots() -> void:
-	party_grid.set_party(_get_display_team_data("p1"))
+	var display_team := _get_display_team_data("p1")
+	_mark_active_party_slot(display_team, "p1")
+	party_grid.set_party(display_team)
+
+func _mark_active_party_slot(display_team: Array, player_id: String) -> void:
+	var active_slot := _get_active_canonical_party_slot(player_id)
+	if active_slot <= 0:
+		return
+
+	for index in range(display_team.size()):
+		var pokemon_value: Variant = display_team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		pokemon_data["active"] = _get_pokemon_data_canonical_party_slot(pokemon_data) == active_slot
+
+func _get_active_canonical_party_slot(player_id: String) -> int:
+	if battle_state == null:
+		return -1
+
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	if active_pokemon.is_empty():
+		return -1
+
+	return _get_pokemon_data_canonical_party_slot(active_pokemon)
 
 func _finish_battle(result: Dictionary) -> void:
 	if battle_finished:

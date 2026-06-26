@@ -6,6 +6,8 @@ signal pokemon_unhovered
 
 const FAINTED_BACKGROUND := Color("#30343c")
 const FAINTED_BORDER := Color("#626a76")
+const ACTIVE_BACKGROUND := Color("#17283d")
+const ACTIVE_BORDER := Color("#d8b767")
 const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
 const POISON_STATUS_TEXTURE: Texture2D = preload("res://assets/battles/status/poisoned.png")
@@ -44,11 +46,13 @@ func _ignore_child_mouse_input(node: Node) -> void:
 func set_pokemon(pokemon: Pokemon) -> void:
 	current_pokemon_data = pokemon.to_battle_dict()
 	var is_fainted := pokemon.current_hp <= 0
-	_apply_slot_style(pokemon.species, is_fainted, pokemon.types)
+	var is_active := bool(current_pokemon_data.get("active", false))
+	_apply_slot_style(pokemon.species, is_fainted, is_active, pokemon.types)
 
 	visible = true
-	disabled = is_fainted
+	disabled = is_active or is_fainted
 	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
+	tooltip_text = "Active Pokemon" if is_active else ""
 
 	_set_species_name(pokemon.species, pokemon.shiny)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
@@ -65,11 +69,12 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var max_hp: int = max(int(pokemon_data.get("maxHp", 1)), 1)
 	var current_hp: int = int(pokemon_data.get("hp", 0))
 
-	_apply_slot_style(species, is_fainted, types)
+	_apply_slot_style(species, is_fainted, is_active, types)
 
 	visible = true
 	disabled = is_active or is_fainted
 	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
+	tooltip_text = "Active Pokemon" if is_active else ""
 
 	var is_shiny := _get_shiny_from_data(pokemon_data)
 	_set_species_name(species, is_shiny)
@@ -173,15 +178,20 @@ func set_empty() -> void:
 	hp_bar.value = 0
 	pokemon_icon.texture = null
 	_set_status_icon("")
+	tooltip_text = ""
 
 	remove_theme_stylebox_override("normal")
 	remove_theme_stylebox_override("hover")
 	remove_theme_stylebox_override("pressed")
 	remove_theme_stylebox_override("disabled")
 
-func _apply_slot_style(species: String, is_fainted: bool, types: Array = []) -> void:
+func _apply_slot_style(species: String, is_fainted: bool, is_active: bool, types: Array = []) -> void:
 	if is_fainted:
-		_set_color(FAINTED_BACKGROUND, FAINTED_BORDER)
+		_set_color(FAINTED_BACKGROUND, FAINTED_BORDER, false)
+		return
+
+	if is_active:
+		_set_color(ACTIVE_BACKGROUND, ACTIVE_BORDER, true)
 		return
 
 	var display_types := types
@@ -194,24 +204,25 @@ func _apply_slot_style(species: String, is_fainted: bool, types: Array = []) -> 
 		return
 
 	var primary_type := str(display_types[0])
-	_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type))
+	_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type), false)
 
-func _set_color(background: Color, border: Color) -> void:
+func _set_color(background: Color, border: Color, is_active: bool) -> void:
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = background
 	normal.border_color = border
-	normal.border_width_left = 1
-	normal.border_width_top = 1
-	normal.border_width_right = 1
-	normal.border_width_bottom = 1
+	var border_width := 2 if is_active else 1
+	normal.border_width_left = border_width
+	normal.border_width_top = border_width
+	normal.border_width_right = border_width
+	normal.border_width_bottom = border_width
 
 	normal.corner_radius_top_left = 6
 	normal.corner_radius_top_right = 6
 	normal.corner_radius_bottom_left = 6
 	normal.corner_radius_bottom_right = 6
-	normal.shadow_color = Color(0, 0, 0, 0.22)
-	normal.shadow_size = 6
-	normal.shadow_offset = Vector2(0, 2)
+	normal.shadow_color = Color(0.85, 0.65, 0.22, 0.28) if is_active else Color(0, 0, 0, 0.22)
+	normal.shadow_size = 10 if is_active else 6
+	normal.shadow_offset = Vector2(0, 3) if is_active else Vector2(0, 2)
 
 	var hover := normal.duplicate() as StyleBoxFlat
 	hover.bg_color = background.lightened(0.08)
