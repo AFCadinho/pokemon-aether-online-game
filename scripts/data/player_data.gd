@@ -14,10 +14,16 @@ var party: Array[Pokemon] = []
 var money := 0
 var playtime_seconds := 0
 var appearance_body_id: String = CharacterAppearanceService.DEFAULT_BODY_ID
-var appearance_hair_id := ""
-var appearance_legs_id := ""
-var appearance_feet_id := ""
+var appearance_hair_id: String = CharacterAppearanceService.DEFAULT_MALE_HAIR_ID
+var appearance_headgear_id: String = CharacterAppearanceService.DEFAULT_MALE_HEADGEAR_ID
 var appearance_facegear_id := ""
+var appearance_top_id: String = CharacterAppearanceService.DEFAULT_MALE_TOP_ID
+var appearance_bottom_id: String = CharacterAppearanceService.DEFAULT_MALE_BOTTOM_ID
+var appearance_shoes_id: String = CharacterAppearanceService.DEFAULT_MALE_SHOES_ID
+var appearance_hair_color: String = CharacterAppearanceService.DEFAULT_HAIR_COLOR
+var appearance_skin_tone: String = CharacterAppearanceService.DEFAULT_SKIN_TONE
+var appearance_eye_color: String = CharacterAppearanceService.DEFAULT_EYE_COLOR
+var appearance_hair_style_index := 0
 var flags := {}
 
 func to_battle_dict() -> Dictionary:
@@ -90,29 +96,93 @@ func replace_party_from_state(party_data: Array) -> void:
 
 func to_appearance_state() -> Dictionary:
 	return {
+		"gender": gender,
 		"body": appearance_body_id,
-		"hair": appearance_hair_id,
-		"legs": appearance_legs_id,
-		"feet": appearance_feet_id,
-		"facegear": appearance_facegear_id,
+		"hair": CharacterAppearanceService.serialize_part_id(appearance_hair_id),
+		"hair_style_index": appearance_hair_style_index,
+		"headgear": CharacterAppearanceService.serialize_part_id(appearance_headgear_id),
+		"facegear": CharacterAppearanceService.serialize_part_id(appearance_facegear_id),
+		"top": CharacterAppearanceService.serialize_part_id(appearance_top_id),
+		"bottom": CharacterAppearanceService.serialize_part_id(appearance_bottom_id),
+		"shoes": CharacterAppearanceService.serialize_part_id(appearance_shoes_id),
+		"legs": CharacterAppearanceService.serialize_part_id(appearance_bottom_id),
+		"feet": CharacterAppearanceService.serialize_part_id(appearance_shoes_id),
+		"hair_color": appearance_hair_color,
+		"skin_tone": appearance_skin_tone,
+		"eye_color": appearance_eye_color,
 	}
 
 func apply_appearance_state(appearance_state: Dictionary) -> void:
+	var decoded_body_appearance: Dictionary = CharacterAppearanceService.decode_presence_body_appearance(str(appearance_state.get("body", "")))
+	if not decoded_body_appearance.is_empty():
+		var merged_appearance_state: Dictionary = appearance_state.duplicate()
+		for key: Variant in decoded_body_appearance.keys():
+			merged_appearance_state[key] = decoded_body_appearance[key]
+		appearance_state = merged_appearance_state
+
 	var body_id := str(appearance_state.get("body", "")).strip_edges()
 	if body_id != "":
-		appearance_body_id = body_id
+		appearance_body_id = CharacterAppearanceService.get_presence_body_base_id(body_id)
 
-	appearance_hair_id = str(appearance_state.get("hair", appearance_hair_id)).strip_edges()
-	appearance_legs_id = str(appearance_state.get("legs", appearance_legs_id)).strip_edges()
-	appearance_feet_id = str(appearance_state.get("feet", appearance_feet_id)).strip_edges()
-	appearance_facegear_id = str(appearance_state.get("facegear", appearance_facegear_id)).strip_edges()
-	ensure_body_matches_gender()
+	appearance_hair_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("hair", appearance_hair_id)))
+	if appearance_state.has("hair_style_index"):
+		appearance_hair_style_index = max(int(appearance_state.get("hair_style_index", appearance_hair_style_index)), 0)
+	appearance_headgear_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("headgear", appearance_headgear_id)))
+	appearance_facegear_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("facegear", appearance_facegear_id)))
+	appearance_top_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("top", appearance_top_id)))
+	appearance_bottom_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("bottom", appearance_state.get("legs", appearance_bottom_id))))
+	appearance_shoes_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("shoes", appearance_state.get("feet", appearance_shoes_id))))
+	appearance_hair_color = str(appearance_state.get("hair_color", appearance_hair_color)).strip_edges()
+	appearance_skin_tone = str(appearance_state.get("skin_tone", appearance_skin_tone)).strip_edges()
+	appearance_eye_color = str(appearance_state.get("eye_color", appearance_eye_color)).strip_edges()
+	if appearance_state.has("hair"):
+		if appearance_hair_id != "":
+			sync_hair_style_index_from_id()
+	elif appearance_state.has("hair_style_index"):
+		apply_hair_style_index_to_id()
+	ensure_body_matches_gender(false)
 
-func ensure_body_matches_gender() -> void:
+func ensure_body_matches_gender(fill_empty_parts: bool = true) -> void:
 	var body_ids: Array[String] = CharacterAppearanceService.get_available_body_ids(gender)
-	if body_ids.has(appearance_body_id):
+	if not body_ids.has(appearance_body_id):
+		appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+		fill_empty_parts = true
+	ensure_layered_appearance_defaults(fill_empty_parts)
+
+func ensure_layered_appearance_defaults(fill_empty_parts: bool = true) -> void:
+	if not CharacterAppearanceService.body_supports_layered_parts(appearance_body_id, gender):
 		return
-	appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+	if fill_empty_parts and appearance_hair_id == "":
+		appearance_hair_id = CharacterAppearanceService.get_default_part_id("hair", gender)
+	if fill_empty_parts and appearance_headgear_id == "":
+		appearance_headgear_id = CharacterAppearanceService.get_default_part_id("headgear", gender)
+	if fill_empty_parts and appearance_top_id == "":
+		appearance_top_id = CharacterAppearanceService.get_default_part_id("top", gender)
+	if fill_empty_parts and appearance_bottom_id == "":
+		appearance_bottom_id = CharacterAppearanceService.get_default_part_id("bottom", gender)
+	if fill_empty_parts and appearance_shoes_id == "":
+		appearance_shoes_id = CharacterAppearanceService.get_default_part_id("shoes", gender)
+	if appearance_hair_color == "":
+		appearance_hair_color = CharacterAppearanceService.DEFAULT_HAIR_COLOR
+	if appearance_skin_tone == "":
+		appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
+	if appearance_eye_color == "":
+		appearance_eye_color = CharacterAppearanceService.DEFAULT_EYE_COLOR
+	if appearance_hair_id != "":
+		sync_hair_style_index_from_id()
+
+func sync_hair_style_index_from_id() -> void:
+	var hair_ids: Array[String] = CharacterAppearanceService.get_available_part_ids("hair", gender)
+	var hair_index: int = hair_ids.find(appearance_hair_id)
+	appearance_hair_style_index = maxi(hair_index, 0)
+
+func apply_hair_style_index_to_id() -> void:
+	var hair_ids: Array[String] = CharacterAppearanceService.get_available_part_ids("hair", gender)
+	if hair_ids.is_empty():
+		return
+	var clamped_index: int = clampi(appearance_hair_style_index, 0, hair_ids.size() - 1)
+	appearance_hair_style_index = clamped_index
+	appearance_hair_id = hair_ids[clamped_index]
 
 func apply_battle_team_state(team: Array) -> void:
 	var party_by_instance_id := {}

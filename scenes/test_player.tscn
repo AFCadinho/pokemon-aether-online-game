@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://xtijcbky261p"]
+
+[ext_resource type="Texture2D" uid="uid://52xwt0jgfrxx" path="res://assets/player/male/body/Gen4_Base_M_Dark.png" id="1_gqg63"]
+[ext_resource type="Texture2D" uid="uid://m0e3iwh7w3hc" path="res://assets/player/male/shoes/Shoes.png" id="2_hfou0"]
+[ext_resource type="Texture2D" uid="uid://ch6sugl04ipkk" path="res://assets/player/male/bottom/Trousers.png" id="3_oxvr6"]
+[ext_resource type="Texture2D" uid="uid://bc0ssvei6sw4k" path="res://assets/player/male/top/Shirt.png" id="4_10l1y"]
+[ext_resource type="Texture2D" uid="uid://bsodkxfp6r2qw" path="res://assets/player/male/hair/Hair.png" id="5_lwvfx"]
+[ext_resource type="Texture2D" uid="uid://btc088quqosch" path="res://assets/player/male/headgear/Cap.png" id="6_s11rc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qt7sb"]
+atlas = ExtResource("1_gqg63")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ca63f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qt7sb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1as6o"]
+atlas = ExtResource("2_hfou0")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b18lp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1as6o")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wbjsk"]
+atlas = ExtResource("3_oxvr6")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ebqom"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wbjsk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nt2n8"]
+atlas = ExtResource("4_10l1y")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_33wjq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nt2n8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krsg4"]
+atlas = ExtResource("5_lwvfx")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ot1g1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krsg4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5e817"]
+atlas = ExtResource("6_s11rc")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5mocb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5e817")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="TestBody" type="CharacterBody2D" unique_id=1482333023]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=835919951]
+
+[node name="Body" type="AnimatedSprite2D" parent="Node2D" unique_id=1143518776]
+sprite_frames = SubResource("SpriteFrames_ca63f")
+
+[node name="Shoes" type="AnimatedSprite2D" parent="Node2D" unique_id=1405151246]
+sprite_frames = SubResource("SpriteFrames_b18lp")
+
+[node name="Bottom" type="AnimatedSprite2D" parent="Node2D" unique_id=1263356941]
+sprite_frames = SubResource("SpriteFrames_ebqom")
+
+[node name="Top" type="AnimatedSprite2D" parent="Node2D" unique_id=1572433536]
+sprite_frames = SubResource("SpriteFrames_33wjq")
+
+[node name="FaceGear" type="AnimatedSprite2D" parent="Node2D" unique_id=798037498]
+
+[node name="Hair" type="AnimatedSprite2D" parent="Node2D" unique_id=860513880]
+sprite_frames = SubResource("SpriteFrames_ot1g1")
+
+[node name="HeadGear" type="AnimatedSprite2D" parent="Node2D" unique_id=1408255928]
+sprite_frames = SubResource("SpriteFrames_5mocb")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2089356309]
+zoom = Vector2(2, 2)

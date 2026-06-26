@@ -2,6 +2,8 @@ extends Node
 
 class_name WorldPresenceServiceNode
 
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+
 signal snapshot_received(players: Array)
 signal player_update_received(player_state: Dictionary)
 signal player_left_received(user_id: int)
@@ -11,6 +13,8 @@ signal session_invalid(reason: String)
 const RECONNECT_DELAY_SECONDS := 3.0
 const SESSION_CHECK_INTERVAL_SECONDS := 10.0
 const SESSION_INVALID_CLOSE_CODE := 1008
+const DEBUG_PLAYER_UPDATE_PAYLOADS := true
+const PLAYER_UPDATE_LOG_PATH := "user://world_presence_player_update.log"
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
 var connected := false
@@ -105,16 +109,49 @@ func disconnect_presence() -> void:
 
 
 func update_position(state: Dictionary) -> bool:
+	var appearance_value: Variant = state.get("appearance", {})
+	var appearance: Dictionary = appearance_value if appearance_value is Dictionary else {}
+	var presence_body: String = CharacterAppearanceService.get_presence_body_base_id(str(appearance.get("body", "")))
+	var appearance_payload: Dictionary = _build_appearance_payload(appearance)
+	appearance_payload["body"] = presence_body
+	var movement_payload: Dictionary = _build_movement_payload(state.get("movement", {}), appearance_payload, presence_body, appearance)
 	var payload := {
 		"type": "position",
 		"mapId": str(state.get("mapId", "")),
 		"mapScenePath": state.get("mapScenePath", null),
+		"gender": str(state.get("gender", "male")),
 		"position": state.get("position", {}),
 		"facingDirection": str(state.get("facingDirection", "down")),
-		"movement": state.get("movement", {}),
+		"movement": movement_payload,
 		"follower": state.get("follower", {}),
-		"appearance": state.get("appearance", {}),
+		"appearance": appearance_payload,
 		"roles": state.get("roles", []),
+		"appearanceBody": presence_body,
+		"appearanceHair": str(appearance.get("hair", "")),
+		"appearanceHairStyleIndex": int(appearance.get("hair_style_index", 0)),
+		"appearanceHeadgear": str(appearance.get("headgear", "")),
+		"appearanceFacegear": str(appearance.get("facegear", "")),
+		"appearanceTop": str(appearance.get("top", "")),
+		"appearanceBottom": str(appearance.get("bottom", "")),
+		"appearanceShoes": str(appearance.get("shoes", "")),
+		"appearanceHairColor": str(appearance.get("hair_color", "")),
+		"appearanceSkinTone": str(appearance.get("skin_tone", "")),
+		"appearanceEyeColor": str(appearance.get("eye_color", "")),
+		"body": presence_body,
+		"hair": str(appearance.get("hair", "")),
+		"hair_style_index": int(appearance.get("hair_style_index", 0)),
+		"hairStyleIndex": int(appearance.get("hair_style_index", 0)),
+		"headgear": str(appearance.get("headgear", "")),
+		"facegear": str(appearance.get("facegear", "")),
+		"top": str(appearance.get("top", "")),
+		"bottom": str(appearance.get("bottom", "")),
+		"shoes": str(appearance.get("shoes", "")),
+		"hair_color": str(appearance.get("hair_color", "")),
+		"hairColor": str(appearance.get("hair_color", "")),
+		"skin_tone": str(appearance.get("skin_tone", "")),
+		"skinTone": str(appearance.get("skin_tone", "")),
+		"eye_color": str(appearance.get("eye_color", "")),
+		"eyeColor": str(appearance.get("eye_color", "")),
 	}
 	last_position_payload = payload
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
@@ -122,6 +159,43 @@ func update_position(state: Dictionary) -> bool:
 		return false
 
 	return _send_payload(payload)
+
+
+func _build_appearance_payload(appearance: Dictionary) -> Dictionary:
+	var payload: Dictionary = appearance.duplicate()
+	payload["hairStyleIndex"] = int(appearance.get("hair_style_index", 0))
+	payload["hairColor"] = str(appearance.get("hair_color", ""))
+	payload["skinTone"] = str(appearance.get("skin_tone", ""))
+	payload["eyeColor"] = str(appearance.get("eye_color", ""))
+	return payload
+
+
+func _build_movement_payload(movement_value: Variant, appearance_payload: Dictionary, presence_body: String, appearance: Dictionary) -> Dictionary:
+	var payload: Dictionary = {}
+	if movement_value is Dictionary:
+		var movement_dictionary: Dictionary = movement_value as Dictionary
+		payload = movement_dictionary.duplicate()
+	payload["appearance"] = appearance_payload
+	payload["appearanceBody"] = presence_body
+	payload["appearanceHair"] = str(appearance.get("hair", ""))
+	payload["appearanceHairStyleIndex"] = int(appearance.get("hair_style_index", 0))
+	payload["appearanceHeadgear"] = str(appearance.get("headgear", ""))
+	payload["appearanceFacegear"] = str(appearance.get("facegear", ""))
+	payload["appearanceTop"] = str(appearance.get("top", ""))
+	payload["appearanceBottom"] = str(appearance.get("bottom", ""))
+	payload["appearanceShoes"] = str(appearance.get("shoes", ""))
+	payload["appearanceHairColor"] = str(appearance.get("hair_color", ""))
+	payload["appearanceSkinTone"] = str(appearance.get("skin_tone", ""))
+	payload["appearanceEyeColor"] = str(appearance.get("eye_color", ""))
+	payload["body"] = presence_body
+	payload["hair"] = str(appearance.get("hair", ""))
+	payload["hair_color"] = str(appearance.get("hair_color", ""))
+	payload["hairColor"] = str(appearance.get("hair_color", ""))
+	payload["eye_color"] = str(appearance.get("eye_color", ""))
+	payload["eyeColor"] = str(appearance.get("eye_color", ""))
+	payload["headgear"] = str(appearance.get("headgear", ""))
+	payload["top"] = str(appearance.get("top", ""))
+	return payload
 
 
 func _send_payload(payload: Dictionary) -> bool:
@@ -162,9 +236,28 @@ func _process_packets() -> void:
 				var players: Array = players_value if players_value is Array else []
 				snapshot_received.emit(players)
 			"player_update":
+				_debug_log_player_update(message)
 				player_update_received.emit(message)
 			"player_left":
 				player_left_received.emit(int(message.get("userId", 0)))
+
+
+func _debug_log_player_update(message: Dictionary) -> void:
+	if not DEBUG_PLAYER_UPDATE_PAYLOADS:
+		return
+
+	var log_line := "[WorldPresenceService player_update] %s" % JSON.stringify(message)
+	print(log_line)
+
+	var file := FileAccess.open(PLAYER_UPDATE_LOG_PATH, FileAccess.READ_WRITE)
+	if file == null:
+		file = FileAccess.open(PLAYER_UPDATE_LOG_PATH, FileAccess.WRITE)
+	if file == null:
+		push_warning("WorldPresenceService: could not write %s" % PLAYER_UPDATE_LOG_PATH)
+		return
+
+	file.seek_end()
+	file.store_line(log_line)
 
 
 func _to_websocket_url(base_url: String) -> String:
