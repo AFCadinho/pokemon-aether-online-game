@@ -532,22 +532,50 @@ func _calculate_max_pp(base_pp: int) -> int:
 	return int(floor(float(base_pp) * 1.6))
 
 func _get_player_save_pokemon_for_hover(pokemon_data: Dictionary) -> Pokemon:
-	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
+	return _get_player_save_pokemon_for_battle_display_data(pokemon_data)
+
+func _get_player_save_pokemon_for_battle_display_data(pokemon_data: Dictionary, fallback_index := -1) -> Pokemon:
+	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
 	if instance_id != "":
 		for pokemon in PlayerSave.party:
 			if pokemon.instance_id == instance_id:
 				return pokemon
 
-	var display_species := battle_state.get_species_from_pokemon_data(pokemon_data)
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+	if canonical_slot > 0:
+		var slot_index := canonical_slot - 1
+		if slot_index >= 0 and slot_index < PlayerSave.party.size():
+			var slot_pokemon: Pokemon = PlayerSave.party[slot_index] as Pokemon
+			if slot_pokemon != null:
+				return slot_pokemon
+
+	if fallback_index >= 0 and fallback_index < PlayerSave.party.size():
+		var fallback_pokemon: Pokemon = PlayerSave.party[fallback_index] as Pokemon
+		if fallback_pokemon != null:
+			return fallback_pokemon
+
+	return _get_unique_player_save_pokemon_by_species(pokemon_data)
+
+func _get_unique_player_save_pokemon_by_species(pokemon_data: Dictionary) -> Pokemon:
+	var display_species := ""
+	if battle_state != null:
+		display_species = battle_state.get_species_from_pokemon_data(pokemon_data)
+	if display_species == "":
+		display_species = str(pokemon_data.get("species", pokemon_data.get("displaySpecies", "")))
+
 	var normalized_display_species := _normalize_species_for_compare(display_species)
 	if normalized_display_species == "":
 		return null
 
+	var matched_pokemon: Pokemon = null
 	for pokemon in PlayerSave.party:
-		if _normalize_species_for_compare(pokemon.species) == normalized_display_species:
-			return pokemon
+		if _normalize_species_for_compare(pokemon.species) != normalized_display_species:
+			continue
+		if matched_pokemon != null:
+			return null
+		matched_pokemon = pokemon
 
-	return null
+	return matched_pokemon
 
 func _position_move_hover_card() -> void:
 	if current_move_hover_rect.size != Vector2.ZERO and move_hover_card.has_method("position_near_rect"):
@@ -3267,12 +3295,14 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 
 	while team_preview_lead_selection_active:
 		var selected_slot: int = int(await party_grid.party_selected)
-		if not _can_choose_lead_slot(selected_slot):
+		var selected_pokemon_data := _get_party_grid_selected_pokemon_data(selected_slot)
+		var submit_slot := _get_canonical_lead_submit_slot(selected_slot, selected_pokemon_data)
+		if not _can_choose_lead_slot(submit_slot, selected_pokemon_data):
 			current_action_panel.set_message("Choose another Pokemon!")
 			continue
 
 		_set_battle_input_locked(true)
-		var lead_response: Dictionary = await _submit_lead(local_player_id, selected_slot)
+		var lead_response: Dictionary = await _submit_lead(local_player_id, submit_slot)
 		if not bool(lead_response.get("success", false)):
 			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
 			current_action_panel.set_message(error_message)
@@ -3385,10 +3415,7 @@ func _get_lead_selection_team_data(player_id: String) -> Array:
 	return lead_team
 
 func _enrich_lead_selection_slot_data(pokemon_data: Dictionary, index: int) -> void:
-	if index < 0 or index >= PlayerSave.party.size():
-		return
-
-	var saved_pokemon: Pokemon = PlayerSave.party[index] as Pokemon
+	var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(pokemon_data, index)
 	if saved_pokemon == null:
 		return
 
@@ -6663,7 +6690,35 @@ func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionar
 
 	return visual_slot
 
+func _get_canonical_lead_submit_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+	if canonical_slot > 0:
+		return canonical_slot
+
+	if _is_pvp_battle() and not pokemon_data.is_empty():
+		push_warning(
+			"PvP lead selection has no canonical party slot; falling back to visual slot %d pokemonKey=%s partySlot=%s metadataSlot=%s" % [
+				visual_slot,
+				str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))),
+				str(pokemon_data.get("partySlot", pokemon_data.get("party_slot", ""))),
+				str(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", ""))),
+			]
+		)
+
+	return visual_slot
+
 func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
+	var party_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["partySlot", "party_slot"])
+	if party_slot > 0:
+		return party_slot
+
+	var metadata_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["metadataSlot", "metadata_slot"])
+	if metadata_slot > 0:
+		return metadata_slot
+
+	return _get_pokemon_key_canonical_party_slot(pokemon_data)
+
+func _get_pokemon_key_canonical_party_slot(pokemon_data: Dictionary) -> int:
 	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
 	var slot_marker := ":slot:"
 	if pokemon_key.contains(slot_marker):
@@ -6672,7 +6727,10 @@ func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
 		if key_slot > 0:
 			return key_slot
 
-	for key in ["partySlot", "party_slot", "metadataSlot", "metadata_slot"]:
+	return -1
+
+func _get_positive_slot_from_pokemon_data(pokemon_data: Dictionary, keys: Array) -> int:
+	for key in keys:
 		if not pokemon_data.has(key):
 			continue
 
@@ -6682,21 +6740,54 @@ func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
 
 	return -1
 
-func _can_choose_lead_slot(slot: int) -> bool:
+func _can_choose_lead_slot(slot: int, pokemon_data: Dictionary = {}) -> bool:
 	var team := battle_state.get_player_team("p1")
 	if slot < 1 or slot > team.size():
 		return false
 
-	var pokemon_value: Variant = team[slot - 1]
-	if not (pokemon_value is Dictionary):
+	if not pokemon_data.is_empty() and not _is_pokemon_data_usable_for_lead(pokemon_data):
 		return false
 
-	var pokemon_data: Dictionary = pokemon_value as Dictionary
+	var team_pokemon := _get_team_pokemon_data_for_canonical_party_slot("p1", slot)
+	if team_pokemon.is_empty():
+		return false
+
+	return _is_pokemon_data_usable_for_lead(team_pokemon)
+
+func _get_team_pokemon_data_for_canonical_party_slot(player_id: String, canonical_slot: int) -> Dictionary:
+	if canonical_slot <= 0:
+		return {}
+
+	var team := battle_state.get_player_team(player_id)
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if _get_pokemon_data_canonical_party_slot(pokemon_data) == canonical_slot:
+			return pokemon_data
+
+	var fallback_index := canonical_slot - 1
+	if fallback_index >= 0 and fallback_index < team.size():
+		var fallback_value: Variant = team[fallback_index]
+		if fallback_value is Dictionary:
+			return fallback_value as Dictionary
+
+	return {}
+
+func _is_pokemon_data_usable_for_lead(pokemon_data: Dictionary) -> bool:
 	if bool(pokemon_data.get("fainted", false)):
 		return false
 
 	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
-	return condition != "0 fnt" and not condition.ends_with(" fnt")
+	if condition == "0 fnt" or condition.ends_with(" fnt"):
+		return false
+
+	var hp_value: Variant = pokemon_data.get("hp", pokemon_data.get("currentHp", pokemon_data.get("current_hp", null)))
+	if hp_value != null and _safe_int(hp_value, -1) == 0:
+		return false
+
+	return true
 
 func _update_active_sprites(context := "sprite_refresh") -> void:
 	_update_active_sprite_box("p1", player_sprite_box, "back", context)

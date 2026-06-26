@@ -92,10 +92,7 @@ func get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Di
 	return display_data
 
 func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int) -> void:
-	if index < 0 or index >= PlayerSave.party.size():
-		return
-
-	var saved_pokemon: Pokemon = PlayerSave.party[index] as Pokemon
+	var saved_pokemon := _get_player_save_pokemon_for_display_data(display_data, index)
 	if saved_pokemon == null:
 		return
 
@@ -108,6 +105,49 @@ func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int)
 		display_data["shiny"] = saved_pokemon.shiny
 	if not display_data.has("instanceId") and saved_pokemon.instance_id != "":
 		display_data["instanceId"] = saved_pokemon.instance_id
+
+func _get_player_save_pokemon_for_display_data(display_data: Dictionary, fallback_index: int) -> Pokemon:
+	var instance_id := str(display_data.get("instanceId", display_data.get("instance_id", ""))).strip_edges()
+	if instance_id != "":
+		for pokemon in PlayerSave.party:
+			if pokemon.instance_id == instance_id:
+				return pokemon
+
+	var canonical_slot := _get_canonical_party_slot(display_data)
+	if canonical_slot > 0:
+		var slot_index := canonical_slot - 1
+		if slot_index >= 0 and slot_index < PlayerSave.party.size():
+			var slot_pokemon: Pokemon = PlayerSave.party[slot_index] as Pokemon
+			if slot_pokemon != null:
+				return slot_pokemon
+
+	if fallback_index >= 0 and fallback_index < PlayerSave.party.size():
+		var fallback_pokemon: Pokemon = PlayerSave.party[fallback_index] as Pokemon
+		if fallback_pokemon != null:
+			return fallback_pokemon
+
+	return _get_unique_player_save_pokemon_by_species(display_data)
+
+func _get_unique_player_save_pokemon_by_species(display_data: Dictionary) -> Pokemon:
+	var display_species := ""
+	if battle_state != null:
+		display_species = battle_state.get_species_from_pokemon_data(display_data)
+	if display_species == "":
+		display_species = str(display_data.get("species", display_data.get("displaySpecies", "")))
+
+	var normalized_display_species := _normalize_species_for_compare(display_species)
+	if normalized_display_species == "":
+		return null
+
+	var matched_pokemon: Pokemon = null
+	for pokemon in PlayerSave.party:
+		if _normalize_species_for_compare(pokemon.species) != normalized_display_species:
+			continue
+		if matched_pokemon != null:
+			return null
+		matched_pokemon = pokemon
+
+	return matched_pokemon
 
 func _sort_display_team_by_canonical_party_slot(display_team: Array) -> Array:
 	if display_team.size() <= 1:
@@ -134,6 +174,17 @@ func _sort_display_team_by_canonical_party_slot(display_team: Array) -> Array:
 	return sorted_team
 
 func _get_canonical_party_slot(pokemon_data: Dictionary) -> int:
+	var party_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["partySlot", "party_slot"])
+	if party_slot > 0:
+		return party_slot
+
+	var metadata_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["metadataSlot", "metadata_slot"])
+	if metadata_slot > 0:
+		return metadata_slot
+
+	return _get_pokemon_key_canonical_party_slot(pokemon_data)
+
+func _get_pokemon_key_canonical_party_slot(pokemon_data: Dictionary) -> int:
 	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
 	var slot_marker := ":slot:"
 	if pokemon_key.contains(slot_marker):
@@ -143,7 +194,10 @@ func _get_canonical_party_slot(pokemon_data: Dictionary) -> int:
 			if key_slot > 0:
 				return key_slot
 
-	for key in ["partySlot", "party_slot", "metadataSlot", "metadata_slot"]:
+	return -1
+
+func _get_positive_slot_from_pokemon_data(pokemon_data: Dictionary, keys: Array) -> int:
+	for key in keys:
 		if not pokemon_data.has(key):
 			continue
 
@@ -160,3 +214,6 @@ func _get_canonical_party_slot(pokemon_data: Dictionary) -> int:
 				return parsed_slot
 
 	return -1
+
+func _normalize_species_for_compare(species: String) -> String:
+	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
