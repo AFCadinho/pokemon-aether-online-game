@@ -305,15 +305,6 @@ func build(event_data: Dictionary) -> Dictionary:
 		"damage":
 			recent_ability_event = false
 			presentation["damage_target_ident"] = str(event_data.get("target", ""))
-			print("[pvp-damage-debug] presentation.damage input target=%s previous_snapshot=%s final_snapshot=%s visible_change=%s has_hp_loss=%s sub_percent=%s event=%s" % [
-				str(presentation["damage_target_ident"]),
-				JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, true)),
-				JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, false)),
-				str(hp_event_helper.get_event_visible_hp_change(event_data)),
-				str(hp_event_helper.event_has_hp_loss(event_data)),
-				str(hp_event_helper.event_has_sub_percent_hp_loss(event_data)),
-				JSON.stringify(event_data),
-			])
 			_debug_battle_move("damage event target=%s previous_snapshot=%s final_snapshot=%s has_hp_loss=%s visible_change=%s event=%s" % [
 				str(presentation["damage_target_ident"]),
 				JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, true)),
@@ -357,20 +348,8 @@ func build(event_data: Dictionary) -> Dictionary:
 					has_sub_percent_hp_loss
 				)
 				if str(presentation["log_message"]) == "":
-					print("[pvp-damage-debug] presentation.damage suppressing damage target because log_message empty target=%s visible_change=%s has_hp_loss=%s event=%s" % [
-						str(event_data.get("target", "")),
-						str(hp_event_helper.get_event_visible_hp_change(event_data)),
-						str(has_hp_loss),
-						JSON.stringify(event_data),
-					])
 					presentation["damage_target_ident"] = ""
 
-			print("[pvp-damage-debug] presentation.damage output target=%s log=%s battle=%s add_blank=%s" % [
-				str(presentation["damage_target_ident"]),
-				str(presentation["log_message"]),
-				str(presentation["battle_message"]),
-				str(presentation["add_blank_after"]),
-			])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
 			recent_field_effect_source = ""
 			recent_move_event = false

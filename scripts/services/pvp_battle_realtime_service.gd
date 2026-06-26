@@ -11,7 +11,7 @@ signal session_invalid(reason: String)
 
 const RECONNECT_DELAY_SECONDS := 3.0
 const SESSION_INVALID_CLOSE_CODE := 1008
-const DEBUG_PVP_REALTIME := true
+const DEBUG_PVP_REALTIME := false
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
 var connected := false

@@ -86,7 +86,7 @@ var damage_calc_saved_assumptions: Dictionary = {}
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
-const DEBUG_PVP_REALTIME := true
+const DEBUG_PVP_REALTIME := false
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
@@ -1377,6 +1377,10 @@ func _on_action_selected(action: String) -> void:
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
 		return
 
+	if team_preview_lead_selection_active:
+		_restore_team_preview_lead_selection_ui()
+		return
+
 	if not battle_actions_ready and not team_preview_lead_selection_active:
 		if action == "run":
 			_queue_battle_action("run")
@@ -1439,6 +1443,10 @@ func _reset_action_choices() -> void:
 
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
+	if team_preview_lead_selection_active:
+		_restore_team_preview_lead_selection_ui()
+		return
+
 	if not _is_pvp_battle() and _local_player_needs_force_switch_ui():
 		_show_force_switch_if_needed()
 		return
@@ -1500,6 +1508,8 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 		party_grid.set_input_disabled(is_locked)
 	if not is_locked:
 		_refresh_bag_action_disabled()
+		if team_preview_lead_selection_active:
+			_restore_team_preview_lead_selection_ui()
 	_update_mechanic_button_states()
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
@@ -1533,6 +1543,10 @@ func _process_queued_battle_action() -> void:
 
 ## Toont de party keuzes in het action panel.
 func _show_party(force_switch := false) -> void:
+	if team_preview_lead_selection_active:
+		_restore_team_preview_lead_selection_ui()
+		return
+
 	var local_state_player_id := _get_local_state_player_id()
 	if not force_switch and _local_player_needs_force_switch_ui():
 		if DEBUG_PVP_REALTIME and _is_pvp_battle():
@@ -1561,6 +1575,17 @@ func _show_party(force_switch := false) -> void:
 	action_buttons.set_selected_action("party")
 	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
+
+func _restore_team_preview_lead_selection_ui() -> void:
+	current_action_panel.set_message("Choose your Lead")
+	current_action_view = ActionView.PARTY
+	moves_grid.visible = false
+	party_grid.visible = true
+	action_buttons.set_action_disabled("fight", true)
+	action_buttons.set_action_disabled("party", false)
+	action_buttons.set_action_disabled("bag", true)
+	action_buttons.set_action_disabled("run", true)
+	action_buttons.set_selected_action("party")
 
 ## Zet de UI in bag-modus.
 func _open_bag() -> void:
@@ -3756,13 +3781,6 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_clear_pending_mega_species_for_event(event_data)
 
 		var presentation: Dictionary = event_presentation.build(event_data)
-		if event_type == "damage":
-			print("[pvp-damage-debug] render.damage presentation target=%s log=%s battle=%s event=%s" % [
-				str(presentation.get("damage_target_ident", "")),
-				str(presentation.get("log_message", "")),
-				str(presentation.get("battle_message", "")),
-				JSON.stringify(event_data),
-			])
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
 			if render_turn_headers:
@@ -3776,12 +3794,6 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			current_action_panel.set_message(fallback_knock_off_message)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			battle_state.apply_event_conditions([event_data])
-			if event_type == "damage":
-				print("[pvp-damage-debug] render.damage after_apply target=%s p1=%s p2=%s" % [
-					str(event_data.get("target", "")),
-					JSON.stringify(_debug_team_identity_snapshot("p1")),
-					JSON.stringify(_debug_team_identity_snapshot("p2")),
-				])
 		if event_type == "status":
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
@@ -4413,28 +4425,14 @@ func _get_species_from_ident(ident: String) -> String:
 func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_previous_hp: bool) -> void:
 	var player_id := _get_player_id_from_ident(target_ident)
 	if player_id == "":
-		print("[pvp-damage-debug] hud_hp skipped: no player id target=%s event=%s" % [
-			target_ident,
-			JSON.stringify(event),
-		])
 		return
 
 	var hp_data: Dictionary = hp_event_helper.get_event_hp_snapshot(event, use_previous_hp)
-	var hp_source := "event"
 	if hp_data.is_empty():
 		hp_data = _get_event_hp_snapshot_with_state_fallback(event, player_id, use_previous_hp)
-		hp_source = "event_with_state_fallback"
 	if hp_data.is_empty() and not use_previous_hp:
 		hp_data = _get_active_state_hp_snapshot(player_id)
-		hp_source = "active_state_fallback"
 	if hp_data.is_empty():
-		print("[pvp-damage-debug] hud_hp missing snapshot target=%s player=%s previous=%s active=%s event=%s" % [
-			target_ident,
-			player_id,
-			str(use_previous_hp),
-			JSON.stringify(battle_state.get_active_player_pokemon(player_id)),
-			JSON.stringify(event),
-		])
 		_debug_battle_hp("HUD hp event missing snapshot target=%s previous=%s event=%s" % [
 			target_ident,
 			str(use_previous_hp),
@@ -4449,20 +4447,6 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	var status: String = _get_status_from_event_or_state(event, player_id, use_previous_hp)
 	var gender: String = battle_state.get_active_pokemon_gender(player_id)
 	var is_shiny: bool = _get_active_pokemon_is_shiny(player_id)
-	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
-	print("[pvp-damage-debug] hud_hp apply target=%s player=%s previous=%s source=%s hp=%d max=%d species=%s activeKey=%s activeSlot=%s activeCondition=%s event=%s" % [
-		target_ident,
-		player_id,
-		str(use_previous_hp),
-		hp_source,
-		hp,
-		max_hp,
-		species,
-		str(active_pokemon.get("pokemonKey", active_pokemon.get("pokemon_key", ""))),
-		str(active_pokemon.get("partySlot", active_pokemon.get("metadataSlot", ""))),
-		str(active_pokemon.get("condition", "")),
-		JSON.stringify(event),
-	])
 
 	match player_id:
 		"p1":

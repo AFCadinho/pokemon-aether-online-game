@@ -13,7 +13,7 @@ signal session_invalid(reason: String)
 const RECONNECT_DELAY_SECONDS := 3.0
 const SESSION_CHECK_INTERVAL_SECONDS := 10.0
 const SESSION_INVALID_CLOSE_CODE := 1008
-const DEBUG_PLAYER_UPDATE_PAYLOADS := true
+const DEBUG_PLAYER_UPDATE_PAYLOADS := false
 const PLAYER_UPDATE_LOG_PATH := "user://world_presence_player_update.log"
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
