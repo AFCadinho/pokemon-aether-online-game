@@ -1385,6 +1385,17 @@ func _on_action_selected(action: String) -> void:
 	if battle_input_locked:
 		return
 
+	if _local_player_needs_force_switch_ui():
+		if action == "party":
+			_show_force_switch_if_needed()
+			return
+
+		current_action_panel.set_message("Choose a Pokemon!")
+		if not _show_force_switch_if_needed():
+			if not _is_pvp_battle():
+				_show_party(true)
+		return
+
 	if action == "fight":
 		_show_moves()
 	elif action == "bag":
@@ -1523,6 +1534,14 @@ func _process_queued_battle_action() -> void:
 ## Toont de party keuzes in het action panel.
 func _show_party(force_switch := false) -> void:
 	var local_state_player_id := _get_local_state_player_id()
+	if not force_switch and _local_player_needs_force_switch_ui():
+		if DEBUG_PVP_REALTIME and _is_pvp_battle():
+			_log_pvp_realtime(
+				"Forcing PvP party view into force-switch mode",
+				"phase=%s next=%s" % [pvp_last_phase, pvp_last_next_phase]
+			)
+		_show_force_switch_if_needed()
+		return
 	if not force_switch and _is_pvp_opponent_force_switch_waiting():
 		_show_pvp_opponent_force_switch_wait()
 		return
@@ -5520,6 +5539,10 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 	var wait_start_server_seq := pvp_last_phase_update_server_seq
 	current_action_panel.set_message("Waiting for opponent...")
 	var attempt := 0
+	var fallback_render_response: Dictionary = {}
+	var fallback_render_action := ""
+	var fallback_render_message := ""
+	var fallback_render_attempt := -1
 	while true:
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["turn_open", "awaiting_force_switch"]):
 			if DEBUG_PVP_REALTIME:
@@ -5530,6 +5553,23 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 						pvp_last_phase_update_server_seq,
 						pvp_last_phase_update_batch_id,
 					]
+				)
+			return true
+
+		if not fallback_render_response.is_empty() and attempt - fallback_render_attempt >= 5:
+			var promoted_response := _promote_pvp_battle_update_fallback_render(fallback_render_response)
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Processing fallback opponent choice render update",
+					"attempt=%d message=%s" % [attempt, fallback_render_message]
+				)
+			var fallback_display_response: Dictionary = action_flow.map_response_for_local_player(promoted_response)
+			if not await _enqueue_pvp_battle_response(promoted_response, "pvp_%s" % fallback_render_action, not action_flow._response_has_deferred_display_event(promoted_response)):
+				return false
+			if _response_has_opponent_force_switch(fallback_display_response) and DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Fallback opponent choice queued with force-switch",
+					"message=%s" % fallback_render_message
 				)
 			return true
 
@@ -5595,6 +5635,38 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 			continue
 
 		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+		if not _is_authoritative_pvp_render_batch_response(response):
+			if _response_has_renderable_battle_events(display_response):
+				fallback_render_response = response.duplicate(true)
+				fallback_render_action = message_action
+				fallback_render_message = _describe_pvp_realtime_message(message)
+				fallback_render_attempt = attempt
+				if DEBUG_PVP_REALTIME:
+					_log_pvp_realtime(
+						"Stashed non-authoritative opponent choice update as fallback render",
+						"attempt=%d message=%s phase=%s next=%s" % [
+							attempt,
+							fallback_render_message,
+							pvp_last_phase,
+							pvp_last_next_phase,
+						]
+					)
+				attempt += 1
+				continue
+
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Ignoring non-authoritative opponent choice update while waiting for render batch",
+					"attempt=%d message=%s phase=%s next=%s" % [
+						attempt,
+						_describe_pvp_realtime_message(message),
+						pvp_last_phase,
+						pvp_last_next_phase,
+					]
+				)
+			attempt += 1
+			continue
+
 		if not await _enqueue_pvp_battle_response(response, "pvp_%s" % message_action, not action_flow._response_has_deferred_display_event(response)):
 			return false
 		if _response_has_opponent_force_switch(display_response) and DEBUG_PVP_REALTIME:
@@ -5639,6 +5711,10 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 	var wait_start_server_seq := pvp_last_phase_update_server_seq
 	current_action_panel.set_message("Waiting for opponent switch...")
 	var attempt := 0
+	var fallback_render_response: Dictionary = {}
+	var fallback_render_action := ""
+	var fallback_render_message := ""
+	var fallback_render_attempt := -1
 	while true:
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["turn_open"]):
 			if DEBUG_PVP_REALTIME:
@@ -5650,6 +5726,26 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 						pvp_last_phase_update_batch_id,
 					]
 				)
+			return true
+
+		if not fallback_render_response.is_empty() and attempt - fallback_render_attempt >= 5:
+			var promoted_response := _promote_pvp_battle_update_fallback_render(fallback_render_response)
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Processing fallback opponent force-switch render update",
+					"attempt=%d message=%s" % [attempt, fallback_render_message]
+				)
+			var fallback_display_response: Dictionary = action_flow.map_response_for_local_player(promoted_response)
+			if not await _enqueue_pvp_battle_response(promoted_response, "pvp_%s" % fallback_render_action, not action_flow._response_has_deferred_display_event(promoted_response)):
+				return false
+			if _response_has_opponent_force_switch(fallback_display_response):
+				current_action_panel.set_message("Waiting for opponent switch...")
+				fallback_render_response.clear()
+				fallback_render_action = ""
+				fallback_render_message = ""
+				fallback_render_attempt = -1
+				attempt += 1
+				continue
 			return true
 
 		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.1, false)
@@ -5711,6 +5807,38 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 				_log_pvp_realtime(
 					"Opponent move deferred while waiting for force-switch",
 					"request=%s" % str(message.get("requestId", ""))
+				)
+			attempt += 1
+			continue
+
+		if not _is_authoritative_pvp_render_batch_response(response):
+			if _response_has_renderable_battle_events(display_response):
+				fallback_render_response = response.duplicate(true)
+				fallback_render_action = message_action
+				fallback_render_message = _describe_pvp_realtime_message(message)
+				fallback_render_attempt = attempt
+				if DEBUG_PVP_REALTIME:
+					_log_pvp_realtime(
+						"Stashed non-authoritative opponent force-switch update as fallback render",
+						"attempt=%d message=%s phase=%s next=%s" % [
+							attempt,
+							fallback_render_message,
+							pvp_last_phase,
+							pvp_last_next_phase,
+						]
+					)
+				attempt += 1
+				continue
+
+			if DEBUG_PVP_REALTIME:
+				_log_pvp_realtime(
+					"Ignoring non-authoritative opponent force-switch update while waiting for render batch",
+					"attempt=%d message=%s phase=%s next=%s" % [
+						attempt,
+						_describe_pvp_realtime_message(message),
+						pvp_last_phase,
+						pvp_last_next_phase,
+					]
 				)
 			attempt += 1
 			continue
@@ -5868,7 +5996,14 @@ func _response_from_pvp_realtime_message(message: Dictionary) -> Dictionary:
 	return {}
 
 func _is_authoritative_pvp_render_batch_response(response: Dictionary) -> bool:
+	if bool(response.get("pvpBattleUpdateFallbackRender", false)):
+		return true
 	return str(response.get("pvpRealtimeMessageType", "")).strip_edges().to_lower() == "pvp.render_batch"
+
+func _promote_pvp_battle_update_fallback_render(response: Dictionary) -> Dictionary:
+	var promoted_response := response.duplicate(true)
+	promoted_response["pvpBattleUpdateFallbackRender"] = true
+	return promoted_response
 
 func _should_apply_pvp_realtime_end_immediately(message: Dictionary) -> bool:
 	if battle_finished:
