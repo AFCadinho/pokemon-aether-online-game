@@ -44,6 +44,15 @@ env:
   POKEMON_GEN5_BACK_ASSET_VERSION: pokemon-gen5-back-v2
   POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-v2
   POKEMON_GEN5_SHINY_BACK_ASSET_VERSION: pokemon-gen5-shiny-back-v2
+  POKEMON_HOME_ASSET_SIZE: 61327194
+  POKEMON_FRONT_ASSET_SIZE: 90099039
+  POKEMON_BACK_ASSET_SIZE: 78450869
+  POKEMON_SHINY_FRONT_ASSET_SIZE: 88077401
+  POKEMON_SHINY_BACK_ASSET_SIZE: 72477263
+  POKEMON_GEN5_FRONT_ASSET_SIZE: 315362253
+  POKEMON_GEN5_BACK_ASSET_SIZE: 248810078
+  POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE: 318368865
+  POKEMON_GEN5_SHINY_BACK_ASSET_SIZE: 251913753
   MUSIC_ASSET_VERSION_PREFIX: music
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
@@ -268,15 +277,15 @@ jobs:
             printf '%s\n' "--external-asset-pack" "${asset_pack_arg}" >> /tmp/asset_pack_args.txt
           }
 
-          register_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "61327194"
-          register_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "90099039"
-          register_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "78450869"
-          register_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "88077401"
-          register_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "72477263"
-          register_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "315362253" "true"
-          register_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "248810078" "true"
-          register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "318368865" "true"
-          register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "251913753" "true"
+          register_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "${POKEMON_HOME_ASSET_SIZE}"
+          register_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_SIZE}"
+          register_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_SIZE}"
+          register_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_SIZE}"
+          register_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_SIZE}"
+          register_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_FRONT_ASSET_SIZE}" "true"
+          register_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_SIZE}" "true"
+          register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE}" "true"
+          register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE}" "true"
 
       - name: Package music asset pack
         run: |

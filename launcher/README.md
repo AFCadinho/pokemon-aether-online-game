@@ -149,6 +149,22 @@ For the production bucket layout, upload with:
 python3 tools/upload_launcher_release.py builds/launcher --layout updates
 ```
 
+## Upload Sprite Asset Packs
+
+Pokemon sprite packs are intentionally kept out of git. When sprite files change, package and upload them from a local checkout that has `assets/sprites/pokemon` populated:
+
+```bash
+python3 tools/upload_sprite_asset_packs.py
+```
+
+This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/`, and updates `.github/workflows/deploy-desktop-r2.yml` with the new asset versions and sizes. Commit and push that workflow change so the launcher manifests reference the new packs. The launcher downloads a pack again when its manifest `version` changes, and also redownloads required packs when the local asset folder is missing.
+
+To upload only one changed pack:
+
+```bash
+python3 tools/upload_sprite_asset_packs.py --pack pokemon-front
+```
+
 The CI workflow also uploads launcher app downloads to stable public URLs:
 
 ```text
