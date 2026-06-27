@@ -19,6 +19,18 @@ const EXTRACT_PROGRESS_BATCH_SIZE := 25
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
 const GEN5_SPRITES_FOLDER_PATH := "assets/sprites/pokemon/gen5"
+const ASSET_PACK_REQUIRED_PATHS := {
+	"music": "assets/music",
+	"pokemon-home": "assets/sprites/pokemon/pokemon_home",
+	"pokemon-front": "assets/sprites/pokemon/front",
+	"pokemon-back": "assets/sprites/pokemon/back",
+	"pokemon-shiny-front": "assets/sprites/pokemon/shiny_front",
+	"pokemon-shiny-back": "assets/sprites/pokemon/shiny_back",
+	"pokemon-gen5-front": "assets/sprites/pokemon/gen5/front",
+	"pokemon-gen5-back": "assets/sprites/pokemon/gen5/back",
+	"pokemon-gen5-shiny-front": "assets/sprites/pokemon/gen5/shiny_front",
+	"pokemon-gen5-shiny-back": "assets/sprites/pokemon/gen5/shiny_back",
+}
 const LAUNCHER_UPDATE_TEMP_DIR := "user://launcher_update"
 const LAUNCHER_UPDATE_STAGING_SUBDIR := "staging"
 const LAUNCHER_UPDATE_WINDOWS_SCRIPT := "apply_launcher_update.bat"
@@ -1365,7 +1377,7 @@ func _build_download_queue() -> void:
 		if pack_id.is_empty() or pack_version.is_empty():
 			continue
 
-		if str(local_asset_packs.get(pack_id, "")) == pack_version:
+		if _is_asset_pack_installed(asset_pack, local_asset_packs):
 			continue
 
 		pending_downloads.append({
@@ -1441,6 +1453,26 @@ func _is_optional_asset_pack(asset_pack: Dictionary) -> bool:
 
 func _is_gen5_asset_pack(asset_pack: Dictionary) -> bool:
 	return str(asset_pack.get("id", "")).begins_with(GEN5_OPTIONAL_ASSET_PACK_PREFIX)
+
+
+func _is_asset_pack_installed(asset_pack: Dictionary, local_asset_packs: Dictionary) -> bool:
+	var pack_id := str(asset_pack.get("id", ""))
+	var pack_version := str(asset_pack.get("version", ""))
+	if pack_id.is_empty() or pack_version.is_empty():
+		return false
+
+	if str(local_asset_packs.get(pack_id, "")) != pack_version:
+		return false
+
+	return _has_asset_pack_required_path(pack_id)
+
+
+func _has_asset_pack_required_path(pack_id: String) -> bool:
+	var required_path := str(ASSET_PACK_REQUIRED_PATHS.get(pack_id, ""))
+	if required_path.is_empty():
+		return true
+
+	return DirAccess.dir_exists_absolute(_globalize_storage_path(install_dir.path_join(required_path)))
 
 
 func _reset_download_progress_counters() -> void:
@@ -2021,11 +2053,7 @@ func _are_gen5_sprites_installed() -> bool:
 
 	var local_asset_packs: Dictionary = _get_dictionary(local_versions, "assetPacks")
 	for asset_pack: Dictionary in gen5_asset_packs:
-		var pack_id := str(asset_pack.get("id", ""))
-		var pack_version := str(asset_pack.get("version", ""))
-		if pack_id.is_empty() or pack_version.is_empty():
-			return false
-		if str(local_asset_packs.get(pack_id, "")) != pack_version:
+		if not _is_asset_pack_installed(asset_pack, local_asset_packs):
 			return false
 
 	return true

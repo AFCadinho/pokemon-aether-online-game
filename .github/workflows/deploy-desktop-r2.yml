@@ -35,15 +35,15 @@ env:
   MACOS_EXPORT_PATH: builds/macos/PokeAether.app
   MACOS_LAUNCHER_EXPORT_PRESET: macOS Launcher
   MACOS_LAUNCHER_EXPORT_PATH: builds/launcher-app/macos/PokeAether Launcher.app
-  POKEMON_HOME_ASSET_VERSION_PREFIX: pokemon-home
-  POKEMON_FRONT_ASSET_VERSION_PREFIX: pokemon-front-scale1-128
-  POKEMON_BACK_ASSET_VERSION_PREFIX: pokemon-back-scale1-128
-  POKEMON_SHINY_FRONT_ASSET_VERSION_PREFIX: pokemon-shiny-front-scale1-128
-  POKEMON_SHINY_BACK_ASSET_VERSION_PREFIX: pokemon-shiny-back-scale1-128
-  POKEMON_GEN5_FRONT_ASSET_VERSION_PREFIX: pokemon-gen5-front
-  POKEMON_GEN5_BACK_ASSET_VERSION_PREFIX: pokemon-gen5-back
-  POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION_PREFIX: pokemon-gen5-shiny-front
-  POKEMON_GEN5_SHINY_BACK_ASSET_VERSION_PREFIX: pokemon-gen5-shiny-back
+  POKEMON_HOME_ASSET_VERSION: pokemon-home-v1
+  POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-v1
+  POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-v1
+  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-v1
+  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-scale1-128-v1
+  POKEMON_GEN5_FRONT_ASSET_VERSION: pokemon-gen5-front-v2
+  POKEMON_GEN5_BACK_ASSET_VERSION: pokemon-gen5-back-v2
+  POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-v2
+  POKEMON_GEN5_SHINY_BACK_ASSET_VERSION: pokemon-gen5-shiny-back-v2
   MUSIC_ASSET_VERSION_PREFIX: music
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
@@ -242,44 +242,41 @@ jobs:
           cd launcher
           ../godot --headless --export-release "${LINUX_LAUNCHER_EXPORT_PRESET}" "../${LINUX_LAUNCHER_EXPORT_PATH}"
 
-      - name: Package Pokemon sprite asset packs
+      - name: Register Pokemon sprite asset packs
         run: |
           : > /tmp/asset_pack_args.txt
 
-          package_local_pack() {
+          register_external_pack() {
             pack_id="$1"
-            pack_version_prefix="$2"
-            source_path="$3"
+            pack_version="$2"
+            size_bytes="$3"
             optional="${4:-false}"
-            skip_missing="${5:-false}"
-            if [ ! -d "${source_path}" ]; then
-              if [ "${skip_missing}" = "true" ]; then
-                echo "Skipping asset pack ${pack_id}; missing source path: ${source_path}"
-                return 0
-              fi
-              echo "Missing required asset pack source path: ${source_path}" >&2
+
+            if [ -z "${pack_id}" ] || [ -z "${pack_version}" ]; then
+              echo "Missing external asset pack id or version." >&2
               return 1
             fi
-            pack_hash="$(find "${source_path}" -type f ! -name '*.import' -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-12)"
-            pack_version="${pack_version_prefix}-${pack_hash}"
-            zip_path="builds/asset-packs/${pack_version}.zip"
-            python3 tools/package_asset_pack.py "${zip_path}" "${source_path}"
-            asset_pack_arg="${pack_id}:${pack_version}:${zip_path}"
+
+            asset_url="${UPDATE_BASE_URL}/assets/${pack_version}.zip"
+            echo "Verifying external asset pack ${pack_id}: ${asset_url}"
+            curl -fsSI "${asset_url}" >/dev/null
+
+            asset_pack_arg="${pack_id}:${pack_version}:${pack_version}.zip:${size_bytes}"
             if [ "${optional}" = "true" ]; then
               asset_pack_arg="${asset_pack_arg}:true"
             fi
-            printf '%s\n' "--asset-pack" "${asset_pack_arg}" >> /tmp/asset_pack_args.txt
+            printf '%s\n' "--external-asset-pack" "${asset_pack_arg}" >> /tmp/asset_pack_args.txt
           }
 
-          package_local_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/pokemon_home" "false" "true"
-          package_local_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/front" "false" "true"
-          package_local_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/back" "false" "true"
-          package_local_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_front" "false" "true"
-          package_local_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/shiny_back" "false" "true"
-          package_local_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/front" "true" "true"
-          package_local_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/back" "true" "true"
-          package_local_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_front" "true" "true"
-          package_local_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION_PREFIX}" "assets/sprites/pokemon/gen5/shiny_back" "true" "true"
+          register_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "61327194"
+          register_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "90099039"
+          register_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "78450869"
+          register_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "88077401"
+          register_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "72477263"
+          register_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "315362253" "true"
+          register_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "248810078" "true"
+          register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "318368865" "true"
+          register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "251913753" "true"
 
       - name: Package music asset pack
         run: |
@@ -342,6 +339,57 @@ jobs:
             test -f builds/launcher/PokeAetherLauncher-linux.zip
             test -f builds/launcher/PokeAetherLauncher-macos.zip
           fi
+
+      - name: Verify launcher manifests include required asset packs
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          required_ids = {
+              "pokemon-home",
+              "pokemon-front",
+              "pokemon-back",
+              "pokemon-shiny-front",
+              "pokemon-shiny-back",
+              "music",
+          }
+          optional_gen5_ids = {
+              "pokemon-gen5-front",
+              "pokemon-gen5-back",
+              "pokemon-gen5-shiny-front",
+              "pokemon-gen5-shiny-back",
+          }
+
+          for manifest_path in sorted(Path("builds/launcher").glob("manifest*.json")):
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              packs = manifest.get("assetPacks", [])
+              by_id = {
+                  pack.get("id"): pack
+                  for pack in packs
+                  if isinstance(pack, dict) and pack.get("id")
+              }
+
+              missing = sorted(required_ids - by_id.keys())
+              if missing:
+                  raise SystemExit(f"{manifest_path} missing required asset packs: {', '.join(missing)}")
+
+              for pack_id in sorted(required_ids):
+                  pack = by_id[pack_id]
+                  if not pack.get("version") or not pack.get("url"):
+                      raise SystemExit(f"{manifest_path} has incomplete asset pack: {pack_id}")
+                  if pack_id != "music" and not str(pack["url"]).endswith(f"/{pack['version']}.zip"):
+                      raise SystemExit(f"{manifest_path} URL does not match version for {pack_id}: {pack['url']}")
+
+              for pack_id in sorted(optional_gen5_ids & by_id.keys()):
+                  pack = by_id[pack_id]
+                  if pack.get("optional") is not True:
+                      raise SystemExit(f"{manifest_path} gen5 pack must be optional: {pack_id}")
+                  if pack.get("autoUpdateIfInstalled") is not True:
+                      raise SystemExit(f"{manifest_path} gen5 pack must auto-update when installed: {pack_id}")
+
+              print(f"Verified {manifest_path}")
+          PY
 
       - name: Verify launcher release size
         run: |

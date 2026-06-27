@@ -227,6 +227,8 @@ def _build_asset_pack(entry: str, base_url: str, asset_prefix: str, output_dir: 
     }
     if optional:
         asset_pack["optional"] = True
+        if pack_id.startswith("pokemon-gen5"):
+            asset_pack["autoUpdateIfInstalled"] = True
 
     return asset_pack
 
@@ -263,6 +265,8 @@ def _build_external_asset_pack(entry: str, base_url: str, asset_prefix: str) -> 
     }
     if optional:
         asset_pack["optional"] = True
+        if pack_id.startswith("pokemon-gen5"):
+            asset_pack["autoUpdateIfInstalled"] = True
 
     return asset_pack
 
