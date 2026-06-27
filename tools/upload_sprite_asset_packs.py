@@ -136,7 +136,7 @@ def main() -> None:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Recreate zip files even if the target zip already exists.",
+        help="Recreate and upload packs even when their computed version is already in the workflow.",
     )
     args = parser.parse_args()
 
@@ -144,6 +144,7 @@ def main() -> None:
     selected_packs = [pack for pack in SPRITE_PACKS if pack.pack_id in selected_ids]
     output_dir = Path(args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
+    workflow_versions = _read_workflow_versions()
 
     uploaded_versions: dict[str, tuple[str, int]] = {}
     r2_config = None if args.no_upload else _load_config()
@@ -154,6 +155,11 @@ def main() -> None:
         version_suffix = args.version_label.strip() or digest[:12]
         version = f"{pack.version_prefix}-{version_suffix}"
         zip_path = output_dir / f"{version}.zip"
+        current_version = workflow_versions.get(pack.version_env, "")
+
+        if not args.force and current_version == version:
+            print(f"Skipping unchanged {pack.pack_id}: {version}")
+            continue
 
         if args.force or not zip_path.exists():
             _write_pack_zip(pack.source_path, files, zip_path)
@@ -169,6 +175,10 @@ def main() -> None:
             print(f"Uploading {zip_path.name} -> s3://{r2_config.bucket}/{key}")
             _upload_file(r2_config, zip_path, key)
             print(f"Uploaded {zip_path.name}")
+
+    if not uploaded_versions:
+        print("No sprite asset pack changes detected.")
+        return
 
     if not args.no_workflow_update:
         _update_workflow(selected_packs, uploaded_versions)
@@ -230,11 +240,32 @@ def _update_workflow(
     workflow_text = WORKFLOW_PATH.read_text(encoding="utf-8")
 
     for pack in packs:
+        if pack.pack_id not in uploaded_versions:
+            continue
+
         version, size_bytes = uploaded_versions[pack.pack_id]
         workflow_text = _replace_env_value(workflow_text, pack.version_env, version)
         workflow_text = _replace_env_value(workflow_text, pack.size_env, str(size_bytes))
 
     WORKFLOW_PATH.write_text(workflow_text, encoding="utf-8")
+
+
+def _read_workflow_versions() -> dict[str, str]:
+    workflow_text = WORKFLOW_PATH.read_text(encoding="utf-8")
+    versions: dict[str, str] = {}
+    for pack in SPRITE_PACKS:
+        versions[pack.version_env] = _read_env_value(workflow_text, pack.version_env)
+
+    return versions
+
+
+def _read_env_value(workflow_text: str, env_name: str) -> str:
+    pattern = re.compile(rf"^  {re.escape(env_name)}: (.*)$", re.MULTILINE)
+    match = pattern.search(workflow_text)
+    if not match:
+        raise SystemExit(f"Missing workflow env entry for {env_name}")
+
+    return match.group(1).strip()
 
 
 def _replace_env_value(workflow_text: str, env_name: str, value: str) -> str:

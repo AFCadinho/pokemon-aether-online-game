@@ -159,6 +159,8 @@ python3 tools/upload_sprite_asset_packs.py
 
 This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/`, and updates `.github/workflows/deploy-desktop-r2.yml` with the new asset versions and sizes. Commit and push that workflow change so the launcher manifests reference the new packs. The launcher downloads a pack again when its manifest `version` changes, and also redownloads required packs when the local asset folder is missing.
 
+The script uses content hashes for versions and skips packs whose computed version is already in the workflow. That means unchanged packs are not uploaded again and users do not redownload them.
+
 To upload only one changed pack:
 
 ```bash
