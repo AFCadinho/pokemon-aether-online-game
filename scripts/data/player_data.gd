@@ -283,6 +283,12 @@ func _apply_move_data_to_pokemon(pokemon: Pokemon, pokemon_data: Dictionary) -> 
 		return
 
 	var updated_moves: Array = pokemon.moves.duplicate(true)
+	if not updated_moves.is_empty() and _move_sets_have_no_overlap(updated_moves, move_slots):
+		push_warning(
+			"PlayerSave: skipped battle move sync for %s because incoming moves do not overlap existing moves." % pokemon.species
+		)
+		return
+
 	if updated_moves.is_empty():
 		# In case party state only has move names, initialize from battle state.
 		for move_index in range(min(move_slots.size(), 4)):
@@ -313,6 +319,39 @@ func _apply_move_data_to_pokemon(pokemon: Pokemon, pokemon_data: Dictionary) -> 
 				updated_moves.append(next_state)
 
 	pokemon.moves = updated_moves.slice(0, 4)
+
+
+func _move_sets_have_no_overlap(existing_moves: Array, incoming_moves: Array) -> bool:
+	var existing_ids := {}
+	for move_value: Variant in existing_moves:
+		var move_id := _get_move_identity_key(move_value)
+		if move_id != "":
+			existing_ids[move_id] = true
+
+	if existing_ids.is_empty():
+		return false
+
+	var has_incoming_move := false
+	for move_value: Variant in incoming_moves:
+		var move_id := _get_move_identity_key(move_value)
+		if move_id == "":
+			continue
+		has_incoming_move = true
+		if existing_ids.has(move_id):
+			return false
+
+	return has_incoming_move
+
+
+func _get_move_identity_key(move_value: Variant) -> String:
+	var raw_value := ""
+	if move_value is Dictionary:
+		var move_data: Dictionary = move_value as Dictionary
+		raw_value = str(move_data.get("id", move_data.get("name", move_data.get("move", ""))))
+	else:
+		raw_value = str(move_value)
+
+	return raw_value.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
 
 func _normalize_battle_move_state(move_value: Variant, fallback_move: Dictionary = {}) -> Dictionary:
 	var normalized_move: Dictionary = fallback_move.duplicate(true)
