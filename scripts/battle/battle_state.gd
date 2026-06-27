@@ -4,8 +4,6 @@ class_name BattleState
 
 const DEBUG_PAO_BATTLE_IDENTITY := false
 const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
-const DEBUG_ACTIVE_MOVE_IDENTITY := true
-const ACTIVE_MOVE_DEBUG_PREFIX := "[PAO Active Move Identity Debug]"
 
 var battle_id := ""
 var format_id := ""
@@ -39,8 +37,6 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	requests = next_requests
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response after requests assignment")
-	if DEBUG_ACTIVE_MOVE_IDENTITY:
-		_debug_print_active_move_snapshot("load_from_api_response after requests assignment")
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
 	field = response.get("field", {})
@@ -54,8 +50,6 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	_remember_hp_fields_from_requests(requests)
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response final state")
-	if DEBUG_ACTIVE_MOVE_IDENTITY:
-		_debug_print_active_move_snapshot("load_from_api_response final state")
 
 func apply_event_conditions(events: Array) -> void:
 	_apply_event_conditions_to_requests(events)
@@ -1110,85 +1104,6 @@ func _debug_print_requests_snapshot(label: String) -> void:
 
 	print(DEBUG_PREFIX, " ", label, " ", snapshot)
 
-func _debug_print_active_move_snapshot(label: String) -> void:
-	var snapshot := {}
-	if requests is Dictionary:
-		for player_id_value: Variant in requests.keys():
-			var player_id := str(player_id_value)
-			var request_value: Variant = requests.get(player_id, {})
-			if not (request_value is Dictionary):
-				continue
-
-			var request: Dictionary = request_value as Dictionary
-			snapshot[player_id] = {
-				"active": _debug_summarize_active_move_array(request.get("active", [])),
-				"activeSidePokemon": _debug_summarize_active_side_pokemon_for_moves(player_id),
-			}
-
-	print(ACTIVE_MOVE_DEBUG_PREFIX, " ", label, " ", snapshot)
-
-func _debug_summarize_active_side_pokemon_for_moves(player_id: String) -> Array:
-	var output: Array = []
-	for pokemon_value: Variant in get_player_team(player_id):
-		if not (pokemon_value is Dictionary):
-			continue
-
-		var pokemon: Dictionary = pokemon_value as Dictionary
-		if bool(pokemon.get("active", false)):
-			output.append(_debug_summarize_active_move_value(pokemon))
-
-	return output
-
-func _debug_summarize_active_move_array(active_value: Variant) -> Array:
-	var output: Array = []
-	if not (active_value is Array):
-		return output
-
-	var active_array: Array = active_value as Array
-	for active_slot: Variant in active_array:
-		output.append(_debug_summarize_active_move_value(active_slot))
-
-	return output
-
-func _debug_summarize_active_move_value(value: Variant) -> Variant:
-	if not (value is Dictionary):
-		return value
-
-	var pokemon: Dictionary = value as Dictionary
-	return {
-		"ident": pokemon.get("ident", ""),
-		"activeIdent": pokemon.get("activeIdent", ""),
-		"active": pokemon.get("active", ""),
-		"species": pokemon.get("species", ""),
-		"displaySpecies": pokemon.get("displaySpecies", ""),
-		"partySlot": pokemon.get("partySlot", ""),
-		"metadataSlot": pokemon.get("metadataSlot", ""),
-		"requestIndex": pokemon.get("requestIndex", ""),
-		"pokemonKey": pokemon.get("pokemonKey", ""),
-		"instanceId": pokemon.get("instanceId", pokemon.get("instance_id", "")),
-		"moves": _debug_summarize_active_move_names(pokemon.get("moves", [])),
-	}
-
-func _debug_summarize_active_move_names(moves_value: Variant) -> Array:
-	var output: Array = []
-	if not (moves_value is Array):
-		return output
-
-	var moves_array: Array = moves_value as Array
-	for move_value: Variant in moves_array:
-		if move_value is Dictionary:
-			var move: Dictionary = move_value as Dictionary
-			output.append({
-				"id": move.get("id", ""),
-				"name": move.get("name", move.get("move", "")),
-				"pp": move.get("pp", ""),
-				"maxPp": move.get("maxPp", move.get("maxpp", "")),
-			})
-		else:
-			output.append(move_value)
-
-	return output
-
 func _debug_summarize_active_slots(active_value: Variant) -> Array:
 	var output: Array = []
 	if not (active_value is Array):
@@ -1462,15 +1377,6 @@ func get_available_moves(player_id: String = "p1", active_index=0) -> Array:
 
 	if active_index >= active_moves_slots.size() or active_index < 0:
 		return []
-
-	if DEBUG_ACTIVE_MOVE_IDENTITY:
-		var active_slot: Variant = active_moves_slots[active_index]
-		print(ACTIVE_MOVE_DEBUG_PREFIX, " get_available_moves ", {
-			"playerId": player_id,
-			"activeIndex": active_index,
-			"activeSlot": _debug_summarize_active_move_value(active_slot),
-			"activeSidePokemon": _debug_summarize_active_move_value(get_active_player_pokemon(player_id)),
-		})
 
 	return active_moves_slots[active_index].get("moves", [])
 
