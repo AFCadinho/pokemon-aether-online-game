@@ -2,6 +2,9 @@ extends RefCounted
 
 class_name BattleDisplayDataPresenter
 
+const DEBUG_PAO_BATTLE_IDENTITY := false
+const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
+
 var battle_state: BattleState
 var display_metadata := preload("res://scripts/battle/battle_display_metadata.gd").new()
 
@@ -71,6 +74,12 @@ func get_display_team_data(player_id: String) -> Array:
 		return []
 
 	var team := battle_state.get_player_team(player_id)
+	if DEBUG_PAO_BATTLE_IDENTITY:
+		print(DEBUG_PREFIX, " display team raw ", {
+			"playerId": player_id,
+			"team": _debug_summarize_team(team),
+		})
+
 	var display_team: Array = []
 	for index in range(team.size()):
 		var pokemon_data: Variant = team[index]
@@ -83,7 +92,15 @@ func get_display_team_data(player_id: String) -> Array:
 			_enrich_player_display_slot_from_save(display_data, index)
 		display_team.append(display_data)
 
-	return _sort_display_team_by_canonical_party_slot(display_team)
+	var sorted_display_team := _sort_display_team_by_canonical_party_slot(display_team)
+	if DEBUG_PAO_BATTLE_IDENTITY:
+		print(DEBUG_PREFIX, " display team output ", {
+			"playerId": player_id,
+			"displayTeam": _debug_summarize_team(display_team),
+			"sortedDisplayTeam": _debug_summarize_team(sorted_display_team),
+		})
+
+	return sorted_display_team
 
 
 func get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Dictionary:
@@ -228,6 +245,31 @@ func _get_positive_slot_from_pokemon_data(pokemon_data: Dictionary, keys: Array)
 				return parsed_slot
 
 	return -1
+
+func _debug_summarize_team(team: Array) -> Array:
+	var output: Array = []
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			output.append({"index": index, "value": pokemon_value})
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		output.append({
+			"index": index,
+			"ident": str(pokemon.get("ident", "")),
+			"active": bool(pokemon.get("active", false)),
+			"details": str(pokemon.get("details", "")),
+			"species": str(pokemon.get("species", "")),
+			"displaySpecies": str(pokemon.get("displaySpecies", "")),
+			"partySlot": pokemon.get("partySlot", ""),
+			"metadataSlot": pokemon.get("metadataSlot", ""),
+			"pokemonKey": str(pokemon.get("pokemonKey", "")),
+			"instanceId": str(pokemon.get("instanceId", pokemon.get("instance_id", ""))),
+			"condition": str(pokemon.get("condition", "")),
+		})
+
+	return output
 
 func _normalize_species_for_compare(species: String) -> String:
 	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")

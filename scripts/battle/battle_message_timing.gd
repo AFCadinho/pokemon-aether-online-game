@@ -34,7 +34,7 @@ func get_battle_message_hold_seconds(event: Dictionary, battle_message: String) 
 	match str(event.get("type", "")):
 		"move":
 			return MOVE_MESSAGE_HOLD_SECONDS
-		"switch":
+		"switch", "drag":
 			return SWITCH_MESSAGE_HOLD_SECONDS
 		"heal":
 			return HEAL_MESSAGE_HOLD_SECONDS

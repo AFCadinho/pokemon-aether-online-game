@@ -2254,7 +2254,7 @@ func _prewarm_battle_event_animations(events: Array) -> void:
 			var effect_key: String = str(effect_key_value)
 			if effect_key != "":
 				effect_keys.append(effect_key)
-		if str(event_data.get("type", "")) == "switch" and not effect_keys.has(SHINY_ENTRANCE_EFFECT_KEY):
+		if _is_switch_like_event(event_data) and not effect_keys.has(SHINY_ENTRANCE_EFFECT_KEY):
 			effect_keys.append(SHINY_ENTRANCE_EFFECT_KEY)
 		needs_damage_sound = needs_damage_sound or bool(preload_keys.get("needs_damage_sound", false))
 
@@ -2541,7 +2541,7 @@ func _remember_public_confirmed_item_from_event(event: Dictionary) -> void:
 func _remember_battle_modifier_event(event: Dictionary) -> void:
 	_remember_public_confirmed_item_from_event(event)
 	match str(event.get("type", "")):
-		"switch":
+		"switch", "drag":
 			_clear_stat_stages_for_ident(str(event.get("fromIdent", "")))
 			_clear_stat_stages_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_ability_stat_modifier_for_ident(str(event.get("fromIdent", "")))
@@ -3854,7 +3854,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_party_slots()
-		if event_type == "switch":
+		if event_type == "switch" or event_type == "drag":
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_active_sprites()
@@ -4242,7 +4242,7 @@ func _order_switch_out_heals_before_switches(events: Array) -> Array:
 			continue
 
 		var event_data: Dictionary = event_value as Dictionary
-		if str(event_data.get("type", "")) == "switch":
+		if _is_switch_like_event(event_data):
 			var heal_index := _find_next_switch_out_heal_event_index(events, index + 1, event_data, consumed_indexes)
 			if heal_index >= 0:
 				ordered_events.append(events[heal_index])
@@ -4272,7 +4272,7 @@ func _find_next_switch_out_heal_event_index(
 
 		var event_data: Dictionary = event_value as Dictionary
 		var event_type := str(event_data.get("type", ""))
-		if event_type == "turn" or event_type == "switch":
+		if event_type == "turn" or event_type == "switch" or event_type == "drag":
 			return -1
 		if not bool(event_data.get("synthetic", false)):
 			continue
@@ -4326,7 +4326,7 @@ func _get_next_matching_switch_event(events: Array, start_index: int, switch_out
 		var event_type := str(event_data.get("type", ""))
 		if event_type == "turn":
 			return {}
-		if event_type != "switch":
+		if event_type != "switch" and event_type != "drag":
 			continue
 
 		var from_ident := _normalize_battle_ident(str(event_data.get("fromIdent", "")))
@@ -4354,7 +4354,7 @@ func _is_pivot_switch_event(switch_event: Dictionary, ordered_events: Array, hea
 
 		var event_data: Dictionary = event_value as Dictionary
 		var event_type := str(event_data.get("type", ""))
-		if event_type == "turn" or event_type == "switch":
+		if event_type == "turn" or event_type == "switch" or event_type == "drag":
 			return false
 		if event_type != "move":
 			continue
@@ -6838,7 +6838,7 @@ func _render_pvp_opponent_response(
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
-	_update_battle_presentation()
+	_update_battle_presentation_before_event_render(opponent_events)
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
 	var success := await _render_pvp_event_batch(opponent_response, opponent_events, true, source)
@@ -6856,7 +6856,7 @@ func _render_opponent_response(
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
-	_update_battle_presentation()
+	_update_battle_presentation_before_event_render(opponent_events)
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
 	await _render_battle_events(opponent_events, true, "opponent_response_non_pvp")
@@ -6870,7 +6870,7 @@ func _prepare_switch_in_presentation_for_events(events: Array) -> void:
 			continue
 
 		var event_data: Dictionary = event_value as Dictionary
-		if str(event_data.get("type", "")) != "switch":
+		if not _is_switch_like_event(event_data):
 			continue
 
 		var switch_ident := _get_switch_event_ident(event_data)
@@ -6998,11 +6998,33 @@ func _get_switch_event_pokemon_key(event_data: Dictionary) -> String:
 		if not (ref_value is Dictionary):
 			continue
 
-		var ref_key_value := _get_switch_event_pokemon_key(ref_value as Dictionary)
+		var ref_key_value := _get_direct_switch_event_pokemon_key(ref_value as Dictionary)
 		if ref_key_value != "":
 			return ref_key_value
 
 	return ""
+
+func _get_direct_switch_event_pokemon_key(event_data: Dictionary) -> String:
+	for key in ["pokemonKey", "pokemon_key"]:
+		var value := str(event_data.get(key, "")).strip_edges()
+		if value != "":
+			return value
+
+	return ""
+
+func _is_switch_like_event(event_data: Dictionary) -> bool:
+	var event_type := str(event_data.get("type", ""))
+	return event_type == "switch" or event_type == "drag"
+
+func _events_have_switch_like_event(events: Array) -> bool:
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		if _is_switch_like_event(event_value as Dictionary):
+			return true
+
+	return false
 
 
 func _find_unique_team_index_by_pokemon_key(team: Array, pokemon_key: String) -> int:
@@ -7106,9 +7128,20 @@ func _get_switch_event_metadata_slot(event_data: Dictionary) -> int:
 		if not (ref_value is Dictionary):
 			continue
 
-		var ref_slot := _get_switch_event_metadata_slot(ref_value as Dictionary)
+		var ref_slot := _get_direct_switch_event_metadata_slot(ref_value as Dictionary)
 		if ref_slot > 0:
 			return ref_slot
+
+	return -1
+
+func _get_direct_switch_event_metadata_slot(event_data: Dictionary) -> int:
+	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
+		if not event_data.has(key):
+			continue
+
+		var slot := _safe_int(event_data.get(key), -1)
+		if slot > 0:
+			return slot
 
 	return -1
 
@@ -7335,6 +7368,19 @@ func _update_battle_presentation(sprite_context := "sprite_refresh") -> void:
 	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_active_sprites(sprite_context)
+	_update_move_slots()
+	_update_party_slots()
+	_update_vs_panel_names()
+	_update_mechanic_button_states()
+	_refresh_damage_calc_results()
+
+func _update_battle_presentation_before_event_render(events: Array) -> void:
+	if not _events_have_switch_like_event(events):
+		_update_battle_presentation()
+		return
+
+	_update_battle_status_panels()
+	_update_hud_panels()
 	_update_move_slots()
 	_update_party_slots()
 	_update_vs_panel_names()

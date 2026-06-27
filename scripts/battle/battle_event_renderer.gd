@@ -181,7 +181,7 @@ func _add_battle_log_player_gap(event: Dictionary) -> void:
 func _get_battle_log_event_player_id(event: Dictionary) -> String:
 	var event_type := str(event.get("type", ""))
 	match event_type:
-		"switch":
+		"switch", "drag":
 			return str(event.get("playerId", ""))
 		"move", "cant", "fail", "miss":
 			return _get_player_id_from_ident(str(event.get("actor", "")))

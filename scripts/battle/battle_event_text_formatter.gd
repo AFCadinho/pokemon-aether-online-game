@@ -68,6 +68,18 @@ func format_player_switch_battle_message(from_name: String, to_name: String) -> 
 
 	return format_player_switch_log_message(from_name, to_name)
 
+func format_player_forced_switch_log_message(_from_name: String, to_name: String) -> String:
+	if to_name == "":
+		to_name = "Pokemon"
+
+	return "Go! %s!" % to_name
+
+func format_player_forced_switch_battle_message(_from_name: String, to_name: String) -> String:
+	if to_name == "":
+		to_name = "Pokemon"
+
+	return "Go! %s!" % to_name
+
 func format_opponent_switch_log_message(trainer_name: String, from_name: String, to_name: String) -> String:
 	if trainer_name == "":
 		trainer_name = "The opposing Trainer"
@@ -91,6 +103,12 @@ func format_opponent_switch_battle_message(trainer_name: String, to_name: String
 		to_name = "Pokemon"
 
 	return "%s sent out %s!" % [trainer_name, to_name]
+
+func format_opponent_forced_switch_log_message(trainer_name: String, _from_name: String, to_name: String) -> String:
+	return format_opponent_switch_battle_message(trainer_name, to_name)
+
+func format_opponent_forced_switch_battle_message(trainer_name: String, to_name: String) -> String:
+	return format_opponent_switch_battle_message(trainer_name, to_name)
 
 func format_faint_event(target: String) -> String:
 	if target == "":

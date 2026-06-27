@@ -2,6 +2,9 @@ extends RefCounted
 
 class_name BattleState
 
+const DEBUG_PAO_BATTLE_IDENTITY := false
+const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
+
 var battle_id := ""
 var format_id := ""
 var players := {}
@@ -32,6 +35,8 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 		var next_requests_dictionary: Dictionary = next_requests as Dictionary
 		_preserve_missing_hp_fields_in_requests(next_requests_dictionary)
 	requests = next_requests
+	if DEBUG_PAO_BATTLE_IDENTITY:
+		_debug_print_requests_snapshot("load_from_api_response after requests assignment")
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
 	field = response.get("field", {})
@@ -43,6 +48,8 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 		_apply_mega_species_to_requests()
 		_remove_deferred_display_fields_from_requests(response.get("events", []))
 	_remember_hp_fields_from_requests(requests)
+	if DEBUG_PAO_BATTLE_IDENTITY:
+		_debug_print_requests_snapshot("load_from_api_response final state")
 
 func apply_event_conditions(events: Array) -> void:
 	_apply_event_conditions_to_requests(events)
@@ -332,7 +339,7 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 
 		var event: Dictionary = event_value as Dictionary
 		var event_type := str(event.get("type", ""))
-		if event_type == "switch":
+		if event_type == "switch" or event_type == "drag":
 			_apply_switch_event_to_requests(event)
 			_clear_transform_event_from_requests(event)
 			continue
@@ -408,6 +415,14 @@ func _apply_switch_event_to_requests(event: Dictionary) -> void:
 
 	var team := get_player_team(player_id)
 	var target_index := _find_party_target_index(team, switch_ident, event, false)
+	if DEBUG_PAO_BATTLE_IDENTITY:
+		print(DEBUG_PREFIX, " apply switch event", {
+			"switchIdent": switch_ident,
+			"playerId": player_id,
+			"event": _debug_summarize_event(event),
+			"targetIndex": target_index,
+			"teamBefore": _debug_summarize_team(team),
+		})
 	if target_index < 0 or target_index >= team.size():
 		return
 
@@ -427,6 +442,14 @@ func _apply_switch_event_to_requests(event: Dictionary) -> void:
 		_apply_condition_fields(pokemon_data, condition)
 		pokemon_data["fainted"] = false
 		_remember_hp_snapshot_for_condition_event(switch_ident, pokemon_data, condition, index)
+
+	if DEBUG_PAO_BATTLE_IDENTITY:
+		print(DEBUG_PREFIX, " apply switch event result", {
+			"switchIdent": switch_ident,
+			"playerId": player_id,
+			"targetIndex": target_index,
+			"teamAfter": _debug_summarize_team(team),
+		})
 
 func _get_switch_event_ident(event: Dictionary) -> String:
 	for key in ["toIdent", "target", "pokemon", "ident"]:
@@ -883,9 +906,18 @@ func _get_event_pokemon_key(event_data: Dictionary) -> String:
 		if not (ref_value is Dictionary):
 			continue
 
-		var ref_key_value := _get_event_pokemon_key(ref_value as Dictionary)
+		var ref_key_value := _get_direct_pokemon_key(ref_value as Dictionary)
 		if ref_key_value != "":
 			return ref_key_value
+
+	return ""
+
+
+func _get_direct_pokemon_key(pokemon_data: Dictionary) -> String:
+	for key in ["pokemonKey", "pokemon_key"]:
+		var value := str(pokemon_data.get(key, "")).strip_edges()
+		if value != "":
+			return value
 
 	return ""
 
@@ -904,9 +936,21 @@ func _get_event_metadata_slot(event_data: Dictionary) -> int:
 		if not (ref_value is Dictionary):
 			continue
 
-		var ref_slot := _get_event_metadata_slot(ref_value as Dictionary)
+		var ref_slot := _get_direct_metadata_slot(ref_value as Dictionary)
 		if ref_slot > 0:
 			return ref_slot
+
+	return -1
+
+
+func _get_direct_metadata_slot(pokemon_data: Dictionary) -> int:
+	for key in ["metadataSlot", "metadata_slot", "partySlot", "party_slot", "slot", "position"]:
+		if not pokemon_data.has(key):
+			continue
+
+		var slot := _safe_int(pokemon_data.get(key), -1)
+		if slot > 0:
+			return slot
 
 	return -1
 
@@ -1041,6 +1085,102 @@ func _debug_team_identity_snapshot(team: Array) -> Array:
 		})
 
 	return snapshot
+
+func _debug_print_requests_snapshot(label: String) -> void:
+	var snapshot := {}
+	if requests is Dictionary:
+		for player_id_value: Variant in requests.keys():
+			var player_id := str(player_id_value)
+			var request_value: Variant = requests.get(player_id, {})
+			if not (request_value is Dictionary):
+				continue
+
+			var request: Dictionary = request_value as Dictionary
+			var active_value: Variant = request.get("active", [])
+			snapshot[player_id] = {
+				"active": _debug_summarize_active_slots(active_value),
+				"team": _debug_summarize_team(get_player_team(player_id)),
+			}
+
+	print(DEBUG_PREFIX, " ", label, " ", snapshot)
+
+func _debug_summarize_active_slots(active_value: Variant) -> Array:
+	var output: Array = []
+	if not (active_value is Array):
+		return output
+
+	for index in range((active_value as Array).size()):
+		var slot_value: Variant = (active_value as Array)[index]
+		if not (slot_value is Dictionary):
+			output.append({"index": index, "value": slot_value})
+			continue
+
+		var slot: Dictionary = slot_value as Dictionary
+		output.append({
+			"index": index,
+			"pokemonKey": str(slot.get("pokemonKey", "")),
+			"partySlot": slot.get("partySlot", ""),
+			"metadataSlot": slot.get("metadataSlot", ""),
+			"activeIdent": str(slot.get("activeIdent", "")),
+			"species": str(slot.get("species", "")),
+			"moves": _debug_summarize_moves(slot.get("moves", [])),
+		})
+
+	return output
+
+func _debug_summarize_moves(moves_value: Variant) -> Array:
+	var output: Array = []
+	if not (moves_value is Array):
+		return output
+
+	var moves: Array = moves_value as Array
+	for move_value: Variant in moves:
+		if move_value is Dictionary:
+			var move_data: Dictionary = move_value as Dictionary
+			output.append(str(move_data.get("move", move_data.get("name", move_data.get("id", "")))))
+		else:
+			output.append(str(move_value))
+
+	return output
+
+func _debug_summarize_team(team: Array) -> Array:
+	var output: Array = []
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			output.append({"index": index, "value": pokemon_value})
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		output.append({
+			"index": index,
+			"ident": str(pokemon.get("ident", "")),
+			"active": bool(pokemon.get("active", false)),
+			"details": str(pokemon.get("details", "")),
+			"species": str(pokemon.get("species", "")),
+			"displaySpecies": str(pokemon.get("displaySpecies", "")),
+			"partySlot": pokemon.get("partySlot", ""),
+			"metadataSlot": pokemon.get("metadataSlot", ""),
+			"pokemonKey": str(pokemon.get("pokemonKey", "")),
+			"instanceId": str(pokemon.get("instanceId", pokemon.get("instance_id", ""))),
+			"condition": str(pokemon.get("condition", "")),
+		})
+
+	return output
+
+func _debug_summarize_event(event: Dictionary) -> Dictionary:
+	return {
+		"type": str(event.get("type", "")),
+		"playerId": str(event.get("playerId", "")),
+		"pokemon": str(event.get("pokemon", "")),
+		"to": str(event.get("to", "")),
+		"toIdent": str(event.get("toIdent", "")),
+		"condition": str(event.get("condition", "")),
+		"partySlot": event.get("partySlot", ""),
+		"metadataSlot": event.get("metadataSlot", ""),
+		"pokemonKey": str(event.get("pokemonKey", "")),
+		"toRef": event.get("toRef", {}),
+	}
 
 
 func _get_party_hp_snapshot_key(pokemon_data: Dictionary, team_index := -1, fallback_ident := "") -> String:

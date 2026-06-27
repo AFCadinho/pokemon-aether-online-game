@@ -28,6 +28,11 @@ func _init() -> void:
 		"player switch battle message"
 	)
 	_check_equal(
+		formatter.format_player_forced_switch_log_message("Pikachu", "Charizard"),
+		"Go! Charizard!",
+		"player forced switch log message"
+	)
+	_check_equal(
 		formatter.format_action_prompt("Pikachu"),
 		"What will Pikachu do?",
 		"action prompt"

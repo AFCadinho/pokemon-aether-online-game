@@ -100,13 +100,14 @@ func build(event_data: Dictionary) -> Dictionary:
 				presentation["log_message"] = event_text_formatter.format_move_event(actor, move_name)
 				presentation["battle_message"] = str(presentation["log_message"])
 
-		"switch":
+		"switch", "drag":
 			recent_field_effect_source = ""
 			recent_ability_event = false
 			recent_move_event = false
 			var player_id := str(event_data.get("playerId", ""))
 			var from_name := str(event_data.get("from", ""))
 			var to_name := str(event_data.get("to", ""))
+			var forced_switch := bool(event_data.get("forced", false)) or str(event_data.get("type", "")) == "drag"
 
 			if to_name == "":
 				to_name = _format_actor(str(event_data.get("toIdent", "")), false)
@@ -115,12 +116,20 @@ func build(event_data: Dictionary) -> Dictionary:
 			if to_name == "":
 				to_name = "Pokemon"
 			if player_id == "p1":
-				presentation["log_message"] = event_text_formatter.format_player_switch_log_message(from_name, to_name)
-				presentation["battle_message"] = event_text_formatter.format_player_switch_battle_message(from_name, to_name)
+				if forced_switch:
+					presentation["log_message"] = event_text_formatter.format_player_forced_switch_log_message(from_name, to_name)
+					presentation["battle_message"] = event_text_formatter.format_player_forced_switch_battle_message(from_name, to_name)
+				else:
+					presentation["log_message"] = event_text_formatter.format_player_switch_log_message(from_name, to_name)
+					presentation["battle_message"] = event_text_formatter.format_player_switch_battle_message(from_name, to_name)
 			else:
 				var trainer_name := _get_player_display_name(player_id)
-				presentation["log_message"] = event_text_formatter.format_opponent_switch_log_message(trainer_name, from_name, to_name)
-				presentation["battle_message"] = event_text_formatter.format_opponent_switch_battle_message(trainer_name, to_name)
+				if forced_switch:
+					presentation["log_message"] = event_text_formatter.format_opponent_forced_switch_log_message(trainer_name, from_name, to_name)
+					presentation["battle_message"] = event_text_formatter.format_opponent_forced_switch_battle_message(trainer_name, to_name)
+				else:
+					presentation["log_message"] = event_text_formatter.format_opponent_switch_log_message(trainer_name, from_name, to_name)
+					presentation["battle_message"] = event_text_formatter.format_opponent_switch_battle_message(trainer_name, to_name)
 			presentation["add_blank_after"] = true
 
 		"faint":
