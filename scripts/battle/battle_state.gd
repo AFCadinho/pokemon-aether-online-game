@@ -293,7 +293,7 @@ func resolve_persisted_mega_species_for_ident(ident: String) -> String:
 
 func resolve_mega_species_for_event(event: Dictionary) -> String:
 	var event_species := str(event.get("species", "")).strip_edges()
-	if _is_mega_species(event_species):
+	if _is_mega_or_primal_species(event_species):
 		return event_species
 
 	var target_ident := str(event.get("target", ""))
@@ -691,6 +691,11 @@ func _get_mega_species_for_base_and_item(base_species: String, item: String) -> 
 	if item_key == "":
 		return ""
 
+	var normalized_base_species := cleaned_base_species.to_lower().replace(" ", "").replace("-", "")
+	if item_key == "redorb" and normalized_base_species == "groudon":
+		return "Groudon-Primal"
+	if item_key == "blueorb" and normalized_base_species == "kyogre":
+		return "Kyogre-Primal"
 	if item_key == "charizarditex":
 		return "Charizard-Mega-X"
 	if item_key == "charizarditey":
@@ -706,6 +711,10 @@ func _get_mega_species_for_base_and_item(base_species: String, item: String) -> 
 
 func _is_mega_species(species: String) -> bool:
 	return species.to_lower().contains("mega")
+
+func _is_mega_or_primal_species(species: String) -> bool:
+	var normalized_species := species.to_lower()
+	return normalized_species.contains("mega") or normalized_species.ends_with("-primal")
 
 func _get_active_mega_species_from_request_slot(player_id: String, active_index := 0) -> String:
 	var active_slots: Array = get_player_request(player_id).get("active", [])
@@ -1328,7 +1337,7 @@ func _get_original_species_from_ident(ident: String) -> String:
 
 func _strip_mega_suffix(species: String) -> String:
 	var cleaned := species.strip_edges()
-	var mega_suffixes: Array[String] = ["-Mega-X", "-Mega-Y", "-Mega"]
+	var mega_suffixes: Array[String] = ["-Mega-X", "-Mega-Y", "-Mega", "-Primal"]
 	for suffix: String in mega_suffixes:
 		if cleaned.ends_with(suffix):
 			return cleaned.substr(0, cleaned.length() - suffix.length())
@@ -1357,6 +1366,7 @@ func _normalize_transform_key_pokemon_name(pokemon_name: String) -> String:
 	normalized = normalized.replace("-mega-x", "")
 	normalized = normalized.replace("-mega-y", "")
 	normalized = normalized.replace("-mega", "")
+	normalized = normalized.replace("-primal", "")
 	return normalized
 
 ## Geeft alle Pokemon op de side van een speler terug.

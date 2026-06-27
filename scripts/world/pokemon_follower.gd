@@ -8,6 +8,7 @@ const MAX_HISTORY_SIZE := 16
 const TELEPORT_DISTANCE := 96.0
 const SORT_Z_MIN := -256
 const SORT_Z_MAX := 256
+const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
 const SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const SIDE_SPRITE_VISUAL_OFFSET := Vector2(0.0, -16.0)
 const VERTICAL_SPRITE_VISUAL_OFFSET := Vector2(0.0, -12.0)
@@ -256,6 +257,7 @@ func _get_player_follow_position() -> Vector2:
 func _update_sort_z() -> void:
 	var follower_sort_y := global_position.y
 	var sort_z := floori(follower_sort_y / TILE_SIZE) + 1
+	var sprite_sort_z := 0
 	if player != null and is_instance_valid(player) and player.has_method("get_feet_position"):
 		var player_feet_position: Variant = player.call("get_feet_position")
 		if player_feet_position is Vector2:
@@ -263,9 +265,34 @@ func _update_sort_z() -> void:
 			var player_sort_z := player.z_index
 			if follower_sort_y > player_sort_y:
 				sort_z = maxi(sort_z, player_sort_z + 1)
+				sprite_sort_z = _get_player_visual_sort_depth() + 1
 			elif follower_sort_y < player_sort_y:
 				sort_z = mini(sort_z, player_sort_z - 1)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
+	if sprite != null:
+		sprite.z_index = sprite_sort_z
+
+func _get_player_visual_sort_depth() -> int:
+	if player == null or not is_instance_valid(player):
+		return DEFAULT_PLAYER_VISUAL_SORT_DEPTH
+
+	var look_node := player.get_node_or_null("Look")
+	if look_node == null:
+		return DEFAULT_PLAYER_VISUAL_SORT_DEPTH
+
+	return maxi(_get_max_relative_z_index(look_node), DEFAULT_PLAYER_VISUAL_SORT_DEPTH)
+
+func _get_max_relative_z_index(node: Node) -> int:
+	var max_z := 0
+	if node is CanvasItem:
+		var canvas_item := node as CanvasItem
+		if canvas_item.z_as_relative:
+			max_z = maxi(max_z, canvas_item.z_index)
+
+	for child in node.get_children():
+		max_z = maxi(max_z, _get_max_relative_z_index(child))
+
+	return max_z
 
 func _get_idle_animation_name(direction: Vector2) -> String:
 	if direction == Vector2.UP:
