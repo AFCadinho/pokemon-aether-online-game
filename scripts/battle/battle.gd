@@ -3459,28 +3459,28 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 					_describe_pokemon_debug_ref(_get_team_pokemon_data_for_canonical_party_slot(local_state_player_id, submit_slot)),
 				]
 			)
-		if not _can_choose_lead_slot(submit_slot, selected_pokemon_data):
-			current_action_panel.set_message("Choose another Pokemon!")
-			continue
+			if not _can_choose_lead_slot(submit_slot, selected_pokemon_data):
+				current_action_panel.set_message("Choose another Pokemon!")
+				continue
 
-		_set_battle_input_locked(true)
-		var lead_response: Dictionary = await _submit_lead(local_player_id, submit_slot)
-		if not bool(lead_response.get("success", false)):
-			var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
-			current_action_panel.set_message(error_message)
-			_add_battle_log_message(error_message)
-			_set_battle_input_locked(false)
-			continue
-
-		if _should_show_team_preview(lead_response):
-			current_action_panel.set_message("Waiting for the other player...")
-			current_action_view = ActionView.NONE
-			moves_grid.visible = false
-			party_grid.visible = false
-			lead_response = await _wait_for_pvp_team_preview_complete(local_player_id)
-			if lead_response.is_empty():
+			_set_battle_input_locked(true)
+			var lead_response: Dictionary = await _submit_lead(local_player_id, submit_slot)
+			if not bool(lead_response.get("success", false)):
+				var error_message := str(lead_response.get("error", "Cannot choose that lead!"))
+				current_action_panel.set_message(error_message)
+				_add_battle_log_message(error_message)
 				_set_battle_input_locked(false)
 				continue
+
+			if _should_show_team_preview(lead_response):
+				current_action_panel.set_message("Waiting for the other player...")
+				current_action_view = ActionView.NONE
+				moves_grid.visible = false
+				party_grid.visible = false
+				lead_response = await _wait_for_pvp_team_preview_complete(local_player_id)
+				if lead_response.is_empty():
+					_set_battle_input_locked(false)
+					continue
 
 		team_preview_lead_selection_active = false
 		_hide_team_preview_layers()
