@@ -535,7 +535,7 @@ func _with_default_pp_for_moves(moves: Array) -> Array:
 
 func _filter_public_opponent_hover_moves(moves: Array) -> Array:
 	var public_moves: Array = []
-	var normalized_moves := _with_default_pp_for_moves(moves)
+	var normalized_moves := _with_max_pp_assumption_for_opponent_moves(moves)
 	for move_value in normalized_moves:
 		if not (move_value is Dictionary):
 			continue
@@ -545,6 +545,27 @@ func _filter_public_opponent_hover_moves(moves: Array) -> Array:
 			public_moves.append(move_data)
 
 	return public_moves
+
+func _with_max_pp_assumption_for_opponent_moves(moves: Array) -> Array:
+	var normalized_moves: Array = []
+	for move_value in moves:
+		if not (move_value is Dictionary):
+			continue
+
+		var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
+		var current_pp := _get_hover_move_pp_value(move_data, ["pp", "currentPp", "currentPP", "current_pp"])
+		var base_max_pp := _get_hover_move_pp_value(move_data, ["maxpp", "maxPp", "maxPP", "max_pp"])
+		if current_pp < 0 or base_max_pp <= 0:
+			normalized_moves.append(move_data)
+			continue
+
+		var used_pp: int = max(0, base_max_pp - current_pp)
+		var assumed_max_pp: int = _calculate_max_pp(base_max_pp)
+		move_data["maxpp"] = assumed_max_pp
+		move_data["pp"] = max(0, assumed_max_pp - used_pp)
+		normalized_moves.append(move_data)
+
+	return normalized_moves
 
 func _hover_move_has_visible_pp_use(move_data: Dictionary) -> bool:
 	var current_pp := _get_hover_move_pp_value(move_data, ["pp", "currentPp", "currentPP", "current_pp"])
@@ -783,9 +804,9 @@ func _show_pokemon_hover(
 	var local_hover_owner := _get_local_state_player_id()
 	var is_local_hover_owner := hover_owner_player_id == local_hover_owner
 	if is_local_hover_owner:
-		var own_moves_value: Variant = display_data.get("moves", [])
-		if own_moves_value is Array and not (own_moves_value as Array).is_empty():
-			confirmed_moves = _with_default_pp_for_moves(own_moves_value as Array)
+		var own_hover_moves := _get_own_pokemon_hover_moves(hover_owner_player_id, display_data)
+		if not own_hover_moves.is_empty():
+			confirmed_moves = own_hover_moves
 			_debug_battle_move("hover own moves override owner=%s localStateOwner=%s rawLocalOwner=%s displayIdent=%s moves=%s" % [
 				hover_owner_player_id,
 				local_hover_owner,
@@ -906,6 +927,31 @@ func _hover_data_matches_pokemon_request(hover_data: Dictionary, pokemon_data: D
 		return true
 
 	return _normalize_species_for_compare(requested_species) == _normalize_species_for_compare(current_species)
+
+func _get_own_pokemon_hover_moves(player_id: String, pokemon_data: Dictionary) -> Array:
+	if _is_hover_pokemon_active(player_id, pokemon_data):
+		var available_moves: Array = battle_state.get_available_moves(player_id)
+		if not available_moves.is_empty():
+			return available_moves
+
+	var cached_moves: Array = _get_cached_party_moves(pokemon_data)
+	if not cached_moves.is_empty():
+		return cached_moves
+
+	var moves_value: Variant = pokemon_data.get("moves", [])
+	if moves_value is Array:
+		var moves: Array = moves_value as Array
+		if not moves.is_empty():
+			return _with_default_pp_for_moves(moves)
+
+	return []
+
+func _is_hover_pokemon_active(player_id: String, pokemon_data: Dictionary) -> bool:
+	if bool(pokemon_data.get("active", false)):
+		return true
+
+	var active_slot := _get_active_canonical_party_slot(player_id)
+	return active_slot > 0 and _get_pokemon_data_canonical_party_slot(pokemon_data) == active_slot
 
 func _hover_response_ident_matches_pokemon_request(response_ident: String, hover_data: Dictionary, pokemon_data: Dictionary) -> bool:
 	var normalized_response := _normalize_battle_ident(response_ident)
