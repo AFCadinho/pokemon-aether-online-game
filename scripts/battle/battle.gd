@@ -87,9 +87,9 @@ var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
 const DEBUG_PVP_REALTIME := false
-const DEBUG_PVP_FLOW_TRACE := false
+const DEBUG_PVP_FLOW_TRACE := true
 const DEBUG_BATTLE_HP_EVENTS := false
-const DEBUG_BATTLE_MOVE_EVENTS := false
+const DEBUG_BATTLE_MOVE_EVENTS := true
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
 const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
@@ -517,7 +517,14 @@ func _with_default_pp_for_moves(moves: Array) -> Array:
 			continue
 
 		var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
-		if not move_data.has("maxpp") and move_data.has("pp"):
+		if not move_data.has("maxpp") and move_data.has("maxPp"):
+			var base_max_pp: int = int(move_data.get("maxPp", 0))
+			var current_pp: int = int(move_data.get("pp", base_max_pp))
+			var used_pp: int = max(0, base_max_pp - current_pp)
+			var max_pp: int = _calculate_max_pp(base_max_pp)
+			move_data["maxpp"] = max_pp
+			move_data["pp"] = max(0, max_pp - used_pp)
+		elif not move_data.has("maxpp") and move_data.has("pp"):
 			var max_pp: int = _calculate_max_pp(int(move_data.get("pp", 0)))
 			move_data["maxpp"] = max_pp
 			move_data["pp"] = max_pp
@@ -525,6 +532,40 @@ func _with_default_pp_for_moves(moves: Array) -> Array:
 		normalized_moves.append(move_data)
 
 	return normalized_moves
+
+func _filter_public_opponent_hover_moves(moves: Array) -> Array:
+	var public_moves: Array = []
+	var normalized_moves := _with_default_pp_for_moves(moves)
+	for move_value in normalized_moves:
+		if not (move_value is Dictionary):
+			continue
+
+		var move_data: Dictionary = move_value as Dictionary
+		if _hover_move_has_visible_pp_use(move_data):
+			public_moves.append(move_data)
+
+	return public_moves
+
+func _hover_move_has_visible_pp_use(move_data: Dictionary) -> bool:
+	var current_pp := _get_hover_move_pp_value(move_data, ["pp", "currentPp", "currentPP", "current_pp"])
+	var max_pp := _get_hover_move_pp_value(move_data, ["maxpp", "maxPp", "maxPP", "max_pp"])
+	if current_pp < 0 or max_pp <= 0:
+		return false
+
+	return current_pp < max_pp
+
+func _get_hover_move_pp_value(move_data: Dictionary, keys: Array[String]) -> int:
+	for key in keys:
+		if not move_data.has(key):
+			continue
+
+		var value: Variant = move_data.get(key)
+		if value == null or str(value).strip_edges() == "":
+			continue
+
+		return int(value)
+
+	return -1
 
 func _calculate_max_pp(base_pp: int) -> int:
 	if base_pp <= 1:
@@ -663,19 +704,52 @@ func _show_pokemon_hover(
 ) -> void:
 	var hover_ident: String = str(request_pokemon_data.get("ident", ""))
 	var request_token: int = hover_state.begin_hover_request()
+	_debug_battle_move("hover begin owner=%s token=%s requestIdent=%s requestSpecies=%s displayIdent=%s displaySpecies=%s viewerOverride=%s identOverride=%s requestPokemon=%s displayPokemon=%s" % [
+		hover_owner_player_id,
+		str(request_token),
+		hover_ident,
+		battle_state.get_species_from_pokemon_data(request_pokemon_data),
+		str(display_pokemon_data.get("ident", "")),
+		battle_state.get_species_from_pokemon_data(display_pokemon_data),
+		_get_raw_pvp_hover_viewer_id(),
+		_get_raw_pvp_hover_ident(hover_ident),
+		JSON.stringify(request_pokemon_data),
+		JSON.stringify(display_pokemon_data),
+	])
+	var hover_info_request := HTTPRequest.new()
+	var hover_stats_request := HTTPRequest.new()
+	add_child(hover_info_request)
+	add_child(hover_stats_request)
 	var hover_data: Dictionary = await pokemon_hover_service.get_hover_card_data(
 		battle_state,
-		pokemon_info_request,
-		pokemon_stats_request,
+		hover_info_request,
+		hover_stats_request,
 		request_pokemon_data,
 		public_confirmed_abilities_by_ident,
 		public_confirmed_items_by_ident,
 		_get_raw_pvp_hover_viewer_id(),
 		_get_raw_pvp_hover_ident(hover_ident)
 	)
+	if is_instance_valid(hover_info_request):
+		hover_info_request.queue_free()
+	if is_instance_valid(hover_stats_request):
+		hover_stats_request.queue_free()
 	if not hover_state.is_hover_request_current(request_token, hover_ident, hover_owner_player_id):
+		_debug_battle_move("hover dropped stale owner=%s token=%s requestIdent=%s hoverData=%s" % [
+			hover_owner_player_id,
+			str(request_token),
+			hover_ident,
+			JSON.stringify(hover_data),
+		])
 		return
 	if not _hover_data_matches_pokemon_request(hover_data, request_pokemon_data):
+		_debug_battle_move("hover dropped mismatch owner=%s token=%s requestIdent=%s hoverData=%s requestPokemon=%s" % [
+			hover_owner_player_id,
+			str(request_token),
+			hover_ident,
+			JSON.stringify(hover_data),
+			JSON.stringify(request_pokemon_data),
+		])
 		return
 
 	var confirmed_moves: Array = hover_data.get("confirmed_moves", [])
@@ -701,7 +775,43 @@ func _show_pokemon_hover(
 		display_data["species"] = display_species
 		display_data["displaySpecies"] = display_species
 
+	var local_hover_owner := _get_local_state_player_id()
+	var is_local_hover_owner := hover_owner_player_id == local_hover_owner
+	if is_local_hover_owner:
+		var own_moves_value: Variant = display_data.get("moves", [])
+		if own_moves_value is Array and not (own_moves_value as Array).is_empty():
+			confirmed_moves = _with_default_pp_for_moves(own_moves_value as Array)
+			_debug_battle_move("hover own moves override owner=%s localStateOwner=%s rawLocalOwner=%s displayIdent=%s moves=%s" % [
+				hover_owner_player_id,
+				local_hover_owner,
+				action_flow.local_player_id,
+				str(display_data.get("ident", "")),
+				JSON.stringify(confirmed_moves),
+			])
+	else:
+		confirmed_moves = _filter_public_opponent_hover_moves(confirmed_moves)
+		display_data.erase("moves")
+		display_data.erase("moveSlots")
+		display_data.erase("baseMoves")
+		_debug_battle_move("hover opponent privacy strip owner=%s localStateOwner=%s rawLocalOwner=%s displayIdent=%s confirmedMoves=%s" % [
+			hover_owner_player_id,
+			local_hover_owner,
+			action_flow.local_player_id,
+			str(display_data.get("ident", "")),
+			JSON.stringify(confirmed_moves),
+		])
+
 	if pokemon_hover_card.has_method("show_for_pokemon"):
+		_debug_battle_move("hover render owner=%s localStateOwner=%s rawLocalOwner=%s displayIdent=%s displaySpecies=%s confirmedMoves=%s confirmedAbility=%s confirmedItem=%s" % [
+			hover_owner_player_id,
+			local_hover_owner,
+			action_flow.local_player_id,
+			str(display_data.get("ident", "")),
+			battle_state.get_species_from_pokemon_data(display_data),
+			JSON.stringify(confirmed_moves),
+			confirmed_ability,
+			confirmed_item,
+		])
 		pokemon_hover_card.call(
 			"show_for_pokemon",
 			display_data,
@@ -771,6 +881,18 @@ func _hover_data_matches_pokemon_request(hover_data: Dictionary, pokemon_data: D
 	var current_ident := str(pokemon_data.get("ident", ""))
 	if requested_ident != current_ident:
 		return false
+
+	var pokemon_info_value: Variant = hover_data.get("pokemon_info", {})
+	if pokemon_info_value is Dictionary:
+		var pokemon_info: Dictionary = pokemon_info_value as Dictionary
+		var response_ident := str(pokemon_info.get("ident", ""))
+		if response_ident != "" and _normalize_battle_ident(response_ident) != _normalize_battle_ident(current_ident):
+			_debug_battle_move("hover response ident mismatch current=%s responseIdent=%s info=%s" % [
+				current_ident,
+				response_ident,
+				JSON.stringify(pokemon_info),
+			])
+			return false
 
 	var requested_species := str(hover_data.get("requested_species", ""))
 	var current_species := battle_state.get_species_from_pokemon_data(pokemon_data)
@@ -2024,6 +2146,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 			if await _finish_if_battle_ended():
 				return true
 
+			_clear_force_switch_request_for_player(_get_local_state_player_id())
 			_update_move_slots()
 
 			if await _hold_pvp_moves_until_force_switch_phase_release(display_response, source):
@@ -2134,6 +2257,10 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 func _hold_pvp_moves_until_force_switch_phase_release(display_response: Dictionary, source: String) -> bool:
 	if not _pvp_should_wait_for_force_switch_phase_release(display_response):
 		return false
+
+	if not _local_player_needs_force_switch_ui() and _opponent_player_needs_force_switch_ui():
+		_show_pvp_opponent_force_switch_wait()
+		return await _wait_for_pvp_opponent_force_switch_and_render()
 
 	_set_battle_input_locked(true)
 	current_action_panel.set_message("Waiting for switch prompt...")
@@ -3570,6 +3697,7 @@ func _get_lead_selection_team_data(player_id: String) -> Array:
 		if pokemon_value is Dictionary:
 			var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate(true)
 			_enrich_lead_selection_slot_data(pokemon_data, index)
+			_apply_lead_selection_availability(player_id, pokemon_data, index)
 			pokemon_data["active"] = false
 			lead_team.append(pokemon_data)
 		else:
@@ -3592,6 +3720,39 @@ func _enrich_lead_selection_slot_data(pokemon_data: Dictionary, index: int) -> v
 		pokemon_data["shiny"] = saved_pokemon.shiny
 	if not pokemon_data.has("instanceId") and saved_pokemon.instance_id != "":
 		pokemon_data["instanceId"] = saved_pokemon.instance_id
+	_apply_saved_lead_selection_hp(pokemon_data, saved_pokemon)
+
+func _apply_saved_lead_selection_hp(pokemon_data: Dictionary, saved_pokemon: Pokemon) -> void:
+	if saved_pokemon == null or not saved_pokemon.has_saved_hp_state:
+		return
+
+	var max_hp: int = max(saved_pokemon.max_hp, 1)
+	var hp: int = clamp(saved_pokemon.current_hp, 0, max_hp)
+	pokemon_data["hp"] = hp
+	pokemon_data["maxHp"] = max_hp
+	pokemon_data["currentHp"] = hp
+	pokemon_data["fainted"] = hp <= 0
+	pokemon_data["condition"] = "0 fnt" if hp <= 0 else "%s/%s" % [hp, max_hp]
+
+func _apply_lead_selection_availability(player_id: String, pokemon_data: Dictionary, fallback_index: int) -> void:
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+	if canonical_slot <= 0:
+		canonical_slot = fallback_index + 1
+
+	var canonical_pokemon := _get_team_pokemon_data_for_canonical_party_slot(player_id, canonical_slot)
+	if canonical_pokemon.is_empty():
+		return
+
+	if _is_pokemon_data_usable_for_lead(canonical_pokemon):
+		return
+
+	pokemon_data["fainted"] = true
+	pokemon_data["hp"] = 0
+	if canonical_pokemon.has("maxHp"):
+		pokemon_data["maxHp"] = max(int(canonical_pokemon.get("maxHp", 1)), 1)
+	elif not pokemon_data.has("maxHp"):
+		pokemon_data["maxHp"] = 1
+	pokemon_data["condition"] = "0 fnt"
 
 func _add_battle_log_messages(messages: Array[String]) -> void:
 	for message in messages:
@@ -3858,7 +4019,6 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		if event_type == "switch" or event_type == "drag":
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
-			_update_active_sprites()
 			_show_switch_event_active_pokemon(event_data)
 			await _play_shiny_entrance_if_needed(event_data)
 		if event_type == "transform":
@@ -4802,10 +4962,23 @@ func _show_force_switch_if_needed() -> bool:
 		_set_battle_input_locked(true)
 		return false
 
+	_refresh_force_switch_transition_presentation()
 	current_action_panel.set_message("Choose a Pokemon!")
 	_trace_pvp_flow("show_force_switch.open", {}, "")
 	_show_party(true)
 	return true
+
+func _clear_force_switch_request_for_player(player_id: String) -> void:
+	var request := battle_state.get_player_request(player_id)
+	var force_switch_value: Variant = request.get("forceSwitch", [])
+	if not (force_switch_value is Array):
+		return
+
+	var force_switch: Array = force_switch_value as Array
+	for index in range(force_switch.size()):
+		force_switch[index] = false
+	request["forceSwitch"] = force_switch
+	_trace_pvp_flow("force_switch.clear", {}, "player=%s" % player_id)
 
 func _pvp_is_waiting_for_force_switch_phase_release() -> bool:
 	return (
@@ -4859,6 +5032,7 @@ func _is_pvp_opponent_force_switch_waiting() -> bool:
 
 func _show_pvp_opponent_force_switch_wait() -> void:
 	_trace_pvp_flow("show_opponent_force_switch_wait", {}, "")
+	_refresh_force_switch_transition_presentation()
 	moves_grid.visible = false
 	party_grid.visible = false
 	_hide_party_hover()
@@ -4868,6 +5042,16 @@ func _show_pvp_opponent_force_switch_wait() -> void:
 	action_buttons.set_action_disabled("party", true)
 	action_buttons.set_action_disabled("bag", true)
 	_set_battle_input_locked(true)
+
+func _refresh_force_switch_transition_presentation() -> void:
+	_trace_pvp_flow("force_switch_transition.refresh", {}, "p1=%s p2=%s" % [
+		_get_active_display_species("p1"),
+		_get_active_display_species("p2"),
+	])
+	defer_force_switch_active_hide = true
+	_update_hud_panels()
+	_update_active_sprites("force_switch_transition")
+	defer_force_switch_active_hide = false
 
 func _can_submit_pvp_switch_choice() -> bool:
 	if not _is_pvp_battle():
@@ -4881,8 +5065,14 @@ func _can_submit_pvp_switch_choice() -> bool:
 func _local_player_needs_force_switch_ui() -> bool:
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
 	for player_id in candidate_player_ids:
+		if _is_pvp_battle() and _player_request_is_waiting(player_id):
+			return false
+
 		if force_switch_flow.player_needs_force_switch(player_id):
 			return true
+
+		if _is_pvp_battle():
+			continue
 
 		if _player_active_fainted_with_available_switch(player_id):
 			return true
@@ -4892,8 +5082,14 @@ func _local_player_needs_force_switch_ui() -> bool:
 func _opponent_player_needs_force_switch_ui() -> bool:
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
 	for player_id in candidate_player_ids:
+		if _is_pvp_battle() and _player_request_is_waiting(player_id):
+			return false
+
 		if force_switch_flow.player_needs_force_switch(player_id):
 			return true
+
+		if _is_pvp_battle():
+			continue
 
 		if _player_active_fainted_with_available_switch(player_id):
 			return true
@@ -4904,9 +5100,17 @@ func _get_force_switch_candidate_player_ids(primary_player_id: String, display_f
 	var candidate_player_ids: Array[String] = []
 	if primary_player_id != "":
 		candidate_player_ids.append(primary_player_id)
+	if _is_pvp_battle():
+		return candidate_player_ids
 	if display_fallback_player_id != "" and not candidate_player_ids.has(display_fallback_player_id):
 		candidate_player_ids.append(display_fallback_player_id)
 	return candidate_player_ids
+
+func _player_request_is_waiting(player_id: String) -> bool:
+	if player_id == "":
+		return false
+	var request := battle_state.get_player_request(player_id)
+	return bool(request.get("wait", false))
 
 func _player_active_fainted_with_available_switch(player_id: String) -> bool:
 	if battle_state.is_battle_ended():
@@ -5189,16 +5393,18 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 		return
 
 	var server_seq := _get_pvp_message_server_seq(message)
-	if server_seq > 0 and server_seq <= pvp_last_applied_server_seq:
-		_trace_pvp_flow("phase_update.skip_stale", {}, "serverSeq=%d lastSeq=%d phase=%s" % [server_seq, pvp_last_applied_server_seq, str(message.get("phase", ""))])
+	var phase := str(message.get("phase", "")).strip_edges()
+	if server_seq > 0 and server_seq < pvp_last_applied_server_seq:
+		_trace_pvp_flow("phase_update.skip_stale", {}, "serverSeq=%d lastSeq=%d phase=%s" % [server_seq, pvp_last_applied_server_seq, phase])
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Skipping stale PvP phase update",
-				"serverSeq=%d lastSeq=%d phase=%s" % [server_seq, pvp_last_applied_server_seq, str(message.get("phase", ""))]
+				"serverSeq=%d lastSeq=%d phase=%s" % [server_seq, pvp_last_applied_server_seq, phase]
 			)
 		return
-
-	var phase := str(message.get("phase", "")).strip_edges()
+	if server_seq > 0 and server_seq == pvp_last_applied_server_seq and phase == pvp_last_phase:
+		_trace_pvp_flow("phase_update.skip_duplicate", {}, "serverSeq=%d phase=%s" % [server_seq, phase])
+		return
 	if phase == "":
 		return
 
@@ -7349,7 +7555,7 @@ func _update_active_sprites(context := "sprite_refresh") -> void:
 	_update_stat_stage_panels()
 
 func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String, context := "sprite_refresh") -> void:
-	if _should_hide_active_pokemon_for_force_switch(player_id):
+	if _active_field_slot_is_empty(player_id, context) or _should_hide_active_pokemon_for_force_switch(player_id):
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
 		return
@@ -7361,6 +7567,11 @@ func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String
 		_get_active_pokemon_is_shiny(player_id),
 		context
 	)
+
+func _active_field_slot_is_empty(player_id: String, context := "sprite_refresh") -> bool:
+	if defer_force_switch_active_hide and context != "force_switch_transition":
+		return false
+	return battle_state.is_active_pokemon_fainted(player_id)
 
 func _should_hide_active_pokemon_for_force_switch(player_id: String) -> bool:
 	return force_switch_flow.should_hide_active_pokemon(player_id, defer_force_switch_active_hide)

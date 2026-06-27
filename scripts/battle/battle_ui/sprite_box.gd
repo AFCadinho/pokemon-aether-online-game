@@ -272,6 +272,7 @@ func play_faint_tween() -> void:
 		active_tween.tween_property(sprite, "modulate:a", 0.0, 0.28)
 
 	await active_tween.finished
+	clear_pokemon()
 
 func _stop_active_tween() -> void:
 	if active_tween != null and active_tween.is_valid():

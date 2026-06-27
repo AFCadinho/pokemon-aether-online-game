@@ -91,7 +91,17 @@ func _fetch_hover_pokemon_info(
 
 	var pokemon_value: Variant = response.get("pokemon", {})
 	if pokemon_value is Dictionary:
-		return pokemon_value
+		var pokemon_info: Dictionary = pokemon_value as Dictionary
+		var response_ident := str(pokemon_info.get("ident", ""))
+		if response_ident != "" and _normalize_battle_ident(response_ident) != _normalize_battle_ident(ident):
+			_debug_battle_move("pokemon-info ignored mismatched response requested=%s responseIdent=%s response=%s" % [
+				ident,
+				response_ident,
+				JSON.stringify(pokemon_info),
+			])
+			return {}
+
+		return pokemon_info
 
 	return {}
 
