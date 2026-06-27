@@ -1,19 +1,27 @@
 name: Deploy Desktop Builds to R2
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       release_version:
-        description: Launcher release version. Leave empty to use 0.1.<run number>.
-        required: false
-        default: ""
+        description: Game/launcher release version, for example 0.2.0.
+        required: true
+        type: string
       build_launcher:
-        description: Force rebuilding and uploading launcher downloads.
+        description: Rebuild and upload launcher downloads too.
         required: false
-        default: "false"
+        type: boolean
+        default: false
+      announce_discord:
+        description: Post a Discord release announcement after a successful R2 upload.
+        required: false
+        type: boolean
+        default: false
+      release_notes:
+        description: Optional release notes for the Discord announcement.
+        required: false
+        type: string
+        default: ""
 
 concurrency:
   group: deploy-desktop-r2
@@ -69,29 +77,27 @@ jobs:
           fetch-depth: 0
 
       - name: Set launcher release version
+        env:
+          INPUT_RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
-          if [ -n "${{ github.event.inputs.release_version }}" ]; then
-            echo "LAUNCHER_RELEASE_VERSION=${{ github.event.inputs.release_version }}" >> "${GITHUB_ENV}"
-          else
-            echo "LAUNCHER_RELEASE_VERSION=0.1.${GITHUB_RUN_NUMBER}" >> "${GITHUB_ENV}"
+          if [ -z "${INPUT_RELEASE_VERSION}" ]; then
+            echo "::error::release_version is required. Use a version like 0.2.0."
+            exit 1
           fi
+          if ! printf '%s' "${INPUT_RELEASE_VERSION}" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([-+][A-Za-z0-9._-]+)?$'; then
+            echo "::error::release_version must look like 0.2.0 or 0.2.0-beta.1."
+            exit 1
+          fi
+          echo "LAUNCHER_RELEASE_VERSION=${INPUT_RELEASE_VERSION}" >> "${GITHUB_ENV}"
 
       - name: Detect launcher changes
+        env:
+          INPUT_BUILD_LAUNCHER: ${{ inputs.build_launcher }}
         run: |
           build_launcher=false
 
-          if [ "${{ github.event.inputs.build_launcher }}" = "true" ]; then
+          if [ "${INPUT_BUILD_LAUNCHER}" = "true" ]; then
             build_launcher=true
-          elif [ "${{ github.event_name }}" = "push" ]; then
-            if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
-              changed_files="$(git diff --name-only HEAD~1 HEAD)"
-            else
-              changed_files="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")"
-            fi
-
-            if printf '%s\n' "${changed_files}" | grep -E '^(launcher/|tools/package_launcher_release\.py|tools/upload_launcher_release\.py|\.github/workflows/deploy-desktop-r2\.yml$)' >/dev/null; then
-              build_launcher=true
-            fi
           fi
 
           echo "BUILD_LAUNCHER=${build_launcher}" >> "${GITHUB_ENV}"
@@ -412,6 +418,7 @@ jobs:
           done
 
       - name: Upload launcher release to R2
+        id: upload_r2
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -420,6 +427,7 @@ jobs:
         run: |
           if [ -z "${R2_ACCOUNT_ID}" ] || [ -z "${R2_BUCKET}" ] || [ -z "${R2_ACCESS_KEY_ID}" ] || [ -z "${R2_SECRET_ACCESS_KEY}" ]; then
             echo "Skipping R2 upload because one or more R2 secrets are not configured."
+            echo "published=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
           python3 tools/upload_launcher_release.py builds/launcher --layout updates
@@ -440,6 +448,49 @@ jobs:
           else
             echo "Skipping launcher download upload because BUILD_LAUNCHER=false."
           fi
+          echo "published=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Post release announcement to Discord
+        if: steps.upload_r2.outputs.published == 'true' && inputs.announce_discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          RELEASE_NOTES: ${{ inputs.release_notes }}
+        run: |
+          if [ -z "${DISCORD_WEBHOOK_URL}" ]; then
+            echo "Skipping Discord announcement because DISCORD_WEBHOOK_URL is not configured."
+            exit 0
+          fi
+
+          python3 - <<'PY' > discord_payload.json
+          import json
+          import os
+
+          version = os.environ["RELEASE_VERSION"].strip()
+          release_notes = os.environ.get("RELEASE_NOTES", "").strip()
+          if not release_notes:
+              release_notes = "Open de launcher om de nieuwste build te downloaden."
+
+          payload = {
+              "username": "PokeAether",
+              "content": "",
+              "allowed_mentions": {"parse": []},
+              "embeds": [
+                  {
+                      "title": f"PokeAether {version} is live",
+                      "description": release_notes,
+                      "color": 5814783,
+                  }
+              ],
+          }
+
+          print(json.dumps(payload))
+          PY
+
+          curl -sS \
+            -H "Content-Type: application/json" \
+            -d @discord_payload.json \
+            "${DISCORD_WEBHOOK_URL}"
 
       - name: Upload desktop build artifacts
         uses: actions/upload-artifact@v4
@@ -451,7 +502,6 @@ jobs:
             builds/macos
 
       - name: Upload launcher release artifacts
-        if: env.BUILD_LAUNCHER == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: launcher-release
