@@ -87,9 +87,9 @@ var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
 const DEBUG_PVP_REALTIME := false
-const DEBUG_PVP_FLOW_TRACE := true
+const DEBUG_PVP_FLOW_TRACE := false
 const DEBUG_BATTLE_HP_EVENTS := false
-const DEBUG_BATTLE_MOVE_EVENTS := true
+const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
 const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
@@ -703,16 +703,21 @@ func _show_pokemon_hover(
 	hover_owner_player_id: String
 ) -> void:
 	var hover_ident: String = str(request_pokemon_data.get("ident", ""))
+	var hover_lookup_ident := _get_hover_info_lookup_ident(request_pokemon_data, hover_owner_player_id)
+	var hover_api_ident := _get_raw_pvp_hover_ident(hover_lookup_ident)
+	if hover_api_ident == "":
+		hover_api_ident = hover_lookup_ident
 	var request_token: int = hover_state.begin_hover_request()
-	_debug_battle_move("hover begin owner=%s token=%s requestIdent=%s requestSpecies=%s displayIdent=%s displaySpecies=%s viewerOverride=%s identOverride=%s requestPokemon=%s displayPokemon=%s" % [
+	_debug_battle_move("hover begin owner=%s token=%s requestIdent=%s lookupIdent=%s apiIdent=%s requestSpecies=%s displayIdent=%s displaySpecies=%s viewerOverride=%s requestPokemon=%s displayPokemon=%s" % [
 		hover_owner_player_id,
 		str(request_token),
 		hover_ident,
+		hover_lookup_ident,
+		hover_api_ident,
 		battle_state.get_species_from_pokemon_data(request_pokemon_data),
 		str(display_pokemon_data.get("ident", "")),
 		battle_state.get_species_from_pokemon_data(display_pokemon_data),
 		_get_raw_pvp_hover_viewer_id(),
-		_get_raw_pvp_hover_ident(hover_ident),
 		JSON.stringify(request_pokemon_data),
 		JSON.stringify(display_pokemon_data),
 	])
@@ -728,7 +733,7 @@ func _show_pokemon_hover(
 		public_confirmed_abilities_by_ident,
 		public_confirmed_items_by_ident,
 		_get_raw_pvp_hover_viewer_id(),
-		_get_raw_pvp_hover_ident(hover_ident)
+		hover_api_ident
 	)
 	if is_instance_valid(hover_info_request):
 		hover_info_request.queue_free()
@@ -886,9 +891,10 @@ func _hover_data_matches_pokemon_request(hover_data: Dictionary, pokemon_data: D
 	if pokemon_info_value is Dictionary:
 		var pokemon_info: Dictionary = pokemon_info_value as Dictionary
 		var response_ident := str(pokemon_info.get("ident", ""))
-		if response_ident != "" and _normalize_battle_ident(response_ident) != _normalize_battle_ident(current_ident):
-			_debug_battle_move("hover response ident mismatch current=%s responseIdent=%s info=%s" % [
+		if response_ident != "" and not _hover_response_ident_matches_pokemon_request(response_ident, hover_data, pokemon_data):
+			_debug_battle_move("hover response ident mismatch current=%s lookup=%s responseIdent=%s info=%s" % [
 				current_ident,
+				str(hover_data.get("requested_lookup_ident", "")),
 				response_ident,
 				JSON.stringify(pokemon_info),
 			])
@@ -901,11 +907,56 @@ func _hover_data_matches_pokemon_request(hover_data: Dictionary, pokemon_data: D
 
 	return _normalize_species_for_compare(requested_species) == _normalize_species_for_compare(current_species)
 
+func _hover_response_ident_matches_pokemon_request(response_ident: String, hover_data: Dictionary, pokemon_data: Dictionary) -> bool:
+	var normalized_response := _normalize_battle_ident(response_ident)
+	var requested_lookup_ident := str(hover_data.get("requested_lookup_ident", "")).strip_edges()
+	if requested_lookup_ident != "" and normalized_response == _normalize_battle_ident(requested_lookup_ident):
+		return true
+
+	var current_ident := str(pokemon_data.get("ident", "")).strip_edges()
+	if current_ident != "" and normalized_response == _normalize_battle_ident(current_ident):
+		return true
+
+	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
+	if _is_pokemon_info_slot_key(pokemon_key) and normalized_response == _normalize_battle_ident(pokemon_key):
+		return true
+
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+	var player_id := _get_player_id_from_ident(current_ident)
+	if canonical_slot > 0 and (player_id == "p1" or player_id == "p2"):
+		var canonical_key := "%s:slot:%d" % [player_id, canonical_slot]
+		return normalized_response == _normalize_battle_ident(canonical_key)
+
+	return false
+
 func _get_raw_pvp_hover_viewer_id() -> String:
 	if not _is_pvp_battle():
 		return ""
 
 	return action_flow.local_player_id
+
+func _get_hover_info_lookup_ident(pokemon_data: Dictionary, hover_owner_player_id: String) -> String:
+	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
+	if _is_pokemon_info_slot_key(pokemon_key):
+		return pokemon_key
+
+	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+	var player_id := hover_owner_player_id.strip_edges()
+	if player_id == "":
+		player_id = _get_player_id_from_ident(str(pokemon_data.get("ident", "")))
+	if canonical_slot > 0 and (player_id == "p1" or player_id == "p2"):
+		return "%s:slot:%d" % [player_id, canonical_slot]
+
+	return str(pokemon_data.get("ident", "")).strip_edges()
+
+func _is_pokemon_info_slot_key(value: String) -> bool:
+	var cleaned := value.strip_edges()
+	if not (cleaned.begins_with("p1:slot:") or cleaned.begins_with("p2:slot:")):
+		return false
+
+	var slot_text := cleaned.split(":slot:")[1]
+	var slot := _safe_int(slot_text, -1)
+	return slot > 0 and slot <= 6
 
 func _get_raw_pvp_hover_ident(display_ident: String) -> String:
 	var normalized_ident := display_ident.strip_edges()

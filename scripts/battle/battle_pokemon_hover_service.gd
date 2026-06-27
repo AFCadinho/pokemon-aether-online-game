@@ -19,6 +19,9 @@ func get_hover_card_data(
 	ident_override: String = ""
 ) -> Dictionary:
 	var requested_ident := str(pokemon_data.get("ident", ""))
+	var requested_lookup_ident := ident_override.strip_edges()
+	if requested_lookup_ident == "":
+		requested_lookup_ident = requested_ident
 	var requested_species := battle_state.get_species_from_pokemon_data(pokemon_data)
 	var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(
 		battle_state,
@@ -35,6 +38,7 @@ func get_hover_card_data(
 
 	return {
 		"requested_ident": requested_ident,
+		"requested_lookup_ident": requested_lookup_ident,
 		"requested_species": requested_species,
 		"confirmed_moves": _get_confirmed_info_moves(pokemon_info),
 		"confirmed_item": _get_confirmed_item_for_hover(
