@@ -88,6 +88,24 @@ theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
 theme_override_font_sizes/font_size = 14
 text = "(12/12)"
 
+[node name="SeperationLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer" unique_id=286594064]
+layout_mode = 2
+text = "/"
+
+[node name="ItemContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HPBoxContainer" unique_id=2146121021]
+layout_mode = 2
+
+[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/ItemContainer" unique_id=53441853]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 14
+text = "@"
+
+[node name="ItemValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/ItemContainer" unique_id=1418138783]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Choice Scarf"
+
 [node name="AbilityBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1385344729]
 layout_mode = 2
 
@@ -110,19 +128,19 @@ text = "Rough Skin"
 layout_mode = 2
 text = "/"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/AbilityBoxContainer" unique_id=2146121021]
+[node name="NatureContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/AbilityBoxContainer" unique_id=2146121022]
 layout_mode = 2
 
-[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer2" unique_id=53441853]
+[node name="NatureLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/NatureContainer" unique_id=53441854]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 14
-text = "@"
+text = "Nature:"
 
-[node name="ItemValueLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer2" unique_id=1418138783]
+[node name="NatureValueLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/NatureContainer" unique_id=1418138784]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Choice Scarf"
+text = "Adamant"
 
 [node name="StatsBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=871422526]
 layout_mode = 2

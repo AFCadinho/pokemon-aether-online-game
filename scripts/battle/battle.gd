@@ -146,11 +146,14 @@ var active_enemy_pokemon: Pokemon
 @onready var vs_player_2_label: Label = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/VSPanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Player2") as Label
 @onready var player_side_effects_panel: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/SideFieldEffectsPanel") as Control
 @onready var enemy_side_effects_panel: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/SideFieldEffectsPanel2") as Control
+@onready var battle_background: TextureRect = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground") as TextureRect
 @onready var weather_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GPUParticles2D") as GPUParticles2D
 @onready var weather_tint: ColorRect = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherTint") as ColorRect
 @onready var terrain_tint: ColorRect = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/TerrainTint") as ColorRect
 @onready var sun_rays: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays") as Control
 @onready var sun_sparkles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunSparkles") as GPUParticles2D
+@onready var desolate_land_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer") as Control
+@onready var primordial_sea_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer") as Control
 @onready var sandstorm_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormParticles") as GPUParticles2D
 @onready var sandstorm_swirls: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls") as Control
 @onready var snow_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SnowParticles") as GPUParticles2D
@@ -307,8 +310,11 @@ func _setup_weather_presentation() -> void:
 	weather_presentation.setup(
 		weather_particles,
 		weather_tint,
+		battle_background,
 		sun_rays,
 		sun_sparkles,
+		desolate_land_layer,
+		primordial_sea_layer,
 		sandstorm_particles,
 		sandstorm_swirls,
 		terrain_tint,
@@ -453,6 +459,9 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		hover_data["hp"] = saved_pokemon.current_hp
 	if not hover_data.has("maxHp"):
 		hover_data["maxHp"] = saved_pokemon.max_hp
+
+	_apply_temporary_form_party_hover_data(hover_data, display_data, saved_pokemon)
+
 	var stat_stages := _get_active_stat_stages_for_party_hover(display_data)
 	if not stat_stages.is_empty():
 		hover_data["statStages"] = stat_stages
@@ -462,6 +471,180 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 		hover_data["moves"] = moves
 
 	return hover_data
+
+func _apply_temporary_form_party_hover_data(
+	hover_data: Dictionary,
+	display_data: Dictionary,
+	saved_pokemon: Pokemon
+) -> void:
+	var temporary_species := _get_party_hover_temporary_display_species(display_data)
+	var primal_data := _get_primal_species_hover_data(temporary_species)
+	if primal_data.is_empty():
+		return
+
+	hover_data["species"] = temporary_species
+	hover_data["displaySpecies"] = temporary_species
+	hover_data["types"] = primal_data.get("types", [])
+	hover_data["ability"] = primal_data.get("ability", hover_data.get("ability", ""))
+	hover_data["possibleAbilities"] = [primal_data.get("ability", "")]
+	hover_data["stats"] = _calculate_battle_stats(
+		primal_data.get("baseStats", {}),
+		int(hover_data.get("level", saved_pokemon.level)),
+		hover_data.get("ivs", saved_pokemon.ivs),
+		hover_data.get("evs", saved_pokemon.evs),
+		str(hover_data.get("nature", saved_pokemon.nature))
+	)
+
+func _get_party_hover_temporary_display_species(display_data: Dictionary) -> String:
+	for key in ["megaSpecies", "transformedSpecies", "displaySpecies"]:
+		var species := str(display_data.get(key, "")).strip_edges()
+		if _is_primal_species(species):
+			return species
+
+	var ident := str(display_data.get("ident", "")).strip_edges()
+	if ident != "" and battle_state != null:
+		var persisted_species := battle_state.resolve_persisted_mega_species_for_ident(ident)
+		if _is_primal_species(persisted_species):
+			return persisted_species
+
+	if bool(display_data.get("active", false)):
+		var active_species := _get_active_display_species("p1")
+		if _is_primal_species(active_species):
+			return active_species
+
+	return ""
+
+func _is_primal_species(species: String) -> bool:
+	var normalized_species := _normalize_species_for_compare(species)
+	return normalized_species == "groudon-primal" or normalized_species == "kyogre-primal"
+
+func _get_primal_species_hover_data(species: String) -> Dictionary:
+	match _normalize_species_for_compare(species):
+		"groudon-primal":
+			return {
+				"ability": "desolate-land",
+				"types": ["ground", "fire"],
+				"baseStats": {
+					"hp": 100,
+					"atk": 180,
+					"def": 160,
+					"spa": 150,
+					"spd": 90,
+					"spe": 90,
+				},
+			}
+		"kyogre-primal":
+			return {
+				"ability": "primordial-sea",
+				"types": ["water"],
+				"baseStats": {
+					"hp": 100,
+					"atk": 150,
+					"def": 90,
+					"spa": 180,
+					"spd": 160,
+					"spe": 90,
+				},
+			}
+
+	return {}
+
+func _calculate_battle_stats(
+	base_stats_value: Variant,
+	level: int,
+	ivs_value: Variant,
+	evs_value: Variant,
+	nature: String
+) -> Dictionary:
+	var base_stats: Dictionary = base_stats_value as Dictionary if base_stats_value is Dictionary else {}
+	var ivs: Dictionary = ivs_value as Dictionary if ivs_value is Dictionary else {}
+	var evs: Dictionary = evs_value as Dictionary if evs_value is Dictionary else {}
+	var calculated_stats := {}
+
+	for stat_key in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		var base_stat := int(base_stats.get(stat_key, 0))
+		var iv := int(ivs.get(stat_key, 31))
+		var ev := int(evs.get(stat_key, 0))
+		var pre_nature := int(floor(float((2 * base_stat + iv + int(floor(float(ev) / 4.0))) * level) / 100.0))
+		if stat_key == "hp":
+			calculated_stats[stat_key] = pre_nature + level + 10
+		else:
+			calculated_stats[stat_key] = int(floor(float(pre_nature + 5) * _get_nature_stat_modifier(nature, stat_key)))
+
+	return calculated_stats
+
+func _get_nature_stat_modifier(nature: String, stat_key: String) -> float:
+	var normalized_nature := nature.to_lower().strip_edges()
+	var raised_stat := ""
+	var lowered_stat := ""
+
+	match normalized_nature:
+		"lonely":
+			raised_stat = "atk"
+			lowered_stat = "def"
+		"brave":
+			raised_stat = "atk"
+			lowered_stat = "spe"
+		"adamant":
+			raised_stat = "atk"
+			lowered_stat = "spa"
+		"naughty":
+			raised_stat = "atk"
+			lowered_stat = "spd"
+		"bold":
+			raised_stat = "def"
+			lowered_stat = "atk"
+		"relaxed":
+			raised_stat = "def"
+			lowered_stat = "spe"
+		"impish":
+			raised_stat = "def"
+			lowered_stat = "spa"
+		"lax":
+			raised_stat = "def"
+			lowered_stat = "spd"
+		"timid":
+			raised_stat = "spe"
+			lowered_stat = "atk"
+		"hasty":
+			raised_stat = "spe"
+			lowered_stat = "def"
+		"jolly":
+			raised_stat = "spe"
+			lowered_stat = "spa"
+		"naive":
+			raised_stat = "spe"
+			lowered_stat = "spd"
+		"modest":
+			raised_stat = "spa"
+			lowered_stat = "atk"
+		"mild":
+			raised_stat = "spa"
+			lowered_stat = "def"
+		"quiet":
+			raised_stat = "spa"
+			lowered_stat = "spe"
+		"rash":
+			raised_stat = "spa"
+			lowered_stat = "spd"
+		"calm":
+			raised_stat = "spd"
+			lowered_stat = "atk"
+		"gentle":
+			raised_stat = "spd"
+			lowered_stat = "def"
+		"sassy":
+			raised_stat = "spd"
+			lowered_stat = "spe"
+		"careful":
+			raised_stat = "spd"
+			lowered_stat = "spa"
+
+	if stat_key == raised_stat:
+		return 1.1
+	if stat_key == lowered_stat:
+		return 0.9
+	return 1.0
 
 func _get_party_hover_moves(display_data: Dictionary, fallback_data: Dictionary) -> Array:
 	if bool(display_data.get("active", false)):
@@ -756,7 +939,8 @@ func _show_pokemon_hover(
 		public_confirmed_abilities_by_ident,
 		public_confirmed_items_by_ident,
 		_get_raw_pvp_hover_viewer_id(),
-		hover_api_ident
+		hover_api_ident,
+		battle_state.get_species_from_pokemon_data(display_pokemon_data)
 	)
 	if is_instance_valid(hover_info_request):
 		hover_info_request.queue_free()
@@ -798,7 +982,7 @@ func _show_pokemon_hover(
 	var display_data: Dictionary = display_pokemon_data.duplicate()
 	display_data["ident"] = str(request_pokemon_data.get("ident", ""))
 	_apply_hover_species_metadata(display_data, species_metadata)
-	var display_species := battle_state.get_species_from_pokemon_data(request_pokemon_data)
+	var display_species := battle_state.get_species_from_pokemon_data(display_pokemon_data)
 	if display_species != "":
 		display_data["species"] = display_species
 		display_data["displaySpecies"] = display_species

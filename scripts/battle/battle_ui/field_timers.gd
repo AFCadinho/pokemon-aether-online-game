@@ -13,7 +13,10 @@ const ANIMATED_ICON_FRAME_SIZE := Vector2i(40, 24)
 const ANIMATED_ICON_FPS := 6.0
 const EFFECT_ICON_ALIASES := {
 	"RainDance": "rain",
+	"PrimordialSea": "rain",
 	"SunnyDay": "sun",
+	"HarshSun": "sun",
+	"DesolateLand": "sun",
 	"Hail": "snow",
 }
 
@@ -232,8 +235,12 @@ func _format_effect_name(effect: String) -> String:
 	match effect_key:
 		"raindance", "rain":
 			return "Rain"
+		"primordialsea":
+			return "Primordial Sea"
 		"sunnyday", "sun":
 			return "Sun"
+		"desolateland":
+			return "Desolate Land"
 		"sandstorm":
 			return "Sandstorm"
 		"hail":
@@ -304,9 +311,9 @@ func _get_animated_effect_icon_path(effect_data: Dictionary) -> String:
 	var effect_key: String = _normalize_effect_key(_get_field_effect_identifier(effect_data))
 	var file_name := ""
 	match effect_key:
-		"raindance", "rain":
+		"raindance", "rain", "primordialsea":
 			file_name = "weatherrain.png"
-		"sunnyday", "sun":
+		"sunnyday", "sun", "desolateland":
 			file_name = "weathersun.png"
 		"sandstorm":
 			file_name = "weathersand.png"

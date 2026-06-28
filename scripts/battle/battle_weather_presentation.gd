@@ -4,8 +4,11 @@ class_name BattleWeatherPresentation
 
 var weather_particles: GPUParticles2D
 var weather_tint: ColorRect
+var battle_background: TextureRect
 var sun_rays: Control
 var sun_sparkles: GPUParticles2D
+var desolate_land_layer: Control
+var primordial_sea_layer: Control
 var sandstorm_particles: GPUParticles2D
 var sandstorm_swirls: Control
 var snow_particles: GPUParticles2D
@@ -17,6 +20,8 @@ var electric_terrain_layer: Control
 var trick_room_layer: Control
 
 var sun_weather_time := 0.0
+var desolate_land_time := 0.0
+var primordial_sea_time := 0.0
 var sandstorm_weather_time := 0.0
 var grassy_terrain_time := 0.0
 var trick_room_time := 0.0
@@ -25,8 +30,11 @@ var active_terrain_effect := ""
 func setup(
 	weather_particles_node: GPUParticles2D,
 	weather_tint_node: ColorRect,
+	battle_background_node: TextureRect,
 	sun_rays_node: Control,
 	sun_sparkles_node: GPUParticles2D,
+	desolate_land_layer_node: Control,
+	primordial_sea_layer_node: Control,
 	sandstorm_particles_node: GPUParticles2D,
 	sandstorm_swirls_node: Control,
 	terrain_tint_node: ColorRect,
@@ -39,8 +47,11 @@ func setup(
 ) -> void:
 	weather_particles = weather_particles_node
 	weather_tint = weather_tint_node
+	battle_background = battle_background_node
 	sun_rays = sun_rays_node
 	sun_sparkles = sun_sparkles_node
+	desolate_land_layer = desolate_land_layer_node
+	primordial_sea_layer = primordial_sea_layer_node
 	sandstorm_particles = sandstorm_particles_node
 	sandstorm_swirls = sandstorm_swirls_node
 	snow_particles = snow_particles_node
@@ -59,12 +70,20 @@ func update_weather(weather_effect: String) -> void:
 	_update_weather_tint(weather_effect)
 
 	var weather_key := _normalize_weather_key(weather_effect)
-	var should_emit_rain := weather_key == "raindance" or weather_key == "rain"
+	var should_emit_rain := _is_rain_weather_key(weather_key)
 	if weather_particles != null:
 		weather_particles.visible = should_emit_rain
 		weather_particles.emitting = should_emit_rain
+		weather_particles.amount = 1280 if weather_key == "primordialsea" else 980
 
-	var should_show_sun := weather_key == "sunnyday" or weather_key == "sun" or weather_key == "harshsun"
+	var should_show_primordial_sea := weather_key == "primordialsea"
+	if primordial_sea_layer != null:
+		primordial_sea_layer.visible = should_show_primordial_sea
+		if not should_show_primordial_sea:
+			primordial_sea_layer.modulate = Color.WHITE
+			primordial_sea_time = 0.0
+
+	var should_show_sun := _is_sun_weather_key(weather_key)
 	if sun_rays != null:
 		sun_rays.visible = should_show_sun
 		if not should_show_sun:
@@ -74,6 +93,15 @@ func update_weather(weather_effect: String) -> void:
 	if sun_sparkles != null:
 		sun_sparkles.visible = should_show_sun
 		sun_sparkles.emitting = should_show_sun
+		sun_sparkles.amount = 105 if weather_key == "desolateland" else 70
+
+	var should_show_desolate_land := weather_key == "desolateland"
+	if desolate_land_layer != null:
+		desolate_land_layer.visible = should_show_desolate_land
+		if not should_show_desolate_land:
+			desolate_land_layer.position = Vector2.ZERO
+			desolate_land_layer.modulate = Color.WHITE
+			desolate_land_time = 0.0
 
 	var should_emit_sandstorm := weather_key == "sandstorm"
 	if sandstorm_particles != null:
@@ -98,6 +126,10 @@ func animate(delta: float) -> void:
 
 	if sun_rays != null and sun_rays.visible:
 		_animate_sun_weather(delta)
+	if desolate_land_layer != null and desolate_land_layer.visible:
+		_animate_desolate_land(delta)
+	if primordial_sea_layer != null and primordial_sea_layer.visible:
+		_animate_primordial_sea(delta)
 	if sandstorm_swirls != null and sandstorm_swirls.visible:
 		_animate_sandstorm_weather(delta)
 	if terrain_tint != null and terrain_tint.visible:
@@ -153,7 +185,7 @@ func update_trick_room(is_active: bool) -> void:
 		trick_room_time = 0.0
 
 func _update_weather_tint(weather_effect: String) -> void:
-	if weather_tint == null:
+	if weather_tint == null and battle_background == null:
 		return
 
 	var tint_color := Color.TRANSPARENT
@@ -162,8 +194,12 @@ func _update_weather_tint(weather_effect: String) -> void:
 	match weather_key:
 		"raindance", "rain":
 			tint_color = Color(0.24, 0.46, 0.9, 0.12)
+		"primordialsea":
+			tint_color = Color(0.03, 0.12, 0.36, 0.36)
 		"sunnyday", "sun", "harshsun":
 			tint_color = Color(1.0, 0.76, 0.18, 0.1)
+		"desolateland":
+			tint_color = Color(1.0, 0.54, 0.08, 0.15)
 		"sandstorm":
 			tint_color = Color(0.68, 0.47, 0.22, 0.14)
 		"hail", "snow", "snowscape":
@@ -171,16 +207,22 @@ func _update_weather_tint(weather_effect: String) -> void:
 		_:
 			should_show_tint = false
 
-	weather_tint.visible = should_show_tint
-	if should_show_tint:
-		weather_tint.color = tint_color
+	if weather_tint != null:
+		weather_tint.visible = should_show_tint
+		if should_show_tint:
+			weather_tint.color = tint_color
+	if battle_background != null:
+		battle_background.modulate = _get_weather_background_modulate(weather_key)
 
 func _hide_weather_effects() -> void:
 	if weather_tint != null:
 		weather_tint.visible = false
+	if battle_background != null:
+		battle_background.modulate = Color.WHITE
 	if weather_particles != null:
 		weather_particles.visible = false
 		weather_particles.emitting = false
+		weather_particles.amount = 980
 	if sun_rays != null:
 		sun_rays.visible = false
 		sun_rays.position = Vector2.ZERO
@@ -188,6 +230,14 @@ func _hide_weather_effects() -> void:
 	if sun_sparkles != null:
 		sun_sparkles.visible = false
 		sun_sparkles.emitting = false
+		sun_sparkles.amount = 70
+	if desolate_land_layer != null:
+		desolate_land_layer.visible = false
+		desolate_land_layer.position = Vector2.ZERO
+		desolate_land_layer.modulate = Color.WHITE
+	if primordial_sea_layer != null:
+		primordial_sea_layer.visible = false
+		primordial_sea_layer.modulate = Color.WHITE
 	if sandstorm_particles != null:
 		sandstorm_particles.visible = false
 		sandstorm_particles.emitting = false
@@ -200,6 +250,8 @@ func _hide_weather_effects() -> void:
 		snow_particles.visible = false
 		snow_particles.emitting = false
 	sun_weather_time = 0.0
+	desolate_land_time = 0.0
+	primordial_sea_time = 0.0
 	sandstorm_weather_time = 0.0
 
 func _hide_terrain_effects() -> void:
@@ -229,9 +281,26 @@ func _animate_sun_weather(delta: float) -> void:
 	var drift_x := sin(sun_weather_time * 0.45) * 14.0
 	var drift_y := sin(sun_weather_time * 0.32) * 5.0
 	var alpha := 0.78 + (sin(sun_weather_time * 0.8) * 0.18)
+	if desolate_land_layer != null and desolate_land_layer.visible:
+		alpha = 0.92 + (sin(sun_weather_time * 0.55) * 0.08)
 
 	sun_rays.position = Vector2(drift_x, drift_y)
 	sun_rays.modulate = Color(1.0, 1.0, 1.0, alpha)
+
+func _animate_desolate_land(delta: float) -> void:
+	desolate_land_time += delta
+	var drift_x: float = sin(desolate_land_time * 0.28) * 10.0
+	var drift_y: float = sin(desolate_land_time * 0.46) * 4.0
+	var alpha: float = 0.86 + (sin(desolate_land_time * 0.72) * 0.1)
+
+	desolate_land_layer.position = Vector2(drift_x, drift_y)
+	desolate_land_layer.modulate = Color(1.0, 1.0, 1.0, alpha)
+
+func _animate_primordial_sea(delta: float) -> void:
+	primordial_sea_time += delta
+	var alpha: float = 0.92 + (sin(primordial_sea_time * 0.55) * 0.08)
+
+	primordial_sea_layer.modulate = Color(1.0, 1.0, 1.0, alpha)
 
 func _animate_sandstorm_weather(delta: float) -> void:
 	sandstorm_weather_time += delta
@@ -241,6 +310,23 @@ func _animate_sandstorm_weather(delta: float) -> void:
 
 	sandstorm_swirls.position = Vector2(drift_x, drift_y)
 	sandstorm_swirls.modulate = Color(1.0, 1.0, 1.0, alpha)
+
+func _get_weather_background_modulate(weather_key: String) -> Color:
+	match weather_key:
+		"raindance", "rain":
+			return Color(0.78, 0.86, 1.0, 1.0)
+		"primordialsea":
+			return Color(0.55, 0.68, 0.92, 1.0)
+		"sunnyday", "sun", "harshsun":
+			return Color(1.0, 0.92, 0.76, 1.0)
+		"desolateland":
+			return Color(1.0, 0.78, 0.58, 1.0)
+		"sandstorm":
+			return Color(0.92, 0.82, 0.66, 1.0)
+		"hail", "snow", "snowscape":
+			return Color(0.86, 0.94, 1.0, 1.0)
+
+	return Color.WHITE
 
 func _get_terrain_tint_color(terrain_effect: String, alpha: float) -> Color:
 	match _normalize_field_effect_key(terrain_effect):
@@ -299,6 +385,12 @@ func _normalize_field_effect_key(field_effect: String) -> String:
 		cleaned = cleaned.substr(separator_index + 1).strip_edges()
 
 	return cleaned.to_lower().replace(" ", "").replace("_", "").replace("-", "")
+
+func _is_rain_weather_key(weather_key: String) -> bool:
+	return weather_key == "raindance" or weather_key == "rain" or weather_key == "primordialsea"
+
+func _is_sun_weather_key(weather_key: String) -> bool:
+	return weather_key == "sunnyday" or weather_key == "sun" or weather_key == "harshsun" or weather_key == "desolateland"
 
 func _is_snow_weather_key(weather_key: String) -> bool:
 	return weather_key == "snow" or weather_key == "hail" or weather_key == "snowscape"

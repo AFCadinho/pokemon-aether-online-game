@@ -13,7 +13,8 @@ const STAT_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 @onready var hp_percent_label: Label = $MarginContainer/VBoxContainer/HPBoxContainer/HpContainer/HpPercentLabel
 @onready var hp_value_label: Label = $MarginContainer/VBoxContainer/HPBoxContainer/HpContainer/HpValueLabel
 @onready var ability_value_label: Label = $MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer/AbilityValueLabel
-@onready var item_value_label: Label = $MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer2/ItemValueLabel
+@onready var item_value_label: Label = $MarginContainer/VBoxContainer/HPBoxContainer/ItemContainer/ItemValueLabel
+@onready var nature_value_label: Label = $MarginContainer/VBoxContainer/AbilityBoxContainer/NatureContainer/NatureValueLabel
 @onready var atk_value_label: Label = $MarginContainer/VBoxContainer/StatsBoxContainer/AttackContainer/ValueLabel
 @onready var def_value_label: Label = $MarginContainer/VBoxContainer/StatsBoxContainer/DefContainer/ValueLabel
 @onready var spa_value_label: Label = $MarginContainer/VBoxContainer/StatsBoxContainer/SpAContainer/ValueLabel
@@ -81,6 +82,7 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 	_set_hp(pokemon_data)
 	ability_value_label.text = _format_value(str(pokemon_data.get("ability", "")), "Unknown")
 	item_value_label.text = _format_value(str(pokemon_data.get("item", "")), "No item")
+	nature_value_label.text = _format_value(str(pokemon_data.get("nature", "")), "Unknown")
 	_set_stats(
 		pokemon_data.get("stats", pokemon_data.get("evs", {})),
 		pokemon_data.get("statStages", pokemon_data.get("stat_stages", {}))

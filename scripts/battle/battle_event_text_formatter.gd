@@ -779,8 +779,14 @@ func _format_field_effect_name(effect: String) -> String:
 	match cleaned:
 		"RainDance":
 			return "Rain"
+		"PrimordialSea":
+			return "Primordial Sea"
 		"SunnyDay":
 			return "Sun"
+		"HarshSun":
+			return "Harsh Sun"
+		"DesolateLand":
+			return "Desolate Land"
 		"Sandstorm":
 			return "Sandstorm"
 		"Hail":
