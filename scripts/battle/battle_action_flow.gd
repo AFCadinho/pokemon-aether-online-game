@@ -63,6 +63,18 @@ func submit_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Dicti
 	return map_response_for_local_player(response)
 
 
+func submit_pass_turn(pass_player_id: String = "p1", player_id: String = "p2", since_event_seq := -1) -> Dictionary:
+	var response: Dictionary = await send_pass_turn(pass_player_id, player_id, since_event_seq)
+	if not _is_successful_response(response):
+		print("Pass turn failed: ", response)
+		return response
+
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
+		return response
+
+	return map_response_for_local_player(response)
+
+
 func send_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
 	return await BattleApiClient.send_choice(
 		request_node,
@@ -79,6 +91,16 @@ func send_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Diction
 	return await BattleApiClient.send_npc_choice(
 		request_node,
 		battle_state.battle_id,
+		player_id,
+		"basic",
+		since_event_seq
+	)
+
+func send_pass_turn(pass_player_id: String = "p1", player_id: String = "p2", since_event_seq := -1) -> Dictionary:
+	return await BattleApiClient.send_pass_turn(
+		request_node,
+		battle_state.battle_id,
+		pass_player_id,
 		player_id,
 		"basic",
 		since_event_seq

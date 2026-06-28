@@ -2092,7 +2092,9 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		return
 
 	_set_battle_input_locked(true)
-	current_action_panel.set_message("You used %s!" % item_name)
+	var use_item_message := "You used %s!" % item_name
+	current_action_panel.set_message(use_item_message)
+	_add_battle_log_message(use_item_message)
 	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
 	if not bool(capture_result.get("success", false)):
 		current_action_panel.set_message(str(capture_result.get("error", "Could not catch Pokemon.")))
@@ -2127,6 +2129,21 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 			"skipPartyBattleSync": true,
 		})
 		return
+
+	if bool(capture_result.get("requiresBattleTurn", false)):
+		await _hold_opponent_response_message()
+		var pass_turn_response: Dictionary = await action_flow.submit_pass_turn("p1", "p2", last_rendered_event_seq)
+		if not bool(pass_turn_response.get("success", false)):
+			current_action_panel.set_message(str(pass_turn_response.get("error", "Could not resolve the wild Pokemon's turn.")))
+			_set_battle_input_locked(false)
+			return
+
+		await _render_opponent_response(pass_turn_response)
+		await _hold_opponent_response_message()
+		if await _finish_if_battle_ended():
+			return
+		if _show_force_switch_if_needed():
+			return
 
 	_set_battle_input_locked(false)
 

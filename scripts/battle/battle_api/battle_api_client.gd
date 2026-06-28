@@ -141,6 +141,26 @@ func send_npc_choice(
 		body
 	)
 
+func send_pass_turn(
+	request_node: HTTPRequest,
+	battle_id: String,
+	pass_player_id: String = "p1",
+	player_id: String = "p2",
+	strategy: String = "basic",
+	since_event_seq := -1
+) -> Dictionary:
+	var body := {
+		"passPlayerId": pass_player_id,
+		"playerId": player_id,
+		"strategy": strategy
+	}
+
+	return await send_post_request(
+		request_node,
+		_append_since_event_seq_query("/battle/%s/pass-turn" % battle_id, since_event_seq),
+		body
+	)
+
 func _append_since_event_seq_query(path: String, since_event_seq: int) -> String:
 	if since_event_seq < 0:
 		return path

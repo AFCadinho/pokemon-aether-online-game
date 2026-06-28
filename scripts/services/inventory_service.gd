@@ -73,6 +73,7 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 		"battleId": str(body.get("battleId", battle_id)),
 		"caught": bool(body.get("caught", false)),
 		"shakeCount": int(body.get("shakeCount", 0)),
+		"requiresBattleTurn": bool(body.get("requiresBattleTurn", false)),
 		"message": str(body.get("message", "")),
 		"itemId": str(body.get("itemId", item_id)),
 		"addedToParty": bool(body.get("addedToParty", false)),

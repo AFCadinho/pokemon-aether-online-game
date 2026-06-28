@@ -6,9 +6,11 @@
 - Added the first complete wild Pokemon capture flow using Bag Poké Balls during wild battles.
 - Added Gen 4-style Poké Ball capture animations for throw, shake, break-out, and successful catch states.
 - Added backend capture handling that consumes balls, resolves catch success, creates owned Pokemon, and updates party state when space is available.
+- Added pass-turn battle resolution so failed wild capture attempts let the wild Pokemon take its turn.
 
 **Changed**
 - Wild battle Bag actions now use backend catch results for shake count, success state, inventory updates, and battle completion.
+- Wild battle capture actions now write both item use and capture outcome messages to the battle log.
 
 ## 0.2.1 - 2026-06-28
 
