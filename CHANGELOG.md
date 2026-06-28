@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.2.2 - 2026-06-28
+## Unreleased
+
+## 0.2.2 - 2026-06-29
 
 **Added**
 - Added the first complete wild Pokemon capture flow using Bag Poké Balls during wild battles.
@@ -20,6 +22,13 @@
 - PvP opponent switch and summon animations now use public Poké Ball metadata when available.
 - Switch release animations now leave audio space for future Pokemon cries.
 - Owned Pokemon Poké Ball changes now consume the newly selected ball and return the previously assigned ball to the Bag.
+
+**Fixed**
+- Fixed team-preview battle leads being visible before their Poké Ball lead animations play.
+- Fixed battle move slots losing type labels after recent battle UI changes.
+- Fixed battle HUD placeholders briefly showing poison status and 75% HP before real Pokemon data loads.
+- Fixed form Pokemon such as Landorus-Therian briefly rendering as their base species in PvP and NPC battle openings.
+- Fixed overworld NPCs drawing behind the player when the NPC is lower on screen.
 
 ## 0.2.1 - 2026-06-28
 
