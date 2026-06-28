@@ -3,6 +3,7 @@
 ## Unreleased
 
 **Added**
+- Added an Electric Terrain battlefield animation with yellow terrain particles and ambient tinting.
 - Added an explicit follower sprite map so Pokemon forms can resolve to the correct follower sprite assets.
 - Added a follower sprite map validation tool for future form sprite updates.
 

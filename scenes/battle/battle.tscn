@@ -110,6 +110,26 @@ scale_min = 2.4
 scale_max = 5.2
 color_initial_ramp = SubResource("GradientTexture1D_psychic_terrain")
 
+[sub_resource type="Gradient" id="Gradient_electric_terrain"]
+offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
+colors = PackedColorArray(1, 0.92, 0.2, 0, 1, 0.86, 0.12, 0.72, 1, 0.98, 0.46, 0.9, 1, 0.92, 0.2, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_electric_terrain"]
+gradient = SubResource("Gradient_electric_terrain")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_electric_terrain"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(155, 14, 1)
+direction = Vector3(0, -1, 0)
+spread = 30.0
+initial_velocity_min = 88.0
+initial_velocity_max = 162.0
+gravity = Vector3(8, 28, 0)
+scale_min = 2.4
+scale_max = 5.2
+color_initial_ramp = SubResource("GradientTexture1D_electric_terrain")
+
 [sub_resource type="Gradient" id="Gradient_sun_sparkles"]
 offsets = PackedFloat32Array(0, 0.35, 0.72, 1)
 colors = PackedColorArray(1, 0.9, 0.38, 0, 1, 0.83, 0.2, 0.5, 1, 0.96, 0.58, 0.75, 1, 0.8, 0.25, 0)
@@ -573,6 +593,40 @@ lifetime = 1.45
 preprocess = 1.45
 visibility_rect = Rect2(-250, -245, 500, 270)
 process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
+
+[node name="ElectricTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+color = Color(1, 0.86, 0.12, 0.075)
+polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+
+[node name="PlayerElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+color = Color(1, 0.86, 0.12, 0.08)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="EnemyElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+position = Vector2(670, 292)
+amount = 150
+lifetime = 1.35
+preprocess = 1.35
+visibility_rect = Rect2(-210, -225, 420, 250)
+process_material = SubResource("ParticleProcessMaterial_electric_terrain")
+
+[node name="PlayerElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+position = Vector2(305, 548)
+amount = 270
+lifetime = 1.45
+preprocess = 1.45
+visibility_rect = Rect2(-250, -245, 500, 270)
+process_material = SubResource("ParticleProcessMaterial_electric_terrain")
 
 [node name="TrickRoomLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1043846889]
 visible = false

@@ -157,6 +157,7 @@ var active_enemy_pokemon: Pokemon
 @onready var grassy_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer") as Control
 @onready var misty_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer") as Control
 @onready var psychic_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer") as Control
+@onready var electric_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer") as Control
 @onready var trick_room_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer") as Control
 
 @onready var field_timers_panel: FieldTimersPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers
@@ -314,6 +315,7 @@ func _setup_weather_presentation() -> void:
 		grassy_terrain_layer,
 		misty_terrain_layer,
 		psychic_terrain_layer,
+		electric_terrain_layer,
 		trick_room_layer,
 		snow_particles
 	)

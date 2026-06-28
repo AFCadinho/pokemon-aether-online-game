@@ -13,6 +13,7 @@ var terrain_tint: ColorRect
 var grassy_terrain_layer: Control
 var misty_terrain_layer: Control
 var psychic_terrain_layer: Control
+var electric_terrain_layer: Control
 var trick_room_layer: Control
 
 var sun_weather_time := 0.0
@@ -32,6 +33,7 @@ func setup(
 	grassy_terrain_layer_node: Control,
 	misty_terrain_layer_node: Control,
 	psychic_terrain_layer_node: Control,
+	electric_terrain_layer_node: Control,
 	trick_room_layer_node: Control,
 	snow_particles_node: GPUParticles2D = null
 ) -> void:
@@ -46,6 +48,7 @@ func setup(
 	grassy_terrain_layer = grassy_terrain_layer_node
 	misty_terrain_layer = misty_terrain_layer_node
 	psychic_terrain_layer = psychic_terrain_layer_node
+	electric_terrain_layer = electric_terrain_layer_node
 	trick_room_layer = trick_room_layer_node
 
 func update_weather(weather_effect: String) -> void:
@@ -107,16 +110,18 @@ func update_terrain(terrain_effect: String) -> void:
 		_hide_terrain_effects()
 		return
 
-	var should_show_grassy_terrain := terrain_effect == "GrassyTerrain"
-	var should_show_misty_terrain := terrain_effect == "MistyTerrain"
-	var should_show_psychic_terrain := terrain_effect == "PsychicTerrain"
-	var should_show_terrain := should_show_grassy_terrain or should_show_misty_terrain or should_show_psychic_terrain
+	var terrain_key := _normalize_field_effect_key(terrain_effect)
+	var should_show_grassy_terrain := terrain_key == "grassyterrain"
+	var should_show_misty_terrain := terrain_key == "mistyterrain"
+	var should_show_psychic_terrain := terrain_key == "psychicterrain"
+	var should_show_electric_terrain := terrain_key == "electricterrain"
+	var should_show_terrain := should_show_grassy_terrain or should_show_misty_terrain or should_show_psychic_terrain or should_show_electric_terrain
 	active_terrain_effect = terrain_effect
 
 	if terrain_tint != null:
 		terrain_tint.visible = should_show_terrain
 		if should_show_terrain:
-			terrain_tint.color = _get_terrain_tint_color(terrain_effect, 0.025)
+			terrain_tint.color = _get_terrain_tint_color(terrain_effect, _get_terrain_tint_alpha(terrain_effect, 0.0))
 		else:
 			terrain_tint.color = Color(0.22, 0.84, 0.16, 0.025)
 			grassy_terrain_time = 0.0
@@ -130,6 +135,9 @@ func update_terrain(terrain_effect: String) -> void:
 	if psychic_terrain_layer != null:
 		psychic_terrain_layer.visible = should_show_psychic_terrain
 		_set_child_particles_emitting(psychic_terrain_layer, should_show_psychic_terrain)
+	if electric_terrain_layer != null:
+		electric_terrain_layer.visible = should_show_electric_terrain
+		_set_child_particles_emitting(electric_terrain_layer, should_show_electric_terrain)
 
 func update_trick_room(is_active: bool) -> void:
 	if trick_room_layer == null:
@@ -206,6 +214,9 @@ func _hide_terrain_effects() -> void:
 	if psychic_terrain_layer != null:
 		psychic_terrain_layer.visible = false
 		_set_child_particles_emitting(psychic_terrain_layer, false)
+	if electric_terrain_layer != null:
+		electric_terrain_layer.visible = false
+		_set_child_particles_emitting(electric_terrain_layer, false)
 	if trick_room_layer != null:
 		trick_room_layer.visible = false
 		trick_room_layer.position = Vector2.ZERO
@@ -232,19 +243,35 @@ func _animate_sandstorm_weather(delta: float) -> void:
 	sandstorm_swirls.modulate = Color(1.0, 1.0, 1.0, alpha)
 
 func _get_terrain_tint_color(terrain_effect: String, alpha: float) -> Color:
-	match terrain_effect:
-		"GrassyTerrain":
+	match _normalize_field_effect_key(terrain_effect):
+		"grassyterrain":
 			return Color(0.24, 0.88, 0.18, alpha)
-		"MistyTerrain":
+		"mistyterrain":
 			return Color(0.9, 0.48, 0.95, alpha)
-		"PsychicTerrain":
+		"psychicterrain":
 			return Color(0.72, 0.28, 1.0, alpha)
+		"electricterrain":
+			return Color(1.0, 0.88, 0.12, alpha)
 
 	return Color.TRANSPARENT
 
+func _get_terrain_tint_alpha(terrain_effect: String, time: float) -> float:
+	var pulse: float = sin(time * 0.9)
+	match _normalize_field_effect_key(terrain_effect):
+		"electricterrain":
+			return 0.052 + (pulse * 0.012)
+		"mistyterrain":
+			return 0.046 + (pulse * 0.01)
+		"psychicterrain":
+			return 0.044 + (pulse * 0.01)
+		"grassyterrain":
+			return 0.04 + (pulse * 0.01)
+
+	return 0.0
+
 func _animate_terrain_effects(delta: float) -> void:
 	grassy_terrain_time += delta
-	var alpha: float = 0.022 + (sin(grassy_terrain_time * 0.9) * 0.008)
+	var alpha: float = _get_terrain_tint_alpha(active_terrain_effect, grassy_terrain_time)
 	terrain_tint.color = _get_terrain_tint_color(active_terrain_effect, alpha)
 
 func _animate_trick_room_effect(delta: float) -> void:
@@ -263,7 +290,10 @@ func _set_child_particles_emitting(container: Node, emitting: bool) -> void:
 			particle_node.emitting = emitting
 
 func _normalize_weather_key(weather_effect: String) -> String:
-	var cleaned := weather_effect.strip_edges()
+	return _normalize_field_effect_key(weather_effect)
+
+func _normalize_field_effect_key(field_effect: String) -> String:
+	var cleaned := field_effect.strip_edges()
 	var separator_index := cleaned.find(":")
 	if separator_index >= 0:
 		cleaned = cleaned.substr(separator_index + 1).strip_edges()
