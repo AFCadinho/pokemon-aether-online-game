@@ -35,7 +35,7 @@ def main() -> None:
     changelog_path = Path(args.changelog)
     sections = _parse_changelog_section(changelog_path, version)
     fields = _build_fields(sections)
-    description = args.release_notes.strip() or "Open de launcher om de nieuwste build te downloaden."
+    description = args.release_notes.strip() or "Open the launcher to download the latest build."
 
     payload = {
         "username": "PokeAether",
@@ -102,7 +102,7 @@ def _build_fields(sections: dict[str, list[str]]) -> list[dict[str, object]]:
     if not fields:
         fields.append({
             "name": "Release notes",
-            "value": "Open de launcher om de nieuwste build te downloaden.",
+            "value": "Open the launcher to download the latest build.",
             "inline": False,
         })
     return fields
