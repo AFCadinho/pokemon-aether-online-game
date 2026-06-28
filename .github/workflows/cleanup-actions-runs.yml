@@ -1,0 +1,77 @@
+name: Cleanup GitHub Actions Runs
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_name:
+        description: Workflow name to clean up.
+        required: true
+        type: string
+        default: Deploy Desktop Builds to R2
+      keep_runs:
+        description: Number of newest runs to keep.
+        required: true
+        type: number
+        default: 3
+      dry_run:
+        description: List runs without deleting them.
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    name: Delete old workflow runs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Delete old runs
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const workflowName = core.getInput("workflow_name", {required: true});
+            const keepRuns = Number(core.getInput("keep_runs", {required: true}));
+            const dryRun = core.getInput("dry_run", {required: true}) === "true";
+
+            if (!Number.isInteger(keepRuns) || keepRuns < 1) {
+              throw new Error("keep_runs must be a positive integer.");
+            }
+
+            const {owner, repo} = context.repo;
+            const workflows = await github.paginate(
+              github.rest.actions.listRepoWorkflows,
+              {owner, repo, per_page: 100}
+            );
+            const workflow = workflows.find((candidate) => candidate.name === workflowName);
+            if (!workflow) {
+              throw new Error(`Workflow not found: ${workflowName}`);
+            }
+
+            const runs = await github.paginate(
+              github.rest.actions.listWorkflowRuns,
+              {owner, repo, workflow_id: workflow.id, per_page: 100}
+            );
+            const deletableRuns = runs
+              .filter((run) => run.status === "completed")
+              .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
+              .slice(keepRuns);
+
+            core.info(`Workflow: ${workflow.name}`);
+            core.info(`Completed runs: ${runs.filter((run) => run.status === "completed").length}`);
+            core.info(`Keeping newest completed runs: ${keepRuns}`);
+            core.info(`${dryRun ? "Would delete" : "Deleting"} runs: ${deletableRuns.length}`);
+
+            for (const run of deletableRuns) {
+              core.info(`${dryRun ? "Would delete" : "Deleting"} #${run.run_number}: ${run.name} (${run.id}) from ${run.created_at}`);
+              if (!dryRun) {
+                await github.rest.actions.deleteWorkflowRun({
+                  owner,
+                  repo,
+                  run_id: run.id,
+                });
+              }
+            }
