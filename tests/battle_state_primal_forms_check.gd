@@ -40,13 +40,14 @@ func _check_primal_form(base_species: String, item: String, expected_species: St
 	)
 
 	state.apply_event_conditions([{
-		"type": "mega",
+		"type": "primal",
 		"target": "p1a: %s" % base_species,
+		"item": item,
 	}])
 	_check_equal(
 		state.get_active_pokemon_species("p1"),
 		expected_species,
-		"%s active display species after event" % expected_species
+		"%s active display species after primal event" % expected_species
 	)
 
 

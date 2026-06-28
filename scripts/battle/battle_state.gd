@@ -348,7 +348,7 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 			_apply_transform_event_to_requests(event)
 			continue
 
-		if event_type == "mega":
+		if event_type == "mega" or event_type == "primal":
 			_apply_mega_event_to_requests(event)
 			continue
 
@@ -776,7 +776,7 @@ func _remove_deferred_display_fields_from_requests(events_value: Variant) -> voi
 		match event_type:
 			"transform":
 				_remove_deferred_transform_fields_from_requests(event)
-			"mega":
+			"mega", "primal":
 				_remove_deferred_mega_fields_from_requests(event)
 
 func _remove_deferred_transform_fields_from_requests(event: Dictionary) -> void:

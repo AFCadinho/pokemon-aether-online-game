@@ -118,7 +118,7 @@ func _response_has_deferred_display_event(response: Dictionary, since_event_seq 
 
 		var event: Dictionary = event_value as Dictionary
 		var event_type := str(event.get("type", ""))
-		if event_type == "transform" or event_type == "mega":
+		if event_type == "transform" or event_type == "mega" or event_type == "primal":
 			return true
 
 	return false

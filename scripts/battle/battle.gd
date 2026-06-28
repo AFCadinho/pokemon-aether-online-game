@@ -4279,7 +4279,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		_remember_battle_modifier_event(event_data)
 
 		var event_type: String = str(event_data.get("type", ""))
-		if event_type == "mega":
+		if event_type == "mega" or event_type == "primal":
 			_fill_mega_event_species(event_data)
 			battle_state.apply_event_conditions([event_data])
 			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
@@ -4576,8 +4576,9 @@ func _mark_non_pvp_response_event_seq_consumed(response: Dictionary) -> void:
 	last_rendered_event_seq = max(last_rendered_event_seq, response_event_seq)
 
 func _get_battle_event_key(event_data: Dictionary) -> String:
-	if str(event_data.get("type", "")) == "mega":
-		return "mega|%s" % str(event_data.get("target", ""))
+	var event_type := str(event_data.get("type", ""))
+	if event_type == "mega" or event_type == "primal":
+		return "%s|%s" % [event_type, str(event_data.get("target", ""))]
 
 	return "%s|%s|%s|%s|%s" % [
 		str(event_data.get("type", "")),
@@ -4850,7 +4851,7 @@ func _find_next_form_change_event_index(
 
 		var event_data: Dictionary = event_value as Dictionary
 		var event_type: String = str(event_data.get("type", ""))
-		if event_type != "mega":
+		if event_type != "mega" and event_type != "primal":
 			continue
 
 		var target_ident: String = str(event_data.get("target", ""))
@@ -4870,7 +4871,7 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 
 		var event_data: Dictionary = event as Dictionary
 		match str(event_data.get("type", "")):
-			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega":
+			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega", "primal":
 				start_events.append(event_data)
 
 	return start_events

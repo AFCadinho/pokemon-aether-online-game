@@ -6,6 +6,7 @@
 - Added an Electric Terrain battlefield animation with yellow terrain particles and ambient tinting.
 - Added distinct Primordial Sea and Desolate Land battlefield animations using heavier rain, storm haze, harsh sunlight, and heat haze layers.
 - Added a Delta Stream battlefield animation with wind bands, air particles, cloud veil, and cool sky tinting.
+- Added Primal Reversion event handling so Red Orb and Blue Orb transformations can play the mega evolution animation.
 - Added an explicit follower sprite map so Pokemon forms can resolve to the correct follower sprite assets.
 - Added a follower sprite map validation tool for future form sprite updates.
 

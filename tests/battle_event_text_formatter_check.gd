@@ -62,6 +62,11 @@ func _init() -> void:
 		"Pikachu restored HP using its Leftovers!",
 		"leftovers heal message"
 	)
+	_check_equal(
+		formatter.format_primal_event("Kyogre", "Kyogre-Primal"),
+		"Kyogre underwent Primal Reversion into Kyogre-Primal!",
+		"primal reversion message"
+	)
 
 	quit(1 if failed else 0)
 

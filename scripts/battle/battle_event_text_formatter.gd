@@ -141,6 +141,15 @@ func format_mega_event(actor: String, species: String) -> String:
 
 	return "%s has Mega Evolved!" % actor
 
+func format_primal_event(actor: String, species: String) -> String:
+	if actor == "":
+		actor = "Pokemon"
+
+	if species != "":
+		return "%s underwent Primal Reversion into %s!" % [actor, species]
+
+	return "%s underwent Primal Reversion!" % actor
+
 func format_wild_battle_start_messages(player_species: String, opponent_species: String) -> Array[String]:
 	if player_species == "":
 		player_species = "Pokemon"
