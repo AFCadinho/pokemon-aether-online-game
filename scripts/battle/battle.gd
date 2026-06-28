@@ -5495,7 +5495,7 @@ func _submit_npc_lead() -> Dictionary:
 func _auto_force_switch_opponent_if_needed() -> bool:
 	if _is_pvp_battle():
 		return false
-	if not force_switch_flow.player_needs_force_switch(_get_opponent_state_player_id()):
+	if not _opponent_player_needs_force_switch_ui():
 		return false
 
 	return await _submit_npc_choice_and_render()
