@@ -8,6 +8,7 @@
 - Added backend capture handling that consumes balls, resolves catch success, creates owned Pokemon, and updates party state when space is available.
 - Added pass-turn battle resolution so failed wild capture attempts let the wild Pokemon take its turn.
 - Added stored Poké Ball metadata and an initial Poké Ball summon animation for wild battle player leads.
+- Added Pokemon cry assets and cry playback on Poké Ball release moments.
 
 **Changed**
 - Wild battle Bag actions now use backend catch results for shake count, success state, inventory updates, and battle completion.

@@ -1,6 +1,8 @@
 extends Node
 
+const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
 const DEFAULT_BUS := SettingsManager.SFX_BUS
+const POKEMON_CRY_VOLUME_DB := -7.0
 const SOUND_DATA := {
 	"battle_item_use": {
 		"path": "res://assets/audio/sfx/battle/battle_item_use.ogg",
@@ -37,6 +39,7 @@ const SOUND_DATA := {
 }
 
 var stream_cache: Dictionary = {}
+var pokemon_cry_resolver := PokemonCryResolver.new()
 
 
 func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 1.0) -> void:
@@ -62,6 +65,31 @@ func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 
 	player.play()
 
 
+func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scale: float = 1.0) -> void:
+	var cry_key := _get_pokemon_cry_key(species)
+	if cry_key == "":
+		return
+
+	var sound_path := "%s/%s.ogg" % [PokemonCryResolver.POKEMON_CRY_DIR, cry_key]
+	if not ResourceLoader.exists(sound_path):
+		return
+
+	var stream := _get_stream("pokemon_cry:%s" % cry_key, {
+		"path": sound_path,
+	})
+	if stream == null:
+		return
+
+	var player := AudioStreamPlayer.new()
+	player.stream = stream
+	player.bus = DEFAULT_BUS
+	player.volume_db = POKEMON_CRY_VOLUME_DB + volume_offset_db
+	player.pitch_scale = pitch_scale
+	player.finished.connect(player.queue_free)
+	add_child(player)
+	player.play()
+
+
 func _get_stream(sound_key: String, sound_data: Dictionary) -> AudioStream:
 	if stream_cache.has(sound_key):
 		return stream_cache[sound_key] as AudioStream
@@ -76,3 +104,7 @@ func _get_stream(sound_key: String, sound_data: Dictionary) -> AudioStream:
 	if stream != null:
 		stream_cache[sound_key] = stream
 	return stream
+
+
+func _get_pokemon_cry_key(species: String) -> String:
+	return pokemon_cry_resolver.get_cry_key(species)

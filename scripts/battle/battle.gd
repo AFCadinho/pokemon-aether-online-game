@@ -90,6 +90,7 @@ var summon_target_sprite_box: Control
 var summon_original_z_index := 0
 var summon_original_z_as_relative := true
 var summon_release_audio_mode := SUMMON_RELEASE_AUDIO_BALL
+var summon_release_cry_species := ""
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -3694,7 +3695,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	_show_original_player_lead_before_initial_events(player_species)
 	await get_tree().process_frame
-	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_sprite_box, "back")
+	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
 	await _render_initial_battle_events(api_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -3724,8 +3725,8 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	_show_original_player_lead_before_initial_events(player_species)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	await get_tree().process_frame
-	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_sprite_box, "back")
-	await _play_lead_summon("poke-ball", enemy_sprite_box, "front")
+	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	await _play_lead_summon("poke-ball", opponent_species, enemy_sprite_box, "front")
 	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -3880,7 +3881,7 @@ func _show_original_player_lead_before_initial_events(species: String) -> void:
 	_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
 	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
-func _play_lead_summon(ball_item_id: String, sprite_box: Control, side: String) -> void:
+func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
 	if sprite_box == null:
 		return
 	if pokeball_summon_animation_player == null:
@@ -3891,9 +3892,12 @@ func _play_lead_summon(ball_item_id: String, sprite_box: Control, side: String) 
 	_prepare_summon_target_hidden(sprite_box)
 	summon_target_sprite_box = sprite_box
 	var previous_release_audio_mode := summon_release_audio_mode
+	var previous_release_cry_species := summon_release_cry_species
 	summon_release_audio_mode = SUMMON_RELEASE_AUDIO_BALL
+	summon_release_cry_species = cry_species
 	await pokeball_summon_animation_player.play_summon(ball_item_id, target_rect, side, arena_rect)
 	summon_release_audio_mode = previous_release_audio_mode
+	summon_release_cry_species = previous_release_cry_species
 	_reset_summon_target_visibility(sprite_box)
 	if summon_target_sprite_box == sprite_box:
 		summon_target_sprite_box = null
@@ -3903,6 +3907,7 @@ func _on_summon_ball_thrown() -> void:
 
 func _on_summon_pokemon_released() -> void:
 	_play_summon_release_audio()
+	_play_summon_release_cry()
 	_fade_summon_target_to_alpha(summon_target_sprite_box, 1.0, 0.16)
 
 func _play_summon_release_audio() -> void:
@@ -3911,6 +3916,12 @@ func _play_summon_release_audio() -> void:
 			SfxManager.play("summon_release")
 		SUMMON_RELEASE_AUDIO_NONE:
 			pass
+
+func _play_summon_release_cry() -> void:
+	if summon_release_cry_species.strip_edges() == "":
+		return
+
+	SfxManager.play_pokemon_cry(summon_release_cry_species)
 
 func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String) -> void:
 	if sprite_box == null:
@@ -3948,7 +3959,7 @@ func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String
 	sprite_box.z_index = original_z_index
 	sprite_box.z_as_relative = original_z_as_relative
 
-func _play_switch_release(ball_item_id: String, sprite_box: Control, side: String) -> void:
+func _play_switch_release(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
 	if sprite_box == null:
 		return
 	if pokeball_summon_animation_player == null:
@@ -3959,9 +3970,12 @@ func _play_switch_release(ball_item_id: String, sprite_box: Control, side: Strin
 	_prepare_summon_target_hidden(sprite_box)
 	summon_target_sprite_box = sprite_box
 	var previous_release_audio_mode := summon_release_audio_mode
+	var previous_release_cry_species := summon_release_cry_species
 	summon_release_audio_mode = SUMMON_RELEASE_AUDIO_NONE
+	summon_release_cry_species = cry_species
 	await pokeball_summon_animation_player.play_release(ball_item_id, target_rect, side, arena_rect)
 	summon_release_audio_mode = previous_release_audio_mode
+	summon_release_cry_species = previous_release_cry_species
 	_reset_summon_target_visibility(sprite_box)
 	if summon_target_sprite_box == sprite_box:
 		summon_target_sprite_box = null
@@ -3984,7 +3998,9 @@ func _play_switch_release_for_event(event_data: Dictionary, player_id: String) -
 	if sprite_box == null:
 		return
 
-	await _play_switch_release(_get_switch_release_ball_item_id(event_data, player_id), sprite_box, _get_switch_animation_side(player_id))
+	var switch_ident := _get_switch_event_ident(event_data)
+	var species := _get_switch_event_species(event_data, switch_ident)
+	await _play_switch_release(_get_switch_release_ball_item_id(event_data, player_id), species, sprite_box, _get_switch_animation_side(player_id))
 
 func _should_play_switch_ball_animation(player_id: String) -> bool:
 	if player_id == "p1":
