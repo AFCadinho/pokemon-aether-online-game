@@ -31,6 +31,27 @@ When you want players to receive a new build:
 
 After a successful run, the workflow uploads the new game zips and launcher manifests to R2. The launcher then sees the new manifest version and downloads the update.
 
+## Changelog
+
+Keep release notes in `CHANGELOG.md`.
+
+The changelog uses Discord-friendly Markdown on purpose:
+
+```md
+**Added**
+- Added a new feature.
+
+**Fixed**
+- Fixed a reported bug.
+
+**Changed**
+- Changed an existing behavior.
+```
+
+During development, add finished changes under `## Unreleased`. When publishing a release, rename the current `## Unreleased` section to the new version, for example `## 0.2.1 - 2026-06-28`, then add a new empty `## Unreleased` section above it.
+
+For Discord, copy the release section contents from `CHANGELOG.md` into the workflow's `release_notes` field and add `Open the launcher to update.` at the end.
+
 ## GitHub CLI
 
 The same release workflow can be started from the terminal:
