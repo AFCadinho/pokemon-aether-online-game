@@ -3,6 +3,7 @@ extends Node
 class_name InventoryServiceNode
 
 const INVENTORY_ENDPOINT := "/game/inventory"
+const WILD_BATTLE_CATCH_ENDPOINT := "/game/wild-battles/%s/catch"
 const DEV_ADD_ITEM_ENDPOINT := "/game/dev/inventory/items"
 const DEV_CLEAR_ITEMS_ENDPOINT := "/game/dev/inventory/items"
 const ITEM_SEARCH_ENDPOINT := "/game/items/search?q=%s"
@@ -31,6 +32,53 @@ func load_inventory() -> Dictionary:
 	return {
 		"success": true,
 		"items": _array_from_value(body.get("items", [])),
+	}
+
+
+func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if battle_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing battle id.",
+		}
+	if item_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing item id.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var endpoint := WILD_BATTLE_CATCH_ENDPOINT % battle_id.uri_encode()
+	var response: Dictionary = await _request_json(
+		base_url + endpoint,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"itemId": item_id,
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	return {
+		"success": true,
+		"battleId": str(body.get("battleId", battle_id)),
+		"caught": bool(body.get("caught", false)),
+		"shakeCount": int(body.get("shakeCount", 0)),
+		"message": str(body.get("message", "")),
+		"itemId": str(body.get("itemId", item_id)),
+		"addedToParty": bool(body.get("addedToParty", false)),
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"inventory": _array_from_value(inventory.get("items", [])),
+		"party": _array_from_value(party.get("party", [])),
 	}
 
 

@@ -30,6 +30,8 @@
 [ext_resource type="Texture2D" uid="uid://c2cbq02hrb073" path="res://assets/battles/mechanics/z-move.png" id="38_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://dn8i3j64uec8i" path="res://assets/battles/mechanics/tera-icon.png" id="39_dsauo"]
 [ext_resource type="Script" uid="uid://bt1ws8crgo0pw" path="res://scripts/battle/battle_ui/battle_damage_calc_panel.gd" id="40_calc"]
+[ext_resource type="Script" path="res://scripts/battle/battle_ui/bag_grid.gd" id="41_bag"]
+[ext_resource type="Script" path="res://scripts/battle/animations/capture_ball_animation_player.gd" id="42_capture"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgdsx"]
 content_margin_left = 8.0
@@ -1166,6 +1168,17 @@ offset_bottom = -73.5
 grow_horizontal = 1
 grow_vertical = 0
 
+[node name="CaptureBallAnimationPlayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1852018222]
+z_index = 60
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("42_capture")
+
 [node name="PlayerHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=997269760 instance=ExtResource("2_01pft")]
 layout_mode = 1
 anchors_preset = 1
@@ -1398,6 +1411,13 @@ layout_mode = 2
 
 [node name="PartySlot6" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+
+[node name="BagGrid" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1779267922]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("41_bag")
 
 [node name="CalcPanel" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=125224096]
 visible = false

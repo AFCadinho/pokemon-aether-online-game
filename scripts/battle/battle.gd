@@ -83,6 +83,7 @@ var damage_calc_defender_species_key := ""
 var damage_calc_defender_assumptions: Dictionary = {}
 var damage_calc_assumption_edited_fields: Dictionary = {}
 var damage_calc_saved_assumptions: Dictionary = {}
+var bag_inventory_request_token := 0
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -111,6 +112,7 @@ var active_enemy_pokemon: Pokemon
 @onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
 @onready var moves_grid: MovesGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid
 @onready var party_grid: PartyGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid
+@onready var bag_grid: BattleBagGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/BagGrid
 @onready var calc_panel: BattleDamageCalcPanel = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel
 @onready var mechanics_panel: Control = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel
 @onready var mega_evolution_button: TextureButton = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon
@@ -130,6 +132,7 @@ var active_enemy_pokemon: Pokemon
 @onready var enemy_battle_platform: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattlePlatform2
 @onready var enemy_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemySpriteBox
 @onready var player_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerSpriteBox
+@onready var capture_ball_animation_player: CaptureBallAnimationPlayer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/CaptureBallAnimationPlayer
 @onready var enemy_team_preview_layer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemyTeamPreviewLayer
 @onready var player_team_preview_layer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerTeamPreviewLayer
 @onready var pokemon_hover_card: Control = $PokemonHoverCard
@@ -193,6 +196,8 @@ func _ready() -> void:
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
+	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
+		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_setup_weather_presentation()
@@ -1449,6 +1454,7 @@ func _sync_action_panel_mode_visibility() -> void:
 	if is_calc_mode:
 		moves_grid.visible = false
 		party_grid.visible = false
+		bag_grid.visible = false
 		_hide_party_hover()
 		_hide_move_hover()
 		return
@@ -1457,12 +1463,19 @@ func _sync_action_panel_mode_visibility() -> void:
 		ActionView.MOVES:
 			moves_grid.visible = true
 			party_grid.visible = false
+			bag_grid.visible = false
 		ActionView.PARTY:
 			moves_grid.visible = false
 			party_grid.visible = true
+			bag_grid.visible = false
+		ActionView.BAG:
+			moves_grid.visible = false
+			party_grid.visible = false
+			bag_grid.visible = true
 		_:
 			moves_grid.visible = false
 			party_grid.visible = false
+			bag_grid.visible = false
 
 func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
@@ -1928,6 +1941,8 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 		moves_grid.set_input_disabled(is_locked)
 	if party_grid.has_method("set_input_disabled"):
 		party_grid.set_input_disabled(is_locked)
+	if bag_grid.has_method("set_input_disabled"):
+		bag_grid.set_input_disabled(is_locked)
 	if not is_locked:
 		_refresh_bag_action_disabled()
 		if team_preview_lead_selection_active:
@@ -2020,15 +2035,100 @@ func _open_bag() -> void:
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
 	party_grid.visible = false
+	bag_grid.visible = true
 	_hide_party_hover()
 	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
+	_refresh_bag_inventory()
 
 func _can_use_bag_in_current_battle() -> bool:
 	return battle_type == BattleType.WILD and not _is_pvp_battle()
 
 func _refresh_bag_action_disabled() -> void:
 	action_buttons.set_action_disabled("bag", not _can_use_bag_in_current_battle())
+
+func _refresh_bag_inventory() -> void:
+	bag_inventory_request_token += 1
+	var request_token := bag_inventory_request_token
+	bag_grid.set_loading()
+
+	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	if request_token != bag_inventory_request_token:
+		return
+	if current_action_view != ActionView.BAG:
+		return
+
+	if not bool(inventory_result.get("success", false)):
+		bag_grid.show_message(str(inventory_result.get("error", "Could not load Bag.")))
+		return
+
+	var inventory_items_value: Variant = inventory_result.get("items", [])
+	var inventory_items: Array = []
+	if inventory_items_value is Array:
+		inventory_items = inventory_items_value
+	bag_grid.set_items(inventory_items)
+
+func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
+	if battle_finished or battle_input_locked:
+		return
+	if not _can_use_bag_in_current_battle():
+		current_action_panel.set_message("Bag cannot be used in this battle.")
+		_refresh_bag_action_disabled()
+		return
+
+	var item_id := str(item_data.get("itemId", "")).strip_edges()
+	if item_id.is_empty():
+		return
+
+	var item_name := str(item_data.get("name", item_id)).strip_edges()
+	if item_name.is_empty():
+		item_name = item_id
+
+	var current_battle_id := ""
+	if battle_state != null:
+		current_battle_id = battle_state.battle_id.strip_edges()
+	if current_battle_id.is_empty():
+		current_action_panel.set_message("Cannot catch Pokemon without a battle id.")
+		return
+
+	_set_battle_input_locked(true)
+	current_action_panel.set_message("You used %s!" % item_name)
+	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
+	if not bool(capture_result.get("success", false)):
+		current_action_panel.set_message(str(capture_result.get("error", "Could not catch Pokemon.")))
+		_refresh_bag_inventory()
+		_set_battle_input_locked(false)
+		return
+
+	var updated_inventory_value: Variant = capture_result.get("inventory", [])
+	if updated_inventory_value is Array:
+		bag_grid.set_items(updated_inventory_value)
+
+	var caught := bool(capture_result.get("caught", false))
+	var shake_count := clampi(int(capture_result.get("shakeCount", 0)), 0, 3)
+	await capture_ball_animation_player.play_capture_preview(item_id, shake_count, caught, enemy_sprite_box.get_global_rect())
+
+	var capture_message := str(capture_result.get("message", ""))
+	if capture_message.is_empty():
+		capture_message = "Gotcha!" if caught else "The Pokemon broke free."
+	current_action_panel.set_message(capture_message)
+	_add_battle_log_message(capture_message)
+
+	if caught:
+		var party_value: Variant = capture_result.get("party", [])
+		if party_value is Array:
+			PlayerSave.replace_party_from_state(party_value)
+		await get_tree().create_timer(0.75).timeout
+		_finish_battle({
+			"reason": "caught",
+			"winner": "p1",
+			"pokemon": capture_result.get("pokemon", {}),
+			"itemId": item_id,
+			"skipPartyBattleSync": true,
+		})
+		return
+
+	_set_battle_input_locked(false)
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:
@@ -2147,8 +2247,9 @@ func _finish_battle(result: Dictionary) -> void:
 	_reset_damage_calc_assumptions()
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
-	_sync_player_save_from_battle_state()
-	PlayerPartyStateService.save_current_battle_party_state_deferred()
+	if not bool(result.get("skipPartyBattleSync", false)):
+		_sync_player_save_from_battle_state()
+		PlayerPartyStateService.save_current_battle_party_state_deferred()
 	battle_ended.emit(result)
 
 func _warn_if_pvp_finish_has_pending_render_work(result: Dictionary) -> void:
