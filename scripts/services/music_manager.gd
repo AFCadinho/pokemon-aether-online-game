@@ -2,8 +2,8 @@ extends Node
 
 const DEFAULT_OVERWORLD_MUSIC_PATH := "res://assets/music/overworld/kanto/routes/route1.ogg"
 const LOGIN_MUSIC_PATH := "res://assets/music/login/lugia_theme_lofi.ogg"
-const DEFAULT_WILD_BATTLE_MUSIC_PATH := "res://assets/music/battle/wild/Kanto Wild Battle.mp3"
-const DEFAULT_TRAINER_BATTLE_MUSIC_PATH := "res://assets/music/battle/trainer/Kalos Trainer Battle.mp3"
+const DEFAULT_WILD_BATTLE_MUSIC_PATH := "res://assets/music/battle/wild/Kanto Wild Battle.ogg"
+const DEFAULT_TRAINER_BATTLE_MUSIC_PATH := "res://assets/music/battle/trainer/Kalos Trainer Battle.ogg"
 const MUSIC_RES_ROOT := "res://assets/music"
 const MUSIC_RELATIVE_ROOT := "assets/music"
 const DEFAULT_BATTLE_MUSIC_ID := "default"

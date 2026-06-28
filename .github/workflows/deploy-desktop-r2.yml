@@ -61,7 +61,8 @@ env:
   POKEMON_GEN5_BACK_ASSET_SIZE: 248412184
   POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE: 317541005
   POKEMON_GEN5_SHINY_BACK_ASSET_SIZE: 251502026
-  MUSIC_ASSET_VERSION_PREFIX: music
+  MUSIC_ASSET_VERSION: music-69d1d3c3da19
+  MUSIC_ASSET_SIZE: 14124193
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
 
@@ -292,44 +293,7 @@ jobs:
           register_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_SIZE}" "true"
           register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE}" "true"
           register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE}" "true"
-
-      - name: Package music asset pack
-        run: |
-          mkdir -p builds/music
-          python3 - <<'PY'
-          from pathlib import Path
-          from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
-          import os
-
-          source_dir = Path("assets/music")
-          hash_input = []
-          for path in sorted(source_dir.rglob("*")):
-              if path.is_file() and path.suffix != ".import":
-                  hash_input.append(path.relative_to(source_dir).as_posix().encode("utf-8"))
-                  hash_input.append(path.read_bytes())
-          import hashlib
-          digest = hashlib.sha256()
-          for value in hash_input:
-              digest.update(value)
-          version = f"{os.environ['MUSIC_ASSET_VERSION_PREFIX']}-{digest.hexdigest()[:12]}"
-          zip_path = Path("builds/music") / f"{version}.zip"
-          if zip_path.exists():
-              zip_path.unlink()
-
-          with ZipFile(zip_path, "w", ZIP_DEFLATED) as archive:
-              for path in sorted(source_dir.rglob("*")):
-                  if not path.is_file() or path.suffix == ".import":
-                      continue
-                  archive_path = path.as_posix()
-                  info = ZipInfo(archive_path)
-                  info.compress_type = ZIP_DEFLATED
-                  info.external_attr = 0o644 << 16
-                  archive.writestr(info, path.read_bytes())
-          print(f"Wrote {zip_path} ({zip_path.stat().st_size} bytes)")
-          with Path("/tmp/asset_pack_args.txt").open("a", encoding="utf-8") as args_file:
-              args_file.write("--asset-pack\n")
-              args_file.write(f"music:{version}:{zip_path.as_posix()}\n")
-          PY
+          register_external_pack "music" "${MUSIC_ASSET_VERSION}" "${MUSIC_ASSET_SIZE}"
 
       - name: Package launcher release
         run: |

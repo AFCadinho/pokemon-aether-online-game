@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.1 - 2026-06-28
 
 **Added**
 - Added an Electric Terrain battlefield animation with yellow terrain particles and ambient tinting.
@@ -12,6 +12,7 @@
 - Added a follower sprite map validation tool for future form sprite updates.
 
 **Fixed**
+- Fixed Hidden Power battle move slots showing the wrong type and PP in battle.
 - Fixed Choice-locked and otherwise disabled battle moves staying clickable in the move UI.
 - Fixed NPC trainer battles getting stuck with empty move slots after the opponent fainted and needed a forced switch.
 - Fixed Primal Groudon and Primal Kyogre hover stats still showing their base form stats after Red Orb or Blue Orb activation.

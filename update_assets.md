@@ -1,5 +1,7 @@
 # Updating Sprite Assets
 
+For music assets, use `update_music.md`. This document only covers Pokemon sprite packs.
+
 Pokemon sprite assets are intentionally not stored in git because the files are too large. Keep the local folders under:
 
 ```text
