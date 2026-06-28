@@ -43,9 +43,9 @@ vertical_alignment = 1
 [node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1266734243]
 layout_mode = 2
 size_flags_horizontal = 2
-text = "Alakazam"
 
 [node name="GenderIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=109394110]
+visible = false
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 texture = ExtResource("1_trgae")
@@ -58,13 +58,13 @@ size_flags_horizontal = 10
 theme_override_constants/separation = 8
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1625273681]
+visible = false
 layout_mode = 2
-text = "PSN"
 
 [node name="LevelLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1890596494]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Lv. 100"
+text = "Lv. --"
 
 [node name="HPRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1866931360]
 layout_mode = 2
@@ -81,4 +81,4 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
-value = 75.0
+value = 100.0

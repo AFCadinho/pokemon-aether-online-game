@@ -29,12 +29,18 @@ func set_trainer_team(team: Array) -> void:
 func get_player_save_pokemon_for_battle_data(pokemon_data: Dictionary) -> Pokemon:
 	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
 	var saved_pokemon := get_player_save_pokemon_by_instance_id(instance_id)
-	if saved_pokemon != null and _has_temporary_battle_display_form(pokemon_data):
+	if saved_pokemon != null:
 		return saved_pokemon
-	if saved_pokemon == null or not saved_species_matches_battle_data(saved_pokemon, pokemon_data):
-		return null
 
-	return saved_pokemon
+	saved_pokemon = get_player_save_pokemon_by_canonical_slot(pokemon_data)
+	if saved_pokemon != null:
+		return saved_pokemon
+
+	saved_pokemon = get_unique_player_save_pokemon_by_battle_species(pokemon_data)
+	if saved_pokemon != null:
+		return saved_pokemon
+
+	return null
 
 
 func enrich_display_data(player_id: String, display_data: Dictionary) -> void:
@@ -57,6 +63,40 @@ func get_player_save_pokemon_by_instance_id(instance_id: String) -> Pokemon:
 	return null
 
 
+func get_player_save_pokemon_by_canonical_slot(pokemon_data: Dictionary) -> Pokemon:
+	var canonical_slot := _get_canonical_party_slot(pokemon_data)
+	if canonical_slot <= 0:
+		return null
+
+	var slot_index := canonical_slot - 1
+	if slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return null
+
+	return PlayerSave.party[slot_index] as Pokemon
+
+
+func get_unique_player_save_pokemon_by_battle_species(pokemon_data: Dictionary) -> Pokemon:
+	var battle_species := ""
+	if battle_state != null:
+		battle_species = battle_state.get_species_from_pokemon_data(pokemon_data)
+	if battle_species == "":
+		battle_species = str(pokemon_data.get("species", pokemon_data.get("displaySpecies", "")))
+
+	var normalized_battle_species := normalize_species_for_compare(battle_species)
+	if normalized_battle_species == "":
+		return null
+
+	var matched_pokemon: Pokemon = null
+	for pokemon in PlayerSave.party:
+		if not saved_species_is_compatible_with_battle_species(pokemon, battle_species):
+			continue
+		if matched_pokemon != null:
+			return null
+		matched_pokemon = pokemon
+
+	return matched_pokemon
+
+
 func saved_species_matches_battle_data(saved_pokemon: Pokemon, pokemon_data: Dictionary) -> bool:
 	if battle_state == null:
 		return false
@@ -65,7 +105,21 @@ func saved_species_matches_battle_data(saved_pokemon: Pokemon, pokemon_data: Dic
 	if battle_species == "":
 		return true
 
-	return normalize_species_for_compare(saved_pokemon.species) == normalize_species_for_compare(battle_species)
+	return saved_species_is_compatible_with_battle_species(saved_pokemon, battle_species)
+
+
+func saved_species_is_compatible_with_battle_species(saved_pokemon: Pokemon, battle_species: String) -> bool:
+	if saved_pokemon == null:
+		return false
+
+	var normalized_saved_species := normalize_species_for_compare(saved_pokemon.species)
+	var normalized_battle_species := normalize_species_for_compare(battle_species)
+	if normalized_saved_species == "" or normalized_battle_species == "":
+		return true
+	if normalized_saved_species == normalized_battle_species:
+		return true
+
+	return normalize_species_base_for_compare(normalized_saved_species) == normalize_species_base_for_compare(normalized_battle_species)
 
 
 func pokemon_data_has_shiny_value(pokemon_data: Dictionary) -> bool:
@@ -93,6 +147,61 @@ func get_pokemon_data_shiny_value(pokemon_data: Dictionary) -> bool:
 
 func normalize_species_for_compare(species: String) -> String:
 	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
+
+
+func normalize_species_base_for_compare(species: String) -> String:
+	var normalized_species := normalize_species_for_compare(species)
+	for suffix in [
+		"-alola", "-galar", "-hisui", "-paldea",
+		"-therian", "-incarnate", "-origin", "-altered",
+		"-wash", "-heat", "-frost", "-fan", "-mow",
+		"-sky", "-land", "-blade", "-shield",
+	]:
+		if normalized_species.ends_with(suffix):
+			return normalized_species.substr(0, normalized_species.length() - suffix.length())
+
+	return normalized_species
+
+
+func _get_canonical_party_slot(pokemon_data: Dictionary) -> int:
+	var party_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["partySlot", "party_slot"])
+	if party_slot > 0:
+		return party_slot
+
+	var metadata_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["metadataSlot", "metadata_slot"])
+	if metadata_slot > 0:
+		return metadata_slot
+
+	return _get_pokemon_key_canonical_party_slot(pokemon_data)
+
+
+func _get_pokemon_key_canonical_party_slot(pokemon_data: Dictionary) -> int:
+	var pokemon_key := str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))).strip_edges()
+	var slot_marker := ":slot:"
+	if pokemon_key.contains(slot_marker):
+		var slot_text := pokemon_key.split(slot_marker)[1]
+		if slot_text.is_valid_int():
+			var key_slot := int(slot_text)
+			if key_slot > 0:
+				return key_slot
+
+	return -1
+
+
+func _get_positive_slot_from_pokemon_data(pokemon_data: Dictionary, keys: Array) -> int:
+	for key in keys:
+		if not pokemon_data.has(key):
+			continue
+
+		var slot_value: Variant = pokemon_data.get(key)
+		if slot_value == null or str(slot_value).strip_edges() == "":
+			continue
+
+		var slot := int(slot_value)
+		if slot > 0:
+			return slot
+
+	return -1
 
 
 func _enrich_display_data_from_player_save(display_data: Dictionary) -> void:

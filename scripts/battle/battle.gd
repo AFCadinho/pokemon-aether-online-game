@@ -830,8 +830,7 @@ func _get_player_save_pokemon_for_battle_display_data(pokemon_data: Dictionary, 
 		var slot_index := canonical_slot - 1
 		if slot_index >= 0 and slot_index < PlayerSave.party.size():
 			var slot_pokemon: Pokemon = PlayerSave.party[slot_index] as Pokemon
-			if _saved_pokemon_matches_battle_species(slot_pokemon, pokemon_data):
-				return slot_pokemon
+			return slot_pokemon
 
 	if fallback_index >= 0 and fallback_index < PlayerSave.party.size():
 		var fallback_pokemon: Pokemon = PlayerSave.party[fallback_index] as Pokemon
@@ -850,7 +849,7 @@ func _saved_pokemon_matches_battle_species(saved_pokemon: Pokemon, pokemon_data:
 	if battle_species == "":
 		return true
 
-	return _normalize_species_for_compare(saved_pokemon.species) == _normalize_species_for_compare(battle_species)
+	return _saved_pokemon_species_is_compatible(saved_pokemon.species, battle_species)
 
 func _get_unique_player_save_pokemon_by_species(pokemon_data: Dictionary) -> Pokemon:
 	var display_species := ""
@@ -865,13 +864,24 @@ func _get_unique_player_save_pokemon_by_species(pokemon_data: Dictionary) -> Pok
 
 	var matched_pokemon: Pokemon = null
 	for pokemon in PlayerSave.party:
-		if _normalize_species_for_compare(pokemon.species) != normalized_display_species:
+		if not _saved_pokemon_species_is_compatible(pokemon.species, display_species):
 			continue
 		if matched_pokemon != null:
 			return null
 		matched_pokemon = pokemon
 
 	return matched_pokemon
+
+
+func _saved_pokemon_species_is_compatible(saved_species: String, battle_species: String) -> bool:
+	var normalized_saved_species := _normalize_species_for_compare(saved_species)
+	var normalized_battle_species := _normalize_species_for_compare(battle_species)
+	if normalized_saved_species == "" or normalized_battle_species == "":
+		return true
+	if normalized_saved_species == normalized_battle_species:
+		return true
+
+	return _normalize_species_base_for_compare(normalized_saved_species) == _normalize_species_base_for_compare(normalized_battle_species)
 
 func _position_move_hover_card() -> void:
 	if current_move_hover_rect.size != Vector2.ZERO and move_hover_card.has_method("position_near_rect"):
@@ -1242,6 +1252,20 @@ func _get_raw_pvp_hover_ident(display_ident: String) -> String:
 
 func _normalize_species_for_compare(species: String) -> String:
 	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")
+
+
+func _normalize_species_base_for_compare(species: String) -> String:
+	var normalized_species := _normalize_species_for_compare(species)
+	for suffix in [
+		"-alola", "-galar", "-hisui", "-paldea",
+		"-therian", "-incarnate", "-origin", "-altered",
+		"-wash", "-heat", "-frost", "-fan", "-mow",
+		"-sky", "-land", "-blade", "-shield",
+	]:
+		if normalized_species.ends_with(suffix):
+			return normalized_species.substr(0, normalized_species.length() - suffix.length())
+
+	return normalized_species
 
 func _hide_pokemon_hover() -> void:
 	hover_state.invalidate_hover()

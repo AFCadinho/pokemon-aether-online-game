@@ -126,24 +126,23 @@ func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int)
 func _get_player_save_pokemon_for_display_data(display_data: Dictionary, fallback_index: int) -> Pokemon:
 	var instance_id := str(display_data.get("instanceId", display_data.get("instance_id", ""))).strip_edges()
 	if instance_id != "":
-		for pokemon in PlayerSave.party:
-			if pokemon.instance_id == instance_id:
-				return pokemon
+		var pokemon_by_instance := display_metadata.get_player_save_pokemon_by_instance_id(instance_id)
+		if pokemon_by_instance != null:
+			return pokemon_by_instance
 
 	var canonical_slot := _get_canonical_party_slot(display_data)
 	if canonical_slot > 0:
 		var slot_index := canonical_slot - 1
 		if slot_index >= 0 and slot_index < PlayerSave.party.size():
 			var slot_pokemon: Pokemon = PlayerSave.party[slot_index] as Pokemon
-			if _saved_pokemon_matches_display_species(slot_pokemon, display_data):
-				return slot_pokemon
+			return slot_pokemon
 
 	if fallback_index >= 0 and fallback_index < PlayerSave.party.size():
 		var fallback_pokemon: Pokemon = PlayerSave.party[fallback_index] as Pokemon
 		if _saved_pokemon_matches_display_species(fallback_pokemon, display_data):
 			return fallback_pokemon
 
-	return _get_unique_player_save_pokemon_by_species(display_data)
+	return display_metadata.get_unique_player_save_pokemon_by_battle_species(display_data)
 
 func _saved_pokemon_matches_display_species(saved_pokemon: Pokemon, display_data: Dictionary) -> bool:
 	if saved_pokemon == null:
@@ -157,28 +156,7 @@ func _saved_pokemon_matches_display_species(saved_pokemon: Pokemon, display_data
 	if display_species == "":
 		return true
 
-	return _normalize_species_for_compare(saved_pokemon.species) == _normalize_species_for_compare(display_species)
-
-func _get_unique_player_save_pokemon_by_species(display_data: Dictionary) -> Pokemon:
-	var display_species := ""
-	if battle_state != null:
-		display_species = battle_state.get_species_from_pokemon_data(display_data)
-	if display_species == "":
-		display_species = str(display_data.get("species", display_data.get("displaySpecies", "")))
-
-	var normalized_display_species := _normalize_species_for_compare(display_species)
-	if normalized_display_species == "":
-		return null
-
-	var matched_pokemon: Pokemon = null
-	for pokemon in PlayerSave.party:
-		if _normalize_species_for_compare(pokemon.species) != normalized_display_species:
-			continue
-		if matched_pokemon != null:
-			return null
-		matched_pokemon = pokemon
-
-	return matched_pokemon
+	return display_metadata.saved_species_is_compatible_with_battle_species(saved_pokemon, display_species)
 
 func _sort_display_team_by_canonical_party_slot(display_team: Array) -> Array:
 	if display_team.size() <= 1:

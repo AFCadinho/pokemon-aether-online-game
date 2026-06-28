@@ -19,6 +19,8 @@ const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
 const SORT_Z_MIN := -256
 const SORT_Z_MAX := 256
+const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
+const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
 
 @onready var sprite: AnimatedSprite2D = $Look/AnimatedSprite2D
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -399,7 +401,60 @@ func _is_ui_typing() -> bool:
 
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(get_feet_position().y / TILE_SIZE) + 1, SORT_Z_MIN, SORT_Z_MAX)
+	var npc_feet_y: float = get_feet_position().y
+	var sort_z := floori(npc_feet_y / TILE_SIZE) + 1
+	var sprite_sort_z := 0
+	var player_for_sorting := _get_player_for_sorting()
+	if player_for_sorting != null:
+		var player_feet_y: float = _get_body_feet_position(player_for_sorting).y
+		var player_canvas_item := player_for_sorting as CanvasItem
+		if player_canvas_item != null:
+			var player_sort_z := player_canvas_item.z_index
+			if npc_feet_y > player_feet_y + PLAYER_OVERLAP_SORT_Y_EPSILON:
+				sort_z = maxi(sort_z, player_sort_z + 1)
+				sprite_sort_z = _get_player_visual_sort_depth(player_for_sorting) + 1
+			elif npc_feet_y < player_feet_y - PLAYER_OVERLAP_SORT_Y_EPSILON:
+				sort_z = mini(sort_z, player_sort_z - 1)
+
+	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
+	if sprite != null:
+		sprite.z_index = sprite_sort_z
+
+
+func _get_player_for_sorting() -> Node2D:
+	if nearby_player != null and is_instance_valid(nearby_player):
+		return nearby_player
+
+	var tree := get_tree()
+	if tree == null:
+		return null
+
+	for candidate: Node in tree.get_nodes_in_group("player"):
+		var player_node := candidate as Node2D
+		if player_node != null and is_instance_valid(player_node):
+			return player_node
+
+	return null
+
+
+func _get_player_visual_sort_depth(player_node: Node2D) -> int:
+	var look_node := player_node.get_node_or_null("Look")
+	if look_node == null:
+		return DEFAULT_PLAYER_VISUAL_SORT_DEPTH
+
+	return maxi(_get_max_relative_z_index(look_node), DEFAULT_PLAYER_VISUAL_SORT_DEPTH)
+
+
+func _get_max_relative_z_index(node: Node) -> int:
+	var max_z := 0
+	var canvas_item := node as CanvasItem
+	if canvas_item != null and canvas_item.z_as_relative:
+		max_z = maxi(max_z, canvas_item.z_index)
+
+	for child: Node in node.get_children():
+		max_z = maxi(max_z, _get_max_relative_z_index(child))
+
+	return max_z
 
 
 func _get_cardinal_direction(direction: Vector2) -> Vector2:
