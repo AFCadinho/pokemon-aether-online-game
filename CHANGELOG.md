@@ -9,12 +9,15 @@
 - Added pass-turn battle resolution so failed wild capture attempts let the wild Pokemon take its turn.
 - Added stored Poké Ball metadata and an initial Poké Ball summon animation for wild battle player leads.
 - Added Pokemon cry assets and cry playback on Poké Ball release moments.
+- Added a summary-card Poké Ball selector for changing owned Pokemon summon ball cosmetics.
 
 **Changed**
 - Wild battle Bag actions now use backend catch results for shake count, success state, inventory updates, and battle completion.
 - Wild battle capture actions now write both item use and capture outcome messages to the battle log.
 - Trainer battle openings now play Poké Ball lead summon animations for both the player and NPC trainer.
+- PvP battle openings now play sequential Poké Ball lead summon animations for both sides.
 - Switch events now use fast Poké Ball recall and release animations without replaying the full throw.
+- PvP opponent switch and summon animations now use public Poké Ball metadata when available.
 - Switch release animations now leave audio space for future Pokemon cries.
 
 ## 0.2.1 - 2026-06-28

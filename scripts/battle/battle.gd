@@ -3726,7 +3726,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	await get_tree().process_frame
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
-	await _play_lead_summon("poke-ball", opponent_species, enemy_sprite_box, "front")
+	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -3756,7 +3756,15 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		"Go! %s!" % _get_active_display_species("p1"),
 		"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_species("p2")],
 	])
-	_show_original_player_lead_before_initial_events(_get_original_active_player_species(_get_active_display_species("p1")))
+	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
+	var opponent_species := _get_active_display_species("p2")
+	_show_original_player_lead_before_initial_events(player_species)
+	_show_original_active_pokemon_for_player("p2", opponent_species)
+	player_sprite_box.visible = false
+	enemy_sprite_box.visible = false
+	await get_tree().process_frame
+	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -4023,17 +4031,13 @@ func _get_switch_animation_side(player_id: String) -> String:
 	return "back" if player_id == "p1" else "front"
 
 func _get_switch_recall_ball_item_id(event_data: Dictionary, player_id: String) -> String:
-	if player_id != "p1":
-		return "poke-ball"
-
 	var from_ident := str(event_data.get("fromIdent", event_data.get("from_ident", ""))).strip_edges()
 	var pokemon_data := _get_player_team_pokemon_data_by_ident(player_id, from_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = battle_state.get_active_player_pokemon(player_id)
 	return _get_player_pokemon_data_ball_item_id(pokemon_data, "poke-ball")
 
 func _get_switch_release_ball_item_id(event_data: Dictionary, player_id: String) -> String:
-	if player_id != "p1":
-		return "poke-ball"
-
 	var switch_ident := _get_switch_event_ident(event_data)
 	var team := battle_state.get_player_team(player_id)
 	var target_index := _find_temporary_switch_target_index(team, switch_ident, event_data)
@@ -4042,7 +4046,10 @@ func _get_switch_release_ball_item_id(event_data: Dictionary, player_id: String)
 		if pokemon_value is Dictionary:
 			return _get_player_pokemon_data_ball_item_id(pokemon_value as Dictionary, "poke-ball")
 
-	return _get_active_summon_ball_item_id(player_id, "poke-ball")
+	if player_id == "p1":
+		return _get_active_summon_ball_item_id(player_id, "poke-ball")
+
+	return "poke-ball"
 
 func _get_player_team_pokemon_data_by_ident(player_id: String, ident: String) -> Dictionary:
 	var normalized_ident := _normalize_battle_ident(ident)
@@ -4111,8 +4118,12 @@ func _get_battle_arena_global_rect() -> Rect2:
 	return Rect2()
 
 func _get_active_summon_ball_item_id(player_id: String, fallback_item_id: String = "poke-ball") -> String:
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+	var active_ball_item_id := _get_player_pokemon_data_ball_item_id(active_pokemon, "")
+	if active_ball_item_id != "":
+		return active_ball_item_id
+
 	if player_id == "p1":
-		var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
 		var saved_pokemon := _get_saved_pokemon_for_active_data(active_pokemon)
 		if saved_pokemon != null and saved_pokemon.ball_item_id.strip_edges() != "":
 			return saved_pokemon.ball_item_id

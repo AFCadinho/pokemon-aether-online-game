@@ -334,6 +334,10 @@ var pokemon_summary_sprite: TextureRect
 var pokemon_summary_sprite_viewport: SubViewport
 var pokemon_summary_animated_sprite: AnimatedSprite2D
 var pokemon_summary_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
+var pokemon_summary_ball_button: Button
+var pokemon_summary_ball_icon: TextureRect
+var pokemon_summary_ball_picker: PanelContainer
+var pokemon_summary_ball_list: VBoxContainer
 var pokemon_summary_type_icon_row: HBoxContainer
 var pokemon_summary_title_label: Label
 var pokemon_summary_id_label: Label
@@ -3702,6 +3706,45 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	sprite_frame.add_child(pokemon_summary_sprite)
 	pokemon_summary_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
+	var ball_button_panel := PanelContainer.new()
+	ball_button_panel.custom_minimum_size = Vector2(30, 30)
+	ball_button_panel.anchor_left = 0.0
+	ball_button_panel.anchor_top = 0.0
+	ball_button_panel.anchor_right = 0.0
+	ball_button_panel.anchor_bottom = 0.0
+	ball_button_panel.offset_left = 6.0
+	ball_button_panel.offset_top = 6.0
+	ball_button_panel.offset_right = 36.0
+	ball_button_panel.offset_bottom = 36.0
+	ball_button_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_button_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#06111fe8"), Color("#d8b767"), 8, 1))
+	sprite_frame.add_child(ball_button_panel)
+
+	var ball_icon_center := CenterContainer.new()
+	ball_icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_button_panel.add_child(ball_icon_center)
+
+	pokemon_summary_ball_icon = TextureRect.new()
+	pokemon_summary_ball_icon.custom_minimum_size = Vector2(22, 22)
+	pokemon_summary_ball_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_summary_ball_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_ball_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_icon_center.add_child(pokemon_summary_ball_icon)
+
+	pokemon_summary_ball_button = Button.new()
+	pokemon_summary_ball_button.text = ""
+	pokemon_summary_ball_button.pressed.connect(_on_pokemon_summary_ball_button_pressed.bind(card_key))
+	pokemon_summary_ball_button.tooltip_text = "Change Poké Ball."
+	pokemon_summary_ball_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_ball_button.flat = true
+	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pokemon_summary_ball_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	pokemon_summary_ball_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pokemon_summary_ball_button.add_theme_stylebox_override("normal", _make_pokemon_summary_held_item_button_style(Color("#00000000"), Color("#00000000")))
+	pokemon_summary_ball_button.add_theme_stylebox_override("hover", _make_pokemon_summary_held_item_button_style(Color("#f4d78a14"), Color("#f4d78a88")))
+	pokemon_summary_ball_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_held_item_button_style(Color("#62d7ff18"), Color("#62d7ffaa")))
+	ball_button_panel.add_child(pokemon_summary_ball_button)
+
 	pokemon_summary_type_icon_row = HBoxContainer.new()
 	pokemon_summary_type_icon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokemon_summary_type_icon_row.add_theme_constant_override("separation", 4)
@@ -3721,6 +3764,22 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	pokemon_summary_hp_label.add_theme_font_size_override("font_size", 10)
 	pokemon_summary_hp_label.add_theme_color_override("font_color", Color("#f5df9a"))
 	left_stack.add_child(pokemon_summary_hp_label)
+
+	pokemon_summary_ball_picker = PanelContainer.new()
+	pokemon_summary_ball_picker.visible = false
+	pokemon_summary_ball_picker.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912f2"), UI_BORDER_SOFT, 8, 1))
+	left_stack.add_child(pokemon_summary_ball_picker)
+
+	var ball_picker_margin := MarginContainer.new()
+	ball_picker_margin.add_theme_constant_override("margin_left", 6)
+	ball_picker_margin.add_theme_constant_override("margin_top", 6)
+	ball_picker_margin.add_theme_constant_override("margin_right", 6)
+	ball_picker_margin.add_theme_constant_override("margin_bottom", 6)
+	pokemon_summary_ball_picker.add_child(ball_picker_margin)
+
+	pokemon_summary_ball_list = VBoxContainer.new()
+	pokemon_summary_ball_list.add_theme_constant_override("separation", 3)
+	ball_picker_margin.add_child(pokemon_summary_ball_list)
 
 	pokemon_summary_hp_bar = ProgressBar.new()
 	pokemon_summary_hp_bar.custom_minimum_size = Vector2(0, 8)
@@ -4328,6 +4387,9 @@ func _item_name_from_id(item_id: String) -> String:
 		formatted_words.append(word.substr(0, 1).to_upper() + word.substr(1).to_lower())
 	return " ".join(formatted_words)
 
+func _normalize_item_id(item_id: String) -> String:
+	return item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+
 func _guess_bag_category(item_id: String) -> String:
 	var normalized := item_id.strip_edges().to_lower()
 	if normalized.ends_with("ball") or normalized.contains("-ball"):
@@ -4459,6 +4521,10 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"sprite": pokemon_summary_sprite,
 		"sprite_viewport": pokemon_summary_sprite_viewport,
 		"animated_sprite": pokemon_summary_animated_sprite,
+		"ball_button": pokemon_summary_ball_button,
+		"ball_icon": pokemon_summary_ball_icon,
+		"ball_picker": pokemon_summary_ball_picker,
+		"ball_list": pokemon_summary_ball_list,
 		"type_icon_row": pokemon_summary_type_icon_row,
 		"title_label": pokemon_summary_title_label,
 		"id_label": pokemon_summary_id_label,
@@ -4501,6 +4567,10 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_sprite = context.get("sprite") as TextureRect
 	pokemon_summary_sprite_viewport = context.get("sprite_viewport") as SubViewport
 	pokemon_summary_animated_sprite = context.get("animated_sprite") as AnimatedSprite2D
+	pokemon_summary_ball_button = context.get("ball_button") as Button
+	pokemon_summary_ball_icon = context.get("ball_icon") as TextureRect
+	pokemon_summary_ball_picker = context.get("ball_picker") as PanelContainer
+	pokemon_summary_ball_list = context.get("ball_list") as VBoxContainer
 	pokemon_summary_type_icon_row = context.get("type_icon_row") as HBoxContainer
 	pokemon_summary_title_label = context.get("title_label") as Label
 	pokemon_summary_id_label = context.get("id_label") as Label
@@ -4590,6 +4660,7 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	pokemon_summary_mode = "interactive"
 	pokemon_summary_selected_slot = slot_index
 	pokemon_summary_item_picker.visible = false
+	pokemon_summary_ball_picker.visible = false
 	pokemon_summary_active_tab = "general"
 	pokemon_summary_active_card_key = card_key
 	pokemon_summary_open_cards[card_key] = _capture_pokemon_summary_card_context(card_key, pokemon, "interactive", slot_index)
@@ -4651,11 +4722,13 @@ func _refresh_pokemon_summary() -> void:
 	pokemon_summary_meta_label.tooltip_text = pokemon_summary_meta_label.text
 	_set_pokemon_summary_sprite(pokemon)
 	_refresh_pokemon_summary_type_icons(pokemon)
+	_set_pokemon_summary_ball_button(pokemon)
 
 	_set_pokemon_summary_held_item_slot(pokemon)
 	if _is_pokemon_summary_readonly():
 		_hide_pokemon_summary_ev_allocate_popup()
 		pokemon_summary_item_picker.visible = false
+		pokemon_summary_ball_picker.visible = false
 	pokemon_summary_hp_bar.max_value = max(pokemon.max_hp, 1)
 	pokemon_summary_hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_summary_hp_label.text = "HP %s / %s" % [max(pokemon.current_hp, 0), max(pokemon.max_hp, 1)]
@@ -5369,6 +5442,102 @@ func _create_summary_move_row(move_number: int, move_name: String, pp_text: Stri
 	margin.add_child(label)
 	return panel
 
+func _set_pokemon_summary_ball_button(pokemon: Pokemon) -> void:
+	if pokemon_summary_ball_button == null or pokemon_summary_ball_icon == null:
+		return
+
+	var ball_item_id := _get_pokemon_ball_item_id(pokemon)
+	var ball_texture := _load_item_icon(ball_item_id)
+	pokemon_summary_ball_icon.texture = ball_texture
+	pokemon_summary_ball_icon.modulate = Color(1, 1, 1, 0.45) if ball_texture == null else Color(1, 1, 1, 1)
+	pokemon_summary_ball_button.disabled = _is_pokemon_summary_readonly()
+	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
+	pokemon_summary_ball_button.tooltip_text = "Read-only preview." if _is_pokemon_summary_readonly() else "Change Poké Ball: %s" % _item_name_from_id(ball_item_id)
+
+func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
+	_apply_pokemon_summary_card_context(card_key)
+	if _is_pokemon_summary_readonly():
+		return
+	var pokemon_value: Variant = _get_selected_summary_pokemon()
+	if not (pokemon_value is Pokemon):
+		_add_chat_message("This Pokemon is missing an ownership id.")
+		return
+	var pokemon: Pokemon = pokemon_value as Pokemon
+	if pokemon.owned_pokemon_id <= 0:
+		_add_chat_message("This Pokemon is missing an ownership id.")
+		return
+
+	await _ensure_bag_inventory_loaded()
+	_apply_pokemon_summary_card_context(card_key)
+	_refresh_pokemon_summary_ball_picker(pokemon)
+	pokemon_summary_ball_picker.visible = not pokemon_summary_ball_picker.visible
+	if pokemon_summary_item_picker != null:
+		pokemon_summary_item_picker.visible = false
+	_store_active_pokemon_summary_card_context()
+
+func _refresh_pokemon_summary_ball_picker(pokemon: Pokemon) -> void:
+	if pokemon_summary_ball_list == null:
+		return
+	for child: Node in pokemon_summary_ball_list.get_children():
+		child.queue_free()
+
+	var current_ball_item_id := _get_pokemon_ball_item_id(pokemon)
+	var added_count := 0
+	for item_value: Variant in bag_inventory_items:
+		var item: Dictionary = item_value
+		if not _is_pokeball_bag_item(item):
+			continue
+		pokemon_summary_ball_list.add_child(_create_summary_ball_choice(item, current_ball_item_id))
+		added_count += 1
+		if added_count >= 8:
+			break
+
+	if added_count <= 0:
+		var empty_label := Label.new()
+		empty_label.text = "No Poké Balls in your bag."
+		empty_label.add_theme_font_size_override("font_size", 12)
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		pokemon_summary_ball_list.add_child(empty_label)
+
+func _create_summary_ball_choice(item: Dictionary, current_ball_item_id: String) -> Control:
+	var button := Button.new()
+	var item_id := str(item.get("id", "")).strip_edges()
+	var is_current := _normalize_item_id(item_id) == _normalize_item_id(current_ball_item_id)
+	var prefix := "✓ " if is_current else ""
+	button.text = "%s%s  x%s" % [prefix, _ellipsize_text(str(item.get("name", _item_name_from_id(item_id))), 18), max(int(item.get("quantity", 1)), 1)]
+	button.tooltip_text = item_id
+	button.focus_mode = Control.FOCUS_NONE
+	button.disabled = is_current
+	button.pressed.connect(_on_pokemon_summary_ball_selected.bind(item_id, pokemon_summary_active_card_key))
+	_apply_button_style(button)
+	return button
+
+func _on_pokemon_summary_ball_selected(item_id: String, card_key: String = "") -> void:
+	_apply_pokemon_summary_card_context(card_key)
+	if _is_pokemon_summary_readonly():
+		return
+	var pokemon_value: Variant = _get_selected_summary_pokemon()
+	if not (pokemon_value is Pokemon):
+		_add_chat_message("This Pokemon is missing an ownership id.")
+		return
+	var pokemon: Pokemon = pokemon_value as Pokemon
+	if pokemon.owned_pokemon_id <= 0:
+		_add_chat_message("This Pokemon is missing an ownership id.")
+		return
+
+	var result: Dictionary = await PlayerPartyStateService.set_pokemon_ball(pokemon.owned_pokemon_id, item_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not change Poké Ball: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	pokemon_summary_ball_picker.visible = false
+	_store_active_pokemon_summary_card_context()
+	_refresh_open_pokemon_summary_cards()
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
+
 func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 	_apply_pokemon_summary_card_context(card_key)
 	if _is_pokemon_summary_readonly():
@@ -5399,6 +5568,8 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 	_apply_pokemon_summary_card_context(card_key)
 	_refresh_pokemon_summary_item_picker()
 	pokemon_summary_item_picker.visible = not pokemon_summary_item_picker.visible
+	if pokemon_summary_ball_picker != null:
+		pokemon_summary_ball_picker.visible = false
 	_store_active_pokemon_summary_card_context()
 
 func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
@@ -5509,6 +5680,15 @@ func _is_holdable_bag_item(item: Dictionary) -> bool:
 	var category: String = str(item.get("category", "")).strip_edges().to_lower()
 	var item_id: String = str(item.get("id", "")).strip_edges().to_lower()
 	return category in ["held_items", "power_stones"] or item_id.ends_with("berry") or item_id.ends_with("--held")
+
+func _is_pokeball_bag_item(item: Dictionary) -> bool:
+	var category: String = str(item.get("category", "")).strip_edges().to_lower()
+	var item_id: String = str(item.get("id", "")).strip_edges().to_lower()
+	return category == "pokeball" or item_id.ends_with("ball") or item_id.contains("-ball")
+
+func _get_pokemon_ball_item_id(pokemon: Pokemon) -> String:
+	var ball_item_id := _normalize_item_id(pokemon.ball_item_id)
+	return ball_item_id if ball_item_id != "" else "poke-ball"
 
 func _format_move_name(move_id: String) -> String:
 	return _item_name_from_id(move_id)
@@ -8871,6 +9051,7 @@ func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
 	pokemon_summary_mode = "readonly"
 	pokemon_summary_selected_slot = -1
 	pokemon_summary_item_picker.visible = false
+	pokemon_summary_ball_picker.visible = false
 	pokemon_summary_active_tab = "general"
 	pokemon_summary_active_card_key = card_key
 	pokemon_summary_open_cards[card_key] = _capture_pokemon_summary_card_context(card_key, pokemon, "readonly", -1)

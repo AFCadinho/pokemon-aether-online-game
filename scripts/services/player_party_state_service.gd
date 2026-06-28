@@ -284,6 +284,32 @@ func take_pokemon_held_item(pokemon_id: int) -> Dictionary:
 	return result
 
 
+func set_pokemon_ball(pokemon_id: int, ball_item_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0 or ball_item_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing Pokemon or ball.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/ball" % pokemon_id,
+		HTTPClient.METHOD_PATCH,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"ballItemId": ball_item_id,
+		})
+	)
+	var result: Dictionary = _pokemon_item_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
 func save_current_party_deferred() -> void:
 	var result: Dictionary = await save_party(PlayerSave.to_party_state())
 	if not bool(result.get("success", false)):
