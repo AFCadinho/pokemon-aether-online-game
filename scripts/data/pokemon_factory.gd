@@ -16,6 +16,8 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		last_error_message = "Missing species in backend Pokemon payload."
 		return null
 
+	var caught_ball_item_id := _get_payload_caught_ball_item_id(data)
+	var ball_item_id := _get_payload_ball_item_id(data, caught_ball_item_id)
 	var pokemon := Pokemon.new(
 		species,
 		int(data.get("level", 1)),
@@ -35,7 +37,9 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		_get_origin_location(data),
 		_get_origin_payload(data),
 		_get_bool_option(data, ["tradable", "isTradable", "is_tradable"], true),
-		_get_stored_evs_payload(data)
+		_get_stored_evs_payload(data),
+		ball_item_id,
+		caught_ball_item_id
 	)
 
 	pokemon.max_hp = max(int(data.get("maxHp", data.get("max_hp", pokemon.max_hp))), 1)
@@ -97,6 +101,29 @@ static func _get_origin_location(data: Dictionary) -> String:
 		return location_name
 
 	return _get_string_option(data, ["location", "caughtLocation", "caught_location", "metLocation", "met_location", "encounterArea", "encounter_area"])
+
+
+static func _get_payload_ball_item_id(data: Dictionary, fallback_caught_ball_item_id: String = "") -> String:
+	var ball_item_id := _get_normalized_item_option(data, ["ballItemId", "ball_item_id", "summonBallItemId", "summon_ball_item_id"])
+	if ball_item_id != "":
+		return ball_item_id
+
+	return fallback_caught_ball_item_id if fallback_caught_ball_item_id != "" else "poke-ball"
+
+
+static func _get_payload_caught_ball_item_id(data: Dictionary) -> String:
+	var caught_ball_item_id := _get_normalized_item_option(data, ["caughtBallItemId", "caught_ball_item_id", "caughtWith", "caught_with"])
+	if caught_ball_item_id != "":
+		return caught_ball_item_id
+
+	var origin_value: Variant = data.get("origin", {})
+	if origin_value is Dictionary:
+		var origin := origin_value as Dictionary
+		caught_ball_item_id = _normalize_item_id(str(origin.get("ball", origin.get("ballItemId", origin.get("ball_item_id", "")))))
+		if caught_ball_item_id != "":
+			return caught_ball_item_id
+
+	return ""
 
 
 static func _normalize_type_array(value: Variant) -> Array:
@@ -161,6 +188,14 @@ static func _get_string_option(options: Dictionary, keys: Array, default_value: 
 			return text_value
 
 	return default_value
+
+
+static func _get_normalized_item_option(options: Dictionary, keys: Array, default_value: String = "") -> String:
+	return _normalize_item_id(_get_string_option(options, keys, default_value))
+
+
+static func _normalize_item_id(value: String) -> String:
+	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 
 
 static func _has_hp_override(options: Dictionary) -> bool:

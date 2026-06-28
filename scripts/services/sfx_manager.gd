@@ -26,6 +26,14 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/battle/capture_success.ogg",
 		"volume_db": -2.0,
 	},
+	"summon_throw": {
+		"path": "res://assets/audio/sfx/battle/capture_throw.ogg",
+		"volume_db": -3.0,
+	},
+	"summon_release": {
+		"path": "res://assets/audio/sfx/battle/capture_absorb.ogg",
+		"volume_db": -4.0,
+	},
 }
 
 var stream_cache: Dictionary = {}

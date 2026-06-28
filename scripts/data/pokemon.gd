@@ -9,6 +9,8 @@ var ability: String
 var nature: String
 var location: String
 var origin: Dictionary
+var ball_item_id: String
+var caught_ball_item_id: String
 var instance_id: String
 var owned_pokemon_id: int
 var shiny: bool
@@ -44,7 +46,9 @@ func _init(
 	_location: String = "",
 	_origin := {},
 	_tradable: bool = true,
-	_stored_evs := {}
+	_stored_evs := {},
+	_ball_item_id: String = "poke-ball",
+	_caught_ball_item_id: String = ""
 	) -> void:
 	species = _species
 	level = _level
@@ -53,6 +57,8 @@ func _init(
 	nature = _nature
 	location = _location
 	origin = _normalize_origin(_origin, location)
+	ball_item_id = _normalize_ball_item_id(_ball_item_id, "poke-ball")
+	caught_ball_item_id = _normalize_ball_item_id(_caught_ball_item_id, "")
 	instance_id = _instance_id
 	owned_pokemon_id = _owned_pokemon_id
 	shiny = _shiny
@@ -117,8 +123,11 @@ func to_battle_dict() -> Dictionary:
 		"types": types,
 		"possibleAbilities": possible_abilities,
 		"instanceId": instance_id,
+		"ballItemId": ball_item_id,
 		"shiny": shiny,
 	}
+	if caught_ball_item_id != "":
+		battle_data["caughtBallItemId"] = caught_ball_item_id
 
 	if has_saved_hp_state:
 		battle_data["currentHp"] = current_hp
@@ -155,6 +164,9 @@ func to_persistence_dict() -> Dictionary:
 		pokemon_data["location"] = location
 	if not origin.is_empty():
 		pokemon_data["origin"] = origin.duplicate(true)
+	pokemon_data["ballItemId"] = ball_item_id
+	if caught_ball_item_id != "":
+		pokemon_data["caughtBallItemId"] = caught_ball_item_id
 	pokemon_data["tradable"] = tradable
 	pokemon_data["currentHp"] = current_hp
 	pokemon_data["maxHp"] = max_hp
@@ -238,3 +250,7 @@ func _normalize_origin(value: Variant, fallback_location: String = "") -> Dictio
 		normalized_origin["locationName"] = fallback_location.strip_edges()
 
 	return normalized_origin
+
+func _normalize_ball_item_id(value: String, fallback_value: String = "") -> String:
+	var normalized_value := value.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	return normalized_value if normalized_value != "" else fallback_value

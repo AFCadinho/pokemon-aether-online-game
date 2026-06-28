@@ -32,6 +32,7 @@
 [ext_resource type="Script" uid="uid://bt1ws8crgo0pw" path="res://scripts/battle/battle_ui/battle_damage_calc_panel.gd" id="40_calc"]
 [ext_resource type="Script" path="res://scripts/battle/battle_ui/bag_grid.gd" id="41_bag"]
 [ext_resource type="Script" path="res://scripts/battle/animations/capture_ball_animation_player.gd" id="42_capture"]
+[ext_resource type="Script" uid="uid://b4h2vuys3xqnb" path="res://scripts/battle/animations/pokeball_summon_animation_player.gd" id="43_summon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgdsx"]
 content_margin_left = 8.0
@@ -1178,6 +1179,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("42_capture")
+
+[node name="PokeballSummonAnimationPlayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=312517651]
+z_index = 61
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("43_summon")
 
 [node name="PlayerHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=997269760 instance=ExtResource("2_01pft")]
 layout_mode = 1
