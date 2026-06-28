@@ -31,12 +31,19 @@ jobs:
     steps:
       - name: Delete old runs
         uses: actions/github-script@v8
+        env:
+          WORKFLOW_NAME: ${{ inputs.workflow_name }}
+          KEEP_RUNS: ${{ inputs.keep_runs }}
+          DRY_RUN: ${{ inputs.dry_run }}
         with:
           script: |
-            const workflowName = core.getInput("workflow_name", {required: true});
-            const keepRuns = Number(core.getInput("keep_runs", {required: true}));
-            const dryRun = core.getInput("dry_run", {required: true}) === "true";
+            const workflowName = process.env.WORKFLOW_NAME;
+            const keepRuns = Number(process.env.KEEP_RUNS);
+            const dryRun = process.env.DRY_RUN === "true";
 
+            if (!workflowName) {
+              throw new Error("workflow_name is required.");
+            }
             if (!Number.isInteger(keepRuns) || keepRuns < 1) {
               throw new Error("keep_runs must be a positive integer.");
             }
