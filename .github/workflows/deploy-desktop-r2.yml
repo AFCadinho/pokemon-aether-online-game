@@ -460,6 +460,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: desktop-builds
+          retention-days: 1
           path: |
             builds/windows
             builds/linux
@@ -469,6 +470,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: launcher-release
+          retention-days: 1
           path: |
             builds/launcher/game-*.zip
             builds/launcher/manifest*.json
