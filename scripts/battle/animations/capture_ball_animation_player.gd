@@ -2,6 +2,10 @@ extends Control
 
 class_name CaptureBallAnimationPlayer
 
+signal ball_thrown
+signal ball_shook
+signal capture_broke
+signal capture_succeeded
 signal target_absorbed
 signal target_released
 
@@ -81,6 +85,7 @@ func play_capture_preview(item_id: String, shake_count: int, caught: bool, targe
 	var target_position := _get_target_position(target_global_rect)
 	var start_position := _get_throw_start_position(target_position)
 
+	ball_thrown.emit()
 	await _play_throw(column, start_position, target_position, token)
 	if token != animation_token:
 		return
@@ -91,14 +96,17 @@ func play_capture_preview(item_id: String, shake_count: int, caught: bool, targe
 		return
 
 	for index: int in range(clampi(shake_count, 0, 4)):
+		ball_shook.emit()
 		await _play_frame_range(column, SHAKE_START_FRAME, SHAKE_END_FRAME, target_position, token)
 		if token != animation_token:
 			return
 
 	if caught:
+		capture_succeeded.emit()
 		await _play_frame_range(column, SUCCESS_START_FRAME, SUCCESS_END_FRAME, target_position, token)
 	else:
 		target_released.emit()
+		capture_broke.emit()
 		await _play_frame_range(column, BREAK_START_FRAME, BREAK_END_FRAME, target_position, token)
 
 	if token != animation_token:

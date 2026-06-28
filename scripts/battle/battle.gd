@@ -199,6 +199,14 @@ func _ready() -> void:
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
 		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
+	if not capture_ball_animation_player.ball_thrown.is_connected(_on_capture_ball_thrown):
+		capture_ball_animation_player.ball_thrown.connect(_on_capture_ball_thrown)
+	if not capture_ball_animation_player.ball_shook.is_connected(_on_capture_ball_shook):
+		capture_ball_animation_player.ball_shook.connect(_on_capture_ball_shook)
+	if not capture_ball_animation_player.capture_broke.is_connected(_on_capture_broke):
+		capture_ball_animation_player.capture_broke.connect(_on_capture_broke)
+	if not capture_ball_animation_player.capture_succeeded.is_connected(_on_capture_succeeded):
+		capture_ball_animation_player.capture_succeeded.connect(_on_capture_succeeded)
 	if not capture_ball_animation_player.target_absorbed.is_connected(_on_capture_target_absorbed):
 		capture_ball_animation_player.target_absorbed.connect(_on_capture_target_absorbed)
 	if not capture_ball_animation_player.target_released.is_connected(_on_capture_target_released):
@@ -2100,6 +2108,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	var use_item_message := "You used %s!" % item_name
 	current_action_panel.set_message(use_item_message)
 	_add_battle_log_message(use_item_message)
+	SfxManager.play("battle_item_use")
 	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
 	if not bool(capture_result.get("success", false)):
 		current_action_panel.set_message(str(capture_result.get("error", "Could not catch Pokemon.")))
@@ -2153,7 +2162,20 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 
 	_set_battle_input_locked(false)
 
+func _on_capture_ball_thrown() -> void:
+	SfxManager.play("capture_throw")
+
+func _on_capture_ball_shook() -> void:
+	SfxManager.play("capture_shake")
+
+func _on_capture_broke() -> void:
+	SfxManager.play("capture_break")
+
+func _on_capture_succeeded() -> void:
+	SfxManager.play("capture_success")
+
 func _on_capture_target_absorbed() -> void:
+	SfxManager.play("capture_absorb")
 	_fade_capture_target_to_alpha(0.0, 0.14, true)
 
 func _on_capture_target_released() -> void:
