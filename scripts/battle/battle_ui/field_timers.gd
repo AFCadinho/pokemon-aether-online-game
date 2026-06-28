@@ -17,6 +17,7 @@ const EFFECT_ICON_ALIASES := {
 	"SunnyDay": "sun",
 	"HarshSun": "sun",
 	"DesolateLand": "sun",
+	"DeltaStream": "snow",
 	"Hail": "snow",
 }
 
@@ -241,6 +242,8 @@ func _format_effect_name(effect: String) -> String:
 			return "Sun"
 		"desolateland":
 			return "Desolate Land"
+		"deltastream":
+			return "Delta Stream"
 		"sandstorm":
 			return "Sandstorm"
 		"hail":
@@ -315,6 +318,8 @@ func _get_animated_effect_icon_path(effect_data: Dictionary) -> String:
 			file_name = "weatherrain.png"
 		"sunnyday", "sun", "desolateland":
 			file_name = "weathersun.png"
+		"deltastream":
+			file_name = "weathersnow.png"
 		"sandstorm":
 			file_name = "weathersand.png"
 		"hail":

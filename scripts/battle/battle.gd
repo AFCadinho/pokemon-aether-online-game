@@ -154,6 +154,8 @@ var active_enemy_pokemon: Pokemon
 @onready var sun_sparkles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunSparkles") as GPUParticles2D
 @onready var desolate_land_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer") as Control
 @onready var primordial_sea_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer") as Control
+@onready var delta_stream_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer") as Control
+@onready var delta_stream_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamParticles") as GPUParticles2D
 @onready var sandstorm_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormParticles") as GPUParticles2D
 @onready var sandstorm_swirls: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls") as Control
 @onready var snow_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SnowParticles") as GPUParticles2D
@@ -315,6 +317,8 @@ func _setup_weather_presentation() -> void:
 		sun_sparkles,
 		desolate_land_layer,
 		primordial_sea_layer,
+		delta_stream_layer,
+		delta_stream_particles,
 		sandstorm_particles,
 		sandstorm_swirls,
 		terrain_tint,

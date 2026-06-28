@@ -9,6 +9,8 @@ var sun_rays: Control
 var sun_sparkles: GPUParticles2D
 var desolate_land_layer: Control
 var primordial_sea_layer: Control
+var delta_stream_layer: Control
+var delta_stream_particles: GPUParticles2D
 var sandstorm_particles: GPUParticles2D
 var sandstorm_swirls: Control
 var snow_particles: GPUParticles2D
@@ -22,6 +24,7 @@ var trick_room_layer: Control
 var sun_weather_time := 0.0
 var desolate_land_time := 0.0
 var primordial_sea_time := 0.0
+var delta_stream_time := 0.0
 var sandstorm_weather_time := 0.0
 var grassy_terrain_time := 0.0
 var trick_room_time := 0.0
@@ -35,6 +38,8 @@ func setup(
 	sun_sparkles_node: GPUParticles2D,
 	desolate_land_layer_node: Control,
 	primordial_sea_layer_node: Control,
+	delta_stream_layer_node: Control,
+	delta_stream_particles_node: GPUParticles2D,
 	sandstorm_particles_node: GPUParticles2D,
 	sandstorm_swirls_node: Control,
 	terrain_tint_node: ColorRect,
@@ -52,6 +57,8 @@ func setup(
 	sun_sparkles = sun_sparkles_node
 	desolate_land_layer = desolate_land_layer_node
 	primordial_sea_layer = primordial_sea_layer_node
+	delta_stream_layer = delta_stream_layer_node
+	delta_stream_particles = delta_stream_particles_node
 	sandstorm_particles = sandstorm_particles_node
 	sandstorm_swirls = sandstorm_swirls_node
 	snow_particles = snow_particles_node
@@ -103,6 +110,17 @@ func update_weather(weather_effect: String) -> void:
 			desolate_land_layer.modulate = Color.WHITE
 			desolate_land_time = 0.0
 
+	var should_show_delta_stream := weather_key == "deltastream"
+	if delta_stream_layer != null:
+		delta_stream_layer.visible = should_show_delta_stream
+		if not should_show_delta_stream:
+			delta_stream_layer.position = Vector2.ZERO
+			delta_stream_layer.modulate = Color.WHITE
+			delta_stream_time = 0.0
+	if delta_stream_particles != null:
+		delta_stream_particles.visible = should_show_delta_stream
+		delta_stream_particles.emitting = should_show_delta_stream
+
 	var should_emit_sandstorm := weather_key == "sandstorm"
 	if sandstorm_particles != null:
 		sandstorm_particles.visible = should_emit_sandstorm
@@ -130,6 +148,8 @@ func animate(delta: float) -> void:
 		_animate_desolate_land(delta)
 	if primordial_sea_layer != null and primordial_sea_layer.visible:
 		_animate_primordial_sea(delta)
+	if delta_stream_layer != null and delta_stream_layer.visible:
+		_animate_delta_stream(delta)
 	if sandstorm_swirls != null and sandstorm_swirls.visible:
 		_animate_sandstorm_weather(delta)
 	if terrain_tint != null and terrain_tint.visible:
@@ -200,6 +220,8 @@ func _update_weather_tint(weather_effect: String) -> void:
 			tint_color = Color(1.0, 0.76, 0.18, 0.1)
 		"desolateland":
 			tint_color = Color(1.0, 0.54, 0.08, 0.15)
+		"deltastream":
+			tint_color = Color(0.55, 0.86, 1.0, 0.115)
 		"sandstorm":
 			tint_color = Color(0.68, 0.47, 0.22, 0.14)
 		"hail", "snow", "snowscape":
@@ -238,6 +260,13 @@ func _hide_weather_effects() -> void:
 	if primordial_sea_layer != null:
 		primordial_sea_layer.visible = false
 		primordial_sea_layer.modulate = Color.WHITE
+	if delta_stream_layer != null:
+		delta_stream_layer.visible = false
+		delta_stream_layer.position = Vector2.ZERO
+		delta_stream_layer.modulate = Color.WHITE
+	if delta_stream_particles != null:
+		delta_stream_particles.visible = false
+		delta_stream_particles.emitting = false
 	if sandstorm_particles != null:
 		sandstorm_particles.visible = false
 		sandstorm_particles.emitting = false
@@ -252,6 +281,7 @@ func _hide_weather_effects() -> void:
 	sun_weather_time = 0.0
 	desolate_land_time = 0.0
 	primordial_sea_time = 0.0
+	delta_stream_time = 0.0
 	sandstorm_weather_time = 0.0
 
 func _hide_terrain_effects() -> void:
@@ -302,6 +332,16 @@ func _animate_primordial_sea(delta: float) -> void:
 
 	primordial_sea_layer.modulate = Color(1.0, 1.0, 1.0, alpha)
 
+func _animate_delta_stream(delta: float) -> void:
+	delta_stream_time += delta
+	var rewind_phase: float = sin(delta_stream_time * 0.52)
+	var drift_x: float = rewind_phase * 42.0
+	var drift_y: float = sin(delta_stream_time * 0.7) * 5.0
+	var alpha: float = 0.78 + (sin(delta_stream_time * 0.95) * 0.12)
+
+	delta_stream_layer.position = Vector2(drift_x, drift_y)
+	delta_stream_layer.modulate = Color(1.0, 1.0, 1.0, alpha)
+
 func _animate_sandstorm_weather(delta: float) -> void:
 	sandstorm_weather_time += delta
 	var drift_x: float = sin(sandstorm_weather_time * 0.72) * 9.0
@@ -321,6 +361,8 @@ func _get_weather_background_modulate(weather_key: String) -> Color:
 			return Color(1.0, 0.92, 0.76, 1.0)
 		"desolateland":
 			return Color(1.0, 0.78, 0.58, 1.0)
+		"deltastream":
+			return Color(0.78, 0.92, 1.0, 1.0)
 		"sandstorm":
 			return Color(0.92, 0.82, 0.66, 1.0)
 		"hail", "snow", "snowscape":

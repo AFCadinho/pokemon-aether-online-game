@@ -150,6 +150,26 @@ scale_min = 0.7
 scale_max = 1.8
 color_initial_ramp = SubResource("GradientTexture1D_sun_sparkles")
 
+[sub_resource type="Gradient" id="Gradient_delta_stream"]
+offsets = PackedFloat32Array(0, 0.28, 0.72, 1)
+colors = PackedColorArray(0.62, 0.9, 1, 0.02, 0.72, 0.96, 1, 0.34, 0.92, 1, 1, 0.56, 0.62, 0.9, 1, 0.04)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_delta_stream"]
+gradient = SubResource("Gradient_delta_stream")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_delta_stream"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(560, 250, 1)
+direction = Vector3(0.98, -0.18, 0)
+spread = 18.0
+initial_velocity_min = 260.0
+initial_velocity_max = 520.0
+gravity = Vector3(52, -8, 0)
+scale_min = 0.35
+scale_max = 1.05
+color_initial_ramp = SubResource("GradientTexture1D_delta_stream")
+
 [sub_resource type="Gradient" id="Gradient_8eh2s"]
 offsets = PackedFloat32Array(0, 0.2, 0.75, 1)
 colors = PackedColorArray(0.82, 0.94, 1, 0.08, 0.86, 0.96, 1, 0.58, 0.96, 1, 1, 0.78, 0.82, 0.94, 1, 0.12)
@@ -975,6 +995,71 @@ offset_bottom = 310.0
 grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.02, 0.06, 0.16, 0.15)
+
+[node name="DeltaStreamLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+visible = false
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WindWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -80.0
+offset_right = 96.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.32, 0.72, 1, 0.055)
+
+[node name="UpperCloudVeil" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+color = Color(0.72, 0.92, 1, 0.135)
+polygon = PackedVector2Array(-240, -28, 1200, -34, 1200, 170, 955, 132, 735, 176, 535, 136, 330, 178, 145, 140, -240, 190)
+
+[node name="JetBand1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+color = Color(0.86, 0.98, 1, 0.18)
+polygon = PackedVector2Array(-210, 112, -120, 90, 980, 520, 890, 548)
+
+[node name="JetBand2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+color = Color(0.54, 0.86, 1, 0.13)
+polygon = PackedVector2Array(-260, 306, -140, 278, 1030, 92, 910, 126)
+
+[node name="JetBand3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+color = Color(0.9, 1, 1, 0.105)
+polygon = PackedVector2Array(-190, 486, -70, 454, 1035, 338, 920, 372)
+
+[node name="LowerAirHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -300.0
+offset_right = 96.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0.5, 0.86, 1, 0.045)
+
+[node name="DeltaStreamParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+visible = false
+position = Vector2(390, 250)
+amount = 420
+lifetime = 1.85
+preprocess = 1.85
+visibility_rect = Rect2(-620, -340, 1520, 820)
+process_material = SubResource("ParticleProcessMaterial_delta_stream")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1668435119]
 visible = false

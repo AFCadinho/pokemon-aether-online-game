@@ -787,6 +787,8 @@ func _format_field_effect_name(effect: String) -> String:
 			return "Harsh Sun"
 		"DesolateLand":
 			return "Desolate Land"
+		"DeltaStream":
+			return "Delta Stream"
 		"Sandstorm":
 			return "Sandstorm"
 		"Hail":

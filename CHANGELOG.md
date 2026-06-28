@@ -5,6 +5,7 @@
 **Added**
 - Added an Electric Terrain battlefield animation with yellow terrain particles and ambient tinting.
 - Added distinct Primordial Sea and Desolate Land battlefield animations using heavier rain, storm haze, harsh sunlight, and heat haze layers.
+- Added a Delta Stream battlefield animation with wind bands, air particles, cloud veil, and cool sky tinting.
 - Added an explicit follower sprite map so Pokemon forms can resolve to the correct follower sprite assets.
 - Added a follower sprite map validation tool for future form sprite updates.
 
@@ -14,6 +15,7 @@
 - Fixed Pokemon followers using the base species sprite instead of available form sprites, including Alolan Ninetales, Oricorio forms, Deoxys forms, Rotom forms, and regional forms.
 
 **Changed**
+- Delta Stream wind bands now loop with a smooth back-and-forth motion instead of snapping back to the start.
 - Party hover cards now show held item next to HP and nature next to ability.
 - Follower sprite loading now checks the species-to-asset map before falling back to legacy filename guesses.
 
