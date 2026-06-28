@@ -84,6 +84,7 @@ var damage_calc_defender_assumptions: Dictionary = {}
 var damage_calc_assumption_edited_fields: Dictionary = {}
 var damage_calc_saved_assumptions: Dictionary = {}
 var bag_inventory_request_token := 0
+var capture_target_visibility_tween: Tween
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -198,6 +199,10 @@ func _ready() -> void:
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
 		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
+	if not capture_ball_animation_player.target_absorbed.is_connected(_on_capture_target_absorbed):
+		capture_ball_animation_player.target_absorbed.connect(_on_capture_target_absorbed)
+	if not capture_ball_animation_player.target_released.is_connected(_on_capture_target_released):
+		capture_ball_animation_player.target_released.connect(_on_capture_target_released)
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_setup_weather_presentation()
@@ -2108,6 +2113,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 
 	var caught := bool(capture_result.get("caught", false))
 	var shake_count := clampi(int(capture_result.get("shakeCount", 0)), 0, 3)
+	_reset_capture_target_visibility()
 	await capture_ball_animation_player.play_capture_preview(item_id, shake_count, caught, enemy_sprite_box.get_global_rect())
 
 	var capture_message := str(capture_result.get("message", ""))
@@ -2146,6 +2152,45 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 			return
 
 	_set_battle_input_locked(false)
+
+func _on_capture_target_absorbed() -> void:
+	_fade_capture_target_to_alpha(0.0, 0.14, true)
+
+func _on_capture_target_released() -> void:
+	_fade_capture_target_to_alpha(1.0, 0.18, false)
+
+func _reset_capture_target_visibility() -> void:
+	_stop_capture_target_visibility_tween()
+	if enemy_sprite_box == null:
+		return
+
+	enemy_sprite_box.visible = true
+	var color: Color = enemy_sprite_box.modulate
+	color.a = 1.0
+	enemy_sprite_box.modulate = color
+
+func _fade_capture_target_to_alpha(target_alpha: float, duration: float, hide_after_fade: bool) -> void:
+	_stop_capture_target_visibility_tween()
+	if enemy_sprite_box == null:
+		return
+
+	enemy_sprite_box.visible = true
+	capture_target_visibility_tween = create_tween()
+	capture_target_visibility_tween.tween_property(enemy_sprite_box, "modulate:a", target_alpha, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	if hide_after_fade:
+		capture_target_visibility_tween.finished.connect(_hide_capture_target_after_fade, CONNECT_ONE_SHOT)
+
+func _hide_capture_target_after_fade() -> void:
+	if enemy_sprite_box == null:
+		return
+	if enemy_sprite_box.modulate.a <= 0.02:
+		enemy_sprite_box.visible = false
+
+func _stop_capture_target_visibility_tween() -> void:
+	if capture_target_visibility_tween != null and capture_target_visibility_tween.is_valid():
+		capture_target_visibility_tween.kill()
+
+	capture_target_visibility_tween = null
 
 ## Probeert de battle te verlaten.
 func _try_run() -> void:

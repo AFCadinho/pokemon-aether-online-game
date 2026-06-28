@@ -2,6 +2,9 @@ extends Control
 
 class_name CaptureBallAnimationPlayer
 
+signal target_absorbed
+signal target_released
+
 const SPRITE_SHEET_PATH := "res://assets/battles/capture/capture_balls_gen4.png"
 const FRAME_SIZE := Vector2i(64, 64)
 const FRAME_SECONDS := 0.045
@@ -82,6 +85,7 @@ func play_capture_preview(item_id: String, shake_count: int, caught: bool, targe
 	if token != animation_token:
 		return
 
+	target_absorbed.emit()
 	await _play_frame_range(column, CATCH_START_FRAME, CATCH_END_FRAME, target_position, token)
 	if token != animation_token:
 		return
@@ -94,6 +98,7 @@ func play_capture_preview(item_id: String, shake_count: int, caught: bool, targe
 	if caught:
 		await _play_frame_range(column, SUCCESS_START_FRAME, SUCCESS_END_FRAME, target_position, token)
 	else:
+		target_released.emit()
 		await _play_frame_range(column, BREAK_START_FRAME, BREAK_END_FRAME, target_position, token)
 
 	if token != animation_token:
@@ -107,6 +112,7 @@ func play_capture_preview(item_id: String, shake_count: int, caught: bool, targe
 func cancel() -> void:
 	animation_token += 1
 	visible = false
+	target_released.emit()
 
 
 func _play_throw(column: int, start_position: Vector2, target_position: Vector2, token: int) -> void:
