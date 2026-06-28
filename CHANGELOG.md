@@ -12,6 +12,7 @@
 **Changed**
 - Wild battle Bag actions now use backend catch results for shake count, success state, inventory updates, and battle completion.
 - Wild battle capture actions now write both item use and capture outcome messages to the battle log.
+- Trainer battle openings now play Poké Ball lead summon animations for both the player and NPC trainer.
 
 ## 0.2.1 - 2026-06-28
 

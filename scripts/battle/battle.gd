@@ -86,8 +86,9 @@ var damage_calc_saved_assumptions: Dictionary = {}
 var bag_inventory_request_token := 0
 var capture_target_visibility_tween: Tween
 var summon_target_visibility_tween: Tween
-var player_summon_original_z_index := 0
-var player_summon_original_z_as_relative := true
+var summon_target_sprite_box: Control
+var summon_original_z_index := 0
+var summon_original_z_as_relative := true
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -3690,7 +3691,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	_show_original_player_lead_before_initial_events(player_species)
 	await get_tree().process_frame
-	await _play_player_lead_summon(player_pokemon)
+	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_sprite_box, "back")
 	await _render_initial_battle_events(api_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -3718,6 +3719,10 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		_get_player_display_name("p2")
 	))
 	_show_original_player_lead_before_initial_events(player_species)
+	_show_original_active_pokemon_for_player("p2", opponent_species)
+	await get_tree().process_frame
+	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_sprite_box, "back")
+	await _play_lead_summon("poke-ball", enemy_sprite_box, "front")
 	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -3872,32 +3877,35 @@ func _show_original_player_lead_before_initial_events(species: String) -> void:
 	_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
 	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
-func _play_player_lead_summon(player_pokemon: Pokemon) -> void:
-	if player_pokemon == null:
+func _play_lead_summon(ball_item_id: String, sprite_box: Control, side: String) -> void:
+	if sprite_box == null:
 		return
 	if pokeball_summon_animation_player == null:
 		return
 
-	var target_rect: Rect2 = _get_player_summon_target_rect()
+	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
 	var arena_rect: Rect2 = _get_battle_arena_global_rect()
-	_prepare_player_summon_target_hidden()
-	await pokeball_summon_animation_player.play_summon(player_pokemon.ball_item_id, target_rect, "back", arena_rect)
-	_reset_player_summon_target_visibility()
+	_prepare_summon_target_hidden(sprite_box)
+	summon_target_sprite_box = sprite_box
+	await pokeball_summon_animation_player.play_summon(ball_item_id, target_rect, side, arena_rect)
+	_reset_summon_target_visibility(sprite_box)
+	if summon_target_sprite_box == sprite_box:
+		summon_target_sprite_box = null
 
 func _on_summon_ball_thrown() -> void:
 	SfxManager.play("summon_throw")
 
 func _on_summon_pokemon_released() -> void:
 	SfxManager.play("summon_release")
-	_fade_player_summon_target_to_alpha(1.0, 0.16)
+	_fade_summon_target_to_alpha(summon_target_sprite_box, 1.0, 0.16)
 
-func _get_player_summon_target_rect() -> Rect2:
-	if player_sprite_box != null and player_sprite_box.has_method("get_single_sprite_slot"):
-		var sprite_slot: Control = player_sprite_box.get_single_sprite_slot()
+func _get_summon_target_rect(sprite_box: Control) -> Rect2:
+	if sprite_box != null and sprite_box.has_method("get_single_sprite_slot"):
+		var sprite_slot: Control = sprite_box.get_single_sprite_slot()
 		if sprite_slot != null and sprite_slot.get_global_rect().size != Vector2.ZERO:
 			return sprite_slot.get_global_rect()
 
-	return player_sprite_box.get_global_rect()
+	return sprite_box.get_global_rect()
 
 func _get_battle_arena_global_rect() -> Rect2:
 	if battle_arena != null and battle_arena.get_global_rect().size != Vector2.ZERO:
@@ -3909,40 +3917,53 @@ func _get_battle_arena_global_rect() -> Rect2:
 		return arena_control.get_global_rect()
 	return Rect2()
 
-func _prepare_player_summon_target_hidden() -> void:
+func _get_active_summon_ball_item_id(player_id: String, fallback_item_id: String = "poke-ball") -> String:
+	if player_id == "p1":
+		var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
+		var saved_pokemon := _get_saved_pokemon_for_active_data(active_pokemon)
+		if saved_pokemon != null and saved_pokemon.ball_item_id.strip_edges() != "":
+			return saved_pokemon.ball_item_id
+
+	var fallback := fallback_item_id.strip_edges()
+	if fallback == "":
+		return "poke-ball"
+
+	return fallback
+
+func _prepare_summon_target_hidden(sprite_box: Control) -> void:
 	_stop_summon_target_visibility_tween()
-	if player_sprite_box == null:
+	if sprite_box == null:
 		return
 
-	player_summon_original_z_index = player_sprite_box.z_index
-	player_summon_original_z_as_relative = player_sprite_box.z_as_relative
-	player_sprite_box.z_index = 80
-	player_sprite_box.z_as_relative = true
-	player_sprite_box.visible = false
-	var color: Color = player_sprite_box.modulate
+	summon_original_z_index = sprite_box.z_index
+	summon_original_z_as_relative = sprite_box.z_as_relative
+	sprite_box.z_index = 80
+	sprite_box.z_as_relative = true
+	sprite_box.visible = false
+	var color: Color = sprite_box.modulate
 	color.a = 0.0
-	player_sprite_box.modulate = color
+	sprite_box.modulate = color
 
-func _reset_player_summon_target_visibility() -> void:
+func _reset_summon_target_visibility(sprite_box: Control) -> void:
 	_stop_summon_target_visibility_tween()
-	if player_sprite_box == null:
+	if sprite_box == null:
 		return
 
-	player_sprite_box.visible = true
-	player_sprite_box.z_index = player_summon_original_z_index
-	player_sprite_box.z_as_relative = player_summon_original_z_as_relative
-	var color: Color = player_sprite_box.modulate
+	sprite_box.visible = true
+	sprite_box.z_index = summon_original_z_index
+	sprite_box.z_as_relative = summon_original_z_as_relative
+	var color: Color = sprite_box.modulate
 	color.a = 1.0
-	player_sprite_box.modulate = color
+	sprite_box.modulate = color
 
-func _fade_player_summon_target_to_alpha(target_alpha: float, duration: float) -> void:
+func _fade_summon_target_to_alpha(sprite_box: Control, target_alpha: float, duration: float) -> void:
 	_stop_summon_target_visibility_tween()
-	if player_sprite_box == null:
+	if sprite_box == null:
 		return
 
-	player_sprite_box.visible = true
+	sprite_box.visible = true
 	summon_target_visibility_tween = create_tween()
-	summon_target_visibility_tween.tween_property(player_sprite_box, "modulate:a", target_alpha, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	summon_target_visibility_tween.tween_property(sprite_box, "modulate:a", target_alpha, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _stop_summon_target_visibility_tween() -> void:
 	if summon_target_visibility_tween != null and summon_target_visibility_tween.is_valid():
@@ -3973,6 +3994,9 @@ func _show_original_transform_targets_before_initial_events(events: Array) -> bo
 	return showed_original_target
 
 func _show_original_active_pokemon_for_player(player_id: String, species: String) -> void:
+	if species == "":
+		return
+
 	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
 	var level: int = battle_state.get_active_pokemon_level(player_id)
 	var hp: int = battle_state.get_active_pokemon_current_hp(player_id)
