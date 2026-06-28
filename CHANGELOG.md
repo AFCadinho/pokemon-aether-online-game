@@ -19,6 +19,7 @@
 - Switch events now use fast Poké Ball recall and release animations without replaying the full throw.
 - PvP opponent switch and summon animations now use public Poké Ball metadata when available.
 - Switch release animations now leave audio space for future Pokemon cries.
+- Owned Pokemon Poké Ball changes now consume the newly selected ball and return the previously assigned ball to the Bag.
 
 ## 0.2.1 - 2026-06-28
 
