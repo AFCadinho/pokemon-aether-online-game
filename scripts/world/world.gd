@@ -692,7 +692,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
 
-	MusicManager.play_battle_music()
+	MusicManager.play_wild_battle_music()
 	
 	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
@@ -746,7 +746,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
 
-	MusicManager.play_battle_music()
+	MusicManager.play_wild_battle_music()
 
 	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
@@ -795,7 +795,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
 
-	MusicManager.play_battle_music()
+	MusicManager.play_trainer_battle_music()
 
 	await battle_instance.setup_trainer_battle_from_response(
 		PlayerSave.party[0],

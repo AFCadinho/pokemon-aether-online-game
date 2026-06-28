@@ -9,6 +9,7 @@ const TELEPORT_DISTANCE := 96.0
 const SORT_Z_MIN := -256
 const SORT_Z_MAX := 256
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
+const PLAYER_OVERLAP_SORT_Y_EPSILON := 8.0
 const SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const SIDE_SPRITE_VISUAL_OFFSET := Vector2(0.0, -16.0)
 const VERTICAL_SPRITE_VISUAL_OFFSET := Vector2(0.0, -12.0)
@@ -263,10 +264,10 @@ func _update_sort_z() -> void:
 		if player_feet_position is Vector2:
 			var player_sort_y: float = (player_feet_position as Vector2).y
 			var player_sort_z := player.z_index
-			if follower_sort_y > player_sort_y:
+			if follower_sort_y > player_sort_y + PLAYER_OVERLAP_SORT_Y_EPSILON:
 				sort_z = maxi(sort_z, player_sort_z + 1)
 				sprite_sort_z = _get_player_visual_sort_depth() + 1
-			elif follower_sort_y < player_sort_y:
+			else:
 				sort_z = mini(sort_z, player_sort_z - 1)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 	if sprite != null:

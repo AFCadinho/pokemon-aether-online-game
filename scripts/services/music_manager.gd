@@ -2,6 +2,8 @@ extends Node
 
 const DEFAULT_OVERWORLD_MUSIC_PATH := "res://assets/music/overworld/kanto/routes/route1.ogg"
 const LOGIN_MUSIC_PATH := "res://assets/music/login/lugia_theme_lofi.ogg"
+const DEFAULT_WILD_BATTLE_MUSIC_PATH := "res://assets/music/battle/wild/Kanto Wild Battle.mp3"
+const DEFAULT_TRAINER_BATTLE_MUSIC_PATH := "res://assets/music/battle/trainer/Kalos Trainer Battle.mp3"
 const MUSIC_RES_ROOT := "res://assets/music"
 const MUSIC_RELATIVE_ROOT := "assets/music"
 const DEFAULT_BATTLE_MUSIC_ID := "default"
@@ -44,6 +46,12 @@ func play_map_music(map_node: Node) -> void:
 
 func play_battle_music() -> void:
 	play_music(get_battle_music_path(SettingsManager.battle_music_track))
+
+func play_wild_battle_music() -> void:
+	play_music(DEFAULT_WILD_BATTLE_MUSIC_PATH)
+
+func play_trainer_battle_music() -> void:
+	play_music(DEFAULT_TRAINER_BATTLE_MUSIC_PATH)
 
 
 func get_map_music_path(map_node: Node) -> String:
