@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 from pathlib import Path
 
@@ -37,10 +36,6 @@ def main() -> None:
     sections = _parse_changelog_section(changelog_path, version)
     fields = _build_fields(sections)
     description = args.release_notes.strip() or "Open de launcher om de nieuwste build te downloaden."
-
-    changelog_url = _build_changelog_url()
-    if changelog_url:
-        description = f"{description}\n\nFull changelog: {changelog_url}"
 
     payload = {
         "username": "PokeAether",
@@ -132,14 +127,6 @@ def _chunk_lines(lines: list[str], limit: int) -> list[list[str]]:
     if current:
         chunks.append(current)
     return chunks
-
-
-def _build_changelog_url() -> str:
-    server_url = os.environ.get("GITHUB_SERVER_URL", "https://github.com").strip().rstrip("/")
-    repository = os.environ.get("GITHUB_REPOSITORY", "").strip()
-    if not server_url or not repository:
-        return ""
-    return f"{server_url}/{repository}/blob/main/CHANGELOG.md"
 
 
 if __name__ == "__main__":
