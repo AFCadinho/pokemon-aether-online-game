@@ -32,7 +32,7 @@ const SOUND_DATA := {
 	},
 	"summon_release": {
 		"path": "res://assets/audio/sfx/battle/capture_absorb.ogg",
-		"volume_db": -4.0,
+		"volume_db": -8.0,
 	},
 }
 

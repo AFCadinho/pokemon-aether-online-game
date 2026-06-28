@@ -5,16 +5,25 @@ class_name PokeballSummonAnimationPlayer
 signal ball_thrown
 signal pokemon_released
 signal summon_finished
+signal pokemon_recall_started
+signal pokemon_recalled
+signal recall_finished
 
 const SPRITE_SHEET_PATH := "res://assets/battles/capture/capture_balls_gen4.png"
 const FRAME_SIZE := Vector2i(64, 64)
 const FRAME_SECONDS := 0.055
+const SWITCH_FRAME_SECONDS := 0.032
+const FINISH_HOLD_SECONDS := 0.08
+const SWITCH_FINISH_HOLD_SECONDS := 0.04
 const SPRITE_SCALE := Vector2(4.0, 4.0)
 const THROW_START_FRAME := 0
 const THROW_END_FRAME := 3
 const RELEASE_START_FRAME := 14
 const RELEASE_REVEAL_FRAME := 10
 const RELEASE_END_FRAME := 4
+const RECALL_START_FRAME := 4
+const RECALL_ABSORB_FRAME := 10
+const RECALL_END_FRAME := 14
 
 const BALL_COLUMNS := {
 	"poke-ball": 0,
@@ -73,18 +82,12 @@ func _ready() -> void:
 func play_summon(item_id: String, target_global_rect: Rect2 = Rect2(), side: String = "back", arena_global_rect: Rect2 = Rect2()) -> void:
 	animation_token += 1
 	var token := animation_token
-	if sheet_texture == null:
+	if not _prepare_animation():
 		return
-
-	visible = true
-	sprite.visible = true
-	sprite.modulate = Color.WHITE
-	sprite.rotation = 0.0
-	sprite.scale = SPRITE_SCALE
 
 	var column := _get_ball_column(item_id)
 	var arena_rect := _get_animation_arena_rect(arena_global_rect)
-	var target_position := _get_target_position(target_global_rect, side, arena_rect)
+	var target_position := _get_target_position(target_global_rect, side, arena_rect, false)
 	var start_position := _get_throw_start_position(target_position, side, arena_rect)
 
 	sprite.position = start_position
@@ -98,24 +101,93 @@ func play_summon(item_id: String, target_global_rect: Rect2 = Rect2(), side: Str
 	if token != animation_token:
 		return
 
-	await _play_frame_range(column, RELEASE_START_FRAME, RELEASE_REVEAL_FRAME, target_position, token)
+	await _play_release_frames(column, target_position, token, FRAME_SECONDS)
 	if token != animation_token:
 		return
 
-	pokemon_released.emit()
-	await _play_frame_range(column, RELEASE_REVEAL_FRAME - 1, RELEASE_END_FRAME, target_position, token)
-	if token != animation_token:
-		return
-
-	await get_tree().create_timer(0.08).timeout
+	await _finish_animation(token, FINISH_HOLD_SECONDS)
 	if token == animation_token:
-		visible = false
 		summon_finished.emit()
+
+
+func play_release(item_id: String, target_global_rect: Rect2 = Rect2(), side: String = "back", arena_global_rect: Rect2 = Rect2()) -> void:
+	animation_token += 1
+	var token := animation_token
+	if not _prepare_animation():
+		return
+
+	var column := _get_ball_column(item_id)
+	var arena_rect := _get_animation_arena_rect(arena_global_rect)
+	var target_position := _get_target_position(target_global_rect, side, arena_rect, true)
+
+	sprite.position = target_position
+	_set_frame(column, RELEASE_START_FRAME)
+	await _play_release_frames(column, target_position, token, SWITCH_FRAME_SECONDS)
+	if token != animation_token:
+		return
+
+	await _finish_animation(token, SWITCH_FINISH_HOLD_SECONDS)
+	if token == animation_token:
+		summon_finished.emit()
+
+
+func play_recall(item_id: String, target_global_rect: Rect2 = Rect2(), side: String = "back", arena_global_rect: Rect2 = Rect2()) -> void:
+	animation_token += 1
+	var token := animation_token
+	if not _prepare_animation():
+		return
+
+	var column := _get_ball_column(item_id)
+	var arena_rect := _get_animation_arena_rect(arena_global_rect)
+	var target_position := _get_target_position(target_global_rect, side, arena_rect, true)
+
+	sprite.position = target_position
+	_set_frame(column, RECALL_START_FRAME)
+	pokemon_recall_started.emit()
+	await _play_frame_range(column, RECALL_START_FRAME, RECALL_ABSORB_FRAME, target_position, token, SWITCH_FRAME_SECONDS)
+	if token != animation_token:
+		return
+
+	pokemon_recalled.emit()
+	await _play_frame_range(column, RECALL_ABSORB_FRAME + 1, RECALL_END_FRAME, target_position, token, SWITCH_FRAME_SECONDS)
+	if token != animation_token:
+		return
+
+	await _finish_animation(token, SWITCH_FINISH_HOLD_SECONDS)
+	if token == animation_token:
+		recall_finished.emit()
 
 
 func cancel() -> void:
 	animation_token += 1
 	visible = false
+
+
+func _prepare_animation() -> bool:
+	if sheet_texture == null:
+		return false
+
+	visible = true
+	sprite.visible = true
+	sprite.modulate = Color.WHITE
+	sprite.rotation = 0.0
+	sprite.scale = SPRITE_SCALE
+	return true
+
+
+func _finish_animation(token: int, hold_seconds: float) -> void:
+	await get_tree().create_timer(hold_seconds).timeout
+	if token == animation_token:
+		visible = false
+
+
+func _play_release_frames(column: int, target_position: Vector2, token: int, frame_seconds: float) -> void:
+	await _play_frame_range(column, RELEASE_START_FRAME, RELEASE_REVEAL_FRAME, target_position, token, frame_seconds)
+	if token != animation_token:
+		return
+
+	pokemon_released.emit()
+	await _play_frame_range(column, RELEASE_REVEAL_FRAME - 1, RELEASE_END_FRAME, target_position, token, frame_seconds)
 
 
 func _play_throw(column: int, start_position: Vector2, target_position: Vector2, side: String, token: int) -> void:
@@ -133,7 +205,7 @@ func _play_throw(column: int, start_position: Vector2, target_position: Vector2,
 		await get_tree().create_timer(FRAME_SECONDS).timeout
 
 
-func _play_frame_range(column: int, start_frame: int, end_frame: int, position: Vector2, token: int) -> void:
+func _play_frame_range(column: int, start_frame: int, end_frame: int, position: Vector2, token: int, frame_seconds: float = FRAME_SECONDS) -> void:
 	sprite.position = position
 	sprite.rotation = 0.0
 	var step := -1 if start_frame > end_frame else 1
@@ -143,7 +215,7 @@ func _play_frame_range(column: int, start_frame: int, end_frame: int, position: 
 			return
 
 		_set_frame(column, frame_index)
-		await get_tree().create_timer(FRAME_SECONDS).timeout
+		await get_tree().create_timer(frame_seconds).timeout
 		if frame_index == end_frame:
 			break
 		frame_index += step
@@ -164,7 +236,10 @@ func _get_ball_column(item_id: String) -> int:
 	return int(BALL_COLUMNS.get(normalized_item_id, 0))
 
 
-func _get_target_position(target_global_rect: Rect2, side: String, arena_rect: Rect2) -> Vector2:
+func _get_target_position(target_global_rect: Rect2, side: String, arena_rect: Rect2, prefer_target_rect: bool) -> Vector2:
+	if prefer_target_rect and target_global_rect.size != Vector2.ZERO:
+		return _global_point_to_local(target_global_rect.get_center()) + Vector2(0.0, 4.0)
+
 	if side == "back":
 		return arena_rect.position + Vector2(arena_rect.size.x * 0.32, arena_rect.size.y * 0.67)
 

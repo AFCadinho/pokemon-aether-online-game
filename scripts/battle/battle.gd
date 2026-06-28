@@ -89,6 +89,7 @@ var summon_target_visibility_tween: Tween
 var summon_target_sprite_box: Control
 var summon_original_z_index := 0
 var summon_original_z_as_relative := true
+var summon_release_audio_mode := SUMMON_RELEASE_AUDIO_BALL
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
@@ -98,6 +99,8 @@ const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
+const SUMMON_RELEASE_AUDIO_BALL := "ball"
+const SUMMON_RELEASE_AUDIO_NONE := "none"
 const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
 const STAT_STAGE_BADGE_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
@@ -3887,7 +3890,10 @@ func _play_lead_summon(ball_item_id: String, sprite_box: Control, side: String) 
 	var arena_rect: Rect2 = _get_battle_arena_global_rect()
 	_prepare_summon_target_hidden(sprite_box)
 	summon_target_sprite_box = sprite_box
+	var previous_release_audio_mode := summon_release_audio_mode
+	summon_release_audio_mode = SUMMON_RELEASE_AUDIO_BALL
 	await pokeball_summon_animation_player.play_summon(ball_item_id, target_rect, side, arena_rect)
+	summon_release_audio_mode = previous_release_audio_mode
 	_reset_summon_target_visibility(sprite_box)
 	if summon_target_sprite_box == sprite_box:
 		summon_target_sprite_box = null
@@ -3896,8 +3902,179 @@ func _on_summon_ball_thrown() -> void:
 	SfxManager.play("summon_throw")
 
 func _on_summon_pokemon_released() -> void:
-	SfxManager.play("summon_release")
+	_play_summon_release_audio()
 	_fade_summon_target_to_alpha(summon_target_sprite_box, 1.0, 0.16)
+
+func _play_summon_release_audio() -> void:
+	match summon_release_audio_mode:
+		SUMMON_RELEASE_AUDIO_BALL:
+			SfxManager.play("summon_release")
+		SUMMON_RELEASE_AUDIO_NONE:
+			pass
+
+func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String) -> void:
+	if sprite_box == null:
+		return
+	if pokeball_summon_animation_player == null:
+		return
+
+	var original_z_index := sprite_box.z_index
+	var original_z_as_relative := sprite_box.z_as_relative
+	var original_scale := sprite_box.scale
+	var original_modulate := sprite_box.modulate
+	var original_pivot_offset := sprite_box.pivot_offset
+	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
+	var arena_rect: Rect2 = _get_battle_arena_global_rect()
+
+	sprite_box.visible = true
+	sprite_box.z_index = 80
+	sprite_box.z_as_relative = true
+	sprite_box.pivot_offset = sprite_box.size * 0.5
+
+	var recall_tween := create_tween()
+	recall_tween.set_parallel(true)
+	recall_tween.tween_property(sprite_box, "scale", original_scale * 0.12, 0.26).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	recall_tween.tween_property(sprite_box, "modulate", Color(0.72, 0.92, 1.0, 0.0), 0.26).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
+	SfxManager.play("summon_release")
+	await pokeball_summon_animation_player.play_recall(ball_item_id, target_rect, side, arena_rect)
+	if recall_tween != null and recall_tween.is_valid():
+		recall_tween.kill()
+
+	sprite_box.visible = false
+	sprite_box.scale = original_scale
+	sprite_box.modulate = original_modulate
+	sprite_box.pivot_offset = original_pivot_offset
+	sprite_box.z_index = original_z_index
+	sprite_box.z_as_relative = original_z_as_relative
+
+func _play_switch_release(ball_item_id: String, sprite_box: Control, side: String) -> void:
+	if sprite_box == null:
+		return
+	if pokeball_summon_animation_player == null:
+		return
+
+	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
+	var arena_rect: Rect2 = _get_battle_arena_global_rect()
+	_prepare_summon_target_hidden(sprite_box)
+	summon_target_sprite_box = sprite_box
+	var previous_release_audio_mode := summon_release_audio_mode
+	summon_release_audio_mode = SUMMON_RELEASE_AUDIO_NONE
+	await pokeball_summon_animation_player.play_release(ball_item_id, target_rect, side, arena_rect)
+	summon_release_audio_mode = previous_release_audio_mode
+	_reset_summon_target_visibility(sprite_box)
+	if summon_target_sprite_box == sprite_box:
+		summon_target_sprite_box = null
+
+func _play_switch_recall_for_event(event_data: Dictionary, player_id: String) -> void:
+	if not _should_play_switch_ball_animation(player_id):
+		return
+
+	var sprite_box := _get_switch_animation_sprite_box(player_id)
+	if sprite_box == null or not sprite_box.visible or sprite_box.modulate.a <= 0.02:
+		return
+
+	await _play_switch_recall(_get_switch_recall_ball_item_id(event_data, player_id), sprite_box, _get_switch_animation_side(player_id))
+
+func _play_switch_release_for_event(event_data: Dictionary, player_id: String) -> void:
+	if not _should_play_switch_ball_animation(player_id):
+		return
+
+	var sprite_box := _get_switch_animation_sprite_box(player_id)
+	if sprite_box == null:
+		return
+
+	await _play_switch_release(_get_switch_release_ball_item_id(event_data, player_id), sprite_box, _get_switch_animation_side(player_id))
+
+func _should_play_switch_ball_animation(player_id: String) -> bool:
+	if player_id == "p1":
+		return true
+	if player_id == "p2":
+		return battle_type != BattleType.WILD
+
+	return false
+
+func _get_switch_animation_sprite_box(player_id: String) -> Control:
+	match player_id:
+		"p1":
+			return player_sprite_box
+		"p2":
+			return enemy_sprite_box
+
+	return null
+
+func _get_switch_animation_side(player_id: String) -> String:
+	return "back" if player_id == "p1" else "front"
+
+func _get_switch_recall_ball_item_id(event_data: Dictionary, player_id: String) -> String:
+	if player_id != "p1":
+		return "poke-ball"
+
+	var from_ident := str(event_data.get("fromIdent", event_data.get("from_ident", ""))).strip_edges()
+	var pokemon_data := _get_player_team_pokemon_data_by_ident(player_id, from_ident)
+	return _get_player_pokemon_data_ball_item_id(pokemon_data, "poke-ball")
+
+func _get_switch_release_ball_item_id(event_data: Dictionary, player_id: String) -> String:
+	if player_id != "p1":
+		return "poke-ball"
+
+	var switch_ident := _get_switch_event_ident(event_data)
+	var team := battle_state.get_player_team(player_id)
+	var target_index := _find_temporary_switch_target_index(team, switch_ident, event_data)
+	if target_index >= 0 and target_index < team.size():
+		var pokemon_value: Variant = team[target_index]
+		if pokemon_value is Dictionary:
+			return _get_player_pokemon_data_ball_item_id(pokemon_value as Dictionary, "poke-ball")
+
+	return _get_active_summon_ball_item_id(player_id, "poke-ball")
+
+func _get_player_team_pokemon_data_by_ident(player_id: String, ident: String) -> Dictionary:
+	var normalized_ident := _normalize_battle_ident(ident)
+	if normalized_ident == "":
+		return {}
+
+	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if _normalize_battle_ident(str(pokemon_data.get("ident", ""))) == normalized_ident:
+			return pokemon_data
+
+	return {}
+
+func _get_player_pokemon_data_ball_item_id(pokemon_data: Dictionary, fallback_item_id: String = "poke-ball") -> String:
+	if pokemon_data.is_empty():
+		return fallback_item_id
+
+	var saved_ball_item_id := _get_saved_pokemon_ball_item_id_for_data(pokemon_data)
+	if saved_ball_item_id != "":
+		return saved_ball_item_id
+
+	for key in ["ballItemId", "ball_item_id", "summonBallItemId", "summon_ball_item_id", "caughtBallItemId", "caught_ball_item_id", "caughtWith", "caught_with"]:
+		var item_id := _normalize_pokeball_item_id(str(pokemon_data.get(key, "")))
+		if item_id != "":
+			return item_id
+
+	return fallback_item_id
+
+func _get_saved_pokemon_ball_item_id_for_data(pokemon_data: Dictionary) -> String:
+	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
+	if instance_id == "":
+		return ""
+
+	for pokemon_value in PlayerSave.party:
+		var pokemon: Pokemon = pokemon_value as Pokemon
+		if pokemon == null:
+			continue
+
+		if pokemon.instance_id == instance_id:
+			return _normalize_pokeball_item_id(pokemon.ball_item_id)
+
+	return ""
+
+func _normalize_pokeball_item_id(item_id: String) -> String:
+	return item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 
 func _get_summon_target_rect(sprite_box: Control) -> Rect2:
 	if sprite_box != null and sprite_box.has_method("get_single_sprite_slot"):
@@ -4564,6 +4741,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		return
 	var ordered_events: Array = _order_switch_out_heals_before_switches(_order_form_change_events_before_moves(events))
 	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
+	var should_play_switch_ball_animations := source != "initial_battle_events"
 	_prewarm_battle_event_animations(ordered_events)
 	event_presentation.reset_recent_context()
 
@@ -4602,9 +4780,14 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_update_hud_panels()
 			_update_party_slots()
 		if event_type == "switch" or event_type == "drag":
+			var switch_player_id := _get_switch_event_player_id(event_data)
+			if should_play_switch_ball_animations:
+				await _play_switch_recall_for_event(event_data, switch_player_id)
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_show_switch_event_active_pokemon(event_data)
+			if should_play_switch_ball_animations:
+				await _play_switch_release_for_event(event_data, switch_player_id)
 			await _play_shiny_entrance_if_needed(event_data)
 		if event_type == "transform":
 			battle_state.apply_event_conditions([event_data])
@@ -7940,9 +8123,7 @@ func _get_direct_switch_event_metadata_slot(event_data: Dictionary) -> int:
 
 func _show_switch_event_active_pokemon(event_data: Dictionary) -> void:
 	var switch_ident := _get_switch_event_ident(event_data)
-	var player_id := str(event_data.get("playerId", ""))
-	if player_id == "":
-		player_id = _get_player_id_from_ident(switch_ident)
+	var player_id := _get_switch_event_player_id(event_data)
 	if player_id == "":
 		return
 
@@ -7956,6 +8137,18 @@ func _show_switch_event_active_pokemon(event_data: Dictionary) -> void:
 			_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "switch_event")
 		"p2":
 			_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "switch_event")
+
+func _get_switch_event_player_id(event_data: Dictionary) -> String:
+	var player_id := str(event_data.get("playerId", ""))
+	if player_id != "":
+		return player_id
+
+	var switch_ident := _get_switch_event_ident(event_data)
+	player_id = _get_player_id_from_ident(switch_ident)
+	if player_id != "":
+		return player_id
+
+	return _get_player_id_from_ident(str(event_data.get("pokemon", "")))
 
 func _get_switch_event_species(event_data: Dictionary, switch_ident: String) -> String:
 	var persisted_mega_species := battle_state.resolve_persisted_mega_species_for_ident(switch_ident)
