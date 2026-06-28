@@ -11,6 +11,21 @@ const POKEMON_SPRITE_RELATIVE_ROOT := "assets/sprites/pokemon"
 const GEN5_SPRITE_ROOT := "gen5"
 const PARTY_ICON_CROP_PADDING := 4
 const PARTY_ICON_ALPHA_THRESHOLD := 0.01
+const HOME_SPRITE_ALIASES := {
+	"ninetales-alola": ["Ninetales-Alola"],
+	"vulpix-alola": ["Vulpix-Alola"],
+	"oricorio": ["Oricorio"],
+	"oricorio-baile": ["Oricorio"],
+	"oricoriobaile": ["Oricorio"],
+	"oricorio-pau": ["Oricorio-Pau"],
+	"oricoriopau": ["Oricorio-Pau"],
+	"oricorio-pa'u": ["Oricorio-Pau"],
+	"oricorio-pompom": ["Oricorio-Pom-Pom"],
+	"oricoriopompom": ["Oricorio-Pom-Pom"],
+	"oricorio-pom-pom": ["Oricorio-Pom-Pom"],
+	"oricorio-sensu": ["Oricorio-Sensu"],
+	"oricoriosensu": ["Oricorio-Sensu"],
+}
 
 static var party_icon_cache: Dictionary = {}
 static var external_sprite_root := ""
@@ -93,13 +108,38 @@ static func load_home_sprite(species: String, is_shiny: bool = false) -> Texture
 	return null
 
 static func _get_home_sprite_names(species: String) -> Array[String]:
-	var names: Array[String] = [
-		species,
-		species.replace(" ", "-"),
-		species.replace(" ", "-").replace("-Mega-X", "-Megax").replace("-Mega-Y", "-Megay"),
-	]
+	var names: Array[String] = []
+	var cleaned := species.strip_edges()
+	_add_home_sprite_name(names, cleaned)
+	_add_home_sprite_name(names, cleaned.replace(" ", "-"))
+	_add_home_sprite_name(names, cleaned.replace(" ", "-").replace("-Mega-X", "-Megax").replace("-Mega-Y", "-Megay"))
+	_add_home_sprite_name(names, _to_home_sprite_case(cleaned))
+	_add_home_sprite_name(names, _to_home_sprite_case(cleaned.replace("'", "")))
+
+	var alias_key := _normalize_home_sprite_key(cleaned)
+	if HOME_SPRITE_ALIASES.has(alias_key):
+		for alias: String in HOME_SPRITE_ALIASES[alias_key]:
+			_add_home_sprite_name(names, alias)
 
 	return names
+
+static func _add_home_sprite_name(names: Array[String], sprite_name: String) -> void:
+	if sprite_name.is_empty() or names.has(sprite_name):
+		return
+	names.append(sprite_name)
+
+static func _to_home_sprite_case(value: String) -> String:
+	var normalized := value.strip_edges().replace("_", "-").replace(" ", "-")
+	var parts := normalized.split("-", false)
+	var formatted_parts: Array[String] = []
+	for part: String in parts:
+		if part.is_empty():
+			continue
+		formatted_parts.append(part.substr(0, 1).to_upper() + part.substr(1).to_lower())
+	return "-".join(formatted_parts)
+
+static func _normalize_home_sprite_key(value: String) -> String:
+	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-").replace(".", "")
 
 static func load_party_icon(species: String, is_shiny: bool = false) -> Texture2D:
 	var cache_key := "%s|%s" % [species, str(is_shiny)]

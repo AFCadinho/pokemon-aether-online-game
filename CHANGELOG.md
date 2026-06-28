@@ -3,10 +3,15 @@
 ## Unreleased
 
 **Added**
+- Added an explicit follower sprite map so Pokemon forms can resolve to the correct follower sprite assets.
+- Added a follower sprite map validation tool for future form sprite updates.
 
 **Fixed**
+- Fixed Pokemon HOME icons not loading for form species such as Alolan Ninetales and Oricorio forms.
+- Fixed Pokemon followers using the base species sprite instead of available form sprites, including Alolan Ninetales, Oricorio forms, Deoxys forms, Rotom forms, and regional forms.
 
 **Changed**
+- Follower sprite loading now checks the species-to-asset map before falling back to legacy filename guesses.
 
 ## 0.2.0 - 2026-06-28
 

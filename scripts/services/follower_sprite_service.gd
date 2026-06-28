@@ -6,6 +6,7 @@ const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 4.0
 const WALK_ANIMATION_SPEED := 7.0
+const FOLLOWER_SPRITE_MAP_PATH := "res://data/follower_sprite_map.json"
 
 const NORMAL_FOLLOWER_DIRECTORIES: Array[String] = [
 	"user://assets/followers",
@@ -30,6 +31,8 @@ const FORM_FOLLOWER_SPRITE_ALIASES := {
 }
 
 static var _sprite_frames_cache: Dictionary = {}
+static var _follower_sprite_map: Dictionary = {}
+static var _follower_sprite_map_loaded := false
 
 static func get_sprite_frames(species: String, shiny: bool) -> SpriteFrames:
 	var cache_key: String = "%s:%s" % [_normalize_species_key(species), str(shiny)]
@@ -140,6 +143,7 @@ static func _get_species_file_candidates(species: String) -> Array[String]:
 	var compact_key: String = normalized_key.replace("_", "")
 	var candidates: Array[String] = []
 
+	_append_manifest_candidates(candidates, species)
 	_append_candidate(candidates, normalized_key)
 	_append_candidate(candidates, compact_key)
 	_append_alias_candidates(candidates, normalized_key)
@@ -150,6 +154,46 @@ static func _get_species_file_candidates(species: String) -> Array[String]:
 			_append_candidate(candidates, str(parts[0]))
 
 	return candidates
+
+static func _append_manifest_candidates(candidates: Array[String], species: String) -> void:
+	var sprite_map := _get_follower_sprite_map()
+	var manifest_key := _normalize_manifest_species_key(species)
+	var mapped_value: Variant = sprite_map.get(manifest_key, "")
+	if mapped_value is Array:
+		for candidate: Variant in mapped_value:
+			_append_candidate(candidates, str(candidate))
+		return
+
+	_append_candidate(candidates, str(mapped_value))
+
+static func _get_follower_sprite_map() -> Dictionary:
+	if _follower_sprite_map_loaded:
+		return _follower_sprite_map
+
+	_follower_sprite_map_loaded = true
+	var file := FileAccess.open(FOLLOWER_SPRITE_MAP_PATH, FileAccess.READ)
+	if file == null:
+		push_warning("Follower sprite map not found: %s" % FOLLOWER_SPRITE_MAP_PATH)
+		return _follower_sprite_map
+
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if not (parsed is Dictionary):
+		push_warning("Follower sprite map is not a JSON object: %s" % FOLLOWER_SPRITE_MAP_PATH)
+		return _follower_sprite_map
+
+	_follower_sprite_map = parsed as Dictionary
+	return _follower_sprite_map
+
+static func _normalize_manifest_species_key(species: String) -> String:
+	var key := species.strip_edges().to_lower()
+	key = key.replace("_", "-")
+	key = key.replace(" ", "-")
+	key = key.replace(".", "")
+	key = key.replace("'", "")
+	key = key.replace(":", "")
+	while key.contains("--"):
+		key = key.replace("--", "-")
+	return key
 
 static func _append_alias_candidates(candidates: Array[String], normalized_key: String) -> void:
 	var aliases: Variant = FORM_FOLLOWER_SPRITE_ALIASES.get(normalized_key, [])
