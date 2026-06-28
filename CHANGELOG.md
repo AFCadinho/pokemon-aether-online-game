@@ -12,6 +12,7 @@
 - Added a follower sprite map validation tool for future form sprite updates.
 
 **Fixed**
+- Fixed Choice-locked and otherwise disabled battle moves staying clickable in the move UI.
 - Fixed NPC trainer battles getting stuck with empty move slots after the opponent fainted and needed a forced switch.
 - Fixed Primal Groudon and Primal Kyogre hover stats still showing their base form stats after Red Orb or Blue Orb activation.
 - Fixed Pokemon HOME icons not loading for form species such as Alolan Ninetales and Oricorio forms.
