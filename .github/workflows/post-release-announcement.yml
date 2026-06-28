@@ -1,0 +1,47 @@
+name: Post Release Announcement to Discord
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: Release version, for example 0.2.1.
+        required: true
+        type: string
+      release_notes:
+        description: Optional intro text shown above the changelog fields.
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  post:
+    name: Post Discord release announcement
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Post release announcement to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          RELEASE_NOTES: ${{ inputs.release_notes }}
+        run: |
+          if [ -z "${DISCORD_WEBHOOK_URL}" ]; then
+            echo "Skipping Discord announcement because DISCORD_WEBHOOK_URL is not configured."
+            exit 0
+          fi
+
+          python3 tools/build_discord_release_payload.py \
+            --version "${RELEASE_VERSION}" \
+            --release-notes "${RELEASE_NOTES}" \
+            > discord_payload.json
+
+          curl -sS \
+            -H "Content-Type: application/json" \
+            -d @discord_payload.json \
+            "${DISCORD_WEBHOOK_URL}"

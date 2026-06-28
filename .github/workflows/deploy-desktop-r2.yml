@@ -426,30 +426,10 @@ jobs:
             exit 0
           fi
 
-          python3 - <<'PY' > discord_payload.json
-          import json
-          import os
-
-          version = os.environ["RELEASE_VERSION"].strip()
-          release_notes = os.environ.get("RELEASE_NOTES", "").strip()
-          if not release_notes:
-              release_notes = "Open de launcher om de nieuwste build te downloaden."
-
-          payload = {
-              "username": "PokeAether",
-              "content": "",
-              "allowed_mentions": {"parse": []},
-              "embeds": [
-                  {
-                      "title": f"PokeAether {version} is live",
-                      "description": release_notes,
-                      "color": 5814783,
-                  }
-              ],
-          }
-
-          print(json.dumps(payload))
-          PY
+          python3 tools/build_discord_release_payload.py \
+            --version "${RELEASE_VERSION}" \
+            --release-notes "${RELEASE_NOTES}" \
+            > discord_payload.json
 
           curl -sS \
             -H "Content-Type: application/json" \
