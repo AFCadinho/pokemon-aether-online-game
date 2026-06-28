@@ -3714,7 +3714,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	if lead_response.is_empty():
 		return
 
-	var player_species := _get_original_active_player_species(player_pokemon.species)
+	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
 	var opponent_species := _get_active_display_species("p2")
 	_add_battle_log_messages(setup_flow.get_trainer_battle_start_messages(
 		player_species,
@@ -3724,6 +3724,8 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	))
 	_show_original_player_lead_before_initial_events(player_species)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
+	player_sprite_box.visible = false
+	enemy_sprite_box.visible = false
 	await get_tree().process_frame
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")

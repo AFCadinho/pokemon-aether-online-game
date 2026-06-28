@@ -1,6 +1,7 @@
 extends Button
 
 const TYPE_BANNER_PATH := "res://assets/sprites/types/small/%s.png"
+const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 
 signal selected
 signal hovered(move_data: Dictionary, slot_rect: Rect2)
@@ -12,6 +13,8 @@ signal unhovered
 @onready var effectiveness_label: Label = $MarginContainer/VBoxContainer/BottomRow/EffectivenessLabel
 
 var current_move_data: Dictionary = {}
+static var move_type_index: Dictionary = {}
+static var move_type_index_loaded := false
 
 func _ready() -> void:
 	if not pressed.is_connected(_on_pressed):
@@ -46,7 +49,7 @@ func set_move_data(move_data: Dictionary) -> void:
 		current_pp,
 		max_pp
 	]
-	_set_type_banner(str(move_data.get("type", "")))
+	_set_type_banner(_get_move_type(move_data))
 	
 	_set_effectiveness(move_data)
 	
@@ -67,6 +70,86 @@ func _set_type_banner(move_type: String) -> void:
 		
 	type_banner.texture = texture
 	type_banner.visible = true
+
+
+func _get_move_type(move_data: Dictionary) -> String:
+	for key in ["type", "moveType", "move_type"]:
+		var type_text := str(move_data.get(key, "")).strip_edges()
+		if type_text != "":
+			return type_text
+
+	var metadata_value: Variant = move_data.get("metadata", move_data.get("data", {}))
+	if metadata_value is Dictionary:
+		var metadata: Dictionary = metadata_value as Dictionary
+		for key in ["type", "moveType", "move_type"]:
+			var type_text := str(metadata.get(key, "")).strip_edges()
+			if type_text != "":
+				return type_text
+
+	for key in ["id", "move", "moveId", "move_id", "name"]:
+		var indexed_type := _lookup_move_type(str(move_data.get(key, "")))
+		if indexed_type != "":
+			return indexed_type
+
+	if metadata_value is Dictionary:
+		var metadata: Dictionary = metadata_value as Dictionary
+		for key in ["id", "move", "moveId", "move_id", "name"]:
+			var indexed_type := _lookup_move_type(str(metadata.get(key, "")))
+			if indexed_type != "":
+				return indexed_type
+
+	return ""
+
+
+func _lookup_move_type(move_key: String) -> String:
+	var normalized_key := _normalize_move_lookup_key(move_key)
+	if normalized_key == "":
+		return ""
+
+	_ensure_move_type_index_loaded()
+	if move_type_index.is_empty():
+		return ""
+
+	return str(move_type_index.get(normalized_key, ""))
+
+
+func _ensure_move_type_index_loaded() -> void:
+	if move_type_index_loaded:
+		return
+
+	move_type_index_loaded = true
+	move_type_index.clear()
+
+	if not FileAccess.file_exists(MOVE_TYPE_INDEX_PATH):
+		return
+
+	var json_text := FileAccess.get_file_as_string(MOVE_TYPE_INDEX_PATH)
+	if json_text.strip_edges() == "":
+		return
+
+	var parsed_value: Variant = JSON.parse_string(json_text)
+	if not (parsed_value is Dictionary):
+		return
+
+	var parsed_dictionary: Dictionary = parsed_value as Dictionary
+	for key_value: Variant in parsed_dictionary.keys():
+		var normalized_key := _normalize_move_lookup_key(str(key_value))
+		var move_type := str(parsed_dictionary.get(key_value, "")).strip_edges().to_lower()
+		if normalized_key != "" and move_type != "":
+			move_type_index[normalized_key] = move_type
+
+
+func _normalize_move_lookup_key(value: String) -> String:
+	var normalized_key := value.strip_edges().to_lower()
+	if normalized_key == "":
+		return ""
+
+	normalized_key = normalized_key.replace("_", "-")
+	normalized_key = normalized_key.replace(" ", "-")
+	while normalized_key.contains("--"):
+		normalized_key = normalized_key.replace("--", "-")
+
+	return normalized_key
 	
 func set_empty() -> void:
 	visible = true
