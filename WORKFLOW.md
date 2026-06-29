@@ -35,6 +35,8 @@ After a successful run, the workflow uploads the new game zips and launcher mani
 
 Keep release notes in `CHANGELOG.md`.
 
+The changelog is for players. Write entries in clear, non-technical language that explains what changed in the game experience. Avoid implementation details, internal filenames, API names, and developer-only wording.
+
 The changelog uses Discord-friendly Markdown on purpose:
 
 ```md

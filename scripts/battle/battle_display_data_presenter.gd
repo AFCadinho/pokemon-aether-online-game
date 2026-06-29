@@ -59,9 +59,9 @@ func get_active_pokemon_is_shiny(player_id: String) -> bool:
 		if saved_by_instance != null:
 			return saved_by_instance.shiny
 
-	var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
-	if saved_pokemon != null:
-		return saved_pokemon.shiny
+		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
+		if saved_pokemon != null:
+			return saved_pokemon.shiny
 
 	if display_metadata.pokemon_data_has_shiny_value(active_pokemon):
 		return display_metadata.get_pokemon_data_shiny_value(active_pokemon)

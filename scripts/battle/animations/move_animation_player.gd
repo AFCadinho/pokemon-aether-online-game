@@ -27,6 +27,8 @@ signal animation_finished
 @export_range(0, 48, 1) var sparkle_count: int = 14
 @export_range(0.25, 4.0, 0.05) var speed_scale: float = 1.0
 @export_range(0.1, 2.0, 0.05) var sprite_zoom_multiplier: float = 1.0
+@export_range(0.25, 2.0, 0.05) var sprite_position_scale: float = 1.0
+@export var sprite_position_anchor: Vector2 = Vector2(128, 224)
 @export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
 @export var sparkle_center: Vector2 = Vector2(256, 188)
 @export_range(8.0, 180.0, 1.0) var sparkle_radius_min: float = 26.0
@@ -453,7 +455,8 @@ func _apply_frame(index: int) -> void:
 			tile_w,
 			tile_h
 		)
-		sprite.position = _battlefield_position(Vector2(float(cell["x"]), float(cell["y"])))
+		var sheet_position := Vector2(float(cell["x"]), float(cell["y"]))
+		sprite.position = _battlefield_position(_scale_sprite_position(sheet_position))
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
 		sprite.rotation_degrees = float(cell["angle"])
@@ -513,6 +516,13 @@ func _battlefield_position(position: Vector2) -> Vector2:
 		REVERSED_BATTLEFIELD_AXIS.x - position.x,
 		REVERSED_BATTLEFIELD_AXIS.y - position.y
 	)
+
+
+func _scale_sprite_position(position: Vector2) -> Vector2:
+	if is_equal_approx(sprite_position_scale, 1.0):
+		return position
+
+	return sprite_position_anchor + (position - sprite_position_anchor) * sprite_position_scale
 
 
 func _projectile_battlefield_position(position: Vector2, config: Dictionary) -> Vector2:

@@ -27,6 +27,12 @@ const STAT_RAISE_FLASH_COLOR := Color(0.38, 1.0, 0.48, 1.0)
 const STAT_RAISE_SECONDARY_COLOR := Color(0.72, 1.0, 0.86, 1.0)
 const STAT_DROP_FLASH_COLOR := Color(1.0, 0.22, 0.42, 1.0)
 const STAT_DROP_SECONDARY_COLOR := Color(0.62, 0.35, 0.95, 1.0)
+const STAT_CHANGE_REFERENCE_SIZE := Vector2(450.0, 293.0)
+const STAT_CHANGE_MIN_MOTION_SCALE := 0.6
+const STAT_RAISE_TWEEN_OFFSET := Vector2(0.0, -10.0)
+const STAT_DROP_TWEEN_OFFSET := Vector2(0.0, 8.0)
+const STAT_RAISE_SCALE_MULTIPLIER := 1.07
+const STAT_DROP_SCALE_MULTIPLIER := 0.94
 const STAT_STAGE_PANEL_GAP := 8.0
 const FAINT_TWEEN_OFFSET := Vector2(0, 34)
 const SPRITE_HOVER_PADDING := Vector2(8, 8)
@@ -221,12 +227,14 @@ func play_stat_raise_tween() -> void:
 	for sprite in sprites:
 		var base_position := _get_base_sprite_position(sprite)
 		var target_scale: Vector2 = _get_sprite_target_scale(sprite)
+		var motion_scale := _get_stat_change_motion_scale()
+		var peak_scale_multiplier := _get_stat_change_scale_multiplier(STAT_RAISE_SCALE_MULTIPLIER, motion_scale)
 		active_tween.tween_property(sprite, "modulate", STAT_RAISE_FLASH_COLOR, 0.08)
 		active_tween.tween_property(sprite, "modulate", STAT_RAISE_SECONDARY_COLOR, 0.08).set_delay(0.08)
 		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.14).set_delay(0.16)
-		active_tween.tween_property(sprite, "position", base_position + Vector2(0, -14), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "position", base_position + STAT_RAISE_TWEEN_OFFSET * motion_scale, 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "position", base_position, 0.16).set_delay(0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		active_tween.tween_property(sprite, "scale", target_scale * 1.12, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "scale", target_scale * peak_scale_multiplier, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "scale", target_scale, 0.18).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 	await active_tween.finished
@@ -245,16 +253,29 @@ func play_stat_drop_tween() -> void:
 	for sprite in sprites:
 		var base_position := _get_base_sprite_position(sprite)
 		var target_scale: Vector2 = _get_sprite_target_scale(sprite)
+		var motion_scale := _get_stat_change_motion_scale()
+		var dip_scale_multiplier := _get_stat_change_scale_multiplier(STAT_DROP_SCALE_MULTIPLIER, motion_scale)
 		active_tween.tween_property(sprite, "modulate", STAT_DROP_FLASH_COLOR, 0.08)
 		active_tween.tween_property(sprite, "modulate", STAT_DROP_SECONDARY_COLOR, 0.08).set_delay(0.08)
 		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.16).set_delay(0.16)
-		active_tween.tween_property(sprite, "position", base_position + Vector2(0, 12), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "position", base_position + STAT_DROP_TWEEN_OFFSET * motion_scale, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "position", base_position, 0.18).set_delay(0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		active_tween.tween_property(sprite, "scale", target_scale * 0.9, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "scale", target_scale * dip_scale_multiplier, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "scale", target_scale, 0.2).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
+
+func _get_stat_change_motion_scale() -> float:
+	if size.x <= 0.0 or size.y <= 0.0:
+		return 1.0
+
+	var width_scale := size.x / STAT_CHANGE_REFERENCE_SIZE.x
+	var height_scale := size.y / STAT_CHANGE_REFERENCE_SIZE.y
+	return clampf(minf(width_scale, height_scale), STAT_CHANGE_MIN_MOTION_SCALE, 1.0)
+
+func _get_stat_change_scale_multiplier(multiplier: float, motion_scale: float) -> float:
+	return 1.0 + (multiplier - 1.0) * motion_scale
 
 func play_faint_tween() -> void:
 	var sprites := _get_visible_sprites()

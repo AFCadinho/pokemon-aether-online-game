@@ -91,6 +91,12 @@
         1.0,
         1.0
       ],
+      "sprite_zoom_multiplier": 0.78,
+      "sprite_position_scale": 0.8,
+      "sprite_position_anchor": [
+        128.0,
+        224.0
+      ],
       "overlay_peak_alpha": 0.08,
       "sparkle_count": 8,
       "speed_scale": 1.2,
@@ -122,6 +128,12 @@
         0.72,
         0.82,
         1.0
+      ],
+      "sprite_zoom_multiplier": 0.78,
+      "sprite_position_scale": 0.8,
+      "sprite_position_anchor": [
+        128.0,
+        224.0
       ],
       "overlay_peak_alpha": 0.08,
       "sparkle_count": 8,

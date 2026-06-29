@@ -8180,7 +8180,7 @@ func _show_switch_event_active_pokemon(event_data: Dictionary) -> void:
 	if player_id == "":
 		return
 
-	var species := _get_switch_event_species(event_data, switch_ident)
+	var species := _get_switch_event_display_species(event_data, switch_ident, player_id)
 	if species == "":
 		return
 
@@ -8221,6 +8221,29 @@ func _get_switch_event_species(event_data: Dictionary, switch_ident: String) -> 
 		return str(pokemon_text.split(": ")[1]).strip_edges()
 
 	return pokemon_text
+
+func _get_switch_event_display_species(event_data: Dictionary, switch_ident: String, player_id: String) -> String:
+	var persisted_mega_species := battle_state.resolve_persisted_mega_species_for_ident(switch_ident)
+	if persisted_mega_species != "":
+		return persisted_mega_species
+
+	for ref_key in ["toRef", "to_ref", "targetRef", "target_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_data: Dictionary = ref_value as Dictionary
+		for key in ["displaySpecies", "display_species", "species"]:
+			var ref_species := str(ref_data.get(key, "")).strip_edges()
+			if ref_species != "":
+				return ref_species
+
+	if player_id != "":
+		var active_display_species := _get_active_display_species(player_id)
+		if active_display_species != "":
+			return active_display_species
+
+	return _get_switch_event_species(event_data, switch_ident)
 
 func _get_switch_event_is_shiny(player_id: String, switch_ident: String, species: String) -> bool:
 	var target_key := _get_pending_mega_key(switch_ident)
