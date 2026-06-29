@@ -4577,6 +4577,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_type_icon_row = HBoxContainer.new()
 	pokemon_summary_type_icon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_type_icon_row.alignment = BoxContainer.ALIGNMENT_END
 	pokemon_summary_type_icon_row.add_theme_constant_override("separation", 5)
 	pokemon_summary_type_icon_row.anchor_left = 1.0
 	pokemon_summary_type_icon_row.anchor_top = 0.0
