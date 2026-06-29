@@ -1260,15 +1260,6 @@ func _setup_move_learn_popup() -> void:
 	move_learn_moves_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stack.add_child(move_learn_moves_container)
 
-	for move_index in range(4):
-		var button := Button.new()
-		button.custom_minimum_size = Vector2(0, 32)
-		button.focus_mode = Control.FOCUS_NONE
-		button.pressed.connect(_on_move_learn_replace_pressed.bind(move_index))
-		_apply_button_style(button)
-		move_learn_moves_container.add_child(button)
-		move_learn_move_buttons.append(button)
-
 	move_learn_status_label = Label.new()
 	move_learn_status_label.text = ""
 	move_learn_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1368,28 +1359,34 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	if species == "":
 		species = pokemon.species
 	move_learn_title_label.text = "Learn %s" % move_name
-	move_learn_message_label.text = "%s wants to learn %s. Choose a move to forget." % [species, move_name]
+	move_learn_message_label.text = "%s wants to learn a new move." % species
 	move_learn_status_label.text = ""
 	_set_move_learn_controls_disabled(false)
 
-	for move_index in range(move_learn_move_buttons.size()):
-		var button := move_learn_move_buttons[move_index]
+	for child: Node in move_learn_moves_container.get_children():
+		child.queue_free()
+	move_learn_move_buttons.clear()
+
+	move_learn_moves_container.add_child(_create_move_learn_new_move_card(prompt))
+	move_learn_moves_container.add_child(_create_move_learn_section_label("Choose a move to forget"))
+
+	for move_index in range(4):
+		var button: Button
 		if move_index < pokemon.moves.size():
 			var existing_move: Variant = pokemon.moves[move_index]
 			var existing_name := _get_summary_move_name(existing_move)
-			button.text = "Forget %s" % existing_name
-			button.tooltip_text = "Forget %s and learn %s." % [existing_name, move_name]
-			button.disabled = false
-			_apply_button_style(button, "primary")
+			button = _create_move_learn_replace_button(move_index, existing_move, existing_name, move_name)
 		else:
-			button.text = "Empty slot"
-			button.tooltip_text = "Learn %s in this empty slot." % move_name
-			button.disabled = false
-			_apply_button_style(button, "primary")
+			button = _create_move_learn_empty_slot_button(move_index, move_name)
+		move_learn_moves_container.add_child(button)
+		move_learn_move_buttons.append(button)
 
-	var popup_size := Vector2(440, 300)
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var popup_position := (viewport_size - popup_size) * 0.5
+	var popup_size := Vector2(min(540.0, viewport_size.x - 32.0), min(430.0, viewport_size.y - 32.0))
+	var popup_position := Vector2(
+		max((viewport_size.x - popup_size.x) * 0.5, 16.0),
+		max((viewport_size.y - popup_size.y) * 0.5, 16.0)
+	)
 	move_learn_popup.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	move_learn_popup.position = popup_position
 	move_learn_popup.size = popup_size
@@ -1400,6 +1397,164 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	move_learn_popup.offset_bottom = popup_position.y + popup_size.y
 	move_learn_popup.visible = true
 	move_learn_popup.move_to_front()
+
+func _create_move_learn_new_move_card(prompt: Dictionary) -> Control:
+	var move_value: Variant = _move_learn_prompt_move_value(prompt)
+	var move_name := _move_learn_prompt_move_name(prompt)
+	var description := _get_summary_move_description_text(move_value)
+
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 7, 1))
+	panel.tooltip_text = description
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	margin.tooltip_text = description
+	panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 4)
+	stack.tooltip_text = description
+	margin.add_child(stack)
+
+	var top_row := HBoxContainer.new()
+	top_row.add_theme_constant_override("separation", 8)
+	top_row.tooltip_text = description
+	stack.add_child(top_row)
+
+	var badge := Label.new()
+	badge.text = "New"
+	badge.custom_minimum_size = Vector2(42, 22)
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	badge.add_theme_font_size_override("font_size", 10)
+	badge.add_theme_color_override("font_color", Color("#04111c"))
+	badge.add_theme_stylebox_override("normal", _make_panel_style(POKEMON_SUMMARY_ACCENT, Color("#b9efff"), 11, 1))
+	top_row.add_child(badge)
+
+	var name_label := Label.new()
+	name_label.text = move_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 15)
+	name_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	top_row.add_child(name_label)
+
+	var move_type := _get_summary_move_type(move_value)
+	if move_type != "":
+		top_row.add_child(_create_move_learn_type_control(move_type))
+
+	var meta_row := HBoxContainer.new()
+	meta_row.add_theme_constant_override("separation", 10)
+	meta_row.tooltip_text = description
+	stack.add_child(meta_row)
+	meta_row.add_child(_create_move_learn_meta_label("PP", _get_summary_move_pp_text(move_value), Color("#ff5da8")))
+	meta_row.add_child(_create_move_learn_meta_label("Power", _get_summary_move_power_text(move_value), Color("#f2cf78")))
+	meta_row.add_child(_create_move_learn_meta_label("ACC", _get_summary_move_accuracy_text(move_value), Color("#d9ecff")))
+
+	if description != "":
+		var description_label := Label.new()
+		description_label.text = description
+		description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description_label.add_theme_font_size_override("font_size", 11)
+		description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		stack.add_child(description_label)
+
+	return panel
+
+func _create_move_learn_section_label(label_text: String) -> Control:
+	var label := Label.new()
+	label.text = label_text.to_upper()
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	return label
+
+func _create_move_learn_replace_button(move_index: int, move_value: Variant, existing_name: String, new_move_name: String) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 46)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.tooltip_text = "Forget %s and learn %s." % [existing_name, new_move_name]
+	button.pressed.connect(_on_move_learn_replace_pressed.bind(move_index))
+	_apply_button_style(button, "primary")
+	_fill_move_learn_choice_button(button, "Forget", existing_name, move_value)
+	return button
+
+func _create_move_learn_empty_slot_button(move_index: int, new_move_name: String) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 46)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.tooltip_text = "Learn %s in this empty slot." % new_move_name
+	button.pressed.connect(_on_move_learn_replace_pressed.bind(move_index))
+	_apply_button_style(button, "primary")
+	_fill_move_learn_choice_button(button, "Use", "Empty slot", {})
+	return button
+
+func _fill_move_learn_choice_button(button: Button, action_text: String, move_name: String, move_value: Variant) -> void:
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.anchor_right = 1.0
+	row.anchor_bottom = 1.0
+	row.add_theme_constant_override("separation", 8)
+	button.add_child(row)
+
+	var action_label := Label.new()
+	action_label.text = action_text
+	action_label.custom_minimum_size = Vector2(48, 0)
+	action_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	action_label.add_theme_font_size_override("font_size", 10)
+	action_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	action_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(action_label)
+
+	var name_label := Label.new()
+	name_label.text = move_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 13)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(name_label)
+
+	var move_type := _get_summary_move_type(move_value)
+	if move_type != "":
+		row.add_child(_create_move_learn_type_control(move_type))
+
+	row.add_child(_create_move_learn_meta_label("PP", _get_summary_move_pp_text(move_value), Color("#ff5da8"), 54.0))
+	row.add_child(_create_move_learn_meta_label("Pow", _get_summary_move_power_text(move_value), Color("#f2cf78"), 48.0))
+	row.add_child(_create_move_learn_meta_label("Acc", _get_summary_move_accuracy_text(move_value), Color("#d9ecff"), 48.0))
+
+func _create_move_learn_type_control(move_type: String) -> Control:
+	var type_icon_texture: Texture2D = _load_pokemon_type_icon(move_type)
+	if type_icon_texture != null:
+		var type_icon := TextureRect.new()
+		type_icon.custom_minimum_size = Vector2(22, 22)
+		type_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		type_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		type_icon.texture = type_icon_texture
+		type_icon.tooltip_text = move_type.capitalize()
+		type_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		return type_icon
+	var type_label := _create_summary_move_type_label(move_type)
+	_set_control_tree_mouse_filter(type_label, Control.MOUSE_FILTER_IGNORE)
+	return type_label
+
+func _create_move_learn_meta_label(label_text: String, value_text: String, color: Color, min_width: float = 70.0) -> Control:
+	var label := Label.new()
+	label.text = "%s: %s" % [label_text, value_text]
+	label.custom_minimum_size = Vector2(min_width, 0)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return label
 
 func _on_move_learn_replace_pressed(move_index: int) -> void:
 	var replace_slot := move_index
@@ -1478,6 +1633,19 @@ func _move_learn_prompt_move_name(prompt: Dictionary) -> String:
 	if move_value is Dictionary:
 		return _get_summary_move_name(move_value)
 	return _format_move_name(_move_learn_prompt_move_id(prompt))
+
+func _move_learn_prompt_move_value(prompt: Dictionary) -> Variant:
+	var move_value: Variant = prompt.get("move", {})
+	if move_value is Dictionary:
+		return (move_value as Dictionary).duplicate(true)
+
+	var move_data := prompt.duplicate(true)
+	var move_id := _move_learn_prompt_move_id(prompt)
+	if move_id != "":
+		move_data["id"] = move_id
+	if str(move_data.get("name", "")).strip_edges() == "":
+		move_data["name"] = _format_move_name(move_id)
+	return move_data
 
 func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup = PanelContainer.new()
