@@ -310,6 +310,37 @@ func set_pokemon_ball(pokemon_id: int, ball_item_id: String) -> Dictionary:
 	return result
 
 
+func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1, skip: bool = false) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0 or move_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing Pokemon or move.",
+		}
+
+	var payload := {
+		"moveId": move_id,
+		"skip": skip,
+	}
+	if replace_slot >= 0:
+		payload["replaceSlot"] = replace_slot
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/moves/learn" % pokemon_id,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(payload)
+	)
+	var result: Dictionary = _pokemon_move_learn_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
 func save_current_party_deferred() -> void:
 	var result: Dictionary = await save_party(PlayerSave.to_party_state())
 	if not bool(result.get("success", false)):
@@ -415,6 +446,23 @@ func _pokemon_create_result_from_response(response: Dictionary) -> Dictionary:
 		"pokemon": pokemon,
 		"hasParty": bool(party.get("hasParty", false)),
 		"party": _array_from_value(party.get("party", [])),
+	}
+
+
+func _pokemon_move_learn_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	return {
+		"success": true,
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"party": _array_from_value(party.get("party", [])),
+		"hasParty": bool(party.get("hasParty", false)),
+		"learnedMove": _dictionary_from_value(body.get("learnedMove", {})),
+		"replacedMove": _dictionary_from_value(body.get("replacedMove", {})),
+		"skipped": bool(body.get("skipped", false)),
 	}
 
 

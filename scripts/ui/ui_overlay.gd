@@ -299,6 +299,16 @@ var ui_confirm_message_label: Label
 var ui_confirm_cancel_button: Button
 var ui_confirm_confirm_button: Button
 var ui_confirm_callback := Callable()
+var move_learn_popup: PanelContainer
+var move_learn_title_label: Label
+var move_learn_message_label: Label
+var move_learn_moves_container: VBoxContainer
+var move_learn_status_label: Label
+var move_learn_skip_button: Button
+var move_learn_move_buttons: Array[Button] = []
+var move_learn_queue: Array[Dictionary] = []
+var move_learn_active_prompt: Dictionary = {}
+var move_learn_processing := false
 var dev_clear_menu_popup: PanelContainer
 var pvp_room_popup: PanelContainer
 var pvp_room_code_label: Label
@@ -472,6 +482,7 @@ func _ready() -> void:
 	_setup_normal_ui_focus_groups()
 	_setup_chat_pokemon_attachment_preview()
 	_setup_ui_confirm_popup()
+	_setup_move_learn_popup()
 	_setup_dev_clear_menu_popup()
 	_setup_pvp_room_popup()
 	_setup_dev_add_item_tools()
@@ -1187,6 +1198,246 @@ func _on_ui_confirm_confirm_pressed() -> void:
 	_hide_ui_confirm_popup()
 	if callback.is_valid():
 		await callback.call()
+
+func _setup_move_learn_popup() -> void:
+	move_learn_popup = PanelContainer.new()
+	move_learn_popup.name = "MoveLearnPopup"
+	move_learn_popup.visible = false
+	move_learn_popup.z_index = UI_MODAL_Z_INDEX
+	move_learn_popup.z_as_relative = false
+	move_learn_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	move_learn_popup.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	move_learn_popup.custom_minimum_size = Vector2(440, 300)
+	move_learn_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912fa"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
+	root_control.add_child(move_learn_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	move_learn_popup.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 10)
+	margin.add_child(stack)
+
+	move_learn_title_label = Label.new()
+	move_learn_title_label.text = "Learn Move"
+	move_learn_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	move_learn_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	move_learn_title_label.add_theme_font_size_override("font_size", 17)
+	move_learn_title_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	stack.add_child(move_learn_title_label)
+
+	move_learn_message_label = Label.new()
+	move_learn_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	move_learn_message_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	move_learn_message_label.add_theme_font_size_override("font_size", 14)
+	move_learn_message_label.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(move_learn_message_label)
+
+	move_learn_moves_container = VBoxContainer.new()
+	move_learn_moves_container.add_theme_constant_override("separation", 6)
+	move_learn_moves_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stack.add_child(move_learn_moves_container)
+
+	for move_index in range(4):
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(0, 32)
+		button.focus_mode = Control.FOCUS_NONE
+		button.pressed.connect(_on_move_learn_replace_pressed.bind(move_index))
+		_apply_button_style(button)
+		move_learn_moves_container.add_child(button)
+		move_learn_move_buttons.append(button)
+
+	move_learn_status_label = Label.new()
+	move_learn_status_label.text = ""
+	move_learn_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	move_learn_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	move_learn_status_label.add_theme_font_size_override("font_size", 12)
+	move_learn_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(move_learn_status_label)
+
+	var button_row := HBoxContainer.new()
+	button_row.alignment = BoxContainer.ALIGNMENT_END
+	button_row.add_theme_constant_override("separation", 8)
+	stack.add_child(button_row)
+
+	move_learn_skip_button = Button.new()
+	move_learn_skip_button.text = "Do not learn"
+	move_learn_skip_button.custom_minimum_size = Vector2(140, 32)
+	move_learn_skip_button.focus_mode = Control.FOCUS_NONE
+	move_learn_skip_button.pressed.connect(_on_move_learn_skip_pressed)
+	_apply_button_style(move_learn_skip_button)
+	button_row.add_child(move_learn_skip_button)
+
+func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
+	if not (reward_value is Dictionary):
+		return
+
+	var reward: Dictionary = reward_value as Dictionary
+	var level_ups_value: Variant = reward.get("levelUps", [])
+	if not (level_ups_value is Array):
+		return
+
+	for level_up_value: Variant in level_ups_value:
+		if not (level_up_value is Dictionary):
+			continue
+
+		var level_up: Dictionary = level_up_value as Dictionary
+		var pokemon_id := int(level_up.get("pokemonId", 0))
+		var species := str(level_up.get("species", "Pokemon")).strip_edges()
+		var candidates_value: Variant = level_up.get("moveLearnCandidates", [])
+		if pokemon_id <= 0 or not (candidates_value is Array):
+			continue
+
+		for candidate_value: Variant in candidates_value:
+			if not (candidate_value is Dictionary):
+				continue
+
+			var prompt := (candidate_value as Dictionary).duplicate(true)
+			var move_id := _move_learn_prompt_move_id(prompt)
+			if move_id == "":
+				continue
+
+			prompt["pokemonId"] = pokemon_id
+			prompt["species"] = species if species != "" else "Pokemon"
+			move_learn_queue.append(prompt)
+
+	_show_next_move_learn_prompt()
+
+func _show_next_move_learn_prompt() -> void:
+	if move_learn_processing or move_learn_popup == null or move_learn_popup.visible:
+		return
+
+	while not move_learn_queue.is_empty():
+		var prompt: Dictionary = move_learn_queue.pop_front()
+		var pokemon := _find_party_pokemon_by_owned_id(int(prompt.get("pokemonId", 0)))
+		if pokemon == null:
+			add_system_message("Could not open move learning prompt for %s." % str(prompt.get("species", "Pokemon")))
+			continue
+
+		move_learn_active_prompt = prompt
+		_render_move_learn_prompt(pokemon, prompt)
+		return
+
+func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
+	var move_name := _move_learn_prompt_move_name(prompt)
+	var species := str(prompt.get("species", pokemon.species)).strip_edges()
+	if species == "":
+		species = pokemon.species
+	move_learn_title_label.text = "Learn %s" % move_name
+	move_learn_message_label.text = "%s wants to learn %s. Choose a move to forget." % [species, move_name]
+	move_learn_status_label.text = ""
+	_set_move_learn_controls_disabled(false)
+
+	for move_index in range(move_learn_move_buttons.size()):
+		var button := move_learn_move_buttons[move_index]
+		if move_index < pokemon.moves.size():
+			var existing_move: Variant = pokemon.moves[move_index]
+			var existing_name := _get_summary_move_name(existing_move)
+			button.text = "Forget %s" % existing_name
+			button.tooltip_text = "Forget %s and learn %s." % [existing_name, move_name]
+			button.disabled = false
+			_apply_button_style(button, "primary")
+		else:
+			button.text = "Empty slot"
+			button.tooltip_text = "Learn %s in this empty slot." % move_name
+			button.disabled = false
+			_apply_button_style(button, "primary")
+
+	var popup_size := Vector2(440, 300)
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var popup_position := (viewport_size - popup_size) * 0.5
+	move_learn_popup.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	move_learn_popup.position = popup_position
+	move_learn_popup.size = popup_size
+	move_learn_popup.custom_minimum_size = popup_size
+	move_learn_popup.offset_left = popup_position.x
+	move_learn_popup.offset_top = popup_position.y
+	move_learn_popup.offset_right = popup_position.x + popup_size.x
+	move_learn_popup.offset_bottom = popup_position.y + popup_size.y
+	move_learn_popup.visible = true
+	move_learn_popup.move_to_front()
+
+func _on_move_learn_replace_pressed(move_index: int) -> void:
+	var replace_slot := move_index
+	var pokemon := _find_party_pokemon_by_owned_id(int(move_learn_active_prompt.get("pokemonId", 0)))
+	if pokemon != null and move_index >= pokemon.moves.size():
+		replace_slot = -1
+	await _submit_move_learn_choice(replace_slot, false)
+
+func _on_move_learn_skip_pressed() -> void:
+	await _submit_move_learn_choice(-1, true)
+
+func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
+	if move_learn_processing or move_learn_active_prompt.is_empty():
+		return
+
+	move_learn_processing = true
+	_set_move_learn_controls_disabled(true)
+	var move_id := _move_learn_prompt_move_id(move_learn_active_prompt)
+	var move_name := _move_learn_prompt_move_name(move_learn_active_prompt)
+	var pokemon_id := int(move_learn_active_prompt.get("pokemonId", 0))
+	move_learn_status_label.text = "Saving..."
+	var result: Dictionary = await PlayerPartyStateService.learn_pokemon_move(pokemon_id, move_id, replace_slot, skip)
+	move_learn_processing = false
+
+	if not bool(result.get("success", false)):
+		move_learn_status_label.text = str(result.get("error", "Could not save move choice."))
+		_set_move_learn_controls_disabled(false)
+		return
+
+	if skip:
+		add_system_message("%s did not learn %s." % [str(move_learn_active_prompt.get("species", "Pokemon")), move_name])
+	else:
+		var replaced_move: Dictionary = result.get("replacedMove", {}) as Dictionary
+		var replaced_name := _get_summary_move_name(replaced_move) if not replaced_move.is_empty() else ""
+		if replaced_name != "":
+			add_system_message("%s forgot %s and learned %s!" % [str(move_learn_active_prompt.get("species", "Pokemon")), replaced_name, move_name])
+		else:
+			add_system_message("%s learned %s!" % [str(move_learn_active_prompt.get("species", "Pokemon")), move_name])
+
+	move_learn_popup.visible = false
+	move_learn_active_prompt.clear()
+	_refresh_party()
+	_refresh_open_pokemon_summary_cards()
+	_show_next_move_learn_prompt()
+
+func _set_move_learn_controls_disabled(disabled: bool) -> void:
+	for button: Button in move_learn_move_buttons:
+		button.disabled = disabled
+	if move_learn_skip_button != null:
+		move_learn_skip_button.disabled = disabled
+
+func _find_party_pokemon_by_owned_id(pokemon_id: int) -> Pokemon:
+	if pokemon_id <= 0:
+		return null
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon.owned_pokemon_id == pokemon_id:
+			return pokemon
+	return null
+
+func _move_learn_prompt_move_id(prompt: Dictionary) -> String:
+	var move_id := str(prompt.get("moveId", prompt.get("move_id", ""))).strip_edges()
+	if move_id != "":
+		return move_id
+
+	var move_value: Variant = prompt.get("move", {})
+	if move_value is Dictionary:
+		var move_payload: Dictionary = move_value as Dictionary
+		return str(move_payload.get("id", move_payload.get("move", ""))).strip_edges()
+	return ""
+
+func _move_learn_prompt_move_name(prompt: Dictionary) -> String:
+	var move_name := str(prompt.get("name", "")).strip_edges()
+	if move_name != "":
+		return move_name
+	var move_value: Variant = prompt.get("move", {})
+	if move_value is Dictionary:
+		return _get_summary_move_name(move_value)
+	return _format_move_name(_move_learn_prompt_move_id(prompt))
 
 func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup = PanelContainer.new()

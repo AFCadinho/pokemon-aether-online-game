@@ -1112,6 +1112,8 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 		get_tree().call_group("ui_overlay", "add_system_message", message)
 		_notify_reward_level_up_moves(species, level_up)
 
+	get_tree().call_group("ui_overlay", "queue_reward_move_learn_candidates", reward)
+
 func _notify_reward_level_up_moves(species: String, level_up: Dictionary) -> void:
 	_notify_reward_move_messages(
 		species,
