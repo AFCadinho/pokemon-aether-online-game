@@ -422,7 +422,9 @@ var bag_item_use_item_label: Label
 var bag_item_use_quantity_spinbox: SpinBox
 var bag_item_use_party_list: VBoxContainer
 var bag_item_use_status_label: Label
+var bag_item_use_confirm_button: Button
 var bag_item_use_pending_item: Dictionary = {}
+var bag_item_use_selected_slot := -1
 var bag_item_use_in_progress := false
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
@@ -5653,6 +5655,23 @@ func _setup_bag_item_use_popup() -> void:
 	bag_item_use_item_label.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(bag_item_use_item_label)
 
+	var party_label := Label.new()
+	party_label.text = "Choose Pokemon"
+	party_label.add_theme_font_size_override("font_size", 11)
+	party_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(party_label)
+
+	var party_scroll := ScrollContainer.new()
+	party_scroll.custom_minimum_size = Vector2(0, 170)
+	party_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	party_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(party_scroll)
+
+	bag_item_use_party_list = VBoxContainer.new()
+	bag_item_use_party_list.add_theme_constant_override("separation", 6)
+	bag_item_use_party_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	party_scroll.add_child(bag_item_use_party_list)
+
 	var quantity_row := HBoxContainer.new()
 	quantity_row.add_theme_constant_override("separation", 8)
 	layout.add_child(quantity_row)
@@ -5669,33 +5688,39 @@ func _setup_bag_item_use_popup() -> void:
 	bag_item_use_quantity_spinbox.max_value = 1
 	bag_item_use_quantity_spinbox.value = 1
 	bag_item_use_quantity_spinbox.step = 1
+	bag_item_use_quantity_spinbox.editable = false
 	bag_item_use_quantity_spinbox.custom_minimum_size = Vector2(116, 0)
 	bag_item_use_quantity_spinbox.value_changed.connect(_on_bag_item_use_quantity_changed)
 	quantity_row.add_child(bag_item_use_quantity_spinbox)
 
-	var party_label := Label.new()
-	party_label.text = "Choose Pokemon"
-	party_label.add_theme_font_size_override("font_size", 11)
-	party_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(party_label)
-
-	var party_scroll := ScrollContainer.new()
-	party_scroll.custom_minimum_size = Vector2(0, 180)
-	party_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	party_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	layout.add_child(party_scroll)
-
-	bag_item_use_party_list = VBoxContainer.new()
-	bag_item_use_party_list.add_theme_constant_override("separation", 6)
-	bag_item_use_party_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	party_scroll.add_child(bag_item_use_party_list)
-
 	bag_item_use_status_label = Label.new()
-	bag_item_use_status_label.text = ""
+	bag_item_use_status_label.text = "Select a Pokemon first."
 	bag_item_use_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bag_item_use_status_label.add_theme_font_size_override("font_size", 12)
 	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(bag_item_use_status_label)
+
+	var action_row := HBoxContainer.new()
+	action_row.alignment = BoxContainer.ALIGNMENT_END
+	action_row.add_theme_constant_override("separation", 8)
+	layout.add_child(action_row)
+
+	var cancel_button := Button.new()
+	cancel_button.text = "Cancel"
+	cancel_button.custom_minimum_size = Vector2(112, 32)
+	cancel_button.focus_mode = Control.FOCUS_NONE
+	cancel_button.pressed.connect(_hide_bag_item_use_popup)
+	_apply_button_style(cancel_button)
+	action_row.add_child(cancel_button)
+
+	bag_item_use_confirm_button = Button.new()
+	bag_item_use_confirm_button.text = "Use"
+	bag_item_use_confirm_button.custom_minimum_size = Vector2(128, 32)
+	bag_item_use_confirm_button.focus_mode = Control.FOCUS_NONE
+	bag_item_use_confirm_button.disabled = true
+	bag_item_use_confirm_button.pressed.connect(_on_bag_item_use_confirm_pressed)
+	_apply_button_style(bag_item_use_confirm_button, "primary")
+	action_row.add_child(bag_item_use_confirm_button)
 
 func _refresh_bag_items() -> void:
 	if bag_item_grid == null:
@@ -5820,6 +5845,7 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 		return
 
 	bag_item_use_pending_item = item.duplicate(true)
+	bag_item_use_selected_slot = -1
 	bag_item_use_in_progress = false
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	var item_name := str(item.get("name", _item_name_from_id(item_id)))
@@ -5828,8 +5854,10 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 	bag_item_use_item_label.text = "%s x%s" % [item_name, quantity]
 	bag_item_use_quantity_spinbox.max_value = min(quantity, 99)
 	bag_item_use_quantity_spinbox.value = 1
-	bag_item_use_quantity_spinbox.editable = true
-	bag_item_use_status_label.text = ""
+	bag_item_use_quantity_spinbox.editable = false
+	if bag_item_use_confirm_button != null:
+		bag_item_use_confirm_button.disabled = true
+	bag_item_use_status_label.text = "Select a Pokemon first."
 	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_refresh_bag_item_use_party_list()
 	bag_item_use_popup.visible = true
@@ -5842,6 +5870,7 @@ func _hide_bag_item_use_popup() -> void:
 	if bag_item_use_popup != null:
 		bag_item_use_popup.visible = false
 	bag_item_use_pending_item = {}
+	bag_item_use_selected_slot = -1
 
 func _refresh_bag_item_use_party_list() -> void:
 	if bag_item_use_party_list == null:
@@ -5864,6 +5893,7 @@ func _on_bag_item_use_quantity_changed(_value: float) -> void:
 		return
 	if bag_item_use_in_progress:
 		return
+	_refresh_bag_item_use_selected_preview()
 	_refresh_bag_item_use_party_list()
 
 func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> Control:
@@ -5875,8 +5905,11 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	var requested_quantity := 1
 	if bag_item_use_quantity_spinbox != null:
 		requested_quantity = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
-	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
-	var preview_text := str(preview.get("label", ""))
+	var preview: Dictionary = {}
+	var preview_text := ""
+	if slot_index == bag_item_use_selected_slot:
+		preview = _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+		preview_text = str(preview.get("label", ""))
 	button.text = "%s  Lv. %s%s" % [
 		pokemon.species,
 		max(pokemon.level, 1),
@@ -5889,7 +5922,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	elif pokemon.owned_pokemon_id <= 0:
 		button.tooltip_text = "%s is missing an ownership id." % pokemon.species
 	button.pressed.connect(_on_bag_item_use_pokemon_selected.bind(slot_index))
-	_apply_button_style(button, "default")
+	_apply_button_style(button, "primary" if slot_index == bag_item_use_selected_slot else "default")
 	return button
 
 func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
@@ -6010,6 +6043,51 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
 		_set_bag_item_use_status("This Pokemon is missing an ownership id.", true)
 		return
+	if pokemon.level >= POKEMON_MAX_LEVEL:
+		_set_bag_item_use_status("%s is already Lv. 100." % pokemon.species, true)
+		return
+
+	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
+	if not _is_exp_item_id(item_id):
+		_set_bag_item_use_status("This item cannot be used for EXP.", true)
+		return
+
+	bag_item_use_selected_slot = slot_index
+	bag_item_use_quantity_spinbox.editable = true
+	if bag_item_use_confirm_button != null:
+		bag_item_use_confirm_button.disabled = false
+	_refresh_bag_item_use_selected_preview()
+	_refresh_bag_item_use_party_list()
+
+func _refresh_bag_item_use_selected_preview() -> void:
+	if bag_item_use_selected_slot < 0 or bag_item_use_selected_slot >= PlayerSave.party.size():
+		_set_bag_item_use_status("Select a Pokemon first.", false)
+		return
+
+	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
+	if pokemon == null:
+		_set_bag_item_use_status("Select a Pokemon first.", false)
+		return
+
+	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
+	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
+	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
+	var preview_text := str(preview.get("label", ""))
+	if preview_text == "":
+		preview_text = "No EXP change"
+	_set_bag_item_use_status("%s selected. %s" % [pokemon.species, preview_text], false)
+
+func _on_bag_item_use_confirm_pressed() -> void:
+	if bag_item_use_in_progress:
+		return
+	if bag_item_use_selected_slot < 0 or bag_item_use_selected_slot >= PlayerSave.party.size():
+		_set_bag_item_use_status("Select a Pokemon first.", true)
+		return
+
+	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
+	if pokemon == null or pokemon.owned_pokemon_id <= 0:
+		_set_bag_item_use_status("This Pokemon is missing an ownership id.", true)
+		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
 	if not _is_exp_item_id(item_id):
@@ -6019,12 +6097,16 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
 	bag_item_use_in_progress = true
 	bag_item_use_quantity_spinbox.editable = false
+	if bag_item_use_confirm_button != null:
+		bag_item_use_confirm_button.disabled = true
 	_set_bag_item_use_status("Using item...", false)
 	_refresh_bag_item_use_party_list()
 
 	var result: Dictionary = await InventoryService.use_pokemon_item(pokemon.owned_pokemon_id, item_id, quantity)
 	bag_item_use_in_progress = false
 	bag_item_use_quantity_spinbox.editable = true
+	if bag_item_use_confirm_button != null:
+		bag_item_use_confirm_button.disabled = false
 	if not bool(result.get("success", false)):
 		_set_bag_item_use_status("Could not use item: %s" % str(result.get("error", "Unknown error")), true)
 		_refresh_bag_item_use_party_list()
