@@ -9379,6 +9379,60 @@ func _add_chat_message(text: String, use_bbcode: bool = false) -> void:
 func add_system_message(text: String) -> void:
 	_add_chat_message(text)
 
+func add_system_pokemon_message(text: String, pokemon_attachments: Array = []) -> void:
+	var attachments: Array[Dictionary] = []
+	for attachment_value: Variant in pokemon_attachments:
+		if attachment_value is Dictionary:
+			var attachment := (attachment_value as Dictionary).duplicate(true)
+			if not attachment.is_empty():
+				attachments.append(attachment)
+
+	var message_text := text.strip_edges()
+	if message_text == "" and attachments.is_empty():
+		return
+
+	var row: HBoxContainer = HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	row.add_theme_constant_override("separation", 4)
+	row.set_meta("chat_category", CHAT_CATEGORY_SYSTEM)
+	row.visible = _should_show_chat_category(CHAT_CATEGORY_SYSTEM)
+	message_list.add_child(row)
+
+	var system_label := message_entry_template.duplicate() as RichTextLabel
+	row.add_child(system_label)
+	system_label.visible = true
+	system_label.bbcode_enabled = true
+	system_label.clear()
+	system_label.append_text("[color=%s][b]SYSTEM[/b][/color][color=%s]:[/color]" % [
+		CHAT_SYSTEM_LABEL_COLOR,
+		CHAT_SEPARATOR_COLOR,
+	])
+	system_label.fit_content = true
+	system_label.scroll_active = false
+	system_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	system_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	system_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+	for pokemon_payload: Dictionary in attachments:
+		row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
+
+	if message_text != "":
+		var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
+		row.add_child(entry)
+		entry.visible = true
+		entry.bbcode_enabled = true
+		entry.clear()
+		entry.append_text("[color=%s]%s[/color]" % [
+			CHAT_SYSTEM_MESSAGE_COLOR,
+			_escape_bbcode(message_text),
+		])
+		entry.fit_content = true
+		entry.scroll_active = false
+		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		entry.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_scroll_chat_to_bottom.call_deferred()
+
 
 func refresh_money_display() -> void:
 	_refresh_player_status_card()

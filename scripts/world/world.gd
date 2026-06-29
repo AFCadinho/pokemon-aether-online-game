@@ -939,10 +939,47 @@ func _on_battle_ended(result: Dictionary) -> void:
 	var reward_species := active_wild_pokemon_species
 	var reward_trainer_name := active_trainer_name
 	end_wild_battle()
+	_notify_caught_pokemon_if_needed(result)
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
 	if should_claim_trainer_reward and reward_battle_id != "":
 		await _award_trainer_battle_rewards(reward_battle_id, reward_trainer_name)
+
+func _notify_caught_pokemon_if_needed(result: Dictionary) -> void:
+	if str(result.get("reason", "")) != "caught":
+		return
+
+	var pokemon_payload := _extract_caught_pokemon_chat_payload(result.get("pokemon", {}))
+	if pokemon_payload.is_empty():
+		return
+
+	var species := str(pokemon_payload.get("species", "Pokemon")).strip_edges()
+	if species == "":
+		species = "Pokemon"
+
+	var message := "You caught %s!" % species
+	if result.has("addedToParty") and bool(result.get("addedToParty", false)):
+		message = "You caught %s! Added to your party." % species
+
+	get_tree().call_group("ui_overlay", "add_system_pokemon_message", message, [pokemon_payload])
+
+func _extract_caught_pokemon_chat_payload(value: Variant) -> Dictionary:
+	if not value is Dictionary:
+		return {}
+
+	var wrapper: Dictionary = value as Dictionary
+	var payload: Dictionary = wrapper.duplicate(true)
+	var nested_value: Variant = wrapper.get("pokemon", {})
+	if nested_value is Dictionary:
+		payload = (nested_value as Dictionary).duplicate(true)
+		var owned_id := str(wrapper.get("id", "")).strip_edges()
+		if owned_id != "" and not payload.has("ownedPokemonId"):
+			payload["ownedPokemonId"] = owned_id
+
+	var species := str(payload.get("species", "")).strip_edges()
+	if species == "":
+		return {}
+	return payload
 
 func _should_claim_wild_battle_reward(result: Dictionary) -> bool:
 	if active_battle_kind != "wild":

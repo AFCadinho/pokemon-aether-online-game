@@ -2208,6 +2208,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 			"reason": "caught",
 			"winner": "p1",
 			"pokemon": capture_result.get("pokemon", {}),
+			"addedToParty": bool(capture_result.get("addedToParty", false)),
 			"itemId": item_id,
 			"skipPartyBattleSync": true,
 		})
