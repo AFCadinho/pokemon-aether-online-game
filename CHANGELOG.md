@@ -3,32 +3,34 @@
 ## Unreleased
 
 **Added**
-- Added a revamped Pokemon summary card with a fixed-size layout, a current-trainer title bar, front/back sprite toggle, compact shiny marker, move hover descriptions, and nature-based stat highlighting.
-- Added compact origin metadata in Pokemon summaries so caught and generated Pokemon show their region, location, origin date, and origin method clearly.
-- Added short description hover tooltips for abilities in the Pokemon summary Info tab.
+- Added a redesigned Pokemon summary screen that is easier to read and keeps every tab the same size.
+- Added a front/back sprite toggle in Pokemon summaries.
+- Added a small shiny marker in Pokemon summaries.
+- Added clearer origin info in Pokemon summaries, including where a Pokemon came from, when it was obtained, and whether it was caught or generated.
+- Added hover descriptions for moves and abilities in Pokemon summaries.
 
 **Changed**
-- Battle logs now start collapsed on smaller screens and open on wider screens.
-- On smaller screens, opening the battle log toggle keeps the large log hidden so battle information stays readable.
-- Battle log open or collapsed state is remembered for the rest of the client session after you change it.
-- Your own overworld character now takes visual priority when players stand on the same spot.
-- Pokemon summary tabs now keep the same card size across Info, IVs, EVs, and Moves without summary scrollbars.
-- Pokemon summary stored EVs now use a roomier two-row layout for better readability.
-- Pokemon summary Poké Ball and held item pickers now use searchable suggestions instead of long option lists.
-- Changing a Pokemon's assigned Poké Ball now consumes the new ball and does not return the previous ball, with a confirmation prompt before the change.
-- Confirmation prompts in the main UI now use the styled in-game popup instead of the default Godot dialog.
+- Battle logs now behave better on different screen sizes and remember your choice during the session.
+- Your own overworld character now appears in front when players stand on the same spot.
+- Pokemon summary stats now highlight nature boosts and drops.
+- Stored EVs now use a roomier two-row layout for better readability.
+- Poké Ball and held item changes now use searchable suggestions instead of long option lists.
+- Changing a Pokemon's assigned Poké Ball now warns you first, consumes the new ball, and does not return the previous ball.
+- Wild Pokemon now receive random natures and IVs, so caught Pokemon should feel less identical.
+- Confirmation prompts now match the game's UI style.
 
 **Fixed**
 - Fixed the forfeit confirmation prompt appearing behind other battle UI.
-- Fixed Red Orb and Blue Orb not being treated as holdable items for Pokemon summary held item assignment.
-- Fixed Pokemon summaries treating 100/100 backend HP snapshots as percentage HP when real max HP stats are available.
+- Fixed Red Orb and Blue Orb not showing up properly as held item choices.
+- Fixed ability names in Pokemon summaries sometimes showing names like `run-away` instead of `Run Away`.
+- Fixed Pokemon summaries sometimes showing HP as a percentage instead of the real HP value.
 - Fixed saved overworld positions sometimes drifting off the tile grid after disconnecting or returning from battle during movement.
-- Fixed overworld players, followers, NPCs, and tree layers drawing in inconsistent order while overlapping.
+- Fixed overworld players, followers, NPCs, and trees sometimes appearing in the wrong visual order while overlapping.
 - Fixed PvP team indicators showing shiny markers on the wrong Pokemon.
 - Fixed form Pokemon such as Landorus-Therian briefly showing the wrong form when switching in.
 - Fixed NPC trainer battle openings briefly showing form Pokemon such as Landorus-Therian as their base species before the summon animation finished.
 - Fixed Leftovers and other healing animations not playing on visible form Pokemon such as Landorus-Therian.
-- Fixed stat-lowering particles looking too large and spread out on the resized battle screen.
+- Fixed stat-lowering particles looking too large and spread out on the battle screen.
 
 ## 0.2.2 - 2026-06-29
 
