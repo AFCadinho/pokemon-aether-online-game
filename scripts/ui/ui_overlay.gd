@@ -5260,7 +5260,7 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	top_metrics.add_theme_constant_override("separation", 8)
 	top_metrics.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(top_metrics)
-	top_metrics.add_child(_create_summary_metric_card("EXP", _get_pokemon_summary_experience_text(pokemon), 0, 1, Color("#62d7ff"), 148.0))
+	top_metrics.add_child(_create_summary_experience_metric_card(pokemon, Color("#62d7ff"), 148.0))
 	top_metrics.add_child(_create_summary_metric_card("Happiness", _get_pokemon_summary_happiness_text(pokemon), 0, 1, Color("#f2cf78"), 148.0))
 
 	var info_grid := GridContainer.new()
@@ -5361,6 +5361,69 @@ func _create_summary_metric_card(
 	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06080de8"), Color("#1d2635"), 3, 0))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
 	stack.add_child(bar)
+	return stack
+
+func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Color, min_width: float = 96.0) -> Control:
+	var current_exp: int = max(pokemon.experience, 0)
+	var current_level_exp: int = max(pokemon.current_level_exp, 0)
+	var next_level_exp: int = max(pokemon.next_level_exp, current_level_exp)
+	var has_next_level_range := next_level_exp > current_level_exp
+	var level_exp_range: int = next_level_exp - current_level_exp if has_next_level_range else 1
+	var earned_level_exp: int = clampi(current_exp - current_level_exp, 0, level_exp_range)
+	var next_level_remaining: int = max(next_level_exp - current_exp, 0) if has_next_level_range else 0
+	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
+	var detail_text := "Next Lv. %s" % next_level_remaining if has_next_level_range else "Next Lv. -"
+	var tooltip_text := "Current EXP: %s\n%s" % [value_text, detail_text]
+
+	var stack := VBoxContainer.new()
+	stack.custom_minimum_size = Vector2(min_width, 42)
+	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stack.add_theme_constant_override("separation", 2)
+	stack.tooltip_text = tooltip_text
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 4)
+	row.tooltip_text = tooltip_text
+	stack.add_child(row)
+
+	var label := Label.new()
+	label.text = "EXP"
+	label.tooltip_text = tooltip_text
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_make_label_clip_width(label)
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", accent_color)
+	row.add_child(label)
+
+	var value_label := Label.new()
+	value_label.text = value_text
+	value_label.tooltip_text = tooltip_text
+	value_label.custom_minimum_size = Vector2(54, 0)
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_make_label_clip_width(value_label)
+	value_label.add_theme_font_size_override("font_size", 10)
+	value_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	row.add_child(value_label)
+
+	var bar := ProgressBar.new()
+	bar.max_value = level_exp_range
+	bar.value = earned_level_exp
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(0, 8)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.tooltip_text = tooltip_text
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06080de8"), Color("#5f829a"), 3, 1))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
+	stack.add_child(bar)
+
+	var detail_label := Label.new()
+	detail_label.text = detail_text
+	detail_label.tooltip_text = tooltip_text
+	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_make_label_clip_width(detail_label)
+	detail_label.add_theme_font_size_override("font_size", 9)
+	detail_label.add_theme_color_override("font_color", Color("#aebbd0"))
+	stack.add_child(detail_label)
 	return stack
 
 func _create_summary_field_card(
@@ -5489,9 +5552,6 @@ func _get_pokemon_summary_caught_date_text(pokemon: Pokemon) -> String:
 	else:
 		date_text = date_part
 	return date_text
-
-func _get_pokemon_summary_experience_text(pokemon: Pokemon) -> String:
-	return _get_pokemon_optional_property_text(pokemon, ["exp", "experience", "current_exp", "currentExp"])
 
 func _get_pokemon_summary_happiness_text(pokemon: Pokemon) -> String:
 	return _get_pokemon_optional_property_text(pokemon, ["happiness", "friendship"])
