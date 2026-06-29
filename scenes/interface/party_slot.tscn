@@ -28,6 +28,25 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exp_bg"]
+bg_color = Color(0.039215688, 0.047058824, 0.0627451, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6313726, 0.7294118, 0.84705883, 0.72)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exp_fill"]
+bg_color = Color(0.38431373, 0.7490196, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nd8rq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kmnus"]
@@ -39,7 +58,7 @@ corner_radius_bottom_left = 8
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jup6d"]
 
 [node name="PartySlot" type="PanelContainer" unique_id=899956667]
-custom_minimum_size = Vector2(260, 70)
+custom_minimum_size = Vector2(260, 76)
 theme_override_styles/panel = SubResource("StyleBoxFlat_kmnus")
 script = ExtResource("1_kmnus")
 
@@ -65,7 +84,7 @@ stretch_mode = 5
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1673202340]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 5
+theme_override_constants/separation = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=890851186]
 layout_mode = 2
@@ -107,6 +126,14 @@ size_flags_horizontal = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_nd8rq")
 theme_override_styles/fill = SubResource("StyleBoxFlat_rmfdk")
 value = 100.0
+
+[node name="ExpBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1544924806]
+custom_minimum_size = Vector2(160, 5)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_exp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_exp_fill")
+show_percentage = false
 
 [node name="ClickButton" type="Button" parent="." unique_id=2018778636]
 layout_mode = 2

@@ -21,6 +21,7 @@ const SHINY_SLOT_HOVER_SHADOW := Color(0.62, 0.50, 0.28, 0.08)
 @onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShinyBadge
 @onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/NameLabel
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/HPBar
+@onready var exp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/ExpBar
 @onready var click_button: Button = $ClickButton
 @onready var seperator: Control = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Seperator
 @onready var level_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LevelLabel
@@ -34,6 +35,7 @@ var current_is_shiny := false
 func _ready() -> void:
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	hp_bar.custom_minimum_size.x = 160.0
+	exp_bar.custom_minimum_size.x = 160.0
 	if not click_button.gui_input.is_connected(_on_click_button_gui_input):
 		click_button.gui_input.connect(_on_click_button_gui_input)
 	if not click_button.mouse_entered.is_connected(_on_click_button_mouse_entered):
@@ -51,6 +53,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	level_label.text = "Lv. " + str(pokemon.level)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
+	_update_experience_bar(pokemon)
 	
 	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	click_button.disabled = false
@@ -65,6 +68,8 @@ func set_empty() -> void:
 	shiny_badge.visible = false
 	pokemon_sprite.texture = null
 	hp_bar.value = 0.0
+	exp_bar.value = 0.0
+	exp_bar.visible = false
 	click_button.disabled = true
 	_apply_slot_style()
 
@@ -109,6 +114,20 @@ func _apply_slot_style() -> void:
 		border_width = 2
 
 	add_theme_stylebox_override("panel", _make_slot_style(background, border, shadow, border_width))
+
+func _update_experience_bar(pokemon: Pokemon) -> void:
+	var current_level_exp := pokemon.current_level_exp
+	var next_level_exp := pokemon.next_level_exp
+	if next_level_exp <= current_level_exp:
+		exp_bar.value = 0.0
+		exp_bar.visible = false
+		return
+
+	var level_exp_range: int = next_level_exp - current_level_exp
+	var earned_level_exp: int = clampi(pokemon.experience - current_level_exp, 0, level_exp_range)
+	exp_bar.max_value = level_exp_range
+	exp_bar.value = earned_level_exp
+	exp_bar.visible = true
 
 func _make_slot_style(background: Color, border: Color, shadow: Color, border_width: int) -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
