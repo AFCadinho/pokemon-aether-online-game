@@ -85,6 +85,7 @@ const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
 const BAG_SIZE := Vector2(920, 620)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
+const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
@@ -2408,64 +2409,95 @@ func _setup_item_dex_popup() -> void:
 	item_dex_popup = PanelContainer.new()
 	item_dex_popup.name = "ItemDexPopup"
 	item_dex_popup.visible = false
-	item_dex_popup.custom_minimum_size = Vector2(560, 430)
+	item_dex_popup.custom_minimum_size = ITEM_DEX_SIZE
 	item_dex_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	item_dex_popup.z_index = UI_BASE_Z_INDEX
 	item_dex_popup.anchor_left = 0.5
 	item_dex_popup.anchor_top = 0.5
 	item_dex_popup.anchor_right = 0.5
 	item_dex_popup.anchor_bottom = 0.5
-	item_dex_popup.offset_left = -280
-	item_dex_popup.offset_top = -215
-	item_dex_popup.offset_right = 280
-	item_dex_popup.offset_bottom = 215
-	item_dex_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	item_dex_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#020711fa"), Color("#d6c78faa"), 4, 1))
 	root_control.add_child(item_dex_popup)
+	_position_item_dex_popup()
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_left", 18)
 	margin_container.add_theme_constant_override("margin_top", 14)
-	margin_container.add_theme_constant_override("margin_right", 16)
-	margin_container.add_theme_constant_override("margin_bottom", 16)
+	margin_container.add_theme_constant_override("margin_right", 18)
+	margin_container.add_theme_constant_override("margin_bottom", 18)
 	item_dex_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 12)
 	margin_container.add_child(layout)
+
+	var header_panel := PanelContainer.new()
+	header_panel.custom_minimum_size = Vector2(0, 44)
+	header_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#c7bea0dd"), Color("#f2ead2aa"), 2, 1))
+	layout.add_child(header_panel)
+
+	var header_margin := MarginContainer.new()
+	header_margin.add_theme_constant_override("margin_left", 12)
+	header_margin.add_theme_constant_override("margin_top", 4)
+	header_margin.add_theme_constant_override("margin_right", 8)
+	header_margin.add_theme_constant_override("margin_bottom", 4)
+	header_panel.add_child(header_margin)
 
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 8)
-	layout.add_child(header)
+	header_margin.add_child(header)
 
 	var title_label := Label.new()
 	title_label.text = "Item Dex"
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.add_theme_font_size_override("font_size", 18)
-	title_label.add_theme_color_override("font_color", UI_TEXT)
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_label.add_theme_font_size_override("font_size", 26)
+	title_label.add_theme_color_override("font_color", Color("#ffffff"))
 	header.add_child(title_label)
 
 	var close_button := Button.new()
 	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.custom_minimum_size = Vector2(40, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_item_dex_popup)
 	header.add_child(close_button)
-
-	item_dex_search_input = LineEdit.new()
-	item_dex_search_input.placeholder_text = "Search item..."
-	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
-	layout.add_child(item_dex_search_input)
 
 	var content_row := HBoxContainer.new()
 	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content_row.add_theme_constant_override("separation", 12)
 	layout.add_child(content_row)
 
+	var browser_panel := PanelContainer.new()
+	browser_panel.custom_minimum_size = Vector2(320, 0)
+	browser_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#061120f0"), Color("#d6c78f66"), 4, 1))
+	content_row.add_child(browser_panel)
+
+	var browser_margin := MarginContainer.new()
+	browser_margin.add_theme_constant_override("margin_left", 10)
+	browser_margin.add_theme_constant_override("margin_top", 10)
+	browser_margin.add_theme_constant_override("margin_right", 10)
+	browser_margin.add_theme_constant_override("margin_bottom", 10)
+	browser_panel.add_child(browser_margin)
+
+	var browser_stack := VBoxContainer.new()
+	browser_stack.add_theme_constant_override("separation", 8)
+	browser_margin.add_child(browser_stack)
+
+	var browser_label := Label.new()
+	browser_label.text = "ITEMS"
+	browser_label.add_theme_font_size_override("font_size", 10)
+	browser_label.add_theme_color_override("font_color", Color("#d6c78f"))
+	browser_stack.add_child(browser_label)
+
+	item_dex_search_input = LineEdit.new()
+	item_dex_search_input.placeholder_text = "Search item..."
+	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
+	browser_stack.add_child(item_dex_search_input)
+
 	var results_scroll := ScrollContainer.new()
-	results_scroll.custom_minimum_size = Vector2(240, 0)
 	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	content_row.add_child(results_scroll)
+	browser_stack.add_child(results_scroll)
 
 	item_dex_results_list = VBoxContainer.new()
 	item_dex_results_list.add_theme_constant_override("separation", 6)
@@ -2473,41 +2505,62 @@ func _setup_item_dex_popup() -> void:
 	results_scroll.add_child(item_dex_results_list)
 
 	var summary_panel := PanelContainer.new()
-	summary_panel.custom_minimum_size = Vector2(250, 0)
+	summary_panel.custom_minimum_size = Vector2(560, 0)
 	summary_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	summary_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), UI_BORDER_SOFT, 8, 1))
+	summary_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ef2"), Color("#d6c78f66"), 4, 1))
 	content_row.add_child(summary_panel)
 
 	var summary_margin := MarginContainer.new()
-	summary_margin.add_theme_constant_override("margin_left", 14)
+	summary_margin.add_theme_constant_override("margin_left", 16)
 	summary_margin.add_theme_constant_override("margin_top", 14)
-	summary_margin.add_theme_constant_override("margin_right", 14)
-	summary_margin.add_theme_constant_override("margin_bottom", 14)
+	summary_margin.add_theme_constant_override("margin_right", 16)
+	summary_margin.add_theme_constant_override("margin_bottom", 16)
 	summary_panel.add_child(summary_margin)
 
 	var summary_layout := VBoxContainer.new()
-	summary_layout.add_theme_constant_override("separation", 10)
+	summary_layout.add_theme_constant_override("separation", 12)
 	summary_layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	summary_margin.add_child(summary_layout)
 
+	var hero_row := HBoxContainer.new()
+	hero_row.custom_minimum_size = Vector2(0, 150)
+	hero_row.add_theme_constant_override("separation", 16)
+	summary_layout.add_child(hero_row)
+
+	var icon_panel := PanelContainer.new()
+	icon_panel.custom_minimum_size = Vector2(150, 132)
+	icon_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071b2ce8"), Color("#d6c78f66"), 3, 1))
+	hero_row.add_child(icon_panel)
+
+	var icon_center := CenterContainer.new()
+	icon_panel.add_child(icon_center)
+
 	item_dex_icon = TextureRect.new()
-	item_dex_icon.custom_minimum_size = Vector2(72, 72)
+	item_dex_icon.custom_minimum_size = Vector2(96, 96)
 	item_dex_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	item_dex_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	summary_layout.add_child(item_dex_icon)
+	icon_center.add_child(item_dex_icon)
+
+	var hero_stack := VBoxContainer.new()
+	hero_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	hero_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hero_stack.add_theme_constant_override("separation", 8)
+	hero_row.add_child(hero_stack)
 
 	item_dex_name_label = Label.new()
 	item_dex_name_label.text = "Select an item"
-	item_dex_name_label.add_theme_font_size_override("font_size", 16)
+	item_dex_name_label.add_theme_font_size_override("font_size", 24)
 	item_dex_name_label.add_theme_color_override("font_color", UI_TEXT)
-	summary_layout.add_child(item_dex_name_label)
+	hero_stack.add_child(item_dex_name_label)
 
 	item_dex_meta_label = Label.new()
-	item_dex_meta_label.text = "Category: -\nBase price: Unknown"
+	item_dex_meta_label.text = "Category: -    Base price: Unknown"
 	item_dex_meta_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_meta_label.add_theme_font_size_override("font_size", 12)
-	item_dex_meta_label.add_theme_color_override("font_color", UI_MONEY)
-	summary_layout.add_child(item_dex_meta_label)
+	item_dex_meta_label.add_theme_color_override("font_color", Color("#d6c78f"))
+	hero_stack.add_child(item_dex_meta_label)
+
+	summary_layout.add_child(_create_pokedex_section_title("Description"))
 
 	item_dex_description_label = Label.new()
 	item_dex_description_label.text = "Search and select an item to view its summary."
@@ -2515,6 +2568,8 @@ func _setup_item_dex_popup() -> void:
 	item_dex_description_label.add_theme_font_size_override("font_size", 13)
 	item_dex_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	summary_layout.add_child(item_dex_description_label)
+
+	summary_layout.add_child(_create_pokedex_section_title("Where to get"))
 
 	var sources_scroll := ScrollContainer.new()
 	sources_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -2531,6 +2586,20 @@ func _setup_item_dex_popup() -> void:
 
 	_apply_button_style(close_button)
 	_apply_line_edit_style(item_dex_search_input)
+
+func _position_item_dex_popup() -> void:
+	if item_dex_popup == null:
+		return
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var popup_size := Vector2(
+		min(ITEM_DEX_SIZE.x, max(viewport_size.x - 32.0, 360.0)),
+		min(ITEM_DEX_SIZE.y, max(viewport_size.y - 32.0, 360.0))
+	)
+	item_dex_popup.custom_minimum_size = popup_size
+	item_dex_popup.offset_left = -popup_size.x * 0.5
+	item_dex_popup.offset_top = -popup_size.y * 0.5
+	item_dex_popup.offset_right = popup_size.x * 0.5
+	item_dex_popup.offset_bottom = popup_size.y * 0.5
 
 func _setup_pokedex_popup() -> void:
 	pokedex_popup = PanelContainer.new()
@@ -9507,6 +9576,7 @@ func _on_content_creator_tools_button_pressed() -> void:
 	_add_chat_message("Content Creator Tools are not implemented yet.")
 
 func _show_item_dex_popup() -> void:
+	_position_item_dex_popup()
 	item_dex_popup.visible = true
 	_activate_ui_panel(item_dex_popup)
 	item_dex_search_input.grab_focus.call_deferred()
@@ -10163,7 +10233,7 @@ func _refresh_item_dex_results() -> void:
 		var item: Dictionary = item_value as Dictionary
 		item_dex_results_list.add_child(_create_item_dex_result_button(item))
 		count += 1
-		if count >= 8:
+		if count >= 40:
 			break
 
 	if count == 0:
@@ -10176,12 +10246,15 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	var item_id := str(item.get("id", ""))
 	var item_name := str(item.get("name", item_id))
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(0, 46)
+	button.custom_minimum_size = Vector2(0, 58)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = str(item.get("shortDesc", item.get("desc", "")))
 	button.pressed.connect(_on_item_dex_result_selected.bind(item))
-	_apply_button_style(button)
+	button.add_theme_stylebox_override("normal", _make_button_style(Color("#07111ed8"), Color("#d6c78f44"), 3, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(Color("#10213aee"), Color("#d6c78faa"), 3, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#050a12ee"), Color("#d6c78f"), 3, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(Color("#10213aee"), UI_BORDER_FOCUS, 3, 1))
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -10197,13 +10270,25 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(icon)
 
+	var label_stack := VBoxContainer.new()
+	label_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	label_stack.add_theme_constant_override("separation", 0)
+	row.add_child(label_stack)
+
 	var label := Label.new()
 	label.text = item_name
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.add_theme_font_size_override("font_size", 13)
 	label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(label)
+	label_stack.add_child(label)
+
+	var meta_label := Label.new()
+	meta_label.text = _format_identifier_display_name(str(item.get("category", "Unknown")))
+	meta_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	meta_label.add_theme_font_size_override("font_size", 10)
+	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	label_stack.add_child(meta_label)
 	return button
 
 func _on_item_dex_result_selected(item: Dictionary) -> void:
@@ -10225,18 +10310,18 @@ func _format_item_dex_meta(item: Dictionary) -> String:
 	var cost_text := "Unknown"
 	if cost_value != null:
 		cost_text = "$%s" % _format_money(int(cost_value))
-	return "Category: %s\nBase price: %s" % [category, cost_text]
+	return "Category: %s    Base price: %s" % [_format_identifier_display_name(category), cost_text]
 
 func _format_item_dex_sources(item: Dictionary) -> String:
 	var summary_value: Variant = item.get("sourceSummary", [])
 	if typeof(summary_value) != TYPE_ARRAY:
-		return "Where to get\nNo known repeatable ways yet."
+		return "No known repeatable ways yet."
 
 	var summaries: Array = summary_value
 	if summaries.is_empty():
-		return "Where to get\nNo known repeatable ways yet."
+		return "No known repeatable ways yet."
 
-	var lines: Array[String] = ["Where to get"]
+	var lines: Array[String] = []
 	for summary_value_item: Variant in summaries:
 		if typeof(summary_value_item) != TYPE_DICTIONARY:
 			continue
