@@ -134,6 +134,36 @@ const MOVE_CATEGORY_LABEL_PATHS := {
 	"special": "res://assets/battles/special_move_label.png",
 	"status": "res://assets/battles/status_move_label.png",
 }
+const ITEM_DEX_CAPTURE_BALL_MULTIPLIERS := {
+	"poke-ball": 1.0,
+	"pokeball": 1.0,
+	"great-ball": 1.5,
+	"ultra-ball": 2.0,
+	"premier-ball": 1.0,
+	"cherish-ball": 1.0,
+	"luxury-ball": 1.0,
+	"nest-ball": 1.0,
+	"net-ball": 1.0,
+	"dive-ball": 1.0,
+	"repeat-ball": 1.0,
+	"timer-ball": 1.0,
+	"safari-ball": 1.5,
+	"quick-ball": 1.0,
+	"dusk-ball": 1.0,
+	"heal-ball": 1.0,
+	"beast-ball": 0.1,
+	"gs-ball": 1.0,
+	"fast-ball": 1.0,
+	"lure-ball": 1.0,
+	"level-ball": 1.0,
+	"heavy-ball": 1.0,
+	"love-ball": 1.0,
+	"friend-ball": 1.0,
+	"moon-ball": 1.0,
+	"park-ball": 1.0,
+	"sport-ball": 1.5,
+	"dream-ball": 1.0,
+}
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const ABILITY_SUMMARY_INDEX_PATH := "res://data/ability_summary_index.json"
@@ -473,6 +503,8 @@ var item_dex_icon: TextureRect
 var item_dex_name_label: Label
 var item_dex_meta_label: Label
 var item_dex_description_label: Label
+var item_dex_capture_section_label: Control
+var item_dex_capture_label: Label
 var item_dex_sources_label: Label
 var item_dex_search_request_id := 0
 var pokedex_popup: PanelContainer
@@ -2568,6 +2600,17 @@ func _setup_item_dex_popup() -> void:
 	item_dex_description_label.add_theme_font_size_override("font_size", 13)
 	item_dex_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	summary_layout.add_child(item_dex_description_label)
+
+	item_dex_capture_section_label = _create_pokedex_section_title("Capture")
+	item_dex_capture_section_label.visible = false
+	summary_layout.add_child(item_dex_capture_section_label)
+
+	item_dex_capture_label = Label.new()
+	item_dex_capture_label.visible = false
+	item_dex_capture_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	item_dex_capture_label.add_theme_font_size_override("font_size", 13)
+	item_dex_capture_label.add_theme_color_override("font_color", Color("#f2cf78"))
+	summary_layout.add_child(item_dex_capture_label)
 
 	summary_layout.add_child(_create_pokedex_section_title("Where to get"))
 
@@ -10302,6 +10345,12 @@ func _on_item_dex_result_selected(item: Dictionary) -> void:
 	if description == "":
 		description = "No item summary available yet."
 	item_dex_description_label.text = description
+	var capture_text := _format_item_dex_capture_info(item)
+	if item_dex_capture_section_label != null:
+		item_dex_capture_section_label.visible = capture_text != ""
+	if item_dex_capture_label != null:
+		item_dex_capture_label.text = capture_text
+		item_dex_capture_label.visible = capture_text != ""
 	item_dex_sources_label.text = _format_item_dex_sources(item)
 
 func _format_item_dex_meta(item: Dictionary) -> String:
@@ -10311,6 +10360,49 @@ func _format_item_dex_meta(item: Dictionary) -> String:
 	if cost_value != null:
 		cost_text = "$%s" % _format_money(int(cost_value))
 	return "Category: %s    Base price: %s" % [_format_identifier_display_name(category), cost_text]
+
+func _format_item_dex_capture_info(item: Dictionary) -> String:
+	if not _is_item_dex_pokeball(item):
+		return ""
+
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	if item_id == "master-ball":
+		return "Guaranteed catch.\nMaster Ball always catches wild Pokemon in the current capture rules."
+
+	var multiplier := float(ITEM_DEX_CAPTURE_BALL_MULTIPLIERS.get(item_id, 1.0))
+	var lines: Array[String] = [
+		"Current capture modifier: x%s" % _format_item_dex_multiplier(multiplier),
+	]
+	var reference_note := _extract_item_dex_capture_effect_note(item)
+	if reference_note != "":
+		lines.append(reference_note)
+	lines.append("Actual catch chance also depends on target HP, species catch rate, and status.")
+	return "\n".join(lines)
+
+func _is_item_dex_pokeball(item: Dictionary) -> bool:
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	var category := str(item.get("category", "")).strip_edges().to_lower().replace("-", "_")
+	if category in ["balls", "poke_balls", "pokeballs", "pokeball"]:
+		return true
+	return item_id.ends_with("ball") or item_id.contains("-ball")
+
+func _extract_item_dex_capture_effect_note(item: Dictionary) -> String:
+	var text := str(item.get("shortDesc", ""))
+	if text == "":
+		text = str(item.get("desc", ""))
+	text = text.strip_edges()
+	if text == "":
+		return ""
+	var lower_text := text.to_lower()
+	if lower_text.contains("success rate") or lower_text.contains("catch rate") or lower_text.contains("catches"):
+		return "Reference effect: %s" % text
+	return ""
+
+func _format_item_dex_multiplier(value: float) -> String:
+	var rounded := roundf(value)
+	if is_equal_approx(value, rounded):
+		return str(int(rounded))
+	return "%.1f" % value
 
 func _format_item_dex_sources(item: Dictionary) -> String:
 	var summary_value: Variant = item.get("sourceSummary", [])
