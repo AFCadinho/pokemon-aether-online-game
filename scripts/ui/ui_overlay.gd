@@ -127,6 +127,11 @@ const POKEMON_SUMMARY_NATURE_CHANGES := {
 	"naive": {"boosted": "spe", "lowered": "spd"},
 }
 const POKEMON_TYPE_ICON_ROOT := "res://assets/sprites/types/small/"
+const MOVE_CATEGORY_LABEL_PATHS := {
+	"physical": "res://assets/battles/physical_move_label.png",
+	"special": "res://assets/battles/special_move_label.png",
+	"status": "res://assets/battles/status_move_label.png",
+}
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const ABILITY_SUMMARY_INDEX_PATH := "res://data/ability_summary_index.json"
@@ -1602,7 +1607,7 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 		chip_row.add_child(_create_move_learn_detail_chip(move_type, Color("#34312a"), Color("#f4f0de")))
 	var category := _get_summary_move_category_text(move_value)
 	if category != "":
-		chip_row.add_child(_create_move_learn_detail_chip(category, Color("#34312a"), Color("#f4f0de")))
+		chip_row.add_child(_create_move_learn_category_label(category))
 
 	var meta_row := HBoxContainer.new()
 	meta_row.add_theme_constant_override("separation", 10)
@@ -1662,6 +1667,25 @@ func _create_move_learn_detail_chip(text: String, background_color: Color, text_
 	label.add_theme_color_override("font_color", text_color)
 	margin.add_child(label)
 	return panel
+
+func _create_move_learn_category_label(category: String) -> Control:
+	var key := category.strip_edges().to_lower().replace("-", "_").replace(" ", "_")
+	var texture_path := str(MOVE_CATEGORY_LABEL_PATHS.get(key, ""))
+	if texture_path == "" or not ResourceLoader.exists(texture_path):
+		return _create_move_learn_detail_chip(category, Color("#34312a"), Color("#f4f0de"))
+
+	var texture := load(texture_path) as Texture2D
+	if texture == null:
+		return _create_move_learn_detail_chip(category, Color("#34312a"), Color("#f4f0de"))
+
+	var icon := TextureRect.new()
+	icon.texture = texture
+	icon.custom_minimum_size = Vector2(94, 27)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.tooltip_text = category
+	return icon
 
 func _get_summary_move_category_text(move_value: Variant) -> String:
 	var category_value: Variant = _get_summary_move_data_value(move_value, ["category", "damageClass", "damage_class"], "")
