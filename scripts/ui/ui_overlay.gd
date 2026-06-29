@@ -6265,11 +6265,12 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var current_exp: int = max(pokemon.experience, 0)
 	var current_level_exp: int = max(pokemon.current_level_exp, 0)
 	var next_level_exp: int = max(pokemon.next_level_exp, current_level_exp)
-	var has_next_level_range := next_level_exp > current_level_exp
-	var level_exp_range: int = next_level_exp - current_level_exp if has_next_level_range else 1
-	var earned_level_exp: int = clampi(current_exp - current_level_exp, 0, level_exp_range)
+	var is_max_level := pokemon.level >= 100
+	var has_next_level_range := next_level_exp > current_level_exp and not is_max_level
+	var level_exp_range: int = 1 if is_max_level else next_level_exp - current_level_exp if has_next_level_range else 1
+	var earned_level_exp: int = level_exp_range if is_max_level else clampi(current_exp - current_level_exp, 0, level_exp_range)
 	var next_level_remaining: int = max(next_level_exp - current_exp, 0) if has_next_level_range else 0
-	var target_level: int = pokemon.level + 1
+	var target_level: int = min(pokemon.level + 1, 100)
 	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
 	var detail_text := "%s EXP to Lv. %s" % [next_level_remaining, target_level] if has_next_level_range else "Max level"
 	var tooltip_text := "Current EXP: %s\n%s" % [value_text, detail_text]
