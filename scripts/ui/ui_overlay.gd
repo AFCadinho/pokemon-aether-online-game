@@ -5349,7 +5349,12 @@ func _create_summary_metric_card(
 	bar.custom_minimum_size = Vector2(0, 12)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bar.tooltip_text = tooltip_text
-	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06080de8"), Color("#1d2635"), 3, 0))
+	bar.add_theme_stylebox_override("background", _make_panel_style(
+		Color("#06080de8"),
+		Color(accent_color.r, accent_color.g, accent_color.b, 0.48),
+		3,
+		1
+	))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
 	stack.add_child(bar)
 	return stack
