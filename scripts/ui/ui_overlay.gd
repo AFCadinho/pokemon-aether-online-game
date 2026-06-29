@@ -5261,7 +5261,7 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	top_metrics.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(top_metrics)
 	top_metrics.add_child(_create_summary_experience_metric_card(pokemon, Color("#62d7ff"), 148.0))
-	top_metrics.add_child(_create_summary_metric_card("Happiness", _get_pokemon_summary_happiness_text(pokemon), 0, 1, Color("#f2cf78"), 148.0))
+	top_metrics.add_child(_create_summary_metric_card("Happiness", "Happiness progress is not tracked yet.", 0, 255, Color("#f2cf78"), 148.0))
 
 	var info_grid := GridContainer.new()
 	info_grid.columns = 2
@@ -5325,32 +5325,22 @@ func _create_summary_metric_card(
 	accent_color: Color,
 	min_width: float = 96.0
 ) -> Control:
+	var tooltip_text := value_text.strip_edges()
 	var stack := VBoxContainer.new()
-	stack.custom_minimum_size = Vector2(min_width, 36)
+	stack.custom_minimum_size = Vector2(min_width, 30)
 	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stack.add_theme_constant_override("separation", 3)
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 4)
-	stack.add_child(row)
+	if tooltip_text != "":
+		stack.tooltip_text = tooltip_text
 
 	var label := Label.new()
 	label.text = label_text.to_upper()
+	label.tooltip_text = tooltip_text
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_make_label_clip_width(label)
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", accent_color)
-	row.add_child(label)
-
-	var value_label := Label.new()
-	value_label.text = value_text
-	value_label.tooltip_text = value_text
-	value_label.custom_minimum_size = Vector2(48, 0)
-	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_make_label_clip_width(value_label)
-	value_label.add_theme_font_size_override("font_size", 10)
-	value_label.add_theme_color_override("font_color", Color("#f4f7ff"))
-	row.add_child(value_label)
+	stack.add_child(label)
 
 	var bar := ProgressBar.new()
 	bar.max_value = max(max_value, 1)
@@ -5358,6 +5348,7 @@ func _create_summary_metric_card(
 	bar.show_percentage = false
 	bar.custom_minimum_size = Vector2(0, 12)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.tooltip_text = tooltip_text
 	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06080de8"), Color("#1d2635"), 3, 0))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
 	stack.add_child(bar)
@@ -5377,15 +5368,10 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var tooltip_text := "Current EXP: %s\n%s" % [value_text, detail_text]
 
 	var stack := VBoxContainer.new()
-	stack.custom_minimum_size = Vector2(min_width, 42)
+	stack.custom_minimum_size = Vector2(min_width, 30)
 	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stack.add_theme_constant_override("separation", 2)
+	stack.add_theme_constant_override("separation", 3)
 	stack.tooltip_text = tooltip_text
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 4)
-	row.tooltip_text = tooltip_text
-	stack.add_child(row)
 
 	var label := Label.new()
 	label.text = "EXP"
@@ -5394,17 +5380,7 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	_make_label_clip_width(label)
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", accent_color)
-	row.add_child(label)
-
-	var value_label := Label.new()
-	value_label.text = value_text
-	value_label.tooltip_text = tooltip_text
-	value_label.custom_minimum_size = Vector2(54, 0)
-	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_make_label_clip_width(value_label)
-	value_label.add_theme_font_size_override("font_size", 10)
-	value_label.add_theme_color_override("font_color", Color("#f4f7ff"))
-	row.add_child(value_label)
+	stack.add_child(label)
 
 	var bar := ProgressBar.new()
 	bar.max_value = level_exp_range
@@ -5416,15 +5392,6 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06080de8"), Color("#5f829a"), 3, 1))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
 	stack.add_child(bar)
-
-	var detail_label := Label.new()
-	detail_label.text = detail_text
-	detail_label.tooltip_text = tooltip_text
-	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_make_label_clip_width(detail_label)
-	detail_label.add_theme_font_size_override("font_size", 10)
-	detail_label.add_theme_color_override("font_color", Color("#aebbd0"))
-	stack.add_child(detail_label)
 	return stack
 
 func _create_summary_field_card(
@@ -5553,27 +5520,6 @@ func _get_pokemon_summary_caught_date_text(pokemon: Pokemon) -> String:
 	else:
 		date_text = date_part
 	return date_text
-
-func _get_pokemon_summary_happiness_text(pokemon: Pokemon) -> String:
-	return _get_pokemon_optional_property_text(pokemon, ["happiness", "friendship"])
-
-func _get_pokemon_optional_property_text(pokemon: Pokemon, property_names: Array[String]) -> String:
-	if pokemon == null:
-		return "-"
-
-	var available_properties := {}
-	for property_value: Variant in pokemon.get_property_list():
-		var property_data: Dictionary = property_value as Dictionary
-		available_properties[str(property_data.get("name", ""))] = true
-
-	for property_name: String in property_names:
-		if not available_properties.has(property_name):
-			continue
-		var value: Variant = pokemon.get(property_name)
-		var text := str(value).strip_edges()
-		if text != "" and text != "<null>":
-			return text
-	return "-"
 
 func _format_pokemon_origin_method(method: String) -> String:
 	match method.strip_edges().to_lower():
