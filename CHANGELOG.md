@@ -4,10 +4,13 @@
 
 **Changed**
 - Battle logs now start collapsed on smaller screens and open on wider screens.
+- On smaller screens, opening the battle log toggle keeps the large log hidden so battle information stays readable.
 - Battle log open or collapsed state is remembered for the rest of the client session after you change it.
+- Your own overworld character now takes visual priority when players stand on the same spot.
 
 **Fixed**
 - Fixed the forfeit confirmation prompt appearing behind other battle UI.
+- Fixed overworld players, followers, NPCs, and tree layers drawing in inconsistent order while overlapping.
 - Fixed PvP team indicators showing shiny markers on the wrong Pokemon.
 - Fixed form Pokemon such as Landorus-Therian briefly showing the wrong form when switching in.
 - Fixed NPC trainer battle openings briefly showing form Pokemon such as Landorus-Therian as their base species before the summon animation finished.

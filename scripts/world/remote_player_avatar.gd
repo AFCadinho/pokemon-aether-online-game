@@ -6,8 +6,8 @@ const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
-const SORT_Z_MIN := -256
-const SORT_Z_MAX := 256
+const SORT_Z_MIN := -4096
+const SORT_Z_MAX := 4096
 const SNAP_DISTANCE := 96.0
 const REMOTE_MOVE_SPEED := 150.0
 const IDLE_ANIMATION_SPEED := 5.0
@@ -954,7 +954,7 @@ func _is_unequipped_appearance_part_sprite(sprite: AnimatedSprite2D) -> bool:
 
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(global_position.y / TILE_SIZE) + 1, SORT_Z_MIN, SORT_Z_MAX)
+	z_index = clampi(floori(global_position.y), SORT_Z_MIN, SORT_Z_MAX)
 
 
 func _get_idle_animation_name(direction: Vector2) -> StringName:

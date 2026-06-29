@@ -9,8 +9,8 @@ const POSITION_SAVE_EPSILON := 1.0
 const PLAYTIME_FLUSH_INTERVAL_SECONDS := 60.0
 const TILE_SIZE := 32.0
 const TREE_LAYER_ROOT_NAME := "Trees"
-const TREE_LAYER_Z_MIN := -256
-const TREE_LAYER_Z_MAX := 256
+const TREE_LAYER_Z_MIN := -4096
+const TREE_LAYER_Z_MAX := 4096
 
 @export var initial_spawn_name := "FromRoute1"
 
@@ -261,7 +261,7 @@ func _normalize_tree_layer_z_indices_recursive(node: Node) -> void:
 		if used_rect.size != Vector2i.ZERO:
 			var layer_bottom_y: float = tile_map_layer.global_position.y + float(used_rect.position.y + used_rect.size.y) * TILE_SIZE
 			tile_map_layer.z_as_relative = false
-			tile_map_layer.z_index = clampi(floori(layer_bottom_y / TILE_SIZE), TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
+			tile_map_layer.z_index = clampi(floori(layer_bottom_y), TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
 
 	for child: Node in node.get_children():
 		_normalize_tree_layer_z_indices_recursive(child)
@@ -269,11 +269,24 @@ func _normalize_tree_layer_z_indices_recursive(node: Node) -> void:
 
 func _ensure_remote_players_container() -> void:
 	if remote_players_container != null and is_instance_valid(remote_players_container):
+		_order_remote_players_container()
 		return
 
 	remote_players_container = Node2D.new()
 	remote_players_container.name = "RemotePlayers"
 	add_child(remote_players_container)
+	_order_remote_players_container()
+
+
+func _order_remote_players_container() -> void:
+	if remote_players_container == null or not is_instance_valid(remote_players_container):
+		return
+	if player == null or not is_instance_valid(player):
+		return
+
+	# Equal z_index falls back to scene tree order. Keep remote players before
+	# the local player so your own character wins exact overlap ties.
+	move_child(remote_players_container, player.get_index())
 
 
 func _connect_world_presence_signals() -> void:
@@ -364,6 +377,8 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 
 		avatar.call("apply_state", player_state)
 
+	_sort_remote_player_avatar_nodes()
+
 	if not prune_missing:
 		return
 
@@ -375,6 +390,31 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 		remote_player_avatars.erase(user_key)
 		if avatar != null and is_instance_valid(avatar):
 			avatar.queue_free()
+
+
+func _sort_remote_player_avatar_nodes() -> void:
+	if remote_players_container == null or not is_instance_valid(remote_players_container):
+		return
+
+	var avatars := remote_players_container.get_children()
+	avatars.sort_custom(_compare_remote_player_avatar_nodes)
+	for index in avatars.size():
+		remote_players_container.move_child(avatars[index], index)
+
+
+func _compare_remote_player_avatar_nodes(a: Node, b: Node) -> bool:
+	return _get_remote_player_avatar_user_id(a) < _get_remote_player_avatar_user_id(b)
+
+
+func _get_remote_player_avatar_user_id(avatar: Node) -> int:
+	if avatar == null:
+		return 0
+
+	var user_id_value: Variant = avatar.get("user_id")
+	if user_id_value == null:
+		return 0
+
+	return int(user_id_value)
 
 
 func _clear_remote_players() -> void:

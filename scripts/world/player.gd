@@ -6,8 +6,8 @@ const RUN_TILE_MOVE_DURATION := 0.14
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
-const SORT_Z_MIN := -256
-const SORT_Z_MAX := 256
+const SORT_Z_MIN := -4096
+const SORT_Z_MAX := 4096
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
 const RUN_WALK_ANIMATION_SPEED := 11.5
@@ -859,7 +859,7 @@ func _resolve_current_map() -> Node:
 	return null
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(get_feet_position().y / TILE_SIZE) + 1, SORT_Z_MIN, SORT_Z_MAX)
+	z_index = clampi(floori(get_feet_position().y), SORT_Z_MIN, SORT_Z_MAX)
 
 func _cache_appearance_sprites() -> void:
 	appearance_sprites.clear()

@@ -17,8 +17,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
-const SORT_Z_MIN := -256
-const SORT_Z_MAX := 256
+const SORT_Z_MIN := -4096
+const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
 
@@ -402,7 +402,7 @@ func _is_ui_typing() -> bool:
 
 func _update_sort_z() -> void:
 	var npc_feet_y: float = get_feet_position().y
-	var sort_z := floori(npc_feet_y / TILE_SIZE) + 1
+	var sort_z := floori(npc_feet_y)
 	var sprite_sort_z := 0
 	var player_for_sorting := _get_player_for_sorting()
 	if player_for_sorting != null:

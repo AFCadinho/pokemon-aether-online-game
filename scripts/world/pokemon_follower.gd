@@ -6,8 +6,8 @@ const TILE_SIZE := 32.0
 const FOLLOW_DISTANCE_TILES := 1
 const MAX_HISTORY_SIZE := 16
 const TELEPORT_DISTANCE := 96.0
-const SORT_Z_MIN := -256
-const SORT_Z_MAX := 256
+const SORT_Z_MIN := -4096
+const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 8.0
 const SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
@@ -257,7 +257,7 @@ func _get_player_follow_position() -> Vector2:
 
 func _update_sort_z() -> void:
 	var follower_sort_y := global_position.y
-	var sort_z := floori(follower_sort_y / TILE_SIZE) + 1
+	var sort_z := floori(follower_sort_y)
 	var sprite_sort_z := 0
 	if player != null and is_instance_valid(player) and player.has_method("get_feet_position"):
 		var player_feet_position: Variant = player.call("get_feet_position")

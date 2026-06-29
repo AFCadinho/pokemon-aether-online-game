@@ -1910,25 +1910,33 @@ func _on_action_selected(action: String) -> void:
 ## Klapt de battle log open of dicht.
 func _on_battle_log_toggle_pressed() -> void:
 	_focus_battle_ui_layer()
-	battle_log_panel.toggle_log()
-	remembered_battle_log_open = 1 if battle_log_panel.is_open() else 0
+	var requested_open := not _get_requested_battle_log_open()
+	remembered_battle_log_open = 1 if requested_open else 0
+	_set_battle_log_open(requested_open)
 	_update_battle_log_toggle_button()
 
 ## Zet de battle log bij battle start op de sessiekeuze, of anders op basis van viewport-breedte.
 func _setup_battle_log_initial_visibility() -> void:
-	if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET:
-		_set_battle_log_open(remembered_battle_log_open == 1)
-		return
+	_set_battle_log_open(_get_requested_battle_log_open())
 
-	_set_battle_log_open(_should_open_battle_log_by_default())
+## Geeft de door speler of responsive default gewenste log-state terug.
+func _get_requested_battle_log_open() -> bool:
+	if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET:
+		return remembered_battle_log_open == 1
+
+	return _should_open_battle_log_by_default()
 
 ## Bepaalt alleen de eerste default voor deze client-sessie.
 func _should_open_battle_log_by_default() -> bool:
 	return get_viewport_rect().size.x >= BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH
 
+## Bepaalt of de grote battle log op dit scherm mag worden getoond.
+func _can_show_full_battle_log() -> bool:
+	return get_viewport_rect().size.x >= BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH
+
 ## Past de log-state toe zonder de sessiekeuze te overschrijven.
 func _set_battle_log_open(open: bool) -> void:
-	battle_log_panel.visible = open
+	battle_log_panel.visible = open and _can_show_full_battle_log()
 
 ## Zet de tekst van de battle log toggle op basis van de open/dicht state.
 func _update_battle_log_toggle_button() -> void:
