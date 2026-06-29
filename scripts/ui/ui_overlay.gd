@@ -386,6 +386,8 @@ var pokemon_summary_sprite: TextureRect
 var pokemon_summary_sprite_viewport: SubViewport
 var pokemon_summary_animated_sprite: AnimatedSprite2D
 var pokemon_summary_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
+var pokemon_summary_level_badge_panel: PanelContainer
+var pokemon_summary_level_badge_label: Label
 var pokemon_summary_ball_button: Button
 var pokemon_summary_ball_icon: TextureRect
 var pokemon_summary_ball_picker: PanelContainer
@@ -3994,6 +3996,41 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_type_icon_row.offset_bottom = 30.0
 	sprite_frame.add_child(pokemon_summary_type_icon_row)
 
+	pokemon_summary_level_badge_panel = PanelContainer.new()
+	pokemon_summary_level_badge_panel.custom_minimum_size = Vector2(54, 24)
+	pokemon_summary_level_badge_panel.anchor_left = 1.0
+	pokemon_summary_level_badge_panel.anchor_top = 1.0
+	pokemon_summary_level_badge_panel.anchor_right = 1.0
+	pokemon_summary_level_badge_panel.anchor_bottom = 1.0
+	pokemon_summary_level_badge_panel.offset_left = -62.0
+	pokemon_summary_level_badge_panel.offset_top = -30.0
+	pokemon_summary_level_badge_panel.offset_right = -6.0
+	pokemon_summary_level_badge_panel.offset_bottom = -6.0
+	pokemon_summary_level_badge_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_level_badge_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#06111fe8"), Color("#f4d78aaa"), 6, 1))
+	sprite_frame.add_child(pokemon_summary_level_badge_panel)
+
+	var level_badge_margin := MarginContainer.new()
+	level_badge_margin.add_theme_constant_override("margin_left", 6)
+	level_badge_margin.add_theme_constant_override("margin_top", 2)
+	level_badge_margin.add_theme_constant_override("margin_right", 6)
+	level_badge_margin.add_theme_constant_override("margin_bottom", 2)
+	level_badge_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_level_badge_panel.add_child(level_badge_margin)
+
+	pokemon_summary_level_badge_label = Label.new()
+	pokemon_summary_level_badge_label.text = "Lv -"
+	pokemon_summary_level_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_level_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_level_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_make_label_clip_width(pokemon_summary_level_badge_label)
+	pokemon_summary_level_badge_label.add_theme_font_size_override("font_size", 12)
+	pokemon_summary_level_badge_label.add_theme_color_override("font_color", Color("#f4d78a"))
+	pokemon_summary_level_badge_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_x", 1)
+	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_y", 1)
+	level_badge_margin.add_child(pokemon_summary_level_badge_label)
+
 	var identity_panel := PanelContainer.new()
 	identity_panel.custom_minimum_size = Vector2(0, 38)
 	identity_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -5080,6 +5117,8 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"sprite": pokemon_summary_sprite,
 		"sprite_viewport": pokemon_summary_sprite_viewport,
 		"animated_sprite": pokemon_summary_animated_sprite,
+		"level_badge_panel": pokemon_summary_level_badge_panel,
+		"level_badge_label": pokemon_summary_level_badge_label,
 		"ball_button": pokemon_summary_ball_button,
 		"ball_icon": pokemon_summary_ball_icon,
 		"ball_picker": pokemon_summary_ball_picker,
@@ -5129,6 +5168,8 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_sprite = context.get("sprite") as TextureRect
 	pokemon_summary_sprite_viewport = context.get("sprite_viewport") as SubViewport
 	pokemon_summary_animated_sprite = context.get("animated_sprite") as AnimatedSprite2D
+	pokemon_summary_level_badge_panel = context.get("level_badge_panel") as PanelContainer
+	pokemon_summary_level_badge_label = context.get("level_badge_label") as Label
 	pokemon_summary_ball_button = context.get("ball_button") as Button
 	pokemon_summary_ball_icon = context.get("ball_icon") as TextureRect
 	pokemon_summary_ball_picker = context.get("ball_picker") as PanelContainer
@@ -5284,7 +5325,13 @@ func _refresh_pokemon_summary() -> void:
 	if pokemon_summary_shiny_badge_label != null:
 		pokemon_summary_shiny_badge_label.text = "*"
 	pokemon_summary_trainer_label.text = _get_pokemon_summary_current_trainer_title_text(pokemon)
-	pokemon_summary_meta_label.text = "Lv %s" % str(max(pokemon.level, 1))
+	var level_text := "Lv %s" % str(max(pokemon.level, 1))
+	pokemon_summary_meta_label.text = level_text
+	if pokemon_summary_level_badge_label != null:
+		pokemon_summary_level_badge_label.text = level_text
+		pokemon_summary_level_badge_label.tooltip_text = level_text
+	if pokemon_summary_level_badge_panel != null:
+		pokemon_summary_level_badge_panel.tooltip_text = level_text
 	pokemon_summary_trainer_label.tooltip_text = pokemon_summary_trainer_label.text
 	pokemon_summary_meta_label.tooltip_text = pokemon_summary_meta_label.text
 	_set_pokemon_summary_sprite(pokemon)
