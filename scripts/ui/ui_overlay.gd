@@ -127,6 +127,7 @@ const POKEMON_SUMMARY_NATURE_CHANGES := {
 	"naive": {"boosted": "spe", "lowered": "spd"},
 }
 const POKEMON_TYPE_ICON_ROOT := "res://assets/sprites/types/small/"
+const MOVE_LEARN_TYPE_LABEL_ROOT := "res://assets/sprites/types/"
 const MOVE_CATEGORY_LABEL_PATHS := {
 	"physical": "res://assets/battles/physical_move_label.png",
 	"special": "res://assets/battles/special_move_label.png",
@@ -1604,7 +1605,7 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 	stack.add_child(chip_row)
 	var move_type := _get_summary_move_type(move_value)
 	if move_type != "":
-		chip_row.add_child(_create_move_learn_type_icon(move_type))
+		chip_row.add_child(_create_move_learn_type_label(move_type))
 	var category := _get_summary_move_category_text(move_value)
 	if category != "":
 		chip_row.add_child(_create_move_learn_category_label(category))
@@ -1668,14 +1669,19 @@ func _create_move_learn_detail_chip(text: String, background_color: Color, text_
 	margin.add_child(label)
 	return panel
 
-func _create_move_learn_type_icon(type_name: String) -> Control:
-	var texture := _load_pokemon_type_icon(type_name)
+func _create_move_learn_type_label(type_name: String) -> Control:
+	var normalized_type := type_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
+	var texture_path := "%s%s.png" % [MOVE_LEARN_TYPE_LABEL_ROOT, normalized_type]
+	if normalized_type == "" or not ResourceLoader.exists(texture_path):
+		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
+
+	var texture := load(texture_path) as Texture2D
 	if texture == null:
 		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
 
 	var icon := TextureRect.new()
 	icon.texture = texture
-	icon.custom_minimum_size = Vector2(27, 27)
+	icon.custom_minimum_size = Vector2(94, 19)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
