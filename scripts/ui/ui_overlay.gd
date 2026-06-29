@@ -1399,8 +1399,9 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	var species := str(prompt.get("species", pokemon.species)).strip_edges()
 	if species == "":
 		species = pokemon.species
+	var new_move_value: Variant = _move_learn_prompt_move_value(prompt)
 	move_learn_title_label.text = "Learn %s" % move_name
-	move_learn_message_label.text = "%s wants to learn %s. Select a move from above to replace or choose not to learn." % [species, move_name]
+	move_learn_message_label.text = "%s wants to learn %s. Select a move to replace or choose not to learn." % [species, move_name]
 	move_learn_status_label.text = ""
 	move_learn_selected_replace_slot = -2
 	_hide_move_learn_hover_panel()
@@ -1408,6 +1409,8 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	for child: Node in move_learn_moves_container.get_children():
 		child.queue_free()
 	move_learn_move_buttons.clear()
+
+	move_learn_moves_container.add_child(_create_move_learn_new_move_tile(move_name, new_move_value))
 
 	var grid := GridContainer.new()
 	grid.columns = 2
@@ -1421,16 +1424,16 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 		if move_index < pokemon.moves.size():
 			var existing_move: Variant = pokemon.moves[move_index]
 			var existing_name := _get_summary_move_name(existing_move)
-			button = _create_move_learn_replace_button(move_index, existing_move, existing_name, move_name)
+			button = _create_move_learn_replace_button(move_index, existing_move, existing_name)
 		else:
-			button = _create_move_learn_empty_slot_button(move_index, move_name)
+			button = _create_move_learn_empty_slot_button(move_index)
 		grid.add_child(button)
 		move_learn_move_buttons.append(button)
 	_refresh_move_learn_selection_buttons()
 	_set_move_learn_controls_disabled(false)
 
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var popup_size := Vector2(min(500.0, viewport_size.x - 32.0), min(380.0, viewport_size.y - 32.0))
+	var popup_size := Vector2(min(500.0, viewport_size.x - 32.0), min(440.0, viewport_size.y - 32.0))
 	var popup_position := Vector2(
 		max((viewport_size.x - popup_size.x) * 0.5, 16.0),
 		max((viewport_size.y - popup_size.y) * 0.5, 16.0)
@@ -1446,12 +1449,50 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	move_learn_popup.visible = true
 	move_learn_popup.move_to_front()
 
-func _create_move_learn_replace_button(move_index: int, move_value: Variant, existing_name: String, new_move_name: String) -> Button:
+func _create_move_learn_new_move_tile(move_name: String, move_value: Variant) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 58)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_entered.connect(_show_move_learn_hover_panel.bind(button, move_value))
+	button.mouse_exited.connect(_hide_move_learn_hover_panel)
+	_apply_move_learn_new_move_tile_style(button)
+
+	var stack := VBoxContainer.new()
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.anchor_right = 1.0
+	stack.anchor_bottom = 1.0
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 2)
+	button.add_child(stack)
+
+	var eyebrow := Label.new()
+	eyebrow.text = "New move"
+	eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	eyebrow.add_theme_font_size_override("font_size", 10)
+	eyebrow.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	eyebrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(eyebrow)
+
+	var name_label := Label.new()
+	name_label.text = move_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 17)
+	name_label.add_theme_color_override("font_color", Color("#ffd95d"))
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(name_label)
+
+	var pp_label := _create_move_learn_meta_label("PP", _get_summary_move_pp_text(move_value), Color("#ffd95d"), 64.0)
+	stack.add_child(pp_label)
+	return button
+
+func _create_move_learn_replace_button(move_index: int, move_value: Variant, existing_name: String) -> Button:
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(202, 74)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = "Forget %s and learn %s." % [existing_name, new_move_name]
 	button.pressed.connect(_on_move_learn_slot_pressed.bind(move_index))
 	button.mouse_entered.connect(_show_move_learn_hover_panel.bind(button, move_value))
 	button.mouse_exited.connect(_hide_move_learn_hover_panel)
@@ -1459,16 +1500,25 @@ func _create_move_learn_replace_button(move_index: int, move_value: Variant, exi
 	_fill_move_learn_choice_button(button, existing_name, move_value, "")
 	return button
 
-func _create_move_learn_empty_slot_button(move_index: int, new_move_name: String) -> Button:
+func _create_move_learn_empty_slot_button(move_index: int) -> Button:
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(202, 74)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = "Learn %s in this empty slot." % new_move_name
 	button.pressed.connect(_on_move_learn_slot_pressed.bind(move_index))
 	_apply_move_learn_move_tile_style(button, false)
 	_fill_move_learn_choice_button(button, "Empty slot", {}, "Learn here")
 	return button
+
+func _apply_move_learn_new_move_tile_style(button: Button) -> void:
+	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_stylebox_override("normal", _make_move_learn_tile_style(Color("#0a1824f4"), POKEMON_SUMMARY_ACCENT_SOFT, true))
+	button.add_theme_stylebox_override("hover", _make_move_learn_tile_style(Color("#0e2638f8"), POKEMON_SUMMARY_ACCENT, true))
+	button.add_theme_stylebox_override("pressed", _make_move_learn_tile_style(Color("#07131df8"), POKEMON_SUMMARY_ACCENT, true))
+	button.add_theme_stylebox_override("focus", _make_move_learn_tile_style(Color("#0e2638f8"), UI_BORDER_FOCUS, true))
 
 func _apply_move_learn_move_tile_style(button: Button, selected: bool) -> void:
 	var normal_bg := Color("#111111f0") if selected else Color("#101010ec")
