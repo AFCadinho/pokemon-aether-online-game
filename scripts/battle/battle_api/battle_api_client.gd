@@ -6,28 +6,40 @@ func create_triggered_wild_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,
 	area_id: String,
-	encounter_type: String = "grass"
+	encounter_type: String = "grass",
+	origin: Dictionary = {}
 ) -> Dictionary:
+	var payload := {
+		"player": player,
+		"areaId": area_id,
+		"encounterType": encounter_type,
+		"formatId": FORMAT_ID,
+	}
+	if not origin.is_empty():
+		payload["origin"] = origin.duplicate(true)
 	return await send_post_request(
 		request_node,
 		"/battle/wild-encounter",
-		{
-			"player": player,
-			"areaId": area_id,
-			"encounterType": encounter_type,
-			"formatId": FORMAT_ID,
-		}
+		payload
 	)
 
-func create_dev_wild_battle(request_node: HTTPRequest, player: Dictionary, pokemon: Dictionary) -> Dictionary:
+func create_dev_wild_battle(
+	request_node: HTTPRequest,
+	player: Dictionary,
+	pokemon: Dictionary,
+	origin: Dictionary = {}
+) -> Dictionary:
+	var payload := {
+		"player": player,
+		"pokemon": pokemon,
+		"formatId": FORMAT_ID,
+	}
+	if not origin.is_empty():
+		payload["origin"] = origin.duplicate(true)
 	return await send_post_request(
 		request_node,
 		"/battle/dev/wild",
-		{
-			"player": player,
-			"pokemon": pokemon,
-			"formatId": FORMAT_ID,
-		}
+		payload
 	)
 
 func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, trainer_id: String) -> Dictionary:

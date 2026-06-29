@@ -696,7 +696,8 @@ func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var response: Dictionary = await BattleApiClient.create_dev_wild_battle(
 		battle_request,
 		BattleApiPayloads.from_player_save(PlayerSave),
-		wild_pokemon.to_battle_dict()
+		wild_pokemon.to_battle_dict(),
+		_get_current_wild_battle_origin()
 	)
 	
 	battle_request.queue_free()
@@ -710,11 +711,46 @@ func create_triggered_wild_battle_response(area_id: String, encounter_type: Stri
 		battle_request,
 		BattleApiPayloads.from_player_save(PlayerSave),
 		area_id,
-		encounter_type
+		encounter_type,
+		_get_current_wild_battle_origin()
 	)
 
 	battle_request.queue_free()
 	return response
+
+func _get_current_wild_battle_origin() -> Dictionary:
+	var current_map: Node = GameState.current_map as Node
+	if current_map == null:
+		return {}
+
+	var metadata: Dictionary = {}
+	if current_map.has_method("get_location_metadata"):
+		var metadata_value: Variant = current_map.call("get_location_metadata")
+		if metadata_value is Dictionary:
+			metadata = (metadata_value as Dictionary).duplicate(true)
+
+	var map_id := ""
+	var location_name := ""
+	var region_name := ""
+	if current_map.has_method("get_map_id"):
+		map_id = str(current_map.call("get_map_id")).strip_edges()
+	if current_map.has_method("get_map_display_name"):
+		location_name = str(current_map.call("get_map_display_name")).strip_edges()
+	if current_map.has_method("get_map_region_name"):
+		region_name = str(current_map.call("get_map_region_name")).strip_edges()
+
+	var origin: Dictionary = {}
+	_set_origin_text_value(origin, "locationId", str(metadata.get("locationId", map_id)).strip_edges())
+	_set_origin_text_value(origin, "locationName", str(metadata.get("locationName", location_name)).strip_edges())
+	_set_origin_text_value(origin, "regionId", str(metadata.get("regionId", region_name.to_lower().replace(" ", "_"))).strip_edges())
+	_set_origin_text_value(origin, "regionName", str(metadata.get("regionName", region_name)).strip_edges())
+	_set_origin_text_value(origin, "mapId", str(metadata.get("mapId", map_id)).strip_edges())
+	return origin
+
+func _set_origin_text_value(origin: Dictionary, key: String, value: String) -> void:
+	var cleaned := value.strip_edges()
+	if cleaned != "":
+		origin[key] = cleaned
 
 func create_trainer_battle_response(trainer_id: String) -> Dictionary:
 	var battle_request := HTTPRequest.new()
