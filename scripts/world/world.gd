@@ -1043,6 +1043,7 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 	if bool(wallet_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(wallet_result)
 		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
+		_notify_reward_level_ups(wallet_result.get("reward", {}))
 	else:
 		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
 
@@ -1054,6 +1055,7 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		var reward: Dictionary = reward_result.get("reward", {}) as Dictionary
 		var money_awarded: int = max(int(reward.get("money", max(int(PlayerSave.money), 0) - previous_money)), 0)
 		_notify_trainer_battle_rewards_awarded(trainer_name, money_awarded)
+		_notify_reward_level_ups(reward)
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
 
@@ -1080,6 +1082,34 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	var message := "You defeated %s and earned $%s." % [trainer_text, _format_money_amount(money_awarded)]
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _notify_reward_level_ups(reward_value: Variant) -> void:
+	if not (reward_value is Dictionary):
+		return
+
+	var reward: Dictionary = reward_value as Dictionary
+	var level_ups_value: Variant = reward.get("levelUps", [])
+	if not (level_ups_value is Array):
+		return
+
+	for level_up_value: Variant in level_ups_value:
+		if not (level_up_value is Dictionary):
+			continue
+
+		var level_up: Dictionary = level_up_value as Dictionary
+		var species := str(level_up.get("species", "Pokemon")).strip_edges()
+		if species == "":
+			species = "Pokemon"
+
+		var previous_level := int(level_up.get("previousLevel", 0))
+		var level := int(level_up.get("level", 0))
+		if level <= 0:
+			continue
+
+		var message := "%s grew to Lv. %s!" % [species, level]
+		if previous_level > 0 and level - previous_level > 1:
+			message = "%s grew from Lv. %s to Lv. %s!" % [species, previous_level, level]
+		get_tree().call_group("ui_overlay", "add_system_message", message)
 
 func _format_money_amount(value: int) -> String:
 	var value_text := str(max(value, 0))
