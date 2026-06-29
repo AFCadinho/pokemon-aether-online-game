@@ -1110,6 +1110,48 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 		if previous_level > 0 and level - previous_level > 1:
 			message = "%s grew from Lv. %s to Lv. %s!" % [species, previous_level, level]
 		get_tree().call_group("ui_overlay", "add_system_message", message)
+		_notify_reward_level_up_moves(species, level_up)
+
+func _notify_reward_level_up_moves(species: String, level_up: Dictionary) -> void:
+	_notify_reward_move_messages(
+		species,
+		level_up.get("learnedMoves", []),
+		"%s learned %s!"
+	)
+	_notify_reward_move_messages(
+		species,
+		level_up.get("moveLearnCandidates", []),
+		"%s can learn %s."
+	)
+
+func _notify_reward_move_messages(species: String, moves_value: Variant, message_template: String) -> void:
+	if not (moves_value is Array):
+		return
+
+	for move_value: Variant in moves_value:
+		var move_name := _reward_move_name(move_value)
+		if move_name == "":
+			continue
+
+		get_tree().call_group("ui_overlay", "add_system_message", message_template % [species, move_name])
+
+func _reward_move_name(move_value: Variant) -> String:
+	if not (move_value is Dictionary):
+		return ""
+
+	var move_event: Dictionary = move_value as Dictionary
+	var move_name := str(move_event.get("name", "")).strip_edges()
+	if move_name != "":
+		return move_name
+
+	var move_payload_value: Variant = move_event.get("move", {})
+	if move_payload_value is Dictionary:
+		var move_payload: Dictionary = move_payload_value as Dictionary
+		move_name = str(move_payload.get("name", move_payload.get("id", ""))).strip_edges()
+		if move_name != "":
+			return move_name
+
+	return str(move_event.get("moveId", "")).strip_edges()
 
 func _format_money_amount(value: int) -> String:
 	var value_text := str(max(value, 0))
