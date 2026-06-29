@@ -365,6 +365,8 @@ var move_learn_selected_replace_slot := -2
 var move_learn_hover_panel: PanelContainer
 var move_learn_queue: Array[Dictionary] = []
 var move_learn_active_prompt: Dictionary = {}
+var move_learn_pending_review_total := 0
+var move_learn_pending_review_index := 0
 var move_learn_processing := false
 var dev_clear_menu_popup: PanelContainer
 var pvp_room_popup: PanelContainer
@@ -529,6 +531,8 @@ var item_dex_icon: TextureRect
 var item_dex_name_label: Label
 var item_dex_meta_label: Label
 var item_dex_description_label: Label
+var item_dex_effect_section_label: Control
+var item_dex_effect_label: Label
 var item_dex_capture_section_label: Control
 var item_dex_capture_label: Label
 var item_dex_sources_label: Label
@@ -1393,16 +1397,23 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 	if prompts_value is Array:
 		var prompts: Array = prompts_value as Array
 		if not prompts.is_empty():
+			var queued_before := _move_learn_pending_prompt_count()
+			var queued_count := 0
 			for prompt_value: Variant in prompts:
 				if prompt_value is Dictionary:
-					_queue_move_learn_prompt(prompt_value as Dictionary)
-			_show_next_move_learn_prompt()
+					if _queue_move_learn_prompt(prompt_value as Dictionary):
+						queued_count += 1
+			_extend_move_learn_review_count(queued_count, queued_before)
+			if queued_count > 0:
+				_show_next_move_learn_prompt()
 			return
 
 	var level_ups_value: Variant = reward.get("levelUps", [])
 	if not (level_ups_value is Array):
 		return
 
+	var queued_before := _move_learn_pending_prompt_count()
+	var queued_count := 0
 	for level_up_value: Variant in level_ups_value:
 		if not (level_up_value is Dictionary):
 			continue
@@ -1425,36 +1436,83 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 
 			prompt["pokemonId"] = pokemon_id
 			prompt["species"] = species if species != "" else "Pokemon"
-			_queue_move_learn_prompt(prompt)
+			if _queue_move_learn_prompt(prompt):
+				queued_count += 1
 
-	_show_next_move_learn_prompt()
+	_extend_move_learn_review_count(queued_count, queued_before)
+	if queued_count > 0:
+		_show_next_move_learn_prompt()
 
-func _queue_move_learn_prompt(prompt_value: Dictionary) -> void:
+func _queue_move_learn_prompt(prompt_value: Dictionary) -> bool:
 	var prompt := prompt_value.duplicate(true)
 	var move_id := _move_learn_prompt_move_id(prompt)
 	if move_id == "":
-		return
+		return false
 	if int(prompt.get("pokemonId", 0)) <= 0:
-		return
+		return false
 
 	var species := str(prompt.get("species", "Pokemon")).strip_edges()
 	prompt["species"] = species if species != "" else "Pokemon"
 	move_learn_queue.append(prompt)
+	return true
+
+func _move_learn_pending_prompt_count() -> int:
+	var count := move_learn_queue.size()
+	if not move_learn_active_prompt.is_empty():
+		count += 1
+	return count
+
+func _extend_move_learn_review_count(queued_count: int, queued_before: int) -> void:
+	if queued_count <= 0:
+		return
+	if queued_before <= 0:
+		move_learn_pending_review_total = queued_count
+		move_learn_pending_review_index = 0
+		return
+	if move_learn_pending_review_total <= 0:
+		move_learn_pending_review_total = move_learn_pending_review_index + queued_before + queued_count
+		return
+	move_learn_pending_review_total += queued_count
+
+func _move_learn_queue_progress_label() -> String:
+	if move_learn_pending_review_total <= 1:
+		return ""
+	var current_index: int = clampi(move_learn_pending_review_index, 1, move_learn_pending_review_total)
+	return "%s / %s" % [current_index, move_learn_pending_review_total]
+
+func _discard_move_learn_review_prompt() -> void:
+	if move_learn_pending_review_total <= 0:
+		return
+	move_learn_pending_review_total = max(move_learn_pending_review_index, move_learn_pending_review_total - 1)
+
+func _finish_move_learn_review_queue() -> void:
+	if move_learn_pending_review_total > 1 and move_learn_pending_review_index >= move_learn_pending_review_total:
+		add_system_message("Move learning review complete.")
+	move_learn_pending_review_total = 0
+	move_learn_pending_review_index = 0
 
 func _show_next_move_learn_prompt() -> void:
 	if move_learn_processing or move_learn_popup == null or move_learn_popup.visible:
 		return
+
+	if move_learn_pending_review_total <= 0 and not move_learn_queue.is_empty():
+		move_learn_pending_review_total = move_learn_queue.size()
+		move_learn_pending_review_index = 0
 
 	while not move_learn_queue.is_empty():
 		var prompt: Dictionary = move_learn_queue.pop_front()
 		var pokemon := _find_party_pokemon_by_owned_id(int(prompt.get("pokemonId", 0)))
 		if pokemon == null:
 			add_system_message("Could not open move learning prompt for %s." % str(prompt.get("species", "Pokemon")))
+			_discard_move_learn_review_prompt()
 			continue
 
+		move_learn_pending_review_index += 1
 		move_learn_active_prompt = prompt
 		_render_move_learn_prompt(pokemon, prompt)
 		return
+
+	_finish_move_learn_review_queue()
 
 func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	var move_name := _move_learn_prompt_move_name(prompt)
@@ -1462,7 +1520,8 @@ func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	if species == "":
 		species = pokemon.species
 	var new_move_value: Variant = _move_learn_prompt_move_value(prompt)
-	move_learn_title_label.text = "Learn %s" % move_name
+	var progress_label := _move_learn_queue_progress_label()
+	move_learn_title_label.text = "Learn %s%s" % [move_name, " (%s)" % progress_label if progress_label != "" else ""]
 	move_learn_message_label.text = "%s wants to learn %s. Select a move to replace or choose not to learn." % [species, move_name]
 	move_learn_status_label.text = ""
 	move_learn_selected_replace_slot = -2
@@ -1868,15 +1927,7 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 		_set_move_learn_controls_disabled(false)
 		return
 
-	if skip:
-		add_system_message("%s did not learn %s." % [str(move_learn_active_prompt.get("species", "Pokemon")), move_name])
-	else:
-		var replaced_move: Dictionary = result.get("replacedMove", {}) as Dictionary
-		var replaced_name := _get_summary_move_name(replaced_move) if not replaced_move.is_empty() else ""
-		if replaced_name != "":
-			add_system_message("%s forgot %s and learned %s!" % [str(move_learn_active_prompt.get("species", "Pokemon")), replaced_name, move_name])
-		else:
-			add_system_message("%s learned %s!" % [str(move_learn_active_prompt.get("species", "Pokemon")), move_name])
+	_emit_move_learn_result_message(result, str(move_learn_active_prompt.get("species", "Pokemon")), move_name, skip)
 
 	move_learn_popup.visible = false
 	_hide_move_learn_hover_panel()
@@ -1884,6 +1935,43 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
 	_show_next_move_learn_prompt()
+
+func _emit_move_learn_result_message(result: Dictionary, fallback_species: String, fallback_move_name: String, fallback_skipped: bool) -> void:
+	var species := fallback_species.strip_edges()
+	if species == "":
+		species = "Pokemon"
+
+	var learned_move: Dictionary = {}
+	var learned_move_value: Variant = result.get("learnedMove", {})
+	if learned_move_value is Dictionary:
+		learned_move = learned_move_value as Dictionary
+	var learned_name := _move_learn_result_move_name(learned_move, fallback_move_name)
+	var skipped := bool(result.get("skipped", fallback_skipped))
+	if skipped:
+		add_system_message("%s did not learn %s." % [species, learned_name])
+		return
+
+	var replaced_move: Dictionary = {}
+	var replaced_move_value: Variant = result.get("replacedMove", {})
+	if replaced_move_value is Dictionary:
+		replaced_move = replaced_move_value as Dictionary
+	var replaced_name := _move_learn_result_move_name(replaced_move, "")
+	if replaced_name != "":
+		add_system_message("%s forgot %s and learned %s!" % [species, replaced_name, learned_name])
+	else:
+		add_system_message("%s learned %s!" % [species, learned_name])
+
+func _move_learn_result_move_name(move_value: Variant, fallback_name: String) -> String:
+	if move_value is Dictionary:
+		var move_data: Dictionary = move_value as Dictionary
+		if not move_data.is_empty():
+			var move_name := _get_summary_move_name(move_data).strip_edges()
+			if move_name != "":
+				return move_name
+			var move_id := str(move_data.get("moveId", move_data.get("move_id", ""))).strip_edges()
+			if move_id != "":
+				return _format_move_name(move_id)
+	return fallback_name
 
 func _set_move_learn_controls_disabled(disabled: bool) -> void:
 	for button: Button in move_learn_move_buttons:
@@ -2627,6 +2715,17 @@ func _setup_item_dex_popup() -> void:
 	item_dex_description_label.add_theme_font_size_override("font_size", 13)
 	item_dex_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	summary_layout.add_child(item_dex_description_label)
+
+	item_dex_effect_section_label = _create_pokedex_section_title("Effect")
+	item_dex_effect_section_label.visible = false
+	summary_layout.add_child(item_dex_effect_section_label)
+
+	item_dex_effect_label = Label.new()
+	item_dex_effect_label.visible = false
+	item_dex_effect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	item_dex_effect_label.add_theme_font_size_override("font_size", 13)
+	item_dex_effect_label.add_theme_color_override("font_color", Color("#f2cf78"))
+	summary_layout.add_child(item_dex_effect_label)
 
 	item_dex_capture_section_label = _create_pokedex_section_title("Capture")
 	item_dex_capture_section_label.visible = false
@@ -10829,7 +10928,7 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	label_stack.add_child(label)
 
 	var meta_label := Label.new()
-	meta_label.text = _format_identifier_display_name(str(item.get("category", "Unknown")))
+	meta_label.text = _format_item_dex_category_label(item)
 	meta_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -10847,6 +10946,12 @@ func _on_item_dex_result_selected(item: Dictionary) -> void:
 	if description == "":
 		description = "No item summary available yet."
 	item_dex_description_label.text = description
+	var effect_text := _format_item_dex_effect_info(item)
+	if item_dex_effect_section_label != null:
+		item_dex_effect_section_label.visible = effect_text != ""
+	if item_dex_effect_label != null:
+		item_dex_effect_label.text = effect_text
+		item_dex_effect_label.visible = effect_text != ""
 	var capture_text := _format_item_dex_capture_info(item)
 	if item_dex_capture_section_label != null:
 		item_dex_capture_section_label.visible = capture_text != ""
@@ -10856,12 +10961,106 @@ func _on_item_dex_result_selected(item: Dictionary) -> void:
 	item_dex_sources_label.text = _format_item_dex_sources(item)
 
 func _format_item_dex_meta(item: Dictionary) -> String:
-	var category := str(item.get("category", "-"))
+	var category_text := _format_item_dex_category_label(item)
 	var cost_value: Variant = item.get("cost", null)
 	var cost_text := "Unknown"
 	if cost_value != null:
 		cost_text = "$%s" % _format_money(int(cost_value))
-	return "Category: %s    Base price: %s" % [_format_identifier_display_name(category), cost_text]
+	var meta_parts: Array[String] = ["Category: %s" % category_text]
+	var potency_text := _format_item_dex_potency(item)
+	if potency_text != "":
+		meta_parts.append("Potency: %s" % potency_text)
+	meta_parts.append("Base price: %s" % cost_text)
+	return "    ".join(meta_parts)
+
+func _format_item_dex_category_label(item: Dictionary) -> String:
+	var category := _format_identifier_display_name(str(item.get("category", "-")))
+	var sub_category := _format_identifier_display_name(str(item.get("subCategory", "")))
+	if sub_category == "":
+		return category
+	return "%s / %s" % [category, sub_category]
+
+func _format_item_dex_potency(item: Dictionary) -> String:
+	var potency_value: Variant = item.get("potency", null)
+	if potency_value == null:
+		return ""
+	var potency_unit := str(item.get("potencyUnit", "")).strip_edges()
+	var potency_number := float(potency_value)
+	var potency_text := str(int(potency_number)) if is_equal_approx(potency_number, float(int(potency_number))) else str(potency_number)
+	match potency_unit:
+		"experience":
+			return "%s EXP" % potency_text
+		"hp":
+			return "%s HP" % potency_text
+		"percent_hp":
+			return "%s%% HP" % potency_text
+		"pp":
+			return "%s PP" % potency_text
+		"pp_all":
+			return "%s PP per move" % potency_text
+		"percent_max_pp":
+			return "%s%% max PP" % potency_text
+		"full_hp":
+			return "Full HP"
+		"full_hp_status":
+			return "Full HP + status cure"
+		"full_pp":
+			return "Full PP"
+		"full_pp_all":
+			return "Full PP per move"
+		"level":
+			return "+%s level" % potency_text
+		"ability_change":
+			return "1 ability change"
+		"status":
+			return "1 status cure"
+		"ev":
+			return "+%s EV" % potency_text
+		"nature":
+			return "1 nature change"
+		"stat":
+			return "+%s stat" % potency_text
+		_:
+			return potency_text
+
+func _format_item_dex_effect_info(item: Dictionary) -> String:
+	var sub_category := str(item.get("subCategory", "")).strip_edges()
+	var potency_text := _format_item_dex_potency(item)
+	if sub_category == "" and potency_text == "":
+		return ""
+
+	var lines: Array[String] = []
+	if sub_category != "":
+		lines.append("Type: %s" % _format_identifier_display_name(sub_category))
+	if potency_text != "":
+		lines.append("Potency: %s" % potency_text)
+
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	match sub_category:
+		"exp":
+			lines.append("Grants experience to the selected Pokemon.")
+		"level":
+			lines.append("Raises the selected Pokemon by the listed number of levels.")
+		"heal":
+			lines.append("Restores HP to the selected Pokemon.")
+		"revive":
+			lines.append("Revives a fainted Pokemon with the listed HP amount.")
+		"pp":
+			lines.append("Restores or increases move PP.")
+		"status":
+			lines.append("Cures a status condition.")
+		"ability":
+			lines.append("Changes an eligible Pokemon's ability.")
+		"ev":
+			lines.append("Changes effort values for one stat.")
+		"nature":
+			lines.append("Changes how stat growth is treated for the Pokemon.")
+		"stat":
+			lines.append("Raises a stat-related value.")
+		_:
+			if item_id != "":
+				lines.append("Structured effect metadata is available for this item.")
+	return "\n".join(lines)
 
 func _format_item_dex_capture_info(item: Dictionary) -> String:
 	if not _is_item_dex_pokeball(item):
@@ -11235,9 +11434,12 @@ func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
 			"id": item_id,
 			"name": str(item.get("name", _item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
+			"subCategory": item.get("subCategory", null),
 			"shortDesc": str(item.get("shortDesc", "")),
 			"desc": str(item.get("desc", "")),
 			"cost": item.get("cost", null),
+			"potency": item.get("potency", null),
+			"potencyUnit": item.get("potencyUnit", null),
 			"sources": item.get("sources", []),
 			"sourceSummary": item.get("sourceSummary", []),
 		})
