@@ -1522,13 +1522,14 @@ func _fill_move_learn_choice_button(button: Button, move_name: String, move_valu
 		meta_row.add_child(_create_move_learn_plain_meta_label(fallback_meta_text))
 		return
 
-	meta_row.add_child(_create_move_learn_meta_label("", _get_summary_move_pp_text(move_value), Color("#ffd95d"), 0.0))
+	meta_row.add_child(_create_move_learn_meta_label("PP", _get_summary_move_pp_text(move_value), Color("#ffd95d"), 64.0))
 
 func _create_move_learn_meta_label(label_text: String, value_text: String, color: Color, min_width: float = 70.0) -> Control:
 	var label := Label.new()
 	label.text = "%s %s" % [label_text, value_text]
 	label.custom_minimum_size = Vector2(min_width, 0)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", color)
@@ -1615,11 +1616,13 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 		var description_label := Label.new()
 		description_label.text = description
 		description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description_label.max_lines_visible = 3
+		description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		description_label.add_theme_font_size_override("font_size", 13)
 		description_label.add_theme_color_override("font_color", UI_TEXT)
 		stack.add_child(description_label)
 
-	var panel_size := Vector2(278, 150)
+	var panel_size := Vector2(260, 126)
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var anchor_rect := anchor.get_global_rect()
 	var position := Vector2(anchor_rect.position.x + anchor_rect.size.x - 4.0, anchor_rect.position.y - 8.0)
@@ -1629,9 +1632,14 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 		position.y = viewport_size.y - panel_size.y - 12.0
 	position.x = max(position.x, 12.0)
 	position.y = max(position.y, 12.0)
+	move_learn_hover_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	move_learn_hover_panel.position = position
 	move_learn_hover_panel.size = panel_size
 	move_learn_hover_panel.custom_minimum_size = panel_size
+	move_learn_hover_panel.offset_left = position.x
+	move_learn_hover_panel.offset_top = position.y
+	move_learn_hover_panel.offset_right = position.x + panel_size.x
+	move_learn_hover_panel.offset_bottom = position.y + panel_size.y
 	move_learn_hover_panel.visible = true
 	move_learn_hover_panel.move_to_front()
 
