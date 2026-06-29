@@ -4,9 +4,14 @@
 
 **Added**
 - Added a dedicated PvP battle music track.
+- Added Pokemon experience gains after battles, including level-up messages after rewards are claimed.
+- Added move learning prompts when a Pokemon levels up and already knows four moves.
+- Added experience progress bars to the player battle HUD, party slots, and Pokemon summaries.
+- Added a visual Happiness progress bar placeholder in Pokemon summaries.
 
 **Changed**
 - The Battle Music setting now lists PvP battle tracks and controls which music plays during PvP battles.
+- Pokemon summaries now show training progress more clearly.
 
 ## 0.2.3 - 2026-06-29
 
