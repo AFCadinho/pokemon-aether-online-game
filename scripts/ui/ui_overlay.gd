@@ -5346,7 +5346,7 @@ func _create_summary_metric_card(
 	bar.max_value = max(max_value, 1)
 	bar.value = clamp(value, 0, max(max_value, 1))
 	bar.show_percentage = false
-	bar.custom_minimum_size = Vector2(0, 12)
+	bar.custom_minimum_size = Vector2(0, 8)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bar.tooltip_text = tooltip_text
 	bar.add_theme_stylebox_override("background", _make_panel_style(
