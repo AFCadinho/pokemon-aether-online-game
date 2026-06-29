@@ -4577,15 +4577,15 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_type_icon_row = HBoxContainer.new()
 	pokemon_summary_type_icon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pokemon_summary_type_icon_row.add_theme_constant_override("separation", 4)
+	pokemon_summary_type_icon_row.add_theme_constant_override("separation", 5)
 	pokemon_summary_type_icon_row.anchor_left = 1.0
 	pokemon_summary_type_icon_row.anchor_top = 0.0
 	pokemon_summary_type_icon_row.anchor_right = 1.0
 	pokemon_summary_type_icon_row.anchor_bottom = 0.0
-	pokemon_summary_type_icon_row.offset_left = -56.0
+	pokemon_summary_type_icon_row.offset_left = -168.0
 	pokemon_summary_type_icon_row.offset_top = 6.0
 	pokemon_summary_type_icon_row.offset_right = -6.0
-	pokemon_summary_type_icon_row.offset_bottom = 30.0
+	pokemon_summary_type_icon_row.offset_bottom = 28.0
 	sprite_frame.add_child(pokemon_summary_type_icon_row)
 
 	pokemon_summary_level_badge_panel = PanelContainer.new()
@@ -6023,15 +6023,15 @@ func _refresh_pokemon_summary_type_icons(pokemon: Pokemon) -> void:
 
 	var added_count: int = 0
 	for type_value: String in _string_array_from_value(pokemon.types):
-		var type_icon: Texture2D = _load_pokemon_type_icon(type_value)
-		if type_icon == null:
+		var type_label: Texture2D = _load_pokemon_type_text_label(type_value)
+		if type_label == null:
 			continue
 
 		var icon: TextureRect = TextureRect.new()
-		icon.custom_minimum_size = Vector2(20, 20)
+		icon.custom_minimum_size = Vector2(76, 16)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.texture = type_icon
+		icon.texture = type_label
 		icon.tooltip_text = type_value.capitalize()
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		pokemon_summary_type_icon_row.add_child(icon)
@@ -6045,6 +6045,17 @@ func _load_pokemon_type_icon(type_name: String) -> Texture2D:
 		return null
 
 	var path: String = "%s%s.png" % [POKEMON_TYPE_ICON_ROOT, normalized_type]
+	if not ResourceLoader.exists(path):
+		return null
+
+	return load(path) as Texture2D
+
+func _load_pokemon_type_text_label(type_name: String) -> Texture2D:
+	var normalized_type: String = type_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
+	if normalized_type == "":
+		return null
+
+	var path: String = "%s%s.png" % [MOVE_LEARN_TYPE_LABEL_ROOT, normalized_type]
 	if not ResourceLoader.exists(path):
 		return null
 
