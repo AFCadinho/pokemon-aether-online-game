@@ -5,6 +5,7 @@
 **Added**
 - Added a revamped Pokemon summary card with a fixed-size layout, a current-trainer title bar, front/back sprite toggle, compact shiny marker, move hover descriptions, and nature-based stat highlighting.
 - Added compact origin metadata in Pokemon summaries so caught and generated Pokemon show their region, location, origin date, and origin method clearly.
+- Added short description hover tooltips for abilities in the Pokemon summary Info tab.
 
 **Changed**
 - Battle logs now start collapsed on smaller screens and open on wider screens.
@@ -12,9 +13,14 @@
 - Battle log open or collapsed state is remembered for the rest of the client session after you change it.
 - Your own overworld character now takes visual priority when players stand on the same spot.
 - Pokemon summary tabs now keep the same card size across Info, IVs, EVs, and Moves without summary scrollbars.
+- Pokemon summary stored EVs now use a roomier two-row layout for better readability.
+- Pokemon summary Poké Ball and held item pickers now use searchable suggestions instead of long option lists.
+- Changing a Pokemon's assigned Poké Ball now consumes the new ball and does not return the previous ball, with a confirmation prompt before the change.
+- Confirmation prompts in the main UI now use the styled in-game popup instead of the default Godot dialog.
 
 **Fixed**
 - Fixed the forfeit confirmation prompt appearing behind other battle UI.
+- Fixed Red Orb and Blue Orb not being treated as holdable items for Pokemon summary held item assignment.
 - Fixed Pokemon summaries treating 100/100 backend HP snapshots as percentage HP when real max HP stats are available.
 - Fixed saved overworld positions sometimes drifting off the tile grid after disconnecting or returning from battle during movement.
 - Fixed overworld players, followers, NPCs, and tree layers drawing in inconsistent order while overlapping.
