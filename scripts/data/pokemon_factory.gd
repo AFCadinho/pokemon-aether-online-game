@@ -44,7 +44,8 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		_get_int_option(data, ["currentLevelExp", "current_level_exp", "levelStartExp", "level_start_exp"]),
 		_get_int_option(data, ["nextLevelExp", "next_level_exp"]),
 		_get_int_option(data, ["experienceToNextLevel", "experience_to_next_level", "expToNextLevel", "exp_to_next_level"]),
-		_get_string_option(data, ["growthRate", "growth_rate"])
+		_get_string_option(data, ["growthRate", "growth_rate"]),
+		_get_int_option(data, ["baseExperience", "base_experience"])
 	)
 
 	_apply_payload_hp_state(pokemon, data)

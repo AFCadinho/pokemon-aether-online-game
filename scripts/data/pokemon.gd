@@ -27,6 +27,7 @@ var current_level_exp: int
 var next_level_exp: int
 var experience_to_next_level: int
 var growth_rate: String
+var base_experience: int
 
 var current_hp: int
 var max_hp: int
@@ -58,7 +59,8 @@ func _init(
 	_current_level_exp: int = 0,
 	_next_level_exp: int = 0,
 	_experience_to_next_level: int = 0,
-	_growth_rate: String = ""
+	_growth_rate: String = "",
+	_base_experience: int = 0
 	) -> void:
 	species = _species
 	level = _level
@@ -107,6 +109,7 @@ func _init(
 	next_level_exp = max(_next_level_exp, current_level_exp)
 	experience_to_next_level = max(_experience_to_next_level, 0)
 	growth_rate = _growth_rate.strip_edges()
+	base_experience = max(_base_experience, 0)
 
 	max_hp = 20
 	current_hp = max_hp
@@ -147,6 +150,8 @@ func to_battle_dict() -> Dictionary:
 	}
 	if growth_rate != "":
 		battle_data["growthRate"] = growth_rate
+	if base_experience > 0:
+		battle_data["baseExperience"] = base_experience
 	if owned_pokemon_id > 0:
 		battle_data["ownedPokemonId"] = owned_pokemon_id
 	if caught_ball_item_id != "":
