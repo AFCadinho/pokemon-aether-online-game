@@ -2,14 +2,20 @@
 
 ## Unreleased
 
+**Added**
+- Added a revamped Pokemon summary card with a fixed-size layout, a current-trainer title bar, front/back sprite toggle, compact shiny marker, move hover descriptions, and nature-based stat highlighting.
+- Added compact origin metadata in Pokemon summaries so caught and generated Pokemon show their region, location, origin date, and origin method clearly.
+
 **Changed**
 - Battle logs now start collapsed on smaller screens and open on wider screens.
 - On smaller screens, opening the battle log toggle keeps the large log hidden so battle information stays readable.
 - Battle log open or collapsed state is remembered for the rest of the client session after you change it.
 - Your own overworld character now takes visual priority when players stand on the same spot.
+- Pokemon summary tabs now keep the same card size across Info, IVs, EVs, and Moves without summary scrollbars.
 
 **Fixed**
 - Fixed the forfeit confirmation prompt appearing behind other battle UI.
+- Fixed Pokemon summaries treating 100/100 backend HP snapshots as percentage HP when real max HP stats are available.
 - Fixed saved overworld positions sometimes drifting off the tile grid after disconnecting or returning from battle during movement.
 - Fixed overworld players, followers, NPCs, and tree layers drawing in inconsistent order while overlapping.
 - Fixed PvP team indicators showing shiny markers on the wrong Pokemon.

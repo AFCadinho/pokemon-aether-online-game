@@ -42,9 +42,7 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		caught_ball_item_id
 	)
 
-	pokemon.max_hp = max(int(data.get("maxHp", data.get("max_hp", pokemon.max_hp))), 1)
-	pokemon.current_hp = int(clamp(int(data.get("currentHp", data.get("current_hp", pokemon.max_hp))), 0, pokemon.max_hp))
-	pokemon.has_saved_hp_state = data.has("currentHp") or data.has("current_hp") or data.has("maxHp") or data.has("max_hp")
+	_apply_payload_hp_state(pokemon, data)
 	return pokemon
 
 
@@ -205,3 +203,37 @@ static func _has_hp_override(options: Dictionary) -> bool:
 		or options.has("maxHp")
 		or options.has("max_hp")
 	)
+
+
+static func _apply_payload_hp_state(pokemon: Pokemon, data: Dictionary) -> void:
+	if not _has_hp_override(data):
+		return
+
+	var max_hp: int = max(int(data.get("maxHp", data.get("max_hp", pokemon.max_hp))), 1)
+	var current_hp: int = int(data.get("currentHp", data.get("current_hp", max_hp)))
+	var has_stat_max_hp: bool = _has_stat_max_hp(pokemon)
+	var stat_max_hp: int = _get_stat_max_hp(pokemon)
+
+	if current_hp <= 0 and max_hp == 1:
+		pokemon.max_hp = stat_max_hp if has_stat_max_hp else max_hp
+		pokemon.current_hp = 0
+		pokemon.has_saved_hp_state = true
+		return
+
+	if max_hp == 100 and has_stat_max_hp and stat_max_hp != 100:
+		var hp_percent: int = int(clamp(current_hp, 0, 100))
+		pokemon.max_hp = stat_max_hp
+		pokemon.current_hp = int(round((float(hp_percent) / 100.0) * float(stat_max_hp)))
+	else:
+		pokemon.max_hp = max_hp
+		pokemon.current_hp = int(clamp(current_hp, 0, pokemon.max_hp))
+
+	pokemon.has_saved_hp_state = true
+
+
+static func _get_stat_max_hp(pokemon: Pokemon) -> int:
+	return max(int(pokemon.stats.get("hp", pokemon.max_hp)), 1)
+
+
+static func _has_stat_max_hp(pokemon: Pokemon) -> bool:
+	return pokemon.stats.has("hp") and int(pokemon.stats.get("hp", 0)) > 0

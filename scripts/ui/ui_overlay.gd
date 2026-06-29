@@ -84,17 +84,49 @@ const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
 const BAG_SIZE := Vector2(920, 620)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
-const POKEMON_SUMMARY_SIZE := Vector2(620, 360)
-const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 176.0
-const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 336.0
-const POKEMON_SUMMARY_CONTENT_PANEL_WIDTH := 336.0
-const POKEMON_SUMMARY_TAB_COLUMN_WIDTH := 48.0
-const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(150, 120)
-const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(124, 96)
+const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
+const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
+const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
+const POKEMON_SUMMARY_RIGHT_AREA_WIDTH := 320.0
+const POKEMON_SUMMARY_CONTENT_PANEL_WIDTH := 320.0
+const POKEMON_SUMMARY_CONTENT_PANEL_HEIGHT := 295.0
+const POKEMON_SUMMARY_CONTENT_STACK_HEIGHT := 281.0
+const POKEMON_SUMMARY_TAB_COLUMN_WIDTH := 64.0
+const POKEMON_SUMMARY_ACCENT := Color("#62d7ff")
+const POKEMON_SUMMARY_ACCENT_SOFT := Color("#62d7ffaa")
+const POKEMON_SUMMARY_ACCENT_FAINT := Color("#62d7ff66")
+const POKEMON_SUMMARY_ACCENT_DARK := Color("#063447")
+const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(263, 180)
+const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_MIN_SCALE := 0.72
 const POKEMON_SUMMARY_SPRITE_MAX_SCALE := 2.2
+const POKEMON_SUMMARY_NATURE_BOOST_COLOR := Color("#7df27f")
+const POKEMON_SUMMARY_NATURE_DROP_COLOR := Color("#ff8f4f")
+const POKEMON_SUMMARY_NATURE_CHANGES := {
+	"lonely": {"boosted": "atk", "lowered": "def"},
+	"brave": {"boosted": "atk", "lowered": "spe"},
+	"adamant": {"boosted": "atk", "lowered": "spa"},
+	"naughty": {"boosted": "atk", "lowered": "spd"},
+	"bold": {"boosted": "def", "lowered": "atk"},
+	"relaxed": {"boosted": "def", "lowered": "spe"},
+	"impish": {"boosted": "def", "lowered": "spa"},
+	"lax": {"boosted": "def", "lowered": "spd"},
+	"modest": {"boosted": "spa", "lowered": "atk"},
+	"mild": {"boosted": "spa", "lowered": "def"},
+	"quiet": {"boosted": "spa", "lowered": "spe"},
+	"rash": {"boosted": "spa", "lowered": "spd"},
+	"calm": {"boosted": "spd", "lowered": "atk"},
+	"gentle": {"boosted": "spd", "lowered": "def"},
+	"sassy": {"boosted": "spd", "lowered": "spe"},
+	"careful": {"boosted": "spd", "lowered": "spa"},
+	"timid": {"boosted": "spe", "lowered": "atk"},
+	"hasty": {"boosted": "spe", "lowered": "def"},
+	"jolly": {"boosted": "spe", "lowered": "spa"},
+	"naive": {"boosted": "spe", "lowered": "spd"},
+}
 const POKEMON_TYPE_ICON_ROOT := "res://assets/sprites/types/small/"
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
+const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const BAG_ICON_ROOT := "res://assets/items/icons/"
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.png")
 const BAG_CATEGORIES := [
@@ -327,9 +359,9 @@ var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pokemon_summary_popup: PanelContainer
 var pokemon_summary_left_panel: PanelContainer
-var pokemon_summary_right_area: HBoxContainer
+var pokemon_summary_right_area: VBoxContainer
 var pokemon_summary_content_panel: PanelContainer
-var pokemon_summary_tab_column: VBoxContainer
+var pokemon_summary_tab_column: HBoxContainer
 var pokemon_summary_sprite: TextureRect
 var pokemon_summary_sprite_viewport: SubViewport
 var pokemon_summary_animated_sprite: AnimatedSprite2D
@@ -353,6 +385,7 @@ var pokemon_summary_tab_buttons: Dictionary = {}
 var pokemon_summary_shiny_badge: PanelContainer
 var pokemon_summary_shiny_badge_label: Label
 var pokemon_summary_active_tab := "general"
+var pokemon_summary_sprite_side := "front"
 var pokemon_summary_trainer_label: Label
 var pokemon_summary_stats_list: VBoxContainer
 var pokemon_summary_moves_list: VBoxContainer
@@ -376,6 +409,8 @@ var pokemon_summary_dragging_card_key := ""
 var pokemon_summary_next_card_offset_index := 0
 var pokemon_summary_move_type_index: Dictionary = {}
 var pokemon_summary_move_type_index_loaded := false
+var pokemon_summary_move_summary_index: Dictionary = {}
+var pokemon_summary_move_summary_index_loaded := false
 var dev_add_button: Button
 var dev_add_menu_popup: PanelContainer
 var dev_add_item_button: Button
@@ -3442,16 +3477,452 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	root_control.add_child(pokemon_summary_popup)
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 12)
-	margin_container.add_theme_constant_override("margin_top", 10)
-	margin_container.add_theme_constant_override("margin_right", 12)
-	margin_container.add_theme_constant_override("margin_bottom", 12)
+	margin_container.add_theme_constant_override("margin_left", 9)
+	margin_container.add_theme_constant_override("margin_top", 8)
+	margin_container.add_theme_constant_override("margin_right", 9)
+	margin_container.add_theme_constant_override("margin_bottom", 9)
 	pokemon_summary_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 6)
+	layout.add_theme_constant_override("separation", 4)
 	margin_container.add_child(layout)
 
+	_add_pokemon_summary_owner_bar(layout, card_key)
+
+	var content_row := HBoxContainer.new()
+	content_row.custom_minimum_size = Vector2(0, POKEMON_SUMMARY_BODY_HEIGHT)
+	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_row.add_theme_constant_override("separation", 7)
+	layout.add_child(content_row)
+
+	_add_pokemon_summary_left_panel(content_row, card_key)
+	_add_pokemon_summary_right_area(content_row, card_key)
+
+func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: String) -> void:
+	var left_panel := PanelContainer.new()
+	pokemon_summary_left_panel = left_panel
+	left_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
+	left_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	left_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	left_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#050911f8"), POKEMON_SUMMARY_ACCENT_SOFT))
+	content_row.add_child(left_panel)
+
+	var left_margin := MarginContainer.new()
+	left_margin.add_theme_constant_override("margin_left", 6)
+	left_margin.add_theme_constant_override("margin_top", 6)
+	left_margin.add_theme_constant_override("margin_right", 6)
+	left_margin.add_theme_constant_override("margin_bottom", 6)
+	left_panel.add_child(left_margin)
+
+	var left_stack := VBoxContainer.new()
+	left_stack.add_theme_constant_override("separation", 6)
+	left_margin.add_child(left_stack)
+
+	var sprite_frame := Control.new()
+	sprite_frame.custom_minimum_size = Vector2(
+		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x),
+		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y)
+	)
+	sprite_frame.mouse_filter = Control.MOUSE_FILTER_STOP
+	sprite_frame.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	sprite_frame.tooltip_text = "Toggle front/back sprite"
+	sprite_frame.gui_input.connect(_on_pokemon_summary_sprite_frame_gui_input.bind(card_key))
+	left_stack.add_child(sprite_frame)
+
+	var sprite_stage_background := TextureRect.new()
+	sprite_stage_background.texture = BATTLE_SUMMARY_SLOT_BG_TEXTURE
+	sprite_stage_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sprite_stage_background.stretch_mode = TextureRect.STRETCH_SCALE
+	sprite_stage_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_frame.add_child(sprite_stage_background)
+	sprite_stage_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var sprite_backdrop := PanelContainer.new()
+	sprite_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_backdrop.add_theme_stylebox_override("panel", _make_pokemon_summary_sprite_stage_style())
+	sprite_frame.add_child(sprite_backdrop)
+	sprite_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var sprite_viewport_container := SubViewportContainer.new()
+	sprite_viewport_container.stretch = true
+	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_frame.add_child(sprite_viewport_container)
+	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	pokemon_summary_sprite_viewport = SubViewport.new()
+	pokemon_summary_sprite_viewport.size = POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE
+	pokemon_summary_sprite_viewport.transparent_bg = true
+	pokemon_summary_sprite_viewport.disable_3d = true
+	pokemon_summary_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	sprite_viewport_container.add_child(pokemon_summary_sprite_viewport)
+
+	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
+	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokemon_summary_animated_sprite.position = Vector2(
+		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x) * 0.5,
+		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y) * 0.52
+	)
+	pokemon_summary_sprite_viewport.add_child(pokemon_summary_animated_sprite)
+
+	pokemon_summary_sprite = TextureRect.new()
+	pokemon_summary_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_summary_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite_frame.add_child(pokemon_summary_sprite)
+	pokemon_summary_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var ball_button_panel := PanelContainer.new()
+	ball_button_panel.custom_minimum_size = Vector2(30, 30)
+	ball_button_panel.anchor_left = 0.0
+	ball_button_panel.anchor_top = 0.0
+	ball_button_panel.anchor_right = 0.0
+	ball_button_panel.anchor_bottom = 0.0
+	ball_button_panel.offset_left = 6.0
+	ball_button_panel.offset_top = 6.0
+	ball_button_panel.offset_right = 36.0
+	ball_button_panel.offset_bottom = 36.0
+	ball_button_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_button_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#06111fe8"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
+	sprite_frame.add_child(ball_button_panel)
+
+	var ball_icon_center := CenterContainer.new()
+	ball_icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_button_panel.add_child(ball_icon_center)
+
+	pokemon_summary_ball_icon = TextureRect.new()
+	pokemon_summary_ball_icon.custom_minimum_size = Vector2(22, 22)
+	pokemon_summary_ball_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_summary_ball_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_ball_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_icon_center.add_child(pokemon_summary_ball_icon)
+
+	pokemon_summary_ball_button = Button.new()
+	pokemon_summary_ball_button.text = ""
+	pokemon_summary_ball_button.pressed.connect(_on_pokemon_summary_ball_button_pressed.bind(card_key))
+	pokemon_summary_ball_button.tooltip_text = "Change Poké Ball."
+	pokemon_summary_ball_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_ball_button.flat = true
+	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pokemon_summary_ball_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	pokemon_summary_ball_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pokemon_summary_ball_button.add_theme_stylebox_override("normal", _make_pokemon_summary_held_item_button_style(Color("#00000000"), Color("#00000000")))
+	pokemon_summary_ball_button.add_theme_stylebox_override("hover", _make_pokemon_summary_held_item_button_style(Color("#62d7ff14"), POKEMON_SUMMARY_ACCENT_SOFT))
+	pokemon_summary_ball_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_held_item_button_style(Color("#62d7ff18"), Color("#62d7ffaa")))
+	ball_button_panel.add_child(pokemon_summary_ball_button)
+
+	pokemon_summary_type_icon_row = HBoxContainer.new()
+	pokemon_summary_type_icon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_type_icon_row.add_theme_constant_override("separation", 4)
+	pokemon_summary_type_icon_row.anchor_left = 1.0
+	pokemon_summary_type_icon_row.anchor_top = 0.0
+	pokemon_summary_type_icon_row.anchor_right = 1.0
+	pokemon_summary_type_icon_row.anchor_bottom = 0.0
+	pokemon_summary_type_icon_row.offset_left = -56.0
+	pokemon_summary_type_icon_row.offset_top = 6.0
+	pokemon_summary_type_icon_row.offset_right = -6.0
+	pokemon_summary_type_icon_row.offset_bottom = 30.0
+	sprite_frame.add_child(pokemon_summary_type_icon_row)
+
+	var identity_panel := PanelContainer.new()
+	identity_panel.custom_minimum_size = Vector2(0, 38)
+	identity_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	identity_panel.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
+	identity_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#0c1119ee"), Color("#3e4654"), 4, 1))
+	left_stack.add_child(identity_panel)
+
+	var identity_margin := MarginContainer.new()
+	identity_margin.add_theme_constant_override("margin_left", 7)
+	identity_margin.add_theme_constant_override("margin_top", 4)
+	identity_margin.add_theme_constant_override("margin_right", 7)
+	identity_margin.add_theme_constant_override("margin_bottom", 4)
+	identity_panel.add_child(identity_margin)
+
+	var identity_stack := VBoxContainer.new()
+	identity_stack.add_theme_constant_override("separation", 1)
+	identity_margin.add_child(identity_stack)
+
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 4)
+	identity_stack.add_child(title_row)
+
+	pokemon_summary_shiny_badge = _create_pokemon_summary_shiny_badge()
+	title_row.add_child(pokemon_summary_shiny_badge)
+
+	pokemon_summary_title_label = Label.new()
+	pokemon_summary_title_label.text = "Pokemon"
+	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_make_label_clip_width(pokemon_summary_title_label)
+	pokemon_summary_title_label.add_theme_font_size_override("font_size", 14)
+	pokemon_summary_title_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	pokemon_summary_title_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_x", 1)
+	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_y", 1)
+	title_row.add_child(pokemon_summary_title_label)
+
+	pokemon_summary_meta_label = Label.new()
+	pokemon_summary_meta_label.text = "Lv -"
+	pokemon_summary_meta_label.custom_minimum_size = Vector2(38, 0)
+	pokemon_summary_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_make_label_clip_width(pokemon_summary_meta_label)
+	pokemon_summary_meta_label.add_theme_font_size_override("font_size", 11)
+	pokemon_summary_meta_label.add_theme_color_override("font_color", Color("#f4d78a"))
+	title_row.add_child(pokemon_summary_meta_label)
+
+	var identity_meta_row := HBoxContainer.new()
+	identity_meta_row.add_theme_constant_override("separation", 4)
+	identity_stack.add_child(identity_meta_row)
+
+	pokemon_summary_id_label = Label.new()
+	pokemon_summary_id_label.text = "ID: -"
+	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_make_label_clip_width(pokemon_summary_id_label)
+	pokemon_summary_id_label.add_theme_font_size_override("font_size", 9)
+	pokemon_summary_id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
+	identity_meta_row.add_child(pokemon_summary_id_label)
+
+	pokemon_summary_hp_label = Label.new()
+	pokemon_summary_hp_label.text = "HP -"
+	pokemon_summary_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_hp_label.add_theme_font_size_override("font_size", 11)
+	pokemon_summary_hp_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	left_stack.add_child(pokemon_summary_hp_label)
+
+	pokemon_summary_ball_picker = PanelContainer.new()
+	pokemon_summary_ball_picker.visible = false
+	pokemon_summary_ball_picker.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912f2"), UI_BORDER_SOFT, 8, 1))
+	left_stack.add_child(pokemon_summary_ball_picker)
+
+	var ball_picker_margin := MarginContainer.new()
+	ball_picker_margin.add_theme_constant_override("margin_left", 6)
+	ball_picker_margin.add_theme_constant_override("margin_top", 6)
+	ball_picker_margin.add_theme_constant_override("margin_right", 6)
+	ball_picker_margin.add_theme_constant_override("margin_bottom", 6)
+	pokemon_summary_ball_picker.add_child(ball_picker_margin)
+
+	pokemon_summary_ball_list = VBoxContainer.new()
+	pokemon_summary_ball_list.add_theme_constant_override("separation", 3)
+	ball_picker_margin.add_child(pokemon_summary_ball_list)
+
+	pokemon_summary_hp_bar = ProgressBar.new()
+	pokemon_summary_hp_bar.custom_minimum_size = Vector2(0, 8)
+	pokemon_summary_hp_bar.show_percentage = false
+	pokemon_summary_hp_bar.add_theme_stylebox_override("background", _make_panel_style(Color("#05070cee"), Color("#1d2635"), 3, 0))
+	pokemon_summary_hp_bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#8dfb64"), Color("#8dfb64"), 3, 0))
+	left_stack.add_child(pokemon_summary_hp_bar)
+
+	pokemon_summary_held_item_slot = PanelContainer.new()
+	pokemon_summary_held_item_slot.custom_minimum_size = Vector2(0, 38)
+	pokemon_summary_held_item_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_held_item_slot.add_theme_stylebox_override("panel", _make_pokemon_summary_held_item_slot_style())
+
+	var held_item_slot_background := TextureRect.new()
+	held_item_slot_background.name = "HeldItemSlotBackground"
+	held_item_slot_background.texture = BATTLE_SUMMARY_SLOT_BG_TEXTURE
+	held_item_slot_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	held_item_slot_background.stretch_mode = TextureRect.STRETCH_SCALE
+	held_item_slot_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	held_item_slot_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	held_item_slot_background.z_index = -1
+	pokemon_summary_held_item_slot.add_child(held_item_slot_background)
+	left_stack.add_child(pokemon_summary_held_item_slot)
+
+	var held_item_slot_row := HBoxContainer.new()
+	held_item_slot_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	held_item_slot_row.add_theme_constant_override("separation", 6)
+	held_item_slot_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	held_item_slot_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_summary_held_item_slot.add_child(held_item_slot_row)
+
+	var held_item_slot_text_column := VBoxContainer.new()
+	held_item_slot_text_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	held_item_slot_text_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	held_item_slot_text_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	held_item_slot_row.add_child(held_item_slot_text_column)
+
+	var held_item_slot_top_spacer := Control.new()
+	held_item_slot_top_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	held_item_slot_text_column.add_child(held_item_slot_top_spacer)
+
+	pokemon_summary_held_item_slot_name_label = Label.new()
+	pokemon_summary_held_item_slot_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_held_item_slot_name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	pokemon_summary_held_item_slot_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_held_item_slot_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_make_label_clip_width(pokemon_summary_held_item_slot_name_label)
+	pokemon_summary_held_item_slot_name_label.add_theme_font_size_override("font_size", 12)
+	pokemon_summary_held_item_slot_name_label.add_theme_color_override("font_color", Color("#f8df9d"))
+	pokemon_summary_held_item_slot_name_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	pokemon_summary_held_item_slot_name_label.add_theme_constant_override("shadow_offset_x", 1)
+	pokemon_summary_held_item_slot_name_label.add_theme_constant_override("shadow_offset_y", 1)
+	held_item_slot_text_column.add_child(pokemon_summary_held_item_slot_name_label)
+
+	var held_item_slot_bottom_spacer := Control.new()
+	held_item_slot_bottom_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	held_item_slot_text_column.add_child(held_item_slot_bottom_spacer)
+
+	var held_item_slot_icon_panel := PanelContainer.new()
+	held_item_slot_icon_panel.custom_minimum_size = Vector2(30, 30)
+	held_item_slot_icon_panel.size_flags_horizontal = Control.SIZE_SHRINK_END
+	held_item_slot_icon_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b607f"), 8, 1))
+	var held_item_slot_icon_center := CenterContainer.new()
+	held_item_slot_icon_panel.add_child(held_item_slot_icon_center)
+	pokemon_summary_held_item_slot_icon = TextureRect.new()
+	pokemon_summary_held_item_slot_icon.custom_minimum_size = Vector2(22, 22)
+	pokemon_summary_held_item_slot_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_summary_held_item_slot_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_held_item_slot_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	held_item_slot_icon_center.add_child(pokemon_summary_held_item_slot_icon)
+	held_item_slot_row.add_child(held_item_slot_icon_panel)
+
+	pokemon_summary_held_item_slot_button = Button.new()
+	pokemon_summary_held_item_slot_button.text = ""
+	pokemon_summary_held_item_slot_button.pressed.connect(_on_pokemon_summary_held_item_slot_pressed.bind(card_key))
+	pokemon_summary_held_item_slot_button.tooltip_text = "Show held item actions."
+	pokemon_summary_held_item_slot_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_held_item_slot_button.flat = true
+	pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pokemon_summary_held_item_slot_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	pokemon_summary_held_item_slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_held_item_slot_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("normal", _make_pokemon_summary_held_item_button_style(Color("#00000000"), Color("#00000000")))
+	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("hover", _make_pokemon_summary_held_item_button_style(Color("#62d7ff14"), POKEMON_SUMMARY_ACCENT_SOFT))
+	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_held_item_button_style(Color("#62d7ff18"), Color("#62d7ffaa")))
+	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_held_item_button_style(Color("#00000000"), Color("#00000000")))
+	pokemon_summary_held_item_slot_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pokemon_summary_held_item_slot.add_child(pokemon_summary_held_item_slot_button)
+
+	pokemon_summary_item_picker = PanelContainer.new()
+	pokemon_summary_item_picker.visible = false
+	pokemon_summary_item_picker.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912f2"), UI_BORDER_SOFT, 8, 1))
+	left_stack.add_child(pokemon_summary_item_picker)
+
+	var picker_margin := MarginContainer.new()
+	picker_margin.add_theme_constant_override("margin_left", 6)
+	picker_margin.add_theme_constant_override("margin_top", 6)
+	picker_margin.add_theme_constant_override("margin_right", 6)
+	picker_margin.add_theme_constant_override("margin_bottom", 6)
+	pokemon_summary_item_picker.add_child(picker_margin)
+
+	pokemon_summary_item_list = VBoxContainer.new()
+	pokemon_summary_item_list.add_theme_constant_override("separation", 3)
+	picker_margin.add_child(pokemon_summary_item_list)
+
+func _add_pokemon_summary_right_area(content_row: HBoxContainer, card_key: String) -> void:
+	var right_area := VBoxContainer.new()
+	pokemon_summary_right_area = right_area
+	right_area.custom_minimum_size = Vector2(POKEMON_SUMMARY_RIGHT_AREA_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
+	right_area.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	right_area.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right_area.add_theme_constant_override("separation", 4)
+	content_row.add_child(right_area)
+
+	var tab_frame := PanelContainer.new()
+	tab_frame.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#060912fb"), POKEMON_SUMMARY_ACCENT_SOFT))
+	tab_frame.custom_minimum_size = Vector2(0, 34)
+	tab_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tab_frame.mouse_filter = Control.MOUSE_FILTER_STOP
+	tab_frame.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
+	right_area.add_child(tab_frame)
+
+	var tab_margin := MarginContainer.new()
+	tab_margin.add_theme_constant_override("margin_left", 4)
+	tab_margin.add_theme_constant_override("margin_top", 3)
+	tab_margin.add_theme_constant_override("margin_right", 4)
+	tab_margin.add_theme_constant_override("margin_bottom", 3)
+	tab_margin.mouse_filter = Control.MOUSE_FILTER_STOP
+	tab_margin.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
+	tab_frame.add_child(tab_margin)
+
+	var tab_column := HBoxContainer.new()
+	pokemon_summary_tab_column = tab_column
+	tab_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tab_column.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	tab_column.alignment = BoxContainer.ALIGNMENT_CENTER
+	tab_column.add_theme_constant_override("separation", 4)
+	tab_margin.add_child(tab_column)
+
+	_add_pokemon_summary_tab_buttons(tab_column, card_key)
+
+	var summary_content_panel := PanelContainer.new()
+	pokemon_summary_content_panel = summary_content_panel
+	summary_content_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_CONTENT_PANEL_WIDTH, POKEMON_SUMMARY_CONTENT_PANEL_HEIGHT)
+	summary_content_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	summary_content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	summary_content_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#070b13fa"), POKEMON_SUMMARY_ACCENT_SOFT))
+	right_area.add_child(summary_content_panel)
+
+	var summary_content_margin := MarginContainer.new()
+	summary_content_margin.add_theme_constant_override("margin_left", 8)
+	summary_content_margin.add_theme_constant_override("margin_top", 7)
+	summary_content_margin.add_theme_constant_override("margin_right", 8)
+	summary_content_margin.add_theme_constant_override("margin_bottom", 7)
+	summary_content_panel.add_child(summary_content_margin)
+
+	pokemon_summary_content_stack = VBoxContainer.new()
+	pokemon_summary_content_stack.custom_minimum_size = Vector2(0, POKEMON_SUMMARY_CONTENT_STACK_HEIGHT)
+	pokemon_summary_content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_content_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_summary_content_stack.add_theme_constant_override("separation", 5)
+	summary_content_margin.add_child(pokemon_summary_content_stack)
+
+func _add_pokemon_summary_owner_bar(layout: VBoxContainer, card_key: String) -> void:
+	var header_frame := PanelContainer.new()
+	header_frame.custom_minimum_size = Vector2(0, 26)
+	header_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_frame.mouse_filter = Control.MOUSE_FILTER_STOP
+	header_frame.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
+	header_frame.add_theme_stylebox_override("panel", _make_pokemon_summary_header_frame_style())
+	layout.add_child(header_frame)
+
+	var header_margin := MarginContainer.new()
+	header_margin.add_theme_constant_override("margin_left", 8)
+	header_margin.add_theme_constant_override("margin_top", 2)
+	header_margin.add_theme_constant_override("margin_right", 4)
+	header_margin.add_theme_constant_override("margin_bottom", 2)
+	header_margin.mouse_filter = Control.MOUSE_FILTER_STOP
+	header_margin.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
+	header_frame.add_child(header_margin)
+
+	var header_row := HBoxContainer.new()
+	header_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_row.add_theme_constant_override("separation", 6)
+	header_row.mouse_filter = Control.MOUSE_FILTER_STOP
+	header_row.gui_input.connect(_on_pokemon_summary_header_gui_input.bind(card_key))
+	header_margin.add_child(header_row)
+
+	pokemon_summary_trainer_label = Label.new()
+	pokemon_summary_trainer_label.text = "Trainer's Pokemon"
+	pokemon_summary_trainer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_trainer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_trainer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_make_label_clip_width(pokemon_summary_trainer_label)
+	pokemon_summary_trainer_label.add_theme_font_size_override("font_size", 15)
+	pokemon_summary_trainer_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	pokemon_summary_trainer_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	pokemon_summary_trainer_label.add_theme_constant_override("shadow_offset_x", 1)
+	pokemon_summary_trainer_label.add_theme_constant_override("shadow_offset_y", 1)
+	pokemon_summary_trainer_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_row.add_child(pokemon_summary_trainer_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(24, 22)
+	close_button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	close_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.tooltip_text = "Close"
+	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	close_button.pressed.connect(_hide_pokemon_summary_popup.bind(card_key))
+	close_button.add_theme_stylebox_override("normal", _make_pokemon_summary_button_style(Color("#0e2138f0"), Color("#5a82ad"), true))
+	close_button.add_theme_stylebox_override("hover", _make_pokemon_summary_button_style(Color("#241421f0"), UI_DANGER, true))
+	close_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_button_style(Color("#0b1019f0"), UI_DANGER, true))
+	close_button.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	close_button.add_theme_constant_override("shadow_offset_x", 1)
+	close_button.add_theme_constant_override("shadow_offset_y", 1)
+	close_button.add_theme_color_override("font_color", UI_TEXT)
+	header_row.add_child(close_button)
+
+func _add_pokemon_summary_top_accent_bar(layout: VBoxContainer, card_key: String) -> void:
 	var top_bar := HBoxContainer.new()
 	top_bar.add_theme_constant_override("separation", 0)
 	top_bar.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -3482,6 +3953,7 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	top_bar_right.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top_bar.add_child(top_bar_right)
 
+func _add_pokemon_summary_header(layout: VBoxContainer, card_key: String) -> void:
 	var header_frame := PanelContainer.new()
 	header_frame.add_theme_stylebox_override("panel", _make_pokemon_summary_header_frame_style())
 	header_frame.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -3526,43 +3998,8 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_row.add_child(pokemon_summary_title_label)
 
-	pokemon_summary_shiny_badge = PanelContainer.new()
-	pokemon_summary_shiny_badge.visible = false
-	pokemon_summary_shiny_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var badge_style := StyleBoxFlat.new()
-	badge_style.bg_color = Color("#ffcd6d")
-	badge_style.border_color = Color("#ffe5a8")
-	badge_style.border_width_left = 1
-	badge_style.border_width_top = 1
-	badge_style.border_width_right = 1
-	badge_style.border_width_bottom = 1
-	badge_style.corner_radius_top_left = 8
-	badge_style.corner_radius_top_right = 8
-	badge_style.corner_radius_bottom_left = 8
-	badge_style.corner_radius_bottom_right = 8
-	badge_style.shadow_size = 6
-	badge_style.shadow_color = Color("#00111f66")
-	pokemon_summary_shiny_badge.add_theme_stylebox_override("panel", badge_style)
-	pokemon_summary_shiny_badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	pokemon_summary_shiny_badge.visible = false
-	var badge_padding := MarginContainer.new()
-	badge_padding.add_theme_constant_override("margin_left", 6)
-	badge_padding.add_theme_constant_override("margin_top", 2)
-	badge_padding.add_theme_constant_override("margin_right", 6)
-	badge_padding.add_theme_constant_override("margin_bottom", 2)
-	badge_padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pokemon_summary_shiny_badge.add_child(badge_padding)
-	pokemon_summary_shiny_badge_label = Label.new()
-	pokemon_summary_shiny_badge_label.text = "SHINY"
-	pokemon_summary_shiny_badge_label.add_theme_font_size_override("font_size", 9)
-	pokemon_summary_shiny_badge_label.add_theme_color_override("font_color", Color("#0d1f38"))
-	pokemon_summary_shiny_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pokemon_summary_shiny_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pokemon_summary_shiny_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_make_label_clip_width(pokemon_summary_shiny_badge_label)
-	badge_padding.add_child(pokemon_summary_shiny_badge_label)
+	pokemon_summary_shiny_badge = _create_pokemon_summary_shiny_badge()
 	title_row.add_child(pokemon_summary_shiny_badge)
-
 	header.add_child(title_row)
 
 	pokemon_summary_id_label = Label.new()
@@ -3625,324 +4062,49 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	close_button.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(close_button)
 
-	var divider_line := ColorRect.new()
-	divider_line.custom_minimum_size = Vector2(0, 1)
-	divider_line.color = Color("#b99045")
-	layout.add_child(divider_line)
-	var spacer := Control.new()
-	spacer.size_flags_vertical = Control.SIZE_SHRINK_END
-	spacer.custom_minimum_size = Vector2.ZERO
-	layout.add_child(spacer)
+func _create_pokemon_summary_shiny_badge() -> PanelContainer:
+	var badge := PanelContainer.new()
+	badge.visible = false
+	badge.custom_minimum_size = Vector2(16, 16)
+	badge.tooltip_text = "Shiny Pokemon"
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var badge_style := StyleBoxFlat.new()
+	badge_style.bg_color = Color("#15191fee")
+	badge_style.border_color = Color("#f4d36a")
+	badge_style.border_width_left = 1
+	badge_style.border_width_top = 1
+	badge_style.border_width_right = 1
+	badge_style.border_width_bottom = 1
+	badge_style.corner_radius_top_left = 4
+	badge_style.corner_radius_top_right = 4
+	badge_style.corner_radius_bottom_left = 4
+	badge_style.corner_radius_bottom_right = 4
+	badge_style.shadow_size = 3
+	badge_style.shadow_color = Color("#f4d36a33")
+	badge.add_theme_stylebox_override("panel", badge_style)
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
-	var content_row := HBoxContainer.new()
-	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_row.add_theme_constant_override("separation", 8)
-	layout.add_child(content_row)
+	var badge_padding := MarginContainer.new()
+	badge_padding.add_theme_constant_override("margin_left", 2)
+	badge_padding.add_theme_constant_override("margin_top", 0)
+	badge_padding.add_theme_constant_override("margin_right", 2)
+	badge_padding.add_theme_constant_override("margin_bottom", 0)
+	badge_padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.add_child(badge_padding)
 
-	var left_panel := PanelContainer.new()
-	pokemon_summary_left_panel = left_panel
-	left_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, 0)
-	left_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	left_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#07111ff6"), Color("#d8b767")))
-	content_row.add_child(left_panel)
+	pokemon_summary_shiny_badge_label = Label.new()
+	pokemon_summary_shiny_badge_label.text = "*"
+	pokemon_summary_shiny_badge_label.add_theme_font_size_override("font_size", 13)
+	pokemon_summary_shiny_badge_label.add_theme_color_override("font_color", Color("#f4d36a"))
+	pokemon_summary_shiny_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_shiny_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_shiny_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_make_label_clip_width(pokemon_summary_shiny_badge_label)
+	badge_padding.add_child(pokemon_summary_shiny_badge_label)
+	return badge
 
-	var left_margin := MarginContainer.new()
-	left_margin.add_theme_constant_override("margin_left", 8)
-	left_margin.add_theme_constant_override("margin_top", 8)
-	left_margin.add_theme_constant_override("margin_right", 8)
-	left_margin.add_theme_constant_override("margin_bottom", 8)
-	left_panel.add_child(left_margin)
-
-	var left_stack := VBoxContainer.new()
-	left_stack.add_theme_constant_override("separation", 6)
-	left_margin.add_child(left_stack)
-
-	var sprite_frame := Control.new()
-	sprite_frame.custom_minimum_size = Vector2(
-		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x),
-		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y)
-	)
-	left_stack.add_child(sprite_frame)
-
-	var sprite_stage_background := TextureRect.new()
-	sprite_stage_background.texture = BATTLE_SUMMARY_SLOT_BG_TEXTURE
-	sprite_stage_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	sprite_stage_background.stretch_mode = TextureRect.STRETCH_SCALE
-	sprite_stage_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sprite_frame.add_child(sprite_stage_background)
-	sprite_stage_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var sprite_backdrop := PanelContainer.new()
-	sprite_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sprite_backdrop.add_theme_stylebox_override("panel", _make_pokemon_summary_sprite_stage_style())
-	sprite_frame.add_child(sprite_backdrop)
-	sprite_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var sprite_viewport_container := SubViewportContainer.new()
-	sprite_viewport_container.stretch = true
-	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sprite_frame.add_child(sprite_viewport_container)
-	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	pokemon_summary_sprite_viewport = SubViewport.new()
-	pokemon_summary_sprite_viewport.size = POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE
-	pokemon_summary_sprite_viewport.transparent_bg = true
-	pokemon_summary_sprite_viewport.disable_3d = true
-	pokemon_summary_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	sprite_viewport_container.add_child(pokemon_summary_sprite_viewport)
-
-	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
-	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	pokemon_summary_animated_sprite.position = Vector2(
-		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x) * 0.5,
-		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y) * 0.52
-	)
-	pokemon_summary_sprite_viewport.add_child(pokemon_summary_animated_sprite)
-
-	pokemon_summary_sprite = TextureRect.new()
-	pokemon_summary_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	pokemon_summary_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	pokemon_summary_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sprite_frame.add_child(pokemon_summary_sprite)
-	pokemon_summary_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var ball_button_panel := PanelContainer.new()
-	ball_button_panel.custom_minimum_size = Vector2(30, 30)
-	ball_button_panel.anchor_left = 0.0
-	ball_button_panel.anchor_top = 0.0
-	ball_button_panel.anchor_right = 0.0
-	ball_button_panel.anchor_bottom = 0.0
-	ball_button_panel.offset_left = 6.0
-	ball_button_panel.offset_top = 6.0
-	ball_button_panel.offset_right = 36.0
-	ball_button_panel.offset_bottom = 36.0
-	ball_button_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ball_button_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#06111fe8"), Color("#d8b767"), 8, 1))
-	sprite_frame.add_child(ball_button_panel)
-
-	var ball_icon_center := CenterContainer.new()
-	ball_icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ball_button_panel.add_child(ball_icon_center)
-
-	pokemon_summary_ball_icon = TextureRect.new()
-	pokemon_summary_ball_icon.custom_minimum_size = Vector2(22, 22)
-	pokemon_summary_ball_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	pokemon_summary_ball_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	pokemon_summary_ball_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ball_icon_center.add_child(pokemon_summary_ball_icon)
-
-	pokemon_summary_ball_button = Button.new()
-	pokemon_summary_ball_button.text = ""
-	pokemon_summary_ball_button.pressed.connect(_on_pokemon_summary_ball_button_pressed.bind(card_key))
-	pokemon_summary_ball_button.tooltip_text = "Change Poké Ball."
-	pokemon_summary_ball_button.focus_mode = Control.FOCUS_NONE
-	pokemon_summary_ball_button.flat = true
-	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pokemon_summary_ball_button.mouse_filter = Control.MOUSE_FILTER_STOP
-	pokemon_summary_ball_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	pokemon_summary_ball_button.add_theme_stylebox_override("normal", _make_pokemon_summary_held_item_button_style(Color("#00000000"), Color("#00000000")))
-	pokemon_summary_ball_button.add_theme_stylebox_override("hover", _make_pokemon_summary_held_item_button_style(Color("#f4d78a14"), Color("#f4d78a88")))
-	pokemon_summary_ball_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_held_item_button_style(Color("#62d7ff18"), Color("#62d7ffaa")))
-	ball_button_panel.add_child(pokemon_summary_ball_button)
-
-	pokemon_summary_type_icon_row = HBoxContainer.new()
-	pokemon_summary_type_icon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pokemon_summary_type_icon_row.add_theme_constant_override("separation", 4)
-	pokemon_summary_type_icon_row.anchor_left = 1.0
-	pokemon_summary_type_icon_row.anchor_top = 0.0
-	pokemon_summary_type_icon_row.anchor_right = 1.0
-	pokemon_summary_type_icon_row.anchor_bottom = 0.0
-	pokemon_summary_type_icon_row.offset_left = -56.0
-	pokemon_summary_type_icon_row.offset_top = 6.0
-	pokemon_summary_type_icon_row.offset_right = -6.0
-	pokemon_summary_type_icon_row.offset_bottom = 30.0
-	sprite_frame.add_child(pokemon_summary_type_icon_row)
-
-	pokemon_summary_hp_label = Label.new()
-	pokemon_summary_hp_label.text = "HP -"
-	pokemon_summary_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pokemon_summary_hp_label.add_theme_font_size_override("font_size", 10)
-	pokemon_summary_hp_label.add_theme_color_override("font_color", Color("#f5df9a"))
-	left_stack.add_child(pokemon_summary_hp_label)
-
-	pokemon_summary_ball_picker = PanelContainer.new()
-	pokemon_summary_ball_picker.visible = false
-	pokemon_summary_ball_picker.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912f2"), UI_BORDER_SOFT, 8, 1))
-	left_stack.add_child(pokemon_summary_ball_picker)
-
-	var ball_picker_margin := MarginContainer.new()
-	ball_picker_margin.add_theme_constant_override("margin_left", 6)
-	ball_picker_margin.add_theme_constant_override("margin_top", 6)
-	ball_picker_margin.add_theme_constant_override("margin_right", 6)
-	ball_picker_margin.add_theme_constant_override("margin_bottom", 6)
-	pokemon_summary_ball_picker.add_child(ball_picker_margin)
-
-	pokemon_summary_ball_list = VBoxContainer.new()
-	pokemon_summary_ball_list.add_theme_constant_override("separation", 3)
-	ball_picker_margin.add_child(pokemon_summary_ball_list)
-
-	pokemon_summary_hp_bar = ProgressBar.new()
-	pokemon_summary_hp_bar.custom_minimum_size = Vector2(0, 8)
-	pokemon_summary_hp_bar.show_percentage = false
-	pokemon_summary_hp_bar.add_theme_stylebox_override("background", _make_panel_style(Color("#0e1726e8"), Color("#263b58"), 8, 0))
-	pokemon_summary_hp_bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#b7f37b"), Color("#b7f37b"), 8, 0))
-	left_stack.add_child(pokemon_summary_hp_bar)
-
-	pokemon_summary_held_item_slot = PanelContainer.new()
-	pokemon_summary_held_item_slot.custom_minimum_size = Vector2(0, 38)
-	pokemon_summary_held_item_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pokemon_summary_held_item_slot.add_theme_stylebox_override("panel", _make_pokemon_summary_held_item_slot_style())
-
-	var held_item_slot_background := TextureRect.new()
-	held_item_slot_background.name = "HeldItemSlotBackground"
-	held_item_slot_background.texture = BATTLE_SUMMARY_SLOT_BG_TEXTURE
-	held_item_slot_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	held_item_slot_background.stretch_mode = TextureRect.STRETCH_SCALE
-	held_item_slot_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	held_item_slot_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	held_item_slot_background.z_index = -1
-	pokemon_summary_held_item_slot.add_child(held_item_slot_background)
-	left_stack.add_child(pokemon_summary_held_item_slot)
-
-	var held_item_slot_row := HBoxContainer.new()
-	held_item_slot_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	held_item_slot_row.add_theme_constant_override("separation", 6)
-	held_item_slot_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	held_item_slot_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pokemon_summary_held_item_slot.add_child(held_item_slot_row)
-
-	var held_item_slot_text_column := VBoxContainer.new()
-	held_item_slot_text_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	held_item_slot_text_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	held_item_slot_text_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	held_item_slot_row.add_child(held_item_slot_text_column)
-
-	var held_item_slot_top_spacer := Control.new()
-	held_item_slot_top_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	held_item_slot_text_column.add_child(held_item_slot_top_spacer)
-
-	pokemon_summary_held_item_slot_name_label = Label.new()
-	pokemon_summary_held_item_slot_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pokemon_summary_held_item_slot_name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	pokemon_summary_held_item_slot_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pokemon_summary_held_item_slot_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	_make_label_clip_width(pokemon_summary_held_item_slot_name_label)
-	pokemon_summary_held_item_slot_name_label.add_theme_font_size_override("font_size", 11)
-	pokemon_summary_held_item_slot_name_label.add_theme_color_override("font_color", Color("#f8df9d"))
-	pokemon_summary_held_item_slot_name_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
-	pokemon_summary_held_item_slot_name_label.add_theme_constant_override("shadow_offset_x", 1)
-	pokemon_summary_held_item_slot_name_label.add_theme_constant_override("shadow_offset_y", 1)
-	held_item_slot_text_column.add_child(pokemon_summary_held_item_slot_name_label)
-
-	var held_item_slot_bottom_spacer := Control.new()
-	held_item_slot_bottom_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	held_item_slot_text_column.add_child(held_item_slot_bottom_spacer)
-
-	var held_item_slot_icon_panel := PanelContainer.new()
-	held_item_slot_icon_panel.custom_minimum_size = Vector2(30, 30)
-	held_item_slot_icon_panel.size_flags_horizontal = Control.SIZE_SHRINK_END
-	held_item_slot_icon_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b607f"), 8, 1))
-	var held_item_slot_icon_center := CenterContainer.new()
-	held_item_slot_icon_panel.add_child(held_item_slot_icon_center)
-	pokemon_summary_held_item_slot_icon = TextureRect.new()
-	pokemon_summary_held_item_slot_icon.custom_minimum_size = Vector2(22, 22)
-	pokemon_summary_held_item_slot_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	pokemon_summary_held_item_slot_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	pokemon_summary_held_item_slot_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	held_item_slot_icon_center.add_child(pokemon_summary_held_item_slot_icon)
-	held_item_slot_row.add_child(held_item_slot_icon_panel)
-
-	pokemon_summary_held_item_slot_button = Button.new()
-	pokemon_summary_held_item_slot_button.text = ""
-	pokemon_summary_held_item_slot_button.pressed.connect(_on_pokemon_summary_held_item_slot_pressed.bind(card_key))
-	pokemon_summary_held_item_slot_button.tooltip_text = "Show held item actions."
-	pokemon_summary_held_item_slot_button.focus_mode = Control.FOCUS_NONE
-	pokemon_summary_held_item_slot_button.flat = true
-	pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pokemon_summary_held_item_slot_button.mouse_filter = Control.MOUSE_FILTER_STOP
-	pokemon_summary_held_item_slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pokemon_summary_held_item_slot_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("normal", _make_pokemon_summary_held_item_button_style(Color("#00000000"), Color("#00000000")))
-	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("hover", _make_pokemon_summary_held_item_button_style(Color("#f4d78a14"), Color("#f4d78a88")))
-	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_held_item_button_style(Color("#62d7ff18"), Color("#62d7ffaa")))
-	pokemon_summary_held_item_slot_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_held_item_button_style(Color("#00000000"), Color("#00000000")))
-	pokemon_summary_held_item_slot_button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	pokemon_summary_held_item_slot.add_child(pokemon_summary_held_item_slot_button)
-
-	pokemon_summary_item_picker = PanelContainer.new()
-	pokemon_summary_item_picker.visible = false
-	pokemon_summary_item_picker.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912f2"), UI_BORDER_SOFT, 8, 1))
-	left_stack.add_child(pokemon_summary_item_picker)
-
-	var picker_margin := MarginContainer.new()
-	picker_margin.add_theme_constant_override("margin_left", 6)
-	picker_margin.add_theme_constant_override("margin_top", 6)
-	picker_margin.add_theme_constant_override("margin_right", 6)
-	picker_margin.add_theme_constant_override("margin_bottom", 6)
-	pokemon_summary_item_picker.add_child(picker_margin)
-
-	pokemon_summary_item_list = VBoxContainer.new()
-	pokemon_summary_item_list.add_theme_constant_override("separation", 3)
-	picker_margin.add_child(pokemon_summary_item_list)
-
-	var right_area := HBoxContainer.new()
-	pokemon_summary_right_area = right_area
-	right_area.custom_minimum_size = Vector2(POKEMON_SUMMARY_RIGHT_AREA_WIDTH, 0)
-	right_area.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	right_area.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	right_area.add_theme_constant_override("separation", 6)
-	content_row.add_child(right_area)
-
-	var summary_content_panel := PanelContainer.new()
-	pokemon_summary_content_panel = summary_content_panel
-	summary_content_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_CONTENT_PANEL_WIDTH, 0)
-	summary_content_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	summary_content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	summary_content_panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#0a1323f4"), Color("#d8b767")))
-	right_area.add_child(summary_content_panel)
-
-	var summary_content_margin := MarginContainer.new()
-	summary_content_margin.add_theme_constant_override("margin_left", 8)
-	summary_content_margin.add_theme_constant_override("margin_top", 8)
-	summary_content_margin.add_theme_constant_override("margin_right", 8)
-	summary_content_margin.add_theme_constant_override("margin_bottom", 8)
-	summary_content_panel.add_child(summary_content_margin)
-
-	var summary_content_scroll := ScrollContainer.new()
-	summary_content_scroll.custom_minimum_size = Vector2(0, 0)
-	summary_content_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	summary_content_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	summary_content_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	summary_content_margin.add_child(summary_content_scroll)
-
-	pokemon_summary_content_stack = VBoxContainer.new()
-	pokemon_summary_content_stack.custom_minimum_size = Vector2(0, 0)
-	pokemon_summary_content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pokemon_summary_content_stack.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	pokemon_summary_content_stack.add_theme_constant_override("separation", 5)
-	summary_content_scroll.add_child(pokemon_summary_content_stack)
-
-	var tab_frame := PanelContainer.new()
-	tab_frame.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#050912f8"), Color("#d8b767")))
-	tab_frame.custom_minimum_size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, 0)
-	tab_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_row.add_child(tab_frame)
-
-	var tab_margin := MarginContainer.new()
-	tab_margin.add_theme_constant_override("margin_left", 4)
-	tab_margin.add_theme_constant_override("margin_top", 6)
-	tab_margin.add_theme_constant_override("margin_right", 4)
-	tab_margin.add_theme_constant_override("margin_bottom", 6)
-	tab_frame.add_child(tab_margin)
-
-	var tab_column := VBoxContainer.new()
-	pokemon_summary_tab_column = tab_column
-	tab_column.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	tab_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	tab_column.add_theme_constant_override("separation", 4)
-	tab_margin.add_child(tab_column)
-
-	var general_tab := _create_pokemon_summary_tab_button("general", "Info", Color("#d8b767"), card_key)
+func _add_pokemon_summary_tab_buttons(tab_column: HBoxContainer, card_key: String) -> void:
+	var general_tab := _create_pokemon_summary_tab_button("general", "Info", POKEMON_SUMMARY_ACCENT, card_key)
 	var iv_tab := _create_pokemon_summary_tab_button("ivs", "IVs", Color("#1fb6ff"), card_key)
 	var ev_tab := _create_pokemon_summary_tab_button("evs", "EVs", Color("#ffb347"), card_key)
 	var moves_tab := _create_pokemon_summary_tab_button("moves", "Moves", Color("#ff7b54"), card_key)
@@ -4028,8 +4190,9 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 func _create_pokemon_summary_tab_button(tab_id: String, label_text: String, accent_color: Color, card_key: String = "") -> Button:
 	var button := Button.new()
 	button.text = label_text
-	button.custom_minimum_size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, 32)
-	button.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	button.custom_minimum_size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, 28)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = label_text
 	button.pressed.connect(_on_pokemon_summary_tab_selected.bind(tab_id, card_key))
@@ -4061,21 +4224,21 @@ func _pokemon_summary_tab_color(tab_id: String) -> Color:
 		"moves":
 			return Color("#ff7b54")
 		_:
-			return Color("#d8b767")
+			return POKEMON_SUMMARY_ACCENT
 
 func _apply_summary_tab_style(button: Button, selected: bool, accent_color: Color) -> void:
-	var bg: Color = Color("#07111fe8") if not selected else Color("#183157f6")
-	var border: Color = Color("#233a58aa") if not selected else accent_color
-	button.add_theme_color_override("font_color", Color("#f8e6b0") if selected else UI_MUTED_TEXT)
+	var bg: Color = Color("#090d14f2") if not selected else POKEMON_SUMMARY_ACCENT
+	var border: Color = Color("#27313f") if not selected else Color("#b9efff")
+	button.add_theme_color_override("font_color", Color("#14161c") if selected else Color("#dde5f2"))
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
-	button.add_theme_font_size_override("font_size", 9)
-	button.add_theme_color_override("font_shadow_color", Color("#00111f"))
-	button.add_theme_constant_override("shadow_offset_x", 1)
-	button.add_theme_constant_override("shadow_offset_y", 1)
+	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_color_override("font_shadow_color", Color("#00000000") if selected else Color("#00111f"))
+	button.add_theme_constant_override("shadow_offset_x", 0 if selected else 1)
+	button.add_theme_constant_override("shadow_offset_y", 0 if selected else 1)
 	button.text = button.text.to_upper()
 	button.add_theme_stylebox_override("normal", _make_pokemon_summary_tab_button_style(bg, border, selected, accent_color))
-	button.add_theme_stylebox_override("hover", _make_pokemon_summary_tab_button_style(Color("#182b4cee"), accent_color, false, accent_color))
-	button.add_theme_stylebox_override("pressed", _make_pokemon_summary_tab_button_style(Color("#08101cf2"), accent_color, true, accent_color))
+	button.add_theme_stylebox_override("hover", _make_pokemon_summary_tab_button_style(Color("#121a28f2"), POKEMON_SUMMARY_ACCENT_SOFT, false, accent_color))
+	button.add_theme_stylebox_override("pressed", _make_pokemon_summary_tab_button_style(POKEMON_SUMMARY_ACCENT_DARK, Color("#b9efff"), true, accent_color))
 	button.add_theme_stylebox_override("focus", _make_pokemon_summary_tab_button_style(bg, accent_color, selected, accent_color))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
@@ -4085,22 +4248,21 @@ func _make_pokemon_summary_tab_button_style(
 	selected: bool,
 	accent_color: Color
 ) -> StyleBoxFlat:
-	var style := _make_button_style(background_color, border_color, 9, 1)
+	var style := _make_button_style(background_color, border_color, 3, 1)
 	style.content_margin_left = 5
 	style.content_margin_top = 4
 	style.content_margin_right = 5
 	style.content_margin_bottom = 4
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_right = 12
-	style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.16 if selected else 0.0)
-	style.shadow_size = 2 if selected else 0
+	style.corner_radius_top_left = 3
+	style.corner_radius_top_right = 3
+	style.corner_radius_bottom_left = 1
+	style.corner_radius_bottom_right = 1
+	style.shadow_color = Color("#00000000")
+	style.shadow_size = 0
 	style.shadow_offset = Vector2.ZERO
-	style.border_width_left = 3 if selected else 1
+	style.border_width_left = 1
 	style.border_width_top = 1
-	if selected:
-		style.border_width_right = 2
-	else:
-		style.border_width_right = 1
+	style.border_width_right = 1
 	style.border_width_bottom = 1
 	if selected:
 		style.border_color = accent_color
@@ -4548,6 +4710,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"mode": mode,
 		"selected_slot": slot_index,
 		"active_tab": "general",
+		"sprite_side": "front",
 		"dragging": false,
 		"drag_offset": Vector2.ZERO,
 	}
@@ -4561,9 +4724,9 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_active_card_key = card_key
 	pokemon_summary_popup = context.get("popup") as PanelContainer
 	pokemon_summary_left_panel = context.get("left_panel") as PanelContainer
-	pokemon_summary_right_area = context.get("right_area") as HBoxContainer
+	pokemon_summary_right_area = context.get("right_area") as VBoxContainer
 	pokemon_summary_content_panel = context.get("content_panel") as PanelContainer
-	pokemon_summary_tab_column = context.get("tab_column") as VBoxContainer
+	pokemon_summary_tab_column = context.get("tab_column") as HBoxContainer
 	pokemon_summary_sprite = context.get("sprite") as TextureRect
 	pokemon_summary_sprite_viewport = context.get("sprite_viewport") as SubViewport
 	pokemon_summary_animated_sprite = context.get("animated_sprite") as AnimatedSprite2D
@@ -4594,6 +4757,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_mode = str(context.get("mode", "interactive"))
 	pokemon_summary_selected_slot = int(context.get("selected_slot", -1))
 	pokemon_summary_active_tab = str(context.get("active_tab", "general"))
+	pokemon_summary_sprite_side = str(context.get("sprite_side", "front"))
 	pokemon_summary_dragging = bool(context.get("dragging", false))
 	pokemon_summary_drag_offset = context.get("drag_offset", Vector2.ZERO) as Vector2
 	return pokemon_summary_popup != null
@@ -4608,6 +4772,7 @@ func _store_active_pokemon_summary_card_context() -> void:
 	context["selected_slot"] = pokemon_summary_selected_slot
 	context["preview_pokemon"] = pokemon_summary_preview_pokemon
 	context["mode"] = pokemon_summary_mode
+	context["sprite_side"] = pokemon_summary_sprite_side
 	context["dragging"] = pokemon_summary_dragging
 	context["drag_offset"] = pokemon_summary_drag_offset
 	pokemon_summary_open_cards[pokemon_summary_active_card_key] = context
@@ -4659,6 +4824,7 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	pokemon_summary_preview_pokemon = null
 	pokemon_summary_mode = "interactive"
 	pokemon_summary_selected_slot = slot_index
+	pokemon_summary_sprite_side = "front"
 	pokemon_summary_item_picker.visible = false
 	pokemon_summary_ball_picker.visible = false
 	pokemon_summary_active_tab = "general"
@@ -4715,8 +4881,8 @@ func _refresh_pokemon_summary() -> void:
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
 	if pokemon_summary_shiny_badge_label != null:
-		pokemon_summary_shiny_badge_label.text = "SHINY"
-	pokemon_summary_trainer_label.text = "Original Trainer: %s" % PlayerSave.player_name
+		pokemon_summary_shiny_badge_label.text = "*"
+	pokemon_summary_trainer_label.text = _get_pokemon_summary_current_trainer_title_text(pokemon)
 	pokemon_summary_meta_label.text = "Lv %s" % str(max(pokemon.level, 1))
 	pokemon_summary_trainer_label.tooltip_text = pokemon_summary_trainer_label.text
 	pokemon_summary_meta_label.tooltip_text = pokemon_summary_meta_label.text
@@ -4742,6 +4908,29 @@ func _set_pokemon_summary_popup_size_for_card(card_key: String) -> void:
 		_apply_pokemon_summary_card_context(card_key)
 	_set_pokemon_summary_popup_size()
 
+func _get_active_pokemon_summary_pokemon() -> Pokemon:
+	if pokemon_summary_preview_pokemon != null:
+		return pokemon_summary_preview_pokemon
+	var resolved_slot: int = _find_party_slot_for_summary_key(pokemon_summary_active_card_key)
+	if resolved_slot >= 0:
+		pokemon_summary_selected_slot = resolved_slot
+	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+		return null
+	return PlayerSave.party[pokemon_summary_selected_slot]
+
+func _on_pokemon_summary_sprite_frame_gui_input(event: InputEvent, card_key: String = "") -> void:
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+			return
+		pokemon_summary_sprite_side = "back" if _get_pokemon_summary_sprite_side() == "front" else "front"
+		_store_active_pokemon_summary_card_context()
+		var pokemon: Pokemon = _get_active_pokemon_summary_pokemon()
+		if pokemon != null:
+			_set_pokemon_summary_sprite(pokemon)
+
 func _make_label_clip_width(label: Label) -> void:
 	label.clip_text = true
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -4751,10 +4940,11 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
 
+	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
 		"_load_sprite_frames",
 		pokemon.species,
-		"front",
+		sprite_side,
 		pokemon.shiny
 	)
 	var frames: SpriteFrames = loaded_frames as SpriteFrames
@@ -4780,6 +4970,9 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	pokemon_summary_sprite.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if pokemon_summary_sprite.texture == null:
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+
+func _get_pokemon_summary_sprite_side() -> String:
+	return "back" if pokemon_summary_sprite_side == "back" else "front"
 
 func _refresh_pokemon_summary_type_icons(pokemon: Pokemon) -> void:
 	if pokemon_summary_type_icon_row == null:
@@ -4913,11 +5106,150 @@ func _render_pokemon_summary_content(pokemon: Pokemon) -> void:
 			_render_pokemon_summary_general(pokemon)
 
 func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
-	_add_summary_section_title("General Info", Color("#f2cf78"))
-	pokemon_summary_content_stack.add_child(_create_summary_info_row("Ability", _default_text(pokemon.ability), Color("#ffb15f")))
-	pokemon_summary_content_stack.add_child(_create_summary_info_row("Nature", _default_text(pokemon.nature), Color("#f2cf78")))
-	pokemon_summary_content_stack.add_child(_create_summary_info_row("Location", _get_pokemon_origin_summary_text(pokemon), Color("#62d7ff")))
-	_render_stat_bar_list(pokemon.stats, 260, true)
+	var top_metrics := HBoxContainer.new()
+	top_metrics.add_theme_constant_override("separation", 8)
+	top_metrics.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_content_stack.add_child(top_metrics)
+	top_metrics.add_child(_create_summary_metric_card("EXP", _get_pokemon_summary_experience_text(pokemon), 0, 1, Color("#62d7ff"), 148.0))
+	top_metrics.add_child(_create_summary_metric_card("Happiness", _get_pokemon_summary_happiness_text(pokemon), 0, 1, Color("#f2cf78"), 148.0))
+
+	var info_grid := GridContainer.new()
+	info_grid.columns = 2
+	info_grid.add_theme_constant_override("h_separation", 8)
+	info_grid.add_theme_constant_override("v_separation", 7)
+	info_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_content_stack.add_child(info_grid)
+	info_grid.add_child(_create_summary_field_card("Original Trainer", PlayerSave.player_name, Color("#9eb7d8"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card("Ability", _default_text(pokemon.ability), Color("#ffb15f"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card("Nature", _default_text(pokemon.nature), Color("#f2cf78"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card("Location", _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card("Caught Date", _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card("Caught Level", _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
+
+	var stat_grid := GridContainer.new()
+	stat_grid.columns = 3
+	stat_grid.add_theme_constant_override("h_separation", 8)
+	stat_grid.add_theme_constant_override("v_separation", 7)
+	stat_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_content_stack.add_child(stat_grid)
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		var stat_id: String = str(stat.get("id", ""))
+		var value: int = int(pokemon.stats.get(stat_id, 0))
+		var stat_color: Color = stat.get("color", UI_BORDER_FOCUS) as Color
+		var value_color := Color(0, 0, 0, 0)
+		var border_color := Color(0, 0, 0, 0)
+		var nature_role: String = _get_pokemon_summary_nature_stat_role(pokemon.nature, stat_id)
+		if nature_role == "boosted":
+			stat_color = POKEMON_SUMMARY_NATURE_BOOST_COLOR
+			value_color = POKEMON_SUMMARY_NATURE_BOOST_COLOR
+			border_color = Color("#375f3b")
+		elif nature_role == "lowered":
+			stat_color = POKEMON_SUMMARY_NATURE_DROP_COLOR
+			value_color = POKEMON_SUMMARY_NATURE_DROP_COLOR
+			border_color = Color("#704329")
+		stat_grid.add_child(_create_summary_field_card(
+			str(stat.get("label", stat_id)),
+			str(value),
+			stat_color,
+			true,
+			96.0,
+			value_color,
+			border_color
+		))
+
+func _create_summary_metric_card(
+	label_text: String,
+	value_text: String,
+	value: int,
+	max_value: int,
+	accent_color: Color,
+	min_width: float = 96.0
+) -> Control:
+	var stack := VBoxContainer.new()
+	stack.custom_minimum_size = Vector2(min_width, 36)
+	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stack.add_theme_constant_override("separation", 3)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 4)
+	stack.add_child(row)
+
+	var label := Label.new()
+	label.text = label_text.to_upper()
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_make_label_clip_width(label)
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", accent_color)
+	row.add_child(label)
+
+	var value_label := Label.new()
+	value_label.text = value_text
+	value_label.tooltip_text = value_text
+	value_label.custom_minimum_size = Vector2(48, 0)
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_make_label_clip_width(value_label)
+	value_label.add_theme_font_size_override("font_size", 10)
+	value_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	row.add_child(value_label)
+
+	var bar := ProgressBar.new()
+	bar.max_value = max(max_value, 1)
+	bar.value = clamp(value, 0, max(max_value, 1))
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(0, 12)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06080de8"), Color("#1d2635"), 3, 0))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(accent_color, accent_color, 3, 0))
+	stack.add_child(bar)
+	return stack
+
+func _create_summary_field_card(
+	label_text: String,
+	value_text: String,
+	accent_color: Color,
+	emphasize_value: bool = false,
+	min_width: float = 96.0,
+	value_color: Color = Color(0, 0, 0, 0),
+	border_color: Color = Color(0, 0, 0, 0)
+) -> Control:
+	var stack := VBoxContainer.new()
+	stack.custom_minimum_size = Vector2(min_width, 41)
+	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stack.add_theme_constant_override("separation", 3)
+
+	var label := Label.new()
+	label.text = label_text.to_upper()
+	label.tooltip_text = label_text
+	_make_label_clip_width(label)
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", accent_color)
+	stack.add_child(label)
+
+	var value_panel := PanelContainer.new()
+	value_panel.custom_minimum_size = Vector2(0, 23)
+	value_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var resolved_border_color: Color = border_color if border_color.a > 0.0 else Color("#2d333c")
+	value_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#15191fee"), resolved_border_color, 4, 1))
+	stack.add_child(value_panel)
+
+	var value_margin := MarginContainer.new()
+	value_margin.add_theme_constant_override("margin_left", 6)
+	value_margin.add_theme_constant_override("margin_top", 2)
+	value_margin.add_theme_constant_override("margin_right", 6)
+	value_margin.add_theme_constant_override("margin_bottom", 2)
+	value_panel.add_child(value_margin)
+
+	var value := Label.new()
+	value.text = _default_text(value_text)
+	value.tooltip_text = value.text
+	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_make_label_clip_width(value)
+	value.add_theme_font_size_override("font_size", 13 if emphasize_value else 12)
+	var resolved_value_color: Color = value_color if value_color.a > 0.0 else (Color("#f4f7ff") if emphasize_value else Color("#e8f0ff"))
+	value.add_theme_color_override("font_color", resolved_value_color)
+	value_margin.add_child(value)
+	return stack
 
 func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
 	var origin: Dictionary = pokemon.origin
@@ -4935,6 +5267,87 @@ func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
 	if met_level > 0:
 		parts.append("Lv %s" % met_level)
 	return " - ".join(parts)
+
+func _get_pokemon_summary_location_text(pokemon: Pokemon) -> String:
+	var origin: Dictionary = pokemon.origin
+	var location_name: String = str(origin.get("locationName", pokemon.location)).strip_edges()
+	var region_name: String = str(origin.get("regionName", origin.get("region", ""))).strip_edges()
+	if location_name == "":
+		location_name = pokemon.location.strip_edges()
+	if location_name == "":
+		location_name = "Unknown Location"
+	if region_name != "" and region_name.to_lower() != "unknown" and region_name != location_name:
+		return "%s - %s" % [region_name, location_name]
+	return location_name
+
+func _get_pokemon_summary_caught_level_text(pokemon: Pokemon) -> String:
+	var origin: Dictionary = pokemon.origin
+	var met_level: int = int(origin.get("metLevel", origin.get("met_level", 0)))
+	if met_level <= 0:
+		met_level = int(origin.get("level", 0))
+	if met_level <= 0:
+		met_level = max(pokemon.level, 1)
+	var method: String = _get_pokemon_summary_method_text(pokemon)
+	return "%s - %s" % [met_level, method] if method != "" else str(met_level)
+
+func _get_pokemon_summary_method_text(pokemon: Pokemon) -> String:
+	var origin: Dictionary = pokemon.origin
+	var method: String = str(origin.get("method", "")).strip_edges()
+	return _format_pokemon_origin_method(method) if method != "" else ""
+
+func _get_pokemon_summary_current_trainer_title_text(_pokemon: Pokemon) -> String:
+	var origin: Dictionary = _pokemon.origin
+	var trainer_name := str(_get_first_dictionary_value(
+		origin,
+		["currentTrainerName", "current_trainer_name", "ownerName", "owner_name"],
+		PlayerSave.player_name
+	)).strip_edges()
+	if trainer_name == "":
+		trainer_name = "Trainer"
+	return "%s's Pokemon" % trainer_name
+
+func _get_pokemon_summary_caught_date_text(pokemon: Pokemon) -> String:
+	var origin: Dictionary = pokemon.origin
+	var raw_date := str(_get_first_dictionary_value(
+		origin,
+		["caughtAt", "caught_at", "metAt", "met_at", "createdAt", "created_at"],
+		""
+	)).strip_edges()
+	var date_text := "-"
+	if raw_date == "":
+		return date_text
+
+	var date_part := raw_date.split("T")[0].split(" ")[0]
+	var pieces := date_part.split("-")
+	if pieces.size() == 3 and pieces[0].length() == 4:
+		date_text = "%s/%s/%s" % [pieces[2], pieces[1], pieces[0]]
+	else:
+		date_text = date_part
+	return date_text
+
+func _get_pokemon_summary_experience_text(pokemon: Pokemon) -> String:
+	return _get_pokemon_optional_property_text(pokemon, ["exp", "experience", "current_exp", "currentExp"])
+
+func _get_pokemon_summary_happiness_text(pokemon: Pokemon) -> String:
+	return _get_pokemon_optional_property_text(pokemon, ["happiness", "friendship"])
+
+func _get_pokemon_optional_property_text(pokemon: Pokemon, property_names: Array[String]) -> String:
+	if pokemon == null:
+		return "-"
+
+	var available_properties := {}
+	for property_value: Variant in pokemon.get_property_list():
+		var property_data: Dictionary = property_value as Dictionary
+		available_properties[str(property_data.get("name", ""))] = true
+
+	for property_name: String in property_names:
+		if not available_properties.has(property_name):
+			continue
+		var value: Variant = pokemon.get(property_name)
+		var text := str(value).strip_edges()
+		if text != "" and text != "<null>":
+			return text
+	return "-"
 
 func _format_pokemon_origin_method(method: String) -> String:
 	match method.strip_edges().to_lower():
@@ -4966,32 +5379,43 @@ func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
 		grid.add_child(_create_summary_value_orb(str(stat.get("label", stat_id)), value, 31, stat.get("color", UI_BORDER_FOCUS) as Color))
 
 func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
-	_add_summary_section_title("Allocated EVs", Color("#ffcc7a"))
+	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
+	_add_summary_section_title("Allocated EVs (%s/510)" % allocated_total, POKEMON_SUMMARY_ACCENT)
 	var grid := GridContainer.new()
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 6)
-	grid.add_theme_constant_override("v_separation", 5)
+	grid.add_theme_constant_override("v_separation", 6)
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(grid)
 	for stat_value: Variant in _summary_stat_order():
 		var stat: Dictionary = stat_value
 		var stat_id: String = str(stat.get("id", ""))
 		var value: int = int(pokemon.evs.get(stat_id, 0))
 		grid.add_child(_create_summary_ev_box(stat_id, str(stat.get("label", stat_id)), value, stat.get("color", UI_BORDER_FOCUS) as Color))
-	_add_summary_section_title("Stored EVs", Color("#ffcc7a"))
+	_add_summary_section_title("Stored EVs", POKEMON_SUMMARY_ACCENT)
 	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.evs, pokemon.stored_evs))
 
 func _render_pokemon_summary_moves_tab(pokemon: Pokemon) -> void:
-	_add_summary_section_title("Moves", Color("#f2cf78"))
+	_add_summary_section_title("Moves", POKEMON_SUMMARY_ACCENT)
 	for move_index in range(4):
+		var move_value: Variant = {}
 		var move_name: String = "-"
 		var pp_text: String = "--/--"
 		var move_type: String = ""
 		if move_index < pokemon.moves.size():
-			var move_value: Variant = pokemon.moves[move_index]
+			move_value = pokemon.moves[move_index]
 			move_name = _get_summary_move_name(move_value)
 			pp_text = _get_summary_move_pp_text(move_value)
 			move_type = _get_summary_move_type(move_value)
-		pokemon_summary_content_stack.add_child(_create_summary_move_card(move_index + 1, move_name, pp_text, move_type))
+		pokemon_summary_content_stack.add_child(_create_summary_move_card(
+			move_index + 1,
+			move_name,
+			pp_text,
+			move_type,
+			_get_summary_move_power_text(move_value),
+			_get_summary_move_accuracy_text(move_value),
+			_get_summary_move_description_text(move_value)
+		))
 
 func _add_summary_section_title(title_text: String, color: Color) -> void:
 	var panel := PanelContainer.new()
@@ -5006,7 +5430,7 @@ func _add_summary_section_title(title_text: String, color: Color) -> void:
 	var label := Label.new()
 	label.text = title_text.to_upper()
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_font_size_override("font_size", 11)
 	label.add_theme_color_override("font_color", color)
 	label.add_theme_color_override("font_shadow_color", Color("#00111f"))
 	label.add_theme_constant_override("shadow_offset_x", 1)
@@ -5048,74 +5472,135 @@ func _create_summary_info_row(label_text: String, value_text: String, accent_col
 
 func _create_summary_value_orb(label_text: String, value: int, max_value: int, color: Color) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(96, 66)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76788"), 8, 1))
+	panel.custom_minimum_size = Vector2(96, 50)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color(color.r, color.g, color.b, 0.48), 7, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 7)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 7)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+
 	var stack := VBoxContainer.new()
-	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 2)
-	panel.add_child(stack)
+	margin.add_child(stack)
+
+	var label := Label.new()
+	label.text = label_text.to_upper()
+	label.tooltip_text = label_text
+	_make_label_clip_width(label)
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", color)
+	stack.add_child(label)
+
+	var value_row := HBoxContainer.new()
+	value_row.add_theme_constant_override("separation", 4)
+	stack.add_child(value_row)
+
 	var value_label := Label.new()
 	value_label.text = str(clamp(value, 0, max_value))
-	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	value_label.add_theme_font_size_override("font_size", 17)
-	value_label.add_theme_color_override("font_color", color)
-	stack.add_child(value_label)
-	var name_label := Label.new()
-	name_label.text = label_text
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 9)
-	name_label.add_theme_color_override("font_color", color)
-	stack.add_child(name_label)
+	value_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value_label.add_theme_font_size_override("font_size", 14)
+	value_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	value_row.add_child(value_label)
+
+	var max_label := Label.new()
+	max_label.text = "/%s" % max(max_value, 1)
+	max_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	max_label.add_theme_font_size_override("font_size", 10)
+	max_label.add_theme_color_override("font_color", Color("#b8c9e4"))
+	value_row.add_child(max_label)
+
 	var bar := ProgressBar.new()
 	bar.max_value = max(max_value, 1)
 	bar.value = clamp(value, 0, max_value)
 	bar.show_percentage = false
-	bar.custom_minimum_size = Vector2(58, 6)
-	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#111927d8"), Color("#1b2a3d"), 8, 0))
+	bar.custom_minimum_size = Vector2(0, 6)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#050912e8"), Color("#263b58"), 8, 0))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(color, color, 8, 0))
 	stack.add_child(bar)
 	return panel
 
 func _create_summary_ev_box(stat_id: String, label_text: String, value: int, color: Color) -> Control:
 	var panel: Control = PanelContainer.new() if _is_pokemon_summary_readonly() else Button.new()
-	panel.custom_minimum_size = Vector2(96, 44)
+	panel.custom_minimum_size = Vector2(96, 50)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if panel is Button:
 		var button: Button = panel as Button
 		button.focus_mode = Control.FOCUS_NONE
 		button.tooltip_text = "Allocate %s EVs" % label_text
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.pressed.connect(_on_summary_allocated_ev_pressed.bind(stat_id, label_text, pokemon_summary_active_card_key))
-		button.add_theme_stylebox_override("normal", _make_panel_style(Color("#081321ef"), Color("#d8b76766"), 8, 1))
-		button.add_theme_stylebox_override("hover", _make_panel_style(Color("#10243cf2"), color, 8, 1))
-		button.add_theme_stylebox_override("pressed", _make_panel_style(Color("#050912f4"), color, 8, 1))
+		button.add_theme_stylebox_override("normal", _make_panel_style(Color("#081321ef"), Color(color.r, color.g, color.b, 0.42), 7, 1))
+		button.add_theme_stylebox_override("hover", _make_panel_style(Color("#10243cf2"), color, 7, 1))
+		button.add_theme_stylebox_override("pressed", _make_panel_style(Color("#050912f4"), color, 7, 1))
 	else:
-		(panel as PanelContainer).add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76766"), 8, 1))
+		(panel as PanelContainer).add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color(color.r, color.g, color.b, 0.42), 7, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 7)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 7)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(margin)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
 	var stack := VBoxContainer.new()
-	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 2)
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_child(stack)
-	stack.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margin.add_child(stack)
+
 	var label := Label.new()
-	label.text = label_text
+	label.text = label_text.to_upper()
+	label.tooltip_text = label_text
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_make_label_clip_width(label)
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", color)
 	stack.add_child(label)
+
+	var value_row := HBoxContainer.new()
+	value_row.add_theme_constant_override("separation", 4)
+	value_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(value_row)
+
 	var value_label := Label.new()
 	value_label.text = str(value)
 	value_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	value_label.add_theme_font_size_override("font_size", 12)
-	value_label.add_theme_color_override("font_color", UI_TEXT)
-	stack.add_child(value_label)
+	value_label.add_theme_font_size_override("font_size", 14)
+	value_label.add_theme_color_override("font_color", Color("#f4f7ff"))
+	value_row.add_child(value_label)
+
+	var cap_label := Label.new()
+	cap_label.text = "/252"
+	cap_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	cap_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cap_label.add_theme_font_size_override("font_size", 10)
+	cap_label.add_theme_color_override("font_color", Color("#b8c9e4"))
+	value_row.add_child(cap_label)
+
+	var bar := ProgressBar.new()
+	bar.max_value = 252
+	bar.value = clamp(value, 0, 252)
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(0, 6)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#050912e8"), Color("#263b58"), 8, 0))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(color, color, 8, 0))
+	stack.add_child(bar)
 	return panel
 
 func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dictionary) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 58)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76766"), 8, 1))
+	panel.custom_minimum_size = Vector2(0, 62)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 7, 1))
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 6)
@@ -5137,15 +5622,15 @@ func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dic
 		stored_total += int(stored_evs.get(stat_id, 0))
 
 	var total_label := Label.new()
-	total_label.text = "AVAILABLE: %s    CAPACITY: %s / 756" % [stored_total, allocated_total + stored_total]
+	total_label.text = "AVAILABLE: %s    TOTAL CAPACITY: %s / 756" % [stored_total, allocated_total + stored_total]
 	total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	total_label.add_theme_font_size_override("font_size", 9)
+	total_label.add_theme_font_size_override("font_size", 10)
 	total_label.add_theme_color_override("font_color", Color("#f5df9a"))
 	stack.add_child(total_label)
 
 	var grid := GridContainer.new()
 	grid.columns = 6
-	grid.add_theme_constant_override("h_separation", 3)
+	grid.add_theme_constant_override("h_separation", 2)
 	grid.add_theme_constant_override("v_separation", 2)
 	stack.add_child(grid)
 
@@ -5161,7 +5646,8 @@ func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dic
 
 func _create_summary_stored_ev_chip(label_text: String, value: int, color: Color) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(40, 26)
+	panel.custom_minimum_size = Vector2(44, 28)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color(color.r, color.g, color.b, 0.55), 6, 1))
 
 	var stack := VBoxContainer.new()
@@ -5172,7 +5658,7 @@ func _create_summary_stored_ev_chip(label_text: String, value: int, color: Color
 	var label := Label.new()
 	label.text = label_text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 7)
+	label.add_theme_font_size_override("font_size", 8)
 	label.add_theme_color_override("font_color", color)
 	stack.add_child(label)
 
@@ -5180,7 +5666,7 @@ func _create_summary_stored_ev_chip(label_text: String, value: int, color: Color
 	value_label.text = str(value)
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	value_label.add_theme_font_size_override("font_size", 10)
-	value_label.add_theme_color_override("font_color", UI_TEXT)
+	value_label.add_theme_color_override("font_color", Color("#f4f7ff"))
 	stack.add_child(value_label)
 
 	return panel
@@ -5269,56 +5755,113 @@ func _get_summary_ev_total(evs: Dictionary) -> int:
 		total += int(evs.get(str(stat.get("id", "")), 0))
 	return total
 
-func _create_summary_move_card(move_number: int, move_name: String, pp_text: String, move_type: String = "") -> Control:
+func _create_summary_move_card(
+	move_number: int,
+	move_name: String,
+	pp_text: String,
+	move_type: String = "",
+	power_text: String = "-",
+	accuracy_text: String = "-",
+	description_text: String = ""
+) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 44)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#d8b76777"), 8, 1))
+	panel.custom_minimum_size = Vector2(0, 50)
+	panel.tooltip_text = description_text
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 8, 1))
+
 	var margin := MarginContainer.new()
+	margin.tooltip_text = description_text
 	margin.add_theme_constant_override("margin_left", 8)
 	margin.add_theme_constant_override("margin_top", 5)
 	margin.add_theme_constant_override("margin_right", 8)
 	margin.add_theme_constant_override("margin_bottom", 5)
 	panel.add_child(margin)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	margin.add_child(row)
+
+	var stack := VBoxContainer.new()
+	stack.tooltip_text = description_text
+	stack.add_theme_constant_override("separation", 3)
+	margin.add_child(stack)
+
+	var top_row := HBoxContainer.new()
+	top_row.tooltip_text = description_text
+	top_row.add_theme_constant_override("separation", 6)
+	stack.add_child(top_row)
+
 	var number_label := Label.new()
 	number_label.text = str(move_number)
-	number_label.custom_minimum_size = Vector2(24, 24)
+	number_label.tooltip_text = description_text
+	number_label.custom_minimum_size = Vector2(22, 22)
 	number_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	number_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	number_label.add_theme_font_size_override("font_size", 12)
+	number_label.add_theme_font_size_override("font_size", 11)
 	number_label.add_theme_color_override("font_color", Color("#101827"))
-	number_label.add_theme_stylebox_override("normal", _make_panel_style(Color("#f2cf78"), Color("#fff1bf"), 12, 1))
-	row.add_child(number_label)
+	number_label.add_theme_stylebox_override("normal", _make_panel_style(POKEMON_SUMMARY_ACCENT, Color("#b9efff"), 12, 1))
+	top_row.add_child(number_label)
+
 	var move_label := Label.new()
 	move_label.text = move_name
-	move_label.tooltip_text = move_name
+	move_label.tooltip_text = description_text if description_text != "" else move_name
 	move_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	move_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_make_label_clip_width(move_label)
-	move_label.add_theme_font_size_override("font_size", 12)
+	move_label.add_theme_font_size_override("font_size", 13)
 	move_label.add_theme_color_override("font_color", Color("#f5df9a"))
-	row.add_child(move_label)
+	top_row.add_child(move_label)
+
 	var type_icon_texture: Texture2D = _load_pokemon_type_icon(move_type)
 	if type_icon_texture != null:
 		var type_icon := TextureRect.new()
-		type_icon.custom_minimum_size = Vector2(22, 22)
+		type_icon.custom_minimum_size = Vector2(24, 24)
 		type_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		type_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		type_icon.texture = type_icon_texture
-		type_icon.tooltip_text = move_type.capitalize()
+		type_icon.tooltip_text = description_text if description_text != "" else move_type.capitalize()
 		type_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		row.add_child(type_icon)
-	var pp_label := Label.new()
-	pp_label.text = pp_text
-	pp_label.custom_minimum_size = Vector2(42, 0)
-	pp_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	pp_label.add_theme_font_size_override("font_size", 10)
-	pp_label.add_theme_color_override("font_color", Color("#ff5da8"))
-	row.add_child(pp_label)
+		top_row.add_child(type_icon)
+	elif move_type.strip_edges() != "":
+		top_row.add_child(_create_summary_move_type_label(move_type))
+
+	var meta_row := HBoxContainer.new()
+	meta_row.tooltip_text = description_text
+	meta_row.add_theme_constant_override("separation", 8)
+	stack.add_child(meta_row)
+	meta_row.add_child(_create_summary_move_meta_label("PP", pp_text, Color("#ff5da8"), description_text))
+	meta_row.add_child(_create_summary_move_meta_label("Power", power_text, Color("#f2cf78"), description_text))
+	meta_row.add_child(_create_summary_move_meta_label("ACC", accuracy_text, Color("#d9ecff"), description_text))
 	return panel
+
+func _create_summary_move_type_label(move_type: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(42, 20)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#101827e8"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 5)
+	margin.add_theme_constant_override("margin_top", 2)
+	margin.add_theme_constant_override("margin_right", 5)
+	margin.add_theme_constant_override("margin_bottom", 2)
+	panel.add_child(margin)
+
+	var label := Label.new()
+	label.text = move_type.to_upper()
+	label.tooltip_text = move_type.capitalize()
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_make_label_clip_width(label)
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", Color("#f5df9a"))
+	margin.add_child(label)
+	return panel
+
+func _create_summary_move_meta_label(label_text: String, value_text: String, color: Color, tooltip_text: String = "") -> Control:
+	var label := Label.new()
+	label.text = "%s: %s" % [label_text, value_text]
+	label.tooltip_text = tooltip_text if tooltip_text != "" else label.text
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_make_label_clip_width(label)
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", color)
+	return label
 
 func _render_stat_bar_list(values: Dictionary, max_value: int, use_actual_max: bool) -> void:
 	var actual_max: int = max_value
@@ -5347,6 +5890,22 @@ func _summary_stat_order() -> Array[Dictionary]:
 		{"id": "spd", "label": "SP.DEF", "color": Color("#73e26d")},
 		{"id": "spe", "label": "SPEED", "color": Color("#e879f9")},
 	]
+
+func _get_pokemon_summary_nature_stat_role(nature: String, stat_id: String) -> String:
+	if stat_id == "hp":
+		return ""
+
+	var nature_key := nature.strip_edges().to_lower().replace(" ", "-")
+	var changes_value: Variant = POKEMON_SUMMARY_NATURE_CHANGES.get(nature_key, {})
+	if not (changes_value is Dictionary):
+		return ""
+
+	var changes: Dictionary = changes_value
+	if stat_id == str(changes.get("boosted", "")):
+		return "boosted"
+	if stat_id == str(changes.get("lowered", "")):
+		return "lowered"
+	return ""
 
 func _refresh_pokemon_summary_stats(pokemon: Pokemon) -> void:
 	for child: Node in pokemon_summary_stats_list.get_children():
@@ -5705,7 +6264,9 @@ func _get_summary_move_name(move_value: Variant) -> String:
 
 func _get_summary_move_type(move_value: Variant) -> String:
 	if not (move_value is Dictionary):
-		return _lookup_summary_move_type(str(move_value))
+		var metadata: Dictionary = _lookup_summary_move_metadata(str(move_value))
+		var metadata_type: String = str(metadata.get("type", "")).strip_edges()
+		return metadata_type if metadata_type != "" else _lookup_summary_move_type(str(move_value))
 
 	var move_data: Dictionary = move_value as Dictionary
 	for key in ["type", "moveType", "move_type"]:
@@ -5723,6 +6284,10 @@ func _get_summary_move_type(move_value: Variant) -> String:
 
 	for key in ["id", "move", "moveId", "move_id", "name"]:
 		var move_key: String = str(move_data.get(key, "")).strip_edges()
+		var metadata: Dictionary = _lookup_summary_move_metadata(move_key)
+		var metadata_type: String = str(metadata.get("type", "")).strip_edges()
+		if metadata_type != "":
+			return metadata_type
 		var indexed_type: String = _lookup_summary_move_type(move_key)
 		if indexed_type != "":
 			return indexed_type
@@ -5731,11 +6296,17 @@ func _get_summary_move_type(move_value: Variant) -> String:
 		var metadata: Dictionary = metadata_value as Dictionary
 		for key in ["id", "move", "moveId", "move_id", "name"]:
 			var move_key: String = str(metadata.get(key, "")).strip_edges()
+			var indexed_metadata: Dictionary = _lookup_summary_move_metadata(move_key)
+			var indexed_metadata_type: String = str(indexed_metadata.get("type", "")).strip_edges()
+			if indexed_metadata_type != "":
+				return indexed_metadata_type
 			var indexed_type: String = _lookup_summary_move_type(move_key)
 			if indexed_type != "":
 				return indexed_type
 
-	return _lookup_summary_move_type(_get_summary_move_name(move_value))
+	var fallback_metadata: Dictionary = _lookup_summary_move_metadata(_get_summary_move_name(move_value))
+	var fallback_metadata_type: String = str(fallback_metadata.get("type", "")).strip_edges()
+	return fallback_metadata_type if fallback_metadata_type != "" else _lookup_summary_move_type(_get_summary_move_name(move_value))
 
 func _lookup_summary_move_type(move_key: String) -> String:
 	var normalized_key: String = _normalize_summary_move_lookup_key(move_key)
@@ -5770,6 +6341,48 @@ func _ensure_summary_move_type_index_loaded() -> void:
 		if normalized_key != "" and move_type != "":
 			pokemon_summary_move_type_index[normalized_key] = move_type
 
+func _lookup_summary_move_metadata(move_key: String) -> Dictionary:
+	var normalized_key: String = _normalize_summary_move_lookup_key(move_key)
+	if normalized_key == "":
+		return {}
+	_ensure_summary_move_summary_index_loaded()
+	if pokemon_summary_move_summary_index.is_empty():
+		return {}
+	var metadata_value: Variant = pokemon_summary_move_summary_index.get(normalized_key, {})
+	return (metadata_value as Dictionary).duplicate(true) if metadata_value is Dictionary else {}
+
+func _ensure_summary_move_summary_index_loaded() -> void:
+	if pokemon_summary_move_summary_index_loaded:
+		return
+	pokemon_summary_move_summary_index_loaded = true
+	pokemon_summary_move_summary_index.clear()
+
+	if not FileAccess.file_exists(MOVE_SUMMARY_INDEX_PATH):
+		return
+
+	var json_text: String = FileAccess.get_file_as_string(MOVE_SUMMARY_INDEX_PATH)
+	if json_text.strip_edges() == "":
+		return
+
+	var parsed_value: Variant = JSON.parse_string(json_text)
+	if not (parsed_value is Dictionary):
+		return
+
+	var parsed_dictionary: Dictionary = parsed_value as Dictionary
+	for key_value: Variant in parsed_dictionary.keys():
+		var move_metadata_value: Variant = parsed_dictionary.get(key_value, {})
+		if not (move_metadata_value is Dictionary):
+			continue
+		var move_metadata: Dictionary = (move_metadata_value as Dictionary).duplicate(true)
+		_add_summary_move_metadata_alias(str(key_value), move_metadata)
+		_add_summary_move_metadata_alias(str(move_metadata.get("id", "")), move_metadata)
+		_add_summary_move_metadata_alias(str(move_metadata.get("name", "")), move_metadata)
+
+func _add_summary_move_metadata_alias(move_key: String, move_metadata: Dictionary) -> void:
+	var normalized_key: String = _normalize_summary_move_lookup_key(move_key)
+	if normalized_key != "" and not pokemon_summary_move_summary_index.has(normalized_key):
+		pokemon_summary_move_summary_index[normalized_key] = move_metadata
+
 func _normalize_summary_move_lookup_key(value: String) -> String:
 	var normalized_key: String = value.strip_edges().to_lower()
 	if normalized_key == "":
@@ -5798,6 +6411,94 @@ func _get_summary_move_pp_text(move_value: Variant) -> String:
 	if max_pp <= 0:
 		return "--/--"
 	return "%s/%s" % [clamp(current_pp, 0, max_pp), max_pp]
+
+func _get_summary_move_power_text(move_value: Variant) -> String:
+	var power_value: Variant = _get_summary_move_data_value(move_value, ["basePower", "base_power", "power"], null)
+	if power_value == null or str(power_value).strip_edges() == "":
+		return "-"
+
+	var power: int = int(power_value)
+	if power <= 0:
+		return "-"
+	return str(power)
+
+func _get_summary_move_accuracy_text(move_value: Variant) -> String:
+	var accuracy_value: Variant = _get_summary_move_data_value(move_value, ["accuracy", "acc"], null)
+	if accuracy_value is bool:
+		return "Always" if bool(accuracy_value) else "-"
+	if accuracy_value == null or str(accuracy_value).strip_edges() == "":
+		return "-"
+
+	var accuracy: int = int(accuracy_value)
+	if accuracy <= 0:
+		return "-"
+	return "%s%%" % accuracy
+
+func _get_summary_move_description_text(move_value: Variant) -> String:
+	var description: String = str(_get_summary_move_data_value(
+		move_value,
+		["shortDesc", "short_desc", "shortDescription", "short_description"],
+		""
+	)).strip_edges()
+	if description == "":
+		description = str(_get_summary_move_data_value(move_value, ["desc", "description"], "")).strip_edges()
+	return description
+
+func _get_summary_move_data_value(move_value: Variant, keys: Array[String], fallback: Variant) -> Variant:
+	if not (move_value is Dictionary):
+		var metadata: Dictionary = _lookup_summary_move_metadata(str(move_value))
+		for key_value: Variant in keys:
+			var key: String = str(key_value)
+			if metadata.has(key):
+				return metadata.get(key)
+		return fallback
+
+	var move_data: Dictionary = move_value as Dictionary
+	for key_value: Variant in keys:
+		var key: String = str(key_value)
+		if move_data.has(key):
+			return move_data.get(key)
+
+	for metadata_key_value: Variant in ["metadata", "data"]:
+		var metadata_key: String = str(metadata_key_value)
+		var metadata_value: Variant = move_data.get(metadata_key, {})
+		if not (metadata_value is Dictionary):
+			continue
+		var metadata: Dictionary = metadata_value as Dictionary
+		for key_value: Variant in keys:
+			var key: String = str(key_value)
+			if metadata.has(key):
+				return metadata.get(key)
+
+	for lookup_key_value: Variant in ["id", "move", "moveId", "move_id", "name"]:
+		var lookup_key: String = str(move_data.get(str(lookup_key_value), "")).strip_edges()
+		var indexed_metadata: Dictionary = _lookup_summary_move_metadata(lookup_key)
+		for key_value: Variant in keys:
+			var key: String = str(key_value)
+			if indexed_metadata.has(key):
+				return indexed_metadata.get(key)
+
+	for metadata_key_value: Variant in ["metadata", "data"]:
+		var metadata_key: String = str(metadata_key_value)
+		var metadata_value: Variant = move_data.get(metadata_key, {})
+		if not (metadata_value is Dictionary):
+			continue
+		var metadata: Dictionary = metadata_value as Dictionary
+		for lookup_key_value: Variant in ["id", "move", "moveId", "move_id", "name"]:
+			var lookup_key: String = str(metadata.get(str(lookup_key_value), "")).strip_edges()
+			var indexed_metadata: Dictionary = _lookup_summary_move_metadata(lookup_key)
+			for key_value: Variant in keys:
+				var key: String = str(key_value)
+				if indexed_metadata.has(key):
+					return indexed_metadata.get(key)
+
+	var fallback_metadata: Dictionary = _lookup_summary_move_metadata(_get_summary_move_name(move_value))
+	for key_value: Variant in keys:
+		var key: String = str(key_value)
+		if fallback_metadata.has(key):
+			return fallback_metadata.get(key)
+
+	return fallback
 
 func _get_first_dictionary_value(dictionary: Dictionary, keys: Array, fallback: Variant) -> Variant:
 	for key in keys:
@@ -5920,17 +6621,20 @@ func _set_pokemon_summary_popup_size() -> void:
 	pokemon_summary_popup.offset_right = pokemon_summary_popup.offset_left + POKEMON_SUMMARY_SIZE.x
 	pokemon_summary_popup.offset_bottom = pokemon_summary_popup.offset_top + POKEMON_SUMMARY_SIZE.y
 	if pokemon_summary_left_panel != null:
-		pokemon_summary_left_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, 0)
-		pokemon_summary_left_panel.size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, pokemon_summary_left_panel.size.y)
+		pokemon_summary_left_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
+		pokemon_summary_left_panel.size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
 	if pokemon_summary_right_area != null:
-		pokemon_summary_right_area.custom_minimum_size = Vector2(POKEMON_SUMMARY_RIGHT_AREA_WIDTH, 0)
-		pokemon_summary_right_area.size = Vector2(POKEMON_SUMMARY_RIGHT_AREA_WIDTH, pokemon_summary_right_area.size.y)
+		pokemon_summary_right_area.custom_minimum_size = Vector2(POKEMON_SUMMARY_RIGHT_AREA_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
+		pokemon_summary_right_area.size = Vector2(POKEMON_SUMMARY_RIGHT_AREA_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
 	if pokemon_summary_content_panel != null:
-		pokemon_summary_content_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_CONTENT_PANEL_WIDTH, 0)
-		pokemon_summary_content_panel.size = Vector2(POKEMON_SUMMARY_CONTENT_PANEL_WIDTH, pokemon_summary_content_panel.size.y)
+		pokemon_summary_content_panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_CONTENT_PANEL_WIDTH, POKEMON_SUMMARY_CONTENT_PANEL_HEIGHT)
+		pokemon_summary_content_panel.size = Vector2(POKEMON_SUMMARY_CONTENT_PANEL_WIDTH, POKEMON_SUMMARY_CONTENT_PANEL_HEIGHT)
+	if pokemon_summary_content_stack != null:
+		pokemon_summary_content_stack.custom_minimum_size = Vector2(0, POKEMON_SUMMARY_CONTENT_STACK_HEIGHT)
+		pokemon_summary_content_stack.size = Vector2(pokemon_summary_content_stack.size.x, POKEMON_SUMMARY_CONTENT_STACK_HEIGHT)
 	if pokemon_summary_tab_column != null:
-		pokemon_summary_tab_column.custom_minimum_size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, 0)
-		pokemon_summary_tab_column.size = Vector2(POKEMON_SUMMARY_TAB_COLUMN_WIDTH, pokemon_summary_tab_column.size.y)
+		pokemon_summary_tab_column.custom_minimum_size = Vector2(0, 28)
+		pokemon_summary_tab_column.size = Vector2(pokemon_summary_tab_column.size.x, 28)
 
 func _set_mail_popup_size() -> void:
 	if mail_popup == null:
@@ -6034,10 +6738,11 @@ func _make_panel_style(background_color: Color, border_color: Color, corner_radi
 	return style
 
 func _make_pokemon_summary_outer_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#050812fb"), Color("#d8b767"), 14, 2)
-	style.shadow_color = Color(0, 0, 0, 0.58)
-	style.shadow_size = 18
-	style.shadow_offset = Vector2(0, 6)
+	var style := _make_panel_style(Color("#030509fc"), POKEMON_SUMMARY_ACCENT_SOFT, 6, 1)
+	style.border_width_bottom = 2
+	style.shadow_color = Color(0, 0, 0, 0.48)
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(0, 4)
 	style.content_margin_left = 0
 	style.content_margin_right = 0
 	style.content_margin_top = 0
@@ -6045,14 +6750,14 @@ func _make_pokemon_summary_outer_style() -> StyleBoxFlat:
 	return style
 
 func _make_pokemon_summary_inner_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
-	var style := _make_panel_style(background_color, border_color, 9, 1)
+	var style := _make_panel_style(background_color, border_color, 5, 1)
 	style.shadow_color = Color("#00000000")
 	style.shadow_size = 0
 	style.shadow_offset = Vector2.ZERO
 	return style
 
 func _make_pokemon_summary_header_frame_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#101827f4"), Color("#d8b767"), 10, 1)
+	var style := _make_panel_style(Color("#101827f4"), POKEMON_SUMMARY_ACCENT_SOFT, 4, 1)
 	style.shadow_color = Color("#00000000")
 	style.shadow_size = 0
 	style.shadow_offset = Vector2.ZERO
@@ -6063,14 +6768,14 @@ func _make_pokemon_summary_header_frame_style() -> StyleBoxFlat:
 	return style
 
 func _make_pokemon_summary_sprite_stage_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#00000000"), Color("#d8b767aa"), 12, 1)
+	var style := _make_panel_style(Color("#00000000"), POKEMON_SUMMARY_ACCENT_FAINT, 4, 1)
 	style.shadow_color = Color("#00000000")
 	style.shadow_size = 0
 	style.shadow_offset = Vector2.ZERO
 	return style
 
 func _make_pokemon_summary_section_title_style(color: Color) -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#07111fe8"), Color(color.r, color.g, color.b, 0.58), 6, 1)
+	var style := _make_panel_style(Color("#080c13f0"), Color(color.r, color.g, color.b, 0.72), 3, 1)
 	style.corner_radius_top_right = 2
 	style.corner_radius_bottom_right = 2
 	style.content_margin_left = 6
@@ -6104,7 +6809,7 @@ func _create_pokemon_summary_chip(label_text: String, background_color: Color, t
 	return chip
 
 func _make_pokemon_summary_row_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#0b1322b8"), Color("#d8b76755"), 7, 1)
+	var style := _make_panel_style(Color("#0b1019e8"), Color("#3e4654"), 4, 1)
 	style.content_margin_left = 0
 	style.content_margin_right = 0
 	style.content_margin_top = 0
@@ -6112,7 +6817,7 @@ func _make_pokemon_summary_row_style() -> StyleBoxFlat:
 	return style
 
 func _make_pokemon_summary_button_style(background_color: Color, border_color: Color, selected: bool) -> StyleBoxFlat:
-	var style := _make_button_style(background_color, border_color, 8, 1)
+	var style := _make_button_style(background_color, border_color, 4, 1)
 	if selected:
 		style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.22)
 		style.shadow_size = 4
@@ -6120,7 +6825,7 @@ func _make_pokemon_summary_button_style(background_color: Color, border_color: C
 	return style
 
 func _make_pokemon_summary_held_item_slot_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#07111fcc"), Color("#d8b76766"), 6, 1)
+	var style := _make_panel_style(Color("#0c1119ee"), Color("#3e4654"), 4, 1)
 	style.content_margin_left = 7
 	style.content_margin_top = 4
 	style.content_margin_right = 6
@@ -6128,7 +6833,7 @@ func _make_pokemon_summary_held_item_slot_style() -> StyleBoxFlat:
 	return style
 
 func _make_pokemon_summary_held_item_button_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
-	var style := _make_button_style(background_color, border_color, 6, 1)
+	var style := _make_button_style(background_color, border_color, 4, 1)
 	style.content_margin_left = 0
 	style.content_margin_top = 0
 	style.content_margin_right = 0
@@ -9050,6 +9755,7 @@ func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
 	pokemon_summary_preview_pokemon = pokemon
 	pokemon_summary_mode = "readonly"
 	pokemon_summary_selected_slot = -1
+	pokemon_summary_sprite_side = "front"
 	pokemon_summary_item_picker.visible = false
 	pokemon_summary_ball_picker.visible = false
 	pokemon_summary_active_tab = "general"
