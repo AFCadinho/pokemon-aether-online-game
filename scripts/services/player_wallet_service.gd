@@ -71,7 +71,7 @@ func award_wild_battle_money(battle_id: String) -> Dictionary:
 			"battleId": battle_id,
 		})
 	)
-	return _wallet_result_from_response(response)
+	return _reward_claim_result_from_response(response)
 
 
 func award_trainer_battle_rewards(battle_id: String) -> Dictionary:
@@ -104,6 +104,9 @@ func apply_wallet_result(result: Dictionary) -> void:
 
 	var wallet: Dictionary = _dictionary_from_value(result.get("wallet", {}))
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
+	var party: Array = _array_from_value(result.get("party", []))
+	if not party.is_empty():
+		PlayerSave.replace_party_from_state(party)
 
 
 func _wallet_result_from_response(response: Dictionary) -> Dictionary:
@@ -126,6 +129,7 @@ func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
 		"success": true,
 		"wallet": _dictionary_from_value(body.get("wallet", {})),
 		"reward": _dictionary_from_value(body.get("reward", {})),
+		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
 	}
 
 
@@ -192,6 +196,13 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 		return {}
 	var dictionary: Dictionary = value
 	return dictionary
+
+
+func _array_from_value(value: Variant) -> Array:
+	if typeof(value) != TYPE_ARRAY:
+		return []
+	var array: Array = value
+	return array
 
 
 func _request_result_message(result: int) -> String:
