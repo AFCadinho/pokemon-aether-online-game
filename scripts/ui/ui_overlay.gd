@@ -1295,6 +1295,16 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 		return
 
 	var reward: Dictionary = reward_value as Dictionary
+	var prompts_value: Variant = reward.get("moveLearnPrompts", [])
+	if prompts_value is Array:
+		var prompts: Array = prompts_value as Array
+		if not prompts.is_empty():
+			for prompt_value: Variant in prompts:
+				if prompt_value is Dictionary:
+					_queue_move_learn_prompt(prompt_value as Dictionary)
+			_show_next_move_learn_prompt()
+			return
+
 	var level_ups_value: Variant = reward.get("levelUps", [])
 	if not (level_ups_value is Array):
 		return
@@ -1321,9 +1331,21 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 
 			prompt["pokemonId"] = pokemon_id
 			prompt["species"] = species if species != "" else "Pokemon"
-			move_learn_queue.append(prompt)
+			_queue_move_learn_prompt(prompt)
 
 	_show_next_move_learn_prompt()
+
+func _queue_move_learn_prompt(prompt_value: Dictionary) -> void:
+	var prompt := prompt_value.duplicate(true)
+	var move_id := _move_learn_prompt_move_id(prompt)
+	if move_id == "":
+		return
+	if int(prompt.get("pokemonId", 0)) <= 0:
+		return
+
+	var species := str(prompt.get("species", "Pokemon")).strip_edges()
+	prompt["species"] = species if species != "" else "Pokemon"
+	move_learn_queue.append(prompt)
 
 func _show_next_move_learn_prompt() -> void:
 	if move_learn_processing or move_learn_popup == null or move_learn_popup.visible:
