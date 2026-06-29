@@ -1661,24 +1661,24 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 		chip_row.add_child(_create_move_learn_category_label(category))
 
 	var meta_row := HBoxContainer.new()
-	meta_row.add_theme_constant_override("separation", 10)
+	meta_row.add_theme_constant_override("separation", 6)
 	stack.add_child(meta_row)
-	meta_row.add_child(_create_move_learn_meta_label("Power", _get_summary_move_power_text(move_value), Color("#f2cf78"), 0.0))
-	meta_row.add_child(_create_move_learn_meta_label("Acc", _get_summary_move_accuracy_text(move_value), Color("#d9ecff"), 0.0))
-	meta_row.add_child(_create_move_learn_meta_label("PP", _get_summary_move_pp_text(move_value).split("/", false, 1)[0], Color("#7df2e8"), 0.0))
+	meta_row.add_child(_create_move_learn_hover_stat("Power", _get_summary_move_power_text(move_value), Color("#f2cf78")))
+	meta_row.add_child(_create_move_learn_hover_stat("Acc", _get_summary_move_accuracy_text(move_value), Color("#d9ecff")))
+	meta_row.add_child(_create_move_learn_hover_stat("PP", _get_summary_move_pp_text(move_value).split("/", false, 1)[0], Color("#7df2e8")))
 
 	var description := _get_summary_move_description_text(move_value)
 	if description != "":
 		var description_label := Label.new()
 		description_label.text = description
 		description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		description_label.max_lines_visible = 3
+		description_label.max_lines_visible = 2
 		description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		description_label.add_theme_font_size_override("font_size", 13)
 		description_label.add_theme_color_override("font_color", UI_TEXT)
 		stack.add_child(description_label)
 
-	var panel_size := Vector2(260, 126)
+	var panel_size := Vector2(280, 154)
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var anchor_rect := anchor.get_global_rect()
 	var position := Vector2(anchor_rect.position.x + anchor_rect.size.x - 4.0, anchor_rect.position.y - 8.0)
@@ -1702,6 +1702,28 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 func _hide_move_learn_hover_panel() -> void:
 	if move_learn_hover_panel != null:
 		move_learn_hover_panel.visible = false
+
+func _create_move_learn_hover_stat(label_text: String, value_text: String, color: Color) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(82, 20)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#141923d8"), Color(color.r, color.g, color.b, 0.48), 2, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 5)
+	margin.add_theme_constant_override("margin_top", 2)
+	margin.add_theme_constant_override("margin_right", 5)
+	margin.add_theme_constant_override("margin_bottom", 2)
+	panel.add_child(margin)
+
+	var label := Label.new()
+	label.text = "%s %s" % [label_text, value_text]
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(label)
+	return panel
 
 func _create_move_learn_detail_chip(text: String, background_color: Color, text_color: Color) -> Control:
 	var panel := PanelContainer.new()
