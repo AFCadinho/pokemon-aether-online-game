@@ -172,6 +172,14 @@ const EXP_ITEM_IDS := {
 	"exp-candy-l": true,
 	"exp-candy-xl": true,
 }
+const POKEMON_MAX_LEVEL := 100
+const EXP_CANDY_EXPERIENCE := {
+	"exp-candy-xs": 100,
+	"exp-candy-s": 800,
+	"exp-candy-m": 3000,
+	"exp-candy-l": 10000,
+	"exp-candy-xl": 30000,
+}
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const ABILITY_SUMMARY_INDEX_PATH := "res://data/ability_summary_index.json"
@@ -5662,6 +5670,7 @@ func _setup_bag_item_use_popup() -> void:
 	bag_item_use_quantity_spinbox.value = 1
 	bag_item_use_quantity_spinbox.step = 1
 	bag_item_use_quantity_spinbox.custom_minimum_size = Vector2(116, 0)
+	bag_item_use_quantity_spinbox.value_changed.connect(_on_bag_item_use_quantity_changed)
 	quantity_row.add_child(bag_item_use_quantity_spinbox)
 
 	var party_label := Label.new()
@@ -5850,13 +5859,30 @@ func _refresh_bag_item_use_party_list() -> void:
 			continue
 		bag_item_use_party_list.add_child(_create_bag_item_use_pokemon_button(pokemon, slot_index))
 
+func _on_bag_item_use_quantity_changed(_value: float) -> void:
+	if bag_item_use_popup == null or not bag_item_use_popup.visible:
+		return
+	if bag_item_use_in_progress:
+		return
+	_refresh_bag_item_use_party_list()
+
 func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> Control:
 	var button := Button.new()
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.custom_minimum_size = Vector2(0, 34)
+	button.custom_minimum_size = Vector2(0, 44)
 	button.focus_mode = Control.FOCUS_NONE
-	button.text = "%s  Lv. %s" % [pokemon.species, max(pokemon.level, 1)]
-	button.tooltip_text = button.text
+	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
+	var requested_quantity := 1
+	if bag_item_use_quantity_spinbox != null:
+		requested_quantity = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
+	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	var preview_text := str(preview.get("label", ""))
+	button.text = "%s  Lv. %s%s" % [
+		pokemon.species,
+		max(pokemon.level, 1),
+		"  ->  %s" % preview_text if preview_text != "" else "",
+	]
+	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or pokemon.level >= 100
 	if pokemon.level >= 100:
 		button.tooltip_text = "%s is already Lv. 100." % pokemon.species
@@ -5865,6 +5891,114 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	button.pressed.connect(_on_bag_item_use_pokemon_selected.bind(slot_index))
 	_apply_button_style(button, "default")
 	return button
+
+func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
+	if pokemon == null:
+		return {}
+	var current_level: int = clampi(max(pokemon.level, 1), 1, POKEMON_MAX_LEVEL)
+	if current_level >= POKEMON_MAX_LEVEL:
+		return {
+			"label": "Max level",
+			"tooltip": "%s is already Lv. 100." % pokemon.species,
+		}
+
+	var growth_rate := _normalize_exp_growth_rate(pokemon.growth_rate)
+	var current_exp := _pokemon_preview_current_experience(pokemon, growth_rate)
+	var max_exp := _pokemon_exp_for_level(growth_rate, POKEMON_MAX_LEVEL)
+	var remaining_exp: int = max(max_exp - current_exp, 0)
+	if remaining_exp <= 0:
+		return {
+			"label": "Max level",
+			"tooltip": "%s is already at the level cap." % pokemon.species,
+		}
+
+	var quantity: int = max(requested_quantity, 1)
+	var used_quantity: int = quantity
+	var gained_exp := 0
+	var target_level := current_level
+	if item_id == "rare-candy":
+		used_quantity = min(quantity, POKEMON_MAX_LEVEL - current_level)
+		target_level = min(current_level + used_quantity, POKEMON_MAX_LEVEL)
+		var target_exp: int = _pokemon_exp_for_level(growth_rate, target_level)
+		gained_exp = min(max(target_exp - current_exp, 0), remaining_exp)
+	else:
+		var candy_exp: int = int(EXP_CANDY_EXPERIENCE.get(item_id, 0))
+		if candy_exp <= 0:
+			return {}
+		used_quantity = min(quantity, int(ceil(float(remaining_exp) / float(candy_exp))))
+		gained_exp = min(used_quantity * candy_exp, remaining_exp)
+		target_level = _pokemon_level_for_exp(growth_rate, current_exp + gained_exp)
+
+	var label := "+%s EXP" % gained_exp
+	if target_level > current_level:
+		label = "Lv. %s  +%s EXP" % [target_level, gained_exp]
+	if used_quantity < quantity:
+		label += "  uses %s/%s" % [used_quantity, quantity]
+
+	return {
+		"label": label,
+		"tooltip": "%s\nUses %sx item(s)\nEstimated gain: %s EXP\nEstimated level: %s -> %s" % [
+			pokemon.species,
+			used_quantity,
+			gained_exp,
+			current_level,
+			target_level,
+		],
+	}
+
+func _pokemon_preview_current_experience(pokemon: Pokemon, growth_rate: String) -> int:
+	var level_floor_exp: int = _pokemon_exp_for_level(growth_rate, max(pokemon.level, 1))
+	return max(max(pokemon.experience, pokemon.current_level_exp), level_floor_exp)
+
+func _normalize_exp_growth_rate(value: String) -> String:
+	var normalized := value.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	if normalized in ["slow", "medium", "fast", "medium-slow", "slow-then-very-fast", "fast-then-very-slow"]:
+		return normalized
+	return "medium"
+
+func _pokemon_level_for_exp(growth_rate: String, experience: int) -> int:
+	var safe_experience: int = max(experience, 0)
+	var resolved_level := 1
+	for candidate_level in range(2, POKEMON_MAX_LEVEL + 1):
+		if _pokemon_exp_for_level(growth_rate, candidate_level) > safe_experience:
+			break
+		resolved_level = candidate_level
+	return resolved_level
+
+func _pokemon_exp_for_level(growth_rate: String, level: int) -> int:
+	var resolved_level: int = clampi(level, 1, POKEMON_MAX_LEVEL)
+	if resolved_level <= 1:
+		return 0
+
+	var cube: int = resolved_level * resolved_level * resolved_level
+	match _normalize_exp_growth_rate(growth_rate):
+		"fast":
+			return _pokemon_exp_floor_div(4 * cube, 5)
+		"medium":
+			return cube
+		"medium-slow":
+			return max(0, _pokemon_exp_floor_div(6 * cube, 5) - (15 * resolved_level * resolved_level) + (100 * resolved_level) - 140)
+		"slow":
+			return _pokemon_exp_floor_div(5 * cube, 4)
+		"slow-then-very-fast":
+			if resolved_level <= 50:
+				return _pokemon_exp_floor_div(cube * (100 - resolved_level), 50)
+			if resolved_level <= 68:
+				return _pokemon_exp_floor_div(cube * (150 - resolved_level), 100)
+			if resolved_level <= 98:
+				return _pokemon_exp_floor_div(cube * _pokemon_exp_floor_div(1911 - (10 * resolved_level), 3), 500)
+			return _pokemon_exp_floor_div(cube * (160 - resolved_level), 100)
+		_:
+			if resolved_level <= 15:
+				return _pokemon_exp_floor_div(cube * (_pokemon_exp_floor_div(resolved_level + 1, 3) + 24), 50)
+			if resolved_level <= 36:
+				return _pokemon_exp_floor_div(cube * (resolved_level + 14), 50)
+			return _pokemon_exp_floor_div(cube * (_pokemon_exp_floor_div(resolved_level, 2) + 32), 50)
+
+func _pokemon_exp_floor_div(numerator: int, denominator: int) -> int:
+	if denominator == 0:
+		return 0
+	return int(floor(float(numerator) / float(denominator)))
 
 func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 	if bag_item_use_in_progress:
