@@ -8,6 +8,20 @@ bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fh7rg"]
 bg_color = Color(0.22352941, 0.9019608, 0.12156863, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ve8bd"]
+bg_color = Color(0.078431375, 0.09411765, 0.1254902, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qsh65"]
+bg_color = Color(0.2784314, 0.6117647, 0.9490196, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="PokemonInfoHud" type="VBoxContainer" unique_id=523398377]
 theme_override_constants/separation = -11
 
@@ -82,3 +96,15 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
 value = 100.0
+
+[node name="ExpBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=1318107520]
+visible = false
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_styles/background = SubResource("StyleBoxFlat_ve8bd")
+theme_override_styles/fill = SubResource("StyleBoxFlat_qsh65")
+max_value = 100.0
+value = 0.0
+show_percentage = false

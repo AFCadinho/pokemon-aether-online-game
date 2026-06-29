@@ -213,6 +213,10 @@ func _ready() -> void:
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
 	if not bag_grid.item_selected.is_connected(_on_bag_grid_item_selected):
 		bag_grid.item_selected.connect(_on_bag_grid_item_selected)
+	if player_hud_panel.has_method("set_experience_bar_enabled"):
+		player_hud_panel.set_experience_bar_enabled(true)
+	if enemy_hud_panel.has_method("set_experience_bar_enabled"):
+		enemy_hud_panel.set_experience_bar_enabled(false)
 	if not capture_ball_animation_player.ball_thrown.is_connected(_on_capture_ball_thrown):
 		capture_ball_animation_player.ball_thrown.connect(_on_capture_ball_thrown)
 	if not capture_ball_animation_player.ball_shook.is_connected(_on_capture_ball_shook):
@@ -3116,6 +3120,7 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 			battle_state.get_active_pokemon_status(player_id),
 			battle_state.get_active_pokemon_gender(player_id),
 			_get_active_pokemon_is_shiny(player_id),
+			_get_active_player_experience_data(player_id),
 		)
 		return
 
@@ -3127,6 +3132,7 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 		battle_state.get_active_pokemon_status(player_id),
 		battle_state.get_active_pokemon_gender(player_id),
 		_get_active_pokemon_is_shiny(player_id),
+		_get_active_player_experience_data(player_id),
 	)
 
 ## Reset de battle status UI naar een lege beginstand.
@@ -3748,7 +3754,7 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 	var opponent_species := _get_active_display_species("p2")
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
-	_show_original_player_lead_before_initial_events(player_species)
+	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	await get_tree().process_frame
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
 	await _render_initial_battle_events(api_response)
@@ -3777,7 +3783,7 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		trainer_data,
 		_get_player_display_name("p2")
 	))
-	_show_original_player_lead_before_initial_events(player_species)
+	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	player_sprite_box.visible = false
 	enemy_sprite_box.visible = false
@@ -3815,7 +3821,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	])
 	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
 	var opponent_species := _get_active_display_species("p2")
-	_show_original_player_lead_before_initial_events(player_species)
+	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	player_sprite_box.visible = false
 	enemy_sprite_box.visible = false
@@ -3876,7 +3882,8 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 		max(player_pokemon.max_hp, 1),
 		"",
 		"",
-		player_pokemon.shiny
+		player_pokemon.shiny,
+		_pokemon_experience_data_from_saved_pokemon(player_pokemon)
 	)
 
 	var trainer_team_value: Variant = api_response.get("trainerTeam", [])
@@ -3931,7 +3938,7 @@ func _show_battle_controls_after_initial_events() -> void:
 	_show_moves()
 	_show_current_action_prompt()
 
-func _show_original_player_lead_before_initial_events(species: String) -> void:
+func _show_original_player_lead_before_initial_events(species: String, fallback_pokemon: Pokemon = null) -> void:
 	if species == "":
 		return
 
@@ -3944,7 +3951,7 @@ func _show_original_player_lead_before_initial_events(species: String) -> void:
 	var is_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
 
 	_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
-	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
+	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1", fallback_pokemon))
 
 func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
 	if sprite_box == null:
@@ -4270,7 +4277,7 @@ func _show_original_active_pokemon_for_player(player_id: String, species: String
 		var saved_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
 		is_shiny = saved_shiny
 		_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
-		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
+		player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1"))
 	elif player_id == "p2":
 		_set_single_pokemon_species_with_pvp_warning(enemy_sprite_box, species, "front", is_shiny, "initial_setup")
 		enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
@@ -4293,6 +4300,28 @@ func _get_saved_pokemon_shiny_for_active_data(active_pokemon: Dictionary) -> boo
 		return false
 
 	return saved_pokemon.shiny
+
+func _get_active_player_experience_data(player_id: String, fallback_pokemon: Pokemon = null) -> Dictionary:
+	if player_id != "p1":
+		return {}
+
+	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+	var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(active_pokemon)
+	if saved_pokemon == null:
+		saved_pokemon = fallback_pokemon
+	return _pokemon_experience_data_from_saved_pokemon(saved_pokemon)
+
+func _pokemon_experience_data_from_saved_pokemon(pokemon: Pokemon) -> Dictionary:
+	if pokemon == null:
+		return {}
+	if pokemon.next_level_exp <= pokemon.current_level_exp:
+		return {}
+
+	return {
+		"experience": pokemon.experience,
+		"currentLevelExp": pokemon.current_level_exp,
+		"nextLevelExp": pokemon.next_level_exp,
+	}
 
 func _get_saved_pokemon_for_active_data(active_pokemon: Dictionary) -> Pokemon:
 	var instance_id := str(active_pokemon.get("instanceId", active_pokemon.get("instance_id", ""))).strip_edges()
@@ -5520,7 +5549,7 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 
 	match player_id:
 		"p1":
-			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
+			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1"))
 		"p2":
 			enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 

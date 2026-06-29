@@ -12,6 +12,8 @@ signal team_pokemon_unhovered
 @onready var team_panel: HBoxContainer = $MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel
 @onready var team_slots: Array = team_panel.get_children()
 
+var experience_bar_enabled := false
+
 const STATUS_COLORS := {
 	"PSN": Color("#b45cff"),
 	"TOX": Color("#7d3cff"),
@@ -48,9 +50,15 @@ func set_pokemon_data(
 	max_hp: int,
 	status: String = "",
 	gender: String = "",
-	is_shiny: bool = false
+	is_shiny: bool = false,
+	experience_data: Dictionary = {}
 ) -> void:
-	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny)
+	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny, experience_data)
+
+func set_experience_bar_enabled(enabled: bool) -> void:
+	experience_bar_enabled = enabled
+	for row_index in range(active_info_rows.size()):
+		_update_experience_bar(active_info_rows[row_index], {})
 
 func clear_active_pokemon_data() -> void:
 	_clear_active_info_row_data(0)
@@ -78,6 +86,7 @@ func _clear_active_info_row_data(row_index: int) -> void:
 	if hp_bar != null:
 		hp_bar.max_value = 100
 		hp_bar.value = 100
+	_update_experience_bar(row, {})
 
 func _set_active_info_row_data(
 	row_index: int,
@@ -87,7 +96,8 @@ func _set_active_info_row_data(
 	max_hp: int,
 	status: String = "",
 	gender: String = "",
-	is_shiny: bool = false
+	is_shiny: bool = false,
+	experience_data: Dictionary = {}
 ) -> void:
 	if row_index < 0 or row_index >= active_info_rows.size():
 		return
@@ -109,9 +119,33 @@ func _set_active_info_row_data(
 	if hp_bar != null:
 		hp_bar.max_value = 100
 		hp_bar.value = visible_hp_percent
+	_update_experience_bar(row, experience_data)
 
 	_set_gender(row, gender)
 	_set_status(row, status)
+
+func _update_experience_bar(row: Node, experience_data: Dictionary) -> void:
+	var exp_bar: ProgressBar = row.get_node_or_null("MarginContainer/VBoxContainer/ExpBar") as ProgressBar
+	if exp_bar == null:
+		return
+
+	if not experience_bar_enabled or experience_data.is_empty():
+		exp_bar.visible = false
+		exp_bar.value = 0
+		return
+
+	var current_exp: int = int(experience_data.get("experience", 0))
+	var current_level_exp: int = int(experience_data.get("currentLevelExp", experience_data.get("current_level_exp", 0)))
+	var next_level_exp: int = int(experience_data.get("nextLevelExp", experience_data.get("next_level_exp", 0)))
+	if next_level_exp <= current_level_exp:
+		exp_bar.visible = false
+		exp_bar.value = 0
+		return
+
+	var earned_level_exp: int = clamp(current_exp - current_level_exp, 0, next_level_exp - current_level_exp)
+	exp_bar.max_value = next_level_exp - current_level_exp
+	exp_bar.value = earned_level_exp
+	exp_bar.visible = true
 
 func _set_shiny_badge(row: Node, is_shiny: bool) -> void:
 	var shiny_badge: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/ShinyBadge") as Label

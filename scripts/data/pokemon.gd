@@ -22,6 +22,11 @@ var moves: Array
 var types: Array
 var possible_abilities: Array
 var tradable: bool
+var experience: int
+var current_level_exp: int
+var next_level_exp: int
+var experience_to_next_level: int
+var growth_rate: String
 
 var current_hp: int
 var max_hp: int
@@ -48,7 +53,12 @@ func _init(
 	_tradable: bool = true,
 	_stored_evs := {},
 	_ball_item_id: String = "poke-ball",
-	_caught_ball_item_id: String = ""
+	_caught_ball_item_id: String = "",
+	_experience: int = 0,
+	_current_level_exp: int = 0,
+	_next_level_exp: int = 0,
+	_experience_to_next_level: int = 0,
+	_growth_rate: String = ""
 	) -> void:
 	species = _species
 	level = _level
@@ -92,6 +102,11 @@ func _init(
 	types = _normalize_types(_types)
 	possible_abilities = _normalize_string_array(_possible_abilities)
 	tradable = _tradable
+	experience = max(_experience, 0)
+	current_level_exp = max(_current_level_exp, 0)
+	next_level_exp = max(_next_level_exp, current_level_exp)
+	experience_to_next_level = max(_experience_to_next_level, 0)
+	growth_rate = _growth_rate.strip_edges()
 
 	max_hp = 20
 	current_hp = max_hp
@@ -125,7 +140,13 @@ func to_battle_dict() -> Dictionary:
 		"instanceId": instance_id,
 		"ballItemId": ball_item_id,
 		"shiny": shiny,
+		"experience": experience,
+		"currentLevelExp": current_level_exp,
+		"nextLevelExp": next_level_exp,
+		"experienceToNextLevel": experience_to_next_level,
 	}
+	if growth_rate != "":
+		battle_data["growthRate"] = growth_rate
 	if owned_pokemon_id > 0:
 		battle_data["ownedPokemonId"] = owned_pokemon_id
 	if caught_ball_item_id != "":

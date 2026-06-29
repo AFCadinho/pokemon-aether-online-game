@@ -39,7 +39,12 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		_get_bool_option(data, ["tradable", "isTradable", "is_tradable"], true),
 		_get_stored_evs_payload(data),
 		ball_item_id,
-		caught_ball_item_id
+		caught_ball_item_id,
+		_get_int_option(data, ["experience", "exp", "currentExp", "current_exp"]),
+		_get_int_option(data, ["currentLevelExp", "current_level_exp", "levelStartExp", "level_start_exp"]),
+		_get_int_option(data, ["nextLevelExp", "next_level_exp"]),
+		_get_int_option(data, ["experienceToNextLevel", "experience_to_next_level", "expToNextLevel", "exp_to_next_level"]),
+		_get_string_option(data, ["growthRate", "growth_rate"])
 	)
 
 	_apply_payload_hp_state(pokemon, data)
