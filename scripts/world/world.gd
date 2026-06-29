@@ -1083,6 +1083,9 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
 
+func notify_progression_reward(reward: Dictionary) -> void:
+	_notify_reward_level_ups(reward)
+
 func _notify_reward_level_ups(reward_value: Variant) -> void:
 	if not (reward_value is Dictionary):
 		return

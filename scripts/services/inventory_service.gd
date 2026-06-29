@@ -4,6 +4,7 @@ class_name InventoryServiceNode
 
 const INVENTORY_ENDPOINT := "/game/inventory"
 const WILD_BATTLE_CATCH_ENDPOINT := "/game/wild-battles/%s/catch"
+const POKEMON_ITEM_USE_ENDPOINT := "/game/pokemon/%s/items/use"
 const DEV_ADD_ITEM_ENDPOINT := "/game/dev/inventory/items"
 const DEV_CLEAR_ITEMS_ENDPOINT := "/game/dev/inventory/items"
 const ITEM_SEARCH_ENDPOINT := "/game/items/search?q=%s"
@@ -80,6 +81,49 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
 		"inventory": _array_from_value(inventory.get("items", [])),
 		"party": _array_from_value(party.get("party", [])),
+	}
+
+
+func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0:
+		return {
+			"success": false,
+			"error": "Missing Pokemon id.",
+		}
+	if item_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing item id.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var endpoint := POKEMON_ITEM_USE_ENDPOINT % str(pokemon_id).uri_encode()
+	var response: Dictionary = await _request_json(
+		base_url + endpoint,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"itemId": item_id,
+			"quantity": max(quantity, 1),
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	return {
+		"success": true,
+		"wallet": _dictionary_from_value(body.get("wallet", {})),
+		"reward": _dictionary_from_value(body.get("reward", {})),
+		"party": _array_from_value(party.get("party", [])),
+		"inventory": _array_from_value(inventory.get("items", [])),
 	}
 
 

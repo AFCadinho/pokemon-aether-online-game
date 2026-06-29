@@ -164,6 +164,14 @@ const ITEM_DEX_CAPTURE_BALL_MULTIPLIERS := {
 	"sport-ball": 1.5,
 	"dream-ball": 1.0,
 }
+const EXP_ITEM_IDS := {
+	"rare-candy": true,
+	"exp-candy-xs": true,
+	"exp-candy-s": true,
+	"exp-candy-m": true,
+	"exp-candy-l": true,
+	"exp-candy-xl": true,
+}
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const ABILITY_SUMMARY_INDEX_PATH := "res://data/ability_summary_index.json"
@@ -400,6 +408,14 @@ var bag_drag_offset := Vector2.ZERO
 var bag_inventory_items: Array[Dictionary] = []
 var bag_inventory_loaded := false
 var bag_inventory_loading := false
+var bag_item_use_popup: PanelContainer
+var bag_item_use_title_label: Label
+var bag_item_use_item_label: Label
+var bag_item_use_quantity_spinbox: SpinBox
+var bag_item_use_party_list: VBoxContainer
+var bag_item_use_status_label: Label
+var bag_item_use_pending_item: Dictionary = {}
+var bag_item_use_in_progress := false
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
 var active_mail_box := "inbox"
@@ -533,6 +549,7 @@ func _ready() -> void:
 	_setup_player_status_card()
 	_setup_trainer_card_popup()
 	_setup_bag_popup()
+	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
 	_setup_collapsible_panels()
@@ -5573,6 +5590,104 @@ func _setup_bag_popup() -> void:
 	_refresh_bag_category_buttons()
 	_refresh_bag_items()
 
+func _setup_bag_item_use_popup() -> void:
+	bag_item_use_popup = PanelContainer.new()
+	bag_item_use_popup.name = "BagItemUsePopup"
+	bag_item_use_popup.visible = false
+	bag_item_use_popup.custom_minimum_size = Vector2(440, 390)
+	bag_item_use_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	bag_item_use_popup.z_index = UI_MODAL_Z_INDEX
+	bag_item_use_popup.anchor_left = 0.5
+	bag_item_use_popup.anchor_top = 0.5
+	bag_item_use_popup.anchor_right = 0.5
+	bag_item_use_popup.anchor_bottom = 0.5
+	bag_item_use_popup.offset_left = -220
+	bag_item_use_popup.offset_top = -195
+	bag_item_use_popup.offset_right = 220
+	bag_item_use_popup.offset_bottom = 195
+	bag_item_use_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912fa"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
+	root_control.add_child(bag_item_use_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	bag_item_use_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	bag_item_use_title_label = Label.new()
+	bag_item_use_title_label.text = "Use Item"
+	bag_item_use_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bag_item_use_title_label.add_theme_font_size_override("font_size", 18)
+	bag_item_use_title_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	header.add_child(bag_item_use_title_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_bag_item_use_popup)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+
+	bag_item_use_item_label = Label.new()
+	bag_item_use_item_label.text = "Select an item."
+	bag_item_use_item_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bag_item_use_item_label.add_theme_font_size_override("font_size", 13)
+	bag_item_use_item_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(bag_item_use_item_label)
+
+	var quantity_row := HBoxContainer.new()
+	quantity_row.add_theme_constant_override("separation", 8)
+	layout.add_child(quantity_row)
+
+	var quantity_label := Label.new()
+	quantity_label.text = "Amount"
+	quantity_label.custom_minimum_size = Vector2(84, 0)
+	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quantity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	quantity_row.add_child(quantity_label)
+
+	bag_item_use_quantity_spinbox = SpinBox.new()
+	bag_item_use_quantity_spinbox.min_value = 1
+	bag_item_use_quantity_spinbox.max_value = 1
+	bag_item_use_quantity_spinbox.value = 1
+	bag_item_use_quantity_spinbox.step = 1
+	bag_item_use_quantity_spinbox.custom_minimum_size = Vector2(116, 0)
+	quantity_row.add_child(bag_item_use_quantity_spinbox)
+
+	var party_label := Label.new()
+	party_label.text = "Choose Pokemon"
+	party_label.add_theme_font_size_override("font_size", 11)
+	party_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(party_label)
+
+	var party_scroll := ScrollContainer.new()
+	party_scroll.custom_minimum_size = Vector2(0, 180)
+	party_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	party_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(party_scroll)
+
+	bag_item_use_party_list = VBoxContainer.new()
+	bag_item_use_party_list.add_theme_constant_override("separation", 6)
+	bag_item_use_party_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	party_scroll.add_child(bag_item_use_party_list)
+
+	bag_item_use_status_label = Label.new()
+	bag_item_use_status_label.text = ""
+	bag_item_use_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bag_item_use_status_label.add_theme_font_size_override("font_size", 12)
+	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(bag_item_use_status_label)
+
 func _refresh_bag_items() -> void:
 	if bag_item_grid == null:
 		return
@@ -5623,8 +5738,11 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), Color("#557999"), 8, 1))
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 	slot.tooltip_text = str(item.get("name", "Item"))
+	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true)))
 
 	var margin_container := MarginContainer.new()
+	margin_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin_container.add_theme_constant_override("margin_left", 5)
 	margin_container.add_theme_constant_override("margin_top", 5)
 	margin_container.add_theme_constant_override("margin_right", 5)
@@ -5632,10 +5750,12 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.add_child(margin_container)
 
 	var stack := VBoxContainer.new()
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.add_theme_constant_override("separation", 2)
 	margin_container.add_child(stack)
 
 	var icon_wrap := Control.new()
+	icon_wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_wrap.custom_minimum_size = Vector2(64, 44)
 	stack.add_child(icon_wrap)
 
@@ -5645,9 +5765,11 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = _load_item_icon(str(item.get("id", "")))
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_wrap.add_child(icon)
 
 	var quantity_label := Label.new()
+	quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	quantity_label.text = "x%s" % max(int(item.get("quantity", 1)), 1)
 	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	quantity_label.add_theme_font_size_override("font_size", 11)
@@ -5655,12 +5777,172 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	stack.add_child(quantity_label)
 
 	var name_label := Label.new()
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_label.text = _ellipsize_text(str(item.get("name", "Item")), 12)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_size_override("font_size", 10)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(name_label)
 	return slot
+
+func _on_bag_item_slot_gui_input(event: InputEvent, item: Dictionary) -> void:
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return
+
+	get_viewport().set_input_as_handled()
+	_on_bag_item_selected(item)
+
+func _on_bag_item_selected(item: Dictionary) -> void:
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	if item_id == "":
+		return
+	if _is_exp_item_id(item_id):
+		_show_bag_item_use_popup(item)
+		return
+
+	_add_chat_message("%s cannot be used from the Bag yet." % str(item.get("name", _item_name_from_id(item_id))))
+
+func _show_bag_item_use_popup(item: Dictionary) -> void:
+	if bag_item_use_popup == null:
+		return
+
+	bag_item_use_pending_item = item.duplicate(true)
+	bag_item_use_in_progress = false
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	var item_name := str(item.get("name", _item_name_from_id(item_id)))
+	var quantity: int = max(int(item.get("quantity", 1)), 1)
+	bag_item_use_title_label.text = "Use %s" % item_name
+	bag_item_use_item_label.text = "%s x%s" % [item_name, quantity]
+	bag_item_use_quantity_spinbox.max_value = min(quantity, 99)
+	bag_item_use_quantity_spinbox.value = 1
+	bag_item_use_quantity_spinbox.editable = true
+	bag_item_use_status_label.text = ""
+	bag_item_use_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_refresh_bag_item_use_party_list()
+	bag_item_use_popup.visible = true
+	bag_item_use_popup.move_to_front()
+	_activate_ui_panel(bag_item_use_popup)
+
+func _hide_bag_item_use_popup() -> void:
+	if bag_item_use_in_progress:
+		return
+	if bag_item_use_popup != null:
+		bag_item_use_popup.visible = false
+	bag_item_use_pending_item = {}
+
+func _refresh_bag_item_use_party_list() -> void:
+	if bag_item_use_party_list == null:
+		return
+	for child: Node in bag_item_use_party_list.get_children():
+		child.queue_free()
+
+	if PlayerSave.party.is_empty():
+		bag_item_use_party_list.add_child(_create_bag_empty_state("Your party is empty."))
+		return
+
+	for slot_index in range(PlayerSave.party.size()):
+		var pokemon: Pokemon = PlayerSave.party[slot_index]
+		if pokemon == null:
+			continue
+		bag_item_use_party_list.add_child(_create_bag_item_use_pokemon_button(pokemon, slot_index))
+
+func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> Control:
+	var button := Button.new()
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.custom_minimum_size = Vector2(0, 34)
+	button.focus_mode = Control.FOCUS_NONE
+	button.text = "%s  Lv. %s" % [pokemon.species, max(pokemon.level, 1)]
+	button.tooltip_text = button.text
+	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or pokemon.level >= 100
+	if pokemon.level >= 100:
+		button.tooltip_text = "%s is already Lv. 100." % pokemon.species
+	elif pokemon.owned_pokemon_id <= 0:
+		button.tooltip_text = "%s is missing an ownership id." % pokemon.species
+	button.pressed.connect(_on_bag_item_use_pokemon_selected.bind(slot_index))
+	_apply_button_style(button, "default")
+	return button
+
+func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
+	if bag_item_use_in_progress:
+		return
+	if slot_index < 0 or slot_index >= PlayerSave.party.size():
+		return
+
+	var pokemon: Pokemon = PlayerSave.party[slot_index]
+	if pokemon == null or pokemon.owned_pokemon_id <= 0:
+		_set_bag_item_use_status("This Pokemon is missing an ownership id.", true)
+		return
+
+	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
+	if not _is_exp_item_id(item_id):
+		_set_bag_item_use_status("This item cannot be used for EXP.", true)
+		return
+
+	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
+	bag_item_use_in_progress = true
+	bag_item_use_quantity_spinbox.editable = false
+	_set_bag_item_use_status("Using item...", false)
+	_refresh_bag_item_use_party_list()
+
+	var result: Dictionary = await InventoryService.use_pokemon_item(pokemon.owned_pokemon_id, item_id, quantity)
+	bag_item_use_in_progress = false
+	bag_item_use_quantity_spinbox.editable = true
+	if not bool(result.get("success", false)):
+		_set_bag_item_use_status("Could not use item: %s" % str(result.get("error", "Unknown error")), true)
+		_refresh_bag_item_use_party_list()
+		return
+
+	PlayerWalletService.apply_wallet_result(result)
+	var inventory_value: Variant = result.get("inventory", [])
+	if inventory_value is Array:
+		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
+		bag_inventory_loaded = true
+	_refresh_bag_items()
+	_refresh_open_pokemon_summary_cards()
+	_refresh_player_status_card()
+	var reward: Dictionary = _staff_dictionary_from_variant(result.get("reward", {}))
+	_add_bag_item_use_success_message(item_id, reward)
+	_notify_progression_reward(reward)
+	_hide_bag_item_use_popup()
+
+func _set_bag_item_use_status(message: String, is_error: bool) -> void:
+	if bag_item_use_status_label == null:
+		return
+	bag_item_use_status_label.text = message
+	bag_item_use_status_label.add_theme_color_override("font_color", UI_DANGER if is_error else UI_MUTED_TEXT)
+
+func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> void:
+	var item_name := str(bag_item_use_pending_item.get("name", _item_name_from_id(item_id)))
+	var quantity: int = 1
+	var experience_gained: int = 0
+	var experience_value: Variant = reward.get("experience", [])
+	if experience_value is Array:
+		var experience_array: Array = experience_value as Array
+		if experience_array.is_empty() or not (experience_array[0] is Dictionary):
+			_add_chat_message("Used %sx %s." % [quantity, item_name])
+			return
+		var experience_entry: Dictionary = experience_array[0]
+		quantity = max(int(experience_entry.get("quantity", quantity)), 1)
+		experience_gained = max(int(experience_entry.get("experience", 0)), 0)
+	var suffix: String = " Gained %s EXP." % experience_gained if experience_gained > 0 else ""
+	_add_chat_message("Used %sx %s.%s" % [quantity, item_name, suffix])
+
+func _notify_progression_reward(reward: Dictionary) -> void:
+	if reward.is_empty():
+		return
+	var world := GameState.get_world()
+	if world != null and world.has_method("notify_progression_reward"):
+		world.call("notify_progression_reward", reward)
+		return
+
+	queue_reward_move_learn_candidates(reward)
+
+func _is_exp_item_id(item_id: String) -> bool:
+	return EXP_ITEM_IDS.has(_normalize_item_id(item_id))
 
 func _load_item_icon(item_id: String) -> Texture2D:
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
@@ -5692,6 +5974,7 @@ func _toggle_bag_popup() -> void:
 		if bag_button.has_focus():
 			bag_button.release_focus()
 	else:
+		_hide_bag_popup()
 		_deactivate_ui_panel(bag_popup)
 
 func _load_bag_inventory() -> void:
@@ -5782,6 +6065,9 @@ func _guess_bag_category(item_id: String) -> String:
 func _hide_bag_popup() -> void:
 	if bag_popup != null:
 		bag_popup.visible = false
+	if bag_item_use_popup != null and bag_item_use_popup.visible and not bag_item_use_in_progress:
+		bag_item_use_popup.visible = false
+		bag_item_use_pending_item = {}
 	if bag_button.has_focus():
 		bag_button.release_focus()
 
