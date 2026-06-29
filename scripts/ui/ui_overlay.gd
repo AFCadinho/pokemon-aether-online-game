@@ -1840,7 +1840,13 @@ func _move_learn_prompt_move_name(prompt: Dictionary) -> String:
 func _move_learn_prompt_move_value(prompt: Dictionary) -> Variant:
 	var move_value: Variant = prompt.get("move", {})
 	if move_value is Dictionary:
-		return (move_value as Dictionary).duplicate(true)
+		var move_payload: Dictionary = (move_value as Dictionary).duplicate(true)
+		var move_id := _move_learn_prompt_move_id(prompt)
+		if move_id != "" and str(move_payload.get("id", move_payload.get("move", ""))).strip_edges() == "":
+			move_payload["id"] = move_id
+		if str(move_payload.get("name", "")).strip_edges() == "":
+			move_payload["name"] = _move_learn_prompt_move_name(prompt)
+		return _merge_summary_move_metadata(move_payload)
 
 	var move_data := prompt.duplicate(true)
 	var move_id := _move_learn_prompt_move_id(prompt)
@@ -1848,7 +1854,7 @@ func _move_learn_prompt_move_value(prompt: Dictionary) -> Variant:
 		move_data["id"] = move_id
 	if str(move_data.get("name", "")).strip_edges() == "":
 		move_data["name"] = _format_move_name(move_id)
-	return move_data
+	return _merge_summary_move_metadata(move_data)
 
 func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup = PanelContainer.new()
@@ -7501,6 +7507,19 @@ func _lookup_summary_move_metadata(move_key: String) -> Dictionary:
 	var metadata_value: Variant = pokemon_summary_move_summary_index.get(normalized_key, {})
 	return (metadata_value as Dictionary).duplicate(true) if metadata_value is Dictionary else {}
 
+func _merge_summary_move_metadata(move_data: Dictionary) -> Dictionary:
+	var merged := move_data.duplicate(true)
+	for lookup_key_value: Variant in ["id", "move", "moveId", "move_id", "name"]:
+		var lookup_key := str(merged.get(str(lookup_key_value), "")).strip_edges()
+		var metadata := _lookup_summary_move_metadata(lookup_key)
+		if metadata.is_empty():
+			continue
+		for key_value: Variant in metadata.keys():
+			if not merged.has(key_value):
+				merged[key_value] = metadata.get(key_value)
+		return merged
+	return merged
+
 func _ensure_summary_move_summary_index_loaded() -> void:
 	if pokemon_summary_move_summary_index_loaded:
 		return
@@ -7622,17 +7641,21 @@ func _get_summary_move_pp_text(move_value: Variant) -> String:
 	if not (move_value is Dictionary):
 		return "--/--"
 
-	var move_data: Dictionary = move_value as Dictionary
 	var current_pp: int = int(_get_first_dictionary_value(
-		move_data,
+		move_value as Dictionary,
 		["pp", "currentPp", "currentPP", "current_pp"],
 		0
 	))
 	var max_pp: int = int(_get_first_dictionary_value(
-		move_data,
+		move_value as Dictionary,
 		["maxpp", "maxPp", "maxPP", "max_pp", "pp"],
 		current_pp
 	))
+	if max_pp <= 0:
+		var indexed_pp_value: Variant = _get_summary_move_data_value(move_value, ["pp", "maxpp", "maxPp", "maxPP", "max_pp"], null)
+		if indexed_pp_value != null and str(indexed_pp_value).strip_edges() != "":
+			max_pp = int(indexed_pp_value)
+			current_pp = max_pp
 	if max_pp <= 0:
 		return "--/--"
 	return "%s/%s" % [clamp(current_pp, 0, max_pp), max_pp]
