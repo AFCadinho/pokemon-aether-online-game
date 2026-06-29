@@ -4,15 +4,12 @@ const DEFAULT_OVERWORLD_MUSIC_PATH := "res://assets/music/overworld/kanto/routes
 const LOGIN_MUSIC_PATH := "res://assets/music/login/lugia_theme_lofi.ogg"
 const DEFAULT_WILD_BATTLE_MUSIC_PATH := "res://assets/music/battle/wild/Kanto Wild Battle.ogg"
 const DEFAULT_TRAINER_BATTLE_MUSIC_PATH := "res://assets/music/battle/trainer/Kalos Trainer Battle.ogg"
+const DEFAULT_PVP_BATTLE_MUSIC_PATH := "res://assets/music/battle/pvp/lysandre_remix_pokemon_legends_z_a_zame.ogg"
+const PVP_BATTLE_MUSIC_RES_DIR := "res://assets/music/battle/pvp"
+const PVP_BATTLE_MUSIC_RELATIVE_DIR := "battle/pvp"
 const MUSIC_RES_ROOT := "res://assets/music"
 const MUSIC_RELATIVE_ROOT := "assets/music"
-const DEFAULT_BATTLE_MUSIC_ID := "default"
-const BATTLE_MUSIC_TRACKS := {
-	"default": {
-		"label": "Default Battle Theme",
-		"path": "res://assets/music/overworld/kanto/routes/route1.ogg",
-	},
-}
+const DEFAULT_BATTLE_MUSIC_ID := "lysandre_remix_pokemon_legends_z_a_zame"
 const FADE_SECONDS := 0.35
 
 var music_player: AudioStreamPlayer
@@ -54,6 +51,10 @@ func play_trainer_battle_music() -> void:
 	play_music(DEFAULT_TRAINER_BATTLE_MUSIC_PATH)
 
 
+func play_pvp_battle_music() -> void:
+	play_music(get_battle_music_path(SettingsManager.battle_music_track))
+
+
 func get_map_music_path(map_node: Node) -> String:
 	if map_node != null and map_node.has_method("get_music_track_path"):
 		var map_track_path: String = str(map_node.call("get_music_track_path")).strip_edges()
@@ -75,23 +76,32 @@ func get_battle_music_path(track_id: String) -> String:
 	if normalized_track_id == "":
 		normalized_track_id = DEFAULT_BATTLE_MUSIC_ID
 
-	var track_data: Dictionary = BATTLE_MUSIC_TRACKS.get(
-		normalized_track_id,
-		BATTLE_MUSIC_TRACKS[DEFAULT_BATTLE_MUSIC_ID]
-	) as Dictionary
+	var tracks := _get_pvp_battle_music_tracks()
+	var track_data: Dictionary = tracks.get(normalized_track_id, {}) as Dictionary
+	if track_data.is_empty():
+		track_data = tracks.get(DEFAULT_BATTLE_MUSIC_ID, {}) as Dictionary
+	if track_data.is_empty() and not tracks.is_empty():
+		var fallback_track_ids := tracks.keys()
+		fallback_track_ids.sort()
+		track_data = tracks[str(fallback_track_ids[0])] as Dictionary
+	if track_data.is_empty():
+		return DEFAULT_PVP_BATTLE_MUSIC_PATH
+
 	return str(track_data.get("path", ""))
 
 
 func get_battle_music_track_ids() -> Array[String]:
 	var track_ids: Array[String] = []
-	for track_id_value: Variant in BATTLE_MUSIC_TRACKS.keys():
+	var tracks := _get_pvp_battle_music_tracks()
+	for track_id_value: Variant in tracks.keys():
 		track_ids.append(str(track_id_value))
+	track_ids.sort()
 
 	return track_ids
 
 
 func get_battle_music_track_label(track_id: String) -> String:
-	var track_data: Dictionary = BATTLE_MUSIC_TRACKS.get(track_id, {}) as Dictionary
+	var track_data: Dictionary = _get_pvp_battle_music_tracks().get(track_id, {}) as Dictionary
 	return str(track_data.get("label", track_id))
 
 
@@ -178,6 +188,63 @@ func _get_external_music_roots() -> Array[String]:
 			return [external_music_root]
 
 	return []
+
+
+func _get_pvp_battle_music_tracks() -> Dictionary:
+	var tracks := {}
+	for directory_path: String in _get_pvp_battle_music_directories():
+		for track_path: String in _get_ogg_files_in_directory(directory_path):
+			var track_id := _get_music_track_id(track_path)
+			if track_id == "" or tracks.has(track_id):
+				continue
+			tracks[track_id] = {
+				"label": _get_music_track_label_from_path(track_path),
+				"path": track_path,
+			}
+
+	if tracks.is_empty() or not tracks.has(DEFAULT_BATTLE_MUSIC_ID):
+		tracks[DEFAULT_BATTLE_MUSIC_ID] = {
+			"label": _get_music_track_label_from_path(DEFAULT_PVP_BATTLE_MUSIC_PATH),
+			"path": DEFAULT_PVP_BATTLE_MUSIC_PATH,
+		}
+
+	return tracks
+
+
+func _get_pvp_battle_music_directories() -> Array[String]:
+	var directories: Array[String] = []
+	for root: String in _get_external_music_roots():
+		directories.append(root.path_join(PVP_BATTLE_MUSIC_RELATIVE_DIR))
+	directories.append(PVP_BATTLE_MUSIC_RES_DIR)
+	return directories
+
+
+func _get_ogg_files_in_directory(directory_path: String) -> Array[String]:
+	var file_paths: Array[String] = []
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return file_paths
+
+	directory.list_dir_begin()
+	var file_name := directory.get_next()
+	while file_name != "":
+		if not directory.current_is_dir() and file_name.get_extension().to_lower() == "ogg":
+			file_paths.append(directory_path.path_join(file_name))
+		file_name = directory.get_next()
+	directory.list_dir_end()
+	file_paths.sort()
+	return file_paths
+
+
+func _get_music_track_id(track_path: String) -> String:
+	return track_path.get_file().get_basename().strip_edges()
+
+
+func _get_music_track_label_from_path(track_path: String) -> String:
+	var label := _get_music_track_id(track_path).replace("_", " ").replace("-", " ").strip_edges()
+	if label == "":
+		return track_path.get_file().get_basename()
+	return label.capitalize()
 
 
 func _load_music_stream_from_path(path: String) -> AudioStream:

@@ -947,7 +947,7 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	if battle_instance.has_signal("battle_ended"):
 		battle_instance.battle_ended.connect(_on_battle_ended)
 
-	MusicManager.play_battle_music()
+	MusicManager.play_pvp_battle_music()
 	await battle_instance.setup_pvp_battle_from_response(
 		PlayerSave.party[0] if not PlayerSave.party.is_empty() else null,
 		response
