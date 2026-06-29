@@ -2,7 +2,12 @@
 
 ## Unreleased
 
+**Changed**
+- Battle logs now start collapsed on smaller screens and open on wider screens.
+- Battle log open or collapsed state is remembered for the rest of the client session after you change it.
+
 **Fixed**
+- Fixed the forfeit confirmation prompt appearing behind other battle UI.
 - Fixed PvP team indicators showing shiny markers on the wrong Pokemon.
 - Fixed form Pokemon such as Landorus-Therian briefly showing the wrong form when switching in.
 - Fixed NPC trainer battle openings briefly showing form Pokemon such as Landorus-Therian as their base species before the summon animation finished.

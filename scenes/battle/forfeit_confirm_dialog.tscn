@@ -30,6 +30,7 @@ border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
 bg_color = Color(0.19215687, 0.14117648, 0.101960786, 1)
 
 [node name="ForfeitConfirmDialog" type="PanelContainer" unique_id=433129307]
+z_index = 120
 custom_minimum_size = Vector2(280, 115)
 anchors_preset = 8
 anchor_left = 0.5

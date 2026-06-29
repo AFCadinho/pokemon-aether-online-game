@@ -30,8 +30,8 @@
 [ext_resource type="Texture2D" uid="uid://c2cbq02hrb073" path="res://assets/battles/mechanics/z-move.png" id="38_8h6bs"]
 [ext_resource type="Texture2D" uid="uid://dn8i3j64uec8i" path="res://assets/battles/mechanics/tera-icon.png" id="39_dsauo"]
 [ext_resource type="Script" uid="uid://bt1ws8crgo0pw" path="res://scripts/battle/battle_ui/battle_damage_calc_panel.gd" id="40_calc"]
-[ext_resource type="Script" path="res://scripts/battle/battle_ui/bag_grid.gd" id="41_bag"]
-[ext_resource type="Script" path="res://scripts/battle/animations/capture_ball_animation_player.gd" id="42_capture"]
+[ext_resource type="Script" uid="uid://dmk2xic0m1mc6" path="res://scripts/battle/battle_ui/bag_grid.gd" id="41_bag"]
+[ext_resource type="Script" uid="uid://bjpq57gr8t0k0" path="res://scripts/battle/animations/capture_ball_animation_player.gd" id="42_capture"]
 [ext_resource type="Script" uid="uid://b4h2vuys3xqnb" path="res://scripts/battle/animations/pokeball_summon_animation_player.gd" id="43_summon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgdsx"]
@@ -463,13 +463,10 @@ theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
 [node name="BattleArena" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer" unique_id=1414126998]
+custom_minimum_size = Vector2(784, 634)
 layout_mode = 2
-mouse_filter = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=21286621]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="BattleBackground" type="TextureRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1857776522]
@@ -481,6 +478,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("2_sgdsx")
+expand_mode = 1
 stretch_mode = 6
 
 [node name="WeatherTint" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1569297772]
@@ -623,7 +621,7 @@ preprocess = 1.45
 visibility_rect = Rect2(-250, -245, 500, 270)
 process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
 
-[node name="ElectricTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+[node name="ElectricTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1282446147]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -633,15 +631,15 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="EnemyElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+[node name="EnemyElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=2133370389]
 color = Color(1, 0.86, 0.12, 0.075)
 polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
 
-[node name="PlayerElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+[node name="PlayerElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=1509654683]
 color = Color(1, 0.86, 0.12, 0.08)
 polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
 
-[node name="EnemyElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+[node name="EnemyElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=579223477]
 position = Vector2(670, 292)
 amount = 150
 lifetime = 1.35
@@ -649,7 +647,7 @@ preprocess = 1.35
 visibility_rect = Rect2(-210, -225, 420, 250)
 process_material = SubResource("ParticleProcessMaterial_electric_terrain")
 
-[node name="PlayerElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer"]
+[node name="PlayerElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=402319053]
 position = Vector2(305, 548)
 amount = 270
 lifetime = 1.45
@@ -897,7 +895,7 @@ preprocess = 2.4
 visibility_rect = Rect2(-520, -330, 1120, 720)
 process_material = SubResource("ParticleProcessMaterial_sun_sparkles")
 
-[node name="DesolateLandLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+[node name="DesolateLandLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=281789845]
 visible = false
 clip_contents = true
 layout_mode = 1
@@ -908,7 +906,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HeatWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer"]
+[node name="HeatWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=389534965]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -918,15 +916,15 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.8, 0.18, 0.02, 0.055)
 
-[node name="HorizonHeatBand" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer"]
+[node name="HorizonHeatBand" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=1593809456]
 color = Color(1, 0.42, 0.08, 0.11)
 polygon = PackedVector2Array(-90, 238, 1060, 214, 1060, 360, 830, 336, 620, 374, 395, 332, 172, 368, -90, 340)
 
-[node name="LowerHeatBand" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer"]
+[node name="LowerHeatBand" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=343116898]
 color = Color(1, 0.72, 0.18, 0.09)
 polygon = PackedVector2Array(-115, 398, 1080, 374, 1080, 610, 865, 566, 640, 626, 412, 560, 190, 618, -115, 584)
 
-[node name="GroundHeatHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer"]
+[node name="GroundHeatHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=819385912]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -938,7 +936,7 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(1, 0.5, 0.08, 0.07)
 
-[node name="PrimordialSeaLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+[node name="PrimordialSeaLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1744772215]
 visible = false
 clip_contents = true
 layout_mode = 1
@@ -949,7 +947,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="StormWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer"]
+[node name="StormWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=994235800]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -963,19 +961,19 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.01, 0.05, 0.14, 0.105)
 
-[node name="CloudBand1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer"]
+[node name="CloudBand1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=486188534]
 color = Color(0.02, 0.07, 0.18, 0.26)
 polygon = PackedVector2Array(-260, -50, 1240, -50, 1240, 190, 930, 146, 730, 188, 535, 148, 350, 192, 155, 152, -260, 210)
 
-[node name="CloudBand2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer"]
+[node name="CloudBand2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=2019903279]
 color = Color(0.04, 0.12, 0.26, 0.2)
 polygon = PackedVector2Array(-300, 78, 1260, 54, 1260, 320, 912, 254, 760, 300, 555, 246, 360, 294, 160, 250, -300, 330)
 
-[node name="CloudBand3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer"]
+[node name="CloudBand3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=1372524441]
 color = Color(0.02, 0.08, 0.2, 0.15)
 polygon = PackedVector2Array(-290, 230, 1240, 210, 1240, 510, 930, 460, 735, 520, 520, 458, 330, 506, 118, 452, -290, 535)
 
-[node name="LowerStormHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer"]
+[node name="LowerStormHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=1963074563]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -990,7 +988,7 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0.01, 0.05, 0.14, 0.075)
 
-[node name="StormCeiling" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer"]
+[node name="StormCeiling" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=1825426780]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -999,7 +997,7 @@ grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.02, 0.06, 0.16, 0.15)
 
-[node name="DeltaStreamLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+[node name="DeltaStreamLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1676778887]
 visible = false
 clip_contents = true
 layout_mode = 1
@@ -1010,7 +1008,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="WindWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+[node name="WindWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1567031014]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1024,23 +1022,23 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.32, 0.72, 1, 0.055)
 
-[node name="UpperCloudVeil" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+[node name="UpperCloudVeil" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1043432695]
 color = Color(0.72, 0.92, 1, 0.135)
 polygon = PackedVector2Array(-240, -28, 1200, -34, 1200, 170, 955, 132, 735, 176, 535, 136, 330, 178, 145, 140, -240, 190)
 
-[node name="JetBand1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+[node name="JetBand1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=2050061389]
 color = Color(0.86, 0.98, 1, 0.18)
 polygon = PackedVector2Array(-210, 112, -120, 90, 980, 520, 890, 548)
 
-[node name="JetBand2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+[node name="JetBand2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1840194132]
 color = Color(0.54, 0.86, 1, 0.13)
 polygon = PackedVector2Array(-260, 306, -140, 278, 1030, 92, 910, 126)
 
-[node name="JetBand3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+[node name="JetBand3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1890762535]
 color = Color(0.9, 1, 1, 0.105)
 polygon = PackedVector2Array(-190, 486, -70, 454, 1035, 338, 920, 372)
 
-[node name="LowerAirHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer"]
+[node name="LowerAirHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1543841111]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -1055,7 +1053,7 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0.5, 0.86, 1, 0.045)
 
-[node name="DeltaStreamParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer"]
+[node name="DeltaStreamParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1696554753]
 visible = false
 position = Vector2(390, 250)
 amount = 420
@@ -1196,28 +1194,32 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -312.0
+offset_left = -322.0
 offset_top = 340.0
-offset_right = 0.0
+offset_right = -10.0
 offset_bottom = 489.0
 grow_horizontal = 0
 
 [node name="EnemyHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1632045920 instance=ExtResource("2_01pft")]
 layout_mode = 1
-offset_left = 0.0
+offset_left = 10.0
 offset_top = 44.0
-offset_right = 312.0
+offset_right = 322.0
 offset_bottom = 193.0
 
 [node name="CurrentActionPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1149733481 instance=ExtResource("5_n6gaa")]
 layout_mode = 1
+offset_left = -375.0
 offset_top = -60.0
+offset_right = 375.0
 offset_bottom = 0.0
 
 [node name="MiniBattleFeed" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1377941626 instance=ExtResource("18_mini")]
 layout_mode = 1
+offset_left = 10.0
 offset_top = 205.0
-offset_bottom = 281.0
+offset_right = 325.0
+offset_bottom = 297.0
 
 [node name="FieldTimers" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=91068280 instance=ExtResource("6_mvulk")]
 layout_mode = 1
@@ -1229,8 +1231,8 @@ layout_mode = 1
 anchors_preset = 0
 anchor_left = 0.0
 anchor_right = 0.0
-offset_left = 0.0
-offset_right = 153.39575
+offset_left = 10.0
+offset_right = 163.39575
 grow_horizontal = 1
 
 [node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=900280603]
@@ -1239,8 +1241,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
+offset_left = 10.0
 offset_top = -18.0
-offset_right = 36.0
+offset_right = 46.0
 offset_bottom = 18.0
 grow_vertical = 2
 mouse_default_cursor_shape = 2
@@ -1557,6 +1560,7 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="BattleLogPanel" parent="." unique_id=2138858408 instance=ExtResource("17_6ofp8")]
+visible = false
 z_index = 99
 layout_mode = 1
 anchors_preset = 4

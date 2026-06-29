@@ -110,6 +110,10 @@ const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
 const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
 const DAMAGE_CALC_ASSUMPTIONS_PATH := "user://damage_calc_assumptions.json"
 const DAMAGE_CALC_ASSUMPTIONS_VERSION := 1
+const BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH := 1200
+const BATTLE_LOG_MEMORY_UNSET := -1
+
+static var remembered_battle_log_open := BATTLE_LOG_MEMORY_UNSET
 
 #Active Pokemon
 var active_player_pokemon: Pokemon
@@ -256,6 +260,7 @@ func _ready() -> void:
 		Callable(self, "_can_start_pvp_render_animation")
 	)
 	_setup_mechanic_buttons()
+	_setup_battle_log_initial_visibility()
 	_update_battle_log_toggle_button()
 
 	# Show Moves, Party or Bag
@@ -1906,7 +1911,24 @@ func _on_action_selected(action: String) -> void:
 func _on_battle_log_toggle_pressed() -> void:
 	_focus_battle_ui_layer()
 	battle_log_panel.toggle_log()
+	remembered_battle_log_open = 1 if battle_log_panel.is_open() else 0
 	_update_battle_log_toggle_button()
+
+## Zet de battle log bij battle start op de sessiekeuze, of anders op basis van viewport-breedte.
+func _setup_battle_log_initial_visibility() -> void:
+	if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET:
+		_set_battle_log_open(remembered_battle_log_open == 1)
+		return
+
+	_set_battle_log_open(_should_open_battle_log_by_default())
+
+## Bepaalt alleen de eerste default voor deze client-sessie.
+func _should_open_battle_log_by_default() -> bool:
+	return get_viewport_rect().size.x >= BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH
+
+## Past de log-state toe zonder de sessiekeuze te overschrijven.
+func _set_battle_log_open(open: bool) -> void:
+	battle_log_panel.visible = open
 
 ## Zet de tekst van de battle log toggle op basis van de open/dicht state.
 func _update_battle_log_toggle_button() -> void:
