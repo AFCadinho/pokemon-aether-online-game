@@ -1425,15 +1425,13 @@ func _create_move_learn_new_move_card(prompt: Dictionary) -> Control:
 	top_row.tooltip_text = description
 	stack.add_child(top_row)
 
-	var badge := Label.new()
-	badge.text = "New"
-	badge.custom_minimum_size = Vector2(42, 22)
-	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	badge.add_theme_font_size_override("font_size", 10)
-	badge.add_theme_color_override("font_color", Color("#04111c"))
-	badge.add_theme_stylebox_override("normal", _make_panel_style(POKEMON_SUMMARY_ACCENT, Color("#b9efff"), 11, 1))
-	top_row.add_child(badge)
+	var eyebrow := Label.new()
+	eyebrow.text = "New move"
+	eyebrow.custom_minimum_size = Vector2(70, 0)
+	eyebrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	eyebrow.add_theme_font_size_override("font_size", 10)
+	eyebrow.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	top_row.add_child(eyebrow)
 
 	var name_label := Label.new()
 	name_label.text = move_name
@@ -1475,42 +1473,59 @@ func _create_move_learn_section_label(label_text: String) -> Control:
 
 func _create_move_learn_replace_button(move_index: int, move_value: Variant, existing_name: String, new_move_name: String) -> Button:
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(0, 46)
+	button.custom_minimum_size = Vector2(0, 56)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = "Forget %s and learn %s." % [existing_name, new_move_name]
 	button.pressed.connect(_on_move_learn_replace_pressed.bind(move_index))
-	_apply_button_style(button, "primary")
-	_fill_move_learn_choice_button(button, "Forget", existing_name, move_value)
+	_apply_move_learn_choice_button_style(button)
+	_fill_move_learn_choice_button(button, move_index + 1, existing_name, move_value, "")
 	return button
 
 func _create_move_learn_empty_slot_button(move_index: int, new_move_name: String) -> Button:
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(0, 46)
+	button.custom_minimum_size = Vector2(0, 56)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = "Learn %s in this empty slot." % new_move_name
 	button.pressed.connect(_on_move_learn_replace_pressed.bind(move_index))
-	_apply_button_style(button, "primary")
-	_fill_move_learn_choice_button(button, "Use", "Empty slot", {})
+	_apply_move_learn_choice_button_style(button)
+	_fill_move_learn_choice_button(button, move_index + 1, "Empty slot", {}, "Learn here")
 	return button
 
-func _fill_move_learn_choice_button(button: Button, action_text: String, move_name: String, move_value: Variant) -> void:
+func _apply_move_learn_choice_button_style(button: Button) -> void:
+	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.45))
+	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_stylebox_override("normal", _make_button_style(Color("#081321ee"), Color("#2d4b6d"), 7, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(Color("#0d1b2fee"), POKEMON_SUMMARY_ACCENT_SOFT, 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#050b15f2"), POKEMON_SUMMARY_ACCENT_SOFT, 7, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(Color("#0d1b2fee"), UI_BORDER_FOCUS, 7, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+func _fill_move_learn_choice_button(button: Button, slot_number: int, move_name: String, move_value: Variant, fallback_meta_text: String) -> void:
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.anchor_right = 1.0
 	row.anchor_bottom = 1.0
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", 10)
 	button.add_child(row)
 
-	var action_label := Label.new()
-	action_label.text = action_text
-	action_label.custom_minimum_size = Vector2(48, 0)
-	action_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	action_label.add_theme_font_size_override("font_size", 10)
-	action_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
-	action_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(action_label)
+	row.add_child(_create_move_learn_slot_badge(slot_number))
+
+	var text_stack := VBoxContainer.new()
+	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	text_stack.add_theme_constant_override("separation", 2)
+	text_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(text_stack)
+
+	var top_row := HBoxContainer.new()
+	top_row.add_theme_constant_override("separation", 8)
+	top_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_stack.add_child(top_row)
 
 	var name_label := Label.new()
 	name_label.text = move_name
@@ -1520,15 +1535,36 @@ func _fill_move_learn_choice_button(button: Button, action_text: String, move_na
 	name_label.add_theme_font_size_override("font_size", 13)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(name_label)
+	top_row.add_child(name_label)
 
 	var move_type := _get_summary_move_type(move_value)
 	if move_type != "":
-		row.add_child(_create_move_learn_type_control(move_type))
+		top_row.add_child(_create_move_learn_type_control(move_type))
 
-	row.add_child(_create_move_learn_meta_label("PP", _get_summary_move_pp_text(move_value), Color("#ff5da8"), 54.0))
-	row.add_child(_create_move_learn_meta_label("Pow", _get_summary_move_power_text(move_value), Color("#f2cf78"), 48.0))
-	row.add_child(_create_move_learn_meta_label("Acc", _get_summary_move_accuracy_text(move_value), Color("#d9ecff"), 48.0))
+	var meta_row := HBoxContainer.new()
+	meta_row.add_theme_constant_override("separation", 10)
+	meta_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_stack.add_child(meta_row)
+
+	if fallback_meta_text != "":
+		meta_row.add_child(_create_move_learn_plain_meta_label(fallback_meta_text))
+		return
+
+	meta_row.add_child(_create_move_learn_meta_label("PP", _get_summary_move_pp_text(move_value), Color("#ff75b4"), 0.0))
+	meta_row.add_child(_create_move_learn_meta_label("Power", _get_summary_move_power_text(move_value), Color("#f2cf78"), 0.0))
+	meta_row.add_child(_create_move_learn_meta_label("Accuracy", _get_summary_move_accuracy_text(move_value), Color("#d9ecff"), 0.0))
+
+func _create_move_learn_slot_badge(slot_number: int) -> Control:
+	var label := Label.new()
+	label.text = str(slot_number)
+	label.custom_minimum_size = Vector2(24, 24)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	label.add_theme_stylebox_override("normal", _make_panel_style(Color("#06111fee"), Color("#315070"), 12, 1))
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return label
 
 func _create_move_learn_type_control(move_type: String) -> Control:
 	var type_icon_texture: Texture2D = _load_pokemon_type_icon(move_type)
@@ -1547,12 +1583,21 @@ func _create_move_learn_type_control(move_type: String) -> Control:
 
 func _create_move_learn_meta_label(label_text: String, value_text: String, color: Color, min_width: float = 70.0) -> Control:
 	var label := Label.new()
-	label.text = "%s: %s" % [label_text, value_text]
+	label.text = "%s %s" % [label_text, value_text]
 	label.custom_minimum_size = Vector2(min_width, 0)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return label
+
+func _create_move_learn_plain_meta_label(text: String) -> Control:
+	var label := Label.new()
+	label.text = text
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return label
 
