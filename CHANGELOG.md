@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.3 - 2026-06-29
+
 **Added**
 - Added a redesigned Pokemon summary screen that is easier to read and keeps every tab the same size.
 - Added a front/back sprite toggle in Pokemon summaries.
