@@ -1604,7 +1604,7 @@ func _show_move_learn_hover_panel(anchor: Control, move_value: Variant) -> void:
 	stack.add_child(chip_row)
 	var move_type := _get_summary_move_type(move_value)
 	if move_type != "":
-		chip_row.add_child(_create_move_learn_detail_chip(move_type, Color("#34312a"), Color("#f4f0de")))
+		chip_row.add_child(_create_move_learn_type_icon(move_type))
 	var category := _get_summary_move_category_text(move_value)
 	if category != "":
 		chip_row.add_child(_create_move_learn_category_label(category))
@@ -1667,6 +1667,20 @@ func _create_move_learn_detail_chip(text: String, background_color: Color, text_
 	label.add_theme_color_override("font_color", text_color)
 	margin.add_child(label)
 	return panel
+
+func _create_move_learn_type_icon(type_name: String) -> Control:
+	var texture := _load_pokemon_type_icon(type_name)
+	if texture == null:
+		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
+
+	var icon := TextureRect.new()
+	icon.texture = texture
+	icon.custom_minimum_size = Vector2(27, 27)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.tooltip_text = type_name.capitalize()
+	return icon
 
 func _create_move_learn_category_label(category: String) -> Control:
 	var key := category.strip_edges().to_lower().replace("-", "_").replace(" ", "_")
