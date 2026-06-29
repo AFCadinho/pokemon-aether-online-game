@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+**Added**
+- Added a dedicated PvP battle music track.
+
+**Changed**
+- The Battle Music setting now lists PvP battle tracks and controls which music plays during PvP battles.
+
 ## 0.2.3 - 2026-06-29
 
 **Added**
