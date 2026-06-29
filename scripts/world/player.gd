@@ -202,9 +202,13 @@ func get_network_movement_state() -> Dictionary:
 		"duration": move_duration,
 	}
 
+func get_persistent_world_position() -> Vector2:
+	return _snap_world_position(target_position if is_moving else global_position)
+
 func reset_movement_state() -> void:
+	var persistent_position := get_persistent_world_position()
 	is_moving = false
-	global_position = _snap_world_position(global_position)
+	global_position = persistent_position
 	target_position = global_position
 	move_start_position = global_position
 	move_elapsed = 0.0

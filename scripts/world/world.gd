@@ -158,7 +158,7 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	else:
 		push_warning("World: spawn '%s' not found in %s. Using fallback position." % [spawn_name, map.name])
 
-	spawn_position = _snap_world_position(spawn_position)
+	spawn_position = _snap_world_position_to_map_tile_center(map, spawn_position)
 	player.global_position = spawn_position
 	player.target_position = spawn_position
 	player.move_start_position = spawn_position
@@ -174,7 +174,7 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 		float(position_data.get("x", player.global_position.x)),
 		float(position_data.get("y", player.global_position.y))
 	)
-	saved_position = _snap_world_position(saved_position)
+	saved_position = _snap_world_position_to_map_tile_center(map, saved_position)
 
 	player.global_position = saved_position
 	player.target_position = saved_position
@@ -486,7 +486,7 @@ func _save_current_player_position(
 
 func _build_current_player_position_state(spawn_marker: String, use_confirmed_appearance: bool = false) -> Dictionary:
 	var current_map: Node = GameState.current_map
-	var position: Vector2 = player.global_position
+	var position: Vector2 = _get_current_player_persistent_position()
 	var appearance_state: Dictionary = _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
 	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
@@ -568,7 +568,7 @@ func _get_current_follower_presence_state() -> Dictionary:
 
 func _get_current_player_position_signature(use_confirmed_appearance: bool = false) -> String:
 	var current_map: Node = GameState.current_map
-	var position: Vector2 = player.global_position
+	var position: Vector2 = _get_current_player_persistent_position()
 	var follower_state := _get_current_follower_presence_state()
 	var appearance_state := _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
 	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
@@ -639,6 +639,40 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 
 func _snap_world_position(position: Vector2) -> Vector2:
 	return Vector2(roundf(position.x), roundf(position.y))
+
+
+func _get_current_player_persistent_position() -> Vector2:
+	if player == null:
+		return Vector2.ZERO
+
+	var position: Vector2 = player.global_position
+	if player.has_method("get_persistent_world_position"):
+		var position_value: Variant = player.call("get_persistent_world_position")
+		if position_value is Vector2:
+			position = position_value as Vector2
+
+	return _snap_world_position_to_map_tile_center(GameState.current_map, position)
+
+
+func _snap_world_position_to_map_tile_center(map: Node, position: Vector2) -> Vector2:
+	var tilemap := _get_position_reference_tilemap(map)
+	if tilemap == null:
+		return _snap_world_position(position)
+
+	var tile_position: Vector2i = tilemap.local_to_map(tilemap.to_local(position))
+	return _snap_world_position(tilemap.to_global(tilemap.map_to_local(tile_position)))
+
+
+func _get_position_reference_tilemap(map: Node) -> TileMapLayer:
+	if map == null or not is_instance_valid(map):
+		return null
+
+	for layer_name in ["Collision", "TallGrass", "LedgeDown", "LedgeUp", "LedgeLeft", "LedgeRight"]:
+		var tilemap := map.get_node_or_null(layer_name) as TileMapLayer
+		if tilemap != null:
+			return tilemap
+
+	return null
 
 
 func _load_player_party_state() -> void:

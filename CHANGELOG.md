@@ -10,6 +10,7 @@
 
 **Fixed**
 - Fixed the forfeit confirmation prompt appearing behind other battle UI.
+- Fixed saved overworld positions sometimes drifting off the tile grid after disconnecting or returning from battle during movement.
 - Fixed overworld players, followers, NPCs, and tree layers drawing in inconsistent order while overlapping.
 - Fixed PvP team indicators showing shiny markers on the wrong Pokemon.
 - Fixed form Pokemon such as Landorus-Therian briefly showing the wrong form when switching in.
