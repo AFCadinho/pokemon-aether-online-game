@@ -85,7 +85,7 @@ const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
 const BAG_SIZE := Vector2(920, 620)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
-const POKEDEX_SIZE := Vector2(1040, 640)
+const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
@@ -481,10 +481,11 @@ var pokedex_name_label: Label
 var pokedex_meta_label: Label
 var pokedex_type_row: HBoxContainer
 var pokedex_sprite: TextureRect
+var pokedex_header_stats_stack: VBoxContainer
 var pokedex_detail_stack: VBoxContainer
 var pokedex_tab_buttons: Dictionary = {}
 var pokedex_selected_species: Dictionary = {}
-var pokedex_active_tab := "info"
+var pokedex_active_tab := "moves"
 var pokedex_search_request_id := 0
 var displayed_money: int = -1
 var displayed_location_map: Node
@@ -2557,16 +2558,28 @@ func _setup_pokedex_popup() -> void:
 	layout.add_theme_constant_override("separation", 12)
 	margin_container.add_child(layout)
 
+	var header_panel := PanelContainer.new()
+	header_panel.custom_minimum_size = Vector2(0, 44)
+	header_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#c7bea0dd"), Color("#f2ead2aa"), 2, 1))
+	layout.add_child(header_panel)
+
+	var header_margin := MarginContainer.new()
+	header_margin.add_theme_constant_override("margin_left", 12)
+	header_margin.add_theme_constant_override("margin_top", 4)
+	header_margin.add_theme_constant_override("margin_right", 8)
+	header_margin.add_theme_constant_override("margin_bottom", 4)
+	header_panel.add_child(header_margin)
+
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 8)
-	layout.add_child(header)
+	header_margin.add_child(header)
 
 	var title_label := Label.new()
 	title_label.text = "Pokédex"
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.add_theme_font_size_override("font_size", 26)
-	title_label.add_theme_color_override("font_color", Color("#f2ead2"))
+	title_label.add_theme_color_override("font_color", Color("#ffffff"))
 	header.add_child(title_label)
 
 	var close_button := Button.new()
@@ -2659,10 +2672,16 @@ func _setup_pokedex_popup() -> void:
 	pokedex_meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(pokedex_meta_label)
 
+	var sprite_stack := VBoxContainer.new()
+	sprite_stack.custom_minimum_size = Vector2(190, 0)
+	sprite_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	sprite_stack.add_theme_constant_override("separation", 8)
+	detail_header.add_child(sprite_stack)
+
 	var sprite_panel := PanelContainer.new()
 	sprite_panel.custom_minimum_size = Vector2(176, 132)
 	sprite_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071b2ce8"), Color("#d6c78f66"), 3, 1))
-	detail_header.add_child(sprite_panel)
+	sprite_stack.add_child(sprite_panel)
 
 	var sprite_center := CenterContainer.new()
 	sprite_panel.add_child(sprite_center)
@@ -2675,18 +2694,29 @@ func _setup_pokedex_popup() -> void:
 	sprite_center.add_child(pokedex_sprite)
 
 	pokedex_type_row = HBoxContainer.new()
-	pokedex_type_row.alignment = BoxContainer.ALIGNMENT_END
+	pokedex_type_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	pokedex_type_row.add_theme_constant_override("separation", 5)
-	detail_header.add_child(pokedex_type_row)
+	sprite_stack.add_child(pokedex_type_row)
+
+	pokedex_header_stats_stack = VBoxContainer.new()
+	pokedex_header_stats_stack.custom_minimum_size = Vector2(208, 0)
+	pokedex_header_stats_stack.add_theme_constant_override("separation", 4)
+	detail_header.add_child(pokedex_header_stats_stack)
 
 	var tab_row := HBoxContainer.new()
 	tab_row.add_theme_constant_override("separation", 6)
 	detail_layout.add_child(tab_row)
 
-	var info_tab := _create_pokedex_tab_button("info", "Info")
-	tab_row.add_child(info_tab)
 	var moves_tab := _create_pokedex_tab_button("moves", "Moves")
 	tab_row.add_child(moves_tab)
+	var abilities_tab := _create_pokedex_tab_button("abilities", "Abilities")
+	tab_row.add_child(abilities_tab)
+	var locations_tab := _create_pokedex_tab_button("locations", "Locations")
+	tab_row.add_child(locations_tab)
+	var evolutions_tab := _create_pokedex_tab_button("evolutions", "Evolutions")
+	tab_row.add_child(evolutions_tab)
+	var drops_tab := _create_pokedex_tab_button("drops", "Drops")
+	tab_row.add_child(drops_tab)
 	_refresh_pokedex_tab_buttons()
 
 	var detail_scroll := ScrollContainer.new()
@@ -2701,6 +2731,7 @@ func _setup_pokedex_popup() -> void:
 
 	_apply_button_style(close_button)
 	_apply_line_edit_style(pokedex_search_input)
+	_refresh_pokedex_header_stats({})
 	_refresh_pokedex_detail()
 
 func _position_pokedex_popup() -> void:
@@ -9666,6 +9697,7 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 		if pokedex_sprite != null:
 			pokedex_sprite.texture = null
 		_refresh_pokedex_type_row([])
+		_refresh_pokedex_header_stats({})
 		return
 
 	var species_name := str(species.get("name", species.get("id", "Unknown")))
@@ -9682,6 +9714,8 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 	if pokedex_sprite != null:
 		pokedex_sprite.texture = _load_pokedex_species_texture(species)
 	_refresh_pokedex_type_row(_array_from_variant(species.get("types", [])))
+	var stats_value: Variant = species.get("baseStats", {})
+	_refresh_pokedex_header_stats(stats_value if typeof(stats_value) == TYPE_DICTIONARY else {})
 
 func _refresh_pokedex_type_row(types: Array) -> void:
 	if pokedex_type_row == null:
@@ -9710,6 +9744,60 @@ func _load_pokedex_species_texture(species: Dictionary) -> Texture2D:
 			return texture
 	return PokemonAssets.load_unknown_icon()
 
+func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
+	if pokedex_header_stats_stack == null:
+		return
+	for child: Node in pokedex_header_stats_stack.get_children():
+		child.queue_free()
+
+	if stats.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "BASE STATS"
+		empty_label.add_theme_font_size_override("font_size", 10)
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		pokedex_header_stats_stack.add_child(empty_label)
+		return
+
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		var stat_id := str(stat.get("id", ""))
+		var stat_label := str(stat.get("label", stat_id.to_upper()))
+		var color: Color = stat.get("color", UI_BORDER_FOCUS) as Color
+		pokedex_header_stats_stack.add_child(_create_pokedex_header_stat_row(stat_label, int(stats.get(stat_id, 0)), color))
+
+func _create_pokedex_header_stat_row(label_text: String, value: int, color: Color) -> Control:
+	var row := HBoxContainer.new()
+	row.custom_minimum_size = Vector2(0, 18)
+	row.add_theme_constant_override("separation", 6)
+
+	var label := Label.new()
+	label.text = label_text
+	label.custom_minimum_size = Vector2(48, 0)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
+
+	var bar := ProgressBar.new()
+	bar.max_value = 255
+	bar.value = clampi(value, 0, 255)
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(96, 9)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06101be8"), Color("#d6c78f44"), 2, 1))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(color, color, 2, 0))
+	row.add_child(bar)
+
+	var value_label := Label.new()
+	value_label.text = str(value)
+	value_label.custom_minimum_size = Vector2(32, 0)
+	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	value_label.add_theme_font_size_override("font_size", 11)
+	value_label.add_theme_color_override("font_color", Color("#f2ead2"))
+	row.add_child(value_label)
+	return row
+
 func _refresh_pokedex_detail() -> void:
 	if pokedex_detail_stack == null:
 		return
@@ -9720,10 +9808,17 @@ func _refresh_pokedex_detail() -> void:
 		_set_pokedex_detail_message("Search and select a Pokemon to view its data.")
 		return
 
-	if pokedex_active_tab == "moves":
-		_build_pokedex_moves_tab()
-	else:
-		_build_pokedex_info_tab()
+	match pokedex_active_tab:
+		"abilities":
+			_build_pokedex_abilities_tab()
+		"locations":
+			_build_pokedex_placeholder_tab("Locations", _array_from_variant(pokedex_selected_species.get("locations", [])))
+		"evolutions":
+			_build_pokedex_placeholder_tab("Evolutions", [])
+		"drops":
+			_build_pokedex_placeholder_tab("Drops", [])
+		_:
+			_build_pokedex_moves_tab()
 
 func _set_pokedex_detail_message(message: String) -> void:
 	if pokedex_detail_stack == null:
@@ -9785,6 +9880,44 @@ func _build_pokedex_info_tab() -> void:
 		var color: Color = stat.get("color", UI_BORDER_FOCUS) as Color
 		stats_grid.add_child(_create_pokedex_stat_chip(stat_label, int(stats.get(stat_id, 0)), color))
 
+func _build_pokedex_abilities_tab() -> void:
+	pokedex_detail_stack.add_child(_create_pokedex_section_title("Abilities"))
+
+	var abilities := _array_from_variant(pokedex_selected_species.get("abilities", []))
+	var added_count := 0
+	for ability_value: Variant in abilities:
+		if typeof(ability_value) != TYPE_DICTIONARY:
+			continue
+		var ability: Dictionary = ability_value
+		var ability_name := str(ability.get("name", ability.get("id", ""))).strip_edges()
+		if ability_name == "":
+			continue
+		var slot := str(ability.get("slot", "")).strip_edges()
+		var label := "Hidden Ability" if slot == "hidden" else "Ability"
+		pokedex_detail_stack.add_child(_create_pokedex_info_line(label, ability_name))
+		added_count += 1
+
+	pokedex_detail_stack.add_child(_create_pokedex_section_title("Training"))
+	pokedex_detail_stack.add_child(_create_pokedex_info_line(
+		"Growth",
+		_format_identifier_display_name(str(pokedex_selected_species.get("growthRate", ""))) if str(pokedex_selected_species.get("growthRate", "")).strip_edges() != "" else "Unknown"
+	))
+	pokedex_detail_stack.add_child(_create_pokedex_info_line(
+		"Base EXP",
+		str(int(pokedex_selected_species.get("baseExperience", 0)))
+	))
+
+	if added_count <= 0:
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No abilities available."))
+
+func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
+	pokedex_detail_stack.add_child(_create_pokedex_section_title(title_text))
+	if entries.is_empty():
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message("%s data is not available yet." % title_text))
+		return
+	for entry_value: Variant in entries:
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(str(entry_value)))
+
 func _build_pokedex_moves_tab() -> void:
 	var moves_value: Variant = pokedex_selected_species.get("moves", {})
 	var moves: Dictionary = moves_value if typeof(moves_value) == TYPE_DICTIONARY else {}
@@ -9820,6 +9953,14 @@ func _create_pokedex_section_title(title_text: String) -> Control:
 	label.text = title_text.to_upper()
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	return label
+
+func _create_pokedex_muted_message(message: String) -> Control:
+	var label := Label.new()
+	label.text = message
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	return label
 
 func _create_pokedex_info_line(label_text: String, value_text: String) -> Control:
