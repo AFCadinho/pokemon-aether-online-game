@@ -126,6 +126,8 @@ func to_battle_dict() -> Dictionary:
 		"ballItemId": ball_item_id,
 		"shiny": shiny,
 	}
+	if owned_pokemon_id > 0:
+		battle_data["ownedPokemonId"] = owned_pokemon_id
 	if caught_ball_item_id != "":
 		battle_data["caughtBallItemId"] = caught_ball_item_id
 
