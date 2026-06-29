@@ -5272,7 +5272,7 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	info_grid.add_child(_create_summary_field_card("Original Trainer", PlayerSave.player_name, Color("#9eb7d8"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(
 		"Ability",
-		_default_text(pokemon.ability),
+		_get_summary_ability_display_name(pokemon.ability),
 		Color("#ffb15f"),
 		false,
 		148.0,
@@ -6517,6 +6517,17 @@ func _get_pokemon_ball_item_id(pokemon: Pokemon) -> String:
 func _format_move_name(move_id: String) -> String:
 	return _item_name_from_id(move_id)
 
+func _format_identifier_display_name(raw_value: String) -> String:
+	var cleaned: String = raw_value.strip_edges()
+	if cleaned == "":
+		return ""
+
+	var words: PackedStringArray = cleaned.replace("_", "-").split("-")
+	for index in range(words.size()):
+		words[index] = words[index].capitalize()
+
+	return " ".join(words)
+
 func _get_summary_move_name(move_value: Variant) -> String:
 	if move_value is Dictionary:
 		var move_data: Dictionary = move_value as Dictionary
@@ -6710,6 +6721,18 @@ func _get_summary_ability_description_text(ability_value: String) -> String:
 	if description == "":
 		description = str(_get_first_dictionary_value(metadata, ["desc", "description"], "")).strip_edges()
 	return description
+
+func _get_summary_ability_display_name(ability_value: String) -> String:
+	var cleaned: String = ability_value.strip_edges()
+	if cleaned == "":
+		return "-"
+
+	var metadata: Dictionary = _lookup_summary_ability_metadata(cleaned)
+	var metadata_name: String = str(_get_first_dictionary_value(metadata, ["name", "displayName", "display_name"], "")).strip_edges()
+	if metadata_name != "":
+		return metadata_name
+
+	return _format_identifier_display_name(cleaned)
 
 func _normalize_summary_move_lookup_key(value: String) -> String:
 	var normalized_key: String = value.strip_edges().to_lower()
