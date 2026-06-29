@@ -39,6 +39,13 @@ func get_active_display_species(player_id: String) -> String:
 	if persisted_mega_species != "":
 		return persisted_mega_species
 
+	if player_id == "p2":
+		var display_pokemon := active_pokemon.duplicate()
+		display_metadata.enrich_display_data(player_id, display_pokemon)
+		var enriched_species := str(display_pokemon.get("displaySpecies", display_pokemon.get("species", "")))
+		if enriched_species != "":
+			return enriched_species
+
 	if player_id == "p1":
 		var saved_pokemon: Pokemon = display_metadata.get_player_save_pokemon_for_battle_data(active_pokemon)
 		if saved_pokemon != null:
@@ -131,18 +138,31 @@ func _get_player_save_pokemon_for_display_data(display_data: Dictionary, fallbac
 			return pokemon_by_instance
 
 	var canonical_slot := _get_canonical_party_slot(display_data)
+	var player_party := _get_player_save_party()
 	if canonical_slot > 0:
 		var slot_index := canonical_slot - 1
-		if slot_index >= 0 and slot_index < PlayerSave.party.size():
-			var slot_pokemon: Pokemon = PlayerSave.party[slot_index] as Pokemon
+		if slot_index >= 0 and slot_index < player_party.size():
+			var slot_pokemon: Pokemon = player_party[slot_index] as Pokemon
 			return slot_pokemon
 
-	if fallback_index >= 0 and fallback_index < PlayerSave.party.size():
-		var fallback_pokemon: Pokemon = PlayerSave.party[fallback_index] as Pokemon
+	if fallback_index >= 0 and fallback_index < player_party.size():
+		var fallback_pokemon: Pokemon = player_party[fallback_index] as Pokemon
 		if _saved_pokemon_matches_display_species(fallback_pokemon, display_data):
 			return fallback_pokemon
 
 	return display_metadata.get_unique_player_save_pokemon_by_battle_species(display_data)
+
+func _get_player_save_party() -> Array:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		return []
+
+	var player_save := tree.root.get_node_or_null("PlayerSave")
+	if player_save == null:
+		return []
+
+	var party_value: Variant = player_save.get("party")
+	return party_value as Array if party_value is Array else []
 
 func _saved_pokemon_matches_display_species(saved_pokemon: Pokemon, display_data: Dictionary) -> bool:
 	if saved_pokemon == null:

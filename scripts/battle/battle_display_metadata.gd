@@ -56,7 +56,7 @@ func get_player_save_pokemon_by_instance_id(instance_id: String) -> Pokemon:
 	if instance_id == "":
 		return null
 
-	for pokemon in PlayerSave.party:
+	for pokemon in _get_player_save_party():
 		if pokemon.instance_id == instance_id:
 			return pokemon
 
@@ -68,11 +68,12 @@ func get_player_save_pokemon_by_canonical_slot(pokemon_data: Dictionary) -> Poke
 	if canonical_slot <= 0:
 		return null
 
+	var player_party := _get_player_save_party()
 	var slot_index := canonical_slot - 1
-	if slot_index < 0 or slot_index >= PlayerSave.party.size():
+	if slot_index < 0 or slot_index >= player_party.size():
 		return null
 
-	return PlayerSave.party[slot_index] as Pokemon
+	return player_party[slot_index] as Pokemon
 
 
 func get_unique_player_save_pokemon_by_battle_species(pokemon_data: Dictionary) -> Pokemon:
@@ -87,7 +88,7 @@ func get_unique_player_save_pokemon_by_battle_species(pokemon_data: Dictionary) 
 		return null
 
 	var matched_pokemon: Pokemon = null
-	for pokemon in PlayerSave.party:
+	for pokemon in _get_player_save_party():
 		if not saved_species_is_compatible_with_battle_species(pokemon, battle_species):
 			continue
 		if matched_pokemon != null:
@@ -95,6 +96,19 @@ func get_unique_player_save_pokemon_by_battle_species(pokemon_data: Dictionary) 
 		matched_pokemon = pokemon
 
 	return matched_pokemon
+
+
+func _get_player_save_party() -> Array:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		return []
+
+	var player_save := tree.root.get_node_or_null("PlayerSave")
+	if player_save == null:
+		return []
+
+	var party_value: Variant = player_save.get("party")
+	return party_value as Array if party_value is Array else []
 
 
 func saved_species_matches_battle_data(saved_pokemon: Pokemon, pokemon_data: Dictionary) -> bool:

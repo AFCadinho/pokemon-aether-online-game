@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+**Fixed**
+- Fixed PvP team indicators showing shiny markers on the wrong Pokemon.
+- Fixed form Pokemon such as Landorus-Therian briefly showing the wrong form when switching in.
+- Fixed NPC trainer battle openings briefly showing form Pokemon such as Landorus-Therian as their base species before the summon animation finished.
+- Fixed Leftovers and other healing animations not playing on visible form Pokemon such as Landorus-Therian.
+- Fixed stat-lowering particles looking too large and spread out on the resized battle screen.
+
 ## 0.2.2 - 2026-06-29
 
 **Added**
