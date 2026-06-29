@@ -5371,8 +5371,9 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var level_exp_range: int = next_level_exp - current_level_exp if has_next_level_range else 1
 	var earned_level_exp: int = clampi(current_exp - current_level_exp, 0, level_exp_range)
 	var next_level_remaining: int = max(next_level_exp - current_exp, 0) if has_next_level_range else 0
+	var target_level: int = pokemon.level + 1
 	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
-	var detail_text := "Next Lv. %s" % next_level_remaining if has_next_level_range else "Next Lv. -"
+	var detail_text := "%s EXP to Lv. %s" % [next_level_remaining, target_level] if has_next_level_range else "Max level"
 	var tooltip_text := "Current EXP: %s\n%s" % [value_text, detail_text]
 
 	var stack := VBoxContainer.new()
@@ -5419,9 +5420,9 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var detail_label := Label.new()
 	detail_label.text = detail_text
 	detail_label.tooltip_text = tooltip_text
-	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_make_label_clip_width(detail_label)
-	detail_label.add_theme_font_size_override("font_size", 9)
+	detail_label.add_theme_font_size_override("font_size", 10)
 	detail_label.add_theme_color_override("font_color", Color("#aebbd0"))
 	stack.add_child(detail_label)
 	return stack
