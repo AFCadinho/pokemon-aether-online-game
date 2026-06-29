@@ -786,12 +786,12 @@ func _get_cached_sound_stream(sound_path: String) -> AudioStream:
 	return stream
 
 
-func play_heal_tween_for_target(target_ident: String) -> void:
+func play_heal_tween_for_target(target_ident: String, event_data: Dictionary = {}) -> void:
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.heal_tween", {"target": target_ident}):
 		return
-	if not is_target_ident_currently_visible(target_ident):
+	if not is_event_target_currently_visible(target_ident, event_data):
 		return
 
 	match _get_player_id_from_ident(target_ident):
@@ -859,6 +859,18 @@ func is_target_ident_currently_visible(target_ident: String) -> bool:
 	if species == "":
 		return true
 
+	return _is_target_species_currently_visible(target_ident, species)
+
+
+func is_event_target_currently_visible(target_ident: String, event_data: Dictionary) -> bool:
+	var event_species := _get_event_target_display_species(event_data)
+	if event_species != "":
+		return _is_target_species_currently_visible(target_ident, event_species)
+
+	return is_target_ident_currently_visible(target_ident)
+
+
+func _is_target_species_currently_visible(target_ident: String, species: String) -> bool:
 	var sprite_box := _get_sprite_box_for_ident(target_ident)
 	if sprite_box == null:
 		return true
@@ -866,6 +878,28 @@ func is_target_ident_currently_visible(target_ident: String) -> bool:
 		return true
 
 	return bool(sprite_box.call("is_showing_species", species))
+
+
+func _get_event_target_display_species(event_data: Dictionary) -> String:
+	for ref_key in ["targetRef", "target_ref"]:
+		var ref_value: Variant = event_data.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+
+		var ref_species := _get_display_species_from_dictionary(ref_value as Dictionary)
+		if ref_species != "":
+			return ref_species
+
+	return _get_display_species_from_dictionary(event_data)
+
+
+func _get_display_species_from_dictionary(data: Dictionary) -> String:
+	for key in ["displaySpecies", "display_species", "transformedSpecies", "megaSpecies", "species"]:
+		var species := str(data.get(key, "")).strip_edges()
+		if species != "":
+			return species
+
+	return ""
 
 
 func _get_sprite_box_for_ident(ident: String) -> Node:
