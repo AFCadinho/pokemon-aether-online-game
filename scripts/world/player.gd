@@ -29,6 +29,7 @@ const EYES_SPRITE_NAME := "EyesSprite"
 const EYEBROWS_SPRITE_NAME := "EyebrowsSprite"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
+const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
 	"hair": HAIR_SPRITE_NAME,
 	"headgear": HEADGEAR_SPRITE_NAME,
@@ -39,6 +40,7 @@ const APPEARANCE_PART_SPRITES := {
 	"eyes": EYES_SPRITE_NAME,
 	"eyebrows": EYEBROWS_SPRITE_NAME,
 }
+const RIDE_STATIC_PART_CATEGORIES := ["hair", "headgear", "facegear", "eyes", "eyebrows"]
 const ROLE_BADGE_COLORS := {
 	"gamemaster": Color(0.0, 0.749, 1.0),
 	"developer": Color(0.0, 0.898, 0.659),
@@ -78,11 +80,32 @@ const ACTIVITY_LAYER_OFFSETS := {
 	},
 	"ride": {
 		"default": {
-			"hair": Vector2(0.0, 2.0),
-			"headgear": Vector2(0.0, 2.0),
-			"facegear": Vector2(0.0, 2.0),
-			"eyes": Vector2(0.0, 2.0),
-			"eyebrows": Vector2(0.0, 2.0),
+			"hair": Vector2(0.0, 4.0),
+			"headgear": Vector2(0.0, 4.0),
+			"facegear": Vector2(0.0, 4.0),
+			"eyes": Vector2(0.0, 4.0),
+			"eyebrows": Vector2(0.0, 4.0),
+		},
+		"down": {
+			"hair": Vector2(0.0, 4.0),
+			"headgear": Vector2(0.0, 4.0),
+			"facegear": Vector2(0.0, 4.0),
+			"eyes": Vector2(0.0, 6.0),
+			"eyebrows": Vector2(0.0, 5.0),
+		},
+		"left": {
+			"hair": Vector2(-4.0, 4.0),
+			"headgear": Vector2(-4.0, 4.0),
+			"facegear": Vector2(-4.0, 4.0),
+			"eyes": Vector2(-4.0, 4.0),
+			"eyebrows": Vector2(-4.0, 4.0),
+		},
+		"right": {
+			"hair": Vector2(4.0, 4.0),
+			"headgear": Vector2(4.0, 4.0),
+			"facegear": Vector2(4.0, 4.0),
+			"eyes": Vector2(4.0, 4.0),
+			"eyebrows": Vector2(4.0, 4.0),
 		},
 	},
 }
@@ -110,6 +133,8 @@ const FISHING_PROMPT_SIZE := Vector2(30.0, 30.0)
 const FISHING_PROMPT_POSITION := Vector2(18.0, -72.0)
 const FISHING_BITE_PROMPT_SIZE := Vector2(28.0, 28.0)
 const FISHING_BITE_PROMPT_POSITION := Vector2(10.0, -92.0)
+const SURF_PROMPT_SIZE := Vector2(30.0, 30.0)
+const SURF_PROMPT_POSITION := Vector2(-48.0, -72.0)
 
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -162,6 +187,7 @@ var surf_activity_active := false
 var base_look_position := Vector2.ZERO
 var fishing_prompt_button: Button
 var fishing_bite_prompt_button: Button
+var surf_prompt_button: Button
 var fishing_input_handled_frame := -1
 var fishing_bite_prompt_rendered_state := ""
 
@@ -209,12 +235,23 @@ func is_fishing_activity_active() -> bool:
 func is_surfing_activity_active() -> bool:
 	return surf_activity_active
 
+func sync_activity_state_for_current_tile() -> void:
+	refresh_map_layers()
+
+	if _is_water_tile_at(global_position):
+		if bool(GameState.surf_unlocked) and not surf_activity_active:
+			_start_surf_activity(false)
+		return
+
+	if surf_activity_active:
+		_finish_surf_activity("left_water")
+
 func can_fish_here() -> bool:
 	if not bool(GameState.fishing_unlocked):
 		return false
 	if int(GameState.fishing_tier) <= 0:
 		return false
-	if fishing_activity_active or is_moving:
+	if fishing_activity_active or surf_activity_active or is_moving:
 		return false
 	if GameState.is_overworld_input_locked() or _is_ui_typing():
 		return false
@@ -234,6 +271,27 @@ func start_fishing(fishing_tier: int = -1) -> bool:
 func can_surf_here() -> bool:
 	return bool(get_surf_check_result().get("allowed", false))
 
+func start_surf() -> bool:
+	var surf_check := get_surf_check_result()
+	if not bool(surf_check.get("allowed", false)):
+		_debug_surf_check("start-blocked", surf_check)
+		return false
+
+	var surf_direction := last_direction
+	_start_surf_activity()
+	var did_start_move := _try_start_move(surf_direction)
+	if not did_start_move:
+		_finish_surf_activity()
+		_debug_surf_check("start-failed", {
+			"allowed": false,
+			"reason": "move_failed",
+			"target_position": surf_check.get("target_position", Vector2.ZERO),
+		})
+		return false
+
+	_debug_surf_check("start", surf_check)
+	return true
+
 func get_surf_check_result() -> Dictionary:
 	var target_position_value := _get_facing_tile_position()
 	var result := {
@@ -246,6 +304,9 @@ func get_surf_check_result() -> Dictionary:
 		result["reason"] = "no_direction"
 		return result
 	if not _is_water_tile_at(target_position_value):
+		return result
+	if surf_activity_active:
+		result["reason"] = "already_surfing"
 		return result
 	if fishing_activity_active:
 		result["reason"] = "busy_fishing"
@@ -368,6 +429,7 @@ func get_persistent_world_position() -> Vector2:
 func reset_movement_state() -> void:
 	var persistent_position := get_persistent_world_position()
 	_finish_fishing_activity()
+	_finish_surf_activity()
 	is_moving = false
 	global_position = persistent_position
 	target_position = global_position
@@ -402,6 +464,7 @@ func _ready() -> void:
 	set_display_name(PlayerSave.player_name, true)
 	set_role_from_user(AuthService.current_user)
 	_setup_fishing_prompt()
+	_setup_surf_prompt()
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
@@ -431,17 +494,20 @@ func _ready() -> void:
 	_setup_pokemon_follower.call_deferred()
 
 func _exit_tree() -> void:
-	if not fishing_activity_active:
-		return
+	var had_activity := fishing_activity_active or surf_activity_active
+	var should_unlock_overworld := fishing_activity_active
 
 	fishing_activity_active = false
 	fishing_activity_time_left = 0.0
 	fishing_activity_tier = 0
 	fishing_activity_state = FISHING_STATE_NONE
 	_sync_fishing_bite_prompt_visibility()
-	activity_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
-	_restore_activity_visual_offset()
-	GameState.unlock_overworld_input()
+	surf_activity_active = false
+	if had_activity:
+		activity_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+		_restore_activity_visual_offset()
+	if should_unlock_overworld:
+		GameState.unlock_overworld_input()
 
 func _sync_nameplate_visibility(visible: bool) -> void:
 	if nameplate == null or nameplate_label == null:
@@ -588,6 +654,28 @@ func _setup_fishing_bite_prompt() -> void:
 	fishing_bite_prompt_button.pressed.connect(Callable(self, "_on_fishing_bite_prompt_pressed"))
 	add_child(fishing_bite_prompt_button)
 
+func _setup_surf_prompt() -> void:
+	if surf_prompt_button != null:
+		return
+
+	surf_prompt_button = Button.new()
+	surf_prompt_button.name = "SurfPromptButton"
+	surf_prompt_button.visible = false
+	surf_prompt_button.text = ""
+	surf_prompt_button.icon = SURF_PROMPT_ICON
+	surf_prompt_button.expand_icon = true
+	surf_prompt_button.focus_mode = Control.FOCUS_NONE
+	surf_prompt_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	surf_prompt_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	surf_prompt_button.custom_minimum_size = SURF_PROMPT_SIZE
+	surf_prompt_button.size = SURF_PROMPT_SIZE
+	surf_prompt_button.position = SURF_PROMPT_POSITION
+	surf_prompt_button.z_index = 560
+	surf_prompt_button.tooltip_text = "Surf"
+	_apply_surf_prompt_style(surf_prompt_button)
+	surf_prompt_button.pressed.connect(Callable(self, "_on_surf_prompt_pressed"))
+	add_child(surf_prompt_button)
+
 func _apply_fishing_prompt_style(button: Button) -> void:
 	button.add_theme_stylebox_override("normal", _make_fishing_prompt_style(Color(0.98, 0.95, 0.86, 0.94), Color(0.18, 0.14, 0.20, 0.88)))
 	button.add_theme_stylebox_override("hover", _make_fishing_prompt_style(Color(1.0, 0.98, 0.90, 0.98), Color(0.30, 0.22, 0.34, 0.95)))
@@ -595,6 +683,16 @@ func _apply_fishing_prompt_style(button: Button) -> void:
 	button.add_theme_color_override("icon_normal_color", Color.WHITE)
 	button.add_theme_color_override("icon_hover_color", Color.WHITE)
 	button.add_theme_color_override("icon_pressed_color", Color(0.92, 0.92, 0.92, 1.0))
+	button.add_theme_constant_override("h_separation", 0)
+	button.add_theme_constant_override("icon_max_width", 22)
+
+func _apply_surf_prompt_style(button: Button) -> void:
+	button.add_theme_stylebox_override("normal", _make_fishing_prompt_style(Color(0.82, 0.94, 1.0, 0.94), Color(0.05, 0.22, 0.38, 0.88)))
+	button.add_theme_stylebox_override("hover", _make_fishing_prompt_style(Color(0.90, 0.98, 1.0, 0.98), Color(0.05, 0.32, 0.52, 0.95)))
+	button.add_theme_stylebox_override("pressed", _make_fishing_prompt_style(Color(0.68, 0.84, 0.94, 0.98), Color(0.03, 0.16, 0.28, 0.95)))
+	button.add_theme_color_override("icon_normal_color", Color.WHITE)
+	button.add_theme_color_override("icon_hover_color", Color.WHITE)
+	button.add_theme_color_override("icon_pressed_color", Color(0.92, 0.96, 1.0, 1.0))
 	button.add_theme_constant_override("h_separation", 0)
 	button.add_theme_constant_override("icon_max_width", 22)
 
@@ -623,6 +721,11 @@ func _sync_fishing_prompt_visibility() -> void:
 	if fishing_prompt_button == null:
 		return
 	fishing_prompt_button.visible = can_fish_here()
+
+func _sync_surf_prompt_visibility() -> void:
+	if surf_prompt_button == null:
+		return
+	surf_prompt_button.visible = can_surf_here()
 
 func _sync_fishing_bite_prompt_visibility() -> void:
 	if fishing_bite_prompt_button == null:
@@ -681,6 +784,11 @@ func _on_fishing_prompt_pressed() -> void:
 	start_fishing()
 	_sync_fishing_prompt_visibility()
 
+func _on_surf_prompt_pressed() -> void:
+	start_surf()
+	_sync_surf_prompt_visibility()
+	_sync_fishing_prompt_visibility()
+
 func _on_fishing_bite_prompt_pressed() -> void:
 	_handle_fishing_bite_prompt_activation()
 
@@ -713,10 +821,12 @@ func _process(delta: float) -> void:
 	_sync_appearance_sprite_frames()
 	_update_fishing_activity(delta)
 	_sync_fishing_prompt_visibility()
+	_sync_surf_prompt_visibility()
 	_sync_fishing_bite_prompt_visibility()
 
 	if _try_start_fishing_skill_input():
 		_sync_fishing_prompt_visibility()
+		_sync_surf_prompt_visibility()
 		return
 
 	if _try_check_surf_interaction_input():
@@ -746,6 +856,8 @@ func _process(delta: float) -> void:
 
 			if check_for_map_exit():
 				return
+
+			_sync_surf_state_after_move()
 			
 			if is_standing_on_tall_grass():
 				check_for_grass_encounter()
@@ -877,7 +989,41 @@ func _try_check_surf_interaction_input() -> bool:
 
 	var surf_check := get_surf_check_result()
 	_debug_surf_check("interact", surf_check)
+	if bool(surf_check.get("allowed", false)):
+		start_surf()
 	return true
+
+func _start_surf_activity(clear_input := true) -> void:
+	surf_activity_active = true
+	if clear_input:
+		_clear_input_buffer()
+		_clear_held_direction()
+	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_SURF)
+	_sync_fishing_prompt_visibility()
+	_sync_surf_prompt_visibility()
+	_debug_activity_layer_offsets("surf-start" if clear_input else "surf-resume")
+
+func _finish_surf_activity(reason := "left_water") -> void:
+	if not surf_activity_active:
+		return
+
+	surf_activity_active = false
+	clear_activity_style()
+	_sync_fishing_prompt_visibility()
+	_sync_surf_prompt_visibility()
+	_debug_surf_check("finish", {
+		"allowed": false,
+		"reason": reason,
+		"target_position": global_position,
+	})
+
+func _sync_surf_state_after_move() -> void:
+	if not surf_activity_active:
+		return
+	if _is_water_tile_at(global_position):
+		return
+
+	_finish_surf_activity()
 
 func _start_fishing_activity(fishing_tier: int = 1) -> void:
 	fishing_activity_active = true
@@ -1038,17 +1184,24 @@ func _has_reached_target() -> bool:
 	return move_elapsed >= move_duration
 
 func _get_current_tile_move_duration() -> float:
+	if surf_activity_active:
+		return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
 	if _is_activity_pose_active():
 		return TILE_MOVE_DURATION
 	return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
 
 func _get_current_walk_animation_speed() -> float:
+	if surf_activity_active:
+		return RUN_WALK_ANIMATION_SPEED if GameState.running_shoes_enabled else WALK_ANIMATION_SPEED
 	if _is_activity_pose_active():
 		return WALK_ANIMATION_SPEED
 	return RUN_WALK_ANIMATION_SPEED if GameState.running_shoes_enabled else WALK_ANIMATION_SPEED
 
 func _is_activity_pose_active() -> bool:
 	return activity_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+
+func _uses_static_activity_movement_pose() -> bool:
+	return CharacterAppearanceService.normalize_movement_style(activity_style) == CharacterAppearanceService.BODY_MOVEMENT_RIDE
 
 func _get_current_body_movement_style() -> String:
 	if _is_activity_pose_active():
@@ -1122,12 +1275,19 @@ func _try_start_move(direction: Vector2) -> bool:
 	return true
 
 func play_walk_animation(direction: Vector2) -> void:
+	if _uses_static_activity_movement_pose():
+		set_idle_frame()
+		return
+
 	var animation_name := _get_walk_animation_name(direction)
 	var should_restart_animation := master_appearance_sprite == null \
 		or master_appearance_sprite.animation != animation_name \
 		or not master_appearance_sprite.is_playing()
 
 	for sprite in appearance_sprites:
+		if _should_keep_activity_layer_idle(sprite):
+			_sync_activity_idle_layer(sprite, direction)
+			continue
 		if _sprite_has_animation(sprite, animation_name):
 			_restore_layer_visibility_if_needed(sprite)
 			sprite.animation = animation_name
@@ -1238,6 +1398,7 @@ func set_idle_frame() -> void:
 	for sprite in appearance_sprites:
 		sprite.stop()
 		_set_idle_animation(sprite, last_direction)
+	_sync_activity_layer_offsets()
 	_apply_activity_visual_offset()
 	
 func refresh_map_layers() -> void:
@@ -1819,6 +1980,9 @@ func _sync_appearance_sprite_frames() -> void:
 	for sprite in appearance_sprites:
 		if sprite == master_appearance_sprite:
 			continue
+		if _should_keep_activity_layer_idle(sprite):
+			_sync_activity_idle_layer(sprite, last_direction)
+			continue
 		if not _sprite_has_animation(sprite, animation_name):
 			_hide_layer_for_missing_animation(sprite)
 			continue
@@ -1850,6 +2014,44 @@ func _sync_appearance_animation_speeds() -> void:
 		for animation_name: String in walk_animation_names:
 			if sprite.sprite_frames.has_animation(animation_name):
 				sprite.sprite_frames.set_animation_speed(animation_name, _get_current_walk_animation_speed())
+
+func _sync_activity_idle_layer(sprite: AnimatedSprite2D, direction: Vector2) -> void:
+	if sprite == null:
+		return
+
+	var animation_name := _get_idle_animation_name(direction)
+	if not _sprite_has_animation(sprite, animation_name):
+		animation_name = _get_walk_animation_name(direction)
+	if not _sprite_has_animation(sprite, animation_name):
+		_hide_layer_for_missing_animation(sprite)
+		return
+
+	_restore_layer_visibility_if_needed(sprite)
+	sprite.animation = animation_name
+	sprite.frame = 0
+	sprite.frame_progress = 0.0
+	sprite.stop()
+	_apply_face_gear_frame_alignment(sprite)
+
+func _should_keep_activity_layer_idle(sprite: AnimatedSprite2D) -> bool:
+	if sprite == null or sprite == master_appearance_sprite:
+		return false
+	if CharacterAppearanceService.normalize_movement_style(activity_style) != CharacterAppearanceService.BODY_MOVEMENT_RIDE:
+		return false
+
+	var category := _get_appearance_category_for_sprite(sprite)
+	return RIDE_STATIC_PART_CATEGORIES.has(category)
+
+func _get_appearance_category_for_sprite(sprite: AnimatedSprite2D) -> String:
+	if sprite == null:
+		return ""
+
+	var sprite_name := str(sprite.name)
+	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+		var category := str(category_value)
+		if str(APPEARANCE_PART_SPRITES[category]) == sprite_name:
+			return category
+	return ""
 
 func _set_idle_animation(sprite: AnimatedSprite2D, direction: Vector2) -> void:
 	if _is_unequipped_appearance_part_sprite(sprite):

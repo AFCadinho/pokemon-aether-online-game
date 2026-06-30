@@ -165,6 +165,7 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	player.is_moving = false
 	player.set_idle_frame()
 	player.refresh_map_layers()
+	_sync_player_activity_state_for_current_tile()
 	if player.has_method("reset_pokemon_follower_position"):
 		player.call("reset_pokemon_follower_position")
 
@@ -183,11 +184,17 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 	player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
 	player.set_idle_frame()
 	player.refresh_map_layers()
+	_sync_player_activity_state_for_current_tile()
 	if player.has_method("reset_pokemon_follower_position"):
 		player.call("reset_pokemon_follower_position")
 	GameState.player_position = saved_position
 	GameState.player_direction = player.last_direction
 	GameState.has_player_position = true
+
+
+func _sync_player_activity_state_for_current_tile() -> void:
+	if player != null and player.has_method("sync_activity_state_for_current_tile"):
+		player.call("sync_activity_state_for_current_tile")
 
 
 func _setup_initial_world_state() -> void:

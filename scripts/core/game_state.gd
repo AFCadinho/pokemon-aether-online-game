@@ -16,7 +16,7 @@ var show_follower := true
 var running_shoes_enabled := false
 var fishing_unlocked := true
 var fishing_tier := 1
-var surf_unlocked := false
+var surf_unlocked := true
 
 func lock_input() -> void:
 	input_locked = true
