@@ -7602,7 +7602,8 @@ func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 		POKEMON_SUMMARY_SPRITE_MAX_SIZE.y / max(normalized_frame_size.y, 1.0)
 	)
 	var scale_value: float = clamp(fit_scale * display_scale_multiplier, POKEMON_SUMMARY_SPRITE_MIN_SCALE, POKEMON_SUMMARY_SPRITE_MAX_SCALE)
-	return Vector2(scale_value, scale_value)
+	var texture_scale: float = scale_value / max(render_scale, 1.0)
+	return Vector2(texture_scale, texture_scale)
 
 func _get_pokemon_summary_sprite_frame_size(frames: SpriteFrames) -> Vector2:
 	if pokemon_summary_sprite_loader.has_method("_get_sprite_frames_frame_size"):
