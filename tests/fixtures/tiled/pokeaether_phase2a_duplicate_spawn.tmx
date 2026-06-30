@@ -16,7 +16,13 @@
 1,1
   </data>
  </layer>
- <objectgroup id="2" name="PA_Spawns">
+ <layer id="2" name="Collision" width="2" height="2" visible="0">
+  <data encoding="csv">
+0,0,
+0,0
+  </data>
+ </layer>
+ <objectgroup id="3" name="PA_Spawns">
   <object id="1" name="StartA" x="0" y="0">
    <properties>
     <property name="spawn_id" value="Start"/>

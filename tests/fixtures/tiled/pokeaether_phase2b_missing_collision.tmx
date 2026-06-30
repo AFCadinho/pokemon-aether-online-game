@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="2" height="2" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="2">
+ <properties>
+  <property name="pa_schema_version" type="int" value="1"/>
+  <property name="map_id" value="phase2b_missing_collision"/>
+  <property name="map_display_name" value="Phase 2B Missing Collision"/>
+  <property name="region_id" value="test"/>
+  <property name="region_name" value="Test Region"/>
+ </properties>
+ <tileset firstgid="1" name="floors" tilewidth="32" tileheight="32" tilecount="30" columns="5">
+  <image source="../../../assets/tilesets/fiver/tiles_env2_floors32.png" width="160" height="192"/>
+ </tileset>
+ <layer id="1" name="Ground" width="2" height="2">
+  <data encoding="csv">
+1,1,
+1,1
+  </data>
+ </layer>
+ <objectgroup id="2" name="PA_Spawns">
+  <object id="1" name="Start" x="0" y="0">
+   <properties>
+    <property name="spawn_id" value="Start"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+</map>

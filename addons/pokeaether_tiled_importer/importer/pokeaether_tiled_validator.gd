@@ -11,7 +11,7 @@ func validate(map_data: Dictionary) -> Dictionary:
 	_validate_map_metadata(map_data, errors)
 	_validate_tile_size(map_data, errors)
 	_validate_object_layers(map_data, errors)
-	_validate_runtime_tile_layers(map_data, warnings)
+	_validate_runtime_tile_layers(map_data, errors, warnings)
 
 	return {
 		"success": errors.is_empty(),
@@ -58,13 +58,19 @@ func _validate_tile_size(map_data: Dictionary, errors: Array[String]) -> void:
 		])
 
 
-func _validate_runtime_tile_layers(map_data: Dictionary, warnings: Array[String]) -> void:
+func _validate_runtime_tile_layers(map_data: Dictionary, errors: Array[String], warnings: Array[String]) -> void:
 	var layer_names := {}
 	for layer: Dictionary in map_data.get("layers", []):
 		layer_names[str(layer.get("name", ""))] = true
 
 	if not layer_names.has(Schema.TILE_LAYER_COLLISION):
-		warnings.append("Tile layer '%s' is missing. The generated layer will be empty, so every tile is passable unless blocked by characters." % Schema.TILE_LAYER_COLLISION)
+		errors.append("Required tile layer '%s' is missing. PokeAether passability depends on an explicit grid occupancy layer." % Schema.TILE_LAYER_COLLISION)
+
+	for layer_name in Schema.REQUIRED_DIRECT_TILE_LAYERS:
+		if layer_name == Schema.TILE_LAYER_COLLISION:
+			continue
+		if not layer_names.has(layer_name):
+			warnings.append("Optional compatibility tile layer '%s' is missing. An empty direct child will be generated." % layer_name)
 
 
 func _validate_object_layers(map_data: Dictionary, errors: Array[String]) -> void:
