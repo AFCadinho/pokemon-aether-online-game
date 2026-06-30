@@ -372,6 +372,16 @@ var move_learn_active_prompt: Dictionary = {}
 var move_learn_pending_review_total := 0
 var move_learn_pending_review_index := 0
 var move_learn_processing := false
+var evolution_prompt_popup: PanelContainer
+var evolution_prompt_title_label: Label
+var evolution_prompt_progress_label: Label
+var evolution_prompt_message_label: Label
+var evolution_prompt_level_label: Label
+var evolution_prompt_status_label: Label
+var evolution_prompt_old_sprite: TextureRect
+var evolution_prompt_new_sprite: TextureRect
+var evolution_prompt_confirm_button: Button
+var evolution_prompt_skip_button: Button
 var evolution_prompt_queue: Array[Dictionary] = []
 var evolution_active_prompt: Dictionary = {}
 var evolution_prompt_processing := false
@@ -597,6 +607,7 @@ func _ready() -> void:
 	_setup_chat_pokemon_attachment_preview()
 	_setup_ui_confirm_popup()
 	_setup_move_learn_popup()
+	_setup_evolution_prompt_popup()
 	_setup_evolution_overlay()
 	_setup_dev_clear_menu_popup()
 	_setup_pvp_room_popup()
@@ -1415,6 +1426,124 @@ func _setup_move_learn_popup() -> void:
 	move_learn_hover_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#080604f4"), Color("#2c241a"), 3, 1))
 	root_control.add_child(move_learn_hover_panel)
 
+func _setup_evolution_prompt_popup() -> void:
+	evolution_prompt_popup = PanelContainer.new()
+	evolution_prompt_popup.name = "EvolutionPromptPopup"
+	evolution_prompt_popup.visible = false
+	evolution_prompt_popup.z_index = UI_MODAL_Z_INDEX
+	evolution_prompt_popup.z_as_relative = false
+	evolution_prompt_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	evolution_prompt_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912fb"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
+	root_control.add_child(evolution_prompt_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 15)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	evolution_prompt_popup.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stack.add_theme_constant_override("separation", 12)
+	margin.add_child(stack)
+
+	var header := HBoxContainer.new()
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_theme_constant_override("separation", 10)
+	stack.add_child(header)
+
+	evolution_prompt_title_label = Label.new()
+	evolution_prompt_title_label.text = "Evolution"
+	evolution_prompt_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	evolution_prompt_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	evolution_prompt_title_label.add_theme_font_size_override("font_size", 19)
+	evolution_prompt_title_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	header.add_child(evolution_prompt_title_label)
+
+	evolution_prompt_progress_label = Label.new()
+	evolution_prompt_progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	evolution_prompt_progress_label.add_theme_font_size_override("font_size", 12)
+	evolution_prompt_progress_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	header.add_child(evolution_prompt_progress_label)
+
+	evolution_prompt_message_label = Label.new()
+	evolution_prompt_message_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	evolution_prompt_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	evolution_prompt_message_label.add_theme_font_size_override("font_size", 15)
+	evolution_prompt_message_label.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(evolution_prompt_message_label)
+
+	var sprite_row := HBoxContainer.new()
+	sprite_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	sprite_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sprite_row.add_theme_constant_override("separation", 14)
+	stack.add_child(sprite_row)
+
+	evolution_prompt_old_sprite = _create_evolution_prompt_sprite("OldSpecies")
+	sprite_row.add_child(evolution_prompt_old_sprite)
+
+	var arrow_label := Label.new()
+	arrow_label.text = ">"
+	arrow_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	arrow_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	arrow_label.custom_minimum_size = Vector2(28, 92)
+	arrow_label.add_theme_font_size_override("font_size", 22)
+	arrow_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	sprite_row.add_child(arrow_label)
+
+	evolution_prompt_new_sprite = _create_evolution_prompt_sprite("NewSpecies")
+	sprite_row.add_child(evolution_prompt_new_sprite)
+
+	evolution_prompt_level_label = Label.new()
+	evolution_prompt_level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	evolution_prompt_level_label.add_theme_font_size_override("font_size", 12)
+	evolution_prompt_level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(evolution_prompt_level_label)
+
+	evolution_prompt_status_label = Label.new()
+	evolution_prompt_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	evolution_prompt_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	evolution_prompt_status_label.add_theme_font_size_override("font_size", 12)
+	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(evolution_prompt_status_label)
+
+	var button_row := HBoxContainer.new()
+	button_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	button_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button_row.add_theme_constant_override("separation", 10)
+	stack.add_child(button_row)
+
+	evolution_prompt_skip_button = Button.new()
+	evolution_prompt_skip_button.text = "Do not evolve"
+	evolution_prompt_skip_button.custom_minimum_size = Vector2(132, 36)
+	evolution_prompt_skip_button.focus_mode = Control.FOCUS_NONE
+	evolution_prompt_skip_button.pressed.connect(_on_evolution_skipped)
+	_apply_button_style(evolution_prompt_skip_button)
+	button_row.add_child(evolution_prompt_skip_button)
+
+	evolution_prompt_confirm_button = Button.new()
+	evolution_prompt_confirm_button.text = "Evolve"
+	evolution_prompt_confirm_button.custom_minimum_size = Vector2(132, 36)
+	evolution_prompt_confirm_button.focus_mode = Control.FOCUS_NONE
+	evolution_prompt_confirm_button.pressed.connect(_on_evolution_confirmed)
+	_apply_button_style(evolution_prompt_confirm_button, "primary")
+	button_row.add_child(evolution_prompt_confirm_button)
+
+func _create_evolution_prompt_sprite(sprite_name: String) -> TextureRect:
+	var sprite := TextureRect.new()
+	sprite.name = sprite_name
+	sprite.custom_minimum_size = Vector2(112, 94)
+	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return sprite
+
 func _apply_move_learn_action_button_style(button: Button, background_color: Color, border_color: Color, pressed_color: Color) -> void:
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
@@ -1904,7 +2033,7 @@ func _finish_evolution_review_queue() -> void:
 func _show_next_evolution_prompt() -> void:
 	if evolution_prompt_processing or evolution_is_playing:
 		return
-	if ui_confirm_popup != null and ui_confirm_popup.visible:
+	if evolution_prompt_popup != null and evolution_prompt_popup.visible:
 		return
 	if move_learn_popup != null and move_learn_popup.visible:
 		return
@@ -1926,22 +2055,41 @@ func _show_next_evolution_prompt() -> void:
 	_finish_evolution_review_queue()
 
 func _render_evolution_prompt(prompt: Dictionary) -> void:
+	if evolution_prompt_popup == null:
+		return
+
 	var from_species := _evolution_prompt_from_species(prompt)
 	var to_species := _evolution_prompt_to_species(prompt)
 	var progress_label := _evolution_queue_progress_label()
-	var title := "Evolve %s?%s" % [from_species, " (%s)" % progress_label if progress_label != "" else ""]
 	var level := int(prompt.get("level", 0))
-	var level_text := "\n\nEvolution became available at Lv. %s." % level if level > 0 else ""
-	_show_ui_confirm_popup(
-		title,
-		"%s can evolve into %s.%s" % [from_species, to_species, level_text],
-		"Evolve",
-		Callable(self, "_on_evolution_confirmed"),
-		Vector2i(460, 0),
-		false,
-		"Do not evolve",
-		Callable(self, "_on_evolution_skipped")
+	evolution_prompt_title_label.text = "Evolution"
+	evolution_prompt_progress_label.text = progress_label
+	evolution_prompt_message_label.text = "%s can evolve into %s." % [from_species, to_species]
+	evolution_prompt_level_label.text = "Available at Lv. %s" % level if level > 0 else ""
+	evolution_prompt_status_label.text = ""
+	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_evolution_prompt_controls_disabled(false)
+
+	var shiny := bool(prompt.get("shiny", false))
+	evolution_prompt_old_sprite.texture = PokemonAssets.load_home_sprite(from_species, shiny)
+	evolution_prompt_new_sprite.texture = PokemonAssets.load_home_sprite(to_species, shiny)
+
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var popup_size := Vector2(min(440.0, viewport_size.x - 32.0), min(336.0, viewport_size.y - 32.0))
+	var popup_position := Vector2(
+		max((viewport_size.x - popup_size.x) * 0.5, 16.0),
+		max((viewport_size.y - popup_size.y) * 0.5, 16.0)
 	)
+	evolution_prompt_popup.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	evolution_prompt_popup.position = popup_position
+	evolution_prompt_popup.size = popup_size
+	evolution_prompt_popup.custom_minimum_size = popup_size
+	evolution_prompt_popup.offset_left = popup_position.x
+	evolution_prompt_popup.offset_top = popup_position.y
+	evolution_prompt_popup.offset_right = popup_position.x + popup_size.x
+	evolution_prompt_popup.offset_bottom = popup_position.y + popup_size.y
+	evolution_prompt_popup.visible = true
+	evolution_prompt_popup.move_to_front()
 
 func _on_evolution_confirmed() -> void:
 	await _submit_evolution_choice(true)
@@ -1954,18 +2102,20 @@ func _submit_evolution_choice(confirm: bool) -> void:
 		return
 
 	evolution_prompt_processing = true
+	_set_evolution_prompt_controls_disabled(true)
 	var prompt := evolution_active_prompt.duplicate(true)
 	var pokemon_id := int(prompt.get("pokemonId", 0))
 	var target_species_id := _evolution_prompt_target_species_id(prompt)
 	var from_species := _evolution_prompt_from_species(prompt)
-	var to_species := _evolution_prompt_to_species(prompt)
+	evolution_prompt_status_label.text = "Saving..."
+	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	var result: Dictionary = await PlayerPartyStateService.evolve_pokemon(pokemon_id, target_species_id, confirm)
 	evolution_prompt_processing = false
 
 	if not bool(result.get("success", false)):
-		add_system_message("Could not save evolution choice for %s: %s" % [from_species, str(result.get("error", "Unknown error"))])
-		evolution_active_prompt.clear()
-		_show_next_evolution_prompt()
+		evolution_prompt_status_label.text = str(result.get("error", "Could not save evolution choice."))
+		evolution_prompt_status_label.add_theme_color_override("font_color", UI_DANGER)
+		_set_evolution_prompt_controls_disabled(false)
 		return
 
 	var evolution: Dictionary = {}
@@ -1976,15 +2126,25 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	if confirm and not bool(result.get("skipped", false)):
 		if evolution.is_empty():
 			evolution = prompt
+		if evolution_prompt_popup != null:
+			evolution_prompt_popup.visible = false
 		await play_evolution_overlay(evolution)
 		add_system_message("%s evolved into %s!" % [from_species, _evolution_prompt_to_species(evolution)])
 	else:
+		if evolution_prompt_popup != null:
+			evolution_prompt_popup.visible = false
 		add_system_message("%s did not evolve." % from_species)
 
 	evolution_active_prompt.clear()
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
 	_show_next_evolution_prompt()
+
+func _set_evolution_prompt_controls_disabled(disabled: bool) -> void:
+	if evolution_prompt_confirm_button != null:
+		evolution_prompt_confirm_button.disabled = disabled
+	if evolution_prompt_skip_button != null:
+		evolution_prompt_skip_button.disabled = disabled
 
 func _evolution_prompt_target_species_id(prompt: Dictionary) -> String:
 	for key in ["toSpeciesId", "to_species_id", "species_id", "targetSpeciesId"]:
