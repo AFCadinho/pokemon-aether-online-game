@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://duw5e076ulb3"]
 
 [ext_resource type="Script" uid="uid://cnuvn2omox1om" path="res://scripts/ui/login_screen.gd" id="1_login"]
-[ext_resource type="Texture2D" uid="uid://bjptubqhypeuh" path="res://assets/ui/logo.png" id="2_logo"]
 [ext_resource type="Texture2D" uid="uid://diu5e64u5vwh8" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="3_hero"]
-[ext_resource type="Texture2D" uid="uid://bucvn1i17alpn" path="res://assets/ui/pokeaether_text_logo.png" id="4_text_logo"]
+[ext_resource type="Texture2D" path="res://assets/ui/pokeaether_combo_logo.png" id="4_combo_logo"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="5_settings"]
 [ext_resource type="VideoStream" uid="uid://cg2bb0mtsdr6o" path="res://assets/video/login_background.ogv" id="6_video"]
+[ext_resource type="Texture2D" uid="uid://bucvn1i17alpn" path="res://assets/ui/pokeaether_text_logo.png" id="7_text_logo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shell"]
 bg_color = Color(0.019607844, 0.024, 0.043, 0)
@@ -22,18 +22,6 @@ border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.38)
 shadow_color = Color(0, 0, 0, 0.34)
 shadow_size = 18
 shadow_offset = Vector2(8, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brand_mark"]
-bg_color = Color(0.02745098, 0.03137255, 0.05490196, 0.96)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.56)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_news_card"]
 bg_color = Color(0.012, 0.017, 0.03, 0.86)
@@ -318,39 +306,16 @@ theme_override_constants/margin_bottom = 40
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="BrandHeader" type="HBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=947319662]
+[node name="BrandHeader" type="TextureRect" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=947319662]
+custom_minimum_size = Vector2(0, 142)
 layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="BrandMark" type="PanelContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader" unique_id=419317588]
-custom_minimum_size = Vector2(84, 84)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_brand_mark")
-
-[node name="Logo" type="TextureRect" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader/BrandMark" unique_id=1607800628]
-layout_mode = 2
-texture = ExtResource("2_logo")
+mouse_filter = 2
+texture = ExtResource("4_combo_logo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BrandText" type="VBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader" unique_id=647963236]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Title" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader/BrandText" unique_id=140159727]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
-theme_override_font_sizes/font_size = 34
-text = "PokeAether"
-
-[node name="Subtitle" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/BrandHeader/BrandText" unique_id=2133762446]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
-theme_override_font_sizes/font_size = 13
-text = "ONLINE"
-
 [node name="SpacerTop" type="Control" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=340243640]
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 
 [node name="Headline" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=799300216]
@@ -456,7 +421,7 @@ theme_override_constants/separation = 6
 custom_minimum_size = Vector2(0, 255)
 layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("4_text_logo")
+texture = ExtResource("7_text_logo")
 expand_mode = 1
 stretch_mode = 5
 
