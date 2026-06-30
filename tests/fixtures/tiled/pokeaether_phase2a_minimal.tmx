@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="7">
+ <properties>
+  <property name="pa_schema_version" type="int" value="1"/>
+  <property name="map_id" value="phase2a_test_map"/>
+  <property name="map_display_name" value="Phase 2A Test Map"/>
+  <property name="region_id" value="test"/>
+  <property name="region_name" value="Test Region"/>
+  <property name="location_id" value="test.phase2a"/>
+  <property name="location_name" value="Phase 2A"/>
+  <property name="music_track_path" value="res://assets/music/overworld/kanto/routes/route1.ogg"/>
+  <property name="default_spawn" value="Start"/>
+ </properties>
+ <tileset firstgid="1" name="floors" tilewidth="32" tileheight="32" tilecount="30" columns="5">
+  <image source="../../../assets/tilesets/fiver/tiles_env2_floors32.png" width="160" height="192"/>
+ </tileset>
+ <layer id="1" name="Ground" width="4" height="4">
+  <data encoding="csv">
+1,1,1,1,
+1,1,1,1,
+1,1,1,1,
+1,1,1,1
+  </data>
+ </layer>
+ <layer id="2" name="Collision" width="4" height="4" visible="0">
+  <data encoding="csv">
+0,0,0,0,
+0,0,1,0,
+0,0,0,0,
+0,0,0,0
+  </data>
+ </layer>
+ <layer id="3" name="TallGrass" width="4" height="4">
+  <data encoding="csv">
+0,0,0,0,
+0,0,0,0,
+1,1,0,0,
+0,0,0,0
+  </data>
+ </layer>
+ <objectgroup id="4" name="PA_Spawns">
+  <object id="1" name="Start" x="32" y="32">
+   <properties>
+    <property name="spawn_id" value="Start"/>
+    <property name="facing" value="down"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="PA_Warps">
+  <object id="2" name="ToOther" x="64" y="0" width="32" height="32">
+   <properties>
+    <property name="warp_id" value="ToOther"/>
+    <property name="target_map_id" value="other_test_map"/>
+    <property name="target_spawn_name" value="FromPhase2A"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="PA_NPCs">
+  <object id="3" name="Guide" x="96" y="32">
+   <properties>
+    <property name="npc_id" value="guide"/>
+    <property name="npc_kind" value="dialogue"/>
+    <property name="facing" value="left"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="7" name="PA_Items">
+  <object id="4" name="Potion" x="0" y="64">
+   <properties>
+    <property name="item_spawn_id" value="potion_1"/>
+    <property name="item_id" value="potion"/>
+    <property name="quantity" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="PA_EncounterRegions">
+  <object id="5" name="GrassEncounter" x="0" y="96" width="64" height="32">
+   <properties>
+    <property name="encounter_region_id" value="grass_a"/>
+    <property name="encounter_area_id" value="phase2a_test_grass"/>
+    <property name="encounter_type" value="grass"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="PA_Triggers">
+  <object id="6" name="IntroTrigger" x="96" y="96" width="32" height="32">
+   <properties>
+    <property name="trigger_id" value="intro"/>
+    <property name="trigger_kind" value="story"/>
+    <property name="event_id" value="phase2a_intro"/>
+    <property name="once" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
