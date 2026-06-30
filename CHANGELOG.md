@@ -6,6 +6,7 @@
 - Added a dedicated PvP battle music track.
 - Added Pokemon experience gains after battles, including level-up messages after rewards are claimed.
 - Added move learning prompts when a Pokemon levels up and already knows four moves.
+- Added level-up evolution prompts after rewards and EXP items, including the choice to evolve or wait.
 - Added experience progress bars to the player battle HUD, party slots, and Pokemon summaries.
 - Added a visual Happiness progress bar placeholder in Pokemon summaries.
 - Added effect details to medicine items in the Item Dex, including EXP, healing, PP, and ability item strengths.
