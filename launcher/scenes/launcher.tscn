@@ -2,14 +2,12 @@
 
 [ext_resource type="Script" uid="uid://sejde4y7ji6v" path="res://scripts/launcher.gd" id="1_launcher"]
 [ext_resource type="Texture2D" uid="uid://da4x4pta7v7o4" path="res://assets/ui/launcher_hero_clean.png" id="2_hero"]
+[ext_resource type="Texture2D" uid="uid://cjvhiyxolpb57" path="res://assets/ui/pao_combo_logo.png" id="3_combo_logo"]
 [ext_resource type="Texture2D" uid="uid://tvvwj514bct" path="res://assets/ui/discord.svg" id="4_discord"]
 [ext_resource type="Texture2D" uid="uid://c5pw2xpavwgib" path="res://assets/ui/refresh.svg" id="5_refresh"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_rsxub"]
 load_path = "res://.godot/imported/logo.png-d34d183e6fc605a54aaa32000f044bbc.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wr5gk"]
-load_path = "res://.godot/imported/pao_text_logo.png-fef76664bf29104b4db10aacc1bf4d3e.ctex"
 
 [node name="Launcher" type="Control" unique_id=1777332781]
 layout_mode = 3
@@ -304,7 +302,7 @@ offset_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("CompressedTexture2D_wr5gk")
+texture = ExtResource("3_combo_logo")
 expand_mode = 1
 stretch_mode = 5
 
