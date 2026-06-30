@@ -105,6 +105,9 @@ const POKEMON_SUMMARY_SPRITE_MIN_SCALE := 0.72
 const POKEMON_SUMMARY_SPRITE_MAX_SCALE := 2.2
 const POKEMON_SUMMARY_NATURE_BOOST_COLOR := Color("#7df27f")
 const POKEMON_SUMMARY_NATURE_DROP_COLOR := Color("#ff8f4f")
+const EVOLUTION_OVERLAY_STAGE_SIZE := Vector2(520, 360)
+const EVOLUTION_OVERLAY_SPRITE_SIZE := Vector2(240, 220)
+const EVOLUTION_OVERLAY_SPARKLE_COUNT := 18
 const POKEMON_SUMMARY_NATURE_CHANGES := {
 	"lonely": {"boosted": "atk", "lowered": "def"},
 	"brave": {"boosted": "atk", "lowered": "spe"},
@@ -353,6 +356,7 @@ var ui_confirm_message_label: Label
 var ui_confirm_cancel_button: Button
 var ui_confirm_confirm_button: Button
 var ui_confirm_callback := Callable()
+var ui_confirm_cancel_callback := Callable()
 var move_learn_popup: PanelContainer
 var move_learn_title_label: Label
 var move_learn_message_label: Label
@@ -368,6 +372,11 @@ var move_learn_active_prompt: Dictionary = {}
 var move_learn_pending_review_total := 0
 var move_learn_pending_review_index := 0
 var move_learn_processing := false
+var evolution_prompt_queue: Array[Dictionary] = []
+var evolution_active_prompt: Dictionary = {}
+var evolution_prompt_processing := false
+var evolution_prompt_review_total := 0
+var evolution_prompt_review_index := 0
 var dev_clear_menu_popup: PanelContainer
 var pvp_room_popup: PanelContainer
 var pvp_room_code_label: Label
@@ -508,7 +517,23 @@ var pokemon_summary_move_summary_index: Dictionary = {}
 var pokemon_summary_move_summary_index_loaded := false
 var pokemon_summary_ability_summary_index: Dictionary = {}
 var pokemon_summary_ability_summary_index_loaded := false
+var evolution_overlay: Control
+var evolution_stage: Control
+var evolution_sprite_stage: Control
+var evolution_title_label: Label
+var evolution_message_label: Label
+var evolution_continue_button: Button
+var evolution_old_sprite: TextureRect
+var evolution_new_sprite: TextureRect
+var evolution_silhouette_sprite: TextureRect
+var evolution_flash_rect: ColorRect
+var evolution_ring_nodes: Array[Control] = []
+var evolution_sparkle_nodes: Array[Control] = []
+var evolution_tween: Tween
+var evolution_silhouette_material: ShaderMaterial
+var evolution_is_playing := false
 var dev_add_button: Button
+var dev_preview_evolution_button: Button
 var dev_add_menu_popup: PanelContainer
 var dev_add_item_button: Button
 var dev_add_item_popup: PanelContainer
@@ -572,6 +597,7 @@ func _ready() -> void:
 	_setup_chat_pokemon_attachment_preview()
 	_setup_ui_confirm_popup()
 	_setup_move_learn_popup()
+	_setup_evolution_overlay()
 	_setup_dev_clear_menu_popup()
 	_setup_pvp_room_popup()
 	_setup_dev_add_item_tools()
@@ -672,6 +698,7 @@ func _ready() -> void:
 	dev_add_team_button.disabled = true
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
 	dev_add_button.pressed.connect(_on_dev_add_button_pressed)
+	dev_preview_evolution_button.pressed.connect(_on_dev_preview_evolution_button_pressed)
 	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
@@ -750,6 +777,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if dev_add_button != null:
 		dev_add_button.visible = can_use_dev_tools
 		dev_add_button.disabled = not can_use_dev_tools
+	if dev_preview_evolution_button != null:
+		dev_preview_evolution_button.visible = can_use_dev_tools
+		dev_preview_evolution_button.disabled = not can_use_dev_tools
 	if dev_heal_party_button != null:
 		dev_heal_party_button.visible = can_use_dev_tools
 		dev_heal_party_button.disabled = not can_use_dev_tools
@@ -1208,7 +1238,7 @@ func _setup_ui_confirm_popup() -> void:
 	close_button.text = "X"
 	close_button.custom_minimum_size = Vector2(32, 28)
 	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(_hide_ui_confirm_popup)
+	close_button.pressed.connect(_on_ui_confirm_cancel_pressed)
 	_apply_button_style(close_button)
 	header.add_child(close_button)
 
@@ -1229,7 +1259,7 @@ func _setup_ui_confirm_popup() -> void:
 	ui_confirm_cancel_button.text = "Cancel"
 	ui_confirm_cancel_button.custom_minimum_size = Vector2(112, 32)
 	ui_confirm_cancel_button.focus_mode = Control.FOCUS_NONE
-	ui_confirm_cancel_button.pressed.connect(_hide_ui_confirm_popup)
+	ui_confirm_cancel_button.pressed.connect(_on_ui_confirm_cancel_pressed)
 	_apply_button_style(ui_confirm_cancel_button)
 	button_row.add_child(ui_confirm_cancel_button)
 
@@ -1247,18 +1277,21 @@ func _show_ui_confirm_popup(
 	confirm_text: String,
 	callback: Callable,
 	size: Vector2i = Vector2i(460, 190),
-	danger_confirm: bool = false
+	danger_confirm: bool = false,
+	cancel_text: String = "Cancel",
+	cancel_callback: Callable = Callable()
 ) -> void:
 	if ui_confirm_popup == null:
 		if callback.is_valid():
 			callback.call()
 		return
 	ui_confirm_callback = callback
+	ui_confirm_cancel_callback = cancel_callback
 	ui_confirm_title_label.text = title
 	ui_confirm_message_label.text = message
 	ui_confirm_confirm_button.text = confirm_text
 	_apply_button_style(ui_confirm_confirm_button, "danger" if danger_confirm else "primary")
-	ui_confirm_cancel_button.text = "Cancel"
+	ui_confirm_cancel_button.text = cancel_text
 
 	var popup_size := Vector2(size)
 	if popup_size.y <= 0.0:
@@ -1285,6 +1318,13 @@ func _hide_ui_confirm_popup() -> void:
 	if ui_confirm_popup != null:
 		ui_confirm_popup.visible = false
 	ui_confirm_callback = Callable()
+	ui_confirm_cancel_callback = Callable()
+
+func _on_ui_confirm_cancel_pressed() -> void:
+	var callback := ui_confirm_cancel_callback
+	_hide_ui_confirm_popup()
+	if callback.is_valid():
+		await callback.call()
 
 func _on_ui_confirm_confirm_pressed() -> void:
 	var callback := ui_confirm_callback
@@ -1388,11 +1428,350 @@ func _apply_move_learn_action_button_style(button: Button, background_color: Col
 	button.add_theme_stylebox_override("focus", _make_button_style(background_color, UI_BORDER_FOCUS, 4, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
+func _setup_evolution_overlay() -> void:
+	evolution_overlay = Control.new()
+	evolution_overlay.name = "EvolutionOverlay"
+	evolution_overlay.visible = false
+	evolution_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	evolution_overlay.z_index = UI_MODAL_Z_INDEX + 30
+	evolution_overlay.z_as_relative = false
+	evolution_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root_control.add_child(evolution_overlay)
+
+	var dim := ColorRect.new()
+	dim.name = "Dim"
+	dim.color = Color("#030811e8")
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	evolution_overlay.add_child(dim)
+
+	evolution_stage = Control.new()
+	evolution_stage.name = "Stage"
+	evolution_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	evolution_stage.custom_minimum_size = EVOLUTION_OVERLAY_STAGE_SIZE
+	evolution_overlay.add_child(evolution_stage)
+
+	evolution_title_label = Label.new()
+	evolution_title_label.name = "Title"
+	evolution_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	evolution_title_label.add_theme_font_size_override("font_size", 26)
+	evolution_title_label.add_theme_color_override("font_color", Color("#f8f5df"))
+	evolution_title_label.add_theme_color_override("font_shadow_color", Color("#08101f"))
+	evolution_title_label.add_theme_constant_override("shadow_offset_x", 2)
+	evolution_title_label.add_theme_constant_override("shadow_offset_y", 2)
+	evolution_stage.add_child(evolution_title_label)
+
+	evolution_sprite_stage = Control.new()
+	evolution_sprite_stage.name = "SpriteStage"
+	evolution_sprite_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	evolution_stage.add_child(evolution_sprite_stage)
+
+	evolution_silhouette_material = _make_evolution_silhouette_material()
+
+	for index in range(3):
+		var ring := Panel.new()
+		ring.name = "LightRing%s" % index
+		ring.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring.add_theme_stylebox_override("panel", _make_evolution_ring_style(index))
+		evolution_sprite_stage.add_child(ring)
+		evolution_ring_nodes.append(ring)
+
+	for index in range(EVOLUTION_OVERLAY_SPARKLE_COUNT):
+		var sparkle := Panel.new()
+		sparkle.name = "Sparkle%s" % index
+		sparkle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		sparkle.add_theme_stylebox_override("panel", _make_evolution_sparkle_style(index))
+		evolution_sprite_stage.add_child(sparkle)
+		evolution_sparkle_nodes.append(sparkle)
+
+	evolution_old_sprite = _create_evolution_sprite("OldSprite")
+	evolution_sprite_stage.add_child(evolution_old_sprite)
+
+	evolution_silhouette_sprite = _create_evolution_sprite("SilhouetteSprite")
+	evolution_silhouette_sprite.material = evolution_silhouette_material
+	evolution_sprite_stage.add_child(evolution_silhouette_sprite)
+
+	evolution_new_sprite = _create_evolution_sprite("NewSprite")
+	evolution_sprite_stage.add_child(evolution_new_sprite)
+
+	evolution_message_label = Label.new()
+	evolution_message_label.name = "Message"
+	evolution_message_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	evolution_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	evolution_message_label.add_theme_font_size_override("font_size", 19)
+	evolution_message_label.add_theme_color_override("font_color", Color("#f1e4a8"))
+	evolution_message_label.add_theme_color_override("font_shadow_color", Color("#08101f"))
+	evolution_message_label.add_theme_constant_override("shadow_offset_x", 2)
+	evolution_message_label.add_theme_constant_override("shadow_offset_y", 2)
+	evolution_stage.add_child(evolution_message_label)
+
+	evolution_continue_button = Button.new()
+	evolution_continue_button.name = "ContinueButton"
+	evolution_continue_button.text = "Continue"
+	evolution_continue_button.custom_minimum_size = Vector2(140, 40)
+	evolution_continue_button.focus_mode = Control.FOCUS_NONE
+	evolution_continue_button.pressed.connect(_hide_evolution_overlay)
+	_apply_move_learn_action_button_style(evolution_continue_button, Color("#0b2035"), POKEMON_SUMMARY_ACCENT_SOFT, Color("#071421"))
+	evolution_stage.add_child(evolution_continue_button)
+
+	evolution_flash_rect = ColorRect.new()
+	evolution_flash_rect.name = "Flash"
+	evolution_flash_rect.color = Color(1.0, 0.96, 0.78, 0.0)
+	evolution_flash_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	evolution_flash_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	evolution_overlay.add_child(evolution_flash_rect)
+
+	_layout_evolution_overlay()
+	_reset_evolution_visuals()
+
+func _make_evolution_silhouette_material() -> ShaderMaterial:
+	var shader := Shader.new()
+	shader.code = "
+shader_type canvas_item;
+uniform vec4 silhouette_color : source_color = vec4(1.0, 0.98, 0.72, 1.0);
+void fragment() {
+	vec4 tex = texture(TEXTURE, UV);
+	COLOR = vec4(silhouette_color.rgb, tex.a * COLOR.a * silhouette_color.a);
+}
+"
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	material.set_shader_parameter("silhouette_color", Color("#fff7bb"))
+	return material
+
+func _create_evolution_sprite(sprite_name: String) -> TextureRect:
+	var sprite := TextureRect.new()
+	sprite.name = sprite_name
+	sprite.custom_minimum_size = EVOLUTION_OVERLAY_SPRITE_SIZE
+	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	return sprite
+
+func _make_evolution_ring_style(index: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color.TRANSPARENT
+	var alpha := 0.75 - float(index) * 0.16
+	style.border_color = Color(0.95, 0.88, 0.54, alpha)
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(999)
+	return style
+
+func _make_evolution_sparkle_style(index: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#fff3a8") if index % 3 != 0 else Color("#d9f7ff")
+	style.set_corner_radius_all(999)
+	return style
+
+func _layout_evolution_overlay() -> void:
+	if evolution_overlay == null or evolution_stage == null:
+		return
+
+	var viewport_size := root_control.size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		viewport_size = get_viewport().get_visible_rect().size
+
+	var stage_size := Vector2(
+		min(EVOLUTION_OVERLAY_STAGE_SIZE.x, max(viewport_size.x - 32.0, 320.0)),
+		min(EVOLUTION_OVERLAY_STAGE_SIZE.y, max(viewport_size.y - 32.0, 320.0))
+	)
+	evolution_stage.position = (viewport_size - stage_size) * 0.5
+	evolution_stage.size = stage_size
+
+	evolution_title_label.position = Vector2(0, 0)
+	evolution_title_label.size = Vector2(stage_size.x, 42)
+
+	var sprite_stage_size := Vector2(min(360.0, stage_size.x), 236.0)
+	evolution_sprite_stage.position = Vector2((stage_size.x - sprite_stage_size.x) * 0.5, 58)
+	evolution_sprite_stage.size = sprite_stage_size
+
+	var sprite_position := (sprite_stage_size - EVOLUTION_OVERLAY_SPRITE_SIZE) * 0.5
+	for sprite in [evolution_old_sprite, evolution_silhouette_sprite, evolution_new_sprite]:
+		if sprite == null:
+			continue
+		sprite.position = sprite_position
+		sprite.size = EVOLUTION_OVERLAY_SPRITE_SIZE
+		sprite.pivot_offset = EVOLUTION_OVERLAY_SPRITE_SIZE * 0.5
+
+	var ring_size := Vector2(250, 250)
+	for ring: Control in evolution_ring_nodes:
+		ring.position = (sprite_stage_size - ring_size) * 0.5
+		ring.size = ring_size
+		ring.pivot_offset = ring_size * 0.5
+
+	_position_evolution_sparkles()
+
+	evolution_message_label.position = Vector2(0, stage_size.y - 94)
+	evolution_message_label.size = Vector2(stage_size.x, 48)
+	evolution_continue_button.position = Vector2((stage_size.x - evolution_continue_button.custom_minimum_size.x) * 0.5, stage_size.y - 38)
+	evolution_continue_button.size = evolution_continue_button.custom_minimum_size
+
+func _position_evolution_sparkles() -> void:
+	if evolution_sprite_stage == null:
+		return
+
+	var center := evolution_sprite_stage.size * 0.5
+	for index in range(evolution_sparkle_nodes.size()):
+		var sparkle := evolution_sparkle_nodes[index]
+		var sparkle_size := 5.0 + float(index % 4)
+		var angle := TAU * float(index) / float(max(evolution_sparkle_nodes.size(), 1))
+		var radius := 76.0 + float((index * 17) % 54)
+		sparkle.size = Vector2(sparkle_size, sparkle_size)
+		sparkle.position = center + Vector2(cos(angle), sin(angle)) * radius - sparkle.size * 0.5
+		sparkle.pivot_offset = sparkle.size * 0.5
+
+func _reset_evolution_visuals() -> void:
+	if evolution_old_sprite != null:
+		evolution_old_sprite.visible = true
+		evolution_old_sprite.modulate = Color.WHITE
+		evolution_old_sprite.scale = Vector2.ONE
+	if evolution_silhouette_sprite != null:
+		evolution_silhouette_sprite.visible = false
+		evolution_silhouette_sprite.modulate = Color(1, 1, 1, 0)
+		evolution_silhouette_sprite.scale = Vector2.ONE
+	if evolution_new_sprite != null:
+		evolution_new_sprite.visible = false
+		evolution_new_sprite.modulate = Color(1, 1, 1, 0)
+		evolution_new_sprite.scale = Vector2.ONE
+	if evolution_flash_rect != null:
+		evolution_flash_rect.color = Color(1.0, 0.96, 0.78, 0.0)
+	for ring: Control in evolution_ring_nodes:
+		ring.visible = false
+		ring.modulate = Color(1, 1, 1, 0)
+		ring.scale = Vector2(0.25, 0.25)
+	for sparkle: Control in evolution_sparkle_nodes:
+		sparkle.visible = false
+		sparkle.modulate = Color(1, 1, 1, 0)
+		sparkle.scale = Vector2(0.2, 0.2)
+	if evolution_continue_button != null:
+		evolution_continue_button.visible = false
+
+func play_evolution_preview(old_species: String, new_species: String, shiny: bool = false) -> void:
+	var payload := {
+		"oldSpecies": old_species,
+		"newSpecies": new_species,
+		"shiny": shiny,
+	}
+	await play_evolution_overlay(payload)
+
+func play_evolution_overlay(evolution: Dictionary) -> void:
+	if evolution_overlay == null:
+		return
+
+	var old_species := str(evolution.get("oldSpecies", evolution.get("fromSpecies", ""))).strip_edges()
+	var new_species := str(evolution.get("newSpecies", evolution.get("toSpecies", ""))).strip_edges()
+	if old_species == "" or new_species == "":
+		return
+
+	if evolution_tween != null and evolution_tween.is_valid():
+		evolution_tween.kill()
+
+	var shiny := bool(evolution.get("shiny", false))
+	var old_texture := PokemonAssets.load_home_sprite(old_species, shiny)
+	var new_texture := PokemonAssets.load_home_sprite(new_species, shiny)
+	if old_texture == null or new_texture == null:
+		add_system_message("%s evolved into %s!" % [old_species, new_species])
+		return
+
+	evolution_is_playing = true
+	evolution_old_sprite.texture = old_texture
+	evolution_silhouette_sprite.texture = old_texture
+	evolution_new_sprite.texture = new_texture
+	evolution_title_label.text = "What? %s is evolving!" % old_species
+	evolution_message_label.text = ""
+	evolution_overlay.visible = true
+	evolution_overlay.move_to_front()
+	_layout_evolution_overlay()
+	_reset_evolution_visuals()
+
+	evolution_tween = create_tween()
+	evolution_tween.tween_property(evolution_old_sprite, "scale", Vector2(1.08, 1.08), 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	evolution_tween.tween_property(evolution_old_sprite, "scale", Vector2(0.96, 0.96), 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	evolution_tween.tween_property(evolution_old_sprite, "scale", Vector2(1.12, 1.12), 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	evolution_tween.tween_callback(_show_evolution_silhouette)
+	evolution_tween.tween_interval(0.12)
+	evolution_tween.tween_callback(_start_evolution_light_effects)
+	evolution_tween.tween_property(evolution_silhouette_sprite, "scale", Vector2(1.22, 1.22), 0.85).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	evolution_tween.tween_property(evolution_silhouette_sprite, "modulate:a", 0.72, 0.18)
+	evolution_tween.tween_property(evolution_silhouette_sprite, "modulate:a", 1.0, 0.18)
+	evolution_tween.tween_callback(_flash_evolution_overlay)
+	evolution_tween.tween_interval(0.16)
+	evolution_tween.tween_callback(_reveal_evolution_new_species)
+	evolution_tween.tween_property(evolution_new_sprite, "modulate:a", 1.0, 0.26).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	evolution_tween.parallel().tween_property(evolution_new_sprite, "scale", Vector2.ONE, 0.34).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	evolution_tween.tween_interval(0.22)
+	await evolution_tween.finished
+
+	evolution_message_label.text = "Congratulations! %s evolved into %s!" % [old_species, new_species]
+	evolution_continue_button.visible = true
+	evolution_is_playing = false
+	await evolution_continue_button.pressed
+
+func _show_evolution_silhouette() -> void:
+	evolution_old_sprite.visible = false
+	evolution_silhouette_sprite.visible = true
+	evolution_silhouette_sprite.modulate = Color(1, 1, 1, 1)
+	evolution_silhouette_sprite.scale = Vector2.ONE
+
+func _start_evolution_light_effects() -> void:
+	for index in range(evolution_ring_nodes.size()):
+		_animate_evolution_ring(evolution_ring_nodes[index], float(index) * 0.18)
+	for index in range(evolution_sparkle_nodes.size()):
+		_animate_evolution_sparkle(evolution_sparkle_nodes[index], float(index % 6) * 0.08)
+
+func _animate_evolution_ring(ring: Control, delay: float) -> void:
+	ring.visible = true
+	ring.scale = Vector2(0.18, 0.18)
+	ring.modulate = Color(1, 1, 1, 0)
+	var tween := create_tween()
+	tween.tween_property(ring, "modulate:a", 0.84, 0.12).set_delay(delay)
+	tween.parallel().tween_property(ring, "scale", Vector2(1.22, 1.22), 0.72).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(ring, "modulate:a", 0.0, 0.28)
+
+func _animate_evolution_sparkle(sparkle: Control, delay: float) -> void:
+	sparkle.visible = true
+	sparkle.scale = Vector2(0.2, 0.2)
+	sparkle.modulate = Color(1, 1, 1, 0)
+	var origin := sparkle.position
+	var center := evolution_sprite_stage.size * 0.5
+	var direction := (origin + sparkle.size * 0.5 - center).normalized()
+	if direction == Vector2.ZERO:
+		direction = Vector2.UP
+	var tween := create_tween()
+	tween.tween_property(sparkle, "modulate:a", 1.0, 0.12).set_delay(delay)
+	tween.parallel().tween_property(sparkle, "scale", Vector2(1.0, 1.0), 0.18).set_delay(delay).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(sparkle, "position", origin + direction * 34.0, 0.54).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(sparkle, "modulate:a", 0.0, 0.22)
+
+func _flash_evolution_overlay() -> void:
+	evolution_flash_rect.color = Color(1.0, 0.96, 0.72, 0.0)
+	var tween := create_tween()
+	tween.tween_property(evolution_flash_rect, "color:a", 0.92, 0.08)
+	tween.tween_property(evolution_flash_rect, "color:a", 0.0, 0.28)
+
+func _reveal_evolution_new_species() -> void:
+	evolution_silhouette_sprite.visible = false
+	evolution_new_sprite.visible = true
+	evolution_new_sprite.modulate = Color(1, 1, 1, 0)
+	evolution_new_sprite.scale = Vector2(0.72, 0.72)
+	_start_evolution_light_effects()
+
+func _hide_evolution_overlay() -> void:
+	if evolution_tween != null and evolution_tween.is_valid():
+		evolution_tween.kill()
+	evolution_tween = null
+	evolution_is_playing = false
+	if evolution_overlay != null:
+		evolution_overlay.visible = false
+	_reset_evolution_visuals()
+
 func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 	if not (reward_value is Dictionary):
 		return
 
 	var reward: Dictionary = reward_value as Dictionary
+	var evolution_queued_count := _queue_reward_evolution_prompts_from_reward(reward)
 	var prompts_value: Variant = reward.get("moveLearnPrompts", [])
 	if prompts_value is Array:
 		var prompts: Array = prompts_value as Array
@@ -1406,10 +1785,14 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 			_extend_move_learn_review_count(queued_count, queued_before)
 			if queued_count > 0:
 				_show_next_move_learn_prompt()
+			elif evolution_queued_count > 0:
+				_show_next_evolution_prompt()
 			return
 
 	var level_ups_value: Variant = reward.get("levelUps", [])
 	if not (level_ups_value is Array):
+		if evolution_queued_count > 0:
+			_show_next_evolution_prompt()
 		return
 
 	var queued_before := _move_learn_pending_prompt_count()
@@ -1442,6 +1825,184 @@ func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 	_extend_move_learn_review_count(queued_count, queued_before)
 	if queued_count > 0:
 		_show_next_move_learn_prompt()
+	elif evolution_queued_count > 0:
+		_show_next_evolution_prompt()
+
+func _queue_reward_evolution_prompts_from_reward(reward: Dictionary) -> int:
+	var queued_count := 0
+	var prompts_value: Variant = reward.get("evolutionPrompts", [])
+	if prompts_value is Array:
+		for prompt_value: Variant in prompts_value as Array:
+			if prompt_value is Dictionary and _queue_evolution_prompt(prompt_value as Dictionary):
+				queued_count += 1
+
+	if queued_count > 0:
+		_extend_evolution_review_count(queued_count)
+		return queued_count
+
+	var level_ups_value: Variant = reward.get("levelUps", [])
+	if not (level_ups_value is Array):
+		return 0
+
+	for level_up_value: Variant in level_ups_value as Array:
+		if not (level_up_value is Dictionary):
+			continue
+		var level_up: Dictionary = level_up_value as Dictionary
+		var pokemon_id := int(level_up.get("pokemonId", 0))
+		var species := str(level_up.get("species", "Pokemon")).strip_edges()
+		var candidates_value: Variant = level_up.get("evolutionCandidates", [])
+		if pokemon_id <= 0 or not (candidates_value is Array):
+			continue
+		for candidate_value: Variant in candidates_value as Array:
+			if not (candidate_value is Dictionary):
+				continue
+			var prompt := (candidate_value as Dictionary).duplicate(true)
+			prompt["pokemonId"] = pokemon_id
+			if not prompt.has("fromSpecies"):
+				prompt["fromSpecies"] = species
+			if _queue_evolution_prompt(prompt):
+				queued_count += 1
+
+	_extend_evolution_review_count(queued_count)
+	return queued_count
+
+func _queue_evolution_prompt(prompt_value: Dictionary) -> bool:
+	var prompt := prompt_value.duplicate(true)
+	var pokemon_id := int(prompt.get("pokemonId", 0))
+	var target_species_id := _evolution_prompt_target_species_id(prompt)
+	if pokemon_id <= 0 or target_species_id == "":
+		return false
+
+	var from_species := _evolution_prompt_from_species(prompt)
+	var to_species := _evolution_prompt_to_species(prompt)
+	prompt["pokemonId"] = pokemon_id
+	prompt["toSpeciesId"] = target_species_id
+	prompt["fromSpecies"] = from_species
+	prompt["toSpecies"] = to_species
+	evolution_prompt_queue.append(prompt)
+	return true
+
+func _extend_evolution_review_count(queued_count: int) -> void:
+	if queued_count <= 0:
+		return
+	if evolution_prompt_review_total <= 0 and evolution_active_prompt.is_empty():
+		evolution_prompt_review_total = queued_count
+		evolution_prompt_review_index = 0
+		return
+	evolution_prompt_review_total += queued_count
+
+func _evolution_queue_progress_label() -> String:
+	if evolution_prompt_review_total <= 1:
+		return ""
+	var current_index: int = clampi(evolution_prompt_review_index, 1, evolution_prompt_review_total)
+	return "%s / %s" % [current_index, evolution_prompt_review_total]
+
+func _finish_evolution_review_queue() -> void:
+	evolution_prompt_review_total = 0
+	evolution_prompt_review_index = 0
+
+func _show_next_evolution_prompt() -> void:
+	if evolution_prompt_processing or evolution_is_playing:
+		return
+	if ui_confirm_popup != null and ui_confirm_popup.visible:
+		return
+	if move_learn_popup != null and move_learn_popup.visible:
+		return
+	if not move_learn_queue.is_empty() or not move_learn_active_prompt.is_empty():
+		return
+
+	while not evolution_prompt_queue.is_empty():
+		var prompt: Dictionary = evolution_prompt_queue.pop_front()
+		var pokemon := _find_party_pokemon_by_owned_id(int(prompt.get("pokemonId", 0)))
+		if pokemon == null:
+			add_system_message("Could not open evolution prompt for %s." % _evolution_prompt_from_species(prompt))
+			continue
+
+		evolution_prompt_review_index += 1
+		evolution_active_prompt = prompt
+		_render_evolution_prompt(prompt)
+		return
+
+	_finish_evolution_review_queue()
+
+func _render_evolution_prompt(prompt: Dictionary) -> void:
+	var from_species := _evolution_prompt_from_species(prompt)
+	var to_species := _evolution_prompt_to_species(prompt)
+	var progress_label := _evolution_queue_progress_label()
+	var title := "Evolve %s?%s" % [from_species, " (%s)" % progress_label if progress_label != "" else ""]
+	var level := int(prompt.get("level", 0))
+	var level_text := "\n\nEvolution became available at Lv. %s." % level if level > 0 else ""
+	_show_ui_confirm_popup(
+		title,
+		"%s can evolve into %s.%s" % [from_species, to_species, level_text],
+		"Evolve",
+		Callable(self, "_on_evolution_confirmed"),
+		Vector2i(460, 0),
+		false,
+		"Do not evolve",
+		Callable(self, "_on_evolution_skipped")
+	)
+
+func _on_evolution_confirmed() -> void:
+	await _submit_evolution_choice(true)
+
+func _on_evolution_skipped() -> void:
+	await _submit_evolution_choice(false)
+
+func _submit_evolution_choice(confirm: bool) -> void:
+	if evolution_prompt_processing or evolution_active_prompt.is_empty():
+		return
+
+	evolution_prompt_processing = true
+	var prompt := evolution_active_prompt.duplicate(true)
+	var pokemon_id := int(prompt.get("pokemonId", 0))
+	var target_species_id := _evolution_prompt_target_species_id(prompt)
+	var from_species := _evolution_prompt_from_species(prompt)
+	var to_species := _evolution_prompt_to_species(prompt)
+	var result: Dictionary = await PlayerPartyStateService.evolve_pokemon(pokemon_id, target_species_id, confirm)
+	evolution_prompt_processing = false
+
+	if not bool(result.get("success", false)):
+		add_system_message("Could not save evolution choice for %s: %s" % [from_species, str(result.get("error", "Unknown error"))])
+		evolution_active_prompt.clear()
+		_show_next_evolution_prompt()
+		return
+
+	var evolution: Dictionary = {}
+	var evolution_value: Variant = result.get("evolution", {})
+	if evolution_value is Dictionary:
+		evolution = (evolution_value as Dictionary).duplicate(true)
+
+	if confirm and not bool(result.get("skipped", false)):
+		if evolution.is_empty():
+			evolution = prompt
+		await play_evolution_overlay(evolution)
+		add_system_message("%s evolved into %s!" % [from_species, _evolution_prompt_to_species(evolution)])
+	else:
+		add_system_message("%s did not evolve." % from_species)
+
+	evolution_active_prompt.clear()
+	_refresh_party()
+	_refresh_open_pokemon_summary_cards()
+	_show_next_evolution_prompt()
+
+func _evolution_prompt_target_species_id(prompt: Dictionary) -> String:
+	for key in ["toSpeciesId", "to_species_id", "species_id", "targetSpeciesId"]:
+		var value := str(prompt.get(key, "")).strip_edges()
+		if value != "":
+			return value
+	return ""
+
+func _evolution_prompt_from_species(prompt: Dictionary) -> String:
+	var species := str(prompt.get("fromSpecies", prompt.get("species", "Pokemon"))).strip_edges()
+	return species if species != "" else "Pokemon"
+
+func _evolution_prompt_to_species(prompt: Dictionary) -> String:
+	var species := str(prompt.get("toSpecies", "")).strip_edges()
+	if species != "":
+		return species
+	var species_id := _evolution_prompt_target_species_id(prompt)
+	return _format_identifier_display_name(species_id) if species_id != "" else "Pokemon"
 
 func _queue_move_learn_prompt(prompt_value: Dictionary) -> bool:
 	var prompt := prompt_value.duplicate(true)
@@ -1513,6 +2074,7 @@ func _show_next_move_learn_prompt() -> void:
 		return
 
 	_finish_move_learn_review_queue()
+	_show_next_evolution_prompt()
 
 func _render_move_learn_prompt(pokemon: Pokemon, prompt: Dictionary) -> void:
 	var move_name := _move_learn_prompt_move_name(prompt)
@@ -2199,6 +2761,14 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_heal_party_button)
 		dev_actions_container.move_child(dev_heal_party_button, dev_clear_party_button.get_index())
 
+	dev_preview_evolution_button = Button.new()
+	dev_preview_evolution_button.text = "Preview Evolution"
+	dev_preview_evolution_button.custom_minimum_size = Vector2(190, 34)
+	dev_preview_evolution_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_preview_evolution_button)
+		dev_actions_container.move_child(dev_preview_evolution_button, dev_clear_party_button.get_index())
+
 	dev_add_menu_popup = PanelContainer.new()
 	dev_add_menu_popup.name = "DevAddMenuPopup"
 	dev_add_menu_popup.visible = false
@@ -2248,6 +2818,7 @@ func _setup_dev_add_item_tools() -> void:
 
 	_apply_button_style(dev_add_button, "primary")
 	_apply_button_style(dev_heal_party_button, "primary")
+	_apply_button_style(dev_preview_evolution_button, "primary")
 	_apply_button_style(dev_add_item_button, "primary")
 	_apply_button_style(dev_add_money_button, "primary")
 	_apply_button_style(add_close_button)
@@ -9049,6 +9620,8 @@ func _apply_premium_overlay_styles() -> void:
 		_apply_button_style(dev_add_button, "primary")
 	if dev_heal_party_button != null:
 		_apply_button_style(dev_heal_party_button, "primary")
+	if dev_preview_evolution_button != null:
+		_apply_button_style(dev_preview_evolution_button, "primary")
 	if dev_add_item_button != null:
 		_apply_button_style(dev_add_item_button, "primary")
 	if dev_add_money_button != null:
@@ -11168,6 +11741,14 @@ func _on_dev_add_button_pressed() -> void:
 		_activate_ui_panel(dev_add_menu_popup)
 	else:
 		_deactivate_ui_panel(dev_add_menu_popup)
+
+func _on_dev_preview_evolution_button_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	dev_actions_popup.visible = false
+	_hide_dev_add_menu_popup()
+	await play_evolution_preview("Pidgey", "Pidgeotto")
 
 func _position_dev_add_menu_popup() -> void:
 	_position_dev_slot_popup(dev_add_menu_popup)
