@@ -14,6 +14,16 @@ A normal push updates the repository only. It does not build Windows, Linux, or 
 
 This keeps small commits, typo fixes, and work-in-progress changes from becoming public game updates.
 
+## Local Checks
+
+Run all current headless project checks from the repository root:
+
+```bash
+godot --headless --path . --script res://tests/run_project_checks.gd
+```
+
+This runs the standalone `tests/*_check.gd` scripts, including the PokeAether TMX importer fixture check. The TMX importer check generates only fixture output under `res://generated/maps/` and cleans it up before exiting. Per-check Godot logs are written to `/tmp/pokeaether_project_checks/`.
+
 ## Publish A New Client Build
 
 When you want players to receive a new build:
