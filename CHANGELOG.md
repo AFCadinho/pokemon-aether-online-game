@@ -5,21 +5,20 @@
 ## 0.2.5 - 2026-06-30
 
 **Added**
-- Added fishing as an overworld activity with cast, bite, success, miss, and early-reel states.
-- Added surf traversal on water tiles, including surf prompts, surf pose rendering, and running-shoes speed support while surfing.
-- Added activity pose support for layered character customization, including fishing and ride/surf pose offsets for body, hair, cap, eyes, and clothing layers.
-- Added a generic wild encounter provider that supports map-level encounter data and imported Tiled encounter regions.
-- Added Pallet Town surf and fishing encounters.
+- Added fishing in the overworld. Cast your rod near water, wait for the bite, and react in time to reel in a wild Pokemon.
+- Added surfing on water tiles after using the surf prompt.
+- Added wild Pokemon encounters while fishing and surfing in Pallet Town.
+- Added proper fishing and surfing poses for customized characters, including layered outfits, hair, caps, eyes, and accessories.
 
 **Changed**
-- Imported PokeAether Tiled encounter regions now expose encounter area, type, chance, shape, and rect metadata for runtime encounter checks.
-- Fishing encounters now ignore Repel, while grass and surf encounters remain blocked by Repel.
+- Running Shoes now also make surfing faster.
+- Fishing can still find Pokemon while Repel is active, while grass and surf encounters are still blocked by Repel.
 
 **Fixed**
-- Fixed water tiles being walkable before surf is active.
-- Fixed surf state not being restored after logging in or returning from battle while standing on water.
-- Fixed the player briefly dropping out of surf pose when a surf encounter starts.
-- Fixed fishing success not triggering encounters when Repel was enabled.
+- Fixed players being able to walk onto water without surfing.
+- Fixed surfing not being restored after logging in or returning from battle while standing on water.
+- Fixed the player briefly leaving the surf pose when a surf encounter starts.
+- Fixed successful fishing sometimes not starting an encounter when Repel was enabled.
 
 ## 0.2.4 - 2026-06-30
 
