@@ -87,6 +87,7 @@ const BAG_SIZE := Vector2(920, 620)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
 const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
+const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
 const POKEMON_SUMMARY_LEFT_PANEL_WIDTH := 275.0
@@ -182,6 +183,22 @@ const EXP_CANDY_EXPERIENCE := {
 	"exp-candy-m": 3000,
 	"exp-candy-l": 10000,
 	"exp-candy-xl": 30000,
+}
+const POKEMON_EV_TOTAL_LIMIT := 510
+const POKEMON_EV_STAT_LIMIT := 252
+const EV_ITEM_EFFECTS := {
+	"hp-up": {"stat": "hp", "potency": 10},
+	"protein": {"stat": "atk", "potency": 10},
+	"iron": {"stat": "def", "potency": 10},
+	"calcium": {"stat": "spa", "potency": 10},
+	"zinc": {"stat": "spd", "potency": 10},
+	"carbos": {"stat": "spe", "potency": 10},
+	"health-wing": {"stat": "hp", "potency": 1},
+	"muscle-wing": {"stat": "atk", "potency": 1},
+	"resist-wing": {"stat": "def", "potency": 1},
+	"genius-wing": {"stat": "spa", "potency": 1},
+	"clever-wing": {"stat": "spd", "potency": 1},
+	"swift-wing": {"stat": "spe", "potency": 1},
 }
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
@@ -579,6 +596,11 @@ var pokedex_name_label: Label
 var pokedex_meta_label: Label
 var pokedex_type_row: HBoxContainer
 var pokedex_sprite: TextureRect
+var pokedex_sprite_panel: PanelContainer
+var pokedex_sprite_viewport: SubViewport
+var pokedex_animated_sprite: AnimatedSprite2D
+var pokedex_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
+var pokedex_sprite_side := "front"
 var pokedex_header_stats_stack: VBoxContainer
 var pokedex_detail_stack: VBoxContainer
 var pokedex_tab_buttons: Dictionary = {}
@@ -3647,20 +3669,41 @@ func _setup_pokedex_popup() -> void:
 	sprite_stack.add_theme_constant_override("separation", 8)
 	detail_header.add_child(sprite_stack)
 
-	var sprite_panel := PanelContainer.new()
-	sprite_panel.custom_minimum_size = Vector2(176, 132)
-	sprite_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071b2ce8"), Color("#d6c78f66"), 3, 1))
-	sprite_stack.add_child(sprite_panel)
+	pokedex_sprite_panel = PanelContainer.new()
+	pokedex_sprite_panel.custom_minimum_size = Vector2(176, 132)
+	pokedex_sprite_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	pokedex_sprite_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pokedex_sprite_panel.tooltip_text = "Show back sprite"
+	pokedex_sprite_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071b2ce8"), Color("#d6c78f66"), 3, 1))
+	pokedex_sprite_panel.gui_input.connect(_on_pokedex_sprite_panel_gui_input)
+	sprite_stack.add_child(pokedex_sprite_panel)
 
-	var sprite_center := CenterContainer.new()
-	sprite_panel.add_child(sprite_center)
+	var sprite_viewport_container := SubViewportContainer.new()
+	sprite_viewport_container.stretch = true
+	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokedex_sprite_panel.add_child(sprite_viewport_container)
+	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	pokedex_sprite_viewport = SubViewport.new()
+	pokedex_sprite_viewport.size = Vector2i(176, 132)
+	pokedex_sprite_viewport.transparent_bg = true
+	pokedex_sprite_viewport.disable_3d = true
+	pokedex_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	sprite_viewport_container.add_child(pokedex_sprite_viewport)
+
+	pokedex_animated_sprite = AnimatedSprite2D.new()
+	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokedex_animated_sprite.position = Vector2(88, 70)
+	pokedex_animated_sprite.visible = false
+	pokedex_sprite_viewport.add_child(pokedex_animated_sprite)
 
 	pokedex_sprite = TextureRect.new()
 	pokedex_sprite.custom_minimum_size = Vector2(132, 112)
 	pokedex_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pokedex_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	pokedex_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sprite_center.add_child(pokedex_sprite)
+	pokedex_sprite_panel.add_child(pokedex_sprite)
+	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	pokedex_type_row = HBoxContainer.new()
 	pokedex_type_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -6664,7 +6707,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "":
 		return
-	if _is_exp_item_id(item_id):
+	if _is_pokemon_usable_item_id(item_id):
 		_show_bag_item_use_popup(item)
 		return
 
@@ -6746,11 +6789,12 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 		"  ->  %s" % preview_text if preview_text != "" else "",
 	]
 	button.tooltip_text = str(preview.get("tooltip", button.text))
-	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or pokemon.level >= 100
-	if pokemon.level >= 100:
-		button.tooltip_text = "%s is already Lv. 100." % pokemon.species
-	elif pokemon.owned_pokemon_id <= 0:
+	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
+	if pokemon.owned_pokemon_id <= 0:
 		button.tooltip_text = "%s is missing an ownership id." % pokemon.species
+	elif button.disabled and not bag_item_use_in_progress:
+		var disabled_preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+		button.tooltip_text = str(disabled_preview.get("tooltip", button.tooltip_text))
 	button.pressed.connect(_on_bag_item_use_pokemon_selected.bind(slot_index))
 	_apply_button_style(button, "primary" if slot_index == bag_item_use_selected_slot else "default")
 	return button
@@ -6758,6 +6802,11 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
 	if pokemon == null:
 		return {}
+	if _is_ev_item_id(item_id):
+		return _bag_ev_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	if not _is_exp_item_id(item_id):
+		return {}
+
 	var current_level: int = clampi(max(pokemon.level, 1), 1, POKEMON_MAX_LEVEL)
 	if current_level >= POKEMON_MAX_LEVEL:
 		return {
@@ -6808,6 +6857,70 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			target_level,
 		],
 	}
+
+func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
+	var effect: Dictionary = EV_ITEM_EFFECTS.get(item_id, {})
+	var stat_id := str(effect.get("stat", "")).strip_edges()
+	var potency: int = max(int(effect.get("potency", 0)), 0)
+	if stat_id == "" or potency <= 0:
+		return {}
+
+	var current_evs: Dictionary = pokemon.evs
+	var current_stored_evs: Dictionary = pokemon.stored_evs
+	var current_value: int = clampi(int(current_stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
+	var allocated_total: int = _get_summary_ev_total(current_evs)
+	var stored_total: int = _get_summary_ev_total(current_stored_evs)
+	var max_gain: int = min(
+		max(POKEMON_EV_STAT_LIMIT - current_value, 0),
+		max(POKEMON_EV_TOTAL_LIMIT - allocated_total - stored_total, 0)
+	)
+	var stat_label := _summary_stat_label(stat_id)
+	if max_gain <= 0:
+		return {
+			"label": "Storage full",
+			"tooltip": "%s cannot store more EVs right now.\nStored %s EVs: %s/%s\nAllocated EVs: %s/%s\nStored EVs: %s" % [
+				pokemon.species,
+				stat_label,
+				current_value,
+				POKEMON_EV_STAT_LIMIT,
+				allocated_total,
+				POKEMON_EV_TOTAL_LIMIT,
+				stored_total,
+			],
+		}
+
+	var quantity: int = max(requested_quantity, 1)
+	var used_quantity: int = min(quantity, int(ceil(float(max_gain) / float(potency))))
+	var gained_evs: int = min(used_quantity * potency, max_gain)
+	var new_value: int = current_value + gained_evs
+	var new_stored_total: int = stored_total + gained_evs
+	var label := "Stored %s %s -> %s" % [stat_label, current_value, new_value]
+	if used_quantity < quantity:
+		label += "  uses %s/%s" % [used_quantity, quantity]
+
+	return {
+		"label": label,
+		"tooltip": "%s\nUses %sx item(s)\nStored %s EVs: %s -> %s\nStored EV total: %s -> %s\nAllocated EVs: %s / %s" % [
+			pokemon.species,
+			used_quantity,
+			stat_label,
+			current_value,
+			new_value,
+			stored_total,
+			new_stored_total,
+			allocated_total,
+			POKEMON_EV_TOTAL_LIMIT,
+		],
+	}
+
+func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
+	if pokemon == null:
+		return false
+	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, 1)
+	if preview.is_empty():
+		return false
+	var label := str(preview.get("label", ""))
+	return not label.contains("Max level") and not label.contains("EV cap") and not label.contains("Storage full")
 
 func _pokemon_preview_current_experience(pokemon: Pokemon, growth_rate: String) -> int:
 	var level_floor_exp: int = _pokemon_exp_for_level(growth_rate, max(pokemon.level, 1))
@@ -6873,13 +6986,14 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
 		_set_bag_item_use_status("This Pokemon is missing an ownership id.", true)
 		return
-	if pokemon.level >= POKEMON_MAX_LEVEL:
-		_set_bag_item_use_status("%s is already Lv. 100." % pokemon.species, true)
-		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
-	if not _is_exp_item_id(item_id):
-		_set_bag_item_use_status("This item cannot be used for EXP.", true)
+	if not _is_pokemon_usable_item_id(item_id):
+		_set_bag_item_use_status("This item cannot be used on Pokemon yet.", true)
+		return
+	if not _bag_item_can_affect_pokemon(pokemon, item_id):
+		var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, 1)
+		_set_bag_item_use_status(str(preview.get("label", "This item would have no effect.")), true)
 		return
 
 	bag_item_use_selected_slot = slot_index
@@ -6904,7 +7018,7 @@ func _refresh_bag_item_use_selected_preview() -> void:
 	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
 	var preview_text := str(preview.get("label", ""))
 	if preview_text == "":
-		preview_text = "No EXP change"
+		preview_text = "No item change"
 	_set_bag_item_use_status("%s selected. %s" % [pokemon.species, preview_text], false)
 
 func _on_bag_item_use_confirm_pressed() -> void:
@@ -6920,11 +7034,15 @@ func _on_bag_item_use_confirm_pressed() -> void:
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
-	if not _is_exp_item_id(item_id):
-		_set_bag_item_use_status("This item cannot be used for EXP.", true)
+	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
+	if not _is_pokemon_usable_item_id(item_id):
+		_set_bag_item_use_status("This item cannot be used on Pokemon yet.", true)
+		return
+	if not _bag_item_can_affect_pokemon(pokemon, item_id):
+		var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
+		_set_bag_item_use_status(str(preview.get("label", "This item would have no effect.")), true)
 		return
 
-	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
 	bag_item_use_in_progress = true
 	bag_item_use_quantity_spinbox.editable = false
 	if bag_item_use_confirm_button != null:
@@ -6964,6 +7082,23 @@ func _set_bag_item_use_status(message: String, is_error: bool) -> void:
 func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> void:
 	var item_name := str(bag_item_use_pending_item.get("name", _item_name_from_id(item_id)))
 	var quantity: int = 1
+	var effort_value: Variant = reward.get("effort", [])
+	if effort_value is Array:
+		var effort_array: Array = effort_value as Array
+		if not effort_array.is_empty() and effort_array[0] is Dictionary:
+			var effort_entry: Dictionary = effort_array[0]
+			quantity = max(int(effort_entry.get("quantity", quantity)), 1)
+			var stat_id := str(effort_entry.get("stat", "")).strip_edges()
+			var ev_changes: Dictionary = _staff_dictionary_from_variant(effort_entry.get("storedEvChanges", effort_entry.get("evChanges", {})))
+			var gained_evs: int = max(int(ev_changes.get(stat_id, 0)), 0)
+			var suffix: String = " %s stored +%s %s EVs." % [
+				str(effort_entry.get("species", "Pokemon")),
+				gained_evs,
+				_summary_stat_label(stat_id),
+			] if gained_evs > 0 else ""
+			_add_chat_message("Used %sx %s.%s" % [quantity, item_name, suffix])
+			return
+
 	var experience_gained: int = 0
 	var experience_value: Variant = reward.get("experience", [])
 	if experience_value is Array:
@@ -6989,6 +7124,12 @@ func _notify_progression_reward(reward: Dictionary) -> void:
 
 func _is_exp_item_id(item_id: String) -> bool:
 	return EXP_ITEM_IDS.has(_normalize_item_id(item_id))
+
+func _is_ev_item_id(item_id: String) -> bool:
+	return EV_ITEM_EFFECTS.has(_normalize_item_id(item_id))
+
+func _is_pokemon_usable_item_id(item_id: String) -> bool:
+	return _is_exp_item_id(item_id) or _is_ev_item_id(item_id)
 
 func _load_item_icon(item_id: String) -> Texture2D:
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
@@ -7602,7 +7743,8 @@ func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 		POKEMON_SUMMARY_SPRITE_MAX_SIZE.y / max(normalized_frame_size.y, 1.0)
 	)
 	var scale_value: float = clamp(fit_scale * display_scale_multiplier, POKEMON_SUMMARY_SPRITE_MIN_SCALE, POKEMON_SUMMARY_SPRITE_MAX_SCALE)
-	return Vector2(scale_value, scale_value)
+	var texture_scale: float = scale_value / max(render_scale, 1.0)
+	return Vector2(texture_scale, texture_scale)
 
 func _get_pokemon_summary_sprite_frame_size(frames: SpriteFrames) -> Vector2:
 	if pokemon_summary_sprite_loader.has_method("_get_sprite_frames_frame_size"):
@@ -7983,7 +8125,12 @@ func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 		var stat: Dictionary = stat_value
 		var stat_id: String = str(stat.get("id", ""))
 		var value: int = int(pokemon.evs.get(stat_id, 0))
-		grid.add_child(_create_summary_ev_box(stat_id, str(stat.get("label", stat_id)), value, stat.get("color", UI_BORDER_FOCUS) as Color))
+		grid.add_child(_create_summary_ev_box(
+			stat_id,
+			str(stat.get("label", stat_id)),
+			value,
+			stat.get("color", UI_BORDER_FOCUS) as Color
+		))
 	_add_summary_section_title("Stored EVs", POKEMON_SUMMARY_ACCENT)
 	pokemon_summary_content_stack.add_child(_create_summary_stored_evs_panel(pokemon.evs, pokemon.stored_evs))
 
@@ -8189,6 +8336,117 @@ func _create_summary_ev_box(stat_id: String, label_text: String, value: int, col
 	stack.add_child(bar)
 	return panel
 
+func _create_summary_ev_total_panel(total_evs: int) -> Control:
+	var clamped_total: int = clampi(total_evs, 0, POKEMON_EV_TOTAL_LIMIT)
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 48)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color("#62d7ff70"), 6, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 5)
+	margin.add_child(stack)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	stack.add_child(row)
+
+	var title := Label.new()
+	title.text = "TOTAL"
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	title.add_theme_color_override("font_shadow_color", Color("#00111f"))
+	title.add_theme_constant_override("shadow_offset_x", 1)
+	title.add_theme_constant_override("shadow_offset_y", 1)
+	row.add_child(title)
+
+	var value_label := Label.new()
+	value_label.text = "%s / %s" % [clamped_total, POKEMON_EV_TOTAL_LIMIT]
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	value_label.add_theme_font_size_override("font_size", 11)
+	value_label.add_theme_color_override("font_color", Color("#f4f7ff") if clamped_total < POKEMON_EV_TOTAL_LIMIT else Color("#f5df9a"))
+	row.add_child(value_label)
+
+	var bar := ProgressBar.new()
+	bar.max_value = POKEMON_EV_TOTAL_LIMIT
+	bar.value = clamped_total
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(0, 8)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.tooltip_text = "Total EVs: %s / %s" % [clamped_total, POKEMON_EV_TOTAL_LIMIT]
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#050912e8"), Color("#263b58"), 3, 1))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#62d7ff"), Color("#62d7ff"), 3, 0))
+	stack.add_child(bar)
+
+	return panel
+
+func _create_summary_ev_training_row(stat_id: String, label_text: String, value: int, color: Color) -> Control:
+	var clamped_value: int = clampi(value, 0, POKEMON_EV_STAT_LIMIT)
+	var capped := clamped_value >= POKEMON_EV_STAT_LIMIT
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 31)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.tooltip_text = "%s EVs: %s / %s" % [label_text, clamped_value, POKEMON_EV_STAT_LIMIT]
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(
+			Color("#081321ef"),
+			Color("#f5df9aaa") if capped else Color(color.r, color.g, color.b, 0.48),
+			5,
+			1
+		)
+	)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 7)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 7)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 7)
+	margin.add_child(row)
+
+	var stat_label := Label.new()
+	stat_label.text = label_text.to_upper()
+	stat_label.custom_minimum_size = Vector2(58, 0)
+	stat_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_make_label_clip_width(stat_label)
+	stat_label.add_theme_font_size_override("font_size", 10)
+	stat_label.add_theme_color_override("font_color", color)
+	row.add_child(stat_label)
+
+	var bar := ProgressBar.new()
+	bar.max_value = POKEMON_EV_STAT_LIMIT
+	bar.value = clamped_value
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(0, 9)
+	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#050912e8"), Color("#263b58"), 3, 1))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(color, color, 3, 0))
+	row.add_child(bar)
+
+	var value_label := Label.new()
+	value_label.text = "%s/%s" % [clamped_value, POKEMON_EV_STAT_LIMIT]
+	value_label.custom_minimum_size = Vector2(58, 0)
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	value_label.add_theme_font_size_override("font_size", 10)
+	value_label.add_theme_color_override("font_color", Color("#f5df9a") if capped else Color("#f4f7ff"))
+	row.add_child(value_label)
+
+	return panel
+
 func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 104)
@@ -8214,7 +8472,7 @@ func _create_summary_stored_evs_panel(allocated_evs: Dictionary, stored_evs: Dic
 		stored_total += int(stored_evs.get(stat_id, 0))
 
 	var total_label := Label.new()
-	total_label.text = "AVAILABLE: %s    TOTAL CAPACITY: %s / 756" % [stored_total, allocated_total + stored_total]
+	total_label.text = "AVAILABLE: %s    TOTAL CAPACITY: %s / %s" % [stored_total, allocated_total + stored_total, POKEMON_EV_TOTAL_LIMIT]
 	total_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	total_label.add_theme_font_size_override("font_size", 10)
 	total_label.add_theme_color_override("font_color", Color("#f5df9a"))
@@ -8302,8 +8560,39 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	if pokemon_summary_ev_allocate_confirm_button.disabled:
 		return
 
-	pokemon_summary_ev_allocate_status_label.text = "EV allocation mutation is not implemented yet."
-	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", Color("#ffcc7a"))
+	if pokemon_summary_selected_slot < 0 or pokemon_summary_selected_slot >= PlayerSave.party.size():
+		return
+
+	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
+	if pokemon == null or pokemon.owned_pokemon_id <= 0:
+		pokemon_summary_ev_allocate_status_label.text = "This Pokemon is missing an ownership id."
+		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
+		return
+
+	var stat_id: String = pokemon_summary_ev_allocate_stat_id
+	var requested_value: int = int(pokemon_summary_ev_allocate_input.value)
+	pokemon_summary_ev_allocate_confirm_button.disabled = true
+	pokemon_summary_ev_allocate_input.editable = false
+	pokemon_summary_ev_allocate_status_label.text = "Allocating EVs..."
+	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+	var result: Dictionary = await PlayerPartyStateService.allocate_pokemon_evs(pokemon.owned_pokemon_id, stat_id, requested_value)
+	pokemon_summary_ev_allocate_input.editable = true
+	if not bool(result.get("success", false)):
+		pokemon_summary_ev_allocate_status_label.text = str(result.get("error", "Could not allocate EVs."))
+		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
+		_refresh_summary_ev_allocate_status()
+		return
+
+	var allocation: Dictionary = _staff_dictionary_from_variant(result.get("allocation", {}))
+	var added_value: int = max(int(allocation.get("addedValue", 0)), 0)
+	_add_chat_message("%s allocated +%s %s EVs." % [
+		str(allocation.get("species", pokemon.species)),
+		added_value,
+		_summary_stat_label(stat_id),
+	])
+	_hide_pokemon_summary_ev_allocate_popup()
+	_refresh_open_pokemon_summary_cards()
 
 func _refresh_summary_ev_allocate_status() -> void:
 	if pokemon_summary_ev_allocate_popup == null or not pokemon_summary_ev_allocate_popup.visible:
@@ -8345,8 +8634,8 @@ func _get_summary_ev_total(evs: Dictionary) -> int:
 	var total := 0
 	for stat_value: Variant in _summary_stat_order():
 		var stat: Dictionary = stat_value
-		total += int(evs.get(str(stat.get("id", "")), 0))
-	return total
+		total += clampi(int(evs.get(str(stat.get("id", "")), 0)), 0, POKEMON_EV_STAT_LIMIT)
+	return clampi(total, 0, POKEMON_EV_TOTAL_LIMIT)
 
 func _create_summary_move_card(
 	move_number: int,
@@ -8483,6 +8772,13 @@ func _summary_stat_order() -> Array[Dictionary]:
 		{"id": "spd", "label": "SP.DEF", "color": Color("#73e26d")},
 		{"id": "spe", "label": "SPEED", "color": Color("#e879f9")},
 	]
+
+func _summary_stat_label(stat_id: String) -> String:
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		if str(stat.get("id", "")) == stat_id:
+			return str(stat.get("label", stat_id))
+	return stat_id.to_upper()
 
 func _get_pokemon_summary_nature_stat_role(nature: String, stat_id: String) -> String:
 	if stat_id == "hp":
@@ -11107,6 +11403,7 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 		return
 
 	pokedex_selected_species = species_value
+	pokedex_sprite_side = "front"
 	_set_pokedex_header_from_species(pokedex_selected_species)
 	_refresh_pokedex_detail()
 
@@ -11141,8 +11438,7 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 	if species.is_empty():
 		pokedex_name_label.text = "Select a species"
 		pokedex_meta_label.text = "No species selected."
-		if pokedex_sprite != null:
-			pokedex_sprite.texture = null
+		_clear_pokedex_species_sprite()
 		_refresh_pokedex_type_row([])
 		_refresh_pokedex_header_stats({})
 		return
@@ -11158,8 +11454,7 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 
 	pokedex_name_label.text = species_name
 	pokedex_meta_label.text = " / ".join(meta_parts) if not meta_parts.is_empty() else "Species data"
-	if pokedex_sprite != null:
-		pokedex_sprite.texture = _load_pokedex_species_texture(species)
+	_set_pokedex_species_sprite(species)
 	_refresh_pokedex_type_row(_array_from_variant(species.get("types", [])))
 	var stats_value: Variant = species.get("baseStats", {})
 	_refresh_pokedex_header_stats(stats_value if typeof(stats_value) == TYPE_DICTIONARY else {})
@@ -11175,6 +11470,165 @@ func _refresh_pokedex_type_row(types: Array) -> void:
 		if type_name == "":
 			continue
 		pokedex_type_row.add_child(_create_pokedex_type_badge(type_name))
+
+func _clear_pokedex_species_sprite() -> void:
+	if pokedex_animated_sprite != null:
+		pokedex_animated_sprite.stop()
+		pokedex_animated_sprite.sprite_frames = null
+		pokedex_animated_sprite.visible = false
+	if pokedex_sprite != null:
+		pokedex_sprite.texture = null
+		pokedex_sprite.visible = true
+	if pokedex_sprite_panel != null:
+		pokedex_sprite_panel.tooltip_text = "Select a Pokemon"
+
+func _set_pokedex_species_sprite(species: Dictionary) -> void:
+	if pokedex_animated_sprite == null or pokedex_sprite == null:
+		return
+
+	var loaded_frames: SpriteFrames = null
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		var frames_value: Variant = pokedex_sprite_loader.call(
+			"_load_sprite_frames",
+			candidate,
+			_get_pokedex_sprite_side(),
+			false
+		)
+		loaded_frames = frames_value as SpriteFrames
+		if loaded_frames != null:
+			break
+
+	if loaded_frames != null:
+		pokedex_sprite.visible = false
+		pokedex_animated_sprite.visible = true
+		pokedex_animated_sprite.sprite_frames = loaded_frames
+		var animation_names: PackedStringArray = loaded_frames.get_animation_names()
+		if loaded_frames.has_animation("idle"):
+			pokedex_animated_sprite.animation = "idle"
+		elif not animation_names.is_empty():
+			pokedex_animated_sprite.animation = animation_names[0]
+		pokedex_animated_sprite.frame = 0
+		pokedex_animated_sprite.position = _get_pokedex_sprite_position()
+		pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
+		_apply_pokedex_sprite_center_offset(loaded_frames, pokedex_animated_sprite.animation)
+		pokedex_animated_sprite.play()
+	else:
+		pokedex_animated_sprite.stop()
+		pokedex_animated_sprite.visible = false
+		pokedex_sprite.visible = true
+		pokedex_sprite.texture = _load_pokedex_species_texture(species)
+
+	if pokedex_sprite_panel != null:
+		pokedex_sprite_panel.tooltip_text = "Show %s sprite" % ("front" if _get_pokedex_sprite_side() == "back" else "back")
+
+func _pokedex_species_sprite_candidates(species: Dictionary) -> Array[String]:
+	var candidates: Array[String] = []
+	for candidate_value: Variant in [
+		species.get("name", ""),
+		species.get("id", ""),
+		species.get("showdownId", ""),
+	]:
+		var candidate := str(candidate_value).strip_edges()
+		if candidate != "" and not candidates.has(candidate):
+			candidates.append(candidate)
+	return candidates
+
+func _get_pokedex_sprite_side() -> String:
+	return "back" if pokedex_sprite_side == "back" else "front"
+
+func _get_pokedex_sprite_position() -> Vector2:
+	if pokedex_sprite_viewport == null:
+		return Vector2(88, 70)
+	return Vector2(
+		float(pokedex_sprite_viewport.size.x) * 0.5,
+		float(pokedex_sprite_viewport.size.y) * 0.55
+	)
+
+func _get_pokedex_sprite_scale(frames: SpriteFrames) -> Vector2:
+	var render_scale := 1.0
+	if pokedex_sprite_loader.has_method("_get_sprite_frames_render_scale"):
+		var render_scale_value: Variant = pokedex_sprite_loader.call("_get_sprite_frames_render_scale", frames)
+		render_scale = float(render_scale_value)
+
+	var display_scale_multiplier := 1.0
+	if pokedex_sprite_loader.has_method("_get_sprite_frames_display_scale_multiplier"):
+		var display_scale_value: Variant = pokedex_sprite_loader.call("_get_sprite_frames_display_scale_multiplier", frames)
+		display_scale_multiplier = float(display_scale_value)
+
+	var visual_rect: Rect2 = _get_pokedex_sprite_visual_rect(frames, "idle")
+	if visual_rect.size == Vector2.ZERO and pokedex_animated_sprite != null:
+		visual_rect = _get_pokedex_sprite_visual_rect(frames, pokedex_animated_sprite.animation)
+	var normalized_frame_size: Vector2 = visual_rect.size / max(render_scale, 1.0)
+	if normalized_frame_size == Vector2.ZERO:
+		normalized_frame_size = _get_pokedex_sprite_frame_size(frames) / max(render_scale, 1.0)
+	var fit_scale: float = min(
+		126.0 / max(normalized_frame_size.x, 1.0),
+		104.0 / max(normalized_frame_size.y, 1.0)
+	)
+	var scale_value: float = clamp(fit_scale * display_scale_multiplier, 0.65, 2.0)
+	var texture_scale: float = scale_value / max(render_scale, 1.0)
+	return Vector2(texture_scale, texture_scale)
+
+func _get_pokedex_sprite_frame_size(frames: SpriteFrames) -> Vector2:
+	if pokedex_sprite_loader.has_method("_get_sprite_frames_frame_size"):
+		var frame_size_value: Variant = pokedex_sprite_loader.call("_get_sprite_frames_frame_size", frames)
+		if frame_size_value is Vector2:
+			return frame_size_value as Vector2
+		if frame_size_value is Vector2i:
+			return Vector2(frame_size_value as Vector2i)
+
+	if frames != null and frames.has_animation("idle") and frames.get_frame_count("idle") > 0:
+		var texture: Texture2D = frames.get_frame_texture("idle", 0)
+		if texture != null:
+			return texture.get_size()
+
+	return Vector2(48, 57)
+
+func _apply_pokedex_sprite_center_offset(frames: SpriteFrames, animation_name: String) -> void:
+	var frame_size: Vector2 = _get_pokedex_sprite_frame_size(frames)
+	var visual_rect: Rect2 = _get_pokedex_sprite_visual_rect(frames, animation_name)
+	if visual_rect.size == Vector2.ZERO:
+		pokedex_animated_sprite.centered = true
+		pokedex_animated_sprite.offset = Vector2.ZERO
+		return
+
+	pokedex_animated_sprite.centered = true
+	pokedex_animated_sprite.offset = (frame_size * 0.5) - visual_rect.get_center()
+
+func _get_pokedex_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
+	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
+		return Rect2()
+
+	var has_rect := false
+	var combined_rect := Rect2()
+	for frame_index in range(frames.get_frame_count(animation_name)):
+		var texture: Texture2D = frames.get_frame_texture(animation_name, frame_index)
+		if texture == null:
+			continue
+		var image: Image = texture.get_image()
+		if image == null:
+			continue
+		var used_rect_i: Rect2i = image.get_used_rect()
+		if used_rect_i.size == Vector2i.ZERO:
+			continue
+		var used_rect := Rect2(Vector2(used_rect_i.position), Vector2(used_rect_i.size))
+		if not has_rect:
+			combined_rect = used_rect
+			has_rect = true
+		else:
+			combined_rect = combined_rect.merge(used_rect)
+
+	return combined_rect if has_rect else Rect2()
+
+func _on_pokedex_sprite_panel_gui_input(event: InputEvent) -> void:
+	if pokedex_selected_species.is_empty():
+		return
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			pokedex_sprite_side = "back" if _get_pokedex_sprite_side() == "front" else "front"
+			_set_pokedex_species_sprite(pokedex_selected_species)
+			get_viewport().set_input_as_handled()
 
 func _load_pokedex_species_texture(species: Dictionary) -> Texture2D:
 	var species_name := str(species.get("name", species.get("id", ""))).strip_edges()
@@ -11227,8 +11681,8 @@ func _create_pokedex_header_stat_row(label_text: String, value: int, color: Colo
 	row.add_child(label)
 
 	var bar := ProgressBar.new()
-	bar.max_value = 255
-	bar.value = clampi(value, 0, 255)
+	bar.max_value = POKEDEX_BASE_STAT_BAR_MAX
+	bar.value = clampi(value, 0, POKEDEX_BASE_STAT_BAR_MAX)
 	bar.show_percentage = false
 	bar.custom_minimum_size = Vector2(96, 9)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -11309,6 +11763,7 @@ func _build_pokedex_info_tab() -> void:
 		"Base EXP",
 		str(int(pokedex_selected_species.get("baseExperience", 0)))
 	))
+	pokedex_detail_stack.add_child(_create_pokedex_ev_yield_panel(_get_pokedex_ev_yield()))
 
 	pokedex_detail_stack.add_child(_create_pokedex_section_title("Base Stats"))
 	var stats_grid := GridContainer.new()
@@ -11345,6 +11800,12 @@ func _build_pokedex_abilities_tab() -> void:
 		added_count += 1
 
 	pokedex_detail_stack.add_child(_create_pokedex_section_title("Training"))
+	_build_pokedex_training_rows()
+
+	if added_count <= 0:
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No abilities available."))
+
+func _build_pokedex_training_rows() -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_info_line(
 		"Growth",
 		_format_identifier_display_name(str(pokedex_selected_species.get("growthRate", ""))) if str(pokedex_selected_species.get("growthRate", "")).strip_edges() != "" else "Unknown"
@@ -11353,9 +11814,98 @@ func _build_pokedex_abilities_tab() -> void:
 		"Base EXP",
 		str(int(pokedex_selected_species.get("baseExperience", 0)))
 	))
+	pokedex_detail_stack.add_child(_create_pokedex_ev_yield_panel(_get_pokedex_ev_yield()))
 
-	if added_count <= 0:
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No abilities available."))
+func _get_pokedex_ev_yield() -> Dictionary:
+	var yield_value: Variant = pokedex_selected_species.get("evYield", pokedex_selected_species.get("ev_yield", {}))
+	var raw_yield: Dictionary = yield_value if typeof(yield_value) == TYPE_DICTIONARY else {}
+	var result: Dictionary = {}
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		var stat_id := str(stat.get("id", ""))
+		result[stat_id] = max(0, int(raw_yield.get(stat_id, 0)))
+	return result
+
+func _create_pokedex_ev_yield_panel(ev_yield: Dictionary) -> Control:
+	var total := 0
+	for value: Variant in ev_yield.values():
+		total += max(0, int(value))
+
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#38bdf866"), 5, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 7)
+	margin.add_child(stack)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	stack.add_child(header)
+
+	var title := Label.new()
+	title.text = "EV YIELD"
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	header.add_child(title)
+
+	var total_label := Label.new()
+	total_label.text = "%d total" % total if total > 0 else "Unknown"
+	total_label.add_theme_font_size_override("font_size", 11)
+	total_label.add_theme_color_override("font_color", Color("#f2ead2") if total > 0 else UI_MUTED_TEXT)
+	header.add_child(total_label)
+
+	if total <= 0:
+		stack.add_child(_create_pokedex_muted_message("No EV yield data available."))
+		return panel
+
+	var chip_row := HBoxContainer.new()
+	chip_row.add_theme_constant_override("separation", 6)
+	stack.add_child(chip_row)
+
+	for stat_value: Variant in _summary_stat_order():
+		var stat: Dictionary = stat_value
+		var stat_id := str(stat.get("id", ""))
+		var value := int(ev_yield.get(stat_id, 0))
+		if value <= 0:
+			continue
+		chip_row.add_child(_create_pokedex_ev_yield_chip(
+			str(stat.get("label", stat_id.to_upper())),
+			value,
+			stat.get("color", UI_BORDER_FOCUS) as Color
+		))
+	return panel
+
+func _create_pokedex_ev_yield_chip(label_text: String, value: int, color: Color) -> Control:
+	var chip := PanelContainer.new()
+	chip.custom_minimum_size = Vector2(86, 30)
+	chip.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ed8"), Color(color.r, color.g, color.b, 0.68), 4, 1))
+
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 5)
+	chip.add_child(row)
+
+	var label := Label.new()
+	label.text = label_text
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", color)
+	row.add_child(label)
+
+	var value_label := Label.new()
+	value_label.text = "+%d" % value
+	value_label.add_theme_font_size_override("font_size", 12)
+	value_label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(value_label)
+	return chip
 
 func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_section_title(title_text))
@@ -11765,6 +12315,10 @@ func _format_item_dex_effect_info(item: Dictionary) -> String:
 	var lines: Array[String] = []
 	if sub_category != "":
 		lines.append("Type: %s" % _format_identifier_display_name(sub_category))
+	if sub_category == "ev":
+		var stat_text := _summary_stat_label(str(item.get("stat", "")).strip_edges())
+		if stat_text != "":
+			lines.append("Stat: %s" % stat_text)
 	if potency_text != "":
 		lines.append("Potency: %s" % potency_text)
 

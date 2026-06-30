@@ -8,6 +8,9 @@
 - Added move learning prompts when a Pokemon levels up and already knows four moves.
 - Added level-up evolution prompts after rewards and EXP items, including the choice to evolve or wait.
 - Added experience progress bars to the player battle HUD, party slots, and Pokemon summaries.
+- Added EV training support, including stored EVs, manual EV allocation, vitamins, wings, and battle EV gains.
+- Added EV Yield information to the Pokedex so players can see what training rewards each Pokemon gives.
+- Added animated Pokedex sprites with a front/back toggle.
 - Added a visual Happiness progress bar placeholder in Pokemon summaries.
 - Added effect details to medicine items in the Item Dex, including EXP, healing, PP, and ability item strengths.
 
@@ -15,6 +18,8 @@
 - The Battle Music setting now lists PvP battle tracks and controls which music plays during PvP battles.
 - Pokemon summaries now show training progress more clearly.
 - Move learning prompts now show queue progress and clearer messages when multiple moves need review.
+- Pokemon EV gains are stored first so players can choose where to allocate them later.
+- The Pokedex now uses a larger, clearer layout with animated Pokemon previews.
 
 ## 0.2.3 - 2026-06-29
 

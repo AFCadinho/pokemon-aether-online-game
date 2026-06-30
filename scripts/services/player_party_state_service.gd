@@ -310,6 +310,33 @@ func set_pokemon_ball(pokemon_id: int, ball_item_id: String) -> Dictionary:
 	return result
 
 
+func allocate_pokemon_evs(pokemon_id: int, stat_id: String, value: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0 or stat_id.strip_edges() == "":
+		return {
+			"success": false,
+			"error": "Missing Pokemon or stat.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/evs/allocate" % pokemon_id,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"stat": stat_id,
+			"value": clampi(value, 0, 252),
+		})
+	)
+	var result: Dictionary = _pokemon_ev_allocation_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
 func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1, skip: bool = false) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -513,6 +540,21 @@ func _pokemon_evolution_result_from_response(response: Dictionary) -> Dictionary
 		"hasParty": bool(party.get("hasParty", false)),
 		"evolution": _dictionary_from_value(body.get("evolution", {})),
 		"skipped": bool(body.get("skipped", false)),
+	}
+
+
+func _pokemon_ev_allocation_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	return {
+		"success": true,
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"party": _array_from_value(party.get("party", [])),
+		"hasParty": bool(party.get("hasParty", false)),
+		"allocation": _dictionary_from_value(body.get("allocation", {})),
 	}
 
 

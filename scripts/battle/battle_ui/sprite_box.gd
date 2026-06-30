@@ -695,6 +695,7 @@ func _load_sprite_frames_from_folder(folder: String) -> SpriteFrames:
 			sprite_frames.add_frame(IDLE_ANIMATION, texture, timing["durations"][index])
 
 	if first_frame_size != Vector2.ZERO:
+		_set_sprite_frames_render_scale(sprite_frames, timing["render_scale"])
 		_set_sprite_frames_auto_anchor(sprite_frames, first_frame_size)
 
 	return sprite_frames
@@ -704,6 +705,7 @@ func _load_frame_timing(folder: String, frame_count: int) -> Dictionary:
 	var timing := {
 		"speed": FRAME_ANIMATION_SPEED,
 		"durations": [],
+		"render_scale": 1.0,
 	}
 
 	if not FileAccess.file_exists(metadata_path):
@@ -721,6 +723,7 @@ func _load_frame_timing(folder: String, frame_count: int) -> Dictionary:
 		return timing
 
 	timing["speed"] = float(parsed.get("speed", FRAME_ANIMATION_SPEED))
+	timing["render_scale"] = max(float(parsed.get("render_scale", 1.0)), 1.0)
 	var durations: Array[float] = []
 	for duration in parsed.get("durations", []):
 		durations.append(float(duration))
