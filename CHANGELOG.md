@@ -21,6 +21,9 @@
 - Pokemon EV gains are stored first so players can choose where to allocate them later.
 - The Pokedex now uses a larger, clearer layout with animated Pokemon previews.
 
+**Fixed**
+- Fixed EXP and EV rewards being given to Pokemon that did not take part in the battle.
+
 ## 0.2.3 - 2026-06-29
 
 **Added**
