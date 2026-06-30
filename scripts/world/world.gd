@@ -1043,6 +1043,7 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 	if bool(wallet_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(wallet_result)
 		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
+		_notify_reward_effort_gains(wallet_result.get("reward", {}))
 		_notify_reward_level_ups(wallet_result.get("reward", {}))
 	else:
 		push_warning("World: wild battle money reward failed: %s" % str(wallet_result.get("error", "Unknown error")))
@@ -1055,6 +1056,7 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		var reward: Dictionary = reward_result.get("reward", {}) as Dictionary
 		var money_awarded: int = max(int(reward.get("money", max(int(PlayerSave.money), 0) - previous_money)), 0)
 		_notify_trainer_battle_rewards_awarded(trainer_name, money_awarded)
+		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
@@ -1085,6 +1087,50 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 
 func notify_progression_reward(reward: Dictionary) -> void:
 	_notify_reward_level_ups(reward)
+
+func _notify_reward_effort_gains(reward_value: Variant) -> void:
+	if not (reward_value is Dictionary):
+		return
+
+	var reward: Dictionary = reward_value as Dictionary
+	var effort_value: Variant = reward.get("effort", [])
+	if not (effort_value is Array):
+		return
+
+	for effort_entry_value: Variant in effort_value as Array:
+		if not (effort_entry_value is Dictionary):
+			continue
+		var effort_entry: Dictionary = effort_entry_value as Dictionary
+		var changes: Dictionary = _dictionary_from_value(effort_entry.get("storedEvChanges", effort_entry.get("gainedEvs", effort_entry.get("evChanges", {}))))
+		var parts: Array[String] = []
+		for stat_key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+			var amount := int(changes.get(stat_key, 0))
+			if amount > 0:
+				parts.append("+%s %s" % [amount, _format_effort_stat_label(stat_key)])
+		if parts.is_empty():
+			continue
+
+		var species := str(effort_entry.get("species", "Pokemon")).strip_edges()
+		if species == "":
+			species = "Pokemon"
+		get_tree().call_group("ui_overlay", "add_system_message", "%s stored %s EVs." % [species, ", ".join(parts)])
+
+func _format_effort_stat_label(stat_key: String) -> String:
+	match stat_key.strip_edges().to_lower():
+		"hp":
+			return "HP"
+		"atk":
+			return "ATK"
+		"def":
+			return "DEF"
+		"spa":
+			return "SP. ATK"
+		"spd":
+			return "SP. DEF"
+		"spe":
+			return "SPEED"
+		_:
+			return stat_key.to_upper()
 
 func _notify_reward_level_ups(reward_value: Variant) -> void:
 	if not (reward_value is Dictionary):
