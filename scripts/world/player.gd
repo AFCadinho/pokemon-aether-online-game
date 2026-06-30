@@ -17,6 +17,7 @@ const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
 const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
 const BASE_SPRITE_OFFSET_META := "base_sprite_offset"
+const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
 const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
 const BODY_SPRITE_NAME := "BodySprite"
 const HAIR_SPRITE_NAME := "HairSprite"
@@ -50,6 +51,50 @@ const ROLE_BADGE_TEXT_HEIGHT := 11.0
 const ROLE_BADGE_DEFAULT_WIDTH := 20.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
+const ACTIVITY_LAYER_OFFSETS := {
+	"fish": {
+		"default": {
+			"hair": Vector2(0.0, 1.0),
+			"headgear": Vector2(0.0, 1.0),
+			"facegear": Vector2(0.0, 2.0),
+			"eyes": Vector2(0.0, 2.0),
+			"eyebrows": Vector2(0.0, 2.0),
+		},
+		"left": {
+			"hair": Vector2(12.0, 1.0),
+			"headgear": Vector2(12.0, 1.0),
+			"facegear": Vector2(12.0, 2.0),
+			"eyes": Vector2(12.0, 2.0),
+			"eyebrows": Vector2(12.0, 2.0),
+		},
+		"right": {
+			"hair": Vector2(-12.0, 1.0),
+			"headgear": Vector2(-12.0, 1.0),
+			"facegear": Vector2(-12.0, 2.0),
+			"eyes": Vector2(-12.0, 2.0),
+			"eyebrows": Vector2(-12.0, 2.0),
+		},
+	},
+	"ride": {
+		"default": {
+			"hair": Vector2(0.0, 2.0),
+			"headgear": Vector2(0.0, 2.0),
+			"facegear": Vector2(0.0, 2.0),
+			"eyes": Vector2(0.0, 2.0),
+			"eyebrows": Vector2(0.0, 2.0),
+		},
+	},
+}
+const ACTIVITY_VISUAL_OFFSETS := {
+	"fish": {
+		"left": Vector2(-6.0, 0.0),
+		"right": Vector2(6.0, 0.0),
+		"up": Vector2(0.0, -2.0),
+		"down": Vector2(0.0, 2.0),
+	},
+}
+const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
+const FISHING_ACTIVITY_DURATION := 1.35
 
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -63,6 +108,7 @@ const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 # TallGrass kan later gebruikt worden voor encounters/effects.
 var collision_tilemap: TileMapLayer
 var grass_tilemap: TileMapLayer
+var water_tilemap: TileMapLayer
 var ledge_down_tilemap: TileMapLayer
 var ledge_up_tilemap: TileMapLayer
 var ledge_left_tilemap: TileMapLayer
@@ -92,6 +138,10 @@ var appearance_sprites: Array[AnimatedSprite2D] = []
 var master_appearance_sprite: AnimatedSprite2D
 var pokemon_follower: PokemonFollower
 var body_sprite_frames_movement_style := ""
+var activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+var fishing_activity_active := false
+var fishing_activity_time_left := 0.0
+var base_look_position := Vector2.ZERO
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
@@ -109,6 +159,30 @@ func set_running_shoes_enabled(enabled: bool) -> void:
 	GameState.running_shoes_enabled = enabled
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_animation_speeds()
+
+func set_activity_style(style: String) -> void:
+	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(style)
+	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_RUN:
+		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	if normalized_style == activity_style:
+		return
+
+	activity_style = normalized_style
+	body_sprite_frames_movement_style = ""
+	_sync_body_sprite_frames_for_movement()
+	_sync_appearance_animation_speeds()
+	set_idle_frame()
+	_sync_activity_layer_offsets()
+	_apply_activity_visual_offset()
+
+func clear_activity_style() -> void:
+	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_DEFAULT)
+
+func get_activity_style() -> String:
+	return activity_style
+
+func is_fishing_activity_active() -> bool:
+	return fishing_activity_active
 
 func set_body_appearance(body_id: String) -> void:
 	var was_layered_body: bool = CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender)
@@ -188,7 +262,7 @@ func set_role_from_user(user: Dictionary) -> void:
 	)
 
 func get_network_movement_state() -> Dictionary:
-	return {
+	var movement_state := {
 		"isMoving": is_moving,
 		"startPosition": {
 			"x": move_start_position.x,
@@ -201,12 +275,16 @@ func get_network_movement_state() -> Dictionary:
 		"elapsed": move_elapsed,
 		"duration": move_duration,
 	}
+	if activity_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT:
+		movement_state["activityStyle"] = activity_style
+	return movement_state
 
 func get_persistent_world_position() -> Vector2:
 	return _snap_world_position(target_position if is_moving else global_position)
 
 func reset_movement_state() -> void:
 	var persistent_position := get_persistent_world_position()
+	_finish_fishing_activity()
 	is_moving = false
 	global_position = persistent_position
 	target_position = global_position
@@ -234,6 +312,7 @@ func face_world_position(world_position: Vector2) -> void:
 func _ready() -> void:
 	add_to_group("player")
 	z_as_relative = false
+	base_look_position = look_node.position
 	PlayerSave.ensure_body_matches_gender(false)
 	_apply_body_appearance(PlayerSave.appearance_body_id)
 	_cache_appearance_sprites()
@@ -245,6 +324,7 @@ func _ready() -> void:
 	# even naar die node wijst.
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
 		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
+		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
 		collision_tilemap = GameState.current_map.get_node_or_null("Collision")
 		ledge_down_tilemap = GameState.current_map.get_node_or_null("LedgeDown")
 		ledge_up_tilemap = GameState.current_map.get_node_or_null("LedgeUp")
@@ -265,6 +345,16 @@ func _ready() -> void:
 	set_idle_frame()
 	_update_sort_z()
 	_setup_pokemon_follower.call_deferred()
+
+func _exit_tree() -> void:
+	if not fishing_activity_active:
+		return
+
+	fishing_activity_active = false
+	fishing_activity_time_left = 0.0
+	activity_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	_restore_activity_visual_offset()
+	GameState.unlock_overworld_input()
 
 func _sync_nameplate_visibility(visible: bool) -> void:
 	if nameplate == null or nameplate_label == null:
@@ -370,6 +460,10 @@ func _process(delta: float) -> void:
 	_update_sort_z()
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
+	_update_fishing_activity(delta)
+
+	if _try_start_fishing_interaction():
+		return
 
 	if _can_accept_movement_input():
 		_update_input_priority()
@@ -479,7 +573,59 @@ func _get_pokemon_follower_parent() -> Node:
 	return self
 
 func _can_accept_movement_input() -> bool:
-	return not GameState.is_overworld_input_locked() and not _is_ui_typing()
+	return not fishing_activity_active \
+		and not GameState.is_overworld_input_locked() \
+		and not _is_ui_typing()
+
+func _try_start_fishing_interaction() -> bool:
+	if fishing_activity_active or is_moving:
+		return false
+	if not Input.is_action_just_pressed("interact"):
+		return false
+	if not _can_accept_movement_input():
+		return false
+	if not _is_facing_water_tile():
+		return false
+
+	_start_fishing_activity()
+	return true
+
+func _start_fishing_activity() -> void:
+	fishing_activity_active = true
+	fishing_activity_time_left = FISHING_ACTIVITY_DURATION
+	_clear_input_buffer()
+	_clear_held_direction()
+	GameState.lock_overworld_input()
+	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_FISH)
+	_debug_activity_layer_offsets("fishing-start")
+
+func _update_fishing_activity(delta: float) -> void:
+	if not fishing_activity_active:
+		return
+
+	fishing_activity_time_left = maxf(fishing_activity_time_left - delta, 0.0)
+	if fishing_activity_time_left <= 0.0:
+		_finish_fishing_activity()
+
+func _finish_fishing_activity() -> void:
+	if not fishing_activity_active:
+		return
+
+	fishing_activity_active = false
+	fishing_activity_time_left = 0.0
+	clear_activity_style()
+	GameState.unlock_overworld_input()
+
+func _is_facing_water_tile() -> bool:
+	if last_direction == Vector2.ZERO:
+		return false
+	if water_tilemap == null:
+		refresh_map_layers()
+	if water_tilemap == null:
+		return false
+
+	var target_position_value: Vector2 = _snap_world_position(global_position) + (last_direction * TILE_SIZE)
+	return _tilemap_has_tile_at(water_tilemap, target_position_value)
 
 func _update_input_priority() -> void:
 	for action_name in MOVE_ACTIONS:
@@ -546,10 +692,24 @@ func _has_reached_target() -> bool:
 	return move_elapsed >= move_duration
 
 func _get_current_tile_move_duration() -> float:
+	if _is_activity_pose_active():
+		return TILE_MOVE_DURATION
 	return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
 
 func _get_current_walk_animation_speed() -> float:
+	if _is_activity_pose_active():
+		return WALK_ANIMATION_SPEED
 	return RUN_WALK_ANIMATION_SPEED if GameState.running_shoes_enabled else WALK_ANIMATION_SPEED
+
+func _is_activity_pose_active() -> bool:
+	return activity_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+
+func _get_current_body_movement_style() -> String:
+	if _is_activity_pose_active():
+		return activity_style
+	return CharacterAppearanceService.BODY_MOVEMENT_RUN \
+		if GameState.running_shoes_enabled \
+		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 
 func _get_move_interpolation(progress: float) -> float:
 	var linear_progress := clampf(progress, 0.0, 1.0)
@@ -724,12 +884,14 @@ func set_idle_frame() -> void:
 	for sprite in appearance_sprites:
 		sprite.stop()
 		_set_idle_animation(sprite, last_direction)
+	_apply_activity_visual_offset()
 	
 func refresh_map_layers() -> void:
 	var current_map: Node = _resolve_current_map()
 	if current_map == null:
 		collision_tilemap = null
 		grass_tilemap = null	
+		water_tilemap = null
 		ledge_down_tilemap = null
 		ledge_up_tilemap = null
 		ledge_left_tilemap = null
@@ -740,6 +902,7 @@ func refresh_map_layers() -> void:
 	GameState.current_map = current_map
 	collision_tilemap = current_map.get_node_or_null("Collision")
 	grass_tilemap = current_map.get_node_or_null("TallGrass")
+	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
 	ledge_down_tilemap = current_map.get_node_or_null("LedgeDown")
 	ledge_up_tilemap = current_map.get_node_or_null("LedgeUp")
 	ledge_left_tilemap = current_map.get_node_or_null("LedgeLeft")
@@ -747,6 +910,29 @@ func refresh_map_layers() -> void:
 
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
+
+func _find_tilemap_layer(parent: Node, layer_names: Array[String]) -> TileMapLayer:
+	if parent == null:
+		return null
+
+	for layer_name: String in layer_names:
+		var direct_layer := parent.get_node_or_null(layer_name) as TileMapLayer
+		if direct_layer != null:
+			return direct_layer
+
+	return _find_tilemap_layer_recursive(parent, layer_names)
+
+func _find_tilemap_layer_recursive(node: Node, layer_names: Array[String]) -> TileMapLayer:
+	var tilemap_layer := node as TileMapLayer
+	if tilemap_layer != null and layer_names.has(tilemap_layer.name):
+		return tilemap_layer
+
+	for child: Node in node.get_children():
+		var child_layer := _find_tilemap_layer_recursive(child, layer_names)
+		if child_layer != null:
+			return child_layer
+
+	return null
 	
 func is_standing_on_tall_grass() -> bool:
 	if grass_tilemap == null:
@@ -905,10 +1091,11 @@ func _apply_body_appearance(body_id: String) -> void:
 		PlayerSave.appearance_body_id = normalized_body_id
 		PlayerSave.ensure_layered_appearance_defaults()
 
+	var movement_style: String = _get_current_body_movement_style()
 	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
 		normalized_body_id,
 		PlayerSave.gender,
-		CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+		movement_style
 	)
 	if body_frames == null:
 		push_warning("Player: body appearance '%s' could not be loaded." % normalized_body_id)
@@ -917,17 +1104,15 @@ func _apply_body_appearance(body_id: String) -> void:
 	body_sprite.sprite_frames = body_frames
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 	_apply_body_modulate(body_sprite, normalized_body_id)
-	body_sprite_frames_movement_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
-	_apply_appearance_parts(CharacterAppearanceService.BODY_MOVEMENT_DEFAULT)
+	body_sprite_frames_movement_style = movement_style
+	_apply_appearance_parts(movement_style)
 
 func _sync_body_sprite_frames_for_movement() -> void:
 	var body_sprite := look_node.get_node_or_null(BODY_SPRITE_NAME) as AnimatedSprite2D
 	if body_sprite == null:
 		return
 
-	var movement_style: String = CharacterAppearanceService.BODY_MOVEMENT_RUN \
-		if GameState.running_shoes_enabled \
-		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	var movement_style: String = _get_current_body_movement_style()
 	if movement_style == body_sprite_frames_movement_style:
 		return
 
@@ -965,9 +1150,7 @@ func _sync_body_sprite_frames_for_movement() -> void:
 	set_idle_frame()
 
 func _apply_appearance_parts(movement_style: String) -> void:
-	var normalized_movement_style: String = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
-	if movement_style == CharacterAppearanceService.BODY_MOVEMENT_RUN:
-		normalized_movement_style = CharacterAppearanceService.BODY_MOVEMENT_RUN
+	var normalized_movement_style: String = CharacterAppearanceService.normalize_movement_style(movement_style)
 
 	if not CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender):
 		for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
@@ -1017,6 +1200,7 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	var normalized_movement_style: String = movement_style
 	if normalized_movement_style == "":
 		normalized_movement_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	normalized_movement_style = CharacterAppearanceService.normalize_movement_style(normalized_movement_style)
 	var part_frames: SpriteFrames = _get_appearance_part_frames(normalized_category, normalized_part_id, normalized_movement_style)
 	if part_frames == null:
 		_clear_appearance_part_sprite(normalized_category)
@@ -1067,6 +1251,7 @@ func _clear_appearance_part_sprite(category: String) -> void:
 	sprite.visible = false
 	sprite.modulate = Color.WHITE
 	sprite.material = null
+	_restore_sprite_base_offset(sprite)
 	sprite.set_meta(UNEQUIPPED_APPEARANCE_PART_META, true)
 	sprite.set_meta(HIDDEN_FOR_MISSING_ANIMATION_META, false)
 
@@ -1085,6 +1270,130 @@ func _apply_appearance_part_visuals(sprite: AnimatedSprite2D, category: String) 
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	sprite.material = null
 	sprite.modulate = _get_appearance_part_modulate(normalized_category)
+	if normalized_category != "facegear":
+		_apply_activity_layer_offset(sprite, normalized_category)
+
+func _apply_activity_layer_offset(sprite: AnimatedSprite2D, category: String) -> void:
+	if sprite == null:
+		return
+	if not sprite.has_meta(ACTIVITY_BASE_SPRITE_OFFSET_META):
+		sprite.set_meta(ACTIVITY_BASE_SPRITE_OFFSET_META, sprite.offset)
+
+	var base_offset: Vector2 = sprite.get_meta(ACTIVITY_BASE_SPRITE_OFFSET_META)
+	sprite.offset = base_offset + _get_activity_layer_offset(category)
+
+func _sync_activity_layer_offsets() -> void:
+	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+		var category: String = str(category_value)
+		if category == "facegear":
+			continue
+		var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[category]))
+		if sprite == null or _is_unequipped_appearance_part_sprite(sprite):
+			continue
+		_apply_activity_layer_offset(sprite, category)
+
+func _apply_activity_visual_offset() -> void:
+	if look_node == null:
+		return
+	look_node.position = base_look_position + _get_activity_visual_offset()
+
+func _restore_activity_visual_offset() -> void:
+	if look_node == null:
+		return
+	look_node.position = base_look_position
+
+func _get_activity_visual_offset() -> Vector2:
+	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(activity_style)
+	var style_offsets: Variant = ACTIVITY_VISUAL_OFFSETS.get(normalized_style, {})
+	if not style_offsets is Dictionary:
+		return Vector2.ZERO
+
+	var direction_offsets: Dictionary = style_offsets as Dictionary
+	var direction_name: String = _get_activity_offset_direction()
+	if direction_offsets.has(direction_name):
+		return direction_offsets[direction_name] as Vector2
+	return Vector2.ZERO
+
+func _restore_sprite_base_offset(sprite: AnimatedSprite2D) -> void:
+	if sprite == null:
+		return
+	if sprite.has_meta(ACTIVITY_BASE_SPRITE_OFFSET_META):
+		sprite.offset = sprite.get_meta(ACTIVITY_BASE_SPRITE_OFFSET_META)
+	elif sprite.has_meta(BASE_SPRITE_OFFSET_META):
+		sprite.offset = sprite.get_meta(BASE_SPRITE_OFFSET_META)
+
+func _get_activity_layer_offset(category: String) -> Vector2:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
+	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(body_sprite_frames_movement_style)
+	var style_offsets: Variant = ACTIVITY_LAYER_OFFSETS.get(normalized_style, {})
+	if not style_offsets is Dictionary:
+		return Vector2.ZERO
+
+	var category_offsets: Dictionary = style_offsets as Dictionary
+	var direction_offsets: Variant = category_offsets.get(_get_activity_offset_direction(), category_offsets.get("default", {}))
+	if direction_offsets is Dictionary:
+		var directional_category_offsets: Dictionary = direction_offsets as Dictionary
+		if directional_category_offsets.has(normalized_category):
+			return directional_category_offsets[normalized_category] as Vector2
+
+	if category_offsets.has(normalized_category):
+		return category_offsets[normalized_category] as Vector2
+	return Vector2.ZERO
+
+func _get_activity_offset_direction() -> String:
+	if master_appearance_sprite != null:
+		var animation_name: String = str(master_appearance_sprite.animation)
+		if animation_name.ends_with("_left"):
+			return "left"
+		if animation_name.ends_with("_right"):
+			return "right"
+		if animation_name.ends_with("_up"):
+			return "up"
+		if animation_name.ends_with("_down"):
+			return "down"
+
+	if last_direction == Vector2.LEFT:
+		return "left"
+	if last_direction == Vector2.RIGHT:
+		return "right"
+	if last_direction == Vector2.UP:
+		return "up"
+	return "down"
+
+func _debug_activity_layer_offsets(reason: String) -> void:
+	if not GameState.world_debug_enabled:
+		return
+
+	GameState.debug_world("[activity-pose] %s style=%s direction=%s body_style=%s position=%s look=%s visual_offset=%s" % [
+		reason,
+		activity_style,
+		_get_activity_offset_direction(),
+		body_sprite_frames_movement_style,
+		str(global_position),
+		str(look_node.position if look_node != null else Vector2.ZERO),
+		str(_get_activity_visual_offset()),
+	])
+	var body_sprite := _get_appearance_sprite(BODY_SPRITE_NAME)
+	if body_sprite != null:
+		GameState.debug_world("[activity-pose] layer=body visible=%s offset=%s animation=%s frame=%d" % [
+			str(body_sprite.visible),
+			str(body_sprite.offset),
+			str(body_sprite.animation),
+			body_sprite.frame,
+		])
+	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
+		var category: String = str(category_value)
+		var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[category]))
+		if sprite == null:
+			continue
+		GameState.debug_world("[activity-pose] layer=%s visible=%s offset=%s activity_offset=%s animation=%s frame=%d" % [
+			category,
+			str(sprite.visible),
+			str(sprite.offset),
+			str(_get_activity_layer_offset(category)),
+			str(sprite.animation),
+			sprite.frame,
+		])
 
 func _get_appearance_part_frames(category: String, part_id: String, movement_style: String) -> SpriteFrames:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
@@ -1224,7 +1533,9 @@ func _apply_face_gear_frame_alignment(sprite: AnimatedSprite2D) -> void:
 
 	var base_offset: Vector2 = sprite.get_meta(BASE_SPRITE_OFFSET_META)
 	var body_bob_y := current_body_center_y - reference_body_center_y
-	sprite.offset = base_offset + Vector2(0.0, reference_face_center_y + body_bob_y - current_face_center_y)
+	sprite.offset = base_offset \
+		+ Vector2(0.0, reference_face_center_y + body_bob_y - current_face_center_y) \
+		+ _get_activity_layer_offset("facegear")
 
 func _get_frame_opaque_center_y(sprite_frames: SpriteFrames, animation_name: StringName, frame_index: int) -> float:
 	var cache_key := "%s:%s:%d" % [str(sprite_frames.get_instance_id()), str(animation_name), frame_index]

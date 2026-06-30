@@ -42,9 +42,13 @@ const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
-const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running"]
+const NON_SELECTABLE_BODY_DIRECTORIES: Array[String] = ["run", "running", "fish", "ride", "surf", "mount"]
 const BODY_MOVEMENT_DEFAULT := "walk"
 const BODY_MOVEMENT_RUN := "run"
+const BODY_MOVEMENT_FISH := "fish"
+const BODY_MOVEMENT_RIDE := "ride"
+const BODY_MOVEMENT_SURF := "surf"
+const BODY_MOVEMENT_MOUNT := "mount"
 const LAYERED_PART_CATEGORIES: Array[String] = [
 	HAIR_CATEGORY,
 	HEADGEAR_CATEGORY,
@@ -411,34 +415,53 @@ static func get_body_frames(body_id: String, gender: String = "", movement_style
 	return sprite_frames
 
 
-static func _normalize_movement_style(movement_style: String) -> String:
+static func normalize_movement_style(movement_style: String) -> String:
 	var normalized: String = movement_style.strip_edges().to_lower()
 	if normalized == BODY_MOVEMENT_RUN:
 		return BODY_MOVEMENT_RUN
+	if normalized == BODY_MOVEMENT_FISH or normalized == "fishing":
+		return BODY_MOVEMENT_FISH
+	if normalized == BODY_MOVEMENT_RIDE \
+			or normalized == BODY_MOVEMENT_SURF \
+			or normalized == BODY_MOVEMENT_MOUNT \
+			or normalized == "riding":
+		return BODY_MOVEMENT_RIDE
 	return BODY_MOVEMENT_DEFAULT
 
 
+static func _normalize_movement_style(movement_style: String) -> String:
+	return normalize_movement_style(movement_style)
+
+
 static func _load_body_texture_for_movement(body_id: String, gender: String, movement_style: String) -> Texture2D:
-	if movement_style == BODY_MOVEMENT_RUN:
-		var run_texture: Texture2D = _load_body_texture(_get_run_body_id(body_id), gender)
-		if run_texture != null:
-			return run_texture
+	var normalized_movement_style: String = _normalize_movement_style(movement_style)
+	if normalized_movement_style != BODY_MOVEMENT_DEFAULT:
+		var movement_texture: Texture2D = _load_body_texture(_get_movement_body_id(body_id, normalized_movement_style), gender)
+		if movement_texture != null:
+			return movement_texture
 
 	return _load_body_texture(body_id, gender)
 
 
 static func _get_run_body_id(body_id: String) -> String:
+	return _get_movement_body_id(body_id, BODY_MOVEMENT_RUN)
+
+
+static func _get_movement_body_id(body_id: String, movement_style: String) -> String:
 	var normalized_body_id: String = _normalize_body_id(body_id)
+	var normalized_movement_style: String = _normalize_movement_style(movement_style)
 	if normalized_body_id == "":
 		return ""
+	if normalized_movement_style == BODY_MOVEMENT_DEFAULT:
+		return normalized_body_id
 
 	var slash_index: int = normalized_body_id.rfind("/")
 	if slash_index >= 0:
 		var directory_path: String = normalized_body_id.substr(0, slash_index)
 		var file_id: String = normalized_body_id.substr(slash_index + 1)
-		return "%s/%s/%s_run" % [directory_path, BODY_MOVEMENT_RUN, file_id]
+		return "%s/%s/%s_%s" % [directory_path, normalized_movement_style, file_id, normalized_movement_style]
 
-	return "%s/%s_run" % [BODY_MOVEMENT_RUN, normalized_body_id]
+	return "%s/%s_%s" % [normalized_movement_style, normalized_body_id, normalized_movement_style]
 
 
 static func _load_body_texture(body_id: String, gender: String = "") -> Texture2D:
@@ -537,11 +560,12 @@ static func _is_selectable_body_id(body_id: String) -> bool:
 
 
 static func _load_part_texture_for_movement(category: String, part_id: String, gender: String, movement_style: String) -> Texture2D:
-	if movement_style == BODY_MOVEMENT_RUN:
-		var run_part_id: String = _get_run_body_id(part_id)
-		var run_texture: Texture2D = _load_part_texture(category, run_part_id, gender)
-		if run_texture != null:
-			return run_texture
+	var normalized_movement_style: String = _normalize_movement_style(movement_style)
+	if normalized_movement_style != BODY_MOVEMENT_DEFAULT:
+		var movement_part_id: String = _get_movement_body_id(part_id, normalized_movement_style)
+		var movement_texture: Texture2D = _load_part_texture(category, movement_part_id, gender)
+		if movement_texture != null:
+			return movement_texture
 	return _load_part_texture(category, part_id, gender)
 
 

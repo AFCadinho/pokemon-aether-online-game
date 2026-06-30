@@ -30,6 +30,49 @@ const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const BODY_SPRITE_NAME := "BodySprite"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
+const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
+const ACTIVITY_LAYER_OFFSETS := {
+	"fish": {
+		"default": {
+			"hair": Vector2(0.0, 1.0),
+			"headgear": Vector2(0.0, 1.0),
+			"facegear": Vector2(0.0, 2.0),
+			"eyes": Vector2(0.0, 2.0),
+			"eyebrows": Vector2(0.0, 2.0),
+		},
+		"left": {
+			"hair": Vector2(12.0, 1.0),
+			"headgear": Vector2(12.0, 1.0),
+			"facegear": Vector2(12.0, 2.0),
+			"eyes": Vector2(12.0, 2.0),
+			"eyebrows": Vector2(12.0, 2.0),
+		},
+		"right": {
+			"hair": Vector2(-12.0, 1.0),
+			"headgear": Vector2(-12.0, 1.0),
+			"facegear": Vector2(-12.0, 2.0),
+			"eyes": Vector2(-12.0, 2.0),
+			"eyebrows": Vector2(-12.0, 2.0),
+		},
+	},
+	"ride": {
+		"default": {
+			"hair": Vector2(0.0, 2.0),
+			"headgear": Vector2(0.0, 2.0),
+			"facegear": Vector2(0.0, 2.0),
+			"eyes": Vector2(0.0, 2.0),
+			"eyebrows": Vector2(0.0, 2.0),
+		},
+	},
+}
+const ACTIVITY_VISUAL_OFFSETS := {
+	"fish": {
+		"left": Vector2(-6.0, 0.0),
+		"right": Vector2(6.0, 0.0),
+		"up": Vector2(0.0, -2.0),
+		"down": Vector2(0.0, 2.0),
+	},
+}
 const APPEARANCE_PART_SPRITES := {
 	"hair": "HairSprite",
 	"headgear": "HeadgearSprite",
@@ -55,6 +98,8 @@ var tile_move_duration := 0.22
 var is_replaying_tile_move := false
 var pending_tile_moves: Array[Dictionary] = []
 var last_direction := Vector2.DOWN
+var look_node: Node2D
+var base_look_position := Vector2.ZERO
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var nameplate: Control
 var nameplate_label: Label
@@ -66,6 +111,7 @@ var current_follower_shiny := false
 var current_body_id := ""
 var current_body_gender := ""
 var current_body_movement_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+var current_activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 var current_gender := "male"
 var current_appearance_state: Dictionary = {}
 var current_appearance_signature := ""
@@ -119,6 +165,7 @@ func apply_state(state: Dictionary) -> void:
 		float(position_data.get("y", target_position.y))
 	)
 	var movement_data := _dictionary_from_value(state.get("movement", {}))
+	current_activity_style = _resolve_activity_style(state, movement_data)
 	var packet_direction := _direction_from_name(str(state.get("facingDirection", "down")))
 	if not has_position:
 		target_position = new_target_position
@@ -224,6 +271,14 @@ func _merge_encoded_body_appearance(appearance_state: Dictionary) -> void:
 		appearance_state[key] = decoded_appearance[key]
 
 
+func _resolve_activity_style(state: Dictionary, movement_state: Dictionary) -> String:
+	var activity_value: Variant = movement_state.get("activityStyle", state.get("activityStyle", ""))
+	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(str(activity_value))
+	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_RUN:
+		return CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	return normalized_style
+
+
 func get_feet_position() -> Vector2:
 	return global_position
 
@@ -285,16 +340,23 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 		body_id = fallback_body_id
 	var next_appearance_state: Dictionary = appearance_state.duplicate()
 	next_appearance_state["body"] = body_id
+	var next_body_movement_style: String = _get_current_body_movement_style(
+		tile_move_duration if is_replaying_tile_move else TILE_MOVE_DURATION
+	)
 	var signature: String = _get_appearance_signature(next_appearance_state)
-	if signature == current_appearance_signature and current_gender == current_body_gender:
+	if signature == current_appearance_signature \
+			and current_gender == current_body_gender \
+			and next_body_movement_style == current_body_movement_style:
 		return
 
 	current_appearance_state = next_appearance_state
 	current_appearance_signature = signature
-	if body_id != current_body_id or current_gender != current_body_gender:
-		_apply_body_frames(body_id, current_gender, current_body_movement_style)
+	if body_id != current_body_id \
+			or current_gender != current_body_gender \
+			or next_body_movement_style != current_body_movement_style:
+		_apply_body_frames(body_id, current_gender, next_body_movement_style)
 	else:
-		_apply_appearance_parts(current_body_movement_style)
+		_apply_appearance_parts(next_body_movement_style)
 
 
 func _ensure_pokemon_follower() -> void:
@@ -481,6 +543,9 @@ func _create_visual() -> void:
 
 	var look_copy := source_look.duplicate()
 	add_child(look_copy)
+	look_node = look_copy as Node2D
+	if look_node != null:
+		base_look_position = look_node.position
 	_collect_appearance_sprites(look_copy)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
@@ -667,12 +732,18 @@ func _sync_appearance_animation_speeds(move_duration: float = TILE_MOVE_DURATION
 
 
 func _sync_body_frames_for_move_duration(move_duration: float) -> void:
-	var movement_style: String = CharacterAppearanceService.BODY_MOVEMENT_RUN \
-		if move_duration < TILE_MOVE_DURATION \
-		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+	var movement_style: String = _get_current_body_movement_style(move_duration)
 	if movement_style == current_body_movement_style:
 		return
 	_apply_body_frames(current_body_id, current_body_gender, movement_style)
+
+
+func _get_current_body_movement_style(move_duration: float) -> String:
+	if current_activity_style != CharacterAppearanceService.BODY_MOVEMENT_DEFAULT:
+		return current_activity_style
+	return CharacterAppearanceService.BODY_MOVEMENT_RUN \
+		if move_duration < TILE_MOVE_DURATION \
+		else CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 
 
 func _apply_body_frames(body_id: String, gender: String, movement_style: String) -> void:
@@ -860,6 +931,7 @@ func _clear_appearance_part_sprite(category: String) -> void:
 	sprite.visible = false
 	sprite.modulate = Color.WHITE
 	sprite.material = null
+	_restore_sprite_base_offset(sprite)
 	sprite.set_meta(UNEQUIPPED_APPEARANCE_PART_META, true)
 
 
@@ -880,6 +952,84 @@ func _apply_appearance_part_visuals(sprite: AnimatedSprite2D, category: String) 
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	sprite.material = null
 	sprite.modulate = _get_appearance_part_modulate(normalized_category)
+	_apply_activity_layer_offset(sprite, normalized_category)
+
+
+func _apply_activity_layer_offset(sprite: AnimatedSprite2D, category: String) -> void:
+	if sprite == null:
+		return
+	if not sprite.has_meta(ACTIVITY_BASE_SPRITE_OFFSET_META):
+		sprite.set_meta(ACTIVITY_BASE_SPRITE_OFFSET_META, sprite.offset)
+
+	var base_offset: Vector2 = sprite.get_meta(ACTIVITY_BASE_SPRITE_OFFSET_META)
+	sprite.offset = base_offset + _get_activity_layer_offset(category)
+
+
+func _apply_activity_visual_offset() -> void:
+	if look_node == null:
+		return
+	look_node.position = base_look_position + _get_activity_visual_offset()
+
+
+func _get_activity_visual_offset() -> Vector2:
+	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(current_body_movement_style)
+	var style_offsets: Variant = ACTIVITY_VISUAL_OFFSETS.get(normalized_style, {})
+	if not style_offsets is Dictionary:
+		return Vector2.ZERO
+
+	var direction_offsets: Dictionary = style_offsets as Dictionary
+	var direction_name: String = _get_activity_offset_direction()
+	if direction_offsets.has(direction_name):
+		return direction_offsets[direction_name] as Vector2
+	return Vector2.ZERO
+
+
+func _restore_sprite_base_offset(sprite: AnimatedSprite2D) -> void:
+	if sprite == null:
+		return
+	if sprite.has_meta(ACTIVITY_BASE_SPRITE_OFFSET_META):
+		sprite.offset = sprite.get_meta(ACTIVITY_BASE_SPRITE_OFFSET_META)
+
+
+func _get_activity_layer_offset(category: String) -> Vector2:
+	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
+	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(current_body_movement_style)
+	var style_offsets: Variant = ACTIVITY_LAYER_OFFSETS.get(normalized_style, {})
+	if not style_offsets is Dictionary:
+		return Vector2.ZERO
+
+	var category_offsets: Dictionary = style_offsets as Dictionary
+	var direction_offsets: Variant = category_offsets.get(_get_activity_offset_direction(), category_offsets.get("default", {}))
+	if direction_offsets is Dictionary:
+		var directional_category_offsets: Dictionary = direction_offsets as Dictionary
+		if directional_category_offsets.has(normalized_category):
+			return directional_category_offsets[normalized_category] as Vector2
+
+	if category_offsets.has(normalized_category):
+		return category_offsets[normalized_category] as Vector2
+	return Vector2.ZERO
+
+
+func _get_activity_offset_direction() -> String:
+	var body_sprite := _get_body_sprite()
+	if body_sprite != null:
+		var animation_name: String = str(body_sprite.animation)
+		if animation_name.ends_with("_left"):
+			return "left"
+		if animation_name.ends_with("_right"):
+			return "right"
+		if animation_name.ends_with("_up"):
+			return "up"
+		if animation_name.ends_with("_down"):
+			return "down"
+
+	if last_direction == Vector2.LEFT:
+		return "left"
+	if last_direction == Vector2.RIGHT:
+		return "right"
+	if last_direction == Vector2.UP:
+		return "up"
+	return "down"
 
 
 func _get_appearance_part_frames(category: String, part_id: String, movement_style: String) -> SpriteFrames:
@@ -947,6 +1097,7 @@ func _update_animation(is_moving: bool) -> void:
 			sprite.frame = 0
 			sprite.stop()
 	_sync_all_part_sprites_to_body()
+	_apply_activity_visual_offset()
 
 
 func _is_unequipped_appearance_part_sprite(sprite: AnimatedSprite2D) -> bool:
