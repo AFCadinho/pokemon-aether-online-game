@@ -28,6 +28,7 @@ const SHOES_SPRITE_NAME := "ShoesSprite"
 const EYES_SPRITE_NAME := "EyesSprite"
 const EYEBROWS_SPRITE_NAME := "EyebrowsSprite"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const APPEARANCE_PART_SPRITES := {
 	"hair": HAIR_SPRITE_NAME,
 	"headgear": HEADGEAR_SPRITE_NAME,
@@ -94,7 +95,21 @@ const ACTIVITY_VISUAL_OFFSETS := {
 	},
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
-const FISHING_ACTIVITY_DURATION := 1.35
+const FISHING_STATE_NONE := "none"
+const FISHING_STATE_CAST := "cast"
+const FISHING_STATE_WAITING := "waiting"
+const FISHING_STATE_BITE := "bite"
+const FISHING_STATE_REEL_SUCCESS := "reel_success"
+const FISHING_STATE_MISSED := "missed"
+const FISHING_CAST_DURATION := 0.45
+const FISHING_BITE_DELAY_MIN := 0.85
+const FISHING_BITE_DELAY_MAX := 2.15
+const FISHING_BITE_WINDOW_DURATION := 1.25
+const FISHING_RESULT_HOLD_DURATION := 0.45
+const FISHING_PROMPT_SIZE := Vector2(30.0, 30.0)
+const FISHING_PROMPT_POSITION := Vector2(18.0, -72.0)
+const FISHING_BITE_PROMPT_SIZE := Vector2(28.0, 28.0)
+const FISHING_BITE_PROMPT_POSITION := Vector2(10.0, -92.0)
 
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -141,7 +156,14 @@ var body_sprite_frames_movement_style := ""
 var activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 var fishing_activity_active := false
 var fishing_activity_time_left := 0.0
+var fishing_activity_tier := 0
+var fishing_activity_state := FISHING_STATE_NONE
+var surf_activity_active := false
 var base_look_position := Vector2.ZERO
+var fishing_prompt_button: Button
+var fishing_bite_prompt_button: Button
+var fishing_input_handled_frame := -1
+var fishing_bite_prompt_rendered_state := ""
 
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
@@ -183,6 +205,67 @@ func get_activity_style() -> String:
 
 func is_fishing_activity_active() -> bool:
 	return fishing_activity_active
+
+func is_surfing_activity_active() -> bool:
+	return surf_activity_active
+
+func can_fish_here() -> bool:
+	if not bool(GameState.fishing_unlocked):
+		return false
+	if int(GameState.fishing_tier) <= 0:
+		return false
+	if fishing_activity_active or is_moving:
+		return false
+	if GameState.is_overworld_input_locked() or _is_ui_typing():
+		return false
+	return _is_facing_water_tile()
+
+func start_fishing(fishing_tier: int = -1) -> bool:
+	if not can_fish_here():
+		return false
+
+	var resolved_tier: int = fishing_tier
+	if resolved_tier <= 0:
+		resolved_tier = int(GameState.fishing_tier)
+	resolved_tier = clampi(resolved_tier, 1, 3)
+	_start_fishing_activity(resolved_tier)
+	return true
+
+func can_surf_here() -> bool:
+	return bool(get_surf_check_result().get("allowed", false))
+
+func get_surf_check_result() -> Dictionary:
+	var target_position_value := _get_facing_tile_position()
+	var result := {
+		"allowed": false,
+		"reason": "not_facing_water",
+		"target_position": target_position_value,
+	}
+
+	if last_direction == Vector2.ZERO:
+		result["reason"] = "no_direction"
+		return result
+	if not _is_water_tile_at(target_position_value):
+		return result
+	if fishing_activity_active:
+		result["reason"] = "busy_fishing"
+		return result
+	if is_moving:
+		result["reason"] = "moving"
+		return result
+	if GameState.is_overworld_input_locked():
+		result["reason"] = "overworld_locked"
+		return result
+	if _is_ui_typing():
+		result["reason"] = "ui_typing"
+		return result
+	if not bool(GameState.surf_unlocked):
+		result["reason"] = "surf_locked"
+		return result
+
+	result["allowed"] = true
+	result["reason"] = "ok"
+	return result
 
 func set_body_appearance(body_id: String) -> void:
 	var was_layered_body: bool = CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender)
@@ -318,6 +401,7 @@ func _ready() -> void:
 	_cache_appearance_sprites()
 	set_display_name(PlayerSave.player_name, true)
 	set_role_from_user(AuthService.current_user)
+	_setup_fishing_prompt()
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
@@ -352,6 +436,9 @@ func _exit_tree() -> void:
 
 	fishing_activity_active = false
 	fishing_activity_time_left = 0.0
+	fishing_activity_tier = 0
+	fishing_activity_state = FISHING_STATE_NONE
+	_sync_fishing_bite_prompt_visibility()
 	activity_style = CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 	_restore_activity_visual_offset()
 	GameState.unlock_overworld_input()
@@ -456,13 +543,183 @@ func _get_role_color(role_id: String, fallback: String) -> Color:
 		return Color(fallback)
 	return Color(0.847, 0.718, 0.404)
 
+func _setup_fishing_prompt() -> void:
+	if fishing_prompt_button != null:
+		return
+
+	fishing_prompt_button = Button.new()
+	fishing_prompt_button.name = "FishingPromptButton"
+	fishing_prompt_button.visible = false
+	fishing_prompt_button.text = ""
+	fishing_prompt_button.icon = FISHING_PROMPT_ICON
+	fishing_prompt_button.expand_icon = true
+	fishing_prompt_button.focus_mode = Control.FOCUS_NONE
+	fishing_prompt_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	fishing_prompt_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	fishing_prompt_button.custom_minimum_size = FISHING_PROMPT_SIZE
+	fishing_prompt_button.size = FISHING_PROMPT_SIZE
+	fishing_prompt_button.position = FISHING_PROMPT_POSITION
+	fishing_prompt_button.z_index = 560
+	fishing_prompt_button.tooltip_text = "Fish"
+	_apply_fishing_prompt_style(fishing_prompt_button)
+	fishing_prompt_button.pressed.connect(Callable(self, "_on_fishing_prompt_pressed"))
+	add_child(fishing_prompt_button)
+	_setup_fishing_bite_prompt()
+
+func _setup_fishing_bite_prompt() -> void:
+	if fishing_bite_prompt_button != null:
+		return
+
+	fishing_bite_prompt_button = Button.new()
+	fishing_bite_prompt_button.name = "FishingBitePromptButton"
+	fishing_bite_prompt_button.visible = false
+	fishing_bite_prompt_button.text = "!"
+	fishing_bite_prompt_button.focus_mode = Control.FOCUS_NONE
+	fishing_bite_prompt_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	fishing_bite_prompt_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	fishing_bite_prompt_button.custom_minimum_size = FISHING_BITE_PROMPT_SIZE
+	fishing_bite_prompt_button.size = FISHING_BITE_PROMPT_SIZE
+	fishing_bite_prompt_button.position = FISHING_BITE_PROMPT_POSITION
+	fishing_bite_prompt_button.z_index = 570
+	fishing_bite_prompt_button.tooltip_text = "Reel"
+	_apply_fishing_bite_prompt_style(fishing_bite_prompt_button)
+	fishing_bite_prompt_button.button_down.connect(Callable(self, "_on_fishing_bite_prompt_button_down"))
+	fishing_bite_prompt_button.gui_input.connect(Callable(self, "_on_fishing_bite_prompt_gui_input"))
+	fishing_bite_prompt_button.pressed.connect(Callable(self, "_on_fishing_bite_prompt_pressed"))
+	add_child(fishing_bite_prompt_button)
+
+func _apply_fishing_prompt_style(button: Button) -> void:
+	button.add_theme_stylebox_override("normal", _make_fishing_prompt_style(Color(0.98, 0.95, 0.86, 0.94), Color(0.18, 0.14, 0.20, 0.88)))
+	button.add_theme_stylebox_override("hover", _make_fishing_prompt_style(Color(1.0, 0.98, 0.90, 0.98), Color(0.30, 0.22, 0.34, 0.95)))
+	button.add_theme_stylebox_override("pressed", _make_fishing_prompt_style(Color(0.90, 0.86, 0.78, 0.98), Color(0.12, 0.10, 0.14, 0.95)))
+	button.add_theme_color_override("icon_normal_color", Color.WHITE)
+	button.add_theme_color_override("icon_hover_color", Color.WHITE)
+	button.add_theme_color_override("icon_pressed_color", Color(0.92, 0.92, 0.92, 1.0))
+	button.add_theme_constant_override("h_separation", 0)
+	button.add_theme_constant_override("icon_max_width", 22)
+
+func _make_fishing_prompt_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background_color
+	style.border_color = border_color
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(9)
+	style.content_margin_left = 4.0
+	style.content_margin_top = 4.0
+	style.content_margin_right = 4.0
+	style.content_margin_bottom = 4.0
+	return style
+
+func _apply_fishing_bite_prompt_style(button: Button) -> void:
+	button.add_theme_stylebox_override("normal", _make_fishing_prompt_style(Color(1.0, 0.92, 0.30, 0.96), Color(0.20, 0.12, 0.02, 0.95)))
+	button.add_theme_stylebox_override("hover", _make_fishing_prompt_style(Color(1.0, 0.98, 0.44, 1.0), Color(0.32, 0.18, 0.02, 1.0)))
+	button.add_theme_stylebox_override("pressed", _make_fishing_prompt_style(Color(0.92, 0.78, 0.18, 1.0), Color(0.14, 0.08, 0.02, 1.0)))
+	button.add_theme_color_override("font_color", Color(0.12, 0.08, 0.02, 1.0))
+	button.add_theme_color_override("font_hover_color", Color(0.12, 0.08, 0.02, 1.0))
+	button.add_theme_color_override("font_pressed_color", Color(0.08, 0.05, 0.01, 1.0))
+	button.add_theme_font_size_override("font_size", 20)
+
+func _sync_fishing_prompt_visibility() -> void:
+	if fishing_prompt_button == null:
+		return
+	fishing_prompt_button.visible = can_fish_here()
+
+func _sync_fishing_bite_prompt_visibility() -> void:
+	if fishing_bite_prompt_button == null:
+		return
+	_sync_fishing_bite_prompt_state()
+	fishing_bite_prompt_button.visible = fishing_activity_active and (
+		fishing_activity_state == FISHING_STATE_BITE
+		or fishing_activity_state == FISHING_STATE_REEL_SUCCESS
+		or fishing_activity_state == FISHING_STATE_MISSED
+	)
+
+func _sync_fishing_bite_prompt_state() -> void:
+	if fishing_bite_prompt_button == null:
+		return
+	if fishing_bite_prompt_rendered_state == fishing_activity_state:
+		return
+
+	fishing_bite_prompt_rendered_state = fishing_activity_state
+
+	match fishing_activity_state:
+		FISHING_STATE_REEL_SUCCESS:
+			fishing_bite_prompt_button.text = "OK"
+			fishing_bite_prompt_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_apply_fishing_bite_result_style(
+				fishing_bite_prompt_button,
+				Color(0.46, 0.94, 0.48, 0.98),
+				Color(0.04, 0.23, 0.06, 0.95),
+				Color(0.02, 0.12, 0.03, 1.0),
+				13
+			)
+		FISHING_STATE_MISSED:
+			fishing_bite_prompt_button.text = "X"
+			fishing_bite_prompt_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_apply_fishing_bite_result_style(
+				fishing_bite_prompt_button,
+				Color(0.96, 0.42, 0.34, 0.98),
+				Color(0.26, 0.04, 0.03, 0.95),
+				Color(0.14, 0.02, 0.02, 1.0),
+				16
+			)
+		_:
+			fishing_bite_prompt_button.text = "!"
+			fishing_bite_prompt_button.mouse_filter = Control.MOUSE_FILTER_STOP
+			_apply_fishing_bite_prompt_style(fishing_bite_prompt_button)
+
+func _apply_fishing_bite_result_style(button: Button, background_color: Color, border_color: Color, font_color: Color, font_size: int) -> void:
+	button.add_theme_stylebox_override("normal", _make_fishing_prompt_style(background_color, border_color))
+	button.add_theme_stylebox_override("hover", _make_fishing_prompt_style(background_color, border_color))
+	button.add_theme_stylebox_override("pressed", _make_fishing_prompt_style(background_color, border_color))
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", font_color)
+	button.add_theme_color_override("font_pressed_color", font_color)
+	button.add_theme_font_size_override("font_size", font_size)
+
+func _on_fishing_prompt_pressed() -> void:
+	start_fishing()
+	_sync_fishing_prompt_visibility()
+
+func _on_fishing_bite_prompt_pressed() -> void:
+	_handle_fishing_bite_prompt_activation()
+
+func _on_fishing_bite_prompt_button_down() -> void:
+	_handle_fishing_bite_prompt_activation()
+
+func _on_fishing_bite_prompt_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			_handle_fishing_bite_prompt_activation()
+			get_viewport().set_input_as_handled()
+	elif event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if touch_event.pressed:
+			_handle_fishing_bite_prompt_activation()
+			get_viewport().set_input_as_handled()
+
+func _handle_fishing_bite_prompt_activation() -> void:
+	_try_reel_fishing_bite()
+	_sync_fishing_bite_prompt_visibility()
+
+func _input(event: InputEvent) -> void:
+	if _try_handle_fishing_input_event(event):
+		get_viewport().set_input_as_handled()
+
 func _process(delta: float) -> void:
 	_update_sort_z()
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
 	_update_fishing_activity(delta)
+	_sync_fishing_prompt_visibility()
+	_sync_fishing_bite_prompt_visibility()
 
-	if _try_start_fishing_interaction():
+	if _try_start_fishing_skill_input():
+		_sync_fishing_prompt_visibility()
+		return
+
+	if _try_check_surf_interaction_input():
 		return
 
 	if _can_accept_movement_input():
@@ -577,26 +834,61 @@ func _can_accept_movement_input() -> bool:
 		and not GameState.is_overworld_input_locked() \
 		and not _is_ui_typing()
 
-func _try_start_fishing_interaction() -> bool:
-	if fishing_activity_active or is_moving:
+func _try_handle_fishing_input_event(event: InputEvent) -> bool:
+	if event == null or not event.is_action_pressed("fish", false):
 		return false
+	if _is_ui_typing():
+		return false
+
+	return _handle_fishing_skill_trigger()
+
+func _try_start_fishing_skill_input() -> bool:
+	if fishing_input_handled_frame == Engine.get_process_frames():
+		return false
+	if not Input.is_action_just_pressed("fish"):
+		return false
+	if _is_ui_typing():
+		return false
+
+	return _handle_fishing_skill_trigger()
+
+func _handle_fishing_skill_trigger() -> bool:
+	if fishing_activity_active:
+		var was_handled := _try_reel_fishing_bite()
+		if was_handled:
+			_mark_fishing_input_handled_frame()
+		return was_handled
+
+	var did_start := start_fishing()
+	if did_start:
+		_mark_fishing_input_handled_frame()
+	return did_start
+
+func _mark_fishing_input_handled_frame() -> void:
+	fishing_input_handled_frame = Engine.get_process_frames()
+
+func _try_check_surf_interaction_input() -> bool:
 	if not Input.is_action_just_pressed("interact"):
 		return false
-	if not _can_accept_movement_input():
+	if _is_ui_typing():
 		return false
 	if not _is_facing_water_tile():
 		return false
 
-	_start_fishing_activity()
+	var surf_check := get_surf_check_result()
+	_debug_surf_check("interact", surf_check)
 	return true
 
-func _start_fishing_activity() -> void:
+func _start_fishing_activity(fishing_tier: int = 1) -> void:
 	fishing_activity_active = true
-	fishing_activity_time_left = FISHING_ACTIVITY_DURATION
+	fishing_activity_state = FISHING_STATE_CAST
+	fishing_activity_time_left = FISHING_CAST_DURATION
+	fishing_activity_tier = clampi(fishing_tier, 1, 3)
 	_clear_input_buffer()
 	_clear_held_direction()
 	GameState.lock_overworld_input()
 	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_FISH)
+	_sync_fishing_bite_prompt_visibility()
 	_debug_activity_layer_offsets("fishing-start")
 
 func _update_fishing_activity(delta: float) -> void:
@@ -604,8 +896,52 @@ func _update_fishing_activity(delta: float) -> void:
 		return
 
 	fishing_activity_time_left = maxf(fishing_activity_time_left - delta, 0.0)
-	if fishing_activity_time_left <= 0.0:
-		_finish_fishing_activity()
+	if fishing_activity_time_left > 0.0:
+		return
+
+	match fishing_activity_state:
+		FISHING_STATE_CAST:
+			_enter_fishing_waiting_state()
+		FISHING_STATE_WAITING:
+			_enter_fishing_bite_state()
+		FISHING_STATE_BITE:
+			_enter_fishing_missed_state()
+		FISHING_STATE_REEL_SUCCESS, FISHING_STATE_MISSED:
+			_finish_fishing_activity()
+		_:
+			_finish_fishing_activity()
+
+func _enter_fishing_waiting_state() -> void:
+	fishing_activity_state = FISHING_STATE_WAITING
+	fishing_activity_time_left = randf_range(FISHING_BITE_DELAY_MIN, FISHING_BITE_DELAY_MAX)
+	_sync_fishing_bite_prompt_visibility()
+	_debug_fishing_state("waiting")
+
+func _enter_fishing_bite_state() -> void:
+	fishing_activity_state = FISHING_STATE_BITE
+	fishing_activity_time_left = FISHING_BITE_WINDOW_DURATION
+	_sync_fishing_bite_prompt_visibility()
+	_debug_fishing_state("bite")
+
+func _enter_fishing_missed_state(reason: String = "missed") -> void:
+	fishing_activity_state = FISHING_STATE_MISSED
+	fishing_activity_time_left = FISHING_RESULT_HOLD_DURATION
+	_sync_fishing_bite_prompt_visibility()
+	_debug_fishing_state(reason)
+
+func _try_reel_fishing_bite() -> bool:
+	if not fishing_activity_active:
+		return false
+	if fishing_activity_state != FISHING_STATE_BITE:
+		if fishing_activity_state == FISHING_STATE_CAST or fishing_activity_state == FISHING_STATE_WAITING:
+			_enter_fishing_missed_state("early")
+		return true
+
+	fishing_activity_state = FISHING_STATE_REEL_SUCCESS
+	fishing_activity_time_left = FISHING_RESULT_HOLD_DURATION
+	_sync_fishing_bite_prompt_visibility()
+	_debug_fishing_state("reel-success")
+	return true
 
 func _finish_fishing_activity() -> void:
 	if not fishing_activity_active:
@@ -613,19 +949,29 @@ func _finish_fishing_activity() -> void:
 
 	fishing_activity_active = false
 	fishing_activity_time_left = 0.0
+	fishing_activity_tier = 0
+	fishing_activity_state = FISHING_STATE_NONE
 	clear_activity_style()
+	_sync_fishing_bite_prompt_visibility()
 	GameState.unlock_overworld_input()
 
 func _is_facing_water_tile() -> bool:
-	if last_direction == Vector2.ZERO:
-		return false
+	return last_direction != Vector2.ZERO and _is_water_tile_at(_get_facing_tile_position())
+
+func _get_facing_tile_position() -> Vector2:
+	return _snap_world_position(global_position) + (last_direction * TILE_SIZE)
+
+func _is_water_tile_at(check_position: Vector2) -> bool:
 	if water_tilemap == null:
+		if _resolve_current_map() == null:
+			return false
 		refresh_map_layers()
 	if water_tilemap == null:
 		return false
+	return _tilemap_has_tile_at(water_tilemap, check_position)
 
-	var target_position_value: Vector2 = _snap_world_position(global_position) + (last_direction * TILE_SIZE)
-	return _tilemap_has_tile_at(water_tilemap, target_position_value)
+func _can_enter_water_tile(_check_position: Vector2) -> bool:
+	return surf_activity_active
 
 func _update_input_priority() -> void:
 	for action_name in MOVE_ACTIONS:
@@ -795,6 +1141,14 @@ func play_walk_animation(direction: Vector2) -> void:
 
 func can_move_to(check_position: Vector2) -> bool:
 	refresh_map_layers()
+
+	if _is_water_tile_at(check_position) and not _can_enter_water_tile(check_position):
+		_debug_surf_check("movement-blocked", {
+			"allowed": false,
+			"reason": "not_surfing",
+			"target_position": check_position,
+		})
+		return false
 
 	if collision_tilemap == null:
 		push_warning("Player.can_move_to: Collision TileMapLayer is missing; allowing movement as fallback.")
@@ -1360,13 +1714,38 @@ func _get_activity_offset_direction() -> String:
 		return "up"
 	return "down"
 
+func _debug_fishing_state(reason: String) -> void:
+	if not GameState.world_debug_enabled:
+		return
+
+	GameState.debug_world("[fishing] %s state=%s tier=%d time_left=%.2f" % [
+		reason,
+		fishing_activity_state,
+		fishing_activity_tier,
+		fishing_activity_time_left,
+	])
+
+func _debug_surf_check(reason: String, result: Dictionary) -> void:
+	if not GameState.world_debug_enabled:
+		return
+
+	GameState.debug_world("[surf] %s allowed=%s reason=%s target=%s unlocked=%s surfing=%s" % [
+		reason,
+		str(bool(result.get("allowed", false))),
+		str(result.get("reason", "")),
+		str(result.get("target_position", Vector2.ZERO)),
+		str(bool(GameState.surf_unlocked)),
+		str(surf_activity_active),
+	])
+
 func _debug_activity_layer_offsets(reason: String) -> void:
 	if not GameState.world_debug_enabled:
 		return
 
-	GameState.debug_world("[activity-pose] %s style=%s direction=%s body_style=%s position=%s look=%s visual_offset=%s" % [
+	GameState.debug_world("[activity-pose] %s style=%s tier=%d direction=%s body_style=%s position=%s look=%s visual_offset=%s" % [
 		reason,
 		activity_style,
+		fishing_activity_tier,
 		_get_activity_offset_direction(),
 		body_sprite_frames_movement_style,
 		str(global_position),
