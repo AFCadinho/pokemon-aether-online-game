@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.4 - 2026-06-30
+
 **Added**
 - Added a dedicated PvP battle music track.
 - Added Pokemon experience gains after battles, including level-up messages after rewards are claimed.
