@@ -263,6 +263,15 @@ func _apply_resource_metadata(node: Node, meta_name: String, resource: Resource)
 	node.set_meta("pao_source_object_id", int(resource.get("source_object_id")))
 	node.set_meta("pao_properties", resource.get("properties"))
 
+	if meta_name == "pao_encounter_region":
+		node.set_meta("pao_encounter_area_id", str(resource.get("encounter_area_id")))
+		node.set_meta("pao_encounter_type", str(resource.get("encounter_type")))
+		node.set_meta("pao_encounter_chance", float(resource.get("encounter_chance")))
+
+	if meta_name == "pao_encounter_region" or meta_name == "pao_trigger":
+		node.set_meta("pao_region_shape", str(resource.get("shape")))
+		node.set_meta("pao_region_rect", resource.get("rect"))
+
 
 func _resource_identifier(meta_name: String, resource: Resource) -> String:
 	match meta_name:

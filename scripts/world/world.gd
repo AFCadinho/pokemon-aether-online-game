@@ -1244,12 +1244,14 @@ func _lock_overworld_for_battle() -> void:
 	GameState.lock_overworld_input()
 	if player.has_method("reset_movement_state"):
 		player.reset_movement_state()
+	_sync_player_activity_state_for_current_tile()
 	player.set_process(false)
 	player.set_physics_process(false)
 
 func _unlock_overworld_after_battle() -> void:
 	if player.has_method("reset_movement_state"):
 		player.reset_movement_state()
+	_sync_player_activity_state_for_current_tile()
 	player.set_process(true)
 	player.set_physics_process(true)
 	GameState.unlock_overworld_input()

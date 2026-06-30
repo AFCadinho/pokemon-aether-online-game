@@ -28,6 +28,7 @@ const SHOES_SPRITE_NAME := "ShoesSprite"
 const EYES_SPRITE_NAME := "EyesSprite"
 const EYEBROWS_SPRITE_NAME := "EyebrowsSprite"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
@@ -118,6 +119,9 @@ const ACTIVITY_VISUAL_OFFSETS := {
 	},
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
+const ENCOUNTER_TYPE_GRASS := "grass"
+const ENCOUNTER_TYPE_SURF := "surf"
+const ENCOUNTER_TYPE_FISH := "fish"
 const FISHING_STATE_NONE := "none"
 const FISHING_STATE_CAST := "cast"
 const FISHING_STATE_WAITING := "waiting"
@@ -858,8 +862,10 @@ func _process(delta: float) -> void:
 				return
 
 			_sync_surf_state_after_move()
-			
-			if is_standing_on_tall_grass():
+
+			if surf_activity_active:
+				check_for_wild_encounter(ENCOUNTER_TYPE_SURF)
+			elif is_standing_on_tall_grass():
 				check_for_grass_encounter()
 
 			if _can_accept_movement_input():
@@ -1093,6 +1099,9 @@ func _finish_fishing_activity() -> void:
 	if not fishing_activity_active:
 		return
 
+	var should_check_fishing_encounter := fishing_activity_state == FISHING_STATE_REEL_SUCCESS
+	var fishing_encounter_position := _get_facing_tile_position()
+
 	fishing_activity_active = false
 	fishing_activity_time_left = 0.0
 	fishing_activity_tier = 0
@@ -1100,6 +1109,9 @@ func _finish_fishing_activity() -> void:
 	clear_activity_style()
 	_sync_fishing_bite_prompt_visibility()
 	GameState.unlock_overworld_input()
+
+	if should_check_fishing_encounter:
+		check_for_wild_encounter(ENCOUNTER_TYPE_FISH, fishing_encounter_position)
 
 func _is_facing_water_tile() -> bool:
 	return last_direction != Vector2.ZERO and _is_water_tile_at(_get_facing_tile_position())
@@ -1463,28 +1475,56 @@ func is_standing_on_tall_grass() -> bool:
 	return tile_data != null
 		
 func check_for_grass_encounter() -> void:
+	check_for_wild_encounter(ENCOUNTER_TYPE_GRASS)
+
+func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = Vector2.INF) -> void:
 	var current_map := GameState.current_map
-	
 	if current_map == null:
-		return
-		
-	if not current_map.has_method("get_wild_encounter_area_id"):
-		return
-		
-	var area_id: String = str(current_map.call("get_wild_encounter_area_id"))
-	if area_id == "":
+		_debug_wild_encounter("blocked", {
+			"reason": "missing_map",
+			"encounter_type": encounter_type,
+		})
 		return
 
-	if GameState.repel_enabled:
+	if GameState.repel_enabled and _does_repel_block_encounter(encounter_type):
+		_debug_wild_encounter("blocked", {
+			"reason": "repel",
+			"encounter_type": encounter_type,
+		})
 		return
 
-	if current_map.has_method("should_trigger_wild_encounter"):
-		if not bool(current_map.call("should_trigger_wild_encounter", "grass")):
+	var resolved_position := global_position if check_position == Vector2.INF else check_position
+	var encounter := WildEncounterProvider.resolve_wild_encounter(current_map, resolved_position, encounter_type)
+	if not bool(encounter.get("available", false)):
+		_debug_wild_encounter("blocked", encounter)
+		return
+
+	var resolved_type: String = str(encounter.get("encounter_type", encounter_type))
+	if bool(encounter.get("use_map_trigger", false)):
+		if current_map.has_method("should_trigger_wild_encounter"):
+			if not bool(current_map.call("should_trigger_wild_encounter", resolved_type)):
+				_debug_wild_encounter("miss", encounter)
+				return
+	else:
+		var encounter_chance := clampf(float(encounter.get("chance", 0.0)), 0.0, 1.0)
+		if randf() > encounter_chance:
+			_debug_wild_encounter("miss", encounter)
 			return
 	
 	var world := GameState.get_world()
 	if world != null and world.has_method("start_triggered_wild_battle_for_area"):
-		world.start_triggered_wild_battle_for_area(area_id, "grass")
+		_debug_wild_encounter("start", encounter)
+		world.start_triggered_wild_battle_for_area(str(encounter.get("area_id", "")), resolved_type)
+	else:
+		_debug_wild_encounter("blocked", {
+			"reason": "missing_world",
+			"encounter_type": resolved_type,
+			"area_id": str(encounter.get("area_id", "")),
+		})
+
+func _does_repel_block_encounter(encounter_type: String) -> bool:
+	var normalized_type := encounter_type.strip_edges().to_lower()
+	return normalized_type != ENCOUNTER_TYPE_FISH and normalized_type != "fishing"
 
 func _is_ui_typing() -> bool:
 	if _is_text_input_control(get_viewport().gui_get_focus_owner()):
@@ -1897,6 +1937,21 @@ func _debug_surf_check(reason: String, result: Dictionary) -> void:
 		str(result.get("target_position", Vector2.ZERO)),
 		str(bool(GameState.surf_unlocked)),
 		str(surf_activity_active),
+	])
+
+func _debug_wild_encounter(reason: String, encounter: Dictionary) -> void:
+	if not GameState.world_debug_enabled:
+		return
+
+	GameState.debug_world("[encounter] %s type=%s area=%s source=%s chance=%.2f use_map_trigger=%s reason=%s region=%s" % [
+		reason,
+		str(encounter.get("encounter_type", "")),
+		str(encounter.get("area_id", "")),
+		str(encounter.get("source", "")),
+		float(encounter.get("chance", 0.0)),
+		str(bool(encounter.get("use_map_trigger", false))),
+		str(encounter.get("reason", "")),
+		str(encounter.get("region_id", "")),
 	])
 
 func _debug_activity_layer_offsets(reason: String) -> void:

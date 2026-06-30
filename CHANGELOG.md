@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+## 0.2.5 - 2026-06-30
+
+**Added**
+- Added fishing as an overworld activity with cast, bite, success, miss, and early-reel states.
+- Added surf traversal on water tiles, including surf prompts, surf pose rendering, and running-shoes speed support while surfing.
+- Added activity pose support for layered character customization, including fishing and ride/surf pose offsets for body, hair, cap, eyes, and clothing layers.
+- Added a generic wild encounter provider that supports map-level encounter data and imported Tiled encounter regions.
+- Added Pallet Town surf and fishing encounters.
+
+**Changed**
+- Imported PokeAether Tiled encounter regions now expose encounter area, type, chance, shape, and rect metadata for runtime encounter checks.
+- Fishing encounters now ignore Repel, while grass and surf encounters remain blocked by Repel.
+
+**Fixed**
+- Fixed water tiles being walkable before surf is active.
+- Fixed surf state not being restored after logging in or returning from battle while standing on water.
+- Fixed the player briefly dropping out of surf pose when a surf encounter starts.
+- Fixed fishing success not triggering encounters when Repel was enabled.
+
 ## 0.2.4 - 2026-06-30
 
 **Added**

@@ -76,6 +76,12 @@ func _check_success_import(importer: RefCounted) -> void:
 			"Triggers/intro",
 		]:
 			_check_true(runtime_root.get_node_or_null(node_path) != null, "runtime has node %s" % node_path)
+
+		var encounter_region := runtime_root.get_node_or_null("EncounterRegions/grass_a")
+		if encounter_region != null:
+			_check_equal(str(encounter_region.get_meta("pao_encounter_area_id", "")), "phase2a_test_grass", "encounter region area metadata")
+			_check_equal(str(encounter_region.get_meta("pao_encounter_type", "")), "grass", "encounter region type metadata")
+			_check_equal(float(encounter_region.get_meta("pao_encounter_chance", 0.0)), -1.0, "encounter region chance metadata")
 		runtime_root.free()
 
 
