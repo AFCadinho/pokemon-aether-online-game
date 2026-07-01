@@ -6,6 +6,7 @@
 - Fixed normal UI party slots resizing on hover while keeping the hover state visually clear.
 - Fixed Pokemon summaries showing the current trainer as OT after receiving a Pokemon through mail.
 - Fixed read-only Pokemon summary previews showing the viewer as the current trainer in mail and chat.
+- Fixed Escape opening settings instead of closing the active overlay panel first.
 
 ## 0.2.5 - 2026-06-30
 
