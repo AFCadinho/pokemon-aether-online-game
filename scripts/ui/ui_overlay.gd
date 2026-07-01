@@ -12330,14 +12330,14 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	method_label.add_theme_color_override("font_color", UI_TEXT)
 	encounter_stack.add_child(method_label)
 
-	var chance_label := Label.new()
-	chance_label.text = "Encounter chance: %s" % _format_pokedex_location_chance(location.get("encounterChance", 0.0))
-	chance_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	chance_label.add_theme_font_size_override("font_size", 10)
-	chance_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	encounter_stack.add_child(chance_label)
+	var rarity_label := Label.new()
+	rarity_label.text = "Rarity: %s" % _get_pokedex_selected_rarity_label()
+	rarity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	rarity_label.add_theme_font_size_override("font_size", 10)
+	rarity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	encounter_stack.add_child(rarity_label)
 
-	panel.tooltip_text = "%s\n%s\n%s" % [area_label.text, method_label.text, chance_label.text]
+	panel.tooltip_text = "%s\n%s\n%s" % [area_label.text, method_label.text, rarity_label.text]
 	return panel
 
 func _format_pokedex_location_level_range(location: Dictionary) -> String:
@@ -12347,18 +12347,9 @@ func _format_pokedex_location_level_range(location: Dictionary) -> String:
 		return "Lv. %d" % min_level
 	return "Lv. %d-%d" % [min_level, max_level]
 
-func _format_pokedex_location_chance(value: Variant) -> String:
-	var chance := 0.0
-	if value is float:
-		chance = value
-	elif value is int:
-		chance = float(value)
-	else:
-		var text := str(value).strip_edges()
-		chance = float(text) if text.is_valid_float() else 0.0
-	if chance <= 1.0:
-		chance *= 100.0
-	return "%.0f%%" % chance
+func _get_pokedex_selected_rarity_label() -> String:
+	var rarity := str(pokedex_selected_species.get("rarity", "")).strip_edges()
+	return _format_identifier_display_name(rarity) if rarity != "" else "Unknown"
 
 func _build_pokedex_evolutions_tab() -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_section_title("Evolves Into"))
