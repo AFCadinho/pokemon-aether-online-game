@@ -12099,7 +12099,7 @@ func _refresh_pokedex_detail() -> void:
 		"general":
 			_build_pokedex_general_tab()
 		"locations":
-			_build_pokedex_placeholder_tab("Locations", _array_from_variant(pokedex_selected_species.get("locations", [])))
+			_build_pokedex_locations_tab()
 		"evolutions":
 			_build_pokedex_evolutions_tab()
 		"drops":
@@ -12277,6 +12277,89 @@ func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
 	for entry_value: Variant in entries:
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(str(entry_value)))
 
+func _build_pokedex_locations_tab() -> void:
+	pokedex_detail_stack.add_child(_create_pokedex_section_title("Wild Locations"))
+
+	var locations := _array_from_variant(pokedex_selected_species.get("locations", []))
+	if locations.is_empty():
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No known wild locations."))
+		return
+
+	for location_value: Variant in locations:
+		if typeof(location_value) != TYPE_DICTIONARY:
+			continue
+		pokedex_detail_stack.add_child(_create_pokedex_location_row(location_value as Dictionary))
+
+func _create_pokedex_location_row(location: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 48)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	margin.add_child(row)
+
+	var area_name := str(location.get("areaName", location.get("areaId", "Unknown Area"))).strip_edges()
+	var area_label := Label.new()
+	area_label.text = area_name if area_name != "" else "Unknown Area"
+	area_label.custom_minimum_size = Vector2(210, 0)
+	area_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	area_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	area_label.add_theme_font_size_override("font_size", 14)
+	area_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	row.add_child(area_label)
+
+	var encounter_stack := VBoxContainer.new()
+	encounter_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	encounter_stack.add_theme_constant_override("separation", 1)
+	row.add_child(encounter_stack)
+
+	var encounter_type := str(location.get("encounterType", "Wild")).strip_edges()
+	var level_text := _format_pokedex_location_level_range(location)
+	var method_label := Label.new()
+	method_label.text = "%s - %s" % [encounter_type if encounter_type != "" else "Wild", level_text]
+	method_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	method_label.add_theme_font_size_override("font_size", 12)
+	method_label.add_theme_color_override("font_color", UI_TEXT)
+	encounter_stack.add_child(method_label)
+
+	var chance_label := Label.new()
+	chance_label.text = "Encounter chance: %s" % _format_pokedex_location_chance(location.get("encounterChance", 0.0))
+	chance_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	chance_label.add_theme_font_size_override("font_size", 10)
+	chance_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	encounter_stack.add_child(chance_label)
+
+	panel.tooltip_text = "%s\n%s\n%s" % [area_label.text, method_label.text, chance_label.text]
+	return panel
+
+func _format_pokedex_location_level_range(location: Dictionary) -> String:
+	var min_level: int = max(1, int(location.get("minLevel", location.get("min_level", 1))))
+	var max_level: int = max(min_level, int(location.get("maxLevel", location.get("max_level", min_level))))
+	if min_level == max_level:
+		return "Lv. %d" % min_level
+	return "Lv. %d-%d" % [min_level, max_level]
+
+func _format_pokedex_location_chance(value: Variant) -> String:
+	var chance := 0.0
+	if value is float:
+		chance = value
+	elif value is int:
+		chance = float(value)
+	else:
+		var text := str(value).strip_edges()
+		chance = float(text) if text.is_valid_float() else 0.0
+	if chance <= 1.0:
+		chance *= 100.0
+	return "%.0f%%" % chance
+
 func _build_pokedex_evolutions_tab() -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_section_title("Evolves Into"))
 
@@ -12346,8 +12429,8 @@ func _format_pokedex_evolution_trigger(evolution: Dictionary) -> String:
 	var trigger := str(evolution.get("trigger", "")).strip_edges()
 	var normalized_method := method.strip_edges().to_lower().replace("_", "-")
 	var normalized_trigger := trigger.strip_edges().to_lower().replace("_", "-")
-	if normalized_method == "item" or normalized_trigger == "use-item":
-		return "Stone"
+	if normalized_method == "item" or normalized_trigger == "use-item" or normalized_trigger == "item":
+		return "Item"
 	if trigger != "":
 		return _format_pokedex_evolution_label(trigger)
 	if method != "":
