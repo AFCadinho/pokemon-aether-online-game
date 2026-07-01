@@ -14582,6 +14582,13 @@ func _on_pvp_join_room_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
+		if _can_reconnect_to_started_pvp_room(response):
+			pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
+			pvp_room_code_label.text = "Room Code: %s" % pvp_active_room_code
+			pvp_copy_code_button.disabled = pvp_active_room_code == ""
+			_set_pvp_status("Room already started. Reconnecting...")
+			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
+			return
 		_set_pvp_status("Could not join room: %s" % str(response.get("error", "Unknown error")))
 		return
 
@@ -14589,6 +14596,32 @@ func _on_pvp_join_room_pressed() -> void:
 	pvp_room_code_label.text = "Room Code: %s" % pvp_active_room_code
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	await _start_pvp_battle_from_response(response)
+
+func _can_reconnect_to_started_pvp_room(response: Dictionary) -> bool:
+	if bool(response.get("success", false)):
+		return false
+	if str(response.get("status", "")).strip_edges().to_lower() != "started":
+		return false
+	if not bool(response.get("reconnectAvailable", false)):
+		return false
+	var battle_id := str(response.get("battleId", "")).strip_edges()
+	if battle_id != "":
+		return true
+	var battle: Variant = response.get("battle", {})
+	return battle is Dictionary and str((battle as Dictionary).get("battleId", "")).strip_edges() != ""
+
+func _normalize_started_pvp_reconnect_response(response: Dictionary) -> Dictionary:
+	var normalized: Dictionary = response.duplicate(true)
+	var battle: Variant = normalized.get("battle", {})
+	if battle is Dictionary:
+		for key in (battle as Dictionary).keys():
+			if not normalized.has(key):
+				normalized[key] = (battle as Dictionary)[key]
+	normalized["success"] = true
+	normalized["status"] = "started"
+	if not normalized.has("playerId"):
+		normalized["playerId"] = "p1"
+	return normalized
 
 func _on_pvp_copy_code_pressed() -> void:
 	if pvp_active_room_code == "":

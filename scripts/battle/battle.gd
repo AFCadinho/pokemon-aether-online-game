@@ -40,6 +40,8 @@ var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
 var pvp_pending_reconciliation_snapshot: Dictionary = {}
 var pvp_retrying_reconciliation_snapshot := false
+var pvp_idle_realtime_drain_pending := false
+var pvp_idle_wait_recovery_active := false
 var pvp_last_applied_server_seq := 0
 var pvp_last_applied_snapshot_server_seq := 0
 var pvp_last_phase := ""
@@ -1966,6 +1968,7 @@ func _reset_action_choices() -> void:
 
 ## Toont de move keuzes in het action panel.
 func _show_moves() -> void:
+	pvp_idle_wait_recovery_active = false
 	if team_preview_lead_selection_active:
 		_restore_team_preview_lead_selection_ui()
 		return
@@ -1980,12 +1983,25 @@ func _show_moves() -> void:
 		var local_needs_force_switch := _local_player_needs_force_switch_ui()
 		var opponent_needs_force_switch := _opponent_player_needs_force_switch_ui()
 		if pvp_last_phase != "turn_open":
-			_log_pvp_realtime(
-				"Blocked PvP moves open",
-				"source=_show_moves phase=%s expected=turn_open" % pvp_last_phase
-			)
-			_set_battle_input_locked(true)
-			return
+			if local_needs_force_switch:
+				_show_force_switch_if_needed()
+				return
+			if opponent_needs_force_switch:
+				_show_pvp_opponent_force_switch_wait()
+				return
+			if _pvp_local_request_allows_action_recovery(local_state_player_id):
+				_log_pvp_realtime(
+					"Recovering PvP moves open from local request",
+					"source=_show_moves phase=%s local_state_player_id=%s" % [pvp_last_phase, local_state_player_id]
+				)
+				_set_battle_input_locked(false)
+			else:
+				_log_pvp_realtime(
+					"Blocked PvP moves open",
+					"source=_show_moves phase=%s expected=turn_open" % pvp_last_phase
+				)
+				_set_battle_input_locked(true)
+				return
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Show moves force-switch check",
@@ -2008,6 +2024,7 @@ func _show_moves() -> void:
 	action_buttons.set_action_disabled("party", false)
 	_refresh_bag_action_disabled()
 	action_buttons.set_action_disabled("run", false)
+	_update_move_slots()
 	current_action_view = ActionView.MOVES
 	moves_grid.visible = true
 	party_grid.visible = false
@@ -2016,6 +2033,12 @@ func _show_moves() -> void:
 	_show_current_action_prompt()
 	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
+
+func _pvp_local_request_allows_action_recovery(local_state_player_id: String) -> bool:
+	if not _is_pvp_battle():
+		return false
+	var available_moves: Array = battle_state.get_available_moves(local_state_player_id)
+	return _pvp_local_request_allows_choice(local_state_player_id) and not available_moves.is_empty()
 
 func _show_current_action_prompt() -> void:
 	var player_species: String = _get_active_display_species("p1")
@@ -2733,7 +2756,6 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 				_show_moves()
 				_set_battle_input_locked(false)
 				return false
-			return true
 		else:
 			_update_battle_presentation()
 
@@ -2776,7 +2798,6 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 			_show_moves()
 			_set_battle_input_locked(false)
 			return false
-		return true
 	else:
 		_update_battle_presentation()
 
@@ -3977,7 +3998,8 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 func _show_battle_controls_after_initial_events() -> void:
 	_update_battle_presentation("initial_setup")
 	_show_moves()
-	_show_current_action_prompt()
+	if current_action_view == ActionView.MOVES and not battle_input_locked:
+		_show_current_action_prompt()
 
 func _show_original_player_lead_before_initial_events(species: String, fallback_pokemon: Pokemon = null) -> void:
 	if species == "":
@@ -4542,6 +4564,12 @@ func _wait_for_pvp_team_preview_complete(local_player_id: String) -> Dictionary:
 		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.1)
 		if message.is_empty():
 			continue
+		var message_type := str(message.get("type", "")).strip_edges().to_lower()
+		if message_type == "pvp.phase_update" and str(message.get("phase", "")).strip_edges() == "turn_open":
+			var polled_response: Dictionary = await _get_pvp_team_preview_complete_room_response(local_player_id)
+			if not polled_response.is_empty():
+				return polled_response
+			continue
 		if str(message.get("action", "")) != "choose_lead":
 			continue
 		if str(message.get("playerId", "")) == local_player_id:
@@ -4563,24 +4591,31 @@ func _wait_for_pvp_team_preview_complete(local_player_id: String) -> Dictionary:
 	current_action_panel.set_message("Opponent lead timed out.")
 	return {}
 
+func _get_pvp_team_preview_complete_room_response(local_player_id: String) -> Dictionary:
+	var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, local_player_id)
+	if not bool(response.get("success", false)):
+		return {}
+
+	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if _should_show_team_preview(display_response):
+		return {}
+
+	if not await _enqueue_pvp_battle_response(response, "pvp_room_polling_team_preview", false):
+		return {}
+
+	return display_response
+
 func _poll_pvp_room_until_team_preview_complete(local_player_id: String) -> Dictionary:
 	if pvp_room_code == "":
 		return {}
 
 	while team_preview_lead_selection_active:
 		await get_tree().create_timer(1.0).timeout
-		var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, local_player_id)
-		if not bool(response.get("success", false)):
-			current_action_panel.set_message(str(response.get("error", "Waiting for the other player...")))
+		var completed_response: Dictionary = await _get_pvp_team_preview_complete_room_response(local_player_id)
+		if completed_response.is_empty():
 			continue
 
-		if _should_show_team_preview(action_flow.map_response_for_local_player(response)):
-			continue
-
-		if not await _enqueue_pvp_battle_response(response, "pvp_room_polling_team_preview", false):
-			return {}
-
-		return action_flow.map_response_for_local_player(response)
+		return completed_response
 
 	return {}
 
@@ -5965,6 +6000,7 @@ func _is_pvp_opponent_force_switch_waiting() -> bool:
 
 func _show_pvp_opponent_force_switch_wait() -> void:
 	_trace_pvp_flow("show_opponent_force_switch_wait", {}, "")
+	pvp_idle_wait_recovery_active = true
 	_refresh_force_switch_transition_presentation()
 	moves_grid.visible = false
 	party_grid.visible = false
@@ -5993,7 +6029,16 @@ func _can_submit_pvp_switch_choice() -> bool:
 	if pvp_last_phase == "awaiting_force_switch":
 		return _local_player_needs_force_switch_ui()
 
-	return pvp_last_phase == "turn_open"
+	return pvp_last_phase == "turn_open" or _pvp_local_request_allows_choice(_get_local_state_player_id())
+
+func _pvp_local_request_allows_choice(local_state_player_id: String) -> bool:
+	if not _is_pvp_battle():
+		return false
+	if _player_request_is_waiting(local_state_player_id):
+		return false
+	if force_switch_flow.player_needs_force_switch(local_state_player_id):
+		return true
+	return not battle_state.get_player_request(local_state_player_id).is_empty()
 
 func _local_player_needs_force_switch_ui() -> bool:
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
@@ -6167,6 +6212,8 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	pvp_realtime_deferred_updates.clear()
 	pvp_pending_reconciliation_snapshot.clear()
 	pvp_retrying_reconciliation_snapshot = false
+	pvp_idle_realtime_drain_pending = false
+	pvp_idle_wait_recovery_active = false
 	pvp_last_applied_server_seq = 0
 	pvp_last_applied_snapshot_server_seq = 0
 	pvp_rendered_event_count = 0
@@ -6307,11 +6354,21 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 
 	pvp_realtime_updates.append(message.duplicate(true))
+	print("[PvPReconnectDebug] queued realtime update message=%s locked=%s view=%s idleWait=%s phase=%s pending=%d" % [
+		_describe_pvp_realtime_message(message),
+		str(battle_input_locked),
+		str(current_action_view),
+		str(pvp_idle_wait_recovery_active),
+		pvp_last_phase,
+		pvp_realtime_updates.size(),
+	])
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
 			"Queued PvP realtime update",
 			"queue_size=%d message=%s" % [pvp_realtime_updates.size(), _describe_pvp_realtime_message(message)]
 		)
+	if _should_drain_idle_pvp_realtime_updates():
+		_drain_idle_pvp_realtime_updates.call_deferred()
 
 func _apply_pvp_phase_update(message: Dictionary) -> void:
 	_trace_pvp_flow("phase_update.received", {}, "message=%s" % _describe_pvp_realtime_message(message))
@@ -6368,6 +6425,9 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 				str(message.get("lastRenderedSeq", "")),
 			]
 		)
+	if team_preview_lead_selection_active and phase == "turn_open":
+		_queue_pvp_team_preview_completion_from_room.call_deferred()
+		return
 	_open_pvp_released_phase(phase)
 
 func _open_pvp_released_phase(phase: String) -> void:
@@ -6391,8 +6451,34 @@ func _open_pvp_released_phase(phase: String) -> void:
 		if opponent_needs_force_switch:
 			_show_pvp_opponent_force_switch_wait()
 			return
+		pvp_idle_wait_recovery_active = true
 		current_action_panel.set_message("Waiting for opponent switch...")
 		return
+
+func _queue_pvp_team_preview_completion_from_room() -> void:
+	if not team_preview_lead_selection_active:
+		return
+	if pvp_room_code == "":
+		return
+
+	var local_player_id := action_flow.local_player_id
+	var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, local_player_id)
+	if not bool(response.get("success", false)):
+		return
+
+	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if _should_show_team_preview(display_response):
+		return
+
+	var opponent_player_id := "p1" if local_player_id == "p2" else "p2"
+	pvp_realtime_updates.append({
+		"type": "pvp.battle_update",
+		"action": "choose_lead",
+		"playerId": opponent_player_id,
+		"battleId": str(response.get("battleId", battle_state.battle_id)),
+		"roomCode": pvp_room_code,
+		"response": response,
+	})
 
 func _has_newer_pvp_phase_update(wait_start_server_seq: int, accepted_phases: Array) -> bool:
 	if pvp_last_phase_update_server_seq <= wait_start_server_seq:
@@ -7139,6 +7225,104 @@ func _defer_pvp_realtime_update(message: Dictionary, context: String = "") -> vo
 		"Requeued PvP realtime update for later processing",
 		"context=%s message=%s deferred_queue_size=%d" % [log_context, _describe_pvp_realtime_message(message), pvp_realtime_deferred_updates.size()]
 	)
+
+func _should_drain_idle_pvp_realtime_updates() -> bool:
+	if not _is_pvp_battle():
+		return false
+	if battle_finished:
+		return false
+	if team_preview_lead_selection_active:
+		return false
+	if pvp_event_queue.is_rendering:
+		return false
+	if pvp_idle_realtime_drain_pending:
+		return false
+	return battle_input_locked and (current_action_view == ActionView.NONE or pvp_idle_wait_recovery_active)
+
+func _drain_idle_pvp_realtime_updates() -> void:
+	if pvp_idle_realtime_drain_pending:
+		return
+	if not _should_drain_idle_pvp_realtime_updates():
+		return
+
+	pvp_idle_realtime_drain_pending = true
+	while _should_continue_idle_pvp_realtime_drain():
+		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.0)
+		print("[PvPReconnectDebug] idle drain popped empty=%s message=%s" % [
+			str(message.is_empty()),
+			_describe_pvp_realtime_message(message) if not message.is_empty() else "none",
+		])
+		if message.is_empty():
+			break
+		if not await _apply_pvp_realtime_battle_update(message):
+			print("[PvPReconnectDebug] idle drain apply failed; deferring message=%s" % _describe_pvp_realtime_message(message))
+			if _get_pvp_realtime_message_kind(message) == "snapshot":
+				continue
+			_defer_pvp_realtime_update(message, "idle_drain_unapplied")
+			break
+		_recover_pvp_idle_wait_ui_after_update(message)
+	pvp_idle_realtime_drain_pending = false
+
+func _recover_pvp_idle_wait_ui_after_update(message: Dictionary) -> void:
+	if not _is_pvp_battle():
+		return
+	if battle_finished:
+		return
+	if team_preview_lead_selection_active:
+		return
+
+	var local_state_player_id := _get_local_state_player_id()
+	var local_needs_force_switch := _local_player_needs_force_switch_ui()
+	var opponent_needs_force_switch := _opponent_player_needs_force_switch_ui()
+	print("[PvPReconnectDebug] recovery check message=%s phase=%s next=%s localForce=%s opponentForce=%s localCanAct=%s locked=%s view=%s" % [
+		_describe_pvp_realtime_message(message),
+		pvp_last_phase,
+		pvp_last_next_phase,
+		str(local_needs_force_switch),
+		str(opponent_needs_force_switch),
+		str(_pvp_local_request_allows_action_recovery(local_state_player_id)),
+		str(battle_input_locked),
+		str(current_action_view),
+	])
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Idle wait recovery check",
+			"message=%s phase=%s localForce=%s opponentForce=%s localCanAct=%s inputLocked=%s actionView=%s" % [
+				_describe_pvp_realtime_message(message),
+				pvp_last_phase,
+				str(local_needs_force_switch),
+				str(opponent_needs_force_switch),
+				str(_pvp_local_request_allows_action_recovery(local_state_player_id)),
+				str(battle_input_locked),
+				str(current_action_view),
+			]
+		)
+
+	if local_needs_force_switch:
+		_set_battle_input_locked(false)
+		_show_force_switch_if_needed()
+		return
+	if opponent_needs_force_switch:
+		_show_pvp_opponent_force_switch_wait()
+		return
+	if pvp_last_phase == "turn_open" or _pvp_local_request_allows_action_recovery(local_state_player_id):
+		pvp_idle_wait_recovery_active = false
+		_set_battle_input_locked(false)
+		_update_battle_presentation("pvp_idle_wait_recovery")
+		_show_moves()
+
+func _should_continue_idle_pvp_realtime_drain() -> bool:
+	if not _is_pvp_battle():
+		return false
+	if battle_finished:
+		return false
+	if team_preview_lead_selection_active:
+		return false
+	if pvp_event_queue.is_rendering:
+		return false
+	if pvp_realtime_updates.is_empty() and pvp_realtime_deferred_updates.is_empty():
+		return false
+	return battle_input_locked and (current_action_view == ActionView.NONE or pvp_idle_wait_recovery_active)
 
 func _wait_for_next_pvp_realtime_update(timeout_seconds: float, include_deferred := true) -> Dictionary:
 	if not pvp_realtime_updates.is_empty():
