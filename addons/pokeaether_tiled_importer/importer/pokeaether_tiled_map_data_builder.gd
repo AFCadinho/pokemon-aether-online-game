@@ -6,6 +6,7 @@ const MapData := preload("res://addons/pokeaether_tiled_importer/resources/pokea
 const SpawnData := preload("res://addons/pokeaether_tiled_importer/resources/pokeaether_tiled_spawn_data.gd")
 const WarpData := preload("res://addons/pokeaether_tiled_importer/resources/pokeaether_tiled_warp_data.gd")
 const NpcData := preload("res://addons/pokeaether_tiled_importer/resources/pokeaether_tiled_npc_data.gd")
+const InteractableData := preload("res://addons/pokeaether_tiled_importer/resources/pokeaether_tiled_interactable_data.gd")
 const ItemData := preload("res://addons/pokeaether_tiled_importer/resources/pokeaether_tiled_item_data.gd")
 const EncounterRegionData := preload("res://addons/pokeaether_tiled_importer/resources/pokeaether_tiled_encounter_region_data.gd")
 const TriggerData := preload("res://addons/pokeaether_tiled_importer/resources/pokeaether_tiled_trigger_data.gd")
@@ -39,6 +40,8 @@ func build_map_data(map_data: Dictionary) -> Resource:
 					resource.warps.append(_build_warp(layer_name, object_data))
 				Schema.OBJECT_LAYER_NPCS:
 					resource.npcs.append(_build_npc(layer_name, object_data))
+				Schema.OBJECT_LAYER_INTERACTABLES:
+					resource.interactables.append(_build_interactable(layer_name, object_data))
 				Schema.OBJECT_LAYER_ITEMS:
 					resource.items.append(_build_item(layer_name, object_data))
 				Schema.OBJECT_LAYER_ENCOUNTER_REGIONS:
@@ -86,6 +89,26 @@ func _build_npc(layer_name: String, object_data: Dictionary) -> Resource:
 	resource.trainer_id = _property_text(properties, Schema.PROP_TRAINER_ID)
 	resource.dialogue_id = _property_text(properties, Schema.PROP_DIALOGUE_ID)
 	resource.sight_range_tiles = int(properties.get(Schema.PROP_SIGHT_RANGE_TILES, 0))
+	_apply_source_metadata(resource, layer_name, object_data, properties)
+	return resource
+
+
+func _build_interactable(layer_name: String, object_data: Dictionary) -> Resource:
+	var properties: Dictionary = object_data.get("properties", {})
+	var resource := InteractableData.new()
+	resource.interactable_id = _property_text(properties, Schema.PROP_INTERACTABLE_ID)
+	resource.interactable_kind = _property_text(properties, Schema.PROP_INTERACTABLE_KIND, "generic")
+	resource.position = _point_to_tile_center(object_data)
+	resource.display_name = _property_text(properties, Schema.PROP_DISPLAY_NAME)
+	resource.dialogue_id = _property_text(properties, Schema.PROP_DIALOGUE_ID)
+	resource.dialogue_lines = _property_text_lines(properties, Schema.PROP_DIALOGUE)
+	resource.scene_path = _property_text(properties, Schema.PROP_SCENE_PATH)
+	resource.blocks_movement = bool(properties.get(Schema.PROP_BLOCKS_MOVEMENT, true))
+	resource.requires_facing = bool(properties.get(Schema.PROP_REQUIRES_FACING, true))
+	resource.blocked_tile_offset = Vector2i(
+		int(properties.get(Schema.PROP_BLOCKED_TILE_OFFSET_X, 0)),
+		int(properties.get(Schema.PROP_BLOCKED_TILE_OFFSET_Y, 0))
+	)
 	_apply_source_metadata(resource, layer_name, object_data, properties)
 	return resource
 
@@ -164,3 +187,18 @@ func _parse_points(points_text: String) -> PackedVector2Array:
 
 func _property_text(properties: Dictionary, property_name: String, fallback := "") -> String:
 	return str(properties.get(property_name, fallback)).strip_edges()
+
+
+func _property_text_lines(properties: Dictionary, property_name: String) -> Array[String]:
+	var lines: Array[String] = []
+	var text := _property_text(properties, property_name)
+	if text == "":
+		return lines
+
+	text = text.replace("\\n", "\n")
+	for line: String in text.split("\n", false):
+		var clean_line := line.strip_edges()
+		if clean_line != "":
+			lines.append(clean_line)
+
+	return lines

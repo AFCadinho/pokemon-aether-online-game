@@ -3879,19 +3879,13 @@ func _input(event: InputEvent) -> void:
 		_handle_hotkey_sidebar_drag_input(event)
 		return
 
-	if chat_input.has_focus() and _is_settings_toggle_event(event):
-		chat_input.release_focus()
-		get_viewport().set_input_as_handled()
-		return
-
 	if _is_settings_toggle_event(event):
-		if bag_popup != null and bag_popup.visible:
-			bag_popup.visible = false
+		if _close_active_overlay_for_escape():
 			get_viewport().set_input_as_handled()
 			return
 
-		if trainer_card_popup != null and trainer_card_popup.visible:
-			trainer_card_popup.visible = false
+		if chat_input.has_focus():
+			chat_input.release_focus()
 			get_viewport().set_input_as_handled()
 			return
 
@@ -7825,7 +7819,7 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	info_grid.add_theme_constant_override("v_separation", 7)
 	info_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(info_grid)
-	info_grid.add_child(_create_summary_field_card("Original Trainer", PlayerSave.player_name, Color("#9eb7d8"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card("Original Trainer", _get_pokemon_summary_original_trainer_text(pokemon), Color("#9eb7d8"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(
 		"Ability",
 		_get_summary_ability_display_name(pokemon.ability),
@@ -8063,6 +8057,30 @@ func _get_pokemon_summary_current_trainer_title_text(_pokemon: Pokemon) -> Strin
 	if trainer_name == "":
 		trainer_name = "Trainer"
 	return "%s's Pokemon" % trainer_name
+
+func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
+	var origin: Dictionary = pokemon.origin
+	var trainer_name := str(_get_first_dictionary_value(
+		origin,
+		["originalTrainerName", "original_trainer_name", "otName", "ot_name"],
+		""
+	)).strip_edges()
+	if trainer_name != "":
+		return trainer_name
+
+	var original_trainer_user_id := str(_get_first_dictionary_value(
+		origin,
+		["originalTrainerUserId", "original_trainer_user_id", "originalOwnerUserId", "original_owner_user_id"],
+		""
+	)).strip_edges()
+	if original_trainer_user_id != "":
+		var current_player_id := str(PlayerSave.player_id).strip_edges()
+		if current_player_id != "" and original_trainer_user_id == current_player_id:
+			return PlayerSave.player_name
+
+		return "Trainer #%s" % original_trainer_user_id
+
+	return "-"
 
 func _get_pokemon_summary_caught_date_text(pokemon: Pokemon) -> String:
 	var origin: Dictionary = pokemon.origin
@@ -10360,14 +10378,137 @@ func _is_settings_toggle_event(event: InputEvent) -> bool:
 	var key_event: InputEventKey = event as InputEventKey
 	return key_event.pressed and not key_event.echo and key_event.keycode == KEY_ESCAPE
 
+func _close_active_overlay_for_escape() -> bool:
+	var candidate: Dictionary = _get_active_escape_close_candidate()
+	if candidate.is_empty():
+		return false
+
+	var close_callable: Callable = candidate.get("close", Callable())
+	if not close_callable.is_valid():
+		return false
+
+	close_callable.call()
+	return true
+
+func _get_active_escape_close_candidate() -> Dictionary:
+	var active_candidate: Dictionary = {}
+	for candidate: Dictionary in _get_escape_close_candidates():
+		var panel: Control = candidate.get("panel") as Control
+		if panel == null or not panel.visible:
+			continue
+		if active_candidate.is_empty() or _is_escape_panel_above(panel, active_candidate.get("panel") as Control):
+			active_candidate = candidate
+
+	return active_candidate
+
+func _get_escape_close_candidates() -> Array[Dictionary]:
+	var candidates: Array[Dictionary] = [
+		{"panel": mail_compose_help_popup, "close": Callable(self, "_hide_mail_compose_help_popup")},
+		{"panel": pokemon_summary_ev_allocate_popup, "close": Callable(self, "_hide_pokemon_summary_ev_allocate_popup")},
+		{"panel": pokemon_summary_ball_picker, "close": Callable(self, "_hide_pokemon_summary_ball_picker_for_escape")},
+		{"panel": pokemon_summary_item_picker, "close": Callable(self, "_hide_pokemon_summary_item_picker_for_escape")},
+		{"panel": bag_item_use_popup, "close": Callable(self, "_hide_bag_item_use_popup_for_escape")},
+		{"panel": mail_compose_popup, "close": Callable(self, "_on_mail_compose_close_button_pressed")},
+		{"panel": staff_impersonate_popup, "close": Callable(self, "_hide_staff_impersonate_popup")},
+		{"panel": dev_add_item_popup, "close": Callable(self, "_hide_dev_add_item_popup_for_escape")},
+		{"panel": dev_add_money_popup, "close": Callable(self, "_hide_dev_add_money_popup_for_escape")},
+		{"panel": dev_add_menu_popup, "close": Callable(self, "_hide_dev_add_menu_popup")},
+		{"panel": dev_clear_menu_popup, "close": Callable(self, "_hide_dev_clear_menu_popup_for_escape")},
+		{"panel": pvp_room_popup, "close": Callable(self, "_hide_pvp_room_popup")},
+		{"panel": pokedex_popup, "close": Callable(self, "_hide_pokedex_popup")},
+		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
+		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
+		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
+		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
+		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
+		{"panel": dev_actions_popup, "close": Callable(self, "_hide_dev_actions_popup_for_escape")},
+		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
+		{"panel": trainer_card_popup, "close": Callable(self, "_hide_trainer_card_for_escape")},
+		{"panel": settings_menu, "close": Callable(self, "_close_settings_menu_for_escape")},
+	]
+
+	for context_value: Variant in pokemon_summary_open_cards.values():
+		if not (context_value is Dictionary):
+			continue
+		var context: Dictionary = context_value as Dictionary
+		var summary_panel: Control = context.get("popup") as Control
+		var card_key := str(context.get("key", ""))
+		if summary_panel != null and card_key != "":
+			candidates.append({
+				"panel": summary_panel,
+				"close": Callable(self, "_hide_pokemon_summary_popup").bind(card_key),
+			})
+
+	return candidates
+
+func _is_escape_panel_above(panel: Control, other_panel: Control) -> bool:
+	if other_panel == null:
+		return true
+	if panel.z_index != other_panel.z_index:
+		return panel.z_index > other_panel.z_index
+
+	var panel_parent := panel.get_parent()
+	var other_parent := other_panel.get_parent()
+	if panel_parent != null and panel_parent == other_parent:
+		return panel.get_index() > other_panel.get_index()
+
+	return false
+
+func _hide_pokemon_summary_ball_picker_for_escape() -> void:
+	if pokemon_summary_ball_picker != null:
+		pokemon_summary_ball_picker.visible = false
+	_store_active_pokemon_summary_card_context()
+
+func _hide_pokemon_summary_item_picker_for_escape() -> void:
+	if pokemon_summary_item_picker != null:
+		pokemon_summary_item_picker.visible = false
+	_store_active_pokemon_summary_card_context()
+
+func _hide_bag_popup_for_escape() -> void:
+	_hide_bag_popup()
+	_deactivate_ui_panel(bag_popup)
+
+func _hide_bag_item_use_popup_for_escape() -> void:
+	_hide_bag_item_use_popup()
+	_deactivate_ui_panel(bag_item_use_popup)
+
+func _hide_dev_actions_popup_for_escape() -> void:
+	if dev_actions_popup != null:
+		dev_actions_popup.visible = false
+		_deactivate_ui_panel(dev_actions_popup)
+
+func _hide_dev_pokemon_popup_for_escape() -> void:
+	_on_dev_pokemon_close_button_pressed()
+	_deactivate_ui_panel(dev_pokemon_popup)
+
+func _hide_dev_add_item_popup_for_escape() -> void:
+	_hide_dev_add_item_popup()
+	_deactivate_ui_panel(dev_add_item_popup)
+
+func _hide_dev_add_money_popup_for_escape() -> void:
+	_hide_dev_add_money_popup()
+	_deactivate_ui_panel(dev_add_money_popup)
+
+func _hide_dev_clear_menu_popup_for_escape() -> void:
+	if dev_clear_menu_popup != null:
+		dev_clear_menu_popup.visible = false
+		_deactivate_ui_panel(dev_clear_menu_popup)
+
+func _hide_trainer_card_for_escape() -> void:
+	_hide_trainer_card()
+	_deactivate_ui_panel(trainer_card_popup)
+
+func _close_settings_menu_for_escape() -> void:
+	if settings_menu.has_method("close"):
+		settings_menu.call("close")
+	else:
+		settings_menu.visible = false
+		_on_settings_menu_closed()
+	_deactivate_ui_panel(settings_menu)
+
 func _toggle_settings_menu() -> void:
 	if settings_menu.visible:
-		if settings_menu.has_method("close"):
-			settings_menu.call("close")
-		else:
-			settings_menu.visible = false
-			_on_settings_menu_closed()
-		_deactivate_ui_panel(settings_menu)
+		_close_settings_menu_for_escape()
 		return
 
 	_on_settings_button_pressed()
@@ -10661,7 +10802,11 @@ func _submit_chat_input_async() -> void:
 		_keep_chat_input_focused()
 		return
 
-	var pokemon_attachments: Array[Dictionary] = pending_chat_pokemon_attachments.duplicate(true)
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments_with_current_trainer(
+		pending_chat_pokemon_attachments,
+		PlayerSave.player_name,
+		PlayerSave.player_id
+	)
 	if text == "" and pokemon_attachments.is_empty():
 		chat_submit_in_progress = false
 		_keep_chat_input_focused()
@@ -10689,7 +10834,11 @@ func _share_party_to_chat() -> void:
 	var attachments: Array[Dictionary] = []
 	for pokemon: Pokemon in PlayerSave.party:
 		if pokemon != null:
-			attachments.append(pokemon.to_persistence_dict())
+			attachments.append(_pokemon_preview_payload_with_current_trainer(
+				pokemon.to_persistence_dict(),
+				PlayerSave.player_name,
+				PlayerSave.player_id
+			))
 
 	chat_input.clear()
 	if not ChatRealtimeService.send_chat_message("", _get_active_chat_channel(), attachments):
@@ -14380,7 +14529,11 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 	name_label.add_theme_font_size_override("font_size", 14)
 	row.add_child(name_label)
 	for pokemon_payload: Dictionary in pokemon_attachments:
-		row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
+		row.add_child(_create_chat_pokemon_attachment_button(_pokemon_preview_payload_with_current_trainer(
+			pokemon_payload,
+			display_name,
+			str(user.get("id", user.get("userId", user.get("user_id", ""))))
+		)))
 	if text != "":
 		var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
 		row.add_child(entry)
@@ -14409,6 +14562,45 @@ func _get_chat_pokemon_attachments(message: Dictionary) -> Array[Dictionary]:
 	if legacy_value is Dictionary:
 		attachments.append((legacy_value as Dictionary).duplicate(true))
 	return attachments
+
+func _get_chat_pokemon_attachments_with_current_trainer(
+	attachments: Array,
+	trainer_name: String,
+	trainer_user_id: String = ""
+) -> Array[Dictionary]:
+	var enriched_attachments: Array[Dictionary] = []
+	for attachment_value: Variant in attachments:
+		if attachment_value is Dictionary:
+			enriched_attachments.append(_pokemon_preview_payload_with_current_trainer(
+				attachment_value as Dictionary,
+				trainer_name,
+				trainer_user_id
+			))
+
+	return enriched_attachments
+
+func _pokemon_preview_payload_with_current_trainer(
+	pokemon_payload: Dictionary,
+	trainer_name: String,
+	trainer_user_id: String = ""
+) -> Dictionary:
+	var payload := pokemon_payload.duplicate(true)
+	var clean_trainer_name := trainer_name.strip_edges()
+	var clean_trainer_user_id := trainer_user_id.strip_edges()
+	var origin_value: Variant = payload.get("origin", {})
+	var origin: Dictionary = (origin_value as Dictionary).duplicate(true) if origin_value is Dictionary else {}
+
+	if clean_trainer_name != "":
+		origin["currentTrainerName"] = clean_trainer_name
+		payload["ownerName"] = clean_trainer_name
+	if clean_trainer_user_id != "":
+		origin["currentTrainerUserId"] = clean_trainer_user_id
+		payload["ownerUserId"] = clean_trainer_user_id
+
+	if not origin.is_empty():
+		payload["origin"] = origin
+
+	return payload
 
 
 func _should_show_chat_category(category: String) -> bool:

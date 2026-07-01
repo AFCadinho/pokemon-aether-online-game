@@ -4,6 +4,7 @@ extends RefCounted
 const PathUtils := preload("res://addons/tiled_tmx_importer/importer/tmx_path_utils.gd")
 const Schema := preload("res://addons/pokeaether_tiled_importer/importer/pokeaether_tiled_schema.gd")
 const RuntimeScript := preload("res://addons/pokeaether_tiled_importer/runtime/pokeaether_imported_map_runtime.gd")
+const WorldInteractableScript := preload("res://scripts/world/interactables/world_interactable.gd")
 
 const RESERVED_RUNTIME_CONTAINER_NAMES: Array[String] = [
 	"Spawns",
@@ -172,6 +173,17 @@ func _add_entities(root: Node2D, map_data: Resource) -> void:
 		npcs_root.add_child(marker)
 		marker.owner = root
 
+	var interactables_root := Node2D.new()
+	interactables_root.name = "Interactables"
+	entities_root.add_child(interactables_root)
+	interactables_root.owner = root
+
+	for interactable: Resource in map_data.get("interactables"):
+		var node := _create_interactable_node(interactable)
+		_apply_resource_metadata(node, "pao_interactable", interactable)
+		interactables_root.add_child(node)
+		_set_owner_recursive(node, root)
+
 	var players_root := Node2D.new()
 	players_root.name = "Players"
 	entities_root.add_child(players_root)
@@ -256,6 +268,32 @@ func _create_rectangle_area(node_name: String, rect: Rect2) -> Area2D:
 	return area
 
 
+func _create_interactable_node(interactable: Resource) -> Node2D:
+	var node: Node2D
+	var scene_path := str(interactable.get("scene_path")).strip_edges()
+	if scene_path != "":
+		var scene := load(scene_path) as PackedScene
+		if scene != null:
+			node = scene.instantiate() as Node2D
+
+	if node == null:
+		node = Node2D.new()
+		node.set_script(WorldInteractableScript)
+
+	node.name = PathUtils.sanitize_node_name(str(interactable.get("interactable_id")), "Interactable")
+	node.position = interactable.get("position")
+	node.set("interactable_id", str(interactable.get("interactable_id")))
+	node.set("interactable_kind", str(interactable.get("interactable_kind")))
+	node.set("display_name", str(interactable.get("display_name")))
+	node.set("dialogue_id", str(interactable.get("dialogue_id")))
+	node.set("dialogue_lines", interactable.get("dialogue_lines"))
+	node.set("blocks_movement", bool(interactable.get("blocks_movement")))
+	node.set("requires_facing", bool(interactable.get("requires_facing")))
+	node.set("blocked_tile_offset", interactable.get("blocked_tile_offset"))
+
+	return node
+
+
 func _apply_resource_metadata(node: Node, meta_name: String, resource: Resource) -> void:
 	node.set_meta("pao_placeholder_type", meta_name.trim_prefix("pao_"))
 	node.set_meta("pao_resource_id", _resource_identifier(meta_name, resource))
@@ -281,6 +319,8 @@ func _resource_identifier(meta_name: String, resource: Resource) -> String:
 			return str(resource.get("warp_id"))
 		"pao_npc":
 			return str(resource.get("npc_id"))
+		"pao_interactable":
+			return str(resource.get("interactable_id"))
 		"pao_item":
 			return str(resource.get("item_spawn_id"))
 		"pao_encounter_region":

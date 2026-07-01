@@ -4,6 +4,8 @@ class_name BattleDisplayDataPresenter
 
 const DEBUG_PAO_BATTLE_IDENTITY := false
 const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
+const DEBUG_TRAINER_TEAM_DISPLAY := false
+const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 
 var battle_state: BattleState
 var display_metadata := preload("res://scripts/battle/battle_display_metadata.gd").new()
@@ -87,6 +89,9 @@ func get_display_team_data(player_id: String) -> Array:
 			"team": _debug_summarize_team(team),
 		})
 
+	if player_id == "p2" and display_metadata.has_trainer_team():
+		return _get_trainer_display_team_data(team)
+
 	var display_team: Array = []
 	for index in range(team.size()):
 		var pokemon_data: Variant = team[index]
@@ -108,6 +113,123 @@ func get_display_team_data(player_id: String) -> Array:
 		})
 
 	return sorted_display_team
+
+
+func _get_trainer_display_team_data(request_team: Array) -> Array:
+	var trainer_team := display_metadata.get_trainer_team()
+	var display_team: Array = []
+	_debug_trainer_team_display("input", {
+		"requestTeam": _debug_summarize_team(request_team),
+		"trainerTeam": _debug_summarize_team(trainer_team),
+	})
+
+	for index in range(trainer_team.size()):
+		var trainer_value: Variant = trainer_team[index]
+		if not (trainer_value is Dictionary):
+			display_team.append(trainer_value)
+			continue
+
+		var trainer_data: Dictionary = (trainer_value as Dictionary).duplicate(true)
+		var canonical_slot := _get_canonical_party_slot(trainer_data)
+		if canonical_slot <= 0:
+			canonical_slot = index + 1
+			trainer_data["metadataSlot"] = canonical_slot
+			trainer_data["partySlot"] = canonical_slot
+			trainer_data["pokemonKey"] = "p2:slot:%d" % canonical_slot
+
+		var request_data: Dictionary = _find_request_data_for_trainer_slot(
+			request_team,
+			trainer_data,
+			canonical_slot
+		)
+		_debug_trainer_team_display("slot match", {
+			"index": index,
+			"canonicalSlot": canonical_slot,
+			"trainer": _debug_summarize_pokemon(trainer_data, index),
+			"request": _debug_summarize_pokemon(request_data, index) if not request_data.is_empty() else {},
+		})
+		var display_data := trainer_data.duplicate(true)
+		_apply_request_battle_state_to_trainer_display(display_data, request_data)
+		display_metadata.enrich_display_data("p2", display_data)
+		display_team.append(display_data)
+
+	_debug_trainer_team_display("output", {
+		"displayTeam": _debug_summarize_team(display_team),
+	})
+	return display_team
+
+
+func _find_request_data_for_trainer_slot(
+	request_team: Array,
+	trainer_data: Dictionary,
+	canonical_slot: int
+) -> Dictionary:
+	var same_slot_candidate: Dictionary = {}
+	var species_candidate: Dictionary = {}
+	var species_match_count := 0
+	var trainer_species := str(trainer_data.get("species", trainer_data.get("displaySpecies", "")))
+
+	for index in range(request_team.size()):
+		var pokemon_value: Variant = request_team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var slot := _get_canonical_party_slot(pokemon_data)
+		if slot <= 0:
+			slot = index + 1
+
+		if slot == canonical_slot and _pokemon_data_species_matches(trainer_species, pokemon_data):
+			same_slot_candidate = pokemon_data
+
+		if _pokemon_data_species_matches(trainer_species, pokemon_data):
+			species_match_count += 1
+			species_candidate = pokemon_data
+
+	if not same_slot_candidate.is_empty():
+		return same_slot_candidate
+	if species_match_count == 1:
+		return species_candidate
+
+	return {}
+
+
+func _pokemon_data_species_matches(expected_species: String, pokemon_data: Dictionary) -> bool:
+	var actual_species := ""
+	if battle_state != null:
+		actual_species = battle_state.get_species_from_pokemon_data(pokemon_data)
+	if actual_species == "":
+		actual_species = str(pokemon_data.get("species", pokemon_data.get("displaySpecies", "")))
+
+	return (
+		display_metadata.normalize_species_for_compare(expected_species)
+		== display_metadata.normalize_species_for_compare(actual_species)
+	)
+
+
+func _apply_request_battle_state_to_trainer_display(display_data: Dictionary, request_data: Dictionary) -> void:
+	if request_data.is_empty():
+		_apply_condition_fields_from_display_data(display_data)
+		return
+
+	for key in [
+		"ident", "condition", "hp", "maxHp", "max_hp", "status", "fainted",
+		"active", "activeIdent", "playerId", "level", "gender", "shiny",
+		"isShiny", "is_shiny",
+	]:
+		if request_data.has(key):
+			display_data[key] = request_data.get(key)
+
+	_apply_condition_fields_from_display_data(display_data)
+
+
+func _apply_condition_fields_from_display_data(display_data: Dictionary) -> void:
+	var condition := str(display_data.get("condition", "")).strip_edges()
+	if condition == "":
+		return
+
+	var hp_helper := BattleHpEventHelper.new()
+	hp_helper.apply_condition_fields(display_data, condition)
 
 
 func get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Dictionary:
@@ -268,6 +390,32 @@ func _debug_summarize_team(team: Array) -> Array:
 		})
 
 	return output
+
+
+func _debug_summarize_pokemon(pokemon_data: Dictionary, index: int) -> Dictionary:
+	return {
+		"index": index,
+		"ident": str(pokemon_data.get("ident", "")),
+		"active": bool(pokemon_data.get("active", false)),
+		"details": str(pokemon_data.get("details", "")),
+		"species": str(pokemon_data.get("species", "")),
+		"displaySpecies": str(pokemon_data.get("displaySpecies", "")),
+		"condition": str(pokemon_data.get("condition", "")),
+		"hp": str(pokemon_data.get("hp", "")),
+		"maxHp": str(pokemon_data.get("maxHp", "")),
+		"fainted": bool(pokemon_data.get("fainted", false)),
+		"partySlot": str(pokemon_data.get("partySlot", pokemon_data.get("party_slot", ""))),
+		"metadataSlot": str(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", ""))),
+		"pokemonKey": str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))),
+		"requestIndex": str(pokemon_data.get("requestIndex", "")),
+	}
+
+
+func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
+	if not DEBUG_TRAINER_TEAM_DISPLAY:
+		return
+
+	print(TRAINER_TEAM_DEBUG_PREFIX, " ", stage, " ", JSON.stringify(payload))
 
 func _normalize_species_for_compare(species: String) -> String:
 	return species.to_lower().replace(" ", "-").replace("-mega-x", "-megax").replace("-mega-y", "-megay")

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="7">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="8">
  <properties>
   <property name="pa_schema_version" type="int" value="1"/>
   <property name="map_id" value="pokeaether_minimal_example"/>
@@ -201,7 +201,19 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="17" name="PA_Items">
+ <objectgroup id="17" name="PA_Interactables">
+  <object id="7" name="TrainerTipsSign" x="64" y="96">
+   <properties>
+    <property name="interactable_id" value="trainer_tips_sign"/>
+    <property name="interactable_kind" value="road_sign"/>
+    <property name="display_name" value="Trainer Tips"/>
+    <property name="dialogue" value="Trainer Tips!\nPress the interact button while facing signs to read them."/>
+    <property name="blocks_movement" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="18" name="PA_Items">
   <object id="4" name="HiddenPotion" x="32" y="160">
    <properties>
     <property name="item_spawn_id" value="hidden_potion_1"/>
@@ -212,7 +224,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="18" name="PA_EncounterRegions">
+ <objectgroup id="19" name="PA_EncounterRegions">
   <object id="5" name="GrassPatchA" x="160" y="128" width="64" height="64">
    <properties>
     <property name="encounter_region_id" value="grass_patch_a"/>
@@ -222,7 +234,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="19" name="PA_Triggers">
+ <objectgroup id="20" name="PA_Triggers">
   <object id="6" name="IntroTrigger" x="96" y="32" width="64" height="32">
    <properties>
     <property name="trigger_id" value="intro_trigger"/>

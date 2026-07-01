@@ -43,6 +43,7 @@ const HIDDEN_RUNTIME_TILE_LAYERS: Array[String] = [
 const OBJECT_LAYER_SPAWNS := "PA_Spawns"
 const OBJECT_LAYER_WARPS := "PA_Warps"
 const OBJECT_LAYER_NPCS := "PA_NPCs"
+const OBJECT_LAYER_INTERACTABLES := "PA_Interactables"
 const OBJECT_LAYER_ITEMS := "PA_Items"
 const OBJECT_LAYER_ENCOUNTER_REGIONS := "PA_EncounterRegions"
 const OBJECT_LAYER_TRIGGERS := "PA_Triggers"
@@ -51,6 +52,7 @@ const PA_OBJECT_LAYERS: Array[String] = [
 	OBJECT_LAYER_SPAWNS,
 	OBJECT_LAYER_WARPS,
 	OBJECT_LAYER_NPCS,
+	OBJECT_LAYER_INTERACTABLES,
 	OBJECT_LAYER_ITEMS,
 	OBJECT_LAYER_ENCOUNTER_REGIONS,
 	OBJECT_LAYER_TRIGGERS,
@@ -73,6 +75,14 @@ const PROP_DISPLAY_NAME := "display_name"
 const PROP_TRAINER_ID := "trainer_id"
 const PROP_DIALOGUE_ID := "dialogue_id"
 const PROP_SIGHT_RANGE_TILES := "sight_range_tiles"
+
+const PROP_INTERACTABLE_ID := "interactable_id"
+const PROP_INTERACTABLE_KIND := "interactable_kind"
+const PROP_DIALOGUE := "dialogue"
+const PROP_BLOCKS_MOVEMENT := "blocks_movement"
+const PROP_REQUIRES_FACING := "requires_facing"
+const PROP_BLOCKED_TILE_OFFSET_X := "blocked_tile_offset_x"
+const PROP_BLOCKED_TILE_OFFSET_Y := "blocked_tile_offset_y"
 
 const PROP_ITEM_SPAWN_ID := "item_spawn_id"
 const PROP_ITEM_ID := "item_id"

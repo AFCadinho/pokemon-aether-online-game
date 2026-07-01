@@ -19,6 +19,9 @@ enum BattleActionsPanelMode {
 	CALC
 }
 
+const DEBUG_TRAINER_TEAM_DISPLAY := false
+const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
+
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
 var current_action_panel_mode: BattleActionsPanelMode = BattleActionsPanelMode.BATTLE
@@ -3107,8 +3110,13 @@ func _update_hud_panels() -> void:
 	_update_active_hud_panel("p1", player_hud_panel)
 	_update_active_hud_panel("p2", enemy_hud_panel)
 
-	player_hud_panel.set_team_data(_get_display_team_data("p1"))
-	enemy_hud_panel.set_team_data(_get_display_team_data("p2"))
+	var player_display_team := _get_display_team_data("p1")
+	var enemy_display_team := _get_display_team_data("p2")
+	_debug_trainer_team_display("hud set_team_data", {
+		"enemyTeam": _debug_summarize_display_team(enemy_display_team),
+	})
+	player_hud_panel.set_team_data(player_display_team)
+	enemy_hud_panel.set_team_data(enemy_display_team)
 
 func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 	if _should_hide_active_pokemon_for_force_switch(player_id):
@@ -3134,6 +3142,39 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 		_get_active_pokemon_is_shiny(player_id),
 		_get_active_player_experience_data(player_id),
 	)
+
+func _debug_summarize_display_team(team: Array) -> Array:
+	var output: Array = []
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			output.append({"index": index, "value": str(pokemon_value)})
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		output.append({
+			"index": index,
+			"ident": str(pokemon_data.get("ident", "")),
+			"active": bool(pokemon_data.get("active", false)),
+			"species": str(pokemon_data.get("species", "")),
+			"displaySpecies": str(pokemon_data.get("displaySpecies", "")),
+			"condition": str(pokemon_data.get("condition", "")),
+			"hp": str(pokemon_data.get("hp", "")),
+			"maxHp": str(pokemon_data.get("maxHp", "")),
+			"fainted": bool(pokemon_data.get("fainted", false)),
+			"partySlot": str(pokemon_data.get("partySlot", pokemon_data.get("party_slot", ""))),
+			"metadataSlot": str(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", ""))),
+			"pokemonKey": str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))),
+			"requestIndex": str(pokemon_data.get("requestIndex", "")),
+		})
+
+	return output
+
+func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
+	if not DEBUG_TRAINER_TEAM_DISPLAY:
+		return
+
+	print(TRAINER_TEAM_DEBUG_PREFIX, " ", stage, " ", JSON.stringify(payload))
 
 ## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
@@ -4691,6 +4732,7 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		_set_battle_input_locked(false)
 		return
 
+	_update_move_slots()
 	_set_battle_input_locked(false)
 	_show_moves()
 
@@ -5801,6 +5843,14 @@ func _on_party_grid_party_selected(slot: int) -> void:
 			if await _finish_if_battle_ended():
 				return
 
+			if _opponent_player_needs_force_switch_ui():
+				if not await _auto_force_switch_opponent_if_needed():
+					_set_battle_input_locked(false)
+					return
+
+				if await _finish_if_battle_ended():
+					return
+
 			if _show_force_switch_if_needed():
 				_set_battle_input_locked(false)
 				return
@@ -5828,6 +5878,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		_set_battle_input_locked(false)
 		return
 
+	_update_move_slots()
 	_set_battle_input_locked(false)
 	_show_moves()
 
@@ -7951,6 +8002,7 @@ func _render_opponent_response(
 	await _render_battle_events(opponent_events, true, "opponent_response_non_pvp")
 	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
 	defer_force_switch_active_hide = false
+	_update_hud_panels()
 	_update_active_sprites()
 
 func _prepare_switch_in_presentation_for_events(events: Array) -> void:

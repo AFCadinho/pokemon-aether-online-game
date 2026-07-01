@@ -6,16 +6,20 @@ signal clicked(slot_index: int)
 
 const SLOT_BG := Color("#111e31f4")
 const SLOT_BORDER := Color("#628bb8")
-const SLOT_HOVER_BG := Color("#122136f6")
-const SLOT_HOVER_BORDER := Color("#9ab6d4")
+const SLOT_HOVER_BG := Color("#17345af8")
+const SLOT_HOVER_BORDER := Color("#c5e0ff")
 const SHINY_SLOT_BG := Color("#121d2df4")
 const SHINY_SLOT_BORDER := Color("#8f7847")
-const SHINY_SLOT_HOVER_BG := Color("#142033f6")
-const SHINY_SLOT_HOVER_BORDER := Color("#b09a66")
+const SHINY_SLOT_HOVER_BG := Color("#2b2740f8")
+const SHINY_SLOT_HOVER_BORDER := Color("#f0ca72")
 const SLOT_SHADOW := Color(0.16, 0.24, 0.34, 0.0)
-const SLOT_HOVER_SHADOW := Color(0.52, 0.68, 0.86, 0.12)
+const SLOT_HOVER_SHADOW := Color(0.58, 0.78, 1.0, 0.24)
 const SHINY_SLOT_SHADOW := Color(0.58, 0.46, 0.24, 0.05)
-const SHINY_SLOT_HOVER_SHADOW := Color(0.62, 0.50, 0.28, 0.08)
+const SHINY_SLOT_HOVER_SHADOW := Color(0.95, 0.72, 0.32, 0.18)
+const SLOT_BORDER_WIDTH := 1
+const SHINY_SLOT_BORDER_WIDTH := 2
+const SLOT_SHADOW_SIZE := 0
+const SHINY_SLOT_SHADOW_SIZE := 8
 
 @onready var pokemon_sprite: TextureRect = $MarginContainer/HBoxContainer/PokemonSprite
 @onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShinyBadge
@@ -101,19 +105,20 @@ func _apply_slot_style() -> void:
 	var background: Color = SLOT_BG
 	var border: Color = SLOT_BORDER
 	var shadow: Color = SLOT_SHADOW
-	var border_width := 1
+	var border_width := SLOT_BORDER_WIDTH
+	var shadow_size := SLOT_SHADOW_SIZE
 	if current_is_shiny:
 		background = SHINY_SLOT_BG
 		border = SHINY_SLOT_BORDER
 		shadow = SHINY_SLOT_SHADOW
-		border_width = 2
+		border_width = SHINY_SLOT_BORDER_WIDTH
+		shadow_size = SHINY_SLOT_SHADOW_SIZE
 	if is_hovered:
 		background = SHINY_SLOT_HOVER_BG if current_is_shiny else SLOT_HOVER_BG
 		border = SHINY_SLOT_HOVER_BORDER if current_is_shiny else SLOT_HOVER_BORDER
 		shadow = SHINY_SLOT_HOVER_SHADOW if current_is_shiny else SLOT_HOVER_SHADOW
-		border_width = 2
 
-	add_theme_stylebox_override("panel", _make_slot_style(background, border, shadow, border_width))
+	add_theme_stylebox_override("panel", _make_slot_style(background, border, shadow, border_width, shadow_size))
 
 func _update_experience_bar(pokemon: Pokemon) -> void:
 	var current_level_exp := pokemon.current_level_exp
@@ -129,7 +134,13 @@ func _update_experience_bar(pokemon: Pokemon) -> void:
 	exp_bar.value = earned_level_exp
 	exp_bar.visible = true
 
-func _make_slot_style(background: Color, border: Color, shadow: Color, border_width: int) -> StyleBoxFlat:
+func _make_slot_style(
+	background: Color,
+	border: Color,
+	shadow: Color,
+	border_width: int,
+	shadow_size: int
+) -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 	style.bg_color = background
 	style.border_color = border
@@ -142,7 +153,7 @@ func _make_slot_style(background: Color, border: Color, shadow: Color, border_wi
 	style.corner_radius_bottom_right = 12
 	style.corner_radius_bottom_left = 12
 	style.shadow_color = shadow
-	style.shadow_size = 8 if shadow.a > 0.0 else 0
+	style.shadow_size = shadow_size
 	style.shadow_offset = Vector2(0, 2)
 	return style
 	

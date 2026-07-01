@@ -47,6 +47,7 @@ func _check_success_import(importer: RefCounted) -> void:
 		_check_equal((map_data.get("spawns") as Array).size(), 1, "spawn data count")
 		_check_equal((map_data.get("warps") as Array).size(), 1, "warp data count")
 		_check_equal((map_data.get("npcs") as Array).size(), 1, "npc data count")
+		_check_equal((map_data.get("interactables") as Array).size(), 1, "interactable data count")
 		_check_equal((map_data.get("items") as Array).size(), 1, "item data count")
 		_check_equal((map_data.get("encounter_regions") as Array).size(), 1, "encounter region data count")
 		_check_equal((map_data.get("triggers") as Array).size(), 1, "trigger data count")
@@ -70,6 +71,7 @@ func _check_success_import(importer: RefCounted) -> void:
 			"Spawns/Start",
 			"Exits/ToOther",
 			"Entities/NPCs/guide",
+			"Entities/Interactables/route_sign",
 			"Entities/Players",
 			"Items/potion_1",
 			"EncounterRegions/grass_a",
@@ -82,6 +84,10 @@ func _check_success_import(importer: RefCounted) -> void:
 			_check_equal(str(encounter_region.get_meta("pao_encounter_area_id", "")), "phase2a_test_grass", "encounter region area metadata")
 			_check_equal(str(encounter_region.get_meta("pao_encounter_type", "")), "grass", "encounter region type metadata")
 			_check_equal(float(encounter_region.get_meta("pao_encounter_chance", 0.0)), -1.0, "encounter region chance metadata")
+		var route_sign := runtime_root.get_node_or_null("Entities/Interactables/route_sign")
+		if route_sign != null:
+			_check_equal(str(route_sign.get("interactable_kind")), "road_sign", "interactable kind")
+			_check_equal(str(route_sign.get("display_name")), "Sign", "interactable display name")
 		runtime_root.free()
 
 
@@ -98,6 +104,7 @@ func _check_official_template_import(importer: RefCounted) -> void:
 		_check_equal((map_data.get("spawns") as Array).size(), 0, "official template spawn data count")
 		_check_equal((map_data.get("warps") as Array).size(), 0, "official template warp data count")
 		_check_equal((map_data.get("npcs") as Array).size(), 0, "official template npc data count")
+		_check_equal((map_data.get("interactables") as Array).size(), 0, "official template interactable data count")
 		_check_equal((map_data.get("items") as Array).size(), 0, "official template item data count")
 		_check_equal((map_data.get("encounter_regions") as Array).size(), 0, "official template encounter region data count")
 		_check_equal((map_data.get("triggers") as Array).size(), 0, "official template trigger data count")
@@ -119,6 +126,7 @@ func _check_official_template_import(importer: RefCounted) -> void:
 		"Spawns",
 		"Exits",
 		"Entities/NPCs",
+		"Entities/Interactables",
 		"Entities/Players",
 		"Items",
 		"EncounterRegions",
@@ -139,6 +147,7 @@ func _check_official_example_import(importer: RefCounted) -> void:
 		_check_equal((map_data.get("spawns") as Array).size(), 1, "official example spawn data count")
 		_check_equal((map_data.get("warps") as Array).size(), 1, "official example warp data count")
 		_check_equal((map_data.get("npcs") as Array).size(), 1, "official example npc data count")
+		_check_equal((map_data.get("interactables") as Array).size(), 1, "official example interactable data count")
 		_check_equal((map_data.get("items") as Array).size(), 1, "official example item data count")
 		_check_equal((map_data.get("encounter_regions") as Array).size(), 1, "official example encounter region data count")
 		_check_equal((map_data.get("triggers") as Array).size(), 1, "official example trigger data count")
@@ -160,6 +169,7 @@ func _check_official_example_import(importer: RefCounted) -> void:
 		"Spawns/Start",
 		"Exits/ToTemplateExit",
 		"Entities/NPCs/guide",
+		"Entities/Interactables/trainer_tips_sign",
 		"Entities/Players",
 		"Items/hidden_potion_1",
 		"EncounterRegions/grass_patch_a",

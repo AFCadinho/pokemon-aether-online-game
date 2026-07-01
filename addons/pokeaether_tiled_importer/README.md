@@ -36,8 +36,11 @@ Recognized object layers:
 - `PA_Spawns`
 - `PA_Warps`
 - `PA_NPCs`
+- `PA_Interactables`
 - `PA_Items`
 - `PA_EncounterRegions`
 - `PA_Triggers`
 
 Gameplay object coordinates must be aligned to the 32 px Tiled grid. Point objects are converted to Godot tile-center positions.
+
+`PA_Interactables` is for map-owned interactive objects such as road signs, trainer tips signs, bookshelves, statues, computers, switches, and hidden map objects. Each point object must define `interactable_id` and `interactable_kind`; optional `dialogue`, `dialogue_id`, `display_name`, `blocks_movement`, and `requires_facing` properties control runtime behavior.

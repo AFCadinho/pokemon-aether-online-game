@@ -102,6 +102,7 @@ func import_tmx(tmx_path: String) -> Dictionary:
 		"spawn_count": (saved_map_data.get("spawns") as Array).size(),
 		"warp_count": (saved_map_data.get("warps") as Array).size(),
 		"npc_count": (saved_map_data.get("npcs") as Array).size(),
+		"interactable_count": (saved_map_data.get("interactables") as Array).size(),
 		"item_count": (saved_map_data.get("items") as Array).size(),
 		"encounter_region_count": (saved_map_data.get("encounter_regions") as Array).size(),
 		"trigger_count": (saved_map_data.get("triggers") as Array).size(),

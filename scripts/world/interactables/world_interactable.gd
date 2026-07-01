@@ -1,0 +1,240 @@
+extends Node2D
+
+class_name WorldInteractable
+
+const TILE_SIZE := 32
+const MISSING_DIALOGUE_LINES: Array[String] = [
+	"There is nothing written here.",
+]
+
+@export var interactable_id := ""
+@export var interactable_kind := "generic"
+@export var display_name := ""
+@export var dialogue_id := ""
+@export var dialogue_lines: Array[String] = []
+@export var blocks_movement := true
+@export var requires_facing := true
+@export var blocked_tile_offset := Vector2i.ZERO
+@export var interaction_shape_size := Vector2(96, 96)
+
+var player_nearby := false
+var nearby_player: Node2D
+var is_interacting := false
+
+@onready var interaction_area: Area2D = get_node_or_null("InteractionArea")
+
+
+func _ready() -> void:
+	_ensure_interaction_area()
+
+
+func _process(_delta: float) -> void:
+	if _can_start_manual_interaction():
+		await _start_manual_interaction(nearby_player)
+
+
+func blocks_world_position(world_position: Vector2) -> bool:
+	if not blocks_movement:
+		return false
+
+	return _to_tile(global_position + _blocked_tile_offset_pixels()) == _to_tile(world_position)
+
+
+func interact_with_player(_player: Node2D) -> void:
+	await show_dialogue()
+
+
+func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> void:
+	var dialogue_box := _get_dialogue_box()
+	if dialogue_box == null:
+		push_warning("%s: DialogueBox/Box not found." % name)
+		return
+
+	var valid_dialogue_lines := _get_valid_dialogue_lines(lines)
+	if valid_dialogue_lines.is_empty():
+		valid_dialogue_lines = _get_valid_dialogue_lines(dialogue_lines)
+	if valid_dialogue_lines.is_empty():
+		valid_dialogue_lines = MISSING_DIALOGUE_LINES
+
+	var speaker_name := speaker_name_override
+	if speaker_name.is_empty():
+		speaker_name = display_name
+	if speaker_name.is_empty():
+		speaker_name = "Sign" if interactable_kind == "road_sign" else name
+
+	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name)
+	await dialogue_box.dialogue_finished
+
+
+func _can_start_manual_interaction() -> bool:
+	if is_interacting:
+		return false
+	if not player_nearby or nearby_player == null:
+		return false
+	if _is_overworld_input_locked():
+		return false
+	if _is_ui_typing():
+		return false
+	if not Input.is_action_just_pressed("interact"):
+		return false
+	if requires_facing and not _is_player_facing_interactable(nearby_player):
+		return false
+
+	var dialogue_box := _get_dialogue_box()
+	if dialogue_box != null and dialogue_box.is_open:
+		return false
+
+	return true
+
+
+func _start_manual_interaction(body: Node2D) -> void:
+	is_interacting = true
+	_lock_overworld_input()
+	if body.has_method("face_world_position"):
+		body.face_world_position(global_position)
+
+	await interact_with_player(body)
+	_unlock_overworld_input()
+	is_interacting = false
+
+
+func _is_player_facing_interactable(player: Node2D) -> bool:
+	if player == null:
+		return false
+
+	var player_direction_value: Variant = player.get("last_direction")
+	if not (player_direction_value is Vector2):
+		return false
+
+	var player_direction: Vector2 = player_direction_value as Vector2
+	if player_direction == Vector2.ZERO:
+		return false
+
+	var player_feet_position := player.global_position
+	if player.has_method("get_feet_position"):
+		player_feet_position = player.call("get_feet_position") as Vector2
+
+	var facing_tile := _to_tile(_snap_world_position(player_feet_position) + player_direction * TILE_SIZE)
+	var interactable_tile := _to_tile(global_position + _blocked_tile_offset_pixels())
+	return facing_tile == interactable_tile
+
+
+func _blocked_tile_offset_pixels() -> Vector2:
+	return Vector2(float(blocked_tile_offset.x), float(blocked_tile_offset.y)) * TILE_SIZE
+
+
+func _snap_world_position(world_position: Vector2) -> Vector2:
+	return Vector2(
+		round(world_position.x / TILE_SIZE) * TILE_SIZE,
+		round(world_position.y / TILE_SIZE) * TILE_SIZE
+	)
+
+
+func _ensure_interaction_area() -> void:
+	if interaction_area == null:
+		interaction_area = Area2D.new()
+		interaction_area.name = "InteractionArea"
+		add_child(interaction_area)
+
+		var collision_shape := CollisionShape2D.new()
+		collision_shape.name = "CollisionShape2D"
+		interaction_area.add_child(collision_shape)
+
+	var collision_shape := interaction_area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision_shape == null:
+		collision_shape = CollisionShape2D.new()
+		collision_shape.name = "CollisionShape2D"
+		interaction_area.add_child(collision_shape)
+
+	var shape := collision_shape.shape as RectangleShape2D
+	if shape == null:
+		shape = RectangleShape2D.new()
+		collision_shape.shape = shape
+	shape.size = interaction_shape_size
+
+	var body_entered_callable := Callable(self, "_on_interaction_area_body_entered")
+	var body_exited_callable := Callable(self, "_on_interaction_area_body_exited")
+	if not interaction_area.body_entered.is_connected(body_entered_callable):
+		interaction_area.body_entered.connect(body_entered_callable)
+	if not interaction_area.body_exited.is_connected(body_exited_callable):
+		interaction_area.body_exited.connect(body_exited_callable)
+
+
+func _to_tile(world_position: Vector2) -> Vector2i:
+	var local_position := world_position - _get_map_origin()
+	return Vector2i(
+		floori(local_position.x / TILE_SIZE),
+		floori(local_position.y / TILE_SIZE)
+	)
+
+
+func _get_map_origin() -> Vector2:
+	var game_state := _get_game_state()
+	if game_state != null:
+		var current_map: Node2D = game_state.get("current_map") as Node2D
+		if current_map != null:
+			return current_map.global_position
+
+	return Vector2.ZERO
+
+
+func _get_valid_dialogue_lines(lines: Array[String]) -> Array[String]:
+	var valid_dialogue_lines: Array[String] = []
+	for line: String in lines:
+		if not line.strip_edges().is_empty():
+			valid_dialogue_lines.append(line)
+
+	return valid_dialogue_lines
+
+
+func _get_dialogue_box() -> Node:
+	if get_tree().current_scene == null:
+		return null
+
+	return get_tree().current_scene.get_node_or_null("DialogueBox/Box")
+
+
+func _on_interaction_area_body_entered(body: Node2D) -> void:
+	if body.name == "Player":
+		player_nearby = true
+		nearby_player = body
+
+
+func _on_interaction_area_body_exited(body: Node2D) -> void:
+	if body.name == "Player":
+		player_nearby = false
+		if body == nearby_player:
+			nearby_player = null
+
+
+func _is_ui_typing() -> bool:
+	var focused_control := get_viewport().gui_get_focus_owner()
+	return focused_control is LineEdit or focused_control is TextEdit
+
+
+func _get_game_state() -> Node:
+	var root := get_tree().root
+	if root == null:
+		return null
+
+	return root.get_node_or_null("GameState")
+
+
+func _is_overworld_input_locked() -> bool:
+	var game_state := _get_game_state()
+	if game_state == null or not game_state.has_method("is_overworld_input_locked"):
+		return false
+
+	return bool(game_state.call("is_overworld_input_locked"))
+
+
+func _lock_overworld_input() -> void:
+	var game_state := _get_game_state()
+	if game_state != null and game_state.has_method("lock_overworld_input"):
+		game_state.call("lock_overworld_input")
+
+
+func _unlock_overworld_input() -> void:
+	var game_state := _get_game_state()
+	if game_state != null and game_state.has_method("unlock_overworld_input"):
+		game_state.call("unlock_overworld_input")
