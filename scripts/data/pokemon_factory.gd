@@ -102,6 +102,14 @@ static func _get_origin_payload(data: Dictionary) -> Dictionary:
 	if original_trainer_user_id > 0 and int(origin.get("originalTrainerUserId", origin.get("original_trainer_user_id", 0))) <= 0:
 		origin["originalTrainerUserId"] = original_trainer_user_id
 
+	var current_trainer_name := _get_string_option(data, ["currentTrainerName", "current_trainer_name", "ownerName", "owner_name"])
+	if current_trainer_name != "" and str(origin.get("currentTrainerName", origin.get("current_trainer_name", origin.get("ownerName", origin.get("owner_name", ""))))).strip_edges() == "":
+		origin["currentTrainerName"] = current_trainer_name
+
+	var current_trainer_user_id := _get_int_option(data, ["currentTrainerUserId", "current_trainer_user_id", "ownerUserId", "owner_user_id", "holderUserId", "holder_user_id"])
+	if current_trainer_user_id > 0 and int(origin.get("currentTrainerUserId", origin.get("current_trainer_user_id", 0))) <= 0:
+		origin["currentTrainerUserId"] = current_trainer_user_id
+
 	return origin
 
 

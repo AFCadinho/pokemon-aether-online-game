@@ -10685,7 +10685,11 @@ func _submit_chat_input_async() -> void:
 		_keep_chat_input_focused()
 		return
 
-	var pokemon_attachments: Array[Dictionary] = pending_chat_pokemon_attachments.duplicate(true)
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments_with_current_trainer(
+		pending_chat_pokemon_attachments,
+		PlayerSave.player_name,
+		PlayerSave.player_id
+	)
 	if text == "" and pokemon_attachments.is_empty():
 		chat_submit_in_progress = false
 		_keep_chat_input_focused()
@@ -10713,7 +10717,11 @@ func _share_party_to_chat() -> void:
 	var attachments: Array[Dictionary] = []
 	for pokemon: Pokemon in PlayerSave.party:
 		if pokemon != null:
-			attachments.append(pokemon.to_persistence_dict())
+			attachments.append(_pokemon_preview_payload_with_current_trainer(
+				pokemon.to_persistence_dict(),
+				PlayerSave.player_name,
+				PlayerSave.player_id
+			))
 
 	chat_input.clear()
 	if not ChatRealtimeService.send_chat_message("", _get_active_chat_channel(), attachments):
@@ -14404,7 +14412,11 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 	name_label.add_theme_font_size_override("font_size", 14)
 	row.add_child(name_label)
 	for pokemon_payload: Dictionary in pokemon_attachments:
-		row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
+		row.add_child(_create_chat_pokemon_attachment_button(_pokemon_preview_payload_with_current_trainer(
+			pokemon_payload,
+			display_name,
+			str(user.get("id", user.get("userId", user.get("user_id", ""))))
+		)))
 	if text != "":
 		var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
 		row.add_child(entry)
@@ -14433,6 +14445,45 @@ func _get_chat_pokemon_attachments(message: Dictionary) -> Array[Dictionary]:
 	if legacy_value is Dictionary:
 		attachments.append((legacy_value as Dictionary).duplicate(true))
 	return attachments
+
+func _get_chat_pokemon_attachments_with_current_trainer(
+	attachments: Array,
+	trainer_name: String,
+	trainer_user_id: String = ""
+) -> Array[Dictionary]:
+	var enriched_attachments: Array[Dictionary] = []
+	for attachment_value: Variant in attachments:
+		if attachment_value is Dictionary:
+			enriched_attachments.append(_pokemon_preview_payload_with_current_trainer(
+				attachment_value as Dictionary,
+				trainer_name,
+				trainer_user_id
+			))
+
+	return enriched_attachments
+
+func _pokemon_preview_payload_with_current_trainer(
+	pokemon_payload: Dictionary,
+	trainer_name: String,
+	trainer_user_id: String = ""
+) -> Dictionary:
+	var payload := pokemon_payload.duplicate(true)
+	var clean_trainer_name := trainer_name.strip_edges()
+	var clean_trainer_user_id := trainer_user_id.strip_edges()
+	var origin_value: Variant = payload.get("origin", {})
+	var origin: Dictionary = (origin_value as Dictionary).duplicate(true) if origin_value is Dictionary else {}
+
+	if clean_trainer_name != "":
+		origin["currentTrainerName"] = clean_trainer_name
+		payload["ownerName"] = clean_trainer_name
+	if clean_trainer_user_id != "":
+		origin["currentTrainerUserId"] = clean_trainer_user_id
+		payload["ownerUserId"] = clean_trainer_user_id
+
+	if not origin.is_empty():
+		payload["origin"] = origin
+
+	return payload
 
 
 func _should_show_chat_category(category: String) -> bool:
