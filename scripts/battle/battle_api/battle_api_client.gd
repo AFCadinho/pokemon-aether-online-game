@@ -82,6 +82,35 @@ func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Diction
 		}
 	)
 
+func get_pvp_queues(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/account/pvp/queues")
+
+func join_pvp_queue(request_node: HTTPRequest, queue_id: String, player: Dictionary) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/account/pvp/queues/%s/join" % queue_id.strip_edges().uri_encode(),
+		{
+			"player": player,
+		}
+	)
+
+func leave_pvp_queue(request_node: HTTPRequest, queue_id: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/account/pvp/queues/%s/leave" % queue_id.strip_edges().uri_encode(),
+		{}
+	)
+
+func get_pvp_queue_status(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/account/pvp/queues/status/me")
+
+func start_pvp_match_battle(request_node: HTTPRequest, match_id: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/pvp/matches/%s/start-battle" % match_id.strip_edges().uri_encode(),
+		{}
+	)
+
 func choose_lead(request_node: HTTPRequest, battle_id: String, player_id: String, slot: int, since_event_seq := -1) -> Dictionary:
 	var body = {
 		"playerId": player_id,
