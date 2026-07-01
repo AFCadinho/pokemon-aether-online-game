@@ -11990,7 +11990,11 @@ func _build_pokedex_abilities_tab() -> void:
 			continue
 		var slot := str(ability.get("slot", "")).strip_edges()
 		var label := "Hidden Ability" if slot == "hidden" else "Ability"
-		pokedex_detail_stack.add_child(_create_pokedex_info_line(label, ability_name))
+		var ability_row := _create_pokedex_info_line(label, ability_name)
+		var ability_description := _get_summary_ability_description_text(ability_name)
+		if ability_description != "":
+			ability_row.tooltip_text = ability_description
+		pokedex_detail_stack.add_child(ability_row)
 		added_count += 1
 
 	pokedex_detail_stack.add_child(_create_pokedex_section_title("Training"))
@@ -12215,6 +12219,9 @@ func _create_pokedex_move_row(move: Dictionary) -> Control:
 	var row_panel := PanelContainer.new()
 	row_panel.custom_minimum_size = Vector2(0, 34)
 	row_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+	var move_description := _get_summary_move_description_text(move)
+	if move_description != "":
+		row_panel.tooltip_text = move_description
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 7)
@@ -12306,8 +12313,16 @@ func _format_pokedex_move_number(value: Variant) -> String:
 	if value == null:
 		return "-"
 	var text := str(value).strip_edges()
-	if text == "" or text == "0":
+	if text == "" or text == "0" or text == "0.0":
 		return "-"
+	if value is int:
+		return str(value)
+	if value is float:
+		return str(int(value))
+	if text.is_valid_int():
+		return str(int(text))
+	if text.is_valid_float():
+		return str(int(float(text)))
 	return text
 
 func _compact_pokedex_text(value: String) -> String:
