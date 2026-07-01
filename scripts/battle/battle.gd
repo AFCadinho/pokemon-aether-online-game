@@ -1410,7 +1410,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("battle_run"):
 		_focus_battle_ui_layer()
 		if not battle_actions_ready:
-			_queue_battle_action("run")
+			if not _is_pvp_battle():
+				_queue_battle_action("run")
 			return
 
 		_try_run()
@@ -1882,7 +1883,7 @@ func _on_action_selected(action: String) -> void:
 		return
 
 	if not battle_actions_ready and not team_preview_lead_selection_active:
-		if action == "run":
+		if action == "run" and not _is_pvp_battle():
 			_queue_battle_action("run")
 		return
 
@@ -2068,6 +2069,8 @@ func _set_battle_actions_ready(is_ready: bool) -> void:
 
 func _queue_battle_action(action_type: String, slot := 0) -> void:
 	if team_preview_lead_selection_active or battle_finished:
+		return
+	if _is_pvp_battle() and action_type == "run":
 		return
 
 	queued_battle_action = {
@@ -5921,11 +5924,11 @@ func _show_force_switch_if_needed() -> bool:
 	_trace_pvp_flow("show_force_switch.check", {}, "localNeeds=%s" % str(_local_player_needs_force_switch_ui()))
 	if not _local_player_needs_force_switch_ui():
 		return false
-	if _is_pvp_battle() and pvp_last_phase != "awaiting_force_switch":
+	if _is_pvp_battle() and not _can_open_pvp_local_force_switch_ui():
 		_trace_pvp_flow("show_force_switch.blocked_phase", {}, "phase=%s" % pvp_last_phase)
 		_log_pvp_realtime(
 			"Blocked PvP force-switch open",
-			"source=_show_force_switch_if_needed phase=%s expected=awaiting_force_switch" % pvp_last_phase
+			"source=_show_force_switch_if_needed phase=%s next=%s expected=awaiting_force_switch" % [pvp_last_phase, pvp_last_next_phase]
 		)
 		_set_battle_input_locked(true)
 		return false
@@ -5935,6 +5938,15 @@ func _show_force_switch_if_needed() -> bool:
 	_trace_pvp_flow("show_force_switch.open", {}, "")
 	_show_party(true)
 	return true
+
+func _can_open_pvp_local_force_switch_ui() -> bool:
+	if not _is_pvp_battle():
+		return true
+	if pvp_last_phase == "awaiting_force_switch":
+		return true
+	if pvp_last_phase == "":
+		return true
+	return pvp_last_phase == "rendering_events" and pvp_last_next_phase == "awaiting_force_switch"
 
 func _clear_force_switch_request_for_player(player_id: String) -> void:
 	var request := battle_state.get_player_request(player_id)
@@ -6354,14 +6366,6 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 
 	pvp_realtime_updates.append(message.duplicate(true))
-	print("[PvPReconnectDebug] queued realtime update message=%s locked=%s view=%s idleWait=%s phase=%s pending=%d" % [
-		_describe_pvp_realtime_message(message),
-		str(battle_input_locked),
-		str(current_action_view),
-		str(pvp_idle_wait_recovery_active),
-		pvp_last_phase,
-		pvp_realtime_updates.size(),
-	])
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
 			"Queued PvP realtime update",
@@ -7248,14 +7252,9 @@ func _drain_idle_pvp_realtime_updates() -> void:
 	pvp_idle_realtime_drain_pending = true
 	while _should_continue_idle_pvp_realtime_drain():
 		var message: Dictionary = await _wait_for_next_pvp_realtime_update(0.0)
-		print("[PvPReconnectDebug] idle drain popped empty=%s message=%s" % [
-			str(message.is_empty()),
-			_describe_pvp_realtime_message(message) if not message.is_empty() else "none",
-		])
 		if message.is_empty():
 			break
 		if not await _apply_pvp_realtime_battle_update(message):
-			print("[PvPReconnectDebug] idle drain apply failed; deferring message=%s" % _describe_pvp_realtime_message(message))
 			if _get_pvp_realtime_message_kind(message) == "snapshot":
 				continue
 			_defer_pvp_realtime_update(message, "idle_drain_unapplied")
@@ -7274,16 +7273,6 @@ func _recover_pvp_idle_wait_ui_after_update(message: Dictionary) -> void:
 	var local_state_player_id := _get_local_state_player_id()
 	var local_needs_force_switch := _local_player_needs_force_switch_ui()
 	var opponent_needs_force_switch := _opponent_player_needs_force_switch_ui()
-	print("[PvPReconnectDebug] recovery check message=%s phase=%s next=%s localForce=%s opponentForce=%s localCanAct=%s locked=%s view=%s" % [
-		_describe_pvp_realtime_message(message),
-		pvp_last_phase,
-		pvp_last_next_phase,
-		str(local_needs_force_switch),
-		str(opponent_needs_force_switch),
-		str(_pvp_local_request_allows_action_recovery(local_state_player_id)),
-		str(battle_input_locked),
-		str(current_action_view),
-	])
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
 			"Idle wait recovery check",
