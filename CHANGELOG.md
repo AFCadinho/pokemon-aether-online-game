@@ -2,11 +2,16 @@
 
 ## Unreleased
 
+**Added**
+- Added Tiled `PA_Interactables` support for map-owned signs and other interactive objects.
+
 **Fixed**
 - Fixed normal UI party slots resizing on hover while keeping the hover state visually clear.
 - Fixed Pokemon summaries showing the current trainer as OT after receiving a Pokemon through mail.
 - Fixed read-only Pokemon summary previews showing the viewer as the current trainer in mail and chat.
 - Fixed Escape opening settings instead of closing the active overlay panel first.
+- Fixed NPC battle pivot moves opening empty move slots after a KO and forced switch sequence.
+- Fixed NPC trainer HUD team icons changing species during faint and forced switch transitions.
 
 ## 0.2.5 - 2026-06-30
 

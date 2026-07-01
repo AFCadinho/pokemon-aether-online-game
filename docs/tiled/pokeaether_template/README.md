@@ -6,7 +6,7 @@ This directory contains the canonical Tiled starting point for imported PokeAeth
 
 - `pokeaether_overworld_template.tsx`: external TSX tileset used by the template and example.
 - `pokeaether_map_template.tmx`: blank 8x8 map with required PokeAether properties, standard tile layers, and all `PA_*` object layers.
-- `pokeaether_minimal_example.tmx`: small complete example with collision, tall grass, spawn, warp, NPC placeholder, item placeholder, encounter region, and trigger.
+- `pokeaether_minimal_example.tmx`: small complete example with collision, tall grass, spawn, warp, NPC placeholder, interactable sign, item placeholder, encounter region, and trigger.
 
 ## Layer Order
 
@@ -31,6 +31,7 @@ Use these object layers exactly:
 - `PA_Spawns`
 - `PA_Warps`
 - `PA_NPCs`
+- `PA_Interactables`
 - `PA_Items`
 - `PA_EncounterRegions`
 - `PA_Triggers`
@@ -45,5 +46,21 @@ Use these object layers exactly:
 6. Paint grass markers on `TallGrass` where encounter checks should later be possible.
 7. Add gameplay placeholders on the `PA_*` object layers, not on visual tile layers.
 8. Keep all gameplay objects aligned to the 32 px grid.
-9. Keep ids unique within each object layer, for example unique `spawn_id`, `warp_id`, and `npc_id`.
-10. Run the importer/check workflow before handing the map to engineering.
+9. For signs or other map objects with behavior, paint the visual tile on a visual layer and place a matching point object on `PA_Interactables`.
+10. Keep ids unique within each object layer, for example unique `spawn_id`, `warp_id`, `npc_id`, and `interactable_id`.
+11. Run the importer/check workflow before handing the map to engineering.
+
+## Interactables
+
+Use `PA_Interactables` for map-owned objects that can be talked to, read, inspected, or otherwise activated. Common examples are road signs, trainer tips signs, bookshelves, statues, computers, switches, and hidden map objects.
+
+Point object properties:
+
+- `interactable_id`: unique stable id within `PA_Interactables`, for example `route_1_sign_viridian`.
+- `interactable_kind`: behavior category, for example `road_sign`.
+- `display_name`: optional dialogue speaker/title, for example `Sign` or `Trainer Tips`.
+- `dialogue`: optional inline text. Use `\n` between dialogue lines.
+- `dialogue_id`: optional content id for externally managed dialogue.
+- `blocks_movement`: optional bool, defaults to `true`.
+- `requires_facing`: optional bool, defaults to `true`.
+- `blocked_tile_offset_x` / `blocked_tile_offset_y`: optional tile offset from the object point when the blocked tile is not the object's own tile.

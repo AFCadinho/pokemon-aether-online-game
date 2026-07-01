@@ -77,6 +77,7 @@ func _validate_object_layers(map_data: Dictionary, errors: Array[String]) -> voi
 	var seen_spawns := {}
 	var seen_warps := {}
 	var seen_npcs := {}
+	var seen_interactables := {}
 	var seen_items := {}
 	var seen_encounter_regions := {}
 	var seen_triggers := {}
@@ -95,6 +96,8 @@ func _validate_object_layers(map_data: Dictionary, errors: Array[String]) -> voi
 					_validate_warp(errors, seen_warps, layer_name, object_data)
 				Schema.OBJECT_LAYER_NPCS:
 					_validate_npc(errors, seen_npcs, layer_name, object_data)
+				Schema.OBJECT_LAYER_INTERACTABLES:
+					_validate_interactable(errors, seen_interactables, layer_name, object_data)
 				Schema.OBJECT_LAYER_ITEMS:
 					_validate_item(errors, seen_items, layer_name, object_data)
 				Schema.OBJECT_LAYER_ENCOUNTER_REGIONS:
@@ -132,6 +135,15 @@ func _validate_npc(errors: Array[String], seen_ids: Dictionary, layer_name: Stri
 	var npc_id := _require_property(errors, properties, Schema.PROP_NPC_ID, context)
 	_require_property(errors, properties, Schema.PROP_NPC_KIND, context)
 	_check_duplicate_id(errors, seen_ids, npc_id, Schema.PROP_NPC_ID, context)
+	_validate_point_object(errors, object_data, context)
+
+
+func _validate_interactable(errors: Array[String], seen_ids: Dictionary, layer_name: String, object_data: Dictionary) -> void:
+	var context := _object_context(layer_name, object_data)
+	var properties: Dictionary = object_data.get("properties", {})
+	var interactable_id := _require_property(errors, properties, Schema.PROP_INTERACTABLE_ID, context)
+	_require_property(errors, properties, Schema.PROP_INTERACTABLE_KIND, context)
+	_check_duplicate_id(errors, seen_ids, interactable_id, Schema.PROP_INTERACTABLE_ID, context)
 	_validate_point_object(errors, object_data, context)
 
 

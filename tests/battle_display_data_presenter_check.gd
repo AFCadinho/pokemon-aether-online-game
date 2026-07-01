@@ -8,6 +8,8 @@ var failed := false
 
 func _init() -> void:
 	_check_trainer_active_species_uses_metadata_form()
+	_check_trainer_team_display_keeps_roster_species_during_ambiguous_switch_state()
+	_check_trainer_team_display_ignores_request_slot_identity_for_species_match()
 
 	quit(1 if failed else 0)
 
@@ -43,6 +45,105 @@ func _check_trainer_active_species_uses_metadata_form() -> void:
 		"Landorus-Therian",
 		"trainer active display species uses metadata form before initial events"
 	)
+
+
+func _check_trainer_team_display_keeps_roster_species_during_ambiguous_switch_state() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "trainer-team-display-stability-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p2: Caterpie",
+							"species": "Caterpie",
+							"metadataSlot": 1,
+							"condition": "0 fnt",
+							"active": false,
+						},
+						{
+							"ident": "p2: Caterpie",
+							"species": "Caterpie",
+							"metadataSlot": 2,
+							"condition": "20/20",
+							"active": true,
+						},
+					],
+				},
+			},
+		},
+	}, false)
+
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	presenter.set_battle_context(1, null)
+	presenter.set_trainer_team([
+		{
+			"species": "Weedle",
+			"metadataSlot": 1,
+		},
+		{
+			"species": "Caterpie",
+			"metadataSlot": 2,
+		},
+	])
+
+	var display_team := presenter.get_display_team_data("p2")
+	_check_equal(display_team.size(), 2, "trainer display team keeps roster size")
+	_check_equal(display_team[0].get("species", ""), "Weedle", "trainer display slot 1 keeps roster species")
+	_check_equal(display_team[1].get("species", ""), "Caterpie", "trainer display slot 2 keeps roster species")
+
+
+func _check_trainer_team_display_ignores_request_slot_identity_for_species_match() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "trainer-team-display-wrong-request-slot-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p2: Caterpie",
+							"species": "Caterpie",
+							"metadataSlot": 2,
+							"partySlot": 2,
+							"pokemonKey": "p2:slot:2",
+							"condition": "100/100",
+							"active": true,
+						},
+						{
+							"ident": "p2: Weedle",
+							"species": "Weedle",
+							"condition": "0 fnt",
+							"active": false,
+						},
+					],
+				},
+			},
+		},
+	}, false)
+
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	presenter.set_battle_context(1, null)
+	presenter.set_trainer_team([
+		{
+			"species": "Caterpie",
+			"metadataSlot": 1,
+		},
+		{
+			"species": "Weedle",
+			"metadataSlot": 2,
+		},
+	])
+
+	var display_team := presenter.get_display_team_data("p2")
+	_check_equal(display_team[0].get("species", ""), "Caterpie", "trainer display slot 1 ignores wrong request slot species overwrite")
+	_check_equal(display_team[0].get("metadataSlot", 0), 1, "trainer display slot 1 keeps roster metadata slot")
+	_check_equal(display_team[0].get("active", false), true, "trainer display slot 1 keeps active state from species request")
+	_check_equal(display_team[1].get("species", ""), "Weedle", "trainer display slot 2 remains Weedle")
+	_check_equal(display_team[1].get("metadataSlot", 0), 2, "trainer display slot 2 keeps roster metadata slot")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

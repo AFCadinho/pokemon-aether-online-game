@@ -1,6 +1,8 @@
 @tool
 extends Node2D
 
+const MapCharacterBlocking := preload("res://scripts/world/map_character_blocking.gd")
+
 @export var map_data: Resource
 
 
@@ -41,3 +43,11 @@ func get_music_track_path() -> String:
 
 func get_wild_encounter_area_id() -> String:
 	return str(map_data.get("encounter_area_id")) if map_data != null else ""
+
+
+func is_position_blocked_by_character(world_position: Vector2) -> bool:
+	return MapCharacterBlocking.is_position_blocked_by_character(self, world_position)
+
+
+func get_closed_route_gate_npc(world_position: Vector2) -> Node:
+	return MapCharacterBlocking.get_closed_route_gate_npc(self, world_position)

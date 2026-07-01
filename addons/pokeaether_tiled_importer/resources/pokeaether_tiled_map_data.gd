@@ -19,6 +19,7 @@ class_name PokeAetherTiledMapData
 @export var spawns: Array[Resource] = []
 @export var warps: Array[Resource] = []
 @export var npcs: Array[Resource] = []
+@export var interactables: Array[Resource] = []
 @export var items: Array[Resource] = []
 @export var encounter_regions: Array[Resource] = []
 @export var triggers: Array[Resource] = []

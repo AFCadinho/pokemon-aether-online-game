@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="7">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="8">
  <properties>
   <property name="pa_schema_version" type="int" value="1"/>
   <property name="map_id" value="phase2a_test_map"/>
@@ -66,7 +66,19 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="7" name="PA_Items">
+ <objectgroup id="7" name="PA_Interactables">
+  <object id="7" name="RouteSign" x="32" y="96">
+   <properties>
+    <property name="interactable_id" value="route_sign"/>
+    <property name="interactable_kind" value="road_sign"/>
+    <property name="display_name" value="Sign"/>
+    <property name="dialogue" value="Route 1\nPallet Town - Test City"/>
+    <property name="blocks_movement" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="PA_Items">
   <object id="4" name="Potion" x="0" y="64">
    <properties>
     <property name="item_spawn_id" value="potion_1"/>
@@ -76,7 +88,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="8" name="PA_EncounterRegions">
+ <objectgroup id="9" name="PA_EncounterRegions">
   <object id="5" name="GrassEncounter" x="0" y="96" width="64" height="32">
    <properties>
     <property name="encounter_region_id" value="grass_a"/>
@@ -85,7 +97,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="9" name="PA_Triggers">
+ <objectgroup id="10" name="PA_Triggers">
   <object id="6" name="IntroTrigger" x="96" y="96" width="32" height="32">
    <properties>
     <property name="trigger_id" value="intro"/>
