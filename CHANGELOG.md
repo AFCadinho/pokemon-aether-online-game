@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+**Fixed**
+- Fixed normal UI party slots resizing on hover while keeping the hover state visually clear.
+
 ## 0.2.5 - 2026-06-30
 
 **Added**
