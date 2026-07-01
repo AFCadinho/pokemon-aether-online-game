@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.6 - 2026-07-01
 
 **Added**
 - Added Tiled `PA_Interactables` support for map-owned signs and other interactive objects.
