@@ -610,6 +610,8 @@ var pokedex_selected_species: Dictionary = {}
 var pokedex_selected_species_id := ""
 var pokedex_active_tab := "general"
 var pokedex_search_request_id := 0
+var pokedex_search_debounce_timer: Timer
+var pokedex_species_list_icon_cache: Dictionary = {}
 var pokedex_dragging := false
 var pokedex_drag_offset := Vector2.ZERO
 var displayed_money: int = -1
@@ -3644,6 +3646,12 @@ func _setup_pokedex_popup() -> void:
 	pokedex_search_input.placeholder_text = "Search species..."
 	pokedex_search_input.text_changed.connect(_on_pokedex_search_changed)
 	browser_stack.add_child(pokedex_search_input)
+
+	pokedex_search_debounce_timer = Timer.new()
+	pokedex_search_debounce_timer.one_shot = true
+	pokedex_search_debounce_timer.wait_time = 0.16
+	pokedex_search_debounce_timer.timeout.connect(_refresh_pokedex_results)
+	pokedex_popup.add_child(pokedex_search_debounce_timer)
 
 	var results_scroll := ScrollContainer.new()
 	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -11567,7 +11575,11 @@ func _hide_pokedex_popup() -> void:
 		_deactivate_ui_panel(pokedex_popup)
 
 func _on_pokedex_search_changed(_text: String) -> void:
-	_refresh_pokedex_results()
+	pokedex_search_request_id += 1
+	if pokedex_search_debounce_timer == null:
+		_refresh_pokedex_results()
+		return
+	pokedex_search_debounce_timer.start()
 
 func _refresh_pokedex_results() -> void:
 	if pokedex_results_list == null:
@@ -11946,15 +11958,27 @@ func _load_pokedex_species_texture(species: Dictionary) -> Texture2D:
 	return PokemonAssets.load_unknown_icon()
 
 func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
+	var cache_key := str(species.get("id", species.get("showdownId", species.get("name", "")))).strip_edges()
+	if cache_key != "" and pokedex_species_list_icon_cache.has(cache_key):
+		return pokedex_species_list_icon_cache[cache_key] as Texture2D
+
+	var texture: Texture2D = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
 		if PokemonAssets.load_home_sprite(candidate, false) != null:
-			return PokemonAssets.load_party_icon(candidate, false)
+			texture = PokemonAssets.load_party_icon(candidate, false)
+			break
 
-	var sprite_frame := _load_first_pokedex_sprite_frame(species)
-	if sprite_frame != null:
-		return sprite_frame
+	if texture == null:
+		var sprite_frame := _load_first_pokedex_sprite_frame(species)
+		if sprite_frame != null:
+			texture = sprite_frame
 
-	return PokemonAssets.load_unknown_icon()
+	if texture == null:
+		texture = PokemonAssets.load_unknown_icon()
+
+	if cache_key != "":
+		pokedex_species_list_icon_cache[cache_key] = texture
+	return texture
 
 func _load_first_pokedex_sprite_frame(species: Dictionary) -> Texture2D:
 	for candidate: String in _pokedex_species_sprite_candidates(species):
