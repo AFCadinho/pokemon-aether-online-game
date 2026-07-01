@@ -2776,7 +2776,7 @@ func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup = PanelContainer.new()
 	dev_clear_menu_popup.name = "DevClearMenuPopup"
 	dev_clear_menu_popup.visible = false
-	dev_clear_menu_popup.custom_minimum_size = Vector2(220, 126)
+	dev_clear_menu_popup.custom_minimum_size = Vector2(220, 164)
 	dev_clear_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	dev_clear_menu_popup.z_index = UI_BASE_Z_INDEX
 	dev_clear_menu_popup.anchor_left = 0.0
@@ -2786,7 +2786,7 @@ func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup.offset_left = 0.0
 	dev_clear_menu_popup.offset_top = 0.0
 	dev_clear_menu_popup.offset_right = 220.0
-	dev_clear_menu_popup.offset_bottom = 126.0
+	dev_clear_menu_popup.offset_bottom = 164.0
 	dev_clear_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	root_control.add_child(dev_clear_menu_popup)
 
@@ -2801,6 +2801,17 @@ func _setup_dev_clear_menu_popup() -> void:
 	layout.add_theme_constant_override("separation", 8)
 	margin_container.add_child(layout)
 
+	var header := HBoxContainer.new()
+	header.alignment = BoxContainer.ALIGNMENT_END
+	layout.add_child(header)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(32, 28)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_dev_clear_menu_popup)
+	header.add_child(close_button)
+
 	var party_button := Button.new()
 	party_button.text = "Party"
 	party_button.focus_mode = Control.FOCUS_NONE
@@ -2813,6 +2824,7 @@ func _setup_dev_clear_menu_popup() -> void:
 	inventory_button.pressed.connect(_on_dev_clear_inventory_option_pressed)
 	layout.add_child(inventory_button)
 
+	_apply_button_style(close_button)
 	_apply_button_style(party_button, "danger")
 	_apply_button_style(inventory_button, "danger")
 
@@ -10490,6 +10502,9 @@ func _hide_dev_add_money_popup_for_escape() -> void:
 	_deactivate_ui_panel(dev_add_money_popup)
 
 func _hide_dev_clear_menu_popup_for_escape() -> void:
+	_hide_dev_clear_menu_popup()
+
+func _hide_dev_clear_menu_popup() -> void:
 	if dev_clear_menu_popup != null:
 		dev_clear_menu_popup.visible = false
 		_deactivate_ui_panel(dev_clear_menu_popup)
@@ -11499,7 +11514,7 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	icon.custom_minimum_size = Vector2(40, 40)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = PokemonAssets.load_party_icon(species_name, false)
+	icon.texture = _load_pokedex_species_list_icon(species)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
 
@@ -11793,6 +11808,36 @@ func _load_pokedex_species_texture(species: Dictionary) -> Texture2D:
 		if texture != null:
 			return texture
 	return PokemonAssets.load_unknown_icon()
+
+func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		if PokemonAssets.load_home_sprite(candidate, false) != null:
+			return PokemonAssets.load_party_icon(candidate, false)
+
+	var sprite_frame := _load_first_pokedex_sprite_frame(species)
+	if sprite_frame != null:
+		return sprite_frame
+
+	return PokemonAssets.load_unknown_icon()
+
+func _load_first_pokedex_sprite_frame(species: Dictionary) -> Texture2D:
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		var frames_value: Variant = pokedex_sprite_loader.call("_load_sprite_frames", candidate, "front", false)
+		var frames := frames_value as SpriteFrames
+		if frames == null:
+			continue
+
+		var animation_name := "idle"
+		if not frames.has_animation(animation_name):
+			var animation_names := frames.get_animation_names()
+			if animation_names.is_empty():
+				continue
+			animation_name = animation_names[0]
+
+		if frames.get_frame_count(animation_name) > 0:
+			return frames.get_frame_texture(animation_name, 0)
+
+	return null
 
 func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
 	if pokedex_header_stats_stack == null:

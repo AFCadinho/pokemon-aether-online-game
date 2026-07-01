@@ -28,6 +28,7 @@ const UI_PURPLE_HOVER := Color("#b980ff")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const ACCOUNT_DIALOG_STATUS_HEIGHT := 30.0
+const LOGOUT_CONFIRM_SIZE := Vector2(360, 154)
 
 @onready var settings_layout: VBoxContainer = $MarginContainer/VBoxContainer
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
@@ -59,7 +60,9 @@ var account_user_label: Label
 var account_status_label: Label
 var edit_account_button: Button
 var logout_button: Button
-var logout_confirm_dialog: ConfirmationDialog
+var logout_confirm_dialog: PanelContainer
+var logout_confirm_return_button: Button
+var logout_confirm_cancel_button: Button
 var account_details_dialog: PanelContainer
 var account_details_panel: PanelContainer
 var account_dialog_status_label: Label
@@ -108,7 +111,7 @@ func close() -> void:
 		_hide_account_details_dialog()
 	logout_confirmation_requested = false
 	if logout_confirm_dialog != null:
-		logout_confirm_dialog.hide()
+		_hide_logout_confirm_dialog()
 	visible = false
 	closed.emit()
 
@@ -266,14 +269,70 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 
 
 func _setup_logout_confirm_dialog() -> void:
-	logout_confirm_dialog = ConfirmationDialog.new()
-	logout_confirm_dialog.title = "Return to Login"
-	logout_confirm_dialog.dialog_text = "Return to the login screen? Your saved session stays active."
-	logout_confirm_dialog.ok_button_text = "Return"
-	logout_confirm_dialog.cancel_button_text = "Cancel"
-	logout_confirm_dialog.exclusive = true
-	logout_confirm_dialog.confirmed.connect(_logout_confirmed)
+	logout_confirm_dialog = PanelContainer.new()
+	logout_confirm_dialog.name = "LogoutConfirmPopup"
+	logout_confirm_dialog.visible = false
+	logout_confirm_dialog.top_level = true
+	logout_confirm_dialog.z_as_relative = false
+	logout_confirm_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
+	logout_confirm_dialog.z_index = 20
+	logout_confirm_dialog.custom_minimum_size = LOGOUT_CONFIRM_SIZE
+	logout_confirm_dialog.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	add_child(logout_confirm_dialog)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	logout_confirm_dialog.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 12)
+	margin.add_child(stack)
+
+	var header := HBoxContainer.new()
+	stack.add_child(header)
+
+	var title_label := Label.new()
+	title_label.text = "Return to Login"
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.add_theme_font_size_override("font_size", 17)
+	title_label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+	header.add_child(title_label)
+
+	var close_dialog_button := Button.new()
+	close_dialog_button.text = "X"
+	close_dialog_button.custom_minimum_size = Vector2(32, 28)
+	close_dialog_button.focus_mode = Control.FOCUS_NONE
+	close_dialog_button.pressed.connect(_hide_logout_confirm_dialog)
+	header.add_child(close_dialog_button)
+
+	var message_label := Label.new()
+	message_label.text = "Return to the login screen? Your saved session stays active."
+	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	message_label.add_theme_font_size_override("font_size", 14)
+	message_label.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(message_label)
+
+	var button_row := HBoxContainer.new()
+	button_row.alignment = BoxContainer.ALIGNMENT_END
+	button_row.add_theme_constant_override("separation", 10)
+	stack.add_child(button_row)
+
+	logout_confirm_cancel_button = Button.new()
+	logout_confirm_cancel_button.text = "Cancel"
+	logout_confirm_cancel_button.custom_minimum_size = Vector2(104, 32)
+	logout_confirm_cancel_button.focus_mode = Control.FOCUS_NONE
+	logout_confirm_cancel_button.pressed.connect(_hide_logout_confirm_dialog)
+	button_row.add_child(logout_confirm_cancel_button)
+
+	logout_confirm_return_button = Button.new()
+	logout_confirm_return_button.text = "Return"
+	logout_confirm_return_button.custom_minimum_size = Vector2(112, 32)
+	logout_confirm_return_button.focus_mode = Control.FOCUS_NONE
+	logout_confirm_return_button.pressed.connect(_logout_confirmed)
+	button_row.add_child(logout_confirm_return_button)
 
 
 func _setup_account_details_dialog() -> void:
@@ -387,6 +446,7 @@ func _apply_premium_styles() -> void:
 		_apply_button_style(logout_button, "danger")
 	_apply_button_style(close_button)
 	_apply_account_dialog_style()
+	_apply_logout_confirm_dialog_style()
 
 
 func _apply_styles_recursive(node: Node) -> void:
@@ -482,6 +542,18 @@ func _apply_account_dialog_style() -> void:
 	]:
 		if input != null:
 			_apply_line_edit_style(input)
+
+
+func _apply_logout_confirm_dialog_style() -> void:
+	if logout_confirm_dialog == null:
+		return
+
+	_apply_styles_recursive(logout_confirm_dialog)
+	logout_confirm_dialog.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	if logout_confirm_return_button != null:
+		_apply_button_style(logout_confirm_return_button, "danger")
+	if logout_confirm_cancel_button != null:
+		_apply_button_style(logout_confirm_cancel_button)
 
 
 func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
@@ -653,8 +725,37 @@ func _on_notification_volume_changed(value: float) -> void:
 func _on_logout_button_pressed() -> void:
 	if logging_out or not visible or not _is_account_tab_active():
 		return
+	_show_logout_confirm_dialog()
+
+
+func _show_logout_confirm_dialog() -> void:
 	logout_confirmation_requested = true
-	logout_confirm_dialog.popup_centered()
+	if logout_confirm_dialog != null:
+		_position_logout_confirm_dialog()
+		logout_confirm_dialog.visible = true
+		logout_confirm_dialog.move_to_front()
+	if logout_confirm_return_button != null:
+		logout_confirm_return_button.grab_focus()
+
+
+func _position_logout_confirm_dialog() -> void:
+	if logout_confirm_dialog == null:
+		return
+
+	var popup_position := global_position + ((size - LOGOUT_CONFIRM_SIZE) * 0.5)
+	logout_confirm_dialog.position = popup_position
+	logout_confirm_dialog.size = LOGOUT_CONFIRM_SIZE
+	logout_confirm_dialog.custom_minimum_size = LOGOUT_CONFIRM_SIZE
+	logout_confirm_dialog.offset_left = popup_position.x
+	logout_confirm_dialog.offset_top = popup_position.y
+	logout_confirm_dialog.offset_right = popup_position.x + LOGOUT_CONFIRM_SIZE.x
+	logout_confirm_dialog.offset_bottom = popup_position.y + LOGOUT_CONFIRM_SIZE.y
+
+
+func _hide_logout_confirm_dialog() -> void:
+	logout_confirmation_requested = false
+	if logout_confirm_dialog != null:
+		logout_confirm_dialog.visible = false
 
 
 func _is_account_tab_active() -> bool:
@@ -797,11 +898,19 @@ func _logout_confirmed() -> void:
 	logging_out = true
 	logout_button.disabled = true
 	close_button.disabled = true
+	if logout_confirm_return_button != null:
+		logout_confirm_return_button.disabled = true
+	if logout_confirm_cancel_button != null:
+		logout_confirm_cancel_button.disabled = true
 	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		logging_out = false
 		logout_button.disabled = false
 		close_button.disabled = false
+		if logout_confirm_return_button != null:
+			logout_confirm_return_button.disabled = false
+		if logout_confirm_cancel_button != null:
+			logout_confirm_cancel_button.disabled = false
 		push_warning("Could not return to login screen: %s" % error_string(error))
 
 
