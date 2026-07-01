@@ -86,16 +86,23 @@ static func _get_stored_evs_payload(data: Dictionary) -> Dictionary:
 
 static func _get_origin_payload(data: Dictionary) -> Dictionary:
 	var origin_value: Variant = data.get("origin", {})
+	var origin: Dictionary = {}
 	if origin_value is Dictionary:
-		return (origin_value as Dictionary).duplicate(true)
+		origin = (origin_value as Dictionary).duplicate(true)
 
 	var location_name: String = _get_string_option(data, ["location", "caughtLocation", "caught_location", "metLocation", "met_location", "encounterArea", "encounter_area"])
-	if location_name == "":
-		return {}
+	if location_name != "" and str(origin.get("locationName", origin.get("location", ""))).strip_edges() == "":
+		origin["locationName"] = location_name
 
-	return {
-		"locationName": location_name,
-	}
+	var original_trainer_name := _get_string_option(data, ["originalTrainerName", "original_trainer_name", "otName", "ot_name"])
+	if original_trainer_name != "" and str(origin.get("originalTrainerName", origin.get("original_trainer_name", ""))).strip_edges() == "":
+		origin["originalTrainerName"] = original_trainer_name
+
+	var original_trainer_user_id := _get_int_option(data, ["originalTrainerUserId", "original_trainer_user_id", "originalOwnerUserId", "original_owner_user_id"])
+	if original_trainer_user_id > 0 and int(origin.get("originalTrainerUserId", origin.get("original_trainer_user_id", 0))) <= 0:
+		origin["originalTrainerUserId"] = original_trainer_user_id
+
+	return origin
 
 
 static func _get_origin_location(data: Dictionary) -> String:

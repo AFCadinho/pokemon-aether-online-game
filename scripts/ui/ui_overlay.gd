@@ -7825,7 +7825,7 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	info_grid.add_theme_constant_override("v_separation", 7)
 	info_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_content_stack.add_child(info_grid)
-	info_grid.add_child(_create_summary_field_card("Original Trainer", PlayerSave.player_name, Color("#9eb7d8"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card("Original Trainer", _get_pokemon_summary_original_trainer_text(pokemon), Color("#9eb7d8"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(
 		"Ability",
 		_get_summary_ability_display_name(pokemon.ability),
@@ -8063,6 +8063,30 @@ func _get_pokemon_summary_current_trainer_title_text(_pokemon: Pokemon) -> Strin
 	if trainer_name == "":
 		trainer_name = "Trainer"
 	return "%s's Pokemon" % trainer_name
+
+func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
+	var origin: Dictionary = pokemon.origin
+	var trainer_name := str(_get_first_dictionary_value(
+		origin,
+		["originalTrainerName", "original_trainer_name", "otName", "ot_name"],
+		""
+	)).strip_edges()
+	if trainer_name != "":
+		return trainer_name
+
+	var original_trainer_user_id := str(_get_first_dictionary_value(
+		origin,
+		["originalTrainerUserId", "original_trainer_user_id", "originalOwnerUserId", "original_owner_user_id"],
+		""
+	)).strip_edges()
+	if original_trainer_user_id != "":
+		var current_player_id := str(PlayerSave.player_id).strip_edges()
+		if current_player_id != "" and original_trainer_user_id == current_player_id:
+			return PlayerSave.player_name
+
+		return "Trainer #%s" % original_trainer_user_id
+
+	return "-"
 
 func _get_pokemon_summary_caught_date_text(pokemon: Pokemon) -> String:
 	var origin: Dictionary = pokemon.origin
