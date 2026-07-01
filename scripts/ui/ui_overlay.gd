@@ -11496,6 +11496,7 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	button.custom_minimum_size = Vector2(0, 58)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.tooltip_text = "%s%s" % [species_name, " - %s" % type_text if type_text != "" else ""]
 	button.pressed.connect(_on_pokedex_species_selected.bind(species_id))
 	button.add_theme_stylebox_override("normal", _make_button_style(Color("#07111ed8"), Color("#d6c78f44"), 3, 1))
