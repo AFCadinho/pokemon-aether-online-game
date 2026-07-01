@@ -4,6 +4,7 @@
 
 **Added**
 - Added Tiled `PA_Interactables` support for map-owned signs and other interactive objects.
+- Added Pokédex wild location entries with species rarity labels instead of raw encounter chances.
 
 **Fixed**
 - Fixed normal UI party slots resizing on hover while keeping the hover state visually clear.
