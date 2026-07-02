@@ -406,6 +406,9 @@ var evolution_prompt_review_total := 0
 var evolution_prompt_review_index := 0
 var dev_clear_menu_popup: PanelContainer
 var pvp_room_popup: PanelContainer
+var pvp_leaderboard_status_label: Label
+var pvp_leaderboard_list: VBoxContainer
+var pvp_leaderboard_refresh_button: Button
 var pvp_history_status_label: Label
 var pvp_history_list: VBoxContainer
 var pvp_history_refresh_button: Button
@@ -431,6 +434,7 @@ var pvp_queue_list_in_flight := false
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
 var pvp_queue_auto_open_in_flight := false
+var pvp_leaderboard_in_flight := false
 var pvp_history_in_flight := false
 var pvp_poll_in_flight := false
 var pvp_polling_active := false
@@ -3030,6 +3034,49 @@ func _setup_pvp_room_popup() -> void:
 	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
 	queue_actions.add_child(pvp_reconnect_battle_button)
 
+	var leaderboard_tab := VBoxContainer.new()
+	leaderboard_tab.name = "Leaderboard"
+	leaderboard_tab.add_theme_constant_override("separation", 10)
+	tabs.add_child(leaderboard_tab)
+
+	var leaderboard_header := HBoxContainer.new()
+	leaderboard_header.add_theme_constant_override("separation", 8)
+	leaderboard_tab.add_child(leaderboard_header)
+
+	pvp_leaderboard_status_label = Label.new()
+	pvp_leaderboard_status_label.text = "Ranked points"
+	pvp_leaderboard_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_leaderboard_status_label.add_theme_color_override("font_color", UI_TEXT)
+	leaderboard_header.add_child(pvp_leaderboard_status_label)
+
+	pvp_leaderboard_refresh_button = Button.new()
+	pvp_leaderboard_refresh_button.text = "Refresh"
+	pvp_leaderboard_refresh_button.custom_minimum_size = Vector2(92, 32)
+	pvp_leaderboard_refresh_button.focus_mode = Control.FOCUS_NONE
+	pvp_leaderboard_refresh_button.pressed.connect(_on_pvp_leaderboard_refresh_pressed)
+	leaderboard_header.add_child(pvp_leaderboard_refresh_button)
+
+	var leaderboard_columns := HBoxContainer.new()
+	leaderboard_columns.add_theme_constant_override("separation", 10)
+	leaderboard_tab.add_child(leaderboard_columns)
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("#", 46, HORIZONTAL_ALIGNMENT_CENTER))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Player", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Points", 88, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("W", 46, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("L", 46, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Games", 72, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Win %", 72, HORIZONTAL_ALIGNMENT_RIGHT))
+
+	var leaderboard_scroll := ScrollContainer.new()
+	leaderboard_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	leaderboard_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	leaderboard_tab.add_child(leaderboard_scroll)
+
+	pvp_leaderboard_list = VBoxContainer.new()
+	pvp_leaderboard_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_leaderboard_list.add_theme_constant_override("separation", 6)
+	leaderboard_scroll.add_child(pvp_leaderboard_list)
+
 	var history_tab := VBoxContainer.new()
 	history_tab.name = "Battle History"
 	history_tab.add_theme_constant_override("separation", 10)
@@ -3075,6 +3122,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
+	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
 	_apply_button_style(close_button)
 
@@ -14746,6 +14794,7 @@ func _on_pvp_button_pressed() -> void:
 	pvp_room_popup.visible = true
 	_activate_ui_panel(pvp_room_popup)
 	await _refresh_pvp_queue_list()
+	await _refresh_pvp_leaderboard()
 	await _refresh_pvp_match_history()
 
 func _hide_pvp_room_popup() -> void:
@@ -14757,6 +14806,7 @@ func _hide_pvp_room_popup() -> void:
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_list_in_flight = false
+	pvp_leaderboard_in_flight = false
 	pvp_history_in_flight = false
 	pvp_poll_elapsed = 0.0
 	pvp_room_popup.visible = false
@@ -14939,6 +14989,116 @@ func _on_pvp_queue_selected(index: int) -> void:
 
 func _on_pvp_history_refresh_pressed() -> void:
 	await _refresh_pvp_match_history()
+
+func _on_pvp_leaderboard_refresh_pressed() -> void:
+	await _refresh_pvp_leaderboard()
+
+func _refresh_pvp_leaderboard() -> void:
+	if pvp_leaderboard_in_flight:
+		return
+	pvp_leaderboard_in_flight = true
+	if pvp_leaderboard_refresh_button != null:
+		pvp_leaderboard_refresh_button.disabled = true
+	if pvp_leaderboard_status_label != null:
+		pvp_leaderboard_status_label.text = "Loading ranked points..."
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_pvp_leaderboard(request, 50, 0)
+	request.queue_free()
+	pvp_leaderboard_in_flight = false
+	if pvp_leaderboard_refresh_button != null:
+		pvp_leaderboard_refresh_button.disabled = false
+
+	if not bool(response.get("success", false)):
+		if pvp_leaderboard_status_label != null:
+			pvp_leaderboard_status_label.text = "Could not load leaderboard."
+		_render_pvp_leaderboard([])
+		return
+
+	var entries_value: Variant = response.get("entries", [])
+	var entries: Array = entries_value as Array if entries_value is Array else []
+	if pvp_leaderboard_status_label != null:
+		pvp_leaderboard_status_label.text = "Ranked points: Win +10, Loss -10"
+	_render_pvp_leaderboard(entries)
+
+func _render_pvp_leaderboard(entries: Array) -> void:
+	if pvp_leaderboard_list == null:
+		return
+	for child in pvp_leaderboard_list.get_children():
+		child.queue_free()
+	if entries.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "No ranked results yet."
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		pvp_leaderboard_list.add_child(empty_label)
+		return
+	for entry_value: Variant in entries:
+		if entry_value is Dictionary:
+			pvp_leaderboard_list.add_child(_create_pvp_leaderboard_row(entry_value as Dictionary))
+
+func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 46)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f88"), 4, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.add_child(row)
+
+	row.add_child(_create_pvp_leaderboard_value_label("#%d" % _pvp_history_variant_to_int(entry.get("rank", 0)), 46, HORIZONTAL_ALIGNMENT_CENTER, Color("#f5df9a")))
+	row.add_child(_create_pvp_leaderboard_value_label(_pvp_leaderboard_display_name(entry), 0, HORIZONTAL_ALIGNMENT_LEFT, UI_TEXT, true))
+	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("points", 0)), 88, HORIZONTAL_ALIGNMENT_RIGHT, Color("#65e38b")))
+	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("wins", 0)), 46, HORIZONTAL_ALIGNMENT_RIGHT))
+	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("losses", 0)), 46, HORIZONTAL_ALIGNMENT_RIGHT))
+	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("gamesPlayed", 0)), 72, HORIZONTAL_ALIGNMENT_RIGHT))
+	row.add_child(_create_pvp_leaderboard_value_label(_pvp_leaderboard_win_rate(entry.get("winRate", 0)), 72, HORIZONTAL_ALIGNMENT_RIGHT))
+	return panel
+
+func _create_pvp_leaderboard_header_label(text: String, width: float, alignment: HorizontalAlignment, expand: bool = false) -> Label:
+	var label := _create_pvp_leaderboard_value_label(text, width, alignment, UI_MUTED_TEXT, expand)
+	label.add_theme_font_size_override("font_size", 12)
+	return label
+
+func _create_pvp_leaderboard_value_label(
+	text: String,
+	width: float,
+	alignment: HorizontalAlignment,
+	color: Color = UI_TEXT,
+	expand: bool = false
+) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.horizontal_alignment = alignment
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	if width > 0.0:
+		label.custom_minimum_size = Vector2(width, 0)
+	if expand:
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_color_override("font_color", color)
+	return label
+
+func _pvp_leaderboard_display_name(entry: Dictionary) -> String:
+	var display_name := str(entry.get("displayName", "")).strip_edges()
+	if display_name != "":
+		return display_name
+	var username := str(entry.get("username", "")).strip_edges()
+	return username if username != "" else "Player"
+
+func _pvp_leaderboard_win_rate(value: Variant) -> String:
+	if typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT:
+		return "%.1f%%" % float(value)
+	var text := str(value).strip_edges()
+	if text.is_valid_float():
+		return "%.1f%%" % text.to_float()
+	return "0.0%"
 
 func _refresh_pvp_match_history() -> void:
 	if pvp_history_in_flight:
@@ -15160,12 +15320,9 @@ func _pvp_history_pokemon_fainted(pokemon_data: Dictionary) -> bool:
 
 func _pvp_history_outcome_summary(match: Dictionary, user_id: int) -> String:
 	var reason := _pvp_history_reason_label(match)
-	var seq := _pvp_history_seq_label(match.get("finalEventSeq", null))
 	var parts: Array[String] = []
 	if reason != "":
 		parts.append(reason)
-	if seq != "":
-		parts.append(seq)
 	return " · ".join(parts) if not parts.is_empty() else str(match.get("status", "PvP match")).capitalize()
 
 func _pvp_history_title(match: Dictionary, user_id: int) -> String:

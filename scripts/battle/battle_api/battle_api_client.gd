@@ -104,6 +104,15 @@ func leave_pvp_queue(request_node: HTTPRequest, queue_id: String) -> Dictionary:
 func get_pvp_queue_status(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/queues/status/me")
 
+func get_pvp_leaderboard(request_node: HTTPRequest, limit: int = 50, offset: int = 0) -> Dictionary:
+	return await send_get_request(
+		request_node,
+		"/account/pvp/leaderboard?limit=%d&offset=%d" % [
+			max(1, limit),
+			max(0, offset),
+		]
+	)
+
 func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0) -> Dictionary:
 	return await send_get_request(
 		request_node,
