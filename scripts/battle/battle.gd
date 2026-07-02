@@ -6426,10 +6426,11 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 		"pvp.opponent_disconnected":
 			log_message = "Opponent disconnected."
 		"pvp.reconnect_grace_started":
-			var deadline := str(message.get("reconnectDeadlineAt", "")).strip_edges()
-			log_message = "Reconnect grace started."
-			if deadline != "":
-				log_message += " Deadline: %s" % deadline
+			var grace_seconds := _get_int_from_variant(message.get("disconnectGraceSeconds", 0), 0)
+			if grace_seconds > 0:
+				log_message = "Opponent has %s seconds to reconnect." % grace_seconds
+			else:
+				log_message = "Waiting for opponent to reconnect."
 		"pvp.opponent_reconnected":
 			log_message = "Opponent reconnected."
 		_:
