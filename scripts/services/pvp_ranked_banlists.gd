@@ -108,6 +108,8 @@ static func _empty_metadata() -> Dictionary:
 	return {
 		"rulesetId": "",
 		"formatId": "",
+		"formatKey": "",
+		"formatName": "",
 		"version": "",
 		"banlistHash": "",
 		"updatedAt": "",
@@ -125,6 +127,8 @@ static func _metadata_from_response(response: Dictionary) -> Dictionary:
 	return {
 		"rulesetId": str(response.get("rulesetId", "")).strip_edges(),
 		"formatId": str(response.get("formatId", "")).strip_edges(),
+		"formatKey": str(response.get("formatKey", response.get("formatId", ""))).strip_edges(),
+		"formatName": str(response.get("formatName", response.get("formatId", ""))).strip_edges(),
 		"version": str(response.get("version", "")).strip_edges(),
 		"banlistHash": str(response.get("banlistHash", response.get("hash", ""))).strip_edges(),
 		"updatedAt": str(response.get("updatedAt", "")).strip_edges(),

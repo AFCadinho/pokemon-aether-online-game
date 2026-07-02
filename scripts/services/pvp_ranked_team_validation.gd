@@ -16,6 +16,7 @@ static func not_checked() -> Dictionary:
 		"success": false,
 		"valid": false,
 		"errors": [],
+		"issues": [],
 		"warnings": [],
 		"message": "Server validation has not run yet.",
 		"teamHash": "",
@@ -28,6 +29,7 @@ static func checking() -> Dictionary:
 		"success": false,
 		"valid": false,
 		"errors": [],
+		"issues": [],
 		"warnings": [],
 		"message": "Checking ranked team with server...",
 		"teamHash": "",
@@ -40,6 +42,7 @@ static func not_ranked() -> Dictionary:
 		"success": true,
 		"valid": true,
 		"errors": [],
+		"issues": [],
 		"warnings": [],
 		"message": "Server ranked validation is only required for ranked queues.",
 		"teamHash": "",
@@ -52,6 +55,7 @@ static func normalize_response(response: Dictionary) -> Dictionary:
 		"success": bool(response.get("success", false)),
 		"valid": false,
 		"errors": [],
+		"issues": [],
 		"warnings": _warning_messages(response.get("warnings", [])),
 		"message": "",
 		"teamHash": "",
@@ -61,12 +65,15 @@ static func normalize_response(response: Dictionary) -> Dictionary:
 	if not bool(response.get("success", false)):
 		normalized["message"] = _failure_message(response)
 		normalized["errors"] = [normalized["message"]]
+		normalized["issues"] = [{"message": normalized["message"]}]
 		return normalized
 
 	var valid := bool(response.get("valid", false))
-	var errors := _error_messages(response.get("errors", []))
+	var issues := _issue_details(response.get("errors", []))
+	var errors := _messages_from_issues(issues)
 	normalized["valid"] = valid
 	normalized["errors"] = errors
+	normalized["issues"] = issues
 	normalized["teamHash"] = _team_hash(response)
 	if valid:
 		normalized["state"] = STATE_VALID
@@ -75,6 +82,7 @@ static func normalize_response(response: Dictionary) -> Dictionary:
 		normalized["state"] = STATE_INVALID
 		normalized["message"] = "Team is not eligible."
 		normalized["errors"] = ["Team is not eligible for ranked queue."]
+		normalized["issues"] = [{"message": "Team is not eligible for ranked queue."}]
 	else:
 		normalized["state"] = STATE_INVALID
 		normalized["message"] = "Team is not eligible."
@@ -116,6 +124,20 @@ static func display_errors(result: Dictionary) -> Array[String]:
 	return errors
 
 
+static func display_issues(result: Dictionary) -> Array[Dictionary]:
+	var issues: Array[Dictionary] = []
+	var value: Variant = result.get("issues", [])
+	if value is Array:
+		for item: Variant in value as Array:
+			if item is Dictionary:
+				issues.append((item as Dictionary).duplicate(true))
+			else:
+				var text := str(item).strip_edges()
+				if text != "":
+					issues.append({"message": text})
+	return issues
+
+
 static func display_message(result: Dictionary) -> String:
 	var message := str(result.get("message", "")).strip_edges()
 	if message != "":
@@ -124,14 +146,33 @@ static func display_message(result: Dictionary) -> String:
 
 
 static func _error_messages(value: Variant) -> Array[String]:
+	return _messages_from_issues(_issue_details(value))
+
+
+static func _messages_from_issues(issues: Array[Dictionary]) -> Array[String]:
 	var messages: Array[String] = []
-	if not (value is Array):
-		return messages
-	for item: Variant in value as Array:
-		var message := _issue_message(item)
+	for issue: Dictionary in issues:
+		var message := _issue_message(issue)
 		if message != "":
 			messages.append(message)
 	return messages
+
+
+static func _issue_details(value: Variant) -> Array[Dictionary]:
+	var issues: Array[Dictionary] = []
+	if not (value is Array):
+		return issues
+	for item: Variant in value as Array:
+		if item is Dictionary:
+			var issue := (item as Dictionary).duplicate(true)
+			if not issue.has("message"):
+				issue["message"] = _issue_message(issue)
+			issues.append(issue)
+		else:
+			var message := str(item).strip_edges()
+			if message != "":
+				issues.append({"message": message})
+	return issues
 
 
 static func _warning_messages(value: Variant) -> Array[String]:

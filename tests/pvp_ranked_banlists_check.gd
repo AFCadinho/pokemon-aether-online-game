@@ -18,7 +18,8 @@ func _check_empty_response() -> void:
 	var result := Banlists.normalize_response({
 		"success": true,
 		"rulesetId": "ranked_v1",
-		"formatId": "gen9nationaldex",
+		"formatId": "aether-ou",
+		"formatName": "Aether OU",
 		"version": 0,
 		"banlistHash": "hash-1",
 		"updatedAt": null,
@@ -33,7 +34,8 @@ func _check_empty_response() -> void:
 	_check_equal(Banlists.category_bans(result, "pokemon").size(), 0, "empty pokemon bans")
 	_check_equal(Banlists.empty_message("pokemon"), "No banned Pokemon.", "empty pokemon message")
 	var metadata: Dictionary = result.get("metadata", {})
-	_check_equal(metadata.get("formatId", ""), "gen9nationaldex", "format metadata")
+	_check_equal(metadata.get("formatId", ""), "aether-ou", "format metadata")
+	_check_equal(metadata.get("formatName", ""), "Aether OU", "format name metadata")
 	_check_equal(metadata.get("rulesetId", ""), "ranked_v1", "ruleset metadata")
 	_check_equal(metadata.get("version", ""), "0", "version metadata")
 	_check_equal(metadata.get("banlistHash", ""), "hash-1", "hash metadata")
@@ -43,7 +45,8 @@ func _check_all_categories_response() -> void:
 	var result := Banlists.normalize_response({
 		"success": true,
 		"rulesetId": "ranked_v1",
-		"formatId": "gen9nationaldex",
+		"formatId": "aether-ou",
+		"formatName": "Aether OU",
 		"version": 2,
 		"hash": "legacy-hash",
 		"updatedAt": "2026-07-02T20:00:00Z",

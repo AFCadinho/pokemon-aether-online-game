@@ -111,26 +111,47 @@ func leave_pvp_queue(request_node: HTTPRequest, queue_id: String) -> Dictionary:
 func get_pvp_queue_status(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/queues/status/me")
 
-func get_pvp_leaderboard(request_node: HTTPRequest, limit: int = 50, offset: int = 0) -> Dictionary:
+func get_pvp_leaderboard(
+	request_node: HTTPRequest,
+	limit: int = 50,
+	offset: int = 0,
+	format_key: String = "",
+	scope: String = "all_time"
+) -> Dictionary:
+	var query := "/account/pvp/leaderboard?limit=%d&offset=%d" % [
+		max(1, limit),
+		max(0, offset),
+	]
+	var normalized_format_key := format_key.strip_edges()
+	if normalized_format_key != "":
+		query += "&formatKey=%s" % normalized_format_key.uri_encode()
+	var normalized_scope := scope.strip_edges()
+	if normalized_scope != "":
+		query += "&scope=%s" % normalized_scope.uri_encode()
 	return await send_get_request(
 		request_node,
-		"/account/pvp/leaderboard?limit=%d&offset=%d" % [
-			max(1, limit),
-			max(0, offset),
-		]
+		query
 	)
 
-func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0) -> Dictionary:
+func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0, format_key: String = "") -> Dictionary:
+	var query := "/account/pvp/matches/history/me?limit=%d&offset=%d" % [
+		max(1, limit),
+		max(0, offset),
+	]
+	var normalized_format_key := format_key.strip_edges()
+	if normalized_format_key != "":
+		query += "&formatKey=%s" % normalized_format_key.uri_encode()
 	return await send_get_request(
 		request_node,
-		"/account/pvp/matches/history/me?limit=%d&offset=%d" % [
-			max(1, limit),
-			max(0, offset),
-		]
+		query
 	)
 
-func get_pvp_ranked_banlists(request_node: HTTPRequest) -> Dictionary:
-	return await send_get_request(request_node, "/account/pvp/ranked/banlists")
+func get_pvp_ranked_banlists(request_node: HTTPRequest, format_key: String = "") -> Dictionary:
+	var query := "/account/pvp/ranked/banlists"
+	var normalized_format_key := format_key.strip_edges()
+	if normalized_format_key != "":
+		query += "?formatKey=%s" % normalized_format_key.uri_encode()
+	return await send_get_request(request_node, query)
 
 func get_active_pvp_match(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/matches/active")

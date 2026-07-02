@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+**Added**
+- Added the Ranked PvP Bans tab with tier-aware banlist metadata, collapsible searchable sections, and read-only player visibility.
+- Added Ranked PvP tier context for Aether OU across bans, leaderboard, and match history requests.
+- Added Ranked PvP leaderboard scopes for Daily, Weekly, Monthly, and All Time.
+- Added a placeholder Live tab for future live ranked PvP battle listings.
+- Added friendlist client implementation support, including friendlist popup scene metadata and social service resource metadata.
+
+**Changed**
+- Refined the Ranked PvP interface with styled tabs, draggable popup behavior, current-party team preview icons, Aether OU tier selection, and clearer General Information.
+- Team Validator now treats server validation as the visible source of truth and avoids duplicate Local/Server errors once server validation is available.
+- Ranked validation feedback now names affected slots and banned Pokemon, items, moves, abilities, and species clause failures more clearly.
+- Ranked banlist metadata now shows a compact Format and Last Updated summary.
+
+**Fixed**
+- Fixed ranked banlist parser and validation tests for malformed or empty server responses.
+
 ## 0.2.6 - 2026-07-01
 
 **Added**
