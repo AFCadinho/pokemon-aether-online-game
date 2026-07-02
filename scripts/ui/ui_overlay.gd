@@ -420,6 +420,10 @@ var pvp_join_room_button: Button
 var pvp_copy_code_button: Button
 var pvp_queue_status_label: Label
 var pvp_queue_select: OptionButton
+var pvp_mode_select: OptionButton
+var pvp_team_source_select: OptionButton
+var pvp_team_validator_status_label: Label
+var pvp_team_validator_list: VBoxContainer
 var pvp_join_queue_button: Button
 var pvp_leave_queue_button: Button
 var pvp_reconnect_battle_button: Button
@@ -440,6 +444,8 @@ var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
+var pvp_room_dragging := false
+var pvp_room_drag_offset := Vector2.ZERO
 var staff_tools_popup: PanelContainer
 var staff_impersonate_button: Button
 var staff_impersonate_popup: PanelContainer
@@ -2888,8 +2894,10 @@ func _setup_pvp_room_popup() -> void:
 	var title := Label.new()
 	title.text = "Ladder"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
+	title.gui_input.connect(_on_pvp_room_header_gui_input)
 	layout.add_child(title)
 
 	var tabs := TabContainer.new()
@@ -2898,16 +2906,16 @@ func _setup_pvp_room_popup() -> void:
 	tabs.add_theme_font_size_override("font_size", 14)
 	layout.add_child(tabs)
 
-	var search_tab := HBoxContainer.new()
-	search_tab.name = "Play"
-	search_tab.add_theme_constant_override("separation", 14)
-	tabs.add_child(search_tab)
+	var play_tab := HBoxContainer.new()
+	play_tab.name = "Play"
+	play_tab.add_theme_constant_override("separation", 14)
+	tabs.add_child(play_tab)
 
 	var ladder_sidebar := PanelContainer.new()
-	ladder_sidebar.custom_minimum_size = Vector2(270, 0)
+	ladder_sidebar.custom_minimum_size = Vector2(340, 0)
 	ladder_sidebar.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	ladder_sidebar.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#315070"), 6, 1))
-	search_tab.add_child(ladder_sidebar)
+	play_tab.add_child(ladder_sidebar)
 
 	var sidebar_margin := MarginContainer.new()
 	sidebar_margin.add_theme_constant_override("margin_left", 12)
@@ -2916,40 +2924,188 @@ func _setup_pvp_room_popup() -> void:
 	sidebar_margin.add_theme_constant_override("margin_bottom", 10)
 	ladder_sidebar.add_child(sidebar_margin)
 
-	var battle_tab := VBoxContainer.new()
-	battle_tab.add_theme_constant_override("separation", 9)
-	sidebar_margin.add_child(battle_tab)
+	var play_controls := VBoxContainer.new()
+	play_controls.add_theme_constant_override("separation", 10)
+	sidebar_margin.add_child(play_controls)
 
-	var ladder_main := VBoxContainer.new()
-	ladder_main.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	ladder_main.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	ladder_main.add_theme_constant_override("separation", 10)
-	search_tab.add_child(ladder_main)
+	play_controls.add_child(_create_pvp_section_title("Team"))
 
-	ladder_main.add_child(_create_pvp_ruleset_panel())
+	var team_source_row := HBoxContainer.new()
+	team_source_row.add_theme_constant_override("separation", 8)
+	play_controls.add_child(team_source_row)
+	team_source_row.add_child(_create_pvp_field_label("Team Source", 104))
+
+	pvp_team_source_select = OptionButton.new()
+	pvp_team_source_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_team_source_select.focus_mode = Control.FOCUS_NONE
+	pvp_team_source_select.add_item("Current Party")
+	pvp_team_source_select.set_item_metadata(0, "party")
+	pvp_team_source_select.add_item("Preset Team")
+	pvp_team_source_select.set_item_metadata(1, "preset")
+	pvp_team_source_select.set_item_disabled(1, true)
+	pvp_team_source_select.item_selected.connect(_on_pvp_team_source_selected)
+	team_source_row.add_child(pvp_team_source_select)
+
+	var team_note := Label.new()
+	team_note.text = "Preset teams are reserved for a later team builder. Queue battles use your current party now."
+	team_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	team_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	play_controls.add_child(team_note)
+
+	play_controls.add_child(HSeparator.new())
+	play_controls.add_child(_create_pvp_section_title("Matchmaking"))
+
+	var mode_row := HBoxContainer.new()
+	mode_row.add_theme_constant_override("separation", 8)
+	play_controls.add_child(mode_row)
+	mode_row.add_child(_create_pvp_field_label("Battle Type", 104))
+
+	pvp_mode_select = OptionButton.new()
+	pvp_mode_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_mode_select.focus_mode = Control.FOCUS_NONE
+	pvp_mode_select.add_item("Casual")
+	pvp_mode_select.set_item_metadata(0, "casual")
+	pvp_mode_select.add_item("Ranked")
+	pvp_mode_select.set_item_metadata(1, "ranked")
+	pvp_mode_select.item_selected.connect(_on_pvp_mode_selected)
+	mode_row.add_child(pvp_mode_select)
+
+	var queue_select_row := HBoxContainer.new()
+	queue_select_row.add_theme_constant_override("separation", 8)
+	play_controls.add_child(queue_select_row)
+	queue_select_row.add_child(_create_pvp_field_label("Tier", 104))
+
+	pvp_queue_select = OptionButton.new()
+	pvp_queue_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_queue_select.focus_mode = Control.FOCUS_NONE
+	pvp_queue_select.item_selected.connect(_on_pvp_queue_selected)
+	queue_select_row.add_child(pvp_queue_select)
+	_populate_pvp_queue_select([
+		{"id": "casual_queue_v1", "name": "Casual Queue", "mode": "casual"},
+	])
+
+	pvp_queue_status_label = Label.new()
+	pvp_queue_status_label.text = "Queue Status: idle"
+	pvp_queue_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_queue_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	play_controls.add_child(pvp_queue_status_label)
+
+	var queue_actions := HBoxContainer.new()
+	queue_actions.add_theme_constant_override("separation", 8)
+	play_controls.add_child(queue_actions)
+
+	pvp_join_queue_button = Button.new()
+	pvp_join_queue_button.text = "Join Queue"
+	pvp_join_queue_button.custom_minimum_size = Vector2(106, 34)
+	pvp_join_queue_button.focus_mode = Control.FOCUS_NONE
+	pvp_join_queue_button.pressed.connect(_on_pvp_join_queue_pressed)
+	queue_actions.add_child(pvp_join_queue_button)
+
+	pvp_leave_queue_button = Button.new()
+	pvp_leave_queue_button.text = "Leave Queue"
+	pvp_leave_queue_button.custom_minimum_size = Vector2(110, 34)
+	pvp_leave_queue_button.focus_mode = Control.FOCUS_NONE
+	pvp_leave_queue_button.disabled = true
+	pvp_leave_queue_button.pressed.connect(_on_pvp_leave_queue_pressed)
+	queue_actions.add_child(pvp_leave_queue_button)
+
+	pvp_reconnect_battle_button = Button.new()
+	pvp_reconnect_battle_button.text = "Reconnect"
+	pvp_reconnect_battle_button.custom_minimum_size = Vector2(110, 34)
+	pvp_reconnect_battle_button.focus_mode = Control.FOCUS_NONE
+	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
+	queue_actions.add_child(pvp_reconnect_battle_button)
+
+	var play_main := PanelContainer.new()
+	play_main.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	play_main.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	play_main.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#8aa0b8aa"), 6, 1))
+	play_tab.add_child(play_main)
+
+	var play_main_margin := MarginContainer.new()
+	play_main_margin.add_theme_constant_override("margin_left", 12)
+	play_main_margin.add_theme_constant_override("margin_top", 10)
+	play_main_margin.add_theme_constant_override("margin_right", 12)
+	play_main_margin.add_theme_constant_override("margin_bottom", 10)
+	play_main.add_child(play_main_margin)
+
+	var play_main_layout := VBoxContainer.new()
+	play_main_layout.add_theme_constant_override("separation", 10)
+	play_main_margin.add_child(play_main_layout)
+
+	play_main_layout.add_child(_create_pvp_section_title("General Information"))
+	play_main_layout.add_child(_create_pvp_info_row("Shared Foundation", "Casual and ranked queue battles use the same persisted PvP match, ownership, timers, reconnect and settlement systems."))
+	play_main_layout.add_child(_create_pvp_info_row("Ranked Points", "The current leaderboard uses a simple provisional model: win +10, loss -10. Full MMR can replace this later."))
+	play_main_layout.add_child(_create_pvp_info_row("Room Codes", "Direct room-code battles are still available in their own tab."))
+
+	play_main_layout.add_child(HSeparator.new())
+	play_main_layout.add_child(_create_pvp_section_title("Team Validator"))
+
+	pvp_team_validator_status_label = Label.new()
+	pvp_team_validator_status_label.text = "Checking current party..."
+	pvp_team_validator_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	play_main_layout.add_child(pvp_team_validator_status_label)
+
+	pvp_team_validator_list = VBoxContainer.new()
+	pvp_team_validator_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_team_validator_list.add_theme_constant_override("separation", 6)
+	play_main_layout.add_child(pvp_team_validator_list)
+
+	var validator_spacer := Control.new()
+	validator_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	play_main_layout.add_child(validator_spacer)
+
+	var room_tab := VBoxContainer.new()
+	room_tab.name = "Room Code"
+	room_tab.add_theme_constant_override("separation", 10)
+	tabs.add_child(room_tab)
+
+	var room_panel := PanelContainer.new()
+	room_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	room_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#315070"), 6, 1))
+	room_tab.add_child(room_panel)
+
+	var room_margin := MarginContainer.new()
+	room_margin.add_theme_constant_override("margin_left", 12)
+	room_margin.add_theme_constant_override("margin_top", 10)
+	room_margin.add_theme_constant_override("margin_right", 12)
+	room_margin.add_theme_constant_override("margin_bottom", 10)
+	room_panel.add_child(room_margin)
+
+	var room_layout := VBoxContainer.new()
+	room_layout.add_theme_constant_override("separation", 9)
+	room_margin.add_child(room_layout)
 
 	pvp_room_code_label = Label.new()
 	pvp_room_code_label.text = "Room Code"
 	pvp_room_code_label.add_theme_font_size_override("font_size", 16)
 	pvp_room_code_label.add_theme_color_override("font_color", Color("#f5df9a"))
-	battle_tab.add_child(pvp_room_code_label)
+	room_layout.add_child(pvp_room_code_label)
 
 	pvp_room_status_label = Label.new()
 	pvp_room_status_label.text = "Ready."
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	battle_tab.add_child(pvp_room_status_label)
+	room_layout.add_child(pvp_room_status_label)
+
+	var room_note_label := Label.new()
+	room_note_label.text = "Use this for direct casual battles with another player. Matchmaking does not need a room code."
+	room_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	room_note_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	room_layout.add_child(room_note_label)
 
 	pvp_room_code_input = LineEdit.new()
 	pvp_room_code_input.placeholder_text = "Room code"
 	pvp_room_code_input.max_length = 12
 	pvp_room_code_input.custom_minimum_size = Vector2(0, 34)
-	battle_tab.add_child(pvp_room_code_input)
+	room_layout.add_child(pvp_room_code_input)
 	_apply_line_edit_style(pvp_room_code_input)
 
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
-	battle_tab.add_child(actions)
+	room_layout.add_child(actions)
 
 	pvp_create_room_button = Button.new()
 	pvp_create_room_button.text = "Create Room"
@@ -2973,66 +3129,15 @@ func _setup_pvp_room_popup() -> void:
 	pvp_copy_code_button.pressed.connect(_on_pvp_copy_code_pressed)
 	actions.add_child(pvp_copy_code_button)
 
-	var queue_separator := HSeparator.new()
-	battle_tab.add_child(queue_separator)
+	var room_spacer := Control.new()
+	room_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_layout.add_child(room_spacer)
 
-	var queue_title := Label.new()
-	queue_title.text = "Matchmaking"
-	queue_title.add_theme_font_size_override("font_size", 16)
-	queue_title.add_theme_color_override("font_color", Color("#f5df9a"))
-	battle_tab.add_child(queue_title)
-
-	var queue_select_row := HBoxContainer.new()
-	queue_select_row.add_theme_constant_override("separation", 8)
-	battle_tab.add_child(queue_select_row)
-
-	var queue_select_label := Label.new()
-	queue_select_label.text = "Tier"
-	queue_select_label.custom_minimum_size = Vector2(56, 0)
-	queue_select_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	queue_select_label.add_theme_color_override("font_color", UI_TEXT)
-	queue_select_row.add_child(queue_select_label)
-
-	pvp_queue_select = OptionButton.new()
-	pvp_queue_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_queue_select.focus_mode = Control.FOCUS_NONE
-	pvp_queue_select.item_selected.connect(_on_pvp_queue_selected)
-	queue_select_row.add_child(pvp_queue_select)
-	_populate_pvp_queue_select([
-		{"id": "casual_queue_v1", "name": "Casual Queue", "mode": "casual"},
-	])
-
-	pvp_queue_status_label = Label.new()
-	pvp_queue_status_label.text = "Queue Status: idle"
-	pvp_queue_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_queue_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	battle_tab.add_child(pvp_queue_status_label)
-
-	var queue_actions := HBoxContainer.new()
-	queue_actions.add_theme_constant_override("separation", 8)
-	battle_tab.add_child(queue_actions)
-
-	pvp_join_queue_button = Button.new()
-	pvp_join_queue_button.text = "Join Queue"
-	pvp_join_queue_button.custom_minimum_size = Vector2(106, 34)
-	pvp_join_queue_button.focus_mode = Control.FOCUS_NONE
-	pvp_join_queue_button.pressed.connect(_on_pvp_join_queue_pressed)
-	queue_actions.add_child(pvp_join_queue_button)
-
-	pvp_leave_queue_button = Button.new()
-	pvp_leave_queue_button.text = "Leave Queue"
-	pvp_leave_queue_button.custom_minimum_size = Vector2(110, 34)
-	pvp_leave_queue_button.focus_mode = Control.FOCUS_NONE
-	pvp_leave_queue_button.disabled = true
-	pvp_leave_queue_button.pressed.connect(_on_pvp_leave_queue_pressed)
-	queue_actions.add_child(pvp_leave_queue_button)
-
-	pvp_reconnect_battle_button = Button.new()
-	pvp_reconnect_battle_button.text = "Reconnect"
-	pvp_reconnect_battle_button.custom_minimum_size = Vector2(110, 34)
-	pvp_reconnect_battle_button.focus_mode = Control.FOCUS_NONE
-	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
-	queue_actions.add_child(pvp_reconnect_battle_button)
+	var rules_tab := VBoxContainer.new()
+	rules_tab.name = "Rules"
+	rules_tab.add_theme_constant_override("separation", 10)
+	tabs.add_child(rules_tab)
+	rules_tab.add_child(_create_pvp_ruleset_panel())
 
 	var leaderboard_tab := VBoxContainer.new()
 	leaderboard_tab.name = "Leaderboard"
@@ -3205,6 +3310,67 @@ func _create_pvp_ruleset_row(title_text: String, body_text: String) -> Control:
 	body.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(body)
 
+	return row
+
+func _create_pvp_section_title(title_text: String) -> Label:
+	var label := Label.new()
+	label.text = title_text
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", Color("#f5df9a"))
+	return label
+
+func _create_pvp_field_label(label_text: String, width: float) -> Label:
+	var label := Label.new()
+	label.text = label_text
+	label.custom_minimum_size = Vector2(width, 0)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", UI_TEXT)
+	return label
+
+func _create_pvp_info_row(title_text: String, body_text: String) -> Control:
+	var row := PanelContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_stylebox_override("panel", _make_panel_style(Color("#111926bb"), Color("#506982aa"), 4, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	row.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 2)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_color_override("font_color", Color("#cfe8ff"))
+	layout.add_child(title)
+
+	var body := Label.new()
+	body.text = body_text
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(body)
+	return row
+
+func _create_pvp_validator_row(status_text: String, message: String, color: Color) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+
+	var status := Label.new()
+	status.text = status_text
+	status.custom_minimum_size = Vector2(58, 0)
+	status.add_theme_color_override("font_color", color)
+	row.add_child(status)
+
+	var label := Label.new()
+	label.text = message
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
 	return row
 
 func _setup_dev_add_item_tools() -> void:
@@ -4186,6 +4352,10 @@ func _input(event: InputEvent) -> void:
 
 	if pokedex_dragging:
 		_handle_pokedex_drag_input(event)
+		return
+
+	if pvp_room_dragging:
+		_handle_pvp_room_drag_input(event)
 		return
 
 	if hotkey_sidebar_dragging:
@@ -14793,9 +14963,157 @@ func _on_pvp_button_pressed() -> void:
 		return
 	pvp_room_popup.visible = true
 	_activate_ui_panel(pvp_room_popup)
+	_refresh_pvp_team_validator()
 	await _refresh_pvp_queue_list()
+	_refresh_pvp_team_validator()
 	await _refresh_pvp_leaderboard()
 	await _refresh_pvp_match_history()
+
+func _on_pvp_room_header_gui_input(event: InputEvent) -> void:
+	if pvp_room_popup == null:
+		return
+	if not (event is InputEventMouseButton):
+		return
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if mouse_event.pressed:
+		pvp_room_dragging = true
+		pvp_room_drag_offset = mouse_event.global_position - pvp_room_popup.global_position
+		_activate_ui_panel(pvp_room_popup)
+	else:
+		pvp_room_dragging = false
+	get_viewport().set_input_as_handled()
+
+func _handle_pvp_room_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			pvp_room_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+	if not (event is InputEventMouseMotion):
+		return
+	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+	_move_overlay_popup_to_global_position(pvp_room_popup, motion_event.global_position - pvp_room_drag_offset)
+	get_viewport().set_input_as_handled()
+
+func _on_pvp_team_source_selected(_index: int) -> void:
+	_refresh_pvp_team_validator()
+
+func _on_pvp_mode_selected(index: int) -> void:
+	if pvp_mode_select == null:
+		return
+	if pvp_battle_starting or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "":
+		_select_pvp_mode_by_queue_id(pvp_active_queue_id)
+		return
+	if index < 0 or index >= pvp_mode_select.item_count:
+		return
+	var mode: String = str(pvp_mode_select.get_item_metadata(index)).strip_edges().to_lower()
+	if mode == "":
+		return
+	_select_first_pvp_queue_for_mode(mode)
+	_refresh_pvp_team_validator()
+
+func _select_first_pvp_queue_for_mode(mode: String) -> bool:
+	var normalized_mode: String = mode.strip_edges().to_lower()
+	if normalized_mode == "":
+		return false
+	for queue: Dictionary in pvp_available_queues:
+		var queue_mode: String = str(queue.get("mode", "")).strip_edges().to_lower()
+		if queue_mode != normalized_mode:
+			continue
+		var queue_id: String = str(queue.get("id", "")).strip_edges()
+		if queue_id == "":
+			continue
+		pvp_active_queue_id = queue_id
+		_select_pvp_queue_by_id(queue_id)
+		_set_pvp_queue_status("Queue Status: idle")
+		_refresh_pvp_queue_buttons("idle")
+		return true
+	return false
+
+func _select_pvp_mode_by_queue_id(queue_id: String) -> void:
+	if pvp_mode_select == null:
+		return
+	var queue_mode: String = _get_pvp_queue_mode(queue_id)
+	if queue_mode == "":
+		return
+	for index in range(pvp_mode_select.item_count):
+		var metadata: String = str(pvp_mode_select.get_item_metadata(index)).strip_edges().to_lower()
+		if metadata == queue_mode:
+			pvp_mode_select.select(index)
+			return
+
+func _get_pvp_queue_mode(queue_id: String) -> String:
+	var normalized_queue_id: String = queue_id.strip_edges()
+	for queue: Dictionary in pvp_available_queues:
+		if str(queue.get("id", "")).strip_edges() == normalized_queue_id:
+			return str(queue.get("mode", "")).strip_edges().to_lower()
+	if normalized_queue_id.contains("ranked"):
+		return "ranked"
+	return "casual"
+
+func _refresh_pvp_team_validator() -> void:
+	if pvp_team_validator_list == null:
+		return
+	for child in pvp_team_validator_list.get_children():
+		child.queue_free()
+
+	var issues: Array[String] = []
+	var warnings: Array[String] = []
+	var party_size: int = PlayerSave.party.size()
+	if party_size <= 0:
+		issues.append("Your current party is empty.")
+	elif party_size > MAX_PARTY_SIZE:
+		issues.append("Your party has more than %d Pokemon." % MAX_PARTY_SIZE)
+	else:
+		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "%d Pokemon selected from your current party." % party_size, Color("#62e36e")))
+
+	var species_counts: Dictionary = {}
+	for pokemon: Pokemon in PlayerSave.party:
+		var species_key: String = _pvp_team_species_clause_key(pokemon.species)
+		if species_key == "":
+			continue
+		species_counts[species_key] = int(species_counts.get(species_key, 0)) + 1
+
+	for species_key: String in species_counts.keys():
+		var count: int = int(species_counts[species_key])
+		if count > 1:
+			issues.append("Species Clause: %s appears %d times." % [_format_identifier_display_name(species_key), count])
+
+	if pvp_team_source_select != null and pvp_team_source_select.selected == 1:
+		issues.append("Preset teams are not available yet. Select Current Party.")
+
+	if pvp_active_queue_id == "":
+		warnings.append("No queue is selected.")
+	else:
+		var mode: String = _get_pvp_queue_mode(pvp_active_queue_id)
+		var mode_text: String = mode.capitalize() if mode != "" else "Selected"
+		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "%s queue selected." % mode_text, Color("#62e36e")))
+
+	if issues.is_empty():
+		if pvp_team_validator_status_label != null:
+			pvp_team_validator_status_label.text = "Eligible for the selected queue."
+			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
+	else:
+		if pvp_team_validator_status_label != null:
+			pvp_team_validator_status_label.text = "Team is not eligible."
+			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
+
+	for issue: String in issues:
+		pvp_team_validator_list.add_child(_create_pvp_validator_row("Issue", issue, Color("#ff7979")))
+	for warning: String in warnings:
+		pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
+	if issues.is_empty() and warnings.is_empty():
+		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "No client-side validation issues found. Server rules remain authoritative.", Color("#62e36e")))
+
+func _pvp_team_species_clause_key(species: String) -> String:
+	var normalized: String = species.strip_edges().to_lower()
+	if normalized == "":
+		return ""
+	normalized = normalized.replace("_", "-").replace(" ", "-")
+	return normalized
 
 func _hide_pvp_room_popup() -> void:
 	if pvp_room_popup == null:
@@ -14808,6 +15126,7 @@ func _hide_pvp_room_popup() -> void:
 	pvp_queue_list_in_flight = false
 	pvp_leaderboard_in_flight = false
 	pvp_history_in_flight = false
+	pvp_room_dragging = false
 	pvp_poll_elapsed = 0.0
 	pvp_room_popup.visible = false
 	_deactivate_ui_panel(pvp_room_popup)
@@ -14960,6 +15279,8 @@ func _populate_pvp_queue_select(queues: Array[Dictionary]) -> void:
 	if not _select_pvp_queue_by_id(pvp_active_queue_id):
 		pvp_active_queue_id = str(pvp_queue_select.get_item_metadata(0)).strip_edges()
 		pvp_queue_select.select(0)
+	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
+	_refresh_pvp_team_validator()
 
 func _select_pvp_queue_by_id(queue_id: String) -> bool:
 	if pvp_queue_select == null:
@@ -14984,8 +15305,10 @@ func _on_pvp_queue_selected(index: int) -> void:
 	if queue_id == "":
 		return
 	pvp_active_queue_id = queue_id
+	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
 	_set_pvp_queue_status("Queue Status: idle")
 	_refresh_pvp_queue_buttons("idle")
+	_refresh_pvp_team_validator()
 
 func _on_pvp_history_refresh_pressed() -> void:
 	await _refresh_pvp_match_history()
@@ -15707,6 +16030,8 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 	if pvp_active_queue_id == "":
 		pvp_active_queue_id = "casual_queue_v1"
 	_select_pvp_queue_by_id(pvp_active_queue_id)
+	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
+	_refresh_pvp_team_validator()
 
 	if status == "matched" and pvp_active_queue_match_id != "":
 		pvp_queue_polling_active = false
@@ -15727,6 +16052,8 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 	pvp_leave_queue_button.disabled = pvp_battle_starting or normalized_status != "waiting"
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
+	if pvp_mode_select != null:
+		pvp_mode_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
 	if pvp_reconnect_battle_button != null:
 		pvp_reconnect_battle_button.disabled = pvp_battle_starting
 
@@ -15856,6 +16183,10 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 		pvp_leave_queue_button.disabled = is_busy or pvp_active_queue_entry_id == "" or pvp_active_queue_match_id != ""
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != ""
+	if pvp_mode_select != null:
+		pvp_mode_select.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != ""
+	if pvp_team_source_select != null:
+		pvp_team_source_select.disabled = is_busy
 	if pvp_reconnect_battle_button != null:
 		pvp_reconnect_battle_button.disabled = is_busy
 	if message != "":
