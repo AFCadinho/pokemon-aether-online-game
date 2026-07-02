@@ -2857,17 +2857,17 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_popup = PanelContainer.new()
 	pvp_room_popup.name = "PvpRoomPopup"
 	pvp_room_popup.visible = false
-	pvp_room_popup.custom_minimum_size = Vector2(640, 520)
+	pvp_room_popup.custom_minimum_size = Vector2(980, 620)
 	pvp_room_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	pvp_room_popup.z_index = UI_BASE_Z_INDEX
 	pvp_room_popup.anchor_left = 0.5
 	pvp_room_popup.anchor_top = 0.5
 	pvp_room_popup.anchor_right = 0.5
 	pvp_room_popup.anchor_bottom = 0.5
-	pvp_room_popup.offset_left = -320
-	pvp_room_popup.offset_top = -260
-	pvp_room_popup.offset_right = 320
-	pvp_room_popup.offset_bottom = 260
+	pvp_room_popup.offset_left = -490
+	pvp_room_popup.offset_top = -310
+	pvp_room_popup.offset_right = 490
+	pvp_room_popup.offset_bottom = 310
 	pvp_room_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	root_control.add_child(pvp_room_popup)
 
@@ -2879,20 +2879,15 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 8)
 	margin_container.add_child(layout)
 
 	var title := Label.new()
-	title.text = "PvP Center"
-	title.add_theme_font_size_override("font_size", 20)
+	title.text = "Ladder"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(title)
-
-	var description := Label.new()
-	description.text = "Queue, room battles, and recent results."
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description.add_theme_color_override("font_color", UI_TEXT)
-	layout.add_child(description)
 
 	var tabs := TabContainer.new()
 	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2900,14 +2895,39 @@ func _setup_pvp_room_popup() -> void:
 	tabs.add_theme_font_size_override("font_size", 14)
 	layout.add_child(tabs)
 
+	var search_tab := HBoxContainer.new()
+	search_tab.name = "Search"
+	search_tab.add_theme_constant_override("separation", 14)
+	tabs.add_child(search_tab)
+
+	var ladder_sidebar := PanelContainer.new()
+	ladder_sidebar.custom_minimum_size = Vector2(270, 0)
+	ladder_sidebar.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	ladder_sidebar.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#315070"), 6, 1))
+	search_tab.add_child(ladder_sidebar)
+
+	var sidebar_margin := MarginContainer.new()
+	sidebar_margin.add_theme_constant_override("margin_left", 12)
+	sidebar_margin.add_theme_constant_override("margin_top", 10)
+	sidebar_margin.add_theme_constant_override("margin_right", 12)
+	sidebar_margin.add_theme_constant_override("margin_bottom", 10)
+	ladder_sidebar.add_child(sidebar_margin)
+
 	var battle_tab := VBoxContainer.new()
-	battle_tab.name = "Battle"
-	battle_tab.add_theme_constant_override("separation", 10)
-	tabs.add_child(battle_tab)
+	battle_tab.add_theme_constant_override("separation", 9)
+	sidebar_margin.add_child(battle_tab)
+
+	var ladder_main := VBoxContainer.new()
+	ladder_main.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ladder_main.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	ladder_main.add_theme_constant_override("separation", 10)
+	search_tab.add_child(ladder_main)
+
+	ladder_main.add_child(_create_pvp_ruleset_panel())
 
 	pvp_room_code_label = Label.new()
-	pvp_room_code_label.text = "Room Code: -"
-	pvp_room_code_label.add_theme_font_size_override("font_size", 18)
+	pvp_room_code_label.text = "Room Code"
+	pvp_room_code_label.add_theme_font_size_override("font_size", 16)
 	pvp_room_code_label.add_theme_color_override("font_color", Color("#f5df9a"))
 	battle_tab.add_child(pvp_room_code_label)
 
@@ -2954,7 +2974,7 @@ func _setup_pvp_room_popup() -> void:
 	battle_tab.add_child(queue_separator)
 
 	var queue_title := Label.new()
-	queue_title.text = "Queue"
+	queue_title.text = "Matchmaking"
 	queue_title.add_theme_font_size_override("font_size", 16)
 	queue_title.add_theme_color_override("font_color", Color("#f5df9a"))
 	battle_tab.add_child(queue_title)
@@ -2964,7 +2984,7 @@ func _setup_pvp_room_popup() -> void:
 	battle_tab.add_child(queue_select_row)
 
 	var queue_select_label := Label.new()
-	queue_select_label.text = "Mode"
+	queue_select_label.text = "Tier"
 	queue_select_label.custom_minimum_size = Vector2(56, 0)
 	queue_select_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	queue_select_label.add_theme_color_override("font_color", UI_TEXT)
@@ -3020,7 +3040,7 @@ func _setup_pvp_room_popup() -> void:
 	queue_actions.add_child(pvp_reconnect_battle_button)
 
 	var history_tab := VBoxContainer.new()
-	history_tab.name = "History"
+	history_tab.name = "Battle History"
 	history_tab.add_theme_constant_override("separation", 10)
 	tabs.add_child(history_tab)
 
@@ -3077,6 +3097,77 @@ func _setup_pvp_room_popup() -> void:
 	pvp_poll_request = HTTPRequest.new()
 	pvp_poll_request.request_completed.connect(_on_pvp_room_poll_completed)
 	add_child(pvp_poll_request)
+
+func _create_pvp_ruleset_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#8aa0b8aa"), 6, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	title.text = "Ruleset"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_color_override("font_color", Color("#f5df9a"))
+	layout.add_child(title)
+
+	var rules: Array[Dictionary] = [
+		{"title": "Format", "body": "Gen 9 National Dex. Queue selection decides casual or ranked processing."},
+		{"title": "Species", "body": "Prevents having 2 or more of the same Pokemon on a team."},
+		{"title": "OHKO", "body": "Prevents one-hit KO moves from being used."},
+		{"title": "Evasion", "body": "Prevents moves that boost evasion from being used."},
+		{"title": "Timers", "body": "Server-authoritative timers are enforced by the PvP foundation."},
+		{"title": "Disconnects", "body": "Reconnect grace is tracked server-side; expired grace can end the match."},
+	]
+	for rule: Dictionary in rules:
+		layout.add_child(_create_pvp_ruleset_row(str(rule["title"]), str(rule["body"])))
+
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(spacer)
+
+	return panel
+
+func _create_pvp_ruleset_row(title_text: String, body_text: String) -> Control:
+	var row := PanelContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_stylebox_override("panel", _make_panel_style(Color("#111926bb"), Color("#c7ced9aa"), 4, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	row.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 2)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_color_override("font_color", Color("#cfe8ff"))
+	layout.add_child(title)
+
+	var body := Label.new()
+	body.text = body_text
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(body)
+
+	return row
 
 func _setup_dev_add_item_tools() -> void:
 	var dev_actions_container := dev_clear_party_button.get_parent()
