@@ -110,6 +110,43 @@ func update_status_message(status_message: String) -> Dictionary:
 	return _socials_result_from_response(response)
 
 
+func send_private_message(recipient_username: String, body: String) -> Dictionary:
+	if not _is_authenticated():
+		return _auth_error()
+
+	var normalized_recipient: String = recipient_username.strip_edges()
+	var normalized_body: String = body.strip_edges()
+	if normalized_recipient == "":
+		return _validation_error("Recipient username is required.")
+	if normalized_body == "":
+		return _validation_error("Message body is required.")
+	if normalized_body.length() > 300:
+		return _validation_error("Message body must be 300 characters or fewer.")
+
+	var gateway := _gateway_api_config()
+	if gateway == null:
+		return _validation_error("Gateway API config is unavailable.")
+
+	var base_url: String = str(gateway.call("get_base_url"))
+	var response: Dictionary = await _request_json(
+		base_url + SOCIALS_ENDPOINT + "/private-messages",
+		HTTPClient.METHOD_POST,
+		gateway.call("get_json_headers"),
+		JSON.stringify({
+			"recipientUsername": normalized_recipient,
+			"body": normalized_body,
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var response_body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"message": _dictionary_from_value(response_body.get("message", {})),
+	}
+
+
 func _friend_request_action(friendship_id: int, action: String) -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()
@@ -249,11 +286,15 @@ func _validation_error(message: String) -> Dictionary:
 
 
 func _is_authenticated() -> bool:
+	if not is_inside_tree():
+		return false
 	var auth_service := get_node_or_null("/root/AuthService")
 	return auth_service != null and auth_service.has_method("is_authenticated") and bool(auth_service.call("is_authenticated"))
 
 
 func _gateway_api_config() -> Object:
+	if not is_inside_tree():
+		return null
 	return get_node_or_null("/root/GatewayApiConfig")
 
 

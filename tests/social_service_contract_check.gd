@@ -12,6 +12,7 @@ func _init() -> void:
 	_check_overview_response_passthrough()
 	_check_action_response_overview_unwrap()
 	_check_error_detail_extraction()
+	await _check_private_message_requires_auth()
 
 	service.free()
 	quit(1 if failed else 0)
@@ -61,6 +62,12 @@ func _check_error_detail_extraction() -> void:
 		"user not found",
 		"dictionary detail message"
 	)
+
+
+func _check_private_message_requires_auth() -> void:
+	var result: Dictionary = await service.send_private_message("misty", "Hey")
+	_check_equal(result.get("success", true), false, "pm auth success")
+	_check_equal(result.get("error", ""), "Not authenticated.", "pm auth error")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

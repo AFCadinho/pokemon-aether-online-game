@@ -3,6 +3,7 @@ extends PanelContainer
 class_name FriendlistPopup
 
 signal closed
+signal private_message_requested(user: Dictionary)
 
 const POPUP_SIZE := Vector2(720, 560)
 
@@ -238,8 +239,8 @@ func _friend_row(user: Dictionary) -> Control:
 
 	var pm_button := Button.new()
 	pm_button.text = "PM"
-	pm_button.disabled = true
-	pm_button.tooltip_text = "PM UI comes in Phase 6."
+	pm_button.tooltip_text = "Open private message."
+	pm_button.pressed.connect(_on_private_message_pressed.bind(user.duplicate(true)))
 	row.add_child(pm_button)
 
 	var remove_button := Button.new()
@@ -346,6 +347,10 @@ func _blocked_row(user: Dictionary) -> Control:
 
 func _on_refresh_pressed() -> void:
 	_load_socials_async()
+
+
+func _on_private_message_pressed(user: Dictionary) -> void:
+	private_message_requested.emit(user)
 
 
 func _on_add_friend_pressed() -> void:
