@@ -413,6 +413,7 @@ var pvp_create_room_button: Button
 var pvp_join_room_button: Button
 var pvp_copy_code_button: Button
 var pvp_queue_status_label: Label
+var pvp_queue_select: OptionButton
 var pvp_join_queue_button: Button
 var pvp_leave_queue_button: Button
 var pvp_open_queue_battle_button: Button
@@ -421,8 +422,10 @@ var pvp_poll_timer: Timer
 var pvp_poll_request: HTTPRequest
 var pvp_active_room_code := ""
 var pvp_active_queue_id := "casual_queue_v1"
+var pvp_available_queues: Array[Dictionary] = []
 var pvp_active_queue_entry_id := ""
 var pvp_active_queue_match_id := ""
+var pvp_queue_list_in_flight := false
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
 var pvp_queue_auto_open_in_flight := false
@@ -2940,6 +2943,26 @@ func _setup_pvp_room_popup() -> void:
 	queue_title.add_theme_font_size_override("font_size", 16)
 	queue_title.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(queue_title)
+
+	var queue_select_row := HBoxContainer.new()
+	queue_select_row.add_theme_constant_override("separation", 8)
+	layout.add_child(queue_select_row)
+
+	var queue_select_label := Label.new()
+	queue_select_label.text = "Mode"
+	queue_select_label.custom_minimum_size = Vector2(56, 0)
+	queue_select_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	queue_select_label.add_theme_color_override("font_color", UI_TEXT)
+	queue_select_row.add_child(queue_select_label)
+
+	pvp_queue_select = OptionButton.new()
+	pvp_queue_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_queue_select.focus_mode = Control.FOCUS_NONE
+	pvp_queue_select.item_selected.connect(_on_pvp_queue_selected)
+	queue_select_row.add_child(pvp_queue_select)
+	_populate_pvp_queue_select([
+		{"id": "casual_queue_v1", "name": "Casual Queue", "mode": "casual"},
+	])
 
 	pvp_queue_status_label = Label.new()
 	pvp_queue_status_label.text = "Queue Status: idle"
@@ -14593,6 +14616,7 @@ func _on_pvp_button_pressed() -> void:
 		return
 	pvp_room_popup.visible = true
 	_activate_ui_panel(pvp_room_popup)
+	await _refresh_pvp_queue_list()
 
 func _hide_pvp_room_popup() -> void:
 	if pvp_room_popup == null:
@@ -14602,6 +14626,7 @@ func _hide_pvp_room_popup() -> void:
 	pvp_polling_active = false
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
+	pvp_queue_list_in_flight = false
 	pvp_poll_elapsed = 0.0
 	pvp_room_popup.visible = false
 	_deactivate_ui_panel(pvp_room_popup)
@@ -14692,6 +14717,94 @@ func _on_pvp_join_queue_pressed() -> void:
 		await _open_pvp_queue_match(true)
 	else:
 		_start_pvp_queue_polling()
+
+func _refresh_pvp_queue_list() -> void:
+	if pvp_queue_list_in_flight or pvp_battle_starting:
+		return
+	pvp_queue_list_in_flight = true
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_pvp_queues(request)
+	request.queue_free()
+	pvp_queue_list_in_flight = false
+
+	if not bool(response.get("success", false)):
+		if pvp_available_queues.is_empty():
+			_populate_pvp_queue_select([
+				{"id": "casual_queue_v1", "name": "Casual Queue", "mode": "casual"},
+			])
+		return
+
+	var queues_value: Variant = response.get("queues", [])
+	if not (queues_value is Array):
+		return
+
+	var queues: Array[Dictionary] = []
+	for item: Variant in queues_value as Array:
+		if not (item is Dictionary):
+			continue
+		var queue: Dictionary = item as Dictionary
+		if str(queue.get("status", "")).strip_edges().to_lower() != "active":
+			continue
+		var queue_id := str(queue.get("id", "")).strip_edges()
+		if queue_id == "":
+			continue
+		queues.append(queue.duplicate(true))
+
+	if queues.is_empty():
+		return
+	_populate_pvp_queue_select(queues)
+
+func _populate_pvp_queue_select(queues: Array[Dictionary]) -> void:
+	pvp_available_queues = queues
+	if pvp_queue_select == null:
+		return
+
+	pvp_queue_select.clear()
+	for queue: Dictionary in pvp_available_queues:
+		var queue_id := str(queue.get("id", "")).strip_edges()
+		if queue_id == "":
+			continue
+		var queue_name := str(queue.get("name", queue_id)).strip_edges()
+		var queue_mode := str(queue.get("mode", "")).strip_edges()
+		var label := queue_name
+		if queue_mode != "":
+			label = "%s (%s)" % [queue_name, queue_mode.capitalize()]
+		pvp_queue_select.add_item(label)
+		pvp_queue_select.set_item_metadata(pvp_queue_select.item_count - 1, queue_id)
+
+	if pvp_queue_select.item_count == 0:
+		pvp_queue_select.add_item("Casual Queue")
+		pvp_queue_select.set_item_metadata(0, "casual_queue_v1")
+
+	if not _select_pvp_queue_by_id(pvp_active_queue_id):
+		pvp_active_queue_id = str(pvp_queue_select.get_item_metadata(0)).strip_edges()
+		pvp_queue_select.select(0)
+
+func _select_pvp_queue_by_id(queue_id: String) -> bool:
+	if pvp_queue_select == null:
+		return false
+	var normalized_queue_id := queue_id.strip_edges()
+	for index in range(pvp_queue_select.item_count):
+		var metadata_value: Variant = pvp_queue_select.get_item_metadata(index)
+		if str(metadata_value).strip_edges() == normalized_queue_id:
+			pvp_queue_select.select(index)
+			return true
+	return false
+
+func _on_pvp_queue_selected(index: int) -> void:
+	if pvp_queue_select == null:
+		return
+	if pvp_battle_starting or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "":
+		_select_pvp_queue_by_id(pvp_active_queue_id)
+		return
+	if index < 0 or index >= pvp_queue_select.item_count:
+		return
+	var queue_id := str(pvp_queue_select.get_item_metadata(index)).strip_edges()
+	if queue_id == "":
+		return
+	pvp_active_queue_id = queue_id
+	_set_pvp_queue_status("Queue Status: idle")
+	_refresh_pvp_queue_buttons("idle")
 
 func _on_pvp_leave_queue_pressed() -> void:
 	if pvp_battle_starting or pvp_active_queue_id == "":
@@ -14890,6 +15003,7 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 	pvp_active_queue_match_id = str(entry.get("matchId", "")).strip_edges()
 	if pvp_active_queue_id == "":
 		pvp_active_queue_id = "casual_queue_v1"
+	_select_pvp_queue_by_id(pvp_active_queue_id)
 
 	if status == "matched" and pvp_active_queue_match_id != "":
 		pvp_queue_polling_active = false
@@ -14909,6 +15023,8 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
 	pvp_leave_queue_button.disabled = pvp_battle_starting or normalized_status != "waiting"
 	pvp_open_queue_battle_button.disabled = pvp_battle_starting or normalized_status != "matched" or pvp_active_queue_match_id == ""
+	if pvp_queue_select != null:
+		pvp_queue_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
 	if pvp_reconnect_battle_button != null:
 		pvp_reconnect_battle_button.disabled = pvp_battle_starting
 
@@ -15032,6 +15148,8 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 		pvp_leave_queue_button.disabled = is_busy or pvp_active_queue_entry_id == "" or pvp_active_queue_match_id != ""
 	if pvp_open_queue_battle_button != null:
 		pvp_open_queue_battle_button.disabled = is_busy or pvp_active_queue_match_id == ""
+	if pvp_queue_select != null:
+		pvp_queue_select.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != ""
 	if pvp_reconnect_battle_button != null:
 		pvp_reconnect_battle_button.disabled = is_busy
 	if message != "":
