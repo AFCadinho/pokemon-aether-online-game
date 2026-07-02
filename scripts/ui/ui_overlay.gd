@@ -15150,7 +15150,7 @@ func _pvp_history_pokemon_species(pokemon_data: Dictionary) -> String:
 func _pvp_history_pokemon_fainted(pokemon_data: Dictionary) -> bool:
 	if bool(pokemon_data.get("fainted", false)):
 		return true
-	var hp_value := pokemon_data.get("hp", null)
+	var hp_value: Variant = pokemon_data.get("hp", null)
 	if hp_value == null:
 		return false
 	if typeof(hp_value) == TYPE_INT or typeof(hp_value) == TYPE_FLOAT:
