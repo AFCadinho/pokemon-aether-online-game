@@ -300,6 +300,9 @@ func _process_packets() -> void:
 		if message_type == "pvp.phase_update":
 			battle_update_received.emit(message)
 			continue
+		if message_type == "pvp.opponent_disconnected" or message_type == "pvp.opponent_reconnected" or message_type == "pvp.reconnect_grace_started":
+			battle_update_received.emit(message)
+			continue
 		if message_type == "pvp.error":
 			var request_id := str(message.get("requestId", ""))
 			if request_id != "":

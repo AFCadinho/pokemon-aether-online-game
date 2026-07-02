@@ -6371,6 +6371,9 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 			return
 
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if _apply_pvp_connection_log_event(message_type, message):
+		return
+
 	var is_snapshot_message := message_type == "pvp.snapshot"
 	if is_snapshot_message:
 		var snapshot_response: Dictionary = _response_from_pvp_realtime_message(message)
@@ -6416,6 +6419,25 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		)
 	if _should_drain_idle_pvp_realtime_updates():
 		_drain_idle_pvp_realtime_updates.call_deferred()
+
+func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:
+	var log_message := ""
+	match message_type:
+		"pvp.opponent_disconnected":
+			log_message = "Opponent disconnected."
+		"pvp.reconnect_grace_started":
+			var deadline := str(message.get("reconnectDeadlineAt", "")).strip_edges()
+			log_message = "Reconnect grace started."
+			if deadline != "":
+				log_message += " Deadline: %s" % deadline
+		"pvp.opponent_reconnected":
+			log_message = "Opponent reconnected."
+		_:
+			return false
+
+	_add_battle_log_message(log_message)
+	current_action_panel.set_message(log_message)
+	return true
 
 func _apply_pvp_phase_update(message: Dictionary) -> void:
 	_trace_pvp_flow("phase_update.received", {}, "message=%s" % _describe_pvp_realtime_message(message))
