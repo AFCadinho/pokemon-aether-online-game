@@ -15658,13 +15658,19 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 		pvp_battle_starting = false
 		return
 
+	var popup_was_visible := pvp_room_popup != null and pvp_room_popup.visible
+	if popup_was_visible:
+		_hide_pvp_room_popup()
+
 	var started: bool = await world.start_pvp_battle_from_response(response)
 	if not started:
+		if popup_was_visible and pvp_room_popup != null:
+			pvp_room_popup.visible = true
+			_activate_ui_panel(pvp_room_popup)
 		_set_pvp_status("Could not start PvP battle.")
 		pvp_battle_starting = false
 		return
 
-	_hide_pvp_room_popup()
 	pvp_active_room_code = ""
 	pvp_active_queue_entry_id = ""
 	pvp_active_queue_match_id = ""
