@@ -26,6 +26,7 @@ const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
 const CHAT_TAB_GENERAL := "general"
 const CHAT_TAB_TRADE := "trade"
 const CHAT_TAB_SYSTEM := "system"
+const CHAT_TAB_PM := "pm"
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
 const CHAT_CHANNEL_GLOBAL := "global"
@@ -37,6 +38,7 @@ const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
+const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const APPEARANCE_CATEGORIES := [
@@ -299,6 +301,7 @@ enum DevPokemonPopupMode {
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/CloseButton
+var friendlist_popup: FriendlistPopup
 @onready var mail_popup: PanelContainer = $Control/MailPopup
 @onready var mail_compose_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/ComposeButton
 @onready var mail_close_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/CloseButton
@@ -470,6 +473,16 @@ var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
 var pending_chat_pokemon_attachments: Array[Dictionary] = []
 var chat_pokemon_attachment_buttons: Array[Button] = []
+var pm_tab_button: Button
+var pm_chat_container: HBoxContainer
+var pm_conversation_list: VBoxContainer
+var pm_message_scroll: ScrollContainer
+var pm_message_list: VBoxContainer
+var pm_empty_label: Label
+var pm_conversations_by_user_id: Dictionary = {}
+var active_pm_user_id: int = 0
+var pm_unread_counts_by_user_id: Dictionary = {}
+var pm_total_unread_count: int = 0
 var hotkey_sidebar_dragging := false
 var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
@@ -709,6 +722,8 @@ func _ready() -> void:
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
 	if not ChatRealtimeService.mail_received.is_connected(_on_realtime_mail_received):
 		ChatRealtimeService.mail_received.connect(_on_realtime_mail_received)
+	if not ChatRealtimeService.private_message_received.is_connected(_on_private_message_received):
+		ChatRealtimeService.private_message_received.connect(_on_private_message_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
 	ChatRealtimeService.connect_chat.call_deferred()
@@ -720,6 +735,7 @@ func _ready() -> void:
 	general_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GENERAL))
 	trade_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_TRADE))
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
+	_setup_pm_chat_ui()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
@@ -11128,6 +11144,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": pokedex_popup, "close": Callable(self, "_hide_pokedex_popup")},
 		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
+		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
@@ -11449,6 +11466,182 @@ func _set_control_tree_mouse_filter(node: Node, mouse_filter_value: int) -> void
 	for child: Node in node.get_children():
 		_set_control_tree_mouse_filter(child, mouse_filter_value)
 
+func _setup_pm_chat_ui() -> void:
+	if pm_tab_button != null:
+		return
+
+	pm_tab_button = Button.new()
+	pm_tab_button.custom_minimum_size = Vector2(70, 28)
+	pm_tab_button.text = "PM"
+	pm_tab_button.focus_mode = Control.FOCUS_NONE
+	pm_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_PM))
+	$Control/ChatTabsPanel/TabRow.add_child(pm_tab_button)
+	_apply_button_style(pm_tab_button, "primary")
+
+	pm_chat_container = HBoxContainer.new()
+	pm_chat_container.visible = false
+	pm_chat_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_chat_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_chat_container.add_theme_constant_override("separation", 8)
+
+	var conversation_scroll := ScrollContainer.new()
+	conversation_scroll.custom_minimum_size = Vector2(150, 0)
+	conversation_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_conversation_list = VBoxContainer.new()
+	pm_conversation_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_conversation_list.add_theme_constant_override("separation", 4)
+	conversation_scroll.add_child(pm_conversation_list)
+	pm_chat_container.add_child(conversation_scroll)
+
+	pm_message_scroll = ScrollContainer.new()
+	pm_message_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_message_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_message_list = VBoxContainer.new()
+	pm_message_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_message_list.add_theme_constant_override("separation", 4)
+	pm_message_scroll.add_child(pm_message_list)
+	pm_chat_container.add_child(pm_message_scroll)
+
+	var chat_vbox := $Control/ChatPanel/MarginContainer/VBoxContainer
+	chat_vbox.add_child(pm_chat_container)
+	chat_vbox.move_child(pm_chat_container, message_scroll.get_index() + 1)
+	_render_pm_conversation_list()
+	_render_active_pm_conversation()
+
+func open_private_message_conversation(user: Dictionary) -> void:
+	var user_id: int = _user_id_from_state(user)
+	if user_id <= 0:
+		_add_chat_message("Could not open PM conversation: missing user id.")
+		return
+
+	_ensure_pm_conversation(user)
+	active_chat_tab = CHAT_TAB_PM
+	active_pm_user_id = user_id
+	_clear_pm_unread(user_id)
+	_apply_chat_tab_state()
+	chat_input.grab_focus()
+
+func _ensure_pm_conversation(user: Dictionary) -> Dictionary:
+	var user_id: int = _user_id_from_state(user)
+	if user_id <= 0:
+		return {}
+	var conversation: Dictionary = pm_conversations_by_user_id.get(user_id, {})
+	if conversation.is_empty():
+		conversation = {
+			"user": _normalize_pm_user(user),
+			"messages": [],
+		}
+		pm_conversations_by_user_id[user_id] = conversation
+	else:
+		conversation["user"] = _merge_pm_user(_dictionary_from_value(conversation.get("user", {})), user)
+	return conversation
+
+func _render_pm_conversation_list() -> void:
+	if pm_conversation_list == null:
+		return
+	_clear_children(pm_conversation_list)
+	if pm_conversations_by_user_id.is_empty():
+		pm_conversation_list.add_child(_pm_empty_label("No PMs yet."))
+		return
+
+	var user_ids: Array = pm_conversations_by_user_id.keys()
+	user_ids.sort()
+	for user_id_value: Variant in user_ids:
+		var user_id: int = int(user_id_value)
+		var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
+		var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+		var unread: int = int(pm_unread_counts_by_user_id.get(user_id, 0))
+		var button := Button.new()
+		button.text = _pm_conversation_title(user, unread)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.disabled = user_id == active_pm_user_id
+		button.pressed.connect(_on_pm_conversation_selected.bind(user_id))
+		_apply_button_style(button, "primary")
+		pm_conversation_list.add_child(button)
+
+func _render_active_pm_conversation() -> void:
+	if pm_message_list == null:
+		return
+	_clear_children(pm_message_list)
+	if active_pm_user_id <= 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
+		pm_message_list.add_child(_pm_empty_label("Select a PM conversation."))
+		return
+
+	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
+	var messages: Array = _array_from_variant(conversation.get("messages", []))
+	if messages.is_empty():
+		pm_message_list.add_child(_pm_empty_label("No messages yet."))
+		return
+	for message_value: Variant in messages:
+		if message_value is Dictionary:
+			pm_message_list.add_child(_create_pm_message_row(message_value as Dictionary))
+	_scroll_pm_to_bottom.call_deferred()
+
+func _create_pm_message_row(message: Dictionary) -> Control:
+	var entry := RichTextLabel.new()
+	entry.bbcode_enabled = true
+	entry.fit_content = true
+	entry.scroll_active = false
+	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var outgoing: bool = bool(message.get("outgoing", false))
+	var label := "You" if outgoing else str(message.get("displayName", message.get("username", "Trainer")))
+	var name_color := "#7fd6ff" if outgoing else CHAT_DEFAULT_NAME_COLOR
+	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
+		name_color,
+		_escape_bbcode(label),
+		CHAT_SEPARATOR_COLOR,
+		CHAT_MESSAGE_COLOR,
+		_escape_bbcode(str(message.get("body", ""))),
+	])
+	return entry
+
+func _pm_empty_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.modulate = Color(0.75, 0.75, 0.75)
+	return label
+
+func _pm_conversation_title(user: Dictionary, unread: int) -> String:
+	var title := str(user.get("displayName", user.get("username", "Trainer"))).strip_edges()
+	if title == "":
+		title = str(user.get("username", "Trainer"))
+	if unread > 0:
+		return "%s (%s)" % [title, unread]
+	return title
+
+func _on_pm_conversation_selected(user_id: int) -> void:
+	active_pm_user_id = user_id
+	_clear_pm_unread(user_id)
+	_apply_chat_tab_state()
+	chat_input.grab_focus()
+
+func _clear_pm_unread(user_id: int) -> void:
+	if user_id <= 0:
+		return
+	pm_unread_counts_by_user_id.erase(user_id)
+	_recalculate_pm_total_unread()
+
+func _recalculate_pm_total_unread() -> void:
+	pm_total_unread_count = 0
+	for unread_value: Variant in pm_unread_counts_by_user_id.values():
+		pm_total_unread_count += max(int(unread_value), 0)
+
+func _refresh_pm_tab_label() -> void:
+	if pm_tab_button == null:
+		return
+	pm_tab_button.text = "PM (%s)" % pm_total_unread_count if pm_total_unread_count > 0 else "PM"
+
+func _scroll_pm_to_bottom() -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	if not is_inside_tree() or pm_message_scroll == null:
+		return
+	var vertical_scroll_bar: VScrollBar = pm_message_scroll.get_v_scroll_bar()
+	if vertical_scroll_bar != null:
+		pm_message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
+
 func _get_party_slot_index_at_position(global_position: Vector2) -> int:
 	for slot_index in range(party_slots.size()):
 		var slot := party_slots[slot_index] as Control
@@ -11484,12 +11677,26 @@ func _apply_chat_tab_state() -> void:
 	general_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if general_active else CHAT_MESSAGE_COLOR))
 	trade_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_TRADE else CHAT_MESSAGE_COLOR))
 	system_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_SYSTEM else CHAT_MESSAGE_COLOR))
+	if pm_tab_button != null:
+		pm_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_PM else CHAT_MESSAGE_COLOR))
 	chat_input.editable = input_active
-	chat_input.placeholder_text = "Trade chat has a 2 minute cooldown" if active_chat_tab == CHAT_TAB_TRADE else ("" if input_active else "System messages only")
+	if active_chat_tab == CHAT_TAB_PM:
+		chat_input.placeholder_text = "Select a PM conversation" if active_pm_user_id <= 0 else "Private message"
+	elif active_chat_tab == CHAT_TAB_TRADE:
+		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
+	else:
+		chat_input.placeholder_text = "" if input_active else "System messages only"
 	send_button.disabled = not input_active
 	if not input_active:
 		chat_input.release_focus()
+	if message_scroll != null:
+		message_scroll.visible = active_chat_tab != CHAT_TAB_PM
+	if pm_chat_container != null:
+		pm_chat_container.visible = active_chat_tab == CHAT_TAB_PM
 	_refresh_chat_message_visibility()
+	_render_pm_conversation_list()
+	_render_active_pm_conversation()
+	_refresh_pm_tab_label()
 	_scroll_chat_to_bottom.call_deferred()
 
 func _refresh_chat_message_visibility() -> void:
@@ -11509,6 +11716,12 @@ func _submit_chat_input_deferred() -> void:
 
 func _submit_chat_input_async() -> void:
 	var text := chat_input.text.strip_edges()
+	if active_chat_tab == CHAT_TAB_PM:
+		await _submit_pm_input_async(text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
+		return
+
 	if text.to_lower() == "/team":
 		await _share_party_to_chat()
 		chat_submit_in_progress = false
@@ -11561,6 +11774,66 @@ func _get_active_chat_channel() -> String:
 	if active_chat_tab == CHAT_TAB_TRADE:
 		return CHAT_CHANNEL_TRADE
 	return CHAT_CHANNEL_GLOBAL
+
+func _submit_pm_input_async(text: String) -> void:
+	if active_pm_user_id <= 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
+		_show_pm_empty_state("Select a PM conversation first.")
+		return
+	if text == "":
+		return
+	if text.length() > 300:
+		text = text.substr(0, 300)
+
+	var target_pm_user_id: int = active_pm_user_id
+	var target_body: String = text
+	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(target_pm_user_id, {}))
+	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+	var target_username: String = str(user.get("username", "")).strip_edges()
+	if target_username == "":
+		_add_pm_notice(target_pm_user_id, "Could not send PM: missing username.")
+		return
+	var sender_username: String = str(AuthService.current_user.get("username", "you"))
+	var sender_display_name: String = AuthService.get_display_name()
+
+	chat_input.clear()
+	var result: Dictionary = await SocialService.send_private_message(target_username, target_body)
+	if not bool(result.get("success", false)):
+		_add_pm_notice(target_pm_user_id, str(result.get("error", "Private message could not be sent.")))
+		return
+
+	var message: Dictionary = _dictionary_from_value(result.get("message", {}))
+	_append_pm_message(target_pm_user_id, {
+		"outgoing": true,
+		"body": str(message.get("body", target_body)),
+		"sentAt": str(message.get("sentAt", "")),
+		"username": sender_username,
+		"displayName": sender_display_name,
+	})
+	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == target_pm_user_id:
+		_render_active_pm_conversation()
+	_render_pm_conversation_list()
+
+func _add_pm_notice(user_id: int, text: String) -> void:
+	if user_id <= 0:
+		_show_pm_empty_state(text)
+		return
+	_append_pm_message(user_id, {
+		"outgoing": false,
+		"body": text,
+		"username": "system",
+		"displayName": "SYSTEM",
+	})
+	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == user_id:
+		_render_active_pm_conversation()
+	else:
+		_add_chat_message(text)
+
+func _show_pm_empty_state(text: String) -> void:
+	if active_chat_tab != CHAT_TAB_PM or pm_message_list == null:
+		_add_chat_message(text)
+		return
+	_clear_children(pm_message_list)
+	pm_message_list.add_child(_pm_empty_label(text))
 
 func _keep_chat_input_focused() -> void:
 	_restore_chat_input_focus.call_deferred()
@@ -14062,7 +14335,32 @@ func _hide_socials_menu() -> void:
 	_deactivate_ui_panel(socials_menu)
 
 func _on_socials_friend_list_button_pressed() -> void:
-	_add_chat_message("Friend list is not implemented yet.")
+	_hide_socials_menu()
+	_open_friendlist_popup()
+
+func _open_friendlist_popup() -> void:
+	if friendlist_popup == null:
+		friendlist_popup = FRIENDLIST_POPUP_SCENE.instantiate() as FriendlistPopup
+		$Control.add_child(friendlist_popup)
+		if not friendlist_popup.closed.is_connected(_on_friendlist_popup_closed):
+			friendlist_popup.closed.connect(_on_friendlist_popup_closed)
+		if not friendlist_popup.private_message_requested.is_connected(_on_friendlist_private_message_requested):
+			friendlist_popup.private_message_requested.connect(_on_friendlist_private_message_requested)
+
+	friendlist_popup.open()
+	_activate_ui_panel(friendlist_popup)
+
+func _hide_friendlist_popup() -> void:
+	if friendlist_popup == null:
+		return
+	friendlist_popup.close()
+
+func _on_friendlist_popup_closed() -> void:
+	if friendlist_popup != null:
+		_deactivate_ui_panel(friendlist_popup)
+
+func _on_friendlist_private_message_requested(user: Dictionary) -> void:
+	open_private_message_conversation(user)
 
 func _on_socials_mail_button_pressed() -> void:
 	_hide_socials_menu()
@@ -15075,10 +15373,21 @@ func _mail_dictionary_from_variant(value: Variant) -> Dictionary:
 		return value
 	return {}
 
+func _dictionary_from_value(value: Variant) -> Dictionary:
+	if value is Dictionary:
+		return value
+	return {}
+
 func _array_from_variant(value: Variant) -> Array:
 	if value is Array:
 		return value as Array
 	return []
+
+func _clear_children(container: Node) -> void:
+	if container == null:
+		return
+	for child: Node in container.get_children():
+		child.queue_free()
 
 func _on_guild_button_pressed() -> void:
 	_add_chat_message("Guild is not implemented yet.")
@@ -16685,6 +16994,82 @@ func _on_realtime_mail_received(mail_id: int) -> void:
 		await _load_mailbox()
 	else:
 		await _refresh_mail_attention_from_inbox()
+
+func _on_private_message_received(message: Dictionary) -> void:
+	var sender: Dictionary = _dictionary_from_value(message.get("sender", {}))
+	var sender_id: int = _user_id_from_state(sender)
+	if sender_id <= 0:
+		return
+
+	_ensure_pm_conversation(sender)
+	_append_pm_message(sender_id, {
+		"outgoing": false,
+		"body": str(message.get("body", "")),
+		"sentAt": str(message.get("sentAt", "")),
+		"username": str(sender.get("username", "")),
+		"displayName": str(sender.get("displayName", sender.get("username", "Trainer"))),
+	})
+
+	var conversation_active: bool = active_chat_tab == CHAT_TAB_PM and active_pm_user_id == sender_id
+	if not conversation_active:
+		pm_unread_counts_by_user_id[sender_id] = int(pm_unread_counts_by_user_id.get(sender_id, 0)) + 1
+		_recalculate_pm_total_unread()
+	else:
+		_clear_pm_unread(sender_id)
+
+	_render_pm_conversation_list()
+	if active_chat_tab == CHAT_TAB_PM:
+		_render_active_pm_conversation()
+	_refresh_pm_tab_label()
+
+
+func _append_pm_message(user_id: int, message: Dictionary) -> void:
+	if user_id <= 0:
+		return
+	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
+	if conversation.is_empty():
+		return
+	var messages: Array = _array_from_variant(conversation.get("messages", []))
+	messages.append(message)
+	conversation["messages"] = messages
+	pm_conversations_by_user_id[user_id] = conversation
+
+
+func _user_id_from_state(user: Dictionary) -> int:
+	for key: String in ["userId", "id", "user_id"]:
+		var value: Variant = user.get(key, 0)
+		var text := str(value).strip_edges()
+		if text.is_valid_int():
+			return int(text)
+	return 0
+
+
+func _normalize_pm_user(user: Dictionary) -> Dictionary:
+	var user_id: int = _user_id_from_state(user)
+	return {
+		"userId": user_id,
+		"id": user_id,
+		"username": str(user.get("username", "")).strip_edges(),
+		"displayName": str(user.get("displayName", user.get("username", ""))).strip_edges(),
+	}
+
+
+func _merge_pm_user(existing: Dictionary, user: Dictionary) -> Dictionary:
+	var merged := existing.duplicate(true)
+	var normalized := _normalize_pm_user(user)
+	for key: String in normalized.keys():
+		var value: Variant = normalized.get(key)
+		if key in ["userId", "id"]:
+			if int(value) > 0:
+				merged[key] = value
+			elif not merged.has(key):
+				merged[key] = value
+			continue
+		if str(value).strip_edges() != "":
+			merged[key] = value
+		elif not merged.has(key):
+			merged[key] = value
+	return merged
 
 
 func _add_user_chat_message(user: Dictionary, display_name: String, text: String, channel: String = CHAT_CHANNEL_GLOBAL, pokemon_attachments: Array[Dictionary] = []) -> void:
