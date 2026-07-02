@@ -4726,6 +4726,46 @@ func _add_battle_log_message(message: String) -> void:
 	if mini_battle_feed != null:
 		mini_battle_feed.add_message(message)
 
+func _restore_battle_log_from_snapshot(response: Dictionary) -> void:
+	var log_value: Variant = response.get("log", [])
+	if not (log_value is Array):
+		return
+
+	battle_log_panel.clear_log()
+	if mini_battle_feed != null:
+		mini_battle_feed.clear()
+	event_renderer.reset_battle_log_player_gap()
+
+	for log_entry: Variant in log_value as Array:
+		var line := str(log_entry).strip_edges()
+		if line == "":
+			continue
+
+		var turn_number := _parse_battle_log_turn_header(line)
+		if turn_number > 0:
+			event_renderer.add_turn_header(turn_number)
+			continue
+
+		_add_battle_log_message(line)
+
+func _parse_battle_log_turn_header(line: String) -> int:
+	var normalized := line.strip_edges().to_lower()
+	if not normalized.begins_with("turn "):
+		return -1
+
+	var raw_turn := normalized.substr(5).strip_edges()
+	var end_index := 0
+	while end_index < raw_turn.length():
+		var character := raw_turn.substr(end_index, 1)
+		if not character.is_valid_int():
+			break
+		end_index += 1
+
+	if end_index <= 0:
+		return -1
+
+	return int(raw_turn.substr(0, end_index))
+
 
 
 
@@ -7657,6 +7697,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 
 	battle_state.load_from_api_response(reconciliation, false)
 	_apply_party_state_from_api_response(reconciliation)
+	_restore_battle_log_from_snapshot(reconciliation)
 	_remember_active_player_party_moves()
 	_prewarm_current_battle_move_animations()
 	_update_battle_presentation("snapshot_reconciliation")
