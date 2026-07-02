@@ -3213,6 +3213,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_history_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_history_list.add_theme_constant_override("separation", 8)
 	history_scroll.add_child(pvp_history_list)
+	tabs.move_child(room_tab, tabs.get_child_count() - 1)
 
 	var close_button := Button.new()
 	close_button.text = "Close"
