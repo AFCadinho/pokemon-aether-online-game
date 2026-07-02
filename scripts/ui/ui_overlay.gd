@@ -11769,39 +11769,45 @@ func _get_active_chat_channel() -> String:
 
 func _submit_pm_input_async(text: String) -> void:
 	if active_pm_user_id <= 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
-		_add_chat_message("Select a PM conversation first.")
+		_show_pm_empty_state("Select a PM conversation first.")
 		return
 	if text == "":
 		return
 	if text.length() > 300:
 		text = text.substr(0, 300)
 
-	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
+	var target_pm_user_id: int = active_pm_user_id
+	var target_body: String = text
+	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(target_pm_user_id, {}))
 	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
-	var username: String = str(user.get("username", "")).strip_edges()
-	if username == "":
-		_add_chat_message("Could not send PM: missing username.")
+	var target_username: String = str(user.get("username", "")).strip_edges()
+	if target_username == "":
+		_add_pm_notice(target_pm_user_id, "Could not send PM: missing username.")
 		return
+	var sender_username: String = str(AuthService.current_user.get("username", "you"))
+	var sender_display_name: String = AuthService.get_display_name()
 
 	chat_input.clear()
-	var result: Dictionary = await SocialService.send_private_message(username, text)
+	var result: Dictionary = await SocialService.send_private_message(target_username, target_body)
 	if not bool(result.get("success", false)):
-		_add_pm_notice(active_pm_user_id, str(result.get("error", "Private message could not be sent.")))
+		_add_pm_notice(target_pm_user_id, str(result.get("error", "Private message could not be sent.")))
 		return
 
 	var message: Dictionary = _dictionary_from_value(result.get("message", {}))
-	_append_pm_message(active_pm_user_id, {
+	_append_pm_message(target_pm_user_id, {
 		"outgoing": true,
-		"body": str(message.get("body", text)),
+		"body": str(message.get("body", target_body)),
 		"sentAt": str(message.get("sentAt", "")),
-		"username": str(AuthService.current_user.get("username", "you")),
-		"displayName": AuthService.get_display_name(),
+		"username": sender_username,
+		"displayName": sender_display_name,
 	})
-	_render_active_pm_conversation()
+	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == target_pm_user_id:
+		_render_active_pm_conversation()
+	_render_pm_conversation_list()
 
 func _add_pm_notice(user_id: int, text: String) -> void:
 	if user_id <= 0:
-		_add_chat_message(text)
+		_show_pm_empty_state(text)
 		return
 	_append_pm_message(user_id, {
 		"outgoing": false,
@@ -11813,6 +11819,13 @@ func _add_pm_notice(user_id: int, text: String) -> void:
 		_render_active_pm_conversation()
 	else:
 		_add_chat_message(text)
+
+func _show_pm_empty_state(text: String) -> void:
+	if active_chat_tab != CHAT_TAB_PM or pm_message_list == null:
+		_add_chat_message(text)
+		return
+	_clear_children(pm_message_list)
+	pm_message_list.add_child(_pm_empty_label(text))
 
 func _keep_chat_input_focused() -> void:
 	_restore_chat_input_focus.call_deferred()
