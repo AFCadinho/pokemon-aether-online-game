@@ -406,6 +406,9 @@ var evolution_prompt_review_total := 0
 var evolution_prompt_review_index := 0
 var dev_clear_menu_popup: PanelContainer
 var pvp_room_popup: PanelContainer
+var pvp_history_status_label: Label
+var pvp_history_list: VBoxContainer
+var pvp_history_refresh_button: Button
 var pvp_room_code_label: Label
 var pvp_room_status_label: Label
 var pvp_room_code_input: LineEdit
@@ -429,6 +432,7 @@ var pvp_queue_list_in_flight := false
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
 var pvp_queue_auto_open_in_flight := false
+var pvp_history_in_flight := false
 var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
@@ -2853,17 +2857,17 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_popup = PanelContainer.new()
 	pvp_room_popup.name = "PvpRoomPopup"
 	pvp_room_popup.visible = false
-	pvp_room_popup.custom_minimum_size = Vector2(390, 330)
+	pvp_room_popup.custom_minimum_size = Vector2(640, 520)
 	pvp_room_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	pvp_room_popup.z_index = UI_BASE_Z_INDEX
 	pvp_room_popup.anchor_left = 0.5
 	pvp_room_popup.anchor_top = 0.5
 	pvp_room_popup.anchor_right = 0.5
 	pvp_room_popup.anchor_bottom = 0.5
-	pvp_room_popup.offset_left = -195
-	pvp_room_popup.offset_top = -165
-	pvp_room_popup.offset_right = 195
-	pvp_room_popup.offset_bottom = 165
+	pvp_room_popup.offset_left = -320
+	pvp_room_popup.offset_top = -260
+	pvp_room_popup.offset_right = 320
+	pvp_room_popup.offset_bottom = 260
 	pvp_room_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	root_control.add_child(pvp_room_popup)
 
@@ -2879,39 +2883,50 @@ func _setup_pvp_room_popup() -> void:
 	margin_container.add_child(layout)
 
 	var title := Label.new()
-	title.text = "PvP Battles"
+	title.text = "PvP Center"
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(title)
 
 	var description := Label.new()
-	description.text = "Create a room code or join one from another player."
+	description.text = "Queue, room battles, and recent results."
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(description)
+
+	var tabs := TabContainer.new()
+	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.add_theme_font_size_override("font_size", 14)
+	layout.add_child(tabs)
+
+	var battle_tab := VBoxContainer.new()
+	battle_tab.name = "Battle"
+	battle_tab.add_theme_constant_override("separation", 10)
+	tabs.add_child(battle_tab)
 
 	pvp_room_code_label = Label.new()
 	pvp_room_code_label.text = "Room Code: -"
 	pvp_room_code_label.add_theme_font_size_override("font_size", 18)
 	pvp_room_code_label.add_theme_color_override("font_color", Color("#f5df9a"))
-	layout.add_child(pvp_room_code_label)
+	battle_tab.add_child(pvp_room_code_label)
 
 	pvp_room_status_label = Label.new()
 	pvp_room_status_label.text = "Ready."
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(pvp_room_status_label)
+	battle_tab.add_child(pvp_room_status_label)
 
 	pvp_room_code_input = LineEdit.new()
 	pvp_room_code_input.placeholder_text = "Room code"
 	pvp_room_code_input.max_length = 12
 	pvp_room_code_input.custom_minimum_size = Vector2(0, 34)
-	layout.add_child(pvp_room_code_input)
+	battle_tab.add_child(pvp_room_code_input)
 	_apply_line_edit_style(pvp_room_code_input)
 
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
-	layout.add_child(actions)
+	battle_tab.add_child(actions)
 
 	pvp_create_room_button = Button.new()
 	pvp_create_room_button.text = "Create Room"
@@ -2936,17 +2951,17 @@ func _setup_pvp_room_popup() -> void:
 	actions.add_child(pvp_copy_code_button)
 
 	var queue_separator := HSeparator.new()
-	layout.add_child(queue_separator)
+	battle_tab.add_child(queue_separator)
 
 	var queue_title := Label.new()
 	queue_title.text = "Queue"
 	queue_title.add_theme_font_size_override("font_size", 16)
 	queue_title.add_theme_color_override("font_color", Color("#f5df9a"))
-	layout.add_child(queue_title)
+	battle_tab.add_child(queue_title)
 
 	var queue_select_row := HBoxContainer.new()
 	queue_select_row.add_theme_constant_override("separation", 8)
-	layout.add_child(queue_select_row)
+	battle_tab.add_child(queue_select_row)
 
 	var queue_select_label := Label.new()
 	queue_select_label.text = "Mode"
@@ -2968,11 +2983,11 @@ func _setup_pvp_room_popup() -> void:
 	pvp_queue_status_label.text = "Queue Status: idle"
 	pvp_queue_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_queue_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(pvp_queue_status_label)
+	battle_tab.add_child(pvp_queue_status_label)
 
 	var queue_actions := HBoxContainer.new()
 	queue_actions.add_theme_constant_override("separation", 8)
-	layout.add_child(queue_actions)
+	battle_tab.add_child(queue_actions)
 
 	pvp_join_queue_button = Button.new()
 	pvp_join_queue_button.text = "Join Queue"
@@ -3004,6 +3019,38 @@ func _setup_pvp_room_popup() -> void:
 	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
 	queue_actions.add_child(pvp_reconnect_battle_button)
 
+	var history_tab := VBoxContainer.new()
+	history_tab.name = "History"
+	history_tab.add_theme_constant_override("separation", 10)
+	tabs.add_child(history_tab)
+
+	var history_header := HBoxContainer.new()
+	history_header.add_theme_constant_override("separation", 8)
+	history_tab.add_child(history_header)
+
+	pvp_history_status_label = Label.new()
+	pvp_history_status_label.text = "Recent matches"
+	pvp_history_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_history_status_label.add_theme_color_override("font_color", UI_TEXT)
+	history_header.add_child(pvp_history_status_label)
+
+	pvp_history_refresh_button = Button.new()
+	pvp_history_refresh_button.text = "Refresh"
+	pvp_history_refresh_button.custom_minimum_size = Vector2(92, 32)
+	pvp_history_refresh_button.focus_mode = Control.FOCUS_NONE
+	pvp_history_refresh_button.pressed.connect(_on_pvp_history_refresh_pressed)
+	history_header.add_child(pvp_history_refresh_button)
+
+	var history_scroll := ScrollContainer.new()
+	history_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	history_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	history_tab.add_child(history_scroll)
+
+	pvp_history_list = VBoxContainer.new()
+	pvp_history_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_history_list.add_theme_constant_override("separation", 8)
+	history_scroll.add_child(pvp_history_list)
+
 	var close_button := Button.new()
 	close_button.text = "Close"
 	close_button.custom_minimum_size = Vector2(0, 32)
@@ -3018,6 +3065,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_open_queue_battle_button)
 	_apply_button_style(pvp_reconnect_battle_button)
+	_apply_button_style(pvp_history_refresh_button)
 	_apply_button_style(close_button)
 
 	pvp_poll_timer = Timer.new()
@@ -14617,6 +14665,7 @@ func _on_pvp_button_pressed() -> void:
 	pvp_room_popup.visible = true
 	_activate_ui_panel(pvp_room_popup)
 	await _refresh_pvp_queue_list()
+	await _refresh_pvp_match_history()
 
 func _hide_pvp_room_popup() -> void:
 	if pvp_room_popup == null:
@@ -14627,6 +14676,7 @@ func _hide_pvp_room_popup() -> void:
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_list_in_flight = false
+	pvp_history_in_flight = false
 	pvp_poll_elapsed = 0.0
 	pvp_room_popup.visible = false
 	_deactivate_ui_panel(pvp_room_popup)
@@ -14805,6 +14855,139 @@ func _on_pvp_queue_selected(index: int) -> void:
 	pvp_active_queue_id = queue_id
 	_set_pvp_queue_status("Queue Status: idle")
 	_refresh_pvp_queue_buttons("idle")
+
+func _on_pvp_history_refresh_pressed() -> void:
+	await _refresh_pvp_match_history()
+
+func _refresh_pvp_match_history() -> void:
+	if pvp_history_in_flight:
+		return
+	pvp_history_in_flight = true
+	if pvp_history_refresh_button != null:
+		pvp_history_refresh_button.disabled = true
+	if pvp_history_status_label != null:
+		pvp_history_status_label.text = "Loading recent matches..."
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_pvp_match_history(request, 20, 0)
+	request.queue_free()
+	pvp_history_in_flight = false
+	if pvp_history_refresh_button != null:
+		pvp_history_refresh_button.disabled = false
+
+	if not bool(response.get("success", false)):
+		if pvp_history_status_label != null:
+			pvp_history_status_label.text = "Could not load match history."
+		_render_pvp_history_matches([])
+		return
+
+	var matches_value: Variant = response.get("matches", [])
+	var matches: Array = matches_value as Array if matches_value is Array else []
+	if pvp_history_status_label != null:
+		pvp_history_status_label.text = "Recent matches"
+	_render_pvp_history_matches(matches)
+
+func _render_pvp_history_matches(matches: Array) -> void:
+	if pvp_history_list == null:
+		return
+	for child in pvp_history_list.get_children():
+		child.queue_free()
+
+	if matches.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "No PvP matches yet."
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		pvp_history_list.add_child(empty_label)
+		return
+
+	for item: Variant in matches:
+		if not (item is Dictionary):
+			continue
+		pvp_history_list.add_child(_create_pvp_history_card(item as Dictionary))
+
+func _create_pvp_history_card(match: Dictionary) -> Control:
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f"), 6, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	card.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 4)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	var title := Label.new()
+	title.text = _pvp_history_title(match)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_color_override("font_color", UI_TEXT)
+	title.add_theme_font_size_override("font_size", 15)
+	header.add_child(title)
+
+	var status := Label.new()
+	status.text = str(match.get("status", "")).strip_edges().capitalize()
+	status.add_theme_color_override("font_color", Color("#f5df9a"))
+	header.add_child(status)
+
+	var detail := Label.new()
+	detail.text = _pvp_history_detail(match)
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(detail)
+
+	return card
+
+func _pvp_history_title(match: Dictionary) -> String:
+	var participants := _array_from_variant(match.get("participants", []))
+	var names: Array[String] = []
+	for participant_value: Variant in participants:
+		if not (participant_value is Dictionary):
+			continue
+		var participant: Dictionary = participant_value as Dictionary
+		var display_name := str(participant.get("displayName", "Player")).strip_edges()
+		if display_name != "":
+			names.append(display_name)
+	var matchup := " vs ".join(names) if names.size() >= 2 else "PvP Match"
+	var mode := str(match.get("mode", "")).strip_edges().capitalize()
+	return "%s%s" % [matchup, " - %s" % mode if mode != "" else ""]
+
+func _pvp_history_detail(match: Dictionary) -> String:
+	var winner_user_id := int(match.get("winnerUserId", 0))
+	var loser_user_id := int(match.get("loserUserId", 0))
+	var winner_name := _pvp_history_participant_name(match, winner_user_id)
+	var loser_name := _pvp_history_participant_name(match, loser_user_id)
+	var reason := str(match.get("reason", "")).strip_edges().replace("_", " ")
+	var settled_at := str(match.get("settledAt", match.get("endedAt", ""))).strip_edges()
+	var final_seq := str(match.get("finalEventSeq", "")).strip_edges()
+	var result_text := "Result pending"
+	if winner_name != "":
+		result_text = "%s defeated %s" % [winner_name, loser_name if loser_name != "" else "opponent"]
+	if reason != "":
+		result_text = "%s by %s" % [result_text, reason]
+	if final_seq != "":
+		result_text = "%s · seq %s" % [result_text, final_seq]
+	if settled_at != "":
+		result_text = "%s · %s" % [result_text, settled_at]
+	return result_text
+
+func _pvp_history_participant_name(match: Dictionary, user_id: int) -> String:
+	if user_id <= 0:
+		return ""
+	var participants := _array_from_variant(match.get("participants", []))
+	for participant_value: Variant in participants:
+		if not (participant_value is Dictionary):
+			continue
+		var participant: Dictionary = participant_value as Dictionary
+		if int(participant.get("userId", 0)) == user_id:
+			return str(participant.get("displayName", "Player")).strip_edges()
+	return ""
 
 func _on_pvp_leave_queue_pressed() -> void:
 	if pvp_battle_starting or pvp_active_queue_id == "":
