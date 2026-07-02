@@ -2,6 +2,7 @@ extends Node
 
 const LOCAL_API_URL = "http://localhost:8000"
 const PRODUCTION_API_URL = "https://api.pokeaether.com"
+const API_URL_ENV = "POKEAETHER_GATEWAY_URL"
 
 var cached_url := ""
 
@@ -9,26 +10,17 @@ func get_base_url() -> String:
 	if cached_url != "":
 		return cached_url
 	
+	var env_url := OS.get_environment(API_URL_ENV).strip_edges()
+	if env_url != "":
+		cached_url = env_url.rstrip("/")
+		return cached_url
+	
+	if OS.has_feature("editor"):
+		cached_url = LOCAL_API_URL
+		return cached_url
+	
 	if not OS.has_feature("editor"):
 		cached_url = PRODUCTION_API_URL
 		return cached_url
-	
-	var http_request = HTTPRequest.new()
-	add_child(http_request)
-	http_request.timeout = 1.0
-	
-	var error = http_request.request(LOCAL_API_URL + "/health")
-	if error == OK:
-		var result = await http_request.request_completed
-		var response_code = result[1]
-		
-		if response_code == 200:
-			cached_url = LOCAL_API_URL
-		else:
-			cached_url = PRODUCTION_API_URL
-	else:
-		cached_url = PRODUCTION_API_URL
-		
-	http_request.queue_free()
 	return cached_url
 	
