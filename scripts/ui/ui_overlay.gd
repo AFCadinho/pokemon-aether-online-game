@@ -425,6 +425,7 @@ var pvp_active_queue_entry_id := ""
 var pvp_active_queue_match_id := ""
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
+var pvp_queue_auto_open_in_flight := false
 var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
@@ -14686,7 +14687,11 @@ func _on_pvp_join_queue_pressed() -> void:
 		return
 
 	_update_pvp_queue_state_from_entry(entry)
-	_start_pvp_queue_polling()
+	var status := str(entry.get("status", "")).strip_edges().to_lower()
+	if status == "matched" and pvp_active_queue_match_id != "":
+		await _open_pvp_queue_match(true)
+	else:
+		_start_pvp_queue_polling()
 
 func _on_pvp_leave_queue_pressed() -> void:
 	if pvp_battle_starting or pvp_active_queue_id == "":
@@ -14710,20 +14715,30 @@ func _on_pvp_leave_queue_pressed() -> void:
 	_refresh_pvp_queue_buttons("idle")
 
 func _on_pvp_open_queue_battle_pressed() -> void:
+	await _open_pvp_queue_match(false)
+
+func _open_pvp_queue_match(auto_open: bool) -> void:
 	if pvp_battle_starting:
+		return
+	if auto_open and pvp_queue_auto_open_in_flight:
 		return
 	if pvp_active_queue_match_id == "":
 		_set_pvp_queue_status("Queue Status: no matched battle yet.")
 		return
 
-	_set_pvp_room_busy(true, "Opening queue battle...")
+	pvp_queue_auto_open_in_flight = auto_open
+	var busy_message := "Starting matched battle..." if auto_open else "Opening queue battle..."
+	_set_pvp_room_busy(true, busy_message)
+	_set_pvp_queue_status("Queue Status: starting matched battle..." if auto_open else "Queue Status: opening battle...")
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.start_pvp_match_battle(request, pvp_active_queue_match_id)
 	request.queue_free()
 	_set_pvp_room_busy(false)
+	pvp_queue_auto_open_in_flight = false
 
 	if not bool(response.get("success", false)):
-		_set_pvp_queue_status("Queue Status: could not open battle: %s" % str(response.get("error", "Unknown error")))
+		_set_pvp_queue_status("Queue Status: could not start battle: %s" % str(response.get("error", "Unknown error")))
+		_refresh_pvp_queue_buttons("matched")
 		return
 
 	if str(response.get("roomCode", "")).strip_edges() == "":
@@ -14800,7 +14815,7 @@ func _on_pvp_copy_code_pressed() -> void:
 
 func _on_pvp_poll_timeout() -> void:
 	if pvp_queue_polling_active:
-		if pvp_queue_poll_in_flight or pvp_battle_starting:
+		if pvp_queue_poll_in_flight or pvp_battle_starting or pvp_queue_auto_open_in_flight:
 			return
 		await _poll_pvp_queue_status()
 		return
@@ -14844,6 +14859,9 @@ func _poll_pvp_queue_status() -> void:
 		return
 
 	_update_pvp_queue_state_from_entry(entry)
+	var status := str(entry.get("status", "")).strip_edges().to_lower()
+	if status == "matched" and pvp_active_queue_match_id != "":
+		await _open_pvp_queue_match(true)
 
 func _pvp_queue_entry_from_response(response: Dictionary) -> Dictionary:
 	var entry_value: Variant = response.get("entry", {})
@@ -14991,6 +15009,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_active_queue_match_id = ""
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
+	pvp_queue_auto_open_in_flight = false
 	pvp_polling_active = false
 	pvp_poll_elapsed = 0.0
 	pvp_room_code_label.text = "Room Code: -"
