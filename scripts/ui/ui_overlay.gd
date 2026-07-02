@@ -15040,8 +15040,8 @@ func _pvp_history_title(match: Dictionary) -> String:
 	return "%s%s" % [matchup, " - %s" % mode if mode != "" else ""]
 
 func _pvp_history_detail(match: Dictionary) -> String:
-	var winner_user_id := int(match.get("winnerUserId", 0))
-	var loser_user_id := int(match.get("loserUserId", 0))
+	var winner_user_id := _pvp_history_variant_to_user_id(match.get("winnerUserId", 0))
+	var loser_user_id := _pvp_history_variant_to_user_id(match.get("loserUserId", 0))
 	var winner_name := _pvp_history_participant_name(match, winner_user_id)
 	var loser_name := _pvp_history_participant_name(match, loser_user_id)
 	var reason := str(match.get("reason", "")).strip_edges().replace("_", " ")
@@ -15066,9 +15066,19 @@ func _pvp_history_participant_name(match: Dictionary, user_id: int) -> String:
 		if not (participant_value is Dictionary):
 			continue
 		var participant: Dictionary = participant_value as Dictionary
-		if int(participant.get("userId", 0)) == user_id:
+		if _pvp_history_variant_to_user_id(participant.get("userId", 0)) == user_id:
 			return str(participant.get("displayName", "Player")).strip_edges()
 	return ""
+
+func _pvp_history_variant_to_user_id(value: Variant) -> int:
+	if typeof(value) == TYPE_INT:
+		return value
+	if typeof(value) == TYPE_FLOAT:
+		return roundi(value)
+	var text := str(value).strip_edges()
+	if text.is_valid_int():
+		return text.to_int()
+	return 0
 
 func _on_pvp_leave_queue_pressed() -> void:
 	if pvp_battle_starting or pvp_active_queue_id == "":
