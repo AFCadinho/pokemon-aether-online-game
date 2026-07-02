@@ -419,7 +419,6 @@ var pvp_queue_status_label: Label
 var pvp_queue_select: OptionButton
 var pvp_join_queue_button: Button
 var pvp_leave_queue_button: Button
-var pvp_open_queue_battle_button: Button
 var pvp_reconnect_battle_button: Button
 var pvp_poll_timer: Timer
 var pvp_poll_request: HTTPRequest
@@ -3024,14 +3023,6 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leave_queue_button.pressed.connect(_on_pvp_leave_queue_pressed)
 	queue_actions.add_child(pvp_leave_queue_button)
 
-	pvp_open_queue_battle_button = Button.new()
-	pvp_open_queue_battle_button.text = "Open Battle"
-	pvp_open_queue_battle_button.custom_minimum_size = Vector2(118, 34)
-	pvp_open_queue_battle_button.focus_mode = Control.FOCUS_NONE
-	pvp_open_queue_battle_button.disabled = true
-	pvp_open_queue_battle_button.pressed.connect(_on_pvp_open_queue_battle_pressed)
-	queue_actions.add_child(pvp_open_queue_battle_button)
-
 	pvp_reconnect_battle_button = Button.new()
 	pvp_reconnect_battle_button.text = "Reconnect"
 	pvp_reconnect_battle_button.custom_minimum_size = Vector2(110, 34)
@@ -3083,7 +3074,6 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_copy_code_button)
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
-	_apply_button_style(pvp_open_queue_battle_button)
 	_apply_button_style(pvp_reconnect_battle_button)
 	_apply_button_style(pvp_history_refresh_button)
 	_apply_button_style(close_button)
@@ -15101,9 +15091,6 @@ func _on_pvp_leave_queue_pressed() -> void:
 	_set_pvp_queue_status("Queue Status: left queue.")
 	_refresh_pvp_queue_buttons("idle")
 
-func _on_pvp_open_queue_battle_pressed() -> void:
-	await _open_pvp_queue_match(false)
-
 func _open_pvp_queue_match(auto_open: bool) -> void:
 	if pvp_battle_starting:
 		return
@@ -15291,12 +15278,11 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 	_refresh_pvp_queue_buttons(status)
 
 func _refresh_pvp_queue_buttons(status: String) -> void:
-	if pvp_join_queue_button == null or pvp_leave_queue_button == null or pvp_open_queue_battle_button == null:
+	if pvp_join_queue_button == null or pvp_leave_queue_button == null:
 		return
 	var normalized_status := status.strip_edges().to_lower()
 	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
 	pvp_leave_queue_button.disabled = pvp_battle_starting or normalized_status != "waiting"
-	pvp_open_queue_battle_button.disabled = pvp_battle_starting or normalized_status != "matched" or pvp_active_queue_match_id == ""
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
 	if pvp_reconnect_battle_button != null:
@@ -15420,8 +15406,6 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != ""
 	if pvp_leave_queue_button != null:
 		pvp_leave_queue_button.disabled = is_busy or pvp_active_queue_entry_id == "" or pvp_active_queue_match_id != ""
-	if pvp_open_queue_battle_button != null:
-		pvp_open_queue_battle_button.disabled = is_busy or pvp_active_queue_match_id == ""
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != ""
 	if pvp_reconnect_battle_button != null:
