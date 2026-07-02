@@ -2895,7 +2895,7 @@ func _setup_pvp_room_popup() -> void:
 	layout.add_child(tabs)
 
 	var search_tab := HBoxContainer.new()
-	search_tab.name = "Search"
+	search_tab.name = "Play"
 	search_tab.add_theme_constant_override("separation", 14)
 	tabs.add_child(search_tab)
 
@@ -14958,16 +14958,17 @@ func _refresh_pvp_match_history() -> void:
 	if not bool(response.get("success", false)):
 		if pvp_history_status_label != null:
 			pvp_history_status_label.text = "Could not load match history."
-		_render_pvp_history_matches([])
+		_render_pvp_history_matches([], 0)
 		return
 
 	var matches_value: Variant = response.get("matches", [])
 	var matches: Array = matches_value as Array if matches_value is Array else []
+	var user_id := _pvp_history_variant_to_user_id(response.get("userId", 0))
 	if pvp_history_status_label != null:
 		pvp_history_status_label.text = "Recent matches"
-	_render_pvp_history_matches(matches)
+	_render_pvp_history_matches(matches, user_id)
 
-func _render_pvp_history_matches(matches: Array) -> void:
+func _render_pvp_history_matches(matches: Array, user_id: int) -> void:
 	if pvp_history_list == null:
 		return
 	for child in pvp_history_list.get_children():
@@ -14983,9 +14984,9 @@ func _render_pvp_history_matches(matches: Array) -> void:
 	for item: Variant in matches:
 		if not (item is Dictionary):
 			continue
-		pvp_history_list.add_child(_create_pvp_history_card(item as Dictionary))
+		pvp_history_list.add_child(_create_pvp_history_card(item as Dictionary, user_id))
 
-func _create_pvp_history_card(match: Dictionary) -> Control:
+func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 	var card := PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f"), 6, 1))
@@ -15006,26 +15007,31 @@ func _create_pvp_history_card(match: Dictionary) -> Control:
 	layout.add_child(header)
 
 	var title := Label.new()
-	title.text = _pvp_history_title(match)
+	title.text = _pvp_history_title(match, user_id)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title.add_theme_font_size_override("font_size", 15)
 	header.add_child(title)
 
 	var status := Label.new()
-	status.text = str(match.get("status", "")).strip_edges().capitalize()
-	status.add_theme_color_override("font_color", Color("#f5df9a"))
+	status.text = _pvp_history_result_label(match, user_id)
+	status.add_theme_color_override("font_color", _pvp_history_result_color(status.text))
 	header.add_child(status)
 
 	var detail := Label.new()
-	detail.text = _pvp_history_detail(match)
+	detail.text = _pvp_history_detail(match, user_id)
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(detail)
 
 	return card
 
-func _pvp_history_title(match: Dictionary) -> String:
+func _pvp_history_title(match: Dictionary, user_id: int) -> String:
+	var opponent_name := _pvp_history_opponent_name(match, user_id)
+	var result_label := _pvp_history_result_label(match, user_id)
+	var mode := _pvp_history_mode_label(match)
+	if opponent_name != "":
+		return "%s vs %s%s" % [result_label, opponent_name, " - %s" % mode if mode != "" else ""]
 	var participants := _array_from_variant(match.get("participants", []))
 	var names: Array[String] = []
 	for participant_value: Variant in participants:
@@ -15036,27 +15042,95 @@ func _pvp_history_title(match: Dictionary) -> String:
 		if display_name != "":
 			names.append(display_name)
 	var matchup := " vs ".join(names) if names.size() >= 2 else "PvP Match"
-	var mode := str(match.get("mode", "")).strip_edges().capitalize()
 	return "%s%s" % [matchup, " - %s" % mode if mode != "" else ""]
 
-func _pvp_history_detail(match: Dictionary) -> String:
+func _pvp_history_detail(match: Dictionary, user_id: int) -> String:
 	var winner_user_id := _pvp_history_variant_to_user_id(match.get("winnerUserId", 0))
 	var loser_user_id := _pvp_history_variant_to_user_id(match.get("loserUserId", 0))
 	var winner_name := _pvp_history_participant_name(match, winner_user_id)
 	var loser_name := _pvp_history_participant_name(match, loser_user_id)
-	var reason := str(match.get("reason", "")).strip_edges().replace("_", " ")
-	var settled_at := str(match.get("settledAt", match.get("endedAt", ""))).strip_edges()
-	var final_seq := str(match.get("finalEventSeq", "")).strip_edges()
+	var opponent_name := _pvp_history_opponent_name(match, user_id)
+	var reason := _pvp_history_reason_label(match)
+	var settled_at := _pvp_history_time_label(str(match.get("settledAt", match.get("endedAt", ""))).strip_edges())
+	var final_seq := _pvp_history_seq_label(match.get("finalEventSeq", null))
 	var result_text := "Result pending"
-	if winner_name != "":
+	if user_id > 0 and winner_user_id == user_id and opponent_name != "":
+		result_text = "You defeated %s" % opponent_name
+	elif user_id > 0 and loser_user_id == user_id and opponent_name != "":
+		result_text = "You lost to %s" % opponent_name
+	elif winner_name != "":
 		result_text = "%s defeated %s" % [winner_name, loser_name if loser_name != "" else "opponent"]
 	if reason != "":
 		result_text = "%s by %s" % [result_text, reason]
 	if final_seq != "":
-		result_text = "%s · seq %s" % [result_text, final_seq]
+		result_text = "%s · %s" % [result_text, final_seq]
 	if settled_at != "":
 		result_text = "%s · %s" % [result_text, settled_at]
 	return result_text
+
+func _pvp_history_result_label(match: Dictionary, user_id: int) -> String:
+	var winner_user_id := _pvp_history_variant_to_user_id(match.get("winnerUserId", 0))
+	var loser_user_id := _pvp_history_variant_to_user_id(match.get("loserUserId", 0))
+	if user_id > 0 and winner_user_id == user_id:
+		return "Win"
+	if user_id > 0 and loser_user_id == user_id:
+		return "Loss"
+	var status := str(match.get("status", "")).strip_edges()
+	return status.capitalize() if status != "" else "Pending"
+
+func _pvp_history_result_color(result_label: String) -> Color:
+	var normalized := result_label.strip_edges().to_lower()
+	if normalized == "win":
+		return Color("#65e38b")
+	if normalized == "loss":
+		return Color("#ff7a7a")
+	return Color("#f5df9a")
+
+func _pvp_history_opponent_name(match: Dictionary, user_id: int) -> String:
+	if user_id <= 0:
+		return ""
+	var participants := _array_from_variant(match.get("participants", []))
+	for participant_value: Variant in participants:
+		if not (participant_value is Dictionary):
+			continue
+		var participant: Dictionary = participant_value as Dictionary
+		if _pvp_history_variant_to_user_id(participant.get("userId", 0)) != user_id:
+			return str(participant.get("displayName", "Player")).strip_edges()
+	return ""
+
+func _pvp_history_mode_label(match: Dictionary) -> String:
+	var mode := str(match.get("mode", "")).strip_edges().to_lower()
+	if mode == "":
+		return ""
+	return mode.capitalize()
+
+func _pvp_history_reason_label(match: Dictionary) -> String:
+	var reason := str(match.get("reason", "")).strip_edges().to_lower()
+	match reason:
+		"battle_end":
+			return "Battle End"
+		"forfeit":
+			return "Forfeit"
+		"timeout":
+			return "Timeout"
+		"disconnect":
+			return "Disconnect"
+		_:
+			return reason.replace("_", " ").capitalize() if reason != "" else ""
+
+func _pvp_history_seq_label(value: Variant) -> String:
+	var text := str(value).strip_edges()
+	if text == "" or text.to_lower() == "<null>" or text.to_lower() == "null":
+		return ""
+	return "Event #%s" % text
+
+func _pvp_history_time_label(value: String) -> String:
+	if value == "":
+		return ""
+	var normalized := value.replace("T", " ").replace("Z", "")
+	if normalized.length() >= 16:
+		return normalized.substr(0, 16)
+	return normalized
 
 func _pvp_history_participant_name(match: Dictionary, user_id: int) -> String:
 	if user_id <= 0:
