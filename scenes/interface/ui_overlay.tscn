@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/guild.svg" id="16_guild"]
 [ext_resource type="AudioStream" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
 [ext_resource type="Texture2D" path="res://assets/battles/poke_ball_svg.png" id="18_pvp"]
+[ext_resource type="Texture2D" path="res://assets/ui/aether_exchange.png" id="19_exchange"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -378,9 +379,9 @@ text = "Pallet Town"
 vertical_alignment = 1
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
-custom_minimum_size = Vector2(308, 0)
+custom_minimum_size = Vector2(368, 0)
 layout_mode = 1
-offset_right = 308.0
+offset_right = 368.0
 offset_bottom = 57.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -394,6 +395,24 @@ theme_override_constants/margin_bottom = 8
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/OptionsPanel/MarginContainer" unique_id=1025196923]
 layout_mode = 2
 theme_override_constants/separation = 8
+
+[node name="AetherExchangeSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Aether Exchange"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("19_exchange")
+texture_pressed = ExtResource("19_exchange")
+texture_hover = ExtResource("19_exchange")
+texture_disabled = ExtResource("19_exchange")
+texture_focused = ExtResource("19_exchange")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="BagSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=1506839726]
 custom_minimum_size = Vector2(52, 52)

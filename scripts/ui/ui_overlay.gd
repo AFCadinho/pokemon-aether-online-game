@@ -280,6 +280,8 @@ enum DevPokemonPopupMode {
 @onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
 @onready var dev_pokemon_add_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/AddButton
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
+@onready var aether_exchange_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot
+@onready var aether_exchange_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot/AetherExchangeButton
 @onready var bag_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot
 @onready var bag_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/BagSlot/BagButton
 @onready var socials_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot
@@ -718,6 +720,7 @@ func _ready() -> void:
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
+	_setup_icon_slot_hover(aether_exchange_slot, aether_exchange_button)
 	_setup_icon_slot_hover(map_slot, map_button)
 	_setup_icon_slot_hover(running_shoes_slot, running_shoes_button)
 	_setup_icon_slot_hover(bag_slot, bag_button)
@@ -762,6 +765,7 @@ func _ready() -> void:
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
 	_load_toggle_preferences.call_deferred()
+	aether_exchange_button.pressed.connect(_on_aether_exchange_button_pressed)
 	dev_actions_button.pressed.connect(_on_dev_actions_button_pressed)
 	staff_tools_button.pressed.connect(_on_staff_tools_button_pressed)
 	item_dex_button.pressed.connect(_on_item_dex_button_pressed)
@@ -10800,6 +10804,8 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(dev_actions_close_button)
 	_apply_socials_menu_style()
 
+	if aether_exchange_slot != null:
+		_apply_icon_slot_hover_style(aether_exchange_slot, false)
 	if map_slot != null:
 		_apply_icon_slot_hover_style(map_slot, false)
 	if bag_slot != null:
@@ -15069,6 +15075,9 @@ func _array_from_variant(value: Variant) -> Array:
 func _on_guild_button_pressed() -> void:
 	_add_chat_message("Guild is not implemented yet.")
 
+func _on_aether_exchange_button_pressed() -> void:
+	_add_chat_message("Aether Exchange is not implemented yet.")
+
 func _on_pvp_button_pressed() -> void:
 	if pvp_mode_menu == null:
 		return
@@ -16404,6 +16413,7 @@ func _on_settings_menu_closed() -> void:
 
 func _disable_icon_button_focus() -> void:
 	for button: BaseButton in [
+		aether_exchange_button,
 		map_button,
 		running_shoes_button,
 		bag_button,
