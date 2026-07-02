@@ -15102,7 +15102,7 @@ func _create_pvp_history_team_strip(team: Array) -> Control:
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		strip.add_child(empty_label)
 		return strip
-	var count := min(team.size(), 6)
+	var count: int = mini(team.size(), 6)
 	for index in range(count):
 		var pokemon_value: Variant = team[index]
 		if pokemon_value is Dictionary:
