@@ -14989,42 +14989,184 @@ func _render_pvp_history_matches(matches: Array, user_id: int) -> void:
 func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 	var card := PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f"), 6, 1))
+	card.custom_minimum_size = Vector2(0, 92)
+	card.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f88"), 4, 1))
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 8)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	card.add_child(margin)
 
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 4)
-	margin.add_child(layout)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	margin.add_child(row)
 
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
-	layout.add_child(header)
+	var result_block := VBoxContainer.new()
+	result_block.custom_minimum_size = Vector2(145, 0)
+	result_block.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	result_block.alignment = BoxContainer.ALIGNMENT_CENTER
+	result_block.add_theme_constant_override("separation", 2)
+	row.add_child(result_block)
 
-	var title := Label.new()
-	title.text = _pvp_history_title(match, user_id)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_color_override("font_color", UI_TEXT)
-	title.add_theme_font_size_override("font_size", 15)
-	header.add_child(title)
+	var result_label := Label.new()
+	result_label.text = _pvp_history_result_label(match, user_id)
+	result_label.add_theme_color_override("font_color", _pvp_history_result_color(result_label.text))
+	result_label.add_theme_font_size_override("font_size", 16)
+	result_block.add_child(result_label)
 
-	var status := Label.new()
-	status.text = _pvp_history_result_label(match, user_id)
-	status.add_theme_color_override("font_color", _pvp_history_result_color(status.text))
-	header.add_child(status)
+	var opponent_label := Label.new()
+	opponent_label.text = _pvp_history_opponent_name(match, user_id)
+	if opponent_label.text == "":
+		opponent_label.text = "Opponent"
+	opponent_label.add_theme_color_override("font_color", UI_TEXT)
+	result_block.add_child(opponent_label)
 
-	var detail := Label.new()
-	detail.text = _pvp_history_detail(match, user_id)
-	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(detail)
+	var meta_label := Label.new()
+	meta_label.text = _pvp_history_mode_label(match)
+	if meta_label.text == "":
+		meta_label.text = "PvP"
+	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	result_block.add_child(meta_label)
+
+	var matchup := VBoxContainer.new()
+	matchup.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	matchup.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	matchup.alignment = BoxContainer.ALIGNMENT_CENTER
+	matchup.add_theme_constant_override("separation", 4)
+	row.add_child(matchup)
+
+	var teams_row := HBoxContainer.new()
+	teams_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	teams_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	teams_row.add_theme_constant_override("separation", 8)
+	matchup.add_child(teams_row)
+	teams_row.add_child(_create_pvp_history_team_strip(_pvp_history_team_snapshot(match, user_id, true)))
+
+	var vs_label := Label.new()
+	vs_label.text = "VS"
+	vs_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	vs_label.add_theme_font_size_override("font_size", 13)
+	teams_row.add_child(vs_label)
+	teams_row.add_child(_create_pvp_history_team_strip(_pvp_history_team_snapshot(match, user_id, false)))
+
+	var summary := Label.new()
+	summary.text = _pvp_history_outcome_summary(match, user_id)
+	summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	summary.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	matchup.add_child(summary)
+
+	var time_block := VBoxContainer.new()
+	time_block.custom_minimum_size = Vector2(130, 0)
+	time_block.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	time_block.alignment = BoxContainer.ALIGNMENT_CENTER
+	time_block.add_theme_constant_override("separation", 2)
+	row.add_child(time_block)
+
+	var time_source := str(match.get("settledAt", match.get("endedAt", ""))).strip_edges()
+	var date_label := Label.new()
+	date_label.text = _pvp_history_date_label(time_source)
+	date_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	date_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	date_label.add_theme_color_override("font_color", UI_TEXT)
+	time_block.add_child(date_label)
+
+	var clock_label := Label.new()
+	clock_label.text = _pvp_history_clock_label(time_source)
+	clock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	clock_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	clock_label.add_theme_color_override("font_color", UI_TEXT)
+	time_block.add_child(clock_label)
+
+	var duration_label := Label.new()
+	duration_label.text = _pvp_history_duration_label(match.get("durationSeconds", null))
+	duration_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	duration_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	duration_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	time_block.add_child(duration_label)
 
 	return card
+
+func _create_pvp_history_team_strip(team: Array) -> Control:
+	var strip := HBoxContainer.new()
+	strip.custom_minimum_size = Vector2(222, 36)
+	strip.add_theme_constant_override("separation", 3)
+	strip.alignment = BoxContainer.ALIGNMENT_CENTER
+	if team.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "Team unavailable"
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		strip.add_child(empty_label)
+		return strip
+	var count := min(team.size(), 6)
+	for index in range(count):
+		var pokemon_value: Variant = team[index]
+		if pokemon_value is Dictionary:
+			strip.add_child(_create_pvp_history_team_icon(pokemon_value as Dictionary))
+	return strip
+
+func _create_pvp_history_team_icon(pokemon_data: Dictionary) -> TextureRect:
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(34, 34)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_PASS
+	var species := _pvp_history_pokemon_species(pokemon_data)
+	var shiny := bool(pokemon_data.get("shiny", false))
+	icon.texture = PokemonAssets.load_party_icon(species, shiny)
+	if icon.texture == null:
+		icon.texture = PokemonAssets.load_unknown_icon()
+	icon.tooltip_text = species if species != "" else "Pokemon"
+	if _pvp_history_pokemon_fainted(pokemon_data):
+		icon.modulate = Color(0.65, 0.65, 0.65, 0.65)
+	return icon
+
+func _pvp_history_team_snapshot(match: Dictionary, user_id: int, local_team: bool) -> Array:
+	var participants := _array_from_variant(match.get("participants", []))
+	var fallback: Array = []
+	for participant_value: Variant in participants:
+		if not (participant_value is Dictionary):
+			continue
+		var participant: Dictionary = participant_value as Dictionary
+		var participant_user_id := _pvp_history_variant_to_user_id(participant.get("userId", 0))
+		var is_local := user_id > 0 and participant_user_id == user_id
+		if is_local == local_team:
+			return _array_from_variant(participant.get("teamSnapshot", []))
+		if fallback.is_empty():
+			fallback = _array_from_variant(participant.get("teamSnapshot", []))
+	return fallback
+
+func _pvp_history_pokemon_species(pokemon_data: Dictionary) -> String:
+	for key in ["displaySpecies", "species", "speciesId", "species_id", "name"]:
+		var value := str(pokemon_data.get(key, "")).strip_edges()
+		if value != "":
+			return value
+	return ""
+
+func _pvp_history_pokemon_fainted(pokemon_data: Dictionary) -> bool:
+	if bool(pokemon_data.get("fainted", false)):
+		return true
+	var hp_value := pokemon_data.get("hp", null)
+	if hp_value == null:
+		return false
+	if typeof(hp_value) == TYPE_INT or typeof(hp_value) == TYPE_FLOAT:
+		return float(hp_value) <= 0.0
+	var hp_text := str(hp_value).strip_edges()
+	return hp_text == "0" or hp_text.begins_with("0/")
+
+func _pvp_history_outcome_summary(match: Dictionary, user_id: int) -> String:
+	var reason := _pvp_history_reason_label(match)
+	var seq := _pvp_history_seq_label(match.get("finalEventSeq", null))
+	var parts: Array[String] = []
+	if reason != "":
+		parts.append(reason)
+	if seq != "":
+		parts.append(seq)
+	return " · ".join(parts) if not parts.is_empty() else str(match.get("status", "PvP match")).capitalize()
 
 func _pvp_history_title(match: Dictionary, user_id: int) -> String:
 	var opponent_name := _pvp_history_opponent_name(match, user_id)
@@ -15072,17 +15214,17 @@ func _pvp_history_result_label(match: Dictionary, user_id: int) -> String:
 	var winner_user_id := _pvp_history_variant_to_user_id(match.get("winnerUserId", 0))
 	var loser_user_id := _pvp_history_variant_to_user_id(match.get("loserUserId", 0))
 	if user_id > 0 and winner_user_id == user_id:
-		return "Win"
+		return "Victory"
 	if user_id > 0 and loser_user_id == user_id:
-		return "Loss"
+		return "Defeat"
 	var status := str(match.get("status", "")).strip_edges()
 	return status.capitalize() if status != "" else "Pending"
 
 func _pvp_history_result_color(result_label: String) -> Color:
 	var normalized := result_label.strip_edges().to_lower()
-	if normalized == "win":
+	if normalized == "win" or normalized == "victory":
 		return Color("#65e38b")
-	if normalized == "loss":
+	if normalized == "loss" or normalized == "defeat":
 		return Color("#ff7a7a")
 	return Color("#f5df9a")
 
@@ -15132,6 +15274,34 @@ func _pvp_history_time_label(value: String) -> String:
 		return normalized.substr(0, 16)
 	return normalized
 
+func _pvp_history_date_label(value: String) -> String:
+	var normalized := value.strip_edges()
+	if normalized == "":
+		return ""
+	var separator := "T" if normalized.contains("T") else " "
+	var parts := normalized.split(separator, false, 1)
+	return parts[0] if parts.size() > 0 else normalized
+
+func _pvp_history_clock_label(value: String) -> String:
+	var normalized := value.strip_edges().replace("Z", "")
+	if normalized == "":
+		return ""
+	var separator := "T" if normalized.contains("T") else " "
+	var parts := normalized.split(separator, false, 1)
+	if parts.size() < 2:
+		return ""
+	var clock := parts[1]
+	return clock.substr(0, 5) if clock.length() >= 5 else clock
+
+func _pvp_history_duration_label(value: Variant) -> String:
+	var seconds := _pvp_history_variant_to_int(value)
+	if seconds <= 0:
+		return ""
+	if seconds < 60:
+		return "%d sec" % seconds
+	var minutes := int(ceil(float(seconds) / 60.0))
+	return "%d min" % minutes
+
 func _pvp_history_participant_name(match: Dictionary, user_id: int) -> String:
 	if user_id <= 0:
 		return ""
@@ -15145,6 +15315,9 @@ func _pvp_history_participant_name(match: Dictionary, user_id: int) -> String:
 	return ""
 
 func _pvp_history_variant_to_user_id(value: Variant) -> int:
+	return _pvp_history_variant_to_int(value)
+
+func _pvp_history_variant_to_int(value: Variant) -> int:
 	if typeof(value) == TYPE_INT:
 		return value
 	if typeof(value) == TYPE_FLOAT:
