@@ -2892,7 +2892,7 @@ func _setup_pvp_room_popup() -> void:
 	margin_container.add_child(layout)
 
 	var title := Label.new()
-	title.text = "Ladder"
+	title.text = "PvP"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title.add_theme_font_size_override("font_size", 22)
@@ -2906,10 +2906,21 @@ func _setup_pvp_room_popup() -> void:
 	tabs.add_theme_font_size_override("font_size", 14)
 	layout.add_child(tabs)
 
+	var ranked_tab := VBoxContainer.new()
+	ranked_tab.name = "Ranked"
+	ranked_tab.add_theme_constant_override("separation", 10)
+	tabs.add_child(ranked_tab)
+
+	var ranked_tabs := TabContainer.new()
+	ranked_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ranked_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	ranked_tabs.add_theme_font_size_override("font_size", 13)
+	ranked_tab.add_child(ranked_tabs)
+
 	var play_tab := HBoxContainer.new()
 	play_tab.name = "Play"
 	play_tab.add_theme_constant_override("separation", 14)
-	tabs.add_child(play_tab)
+	ranked_tabs.add_child(play_tab)
 
 	var ladder_sidebar := PanelContainer.new()
 	ladder_sidebar.custom_minimum_size = Vector2(340, 0)
@@ -2956,6 +2967,7 @@ func _setup_pvp_room_popup() -> void:
 	play_controls.add_child(_create_pvp_section_title("Matchmaking"))
 
 	var mode_row := HBoxContainer.new()
+	mode_row.visible = false
 	mode_row.add_theme_constant_override("separation", 8)
 	play_controls.add_child(mode_row)
 	mode_row.add_child(_create_pvp_field_label("Battle Type", 104))
@@ -2963,10 +2975,10 @@ func _setup_pvp_room_popup() -> void:
 	pvp_mode_select = OptionButton.new()
 	pvp_mode_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_mode_select.focus_mode = Control.FOCUS_NONE
-	pvp_mode_select.add_item("Casual")
-	pvp_mode_select.set_item_metadata(0, "casual")
 	pvp_mode_select.add_item("Ranked")
-	pvp_mode_select.set_item_metadata(1, "ranked")
+	pvp_mode_select.set_item_metadata(0, "ranked")
+	pvp_mode_select.add_item("Casual")
+	pvp_mode_select.set_item_metadata(1, "casual")
 	pvp_mode_select.item_selected.connect(_on_pvp_mode_selected)
 	mode_row.add_child(pvp_mode_select)
 
@@ -3036,7 +3048,7 @@ func _setup_pvp_room_popup() -> void:
 	play_main_layout.add_child(_create_pvp_section_title("General Information"))
 	play_main_layout.add_child(_create_pvp_info_row("Shared Foundation", "Casual and ranked queue battles use the same persisted PvP match, ownership, timers, reconnect and settlement systems."))
 	play_main_layout.add_child(_create_pvp_info_row("Ranked Points", "The current leaderboard uses a simple provisional model: win +10, loss -10. Full MMR can replace this later."))
-	play_main_layout.add_child(_create_pvp_info_row("Room Codes", "Direct room-code battles are still available in their own tab."))
+	play_main_layout.add_child(_create_pvp_info_row("Custom Battles", "Direct room-code battles are available under Custom / Casual. Ranked matchmaking does not use room codes."))
 
 	play_main_layout.add_child(HSeparator.new())
 	play_main_layout.add_child(_create_pvp_section_title("Team Validator"))
@@ -3057,7 +3069,7 @@ func _setup_pvp_room_popup() -> void:
 	play_main_layout.add_child(validator_spacer)
 
 	var room_tab := VBoxContainer.new()
-	room_tab.name = "Room Code"
+	room_tab.name = "Custom / Casual"
 	room_tab.add_theme_constant_override("separation", 10)
 	tabs.add_child(room_tab)
 
@@ -3136,13 +3148,13 @@ func _setup_pvp_room_popup() -> void:
 	var rules_tab := VBoxContainer.new()
 	rules_tab.name = "Rules"
 	rules_tab.add_theme_constant_override("separation", 10)
-	tabs.add_child(rules_tab)
+	ranked_tabs.add_child(rules_tab)
 	rules_tab.add_child(_create_pvp_ruleset_panel())
 
 	var leaderboard_tab := VBoxContainer.new()
 	leaderboard_tab.name = "Leaderboard"
 	leaderboard_tab.add_theme_constant_override("separation", 10)
-	tabs.add_child(leaderboard_tab)
+	ranked_tabs.add_child(leaderboard_tab)
 
 	var leaderboard_header := HBoxContainer.new()
 	leaderboard_header.add_theme_constant_override("separation", 8)
@@ -3185,7 +3197,7 @@ func _setup_pvp_room_popup() -> void:
 	var history_tab := VBoxContainer.new()
 	history_tab.name = "Battle History"
 	history_tab.add_theme_constant_override("separation", 10)
-	tabs.add_child(history_tab)
+	ranked_tabs.add_child(history_tab)
 
 	var history_header := HBoxContainer.new()
 	history_header.add_theme_constant_override("separation", 8)
@@ -3213,7 +3225,13 @@ func _setup_pvp_room_popup() -> void:
 	pvp_history_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_history_list.add_theme_constant_override("separation", 8)
 	history_scroll.add_child(pvp_history_list)
-	tabs.move_child(room_tab, tabs.get_child_count() - 1)
+
+	var tournaments_tab := VBoxContainer.new()
+	tournaments_tab.name = "Tournaments"
+	tournaments_tab.add_theme_constant_override("separation", 10)
+	tabs.add_child(tournaments_tab)
+	tournaments_tab.add_child(_create_pvp_tournaments_placeholder())
+	tabs.move_child(tournaments_tab, 1)
 
 	var close_button := Button.new()
 	close_button.text = "Close"
@@ -3355,6 +3373,33 @@ func _create_pvp_info_row(title_text: String, body_text: String) -> Control:
 	body.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(body)
 	return row
+
+func _create_pvp_tournaments_placeholder() -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#8aa0b8aa"), 6, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin.add_child(layout)
+
+	layout.add_child(_create_pvp_section_title("Tournaments"))
+	layout.add_child(_create_pvp_info_row("Status", "Tournament support is not live yet. This section is reserved for brackets, best-of series and scheduled events."))
+	layout.add_child(_create_pvp_info_row("Foundation", "Future tournament battles will use the same PvP match, ownership, reconnect, settlement and history systems as ranked."))
+	layout.add_child(_create_pvp_info_row("Next Work", "The next backend step is a tournament domain with brackets, check-in, series rules and spectator support."))
+
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(spacer)
+	return panel
 
 func _create_pvp_validator_row(status_text: String, message: String, color: Color) -> Control:
 	var row := HBoxContainer.new()
@@ -14966,6 +15011,7 @@ func _on_pvp_button_pressed() -> void:
 	_activate_ui_panel(pvp_room_popup)
 	_refresh_pvp_team_validator()
 	await _refresh_pvp_queue_list()
+	_select_first_pvp_queue_for_mode("ranked")
 	_refresh_pvp_team_validator()
 	await _refresh_pvp_leaderboard()
 	await _refresh_pvp_match_history()
