@@ -15368,6 +15368,8 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 	pvp_queue_auto_open_in_flight = false
 
 	if not bool(response.get("success", false)):
+		if await _recover_already_bound_pvp_queue_match(response):
+			return
 		_set_pvp_queue_status("Queue Status: could not start battle: %s" % str(response.get("error", "Unknown error")))
 		_refresh_pvp_queue_buttons("matched")
 		return
@@ -15405,12 +15407,38 @@ func _on_pvp_reconnect_battle_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(start_response.get("success", false)):
+		if await _recover_already_bound_pvp_queue_match(start_response):
+			return
 		_set_pvp_queue_status("Queue Status: reconnect failed: %s" % str(start_response.get("error", "Unknown error")))
 		return
 
 	if str(start_response.get("roomCode", "")).strip_edges() == "":
 		start_response["roomCode"] = match_id.to_upper()
 	await _start_pvp_battle_from_response(start_response)
+
+func _recover_already_bound_pvp_queue_match(error_response: Dictionary) -> bool:
+	var error_text := str(error_response.get("error", error_response.get("detail", ""))).strip_edges().to_lower()
+	if not error_text.contains("already bound"):
+		return false
+	_set_pvp_queue_status("Queue Status: matched battle already exists. Reconnecting...")
+	var active_request := _create_pvp_request_node()
+	var active_response: Dictionary = await BattleApiClient.get_active_pvp_match(active_request)
+	active_request.queue_free()
+	if not bool(active_response.get("success", false)):
+		return false
+	var match_id := str(active_response.get("matchId", pvp_active_queue_match_id)).strip_edges()
+	if match_id == "":
+		return false
+	pvp_active_queue_match_id = match_id
+	var retry_request := _create_pvp_request_node()
+	var retry_response: Dictionary = await BattleApiClient.start_pvp_match_battle(retry_request, match_id)
+	retry_request.queue_free()
+	if not bool(retry_response.get("success", false)):
+		return false
+	if str(retry_response.get("roomCode", "")).strip_edges() == "":
+		retry_response["roomCode"] = match_id.to_upper()
+	await _start_pvp_battle_from_response(retry_response)
+	return true
 
 func _can_reconnect_to_started_pvp_room(response: Dictionary) -> bool:
 	if bool(response.get("success", false)):
