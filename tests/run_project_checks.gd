@@ -8,6 +8,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_cry_resolver_check.gd",
 	"res://tests/pokemon_experience_payload_check.gd",
 	"res://tests/pokemon_factory_hp_snapshot_check.gd",
+	"res://tests/pvp_ranked_banlists_check.gd",
 	"res://tests/pvp_ranked_team_validation_check.gd",
 	"res://tests/map_encounter_provider_check.gd",
 	"res://tests/pallet_town_encounter_check.gd",

@@ -36,6 +36,7 @@ const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
@@ -419,6 +420,11 @@ var pvp_mode_close_button: Button
 var pvp_room_popup: PanelContainer
 var pvp_popup_title_label: Label
 var pvp_root_tabs: TabContainer
+var pvp_ranked_tabs: TabContainer
+var pvp_bans_status_label: Label
+var pvp_bans_metadata_list: VBoxContainer
+var pvp_bans_list: VBoxContainer
+var pvp_bans_refresh_button: Button
 var pvp_leaderboard_status_label: Label
 var pvp_leaderboard_list: VBoxContainer
 var pvp_leaderboard_refresh_button: Button
@@ -451,6 +457,9 @@ var pvp_queue_list_in_flight := false
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
 var pvp_queue_auto_open_in_flight := false
+var pvp_banlists_in_flight := false
+var pvp_banlists_loaded := false
+var pvp_banlists_result: Dictionary = PvpRankedBanlists.not_loaded()
 var pvp_leaderboard_in_flight := false
 var pvp_history_in_flight := false
 var pvp_ranked_team_validation_in_flight := false
@@ -2955,7 +2964,9 @@ func _setup_pvp_room_popup() -> void:
 	ranked_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ranked_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	ranked_tabs.add_theme_font_size_override("font_size", 13)
+	ranked_tabs.tab_changed.connect(_on_pvp_ranked_tab_changed)
 	ranked_tab.add_child(ranked_tabs)
+	pvp_ranked_tabs = ranked_tabs
 
 	var play_tab := HBoxContainer.new()
 	play_tab.name = "Play"
@@ -3191,6 +3202,50 @@ func _setup_pvp_room_popup() -> void:
 	ranked_tabs.add_child(rules_tab)
 	rules_tab.add_child(_create_pvp_ruleset_panel())
 
+	var bans_tab := VBoxContainer.new()
+	bans_tab.name = "Bans"
+	bans_tab.add_theme_constant_override("separation", 10)
+	ranked_tabs.add_child(bans_tab)
+
+	var bans_header := HBoxContainer.new()
+	bans_header.add_theme_constant_override("separation", 8)
+	bans_tab.add_child(bans_header)
+
+	pvp_bans_status_label = Label.new()
+	pvp_bans_status_label.text = "Loading..."
+	pvp_bans_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_bans_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	bans_header.add_child(pvp_bans_status_label)
+
+	pvp_bans_refresh_button = Button.new()
+	pvp_bans_refresh_button.text = "Refresh"
+	pvp_bans_refresh_button.custom_minimum_size = Vector2(92, 32)
+	pvp_bans_refresh_button.focus_mode = Control.FOCUS_NONE
+	pvp_bans_refresh_button.pressed.connect(_on_pvp_bans_refresh_pressed)
+	bans_header.add_child(pvp_bans_refresh_button)
+
+	var bans_scroll := ScrollContainer.new()
+	bans_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bans_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bans_tab.add_child(bans_scroll)
+
+	var bans_content := VBoxContainer.new()
+	bans_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bans_content.add_theme_constant_override("separation", 10)
+	bans_scroll.add_child(bans_content)
+
+	pvp_bans_metadata_list = VBoxContainer.new()
+	pvp_bans_metadata_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_bans_metadata_list.add_theme_constant_override("separation", 6)
+	bans_content.add_child(pvp_bans_metadata_list)
+
+	bans_content.add_child(HSeparator.new())
+
+	pvp_bans_list = VBoxContainer.new()
+	pvp_bans_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_bans_list.add_theme_constant_override("separation", 10)
+	bans_content.add_child(pvp_bans_list)
+
 	var leaderboard_tab := VBoxContainer.new()
 	leaderboard_tab.name = "Leaderboard"
 	leaderboard_tab.add_theme_constant_override("separation", 10)
@@ -3235,7 +3290,7 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_scroll.add_child(pvp_leaderboard_list)
 
 	var history_tab := VBoxContainer.new()
-	history_tab.name = "Battle History"
+	history_tab.name = "History"
 	history_tab.add_theme_constant_override("separation", 10)
 	ranked_tabs.add_child(history_tab)
 
@@ -3286,8 +3341,10 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
+	_apply_button_style(pvp_bans_refresh_button)
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
+	_render_pvp_banlists()
 	_apply_button_style(close_button)
 
 	pvp_poll_timer = Timer.new()
@@ -15452,6 +15509,7 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		await _refresh_pvp_queue_list()
 		_select_first_pvp_queue_for_mode("ranked")
 		await _refresh_pvp_ranked_team_validation(true)
+		await _refresh_pvp_banlists(false)
 		await _refresh_pvp_leaderboard()
 		await _refresh_pvp_match_history()
 
@@ -15740,6 +15798,9 @@ func _hide_pvp_room_popup() -> void:
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_list_in_flight = false
+	pvp_banlists_in_flight = false
+	pvp_banlists_loaded = false
+	pvp_banlists_result = PvpRankedBanlists.not_loaded()
 	pvp_leaderboard_in_flight = false
 	pvp_history_in_flight = false
 	pvp_room_dragging = false
@@ -15936,6 +15997,124 @@ func _on_pvp_queue_selected(index: int) -> void:
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_team_validator()
 	_refresh_pvp_ranked_team_validation.call_deferred(true)
+
+func _on_pvp_ranked_tab_changed(tab_index: int) -> void:
+	if pvp_ranked_tabs == null:
+		return
+	var tab := pvp_ranked_tabs.get_child(tab_index)
+	if tab == null or tab.name != "Bans":
+		return
+	_refresh_pvp_banlists.call_deferred(false)
+
+func _on_pvp_bans_refresh_pressed() -> void:
+	await _refresh_pvp_banlists(true)
+
+func _refresh_pvp_banlists(force: bool = false) -> void:
+	if pvp_banlists_in_flight:
+		return
+	if pvp_banlists_loaded and not force:
+		_render_pvp_banlists()
+		return
+	pvp_banlists_in_flight = true
+	pvp_banlists_result = PvpRankedBanlists.loading()
+	_render_pvp_banlists()
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_pvp_ranked_banlists(request)
+	request.queue_free()
+	pvp_banlists_in_flight = false
+	pvp_banlists_result = PvpRankedBanlists.normalize_response(response)
+	pvp_banlists_loaded = PvpRankedBanlists.is_ready(pvp_banlists_result)
+	_render_pvp_banlists()
+
+func _render_pvp_banlists() -> void:
+	if pvp_bans_status_label != null:
+		pvp_bans_status_label.text = PvpRankedBanlists.display_message(pvp_banlists_result)
+		var state := str(pvp_banlists_result.get("state", "")).strip_edges()
+		var color := UI_MUTED_TEXT
+		if state == PvpRankedBanlists.STATE_READY:
+			color = UI_TEXT
+		elif state == PvpRankedBanlists.STATE_ERROR:
+			color = Color("#ff7979")
+		pvp_bans_status_label.add_theme_color_override("font_color", color)
+	if pvp_bans_refresh_button != null:
+		pvp_bans_refresh_button.disabled = pvp_banlists_in_flight
+	_render_pvp_banlist_metadata()
+	_render_pvp_banlist_categories()
+
+func _render_pvp_banlist_metadata() -> void:
+	if pvp_bans_metadata_list == null:
+		return
+	for child in pvp_bans_metadata_list.get_children():
+		child.queue_free()
+	var metadata_value: Variant = pvp_banlists_result.get("metadata", {})
+	var metadata: Dictionary = metadata_value as Dictionary if metadata_value is Dictionary else {}
+	pvp_bans_metadata_list.add_child(_create_pvp_info_row("Format", _pvp_banlist_metadata_value(metadata, "formatId", "Unknown")))
+	pvp_bans_metadata_list.add_child(_create_pvp_info_row("Ruleset", _pvp_banlist_metadata_value(metadata, "rulesetId", "Unknown")))
+	pvp_bans_metadata_list.add_child(_create_pvp_info_row("Banlist Version", _pvp_banlist_metadata_value(metadata, "version", "Unknown")))
+	pvp_bans_metadata_list.add_child(_create_pvp_info_row("Last Updated", _pvp_banlist_updated_label(_pvp_banlist_metadata_value(metadata, "updatedAt", ""))))
+
+func _render_pvp_banlist_categories() -> void:
+	if pvp_bans_list == null:
+		return
+	for child in pvp_bans_list.get_children():
+		child.queue_free()
+	var state := str(pvp_banlists_result.get("state", "")).strip_edges()
+	if state == PvpRankedBanlists.STATE_LOADING:
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Loading..."))
+		return
+	if state == PvpRankedBanlists.STATE_ERROR:
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Failed to load banlists."))
+		return
+	for category_value: String in PvpRankedBanlists.CATEGORIES:
+		pvp_bans_list.add_child(_create_pvp_banlist_category_panel(category_value))
+
+func _create_pvp_banlist_category_panel(category: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f88"), 4, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 6)
+	margin.add_child(layout)
+
+	var title := _create_pvp_section_title(PvpRankedBanlists.category_label(category))
+	layout.add_child(title)
+
+	var bans := PvpRankedBanlists.category_bans(pvp_banlists_result, category)
+	if bans.is_empty():
+		var empty := Label.new()
+		empty.text = PvpRankedBanlists.empty_message(category)
+		empty.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		layout.add_child(empty)
+		return panel
+
+	for ban: Dictionary in bans:
+		var label := Label.new()
+		label.text = str(ban.get("label", ban.get("id", ""))).strip_edges()
+		label.add_theme_color_override("font_color", UI_TEXT)
+		layout.add_child(label)
+	return panel
+
+func _create_pvp_banlist_state_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	return label
+
+func _pvp_banlist_metadata_value(metadata: Dictionary, key: String, fallback: String) -> String:
+	var value := str(metadata.get(key, "")).strip_edges()
+	return value if value != "" else fallback
+
+func _pvp_banlist_updated_label(value: String) -> String:
+	return value if value.strip_edges() != "" else "Not updated"
 
 func _on_pvp_history_refresh_pressed() -> void:
 	await _refresh_pvp_match_history()

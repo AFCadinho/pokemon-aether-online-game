@@ -129,6 +129,9 @@ func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: i
 		]
 	)
 
+func get_pvp_ranked_banlists(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/account/pvp/ranked/banlists")
+
 func get_active_pvp_match(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/matches/active")
 
