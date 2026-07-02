@@ -411,6 +411,7 @@ var pvp_mode_tournaments_button: Button
 var pvp_mode_casual_button: Button
 var pvp_mode_close_button: Button
 var pvp_room_popup: PanelContainer
+var pvp_popup_title_label: Label
 var pvp_root_tabs: TabContainer
 var pvp_leaderboard_status_label: Label
 var pvp_leaderboard_list: VBoxContainer
@@ -2907,10 +2908,12 @@ func _setup_pvp_room_popup() -> void:
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	title.gui_input.connect(_on_pvp_room_header_gui_input)
 	layout.add_child(title)
+	pvp_popup_title_label = title
 
 	var tabs := TabContainer.new()
 	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.tabs_visible = false
 	tabs.add_theme_font_size_override("font_size", 14)
 	layout.add_child(tabs)
 	pvp_root_tabs = tabs
@@ -15114,22 +15117,44 @@ func _open_pvp_popup_section(section_name: String) -> void:
 	pvp_room_popup.visible = true
 	_activate_ui_panel(pvp_room_popup)
 	_select_pvp_root_tab(section_name)
-	_refresh_pvp_team_validator()
-	await _refresh_pvp_queue_list()
+	if pvp_popup_title_label != null:
+		pvp_popup_title_label.text = _pvp_popup_title_for_section(section_name)
+	if section_name != "Ranked":
+		return
 	if section_name == "Ranked":
+		_refresh_pvp_team_validator()
+		await _refresh_pvp_queue_list()
 		_select_first_pvp_queue_for_mode("ranked")
-	_refresh_pvp_team_validator()
-	await _refresh_pvp_leaderboard()
-	await _refresh_pvp_match_history()
+		_refresh_pvp_team_validator()
+		await _refresh_pvp_leaderboard()
+		await _refresh_pvp_match_history()
+
+func _pvp_popup_title_for_section(section_name: String) -> String:
+	match section_name:
+		"Ranked":
+			return "Ranked"
+		"Tournaments":
+			return "Tournaments"
+		"Custom / Casual":
+			return "Custom / Casual"
+		_:
+			return "PvP"
 
 func _select_pvp_root_tab(section_name: String) -> void:
 	if pvp_root_tabs == null:
 		return
 	for index in range(pvp_root_tabs.get_child_count()):
 		var child := pvp_root_tabs.get_child(index)
-		if child != null and child.name == section_name:
+		if child != null and _pvp_root_tab_matches_section(child.name, section_name):
 			pvp_root_tabs.current_tab = index
 			return
+
+func _pvp_root_tab_matches_section(tab_name: String, section_name: String) -> bool:
+	if tab_name == section_name:
+		return true
+	if section_name == "Custom / Casual":
+		return tab_name == "Custom _ Casual" or tab_name == "Custom Casual"
+	return false
 
 func _on_pvp_room_header_gui_input(event: InputEvent) -> void:
 	if pvp_room_popup == null:
