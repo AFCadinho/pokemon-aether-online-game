@@ -94,6 +94,13 @@ func join_pvp_queue(request_node: HTTPRequest, queue_id: String, player: Diction
 		}
 	)
 
+func validate_pvp_queue_team(request_node: HTTPRequest, queue_id: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/account/pvp/queues/%s/team-validation" % queue_id.strip_edges().uri_encode(),
+		{}
+	)
+
 func leave_pvp_queue(request_node: HTTPRequest, queue_id: String) -> Dictionary:
 	return await send_post_request(
 		request_node,

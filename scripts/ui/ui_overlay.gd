@@ -35,6 +35,7 @@ const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
@@ -449,6 +450,11 @@ var pvp_queue_poll_in_flight := false
 var pvp_queue_auto_open_in_flight := false
 var pvp_leaderboard_in_flight := false
 var pvp_history_in_flight := false
+var pvp_ranked_team_validation_in_flight := false
+var pvp_ranked_team_validation_request_seq := 0
+var pvp_ranked_team_validation_result: Dictionary = PvpRankedTeamValidation.not_checked()
+var pvp_ranked_team_validation_party_signature := ""
+var pvp_ranked_team_validation_queue_id := ""
 var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
@@ -697,6 +703,8 @@ func _ready() -> void:
 
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
 		PlayerSave.party_changed.connect(_refresh_party)
+	if not PlayerSave.party_changed.is_connected(_on_pvp_party_changed):
+		PlayerSave.party_changed.connect(_on_pvp_party_changed)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
 	if not ChatRealtimeService.mail_received.is_connected(_on_realtime_mail_received):
@@ -15134,7 +15142,7 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		_refresh_pvp_team_validator()
 		await _refresh_pvp_queue_list()
 		_select_first_pvp_queue_for_mode("ranked")
-		_refresh_pvp_team_validator()
+		await _refresh_pvp_ranked_team_validation(true)
 		await _refresh_pvp_leaderboard()
 		await _refresh_pvp_match_history()
 
@@ -15196,6 +15204,7 @@ func _handle_pvp_room_drag_input(event: InputEvent) -> void:
 
 func _on_pvp_team_source_selected(_index: int) -> void:
 	_refresh_pvp_team_validator()
+	_refresh_pvp_ranked_team_validation.call_deferred(true)
 
 func _on_pvp_mode_selected(index: int) -> void:
 	if pvp_mode_select == null:
@@ -15210,6 +15219,7 @@ func _on_pvp_mode_selected(index: int) -> void:
 		return
 	_select_first_pvp_queue_for_mode(mode)
 	_refresh_pvp_team_validator()
+	_refresh_pvp_ranked_team_validation.call_deferred(true)
 
 func _select_first_pvp_queue_for_mode(mode: String) -> bool:
 	var normalized_mode: String = mode.strip_edges().to_lower()
@@ -15288,21 +15298,122 @@ func _refresh_pvp_team_validator() -> void:
 		var mode_text: String = mode.capitalize() if mode != "" else "Selected"
 		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "%s queue selected." % mode_text, Color("#62e36e")))
 
-	if issues.is_empty():
+	if issues.is_empty() and not _is_selected_pvp_queue_ranked():
 		if pvp_team_validator_status_label != null:
 			pvp_team_validator_status_label.text = "Eligible for the selected queue."
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
-	else:
+	elif not issues.is_empty():
 		if pvp_team_validator_status_label != null:
 			pvp_team_validator_status_label.text = "Team is not eligible."
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 
 	for issue: String in issues:
-		pvp_team_validator_list.add_child(_create_pvp_validator_row("Issue", issue, Color("#ff7979")))
+		pvp_team_validator_list.add_child(_create_pvp_validator_row("Local", issue, Color("#f5df9a")))
 	for warning: String in warnings:
 		pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
-	if issues.is_empty() and warnings.is_empty():
-		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "No client-side validation issues found. Server rules remain authoritative.", Color("#62e36e")))
+
+	if _is_selected_pvp_queue_ranked():
+		_render_pvp_ranked_server_validation()
+	elif issues.is_empty() and warnings.is_empty():
+		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "No client-side validation issues found.", Color("#62e36e")))
+	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
+
+func _render_pvp_ranked_server_validation() -> void:
+	var server_state := str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
+	var server_message := PvpRankedTeamValidation.display_message(pvp_ranked_team_validation_result)
+	match server_state:
+		PvpRankedTeamValidation.STATE_VALID:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Ranked Ready"
+				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Server", server_message, Color("#62e36e")))
+		PvpRankedTeamValidation.STATE_INVALID:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Team is not eligible."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
+			var errors := PvpRankedTeamValidation.display_errors(pvp_ranked_team_validation_result)
+			for error: String in errors:
+				pvp_team_validator_list.add_child(_create_pvp_validator_row("Server", error, Color("#ff7979")))
+		PvpRankedTeamValidation.STATE_CHECKING:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Checking ranked team..."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Server", server_message, UI_MUTED_TEXT))
+		PvpRankedTeamValidation.STATE_ERROR:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Server validation unavailable."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
+			var errors := PvpRankedTeamValidation.display_errors(pvp_ranked_team_validation_result)
+			for error: String in errors:
+				pvp_team_validator_list.add_child(_create_pvp_validator_row("Server", error, Color("#ff7979")))
+		_:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Checking current party..."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Server", "Server validation pending.", UI_MUTED_TEXT))
+
+func _refresh_pvp_ranked_team_validation(force: bool = false) -> void:
+	if pvp_team_validator_list == null:
+		return
+	if not _is_selected_pvp_queue_ranked():
+		pvp_ranked_team_validation_result = PvpRankedTeamValidation.not_ranked()
+		_refresh_pvp_team_validator()
+		return
+	if pvp_active_queue_id == "":
+		pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response({
+			"success": false,
+			"error": "No ranked queue is selected.",
+		})
+		_refresh_pvp_team_validator()
+		return
+	var party_signature := _pvp_current_party_signature()
+	if not force and pvp_ranked_team_validation_queue_id == pvp_active_queue_id and pvp_ranked_team_validation_party_signature == party_signature and str(pvp_ranked_team_validation_result.get("state", "")) != PvpRankedTeamValidation.STATE_NOT_CHECKED:
+		_refresh_pvp_team_validator()
+		return
+	if pvp_ranked_team_validation_in_flight:
+		if not force:
+			return
+		pvp_ranked_team_validation_request_seq += 1
+		pvp_ranked_team_validation_in_flight = false
+
+	pvp_ranked_team_validation_in_flight = true
+	pvp_ranked_team_validation_request_seq += 1
+	var request_seq := pvp_ranked_team_validation_request_seq
+	pvp_ranked_team_validation_queue_id = pvp_active_queue_id
+	pvp_ranked_team_validation_party_signature = party_signature
+	pvp_ranked_team_validation_result = PvpRankedTeamValidation.checking()
+	_refresh_pvp_team_validator()
+
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.validate_pvp_queue_team(request, pvp_active_queue_id)
+	request.queue_free()
+	if request_seq != pvp_ranked_team_validation_request_seq:
+		return
+	pvp_ranked_team_validation_in_flight = false
+	pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(response)
+	_refresh_pvp_team_validator()
+
+func _on_pvp_party_changed() -> void:
+	pvp_ranked_team_validation_request_seq += 1
+	pvp_ranked_team_validation_in_flight = false
+	pvp_ranked_team_validation_result = PvpRankedTeamValidation.not_checked()
+	pvp_ranked_team_validation_party_signature = ""
+	if pvp_room_popup != null and pvp_room_popup.visible and _is_selected_pvp_queue_ranked():
+		_refresh_pvp_team_validator()
+		_refresh_pvp_ranked_team_validation.call_deferred(true)
+
+func _is_selected_pvp_queue_ranked() -> bool:
+	return _get_pvp_queue_mode(pvp_active_queue_id) == "ranked"
+
+func _pvp_current_party_signature() -> String:
+	return PvpRankedTeamValidation.party_signature(PlayerSave.party)
+
+func _current_pvp_queue_status_for_buttons() -> String:
+	if pvp_active_queue_match_id != "":
+		return "matched"
+	if pvp_active_queue_entry_id != "":
+		return "waiting"
+	return "idle"
 
 func _pvp_team_species_clause_key(species: String) -> String:
 	var normalized: String = species.strip_edges().to_lower()
@@ -15387,6 +15498,12 @@ func _on_pvp_join_room_pressed() -> void:
 func _on_pvp_join_queue_pressed() -> void:
 	if pvp_battle_starting:
 		return
+	if _is_selected_pvp_queue_ranked():
+		await _refresh_pvp_ranked_team_validation(true)
+		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
+			_set_pvp_queue_status("Queue Status: team validation failed.")
+			_refresh_pvp_team_validator()
+			return
 	_set_pvp_room_busy(true, "Joining queue...")
 	_set_pvp_queue_status("Queue Status: joining...")
 	var request := _create_pvp_request_node()
@@ -15400,6 +15517,10 @@ func _on_pvp_join_queue_pressed() -> void:
 
 	if not bool(response.get("success", false)):
 		_set_pvp_queue_status("Queue Status: join failed: %s" % str(response.get("error", "Unknown error")))
+		var validation_value: Variant = response.get("validation", {})
+		if validation_value is Dictionary:
+			pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(validation_value as Dictionary)
+			_refresh_pvp_team_validator()
 		return
 
 	var entry: Dictionary = _pvp_queue_entry_from_response(response)
@@ -15505,6 +15626,7 @@ func _on_pvp_queue_selected(index: int) -> void:
 	_set_pvp_queue_status("Queue Status: idle")
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_team_validator()
+	_refresh_pvp_ranked_team_validation.call_deferred(true)
 
 func _on_pvp_history_refresh_pressed() -> void:
 	await _refresh_pvp_match_history()
@@ -16244,7 +16366,8 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 	if pvp_join_queue_button == null or pvp_leave_queue_button == null:
 		return
 	var normalized_status := status.strip_edges().to_lower()
-	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
+	var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
+	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched" or ranked_blocked
 	pvp_leave_queue_button.disabled = pvp_battle_starting or normalized_status != "waiting"
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
@@ -16374,7 +16497,8 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 	pvp_create_room_button.disabled = is_busy
 	pvp_join_room_button.disabled = is_busy
 	if pvp_join_queue_button != null:
-		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != ""
+		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
+		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
 	if pvp_leave_queue_button != null:
 		pvp_leave_queue_button.disabled = is_busy or pvp_active_queue_entry_id == "" or pvp_active_queue_match_id != ""
 	if pvp_queue_select != null:
