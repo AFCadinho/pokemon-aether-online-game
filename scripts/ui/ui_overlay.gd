@@ -36,6 +36,7 @@ const DEV_TOOLS_PERMISSION := "generating"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
+const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const APPEARANCE_CATEGORIES := [
@@ -298,6 +299,7 @@ enum DevPokemonPopupMode {
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/CloseButton
+var friendlist_popup: FriendlistPopup
 @onready var mail_popup: PanelContainer = $Control/MailPopup
 @onready var mail_compose_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/ComposeButton
 @onready var mail_close_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/CloseButton
@@ -11120,6 +11122,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": pokedex_popup, "close": Callable(self, "_hide_pokedex_popup")},
 		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
+		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
@@ -14054,7 +14057,27 @@ func _hide_socials_menu() -> void:
 	_deactivate_ui_panel(socials_menu)
 
 func _on_socials_friend_list_button_pressed() -> void:
-	_add_chat_message("Friend list is not implemented yet.")
+	_hide_socials_menu()
+	_open_friendlist_popup()
+
+func _open_friendlist_popup() -> void:
+	if friendlist_popup == null:
+		friendlist_popup = FRIENDLIST_POPUP_SCENE.instantiate() as FriendlistPopup
+		$Control.add_child(friendlist_popup)
+		if not friendlist_popup.closed.is_connected(_on_friendlist_popup_closed):
+			friendlist_popup.closed.connect(_on_friendlist_popup_closed)
+
+	friendlist_popup.open()
+	_activate_ui_panel(friendlist_popup)
+
+func _hide_friendlist_popup() -> void:
+	if friendlist_popup == null:
+		return
+	friendlist_popup.close()
+
+func _on_friendlist_popup_closed() -> void:
+	if friendlist_popup != null:
+		_deactivate_ui_panel(friendlist_popup)
 
 func _on_socials_mail_button_pressed() -> void:
 	_hide_socials_menu()

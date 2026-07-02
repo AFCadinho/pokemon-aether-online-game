@@ -11,6 +11,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/map_encounter_provider_check.gd",
 	"res://tests/pallet_town_encounter_check.gd",
 	"res://tests/pokeaether_tmx_importer_check.gd",
+	"res://tests/social_service_contract_check.gd",
 ]
 
 const LOG_DIR := "/tmp/pokeaether_project_checks"

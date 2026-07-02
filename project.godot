@@ -42,6 +42,7 @@ ChatRealtimeService="*res://scripts/services/chat_realtime_service.gd"
 WorldPresenceService="*res://scripts/services/world_presence_service.gd"
 PvpBattleRealtimeService="*res://scripts/services/pvp_battle_realtime_service.gd"
 MailService="*res://scripts/services/mail_service.gd"
+SocialService="*res://scripts/services/social_service.gd"
 
 [display]
 
