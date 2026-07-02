@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0u5xg4ep4u6t"]
+
+[ext_resource type="Script" path="res://scripts/ui/friendlist_popup.gd" id="1_friendlist_popup"]
+
+[node name="FriendlistPopup" type="PanelContainer"]
+visible = false
+offset_right = 720.0
+offset_bottom = 560.0
+script = ExtResource("1_friendlist_popup")
