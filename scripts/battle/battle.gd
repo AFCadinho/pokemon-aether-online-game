@@ -3866,14 +3866,16 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	action_flow.set_local_player_id(local_player_id)
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
 	pvp_match_id = str(api_response.get("matchId", "")).strip_edges()
-	_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
 
+	var is_team_preview_response := _should_show_team_preview(display_response)
+	var restored_history_log := false
 	var lead_response: Dictionary = display_response
-	if _should_show_team_preview(display_response):
+	if is_team_preview_response:
 		if not _apply_team_preview_battle_response(api_response):
 			return
+		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
 		lead_response = await _run_pvp_team_preview_lead_selection(local_player_id)
 		if lead_response.is_empty():
 			return
@@ -3881,12 +3883,15 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		if not _apply_initial_battle_response(api_response):
 			return
 		_show_default_trainer_leads_before_selection(player_pokemon, display_response)
+		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
 
-	_add_battle_log_messages([
-		"%s wants to battle!" % _get_player_display_name("p2"),
-		"Go! %s!" % _get_active_display_species("p1"),
-		"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_species("p2")],
-	])
+	restored_history_log = _restore_battle_log_from_history_response(display_response)
+	if not restored_history_log:
+		_add_battle_log_messages([
+			"%s wants to battle!" % _get_player_display_name("p2"),
+			"Go! %s!" % _get_active_display_species("p1"),
+			"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_species("p2")],
+		])
 	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
 	var opponent_species := _get_active_display_species("p2")
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
@@ -3896,7 +3901,8 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	await get_tree().process_frame
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
-	await _render_initial_battle_events(lead_response)
+	if not restored_history_log:
+		await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
@@ -4727,8 +4733,13 @@ func _add_battle_log_message(message: String) -> void:
 		mini_battle_feed.add_message(message)
 
 func _restore_battle_log_from_snapshot(response: Dictionary) -> void:
+	if _restore_battle_log_from_history_response(response):
+		return
+
 	var log_value: Variant = response.get("log", [])
 	if not (log_value is Array):
+		return
+	if (log_value as Array).is_empty():
 		return
 
 	battle_log_panel.clear_log()
@@ -4748,6 +4759,46 @@ func _restore_battle_log_from_snapshot(response: Dictionary) -> void:
 
 		_add_battle_log_message(line)
 
+func _restore_battle_log_from_history_response(response: Dictionary) -> bool:
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array) or (events_value as Array).is_empty():
+		return false
+
+	battle_log_panel.clear_log()
+	if mini_battle_feed != null:
+		mini_battle_feed.clear()
+	event_renderer.reset_battle_log_player_gap()
+
+	var restored_count := 0
+	for event_value: Variant in events_value as Array:
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		var presentation: Dictionary = event_presentation.build(event_data)
+		var turn := int(presentation.get("turn", 0))
+		if turn > 0:
+			event_renderer.add_turn_header(turn)
+			restored_count += 1
+			continue
+
+		var pre_log_message := str(presentation.get("pre_log_message", ""))
+		var log_message := str(presentation.get("log_message", ""))
+		if pre_log_message != "":
+			_add_battle_log_message(pre_log_message)
+			restored_count += 1
+		if log_message != "":
+			_add_battle_log_message(log_message)
+			restored_count += 1
+
+	if restored_count > 0:
+		var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+		if response_event_seq >= 0:
+			pvp_event_queue.last_rendered_seq = max(pvp_event_queue.last_rendered_seq, response_event_seq)
+			last_rendered_event_seq = max(last_rendered_event_seq, response_event_seq)
+		pvp_rendered_event_count = max(pvp_rendered_event_count, (events_value as Array).size())
+	return restored_count > 0
+
 func _parse_battle_log_turn_header(line: String) -> int:
 	var normalized := line.strip_edges().to_lower()
 	if not normalized.begins_with("turn "):
@@ -4765,9 +4816,6 @@ func _parse_battle_log_turn_header(line: String) -> int:
 		return -1
 
 	return int(raw_turn.substr(0, end_index))
-
-
-
 
 ## Stuurt de gekozen player move door en laat de backend de NPC-keuze verwerken.
 func _on_moves_grid_move_selected(slot: int) -> void:
@@ -6422,23 +6470,38 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 
 func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:
 	var log_message := ""
+	var player_name := _get_pvp_connection_event_display_name(message)
 	match message_type:
 		"pvp.opponent_disconnected":
-			log_message = "Opponent disconnected."
+			log_message = "%s disconnected." % player_name
 		"pvp.reconnect_grace_started":
 			var grace_seconds := _get_int_from_variant(message.get("disconnectGraceSeconds", 0), 0)
 			if grace_seconds > 0:
-				log_message = "Opponent has %s seconds to reconnect." % grace_seconds
+				log_message = "%s has %s seconds to reconnect." % [player_name, grace_seconds]
 			else:
-				log_message = "Waiting for opponent to reconnect."
+				log_message = "Waiting for %s to reconnect." % player_name
 		"pvp.opponent_reconnected":
-			log_message = "Opponent reconnected."
+			log_message = "%s reconnected." % player_name
 		_:
 			return false
 
 	_add_battle_log_message(log_message)
 	current_action_panel.set_message(log_message)
 	return true
+
+func _get_pvp_connection_event_display_name(message: Dictionary) -> String:
+	var server_side := str(message.get("side", "")).strip_edges()
+	var display_side := server_side
+	if action_flow.local_player_id == "p2":
+		if server_side == "p1":
+			display_side = "p2"
+		elif server_side == "p2":
+			display_side = "p1"
+
+	if display_side == "p1" or display_side == "p2":
+		return _get_player_display_name(display_side)
+
+	return "Player"
 
 func _apply_pvp_phase_update(message: Dictionary) -> void:
 	_trace_pvp_flow("phase_update.received", {}, "message=%s" % _describe_pvp_realtime_message(message))
@@ -7720,7 +7783,6 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 
 	battle_state.load_from_api_response(reconciliation, false)
 	_apply_party_state_from_api_response(reconciliation)
-	_restore_battle_log_from_snapshot(reconciliation)
 	_remember_active_player_party_moves()
 	_prewarm_current_battle_move_animations()
 	_update_battle_presentation("snapshot_reconciliation")
@@ -8952,9 +9014,25 @@ func _get_active_display_species(player_id: String) -> String:
 		if ident_species != "":
 			var display_compare := _normalize_species_for_compare(display_species)
 			var ident_compare := _normalize_species_for_compare(ident_species)
-			if display_compare == "" or display_compare != ident_compare:
+			if display_compare == "" or (display_compare != ident_compare and not _is_specific_battle_form_species(display_species)):
 				return ident_species
 	return display_species
+
+func _is_specific_battle_form_species(species: String) -> bool:
+	var normalized := species.strip_edges().to_lower()
+	if normalized.contains("mega") or normalized.ends_with("-primal"):
+		return true
+
+	for suffix in [
+		"-alola", "-galar", "-hisui", "-paldea",
+		"-therian", "-incarnate", "-origin", "-altered",
+		"-wash", "-heat", "-frost", "-fan", "-mow",
+		"-sky", "-land", "-blade", "-shield",
+	]:
+		if normalized.ends_with(suffix):
+			return true
+
+	return false
 
 func _get_active_pokemon_is_shiny(player_id: String) -> bool:
 	return display_data_presenter.get_active_pokemon_is_shiny(player_id)
@@ -8995,6 +9073,8 @@ func _repair_pvp_local_display_species_from_ident(pokemon_data: Dictionary) -> v
 	var payload_species := _get_pokemon_data_compare_species(pokemon_data)
 	var ident_compare_species := _normalize_species_for_compare(ident_species)
 	if payload_species != "" and payload_species == ident_compare_species:
+		return
+	if _is_specific_battle_form_species(str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))):
 		return
 
 	pokemon_data["species"] = ident_species

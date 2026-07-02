@@ -235,6 +235,8 @@ func _enrich_display_data_from_player_save(display_data: Dictionary) -> void:
 		display_data["shiny"] = saved_pokemon.shiny
 		if not display_data.has("possibleAbilities"):
 			display_data["possibleAbilities"] = saved_pokemon.possible_abilities
+		if not display_data.has("types"):
+			display_data["types"] = saved_pokemon.types
 		return
 
 	display_data["displaySpecies"] = saved_pokemon.species
@@ -244,10 +246,28 @@ func _enrich_display_data_from_player_save(display_data: Dictionary) -> void:
 	display_data["possibleAbilities"] = saved_pokemon.possible_abilities
 
 func _has_temporary_battle_display_form(display_data: Dictionary) -> bool:
+	var display_species := str(display_data.get("displaySpecies", display_data.get("species", ""))).strip_edges()
 	return (
 		str(display_data.get("megaSpecies", "")) != ""
 		or str(display_data.get("transformedSpecies", "")) != ""
+		or _is_specific_battle_form_species(display_species)
 	)
+
+func _is_specific_battle_form_species(species: String) -> bool:
+	var normalized_species := normalize_species_for_compare(species)
+	if normalized_species.contains("mega") or normalized_species.ends_with("-primal"):
+		return true
+
+	for suffix in [
+		"-alola", "-galar", "-hisui", "-paldea",
+		"-therian", "-incarnate", "-origin", "-altered",
+		"-wash", "-heat", "-frost", "-fan", "-mow",
+		"-sky", "-land", "-blade", "-shield",
+	]:
+		if normalized_species.ends_with(suffix):
+			return true
+
+	return false
 
 
 func _enrich_display_data_from_wild_pokemon(display_data: Dictionary) -> void:

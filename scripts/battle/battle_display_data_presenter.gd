@@ -41,6 +41,10 @@ func get_active_display_species(player_id: String) -> String:
 	if persisted_mega_species != "":
 		return persisted_mega_species
 
+	var active_battle_form_species := battle_state.resolve_active_mega_species(player_id)
+	if active_battle_form_species != "":
+		return active_battle_form_species
+
 	if player_id == "p2":
 		var display_pokemon := active_pokemon.duplicate()
 		display_metadata.enrich_display_data(player_id, display_pokemon)
