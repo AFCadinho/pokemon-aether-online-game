@@ -416,6 +416,7 @@ var pvp_queue_status_label: Label
 var pvp_join_queue_button: Button
 var pvp_leave_queue_button: Button
 var pvp_open_queue_battle_button: Button
+var pvp_reconnect_battle_button: Button
 var pvp_poll_timer: Timer
 var pvp_poll_request: HTTPRequest
 var pvp_active_room_code := ""
@@ -2972,6 +2973,13 @@ func _setup_pvp_room_popup() -> void:
 	pvp_open_queue_battle_button.pressed.connect(_on_pvp_open_queue_battle_pressed)
 	queue_actions.add_child(pvp_open_queue_battle_button)
 
+	pvp_reconnect_battle_button = Button.new()
+	pvp_reconnect_battle_button.text = "Reconnect"
+	pvp_reconnect_battle_button.custom_minimum_size = Vector2(110, 34)
+	pvp_reconnect_battle_button.focus_mode = Control.FOCUS_NONE
+	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
+	queue_actions.add_child(pvp_reconnect_battle_button)
+
 	var close_button := Button.new()
 	close_button.text = "Close"
 	close_button.custom_minimum_size = Vector2(0, 32)
@@ -2985,6 +2993,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_open_queue_battle_button)
+	_apply_button_style(pvp_reconnect_battle_button)
 	_apply_button_style(close_button)
 
 	pvp_poll_timer = Timer.new()
@@ -14721,6 +14730,42 @@ func _on_pvp_open_queue_battle_pressed() -> void:
 		response["roomCode"] = pvp_active_queue_match_id.to_upper()
 	await _start_pvp_battle_from_response(response)
 
+func _on_pvp_reconnect_battle_pressed() -> void:
+	if pvp_battle_starting:
+		return
+
+	_set_pvp_room_busy(true, "Checking active battle...")
+	_set_pvp_queue_status("Queue Status: checking active battle...")
+	var active_request := _create_pvp_request_node()
+	var active_response: Dictionary = await BattleApiClient.get_active_pvp_match(active_request)
+	active_request.queue_free()
+
+	if not bool(active_response.get("success", false)):
+		_set_pvp_room_busy(false)
+		_set_pvp_queue_status("Queue Status: no active battle found.")
+		return
+
+	var match_id := str(active_response.get("matchId", "")).strip_edges()
+	if match_id == "":
+		_set_pvp_room_busy(false)
+		_set_pvp_queue_status("Queue Status: active battle has no match id.")
+		return
+
+	pvp_active_queue_match_id = match_id
+	_set_pvp_queue_status("Queue Status: reconnecting...")
+	var start_request := _create_pvp_request_node()
+	var start_response: Dictionary = await BattleApiClient.start_pvp_match_battle(start_request, match_id)
+	start_request.queue_free()
+	_set_pvp_room_busy(false)
+
+	if not bool(start_response.get("success", false)):
+		_set_pvp_queue_status("Queue Status: reconnect failed: %s" % str(start_response.get("error", "Unknown error")))
+		return
+
+	if str(start_response.get("roomCode", "")).strip_edges() == "":
+		start_response["roomCode"] = match_id.to_upper()
+	await _start_pvp_battle_from_response(start_response)
+
 func _can_reconnect_to_started_pvp_room(response: Dictionary) -> bool:
 	if bool(response.get("success", false)):
 		return false
@@ -14846,6 +14891,8 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
 	pvp_leave_queue_button.disabled = pvp_battle_starting or normalized_status != "waiting"
 	pvp_open_queue_battle_button.disabled = pvp_battle_starting or normalized_status != "matched" or pvp_active_queue_match_id == ""
+	if pvp_reconnect_battle_button != null:
+		pvp_reconnect_battle_button.disabled = pvp_battle_starting
 
 func _poll_pvp_room() -> void:
 	if pvp_poll_in_flight or pvp_active_room_code == "":
@@ -14966,6 +15013,8 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 		pvp_leave_queue_button.disabled = is_busy or pvp_active_queue_entry_id == "" or pvp_active_queue_match_id != ""
 	if pvp_open_queue_battle_button != null:
 		pvp_open_queue_battle_button.disabled = is_busy or pvp_active_queue_match_id == ""
+	if pvp_reconnect_battle_button != null:
+		pvp_reconnect_battle_button.disabled = is_busy
 	if message != "":
 		_set_pvp_status(message)
 

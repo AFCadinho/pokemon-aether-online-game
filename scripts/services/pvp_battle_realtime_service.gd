@@ -22,6 +22,7 @@ var session_invalid_handled := false
 var active_room_code := ""
 var active_player_id := "p1"
 var active_battle_id := ""
+var active_match_id := ""
 var request_counter := 0
 var joined := false
 var room_is_ready := false
@@ -56,15 +57,16 @@ func _process(delta: float) -> void:
 	reconnect_timer -= delta
 	if reconnect_timer <= 0.0:
 		reconnect_timer = RECONNECT_DELAY_SECONDS
-		connect_room(active_room_code, active_player_id, active_battle_id)
+		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id)
 
 
-func connect_room(room_code: String, player_id: String, battle_id: String) -> void:
+func connect_room(room_code: String, player_id: String, battle_id: String, match_id: String = "") -> void:
 	if DEBUG_PVP_REALTIME:
-		_log_realtime("connect_room called", "room_code=%s player_id=%s battle_id=%s" % [room_code, player_id, battle_id])
+		_log_realtime("connect_room called", "room_code=%s player_id=%s battle_id=%s match_id=%s" % [room_code, player_id, battle_id, match_id])
 	active_room_code = room_code.strip_edges().to_upper()
 	active_player_id = "p2" if player_id == "p2" else "p1"
 	active_battle_id = battle_id.strip_edges()
+	active_match_id = match_id.strip_edges()
 	joined = false
 	room_is_ready = false
 	if active_room_code == "" or not AuthService.is_authenticated():
@@ -137,6 +139,8 @@ func _send_join() -> void:
 		"playerId": active_player_id,
 		"battleId": active_battle_id,
 	}
+	if active_match_id != "":
+		payload["matchId"] = active_match_id
 	websocket.send_text(JSON.stringify(payload))
 
 
@@ -148,6 +152,7 @@ func disconnect_room() -> void:
 	active_room_code = ""
 	active_player_id = "p1"
 	active_battle_id = ""
+	active_match_id = ""
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
 	websocket = WebSocketPeer.new()
@@ -163,7 +168,7 @@ func send_action(action: String, battle_id: String, player_id: String, slot: int
 				"send_action blocked because socket is not open",
 				"state=%s room=%s player=%s action=%s slot=%s" % [websocket.get_ready_state(), active_room_code, player_id, action, slot]
 			)
-		connect_room(active_room_code, active_player_id, active_battle_id)
+		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id)
 		return ""
 
 	request_counter += 1
@@ -212,7 +217,7 @@ func send_render_ack(
 					last_rendered_seq,
 				]
 			)
-		connect_room(active_room_code, active_player_id, active_battle_id)
+		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id)
 		return false
 
 	var normalized_player_id := "p2" if player_id == "p2" else "p1"
@@ -267,6 +272,7 @@ func _process_packets() -> void:
 			active_room_code = str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
 			active_player_id = "p2" if str(message.get("playerId", active_player_id)) == "p2" else "p1"
 			active_battle_id = str(message.get("battleId", active_battle_id)).strip_edges()
+			active_match_id = str(message.get("matchId", active_match_id)).strip_edges()
 			room_joined.emit(active_room_code, active_player_id, active_battle_id)
 			continue
 		if message_type == "pvp.room_ready":

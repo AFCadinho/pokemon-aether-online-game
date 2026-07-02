@@ -36,6 +36,7 @@ var mega_evolution_selected := false
 var mega_evolution_pulse_tween: Tween
 var pending_mega_species_by_ident: Dictionary = {}
 var pvp_room_code := ""
+var pvp_match_id := ""
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
 var pvp_pending_reconciliation_snapshot: Dictionary = {}
@@ -2433,6 +2434,7 @@ func _finish_battle(result: Dictionary) -> void:
 	_reset_damage_calc_assumptions()
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
+		pvp_match_id = ""
 	if not bool(result.get("skipPartyBattleSync", false)):
 		_sync_player_save_from_battle_state()
 		PlayerPartyStateService.save_current_battle_party_state_deferred()
@@ -3863,6 +3865,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	var local_player_id := str(api_response.get("playerId", "p1"))
 	action_flow.set_local_player_id(local_player_id)
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
+	pvp_match_id = str(api_response.get("matchId", "")).strip_edges()
 	_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
@@ -6232,7 +6235,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	pvp_victory_message_added = false
 	if not PvpBattleRealtimeService.battle_update_received.is_connected(_on_pvp_realtime_battle_update):
 		PvpBattleRealtimeService.battle_update_received.connect(_on_pvp_realtime_battle_update)
-	PvpBattleRealtimeService.connect_room(pvp_room_code, local_player_id, battle_id)
+	PvpBattleRealtimeService.connect_room(pvp_room_code, local_player_id, battle_id, pvp_match_id)
 
 func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
 	_trace_pvp_flow("render_completed", {}, "completion=%s" % JSON.stringify(completion))
@@ -8576,6 +8579,11 @@ func _get_party_grid_selected_pokemon_data(visual_slot: int) -> Dictionary:
 	return {}
 
 func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	if _is_pvp_battle() and not pokemon_data.is_empty():
+		var resolved_slot := _resolve_pvp_selected_local_party_slot(visual_slot, pokemon_data)
+		if resolved_slot > 0:
+			return resolved_slot
+
 	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if canonical_slot > 0:
 		return canonical_slot
@@ -8591,6 +8599,11 @@ func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionar
 	return visual_slot
 
 func _get_canonical_lead_submit_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	if _is_pvp_battle() and not pokemon_data.is_empty():
+		var resolved_slot := _resolve_pvp_selected_local_party_slot(visual_slot, pokemon_data)
+		if resolved_slot > 0:
+			return resolved_slot
+
 	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if canonical_slot > 0:
 		return canonical_slot
@@ -8606,6 +8619,114 @@ func _get_canonical_lead_submit_slot(visual_slot: int, pokemon_data: Dictionary)
 		)
 
 	return visual_slot
+
+func _resolve_pvp_selected_local_party_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	var local_state_player_id := _get_local_state_player_id()
+	var metadata_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+	if metadata_slot > 0:
+		var metadata_team_pokemon := _get_team_pokemon_data_for_canonical_party_slot(local_state_player_id, metadata_slot)
+		if not metadata_team_pokemon.is_empty() and _selected_pokemon_matches_team_pokemon(pokemon_data, metadata_team_pokemon):
+			return metadata_slot
+
+	var selected_instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
+	if selected_instance_id != "":
+		var instance_slot := _find_local_party_slot_by_instance_id(local_state_player_id, selected_instance_id, pokemon_data)
+		if instance_slot > 0:
+			_log_pvp_slot_resolution_correction("instance", visual_slot, metadata_slot, instance_slot, pokemon_data)
+			return instance_slot
+
+	var species_slot := _find_unique_local_party_slot_by_species(local_state_player_id, pokemon_data)
+	if species_slot > 0:
+		_log_pvp_slot_resolution_correction("species", visual_slot, metadata_slot, species_slot, pokemon_data)
+		return species_slot
+
+	if metadata_slot > 0:
+		_log_pvp_slot_resolution_correction("metadata-fallback", visual_slot, metadata_slot, metadata_slot, pokemon_data)
+		return metadata_slot
+
+	return -1
+
+func _selected_pokemon_matches_team_pokemon(selected_data: Dictionary, team_data: Dictionary) -> bool:
+	if team_data.is_empty():
+		return false
+
+	var selected_species := _get_pokemon_data_compare_species(selected_data)
+	var team_species := _get_pokemon_data_compare_species(team_data)
+	if selected_species != "" and team_species != "" and selected_species != team_species:
+		return false
+
+	var selected_instance_id := str(selected_data.get("instanceId", selected_data.get("instance_id", ""))).strip_edges()
+	var team_instance_id := str(team_data.get("instanceId", team_data.get("instance_id", ""))).strip_edges()
+	if selected_instance_id != "" and team_instance_id != "":
+		return selected_instance_id == team_instance_id
+
+	return selected_species != "" and selected_species == team_species
+
+func _find_local_party_slot_by_instance_id(player_id: String, instance_id: String, selected_data: Dictionary = {}) -> int:
+	var selected_species := _get_pokemon_data_compare_species(selected_data)
+	var team := battle_state.get_player_team(player_id)
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var team_instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
+		if team_instance_id != instance_id:
+			continue
+
+		var team_species := _get_pokemon_data_compare_species(pokemon_data)
+		if selected_species != "" and team_species != "" and selected_species != team_species:
+			continue
+
+		var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+		return canonical_slot if canonical_slot > 0 else index + 1
+
+	return -1
+
+func _find_unique_local_party_slot_by_species(player_id: String, selected_data: Dictionary) -> int:
+	var selected_species := _get_pokemon_data_compare_species(selected_data)
+	if selected_species == "":
+		return -1
+
+	var matched_slot := -1
+	var team := battle_state.get_player_team(player_id)
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if _get_pokemon_data_compare_species(pokemon_data) != selected_species:
+			continue
+
+		if matched_slot > 0:
+			return -1
+
+		var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+		matched_slot = canonical_slot if canonical_slot > 0 else index + 1
+
+	return matched_slot
+
+func _get_pokemon_data_compare_species(pokemon_data: Dictionary) -> String:
+	if pokemon_data.is_empty():
+		return ""
+
+	var species := battle_state.get_species_from_pokemon_data(pokemon_data) if battle_state != null else ""
+	if species == "":
+		species = str(pokemon_data.get("displaySpecies", pokemon_data.get("species", pokemon_data.get("details", "")))).strip_edges()
+	if species.contains(","):
+		species = species.split(",")[0].strip_edges()
+	return _normalize_species_for_compare(species)
+
+func _log_pvp_slot_resolution_correction(
+	reason: String,
+	visual_slot: int,
+	metadata_slot: int,
+	resolved_slot: int,
+	pokemon_data: Dictionary
+) -> void:
+	pass
 
 func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
 	var party_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["partySlot", "party_slot"])
@@ -8760,13 +8881,90 @@ func _get_vs_player_name(player_id: String) -> String:
 	return _get_player_display_name(player_id)
 
 func _get_active_display_species(player_id: String) -> String:
-	return display_data_presenter.get_active_display_species(player_id)
+	var display_species := display_data_presenter.get_active_display_species(player_id)
+	if _is_pvp_battle() and player_id == _get_local_state_player_id():
+		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+		var ident_species := _get_species_from_battle_ident(str(active_pokemon.get("ident", "")))
+		if ident_species != "":
+			var display_compare := _normalize_species_for_compare(display_species)
+			var ident_compare := _normalize_species_for_compare(ident_species)
+			if display_compare == "" or display_compare != ident_compare:
+				return ident_species
+	return display_species
 
 func _get_active_pokemon_is_shiny(player_id: String) -> bool:
 	return display_data_presenter.get_active_pokemon_is_shiny(player_id)
 
 func _get_display_team_data(player_id: String) -> Array:
-	return display_data_presenter.get_display_team_data(player_id)
+	var display_team := display_data_presenter.get_display_team_data(player_id)
+	if _is_pvp_battle() and player_id == _get_local_state_player_id():
+		return _normalize_pvp_local_display_team_slots(display_team)
+	return display_team
+
+func _normalize_pvp_local_display_team_slots(display_team: Array) -> Array:
+	if display_team.is_empty():
+		return display_team
+
+	var normalized_team: Array = []
+	for index in range(display_team.size()):
+		var pokemon_value: Variant = display_team[index]
+		if not (pokemon_value is Dictionary):
+			normalized_team.append(pokemon_value)
+			continue
+
+		var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate(true)
+		_repair_pvp_local_display_species_from_ident(pokemon_data)
+		var resolved_slot := _resolve_pvp_selected_local_party_slot(index + 1, pokemon_data)
+		if resolved_slot > 0:
+			pokemon_data["partySlot"] = resolved_slot
+			pokemon_data["metadataSlot"] = resolved_slot
+			pokemon_data["pokemonKey"] = "%s:slot:%d" % [_get_local_state_player_id(), resolved_slot]
+		normalized_team.append(pokemon_data)
+
+	return _sort_pokemon_display_team_by_canonical_slot(normalized_team)
+
+func _repair_pvp_local_display_species_from_ident(pokemon_data: Dictionary) -> void:
+	var ident_species := _get_species_from_battle_ident(str(pokemon_data.get("ident", "")))
+	if ident_species == "":
+		return
+
+	var payload_species := _get_pokemon_data_compare_species(pokemon_data)
+	var ident_compare_species := _normalize_species_for_compare(ident_species)
+	if payload_species != "" and payload_species == ident_compare_species:
+		return
+
+	pokemon_data["species"] = ident_species
+	pokemon_data["displaySpecies"] = ident_species
+
+func _get_species_from_battle_ident(ident: String) -> String:
+	var cleaned := ident.strip_edges()
+	if not cleaned.contains(": "):
+		return ""
+
+	return str(cleaned.split(": ")[1]).strip_edges()
+
+func _sort_pokemon_display_team_by_canonical_slot(display_team: Array) -> Array:
+	if display_team.size() <= 1:
+		return display_team
+
+	var by_slot: Dictionary = {}
+	for pokemon_value: Variant in display_team:
+		if not (pokemon_value is Dictionary):
+			return display_team
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+		if slot <= 0 or by_slot.has(slot):
+			return display_team
+
+		by_slot[slot] = pokemon_data
+
+	var sorted_slots: Array = by_slot.keys()
+	sorted_slots.sort()
+	var sorted_team: Array = []
+	for slot_value: Variant in sorted_slots:
+		sorted_team.append(by_slot[slot_value])
+	return sorted_team
 
 func _get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Dictionary:
 	return display_data_presenter.get_display_pokemon_data(player_id, pokemon_data)

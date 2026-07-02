@@ -104,6 +104,9 @@ func leave_pvp_queue(request_node: HTTPRequest, queue_id: String) -> Dictionary:
 func get_pvp_queue_status(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/queues/status/me")
 
+func get_active_pvp_match(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/account/pvp/matches/active")
+
 func start_pvp_match_battle(request_node: HTTPRequest, match_id: String) -> Dictionary:
 	return await send_post_request(
 		request_node,
