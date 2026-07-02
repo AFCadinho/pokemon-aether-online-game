@@ -405,7 +405,13 @@ var evolution_prompt_processing := false
 var evolution_prompt_review_total := 0
 var evolution_prompt_review_index := 0
 var dev_clear_menu_popup: PanelContainer
+var pvp_mode_menu: PanelContainer
+var pvp_mode_ranked_button: Button
+var pvp_mode_tournaments_button: Button
+var pvp_mode_casual_button: Button
+var pvp_mode_close_button: Button
 var pvp_room_popup: PanelContainer
+var pvp_root_tabs: TabContainer
 var pvp_leaderboard_status_label: Label
 var pvp_leaderboard_list: VBoxContainer
 var pvp_leaderboard_refresh_button: Button
@@ -667,6 +673,7 @@ func _ready() -> void:
 	_setup_evolution_overlay()
 	_setup_dev_clear_menu_popup()
 	_setup_pvp_room_popup()
+	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
 	_setup_staff_impersonation_tools()
 	_setup_item_dex_button()
@@ -1077,6 +1084,7 @@ func _apply_ui_z_index_policy() -> void:
 		dev_actions_popup,
 		dev_pokemon_popup,
 		dev_clear_menu_popup,
+		pvp_mode_menu,
 		pvp_room_popup,
 		dev_add_item_popup,
 		dev_add_money_popup,
@@ -2905,6 +2913,7 @@ func _setup_pvp_room_popup() -> void:
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.add_theme_font_size_override("font_size", 14)
 	layout.add_child(tabs)
+	pvp_root_tabs = tabs
 
 	var ranked_tab := VBoxContainer.new()
 	ranked_tab.name = "Ranked"
@@ -3259,6 +3268,61 @@ func _setup_pvp_room_popup() -> void:
 	pvp_poll_request = HTTPRequest.new()
 	pvp_poll_request.request_completed.connect(_on_pvp_room_poll_completed)
 	add_child(pvp_poll_request)
+
+func _setup_pvp_mode_menu() -> void:
+	pvp_mode_menu = PanelContainer.new()
+	pvp_mode_menu.name = "PvpModeMenu"
+	pvp_mode_menu.visible = false
+	pvp_mode_menu.custom_minimum_size = Vector2(230, 0)
+	pvp_mode_menu.mouse_filter = Control.MOUSE_FILTER_STOP
+	pvp_mode_menu.z_index = UI_BASE_Z_INDEX
+	pvp_mode_menu.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	root_control.add_child(pvp_mode_menu)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	pvp_mode_menu.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	var title := Label.new()
+	title.text = "PvP"
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(title)
+
+	pvp_mode_ranked_button = _create_pvp_mode_menu_button("Ranked")
+	pvp_mode_ranked_button.pressed.connect(_on_pvp_mode_ranked_pressed)
+	layout.add_child(pvp_mode_ranked_button)
+
+	pvp_mode_tournaments_button = _create_pvp_mode_menu_button("Tournaments")
+	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
+	layout.add_child(pvp_mode_tournaments_button)
+
+	pvp_mode_casual_button = _create_pvp_mode_menu_button("Custom / Casual")
+	pvp_mode_casual_button.pressed.connect(_on_pvp_mode_casual_pressed)
+	layout.add_child(pvp_mode_casual_button)
+
+	pvp_mode_close_button = _create_pvp_mode_menu_button("Close")
+	pvp_mode_close_button.pressed.connect(_hide_pvp_mode_menu)
+	layout.add_child(pvp_mode_close_button)
+
+	_apply_button_style(pvp_mode_ranked_button, "primary")
+	_apply_button_style(pvp_mode_tournaments_button, "primary")
+	_apply_button_style(pvp_mode_casual_button, "primary")
+	_apply_button_style(pvp_mode_close_button)
+
+func _create_pvp_mode_menu_button(text: String) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.custom_minimum_size = Vector2(0, 32)
+	button.focus_mode = Control.FOCUS_NONE
+	return button
 
 func _create_pvp_ruleset_panel() -> Control:
 	var panel := PanelContainer.new()
@@ -11043,6 +11107,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": dev_add_menu_popup, "close": Callable(self, "_hide_dev_add_menu_popup")},
 		{"panel": dev_clear_menu_popup, "close": Callable(self, "_hide_dev_clear_menu_popup_for_escape")},
 		{"panel": pvp_room_popup, "close": Callable(self, "_hide_pvp_room_popup")},
+		{"panel": pvp_mode_menu, "close": Callable(self, "_hide_pvp_mode_menu")},
 		{"panel": pokedex_popup, "close": Callable(self, "_hide_pokedex_popup")},
 		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
@@ -15002,19 +15067,69 @@ func _on_guild_button_pressed() -> void:
 	_add_chat_message("Guild is not implemented yet.")
 
 func _on_pvp_button_pressed() -> void:
+	if pvp_mode_menu == null:
+		return
+	if pvp_mode_menu.visible:
+		_hide_pvp_mode_menu()
+		return
+	if pvp_room_popup != null and pvp_room_popup.visible:
+		_hide_pvp_room_popup()
+	pvp_mode_menu.visible = true
+	_position_pvp_mode_menu()
+	_activate_ui_panel(pvp_mode_menu)
+
+func _position_pvp_mode_menu() -> void:
+	if pvp_mode_menu == null or pvp_slot == null:
+		return
+	var slot_rect: Rect2 = pvp_slot.get_global_rect()
+	var menu_size: Vector2 = pvp_mode_menu.get_combined_minimum_size()
+	if menu_size == Vector2.ZERO:
+		menu_size = pvp_mode_menu.size
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var target_position := Vector2(slot_rect.position.x, slot_rect.position.y + slot_rect.size.y + 8.0)
+	if target_position.x + menu_size.x > viewport_size.x - 12.0:
+		target_position.x = viewport_size.x - menu_size.x - 12.0
+	target_position.x = max(target_position.x, 12.0)
+	pvp_mode_menu.position = target_position
+
+func _hide_pvp_mode_menu() -> void:
+	if pvp_mode_menu == null:
+		return
+	pvp_mode_menu.visible = false
+	_deactivate_ui_panel(pvp_mode_menu)
+
+func _on_pvp_mode_ranked_pressed() -> void:
+	await _open_pvp_popup_section("Ranked")
+
+func _on_pvp_mode_tournaments_pressed() -> void:
+	await _open_pvp_popup_section("Tournaments")
+
+func _on_pvp_mode_casual_pressed() -> void:
+	await _open_pvp_popup_section("Custom / Casual")
+
+func _open_pvp_popup_section(section_name: String) -> void:
 	if pvp_room_popup == null:
 		return
-	if pvp_room_popup.visible:
-		_hide_pvp_room_popup()
-		return
+	_hide_pvp_mode_menu()
 	pvp_room_popup.visible = true
 	_activate_ui_panel(pvp_room_popup)
+	_select_pvp_root_tab(section_name)
 	_refresh_pvp_team_validator()
 	await _refresh_pvp_queue_list()
-	_select_first_pvp_queue_for_mode("ranked")
+	if section_name == "Ranked":
+		_select_first_pvp_queue_for_mode("ranked")
 	_refresh_pvp_team_validator()
 	await _refresh_pvp_leaderboard()
 	await _refresh_pvp_match_history()
+
+func _select_pvp_root_tab(section_name: String) -> void:
+	if pvp_root_tabs == null:
+		return
+	for index in range(pvp_root_tabs.get_child_count()):
+		var child := pvp_root_tabs.get_child(index)
+		if child != null and child.name == section_name:
+			pvp_root_tabs.current_tab = index
+			return
 
 func _on_pvp_room_header_gui_input(event: InputEvent) -> void:
 	if pvp_room_popup == null:
