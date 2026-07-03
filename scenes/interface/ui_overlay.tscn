@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bh3hhhb58uh2g" path="res://assets/ui/location.png" id="2_2onii"]
 [ext_resource type="PackedScene" uid="uid://cnvx5qmbwl27m" path="res://scenes/interface/hotkey_sidebar.tscn" id="2_hotkeys"]
 [ext_resource type="Texture2D" uid="uid://b8qwcsde8a7l7" path="res://assets/ui/town_map.svg" id="3_riyyd"]
-[ext_resource type="PackedScene" path="res://scenes/interface/player_status_card.tscn" id="4_status"]
+[ext_resource type="PackedScene" uid="uid://dni4uwhy5b3in" path="res://scenes/interface/player_status_card.tscn" id="4_status"]
 [ext_resource type="Texture2D" uid="uid://c7goexdnbj60q" path="res://assets/ui/bag-icon.svg" id="5_j0ub1"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="6_settings"]
 [ext_resource type="Texture2D" uid="uid://5ixth4h1adwb" path="res://assets/ui/settings-icon.svg" id="7_settings_icon"]
@@ -17,11 +17,11 @@
 [ext_resource type="Texture2D" uid="uid://b8eogooab7wv7" path="res://assets/ui/friendlist.svg" id="13_friendlist"]
 [ext_resource type="Texture2D" uid="uid://dlfduj6lmdad7" path="res://assets/ui/staff.svg" id="13_staff_tools"]
 [ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
-[ext_resource type="Texture2D" uid="uid://dpgqsawas4xna" path="res://assets/ui/content_creator.svg" id="15_content_creator"]
-[ext_resource type="Texture2D" path="res://assets/ui/guild.svg" id="16_guild"]
-[ext_resource type="AudioStream" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
-[ext_resource type="Texture2D" path="res://assets/battles/poke_ball_svg.png" id="18_pvp"]
-[ext_resource type="Texture2D" path="res://assets/ui/aether_exchange_icon.svg" id="19_exchange"]
+[ext_resource type="Texture2D" uid="uid://m2mkbq1umppx" path="res://assets/ui/content_creator.svg" id="15_content_creator"]
+[ext_resource type="Texture2D" uid="uid://ct7ceuc3pp7q4" path="res://assets/ui/guild.svg" id="16_guild"]
+[ext_resource type="AudioStream" uid="uid://d0sitgcr6kq4u" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
+[ext_resource type="Texture2D" uid="uid://cs0q0ycclxlgo" path="res://assets/battles/poke_ball_svg.png" id="18_pvp"]
+[ext_resource type="Texture2D" uid="uid://6ymqdgvfj4rj" path="res://assets/ui/aether_exchange_icon.svg" id="19_exchange"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -108,7 +108,6 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 shadow_color = Color(0.9, 0.2, 0.2, 0.6)
 shadow_size = 10
-shadow_offset = Vector2(0, 0)
 
 [node name="UIOverlay" type="CanvasLayer" unique_id=2126675853]
 script = ExtResource("1_7g5y2")
@@ -127,9 +126,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 0.0
-offset_top = -409.5
+offset_top = -389.5
 offset_right = 62.0
-offset_bottom = 0.5
+offset_bottom = 20.5
 grow_vertical = 2
 
 [node name="PlayerStatusPanel" parent="Control" unique_id=2085471070 instance=ExtResource("4_status")]
@@ -413,12 +412,12 @@ texture_focused = ExtResource("5_j0ub1")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="SocialsSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+[node name="SocialsSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=624339647]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="SocialsButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot"]
+[node name="SocialsButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot" unique_id=442590352]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Socials"
@@ -431,29 +430,19 @@ texture_focused = ExtResource("13_friendlist")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="SocialsAttentionBadge" type="Panel" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot"]
+[node name="SocialsAttentionBadge" type="Panel" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot" unique_id=1773795116]
 visible = false
 custom_minimum_size = Vector2(12, 12)
-layout_mode = 1
+layout_mode = 2
 mouse_filter = 2
-anchor_left = 1.0
-anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 0.0
-offset_left = -12.0
-offset_top = 2.0
-offset_right = 0.0
-offset_bottom = 14.0
-grow_horizontal = 0
-grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_socials_badge")
 
-[node name="AetherExchangeSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+[node name="AetherExchangeSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=3952606]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot"]
+[node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot" unique_id=1721297434]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Aether Exchange"
@@ -466,12 +455,12 @@ texture_focused = ExtResource("19_exchange")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="GuildSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+[node name="GuildSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=870794241]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="GuildButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot"]
+[node name="GuildButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot" unique_id=2000857235]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "Guild"
@@ -484,12 +473,12 @@ texture_focused = ExtResource("16_guild")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="PvpSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer"]
+[node name="PvpSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=1613803876]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="PvpButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot"]
+[node name="PvpButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot" unique_id=342526372]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 tooltip_text = "PvP Battles"
@@ -870,7 +859,7 @@ offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SocialsMenu" type="PanelContainer" parent="Control"]
+[node name="SocialsMenu" type="PanelContainer" parent="Control" unique_id=1369571944]
 visible = false
 z_index = 100
 custom_minimum_size = Vector2(220, 0)
@@ -885,41 +874,41 @@ offset_bottom = 230.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/SocialsMenu"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/SocialsMenu" unique_id=563607584]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/SocialsMenu/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/SocialsMenu/MarginContainer" unique_id=326117914]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="Control/SocialsMenu/MarginContainer/VBoxContainer" unique_id=1908866577]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Socials"
 
-[node name="FriendListButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+[node name="FriendListButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer" unique_id=206924973]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Friendlist"
 
-[node name="MailButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+[node name="MailButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer" unique_id=762226262]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Mail"
 
-[node name="CloseButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+[node name="CloseButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer" unique_id=686062249]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Close"
 
-[node name="MailPopup" type="PanelContainer" parent="Control"]
+[node name="MailPopup" type="PanelContainer" parent="Control" unique_id=230067198]
 visible = false
 z_index = 100
 custom_minimum_size = Vector2(680, 430)
@@ -937,162 +926,162 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MailPopup"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MailPopup" unique_id=1717720084]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 14
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MailPopup/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MailPopup/MarginContainer" unique_id=213875187]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="HeaderRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer"]
+[node name="HeaderRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer" unique_id=305588876]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow"]
+[node name="Title" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow" unique_id=2133494414]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Mail"
 
-[node name="ComposeButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow"]
+[node name="ComposeButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow" unique_id=1372160869]
 custom_minimum_size = Vector2(120, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "New Mail"
 
-[node name="CloseButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow"]
+[node name="CloseButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow" unique_id=512305409]
 custom_minimum_size = Vector2(80, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Close"
 
-[node name="MailTabRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer"]
+[node name="MailTabRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer" unique_id=726266398]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="InboxButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow"]
+[node name="InboxButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow" unique_id=811014978]
 custom_minimum_size = Vector2(110, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Inbox"
 
-[node name="SentButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow"]
+[node name="SentButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow" unique_id=1829045477]
 custom_minimum_size = Vector2(110, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Sent"
 
-[node name="BodyRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer"]
+[node name="BodyRow" type="HBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer" unique_id=371925585]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="MailListPanel" type="PanelContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow"]
+[node name="MailListPanel" type="PanelContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow" unique_id=353195720]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel" unique_id=1106866481]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="MailListScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer"]
+[node name="MailListScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer" unique_id=646927902]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MailList" type="VBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll"]
+[node name="MailList" type="VBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll" unique_id=225252546]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="InboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList"]
+[node name="InboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList" unique_id=61995334]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Inbox"
 
-[node name="EmptyInboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList"]
+[node name="EmptyInboxLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList" unique_id=989309632]
 layout_mode = 2
 text = "No mail yet."
 
-[node name="MailDetailPanel" type="PanelContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow"]
+[node name="MailDetailPanel" type="PanelContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow" unique_id=857998755]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel" unique_id=593481355]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="DetailStack" type="VBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer"]
+[node name="DetailStack" type="VBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer" unique_id=965773364]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="SubjectLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="SubjectLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1667600774]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Select a mail"
 
-[node name="SenderLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="SenderLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1062141544]
 layout_mode = 2
 text = "Sender: -"
 
-[node name="BodyScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="BodyScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=2040912713]
 custom_minimum_size = Vector2(0, 105)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BodyLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll"]
+[node name="BodyLabel" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll" unique_id=1339070480]
 layout_mode = 2
 size_flags_horizontal = 3
-autowrap_mode = 3
 text = "Mail messages and reward attachments will appear here."
+autowrap_mode = 3
 
-[node name="AttachmentTitle" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="AttachmentTitle" type="Label" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1112882056]
 layout_mode = 2
 text = "Attachments"
 
-[node name="AttachmentScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="AttachmentScroll" type="ScrollContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1793159218]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="AttachmentList" type="VBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll"]
+[node name="AttachmentList" type="VBoxContainer" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll" unique_id=426021938]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="ClaimButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="ClaimButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1848904791]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 disabled = true
 text = "Claim Attachments"
 
-[node name="ReplyButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="ReplyButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=1379299307]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Reply"
 
-[node name="DeleteButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack"]
+[node name="DeleteButton" type="Button" parent="Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack" unique_id=530702169]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 disabled = true
 text = "Delete Mail"
 
-[node name="MailComposePopup" type="PanelContainer" parent="Control"]
+[node name="MailComposePopup" type="PanelContainer" parent="Control" unique_id=1922992608]
 visible = false
 z_index = 101
 custom_minimum_size = Vector2(560, 520)
@@ -1110,110 +1099,110 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MailComposePopup"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MailComposePopup" unique_id=2145835451]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 14
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer" unique_id=859552397]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=145136877]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "New Mail"
 
-[node name="RecipientInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="RecipientInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1434314538]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 placeholder_text = "Recipient username"
 
-[node name="SubjectInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="SubjectInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1837748876]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 placeholder_text = "Subject"
 
-[node name="BodyInput" type="TextEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="BodyInput" type="TextEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=137926333]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "Message"
 wrap_mode = 1
 
-[node name="AttachmentsTitle" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="AttachmentsTitle" type="Label" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=204848758]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Attachments"
 
-[node name="ItemAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="ItemAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1302572077]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ItemSearchInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow"]
+[node name="ItemSearchInput" type="LineEdit" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow" unique_id=341784634]
 custom_minimum_size = Vector2(240, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search items in your bag"
 
-[node name="ItemQuantity" type="SpinBox" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow"]
+[node name="ItemQuantity" type="SpinBox" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow" unique_id=1743334111]
 custom_minimum_size = Vector2(86, 34)
 layout_mode = 2
 min_value = 1.0
 max_value = 999.0
 value = 1.0
 
-[node name="AddItemButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow"]
+[node name="AddItemButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow" unique_id=616399086]
 custom_minimum_size = Vector2(110, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Add Item"
 
-[node name="ItemSuggestions" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="ItemSuggestions" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=523515061]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="PokemonAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="PokemonAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1417563497]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PokemonOption" type="OptionButton" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow"]
+[node name="PokemonOption" type="OptionButton" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow" unique_id=1171533499]
 custom_minimum_size = Vector2(330, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AddPokemonButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow"]
+[node name="AddPokemonButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow" unique_id=2113479045]
 custom_minimum_size = Vector2(130, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Add Pokemon"
 
-[node name="SelectedAttachmentsScroll" type="ScrollContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="SelectedAttachmentsScroll" type="ScrollContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=627427116]
 custom_minimum_size = Vector2(0, 104)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="SelectedAttachmentsList" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll"]
+[node name="SelectedAttachmentsList" type="VBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll" unique_id=1328098385]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 3
 
-[node name="ButtonRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer"]
+[node name="ButtonRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=531480589]
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow"]
+[node name="Spacer" type="Control" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1814699490]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SendButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow"]
+[node name="SendButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1560490184]
 custom_minimum_size = Vector2(100, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Send"
 
-[node name="CloseButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow"]
+[node name="CloseButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1602980904]
 custom_minimum_size = Vector2(100, 34)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -1239,7 +1228,7 @@ offset_top = -254.0
 offset_right = 509.0
 grow_vertical = 0
 
-[node name="ParsePokemonRequest" type="HTTPRequest" parent="." unique_id=1824609221]
-
-[node name="MailNotificationSound" type="AudioStreamPlayer" parent="Control"]
+[node name="MailNotificationSound" type="AudioStreamPlayer" parent="Control" unique_id=2057116612]
 stream = ExtResource("17_notification")
+
+[node name="ParsePokemonRequest" type="HTTPRequest" parent="." unique_id=1824609221]
