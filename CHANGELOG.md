@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.9 - 2026-07-03
+
+**Added**
+- Added the first real overworld map: Pallet Town.
+- Added complete Pokedex move tabs for level-up, egg, TM, tutor, special, event, legacy, legacy event, and pre-evolution moves.
+- Added move search to the Pokedex moves tab.
+
+**Changed**
+- Improved Pokedex move section headers so learnset groups are easier to scan.
+
 ## 0.2.7 - 2026-07-03
 
 **Added**

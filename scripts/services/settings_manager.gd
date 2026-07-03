@@ -23,6 +23,7 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 var battle_animations := true
 var weather_effects := true
 var terrain_effects := true
+var display_own_name := true
 var sprite_style := SPRITE_STYLE_ANIMATED
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
@@ -55,6 +56,7 @@ func load_settings() -> void:
 	battle_animations = bool(data.get("battle_animations", battle_animations))
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
+	display_own_name = bool(data.get("display_own_name", display_own_name))
 	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
@@ -74,6 +76,7 @@ func save_settings() -> void:
 		"battle_animations": battle_animations,
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
+		"display_own_name": display_own_name,
 		"sprite_style": sprite_style,
 		"fullscreen": fullscreen,
 		"window_resolution": {
@@ -117,6 +120,14 @@ func set_terrain_effects(enabled: bool) -> void:
 		return
 
 	terrain_effects = enabled
+	_save_and_emit()
+
+
+func set_display_own_name(enabled: bool) -> void:
+	if display_own_name == enabled:
+		return
+
+	display_own_name = enabled
 	_save_and_emit()
 
 

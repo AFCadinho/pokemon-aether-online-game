@@ -12,7 +12,7 @@ const TREE_LAYER_ROOT_NAME := "Trees"
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
 
-@export var initial_spawn_name := "FromRoute1"
+@export var initial_spawn_name := "InitialSpawn"
 
 var is_in_battle := false
 var battle_layer: CanvasLayer
@@ -112,12 +112,14 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	if target_scene_path == "":
 		push_error("World.load_map failed: target_scene_path is empty.")
 		is_loading_map = false
+		GameState.unlock_overworld_input()
 		return
 
 	var target_scene: PackedScene = load(target_scene_path) as PackedScene
 	if target_scene == null:
 		push_error("World.load_map failed: could not load scene %s" % target_scene_path)
 		is_loading_map = false
+		GameState.unlock_overworld_input()
 		return
 
 	if player.get_parent() != null:
@@ -141,6 +143,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	is_loading_map = false
 	await _save_current_player_position_if_changed(true, target_spawn_name)
 	_publish_world_presence(true)
+	GameState.unlock_overworld_input()
 
 func move_player_to_map(map: Node) -> void:
 	var players: Node = map.get_node_or_null("Entities/Players")
@@ -596,6 +599,7 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"spawnMarker": spawn_marker,
 		"appearance": appearance_state,
 		"roles": _get_current_role_presence_state(),
+		"selectedRoleBadge": GameState.selected_role_badge,
 	}
 	if player.has_method("get_network_movement_state"):
 		state["movement"] = player.call("get_network_movement_state")
@@ -667,13 +671,14 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 	var position: Vector2 = _get_current_player_persistent_position()
 	var follower_state := _get_current_follower_presence_state()
 	var appearance_state := _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
-	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_get_map_id(current_map),
 		_get_map_scene_path(current_map),
 		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
 		roundf(position.y / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
 		PlayerSave.gender,
 		_direction_to_name(player.last_direction),
+		GameState.selected_role_badge,
 		str(follower_state.get("visible", false)),
 		str(follower_state.get("species", "")),
 		str(follower_state.get("shiny", false)),

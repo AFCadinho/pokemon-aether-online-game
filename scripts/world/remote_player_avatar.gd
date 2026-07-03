@@ -16,6 +16,7 @@ const WALK_ANIMATION_HOLD_DURATION := 0.18
 const INTERPOLATION_DELAY_SECONDS := 0.16
 const MAX_POSITION_SAMPLES := 8
 const ROLE_BADGE_COLORS := {
+	"alpha": Color(0.851, 0.722, 1.0),
 	"gamemaster": Color(0.0, 0.749, 1.0),
 	"developer": Color(0.0, 0.898, 0.659),
 	"moderator": Color(0.482, 0.173, 0.749),
@@ -88,6 +89,7 @@ var user_id := 0
 var username := ""
 var display_name := ""
 var roles: Array = []
+var selected_role_badge := ""
 var target_position := Vector2.ZERO
 var walk_animation_hold_timer := 0.0
 var position_samples: Array[Dictionary] = []
@@ -157,6 +159,7 @@ func apply_state(state: Dictionary) -> void:
 		roles = roles_value as Array
 	else:
 		roles = []
+	selected_role_badge = str(state.get("selectedRoleBadge", selected_role_badge)).strip_edges().to_lower()
 	_update_nameplate()
 
 	var position_data := _dictionary_from_value(state.get("position", {}))
@@ -596,7 +599,7 @@ func _update_role_badge() -> void:
 	if role_badge_label == null:
 		return
 
-	var primary_role: Dictionary = _get_primary_visible_role(roles)
+	var primary_role: Dictionary = _get_primary_visible_role(roles, selected_role_badge)
 	if primary_role.is_empty():
 		role_badge_label.text = ""
 		if role_badge_panel != null:
@@ -651,6 +654,8 @@ func _get_label_text_width(label: Label) -> float:
 
 func _get_role_badge_width(badge_text: String) -> float:
 	match badge_text.strip_edges():
+		"alpha":
+			return 26.0
 		"GM":
 			return 16.0
 		"DEV", "MOD":
@@ -659,7 +664,13 @@ func _get_role_badge_width(badge_text: String) -> float:
 			return ROLE_BADGE_DEFAULT_WIDTH
 
 
-func _get_primary_visible_role(role_values: Array) -> Dictionary:
+func _get_primary_visible_role(role_values: Array, selected_badge: String = "") -> Dictionary:
+	var normalized_selected_badge := selected_badge.strip_edges().to_lower()
+	if normalized_selected_badge == "none":
+		return {}
+	if normalized_selected_badge != "":
+		return _find_visible_role(role_values, normalized_selected_badge)
+
 	var primary_role: Dictionary = {}
 	var primary_priority: int = -999999
 	for role_value: Variant in role_values:
@@ -681,9 +692,28 @@ func _get_primary_visible_role(role_values: Array) -> Dictionary:
 
 	return primary_role
 
+func _find_visible_role(role_values: Array, selected_badge: String) -> Dictionary:
+	for role_value: Variant in role_values:
+		if not role_value is Dictionary:
+			continue
+		var role: Dictionary = role_value as Dictionary
+		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
+		if role_id != selected_badge:
+			continue
+		var badge: String = _get_role_badge(role_id)
+		if badge.is_empty():
+			return {}
+		var role_with_badge: Dictionary = role.duplicate()
+		role_with_badge["id"] = role_id
+		role_with_badge["badge"] = badge
+		return role_with_badge
+	return {}
+
 
 func _get_role_badge(role_id: String) -> String:
 	match role_id:
+		"alpha":
+			return "alpha"
 		"gamemaster":
 			return "GM"
 		"developer":

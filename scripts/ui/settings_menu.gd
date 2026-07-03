@@ -35,6 +35,7 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
+var display_own_name_check_box: CheckBox
 @onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
 @onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
@@ -84,6 +85,7 @@ func _ready() -> void:
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
+	display_own_name_check_box.toggled.connect(_on_display_own_name_toggled)
 	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
 	resolution_options_button.item_selected.connect(_on_resolution_selected)
@@ -122,6 +124,7 @@ func _apply_settings_to_controls() -> void:
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
 	weather_effects_check_box.button_pressed = SettingsManager.weather_effects
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
+	display_own_name_check_box.button_pressed = SettingsManager.display_own_name
 
 	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
 	var option_index: int = sprite_style_options_button.get_item_index(option_id)
@@ -164,6 +167,7 @@ func _setup_tabs() -> void:
 		battle_animations_check_box,
 		weather_effects_check_box,
 		terrain_effects_check_box,
+		_create_display_own_name_check_box(),
 	])
 	_move_nodes_to_container(graphics_tab, [
 		sprite_style_options_button.get_node("../SpriteStyleLabel"),
@@ -267,6 +271,13 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	logout_button.text = "Return to Login"
 	logout_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(logout_button)
+
+
+func _create_display_own_name_check_box() -> CheckBox:
+	display_own_name_check_box = CheckBox.new()
+	display_own_name_check_box.text = "Display own name"
+	display_own_name_check_box.focus_mode = Control.FOCUS_NONE
+	return display_own_name_check_box
 
 
 func _setup_logout_confirm_dialog() -> void:
@@ -642,6 +653,14 @@ func _on_terrain_effects_toggled(enabled: bool) -> void:
 	SettingsManager.set_terrain_effects(enabled)
 
 
+func _on_display_own_name_toggled(enabled: bool) -> void:
+	if loading_controls:
+		return
+
+	SettingsManager.set_display_own_name(enabled)
+	_refresh_local_player_nameplate()
+
+
 func _on_sprite_style_selected(index: int) -> void:
 	if loading_controls:
 		return
@@ -845,11 +864,17 @@ func _account_details_confirmed() -> void:
 	PlayerSave.player_name = AuthService.get_display_name()
 	var player_node: Node = get_tree().get_first_node_in_group("player")
 	if player_node != null and player_node.has_method("set_display_name"):
-		player_node.call("set_display_name", PlayerSave.player_name, true)
+		player_node.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
 
 	_refresh_account_tab()
 	_hide_account_details_dialog()
 	_set_account_status("Account details updated.")
+
+
+func _refresh_local_player_nameplate() -> void:
+	var player_node: Node = get_tree().get_first_node_in_group("player")
+	if player_node != null and player_node.has_method("set_display_name"):
+		player_node.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
 
 
 func _set_account_dialog_status(message: String, is_error: bool = false) -> void:

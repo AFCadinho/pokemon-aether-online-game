@@ -3,17 +3,12 @@ extends Area2D
 @export_file("*.tscn") var target_scene_path := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn" 
 @export var target_spawn_name := "FromPalletTown"
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+var is_transitioning := false
 
 
 func _on_body_entered(body: Node2D) -> void:
+	if is_transitioning:
+		return
 	if body.name != "Player":
 		return
 		
@@ -22,4 +17,5 @@ func _on_body_entered(body: Node2D) -> void:
 		push_error("ToOaksLab failed: could not resolve World.")
 		return
 
+	is_transitioning = true
 	world.load_map(target_scene_path, target_spawn_name)

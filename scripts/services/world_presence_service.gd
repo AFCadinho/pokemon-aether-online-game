@@ -126,6 +126,7 @@ func update_position(state: Dictionary) -> bool:
 		"follower": state.get("follower", {}),
 		"appearance": appearance_payload,
 		"roles": state.get("roles", []),
+		"selectedRoleBadge": str(state.get("selectedRoleBadge", "")),
 		"appearanceBody": presence_body,
 		"appearanceHair": str(appearance.get("hair", "")),
 		"appearanceHairStyleIndex": int(appearance.get("hair_style_index", 0)),

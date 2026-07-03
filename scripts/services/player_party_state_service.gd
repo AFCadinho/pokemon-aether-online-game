@@ -159,6 +159,29 @@ func dev_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> 
 	return await _create_owned_pokemon("/game/dev/pokemon", _with_current_origin(pokemon_data, "generated"), add_to_party)
 
 
+func content_creator_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
+	return await _create_owned_pokemon("/game/content-creator/pokemon", _with_current_origin(pokemon_data, "content_creator"), add_to_party)
+
+
+func content_creator_clear_party_pokemon() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/content-creator/pokemon/party",
+		HTTPClient.METHOD_DELETE,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	var result: Dictionary = _party_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
 func _create_owned_pokemon(endpoint: String, pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {

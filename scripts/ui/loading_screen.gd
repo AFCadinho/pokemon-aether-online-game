@@ -138,6 +138,8 @@ func _apply_profile_response(profile_response: Dictionary) -> void:
 	GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
 	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+	GameState.selected_role_badge = str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)).strip_edges().to_lower()
+	AuthService.current_user["selectedRoleBadge"] = GameState.selected_role_badge
 
 	var wallet: Dictionary = _dictionary_from_value(profile_response.get("wallet", {}))
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)

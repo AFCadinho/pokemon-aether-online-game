@@ -14,6 +14,7 @@ var world_debug_enabled := false
 var repel_enabled := false
 var show_follower := true
 var running_shoes_enabled := false
+var selected_role_badge := ""
 var fishing_unlocked := true
 var fishing_tier := 1
 var surf_unlocked := true

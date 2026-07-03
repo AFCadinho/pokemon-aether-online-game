@@ -34,10 +34,11 @@ const CHAT_CATEGORY_SYSTEM := "system"
 const CHAT_CHANNEL_GLOBAL := "global"
 const CHAT_CHANNEL_TRADE := "trade"
 const CHAT_CHANNEL_HELP := "help"
-const STAFF_TOOLS_ROLE_IDS := ["staff", "admin", "owner", "developer", "moderator", "gamemaster"]
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
+const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
+const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
@@ -259,6 +260,7 @@ enum DevPokemonPopupMode {
 	POKEMON,
 	TEAM,
 	SPAWN,
+	CONTENT_CREATOR,
 }
 
 @onready var root_control: Control = $Control
@@ -528,6 +530,9 @@ var trainer_card_part_buttons: Dictionary = {}
 var trainer_card_color_buttons: Dictionary = {}
 var trainer_card_appearance_save_button: Button
 var trainer_card_appearance_status_label: Label
+var trainer_card_badge_option: OptionButton
+var trainer_card_badge_status_label: Label
+var trainer_card_badge_options: Array[Dictionary] = []
 var trainer_card_has_unsaved_appearance_changes := false
 var trainer_card_is_saving_appearance := false
 var trainer_card_dragging: bool = false
@@ -650,6 +655,10 @@ var evolution_sparkle_nodes: Array[Control] = []
 var evolution_tween: Tween
 var evolution_silhouette_material: ShaderMaterial
 var evolution_is_playing := false
+var content_creator_menu_popup: PanelContainer
+var content_creator_create_pokemon_button: Button
+var content_creator_clear_party_button: Button
+var content_creator_close_button: Button
 var dev_add_button: Button
 var dev_preview_evolution_button: Button
 var dev_add_menu_popup: PanelContainer
@@ -696,10 +705,12 @@ var pokedex_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
 var pokedex_sprite_side := "front"
 var pokedex_header_stats_stack: VBoxContainer
 var pokedex_detail_stack: VBoxContainer
+var pokedex_move_search_input: LineEdit
 var pokedex_tab_buttons: Dictionary = {}
 var pokedex_selected_species: Dictionary = {}
 var pokedex_selected_species_id := ""
 var pokedex_active_tab := "general"
+var pokedex_move_search_text := ""
 var pokedex_search_request_id := 0
 var pokedex_search_debounce_timer: Timer
 var pokedex_species_list_icon_cache: Dictionary = {}
@@ -730,6 +741,7 @@ func _ready() -> void:
 	_setup_evolution_prompt_popup()
 	_setup_evolution_overlay()
 	_setup_dev_clear_menu_popup()
+	_setup_content_creator_menu_popup()
 	_setup_pvp_room_popup()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
@@ -867,18 +879,11 @@ func _can_use_dev_tools() -> bool:
 func _can_use_content_creator_tools() -> bool:
 	return _has_user_permission(CONTENT_CREATOR_TOOLS_PERMISSION)
 
-func _can_use_staff_tools() -> bool:
-	var roles_value: Variant = AuthService.current_user.get("roles", [])
-	if roles_value is Array:
-		for role_value: Variant in roles_value:
-			var role_id := ""
-			if role_value is Dictionary:
-				role_id = str((role_value as Dictionary).get("id", "")).strip_edges().to_lower()
-			else:
-				role_id = str(role_value).strip_edges().to_lower()
-			if STAFF_TOOLS_ROLE_IDS.has(role_id):
-				return true
-	return _can_use_dev_tools() or _can_impersonate_accounts()
+func _can_use_content_creator_generation() -> bool:
+	return _has_user_permission(CONTENT_CREATOR_GENERATING_PERMISSION)
+
+func _can_show_staff_action_bar() -> bool:
+	return _has_user_permission(STAFF_ACTION_BAR_PERMISSION)
 
 func _can_impersonate_accounts() -> bool:
 	return _has_user_permission(IMPERSONATE_PERMISSION)
@@ -894,24 +899,32 @@ func _has_user_permission(permission: String) -> bool:
 	return false
 
 func _refresh_dev_tools_visibility() -> void:
-	var can_use_staff_tools: bool = _can_use_staff_tools()
+	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
-	var has_visible_staff_action: bool = can_impersonate or can_use_dev_tools or can_use_content_creator_tools
-	PlayerSave.is_staff = can_use_staff_tools
+	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
+	var can_open_content_creator_menu: bool = can_use_content_creator_tools or can_use_content_creator_generation
+	var has_visible_staff_action: bool = can_impersonate or can_use_dev_tools or can_open_content_creator_menu
+	PlayerSave.is_staff = can_show_staff_action_bar and has_visible_staff_action
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_use_staff_tools and can_use_content_creator_tools
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_open_content_creator_menu
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_use_staff_tools and can_use_content_creator_tools
-		content_creator_tools_button.disabled = not can_use_content_creator_tools
-	dev_actions_slot.visible = can_use_staff_tools and can_use_dev_tools
-	dev_actions_button.visible = can_use_staff_tools and can_use_dev_tools
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_open_content_creator_menu
+		content_creator_tools_button.disabled = not can_open_content_creator_menu
+	if content_creator_create_pokemon_button != null:
+		content_creator_create_pokemon_button.visible = can_use_content_creator_generation
+		content_creator_create_pokemon_button.disabled = not can_use_content_creator_generation
+	if content_creator_clear_party_button != null:
+		content_creator_clear_party_button.visible = can_use_content_creator_generation
+		content_creator_clear_party_button.disabled = not can_use_content_creator_generation
+	dev_actions_slot.visible = can_show_staff_action_bar and can_use_dev_tools
+	dev_actions_button.visible = can_show_staff_action_bar and can_use_dev_tools
 	dev_actions_button.disabled = not can_use_dev_tools
 	if staff_tools_slot != null:
-		staff_tools_slot.visible = can_use_staff_tools and can_impersonate
+		staff_tools_slot.visible = can_show_staff_action_bar and can_impersonate
 	if staff_tools_button != null:
-		staff_tools_button.visible = can_use_staff_tools and can_impersonate
+		staff_tools_button.visible = can_show_staff_action_bar and can_impersonate
 		staff_tools_button.disabled = not can_impersonate
 	dev_add_pokemon_button.visible = can_use_dev_tools
 	dev_add_pokemon_button.disabled = not can_use_dev_tools
@@ -946,7 +959,8 @@ func _refresh_dev_tools_visibility() -> void:
 			staff_impersonate_popup.visible = false
 	if not can_use_dev_tools:
 		dev_actions_popup.visible = false
-		dev_pokemon_popup.visible = false
+		if dev_pokemon_popup_mode != DevPokemonPopupMode.CONTENT_CREATOR:
+			dev_pokemon_popup.visible = false
 		if dev_add_menu_popup != null:
 			dev_add_menu_popup.visible = false
 		if dev_add_item_popup != null:
@@ -955,11 +969,15 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_add_money_popup.visible = false
 		if dev_clear_menu_popup != null:
 			dev_clear_menu_popup.visible = false
+	if not can_open_content_creator_menu and content_creator_menu_popup != null:
+		content_creator_menu_popup.visible = false
+	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
+		dev_pokemon_popup.visible = false
 	if not can_impersonate and staff_impersonate_popup != null:
 		staff_impersonate_popup.visible = false
 	_refresh_action_bar_layouts()
 	_set_collapsible_panel_available("dex_actions", true)
-	_set_collapsible_panel_available("staff_actions", can_use_staff_tools and has_visible_staff_action)
+	_set_collapsible_panel_available("staff_actions", can_show_staff_action_bar and has_visible_staff_action)
 
 func _apply_mail_ui_styles() -> void:
 	mail_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
@@ -3744,6 +3762,52 @@ func _create_pvp_validator_row(status_text: String, message: String, color: Colo
 	row.add_child(label)
 	return row
 
+func _setup_content_creator_menu_popup() -> void:
+	content_creator_menu_popup = PanelContainer.new()
+	content_creator_menu_popup.name = "ContentCreatorMenuPopup"
+	content_creator_menu_popup.visible = false
+	content_creator_menu_popup.custom_minimum_size = Vector2(220, 164)
+	content_creator_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	content_creator_menu_popup.z_index = UI_BASE_Z_INDEX
+	content_creator_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(content_creator_menu_popup)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 12)
+	margin_container.add_theme_constant_override("margin_top", 12)
+	margin_container.add_theme_constant_override("margin_right", 12)
+	margin_container.add_theme_constant_override("margin_bottom", 12)
+	content_creator_menu_popup.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin_container.add_child(layout)
+
+	content_creator_create_pokemon_button = Button.new()
+	content_creator_create_pokemon_button.text = "Create Pokemon"
+	content_creator_create_pokemon_button.custom_minimum_size = Vector2(190, 34)
+	content_creator_create_pokemon_button.focus_mode = Control.FOCUS_NONE
+	content_creator_create_pokemon_button.pressed.connect(_on_content_creator_create_pokemon_button_pressed)
+	layout.add_child(content_creator_create_pokemon_button)
+
+	content_creator_clear_party_button = Button.new()
+	content_creator_clear_party_button.text = "Clear Party"
+	content_creator_clear_party_button.custom_minimum_size = Vector2(190, 34)
+	content_creator_clear_party_button.focus_mode = Control.FOCUS_NONE
+	content_creator_clear_party_button.pressed.connect(_on_content_creator_clear_party_button_pressed)
+	layout.add_child(content_creator_clear_party_button)
+
+	content_creator_close_button = Button.new()
+	content_creator_close_button.text = "Close"
+	content_creator_close_button.custom_minimum_size = Vector2(190, 34)
+	content_creator_close_button.focus_mode = Control.FOCUS_NONE
+	content_creator_close_button.pressed.connect(_hide_content_creator_menu_popup)
+	layout.add_child(content_creator_close_button)
+
+	_apply_button_style(content_creator_create_pokemon_button, "primary")
+	_apply_button_style(content_creator_clear_party_button, "danger")
+	_apply_button_style(content_creator_close_button)
+
 func _setup_dev_add_item_tools() -> void:
 	var dev_actions_container := dev_clear_party_button.get_parent()
 
@@ -5286,7 +5350,129 @@ func _create_trainer_card_identity_panel() -> Control:
 	rows.add_child(_create_trainer_card_stat_row("Name", PlayerSave.player_name, 104, 22, TRAINER_CARD_CYAN))
 	rows.add_child(_create_trainer_card_stat_row("ID", _get_trainer_id_text(), 104, 22, TRAINER_CARD_CYAN))
 	rows.add_child(_create_trainer_card_stat_row("Guild", _get_trainer_stat_text("guild", "-"), 104, 22, TRAINER_CARD_CYAN))
+	rows.add_child(_create_trainer_card_badge_row())
 	return panel
+
+func _create_trainer_card_badge_row() -> Control:
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 10)
+
+	var label := Label.new()
+	label.text = "Badge:"
+	label.custom_minimum_size = Vector2(104, 0)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	label.add_theme_color_override("font_shadow_color", Color("#000000"))
+	label.add_theme_constant_override("shadow_offset_x", 1)
+	label.add_theme_constant_override("shadow_offset_y", 1)
+	row.add_child(label)
+
+	var option_wrap := HBoxContainer.new()
+	option_wrap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	option_wrap.alignment = BoxContainer.ALIGNMENT_END
+	option_wrap.add_theme_constant_override("separation", 6)
+	row.add_child(option_wrap)
+
+	trainer_card_badge_option = OptionButton.new()
+	trainer_card_badge_option.custom_minimum_size = Vector2(116, 24)
+	trainer_card_badge_option.focus_mode = Control.FOCUS_NONE
+	trainer_card_badge_option.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_apply_trainer_card_badge_option_style(trainer_card_badge_option)
+	option_wrap.add_child(trainer_card_badge_option)
+
+	trainer_card_badge_status_label = Label.new()
+	trainer_card_badge_status_label.custom_minimum_size = Vector2(38, 0)
+	trainer_card_badge_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	trainer_card_badge_status_label.add_theme_font_size_override("font_size", 12)
+	trainer_card_badge_status_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	option_wrap.add_child(trainer_card_badge_status_label)
+
+	_populate_trainer_card_badge_option()
+	if not trainer_card_badge_option.item_selected.is_connected(_on_trainer_card_badge_selected):
+		trainer_card_badge_option.item_selected.connect(_on_trainer_card_badge_selected)
+	return row
+
+func _apply_trainer_card_badge_option_style(option: OptionButton) -> void:
+	var normal := _make_button_style(Color("#111827f2"), Color("#2ba7ddaa"), 5, 1)
+	normal.content_margin_left = 10
+	normal.content_margin_right = 24
+	normal.content_margin_top = 2
+	normal.content_margin_bottom = 2
+	var hover := _make_button_style(Color("#16233af2"), Color("#00cfffcc"), 5, 1)
+	hover.content_margin_left = 10
+	hover.content_margin_right = 24
+	hover.content_margin_top = 2
+	hover.content_margin_bottom = 2
+	var pressed := _make_button_style(Color("#0a1120f2"), Color("#00f5ffcc"), 5, 1)
+	pressed.content_margin_left = 10
+	pressed.content_margin_right = 24
+	pressed.content_margin_top = 2
+	pressed.content_margin_bottom = 2
+	option.add_theme_stylebox_override("normal", normal)
+	option.add_theme_stylebox_override("hover", hover)
+	option.add_theme_stylebox_override("pressed", pressed)
+	option.add_theme_stylebox_override("focus", hover)
+	option.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	option.add_theme_color_override("font_hover_color", TRAINER_CARD_CYAN)
+	option.add_theme_color_override("font_pressed_color", TRAINER_CARD_CYAN)
+	option.add_theme_font_size_override("font_size", 14)
+
+func _populate_trainer_card_badge_option() -> void:
+	if trainer_card_badge_option == null:
+		return
+	trainer_card_badge_options = _get_selectable_chat_badge_roles(AuthService.current_user)
+	trainer_card_badge_option.clear()
+	for option: Dictionary in trainer_card_badge_options:
+		trainer_card_badge_option.add_item(str(option.get("label", "None")))
+		trainer_card_badge_option.set_item_metadata(trainer_card_badge_option.item_count - 1, str(option.get("id", "")))
+
+	var selected_badge: String = _get_selected_role_badge_preference()
+	var selected_index := 0
+	for index: int in range(trainer_card_badge_option.item_count):
+		if str(trainer_card_badge_option.get_item_metadata(index)) == selected_badge:
+			selected_index = index
+			break
+	trainer_card_badge_option.select(selected_index)
+	trainer_card_badge_option.disabled = trainer_card_badge_option.item_count <= 1
+
+func _on_trainer_card_badge_selected(index: int) -> void:
+	if trainer_card_badge_option == null or index < 0 or index >= trainer_card_badge_option.item_count:
+		return
+	var selected_badge: String = str(trainer_card_badge_option.get_item_metadata(index)).strip_edges().to_lower()
+	_apply_selected_role_badge_preference(selected_badge)
+	trainer_card_badge_status_label.text = "Saving"
+	var result: Dictionary = await _save_toggle_preferences()
+	if bool(result.get("success", false)):
+		trainer_card_badge_status_label.text = "Saved"
+		_refresh_world_role_badge_state()
+	else:
+		trainer_card_badge_status_label.text = "Error"
+
+func _get_selected_role_badge_preference() -> String:
+	var selected_badge: String = GameState.selected_role_badge.strip_edges().to_lower()
+	if selected_badge != "":
+		return selected_badge
+	var primary_role: Dictionary = _get_primary_visible_chat_role(AuthService.current_user, true)
+	return str(primary_role.get("id", "")).strip_edges().to_lower()
+
+func _apply_selected_role_badge_preference(selected_badge: String) -> void:
+	GameState.selected_role_badge = selected_badge.strip_edges().to_lower()
+	AuthService.current_user["selectedRoleBadge"] = GameState.selected_role_badge
+
+func _refresh_world_role_badge_state() -> void:
+	var player_node := get_tree().get_first_node_in_group("player")
+	if player_node != null and player_node.has_method("set_role_from_user"):
+		player_node.call("set_role_from_user", _get_current_user_with_selected_badge())
+	var world := GameState.get_world()
+	if world != null and world.has_method("save_current_player_state"):
+		world.call("save_current_player_state")
+
+func _get_current_user_with_selected_badge() -> Dictionary:
+	var user: Dictionary = AuthService.current_user.duplicate(true)
+	user["selectedRoleBadge"] = GameState.selected_role_badge
+	return user
 
 func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]) -> Control:
 	var panel := PanelContainer.new()
@@ -12417,6 +12603,67 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 	_add_chat_message("Added %s Lv. %s to party." % [pokemon.species, pokemon.level])
 	return true
 
+func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
+	pokemon_text = _clean_team_paste_text(pokemon_text)
+	if pokemon_text.strip_edges() == "":
+		_add_chat_message("Paste a Showdown/Pokepaste set or team first.")
+		return false
+
+	var open_slots: int = MAX_PARTY_SIZE - PlayerSave.party.size()
+	if open_slots <= 0:
+		_add_chat_message("Party is full.")
+		return false
+
+	_add_chat_message("Creating content creator Pokemon...")
+	var response: Dictionary = await PokemonDataApiClient.create_team_from_text(parse_pokemon_request, pokemon_text)
+	if not bool(response.get("success", false)):
+		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
+		return false
+
+	var team_value: Variant = response.get("team", [])
+	if not (team_value is Array):
+		_add_chat_message("Create failed: response did not include team data.")
+		return false
+
+	var team_data: Array = team_value as Array
+	if team_data.is_empty():
+		_add_chat_message("Create failed: team was empty.")
+		return false
+	if team_data.size() > open_slots:
+		_add_chat_message("Not enough party space. Open slots: %s, parsed Pokemon: %s." % [open_slots, team_data.size()])
+		return false
+
+	var parsed_pokemon_payloads: Array[Dictionary] = []
+	for index in range(team_data.size()):
+		var pokemon_value: Variant = team_data[index]
+		if not (pokemon_value is Dictionary):
+			_add_chat_message("Could not create team. Reason: Pokemon %s did not include Pokemon data." % [index + 1])
+			return false
+
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		var parsed_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_data)
+		if parsed_pokemon == null:
+			print_debug("Content creator Pokemon failed after backend create. index=", index, " pokemon_data=", pokemon_data, " response=", response)
+			var reason: String = PokemonFactory.last_error_message
+			if reason == "":
+				reason = "Unknown reason."
+
+			_add_chat_message("Could not create team. Pokemon %s reason: %s" % [index + 1, reason])
+			return false
+
+		parsed_pokemon_payloads.append(pokemon_data)
+
+	var created_count := 0
+	for pokemon_data: Dictionary in parsed_pokemon_payloads:
+		var create_result: Dictionary = await PlayerPartyStateService.content_creator_create_pokemon(pokemon_data, true)
+		if not bool(create_result.get("success", false)):
+			_add_chat_message("Created %s Pokemon, then failed: %s" % [created_count, str(create_result.get("error", "Unknown error"))])
+			return false
+		created_count += 1
+
+	_add_chat_message("Added %s content creator Pokemon to party." % created_count)
+	return true
+
 func _handle_add_team_command(team_text: String) -> bool:
 	team_text = _clean_team_paste_text(team_text)
 	if team_text.strip_edges() == "":
@@ -12531,6 +12778,7 @@ func _load_toggle_preferences() -> void:
 	GameState.show_follower = bool(preferences.get("showFollower", true))
 	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+	_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
 	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
@@ -12546,16 +12794,17 @@ func _on_follower_toggle_toggled(toggled_on: bool) -> void:
 	_refresh_world_follower_visibility()
 	await _save_toggle_preferences()
 
-func _save_toggle_preferences() -> void:
+func _save_toggle_preferences() -> Dictionary:
 	var result: Dictionary = await PlayerGameStateService.save_player_preferences({
 		"showFollower": GameState.show_follower,
 		"showRepel": GameState.repel_enabled,
 		"runningShoes": GameState.running_shoes_enabled,
+		"selectedRoleBadge": GameState.selected_role_badge,
 	})
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not save toggle settings. Please contact staff.")
 		push_warning("UIOverlay: toggle preference save failed: %s" % str(result.get("error", "Unknown error")))
-		return
+		return result
 
 	var preferences_value: Variant = result.get("preferences", {})
 	if preferences_value is Dictionary:
@@ -12563,6 +12812,8 @@ func _save_toggle_preferences() -> void:
 		GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
 		GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
 		GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+		_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
+	return result
 
 func _refresh_world_follower_visibility() -> void:
 	var tree := get_tree()
@@ -12716,6 +12967,8 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 		running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 		_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
 		_refresh_world_running_shoes_state()
+	if preferences.has("selectedRoleBadge"):
+		_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge")))
 
 	_refresh_player_status_card()
 	_refresh_avatar_previews()
@@ -12735,13 +12988,13 @@ func _refresh_world_player_display_name() -> void:
 		if world != null:
 			player_node = world.get_node_or_null("Player")
 	if player_node != null and player_node.has_method("set_display_name"):
-		player_node.call("set_display_name", PlayerSave.player_name, true)
+		player_node.call("set_display_name", PlayerSave.player_name, SettingsManager.display_own_name)
 	if player_node != null and player_node.has_method("refresh_appearance"):
 		player_node.call("refresh_appearance")
 	elif player_node != null and player_node.has_method("set_body_appearance"):
 		player_node.call("set_body_appearance", PlayerSave.appearance_body_id)
 	if player_node != null and player_node.has_method("set_role_from_user"):
-		player_node.call("set_role_from_user", AuthService.current_user)
+		player_node.call("set_role_from_user", _get_current_user_with_selected_badge())
 
 func _reset_impersonated_account_caches() -> void:
 	bag_inventory_items = []
@@ -12872,9 +13125,61 @@ func _on_pokedex_button_pressed() -> void:
 	await _show_pokedex_popup()
 
 func _on_content_creator_tools_button_pressed() -> void:
-	if not _can_use_content_creator_tools():
+	if not _can_use_content_creator_tools() and not _can_use_content_creator_generation():
 		return
-	_add_chat_message("Content Creator Tools are not implemented yet.")
+	if content_creator_menu_popup == null:
+		return
+	content_creator_menu_popup.visible = not content_creator_menu_popup.visible
+	if content_creator_menu_popup.visible:
+		_position_content_creator_menu_popup()
+		_activate_ui_panel(content_creator_menu_popup)
+	else:
+		_deactivate_ui_panel(content_creator_menu_popup)
+
+func _on_content_creator_create_pokemon_button_pressed() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	_hide_content_creator_menu_popup()
+	_show_dev_pokemon_popup(DevPokemonPopupMode.CONTENT_CREATOR)
+
+func _on_content_creator_clear_party_button_pressed() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	_hide_content_creator_menu_popup()
+	_show_ui_confirm_popup(
+		"Clear Content Creator Pokemon",
+		"This will remove party Pokemon with Original Trainer Content Creator and generated origin. Other party Pokemon stay untouched.",
+		"Clear Pokemon",
+		Callable(self, "_on_content_creator_clear_party_confirmed"),
+		Vector2i(500, 0),
+		true
+	)
+
+func _on_content_creator_clear_party_confirmed() -> void:
+	if not _can_use_content_creator_generation():
+		return
+
+	var before_count := PlayerSave.party.size()
+	var result: Dictionary = await PlayerPartyStateService.content_creator_clear_party_pokemon()
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not clear content creator Pokemon: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var after_count := PlayerSave.party.size()
+	var removed_count: int = max(before_count - after_count, 0)
+	if removed_count > 0:
+		_add_chat_message("Removed %s content creator Pokemon from party." % removed_count)
+	else:
+		_add_chat_message("No content creator Pokemon found in party.")
+
+func _position_content_creator_menu_popup() -> void:
+	_position_action_slot_popup(content_creator_menu_popup, content_creator_tools_slot)
+
+func _hide_content_creator_menu_popup() -> void:
+	if content_creator_menu_popup == null:
+		return
+	content_creator_menu_popup.visible = false
+	_deactivate_ui_panel(content_creator_menu_popup)
 
 func _show_item_dex_popup() -> void:
 	_position_item_dex_popup()
@@ -13043,6 +13348,7 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 
 	pokedex_selected_species = species_value
 	pokedex_selected_species_id = normalized_species_id
+	pokedex_move_search_text = ""
 	pokedex_sprite_side = "front"
 	_set_pokedex_header_from_species(pokedex_selected_species)
 	_refresh_pokedex_detail()
@@ -13763,32 +14069,175 @@ func _format_pokedex_evolution_label(value: String) -> String:
 func _build_pokedex_moves_tab() -> void:
 	var moves_value: Variant = pokedex_selected_species.get("moves", {})
 	var moves: Dictionary = moves_value if typeof(moves_value) == TYPE_DICTIONARY else {}
-	var level_up_moves := _array_from_variant(moves.get("levelUp", []))
-	pokedex_detail_stack.add_child(_create_pokedex_section_title("Level-Up Moves"))
+	pokedex_detail_stack.add_child(_create_pokedex_move_search_input())
 
-	if level_up_moves.is_empty():
-		var empty_label := Label.new()
-		empty_label.text = "No level-up moves available."
-		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-		pokedex_detail_stack.add_child(empty_label)
+	var sections := [
+		{"key": "levelUp", "title": "Level-Up Moves", "empty": "No level-up moves available.", "column": "Lv", "source": ""},
+		{"key": "egg", "title": "Egg Moves", "empty": "No egg moves available.", "column": "Learn", "source": "Egg"},
+		{"key": "tm", "title": "TM Moves", "empty": "No TM moves available.", "column": "Learn", "source": "TM"},
+		{"key": "tutor", "title": "Tutor Moves", "empty": "No tutor moves available.", "column": "Learn", "source": "Tutor"},
+		{"key": "special", "title": "Special Moves", "empty": "No special moves available.", "column": "Learn", "source": "Special"},
+		{"key": "event", "title": "Event Moves", "empty": "No event moves available.", "column": "Learn", "source": "Event"},
+		{"key": "legacy", "title": "Legacy Moves", "empty": "No legacy moves available.", "column": "Learn", "source": "Legacy"},
+		{"key": "legacyEvent", "title": "Legacy Event Moves", "empty": "No legacy event moves available.", "column": "Learn", "source": "Legacy Event"},
+		{"key": "preEvolution", "title": "Pre-Evolution Moves", "empty": "No pre-evolution moves available.", "column": "Learn", "source": "Pre-Evo"},
+	]
+	var added_any_section := false
+	var available_move_count := 0
+	var normalized_query := _normalize_pokedex_move_query(pokedex_move_search_text)
+	for section_value: Variant in sections:
+		if typeof(section_value) != TYPE_DICTIONARY:
+			continue
+		var section: Dictionary = section_value
+		var raw_bucket_moves := _array_from_variant(moves.get(str(section.get("key", "")), []))
+		available_move_count += raw_bucket_moves.size()
+		var bucket_moves := _filter_pokedex_move_bucket(
+			raw_bucket_moves,
+			normalized_query,
+			str(section.get("source", ""))
+		)
+		if bucket_moves.is_empty() and (normalized_query != "" or str(section.get("key", "")) != "levelUp"):
+			continue
+		if added_any_section:
+			pokedex_detail_stack.add_child(_create_pokedex_section_spacer())
+		added_any_section = true
+		_add_pokedex_move_section(
+			str(section.get("title", "")),
+			bucket_moves,
+			str(section.get("column", "")),
+			str(section.get("source", "")),
+			str(section.get("empty", "No moves available."))
+		)
+
+	if not added_any_section:
+		if available_move_count <= 0:
+			pokedex_detail_stack.add_child(_create_pokedex_muted_message("No moves available."))
+		else:
+			pokedex_detail_stack.add_child(_create_pokedex_muted_message("No moves match your search."))
+
+func _create_pokedex_move_search_input() -> Control:
+	var search_input := LineEdit.new()
+	pokedex_move_search_input = search_input
+	search_input.placeholder_text = "Search moves..."
+	search_input.text = pokedex_move_search_text
+	search_input.custom_minimum_size = Vector2(0, 32)
+	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search_input.clear_button_enabled = true
+	search_input.text_changed.connect(_on_pokedex_move_search_changed)
+	_apply_line_edit_style(search_input)
+	return search_input
+
+func _on_pokedex_move_search_changed(query: String) -> void:
+	pokedex_move_search_text = query
+	if pokedex_active_tab == "moves":
+		_refresh_pokedex_detail()
+		call_deferred("_focus_pokedex_move_search")
+
+func _focus_pokedex_move_search() -> void:
+	if pokedex_move_search_input == null or not is_instance_valid(pokedex_move_search_input):
+		return
+	pokedex_move_search_input.grab_focus()
+	pokedex_move_search_input.caret_column = pokedex_move_search_input.text.length()
+
+func _filter_pokedex_move_bucket(moves: Array, normalized_query: String, source_label: String) -> Array:
+	if normalized_query == "":
+		return moves
+
+	var filtered_moves: Array = []
+	for move_value: Variant in moves:
+		if typeof(move_value) != TYPE_DICTIONARY:
+			continue
+		var move: Dictionary = move_value
+		if _pokedex_move_matches_query(move, normalized_query, source_label):
+			filtered_moves.append(move)
+	return filtered_moves
+
+func _pokedex_move_matches_query(move: Dictionary, normalized_query: String, source_label: String) -> bool:
+	var values := [
+		str(move.get("id", "")),
+		str(move.get("name", "")),
+		str(move.get("type", "")),
+		str(move.get("category", "")),
+		source_label,
+	]
+	if move.has("level"):
+		values.append("level")
+		values.append(str(int(move.get("level", 1))))
+	var compact_query := normalized_query.replace(" ", "")
+	for value: String in values:
+		var normalized_value := _normalize_pokedex_move_query(value)
+		if normalized_value.find(normalized_query) >= 0:
+			return true
+		if compact_query != "" and normalized_value.replace(" ", "").find(compact_query) >= 0:
+			return true
+	return false
+
+func _normalize_pokedex_move_query(value: String) -> String:
+	return value.strip_edges().to_lower().replace("_", " ").replace("-", " ")
+
+func _add_pokedex_move_section(title_text: String, moves: Array, first_column_label: String, source_label: String, empty_text: String) -> void:
+	pokedex_detail_stack.add_child(_create_pokedex_move_section_title(title_text, moves.size()))
+	if moves.is_empty():
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(empty_text))
 		return
 
+	pokedex_detail_stack.add_child(_create_pokedex_move_header_row(first_column_label))
+
+	for move_value: Variant in moves:
+		if typeof(move_value) != TYPE_DICTIONARY:
+			continue
+		var move: Dictionary = move_value
+		pokedex_detail_stack.add_child(_create_pokedex_move_row(move, source_label))
+
+func _create_pokedex_move_header_row(first_column_label: String) -> Control:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 7)
-	header.add_child(_create_pokedex_move_header_label("Lv", 36))
-	header.add_child(_create_pokedex_move_header_label("Move", 190))
+	header.add_child(_create_pokedex_move_header_label(first_column_label, 54))
+	header.add_child(_create_pokedex_move_header_label("Move", 172))
 	header.add_child(_create_pokedex_move_header_label("Type", 92))
 	header.add_child(_create_pokedex_move_header_label("Category", 92))
 	header.add_child(_create_pokedex_move_header_label("Power", 52))
 	header.add_child(_create_pokedex_move_header_label("Acc", 52))
 	header.add_child(_create_pokedex_move_header_label("PP", 42))
-	pokedex_detail_stack.add_child(header)
+	return header
 
-	for move_value: Variant in level_up_moves:
-		if typeof(move_value) != TYPE_DICTIONARY:
-			continue
-		var move: Dictionary = move_value
-		pokedex_detail_stack.add_child(_create_pokedex_move_row(move))
+func _create_pokedex_move_section_title(title_text: String, move_count: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 30)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+
+	var accent := ColorRect.new()
+	accent.custom_minimum_size = Vector2(3, 0)
+	accent.color = POKEMON_SUMMARY_ACCENT
+	row.add_child(accent)
+
+	var label := Label.new()
+	label.text = title_text
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
+
+	var count_label := Label.new()
+	count_label.text = str(move_count)
+	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.add_theme_font_size_override("font_size", 11)
+	count_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	row.add_child(count_label)
+	return panel
 
 func _create_pokedex_section_title(title_text: String) -> Control:
 	var label := Label.new()
@@ -13804,6 +14253,11 @@ func _create_pokedex_muted_message(message: String) -> Control:
 	label.add_theme_font_size_override("font_size", 12)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	return label
+
+func _create_pokedex_section_spacer() -> Control:
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(0, 4)
+	return spacer
 
 func _create_pokedex_info_line(label_text: String, value_text: String) -> Control:
 	var row := HBoxContainer.new()
@@ -13862,7 +14316,7 @@ func _create_pokedex_move_header_label(label_text: String, width: float) -> Cont
 	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	return label
 
-func _create_pokedex_move_row(move: Dictionary) -> Control:
+func _create_pokedex_move_row(move: Dictionary, source_label: String = "") -> Control:
 	var row_panel := PanelContainer.new()
 	row_panel.custom_minimum_size = Vector2(0, 34)
 	row_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
@@ -13881,8 +14335,11 @@ func _create_pokedex_move_row(move: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 7)
 	margin.add_child(row)
 
-	row.add_child(_create_pokedex_move_value_label(str(int(move.get("level", 1))), 36, POKEMON_SUMMARY_ACCENT))
-	row.add_child(_create_pokedex_move_value_label(str(move.get("name", move.get("id", ""))), 190, UI_TEXT, true))
+	var first_column_text := source_label
+	if first_column_text == "":
+		first_column_text = str(int(move.get("level", 1)))
+	row.add_child(_create_pokedex_move_value_label(first_column_text, 54, POKEMON_SUMMARY_ACCENT, true))
+	row.add_child(_create_pokedex_move_value_label(str(move.get("name", move.get("id", ""))), 172, UI_TEXT, true))
 	row.add_child(_create_pokedex_move_type_cell(str(move.get("type", "")), 92))
 	row.add_child(_create_pokedex_move_category_cell(str(move.get("category", "")), 92))
 	row.add_child(_create_pokedex_move_value_label(_format_pokedex_move_number(move.get("power", null)), 52, UI_TEXT))
@@ -14335,14 +14792,17 @@ func _position_dev_clear_menu_popup() -> void:
 	_position_dev_slot_popup(dev_clear_menu_popup)
 
 func _position_dev_slot_popup(popup: Control) -> void:
-	if popup == null or dev_actions_slot == null:
+	_position_action_slot_popup(popup, dev_actions_slot)
+
+func _position_action_slot_popup(popup: Control, slot: Control) -> void:
+	if popup == null or slot == null:
 		return
 
 	var parent_control: Control = popup.get_parent_control()
 	if parent_control == null:
 		return
 
-	var slot_rect: Rect2 = dev_actions_slot.get_global_rect()
+	var slot_rect: Rect2 = slot.get_global_rect()
 	var popup_size: Vector2 = popup.get_combined_minimum_size()
 	if popup_size == Vector2.ZERO:
 		popup_size = popup.custom_minimum_size
@@ -14745,11 +15205,18 @@ func _on_dev_actions_close_button_pressed() -> void:
 	_hide_dev_add_menu_popup()
 
 func _show_dev_pokemon_popup(mode: int) -> void:
-	if not _can_use_dev_tools():
+	if mode == DevPokemonPopupMode.CONTENT_CREATOR:
+		if not _can_use_content_creator_generation():
+			return
+	elif not _can_use_dev_tools():
 		return
 
 	dev_pokemon_popup_mode = mode
 	match dev_pokemon_popup_mode:
+		DevPokemonPopupMode.CONTENT_CREATOR:
+			dev_pokemon_title.text = "Content Creator Pokemon"
+			dev_pokemon_add_button.text = "Create"
+			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team. Shiny, invalid EVs, and non-held items are rejected."
 		DevPokemonPopupMode.TEAM:
 			dev_pokemon_title.text = "Create Pokemon"
 			dev_pokemon_add_button.text = "Create"
@@ -14763,16 +15230,23 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 			dev_pokemon_add_button.text = "Add"
 			dev_pokemon_text.placeholder_text = "Paste Showdown/Pokepaste text here"
 
+	dev_pokemon_add_button.disabled = dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR and not _can_use_content_creator_generation()
 	dev_pokemon_popup.visible = true
 	_activate_ui_panel(dev_pokemon_popup)
 	dev_pokemon_text.grab_focus()
 
 func _on_dev_pokemon_add_button_pressed() -> void:
-	if not _can_use_dev_tools():
-		return
+	if dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
+		if not _can_use_content_creator_generation():
+			return
+	else:
+		if not _can_use_dev_tools():
+			return
 
 	var added: bool = false
 	match dev_pokemon_popup_mode:
+		DevPokemonPopupMode.CONTENT_CREATOR:
+			added = await _handle_content_creator_add_pokemon_command(dev_pokemon_text.text)
 		DevPokemonPopupMode.TEAM:
 			added = await _handle_add_team_command(dev_pokemon_text.text)
 		DevPokemonPopupMode.SPAWN:
@@ -18201,7 +18675,7 @@ func _pokemon_preview_payload_with_current_trainer(
 
 func _should_show_chat_category(category: String) -> bool:
 	if category == CHAT_CATEGORY_SYSTEM:
-		return true
+		return active_chat_tab == CHAT_TAB_GENERAL or active_chat_tab == CHAT_TAB_SYSTEM
 	if active_chat_tab == CHAT_TAB_GENERAL:
 		return category == CHAT_CHANNEL_GLOBAL or category == CHAT_CATEGORY_USER
 	if active_chat_tab == CHAT_TAB_TRADE:
@@ -18265,12 +18739,21 @@ func _create_chat_pokemon_attachment_button(pokemon_payload: Dictionary) -> Cont
 	return button
 
 
-func _get_primary_visible_chat_role(user: Dictionary) -> Dictionary:
+func _get_primary_visible_chat_role(user: Dictionary, ignore_selected_badge: bool = false) -> Dictionary:
 	var roles_value: Variant = user.get("roles", [])
 	if not roles_value is Array:
 		return {}
 
 	var roles: Array = roles_value as Array
+	if not ignore_selected_badge:
+		var selected_badge: String = str(user.get("selectedRoleBadge", "")).strip_edges().to_lower()
+		if selected_badge == "" and _is_current_auth_user(user):
+			selected_badge = GameState.selected_role_badge.strip_edges().to_lower()
+		if selected_badge == "none":
+			return {}
+		if selected_badge != "":
+			return _find_visible_chat_role(roles, selected_badge)
+
 	var primary_role: Dictionary = {}
 	var primary_priority: int = -999999
 	for role_value: Variant in roles:
@@ -18292,11 +18775,58 @@ func _get_primary_visible_chat_role(user: Dictionary) -> Dictionary:
 
 	return primary_role
 
+func _is_current_auth_user(user: Dictionary) -> bool:
+	var user_id := int(user.get("id", user.get("userId", 0)))
+	var current_user_id := int(AuthService.current_user.get("id", 0))
+	if user_id > 0 and current_user_id > 0:
+		return user_id == current_user_id
+	var username := str(user.get("username", "")).strip_edges().to_lower()
+	var current_username := str(AuthService.current_user.get("username", "")).strip_edges().to_lower()
+	return username != "" and username == current_username
+
+func _find_visible_chat_role(roles: Array, selected_badge: String) -> Dictionary:
+	for role_value: Variant in roles:
+		if not role_value is Dictionary:
+			continue
+		var role: Dictionary = role_value as Dictionary
+		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
+		if role_id != selected_badge:
+			continue
+		var badge: String = _get_chat_role_badge(role_id)
+		if badge.is_empty():
+			return {}
+		var role_with_badge: Dictionary = role.duplicate()
+		role_with_badge["id"] = role_id
+		role_with_badge["badge"] = badge
+		role_with_badge["color"] = _get_chat_role_color(role_id, str(role.get("color", "#d8b767")))
+		return role_with_badge
+	return {}
+
+func _get_selectable_chat_badge_roles(user: Dictionary) -> Array[Dictionary]:
+	var options: Array[Dictionary] = [{"id": "none", "label": "None"}]
+	var roles_value: Variant = user.get("roles", [])
+	if not roles_value is Array:
+		return options
+	var roles: Array = roles_value as Array
+	for role_value: Variant in roles:
+		if not role_value is Dictionary:
+			continue
+		var role: Dictionary = role_value as Dictionary
+		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
+		var badge: String = _get_chat_role_badge(role_id)
+		if badge.is_empty():
+			continue
+		options.append({
+			"id": role_id,
+			"label": badge,
+		})
+	return options
+
 
 func _get_chat_role_badge(role_id: String) -> String:
 	match role_id:
 		"alpha":
-			return "ALPHA"
+			return "alpha"
 		"gamemaster":
 			return "GM"
 		"developer":

@@ -1877,7 +1877,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=674461704]
 
 [node name="RouteGateNPC" parent="Entities/NPCs" unique_id=1463025 instance=ExtResource("5_n6c5k")]
-position = Vector2(1008, 272)
+position = Vector2(1040, 208)
 requires_staff_role = true
 staff_blocked_dialogue_lines = Array[String](["This route is closed during the alpha."])
 npc_id = "kanto_pallet_town_johny_sins_1"
@@ -1899,8 +1899,11 @@ tile_set = SubResource("TileSet_3e7rq")
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1454965346]
 
+[node name="InitialSpawn" type="Marker2D" parent="Spawns" unique_id=1909342481]
+position = Vector2(656, 560)
+
 [node name="FromRoute1" type="Marker2D" parent="Spawns" unique_id=1105260285]
-position = Vector2(1008, 48)
+position = Vector2(1008, 112)
 
 [node name="FromOaksLab" type="Marker2D" parent="Spawns" unique_id=682812935]
 position = Vector2(1296, 848)
@@ -1912,7 +1915,7 @@ position = Vector2(432, 16)
 script = ExtResource("13_l40au")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute1" unique_id=242240651]
-position = Vector2(542, -15)
+position = Vector2(544, 32)
 shape = SubResource("RectangleShape2D_b5jff")
 
 [node name="TransitionHint" type="Node2D" parent="Exits/ToRoute1" unique_id=166557463]
@@ -1921,6 +1924,7 @@ position = Vector2(544, 0)
 script = ExtResource("22_transition_hint")
 particle_count = 14
 width = 120.0
+height = 64.0
 cycle_seconds = 2.0
 particle_radius = 1.7
 tint = Color(0.88, 0.68, 1, 0.68)
@@ -1950,7 +1954,7 @@ tile_set = SubResource("TileSet_n6c5k")
 
 [node name="RouteGates" type="TileMapLayer" parent="." unique_id=1335463915]
 visible = false
-position = Vector2(432, 240)
+position = Vector2(432, 176)
 tile_map_data = PackedByteArray("AAATAAAAAAAEAAEAAAASAAAAAAAEAAEAAAARAAAAAAAEAAEAAAAQAAAAAAAEAAEAAAAPAAAAAAAEAAEAAAA=")
 tile_set = SubResource("TileSet_0ke4d")
 
