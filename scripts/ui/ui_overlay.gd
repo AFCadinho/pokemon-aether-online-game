@@ -2996,6 +2996,8 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(close_button)
 
 	var tabs_margin := MarginContainer.new()
+	tabs_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs_margin.add_theme_constant_override("margin_left", 10)
 	tabs_margin.add_theme_constant_override("margin_top", 2)
 	tabs_margin.add_theme_constant_override("margin_right", 10)
@@ -3023,6 +3025,8 @@ func _setup_pvp_room_popup() -> void:
 	ranked_tabs.tab_changed.connect(_on_pvp_ranked_tab_changed)
 	_apply_pvp_ranked_tabs_style(ranked_tabs)
 	var ranked_tabs_container := MarginContainer.new()
+	ranked_tabs_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ranked_tabs_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	ranked_tabs_container.add_theme_constant_override("margin_left", 6)
 	ranked_tabs_container.add_theme_constant_override("margin_top", 2)
 	ranked_tabs_container.add_theme_constant_override("margin_right", 6)
@@ -3306,6 +3310,7 @@ func _setup_pvp_room_popup() -> void:
 
 	var bans_content := VBoxContainer.new()
 	bans_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bans_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bans_content.add_theme_constant_override("separation", 10)
 	bans_scroll.add_child(bans_content)
 
@@ -3470,6 +3475,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
 	_render_pvp_banlists()
+	_render_pvp_banlists.call_deferred()
 
 	pvp_poll_timer = Timer.new()
 	pvp_poll_timer.wait_time = 2.0
