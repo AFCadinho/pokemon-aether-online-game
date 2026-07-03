@@ -9,6 +9,10 @@
 
 # Regenerated Tiled visual output; Godot gameplay scenes own logic separately.
 /generated/tiled_visuals/
+!/generated/
+!/generated/tiled_visuals/
+!/generated/tiled_visuals/pallet_town/
+!/generated/tiled_visuals/pallet_town/**
 
 # Large music assets are bundled outside git for launcher builds.
 /assets/music/*
