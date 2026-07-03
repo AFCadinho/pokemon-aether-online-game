@@ -1040,7 +1040,13 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 			part_id,
 			current_body_gender,
 			movement_style,
-			_parse_appearance_color(str(current_appearance_state.get("eye_color", CharacterAppearanceService.DEFAULT_EYE_COLOR)), Color.WHITE)
+			_parse_appearance_color(
+				CharacterAppearanceService.resolve_eye_color(
+					str(current_appearance_state.get("eye_color", "")),
+					current_body_gender
+				),
+				Color.WHITE
+			)
 		)
 	if normalized_category == "hair" or normalized_category == "eyebrows":
 		return CharacterAppearanceService.get_tinted_part_frames(
@@ -1048,7 +1054,13 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 			part_id,
 			current_body_gender,
 			movement_style,
-			_parse_appearance_color(str(current_appearance_state.get("hair_color", CharacterAppearanceService.DEFAULT_HAIR_COLOR)), Color.WHITE),
+			_parse_appearance_color(
+				CharacterAppearanceService.resolve_hair_color(
+					str(current_appearance_state.get("hair_color", "")),
+					current_body_gender
+				),
+				Color.WHITE
+			),
 			true
 		)
 	return CharacterAppearanceService.get_part_frames(

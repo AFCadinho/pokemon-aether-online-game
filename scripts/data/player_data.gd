@@ -20,9 +20,9 @@ var appearance_facegear_id := ""
 var appearance_top_id: String = CharacterAppearanceService.DEFAULT_MALE_TOP_ID
 var appearance_bottom_id: String = CharacterAppearanceService.DEFAULT_MALE_BOTTOM_ID
 var appearance_shoes_id: String = CharacterAppearanceService.DEFAULT_MALE_SHOES_ID
-var appearance_hair_color: String = CharacterAppearanceService.DEFAULT_HAIR_COLOR
+var appearance_hair_color: String = ""
 var appearance_skin_tone: String = CharacterAppearanceService.DEFAULT_SKIN_TONE
-var appearance_eye_color: String = CharacterAppearanceService.DEFAULT_EYE_COLOR
+var appearance_eye_color: String = ""
 var appearance_hair_style_index := 0
 var flags := {}
 
@@ -132,9 +132,15 @@ func apply_appearance_state(appearance_state: Dictionary) -> void:
 	appearance_top_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("top", appearance_top_id)))
 	appearance_bottom_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("bottom", appearance_state.get("legs", appearance_bottom_id))))
 	appearance_shoes_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("shoes", appearance_state.get("feet", appearance_shoes_id))))
-	appearance_hair_color = str(appearance_state.get("hair_color", appearance_hair_color)).strip_edges()
+	appearance_hair_color = CharacterAppearanceService.resolve_hair_color(
+		str(appearance_state.get("hair_color", appearance_hair_color)),
+		gender
+	)
 	appearance_skin_tone = str(appearance_state.get("skin_tone", appearance_skin_tone)).strip_edges()
-	appearance_eye_color = str(appearance_state.get("eye_color", appearance_eye_color)).strip_edges()
+	appearance_eye_color = CharacterAppearanceService.resolve_eye_color(
+		str(appearance_state.get("eye_color", appearance_eye_color)),
+		gender
+	)
 	if appearance_state.has("hair"):
 		if appearance_hair_id != "":
 			sync_hair_style_index_from_id()
@@ -162,12 +168,10 @@ func ensure_layered_appearance_defaults(fill_empty_parts: bool = true) -> void:
 		appearance_bottom_id = CharacterAppearanceService.get_default_part_id("bottom", gender)
 	if fill_empty_parts and appearance_shoes_id == "":
 		appearance_shoes_id = CharacterAppearanceService.get_default_part_id("shoes", gender)
-	if appearance_hair_color == "":
-		appearance_hair_color = CharacterAppearanceService.DEFAULT_HAIR_COLOR
+	appearance_hair_color = CharacterAppearanceService.resolve_hair_color(appearance_hair_color, gender)
 	if appearance_skin_tone == "":
 		appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
-	if appearance_eye_color == "":
-		appearance_eye_color = CharacterAppearanceService.DEFAULT_EYE_COLOR
+	appearance_eye_color = CharacterAppearanceService.resolve_eye_color(appearance_eye_color, gender)
 	if appearance_hair_id != "":
 		sync_hair_style_index_from_id()
 

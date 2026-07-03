@@ -415,6 +415,7 @@ func _apply_authenticated_player_profile() -> void:
 	if join_date_text != "":
 		PlayerSave.flags["join_date"] = join_date_text
 	PlayerSave.gender = AuthService.get_gender()
+	PlayerSave.ensure_body_matches_gender()
 
 
 func _get_idle_login_button_text() -> String:

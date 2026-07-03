@@ -63,21 +63,22 @@ const APPEARANCE_CATEGORIES := [
 	{"id": "shoes", "label": "Shoes"},
 ]
 const HAIR_COLOR_SWATCHES := [
-	{"id": "#ffffff", "label": "White", "color": Color("#ffffff")},
-	{"id": "#2a2421", "label": "Black", "color": Color("#2a2421")},
-	{"id": "#5a3728", "label": "Brown", "color": Color("#5a3728")},
-	{"id": "#f4d77a", "label": "Blond", "color": Color("#f4d77a")},
-	{"id": "#8a3030", "label": "Red", "color": Color("#8a3030")},
-	{"id": "#5d49a8", "label": "Violet", "color": Color("#5d49a8")},
-	{"id": "#2f6f7a", "label": "Teal", "color": Color("#2f6f7a")},
+	{"id": "#5a3728", "label": "Dark Brown", "color": Color("#5a3728")},
+	{"id": "#6b4632", "label": "Warm Brown", "color": Color("#6b4632")},
+	{"id": "#2a2421", "label": "Soft Black", "color": Color("#2a2421")},
+	{"id": "#b99555", "label": "Dirty Blond", "color": Color("#b99555")},
+	{"id": "#d6b66b", "label": "Ash Blond", "color": Color("#d6b66b")},
+	{"id": "#7a4632", "label": "Chestnut", "color": Color("#7a4632")},
+	{"id": "#813a2f", "label": "Auburn", "color": Color("#813a2f")},
+	{"id": "#2b5f64", "label": "Deep Teal", "color": Color("#2b5f64")},
 ]
 const EYE_COLOR_SWATCHES := [
-	{"id": "#0fff00", "label": "Green", "color": Color("#0fff00")},
-	{"id": "#3da5ff", "label": "Blue", "color": Color("#3da5ff")},
-	{"id": "#7a4b2a", "label": "Brown", "color": Color("#7a4b2a")},
-	{"id": "#6f50c9", "label": "Violet", "color": Color("#6f50c9")},
-	{"id": "#f2d24b", "label": "Gold", "color": Color("#f2d24b")},
-	{"id": "#e83b3b", "label": "Red", "color": Color("#e83b3b")},
+	{"id": "#3d6f86", "label": "Blue Gray", "color": Color("#3d6f86")},
+	{"id": "#456f4a", "label": "Moss Green", "color": Color("#456f4a")},
+	{"id": "#4b5f7e", "label": "Muted Blue", "color": Color("#4b5f7e")},
+	{"id": "#526c4d", "label": "Olive Green", "color": Color("#526c4d")},
+	{"id": "#7a5a36", "label": "Amber Brown", "color": Color("#7a5a36")},
+	{"id": "#6b5c91", "label": "Muted Violet", "color": Color("#6b5c91")},
 ]
 const KANTO_BADGES := [
 	{"id": "boulder", "name": "Boulder Badge", "texture": "res://assets/gym_badges/kanto_badges/Boulder_Badge.png", "unlocked": false},
@@ -12826,9 +12827,9 @@ func _reset_impersonated_appearance_to_defaults() -> void:
 	PlayerSave.appearance_bottom_id = CharacterAppearanceService.get_default_part_id("bottom", PlayerSave.gender)
 	PlayerSave.appearance_shoes_id = CharacterAppearanceService.get_default_part_id("shoes", PlayerSave.gender)
 	PlayerSave.sync_hair_style_index_from_id()
-	PlayerSave.appearance_hair_color = CharacterAppearanceService.DEFAULT_HAIR_COLOR
+	PlayerSave.appearance_hair_color = CharacterAppearanceService.get_default_hair_color(PlayerSave.gender)
 	PlayerSave.appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
-	PlayerSave.appearance_eye_color = CharacterAppearanceService.DEFAULT_EYE_COLOR
+	PlayerSave.appearance_eye_color = CharacterAppearanceService.get_default_eye_color(PlayerSave.gender)
 	PlayerSave.ensure_body_matches_gender()
 
 func _rebuild_trainer_card_popup(keep_visible: bool) -> void:

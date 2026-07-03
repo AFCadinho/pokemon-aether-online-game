@@ -35,9 +35,15 @@ const DEFAULT_FEMALE_BOTTOM_ID := "Trousers"
 const DEFAULT_FEMALE_SHOES_ID := "Shoes"
 const DEFAULT_FEMALE_EYES_ID := "Eyes"
 const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
-const DEFAULT_HAIR_COLOR := "#ffffff"
+const LEGACY_DEFAULT_HAIR_COLOR := "#ffffff"
+const LEGACY_DEFAULT_EYE_COLOR := "#0fff00"
+const DEFAULT_MALE_HAIR_COLOR := "#5a3728"
+const DEFAULT_FEMALE_HAIR_COLOR := "#6b4632"
+const DEFAULT_HAIR_COLOR := DEFAULT_MALE_HAIR_COLOR
 const DEFAULT_SKIN_TONE := "#ffffff"
-const DEFAULT_EYE_COLOR := "#0fff00"
+const DEFAULT_MALE_EYE_COLOR := "#3d6f86"
+const DEFAULT_FEMALE_EYE_COLOR := "#456f4a"
+const DEFAULT_EYE_COLOR := DEFAULT_MALE_EYE_COLOR
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
@@ -86,9 +92,9 @@ static func get_default_appearance(gender: String = "") -> Dictionary:
 		"top": "",
 		"bottom": "",
 		"shoes": "",
-		"hair_color": DEFAULT_HAIR_COLOR,
+		"hair_color": get_default_hair_color(normalized_gender),
 		"skin_tone": DEFAULT_SKIN_TONE,
-		"eye_color": DEFAULT_EYE_COLOR,
+		"eye_color": get_default_eye_color(normalized_gender),
 	}
 	if body_supports_layered_parts(body_id, normalized_gender):
 		for category: String in LAYERED_PART_CATEGORIES:
@@ -96,6 +102,28 @@ static func get_default_appearance(gender: String = "") -> Dictionary:
 				continue
 			appearance[category] = get_default_part_id(category, normalized_gender)
 	return appearance
+
+
+static func get_default_hair_color(gender: String = "") -> String:
+	return DEFAULT_FEMALE_HAIR_COLOR if normalize_gender(gender) == "female" else DEFAULT_MALE_HAIR_COLOR
+
+
+static func get_default_eye_color(gender: String = "") -> String:
+	return DEFAULT_FEMALE_EYE_COLOR if normalize_gender(gender) == "female" else DEFAULT_MALE_EYE_COLOR
+
+
+static func resolve_hair_color(color_text: String, gender: String = "") -> String:
+	var normalized_color: String = color_text.strip_edges()
+	if normalized_color == "" or normalized_color.to_lower() == LEGACY_DEFAULT_HAIR_COLOR:
+		return get_default_hair_color(gender)
+	return normalized_color
+
+
+static func resolve_eye_color(color_text: String, gender: String = "") -> String:
+	var normalized_color: String = color_text.strip_edges()
+	if normalized_color == "" or normalized_color.to_lower() == LEGACY_DEFAULT_EYE_COLOR:
+		return get_default_eye_color(gender)
+	return normalized_color
 
 
 static func body_supports_layered_parts(body_id: String, gender: String = "") -> bool:
