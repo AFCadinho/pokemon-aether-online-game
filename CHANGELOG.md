@@ -8,15 +8,23 @@
 - Added Ranked PvP leaderboard scopes for Daily, Weekly, Monthly, and All Time.
 - Added a placeholder Live tab for future live ranked PvP battle listings.
 - Added friendlist client implementation support, including friendlist popup scene metadata and social service resource metadata.
+- Added a redesigned friendlist popup with draggable positioning, friend search, add/remove friend dialogs, request badges, mail and message actions, last-seen display, and status message previews.
+- Added PM support for `/pm username`, party sharing through `/team` and dragged Pokemon attachments, unread visual badges, and clearer active conversation styling.
+- Added a Help chat tab with a 5 minute cooldown.
+- Added friend request visual attention badges and notification sound handling on live requests and login refresh.
 
 **Changed**
 - Refined the Ranked PvP interface with styled tabs, draggable popup behavior, current-party team preview icons, Aether OU tier selection, and clearer General Information.
 - Team Validator now treats server validation as the visible source of truth and avoids duplicate Local/Server errors once server validation is available.
 - Ranked validation feedback now names affected slots and banned Pokemon, items, moves, abilities, and species clause failures more clearly.
 - Ranked banlist metadata now shows a compact Format and Last Updated summary.
+- Reordered the top-left options row to Bag, Socials, Aether Exchange, Clan, PvP Interface, and Settings, and replaced the Aether Exchange icon.
+- Refined chat tab positioning and Ranked PvP tab hover cursor behavior.
 
 **Fixed**
 - Fixed ranked banlist parser and validation tests for malformed or empty server responses.
+- Fixed private messages failing when the recipient user id is not already known client-side.
+- Fixed return-to-login confirmation layering behind the settings menu.
 
 ## 0.2.6 - 2026-07-01
 

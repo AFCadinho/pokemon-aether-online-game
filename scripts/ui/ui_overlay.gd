@@ -17,6 +17,7 @@ const CHAT_MIN_SIZE := Vector2(360, 190)
 const CHAT_MAX_SIZE := Vector2(760, 520)
 const CHAT_RESIZE_BUTTON_GAP := 10.0
 const CHAT_TABS_GAP := 8.0
+const CHAT_TABS_LEFT_INSET := 76.0
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
 const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
 const CHAT_SEPARATOR_COLOR := "#778194"
@@ -25,12 +26,14 @@ const CHAT_SYSTEM_LABEL_COLOR := "#d8b767"
 const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
 const CHAT_TAB_GENERAL := "general"
 const CHAT_TAB_TRADE := "trade"
+const CHAT_TAB_HELP := "help"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
 const CHAT_CHANNEL_GLOBAL := "global"
 const CHAT_CHANNEL_TRADE := "trade"
+const CHAT_CHANNEL_HELP := "help"
 const STAFF_TOOLS_ROLE_IDS := ["staff", "admin", "owner", "developer", "moderator", "gamemaster"]
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
@@ -500,8 +503,11 @@ var active_chat_tab: String = CHAT_TAB_GENERAL
 var pending_chat_pokemon_attachments: Array[Dictionary] = []
 var chat_pokemon_attachment_buttons: Array[Button] = []
 var pm_tab_button: Button
+var pm_tab_attention_badge: Panel
+var help_chat_tab_button: Button
 var pm_chat_container: HBoxContainer
 var pm_conversation_list: VBoxContainer
+var pm_active_conversation_label: Label
 var pm_message_scroll: ScrollContainer
 var pm_message_list: VBoxContainer
 var pm_empty_label: Label
@@ -561,6 +567,9 @@ var socials_mail_attention_badge: Panel
 var known_mail_ids: Dictionary = {}
 var mail_ids_initialized: bool = false
 var play_existing_mail_notification_on_next_inbox_load: bool = true
+var known_incoming_friend_request_ids: Dictionary = {}
+var incoming_friend_request_ids_initialized: bool = false
+var play_existing_friend_request_notification_on_next_socials_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pokemon_summary_popup: PanelContainer
@@ -750,9 +759,12 @@ func _ready() -> void:
 		ChatRealtimeService.mail_received.connect(_on_realtime_mail_received)
 	if not ChatRealtimeService.private_message_received.is_connected(_on_private_message_received):
 		ChatRealtimeService.private_message_received.connect(_on_private_message_received)
+	if not ChatRealtimeService.friend_request_received.is_connected(_on_friend_request_received):
+		ChatRealtimeService.friend_request_received.connect(_on_friend_request_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
 	ChatRealtimeService.connect_chat.call_deferred()
+	_refresh_friend_request_attention_from_socials.call_deferred()
 
 	send_button.pressed.connect(_on_send_button_pressed)
 	send_button.focus_mode = Control.FOCUS_NONE
@@ -761,10 +773,12 @@ func _ready() -> void:
 	general_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GENERAL))
 	trade_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_TRADE))
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
+	_setup_help_chat_tab()
 	_setup_pm_chat_ui()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
 	dev_pokemon_button.disabled = true
@@ -967,6 +981,7 @@ func _apply_mail_ui_styles() -> void:
 	mail_body_label.add_theme_color_override("font_color", UI_TEXT)
 	_apply_button_style(mail_compose_button, "primary")
 	_apply_button_style(mail_close_button)
+	_apply_button_style(mail_close_button, "danger")
 	_apply_button_style(mail_inbox_button, "primary")
 	_apply_button_style(mail_sent_button)
 	_apply_button_style(mail_claim_button, "primary")
@@ -2955,22 +2970,45 @@ func _setup_pvp_room_popup() -> void:
 	layout.add_theme_constant_override("separation", 8)
 	margin_container.add_child(layout)
 
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
 	var title := Label.new()
 	title.text = "PvP"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	title.gui_input.connect(_on_pvp_room_header_gui_input)
-	layout.add_child(title)
+	header.add_child(title)
 	pvp_popup_title_label = title
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.gui_input.connect(_on_pvp_room_header_gui_input)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_pvp_room_popup)
+	header.add_child(close_button)
+	_apply_button_style(close_button)
+
+	var tabs_margin := MarginContainer.new()
+	tabs_margin.add_theme_constant_override("margin_left", 10)
+	tabs_margin.add_theme_constant_override("margin_top", 2)
+	tabs_margin.add_theme_constant_override("margin_right", 10)
+	tabs_margin.add_theme_constant_override("margin_bottom", 2)
 
 	var tabs := TabContainer.new()
+	tabs_margin.add_child(tabs)
+	layout.add_child(tabs_margin)
 	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.tabs_visible = false
+	tabs.add_theme_constant_override("side_margin", 8)
 	tabs.add_theme_font_size_override("font_size", 14)
-	layout.add_child(tabs)
 	pvp_root_tabs = tabs
 
 	var ranked_tab := VBoxContainer.new()
@@ -2984,13 +3022,23 @@ func _setup_pvp_room_popup() -> void:
 	ranked_tabs.add_theme_font_size_override("font_size", 13)
 	ranked_tabs.tab_changed.connect(_on_pvp_ranked_tab_changed)
 	_apply_pvp_ranked_tabs_style(ranked_tabs)
-	ranked_tab.add_child(ranked_tabs)
+	var ranked_tabs_container := MarginContainer.new()
+	ranked_tabs_container.add_theme_constant_override("margin_left", 6)
+	ranked_tabs_container.add_theme_constant_override("margin_top", 2)
+	ranked_tabs_container.add_theme_constant_override("margin_right", 6)
+	ranked_tabs_container.add_theme_constant_override("margin_bottom", 2)
+	ranked_tabs_container.add_child(ranked_tabs)
+	ranked_tab.add_child(ranked_tabs_container)
 	pvp_ranked_tabs = ranked_tabs
 
+	var play_tab_page := _create_pvp_ranked_tab_page("Play")
+	ranked_tabs.add_child(play_tab_page)
+
 	var play_tab := HBoxContainer.new()
-	play_tab.name = "Play"
+	play_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	play_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	play_tab.add_theme_constant_override("separation", 14)
-	ranked_tabs.add_child(play_tab)
+	play_tab_page.add_child(play_tab)
 
 	var ladder_sidebar := PanelContainer.new()
 	ladder_sidebar.custom_minimum_size = Vector2(340, 0)
@@ -3215,16 +3263,24 @@ func _setup_pvp_room_popup() -> void:
 	room_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	room_layout.add_child(room_spacer)
 
+	var rules_tab_page := _create_pvp_ranked_tab_page("Rules")
+	ranked_tabs.add_child(rules_tab_page)
+
 	var rules_tab := VBoxContainer.new()
-	rules_tab.name = "Rules"
+	rules_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rules_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rules_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(rules_tab)
+	rules_tab_page.add_child(rules_tab)
 	rules_tab.add_child(_create_pvp_ruleset_panel())
 
+	var bans_tab_page := _create_pvp_ranked_tab_page("Bans")
+	ranked_tabs.add_child(bans_tab_page)
+
 	var bans_tab := VBoxContainer.new()
-	bans_tab.name = "Bans"
+	bans_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bans_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bans_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(bans_tab)
+	bans_tab_page.add_child(bans_tab)
 
 	var bans_header := HBoxContainer.new()
 	bans_header.add_theme_constant_override("separation", 8)
@@ -3265,10 +3321,14 @@ func _setup_pvp_room_popup() -> void:
 	pvp_bans_list.add_theme_constant_override("separation", 10)
 	bans_content.add_child(pvp_bans_list)
 
+	var live_tab_page := _create_pvp_ranked_tab_page("Live")
+	ranked_tabs.add_child(live_tab_page)
+
 	var live_tab := VBoxContainer.new()
-	live_tab.name = "Live"
+	live_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	live_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	live_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(live_tab)
+	live_tab_page.add_child(live_tab)
 
 	var live_header := HBoxContainer.new()
 	live_header.add_theme_constant_override("separation", 8)
@@ -3299,10 +3359,14 @@ func _setup_pvp_room_popup() -> void:
 	live_scroll.add_child(pvp_live_list)
 	_render_pvp_live_battles([])
 
+	var leaderboard_tab_page := _create_pvp_ranked_tab_page("Leaderboard")
+	ranked_tabs.add_child(leaderboard_tab_page)
+
 	var leaderboard_tab := VBoxContainer.new()
-	leaderboard_tab.name = "Leaderboard"
+	leaderboard_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	leaderboard_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	leaderboard_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(leaderboard_tab)
+	leaderboard_tab_page.add_child(leaderboard_tab)
 
 	var leaderboard_header := HBoxContainer.new()
 	leaderboard_header.add_theme_constant_override("separation", 8)
@@ -3353,10 +3417,14 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_list.add_theme_constant_override("separation", 6)
 	leaderboard_scroll.add_child(pvp_leaderboard_list)
 
+	var history_tab_page := _create_pvp_ranked_tab_page("History")
+	ranked_tabs.add_child(history_tab_page)
+
 	var history_tab := VBoxContainer.new()
-	history_tab.name = "History"
+	history_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	history_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	history_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(history_tab)
+	history_tab_page.add_child(history_tab)
 
 	var history_header := HBoxContainer.new()
 	history_header.add_theme_constant_override("separation", 8)
@@ -3392,13 +3460,6 @@ func _setup_pvp_room_popup() -> void:
 	tournaments_tab.add_child(_create_pvp_tournaments_placeholder())
 	tabs.move_child(tournaments_tab, 1)
 
-	var close_button := Button.new()
-	close_button.text = "Close"
-	close_button.custom_minimum_size = Vector2(0, 32)
-	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(_hide_pvp_room_popup)
-	layout.add_child(close_button)
-
 	_apply_button_style(pvp_create_room_button, "primary")
 	_apply_button_style(pvp_join_room_button)
 	_apply_button_style(pvp_copy_code_button)
@@ -3409,7 +3470,6 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
 	_render_pvp_banlists()
-	_apply_button_style(close_button)
 
 	pvp_poll_timer = Timer.new()
 	pvp_poll_timer.wait_time = 2.0
@@ -3475,6 +3535,14 @@ func _create_pvp_mode_menu_button(text: String) -> Button:
 	button.custom_minimum_size = Vector2(0, 32)
 	button.focus_mode = Control.FOCUS_NONE
 	return button
+
+func _create_pvp_ranked_tab_page(tab_name: String) -> MarginContainer:
+	var page := MarginContainer.new()
+	page.name = tab_name
+	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	page.add_theme_constant_override("margin_top", 12)
+	return page
 
 func _create_pvp_ruleset_panel() -> Control:
 	var panel := PanelContainer.new()
@@ -10898,7 +10966,9 @@ func _apply_line_edit_style(line_edit: LineEdit) -> void:
 	))
 
 func _apply_pvp_ranked_tabs_style(tabs: TabContainer) -> void:
-	tabs.add_theme_constant_override("side_margin", 4)
+	var tab_bar: TabBar = tabs.get_tab_bar()
+	tab_bar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	tabs.add_theme_constant_override("side_margin", 8)
 	tabs.add_theme_constant_override("tab_separation", 3)
 	tabs.add_theme_constant_override("outline_size", 0)
 	tabs.add_theme_color_override("font_selected_color", Color("#17120a"))
@@ -11262,9 +11332,17 @@ func _position_chat_tabs_panel() -> void:
 	if not chat_tabs_panel.visible:
 		return
 
+	var viewport_size := root_control.size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		viewport_size = get_viewport().get_visible_rect().size
 	var tabs_size := chat_tabs_panel.get_combined_minimum_size()
+	var max_tabs_width: float = max(0.0, viewport_size.x)
+	tabs_size.x = min(tabs_size.x, max_tabs_width)
 	chat_tabs_panel.size = tabs_size
-	chat_tabs_panel.position = chat_panel.position + Vector2(0.0, -tabs_size.y - CHAT_TABS_GAP)
+	chat_tabs_panel.position = Vector2(
+		clampf(chat_panel.position.x + CHAT_TABS_LEFT_INSET, 0.0, max(0.0, viewport_size.x - tabs_size.x)),
+		max(0.0, chat_panel.position.y - tabs_size.y - CHAT_TABS_GAP)
+	)
 
 func _set_chat_panel_size(size: Vector2) -> void:
 	var clamped_size := Vector2(
@@ -11659,6 +11737,8 @@ func _setup_pm_chat_ui() -> void:
 	pm_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_PM))
 	$Control/ChatTabsPanel/TabRow.add_child(pm_tab_button)
 	_apply_button_style(pm_tab_button, "primary")
+	pm_tab_attention_badge = _create_attention_badge_for_button(pm_tab_button, 4.0, 3.0)
+	_refresh_pm_tab_label()
 
 	pm_chat_container = HBoxContainer.new()
 	pm_chat_container.visible = false
@@ -11666,14 +11746,52 @@ func _setup_pm_chat_ui() -> void:
 	pm_chat_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pm_chat_container.add_theme_constant_override("separation", 8)
 
+	var conversation_margin := MarginContainer.new()
+	conversation_margin.custom_minimum_size = Vector2(132, 0)
+	conversation_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	conversation_margin.add_theme_constant_override("margin_left", 4)
+	conversation_margin.add_theme_constant_override("margin_top", 4)
+	conversation_margin.add_theme_constant_override("margin_right", 6)
+	conversation_margin.add_theme_constant_override("margin_bottom", 4)
+	pm_chat_container.add_child(conversation_margin)
+
 	var conversation_scroll := ScrollContainer.new()
-	conversation_scroll.custom_minimum_size = Vector2(150, 0)
+	conversation_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	conversation_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pm_conversation_list = VBoxContainer.new()
 	pm_conversation_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pm_conversation_list.add_theme_constant_override("separation", 4)
+	pm_conversation_list.add_theme_constant_override("separation", 5)
 	conversation_scroll.add_child(pm_conversation_list)
-	pm_chat_container.add_child(conversation_scroll)
+	conversation_margin.add_child(conversation_scroll)
+
+	var separator := PanelContainer.new()
+	separator.custom_minimum_size = Vector2(1, 0)
+	separator.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	separator.add_theme_stylebox_override("panel", _make_panel_style(Color(UI_BORDER_SOFT.r, UI_BORDER_SOFT.g, UI_BORDER_SOFT.b, 0.72), Color.TRANSPARENT, 0, 0))
+	pm_chat_container.add_child(separator)
+
+	var message_margin := MarginContainer.new()
+	message_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	message_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	message_margin.add_theme_constant_override("margin_left", 4)
+	message_margin.add_theme_constant_override("margin_top", 4)
+	message_margin.add_theme_constant_override("margin_right", 6)
+	message_margin.add_theme_constant_override("margin_bottom", 4)
+	pm_chat_container.add_child(message_margin)
+
+	var pm_message_column := VBoxContainer.new()
+	pm_message_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_message_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_message_column.add_theme_constant_override("separation", 5)
+	message_margin.add_child(pm_message_column)
+
+	pm_active_conversation_label = Label.new()
+	pm_active_conversation_label.clip_text = true
+	pm_active_conversation_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pm_active_conversation_label.custom_minimum_size = Vector2(0, 22)
+	pm_active_conversation_label.add_theme_color_override("font_color", CHAT_SYSTEM_LABEL_COLOR)
+	pm_active_conversation_label.add_theme_font_size_override("font_size", 13)
+	pm_message_column.add_child(pm_active_conversation_label)
 
 	pm_message_scroll = ScrollContainer.new()
 	pm_message_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -11682,38 +11800,89 @@ func _setup_pm_chat_ui() -> void:
 	pm_message_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pm_message_list.add_theme_constant_override("separation", 4)
 	pm_message_scroll.add_child(pm_message_list)
-	pm_chat_container.add_child(pm_message_scroll)
+	pm_message_column.add_child(pm_message_scroll)
 
 	var chat_vbox := $Control/ChatPanel/MarginContainer/VBoxContainer
 	chat_vbox.add_child(pm_chat_container)
 	chat_vbox.move_child(pm_chat_container, message_scroll.get_index() + 1)
 	_render_pm_conversation_list()
 	_render_active_pm_conversation()
+	_reorder_chat_tab_buttons()
+
+
+func _setup_help_chat_tab() -> void:
+	if help_chat_tab_button != null:
+		return
+
+	help_chat_tab_button = Button.new()
+	help_chat_tab_button.custom_minimum_size = Vector2(70, 28)
+	help_chat_tab_button.text = "Help"
+	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	help_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_HELP))
+	$Control/ChatTabsPanel/TabRow.add_child(help_chat_tab_button)
+	_apply_button_style(help_chat_tab_button, "primary")
+	_reorder_chat_tab_buttons()
+
+
+func _reorder_chat_tab_buttons() -> void:
+	var tab_row := $Control/ChatTabsPanel/TabRow
+	var order: Array[Button] = [
+		general_chat_tab_button,
+		system_chat_tab_button,
+		trade_chat_tab_button,
+	]
+	if help_chat_tab_button != null:
+		order.append(help_chat_tab_button)
+	if pm_tab_button != null:
+		order.append(pm_tab_button)
+
+	var index: int = 0
+	for button: Button in order:
+		if button == null or button.get_parent() != tab_row:
+			continue
+		tab_row.move_child(button, index)
+		index += 1
 
 func open_private_message_conversation(user: Dictionary) -> void:
-	var user_id: int = _user_id_from_state(user)
-	if user_id <= 0:
-		_add_chat_message("Could not open PM conversation: missing user id.")
+	var conversation_key: int = _pm_conversation_key_from_user(user)
+	if conversation_key == 0:
+		_add_chat_message("Could not open PM conversation: missing username.")
 		return
 
 	_ensure_pm_conversation(user)
+	var active_conversation_key: int = _existing_pm_conversation_key_for_user(user)
+	if active_conversation_key == 0:
+		active_conversation_key = conversation_key
 	active_chat_tab = CHAT_TAB_PM
-	active_pm_user_id = user_id
-	_clear_pm_unread(user_id)
+	active_pm_user_id = active_conversation_key
+	_clear_pm_unread(active_conversation_key)
 	_apply_chat_tab_state()
 	chat_input.grab_focus()
 
 func _ensure_pm_conversation(user: Dictionary) -> Dictionary:
-	var user_id: int = _user_id_from_state(user)
-	if user_id <= 0:
+	var conversation_key: int = _pm_conversation_key_from_user(user)
+	if conversation_key == 0:
 		return {}
-	var conversation: Dictionary = pm_conversations_by_user_id.get(user_id, {})
+	var existing_key: int = _existing_pm_conversation_key_for_user(user)
+	if existing_key != 0 and existing_key != conversation_key:
+		if conversation_key < 0:
+			conversation_key = existing_key
+		else:
+			var existing_conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(existing_key, {}))
+			pm_conversations_by_user_id.erase(existing_key)
+			if active_pm_user_id == existing_key:
+				active_pm_user_id = conversation_key
+			if pm_unread_counts_by_user_id.has(existing_key):
+				pm_unread_counts_by_user_id[conversation_key] = int(pm_unread_counts_by_user_id.get(existing_key, 0))
+				pm_unread_counts_by_user_id.erase(existing_key)
+			pm_conversations_by_user_id[conversation_key] = existing_conversation
+	var conversation: Dictionary = pm_conversations_by_user_id.get(conversation_key, {})
 	if conversation.is_empty():
 		conversation = {
 			"user": _normalize_pm_user(user),
 			"messages": [],
 		}
-		pm_conversations_by_user_id[user_id] = conversation
+		pm_conversations_by_user_id[conversation_key] = conversation
 	else:
 		conversation["user"] = _merge_pm_user(_dictionary_from_value(conversation.get("user", {})), user)
 	return conversation
@@ -11733,23 +11902,34 @@ func _render_pm_conversation_list() -> void:
 		var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
 		var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
 		var unread: int = int(pm_unread_counts_by_user_id.get(user_id, 0))
+		var active := user_id == active_pm_user_id
 		var button := Button.new()
-		button.text = _pm_conversation_title(user, unread)
+		button.text = _pm_conversation_title(user, 0)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.disabled = user_id == active_pm_user_id
+		button.clip_text = true
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		button.pressed.connect(_on_pm_conversation_selected.bind(user_id))
-		_apply_button_style(button, "primary")
+		_apply_pm_conversation_button_style(button, active)
+		if unread > 0:
+			var unread_badge: Panel = _create_attention_badge_for_button(button, 5.0, 5.0)
+			if unread_badge != null:
+				unread_badge.visible = true
 		pm_conversation_list.add_child(button)
 
 func _render_active_pm_conversation() -> void:
 	if pm_message_list == null:
 		return
 	_clear_children(pm_message_list)
-	if active_pm_user_id <= 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
+	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
+		if pm_active_conversation_label != null:
+			pm_active_conversation_label.text = "No PM selected"
 		pm_message_list.add_child(_pm_empty_label("Select a PM conversation."))
 		return
 
 	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
+	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+	if pm_active_conversation_label != null:
+		pm_active_conversation_label.text = "Chat with %s" % _pm_conversation_title(user, 0)
 	var messages: Array = _array_from_variant(conversation.get("messages", []))
 	if messages.is_empty():
 		pm_message_list.add_child(_pm_empty_label("No messages yet."))
@@ -11760,22 +11940,48 @@ func _render_active_pm_conversation() -> void:
 	_scroll_pm_to_bottom.call_deferred()
 
 func _create_pm_message_row(message: Dictionary) -> Control:
-	var entry := RichTextLabel.new()
-	entry.bbcode_enabled = true
-	entry.fit_content = true
-	entry.scroll_active = false
-	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	row.add_theme_constant_override("separation", 4)
+
 	var outgoing: bool = bool(message.get("outgoing", false))
-	var label := "You" if outgoing else str(message.get("displayName", message.get("username", "Trainer")))
-	var name_color := "#7fd6ff" if outgoing else CHAT_DEFAULT_NAME_COLOR
-	entry.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color] [color=%s]%s[/color]" % [
+	var label: String = "You" if outgoing else str(message.get("displayName", message.get("username", "Trainer")))
+	var name_color: String = "#7fd6ff" if outgoing else CHAT_DEFAULT_NAME_COLOR
+
+	var name_label := RichTextLabel.new()
+	name_label.bbcode_enabled = true
+	name_label.fit_content = true
+	name_label.scroll_active = false
+	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	name_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	name_label.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color]" % [
 		name_color,
 		_escape_bbcode(label),
 		CHAT_SEPARATOR_COLOR,
-		CHAT_MESSAGE_COLOR,
-		_escape_bbcode(str(message.get("body", ""))),
 	])
-	return entry
+	row.add_child(name_label)
+
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
+	for pokemon_payload: Dictionary in pokemon_attachments:
+		row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
+
+	var body_text: String = str(message.get("body", "")).strip_edges()
+	if body_text != "":
+		var body_label := RichTextLabel.new()
+		body_label.bbcode_enabled = true
+		body_label.fit_content = true
+		body_label.scroll_active = false
+		body_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		body_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		body_label.append_text("[color=%s]%s[/color]" % [
+			CHAT_MESSAGE_COLOR,
+			_escape_bbcode(body_text),
+		])
+		row.add_child(body_label)
+
+	return row
 
 func _pm_empty_label(text: String) -> Label:
 	var label := Label.new()
@@ -11791,6 +11997,24 @@ func _pm_conversation_title(user: Dictionary, unread: int) -> String:
 		return "%s (%s)" % [title, unread]
 	return title
 
+func _apply_pm_conversation_button_style(button: Button, active: bool) -> void:
+	var normal_bg: Color = Color("#111f3af0") if active else Color("#07111ee0")
+	var hover_bg: Color = Color("#182b52f4") if active else Color("#101f38ee")
+	var pressed_bg: Color = Color("#0c1830f4")
+	var border: Color = UI_BORDER_FOCUS if active else Color("#29415f")
+	var hover_border: Color = UI_BORDER if active else UI_BORDER_FOCUS
+	var font_color: Color = CHAT_SYSTEM_LABEL_COLOR if active else UI_TEXT
+
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 6, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 6, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 6, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 6, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
 func _on_pm_conversation_selected(user_id: int) -> void:
 	active_pm_user_id = user_id
 	_clear_pm_unread(user_id)
@@ -11798,7 +12022,7 @@ func _on_pm_conversation_selected(user_id: int) -> void:
 	chat_input.grab_focus()
 
 func _clear_pm_unread(user_id: int) -> void:
-	if user_id <= 0:
+	if user_id == 0:
 		return
 	pm_unread_counts_by_user_id.erase(user_id)
 	_recalculate_pm_total_unread()
@@ -11811,7 +12035,9 @@ func _recalculate_pm_total_unread() -> void:
 func _refresh_pm_tab_label() -> void:
 	if pm_tab_button == null:
 		return
-	pm_tab_button.text = "PM (%s)" % pm_total_unread_count if pm_total_unread_count > 0 else "PM"
+	pm_tab_button.text = "PM"
+	if pm_tab_attention_badge != null:
+		pm_tab_attention_badge.visible = pm_total_unread_count > 0
 
 func _scroll_pm_to_bottom() -> void:
 	var tree := get_tree()
@@ -11859,13 +12085,17 @@ func _apply_chat_tab_state() -> void:
 	general_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if general_active else CHAT_MESSAGE_COLOR))
 	trade_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_TRADE else CHAT_MESSAGE_COLOR))
 	system_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_SYSTEM else CHAT_MESSAGE_COLOR))
+	if help_chat_tab_button != null:
+		help_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_HELP else CHAT_MESSAGE_COLOR))
 	if pm_tab_button != null:
 		pm_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_PM else CHAT_MESSAGE_COLOR))
 	chat_input.editable = input_active
 	if active_chat_tab == CHAT_TAB_PM:
-		chat_input.placeholder_text = "Select a PM conversation" if active_pm_user_id <= 0 else "Private message"
+		chat_input.placeholder_text = "Select a PM conversation" if active_pm_user_id == 0 else "Private message"
 	elif active_chat_tab == CHAT_TAB_TRADE:
 		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
+	elif active_chat_tab == CHAT_TAB_HELP:
+		chat_input.placeholder_text = "Help chat has a 5 minute cooldown"
 	else:
 		chat_input.placeholder_text = "" if input_active else "System messages only"
 	send_button.disabled = not input_active
@@ -11898,7 +12128,18 @@ func _submit_chat_input_deferred() -> void:
 
 func _submit_chat_input_async() -> void:
 	var text := chat_input.text.strip_edges()
+	if _is_pm_open_command(text):
+		await _open_pm_from_chat_command(text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
+		return
+
 	if active_chat_tab == CHAT_TAB_PM:
+		if text.to_lower() == "/team":
+			await _share_party_to_pm()
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
+			return
 		await _submit_pm_input_async(text)
 		chat_submit_in_progress = false
 		_keep_chat_input_focused()
@@ -11934,6 +12175,35 @@ func _submit_chat_input_async() -> void:
 	chat_submit_in_progress = false
 	_keep_chat_input_focused()
 
+func _is_pm_open_command(text: String) -> bool:
+	var normalized := text.strip_edges().to_lower()
+	return normalized == "/pm" or normalized.begins_with("/pm ")
+
+func _open_pm_from_chat_command(text: String) -> void:
+	var command_text := text.strip_edges()
+	var username := command_text.substr(3).strip_edges()
+	if username == "":
+		_add_chat_message("Usage: /pm username")
+		return
+	if username.contains(" "):
+		username = username.split(" ", false, 1)[0].strip_edges()
+	if username == "":
+		_add_chat_message("Usage: /pm username")
+		return
+
+	var result: Dictionary = await SocialService.validate_private_message_target(username)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not open PM: %s" % str(result.get("error", "Player is not available.")))
+		return
+
+	var user: Dictionary = _dictionary_from_value(result.get("user", {}))
+	if user.is_empty():
+		_add_chat_message("Could not open PM: player not found.")
+		return
+
+	chat_input.clear()
+	open_private_message_conversation(user)
+
 func _share_party_to_chat() -> void:
 	if PlayerSave.party.is_empty():
 		_add_chat_message("You need a Pokemon in your party first.")
@@ -11952,16 +12222,43 @@ func _share_party_to_chat() -> void:
 	if not ChatRealtimeService.send_chat_message("", _get_active_chat_channel(), attachments):
 		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
 
+func _share_party_to_pm() -> void:
+	if PlayerSave.party.is_empty():
+		_add_pm_notice(active_pm_user_id, "You need a Pokemon in your party first.")
+		return
+
+	var attachments: Array[Dictionary] = []
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon != null:
+			attachments.append(_pokemon_preview_payload_with_current_trainer(
+				pokemon.to_persistence_dict(),
+				PlayerSave.player_name,
+				PlayerSave.player_id
+			))
+
+	chat_input.clear()
+	await _submit_pm_message_with_attachments("", attachments)
+
 func _get_active_chat_channel() -> String:
 	if active_chat_tab == CHAT_TAB_TRADE:
 		return CHAT_CHANNEL_TRADE
+	if active_chat_tab == CHAT_TAB_HELP:
+		return CHAT_CHANNEL_HELP
 	return CHAT_CHANNEL_GLOBAL
 
 func _submit_pm_input_async(text: String) -> void:
-	if active_pm_user_id <= 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
-		_show_pm_empty_state("Select a PM conversation first.")
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments_with_current_trainer(
+		pending_chat_pokemon_attachments,
+		PlayerSave.player_name,
+		PlayerSave.player_id
+	)
+	if text == "" and pokemon_attachments.is_empty():
 		return
-	if text == "":
+	await _submit_pm_message_with_attachments(text, pokemon_attachments)
+
+func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Array[Dictionary]) -> void:
+	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
+		_show_pm_empty_state("Select a PM conversation first.")
 		return
 	if text.length() > 300:
 		text = text.substr(0, 300)
@@ -11978,25 +12275,30 @@ func _submit_pm_input_async(text: String) -> void:
 	var sender_display_name: String = AuthService.get_display_name()
 
 	chat_input.clear()
-	var result: Dictionary = await SocialService.send_private_message(target_username, target_body)
+	var result: Dictionary = await SocialService.send_private_message(target_username, target_body, pokemon_attachments)
 	if not bool(result.get("success", false)):
 		_add_pm_notice(target_pm_user_id, str(result.get("error", "Private message could not be sent.")))
 		return
 
 	var message: Dictionary = _dictionary_from_value(result.get("message", {}))
+	var response_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
+	if response_attachments.is_empty():
+		response_attachments = pokemon_attachments
 	_append_pm_message(target_pm_user_id, {
 		"outgoing": true,
 		"body": str(message.get("body", target_body)),
+		"pokemonAttachments": response_attachments,
 		"sentAt": str(message.get("sentAt", "")),
 		"username": sender_username,
 		"displayName": sender_display_name,
 	})
+	_clear_pending_chat_pokemon_attachments()
 	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == target_pm_user_id:
 		_render_active_pm_conversation()
 	_render_pm_conversation_list()
 
 func _add_pm_notice(user_id: int, text: String) -> void:
-	if user_id <= 0:
+	if user_id == 0:
 		_show_pm_empty_state(text)
 		return
 	_append_pm_message(user_id, {
@@ -12015,6 +12317,8 @@ func _show_pm_empty_state(text: String) -> void:
 		_add_chat_message(text)
 		return
 	_clear_children(pm_message_list)
+	if pm_active_conversation_label != null and active_pm_user_id == 0:
+		pm_active_conversation_label.text = "No PM selected"
 	pm_message_list.add_child(_pm_empty_label(text))
 
 func _keep_chat_input_focused() -> void:
@@ -14528,6 +14832,10 @@ func _open_friendlist_popup() -> void:
 			friendlist_popup.closed.connect(_on_friendlist_popup_closed)
 		if not friendlist_popup.private_message_requested.is_connected(_on_friendlist_private_message_requested):
 			friendlist_popup.private_message_requested.connect(_on_friendlist_private_message_requested)
+		if not friendlist_popup.mail_requested.is_connected(_on_friendlist_mail_requested):
+			friendlist_popup.mail_requested.connect(_on_friendlist_mail_requested)
+		if not friendlist_popup.incoming_friend_requests_changed.is_connected(_on_friendlist_incoming_friend_requests_changed):
+			friendlist_popup.incoming_friend_requests_changed.connect(_on_friendlist_incoming_friend_requests_changed)
 
 	friendlist_popup.open()
 	_activate_ui_panel(friendlist_popup)
@@ -14543,6 +14851,17 @@ func _on_friendlist_popup_closed() -> void:
 
 func _on_friendlist_private_message_requested(user: Dictionary) -> void:
 	open_private_message_conversation(user)
+
+
+func _on_friendlist_mail_requested(user: Dictionary) -> void:
+	var username: String = str(user.get("username", "")).strip_edges()
+	if username == "":
+		return
+	_open_mail_compose_popup(username, "")
+
+
+func _on_friendlist_incoming_friend_requests_changed(count: int) -> void:
+	_set_socials_attention("friend_list", count > 0)
 
 func _on_socials_mail_button_pressed() -> void:
 	_hide_socials_menu()
@@ -14593,7 +14912,7 @@ func _make_attention_badge_style() -> StyleBoxFlat:
 func _position_attention_badge_in_parent(badge: Panel, right_offset: float = 2.0, top_offset: float = 2.0) -> void:
 	if badge == null:
 		return
-	var badge_size := Vector2(12, 12)
+	var badge_size: Vector2 = Vector2(12, 12)
 	badge.set_anchors_preset(Control.PRESET_TOP_RIGHT, false)
 	badge.offset_left = -badge_size.x - right_offset
 	badge.offset_top = top_offset
@@ -14603,6 +14922,10 @@ func _position_attention_badge_in_parent(badge: Panel, right_offset: float = 2.0
 
 
 func _create_socials_menu_attention_badge(button: Button) -> Panel:
+	return _create_attention_badge_for_button(button, 6.0, 4.0)
+
+
+func _create_attention_badge_for_button(button: Button, right_offset: float = 2.0, top_offset: float = 2.0) -> Panel:
 	if button == null:
 		return null
 
@@ -14614,7 +14937,7 @@ func _create_socials_menu_attention_badge(button: Button) -> Panel:
 	badge.z_index = 100
 	badge.add_theme_stylebox_override("panel", _make_attention_badge_style())
 	button.add_child(badge)
-	_position_attention_badge_in_parent(badge, 6.0, 4.0)
+	_position_attention_badge_in_parent(badge, right_offset, top_offset)
 	return badge
 
 
@@ -14640,6 +14963,51 @@ func _has_socials_attention() -> bool:
 		if bool(value):
 			return true
 	return false
+
+
+func _refresh_friend_request_attention_from_socials() -> void:
+	var result: Dictionary = await SocialService.load_socials()
+	if not bool(result.get("success", false)):
+		return
+
+	var overview: Dictionary = _dictionary_from_value(result.get("overview", {}))
+	var incoming_requests: Array = _array_from_variant(overview.get("incomingFriendRequests", []))
+	var has_new_request: bool = _update_incoming_friend_request_session_state(incoming_requests)
+	var has_attention: bool = not incoming_requests.is_empty()
+	if has_attention and (has_new_request or play_existing_friend_request_notification_on_next_socials_load):
+		_play_mail_notification_sound()
+	play_existing_friend_request_notification_on_next_socials_load = false
+	_set_socials_attention("friend_list", has_attention)
+
+
+func _update_incoming_friend_request_session_state(incoming_requests: Array) -> bool:
+	var has_new_request := false
+	var current_ids: Dictionary = {}
+	for request_value: Variant in incoming_requests:
+		var request: Dictionary = _dictionary_from_value(request_value)
+		var request_id: int = int(request.get("id", 0))
+		if request_id <= 0:
+			continue
+		current_ids[request_id] = true
+		if incoming_friend_request_ids_initialized and not known_incoming_friend_request_ids.has(request_id):
+			has_new_request = true
+
+	known_incoming_friend_request_ids = current_ids
+	if not incoming_friend_request_ids_initialized:
+		incoming_friend_request_ids_initialized = true
+	return has_new_request
+
+
+func _on_friend_request_received(request: Dictionary) -> void:
+	var request_id: int = int(request.get("id", 0))
+	if request_id > 0 and not known_incoming_friend_request_ids.has(request_id):
+		known_incoming_friend_request_ids[request_id] = true
+		_play_mail_notification_sound()
+	incoming_friend_request_ids_initialized = true
+	play_existing_friend_request_notification_on_next_socials_load = false
+	_set_socials_attention("friend_list", true)
+	if friendlist_popup != null and friendlist_popup.visible:
+		friendlist_popup.refresh()
 
 func _on_socials_close_button_pressed() -> void:
 	_hide_socials_menu()
@@ -17605,25 +17973,29 @@ func _on_realtime_mail_received(mail_id: int) -> void:
 
 func _on_private_message_received(message: Dictionary) -> void:
 	var sender: Dictionary = _dictionary_from_value(message.get("sender", {}))
-	var sender_id: int = _user_id_from_state(sender)
-	if sender_id <= 0:
+	var sender_key: int = _pm_conversation_key_from_user(sender)
+	if sender_key == 0:
 		return
 
 	_ensure_pm_conversation(sender)
-	_append_pm_message(sender_id, {
+	var active_sender_key: int = _existing_pm_conversation_key_for_user(sender)
+	if active_sender_key != 0:
+		sender_key = active_sender_key
+	_append_pm_message(sender_key, {
 		"outgoing": false,
 		"body": str(message.get("body", "")),
+		"pokemonAttachments": _get_chat_pokemon_attachments(message),
 		"sentAt": str(message.get("sentAt", "")),
 		"username": str(sender.get("username", "")),
 		"displayName": str(sender.get("displayName", sender.get("username", "Trainer"))),
 	})
 
-	var conversation_active: bool = active_chat_tab == CHAT_TAB_PM and active_pm_user_id == sender_id
+	var conversation_active: bool = active_chat_tab == CHAT_TAB_PM and active_pm_user_id == sender_key
 	if not conversation_active:
-		pm_unread_counts_by_user_id[sender_id] = int(pm_unread_counts_by_user_id.get(sender_id, 0)) + 1
+		pm_unread_counts_by_user_id[sender_key] = int(pm_unread_counts_by_user_id.get(sender_key, 0)) + 1
 		_recalculate_pm_total_unread()
 	else:
-		_clear_pm_unread(sender_id)
+		_clear_pm_unread(sender_key)
 
 	_render_pm_conversation_list()
 	if active_chat_tab == CHAT_TAB_PM:
@@ -17632,7 +18004,7 @@ func _on_private_message_received(message: Dictionary) -> void:
 
 
 func _append_pm_message(user_id: int, message: Dictionary) -> void:
-	if user_id <= 0:
+	if user_id == 0:
 		return
 	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
 	if conversation.is_empty():
@@ -17650,6 +18022,39 @@ func _user_id_from_state(user: Dictionary) -> int:
 		if text.is_valid_int():
 			return int(text)
 	return 0
+
+
+func _pm_conversation_key_from_user(user: Dictionary) -> int:
+	var user_id: int = _user_id_from_state(user)
+	if user_id > 0:
+		return user_id
+
+	var username := _pm_username_from_user(user)
+	if username == "":
+		return 0
+
+	var hash_value := 0
+	for index in range(username.length()):
+		hash_value = int((hash_value * 31 + username.unicode_at(index)) & 0x7fffffff)
+	return -max(hash_value, 1)
+
+
+func _existing_pm_conversation_key_for_user(user: Dictionary) -> int:
+	var username := _pm_username_from_user(user)
+	if username == "":
+		return 0
+
+	for conversation_key_value: Variant in pm_conversations_by_user_id.keys():
+		var conversation_key := int(conversation_key_value)
+		var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(conversation_key, {}))
+		var conversation_user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+		if _pm_username_from_user(conversation_user) == username:
+			return conversation_key
+	return 0
+
+
+func _pm_username_from_user(user: Dictionary) -> String:
+	return str(user.get("username", "")).strip_edges().to_lower()
 
 
 func _normalize_pm_user(user: Dictionary) -> Dictionary:
@@ -17689,7 +18094,11 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	row.add_theme_constant_override("separation", 4)
-	var chat_category: String = CHAT_CHANNEL_TRADE if channel == CHAT_CHANNEL_TRADE else CHAT_CHANNEL_GLOBAL
+	var chat_category: String = CHAT_CHANNEL_GLOBAL
+	if channel == CHAT_CHANNEL_TRADE:
+		chat_category = CHAT_CHANNEL_TRADE
+	elif channel == CHAT_CHANNEL_HELP:
+		chat_category = CHAT_CHANNEL_HELP
 	row.set_meta("chat_category", chat_category)
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
@@ -17790,6 +18199,8 @@ func _should_show_chat_category(category: String) -> bool:
 		return category == CHAT_CHANNEL_GLOBAL or category == CHAT_CATEGORY_USER
 	if active_chat_tab == CHAT_TAB_TRADE:
 		return category == CHAT_CHANNEL_TRADE
+	if active_chat_tab == CHAT_TAB_HELP:
+		return category == CHAT_CHANNEL_HELP
 	return false
 
 

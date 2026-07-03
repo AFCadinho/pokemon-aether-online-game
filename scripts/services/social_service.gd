@@ -110,7 +110,36 @@ func update_status_message(status_message: String) -> Dictionary:
 	return _socials_result_from_response(response)
 
 
-func send_private_message(recipient_username: String, body: String) -> Dictionary:
+func validate_private_message_target(username: String) -> Dictionary:
+	if not _is_authenticated():
+		return _auth_error()
+
+	var normalized_username: String = username.strip_edges()
+	if normalized_username == "":
+		return _validation_error("Username is required.")
+
+	var gateway := _gateway_api_config()
+	if gateway == null:
+		return _validation_error("Gateway API config is unavailable.")
+
+	var base_url: String = str(gateway.call("get_base_url"))
+	var response: Dictionary = await _request_json(
+		base_url + SOCIALS_ENDPOINT + "/private-message-target/%s" % normalized_username.uri_encode(),
+		HTTPClient.METHOD_GET,
+		gateway.call("get_accept_headers"),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var response_body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"user": _dictionary_from_value(response_body.get("user", {})),
+	}
+
+
+func send_private_message(recipient_username: String, body: String, pokemon_attachments: Array = []) -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()
 
@@ -118,7 +147,7 @@ func send_private_message(recipient_username: String, body: String) -> Dictionar
 	var normalized_body: String = body.strip_edges()
 	if normalized_recipient == "":
 		return _validation_error("Recipient username is required.")
-	if normalized_body == "":
+	if normalized_body == "" and pokemon_attachments.is_empty():
 		return _validation_error("Message body is required.")
 	if normalized_body.length() > 300:
 		return _validation_error("Message body must be 300 characters or fewer.")
@@ -128,14 +157,17 @@ func send_private_message(recipient_username: String, body: String) -> Dictionar
 		return _validation_error("Gateway API config is unavailable.")
 
 	var base_url: String = str(gateway.call("get_base_url"))
+	var payload: Dictionary = {
+		"recipientUsername": normalized_recipient,
+		"body": normalized_body,
+	}
+	if not pokemon_attachments.is_empty():
+		payload["pokemonAttachments"] = pokemon_attachments.slice(0, 6)
 	var response: Dictionary = await _request_json(
 		base_url + SOCIALS_ENDPOINT + "/private-messages",
 		HTTPClient.METHOD_POST,
 		gateway.call("get_json_headers"),
-		JSON.stringify({
-			"recipientUsername": normalized_recipient,
-			"body": normalized_body,
-		})
+		JSON.stringify(payload)
 	)
 	if not bool(response.get("success", false)):
 		return response
