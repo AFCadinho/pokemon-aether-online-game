@@ -12,7 +12,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pvp_ranked_team_validation_check.gd",
 	"res://tests/map_encounter_provider_check.gd",
 	"res://tests/pallet_town_encounter_check.gd",
-	"res://tests/pokeaether_tmx_importer_check.gd",
+	"res://tests/tmx_visual_importer_check.gd",
 	"res://tests/social_service_contract_check.gd",
 ]
 

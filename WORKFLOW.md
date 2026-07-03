@@ -22,7 +22,7 @@ Run all current headless project checks from the repository root:
 godot --headless --path . --script res://tests/run_project_checks.gd
 ```
 
-This runs the standalone `tests/*_check.gd` scripts, including the PokeAether TMX importer fixture check. The TMX importer check generates only fixture output under `res://generated/maps/` and cleans it up before exiting. Per-check Godot logs are written to `/tmp/pokeaether_project_checks/`.
+This runs the standalone `tests/*_check.gd` scripts, including the visual TMX importer fixture check. The visual importer check generates only fixture output under `res://generated/tiled_visuals/` and cleans it up before exiting. Per-check Godot logs are written to `/tmp/pokeaether_project_checks/`.
 
 ## Publish A New Client Build
 

@@ -1,7 +1,7 @@
 @tool
 extends ConfirmationDialog
 
-const TmxImporter := preload("res://addons/tiled_tmx_importer/importer/tmx_importer.gd")
+const TmxVisualImporter := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_importer.gd")
 
 var tmx_path_edit: LineEdit
 var output_scene_edit: LineEdit
@@ -49,7 +49,7 @@ func _build_ui() -> void:
 
 	var hint_label := Label.new()
 	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hint_label.text = "The importer creates one .tscn scene and one shared .tileset.tres beside it. It imports visible tile layers and object placeholders only."
+	hint_label.text = "The importer creates one visual .tscn scene and one shared .tileset.tres beside it. It imports tile layers only and ignores object layers/properties."
 	rows.add_child(hint_label)
 
 	status_label = Label.new()
@@ -65,7 +65,7 @@ func _on_confirmed() -> void:
 		popup_centered(size)
 		return
 
-	var importer := TmxImporter.new()
+	var importer := TmxVisualImporter.new()
 	var result: Dictionary = importer.import_tmx(tmx_path, output_scene_path)
 	if not bool(result.get("success", false)):
 		status_label.text = "Import failed: %s" % str(result.get("error", "Unknown error"))

@@ -1,46 +1,58 @@
-# PokeAether Tiled Importer Phase 2A
+# PokeAether Tiled Visual Importer
 
-This addon layer imports a PokeAether-specific TMX schema on top of the generic Tiled importer.
+Tiled owns visual map layout only. Godot owns gameplay.
 
-Phase 2A scope:
+The active PokeAether TMX pipeline imports regular finite orthogonal TMX files as generated visual scenes. It does not require PokeAether gameplay schema, map IDs, collision layers, spawns, warps, NPCs, interactables, encounters, or region metadata.
+
+Visual import scope:
 
 - parse TMX through the generic importer parser
-- validate PokeAether map properties and `PA_*` object layers
-- generate typed map data resources
-- generate a current-compatible runtime scene
-- write generated files only under `res://generated/maps/<map_id>/`
+- resolve external TSX tilesets and tileset images
+- import tile layers as `TileMapLayer` nodes
+- preserve tile layer order
+- preserve tile layer visibility, opacity, and offsets
+- support visual render hints through tile layer properties
+- support CSV tile data
+- preserve Tiled flip flags through Godot alternative tiles
+- ignore object layers and gameplay properties
+- write generated files only under `res://generated/tiled_visuals/<visual_id>/`
 
-Generated files:
+Generated visual files:
 
-- `<map_id>.runtime.tscn`
-- `<map_id>.map_data.tres`
-- `<map_id>.tileset.tres`
+- `<visual_id>.visual.tscn`
+- `<visual_id>.visual.tileset.tres`
+
+These files are safe to delete/regenerate. Do not put gameplay nodes in generated visual scenes.
+
+Visual render hints:
+
+- `pao_render_layer=overlay` renders a Tiled tile layer above Y-sorted characters.
+- `pao_z_index=<number>` sets an explicit Godot `z_index` for that visual layer.
+
+Use these only for visuals such as tree tops, roof tops, and foreground overlays. Gameplay still belongs in Godot.
+
+Gameplay stays in hand-authored Godot scenes/resources:
+
+- collision/blocking
+- warps
+- spawns
+- NPCs
+- interactables
+- encounters
+- map IDs and region data
 
 CLI usage:
 
 ```bash
 godot --headless --path . --script res://addons/pokeaether_tiled_importer/import_pokeaether_tmx_cli.gd -- \
-  /path/to/pokeaether_map.tmx
+  /path/to/artist_map.tmx
 ```
 
-Required map properties:
+The importer derives `visual_id` from the TMX filename. You can override it:
 
-- `pa_schema_version`
-- `map_id`
-- `map_display_name`
-- `region_id`
-- `region_name`
+```bash
+godot --headless --path . --script res://addons/pokeaether_tiled_importer/import_pokeaether_tmx_cli.gd -- \
+  /path/to/Pallet\ Town.tmx pallet_town
+```
 
-Recognized object layers:
-
-- `PA_Spawns`
-- `PA_Warps`
-- `PA_NPCs`
-- `PA_Interactables`
-- `PA_Items`
-- `PA_EncounterRegions`
-- `PA_Triggers`
-
-Gameplay object coordinates must be aligned to the 32 px Tiled grid. Point objects are converted to Godot tile-center positions.
-
-`PA_Interactables` is for map-owned interactive objects such as road signs, trainer tips signs, bookshelves, statues, computers, switches, and hidden map objects. Each point object must define `interactable_id` and `interactable_kind`; optional `dialogue`, `dialogue_id`, `display_name`, `blocks_movement`, and `requires_facing` properties control runtime behavior.
+Legacy schema code still exists in `importer/pokeaether_tmx_importer.gd` for old fixtures, but it is not the artist-map pipeline.

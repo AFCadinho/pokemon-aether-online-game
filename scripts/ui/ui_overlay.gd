@@ -18295,6 +18295,8 @@ func _get_primary_visible_chat_role(user: Dictionary) -> Dictionary:
 
 func _get_chat_role_badge(role_id: String) -> String:
 	match role_id:
+		"alpha":
+			return "ALPHA"
 		"gamemaster":
 			return "GM"
 		"developer":
@@ -18307,6 +18309,8 @@ func _get_chat_role_badge(role_id: String) -> String:
 
 func _get_chat_role_color(role_id: String, fallback: String) -> String:
 	match role_id:
+		"alpha":
+			return "#d9b8ff"
 		"gamemaster":
 			return "#00bfff"
 		"developer":

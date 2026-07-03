@@ -1,7 +1,7 @@
 @tool
 extends SceneTree
 
-const TmxImporter := preload("res://addons/tiled_tmx_importer/importer/tmx_importer.gd")
+const TmxVisualImporter := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_importer.gd")
 
 
 func _init() -> void:
@@ -11,12 +11,12 @@ func _init() -> void:
 		quit(2)
 		return
 
-	var importer := TmxImporter.new()
+	var importer := TmxVisualImporter.new()
 	var result: Dictionary = importer.import_tmx(str(args[0]), str(args[1]))
 	if not bool(result.get("success", false)):
-		push_error("TMX import failed: %s" % str(result.get("error", "Unknown error")))
+		push_error("TMX visual import failed: %s" % str(result.get("error", "Unknown error")))
 		quit(1)
 		return
 
-	print("TMX import complete: %s" % str(result.get("scene_path", args[1])))
+	print("TMX visual import complete: %s" % str(result.get("scene_path", args[1])))
 	quit(0)

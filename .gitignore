@@ -7,6 +7,9 @@
 # Large generated Pokemon sprite assets are bundled outside git for builds.
 /assets/sprites/pokemon/
 
+# Regenerated Tiled visual output; Godot gameplay scenes own logic separately.
+/generated/tiled_visuals/
+
 # Large music assets are bundled outside git for launcher builds.
 /assets/music/*
 !/assets/music/.gitkeep

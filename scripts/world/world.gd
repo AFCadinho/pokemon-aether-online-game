@@ -135,6 +135,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 	move_player_to_map(new_map)
 	_position_player_at_spawn(new_map, target_spawn_name, Vector2.ZERO)
+	_apply_camera_limits_for_map(new_map)
 
 	await get_tree().physics_frame
 	is_loading_map = false
@@ -237,6 +238,7 @@ func _setup_initial_world_state() -> void:
 		_position_player_at_spawn(initial_map, initial_spawn_name, player.global_position)
 		_save_current_player_position_if_changed.call_deferred(true, initial_spawn_name)
 
+	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
@@ -253,6 +255,93 @@ func _clear_current_map() -> void:
 	for child in $CurrentMap.get_children():
 		$CurrentMap.remove_child(child)
 		child.queue_free()
+
+
+func _apply_camera_limits_for_map(map: Node) -> void:
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera == null:
+		return
+
+	var bounds := _get_map_visual_bounds(map)
+	if not bool(bounds.get("valid", false)):
+		return
+
+	var rect: Rect2 = bounds["rect"]
+	camera.limit_left = floori(rect.position.x)
+	camera.limit_top = floori(rect.position.y)
+	camera.limit_right = ceili(rect.position.x + rect.size.x)
+	camera.limit_bottom = ceili(rect.position.y + rect.size.y)
+	camera.reset_smoothing()
+
+
+func _get_map_visual_bounds(map: Node) -> Dictionary:
+	var visual_bounds := _get_generated_visual_bounds(map)
+	if bool(visual_bounds.get("valid", false)):
+		return visual_bounds
+
+	return _get_tilemap_layer_bounds(map)
+
+
+func _get_generated_visual_bounds(map: Node) -> Dictionary:
+	var visuals := map.get_node_or_null("Visuals") as Node2D
+	if visuals == null or not visuals.has_meta("tiled_visual_map"):
+		return {"valid": false}
+
+	var metadata: Dictionary = visuals.get_meta("tiled_visual_map")
+	var width := int(metadata.get("width", 0))
+	var height := int(metadata.get("height", 0))
+	var tile_width := int(metadata.get("tile_width", 0))
+	var tile_height := int(metadata.get("tile_height", 0))
+	if width <= 0 or height <= 0 or tile_width <= 0 or tile_height <= 0:
+		return {"valid": false}
+
+	var top_left := visuals.global_position
+	return {
+		"valid": true,
+		"rect": Rect2(top_left, Vector2(width * tile_width, height * tile_height)),
+	}
+
+
+func _get_tilemap_layer_bounds(map: Node) -> Dictionary:
+	var rect := Rect2()
+	var has_rect := false
+	var layers := _collect_tilemap_layers(map)
+	for layer: TileMapLayer in layers:
+		if not layer.visible:
+			continue
+
+		var used_rect := layer.get_used_rect()
+		if used_rect.size == Vector2i.ZERO:
+			continue
+
+		var top_left := layer.to_global(layer.map_to_local(used_rect.position) - Vector2(TILE_SIZE, TILE_SIZE) * 0.5)
+		var bottom_right_cell := used_rect.position + used_rect.size
+		var bottom_right := layer.to_global(layer.map_to_local(bottom_right_cell) - Vector2(TILE_SIZE, TILE_SIZE) * 0.5)
+		var layer_rect := Rect2(top_left, bottom_right - top_left).abs()
+		if has_rect:
+			rect = rect.merge(layer_rect)
+		else:
+			rect = layer_rect
+			has_rect = true
+
+	return {
+		"valid": has_rect,
+		"rect": rect,
+	}
+
+
+func _collect_tilemap_layers(root: Node) -> Array[TileMapLayer]:
+	var layers: Array[TileMapLayer] = []
+	_collect_tilemap_layers_recursive(root, layers)
+	return layers
+
+
+func _collect_tilemap_layers_recursive(node: Node, layers: Array[TileMapLayer]) -> void:
+	if node is TileMapLayer:
+		layers.append(node as TileMapLayer)
+
+	for child: Node in node.get_children():
+		_collect_tilemap_layers_recursive(child, layers)
 
 func _normalize_map_tree_layer_z_indices(map: Node) -> void:
 	var trees_root: Node = map.get_node_or_null(TREE_LAYER_ROOT_NAME)

@@ -101,12 +101,25 @@ func _add_tileset_source(tile_set: TileSet, tileset: Dictionary, map_data: Dicti
 			"error": "Could not load tileset image %s." % image_path,
 		}
 
-	var source := TileSetAtlasSource.new()
-	source.texture = texture
-	source.texture_region_size = Vector2i(
+	var region_size := Vector2i(
 		int(tileset.get("tile_width", map_data.get("tile_width", 32))),
 		int(tileset.get("tile_height", map_data.get("tile_height", 32)))
 	)
+	if texture.get_width() < region_size.x or texture.get_height() < region_size.y:
+		return {
+			"success": false,
+			"error": "Tileset texture %s has invalid size %dx%d for %dx%d tiles." % [
+				image_path,
+				texture.get_width(),
+				texture.get_height(),
+				region_size.x,
+				region_size.y,
+			],
+		}
+
+	var source := TileSetAtlasSource.new()
+	source.texture = texture
+	source.texture_region_size = region_size
 	if int(tileset.get("spacing", 0)) != 0:
 		source.separation = Vector2i(int(tileset.get("spacing", 0)), int(tileset.get("spacing", 0)))
 	if int(tileset.get("margin", 0)) != 0:
