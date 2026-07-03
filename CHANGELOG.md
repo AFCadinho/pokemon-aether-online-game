@@ -1,6 +1,32 @@
 # Changelog
 
-## Unreleased
+## 0.2.7 - 2026-07-03
+
+**Added**
+- Added the new Friend List interface with friend search, friend requests, blocking, status messages, and last-seen information.
+- Added buttons to message or mail friends directly from the Friend List.
+- Added friend request alerts with a red badge and notification sound.
+- Added private messages through the chat tab, including unread badges and clearer active conversation styling.
+- Added `/pm username` to start a private message with an online player.
+- Added Pokemon sharing in private messages through `/team` or by dragging Pokemon into chat.
+- Added a Help chat tab with a 5 minute cooldown.
+- Added Ranked PvP tabs for Play, Rules, Bans, Live, Leaderboard, and History.
+- Added Aether OU ranked details, banlist visibility, and leaderboard filters for Daily, Weekly, Monthly, and All Time.
+
+**Changed**
+- Improved the Friend List layout, spacing, colors, buttons, and confirmation prompts.
+- Offline friends can no longer be opened through the Friend List message button.
+- Private messages now stay realtime-only and are easier to follow visually.
+- Improved the Ranked PvP interface with a draggable window, better tab spacing, clearer team previews, and more readable validation messages.
+- Reordered the top-left options row to Bag, Socials, Aether Exchange, Clan, PvP Interface, and Settings.
+- Updated the Aether Exchange icon.
+- Improved chat tab positioning and hover behavior on Ranked PvP tabs.
+
+**Fixed**
+- Fixed private messages sometimes failing to open for players outside your Friend List.
+- Fixed private messages not always showing shared Pokemon correctly.
+- Fixed the return-to-login confirmation appearing behind the Settings menu.
+- Fixed several Friend List and chat alignment issues.
 
 ## 0.2.6 - 2026-07-01
 

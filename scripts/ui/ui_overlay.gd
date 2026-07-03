@@ -17,6 +17,7 @@ const CHAT_MIN_SIZE := Vector2(360, 190)
 const CHAT_MAX_SIZE := Vector2(760, 520)
 const CHAT_RESIZE_BUTTON_GAP := 10.0
 const CHAT_TABS_GAP := 8.0
+const CHAT_TABS_LEFT_INSET := 76.0
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
 const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
 const CHAT_SEPARATOR_COLOR := "#778194"
@@ -25,17 +26,31 @@ const CHAT_SYSTEM_LABEL_COLOR := "#d8b767"
 const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
 const CHAT_TAB_GENERAL := "general"
 const CHAT_TAB_TRADE := "trade"
+const CHAT_TAB_HELP := "help"
 const CHAT_TAB_SYSTEM := "system"
+const CHAT_TAB_PM := "pm"
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
 const CHAT_CHANNEL_GLOBAL := "global"
 const CHAT_CHANNEL_TRADE := "trade"
+const CHAT_CHANNEL_HELP := "help"
 const STAFF_TOOLS_ROLE_IDS := ["staff", "admin", "owner", "developer", "moderator", "gamemaster"]
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
+const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
+const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
+const PVP_RANKED_DEFAULT_FORMAT_NAME := "Aether OU"
+const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
+	{"id": "daily", "label": "Daily"},
+	{"id": "weekly", "label": "Weekly"},
+	{"id": "monthly", "label": "Monthly"},
+	{"id": "all_time", "label": "All Time"},
+]
+const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const APPEARANCE_CATEGORIES := [
@@ -298,6 +313,7 @@ enum DevPokemonPopupMode {
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/CloseButton
+var friendlist_popup: FriendlistPopup
 @onready var mail_popup: PanelContainer = $Control/MailPopup
 @onready var mail_compose_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/ComposeButton
 @onready var mail_close_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/CloseButton
@@ -415,6 +431,13 @@ var pvp_mode_close_button: Button
 var pvp_room_popup: PanelContainer
 var pvp_popup_title_label: Label
 var pvp_root_tabs: TabContainer
+var pvp_ranked_tabs: TabContainer
+var pvp_bans_status_label: Label
+var pvp_bans_metadata_list: VBoxContainer
+var pvp_bans_list: VBoxContainer
+var pvp_bans_refresh_button: Button
+var pvp_live_status_label: Label
+var pvp_live_list: VBoxContainer
 var pvp_leaderboard_status_label: Label
 var pvp_leaderboard_list: VBoxContainer
 var pvp_leaderboard_refresh_button: Button
@@ -431,6 +454,7 @@ var pvp_queue_status_label: Label
 var pvp_queue_select: OptionButton
 var pvp_mode_select: OptionButton
 var pvp_team_source_select: OptionButton
+var pvp_team_preview_grid: HBoxContainer
 var pvp_team_validator_status_label: Label
 var pvp_team_validator_list: VBoxContainer
 var pvp_join_queue_button: Button
@@ -439,7 +463,9 @@ var pvp_reconnect_battle_button: Button
 var pvp_poll_timer: Timer
 var pvp_poll_request: HTTPRequest
 var pvp_active_room_code := ""
-var pvp_active_queue_id := "casual_queue_v1"
+var pvp_active_queue_id := "ranked_queue_v1"
+var pvp_active_format_key := PVP_RANKED_DEFAULT_FORMAT_KEY
+var pvp_active_format_name := PVP_RANKED_DEFAULT_FORMAT_NAME
 var pvp_available_queues: Array[Dictionary] = []
 var pvp_active_queue_entry_id := ""
 var pvp_active_queue_match_id := ""
@@ -447,8 +473,20 @@ var pvp_queue_list_in_flight := false
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
 var pvp_queue_auto_open_in_flight := false
+var pvp_banlists_in_flight := false
+var pvp_banlists_loaded := false
+var pvp_banlists_result: Dictionary = PvpRankedBanlists.not_loaded()
+var pvp_banlist_category_open: Dictionary = {}
+var pvp_banlist_category_search: Dictionary = {}
 var pvp_leaderboard_in_flight := false
+var pvp_leaderboard_scope_select: OptionButton
+var pvp_active_leaderboard_scope := "all_time"
 var pvp_history_in_flight := false
+var pvp_ranked_team_validation_in_flight := false
+var pvp_ranked_team_validation_request_seq := 0
+var pvp_ranked_team_validation_result: Dictionary = PvpRankedTeamValidation.not_checked()
+var pvp_ranked_team_validation_party_signature := ""
+var pvp_ranked_team_validation_queue_id := ""
 var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
@@ -464,6 +502,19 @@ var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
 var pending_chat_pokemon_attachments: Array[Dictionary] = []
 var chat_pokemon_attachment_buttons: Array[Button] = []
+var pm_tab_button: Button
+var pm_tab_attention_badge: Panel
+var help_chat_tab_button: Button
+var pm_chat_container: HBoxContainer
+var pm_conversation_list: VBoxContainer
+var pm_active_conversation_label: Label
+var pm_message_scroll: ScrollContainer
+var pm_message_list: VBoxContainer
+var pm_empty_label: Label
+var pm_conversations_by_user_id: Dictionary = {}
+var active_pm_user_id: int = 0
+var pm_unread_counts_by_user_id: Dictionary = {}
+var pm_total_unread_count: int = 0
 var hotkey_sidebar_dragging := false
 var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
@@ -516,6 +567,9 @@ var socials_mail_attention_badge: Panel
 var known_mail_ids: Dictionary = {}
 var mail_ids_initialized: bool = false
 var play_existing_mail_notification_on_next_inbox_load: bool = true
+var known_incoming_friend_request_ids: Dictionary = {}
+var incoming_friend_request_ids_initialized: bool = false
+var play_existing_friend_request_notification_on_next_socials_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pokemon_summary_popup: PanelContainer
@@ -697,13 +751,20 @@ func _ready() -> void:
 
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
 		PlayerSave.party_changed.connect(_refresh_party)
+	if not PlayerSave.party_changed.is_connected(_on_pvp_party_changed):
+		PlayerSave.party_changed.connect(_on_pvp_party_changed)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
 	if not ChatRealtimeService.mail_received.is_connected(_on_realtime_mail_received):
 		ChatRealtimeService.mail_received.connect(_on_realtime_mail_received)
+	if not ChatRealtimeService.private_message_received.is_connected(_on_private_message_received):
+		ChatRealtimeService.private_message_received.connect(_on_private_message_received)
+	if not ChatRealtimeService.friend_request_received.is_connected(_on_friend_request_received):
+		ChatRealtimeService.friend_request_received.connect(_on_friend_request_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
 	ChatRealtimeService.connect_chat.call_deferred()
+	_refresh_friend_request_attention_from_socials.call_deferred()
 
 	send_button.pressed.connect(_on_send_button_pressed)
 	send_button.focus_mode = Control.FOCUS_NONE
@@ -712,9 +773,12 @@ func _ready() -> void:
 	general_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GENERAL))
 	trade_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_TRADE))
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
+	_setup_help_chat_tab()
+	_setup_pm_chat_ui()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
 	dev_pokemon_button.disabled = true
@@ -917,6 +981,7 @@ func _apply_mail_ui_styles() -> void:
 	mail_body_label.add_theme_color_override("font_color", UI_TEXT)
 	_apply_button_style(mail_compose_button, "primary")
 	_apply_button_style(mail_close_button)
+	_apply_button_style(mail_close_button, "danger")
 	_apply_button_style(mail_inbox_button, "primary")
 	_apply_button_style(mail_sent_button)
 	_apply_button_style(mail_claim_button, "primary")
@@ -2891,6 +2956,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_popup.offset_right = 490
 	pvp_room_popup.offset_bottom = 310
 	pvp_room_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	pvp_room_popup.gui_input.connect(_on_pvp_room_panel_gui_input)
 	root_control.add_child(pvp_room_popup)
 
 	var margin_container := MarginContainer.new()
@@ -2904,22 +2970,45 @@ func _setup_pvp_room_popup() -> void:
 	layout.add_theme_constant_override("separation", 8)
 	margin_container.add_child(layout)
 
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
 	var title := Label.new()
 	title.text = "PvP"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#f5df9a"))
 	title.gui_input.connect(_on_pvp_room_header_gui_input)
-	layout.add_child(title)
+	header.add_child(title)
 	pvp_popup_title_label = title
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.gui_input.connect(_on_pvp_room_header_gui_input)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_pvp_room_popup)
+	header.add_child(close_button)
+	_apply_button_style(close_button)
+
+	var tabs_margin := MarginContainer.new()
+	tabs_margin.add_theme_constant_override("margin_left", 10)
+	tabs_margin.add_theme_constant_override("margin_top", 2)
+	tabs_margin.add_theme_constant_override("margin_right", 10)
+	tabs_margin.add_theme_constant_override("margin_bottom", 2)
 
 	var tabs := TabContainer.new()
+	tabs_margin.add_child(tabs)
+	layout.add_child(tabs_margin)
 	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.tabs_visible = false
+	tabs.add_theme_constant_override("side_margin", 8)
 	tabs.add_theme_font_size_override("font_size", 14)
-	layout.add_child(tabs)
 	pvp_root_tabs = tabs
 
 	var ranked_tab := VBoxContainer.new()
@@ -2931,12 +3020,25 @@ func _setup_pvp_room_popup() -> void:
 	ranked_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ranked_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	ranked_tabs.add_theme_font_size_override("font_size", 13)
-	ranked_tab.add_child(ranked_tabs)
+	ranked_tabs.tab_changed.connect(_on_pvp_ranked_tab_changed)
+	_apply_pvp_ranked_tabs_style(ranked_tabs)
+	var ranked_tabs_container := MarginContainer.new()
+	ranked_tabs_container.add_theme_constant_override("margin_left", 6)
+	ranked_tabs_container.add_theme_constant_override("margin_top", 2)
+	ranked_tabs_container.add_theme_constant_override("margin_right", 6)
+	ranked_tabs_container.add_theme_constant_override("margin_bottom", 2)
+	ranked_tabs_container.add_child(ranked_tabs)
+	ranked_tab.add_child(ranked_tabs_container)
+	pvp_ranked_tabs = ranked_tabs
+
+	var play_tab_page := _create_pvp_ranked_tab_page("Play")
+	ranked_tabs.add_child(play_tab_page)
 
 	var play_tab := HBoxContainer.new()
-	play_tab.name = "Play"
+	play_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	play_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	play_tab.add_theme_constant_override("separation", 14)
-	ranked_tabs.add_child(play_tab)
+	play_tab_page.add_child(play_tab)
 
 	var ladder_sidebar := PanelContainer.new()
 	ladder_sidebar.custom_minimum_size = Vector2(340, 0)
@@ -2960,24 +3062,25 @@ func _setup_pvp_room_popup() -> void:
 	var team_source_row := HBoxContainer.new()
 	team_source_row.add_theme_constant_override("separation", 8)
 	play_controls.add_child(team_source_row)
-	team_source_row.add_child(_create_pvp_field_label("Team Source", 104))
+	team_source_row.add_child(_create_pvp_field_label("Team", 104))
 
 	pvp_team_source_select = OptionButton.new()
 	pvp_team_source_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_team_source_select.focus_mode = Control.FOCUS_NONE
 	pvp_team_source_select.add_item("Current Party")
 	pvp_team_source_select.set_item_metadata(0, "party")
-	pvp_team_source_select.add_item("Preset Team")
-	pvp_team_source_select.set_item_metadata(1, "preset")
-	pvp_team_source_select.set_item_disabled(1, true)
+	for team_index in range(1, 4):
+		pvp_team_source_select.add_item("PvP Team %d" % team_index)
+		pvp_team_source_select.set_item_metadata(team_index, "pvp_team_%d" % team_index)
+		pvp_team_source_select.set_item_disabled(team_index, true)
 	pvp_team_source_select.item_selected.connect(_on_pvp_team_source_selected)
 	team_source_row.add_child(pvp_team_source_select)
 
-	var team_note := Label.new()
-	team_note.text = "Preset teams are reserved for a later team builder. Queue battles use your current party now."
-	team_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	team_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	play_controls.add_child(team_note)
+	pvp_team_preview_grid = HBoxContainer.new()
+	pvp_team_preview_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_team_preview_grid.add_theme_constant_override("separation", 6)
+	play_controls.add_child(pvp_team_preview_grid)
+	_render_pvp_team_preview()
 
 	play_controls.add_child(HSeparator.new())
 	play_controls.add_child(_create_pvp_section_title("Matchmaking"))
@@ -3009,7 +3112,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_queue_select.item_selected.connect(_on_pvp_queue_selected)
 	queue_select_row.add_child(pvp_queue_select)
 	_populate_pvp_queue_select([
-		{"id": "casual_queue_v1", "name": "Casual Queue", "mode": "casual"},
+		{"id": "ranked_queue_v1", "name": "Ranked Queue", "mode": "ranked"},
 	])
 
 	pvp_queue_status_label = Label.new()
@@ -3062,9 +3165,8 @@ func _setup_pvp_room_popup() -> void:
 	play_main_margin.add_child(play_main_layout)
 
 	play_main_layout.add_child(_create_pvp_section_title("General Information"))
-	play_main_layout.add_child(_create_pvp_info_row("Shared Foundation", "Casual and ranked queue battles use the same persisted PvP match, ownership, timers, reconnect and settlement systems."))
-	play_main_layout.add_child(_create_pvp_info_row("Ranked Points", "The current leaderboard uses a simple provisional model: win +10, loss -10. Full MMR can replace this later."))
-	play_main_layout.add_child(_create_pvp_info_row("Custom Battles", "Direct room-code battles are available under Custom / Casual. Ranked matchmaking does not use room codes."))
+	play_main_layout.add_child(_create_pvp_info_row("Ladder Integrity", "Wintrading and ladder manipulation can result in a ladder ban."))
+	play_main_layout.add_child(_create_pvp_info_row("Tier Banlists", "Bans can differ per tier. The Bans tab shows the current list for the selected tier."))
 
 	play_main_layout.add_child(HSeparator.new())
 	play_main_layout.add_child(_create_pvp_section_title("Team Validator"))
@@ -3161,16 +3263,110 @@ func _setup_pvp_room_popup() -> void:
 	room_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	room_layout.add_child(room_spacer)
 
+	var rules_tab_page := _create_pvp_ranked_tab_page("Rules")
+	ranked_tabs.add_child(rules_tab_page)
+
 	var rules_tab := VBoxContainer.new()
-	rules_tab.name = "Rules"
+	rules_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rules_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rules_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(rules_tab)
+	rules_tab_page.add_child(rules_tab)
 	rules_tab.add_child(_create_pvp_ruleset_panel())
 
+	var bans_tab_page := _create_pvp_ranked_tab_page("Bans")
+	ranked_tabs.add_child(bans_tab_page)
+
+	var bans_tab := VBoxContainer.new()
+	bans_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bans_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bans_tab.add_theme_constant_override("separation", 10)
+	bans_tab_page.add_child(bans_tab)
+
+	var bans_header := HBoxContainer.new()
+	bans_header.add_theme_constant_override("separation", 8)
+	bans_tab.add_child(bans_header)
+
+	pvp_bans_status_label = Label.new()
+	pvp_bans_status_label.text = "Loading..."
+	pvp_bans_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_bans_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	bans_header.add_child(pvp_bans_status_label)
+
+	pvp_bans_refresh_button = Button.new()
+	pvp_bans_refresh_button.text = "Refresh"
+	pvp_bans_refresh_button.custom_minimum_size = Vector2(92, 32)
+	pvp_bans_refresh_button.focus_mode = Control.FOCUS_NONE
+	pvp_bans_refresh_button.pressed.connect(_on_pvp_bans_refresh_pressed)
+	bans_header.add_child(pvp_bans_refresh_button)
+
+	var bans_scroll := ScrollContainer.new()
+	bans_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bans_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bans_tab.add_child(bans_scroll)
+
+	var bans_content := VBoxContainer.new()
+	bans_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bans_content.add_theme_constant_override("separation", 10)
+	bans_scroll.add_child(bans_content)
+
+	pvp_bans_metadata_list = VBoxContainer.new()
+	pvp_bans_metadata_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_bans_metadata_list.add_theme_constant_override("separation", 6)
+	bans_content.add_child(pvp_bans_metadata_list)
+
+	bans_content.add_child(HSeparator.new())
+
+	pvp_bans_list = VBoxContainer.new()
+	pvp_bans_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_bans_list.add_theme_constant_override("separation", 10)
+	bans_content.add_child(pvp_bans_list)
+
+	var live_tab_page := _create_pvp_ranked_tab_page("Live")
+	ranked_tabs.add_child(live_tab_page)
+
+	var live_tab := VBoxContainer.new()
+	live_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	live_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	live_tab.add_theme_constant_override("separation", 10)
+	live_tab_page.add_child(live_tab)
+
+	var live_header := HBoxContainer.new()
+	live_header.add_theme_constant_override("separation", 8)
+	live_tab.add_child(live_header)
+
+	pvp_live_status_label = Label.new()
+	pvp_live_status_label.text = "Live ranked battles"
+	pvp_live_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_live_status_label.add_theme_color_override("font_color", UI_TEXT)
+	live_header.add_child(pvp_live_status_label)
+
+	var live_columns := HBoxContainer.new()
+	live_columns.add_theme_constant_override("separation", 10)
+	live_tab.add_child(live_columns)
+	live_columns.add_child(_create_pvp_leaderboard_header_label("Battle", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("Players", 180, HORIZONTAL_ALIGNMENT_LEFT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("Status", 100, HORIZONTAL_ALIGNMENT_RIGHT))
+	live_columns.add_child(_create_pvp_leaderboard_header_label("Started", 110, HORIZONTAL_ALIGNMENT_RIGHT))
+
+	var live_scroll := ScrollContainer.new()
+	live_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	live_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	live_tab.add_child(live_scroll)
+
+	pvp_live_list = VBoxContainer.new()
+	pvp_live_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_live_list.add_theme_constant_override("separation", 6)
+	live_scroll.add_child(pvp_live_list)
+	_render_pvp_live_battles([])
+
+	var leaderboard_tab_page := _create_pvp_ranked_tab_page("Leaderboard")
+	ranked_tabs.add_child(leaderboard_tab_page)
+
 	var leaderboard_tab := VBoxContainer.new()
-	leaderboard_tab.name = "Leaderboard"
+	leaderboard_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	leaderboard_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	leaderboard_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(leaderboard_tab)
+	leaderboard_tab_page.add_child(leaderboard_tab)
 
 	var leaderboard_header := HBoxContainer.new()
 	leaderboard_header.add_theme_constant_override("separation", 8)
@@ -3181,6 +3377,17 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_leaderboard_status_label.add_theme_color_override("font_color", UI_TEXT)
 	leaderboard_header.add_child(pvp_leaderboard_status_label)
+
+	pvp_leaderboard_scope_select = OptionButton.new()
+	pvp_leaderboard_scope_select.custom_minimum_size = Vector2(130, 32)
+	pvp_leaderboard_scope_select.focus_mode = Control.FOCUS_NONE
+	for scope_index in range(PVP_LEADERBOARD_SCOPES.size()):
+		var scope: Dictionary = PVP_LEADERBOARD_SCOPES[scope_index]
+		pvp_leaderboard_scope_select.add_item(str(scope.get("label", "")))
+		pvp_leaderboard_scope_select.set_item_metadata(scope_index, str(scope.get("id", "")))
+	pvp_leaderboard_scope_select.select(_pvp_leaderboard_scope_index(pvp_active_leaderboard_scope))
+	pvp_leaderboard_scope_select.item_selected.connect(_on_pvp_leaderboard_scope_selected)
+	leaderboard_header.add_child(pvp_leaderboard_scope_select)
 
 	pvp_leaderboard_refresh_button = Button.new()
 	pvp_leaderboard_refresh_button.text = "Refresh"
@@ -3210,10 +3417,14 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_list.add_theme_constant_override("separation", 6)
 	leaderboard_scroll.add_child(pvp_leaderboard_list)
 
+	var history_tab_page := _create_pvp_ranked_tab_page("History")
+	ranked_tabs.add_child(history_tab_page)
+
 	var history_tab := VBoxContainer.new()
-	history_tab.name = "Battle History"
+	history_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	history_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	history_tab.add_theme_constant_override("separation", 10)
-	ranked_tabs.add_child(history_tab)
+	history_tab_page.add_child(history_tab)
 
 	var history_header := HBoxContainer.new()
 	history_header.add_theme_constant_override("separation", 8)
@@ -3249,22 +3460,16 @@ func _setup_pvp_room_popup() -> void:
 	tournaments_tab.add_child(_create_pvp_tournaments_placeholder())
 	tabs.move_child(tournaments_tab, 1)
 
-	var close_button := Button.new()
-	close_button.text = "Close"
-	close_button.custom_minimum_size = Vector2(0, 32)
-	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(_hide_pvp_room_popup)
-	layout.add_child(close_button)
-
 	_apply_button_style(pvp_create_room_button, "primary")
 	_apply_button_style(pvp_join_room_button)
 	_apply_button_style(pvp_copy_code_button)
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
+	_apply_button_style(pvp_bans_refresh_button)
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
-	_apply_button_style(close_button)
+	_render_pvp_banlists()
 
 	pvp_poll_timer = Timer.new()
 	pvp_poll_timer.wait_time = 2.0
@@ -3331,6 +3536,14 @@ func _create_pvp_mode_menu_button(text: String) -> Button:
 	button.focus_mode = Control.FOCUS_NONE
 	return button
 
+func _create_pvp_ranked_tab_page(tab_name: String) -> MarginContainer:
+	var page := MarginContainer.new()
+	page.name = tab_name
+	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	page.add_theme_constant_override("margin_top", 12)
+	return page
+
 func _create_pvp_ruleset_panel() -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -3356,7 +3569,7 @@ func _create_pvp_ruleset_panel() -> Control:
 	layout.add_child(title)
 
 	var rules: Array[Dictionary] = [
-		{"title": "Format", "body": "Gen 9 National Dex. Queue selection decides casual or ranked processing."},
+		{"title": "Format", "body": "Aether OU. Queue selection decides casual or ranked processing."},
 		{"title": "Species", "body": "Prevents having 2 or more of the same Pokemon on a team."},
 		{"title": "OHKO", "body": "Prevents one-hit KO moves from being used."},
 		{"title": "Evasion", "body": "Prevents moves that boost evasion from being used."},
@@ -3444,6 +3657,40 @@ func _create_pvp_info_row(title_text: String, body_text: String) -> Control:
 	body.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(body)
 	return row
+
+func _render_pvp_team_preview() -> void:
+	if pvp_team_preview_grid == null:
+		return
+	for child in pvp_team_preview_grid.get_children():
+		child.queue_free()
+	for slot_index in range(6):
+		var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index < PlayerSave.party.size() else null
+		pvp_team_preview_grid.add_child(_create_pvp_team_preview_slot(pokemon, slot_index))
+
+func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(46, 46)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#315070aa"), 6, 1))
+
+	var center := CenterContainer.new()
+	panel.add_child(center)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(38, 38)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	center.add_child(icon)
+
+	if pokemon == null:
+		icon.modulate = Color(1, 1, 1, 0.18)
+		panel.tooltip_text = "Empty slot %d" % [slot_index + 1]
+		return panel
+
+	icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	icon.modulate = Color(1, 1, 1, 1) if icon.texture != null else Color(1, 1, 1, 0.18)
+	panel.tooltip_text = _format_identifier_display_name(pokemon.species)
+	return panel
 
 func _create_pvp_tournaments_placeholder() -> Control:
 	var panel := PanelContainer.new()
@@ -8719,7 +8966,7 @@ func _format_pokemon_origin_method(method: String) -> String:
 func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
 	_add_summary_section_title("Individual Values", Color("#62d7ff"))
 	var grid := GridContainer.new()
-	grid.columns = 3
+	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 6)
 	grid.add_theme_constant_override("v_separation", 6)
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -10718,6 +10965,34 @@ func _apply_line_edit_style(line_edit: LineEdit) -> void:
 		1
 	))
 
+func _apply_pvp_ranked_tabs_style(tabs: TabContainer) -> void:
+	var tab_bar: TabBar = tabs.get_tab_bar()
+	tab_bar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	tabs.add_theme_constant_override("side_margin", 8)
+	tabs.add_theme_constant_override("tab_separation", 3)
+	tabs.add_theme_constant_override("outline_size", 0)
+	tabs.add_theme_color_override("font_selected_color", Color("#17120a"))
+	tabs.add_theme_color_override("font_unselected_color", UI_MUTED_TEXT)
+	tabs.add_theme_color_override("font_hovered_color", UI_TEXT)
+	tabs.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.42))
+	tabs.add_theme_stylebox_override("tab_selected", _make_pvp_ranked_tab_style(Color("#f5d884"), Color("#f0cc70"), true))
+	tabs.add_theme_stylebox_override("tab_unselected", _make_pvp_ranked_tab_style(Color("#07111ed8"), Color("#2d405b99"), false))
+	tabs.add_theme_stylebox_override("tab_hovered", _make_pvp_ranked_tab_style(Color("#10213aee"), Color("#d6c78faa"), false))
+	tabs.add_theme_stylebox_override("tab_disabled", _make_pvp_ranked_tab_style(Color("#05091288"), Color("#25324755"), false))
+	tabs.add_theme_stylebox_override("tab_focus", _make_pvp_ranked_tab_style(Color("#10213aee"), UI_BORDER_FOCUS, false))
+	tabs.add_theme_stylebox_override("panel", _make_panel_style(Color("#05091200"), Color("#00000000"), 0, 0))
+
+func _make_pvp_ranked_tab_style(background_color: Color, border_color: Color, selected: bool) -> StyleBoxFlat:
+	var style := _make_button_style(background_color, border_color, 4, 1)
+	style.content_margin_left = 12
+	style.content_margin_right = 12
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	if selected:
+		style.border_width_bottom = 2
+		style.border_color = Color("#f0cc70")
+	return style
+
 func _apply_text_edit_style(text_edit: TextEdit) -> void:
 	text_edit.add_theme_color_override("font_color", UI_TEXT)
 	text_edit.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
@@ -11057,9 +11332,17 @@ func _position_chat_tabs_panel() -> void:
 	if not chat_tabs_panel.visible:
 		return
 
+	var viewport_size := root_control.size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		viewport_size = get_viewport().get_visible_rect().size
 	var tabs_size := chat_tabs_panel.get_combined_minimum_size()
+	var max_tabs_width: float = max(0.0, viewport_size.x)
+	tabs_size.x = min(tabs_size.x, max_tabs_width)
 	chat_tabs_panel.size = tabs_size
-	chat_tabs_panel.position = chat_panel.position + Vector2(0.0, -tabs_size.y - CHAT_TABS_GAP)
+	chat_tabs_panel.position = Vector2(
+		clampf(chat_panel.position.x + CHAT_TABS_LEFT_INSET, 0.0, max(0.0, viewport_size.x - tabs_size.x)),
+		max(0.0, chat_panel.position.y - tabs_size.y - CHAT_TABS_GAP)
+	)
 
 func _set_chat_panel_size(size: Vector2) -> void:
 	var clamped_size := Vector2(
@@ -11120,6 +11403,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": pokedex_popup, "close": Callable(self, "_hide_pokedex_popup")},
 		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
+		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
@@ -11233,6 +11517,7 @@ func _build_party_slots() -> void:
 
 func _refresh_party() -> void:
 	_set_collapsible_panel_available("party", PlayerSave.party.size() > 0)
+	_render_pvp_team_preview()
 
 	for slot_number in range(party_slots.size()):
 		var slot = party_slots[slot_number]
@@ -11441,6 +11726,330 @@ func _set_control_tree_mouse_filter(node: Node, mouse_filter_value: int) -> void
 	for child: Node in node.get_children():
 		_set_control_tree_mouse_filter(child, mouse_filter_value)
 
+func _setup_pm_chat_ui() -> void:
+	if pm_tab_button != null:
+		return
+
+	pm_tab_button = Button.new()
+	pm_tab_button.custom_minimum_size = Vector2(70, 28)
+	pm_tab_button.text = "PM"
+	pm_tab_button.focus_mode = Control.FOCUS_NONE
+	pm_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_PM))
+	$Control/ChatTabsPanel/TabRow.add_child(pm_tab_button)
+	_apply_button_style(pm_tab_button, "primary")
+	pm_tab_attention_badge = _create_attention_badge_for_button(pm_tab_button, 4.0, 3.0)
+	_refresh_pm_tab_label()
+
+	pm_chat_container = HBoxContainer.new()
+	pm_chat_container.visible = false
+	pm_chat_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_chat_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_chat_container.add_theme_constant_override("separation", 8)
+
+	var conversation_margin := MarginContainer.new()
+	conversation_margin.custom_minimum_size = Vector2(132, 0)
+	conversation_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	conversation_margin.add_theme_constant_override("margin_left", 4)
+	conversation_margin.add_theme_constant_override("margin_top", 4)
+	conversation_margin.add_theme_constant_override("margin_right", 6)
+	conversation_margin.add_theme_constant_override("margin_bottom", 4)
+	pm_chat_container.add_child(conversation_margin)
+
+	var conversation_scroll := ScrollContainer.new()
+	conversation_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	conversation_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_conversation_list = VBoxContainer.new()
+	pm_conversation_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_conversation_list.add_theme_constant_override("separation", 5)
+	conversation_scroll.add_child(pm_conversation_list)
+	conversation_margin.add_child(conversation_scroll)
+
+	var separator := PanelContainer.new()
+	separator.custom_minimum_size = Vector2(1, 0)
+	separator.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	separator.add_theme_stylebox_override("panel", _make_panel_style(Color(UI_BORDER_SOFT.r, UI_BORDER_SOFT.g, UI_BORDER_SOFT.b, 0.72), Color.TRANSPARENT, 0, 0))
+	pm_chat_container.add_child(separator)
+
+	var message_margin := MarginContainer.new()
+	message_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	message_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	message_margin.add_theme_constant_override("margin_left", 4)
+	message_margin.add_theme_constant_override("margin_top", 4)
+	message_margin.add_theme_constant_override("margin_right", 6)
+	message_margin.add_theme_constant_override("margin_bottom", 4)
+	pm_chat_container.add_child(message_margin)
+
+	var pm_message_column := VBoxContainer.new()
+	pm_message_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_message_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_message_column.add_theme_constant_override("separation", 5)
+	message_margin.add_child(pm_message_column)
+
+	pm_active_conversation_label = Label.new()
+	pm_active_conversation_label.clip_text = true
+	pm_active_conversation_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pm_active_conversation_label.custom_minimum_size = Vector2(0, 22)
+	pm_active_conversation_label.add_theme_color_override("font_color", CHAT_SYSTEM_LABEL_COLOR)
+	pm_active_conversation_label.add_theme_font_size_override("font_size", 13)
+	pm_message_column.add_child(pm_active_conversation_label)
+
+	pm_message_scroll = ScrollContainer.new()
+	pm_message_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_message_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_message_list = VBoxContainer.new()
+	pm_message_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_message_list.add_theme_constant_override("separation", 4)
+	pm_message_scroll.add_child(pm_message_list)
+	pm_message_column.add_child(pm_message_scroll)
+
+	var chat_vbox := $Control/ChatPanel/MarginContainer/VBoxContainer
+	chat_vbox.add_child(pm_chat_container)
+	chat_vbox.move_child(pm_chat_container, message_scroll.get_index() + 1)
+	_render_pm_conversation_list()
+	_render_active_pm_conversation()
+	_reorder_chat_tab_buttons()
+
+
+func _setup_help_chat_tab() -> void:
+	if help_chat_tab_button != null:
+		return
+
+	help_chat_tab_button = Button.new()
+	help_chat_tab_button.custom_minimum_size = Vector2(70, 28)
+	help_chat_tab_button.text = "Help"
+	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	help_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_HELP))
+	$Control/ChatTabsPanel/TabRow.add_child(help_chat_tab_button)
+	_apply_button_style(help_chat_tab_button, "primary")
+	_reorder_chat_tab_buttons()
+
+
+func _reorder_chat_tab_buttons() -> void:
+	var tab_row := $Control/ChatTabsPanel/TabRow
+	var order: Array[Button] = [
+		general_chat_tab_button,
+		system_chat_tab_button,
+		trade_chat_tab_button,
+	]
+	if help_chat_tab_button != null:
+		order.append(help_chat_tab_button)
+	if pm_tab_button != null:
+		order.append(pm_tab_button)
+
+	var index: int = 0
+	for button: Button in order:
+		if button == null or button.get_parent() != tab_row:
+			continue
+		tab_row.move_child(button, index)
+		index += 1
+
+func open_private_message_conversation(user: Dictionary) -> void:
+	var conversation_key: int = _pm_conversation_key_from_user(user)
+	if conversation_key == 0:
+		_add_chat_message("Could not open PM conversation: missing username.")
+		return
+
+	_ensure_pm_conversation(user)
+	var active_conversation_key: int = _existing_pm_conversation_key_for_user(user)
+	if active_conversation_key == 0:
+		active_conversation_key = conversation_key
+	active_chat_tab = CHAT_TAB_PM
+	active_pm_user_id = active_conversation_key
+	_clear_pm_unread(active_conversation_key)
+	_apply_chat_tab_state()
+	chat_input.grab_focus()
+
+func _ensure_pm_conversation(user: Dictionary) -> Dictionary:
+	var conversation_key: int = _pm_conversation_key_from_user(user)
+	if conversation_key == 0:
+		return {}
+	var existing_key: int = _existing_pm_conversation_key_for_user(user)
+	if existing_key != 0 and existing_key != conversation_key:
+		if conversation_key < 0:
+			conversation_key = existing_key
+		else:
+			var existing_conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(existing_key, {}))
+			pm_conversations_by_user_id.erase(existing_key)
+			if active_pm_user_id == existing_key:
+				active_pm_user_id = conversation_key
+			if pm_unread_counts_by_user_id.has(existing_key):
+				pm_unread_counts_by_user_id[conversation_key] = int(pm_unread_counts_by_user_id.get(existing_key, 0))
+				pm_unread_counts_by_user_id.erase(existing_key)
+			pm_conversations_by_user_id[conversation_key] = existing_conversation
+	var conversation: Dictionary = pm_conversations_by_user_id.get(conversation_key, {})
+	if conversation.is_empty():
+		conversation = {
+			"user": _normalize_pm_user(user),
+			"messages": [],
+		}
+		pm_conversations_by_user_id[conversation_key] = conversation
+	else:
+		conversation["user"] = _merge_pm_user(_dictionary_from_value(conversation.get("user", {})), user)
+	return conversation
+
+func _render_pm_conversation_list() -> void:
+	if pm_conversation_list == null:
+		return
+	_clear_children(pm_conversation_list)
+	if pm_conversations_by_user_id.is_empty():
+		pm_conversation_list.add_child(_pm_empty_label("No PMs yet."))
+		return
+
+	var user_ids: Array = pm_conversations_by_user_id.keys()
+	user_ids.sort()
+	for user_id_value: Variant in user_ids:
+		var user_id: int = int(user_id_value)
+		var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
+		var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+		var unread: int = int(pm_unread_counts_by_user_id.get(user_id, 0))
+		var active := user_id == active_pm_user_id
+		var button := Button.new()
+		button.text = _pm_conversation_title(user, 0)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.clip_text = true
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		button.pressed.connect(_on_pm_conversation_selected.bind(user_id))
+		_apply_pm_conversation_button_style(button, active)
+		if unread > 0:
+			var unread_badge: Panel = _create_attention_badge_for_button(button, 5.0, 5.0)
+			if unread_badge != null:
+				unread_badge.visible = true
+		pm_conversation_list.add_child(button)
+
+func _render_active_pm_conversation() -> void:
+	if pm_message_list == null:
+		return
+	_clear_children(pm_message_list)
+	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
+		if pm_active_conversation_label != null:
+			pm_active_conversation_label.text = "No PM selected"
+		pm_message_list.add_child(_pm_empty_label("Select a PM conversation."))
+		return
+
+	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
+	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+	if pm_active_conversation_label != null:
+		pm_active_conversation_label.text = "Chat with %s" % _pm_conversation_title(user, 0)
+	var messages: Array = _array_from_variant(conversation.get("messages", []))
+	if messages.is_empty():
+		pm_message_list.add_child(_pm_empty_label("No messages yet."))
+		return
+	for message_value: Variant in messages:
+		if message_value is Dictionary:
+			pm_message_list.add_child(_create_pm_message_row(message_value as Dictionary))
+	_scroll_pm_to_bottom.call_deferred()
+
+func _create_pm_message_row(message: Dictionary) -> Control:
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	row.add_theme_constant_override("separation", 4)
+
+	var outgoing: bool = bool(message.get("outgoing", false))
+	var label: String = "You" if outgoing else str(message.get("displayName", message.get("username", "Trainer")))
+	var name_color: String = "#7fd6ff" if outgoing else CHAT_DEFAULT_NAME_COLOR
+
+	var name_label := RichTextLabel.new()
+	name_label.bbcode_enabled = true
+	name_label.fit_content = true
+	name_label.scroll_active = false
+	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	name_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	name_label.append_text("[color=%s][b]%s[/b][/color][color=%s]:[/color]" % [
+		name_color,
+		_escape_bbcode(label),
+		CHAT_SEPARATOR_COLOR,
+	])
+	row.add_child(name_label)
+
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
+	for pokemon_payload: Dictionary in pokemon_attachments:
+		row.add_child(_create_chat_pokemon_attachment_button(pokemon_payload))
+
+	var body_text: String = str(message.get("body", "")).strip_edges()
+	if body_text != "":
+		var body_label := RichTextLabel.new()
+		body_label.bbcode_enabled = true
+		body_label.fit_content = true
+		body_label.scroll_active = false
+		body_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		body_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		body_label.append_text("[color=%s]%s[/color]" % [
+			CHAT_MESSAGE_COLOR,
+			_escape_bbcode(body_text),
+		])
+		row.add_child(body_label)
+
+	return row
+
+func _pm_empty_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.modulate = Color(0.75, 0.75, 0.75)
+	return label
+
+func _pm_conversation_title(user: Dictionary, unread: int) -> String:
+	var title := str(user.get("displayName", user.get("username", "Trainer"))).strip_edges()
+	if title == "":
+		title = str(user.get("username", "Trainer"))
+	if unread > 0:
+		return "%s (%s)" % [title, unread]
+	return title
+
+func _apply_pm_conversation_button_style(button: Button, active: bool) -> void:
+	var normal_bg: Color = Color("#111f3af0") if active else Color("#07111ee0")
+	var hover_bg: Color = Color("#182b52f4") if active else Color("#101f38ee")
+	var pressed_bg: Color = Color("#0c1830f4")
+	var border: Color = UI_BORDER_FOCUS if active else Color("#29415f")
+	var hover_border: Color = UI_BORDER if active else UI_BORDER_FOCUS
+	var font_color: Color = CHAT_SYSTEM_LABEL_COLOR if active else UI_TEXT
+
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 6, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 6, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 6, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 6, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+func _on_pm_conversation_selected(user_id: int) -> void:
+	active_pm_user_id = user_id
+	_clear_pm_unread(user_id)
+	_apply_chat_tab_state()
+	chat_input.grab_focus()
+
+func _clear_pm_unread(user_id: int) -> void:
+	if user_id == 0:
+		return
+	pm_unread_counts_by_user_id.erase(user_id)
+	_recalculate_pm_total_unread()
+
+func _recalculate_pm_total_unread() -> void:
+	pm_total_unread_count = 0
+	for unread_value: Variant in pm_unread_counts_by_user_id.values():
+		pm_total_unread_count += max(int(unread_value), 0)
+
+func _refresh_pm_tab_label() -> void:
+	if pm_tab_button == null:
+		return
+	pm_tab_button.text = "PM"
+	if pm_tab_attention_badge != null:
+		pm_tab_attention_badge.visible = pm_total_unread_count > 0
+
+func _scroll_pm_to_bottom() -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	if not is_inside_tree() or pm_message_scroll == null:
+		return
+	var vertical_scroll_bar: VScrollBar = pm_message_scroll.get_v_scroll_bar()
+	if vertical_scroll_bar != null:
+		pm_message_scroll.scroll_vertical = int(vertical_scroll_bar.max_value)
+
 func _get_party_slot_index_at_position(global_position: Vector2) -> int:
 	for slot_index in range(party_slots.size()):
 		var slot := party_slots[slot_index] as Control
@@ -11476,12 +12085,30 @@ func _apply_chat_tab_state() -> void:
 	general_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if general_active else CHAT_MESSAGE_COLOR))
 	trade_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_TRADE else CHAT_MESSAGE_COLOR))
 	system_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_SYSTEM else CHAT_MESSAGE_COLOR))
+	if help_chat_tab_button != null:
+		help_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_HELP else CHAT_MESSAGE_COLOR))
+	if pm_tab_button != null:
+		pm_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_PM else CHAT_MESSAGE_COLOR))
 	chat_input.editable = input_active
-	chat_input.placeholder_text = "Trade chat has a 2 minute cooldown" if active_chat_tab == CHAT_TAB_TRADE else ("" if input_active else "System messages only")
+	if active_chat_tab == CHAT_TAB_PM:
+		chat_input.placeholder_text = "Select a PM conversation" if active_pm_user_id == 0 else "Private message"
+	elif active_chat_tab == CHAT_TAB_TRADE:
+		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
+	elif active_chat_tab == CHAT_TAB_HELP:
+		chat_input.placeholder_text = "Help chat has a 5 minute cooldown"
+	else:
+		chat_input.placeholder_text = "" if input_active else "System messages only"
 	send_button.disabled = not input_active
 	if not input_active:
 		chat_input.release_focus()
+	if message_scroll != null:
+		message_scroll.visible = active_chat_tab != CHAT_TAB_PM
+	if pm_chat_container != null:
+		pm_chat_container.visible = active_chat_tab == CHAT_TAB_PM
 	_refresh_chat_message_visibility()
+	_render_pm_conversation_list()
+	_render_active_pm_conversation()
+	_refresh_pm_tab_label()
 	_scroll_chat_to_bottom.call_deferred()
 
 func _refresh_chat_message_visibility() -> void:
@@ -11501,6 +12128,23 @@ func _submit_chat_input_deferred() -> void:
 
 func _submit_chat_input_async() -> void:
 	var text := chat_input.text.strip_edges()
+	if _is_pm_open_command(text):
+		await _open_pm_from_chat_command(text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
+		return
+
+	if active_chat_tab == CHAT_TAB_PM:
+		if text.to_lower() == "/team":
+			await _share_party_to_pm()
+			chat_submit_in_progress = false
+			_keep_chat_input_focused()
+			return
+		await _submit_pm_input_async(text)
+		chat_submit_in_progress = false
+		_keep_chat_input_focused()
+		return
+
 	if text.to_lower() == "/team":
 		await _share_party_to_chat()
 		chat_submit_in_progress = false
@@ -11531,6 +12175,35 @@ func _submit_chat_input_async() -> void:
 	chat_submit_in_progress = false
 	_keep_chat_input_focused()
 
+func _is_pm_open_command(text: String) -> bool:
+	var normalized := text.strip_edges().to_lower()
+	return normalized == "/pm" or normalized.begins_with("/pm ")
+
+func _open_pm_from_chat_command(text: String) -> void:
+	var command_text := text.strip_edges()
+	var username := command_text.substr(3).strip_edges()
+	if username == "":
+		_add_chat_message("Usage: /pm username")
+		return
+	if username.contains(" "):
+		username = username.split(" ", false, 1)[0].strip_edges()
+	if username == "":
+		_add_chat_message("Usage: /pm username")
+		return
+
+	var result: Dictionary = await SocialService.validate_private_message_target(username)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not open PM: %s" % str(result.get("error", "Player is not available.")))
+		return
+
+	var user: Dictionary = _dictionary_from_value(result.get("user", {}))
+	if user.is_empty():
+		_add_chat_message("Could not open PM: player not found.")
+		return
+
+	chat_input.clear()
+	open_private_message_conversation(user)
+
 func _share_party_to_chat() -> void:
 	if PlayerSave.party.is_empty():
 		_add_chat_message("You need a Pokemon in your party first.")
@@ -11549,10 +12222,104 @@ func _share_party_to_chat() -> void:
 	if not ChatRealtimeService.send_chat_message("", _get_active_chat_channel(), attachments):
 		_add_chat_message("Chat is reconnecting. Please try again in a moment.")
 
+func _share_party_to_pm() -> void:
+	if PlayerSave.party.is_empty():
+		_add_pm_notice(active_pm_user_id, "You need a Pokemon in your party first.")
+		return
+
+	var attachments: Array[Dictionary] = []
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon != null:
+			attachments.append(_pokemon_preview_payload_with_current_trainer(
+				pokemon.to_persistence_dict(),
+				PlayerSave.player_name,
+				PlayerSave.player_id
+			))
+
+	chat_input.clear()
+	await _submit_pm_message_with_attachments("", attachments)
+
 func _get_active_chat_channel() -> String:
 	if active_chat_tab == CHAT_TAB_TRADE:
 		return CHAT_CHANNEL_TRADE
+	if active_chat_tab == CHAT_TAB_HELP:
+		return CHAT_CHANNEL_HELP
 	return CHAT_CHANNEL_GLOBAL
+
+func _submit_pm_input_async(text: String) -> void:
+	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments_with_current_trainer(
+		pending_chat_pokemon_attachments,
+		PlayerSave.player_name,
+		PlayerSave.player_id
+	)
+	if text == "" and pokemon_attachments.is_empty():
+		return
+	await _submit_pm_message_with_attachments(text, pokemon_attachments)
+
+func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Array[Dictionary]) -> void:
+	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
+		_show_pm_empty_state("Select a PM conversation first.")
+		return
+	if text.length() > 300:
+		text = text.substr(0, 300)
+
+	var target_pm_user_id: int = active_pm_user_id
+	var target_body: String = text
+	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(target_pm_user_id, {}))
+	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+	var target_username: String = str(user.get("username", "")).strip_edges()
+	if target_username == "":
+		_add_pm_notice(target_pm_user_id, "Could not send PM: missing username.")
+		return
+	var sender_username: String = str(AuthService.current_user.get("username", "you"))
+	var sender_display_name: String = AuthService.get_display_name()
+
+	chat_input.clear()
+	var result: Dictionary = await SocialService.send_private_message(target_username, target_body, pokemon_attachments)
+	if not bool(result.get("success", false)):
+		_add_pm_notice(target_pm_user_id, str(result.get("error", "Private message could not be sent.")))
+		return
+
+	var message: Dictionary = _dictionary_from_value(result.get("message", {}))
+	var response_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
+	if response_attachments.is_empty():
+		response_attachments = pokemon_attachments
+	_append_pm_message(target_pm_user_id, {
+		"outgoing": true,
+		"body": str(message.get("body", target_body)),
+		"pokemonAttachments": response_attachments,
+		"sentAt": str(message.get("sentAt", "")),
+		"username": sender_username,
+		"displayName": sender_display_name,
+	})
+	_clear_pending_chat_pokemon_attachments()
+	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == target_pm_user_id:
+		_render_active_pm_conversation()
+	_render_pm_conversation_list()
+
+func _add_pm_notice(user_id: int, text: String) -> void:
+	if user_id == 0:
+		_show_pm_empty_state(text)
+		return
+	_append_pm_message(user_id, {
+		"outgoing": false,
+		"body": text,
+		"username": "system",
+		"displayName": "SYSTEM",
+	})
+	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == user_id:
+		_render_active_pm_conversation()
+	else:
+		_add_chat_message(text)
+
+func _show_pm_empty_state(text: String) -> void:
+	if active_chat_tab != CHAT_TAB_PM or pm_message_list == null:
+		_add_chat_message(text)
+		return
+	_clear_children(pm_message_list)
+	if pm_active_conversation_label != null and active_pm_user_id == 0:
+		pm_active_conversation_label.text = "No PM selected"
+	pm_message_list.add_child(_pm_empty_label(text))
 
 func _keep_chat_input_focused() -> void:
 	_restore_chat_input_focus.call_deferred()
@@ -14054,7 +14821,47 @@ func _hide_socials_menu() -> void:
 	_deactivate_ui_panel(socials_menu)
 
 func _on_socials_friend_list_button_pressed() -> void:
-	_add_chat_message("Friend list is not implemented yet.")
+	_hide_socials_menu()
+	_open_friendlist_popup()
+
+func _open_friendlist_popup() -> void:
+	if friendlist_popup == null:
+		friendlist_popup = FRIENDLIST_POPUP_SCENE.instantiate() as FriendlistPopup
+		$Control.add_child(friendlist_popup)
+		if not friendlist_popup.closed.is_connected(_on_friendlist_popup_closed):
+			friendlist_popup.closed.connect(_on_friendlist_popup_closed)
+		if not friendlist_popup.private_message_requested.is_connected(_on_friendlist_private_message_requested):
+			friendlist_popup.private_message_requested.connect(_on_friendlist_private_message_requested)
+		if not friendlist_popup.mail_requested.is_connected(_on_friendlist_mail_requested):
+			friendlist_popup.mail_requested.connect(_on_friendlist_mail_requested)
+		if not friendlist_popup.incoming_friend_requests_changed.is_connected(_on_friendlist_incoming_friend_requests_changed):
+			friendlist_popup.incoming_friend_requests_changed.connect(_on_friendlist_incoming_friend_requests_changed)
+
+	friendlist_popup.open()
+	_activate_ui_panel(friendlist_popup)
+
+func _hide_friendlist_popup() -> void:
+	if friendlist_popup == null:
+		return
+	friendlist_popup.close()
+
+func _on_friendlist_popup_closed() -> void:
+	if friendlist_popup != null:
+		_deactivate_ui_panel(friendlist_popup)
+
+func _on_friendlist_private_message_requested(user: Dictionary) -> void:
+	open_private_message_conversation(user)
+
+
+func _on_friendlist_mail_requested(user: Dictionary) -> void:
+	var username: String = str(user.get("username", "")).strip_edges()
+	if username == "":
+		return
+	_open_mail_compose_popup(username, "")
+
+
+func _on_friendlist_incoming_friend_requests_changed(count: int) -> void:
+	_set_socials_attention("friend_list", count > 0)
 
 func _on_socials_mail_button_pressed() -> void:
 	_hide_socials_menu()
@@ -14105,7 +14912,7 @@ func _make_attention_badge_style() -> StyleBoxFlat:
 func _position_attention_badge_in_parent(badge: Panel, right_offset: float = 2.0, top_offset: float = 2.0) -> void:
 	if badge == null:
 		return
-	var badge_size := Vector2(12, 12)
+	var badge_size: Vector2 = Vector2(12, 12)
 	badge.set_anchors_preset(Control.PRESET_TOP_RIGHT, false)
 	badge.offset_left = -badge_size.x - right_offset
 	badge.offset_top = top_offset
@@ -14115,6 +14922,10 @@ func _position_attention_badge_in_parent(badge: Panel, right_offset: float = 2.0
 
 
 func _create_socials_menu_attention_badge(button: Button) -> Panel:
+	return _create_attention_badge_for_button(button, 6.0, 4.0)
+
+
+func _create_attention_badge_for_button(button: Button, right_offset: float = 2.0, top_offset: float = 2.0) -> Panel:
 	if button == null:
 		return null
 
@@ -14126,7 +14937,7 @@ func _create_socials_menu_attention_badge(button: Button) -> Panel:
 	badge.z_index = 100
 	badge.add_theme_stylebox_override("panel", _make_attention_badge_style())
 	button.add_child(badge)
-	_position_attention_badge_in_parent(badge, 6.0, 4.0)
+	_position_attention_badge_in_parent(badge, right_offset, top_offset)
 	return badge
 
 
@@ -14152,6 +14963,51 @@ func _has_socials_attention() -> bool:
 		if bool(value):
 			return true
 	return false
+
+
+func _refresh_friend_request_attention_from_socials() -> void:
+	var result: Dictionary = await SocialService.load_socials()
+	if not bool(result.get("success", false)):
+		return
+
+	var overview: Dictionary = _dictionary_from_value(result.get("overview", {}))
+	var incoming_requests: Array = _array_from_variant(overview.get("incomingFriendRequests", []))
+	var has_new_request: bool = _update_incoming_friend_request_session_state(incoming_requests)
+	var has_attention: bool = not incoming_requests.is_empty()
+	if has_attention and (has_new_request or play_existing_friend_request_notification_on_next_socials_load):
+		_play_mail_notification_sound()
+	play_existing_friend_request_notification_on_next_socials_load = false
+	_set_socials_attention("friend_list", has_attention)
+
+
+func _update_incoming_friend_request_session_state(incoming_requests: Array) -> bool:
+	var has_new_request := false
+	var current_ids: Dictionary = {}
+	for request_value: Variant in incoming_requests:
+		var request: Dictionary = _dictionary_from_value(request_value)
+		var request_id: int = int(request.get("id", 0))
+		if request_id <= 0:
+			continue
+		current_ids[request_id] = true
+		if incoming_friend_request_ids_initialized and not known_incoming_friend_request_ids.has(request_id):
+			has_new_request = true
+
+	known_incoming_friend_request_ids = current_ids
+	if not incoming_friend_request_ids_initialized:
+		incoming_friend_request_ids_initialized = true
+	return has_new_request
+
+
+func _on_friend_request_received(request: Dictionary) -> void:
+	var request_id: int = int(request.get("id", 0))
+	if request_id > 0 and not known_incoming_friend_request_ids.has(request_id):
+		known_incoming_friend_request_ids[request_id] = true
+		_play_mail_notification_sound()
+	incoming_friend_request_ids_initialized = true
+	play_existing_friend_request_notification_on_next_socials_load = false
+	_set_socials_attention("friend_list", true)
+	if friendlist_popup != null and friendlist_popup.visible:
+		friendlist_popup.refresh()
 
 func _on_socials_close_button_pressed() -> void:
 	_hide_socials_menu()
@@ -15067,10 +15923,21 @@ func _mail_dictionary_from_variant(value: Variant) -> Dictionary:
 		return value
 	return {}
 
+func _dictionary_from_value(value: Variant) -> Dictionary:
+	if value is Dictionary:
+		return value
+	return {}
+
 func _array_from_variant(value: Variant) -> Array:
 	if value is Array:
 		return value as Array
 	return []
+
+func _clear_children(container: Node) -> void:
+	if container == null:
+		return
+	for child: Node in container.get_children():
+		child.queue_free()
 
 func _on_guild_button_pressed() -> void:
 	_add_chat_message("Guild is not implemented yet.")
@@ -15134,7 +16001,8 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		_refresh_pvp_team_validator()
 		await _refresh_pvp_queue_list()
 		_select_first_pvp_queue_for_mode("ranked")
-		_refresh_pvp_team_validator()
+		await _refresh_pvp_ranked_team_validation(true)
+		await _refresh_pvp_banlists(false)
 		await _refresh_pvp_leaderboard()
 		await _refresh_pvp_match_history()
 
@@ -15181,6 +16049,24 @@ func _on_pvp_room_header_gui_input(event: InputEvent) -> void:
 		pvp_room_dragging = false
 	get_viewport().set_input_as_handled()
 
+func _on_pvp_room_panel_gui_input(event: InputEvent) -> void:
+	if pvp_room_popup == null:
+		return
+	if not (event is InputEventMouseButton):
+		return
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if mouse_event.position.y > 56.0:
+		return
+	if mouse_event.pressed:
+		pvp_room_dragging = true
+		pvp_room_drag_offset = mouse_event.global_position - pvp_room_popup.global_position
+		_activate_ui_panel(pvp_room_popup)
+	else:
+		pvp_room_dragging = false
+	get_viewport().set_input_as_handled()
+
 func _handle_pvp_room_drag_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
@@ -15196,6 +16082,7 @@ func _handle_pvp_room_drag_input(event: InputEvent) -> void:
 
 func _on_pvp_team_source_selected(_index: int) -> void:
 	_refresh_pvp_team_validator()
+	_refresh_pvp_ranked_team_validation.call_deferred(true)
 
 func _on_pvp_mode_selected(index: int) -> void:
 	if pvp_mode_select == null:
@@ -15210,6 +16097,7 @@ func _on_pvp_mode_selected(index: int) -> void:
 		return
 	_select_first_pvp_queue_for_mode(mode)
 	_refresh_pvp_team_validator()
+	_refresh_pvp_ranked_team_validation.call_deferred(true)
 
 func _select_first_pvp_queue_for_mode(mode: String) -> bool:
 	var normalized_mode: String = mode.strip_edges().to_lower()
@@ -15224,6 +16112,7 @@ func _select_first_pvp_queue_for_mode(mode: String) -> bool:
 			continue
 		pvp_active_queue_id = queue_id
 		_select_pvp_queue_by_id(queue_id)
+		_update_pvp_active_format_from_queue_id(queue_id)
 		_set_pvp_queue_status("Queue Status: idle")
 		_refresh_pvp_queue_buttons("idle")
 		return true
@@ -15278,8 +16167,8 @@ func _refresh_pvp_team_validator() -> void:
 		if count > 1:
 			issues.append("Species Clause: %s appears %d times." % [_format_identifier_display_name(species_key), count])
 
-	if pvp_team_source_select != null and pvp_team_source_select.selected == 1:
-		issues.append("Preset teams are not available yet. Select Current Party.")
+	if pvp_team_source_select != null and pvp_team_source_select.selected > 0:
+		issues.append("PvP team slots are not available yet. Select Current Party.")
 
 	if pvp_active_queue_id == "":
 		warnings.append("No queue is selected.")
@@ -15288,21 +16177,222 @@ func _refresh_pvp_team_validator() -> void:
 		var mode_text: String = mode.capitalize() if mode != "" else "Selected"
 		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "%s queue selected." % mode_text, Color("#62e36e")))
 
-	if issues.is_empty():
+	if issues.is_empty() and not _is_selected_pvp_queue_ranked():
 		if pvp_team_validator_status_label != null:
 			pvp_team_validator_status_label.text = "Eligible for the selected queue."
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
-	else:
+	elif not issues.is_empty():
 		if pvp_team_validator_status_label != null:
 			pvp_team_validator_status_label.text = "Team is not eligible."
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 
-	for issue: String in issues:
-		pvp_team_validator_list.add_child(_create_pvp_validator_row("Issue", issue, Color("#ff7979")))
-	for warning: String in warnings:
-		pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
-	if issues.is_empty() and warnings.is_empty():
-		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "No client-side validation issues found. Server rules remain authoritative.", Color("#62e36e")))
+	if _is_selected_pvp_queue_ranked():
+		var server_state := str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
+		var server_is_authoritative := server_state in [
+			PvpRankedTeamValidation.STATE_VALID,
+			PvpRankedTeamValidation.STATE_INVALID,
+			PvpRankedTeamValidation.STATE_ERROR,
+		]
+		if not server_is_authoritative:
+			for issue: String in issues:
+				pvp_team_validator_list.add_child(_create_pvp_validator_row("Hint", issue, Color("#f5df9a")))
+			for warning: String in warnings:
+				pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
+		_render_pvp_ranked_server_validation()
+	else:
+		for issue: String in issues:
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Local", issue, Color("#f5df9a")))
+		for warning: String in warnings:
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
+		if issues.is_empty() and warnings.is_empty():
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "No client-side validation issues found.", Color("#62e36e")))
+	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
+
+func _render_pvp_ranked_server_validation() -> void:
+	var server_state := str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
+	var server_message := PvpRankedTeamValidation.display_message(pvp_ranked_team_validation_result)
+	match server_state:
+		PvpRankedTeamValidation.STATE_VALID:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Ranked Ready"
+				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", server_message, Color("#62e36e")))
+		PvpRankedTeamValidation.STATE_INVALID:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Team is not eligible."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
+			var server_issues := PvpRankedTeamValidation.display_issues(pvp_ranked_team_validation_result)
+			for issue: Dictionary in server_issues:
+				pvp_team_validator_list.add_child(_create_pvp_validator_row(
+					_pvp_ranked_validation_issue_label(issue),
+					_pvp_ranked_validation_issue_message(issue),
+					Color("#ff7979")
+				))
+		PvpRankedTeamValidation.STATE_CHECKING:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Checking ranked team..."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Checking", server_message, UI_MUTED_TEXT))
+		PvpRankedTeamValidation.STATE_ERROR:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Server validation unavailable."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
+			var errors := PvpRankedTeamValidation.display_errors(pvp_ranked_team_validation_result)
+			for error: String in errors:
+				pvp_team_validator_list.add_child(_create_pvp_validator_row("Error", error, Color("#ff7979")))
+		_:
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Checking current party..."
+				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Checking", "Server validation pending.", UI_MUTED_TEXT))
+
+func _pvp_ranked_validation_issue_label(issue: Dictionary) -> String:
+	var slot := int(issue.get("slot", 0))
+	if slot > 0:
+		return "Slot %d" % slot
+	return "Rule"
+
+func _pvp_ranked_validation_issue_message(issue: Dictionary) -> String:
+	var code := str(issue.get("code", "")).strip_edges()
+	var slot := int(issue.get("slot", 0))
+	var pokemon_name := _pvp_party_slot_display_name(slot)
+	var value := _pvp_validation_issue_value(issue)
+	match code:
+		"banned_pokemon":
+			return "%s is banned." % (pokemon_name if pokemon_name != "" else value)
+		"banned_item":
+			return "%s holds banned item: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+		"banned_move":
+			return "%s has banned move: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+		"banned_ability":
+			return "%s has banned ability: %s." % [_pvp_issue_subject(pokemon_name, slot), value]
+		"species_clause_duplicate":
+			var slots_text := _pvp_validation_slots_text(issue.get("slots", []))
+			var species := _format_identifier_display_name(str(issue.get("species", value))).strip_edges()
+			return "Species Clause: %s appears more than once%s." % [species, " in %s" % slots_text if slots_text != "" else ""]
+	var message := str(issue.get("message", "")).strip_edges()
+	return message if message != "" else code.replace("_", " ").capitalize()
+
+func _pvp_validation_issue_value(issue: Dictionary) -> String:
+	var value := str(issue.get("value", "")).strip_edges()
+	if value == "":
+		value = str(issue.get("normalizedValue", "")).strip_edges()
+	return _format_identifier_display_name(value) if value != "" else "Unknown"
+
+func _pvp_issue_subject(pokemon_name: String, slot: int) -> String:
+	if pokemon_name != "":
+		return pokemon_name
+	if slot > 0:
+		return "Slot %d" % slot
+	return "Pokemon"
+
+func _pvp_party_slot_display_name(slot: int) -> String:
+	if slot <= 0 or slot > PlayerSave.party.size():
+		return ""
+	var pokemon: Pokemon = PlayerSave.party[slot - 1]
+	if pokemon == null:
+		return ""
+	return _format_pvp_species_display_name(pokemon.species)
+
+func _format_pvp_species_display_name(species: String) -> String:
+	var value := species.strip_edges()
+	if value == "":
+		return ""
+	if value.contains("-") or value.contains("_") or value.contains(" "):
+		return _format_identifier_display_name(value)
+	var suffix_labels := {
+		"mega": "Mega",
+		"megax": "Mega X",
+		"megay": "Mega Y",
+		"primal": "Primal",
+		"origin": "Origin",
+		"crowned": "Crowned",
+		"ice": "Ice",
+		"shadow": "Shadow",
+		"black": "Black",
+		"white": "White",
+		"sky": "Sky",
+		"bloodmoon": "Bloodmoon",
+		"hearthflame": "Hearthflame",
+	}
+	for suffix: String in suffix_labels.keys():
+		if value.ends_with(suffix) and value.length() > suffix.length():
+			var base := value.substr(0, value.length() - suffix.length())
+			return "%s %s" % [base.capitalize(), suffix_labels[suffix]]
+	return value.capitalize()
+
+func _pvp_validation_slots_text(slots_value: Variant) -> String:
+	if not (slots_value is Array):
+		return ""
+	var labels: Array[String] = []
+	for slot_value: Variant in slots_value as Array:
+		var slot := int(slot_value)
+		if slot > 0:
+			labels.append("Slot %d" % slot)
+	return ", ".join(labels)
+
+func _refresh_pvp_ranked_team_validation(force: bool = false) -> void:
+	if pvp_team_validator_list == null:
+		return
+	if not _is_selected_pvp_queue_ranked():
+		pvp_ranked_team_validation_result = PvpRankedTeamValidation.not_ranked()
+		_refresh_pvp_team_validator()
+		return
+	if pvp_active_queue_id == "":
+		pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response({
+			"success": false,
+			"error": "No ranked queue is selected.",
+		})
+		_refresh_pvp_team_validator()
+		return
+	var party_signature := _pvp_current_party_signature()
+	if not force and pvp_ranked_team_validation_queue_id == pvp_active_queue_id and pvp_ranked_team_validation_party_signature == party_signature and str(pvp_ranked_team_validation_result.get("state", "")) != PvpRankedTeamValidation.STATE_NOT_CHECKED:
+		_refresh_pvp_team_validator()
+		return
+	if pvp_ranked_team_validation_in_flight:
+		if not force:
+			return
+		pvp_ranked_team_validation_request_seq += 1
+		pvp_ranked_team_validation_in_flight = false
+
+	pvp_ranked_team_validation_in_flight = true
+	pvp_ranked_team_validation_request_seq += 1
+	var request_seq := pvp_ranked_team_validation_request_seq
+	pvp_ranked_team_validation_queue_id = pvp_active_queue_id
+	pvp_ranked_team_validation_party_signature = party_signature
+	pvp_ranked_team_validation_result = PvpRankedTeamValidation.checking()
+	_refresh_pvp_team_validator()
+
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.validate_pvp_queue_team(request, pvp_active_queue_id)
+	request.queue_free()
+	if request_seq != pvp_ranked_team_validation_request_seq:
+		return
+	pvp_ranked_team_validation_in_flight = false
+	pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(response)
+	_refresh_pvp_team_validator()
+
+func _on_pvp_party_changed() -> void:
+	pvp_ranked_team_validation_request_seq += 1
+	pvp_ranked_team_validation_in_flight = false
+	pvp_ranked_team_validation_result = PvpRankedTeamValidation.not_checked()
+	pvp_ranked_team_validation_party_signature = ""
+	if pvp_room_popup != null and pvp_room_popup.visible and _is_selected_pvp_queue_ranked():
+		_refresh_pvp_team_validator()
+		_refresh_pvp_ranked_team_validation.call_deferred(true)
+
+func _is_selected_pvp_queue_ranked() -> bool:
+	return _get_pvp_queue_mode(pvp_active_queue_id) == "ranked"
+
+func _pvp_current_party_signature() -> String:
+	return PvpRankedTeamValidation.party_signature(PlayerSave.party)
+
+func _current_pvp_queue_status_for_buttons() -> String:
+	if pvp_active_queue_match_id != "":
+		return "matched"
+	if pvp_active_queue_entry_id != "":
+		return "waiting"
+	return "idle"
 
 func _pvp_team_species_clause_key(species: String) -> String:
 	var normalized: String = species.strip_edges().to_lower()
@@ -15320,6 +16410,9 @@ func _hide_pvp_room_popup() -> void:
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_list_in_flight = false
+	pvp_banlists_in_flight = false
+	pvp_banlists_loaded = false
+	pvp_banlists_result = PvpRankedBanlists.not_loaded()
 	pvp_leaderboard_in_flight = false
 	pvp_history_in_flight = false
 	pvp_room_dragging = false
@@ -15387,6 +16480,12 @@ func _on_pvp_join_room_pressed() -> void:
 func _on_pvp_join_queue_pressed() -> void:
 	if pvp_battle_starting:
 		return
+	if _is_selected_pvp_queue_ranked():
+		await _refresh_pvp_ranked_team_validation(true)
+		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
+			_set_pvp_queue_status("Queue Status: team validation failed.")
+			_refresh_pvp_team_validator()
+			return
 	_set_pvp_room_busy(true, "Joining queue...")
 	_set_pvp_queue_status("Queue Status: joining...")
 	var request := _create_pvp_request_node()
@@ -15400,6 +16499,10 @@ func _on_pvp_join_queue_pressed() -> void:
 
 	if not bool(response.get("success", false)):
 		_set_pvp_queue_status("Queue Status: join failed: %s" % str(response.get("error", "Unknown error")))
+		var validation_value: Variant = response.get("validation", {})
+		if validation_value is Dictionary:
+			pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(validation_value as Dictionary)
+			_refresh_pvp_team_validator()
 		return
 
 	var entry: Dictionary = _pvp_queue_entry_from_response(response)
@@ -15426,7 +16529,7 @@ func _refresh_pvp_queue_list() -> void:
 	if not bool(response.get("success", false)):
 		if pvp_available_queues.is_empty():
 			_populate_pvp_queue_select([
-				{"id": "casual_queue_v1", "name": "Casual Queue", "mode": "casual"},
+				{"id": "ranked_queue_v1", "name": "Ranked Queue", "mode": "ranked"},
 			])
 		return
 
@@ -15440,6 +16543,8 @@ func _refresh_pvp_queue_list() -> void:
 			continue
 		var queue: Dictionary = item as Dictionary
 		if str(queue.get("status", "")).strip_edges().to_lower() != "active":
+			continue
+		if str(queue.get("mode", "")).strip_edges().to_lower() != "ranked":
 			continue
 		var queue_id := str(queue.get("id", "")).strip_edges()
 		if queue_id == "":
@@ -15463,18 +16568,21 @@ func _populate_pvp_queue_select(queues: Array[Dictionary]) -> void:
 		var queue_name := str(queue.get("name", queue_id)).strip_edges()
 		var queue_mode := str(queue.get("mode", "")).strip_edges()
 		var label := queue_name
-		if queue_mode != "":
+		if queue_mode.to_lower() == "ranked":
+			label = _pvp_queue_format_name(queue)
+		elif queue_mode != "":
 			label = "%s (%s)" % [queue_name, queue_mode.capitalize()]
 		pvp_queue_select.add_item(label)
 		pvp_queue_select.set_item_metadata(pvp_queue_select.item_count - 1, queue_id)
 
 	if pvp_queue_select.item_count == 0:
-		pvp_queue_select.add_item("Casual Queue")
-		pvp_queue_select.set_item_metadata(0, "casual_queue_v1")
+		pvp_queue_select.add_item(PVP_RANKED_DEFAULT_FORMAT_NAME)
+		pvp_queue_select.set_item_metadata(0, "ranked_queue_v1")
 
 	if not _select_pvp_queue_by_id(pvp_active_queue_id):
 		pvp_active_queue_id = str(pvp_queue_select.get_item_metadata(0)).strip_edges()
 		pvp_queue_select.select(0)
+	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
 	_refresh_pvp_team_validator()
 
@@ -15500,17 +16608,300 @@ func _on_pvp_queue_selected(index: int) -> void:
 	var queue_id := str(pvp_queue_select.get_item_metadata(index)).strip_edges()
 	if queue_id == "":
 		return
+	var previous_format_key := pvp_active_format_key
 	pvp_active_queue_id = queue_id
+	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
+	if pvp_active_format_key != previous_format_key:
+		pvp_banlists_loaded = false
+		pvp_banlists_result = PvpRankedBanlists.not_loaded()
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
 	_set_pvp_queue_status("Queue Status: idle")
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_team_validator()
+	_refresh_pvp_ranked_team_validation.call_deferred(true)
+
+func _pvp_queue_by_id(queue_id: String) -> Dictionary:
+	var normalized_queue_id := queue_id.strip_edges()
+	for queue: Dictionary in pvp_available_queues:
+		if str(queue.get("id", "")).strip_edges() == normalized_queue_id:
+			return queue
+	return {}
+
+func _pvp_queue_format_key(queue: Dictionary) -> String:
+	var format_key := str(queue.get("formatKey", "")).strip_edges()
+	if format_key == "":
+		format_key = str(queue.get("formatId", "")).strip_edges()
+	return format_key if format_key != "" else PVP_RANKED_DEFAULT_FORMAT_KEY
+
+func _pvp_queue_format_name(queue: Dictionary) -> String:
+	var format_name := str(queue.get("formatName", "")).strip_edges()
+	return format_name if format_name != "" else PVP_RANKED_DEFAULT_FORMAT_NAME
+
+func _update_pvp_active_format_from_queue_id(queue_id: String) -> void:
+	var queue := _pvp_queue_by_id(queue_id)
+	if queue.is_empty():
+		pvp_active_format_key = PVP_RANKED_DEFAULT_FORMAT_KEY
+		pvp_active_format_name = PVP_RANKED_DEFAULT_FORMAT_NAME
+		return
+	pvp_active_format_key = _pvp_queue_format_key(queue)
+	pvp_active_format_name = _pvp_queue_format_name(queue)
+
+func _on_pvp_ranked_tab_changed(tab_index: int) -> void:
+	if pvp_ranked_tabs == null:
+		return
+	var tab := pvp_ranked_tabs.get_child(tab_index)
+	if tab == null or tab.name != "Bans":
+		return
+	_refresh_pvp_banlists.call_deferred(false)
+
+func _on_pvp_bans_refresh_pressed() -> void:
+	await _refresh_pvp_banlists(true)
+
+func _refresh_pvp_banlists(force: bool = false) -> void:
+	if pvp_banlists_in_flight:
+		return
+	if pvp_banlists_loaded and not force:
+		_render_pvp_banlists()
+		return
+	pvp_banlists_in_flight = true
+	pvp_banlists_result = PvpRankedBanlists.loading()
+	_render_pvp_banlists()
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_pvp_ranked_banlists(request, pvp_active_format_key)
+	request.queue_free()
+	pvp_banlists_in_flight = false
+	pvp_banlists_result = PvpRankedBanlists.normalize_response(response)
+	pvp_banlists_loaded = PvpRankedBanlists.is_ready(pvp_banlists_result)
+	_render_pvp_banlists()
+
+func _render_pvp_banlists() -> void:
+	if pvp_bans_status_label != null:
+		pvp_bans_status_label.text = PvpRankedBanlists.display_message(pvp_banlists_result)
+		var state := str(pvp_banlists_result.get("state", "")).strip_edges()
+		var color := UI_MUTED_TEXT
+		if state == PvpRankedBanlists.STATE_READY:
+			color = UI_TEXT
+		elif state == PvpRankedBanlists.STATE_ERROR:
+			color = Color("#ff7979")
+		pvp_bans_status_label.add_theme_color_override("font_color", color)
+	if pvp_bans_refresh_button != null:
+		pvp_bans_refresh_button.disabled = pvp_banlists_in_flight
+	_render_pvp_banlist_metadata()
+	_render_pvp_banlist_categories()
+
+func _render_pvp_banlist_metadata() -> void:
+	if pvp_bans_metadata_list == null:
+		return
+	for child in pvp_bans_metadata_list.get_children():
+		child.queue_free()
+	var metadata_value: Variant = pvp_banlists_result.get("metadata", {})
+	var metadata: Dictionary = metadata_value as Dictionary if metadata_value is Dictionary else {}
+	pvp_bans_metadata_list.add_child(_create_pvp_banlist_metadata_panel(metadata))
+
+func _create_pvp_banlist_metadata_panel(metadata: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#111926bb"), Color("#506982aa"), 4, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 8)
+	margin.add_child(grid)
+
+	grid.add_child(_create_pvp_banlist_metadata_field("Format", _pvp_banlist_metadata_value(metadata, "formatName", _pvp_banlist_metadata_value(metadata, "formatId", "Unknown"))))
+	grid.add_child(_create_pvp_banlist_metadata_field("Last Updated", _pvp_banlist_updated_label(_pvp_banlist_metadata_value(metadata, "updatedAt", ""))))
+	return panel
+
+func _create_pvp_banlist_metadata_field(title_text: String, body_text: String) -> Control:
+	var layout := VBoxContainer.new()
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 2)
+
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_color_override("font_color", Color("#cfe8ff"))
+	layout.add_child(title)
+
+	var body := Label.new()
+	body.text = body_text
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(body)
+	return layout
+
+func _render_pvp_banlist_categories() -> void:
+	if pvp_bans_list == null:
+		return
+	for child in pvp_bans_list.get_children():
+		child.queue_free()
+	var state := str(pvp_banlists_result.get("state", "")).strip_edges()
+	if state == PvpRankedBanlists.STATE_LOADING:
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Loading..."))
+		return
+	if state == PvpRankedBanlists.STATE_ERROR:
+		pvp_bans_list.add_child(_create_pvp_banlist_state_label("Failed to load banlists."))
+		return
+	for category_value: String in PvpRankedBanlists.CATEGORIES:
+		pvp_bans_list.add_child(_create_pvp_banlist_category_panel(category_value))
+
+func _create_pvp_banlist_category_panel(category: String) -> Control:
+	if not pvp_banlist_category_open.has(category):
+		pvp_banlist_category_open[category] = false
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f88"), 4, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	var bans := PvpRankedBanlists.category_bans(pvp_banlists_result, category)
+	var is_open := bool(pvp_banlist_category_open.get(category, true))
+
+	var header_button := Button.new()
+	header_button.text = "%s %s (%d)" % ["v" if is_open else ">", PvpRankedBanlists.category_label(category), bans.size()]
+	header_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	header_button.focus_mode = Control.FOCUS_NONE
+	header_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_button.pressed.connect(_on_pvp_banlist_category_toggled.bind(category))
+	_apply_button_style(header_button)
+	layout.add_child(header_button)
+
+	if not is_open:
+		return panel
+
+	var search_input := LineEdit.new()
+	search_input.placeholder_text = "Search %s bans" % PvpRankedBanlists.category_label(category)
+	search_input.text = str(pvp_banlist_category_search.get(category, ""))
+	search_input.clear_button_enabled = true
+	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_line_edit_style(search_input)
+	layout.add_child(search_input)
+
+	var items_list := VBoxContainer.new()
+	items_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	items_list.add_theme_constant_override("separation", 5)
+	layout.add_child(items_list)
+	search_input.text_changed.connect(_on_pvp_banlist_search_changed.bind(category, items_list))
+	_populate_pvp_banlist_category_items(category, items_list)
+	return panel
+
+func _populate_pvp_banlist_category_items(category: String, items_list: VBoxContainer) -> void:
+	for child in items_list.get_children():
+		child.queue_free()
+	var bans := PvpRankedBanlists.category_bans(pvp_banlists_result, category)
+	if bans.is_empty():
+		items_list.add_child(_create_pvp_banlist_state_label(PvpRankedBanlists.empty_message(category)))
+		return
+	var query := str(pvp_banlist_category_search.get(category, "")).strip_edges().to_lower()
+	var matches := 0
+	for ban: Dictionary in bans:
+		if not _pvp_ban_matches_search(ban, query):
+			continue
+		matches += 1
+		var label := Label.new()
+		label.text = str(ban.get("label", ban.get("id", ""))).strip_edges()
+		label.add_theme_color_override("font_color", UI_TEXT)
+		items_list.add_child(label)
+	if matches == 0:
+		items_list.add_child(_create_pvp_banlist_state_label("No matching bans."))
+
+func _pvp_ban_matches_search(ban: Dictionary, query: String) -> bool:
+	if query == "":
+		return true
+	var label := str(ban.get("label", "")).strip_edges().to_lower()
+	var id := str(ban.get("id", "")).strip_edges().to_lower()
+	return label.find(query) >= 0 or id.find(query) >= 0
+
+func _on_pvp_banlist_category_toggled(category: String) -> void:
+	pvp_banlist_category_open[category] = not bool(pvp_banlist_category_open.get(category, true))
+	_render_pvp_banlist_categories()
+
+func _on_pvp_banlist_search_changed(text: String, category: String, items_list: VBoxContainer) -> void:
+	pvp_banlist_category_search[category] = text
+	_populate_pvp_banlist_category_items(category, items_list)
+
+func _create_pvp_banlist_state_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	return label
+
+func _pvp_banlist_metadata_value(metadata: Dictionary, key: String, fallback: String) -> String:
+	var value := str(metadata.get(key, "")).strip_edges()
+	return value if value != "" else fallback
+
+func _pvp_banlist_updated_label(value: String) -> String:
+	var cleaned := value.strip_edges()
+	if cleaned == "":
+		return "Not updated"
+	var without_zone := cleaned.trim_suffix("Z")
+	var dot_index := without_zone.find(".")
+	if dot_index >= 0:
+		without_zone = without_zone.substr(0, dot_index)
+	var parts := without_zone.split("T")
+	if parts.size() != 2:
+		return without_zone.replace("T", " ") + " UTC"
+	var date_parts := String(parts[0]).split("-")
+	var time_parts := String(parts[1]).split(":")
+	if date_parts.size() != 3 or time_parts.size() < 2:
+		return without_zone.replace("T", " ") + " UTC"
+	var year: int = int(date_parts[0])
+	var month: int = int(date_parts[1])
+	var day: int = int(date_parts[2])
+	var hour: int = int(time_parts[0])
+	var minute: int = int(time_parts[1])
+	var month_names: Array[String] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+	var month_label: String = month_names[month - 1] if month >= 1 and month <= 12 else String(parts[0])
+	return "%s %d, %d, %02d:%02d UTC" % [month_label, day, year, hour, minute]
 
 func _on_pvp_history_refresh_pressed() -> void:
 	await _refresh_pvp_match_history()
 
 func _on_pvp_leaderboard_refresh_pressed() -> void:
 	await _refresh_pvp_leaderboard()
+
+func _render_pvp_live_battles(entries: Array) -> void:
+	if pvp_live_list == null:
+		return
+	for child in pvp_live_list.get_children():
+		child.queue_free()
+	if pvp_live_status_label != null:
+		pvp_live_status_label.text = "Live ranked battles"
+	if entries.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "No live ranked battles."
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		pvp_live_list.add_child(empty_label)
+		return
+
+func _on_pvp_leaderboard_scope_selected(index: int) -> void:
+	if pvp_leaderboard_scope_select == null:
+		return
+	if index < 0 or index >= pvp_leaderboard_scope_select.item_count:
+		return
+	var scope := str(pvp_leaderboard_scope_select.get_item_metadata(index)).strip_edges()
+	if scope == "":
+		return
+	pvp_active_leaderboard_scope = scope
+	_refresh_pvp_leaderboard.call_deferred()
 
 func _refresh_pvp_leaderboard() -> void:
 	if pvp_leaderboard_in_flight:
@@ -15519,9 +16910,9 @@ func _refresh_pvp_leaderboard() -> void:
 	if pvp_leaderboard_refresh_button != null:
 		pvp_leaderboard_refresh_button.disabled = true
 	if pvp_leaderboard_status_label != null:
-		pvp_leaderboard_status_label.text = "Loading ranked points..."
+		pvp_leaderboard_status_label.text = "Loading %s leaderboard..." % _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope).to_lower()
 	var request := _create_pvp_request_node()
-	var response: Dictionary = await BattleApiClient.get_pvp_leaderboard(request, 50, 0)
+	var response: Dictionary = await BattleApiClient.get_pvp_leaderboard(request, 50, 0, pvp_active_format_key, pvp_active_leaderboard_scope)
 	request.queue_free()
 	pvp_leaderboard_in_flight = false
 	if pvp_leaderboard_refresh_button != null:
@@ -15536,8 +16927,23 @@ func _refresh_pvp_leaderboard() -> void:
 	var entries_value: Variant = response.get("entries", [])
 	var entries: Array = entries_value as Array if entries_value is Array else []
 	if pvp_leaderboard_status_label != null:
-		pvp_leaderboard_status_label.text = "Ranked points: Win +10, Loss -10"
+		var scope_label := str(response.get("scopeLabel", _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope))).strip_edges()
+		pvp_leaderboard_status_label.text = "%s ranked points: Win +10, Loss -10" % scope_label
 	_render_pvp_leaderboard(entries)
+
+func _pvp_leaderboard_scope_index(scope: String) -> int:
+	var normalized_scope := scope.strip_edges()
+	for index in range(PVP_LEADERBOARD_SCOPES.size()):
+		if str(PVP_LEADERBOARD_SCOPES[index].get("id", "")).strip_edges() == normalized_scope:
+			return index
+	return 3
+
+func _pvp_leaderboard_scope_label(scope: String) -> String:
+	var normalized_scope := scope.strip_edges()
+	for entry: Dictionary in PVP_LEADERBOARD_SCOPES:
+		if str(entry.get("id", "")).strip_edges() == normalized_scope:
+			return str(entry.get("label", "All Time"))
+	return "All Time"
 
 func _render_pvp_leaderboard(entries: Array) -> void:
 	if pvp_leaderboard_list == null:
@@ -15628,7 +17034,7 @@ func _refresh_pvp_match_history() -> void:
 	if pvp_history_status_label != null:
 		pvp_history_status_label.text = "Loading recent matches..."
 	var request := _create_pvp_request_node()
-	var response: Dictionary = await BattleApiClient.get_pvp_match_history(request, 20, 0)
+	var response: Dictionary = await BattleApiClient.get_pvp_match_history(request, 20, 0, pvp_active_format_key)
 	request.queue_free()
 	pvp_history_in_flight = false
 	if pvp_history_refresh_button != null:
@@ -16224,8 +17630,9 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 	pvp_active_queue_id = str(entry.get("queueId", pvp_active_queue_id)).strip_edges()
 	pvp_active_queue_match_id = str(entry.get("matchId", "")).strip_edges()
 	if pvp_active_queue_id == "":
-		pvp_active_queue_id = "casual_queue_v1"
+		pvp_active_queue_id = "ranked_queue_v1"
 	_select_pvp_queue_by_id(pvp_active_queue_id)
+	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
 	_refresh_pvp_team_validator()
 
@@ -16244,7 +17651,8 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 	if pvp_join_queue_button == null or pvp_leave_queue_button == null:
 		return
 	var normalized_status := status.strip_edges().to_lower()
-	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
+	var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
+	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched" or ranked_blocked
 	pvp_leave_queue_button.disabled = pvp_battle_starting or normalized_status != "waiting"
 	if pvp_queue_select != null:
 		pvp_queue_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
@@ -16374,7 +17782,8 @@ func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 	pvp_create_room_button.disabled = is_busy
 	pvp_join_room_button.disabled = is_busy
 	if pvp_join_queue_button != null:
-		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != ""
+		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
+		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
 	if pvp_leave_queue_button != null:
 		pvp_leave_queue_button.disabled = is_busy or pvp_active_queue_entry_id == "" or pvp_active_queue_match_id != ""
 	if pvp_queue_select != null:
@@ -16562,6 +17971,119 @@ func _on_realtime_mail_received(mail_id: int) -> void:
 	else:
 		await _refresh_mail_attention_from_inbox()
 
+func _on_private_message_received(message: Dictionary) -> void:
+	var sender: Dictionary = _dictionary_from_value(message.get("sender", {}))
+	var sender_key: int = _pm_conversation_key_from_user(sender)
+	if sender_key == 0:
+		return
+
+	_ensure_pm_conversation(sender)
+	var active_sender_key: int = _existing_pm_conversation_key_for_user(sender)
+	if active_sender_key != 0:
+		sender_key = active_sender_key
+	_append_pm_message(sender_key, {
+		"outgoing": false,
+		"body": str(message.get("body", "")),
+		"pokemonAttachments": _get_chat_pokemon_attachments(message),
+		"sentAt": str(message.get("sentAt", "")),
+		"username": str(sender.get("username", "")),
+		"displayName": str(sender.get("displayName", sender.get("username", "Trainer"))),
+	})
+
+	var conversation_active: bool = active_chat_tab == CHAT_TAB_PM and active_pm_user_id == sender_key
+	if not conversation_active:
+		pm_unread_counts_by_user_id[sender_key] = int(pm_unread_counts_by_user_id.get(sender_key, 0)) + 1
+		_recalculate_pm_total_unread()
+	else:
+		_clear_pm_unread(sender_key)
+
+	_render_pm_conversation_list()
+	if active_chat_tab == CHAT_TAB_PM:
+		_render_active_pm_conversation()
+	_refresh_pm_tab_label()
+
+
+func _append_pm_message(user_id: int, message: Dictionary) -> void:
+	if user_id == 0:
+		return
+	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
+	if conversation.is_empty():
+		return
+	var messages: Array = _array_from_variant(conversation.get("messages", []))
+	messages.append(message)
+	conversation["messages"] = messages
+	pm_conversations_by_user_id[user_id] = conversation
+
+
+func _user_id_from_state(user: Dictionary) -> int:
+	for key: String in ["userId", "id", "user_id"]:
+		var value: Variant = user.get(key, 0)
+		var text := str(value).strip_edges()
+		if text.is_valid_int():
+			return int(text)
+	return 0
+
+
+func _pm_conversation_key_from_user(user: Dictionary) -> int:
+	var user_id: int = _user_id_from_state(user)
+	if user_id > 0:
+		return user_id
+
+	var username := _pm_username_from_user(user)
+	if username == "":
+		return 0
+
+	var hash_value := 0
+	for index in range(username.length()):
+		hash_value = int((hash_value * 31 + username.unicode_at(index)) & 0x7fffffff)
+	return -max(hash_value, 1)
+
+
+func _existing_pm_conversation_key_for_user(user: Dictionary) -> int:
+	var username := _pm_username_from_user(user)
+	if username == "":
+		return 0
+
+	for conversation_key_value: Variant in pm_conversations_by_user_id.keys():
+		var conversation_key := int(conversation_key_value)
+		var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(conversation_key, {}))
+		var conversation_user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
+		if _pm_username_from_user(conversation_user) == username:
+			return conversation_key
+	return 0
+
+
+func _pm_username_from_user(user: Dictionary) -> String:
+	return str(user.get("username", "")).strip_edges().to_lower()
+
+
+func _normalize_pm_user(user: Dictionary) -> Dictionary:
+	var user_id: int = _user_id_from_state(user)
+	return {
+		"userId": user_id,
+		"id": user_id,
+		"username": str(user.get("username", "")).strip_edges(),
+		"displayName": str(user.get("displayName", user.get("username", ""))).strip_edges(),
+	}
+
+
+func _merge_pm_user(existing: Dictionary, user: Dictionary) -> Dictionary:
+	var merged := existing.duplicate(true)
+	var normalized := _normalize_pm_user(user)
+	for key: String in normalized.keys():
+		var value: Variant = normalized.get(key)
+		if key in ["userId", "id"]:
+			if int(value) > 0:
+				merged[key] = value
+			elif not merged.has(key):
+				merged[key] = value
+			continue
+		if str(value).strip_edges() != "":
+			merged[key] = value
+		elif not merged.has(key):
+			merged[key] = value
+	return merged
+
 
 func _add_user_chat_message(user: Dictionary, display_name: String, text: String, channel: String = CHAT_CHANNEL_GLOBAL, pokemon_attachments: Array[Dictionary] = []) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
@@ -16572,7 +18094,11 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	row.add_theme_constant_override("separation", 4)
-	var chat_category: String = CHAT_CHANNEL_TRADE if channel == CHAT_CHANNEL_TRADE else CHAT_CHANNEL_GLOBAL
+	var chat_category: String = CHAT_CHANNEL_GLOBAL
+	if channel == CHAT_CHANNEL_TRADE:
+		chat_category = CHAT_CHANNEL_TRADE
+	elif channel == CHAT_CHANNEL_HELP:
+		chat_category = CHAT_CHANNEL_HELP
 	row.set_meta("chat_category", chat_category)
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
@@ -16673,6 +18199,8 @@ func _should_show_chat_category(category: String) -> bool:
 		return category == CHAT_CHANNEL_GLOBAL or category == CHAT_CATEGORY_USER
 	if active_chat_tab == CHAT_TAB_TRADE:
 		return category == CHAT_CHANNEL_TRADE
+	if active_chat_tab == CHAT_TAB_HELP:
+		return category == CHAT_CHANNEL_HELP
 	return false
 
 

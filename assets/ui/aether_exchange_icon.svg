@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Aether Exchange icon">
+  <defs>
+    <linearGradient id="aetherBlue" x1="170" y1="220" x2="460" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22d8ff"/>
+      <stop offset="1" stop-color="#008ed6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Transparent background by design -->
+
+  <!-- White right exchange arrow -->
+  <path d="M470 178
+           H760
+           L960 512
+           L760 846
+           H470
+           L610 674
+           H408
+           L312 512
+           L408 350
+           H610
+           Z"
+        fill="#ffffff"
+        stroke="#1f1a17"
+        stroke-width="42"
+        stroke-linejoin="miter"/>
+
+  <!-- Blue left exchange arrow -->
+  <path d="M554 178
+           H264
+           L64 512
+           L264 846
+           H554
+           L414 674
+           H616
+           L712 512
+           L616 350
+           H414
+           Z"
+        fill="url(#aetherBlue)"
+        stroke="#1f1a17"
+        stroke-width="42"
+        stroke-linejoin="miter"/>
+
+  <!-- Aether swoosh -->
+  <path d="M170 574
+           C250 650 355 698 492 704
+           C396 668 306 612 244 528
+           C216 490 195 444 186 392
+           C155 448 146 513 170 574Z"
+        fill="#006fa9"
+        opacity="0.75"/>
+
+  <!-- Sparkles -->
+  <path d="M300 318 L326 374 L382 400 L326 426 L300 482 L274 426 L218 400 L274 374 Z"
+        fill="#ffffff"/>
+  <path d="M420 410 L436 444 L470 460 L436 476 L420 510 L404 476 L370 460 L404 444 Z"
+        fill="#ffffff"/>
+
+  <!-- Center emblem -->
+  <circle cx="512" cy="512" r="98" fill="#1f1a17"/>
+  <circle cx="512" cy="512" r="70" fill="#ffffff"/>
+  <path d="M442 512 H582" stroke="#1f1a17" stroke-width="22" stroke-linecap="butt"/>
+  <circle cx="512" cy="512" r="40" fill="#ffffff" stroke="#1f1a17" stroke-width="12"/>
+</svg>

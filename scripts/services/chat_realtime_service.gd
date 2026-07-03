@@ -3,7 +3,9 @@ extends Node
 class_name ChatRealtimeServiceNode
 
 signal message_received(message: Dictionary)
+signal private_message_received(message: Dictionary)
 signal mail_received(mail_id: int)
+signal friend_request_received(request: Dictionary)
 signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
 
@@ -159,10 +161,16 @@ func _process_packets() -> void:
 
 		var message: Dictionary = parsed_body
 		var message_type: String = str(message.get("type", "")).to_lower().strip_edges()
+		if message_type == "private_message.received":
+			private_message_received.emit(message)
+			continue
 		if message_type == "mail.received":
 			var mail_id: int = int(message.get("mailId", message.get("mail_id", -1)))
 			if mail_id > 0:
 				mail_received.emit(mail_id)
+			continue
+		if message_type == "friend_request.received":
+			friend_request_received.emit(_dictionary_from_value(message.get("request", {})))
 			continue
 		message_received.emit(message)
 
@@ -173,3 +181,10 @@ func _to_websocket_url(base_url: String) -> String:
 	if base_url.begins_with("http://"):
 		return "ws://" + base_url.trim_prefix("http://").rstrip("/")
 	return base_url.rstrip("/")
+
+
+func _dictionary_from_value(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY:
+		return {}
+	var dictionary: Dictionary = value
+	return dictionary

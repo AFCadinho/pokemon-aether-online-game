@@ -29,6 +29,7 @@ const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const ACCOUNT_DIALOG_STATUS_HEIGHT := 30.0
 const LOGOUT_CONFIRM_SIZE := Vector2(360, 154)
+const LOGOUT_CONFIRM_Z_INDEX := 2200
 
 @onready var settings_layout: VBoxContainer = $MarginContainer/VBoxContainer
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
@@ -275,7 +276,7 @@ func _setup_logout_confirm_dialog() -> void:
 	logout_confirm_dialog.top_level = true
 	logout_confirm_dialog.z_as_relative = false
 	logout_confirm_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
-	logout_confirm_dialog.z_index = 20
+	logout_confirm_dialog.z_index = LOGOUT_CONFIRM_Z_INDEX
 	logout_confirm_dialog.custom_minimum_size = LOGOUT_CONFIRM_SIZE
 	logout_confirm_dialog.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	add_child(logout_confirm_dialog)
@@ -733,6 +734,7 @@ func _show_logout_confirm_dialog() -> void:
 	if logout_confirm_dialog != null:
 		_position_logout_confirm_dialog()
 		logout_confirm_dialog.visible = true
+		logout_confirm_dialog.z_index = LOGOUT_CONFIRM_Z_INDEX
 		logout_confirm_dialog.move_to_front()
 	if logout_confirm_return_button != null:
 		logout_confirm_return_button.grab_focus()
