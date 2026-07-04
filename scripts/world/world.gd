@@ -28,6 +28,9 @@ var unflushed_playtime_seconds := 0
 var is_flushing_playtime := false
 var is_saving_player_position := false
 var has_pending_player_position_save := false
+var authorized_teleport_in_progress := false
+var authorized_teleport_locked_overworld := false
+var authorized_teleport_apply_failed_autosave_blocked := false
 var last_saved_position_signature := ""
 var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
@@ -65,7 +68,8 @@ func _process(delta: float) -> void:
 	position_autosave_elapsed += delta
 	if position_autosave_elapsed >= POSITION_AUTOSAVE_INTERVAL_SECONDS:
 		position_autosave_elapsed = 0.0
-		await _save_current_player_position_if_changed(true)
+		if not _is_player_position_save_blocked_by_teleport():
+			await _save_current_player_position_if_changed(true)
 
 
 func _notification(what: int) -> void:
@@ -79,6 +83,11 @@ func save_current_player_state() -> void:
 	_publish_world_presence.call_deferred(true)
 
 func save_current_player_state_now() -> Dictionary:
+	if _is_player_position_save_blocked_by_teleport():
+		return {
+			"success": false,
+			"error": _get_player_position_save_block_reason(),
+		}
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -93,12 +102,157 @@ func save_current_player_state_now() -> Dictionary:
 	while is_saving_player_position:
 		await get_tree().process_frame
 
+	if _is_player_position_save_blocked_by_teleport():
+		return {
+			"success": false,
+			"error": _get_player_position_save_block_reason(),
+		}
+
 	var signature: String = _get_current_player_position_signature(false)
 	var result: Dictionary = await _save_current_player_position(signature, "", false, true)
 	if bool(result.get("success", false)):
 		_publish_world_presence(true)
 	_flush_playtime_if_needed.call_deferred(true)
 	return result
+
+
+func begin_authorized_teleport() -> Dictionary:
+	var block_reason := get_authorized_teleport_block_reason()
+	if block_reason != "":
+		return {
+			"success": false,
+			"error": block_reason,
+		}
+	authorized_teleport_in_progress = true
+	has_pending_player_position_save = false
+	GameState.lock_overworld_input()
+	authorized_teleport_locked_overworld = true
+	while is_saving_player_position:
+		await get_tree().process_frame
+	block_reason = _get_authorized_teleport_block_reason(true)
+	if block_reason != "":
+		cancel_authorized_teleport()
+		return {
+			"success": false,
+			"error": block_reason,
+		}
+	return {"success": true}
+
+
+func cancel_authorized_teleport() -> void:
+	authorized_teleport_in_progress = false
+	if authorized_teleport_locked_overworld:
+		GameState.unlock_overworld_input()
+	authorized_teleport_locked_overworld = false
+
+
+func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	authorized_teleport_in_progress = true
+	if player == null:
+		_mark_authorized_teleport_apply_failed()
+		return {
+			"success": false,
+			"error": "World player is not ready.",
+		}
+
+	var target_scene_path := str(state.get("mapScenePath", "")).strip_edges()
+	if target_scene_path == "":
+		_mark_authorized_teleport_apply_failed()
+		return {
+			"success": false,
+			"error": "Teleport response is missing a map scene path.",
+		}
+
+	if not authorized_teleport_locked_overworld:
+		GameState.lock_overworld_input()
+		authorized_teleport_locked_overworld = true
+	is_loading_map = true
+	_clear_remote_players()
+
+	var current_scene_path := _get_map_scene_path(GameState.current_map)
+	var target_map: Node = GameState.current_map
+	if current_scene_path != target_scene_path:
+		target_map = _instantiate_map(target_scene_path)
+		if target_map == null:
+			_mark_authorized_teleport_apply_failed()
+			return {
+				"success": false,
+				"error": "Could not load teleport map: %s" % target_scene_path,
+			}
+		_clear_current_map()
+		$CurrentMap.add_child(target_map)
+		GameState.current_map = target_map
+		_normalize_map_tree_layer_z_indices(target_map)
+		MusicManager.play_map_music(target_map)
+
+	move_player_to_map(target_map)
+	if player.has_method("reset_movement_state"):
+		player.call("reset_movement_state")
+	_position_player_at_saved_state(target_map, state)
+	_apply_camera_limits_for_map(target_map)
+
+	await get_tree().physics_frame
+	is_loading_map = false
+	last_saved_position_signature = _get_current_player_position_signature(true)
+	last_presence_position_signature = ""
+	has_pending_player_position_save = false
+	_publish_world_presence(true)
+	authorized_teleport_apply_failed_autosave_blocked = false
+	authorized_teleport_in_progress = false
+	if authorized_teleport_locked_overworld:
+		GameState.unlock_overworld_input()
+	authorized_teleport_locked_overworld = false
+	return {"success": true}
+
+
+func get_authorized_teleport_block_reason() -> String:
+	return _get_authorized_teleport_block_reason(false)
+
+
+func _get_authorized_teleport_block_reason(ignore_teleport_in_progress := false) -> String:
+	if authorized_teleport_in_progress and not ignore_teleport_in_progress:
+		return "Another teleport is already in progress."
+	if authorized_teleport_apply_failed_autosave_blocked:
+		return "A previous teleport was saved by the server but did not finish locally. Reload before saving or teleporting again."
+	if is_loading_map:
+		return "A map transition is already in progress."
+	if is_in_battle:
+		return "Cannot teleport during battle."
+	if player == null or GameState.current_map == null:
+		return "World is not ready."
+	if GameState.input_locked:
+		return "Cannot teleport while dialogue or a global input lock is active."
+	if GameState.overworld_input_locked and not ignore_teleport_in_progress:
+		return "Cannot teleport while overworld movement is locked."
+	if GameState.ui_input_locked:
+		return "Cannot teleport while a menu lock is active."
+	if player.has_method("is_tile_moving") and bool(player.call("is_tile_moving")):
+		return "Cannot teleport while moving."
+	if bool(player.get("route_gate_interaction_in_progress")):
+		return "Cannot teleport during a route transition."
+	if bool(player.get("fishing_activity_active")) or bool(player.get("surf_activity_active")):
+		return "Cannot teleport during an overworld activity."
+	return ""
+
+
+func _mark_authorized_teleport_apply_failed() -> void:
+	is_loading_map = false
+	authorized_teleport_in_progress = false
+	authorized_teleport_apply_failed_autosave_blocked = true
+	has_pending_player_position_save = false
+	if authorized_teleport_locked_overworld:
+		GameState.unlock_overworld_input()
+	authorized_teleport_locked_overworld = false
+
+
+func _is_player_position_save_blocked_by_teleport() -> bool:
+	return authorized_teleport_in_progress or authorized_teleport_apply_failed_autosave_blocked
+
+
+func _get_player_position_save_block_reason() -> String:
+	if authorized_teleport_apply_failed_autosave_blocked:
+		return "A server-authorized teleport did not finish locally; position autosave is blocked to protect the new server position."
+	return "Authorized teleport is in progress."
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
@@ -546,6 +700,8 @@ func _on_world_presence_player_left_received(user_id: int) -> void:
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
 	if not AuthService.is_authenticated() or player == null:
 		return
+	if _is_player_position_save_blocked_by_teleport():
+		return
 	if is_saving_player_position:
 		has_pending_player_position_save = true
 		return
@@ -563,8 +719,25 @@ func _save_current_player_position(
 	use_confirmed_appearance: bool = false,
 	mark_current_appearance_confirmed: bool = false
 ) -> Dictionary:
+	if _is_player_position_save_blocked_by_teleport():
+		return {
+			"success": false,
+			"error": _get_player_position_save_block_reason(),
+		}
 	is_saving_player_position = true
+	if _is_player_position_save_blocked_by_teleport():
+		is_saving_player_position = false
+		return {
+			"success": false,
+			"error": _get_player_position_save_block_reason(),
+		}
 	var state: Dictionary = _build_current_player_position_state(spawn_marker, use_confirmed_appearance)
+	if _is_player_position_save_blocked_by_teleport():
+		is_saving_player_position = false
+		return {
+			"success": false,
+			"error": _get_player_position_save_block_reason(),
+		}
 	var result: Dictionary = await PlayerGameStateService.save_player_position(state)
 	if bool(result.get("success", false)):
 		last_saved_position_signature = signature

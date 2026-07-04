@@ -37,6 +37,7 @@ const CHAT_CHANNEL_HELP := "help"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
+const WORLD_TELEPORT_SELF_PERMISSION := "world:teleport:self"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
 const STAFF_ROLE_IDS := ["staff", "admin", "owner", "developer", "moderator", "gamemaster"]
@@ -499,9 +500,18 @@ var pvp_room_dragging := false
 var pvp_room_drag_offset := Vector2.ZERO
 var staff_tools_popup: PanelContainer
 var staff_impersonate_button: Button
+var staff_teleport_button: Button
 var staff_impersonate_popup: PanelContainer
 var staff_impersonate_token_input: LineEdit
 var staff_impersonate_confirm_button: Button
+var staff_teleport_popup: PanelContainer
+var staff_teleport_map_select: OptionButton
+var staff_teleport_point_select: OptionButton
+var staff_teleport_reason_input: LineEdit
+var staff_teleport_confirm_button: Button
+var staff_teleport_maps: Array = []
+var staff_teleport_points_loading := false
+var staff_teleport_in_flight := false
 var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
 var pending_chat_pokemon_attachments: Array[Dictionary] = []
@@ -889,6 +899,9 @@ func _can_show_staff_action_bar() -> bool:
 func _can_impersonate_accounts() -> bool:
 	return _has_user_permission(IMPERSONATE_PERMISSION)
 
+func _can_teleport_self() -> bool:
+	return _has_user_permission(WORLD_TELEPORT_SELF_PERMISSION)
+
 func _current_player_has_staff_role() -> bool:
 	var roles_value: Variant = AuthService.current_user.get("roles", [])
 	if not roles_value is Array:
@@ -921,10 +934,12 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_impersonate: bool = _can_impersonate_accounts()
+	var can_teleport: bool = _can_teleport_self()
 	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
 	var can_open_content_creator_menu: bool = can_use_content_creator_tools or can_use_content_creator_generation
-	var has_visible_staff_action: bool = can_impersonate or can_use_dev_tools or can_open_content_creator_menu
+	var has_staff_tool: bool = can_impersonate or can_teleport
+	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_open_content_creator_menu
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
 		content_creator_tools_slot.visible = can_show_staff_action_bar and can_open_content_creator_menu
@@ -941,10 +956,10 @@ func _refresh_dev_tools_visibility() -> void:
 	dev_actions_button.visible = can_show_staff_action_bar and can_use_dev_tools
 	dev_actions_button.disabled = not can_use_dev_tools
 	if staff_tools_slot != null:
-		staff_tools_slot.visible = can_show_staff_action_bar and can_impersonate
+		staff_tools_slot.visible = has_staff_tool
 	if staff_tools_button != null:
-		staff_tools_button.visible = can_show_staff_action_bar and can_impersonate
-		staff_tools_button.disabled = not can_impersonate
+		staff_tools_button.visible = has_staff_tool
+		staff_tools_button.disabled = not has_staff_tool
 	dev_add_pokemon_button.visible = can_use_dev_tools
 	dev_add_pokemon_button.disabled = not can_use_dev_tools
 	dev_add_team_button.disabled = true
@@ -971,11 +986,17 @@ func _refresh_dev_tools_visibility() -> void:
 	if staff_impersonate_button != null:
 		staff_impersonate_button.visible = can_impersonate
 		staff_impersonate_button.disabled = not can_impersonate
-	if not can_impersonate:
+	if staff_teleport_button != null:
+		staff_teleport_button.visible = can_teleport
+		staff_teleport_button.disabled = not can_teleport
+	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
+	if not can_impersonate:
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
+	if not can_teleport and staff_teleport_popup != null:
+		staff_teleport_popup.visible = false
 	if not can_use_dev_tools:
 		dev_actions_popup.visible = false
 		if dev_pokemon_popup_mode != DevPokemonPopupMode.CONTENT_CREATOR:
@@ -1199,6 +1220,7 @@ func _apply_ui_z_index_policy() -> void:
 		dev_add_menu_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
+		staff_teleport_popup,
 		item_dex_popup,
 		pokedex_popup,
 		settings_menu,
@@ -1248,6 +1270,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		dev_add_menu_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
+		staff_teleport_popup,
 		item_dex_popup,
 		pokedex_popup,
 		settings_menu,
@@ -4084,17 +4107,17 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_popup = PanelContainer.new()
 	staff_tools_popup.name = "StaffToolsPopup"
 	staff_tools_popup.visible = false
-	staff_tools_popup.custom_minimum_size = Vector2(230, 128)
+	staff_tools_popup.custom_minimum_size = Vector2(250, 170)
 	staff_tools_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	staff_tools_popup.z_index = UI_BASE_Z_INDEX
 	staff_tools_popup.anchor_left = 0.5
 	staff_tools_popup.anchor_top = 0.5
 	staff_tools_popup.anchor_right = 0.5
 	staff_tools_popup.anchor_bottom = 0.5
-	staff_tools_popup.offset_left = -115
-	staff_tools_popup.offset_top = -64
-	staff_tools_popup.offset_right = 115
-	staff_tools_popup.offset_bottom = 64
+	staff_tools_popup.offset_left = -125
+	staff_tools_popup.offset_top = -85
+	staff_tools_popup.offset_right = 125
+	staff_tools_popup.offset_bottom = 85
 	staff_tools_popup.add_theme_stylebox_override("panel", _make_glass_panel_style(10, 1))
 	root_control.add_child(staff_tools_popup)
 
@@ -4122,6 +4145,13 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_impersonate_button.focus_mode = Control.FOCUS_NONE
 	staff_impersonate_button.pressed.connect(_on_staff_impersonate_button_pressed)
 	tools_layout.add_child(staff_impersonate_button)
+
+	staff_teleport_button = Button.new()
+	staff_teleport_button.text = "Teleport"
+	staff_teleport_button.custom_minimum_size = Vector2(190, 32)
+	staff_teleport_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_button.pressed.connect(_on_staff_teleport_button_pressed)
+	tools_layout.add_child(staff_teleport_button)
 
 	var staff_tools_close_button := Button.new()
 	staff_tools_close_button.text = "Close"
@@ -4194,11 +4224,82 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_impersonate_confirm_button.pressed.connect(_on_staff_impersonate_confirm_pressed)
 	layout.add_child(staff_impersonate_confirm_button)
 
+	staff_teleport_popup = PanelContainer.new()
+	staff_teleport_popup.name = "StaffTeleportPopup"
+	staff_teleport_popup.visible = false
+	staff_teleport_popup.custom_minimum_size = Vector2(500, 300)
+	staff_teleport_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	staff_teleport_popup.z_index = UI_BASE_Z_INDEX
+	staff_teleport_popup.anchor_left = 0.5
+	staff_teleport_popup.anchor_top = 0.5
+	staff_teleport_popup.anchor_right = 0.5
+	staff_teleport_popup.anchor_bottom = 0.5
+	staff_teleport_popup.offset_left = -250
+	staff_teleport_popup.offset_top = -150
+	staff_teleport_popup.offset_right = 250
+	staff_teleport_popup.offset_bottom = 150
+	staff_teleport_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(staff_teleport_popup)
+
+	var teleport_margin := MarginContainer.new()
+	teleport_margin.add_theme_constant_override("margin_left", 16)
+	teleport_margin.add_theme_constant_override("margin_top", 14)
+	teleport_margin.add_theme_constant_override("margin_right", 16)
+	teleport_margin.add_theme_constant_override("margin_bottom", 16)
+	staff_teleport_popup.add_child(teleport_margin)
+
+	var teleport_layout := VBoxContainer.new()
+	teleport_layout.add_theme_constant_override("separation", 10)
+	teleport_margin.add_child(teleport_layout)
+
+	var teleport_header := HBoxContainer.new()
+	teleport_header.add_theme_constant_override("separation", 8)
+	teleport_layout.add_child(teleport_header)
+
+	var teleport_title := Label.new()
+	teleport_title.text = "Staff Teleport"
+	teleport_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	teleport_title.add_theme_font_size_override("font_size", 18)
+	teleport_title.add_theme_color_override("font_color", UI_TEXT)
+	teleport_header.add_child(teleport_title)
+
+	var teleport_close_button := Button.new()
+	teleport_close_button.text = "X"
+	teleport_close_button.custom_minimum_size = Vector2(34, 30)
+	teleport_close_button.focus_mode = Control.FOCUS_NONE
+	teleport_close_button.pressed.connect(_hide_staff_teleport_popup)
+	teleport_header.add_child(teleport_close_button)
+
+	staff_teleport_map_select = OptionButton.new()
+	staff_teleport_map_select.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_map_select.item_selected.connect(_on_staff_teleport_map_selected)
+	teleport_layout.add_child(staff_teleport_map_select)
+
+	staff_teleport_point_select = OptionButton.new()
+	staff_teleport_point_select.custom_minimum_size = Vector2(0, 36)
+	teleport_layout.add_child(staff_teleport_point_select)
+
+	staff_teleport_reason_input = LineEdit.new()
+	staff_teleport_reason_input.placeholder_text = "Reason (optional)"
+	staff_teleport_reason_input.custom_minimum_size = Vector2(0, 38)
+	teleport_layout.add_child(staff_teleport_reason_input)
+
+	staff_teleport_confirm_button = Button.new()
+	staff_teleport_confirm_button.text = "Teleport"
+	staff_teleport_confirm_button.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_confirm_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_confirm_button.pressed.connect(_on_staff_teleport_confirm_pressed)
+	teleport_layout.add_child(staff_teleport_confirm_button)
+
 	_apply_button_style(staff_impersonate_button, "primary")
+	_apply_button_style(staff_teleport_button, "primary")
 	_apply_button_style(staff_tools_close_button)
 	_apply_button_style(close_button)
 	_apply_line_edit_style(staff_impersonate_token_input)
 	_apply_button_style(staff_impersonate_confirm_button, "primary")
+	_apply_button_style(teleport_close_button)
+	_apply_line_edit_style(staff_teleport_reason_input)
+	_apply_button_style(staff_teleport_confirm_button, "primary")
 
 func _setup_item_dex_button() -> void:
 	if item_dex_button != null:
@@ -4889,6 +4990,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		dev_add_menu_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
+		staff_teleport_popup,
 		item_dex_popup,
 		pokedex_popup,
 		settings_menu,
@@ -11436,6 +11538,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 			staff_tools_popup.visible = false
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
+		if staff_teleport_popup != null:
+			staff_teleport_popup.visible = false
 	if collapsed and panel_id == "dex_actions":
 		if item_dex_popup != null:
 			item_dex_popup.visible = false
@@ -11606,6 +11710,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": bag_item_use_popup, "close": Callable(self, "_hide_bag_item_use_popup_for_escape")},
 		{"panel": mail_compose_popup, "close": Callable(self, "_on_mail_compose_close_button_pressed")},
 		{"panel": staff_impersonate_popup, "close": Callable(self, "_hide_staff_impersonate_popup")},
+		{"panel": staff_teleport_popup, "close": Callable(self, "_hide_staff_teleport_popup")},
 		{"panel": dev_add_item_popup, "close": Callable(self, "_hide_dev_add_item_popup_for_escape")},
 		{"panel": dev_add_money_popup, "close": Callable(self, "_hide_dev_add_money_popup_for_escape")},
 		{"panel": dev_add_menu_popup, "close": Callable(self, "_hide_dev_add_menu_popup")},
@@ -12868,7 +12973,7 @@ func _on_dev_actions_button_pressed() -> void:
 		_deactivate_ui_panel(dev_actions_popup)
 
 func _on_staff_tools_button_pressed() -> void:
-	if not _can_impersonate_accounts():
+	if not (_can_impersonate_accounts() or _can_teleport_self()):
 		return
 	if staff_tools_popup == null:
 		return
@@ -12901,6 +13006,176 @@ func _hide_staff_impersonate_popup() -> void:
 	if staff_impersonate_popup != null:
 		staff_impersonate_popup.visible = false
 		_deactivate_ui_panel(staff_impersonate_popup)
+
+
+func _on_staff_teleport_button_pressed() -> void:
+	if not _can_teleport_self():
+		_add_chat_message("You do not have permission to teleport.")
+		return
+	if staff_teleport_popup == null:
+		return
+	staff_teleport_popup.visible = not staff_teleport_popup.visible
+	if staff_teleport_popup.visible:
+		_activate_ui_panel(staff_teleport_popup)
+		_load_staff_teleport_points_if_needed()
+	else:
+		_deactivate_ui_panel(staff_teleport_popup)
+
+
+func _hide_staff_teleport_popup() -> void:
+	if staff_teleport_popup != null:
+		staff_teleport_popup.visible = false
+		_deactivate_ui_panel(staff_teleport_popup)
+
+
+func _load_staff_teleport_points_if_needed() -> void:
+	if not staff_teleport_maps.is_empty() or staff_teleport_points_loading:
+		return
+	staff_teleport_points_loading = true
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = true
+
+	var result: Dictionary = await ModeratorTeleportService.load_teleport_points()
+	staff_teleport_points_loading = false
+	if not bool(result.get("success", false)):
+		if staff_teleport_confirm_button != null:
+			staff_teleport_confirm_button.disabled = false
+		_add_chat_message("Could not load teleport points: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var maps_value: Variant = result.get("maps", [])
+	staff_teleport_maps = maps_value if maps_value is Array else []
+	_rebuild_staff_teleport_map_options()
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+
+
+func _rebuild_staff_teleport_map_options() -> void:
+	if staff_teleport_map_select == null:
+		return
+	staff_teleport_map_select.clear()
+	for index in range(staff_teleport_maps.size()):
+		var map_entry: Dictionary = _staff_dictionary_from_variant(staff_teleport_maps[index])
+		staff_teleport_map_select.add_item(str(map_entry.get("label", map_entry.get("id", "Map"))), index)
+	if staff_teleport_map_select.item_count > 0:
+		staff_teleport_map_select.select(0)
+		_rebuild_staff_teleport_point_options(0)
+
+
+func _on_staff_teleport_map_selected(index: int) -> void:
+	_rebuild_staff_teleport_point_options(index)
+
+
+func _rebuild_staff_teleport_point_options(map_index: int) -> void:
+	if staff_teleport_point_select == null:
+		return
+	staff_teleport_point_select.clear()
+	if map_index < 0 or map_index >= staff_teleport_maps.size():
+		return
+	var map_entry: Dictionary = _staff_dictionary_from_variant(staff_teleport_maps[map_index])
+	var points_value: Variant = map_entry.get("points", [])
+	var points: Array = points_value if points_value is Array else []
+	for index in range(points.size()):
+		var point_entry: Dictionary = _staff_dictionary_from_variant(points[index])
+		staff_teleport_point_select.add_item(str(point_entry.get("label", point_entry.get("id", "Point"))), index)
+	if staff_teleport_point_select.item_count > 0:
+		staff_teleport_point_select.select(0)
+
+
+func _on_staff_teleport_confirm_pressed() -> void:
+	if not _can_teleport_self():
+		_add_chat_message("You do not have permission to teleport.")
+		return
+	if staff_teleport_in_flight:
+		return
+
+	var selected_map := _get_selected_staff_teleport_map()
+	var selected_point := _get_selected_staff_teleport_point(selected_map)
+	var map_id := str(selected_map.get("id", "")).strip_edges()
+	var point_id := str(selected_point.get("id", "")).strip_edges()
+	if map_id == "" or point_id == "":
+		_add_chat_message("Select a teleport destination first.")
+		return
+
+	var world := GameState.get_world()
+	if world == null or not world.has_method("begin_authorized_teleport") or not world.has_method("apply_authorized_teleport_state"):
+		_add_chat_message("World is not ready for teleport.")
+		return
+	var local_block_reason := _get_staff_teleport_local_block_reason(world)
+	if local_block_reason != "":
+		_add_chat_message("Teleport unavailable: %s" % local_block_reason)
+		return
+
+	staff_teleport_in_flight = true
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = true
+
+	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	if not bool(begin_result.get("success", false)):
+		staff_teleport_in_flight = false
+		if staff_teleport_confirm_button != null:
+			staff_teleport_confirm_button.disabled = false
+		_add_chat_message("Teleport unavailable: %s" % str(begin_result.get("error", "World is not ready.")))
+		return
+	var reason := ""
+	if staff_teleport_reason_input != null:
+		reason = staff_teleport_reason_input.text.strip_edges()
+	var result: Dictionary = await ModeratorTeleportService.teleport_self(map_id, point_id, reason)
+	if not bool(result.get("success", false)):
+		if world.has_method("cancel_authorized_teleport"):
+			world.call("cancel_authorized_teleport")
+		staff_teleport_in_flight = false
+		if staff_teleport_confirm_button != null:
+			staff_teleport_confirm_button.disabled = false
+		_add_chat_message("Teleport failed: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
+	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
+	staff_teleport_in_flight = false
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = false
+	if not bool(apply_result.get("success", false)):
+		_add_chat_message("Teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
+		return
+
+	_hide_staff_teleport_popup()
+	_hide_staff_tools_popup()
+	_add_chat_message("Teleported to %s: %s." % [
+		str(selected_map.get("label", map_id)),
+		str(selected_point.get("label", point_id)),
+	])
+
+
+func _get_selected_staff_teleport_map() -> Dictionary:
+	if staff_teleport_map_select == null:
+		return {}
+	var selected_index := staff_teleport_map_select.selected
+	if selected_index < 0 or selected_index >= staff_teleport_maps.size():
+		return {}
+	return _staff_dictionary_from_variant(staff_teleport_maps[selected_index])
+
+
+func _get_selected_staff_teleport_point(selected_map: Dictionary) -> Dictionary:
+	if staff_teleport_point_select == null:
+		return {}
+	var points_value: Variant = selected_map.get("points", [])
+	var points: Array = points_value if points_value is Array else []
+	var selected_index := staff_teleport_point_select.selected
+	if selected_index < 0 or selected_index >= points.size():
+		return {}
+	return _staff_dictionary_from_variant(points[selected_index])
+
+
+func _get_staff_teleport_local_block_reason(world: Node) -> String:
+	if staff_teleport_in_flight:
+		return "Another teleport is already in progress."
+	if world != null and world.has_method("get_authorized_teleport_block_reason"):
+		var reason := str(world.call("get_authorized_teleport_block_reason")).strip_edges()
+		if reason != "":
+			return reason
+	return ""
+
 
 func _on_staff_impersonate_confirm_pressed() -> void:
 	if not _can_impersonate_accounts():
