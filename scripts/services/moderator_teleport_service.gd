@@ -3,9 +3,11 @@ extends Node
 class_name ModeratorTeleportServiceNode
 
 const TELEPORT_POINTS_ENDPOINT := "/game/moderation/teleport-points"
+const TELEPORT_SAFE_POINTS_ENDPOINT := "/game/moderation/teleport-safe-points"
 const TELEPORT_SELF_ENDPOINT := "/game/moderation/teleport-self"
 const TELEPORT_ONLINE_PLAYERS_ENDPOINT := "/game/moderation/teleport-online-players"
 const TELEPORT_TO_PLAYER_ENDPOINT := "/game/moderation/teleport-to-player"
+const TELEPORT_PLAYER_ENDPOINT := "/game/moderation/teleport-player"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -19,6 +21,30 @@ func load_teleport_points() -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + TELEPORT_POINTS_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"maps": _array_from_value(body.get("maps", [])),
+	}
+
+
+func load_safe_teleport_points() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + TELEPORT_SAFE_POINTS_ENDPOINT,
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -106,6 +132,39 @@ func teleport_to_player(target_player_id: int, reason: String = "") -> Dictionar
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + TELEPORT_TO_PLAYER_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(payload)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"state": _dictionary_from_value(body.get("state", {})),
+	}
+
+
+func teleport_player(target_player_id: int, map_id: String, point_id: String, reason: String = "") -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var payload := {
+		"targetPlayerId": target_player_id,
+		"mapId": map_id.strip_edges(),
+		"pointId": point_id.strip_edges(),
+	}
+	var cleaned_reason := reason.strip_edges()
+	if cleaned_reason != "":
+		payload["reason"] = cleaned_reason
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + TELEPORT_PLAYER_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(payload)

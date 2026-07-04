@@ -31,6 +31,7 @@ var has_pending_player_position_save := false
 var authorized_teleport_in_progress := false
 var authorized_teleport_locked_overworld := false
 var authorized_teleport_apply_failed_autosave_blocked := false
+var current_teleport_revision := 0
 var last_saved_position_signature := ""
 var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
@@ -189,31 +190,50 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	if player.has_method("reset_movement_state"):
 		player.call("reset_movement_state")
 	_position_player_at_saved_state(target_map, state)
+	current_teleport_revision = int(state.get("teleportRevision", current_teleport_revision))
 	_apply_camera_limits_for_map(target_map)
 
 	await get_tree().physics_frame
 	is_loading_map = false
-	last_saved_position_signature = _get_current_player_position_signature(true)
 	last_presence_position_signature = ""
 	has_pending_player_position_save = false
-	_publish_world_presence(true)
-	_refresh_remote_players_from_server.call_deferred()
+	var ack_result: Dictionary = await _ack_authorized_teleport_state(state)
+	if not bool(ack_result.get("success", false)):
+		_mark_authorized_teleport_apply_failed()
+		return {
+			"success": false,
+			"error": str(ack_result.get("error", "Could not acknowledge authorized teleport.")),
+		}
+	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_apply_failed_autosave_blocked = false
 	authorized_teleport_in_progress = false
+	_publish_world_presence(true)
+	_refresh_remote_players_from_server.call_deferred()
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
 	return {"success": true}
 
 
+func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	var block_reason := _get_authorized_teleport_block_reason(false, true)
+	if block_reason != "":
+		_mark_authorized_teleport_apply_failed()
+		return {
+			"success": false,
+			"error": block_reason,
+		}
+	return await apply_authorized_teleport_state(state)
+
+
 func get_authorized_teleport_block_reason() -> String:
 	return _get_authorized_teleport_block_reason(false)
 
 
-func _get_authorized_teleport_block_reason(ignore_teleport_in_progress := false) -> String:
+func _get_authorized_teleport_block_reason(ignore_teleport_in_progress := false, ignore_failed_autosave_block := false) -> String:
 	if authorized_teleport_in_progress and not ignore_teleport_in_progress:
 		return "Another teleport is already in progress."
-	if authorized_teleport_apply_failed_autosave_blocked:
+	if authorized_teleport_apply_failed_autosave_blocked and not ignore_failed_autosave_block:
 		return "A previous teleport was saved by the server but did not finish locally. Reload before saving or teleporting again."
 	if is_loading_map:
 		return "A map transition is already in progress."
@@ -254,6 +274,40 @@ func _get_player_position_save_block_reason() -> String:
 	if authorized_teleport_apply_failed_autosave_blocked:
 		return "A server-authorized teleport did not finish locally; position autosave is blocked to protect the new server position."
 	return "Authorized teleport is in progress."
+
+
+func _ack_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	var teleport_revision := int(state.get("teleportRevision", current_teleport_revision))
+	var position_data: Dictionary = _dictionary_from_value(state.get("position", {}))
+	var ack_state: Dictionary = {
+		"mapId": str(state.get("mapId", _get_map_id(GameState.current_map))).strip_edges(),
+		"mapScenePath": str(state.get("mapScenePath", _get_map_scene_path(GameState.current_map))).strip_edges(),
+		"position": {
+			"x": float(position_data.get("x", player.global_position.x)),
+			"y": float(position_data.get("y", player.global_position.y)),
+		},
+		"gender": PlayerSave.gender,
+		"facingDirection": str(state.get("facingDirection", _direction_to_name(player.last_direction))).strip_edges(),
+		"spawnMarker": str(state.get("spawnMarker", "")).strip_edges(),
+		"appearance": _get_confirmed_appearance_state(),
+		"roles": _get_current_role_presence_state(),
+		"selectedRoleBadge": GameState.selected_role_badge,
+		"activityState": "battle" if is_in_battle else "idle",
+		"activityContext": _get_current_activity_context(),
+		"teleportRevision": teleport_revision,
+	}
+	var result: Dictionary = await PlayerGameStateService.save_player_position(ack_state)
+	if bool(result.get("success", false)):
+		var response_state: Dictionary = _dictionary_from_value(result.get("state", {}))
+		current_teleport_revision = int(response_state.get("teleportRevision", teleport_revision))
+		position_autosave_elapsed = 0.0
+		return {"success": true}
+	if str(result.get("error", "")) == "FORCED_TELEPORT_PENDING":
+		return {
+			"success": false,
+			"error": "The server is still waiting for the forced teleport destination acknowledgement.",
+		}
+	return result
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
@@ -392,6 +446,7 @@ func _setup_initial_world_state() -> void:
 	if not saved_state.is_empty():
 		_apply_saved_appearance_state(saved_state)
 		_position_player_at_saved_state(initial_map, saved_state)
+		current_teleport_revision = int(saved_state.get("teleportRevision", current_teleport_revision))
 		last_saved_position_signature = _get_current_player_position_signature(true)
 	elif not GameState.has_player_position:
 		_position_player_at_spawn(initial_map, initial_spawn_name, player.global_position)
@@ -626,14 +681,19 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			continue
 
 		var player_state: Dictionary = player_state_value
-		if str(player_state.get("mapId", "")) != current_map_id:
-			continue
-
 		var user_id := int(player_state.get("userId", 0))
 		if user_id <= 0:
 			continue
 
 		var user_key := str(user_id)
+		if str(player_state.get("mapId", "")) != current_map_id:
+			if not prune_missing:
+				var stale_avatar: Node2D = remote_player_avatars.get(user_key, null)
+				remote_player_avatars.erase(user_key)
+				if stale_avatar != null and is_instance_valid(stale_avatar):
+					stale_avatar.queue_free()
+			continue
+
 		seen_user_ids[user_key] = true
 		var avatar: Node2D = remote_player_avatars.get(user_key, null)
 		if avatar == null or not is_instance_valid(avatar):
@@ -757,6 +817,8 @@ func _save_current_player_position(
 		}
 	var result: Dictionary = await PlayerGameStateService.save_player_position(state)
 	if bool(result.get("success", false)):
+		var response_state: Dictionary = _dictionary_from_value(result.get("state", {}))
+		current_teleport_revision = int(response_state.get("teleportRevision", current_teleport_revision))
 		last_saved_position_signature = signature
 		if mark_current_appearance_confirmed:
 			confirmed_appearance_state = PlayerSave.to_appearance_state().duplicate(true)
@@ -765,6 +827,8 @@ func _save_current_player_position(
 			if appearance_value is Dictionary:
 				confirmed_appearance_state = (appearance_value as Dictionary).duplicate(true)
 	else:
+		if str(result.get("error", "")) == "FORCED_TELEPORT_PENDING":
+			_mark_authorized_teleport_apply_failed()
 		push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
 	is_saving_player_position = false
 	if has_pending_player_position_save:
@@ -790,11 +854,33 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"appearance": appearance_state,
 		"roles": _get_current_role_presence_state(),
 		"selectedRoleBadge": GameState.selected_role_badge,
+		"activityState": "battle" if is_in_battle else "idle",
+		"activityContext": _get_current_activity_context(),
+		"teleportRevision": current_teleport_revision,
 	}
 	if player.has_method("get_network_movement_state"):
 		state["movement"] = player.call("get_network_movement_state")
 	state["follower"] = _get_current_follower_presence_state()
 	return state
+
+
+func _get_current_activity_context() -> Dictionary:
+	if not is_in_battle:
+		return {}
+	return {
+		"kind": active_battle_kind,
+		"battleId": active_battle_id,
+	}
+
+
+func _save_player_activity_state_deferred(activity_state: String, activity_context: Dictionary = {}) -> void:
+	_save_player_activity_state.call_deferred(activity_state, activity_context)
+
+
+func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> void:
+	var result: Dictionary = await PlayerGameStateService.save_player_activity_state(activity_state, activity_context)
+	if not bool(result.get("success", false)):
+		push_warning("World: activity state save failed: %s" % str(result.get("error", "Unknown error")))
 
 
 func _get_current_appearance_presence_state() -> Dictionary:
@@ -1073,7 +1159,8 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	active_battle_id = str(response.get("battleId", ""))
-	
+	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+
 	battle_layer = CanvasLayer.new()
 	battle_layer.layer = 10
 	add_child(battle_layer)
@@ -1118,6 +1205,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	active_battle_id = str(response.get("battleId", ""))
+	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
 	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
 	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
@@ -1177,6 +1265,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 		_abort_battle_start()
 		return false
 	active_battle_id = str(response.get("battleId", ""))
+	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
 	battle_layer = CanvasLayer.new()
 	battle_layer.layer = 10
@@ -1218,6 +1307,7 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_pokemon_species = ""
 	active_trainer_name = ""
+	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_lock_overworld_for_battle()
 
 	battle_layer = CanvasLayer.new()
@@ -1256,6 +1346,7 @@ func end_wild_battle() -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_trainer_name = ""
+	_save_player_activity_state_deferred("idle")
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
 	
@@ -1546,5 +1637,6 @@ func _abort_battle_start() -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_trainer_name = ""
+	_save_player_activity_state_deferred("idle")
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()

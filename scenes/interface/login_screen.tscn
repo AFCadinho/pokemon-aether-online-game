@@ -597,6 +597,7 @@ text = "@trainer"
 custom_minimum_size = Vector2(190, 154)
 layout_mode = 2
 size_flags_horizontal = 4
+stretch = false
 stretch = true
 
 [node name="PlayerPreviewViewport" type="SubViewport" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/PlayerPreviewViewportContainer" unique_id=1524054212]

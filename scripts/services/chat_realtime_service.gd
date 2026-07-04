@@ -6,6 +6,7 @@ signal message_received(message: Dictionary)
 signal private_message_received(message: Dictionary)
 signal mail_received(mail_id: int)
 signal friend_request_received(request: Dictionary)
+signal authorized_teleport_received(state: Dictionary, reason: String)
 signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
 
@@ -171,6 +172,12 @@ func _process_packets() -> void:
 			continue
 		if message_type == "friend_request.received":
 			friend_request_received.emit(_dictionary_from_value(message.get("request", {})))
+			continue
+		if message_type == "world.teleport.authorized":
+			authorized_teleport_received.emit(
+				_dictionary_from_value(message.get("state", {})),
+				str(message.get("reason", ""))
+			)
 			continue
 		message_received.emit(message)
 

@@ -3,6 +3,7 @@ extends Node
 class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
+const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
 const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const PLAYER_PROFILE_ENDPOINT := "/game/profile"
@@ -89,6 +90,35 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(state)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"hasState": bool(body.get("hasState", false)),
+		"state": _dictionary_from_value(body.get("state", {})),
+	}
+
+
+func save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var payload := {
+		"activityState": activity_state.strip_edges().to_lower(),
+		"activityContext": activity_context,
+	}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_ACTIVITY_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(payload)
 	)
 	if not bool(response.get("success", false)):
 		return response

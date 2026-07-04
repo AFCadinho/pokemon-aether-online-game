@@ -39,6 +39,7 @@ const DEV_TOOLS_PERMISSION := "generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
 const WORLD_TELEPORT_SELF_PERMISSION := "world:teleport:self"
 const WORLD_TELEPORT_PLAYER_PERMISSION := "world:teleport:player"
+const WORLD_TELEPORT_OTHER_PERMISSION := "world:teleport:other"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
 const STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
@@ -506,21 +507,39 @@ var staff_impersonate_popup: PanelContainer
 var staff_impersonate_token_input: LineEdit
 var staff_impersonate_confirm_button: Button
 var staff_teleport_popup: PanelContainer
+var staff_teleport_dragging := false
+var staff_teleport_drag_offset := Vector2.ZERO
+var staff_teleport_self_tab_button: Button
+var staff_teleport_player_tab_button: Button
+var staff_teleport_self_section: Control
 var staff_teleport_map_select: OptionButton
 var staff_teleport_point_select: OptionButton
-var staff_teleport_reason_input: LineEdit
+var staff_teleport_self_reason_input: LineEdit
 var staff_teleport_confirm_button: Button
 var staff_teleport_player_divider: HSeparator
 var staff_teleport_player_title: Label
+var staff_teleport_player_section: Control
 var staff_teleport_player_search_input: LineEdit
 var staff_teleport_player_select: OptionButton
+var staff_teleport_selected_player_label: Label
+var staff_teleport_to_player_mode_button: Button
+var staff_teleport_send_player_mode_button: Button
+var staff_teleport_player_reason_input: LineEdit
 var staff_teleport_to_player_button: Button
+var staff_teleport_send_section: Control
+var staff_teleport_send_map_select: OptionButton
+var staff_teleport_send_point_select: OptionButton
+var staff_teleport_send_player_button: Button
 var staff_teleport_maps: Array = []
+var staff_teleport_safe_maps: Array = []
 var staff_teleport_online_players: Array = []
 var staff_teleport_filtered_players: Array = []
 var staff_teleport_points_loading := false
+var staff_teleport_safe_points_loading := false
 var staff_teleport_players_loading := false
 var staff_teleport_in_flight := false
+var staff_teleport_active_tab := "self"
+var staff_teleport_player_action_mode := "to_player"
 var chat_submit_in_progress: bool = false
 var active_chat_tab: String = CHAT_TAB_GENERAL
 var pending_chat_pokemon_attachments: Array[Dictionary] = []
@@ -794,6 +813,8 @@ func _ready() -> void:
 		ChatRealtimeService.private_message_received.connect(_on_private_message_received)
 	if not ChatRealtimeService.friend_request_received.is_connected(_on_friend_request_received):
 		ChatRealtimeService.friend_request_received.connect(_on_friend_request_received)
+	if not ChatRealtimeService.authorized_teleport_received.is_connected(_on_authorized_teleport_received):
+		ChatRealtimeService.authorized_teleport_received.connect(_on_authorized_teleport_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
 	ChatRealtimeService.connect_chat.call_deferred()
@@ -914,6 +935,9 @@ func _can_teleport_self() -> bool:
 func _can_teleport_to_player() -> bool:
 	return _has_user_permission(WORLD_TELEPORT_PLAYER_PERMISSION)
 
+func _can_teleport_other_player() -> bool:
+	return _has_user_permission(WORLD_TELEPORT_OTHER_PERMISSION)
+
 func _current_player_has_staff_role() -> bool:
 	var roles_value: Variant = AuthService.current_user.get("roles", [])
 	if not roles_value is Array:
@@ -950,9 +974,12 @@ func _current_user_role_ids() -> Array[String]:
 
 func _current_user_requires_teleport_to_player_reason() -> bool:
 	var role_ids := _current_user_role_ids()
-	if role_ids.has("owner") or role_ids.has("senior_staff") or role_ids.has("developer") or role_ids.has("gamemaster"):
+	if role_ids.has("owner") or role_ids.has("senior_staff") or role_ids.has("developer") or role_ids.has("gamemaster") or role_ids.has("admin"):
 		return false
 	return role_ids.has("moderator")
+
+func _current_user_requires_teleport_other_reason() -> bool:
+	return _current_user_requires_teleport_to_player_reason()
 
 func _has_user_permission(permission: String) -> bool:
 	var permissions_value: Variant = AuthService.current_user.get("permissions", [])
@@ -970,10 +997,11 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_teleport: bool = _can_teleport_self()
 	var can_teleport_to_player: bool = _can_teleport_to_player()
+	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_tools: bool = _can_use_content_creator_tools()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
 	var can_open_content_creator_menu: bool = can_use_content_creator_tools or can_use_content_creator_generation
-	var has_staff_tool: bool = can_impersonate or can_teleport or can_teleport_to_player
+	var has_staff_tool: bool = can_impersonate or can_teleport or can_teleport_to_player or can_teleport_other
 	var has_visible_staff_action: bool = has_staff_tool or can_use_dev_tools or can_open_content_creator_menu
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
@@ -1022,15 +1050,15 @@ func _refresh_dev_tools_visibility() -> void:
 		staff_impersonate_button.visible = can_impersonate
 		staff_impersonate_button.disabled = not can_impersonate
 	if staff_teleport_button != null:
-		staff_teleport_button.visible = can_teleport or can_teleport_to_player
-		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player)
+		staff_teleport_button.visible = can_teleport or can_teleport_to_player or can_teleport_other
+		staff_teleport_button.disabled = not (can_teleport or can_teleport_to_player or can_teleport_other)
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
 	if not can_impersonate:
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
-	if not (can_teleport or can_teleport_to_player) and staff_teleport_popup != null:
+	if not (can_teleport or can_teleport_to_player or can_teleport_other) and staff_teleport_popup != null:
 		staff_teleport_popup.visible = false
 	if not can_use_dev_tools:
 		dev_actions_popup.visible = false
@@ -4262,7 +4290,7 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_popup = PanelContainer.new()
 	staff_teleport_popup.name = "StaffTeleportPopup"
 	staff_teleport_popup.visible = false
-	staff_teleport_popup.custom_minimum_size = Vector2(500, 450)
+	staff_teleport_popup.custom_minimum_size = Vector2(500, 560)
 	staff_teleport_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	staff_teleport_popup.z_index = UI_BASE_Z_INDEX
 	staff_teleport_popup.anchor_left = 0.5
@@ -4270,9 +4298,9 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_popup.anchor_right = 0.5
 	staff_teleport_popup.anchor_bottom = 0.5
 	staff_teleport_popup.offset_left = -250
-	staff_teleport_popup.offset_top = -225
+	staff_teleport_popup.offset_top = -280
 	staff_teleport_popup.offset_right = 250
-	staff_teleport_popup.offset_bottom = 225
+	staff_teleport_popup.offset_bottom = 280
 	staff_teleport_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	root_control.add_child(staff_teleport_popup)
 
@@ -4289,6 +4317,8 @@ func _setup_staff_impersonation_tools() -> void:
 
 	var teleport_header := HBoxContainer.new()
 	teleport_header.add_theme_constant_override("separation", 8)
+	teleport_header.mouse_filter = Control.MOUSE_FILTER_STOP
+	teleport_header.gui_input.connect(_on_staff_teleport_header_gui_input)
 	teleport_layout.add_child(teleport_header)
 
 	var teleport_title := Label.new()
@@ -4296,6 +4326,8 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	teleport_title.add_theme_font_size_override("font_size", 18)
 	teleport_title.add_theme_color_override("font_color", UI_TEXT)
+	teleport_title.mouse_filter = Control.MOUSE_FILTER_STOP
+	teleport_title.gui_input.connect(_on_staff_teleport_header_gui_input)
 	teleport_header.add_child(teleport_title)
 
 	var teleport_close_button := Button.new()
@@ -4305,52 +4337,155 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_close_button.pressed.connect(_hide_staff_teleport_popup)
 	teleport_header.add_child(teleport_close_button)
 
+	var teleport_tab_bar := HBoxContainer.new()
+	teleport_tab_bar.add_theme_constant_override("separation", 6)
+	teleport_layout.add_child(teleport_tab_bar)
+
+	staff_teleport_self_tab_button = Button.new()
+	staff_teleport_self_tab_button.text = "Self"
+	staff_teleport_self_tab_button.custom_minimum_size = Vector2(0, 34)
+	staff_teleport_self_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_self_tab_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_self_tab_button.pressed.connect(_on_staff_teleport_self_tab_pressed)
+	teleport_tab_bar.add_child(staff_teleport_self_tab_button)
+
+	staff_teleport_player_tab_button = Button.new()
+	staff_teleport_player_tab_button.text = "Player"
+	staff_teleport_player_tab_button.custom_minimum_size = Vector2(0, 34)
+	staff_teleport_player_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_tab_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_player_tab_button.pressed.connect(_on_staff_teleport_player_tab_pressed)
+	teleport_tab_bar.add_child(staff_teleport_player_tab_button)
+
+	var teleport_scroll := ScrollContainer.new()
+	teleport_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	teleport_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	teleport_layout.add_child(teleport_scroll)
+
+	var teleport_body := VBoxContainer.new()
+	teleport_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	teleport_body.add_theme_constant_override("separation", 12)
+	teleport_scroll.add_child(teleport_body)
+
+	staff_teleport_self_section = VBoxContainer.new()
+	staff_teleport_self_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_self_section.add_theme_constant_override("separation", 7)
+	teleport_body.add_child(staff_teleport_self_section)
+
+	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Self"))
+
 	staff_teleport_map_select = OptionButton.new()
 	staff_teleport_map_select.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_map_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_map_select.item_selected.connect(_on_staff_teleport_map_selected)
-	teleport_layout.add_child(staff_teleport_map_select)
+	staff_teleport_self_section.add_child(staff_teleport_map_select)
 
 	staff_teleport_point_select = OptionButton.new()
 	staff_teleport_point_select.custom_minimum_size = Vector2(0, 36)
-	teleport_layout.add_child(staff_teleport_point_select)
+	staff_teleport_point_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_self_section.add_child(staff_teleport_point_select)
 
-	staff_teleport_reason_input = LineEdit.new()
-	staff_teleport_reason_input.placeholder_text = "Reason (optional)"
-	staff_teleport_reason_input.custom_minimum_size = Vector2(0, 38)
-	teleport_layout.add_child(staff_teleport_reason_input)
+	staff_teleport_self_reason_input = LineEdit.new()
+	staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
+	staff_teleport_self_reason_input.custom_minimum_size = Vector2(0, 38)
+	staff_teleport_self_reason_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_self_section.add_child(staff_teleport_self_reason_input)
 
 	staff_teleport_confirm_button = Button.new()
-	staff_teleport_confirm_button.text = "Teleport"
+	staff_teleport_confirm_button.text = "Teleport Self"
 	staff_teleport_confirm_button.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_confirm_button.focus_mode = Control.FOCUS_NONE
 	staff_teleport_confirm_button.pressed.connect(_on_staff_teleport_confirm_pressed)
-	teleport_layout.add_child(staff_teleport_confirm_button)
+	staff_teleport_self_section.add_child(staff_teleport_confirm_button)
 
-	staff_teleport_player_divider = HSeparator.new()
-	teleport_layout.add_child(staff_teleport_player_divider)
+	staff_teleport_player_section = VBoxContainer.new()
+	staff_teleport_player_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_section.add_theme_constant_override("separation", 7)
+	teleport_body.add_child(staff_teleport_player_section)
 
-	staff_teleport_player_title = Label.new()
-	staff_teleport_player_title.text = "Teleport To Player"
-	staff_teleport_player_title.add_theme_font_size_override("font_size", 15)
-	staff_teleport_player_title.add_theme_color_override("font_color", UI_TEXT)
-	teleport_layout.add_child(staff_teleport_player_title)
+	staff_teleport_player_title = _create_staff_teleport_section_title("To Player") as Label
+	staff_teleport_player_section.add_child(staff_teleport_player_title)
 
 	staff_teleport_player_search_input = LineEdit.new()
 	staff_teleport_player_search_input.placeholder_text = "Search online players"
 	staff_teleport_player_search_input.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_player_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_search_input.text_changed.connect(_on_staff_teleport_player_search_changed)
-	teleport_layout.add_child(staff_teleport_player_search_input)
+	staff_teleport_player_section.add_child(staff_teleport_player_search_input)
 
 	staff_teleport_player_select = OptionButton.new()
 	staff_teleport_player_select.custom_minimum_size = Vector2(0, 36)
-	teleport_layout.add_child(staff_teleport_player_select)
+	staff_teleport_player_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_select.item_selected.connect(_on_staff_teleport_player_selected)
+	staff_teleport_player_section.add_child(staff_teleport_player_select)
+
+	staff_teleport_selected_player_label = Label.new()
+	staff_teleport_selected_player_label.text = "Selected player: none"
+	staff_teleport_selected_player_label.add_theme_font_size_override("font_size", 12)
+	staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	staff_teleport_selected_player_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	staff_teleport_player_section.add_child(staff_teleport_selected_player_label)
+
+	var player_action_mode_bar := HBoxContainer.new()
+	player_action_mode_bar.add_theme_constant_override("separation", 6)
+	staff_teleport_player_section.add_child(player_action_mode_bar)
+
+	staff_teleport_to_player_mode_button = Button.new()
+	staff_teleport_to_player_mode_button.text = "To Player"
+	staff_teleport_to_player_mode_button.custom_minimum_size = Vector2(0, 34)
+	staff_teleport_to_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_to_player_mode_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_to_player_mode_button.pressed.connect(_on_staff_teleport_to_player_mode_pressed)
+	player_action_mode_bar.add_child(staff_teleport_to_player_mode_button)
+
+	staff_teleport_send_player_mode_button = Button.new()
+	staff_teleport_send_player_mode_button.text = "Send Safe"
+	staff_teleport_send_player_mode_button.custom_minimum_size = Vector2(0, 34)
+	staff_teleport_send_player_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_player_mode_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_send_player_mode_button.pressed.connect(_on_staff_teleport_send_player_mode_pressed)
+	player_action_mode_bar.add_child(staff_teleport_send_player_mode_button)
+
+	staff_teleport_send_section = VBoxContainer.new()
+	staff_teleport_send_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_section.add_theme_constant_override("separation", 7)
+	staff_teleport_player_section.add_child(staff_teleport_send_section)
+
+	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Safe Location"))
+
+	staff_teleport_send_map_select = OptionButton.new()
+	staff_teleport_send_map_select.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_send_map_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_map_select.item_selected.connect(_on_staff_teleport_send_map_selected)
+	staff_teleport_send_section.add_child(staff_teleport_send_map_select)
+
+	staff_teleport_send_point_select = OptionButton.new()
+	staff_teleport_send_point_select.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_send_point_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_section.add_child(staff_teleport_send_point_select)
+
+	staff_teleport_player_reason_input = LineEdit.new()
+	staff_teleport_player_reason_input.placeholder_text = "Player action reason (optional)"
+	staff_teleport_player_reason_input.custom_minimum_size = Vector2(0, 38)
+	staff_teleport_player_reason_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_section.add_child(staff_teleport_player_reason_input)
 
 	staff_teleport_to_player_button = Button.new()
 	staff_teleport_to_player_button.text = "Teleport To Player"
 	staff_teleport_to_player_button.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_to_player_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_to_player_button.focus_mode = Control.FOCUS_NONE
 	staff_teleport_to_player_button.pressed.connect(_on_staff_teleport_to_player_pressed)
-	teleport_layout.add_child(staff_teleport_to_player_button)
+	staff_teleport_player_section.add_child(staff_teleport_to_player_button)
+
+	staff_teleport_send_player_button = Button.new()
+	staff_teleport_send_player_button.text = "Send To Safe Location"
+	staff_teleport_send_player_button.custom_minimum_size = Vector2(0, 36)
+	staff_teleport_send_player_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_player_button.focus_mode = Control.FOCUS_NONE
+	staff_teleport_send_player_button.pressed.connect(_on_staff_teleport_send_player_pressed)
+	staff_teleport_player_section.add_child(staff_teleport_send_player_button)
 
 	_apply_button_style(staff_impersonate_button, "primary")
 	_apply_button_style(staff_teleport_button, "primary")
@@ -4359,10 +4494,26 @@ func _setup_staff_impersonation_tools() -> void:
 	_apply_line_edit_style(staff_impersonate_token_input)
 	_apply_button_style(staff_impersonate_confirm_button, "primary")
 	_apply_button_style(teleport_close_button)
-	_apply_line_edit_style(staff_teleport_reason_input)
+	_apply_button_style(staff_teleport_self_tab_button, "primary")
+	_apply_button_style(staff_teleport_player_tab_button)
+	_apply_button_style(staff_teleport_to_player_mode_button, "primary")
+	_apply_button_style(staff_teleport_send_player_mode_button)
+	_apply_line_edit_style(staff_teleport_self_reason_input)
+	_apply_line_edit_style(staff_teleport_player_reason_input)
 	_apply_button_style(staff_teleport_confirm_button, "primary")
 	_apply_line_edit_style(staff_teleport_player_search_input)
 	_apply_button_style(staff_teleport_to_player_button, "primary")
+	_apply_button_style(staff_teleport_send_player_button, "primary")
+
+func _create_staff_teleport_section_title(title_text: String) -> Label:
+	var label := Label.new()
+	label.text = title_text
+	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.35))
+	label.add_theme_constant_override("shadow_offset_x", 0)
+	label.add_theme_constant_override("shadow_offset_y", 1)
+	return label
 
 func _setup_item_dex_button() -> void:
 	if item_dex_button != null:
@@ -4974,6 +5125,10 @@ func _input(event: InputEvent) -> void:
 
 	if pvp_room_dragging:
 		_handle_pvp_room_drag_input(event)
+		return
+
+	if staff_teleport_dragging:
+		_handle_staff_teleport_drag_input(event)
 		return
 
 	if hotkey_sidebar_dragging:
@@ -11137,6 +11292,39 @@ func _move_overlay_popup_to_global_position(popup: Control, global_top_left: Vec
 	popup.offset_bottom = local_offset.y + popup_size.y
 	popup.size = popup_size
 
+func _on_staff_teleport_header_gui_input(event: InputEvent) -> void:
+	if staff_teleport_popup == null:
+		return
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		staff_teleport_dragging = true
+		staff_teleport_drag_offset = mouse_event.global_position - staff_teleport_popup.global_position
+		_activate_ui_panel(staff_teleport_popup)
+	else:
+		staff_teleport_dragging = false
+	get_viewport().set_input_as_handled()
+
+func _handle_staff_teleport_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			staff_teleport_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+
+	if not (event is InputEventMouseMotion):
+		return
+
+	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+	_move_overlay_popup_to_global_position(staff_teleport_popup, motion_event.global_position - staff_teleport_drag_offset)
+	get_viewport().set_input_as_handled()
+
 func _format_money(value: int) -> String:
 	var value_text := str(max(value, 0))
 	var formatted := ""
@@ -13036,7 +13224,7 @@ func _on_dev_actions_button_pressed() -> void:
 		_deactivate_ui_panel(dev_actions_popup)
 
 func _on_staff_tools_button_pressed() -> void:
-	if not (_can_impersonate_accounts() or _can_teleport_self() or _can_teleport_to_player()):
+	if not (_can_impersonate_accounts() or _can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
 		return
 	if staff_tools_popup == null:
 		return
@@ -13071,40 +13259,106 @@ func _hide_staff_impersonate_popup() -> void:
 		_deactivate_ui_panel(staff_impersonate_popup)
 
 
+func _on_staff_teleport_self_tab_pressed() -> void:
+	_set_staff_teleport_active_tab("self")
+
+
+func _on_staff_teleport_player_tab_pressed() -> void:
+	_set_staff_teleport_active_tab("player")
+
+
+func _on_staff_teleport_to_player_mode_pressed() -> void:
+	_set_staff_teleport_player_action_mode("to_player")
+
+
+func _on_staff_teleport_send_player_mode_pressed() -> void:
+	_set_staff_teleport_player_action_mode("send_safe")
+
+
+func _set_staff_teleport_active_tab(tab_id: String) -> void:
+	staff_teleport_active_tab = tab_id
+	_refresh_staff_teleport_tab_visibility()
+
+
+func _set_staff_teleport_player_action_mode(mode_id: String) -> void:
+	staff_teleport_player_action_mode = mode_id
+	_refresh_staff_teleport_tab_visibility()
+
+
+func _refresh_staff_teleport_tab_visibility() -> void:
+	var can_self := _can_teleport_self()
+	var can_player := _can_teleport_to_player() or _can_teleport_other_player()
+	if staff_teleport_active_tab == "self" and not can_self:
+		staff_teleport_active_tab = "player"
+	if staff_teleport_active_tab == "player" and not can_player:
+		staff_teleport_active_tab = "self"
+	if staff_teleport_player_action_mode == "to_player" and not _can_teleport_to_player():
+		staff_teleport_player_action_mode = "send_safe"
+	if staff_teleport_player_action_mode == "send_safe" and not _can_teleport_other_player():
+		staff_teleport_player_action_mode = "to_player"
+	var show_self := staff_teleport_active_tab == "self" and can_self
+	var show_player := staff_teleport_active_tab == "player" and can_player
+	var show_to_player := show_player and staff_teleport_player_action_mode == "to_player" and _can_teleport_to_player()
+	var show_send_safe := show_player and staff_teleport_player_action_mode == "send_safe" and _can_teleport_other_player()
+
+	if staff_teleport_self_tab_button != null:
+		staff_teleport_self_tab_button.visible = can_self
+		_apply_button_style(staff_teleport_self_tab_button, "primary" if show_self else "default")
+	if staff_teleport_player_tab_button != null:
+		staff_teleport_player_tab_button.visible = can_player
+		_apply_button_style(staff_teleport_player_tab_button, "primary" if show_player else "default")
+	if staff_teleport_self_section != null:
+		staff_teleport_self_section.visible = show_self
+	if staff_teleport_player_section != null:
+		staff_teleport_player_section.visible = show_player
+	if staff_teleport_to_player_mode_button != null:
+		staff_teleport_to_player_mode_button.visible = show_player and _can_teleport_to_player()
+		_apply_button_style(staff_teleport_to_player_mode_button, "primary" if show_to_player else "default")
+	if staff_teleport_send_player_mode_button != null:
+		staff_teleport_send_player_mode_button.visible = show_player and _can_teleport_other_player()
+		_apply_button_style(staff_teleport_send_player_mode_button, "primary" if show_send_safe else "default")
+	if staff_teleport_send_section != null:
+		staff_teleport_send_section.visible = show_send_safe
+	if staff_teleport_player_divider != null:
+		staff_teleport_player_divider.visible = false
+	if staff_teleport_self_reason_input != null:
+		staff_teleport_self_reason_input.visible = show_self
+		staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
+	if staff_teleport_player_reason_input != null:
+		staff_teleport_player_reason_input.visible = show_player
+		var player_reason_required := (_current_user_requires_teleport_to_player_reason() and show_to_player) or (_current_user_requires_teleport_other_reason() and show_send_safe)
+		var player_reason_label := "Reason for teleport to player" if show_to_player else "Reason for safe-location send"
+		staff_teleport_player_reason_input.placeholder_text = "%s (required)" % player_reason_label if player_reason_required else "%s (optional)" % player_reason_label
+	if staff_teleport_to_player_button != null:
+		staff_teleport_to_player_button.visible = show_to_player
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.visible = show_send_safe
+
+
 func _on_staff_teleport_button_pressed() -> void:
-	if not (_can_teleport_self() or _can_teleport_to_player()):
+	if not (_can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
 		_add_chat_message("You do not have permission to teleport.")
 		return
 	if staff_teleport_popup == null:
 		return
-	if staff_teleport_confirm_button != null:
-		staff_teleport_confirm_button.visible = _can_teleport_self()
-	if staff_teleport_map_select != null:
-		staff_teleport_map_select.visible = _can_teleport_self()
-	if staff_teleport_point_select != null:
-		staff_teleport_point_select.visible = _can_teleport_self()
-	if staff_teleport_player_divider != null:
-		staff_teleport_player_divider.visible = _can_teleport_to_player()
-	if staff_teleport_player_title != null:
-		staff_teleport_player_title.visible = _can_teleport_to_player()
-	if staff_teleport_player_search_input != null:
-		staff_teleport_player_search_input.visible = _can_teleport_to_player()
-	if staff_teleport_player_select != null:
-		staff_teleport_player_select.visible = _can_teleport_to_player()
-	if staff_teleport_to_player_button != null:
-		staff_teleport_to_player_button.visible = _can_teleport_to_player()
-	if staff_teleport_reason_input != null:
-		staff_teleport_reason_input.placeholder_text = "Reason required for player teleport" if _current_user_requires_teleport_to_player_reason() else "Reason (optional)"
+	if _can_teleport_self():
+		staff_teleport_active_tab = "self"
+	else:
+		staff_teleport_active_tab = "player"
+	staff_teleport_player_action_mode = "to_player" if _can_teleport_to_player() else "send_safe"
+	_refresh_staff_teleport_tab_visibility()
 	staff_teleport_popup.visible = not staff_teleport_popup.visible
 	if staff_teleport_popup.visible:
 		_activate_ui_panel(staff_teleport_popup)
 		_load_staff_teleport_points_if_needed()
 		_load_staff_teleport_online_players_if_needed()
+		_load_staff_teleport_safe_points_if_needed()
 	else:
 		_deactivate_ui_panel(staff_teleport_popup)
 
 
 func _hide_staff_teleport_popup() -> void:
+	staff_teleport_dragging = false
 	if staff_teleport_popup != null:
 		staff_teleport_popup.visible = false
 		_deactivate_ui_panel(staff_teleport_popup)
@@ -13135,7 +13389,7 @@ func _load_staff_teleport_points_if_needed() -> void:
 
 
 func _load_staff_teleport_online_players_if_needed(force := false) -> void:
-	if not _can_teleport_to_player():
+	if not (_can_teleport_to_player() or _can_teleport_other_player()):
 		return
 	if (not force and not staff_teleport_online_players.is_empty()) or staff_teleport_players_loading:
 		return
@@ -13156,6 +13410,32 @@ func _load_staff_teleport_online_players_if_needed(force := false) -> void:
 	_rebuild_staff_teleport_player_options()
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_safe_maps.is_empty()
+
+
+func _load_staff_teleport_safe_points_if_needed() -> void:
+	if not _can_teleport_other_player():
+		return
+	if not staff_teleport_safe_maps.is_empty() or staff_teleport_safe_points_loading:
+		return
+	staff_teleport_safe_points_loading = true
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = true
+
+	var result: Dictionary = await ModeratorTeleportService.load_safe_teleport_points()
+	staff_teleport_safe_points_loading = false
+	if not bool(result.get("success", false)):
+		if staff_teleport_send_player_button != null:
+			staff_teleport_send_player_button.disabled = false
+		_add_chat_message("Could not load safe teleport points: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var maps_value: Variant = result.get("maps", [])
+	staff_teleport_safe_maps = maps_value if maps_value is Array else []
+	_rebuild_staff_teleport_send_map_options()
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = staff_teleport_safe_maps.is_empty() or staff_teleport_filtered_players.is_empty()
 
 
 func _rebuild_staff_teleport_map_options() -> void:
@@ -13174,6 +13454,10 @@ func _on_staff_teleport_map_selected(index: int) -> void:
 	_rebuild_staff_teleport_point_options(index)
 
 
+func _on_staff_teleport_send_map_selected(index: int) -> void:
+	_rebuild_staff_teleport_send_point_options(index)
+
+
 func _rebuild_staff_teleport_point_options(map_index: int) -> void:
 	if staff_teleport_point_select == null:
 		return
@@ -13190,8 +13474,39 @@ func _rebuild_staff_teleport_point_options(map_index: int) -> void:
 		staff_teleport_point_select.select(0)
 
 
+func _rebuild_staff_teleport_send_map_options() -> void:
+	if staff_teleport_send_map_select == null:
+		return
+	staff_teleport_send_map_select.clear()
+	for index in range(staff_teleport_safe_maps.size()):
+		var map_entry: Dictionary = _staff_dictionary_from_variant(staff_teleport_safe_maps[index])
+		staff_teleport_send_map_select.add_item(str(map_entry.get("label", map_entry.get("id", "Map"))), index)
+	if staff_teleport_send_map_select.item_count > 0:
+		staff_teleport_send_map_select.select(0)
+		_rebuild_staff_teleport_send_point_options(0)
+
+
+func _rebuild_staff_teleport_send_point_options(map_index: int) -> void:
+	if staff_teleport_send_point_select == null:
+		return
+	staff_teleport_send_point_select.clear()
+	if map_index < 0 or map_index >= staff_teleport_safe_maps.size():
+		return
+	var map_entry: Dictionary = _staff_dictionary_from_variant(staff_teleport_safe_maps[map_index])
+	var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
+	for index in range(points.size()):
+		var point_entry: Dictionary = _staff_dictionary_from_variant(points[index])
+		staff_teleport_send_point_select.add_item(str(point_entry.get("label", point_entry.get("id", "Point"))), index)
+	if staff_teleport_send_point_select.item_count > 0:
+		staff_teleport_send_point_select.select(0)
+
+
 func _on_staff_teleport_player_search_changed(_text: String) -> void:
 	_rebuild_staff_teleport_player_options()
+
+
+func _on_staff_teleport_player_selected(_index: int) -> void:
+	_update_staff_teleport_selected_player_label()
 
 
 func _rebuild_staff_teleport_player_options() -> void:
@@ -13214,8 +13529,25 @@ func _rebuild_staff_teleport_player_options() -> void:
 		staff_teleport_player_select.add_item(option_label, staff_teleport_filtered_players.size() - 1)
 	if staff_teleport_player_select.item_count > 0:
 		staff_teleport_player_select.select(0)
+	_update_staff_teleport_selected_player_label()
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_in_flight
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_safe_maps.is_empty() or staff_teleport_in_flight
+
+
+func _update_staff_teleport_selected_player_label() -> void:
+	if staff_teleport_selected_player_label == null:
+		return
+	var selected_player := _get_selected_staff_teleport_player()
+	var username := str(selected_player.get("username", "")).strip_edges()
+	var display_name := str(selected_player.get("displayName", username)).strip_edges()
+	if username == "" and display_name == "":
+		staff_teleport_selected_player_label.text = "Selected player: none"
+		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		return
+	staff_teleport_selected_player_label.text = "Selected player: %s (@%s)" % [display_name, username]
+	staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_TEXT)
 
 
 func _on_staff_teleport_confirm_pressed() -> void:
@@ -13254,8 +13586,8 @@ func _on_staff_teleport_confirm_pressed() -> void:
 		_add_chat_message("Teleport unavailable: %s" % str(begin_result.get("error", "World is not ready.")))
 		return
 	var reason := ""
-	if staff_teleport_reason_input != null:
-		reason = staff_teleport_reason_input.text.strip_edges()
+	if staff_teleport_self_reason_input != null:
+		reason = staff_teleport_self_reason_input.text.strip_edges()
 	var result: Dictionary = await ModeratorTeleportService.teleport_self(map_id, point_id, reason)
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport"):
@@ -13322,19 +13654,19 @@ func _on_staff_teleport_to_player_pressed() -> void:
 		return
 
 	var reason := ""
-	if staff_teleport_reason_input != null:
-		reason = staff_teleport_reason_input.text.strip_edges()
+	if staff_teleport_player_reason_input != null:
+		reason = staff_teleport_player_reason_input.text.strip_edges()
 	if _current_user_requires_teleport_to_player_reason() and reason == "":
 		if world.has_method("cancel_authorized_teleport"):
 			world.call("cancel_authorized_teleport")
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
-		if staff_teleport_to_player_button != null:
-			staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
-		_add_chat_message("Enter a reason before teleporting to a player.")
-		if staff_teleport_reason_input != null:
-			staff_teleport_reason_input.grab_focus()
+			if staff_teleport_to_player_button != null:
+				staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
+			_add_chat_message("Enter a reason before teleporting to a player.")
+			if staff_teleport_player_reason_input != null:
+				staff_teleport_player_reason_input.grab_focus()
 		return
 	var result: Dictionary = await ModeratorTeleportService.teleport_to_player(target_player_id, reason)
 	if not bool(result.get("success", false)):
@@ -13365,6 +13697,74 @@ func _on_staff_teleport_to_player_pressed() -> void:
 	_add_chat_message("Teleported to %s." % str(selected_player.get("displayName", selected_player.get("username", "player"))))
 
 
+func _on_staff_teleport_send_player_pressed() -> void:
+	if not _can_teleport_other_player():
+		_add_chat_message("You do not have permission to teleport other players.")
+		return
+	if staff_teleport_in_flight:
+		return
+
+	var selected_player := _get_selected_staff_teleport_player()
+	var selected_map := _get_selected_staff_teleport_send_map()
+	var selected_point := _get_selected_staff_teleport_send_point(selected_map)
+	var target_player_id := int(selected_player.get("targetPlayerId", 0))
+	var map_id := str(selected_map.get("id", "")).strip_edges()
+	var point_id := str(selected_point.get("id", "")).strip_edges()
+	if target_player_id <= 0:
+		_add_chat_message("Select an online player first.")
+		return
+	if map_id == "" or point_id == "":
+		_add_chat_message("Select a safe destination first.")
+		return
+
+	var world := GameState.get_world()
+	var local_block_reason := _get_staff_teleport_local_block_reason(world)
+	if local_block_reason != "":
+		_add_chat_message("Teleport unavailable: %s" % local_block_reason)
+		return
+
+	var reason := ""
+	if staff_teleport_player_reason_input != null:
+		reason = staff_teleport_player_reason_input.text.strip_edges()
+	if _current_user_requires_teleport_other_reason() and reason == "":
+		_add_chat_message("Enter a reason before teleporting a player.")
+		if staff_teleport_player_reason_input != null:
+			staff_teleport_player_reason_input.grab_focus()
+		return
+
+	staff_teleport_in_flight = true
+	if staff_teleport_to_player_button != null:
+		staff_teleport_to_player_button.disabled = true
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = true
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = true
+
+	var result: Dictionary = await ModeratorTeleportService.teleport_player(target_player_id, map_id, point_id, reason)
+	staff_teleport_in_flight = false
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = staff_teleport_maps.is_empty()
+	if staff_teleport_to_player_button != null:
+		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_safe_maps.is_empty()
+	if not bool(result.get("success", false)):
+		var error_text := str(result.get("error", "Unknown error"))
+		if error_text == "PLAYER_BUSY":
+			_add_chat_message("Teleport failed: player is busy.")
+		else:
+			_add_chat_message("Teleport player failed: %s" % error_text)
+		await _load_staff_teleport_online_players_if_needed(true)
+		return
+
+	_hide_staff_teleport_popup()
+	_hide_staff_tools_popup()
+	_add_chat_message("Sent %s to %s." % [
+		str(selected_player.get("displayName", selected_player.get("username", "player"))),
+		str(selected_point.get("label", selected_point.get("id", "safe location"))),
+	])
+
+
 func _get_selected_staff_teleport_map() -> Dictionary:
 	if staff_teleport_map_select == null:
 		return {}
@@ -13385,10 +13785,31 @@ func _get_selected_staff_teleport_point(selected_map: Dictionary) -> Dictionary:
 	return _staff_dictionary_from_variant(points[selected_index])
 
 
+func _get_selected_staff_teleport_send_map() -> Dictionary:
+	if staff_teleport_send_map_select == null:
+		return {}
+	var selected_index := staff_teleport_send_map_select.selected
+	if selected_index < 0 or selected_index >= staff_teleport_safe_maps.size():
+		return {}
+	return _staff_dictionary_from_variant(staff_teleport_safe_maps[selected_index])
+
+
+func _get_selected_staff_teleport_send_point(selected_map: Dictionary) -> Dictionary:
+	if staff_teleport_send_point_select == null:
+		return {}
+	var points: Array = selected_map.get("points", []) if selected_map.get("points", []) is Array else []
+	var selected_index := staff_teleport_send_point_select.selected
+	if selected_index < 0 or selected_index >= points.size():
+		return {}
+	return _staff_dictionary_from_variant(points[selected_index])
+
+
 func _get_selected_staff_teleport_player() -> Dictionary:
 	if staff_teleport_player_select == null:
 		return {}
-	var selected_index := staff_teleport_player_select.selected
+	var selected_index := staff_teleport_player_select.get_selected_id()
+	if selected_index < 0:
+		selected_index = staff_teleport_player_select.selected
 	if selected_index < 0 or selected_index >= staff_teleport_filtered_players.size():
 		return {}
 	return _staff_dictionary_from_variant(staff_teleport_filtered_players[selected_index])
@@ -18972,6 +19393,31 @@ func _on_realtime_mail_received(mail_id: int) -> void:
 		await _load_mailbox()
 	else:
 		await _refresh_mail_attention_from_inbox()
+
+
+func _on_authorized_teleport_received(state: Dictionary, _reason: String) -> void:
+	var world := GameState.get_world()
+	if world == null:
+		_add_chat_message("A staff teleport was received, but the world is not ready. Please reload.")
+		return
+
+	var apply_result: Dictionary
+	if world.has_method("apply_remote_authorized_teleport_state"):
+		apply_result = await world.call("apply_remote_authorized_teleport_state", state)
+	elif world.has_method("apply_authorized_teleport_state"):
+		apply_result = await world.call("apply_authorized_teleport_state", state)
+	else:
+		_add_chat_message("A staff teleport was received, but this client cannot apply it. Please reload.")
+		return
+
+	if not bool(apply_result.get("success", false)):
+		_add_chat_message("A staff teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
+		return
+
+	_hide_staff_teleport_popup()
+	_hide_staff_tools_popup()
+	_add_chat_message("A staff member moved you to a safe location.")
+
 
 func _on_private_message_received(message: Dictionary) -> void:
 	var sender: Dictionary = _dictionary_from_value(message.get("sender", {}))

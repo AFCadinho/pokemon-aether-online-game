@@ -445,6 +445,9 @@ func _show_saved_session_card() -> void:
 
 
 func _setup_player_preview() -> void:
+	var preview_container := player_preview_viewport.get_parent() as SubViewportContainer
+	if preview_container != null:
+		preview_container.stretch = false
 	player_preview_viewport.transparent_bg = true
 	player_preview_viewport.size = PLAYER_PREVIEW_VIEWPORT_SIZE
 	player_preview_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS

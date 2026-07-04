@@ -18,4 +18,4 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 
 	is_transitioning = true
-	world.load_map(target_scene_path, target_spawn_name)
+	world.call_deferred("load_map", target_scene_path, target_spawn_name)
