@@ -55,6 +55,7 @@ var pvp_rendered_event_count := 0
 var pvp_allow_setup_animation := false
 var pvp_victory_message_added := false
 var last_rendered_event_seq := -1
+var rendered_non_pvp_event_keys: Dictionary = {}
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
 
 #Battle State
@@ -101,6 +102,8 @@ var summon_release_cry_species := ""
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
+const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
+const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
 const DEBUG_BATTLE_HP_EVENTS := false
@@ -2238,7 +2241,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		var party_value: Variant = capture_result.get("party", [])
 		if party_value is Array:
 			PlayerSave.replace_party_from_state(party_value)
-		await get_tree().create_timer(0.75).timeout
+		await get_tree().create_timer(CAPTURE_SUCCESS_RESULT_HOLD_SECONDS).timeout
 		_finish_battle({
 			"reason": "caught",
 			"winner": "p1",
@@ -2251,7 +2254,13 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 
 	if bool(capture_result.get("requiresBattleTurn", false)):
 		await _hold_opponent_response_message()
+		print("[BattleDebug] capture_fail.pass_turn.start battleId=%s lastRenderedEventSeq=%d captureMessage=%s" % [
+			current_battle_id,
+			last_rendered_event_seq,
+			capture_message,
+		])
 		var pass_turn_response: Dictionary = await action_flow.submit_pass_turn("p1", "p2", last_rendered_event_seq)
+		_debug_print_battle_response("capture_fail.pass_turn.response", pass_turn_response)
 		if not bool(pass_turn_response.get("success", false)):
 			current_action_panel.set_message(str(pass_turn_response.get("error", "Could not resolve the wild Pokemon's turn.")))
 			_set_battle_input_locked(false)
@@ -3917,6 +3926,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_batch_id = ""
 	pvp_last_phase_update_phase = ""
 	last_rendered_event_seq = -1
+	rendered_non_pvp_event_keys.clear()
 	active_player_pokemon = player_pokemon
 	active_enemy_pokemon = enemy_pokemon
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
@@ -3989,6 +3999,7 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
 	event_renderer.add_turn_header(battle_state.get_turn())
+	_remember_initial_non_pvp_setup_events()
 	var start_events := _get_wild_battle_start_events(api_response.get("events", []))
 	if _show_original_transform_targets_before_initial_events(start_events):
 		await get_tree().process_frame
@@ -5083,6 +5094,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_update_hud_panels()
 			_update_active_sprites()
 
+	_remember_rendered_non_pvp_event_keys(ordered_events)
 	_prune_inactive_field_condition_ability_modifiers(battle_state.get_field_effects())
 	_update_hud_panels()
 	_update_party_slots()
@@ -5273,6 +5285,13 @@ func _filter_already_rendered_events(events_value: Variant, rendered_event_keys:
 			var event_key := _get_battle_event_key(event_data)
 			if event_key != "" and rendered_event_keys.has(event_key):
 				continue
+			if not _is_pvp_battle() and _should_dedupe_rendered_non_pvp_event(event_data):
+				if event_key != "" and rendered_non_pvp_event_keys.has(event_key):
+					print("[BattleDebug] non_pvp.local_dedupe skipped key=%s event=%s" % [
+						event_key,
+						_debug_event_label(event_data),
+					])
+					continue
 
 		filtered_events.append(event_value)
 
@@ -5295,6 +5314,15 @@ func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
 		if event_seq > last_rendered_event_seq:
 			filtered_events.append(events[index])
 
+	print("[BattleDebug] non_pvp.seq_filter responseEventSeq=%d firstEventSeq=%d lastRenderedEventSeq=%d inputEvents=%d outputEvents=%d input=%s output=%s" % [
+		response_event_seq,
+		first_event_seq,
+		last_rendered_event_seq,
+		events.size(),
+		filtered_events.size(),
+		_debug_event_summary(events),
+		_debug_event_summary(filtered_events),
+	])
 	return filtered_events
 
 func _filter_unrendered_pvp_events(events: Array, response: Dictionary = {}) -> Array:
@@ -5347,6 +5375,14 @@ func _mark_non_pvp_response_event_seq_consumed(response: Dictionary) -> void:
 
 func _get_battle_event_key(event_data: Dictionary) -> String:
 	var event_type := str(event_data.get("type", ""))
+	if event_type == "turn":
+		return "%s|%d" % [event_type, int(event_data.get("turn", 0))]
+	if event_type == "switch" or event_type == "drag":
+		return "%s|%s|%s" % [
+			event_type,
+			str(event_data.get("playerId", "")),
+			_normalize_species_for_compare(_get_switch_event_dedupe_species(event_data)),
+		]
 	if event_type == "mega" or event_type == "primal":
 		return "%s|%s" % [event_type, str(event_data.get("target", ""))]
 
@@ -5357,6 +5393,99 @@ func _get_battle_event_key(event_data: Dictionary) -> String:
 		str(event_data.get("species", "")),
 		str(event_data.get("to", "")),
 	]
+
+func _should_dedupe_rendered_non_pvp_event(event_data: Dictionary) -> bool:
+	var event_type := str(event_data.get("type", ""))
+	return event_type == "turn" or event_type == "switch" or event_type == "drag"
+
+func _get_switch_event_dedupe_species(event_data: Dictionary) -> String:
+	var species := str(event_data.get("to", "")).strip_edges()
+	if species != "":
+		return species
+
+	species = str(event_data.get("species", "")).strip_edges()
+	if species != "":
+		return species
+
+	species = _get_species_from_ident(str(event_data.get("toIdent", "")))
+	if species != "":
+		return species
+
+	return _get_species_from_ident(str(event_data.get("pokemon", "")))
+
+func _remember_rendered_non_pvp_event_keys(events: Array) -> void:
+	if _is_pvp_battle():
+		return
+
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if not _should_dedupe_rendered_non_pvp_event(event_data):
+			continue
+
+		var event_key := _get_battle_event_key(event_data)
+		if event_key != "":
+			rendered_non_pvp_event_keys[event_key] = true
+
+func _remember_initial_non_pvp_setup_events() -> void:
+	if _is_pvp_battle():
+		return
+
+	_remember_rendered_non_pvp_event_keys([
+		{
+			"type": "turn",
+			"turn": battle_state.get_turn(),
+		},
+		_build_initial_switch_dedupe_event("p1"),
+		_build_initial_switch_dedupe_event("p2"),
+	])
+
+func _build_initial_switch_dedupe_event(player_id: String) -> Dictionary:
+	var ident := battle_state.get_active_pokemon_ident(player_id)
+	var species := _get_active_display_species(player_id)
+	return {
+		"type": "switch",
+		"playerId": player_id,
+		"toIdent": ident,
+		"to": species,
+	}
+
+func _debug_print_battle_response(label: String, response: Dictionary) -> void:
+	var events_value: Variant = response.get("events", [])
+	var events: Array = events_value as Array if events_value is Array else []
+	print("[BattleDebug] %s success=%s eventSeq=%d batchSeq=%d events=%d lastRenderedEventSeq=%d summary=%s" % [
+		label,
+		str(response.get("success", null)),
+		_get_int_from_variant(response.get("eventSeq", -1), -1),
+		_get_int_from_variant(response.get("batchSeq", -1), -1),
+		events.size(),
+		last_rendered_event_seq,
+		_debug_event_summary(events),
+	])
+
+func _debug_event_summary(events: Array) -> String:
+	var labels: Array[String] = []
+	for index: int in range(min(events.size(), 12)):
+		var event_value: Variant = events[index]
+		if event_value is Dictionary:
+			labels.append(_debug_event_label(event_value as Dictionary))
+		else:
+			labels.append(str(event_value))
+	if events.size() > labels.size():
+		labels.append("...+%d" % (events.size() - labels.size()))
+	return "[" + ", ".join(labels) + "]"
+
+func _debug_event_label(event_data: Dictionary) -> String:
+	var event_type := str(event_data.get("type", ""))
+	var parts: Array[String] = [event_type]
+	if event_data.has("turn"):
+		parts.append("turn=%s" % str(event_data.get("turn", "")))
+	for key in ["actor", "target", "playerId", "pokemon", "to", "toIdent", "from", "fromIdent", "species"]:
+		if event_data.has(key) and str(event_data.get(key, "")).strip_edges() != "":
+			parts.append("%s=%s" % [key, str(event_data.get(key, ""))])
+	return "{%s}" % " ".join(parts)
 
 func _remember_pending_mega_species(event_data: Dictionary) -> void:
 	var pending_key := _get_pending_mega_key_from_event(event_data)
@@ -6224,7 +6353,7 @@ func _finish_if_battle_ended() -> bool:
 		"winner": battle_state.get_winner()
 	}
 	_add_pvp_victory_message_if_needed(finish_result)
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(BATTLE_END_RESULT_HOLD_SECONDS).timeout
 	_finish_battle(finish_result)
 	return true
 
@@ -8337,6 +8466,15 @@ func _render_opponent_response(
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
+	_debug_print_battle_response("render_opponent_response.input", opponent_response)
+	print("[BattleDebug] render_opponent_response events response=%d filtered=%d merged=%d responseSummary=%s filteredSummary=%s mergedSummary=%s" % [
+		response_events.size(),
+		filtered_events.size(),
+		opponent_events.size(),
+		_debug_event_summary(response_events),
+		_debug_event_summary(filtered_events),
+		_debug_event_summary(opponent_events),
+	])
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
 	_update_battle_presentation_before_event_render(opponent_events)
