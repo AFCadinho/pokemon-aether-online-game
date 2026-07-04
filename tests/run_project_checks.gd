@@ -3,6 +3,7 @@ extends SceneTree
 const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_display_data_presenter_check.gd",
 	"res://tests/battle_event_text_formatter_check.gd",
+	"res://tests/battle_message_timing_check.gd",
 	"res://tests/battle_state_primal_forms_check.gd",
 	"res://tests/pokemon_ball_metadata_check.gd",
 	"res://tests/pokemon_cry_resolver_check.gd",
