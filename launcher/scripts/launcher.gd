@@ -3,7 +3,7 @@ extends Control
 const LauncherServerHealthService := preload("res://scripts/server_health_service.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
-const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/news.json"
+const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_HEALTH_URL := "https://pokeaether.com/health"
@@ -641,6 +641,8 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 	var news_data: Dictionary = parsed_json
 	var parsed_items: Array[Dictionary] = []
 	var item_variants: Variant = news_data.get("items", [])
+	if typeof(item_variants) != TYPE_ARRAY:
+		item_variants = news_data.get("articles", [])
 	if typeof(item_variants) == TYPE_ARRAY:
 		for item_variant: Variant in item_variants:
 			if typeof(item_variant) != TYPE_DICTIONARY:
@@ -653,8 +655,8 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 
 			parsed_items.append({
 				"title": title,
-				"description": str(item.get("description", "")).strip_edges(),
-				"url": str(item.get("url", "")).strip_edges(),
+				"description": str(item.get("description", item.get("summary", ""))).strip_edges(),
+				"url": str(item.get("url", item.get("externalLink", ""))).strip_edges(),
 			})
 
 	_render_news_items(parsed_items)

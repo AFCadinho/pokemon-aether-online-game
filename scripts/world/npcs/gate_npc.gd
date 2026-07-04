@@ -101,9 +101,6 @@ func _get_blocked_dialogue_lines() -> Array[String]:
 
 
 func _current_player_has_staff_role() -> bool:
-	if PlayerSave.is_staff:
-		return true
-
 	var roles_value: Variant = AuthService.current_user.get("roles", [])
 	if not roles_value is Array:
 		return false

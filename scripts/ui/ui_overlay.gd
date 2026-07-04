@@ -39,6 +39,7 @@ const DEV_TOOLS_PERMISSION := "generating"
 const STAFF_ACTION_BAR_PERMISSION := "ui:staff:action-bar"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
+const STAFF_ROLE_IDS := ["staff", "admin", "owner", "developer", "moderator", "gamemaster"]
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
@@ -888,6 +889,24 @@ func _can_show_staff_action_bar() -> bool:
 func _can_impersonate_accounts() -> bool:
 	return _has_user_permission(IMPERSONATE_PERMISSION)
 
+func _current_player_has_staff_role() -> bool:
+	var roles_value: Variant = AuthService.current_user.get("roles", [])
+	if not roles_value is Array:
+		return false
+
+	var roles: Array = roles_value as Array
+	for role_value: Variant in roles:
+		var role_id := ""
+		if role_value is Dictionary:
+			role_id = str((role_value as Dictionary).get("id", "")).strip_edges().to_lower()
+		else:
+			role_id = str(role_value).strip_edges().to_lower()
+
+		if STAFF_ROLE_IDS.has(role_id):
+			return true
+
+	return false
+
 func _has_user_permission(permission: String) -> bool:
 	var permissions_value: Variant = AuthService.current_user.get("permissions", [])
 	if permissions_value is Array:
@@ -906,7 +925,7 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
 	var can_open_content_creator_menu: bool = can_use_content_creator_tools or can_use_content_creator_generation
 	var has_visible_staff_action: bool = can_impersonate or can_use_dev_tools or can_open_content_creator_menu
-	PlayerSave.is_staff = can_show_staff_action_bar and has_visible_staff_action
+	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
 		content_creator_tools_slot.visible = can_show_staff_action_bar and can_open_content_creator_menu
 	if content_creator_tools_button != null:

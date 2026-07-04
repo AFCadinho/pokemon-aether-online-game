@@ -3,7 +3,7 @@ extends Control
 signal login_submitted(username: String, password: String)
 
 const REGISTER_URL := "https://pokeaether.com/register"
-const NEWS_URL := "https://updates.pokeaether.com/news.json"
+const NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const USER_AGENT_HEADER := "User-Agent: PokeAether/1.0"
 const ONLINE_COLOR := Color(0.16, 0.94, 0.66)
@@ -222,6 +222,8 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 	var news_data: Dictionary = parsed_json
 	var parsed_items: Array[Dictionary] = []
 	var item_variants: Variant = news_data.get("items", [])
+	if typeof(item_variants) != TYPE_ARRAY:
+		item_variants = news_data.get("articles", [])
 	if typeof(item_variants) == TYPE_ARRAY:
 		for item_variant: Variant in item_variants:
 			if typeof(item_variant) != TYPE_DICTIONARY:
@@ -234,8 +236,8 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 
 			parsed_items.append({
 				"title": title,
-				"description": str(item.get("description", "")).strip_edges(),
-				"url": str(item.get("url", "")).strip_edges(),
+				"description": str(item.get("description", item.get("summary", ""))).strip_edges(),
+				"url": str(item.get("url", item.get("externalLink", ""))).strip_edges(),
 			})
 
 	_render_news_items(parsed_items)

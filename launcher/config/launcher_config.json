@@ -5,7 +5,7 @@
 	"macOS": "https://updates.pokeaether.com/manifest-macos.json",
 	"macos": "https://updates.pokeaether.com/manifest-macos.json"
   },
-  "newsUrl": "https://updates.pokeaether.com/news.json",
+  "newsUrl": "https://updates.pokeaether.com/data/news.json",
   "healthUrl": "https://pokeaether.com/health",
   "presenceUrl": "https://admin.pokeaether.com/presence/online-count",
   "discordUrl": "https://discord.com/invite/b6WexWT8HX",
