@@ -114,14 +114,15 @@ func _connect_room_async() -> void:
 func _send_join_when_open() -> void:
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("Waiting for websocket open to send join", "room=%s player=%s" % [active_room_code, active_player_id])
-	for _attempt in range(60):
+	var open_deadline_msec := Time.get_ticks_msec() + 3000
+	while Time.get_ticks_msec() < open_deadline_msec:
 		websocket.poll()
 		if websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:
 			_send_join()
 			return
 		if websocket.get_ready_state() == WebSocketPeer.STATE_CLOSED:
 			return
-		await get_tree().create_timer(0.05).timeout
+		await get_tree().process_frame
 
 
 func _send_join() -> void:

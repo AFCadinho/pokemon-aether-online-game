@@ -39,6 +39,7 @@ var pvp_room_code := ""
 var pvp_match_id := ""
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
+var pvp_realtime_activity_seq := 0
 var pvp_pending_reconciliation_snapshot: Dictionary = {}
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_idle_realtime_drain_pending := false
@@ -99,7 +100,7 @@ var summon_release_audio_mode := SUMMON_RELEASE_AUDIO_BALL
 var summon_release_cry_species := ""
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
-const OPPONENT_RESPONSE_HOLD_SECONDS := 0.65
+const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
 const DEBUG_BATTLE_HP_EVENTS := false
@@ -6075,7 +6076,7 @@ func _wait_for_pvp_force_switch_phase_release(source: String) -> bool:
 		)
 
 	while _pvp_is_waiting_for_force_switch_phase_release():
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().process_frame
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["awaiting_force_switch"]):
 			break
 
@@ -6313,6 +6314,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 		)
 	pvp_realtime_updates.clear()
 	pvp_realtime_deferred_updates.clear()
+	pvp_realtime_activity_seq = 0
 	pvp_pending_reconciliation_snapshot.clear()
 	pvp_retrying_reconciliation_snapshot = false
 	pvp_idle_realtime_drain_pending = false
@@ -6444,6 +6446,7 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 
 	if message_type == "pvp.phase_update":
+		pvp_realtime_activity_seq += 1
 		_apply_pvp_phase_update(message)
 		return
 
@@ -6460,6 +6463,7 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		return
 
 	pvp_realtime_updates.append(message.duplicate(true))
+	pvp_realtime_activity_seq += 1
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
 			"Queued PvP realtime update",
@@ -6679,10 +6683,11 @@ func _submit_pvp_realtime_forfeit() -> Dictionary:
 func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot: int, mega := false) -> Dictionary:
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime("Preparing PvP realtime action wait", "action=%s player_id=%s slot=%s mega=%s" % [action, player_id, slot, mega])
-	for _ready_attempt in range(40):
+	var ready_deadline_msec := Time.get_ticks_msec() + 2000
+	while Time.get_ticks_msec() < ready_deadline_msec:
 		if PvpBattleRealtimeService.connected and PvpBattleRealtimeService.joined and PvpBattleRealtimeService.room_is_ready:
 			break
-		await get_tree().create_timer(0.05).timeout
+		await get_tree().process_frame
 
 	if not PvpBattleRealtimeService.connected or not PvpBattleRealtimeService.joined or not PvpBattleRealtimeService.room_is_ready:
 		if DEBUG_PVP_REALTIME:
@@ -6728,11 +6733,14 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 	var queue_start := pvp_realtime_updates.size()
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime("Realtime queue start", "request_id=%s queue_start=%d" % [request_id, queue_start])
-	for _attempt in range(120):
-		if DEBUG_PVP_REALTIME and _attempt % 20 == 0:
+
+	var response_deadline_msec := Time.get_ticks_msec() + 12000
+	var response_wait_attempt := 0
+	while Time.get_ticks_msec() < response_deadline_msec:
+		if DEBUG_PVP_REALTIME and response_wait_attempt % 60 == 0:
 			_log_pvp_realtime(
 				"Realtime wait attempt",
-				"request_id=%s attempt=%d queue=%d" % [request_id, _attempt, pvp_realtime_updates.size()]
+				"request_id=%s attempt=%d queue=%d" % [request_id, response_wait_attempt, pvp_realtime_updates.size()]
 			)
 		if not signal_match.is_empty():
 			if PvpBattleRealtimeService.action_response_received.is_connected(listener):
@@ -6774,12 +6782,13 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 				"success": false,
 				"error": "Invalid PvP realtime response.",
 			}
-		if DEBUG_PVP_REALTIME and _attempt % 20 == 0:
+		if DEBUG_PVP_REALTIME and response_wait_attempt % 60 == 0:
 			_log_pvp_realtime(
 				"No realtime match yet",
 				"request_id=%s action=%s player_id=%s queue_size=%d" % [request_id, action, player_id, pvp_realtime_updates.size()]
 			)
-		await get_tree().create_timer(0.1).timeout
+		response_wait_attempt += 1
+		await get_tree().process_frame
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
 			"PvP realtime response timed out",
@@ -7350,6 +7359,7 @@ func _defer_pvp_realtime_update(message: Dictionary, context: String = "") -> vo
 		return
 
 	pvp_realtime_deferred_updates.append(message.duplicate(true))
+	pvp_realtime_activity_seq += 1
 	if not DEBUG_PVP_REALTIME:
 		return
 
@@ -7443,12 +7453,29 @@ func _should_continue_idle_pvp_realtime_drain() -> bool:
 	return battle_input_locked and (current_action_view == ActionView.NONE or pvp_idle_wait_recovery_active)
 
 func _wait_for_next_pvp_realtime_update(timeout_seconds: float, include_deferred := true) -> Dictionary:
+	var queued_message := _pop_next_pvp_realtime_update(include_deferred, "immediately")
+	if not queued_message.is_empty() or timeout_seconds <= 0.0:
+		return queued_message
+
+	var start_activity_seq := pvp_realtime_activity_seq
+	var deadline_msec := Time.get_ticks_msec() + int(max(timeout_seconds * 1000.0, 1.0))
+	while Time.get_ticks_msec() < deadline_msec:
+		await get_tree().process_frame
+		var received_message := _pop_next_pvp_realtime_update(include_deferred, "after wait")
+		if not received_message.is_empty():
+			return received_message
+		if pvp_realtime_activity_seq != start_activity_seq:
+			return {}
+
+	return _pop_next_pvp_realtime_update(include_deferred, "after timeout")
+
+func _pop_next_pvp_realtime_update(include_deferred := true, timing_context := "") -> Dictionary:
 	if not pvp_realtime_updates.is_empty():
 		var queued_message: Variant = pvp_realtime_updates.pop_front()
 		if queued_message is Dictionary:
 			if DEBUG_PVP_REALTIME:
 				_log_pvp_realtime(
-					"Dequeued realtime update immediately",
+					"Dequeued realtime update %s" % timing_context,
 					"message=%s" % _describe_pvp_realtime_message(queued_message)
 				)
 			return queued_message as Dictionary
@@ -7458,32 +7485,10 @@ func _wait_for_next_pvp_realtime_update(timeout_seconds: float, include_deferred
 		if deferred_message is Dictionary:
 			if DEBUG_PVP_REALTIME:
 				_log_pvp_realtime(
-					"Dequeued deferred realtime update",
+					"Dequeued deferred realtime update %s" % timing_context,
 					"message=%s" % _describe_pvp_realtime_message(deferred_message)
 				)
 			return deferred_message as Dictionary
-		return {}
-
-	await get_tree().create_timer(timeout_seconds).timeout
-	if not pvp_realtime_updates.is_empty():
-		var received_message: Variant = pvp_realtime_updates.pop_front()
-		if received_message is Dictionary:
-			if DEBUG_PVP_REALTIME:
-				_log_pvp_realtime(
-					"Dequeued realtime update after wait",
-					"message=%s" % _describe_pvp_realtime_message(received_message)
-				)
-			return received_message as Dictionary
-		return {}
-	if include_deferred and not pvp_realtime_deferred_updates.is_empty():
-		var delayed_deferred_message: Variant = pvp_realtime_deferred_updates.pop_front()
-		if delayed_deferred_message is Dictionary:
-			if DEBUG_PVP_REALTIME:
-				_log_pvp_realtime(
-					"Dequeued deferred realtime update after wait",
-					"message=%s" % _describe_pvp_realtime_message(delayed_deferred_message)
-				)
-			return delayed_deferred_message as Dictionary
 		return {}
 
 	return {}
@@ -8677,6 +8682,8 @@ func _get_switch_event_is_shiny(player_id: String, switch_ident: String, species
 	return false
 
 func _hold_opponent_response_message() -> void:
+	if OPPONENT_RESPONSE_HOLD_SECONDS <= 0.0:
+		return
 	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
 
 func _can_switch_to_slot(slot: int) -> bool:
