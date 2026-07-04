@@ -4,6 +4,8 @@ class_name ModeratorTeleportServiceNode
 
 const TELEPORT_POINTS_ENDPOINT := "/game/moderation/teleport-points"
 const TELEPORT_SELF_ENDPOINT := "/game/moderation/teleport-self"
+const TELEPORT_ONLINE_PLAYERS_ENDPOINT := "/game/moderation/teleport-online-players"
+const TELEPORT_TO_PLAYER_ENDPOINT := "/game/moderation/teleport-to-player"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -49,6 +51,61 @@ func teleport_self(map_id: String, point_id: String, reason: String = "") -> Dic
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + TELEPORT_SELF_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(payload)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"state": _dictionary_from_value(body.get("state", {})),
+	}
+
+
+func load_online_teleport_players() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + TELEPORT_ONLINE_PLAYERS_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"players": _array_from_value(body.get("players", [])),
+	}
+
+
+func teleport_to_player(target_player_id: int, reason: String = "") -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+
+	var payload := {
+		"targetPlayerId": target_player_id,
+	}
+	var cleaned_reason := reason.strip_edges()
+	if cleaned_reason != "":
+		payload["reason"] = cleaned_reason
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + TELEPORT_TO_PLAYER_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(payload)

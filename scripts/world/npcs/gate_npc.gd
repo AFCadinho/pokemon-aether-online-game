@@ -2,7 +2,7 @@ extends DialogueNPC
 
 class_name GateNPC
 
-const STAFF_ROLE_IDS := ["staff", "admin", "owner", "developer", "moderator", "gamemaster"]
+const STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 
 @export var gate_id := "route_1"
 @export var requires_party_pokemon := true

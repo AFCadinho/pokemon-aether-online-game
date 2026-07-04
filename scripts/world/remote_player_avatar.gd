@@ -18,6 +18,7 @@ const MAX_POSITION_SAMPLES := 8
 const ROLE_BADGE_COLORS := {
 	"alpha": Color(0.851, 0.722, 1.0),
 	"gamemaster": Color(0.0, 0.749, 1.0),
+	"senior_staff": Color(0.957, 0.773, 0.259),
 	"developer": Color(0.0, 0.898, 0.659),
 	"moderator": Color(0.482, 0.173, 0.749),
 }
@@ -716,6 +717,8 @@ func _get_role_badge(role_id: String) -> String:
 			return "alpha"
 		"gamemaster":
 			return "GM"
+		"senior_staff":
+			return "SR"
 		"developer":
 			return "DEV"
 		"moderator":

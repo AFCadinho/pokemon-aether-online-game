@@ -197,6 +197,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	last_presence_position_signature = ""
 	has_pending_player_position_save = false
 	_publish_world_presence(true)
+	_refresh_remote_players_from_server.call_deferred()
 	authorized_teleport_apply_failed_autosave_blocked = false
 	authorized_teleport_in_progress = false
 	if authorized_teleport_locked_overworld:
@@ -297,6 +298,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	is_loading_map = false
 	await _save_current_player_position_if_changed(true, target_spawn_name)
 	_publish_world_presence(true)
+	_refresh_remote_players_from_server.call_deferred()
 	GameState.unlock_overworld_input()
 
 func move_player_to_map(map: Node) -> void:
@@ -561,6 +563,21 @@ func _publish_world_presence(force := false) -> void:
 
 	last_presence_position_signature = signature
 	WorldPresenceService.update_position(_build_current_player_position_state(""))
+
+
+func _refresh_remote_players_from_server() -> void:
+	if not AuthService.is_authenticated() or GameState.current_map == null:
+		return
+
+	var result: Dictionary = await PlayerGameStateService.load_map_players()
+	if not bool(result.get("success", false)):
+		push_warning("World: map player snapshot load failed: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	var players_value: Variant = result.get("players", [])
+	var players: Array = players_value if players_value is Array else []
+	_apply_remote_player_states(players, true)
+
 
 func _track_playtime(delta: float) -> void:
 	if not AuthService.is_authenticated() or is_loading_map:
