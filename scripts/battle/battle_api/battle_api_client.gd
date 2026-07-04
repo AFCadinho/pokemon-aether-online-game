@@ -216,6 +216,33 @@ func send_choice(
 		body
 	)
 
+func send_choice_and_resolve(
+	request_node: HTTPRequest,
+	battle_id: String,
+	player_id: String,
+	choice_type: String,
+	slot: int,
+	mega := false,
+	strategy := "basic",
+	npc_player_id := "p2",
+	since_event_seq := -1
+) -> Dictionary:
+	var body := {
+		"playerId": player_id,
+		"type": choice_type,
+		"slot": slot,
+		"strategy": strategy,
+		"npcPlayerId": npc_player_id
+	}
+	if mega:
+		body["mega"] = true
+
+	return await send_post_request(
+		request_node,
+		_append_since_event_seq_query("/battle/%s/choice-and-resolve" % battle_id, since_event_seq),
+		body
+	)
+
 func send_npc_choice(
 	request_node: HTTPRequest,
 	battle_id: String,

@@ -51,6 +51,18 @@ func submit_player_choice(choice_type: String, slot: int, mega := false, since_e
 	return map_response_for_local_player(response)
 
 
+func submit_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
+	var response: Dictionary = await send_player_choice_and_resolve(choice_type, slot, mega, since_event_seq)
+	if not _is_successful_response(response):
+		print("Player choice resolution failed: ", response)
+		return response
+
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
+		return response
+
+	return map_response_for_local_player(response)
+
+
 func submit_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Dictionary:
 	var response: Dictionary = await send_npc_choice(player_id, since_event_seq)
 	if not _is_successful_response(response):
@@ -83,6 +95,20 @@ func send_player_choice(choice_type: String, slot: int, mega := false, since_eve
 		choice_type,
 		slot,
 		mega,
+		since_event_seq
+		)
+
+
+func send_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
+	return await BattleApiClient.send_choice_and_resolve(
+		request_node,
+		battle_state.battle_id,
+		local_player_id,
+		choice_type,
+		slot,
+		mega,
+		"basic",
+		"p2",
 		since_event_seq
 	)
 

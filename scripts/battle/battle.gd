@@ -4833,7 +4833,11 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_set_battle_input_locked(true)
 	moves_grid.visible = false
 	_clear_mega_evolution_selection()
-	var player_response: Dictionary = await _submit_player_choice("move", slot, use_mega, pending_player_choice_events)
+	var player_response: Dictionary = {}
+	if _is_pvp_battle():
+		player_response = await _submit_player_choice("move", slot, use_mega, pending_player_choice_events)
+	else:
+		player_response = await _submit_player_choice_and_resolve("move", slot, use_mega)
 
 	if not player_response.get("success", false):
 		_clear_pending_mega_species_for_events(pending_player_choice_events)
@@ -4845,7 +4849,7 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	if _is_pvp_battle():
 		return
 
-	if not await _submit_npc_choice_and_render({}, pending_player_choice_events):
+	if not await _render_resolved_player_choice_response(player_response, pending_player_choice_events):
 		_clear_pending_mega_species_for_events(pending_player_choice_events)
 		_show_moves()
 		_set_battle_input_locked(false)
@@ -5948,7 +5952,11 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	party_grid.visible = false
 	_hide_party_hover()
 
-	var player_response: Dictionary = await _submit_player_choice("switch", submit_slot)
+	var player_response: Dictionary = {}
+	if _is_pvp_battle() or was_force_switch:
+		player_response = await _submit_player_choice("switch", submit_slot)
+	else:
+		player_response = await _submit_player_choice_and_resolve("switch", submit_slot)
 
 	if not player_response.get("success", false):
 		var error_message := str(player_response.get("error", "Cannot switch right now!"))
@@ -5993,7 +6001,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	if _is_pvp_battle():
 		return
 
-	if not await _submit_npc_choice_and_render():
+	if not await _render_resolved_player_choice_response(player_response):
 		_set_battle_input_locked(false)
 		return
 
@@ -6250,6 +6258,23 @@ func _submit_player_choice(
 	if _is_pvp_battle():
 		return await _submit_pvp_realtime_choice(choice_type, slot, mega, pending_player_choice_events)
 	return await action_flow.submit_player_choice(choice_type, slot, mega, last_rendered_event_seq)
+
+func _submit_player_choice_and_resolve(choice_type: String, slot: int, mega := false) -> Dictionary:
+	if _is_pvp_battle():
+		return await _submit_player_choice(choice_type, slot, mega)
+	if (choice_type == "item" or choice_type == "bag") and not _can_use_bag_in_current_battle():
+		return {
+			"success": false,
+			"error": "Bag cannot be used in this battle.",
+		}
+
+	var local_state_player_id := _get_local_state_player_id()
+	if choice_type == "move" and mega and not battle_state.can_active_pokemon_mega_evolve(local_state_player_id):
+		if mega_evolution_selected:
+			_clear_mega_evolution_selection()
+		mega = false
+
+	return await action_flow.submit_player_choice_and_resolve(choice_type, slot, mega, last_rendered_event_seq)
 
 func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	if _is_pvp_battle():
@@ -8271,6 +8296,17 @@ func _submit_npc_choice_and_render(
 		return false
 
 	await _render_opponent_response(opponent_response, rendered_event_keys, pending_player_choice_events)
+	await _hold_opponent_response_message()
+	return true
+
+func _render_resolved_player_choice_response(
+	resolved_response: Dictionary,
+	pending_player_choice_events: Array = []
+) -> bool:
+	if not bool(resolved_response.get("success", false)):
+		return false
+
+	await _render_opponent_response(resolved_response, {}, pending_player_choice_events)
 	await _hold_opponent_response_message()
 	return true
 
