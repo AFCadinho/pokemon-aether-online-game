@@ -2254,13 +2254,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 
 	if bool(capture_result.get("requiresBattleTurn", false)):
 		await _hold_opponent_response_message()
-		print("[BattleDebug] capture_fail.pass_turn.start battleId=%s lastRenderedEventSeq=%d captureMessage=%s" % [
-			current_battle_id,
-			last_rendered_event_seq,
-			capture_message,
-		])
 		var pass_turn_response: Dictionary = await action_flow.submit_pass_turn("p1", "p2", last_rendered_event_seq)
-		_debug_print_battle_response("capture_fail.pass_turn.response", pass_turn_response)
 		if not bool(pass_turn_response.get("success", false)):
 			current_action_panel.set_message(str(pass_turn_response.get("error", "Could not resolve the wild Pokemon's turn.")))
 			_set_battle_input_locked(false)
@@ -5287,10 +5281,6 @@ func _filter_already_rendered_events(events_value: Variant, rendered_event_keys:
 				continue
 			if not _is_pvp_battle() and _should_dedupe_rendered_non_pvp_event(event_data):
 				if event_key != "" and rendered_non_pvp_event_keys.has(event_key):
-					print("[BattleDebug] non_pvp.local_dedupe skipped key=%s event=%s" % [
-						event_key,
-						_debug_event_label(event_data),
-					])
 					continue
 
 		filtered_events.append(event_value)
@@ -5314,15 +5304,6 @@ func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
 		if event_seq > last_rendered_event_seq:
 			filtered_events.append(events[index])
 
-	print("[BattleDebug] non_pvp.seq_filter responseEventSeq=%d firstEventSeq=%d lastRenderedEventSeq=%d inputEvents=%d outputEvents=%d input=%s output=%s" % [
-		response_event_seq,
-		first_event_seq,
-		last_rendered_event_seq,
-		events.size(),
-		filtered_events.size(),
-		_debug_event_summary(events),
-		_debug_event_summary(filtered_events),
-	])
 	return filtered_events
 
 func _filter_unrendered_pvp_events(events: Array, response: Dictionary = {}) -> Array:
@@ -5451,41 +5432,6 @@ func _build_initial_switch_dedupe_event(player_id: String) -> Dictionary:
 		"toIdent": ident,
 		"to": species,
 	}
-
-func _debug_print_battle_response(label: String, response: Dictionary) -> void:
-	var events_value: Variant = response.get("events", [])
-	var events: Array = events_value as Array if events_value is Array else []
-	print("[BattleDebug] %s success=%s eventSeq=%d batchSeq=%d events=%d lastRenderedEventSeq=%d summary=%s" % [
-		label,
-		str(response.get("success", null)),
-		_get_int_from_variant(response.get("eventSeq", -1), -1),
-		_get_int_from_variant(response.get("batchSeq", -1), -1),
-		events.size(),
-		last_rendered_event_seq,
-		_debug_event_summary(events),
-	])
-
-func _debug_event_summary(events: Array) -> String:
-	var labels: Array[String] = []
-	for index: int in range(min(events.size(), 12)):
-		var event_value: Variant = events[index]
-		if event_value is Dictionary:
-			labels.append(_debug_event_label(event_value as Dictionary))
-		else:
-			labels.append(str(event_value))
-	if events.size() > labels.size():
-		labels.append("...+%d" % (events.size() - labels.size()))
-	return "[" + ", ".join(labels) + "]"
-
-func _debug_event_label(event_data: Dictionary) -> String:
-	var event_type := str(event_data.get("type", ""))
-	var parts: Array[String] = [event_type]
-	if event_data.has("turn"):
-		parts.append("turn=%s" % str(event_data.get("turn", "")))
-	for key in ["actor", "target", "playerId", "pokemon", "to", "toIdent", "from", "fromIdent", "species"]:
-		if event_data.has(key) and str(event_data.get(key, "")).strip_edges() != "":
-			parts.append("%s=%s" % [key, str(event_data.get(key, ""))])
-	return "{%s}" % " ".join(parts)
 
 func _remember_pending_mega_species(event_data: Dictionary) -> void:
 	var pending_key := _get_pending_mega_key_from_event(event_data)
@@ -8466,15 +8412,6 @@ func _render_opponent_response(
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
-	_debug_print_battle_response("render_opponent_response.input", opponent_response)
-	print("[BattleDebug] render_opponent_response events response=%d filtered=%d merged=%d responseSummary=%s filteredSummary=%s mergedSummary=%s" % [
-		response_events.size(),
-		filtered_events.size(),
-		opponent_events.size(),
-		_debug_event_summary(response_events),
-		_debug_event_summary(filtered_events),
-		_debug_event_summary(opponent_events),
-	])
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
 	_update_battle_presentation_before_event_render(opponent_events)

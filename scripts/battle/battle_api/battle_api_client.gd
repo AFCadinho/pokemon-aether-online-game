@@ -343,8 +343,6 @@ func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 
 func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
-	if path.contains("/pass-turn") or path.contains("sinceEventSeq"):
-		print("[BattleDebug] HTTP POST path=%s body=%s" % [path, JSON.stringify(body)])
 	
 	var error: int = request_node.request(
 		api_base_url + path,
