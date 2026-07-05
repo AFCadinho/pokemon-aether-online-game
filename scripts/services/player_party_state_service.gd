@@ -530,6 +530,7 @@ func _pokemon_create_result_from_response(response: Dictionary) -> Dictionary:
 		"pokemon": pokemon,
 		"hasParty": bool(party.get("hasParty", false)),
 		"party": _array_from_value(party.get("party", [])),
+		"storageLocation": PokemonStorageService.normalize_storage_location(body.get("storageLocation", {})),
 	}
 
 

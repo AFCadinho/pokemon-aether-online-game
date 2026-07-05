@@ -2237,6 +2237,8 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	var capture_message := str(capture_result.get("message", ""))
 	if capture_message.is_empty():
 		capture_message = "Gotcha!" if caught else "The Pokemon broke free."
+	if caught:
+		capture_message = _capture_result_message_with_storage(capture_result, capture_message)
 	current_action_panel.set_message(capture_message)
 	_add_battle_log_message(capture_message)
 
@@ -2271,6 +2273,35 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 			return
 
 	_set_battle_input_locked(false)
+
+func _capture_result_message_with_storage(capture_result: Dictionary, fallback_message: String) -> String:
+	var location: Dictionary = PokemonStorageService.normalize_storage_location(capture_result.get("storageLocation", {}))
+	if location.is_empty():
+		return fallback_message
+
+	var pokemon_response: Dictionary = {}
+	var pokemon_response_value: Variant = capture_result.get("pokemon", {})
+	if pokemon_response_value is Dictionary:
+		pokemon_response = pokemon_response_value as Dictionary
+
+	var pokemon_payload: Dictionary = {}
+	var pokemon_payload_value: Variant = pokemon_response.get("pokemon", {})
+	if pokemon_payload_value is Dictionary:
+		pokemon_payload = pokemon_payload_value as Dictionary
+
+	var species := str(pokemon_payload.get("displaySpecies", pokemon_payload.get("species", "Pokemon"))).strip_edges()
+	if species == "":
+		species = "Pokemon"
+
+	match str(location.get("type", "")):
+		"party":
+			return "Gotcha! %s was caught and added to party." % species
+		"box":
+			return "Gotcha! %s was caught and sent to %s." % [
+				species,
+				PokemonStorageService.storage_location_label(location),
+			]
+	return fallback_message
 
 func _on_capture_ball_thrown() -> void:
 	SfxManager.play("capture_throw")
