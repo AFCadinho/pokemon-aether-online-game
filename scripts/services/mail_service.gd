@@ -114,6 +114,7 @@ func claim_mail(mail_id: int) -> Dictionary:
 		"mail": _dictionary_from_value(body.get("mail", {})),
 		"inventory": _array_from_value(_dictionary_from_value(body.get("inventory", {})).get("items", [])),
 		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
+		"storageLocations": _normalize_storage_locations(body.get("storageLocations", [])),
 	}
 
 
@@ -179,6 +180,7 @@ func claim_mail_attachment(mail_id: int, attachment_id: int) -> Dictionary:
 		"mail": _dictionary_from_value(body.get("mail", {})),
 		"inventory": _array_from_value(_dictionary_from_value(body.get("inventory", {})).get("items", [])),
 		"party": _array_from_value(_dictionary_from_value(body.get("party", {})).get("party", [])),
+		"storageLocations": _normalize_storage_locations(body.get("storageLocations", [])),
 	}
 
 
@@ -249,6 +251,18 @@ func _normalize_pokemon_attachment_ids(value: Array) -> Array:
 		if normalized.size() >= 5:
 			break
 
+	return normalized
+
+
+func _normalize_storage_locations(value: Variant) -> Array:
+	var normalized: Array = []
+	if typeof(value) != TYPE_ARRAY:
+		return normalized
+	var locations: Array = value
+	for location_value: Variant in locations:
+		var location := PokemonStorageService.normalize_storage_location(location_value)
+		if not location.is_empty():
+			normalized.append(location)
 	return normalized
 
 

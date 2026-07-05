@@ -106,6 +106,8 @@ const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
 const BAG_SIZE := Vector2(920, 620)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
+const PC_POPUP_SIZE := Vector2(900, 560)
+const PC_BOX_SLOTS_PER_ROW := 6
 const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
@@ -617,6 +619,19 @@ var incoming_friend_request_ids_initialized: bool = false
 var play_existing_friend_request_notification_on_next_socials_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
+var socials_pc_button: Button
+var pc_popup: PanelContainer
+var pc_box_selector: OptionButton
+var pc_party_list: VBoxContainer
+var pc_box_grid: GridContainer
+var pc_status_label: Label
+var pc_close_button: Button
+var pc_selected_box_index := 0
+var pc_box_count := 0
+var pc_slots_per_box := 30
+var pc_current_box: Dictionary = {}
+var pc_selected_source: Dictionary = {}
+var pc_move_in_progress := false
 var pokemon_summary_popup: PanelContainer
 var pokemon_summary_left_panel: PanelContainer
 var pokemon_summary_right_area: VBoxContainer
@@ -789,6 +804,7 @@ func _ready() -> void:
 	_setup_item_dex_popup()
 	_setup_pokedex_button()
 	_setup_pokedex_popup()
+	_setup_pc_ui()
 	_apply_ui_z_index_policy()
 	_apply_premium_overlay_styles()
 	_apply_mail_ui_styles()
@@ -859,6 +875,8 @@ func _ready() -> void:
 	socials_button.pressed.connect(_on_socials_button_pressed)
 	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
+	if socials_pc_button != null:
+		socials_pc_button.pressed.connect(_on_socials_pc_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
 	mail_inbox_button.pressed.connect(_on_mail_box_selected.bind("inbox"))
 	mail_sent_button.pressed.connect(_on_mail_box_selected.bind("sent"))
@@ -1118,6 +1136,147 @@ func _apply_mail_ui_styles() -> void:
 	_apply_line_edit_style(mail_item_search_input)
 	_apply_text_edit_style(mail_compose_body_input)
 
+func _setup_pc_ui() -> void:
+	if socials_pc_button == null:
+		socials_pc_button = Button.new()
+		socials_pc_button.name = "PCButton"
+		socials_pc_button.text = "PC Boxes"
+		socials_pc_button.custom_minimum_size = Vector2(0, 36)
+		socials_pc_button.focus_mode = Control.FOCUS_NONE
+		var socials_stack := socials_close_button.get_parent()
+		if socials_stack != null:
+			socials_stack.add_child(socials_pc_button)
+			socials_stack.move_child(socials_pc_button, socials_close_button.get_index())
+		_apply_button_style(socials_pc_button, "primary")
+
+	if pc_popup != null:
+		return
+
+	pc_popup = PanelContainer.new()
+	pc_popup.name = "PokemonPCPopup"
+	pc_popup.visible = false
+	pc_popup.z_index = UI_BASE_Z_INDEX
+	pc_popup.custom_minimum_size = PC_POPUP_SIZE
+	pc_popup.set_anchors_preset(Control.PRESET_CENTER)
+	pc_popup.offset_left = -PC_POPUP_SIZE.x / 2.0
+	pc_popup.offset_top = -PC_POPUP_SIZE.y / 2.0
+	pc_popup.offset_right = PC_POPUP_SIZE.x / 2.0
+	pc_popup.offset_bottom = PC_POPUP_SIZE.y / 2.0
+	pc_popup.add_theme_stylebox_override("panel", _make_panel_style(UI_PANEL_BG, UI_BORDER, 10, 1))
+	root_control.add_child(pc_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	pc_popup.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 10)
+	margin.add_child(stack)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
+	stack.add_child(header)
+
+	var title := Label.new()
+	title.text = "PC Boxes"
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(title)
+
+	pc_status_label = Label.new()
+	pc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	pc_status_label.add_theme_font_size_override("font_size", 13)
+	pc_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	header.add_child(pc_status_label)
+
+	pc_close_button = Button.new()
+	pc_close_button.text = "Close"
+	pc_close_button.custom_minimum_size = Vector2(78, 32)
+	pc_close_button.focus_mode = Control.FOCUS_NONE
+	pc_close_button.pressed.connect(_on_pc_close_button_pressed)
+	_apply_button_style(pc_close_button)
+	header.add_child(pc_close_button)
+
+	var body := HBoxContainer.new()
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 14)
+	stack.add_child(body)
+
+	var party_panel := PanelContainer.new()
+	party_panel.custom_minimum_size = Vector2(250, 0)
+	party_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	party_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
+	body.add_child(party_panel)
+
+	var party_margin := MarginContainer.new()
+	party_margin.add_theme_constant_override("margin_left", 10)
+	party_margin.add_theme_constant_override("margin_top", 10)
+	party_margin.add_theme_constant_override("margin_right", 10)
+	party_margin.add_theme_constant_override("margin_bottom", 10)
+	party_panel.add_child(party_margin)
+
+	var party_stack := VBoxContainer.new()
+	party_stack.add_theme_constant_override("separation", 8)
+	party_margin.add_child(party_stack)
+
+	var party_title := Label.new()
+	party_title.text = "Party"
+	party_title.add_theme_font_size_override("font_size", 16)
+	party_title.add_theme_color_override("font_color", UI_TEXT)
+	party_stack.add_child(party_title)
+
+	pc_party_list = VBoxContainer.new()
+	pc_party_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pc_party_list.add_theme_constant_override("separation", 7)
+	party_stack.add_child(pc_party_list)
+
+	var box_panel := PanelContainer.new()
+	box_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
+	body.add_child(box_panel)
+
+	var box_margin := MarginContainer.new()
+	box_margin.add_theme_constant_override("margin_left", 10)
+	box_margin.add_theme_constant_override("margin_top", 10)
+	box_margin.add_theme_constant_override("margin_right", 10)
+	box_margin.add_theme_constant_override("margin_bottom", 10)
+	box_panel.add_child(box_margin)
+
+	var box_stack := VBoxContainer.new()
+	box_stack.add_theme_constant_override("separation", 10)
+	box_margin.add_child(box_stack)
+
+	var box_header := HBoxContainer.new()
+	box_header.add_theme_constant_override("separation", 8)
+	box_stack.add_child(box_header)
+
+	var box_title := Label.new()
+	box_title.text = "Box"
+	box_title.add_theme_font_size_override("font_size", 16)
+	box_title.add_theme_color_override("font_color", UI_TEXT)
+	box_header.add_child(box_title)
+
+	pc_box_selector = OptionButton.new()
+	pc_box_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_box_selector.item_selected.connect(_on_pc_box_selected)
+	box_header.add_child(pc_box_selector)
+
+	pc_box_grid = GridContainer.new()
+	pc_box_grid.columns = PC_BOX_SLOTS_PER_ROW
+	pc_box_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_box_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pc_box_grid.add_theme_constant_override("h_separation", 8)
+	pc_box_grid.add_theme_constant_override("v_separation", 8)
+	box_stack.add_child(pc_box_grid)
+
+	pc_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(pc_popup))
+
 func _setup_mail_compose_help_button() -> void:
 	if mail_compose_help_button != null:
 		return
@@ -1340,6 +1499,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		socials_menu,
 		mail_popup,
 		mail_compose_popup,
+		pc_popup,
 	]
 	for panel: Control in panels:
 		if panel != null and panel.visible:
@@ -12943,10 +13103,6 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 		_add_chat_message("Paste a Showdown/Pokepaste set first.")
 		return false
 
-	if PlayerSave.party.size() >= MAX_PARTY_SIZE:
-		_add_chat_message("Party is full.")
-		return false
-
 	_add_chat_message("Creating Pokemon...")
 	var response: Dictionary = await PokemonDataApiClient.create_pokemon_from_text(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
@@ -12975,18 +13131,13 @@ func _handle_add_pokemon_command(pokemon_text: String) -> bool:
 		return false
 
 	var pokemon: Pokemon = _pokemon_from_create_result(create_result, parsed_pokemon)
-	_add_chat_message("Added %s Lv. %s to party." % [pokemon.species, pokemon.level])
+	_add_chat_message(_created_pokemon_storage_message(pokemon, create_result))
 	return true
 
 func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 	pokemon_text = _clean_team_paste_text(pokemon_text)
 	if pokemon_text.strip_edges() == "":
 		_add_chat_message("Paste a Showdown/Pokepaste set or team first.")
-		return false
-
-	var open_slots: int = MAX_PARTY_SIZE - PlayerSave.party.size()
-	if open_slots <= 0:
-		_add_chat_message("Party is full.")
 		return false
 
 	_add_chat_message("Creating content creator Pokemon...")
@@ -13004,10 +13155,6 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 	if team_data.is_empty():
 		_add_chat_message("Create failed: team was empty.")
 		return false
-	if team_data.size() > open_slots:
-		_add_chat_message("Not enough party space. Open slots: %s, parsed Pokemon: %s." % [open_slots, team_data.size()])
-		return false
-
 	var parsed_pokemon_payloads: Array[Dictionary] = []
 	for index in range(team_data.size()):
 		var pokemon_value: Variant = team_data[index]
@@ -13036,18 +13183,13 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 			return false
 		created_count += 1
 
-	_add_chat_message("Added %s content creator Pokemon to party." % created_count)
+	_add_chat_message("Created %s content creator Pokemon." % created_count)
 	return true
 
 func _handle_add_team_command(team_text: String) -> bool:
 	team_text = _clean_team_paste_text(team_text)
 	if team_text.strip_edges() == "":
 		_add_chat_message("Paste a Showdown/Pokepaste team first.")
-		return false
-
-	var open_slots: int = MAX_PARTY_SIZE - PlayerSave.party.size()
-	if open_slots <= 0:
-		_add_chat_message("Party is full.")
 		return false
 
 	_add_chat_message("Creating team...")
@@ -13065,10 +13207,6 @@ func _handle_add_team_command(team_text: String) -> bool:
 	if team_data.is_empty():
 		_add_chat_message("Create failed: team was empty.")
 		return false
-	if team_data.size() > open_slots:
-		_add_chat_message("Not enough party space. Open slots: %s, parsed Pokemon: %s." % [open_slots, team_data.size()])
-		return false
-
 	var parsed_pokemon_payloads: Array[Dictionary] = []
 	for index in range(team_data.size()):
 		var pokemon_value: Variant = team_data[index]
@@ -13097,8 +13235,23 @@ func _handle_add_team_command(team_text: String) -> bool:
 			return false
 		created_count += 1
 
-	_add_chat_message("Added %s Pokemon to party." % created_count)
+	_add_chat_message("Created %s Pokemon." % created_count)
 	return true
+
+func _created_pokemon_storage_message(pokemon: Pokemon, create_result: Dictionary) -> String:
+	var species := pokemon.species if pokemon != null else "Pokemon"
+	var level := pokemon.level if pokemon != null else 1
+	var location: Dictionary = PokemonStorageService.normalize_storage_location(create_result.get("storageLocation", {}))
+	match str(location.get("type", "")):
+		"party":
+			return "Added %s Lv. %s to party." % [species, level]
+		"box":
+			return "Created %s Lv. %s and sent to %s." % [
+				species,
+				level,
+				PokemonStorageService.storage_location_label(location),
+			]
+	return "Created %s Lv. %s." % [species, level]
 
 func _pokemon_from_create_result(create_result: Dictionary, fallback: Pokemon) -> Pokemon:
 	var pokemon_response: Dictionary = {}
@@ -16294,6 +16447,282 @@ func _on_socials_mail_button_pressed() -> void:
 	_load_mailbox()
 
 
+func _on_socials_pc_button_pressed() -> void:
+	_hide_socials_menu()
+	_show_pc_popup()
+
+
+func _show_pc_popup() -> void:
+	if pc_popup == null:
+		return
+	pc_popup.visible = true
+	_activate_ui_panel(pc_popup)
+	pc_status_label.text = "Loading..."
+	pc_selected_source = {}
+	await _refresh_pc_state(true)
+
+
+func _on_pc_close_button_pressed() -> void:
+	if pc_popup == null:
+		return
+	pc_popup.visible = false
+	pc_selected_source = {}
+	_deactivate_ui_panel(pc_popup)
+
+
+func _on_pc_box_selected(index: int) -> void:
+	pc_selected_box_index = max(index, 0)
+	pc_selected_source = {}
+	await _refresh_pc_state(false)
+
+
+func _refresh_pc_state(load_all_boxes: bool = false) -> void:
+	if pc_popup == null or not pc_popup.visible:
+		return
+
+	var box_result: Dictionary
+	if load_all_boxes:
+		box_result = await PokemonStorageService.load_boxes()
+		if bool(box_result.get("success", false)):
+			pc_box_count = int(box_result.get("boxCount", 0))
+			pc_slots_per_box = max(int(box_result.get("slotsPerBox", 30)), 1)
+			_refresh_pc_box_selector()
+			var boxes: Array = _array_from_variant(box_result.get("boxes", []))
+			pc_current_box = _box_state_from_boxes(boxes, pc_selected_box_index)
+		else:
+			pc_status_label.text = "Could not load boxes."
+			_add_chat_message("Could not load PC boxes: %s" % str(box_result.get("error", "Unknown error")))
+			_render_pc_party()
+			_render_pc_box()
+			return
+	else:
+		box_result = await PokemonStorageService.load_box(pc_selected_box_index)
+		if bool(box_result.get("success", false)):
+			pc_box_count = max(pc_box_count, int(box_result.get("boxCount", 0)))
+			pc_slots_per_box = max(int(box_result.get("slotsPerBox", pc_slots_per_box)), 1)
+			_refresh_pc_box_selector()
+			pc_current_box = _dictionary_from_value(box_result.get("box", {}))
+		else:
+			pc_status_label.text = "Could not load box."
+			_add_chat_message("Could not load PC box: %s" % str(box_result.get("error", "Unknown error")))
+			return
+
+	_render_pc_party()
+	_render_pc_box()
+	pc_status_label.text = "Select a Pokemon, then a destination."
+
+
+func _refresh_pc_box_selector() -> void:
+	if pc_box_selector == null:
+		return
+	var count: int = max(pc_box_count, 1)
+	pc_selected_box_index = clampi(pc_selected_box_index, 0, count - 1)
+	if pc_box_selector.item_count != count:
+		pc_box_selector.clear()
+		for index in range(count):
+			pc_box_selector.add_item("Box %d" % (index + 1), index)
+	pc_box_selector.select(pc_selected_box_index)
+
+
+func _box_state_from_boxes(boxes: Array, box_index: int) -> Dictionary:
+	for box_value: Variant in boxes:
+		if not (box_value is Dictionary):
+			continue
+		var box: Dictionary = box_value as Dictionary
+		if int(box.get("boxIndex", -1)) == box_index:
+			return box
+	return {
+		"boxIndex": box_index,
+		"slots": [],
+	}
+
+
+func _render_pc_party() -> void:
+	_clear_children(pc_party_list)
+	for slot_index in range(MAX_PARTY_SIZE):
+		var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index < PlayerSave.party.size() else null
+		var button := _create_pc_slot_button(
+			_pc_party_slot_label(slot_index, pokemon),
+			pokemon != null,
+			_pc_source_matches("party", slot_index)
+		)
+		button.pressed.connect(_on_pc_party_slot_pressed.bind(slot_index))
+		pc_party_list.add_child(button)
+
+
+func _render_pc_box() -> void:
+	_clear_children(pc_box_grid)
+	var slot_map := _pc_box_slot_map()
+	for slot_index in range(pc_slots_per_box):
+		var slot_state: Dictionary = _dictionary_from_value(slot_map.get(slot_index, {}))
+		var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
+		var button := _create_pc_slot_button(
+			_pc_box_slot_label(slot_index, pokemon_response),
+			not pokemon_response.is_empty(),
+			_pc_source_matches("box", slot_index)
+		)
+		button.pressed.connect(_on_pc_box_slot_pressed.bind(slot_index))
+		pc_box_grid.add_child(button)
+
+
+func _create_pc_slot_button(label_text: String, occupied: bool, selected: bool) -> Button:
+	var button := Button.new()
+	button.text = label_text
+	button.custom_minimum_size = Vector2(96, 54)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	if selected:
+		_apply_button_style(button, "primary")
+	else:
+		_apply_button_style(button)
+		if not occupied:
+			button.modulate = Color(1.0, 1.0, 1.0, 0.72)
+	return button
+
+
+func _pc_party_slot_label(slot_index: int, pokemon: Pokemon) -> String:
+	if pokemon == null:
+		return "%d. Empty" % (slot_index + 1)
+	return "%d. %s\nLv. %s" % [slot_index + 1, pokemon.species, pokemon.level]
+
+
+func _pc_box_slot_label(slot_index: int, pokemon_response: Dictionary) -> String:
+	var slot_label := "%02d" % (slot_index + 1)
+	if pokemon_response.is_empty():
+		return "%s\nEmpty" % slot_label
+	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
+	var species := str(payload.get("displaySpecies", payload.get("species", "Pokemon"))).strip_edges()
+	var level := int(payload.get("level", 1))
+	return "%s\n%s Lv. %s" % [slot_label, species, level]
+
+
+func _pc_box_slot_map() -> Dictionary:
+	var slot_map: Dictionary = {}
+	var slots: Array = _array_from_variant(pc_current_box.get("slots", []))
+	for slot_value: Variant in slots:
+		if not (slot_value is Dictionary):
+			continue
+		var slot_state: Dictionary = slot_value as Dictionary
+		slot_map[int(slot_state.get("slotIndex", 0))] = slot_state
+	return slot_map
+
+
+func _pc_source_matches(source_type: String, slot_index: int) -> bool:
+	if pc_selected_source.is_empty():
+		return false
+	if str(pc_selected_source.get("type", "")) != source_type:
+		return false
+	if source_type == "party":
+		return int(pc_selected_source.get("partySlot", -1)) == slot_index
+	if source_type == "box":
+		return int(pc_selected_source.get("boxIndex", -1)) == pc_selected_box_index and int(pc_selected_source.get("slotIndex", -1)) == slot_index
+	return false
+
+
+func _on_pc_party_slot_pressed(slot_index: int) -> void:
+	if pc_move_in_progress:
+		return
+	var has_pokemon := slot_index >= 0 and slot_index < PlayerSave.party.size()
+	if pc_selected_source.is_empty():
+		if not has_pokemon:
+			return
+		var pokemon: Pokemon = PlayerSave.party[slot_index]
+		if pokemon == null or pokemon.owned_pokemon_id <= 0:
+			return
+		pc_selected_source = {
+			"type": "party",
+			"partySlot": slot_index,
+			"pokemonId": pokemon.owned_pokemon_id,
+		}
+		pc_status_label.text = "Selected %s." % pokemon.species
+		_render_pc_party()
+		_render_pc_box()
+		return
+
+	if _pc_source_matches("party", slot_index):
+		pc_selected_source = {}
+		pc_status_label.text = "Selection cleared."
+		_render_pc_party()
+		_render_pc_box()
+		return
+
+	if has_pokemon:
+		await _move_pc_selection_to(PokemonStorageService.party_location(slot_index))
+		return
+
+	if str(pc_selected_source.get("type", "")) == "box":
+		var target := PokemonStorageService.next_empty_party_location(PlayerSave.party.size())
+		if target.is_empty():
+			pc_status_label.text = "Your party is full."
+			return
+		await _move_pc_selection_to(target)
+		return
+
+	pc_status_label.text = "Choose an occupied party slot or a box slot."
+
+
+func _on_pc_box_slot_pressed(slot_index: int) -> void:
+	if pc_move_in_progress:
+		return
+	var slot_map := _pc_box_slot_map()
+	var slot_state: Dictionary = _dictionary_from_value(slot_map.get(slot_index, {}))
+	var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
+	if pc_selected_source.is_empty():
+		if pokemon_response.is_empty():
+			return
+		var pokemon_id := int(pokemon_response.get("id", 0))
+		if pokemon_id <= 0:
+			return
+		pc_selected_source = {
+			"type": "box",
+			"boxIndex": pc_selected_box_index,
+			"slotIndex": slot_index,
+			"pokemonId": pokemon_id,
+		}
+		pc_status_label.text = "Selected boxed Pokemon."
+		_render_pc_party()
+		_render_pc_box()
+		return
+
+	if _pc_source_matches("box", slot_index):
+		pc_selected_source = {}
+		pc_status_label.text = "Selection cleared."
+		_render_pc_party()
+		_render_pc_box()
+		return
+
+	if str(pc_selected_source.get("type", "")) == "party" and PlayerSave.party.size() <= 1 and pokemon_response.is_empty():
+		pc_status_label.text = "You must keep at least one Pokemon in your party."
+		return
+
+	await _move_pc_selection_to(PokemonStorageService.box_location(pc_selected_box_index, slot_index))
+
+
+func _move_pc_selection_to(target: Dictionary) -> void:
+	if pc_selected_source.is_empty():
+		return
+	var pokemon_id := int(pc_selected_source.get("pokemonId", 0))
+	if pokemon_id <= 0:
+		pc_selected_source = {}
+		return
+
+	pc_move_in_progress = true
+	pc_status_label.text = "Moving..."
+	var source := pc_selected_source.duplicate(true)
+	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
+	pc_move_in_progress = false
+	if not bool(result.get("success", false)):
+		pc_status_label.text = "Move failed."
+		_add_chat_message("Could not move Pokemon: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	pc_selected_source = {}
+	var location: Dictionary = _dictionary_from_value(result.get("location", {}))
+	_add_chat_message("Pokemon moved to %s." % PokemonStorageService.storage_location_label(location))
+	_refresh_party()
+	await _refresh_pc_state(false)
+
+
 func _setup_socials_attention_badge() -> void:
 	if socials_attention_badge == null:
 		return
@@ -16568,7 +16997,7 @@ func _on_mail_claim_button_pressed() -> void:
 		_refresh_bag_items()
 
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
-	_emit_mail_claim_messages(previous_attachments, claimed_mail)
+	_emit_mail_claim_messages(previous_attachments, claimed_mail, _array_from_variant(result.get("storageLocations", [])))
 	await _load_mailbox()
 	_refresh_mail_attention_from_messages(mailbox_messages)
 
@@ -16596,11 +17025,11 @@ func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
 		_refresh_bag_items()
 
 	var claimed_mail: Dictionary = _mail_dictionary_from_variant(result.get("mail", {}))
-	_emit_mail_claim_messages(previous_attachments, claimed_mail)
+	_emit_mail_claim_messages(previous_attachments, claimed_mail, _array_from_variant(result.get("storageLocations", [])))
 	await _load_mailbox()
 	_refresh_mail_attention_from_messages(mailbox_messages)
 
-func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictionary) -> void:
+func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictionary, storage_locations: Array = []) -> void:
 	var after_attachments: Array = _array_from_variant(claimed_mail.get("attachments", []))
 	var attachment_map: Dictionary = {}
 	for attachment_value: Variant in after_attachments:
@@ -16611,6 +17040,7 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 		if attachment_id > 0:
 			attachment_map[attachment_id] = attachment
 
+	var pokemon_claim_index := 0
 	for previous_attachment_value: Variant in previous_attachments:
 		if not (previous_attachment_value is Dictionary):
 			continue
@@ -16646,7 +17076,18 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 					pokemon_payload = pokemon_value as Dictionary
 				var species: String = str(pokemon_payload.get("species", "Pokemon"))
 				var level: int = int(pokemon_payload.get("level", 1))
-				_add_chat_message("Received Pokemon: %s (Lv. %s)." % [species, level])
+				var location: Dictionary = {}
+				if pokemon_claim_index >= 0 and pokemon_claim_index < storage_locations.size():
+					location = PokemonStorageService.normalize_storage_location(storage_locations[pokemon_claim_index])
+				pokemon_claim_index += 1
+				if location.is_empty():
+					_add_chat_message("Received Pokemon: %s (Lv. %s)." % [species, level])
+				else:
+					_add_chat_message("Received Pokemon: %s (Lv. %s), sent to %s." % [
+						species,
+						level,
+						PokemonStorageService.storage_location_label(location),
+					])
 			_:
 				_add_chat_message("Mail attachment claimed.")
 

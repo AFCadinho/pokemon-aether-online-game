@@ -78,6 +78,7 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 		"message": str(body.get("message", "")),
 		"itemId": str(body.get("itemId", item_id)),
 		"addedToParty": bool(body.get("addedToParty", false)),
+		"storageLocation": PokemonStorageService.normalize_storage_location(body.get("storageLocation", {})),
 		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
 		"inventory": _array_from_value(inventory.get("items", [])),
 		"party": _array_from_value(party.get("party", [])),
