@@ -111,6 +111,7 @@ const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const DEBUG_BATTLE_PRESENTATION_ORDER := false
+const DEBUG_BATTLE_START_EVENTS := true
 const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
 const SUMMON_RELEASE_AUDIO_BALL := "ball"
 const SUMMON_RELEASE_AUDIO_NONE := "none"
@@ -3871,11 +3872,19 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 
 	var player_species := _get_original_active_player_species(player_pokemon.species)
 	var opponent_species := _get_active_display_species("p2")
+	_debug_battle_start_response("wild.setup.after_apply", api_response)
+	_debug_battle_start_active_snapshot("wild.setup.after_apply")
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	await get_tree().process_frame
+	_debug_battle_start("wild.setup.before_player_lead_summon playerSpecies=%s opponentSpecies=%s lastRenderedSeq=%d" % [
+		player_species,
+		opponent_species,
+		last_rendered_event_seq,
+	])
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
+	_debug_battle_start("wild.setup.after_player_lead_summon lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(api_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -3896,6 +3905,8 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 
 	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
 	var opponent_species := _get_active_display_species("p2")
+	_debug_battle_start_response("trainer.lead.after_selection", lead_response)
+	_debug_battle_start_active_snapshot("trainer.lead.after_selection")
 	_add_battle_log_messages(setup_flow.get_trainer_battle_start_messages(
 		player_species,
 		opponent_species,
@@ -3907,8 +3918,14 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	player_sprite_box.visible = false
 	enemy_sprite_box.visible = false
 	await get_tree().process_frame
+	_debug_battle_start("trainer.setup.before_lead_summons playerSpecies=%s opponentSpecies=%s lastRenderedSeq=%d" % [
+		player_species,
+		opponent_species,
+		last_rendered_event_seq,
+	])
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
+	_debug_battle_start("trainer.setup.after_lead_summons lastRenderedSeq=%d" % last_rendered_event_seq)
 	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -4041,9 +4058,12 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 	enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
+	_debug_battle_start_response("initial.render.enter", api_response)
+	_debug_battle_start_active_snapshot("initial.render.enter")
 	event_renderer.add_turn_header(battle_state.get_turn())
 	_remember_initial_non_pvp_setup_events()
 	var start_events := _get_wild_battle_start_events(api_response.get("events", []))
+	_debug_battle_start("initial.render.start_events selected=%s" % _summarize_battle_events(start_events))
 	if _show_original_transform_targets_before_initial_events(start_events):
 		await get_tree().process_frame
 		await get_tree().create_timer(INITIAL_TRANSFORM_REVEAL_SECONDS).timeout
@@ -4061,6 +4081,8 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 	else:
 		await _render_battle_events(start_events, false, "initial_battle_events")
 		_mark_initial_non_pvp_response_events_consumed(api_response)
+	_debug_battle_start_active_snapshot("initial.render.exit")
+	_debug_battle_start("initial.render.exit lastRenderedSeq=%d" % last_rendered_event_seq)
 
 func _show_battle_controls_after_initial_events() -> void:
 	_update_battle_presentation("initial_setup")
@@ -4417,6 +4439,9 @@ func _get_original_active_player_species(fallback_species: String = "") -> Strin
 	var saved_pokemon := _get_saved_pokemon_for_active_data(active_pokemon)
 	if saved_pokemon != null:
 		return saved_pokemon.species
+
+	if _is_specific_battle_form_species(fallback_species):
+		return fallback_species
 
 	var ident := str(active_pokemon.get("ident", ""))
 	if ident.contains(": "):
@@ -5056,6 +5081,13 @@ func _set_single_pokemon_species_with_pvp_warning(
 	is_shiny: bool,
 	context: String
 ) -> void:
+	_debug_battle_start("sprite.set context=%s side=%s species=%s shiny=%s current=%s" % [
+		context,
+		side,
+		species,
+		str(is_shiny),
+		_get_sprite_box_debug_species(sprite_box),
+	])
 	_warn_if_pvp_species_change_outside_batch(sprite_box, species, context)
 	sprite_box.set_single_pokemon_species(species, side, is_shiny)
 
@@ -5083,6 +5115,13 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 	if not _guard_pvp_render_runner(source):
 		return
 	var ordered_events: Array = _order_switch_out_heals_before_switches(_order_form_change_events_before_moves(events))
+	_debug_battle_start("render.begin source=%s renderTurns=%s input=%s ordered=%s lastRenderedSeq=%d" % [
+		source,
+		str(render_turn_headers),
+		_summarize_battle_events(events),
+		_summarize_battle_events(ordered_events),
+		last_rendered_event_seq,
+	])
 	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
 	var should_play_switch_ball_animations := source != "initial_battle_events"
 	_prewarm_battle_event_animations(ordered_events)
@@ -5098,6 +5137,13 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		_remember_battle_modifier_event(event_data)
 
 		var event_type: String = str(event_data.get("type", ""))
+		if _should_debug_battle_start_event(event_data):
+			_debug_battle_start("render.event.before source=%s index=%d event=%s active=%s" % [
+				source,
+				event_index,
+				_summarize_battle_event(event_data),
+				_summarize_active_battle_state(),
+			])
 		if event_type == "mega" or event_type == "primal":
 			_fill_mega_event_species(event_data)
 			battle_state.apply_event_conditions([event_data])
@@ -5157,6 +5203,13 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_active_sprites()
+		if _should_debug_battle_start_event(event_data):
+			_debug_battle_start("render.event.after source=%s index=%d event=%s active=%s" % [
+				source,
+				event_index,
+				_summarize_battle_event(event_data),
+				_summarize_active_battle_state(),
+			])
 
 	_remember_rendered_non_pvp_event_keys(ordered_events)
 	_sync_presentation_field_from_battle_state()
@@ -5166,6 +5219,11 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 	_update_party_slots()
 	_update_vs_panel_names()
 	_sync_player_save_from_battle_state()
+	_debug_battle_start("render.end source=%s lastRenderedSeq=%d active=%s" % [
+		source,
+		last_rendered_event_seq,
+		_summarize_active_battle_state(),
+	])
 
 func _get_move_animation_result_for_event(events: Array, event_index: int) -> String:
 	if event_index < 0 or event_index >= events.size():
@@ -5410,10 +5468,19 @@ func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
 	var events_value: Variant = response.get("events", [])
 	var events: Array = events_value as Array if events_value is Array else []
 	if _is_pvp_battle() or events.is_empty():
+		_debug_battle_start("filter.non_pvp.skip isPvp=%s events=%d lastRenderedSeq=%d" % [
+			str(_is_pvp_battle()),
+			events.size(),
+			last_rendered_event_seq,
+		])
 		return events
 
 	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
 	if response_event_seq < 0:
+		_debug_battle_start("filter.non_pvp.no_seq events=%s lastRenderedSeq=%d" % [
+			_summarize_battle_events(events),
+			last_rendered_event_seq,
+		])
 		return events
 
 	var first_event_seq := response_event_seq - events.size() + 1
@@ -5423,6 +5490,13 @@ func _filter_incremental_non_pvp_response_events(response: Dictionary) -> Array:
 		if event_seq > last_rendered_event_seq:
 			filtered_events.append(events[index])
 
+	_debug_battle_start("filter.non_pvp result firstSeq=%d responseSeq=%d lastRenderedBefore=%d input=%s output=%s" % [
+		first_event_seq,
+		response_event_seq,
+		last_rendered_event_seq,
+		_summarize_battle_events(events),
+		_summarize_battle_events(filtered_events),
+	])
 	return filtered_events
 
 func _filter_unrendered_pvp_events(events: Array, response: Dictionary = {}) -> Array:
@@ -5471,7 +5545,13 @@ func _mark_non_pvp_response_event_seq_consumed(response: Dictionary) -> void:
 	if response_event_seq < 0:
 		return
 
+	var previous_seq := last_rendered_event_seq
 	last_rendered_event_seq = max(last_rendered_event_seq, response_event_seq)
+	_debug_battle_start("cursor.mark_full previous=%d responseSeq=%d next=%d" % [
+		previous_seq,
+		response_event_seq,
+		last_rendered_event_seq,
+	])
 
 func _mark_initial_non_pvp_response_events_consumed(response: Dictionary) -> void:
 	if _is_pvp_battle():
@@ -5488,10 +5568,26 @@ func _mark_initial_non_pvp_response_events_consumed(response: Dictionary) -> voi
 	var events: Array = events_value as Array
 	var last_start_event_index := _get_battle_start_event_end_index(events)
 	if last_start_event_index < 0:
+		_debug_battle_start("cursor.mark_initial.no_start_events responseSeq=%d events=%s previous=%d" % [
+			response_event_seq,
+			_summarize_battle_events(events),
+			last_rendered_event_seq,
+		])
 		return
 
 	var first_event_seq := response_event_seq - events.size() + 1
-	last_rendered_event_seq = max(last_rendered_event_seq, first_event_seq + last_start_event_index)
+	var previous_seq := last_rendered_event_seq
+	var next_seq := first_event_seq + last_start_event_index
+	last_rendered_event_seq = max(last_rendered_event_seq, next_seq)
+	_debug_battle_start("cursor.mark_initial firstSeq=%d responseSeq=%d lastStartIndex=%d previous=%d nextCandidate=%d next=%d events=%s" % [
+		first_event_seq,
+		response_event_seq,
+		last_start_event_index,
+		previous_seq,
+		next_seq,
+		last_rendered_event_seq,
+		_summarize_battle_events(events),
+	])
 
 func _get_battle_event_key(event_data: Dictionary) -> String:
 	var event_type := str(event_data.get("type", ""))
@@ -5862,6 +5958,7 @@ func _find_next_form_change_event_index(
 
 func _get_wild_battle_start_events(events: Array) -> Array:
 	var start_events: Array = []
+	_debug_battle_start("start_filter.begin input=%s" % _summarize_battle_events(events))
 
 	for event in events:
 		if not (event is Dictionary):
@@ -5870,12 +5967,19 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 		var event_data: Dictionary = event as Dictionary
 		match str(event_data.get("type", "")):
 			"turn", "switch", "drag":
+				_debug_battle_start("start_filter.skip_setup event=%s" % _summarize_battle_event(event_data))
 				continue
 			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega", "primal":
+				_debug_battle_start("start_filter.include event=%s" % _summarize_battle_event(event_data))
 				start_events.append(event_data)
 			_:
+				_debug_battle_start("start_filter.break event=%s selected=%s" % [
+					_summarize_battle_event(event_data),
+					_summarize_battle_events(start_events),
+				])
 				break
 
+	_debug_battle_start("start_filter.end selected=%s" % _summarize_battle_events(start_events))
 	return start_events
 
 func _get_battle_start_event_end_index(events: Array) -> int:
@@ -5890,8 +5994,17 @@ func _get_battle_start_event_end_index(events: Array) -> int:
 			"turn", "switch", "drag", "fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega", "primal":
 				last_start_event_index = index
 			_:
+				_debug_battle_start("start_boundary.break index=%d event=%s lastStartIndex=%d" % [
+					index,
+					_summarize_battle_event(event_data),
+					last_start_event_index,
+				])
 				break
 
+	_debug_battle_start("start_boundary.end lastStartIndex=%d events=%s" % [
+		last_start_event_index,
+		_summarize_battle_events(events),
+	])
 	return last_start_event_index
 
 func _get_player_id_from_ident(ident: String) -> String:
@@ -6153,6 +6266,124 @@ func _is_ability_heal_event(event_data: Dictionary) -> bool:
 func _debug_battle_move(message: String) -> void:
 	if DEBUG_BATTLE_MOVE_EVENTS:
 		print("[battle-move] " + message)
+
+func _debug_battle_start(message: String) -> void:
+	if DEBUG_BATTLE_START_EVENTS:
+		print("[battle-start] " + message)
+
+func _debug_battle_start_response(label: String, response: Dictionary) -> void:
+	if not DEBUG_BATTLE_START_EVENTS:
+		return
+
+	var events_value: Variant = response.get("events", [])
+	var events_count := (events_value as Array).size() if events_value is Array else 0
+	_debug_battle_start("%s battleId=%s eventSeq=%d batchSeq=%d turn=%d eventsCount=%d events=%s" % [
+		label,
+		str(response.get("battleId", "")),
+		_get_int_from_variant(response.get("eventSeq", -1), -1),
+		_get_int_from_variant(response.get("batchSeq", -1), -1),
+		battle_state.get_turn(),
+		events_count,
+		_summarize_battle_events(events_value),
+	])
+
+func _debug_battle_start_active_snapshot(label: String) -> void:
+	_debug_battle_start("%s active=%s lastRenderedSeq=%d" % [
+		label,
+		_summarize_active_battle_state(),
+		last_rendered_event_seq,
+	])
+
+func _should_debug_battle_start_event(event_data: Dictionary) -> bool:
+	match str(event_data.get("type", "")):
+		"turn", "switch", "drag", "ability", "statChange", "transform", "mega", "primal", "fieldEffect", "pokemonEffect", "move":
+			return true
+		_:
+			return false
+
+func _summarize_battle_events(events_value: Variant) -> String:
+	if not (events_value is Array):
+		return "[]"
+
+	var summary: Array = []
+	var events: Array = events_value as Array
+	for index: int in range(events.size()):
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_summary: Dictionary = _summarize_battle_event_dictionary(event_value as Dictionary)
+		event_summary["idx"] = index
+		summary.append(event_summary)
+
+	return JSON.stringify(summary)
+
+func _summarize_battle_event(event_data: Dictionary) -> String:
+	return JSON.stringify(_summarize_battle_event_dictionary(event_data))
+
+func _summarize_battle_event_dictionary(event_data: Dictionary) -> Dictionary:
+	var summary := {}
+	for key in [
+		"type",
+		"turn",
+		"playerId",
+		"target",
+		"actor",
+		"pokemon",
+		"ident",
+		"from",
+		"fromIdent",
+		"to",
+		"toIdent",
+		"species",
+		"ability",
+		"abilityName",
+		"effect",
+		"source",
+		"sourceTarget",
+		"sourcePokemon",
+		"stat",
+		"amount",
+		"condition",
+		"previousCondition",
+		"hp",
+		"previousHp",
+		"maxHp",
+		"pokemonKey",
+		"metadataSlot",
+	]:
+		if event_data.has(key):
+			summary[key] = event_data.get(key)
+
+	return summary
+
+func _summarize_active_battle_state() -> String:
+	var summary := {}
+	for player_id in ["p1", "p2"]:
+		var active_pokemon: Dictionary = battle_state.get_active_player_pokemon(player_id)
+		summary[player_id] = {
+			"ident": str(active_pokemon.get("ident", "")),
+			"species": str(active_pokemon.get("species", active_pokemon.get("displaySpecies", ""))),
+			"displaySpecies": _get_active_display_species(player_id),
+			"level": battle_state.get_active_pokemon_level(player_id),
+			"hp": battle_state.get_active_pokemon_current_hp(player_id),
+			"maxHp": battle_state.get_active_pokemon_max_hp(player_id),
+			"status": battle_state.get_active_pokemon_status(player_id),
+			"gender": battle_state.get_active_pokemon_gender(player_id),
+			"shiny": _get_active_pokemon_is_shiny(player_id),
+			"sprite": _get_sprite_box_debug_species(player_sprite_box if player_id == "p1" else enemy_sprite_box),
+		}
+
+	return JSON.stringify(summary)
+
+func _get_sprite_box_debug_species(sprite_box: Node) -> String:
+	if sprite_box == null:
+		return "null"
+	if sprite_box.has_method("get_debug_species"):
+		return str(sprite_box.call("get_debug_species"))
+	if sprite_box.has_method("get_current_species"):
+		return str(sprite_box.call("get_current_species"))
+	return "%s:%s" % [sprite_box.name, sprite_box.get_class()]
 
 func _format_battle_actor(actor: String, include_side_prefix := true) -> String:
 	var player_id := _get_player_id_from_ident(actor)
@@ -9394,7 +9625,7 @@ func _get_active_display_species(player_id: String) -> String:
 	return display_species
 
 func _is_specific_battle_form_species(species: String) -> bool:
-	var normalized := species.strip_edges().to_lower()
+	var normalized := species.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
 	if normalized.contains("mega") or normalized.ends_with("-primal"):
 		return true
 

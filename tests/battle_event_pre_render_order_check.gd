@@ -10,6 +10,7 @@ func _init() -> void:
 	_check_non_pvp_switch_events_are_not_deduped_by_species()
 	_check_initial_setup_switch_events_are_filtered_once()
 	_check_initial_event_seq_cursor_tracks_start_event_boundary()
+	_check_initial_setup_keeps_specific_form_species()
 	quit(1 if failed else 0)
 
 
@@ -113,6 +114,34 @@ func _check_initial_event_seq_cursor_tracks_start_event_boundary() -> void:
 		start_source.contains("break"),
 		true,
 		"battle start filter stops before first non-start action event"
+	)
+
+
+func _check_initial_setup_keeps_specific_form_species() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var original_species_index := source.find("func _get_original_active_player_species(fallback_species: String = \"\") -> String:")
+	var original_species_next_index := source.find("\nfunc ", original_species_index + 1)
+	var original_species_source := source.substr(original_species_index, original_species_next_index - original_species_index)
+	var form_check_index := source.find("func _is_specific_battle_form_species(species: String) -> bool:")
+	var form_check_next_index := source.find("\nfunc ", form_check_index + 1)
+	var form_check_source := source.substr(form_check_index, form_check_next_index - form_check_index)
+
+	_check_equal(original_species_index >= 0, true, "original active player species helper exists")
+	_check_equal(
+		original_species_source.contains("_is_specific_battle_form_species(fallback_species)"),
+		true,
+		"initial setup keeps explicit form species before falling back to Showdown ident"
+	)
+	_check_equal(
+		original_species_source.find("_is_specific_battle_form_species(fallback_species)") < original_species_source.find("ident.contains(\": \")"),
+		true,
+		"initial setup checks explicit form species before ident species"
+	)
+	_check_equal(form_check_index >= 0, true, "specific battle form helper exists")
+	_check_equal(
+		form_check_source.contains("replace(\" \", \"-\")"),
+		true,
+		"specific battle form helper treats spaced form names as form species"
 	)
 
 
