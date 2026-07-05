@@ -12,6 +12,11 @@ on:
         required: false
         type: boolean
         default: false
+      build_macos:
+        description: Build and include macOS artifacts.
+        required: false
+        type: boolean
+        default: false
       announce_discord:
         description: Post a Discord release announcement after a successful R2 upload.
         required: false
@@ -104,6 +109,24 @@ jobs:
           echo "BUILD_LAUNCHER=${build_launcher}" >> "${GITHUB_ENV}"
           echo "Build launcher: ${build_launcher}"
 
+      - name: Detect build platform
+        env:
+          INPUT_BUILD_MACOS: ${{ inputs.build_macos }}
+        run: |
+          build_macos=false
+          package_platforms="windows,linux"
+
+          if [ "${INPUT_BUILD_MACOS}" = "true" ]; then
+            build_macos=true
+            package_platforms="windows,linux,macos"
+          fi
+
+          echo "BUILD_MACOS=${build_macos}" >> "${GITHUB_ENV}"
+          echo "PACKAGE_PLATFORMS=${package_platforms}" >> "${GITHUB_ENV}"
+
+          echo "Build macOS: ${build_macos}"
+          echo "Package platforms: ${package_platforms}"
+
       - name: Stamp launcher version
         if: env.BUILD_LAUNCHER == 'true'
         run: |
@@ -190,6 +213,7 @@ jobs:
           ./godot --headless --export-release "${LINUX_EXPORT_PRESET}" "${LINUX_EXPORT_PATH}"
 
       - name: Export macOS build
+        if: env.BUILD_MACOS == 'true'
         run: |
           mkdir -p builds/macos
           ./godot --headless --export-release "${MACOS_EXPORT_PRESET}" "${MACOS_EXPORT_PATH}"
@@ -219,6 +243,7 @@ jobs:
           grep -a -q "assets/player/female/body/body_manifest.json" "builds/linux/PokeAether.pck"
 
       - name: Verify macOS build
+        if: env.BUILD_MACOS == 'true'
         run: |
           test -d "builds/macos/PokeAether.app"
           test -f "builds/macos/PokeAether.app/Contents/MacOS/PokeAether"
@@ -238,7 +263,7 @@ jobs:
           grep -a -q "assets/player/female/body/body_manifest.json" "$macos_pck"
 
       - name: Export macOS launcher
-        if: env.BUILD_LAUNCHER == 'true'
+        if: ${{ env.BUILD_LAUNCHER == 'true' && env.BUILD_MACOS == 'true' }}
         run: |
           mkdir -p builds/launcher-app/macos
           cd launcher
@@ -309,6 +334,7 @@ jobs:
             --asset-prefix assets \
             --output-dir builds/launcher \
             --default-platform windows \
+            --platform "${PACKAGE_PLATFORMS}" \
             "${launcher_args[@]}" \
             $(cat /tmp/asset_pack_args.txt)
 
@@ -316,7 +342,9 @@ jobs:
           if [ "${BUILD_LAUNCHER}" = "true" ]; then
             test -f builds/launcher/PokeAetherLauncher-windows.zip
             test -f builds/launcher/PokeAetherLauncher-linux.zip
-            test -f builds/launcher/PokeAetherLauncher-macos.zip
+            if [ "${BUILD_MACOS}" = "true" ]; then
+              test -f builds/launcher/PokeAetherLauncher-macos.zip
+            fi
           fi
 
       - name: Verify launcher manifests include required asset packs
@@ -397,18 +425,28 @@ jobs:
           python3 tools/upload_launcher_release.py builds/launcher --layout updates
           cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-windows.zip" builds/launcher/PokeAether-windows.zip
           cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-linux.zip" builds/launcher/PokeAether-linux.zip
-          cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-macos.zip" builds/launcher/PokeAether-macos.zip
+          if [ "${BUILD_MACOS}" = "true" ]; then
+            cp "builds/launcher/game-${LAUNCHER_RELEASE_VERSION}-macos.zip" builds/launcher/PokeAether-macos.zip
+          fi
           python3 tools/upload_launcher_release.py builds/launcher \
             --prefix "game/latest" \
             --file PokeAether-windows.zip \
-            --file PokeAether-linux.zip \
-            --file PokeAether-macos.zip
+            --file PokeAether-linux.zip
+          if [ "${BUILD_MACOS}" = "true" ]; then
+            python3 tools/upload_launcher_release.py builds/launcher \
+              --prefix "game/latest" \
+              --file PokeAether-macos.zip
+          fi
           if [ "${BUILD_LAUNCHER}" = "true" ]; then
             python3 tools/upload_launcher_release.py builds/launcher \
               --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
               --file PokeAetherLauncher-windows.zip \
-              --file PokeAetherLauncher-linux.zip \
-              --file PokeAetherLauncher-macos.zip
+              --file PokeAetherLauncher-linux.zip
+            if [ "${BUILD_MACOS}" = "true" ]; then
+              python3 tools/upload_launcher_release.py builds/launcher \
+                --prefix "launcher/${LAUNCHER_RELEASE_VERSION}" \
+                --file PokeAetherLauncher-macos.zip
+            fi
           else
             echo "Skipping launcher download upload because BUILD_LAUNCHER=false."
           fi
@@ -441,6 +479,7 @@ jobs:
         with:
           name: desktop-builds
           retention-days: 1
+          if-no-files-found: ignore
           path: |
             builds/windows
             builds/linux

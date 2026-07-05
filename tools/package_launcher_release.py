@@ -91,9 +91,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--platform",
-        choices=["windows", "linux", "macos", "all"],
         default="all",
-        help="Which platform build to package.",
+        help="Comma-separated platforms to package (windows,linux,macos), or all.",
     )
     parser.add_argument(
         "--default-platform",
@@ -131,7 +130,7 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     base_url = args.base_url.rstrip("/")
-    platform_names = ["windows", "linux", "macos"] if args.platform == "all" else [args.platform]
+    platform_names = _parse_platforms(args.platform)
     game_prefix = args.game_prefix.strip("/")
     asset_prefix = args.asset_prefix.strip("/")
     asset_packs = [_build_asset_pack(entry, base_url, asset_prefix, output_dir) for entry in args.asset_pack]
@@ -189,6 +188,25 @@ def main() -> None:
         default_manifest_path = output_dir / "manifest.json"
         _write_json(default_manifest_path, manifests[args.default_platform])
         print(f"Wrote {_display_path(default_manifest_path)}")
+
+
+def _parse_platforms(platforms_arg: str) -> list[str]:
+    if platforms_arg == "all":
+        return ["windows", "linux", "macos"]
+
+    requested_platforms: list[str] = []
+    for platform_name in (item.strip().lower() for item in platforms_arg.split(",")):
+        if not platform_name:
+            continue
+        if platform_name not in PLATFORMS:
+            raise SystemExit(f"Unsupported platform for --platform: {platform_name}")
+        if platform_name not in requested_platforms:
+            requested_platforms.append(platform_name)
+
+    if not requested_platforms:
+        raise SystemExit("--platform must include at least one of windows, linux, macos, or all")
+
+    return requested_platforms
 
 
 def _assert_required_paths(build_dir: Path, required_paths: list[str]) -> None:
