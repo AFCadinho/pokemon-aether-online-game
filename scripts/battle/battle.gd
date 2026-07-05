@@ -110,6 +110,7 @@ const DEBUG_PVP_FLOW_TRACE := false
 const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
+const DEBUG_BATTLE_PRESENTATION_ORDER := false
 const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
 const SUMMON_RELEASE_AUDIO_BALL := "ball"
 const SUMMON_RELEASE_AUDIO_NONE := "none"
@@ -3168,12 +3169,21 @@ func _safe_int(value: Variant, fallback: int) -> int:
 	return fallback
 
 ## Werkt de player en opponent HUD panels bij vanuit de battle state.
-func _update_hud_panels() -> void:
+func _update_hud_panels(include_team_data := true) -> void:
+	_debug_battle_presentation_order("update_hud_panels.begin include_team=%s" % str(include_team_data))
 	_update_active_hud_panel("p1", player_hud_panel)
 	_update_active_hud_panel("p2", enemy_hud_panel)
 
+	if not include_team_data:
+		_debug_battle_presentation_order("update_hud_panels.skip_team")
+		return
+
 	var player_display_team := _get_display_team_data("p1")
 	var enemy_display_team := _get_display_team_data("p2")
+	_debug_battle_presentation_order("update_hud_panels.set_team_data p1=%s p2=%s" % [
+		JSON.stringify(_summarize_team_for_order_debug(player_display_team)),
+		JSON.stringify(_summarize_team_for_order_debug(enemy_display_team)),
+	])
 	_debug_trainer_team_display("hud set_team_data", {
 		"enemyTeam": _debug_summarize_display_team(enemy_display_team),
 	})
@@ -5104,12 +5114,27 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		_show_switch_out_heal_target_if_needed(event_data, ordered_events, event_index)
 		if event_type == "fieldEffect":
 			_apply_field_presentation_event(event_data)
+		if event_type == "damage" or event_type == "heal" or event_type == "faint":
+			_debug_battle_presentation_order("render_event.before type=%s event=%s" % [
+				event_type,
+				_summarize_hp_event_for_order_debug(event_data),
+			])
 		await event_renderer.render_event(event_data, presentation)
+		if event_type == "damage" or event_type == "heal" or event_type == "faint":
+			_debug_battle_presentation_order("render_event.after type=%s event=%s" % [
+				event_type,
+				_summarize_hp_event_for_order_debug(event_data),
+			])
 		if fallback_knock_off_message != "":
 			_add_battle_log_message(fallback_knock_off_message)
 			current_action_panel.set_message(fallback_knock_off_message)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
+			_debug_battle_presentation_order("apply_event_conditions.before type=%s" % event_type)
 			battle_state.apply_event_conditions([event_data])
+			_debug_battle_presentation_order("apply_event_conditions.after p1=%s p2=%s" % [
+				JSON.stringify(_summarize_team_for_order_debug(_get_display_team_data("p1"))),
+				JSON.stringify(_summarize_team_for_order_debug(_get_display_team_data("p2"))),
+			])
 		if event_type == "status":
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
@@ -5839,6 +5864,13 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 
 	var hp: int = int(hp_data.get("hp", 0))
 	var max_hp: int = max(int(hp_data.get("max_hp", 1)), 1)
+	_debug_battle_presentation_order("active_hud_hp_from_event target=%s mode=%s hp=%d/%d event=%s" % [
+		target_ident,
+		"previous" if use_previous_hp else "current",
+		hp,
+		max_hp,
+		_summarize_hp_event_for_order_debug(event),
+	])
 	var species: String = _get_active_display_species(player_id)
 	var level: int = battle_state.get_active_pokemon_level(player_id)
 	var status: String = _get_status_from_event_or_state(event, player_id, use_previous_hp)
@@ -5892,6 +5924,7 @@ func _get_status_from_event_or_state(event: Dictionary, player_id: String, use_p
 	return battle_state.get_active_pokemon_status(player_id)
 
 func _rewind_active_hud_hp_for_events(events: Array) -> void:
+	_debug_battle_presentation_order("rewind_active_hud_hp.begin events=%s" % JSON.stringify(_summarize_events_for_order_debug(events)))
 	var rewound_player_ids: Dictionary = {}
 
 	for event_value in events:
@@ -5912,18 +5945,79 @@ func _rewind_active_hud_hp_for_events(events: Array) -> void:
 		rewound_player_ids[player_id] = true
 
 func _rewind_party_slots_for_events(events: Array) -> void:
+	_debug_battle_presentation_order("rewind_party_slots.begin events=%s" % JSON.stringify(_summarize_events_for_order_debug(events)))
 	var player_team: Array = rewind_helper.get_rewound_team_data_for_events("p1", _get_display_team_data("p1"), events)
 	if not player_team.is_empty():
+		_debug_battle_presentation_order("rewind_party_slots.apply p1=%s" % JSON.stringify(_summarize_team_for_order_debug(player_team)))
 		player_hud_panel.set_team_data(player_team)
 		party_grid.set_party(player_team)
 
 	var enemy_team: Array = rewind_helper.get_rewound_team_data_for_events("p2", _get_display_team_data("p2"), events)
 	if not enemy_team.is_empty():
+		_debug_battle_presentation_order("rewind_party_slots.apply p2=%s" % JSON.stringify(_summarize_team_for_order_debug(enemy_team)))
 		enemy_hud_panel.set_team_data(enemy_team)
 
 func _debug_battle_hp(message: String) -> void:
 	if DEBUG_BATTLE_HP_EVENTS:
 		print("[battle-hp] " + message)
+
+func _debug_battle_presentation_order(message: String) -> void:
+	if DEBUG_BATTLE_PRESENTATION_ORDER:
+		print("[battle-order] " + message)
+
+func _summarize_events_for_order_debug(events: Array) -> Array:
+	var summary: Array = []
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		var event_type := str(event.get("type", ""))
+		if event_type != "damage" and event_type != "heal" and event_type != "faint" and event_type != "switch" and event_type != "drag":
+			continue
+
+		summary.append({
+			"type": event_type,
+			"target": str(event.get("target", "")),
+			"pokemon": str(event.get("pokemon", event.get("toIdent", ""))),
+			"previousCondition": str(event.get("previousCondition", "")),
+			"condition": str(event.get("condition", "")),
+			"previousHp": event.get("previousHp", ""),
+			"hp": event.get("hp", ""),
+			"maxHp": event.get("maxHp", ""),
+			"pokemonKey": str(event.get("pokemonKey", event.get("pokemon_key", ""))),
+			"metadataSlot": event.get("metadataSlot", event.get("metadata_slot", "")),
+			"targetRef": event.get("targetRef", event.get("target_ref", {})),
+		})
+
+	return summary
+
+func _summarize_hp_event_for_order_debug(event: Dictionary) -> String:
+	return JSON.stringify(_summarize_events_for_order_debug([event])[0] if not _summarize_events_for_order_debug([event]).is_empty() else event)
+
+func _summarize_team_for_order_debug(team: Array) -> Array:
+	var summary: Array = []
+	for index in range(team.size()):
+		var pokemon_value: Variant = team[index]
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		summary.append({
+			"idx": index,
+			"ident": str(pokemon.get("ident", "")),
+			"species": str(pokemon.get("species", pokemon.get("displaySpecies", ""))),
+			"active": bool(pokemon.get("active", false)),
+			"fainted": bool(pokemon.get("fainted", false)),
+			"condition": str(pokemon.get("condition", "")),
+			"hp": pokemon.get("hp", ""),
+			"maxHp": pokemon.get("maxHp", ""),
+			"pokemonKey": str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))),
+			"metadataSlot": pokemon.get("metadataSlot", pokemon.get("metadata_slot", "")),
+			"partySlot": pokemon.get("partySlot", pokemon.get("party_slot", "")),
+		})
+
+	return summary
 
 func _debug_team_identity_snapshot(player_id: String) -> Array:
 	var snapshot: Array = []
@@ -8442,6 +8536,10 @@ func _render_pvp_opponent_response(
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
+	_debug_battle_presentation_order("pvp_opponent_response.events source=%s events=%s" % [
+		source,
+		JSON.stringify(_summarize_events_for_order_debug(opponent_events)),
+	])
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
 	_update_battle_presentation_before_event_render(opponent_events)
@@ -8460,6 +8558,7 @@ func _render_opponent_response(
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
+	_debug_battle_presentation_order("opponent_response.events events=%s" % JSON.stringify(_summarize_events_for_order_debug(opponent_events)))
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(opponent_events)
 	_update_battle_presentation_before_event_render(opponent_events)
@@ -9140,17 +9239,28 @@ func _update_battle_presentation(sprite_context := "sprite_refresh") -> void:
 	_refresh_damage_calc_results()
 
 func _update_battle_presentation_before_event_render(events: Array) -> void:
+	_debug_battle_presentation_order("pre_event_presentation.begin switch_like=%s events=%s" % [
+		str(_events_have_switch_like_event(events)),
+		JSON.stringify(_summarize_events_for_order_debug(events)),
+	])
 	if not _events_have_switch_like_event(events):
-		_update_battle_presentation()
+		_update_battle_status_panels()
+		_update_hud_panels(false)
+		_update_active_sprites()
+		_update_move_slots()
+		_update_vs_panel_names()
+		_update_mechanic_button_states()
+		_refresh_damage_calc_results()
+		_debug_battle_presentation_order("pre_event_presentation.end no_switch_like")
 		return
 
 	_update_battle_status_panels()
-	_update_hud_panels()
+	_update_hud_panels(false)
 	_update_move_slots()
-	_update_party_slots()
 	_update_vs_panel_names()
 	_update_mechanic_button_states()
 	_refresh_damage_calc_results()
+	_debug_battle_presentation_order("pre_event_presentation.end switch_like")
 
 func _update_vs_panel_names() -> void:
 	if vs_player_1_label != null:

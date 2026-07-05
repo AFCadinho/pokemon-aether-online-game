@@ -5,8 +5,8 @@ class_name BattleRewindHelper
 var hp_event_helper := BattleHpEventHelper.new()
 
 func get_rewound_team_data_for_events(player_id: String, team: Array, events: Array) -> Array:
-	var previous_conditions_by_index: Dictionary = get_previous_conditions_by_party_index_for_events(player_id, team, events)
-	if previous_conditions_by_index.is_empty():
+	var previous_snapshots_by_index: Dictionary = get_previous_snapshots_by_party_index_for_events(player_id, team, events)
+	if previous_snapshots_by_index.is_empty():
 		return team
 
 	var rewound_team: Array = []
@@ -17,10 +17,8 @@ func get_rewound_team_data_for_events(player_id: String, team: Array, events: Ar
 			continue
 
 		var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate()
-		if previous_conditions_by_index.has(index):
-			var previous_condition := str(previous_conditions_by_index.get(index, pokemon_data.get("condition", "")))
-			pokemon_data["condition"] = previous_condition
-			hp_event_helper.apply_condition_fields(pokemon_data, previous_condition)
+		if previous_snapshots_by_index.has(index):
+			_apply_previous_snapshot(pokemon_data, previous_snapshots_by_index.get(index, {}))
 
 		rewound_team.append(pokemon_data)
 
@@ -29,6 +27,21 @@ func get_rewound_team_data_for_events(player_id: String, team: Array, events: Ar
 
 func get_previous_conditions_by_party_index_for_events(player_id: String, team: Array, events: Array) -> Dictionary:
 	var previous_conditions_by_index: Dictionary = {}
+	var previous_snapshots_by_index := get_previous_snapshots_by_party_index_for_events(player_id, team, events)
+	for index_value: Variant in previous_snapshots_by_index.keys():
+		var snapshot_value: Variant = previous_snapshots_by_index.get(index_value, {})
+		if not (snapshot_value is Dictionary):
+			continue
+
+		var condition := str((snapshot_value as Dictionary).get("condition", ""))
+		if condition != "":
+			previous_conditions_by_index[index_value] = condition
+
+	return previous_conditions_by_index
+
+
+func get_previous_snapshots_by_party_index_for_events(player_id: String, team: Array, events: Array) -> Dictionary:
+	var previous_snapshots_by_index: Dictionary = {}
 	for event_value in events:
 		if not (event_value is Dictionary):
 			continue
@@ -42,17 +55,59 @@ func get_previous_conditions_by_party_index_for_events(player_id: String, team: 
 		if _get_player_id_from_ident(target_ident) != player_id:
 			continue
 
-		var previous_condition: String = str(event.get("previousCondition", ""))
-		if previous_condition == "":
+		var previous_snapshot := _get_previous_snapshot_from_event(event)
+		if previous_snapshot.is_empty():
 			continue
 
 		var target_index := _find_party_target_index(team, target_ident, event, true)
-		if target_index < 0 or previous_conditions_by_index.has(target_index):
+		if target_index < 0 or previous_snapshots_by_index.has(target_index):
 			continue
 
-		previous_conditions_by_index[target_index] = previous_condition
+		previous_snapshots_by_index[target_index] = previous_snapshot
 
-	return previous_conditions_by_index
+	return previous_snapshots_by_index
+
+
+func _get_previous_snapshot_from_event(event: Dictionary) -> Dictionary:
+	var previous_condition := str(event.get("previousCondition", ""))
+	if previous_condition != "":
+		return {"condition": previous_condition}
+
+	if not event.has("previousHp"):
+		return {}
+
+	var previous_hp := int(event.get("previousHp", 0))
+	var max_hp := int(event.get("maxHp", 0))
+	if max_hp <= 0:
+		return {}
+
+	return {
+		"condition": "0 fnt" if previous_hp <= 0 else "%s/%s" % [previous_hp, max_hp],
+		"hp": previous_hp,
+		"maxHp": max_hp,
+		"currentHp": previous_hp,
+		"fainted": previous_hp <= 0,
+	}
+
+
+func _apply_previous_snapshot(pokemon_data: Dictionary, snapshot: Variant) -> void:
+	if not (snapshot is Dictionary):
+		return
+
+	var snapshot_data: Dictionary = snapshot as Dictionary
+	var previous_condition := str(snapshot_data.get("condition", ""))
+	if previous_condition != "":
+		pokemon_data["condition"] = previous_condition
+		hp_event_helper.apply_condition_fields(pokemon_data, previous_condition)
+
+	if snapshot_data.has("hp"):
+		pokemon_data["hp"] = int(snapshot_data.get("hp", 0))
+	if snapshot_data.has("maxHp"):
+		pokemon_data["maxHp"] = int(snapshot_data.get("maxHp", 1))
+	if snapshot_data.has("currentHp"):
+		pokemon_data["currentHp"] = int(snapshot_data.get("currentHp", 0))
+	if snapshot_data.has("fainted"):
+		pokemon_data["fainted"] = bool(snapshot_data.get("fainted", false))
 
 
 func _find_party_target_index(team: Array, target_ident: String, source_event: Dictionary = {}, prefer_active := false) -> int:
@@ -61,7 +116,8 @@ func _find_party_target_index(team: Array, target_ident: String, source_event: D
 		var pokemon_key_index := _find_unique_team_index_by_pokemon_key(team, event_pokemon_key)
 		if pokemon_key_index >= 0:
 			return pokemon_key_index
-		return -1
+		if _team_has_any_pokemon_key(team):
+			return -1
 
 	var event_slot := _get_event_metadata_slot(source_event)
 	if event_slot > 0:
@@ -96,8 +152,13 @@ func _get_event_pokemon_key(event_data: Dictionary) -> String:
 			return value
 
 	for ref_key in ["targetRef", "target_ref", "toRef", "to_ref"]:
-		var ref_value: Variant = event_data.get(ref_key, {})
+		if not event_data.has(ref_key):
+			continue
+
+		var ref_value: Variant = event_data.get(ref_key)
 		if not (ref_value is Dictionary):
+			continue
+		if (ref_value as Dictionary).is_empty():
 			continue
 
 		var ref_key_value := _get_event_pokemon_key(ref_value as Dictionary)
@@ -117,8 +178,13 @@ func _get_event_metadata_slot(event_data: Dictionary) -> int:
 			return slot
 
 	for ref_key in ["targetRef", "target_ref", "toRef", "to_ref"]:
-		var ref_value: Variant = event_data.get(ref_key, {})
+		if not event_data.has(ref_key):
+			continue
+
+		var ref_value: Variant = event_data.get(ref_key)
 		if not (ref_value is Dictionary):
+			continue
+		if (ref_value as Dictionary).is_empty():
 			continue
 
 		var ref_slot := _get_event_metadata_slot(ref_value as Dictionary)
@@ -146,6 +212,19 @@ func _find_unique_team_index_by_pokemon_key(team: Array, pokemon_key: String) ->
 		found_index = index
 
 	return found_index
+
+
+func _team_has_any_pokemon_key(team: Array) -> bool:
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		var current_key := str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))).strip_edges()
+		if current_key != "":
+			return true
+
+	return false
 
 
 func _find_unique_team_index_by_metadata_slot(team: Array, metadata_slot: int) -> int:
