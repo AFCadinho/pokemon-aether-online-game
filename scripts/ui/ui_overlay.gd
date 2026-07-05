@@ -246,6 +246,7 @@ const TRAINER_CARD_CYAN := Color("#00f5ff")
 const TRAINER_CARD_GREEN := Color("#4cff76")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
 const UI_BG := Color("#070b14e6")
+const UI_PANEL_BG := UI_BG
 const UI_BG_STRONG := Color("#05070bf2")
 const UI_SLOT_BG := Color("#0d1625e6")
 const UI_INPUT_BG := Color("#050912e8")
@@ -619,7 +620,6 @@ var incoming_friend_request_ids_initialized: bool = false
 var play_existing_friend_request_notification_on_next_socials_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
-var socials_pc_button: Button
 var pc_popup: PanelContainer
 var pc_box_selector: OptionButton
 var pc_party_list: VBoxContainer
@@ -875,8 +875,6 @@ func _ready() -> void:
 	socials_button.pressed.connect(_on_socials_button_pressed)
 	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
-	if socials_pc_button != null:
-		socials_pc_button.pressed.connect(_on_socials_pc_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
 	mail_inbox_button.pressed.connect(_on_mail_box_selected.bind("inbox"))
 	mail_sent_button.pressed.connect(_on_mail_box_selected.bind("sent"))
@@ -1137,18 +1135,6 @@ func _apply_mail_ui_styles() -> void:
 	_apply_text_edit_style(mail_compose_body_input)
 
 func _setup_pc_ui() -> void:
-	if socials_pc_button == null:
-		socials_pc_button = Button.new()
-		socials_pc_button.name = "PCButton"
-		socials_pc_button.text = "PC Boxes"
-		socials_pc_button.custom_minimum_size = Vector2(0, 36)
-		socials_pc_button.focus_mode = Control.FOCUS_NONE
-		var socials_stack := socials_close_button.get_parent()
-		if socials_stack != null:
-			socials_stack.add_child(socials_pc_button)
-			socials_stack.move_child(socials_pc_button, socials_close_button.get_index())
-		_apply_button_style(socials_pc_button, "primary")
-
 	if pc_popup != null:
 		return
 
@@ -16447,9 +16433,8 @@ func _on_socials_mail_button_pressed() -> void:
 	_load_mailbox()
 
 
-func _on_socials_pc_button_pressed() -> void:
-	_hide_socials_menu()
-	_show_pc_popup()
+func open_pokemon_pc() -> void:
+	await _show_pc_popup()
 
 
 func _show_pc_popup() -> void:
