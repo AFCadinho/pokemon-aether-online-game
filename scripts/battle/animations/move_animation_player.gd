@@ -20,6 +20,11 @@ signal animation_finished
 @export var projectile_config: Dictionary = {}
 @export var orb_config: Dictionary = {}
 @export var orb_projectile_config: Dictionary = {}
+@export var energy_blast_config: Dictionary = {}
+@export var water_splash_config: Dictionary = {}
+@export var electric_switch_config: Dictionary = {}
+@export var flash_config: Dictionary = {}
+@export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
 @export var sprite_tint: Color = Color(1.0, 0.78, 1.0, 1.0)
 @export var reverse_battlefield: bool = false
@@ -29,6 +34,7 @@ signal animation_finished
 @export_range(0.1, 2.0, 0.05) var sprite_zoom_multiplier: float = 1.0
 @export_range(0.25, 2.0, 0.05) var sprite_position_scale: float = 1.0
 @export var sprite_position_anchor: Vector2 = Vector2(128, 224)
+@export var sprite_position_offset: Vector2 = Vector2.ZERO
 @export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
 @export var sparkle_center: Vector2 = Vector2(256, 188)
 @export_range(8.0, 180.0, 1.0) var sparkle_radius_min: float = 26.0
@@ -53,6 +59,9 @@ var background_texture_override: Texture2D
 var foreground_texture_override: Texture2D
 var sound_streams: Dictionary = {}
 var projectile_sprite: Sprite2D
+var base_position := Vector2.ZERO
+var base_position_active := false
+var shake_applied := false
 
 @onready var bg: Sprite2D = Sprite2D.new()
 @onready var fg: Sprite2D = Sprite2D.new()
@@ -79,9 +88,13 @@ func play() -> void:
 	pink_overlay_alpha = 0.0
 	bg_hide_frame = -1
 	fg_hide_frame = -1
+	base_position = position
+	base_position_active = true
+	shake_applied = false
 	played_events.clear()
 	is_playing = true
 	_apply_frame(frame_index)
+	_apply_shake_offset()
 
 
 func stop() -> void:
@@ -93,6 +106,7 @@ func stop() -> void:
 	bg_hide_frame = -1
 	fg_hide_frame = -1
 	pink_overlay_alpha = 0.0
+	_restore_base_position()
 	queue_redraw()
 
 
@@ -119,6 +133,7 @@ func _process(delta: float) -> void:
 					queue_free()
 				return
 		_apply_frame(frame_index)
+	_apply_shake_offset()
 
 
 func _load_animation_data() -> void:
@@ -223,6 +238,7 @@ func _draw() -> void:
 
 	if should_draw_overlay and overlay_fill_enabled:
 		draw_rect(Rect2(Vector2.ZERO, Vector2(512, 384)), Color(visual_color.r, visual_color.g, visual_color.b, pink_overlay_alpha), true)
+	_draw_flash_visual()
 	if should_draw_overlay:
 		_draw_orb_visual()
 		for i: int in range(sparkle_count):
@@ -240,6 +256,9 @@ func _draw() -> void:
 			draw_line(center + Vector2(-sparkle_size * 0.7, sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, -sparkle_size * 0.7), sparkle_color, 1.0)
 			draw_circle(center, sparkle_size * 0.38, sparkle_color)
 	_draw_orb_projectile_visual()
+	_draw_energy_blast_visual()
+	_draw_water_splash_visual()
+	_draw_electric_switch_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -368,6 +387,353 @@ func _orb_projectile_enabled() -> bool:
 	return bool(orb_projectile_config.get("enabled", false))
 
 
+func _draw_flash_visual() -> void:
+	if not bool(flash_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var start: float = clampf(float(flash_config.get("start", 0.62)), 0.0, 1.0)
+	var peak: float = clampf(float(flash_config.get("peak", 0.72)), start, 1.0)
+	var end: float = clampf(float(flash_config.get("end", 0.9)), peak, 1.0)
+	if progress < start or progress > end:
+		return
+
+	var alpha: float
+	if progress <= peak:
+		alpha = clampf((progress - start) / maxf(peak - start, 0.001), 0.0, 1.0)
+	else:
+		alpha = clampf((end - progress) / maxf(end - peak, 0.001), 0.0, 1.0)
+	alpha *= float(flash_config.get("alpha", 0.16))
+	if alpha <= 0.01:
+		return
+
+	var color := _color_from_value(flash_config.get("color", [0.72, 0.95, 1.0, 1.0]), Color(0.72, 0.95, 1.0, 1.0))
+	draw_rect(Rect2(Vector2.ZERO, Vector2(512, 384)), _color_with_alpha(color, alpha), true)
+
+
+func _draw_energy_blast_visual() -> void:
+	if not bool(energy_blast_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(energy_blast_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(energy_blast_config.get("visible_end", 1.0)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha: float = _get_energy_blast_alpha(progress, visible_start, visible_end)
+	if alpha <= 0.02:
+		return
+
+	var projectile_state: Dictionary = _get_projectile_state_from_config(progress, energy_blast_config)
+	var center: Vector2 = _projectile_battlefield_position(projectile_state.get("position", Vector2.ZERO) as Vector2, energy_blast_config)
+	var scale_value: float = float(projectile_state.get("scale", 1.0))
+	var base_radius: float = float(energy_blast_config.get("radius", 18.0))
+	var radius: float = base_radius * scale_value * (1.0 + 0.08 * sin(float(frame_index) * 0.72))
+	var aura_color: Color = _color_from_value(energy_blast_config.get("aura_color", [0.08, 0.62, 1.0, 1.0]), Color(0.08, 0.62, 1.0, 1.0))
+	var core_color: Color = _color_from_value(energy_blast_config.get("core_color", [0.92, 1.0, 1.0, 1.0]), Color(0.92, 1.0, 1.0, 1.0))
+	var ring_color: Color = _color_from_value(energy_blast_config.get("ring_color", [0.28, 0.95, 1.0, 1.0]), Color(0.28, 0.95, 1.0, 1.0))
+	var shadow_color: Color = _color_from_value(energy_blast_config.get("shadow_color", [0.02, 0.12, 0.24, 1.0]), Color(0.02, 0.12, 0.24, 1.0))
+
+	var trail_count: int = maxi(0, int(energy_blast_config.get("trail_count", 5)))
+	var trail_spacing: float = float(energy_blast_config.get("trail_spacing", 0.035))
+	for trail_index: int in range(trail_count, 0, -1):
+		var trail_progress: float = clampf(progress - float(trail_index) * trail_spacing, visible_start, visible_end)
+		if trail_progress >= progress:
+			continue
+		var trail_state: Dictionary = _get_projectile_state_from_config(trail_progress, energy_blast_config)
+		var trail_center: Vector2 = _projectile_battlefield_position(trail_state.get("position", Vector2.ZERO) as Vector2, energy_blast_config)
+		var trail_scale: float = float(trail_state.get("scale", 1.0))
+		var trail_alpha: float = alpha * (1.0 - (float(trail_index) / float(trail_count + 1))) * 0.24
+		draw_line(trail_center, center, _color_with_alpha(aura_color, trail_alpha), maxf(1.0, radius * 0.22))
+		draw_circle(trail_center, base_radius * trail_scale * 0.66, _color_with_alpha(aura_color, trail_alpha * 0.7))
+
+	draw_circle(center + Vector2(radius * 0.16, radius * 0.18), radius * 1.75, _color_with_alpha(shadow_color, alpha * 0.18))
+	draw_circle(center, radius * 1.85, _color_with_alpha(aura_color, alpha * 0.18))
+	draw_circle(center, radius * 1.05, _color_with_alpha(aura_color, alpha * 0.46))
+	draw_circle(center, radius * 0.54, _color_with_alpha(core_color, alpha * 0.9))
+
+	var spin: float = float(frame_index) * 0.24
+	draw_arc(center, radius * 1.24, spin, spin + PI * 1.15, 48, _color_with_alpha(ring_color, alpha * 0.85), maxf(1.7, radius * 0.11))
+	draw_arc(center, radius * 1.58, -spin * 0.82, -spin * 0.82 + PI * 0.78, 48, _color_with_alpha(core_color, alpha * 0.55), maxf(1.2, radius * 0.07))
+
+	var ray_count: int = maxi(0, int(energy_blast_config.get("ray_count", 7)))
+	for ray_index: int in range(ray_count):
+		var angle: float = spin + float(ray_index) * TAU / float(ray_count)
+		var inner: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * 0.72
+		var outer: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * (1.25 + 0.18 * sin(spin + float(ray_index)))
+		draw_line(inner, outer, _color_with_alpha(ring_color, alpha * 0.42), 1.3)
+
+	_draw_energy_blast_impact(progress, visible_end, aura_color, core_color, ring_color)
+
+
+func _draw_energy_blast_impact(progress: float, visible_end: float, aura_color: Color, core_color: Color, ring_color: Color) -> void:
+	var impact_start: float = clampf(float(energy_blast_config.get("impact_start", 0.68)), 0.0, visible_end)
+	if progress < impact_start:
+		return
+
+	var impact_progress: float = clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var impact_state: Dictionary = _get_projectile_state_from_config(1.0, energy_blast_config)
+	var center: Vector2 = _projectile_battlefield_position(impact_state.get("position", Vector2.ZERO) as Vector2, energy_blast_config)
+	var impact_alpha: float = (1.0 - impact_progress) * float(energy_blast_config.get("impact_alpha", 0.78))
+	if impact_alpha <= 0.02:
+		return
+
+	var impact_radius: float = float(energy_blast_config.get("impact_radius", 46.0)) * (0.38 + impact_progress * 0.9)
+	draw_circle(center, impact_radius * 0.72, _color_with_alpha(aura_color, impact_alpha * 0.16))
+	for ring_index: int in range(3):
+		draw_arc(center, impact_radius + float(ring_index) * 9.0, 0.0, TAU, 72, _color_with_alpha(ring_color, impact_alpha * (0.7 - float(ring_index) * 0.16)), 2.0)
+
+	var burst_count: int = maxi(4, int(energy_blast_config.get("impact_ray_count", 10)))
+	for burst_index: int in range(burst_count):
+		var angle: float = float(burst_index) * TAU / float(burst_count) + float(frame_index) * 0.05
+		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * impact_radius * 0.34
+		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * impact_radius * (1.02 + 0.24 * sin(float(burst_index) + float(frame_index) * 0.2))
+		draw_line(start, end, _color_with_alpha(core_color, impact_alpha * 0.58), 1.5)
+
+
+func _draw_water_splash_visual() -> void:
+	if not bool(water_splash_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(water_splash_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(water_splash_config.get("visible_end", 1.0)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha: float = _get_timed_alpha(progress, visible_start, visible_end, water_splash_config)
+	if alpha <= 0.02:
+		return
+
+	var water_color: Color = _color_from_value(water_splash_config.get("water_color", [0.12, 0.7, 1.0, 1.0]), Color(0.12, 0.7, 1.0, 1.0))
+	var foam_color: Color = _color_from_value(water_splash_config.get("foam_color", [0.84, 0.98, 1.0, 1.0]), Color(0.84, 0.98, 1.0, 1.0))
+	var path_value: Variant = water_splash_config.get("reverse_path", []) if _uses_explicit_reverse_path(water_splash_config) else water_splash_config.get("path", [])
+	if not path_value is Array or (path_value as Array).is_empty():
+		return
+
+	var current_state: Dictionary = _get_projectile_state_from_config(progress, water_splash_config)
+	var current: Vector2 = _projectile_battlefield_position(current_state.get("position", Vector2.ZERO) as Vector2, water_splash_config)
+
+	var trail_progress: float = clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var trail_start: float = clampf(trail_progress - float(water_splash_config.get("trail_length", 0.34)), 0.0, 1.0)
+	var segments: int = maxi(8, int(water_splash_config.get("segments", 18)))
+	var previous_state: Dictionary = _get_projectile_state_from_config(trail_start, water_splash_config)
+	var previous: Vector2 = _projectile_battlefield_position(previous_state.get("position", Vector2.ZERO) as Vector2, water_splash_config)
+	for segment_index: int in range(1, segments + 1):
+		var t: float = lerpf(trail_start, trail_progress, float(segment_index) / float(segments))
+		var point_state: Dictionary = _get_projectile_state_from_config(t, water_splash_config)
+		var point: Vector2 = _projectile_battlefield_position(point_state.get("position", Vector2.ZERO) as Vector2, water_splash_config)
+		var segment_alpha: float = alpha * (0.3 + 0.7 * float(segment_index) / float(segments))
+		draw_line(previous, point, _color_with_alpha(water_color, segment_alpha * 0.62), float(water_splash_config.get("trail_width", 5.0)))
+		draw_line(previous + Vector2(0.0, -2.0), point + Vector2(0.0, -2.0), _color_with_alpha(foam_color, segment_alpha * 0.36), 1.7)
+		previous = point
+
+	var droplet_count: int = maxi(0, int(water_splash_config.get("droplet_count", 8)))
+	for droplet_index: int in range(droplet_count):
+		var droplet_t: float = clampf(trail_progress - float(droplet_index) * 0.055, 0.0, 1.0)
+		var droplet_state: Dictionary = _get_projectile_state_from_config(droplet_t, water_splash_config)
+		var base: Vector2 = _projectile_battlefield_position(droplet_state.get("position", Vector2.ZERO) as Vector2, water_splash_config)
+		var wave: float = sin(float(frame_index) * 0.42 + float(droplet_index) * 1.7)
+		var offset := Vector2(wave * 8.0, -absf(wave) * 9.0 + float(droplet_index % 3) * 3.0)
+		var droplet_alpha: float = alpha * (0.72 - float(droplet_index) / float(droplet_count + 2))
+		draw_circle(base + offset, 2.5 + float(droplet_index % 2), _color_with_alpha(foam_color, droplet_alpha))
+
+	_draw_water_splash_impact(progress, visible_end, current, water_color, foam_color)
+
+
+func _draw_water_splash_impact(progress: float, visible_end: float, target: Vector2, water_color: Color, foam_color: Color) -> void:
+	var impact_start: float = clampf(float(water_splash_config.get("impact_start", 0.58)), 0.0, visible_end)
+	if progress < impact_start:
+		return
+
+	var impact_progress: float = clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var impact_alpha: float = (1.0 - impact_progress) * float(water_splash_config.get("impact_alpha", 0.86))
+	if impact_alpha <= 0.02:
+		return
+
+	var impact_at: float = clampf(float(water_splash_config.get("impact_at", 1.0)), 0.0, 1.0)
+	var impact_state: Dictionary = _get_projectile_state_from_config(impact_at, water_splash_config)
+	target = _projectile_battlefield_position(impact_state.get("position", target) as Vector2, water_splash_config)
+	var radius: float = float(water_splash_config.get("impact_radius", 44.0)) * (0.36 + impact_progress * 0.95)
+	draw_arc(target, radius, 0.0, TAU, 72, _color_with_alpha(water_color, impact_alpha * 0.7), 2.4)
+	draw_arc(target, radius * 0.68, 0.0, TAU, 56, _color_with_alpha(foam_color, impact_alpha * 0.52), 1.6)
+
+	var splash_count: int = maxi(5, int(water_splash_config.get("impact_splash_count", 12)))
+	for splash_index: int in range(splash_count):
+		var angle: float = -PI * 0.85 + float(splash_index) * PI * 1.7 / float(splash_count - 1)
+		var length: float = radius * (0.72 + 0.32 * sin(float(splash_index) * 1.31 + float(frame_index) * 0.12))
+		var start: Vector2 = target + Vector2(cos(angle), sin(angle)) * radius * 0.28
+		var end: Vector2 = target + Vector2(cos(angle), sin(angle)) * length
+		var color := foam_color if splash_index % 2 == 0 else water_color
+		draw_line(start, end, _color_with_alpha(color, impact_alpha * 0.62), 1.7)
+		draw_circle(end, 2.0, _color_with_alpha(foam_color, impact_alpha * 0.46))
+
+
+func _draw_electric_switch_visual() -> void:
+	if not bool(electric_switch_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(electric_switch_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(electric_switch_config.get("visible_end", 1.0)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha: float = _get_timed_alpha(progress, visible_start, visible_end, electric_switch_config)
+	if alpha <= 0.02:
+		return
+
+	var bolt_color: Color = _color_from_value(electric_switch_config.get("bolt_color", [1.0, 0.88, 0.08, 1.0]), Color(1.0, 0.88, 0.08, 1.0))
+	var core_color: Color = _color_from_value(electric_switch_config.get("core_color", [1.0, 1.0, 0.86, 1.0]), Color(1.0, 1.0, 0.86, 1.0))
+	var shadow_color: Color = _color_from_value(electric_switch_config.get("shadow_color", [0.38, 0.12, 0.9, 1.0]), Color(0.38, 0.12, 0.9, 1.0))
+	var trail_progress: float = clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var trail_start: float = clampf(trail_progress - float(electric_switch_config.get("trail_length", 0.18)), 0.0, 1.0)
+	var segments: int = maxi(6, int(electric_switch_config.get("segments", 12)))
+	var previous_state: Dictionary = _get_projectile_state_from_config(trail_start, electric_switch_config)
+	var previous: Vector2 = _projectile_battlefield_position(previous_state.get("position", Vector2.ZERO) as Vector2, electric_switch_config)
+	for segment_index: int in range(1, segments + 1):
+		var t: float = lerpf(trail_start, trail_progress, float(segment_index) / float(segments))
+		var point_state: Dictionary = _get_projectile_state_from_config(t, electric_switch_config)
+		var point: Vector2 = _projectile_battlefield_position(point_state.get("position", Vector2.ZERO) as Vector2, electric_switch_config)
+		var jitter: Vector2 = _electric_jitter(segment_index, t, float(electric_switch_config.get("jitter", 9.0)))
+		var next_point := point + jitter
+		var segment_alpha: float = alpha * (0.32 + 0.68 * float(segment_index) / float(segments))
+		draw_line(previous, next_point, _color_with_alpha(shadow_color, segment_alpha * 0.34), float(electric_switch_config.get("width", 4.8)))
+		draw_line(previous, next_point, _color_with_alpha(bolt_color, segment_alpha * 0.9), float(electric_switch_config.get("width", 3.0)))
+		draw_line(previous, next_point, _color_with_alpha(core_color, segment_alpha * 0.72), 1.2)
+		if segment_index % 3 == 0:
+			var branch_direction := (next_point - previous).normalized().orthogonal()
+			var branch_length: float = float(electric_switch_config.get("branch_length", 18.0)) * (0.65 + 0.35 * sin(float(frame_index + segment_index)))
+			draw_line(next_point, next_point + branch_direction * branch_length, _color_with_alpha(bolt_color, segment_alpha * 0.45), 1.5)
+		previous = next_point
+
+	if bool(electric_switch_config.get("core_enabled", true)):
+		_draw_electric_switch_core(progress, bolt_color, core_color, shadow_color, alpha)
+	_draw_electric_switch_impact(progress, visible_end, bolt_color, core_color, shadow_color)
+
+
+func _draw_electric_switch_core(progress: float, bolt_color: Color, core_color: Color, shadow_color: Color, alpha: float) -> void:
+	var state: Dictionary = _get_projectile_state_from_config(progress, electric_switch_config)
+	var center: Vector2 = _projectile_battlefield_position(state.get("position", Vector2.ZERO) as Vector2, electric_switch_config)
+	var base_radius: float = float(electric_switch_config.get("core_radius", 13.0))
+	var radius: float = base_radius * (1.0 + 0.16 * sin(float(frame_index) * 0.74))
+	draw_circle(center, radius * 1.72, _color_with_alpha(shadow_color, alpha * 0.18))
+	draw_circle(center, radius * 1.34, _color_with_alpha(bolt_color, alpha * 0.3))
+	draw_circle(center, radius * 0.84, _color_with_alpha(bolt_color, alpha * 0.72))
+	draw_circle(center + Vector2(-radius * 0.18, -radius * 0.2), radius * 0.36, _color_with_alpha(core_color, alpha * 0.9))
+	draw_arc(center, radius * 1.18, float(frame_index) * 0.22, float(frame_index) * 0.22 + PI * 1.35, 32, _color_with_alpha(core_color, alpha * 0.8), 1.7)
+
+	var spark_count: int = maxi(3, int(electric_switch_config.get("core_spark_count", 5)))
+	for spark_index: int in range(spark_count):
+		var angle: float = float(frame_index) * 0.31 + float(spark_index) * TAU / float(spark_count)
+		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * 0.88
+		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * (1.35 + 0.22 * sin(float(spark_index) + float(frame_index) * 0.2))
+		draw_line(start, end, _color_with_alpha(core_color, alpha * 0.64), 1.2)
+
+
+func _draw_electric_switch_impact(progress: float, visible_end: float, bolt_color: Color, core_color: Color, shadow_color: Color) -> void:
+	var impact_start: float = clampf(float(electric_switch_config.get("impact_start", 0.28)), 0.0, visible_end)
+	if progress < impact_start:
+		return
+
+	var impact_progress: float = clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var impact_alpha: float = (1.0 - impact_progress) * float(electric_switch_config.get("impact_alpha", 0.9))
+	if impact_alpha <= 0.02:
+		return
+
+	var impact_at: float = clampf(float(electric_switch_config.get("impact_at", 0.42)), 0.0, 1.0)
+	var impact_state: Dictionary = _get_projectile_state_from_config(impact_at, electric_switch_config)
+	var center: Vector2 = _projectile_battlefield_position(impact_state.get("position", Vector2.ZERO) as Vector2, electric_switch_config)
+	var radius: float = float(electric_switch_config.get("impact_radius", 40.0)) * (0.45 + impact_progress * 0.72)
+	draw_circle(center, radius * 0.42, _color_with_alpha(core_color, impact_alpha * 0.16))
+	draw_arc(center, radius, 0.0, TAU, 64, _color_with_alpha(bolt_color, impact_alpha * 0.76), 2.5)
+	draw_arc(center, radius * 0.68, 0.0, TAU, 48, _color_with_alpha(shadow_color, impact_alpha * 0.32), 1.8)
+	var spark_count: int = maxi(5, int(electric_switch_config.get("impact_spark_count", 10)))
+	for spark_index: int in range(spark_count):
+		var angle: float = float(spark_index) * TAU / float(spark_count) + float(frame_index) * 0.08
+		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * 0.26
+		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * (0.9 + 0.24 * sin(float(spark_index) + float(frame_index) * 0.23))
+		draw_line(start, end, _color_with_alpha(core_color, impact_alpha * 0.7), 1.5)
+
+
+func _electric_jitter(index: int, t: float, amount: float) -> Vector2:
+	var value: float = sin(float(index) * 11.17 + t * 23.0 + float(frame_index) * 0.41)
+	var value_y: float = cos(float(index) * 7.83 + t * 19.0 + float(frame_index) * 0.36)
+	return Vector2(value, value_y) * amount
+
+
+func _get_energy_blast_alpha(progress: float, visible_start: float, visible_end: float) -> float:
+	return _get_timed_alpha(progress, visible_start, visible_end, energy_blast_config)
+
+
+func _get_timed_alpha(progress: float, visible_start: float, visible_end: float, config: Dictionary) -> float:
+	var fade_in: float = maxf(float(config.get("fade_in", 0.08)), 0.001)
+	var fade_out: float = maxf(float(config.get("fade_out", 0.16)), 0.001)
+	return minf(
+		clampf((progress - visible_start) / fade_in, 0.0, 1.0),
+		clampf((visible_end - progress) / fade_out, 0.0, 1.0)
+	)
+
+
+func _quadratic_bezier(start: Vector2, control: Vector2, end: Vector2, t: float) -> Vector2:
+	var inverse := 1.0 - t
+	return (start * inverse * inverse) + (control * 2.0 * inverse * t) + (end * t * t)
+
+
+func _color_with_alpha(color: Color, alpha: float) -> Color:
+	return Color(color.r, color.g, color.b, color.a * alpha)
+
+
+func _apply_shake_offset() -> void:
+	if not base_position_active:
+		return
+	if not bool(shake_config.get("enabled", false)):
+		_restore_base_position()
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var last_frame: int = maxi(frames.size() - 1, 0)
+	var start_frame: int = clampi(int(shake_config.get("start_frame", 0)), 0, last_frame)
+	var end_frame: int = clampi(int(shake_config.get("end_frame", last_frame)), start_frame, last_frame)
+	if frame_index < start_frame or frame_index > end_frame:
+		_restore_base_position()
+		return
+
+	var duration: float = maxf(float(end_frame - start_frame), 1.0)
+	var progress: float = clampf(float(frame_index - start_frame) / duration, 0.0, 1.0)
+	var amplitude: float = maxf(float(shake_config.get("amplitude", 6.0)), 0.0)
+	if bool(shake_config.get("decay", true)):
+		amplitude *= 1.0 - progress
+
+	var frequency_x: float = float(shake_config.get("frequency_x", 2.7))
+	var frequency_y: float = float(shake_config.get("frequency_y", 3.9))
+	var vertical_scale: float = float(shake_config.get("vertical_scale", 0.45))
+	var frame_value: float = float(frame_index - start_frame + 1)
+	var offset := Vector2(
+		roundf(sin(frame_value * frequency_x) * amplitude),
+		roundf(cos(frame_value * frequency_y) * amplitude * vertical_scale)
+	)
+	position = base_position + offset
+	shake_applied = true
+
+
+func _restore_base_position() -> void:
+	if not base_position_active or not shake_applied:
+		return
+
+	position = base_position
+	shake_applied = false
+
+
 func _get_orb_projectile_alpha(progress: float) -> float:
 	var fade_in: float = maxf(float(orb_projectile_config.get("fade_in", 0.10)), 0.001)
 	var fade_out: float = maxf(float(orb_projectile_config.get("fade_out", 0.14)), 0.001)
@@ -455,8 +821,8 @@ func _apply_frame(index: int) -> void:
 			tile_w,
 			tile_h
 		)
-		var sheet_position := Vector2(float(cell["x"]), float(cell["y"]))
-		sprite.position = _battlefield_position(_scale_sprite_position(sheet_position))
+		var sheet_position := _scale_sprite_position(Vector2(float(cell["x"]), float(cell["y"]))) + sprite_position_offset
+		sprite.position = _battlefield_position(sheet_position)
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
 		sprite.rotation_degrees = float(cell["angle"])

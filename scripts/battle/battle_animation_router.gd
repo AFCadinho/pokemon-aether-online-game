@@ -44,13 +44,14 @@ func play_attack_tween_for_actor(actor_ident: String) -> void:
 			await enemy_sprite_box.play_attack_tween(Vector2(-28, 6))
 
 
-func play_move_animation(move_name: String, actor_ident: String = "", _target_ident: String = "") -> void:
+func play_move_animation(move_name: String, actor_ident: String = "", _target_ident: String = "", options: Dictionary = {}) -> void:
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.move_animation", {
 		"move": move_name,
 		"actor": actor_ident,
 		"target": _target_ident,
+		"result": str(options.get("result", "")),
 	}):
 		return
 
@@ -59,7 +60,7 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 	if config.is_empty():
 		return
 
-	await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2", actor_ident, _target_ident)
+	await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2", actor_ident, _target_ident, options)
 
 
 func play_effect_animation(effect_key: String, target_ident: String = "") -> void:
@@ -83,7 +84,8 @@ func _play_animation_config(
 	target_ident: String = "",
 	reverse_battlefield: bool = false,
 	move_actor_ident: String = "",
-	move_target_ident: String = ""
+	move_target_ident: String = "",
+	animation_options: Dictionary = {}
 ) -> void:
 	var parent_node: Node = animation_parent
 	if parent_node == null:
@@ -101,25 +103,29 @@ func _play_animation_config(
 		return
 
 	var animation_node: MoveAnimationPlayer = _create_move_animation_node(config, resources, reverse_battlefield)
+	_apply_move_animation_options(animation_node, config, animation_options)
+	var hidden_actor_sprites: Array = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 
 	var overlay: Control = _create_animation_overlay(parent_node)
 	if overlay != null:
 		parent_node.add_child(overlay)
 		_fit_animation_to_parent(animation_node, overlay)
-		_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, overlay)
+		_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, overlay, config, animation_options)
 		_apply_effect_target_offset(animation_node, target_ident, config, overlay)
 		overlay.add_child(animation_node)
 		await _wait_for_animation_node(animation_node, overlay)
+		_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
 		if is_instance_valid(overlay):
 			overlay.queue_free()
 		return
 
 	animation_node.z_index = 50
 	_fit_animation_to_parent(animation_node, parent_node)
-	_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, parent_node)
+	_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, parent_node, config, animation_options)
 	_apply_effect_target_offset(animation_node, target_ident, config, parent_node)
 	parent_node.add_child(animation_node)
 	await _wait_for_animation_node(animation_node, parent_node)
+	_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
 
 
 func prewarm_move_animations(move_names: Array) -> void:
@@ -244,6 +250,31 @@ func _load_effect_animation_catalog() -> void:
 		effect_animation_aliases = aliases_value as Dictionary
 
 
+func _hide_move_actor_sprite_if_needed(config: Dictionary, actor_ident: String) -> Array:
+	if not bool(config.get("hide_actor_sprite", false)):
+		return []
+
+	var actor_box := _get_sprite_box_for_ident(actor_ident)
+	if actor_box == null or not actor_box.has_method("set_battle_sprites_visible"):
+		return []
+
+	var changed_sprites: Variant = actor_box.call("set_battle_sprites_visible", false)
+	if changed_sprites is Array:
+		return changed_sprites as Array
+	return []
+
+
+func _restore_move_actor_sprite_if_needed(config: Dictionary, actor_ident: String, hidden_sprites: Array) -> void:
+	if hidden_sprites.is_empty() or not bool(config.get("hide_actor_sprite", false)):
+		return
+
+	var actor_box := _get_sprite_box_for_ident(actor_ident)
+	if actor_box == null or not actor_box.has_method("restore_battle_sprites_visibility"):
+		return
+
+	actor_box.call("restore_battle_sprites_visibility", hidden_sprites)
+
+
 func _create_move_animation_node(config: Dictionary, resources: Dictionary = {}, reverse_battlefield: bool = false) -> MoveAnimationPlayer:
 	var animation_node: MoveAnimationPlayer = MoveAnimationPlayer.new()
 	animation_node.data_path = str(config.get("data_path", ""))
@@ -265,6 +296,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 		config.get("sprite_position_anchor", [EFFECT_SOURCE_PLAYER_POSITION.x, EFFECT_SOURCE_PLAYER_POSITION.y]),
 		EFFECT_SOURCE_PLAYER_POSITION
 	)
+	animation_node.sprite_position_offset = _vector2_from_config_value(config.get("sprite_position_offset", [0.0, 0.0]), Vector2.ZERO)
 	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))
 	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
 	animation_node.pattern_override = int(config.get("pattern_override", -1))
@@ -278,6 +310,11 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.projectile_config = (config.get("projectile", {}) as Dictionary).duplicate(true)
 	animation_node.orb_config = (config.get("orb", {}) as Dictionary).duplicate(true)
 	animation_node.orb_projectile_config = (config.get("orb_projectile", {}) as Dictionary).duplicate(true)
+	animation_node.energy_blast_config = (config.get("energy_blast", {}) as Dictionary).duplicate(true)
+	animation_node.water_splash_config = (config.get("water_splash", {}) as Dictionary).duplicate(true)
+	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
+	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
+	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
 	animation_node.sprite_tint = _color_from_config(config.get("sprite_tint", [1.0, 1.0, 1.0, 1.0]), Color.WHITE)
 	animation_node.reverse_battlefield = reverse_battlefield
@@ -287,6 +324,54 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.sparkle_radius_min = float(config.get("sparkle_radius_min", 26.0))
 	animation_node.sparkle_radius_max = float(config.get("sparkle_radius_max", 78.0))
 	return animation_node
+
+
+func _apply_move_animation_options(animation_node: MoveAnimationPlayer, config: Dictionary, animation_options: Dictionary) -> void:
+	if animation_node == null or not _is_miss_animation(animation_options):
+		return
+
+	var miss_config := _get_miss_animation_config(config)
+	if miss_config.is_empty():
+		return
+
+	var target_offset := _get_miss_animation_offset(miss_config, "target_offset", Vector2(56.0, -20.0))
+	var default_sheet_offset := target_offset if str(config.get("category", "")) == "physical_contact" else Vector2.ZERO
+	var sheet_offset := _get_miss_animation_offset(miss_config, "sheet_offset", default_sheet_offset)
+	animation_node.sprite_position_offset += sheet_offset
+
+	if bool(miss_config.get("shift_visual_center", false)):
+		animation_node.sparkle_center += target_offset
+		if animation_node.orb_config.has("center"):
+			var orb_center := _vector2_from_config_value(animation_node.orb_config.get("center", []), animation_node.sparkle_center - target_offset)
+			animation_node.orb_config["center"] = [
+				orb_center.x + target_offset.x,
+				orb_center.y + target_offset.y,
+			]
+
+	if bool(miss_config.get("suppress_shake", true)):
+		animation_node.shake_config.clear()
+
+
+func _is_miss_animation(animation_options: Dictionary) -> bool:
+	return str(animation_options.get("result", "")).strip_edges().to_lower() == "miss"
+
+
+func _get_miss_animation_config(config: Dictionary) -> Dictionary:
+	var miss_config: Dictionary = {}
+	var miss_value: Variant = config.get("miss", {})
+	if miss_value is Dictionary:
+		miss_config = miss_value as Dictionary
+
+	var category := str(config.get("category", ""))
+	var default_enabled := category != "field_impact" and category != "status_buff"
+	if not bool(miss_config.get("enabled", default_enabled)):
+		return {}
+
+	return miss_config
+
+
+func _get_miss_animation_offset(miss_config: Dictionary, key: String, fallback: Vector2) -> Vector2:
+	return _vector2_from_config_value(miss_config.get(key, [fallback.x, fallback.y]), fallback)
 
 
 func _color_from_config(value: Variant, fallback: Color) -> Color:
@@ -614,17 +699,39 @@ func _apply_effect_target_offset(animation_node: Node2D, target_ident: String, c
 		return
 
 	var source_anchor_in_parent := animation_node.position + Vector2(source_anchor.x * animation_node.scale.x, source_anchor.y * animation_node.scale.y)
-	animation_node.position += target_anchor - source_anchor_in_parent
-
 	var effect_offset: Vector2 = _vector2_from_config_value(config.get("effect_position_offset", [0.0, 0.0]), Vector2.ZERO)
+	if bool(config.get("keep_screen_overlay_fullscreen", false)) and animation_node is MoveAnimationPlayer:
+		var scale_x: float = animation_node.scale.x if absf(animation_node.scale.x) > 0.001 else 1.0
+		var scale_y: float = animation_node.scale.y if absf(animation_node.scale.y) > 0.001 else 1.0
+		var visual_offset := Vector2(
+			(target_anchor.x - source_anchor_in_parent.x) / scale_x + effect_offset.x,
+			(target_anchor.y - source_anchor_in_parent.y) / scale_y + effect_offset.y
+		)
+		_apply_effect_visual_offset(animation_node as MoveAnimationPlayer, visual_offset)
+		return
+
+	animation_node.position += target_anchor - source_anchor_in_parent
 	animation_node.position += Vector2(effect_offset.x * animation_node.scale.x, effect_offset.y * animation_node.scale.y)
+
+
+func _apply_effect_visual_offset(animation_node: MoveAnimationPlayer, visual_offset: Vector2) -> void:
+	animation_node.sprite_position_offset += visual_offset
+	animation_node.sparkle_center += visual_offset
+	if animation_node.orb_config.has("center"):
+		var orb_center := _vector2_from_config_value(animation_node.orb_config.get("center", []), animation_node.sparkle_center - visual_offset)
+		animation_node.orb_config["center"] = [
+			orb_center.x + visual_offset.x,
+			orb_center.y + visual_offset.y,
+		]
 
 
 func _apply_move_projectile_endpoint_anchors(
 	animation_node: MoveAnimationPlayer,
 	actor_ident: String,
 	target_ident: String,
-	parent_node: Node
+	parent_node: Node,
+	config: Dictionary = {},
+	animation_options: Dictionary = {}
 ) -> void:
 	if actor_ident == "" or animation_node == null:
 		return
@@ -642,6 +749,14 @@ func _apply_move_projectile_endpoint_anchors(
 	if actor_anchor_parent == Vector2.ZERO or target_anchor_parent == Vector2.ZERO:
 		return
 
+	if _is_miss_animation(animation_options):
+		var miss_config := _get_miss_animation_config(config)
+		if not miss_config.is_empty():
+			var target_offset := _get_miss_animation_offset(miss_config, "target_offset", Vector2(56.0, -20.0))
+			if actor_id == "p2":
+				target_offset = Vector2(-target_offset.x, -target_offset.y)
+			target_anchor_parent += Vector2(target_offset.x * animation_node.scale.x, target_offset.y * animation_node.scale.y)
+
 	var actor_anchor := _parent_position_to_animation_source(animation_node, actor_anchor_parent)
 	var target_anchor := _parent_position_to_animation_source(animation_node, target_anchor_parent)
 	animation_node.projectile_config = _with_projectile_endpoint_anchors(
@@ -654,6 +769,21 @@ func _apply_move_projectile_endpoint_anchors(
 		actor_anchor,
 		target_anchor
 	)
+	animation_node.energy_blast_config = _with_projectile_endpoint_anchors(
+		animation_node.energy_blast_config,
+		actor_anchor,
+		target_anchor
+	)
+	animation_node.water_splash_config = _with_projectile_endpoint_anchors(
+		animation_node.water_splash_config,
+		actor_anchor,
+		target_anchor
+	)
+	animation_node.electric_switch_config = _with_projectile_endpoint_anchors(
+		animation_node.electric_switch_config,
+		actor_anchor,
+		target_anchor
+	)
 
 
 func _with_projectile_endpoint_anchors(config: Dictionary, actor_anchor: Vector2, target_anchor: Vector2) -> Dictionary:
@@ -661,6 +791,8 @@ func _with_projectile_endpoint_anchors(config: Dictionary, actor_anchor: Vector2
 		return config
 
 	var updated_config: Dictionary = config.duplicate(true)
+	actor_anchor += _vector2_from_config_value(updated_config.get("actor_offset", [0.0, 0.0]), Vector2.ZERO)
+	target_anchor += _vector2_from_config_value(updated_config.get("target_offset", [0.0, 0.0]), Vector2.ZERO)
 	if updated_config.has("path"):
 		_set_projectile_path_endpoints(updated_config, "path", actor_anchor, target_anchor)
 	if updated_config.has("reverse_path"):
@@ -681,6 +813,22 @@ func _set_projectile_path_endpoints(config: Dictionary, path_key: String, actor_
 		var first_point: Dictionary = (path[0] as Dictionary).duplicate(true)
 		first_point["position"] = [actor_anchor.x, actor_anchor.y]
 		path[0] = first_point
+
+	if bool(config.get("return_to_actor", false)):
+		var target_point_index: int = clampi(int(config.get("target_point_index", path.size() - 1)), 0, path.size() - 1)
+		if path[target_point_index] is Dictionary:
+			var target_point: Dictionary = (path[target_point_index] as Dictionary).duplicate(true)
+			target_point["position"] = [target_anchor.x, target_anchor.y]
+			path[target_point_index] = target_point
+
+		var return_index: int = path.size() - 1
+		if path[return_index] is Dictionary:
+			var return_point: Dictionary = (path[return_index] as Dictionary).duplicate(true)
+			return_point["position"] = [actor_anchor.x, actor_anchor.y]
+			path[return_index] = return_point
+
+		config[path_key] = path
+		return
 
 	var last_index: int = path.size() - 1
 	if path[last_index] is Dictionary:

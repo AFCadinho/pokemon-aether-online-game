@@ -264,6 +264,7 @@
       "show_timing_foregrounds": false,
       "show_pink_visual": true,
       "show_sheet_sprites": false,
+      "keep_screen_overlay_fullscreen": true,
       "visual_color": [
         0.72,
         0.48,

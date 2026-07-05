@@ -417,6 +417,7 @@ func _new_presentation() -> Dictionary:
 		"move_animation_name": "",
 		"move_animation_actor_ident": "",
 		"move_animation_target_ident": "",
+		"move_animation_result": "",
 		"damage_target_ident": "",
 		"heal_target_ident": "",
 		"faint_target_ident": "",

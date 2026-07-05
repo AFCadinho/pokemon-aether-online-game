@@ -122,6 +122,19 @@ func _get_visible_sprites() -> Array[AnimatedSprite2D]:
 
 	return sprites
 
+func set_battle_sprites_visible(is_visible: bool) -> Array:
+	var changed_sprites: Array = []
+	for sprite in _get_all_sprites():
+		if sprite.visible != is_visible:
+			changed_sprites.append(sprite)
+			sprite.visible = is_visible
+	return changed_sprites
+
+func restore_battle_sprites_visibility(sprites: Array) -> void:
+	for sprite_value: Variant in sprites:
+		if sprite_value is AnimatedSprite2D:
+			(sprite_value as AnimatedSprite2D).visible = true
+
 func _get_sprite_key(sprite: AnimatedSprite2D) -> String:
 	return str(sprite.get_path())
 

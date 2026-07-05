@@ -223,6 +223,18 @@
       "sound_paths": {
         "PRSFX- Quick Attack.wav": "res://assets/battles/animations/quickattack/PRSFX- Quick Attack.wav"
       },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          56,
+          -20
+        ],
+        "sheet_offset": [
+          56,
+          -20
+        ],
+        "suppress_shake": true
+      },
       "pattern_offset": 0,
       "pattern_override": -1
     },
@@ -381,6 +393,722 @@
             "ease": "ease_out_quad"
           }
         ]
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          64,
+          -24
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "earthquake": {
+      "template": "imported_sheet",
+      "category": "field_impact",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": true,
+      "show_timing_foregrounds": true,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.72,
+        0.52,
+        0.28,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "shake": {
+        "enabled": true,
+        "start_frame": 5,
+        "end_frame": 44,
+        "amplitude": 8.0,
+        "frequency_x": 2.8,
+        "frequency_y": 4.2,
+        "vertical_scale": 0.42,
+        "decay": true
+      },
+      "data_path": "res://assets/battles/animations/earthquake/earthquake.json",
+      "sheet_path": "res://assets/battles/animations/earthquake/PRAS- Rock.png",
+      "background_path": "res://assets/battles/animations/earthquake/PRAS- Earthquake BG.png",
+      "foreground_path": "res://assets/battles/animations/earthquake/PRAS- Sandstorm.png",
+      "sound_paths": {
+        "PRSFX- Earthquake1.wav": "res://assets/battles/animations/earthquake/PRSFX- Earthquake1.wav",
+        "PRSFX- Earthquake2.wav": "res://assets/battles/animations/earthquake/PRSFX- Earthquake2.wav"
+      },
+      "miss": {
+        "enabled": false
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "knockoff": {
+      "speed_scale": 1.35,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "data_path": "res://assets/battles/animations/knockoff/knockoff.json",
+      "sheet_path": "res://assets/battles/animations/knockoff/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Knock Off.wav": "res://assets/battles/animations/knockoff/PRSFX- Knock Off.wav"
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          54,
+          -18
+        ],
+        "sheet_offset": [
+          54,
+          -18
+        ],
+        "suppress_shake": true
+      },
+      "shake": {
+        "enabled": true,
+        "start_frame": 2,
+        "end_frame": 12,
+        "amplitude": 5.0,
+        "frequency_x": 2.8,
+        "frequency_y": 4.1,
+        "vertical_scale": 0.55,
+        "decay": true
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "focusblast": {
+      "speed_scale": 1.18,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.1,
+        0.68,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.78,
+        0.95,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "template": "imported_sheet",
+      "category": "projectile",
+      "data_path": "res://assets/battles/animations/focusblast/focusblast.json",
+      "sheet_path": "res://assets/battles/animations/focusblast/PRAS- Tri Attack.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Focus Blast1.wav": "res://assets/battles/animations/focusblast/PRSFX- Focus Blast1.wav"
+      },
+      "energy_blast": {
+        "enabled": true,
+        "visible_start": 0.04,
+        "visible_end": 0.98,
+        "fade_in": 0.08,
+        "fade_out": 0.12,
+        "radius": 17.0,
+        "trail_count": 7,
+        "trail_spacing": 0.038,
+        "ray_count": 8,
+        "impact_start": 0.66,
+        "impact_radius": 50.0,
+        "impact_alpha": 0.82,
+        "impact_ray_count": 11,
+        "aura_color": [
+          0.05,
+          0.55,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.92,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "ring_color": [
+          0.32,
+          0.95,
+          1.0,
+          1.0
+        ],
+        "shadow_color": [
+          0.02,
+          0.1,
+          0.22,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 0.62
+          },
+          {
+            "at": 0.36,
+            "position": [
+              238,
+              158
+            ],
+            "scale": 1.08,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.36,
+            "ease": "smoothstep"
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 0.62
+          },
+          {
+            "at": 0.36,
+            "position": [
+              274,
+              162
+            ],
+            "scale": 1.08,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.36,
+            "ease": "smoothstep"
+          }
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.08,
+        "peak": 0.58,
+        "end": 0.98,
+        "alpha": 0.09,
+        "color": [
+          0.08,
+          0.42,
+          1.0,
+          1.0
+        ]
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          56,
+          -20
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
+      },
+      "shake": {
+        "enabled": true,
+        "start_frame": 15,
+        "end_frame": 22,
+        "amplitude": 3.0,
+        "frequency_x": 3.1,
+        "frequency_y": 4.4,
+        "vertical_scale": 0.45,
+        "decay": true
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "uturn": {
+      "speed_scale": 1.35,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "hide_actor_sprite": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "data_path": "res://assets/battles/animations/uturn/uturn.json",
+      "sheet_path": "res://assets/battles/animations/uturn/PRAS- U-Turn.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- U-Turn2.wav": "res://assets/battles/animations/uturn/PRSFX- U-Turn2.wav"
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          54,
+          -18
+        ],
+        "sheet_offset": [
+          54,
+          -18
+        ],
+        "suppress_shake": true
+      },
+      "shake": {
+        "enabled": true,
+        "start_frame": 8,
+        "end_frame": 16,
+        "amplitude": 4.0,
+        "frequency_x": 3.0,
+        "frequency_y": 4.2,
+        "vertical_scale": 0.45,
+        "decay": true
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "flipturn": {
+      "speed_scale": 2.05,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "hide_actor_sprite": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.38,
+        0.76,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.82,
+        0.95,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "data_path": "res://assets/battles/animations/flipturn/flipturn.json",
+      "sheet_path": "res://assets/battles/animations/flipturn/PRAS- Water.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- U-Turn2.wav": "res://assets/battles/animations/uturn/PRSFX- U-Turn2.wav"
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          54,
+          -18
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
+      },
+      "shake": {
+        "enabled": true,
+        "start_frame": 6,
+        "end_frame": 12,
+        "amplitude": 3.5,
+        "frequency_x": 2.7,
+        "frequency_y": 4.0,
+        "vertical_scale": 0.42,
+        "decay": true
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "water_splash": {
+        "enabled": true,
+        "visible_start": 0.0,
+        "visible_end": 0.86,
+        "fade_in": 0.035,
+        "fade_out": 0.08,
+        "arc_lift": 50.0,
+        "trail_length": 0.24,
+        "trail_width": 7.0,
+        "segments": 20,
+        "droplet_count": 10,
+        "impact_start": 0.24,
+        "impact_radius": 48.0,
+        "impact_alpha": 0.9,
+        "impact_splash_count": 13,
+        "actor_offset": [
+          0,
+          92
+        ],
+        "target_offset": [
+          0,
+          4
+        ],
+        "water_color": [
+          0.08,
+          0.58,
+          1.0,
+          1.0
+        ],
+        "foam_color": [
+          0.82,
+          0.98,
+          1.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 0.22,
+            "position": [
+              250,
+              146
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 0.42,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0,
+            "ease": "smoothstep"
+          },
+          {
+            "at": 0.62,
+            "position": [
+              250,
+              146
+            ],
+            "scale": 0.96,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 0.9,
+            "ease": "smoothstep"
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 0.22,
+            "position": [
+              270,
+              158
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 0.42,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0,
+            "ease": "smoothstep"
+          },
+          {
+            "at": 0.62,
+            "position": [
+              270,
+              158
+            ],
+            "scale": 0.96,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 0.9,
+            "ease": "smoothstep"
+          }
+        ],
+        "impact_at": 0.42,
+        "return_to_actor": true,
+        "target_point_index": 2
+      }
+    },
+    "voltswitch": {
+      "speed_scale": 2.0,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "hide_actor_sprite": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        0.84,
+        0.08,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.96,
+        0.62,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "template": "imported_sheet",
+      "category": "projectile",
+      "data_path": "res://assets/battles/animations/voltswitch/voltswitch.json",
+      "sheet_path": "res://assets/battles/animations/voltswitch/PRAS- Electric.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Volt Switch1.wav": "res://assets/battles/animations/voltswitch/PRSFX- Volt Switch1.wav",
+        "PRSFX- Volt Switch2.wav": "res://assets/battles/animations/voltswitch/PRSFX- Volt Switch2.wav"
+      },
+      "electric_switch": {
+        "enabled": true,
+        "visible_start": 0.0,
+        "visible_end": 0.9,
+        "fade_in": 0.035,
+        "fade_out": 0.08,
+        "trail_length": 0.2,
+        "segments": 14,
+        "width": 3.2,
+        "jitter": 10.0,
+        "branch_length": 18.0,
+        "impact_start": 0.24,
+        "impact_at": 0.42,
+        "impact_radius": 42.0,
+        "impact_alpha": 0.9,
+        "impact_spark_count": 11,
+        "bolt_color": [
+          1.0,
+          0.86,
+          0.06,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          1.0,
+          0.78,
+          1.0
+        ],
+        "shadow_color": [
+          0.36,
+          0.14,
+          0.88,
+          1.0
+        ],
+        "return_to_actor": true,
+        "target_point_index": 2,
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 0.2,
+            "position": [
+              252,
+              140
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 0.42,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0,
+            "ease": "smoothstep"
+          },
+          {
+            "at": 0.62,
+            "position": [
+              252,
+              140
+            ],
+            "scale": 0.96,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 0.9,
+            "ease": "smoothstep"
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 0.2,
+            "position": [
+              270,
+              158
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 0.42,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0,
+            "ease": "smoothstep"
+          },
+          {
+            "at": 0.62,
+            "position": [
+              270,
+              158
+            ],
+            "scale": 0.96,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 0.9,
+            "ease": "smoothstep"
+          }
+        ],
+        "core_enabled": true,
+        "core_radius": 15.0,
+        "core_spark_count": 6,
+        "actor_offset": [
+          0,
+          92
+        ],
+        "target_offset": [
+          0,
+          4
+        ]
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          56,
+          -20
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
+      },
+      "shake": {
+        "enabled": true,
+        "start_frame": 6,
+        "end_frame": 12,
+        "amplitude": 4.0,
+        "frequency_x": 3.4,
+        "frequency_y": 4.5,
+        "vertical_scale": 0.35,
+        "decay": true
       },
       "pattern_offset": 0,
       "pattern_override": -1

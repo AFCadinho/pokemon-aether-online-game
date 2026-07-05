@@ -4060,7 +4060,7 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 		await _render_pvp_event_batch(api_response, start_events, false, "initial_battle_events")
 	else:
 		await _render_battle_events(start_events, false, "initial_battle_events")
-		_mark_non_pvp_response_event_seq_consumed(api_response)
+		_mark_initial_non_pvp_response_events_consumed(api_response)
 
 func _show_battle_controls_after_initial_events() -> void:
 	_update_battle_presentation("initial_setup")
@@ -5105,6 +5105,10 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_clear_pending_mega_species_for_event(event_data)
 
 		var presentation: Dictionary = event_presentation.build(event_data)
+		if event_type == "move":
+			var move_animation_result := _get_move_animation_result_for_event(ordered_events, event_index)
+			if move_animation_result != "":
+				presentation["move_animation_result"] = move_animation_result
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
 			if render_turn_headers:
@@ -5162,6 +5166,50 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 	_update_party_slots()
 	_update_vs_panel_names()
 	_sync_player_save_from_battle_state()
+
+func _get_move_animation_result_for_event(events: Array, event_index: int) -> String:
+	if event_index < 0 or event_index >= events.size():
+		return ""
+	if not (events[event_index] is Dictionary):
+		return ""
+
+	var move_event: Dictionary = events[event_index] as Dictionary
+	if str(move_event.get("type", "")) != "move":
+		return ""
+
+	for next_index: int in range(event_index + 1, events.size()):
+		var next_value: Variant = events[next_index]
+		if not (next_value is Dictionary):
+			continue
+
+		var next_event: Dictionary = next_value as Dictionary
+		var next_type := str(next_event.get("type", ""))
+		if next_type == "miss":
+			return "miss" if _miss_event_matches_move_event(move_event, next_event) else ""
+		if _is_move_animation_result_boundary_event(next_event):
+			return ""
+
+	return ""
+
+func _miss_event_matches_move_event(move_event: Dictionary, miss_event: Dictionary) -> bool:
+	var move_actor := _normalize_battle_ident(str(move_event.get("actor", "")))
+	var miss_actor := _normalize_battle_ident(str(miss_event.get("actor", "")))
+	if move_actor != "" and miss_actor != "" and move_actor != miss_actor:
+		return false
+
+	var move_target := _normalize_battle_ident(str(move_event.get("target", "")))
+	var miss_target := _normalize_battle_ident(str(miss_event.get("target", "")))
+	if move_target != "" and miss_target != "" and move_target != miss_target:
+		return false
+
+	return true
+
+func _is_move_animation_result_boundary_event(event_data: Dictionary) -> bool:
+	match str(event_data.get("type", "")):
+		"move", "damage", "heal", "faint", "status", "statChange", "effectiveness", "hitCount", "criticalHit", "fail", "cant", "switch", "drag", "turn":
+			return true
+		_:
+			return false
 
 func _apply_field_presentation_event(event_data: Dictionary) -> void:
 	if presentation_state.apply_event(event_data, battle_state.get_turn()):
@@ -5351,9 +5399,8 @@ func _filter_already_rendered_events(events_value: Variant, rendered_event_keys:
 			var event_key := _get_battle_event_key(event_data)
 			if event_key != "" and rendered_event_keys.has(event_key):
 				continue
-			if not _is_pvp_battle() and _should_dedupe_rendered_non_pvp_event(event_data):
-				if event_key != "" and rendered_non_pvp_event_keys.has(event_key):
-					continue
+			if not _is_pvp_battle() and event_key != "" and rendered_non_pvp_event_keys.has(event_key):
+				continue
 
 		filtered_events.append(event_value)
 
@@ -5426,15 +5473,36 @@ func _mark_non_pvp_response_event_seq_consumed(response: Dictionary) -> void:
 
 	last_rendered_event_seq = max(last_rendered_event_seq, response_event_seq)
 
+func _mark_initial_non_pvp_response_events_consumed(response: Dictionary) -> void:
+	if _is_pvp_battle():
+		return
+
+	var response_event_seq := _get_int_from_variant(response.get("eventSeq", -1), -1)
+	if response_event_seq < 0:
+		return
+
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return
+
+	var events: Array = events_value as Array
+	var last_start_event_index := _get_battle_start_event_end_index(events)
+	if last_start_event_index < 0:
+		return
+
+	var first_event_seq := response_event_seq - events.size() + 1
+	last_rendered_event_seq = max(last_rendered_event_seq, first_event_seq + last_start_event_index)
+
 func _get_battle_event_key(event_data: Dictionary) -> String:
 	var event_type := str(event_data.get("type", ""))
 	if event_type == "turn":
 		return "%s|%d" % [event_type, int(event_data.get("turn", 0))]
 	if event_type == "switch" or event_type == "drag":
-		return "%s|%s|%s" % [
+		return "%s|%s|%s|%s" % [
 			event_type,
 			str(event_data.get("playerId", "")),
-			_normalize_species_for_compare(_get_switch_event_dedupe_species(event_data)),
+			_normalize_species_base_for_compare(_get_switch_event_source_species(event_data)),
+			_normalize_species_base_for_compare(_get_switch_event_dedupe_species(event_data)),
 		]
 	if event_type == "mega" or event_type == "primal":
 		return "%s|%s" % [event_type, str(event_data.get("target", ""))]
@@ -5466,6 +5534,17 @@ func _get_switch_event_dedupe_species(event_data: Dictionary) -> String:
 
 	return _get_species_from_ident(str(event_data.get("pokemon", "")))
 
+func _get_switch_event_source_species(event_data: Dictionary) -> String:
+	var species := str(event_data.get("from", "")).strip_edges()
+	if species != "":
+		return species
+
+	species = _get_species_from_ident(str(event_data.get("fromIdent", "")))
+	if species != "":
+		return species
+
+	return _get_species_from_ident(str(event_data.get("source", "")))
+
 func _remember_rendered_non_pvp_event_keys(events: Array) -> void:
 	if _is_pvp_battle():
 		return
@@ -5491,9 +5570,11 @@ func _remember_initial_non_pvp_setup_events() -> void:
 			"type": "turn",
 			"turn": battle_state.get_turn(),
 		},
-		_build_initial_switch_dedupe_event("p1"),
-		_build_initial_switch_dedupe_event("p2"),
 	])
+	for player_id: String in ["p1", "p2"]:
+		var event_key := _get_battle_event_key(_build_initial_switch_dedupe_event(player_id))
+		if event_key != "":
+			rendered_non_pvp_event_keys[event_key] = true
 
 func _build_initial_switch_dedupe_event(player_id: String) -> Dictionary:
 	var ident := battle_state.get_active_pokemon_ident(player_id)
@@ -5788,10 +5869,30 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 
 		var event_data: Dictionary = event as Dictionary
 		match str(event_data.get("type", "")):
+			"turn", "switch", "drag":
+				continue
 			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega", "primal":
 				start_events.append(event_data)
+			_:
+				break
 
 	return start_events
+
+func _get_battle_start_event_end_index(events: Array) -> int:
+	var last_start_event_index := -1
+	for index: int in range(events.size()):
+		var event_value: Variant = events[index]
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		match str(event_data.get("type", "")):
+			"turn", "switch", "drag", "fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega", "primal":
+				last_start_event_index = index
+			_:
+				break
+
+	return last_start_event_index
 
 func _get_player_id_from_ident(ident: String) -> String:
 	if ident.begins_with("p1"):
