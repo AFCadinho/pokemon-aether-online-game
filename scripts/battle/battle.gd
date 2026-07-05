@@ -5449,7 +5449,7 @@ func _get_battle_event_key(event_data: Dictionary) -> String:
 
 func _should_dedupe_rendered_non_pvp_event(event_data: Dictionary) -> bool:
 	var event_type := str(event_data.get("type", ""))
-	return event_type == "turn" or event_type == "switch" or event_type == "drag"
+	return event_type == "turn"
 
 func _get_switch_event_dedupe_species(event_data: Dictionary) -> String:
 	var species := str(event_data.get("to", "")).strip_edges()
