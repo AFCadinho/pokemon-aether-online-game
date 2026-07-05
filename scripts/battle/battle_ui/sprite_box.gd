@@ -184,6 +184,48 @@ func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
 
+func play_move_actor_motion(motion_config: Dictionary = {}, horizontal_direction: float = 1.0) -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	var points_value: Variant = motion_config.get("points", [])
+	if not points_value is Array:
+		return
+
+	var points: Array = points_value as Array
+	if points.is_empty():
+		return
+
+	var duration: float = max(float(motion_config.get("duration", 0.45)), 0.05)
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		var base_position := _get_base_sprite_position(sprite)
+		var target_scale: Vector2 = _get_sprite_target_scale(sprite)
+		for point_value: Variant in points:
+			if not point_value is Dictionary:
+				continue
+
+			var point: Dictionary = point_value as Dictionary
+			var at: float = clamp(float(point.get("at", 0.0)), 0.0, 1.0)
+			var delay: float = at * duration
+			var offset: Vector2 = _read_motion_offset(point.get("offset", [0, 0]))
+			offset.x *= horizontal_direction
+			var rotation: float = deg_to_rad(float(point.get("rotation_degrees", 0.0)) * horizontal_direction)
+			var scale_multiplier: float = max(float(point.get("scale", 1.0)), 0.1)
+			var segment_duration: float = max(float(point.get("duration", 0.05)), 0.01)
+
+			active_tween.tween_property(sprite, "position", base_position + offset, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			active_tween.tween_property(sprite, "rotation", rotation, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			active_tween.tween_property(sprite, "scale", target_scale * scale_multiplier, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
 func play_damage_tween() -> void:
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
@@ -322,8 +364,19 @@ func _reset_sprites_pose(sprites: Array[AnimatedSprite2D]) -> void:
 func _reset_sprite_pose(sprite: AnimatedSprite2D) -> void:
 	sprite.position = _get_base_sprite_position(sprite)
 	sprite.scale = _get_sprite_target_scale(sprite)
+	sprite.rotation = 0.0
 	_apply_sprite_anchor(sprite)
 	sprite.modulate = Color.WHITE
+
+func _read_motion_offset(value: Variant) -> Vector2:
+	if value is Vector2:
+		return value as Vector2
+	if value is Array:
+		var values := value as Array
+		if values.size() >= 2:
+			return Vector2(float(values[0]), float(values[1]))
+
+	return Vector2.ZERO
 
 func _get_base_sprite_position(sprite: AnimatedSprite2D) -> Vector2:
 	var base_position_value: Variant = base_sprite_positions.get(_get_sprite_key(sprite), sprite.position)

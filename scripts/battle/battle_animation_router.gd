@@ -105,6 +105,7 @@ func _play_animation_config(
 	var animation_node: MoveAnimationPlayer = _create_move_animation_node(config, resources, reverse_battlefield)
 	_apply_move_animation_options(animation_node, config, animation_options)
 	var hidden_actor_sprites: Array = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
+	_play_move_actor_motion_if_needed(config, move_actor_ident)
 
 	var overlay: Control = _create_animation_overlay(parent_node)
 	if overlay != null:
@@ -273,6 +274,25 @@ func _restore_move_actor_sprite_if_needed(config: Dictionary, actor_ident: Strin
 		return
 
 	actor_box.call("restore_battle_sprites_visibility", hidden_sprites)
+
+
+func _play_move_actor_motion_if_needed(config: Dictionary, actor_ident: String) -> void:
+	var motion_value: Variant = config.get("actor_motion", {})
+	if not motion_value is Dictionary:
+		return
+
+	var motion_config := motion_value as Dictionary
+	if not bool(motion_config.get("enabled", false)):
+		return
+
+	var actor_box := _get_sprite_box_for_ident(actor_ident)
+	if actor_box == null or not actor_box.has_method("play_move_actor_motion"):
+		return
+
+	var direction := 1.0
+	if _get_player_id_from_ident(actor_ident) == "p2":
+		direction = -1.0
+	actor_box.call("play_move_actor_motion", motion_config, direction)
 
 
 func _create_move_animation_node(config: Dictionary, resources: Dictionary = {}, reverse_battlefield: bool = false) -> MoveAnimationPlayer:

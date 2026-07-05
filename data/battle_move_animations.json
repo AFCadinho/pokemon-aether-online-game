@@ -1168,6 +1168,132 @@
       },
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "rapidspin": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "data_path": "res://assets/battles/animations/rapidspin/rapidspin.json",
+      "sheet_path": "res://assets/battles/animations/rapidspin/PRAS- Dragon Dance.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Rapid Spin.wav": "res://assets/battles/animations/rapidspin/PRSFX- Rapid Spin.wav"
+      },
+      "speed_scale": 1.25,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.86,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "sprite_zoom_multiplier": 0.82,
+      "sprite_position_offset": [
+        0,
+        8
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "actor_motion": {
+        "enabled": true,
+        "duration": 0.46,
+        "points": [
+          {
+            "at": 0.0,
+            "offset": [
+              0,
+              0
+            ],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.01
+          },
+          {
+            "at": 0.14,
+            "offset": [
+              -10,
+              -1
+            ],
+            "rotation_degrees": -2.5,
+            "scale": 1.02,
+            "duration": 0.05
+          },
+          {
+            "at": 0.32,
+            "offset": [
+              14,
+              0
+            ],
+            "rotation_degrees": 2.8,
+            "scale": 0.98,
+            "duration": 0.05
+          },
+          {
+            "at": 0.5,
+            "offset": [
+              -16,
+              1
+            ],
+            "rotation_degrees": -2.2,
+            "scale": 1.01,
+            "duration": 0.05
+          },
+          {
+            "at": 0.68,
+            "offset": [
+              11,
+              0
+            ],
+            "rotation_degrees": 1.8,
+            "scale": 0.99,
+            "duration": 0.05
+          },
+          {
+            "at": 0.9,
+            "offset": [
+              0,
+              0
+            ],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.06
+          }
+        ]
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          0,
+          0
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
+      },
+      "shake": {
+        "enabled": true,
+        "start_frame": 8,
+        "end_frame": 19,
+        "amplitude": 1.6,
+        "frequency_x": 5.0,
+        "frequency_y": 4.4,
+        "vertical_scale": 0.2,
+        "decay": true
+      }
     }
   }
 }
