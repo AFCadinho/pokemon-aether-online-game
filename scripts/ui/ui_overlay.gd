@@ -46,6 +46,7 @@ const STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderat
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
+const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
 const PVP_RANKED_DEFAULT_FORMAT_NAME := "Aether OU"
@@ -106,8 +107,10 @@ const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(1.6, 1.6)
 const BAG_SIZE := Vector2(920, 620)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
-const PC_POPUP_SIZE := Vector2(900, 560)
+const PC_POPUP_SIZE := Vector2(980, 600)
 const PC_BOX_SLOTS_PER_ROW := 6
+const PC_BOX_SLOT_SIZE := Vector2(106, 72)
+const PC_PARTY_SLOT_SIZE := Vector2(230, 62)
 const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
@@ -631,6 +634,7 @@ var pc_box_count := 0
 var pc_slots_per_box := 30
 var pc_current_box: Dictionary = {}
 var pc_selected_source: Dictionary = {}
+var pc_party_slot_by_owned_id: Dictionary = {}
 var pc_move_in_progress := false
 var pokemon_summary_popup: PanelContainer
 var pokemon_summary_left_panel: PanelContainer
@@ -16444,6 +16448,7 @@ func _show_pc_popup() -> void:
 	_activate_ui_panel(pc_popup)
 	pc_status_label.text = "Loading..."
 	pc_selected_source = {}
+	await _compact_pc_party_storage_slots("open")
 	await _refresh_pc_state(true)
 
 
@@ -16526,11 +16531,8 @@ func _render_pc_party() -> void:
 	_clear_children(pc_party_list)
 	for slot_index in range(MAX_PARTY_SIZE):
 		var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index < PlayerSave.party.size() else null
-		var button := _create_pc_slot_button(
-			_pc_party_slot_label(slot_index, pokemon),
-			pokemon != null,
-			_pc_source_matches("party", slot_index)
-		)
+		var storage_slot := _pc_storage_slot_for_party_pokemon(pokemon, slot_index)
+		var button := _create_pc_party_slot_button(slot_index, storage_slot, pokemon, _pc_source_matches("party", storage_slot))
 		button.pressed.connect(_on_pc_party_slot_pressed.bind(slot_index))
 		pc_party_list.add_child(button)
 
@@ -16541,44 +16543,165 @@ func _render_pc_box() -> void:
 	for slot_index in range(pc_slots_per_box):
 		var slot_state: Dictionary = _dictionary_from_value(slot_map.get(slot_index, {}))
 		var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
-		var button := _create_pc_slot_button(
-			_pc_box_slot_label(slot_index, pokemon_response),
-			not pokemon_response.is_empty(),
-			_pc_source_matches("box", slot_index)
-		)
+		var button := _create_pc_box_slot_button(slot_index, pokemon_response, _pc_source_matches("box", slot_index))
 		button.pressed.connect(_on_pc_box_slot_pressed.bind(slot_index))
 		pc_box_grid.add_child(button)
 
 
-func _create_pc_slot_button(label_text: String, occupied: bool, selected: bool) -> Button:
-	var button := Button.new()
-	button.text = label_text
-	button.custom_minimum_size = Vector2(96, 54)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.focus_mode = Control.FOCUS_NONE
-	if selected:
-		_apply_button_style(button, "primary")
-	else:
-		_apply_button_style(button)
-		if not occupied:
-			button.modulate = Color(1.0, 1.0, 1.0, 0.72)
+func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, pokemon: Pokemon, selected: bool) -> Button:
+	var occupied := pokemon != null
+	var title := pokemon.species if occupied else "Empty"
+	var subtitle := "Lv. %s" % pokemon.level if occupied else "Party slot %d" % (slot_index + 1)
+	var texture: Texture2D = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny) if occupied else null
+	var button := _create_pc_pokemon_slot_button(
+		title,
+		subtitle,
+		texture,
+		occupied,
+		selected,
+		"%d" % (slot_index + 1),
+		PC_PARTY_SLOT_SIZE
+	)
+	button.tooltip_text = "%s party slot %d" % [title, slot_index + 1]
+	if occupied and pokemon.owned_pokemon_id > 0:
+		button.drag_source = {
+			"type": "party",
+			"partySlot": storage_slot_index,
+			"pokemonId": pokemon.owned_pokemon_id,
+		}
+	if occupied:
+		button.drop_target = PokemonStorageService.party_location(storage_slot_index)
+	elif slot_index == PlayerSave.party.size():
+		button.drop_target = PokemonStorageService.party_location(slot_index)
+	button.slot_dropped.connect(_on_pc_slot_dropped)
 	return button
 
 
-func _pc_party_slot_label(slot_index: int, pokemon: Pokemon) -> String:
-	if pokemon == null:
-		return "%d. Empty" % (slot_index + 1)
-	return "%d. %s\nLv. %s" % [slot_index + 1, pokemon.species, pokemon.level]
-
-
-func _pc_box_slot_label(slot_index: int, pokemon_response: Dictionary) -> String:
-	var slot_label := "%02d" % (slot_index + 1)
-	if pokemon_response.is_empty():
-		return "%s\nEmpty" % slot_label
+func _create_pc_box_slot_button(slot_index: int, pokemon_response: Dictionary, selected: bool) -> Button:
+	var occupied := not pokemon_response.is_empty()
 	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
+	var species := _pc_payload_species(payload)
+	var level := _pc_payload_level(payload)
+	var shiny := _pc_payload_shiny(payload)
+	var texture: Texture2D = PokemonAssets.load_party_icon(species, shiny) if occupied else null
+	var button := _create_pc_pokemon_slot_button(
+		species if occupied else "Empty",
+		"Lv. %s" % level if occupied else "Box slot %02d" % (slot_index + 1),
+		texture,
+		occupied,
+		selected,
+		"%02d" % (slot_index + 1),
+		PC_BOX_SLOT_SIZE
+	)
+	button.tooltip_text = "%s box slot %02d" % [species if occupied else "Empty", slot_index + 1]
+	if occupied:
+		var pokemon_id := int(pokemon_response.get("id", 0))
+		if pokemon_id > 0:
+			button.drag_source = {
+				"type": "box",
+				"boxIndex": pc_selected_box_index,
+				"slotIndex": slot_index,
+				"pokemonId": pokemon_id,
+			}
+	button.drop_target = PokemonStorageService.box_location(pc_selected_box_index, slot_index)
+	button.slot_dropped.connect(_on_pc_slot_dropped)
+	return button
+
+
+func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, texture: Texture2D, occupied: bool, selected: bool, slot_badge: String, slot_size: Vector2) -> PcPokemonSlotButton:
+	var button: PcPokemonSlotButton = PC_POKEMON_SLOT_BUTTON_SCRIPT.new()
+	button.text = ""
+	button.custom_minimum_size = slot_size
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.drag_title = title_text
+	button.drag_subtitle = subtitle_text
+	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
+	_apply_button_style(button, "primary" if selected else "default")
+	if not occupied:
+		button.modulate = Color(1.0, 1.0, 1.0, 0.70)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.anchor_right = 1.0
+	row.anchor_bottom = 1.0
+	row.offset_left = 8
+	row.offset_top = 6
+	row.offset_right = -8
+	row.offset_bottom = -6
+	row.add_theme_constant_override("separation", 7)
+	button.add_child(row)
+
+	var icon_stack := VBoxContainer.new()
+	icon_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_stack.custom_minimum_size = Vector2(38, 0)
+	icon_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_child(icon_stack)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(34, 34)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
+	icon.modulate = Color(1, 1, 1, 1) if occupied else Color(1, 1, 1, 0.30)
+	icon_stack.add_child(icon)
+
+	var text_stack := VBoxContainer.new()
+	text_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	text_stack.add_theme_constant_override("separation", 1)
+	row.add_child(text_stack)
+
+	var title := Label.new()
+	title.text = _pc_compact_text(title_text, 14)
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_color_override("font_color", UI_TEXT if occupied else UI_MUTED_TEXT)
+	title.clip_text = true
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	text_stack.add_child(title)
+
+	var subtitle := Label.new()
+	subtitle.text = subtitle_text
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	subtitle.clip_text = true
+	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	text_stack.add_child(subtitle)
+
+	var badge := Label.new()
+	badge.text = slot_badge
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.custom_minimum_size = Vector2(22, 0)
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	badge.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	badge.add_theme_font_size_override("font_size", 10)
+	badge.add_theme_color_override("font_color", UI_MONEY if occupied else UI_MUTED_TEXT)
+	row.add_child(badge)
+	return button
+
+
+func _pc_payload_species(payload: Dictionary) -> String:
 	var species := str(payload.get("displaySpecies", payload.get("species", "Pokemon"))).strip_edges()
-	var level := int(payload.get("level", 1))
-	return "%s\n%s Lv. %s" % [slot_label, species, level]
+	return species if species != "" else "Pokemon"
+
+
+func _pc_payload_level(payload: Dictionary) -> int:
+	return max(int(payload.get("level", 1)), 1)
+
+
+func _pc_payload_shiny(payload: Dictionary) -> bool:
+	return bool(payload.get("shiny", false))
+
+
+func _pc_compact_text(text: String, max_length: int) -> String:
+	var cleaned := text.strip_edges()
+	if cleaned.length() <= max_length:
+		return cleaned
+	return cleaned.substr(0, max(max_length - 3, 1)) + "..."
 
 
 func _pc_box_slot_map() -> Dictionary:
@@ -16590,6 +16713,55 @@ func _pc_box_slot_map() -> Dictionary:
 		var slot_state: Dictionary = slot_value as Dictionary
 		slot_map[int(slot_state.get("slotIndex", 0))] = slot_state
 	return slot_map
+
+
+func _pc_party_pokemon_at_storage_slot(slot_index: int) -> Pokemon:
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon == null or pokemon.owned_pokemon_id <= 0:
+			continue
+		if int(pc_party_slot_by_owned_id.get(pokemon.owned_pokemon_id, -1)) == slot_index:
+			return pokemon
+	return null
+
+
+func _pc_storage_slot_for_party_pokemon(pokemon: Pokemon, fallback_slot_index: int) -> int:
+	if pokemon == null or pokemon.owned_pokemon_id <= 0:
+		return fallback_slot_index
+	return int(pc_party_slot_by_owned_id.get(pokemon.owned_pokemon_id, fallback_slot_index))
+
+
+func _pc_first_open_party_storage_slot() -> int:
+	var occupied_slots := {}
+	for slot_value: Variant in pc_party_slot_by_owned_id.values():
+		var storage_slot := int(slot_value)
+		if storage_slot >= 0 and storage_slot < MAX_PARTY_SIZE:
+			occupied_slots[storage_slot] = true
+	for slot_index in range(MAX_PARTY_SIZE):
+		if not occupied_slots.has(slot_index):
+			return slot_index
+	return -1
+
+
+func _rebuild_pc_party_slot_map_from_current_party(reset_existing := false) -> void:
+	if reset_existing:
+		pc_party_slot_by_owned_id.clear()
+
+	var current_ids := {}
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon == null or pokemon.owned_pokemon_id <= 0:
+			continue
+		current_ids[pokemon.owned_pokemon_id] = true
+
+	for pokemon_id: Variant in pc_party_slot_by_owned_id.keys():
+		if not current_ids.has(int(pokemon_id)):
+			pc_party_slot_by_owned_id.erase(pokemon_id)
+
+	for party_index in range(PlayerSave.party.size()):
+		var pokemon: Pokemon = PlayerSave.party[party_index]
+		if pokemon == null or pokemon.owned_pokemon_id <= 0 or pc_party_slot_by_owned_id.has(pokemon.owned_pokemon_id):
+			continue
+		var open_slot := _pc_first_open_party_storage_slot()
+		pc_party_slot_by_owned_id[pokemon.owned_pokemon_id] = open_slot if open_slot >= 0 else party_index
 
 
 func _pc_source_matches(source_type: String, slot_index: int) -> bool:
@@ -16607,16 +16779,17 @@ func _pc_source_matches(source_type: String, slot_index: int) -> bool:
 func _on_pc_party_slot_pressed(slot_index: int) -> void:
 	if pc_move_in_progress:
 		return
-	var has_pokemon := slot_index >= 0 and slot_index < PlayerSave.party.size()
+	var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index >= 0 and slot_index < PlayerSave.party.size() else null
+	var storage_slot := _pc_storage_slot_for_party_pokemon(pokemon, slot_index)
+	var has_pokemon := pokemon != null
 	if pc_selected_source.is_empty():
 		if not has_pokemon:
 			return
-		var pokemon: Pokemon = PlayerSave.party[slot_index]
 		if pokemon == null or pokemon.owned_pokemon_id <= 0:
 			return
 		pc_selected_source = {
 			"type": "party",
-			"partySlot": slot_index,
+			"partySlot": storage_slot,
 			"pokemonId": pokemon.owned_pokemon_id,
 		}
 		pc_status_label.text = "Selected %s." % pokemon.species
@@ -16624,7 +16797,7 @@ func _on_pc_party_slot_pressed(slot_index: int) -> void:
 		_render_pc_box()
 		return
 
-	if _pc_source_matches("party", slot_index):
+	if _pc_source_matches("party", storage_slot):
 		pc_selected_source = {}
 		pc_status_label.text = "Selection cleared."
 		_render_pc_party()
@@ -16632,7 +16805,7 @@ func _on_pc_party_slot_pressed(slot_index: int) -> void:
 		return
 
 	if has_pokemon:
-		await _move_pc_selection_to(PokemonStorageService.party_location(slot_index))
+		await _move_pc_selection_to(PokemonStorageService.party_location(storage_slot))
 		return
 
 	if str(pc_selected_source.get("type", "")) == "box":
@@ -16683,6 +16856,45 @@ func _on_pc_box_slot_pressed(slot_index: int) -> void:
 	await _move_pc_selection_to(PokemonStorageService.box_location(pc_selected_box_index, slot_index))
 
 
+func _on_pc_slot_dropped(source: Dictionary, target: Dictionary) -> void:
+	if pc_move_in_progress or source.is_empty() or target.is_empty():
+		return
+	if _pc_locations_match(source, target):
+		return
+
+	if str(source.get("type", "")) == "party" and str(target.get("type", "")) == "box" and PlayerSave.party.size() <= 1 and not _pc_target_has_pokemon(target):
+		pc_status_label.text = "You must keep at least one Pokemon in your party."
+		return
+
+	pc_selected_source = source.duplicate(true)
+	await _move_pc_selection_to(target.duplicate(true))
+
+
+func _pc_target_has_pokemon(target: Dictionary) -> bool:
+	match str(target.get("type", "")):
+		"party":
+			var party_slot := int(target.get("partySlot", -1))
+			return _pc_party_pokemon_at_storage_slot(party_slot) != null
+		"box":
+			if int(target.get("boxIndex", -1)) != pc_selected_box_index:
+				return false
+			var slot_map := _pc_box_slot_map()
+			var slot_state: Dictionary = _dictionary_from_value(slot_map.get(int(target.get("slotIndex", -1)), {}))
+			return not _dictionary_from_value(slot_state.get("pokemon", {})).is_empty()
+	return false
+
+
+func _pc_locations_match(a: Dictionary, b: Dictionary) -> bool:
+	var a_type := str(a.get("type", ""))
+	if a_type != str(b.get("type", "")):
+		return false
+	if a_type == "party":
+		return int(a.get("partySlot", -1)) == int(b.get("partySlot", -2))
+	if a_type == "box":
+		return int(a.get("boxIndex", -1)) == int(b.get("boxIndex", -2)) and int(a.get("slotIndex", -1)) == int(b.get("slotIndex", -2))
+	return false
+
+
 func _move_pc_selection_to(target: Dictionary) -> void:
 	if pc_selected_source.is_empty():
 		return
@@ -16694,6 +16906,8 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	pc_move_in_progress = true
 	pc_status_label.text = "Moving..."
 	var source := pc_selected_source.duplicate(true)
+	var target_party_pokemon_before := _pc_party_pokemon_at_storage_slot(int(target.get("partySlot", -1))) if str(target.get("type", "")) == "party" else null
+	var target_box_pokemon_id_before := _pc_box_pokemon_id_at_target(target) if str(target.get("type", "")) == "box" else 0
 	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
 	pc_move_in_progress = false
 	if not bool(result.get("success", false)):
@@ -16702,10 +16916,60 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 		return
 
 	pc_selected_source = {}
+	var compacted := await _compact_pc_party_storage_slots("after_move")
+	if not compacted:
+		_apply_pc_party_slot_move(source, target, target_party_pokemon_before, target_box_pokemon_id_before)
 	var location: Dictionary = _dictionary_from_value(result.get("location", {}))
 	_add_chat_message("Pokemon moved to %s." % PokemonStorageService.storage_location_label(location))
 	_refresh_party()
 	await _refresh_pc_state(false)
+
+
+func _pc_box_pokemon_id_at_target(target: Dictionary) -> int:
+	if str(target.get("type", "")) != "box" or int(target.get("boxIndex", -1)) != pc_selected_box_index:
+		return 0
+	var slot_map := _pc_box_slot_map()
+	var slot_state: Dictionary = _dictionary_from_value(slot_map.get(int(target.get("slotIndex", -1)), {}))
+	var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
+	return int(pokemon_response.get("id", 0))
+
+
+func _apply_pc_party_slot_move(source: Dictionary, target: Dictionary, target_party_pokemon_before: Pokemon, target_box_pokemon_id_before: int) -> void:
+	_rebuild_pc_party_slot_map_from_current_party(false)
+	var pokemon_id := int(source.get("pokemonId", 0))
+	var source_type := str(source.get("type", ""))
+	var target_type := str(target.get("type", ""))
+	if pokemon_id <= 0:
+		return
+
+	if source_type == "party" and target_type == "box":
+		var source_slot := int(source.get("partySlot", -1))
+		pc_party_slot_by_owned_id.erase(pokemon_id)
+		if target_box_pokemon_id_before > 0:
+			pc_party_slot_by_owned_id[target_box_pokemon_id_before] = source_slot
+		return
+
+	if source_type == "box" and target_type == "party":
+		var target_slot := int(target.get("partySlot", -1))
+		if target_party_pokemon_before != null and target_party_pokemon_before.owned_pokemon_id > 0:
+			pc_party_slot_by_owned_id.erase(target_party_pokemon_before.owned_pokemon_id)
+		pc_party_slot_by_owned_id[pokemon_id] = target_slot
+
+
+func _compact_pc_party_storage_slots(reason: String) -> bool:
+	if PlayerSave.party.is_empty():
+		pc_party_slot_by_owned_id.clear()
+		return true
+
+	var result: Dictionary = await PlayerPartyStateService.save_current_party()
+	var success := bool(result.get("success", false))
+	if success:
+		_rebuild_pc_party_slot_map_from_current_party(true)
+		return true
+
+	_rebuild_pc_party_slot_map_from_current_party(false)
+	push_warning("UIOverlay: could not compact PC party storage slots after %s: %s" % [reason, str(result.get("error", "Unknown error"))])
+	return false
 
 
 func _setup_socials_attention_badge() -> void:

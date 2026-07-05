@@ -3657,14 +3657,13 @@ npc_sprite_frames = SubResource("SpriteFrames_aw12e")
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]
 
 [node name="PokemonPC" type="Node2D" parent="Entities" unique_id=2026070501]
-position = Vector2(112, 48)
+position = Vector2(112, 0)
 script = ExtResource("12_pc_interactable")
 interactable_id = "oak_lab_pc"
 interactable_kind = "pokemon_pc"
 display_name = "PC"
 blocks_movement = false
 interaction_shape_size = Vector2(32, 32)
-required_facing_direction = 1
 
 [node name="InteractionArea" type="Area2D" parent="Entities/PokemonPC" unique_id=2026070502]
 position = Vector2(0, 32)

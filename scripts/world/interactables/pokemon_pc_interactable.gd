@@ -10,7 +10,7 @@ enum FacingDirection {
 	RIGHT,
 }
 
-@export var required_facing_direction := FacingDirection.ANY
+@export var required_facing_direction := FacingDirection.UP
 
 
 func _can_start_manual_interaction() -> bool:
