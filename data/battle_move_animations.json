@@ -916,6 +916,62 @@
         "target_point_index": 2
       }
     },
+    "stealthrock": {
+      "show_sheet_sprites": true,
+      "sparkle_count": 0,
+      "overlay_peak_alpha": 0.0,
+      "show_timing_backgrounds": false,
+      "visual_color": [
+        0.72,
+        0.64,
+        0.48,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "category": "field",
+      "show_pink_visual": false,
+      "show_timing_foregrounds": false,
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "template": "imported_sheet",
+      "speed_scale": 1.08,
+      "data_path": "res://assets/battles/animations/stealthrock/stealthrock.json",
+      "sheet_path": "res://assets/battles/animations/stealthrock/PRAS- Stealth Rock.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Stealth Rocks.wav": "res://assets/battles/animations/stealthrock/PRSFX- Stealth Rocks.wav"
+      },
+      "overlay_fill_enabled": false,
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          58,
+          -16
+        ],
+        "sheet_offset": [
+          42,
+          -20
+        ],
+        "suppress_shake": true
+      },
+      "shake": {
+        "enabled": true,
+        "start_frame": 16,
+        "end_frame": 25,
+        "amplitude": 1.8,
+        "frequency_x": 2.4,
+        "frequency_y": 4.0,
+        "vertical_scale": 0.32,
+        "decay": true
+      },
+      "sprite_zoom_multiplier": 0.75
+    },
     "voltswitch": {
       "speed_scale": 2.0,
       "show_timing_backgrounds": false,
