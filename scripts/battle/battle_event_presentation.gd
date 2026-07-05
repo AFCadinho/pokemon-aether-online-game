@@ -61,7 +61,7 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 		"mega", "primal":
 			effect_keys.append("mega_evolution")
 		"damage":
-			needs_damage_sound = true
+			needs_damage_sound = hp_event_helper.event_has_hp_loss(event_data) or hp_event_helper.event_has_sub_percent_hp_loss(event_data)
 
 	return {
 		"move_names": move_names,
@@ -325,55 +325,59 @@ func build(event_data: Dictionary) -> Dictionary:
 
 		"damage":
 			recent_ability_event = false
-			presentation["damage_target_ident"] = str(event_data.get("target", ""))
+			var damage_target_ident := str(event_data.get("target", ""))
 			_debug_battle_move("damage event target=%s previous_snapshot=%s final_snapshot=%s has_hp_loss=%s visible_change=%s event=%s" % [
-				str(presentation["damage_target_ident"]),
+				damage_target_ident,
 				JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, true)),
 				JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, false)),
 				str(hp_event_helper.event_has_hp_loss(event_data)),
 				str(hp_event_helper.get_event_visible_hp_change(event_data)),
 				JSON.stringify(event_data),
 			])
-			var target := _format_actor(str(presentation["damage_target_ident"]))
 			var has_hp_loss: bool = hp_event_helper.event_has_hp_loss(event_data)
 			var has_sub_percent_hp_loss: bool = hp_event_helper.event_has_sub_percent_hp_loss(event_data)
-			var active_effect := ""
-			if not recent_move_event:
-				active_effect = _get_active_residual_pokemon_effect(str(presentation["damage_target_ident"]))
-			var source_message := event_text_formatter.format_indirect_damage_message(
-				event_data,
-				target,
-				recent_field_effect_source,
-				active_effect,
-				not recent_move_event
-			)
-			_debug_battle_move("damage formatted target=%s source=%s fallback_source=%s recent_move=%s source_message=%s has_hp_loss=%s sub_percent=%s" % [
-				str(presentation["damage_target_ident"]),
-				str(event_data.get("source", "")),
-				recent_field_effect_source,
-				str(recent_move_event),
-				source_message,
-				str(has_hp_loss),
-				str(has_sub_percent_hp_loss),
-			])
-
-			if source_message != "" and (has_hp_loss or has_sub_percent_hp_loss):
-				presentation["log_message"] = source_message
-				if event_text_formatter.should_show_indirect_damage_in_battle_text(event_data):
-					presentation["battle_message"] = source_message
+			if not has_hp_loss and not has_sub_percent_hp_loss:
+				recent_field_effect_source = ""
 			else:
-				presentation["log_message"] = event_text_formatter.format_direct_damage_message(
+				presentation["damage_target_ident"] = damage_target_ident
+				var target := _format_actor(str(presentation["damage_target_ident"]))
+				var active_effect := ""
+				if not recent_move_event:
+					active_effect = _get_active_residual_pokemon_effect(str(presentation["damage_target_ident"]))
+				var source_message := event_text_formatter.format_indirect_damage_message(
+					event_data,
 					target,
-					hp_event_helper.get_event_visible_hp_change(event_data),
-					has_hp_loss,
-					has_sub_percent_hp_loss
+					recent_field_effect_source,
+					active_effect,
+					not recent_move_event
 				)
-				if str(presentation["log_message"]) == "":
-					presentation["damage_target_ident"] = ""
+				_debug_battle_move("damage formatted target=%s source=%s fallback_source=%s recent_move=%s source_message=%s has_hp_loss=%s sub_percent=%s" % [
+					str(presentation["damage_target_ident"]),
+					str(event_data.get("source", "")),
+					recent_field_effect_source,
+					str(recent_move_event),
+					source_message,
+					str(has_hp_loss),
+					str(has_sub_percent_hp_loss),
+				])
 
-			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
-			recent_field_effect_source = ""
-			recent_move_event = false
+				if source_message != "" and (has_hp_loss or has_sub_percent_hp_loss):
+					presentation["log_message"] = source_message
+					if event_text_formatter.should_show_indirect_damage_in_battle_text(event_data):
+						presentation["battle_message"] = source_message
+				else:
+					presentation["log_message"] = event_text_formatter.format_direct_damage_message(
+						target,
+						hp_event_helper.get_event_visible_hp_change(event_data),
+						has_hp_loss,
+						has_sub_percent_hp_loss
+					)
+					if str(presentation["log_message"]) == "":
+						presentation["damage_target_ident"] = ""
+
+				presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+				recent_field_effect_source = ""
+				recent_move_event = false
 
 		"heal":
 			recent_ability_event = false

@@ -47,6 +47,7 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	else:
 		_apply_mega_species_to_requests()
 		_remove_deferred_display_fields_from_requests(response.get("events", []))
+		_rewind_deferred_hp_events_from_requests(response.get("events", []))
 	_remember_hp_fields_from_requests(requests)
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response final state")
@@ -778,6 +779,44 @@ func _remove_deferred_display_fields_from_requests(events_value: Variant) -> voi
 				_remove_deferred_transform_fields_from_requests(event)
 			"mega", "primal":
 				_remove_deferred_mega_fields_from_requests(event)
+
+func _rewind_deferred_hp_events_from_requests(events_value: Variant) -> void:
+	if not (events_value is Array):
+		return
+
+	var rewound_targets: Dictionary = {}
+	for event_value in events_value:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		var event_type := str(event.get("type", ""))
+		if event_type != "damage" and event_type != "heal" and event_type != "faint":
+			continue
+
+		var target_ident := str(event.get("target", ""))
+		if target_ident == "" or rewound_targets.has(target_ident):
+			continue
+
+		var previous_condition := _get_previous_condition_from_event(event)
+		if previous_condition == "":
+			continue
+
+		_set_pokemon_condition(target_ident, previous_condition, event)
+		rewound_targets[target_ident] = true
+
+func _get_previous_condition_from_event(event: Dictionary) -> String:
+	var previous_condition := str(event.get("previousCondition", "")).strip_edges()
+	if previous_condition != "":
+		return previous_condition
+
+	var previous_snapshot: Dictionary = hp_event_helper.get_event_hp_snapshot(event, true)
+	if previous_snapshot.is_empty():
+		return ""
+
+	var previous_hp: int = int(previous_snapshot.get("hp", 0))
+	var previous_max_hp: int = max(int(previous_snapshot.get("max_hp", 1)), 1)
+	return "0 fnt" if previous_hp <= 0 else "%s/%s" % [previous_hp, previous_max_hp]
 
 func _remove_deferred_transform_fields_from_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))

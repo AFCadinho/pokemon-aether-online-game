@@ -9245,7 +9245,6 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 	])
 	if not _events_have_switch_like_event(events):
 		_update_battle_status_panels()
-		_update_hud_panels(false)
 		_update_active_sprites()
 		_update_move_slots()
 		_update_vs_panel_names()
@@ -9255,7 +9254,6 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 		return
 
 	_update_battle_status_panels()
-	_update_hud_panels(false)
 	_update_move_slots()
 	_update_vs_panel_names()
 	_update_mechanic_button_states()

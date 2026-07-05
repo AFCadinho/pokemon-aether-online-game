@@ -17,7 +17,7 @@ func _check_pre_event_render_skips_final_team_hud_refresh() -> void:
 	var function_source := source.substr(function_index, next_function_index - function_index)
 
 	_check_equal(function_index >= 0, true, "pre-event presentation function exists")
-	_check_equal(function_source.contains("_update_hud_panels(false)"), true, "pre-event presentation uses active HUD only")
+	_check_equal(function_source.contains("_update_hud_panels("), false, "pre-event presentation does not push final active HUD HP")
 	_check_equal(function_source.contains("_update_hud_panels()"), false, "pre-event presentation does not push final team HUD")
 	_check_equal(function_source.contains("_update_party_slots()"), false, "pre-event presentation does not push final party slots")
 

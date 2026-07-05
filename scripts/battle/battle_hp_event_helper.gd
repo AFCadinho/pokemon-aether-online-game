@@ -3,6 +3,11 @@ extends RefCounted
 class_name BattleHpEventHelper
 
 func get_event_hp_snapshot(event: Dictionary, use_previous_hp: bool) -> Dictionary:
+	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
+	var condition_snapshot := parse_condition_hp_snapshot(str(event.get(condition_key, "")))
+	if use_previous_hp and not condition_snapshot.is_empty():
+		return condition_snapshot
+
 	var hp_key: String = "previousHp" if use_previous_hp else "hp"
 	if event.has(hp_key) and event.has("maxHp"):
 		return {
@@ -10,8 +15,7 @@ func get_event_hp_snapshot(event: Dictionary, use_previous_hp: bool) -> Dictiona
 			"max_hp": max(int(event.get("maxHp", 1)), 1),
 		}
 
-	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
-	return parse_condition_hp_snapshot(str(event.get(condition_key, "")))
+	return condition_snapshot
 
 func get_event_status(event: Dictionary, use_previous_hp: bool) -> String:
 	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
