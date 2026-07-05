@@ -26,6 +26,9 @@ var active_match_id := ""
 var request_counter := 0
 var joined := false
 var room_is_ready := false
+var battle_event_latest_seq := 0
+var last_battle_event_seq := 0
+var received_battle_event_count := 0
 
 
 func _process(delta: float) -> void:
@@ -51,7 +54,7 @@ func _process(delta: float) -> void:
 		return
 
 	connecting = false
-	if not should_reconnect or not AuthService.is_authenticated() or active_room_code == "":
+	if not should_reconnect or not _is_authenticated() or active_room_code == "":
 		return
 
 	reconnect_timer -= delta
@@ -63,17 +66,22 @@ func _process(delta: float) -> void:
 func connect_room(room_code: String, player_id: String, battle_id: String, match_id: String = "") -> void:
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("connect_room called", "room_code=%s player_id=%s battle_id=%s match_id=%s" % [room_code, player_id, battle_id, match_id])
+	var normalized_battle_id := battle_id.strip_edges()
+	if active_battle_id != "" and normalized_battle_id != "" and normalized_battle_id != active_battle_id:
+		battle_event_latest_seq = 0
+		last_battle_event_seq = 0
+		received_battle_event_count = 0
 	active_room_code = room_code.strip_edges().to_upper()
 	active_player_id = "p2" if player_id == "p2" else "p1"
-	active_battle_id = battle_id.strip_edges()
+	active_battle_id = normalized_battle_id
 	active_match_id = match_id.strip_edges()
 	joined = false
 	room_is_ready = false
-	if active_room_code == "" or not AuthService.is_authenticated():
+	if active_room_code == "" or not _is_authenticated():
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
 				"connect_room aborted",
-				"active_room_code=%s authenticated=%s" % [active_room_code, AuthService.is_authenticated()]
+				"active_room_code=%s authenticated=%s" % [active_room_code, _is_authenticated()]
 			)
 		return
 	if connecting:
@@ -88,15 +96,15 @@ func connect_room(room_code: String, player_id: String, battle_id: String, match
 
 
 func _connect_room_async() -> void:
-	var base_url: String = await GatewayApiConfig.get_base_url()
-	if not AuthService.is_authenticated() or active_room_code == "":
+	var base_url: String = await _get_gateway_base_url()
+	if not _is_authenticated() or active_room_code == "":
 		if DEBUG_PVP_REALTIME:
-			_log_realtime("connect_room_async aborted", "authenticated=%s room=%s" % [AuthService.is_authenticated(), active_room_code])
+			_log_realtime("connect_room_async aborted", "authenticated=%s room=%s" % [_is_authenticated(), active_room_code])
 		connecting = false
 		return
 
 	websocket = WebSocketPeer.new()
-	var websocket_url := _to_websocket_url(base_url) + "/ws/pvp-battle?token=%s" % AuthService.session_token.uri_encode()
+	var websocket_url := _to_websocket_url(base_url) + "/ws/pvp-battle?token=%s" % _session_token().uri_encode()
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("Connecting websocket", "url=%s" % websocket_url)
 	var error := websocket.connect_to_url(websocket_url)
@@ -134,15 +142,21 @@ func _send_join() -> void:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		return
 
+	var payload := _build_join_payload()
+	websocket.send_text(JSON.stringify(payload))
+
+
+func _build_join_payload() -> Dictionary:
 	var payload := {
 		"type": "join",
 		"roomCode": active_room_code,
 		"playerId": active_player_id,
 		"battleId": active_battle_id,
+		"lastBattleEventSeq": last_battle_event_seq,
 	}
 	if active_match_id != "":
 		payload["matchId"] = active_match_id
-	websocket.send_text(JSON.stringify(payload))
+	return payload
 
 
 func disconnect_room() -> void:
@@ -154,6 +168,9 @@ func disconnect_room() -> void:
 	active_player_id = "p1"
 	active_battle_id = ""
 	active_match_id = ""
+	battle_event_latest_seq = 0
+	last_battle_event_seq = 0
+	received_battle_event_count = 0
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
 	websocket = WebSocketPeer.new()
@@ -298,6 +315,9 @@ func _process_packets() -> void:
 		if message_type == "pvp.snapshot":
 			battle_update_received.emit(message)
 			continue
+		if message_type == "pvp.battle_events":
+			_handle_battle_events_message(message)
+			continue
 		if message_type == "pvp.phase_update":
 			battle_update_received.emit(message)
 			continue
@@ -329,7 +349,7 @@ func _handle_closed_socket() -> void:
 	var close_code := websocket.get_close_code()
 	if close_code != SESSION_INVALID_CLOSE_CODE:
 		return
-	if not AuthService.is_authenticated():
+	if not _is_authenticated():
 		return
 
 	session_invalid_handled = true
@@ -338,12 +358,86 @@ func _handle_closed_socket() -> void:
 	session_invalid.emit("Your PvP battle session is no longer valid.")
 
 
+func _handle_battle_events_message(message: Dictionary) -> void:
+	var latest_seq := _nonnegative_int(message.get("battleEventLatestSeq", battle_event_latest_seq), battle_event_latest_seq)
+	var events_value: Variant = message.get("events", [])
+	var valid_event_count := 0
+	var max_event_seq := last_battle_event_seq
+	if events_value is Array:
+		for event_value in events_value:
+			if not (event_value is Dictionary):
+				continue
+			var event := event_value as Dictionary
+			var event_seq := _nonnegative_int(event.get("battleEventSeq", -1), -1)
+			if event_seq < 0:
+				continue
+			valid_event_count += 1
+			max_event_seq = max(max_event_seq, event_seq)
+
+	battle_event_latest_seq = max(battle_event_latest_seq, latest_seq)
+	last_battle_event_seq = max(max(last_battle_event_seq, battle_event_latest_seq), max_event_seq)
+	received_battle_event_count += valid_event_count
+	if DEBUG_PVP_REALTIME:
+		_log_realtime(
+			"Received battle event stream update",
+			"battle=%s after=%d latest=%d validEvents=%d totalEvents=%d" % [
+				str(message.get("battleId", active_battle_id)),
+				_nonnegative_int(message.get("afterBattleEventSeq", 0), 0),
+				battle_event_latest_seq,
+				valid_event_count,
+				received_battle_event_count,
+			]
+		)
+
+
 func _to_websocket_url(base_url: String) -> String:
 	if base_url.begins_with("https://"):
 		return "wss://" + base_url.trim_prefix("https://").rstrip("/")
 	if base_url.begins_with("http://"):
 		return "ws://" + base_url.trim_prefix("http://").rstrip("/")
 	return base_url.rstrip("/")
+
+
+func _nonnegative_int(value: Variant, fallback: int = 0) -> int:
+	var parsed := fallback
+	match typeof(value):
+		TYPE_INT:
+			parsed = int(value)
+		TYPE_FLOAT:
+			parsed = int(value)
+		TYPE_STRING:
+			var text := str(value).strip_edges()
+			if text.is_valid_int():
+				parsed = int(text)
+	return max(parsed, 0) if parsed >= 0 else fallback
+
+
+func _is_authenticated() -> bool:
+	if not is_inside_tree():
+		return false
+	var auth_service := get_node_or_null("/root/AuthService")
+	if auth_service == null or not auth_service.has_method("is_authenticated"):
+		return false
+	return bool(auth_service.call("is_authenticated"))
+
+
+func _session_token() -> String:
+	if not is_inside_tree():
+		return ""
+	var auth_service := get_node_or_null("/root/AuthService")
+	if auth_service == null:
+		return ""
+	return str(auth_service.get("session_token"))
+
+
+func _get_gateway_base_url() -> String:
+	if not is_inside_tree():
+		return ""
+	var gateway_config := get_node_or_null("/root/GatewayApiConfig")
+	if gateway_config != null and gateway_config.has_method("get_base_url"):
+		return str(await gateway_config.call("get_base_url"))
+	return ""
+
 
 func _log_realtime(message: String, details: String = "") -> void:
 	if not DEBUG_PVP_REALTIME:
