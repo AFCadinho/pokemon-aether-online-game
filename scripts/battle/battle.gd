@@ -75,6 +75,7 @@ var event_presentation := preload("res://scripts/battle/battle_event_presentatio
 var event_renderer := preload("res://scripts/battle/battle_event_renderer.gd").new()
 var animation_router := preload("res://scripts/battle/battle_animation_router.gd").new()
 var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
+var presentation_state := preload("res://scripts/battle/battle_presentation_state.gd").new()
 var public_confirmed_abilities_by_ident := {}
 var public_confirmed_items_by_ident := {}
 var pending_knock_off_targets_by_ident := {}
@@ -2558,9 +2559,22 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		_prewarm_current_battle_move_animations()
 		_update_pvp_phase_contract_from_response(response, source)
 		_mark_pvp_response_applied(response)
+		if _should_sync_presentation_field_from_response(response, source):
+			_sync_presentation_field_from_battle_state()
 		_refresh_damage_calc_results()
 
 	return success
+
+func _should_sync_presentation_field_from_response(response: Dictionary, source: String = "") -> bool:
+	if source.begins_with("pvp_snapshot"):
+		return true
+
+	var events_value: Variant = response.get("events", [])
+	var events: Array = events_value as Array if events_value is Array else []
+	return events.is_empty()
+
+func _sync_presentation_field_from_battle_state() -> void:
+	presentation_state.sync_field_from_snapshot(battle_state.field)
 
 func _update_pvp_phase_contract_from_response(response: Dictionary, source: String = "") -> void:
 	if not _is_pvp_battle():
@@ -3228,7 +3242,7 @@ func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
 	field_timers_panel.reset_timers()
-	_update_side_condition_ui()
+	_update_side_condition_ui([])
 
 func _reset_battle_effect_tracking() -> void:
 	public_confirmed_abilities_by_ident.clear()
@@ -3696,26 +3710,32 @@ func _get_ability_name_from_source(source: String) -> String:
 
 	return ""
 
-## Werkt turn en field timer status bij vanuit de battle state.
+## Werkt turn en field timer status bij vanuit de presentatie-state.
 func _update_battle_status_panels() -> void:
 	battle_status_panel.set_turn(battle_state.get_turn())
 	battle_status_panel.hide_timer()
-	var field_effects := battle_state.get_field_effects()
+	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, battle_state.get_turn())
-	_update_side_condition_ui()
+	_update_side_condition_ui(field_effects)
 	weather_presentation.update_weather(_get_active_weather_effect_id(field_effects))
 	weather_presentation.update_terrain(_get_active_terrain_effect_id(field_effects))
 	weather_presentation.update_trick_room(_is_trick_room_active(field_effects))
 
-func _update_side_condition_ui() -> void:
-	var player_side_effects: Array = _get_side_condition_effects("p1")
-	var enemy_side_effects: Array = _get_side_condition_effects("p2")
+func _get_display_field_effects() -> Array:
+	if presentation_state.has_field_snapshot:
+		return presentation_state.get_field_effects()
+
+	return battle_state.get_field_effects()
+
+func _update_side_condition_ui(field_effects: Array) -> void:
+	var player_side_effects: Array = _get_side_condition_effects("p1", field_effects)
+	var enemy_side_effects: Array = _get_side_condition_effects("p2", field_effects)
 	side_condition_presentation.update(player_side_effects, enemy_side_effects, battle_state.get_turn())
 
-func _get_side_condition_effects(side_id: String) -> Array:
+func _get_side_condition_effects(side_id: String, field_effects: Array) -> Array:
 	var side_effects: Array = []
-	for effect_value in battle_state.get_field_effects():
+	for effect_value in field_effects:
 		if not (effect_value is Dictionary):
 			continue
 
@@ -3827,7 +3847,7 @@ func _normalize_ability_stat_modifier_key(ability_name: String) -> String:
 	return ability_name.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "")
 
 func _update_battle_platform_hazards() -> void:
-	_update_side_condition_ui()
+	_update_side_condition_ui(_get_display_field_effects())
 
 ## Initialiseert een wild battle vanuit een al gemaakte API battle response.
 func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
@@ -3943,6 +3963,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	active_enemy_pokemon = enemy_pokemon
 	display_data_presenter.set_battle_context(type, active_enemy_pokemon)
 	_reset_battle_effect_tracking()
+	presentation_state.reset()
 	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY])
 	player_hud_panel.clear_player_name()
@@ -5081,6 +5102,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			continue
 
 		_show_switch_out_heal_target_if_needed(event_data, ordered_events, event_index)
+		if event_type == "fieldEffect":
+			_apply_field_presentation_event(event_data)
 		await event_renderer.render_event(event_data, presentation)
 		if fallback_knock_off_message != "":
 			_add_battle_log_message(fallback_knock_off_message)
@@ -5107,11 +5130,17 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			_update_active_sprites()
 
 	_remember_rendered_non_pvp_event_keys(ordered_events)
-	_prune_inactive_field_condition_ability_modifiers(battle_state.get_field_effects())
+	_sync_presentation_field_from_battle_state()
+	_prune_inactive_field_condition_ability_modifiers(_get_display_field_effects())
+	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_party_slots()
 	_update_vs_panel_names()
 	_sync_player_save_from_battle_state()
+
+func _apply_field_presentation_event(event_data: Dictionary) -> void:
+	if presentation_state.apply_event(event_data, battle_state.get_turn()):
+		_update_battle_status_panels()
 
 func _fill_mega_event_species(event_data: Dictionary) -> void:
 	var mega_species := battle_state.resolve_mega_species_for_event(event_data)
@@ -7908,6 +7937,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 	_apply_party_state_from_api_response(reconciliation)
 	_remember_active_player_party_moves()
 	_prewarm_current_battle_move_animations()
+	_sync_presentation_field_from_battle_state()
 	_update_battle_presentation("snapshot_reconciliation")
 
 	var snapshot_server_seq := _get_pvp_response_server_seq(reconciliation)

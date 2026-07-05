@@ -145,8 +145,10 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		var ability_boost_hold_seconds := message_timing.get_stat_change_animation_hold_seconds()
 		artificial_hold_seconds += ability_boost_hold_seconds
 		await _wait(ability_boost_hold_seconds)
-	if animations_allowed and faint_target_ident != "":
-		await animation_router.play_faint_tween_for_target(faint_target_ident)
+	if faint_target_ident != "":
+		_set_active_hud_hp_from_event(faint_target_ident, event_data, false)
+		if animations_allowed:
+			await animation_router.play_faint_tween_for_target(faint_target_ident)
 	if battle_message != "":
 		var message_hold_seconds := message_timing.get_battle_message_hold_seconds(event_data, battle_message)
 		await _wait(max(message_hold_seconds - artificial_hold_seconds, 0.0))
