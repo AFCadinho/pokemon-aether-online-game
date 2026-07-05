@@ -2339,6 +2339,15 @@ func _try_run() -> void:
 		return
 
 	_clear_mega_evolution_selection()
+	_set_battle_input_locked(true)
+	var response: Dictionary = await action_flow.submit_player_choice("run", 1, false, last_rendered_event_seq)
+	_set_battle_input_locked(false)
+	if not bool(response.get("success", false)):
+		var error_message := str(response.get("error", "Could not run from the battle."))
+		current_action_panel.set_message(error_message)
+		_add_battle_log_message(error_message)
+		return
+
 	_add_battle_log_message("Got away safely!")
 	_finish_battle({"reason": "flee"})
 
@@ -2354,6 +2363,15 @@ func _on_forfeit_confirmed() -> void:
 	_set_battle_input_locked(false)
 	_add_battle_log_message("You forfeited the battle.")
 	if not _is_pvp_battle():
+		_set_battle_input_locked(true)
+		var response: Dictionary = await action_flow.submit_player_choice("forfeit", 1, false, last_rendered_event_seq)
+		_set_battle_input_locked(false)
+		if not bool(response.get("success", false)):
+			var error_message := str(response.get("error", "Could not forfeit the battle."))
+			current_action_panel.set_message(error_message)
+			_add_battle_log_message(error_message)
+			return
+
 		_finish_battle({"reason": "forfeit"})
 		return
 
