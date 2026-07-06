@@ -39,8 +39,20 @@ func _check_pc_slot_button_script_compiles() -> void:
 	_check_equal(button is Button, true, "PcPokemonSlotButton extends Button")
 	_check_equal(button.has_signal("slot_dropped"), true, "PcPokemonSlotButton emits drops")
 	_check_equal(button.has_method("_get_drag_data"), true, "PcPokemonSlotButton exposes drag data")
+	_check_equal(button.has_method("_create_drag_icon_preview"), true, "PcPokemonSlotButton drags Pokemon icon preview")
 	_check_equal(button.has_method("_can_drop_data"), true, "PcPokemonSlotButton validates drop data")
 	_check_equal(button.has_method("_drop_data"), true, "PcPokemonSlotButton handles drop data")
+	button.drop_target = {"type": "box", "boxIndex": 0, "slotIndex": 5}
+	var box_drag_data := {
+		"kind": "pokemon_pc_slot",
+		"source": {"type": "box", "boxIndex": 0, "slotIndex": 2, "pokemonId": 42},
+	}
+	_check_equal(button._can_drop_data(Vector2.ZERO, box_drag_data), true, "PcPokemonSlotButton accepts box to different box slot")
+	var same_box_drag_data := {
+		"kind": "pokemon_pc_slot",
+		"source": {"type": "box", "boxIndex": 0, "slotIndex": 5, "pokemonId": 42},
+	}
+	_check_equal(button._can_drop_data(Vector2.ZERO, same_box_drag_data), false, "PcPokemonSlotButton rejects box drop onto same slot")
 	button.free()
 
 
@@ -49,6 +61,12 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains("func open_pokemon_pc() -> void:"), true, "UIOverlay exposes open_pokemon_pc")
 	_check_equal(source.contains("await _show_pc_popup()"), true, "open_pokemon_pc opens existing PC popup")
 	_check_equal(source.contains("func _create_pc_pokemon_slot_button"), true, "UIOverlay renders visual PC Pokemon slots")
+	_check_equal(source.contains("func _create_pc_box_pokemon_slot_button"), true, "UIOverlay renders vertical PC box Pokemon slots")
+	_check_equal(source.contains("shiny_badge.text = \"S\""), true, "UIOverlay marks shiny boxed Pokemon")
+	_check_equal(source.contains("func _open_pc_box_pokemon_summary"), true, "UIOverlay opens boxed Pokemon summary from slot click")
+	_check_equal(source.contains("party_drag_visual = party_drag_source_slot.duplicate() as Control"), true, "UIOverlay drags whole normal party slot preview")
+	_check_equal(source.contains("func _handle_pc_drag_input"), true, "UIOverlay uses custom PC drag input")
+	_check_equal(source.contains("button.use_native_drag = false"), true, "UIOverlay disables native PC slot drag feedback")
 	_check_equal(source.contains("PokemonAssets.load_party_icon"), true, "UIOverlay uses Pokemon icons in PC slots")
 	_check_equal(source.contains("func _pc_payload_species"), true, "UIOverlay normalizes boxed Pokemon display data")
 	_check_equal(source.contains("PC_POKEMON_SLOT_BUTTON_SCRIPT"), true, "UIOverlay uses draggable PC slot button")
@@ -59,6 +77,19 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains("func _pc_party_pokemon_at_storage_slot"), true, "UIOverlay can inspect party storage slots")
 	_check_equal(source.contains("func _pc_storage_slot_for_party_pokemon"), true, "UIOverlay translates compact party rows to storage slots")
 	_check_equal(source.contains("func _pc_first_open_party_storage_slot"), true, "UIOverlay targets first open party storage slot")
+	_check_equal(source.contains("pc_box_tab_bar"), true, "UIOverlay uses PC box tab bar")
+	_check_equal(source.contains("func _refresh_pc_box_tabs"), true, "UIOverlay refreshes PC box tabs")
+	_check_equal(source.contains("func _apply_pc_box_tab_style"), true, "UIOverlay styles active PC box tab")
+	_check_equal(source.contains("pc_search_input"), true, "UIOverlay has PC search input")
+	_check_equal(source.contains("pc_all_boxes"), true, "UIOverlay caches all boxes for global PC search")
+	_check_equal(source.contains("pc_box_scroll"), true, "UIOverlay scrolls global PC search results")
+	_check_equal(source.contains("func _pc_pokemon_matches_search"), true, "UIOverlay filters PC box Pokemon search")
+	_check_equal(source.contains("pc_release_drop_panel"), true, "UIOverlay has PC release drop zone")
+	_check_equal(source.contains("func _confirm_pc_release_from_source"), true, "UIOverlay confirms releases from dropped Pokemon")
+	_check_equal(source.contains("func _release_selected_pc_pokemon"), true, "UIOverlay releases selected PC Pokemon")
+	_check_equal(source.contains("func _add_pc_held_item_marker"), true, "UIOverlay marks PC Pokemon with held items")
+	_check_equal(source.contains("HeldItemMarker"), true, "UIOverlay creates held item marker control")
+	_check_equal(source.contains("pc_box_selector"), false, "UIOverlay no longer uses PC box dropdown")
 	_check_equal(source.contains("socials_pc_button"), false, "Socials menu no longer owns PC button")
 	_check_equal(source.contains("_on_socials_pc_button_pressed"), false, "Socials PC handler removed")
 

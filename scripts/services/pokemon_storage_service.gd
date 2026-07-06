@@ -5,6 +5,7 @@ class_name PokemonStorageServiceNode
 const BOXES_ENDPOINT := "/game/boxes"
 const BOX_ENDPOINT := "/game/boxes/%s"
 const STORAGE_MOVE_ENDPOINT := "/game/pokemon/storage/move"
+const POKEMON_ENDPOINT := "/game/pokemon/%s"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -68,6 +69,35 @@ func move_pokemon(pokemon_id: int, source: Dictionary, target: Dictionary) -> Di
 		JSON.stringify(payload)
 	)
 	var result: Dictionary = parse_move_response(response)
+	if bool(result.get("success", false)):
+		var party_value: Variant = result.get("party", [])
+		if party_value is Array:
+			var player_save := get_node_or_null("/root/PlayerSave")
+			if player_save != null and player_save.has_method("replace_party_from_state"):
+				player_save.call("replace_party_from_state", party_value as Array)
+	return result
+
+
+func release_pokemon(pokemon_id: int) -> Dictionary:
+	if not _is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0:
+		return {
+			"success": false,
+			"error": "Missing Pokemon.",
+		}
+
+	var base_url: String = await _get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + POKEMON_ENDPOINT % str(pokemon_id).uri_encode(),
+		HTTPClient.METHOD_DELETE,
+		_get_accept_headers(),
+		""
+	)
+	var result: Dictionary = parse_release_response(response)
 	if bool(result.get("success", false)):
 		var party_value: Variant = result.get("party", [])
 		if party_value is Array:
@@ -149,9 +179,21 @@ static func parse_move_response(response: Dictionary) -> Dictionary:
 	}
 
 
+static func parse_release_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"party": _array_from_value(body.get("party", [])),
+		"hasParty": bool(body.get("hasParty", false)),
+	}
+
+
 static func normalize_storage_location(value: Variant) -> Dictionary:
 	var location: Dictionary = _dictionary_from_value(value)
-	var location_type := str(location.get("type", "")).strip_edges().to_lower()
+	var location_type: String = str(location.get("type", "")).strip_edges().to_lower()
 	if location_type == "party":
 		return {
 			"type": "party",
@@ -167,14 +209,14 @@ static func normalize_storage_location(value: Variant) -> Dictionary:
 
 
 static func storage_location_label(value: Variant) -> String:
-	var location := normalize_storage_location(value)
+	var location: Dictionary = normalize_storage_location(value)
 	match str(location.get("type", "")):
 		"party":
-			var party_slot := int(location.get("partySlot", -1))
+			var party_slot: int = int(location.get("partySlot", -1))
 			return "party slot %d" % (party_slot + 1) if party_slot >= 0 else "party"
 		"box":
-			var box_index := int(location.get("boxIndex", -1))
-			var slot_index := int(location.get("slotIndex", -1))
+			var box_index: int = int(location.get("boxIndex", -1))
+			var slot_index: int = int(location.get("slotIndex", -1))
 			if box_index >= 0 and slot_index >= 0:
 				return "Box %d slot %d" % [box_index + 1, slot_index + 1]
 			if box_index >= 0:
@@ -233,7 +275,7 @@ func _request_json(url: String, method: HTTPClient.Method, headers: PackedString
 
 
 static func _normalize_move_location(location: Dictionary) -> Dictionary:
-	var location_type := str(location.get("type", "")).strip_edges().to_lower()
+	var location_type: String = str(location.get("type", "")).strip_edges().to_lower()
 	if location_type == "party":
 		return party_location(int(location.get("partySlot", location.get("party_slot", -1))))
 	if location_type == "box":

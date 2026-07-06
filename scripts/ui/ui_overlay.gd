@@ -109,8 +109,9 @@ const BAG_SIZE := Vector2(920, 620)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
 const PC_POPUP_SIZE := Vector2(980, 600)
 const PC_BOX_SLOTS_PER_ROW := 6
-const PC_BOX_SLOT_SIZE := Vector2(106, 72)
+const PC_BOX_SLOT_SIZE := Vector2(106, 86)
 const PC_PARTY_SLOT_SIZE := Vector2(230, 62)
+const PC_BOX_TABS_VISIBLE := 10
 const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
@@ -624,18 +625,39 @@ var play_existing_friend_request_notification_on_next_socials_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pc_popup: PanelContainer
-var pc_box_selector: OptionButton
+var pc_box_tab_bar: HBoxContainer
+var pc_box_tab_prev_button: Button
+var pc_box_tab_next_button: Button
+var pc_search_input: LineEdit
 var pc_party_list: VBoxContainer
+var pc_box_scroll: ScrollContainer
 var pc_box_grid: GridContainer
 var pc_status_label: Label
 var pc_close_button: Button
+var pc_release_mode_button: Button
+var pc_release_drop_panel: PanelContainer
+var pc_release_hint_label: Label
 var pc_selected_box_index := 0
+var pc_box_tab_page_start := 0
 var pc_box_count := 0
 var pc_slots_per_box := 30
 var pc_current_box: Dictionary = {}
+var pc_all_boxes: Array = []
 var pc_selected_source: Dictionary = {}
+var pc_selected_release_source: Dictionary = {}
+var pc_selected_release_name := ""
 var pc_party_slot_by_owned_id: Dictionary = {}
 var pc_move_in_progress := false
+var pc_release_in_progress := false
+var pc_release_mode_active := false
+var pc_popup_dragging := false
+var pc_popup_drag_offset := Vector2.ZERO
+var pc_dragging := false
+var pc_drag_source: Dictionary = {}
+var pc_drag_visual: Control
+var pc_drag_source_button: Control
+var pc_drag_pointer_offset := Vector2.ZERO
+var pc_drag_start_mouse_position := Vector2.ZERO
 var pokemon_summary_popup: PanelContainer
 var pokemon_summary_left_panel: PanelContainer
 var pokemon_summary_right_area: VBoxContainer
@@ -1168,11 +1190,15 @@ func _setup_pc_ui() -> void:
 
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 10)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.gui_input.connect(_on_pc_header_gui_input)
 	stack.add_child(header)
 
 	var title := Label.new()
 	title.text = "PC Boxes"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.mouse_filter = Control.MOUSE_FILTER_STOP
+	title.gui_input.connect(_on_pc_header_gui_input)
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
@@ -1180,9 +1206,20 @@ func _setup_pc_ui() -> void:
 	pc_status_label = Label.new()
 	pc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	pc_status_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	pc_status_label.gui_input.connect(_on_pc_header_gui_input)
 	pc_status_label.add_theme_font_size_override("font_size", 13)
 	pc_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	header.add_child(pc_status_label)
+
+	pc_release_mode_button = Button.new()
+	pc_release_mode_button.text = "Release"
+	pc_release_mode_button.custom_minimum_size = Vector2(88, 32)
+	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
+	pc_release_mode_button.tooltip_text = "Enable release mode"
+	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
+	_apply_button_style(pc_release_mode_button, "danger")
+	header.add_child(pc_release_mode_button)
 
 	pc_close_button = Button.new()
 	pc_close_button.text = "Close"
@@ -1252,10 +1289,41 @@ func _setup_pc_ui() -> void:
 	box_title.add_theme_color_override("font_color", UI_TEXT)
 	box_header.add_child(box_title)
 
-	pc_box_selector = OptionButton.new()
-	pc_box_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pc_box_selector.item_selected.connect(_on_pc_box_selected)
-	box_header.add_child(pc_box_selector)
+	pc_box_tab_prev_button = Button.new()
+	pc_box_tab_prev_button.text = "<"
+	pc_box_tab_prev_button.custom_minimum_size = Vector2(34, 30)
+	pc_box_tab_prev_button.focus_mode = Control.FOCUS_NONE
+	pc_box_tab_prev_button.tooltip_text = "Previous box"
+	pc_box_tab_prev_button.pressed.connect(_on_pc_box_step_pressed.bind(-1))
+	_apply_button_style(pc_box_tab_prev_button)
+	box_header.add_child(pc_box_tab_prev_button)
+
+	pc_box_tab_bar = HBoxContainer.new()
+	pc_box_tab_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_box_tab_bar.add_theme_constant_override("separation", 5)
+	box_header.add_child(pc_box_tab_bar)
+
+	pc_box_tab_next_button = Button.new()
+	pc_box_tab_next_button.text = ">"
+	pc_box_tab_next_button.custom_minimum_size = Vector2(34, 30)
+	pc_box_tab_next_button.focus_mode = Control.FOCUS_NONE
+	pc_box_tab_next_button.tooltip_text = "Next box"
+	pc_box_tab_next_button.pressed.connect(_on_pc_box_step_pressed.bind(1))
+	_apply_button_style(pc_box_tab_next_button)
+	box_header.add_child(pc_box_tab_next_button)
+
+	pc_search_input = LineEdit.new()
+	pc_search_input.placeholder_text = "Search name, type, ability, held item..."
+	pc_search_input.clear_button_enabled = true
+	pc_search_input.text_changed.connect(_on_pc_search_text_changed)
+	_apply_line_edit_style(pc_search_input)
+	box_stack.add_child(pc_search_input)
+
+	pc_box_scroll = ScrollContainer.new()
+	pc_box_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_box_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pc_box_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	box_stack.add_child(pc_box_scroll)
 
 	pc_box_grid = GridContainer.new()
 	pc_box_grid.columns = PC_BOX_SLOTS_PER_ROW
@@ -1263,7 +1331,41 @@ func _setup_pc_ui() -> void:
 	pc_box_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pc_box_grid.add_theme_constant_override("h_separation", 8)
 	pc_box_grid.add_theme_constant_override("v_separation", 8)
-	box_stack.add_child(pc_box_grid)
+	pc_box_scroll.add_child(pc_box_grid)
+
+	pc_release_drop_panel = PanelContainer.new()
+	pc_release_drop_panel.visible = false
+	pc_release_drop_panel.custom_minimum_size = Vector2(0, 64)
+	pc_release_drop_panel.tooltip_text = "Drag a Pokemon here to release it."
+	pc_release_drop_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#2a1015e8"), UI_DANGER, 6, 1))
+	box_stack.add_child(pc_release_drop_panel)
+
+	var release_margin := MarginContainer.new()
+	release_margin.add_theme_constant_override("margin_left", 8)
+	release_margin.add_theme_constant_override("margin_top", 8)
+	release_margin.add_theme_constant_override("margin_right", 8)
+	release_margin.add_theme_constant_override("margin_bottom", 8)
+	pc_release_drop_panel.add_child(release_margin)
+
+	var release_stack := VBoxContainer.new()
+	release_stack.add_theme_constant_override("separation", 6)
+	release_margin.add_child(release_stack)
+
+	pc_release_hint_label = Label.new()
+	pc_release_hint_label.text = "Drag Pokemon here to release"
+	pc_release_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pc_release_hint_label.add_theme_font_size_override("font_size", 13)
+	pc_release_hint_label.add_theme_color_override("font_color", Color("#ffd0d4"))
+	pc_release_hint_label.clip_text = true
+	pc_release_hint_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	release_stack.add_child(pc_release_hint_label)
+
+	var release_warning_label := Label.new()
+	release_warning_label.text = "Permanent"
+	release_warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	release_warning_label.add_theme_font_size_override("font_size", 11)
+	release_warning_label.add_theme_color_override("font_color", UI_DANGER)
+	release_stack.add_child(release_warning_label)
 
 	pc_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(pc_popup))
 
@@ -5241,6 +5343,14 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	time_label.text = "%02d:%02d %s" % [display_hour, minute, period]
 
 func _input(event: InputEvent) -> void:
+	if pc_dragging:
+		_handle_pc_drag_input(event)
+		return
+
+	if pc_popup_dragging:
+		_handle_pc_popup_drag_input(event)
+		return
+
 	if party_dragging:
 		_handle_party_drag_input(event)
 		return
@@ -11442,6 +11552,42 @@ func _move_overlay_popup_to_global_position(popup: Control, global_top_left: Vec
 	popup.offset_bottom = local_offset.y + popup_size.y
 	popup.size = popup_size
 
+
+func _on_pc_header_gui_input(event: InputEvent) -> void:
+	if pc_popup == null:
+		return
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		pc_popup_dragging = true
+		pc_popup_drag_offset = mouse_event.global_position - pc_popup.global_position
+		_activate_ui_panel(pc_popup)
+	else:
+		pc_popup_dragging = false
+	get_viewport().set_input_as_handled()
+
+
+func _handle_pc_popup_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			pc_popup_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+
+	if not (event is InputEventMouseMotion):
+		return
+
+	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+	_move_overlay_popup_to_global_position(pc_popup, motion_event.global_position - pc_popup_drag_offset)
+	get_viewport().set_input_as_handled()
+
+
 func _on_staff_teleport_header_gui_input(event: InputEvent) -> void:
 	if staff_teleport_popup == null:
 		return
@@ -16448,6 +16594,9 @@ func _show_pc_popup() -> void:
 	_activate_ui_panel(pc_popup)
 	pc_status_label.text = "Loading..."
 	pc_selected_source = {}
+	_set_pc_release_mode_active(false)
+	if pc_search_input != null:
+		pc_search_input.text = ""
 	await _compact_pc_party_storage_slots("open")
 	await _refresh_pc_state(true)
 
@@ -16456,14 +16605,25 @@ func _on_pc_close_button_pressed() -> void:
 	if pc_popup == null:
 		return
 	pc_popup.visible = false
+	pc_popup_dragging = false
 	pc_selected_source = {}
+	_set_pc_release_mode_active(false)
 	_deactivate_ui_panel(pc_popup)
 
 
 func _on_pc_box_selected(index: int) -> void:
 	pc_selected_box_index = max(index, 0)
 	pc_selected_source = {}
+	_clear_pc_release_selection()
 	await _refresh_pc_state(false)
+
+
+func _on_pc_box_step_pressed(direction: int) -> void:
+	var count: int = max(pc_box_count, 1)
+	var next_index := clampi(pc_selected_box_index + direction, 0, count - 1)
+	if next_index == pc_selected_box_index:
+		return
+	await _on_pc_box_selected(next_index)
 
 
 func _refresh_pc_state(load_all_boxes: bool = false) -> void:
@@ -16476,8 +16636,9 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 		if bool(box_result.get("success", false)):
 			pc_box_count = int(box_result.get("boxCount", 0))
 			pc_slots_per_box = max(int(box_result.get("slotsPerBox", 30)), 1)
-			_refresh_pc_box_selector()
+			_refresh_pc_box_tabs()
 			var boxes: Array = _array_from_variant(box_result.get("boxes", []))
+			pc_all_boxes = boxes
 			pc_current_box = _box_state_from_boxes(boxes, pc_selected_box_index)
 		else:
 			pc_status_label.text = "Could not load boxes."
@@ -16490,8 +16651,9 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 		if bool(box_result.get("success", false)):
 			pc_box_count = max(pc_box_count, int(box_result.get("boxCount", 0)))
 			pc_slots_per_box = max(int(box_result.get("slotsPerBox", pc_slots_per_box)), 1)
-			_refresh_pc_box_selector()
+			_refresh_pc_box_tabs()
 			pc_current_box = _dictionary_from_value(box_result.get("box", {}))
+			_update_pc_all_boxes_cache(pc_current_box)
 		else:
 			pc_status_label.text = "Could not load box."
 			_add_chat_message("Could not load PC box: %s" % str(box_result.get("error", "Unknown error")))
@@ -16499,19 +16661,69 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 
 	_render_pc_party()
 	_render_pc_box()
-	pc_status_label.text = "Select a Pokemon, then a destination."
+	if _pc_search_query() == "":
+		pc_status_label.text = "Select a Pokemon, then a destination."
 
 
-func _refresh_pc_box_selector() -> void:
-	if pc_box_selector == null:
+func _update_pc_all_boxes_cache(box_state: Dictionary) -> void:
+	if box_state.is_empty():
+		return
+	var box_index := int(box_state.get("boxIndex", -1))
+	if box_index < 0:
+		return
+	for index in range(pc_all_boxes.size()):
+		var existing: Dictionary = _dictionary_from_value(pc_all_boxes[index])
+		if int(existing.get("boxIndex", -1)) == box_index:
+			pc_all_boxes[index] = box_state
+			return
+	pc_all_boxes.append(box_state)
+
+
+func _refresh_pc_box_tabs() -> void:
+	if pc_box_tab_bar == null:
 		return
 	var count: int = max(pc_box_count, 1)
 	pc_selected_box_index = clampi(pc_selected_box_index, 0, count - 1)
-	if pc_box_selector.item_count != count:
-		pc_box_selector.clear()
-		for index in range(count):
-			pc_box_selector.add_item("Box %d" % (index + 1), index)
-	pc_box_selector.select(pc_selected_box_index)
+	var max_start: int = max(count - PC_BOX_TABS_VISIBLE, 0)
+	if pc_selected_box_index < pc_box_tab_page_start or pc_selected_box_index >= pc_box_tab_page_start + PC_BOX_TABS_VISIBLE:
+		pc_box_tab_page_start = int(floor(float(pc_selected_box_index) / float(PC_BOX_TABS_VISIBLE))) * PC_BOX_TABS_VISIBLE
+	pc_box_tab_page_start = clampi(pc_box_tab_page_start, 0, max_start)
+
+	_clear_children(pc_box_tab_bar)
+	var visible_end: int = min(pc_box_tab_page_start + PC_BOX_TABS_VISIBLE, count)
+	for index in range(pc_box_tab_page_start, visible_end):
+		var button := Button.new()
+		button.text = str(index + 1)
+		button.custom_minimum_size = Vector2(38, 30)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.focus_mode = Control.FOCUS_NONE
+		button.tooltip_text = "Box %d" % (index + 1)
+		button.pressed.connect(_on_pc_box_selected.bind(index))
+		_apply_pc_box_tab_style(button, index == pc_selected_box_index)
+		pc_box_tab_bar.add_child(button)
+
+	if pc_box_tab_prev_button != null:
+		pc_box_tab_prev_button.disabled = pc_selected_box_index <= 0
+	if pc_box_tab_next_button != null:
+		pc_box_tab_next_button.disabled = pc_selected_box_index >= count - 1
+
+
+func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
+	var normal_bg := Color("#141b2bee") if selected else Color("#07111ed8")
+	var hover_bg := Color("#1f2b42f2") if selected else Color("#10213aee")
+	var pressed_bg := Color("#0c1322f2")
+	var border := UI_MONEY if selected else UI_BORDER_SOFT
+	var hover_border := Color("#ffe28acc") if selected else UI_BORDER
+	var font_color := UI_MONEY if selected else UI_TEXT
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 4, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 4, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 4, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 4, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
 func _box_state_from_boxes(boxes: Array, box_index: int) -> Dictionary:
@@ -16533,19 +16745,47 @@ func _render_pc_party() -> void:
 		var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index < PlayerSave.party.size() else null
 		var storage_slot := _pc_storage_slot_for_party_pokemon(pokemon, slot_index)
 		var button := _create_pc_party_slot_button(slot_index, storage_slot, pokemon, _pc_source_matches("party", storage_slot))
-		button.pressed.connect(_on_pc_party_slot_pressed.bind(slot_index))
+		button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
 		pc_party_list.add_child(button)
 
 
 func _render_pc_box() -> void:
 	_clear_children(pc_box_grid)
+	var search_query := _pc_search_query()
+	if search_query != "":
+		_render_pc_box_search_results(search_query)
+		return
+
 	var slot_map := _pc_box_slot_map()
 	for slot_index in range(pc_slots_per_box):
 		var slot_state: Dictionary = _dictionary_from_value(slot_map.get(slot_index, {}))
 		var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
 		var button := _create_pc_box_slot_button(slot_index, pokemon_response, _pc_source_matches("box", slot_index))
-		button.pressed.connect(_on_pc_box_slot_pressed.bind(slot_index))
+		button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
 		pc_box_grid.add_child(button)
+
+
+func _render_pc_box_search_results(search_query: String) -> void:
+	var result_count := 0
+	for box_value: Variant in pc_all_boxes:
+		var box: Dictionary = _dictionary_from_value(box_value)
+		var box_index := int(box.get("boxIndex", -1))
+		if box_index < 0:
+			continue
+		var slots: Array = _array_from_variant(box.get("slots", []))
+		for slot_value: Variant in slots:
+			var slot_state: Dictionary = _dictionary_from_value(slot_value)
+			var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
+			if pokemon_response.is_empty() or not _pc_pokemon_matches_search(pokemon_response, search_query):
+				continue
+			var slot_index := int(slot_state.get("slotIndex", -1))
+			if slot_index < 0:
+				continue
+			var button := _create_pc_box_slot_button_for_location(box_index, slot_index, pokemon_response, _pc_source_matches_location("box", box_index, slot_index), "B%d S%02d" % [box_index + 1, slot_index + 1])
+			button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
+			pc_box_grid.add_child(button)
+			result_count += 1
+	pc_status_label.text = "%d result%s." % [result_count, "" if result_count == 1 else "s"]
 
 
 func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, pokemon: Pokemon, selected: bool) -> Button:
@@ -16553,9 +16793,13 @@ func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, poke
 	var title := pokemon.species if occupied else "Empty"
 	var subtitle := "Lv. %s" % pokemon.level if occupied else "Party slot %d" % (slot_index + 1)
 	var texture: Texture2D = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny) if occupied else null
+	var held_item_id := _get_pokemon_held_item_id(pokemon) if occupied else ""
 	var button := _create_pc_pokemon_slot_button(
 		title,
 		subtitle,
+		pokemon.shiny if occupied else false,
+		held_item_id,
+		[],
 		texture,
 		occupied,
 		selected,
@@ -16578,38 +16822,136 @@ func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, poke
 
 
 func _create_pc_box_slot_button(slot_index: int, pokemon_response: Dictionary, selected: bool) -> Button:
+	return _create_pc_box_slot_button_for_location(pc_selected_box_index, slot_index, pokemon_response, selected, "%02d" % (slot_index + 1))
+
+
+func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, pokemon_response: Dictionary, selected: bool, slot_badge: String) -> Button:
 	var occupied := not pokemon_response.is_empty()
 	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
 	var species := _pc_payload_species(payload)
 	var level := _pc_payload_level(payload)
 	var shiny := _pc_payload_shiny(payload)
+	var held_item_id := _pc_payload_held_item_id(payload)
+	var types: Array = _pc_payload_types(payload)
 	var texture: Texture2D = PokemonAssets.load_party_icon(species, shiny) if occupied else null
-	var button := _create_pc_pokemon_slot_button(
+	var button := _create_pc_box_pokemon_slot_button(
 		species if occupied else "Empty",
-		"Lv. %s" % level if occupied else "Box slot %02d" % (slot_index + 1),
+		level,
+		shiny,
+		held_item_id,
+		types,
 		texture,
 		occupied,
 		selected,
-		"%02d" % (slot_index + 1),
+		slot_badge,
 		PC_BOX_SLOT_SIZE
 	)
-	button.tooltip_text = "%s box slot %02d" % [species if occupied else "Empty", slot_index + 1]
+	button.use_native_drag = false
+	button.tooltip_text = "%s Box %d slot %02d" % [species if occupied else "Empty", box_index + 1, slot_index + 1]
 	if occupied:
-		var pokemon_id := int(pokemon_response.get("id", 0))
+		var pokemon_id := _pc_owned_pokemon_id_from_response(pokemon_response)
 		if pokemon_id > 0:
 			button.drag_source = {
 				"type": "box",
-				"boxIndex": pc_selected_box_index,
+				"boxIndex": box_index,
 				"slotIndex": slot_index,
 				"pokemonId": pokemon_id,
 			}
-	button.drop_target = PokemonStorageService.box_location(pc_selected_box_index, slot_index)
+	button.drop_target = PokemonStorageService.box_location(box_index, slot_index)
 	button.slot_dropped.connect(_on_pc_slot_dropped)
 	return button
 
 
-func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, texture: Texture2D, occupied: bool, selected: bool, slot_badge: String, slot_size: Vector2) -> PcPokemonSlotButton:
+func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: bool, held_item_id: String, types: Array, texture: Texture2D, occupied: bool, selected: bool, slot_badge: String, slot_size: Vector2) -> PcPokemonSlotButton:
 	var button: PcPokemonSlotButton = PC_POKEMON_SLOT_BUTTON_SCRIPT.new()
+	button.use_native_drag = false
+	button.text = ""
+	button.custom_minimum_size = slot_size
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.drag_title = title_text
+	button.drag_subtitle = "Lv. %s" % level if occupied else "Box slot %s" % slot_badge
+	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
+	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
+	if not occupied:
+		button.modulate = Color(1.0, 1.0, 1.0, 0.70)
+
+	var stack := VBoxContainer.new()
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.anchor_right = 1.0
+	stack.anchor_bottom = 1.0
+	stack.offset_left = 6
+	stack.offset_top = 5
+	stack.offset_right = -6
+	stack.offset_bottom = -5
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 0)
+	button.add_child(stack)
+
+	var title_row := HBoxContainer.new()
+	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.custom_minimum_size = Vector2(0, 16)
+	title_row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	title_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_row.add_theme_constant_override("separation", 2)
+	stack.add_child(title_row)
+
+	if occupied and shiny:
+		var shiny_badge := Label.new()
+		shiny_badge.text = "S"
+		shiny_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		shiny_badge.custom_minimum_size = Vector2(9, 0)
+		shiny_badge.add_theme_font_size_override("font_size", 11)
+		shiny_badge.add_theme_color_override("font_color", Color("#ffe14d"))
+		shiny_badge.add_theme_color_override("font_shadow_color", Color("#3b2200"))
+		shiny_badge.add_theme_constant_override("shadow_offset_x", 1)
+		shiny_badge.add_theme_constant_override("shadow_offset_y", 1)
+		title_row.add_child(shiny_badge)
+
+	var title := Label.new()
+	title.text = _pc_compact_text(title_text, 13)
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.custom_minimum_size = Vector2(68 if occupied and shiny else 82, 0)
+	title.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if occupied and shiny else HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_color_override("font_color", UI_TEXT if occupied else UI_MUTED_TEXT)
+	title.clip_text = true
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_row.add_child(title)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(42, 36)
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
+	icon.modulate = Color(1, 1, 1, 1) if occupied else Color(1, 1, 1, 0.26)
+	stack.add_child(icon)
+
+	var footer := HBoxContainer.new()
+	footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	footer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	footer.alignment = BoxContainer.ALIGNMENT_CENTER
+	footer.add_theme_constant_override("separation", 6)
+	stack.add_child(footer)
+
+	var level_label := Label.new()
+	level_label.text = "Lv %s" % level if occupied else "Box"
+	level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	level_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	level_label.add_theme_font_size_override("font_size", 11)
+	level_label.add_theme_color_override("font_color", UI_TEXT if occupied else UI_MUTED_TEXT)
+	footer.add_child(level_label)
+	if occupied and held_item_id != "":
+		_add_pc_held_item_marker(icon, held_item_id)
+	return button
+
+
+func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, shiny: bool, held_item_id: String, types: Array, texture: Texture2D, occupied: bool, selected: bool, slot_badge: String, slot_size: Vector2) -> PcPokemonSlotButton:
+	var button: PcPokemonSlotButton = PC_POKEMON_SLOT_BUTTON_SCRIPT.new()
+	button.use_native_drag = false
 	button.text = ""
 	button.custom_minimum_size = slot_size
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -16617,7 +16959,7 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, t
 	button.drag_title = title_text
 	button.drag_subtitle = subtitle_text
 	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
-	_apply_button_style(button, "primary" if selected else "default")
+	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
 	if not occupied:
 		button.modulate = Color(1.0, 1.0, 1.0, 0.70)
 
@@ -16653,20 +16995,39 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, t
 	text_stack.add_theme_constant_override("separation", 1)
 	row.add_child(text_stack)
 
+	var title_row := HBoxContainer.new()
+	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	title_row.add_theme_constant_override("separation", 2)
+	text_stack.add_child(title_row)
+
+	if occupied and shiny:
+		var shiny_badge := Label.new()
+		shiny_badge.text = "S"
+		shiny_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		shiny_badge.custom_minimum_size = Vector2(9, 0)
+		shiny_badge.add_theme_font_size_override("font_size", 11)
+		shiny_badge.add_theme_color_override("font_color", Color("#ffe14d"))
+		shiny_badge.add_theme_color_override("font_shadow_color", Color("#3b2200"))
+		shiny_badge.add_theme_constant_override("shadow_offset_x", 1)
+		shiny_badge.add_theme_constant_override("shadow_offset_y", 1)
+		title_row.add_child(shiny_badge)
+
 	var title := Label.new()
 	title.text = _pc_compact_text(title_text, 14)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_TEXT if occupied else UI_MUTED_TEXT)
 	title.clip_text = true
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	text_stack.add_child(title)
+	title_row.add_child(title)
 
 	var subtitle := Label.new()
 	subtitle.text = subtitle_text
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	subtitle.clip_text = true
 	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -16681,6 +17042,8 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, t
 	badge.add_theme_font_size_override("font_size", 10)
 	badge.add_theme_color_override("font_color", UI_MONEY if occupied else UI_MUTED_TEXT)
 	row.add_child(badge)
+	if occupied and held_item_id != "":
+		_add_pc_held_item_marker(icon, held_item_id)
 	return button
 
 
@@ -16695,6 +17058,188 @@ func _pc_payload_level(payload: Dictionary) -> int:
 
 func _pc_payload_shiny(payload: Dictionary) -> bool:
 	return bool(payload.get("shiny", false))
+
+
+func _pc_payload_held_item_id(payload: Dictionary) -> String:
+	for key in ["heldItemId", "held_item_id", "item"]:
+		var value := str(payload.get(key, "")).strip_edges()
+		if value != "":
+			return value
+	return ""
+
+
+func _pc_payload_types(payload: Dictionary) -> Array[String]:
+	var types: Array[String] = []
+	for type_value: Variant in _array_from_variant(payload.get("types", [])):
+		if type_value is Dictionary:
+			var type_entry: Dictionary = type_value as Dictionary
+			for key: String in ["name", "type", "id"]:
+				var nested_value: String = str(type_entry.get(key, "")).strip_edges()
+				if nested_value != "":
+					types.append(nested_value)
+					break
+		else:
+			var type_name: String = str(type_value).strip_edges()
+			if type_name != "":
+				types.append(type_name)
+	for key: String in ["type", "type1", "type2", "primaryType", "secondaryType", "primary_type", "secondary_type"]:
+		var value: String = str(payload.get(key, "")).strip_edges()
+		if value != "" and not types.has(value):
+			types.append(value)
+	return types
+
+
+func _apply_pc_pokemon_slot_style(button: Button, occupied: bool, selected: bool, types: Array) -> void:
+	if not occupied or types.is_empty():
+		_apply_button_style(button, "primary" if selected else "default")
+		return
+
+	var primary_type: String = str(types[0]).strip_edges()
+	if primary_type == "":
+		_apply_button_style(button, "primary" if selected else "default")
+		return
+
+	var background: Color = TypeColors.get_slot_background(primary_type, UI_SLOT_BG)
+	var border: Color = UI_MONEY if selected else TypeColors.get_slot_border(primary_type, UI_BORDER_SOFT)
+	var hover_border: Color = UI_MONEY if selected else border.lightened(0.18)
+	var normal_bg: Color = background.lightened(0.04) if selected else background
+	var hover_bg: Color = background.lightened(0.10)
+	var pressed_bg: Color = background.darkened(0.08)
+	var border_width: int = 2 if selected else 1
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 4, border_width))
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 4, border_width))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 4, border_width))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 4, border_width))
+
+
+func _add_pc_held_item_marker(icon: Control, held_item_id: String) -> void:
+	var marker: Control = Control.new()
+	marker.name = "HeldItemMarker"
+	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	marker.tooltip_text = "Holding %s" % _item_name_from_id(held_item_id)
+	marker.custom_minimum_size = Vector2(10, 14)
+	marker.anchor_left = 1.0
+	marker.anchor_right = 1.0
+	marker.anchor_top = 0.0
+	marker.anchor_bottom = 0.0
+	marker.offset_left = -10.0
+	marker.offset_top = 0.0
+	marker.offset_right = 0.0
+	marker.offset_bottom = 14.0
+	marker.z_index = 5
+
+	var item_chip: PanelContainer = _create_pc_held_item_chip(Color("#f5c33b"), Color("#2a1700"))
+	item_chip.position = Vector2(1, 1)
+	marker.add_child(item_chip)
+
+	var red_stripe: PanelContainer = PanelContainer.new()
+	red_stripe.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	red_stripe.custom_minimum_size = Vector2(6, 2)
+	red_stripe.size = Vector2(6, 2)
+	red_stripe.position = Vector2(2, 7)
+	var stripe_style: StyleBoxFlat = StyleBoxFlat.new()
+	stripe_style.bg_color = Color("#c93324")
+	stripe_style.border_color = Color("#6f140d")
+	stripe_style.border_width_bottom = 1
+	red_stripe.add_theme_stylebox_override("panel", stripe_style)
+	marker.add_child(red_stripe)
+	icon.add_child(marker)
+
+
+func _create_pc_held_item_chip(fill_color: Color, border_color: Color) -> PanelContainer:
+	var chip: PanelContainer = PanelContainer.new()
+	chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chip.custom_minimum_size = Vector2(8, 12)
+	chip.size = Vector2(8, 12)
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = fill_color
+	style.border_color = border_color
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 1
+	style.corner_radius_top_right = 1
+	style.corner_radius_bottom_right = 1
+	style.corner_radius_bottom_left = 1
+	chip.add_theme_stylebox_override("panel", style)
+	return chip
+
+
+func _pc_search_query() -> String:
+	if pc_search_input == null:
+		return ""
+	return pc_search_input.text.strip_edges().to_lower()
+
+
+func _on_pc_search_text_changed(_text: String) -> void:
+	_render_pc_box()
+	var query := _pc_search_query()
+	if query == "":
+		pc_status_label.text = "Select a Pokemon, then a destination."
+
+
+func _pc_pokemon_matches_search(pokemon_response: Dictionary, query: String) -> bool:
+	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
+	var fields: Array[String] = [
+		_pc_payload_species(payload),
+		str(payload.get("ability", "")),
+		str(payload.get("item", "")),
+		str(payload.get("heldItemId", "")),
+		str(payload.get("held_item_id", "")),
+	]
+	fields.append_array(_pc_payload_type_search_fields(payload))
+	for field: String in fields:
+		var normalized: String = field.strip_edges().to_lower()
+		if normalized != "" and normalized.find(query) >= 0:
+			return true
+	return false
+
+
+func _pc_payload_type_search_fields(payload: Dictionary) -> Array[String]:
+	var fields: Array[String] = []
+	for type_value: Variant in _array_from_variant(payload.get("types", [])):
+		if type_value is Dictionary:
+			var type_entry: Dictionary = type_value as Dictionary
+			for key: String in ["name", "type", "id"]:
+				var nested_value: String = str(type_entry.get(key, "")).strip_edges()
+				if nested_value != "":
+					fields.append(nested_value)
+		else:
+			var type_name: String = str(type_value).strip_edges()
+			if type_name != "":
+				fields.append(type_name)
+	for key: String in ["type", "type1", "type2", "primaryType", "secondaryType", "primary_type", "secondary_type"]:
+		var value: String = str(payload.get(key, "")).strip_edges()
+		if value != "":
+			fields.append(value)
+	return fields
+
+
+func _pc_owned_pokemon_id_from_response(pokemon_response: Dictionary) -> int:
+	for key in ["id", "ownedPokemonId", "owned_pokemon_id", "pokemonId", "pokemon_id"]:
+		var value := int(pokemon_response.get(key, 0))
+		if value > 0:
+			return value
+
+	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
+	for key in ["ownedPokemonId", "owned_pokemon_id", "pokemonId", "pokemon_id"]:
+		var value := int(payload.get(key, 0))
+		if value > 0:
+			return value
+	return 0
+
+
+func _open_pc_box_pokemon_summary(pokemon_response: Dictionary) -> void:
+	var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {})).duplicate(true)
+	if payload.is_empty():
+		return
+
+	var owned_pokemon_id := _pc_owned_pokemon_id_from_response(pokemon_response)
+	if owned_pokemon_id > 0:
+		payload["ownedPokemonId"] = owned_pokemon_id
+		payload["owned_pokemon_id"] = owned_pokemon_id
+	_open_readonly_pokemon_summary(payload)
 
 
 func _pc_compact_text(text: String, max_length: int) -> String:
@@ -16772,51 +17317,286 @@ func _pc_source_matches(source_type: String, slot_index: int) -> bool:
 	if source_type == "party":
 		return int(pc_selected_source.get("partySlot", -1)) == slot_index
 	if source_type == "box":
-		return int(pc_selected_source.get("boxIndex", -1)) == pc_selected_box_index and int(pc_selected_source.get("slotIndex", -1)) == slot_index
+		return _pc_source_matches_location(source_type, pc_selected_box_index, slot_index)
 	return false
+
+
+func _pc_source_matches_location(source_type: String, box_index: int, slot_index: int) -> bool:
+	if pc_selected_source.is_empty():
+		return false
+	if str(pc_selected_source.get("type", "")) != source_type:
+		return false
+	if source_type == "box":
+		return int(pc_selected_source.get("boxIndex", -1)) == box_index and int(pc_selected_source.get("slotIndex", -1)) == slot_index
+	return false
+
+
+func _on_pc_slot_button_gui_input(event: InputEvent, button: PcPokemonSlotButton) -> void:
+	if pc_move_in_progress:
+		return
+	if not (event is InputEventMouseButton):
+		return
+
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.pressed:
+		if button.drag_source.is_empty():
+			return
+		_start_pc_drag(button, mouse_event.global_position)
+		get_viewport().set_input_as_handled()
+		return
+
+	if pc_dragging:
+		await _finish_pc_drag(mouse_event.global_position)
+		get_viewport().set_input_as_handled()
+
+
+func _start_pc_drag(button: PcPokemonSlotButton, global_position: Vector2) -> void:
+	_clear_pc_drag_visual()
+	pc_drag_source_button = button
+	pc_drag_source = button.drag_source.duplicate(true)
+	pc_drag_start_mouse_position = global_position
+	pc_dragging = true
+	button.modulate = Color(1.0, 1.0, 1.0, 0.35)
+
+	pc_drag_visual = _create_pc_drag_icon_visual(button.drag_texture)
+	if pc_drag_visual == null:
+		return
+	pc_drag_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pc_drag_visual.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	pc_drag_visual.custom_minimum_size = Vector2(62, 62)
+	pc_drag_visual.size = Vector2(62, 62)
+	pc_drag_visual.z_index = UI_DRAG_Z_INDEX
+	pc_drag_visual.modulate = Color(1.0, 1.0, 1.0, 0.92)
+	_set_control_tree_mouse_filter(pc_drag_visual, Control.MOUSE_FILTER_IGNORE)
+	root_control.add_child(pc_drag_visual)
+	pc_drag_pointer_offset = pc_drag_visual.size * 0.5
+	_update_pc_drag_visual_position()
+
+
+func _create_pc_drag_icon_visual(texture: Texture2D) -> Control:
+	var preview := TextureRect.new()
+	preview.custom_minimum_size = Vector2(62, 62)
+	preview.size = Vector2(62, 62)
+	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	preview.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
+	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return preview
+
+
+func _handle_pc_drag_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		_update_pc_drag_visual_position()
+		get_viewport().set_input_as_handled()
+		return
+
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			await _finish_pc_drag(mouse_event.global_position)
+			get_viewport().set_input_as_handled()
+
+
+func _update_pc_drag_visual_position() -> void:
+	if pc_drag_visual == null:
+		return
+	var local_mouse_position := root_control.get_local_mouse_position()
+	pc_drag_visual.position = local_mouse_position - pc_drag_pointer_offset
+
+
+func _finish_pc_drag(global_position: Vector2) -> void:
+	if not pc_dragging:
+		return
+
+	var source := pc_drag_source.duplicate(true)
+	var was_click := pc_drag_start_mouse_position.distance_to(global_position) <= 6.0
+	_clear_pc_drag_visual()
+	if was_click:
+		_open_pc_drag_source_summary(source)
+		return
+
+	var target := _pc_drop_target_at_global_position(global_position)
+	if target.is_empty():
+		return
+	if str(target.get("type", "")) == "release":
+		_confirm_pc_release_from_source(source)
+		return
+	if _pc_locations_match(source, target):
+		return
+	await _on_pc_slot_dropped(source, target)
+
+
+func _clear_pc_drag_visual() -> void:
+	pc_dragging = false
+	pc_drag_source = {}
+	if pc_drag_source_button != null:
+		pc_drag_source_button.modulate = Color.WHITE
+	pc_drag_source_button = null
+	if pc_drag_visual != null:
+		pc_drag_visual.queue_free()
+	pc_drag_visual = null
+
+
+func _pc_drop_target_at_global_position(global_position: Vector2) -> Dictionary:
+	if pc_release_mode_active and pc_release_drop_panel != null and pc_release_drop_panel.visible and pc_release_drop_panel.get_global_rect().has_point(global_position):
+		return {"type": "release"}
+	for container in [pc_party_list, pc_box_grid]:
+		if container == null:
+			continue
+		for child: Node in container.get_children():
+			var button := child as PcPokemonSlotButton
+			if button == null or button.drop_target.is_empty():
+				continue
+			if button.get_global_rect().has_point(global_position):
+				return button.drop_target.duplicate(true)
+	return {}
+
+
+func _open_pc_drag_source_summary(source: Dictionary) -> void:
+	match str(source.get("type", "")):
+			"party":
+				var pokemon_id := int(source.get("pokemonId", 0))
+				var party_index := _pc_party_index_for_owned_id(pokemon_id)
+				if party_index >= 0:
+					_show_pokemon_summary(party_index)
+			"box":
+				var pokemon_response := _pc_box_pokemon_response_at_location(int(source.get("boxIndex", -1)), int(source.get("slotIndex", -1)))
+				if not pokemon_response.is_empty():
+					_open_pc_box_pokemon_summary(pokemon_response)
+
+
+func _pc_party_index_for_owned_id(pokemon_id: int) -> int:
+	if pokemon_id <= 0:
+		return -1
+	for index in range(PlayerSave.party.size()):
+		var pokemon: Pokemon = PlayerSave.party[index]
+		if pokemon != null and pokemon.owned_pokemon_id == pokemon_id:
+			return index
+	return -1
+
+
+func _set_pc_release_selection(source: Dictionary, pokemon_name: String) -> void:
+	pc_selected_release_source = source.duplicate(true)
+	pc_selected_release_name = pokemon_name.strip_edges()
+	if pc_selected_release_name == "":
+		pc_selected_release_name = "Pokemon"
+	_refresh_pc_release_controls()
+
+
+func _clear_pc_release_selection() -> void:
+	pc_selected_release_source = {}
+	pc_selected_release_name = ""
+	_refresh_pc_release_controls()
+
+
+func _on_pc_release_mode_button_pressed() -> void:
+	if pc_release_in_progress:
+		return
+	_set_pc_release_mode_active(not pc_release_mode_active)
+
+
+func _set_pc_release_mode_active(active: bool) -> void:
+	pc_release_mode_active = active
+	if not pc_release_mode_active:
+		pc_selected_release_source = {}
+		pc_selected_release_name = ""
+	_refresh_pc_release_controls()
+
+
+func _refresh_pc_release_controls() -> void:
+	if pc_release_hint_label == null:
+		return
+	if pc_release_drop_panel != null:
+		pc_release_drop_panel.visible = pc_release_mode_active
+	if pc_release_mode_button != null:
+		pc_release_mode_button.text = "Cancel Release" if pc_release_mode_active else "Release"
+		pc_release_mode_button.disabled = pc_release_in_progress
+		pc_release_mode_button.tooltip_text = "Cancel release mode" if pc_release_mode_active else "Enable release mode"
+		_apply_button_style(pc_release_mode_button, "danger")
+	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop Pokemon here to release"
+
+
+func _confirm_pc_release_from_source(source: Dictionary) -> void:
+	if not pc_release_mode_active or pc_release_in_progress or source.is_empty():
+		return
+	if str(source.get("type", "")) == "party" and PlayerSave.party.size() <= 1:
+		pc_status_label.text = "You must keep at least one Pokemon in your party."
+		return
+	var pokemon_id: int = int(source.get("pokemonId", 0))
+	if pokemon_id <= 0:
+		return
+	var pokemon_name: String = _pc_release_name_for_source(source)
+	_set_pc_release_selection(source, pokemon_name)
+	_show_ui_confirm_popup(
+		"Release Pokemon",
+		"Release %s permanently?\n\nThis cannot be undone." % pc_selected_release_name,
+		"Release",
+		Callable(self, "_release_selected_pc_pokemon_confirmed"),
+		Vector2i(460, 190),
+		true,
+		"Cancel",
+		Callable(self, "_on_pc_release_confirm_cancelled")
+	)
+
+
+func _on_pc_release_confirm_cancelled() -> void:
+	_set_pc_release_mode_active(false)
+
+
+func _pc_release_name_for_source(source: Dictionary) -> String:
+	match str(source.get("type", "")):
+		"party":
+			var party_index: int = _pc_party_index_for_owned_id(int(source.get("pokemonId", 0)))
+			if party_index >= 0:
+				var pokemon: Pokemon = PlayerSave.party[party_index]
+				if pokemon != null and pokemon.species.strip_edges() != "":
+					return pokemon.species.strip_edges()
+		"box":
+			var pokemon_response: Dictionary = _pc_box_pokemon_response_at_location(int(source.get("boxIndex", -1)), int(source.get("slotIndex", -1)))
+			if not pokemon_response.is_empty():
+				var payload: Dictionary = _dictionary_from_value(pokemon_response.get("pokemon", {}))
+				return _pc_payload_species(payload)
+	return "Pokemon"
+
+
+func _release_selected_pc_pokemon_confirmed() -> void:
+	await _release_selected_pc_pokemon()
+
+
+func _release_selected_pc_pokemon() -> void:
+	if pc_release_in_progress or pc_selected_release_source.is_empty():
+		return
+	var pokemon_id := int(pc_selected_release_source.get("pokemonId", 0))
+	if pokemon_id <= 0:
+		_clear_pc_release_selection()
+		return
+
+	pc_release_in_progress = true
+	_refresh_pc_release_controls()
+	pc_status_label.text = "Releasing..."
+	var result: Dictionary = await PokemonStorageService.release_pokemon(pokemon_id)
+	pc_release_in_progress = false
+	if not bool(result.get("success", false)):
+		pc_status_label.text = "Release failed."
+		_add_chat_message("Could not release Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_refresh_pc_release_controls()
+		return
+
+	_set_pc_release_mode_active(false)
+	_add_chat_message("Pokemon released.")
+	_refresh_party()
+	await _refresh_pc_state(_pc_search_query() != "")
 
 
 func _on_pc_party_slot_pressed(slot_index: int) -> void:
 	if pc_move_in_progress:
 		return
 	var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index >= 0 and slot_index < PlayerSave.party.size() else null
-	var storage_slot := _pc_storage_slot_for_party_pokemon(pokemon, slot_index)
-	var has_pokemon := pokemon != null
-	if pc_selected_source.is_empty():
-		if not has_pokemon:
-			return
-		if pokemon == null or pokemon.owned_pokemon_id <= 0:
-			return
-		pc_selected_source = {
-			"type": "party",
-			"partySlot": storage_slot,
-			"pokemonId": pokemon.owned_pokemon_id,
-		}
-		pc_status_label.text = "Selected %s." % pokemon.species
-		_render_pc_party()
-		_render_pc_box()
-		return
-
-	if _pc_source_matches("party", storage_slot):
-		pc_selected_source = {}
-		pc_status_label.text = "Selection cleared."
-		_render_pc_party()
-		_render_pc_box()
-		return
-
-	if has_pokemon:
-		await _move_pc_selection_to(PokemonStorageService.party_location(storage_slot))
-		return
-
-	if str(pc_selected_source.get("type", "")) == "box":
-		var target := PokemonStorageService.next_empty_party_location(PlayerSave.party.size())
-		if target.is_empty():
-			pc_status_label.text = "Your party is full."
-			return
-		await _move_pc_selection_to(target)
-		return
-
-	pc_status_label.text = "Choose an occupied party slot or a box slot."
+	if pokemon != null:
+		_show_pokemon_summary(slot_index)
 
 
 func _on_pc_box_slot_pressed(slot_index: int) -> void:
@@ -16825,35 +17605,8 @@ func _on_pc_box_slot_pressed(slot_index: int) -> void:
 	var slot_map := _pc_box_slot_map()
 	var slot_state: Dictionary = _dictionary_from_value(slot_map.get(slot_index, {}))
 	var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
-	if pc_selected_source.is_empty():
-		if pokemon_response.is_empty():
-			return
-		var pokemon_id := int(pokemon_response.get("id", 0))
-		if pokemon_id <= 0:
-			return
-		pc_selected_source = {
-			"type": "box",
-			"boxIndex": pc_selected_box_index,
-			"slotIndex": slot_index,
-			"pokemonId": pokemon_id,
-		}
-		pc_status_label.text = "Selected boxed Pokemon."
-		_render_pc_party()
-		_render_pc_box()
-		return
-
-	if _pc_source_matches("box", slot_index):
-		pc_selected_source = {}
-		pc_status_label.text = "Selection cleared."
-		_render_pc_party()
-		_render_pc_box()
-		return
-
-	if str(pc_selected_source.get("type", "")) == "party" and PlayerSave.party.size() <= 1 and pokemon_response.is_empty():
-		pc_status_label.text = "You must keep at least one Pokemon in your party."
-		return
-
-	await _move_pc_selection_to(PokemonStorageService.box_location(pc_selected_box_index, slot_index))
+	if not pokemon_response.is_empty():
+		_open_pc_box_pokemon_summary(pokemon_response)
 
 
 func _on_pc_slot_dropped(source: Dictionary, target: Dictionary) -> void:
@@ -16876,11 +17629,7 @@ func _pc_target_has_pokemon(target: Dictionary) -> bool:
 			var party_slot := int(target.get("partySlot", -1))
 			return _pc_party_pokemon_at_storage_slot(party_slot) != null
 		"box":
-			if int(target.get("boxIndex", -1)) != pc_selected_box_index:
-				return false
-			var slot_map := _pc_box_slot_map()
-			var slot_state: Dictionary = _dictionary_from_value(slot_map.get(int(target.get("slotIndex", -1)), {}))
-			return not _dictionary_from_value(slot_state.get("pokemon", {})).is_empty()
+			return not _pc_box_pokemon_response_at_location(int(target.get("boxIndex", -1)), int(target.get("slotIndex", -1))).is_empty()
 	return false
 
 
@@ -16916,22 +17665,43 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 		return
 
 	pc_selected_source = {}
+	_clear_pc_release_selection()
 	var compacted := await _compact_pc_party_storage_slots("after_move")
 	if not compacted:
 		_apply_pc_party_slot_move(source, target, target_party_pokemon_before, target_box_pokemon_id_before)
 	var location: Dictionary = _dictionary_from_value(result.get("location", {}))
 	_add_chat_message("Pokemon moved to %s." % PokemonStorageService.storage_location_label(location))
 	_refresh_party()
-	await _refresh_pc_state(false)
+	await _refresh_pc_state(_pc_search_query() != "")
 
 
 func _pc_box_pokemon_id_at_target(target: Dictionary) -> int:
-	if str(target.get("type", "")) != "box" or int(target.get("boxIndex", -1)) != pc_selected_box_index:
+	if str(target.get("type", "")) != "box":
 		return 0
-	var slot_map := _pc_box_slot_map()
-	var slot_state: Dictionary = _dictionary_from_value(slot_map.get(int(target.get("slotIndex", -1)), {}))
-	var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
-	return int(pokemon_response.get("id", 0))
+	var pokemon_response := _pc_box_pokemon_response_at_location(int(target.get("boxIndex", -1)), int(target.get("slotIndex", -1)))
+	return _pc_owned_pokemon_id_from_response(pokemon_response)
+
+
+func _pc_box_pokemon_response_at_location(box_index: int, slot_index: int) -> Dictionary:
+	if box_index < 0 or slot_index < 0:
+		return {}
+	if box_index == pc_selected_box_index:
+		var current_slot_map := _pc_box_slot_map()
+		var current_slot_state: Dictionary = _dictionary_from_value(current_slot_map.get(slot_index, {}))
+		var current_response: Dictionary = _dictionary_from_value(current_slot_state.get("pokemon", {}))
+		if not current_response.is_empty():
+			return current_response
+
+	for box_value: Variant in pc_all_boxes:
+		var box: Dictionary = _dictionary_from_value(box_value)
+		if int(box.get("boxIndex", -1)) != box_index:
+			continue
+		var slots: Array = _array_from_variant(box.get("slots", []))
+		for slot_value: Variant in slots:
+			var slot_state: Dictionary = _dictionary_from_value(slot_value)
+			if int(slot_state.get("slotIndex", -1)) == slot_index:
+				return _dictionary_from_value(slot_state.get("pokemon", {}))
+	return {}
 
 
 func _apply_pc_party_slot_move(source: Dictionary, target: Dictionary, target_party_pokemon_before: Pokemon, target_box_pokemon_id_before: int) -> void:

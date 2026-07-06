@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.3.0 - 2026-07-06
+
+**Added**
+- Added PC Boxes. You can now open the PC from a physical PC in the overworld and manage your Pokemon storage from there.
+- Added drag-and-drop support for PC Boxes. Move Pokemon between box slots and party slots by dragging them.
+- Added PC search. You can find Pokemon by name, type, ability, or held item across your boxes.
+- Added Pokemon release support from the PC, with a confirmation warning before a Pokemon is released permanently.
+- Added held item markers to party slots so you can quickly see when a Pokemon is holding an item.
+- Added new battle move animations for Earthquake, Knock Off, Focus Blast, U-turn, Flip Turn, Stealth Rock, and Rapid Spin.
+
+**Changed**
+- Battles should feel smoother, with cleaner timing and more responsive battle presentation.
+- PC Boxes now use clearer box tabs, improved slot visuals, draggable windows, and type-colored box slots.
+- Pokemon summaries can now be opened from PC slots by clicking a Pokemon.
+
+**Fixed**
+- Improved several battle presentation issues around switching, HP updates, fainted Pokemon, and battle startup visuals.
+
 ## 0.2.9 - 2026-07-03
 
 **Added**

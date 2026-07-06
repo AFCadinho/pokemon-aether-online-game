@@ -11,49 +11,30 @@ var drop_target: Dictionary = {}
 var drag_title := "Pokemon"
 var drag_subtitle := ""
 var drag_texture: Texture2D
+var use_native_drag := true
 
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
-	if disabled or drag_source.is_empty():
+	if not use_native_drag or disabled or drag_source.is_empty():
 		return null
 
-	var preview := PanelContainer.new()
-	preview.custom_minimum_size = Vector2(150, 44)
-	preview.modulate = Color(1, 1, 1, 0.88)
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	preview.add_child(row)
-
-	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(32, 32)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = drag_texture
-	row.add_child(icon)
-
-	var text_stack := VBoxContainer.new()
-	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(text_stack)
-
-	var title := Label.new()
-	title.text = drag_title
-	title.clip_text = true
-	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	text_stack.add_child(title)
-
-	var subtitle := Label.new()
-	subtitle.text = drag_subtitle
-	subtitle.clip_text = true
-	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	subtitle.add_theme_font_size_override("font_size", 11)
-	text_stack.add_child(subtitle)
-
-	set_drag_preview(preview)
+	set_drag_preview(_create_drag_icon_preview())
 	return {
 		"kind": DRAG_KIND,
 		"source": drag_source.duplicate(true),
 	}
+
+
+func _create_drag_icon_preview() -> Control:
+	var preview := TextureRect.new()
+	preview.custom_minimum_size = Vector2(58, 58)
+	preview.size = Vector2(58, 58)
+	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	preview.texture = drag_texture
+	preview.modulate = Color(1, 1, 1, 0.92)
+	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return preview
 
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:

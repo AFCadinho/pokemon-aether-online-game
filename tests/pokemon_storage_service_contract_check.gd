@@ -9,6 +9,7 @@ func _init() -> void:
 	_check_boxes_response_parsing()
 	_check_storage_location_parsing()
 	_check_move_payload_shape()
+	_check_release_response_parsing()
 	_check_empty_party_target_uses_next_contiguous_slot()
 
 	quit(1 if failed else 0)
@@ -73,6 +74,21 @@ func _check_move_payload_shape() -> void:
 	_check_equal((payload.get("target", {}) as Dictionary).get("type", ""), "box", "move target type")
 	_check_equal((payload.get("target", {}) as Dictionary).get("boxIndex", -1), 2, "move target box")
 	_check_equal((payload.get("target", {}) as Dictionary).get("slotIndex", -1), 9, "move target slot")
+
+
+func _check_release_response_parsing() -> void:
+	var result := StorageService.parse_release_response({
+		"success": true,
+		"body": {
+			"hasParty": true,
+			"party": [
+				{"species": "Pikachu", "level": 5},
+			],
+		},
+	})
+	_check_equal(result.get("success", false), true, "release parse success")
+	_check_equal(result.get("hasParty", false), true, "release party state")
+	_check_equal((result.get("party", []) as Array).size(), 1, "release party size")
 
 
 func _check_empty_party_target_uses_next_contiguous_slot() -> void:

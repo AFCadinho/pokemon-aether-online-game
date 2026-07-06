@@ -30,10 +30,11 @@ const SHINY_SLOT_SHADOW_SIZE := 8
 @onready var seperator: Control = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Seperator
 @onready var level_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LevelLabel
 
-var slot_index := -1
-var press_global_position := Vector2.ZERO
-var is_hovered := false
-var current_is_shiny := false
+var slot_index: int = -1
+var press_global_position: Vector2 = Vector2.ZERO
+var is_hovered: bool = false
+var current_is_shiny: bool = false
+var held_item_marker: Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -46,6 +47,7 @@ func _ready() -> void:
 		click_button.mouse_entered.connect(_on_click_button_mouse_entered)
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):
 		click_button.mouse_exited.connect(_on_click_button_mouse_exited)
+	_setup_held_item_marker()
 	_apply_slot_style()
 	
 func set_pokemon(pokemon: Pokemon) -> void:
@@ -60,6 +62,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	_update_experience_bar(pokemon)
 	
 	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	_set_held_item_marker(pokemon.item)
 	click_button.disabled = false
 	_apply_slot_style()
 	
@@ -71,11 +74,75 @@ func set_empty() -> void:
 	name_label.tooltip_text = ""
 	shiny_badge.visible = false
 	pokemon_sprite.texture = null
+	_set_held_item_marker("")
 	hp_bar.value = 0.0
 	exp_bar.value = 0.0
 	exp_bar.visible = false
 	click_button.disabled = true
 	_apply_slot_style()
+
+func _setup_held_item_marker() -> void:
+	if held_item_marker != null:
+		return
+	held_item_marker = Control.new()
+	held_item_marker.name = "HeldItemMarker"
+	held_item_marker.visible = false
+	held_item_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	held_item_marker.custom_minimum_size = Vector2(10, 14)
+	held_item_marker.anchor_left = 1.0
+	held_item_marker.anchor_right = 1.0
+	held_item_marker.anchor_top = 0.0
+	held_item_marker.anchor_bottom = 0.0
+	held_item_marker.offset_left = -10.0
+	held_item_marker.offset_top = 0.0
+	held_item_marker.offset_right = 0.0
+	held_item_marker.offset_bottom = 14.0
+	held_item_marker.z_index = 5
+	pokemon_sprite.add_child(held_item_marker)
+
+	var item_chip: PanelContainer = _create_held_item_chip(Color("#f5c33b"), Color("#2a1700"))
+	item_chip.position = Vector2(1, 1)
+	held_item_marker.add_child(item_chip)
+
+	var red_stripe: PanelContainer = PanelContainer.new()
+	red_stripe.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	red_stripe.custom_minimum_size = Vector2(6, 2)
+	red_stripe.size = Vector2(6, 2)
+	red_stripe.position = Vector2(2, 7)
+	var stripe_style: StyleBoxFlat = StyleBoxFlat.new()
+	stripe_style.bg_color = Color("#c93324")
+	stripe_style.border_color = Color("#6f140d")
+	stripe_style.border_width_bottom = 1
+	red_stripe.add_theme_stylebox_override("panel", stripe_style)
+	held_item_marker.add_child(red_stripe)
+
+
+func _create_held_item_chip(fill_color: Color, border_color: Color) -> PanelContainer:
+	var chip: PanelContainer = PanelContainer.new()
+	chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chip.custom_minimum_size = Vector2(8, 12)
+	chip.size = Vector2(8, 12)
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = fill_color
+	style.border_color = border_color
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 1
+	style.corner_radius_top_right = 1
+	style.corner_radius_bottom_right = 1
+	style.corner_radius_bottom_left = 1
+	chip.add_theme_stylebox_override("panel", style)
+	return chip
+
+
+func _set_held_item_marker(item_id: String) -> void:
+	if held_item_marker == null:
+		return
+	var normalized_item_id: String = item_id.strip_edges()
+	held_item_marker.visible = normalized_item_id != ""
+	held_item_marker.tooltip_text = "Holding %s" % normalized_item_id if normalized_item_id != "" else ""
 
 func _on_click_button_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):
@@ -105,8 +172,8 @@ func _apply_slot_style() -> void:
 	var background: Color = SLOT_BG
 	var border: Color = SLOT_BORDER
 	var shadow: Color = SLOT_SHADOW
-	var border_width := SLOT_BORDER_WIDTH
-	var shadow_size := SLOT_SHADOW_SIZE
+	var border_width: int = SLOT_BORDER_WIDTH
+	var shadow_size: int = SLOT_SHADOW_SIZE
 	if current_is_shiny:
 		background = SHINY_SLOT_BG
 		border = SHINY_SLOT_BORDER
@@ -121,8 +188,8 @@ func _apply_slot_style() -> void:
 	add_theme_stylebox_override("panel", _make_slot_style(background, border, shadow, border_width, shadow_size))
 
 func _update_experience_bar(pokemon: Pokemon) -> void:
-	var current_level_exp := pokemon.current_level_exp
-	var next_level_exp := pokemon.next_level_exp
+	var current_level_exp: int = pokemon.current_level_exp
+	var next_level_exp: int = pokemon.next_level_exp
 	if next_level_exp <= current_level_exp:
 		exp_bar.value = 0.0
 		exp_bar.visible = false
