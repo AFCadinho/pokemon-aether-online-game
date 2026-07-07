@@ -1562,6 +1562,46 @@
       "sound_paths": {
         "PRSFX- Light Screen.wav": "res://assets/battles/animations/lightscreen/PRSFX- Light Screen.wav"
       }
+    },
+    "auroraveil": {
+      "template": "imported_sheet",
+      "category": "screen",
+      "data_path": "res://assets/battles/animations/auroraveil/auroraveil.json",
+      "sheet_path": "res://assets/battles/animations/auroraveil/PRAS- Weather.png",
+      "background_path": "res://assets/battles/animations/auroraveil/PRAS- Aurora BG.png",
+      "foreground_path": "res://assets/battles/animations/auroraveil/PRAS- Aurora Veil FG.png",
+      "sound_paths": {
+        "PRSFX- Aurora Veil1.wav": "res://assets/battles/animations/auroraveil/PRSFX- Aurora Veil1.wav",
+        "PRSFX- Aurora Veil2.wav": "res://assets/battles/animations/auroraveil/PRSFX- Aurora Veil2.wav",
+        "PRSFX- Aurora Veil3.wav": "res://assets/battles/animations/auroraveil/PRSFX- Aurora Veil3.wav",
+        "PRSFX- Aurora Veil4.wav": "res://assets/battles/animations/auroraveil/PRSFX- Aurora Veil4.wav"
+      },
+      "speed_scale": 1.15,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "visual_color": [
+        0.55,
+        1.0,
+        0.9,
+        1.0
+      ],
+      "sprite_tint": [
+        0.84,
+        1.0,
+        0.96,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.82,
+      "sprite_position_offset": [
+        0,
+        10
+      ]
     }
   }
 }
