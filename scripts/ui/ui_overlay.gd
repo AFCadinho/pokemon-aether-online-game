@@ -13639,9 +13639,9 @@ func _on_staff_teleport_button_pressed() -> void:
 	staff_teleport_popup.visible = not staff_teleport_popup.visible
 	if staff_teleport_popup.visible:
 		_activate_ui_panel(staff_teleport_popup)
-		_load_staff_teleport_points_if_needed()
+		_load_staff_teleport_points_if_needed(true)
 		_load_staff_teleport_online_players_if_needed()
-		_load_staff_teleport_safe_points_if_needed()
+		_load_staff_teleport_safe_points_if_needed(true)
 	else:
 		_deactivate_ui_panel(staff_teleport_popup)
 
@@ -13653,10 +13653,10 @@ func _hide_staff_teleport_popup() -> void:
 		_deactivate_ui_panel(staff_teleport_popup)
 
 
-func _load_staff_teleport_points_if_needed() -> void:
+func _load_staff_teleport_points_if_needed(force := false) -> void:
 	if not _can_teleport_self():
 		return
-	if not staff_teleport_maps.is_empty() or staff_teleport_points_loading:
+	if (not force and not staff_teleport_maps.is_empty()) or staff_teleport_points_loading:
 		return
 	staff_teleport_points_loading = true
 	if staff_teleport_confirm_button != null:
@@ -13703,10 +13703,10 @@ func _load_staff_teleport_online_players_if_needed(force := false) -> void:
 		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_safe_maps.is_empty()
 
 
-func _load_staff_teleport_safe_points_if_needed() -> void:
+func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
 	if not _can_teleport_other_player():
 		return
-	if not staff_teleport_safe_maps.is_empty() or staff_teleport_safe_points_loading:
+	if (not force and not staff_teleport_safe_maps.is_empty()) or staff_teleport_safe_points_loading:
 		return
 	staff_teleport_safe_points_loading = true
 	if staff_teleport_send_player_button != null:

@@ -1,0 +1,100 @@
+{
+  "kanto_oaks_lab": {
+    "label": "Oak's Lab",
+    "points": {
+      "pallet_town_exit": {
+        "facingDirection": "down",
+        "label": "Pallet Town Exit",
+        "safe": true,
+        "spawnMarker": "FromPalletTown",
+        "tile": {
+          "x": 7,
+          "y": 11
+        }
+      }
+    },
+    "regionName": "Kanto",
+    "scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
+  },
+  "kanto_pallet_town": {
+    "label": "Pallet Town",
+    "points": {
+      "oaks_lab_entrance": {
+        "facingDirection": "up",
+        "label": "Oak's Lab Entrance",
+        "safe": true,
+        "spawnMarker": "FromOaksLab",
+        "tile": {
+          "x": 40,
+          "y": 26
+        }
+      },
+      "route_1_entrance": {
+        "facingDirection": "down",
+        "label": "Route 1 Entrance",
+        "safe": true,
+        "spawnMarker": "FromRoute1",
+        "tile": {
+          "x": 31,
+          "y": 3
+        }
+      },
+      "spawn": {
+        "facingDirection": "down",
+        "label": "Spawn",
+        "safe": true,
+        "spawnMarker": "InitialSpawn",
+        "tile": {
+          "x": 20,
+          "y": 17
+        }
+      }
+    },
+    "regionName": "Kanto",
+    "scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+  },
+  "kanto_route_1": {
+    "label": "Route 1",
+    "points": {
+      "pallet_town_entrance": {
+        "facingDirection": "up",
+        "label": "Pallet Town Entrance",
+        "safe": true,
+        "spawnMarker": "FromPalletTown",
+        "tile": {
+          "x": 12,
+          "y": 44
+        }
+      },
+      "viridian_city_entrance": {
+        "facingDirection": "down",
+        "label": "Viridian City Entrance",
+        "safe": true,
+        "spawnMarker": "FromViridianCity",
+        "tile": {
+          "x": 12,
+          "y": 1
+        }
+      }
+    },
+    "regionName": "Kanto",
+    "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
+  },
+  "kanto_viridian_city": {
+    "label": "Viridian City",
+    "points": {
+      "route_1_entrance": {
+        "facingDirection": "up",
+        "label": "Route 1 Entrance",
+        "safe": true,
+        "spawnMarker": "FromRoute1",
+        "tile": {
+          "x": 24,
+          "y": 37
+        }
+      }
+    },
+    "regionName": "Kanto",
+    "scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+  }
+}

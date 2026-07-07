@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://80ehka6bybdc" path="res://assets/tilesets/overworld/interior/Interiors11.png" id="4_sxk7c"]
 [ext_resource type="Texture2D" uid="uid://bocjn3eo81c1r" path="res://assets/tilesets/overworld/interior/Interiors14.png" id="5_625wd"]
 [ext_resource type="Script" uid="uid://dc87fdx313qm4" path="res://scripts/world/kanto/towns/pallet_town/oak.gd" id="6_m2ga1"]
-[ext_resource type="Script" uid="uid://dguhd4ywnh3rf" path="res://scripts/world/kanto/towns/pallet_town/to_pallet_town.gd" id="8_rguhm"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="8_rguhm"]
 [ext_resource type="Texture2D" uid="uid://coa5lp430b8p8" path="res://assets/npcs/gen4-ow-sprites/phone001.png" id="8_ywtjb"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="10_7ad88"]
@@ -3692,6 +3692,8 @@ tile_set = SubResource("TileSet_rguhm")
 
 [node name="ToPalletTown" type="Area2D" parent="Exits" unique_id=1650591305]
 script = ExtResource("8_rguhm")
+target_scene_path = "uid://cbb7318supm5h"
+target_spawn_name = "FromOaksLab"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=1515532203]
 position = Vector2(258, 400)

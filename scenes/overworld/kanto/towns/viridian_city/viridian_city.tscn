@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://b8tl17hk3yovn"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/viridian_city/viridian_city.visual.tscn" id="1_leyf6"]
+[ext_resource type="Script" uid="uid://cnkkdc5ikupld" path="res://scripts/world/kanto/towns/viridian_city.gd" id="2_meta"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_route1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
+size = Vector2(96, 36)
+
+[node name="ViridianCity" type="Node2D" unique_id=1723060210]
+script = ExtResource("2_meta")
+
+[node name="ViridianCity" parent="." unique_id=76574466 instance=ExtResource("1_leyf6")]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=2084573961]
+
+[node name="FromRoute1" type="Marker2D" parent="Spawns" unique_id=2062382951]
+position = Vector2(784, 1200)
+
+[node name="Exits" type="Node2D" parent="." unique_id=1188707532]
+
+[node name="ToRoute1" type="Area2D" parent="Exits" unique_id=1702409658]
+position = Vector2(752, 1264)
+script = ExtResource("3_route1")
+target_scene_path = "uid://b65lnk8twsct"
+target_spawn_name = "FromViridianCity"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute1" unique_id=1666739729]
+position = Vector2(48, 18)
+shape = SubResource("RectangleShape2D_route1")
+
+[connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]

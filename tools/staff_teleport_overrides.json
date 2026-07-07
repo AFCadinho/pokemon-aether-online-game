@@ -1,0 +1,62 @@
+{
+  "maps": {
+    "kanto_oaks_lab": {
+      "points": {
+        "from_pallet_town": {
+          "facingDirection": "down",
+          "id": "pallet_town_exit",
+          "label": "Pallet Town Exit",
+          "safe": true
+        }
+      }
+    },
+    "kanto_pallet_town": {
+      "points": {
+        "from_oaks_lab": {
+          "facingDirection": "up",
+          "id": "oaks_lab_entrance",
+          "label": "Oak's Lab Entrance",
+          "safe": true
+        },
+        "from_route_1": {
+          "facingDirection": "down",
+          "id": "route_1_entrance",
+          "label": "Route 1 Entrance",
+          "safe": true
+        },
+        "initial_spawn": {
+          "facingDirection": "down",
+          "id": "spawn",
+          "label": "Spawn",
+          "safe": true
+        }
+      }
+    },
+    "kanto_route_1": {
+      "points": {
+        "from_pallet_town": {
+          "facingDirection": "up",
+          "id": "pallet_town_entrance",
+          "label": "Pallet Town Entrance",
+          "safe": true
+        },
+        "from_viridian_city": {
+          "facingDirection": "down",
+          "id": "viridian_city_entrance",
+          "label": "Viridian City Entrance",
+          "safe": true
+        }
+      }
+    },
+    "kanto_viridian_city": {
+      "points": {
+        "from_route_1": {
+          "facingDirection": "up",
+          "id": "route_1_entrance",
+          "label": "Route 1 Entrance",
+          "safe": true
+        }
+      }
+    }
+  }
+}

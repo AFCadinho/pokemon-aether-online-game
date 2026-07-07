@@ -11,8 +11,14 @@ extends Node2D
 @export_range(0.0, 1.0, 0.01) var fish_encounter_chance := 1.0
 @export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
 
+const TILE_SIZE := 32.0
+const TREE_TOP_VISUAL_LAYERS := [
+	"Structures Top",
+]
+
 
 func _ready() -> void:
+	_configure_visual_layer_order()
 	await _load_encounter_area_metadata()
 
 
@@ -40,6 +46,27 @@ func get_location_metadata() -> Dictionary:
 
 func get_music_track_path() -> String:
 	return music_track_path
+
+
+func _configure_visual_layer_order() -> void:
+	var visuals := get_node_or_null("Visuals")
+	if visuals == null:
+		return
+
+	for layer_name: String in TREE_TOP_VISUAL_LAYERS:
+		var layer := visuals.get_node_or_null(layer_name) as TileMapLayer
+		if layer != null:
+			_set_tree_top_layer_z_index(layer)
+
+
+func _set_tree_top_layer_z_index(layer: TileMapLayer) -> void:
+	var used_rect := layer.get_used_rect()
+	if used_rect.size == Vector2i.ZERO:
+		return
+
+	var layer_bottom_y := layer.global_position.y + float(used_rect.position.y + used_rect.size.y) * TILE_SIZE
+	layer.z_as_relative = false
+	layer.z_index = clampi(floori(layer_bottom_y), -4096, 4096)
 
 
 func get_wild_encounter_area_id() -> String:

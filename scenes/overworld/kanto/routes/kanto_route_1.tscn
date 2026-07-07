@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://ckuih8fdbjcwv" path="res://assets/tilesets/overworld/nature/flowers/Outdoor1.png" id="5_js2aw"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_ykhnd"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_lmnv3"]
-[ext_resource type="Script" uid="uid://s6yudwt884a8" path="res://scripts/world/kanto/routes/to_pallet_town.gd" id="8_odd7f"]
 [ext_resource type="Texture2D" uid="uid://bk6vp4prd8wbj" path="res://assets/npcs/gen4-ow-sprites/trchar017.png" id="9_qefnj"]
 [ext_resource type="Texture2D" uid="uid://d4c0skpe6wmsw" path="res://assets/sprites/mugshots/gary.png" id="10_6o5ht"]
 [ext_resource type="Texture2D" uid="uid://b5gghkoggsglg" path="res://assets/npcs/gen5-ow-pack/Ultimate Gen 5 Overworlds Pack/BW_082.png" id="10_gd1nu"]
@@ -25,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://ydeq0ashdvoi" path="res://assets/tilesets/da5h3mn-180d5fbd-2009-494d-8302-b394efb10c92.png" id="17_qqtdo"]
 [ext_resource type="Texture2D" uid="uid://yq32rn0d77iy" path="res://assets/tilesets/Custom Outside tileset.png" id="18_8kkc8"]
 [ext_resource type="Texture2D" uid="uid://bp4fdpeow1m4y" path="res://assets/tilesets/Gen 4 Pack/Autotiles/grass.png" id="19_4m8jl"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="20_viridian"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_coq5q"]
 texture = ExtResource("1_428bq")
@@ -13027,23 +13027,31 @@ npc_sprite_frames = SubResource("SpriteFrames_bnyo4")
 
 [node name="ToPalletTown" type="Area2D" parent="Exits" unique_id=1358299929]
 position = Vector2(407, 1459)
-script = ExtResource("8_odd7f")
+script = ExtResource("20_viridian")
 target_scene_path = "uid://cbb7318supm5h"
+target_spawn_name = "FromRoute1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=1757925127]
 position = Vector2(9, 31)
 shape = SubResource("RectangleShape2D_7kpb1")
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=185773419]
-visible = false
+position = Vector2(407, -47)
+script = ExtResource("20_viridian")
+target_scene_path = "uid://b8tl17hk3yovn"
+target_spawn_name = "FromRoute1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=297572459]
-visible = false
+position = Vector2(9, 31)
+shape = SubResource("RectangleShape2D_7kpb1")
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1226721215]
 
 [node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=609805199]
 position = Vector2(400, 1424)
+
+[node name="FromViridianCity" type="Marker2D" parent="Spawns" unique_id=222652886]
+position = Vector2(400, 48)
 
 [node name="Test" type="Node2D" parent="." unique_id=897342471]
 
@@ -13058,3 +13066,4 @@ tile_map_data = PackedByteArray("AAAgAAIAAgAAAAEAAAAgAAMAAgAAAAIAAAAgAAcAAgAAAAM
 tile_set = SubResource("TileSet_8kkc8")
 
 [connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
