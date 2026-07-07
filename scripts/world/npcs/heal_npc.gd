@@ -16,6 +16,9 @@ class_name HealNPC
 	"Please try again in a moment.",
 ]
 @export var healed_system_message := "Your party was healed."
+@export var respawn_point_id := ""
+@export var respawn_marker_path: NodePath = ^"RespawnMarker"
+@export_enum("up", "down", "left", "right") var respawn_facing_direction := "down"
 
 
 func interact_with_player(_player: Node2D) -> void:
@@ -36,7 +39,8 @@ func interact_with_player(_player: Node2D) -> void:
 		await show_dialogue(failure_dialogue_lines)
 		return
 
-	var result: Dictionary = await party_heal_service.call("heal_current_party_and_save")
+	var respawn_point := _build_respawn_point_payload()
+	var result: Dictionary = await party_heal_service.call("heal_current_party_and_save", respawn_point)
 	if not bool(result.get("success", false)):
 		push_warning("HealNPC: party heal failed: %s" % str(result.get("error", "Unknown error")))
 		await show_dialogue(failure_dialogue_lines)
@@ -44,8 +48,10 @@ func interact_with_player(_player: Node2D) -> void:
 
 	if bool(result.get("changed", false)):
 		_add_system_message(healed_system_message)
+		await _save_respawn_point()
 		await show_dialogue(success_dialogue_lines)
 	else:
+		await _save_respawn_point()
 		await show_dialogue(already_healed_dialogue_lines)
 
 
@@ -111,3 +117,68 @@ func _add_system_message(text: String) -> void:
 	var ui_overlay := get_tree().current_scene.get_node_or_null("UIOverlay") if get_tree().current_scene != null else null
 	if ui_overlay != null and ui_overlay.has_method("add_system_message"):
 		ui_overlay.call("add_system_message", message)
+
+
+func _save_respawn_point() -> void:
+	var payload := _build_respawn_point_payload()
+	if payload.is_empty():
+		return
+
+	var player_game_state_service := get_node_or_null("/root/PlayerGameStateService")
+	if player_game_state_service == null or not player_game_state_service.has_method("save_respawn_point"):
+		return
+
+	var result: Dictionary = await player_game_state_service.call("save_respawn_point", payload)
+	if not bool(result.get("success", false)):
+		push_warning("HealNPC: respawn point save failed: %s" % str(result.get("error", "Unknown error")))
+
+
+func _build_respawn_point_payload() -> Dictionary:
+
+	var current_map: Node = GameState.current_map
+	if current_map == null:
+		return {}
+
+	var marker := get_node_or_null(respawn_marker_path) as Node2D
+	if marker == null:
+		marker = self
+
+	var map_scene_path := _get_map_scene_path(current_map)
+	if map_scene_path.is_empty():
+		push_warning("HealNPC: cannot save respawn point without map scene path.")
+		return {}
+
+	var marker_id := respawn_point_id.strip_edges()
+	if marker_id.is_empty():
+		marker_id = npc_id.strip_edges()
+	if marker_id.is_empty():
+		marker_id = name
+
+	return {
+		"mapId": _get_map_id(current_map),
+		"mapScenePath": map_scene_path,
+		"position": {
+			"x": marker.global_position.x,
+			"y": marker.global_position.y,
+		},
+		"facingDirection": respawn_facing_direction,
+		"markerId": marker_id,
+	}
+
+
+func _get_map_id(map: Node) -> String:
+	if map != null and map.has_method("get_map_id"):
+		return str(map.call("get_map_id")).strip_edges()
+	if map != null:
+		return map.name
+	return ""
+
+
+func _get_map_scene_path(map: Node) -> String:
+	if map == null:
+		return ""
+	var scene_file_path := str(map.scene_file_path).strip_edges()
+	if not scene_file_path.is_empty():
+		return scene_file_path
+	var filename := str(map.get("filename")).strip_edges()
+	return filename

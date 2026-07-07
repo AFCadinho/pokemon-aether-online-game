@@ -24,3 +24,6 @@ animation = &"walk_down"
 shape = SubResource("RectangleShape2D_heal")
 
 [node name="FeetMarker" type="Marker2D" parent="."]
+
+[node name="RespawnMarker" type="Marker2D" parent="."]
+position = Vector2(0, 32)

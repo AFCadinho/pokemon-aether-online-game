@@ -2491,10 +2491,27 @@ func _finish_battle(result: Dictionary) -> void:
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
-	if not bool(result.get("skipPartyBattleSync", false)):
+	var skip_party_battle_sync := bool(result.get("skipPartyBattleSync", false)) or _should_skip_party_battle_sync_for_blackout(result)
+	if not skip_party_battle_sync:
 		_sync_player_save_from_battle_state()
 		PlayerPartyStateService.save_current_battle_party_state_deferred()
 	battle_ended.emit(result)
+
+
+func _should_skip_party_battle_sync_for_blackout(result: Dictionary) -> bool:
+	if _is_pvp_battle():
+		return false
+
+	var reason := str(result.get("reason", "")).strip_edges().to_lower()
+	if reason in ["caught", "flee"]:
+		return false
+	if reason in ["forfeit", "loss", "blackout"]:
+		return true
+
+	var winner := str(result.get("winner", "")).strip_edges().to_lower()
+	if winner.is_empty():
+		return false
+	return winner not in ["p1", "player 1", "player1"]
 
 func _warn_if_pvp_finish_has_pending_render_work(result: Dictionary) -> void:
 	if not _is_pvp_battle():

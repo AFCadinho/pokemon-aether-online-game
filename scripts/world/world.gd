@@ -1395,15 +1395,64 @@ func end_wild_battle() -> void:
 func _on_battle_ended(result: Dictionary) -> void:
 	var should_claim_wild_reward := _should_claim_wild_battle_reward(result)
 	var should_claim_trainer_reward := _should_claim_trainer_battle_reward(result)
+	var should_respawn_after_loss := _should_respawn_after_battle_loss(result, active_battle_kind)
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
 	var reward_trainer_name := active_trainer_name
 	end_wild_battle()
 	_notify_caught_pokemon_if_needed(result)
+	if should_respawn_after_loss:
+		await _respawn_after_battle_loss()
+		return
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
 	if should_claim_trainer_reward and reward_battle_id != "":
 		await _award_trainer_battle_rewards(reward_battle_id, reward_trainer_name)
+
+
+func _should_respawn_after_battle_loss(result: Dictionary, battle_kind: String) -> bool:
+	if battle_kind not in ["wild", "trainer"]:
+		return false
+
+	var reason := str(result.get("reason", "")).strip_edges().to_lower()
+	if reason in ["caught", "flee"]:
+		return false
+	if reason in ["forfeit", "loss", "blackout"]:
+		return true
+
+	var winner := str(result.get("winner", "")).strip_edges().to_lower()
+	if winner.is_empty():
+		return false
+	return winner not in ["p1", "player 1", "player1"]
+
+
+func _respawn_after_battle_loss() -> void:
+	var result: Dictionary = await PlayerGameStateService.respawn_player()
+	if not bool(result.get("success", false)):
+		push_warning("World: respawn after battle loss failed: %s" % str(result.get("error", "Unknown error")))
+		get_tree().call_group("ui_overlay", "add_system_message", "You blacked out, but no respawn point is available.")
+		return
+
+	_apply_respawn_party_response(_dictionary_from_value(result.get("party", {})))
+	var position_state := _dictionary_from_value(result.get("position", {}))
+	if position_state.is_empty():
+		push_warning("World: respawn response did not include a position.")
+		return
+
+	var apply_result: Dictionary = await apply_authorized_teleport_state(position_state)
+	if not bool(apply_result.get("success", false)):
+		push_warning("World: respawn position apply failed: %s" % str(apply_result.get("error", "Unknown error")))
+		return
+	get_tree().call_group("ui_overlay", "add_system_message", "You blacked out, returned to your last heal point, and your party was healed.")
+
+
+func _apply_respawn_party_response(party_response: Dictionary) -> void:
+	var player_save := get_node_or_null("/root/PlayerSave")
+	if player_save == null or not player_save.has_method("replace_party_from_state"):
+		return
+	var party_value: Variant = party_response.get("party", [])
+	if party_value is Array:
+		player_save.call("replace_party_from_state", party_value as Array)
 
 func _notify_caught_pokemon_if_needed(result: Dictionary) -> void:
 	if str(result.get("reason", "")) != "caught":

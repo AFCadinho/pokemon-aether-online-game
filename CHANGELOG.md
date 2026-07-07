@@ -5,9 +5,14 @@
 **Added**
 - Added a Heal NPC that can restore your party from the overworld.
 - Added a Nurse mugshot for Heal NPC dialogue.
+- Added persistent heal-point respawns for wild and NPC battle losses.
 
 **Changed**
 - Party healing now uses the same reusable healing flow across NPCs and developer tools.
+- Heal NPCs now store the player's last heal point for future blackout respawns.
+
+**Fixed**
+- Blackout respawns now heal the party and no longer let fainted battle state overwrite the healed party.
 
 ## 0.3.0 - 2026-07-06
 
