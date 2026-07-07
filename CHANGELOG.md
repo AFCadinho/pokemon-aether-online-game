@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.1 - 2026-07-07
+
+**Added**
+- Added a Heal NPC that can restore your party from the overworld.
+- Added a Nurse mugshot for Heal NPC dialogue.
+
+**Changed**
+- Party healing now uses the same reusable healing flow across NPCs and developer tools.
+
 ## 0.3.0 - 2026-07-06
 
 **Added**

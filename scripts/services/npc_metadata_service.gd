@@ -90,6 +90,11 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["dialogue"] = _get_string_array(npc_metadata.get("dialogue", []))
 	npc_metadata["blockedDialogue"] = _get_string_array(npc_metadata.get("blockedDialogue", []))
 	npc_metadata["allowedDialogue"] = _get_string_array(npc_metadata.get("allowedDialogue", []))
+	npc_metadata["successDialogue"] = _get_string_array(npc_metadata.get("successDialogue", []))
+	npc_metadata["alreadyHealedDialogue"] = _get_string_array(npc_metadata.get("alreadyHealedDialogue", []))
+	npc_metadata["noPartyDialogue"] = _get_string_array(npc_metadata.get("noPartyDialogue", []))
+	npc_metadata["failureDialogue"] = _get_string_array(npc_metadata.get("failureDialogue", []))
+	npc_metadata["healedSystemMessage"] = str(npc_metadata.get("healedSystemMessage", ""))
 	npc_metadata["requiresPartyPokemon"] = bool(npc_metadata.get("requiresPartyPokemon", false))
 	return npc_metadata
 

@@ -16328,11 +16328,7 @@ func _on_dev_heal_party_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	_hide_dev_add_menu_popup()
 	dev_heal_party_button.disabled = true
-	for pokemon: Pokemon in PlayerSave.party:
-		_heal_dev_party_pokemon(pokemon)
-
-	PlayerSave.party_changed.emit()
-	var result: Dictionary = await PlayerPartyStateService.save_current_party()
+	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
 	dev_heal_party_button.disabled = false
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not save healed party: %s" % str(result.get("error", "Unknown error")))
@@ -16342,39 +16338,6 @@ func _on_dev_heal_party_button_pressed() -> void:
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
 	_add_chat_message("Party healed.")
-
-func _heal_dev_party_pokemon(pokemon: Pokemon) -> void:
-	if pokemon == null:
-		return
-
-	var restored_max_hp: int = max(pokemon.max_hp, int(pokemon.stats.get("hp", pokemon.max_hp)), 1)
-	pokemon.max_hp = restored_max_hp
-	pokemon.current_hp = restored_max_hp
-	pokemon.has_saved_hp_state = true
-
-	for move_index in range(pokemon.moves.size()):
-		pokemon.moves[move_index] = _heal_dev_party_move(pokemon.moves[move_index])
-
-func _heal_dev_party_move(move_value: Variant) -> Variant:
-	if not (move_value is Dictionary):
-		return move_value
-
-	var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
-	var max_pp: int = int(_get_first_dictionary_value(
-		move_data,
-		["maxPp", "maxpp", "maxPP", "max_pp", "pp"],
-		0
-	))
-	if max_pp <= 0:
-		return move_data
-
-	move_data["pp"] = max_pp
-	move_data["currentPp"] = max_pp
-	move_data["currentPP"] = max_pp
-	move_data["current_pp"] = max_pp
-	move_data["maxPp"] = max_pp
-	move_data["maxpp"] = max_pp
-	return move_data
 
 func _show_dev_add_item_popup() -> void:
 	if not _can_use_dev_tools():

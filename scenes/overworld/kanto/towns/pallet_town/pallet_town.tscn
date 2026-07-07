@@ -5,8 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
 [ext_resource type="Texture2D" uid="uid://be1e15jiippau" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trAceTrainer_M.png" id="6_66okb"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/heal_npc.tscn" id="6_jhh0g"]
 [ext_resource type="Texture2D" uid="uid://dgvhjpghervgq" path="res://assets/sprites/mugshots/ace_trainer.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
+[ext_resource type="Texture2D" path="res://assets/npcs/gen4-ow-sprites/NPC 16.png" id="7_j16lr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/nurse_joy_mugshot.png" id="8_j16lr"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
@@ -24,6 +27,67 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ckaf6"]
+atlas = ExtResource("7_j16lr")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhh0g"]
+atlas = ExtResource("7_j16lr")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j16lr"]
+atlas = ExtResource("7_j16lr")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ltoox"]
+atlas = ExtResource("7_j16lr")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ltoox"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ckaf6")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhh0g")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j16lr")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ltoox")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation_3",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation_4",
 "speed": 5.0
 }]
 
@@ -1883,6 +1947,11 @@ npc_id = "kanto_pallet_town_johny_sins_1"
 display_name = "Johny Sins"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
 mugshot = ExtResource("7_66okb")
+
+[node name="HealNPC" parent="Entities/NPCs" unique_id=437133988 instance=ExtResource("6_jhh0g")]
+position = Vector2(368, 240)
+npc_sprite_frames = SubResource("SpriteFrames_ltoox")
+mugshot = ExtResource("8_j16lr")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
 
