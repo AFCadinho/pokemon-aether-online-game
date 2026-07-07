@@ -448,6 +448,8 @@ func _get_status_condition_effect_animation_key(event: Dictionary) -> String:
 			return "status_poisoned"
 		"tox", "toxic", "badlypoisoned", "toxicpoison":
 			return "status_badly_poisoned"
+		"brn", "burn", "burned":
+			return "status_burned"
 
 	return ""
 
@@ -468,6 +470,8 @@ func _get_residual_status_damage_effect_animation_key(event: Dictionary) -> Stri
 			return "status_poisoned"
 		"tox", "toxic", "badlypoisoned", "toxicpoison":
 			return "status_badly_poisoned"
+		"brn", "burn", "burned":
+			return "status_burned"
 
 	var source_key := _normalize_animation_key(str(event.get("source", "")))
 	match source_key:
@@ -475,6 +479,8 @@ func _get_residual_status_damage_effect_animation_key(event: Dictionary) -> Stri
 			return "status_poisoned"
 		"tox", "toxic", "badlypoisoned", "toxicpoison":
 			return "status_badly_poisoned"
+		"brn", "burn", "burned":
+			return "status_burned"
 
 	return ""
 

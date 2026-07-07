@@ -52,6 +52,9 @@ func _update_sprite_tint() -> void:
 	if condition_key == "badly_poisoned":
 		_apply_sprite_tint(Color(0.62, 0.0, 1.0, 1.0), 1.05, 0.62, 0.34)
 		return
+	if condition_key == "burned":
+		_apply_sprite_tint(Color(1.0, 0.32, 0.08, 1.0), 1.12, 0.42, 0.32)
+		return
 
 	_reset_sprite_tint()
 
@@ -98,5 +101,7 @@ func _normalize_condition(value: String) -> String:
 			return "poisoned"
 		"tox", "toxic", "badlypoisoned", "toxicpoison":
 			return "badly_poisoned"
+		"brn", "burn", "burned":
+			return "burned"
 		_:
 			return ""

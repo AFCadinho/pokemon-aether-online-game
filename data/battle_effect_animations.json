@@ -463,6 +463,50 @@
       ],
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "status_burned": {
+      "template": "imported_sheet",
+      "source": "Common:Burn",
+      "category": "status_condition",
+      "data_path": "res://assets/battles/animations/burn/burn.json",
+      "sheet_path": "res://assets/battles/animations/burn/PRAS- Status.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Burn.wav": "res://assets/battles/animations/burn/PRSFX- Burn.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        0.34,
+        0.12,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.56,
+        0.34,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        8
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "speed_scale": 1.14,
+      "source_anchor": "player",
+      "effect_position_offset": [
+        0,
+        -8
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   },
   "aliases": {

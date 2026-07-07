@@ -80,6 +80,7 @@ var presentation_state := preload("res://scripts/battle/battle_presentation_stat
 var public_confirmed_abilities_by_ident := {}
 var public_confirmed_items_by_ident := {}
 var status_condition_overlays: Dictionary = {}
+var pending_status_condition_overlay_players: Dictionary = {}
 var pending_knock_off_targets_by_ident := {}
 var pending_booster_energy_modifier_targets_by_ident := {}
 var stat_stages_by_ident: Dictionary = {}
@@ -3333,13 +3334,50 @@ func _sync_status_condition_overlay_for_player(player_id: String) -> void:
 		return
 
 	var condition_key := ""
-	if SettingsManager.battle_animations:
+	if pending_status_condition_overlay_players.has(player_id):
+		condition_key = ""
+	elif SettingsManager.battle_animations:
 		var pokemon_data := battle_state.get_active_player_pokemon(player_id)
 		if not pokemon_data.is_empty() and not _active_status_overlay_should_hide(pokemon_data):
 			condition_key = _get_persistent_status_condition_key(str(pokemon_data.get("status", "")))
 
 	if overlay.has_method("set_condition"):
 		overlay.call("set_condition", condition_key)
+
+func _prepare_pending_status_condition_overlays(events: Array) -> void:
+	pending_status_condition_overlay_players.clear()
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if str(event_data.get("type", "")) != "status":
+			continue
+		if not _status_event_starts_persistent_condition(event_data):
+			continue
+
+		var player_id := _get_player_id_from_ident(str(event_data.get("target", event_data.get("pokemon", ""))))
+		if player_id == "":
+			continue
+
+		pending_status_condition_overlay_players[player_id] = true
+
+	if not pending_status_condition_overlay_players.is_empty():
+		_sync_status_condition_overlays()
+
+func _release_pending_status_condition_overlay(event_data: Dictionary) -> void:
+	var player_id := _get_player_id_from_ident(str(event_data.get("target", event_data.get("pokemon", ""))))
+	if player_id == "":
+		return
+
+	pending_status_condition_overlay_players.erase(player_id)
+
+func _status_event_starts_persistent_condition(event_data: Dictionary) -> bool:
+	var state := str(event_data.get("state", "start")).strip_edges().to_lower()
+	if state == "end" or state == "cure" or state == "cured":
+		return false
+
+	return _get_persistent_status_condition_key(str(event_data.get("status", event_data.get("condition", "")))) != ""
 
 func _active_status_overlay_should_hide(pokemon_data: Dictionary) -> bool:
 	if bool(pokemon_data.get("fainted", false)):
@@ -3356,6 +3394,8 @@ func _get_persistent_status_condition_key(status: String) -> String:
 			return "poisoned"
 		"tox", "toxic", "badlypoisoned", "toxicpoison":
 			return "badly_poisoned"
+		"brn", "burn", "burned":
+			return "burned"
 		_:
 			return ""
 
@@ -5268,6 +5308,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 	var has_explicit_item_events := _events_have_explicit_item_events(ordered_events)
 	var should_play_switch_ball_animations := source != "initial_battle_events"
 	_prewarm_battle_event_animations(ordered_events)
+	_prepare_pending_status_condition_overlays(ordered_events)
 	event_presentation.reset_recent_context()
 
 	for event_index: int in range(ordered_events.size()):
@@ -5330,6 +5371,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			])
 		if event_type == "status":
 			battle_state.apply_event_conditions([event_data])
+			_release_pending_status_condition_overlay(event_data)
 			_update_hud_panels()
 			_update_party_slots()
 		if event_type == "switch" or event_type == "drag":
@@ -5358,6 +5400,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 	_sync_presentation_field_from_battle_state()
 	_prune_inactive_field_condition_ability_modifiers(_get_display_field_effects())
 	_update_battle_status_panels()
+	pending_status_condition_overlay_players.clear()
 	_update_hud_panels()
 	_update_party_slots()
 	_update_vs_panel_names()

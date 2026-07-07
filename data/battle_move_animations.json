@@ -1703,6 +1703,50 @@
         ],
         "suppress_shake": true
       }
+    },
+    "willowisp": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "data_path": "res://assets/battles/animations/willowisp/willowisp.json",
+      "sheet_path": "res://assets/battles/animations/willowisp/PRAS- Will O Wisp.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Will O Wisp1.wav": "res://assets/battles/animations/willowisp/PRSFX- Will O Wisp1.wav",
+        "PRSFX- Will O Wisp2.wav": "res://assets/battles/animations/willowisp/PRSFX- Will O Wisp2.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.86,
+        0.34,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.72,
+        0.9,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "speed_scale": 1.08,
+      "source_anchor": "target",
+      "effect_position_offset": [
+        0,
+        -12
+      ],
+      "sprite_zoom_multiplier": 0.78,
+      "sprite_position_offset": [
+        0,
+        0
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   }
 }

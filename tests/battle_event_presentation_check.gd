@@ -19,8 +19,10 @@ func _init() -> void:
 	_check_paralysis_cant_event_replays_status_effect_animation()
 	_check_poison_status_event_uses_status_effect_animation()
 	_check_badly_poisoned_status_event_uses_status_effect_animation()
+	_check_burn_status_event_uses_status_effect_animation()
 	_check_poison_damage_replays_status_effect_animation()
 	_check_badly_poisoned_damage_replays_status_effect_animation()
+	_check_burn_damage_replays_status_effect_animation()
 	quit(1 if failed else 0)
 
 
@@ -223,6 +225,19 @@ func _check_badly_poisoned_status_event_uses_status_effect_animation() -> void:
 	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "badly poisoned status start targets affected Pokemon")
 
 
+func _check_burn_status_event_uses_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "status",
+		"target": "p2a: Garchomp",
+		"status": "brn",
+		"state": "start",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_burned", "burn status start uses burn effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "burn status start targets affected Pokemon")
+
+
 func _check_poison_damage_replays_status_effect_animation() -> void:
 	var presentation = _make_presentation()
 	var result: Dictionary = presentation.build({
@@ -270,6 +285,24 @@ func _check_badly_poisoned_damage_replays_status_effect_animation() -> void:
 	})
 
 	_check_equal(str(result.get("effect_animation_key", "")), "status_badly_poisoned", "toxic condition wins over Showdown psn damage source")
+
+
+func _check_burn_damage_replays_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Garchomp",
+		"source": "brn",
+		"previousCondition": "100/100 brn",
+		"condition": "94/100 brn",
+		"previousHp": 100,
+		"hp": 94,
+		"maxHp": 100,
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_burned", "burn damage replays burn effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "burn damage targets affected Pokemon")
+	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Garchomp", "burn damage still animates HP loss")
 
 
 func _format_actor(ident: String, _prefer_player_name := true) -> String:
