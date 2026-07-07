@@ -1399,6 +1399,39 @@
         "vertical_scale": 0.2,
         "decay": true
       }
+    },
+    "spikes": {
+      "template": "imported_sheet",
+      "category": "field_hazard",
+      "speed_scale": 1.15,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.72,
+        0.58,
+        0.24,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/spikes/spikes.json",
+      "sheet_path": "res://assets/battles/animations/spikes/PRAS- Spikes.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Spikes1.wav": "res://assets/battles/animations/spikes/PRSFX- Spikes1.wav",
+        "PRSFX- Spikes2.wav": "res://assets/battles/animations/spikes/PRSFX- Spikes2.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   }
 }
