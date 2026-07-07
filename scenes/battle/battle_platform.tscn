@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ci832f108wt70" path="res://assets/background/platform/grass_platform.png" id="1_ik1kv"]
 [ext_resource type="Script" uid="uid://df0if3qvwsnl7" path="res://scripts/battle/battle_ui/battle_platform.gd" id="1_um0dl"]
-[ext_resource type="Texture2D" uid="uid://bwk26vj7w2gj0" path="res://assets/background/hazards/stealth_rock.png" id="2_vchu0"]
+[ext_resource type="Texture2D" path="res://assets/background/hazards/stealth_rock_field.png" id="2_vchu0"]
 [ext_resource type="Texture2D" uid="uid://cd8et1gg6sriw" path="res://assets/background/hazards/sticky_webs.png" id="2_vllko"]
 [ext_resource type="Texture2D" uid="uid://4uomfvbjfexk" path="res://assets/background/hazards/spikes.png" id="3_7758y"]
 [ext_resource type="Texture2D" uid="uid://0bvlblife2ur" path="res://assets/background/hazards/toxic_spikes.png" id="4_sluh8"]
