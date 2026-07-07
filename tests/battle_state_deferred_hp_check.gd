@@ -9,6 +9,7 @@ var failed := false
 func _init() -> void:
 	_check_damage_response_is_display_deferred()
 	_check_deferred_damage_load_rewinds_to_previous_hp()
+	_check_status_event_normalizes_badly_poisoned()
 	quit(1 if failed else 0)
 
 
@@ -68,6 +69,40 @@ func _check_deferred_damage_load_rewinds_to_previous_hp() -> void:
 	state.apply_event_conditions([damage_event])
 	_check_equal(state.get_active_pokemon_current_hp("p2"), 0, "damage event applies final HP")
 	_check_equal(state.is_active_pokemon_fainted("p2"), true, "damage event applies fainted state")
+
+
+func _check_status_event_normalizes_badly_poisoned() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "status-normalization-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2: Magikarp",
+						"species": "Magikarp",
+						"active": true,
+						"condition": "100/100",
+						"hp": 100,
+						"maxHp": 100,
+						"metadataSlot": 1,
+						"pokemonKey": "p2:slot:1",
+					}],
+				},
+			},
+		},
+		"events": [],
+	}, false)
+
+	state.apply_event_conditions([{
+		"type": "status",
+		"target": "p2a: Magikarp",
+		"status": "Badly Poisoned",
+		"state": "start",
+	}])
+
+	_check_equal(state.get_active_pokemon_status("p2"), "tox", "badly poisoned status normalizes to tox")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

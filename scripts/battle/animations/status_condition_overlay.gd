@@ -43,23 +43,39 @@ func _update_sprite_tint() -> void:
 	if tinted_sprite == null:
 		return
 
-	if condition_key != "paralysis":
-		_reset_sprite_tint()
+	if condition_key == "paralysis":
+		_apply_sprite_tint(Color(1.0, 0.78, 0.04, 1.0), 1.45, 0.48, 0.42)
+		return
+	if condition_key == "poisoned":
+		_apply_sprite_tint(Color(0.56, 0.26, 0.82, 1.0), 0.95, 0.26, 0.24)
+		return
+	if condition_key == "badly_poisoned":
+		_apply_sprite_tint(Color(0.62, 0.0, 1.0, 1.0), 1.05, 0.62, 0.34)
 		return
 
-	var pulse := 0.5 + 0.5 * sin(elapsed * TAU * 1.45)
-	var flash := 0.48 + pulse * 0.42
-	tinted_sprite.self_modulate = Color(
-		1.0,
-		lerpf(1.0, 0.78, flash),
-		lerpf(1.0, 0.04, flash),
+	_reset_sprite_tint()
+
+
+func _apply_sprite_tint(target_color: Color, speed: float, base_amount: float, pulse_amount: float) -> void:
+	if tinted_sprite == null:
+		return
+
+	var pulse := 0.5 + 0.5 * sin(elapsed * TAU * speed)
+	var flash := base_amount + pulse * pulse_amount
+	var tint := Color(
+		lerpf(1.0, target_color.r, flash),
+		lerpf(1.0, target_color.g, flash),
+		lerpf(1.0, target_color.b, flash),
 		1.0
 	)
+	tinted_sprite.self_modulate = tint
+	tinted_sprite.modulate = tint
 
 
 func _reset_sprite_tint() -> void:
 	if tinted_sprite != null and is_instance_valid(tinted_sprite):
 		tinted_sprite.self_modulate = Color.WHITE
+		tinted_sprite.modulate = Color.WHITE
 	tinted_sprite = null
 
 
@@ -75,8 +91,12 @@ func _get_parent_sprite() -> AnimatedSprite2D:
 
 
 func _normalize_condition(value: String) -> String:
-	match value.strip_edges().to_lower():
+	match value.strip_edges().to_lower().replace(" ", "").replace("_", "").replace("-", ""):
 		"par", "paralysis", "paralyzed":
 			return "paralysis"
+		"psn", "poison", "poisoned":
+			return "poisoned"
+		"tox", "toxic", "badlypoisoned", "toxicpoison":
+			return "badly_poisoned"
 		_:
 			return ""

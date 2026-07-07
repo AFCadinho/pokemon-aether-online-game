@@ -17,6 +17,10 @@ func _init() -> void:
 	_check_booster_energy_quark_drive_messages()
 	_check_paralysis_status_event_uses_status_effect_animation()
 	_check_paralysis_cant_event_replays_status_effect_animation()
+	_check_poison_status_event_uses_status_effect_animation()
+	_check_badly_poisoned_status_event_uses_status_effect_animation()
+	_check_poison_damage_replays_status_effect_animation()
+	_check_badly_poisoned_damage_replays_status_effect_animation()
 	quit(1 if failed else 0)
 
 
@@ -191,6 +195,81 @@ func _check_paralysis_cant_event_replays_status_effect_animation() -> void:
 
 	_check_equal(str(result.get("effect_animation_key", "")), "status_paralysis", "paralysis cant replays status effect animation")
 	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Pikachu", "paralysis cant targets blocked actor")
+
+
+func _check_poison_status_event_uses_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "status",
+		"target": "p2a: Garchomp",
+		"status": "psn",
+		"state": "start",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_poisoned", "poison status start uses poison effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "poison status start targets affected Pokemon")
+
+
+func _check_badly_poisoned_status_event_uses_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "status",
+		"target": "p2a: Garchomp",
+		"status": "tox",
+		"state": "start",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_badly_poisoned", "badly poisoned status start uses toxic effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "badly poisoned status start targets affected Pokemon")
+
+
+func _check_poison_damage_replays_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Garchomp",
+		"source": "psn",
+		"previousCondition": "100/100 psn",
+		"condition": "88/100 psn",
+		"previousHp": 100,
+		"hp": 88,
+		"maxHp": 100,
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_poisoned", "poison damage replays poison effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "poison damage targets affected Pokemon")
+	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Garchomp", "poison damage still animates HP loss")
+
+
+func _check_badly_poisoned_damage_replays_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Garchomp",
+		"source": "tox",
+		"previousCondition": "100/100 tox",
+		"condition": "82/100 tox",
+		"previousHp": 100,
+		"hp": 82,
+		"maxHp": 100,
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_badly_poisoned", "badly poisoned damage replays toxic effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "badly poisoned damage targets affected Pokemon")
+	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Garchomp", "badly poisoned damage still animates HP loss")
+
+	result = presentation.build({
+		"type": "damage",
+		"target": "p2a: Garchomp",
+		"source": "psn",
+		"previousCondition": "100/100 tox",
+		"condition": "94/100 tox",
+		"previousHp": 100,
+		"hp": 94,
+		"maxHp": 100,
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_badly_poisoned", "toxic condition wins over Showdown psn damage source")
 
 
 func _format_actor(ident: String, _prefer_player_name := true) -> String:

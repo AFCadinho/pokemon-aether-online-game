@@ -1652,6 +1652,57 @@
         ],
         "suppress_shake": true
       }
+    },
+    "toxic": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "data_path": "res://assets/battles/animations/toxic/toxic.json",
+      "sheet_path": "res://assets/battles/animations/toxic/PRAS- Poison.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Toxic1.wav": "res://assets/battles/animations/toxic/PRSFX- Toxic1.wav",
+        "PRSFX- Toxic2.wav": "res://assets/battles/animations/toxic/PRSFX- Toxic2.wav"
+      },
+      "speed_scale": 1.18,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 5,
+      "visual_color": [
+        0.72,
+        0.18,
+        0.86,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.72,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.48,
+      "sprite_position_offset": [
+        0,
+        28
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          58,
+          -22
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
+      }
     }
   }
 }

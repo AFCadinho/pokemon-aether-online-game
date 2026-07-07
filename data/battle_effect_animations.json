@@ -374,6 +374,95 @@
       ],
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "status_badly_poisoned": {
+      "template": "imported_sheet",
+      "source": "Common:Toxic",
+      "category": "status_condition",
+      "data_path": "res://assets/battles/animations/badlypoisoned/badlypoisoned.json",
+      "sheet_path": "res://assets/battles/animations/badlypoisoned/PRAS- Poison.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Toxic1.wav": "res://assets/battles/animations/badlypoisoned/PRSFX- Toxic1.wav",
+        "PRSFX- Toxic2.wav": "res://assets/battles/animations/badlypoisoned/PRSFX- Toxic2.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.72,
+        0.18,
+        0.86,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.72,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        8
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "speed_scale": 1.18,
+      "source_anchor": "player",
+      "effect_position_offset": [
+        0,
+        -10
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "status_poisoned": {
+      "template": "imported_sheet",
+      "source": "Common:Poison",
+      "category": "status_condition",
+      "data_path": "res://assets/battles/animations/poison/poison.json",
+      "sheet_path": "res://assets/battles/animations/poison/PRAS- Status.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Poison.wav": "res://assets/battles/animations/poison/PRSFX- Poison.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.62,
+        0.34,
+        0.82,
+        1.0
+      ],
+      "sprite_tint": [
+        0.84,
+        0.72,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.62,
+      "sprite_position_offset": [
+        0,
+        8
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "speed_scale": 1.15,
+      "source_anchor": "player",
+      "effect_position_offset": [
+        0,
+        -8
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   },
   "aliases": {

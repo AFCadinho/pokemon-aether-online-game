@@ -548,9 +548,21 @@ func _remove_status_from_condition(condition: String, status: String) -> String:
 	return " ".join(output_parts)
 
 func _normalize_status(status: String) -> String:
-	match status.strip_edges().to_lower():
+	match status.strip_edges().to_lower().replace(" ", "").replace("_", "").replace("-", ""):
 		"psn", "tox", "brn", "par", "slp", "frz":
 			return status.strip_edges().to_lower()
+		"poison", "poisoned":
+			return "psn"
+		"toxic", "badlypoisoned", "toxicpoison":
+			return "tox"
+		"burn", "burned":
+			return "brn"
+		"paralysis", "paralyzed", "paralysed":
+			return "par"
+		"sleep", "asleep":
+			return "slp"
+		"freeze", "frozen":
+			return "frz"
 
 	return ""
 

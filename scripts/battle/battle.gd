@@ -3349,9 +3349,13 @@ func _active_status_overlay_should_hide(pokemon_data: Dictionary) -> bool:
 	return false
 
 func _get_persistent_status_condition_key(status: String) -> String:
-	match status.strip_edges().to_lower():
+	match status.strip_edges().to_lower().replace(" ", ""):
 		"par", "paralysis", "paralyzed":
 			return "paralysis"
+		"psn", "poison", "poisoned":
+			return "poisoned"
+		"tox", "toxic", "badlypoisoned", "toxicpoison":
+			return "badly_poisoned"
 		_:
 			return ""
 
@@ -6235,6 +6239,7 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 			player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1"))
 		"p2":
 			enemy_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny)
+	_sync_status_condition_overlays()
 
 func _get_event_hp_snapshot_with_state_fallback(event: Dictionary, player_id: String, use_previous_hp: bool) -> Dictionary:
 	var hp_key: String = "previousHp" if use_previous_hp else "hp"

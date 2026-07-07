@@ -68,6 +68,9 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 		"mega", "primal":
 			effect_keys.append("mega_evolution")
 		"damage":
+			var damage_effect_key: String = _get_residual_status_damage_effect_animation_key(event_data)
+			if damage_effect_key != "":
+				effect_keys.append(damage_effect_key)
 			needs_damage_sound = hp_event_helper.event_has_hp_loss(event_data) or hp_event_helper.event_has_sub_percent_hp_loss(event_data)
 
 	return {
@@ -310,6 +313,9 @@ func build(event_data: Dictionary) -> Dictionary:
 				recent_field_effect_source = ""
 			else:
 				presentation["damage_target_ident"] = damage_target_ident
+				presentation["effect_animation_key"] = _get_residual_status_damage_effect_animation_key(event_data)
+				if str(presentation["effect_animation_key"]) != "":
+					presentation["effect_animation_target_ident"] = damage_target_ident
 				var target := _format_actor(str(presentation["damage_target_ident"]))
 				var active_effect := ""
 				if not recent_move_event:
@@ -438,6 +444,10 @@ func _get_status_condition_effect_animation_key(event: Dictionary) -> String:
 	match status_key:
 		"par", "paralysis", "paralyzed":
 			return "status_paralysis"
+		"psn", "poison", "poisoned":
+			return "status_poisoned"
+		"tox", "toxic", "badlypoisoned", "toxicpoison":
+			return "status_badly_poisoned"
 
 	return ""
 
@@ -447,6 +457,24 @@ func _get_cant_status_effect_animation_key(event: Dictionary) -> String:
 	match reason_key:
 		"par", "paralysis", "paralyzed":
 			return "status_paralysis"
+
+	return ""
+
+
+func _get_residual_status_damage_effect_animation_key(event: Dictionary) -> String:
+	var condition_status_key := _normalize_animation_key(hp_event_helper.get_event_status(event, false))
+	match condition_status_key:
+		"psn", "poison", "poisoned":
+			return "status_poisoned"
+		"tox", "toxic", "badlypoisoned", "toxicpoison":
+			return "status_badly_poisoned"
+
+	var source_key := _normalize_animation_key(str(event.get("source", "")))
+	match source_key:
+		"psn", "poison", "poisoned":
+			return "status_poisoned"
+		"tox", "toxic", "badlypoisoned", "toxicpoison":
+			return "status_badly_poisoned"
 
 	return ""
 
