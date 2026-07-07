@@ -1432,6 +1432,72 @@
       },
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "toxicspikes": {
+      "template": "imported_sheet",
+      "category": "field_hazard",
+      "speed_scale": 1.15,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.72,
+        0.2,
+        0.82,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.82,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/toxicspikes/toxicspikes.json",
+      "sheet_path": "res://assets/battles/animations/toxicspikes/PRAS- Spikes.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Spikes1.wav": "res://assets/battles/animations/toxicspikes/PRSFX- Spikes1.wav",
+        "PRSFX- Spikes2.wav": "res://assets/battles/animations/toxicspikes/PRSFX- Spikes2.wav",
+        "PRSFX- Toxic Spikes2.wav": "res://assets/battles/animations/toxicspikes/PRSFX- Toxic Spikes2.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "stickyweb": {
+      "template": "imported_sheet",
+      "category": "field_hazard",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.9,
+        0.9,
+        0.86,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/stickyweb/stickyweb.json",
+      "sheet_path": "res://assets/battles/animations/stickyweb/PRAS- Sticky Web.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Sticky Web.wav": "res://assets/battles/animations/stickyweb/PRSFX- Sticky Web.wav"
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   }
 }
