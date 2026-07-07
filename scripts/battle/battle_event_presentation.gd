@@ -57,6 +57,14 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var stat_effect_key: String = _get_stat_change_effect_animation_key(int(event_data.get("amount", 0)))
 			if stat_effect_key != "":
 				effect_keys.append(stat_effect_key)
+		"status":
+			var status_effect_key: String = _get_status_condition_effect_animation_key(event_data)
+			if status_effect_key != "":
+				effect_keys.append(status_effect_key)
+		"cant":
+			var cant_effect_key: String = _get_cant_status_effect_animation_key(event_data)
+			if cant_effect_key != "":
+				effect_keys.append(cant_effect_key)
 		"mega", "primal":
 			effect_keys.append("mega_evolution")
 		"damage":
@@ -236,6 +244,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_field_effect_source = ""
 			recent_ability_event = false
 			recent_move_event = false
+			presentation["effect_animation_key"] = _get_status_condition_effect_animation_key(event_data)
+			presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("pokemon", "")))
 			presentation["log_message"] = event_text_formatter.format_status_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -252,6 +262,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_field_effect_source = ""
 			recent_ability_event = false
 			recent_move_event = false
+			presentation["effect_animation_key"] = _get_cant_status_effect_animation_key(event_data)
+			presentation["effect_animation_target_ident"] = str(event_data.get("actor", event_data.get("target", "")))
 			presentation["log_message"] = event_text_formatter.format_cant_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -415,6 +427,28 @@ func _get_heal_effect_animation_key(event: Dictionary) -> String:
 			return "recover_heal"
 
 	return "generic_heal"
+
+
+func _get_status_condition_effect_animation_key(event: Dictionary) -> String:
+	var state := str(event.get("state", "start")).strip_edges().to_lower()
+	if state == "end" or state == "cure" or state == "cured":
+		return ""
+
+	var status_key := _normalize_animation_key(str(event.get("status", event.get("condition", ""))))
+	match status_key:
+		"par", "paralysis", "paralyzed":
+			return "status_paralysis"
+
+	return ""
+
+
+func _get_cant_status_effect_animation_key(event: Dictionary) -> String:
+	var reason_key := _normalize_animation_key(str(event.get("reason", event.get("source", ""))))
+	match reason_key:
+		"par", "paralysis", "paralyzed":
+			return "status_paralysis"
+
+	return ""
 
 
 func _track_pokemon_effect_event(event: Dictionary) -> void:

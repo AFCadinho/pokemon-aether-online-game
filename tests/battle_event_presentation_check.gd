@@ -15,6 +15,8 @@ func _init() -> void:
 	_check_damage_after_hazard_logs_when_conditions_repeat()
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
 	_check_booster_energy_quark_drive_messages()
+	_check_paralysis_status_event_uses_status_effect_animation()
+	_check_paralysis_cant_event_replays_status_effect_animation()
 	quit(1 if failed else 0)
 
 
@@ -164,6 +166,31 @@ func _check_booster_energy_quark_drive_messages() -> void:
 	_check_equal(str(ability_result.get("log_message", "")), "Iron Valiant's Quark Drive boosted its Speed!", "Quark Drive lead stat boost logs")
 	_check_equal(str(ability_result.get("battle_message", "")), "Iron Valiant's Quark Drive boosted its Speed!", "Quark Drive lead stat boost battle text")
 	_check_equal(str(ability_result.get("ability_boost_target_ident", "")), "p1a: Iron Valiant", "Quark Drive lead stat boost animates badge target")
+
+
+func _check_paralysis_status_event_uses_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "status",
+		"target": "p2a: Garchomp",
+		"status": "par",
+		"state": "start",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_paralysis", "paralysis status start uses status effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "paralysis status start targets affected Pokemon")
+
+
+func _check_paralysis_cant_event_replays_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "cant",
+		"actor": "p1a: Pikachu",
+		"reason": "par",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_paralysis", "paralysis cant replays status effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Pikachu", "paralysis cant targets blocked actor")
 
 
 func _format_actor(ident: String, _prefer_player_name := true) -> String:

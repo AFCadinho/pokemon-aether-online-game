@@ -21,6 +21,7 @@ enum BattleActionsPanelMode {
 
 const DEBUG_TRAINER_TEAM_DISPLAY := false
 const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
+const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animations/status_condition_overlay.gd")
 
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
@@ -78,6 +79,7 @@ var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var presentation_state := preload("res://scripts/battle/battle_presentation_state.gd").new()
 var public_confirmed_abilities_by_ident := {}
 var public_confirmed_items_by_ident := {}
+var status_condition_overlays: Dictionary = {}
 var pending_knock_off_targets_by_ident := {}
 var pending_booster_energy_modifier_targets_by_ident := {}
 var stat_stages_by_ident: Dictionary = {}
@@ -275,6 +277,7 @@ func _ready() -> void:
 		Callable(self, "_set_active_hud_hp_from_event"),
 		Callable(self, "_can_start_pvp_render_animation")
 	)
+	_setup_status_condition_overlays()
 	_setup_mechanic_buttons()
 	_setup_battle_log_initial_visibility()
 	_update_battle_log_toggle_button()
@@ -3260,6 +3263,7 @@ func _update_hud_panels(include_team_data := true) -> void:
 
 	if not include_team_data:
 		_debug_battle_presentation_order("update_hud_panels.skip_team")
+		_sync_status_condition_overlays()
 		return
 
 	var player_display_team := _get_display_team_data("p1")
@@ -3273,6 +3277,7 @@ func _update_hud_panels(include_team_data := true) -> void:
 	})
 	player_hud_panel.set_team_data(player_display_team)
 	enemy_hud_panel.set_team_data(enemy_display_team)
+	_sync_status_condition_overlays()
 
 func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 	if _should_hide_active_pokemon_for_force_switch(player_id):
@@ -3298,6 +3303,57 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 		_get_active_pokemon_is_shiny(player_id),
 		_get_active_player_experience_data(player_id),
 	)
+
+func _setup_status_condition_overlays() -> void:
+	_attach_status_condition_overlay("p1", player_sprite_box)
+	_attach_status_condition_overlay("p2", enemy_sprite_box)
+	Callable(self, "_sync_status_condition_overlays").call_deferred()
+
+func _attach_status_condition_overlay(player_id: String, sprite_box: Node) -> void:
+	if sprite_box == null or not sprite_box.has_method("get_single_sprite_slot"):
+		return
+
+	var sprite_slot := sprite_box.call("get_single_sprite_slot") as Control
+	if sprite_slot == null:
+		return
+
+	var overlay := STATUS_CONDITION_OVERLAY_SCRIPT.new()
+	overlay.name = "%sStatusConditionOverlay" % player_id.to_upper()
+	overlay.z_index = 80
+	sprite_slot.add_child(overlay)
+	status_condition_overlays[player_id] = overlay
+
+func _sync_status_condition_overlays() -> void:
+	_sync_status_condition_overlay_for_player("p1")
+	_sync_status_condition_overlay_for_player("p2")
+
+func _sync_status_condition_overlay_for_player(player_id: String) -> void:
+	var overlay: Node = status_condition_overlays.get(player_id, null) as Node
+	if overlay == null or not is_instance_valid(overlay):
+		return
+
+	var condition_key := ""
+	if SettingsManager.battle_animations:
+		var pokemon_data := battle_state.get_active_player_pokemon(player_id)
+		if not pokemon_data.is_empty() and not _active_status_overlay_should_hide(pokemon_data):
+			condition_key = _get_persistent_status_condition_key(str(pokemon_data.get("status", "")))
+
+	if overlay.has_method("set_condition"):
+		overlay.call("set_condition", condition_key)
+
+func _active_status_overlay_should_hide(pokemon_data: Dictionary) -> bool:
+	if bool(pokemon_data.get("fainted", false)):
+		return true
+	if int(pokemon_data.get("hp", 1)) <= 0:
+		return true
+	return false
+
+func _get_persistent_status_condition_key(status: String) -> String:
+	match status.strip_edges().to_lower():
+		"par", "paralysis", "paralyzed":
+			return "paralysis"
+		_:
+			return ""
 
 func _debug_summarize_display_team(team: Array) -> Array:
 	var output: Array = []

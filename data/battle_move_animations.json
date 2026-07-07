@@ -1602,6 +1602,56 @@
         0,
         10
       ]
+    },
+    "thunderwave": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "data_path": "res://assets/battles/animations/thunderwave/thunderwave.json",
+      "sheet_path": "res://assets/battles/animations/thunderwave/PRAS- Electric.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Thunder Wave.wav": "res://assets/battles/animations/thunderwave/PRSFX- Thunder Wave.wav"
+      },
+      "speed_scale": 1.25,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 3,
+      "visual_color": [
+        1.0,
+        0.88,
+        0.14,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.96,
+        0.45,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.38,
+      "sprite_position_offset": [
+        0,
+        42
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          58,
+          -22
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
+      }
     }
   }
 }
