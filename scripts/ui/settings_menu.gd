@@ -929,6 +929,7 @@ func _logout_confirmed() -> void:
 		logout_confirm_return_button.disabled = true
 	if logout_confirm_cancel_button != null:
 		logout_confirm_cancel_button.disabled = true
+	await _leave_ranked_queue_before_logout()
 	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		logging_out = false
@@ -939,6 +940,14 @@ func _logout_confirmed() -> void:
 		if logout_confirm_cancel_button != null:
 			logout_confirm_cancel_button.disabled = false
 		push_warning("Could not return to login screen: %s" % error_string(error))
+
+func _leave_ranked_queue_before_logout() -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	for node: Node in tree.get_nodes_in_group("ui_overlay"):
+		if node != null and node.has_method("leave_pvp_queue_for_logout"):
+			await node.call("leave_pvp_queue_for_logout")
 
 
 func _set_volume_control(slider: HSlider, value_label: Label, value: float) -> void:

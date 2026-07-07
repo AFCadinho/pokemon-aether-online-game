@@ -1297,7 +1297,8 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle:
-		return false
+		if not await _interrupt_current_battle_for_pvp_match():
+			return false
 	if not bool(response.get("success", false)):
 		push_warning("World.start_pvp_battle_from_response failed: %s" % str(response.get("error", "Unknown error")))
 		return false
@@ -1334,8 +1335,49 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 		response
 	)
 	return true
+
+func _interrupt_current_battle_for_pvp_match() -> bool:
+	if not is_in_battle:
+		return true
+	if active_battle_kind == "pvp":
+		return false
+	await _forfeit_current_non_pvp_battle_for_pvp_match()
+	end_wild_battle()
+	return true
+
+func _forfeit_current_non_pvp_battle_for_pvp_match() -> void:
+	var battle_id := active_battle_id.strip_edges()
+	if battle_id == "":
+		return
+	var battle_kind := active_battle_kind.strip_edges()
+	if battle_kind == "" or battle_kind == "pvp":
+		return
+
+	var forfeit_request := HTTPRequest.new()
+	add_child(forfeit_request)
+	var response: Dictionary = await BattleApiClient.send_choice(
+		forfeit_request,
+		battle_id,
+		"p1",
+		"forfeit",
+		1
+	)
+	forfeit_request.queue_free()
+
+	if not bool(response.get("success", false)):
+		push_warning(
+			"World: could not register %s battle %s as a PvP queue forfeit: %s" % [
+				battle_kind,
+				battle_id,
+				str(response.get("error", "Unknown error")),
+			]
+		)
 	
 func end_wild_battle() -> void:
+	if battle_instance != null and battle_instance.has_signal("battle_ended"):
+		var ended_callback := Callable(self, "_on_battle_ended")
+		if battle_instance.is_connected("battle_ended", ended_callback):
+			battle_instance.disconnect("battle_ended", ended_callback)
 	if battle_layer != null:
 		battle_layer.queue_free()
 		

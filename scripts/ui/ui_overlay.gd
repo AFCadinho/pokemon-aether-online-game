@@ -50,6 +50,7 @@ const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
 const PVP_RANKED_DEFAULT_FORMAT_NAME := "Aether OU"
+const PVP_MATCH_COUNTDOWN_SECONDS := 10.0
 const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
 	{"id": "daily", "label": "Daily"},
 	{"id": "weekly", "label": "Weekly"},
@@ -446,6 +447,17 @@ var pvp_room_popup: PanelContainer
 var pvp_popup_title_label: Label
 var pvp_root_tabs: TabContainer
 var pvp_ranked_tabs: TabContainer
+var pvp_queue_compact_panel: PanelContainer
+var pvp_queue_compact_status_label: Label
+var pvp_queue_compact_time_label: Label
+var pvp_queue_compact_spinner_label: Label
+var pvp_queue_compact_open_button: Button
+var pvp_queue_compact_leave_button: Button
+var pvp_match_countdown_overlay: Control
+var pvp_match_countdown_flash_dim: ColorRect
+var pvp_match_countdown_flash_tween: Tween
+var pvp_match_countdown_timer_label: Label
+var pvp_match_countdown_status_label: Label
 var pvp_bans_status_label: Label
 var pvp_bans_metadata_list: VBoxContainer
 var pvp_bans_list: VBoxContainer
@@ -464,6 +476,7 @@ var pvp_room_code_input: LineEdit
 var pvp_create_room_button: Button
 var pvp_join_room_button: Button
 var pvp_copy_code_button: Button
+var pvp_queue_status_spinner_label: Label
 var pvp_queue_status_label: Label
 var pvp_queue_select: OptionButton
 var pvp_mode_select: OptionButton
@@ -483,10 +496,20 @@ var pvp_active_format_name := PVP_RANKED_DEFAULT_FORMAT_NAME
 var pvp_available_queues: Array[Dictionary] = []
 var pvp_active_queue_entry_id := ""
 var pvp_active_queue_match_id := ""
+var pvp_active_queue_status := ""
+var pvp_active_queue_starts_at := ""
 var pvp_queue_list_in_flight := false
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
 var pvp_queue_auto_open_in_flight := false
+var pvp_queue_leave_in_flight := false
+var pvp_queue_compact_minimized := false
+var pvp_queue_wait_started_msec := 0
+var pvp_queue_spinner_elapsed := 0.0
+var pvp_match_countdown_active := false
+var pvp_match_countdown_finishing := false
+var pvp_match_countdown_match_id := ""
+var pvp_match_countdown_remaining := 0.0
 var pvp_banlists_in_flight := false
 var pvp_banlists_loaded := false
 var pvp_banlists_result: Dictionary = PvpRankedBanlists.not_loaded()
@@ -823,6 +846,8 @@ func _ready() -> void:
 	_setup_dev_clear_menu_popup()
 	_setup_content_creator_menu_popup()
 	_setup_pvp_room_popup()
+	_setup_pvp_queue_compact_panel()
+	_setup_pvp_match_countdown_overlay()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
 	_setup_staff_impersonation_tools()
@@ -3363,6 +3388,15 @@ func _setup_pvp_room_popup() -> void:
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_pvp_room_header_gui_input)
 
+	var minimize_button := Button.new()
+	minimize_button.text = "-"
+	minimize_button.tooltip_text = "Minimize"
+	minimize_button.custom_minimum_size = Vector2(30, 30)
+	minimize_button.focus_mode = Control.FOCUS_NONE
+	minimize_button.pressed.connect(_minimize_pvp_room_popup)
+	header.add_child(minimize_button)
+	_apply_button_style(minimize_button)
+
 	var close_button := Button.new()
 	close_button.text = "X"
 	close_button.custom_minimum_size = Vector2(30, 30)
@@ -3495,11 +3529,25 @@ func _setup_pvp_room_popup() -> void:
 		{"id": "ranked_queue_v1", "name": "Ranked Queue", "mode": "ranked"},
 	])
 
+	var queue_status_row := HBoxContainer.new()
+	queue_status_row.add_theme_constant_override("separation", 6)
+	play_controls.add_child(queue_status_row)
+
+	pvp_queue_status_spinner_label = Label.new()
+	pvp_queue_status_spinner_label.text = ""
+	pvp_queue_status_spinner_label.custom_minimum_size = Vector2(16, 0)
+	pvp_queue_status_spinner_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pvp_queue_status_spinner_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pvp_queue_status_spinner_label.add_theme_font_size_override("font_size", 14)
+	pvp_queue_status_spinner_label.add_theme_color_override("font_color", UI_MONEY)
+	queue_status_row.add_child(pvp_queue_status_spinner_label)
+
 	pvp_queue_status_label = Label.new()
 	pvp_queue_status_label.text = "Queue Status: idle"
+	pvp_queue_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_queue_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_queue_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	play_controls.add_child(pvp_queue_status_label)
+	queue_status_row.add_child(pvp_queue_status_label)
 
 	var queue_actions := HBoxContainer.new()
 	queue_actions.add_theme_constant_override("separation", 8)
@@ -5254,6 +5302,8 @@ func _position_pokedex_popup() -> void:
 
 func _process(delta: float) -> void:
 	_position_collapsible_buttons()
+	_refresh_pvp_queue_compact_panel(delta)
+	_refresh_pvp_match_countdown(delta)
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
@@ -5541,6 +5591,202 @@ func _setup_player_status_card() -> void:
 	player_status_panel.mouse_exited.connect(_on_player_status_panel_mouse_exited)
 	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
 	_refresh_player_status_card()
+
+func _setup_pvp_queue_compact_panel() -> void:
+	pvp_queue_compact_panel = PanelContainer.new()
+	pvp_queue_compact_panel.name = "PvpQueueCompactPanel"
+	pvp_queue_compact_panel.visible = false
+	pvp_queue_compact_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	pvp_queue_compact_panel.z_index = UI_BASE_Z_INDEX + 5
+	pvp_queue_compact_panel.custom_minimum_size = Vector2(248, 52)
+	pvp_queue_compact_panel.add_theme_stylebox_override("panel", _make_pvp_queue_compact_style())
+	root_control.add_child(pvp_queue_compact_panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	pvp_queue_compact_panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+
+	pvp_queue_compact_spinner_label = Label.new()
+	pvp_queue_compact_spinner_label.text = "|"
+	pvp_queue_compact_spinner_label.custom_minimum_size = Vector2(16, 0)
+	pvp_queue_compact_spinner_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pvp_queue_compact_spinner_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pvp_queue_compact_spinner_label.add_theme_font_size_override("font_size", 17)
+	pvp_queue_compact_spinner_label.add_theme_color_override("font_color", UI_MONEY)
+	row.add_child(pvp_queue_compact_spinner_label)
+
+	var text_stack := VBoxContainer.new()
+	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_stack.add_theme_constant_override("separation", 2)
+	row.add_child(text_stack)
+
+	pvp_queue_compact_status_label = Label.new()
+	pvp_queue_compact_status_label.text = "Ranked Queue"
+	pvp_queue_compact_status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pvp_queue_compact_status_label.add_theme_font_size_override("font_size", 13)
+	pvp_queue_compact_status_label.add_theme_color_override("font_color", UI_TEXT)
+	text_stack.add_child(pvp_queue_compact_status_label)
+
+	pvp_queue_compact_time_label = Label.new()
+	pvp_queue_compact_time_label.text = "0:00"
+	pvp_queue_compact_time_label.add_theme_font_size_override("font_size", 12)
+	pvp_queue_compact_time_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	text_stack.add_child(pvp_queue_compact_time_label)
+
+	pvp_queue_compact_open_button = Button.new()
+	pvp_queue_compact_open_button.text = "Open"
+	pvp_queue_compact_open_button.custom_minimum_size = Vector2(58, 30)
+	pvp_queue_compact_open_button.focus_mode = Control.FOCUS_NONE
+	pvp_queue_compact_open_button.pressed.connect(_on_pvp_queue_compact_open_pressed)
+	_apply_button_style(pvp_queue_compact_open_button)
+	row.add_child(pvp_queue_compact_open_button)
+
+	pvp_queue_compact_leave_button = Button.new()
+	pvp_queue_compact_leave_button.text = "Leave"
+	pvp_queue_compact_leave_button.custom_minimum_size = Vector2(62, 30)
+	pvp_queue_compact_leave_button.focus_mode = Control.FOCUS_NONE
+	pvp_queue_compact_leave_button.pressed.connect(_on_pvp_queue_compact_leave_pressed)
+	_apply_button_style(pvp_queue_compact_leave_button, "danger")
+	row.add_child(pvp_queue_compact_leave_button)
+
+func _make_pvp_queue_compact_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#07101bf4"), Color("#e6c777"), 8, 1)
+	style.shadow_color = Color(0, 0, 0, 0.34)
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 4)
+	return style
+
+func _make_pvp_match_countdown_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#030711fb"), UI_MONEY, 8, 2)
+	style.shadow_color = Color(0, 0, 0, 0.58)
+	style.shadow_size = 18
+	style.shadow_offset = Vector2(0, 6)
+	return style
+
+func _setup_pvp_match_countdown_overlay() -> void:
+	pvp_match_countdown_overlay = Control.new()
+	pvp_match_countdown_overlay.name = "PvpMatchCountdownOverlay"
+	pvp_match_countdown_overlay.visible = false
+	pvp_match_countdown_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pvp_match_countdown_overlay.z_index = UI_MODAL_Z_INDEX + 20
+	pvp_match_countdown_overlay.z_as_relative = false
+	pvp_match_countdown_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root_control.add_child(pvp_match_countdown_overlay)
+
+	pvp_match_countdown_flash_dim = ColorRect.new()
+	pvp_match_countdown_flash_dim.name = "FlashDim"
+	pvp_match_countdown_flash_dim.visible = false
+	pvp_match_countdown_flash_dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pvp_match_countdown_flash_dim.color = Color(0.02, 0.04, 0.07, 0.0)
+	pvp_match_countdown_flash_dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	pvp_match_countdown_overlay.add_child(pvp_match_countdown_flash_dim)
+
+	var panel := PanelContainer.new()
+	panel.name = "CountdownPanel"
+	panel.custom_minimum_size = Vector2(620, 104)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override("panel", _make_pvp_match_countdown_style())
+	pvp_match_countdown_overlay.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 16)
+	margin.add_child(row)
+
+	var alert_badge := PanelContainer.new()
+	alert_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	alert_badge.custom_minimum_size = Vector2(48, 48)
+	alert_badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#2a1603f5"), UI_MONEY, 8, 2))
+	row.add_child(alert_badge)
+
+	var alert_label := Label.new()
+	alert_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	alert_label.text = "!"
+	alert_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	alert_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	alert_label.add_theme_font_size_override("font_size", 30)
+	alert_label.add_theme_color_override("font_color", UI_MONEY)
+	alert_badge.add_child(alert_label)
+
+	var text_stack := VBoxContainer.new()
+	text_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_stack.add_theme_constant_override("separation", 3)
+	row.add_child(text_stack)
+
+	var title := Label.new()
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.text = "RANKED MATCH FOUND"
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_color_override("font_color", UI_MONEY)
+	text_stack.add_child(title)
+
+	pvp_match_countdown_status_label = Label.new()
+	pvp_match_countdown_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pvp_match_countdown_status_label.text = "Finish your action now. PvP starts soon."
+	pvp_match_countdown_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_match_countdown_status_label.add_theme_font_size_override("font_size", 16)
+	pvp_match_countdown_status_label.add_theme_color_override("font_color", UI_TEXT)
+	text_stack.add_child(pvp_match_countdown_status_label)
+
+	pvp_match_countdown_timer_label = Label.new()
+	pvp_match_countdown_timer_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pvp_match_countdown_timer_label.text = "10s"
+	pvp_match_countdown_timer_label.custom_minimum_size = Vector2(86, 0)
+	pvp_match_countdown_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pvp_match_countdown_timer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pvp_match_countdown_timer_label.add_theme_font_size_override("font_size", 40)
+	pvp_match_countdown_timer_label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(pvp_match_countdown_timer_label)
+
+func _position_pvp_match_countdown_overlay() -> void:
+	if pvp_match_countdown_overlay == null or not pvp_match_countdown_overlay.visible:
+		return
+	var panel := pvp_match_countdown_overlay.get_node_or_null("CountdownPanel") as PanelContainer
+	if panel == null:
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	var panel_size := panel.custom_minimum_size
+	panel_size.x = minf(panel_size.x, maxf(280.0, viewport_size.x - 24.0))
+	panel.position = Vector2((viewport_size.x - panel_size.x) * 0.5, 16.0)
+	panel.size = panel_size
+
+func _play_pvp_match_countdown_flash() -> void:
+	if pvp_match_countdown_flash_dim == null:
+		return
+	if pvp_match_countdown_flash_tween != null:
+		pvp_match_countdown_flash_tween.kill()
+		pvp_match_countdown_flash_tween = null
+	pvp_match_countdown_flash_dim.visible = true
+	pvp_match_countdown_flash_dim.color = Color(0.02, 0.04, 0.07, 0.0)
+	var flash_tween: Tween = create_tween()
+	pvp_match_countdown_flash_tween = flash_tween
+	flash_tween.tween_property(pvp_match_countdown_flash_dim, "color:a", 0.46, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	flash_tween.tween_interval(2.35)
+	flash_tween.tween_property(pvp_match_countdown_flash_dim, "color:a", 0.0, 0.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	flash_tween.finished.connect(func() -> void:
+		if pvp_match_countdown_flash_tween == flash_tween:
+			pvp_match_countdown_flash_tween = null
+		if pvp_match_countdown_flash_dim != null:
+			pvp_match_countdown_flash_dim.visible = false
+	)
 
 func _create_player_status_avatar_visual() -> Node2D:
 	var source_player: Node2D = PLAYER_PREVIEW_SCENE.instantiate() as Node2D
@@ -18873,6 +19119,8 @@ func _open_pvp_popup_section(section_name: String) -> void:
 	if pvp_room_popup == null:
 		return
 	_hide_pvp_mode_menu()
+	pvp_queue_compact_minimized = false
+	_refresh_pvp_queue_compact_panel(0.0)
 	pvp_room_popup.visible = true
 	_activate_ui_panel(pvp_room_popup)
 	_select_pvp_root_tab(section_name)
@@ -18884,6 +19132,7 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		_refresh_pvp_team_validator()
 		await _refresh_pvp_queue_list()
 		_select_first_pvp_queue_for_mode("ranked")
+		await _poll_pvp_queue_status()
 		await _refresh_pvp_ranked_team_validation(true)
 		await _refresh_pvp_banlists(false)
 		await _refresh_pvp_leaderboard()
@@ -18996,8 +19245,11 @@ func _select_first_pvp_queue_for_mode(mode: String) -> bool:
 		pvp_active_queue_id = queue_id
 		_select_pvp_queue_by_id(queue_id)
 		_update_pvp_active_format_from_queue_id(queue_id)
-		_set_pvp_queue_status("Queue Status: idle")
-		_refresh_pvp_queue_buttons("idle")
+		if pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "":
+			_refresh_pvp_queue_buttons(pvp_active_queue_status)
+		else:
+			_set_pvp_queue_status("Queue Status: idle")
+			_refresh_pvp_queue_buttons("idle")
 		return true
 	return false
 
@@ -19285,13 +19537,23 @@ func _pvp_team_species_clause_key(species: String) -> String:
 	return normalized
 
 func _hide_pvp_room_popup() -> void:
+	if _should_confirm_pvp_queue_leave_on_popup_close():
+		_show_pvp_queue_close_confirm()
+		return
+	_hide_pvp_room_popup_now(true)
+
+func _hide_pvp_room_popup_now(stop_queue_polling: bool = true) -> void:
 	if pvp_room_popup == null:
 		return
+	if stop_queue_polling:
+		pvp_queue_compact_minimized = false
 	if pvp_poll_timer != null:
-		pvp_poll_timer.stop()
+		if stop_queue_polling or not pvp_queue_polling_active:
+			pvp_poll_timer.stop()
 	pvp_polling_active = false
-	pvp_queue_polling_active = false
-	pvp_queue_poll_in_flight = false
+	if stop_queue_polling:
+		pvp_queue_polling_active = false
+		pvp_queue_poll_in_flight = false
 	pvp_queue_list_in_flight = false
 	pvp_banlists_in_flight = false
 	pvp_banlists_loaded = false
@@ -19302,6 +19564,37 @@ func _hide_pvp_room_popup() -> void:
 	pvp_poll_elapsed = 0.0
 	pvp_room_popup.visible = false
 	_deactivate_ui_panel(pvp_room_popup)
+
+func _minimize_pvp_room_popup() -> void:
+	_hide_pvp_room_popup_now(false)
+	pvp_queue_compact_minimized = pvp_active_queue_entry_id.strip_edges() != ""
+	_refresh_pvp_queue_compact_panel(0.0)
+
+func _should_confirm_pvp_queue_leave_on_popup_close() -> bool:
+	if pvp_battle_starting or pvp_queue_leave_in_flight:
+		return false
+	if pvp_active_queue_id.strip_edges() == "":
+		return false
+	var active_status := pvp_active_queue_status.strip_edges().to_lower()
+	if pvp_active_queue_match_id.strip_edges() != "" or active_status == "matched":
+		return false
+	return active_status == "waiting" or (pvp_active_queue_entry_id.strip_edges() != "" and pvp_active_queue_match_id.strip_edges() == "") or pvp_queue_polling_active
+
+func _show_pvp_queue_close_confirm() -> void:
+	_show_ui_confirm_popup(
+		"Leave ranked queue?",
+		"You are currently in the ranked queue. Closing this window will leave the queue.",
+		"Leave Queue",
+		Callable(self, "_confirm_close_pvp_room_and_leave_queue"),
+		Vector2i(480, 178),
+		true,
+		"Stay in Queue"
+	)
+
+func _confirm_close_pvp_room_and_leave_queue() -> void:
+	var left_queue := await _leave_pvp_queue(pvp_active_queue_id, true)
+	if left_queue:
+		_hide_pvp_room_popup_now(true)
 
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
@@ -19396,7 +19689,7 @@ func _on_pvp_join_queue_pressed() -> void:
 	_update_pvp_queue_state_from_entry(entry)
 	var status := str(entry.get("status", "")).strip_edges().to_lower()
 	if status == "matched" and pvp_active_queue_match_id != "":
-		await _open_pvp_queue_match(true)
+		_begin_pvp_match_countdown(pvp_active_queue_match_id, pvp_active_queue_starts_at)
 	else:
 		_start_pvp_queue_polling()
 
@@ -20293,25 +20586,51 @@ func _pvp_history_variant_to_int(value: Variant) -> int:
 	return 0
 
 func _on_pvp_leave_queue_pressed() -> void:
-	if pvp_battle_starting or pvp_active_queue_id == "":
-		return
-	_set_pvp_room_busy(true, "Leaving queue...")
+	await _leave_pvp_queue(pvp_active_queue_id, true)
+
+func _leave_pvp_queue(queue_id: String, show_status: bool = true) -> bool:
+	if pvp_battle_starting or pvp_queue_leave_in_flight:
+		return false
+	var normalized_queue_id := queue_id.strip_edges()
+	if normalized_queue_id == "":
+		return false
+	pvp_queue_leave_in_flight = true
+	if show_status:
+		_set_pvp_room_busy(true, "Leaving queue...")
 	var request := _create_pvp_request_node()
-	var response: Dictionary = await BattleApiClient.leave_pvp_queue(request, pvp_active_queue_id)
+	var response: Dictionary = await BattleApiClient.leave_pvp_queue(request, normalized_queue_id)
 	request.queue_free()
-	_set_pvp_room_busy(false)
+	if show_status:
+		_set_pvp_room_busy(false)
+	pvp_queue_leave_in_flight = false
 
 	if not bool(response.get("success", false)):
-		_set_pvp_queue_status("Queue Status: leave failed: %s" % str(response.get("error", "Unknown error")))
-		return
+		if show_status:
+			_set_pvp_queue_status("Queue Status: leave failed: %s" % str(response.get("error", "Unknown error")))
+		return false
 
-	pvp_active_queue_entry_id = ""
-	pvp_active_queue_match_id = ""
-	pvp_queue_polling_active = false
-	if pvp_poll_timer != null:
-		pvp_poll_timer.stop()
-	_set_pvp_queue_status("Queue Status: left queue.")
-	_refresh_pvp_queue_buttons("idle")
+	if pvp_active_queue_id == normalized_queue_id:
+		pvp_active_queue_entry_id = ""
+		pvp_active_queue_match_id = ""
+		pvp_active_queue_status = ""
+		pvp_active_queue_starts_at = ""
+		pvp_queue_compact_minimized = false
+		pvp_queue_wait_started_msec = 0
+		pvp_queue_polling_active = false
+		if pvp_poll_timer != null:
+			pvp_poll_timer.stop()
+		if show_status:
+			_set_pvp_queue_status("Queue Status: left queue.")
+		_refresh_pvp_queue_buttons("idle")
+		_refresh_pvp_queue_compact_panel(0.0)
+	return true
+
+func leave_pvp_queue_for_logout() -> void:
+	if pvp_active_queue_id.strip_edges() == "" or pvp_active_queue_entry_id.strip_edges() == "":
+		return
+	if pvp_active_queue_match_id.strip_edges() != "":
+		return
+	await _leave_pvp_queue(pvp_active_queue_id, false)
 
 func _open_pvp_queue_match(auto_open: bool) -> void:
 	if pvp_battle_starting:
@@ -20335,6 +20654,7 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 	if not bool(response.get("success", false)):
 		if await _recover_already_bound_pvp_queue_match(response):
 			return
+		_clear_pvp_match_countdown(true)
 		_set_pvp_queue_status("Queue Status: could not start battle: %s" % str(response.get("error", "Unknown error")))
 		_refresh_pvp_queue_buttons("matched")
 		return
@@ -20342,6 +20662,104 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 	if str(response.get("roomCode", "")).strip_edges() == "":
 		response["roomCode"] = pvp_active_queue_match_id.to_upper()
 	await _start_pvp_battle_from_response(response)
+
+func _begin_pvp_match_countdown(match_id: String, starts_at: String = "") -> void:
+	var normalized_match_id := match_id.strip_edges()
+	if normalized_match_id == "":
+		return
+	if pvp_battle_starting:
+		return
+	if pvp_match_countdown_active and pvp_match_countdown_match_id == normalized_match_id:
+		return
+	var remaining: float = _pvp_match_countdown_remaining_from_starts_at(starts_at)
+	pvp_match_countdown_active = true
+	pvp_match_countdown_finishing = false
+	pvp_match_countdown_match_id = normalized_match_id
+	pvp_match_countdown_remaining = remaining
+	pvp_queue_polling_active = false
+	pvp_queue_compact_minimized = false
+	_focus_overlay_ui_layer()
+	GameState.lock_overworld_input()
+	_hide_pvp_mode_menu()
+	_hide_pvp_room_popup_now(false)
+	SfxManager.play("ranked_match_found")
+	if pvp_match_countdown_overlay != null:
+		pvp_match_countdown_overlay.visible = true
+		pvp_match_countdown_overlay.move_to_front()
+	_position_pvp_match_countdown_overlay()
+	_play_pvp_match_countdown_flash()
+	_update_pvp_match_countdown_text()
+	_set_pvp_queue_status("Queue Status: match found. Starting in %ds..." % int(ceil(pvp_match_countdown_remaining)))
+	_refresh_pvp_queue_buttons("matched")
+	_refresh_pvp_queue_compact_panel(0.0)
+
+func _pvp_match_countdown_remaining_from_starts_at(starts_at: String) -> float:
+	var normalized: String = starts_at.strip_edges()
+	if normalized == "":
+		return PVP_MATCH_COUNTDOWN_SECONDS
+	var unix_time: float = _pvp_iso_timestamp_to_unix_time(normalized)
+	if unix_time <= 0.0:
+		return PVP_MATCH_COUNTDOWN_SECONDS
+	return maxf(0.0, unix_time - Time.get_unix_time_from_system())
+
+func _pvp_iso_timestamp_to_unix_time(value: String) -> float:
+	var normalized: String = value.strip_edges()
+	if normalized == "":
+		return 0.0
+	normalized = normalized.replace("Z", "")
+	var dot_index: int = normalized.find(".")
+	if dot_index >= 0:
+		normalized = normalized.substr(0, dot_index)
+	return float(Time.get_unix_time_from_datetime_string(normalized))
+
+func _refresh_pvp_match_countdown(delta: float) -> void:
+	if not pvp_match_countdown_active:
+		return
+	_focus_overlay_ui_layer()
+	_position_pvp_match_countdown_overlay()
+	if pvp_match_countdown_finishing:
+		return
+	pvp_match_countdown_remaining = maxf(0.0, pvp_match_countdown_remaining - delta)
+	_update_pvp_match_countdown_text()
+	if pvp_match_countdown_remaining <= 0.0:
+		pvp_match_countdown_finishing = true
+		_finish_pvp_match_countdown.call_deferred()
+
+func _update_pvp_match_countdown_text() -> void:
+	var remaining_seconds: int = maxi(0, int(ceil(pvp_match_countdown_remaining)))
+	if pvp_match_countdown_timer_label != null:
+		pvp_match_countdown_timer_label.text = "%ds" % remaining_seconds
+	if pvp_match_countdown_status_label != null:
+		pvp_match_countdown_status_label.text = "Finish your action now. PvP starts in %d seconds." % remaining_seconds
+	_set_pvp_queue_status("Queue Status: match found. Starting in %ds..." % remaining_seconds)
+
+func _finish_pvp_match_countdown() -> void:
+	if not pvp_match_countdown_active:
+		return
+	var match_id := pvp_match_countdown_match_id
+	if match_id == "":
+		_clear_pvp_match_countdown(false)
+		return
+	pvp_active_queue_match_id = match_id
+	await _open_pvp_queue_match(true)
+
+func _clear_pvp_match_countdown(unlock_input: bool) -> void:
+	pvp_match_countdown_active = false
+	pvp_match_countdown_finishing = false
+	pvp_match_countdown_match_id = ""
+	pvp_match_countdown_remaining = 0.0
+	if pvp_match_countdown_flash_tween != null:
+		pvp_match_countdown_flash_tween.kill()
+		pvp_match_countdown_flash_tween = null
+	if pvp_match_countdown_flash_dim != null:
+		pvp_match_countdown_flash_dim.visible = false
+		pvp_match_countdown_flash_dim.color = Color(0.02, 0.04, 0.07, 0.0)
+	if pvp_match_countdown_overlay != null:
+		pvp_match_countdown_overlay.visible = false
+	if unlock_input:
+		GameState.unlock_overworld_input()
+	if not _has_visible_priority_overlay_panel():
+		layer = UI_OVERLAY_BASE_LAYER
 
 func _on_pvp_reconnect_battle_pressed() -> void:
 	if pvp_battle_starting:
@@ -20458,6 +20876,76 @@ func _start_pvp_queue_polling() -> void:
 	if pvp_poll_timer != null and pvp_poll_timer.is_stopped():
 		pvp_poll_timer.start()
 
+func _refresh_pvp_queue_compact_panel(delta: float = 0.0) -> void:
+	pvp_queue_spinner_elapsed += delta
+	var spinner_index := int(floor(pvp_queue_spinner_elapsed * 8.0)) % 4
+	var spinner_text: String = _pvp_queue_spinner_frame(spinner_index)
+	if pvp_queue_status_spinner_label != null:
+		pvp_queue_status_spinner_label.text = spinner_text if pvp_active_queue_status.strip_edges().to_lower() == "waiting" else ""
+	if pvp_queue_compact_panel == null:
+		return
+	var has_active_entry := pvp_active_queue_entry_id.strip_edges() != ""
+	var popup_visible := pvp_room_popup != null and pvp_room_popup.visible
+	pvp_queue_compact_panel.visible = pvp_queue_compact_minimized and has_active_entry and not popup_visible
+	if not pvp_queue_compact_minimized or not has_active_entry or popup_visible:
+		return
+
+	_position_pvp_queue_compact_panel()
+	var has_match := pvp_active_queue_match_id.strip_edges() != ""
+	if pvp_queue_compact_status_label != null:
+		pvp_queue_compact_status_label.text = "Match found" if has_match else "Ranked Queue"
+	if pvp_queue_compact_time_label != null:
+		var elapsed_seconds := _pvp_queue_elapsed_seconds()
+		pvp_queue_compact_time_label.text = "Ready" if has_match else _format_pvp_queue_elapsed(elapsed_seconds)
+	if pvp_queue_compact_spinner_label != null:
+		pvp_queue_compact_spinner_label.text = spinner_text
+	if pvp_queue_compact_open_button != null:
+		pvp_queue_compact_open_button.disabled = pvp_battle_starting
+	if pvp_queue_compact_leave_button != null:
+		pvp_queue_compact_leave_button.disabled = pvp_battle_starting or pvp_queue_leave_in_flight or has_match
+
+func _position_pvp_queue_compact_panel() -> void:
+	if pvp_queue_compact_panel == null or player_status_panel == null:
+		return
+	var panel_size := pvp_queue_compact_panel.custom_minimum_size
+	if panel_size == Vector2.ZERO:
+		panel_size = pvp_queue_compact_panel.size
+	var status_rect := player_status_panel.get_global_rect()
+	var parent_control := pvp_queue_compact_panel.get_parent_control()
+	var parent_global := parent_control.global_position if parent_control != null else Vector2.ZERO
+	var target := status_rect.position - parent_global + Vector2(0, -panel_size.y - 8.0)
+	var parent_size := parent_control.size if parent_control != null else get_viewport().get_visible_rect().size
+	target.x = clampf(target.x, 8.0, maxf(8.0, parent_size.x - panel_size.x - 8.0))
+	target.y = clampf(target.y, 8.0, maxf(8.0, parent_size.y - panel_size.y - 8.0))
+	pvp_queue_compact_panel.position = target
+	pvp_queue_compact_panel.size = panel_size
+
+func _pvp_queue_spinner_frame(index: int) -> String:
+	match index % 4:
+		0:
+			return "|"
+		1:
+			return "/"
+		2:
+			return "-"
+		_:
+			return "\\"
+
+func _pvp_queue_elapsed_seconds() -> int:
+	if pvp_queue_wait_started_msec <= 0:
+		return 0
+	return max(0, int((Time.get_ticks_msec() - pvp_queue_wait_started_msec) / 1000))
+
+func _format_pvp_queue_elapsed(seconds: int) -> String:
+	var safe_seconds: int = maxi(seconds, 0)
+	return "%d:%02d" % [int(safe_seconds / 60), safe_seconds % 60]
+
+func _on_pvp_queue_compact_open_pressed() -> void:
+	await _open_pvp_popup_section("Ranked")
+
+func _on_pvp_queue_compact_leave_pressed() -> void:
+	await _on_pvp_leave_queue_pressed()
+
 func _poll_pvp_queue_status() -> void:
 	if pvp_queue_poll_in_flight:
 		return
@@ -20478,14 +20966,19 @@ func _poll_pvp_queue_status() -> void:
 			pvp_poll_timer.stop()
 		pvp_active_queue_entry_id = ""
 		pvp_active_queue_match_id = ""
+		pvp_active_queue_status = ""
+		pvp_active_queue_starts_at = ""
+		pvp_queue_compact_minimized = false
+		pvp_queue_wait_started_msec = 0
 		_set_pvp_queue_status("Queue Status: idle")
 		_refresh_pvp_queue_buttons("idle")
+		_refresh_pvp_queue_compact_panel(0.0)
 		return
 
 	_update_pvp_queue_state_from_entry(entry)
 	var status := str(entry.get("status", "")).strip_edges().to_lower()
 	if status == "matched" and pvp_active_queue_match_id != "":
-		await _open_pvp_queue_match(true)
+		_begin_pvp_match_countdown(pvp_active_queue_match_id, pvp_active_queue_starts_at)
 
 func _pvp_queue_entry_from_response(response: Dictionary) -> Dictionary:
 	var entry_value: Variant = response.get("entry", {})
@@ -20507,11 +21000,23 @@ func _latest_relevant_pvp_queue_entry(response: Dictionary) -> Dictionary:
 			return entry.duplicate(true)
 	return {}
 
+func _pvp_optional_id(value: Variant) -> String:
+	if value == null:
+		return ""
+	return str(value).strip_edges()
+
 func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 	var status := str(entry.get("status", "")).strip_edges().to_lower()
-	pvp_active_queue_entry_id = str(entry.get("id", "")).strip_edges()
-	pvp_active_queue_id = str(entry.get("queueId", pvp_active_queue_id)).strip_edges()
-	pvp_active_queue_match_id = str(entry.get("matchId", "")).strip_edges()
+	var previous_entry_id := pvp_active_queue_entry_id
+	pvp_active_queue_entry_id = _pvp_optional_id(entry.get("id", ""))
+	pvp_active_queue_id = _pvp_optional_id(entry.get("queueId", pvp_active_queue_id))
+	pvp_active_queue_match_id = _pvp_optional_id(entry.get("matchId", ""))
+	pvp_active_queue_status = status
+	pvp_active_queue_starts_at = str(entry.get("startsAt", "")).strip_edges()
+	if status == "waiting" and (pvp_queue_wait_started_msec <= 0 or previous_entry_id != pvp_active_queue_entry_id):
+		pvp_queue_wait_started_msec = Time.get_ticks_msec()
+	elif status != "waiting" and pvp_active_queue_match_id == "":
+		pvp_queue_wait_started_msec = 0
 	if pvp_active_queue_id == "":
 		pvp_active_queue_id = "ranked_queue_v1"
 	_select_pvp_queue_by_id(pvp_active_queue_id)
@@ -20525,10 +21030,11 @@ func _update_pvp_queue_state_from_entry(entry: Dictionary) -> void:
 			pvp_poll_timer.stop()
 		_set_pvp_queue_status("Queue Status: match found.")
 	elif status == "waiting":
-		_set_pvp_queue_status("Queue Status: waiting for opponent...")
+		_set_pvp_queue_status("Queue Status: searching for opponent...")
 	else:
 		_set_pvp_queue_status("Queue Status: %s" % (status if status != "" else "unknown"))
 	_refresh_pvp_queue_buttons(status)
+	_refresh_pvp_queue_compact_panel(0.0)
 
 func _refresh_pvp_queue_buttons(status: String) -> void:
 	if pvp_join_queue_button == null or pvp_leave_queue_button == null:
@@ -20633,18 +21139,24 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	if popup_was_visible:
 		_hide_pvp_room_popup()
 
+	_clear_pvp_match_countdown(false)
 	var started: bool = await world.start_pvp_battle_from_response(response)
 	if not started:
 		if popup_was_visible and pvp_room_popup != null:
 			pvp_room_popup.visible = true
 			_activate_ui_panel(pvp_room_popup)
 		_set_pvp_status("Could not start PvP battle.")
+		_clear_pvp_match_countdown(true)
 		pvp_battle_starting = false
 		return
 
 	pvp_active_room_code = ""
 	pvp_active_queue_entry_id = ""
 	pvp_active_queue_match_id = ""
+	pvp_active_queue_status = ""
+	pvp_active_queue_starts_at = ""
+	pvp_queue_compact_minimized = false
+	pvp_queue_wait_started_msec = 0
 	pvp_queue_polling_active = false
 	pvp_queue_poll_in_flight = false
 	pvp_queue_auto_open_in_flight = false
@@ -20654,6 +21166,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_copy_code_button.disabled = true
 	_set_pvp_queue_status("Queue Status: idle")
 	_refresh_pvp_queue_buttons("idle")
+	_refresh_pvp_queue_compact_panel(0.0)
 	pvp_battle_starting = false
 
 func _create_pvp_request_node() -> HTTPRequest:

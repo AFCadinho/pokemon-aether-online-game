@@ -36,6 +36,10 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/battle/capture_absorb.ogg",
 		"volume_db": -8.0,
 	},
+	"ranked_match_found": {
+		"path": "res://assets/audio/sfx/ui/ranked_match_found.ogg",
+		"volume_db": -2.0,
+	},
 }
 
 var stream_cache: Dictionary = {}
