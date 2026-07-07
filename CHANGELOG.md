@@ -24,6 +24,7 @@
 - Fixed stale matched queue state after forfeiting or reconnecting to a previous Ranked match.
 - Fixed Ranked validation being reset by the pre-queue party heal, which could show `Ranked Ready` while join still failed.
 - Fixed PvP battle damage being written back to the overworld party after PvP ends.
+- Fixed the active player party sometimes staying damaged in the UI after a PvP forfeit before the server heal response finished.
 - Fixed lead Booster Energy activations not showing their battle log text, battle text, or Quark Drive/Protosynthesis stat badge before turn one.
 
 ## 0.3.0 - 2026-07-06
