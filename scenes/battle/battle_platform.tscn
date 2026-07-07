@@ -6,9 +6,9 @@
 [ext_resource type="Texture2D" path="res://assets/background/hazards/sticky_webs_field.png" id="2_vllko"]
 [ext_resource type="Texture2D" path="res://assets/background/hazards/spikes_field.png" id="3_7758y"]
 [ext_resource type="Texture2D" path="res://assets/background/hazards/toxic_spikes_field.png" id="4_sluh8"]
-[ext_resource type="Texture2D" uid="uid://bht2tgee4wdja" path="res://assets/background/screens/light_screen.png" id="7_1jvj1"]
+[ext_resource type="Texture2D" path="res://assets/background/screens/light_screen_field.png" id="7_1jvj1"]
 [ext_resource type="Texture2D" uid="uid://cw37m8pnxmc4c" path="res://assets/background/screens/aurora_veil.png" id="7_cuh4d"]
-[ext_resource type="Texture2D" uid="uid://c2qg6ngypb6on" path="res://assets/background/screens/reflect.png" id="8_cy83y"]
+[ext_resource type="Texture2D" path="res://assets/background/screens/reflect_field.png" id="8_cy83y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ik1kv"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -94,9 +94,9 @@ stretch_mode = 5
 
 [node name="LightScreenImage" type="TextureRect" parent="PlayerScreens" unique_id=289518310]
 visible = false
-offset_left = 68.00692
+offset_left = 150.00693
 offset_top = -68.0
-offset_right = 518.0069
+offset_right = 370.00693
 offset_bottom = 82.0
 rotation = 0.056720145
 texture = ExtResource("7_1jvj1")
@@ -105,9 +105,9 @@ stretch_mode = 5
 
 [node name="ReflectImage" type="TextureRect" parent="PlayerScreens" unique_id=1033374092]
 visible = false
-offset_left = 62.00692
+offset_left = 144.00693
 offset_top = -43.0
-offset_right = 512.0069
+offset_right = 364.00693
 offset_bottom = 107.0
 rotation = 0.056720145
 texture = ExtResource("8_cy83y")
@@ -131,9 +131,9 @@ stretch_mode = 5
 
 [node name="LightScreenImage" type="TextureRect" parent="EnemyScreens" unique_id=2109468842]
 visible = false
-offset_left = -168.49654
+offset_left = -86.49654
 offset_top = 37.0
-offset_right = 281.50342
+offset_right = 133.50346
 offset_bottom = 187.0
 rotation = 0.056720145
 texture = ExtResource("7_1jvj1")
@@ -142,9 +142,9 @@ stretch_mode = 5
 
 [node name="ReflectImage" type="TextureRect" parent="EnemyScreens" unique_id=1566483548]
 visible = false
-offset_left = -174.49654
+offset_left = -92.49654
 offset_top = 62.0
-offset_right = 275.50342
+offset_right = 127.50346
 offset_bottom = 212.0
 rotation = 0.056720145
 texture = ExtResource("8_cy83y")

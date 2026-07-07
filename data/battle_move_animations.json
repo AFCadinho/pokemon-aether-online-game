@@ -1498,6 +1498,70 @@
       },
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "reflect": {
+      "template": "imported_sheet",
+      "category": "screen",
+      "data_path": "res://assets/battles/animations/reflect/reflect.json",
+      "sheet_path": "res://assets/battles/animations/reflect/PRAS- Reflect.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Reflect.wav": "res://assets/battles/animations/reflect/PRSFX- Reflect.wav"
+      },
+      "speed_scale": 1.15,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "visual_color": [
+        0.95,
+        0.48,
+        0.84,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.82,
+        0.96,
+        1.0
+      ]
+    },
+    "lightscreen": {
+      "template": "imported_sheet",
+      "category": "screen",
+      "speed_scale": 1.15,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "pattern_offset": 0,
+      "pattern_override": -1,
+      "visual_color": [
+        0.55,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.82,
+        0.96,
+        1.0,
+        1.0
+      ],
+      "data_path": "res://assets/battles/animations/lightscreen/lightscreen.json",
+      "sheet_path": "res://assets/battles/animations/lightscreen/PRAS- Light Screen.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Light Screen.wav": "res://assets/battles/animations/lightscreen/PRSFX- Light Screen.wav"
+      }
     }
   }
 }
