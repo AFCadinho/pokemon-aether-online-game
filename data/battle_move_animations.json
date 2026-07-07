@@ -163,12 +163,87 @@
       "show_timing_foregrounds": false,
       "speed_scale": 1.25,
       "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/flamethrower/flamethrower.json",
       "sheet_path": "res://assets/battles/animations/flamethrower/PRAS- Fire.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Flamethrower.wav": "res://assets/battles/animations/flamethrower/PRSFX- Flamethrower.wav"
+      },
+      "fire_stream": {
+        "enabled": true,
+        "visible_start": 0.0,
+        "visible_end": 0.92,
+        "fade_in": 0.08,
+        "fade_out": 0.18,
+        "travel_scale": 1.22,
+        "segments": 20,
+        "start_width": 8.0,
+        "end_width": 22.0,
+        "jitter": 5.5,
+        "wave_speed": 0.55,
+        "ember_count": 9,
+        "impact_start": 0.48,
+        "impact_at": 0.98,
+        "impact_radius": 34.0,
+        "impact_alpha": 0.72,
+        "flame_color": [
+          1.0,
+          0.16,
+          0.02,
+          1.0
+        ],
+        "hot_color": [
+          1.0,
+          0.64,
+          0.08,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.96,
+          0.58,
+          1.0
+        ],
+        "smoke_color": [
+          0.16,
+          0.04,
+          0.02,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 0.72
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          }
+        ]
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          56,
+          -20
+        ],
+        "sheet_offset": [
+          0,
+          0
+        ],
+        "suppress_shake": true
       },
       "pattern_offset": 0,
       "pattern_override": 2

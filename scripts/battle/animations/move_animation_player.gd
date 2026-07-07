@@ -23,6 +23,7 @@ signal animation_finished
 @export var energy_blast_config: Dictionary = {}
 @export var water_splash_config: Dictionary = {}
 @export var electric_switch_config: Dictionary = {}
+@export var fire_stream_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -259,6 +260,7 @@ func _draw() -> void:
 	_draw_energy_blast_visual()
 	_draw_water_splash_visual()
 	_draw_electric_switch_visual()
+	_draw_fire_stream_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -663,6 +665,135 @@ func _draw_electric_switch_impact(progress: float, visible_end: float, bolt_colo
 		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * 0.26
 		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * (0.9 + 0.24 * sin(float(spark_index) + float(frame_index) * 0.23))
 		draw_line(start, end, _color_with_alpha(core_color, impact_alpha * 0.7), 1.5)
+
+
+func _draw_fire_stream_visual() -> void:
+	if not bool(fire_stream_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(fire_stream_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(fire_stream_config.get("visible_end", 1.0)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha: float = _get_timed_alpha(progress, visible_start, visible_end, fire_stream_config)
+	if alpha <= 0.02:
+		return
+
+	var flame_color: Color = _color_from_value(fire_stream_config.get("flame_color", [1.0, 0.22, 0.03, 1.0]), Color(1.0, 0.22, 0.03, 1.0))
+	var hot_color: Color = _color_from_value(fire_stream_config.get("hot_color", [1.0, 0.88, 0.18, 1.0]), Color(1.0, 0.88, 0.18, 1.0))
+	var core_color: Color = _color_from_value(fire_stream_config.get("core_color", [1.0, 0.98, 0.72, 1.0]), Color(1.0, 0.98, 0.72, 1.0))
+	var smoke_color: Color = _color_from_value(fire_stream_config.get("smoke_color", [0.18, 0.08, 0.04, 1.0]), Color(0.18, 0.08, 0.04, 1.0))
+	var stream_progress: float = clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var head_progress: float = clampf(stream_progress * float(fire_stream_config.get("travel_scale", 1.28)), 0.0, 1.0)
+	var segments: int = maxi(8, int(fire_stream_config.get("segments", 18)))
+	var start_width: float = float(fire_stream_config.get("start_width", 12.0))
+	var end_width: float = float(fire_stream_config.get("end_width", 28.0))
+	var jitter: float = float(fire_stream_config.get("jitter", 7.0))
+	var wave_speed: float = float(fire_stream_config.get("wave_speed", 0.48))
+	var stream_direction: Vector2 = _fire_stream_direction()
+
+	var previous: Vector2 = _fire_stream_point(0.0, jitter, wave_speed)
+	for segment_index: int in range(1, segments + 1):
+		var t: float = head_progress * float(segment_index) / float(segments)
+		var current: Vector2 = _fire_stream_point(t, jitter, wave_speed)
+		var local: float = float(segment_index) / float(segments)
+		var width: float = lerpf(start_width, end_width, local) * (0.88 + 0.12 * sin(float(frame_index) * 0.42 + local * 9.0))
+		var segment_alpha: float = alpha * (0.24 + 0.76 * local)
+		draw_line(previous, current, _color_with_alpha(smoke_color, segment_alpha * 0.16), width * 0.9)
+		draw_line(previous, current, _color_with_alpha(flame_color, segment_alpha * 0.24), width * 0.52)
+		if segment_index % 2 == 0:
+			var tongue_phase: float = float(frame_index) * 0.34 + float(segment_index) * 1.19
+			var side: float = sin(tongue_phase)
+			var tongue_center: Vector2 = current + stream_direction.orthogonal() * side * width * 0.18
+			var tongue_length: float = width * (1.45 + 0.22 * sin(tongue_phase * 1.7))
+			_draw_flame_tongue(tongue_center, stream_direction, tongue_length * 1.18, width * 0.88, flame_color, segment_alpha * 0.78, side)
+			_draw_flame_tongue(tongue_center + stream_direction * width * 0.12, stream_direction, tongue_length * 0.82, width * 0.52, hot_color, segment_alpha * 0.82, -side)
+			_draw_flame_tongue(tongue_center + stream_direction * width * 0.25, stream_direction, tongue_length * 0.48, width * 0.24, core_color, segment_alpha * 0.68, side * 0.4)
+		previous = current
+
+	var ember_count: int = maxi(0, int(fire_stream_config.get("ember_count", 10)))
+	for ember_index: int in range(ember_count):
+		var ember_t: float = clampf(head_progress - float(ember_index) * 0.055, 0.0, head_progress)
+		var base: Vector2 = _fire_stream_point(ember_t, jitter * 1.4, wave_speed * 0.8)
+		var ember_phase: float = float(frame_index) * 0.36 + float(ember_index) * 1.73
+		var ember_offset := Vector2(sin(ember_phase) * 8.0, cos(ember_phase * 0.7) * 5.0 - float(ember_index % 3) * 2.0)
+		var ember_alpha: float = alpha * (0.68 - float(ember_index) / float(ember_count + 2))
+		draw_circle(base + ember_offset, 1.8 + float(ember_index % 3) * 0.45, _color_with_alpha(hot_color, ember_alpha))
+
+	_draw_fire_stream_impact(progress, visible_end, flame_color, hot_color, core_color)
+
+
+func _fire_stream_point(t: float, jitter: float, wave_speed: float) -> Vector2:
+	var state: Dictionary = _get_projectile_state_from_config(t, fire_stream_config)
+	var base: Vector2 = _projectile_battlefield_position(state.get("position", Vector2.ZERO) as Vector2, fire_stream_config)
+	var start_state: Dictionary = _get_projectile_state_from_config(0.0, fire_stream_config)
+	var end_state: Dictionary = _get_projectile_state_from_config(1.0, fire_stream_config)
+	var start: Vector2 = _projectile_battlefield_position(start_state.get("position", Vector2.ZERO) as Vector2, fire_stream_config)
+	var end: Vector2 = _projectile_battlefield_position(end_state.get("position", Vector2.ZERO) as Vector2, fire_stream_config)
+	var direction: Vector2 = (end - start).normalized()
+	if direction == Vector2.ZERO:
+		direction = Vector2.RIGHT
+	var perpendicular := direction.orthogonal()
+	var wave: float = sin(t * TAU * 2.2 + float(frame_index) * wave_speed) * jitter * sin(t * PI)
+	return base + perpendicular * wave
+
+
+func _fire_stream_direction() -> Vector2:
+	var start_state: Dictionary = _get_projectile_state_from_config(0.0, fire_stream_config)
+	var end_state: Dictionary = _get_projectile_state_from_config(1.0, fire_stream_config)
+	var start: Vector2 = _projectile_battlefield_position(start_state.get("position", Vector2.ZERO) as Vector2, fire_stream_config)
+	var end: Vector2 = _projectile_battlefield_position(end_state.get("position", Vector2.ZERO) as Vector2, fire_stream_config)
+	var direction: Vector2 = (end - start).normalized()
+	return Vector2.RIGHT if direction == Vector2.ZERO else direction
+
+
+func _draw_flame_tongue(center: Vector2, direction: Vector2, length: float, width: float, color: Color, alpha: float, bend: float = 0.0) -> void:
+	if alpha <= 0.02:
+		return
+
+	var normalized_direction: Vector2 = direction.normalized()
+	if normalized_direction == Vector2.ZERO:
+		normalized_direction = Vector2.RIGHT
+	var perpendicular := normalized_direction.orthogonal()
+	var tip: Vector2 = center + normalized_direction * length * 0.58 + perpendicular * bend * width * 0.28
+	var shoulder: Vector2 = center + normalized_direction * length * 0.08
+	var rear: Vector2 = center - normalized_direction * length * 0.42
+	var points := PackedVector2Array([
+		tip,
+		shoulder + perpendicular * width * 0.48,
+		rear + perpendicular * width * 0.22,
+		rear - perpendicular * width * 0.22,
+		shoulder - perpendicular * width * 0.48,
+	])
+	draw_colored_polygon(points, _color_with_alpha(color, alpha))
+
+
+func _draw_fire_stream_impact(progress: float, visible_end: float, flame_color: Color, hot_color: Color, core_color: Color) -> void:
+	var impact_start: float = clampf(float(fire_stream_config.get("impact_start", 0.54)), 0.0, visible_end)
+	if progress < impact_start:
+		return
+
+	var impact_progress: float = clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var impact_alpha: float = (1.0 - impact_progress) * float(fire_stream_config.get("impact_alpha", 0.78))
+	if impact_alpha <= 0.02:
+		return
+
+	var impact_at: float = clampf(float(fire_stream_config.get("impact_at", 1.0)), 0.0, 1.0)
+	var impact_state: Dictionary = _get_projectile_state_from_config(impact_at, fire_stream_config)
+	var center: Vector2 = _projectile_battlefield_position(impact_state.get("position", Vector2.ZERO) as Vector2, fire_stream_config)
+	var radius: float = float(fire_stream_config.get("impact_radius", 38.0)) * (0.42 + impact_progress * 0.86)
+	draw_circle(center, radius * 0.72, _color_with_alpha(flame_color, impact_alpha * 0.22))
+	draw_arc(center, radius, 0.0, TAU, 64, _color_with_alpha(hot_color, impact_alpha * 0.72), 2.2)
+	var burst_count: int = maxi(5, int(fire_stream_config.get("impact_burst_count", 9)))
+	for burst_index: int in range(burst_count):
+		var angle: float = float(burst_index) * TAU / float(burst_count) + float(frame_index) * 0.08
+		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * 0.25
+		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * (0.86 + 0.22 * sin(float(burst_index) + float(frame_index) * 0.2))
+		draw_line(start, end, _color_with_alpha(core_color, impact_alpha * 0.54), 1.4)
 
 
 func _electric_jitter(index: int, t: float, amount: float) -> Vector2:

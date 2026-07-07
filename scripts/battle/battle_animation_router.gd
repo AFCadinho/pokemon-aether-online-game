@@ -333,6 +333,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.energy_blast_config = (config.get("energy_blast", {}) as Dictionary).duplicate(true)
 	animation_node.water_splash_config = (config.get("water_splash", {}) as Dictionary).duplicate(true)
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
+	animation_node.fire_stream_config = (config.get("fire_stream", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -801,6 +802,11 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.electric_switch_config = _with_projectile_endpoint_anchors(
 		animation_node.electric_switch_config,
+		actor_anchor,
+		target_anchor
+	)
+	animation_node.fire_stream_config = _with_projectile_endpoint_anchors(
+		animation_node.fire_stream_config,
 		actor_anchor,
 		target_anchor
 	)
