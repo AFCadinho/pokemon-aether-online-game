@@ -450,6 +450,8 @@ func _get_status_condition_effect_animation_key(event: Dictionary) -> String:
 			return "status_badly_poisoned"
 		"brn", "burn", "burned":
 			return "status_burned"
+		"frz", "freeze", "frozen":
+			return "status_frozen"
 
 	return ""
 
@@ -459,6 +461,8 @@ func _get_cant_status_effect_animation_key(event: Dictionary) -> String:
 	match reason_key:
 		"par", "paralysis", "paralyzed":
 			return "status_paralysis"
+		"frz", "freeze", "frozen":
+			return "status_frozen"
 
 	return ""
 

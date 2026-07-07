@@ -3396,6 +3396,8 @@ func _get_persistent_status_condition_key(status: String) -> String:
 			return "badly_poisoned"
 		"brn", "burn", "burned":
 			return "burned"
+		"frz", "freeze", "frozen":
+			return "frozen"
 		_:
 			return ""
 

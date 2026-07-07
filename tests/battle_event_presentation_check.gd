@@ -17,6 +17,8 @@ func _init() -> void:
 	_check_booster_energy_quark_drive_messages()
 	_check_paralysis_status_event_uses_status_effect_animation()
 	_check_paralysis_cant_event_replays_status_effect_animation()
+	_check_freeze_status_event_uses_status_effect_animation()
+	_check_freeze_cant_event_replays_status_effect_animation()
 	_check_poison_status_event_uses_status_effect_animation()
 	_check_badly_poisoned_status_event_uses_status_effect_animation()
 	_check_burn_status_event_uses_status_effect_animation()
@@ -197,6 +199,31 @@ func _check_paralysis_cant_event_replays_status_effect_animation() -> void:
 
 	_check_equal(str(result.get("effect_animation_key", "")), "status_paralysis", "paralysis cant replays status effect animation")
 	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Pikachu", "paralysis cant targets blocked actor")
+
+
+func _check_freeze_status_event_uses_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "status",
+		"target": "p2a: Garchomp",
+		"status": "frz",
+		"state": "start",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_frozen", "freeze status start uses freeze effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "freeze status start targets affected Pokemon")
+
+
+func _check_freeze_cant_event_replays_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "cant",
+		"actor": "p1a: Pikachu",
+		"reason": "frz",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_frozen", "freeze cant replays status effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Pikachu", "freeze cant targets blocked actor")
 
 
 func _check_poison_status_event_uses_status_effect_animation() -> void:

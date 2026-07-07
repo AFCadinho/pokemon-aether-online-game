@@ -5,6 +5,8 @@ class_name StatusConditionOverlay
 var condition_key := ""
 var elapsed := 0.0
 var tinted_sprite: AnimatedSprite2D
+var frozen_sprite: AnimatedSprite2D
+var frozen_sprite_was_playing := false
 
 
 func set_condition(value: String) -> void:
@@ -55,6 +57,9 @@ func _update_sprite_tint() -> void:
 	if condition_key == "burned":
 		_apply_sprite_tint(Color(1.0, 0.32, 0.08, 1.0), 1.12, 0.42, 0.32)
 		return
+	if condition_key == "frozen":
+		_apply_frozen_sprite_state()
+		return
 
 	_reset_sprite_tint()
 
@@ -76,10 +81,40 @@ func _apply_sprite_tint(target_color: Color, speed: float, base_amount: float, p
 
 
 func _reset_sprite_tint() -> void:
+	_reset_frozen_sprite_state()
 	if tinted_sprite != null and is_instance_valid(tinted_sprite):
 		tinted_sprite.self_modulate = Color.WHITE
 		tinted_sprite.modulate = Color.WHITE
 	tinted_sprite = null
+
+
+func _apply_frozen_sprite_state() -> void:
+	if tinted_sprite == null:
+		return
+
+	if frozen_sprite != tinted_sprite:
+		_reset_frozen_sprite_state()
+		frozen_sprite = tinted_sprite
+		frozen_sprite_was_playing = frozen_sprite.is_playing()
+		frozen_sprite.pause()
+
+	var pulse := 0.5 + 0.5 * sin(elapsed * TAU * 0.35)
+	var flash := 0.36 + pulse * 0.12
+	var tint := Color(
+		lerpf(1.0, 0.58, flash),
+		lerpf(1.0, 0.9, flash),
+		1.0,
+		1.0
+	)
+	tinted_sprite.self_modulate = tint
+	tinted_sprite.modulate = tint
+
+
+func _reset_frozen_sprite_state() -> void:
+	if frozen_sprite != null and is_instance_valid(frozen_sprite) and frozen_sprite_was_playing:
+		frozen_sprite.play()
+	frozen_sprite = null
+	frozen_sprite_was_playing = false
 
 
 func _get_parent_sprite() -> AnimatedSprite2D:
@@ -103,5 +138,7 @@ func _normalize_condition(value: String) -> String:
 			return "badly_poisoned"
 		"brn", "burn", "burned":
 			return "burned"
+		"frz", "freeze", "frozen":
+			return "frozen"
 		_:
 			return ""

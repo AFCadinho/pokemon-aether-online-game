@@ -507,6 +507,50 @@
       ],
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "status_frozen": {
+      "template": "imported_sheet",
+      "source": "Common:Frozen",
+      "category": "status_condition",
+      "data_path": "res://assets/battles/animations/frozen/frozen.json",
+      "sheet_path": "res://assets/battles/animations/frozen/PRAS- Status.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Frozen.wav": "res://assets/battles/animations/frozen/PRSFX- Frozen.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.56,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.72,
+        0.94,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.68,
+      "sprite_position_offset": [
+        0,
+        2
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "speed_scale": 1.0,
+      "source_anchor": "player",
+      "effect_position_offset": [
+        0,
+        -8
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   },
   "aliases": {

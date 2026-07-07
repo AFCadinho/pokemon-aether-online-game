@@ -1747,6 +1747,49 @@
       ],
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "blizzard": {
+      "template": "imported_sheet",
+      "category": "field_impact",
+      "data_path": "res://assets/battles/animations/blizzard/blizzard.json",
+      "sheet_path": "res://assets/battles/animations/blizzard/PRAS- Ice.png",
+      "background_path": "res://assets/battles/animations/blizzard/PRAS- Blizzard BG.png",
+      "foreground_path": "res://assets/battles/animations/blizzard/PRAS- Blizzard FG.png",
+      "sound_paths": {
+        "PRSFX- Blizzard.wav": "res://assets/battles/animations/blizzard/PRSFX- Blizzard.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.64,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.82,
+        0.97,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.58,
+      "sprite_position_offset": [
+        0,
+        12
+      ],
+      "overlay_peak_alpha": 0.08,
+      "sparkle_count": 10,
+      "speed_scale": 1.16,
+      "source_anchor": "target",
+      "effect_position_offset": [
+        0,
+        -18
+      ],
+      "pattern_offset": 0,
+      "pattern_override": 4
     }
   }
 }
