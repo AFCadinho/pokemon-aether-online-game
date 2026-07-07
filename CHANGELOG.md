@@ -17,6 +17,7 @@
 - If a Ranked match starts while the player is in a wild or NPC battle, the PvE battle is forfeited and cleaned up before PvP opens.
 
 **Fixed**
+- Fixed the developer Clear Party tool only clearing the local UI, which could make the cleared party reappear and send newly generated Pokemon to PC storage.
 - Blackout respawns now heal the party and no longer let fainted battle state overwrite the healed party.
 - Fixed players remaining queued after closing the Ranked menu.
 - Fixed matched Ranked players getting stuck when the opponent closed the Ranked interface before battle start.
