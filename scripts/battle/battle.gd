@@ -111,7 +111,7 @@ const DEBUG_BATTLE_HP_EVENTS := false
 const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const DEBUG_BATTLE_PRESENTATION_ORDER := false
-const DEBUG_BATTLE_START_EVENTS := true
+const DEBUG_BATTLE_START_EVENTS := false
 const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
 const SUMMON_RELEASE_AUDIO_BALL := "ball"
 const SUMMON_RELEASE_AUDIO_NONE := "none"
@@ -259,7 +259,6 @@ func _ready() -> void:
 		Callable(self, "_format_battle_actor"),
 		Callable(self, "_get_player_display_name")
 	)
-	event_presentation.debug_enabled = DEBUG_BATTLE_MOVE_EVENTS
 	animation_router.setup(
 		player_sprite_box,
 		enemy_sprite_box,

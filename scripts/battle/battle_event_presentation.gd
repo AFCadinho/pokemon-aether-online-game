@@ -10,7 +10,6 @@ var recent_field_effect_source := ""
 var recent_ability_event := false
 var recent_move_event := false
 var active_residual_pokemon_effects := {}
-var debug_enabled := false
 
 
 func setup(
@@ -80,13 +79,6 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_ability_event = false
 			recent_move_event = true
 			presentation["attack_actor_ident"] = str(event_data.get("actor", ""))
-			_debug_battle_move("move event actor=%s move=%s target=%s source=%s event=%s" % [
-				str(presentation["attack_actor_ident"]),
-				str(event_data.get("move", "")),
-				str(event_data.get("target", "")),
-				str(event_data.get("source", "")),
-				JSON.stringify(event_data),
-			])
 			var actor := _format_actor(str(event_data.get("actor", "")))
 			var move_name := str(event_data.get("move", ""))
 			presentation["move_animation_name"] = move_name
@@ -205,13 +197,6 @@ func build(event_data: Dictionary) -> Dictionary:
 		"fieldEffect":
 			recent_ability_event = false
 			recent_move_event = false
-			_debug_battle_move("fieldEffect event effect=%s state=%s source=%s sourceTarget=%s event=%s" % [
-				str(event_data.get("effect", "")),
-				str(event_data.get("state", "")),
-				str(event_data.get("source", "")),
-				str(event_data.get("sourceTarget", "")),
-				JSON.stringify(event_data),
-			])
 			presentation["log_message"] = event_text_formatter.format_field_effect_event(event_data)
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
 			presentation["effect_animation_key"] = _get_field_effect_animation_key(event_data)
@@ -228,14 +213,6 @@ func build(event_data: Dictionary) -> Dictionary:
 		"ability":
 			recent_field_effect_source = ""
 			recent_move_event = false
-			_debug_battle_move("ability event target=%s ability=%s effect=%s stat=%s source=%s event=%s" % [
-				str(event_data.get("target", event_data.get("actor", ""))),
-				str(event_data.get("ability", "")),
-				str(event_data.get("effect", "")),
-				str(event_data.get("stat", "")),
-				str(event_data.get("source", "")),
-				JSON.stringify(event_data),
-			])
 			presentation["log_message"] = event_text_formatter.format_ability_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -259,12 +236,6 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_field_effect_source = ""
 			recent_ability_event = false
 			recent_move_event = false
-			_debug_battle_move("status event target=%s status=%s source=%s event=%s" % [
-				str(event_data.get("target", event_data.get("pokemon", ""))),
-				_get_first_event_text_value(event_data, ["status", "statusName", "condition"]),
-				str(event_data.get("source", "")),
-				JSON.stringify(event_data),
-			])
 			presentation["log_message"] = event_text_formatter.format_status_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -273,12 +244,6 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_field_effect_source = ""
 			recent_ability_event = false
 			recent_move_event = false
-			_debug_battle_move("fail event target=%s reason=%s source=%s event=%s" % [
-				str(event_data.get("target", event_data.get("pokemon", ""))),
-				str(event_data.get("reason", "")),
-				str(event_data.get("source", "")),
-				JSON.stringify(event_data),
-			])
 			presentation["log_message"] = event_text_formatter.format_fail_event(event_data)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
@@ -326,16 +291,9 @@ func build(event_data: Dictionary) -> Dictionary:
 		"damage":
 			recent_ability_event = false
 			var damage_target_ident := str(event_data.get("target", ""))
-			_debug_battle_move("damage event target=%s previous_snapshot=%s final_snapshot=%s has_hp_loss=%s visible_change=%s event=%s" % [
-				damage_target_ident,
-				JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, true)),
-				JSON.stringify(hp_event_helper.get_event_hp_snapshot(event_data, false)),
-				str(hp_event_helper.event_has_hp_loss(event_data)),
-				str(hp_event_helper.get_event_visible_hp_change(event_data)),
-				JSON.stringify(event_data),
-			])
 			var has_hp_loss: bool = hp_event_helper.event_has_hp_loss(event_data)
 			var has_sub_percent_hp_loss: bool = hp_event_helper.event_has_sub_percent_hp_loss(event_data)
+			var visible_hp_change: int = hp_event_helper.get_event_visible_hp_change(event_data)
 			if not has_hp_loss and not has_sub_percent_hp_loss:
 				recent_field_effect_source = ""
 			else:
@@ -351,15 +309,6 @@ func build(event_data: Dictionary) -> Dictionary:
 					active_effect,
 					not recent_move_event
 				)
-				_debug_battle_move("damage formatted target=%s source=%s fallback_source=%s recent_move=%s source_message=%s has_hp_loss=%s sub_percent=%s" % [
-					str(presentation["damage_target_ident"]),
-					str(event_data.get("source", "")),
-					recent_field_effect_source,
-					str(recent_move_event),
-					source_message,
-					str(has_hp_loss),
-					str(has_sub_percent_hp_loss),
-				])
 
 				if source_message != "" and (has_hp_loss or has_sub_percent_hp_loss):
 					presentation["log_message"] = source_message
@@ -368,7 +317,7 @@ func build(event_data: Dictionary) -> Dictionary:
 				else:
 					presentation["log_message"] = event_text_formatter.format_direct_damage_message(
 						target,
-						hp_event_helper.get_event_visible_hp_change(event_data),
+						visible_hp_change,
 						has_hp_loss,
 						has_sub_percent_hp_loss
 					)
@@ -536,8 +485,3 @@ func _get_first_event_text_value(event: Dictionary, keys: Array) -> String:
 			return value
 
 	return ""
-
-
-func _debug_battle_move(message: String) -> void:
-	if debug_enabled:
-		print("[battle-move] " + message)

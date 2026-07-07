@@ -108,9 +108,15 @@ func get_event_visible_hp_change(event: Dictionary) -> int:
 	var condition := str(event.get("condition", ""))
 	var previous_percent: int = get_condition_visible_hp_percent(previous_condition)
 	var current_percent: int = get_condition_visible_hp_percent(condition)
+	var numeric_hp_loss_change: int = _get_numeric_hp_loss_visible_change(event)
 
 	if previous_percent >= 0 and current_percent >= 0:
 		var condition_change: int = abs(previous_percent - current_percent)
+		if numeric_hp_loss_change >= 0:
+			if condition_change == 0:
+				return numeric_hp_loss_change
+			if abs(condition_change - numeric_hp_loss_change) > 1:
+				return numeric_hp_loss_change
 		if condition_change == 0:
 			var amount_from_condition: int = int(event.get("amount", 0))
 			var max_hp_from_condition: int = int(event.get("maxHp", 0))
@@ -141,6 +147,9 @@ func event_has_hp_loss(event: Dictionary) -> bool:
 	if is_percentage_only_condition_event(event, false):
 		return false
 
+	if _event_has_numeric_hp_loss(event):
+		return true
+
 	var previous_snapshot: Dictionary = get_event_hp_snapshot(event, true)
 	var snapshot: Dictionary = get_event_hp_snapshot(event, false)
 	if not previous_snapshot.is_empty() and not snapshot.is_empty():
@@ -167,6 +176,27 @@ func event_has_sub_percent_hp_loss(event: Dictionary) -> bool:
 		return false
 
 	return to_visible_hp_percent(amount, max_hp) <= 1
+
+func _event_has_numeric_hp_loss(event: Dictionary) -> bool:
+	if not event.has("previousHp") or not event.has("hp") or not event.has("maxHp"):
+		return false
+
+	var max_hp: int = int(event.get("maxHp", 0))
+	if max_hp <= 0:
+		return false
+
+	var previous_hp: int = int(event.get("previousHp", 0))
+	var hp: int = int(event.get("hp", 0))
+	return previous_hp > hp
+
+func _get_numeric_hp_loss_visible_change(event: Dictionary) -> int:
+	if not _event_has_numeric_hp_loss(event):
+		return -1
+
+	var previous_hp: int = int(event.get("previousHp", 0))
+	var hp: int = int(event.get("hp", 0))
+	var max_hp: int = int(event.get("maxHp", 0))
+	return get_visible_hp_change(previous_hp, hp, max_hp)
 
 func get_condition_visible_hp_percent(condition: String) -> int:
 	if condition.contains("fnt"):
