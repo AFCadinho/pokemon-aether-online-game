@@ -14,6 +14,7 @@ func _init() -> void:
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
 	_check_damage_after_hazard_logs_when_conditions_repeat()
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
+	_check_booster_energy_quark_drive_messages()
 	quit(1 if failed else 0)
 
 
@@ -139,6 +140,30 @@ func _check_damage_after_hazard_logs_mixed_visible_and_exact_conditions() -> voi
 	})
 
 	_check_equal(str(result.get("log_message", "")), "(Alomomola lost 34% of its health!)", "damage after hazard logs visible delta before exact HP reveal")
+
+
+func _check_booster_energy_quark_drive_messages() -> void:
+	var presentation = _make_presentation()
+	var item_result: Dictionary = presentation.build({
+		"type": "item",
+		"target": "p1a: Iron Valiant",
+		"item": "Booster Energy",
+		"state": "end",
+	})
+	var ability_result: Dictionary = presentation.build({
+		"type": "ability",
+		"target": "p1a: Iron Valiant",
+		"ability": "Quark Drive",
+		"effect": "boost",
+		"stat": "spe",
+		"source": "item: Booster Energy",
+	})
+
+	_check_equal(str(item_result.get("log_message", "")), "Iron Valiant's Booster Energy activated!", "Booster Energy lead item activation logs")
+	_check_equal(str(item_result.get("battle_message", "")), "Iron Valiant's Booster Energy activated!", "Booster Energy lead item activation battle text")
+	_check_equal(str(ability_result.get("log_message", "")), "Iron Valiant's Quark Drive boosted its Speed!", "Quark Drive lead stat boost logs")
+	_check_equal(str(ability_result.get("battle_message", "")), "Iron Valiant's Quark Drive boosted its Speed!", "Quark Drive lead stat boost battle text")
+	_check_equal(str(ability_result.get("ability_boost_target_ident", "")), "p1a: Iron Valiant", "Quark Drive lead stat boost animates badge target")
 
 
 func _format_actor(ident: String, _prefer_player_name := true) -> String:

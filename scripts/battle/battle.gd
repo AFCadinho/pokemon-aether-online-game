@@ -6040,7 +6040,7 @@ func _get_wild_battle_start_events(events: Array) -> Array:
 			"turn", "switch", "drag":
 				_debug_battle_start("start_filter.skip_setup event=%s" % _summarize_battle_event(event_data))
 				continue
-			"fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega", "primal":
+			"fieldEffect", "pokemonEffect", "ability", "statChange", "item", "transform", "mega", "primal":
 				_debug_battle_start("start_filter.include event=%s" % _summarize_battle_event(event_data))
 				start_events.append(event_data)
 			_:
@@ -6062,7 +6062,7 @@ func _get_battle_start_event_end_index(events: Array) -> int:
 
 		var event_data: Dictionary = event_value as Dictionary
 		match str(event_data.get("type", "")):
-			"turn", "switch", "drag", "fieldEffect", "pokemonEffect", "ability", "statChange", "transform", "mega", "primal":
+			"turn", "switch", "drag", "fieldEffect", "pokemonEffect", "ability", "statChange", "item", "transform", "mega", "primal":
 				last_start_event_index = index
 			_:
 				_debug_battle_start("start_boundary.break index=%d event=%s lastStartIndex=%d" % [

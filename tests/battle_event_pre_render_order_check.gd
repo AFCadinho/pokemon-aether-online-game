@@ -10,6 +10,7 @@ func _init() -> void:
 	_check_non_pvp_switch_events_are_not_deduped_by_species()
 	_check_initial_setup_switch_events_are_filtered_once()
 	_check_initial_event_seq_cursor_tracks_start_event_boundary()
+	_check_initial_start_events_include_booster_energy_item_events()
 	_check_initial_setup_keeps_specific_form_species()
 	quit(1 if failed else 0)
 
@@ -114,6 +115,29 @@ func _check_initial_event_seq_cursor_tracks_start_event_boundary() -> void:
 		start_source.contains("break"),
 		true,
 		"battle start filter stops before first non-start action event"
+	)
+
+
+func _check_initial_start_events_include_booster_energy_item_events() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var start_index := source.find("func _get_wild_battle_start_events(events: Array) -> Array:")
+	var start_next_index := source.find("\nfunc ", start_index + 1)
+	var start_source := source.substr(start_index, start_next_index - start_index)
+	var boundary_index := source.find("func _get_battle_start_event_end_index(events: Array) -> int:")
+	var boundary_next_index := source.find("\nfunc ", boundary_index + 1)
+	var boundary_source := source.substr(boundary_index, boundary_next_index - boundary_index)
+
+	_check_equal(start_index >= 0, true, "battle start event filter exists")
+	_check_equal(
+		start_source.contains("\"fieldEffect\", \"pokemonEffect\", \"ability\", \"statChange\", \"item\", \"transform\", \"mega\", \"primal\":"),
+		true,
+		"battle start filter includes item events before ability boosts"
+	)
+	_check_equal(boundary_index >= 0, true, "battle start boundary helper exists")
+	_check_equal(
+		boundary_source.contains("\"turn\", \"switch\", \"drag\", \"fieldEffect\", \"pokemonEffect\", \"ability\", \"statChange\", \"item\", \"transform\", \"mega\", \"primal\":"),
+		true,
+		"battle start boundary consumes item events before ability boosts"
 	)
 
 
