@@ -16614,9 +16614,11 @@ func _on_clear_party_confirmed() -> void:
 	if not _can_use_dev_tools():
 		return
 
-	PlayerSave.party.clear()
-	PlayerSave.party_changed.emit()
-	await _save_party_state_after_change()
+	var result: Dictionary = await PlayerPartyStateService.dev_clear_party()
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not clear party: %s" % str(result.get("error", "Unknown error")))
+		return
+
 	dev_actions_popup.visible = false
 	_add_chat_message("Party cleared.")
 
