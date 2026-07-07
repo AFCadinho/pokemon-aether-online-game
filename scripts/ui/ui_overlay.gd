@@ -520,6 +520,7 @@ var pvp_leaderboard_scope_select: OptionButton
 var pvp_active_leaderboard_scope := "all_time"
 var pvp_history_in_flight := false
 var pvp_ranked_team_validation_in_flight := false
+var pvp_ranked_queue_join_preparing := false
 var pvp_ranked_team_validation_request_seq := 0
 var pvp_ranked_team_validation_result: Dictionary = PvpRankedTeamValidation.not_checked()
 var pvp_ranked_team_validation_party_signature := ""
@@ -19471,6 +19472,8 @@ func _refresh_pvp_ranked_team_validation(force: bool = false) -> void:
 	_refresh_pvp_team_validator()
 
 func _on_pvp_party_changed() -> void:
+	if pvp_ranked_queue_join_preparing:
+		return
 	pvp_ranked_team_validation_request_seq += 1
 	pvp_ranked_team_validation_in_flight = false
 	pvp_ranked_team_validation_result = PvpRankedTeamValidation.not_checked()
@@ -19559,8 +19562,24 @@ func _confirm_close_pvp_room_and_leave_queue() -> void:
 	if left_queue:
 		_hide_pvp_room_popup_now(true)
 
+func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
+	if PlayerSave.party.is_empty():
+		_set_pvp_queue_status("Queue Status: add at least one Pokemon before joining PvP.")
+		_set_pvp_status("Add at least one Pokemon before starting PvP.")
+		return false
+	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
+	if bool(result.get("success", false)):
+		return true
+	var error := str(result.get("error", "Unknown error"))
+	_set_pvp_queue_status("Queue Status: could not prepare team: %s" % error)
+	_set_pvp_status("Could not prepare team for %s: %s" % [action_label, error])
+	push_warning("UIOverlay: could not heal party before %s: %s" % [action_label, error])
+	return false
+
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
+		return
+	if not await _heal_party_before_pvp("PvP room"):
 		return
 	_set_pvp_room_busy(true, "Creating room...")
 	var request := _create_pvp_request_node()
@@ -19588,6 +19607,8 @@ func _on_pvp_join_room_pressed() -> void:
 	var room_code := pvp_room_code_input.text.strip_edges().to_upper()
 	if room_code == "":
 		_set_pvp_status("Enter a room code first.")
+		return
+	if not await _heal_party_before_pvp("PvP room"):
 		return
 
 	_set_pvp_room_busy(true, "Joining room...")
@@ -19619,12 +19640,19 @@ func _on_pvp_join_room_pressed() -> void:
 func _on_pvp_join_queue_pressed() -> void:
 	if pvp_battle_starting:
 		return
+	pvp_ranked_queue_join_preparing = true
+	if not await _heal_party_before_pvp("ranked queue"):
+		pvp_ranked_queue_join_preparing = false
+		return
 	if _is_selected_pvp_queue_ranked():
+		pvp_ranked_team_validation_party_signature = ""
 		await _refresh_pvp_ranked_team_validation(true)
 		if not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result):
+			pvp_ranked_queue_join_preparing = false
 			_set_pvp_queue_status("Queue Status: team validation failed.")
 			_refresh_pvp_team_validator()
 			return
+	pvp_ranked_queue_join_preparing = false
 	_set_pvp_room_busy(true, "Joining queue...")
 	_set_pvp_queue_status("Queue Status: joining...")
 	var request := _create_pvp_request_node()

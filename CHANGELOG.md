@@ -6,13 +6,24 @@
 - Added a Heal NPC that can restore your party from the overworld.
 - Added a Nurse mugshot for Heal NPC dialogue.
 - Added persistent heal-point respawns for wild and NPC battle losses.
+- Added a minimized Ranked queue panel so players can keep playing while waiting in queue.
+- Added a Ranked match-found countdown banner with a notification sound and short screen-dim warning before PvP starts.
 
 **Changed**
 - Party healing now uses the same reusable healing flow across NPCs and developer tools.
 - Heal NPCs now store the player's last heal point for future blackout respawns.
+- Ranked queue close/minimize behavior is now explicit: minimizing keeps the queue active, while closing or logging out leaves the queue unless a match has already been found.
+- PvP now prepares teams by healing the current party before joining a PvP room or ranked queue, and heals the party again after PvP ends.
+- If a Ranked match starts while the player is in a wild or NPC battle, the PvE battle is forfeited and cleaned up before PvP opens.
 
 **Fixed**
 - Blackout respawns now heal the party and no longer let fainted battle state overwrite the healed party.
+- Fixed players remaining queued after closing the Ranked menu.
+- Fixed matched Ranked players getting stuck when the opponent closed the Ranked interface before battle start.
+- Fixed Ranked match-found overlays blocking wild battle actions during the countdown.
+- Fixed stale matched queue state after forfeiting or reconnecting to a previous Ranked match.
+- Fixed Ranked validation being reset by the pre-queue party heal, which could show `Ranked Ready` while join still failed.
+- Fixed PvP battle damage being written back to the overworld party after PvP ends.
 
 ## 0.3.0 - 2026-07-06
 

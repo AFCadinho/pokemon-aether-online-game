@@ -2491,6 +2491,7 @@ func _finish_battle(result: Dictionary) -> void:
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
+		_heal_party_after_pvp_battle.call_deferred()
 	if not result.has("localPartyDefeated"):
 		result["localPartyDefeated"] = _is_local_battle_party_defeated()
 	var skip_party_battle_sync := bool(result.get("skipPartyBattleSync", false)) or _should_skip_party_battle_sync_for_blackout(result)
@@ -2502,7 +2503,7 @@ func _finish_battle(result: Dictionary) -> void:
 
 func _should_skip_party_battle_sync_for_blackout(result: Dictionary) -> bool:
 	if _is_pvp_battle():
-		return false
+		return true
 
 	var reason := str(result.get("reason", "")).strip_edges().to_lower()
 	if reason in ["caught", "flee"]:
@@ -2530,6 +2531,11 @@ func _is_local_battle_party_defeated() -> bool:
 		) > 0:
 			return false
 	return has_pokemon
+
+func _heal_party_after_pvp_battle() -> void:
+	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
+	if not bool(result.get("success", false)):
+		push_warning("Battle: could not heal party after PvP battle: %s" % str(result.get("error", "Unknown error")))
 
 func _warn_if_pvp_finish_has_pending_render_work(result: Dictionary) -> void:
 	if not _is_pvp_battle():
