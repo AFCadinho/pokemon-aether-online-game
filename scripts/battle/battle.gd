@@ -2490,6 +2490,7 @@ func _finish_battle(result: Dictionary) -> void:
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
+		_heal_local_party_after_pvp_battle()
 		_heal_party_after_pvp_battle.call_deferred()
 	if not result.has("localPartyDefeated"):
 		result["localPartyDefeated"] = _is_local_battle_party_defeated()
@@ -2530,6 +2531,17 @@ func _is_local_battle_party_defeated() -> bool:
 		) > 0:
 			return false
 	return has_pokemon
+
+func _heal_local_party_after_pvp_battle() -> void:
+	var player_save := get_node_or_null("/root/PlayerSave")
+	if player_save == null:
+		return
+
+	var party_value: Variant = player_save.get("party")
+	if not (party_value is Array):
+		return
+
+	PartyHealService.heal_party_locally(party_value as Array)
 
 func _heal_party_after_pvp_battle() -> void:
 	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
