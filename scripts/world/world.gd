@@ -1419,11 +1419,13 @@ func _should_respawn_after_battle_loss(result: Dictionary, battle_kind: String) 
 		return false
 	if reason in ["forfeit", "loss", "blackout"]:
 		return true
+	if reason == "win" and _is_player_battle_winner(str(result.get("winner", ""))):
+		return false
 
 	var winner := str(result.get("winner", "")).strip_edges().to_lower()
 	if winner.is_empty():
 		return false
-	return winner not in ["p1", "player 1", "player1"]
+	return winner not in ["p1", "player 1", "player1"] and bool(result.get("localPartyDefeated", _is_current_party_defeated()))
 
 
 func _respawn_after_battle_loss() -> void:
@@ -1453,6 +1455,23 @@ func _apply_respawn_party_response(party_response: Dictionary) -> void:
 	var party_value: Variant = party_response.get("party", [])
 	if party_value is Array:
 		player_save.call("replace_party_from_state", party_value as Array)
+
+
+func _is_current_party_defeated() -> bool:
+	var party_value: Variant = PlayerSave.get("party")
+	if not (party_value is Array):
+		return false
+
+	var party: Array = party_value as Array
+	var has_pokemon := false
+	for pokemon_value: Variant in party:
+		var pokemon := pokemon_value as Pokemon
+		if pokemon == null:
+			continue
+		has_pokemon = true
+		if pokemon.current_hp > 0:
+			return false
+	return has_pokemon
 
 func _notify_caught_pokemon_if_needed(result: Dictionary) -> void:
 	if str(result.get("reason", "")) != "caught":

@@ -2491,6 +2491,8 @@ func _finish_battle(result: Dictionary) -> void:
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
+	if not result.has("localPartyDefeated"):
+		result["localPartyDefeated"] = _is_local_battle_party_defeated()
 	var skip_party_battle_sync := bool(result.get("skipPartyBattleSync", false)) or _should_skip_party_battle_sync_for_blackout(result)
 	if not skip_party_battle_sync:
 		_sync_player_save_from_battle_state()
@@ -2511,7 +2513,23 @@ func _should_skip_party_battle_sync_for_blackout(result: Dictionary) -> bool:
 	var winner := str(result.get("winner", "")).strip_edges().to_lower()
 	if winner.is_empty():
 		return false
-	return winner not in ["p1", "player 1", "player1"]
+	return winner not in ["p1", "player 1", "player1"] and bool(result.get("localPartyDefeated", false))
+
+
+func _is_local_battle_party_defeated() -> bool:
+	var team: Array = battle_state.get_player_team(_get_local_state_player_id())
+	var has_pokemon := false
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+		has_pokemon = true
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if not bool(pokemon_data.get("fainted", false)) and _safe_int(
+			pokemon_data.get("hp", pokemon_data.get("currentHp", pokemon_data.get("current_hp", 1))),
+			1
+		) > 0:
+			return false
+	return has_pokemon
 
 func _warn_if_pvp_finish_has_pending_render_work(result: Dictionary) -> void:
 	if not _is_pvp_battle():
