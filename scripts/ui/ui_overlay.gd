@@ -19733,9 +19733,6 @@ func _on_pvp_join_queue_pressed() -> void:
 	if pvp_battle_starting:
 		return
 	pvp_ranked_queue_join_preparing = true
-	if not await _heal_party_before_pvp("ranked queue"):
-		pvp_ranked_queue_join_preparing = false
-		return
 	if _is_selected_pvp_queue_ranked():
 		pvp_ranked_team_validation_party_signature = ""
 		await _refresh_pvp_ranked_team_validation(true)
