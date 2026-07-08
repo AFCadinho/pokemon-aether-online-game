@@ -1069,10 +1069,11 @@ func _load_player_party_state() -> void:
 func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
+	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
 	
 	var response: Dictionary = await BattleApiClient.create_dev_wild_battle(
 		battle_request,
-		BattleApiPayloads.from_player_save(PlayerSave),
+		player_payload,
 		wild_pokemon.to_battle_dict(),
 		_get_current_wild_battle_origin()
 	)
@@ -1083,10 +1084,11 @@ func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 func create_triggered_wild_battle_response(area_id: String, encounter_type: String = "grass") -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
+	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
 
 	var response: Dictionary = await BattleApiClient.create_triggered_wild_battle(
 		battle_request,
-		BattleApiPayloads.from_player_save(PlayerSave),
+		player_payload,
 		area_id,
 		encounter_type,
 		_get_current_wild_battle_origin()
@@ -1132,10 +1134,11 @@ func _set_origin_text_value(origin: Dictionary, key: String, value: String) -> v
 func create_trainer_battle_response(trainer_id: String) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
+	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
 
 	var response: Dictionary = await BattleApiClient.create_trainer_battle(
 		battle_request,
-		BattleApiPayloads.from_player_save(PlayerSave),
+		player_payload,
 		trainer_id
 	)
 

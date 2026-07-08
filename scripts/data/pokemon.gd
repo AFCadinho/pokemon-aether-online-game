@@ -28,6 +28,7 @@ var next_level_exp: int
 var experience_to_next_level: int
 var growth_rate: String
 var base_experience: int
+var status: String
 
 var current_hp: int
 var max_hp: int
@@ -60,7 +61,8 @@ func _init(
 	_next_level_exp: int = 0,
 	_experience_to_next_level: int = 0,
 	_growth_rate: String = "",
-	_base_experience: int = 0
+	_base_experience: int = 0,
+	_status: String = ""
 	) -> void:
 	species = _species
 	level = _level
@@ -110,6 +112,7 @@ func _init(
 	experience_to_next_level = max(_experience_to_next_level, 0)
 	growth_rate = _growth_rate.strip_edges()
 	base_experience = max(_base_experience, 0)
+	status = _normalize_status(_status)
 
 	max_hp = 20
 	current_hp = max_hp
@@ -157,7 +160,7 @@ func to_battle_dict() -> Dictionary:
 	if caught_ball_item_id != "":
 		battle_data["caughtBallItemId"] = caught_ball_item_id
 
-	if has_saved_hp_state:
+	if has_saved_hp_state or status != "":
 		battle_data["currentHp"] = current_hp
 		battle_data["maxHp"] = max_hp
 		battle_data["condition"] = _to_battle_condition()
@@ -234,7 +237,10 @@ func _to_battle_condition() -> String:
 	if current_hp <= 0:
 		return "0 fnt"
 
-	return "%s/%s" % [current_hp, max(max_hp, 1)]
+	var condition := "%s/%s" % [current_hp, max(max_hp, 1)]
+	if status != "":
+		condition += " " + status
+	return condition
 
 func ensure_instance_id() -> void:
 	if instance_id != "":
@@ -282,3 +288,20 @@ func _normalize_origin(value: Variant, fallback_location: String = "") -> Dictio
 func _normalize_ball_item_id(value: String, fallback_value: String = "") -> String:
 	var normalized_value := value.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 	return normalized_value if normalized_value != "" else fallback_value
+
+func _normalize_status(value: String) -> String:
+	match value.strip_edges().to_lower():
+		"psn", "poison", "poisoned":
+			return "psn"
+		"tox", "toxic", "badly_poisoned", "badlypoisoned":
+			return "tox"
+		"brn", "burn", "burned":
+			return "brn"
+		"par", "paralysis", "paralyzed":
+			return "par"
+		"slp", "sleep", "sleeping", "asleep":
+			return "slp"
+		"frz", "freeze", "frozen":
+			return "frz"
+
+	return ""

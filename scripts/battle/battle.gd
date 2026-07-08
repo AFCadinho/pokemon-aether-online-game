@@ -2646,6 +2646,7 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 	var success: bool = action_flow.apply_response(response, apply_event_conditions)
 	if success:
 		_apply_party_state_from_api_response(response)
+		_sync_player_save_party_status_from_battle_state()
 		_remember_active_player_party_moves()
 		_prewarm_current_battle_move_animations()
 		_update_pvp_phase_contract_from_response(response, source)
@@ -3007,6 +3008,127 @@ func _apply_party_state_from_api_response(response: Dictionary) -> void:
 		var party_data: Array = party_value as Array
 		if not party_data.is_empty():
 			PlayerSave.replace_party_from_state(party_data)
+
+func _sync_player_save_party_status_from_battle_state() -> void:
+	var team: Array = battle_state.get_player_team(_get_local_state_player_id())
+	if team.is_empty() or PlayerSave.party.is_empty():
+		return
+
+	var changed := false
+	for team_index in range(team.size()):
+		var team_value: Variant = team[team_index]
+		if not (team_value is Dictionary):
+			continue
+
+		var team_pokemon: Dictionary = team_value as Dictionary
+		var saved_pokemon := _find_saved_party_pokemon_for_battle_data(team_pokemon, team_index)
+		if saved_pokemon == null:
+			continue
+
+		var next_status := _get_status_from_battle_pokemon_data(team_pokemon)
+		if saved_pokemon.status != next_status:
+			saved_pokemon.status = next_status
+			changed = true
+
+			var hp_snapshot: Dictionary = _get_hp_snapshot_from_battle_pokemon_data(team_pokemon)
+			if not hp_snapshot.is_empty():
+				var next_max_hp: int = max(int(hp_snapshot.get("max_hp", saved_pokemon.max_hp)), 1)
+				var next_current_hp: int = clampi(int(hp_snapshot.get("current_hp", saved_pokemon.current_hp)), 0, next_max_hp)
+				if saved_pokemon.max_hp != next_max_hp or saved_pokemon.current_hp != next_current_hp or not saved_pokemon.has_saved_hp_state:
+					saved_pokemon.max_hp = next_max_hp
+					saved_pokemon.current_hp = next_current_hp
+					saved_pokemon.has_saved_hp_state = true
+					changed = true
+
+	if changed:
+		PlayerSave.party_changed.emit()
+
+func _find_saved_party_pokemon_for_battle_data(pokemon_data: Dictionary, fallback_index: int) -> Pokemon:
+	var owned_pokemon_id := int(pokemon_data.get("ownedPokemonId", pokemon_data.get("owned_pokemon_id", 0)))
+	if owned_pokemon_id > 0:
+		for saved_pokemon: Pokemon in PlayerSave.party:
+			if saved_pokemon != null and saved_pokemon.owned_pokemon_id == owned_pokemon_id:
+				return saved_pokemon
+
+	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
+	if instance_id != "":
+		for saved_pokemon: Pokemon in PlayerSave.party:
+			if saved_pokemon != null and saved_pokemon.instance_id == instance_id:
+				return saved_pokemon
+
+	var metadata_slot := int(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", fallback_index + 1)))
+	if metadata_slot > 0:
+		var party_index := metadata_slot - 1
+		if party_index >= 0 and party_index < PlayerSave.party.size():
+			return PlayerSave.party[party_index]
+
+	if fallback_index >= 0 and fallback_index < PlayerSave.party.size():
+		return PlayerSave.party[fallback_index]
+
+	return null
+
+func _get_status_from_battle_pokemon_data(pokemon_data: Dictionary) -> String:
+	var direct_status := _normalize_party_status(str(pokemon_data.get("status", "")))
+	if direct_status != "":
+		return direct_status
+
+	return _get_status_from_condition_text(str(pokemon_data.get("condition", "")))
+
+func _get_status_from_condition_text(condition: String) -> String:
+	for part_value: String in condition.strip_edges().split(" ", false):
+		var status := _normalize_party_status(part_value)
+		if status != "":
+			return status
+
+	return ""
+
+func _normalize_party_status(status: String) -> String:
+	match status.strip_edges().to_lower():
+		"psn", "poison", "poisoned":
+			return "psn"
+		"tox", "toxic", "badly_poisoned", "badlypoisoned":
+			return "tox"
+		"brn", "burn", "burned":
+			return "brn"
+		"par", "paralysis", "paralyzed":
+			return "par"
+		"slp", "sleep", "sleeping", "asleep":
+			return "slp"
+		"frz", "freeze", "frozen":
+			return "frz"
+
+	return ""
+
+func _get_hp_snapshot_from_battle_pokemon_data(pokemon_data: Dictionary) -> Dictionary:
+	var condition := str(pokemon_data.get("condition", "")).strip_edges()
+	if condition.contains("/") and not condition.contains("fnt"):
+		var hp_part := str(condition.split(" ", false)[0])
+		var hp_values := hp_part.split("/", false)
+		if hp_values.size() >= 2:
+			return {
+				"current_hp": int(hp_values[0]),
+				"max_hp": max(int(hp_values[1]), 1),
+			}
+
+	if pokemon_data.has("hp") and pokemon_data.has("maxHp"):
+		return {
+			"current_hp": int(pokemon_data.get("hp", 0)),
+			"max_hp": max(int(pokemon_data.get("maxHp", 1)), 1),
+		}
+
+	if pokemon_data.has("currentHp") and pokemon_data.has("maxHp"):
+		return {
+			"current_hp": int(pokemon_data.get("currentHp", 0)),
+			"max_hp": max(int(pokemon_data.get("maxHp", 1)), 1),
+		}
+
+	if condition.contains("fnt"):
+		return {
+			"current_hp": 0,
+			"max_hp": max(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1),
+		}
+
+	return {}
 
 func _prewarm_current_battle_move_animations() -> void:
 	var move_names: Array[String] = []

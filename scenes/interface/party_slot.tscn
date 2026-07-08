@@ -102,11 +102,17 @@ text = "S"
 vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=714565378]
-custom_minimum_size = Vector2(118, 0)
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Archaludon"
 text_overrun_behavior = 3
+
+[node name="StatusIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=654589725]
+visible = false
+custom_minimum_size = Vector2(44, 16)
+layout_mode = 2
+stretch_mode = 5
 
 [node name="Seperator" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1935279458]
 layout_mode = 2

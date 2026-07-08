@@ -45,7 +45,8 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		_get_int_option(data, ["nextLevelExp", "next_level_exp"]),
 		_get_int_option(data, ["experienceToNextLevel", "experience_to_next_level", "expToNextLevel", "exp_to_next_level"]),
 		_get_string_option(data, ["growthRate", "growth_rate"]),
-		_get_int_option(data, ["baseExperience", "base_experience"])
+		_get_int_option(data, ["baseExperience", "base_experience"]),
+		_get_payload_status(data)
 	)
 
 	_apply_payload_hp_state(pokemon, data)
@@ -217,12 +218,48 @@ static func _normalize_item_id(value: String) -> String:
 	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 
 
+static func _get_payload_status(data: Dictionary) -> String:
+	var direct_status := _normalize_status(_get_string_option(data, ["status", "battleStatus", "battle_status"]))
+	if direct_status != "":
+		return direct_status
+
+	return _get_status_from_condition(_get_string_option(data, ["condition", "hpCondition", "hp_condition"]))
+
+
+static func _get_status_from_condition(condition: String) -> String:
+	for part_value: String in condition.strip_edges().split(" ", false):
+		var status := _normalize_status(part_value)
+		if status != "":
+			return status
+
+	return ""
+
+
+static func _normalize_status(value: String) -> String:
+	match value.strip_edges().to_lower():
+		"psn", "poison", "poisoned":
+			return "psn"
+		"tox", "toxic", "badly_poisoned", "badlypoisoned":
+			return "tox"
+		"brn", "burn", "burned":
+			return "brn"
+		"par", "paralysis", "paralyzed":
+			return "par"
+		"slp", "sleep", "sleeping", "asleep":
+			return "slp"
+		"frz", "freeze", "frozen":
+			return "frz"
+
+	return ""
+
+
 static func _has_hp_override(options: Dictionary) -> bool:
 	return (
 		options.has("currentHp")
 		or options.has("current_hp")
 		or options.has("maxHp")
 		or options.has("max_hp")
+		or str(options.get("condition", "")).strip_edges() != ""
 	)
 
 
@@ -230,8 +267,11 @@ static func _apply_payload_hp_state(pokemon: Pokemon, data: Dictionary) -> void:
 	if not _has_hp_override(data):
 		return
 
-	var max_hp: int = max(int(data.get("maxHp", data.get("max_hp", pokemon.max_hp))), 1)
-	var current_hp: int = int(data.get("currentHp", data.get("current_hp", max_hp)))
+	var condition_hp := _get_hp_from_condition(str(data.get("condition", "")).strip_edges())
+	var fallback_max_hp: int = int(condition_hp.get("max_hp", pokemon.max_hp)) if not condition_hp.is_empty() else pokemon.max_hp
+	var max_hp: int = max(int(data.get("maxHp", data.get("max_hp", fallback_max_hp))), 1)
+	var fallback_current_hp: int = int(condition_hp.get("current_hp", max_hp)) if not condition_hp.is_empty() else max_hp
+	var current_hp: int = int(data.get("currentHp", data.get("current_hp", fallback_current_hp)))
 	var has_stat_max_hp: bool = _has_stat_max_hp(pokemon)
 	var stat_max_hp: int = _get_stat_max_hp(pokemon)
 
@@ -250,6 +290,30 @@ static func _apply_payload_hp_state(pokemon: Pokemon, data: Dictionary) -> void:
 		pokemon.current_hp = int(clamp(current_hp, 0, pokemon.max_hp))
 
 	pokemon.has_saved_hp_state = true
+
+
+static func _get_hp_from_condition(condition: String) -> Dictionary:
+	var normalized_condition := condition.strip_edges().to_lower()
+	if normalized_condition == "":
+		return {}
+	if normalized_condition == "0 fnt" or normalized_condition.ends_with(" fnt"):
+		return {
+			"current_hp": 0,
+			"max_hp": 1,
+		}
+
+	var hp_text := normalized_condition.split(" ", false)[0]
+	if not hp_text.contains("/"):
+		return {}
+
+	var hp_parts := hp_text.split("/", false)
+	if hp_parts.size() < 2:
+		return {}
+
+	return {
+		"current_hp": int(float(hp_parts[0])),
+		"max_hp": max(int(float(hp_parts[1])), 1),
+	}
 
 
 static func _get_stat_max_hp(pokemon: Pokemon) -> int:

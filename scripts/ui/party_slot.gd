@@ -20,10 +20,22 @@ const SLOT_BORDER_WIDTH := 1
 const SHINY_SLOT_BORDER_WIDTH := 2
 const SLOT_SHADOW_SIZE := 0
 const SHINY_SLOT_SHADOW_SIZE := 8
+const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
+const STATUS_ICON_WIDTH := 44
+const STATUS_ICON_HEIGHT := 16
+const STATUS_ICON_ROWS := {
+	"slp": 0,
+	"psn": 1,
+	"brn": 2,
+	"par": 3,
+	"frz": 4,
+	"tox": 7,
+}
 
 @onready var pokemon_sprite: TextureRect = $MarginContainer/HBoxContainer/PokemonSprite
 @onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShinyBadge
 @onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/NameLabel
+@onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/StatusIcon
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/HPBar
 @onready var exp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/ExpBar
 @onready var click_button: Button = $ClickButton
@@ -35,6 +47,7 @@ var press_global_position: Vector2 = Vector2.ZERO
 var is_hovered: bool = false
 var current_is_shiny: bool = false
 var held_item_marker: Control
+var status_icon_texture_cache: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -63,6 +76,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	
 	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	_set_held_item_marker(pokemon.item)
+	_set_status_icon(pokemon.status)
 	click_button.disabled = false
 	_apply_slot_style()
 	
@@ -75,6 +89,7 @@ func set_empty() -> void:
 	shiny_badge.visible = false
 	pokemon_sprite.texture = null
 	_set_held_item_marker("")
+	_set_status_icon("")
 	hp_bar.value = 0.0
 	exp_bar.value = 0.0
 	exp_bar.visible = false
@@ -142,6 +157,67 @@ func _set_held_item_marker(item_id: String) -> void:
 	var normalized_item_id: String = item_id.strip_edges()
 	held_item_marker.visible = normalized_item_id != ""
 	held_item_marker.tooltip_text = "Holding %s" % normalized_item_id if normalized_item_id != "" else ""
+
+func _set_status_icon(status: String) -> void:
+	if status_icon == null:
+		return
+
+	var status_key := _normalize_status_key(status)
+	var status_texture := _get_status_icon_texture(status_key)
+	status_icon.texture = status_texture
+	status_icon.visible = status_texture != null
+	status_icon.tooltip_text = _get_status_tooltip(status_key) if status_icon.visible else ""
+
+func _normalize_status_key(status: String) -> String:
+	match status.strip_edges().to_lower():
+		"psn", "poison", "poisoned":
+			return "psn"
+		"tox", "toxic", "badly_poisoned", "badlypoisoned":
+			return "tox"
+		"brn", "burn", "burned":
+			return "brn"
+		"par", "paralysis", "paralyzed":
+			return "par"
+		"slp", "sleep", "sleeping", "asleep":
+			return "slp"
+		"frz", "freeze", "frozen":
+			return "frz"
+
+	return ""
+
+func _get_status_icon_texture(status_key: String) -> Texture2D:
+	if status_key == "" or not STATUS_ICON_ROWS.has(status_key):
+		return null
+	if status_icon_texture_cache.has(status_key):
+		return status_icon_texture_cache[status_key] as Texture2D
+
+	var atlas_texture := AtlasTexture.new()
+	atlas_texture.atlas = STATUS_ICON_SHEET
+	atlas_texture.region = Rect2(
+		0,
+		int(STATUS_ICON_ROWS[status_key]) * STATUS_ICON_HEIGHT,
+		STATUS_ICON_WIDTH,
+		STATUS_ICON_HEIGHT
+	)
+	status_icon_texture_cache[status_key] = atlas_texture
+	return atlas_texture
+
+func _get_status_tooltip(status_key: String) -> String:
+	match status_key:
+		"psn":
+			return "Poisoned"
+		"tox":
+			return "Badly poisoned"
+		"brn":
+			return "Burned"
+		"par":
+			return "Paralyzed"
+		"slp":
+			return "Asleep"
+		"frz":
+			return "Frozen"
+
+	return ""
 
 func _on_click_button_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):

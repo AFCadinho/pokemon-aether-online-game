@@ -214,11 +214,13 @@ func apply_battle_team_state(team: Array) -> void:
 		else:
 			used_fallback_instances[pokemon.instance_id] = true
 		var hp_data := _get_battle_hp_data(pokemon_data)
-		if hp_data.is_empty() and not _has_battle_move_data(pokemon_data):
+		var status := _get_battle_status(pokemon_data)
+		if hp_data.is_empty() and status == "" and not _has_battle_move_data(pokemon_data):
 			continue
 
 		if not hp_data.is_empty():
 			_apply_hp_data_to_pokemon(pokemon, hp_data)
+		pokemon.status = status
 
 		_apply_move_data_to_pokemon(pokemon, pokemon_data)
 
@@ -517,3 +519,33 @@ func _get_battle_hp_data(pokemon_data: Dictionary) -> Dictionary:
 		}
 
 	return {}
+
+func _get_battle_status(pokemon_data: Dictionary) -> String:
+	var direct_status := _normalize_battle_status(str(pokemon_data.get("status", "")))
+	if direct_status != "":
+		return direct_status
+
+	var condition := str(pokemon_data.get("condition", "")).strip_edges()
+	for part_value: String in condition.split(" ", false):
+		var status := _normalize_battle_status(part_value)
+		if status != "":
+			return status
+
+	return ""
+
+func _normalize_battle_status(value: String) -> String:
+	match value.strip_edges().to_lower():
+		"psn", "poison", "poisoned":
+			return "psn"
+		"tox", "toxic", "badly_poisoned", "badlypoisoned":
+			return "tox"
+		"brn", "burn", "burned":
+			return "brn"
+		"par", "paralysis", "paralyzed":
+			return "par"
+		"slp", "sleep", "sleeping", "asleep":
+			return "slp"
+		"frz", "freeze", "frozen":
+			return "frz"
+
+	return ""
