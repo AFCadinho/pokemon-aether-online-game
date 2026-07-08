@@ -132,10 +132,10 @@ func _apply_sleep_sprite_state() -> void:
 
 
 func _ensure_sleep_labels() -> void:
-	while sleep_labels.size() < 2:
+	while sleep_labels.size() < 3:
 		var label := Label.new()
 		label.text = "Z"
-		label.add_theme_font_size_override("font_size", 20 - sleep_labels.size() * 3)
+		label.add_theme_font_size_override("font_size", 18 - sleep_labels.size() * 2)
 		label.add_theme_color_override("font_color", Color(0.72, 0.78, 1.0, 0.0))
 		label.add_theme_color_override("font_outline_color", Color(0.12, 0.15, 0.42, 0.0))
 		label.add_theme_constant_override("outline_size", 2)
@@ -150,18 +150,19 @@ func _update_sleep_labels() -> void:
 		return
 
 	var sprite_rect := _get_tinted_sprite_visual_rect()
-	var base_position := sprite_rect.position + Vector2(sprite_rect.size.x * 0.34, sprite_rect.size.y * 0.76)
+	var base_position := sprite_rect.position + Vector2(sprite_rect.size.x * 0.40, sprite_rect.size.y * 0.72)
 	for index in range(sleep_labels.size()):
 		var label := sleep_labels[index]
 		if label == null or not is_instance_valid(label):
 			continue
 
-		var phase := fmod(elapsed * 0.62 + float(index) * 0.48, 1.0)
-		var alpha := sin(phase * PI)
-		var drift := Vector2(float(index) * 5.0 + phase * 1.5, -phase * 4.0)
+		var phase := fmod(elapsed * 0.34 + float(index) * 0.34, 1.0)
+		var fade_in := smoothstep(0.0, 0.22, phase)
+		var fade_out := 1.0 - smoothstep(0.58, 1.0, phase)
+		var label_alpha := clampf(fade_in * fade_out * 0.88, 0.0, 0.88)
+		var drift := Vector2(float(index) * 5.0 + sin(phase * TAU) * 3.0, -phase * 26.0)
 		var label_size := label.get_combined_minimum_size()
 		label.position = base_position + drift - (label_size * 0.5)
-		var label_alpha := clampf(alpha * 0.92, 0.0, 0.92)
 		label.modulate = Color(1.0, 1.0, 1.0, label_alpha)
 		label.add_theme_color_override("font_outline_color", Color(0.12, 0.15, 0.42, label_alpha * 0.85))
 
