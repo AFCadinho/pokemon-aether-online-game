@@ -69,7 +69,9 @@ func _add_badge(badge_data: Dictionary) -> void:
 	if stat_label != null:
 		stat_label.text = str(badge_data.get("label", ""))
 	if value_label != null:
-		value_label.text = str(badge_data.get("value", ""))
+		var value_text := str(badge_data.get("value", ""))
+		value_label.text = value_text
+		value_label.visible = value_text != ""
 
 	var color: Color = badge_data.get("color", BOOST_COLOR) as Color
 	_apply_badge_text_color(badge, color)

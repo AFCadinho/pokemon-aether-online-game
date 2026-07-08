@@ -1833,6 +1833,44 @@
       ],
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "hurricane": {
+      "template": "imported_sheet",
+      "category": "field_impact",
+      "data_path": "res://assets/battles/animations/hurricane/hurricane.json",
+      "sheet_path": "res://assets/battles/animations/hurricane/PRAS- Gust.png",
+      "background_path": "",
+      "foreground_path": "res://assets/battles/animations/hurricane/PRAS- Hurricane FG.png",
+      "sound_paths": {
+        "PRSFX- Hurricane.wav": "res://assets/battles/animations/hurricane/PRSFX- Hurricane.wav"
+      },
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": true,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.72,
+        0.92,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.86,
+        0.94,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.78,
+      "sprite_position_offset": [
+        0,
+        12
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 8,
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   }
 }

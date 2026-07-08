@@ -7,6 +7,7 @@ var elapsed := 0.0
 var tinted_sprite: AnimatedSprite2D
 var frozen_sprite: AnimatedSprite2D
 var frozen_sprite_was_playing := false
+var sprite_tint_applied := false
 var sleep_labels: Array[Label] = []
 
 
@@ -15,12 +16,11 @@ func set_condition(value: String) -> void:
 	if condition_key == normalized:
 		return
 
+	_reset_sprite_tint()
 	condition_key = normalized
 	elapsed = 0.0
 	visible = condition_key != ""
 	set_process(visible)
-	if condition_key == "":
-		_reset_sprite_tint()
 
 
 func _ready() -> void:
@@ -82,15 +82,17 @@ func _apply_sprite_tint(target_color: Color, speed: float, base_amount: float, p
 	)
 	tinted_sprite.self_modulate = tint
 	tinted_sprite.modulate = tint
+	sprite_tint_applied = true
 
 
 func _reset_sprite_tint() -> void:
 	_reset_frozen_sprite_state()
 	_clear_sleep_labels()
-	if tinted_sprite != null and is_instance_valid(tinted_sprite):
+	if sprite_tint_applied and tinted_sprite != null and is_instance_valid(tinted_sprite):
 		tinted_sprite.self_modulate = Color.WHITE
 		tinted_sprite.modulate = Color.WHITE
 	tinted_sprite = null
+	sprite_tint_applied = false
 
 
 func _apply_frozen_sprite_state() -> void:
@@ -113,6 +115,7 @@ func _apply_frozen_sprite_state() -> void:
 	)
 	tinted_sprite.self_modulate = tint
 	tinted_sprite.modulate = tint
+	sprite_tint_applied = true
 
 
 func _reset_frozen_sprite_state() -> void:

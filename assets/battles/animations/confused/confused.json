@@ -1,0 +1,64 @@
+{
+  "name": "Common:Confused",
+  "fps": 20,
+  "sheet": "PRAS- Confuse Ray.png",
+  "tile_size": [
+    192,
+    192
+  ],
+  "frames": [
+    [
+      {"x": 112, "y": 180, "zoom": 42, "angle": 0, "mirror": false, "source": 0, "opacity": 80, "blend": 0, "pattern": 0},
+      {"x": 144, "y": 180, "zoom": 42, "angle": 0, "mirror": false, "source": 0, "opacity": 80, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 106, "y": 174, "zoom": 48, "angle": 0, "mirror": false, "source": 0, "opacity": 130, "blend": 0, "pattern": 0},
+      {"x": 150, "y": 186, "zoom": 48, "angle": 0, "mirror": false, "source": 0, "opacity": 130, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 108, "y": 168, "zoom": 54, "angle": 0, "mirror": false, "source": 0, "opacity": 190, "blend": 0, "pattern": 0},
+      {"x": 148, "y": 192, "zoom": 54, "angle": 0, "mirror": false, "source": 0, "opacity": 190, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 116, "y": 164, "zoom": 58, "angle": 0, "mirror": false, "source": 0, "opacity": 230, "blend": 0, "pattern": 0},
+      {"x": 140, "y": 196, "zoom": 58, "angle": 0, "mirror": false, "source": 0, "opacity": 230, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 128, "y": 162, "zoom": 60, "angle": 0, "mirror": false, "source": 0, "opacity": 255, "blend": 0, "pattern": 0},
+      {"x": 128, "y": 198, "zoom": 60, "angle": 0, "mirror": false, "source": 0, "opacity": 255, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 140, "y": 164, "zoom": 58, "angle": 0, "mirror": false, "source": 0, "opacity": 230, "blend": 0, "pattern": 0},
+      {"x": 116, "y": 196, "zoom": 58, "angle": 0, "mirror": false, "source": 0, "opacity": 230, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 148, "y": 168, "zoom": 54, "angle": 0, "mirror": false, "source": 0, "opacity": 190, "blend": 0, "pattern": 0},
+      {"x": 108, "y": 192, "zoom": 54, "angle": 0, "mirror": false, "source": 0, "opacity": 190, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 150, "y": 174, "zoom": 48, "angle": 0, "mirror": false, "source": 0, "opacity": 130, "blend": 0, "pattern": 0},
+      {"x": 106, "y": 186, "zoom": 48, "angle": 0, "mirror": false, "source": 0, "opacity": 130, "blend": 0, "pattern": 0}
+    ],
+    [
+      {"x": 144, "y": 180, "zoom": 42, "angle": 0, "mirror": false, "source": 0, "opacity": 80, "blend": 0, "pattern": 0},
+      {"x": 112, "y": 180, "zoom": 42, "angle": 0, "mirror": false, "source": 0, "opacity": 80, "blend": 0, "pattern": 0}
+    ]
+  ],
+  "timings": [
+    {
+      "frame": 0,
+      "type": 0,
+      "name": "PRSFX- Confused.wav",
+      "duration": 0,
+      "opacity": null,
+      "volume": 100,
+      "pitch": 100,
+      "color": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

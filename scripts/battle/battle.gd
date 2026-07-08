@@ -80,6 +80,7 @@ var presentation_state := preload("res://scripts/battle/battle_presentation_stat
 var public_confirmed_abilities_by_ident := {}
 var public_confirmed_items_by_ident := {}
 var status_condition_overlays: Dictionary = {}
+var volatile_conditions_by_ident: Dictionary = {}
 var pending_status_condition_overlay_players: Dictionary = {}
 var pending_knock_off_targets_by_ident := {}
 var pending_booster_energy_modifier_targets_by_ident := {}
@@ -121,6 +122,7 @@ const SUMMON_RELEASE_AUDIO_NONE := "none"
 const INITIAL_TRANSFORM_REVEAL_SECONDS := 0.8
 const STAT_STAGE_BADGE_BOOST_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
 const STAT_STAGE_BADGE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
+const VOLATILE_CONDITION_BADGE_COLOR := Color(1.0, 0.74, 0.26, 1.0)
 const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
 const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
@@ -3306,11 +3308,11 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 	)
 
 func _setup_status_condition_overlays() -> void:
-	_attach_status_condition_overlay("p1", player_sprite_box)
-	_attach_status_condition_overlay("p2", enemy_sprite_box)
+	_attach_status_condition_overlay("p1", player_sprite_box, status_condition_overlays, "StatusConditionOverlay", 80)
+	_attach_status_condition_overlay("p2", enemy_sprite_box, status_condition_overlays, "StatusConditionOverlay", 80)
 	Callable(self, "_sync_status_condition_overlays").call_deferred()
 
-func _attach_status_condition_overlay(player_id: String, sprite_box: Node) -> void:
+func _attach_status_condition_overlay(player_id: String, sprite_box: Node, overlay_store: Dictionary, suffix: String, overlay_z_index: int) -> void:
 	if sprite_box == null or not sprite_box.has_method("get_single_sprite_slot"):
 		return
 
@@ -3319,10 +3321,10 @@ func _attach_status_condition_overlay(player_id: String, sprite_box: Node) -> vo
 		return
 
 	var overlay := STATUS_CONDITION_OVERLAY_SCRIPT.new()
-	overlay.name = "%sStatusConditionOverlay" % player_id.to_upper()
-	overlay.z_index = 80
+	overlay.name = "%s%s" % [player_id.to_upper(), suffix]
+	overlay.z_index = overlay_z_index
 	sprite_slot.add_child(overlay)
-	status_condition_overlays[player_id] = overlay
+	overlay_store[player_id] = overlay
 
 func _sync_status_condition_overlays() -> void:
 	_sync_status_condition_overlay_for_player("p1")
@@ -3371,6 +3373,104 @@ func _release_pending_status_condition_overlay(event_data: Dictionary) -> void:
 		return
 
 	pending_status_condition_overlay_players.erase(player_id)
+
+func _apply_volatile_condition_event(event_data: Dictionary) -> void:
+	var condition_key := _get_volatile_condition_key(str(event_data.get("effect", "")))
+	if condition_key == "":
+		return
+
+	var ident_key := _normalize_battle_ident(str(event_data.get("target", event_data.get("pokemon", ""))))
+	if ident_key == "":
+		return
+
+	match str(event_data.get("state", "")).strip_edges().to_lower():
+		"start", "activate":
+			_add_volatile_condition_for_ident(ident_key, condition_key, event_data)
+		"end", "cure", "cured":
+			_remove_volatile_condition_for_ident(ident_key, condition_key)
+
+func _clear_volatile_condition_for_ident(ident: String) -> void:
+	var ident_key := _normalize_battle_ident(ident)
+	if ident_key == "":
+		return
+
+	volatile_conditions_by_ident.erase(ident_key)
+	_update_stat_stage_panels()
+
+func _add_volatile_condition_for_ident(ident_key: String, condition_key: String, event_data: Dictionary = {}) -> void:
+	var conditions: Dictionary = {}
+	var existing_value: Variant = volatile_conditions_by_ident.get(ident_key, {})
+	if existing_value is Dictionary:
+		conditions = (existing_value as Dictionary).duplicate()
+
+	conditions[condition_key] = _get_volatile_condition_badge_data(condition_key, event_data)
+	volatile_conditions_by_ident[ident_key] = conditions
+	_update_stat_stage_panels()
+
+func _remove_volatile_condition_for_ident(ident_key: String, condition_key: String) -> void:
+	var existing_value: Variant = volatile_conditions_by_ident.get(ident_key, {})
+	if not existing_value is Dictionary:
+		return
+
+	var conditions := (existing_value as Dictionary).duplicate()
+	conditions.erase(condition_key)
+	if conditions.is_empty():
+		volatile_conditions_by_ident.erase(ident_key)
+	else:
+		volatile_conditions_by_ident[ident_key] = conditions
+	_update_stat_stage_panels()
+
+func _get_volatile_condition_key(effect: String) -> String:
+	var cleaned_effect := effect.strip_edges().to_lower()
+	if cleaned_effect.begins_with("move:"):
+		cleaned_effect = cleaned_effect.substr("move:".length()).strip_edges()
+	match cleaned_effect.replace(" ", "").replace("_", "").replace("-", ""):
+		"confusion", "confused":
+			return "confused"
+		"taunt", "taunted":
+			return "taunt"
+		"encore", "encored":
+			return "encore"
+		_:
+			return ""
+
+func _get_volatile_condition_badge_data(condition_key: String, event_data: Dictionary) -> Dictionary:
+	var data := {
+		"condition": condition_key,
+	}
+	var turns := _get_volatile_condition_turns(event_data)
+	if turns > 0:
+		data["turns"] = turns
+		data["turns_started_turn"] = int(event_data.get("startedTurn", battle_state.get_turn()))
+
+	var duration := _get_volatile_condition_duration(event_data)
+	if duration > 0:
+		data["duration"] = duration
+		data["started_turn"] = int(event_data.get("startedTurn", battle_state.get_turn()))
+
+	return data
+
+func _get_volatile_condition_turns(event_data: Dictionary) -> int:
+	for key in ["remainingTurns", "remaining_turns", "turns", "turnsRemaining", "turns_remaining"]:
+		if not event_data.has(key):
+			continue
+
+		var turns := int(event_data.get(key, 0))
+		if turns > 0:
+			return turns
+
+	return 0
+
+func _get_volatile_condition_duration(event_data: Dictionary) -> int:
+	for key in ["duration", "maxDuration", "minDuration"]:
+		if not event_data.has(key):
+			continue
+
+		var duration := int(event_data.get(key, 0))
+		if duration > 0:
+			return duration
+
+	return 0
 
 func _status_event_starts_persistent_condition(event_data: Dictionary) -> bool:
 	var state := str(event_data.get("state", "start")).strip_edges().to_lower()
@@ -3445,6 +3545,7 @@ func _reset_battle_status_panel() -> void:
 func _reset_battle_effect_tracking() -> void:
 	public_confirmed_abilities_by_ident.clear()
 	public_confirmed_items_by_ident.clear()
+	volatile_conditions_by_ident.clear()
 	pending_knock_off_targets_by_ident.clear()
 	pending_booster_energy_modifier_targets_by_ident.clear()
 	stat_stages_by_ident.clear()
@@ -3517,6 +3618,8 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 	_remember_public_confirmed_item_from_event(event)
 	match str(event.get("type", "")):
 		"switch", "drag":
+			_clear_volatile_condition_for_ident(str(event.get("fromIdent", "")))
+			_clear_volatile_condition_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_stat_stages_for_ident(str(event.get("fromIdent", "")))
 			_clear_stat_stages_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_ability_stat_modifier_for_ident(str(event.get("fromIdent", "")))
@@ -3524,6 +3627,7 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("fromIdent", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 		"faint":
+			_clear_volatile_condition_for_ident(str(event.get("target", "")))
 			_clear_stat_stages_for_ident(str(event.get("target", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("target", "")))
@@ -3707,7 +3811,65 @@ func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
 				"line": STAT_STAGE_BADGE_LINE_MODIFIER,
 			})
 
+	var volatile_value: Variant = volatile_conditions_by_ident.get(ident_key, {})
+	if volatile_value is Dictionary:
+		var volatile_conditions: Dictionary = volatile_value as Dictionary
+		for condition_key in ["confused", "taunt", "encore"]:
+			if not volatile_conditions.has(condition_key):
+				continue
+
+			var condition_data: Dictionary = {}
+			var condition_value: Variant = volatile_conditions.get(condition_key, {})
+			if condition_value is Dictionary:
+				condition_data = condition_value as Dictionary
+
+			badges.append({
+				"label": _format_volatile_condition_badge_name(condition_key),
+				"value": _format_volatile_condition_badge_value(condition_key, condition_data),
+				"color": VOLATILE_CONDITION_BADGE_COLOR,
+				"line": STAT_STAGE_BADGE_LINE_MODIFIER,
+			})
+
 	return badges
+
+func _format_volatile_condition_badge_name(condition_key: String) -> String:
+	match condition_key:
+		"confused":
+			return "Confused"
+		"taunt":
+			return "Taunt:"
+		"encore":
+			return "Encore:"
+
+	return condition_key.capitalize()
+
+func _format_volatile_condition_badge_value(condition_key: String, condition_data: Dictionary) -> String:
+	var turns := _get_volatile_condition_display_turns(condition_key, condition_data)
+	if turns <= 0:
+		return ""
+
+	return str(turns)
+
+func _get_volatile_condition_display_turns(condition_key: String, condition_data: Dictionary) -> int:
+	var direct_turns := int(condition_data.get("turns", 0))
+	if direct_turns > 0:
+		var turns_started_turn := int(condition_data.get("turns_started_turn", 0))
+		var direct_current_turn := battle_state.get_turn()
+		if turns_started_turn > 0 and direct_current_turn > 0:
+			return max(direct_turns - max(direct_current_turn - turns_started_turn, 0), 0)
+		return direct_turns
+
+	var duration := int(condition_data.get("duration", 0))
+	var started_turn := int(condition_data.get("started_turn", 0))
+	var current_turn := battle_state.get_turn()
+	if duration > 0 and started_turn > 0 and current_turn > 0:
+		return max(duration - max(current_turn - started_turn, 0), 0)
+
+	match condition_key:
+		"taunt", "encore":
+			return 3
+
+	return 0
 
 func _format_stat_badge_name(stat_key: String) -> String:
 	match stat_key:
@@ -5347,6 +5509,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		if turn > 0:
 			if render_turn_headers:
 				event_renderer.add_turn_header(turn)
+			_update_stat_stage_panels()
 			continue
 
 		_show_switch_out_heal_target_if_needed(event_data, ordered_events, event_index)
@@ -5358,6 +5521,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				_summarize_hp_event_for_order_debug(event_data),
 			])
 		await event_renderer.render_event(event_data, presentation)
+		if event_type == "pokemonEffect":
+			_apply_volatile_condition_event(event_data)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			_debug_battle_presentation_order("render_event.after type=%s event=%s" % [
 				event_type,

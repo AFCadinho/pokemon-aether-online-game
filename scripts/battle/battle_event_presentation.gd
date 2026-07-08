@@ -61,6 +61,10 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var status_effect_key: String = _get_status_condition_effect_animation_key(event_data)
 			if status_effect_key != "":
 				effect_keys.append(status_effect_key)
+		"pokemonEffect":
+			var pokemon_effect_key: String = _get_pokemon_effect_animation_key(event_data)
+			if pokemon_effect_key != "":
+				effect_keys.append(pokemon_effect_key)
 		"cant":
 			var cant_effect_key: String = _get_cant_status_effect_animation_key(event_data)
 			if cant_effect_key != "":
@@ -218,6 +222,8 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_ability_event = false
 			recent_move_event = false
 			_track_pokemon_effect_event(event_data)
+			presentation["effect_animation_key"] = _get_pokemon_effect_animation_key(event_data)
+			presentation["effect_animation_target_ident"] = str(event_data.get("target", event_data.get("pokemon", "")))
 			presentation["log_message"] = event_text_formatter.format_pokemon_effect_event(event_data)
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
 
@@ -467,6 +473,19 @@ func _get_cant_status_effect_animation_key(event: Dictionary) -> String:
 			return "status_frozen"
 		"slp", "sleep", "sleeping", "asleep":
 			return "status_sleeping"
+
+	return ""
+
+
+func _get_pokemon_effect_animation_key(event: Dictionary) -> String:
+	var state := str(event.get("state", "start")).strip_edges().to_lower()
+	if state == "end" or state == "cure" or state == "cured":
+		return ""
+
+	var effect_key := _normalize_animation_key(str(event.get("effect", "")))
+	match effect_key:
+		"confusion", "confused":
+			return "status_confused"
 
 	return ""
 

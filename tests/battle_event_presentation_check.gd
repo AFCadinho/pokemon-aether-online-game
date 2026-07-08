@@ -24,6 +24,8 @@ func _init() -> void:
 	_check_poison_status_event_uses_status_effect_animation()
 	_check_badly_poisoned_status_event_uses_status_effect_animation()
 	_check_burn_status_event_uses_status_effect_animation()
+	_check_confusion_pokemon_effect_uses_status_effect_animation()
+	_check_confusion_activate_replays_status_effect_animation()
 	_check_poison_damage_replays_status_effect_animation()
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
@@ -290,6 +292,32 @@ func _check_burn_status_event_uses_status_effect_animation() -> void:
 
 	_check_equal(str(result.get("effect_animation_key", "")), "status_burned", "burn status start uses burn effect animation")
 	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "burn status start targets affected Pokemon")
+
+
+func _check_confusion_pokemon_effect_uses_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "pokemonEffect",
+		"target": "p2a: Garchomp",
+		"effect": "confusion",
+		"state": "start",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_confused", "confusion start uses confused effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p2a: Garchomp", "confusion start targets affected Pokemon")
+
+
+func _check_confusion_activate_replays_status_effect_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "pokemonEffect",
+		"target": "p1a: Pikachu",
+		"effect": "confusion",
+		"state": "activate",
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "status_confused", "confusion activate replays confused effect animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Pikachu", "confusion activate targets affected Pokemon")
 
 
 func _check_poison_damage_replays_status_effect_animation() -> void:
