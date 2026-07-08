@@ -76,9 +76,11 @@ layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/separation = 8
 
-[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1625273681]
+[node name="StatusIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1625273681]
 visible = false
+custom_minimum_size = Vector2(44, 16)
 layout_mode = 2
+stretch_mode = 5
 
 [node name="LevelLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1890596494]
 layout_mode = 2

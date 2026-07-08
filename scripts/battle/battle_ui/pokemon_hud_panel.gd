@@ -14,19 +14,24 @@ signal team_pokemon_unhovered
 
 var experience_bar_enabled := false
 
-const STATUS_COLORS := {
-	"PSN": Color("#b45cff"),
-	"TOX": Color("#7d3cff"),
-	"BRN": Color("#ff7a2f"),
-	"PAR": Color("#ffd84a"),
-	"SLP": Color("#64a8ff"),
-	"FRZ": Color("#7de8ff"),
+const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
+const STATUS_ICON_WIDTH := 44
+const STATUS_ICON_HEIGHT := 16
+const STATUS_ICON_ROWS := {
+	"slp": 0,
+	"psn": 1,
+	"brn": 2,
+	"par": 3,
+	"frz": 4,
+	"tox": 7,
 }
 
 const GENDER_COLORS := {
 	"M": Color("#64a8ff"),
 	"F": Color("#ff78c8"),
 }
+
+var status_icon_texture_cache: Dictionary = {}
 
 func _ready() -> void:
 	_connect_team_slot_hover_signals()
@@ -179,30 +184,68 @@ func _set_gender(row: Node, gender: String) -> void:
 	gender_icon.tooltip_text = "Male" if gender_text == "M" else "Female"
 
 func _set_status(row: Node, status: String) -> void:
-	var status_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/StatusLabel") as Label
-	if status_label == null:
+	var status_icon: TextureRect = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/StatusIcon") as TextureRect
+	if status_icon == null:
+		var legacy_status_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/StatusLabel") as Label
+		if legacy_status_label != null:
+			legacy_status_label.text = ""
+			legacy_status_label.visible = false
 		return
 
-	var status_text: String = _format_status_text(status)
-	status_label.text = status_text
-	status_label.visible = status_text != ""
-	var status_color: Color = STATUS_COLORS.get(status_text, Color.WHITE)
-	status_label.modulate = status_color
+	var status_key: String = _normalize_status_key(status)
+	var status_texture: Texture2D = _get_status_icon_texture(status_key)
+	status_icon.texture = status_texture
+	status_icon.visible = status_texture != null
+	status_icon.tooltip_text = _get_status_tooltip(status_key) if status_icon.visible else ""
 
-func _format_status_text(status: String) -> String:
+func _normalize_status_key(status: String) -> String:
 	match status.strip_edges().to_lower():
-		"psn", "poison":
-			return "PSN"
-		"tox", "toxic":
-			return "TOX"
-		"brn", "burn":
-			return "BRN"
-		"par", "paralysis":
-			return "PAR"
-		"slp", "sleep":
-			return "SLP"
-		"frz", "freeze":
-			return "FRZ"
+		"psn", "poison", "poisoned":
+			return "psn"
+		"tox", "toxic", "badly_poisoned", "badlypoisoned":
+			return "tox"
+		"brn", "burn", "burned":
+			return "brn"
+		"par", "paralysis", "paralyzed":
+			return "par"
+		"slp", "sleep", "sleeping", "asleep":
+			return "slp"
+		"frz", "freeze", "frozen":
+			return "frz"
+
+	return ""
+
+func _get_status_icon_texture(status_key: String) -> Texture2D:
+	if status_key == "" or not STATUS_ICON_ROWS.has(status_key):
+		return null
+	if status_icon_texture_cache.has(status_key):
+		return status_icon_texture_cache[status_key] as Texture2D
+
+	var atlas_texture := AtlasTexture.new()
+	atlas_texture.atlas = STATUS_ICON_SHEET
+	atlas_texture.region = Rect2(
+		0,
+		int(STATUS_ICON_ROWS[status_key]) * STATUS_ICON_HEIGHT,
+		STATUS_ICON_WIDTH,
+		STATUS_ICON_HEIGHT
+	)
+	status_icon_texture_cache[status_key] = atlas_texture
+	return atlas_texture
+
+func _get_status_tooltip(status_key: String) -> String:
+	match status_key:
+		"psn":
+			return "Poisoned"
+		"tox":
+			return "Badly poisoned"
+		"brn":
+			return "Burned"
+		"par":
+			return "Paralyzed"
+		"slp":
+			return "Asleep"
+		"frz":
+			return "Frozen"
 
 	return ""
 
