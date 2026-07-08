@@ -79,6 +79,28 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	_set_status_icon(pokemon.status)
 	click_button.disabled = false
 	_apply_slot_style()
+
+func set_pokemon_data(pokemon_data: Dictionary) -> void:
+	visible = true
+	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", ""))).strip_edges()
+	var is_shiny := bool(pokemon_data.get("shiny", false))
+	var level := int(pokemon_data.get("level", 0))
+	var max_hp := max(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1)
+	var current_hp := int(pokemon_data.get("hp", pokemon_data.get("currentHp", pokemon_data.get("current_hp", max_hp))))
+	current_is_shiny = is_shiny
+	name_label.text = species
+	name_label.tooltip_text = species
+	shiny_badge.visible = is_shiny
+	level_label.text = "Lv. " + str(level) if level > 0 else ""
+	hp_bar.max_value = max_hp
+	hp_bar.value = clamp(current_hp, 0, max_hp)
+	exp_bar.value = 0.0
+	exp_bar.visible = false
+	pokemon_sprite.texture = PokemonAssets.load_party_icon(species, is_shiny)
+	_set_held_item_marker(str(pokemon_data.get("item", pokemon_data.get("heldItemId", ""))))
+	_set_status_icon(str(pokemon_data.get("status", "")))
+	click_button.disabled = false
+	_apply_slot_style()
 	
 func set_empty() -> void:
 	visible = false

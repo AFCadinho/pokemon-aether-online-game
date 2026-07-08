@@ -2496,6 +2496,7 @@ func _finish_battle(result: Dictionary) -> void:
 	if _is_pvp_battle():
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
+		_clear_pvp_party_hud_display_override()
 		_heal_local_party_after_pvp_battle()
 		_heal_party_after_pvp_battle.call_deferred()
 	if not result.has("localPartyDefeated"):
@@ -4415,6 +4416,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	if is_team_preview_response:
 		if not _apply_team_preview_battle_response(api_response):
 			return
+		_set_pvp_party_hud_display_override()
 		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
 		lead_response = await _run_pvp_team_preview_lead_selection(local_player_id)
 		if lead_response.is_empty():
@@ -4422,6 +4424,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	else:
 		if not _apply_initial_battle_response(api_response):
 			return
+		_set_pvp_party_hud_display_override()
 		_show_default_trainer_leads_before_selection(player_pokemon, display_response)
 		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
 
@@ -4445,6 +4448,14 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
+
+func _set_pvp_party_hud_display_override() -> void:
+	if not _is_pvp_battle():
+		return
+	get_tree().call_group("ui_overlay", "set_party_display_override", _get_lead_selection_team_data("p1"))
+
+func _clear_pvp_party_hud_display_override() -> void:
+	get_tree().call_group("ui_overlay", "clear_party_display_override")
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type

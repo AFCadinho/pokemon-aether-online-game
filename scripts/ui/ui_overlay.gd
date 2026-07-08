@@ -399,6 +399,7 @@ var friendlist_popup: FriendlistPopup
 @onready var dev_actions_close_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/CloseButton
 
 var party_slots: Array = []
+var party_display_override: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
@@ -12717,19 +12718,36 @@ func _build_party_slots() -> void:
 		_register_party_slot_drag_handlers(slot, i + 1)
 
 func _refresh_party() -> void:
-	_set_collapsible_panel_available("party", PlayerSave.party.size() > 0)
+	var display_party := party_display_override if not party_display_override.is_empty() else PlayerSave.party
+	_set_collapsible_panel_available("party", display_party.size() > 0)
 	_render_pvp_team_preview()
 
 	for slot_number in range(party_slots.size()):
 		var slot = party_slots[slot_number]
 		slot.set("slot_index", slot_number)
 
-		if slot_number < PlayerSave.party.size():
-			slot.set_pokemon(PlayerSave.party[slot_number])
+		if slot_number < display_party.size():
+			var pokemon_value: Variant = display_party[slot_number]
+			if pokemon_value is Dictionary and slot.has_method("set_pokemon_data"):
+				slot.set_pokemon_data(pokemon_value as Dictionary)
+			elif pokemon_value is Pokemon:
+				slot.set_pokemon(pokemon_value as Pokemon)
+			else:
+				slot.set_empty()
 		else:
 			slot.set_empty()
 
 	_refresh_open_pokemon_summary_cards()
+
+func set_party_display_override(party_data: Array) -> void:
+	party_display_override = party_data.duplicate(true)
+	_refresh_party()
+
+func clear_party_display_override() -> void:
+	if party_display_override.is_empty():
+		return
+	party_display_override.clear()
+	_refresh_party()
 
 func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
 	slot.set("slot_index", slot_index)
