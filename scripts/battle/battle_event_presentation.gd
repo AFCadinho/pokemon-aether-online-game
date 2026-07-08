@@ -491,18 +491,12 @@ func _get_pokemon_effect_animation_key(event: Dictionary) -> String:
 
 
 func _get_residual_status_damage_effect_animation_key(event: Dictionary) -> String:
-	var condition_status_key := _normalize_animation_key(hp_event_helper.get_event_status(event, false))
-	match condition_status_key:
-		"psn", "poison", "poisoned":
-			return "status_poisoned"
-		"tox", "toxic", "badlypoisoned", "toxicpoison":
-			return "status_badly_poisoned"
-		"brn", "burn", "burned":
-			return "status_burned"
-
 	var source_key := _normalize_animation_key(str(event.get("source", "")))
 	match source_key:
 		"psn", "poison", "poisoned":
+			var condition_status_key := _normalize_animation_key(hp_event_helper.get_event_status(event, false))
+			if condition_status_key in ["tox", "toxic", "badlypoisoned", "toxicpoison"]:
+				return "status_badly_poisoned"
 			return "status_poisoned"
 		"tox", "toxic", "badlypoisoned", "toxicpoison":
 			return "status_badly_poisoned"

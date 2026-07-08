@@ -26,6 +26,7 @@ func _init() -> void:
 	_check_burn_status_event_uses_status_effect_animation()
 	_check_confusion_pokemon_effect_uses_status_effect_animation()
 	_check_confusion_activate_replays_status_effect_animation()
+	_check_direct_damage_on_statused_target_does_not_replay_status_effect()
 	_check_poison_damage_replays_status_effect_animation()
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
@@ -318,6 +319,41 @@ func _check_confusion_activate_replays_status_effect_animation() -> void:
 
 	_check_equal(str(result.get("effect_animation_key", "")), "status_confused", "confusion activate replays confused effect animation")
 	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Pikachu", "confusion activate targets affected Pokemon")
+
+
+func _check_direct_damage_on_statused_target_does_not_replay_status_effect() -> void:
+	var presentation = _make_presentation()
+	presentation.build({
+		"type": "move",
+		"actor": "p1a: Garchomp",
+		"move": "Earthquake",
+		"target": "p2a: Steelix",
+	})
+	var result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Steelix",
+		"previousCondition": "100/100 psn",
+		"condition": "64/100 psn",
+		"previousHp": 100,
+		"hp": 64,
+		"maxHp": 100,
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "", "direct damage on poisoned target does not replay poison effect")
+	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Steelix", "direct damage on poisoned target still animates HP loss")
+
+	result = presentation.build({
+		"type": "damage",
+		"target": "p2a: Steelix",
+		"previousCondition": "64/100 brn",
+		"condition": "28/100 brn",
+		"previousHp": 64,
+		"hp": 28,
+		"maxHp": 100,
+	})
+
+	_check_equal(str(result.get("effect_animation_key", "")), "", "direct damage on burned target does not replay burn effect")
+	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Steelix", "direct damage on burned target still animates HP loss")
 
 
 func _check_poison_damage_replays_status_effect_animation() -> void:
