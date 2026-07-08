@@ -5210,7 +5210,7 @@ func _get_lead_selection_team_data(player_id: String) -> Array:
 		var pokemon_value: Variant = display_team[index]
 		if pokemon_value is Dictionary:
 			var pokemon_data: Dictionary = (pokemon_value as Dictionary).duplicate(true)
-			_enrich_lead_selection_slot_data(pokemon_data, index)
+			_enrich_lead_selection_slot_data(pokemon_data, index, player_id)
 			_apply_lead_selection_availability(player_id, pokemon_data, index)
 			pokemon_data["active"] = false
 			lead_team.append(pokemon_data)
@@ -5219,7 +5219,7 @@ func _get_lead_selection_team_data(player_id: String) -> Array:
 
 	return lead_team
 
-func _enrich_lead_selection_slot_data(pokemon_data: Dictionary, index: int) -> void:
+func _enrich_lead_selection_slot_data(pokemon_data: Dictionary, index: int, player_id: String = "") -> void:
 	var saved_pokemon := _get_player_save_pokemon_for_battle_display_data(pokemon_data, index)
 	if saved_pokemon == null:
 		return
@@ -5234,7 +5234,21 @@ func _enrich_lead_selection_slot_data(pokemon_data: Dictionary, index: int) -> v
 		pokemon_data["shiny"] = saved_pokemon.shiny
 	if not pokemon_data.has("instanceId") and saved_pokemon.instance_id != "":
 		pokemon_data["instanceId"] = saved_pokemon.instance_id
+	if _should_show_battle_ready_pvp_lead_hp(player_id):
+		_apply_battle_ready_lead_selection_hp(pokemon_data, saved_pokemon)
+		return
 	_apply_saved_lead_selection_hp(pokemon_data, saved_pokemon)
+
+func _should_show_battle_ready_pvp_lead_hp(player_id: String) -> bool:
+	return _is_pvp_battle() and player_id == _get_local_state_player_id()
+
+func _apply_battle_ready_lead_selection_hp(pokemon_data: Dictionary, saved_pokemon: Pokemon) -> void:
+	var max_hp: int = max(saved_pokemon.max_hp, int(saved_pokemon.stats.get("hp", saved_pokemon.max_hp)), 1)
+	pokemon_data["hp"] = max_hp
+	pokemon_data["maxHp"] = max_hp
+	pokemon_data["currentHp"] = max_hp
+	pokemon_data["fainted"] = false
+	pokemon_data["condition"] = "%s/%s" % [max_hp, max_hp]
 
 func _apply_saved_lead_selection_hp(pokemon_data: Dictionary, saved_pokemon: Pokemon) -> void:
 	if saved_pokemon == null or not saved_pokemon.has_saved_hp_state:
@@ -5249,6 +5263,9 @@ func _apply_saved_lead_selection_hp(pokemon_data: Dictionary, saved_pokemon: Pok
 	pokemon_data["condition"] = "0 fnt" if hp <= 0 else "%s/%s" % [hp, max_hp]
 
 func _apply_lead_selection_availability(player_id: String, pokemon_data: Dictionary, fallback_index: int) -> void:
+	if _should_show_battle_ready_pvp_lead_hp(player_id):
+		return
+
 	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if canonical_slot <= 0:
 		canonical_slot = fallback_index + 1
