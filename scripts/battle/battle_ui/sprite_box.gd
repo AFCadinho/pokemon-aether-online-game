@@ -249,6 +249,42 @@ func play_damage_tween() -> void:
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
 
+func play_shake_tween(shake_config: Dictionary = {}) -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	var duration: float = maxf(float(shake_config.get("duration", 0.65)), 0.05)
+	var interval: float = maxf(float(shake_config.get("interval", 0.045)), 0.01)
+	var amplitude: float = maxf(float(shake_config.get("amplitude", 8.0)), 0.0)
+	var vertical_scale: float = maxf(float(shake_config.get("vertical_scale", 0.35)), 0.0)
+	var decay := bool(shake_config.get("decay", true))
+	var delay: float = maxf(float(shake_config.get("delay", 0.0)), 0.0)
+	var step_count: int = maxi(int(ceil(duration / interval)), 1)
+
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		var base_position := _get_base_sprite_position(sprite)
+		for step: int in range(step_count):
+			var progress := float(step) / float(maxi(step_count - 1, 1))
+			var step_amplitude := amplitude * (1.0 - progress if decay else 1.0)
+			var direction := -1.0 if step % 2 == 0 else 1.0
+			var vertical_direction := -1.0 if step % 4 < 2 else 1.0
+			var offset := Vector2(
+				roundf(step_amplitude * direction),
+				roundf(step_amplitude * vertical_scale * vertical_direction)
+			)
+			active_tween.tween_property(sprite, "position", base_position + offset, interval).set_delay(delay + float(step) * interval).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+		active_tween.tween_property(sprite, "position", base_position, interval).set_delay(delay + duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
 func play_heal_tween() -> void:
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():

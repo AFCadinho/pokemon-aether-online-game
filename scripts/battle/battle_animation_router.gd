@@ -106,6 +106,7 @@ func _play_animation_config(
 	_apply_move_animation_options(animation_node, config, animation_options)
 	var hidden_actor_sprites: Array = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 	_play_move_actor_motion_if_needed(config, move_actor_ident)
+	_play_move_target_shake_if_needed(config, move_target_ident)
 
 	var overlay: Control = _create_animation_overlay(parent_node)
 	if overlay != null:
@@ -371,6 +372,21 @@ func _apply_move_animation_options(animation_node: MoveAnimationPlayer, config: 
 
 	if bool(miss_config.get("suppress_shake", true)):
 		animation_node.shake_config.clear()
+
+
+func _play_move_target_shake_if_needed(config: Dictionary, target_ident: String) -> void:
+	if target_ident == "":
+		return
+
+	var shake_config: Dictionary = (config.get("target_shake", {}) as Dictionary).duplicate(true)
+	if not bool(shake_config.get("enabled", false)):
+		return
+
+	match _get_player_id_from_ident(target_ident):
+		"p1":
+			player_sprite_box.play_shake_tween(shake_config)
+		"p2":
+			enemy_sprite_box.play_shake_tween(shake_config)
 
 
 func _is_miss_animation(animation_options: Dictionary) -> bool:

@@ -541,6 +541,15 @@
         "vertical_scale": 0.42,
         "decay": true
       },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.12,
+        "duration": 0.62,
+        "interval": 0.04,
+        "amplitude": 9.0,
+        "vertical_scale": 0.22,
+        "decay": true
+      },
       "data_path": "res://assets/battles/animations/earthquake/earthquake.json",
       "sheet_path": "res://assets/battles/animations/earthquake/PRAS- Rock.png",
       "background_path": "res://assets/battles/animations/earthquake/PRAS- Earthquake BG.png",
