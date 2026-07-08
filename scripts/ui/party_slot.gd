@@ -97,7 +97,6 @@ func _setup_held_item_marker() -> void:
 	held_item_marker.offset_top = 0.0
 	held_item_marker.offset_right = 0.0
 	held_item_marker.offset_bottom = 14.0
-	held_item_marker.z_index = 5
 	pokemon_sprite.add_child(held_item_marker)
 
 	var item_chip: PanelContainer = _create_held_item_chip(Color("#f5c33b"), Color("#2a1700"))
