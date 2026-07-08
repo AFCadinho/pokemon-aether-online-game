@@ -3398,6 +3398,8 @@ func _get_persistent_status_condition_key(status: String) -> String:
 			return "burned"
 		"frz", "freeze", "frozen":
 			return "frozen"
+		"slp", "sleep", "sleeping", "asleep":
+			return "sleeping"
 		_:
 			return ""
 

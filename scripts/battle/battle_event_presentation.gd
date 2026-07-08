@@ -452,6 +452,8 @@ func _get_status_condition_effect_animation_key(event: Dictionary) -> String:
 			return "status_burned"
 		"frz", "freeze", "frozen":
 			return "status_frozen"
+		"slp", "sleep", "sleeping", "asleep":
+			return "status_sleeping"
 
 	return ""
 
@@ -463,6 +465,8 @@ func _get_cant_status_effect_animation_key(event: Dictionary) -> String:
 			return "status_paralysis"
 		"frz", "freeze", "frozen":
 			return "status_frozen"
+		"slp", "sleep", "sleeping", "asleep":
+			return "status_sleeping"
 
 	return ""
 
