@@ -1871,6 +1871,94 @@
       "sparkle_count": 8,
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "taunt": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "data_path": "res://assets/battles/animations/taunt/taunt.json",
+      "sheet_path": "res://assets/battles/animations/taunt/PRAS- Taunt.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Taunt1.wav": "res://assets/battles/animations/taunt/PRSFX- Taunt1.wav",
+        "PRSFX- Taunt2.wav": "res://assets/battles/animations/taunt/PRSFX- Taunt2.wav",
+        "PRSFX- Taunt3.wav": "res://assets/battles/animations/taunt/PRSFX- Taunt3.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.88,
+        0.38,
+        0.76,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.78,
+        0.96,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.5,
+      "sprite_position_offset": [
+        14,
+        28
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "speed_scale": 1.12,
+      "source_anchor": "target",
+      "effect_position_offset": [
+        0,
+        8
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
+    "encore": {
+      "template": "imported_sheet",
+      "category": "status_projectile",
+      "data_path": "res://assets/battles/animations/encore/encore.json",
+      "sheet_path": "res://assets/battles/animations/encore/PRAS- Encore.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Encore.wav": "res://assets/battles/animations/encore/PRSFX- Encore.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        0.82,
+        0.32,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.92,
+        0.72,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.6,
+      "sprite_position_offset": [
+        0,
+        16
+      ],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 6,
+      "speed_scale": 1.08,
+      "source_anchor": "target",
+      "effect_position_offset": [
+        0,
+        8
+      ],
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   }
 }
