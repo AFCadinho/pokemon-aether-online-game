@@ -1,13 +1,21 @@
 # Changelog
 
-## 0.3.1 - 2026-07-07
+## 0.3.1 - 2026-07-08
 
 **Added**
+- Added updated Kanto map visuals, teleport catalog data, and Pallet Town door-opening visuals.
 - Added a Heal NPC that can restore your party from the overworld.
 - Added a Nurse mugshot for Heal NPC dialogue.
 - Added persistent heal-point respawns for wild and NPC battle losses.
 - Added a minimized Ranked queue panel so players can keep playing while waiting in queue.
 - Added a Ranked match-found countdown banner with a notification sound and short screen-dim warning before PvP starts.
+- Added battle animations for Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen, Aurora Veil, Thunder Wave, Toxic, Will-O-Wisp, Blizzard, Spore, Hurricane, Taunt, and Encore.
+- Added improved custom Flamethrower visuals and tuned imported move animation sizing/positioning.
+- Added battlefield side-effect visuals for Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen, and Aurora Veil.
+- Added continuous status condition animations for paralysis, poison, badly poison, burn, freeze, and sleep.
+- Added confusion, Taunt, and Encore volatile badges above battle sprites, including turn counts where available.
+- Added status icon badges to the battle HUD, normal party slots, and Pokemon summary cards.
+- Added persistence for non-PvP party status conditions so poisoned, burned, paralyzed, asleep, and frozen Pokemon keep their condition across wild and NPC battles.
 
 **Changed**
 - Party healing now uses the same reusable healing flow across NPCs and developer tools.
@@ -15,6 +23,9 @@
 - Ranked queue close/minimize behavior is now explicit: minimizing keeps the queue active, while closing or logging out leaves the queue unless a match has already been found.
 - PvP now prepares teams by healing the current party before joining a PvP room or ranked queue, and heals the party again after PvP ends.
 - If a Ranked match starts while the player is in a wild or NPC battle, the PvE battle is forfeited and cleaned up before PvP opens.
+- Battle status presentation now separates one-time move animations, continuous status overlays, and end-of-turn residual status damage animations.
+- Taunt, Encore, and confusion presentation now follows the same above-sprite badge style as stat-stage changes instead of using compact abbreviations.
+- Creator-generated Pokemon can now use holdable berries where appropriate.
 
 **Fixed**
 - Fixed the developer Clear Party tool only clearing the local UI, which could make the cleared party reappear and send newly generated Pokemon to PC storage.
@@ -27,6 +38,13 @@
 - Fixed PvP battle damage being written back to the overworld party after PvP ends.
 - Fixed the active player party sometimes staying damaged in the UI after a PvP forfeit before the server heal response finished.
 - Fixed lead Booster Energy activations not showing their battle log text, battle text, or Quark Drive/Protosynthesis stat badge before turn one.
+- Fixed hazard switch-in damage logs and HP deltas being merged with following attack damage.
+- Fixed Stealth Rock field markers appearing too transparent or too far from the affected side.
+- Fixed party held item markers drawing above other UI layers.
+- Fixed badly poisoned Pokemon losing their `tox` state when a new wild or NPC battle started.
+- Fixed saved status conditions being shown in the client but not restored inside Showdown battle logic at battle start.
+- Fixed poison and burn residual animations replaying during normal attack damage on already-statused targets.
+- Fixed the summary card missing the Pokemon's current status condition.
 
 ## 0.3.0 - 2026-07-06
 
