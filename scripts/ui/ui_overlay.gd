@@ -59,6 +59,7 @@ const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
+const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const APPEARANCE_CATEGORIES := [
 	{"id": "body", "label": "Body"},
@@ -132,6 +133,16 @@ const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(263, 180)
 const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_MIN_SCALE := 0.72
 const POKEMON_SUMMARY_SPRITE_MAX_SCALE := 2.2
+const POKEMON_SUMMARY_STATUS_ICON_WIDTH := 44
+const POKEMON_SUMMARY_STATUS_ICON_HEIGHT := 16
+const POKEMON_SUMMARY_STATUS_ICON_ROWS := {
+	"slp": 0,
+	"psn": 1,
+	"brn": 2,
+	"par": 3,
+	"frz": 4,
+	"tox": 7,
+}
 const POKEMON_SUMMARY_NATURE_BOOST_COLOR := Color("#7df27f")
 const POKEMON_SUMMARY_NATURE_DROP_COLOR := Color("#ff8f4f")
 const EVOLUTION_OVERLAY_STAGE_SIZE := Vector2(520, 360)
@@ -711,6 +722,7 @@ var pokemon_summary_held_item_slot_name_label: Label
 var pokemon_summary_item_search_input: LineEdit
 var pokemon_summary_hp_bar: ProgressBar
 var pokemon_summary_hp_label: Label
+var pokemon_summary_status_icon: TextureRect
 var pokemon_summary_content_stack: VBoxContainer
 var pokemon_summary_tab_buttons: Dictionary = {}
 var pokemon_summary_shiny_badge: PanelContainer
@@ -744,6 +756,7 @@ var pokemon_summary_move_summary_index: Dictionary = {}
 var pokemon_summary_move_summary_index_loaded := false
 var pokemon_summary_ability_summary_index: Dictionary = {}
 var pokemon_summary_ability_summary_index_loaded := false
+var pokemon_summary_status_icon_texture_cache: Dictionary = {}
 var evolution_overlay: Control
 var evolution_stage: Control
 var evolution_sprite_stage: Control
@@ -7641,12 +7654,25 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
 	identity_meta_row.add_child(pokemon_summary_id_label)
 
+	var hp_row := HBoxContainer.new()
+	hp_row.add_theme_constant_override("separation", 6)
+	left_stack.add_child(hp_row)
+
 	pokemon_summary_hp_label = Label.new()
 	pokemon_summary_hp_label.text = "HP -"
+	pokemon_summary_hp_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_summary_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pokemon_summary_hp_label.add_theme_font_size_override("font_size", 11)
 	pokemon_summary_hp_label.add_theme_color_override("font_color", Color("#f5df9a"))
-	left_stack.add_child(pokemon_summary_hp_label)
+	hp_row.add_child(pokemon_summary_hp_label)
+
+	pokemon_summary_status_icon = TextureRect.new()
+	pokemon_summary_status_icon.custom_minimum_size = Vector2(POKEMON_SUMMARY_STATUS_ICON_WIDTH, POKEMON_SUMMARY_STATUS_ICON_HEIGHT)
+	pokemon_summary_status_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_summary_status_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokemon_summary_status_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_status_icon.visible = false
+	hp_row.add_child(pokemon_summary_status_icon)
 
 	pokemon_summary_ball_picker = PanelContainer.new()
 	pokemon_summary_ball_picker.visible = false
@@ -9260,6 +9286,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"held_item_slot_name_label": pokemon_summary_held_item_slot_name_label,
 		"hp_bar": pokemon_summary_hp_bar,
 		"hp_label": pokemon_summary_hp_label,
+		"status_icon": pokemon_summary_status_icon,
 		"content_stack": pokemon_summary_content_stack,
 		"tab_buttons": pokemon_summary_tab_buttons.duplicate(),
 		"shiny_badge": pokemon_summary_shiny_badge,
@@ -9311,6 +9338,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_held_item_slot_name_label = context.get("held_item_slot_name_label") as Label
 	pokemon_summary_hp_bar = context.get("hp_bar") as ProgressBar
 	pokemon_summary_hp_label = context.get("hp_label") as Label
+	pokemon_summary_status_icon = context.get("status_icon") as TextureRect
 	pokemon_summary_content_stack = context.get("content_stack") as VBoxContainer
 	pokemon_summary_tab_buttons = (context.get("tab_buttons", {}) as Dictionary).duplicate()
 	pokemon_summary_shiny_badge = context.get("shiny_badge") as PanelContainer
@@ -9472,6 +9500,7 @@ func _refresh_pokemon_summary() -> void:
 	pokemon_summary_hp_bar.max_value = max(pokemon.max_hp, 1)
 	pokemon_summary_hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_summary_hp_label.text = "HP %s / %s" % [max(pokemon.current_hp, 0), max(pokemon.max_hp, 1)]
+	_set_pokemon_summary_status_icon(pokemon.status)
 	_refresh_pokemon_summary_tab_buttons()
 	_render_pokemon_summary_content(pokemon)
 	_store_active_pokemon_summary_card_context()
@@ -9572,6 +9601,67 @@ func _refresh_pokemon_summary_type_icons(pokemon: Pokemon) -> void:
 		added_count += 1
 		if added_count >= 2:
 			break
+
+func _set_pokemon_summary_status_icon(status: String) -> void:
+	if pokemon_summary_status_icon == null:
+		return
+
+	var status_key: String = _normalize_pokemon_summary_status_key(status)
+	var status_texture: Texture2D = _get_pokemon_summary_status_icon_texture(status_key)
+	pokemon_summary_status_icon.texture = status_texture
+	pokemon_summary_status_icon.visible = status_texture != null
+	pokemon_summary_status_icon.tooltip_text = _get_pokemon_summary_status_tooltip(status_key) if pokemon_summary_status_icon.visible else ""
+
+func _normalize_pokemon_summary_status_key(status: String) -> String:
+	match status.strip_edges().to_lower():
+		"psn", "poison", "poisoned":
+			return "psn"
+		"tox", "toxic", "badly_poisoned", "badlypoisoned":
+			return "tox"
+		"brn", "burn", "burned":
+			return "brn"
+		"par", "paralysis", "paralyzed":
+			return "par"
+		"slp", "sleep", "sleeping", "asleep":
+			return "slp"
+		"frz", "freeze", "frozen":
+			return "frz"
+
+	return ""
+
+func _get_pokemon_summary_status_icon_texture(status_key: String) -> Texture2D:
+	if status_key == "" or not POKEMON_SUMMARY_STATUS_ICON_ROWS.has(status_key):
+		return null
+	if pokemon_summary_status_icon_texture_cache.has(status_key):
+		return pokemon_summary_status_icon_texture_cache[status_key] as Texture2D
+
+	var atlas_texture := AtlasTexture.new()
+	atlas_texture.atlas = STATUS_ICON_SHEET
+	atlas_texture.region = Rect2(
+		0,
+		int(POKEMON_SUMMARY_STATUS_ICON_ROWS[status_key]) * POKEMON_SUMMARY_STATUS_ICON_HEIGHT,
+		POKEMON_SUMMARY_STATUS_ICON_WIDTH,
+		POKEMON_SUMMARY_STATUS_ICON_HEIGHT
+	)
+	pokemon_summary_status_icon_texture_cache[status_key] = atlas_texture
+	return atlas_texture
+
+func _get_pokemon_summary_status_tooltip(status_key: String) -> String:
+	match status_key:
+		"psn":
+			return "Poisoned"
+		"tox":
+			return "Badly poisoned"
+		"brn":
+			return "Burned"
+		"par":
+			return "Paralyzed"
+		"slp":
+			return "Asleep"
+		"frz":
+			return "Frozen"
+
+	return ""
 
 func _load_pokemon_type_icon(type_name: String) -> Texture2D:
 	var normalized_type: String = type_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
