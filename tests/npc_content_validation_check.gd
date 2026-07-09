@@ -12,6 +12,7 @@ const NPC_SCENE_SUFFIXES: Array[String] = [
 	"/scenes/npcs/gate_npc.tscn",
 	"/scenes/npcs/heal_npc.tscn",
 	"/scenes/npcs/trainer_npc.tscn",
+	"/scenes/npcs/boss_battle_npc.tscn",
 ]
 
 const TRAINER_NPC_SCENE_SUFFIX := "/scenes/npcs/trainer_npc.tscn"

@@ -15,7 +15,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var npc_sprite_frames: SpriteFrames
 @export var sprite_offset := Vector2(0, -16)
 @export var mugshot: Texture2D
-@export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "pace_horizontal"
+@export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "idle"
 @export_range(1, 12, 1) var movement_tiles := 3
 @export var movement_wait_seconds := 0.0
 @export var movement_speed_pixels := 90.0

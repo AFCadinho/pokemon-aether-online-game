@@ -10,7 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
 [ext_resource type="Texture2D" uid="uid://c3eq5myl821f3" path="res://assets/npcs/gen4-ow-sprites/NPC 16.png" id="7_j16lr"]
 [ext_resource type="Texture2D" uid="uid://dvw4u17xvuce4" path="res://assets/sprites/mugshots/nurse_joy_mugshot.png" id="8_j16lr"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/boss_battle_npc.tscn" id="9_s3ag2"]
+[ext_resource type="Texture2D" uid="uid://30fkhs34v51d" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/DP Beta Overworlds/DP_Beta027.png" id="10_s3ag2"]
+[ext_resource type="Texture2D" uid="uid://ckc4i8557tm1l" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="11_fec28"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
+[ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
+[ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="14_2p5pd"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
 [ext_resource type="PackedScene" uid="uid://mkdk7jtd37sw" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
@@ -89,6 +95,207 @@ animations = [{
 "frames": [],
 "loop": true,
 "name": &"new_animation_4",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fec28"]
+atlas = ExtResource("10_s3ag2")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s3ag2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fec28")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2p5pd"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8pek"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abkj7"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kveef"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4x353"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m86ow"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(128, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5eg0"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(192, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3oirl"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q27eu"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wfrmf"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(128, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wa66"]
+atlas = ExtResource("13_j8pek")
+region = Rect2(192, 128, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_abkj7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2p5pd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j8pek")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abkj7")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kveef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4x353")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m86ow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5eg0")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3oirl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q27eu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wfrmf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wa66")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfhh0"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bkfw7"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssmip"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1rkm"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_it3rq"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tu82a"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aoenu"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(64, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_po4ft"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(128, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_temji"]
+atlas = ExtResource("14_2p5pd")
+region = Rect2(192, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ih4yo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfhh0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bkfw7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ssmip")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l1rkm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_it3rq")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tu82a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aoenu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_po4ft")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_temji")
+}],
+"loop": true,
+"name": &"walk_up",
 "speed": 5.0
 }]
 
@@ -1738,7 +1945,7 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_voysl")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jff"]
-size = Vector2(212, 31)
+size = Vector2(160, 15.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3e7rq"]
 size = Vector2(32, 32)
@@ -1956,7 +2163,40 @@ npc_id = "kanto_pallet_town_nurse"
 npc_sprite_frames = SubResource("SpriteFrames_ltoox")
 mugshot = ExtResource("8_j16lr")
 
+[node name="BossBattle" type="Node2D" parent="Entities/NPCs" unique_id=1297212386]
+
+[node name="AshKetchum" parent="Entities/NPCs/BossBattle" unique_id=1887464688 instance=ExtResource("9_s3ag2")]
+position = Vector2(784, 1008)
+easy_trainer_id = "kanto_route_1_trainer_red_easy"
+normal_trainer_id = "kanto_route_1_trainer_red_normal"
+hard_trainer_id = "kanto_route_1_trainer_red_hard"
+npc_id = "kanto_route_1_trainer_red_boss"
+dialogue_id = "kanto_pallet_town_trainer_red_default"
+display_name = "Trainer Red"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = SubResource("SpriteFrames_s3ag2")
+mugshot = ExtResource("11_fec28")
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=689328441]
+
+[node name="Horsea" parent="Entities/Pokemon" unique_id=448121141 instance=ExtResource("12_h1bkg")]
+position = Vector2(432, 944)
+overworld_pokemon_id = "kanto_pallet_town_horsea_1"
+species_id = "horsea"
+display_name = "Horsea"
+npc_sprite_frames = SubResource("SpriteFrames_abkj7")
+movement_behavior = "pace_horizontal"
+
+[node name="Pikachu" parent="Entities/Pokemon" unique_id=586832654 instance=ExtResource("12_h1bkg")]
+position = Vector2(240, 464)
+overworld_pokemon_id = "kanto_pallet_town_pikachu_1"
+species_id = "pikachu"
+display_name = "Pikachu"
+npc_sprite_frames = SubResource("SpriteFrames_ih4yo")
+movement_behavior = "pace_vertical"
+movement_speed_pixels = 60.0
 
 [node name="Water" type="TileMapLayer" parent="." unique_id=1009891667]
 visible = false
@@ -1973,6 +2213,9 @@ tile_set = SubResource("TileSet_3e7rq")
 [node name="InitialSpawn" type="Marker2D" parent="Spawns" unique_id=1909342481]
 position = Vector2(656, 560)
 
+[node name="HealNPC" type="Marker2D" parent="Spawns" unique_id=138697794]
+position = Vector2(368, 272)
+
 [node name="FromRoute1" type="Marker2D" parent="Spawns" unique_id=1105260285]
 position = Vector2(1008, 112)
 
@@ -1982,18 +2225,18 @@ position = Vector2(1296, 848)
 [node name="Exits" type="Node2D" parent="." unique_id=1482608450]
 
 [node name="ToRoute1" type="Area2D" parent="Exits" unique_id=247861442]
-position = Vector2(432, 16)
+position = Vector2(976, 16)
 script = ExtResource("14_voysl")
 target_scene_path = "uid://b65lnk8twsct"
 target_spawn_name = "FromPalletTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute1" unique_id=242240651]
-position = Vector2(544, 32)
+position = Vector2(16, -7.75)
 shape = SubResource("RectangleShape2D_b5jff")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute1" unique_id=375230244 instance=ExtResource("23_route_hint")]
-position = Vector2(544, 0)
-width = 120.0
+position = Vector2(16, 0)
+width = 132.0
 height = 58.0
 
 [node name="ToOaksLab" type="Area2D" parent="Exits" unique_id=534349301]

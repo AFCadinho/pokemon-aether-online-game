@@ -29,6 +29,8 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/dialogue_metadata_service_check.gd",
 	"res://tests/trainer_dialogue_cleanup_check.gd",
 	"res://tests/npc_content_validation_check.gd",
+	"res://tests/overworld_pokemon_check.gd",
+	"res://tests/boss_battle_npc_check.gd",
 ]
 
 const LOG_DIR := "/tmp/pokeaether_project_checks"

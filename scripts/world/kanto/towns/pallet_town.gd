@@ -16,7 +16,12 @@ const TREE_TOP_VISUAL_LAYERS := [
 	"Structures Top",
 ]
 const DOOR_LAYER_NAME := "Door Layer"
-const DOOR_OPEN_OFFSET := Vector2(0.0, -10.0)
+const DOOR_COVER_LAYER_NAMES := [
+	"Structures Bottom",
+	"Objects Layer",
+	"Structures Top",
+]
+const DOOR_OPEN_OFFSET := Vector2(10.0, 0.0)
 const DOOR_TWEEN_SECONDS := 0.16
 
 var door_layer: TileMapLayer
@@ -91,6 +96,12 @@ func _setup_door_animation_groups() -> void:
 	if door_layer == null:
 		return
 
+	var door_z_index := door_layer.z_index
+	for cover_layer_name: String in DOOR_COVER_LAYER_NAMES:
+		var door_cover_layer := visuals.get_node_or_null(cover_layer_name) as TileMapLayer
+		if door_cover_layer != null:
+			door_z_index = mini(door_z_index, door_cover_layer.z_index - 1)
+
 	var used_cells := door_layer.get_used_cells()
 	var groups := _build_door_cell_groups(used_cells)
 	for group_index in range(groups.size()):
@@ -100,7 +111,7 @@ func _setup_door_animation_groups() -> void:
 		animated_layer.tile_set = door_layer.tile_set
 		animated_layer.position = door_layer.position
 		animated_layer.z_as_relative = door_layer.z_as_relative
-		animated_layer.z_index = door_layer.z_index
+		animated_layer.z_index = door_z_index
 		animated_layer.modulate = door_layer.modulate
 		visuals.add_child(animated_layer)
 

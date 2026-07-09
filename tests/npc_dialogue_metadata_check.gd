@@ -80,7 +80,7 @@ func _check_npc_metadata_service_normalizes_dialogue_id() -> void:
 func _check_base_npc_movement_behavior() -> void:
 	var text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(
-		text.contains("@export_enum(\"idle\", \"pace_horizontal\", \"pace_vertical\") var movement_behavior := \"pace_horizontal\""),
+		text.contains("@export_enum(\"idle\", \"pace_horizontal\", \"pace_vertical\") var movement_behavior := \"idle\""),
 		"BaseNPC exports NPC movement behavior"
 	)
 	_check_true(text.contains("@export_range(1, 12, 1) var movement_tiles := 3"), "BaseNPC exports movement tile range")

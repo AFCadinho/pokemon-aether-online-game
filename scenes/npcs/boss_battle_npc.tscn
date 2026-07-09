@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bql6a1hbx7o2m"]
+
+[ext_resource type="Script" path="res://scripts/world/npcs/boss_battle_npc.gd" id="1_boss"]
+[ext_resource type="SpriteFrames" uid="uid://36b8nbn22y3h" path="res://assets/npcs/trainer/bug_catcher_sprite_frames.tres" id="2_frames"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interaction"]
+size = Vector2(96, 97)
+
+[node name="BossBattleNPC" type="Node2D"]
+script = ExtResource("1_boss")
+display_name = "Boss"
+dialogue_lines = Array[String](["Choose your challenge."])
+npc_sprite_frames = ExtResource("2_frames")
+
+[node name="Look" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
+position = Vector2(0, -16)
+sprite_frames = ExtResource("2_frames")
+animation = &"walk_down"
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_interaction")
+
+[node name="FeetMarker" type="Marker2D" parent="."]

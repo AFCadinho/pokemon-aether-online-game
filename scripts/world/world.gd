@@ -1668,20 +1668,71 @@ func _respawn_after_battle_loss() -> void:
 	var result: Dictionary = await PlayerGameStateService.respawn_player()
 	if not bool(result.get("success", false)):
 		push_warning("World: respawn after battle loss failed: %s" % str(result.get("error", "Unknown error")))
-		get_tree().call_group("ui_overlay", "add_system_message", "You blacked out, but no respawn point is available.")
+		await _fallback_respawn_after_battle_loss()
 		return
 
 	_apply_respawn_party_response(_dictionary_from_value(result.get("party", {})))
 	var position_state := _dictionary_from_value(result.get("position", {}))
 	if position_state.is_empty():
 		push_warning("World: respawn response did not include a position.")
+		await _fallback_respawn_after_battle_loss()
 		return
 
+	position_state = _normalize_respawn_position_state(position_state)
 	var apply_result: Dictionary = await apply_authorized_teleport_state(position_state)
 	if not bool(apply_result.get("success", false)):
 		push_warning("World: respawn position apply failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
 	get_tree().call_group("ui_overlay", "add_system_message", "You blacked out, returned to your last heal point, and your party was healed.")
+
+
+func _fallback_respawn_after_battle_loss() -> void:
+	var default_respawn_state := _get_default_healer_respawn_state()
+	var party_heal_service := get_node_or_null("/root/PartyHealService")
+	if party_heal_service != null and party_heal_service.has_method("heal_current_party_and_save"):
+		await party_heal_service.call("heal_current_party_and_save")
+
+	var apply_result: Dictionary = await apply_authorized_teleport_state(default_respawn_state)
+	if not bool(apply_result.get("success", false)):
+		push_warning("World: fallback respawn position apply failed: %s" % str(apply_result.get("error", "Unknown error")))
+		get_tree().call_group("ui_overlay", "add_system_message", "You blacked out, but the default heal point could not be loaded.")
+		return
+
+	get_tree().call_group("ui_overlay", "add_system_message", "You blacked out and returned to Nurse Joy.")
+
+
+func _get_default_healer_respawn_state() -> Dictionary:
+	return {
+		"mapId": "kanto_pallet_town",
+		"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+		"position": {
+			"x": 368.0,
+			"y": 272.0,
+		},
+		"facingDirection": "down",
+		"spawnMarker": "HealNPC",
+		"markerId": "pallet_town_heal_npc",
+	}
+
+
+func _normalize_respawn_position_state(position_state: Dictionary) -> Dictionary:
+	var normalized_state := position_state.duplicate(true)
+	var map_id := str(normalized_state.get("mapId", "")).strip_edges()
+	var marker_id := str(normalized_state.get("markerId", "")).strip_edges()
+	var spawn_marker := str(normalized_state.get("spawnMarker", "")).strip_edges()
+	if map_id != "kanto_pallet_town" or spawn_marker != "":
+		return normalized_state
+
+	if marker_id not in ["", "pallet_town_heal_npc", "pallet_town_initial_spawn"]:
+		return normalized_state
+
+	normalized_state["spawnMarker"] = "HealNPC"
+	normalized_state["markerId"] = "pallet_town_heal_npc"
+	normalized_state["position"] = {
+		"x": 368.0,
+		"y": 272.0,
+	}
+	return normalized_state
 
 
 func _apply_respawn_party_response(party_response: Dictionary) -> void:
