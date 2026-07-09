@@ -2,7 +2,8 @@ extends DialogueNPC
 
 class_name GateNPC
 
-const STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
+const STAFF_ROLE_CATEGORY := "staff"
+const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 
 @export var gate_id := "route_1"
 @export var requires_party_pokemon := true
@@ -14,6 +15,9 @@ const STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderat
 	"This area is not available during the alpha.",
 ]
 @export var allowed_dialogue_lines: Array[String] = []
+@export var blocked_dialogue_id := ""
+@export var staff_blocked_dialogue_id := ""
+@export var allowed_dialogue_id := ""
 
 
 func _ready() -> void:
@@ -52,9 +56,9 @@ func show_gate_dialogue() -> void:
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
-	var lines: Array[String] = _get_blocked_dialogue_lines()
+	var lines: Array[String] = await _get_blocked_dialogue_lines()
 	if is_gate_open():
-		lines = allowed_dialogue_lines
+		lines = await _resolve_dialogue_lines(allowed_dialogue_id, allowed_dialogue_lines)
 
 	await show_dialogue(lines)
 
@@ -76,28 +80,51 @@ func _load_gate_metadata() -> Dictionary:
 	)
 	if not metadata_blocked_dialogue.is_empty():
 		blocked_dialogue_lines = metadata_blocked_dialogue
+	blocked_dialogue_id = _get_metadata_dialogue_id(metadata, "blockedDialogueId", "blocked_dialogue_id", blocked_dialogue_id)
 
 	var metadata_staff_blocked_dialogue: Array[String] = _get_string_array(
 		metadata.get("staffBlockedDialogue", staff_blocked_dialogue_lines)
 	)
 	if not metadata_staff_blocked_dialogue.is_empty():
 		staff_blocked_dialogue_lines = metadata_staff_blocked_dialogue
+	staff_blocked_dialogue_id = _get_metadata_dialogue_id(metadata, "staffBlockedDialogueId", "staff_blocked_dialogue_id", staff_blocked_dialogue_id)
 
 	var metadata_allowed_dialogue: Array[String] = _get_string_array(
 		metadata.get("allowedDialogue", allowed_dialogue_lines)
 	)
 	allowed_dialogue_lines = metadata_allowed_dialogue
+	allowed_dialogue_id = _get_metadata_dialogue_id(metadata, "allowedDialogueId", "allowed_dialogue_id", allowed_dialogue_id)
 	return response
 
 
 func _get_blocked_dialogue_lines() -> Array[String]:
 	if requires_party_pokemon and PlayerSave.party.is_empty():
-		return blocked_dialogue_lines
+		return await _resolve_dialogue_lines(blocked_dialogue_id, blocked_dialogue_lines)
 
 	if requires_staff_role and not _current_player_has_staff_role():
-		return staff_blocked_dialogue_lines
+		return await _resolve_dialogue_lines(staff_blocked_dialogue_id, staff_blocked_dialogue_lines)
 
-	return blocked_dialogue_lines
+	return await _resolve_dialogue_lines(blocked_dialogue_id, blocked_dialogue_lines)
+
+
+func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:
+	var metadata_dialogue_id := str(metadata.get(camel_key, metadata.get(snake_key, ""))).strip_edges()
+	if metadata_dialogue_id.is_empty():
+		return current_value
+	return metadata_dialogue_id
+
+
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
+	if resolved_dialogue_id.is_empty():
+		return fallback_lines
+
+	var lines: Array[String] = await DialogueMetadataService.get_lines(resolved_dialogue_id)
+	if lines.is_empty():
+		push_warning("GateNPC: Dialogue metadata was empty for %s; falling back to inline dialogue." % resolved_dialogue_id)
+		return fallback_lines
+
+	return lines
 
 
 func _current_player_has_staff_role() -> bool:
@@ -108,12 +135,15 @@ func _current_player_has_staff_role() -> bool:
 	var roles: Array = roles_value as Array
 	for role_value: Variant in roles:
 		var role_id := ""
+		var role_category := ""
 		if role_value is Dictionary:
-			role_id = str((role_value as Dictionary).get("id", "")).strip_edges().to_lower()
+			var role := role_value as Dictionary
+			role_id = str(role.get("id", "")).strip_edges().to_lower()
+			role_category = str(role.get("category", "")).strip_edges().to_lower()
 		else:
 			role_id = str(role_value).strip_edges().to_lower()
 
-		if STAFF_ROLE_IDS.has(role_id):
+		if role_category == STAFF_ROLE_CATEGORY or LEGACY_STAFF_ROLE_IDS.has(role_id):
 			return true
 
 	return false

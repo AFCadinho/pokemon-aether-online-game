@@ -24,6 +24,11 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pallet_town_encounter_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",
 	"res://tests/social_service_contract_check.gd",
+	"res://tests/npc_identity_check.gd",
+	"res://tests/npc_dialogue_metadata_check.gd",
+	"res://tests/dialogue_metadata_service_check.gd",
+	"res://tests/trainer_dialogue_cleanup_check.gd",
+	"res://tests/npc_content_validation_check.gd",
 ]
 
 const LOG_DIR := "/tmp/pokeaether_project_checks"

@@ -15,6 +15,10 @@ class_name HealNPC
 	"I could not heal your party right now.",
 	"Please try again in a moment.",
 ]
+@export var success_dialogue_id := ""
+@export var already_healed_dialogue_id := ""
+@export var no_party_dialogue_id := ""
+@export var failure_dialogue_id := ""
 @export var healed_system_message := "Your party was healed."
 @export var respawn_point_id := ""
 @export var respawn_marker_path: NodePath = ^"RespawnMarker"
@@ -27,32 +31,32 @@ func interact_with_player(_player: Node2D) -> void:
 		await _show_report_to_staff_message()
 		return
 
-	if not dialogue_lines.is_empty():
+	if not dialogue_lines.is_empty() or not dialogue_id.strip_edges().is_empty():
 		await show_dialogue(dialogue_lines)
 
 	if _get_player_party().is_empty():
-		await show_dialogue(no_party_dialogue_lines)
+		await show_dialogue(await _resolve_dialogue_lines(no_party_dialogue_id, no_party_dialogue_lines))
 		return
 
 	var party_heal_service := get_node_or_null("/root/PartyHealService")
 	if party_heal_service == null or not party_heal_service.has_method("heal_current_party_and_save"):
-		await show_dialogue(failure_dialogue_lines)
+		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
 		return
 
 	var respawn_point := _build_respawn_point_payload()
 	var result: Dictionary = await party_heal_service.call("heal_current_party_and_save", respawn_point)
 	if not bool(result.get("success", false)):
 		push_warning("HealNPC: party heal failed: %s" % str(result.get("error", "Unknown error")))
-		await show_dialogue(failure_dialogue_lines)
+		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
 		return
 
 	if bool(result.get("changed", false)):
 		_add_system_message(healed_system_message)
 		await _save_respawn_point()
-		await show_dialogue(success_dialogue_lines)
+		await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))
 	else:
 		await _save_respawn_point()
-		await show_dialogue(already_healed_dialogue_lines)
+		await show_dialogue(await _resolve_dialogue_lines(already_healed_dialogue_id, already_healed_dialogue_lines))
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
@@ -61,22 +65,46 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	var metadata_success_dialogue := _get_string_array(metadata.get("successDialogue", []))
 	if not metadata_success_dialogue.is_empty():
 		success_dialogue_lines = metadata_success_dialogue
+	success_dialogue_id = _get_metadata_dialogue_id(metadata, "successDialogueId", "success_dialogue_id", success_dialogue_id)
 
 	var metadata_already_healed_dialogue := _get_string_array(metadata.get("alreadyHealedDialogue", []))
 	if not metadata_already_healed_dialogue.is_empty():
 		already_healed_dialogue_lines = metadata_already_healed_dialogue
+	already_healed_dialogue_id = _get_metadata_dialogue_id(metadata, "alreadyHealedDialogueId", "already_healed_dialogue_id", already_healed_dialogue_id)
 
 	var metadata_no_party_dialogue := _get_string_array(metadata.get("noPartyDialogue", []))
 	if not metadata_no_party_dialogue.is_empty():
 		no_party_dialogue_lines = metadata_no_party_dialogue
+	no_party_dialogue_id = _get_metadata_dialogue_id(metadata, "noPartyDialogueId", "no_party_dialogue_id", no_party_dialogue_id)
 
 	var metadata_failure_dialogue := _get_string_array(metadata.get("failureDialogue", []))
 	if not metadata_failure_dialogue.is_empty():
 		failure_dialogue_lines = metadata_failure_dialogue
+	failure_dialogue_id = _get_metadata_dialogue_id(metadata, "failureDialogueId", "failure_dialogue_id", failure_dialogue_id)
 
 	var metadata_healed_system_message := str(metadata.get("healedSystemMessage", "")).strip_edges()
 	if not metadata_healed_system_message.is_empty():
 		healed_system_message = metadata_healed_system_message
+
+
+func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:
+	var metadata_dialogue_id := str(metadata.get(camel_key, metadata.get(snake_key, ""))).strip_edges()
+	if metadata_dialogue_id.is_empty():
+		return current_value
+	return metadata_dialogue_id
+
+
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
+	if resolved_dialogue_id.is_empty():
+		return fallback_lines
+
+	var lines: Array[String] = await DialogueMetadataService.get_lines(resolved_dialogue_id)
+	if lines.is_empty():
+		push_warning("HealNPC: Dialogue metadata was empty for %s; falling back to inline dialogue." % resolved_dialogue_id)
+		return fallback_lines
+
+	return lines
 
 
 func _load_npc_metadata_if_needed() -> Dictionary:

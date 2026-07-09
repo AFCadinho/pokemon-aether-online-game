@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c8jc7hkjwy7fn"]
+
+[ext_resource type="Script" uid="uid://debe8msgfkubc" path="res://scripts/world/transition_hint.gd" id="1_x5j15"]
+
+[node name="TransitionHint" type="Node2D" unique_id=375230244]
+z_index = 1200
+script = ExtResource("1_x5j15")
+particle_count = 14
+width = 120.0
+height = 64.0
+cycle_seconds = 2.0
+particle_radius = 1.7
+tint = Color(0.88, 0.68, 1, 0.68)

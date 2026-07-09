@@ -1,5 +1,16 @@
 extends DialogueNPC
 
+@export var starter_gift_dialogue_id := ""
+@export var starter_received_dialogue_id := ""
+@export var starter_gift_dialogue_lines: Array[String] = [
+	"Ah, there you are!",
+	"Take this Charmander with you.",
+	"You received Charmander!",
+]
+@export var starter_received_dialogue_lines: Array[String] = [
+	"Take good care of Charmander!",
+]
+
 var is_creating_starter := false
 var create_pokemon_request: HTTPRequest
 
@@ -20,9 +31,7 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	if PlayerSave.flags.get("received_starter", false):
-		await show_dialogue([
-			"Take good care of Charmander!"
-		])
+		await show_dialogue(await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines))
 		return
 
 	is_creating_starter = true
@@ -34,11 +43,34 @@ func interact_with_player(_player: Node2D) -> void:
 
 	PlayerSave.flags["received_starter"] = true
 
-	await show_dialogue([
-		"Ah, there you are!",
-		"Take this Charmander with you.",
-		"You received Charmander!"
-	])
+	await show_dialogue(await _resolve_dialogue_lines(starter_gift_dialogue_id, starter_gift_dialogue_lines))
+
+
+func _apply_npc_metadata(metadata: Dictionary) -> void:
+	super._apply_npc_metadata(metadata)
+
+	starter_gift_dialogue_id = _get_metadata_dialogue_id(metadata, "starterGiftDialogueId", "starter_gift_dialogue_id", starter_gift_dialogue_id)
+	starter_received_dialogue_id = _get_metadata_dialogue_id(metadata, "starterReceivedDialogueId", "starter_received_dialogue_id", starter_received_dialogue_id)
+
+
+func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:
+	var metadata_dialogue_id := str(metadata.get(camel_key, metadata.get(snake_key, ""))).strip_edges()
+	if metadata_dialogue_id.is_empty():
+		return current_value
+	return metadata_dialogue_id
+
+
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
+	if resolved_dialogue_id.is_empty():
+		return fallback_lines
+
+	var lines: Array[String] = await DialogueMetadataService.get_lines(resolved_dialogue_id)
+	if lines.is_empty():
+		push_warning("Oak: Dialogue metadata was empty for %s; falling back to inline dialogue." % resolved_dialogue_id)
+		return fallback_lines
+
+	return lines
 	
 func give_starter_pokemon(pokemon_name: String) -> Pokemon:
 	var response: Dictionary = await PokemonDataApiClient.create_pokemon(

@@ -68,7 +68,7 @@ func show_intro_dialogue() -> void:
 		await _fail_trainer_metadata(dialogue_box, "Trainer metadata for %s is missing name." % trainer_id)
 		return
 
-	var dialogue_lines := _get_dialogue_lines_from_trainer_metadata(trainer_metadata)
+	var dialogue_lines := await _resolve_intro_dialogue_lines(trainer_metadata)
 	if dialogue_lines.is_empty():
 		await _fail_trainer_metadata(dialogue_box, "Trainer metadata for %s is missing dialogue_before_battle." % trainer_id)
 		return
@@ -94,9 +94,47 @@ func _get_dialogue_lines_from_trainer_metadata(trainer_metadata: Dictionary) -> 
 	var dialogue_value: Variant = trainer_metadata.get("dialogue_before_battle", [])
 	if dialogue_value is Array:
 		for item: Variant in dialogue_value:
-			dialogue_lines.append(str(item))
+			var line := str(item).strip_edges()
+			if not line.is_empty():
+				dialogue_lines.append(line)
 	
 	return dialogue_lines
+
+func _resolve_intro_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:
+	var configured_dialogue_id := dialogue_id.strip_edges()
+	if not configured_dialogue_id.is_empty():
+		var configured_lines := await _get_dialogue_metadata_lines(configured_dialogue_id)
+		if not configured_lines.is_empty():
+			return configured_lines
+
+	var metadata_dialogue_id := _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata)
+	if not metadata_dialogue_id.is_empty() and metadata_dialogue_id != configured_dialogue_id:
+		var metadata_lines := await _get_dialogue_metadata_lines(metadata_dialogue_id)
+		if not metadata_lines.is_empty():
+			return metadata_lines
+
+	return _get_dialogue_lines_from_trainer_metadata(trainer_metadata)
+
+func _get_intro_dialogue_id_from_trainer_metadata(trainer_metadata: Dictionary) -> String:
+	for key: String in [
+		"battleIntroDialogueId",
+		"battle_intro_dialogue_id",
+		"introDialogueId",
+		"intro_dialogue_id",
+		"dialogueId",
+		"dialogue_id",
+	]:
+		var value := str(trainer_metadata.get(key, "")).strip_edges()
+		if not value.is_empty():
+			return value
+
+	return ""
+
+func _get_dialogue_metadata_lines(intro_dialogue_id: String) -> Array[String]:
+	var lines: Array[String] = await DialogueMetadataService.get_lines(intro_dialogue_id)
+	if lines.is_empty():
+		push_warning("TrainerNPC: Dialogue metadata was empty for %s; falling back to dialogue_before_battle." % intro_dialogue_id)
+	return lines
 
 func _fail_trainer_metadata(dialogue_box: Node, message: String) -> void:
 	push_error("TrainerNPC: %s" % message)

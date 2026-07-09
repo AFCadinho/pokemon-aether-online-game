@@ -42,7 +42,8 @@ const WORLD_TELEPORT_PLAYER_PERMISSION := "world:teleport:player"
 const WORLD_TELEPORT_OTHER_PERMISSION := "world:teleport:other"
 const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
-const STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
+const STAFF_ROLE_CATEGORY := "staff"
+const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
@@ -1028,12 +1029,15 @@ func _current_player_has_staff_role() -> bool:
 	var roles: Array = roles_value as Array
 	for role_value: Variant in roles:
 		var role_id := ""
+		var role_category := ""
 		if role_value is Dictionary:
-			role_id = str((role_value as Dictionary).get("id", "")).strip_edges().to_lower()
+			var role := role_value as Dictionary
+			role_id = str(role.get("id", "")).strip_edges().to_lower()
+			role_category = str(role.get("category", "")).strip_edges().to_lower()
 		else:
 			role_id = str(role_value).strip_edges().to_lower()
 
-		if STAFF_ROLE_IDS.has(role_id):
+		if role_category == STAFF_ROLE_CATEGORY or LEGACY_STAFF_ROLE_IDS.has(role_id):
 			return true
 
 	return false
@@ -21799,11 +21803,13 @@ func _get_primary_visible_chat_role(user: Dictionary, ignore_selected_badge: boo
 			continue
 
 		var role: Dictionary = role_value as Dictionary
-		var role_id: String = str(role.get("id", ""))
-		var badge: String = _get_chat_role_badge(role_id)
+		if not _should_show_chat_role_badge(role):
+			continue
+		var badge: String = _get_chat_role_badge(role)
 		if badge.is_empty():
 			continue
 
+		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
 		role["badge"] = badge
 		role["color"] = _get_chat_role_color(role_id, str(role.get("color", "#d8b767")))
 		var priority: int = int(role.get("priority", 0))
@@ -21830,7 +21836,9 @@ func _find_visible_chat_role(roles: Array, selected_badge: String) -> Dictionary
 		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
 		if role_id != selected_badge:
 			continue
-		var badge: String = _get_chat_role_badge(role_id)
+		if not _should_show_chat_role_badge(role):
+			return {}
+		var badge: String = _get_chat_role_badge(role)
 		if badge.is_empty():
 			return {}
 		var role_with_badge: Dictionary = role.duplicate()
@@ -21851,7 +21859,9 @@ func _get_selectable_chat_badge_roles(user: Dictionary) -> Array[Dictionary]:
 			continue
 		var role: Dictionary = role_value as Dictionary
 		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
-		var badge: String = _get_chat_role_badge(role_id)
+		if not _should_show_chat_role_badge(role):
+			continue
+		var badge: String = _get_chat_role_badge(role)
 		if badge.is_empty():
 			continue
 		options.append({
@@ -21861,8 +21871,23 @@ func _get_selectable_chat_badge_roles(user: Dictionary) -> Array[Dictionary]:
 	return options
 
 
-func _get_chat_role_badge(role_id: String) -> String:
-	match role_id:
+func _should_show_chat_role_badge(role: Dictionary) -> bool:
+	var display: Dictionary = role.get("display", {}) if role.get("display", {}) is Dictionary else {}
+	if display.has("chatBadge"):
+		return bool(display.get("chatBadge", false))
+	return _get_legacy_chat_role_badge(str(role.get("id", ""))).strip_edges() != ""
+
+
+func _get_chat_role_badge(role: Dictionary) -> String:
+	var short_label := str(role.get("shortLabel", role.get("badge", ""))).strip_edges()
+	if short_label != "":
+		return short_label
+	return _get_legacy_chat_role_badge(str(role.get("id", "")))
+
+
+func _get_legacy_chat_role_badge(role_id: String) -> String:
+	var normalized_role_id := role_id.strip_edges().to_lower()
+	match normalized_role_id:
 		"alpha":
 			return "alpha"
 		"gamemaster":

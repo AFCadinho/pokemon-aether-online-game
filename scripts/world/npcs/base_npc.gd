@@ -8,12 +8,17 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ]
 
 @export var npc_id := ""
+@export var dialogue_id := ""
 @export var display_name := ""
 @export var facing_direction := Vector2.DOWN
 @export var dialogue_lines: Array[String] = []
 @export var npc_sprite_frames: SpriteFrames
 @export var sprite_offset := Vector2(0, -16)
 @export var mugshot: Texture2D
+@export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "pace_horizontal"
+@export_range(1, 12, 1) var movement_tiles := 3
+@export var movement_wait_seconds := 0.0
+@export var movement_speed_pixels := 90.0
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -39,6 +44,12 @@ var npc_metadata_load_failed := false
 var nameplate: Control
 var nameplate_background: Panel
 var nameplate_label: Label
+var movement_origin_tile := Vector2i.ZERO
+var movement_current_offset_tiles := 0
+var movement_direction_sign := 1
+var movement_next_step_at_msec := 0
+var movement_reserved_tile := Vector2i.ZERO
+var is_npc_moving := false
 
 
 func _ready_base_npc() -> void:
@@ -54,12 +65,18 @@ func _ready_base_npc() -> void:
 			interaction_area.body_entered.connect(body_entered_callable)
 		if not interaction_area.body_exited.is_connected(body_exited_callable):
 			interaction_area.body_exited.connect(body_exited_callable)
+	movement_origin_tile = _to_tile(get_feet_position())
+	_schedule_next_npc_movement_step()
 	_update_sort_z()
 	_setup_nameplate()
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
-	return _to_tile(feet_marker.global_position) == _to_tile(world_position)
+	var blocked_tile := _to_tile(feet_marker.global_position)
+	if is_npc_moving:
+		var checked_tile := _to_tile(world_position)
+		return blocked_tile == checked_tile or movement_reserved_tile == checked_tile
+	return blocked_tile == _to_tile(world_position)
 
 
 func get_feet_position() -> Vector2:
@@ -128,6 +145,8 @@ func _play_walk_animation(direction: Vector2) -> void:
 func _set_idle_frame(direction: Vector2) -> void:
 	if direction == Vector2.ZERO:
 		return
+
+	facing_direction = _get_cardinal_direction(direction)
 
 	var animation_name := _get_idle_animation_name(direction)
 	if animation_name != "" and sprite.sprite_frames.has_animation(animation_name):
@@ -343,8 +362,125 @@ func _create_atlas_frame(atlas: Texture2D, frame_size: Vector2, column: int, row
 
 func _process_base_npc() -> void:
 	_update_sort_z()
+	await _process_npc_movement()
 	if _can_start_manual_interaction():
 		await _start_manual_interaction(nearby_player)
+
+
+func _process_npc_movement() -> void:
+	if movement_behavior == "idle":
+		return
+
+	if is_npc_moving or is_interacting:
+		return
+
+	if player_nearby:
+		return
+
+	if GameState.is_overworld_input_locked():
+		return
+
+	if _is_ui_typing():
+		return
+
+	var dialogue_box := _get_dialogue_box()
+	if dialogue_box != null and dialogue_box.is_open:
+		return
+
+	if Time.get_ticks_msec() < movement_next_step_at_msec:
+		return
+
+	await _try_step_npc_movement()
+
+
+func _try_step_npc_movement() -> void:
+	var direction := _get_movement_axis_direction() * float(movement_direction_sign)
+	if direction == Vector2.ZERO:
+		_schedule_next_npc_movement_step()
+		return
+
+	var target_offset := movement_current_offset_tiles + movement_direction_sign
+	var max_tiles := maxi(movement_tiles, 1)
+	if abs(target_offset) > max_tiles:
+		movement_direction_sign *= -1
+		_set_idle_frame(_get_movement_axis_direction() * float(movement_direction_sign))
+		_update_directional_sensors()
+		_schedule_next_npc_movement_step()
+		return
+
+	var current_tile := _to_tile(get_feet_position())
+	var target_tile := current_tile + Vector2i(int(direction.x), int(direction.y))
+	var target_feet_position := _tile_to_world(target_tile)
+	if not _can_npc_move_to(target_feet_position):
+		movement_direction_sign *= -1
+		_set_idle_frame(_get_movement_axis_direction() * float(movement_direction_sign))
+		_update_directional_sensors()
+		_schedule_next_npc_movement_step()
+		return
+
+	is_npc_moving = true
+	facing_direction = direction
+	_play_walk_animation(direction)
+	_update_directional_sensors()
+
+	var target_global_position := global_position + (target_feet_position - get_feet_position())
+	var speed := maxf(movement_speed_pixels, 1.0)
+	var duration := global_position.distance_to(target_global_position) / speed
+	movement_reserved_tile = target_tile
+	var tween := create_tween()
+	tween.tween_property(self, "global_position", target_global_position, duration)
+	await tween.finished
+
+	movement_current_offset_tiles = target_offset
+	_set_idle_frame(direction)
+	_update_directional_sensors()
+	_update_sort_z()
+	movement_reserved_tile = Vector2i.ZERO
+	is_npc_moving = false
+	_schedule_next_npc_movement_step()
+
+
+func _get_movement_axis_direction() -> Vector2:
+	if movement_behavior == "pace_horizontal":
+		return Vector2.RIGHT
+	if movement_behavior == "pace_vertical":
+		return Vector2.DOWN
+	return Vector2.ZERO
+
+
+func _schedule_next_npc_movement_step() -> void:
+	var wait_msec := int(maxf(movement_wait_seconds, 0.0) * 1000.0)
+	movement_next_step_at_msec = Time.get_ticks_msec() + wait_msec
+
+
+func _can_npc_move_to(world_position: Vector2) -> bool:
+	var current_map: Node = GameState.current_map
+	if current_map == null:
+		return true
+
+	for candidate: Node in get_tree().get_nodes_in_group("player"):
+		var player_node := candidate as Node2D
+		if player_node != null and _to_tile(_get_body_target_feet_position(player_node)) == _to_tile(world_position):
+			return false
+
+	var collision_tilemap: TileMapLayer = current_map.get_node_or_null("Collision") as TileMapLayer
+	if collision_tilemap != null:
+		var local_position := collision_tilemap.to_local(world_position)
+		var tile_position := collision_tilemap.local_to_map(local_position)
+		if collision_tilemap.get_cell_source_id(tile_position) != -1:
+			return false
+		if collision_tilemap.get_cell_tile_data(tile_position) != null:
+			return false
+
+	if current_map.has_method("is_position_blocked_by_character"):
+		return not bool(current_map.call("is_position_blocked_by_character", world_position))
+
+	return not MapCharacterBlocking.is_position_blocked_by_character(current_map, world_position)
+
+
+func _update_directional_sensors() -> void:
+	if has_method("_configure_vision_area"):
+		call("_configure_vision_area")
 
 
 func _can_start_manual_interaction() -> bool:
@@ -448,8 +584,12 @@ func _load_npc_metadata() -> Dictionary:
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
+	var metadata_dialogue_id := str(metadata.get("dialogueId", metadata.get("dialogue_id", ""))).strip_edges()
+	if not metadata_dialogue_id.is_empty():
+		dialogue_id = metadata_dialogue_id
+
 	var metadata_name := str(metadata.get("name", ""))
-	if not metadata_name.is_empty():
+	if display_name.strip_edges().is_empty() and not metadata_name.is_empty():
 		display_name = metadata_name
 		_sync_nameplate()
 

@@ -197,7 +197,10 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	move_player_to_map(target_map)
 	if player.has_method("reset_movement_state"):
 		player.call("reset_movement_state")
-	_position_player_at_saved_state(target_map, state)
+	var position_result := _position_player_at_authorized_teleport_state(target_map, state)
+	if not bool(position_result.get("success", false)):
+		_mark_authorized_teleport_apply_failed()
+		return position_result
 	current_teleport_revision = int(state.get("teleportRevision", current_teleport_revision))
 	_apply_camera_limits_for_map(target_map)
 
@@ -349,7 +352,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	$CurrentMap.add_child(new_map)
 
 	GameState.current_map = new_map
-	_normalize_map_tree_layer_z_indices(new_map)
+	_normalize_map_depth_layer_z_indices(new_map)
 	MusicManager.play_map_music(new_map)
 
 	move_player_to_map(new_map)
@@ -390,6 +393,35 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	_sync_player_activity_state_for_current_tile()
 	if player.has_method("reset_pokemon_follower_position"):
 		player.call("reset_pokemon_follower_position")
+
+func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary) -> Dictionary:
+	var spawn_marker := str(state.get("spawnMarker", "")).strip_edges()
+	if spawn_marker != "":
+		var spawn: Node = map.get_node_or_null("Spawns/" + spawn_marker)
+		if spawn == null:
+			return {
+				"success": false,
+				"error": "Teleport spawn marker '%s' was not found in %s." % [spawn_marker, map.name],
+			}
+
+		var spawn_position := _snap_world_position_to_map_tile_center(map, (spawn as Node2D).global_position)
+		player.global_position = spawn_position
+		player.target_position = spawn_position
+		player.move_start_position = spawn_position
+		player.is_moving = false
+		player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
+		player.set_idle_frame()
+		player.refresh_map_layers()
+		_sync_player_activity_state_for_current_tile()
+		if player.has_method("reset_pokemon_follower_position"):
+			player.call("reset_pokemon_follower_position")
+		GameState.player_position = spawn_position
+		GameState.player_direction = player.last_direction
+		GameState.has_player_position = true
+		return {"success": true}
+
+	_position_player_at_saved_state(map, state)
+	return {"success": true}
 
 func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 	var position_data: Dictionary = _dictionary_from_value(state.get("position", {}))
@@ -1114,10 +1146,15 @@ func _get_current_role_presence_state() -> Array:
 			continue
 
 		var role: Dictionary = role_value as Dictionary
+		var display_value: Variant = role.get("display", {})
 		presence_roles.append({
 			"id": str(role.get("id", "")),
+			"category": str(role.get("category", "")),
+			"label": str(role.get("label", role.get("name", ""))),
+			"shortLabel": str(role.get("shortLabel", role.get("badge", ""))),
 			"color": str(role.get("color", "")),
 			"priority": int(role.get("priority", 0)),
+			"display": display_value.duplicate(true) if display_value is Dictionary else {},
 		})
 
 	return presence_roles

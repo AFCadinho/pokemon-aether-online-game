@@ -49,6 +49,8 @@ const ROLE_BADGE_COLORS := {
 	"developer": Color(0.0, 0.898, 0.659),
 	"moderator": Color(0.482, 0.173, 0.749),
 }
+const STAFF_ROLE_CATEGORY := "staff"
+const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const NAMEPLATE_TEXT_PADDING := 6.0
@@ -590,14 +592,6 @@ func _get_primary_visible_role(user: Dictionary) -> Dictionary:
 		return {}
 
 	var roles: Array = roles_value as Array
-	var selected_badge: String = str(user.get("selectedRoleBadge", "")).strip_edges().to_lower()
-	if selected_badge == "":
-		selected_badge = GameState.selected_role_badge.strip_edges().to_lower()
-	if selected_badge == "none":
-		return {}
-	if selected_badge != "":
-		return _find_visible_role(roles, selected_badge)
-
 	var primary_role: Dictionary = {}
 	var primary_priority: int = -999999
 	for role_value: Variant in roles:
@@ -605,8 +599,9 @@ func _get_primary_visible_role(user: Dictionary) -> Dictionary:
 			continue
 
 		var role: Dictionary = role_value as Dictionary
-		var role_id: String = str(role.get("id", ""))
-		var badge: String = _get_role_badge(role_id)
+		if not _should_show_overworld_role_badge(role):
+			continue
+		var badge: String = _get_role_badge(role)
 		if badge.is_empty():
 			continue
 
@@ -619,24 +614,20 @@ func _get_primary_visible_role(user: Dictionary) -> Dictionary:
 
 	return primary_role
 
-func _find_visible_role(roles: Array, selected_badge: String) -> Dictionary:
-	for role_value: Variant in roles:
-		if not role_value is Dictionary:
-			continue
-		var role: Dictionary = role_value as Dictionary
-		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
-		if role_id != selected_badge:
-			continue
-		var badge: String = _get_role_badge(role_id)
-		if badge.is_empty():
-			return {}
-		var role_with_badge: Dictionary = role.duplicate()
-		role_with_badge["id"] = role_id
-		role_with_badge["badge"] = badge
-		return role_with_badge
-	return {}
+func _should_show_overworld_role_badge(role: Dictionary) -> bool:
+	var role_id := str(role.get("id", "")).strip_edges().to_lower()
+	var category := str(role.get("category", "")).strip_edges().to_lower()
+	if category != STAFF_ROLE_CATEGORY and not LEGACY_STAFF_ROLE_IDS.has(role_id):
+		return false
+	var display: Dictionary = role.get("display", {}) if role.get("display", {}) is Dictionary else {}
+	return bool(display.get("overworldBadge", true))
 
-func _get_role_badge(role_id: String) -> String:
+func _get_role_badge(role: Dictionary) -> String:
+	var short_label := str(role.get("shortLabel", role.get("badge", ""))).strip_edges()
+	if short_label != "":
+		return short_label
+
+	var role_id := str(role.get("id", "")).strip_edges().to_lower()
 	match role_id:
 		"alpha":
 			return "alpha"

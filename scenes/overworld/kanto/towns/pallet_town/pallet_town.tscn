@@ -13,7 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
 [ext_resource type="PackedScene" uid="uid://mkdk7jtd37sw" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
-[ext_resource type="Script" uid="uid://debe8msgfkubc" path="res://scripts/world/transition_hint.gd" id="22_transition_hint"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gib12"]
 atlas = ExtResource("6_66okb")
@@ -1942,13 +1943,16 @@ z_index = 5
 [node name="RouteGateNPC" parent="Entities/NPCs" unique_id=1463025 instance=ExtResource("5_n6c5k")]
 position = Vector2(1040, 208)
 staff_blocked_dialogue_lines = Array[String](["This route is closed during the alpha."])
-npc_id = "kanto_pallet_town_johny_sins_1"
+blocked_dialogue_id = "kanto_pallet_town_north_guard_blocked"
+allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
+npc_id = "kanto_pallet_town_north_guard"
 display_name = "Johny Sins"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
 mugshot = ExtResource("7_66okb")
 
 [node name="HealNPC" parent="Entities/NPCs" unique_id=437133988 instance=ExtResource("6_jhh0g")]
 position = Vector2(368, 240)
+npc_id = "kanto_pallet_town_nurse"
 npc_sprite_frames = SubResource("SpriteFrames_ltoox")
 mugshot = ExtResource("8_j16lr")
 
@@ -1987,16 +1991,10 @@ target_spawn_name = "FromPalletTown"
 position = Vector2(544, 32)
 shape = SubResource("RectangleShape2D_b5jff")
 
-[node name="TransitionHint" type="Node2D" parent="Exits/ToRoute1" unique_id=166557463]
-z_index = 1200
+[node name="RouteTransitionHint" parent="Exits/ToRoute1" unique_id=375230244 instance=ExtResource("23_route_hint")]
 position = Vector2(544, 0)
-script = ExtResource("22_transition_hint")
-particle_count = 14
 width = 120.0
-height = 64.0
-cycle_seconds = 2.0
-particle_radius = 1.7
-tint = Color(0.88, 0.68, 1, 0.68)
+height = 58.0
 
 [node name="ToOaksLab" type="Area2D" parent="Exits" unique_id=534349301]
 position = Vector2(496, 144)
@@ -2008,14 +2006,8 @@ target_spawn_name = "FromPalletTown"
 position = Vector2(800, 640)
 shape = SubResource("RectangleShape2D_3e7rq")
 
-[node name="TransitionHint" type="Node2D" parent="Exits/ToOaksLab" unique_id=1983010285]
-z_index = 1200
+[node name="DoorTransitionHint" parent="Exits/ToOaksLab" unique_id=1983010285 instance=ExtResource("24_door_hint")]
 position = Vector2(800, 672)
-script = ExtResource("22_transition_hint")
-particle_count = 14
-cycle_seconds = 2.0
-particle_radius = 1.7
-tint = Color(0.88, 0.68, 1, 0.68)
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=136807931]
 visible = false
