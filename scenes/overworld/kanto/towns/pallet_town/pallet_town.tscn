@@ -1874,7 +1874,7 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_3e7rq")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gib12"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j16lr"]
 texture = ExtResource("2_gell4")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -1927,7 +1927,7 @@ texture_region_size = Vector2i(32, 32)
 
 [sub_resource type="TileSet" id="TileSet_0ke4d"]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_gib12")
+sources/0 = SubResource("TileSetAtlasSource_j16lr")
 
 [node name="PalletTown" type="Node2D" unique_id=1153208337]
 script = ExtResource("1_f4ndu")
@@ -1941,7 +1941,6 @@ z_index = 5
 
 [node name="RouteGateNPC" parent="Entities/NPCs" unique_id=1463025 instance=ExtResource("5_n6c5k")]
 position = Vector2(1040, 208)
-requires_staff_role = true
 staff_blocked_dialogue_lines = Array[String](["This route is closed during the alpha."])
 npc_id = "kanto_pallet_town_johny_sins_1"
 display_name = "Johny Sins"

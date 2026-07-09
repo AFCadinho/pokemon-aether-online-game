@@ -9,6 +9,13 @@ const POSITION_SAVE_EPSILON := 1.0
 const PLAYTIME_FLUSH_INTERVAL_SECONDS := 60.0
 const TILE_SIZE := 32.0
 const TREE_LAYER_ROOT_NAME := "Trees"
+const TALL_GRASS_VISUAL_LAYER_NAME := "TallGrassVisual"
+const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = ["StructureTopVisual", "Structures Top"]
+const TALL_GRASS_DEPTH_ROW_META := "pao_tall_grass_depth_row"
+const TALL_GRASS_DEPTH_ROWS_BUILT_META := "pao_tall_grass_depth_rows_built"
+const STRUCTURE_TOP_DEPTH_GROUP_META := "pao_structure_top_depth_group"
+const STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META := "pao_structure_top_depth_groups_built"
+const TALL_GRASS_LAYER_Z_OFFSET := 1
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
 
@@ -53,6 +60,7 @@ func _ready() -> void:
 	_ensure_remote_players_container()
 	_connect_world_presence_signals()
 	await _setup_initial_world_state()
+	_normalize_map_depth_layer_z_indices(GameState.current_map)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -183,7 +191,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		_clear_current_map()
 		$CurrentMap.add_child(target_map)
 		GameState.current_map = target_map
-		_normalize_map_tree_layer_z_indices(target_map)
+		_normalize_map_depth_layer_z_indices(target_map)
 		MusicManager.play_map_music(target_map)
 
 	move_player_to_map(target_map)
@@ -564,6 +572,14 @@ func _normalize_map_tree_layer_z_indices(map: Node) -> void:
 
 	_normalize_tree_layer_z_indices_recursive(trees_root)
 
+func _normalize_map_depth_layer_z_indices(map: Node) -> void:
+	if map == null:
+		return
+
+	_normalize_map_tree_layer_z_indices(map)
+	_build_tall_grass_visual_depth_rows(map)
+	_build_structure_top_visual_depth_groups(map)
+
 func _normalize_tree_layer_z_indices_recursive(node: Node) -> void:
 	if node is TileMapLayer:
 		var tile_map_layer: TileMapLayer = node as TileMapLayer
@@ -575,6 +591,186 @@ func _normalize_tree_layer_z_indices_recursive(node: Node) -> void:
 
 	for child: Node in node.get_children():
 		_normalize_tree_layer_z_indices_recursive(child)
+
+func _build_tall_grass_visual_depth_rows(map: Node) -> void:
+	var grass_layers: Array[TileMapLayer] = []
+	_collect_tall_grass_visual_layers_recursive(map, grass_layers)
+
+	for grass_layer: TileMapLayer in grass_layers:
+		if bool(grass_layer.get_meta(TALL_GRASS_DEPTH_ROWS_BUILT_META, false)):
+			continue
+
+		var used_cells: Array[Vector2i] = grass_layer.get_used_cells()
+		if used_cells.is_empty():
+			continue
+
+		var parent := grass_layer.get_parent()
+		if parent == null:
+			continue
+
+		var rows := {}
+		for cell: Vector2i in used_cells:
+			var row := cell.y
+			if not rows.has(row):
+				rows[row] = []
+			rows[row].append(cell)
+
+		var row_group := Node2D.new()
+		row_group.name = "%sDepthRows" % grass_layer.name
+		row_group.set_meta(TALL_GRASS_DEPTH_ROW_META, true)
+		parent.add_child(row_group)
+
+		for row in rows.keys():
+			var row_layer := TileMapLayer.new()
+			row_layer.name = "%sRow%d" % [grass_layer.name, int(row)]
+			row_layer.tile_set = grass_layer.tile_set
+			row_layer.visible = grass_layer.visible
+			row_layer.modulate = grass_layer.modulate
+			row_layer.position = grass_layer.position
+			row_layer.z_as_relative = false
+			row_layer.z_index = _get_tall_grass_row_z_index(grass_layer, int(row))
+			row_layer.set_meta(TALL_GRASS_DEPTH_ROW_META, true)
+			row_group.add_child(row_layer)
+
+			for cell: Vector2i in rows[row]:
+				var source_id := grass_layer.get_cell_source_id(cell)
+				if source_id == -1:
+					continue
+				row_layer.set_cell(
+					cell,
+					source_id,
+					grass_layer.get_cell_atlas_coords(cell),
+					grass_layer.get_cell_alternative_tile(cell)
+				)
+
+		grass_layer.visible = false
+		grass_layer.set_meta(TALL_GRASS_DEPTH_ROWS_BUILT_META, true)
+
+func _collect_tall_grass_visual_layers_recursive(node: Node, grass_layers: Array[TileMapLayer]) -> void:
+	var tile_map_layer := node as TileMapLayer
+	if tile_map_layer != null:
+		var tiled_name := str(tile_map_layer.get_meta("tiled_name", tile_map_layer.name))
+		if tiled_name == TALL_GRASS_VISUAL_LAYER_NAME and not bool(tile_map_layer.get_meta(TALL_GRASS_DEPTH_ROW_META, false)):
+			grass_layers.append(tile_map_layer)
+
+	for child: Node in node.get_children():
+		_collect_tall_grass_visual_layers_recursive(child, grass_layers)
+
+func _get_tall_grass_row_z_index(grass_layer: TileMapLayer, row: int) -> int:
+	var tile_size := Vector2(TILE_SIZE, TILE_SIZE)
+	if grass_layer.tile_set != null:
+		tile_size = Vector2(grass_layer.tile_set.tile_size)
+
+	var row_center_local := grass_layer.map_to_local(Vector2i(0, row))
+	var row_bottom_global := grass_layer.to_global(row_center_local + Vector2(0.0, tile_size.y * 0.5)).y
+	return clampi(floori(row_bottom_global) + TALL_GRASS_LAYER_Z_OFFSET, TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
+
+func _build_structure_top_visual_depth_groups(map: Node) -> void:
+	var structure_layers: Array[TileMapLayer] = []
+	_collect_structure_top_visual_layers_recursive(map, structure_layers)
+
+	for structure_layer: TileMapLayer in structure_layers:
+		if bool(structure_layer.get_meta(STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META, false)):
+			continue
+
+		var used_cells: Array[Vector2i] = structure_layer.get_used_cells()
+		if used_cells.is_empty():
+			continue
+
+		var parent := structure_layer.get_parent()
+		if parent == null:
+			continue
+
+		var groups := _build_connected_tile_groups(used_cells)
+		var group_root := Node2D.new()
+		group_root.name = "%sDepthGroups" % structure_layer.name
+		group_root.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
+		parent.add_child(group_root)
+
+		for group_index in range(groups.size()):
+			var group: Array[Vector2i] = groups[group_index]
+			var group_layer := TileMapLayer.new()
+			group_layer.name = "%sGroup%d" % [structure_layer.name, group_index]
+			group_layer.tile_set = structure_layer.tile_set
+			group_layer.visible = structure_layer.visible
+			group_layer.modulate = structure_layer.modulate
+			group_layer.position = structure_layer.position
+			group_layer.z_as_relative = false
+			group_layer.z_index = _get_tile_group_bottom_z_index(structure_layer, group, 0)
+			group_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
+			group_root.add_child(group_layer)
+
+			for cell: Vector2i in group:
+				var source_id := structure_layer.get_cell_source_id(cell)
+				if source_id == -1:
+					continue
+				group_layer.set_cell(
+					cell,
+					source_id,
+					structure_layer.get_cell_atlas_coords(cell),
+					structure_layer.get_cell_alternative_tile(cell)
+				)
+
+		structure_layer.visible = false
+		structure_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META, true)
+
+func _collect_structure_top_visual_layers_recursive(node: Node, structure_layers: Array[TileMapLayer]) -> void:
+	var tile_map_layer := node as TileMapLayer
+	if tile_map_layer != null:
+		var tiled_name := str(tile_map_layer.get_meta("tiled_name", tile_map_layer.name))
+		if STRUCTURE_TOP_VISUAL_LAYER_NAMES.has(tiled_name) and not bool(tile_map_layer.get_meta(STRUCTURE_TOP_DEPTH_GROUP_META, false)):
+			structure_layers.append(tile_map_layer)
+
+	for child: Node in node.get_children():
+		_collect_structure_top_visual_layers_recursive(child, structure_layers)
+
+func _build_connected_tile_groups(cells: Array[Vector2i]) -> Array[Array]:
+	var remaining := {}
+	for cell: Vector2i in cells:
+		remaining[cell] = true
+
+	var groups: Array[Array] = []
+	var directions: Array[Vector2i] = [
+		Vector2i.LEFT,
+		Vector2i.RIGHT,
+		Vector2i.UP,
+		Vector2i.DOWN,
+	]
+
+	while not remaining.is_empty():
+		var first_cell: Vector2i = remaining.keys()[0]
+		var group: Array[Vector2i] = []
+		var stack: Array[Vector2i] = [first_cell]
+		remaining.erase(first_cell)
+
+		while not stack.is_empty():
+			var cell: Vector2i = stack.pop_back()
+			group.append(cell)
+
+			for direction: Vector2i in directions:
+				var neighbor := cell + direction
+				if remaining.has(neighbor):
+					remaining.erase(neighbor)
+					stack.append(neighbor)
+
+		groups.append(group)
+
+	return groups
+
+func _get_tile_group_bottom_z_index(layer: TileMapLayer, group: Array[Vector2i], z_offset: int) -> int:
+	var tile_size := Vector2(TILE_SIZE, TILE_SIZE)
+	if layer.tile_set != null:
+		tile_size = Vector2(layer.tile_set.tile_size)
+
+	var bottom_y := -INF
+	for cell: Vector2i in group:
+		var cell_bottom_y := layer.to_global(layer.map_to_local(cell) + Vector2(0.0, tile_size.y * 0.5)).y
+		bottom_y = maxf(bottom_y, cell_bottom_y)
+
+	if is_inf(bottom_y):
+		return 0
+
+	return clampi(floori(bottom_y) + z_offset, TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
 
 
 func _ensure_remote_players_container() -> void:

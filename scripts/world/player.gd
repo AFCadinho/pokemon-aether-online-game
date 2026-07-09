@@ -121,6 +121,9 @@ const ACTIVITY_VISUAL_OFFSETS := {
 	},
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
+const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual"]
+const TALL_GRASS_RUSTLE_EFFECT_SCRIPT := preload("res://scripts/world/tall_grass_rustle_effect.gd")
+const WATER_RIPPLE_EFFECT_SCRIPT := preload("res://scripts/world/water_ripple_effect.gd")
 const ENCOUNTER_TYPE_GRASS := "grass"
 const ENCOUNTER_TYPE_SURF := "surf"
 const ENCOUNTER_TYPE_FISH := "fish"
@@ -141,6 +144,7 @@ const FISHING_BITE_PROMPT_SIZE := Vector2(28.0, 28.0)
 const FISHING_BITE_PROMPT_POSITION := Vector2(10.0, -92.0)
 const SURF_PROMPT_SIZE := Vector2(30.0, 30.0)
 const SURF_PROMPT_POSITION := Vector2(-48.0, -72.0)
+const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -154,6 +158,7 @@ const SURF_PROMPT_POSITION := Vector2(-48.0, -72.0)
 # TallGrass kan later gebruikt worden voor encounters/effects.
 var collision_tilemap: TileMapLayer
 var grass_tilemap: TileMapLayer
+var grass_visual_tilemap: TileMapLayer
 var water_tilemap: TileMapLayer
 var ledge_down_tilemap: TileMapLayer
 var ledge_up_tilemap: TileMapLayer
@@ -897,9 +902,13 @@ func _process(delta: float) -> void:
 
 			_sync_surf_state_after_move()
 
+			var standing_on_tall_grass := is_standing_on_tall_grass()
+			if standing_on_tall_grass:
+				_spawn_tall_grass_rustle_effect()
+
 			if surf_activity_active:
 				check_for_wild_encounter(ENCOUNTER_TYPE_SURF)
-			elif is_standing_on_tall_grass():
+			elif standing_on_tall_grass:
 				check_for_grass_encounter()
 
 			if _can_accept_movement_input():
@@ -1042,6 +1051,7 @@ func _start_surf_activity(clear_input := true) -> void:
 	_sync_fishing_prompt_visibility()
 	_sync_surf_prompt_visibility()
 	_debug_activity_layer_offsets("surf-start" if clear_input else "surf-resume")
+	_spawn_water_ripple_effect(global_position, "surf_start")
 
 func _finish_surf_activity(reason := "left_water") -> void:
 	if not surf_activity_active:
@@ -1061,6 +1071,7 @@ func _sync_surf_state_after_move() -> void:
 	if not surf_activity_active:
 		return
 	if _is_water_tile_at(global_position):
+		_spawn_water_ripple_effect(global_position, "surf_step")
 		return
 
 	_finish_surf_activity()
@@ -1076,6 +1087,7 @@ func _start_fishing_activity(fishing_tier: int = 1) -> void:
 	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_FISH)
 	_sync_fishing_bite_prompt_visibility()
 	_debug_activity_layer_offsets("fishing-start")
+	_spawn_water_ripple_effect(_get_fishing_ripple_position(), "fish_cast", false)
 
 func _update_fishing_activity(delta: float) -> void:
 	if not fishing_activity_active:
@@ -1108,6 +1120,7 @@ func _enter_fishing_bite_state() -> void:
 	fishing_activity_time_left = FISHING_BITE_WINDOW_DURATION
 	_sync_fishing_bite_prompt_visibility()
 	_debug_fishing_state("bite")
+	_spawn_water_ripple_effect(_get_fishing_ripple_position(), "fish_bite", false)
 
 func _enter_fishing_missed_state(reason: String = "missed") -> void:
 	fishing_activity_state = FISHING_STATE_MISSED
@@ -1127,6 +1140,7 @@ func _try_reel_fishing_bite() -> bool:
 	fishing_activity_time_left = FISHING_RESULT_HOLD_DURATION
 	_sync_fishing_bite_prompt_visibility()
 	_debug_fishing_state("reel-success")
+	_spawn_water_ripple_effect(_get_fishing_ripple_position(), "fish_reel", false)
 	return true
 
 func _finish_fishing_activity() -> void:
@@ -1152,6 +1166,11 @@ func _is_facing_water_tile() -> bool:
 
 func _get_facing_tile_position() -> Vector2:
 	return _snap_world_position(global_position) + (last_direction * TILE_SIZE)
+
+func _get_fishing_ripple_position() -> Vector2:
+	if last_direction == Vector2.ZERO:
+		return _get_facing_tile_position()
+	return _snap_world_position(global_position) + (last_direction.normalized() * FISHING_RIPPLE_DISTANCE)
 
 func _is_water_tile_at(check_position: Vector2) -> bool:
 	if water_tilemap == null:
@@ -1452,6 +1471,7 @@ func refresh_map_layers() -> void:
 	if current_map == null:
 		collision_tilemap = null
 		grass_tilemap = null	
+		grass_visual_tilemap = null
 		water_tilemap = null
 		ledge_down_tilemap = null
 		ledge_up_tilemap = null
@@ -1463,6 +1483,7 @@ func refresh_map_layers() -> void:
 	GameState.current_map = current_map
 	collision_tilemap = current_map.get_node_or_null("Collision")
 	grass_tilemap = current_map.get_node_or_null("TallGrass")
+	grass_visual_tilemap = _find_tilemap_layer(current_map, TALL_GRASS_VISUAL_TILEMAP_NAMES)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
 	ledge_down_tilemap = current_map.get_node_or_null("LedgeDown")
 	ledge_up_tilemap = current_map.get_node_or_null("LedgeUp")
@@ -1510,6 +1531,42 @@ func is_standing_on_tall_grass() -> bool:
 		
 func check_for_grass_encounter() -> void:
 	check_for_wild_encounter(ENCOUNTER_TYPE_GRASS)
+
+func _spawn_tall_grass_rustle_effect() -> void:
+	if grass_visual_tilemap == null:
+		var current_map := _resolve_current_map()
+		grass_visual_tilemap = _find_tilemap_layer(current_map, TALL_GRASS_VISUAL_TILEMAP_NAMES)
+
+	if grass_visual_tilemap == null:
+		return
+
+	var local_position := grass_visual_tilemap.to_local(global_position)
+	var tile_position := grass_visual_tilemap.local_to_map(local_position)
+	var source_id := grass_visual_tilemap.get_cell_source_id(tile_position)
+	if source_id == -1 and grass_visual_tilemap.get_cell_tile_data(tile_position) == null:
+		return
+
+	var current_map := _resolve_current_map()
+	var effect_parent: Node = current_map if current_map != null else get_parent()
+	if effect_parent == null:
+		return
+
+	var effect := TALL_GRASS_RUSTLE_EFFECT_SCRIPT.new()
+	effect_parent.add_child(effect)
+	effect.play(grass_visual_tilemap, tile_position)
+
+func _spawn_water_ripple_effect(world_position: Vector2, kind: String, require_water_tile := true) -> void:
+	if require_water_tile and not _is_water_tile_at(world_position):
+		return
+
+	var current_map := _resolve_current_map()
+	var effect_parent: Node = current_map if current_map != null else get_parent()
+	if effect_parent == null:
+		return
+
+	var effect := WATER_RIPPLE_EFFECT_SCRIPT.new()
+	effect_parent.add_child(effect)
+	effect.play(_snap_world_position(world_position), kind)
 
 func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = Vector2.INF) -> void:
 	var current_map := GameState.current_map
