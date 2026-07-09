@@ -3,28 +3,44 @@
 [ext_resource type="Script" uid="uid://dgvg8ufaw2fbs" path="res://scripts/world/player.gd" id="1_qhqgy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_role_badge"]
-bg_color = Color(0.0156863, 0.0235294, 0.0431373, 0.9)
+bg_color = Color(0.025, 0.18, 0.165, 0.92)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.0313726, 0.247059, 0.298039, 0.95)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+border_color = Color(0.22, 0.78, 0.68, 0.48)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.36)
+shadow_size = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nameplate_background"]
+bg_color = Color(0.0392157, 0.054902, 0.0862745, 0.68)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.76, 0.62, 0.28, 0.42)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 2
 
 [sub_resource type="LabelSettings" id="LabelSettings_nameplate_role"]
-font_size = 7
-font_color = Color(0, 0.898039, 0.658824, 1)
+font_size = 8
+font_color = Color(0.72, 1, 0.91, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_nameplate"]
 font_size = 12
-font_color = Color(1, 0.952941, 0.698039, 1)
-outline_size = 5
-outline_color = Color(0.0313726, 0.0392157, 0.0627451, 0.95)
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.7)
+font_color = Color(1, 0.89, 0.54, 1)
+outline_size = 3
+outline_color = Color(0.0196078, 0.0235294, 0.0352941, 0.88)
+shadow_size = 1
+shadow_color = Color(0, 0, 0, 0.55)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(32, 30.5)
@@ -69,18 +85,27 @@ z_index = 512
 layout_mode = 3
 anchors_preset = 0
 offset_left = -82.0
-offset_top = -80.0
+offset_top = -92.0
 offset_right = 82.0
 offset_bottom = -56.0
 mouse_filter = 2
 
+[node name="NameplateBackground" type="Panel" parent="Nameplate" unique_id=1937719014]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 14.0
+offset_right = 127.0
+offset_bottom = 32.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nameplate_background")
+
 [node name="RoleBadgePanel" type="Panel" parent="Nameplate" unique_id=1565155837]
 visible = false
 layout_mode = 0
-offset_left = 48.0
-offset_top = 5.0
-offset_right = 68.0
-offset_bottom = 16.0
+offset_left = 71.0
+offset_top = 2.0
+offset_right = 97.0
+offset_bottom = 15.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_role_badge")
 
@@ -96,8 +121,9 @@ vertical_alignment = 1
 [node name="NameLabel" type="Label" parent="Nameplate" unique_id=1544517454]
 layout_mode = 0
 offset_left = 44.0
+offset_top = 12.0
 offset_right = 164.0
-offset_bottom = 22.0
+offset_bottom = 34.0
 label_settings = SubResource("LabelSettings_nameplate")
 vertical_alignment = 1
 text_overrun_behavior = 3

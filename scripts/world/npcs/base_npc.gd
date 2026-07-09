@@ -21,6 +21,11 @@ const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 0.1
+const NAMEPLATE_WIDTH := 164.0
+const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
+const NAMEPLATE_TEXT_PADDING := 10.0
+const NAMEPLATE_MIN_NAME_WIDTH := 44.0
+const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 
 @onready var sprite: AnimatedSprite2D = $Look/AnimatedSprite2D
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -31,6 +36,9 @@ var nearby_player: Node2D
 var is_interacting := false
 var npc_metadata_loaded := false
 var npc_metadata_load_failed := false
+var nameplate: Control
+var nameplate_background: Panel
+var nameplate_label: Label
 
 
 func _ready_base_npc() -> void:
@@ -47,6 +55,7 @@ func _ready_base_npc() -> void:
 		if not interaction_area.body_exited.is_connected(body_exited_callable):
 			interaction_area.body_exited.connect(body_exited_callable)
 	_update_sort_z()
+	_setup_nameplate()
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
@@ -131,6 +140,102 @@ func _set_idle_frame(direction: Vector2) -> void:
 		sprite.animation = animation_name
 		sprite.frame = 0
 		sprite.stop()
+
+
+func _setup_nameplate() -> void:
+	if nameplate != null:
+		_sync_nameplate()
+		return
+
+	nameplate = Control.new()
+	nameplate.name = "Nameplate"
+	nameplate.visible = false
+	nameplate.z_index = 512
+	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	nameplate.offset_left = -82.0
+	nameplate.offset_top = -80.0
+	nameplate.offset_right = 82.0
+	nameplate.offset_bottom = -56.0
+	add_child(nameplate)
+
+	nameplate_background = Panel.new()
+	nameplate_background.name = "NameplateBackground"
+	nameplate_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	nameplate_background.add_theme_stylebox_override("panel", _make_nameplate_background_style())
+	nameplate.add_child(nameplate_background)
+
+	nameplate_label = Label.new()
+	nameplate_label.name = "NameLabel"
+	nameplate_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	nameplate_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	nameplate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	nameplate_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	nameplate_label.label_settings = _make_nameplate_label_settings()
+	nameplate.add_child(nameplate_label)
+
+	_sync_nameplate()
+
+
+func _sync_nameplate() -> void:
+	if nameplate == null or nameplate_label == null:
+		return
+
+	var name_text := display_name.strip_edges()
+	nameplate_label.text = name_text
+	nameplate.visible = name_text != ""
+	nameplate_label.visible = name_text != ""
+
+	var name_width := clampf(
+		_get_nameplate_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
+		NAMEPLATE_MIN_NAME_WIDTH,
+		NAMEPLATE_MAX_NAME_WIDTH
+	)
+	nameplate_label.offset_left = NAMEPLATE_CENTER_X - (name_width * 0.5)
+	nameplate_label.offset_right = nameplate_label.offset_left + name_width
+	nameplate_label.offset_top = 0.0
+	nameplate_label.offset_bottom = 22.0
+
+	if nameplate_background != null:
+		nameplate_background.offset_left = nameplate_label.offset_left - 5.0
+		nameplate_background.offset_right = nameplate_label.offset_right + 5.0
+		nameplate_background.offset_top = 2.0
+		nameplate_background.offset_bottom = 20.0
+
+
+func _make_nameplate_background_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.027, 0.070, 0.078, 0.64)
+	style.border_color = Color(0.24, 0.86, 0.76, 0.36)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(6)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
+	style.shadow_size = 2
+	return style
+
+
+func _make_nameplate_label_settings() -> LabelSettings:
+	var settings := LabelSettings.new()
+	settings.font_size = 12
+	settings.font_color = Color(0.68, 1.0, 0.88, 1.0)
+	settings.outline_size = 3
+	settings.outline_color = Color(0.015, 0.025, 0.030, 0.88)
+	settings.shadow_size = 1
+	settings.shadow_color = Color(0.0, 0.0, 0.0, 0.55)
+	return settings
+
+
+func _get_nameplate_label_text_width(label: Label) -> float:
+	var text := label.text.strip_edges()
+	if text == "":
+		return 0.0
+
+	var font := label.get_theme_font("font")
+	var font_size := label.get_theme_font_size("font_size")
+	if label.label_settings != null:
+		font_size = label.label_settings.font_size
+	if font == null:
+		return float(text.length() * max(font_size, 10) * 0.6)
+	return font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
 
 
 func _get_idle_animation_name(direction: Vector2) -> String:
@@ -346,6 +451,7 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	var metadata_name := str(metadata.get("name", ""))
 	if not metadata_name.is_empty():
 		display_name = metadata_name
+		_sync_nameplate()
 
 	var metadata_dialogue: Array[String] = _get_string_array(metadata.get("dialogue", []))
 	if not metadata_dialogue.is_empty():

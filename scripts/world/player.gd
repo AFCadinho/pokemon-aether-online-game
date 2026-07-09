@@ -52,9 +52,8 @@ const ROLE_BADGE_COLORS := {
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const NAMEPLATE_TEXT_PADDING := 6.0
-const ROLE_BADGE_GAP := -5.0
-const ROLE_BADGE_TEXT_HEIGHT := 11.0
-const ROLE_BADGE_DEFAULT_WIDTH := 20.0
+const ROLE_BADGE_TEXT_HEIGHT := 13.0
+const ROLE_BADGE_DEFAULT_WIDTH := 30.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const ACTIVITY_LAYER_OFFSETS := {
@@ -149,6 +148,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 @onready var look_node: Node2D = $Look
 @onready var feet_marker: Marker2D = $FeetMarker
 @onready var nameplate: Control = $Nameplate
+@onready var nameplate_background: Panel = $Nameplate/NameplateBackground
 @onready var nameplate_label: Label = $Nameplate/NameLabel
 @onready var role_badge_panel: Panel = $Nameplate/RoleBadgePanel
 @onready var role_badge_label: Label = $Nameplate/RoleBadgePanel/RoleBadge
@@ -395,14 +395,16 @@ func set_display_name(display_name: String, visible: bool = true) -> void:
 	nameplate_label.text = display_name.strip_edges()
 	_sync_nameplate_visibility(visible and SettingsManager.display_own_name)
 
-func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 0.404)) -> void:
+func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 0.404), role_id: String = "") -> void:
 	if role_badge_label == null:
 		return
 
 	role_badge_label.text = role_badge.strip_edges()
 	if role_badge_panel != null:
 		role_badge_panel.visible = role_badge_label.text != ""
+		role_badge_panel.add_theme_stylebox_override("panel", _make_role_badge_style(role_id, role_color))
 	role_badge_label.add_theme_color_override("font_color", role_color)
+	role_badge_label.add_theme_font_size_override("font_size", 8)
 	_sync_nameplate_visibility(nameplate_label != null and nameplate_label.text != "")
 
 func set_role_from_user(user: Dictionary) -> void:
@@ -413,7 +415,8 @@ func set_role_from_user(user: Dictionary) -> void:
 
 	set_role_badge(
 		str(primary_role.get("badge", "")),
-		_get_role_color(str(primary_role.get("id", "")), str(primary_role.get("color", "")))
+		_get_role_color(str(primary_role.get("id", "")), str(primary_role.get("color", ""))),
+		str(primary_role.get("id", ""))
 	)
 
 func get_network_movement_state() -> Dictionary:
@@ -542,14 +545,18 @@ func _sync_nameplate_layout() -> void:
 	nameplate_label.offset_left = NAMEPLATE_CENTER_X - (name_width * 0.5)
 	nameplate_label.offset_right = nameplate_label.offset_left + name_width
 	nameplate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if nameplate_background != null:
+		nameplate_background.offset_left = nameplate_label.offset_left - 5.0
+		nameplate_background.offset_right = nameplate_label.offset_right + 5.0
+		nameplate_background.offset_top = 14.0
+		nameplate_background.offset_bottom = 32.0
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
-		var name_center_y: float = (nameplate_label.offset_top + nameplate_label.offset_bottom) / 2.0
-		var start_x: float = nameplate_label.offset_left - ROLE_BADGE_GAP - badge_width
+		var start_x := NAMEPLATE_CENTER_X - (badge_width * 0.5)
 		role_badge_panel.offset_left = start_x
 		role_badge_panel.offset_right = start_x + badge_width
-		role_badge_panel.offset_top = name_center_y - (ROLE_BADGE_TEXT_HEIGHT * 0.5)
-		role_badge_panel.offset_bottom = name_center_y + (ROLE_BADGE_TEXT_HEIGHT * 0.5)
+		role_badge_panel.offset_top = 2.0
+		role_badge_panel.offset_bottom = role_badge_panel.offset_top + ROLE_BADGE_TEXT_HEIGHT
 		role_badge_label.offset_left = 1.0
 		role_badge_label.offset_right = badge_width - 1.0
 		role_badge_label.offset_top = 0.0
@@ -569,11 +576,11 @@ func _get_label_text_width(label: Label) -> float:
 func _get_role_badge_width(badge_text: String) -> float:
 	match badge_text.strip_edges():
 		"alpha":
-			return 26.0
+			return 38.0
 		"GM":
-			return 16.0
-		"DEV", "MOD":
-			return 20.0
+			return 28.0
+		"SR", "DEV", "MOD":
+			return 32.0
 		_:
 			return ROLE_BADGE_DEFAULT_WIDTH
 
@@ -651,6 +658,39 @@ func _get_role_color(role_id: String, fallback: String) -> Color:
 	if fallback.begins_with("#"):
 		return Color(fallback)
 	return Color(0.847, 0.718, 0.404)
+
+func _make_role_badge_style(role_id: String, fallback_color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	var normalized_role := role_id.strip_edges().to_lower()
+	match normalized_role:
+		"developer":
+			style.bg_color = Color(0.025, 0.18, 0.165, 0.92)
+			style.border_color = Color(0.22, 0.78, 0.68, 0.48)
+		"gamemaster":
+			style.bg_color = Color(0.030, 0.105, 0.235, 0.92)
+			style.border_color = Color(0.30, 0.64, 1.0, 0.48)
+		"moderator":
+			style.bg_color = Color(0.18, 0.055, 0.18, 0.92)
+			style.border_color = Color(0.86, 0.42, 0.84, 0.48)
+		"senior_staff":
+			style.bg_color = Color(0.22, 0.145, 0.035, 0.92)
+			style.border_color = Color(1.0, 0.70, 0.24, 0.50)
+		"alpha":
+			style.bg_color = Color(0.125, 0.105, 0.19, 0.92)
+			style.border_color = Color(0.76, 0.65, 1.0, 0.48)
+		_:
+			style.bg_color = Color(
+				clampf(fallback_color.r * 0.22, 0.02, 0.22),
+				clampf(fallback_color.g * 0.22, 0.02, 0.22),
+				clampf(fallback_color.b * 0.22, 0.02, 0.22),
+				0.92
+			)
+			style.border_color = Color(fallback_color.r, fallback_color.g, fallback_color.b, 0.42)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.36)
+	style.shadow_size = 2
+	return style
 
 func _setup_fishing_prompt() -> void:
 	if fishing_prompt_button != null:

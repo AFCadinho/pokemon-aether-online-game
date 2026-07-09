@@ -597,12 +597,14 @@ z_index = 5
 [node name="BugCatcherTrainerNPC" parent="Entities/NPCs" unique_id=168052101 instance=ExtResource("8_lmnv3")]
 position = Vector2(400, 976)
 sight_range_tiles = 2
+npc_id = "Bug Catcher Big D"
 npc_sprite_frames = SubResource("SpriteFrames_y12x5")
 
 [node name="GaryTrainerNPC" parent="Entities/NPCs" unique_id=874508670 instance=ExtResource("8_lmnv3")]
 position = Vector2(272, 944)
 trainer_id = "route_1_gary_1"
 sight_range_tiles = 3
+display_name = "Gary Oak"
 npc_sprite_frames = SubResource("SpriteFrames_cd607")
 mugshot = ExtResource("10_6o5ht")
 
@@ -610,6 +612,7 @@ mugshot = ExtResource("10_6o5ht")
 position = Vector2(816, 1104)
 trainer_id = "kanto_route_1_cynthia_1"
 sight_range_tiles = 3
+display_name = "Champion Cynthia"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_m8cit")
 mugshot = ExtResource("12_mjhtk")
