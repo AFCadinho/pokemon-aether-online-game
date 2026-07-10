@@ -7,6 +7,9 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 signal snapshot_received(players: Array)
 signal player_update_received(player_state: Dictionary)
 signal player_left_received(user_id: int)
+signal roster_changed(players: Array, roster_revision: int)
+signal roster_player_changed(player_state: Dictionary, roster_revision: int)
+signal roster_player_removed(user_id: int, roster_revision: int)
 signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
 
@@ -24,6 +27,10 @@ var reconnect_timer := 0.0
 var session_check_timer := SESSION_CHECK_INTERVAL_SECONDS
 var session_invalid_handled := false
 var last_position_payload: Dictionary = {}
+var current_map_players: Dictionary = {}
+var roster_revision := 0
+var has_authoritative_roster_revision := false
+var last_sent_map_id := ""
 
 
 func _process(delta: float) -> void:
@@ -40,6 +47,7 @@ func _process(delta: float) -> void:
 		connected = is_connected
 		connection_changed.emit(connected)
 		if connected and not last_position_payload.is_empty():
+			_reset_roster()
 			_send_payload(last_position_payload)
 
 	if ready_state == WebSocketPeer.STATE_OPEN:
@@ -55,7 +63,7 @@ func _process(delta: float) -> void:
 		return
 
 	connecting = false
-	if not should_reconnect or not AuthService.is_authenticated():
+	if not should_reconnect or not _is_authenticated():
 		return
 
 	reconnect_timer -= delta
@@ -67,7 +75,7 @@ func _process(delta: float) -> void:
 func connect_presence() -> void:
 	if connecting:
 		return
-	if not AuthService.is_authenticated():
+	if not _is_authenticated():
 		return
 
 	should_reconnect = true
@@ -78,12 +86,16 @@ func connect_presence() -> void:
 
 
 func _connect_presence_async() -> void:
-	var base_url: String = await GatewayApiConfig.get_base_url()
-	if not AuthService.is_authenticated():
+	var gateway := _gateway_api_config()
+	if gateway == null:
+		connecting = false
+		return
+	var base_url: String = await gateway.call("get_base_url")
+	if not _is_authenticated():
 		connecting = false
 		return
 
-	var websocket_url := _to_websocket_url(base_url) + "/ws/world-presence?token=%s" % AuthService.session_token.uri_encode()
+	var websocket_url := _to_websocket_url(base_url) + "/ws/world-presence?token=%s" % _session_token().uri_encode()
 	var error := websocket.connect_to_url(websocket_url)
 	if error != OK:
 		connecting = false
@@ -97,6 +109,8 @@ func disconnect_presence() -> void:
 	should_reconnect = false
 	connecting = false
 	last_position_payload.clear()
+	last_sent_map_id = ""
+	_reset_roster()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
 	websocket = WebSocketPeer.new()
@@ -109,6 +123,11 @@ func disconnect_presence() -> void:
 
 
 func update_position(state: Dictionary) -> bool:
+	var map_id := str(state.get("mapId", "")).strip_edges()
+	if map_id != last_sent_map_id:
+		last_sent_map_id = map_id
+		_reset_roster()
+
 	var appearance_value: Variant = state.get("appearance", {})
 	var appearance: Dictionary = appearance_value if appearance_value is Dictionary else {}
 	var presence_body: String = CharacterAppearanceService.get_presence_body_base_id(str(appearance.get("body", "")))
@@ -117,7 +136,7 @@ func update_position(state: Dictionary) -> bool:
 	var movement_payload: Dictionary = _build_movement_payload(state.get("movement", {}), appearance_payload, presence_body, appearance)
 	var payload := {
 		"type": "position",
-		"mapId": str(state.get("mapId", "")),
+		"mapId": map_id,
 		"mapScenePath": state.get("mapScenePath", null),
 		"gender": str(state.get("gender", "male")),
 		"position": state.get("position", {}),
@@ -127,6 +146,7 @@ func update_position(state: Dictionary) -> bool:
 		"appearance": appearance_payload,
 		"roles": state.get("roles", []),
 		"selectedRoleBadge": str(state.get("selectedRoleBadge", "")),
+		"activityState": str(state.get("activityState", "idle")),
 		"appearanceBody": presence_body,
 		"appearanceHair": str(appearance.get("hair", "")),
 		"appearanceHairStyleIndex": int(appearance.get("hair_style_index", 0)),
@@ -214,7 +234,7 @@ func _handle_closed_socket() -> void:
 	var close_code := websocket.get_close_code()
 	if close_code != SESSION_INVALID_CLOSE_CODE:
 		return
-	if not AuthService.is_authenticated():
+	if not _is_authenticated():
 		return
 
 	session_invalid_handled = true
@@ -233,14 +253,102 @@ func _process_packets() -> void:
 		var message: Dictionary = parsed_body
 		match str(message.get("type", "")):
 			"snapshot":
-				var players_value: Variant = message.get("players", [])
-				var players: Array = players_value if players_value is Array else []
-				snapshot_received.emit(players)
+				_apply_snapshot_message(message)
 			"player_update":
 				_debug_log_player_update(message)
-				player_update_received.emit(message)
+				_apply_player_update_message(message)
 			"player_left":
-				player_left_received.emit(int(message.get("userId", 0)))
+				_apply_player_left_message(message)
+
+
+func get_current_map_players() -> Array:
+	var players: Array = []
+	var user_ids: Array = current_map_players.keys()
+	user_ids.sort()
+	for user_id: Variant in user_ids:
+		var player_state: Dictionary = _dictionary_from_value(current_map_players.get(user_id, {}))
+		if not player_state.is_empty():
+			players.append(player_state.duplicate(true))
+	return players
+
+
+func _apply_snapshot_message(message: Dictionary) -> void:
+	var incoming_revision := _incoming_roster_revision(message)
+	if not _should_apply_roster_revision(incoming_revision):
+		return
+
+	current_map_players.clear()
+	var players_value: Variant = message.get("players", [])
+	var players: Array = players_value if players_value is Array else []
+	for player_value: Variant in players:
+		var player_state := _dictionary_from_value(player_value)
+		var user_id := int(player_state.get("userId", 0))
+		if user_id > 0:
+			current_map_players[str(user_id)] = player_state.duplicate(true)
+	_apply_roster_revision(incoming_revision)
+	var roster := get_current_map_players()
+	roster_changed.emit(roster, roster_revision)
+	snapshot_received.emit(roster)
+
+
+func _apply_player_update_message(message: Dictionary) -> void:
+	var incoming_revision := _incoming_roster_revision(message)
+	if not _should_apply_roster_revision(incoming_revision):
+		return
+
+	var user_id := int(message.get("userId", 0))
+	if user_id <= 0:
+		return
+	var player_state: Dictionary = message.duplicate(true)
+	player_state.erase("type")
+	player_state.erase("rosterRevision")
+	current_map_players[str(user_id)] = player_state
+	_apply_roster_revision(incoming_revision)
+	var snapshot: Dictionary = player_state.duplicate(true)
+	roster_player_changed.emit(snapshot, roster_revision)
+	player_update_received.emit(message.duplicate(true))
+
+
+func _apply_player_left_message(message: Dictionary) -> void:
+	var incoming_revision := _incoming_roster_revision(message)
+	if not _should_apply_roster_revision(incoming_revision):
+		return
+
+	var user_id := int(message.get("userId", 0))
+	if user_id <= 0:
+		return
+	current_map_players.erase(str(user_id))
+	_apply_roster_revision(incoming_revision)
+	roster_player_removed.emit(user_id, roster_revision)
+	player_left_received.emit(user_id)
+
+
+func _incoming_roster_revision(message: Dictionary) -> int:
+	if not message.has("rosterRevision"):
+		return -1
+	return maxi(int(message.get("rosterRevision", 0)), 0)
+
+
+func _should_apply_roster_revision(incoming_revision: int) -> bool:
+	if incoming_revision < 0:
+		return not has_authoritative_roster_revision
+	return not has_authoritative_roster_revision or incoming_revision > roster_revision
+
+
+func _apply_roster_revision(incoming_revision: int) -> void:
+	if incoming_revision < 0:
+		return
+	has_authoritative_roster_revision = true
+	roster_revision = incoming_revision
+
+
+func _reset_roster() -> void:
+	var had_players := not current_map_players.is_empty()
+	current_map_players.clear()
+	roster_revision = 0
+	has_authoritative_roster_revision = false
+	if had_players:
+		roster_changed.emit([], roster_revision)
 
 
 func _debug_log_player_update(message: Dictionary) -> void:
@@ -267,3 +375,30 @@ func _to_websocket_url(base_url: String) -> String:
 	if base_url.begins_with("http://"):
 		return "ws://" + base_url.trim_prefix("http://").rstrip("/")
 	return base_url.rstrip("/")
+
+
+func _dictionary_from_value(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY:
+		return {}
+	var dictionary: Dictionary = value
+	return dictionary
+
+
+func _is_authenticated() -> bool:
+	if not is_inside_tree():
+		return false
+	var auth_service := get_node_or_null("/root/AuthService")
+	return auth_service != null and auth_service.has_method("is_authenticated") and bool(auth_service.call("is_authenticated"))
+
+
+func _session_token() -> String:
+	if not is_inside_tree():
+		return ""
+	var auth_service := get_node_or_null("/root/AuthService")
+	return str(auth_service.get("session_token")) if auth_service != null else ""
+
+
+func _gateway_api_config() -> Object:
+	if not is_inside_tree():
+		return null
+	return get_node_or_null("/root/GatewayApiConfig")

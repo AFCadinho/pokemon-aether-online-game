@@ -43,6 +43,7 @@ func login(username: String, password: String, remember_me: bool) -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	_apply_auth_response(body)
+	_refresh_trade_session.call_deferred()
 
 	if remember_me:
 		_save_session()
@@ -76,6 +77,7 @@ func impersonate_with_token(token: String) -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	_apply_auth_response(body)
+	_refresh_trade_session.call_deferred()
 	_clear_session_file()
 
 	return {
@@ -101,6 +103,7 @@ func restore_saved_session() -> Dictionary:
 	var me_response: Dictionary = await me()
 	if bool(me_response.get("success", false)):
 		_save_session()
+		_refresh_trade_session.call_deferred()
 		return me_response
 
 	clear_session()
@@ -200,6 +203,13 @@ func clear_session() -> void:
 	if world_presence_service != null and world_presence_service.has_method("disconnect_presence"):
 		world_presence_service.call("disconnect_presence")
 
+	var trade_realtime_service: Object = get_node_or_null("/root/TradeRealtimeService")
+	if trade_realtime_service != null and trade_realtime_service.has_method("clear_active_trade"):
+		trade_realtime_service.call("clear_active_trade")
+	var trade_service: Object = get_node_or_null("/root/TradeService")
+	if trade_service != null and trade_service.has_method("clear_capabilities"):
+		trade_service.call("clear_capabilities")
+
 	session_token = ""
 	expires_at = ""
 	current_user.clear()
@@ -242,6 +252,15 @@ func _apply_auth_response(body: Dictionary) -> void:
 	session_token = str(body.get("token", ""))
 	expires_at = str(body.get("expiresAt", ""))
 	current_user = _dictionary_from_value(body.get("user", {}))
+
+
+func _refresh_trade_session() -> void:
+	var trade_service: Object = get_node_or_null("/root/TradeService")
+	if trade_service != null and trade_service.has_method("clear_capabilities"):
+		trade_service.call("clear_capabilities")
+	var realtime: Object = get_node_or_null("/root/TradeRealtimeService")
+	if realtime != null and realtime.has_method("restore_active_trade_and_connect"):
+		realtime.call("restore_active_trade_and_connect")
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:

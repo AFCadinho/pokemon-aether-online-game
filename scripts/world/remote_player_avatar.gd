@@ -2,6 +2,8 @@ extends Node2D
 
 class_name RemotePlayerAvatar
 
+signal interaction_requested(player_state: Dictionary, world_position: Vector2)
+
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const TILE_SIZE := 32
@@ -121,6 +123,7 @@ var current_gender := "male"
 var current_appearance_state: Dictionary = {}
 var current_appearance_signature := ""
 var has_position := false
+var presence_state: Dictionary = {}
 
 
 func _ready() -> void:
@@ -149,6 +152,7 @@ func _process(delta: float) -> void:
 
 
 func apply_state(state: Dictionary) -> void:
+	presence_state = state.duplicate(true)
 	user_id = int(state.get("userId", user_id))
 	username = str(state.get("username", username))
 	var display_name_value: Variant = state.get("displayName", display_name)
@@ -555,7 +559,34 @@ func _create_visual() -> void:
 	_collect_appearance_sprites(look_copy)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
+	_create_interaction_hit_area()
 	player_instance.queue_free()
+
+func _create_interaction_hit_area() -> void:
+	var hit_area := Area2D.new()
+	hit_area.name = "PlayerInteractionHitArea"
+	hit_area.input_pickable = true
+	hit_area.collision_layer = 0
+	hit_area.collision_mask = 0
+	var shape := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(28.0, 42.0)
+	shape.shape = rectangle
+	shape.position = Vector2(0.0, -10.0)
+	hit_area.add_child(shape)
+	hit_area.input_event.connect(_on_interaction_hit_area_input_event)
+	add_child(hit_area)
+
+func _on_interaction_hit_area_input_event(_viewport: Node, event: InputEvent, _shape_index: int) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_RIGHT or not mouse_event.pressed:
+		return
+	if presence_state.is_empty():
+		return
+	interaction_requested.emit(presence_state.duplicate(true), global_position)
+	get_viewport().set_input_as_handled()
 
 
 func _create_nameplate_from_player_scene(player_instance: Node) -> void:

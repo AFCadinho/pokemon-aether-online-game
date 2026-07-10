@@ -896,6 +896,12 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Friendlist"
 
+[node name="PlayersOnMapButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Players on Map"
+
 [node name="MailButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer" unique_id=762226262]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2

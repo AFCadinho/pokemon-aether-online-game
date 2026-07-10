@@ -44,6 +44,8 @@ var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var pending_remote_player_interaction: Dictionary = {}
+var remote_player_interaction_pending := false
 var active_battle_kind := ""
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
@@ -219,7 +221,6 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	authorized_teleport_apply_failed_autosave_blocked = false
 	authorized_teleport_in_progress = false
 	_publish_world_presence(true)
-	_refresh_remote_players_from_server.call_deferred()
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
@@ -363,7 +364,6 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	is_loading_map = false
 	await _save_current_player_position_if_changed(true, target_spawn_name)
 	_publish_world_presence(true)
-	_refresh_remote_players_from_server.call_deferred()
 	GameState.unlock_overworld_input()
 
 func move_player_to_map(map: Node) -> void:
@@ -828,12 +828,12 @@ func _order_remote_players_container() -> void:
 
 
 func _connect_world_presence_signals() -> void:
-	if not WorldPresenceService.snapshot_received.is_connected(_on_world_presence_snapshot_received):
-		WorldPresenceService.snapshot_received.connect(_on_world_presence_snapshot_received)
-	if not WorldPresenceService.player_update_received.is_connected(_on_world_presence_player_update_received):
-		WorldPresenceService.player_update_received.connect(_on_world_presence_player_update_received)
-	if not WorldPresenceService.player_left_received.is_connected(_on_world_presence_player_left_received):
-		WorldPresenceService.player_left_received.connect(_on_world_presence_player_left_received)
+	if not WorldPresenceService.roster_changed.is_connected(_on_world_presence_roster_changed):
+		WorldPresenceService.roster_changed.connect(_on_world_presence_roster_changed)
+	if not WorldPresenceService.roster_player_changed.is_connected(_on_world_presence_roster_player_changed):
+		WorldPresenceService.roster_player_changed.connect(_on_world_presence_roster_player_changed)
+	if not WorldPresenceService.roster_player_removed.is_connected(_on_world_presence_roster_player_removed):
+		WorldPresenceService.roster_player_removed.connect(_on_world_presence_roster_player_removed)
 
 
 func _publish_world_presence(force := false) -> void:
@@ -846,20 +846,6 @@ func _publish_world_presence(force := false) -> void:
 
 	last_presence_position_signature = signature
 	WorldPresenceService.update_position(_build_current_player_position_state(""))
-
-
-func _refresh_remote_players_from_server() -> void:
-	if not AuthService.is_authenticated() or GameState.current_map == null:
-		return
-
-	var result: Dictionary = await PlayerGameStateService.load_map_players()
-	if not bool(result.get("success", false)):
-		push_warning("World: map player snapshot load failed: %s" % str(result.get("error", "Unknown error")))
-		return
-
-	var players_value: Variant = result.get("players", [])
-	var players: Array = players_value if players_value is Array else []
-	_apply_remote_player_states(players, true)
 
 
 func _track_playtime(delta: float) -> void:
@@ -929,9 +915,12 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			if not new_avatar is Node2D:
 				push_warning("World: remote player avatar script did not create a Node2D.")
 				continue
-			avatar = new_avatar as Node2D
-			remote_player_avatars[user_key] = avatar
-			remote_players_container.add_child(avatar)
+		avatar = new_avatar as Node2D
+		remote_player_avatars[user_key] = avatar
+		remote_players_container.add_child(avatar)
+		var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
+		if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
+			avatar.connect("interaction_requested", interaction_callable)
 
 		avatar.call("apply_state", player_state)
 
@@ -976,6 +965,9 @@ func _get_remote_player_avatar_user_id(avatar: Node) -> int:
 
 
 func _clear_remote_players() -> void:
+	get_tree().call_group("player_interaction_coordinator", "close_for_map_transition")
+	pending_remote_player_interaction.clear()
+	remote_player_interaction_pending = false
 	for avatar in remote_player_avatars.values():
 		if avatar != null and is_instance_valid(avatar):
 			avatar.queue_free()
@@ -990,16 +982,45 @@ func _remove_remote_player(user_id: int) -> void:
 		avatar.queue_free()
 
 
-func _on_world_presence_snapshot_received(players: Array) -> void:
-	_apply_remote_player_states(players, true)
+func _on_world_presence_roster_changed(_players: Array, _roster_revision: int) -> void:
+	_apply_remote_player_states(WorldPresenceService.get_current_map_players(), true)
 
 
-func _on_world_presence_player_update_received(player_state: Dictionary) -> void:
+func _on_world_presence_roster_player_changed(player_state: Dictionary, _roster_revision: int) -> void:
 	_apply_remote_player_states([player_state], false)
 
 
-func _on_world_presence_player_left_received(user_id: int) -> void:
+func _on_world_presence_roster_player_removed(user_id: int, _roster_revision: int) -> void:
 	_remove_remote_player(user_id)
+
+func _on_remote_player_interaction_requested(player_state: Dictionary, world_position: Vector2) -> void:
+	var candidate := {
+		"player": player_state.duplicate(true),
+		"worldPosition": world_position,
+	}
+	if pending_remote_player_interaction.is_empty() or _is_remote_interaction_candidate_above(candidate, pending_remote_player_interaction):
+		pending_remote_player_interaction = candidate
+	if not remote_player_interaction_pending:
+		remote_player_interaction_pending = true
+		_resolve_remote_player_interaction.call_deferred()
+
+func _resolve_remote_player_interaction() -> void:
+	remote_player_interaction_pending = false
+	if pending_remote_player_interaction.is_empty():
+		return
+	var candidate := pending_remote_player_interaction.duplicate(true)
+	pending_remote_player_interaction.clear()
+	var player_state: Dictionary = _dictionary_from_value(candidate.get("player", {}))
+	var world_position: Vector2 = candidate.get("worldPosition", Vector2.ZERO)
+	var screen_position := get_viewport().get_canvas_transform() * world_position
+	get_tree().call_group("player_interaction_coordinator", "open_context_for_player", player_state, screen_position)
+
+func _is_remote_interaction_candidate_above(first: Dictionary, second: Dictionary) -> bool:
+	var first_position: Vector2 = first.get("worldPosition", Vector2.ZERO)
+	var second_position: Vector2 = second.get("worldPosition", Vector2.ZERO)
+	if not is_equal_approx(first_position.y, second_position.y):
+		return first_position.y > second_position.y
+	return int(_dictionary_from_value(first.get("player", {})).get("userId", 0)) > int(_dictionary_from_value(second.get("player", {})).get("userId", 0))
 
 
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:

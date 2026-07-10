@@ -59,6 +59,7 @@ const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
 	{"id": "all_time", "label": "All Time"},
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
+const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
@@ -338,9 +339,11 @@ enum DevPokemonPopupMode {
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
 @onready var socials_menu: PanelContainer = $Control/SocialsMenu
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
+@onready var socials_players_on_map_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/PlayersOnMapButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/CloseButton
 var friendlist_popup: FriendlistPopup
+var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var mail_popup: PanelContainer = $Control/MailPopup
 @onready var mail_compose_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/ComposeButton
 @onready var mail_close_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/CloseButton
@@ -952,8 +955,10 @@ func _ready() -> void:
 	bag_button.pressed.connect(_on_bag_button_pressed)
 	socials_button.pressed.connect(_on_socials_button_pressed)
 	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
+	socials_players_on_map_button.pressed.connect(_on_socials_players_on_map_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
+	_ensure_player_interaction_coordinator()
 	mail_inbox_button.pressed.connect(_on_mail_box_selected.bind("inbox"))
 	mail_sent_button.pressed.connect(_on_mail_box_selected.bind("sent"))
 	mail_compose_button.pressed.connect(_on_mail_compose_button_pressed)
@@ -12963,6 +12968,8 @@ func _is_settings_toggle_event(event: InputEvent) -> bool:
 	return key_event.pressed and not key_event.echo and key_event.keycode == KEY_ESCAPE
 
 func _close_active_overlay_for_escape() -> bool:
+	if player_interaction_coordinator != null and player_interaction_coordinator.close_topmost():
+		return true
 	var candidate: Dictionary = _get_active_escape_close_candidate()
 	if candidate.is_empty():
 		return false
@@ -17254,6 +17261,39 @@ func _hide_socials_menu() -> void:
 func _on_socials_friend_list_button_pressed() -> void:
 	_hide_socials_menu()
 	_open_friendlist_popup()
+
+func _on_socials_players_on_map_button_pressed() -> void:
+	_hide_socials_menu()
+	_open_players_on_map()
+
+func _open_players_on_map() -> void:
+	if not _ensure_player_interaction_coordinator():
+		return
+	player_interaction_coordinator.open_players_on_map(socials_slot.get_global_rect())
+
+func _ensure_player_interaction_coordinator() -> bool:
+	if player_interaction_coordinator == null:
+		var coordinator_value: Variant = PLAYER_INTERACTION_COORDINATOR_SCRIPT.new()
+		if not coordinator_value is PlayerInteractionCoordinator:
+			return false
+		player_interaction_coordinator = coordinator_value as PlayerInteractionCoordinator
+		$Control.add_child(player_interaction_coordinator)
+		player_interaction_coordinator.setup($Control)
+		player_interaction_coordinator.private_message_requested.connect(_on_player_interaction_private_message_requested)
+		player_interaction_coordinator.mail_requested.connect(_on_player_interaction_mail_requested)
+		player_interaction_coordinator.social_overview_updated.connect(_on_player_interaction_social_overview_updated)
+	return true
+
+func _on_player_interaction_private_message_requested(user: Dictionary) -> void:
+	open_private_message_conversation(user)
+
+func _on_player_interaction_mail_requested(username: String) -> void:
+	_open_mail_compose_popup(username, "")
+
+func _on_player_interaction_social_overview_updated(_overview: Dictionary) -> void:
+	if friendlist_popup != null and friendlist_popup.visible:
+		friendlist_popup.refresh()
+	_refresh_friend_request_attention_from_socials.call_deferred()
 
 func _open_friendlist_popup() -> void:
 	if friendlist_popup == null:
