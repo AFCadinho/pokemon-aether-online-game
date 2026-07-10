@@ -640,6 +640,16 @@ var bag_item_use_confirm_button: Button
 var bag_item_use_pending_item: Dictionary = {}
 var bag_item_use_selected_slot := -1
 var bag_item_use_in_progress := false
+var market_popup: PanelContainer
+var market_title_label: Label
+var market_money_label: Label
+var market_item_list: VBoxContainer
+var market_quantity_spinbox: SpinBox
+var market_status_label: Label
+var market_buy_button: Button
+var market_items: Array[Dictionary] = []
+var market_selected_item: Dictionary = {}
+var market_purchase_in_progress := false
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
 var active_mail_box := "inbox"
@@ -848,6 +858,7 @@ func _ready() -> void:
 	_setup_player_status_card()
 	_setup_trainer_card_popup()
 	_setup_bag_popup()
+	_setup_market_popup()
 	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
@@ -8383,6 +8394,390 @@ func _setup_bag_popup() -> void:
 
 	_refresh_bag_category_buttons()
 	_refresh_bag_items()
+
+func _setup_market_popup() -> void:
+	market_popup = PanelContainer.new()
+	market_popup.name = "MarketPopup"
+	market_popup.visible = false
+	market_popup.custom_minimum_size = Vector2(640, 500)
+	market_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	market_popup.z_index = UI_MODAL_Z_INDEX
+	market_popup.anchor_left = 0.5
+	market_popup.anchor_top = 0.5
+	market_popup.anchor_right = 0.5
+	market_popup.anchor_bottom = 0.5
+	market_popup.offset_left = -320
+	market_popup.offset_top = -250
+	market_popup.offset_right = 320
+	market_popup.offset_bottom = 250
+	market_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912ff"), UI_BORDER, 8, 1))
+	root_control.add_child(market_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	market_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	market_title_label = Label.new()
+	market_title_label.text = "Market"
+	market_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	market_title_label.add_theme_font_size_override("font_size", 22)
+	market_title_label.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(market_title_label)
+
+	market_money_label = Label.new()
+	market_money_label.text = "Money: %s" % _format_money(PlayerSave.money)
+	market_money_label.custom_minimum_size = Vector2(170, 0)
+	market_money_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	market_money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	market_money_label.add_theme_font_size_override("font_size", 14)
+	market_money_label.add_theme_color_override("font_color", UI_MONEY)
+	header.add_child(market_money_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_market_popup)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+
+	var column_header := HBoxContainer.new()
+	column_header.add_theme_constant_override("separation", 10)
+	layout.add_child(column_header)
+
+	var item_header := Label.new()
+	item_header.text = "Item"
+	item_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_header.add_theme_font_size_override("font_size", 11)
+	item_header.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	column_header.add_child(item_header)
+
+	var price_header := Label.new()
+	price_header.text = "Price"
+	price_header.custom_minimum_size = Vector2(120, 0)
+	price_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	price_header.add_theme_font_size_override("font_size", 11)
+	price_header.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	column_header.add_child(price_header)
+
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 310)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(scroll)
+
+	market_item_list = VBoxContainer.new()
+	market_item_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	market_item_list.add_theme_constant_override("separation", 7)
+	scroll.add_child(market_item_list)
+
+	var footer_panel := PanelContainer.new()
+	footer_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#08111fff"), UI_BORDER_SOFT, 6, 1))
+	layout.add_child(footer_panel)
+
+	var footer_margin := MarginContainer.new()
+	footer_margin.add_theme_constant_override("margin_left", 10)
+	footer_margin.add_theme_constant_override("margin_top", 8)
+	footer_margin.add_theme_constant_override("margin_right", 10)
+	footer_margin.add_theme_constant_override("margin_bottom", 8)
+	footer_panel.add_child(footer_margin)
+
+	var quantity_row := HBoxContainer.new()
+	quantity_row.add_theme_constant_override("separation", 10)
+	footer_margin.add_child(quantity_row)
+
+	var quantity_label := Label.new()
+	quantity_label.text = "Amount"
+	quantity_label.custom_minimum_size = Vector2(72, 0)
+	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quantity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	quantity_row.add_child(quantity_label)
+
+	market_quantity_spinbox = SpinBox.new()
+	market_quantity_spinbox.min_value = 1
+	market_quantity_spinbox.max_value = 99
+	market_quantity_spinbox.value = 1
+	market_quantity_spinbox.step = 1
+	market_quantity_spinbox.custom_minimum_size = Vector2(104, 0)
+	market_quantity_spinbox.value_changed.connect(_on_market_quantity_changed)
+	quantity_row.add_child(market_quantity_spinbox)
+
+	market_status_label = Label.new()
+	market_status_label.text = "Select an item."
+	market_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	market_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	market_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	market_status_label.add_theme_font_size_override("font_size", 13)
+	market_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	quantity_row.add_child(market_status_label)
+
+	var action_row := HBoxContainer.new()
+	action_row.alignment = BoxContainer.ALIGNMENT_END
+	action_row.add_theme_constant_override("separation", 8)
+	layout.add_child(action_row)
+
+	var cancel_button := Button.new()
+	cancel_button.text = "Cancel"
+	cancel_button.custom_minimum_size = Vector2(110, 32)
+	cancel_button.focus_mode = Control.FOCUS_NONE
+	cancel_button.pressed.connect(_hide_market_popup)
+	_apply_button_style(cancel_button)
+	action_row.add_child(cancel_button)
+
+	market_buy_button = Button.new()
+	market_buy_button.text = "Buy"
+	market_buy_button.custom_minimum_size = Vector2(156, 32)
+	market_buy_button.focus_mode = Control.FOCUS_NONE
+	market_buy_button.disabled = true
+	market_buy_button.pressed.connect(_on_market_buy_pressed)
+	_apply_button_style(market_buy_button, "primary")
+	action_row.add_child(market_buy_button)
+
+	_refresh_market_items()
+
+func open_market(market: Dictionary) -> void:
+	if market_popup == null:
+		return
+	market_title_label.text = str(market.get("name", "Market"))
+	market_items = _normalize_market_items(market.get("items", []))
+	market_selected_item = {}
+	market_quantity_spinbox.value = 1
+	market_popup.visible = true
+	_activate_ui_panel(market_popup)
+	_refresh_market_money()
+	_refresh_market_items()
+	_set_market_status("Select an item.", false)
+
+func _hide_market_popup() -> void:
+	if market_popup != null:
+		market_popup.visible = false
+		_deactivate_ui_panel(market_popup)
+	market_selected_item = {}
+	market_purchase_in_progress = false
+
+func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
+	var normalized_items: Array[Dictionary] = []
+	if typeof(items_value) != TYPE_ARRAY:
+		return normalized_items
+
+	var items: Array = items_value
+	for item_value: Variant in items:
+		if typeof(item_value) != TYPE_DICTIONARY:
+			continue
+		var item: Dictionary = item_value
+		var item_id := str(item.get("itemId", "")).strip_edges()
+		if item_id == "":
+			continue
+		normalized_items.append({
+			"id": item_id,
+			"name": str(item.get("name", _item_name_from_id(item_id))),
+			"category": str(item.get("category", "")),
+			"shortDesc": str(item.get("shortDesc", "")),
+			"price": _market_item_money_price(item),
+		})
+	return normalized_items
+
+func _market_item_money_price(item: Dictionary) -> int:
+	var costs_value: Variant = item.get("costs", [])
+	if typeof(costs_value) != TYPE_ARRAY:
+		return 0
+	var costs: Array = costs_value
+	for cost_value: Variant in costs:
+		if typeof(cost_value) != TYPE_DICTIONARY:
+			continue
+		var cost: Dictionary = cost_value
+		if str(cost.get("currency", "")).strip_edges().to_lower() == "money":
+			return max(int(cost.get("amount", 0)), 0)
+	return 0
+
+func _refresh_market_items() -> void:
+	if market_item_list == null:
+		return
+	for child: Node in market_item_list.get_children():
+		child.queue_free()
+
+	if market_items.is_empty():
+		market_item_list.add_child(_create_bag_empty_state("No market items available."))
+		if market_buy_button != null:
+			market_buy_button.disabled = true
+		return
+
+	for item: Dictionary in market_items:
+		market_item_list.add_child(_create_market_item_button(item))
+
+	_refresh_market_purchase_state()
+
+func _create_market_item_button(item: Dictionary) -> Control:
+	var item_id := str(item.get("id", ""))
+	var item_name := str(item.get("name", _item_name_from_id(item_id)))
+	var price: int = int(item.get("price", 0))
+	var selected := _is_same_market_item(item, market_selected_item)
+	var row := PanelContainer.new()
+	row.custom_minimum_size = Vector2(0, 62)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.mouse_filter = Control.MOUSE_FILTER_STOP
+	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	row.tooltip_text = str(item.get("shortDesc", ""))
+	row.gui_input.connect(_on_market_item_row_gui_input.bind(item.duplicate(true)))
+	_apply_market_item_row_style(row, selected)
+
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	row.add_child(margin)
+
+	var content := HBoxContainer.new()
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+
+	var text_stack := VBoxContainer.new()
+	text_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_stack.add_theme_constant_override("separation", 2)
+	content.add_child(text_stack)
+
+	var name_label := Label.new()
+	name_label.text = item_name
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_label.add_theme_font_size_override("font_size", 15)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	text_stack.add_child(name_label)
+
+	var desc_label := Label.new()
+	desc_label.text = _market_item_subtitle(item)
+	desc_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	desc_label.clip_text = true
+	desc_label.add_theme_font_size_override("font_size", 11)
+	desc_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	text_stack.add_child(desc_label)
+
+	var price_label := Label.new()
+	price_label.text = _format_money(price)
+	price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	price_label.custom_minimum_size = Vector2(120, 0)
+	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	price_label.add_theme_font_size_override("font_size", 15)
+	price_label.add_theme_color_override("font_color", UI_MONEY)
+	content.add_child(price_label)
+
+	return row
+
+func _on_market_item_row_gui_input(event: InputEvent, item: Dictionary) -> void:
+	if not (event is InputEventMouseButton):
+		return
+	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return
+	_on_market_item_selected(item)
+	get_viewport().set_input_as_handled()
+
+func _apply_market_item_row_style(row: PanelContainer, selected: bool) -> void:
+	var background := Color("#0b1524ff") if not selected else Color("#14284aff")
+	var border := UI_BORDER_SOFT if not selected else UI_BORDER_FOCUS
+	row.add_theme_stylebox_override("panel", _make_panel_style(background, border, 6, 1))
+
+func _market_item_subtitle(item: Dictionary) -> String:
+	var description := str(item.get("shortDesc", "")).strip_edges()
+	if description != "":
+		return _ellipsize_text(description, 72)
+	var category := str(item.get("category", "")).strip_edges()
+	if category != "":
+		return category.replace("-", " ").replace("_", " ").capitalize()
+	return str(item.get("id", ""))
+
+func _on_market_item_selected(item: Dictionary) -> void:
+	if market_purchase_in_progress:
+		return
+	market_selected_item = item
+	market_quantity_spinbox.value = 1
+	_refresh_market_items()
+	_refresh_market_purchase_state()
+
+func _on_market_quantity_changed(_value: float) -> void:
+	_refresh_market_purchase_state()
+
+func _refresh_market_purchase_state() -> void:
+	_refresh_market_money()
+	if market_buy_button == null or market_status_label == null:
+		return
+	if market_selected_item.is_empty():
+		market_buy_button.disabled = true
+		market_buy_button.text = "Buy"
+		return
+
+	var quantity: int = max(int(market_quantity_spinbox.value), 1)
+	var price: int = int(market_selected_item.get("price", 0))
+	var total: int = price * quantity
+	var has_enough_money := total <= PlayerSave.money
+	market_buy_button.disabled = market_purchase_in_progress or not has_enough_money
+	market_buy_button.text = "Buying..." if market_purchase_in_progress else "Buy %s" % _format_money(total)
+	var item_name := str(market_selected_item.get("name", "Item"))
+	var status_text := "%sx %s selected. Total: %s" % [quantity, item_name, _format_money(total)]
+	if not has_enough_money:
+		status_text += "  Not enough money."
+	_set_market_status(status_text, not has_enough_money)
+
+func _refresh_market_money() -> void:
+	if market_money_label != null:
+		market_money_label.text = "Money: %s" % _format_money(PlayerSave.money)
+
+func _on_market_buy_pressed() -> void:
+	if market_purchase_in_progress or market_selected_item.is_empty():
+		return
+	var item_id := str(market_selected_item.get("id", "")).strip_edges()
+	if item_id == "":
+		return
+
+	market_purchase_in_progress = true
+	_refresh_market_purchase_state()
+	_set_market_status("Buying item...", false)
+
+	var quantity: int = max(int(market_quantity_spinbox.value), 1)
+	var result: Dictionary = await MarketService.purchase_standard_item(item_id, quantity)
+	market_purchase_in_progress = false
+	if not bool(result.get("success", false)):
+		_set_market_status("Could not buy item: %s" % str(result.get("error", "Unknown error")), true)
+		_refresh_market_purchase_state()
+		return
+
+	PlayerWalletService.apply_wallet_result(result)
+	refresh_money_display()
+	var inventory_value: Variant = result.get("inventory", [])
+	if inventory_value is Array:
+		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
+		bag_inventory_loaded = true
+		_refresh_bag_items()
+
+	var purchase: Dictionary = _staff_dictionary_from_variant(result.get("purchase", {}))
+	var purchased_quantity: int = max(int(purchase.get("quantity", quantity)), 1)
+	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
+	_add_chat_message("Bought %sx %s." % [purchased_quantity, item_name])
+	_refresh_market_purchase_state()
+
+func _set_market_status(message: String, is_error: bool) -> void:
+	if market_status_label == null:
+		return
+	market_status_label.text = message
+	market_status_label.add_theme_color_override("font_color", UI_DANGER if is_error else UI_MUTED_TEXT)
+
+func _is_same_market_item(left: Dictionary, right: Dictionary) -> bool:
+	return str(left.get("id", "")) != "" and str(left.get("id", "")) == str(right.get("id", ""))
 
 func _setup_bag_item_use_popup() -> void:
 	bag_item_use_popup = PanelContainer.new()

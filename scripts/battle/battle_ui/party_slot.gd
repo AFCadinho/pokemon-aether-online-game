@@ -65,9 +65,9 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	var species := _get_species_from_data(pokemon_data)
 	var types := _get_types_from_data(pokemon_data)
 	var is_active := bool(pokemon_data.get("active", false))
-	var is_fainted := bool(pokemon_data.get("fainted", false))
-	var max_hp: int = max(int(pokemon_data.get("maxHp", 1)), 1)
-	var current_hp: int = int(pokemon_data.get("hp", 0))
+	var max_hp: int = _get_max_hp_from_data(pokemon_data)
+	var current_hp: int = _get_current_hp_from_data(pokemon_data, max_hp)
+	var is_fainted := _get_fainted_from_data(pokemon_data, current_hp)
 
 	_apply_slot_style(species, is_fainted, is_active, types)
 
@@ -127,6 +127,44 @@ func _get_types_from_data(pokemon_data: Dictionary) -> Array:
 		types.append(str(type_name))
 
 	return types
+
+func _get_max_hp_from_data(pokemon_data: Dictionary) -> int:
+	for key in ["maxHp", "max_hp"]:
+		if pokemon_data.has(key):
+			return max(int(pokemon_data.get(key)), 1)
+
+	var stats_value: Variant = pokemon_data.get("stats", {})
+	if stats_value is Dictionary:
+		var stats: Dictionary = stats_value as Dictionary
+		if stats.has("hp"):
+			return max(int(stats.get("hp")), 1)
+
+	return 1
+
+func _get_current_hp_from_data(pokemon_data: Dictionary, max_hp: int) -> int:
+	for key in ["hp", "currentHp", "current_hp"]:
+		if pokemon_data.has(key):
+			return clamp(int(pokemon_data.get(key)), 0, max_hp)
+
+	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
+	if condition == "0 fnt" or condition.ends_with(" fnt"):
+		return 0
+	if condition.contains("/"):
+		var hp_parts := condition.split("/")
+		if hp_parts.size() >= 2:
+			return clamp(int(hp_parts[0]), 0, max_hp)
+
+	return max_hp
+
+func _get_fainted_from_data(pokemon_data: Dictionary, current_hp: int) -> bool:
+	if bool(pokemon_data.get("fainted", false)):
+		return true
+
+	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
+	if condition == "0 fnt" or condition.ends_with(" fnt"):
+		return true
+
+	return pokemon_data.has("hp") and current_hp <= 0
 
 func _set_status_icon(status: String) -> void:
 	status_icon.texture = _get_status_texture(status)

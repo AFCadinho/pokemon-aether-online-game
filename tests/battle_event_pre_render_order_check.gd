@@ -12,6 +12,7 @@ func _init() -> void:
 	_check_initial_event_seq_cursor_tracks_start_event_boundary()
 	_check_initial_start_events_include_booster_energy_item_events()
 	_check_initial_setup_keeps_specific_form_species()
+	_check_team_preview_lead_selection_unlocks_party_grid()
 	quit(1 if failed else 0)
 
 
@@ -166,6 +167,51 @@ func _check_initial_setup_keeps_specific_form_species() -> void:
 		form_check_source.contains("replace(\" \", \"-\")"),
 		true,
 		"specific battle form helper treats spaced form names as form species"
+	)
+
+
+func _check_team_preview_lead_selection_unlocks_party_grid() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var trainer_index := source.find("func _run_trainer_team_preview_lead_selection() -> Dictionary:")
+	var trainer_next_index := source.find("\nfunc ", trainer_index + 1)
+	var trainer_source := source.substr(trainer_index, trainer_next_index - trainer_index)
+	var pvp_index := source.find("func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary:")
+	var pvp_next_index := source.find("\nfunc ", pvp_index + 1)
+	var pvp_source := source.substr(pvp_index, pvp_next_index - pvp_index)
+
+	_check_equal(trainer_index >= 0, true, "trainer team preview lead selection exists")
+	_check_equal(pvp_index >= 0, true, "PvP team preview lead selection exists")
+	_check_equal(
+		trainer_source.find("_set_battle_input_locked(false)") >= 0
+			and trainer_source.find("_set_battle_input_locked(false)") < trainer_source.find("party_grid.set_party("),
+		true,
+		"trainer team preview unlocks input before waiting for party lead selection"
+	)
+	_check_equal(
+		trainer_source.contains("party_grid.set_party(_get_trainer_lead_selection_party_data())"),
+		true,
+		"trainer team preview lead selection uses saved party data for clickable slots"
+	)
+	_check_equal(
+		trainer_source.contains("_can_choose_trainer_lead_slot(selected_slot)"),
+		true,
+		"trainer team preview validates selected lead against saved party"
+	)
+	_check_equal(
+		source.contains("if not pokemon.has_saved_hp_state and current_hp <= 0:"),
+		true,
+		"trainer lead selection treats missing saved HP as full HP"
+	)
+	_check_equal(
+		source.contains("if pokemon.has_saved_hp_state and pokemon.current_hp <= 0:"),
+		true,
+		"trainer lead validation only rejects saved fainted Pokemon"
+	)
+	_check_equal(
+		pvp_source.find("_set_battle_input_locked(false)") >= 0
+			and pvp_source.find("_set_battle_input_locked(false)") < pvp_source.find("party_grid.set_party("),
+		true,
+		"PvP team preview unlocks input before waiting for party lead selection"
 	)
 
 

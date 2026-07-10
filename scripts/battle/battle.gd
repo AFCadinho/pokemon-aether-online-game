@@ -5028,10 +5028,11 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	team_preview_lead_selection_active = true
 	queued_battle_action.clear()
 	_show_team_preview_layers()
+	_set_battle_input_locked(false)
 	current_action_panel.set_message("Choose your Lead")
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
-	party_grid.set_party(_get_lead_selection_team_data("p1"))
+	party_grid.set_party(_get_trainer_lead_selection_party_data())
 	party_grid.visible = true
 	action_buttons.set_action_disabled("fight", true)
 	action_buttons.set_action_disabled("bag", true)
@@ -5040,7 +5041,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 
 	while team_preview_lead_selection_active:
 		var selected_slot: int = int(await party_grid.party_selected)
-		if not _can_choose_lead_slot(selected_slot):
+		if not _can_choose_trainer_lead_slot(selected_slot):
 			current_action_panel.set_message("Choose another Pokemon!")
 			continue
 
@@ -5069,10 +5070,57 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 
 	return {}
 
+func _get_trainer_lead_selection_party_data() -> Array:
+	var party: Array = []
+	for pokemon_value: Variant in PlayerSave.party:
+		var pokemon: Pokemon = pokemon_value as Pokemon
+		if pokemon == null:
+			party.append({
+				"species": "",
+				"fainted": true,
+				"hp": 0,
+				"currentHp": 0,
+				"maxHp": 1,
+			})
+			continue
+
+		var max_hp: int = max(pokemon.max_hp, int(pokemon.stats.get("hp", pokemon.max_hp)), 1)
+		var current_hp: int = pokemon.current_hp
+		if not pokemon.has_saved_hp_state and current_hp <= 0:
+			current_hp = max_hp
+
+		var pokemon_data: Dictionary = pokemon.to_battle_dict()
+		pokemon_data["hp"] = clamp(current_hp, 0, max_hp)
+		pokemon_data["currentHp"] = clamp(current_hp, 0, max_hp)
+		pokemon_data["maxHp"] = max_hp
+		pokemon_data["condition"] = "0 fnt" if current_hp <= 0 else "%s/%s" % [current_hp, max_hp]
+		pokemon_data["fainted"] = current_hp <= 0
+		pokemon_data["active"] = false
+		party.append(pokemon_data)
+
+	return party
+
+func _can_choose_trainer_lead_slot(slot: int) -> bool:
+	if slot < 1 or slot > PlayerSave.party.size():
+		return false
+
+	var pokemon: Pokemon = PlayerSave.party[slot - 1] as Pokemon
+	if pokemon == null:
+		return false
+
+	if pokemon.species.strip_edges() == "":
+		return false
+
+	if pokemon.has_saved_hp_state and pokemon.current_hp <= 0:
+		return false
+
+	return true
+
 func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary:
 	team_preview_lead_selection_active = true
 	queued_battle_action.clear()
 	_show_team_preview_layers()
+	_set_battle_input_locked(false)
 	current_action_panel.set_message("Choose your Lead")
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false

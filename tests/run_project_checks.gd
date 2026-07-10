@@ -11,6 +11,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_event_pre_render_order_check.gd",
 	"res://tests/battle_state_deferred_hp_check.gd",
 	"res://tests/battle_state_primal_forms_check.gd",
+	"res://tests/party_slot_hp_payload_check.gd",
 	"res://tests/pokemon_ball_metadata_check.gd",
 	"res://tests/pokemon_cry_resolver_check.gd",
 	"res://tests/pokemon_experience_payload_check.gd",

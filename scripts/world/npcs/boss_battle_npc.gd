@@ -13,6 +13,7 @@ signal difficulty_selected(difficulty: String)
 @export var hard_label := "Hard"
 
 var difficulty_layer: CanvasLayer
+var difficulty_root: Control
 var difficulty_panel: PanelContainer
 
 
@@ -52,6 +53,8 @@ func interact_with_player(_player: Node2D) -> void:
 
 func _show_difficulty_prompt() -> String:
 	_ensure_difficulty_panel()
+	if difficulty_root != null and is_instance_valid(difficulty_root):
+		difficulty_root.show()
 	difficulty_panel.show()
 	return await difficulty_selected
 
@@ -68,6 +71,9 @@ func _ensure_difficulty_panel() -> void:
 	var screen_root := Control.new()
 	screen_root.name = "BossDifficultyRoot"
 	screen_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	screen_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	screen_root.visible = false
+	difficulty_root = screen_root
 	difficulty_layer.add_child(screen_root)
 
 	difficulty_panel = PanelContainer.new()
@@ -156,6 +162,8 @@ func _make_cancel_button() -> Button:
 
 
 func _select_difficulty(difficulty: String) -> void:
+	if difficulty_root != null and is_instance_valid(difficulty_root):
+		difficulty_root.hide()
 	if difficulty_panel != null and is_instance_valid(difficulty_panel):
 		difficulty_panel.hide()
 	difficulty_selected.emit(difficulty)
