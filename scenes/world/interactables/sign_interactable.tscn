@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b8s7eihsl5ikf"]
+
+[ext_resource type="Script" uid="uid://ngj14apa2e16" path="res://scripts/world/interactables/sign_interactable.gd" id="1_sign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sign"]
+size = Vector2(32, 32)
+
+[node name="SignInteractable" type="Node2D" unique_id=1449815395]
+script = ExtResource("1_sign")
+blocks_movement = false
+interaction_shape_size = Vector2(32, 32)
+sign_size = "small"
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1782507464]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1629011937]
+shape = SubResource("RectangleShape2D_sign")

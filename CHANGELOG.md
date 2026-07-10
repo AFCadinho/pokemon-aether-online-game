@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+- Added client-side map sign interactions for small and large overworld signs, including local sign text loading, Pallet Town sign placements, text-only dialogue presentation, and validation checks for sign content and scene references.
+
 ## 0.3.3 - 2026-07-10
 
 **Added**

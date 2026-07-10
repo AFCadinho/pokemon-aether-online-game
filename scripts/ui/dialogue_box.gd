@@ -3,6 +3,7 @@ extends Control
 signal dialogue_finished
 
 @onready var name_label: Label = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/NPCName
+@onready var portrait_panel: Panel = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel
 @onready var npc_sprite: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel/PortraitMargin/NPCSprite
 @onready var text_label: RichTextLabel = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RichTextLabel
 
@@ -36,11 +37,15 @@ func _process(_delta: float) -> void:
 		else:
 			show_current_line()
 	
-func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = null) -> void:
+func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = null, show_mugshot := true) -> void:
 	lines = new_lines
 	name_label.text = speaker_name
 	name_label.visible = speaker_name != ""
-	npc_sprite.texture = mugshot if mugshot != null else default_mugshot
+	portrait_panel.visible = show_mugshot
+	if show_mugshot:
+		npc_sprite.texture = mugshot if mugshot != null else default_mugshot
+	else:
+		npc_sprite.texture = null
 	
 	current_line_index = 0
 	is_open = true

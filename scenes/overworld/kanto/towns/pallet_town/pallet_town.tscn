@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dgwpkenum0n5a" path="res://scripts/world/kanto/towns/pallet_town.gd" id="1_f4ndu"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="2_gell4"]
+[ext_resource type="Texture2D" uid="uid://c5801ltimr4ed" path="res://assets/npcs/gen4-ow-sprites/trchar101.png" id="4_3oirl"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
-[ext_resource type="Texture2D" uid="uid://be1e15jiippau" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trAceTrainer_M.png" id="6_66okb"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/heal_npc.tscn" id="6_jhh0g"]
 [ext_resource type="Texture2D" uid="uid://dgvhjpghervgq" path="res://assets/sprites/mugshots/ace_trainer.png" id="7_66okb"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/boss_battle_npc.tscn" id="9_s3ag2"]
 [ext_resource type="Texture2D" uid="uid://30fkhs34v51d" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/DP Beta Overworlds/DP_Beta027.png" id="10_s3ag2"]
 [ext_resource type="Texture2D" uid="uid://ckc4i8557tm1l" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="11_fec28"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/market_attendant_npc.tscn" id="12_4x353"]
+[ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="12_4x353"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
 [ext_resource type="Texture2D" uid="uid://d3tf216kfmai2" path="res://assets/npcs/gen4-ow-sprites/trchar118.png" id="13_4x353"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
@@ -21,19 +21,21 @@
 [ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="14_2p5pd"]
 [ext_resource type="Texture2D" uid="uid://wf0tl5jvqhhw" path="res://assets/sprites/mugshots/market_attendance.png" id="14_m86ow"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_3oirl"]
 [ext_resource type="PackedScene" uid="uid://mkdk7jtd37sw" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gib12"]
-atlas = ExtResource("6_66okb")
+[sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
+atlas = ExtResource("4_3oirl")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_0ke4d"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gib12")
+"texture": SubResource("AtlasTexture_6lp0i")
 }],
 "loop": true,
 "name": &"default",
@@ -136,7 +138,7 @@ region = Rect2(128, 0, 64, 64)
 atlas = ExtResource("13_4x353")
 region = Rect2(192, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_m86ow"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_3oirl"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -2205,7 +2207,6 @@ staff_blocked_dialogue_lines = Array[String](["This route is closed during the a
 blocked_dialogue_id = "kanto_pallet_town_north_guard_blocked"
 allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
 npc_id = "kanto_pallet_town_north_guard"
-display_name = "Johny Sins"
 npc_sprite_frames = SubResource("SpriteFrames_0ke4d")
 mugshot = ExtResource("7_66okb")
 
@@ -2232,7 +2233,7 @@ mugshot = ExtResource("11_fec28")
 
 [node name="MarketAttendantNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
 position = Vector2(272, 240)
-npc_sprite_frames = SubResource("SpriteFrames_m86ow")
+npc_sprite_frames = SubResource("SpriteFrames_3oirl")
 mugshot = ExtResource("14_m86ow")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]
@@ -2255,6 +2256,17 @@ display_name = "Pikachu"
 npc_sprite_frames = SubResource("SpriteFrames_ih4yo")
 movement_behavior = "pace_vertical"
 movement_speed_pixels = 60.0
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1829912001]
+
+[node name="TownSign" parent="Entities/Interactables" unique_id=1776127209 instance=ExtResource("19_3oirl")]
+position = Vector2(1056, 304)
+sign_id = "kanto_pallet_town_town_sign"
+sign_type = "town"
+
+[node name="OaksLabSign" parent="Entities/Interactables" unique_id=1449815395 instance=ExtResource("25_sign")]
+position = Vector2(1200, 880)
+sign_id = "kanto_pallet_town_oaks_lab"
 
 [node name="Water" type="TileMapLayer" parent="." unique_id=1009891667]
 visible = false

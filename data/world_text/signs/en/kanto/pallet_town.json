@@ -1,0 +1,32 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_pallet_town",
+  "signs": [
+	{
+	  "id": "kanto_pallet_town_town_sign",
+	  "type": "town",
+	  "title": "Pallet Town",
+	  "lines": [
+		"Pallet Town",
+        "A quiet town where new journeys begin."
+	  ]
+	},
+	{
+	  "id": "kanto_pallet_town_trainer_tips_1",
+	  "type": "trainer_tips",
+	  "speakerName": "Trainer Tips",
+	  "lines": [
+        "Press the interact button while facing people or signs."
+	  ]
+	},
+	{
+	  "id": "kanto_pallet_town_oaks_lab",
+	  "type": "building",
+	  "title": "Oaks Lab",
+	  "lines": [
+		"Oak's Pokémon Research Lab",
+        "Where Pokémon mysteries are studied."
+	  ]
+	},
+  ]
+}
