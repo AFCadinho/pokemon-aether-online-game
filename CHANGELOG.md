@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.3.3 - 2026-07-10
+
+**Added**
+- Added Route 1 visual depth, generated map visuals, tall-grass rustle effects, and water ripple effects.
+- Added styled overworld nameplates for the player, remote players, and NPCs.
+- Added route and door transition hint scenes for clearer overworld exits.
+- Added dialogue metadata loading from the game-content service.
+- Added overworld Pokemon NPC support, metadata loading, collision blocking, and Route 1/Pallet Town overworld Pokemon placements.
+- Added boss battle NPC support with difficulty selection.
+- Added Trainer Red as a Pallet Town boss battle with Easy, Medium, and Hard teams, dialogue, mugshot, and reward content.
+- Added market attendant NPC support, a market service client, and the first market UI flow.
+- Added backend game-content routes for NPCs, dialogues, and overworld Pokemon.
+- Added backend account-service support for standard market purchases and shop item source validation.
+
+**Changed**
+- Improved NPC metadata, trainer metadata, dialogue fallback handling, and overworld interaction validation.
+- Updated trainer repository handling and trainer metadata tests for the expanded Trainer Red content.
+- Improved market UI integration in the main overlay and Pallet Town scene.
+- Cleaned up overworld NPC sprite assets and migrated to the newer official overworld sprite pack.
+
+**Fixed**
+- Fixed Trainer Red's boss battle difficulty overlay blocking clicks in team preview and battle UI after the difficulty choice.
+- Fixed trainer team-preview lead selection staying locked or showing unusable party slots when saved HP data was missing.
+- Fixed party slot HP parsing for battle payloads that include stats or conditions but no explicit `hp` field.
+- Fixed local dialogue validation for Pallet Town Trainer Red dialogue references.
+- Fixed backend Pokemon box handling around market and trainer content updates.
+
 ## 0.3.1 - 2026-07-08
 
 **Added**
