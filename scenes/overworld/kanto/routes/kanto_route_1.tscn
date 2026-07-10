@@ -3,181 +3,28 @@
 [ext_resource type="Script" uid="uid://bi6qlnjlrb4m5" path="res://scripts/world/kanto/routes/kanto_route_1.gd" id="1_7kpb1"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="2_4urj5"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_ykhnd"]
+[ext_resource type="Texture2D" uid="uid://bb2rbsd7p2wxa" path="res://assets/npcs/gen4-ow-sprites/NPC 82.png" id="8_bnyo4"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_lmnv3"]
 [ext_resource type="Texture2D" uid="uid://bk6vp4prd8wbj" path="res://assets/npcs/gen4-ow-sprites/trchar017.png" id="9_qefnj"]
 [ext_resource type="Texture2D" uid="uid://d4c0skpe6wmsw" path="res://assets/sprites/mugshots/gary.png" id="10_6o5ht"]
-[ext_resource type="Texture2D" path="res://assets/followers/PIDGEY.png" id="10_gd1nu"]
 [ext_resource type="Texture2D" uid="uid://eaiyuihpfhda" path="res://assets/npcs/gen4-ow-sprites/NPC 57.png" id="10_qefnj"]
 [ext_resource type="Texture2D" uid="uid://y0rea10fmcdi" path="res://assets/sprites/mugshots/cynthia.png" id="12_mjhtk"]
-[ext_resource type="Texture2D" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trChampion01.png" id="12_qefnj"]
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="13_8kkc8"]
 [ext_resource type="Texture2D" uid="uid://brfbcgg6o3jrq" path="res://assets/npcs/gen4-ow-sprites/NPC 14_1.png" id="14_8kkc8"]
 [ext_resource type="Texture2D" uid="uid://dgvhjpghervgq" path="res://assets/sprites/mugshots/ace_trainer.png" id="15_4m8jl"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="15_khy7p"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="16_bnyo4"]
 [ext_resource type="Texture2D" uid="uid://cugmmwml7tr6y" path="res://assets/followers/PIDGEY.png" id="16_cd607"]
+[ext_resource type="Texture2D" uid="uid://dsalb0724w4wo" path="res://assets/followers/PIDGEOT.png" id="16_qefnj"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="17_bnyo4"]
 [ext_resource type="Texture2D" uid="uid://bywpecaqt7jd3" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trChampion01.png" id="17_cd607"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="20_viridian"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_1/route_1.visual.tscn" id="26_c1ijh"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="27_pokemon"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/boss_battle_npc.tscn" id="28_boss"]
-[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_180_Champion_Red.png" id="29_ash"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_14rri"]
-atlas = ExtResource("10_gd1nu")
+atlas = ExtResource("16_cd607")
 region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_down_idle"]
-atlas = ExtResource("29_ash")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_down_step_1"]
-atlas = ExtResource("29_ash")
-region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_down_step_2"]
-atlas = ExtResource("29_ash")
-region = Rect2(256, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_left_idle"]
-atlas = ExtResource("29_ash")
-region = Rect2(0, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_left_step_1"]
-atlas = ExtResource("29_ash")
-region = Rect2(128, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_left_step_2"]
-atlas = ExtResource("29_ash")
-region = Rect2(256, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_up_idle"]
-atlas = ExtResource("29_ash")
-region = Rect2(0, 256, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_up_step_1"]
-atlas = ExtResource("29_ash")
-region = Rect2(128, 256, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_up_step_2"]
-atlas = ExtResource("29_ash")
-region = Rect2(256, 256, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_right_idle"]
-atlas = ExtResource("29_ash")
-region = Rect2(0, 384, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_right_step_1"]
-atlas = ExtResource("29_ash")
-region = Rect2(128, 384, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ash_right_step_2"]
-atlas = ExtResource("29_ash")
-region = Rect2(256, 384, 128, 128)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ash"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_down_idle")
-}],
-"loop": true,
-"name": &"idle_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_left_idle")
-}],
-"loop": true,
-"name": &"idle_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_right_idle")
-}],
-"loop": true,
-"name": &"idle_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_up_idle")
-}],
-"loop": true,
-"name": &"idle_up",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_down_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_down_step_1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_down_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_down_step_2")
-}],
-"loop": true,
-"name": &"walk_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_left_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_left_step_1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_left_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_left_step_2")
-}],
-"loop": true,
-"name": &"walk_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_right_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_right_step_1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_right_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_right_step_2")
-}],
-"loop": true,
-"name": &"walk_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_up_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_up_step_1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_up_idle")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ash_up_step_2")
-}],
-"loop": true,
-"name": &"walk_up",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a43pa"]
 atlas = ExtResource("9_qefnj")
@@ -476,36 +323,36 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rsiae"]
-atlas = ExtResource("12_qefnj")
+atlas = ExtResource("8_bnyo4")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xlabm"]
-atlas = ExtResource("12_qefnj")
+atlas = ExtResource("8_bnyo4")
 region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8lngs"]
-atlas = ExtResource("12_qefnj")
+atlas = ExtResource("8_bnyo4")
 region = Rect2(0, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gmegt"]
-atlas = ExtResource("12_qefnj")
+atlas = ExtResource("8_bnyo4")
 region = Rect2(0, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hjeao"]
-atlas = ExtResource("12_qefnj")
-region = Rect2(0, 64, 64, 64)
+atlas = ExtResource("8_bnyo4")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8eevg"]
-atlas = ExtResource("12_qefnj")
-region = Rect2(64, 64, 64, 64)
+atlas = ExtResource("8_bnyo4")
+region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bedxd"]
-atlas = ExtResource("12_qefnj")
-region = Rect2(128, 64, 64, 64)
+atlas = ExtResource("8_bnyo4")
+region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eypur"]
-atlas = ExtResource("12_qefnj")
-region = Rect2(192, 64, 64, 64)
+atlas = ExtResource("8_bnyo4")
+region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_m8cit"]
 animations = [{
@@ -555,7 +402,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_eypur")
 }],
 "loop": true,
-"name": &"walk_left",
+"name": &"walk_down",
 "speed": 5.0
 }]
 
@@ -592,6 +439,87 @@ animations = [{
 "frames": [],
 "loop": true,
 "name": &"walk_down",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tegq"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xvqrm"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l3kgu"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djdtb"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(128, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_505w3"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(192, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i8pht"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lany"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rovd"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(128, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_esvsc"]
+atlas = ExtResource("16_qefnj")
+region = Rect2(192, 128, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oup8f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1tegq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xvqrm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l3kgu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djdtb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_505w3")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i8pht")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5lany")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rovd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_esvsc")
+}],
+"loop": true,
+"name": &"walk_right",
 "speed": 5.0
 }]
 
@@ -1028,17 +956,6 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=394772807]
 
-[node name="AshKetchumBossNPC" parent="Entities/NPCs" instance=ExtResource("28_boss")]
-position = Vector2(720, 848)
-npc_id = "kanto_route_1_ash_ketchum_boss"
-display_name = "Ash Ketchum"
-dialogue_lines = Array[String](["I'm Ash from Pallet Town!", "Pick a battle level and give it everything you've got!"])
-npc_sprite_frames = SubResource("SpriteFrames_ash")
-easy_trainer_id = "kanto_route_1_ash_ketchum_easy"
-normal_trainer_id = "kanto_route_1_ash_ketchum_normal"
-hard_trainer_id = "kanto_route_1_ash_ketchum_hard"
-difficulty_prompt = "Which Ash battle do you want?"
-
 [node name="BugCatcherTrainerNPC" parent="Entities/NPCs" unique_id=168052101 instance=ExtResource("8_lmnv3")]
 position = Vector2(1456, 1648)
 sight_range_tiles = 2
@@ -1062,7 +979,6 @@ trainer_id = "kanto_route_1_cynthia_1"
 sight_range_tiles = 3
 npc_id = "kanto_route_1_cynthia"
 display_name = "Champion Cynthia"
-facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_m8cit")
 mugshot = ExtResource("12_mjhtk")
 
@@ -1087,10 +1003,13 @@ mugshot = ExtResource("15_4m8jl")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=861955121]
 
-[node name="Lillipup" parent="Entities/Pokemon" unique_id=2091997393 instance=ExtResource("27_pokemon")]
-position = Vector2(704, 720)
-overworld_pokemon_id = "kanto_route_1_lillipup_1"
-movement_tiles = 2
+[node name="Pidgeot" parent="Entities/Pokemon" unique_id=2091997393 instance=ExtResource("27_pokemon")]
+position = Vector2(816, 688)
+overworld_pokemon_id = "kanto_route_1_pidgeot_1"
+species_id = "pidgeot"
+display_name = "Pidgeot"
+npc_sprite_frames = SubResource("SpriteFrames_oup8f")
+movement_behavior = "pace_horizontal"
 
 [node name="Pidgey" parent="Entities/Pokemon" unique_id=1921985172 instance=ExtResource("27_pokemon")]
 position = Vector2(560, 1552)
