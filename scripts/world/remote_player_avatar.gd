@@ -566,7 +566,8 @@ func _create_interaction_hit_area() -> void:
 	var hit_area := Area2D.new()
 	hit_area.name = "PlayerInteractionHitArea"
 	hit_area.input_pickable = true
-	hit_area.collision_layer = 0
+	# Area2D input picking requires a non-zero collision layer.
+	hit_area.collision_layer = 1
 	hit_area.collision_mask = 0
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
