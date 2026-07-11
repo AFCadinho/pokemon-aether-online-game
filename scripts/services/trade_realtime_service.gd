@@ -241,7 +241,7 @@ func discover_active_trade() -> Dictionary:
 
 
 func _needs_active_trade_discovery() -> bool:
-	return active_trade_id == "" or str(active_trade_snapshot.get("status", "")) == "invited"
+	return active_trade_id == "" or str(active_trade_snapshot.get("status", "")) in ["invited", "active", "locked"]
 
 
 func _authenticated_websocket_url() -> String:

@@ -429,7 +429,7 @@ func _connection_state_unresolved() -> bool:
 	if not _disconnected_opponent().is_empty():
 		return true
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
-	return realtime != null and realtime.active_trade_id == str(trade.get("tradeId", "")) and (realtime.recovery_in_progress or not realtime.connected)
+	return realtime != null and realtime.active_trade_id == str(trade.get("tradeId", "")) and realtime.recovery_in_progress
 
 
 func _add_review_pokemon(target: VBoxContainer, values: Variant) -> void:
@@ -495,7 +495,12 @@ func _show_error(message: String) -> void:
 
 func _pokemon_label(value: Variant) -> String:
 	var pokemon: Dictionary = value if value is Dictionary else {}
-	var name := str(pokemon.get("nickname", pokemon.get("speciesName", pokemon.get("speciesId", "Pokemon"))))
+	var nickname := str(pokemon.get("nickname", "")).strip_edges()
+	var species_name := str(pokemon.get("speciesName", "")).strip_edges()
+	var species_id := str(pokemon.get("speciesId", "")).strip_edges()
+	var name := nickname if nickname != "" and nickname != "<null>" else species_name
+	if name == "" or name == "<null>":
+		name = species_id if species_id != "" else "Pokemon"
 	return "%s  Lv. %d" % [name, maxi(int(pokemon.get("level", 1)), 1)]
 
 
