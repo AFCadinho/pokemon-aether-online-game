@@ -3,6 +3,10 @@
 ## Unreleased
 
 **Added**
+- Added overworld use for Potion, Super Potion, Hyper Potion, Max Potion, Full Restore, Antidote, Burn Heal, Ice Heal, Awakening, Paralyze Heal, Full Heal, and Revive. Select a party Pokemon from the Bag to preview and apply the effect.
+- Added a permanent Escape Rope Key Item. It returns you to your latest healing point without healing your party and has a 30-minute cooldown that continues while you are offline.
+- Added an eight-slot hotbar on the left side of the screen. Drag usable Bag items into a chosen slot and activate them by clicking or pressing keys 1–8.
+- Added hotbar item counts, unavailable-item states, highlighted drop targets, slot clearing with right-click, and drag-and-drop swapping between hotbar slots.
 - Added client-side map sign interactions for small and large overworld signs, including local sign text loading, Pallet Town sign placements, text-only dialogue presentation, and validation checks for sign content and scene references.
 - Added Player Trade. You can request a nearby player, exchange Pokemon, item stacks, and money, then review and confirm the exact exchange together.
 - Added live trade invitations, incoming-request notifications, reconnection recovery, and clear system messages for Pokemon and item transfers.
@@ -10,11 +14,18 @@
 - Added a searchable item picker for quickly finding tradable inventory items and choosing their quantities.
 
 **Changed**
+- Escape Rope is now used exclusively from the configurable hotbar instead of the action bar or legacy inventory stacks.
+- The standard PokéMart now focuses on currently usable Poké Balls and medicines. Escape Rope, Repel, Super Repel, and Max Repel are no longer sold there; existing owned stacks remain in the Bag.
+- Stored EVs can now only be assigned to their matching stat. For example, stored Speed EVs can no longer be spent on Sp. Def.
 - Trade offers now use Pokemon from your current party. Drag a party slot into your offer, click an offered Pokemon to inspect its summary, and keep at least one Pokemon in your party.
 - Redesigned the trade workspace with compact Pokemon slots, player names above each offer, clearer money controls, improved invitation screens, and consistent button hover feedback.
 - Trade completion now refreshes your party immediately and closes the workspace once the transfer is complete.
 
 **Fixed**
+- Fixed Pokemon sometimes receiving EVs but not keeping earned EXP after defeating a wild Pokemon.
+- Fixed EXP bars not updating after battle rewards and added clear system messages showing how much EXP each Pokemon earned.
+- Fixed Escape Rope confirmation and cooldown feedback being inconsistent, and updated its confirmation window to match the game UI.
+- Fixed cleared hotbar slots restoring Escape Rope automatically and fixed dragged item icons appearing behind the hotbar.
 - Improved trade invitation delivery and state recovery so new invitations, acceptances, offers, readiness, and completed trades stay in sync for both players.
 - Fixed trade offers occasionally reverting, appearing late for the other player, or showing stale trade-state errors after quick updates.
 - Fixed money offers resetting while typing or not appearing consistently in the shared offer and final review.
