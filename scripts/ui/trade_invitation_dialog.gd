@@ -55,7 +55,7 @@ func setup() -> void:
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
 	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
 	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015"), Color("#b84c58"), 4, 1))
-	close_button.pressed.connect(hide)
+	close_button.pressed.connect(_decline_or_close)
 	header.add_child(close_button)
 	var content_panel := PanelContainer.new()
 	content_panel.anchor_left = 0.0
@@ -113,7 +113,7 @@ func setup() -> void:
 	decline_button.pressed.connect(_decline_or_close)
 	_style_button(decline_button, "danger")
 	actions.add_child(decline_button)
-	close_requested.connect(hide)
+	close_requested.connect(_decline_or_close)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
 		realtime.invitation_received.connect(show_trade)
