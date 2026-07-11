@@ -27,6 +27,8 @@ func _init() -> void:
 	_check(source.contains("func _retry_offer_after_stale_revision") and source.contains("service.load_trade(trade_id)"), "stale offer retry refreshes the authoritative snapshot")
 	_check(source.contains("_render_item_offer"), "both offer panels render item stacks")
 	_check(source.contains("money_amount_spinbox") and source.contains("func _update_money_offer"), "workspace offers authoritative wallet money")
+	_check(source.contains("update_on_text_changed = true"), "typed money is committed before Set Money is handled")
+	_check(source.contains("local_money_offer_label") and source.contains("MONEY  $%s"), "authoritative money offer remains prominently visible")
 	_check(source.contains("_render_money_offer") and source.contains("givesMoney") and source.contains("receivesMoney"), "workspace renders money offers and locked consent")
 	_check(source.contains("money_offer") and source.contains("_retry_offer_after_stale_revision"), "stale retry preserves the complete money offer")
 	quit(1 if failed else 0)

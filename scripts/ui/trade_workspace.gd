@@ -34,6 +34,8 @@ var add_items_button: Button
 var money_amount_spinbox: SpinBox
 var money_balance_label: Label
 var update_money_button: Button
+var local_money_offer_label: Label
+var opponent_money_offer_label: Label
 var local_ready_indicator: Label
 var opponent_ready_indicator: Label
 var phase_label: Label
@@ -155,6 +157,7 @@ func _build_ui() -> void:
 	money_amount_spinbox.min_value = 0
 	money_amount_spinbox.max_value = 2147483647
 	money_amount_spinbox.step = 1
+	money_amount_spinbox.update_on_text_changed = true
 	money_amount_spinbox.custom_minimum_size.x = 130
 	actions.add_child(money_amount_spinbox)
 	update_money_button = Button.new()
@@ -299,6 +302,15 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		local_ready_indicator = ready_indicator
 	else:
 		opponent_ready_indicator = ready_indicator
+	var money_offer_label := Label.new()
+	money_offer_label.visible = false
+	money_offer_label.add_theme_color_override("font_color", TRADE_GOLD)
+	money_offer_label.add_theme_font_size_override("font_size", 14)
+	header.add_child(money_offer_label)
+	if label_text == "Your Offer":
+		local_money_offer_label = money_offer_label
+	else:
+		opponent_money_offer_label = money_offer_label
 	var panel := PanelContainer.new()
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -646,6 +658,8 @@ func _render_offers() -> void:
 	_clear_offer_slots(opponent_offer_slots)
 	_clear(local_item_offer_list)
 	_clear(opponent_item_offer_list)
+	local_money_offer_label.visible = false
+	opponent_money_offer_label.visible = false
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
 		if not offer_value is Dictionary:
@@ -663,6 +677,9 @@ func _render_offers() -> void:
 				_render_item_offer(item_target, item_values[index], is_local, index)
 		var money := maxi(int(offer_value.get("money", 0)), 0)
 		if money > 0:
+			var money_label := local_money_offer_label if is_local else opponent_money_offer_label
+			money_label.text = "MONEY  $%s" % format_money(money)
+			money_label.visible = true
 			_render_money_offer(item_target, money, is_local)
 
 
