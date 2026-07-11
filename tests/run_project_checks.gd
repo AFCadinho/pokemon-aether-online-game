@@ -46,6 +46,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/overworld_pokemon_check.gd",
 	"res://tests/overworld_medicine_check.gd",
 	"res://tests/player_action_escape_rope_check.gd",
+	"res://tests/player_hotbar_check.gd",
 	"res://tests/legacy_market_cleanup_check.gd",
 	"res://tests/wild_battle_experience_reward_check.gd",
 	"res://tests/boss_battle_npc_check.gd",

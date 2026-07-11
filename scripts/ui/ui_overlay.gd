@@ -256,6 +256,7 @@ const BAG_CATEGORIES := [
 	{"id": "general", "label": "General"},
 	{"id": "pokeball", "label": "Pokeball"},
 	{"id": "medicine", "label": "Medicine"},
+	{"id": "key_items", "label": "Key Items"},
 	{"id": "machines", "label": "Machines"},
 	{"id": "held_items", "label": "Held Items"},
 	{"id": "power_stones", "label": "Mega & Z"},
@@ -412,6 +413,10 @@ var escape_rope_status: Dictionary = {}
 var escape_rope_remaining_seconds: float = 0.0
 var player_action_status_refresh_seconds: float = 0.0
 var escape_rope_in_flight := false
+var hotbar_panel: PanelContainer
+var hotbar_row: HBoxContainer
+var hotbar_buttons: Array[TextureButton] = []
+var hotbar_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
@@ -990,9 +995,13 @@ func _ready() -> void:
 	running_shoes_button.toggled.connect(_on_running_shoes_toggled)
 	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
 	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
-	escape_rope_button.pressed.connect(_on_escape_rope_pressed)
+	escape_rope_slot.visible = false
 	if not PlayerActionService.statuses_changed.is_connected(_on_player_action_statuses_changed):
 		PlayerActionService.statuses_changed.connect(_on_player_action_statuses_changed)
+	_setup_player_hotbar()
+	if not PlayerHotbarService.hotbar_changed.is_connected(_on_hotbar_changed):
+		PlayerHotbarService.hotbar_changed.connect(_on_hotbar_changed)
+	PlayerHotbarService.load_hotbar.call_deferred()
 	_refresh_player_actions.call_deferred()
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
@@ -9024,15 +9033,21 @@ func _on_bag_item_slot_gui_input(event: InputEvent, item: Dictionary) -> void:
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+	if not mouse_event.pressed:
 		return
 
 	get_viewport().set_input_as_handled()
-	_on_bag_item_selected(item)
+	if mouse_event.button_index == MOUSE_BUTTON_RIGHT:
+		_assign_bag_item_to_hotbar(item)
+	elif mouse_event.button_index == MOUSE_BUTTON_LEFT:
+		_on_bag_item_selected(item)
 
 func _on_bag_item_selected(item: Dictionary) -> void:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "":
+		return
+	if item_id == "escape-rope-action":
+		_on_escape_rope_pressed()
 		return
 	if _is_pokemon_usable_item_id(item_id):
 		_show_bag_item_use_popup(item)
@@ -9489,6 +9504,8 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 	return {}
 
 func _load_item_icon(item_id: String) -> Texture2D:
+	if item_id == "escape-rope-action":
+		item_id = "escape-rope"
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
 	var candidates: Array[String] = [
 		BAG_ICON_ROOT + normalized + ".png",
@@ -9542,7 +9559,7 @@ func _load_bag_inventory() -> void:
 func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 	var normalized_items: Array[Dictionary] = []
 	if typeof(items_value) != TYPE_ARRAY:
-		return normalized_items
+		items_value = []
 
 	var items: Array = items_value
 	for item_value: Variant in items:
@@ -9564,6 +9581,14 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"gameplay": gameplay,
 			"useNotice": use_notice,
 		})
+	normalized_items.append({
+		"id": "escape-rope-action",
+		"name": "Escape Rope",
+		"category": "key_items",
+		"quantity": 1,
+		"gameplay": {},
+		"useNotice": {"message": "Use Escape Rope from your hotbar."},
+	})
 	return normalized_items
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
@@ -9573,7 +9598,7 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 			return "held_items"
 		"poke_balls", "pokeballs":
 			return "pokeball"
-		"medicine", "machines", "power_stones", "cosmetics", "currency":
+		"medicine", "machines", "power_stones", "cosmetics", "currency", "key_items":
 			return normalized
 
 	return _guess_bag_category(item_id)
@@ -14283,6 +14308,131 @@ func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 	await _save_toggle_preferences()
 
 
+func _setup_player_hotbar() -> void:
+	hotbar_panel = PanelContainer.new()
+	hotbar_panel.name = "PlayerHotbar"
+	hotbar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	hotbar_panel.offset_left = -236.0
+	hotbar_panel.offset_top = 76.0
+	hotbar_panel.offset_right = -8.0
+	hotbar_panel.offset_bottom = 136.0
+	hotbar_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), UI_BORDER_SOFT, 8, 1))
+	root_control.add_child(hotbar_panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 6)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	hotbar_panel.add_child(margin)
+	hotbar_row = HBoxContainer.new()
+	hotbar_row.add_theme_constant_override("separation", 6)
+	margin.add_child(hotbar_row)
+	for slot_index in range(4):
+		var button := TextureButton.new()
+		button.custom_minimum_size = Vector2(48, 48)
+		button.ignore_texture_size = true
+		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.tooltip_text = "Empty hotbar slot %s" % (slot_index + 1)
+		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
+		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
+		hotbar_row.add_child(button)
+		hotbar_buttons.append(button)
+
+
+func _on_hotbar_changed(slots: Array) -> void:
+	hotbar_slots = slots.duplicate(true)
+	_refresh_hotbar_ui()
+
+
+func _refresh_hotbar_ui() -> void:
+	for slot_index in range(hotbar_buttons.size()):
+		var button := hotbar_buttons[slot_index]
+		var entry := _hotbar_entry_for_slot(slot_index)
+		button.texture_normal = null
+		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
+		button.tooltip_text = "Empty hotbar slot %s\nRight-click a usable Bag item to assign it." % (slot_index + 1)
+		if entry.is_empty():
+			continue
+		var entry_type := str(entry.get("entryType", ""))
+		var entry_id := str(entry.get("entryId", ""))
+		if entry_type == "player_action" and entry_id == "escape-rope":
+			button.texture_normal = _load_item_icon("escape-rope")
+			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
+			button.tooltip_text = "%s\nRight-click to remove from hotbar." % escape_rope_button.tooltip_text
+		elif entry_type == "item":
+			button.texture_normal = _load_item_icon(entry_id)
+			button.modulate = Color.WHITE
+			button.tooltip_text = "%s\nUse on a party Pokemon.\nRight-click to remove from hotbar." % _item_name_from_id(entry_id)
+
+
+func _hotbar_entry_for_slot(slot_index: int) -> Dictionary:
+	for value: Variant in hotbar_slots:
+		if value is Dictionary and int((value as Dictionary).get("slot", -1)) == slot_index:
+			return value as Dictionary
+	return {}
+
+
+func _on_hotbar_slot_pressed(slot_index: int) -> void:
+	var entry := _hotbar_entry_for_slot(slot_index)
+	if entry.is_empty():
+		_add_chat_message("Hotbar slot %s is empty. Right-click a usable item in your Bag to assign it." % (slot_index + 1))
+		return
+	var entry_type := str(entry.get("entryType", ""))
+	var entry_id := str(entry.get("entryId", ""))
+	if entry_type == "player_action" and entry_id == "escape-rope":
+		_on_escape_rope_pressed()
+		return
+	if entry_type == "item":
+		for item: Dictionary in bag_inventory_items:
+			if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(entry_id):
+				_show_bag_item_use_popup(item)
+				return
+		_add_chat_message("That hotbar item is no longer in your Bag.")
+		_load_bag_inventory.call_deferred()
+
+
+func _on_hotbar_slot_gui_input(event: InputEvent, slot_index: int) -> void:
+	if not (event is InputEventMouseButton):
+		return
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_RIGHT or not mouse_event.pressed:
+		return
+	get_viewport().set_input_as_handled()
+	if _hotbar_entry_for_slot(slot_index).is_empty():
+		return
+	var result: Dictionary = await PlayerHotbarService.clear_slot(slot_index)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not clear hotbar slot: %s" % str(result.get("error", "Unknown error")))
+		return
+	_add_chat_message("Hotbar slot %s cleared." % (slot_index + 1))
+
+
+func _assign_bag_item_to_hotbar(item: Dictionary) -> void:
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	var entry_type := "item"
+	var entry_id := item_id
+	if item_id == "escape-rope-action":
+		entry_type = "player_action"
+		entry_id = "escape-rope"
+	elif not _is_pokemon_usable_item_id(item_id):
+		_add_chat_message("This item cannot be assigned to the overworld hotbar.")
+		return
+	var target_slot := -1
+	for slot_index in range(4):
+		if _hotbar_entry_for_slot(slot_index).is_empty():
+			target_slot = slot_index
+			break
+	if target_slot < 0:
+		target_slot = 3
+	var result: Dictionary = await PlayerHotbarService.assign(target_slot, entry_type, entry_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
+		return
+	_add_chat_message("%s assigned to hotbar slot %s." % [str(item.get("name", _item_name_from_id(item_id))), target_slot + 1])
+
+
 func _refresh_player_actions() -> void:
 	player_action_status_refresh_seconds = 30.0
 	await PlayerActionService.load_statuses()
@@ -14297,6 +14447,7 @@ func _on_player_action_statuses_changed(actions: Array) -> void:
 	var cooldown: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("cooldown", {}))
 	escape_rope_remaining_seconds = float(max(int(cooldown.get("remainingSeconds", 0)), 0))
 	_update_escape_rope_action_ui()
+	_refresh_hotbar_ui()
 
 
 func _refresh_player_action_cooldown(delta: float) -> void:
