@@ -212,7 +212,7 @@ func restore_active_trade_and_connect() -> Dictionary:
 
 
 func _discover_active_trade_if_needed(delta: float) -> void:
-	if active_trade_id != "" or active_trade_discovery_in_flight or not _is_authenticated():
+	if not _needs_active_trade_discovery() or active_trade_discovery_in_flight or not _is_authenticated():
 		return
 	active_trade_discovery_elapsed += delta
 	if active_trade_discovery_elapsed < ACTIVE_TRADE_DISCOVERY_INTERVAL_SECONDS:
@@ -222,7 +222,7 @@ func _discover_active_trade_if_needed(delta: float) -> void:
 
 
 func discover_active_trade() -> Dictionary:
-	if active_trade_id != "" or active_trade_discovery_in_flight:
+	if not _needs_active_trade_discovery() or active_trade_discovery_in_flight:
 		return {"success": false, "error": "Trade discovery is not needed."}
 	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
 	if trade_service == null:
@@ -238,6 +238,10 @@ func discover_active_trade() -> Dictionary:
 		should_reconnect = true
 		connect_trade_socket(url)
 	return result
+
+
+func _needs_active_trade_discovery() -> bool:
+	return active_trade_id == "" or str(active_trade_snapshot.get("status", "")) == "invited"
 
 
 func _authenticated_websocket_url() -> String:

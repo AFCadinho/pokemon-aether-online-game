@@ -69,7 +69,12 @@ func _init() -> void:
 	var discovered: Dictionary = await service.discover_active_trade()
 	_check(bool(discovered.get("hasActiveTrade", false)), "incoming invitation is discovered without a trade socket")
 	_check(service.active_trade_id == "restored", "discovery applies authoritative invitation snapshot")
+	fake.active_trade = {"tradeId":"restored", "status":"active", "revision":2, "lastEventSeq":3}
+	var reconciled: Dictionary = await service.discover_active_trade()
+	_check(str(reconciled.get("trade", {}).get("status", "")) == "active", "pending invitation reconciles accepted trade through REST")
+	_check(str(service.active_trade_snapshot.get("status", "")) == "active", "accepted snapshot supersedes waiting invitation")
 	service.clear_active_trade()
+	fake.active_trade = {"tradeId":"restored", "status":"invited", "revision":1, "lastEventSeq":2}
 	await service.restore_active_trade_and_connect()
 	_check(service.active_trade_id == "restored", "active invitation restored authoritatively")
 	_check(service.last_applied_event_seq == 2, "active restore preserves durable cursor")
