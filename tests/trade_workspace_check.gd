@@ -15,6 +15,7 @@ func _init() -> void:
 	_check(candidates[0].get("location", {}).get("type", "") == "party", "party location")
 	_check(candidates[1].get("location", {}).get("boxIndex", -1) == 2, "box location")
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_workspace.gd")
+	_check(source.contains("func _ready() -> void:\n\thide()"), "workspace starts hidden without an active trade")
 	_check(source.contains("replace_offer"), "workspace uses complete replacement")
 	_check(source.contains("PlayerPartyStateService"), "workspace reuses party service")
 	_check(source.contains("PokemonStorageService"), "workspace reuses storage service")

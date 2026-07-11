@@ -28,6 +28,7 @@ var mutation_in_flight := false
 
 
 func _ready() -> void:
+	hide()
 	title = "Pokemon Trade"
 	min_size = Vector2i(760, 520)
 	_build_ui()
