@@ -763,7 +763,7 @@ var pokemon_summary_selected_slot := -1
 var pokemon_summary_dragging := false
 var pokemon_summary_drag_offset := Vector2.ZERO
 var pokemon_summary_open_cards: Dictionary = {}
-var trade_summary_card_keys: Dictionary = {}
+var trade_summary_windows: Dictionary = {}
 var pokemon_summary_active_card_key := ""
 var pokemon_summary_dragging_card_key := ""
 var pokemon_summary_next_card_offset_index := 0
@@ -9848,16 +9848,12 @@ func _hide_pokemon_summary_popup(card_key: String = "") -> void:
 		pokemon_summary_popup.queue_free()
 	if card_key == "":
 		card_key = pokemon_summary_active_card_key
-	var was_trade_summary := trade_summary_card_keys.has(card_key)
 	if card_key != "":
 		pokemon_summary_open_cards.erase(card_key)
-		trade_summary_card_keys.erase(card_key)
 		if pokemon_summary_active_card_key == card_key:
 			pokemon_summary_active_card_key = ""
 		if pokemon_summary_dragging_card_key == card_key:
 			pokemon_summary_dragging_card_key = ""
-	if was_trade_summary and trade_summary_card_keys.is_empty():
-		_restore_trade_workspace_after_summary()
 	_hide_pokemon_summary_ev_allocate_popup()
 	pokemon_summary_preview_pokemon = null
 	pokemon_summary_mode = "interactive"
@@ -19541,16 +19537,49 @@ func open_trade_pokemon_summary(pokemon_payload: Dictionary) -> void:
 		_add_chat_message("Could not open Pokemon summary: %s" % PokemonFactory.last_error_message)
 		return
 	var card_key: String = _get_pokemon_summary_card_key(pokemon, -1, "readonly")
-	trade_summary_card_keys[card_key] = true
-	var workspace := get_node_or_null("/root/TradeWorkspace")
-	if workspace != null and workspace.has_method("hide_for_pokemon_summary"):
-		workspace.call("hide_for_pokemon_summary")
 	_open_readonly_pokemon_summary(pokemon_payload)
+	_promote_trade_summary_to_window(card_key)
 
-func _restore_trade_workspace_after_summary() -> void:
-	var workspace := get_node_or_null("/root/TradeWorkspace")
-	if workspace != null and workspace.has_method("restore_after_pokemon_summary"):
-		workspace.call_deferred("restore_after_pokemon_summary")
+func _promote_trade_summary_to_window(card_key: String) -> void:
+	var existing := trade_summary_windows.get(card_key) as Window
+	if existing != null and is_instance_valid(existing):
+		existing.show()
+		existing.grab_focus()
+		return
+	var context: Dictionary = pokemon_summary_open_cards.get(card_key, {})
+	var popup := context.get("popup") as PanelContainer
+	if popup == null:
+		return
+	var host := Window.new()
+	host.name = "TradePokemonSummary"
+	host.title = "Pokemon Summary"
+	host.borderless = true
+	host.unresizable = true
+	host.always_on_top = true
+	host.transient = true
+	host.size = Vector2i(ceili(popup.size.x), ceili(popup.size.y))
+	host.min_size = host.size
+	host.max_size = host.size
+	get_tree().root.add_child(host)
+	popup.reparent(host)
+	popup.anchor_left = 0.0
+	popup.anchor_top = 0.0
+	popup.anchor_right = 0.0
+	popup.anchor_bottom = 0.0
+	popup.position = Vector2.ZERO
+	popup.size = Vector2(host.size)
+	var root_size := get_tree().root.size
+	var offset := Vector2i(trade_summary_windows.size() * 24, trade_summary_windows.size() * 24)
+	host.position = (root_size - host.size) / 2 + offset
+	trade_summary_windows[card_key] = host
+	popup.tree_exited.connect(_on_trade_summary_popup_exited.bind(card_key, host), CONNECT_ONE_SHOT)
+	host.popup()
+	host.grab_focus()
+
+func _on_trade_summary_popup_exited(card_key: String, host: Window) -> void:
+	trade_summary_windows.erase(card_key)
+	if is_instance_valid(host):
+		host.queue_free()
 
 func _make_mail_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(Color("#07101bf4"), Color("#e6c777"), 12, 1)
