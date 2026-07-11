@@ -7,6 +7,7 @@ var gaps := 0
 var offer_updates := 0
 class FakeTradeService extends Node:
 	var failures := 0
+	var exit_action := ""
 	var active_trade: Dictionary = {"tradeId":"restored", "status":"invited", "revision":1, "lastEventSeq":2}
 	var has_active_trade := true
 	var known_trade: Dictionary = {"tradeId":"t", "status":"active", "revision":6, "lastEventSeq":5}
@@ -21,6 +22,9 @@ class FakeTradeService extends Node:
 		return {"success": true, "trade": known_trade}
 	func load_trade_events(_id: String, _after: int, _limit: int) -> Dictionary:
 		return {"success": true, "events": {"events": []}}
+	func leave_trade(trade_id: String, _revision: int) -> Dictionary:
+		exit_action = "leave"
+		return {"success":true, "trade":{"tradeId":trade_id, "status":"cancelled", "revision":2, "lastEventSeq":2}}
 func _init() -> void:
 	service = Service.new()
 	service.event_received.connect(func(event): applied.append(event.get("eventSeq")))
@@ -97,6 +101,11 @@ func _init() -> void:
 	_check(service.active_trade_id == "restored", "active invitation restored authoritatively")
 	_check(service.last_applied_event_seq == 2, "active restore preserves durable cursor")
 	_check(fake.discovery_calls >= 2, "active trade discovery uses the authoritative endpoint")
+	service.clear_active_trade()
+	service.apply_snapshot({"tradeId":"exit-trade", "status":"active", "revision":1, "lastEventSeq":1})
+	var exit_result: Dictionary = await service.leave_active_trade_for_exit()
+	_check(bool(exit_result.get("success", false)) and fake.exit_action == "leave", "application exit leaves an active trade authoritatively")
+	_check(service.active_trade_id == "", "application exit applies terminal trade cleanup")
 	fake.free()
 	quit(1 if failed else 0)
 func _check(value: bool, label: String) -> void:

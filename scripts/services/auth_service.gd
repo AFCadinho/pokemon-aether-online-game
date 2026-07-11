@@ -147,6 +147,9 @@ func logout() -> Dictionary:
 	if session_token == "":
 		clear_session()
 		return {"success": true}
+	var trade_realtime_service: Object = get_node_or_null("/root/TradeRealtimeService")
+	if trade_realtime_service != null and trade_realtime_service.has_method("leave_active_trade_for_exit"):
+		await trade_realtime_service.call("leave_active_trade_for_exit")
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(

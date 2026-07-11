@@ -14,6 +14,12 @@ func _init() -> void:
 	_check(source.contains("reconnectDeadlineAt"), "workspace uses server reconnect deadline")
 	_check(source.contains("reconnect_timeout"), "workspace explains timeout cancellation")
 	_check(source.contains("Confirm Trade"), "confirmation remains confined to locked workspace")
+	var realtime_source := FileAccess.get_file_as_string("res://scripts/services/trade_realtime_service.gd")
+	_check(realtime_source.contains("func leave_active_trade_for_exit()"), "trade service owns logout and shutdown cleanup")
+	_check(realtime_source.contains("NOTIFICATION_WM_CLOSE_REQUEST"), "application close waits for trade cleanup")
+	_check(realtime_source.contains("auto_accept_quit = false"), "automatic quit cannot bypass trade cleanup")
+	var auth_source := FileAccess.get_file_as_string("res://scripts/services/auth_service.gd")
+	_check(auth_source.find("leave_active_trade_for_exit") < auth_source.find("/auth/logout"), "trade cleanup runs before token logout")
 	var service := Realtime.new()
 	var locked := {"tradeId":"t","status":"locked","revision":4,"lastEventSeq":4,"participants":[{"userId":1,"connectionState":"connected"},{"userId":2,"connectionState":"disconnected","reconnectDeadlineAt":"2026-07-11T12:00:30Z"}],"lockedReview":{"snapshotHash":"stable"}}
 	service.apply_snapshot(locked)

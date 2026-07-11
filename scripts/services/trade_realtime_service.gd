@@ -33,12 +33,20 @@ var active_trade_snapshot: Dictionary = {}
 var completion_refresh_attempts := 0
 var active_trade_discovery_elapsed := 0.0
 var active_trade_discovery_in_flight := false
+var application_shutdown_in_progress := false
 
 
 func _ready() -> void:
 	# Invitation discovery and reconnect recovery must continue while modal game
 	# UI temporarily pauses regular scene processing.
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().auto_accept_quit = false
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST and not application_shutdown_in_progress:
+		application_shutdown_in_progress = true
+		_shutdown_after_trade_cleanup.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -185,6 +193,35 @@ func apply_recovery(snapshot: Dictionary, events: Array) -> void:
 
 func clear_active_trade() -> void:
 	stop_transport(false)
+
+
+func leave_active_trade_for_exit() -> Dictionary:
+	var status := str(active_trade_snapshot.get("status", ""))
+	var trade_id := str(active_trade_snapshot.get("tradeId", active_trade_id)).strip_edges()
+	if trade_id == "" or status not in ["invited", "active", "locked"]:
+		return {"success": true, "skipped": true}
+	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
+	if trade_service == null:
+		return {"success": false, "error": "Trade service unavailable."}
+	var revision := int(active_trade_snapshot.get("revision", latest_revision))
+	var result: Dictionary
+	if status == "invited":
+		if _is_recipient(active_trade_snapshot):
+			result = await trade_service.call("decline_invitation", trade_id, revision)
+		else:
+			result = await trade_service.call("cancel_invitation", trade_id, revision)
+	else:
+		result = await trade_service.call("leave_trade", trade_id, revision)
+	if bool(result.get("success", false)):
+		apply_snapshot(_dictionary(result.get("trade", {})))
+	return result
+
+
+func _shutdown_after_trade_cleanup() -> void:
+	await leave_active_trade_for_exit()
+	var tree := get_tree()
+	if tree != null:
+		tree.quit()
 
 
 func stop_transport(preserve_snapshot := false) -> void:
