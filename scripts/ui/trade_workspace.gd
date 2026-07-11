@@ -22,8 +22,6 @@ var review_trust_label: Label
 var review_edit_button: Button
 var confirm_button: Button
 var confirmation_label: Label
-var leave_button: Button
-var close_button: Button
 var mutation_in_flight := false
 var offer_draft_dirty := false
 
@@ -33,7 +31,7 @@ func _ready() -> void:
 	title = "Pokemon Trade"
 	min_size = Vector2i(760, 520)
 	_build_ui()
-	close_requested.connect(hide)
+	close_requested.connect(_on_close_requested)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
 		realtime.active_trade_changed.connect(_on_trade_changed)
@@ -98,18 +96,6 @@ func _build_ui() -> void:
 	confirm_button.text = "Confirm Trade"
 	confirm_button.pressed.connect(_confirm_trade)
 	review_root.add_child(confirm_button)
-	var footer := HBoxContainer.new()
-	root.add_child(footer)
-	leave_button = Button.new()
-	leave_button.text = "Leave Trade"
-	leave_button.pressed.connect(_leave_trade)
-	footer.add_child(leave_button)
-	close_button = Button.new()
-	close_button.text = "Close"
-	close_button.pressed.connect(hide)
-	footer.add_child(close_button)
-
-
 func _process(_delta: float) -> void:
 	if visible and str(trade.get("status", "")) in ["active", "locked"]:
 		_render_connection_status()
@@ -140,15 +126,16 @@ func _on_trade_changed(value: Dictionary) -> void:
 		trade = value.duplicate(true)
 		editable_root.visible = false
 		review_root.visible = false
-		leave_button.visible = false
-		status_label.text = "Trade cancelled because reconnect time expired." if str(trade.get("cancellationReason", "")) == "reconnect_timeout" else "Trade cancelled."
-		popup_centered()
+		if str(trade.get("cancellationReason", "")) == "reconnect_timeout":
+			status_label.text = "Trade cancelled because reconnect time expired."
+			popup_centered()
+		else:
+			hide()
 		return
 	if status == "completed":
 		trade = value.duplicate(true)
 		editable_root.visible = false
 		review_root.visible = false
-		leave_button.visible = false
 		status_label.text = "Trade completed. Your party and PC storage were refreshed."
 		popup_centered()
 		refresh_after_completion.call_deferred()
@@ -338,8 +325,6 @@ func _render_mode() -> void:
 	edit_button.disabled = mutation_in_flight or blocked
 	_refresh_submit_button()
 	submit_button.disabled = submit_button.disabled or any_ready or blocked
-	leave_button.visible = true
-	leave_button.disabled = mutation_in_flight
 	if any_ready:
 		status_label.text = "Offer editing is paused until readiness is cleared."
 	elif not _both_offers_nonempty():
@@ -365,8 +350,6 @@ func _render_locked_review() -> void:
 	confirm_button.visible = not local_confirmed
 	confirm_button.disabled = mutation_in_flight or _connection_state_unresolved()
 	confirmation_label.text = "Confirmed. Waiting for the other player." if local_confirmed else "Review the exact exchange before confirming."
-	leave_button.visible = true
-	leave_button.disabled = mutation_in_flight
 	if _connection_state_unresolved():
 		review_edit_button.disabled = true
 
@@ -409,7 +392,6 @@ func _leave_trade() -> void:
 	if mutation_in_flight:
 		return
 	mutation_in_flight = true
-	leave_button.disabled = true
 	var service := get_node_or_null("/root/TradeService")
 	var result: Dictionary
 	if service == null:
@@ -419,7 +401,6 @@ func _leave_trade() -> void:
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
 		_show_error(_friendly_error(result))
-		leave_button.disabled = false
 		return
 	var snapshot: Dictionary = result.get("trade", {}).duplicate(true)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
@@ -427,6 +408,13 @@ func _leave_trade() -> void:
 		realtime.apply_snapshot(snapshot)
 	else:
 		_on_trade_changed(snapshot)
+
+
+func _on_close_requested() -> void:
+	if str(trade.get("status", "")) in ["active", "locked"]:
+		_leave_trade()
+		return
+	hide()
 
 
 func _render_connection_status() -> void:
