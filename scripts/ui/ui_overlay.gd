@@ -13242,6 +13242,10 @@ func _finish_party_drag(global_position: Vector2) -> void:
 		party_drag_start_index = -1
 		_clear_party_drag_visual()
 		return
+	if _try_offer_party_drag_to_trade(global_position):
+		party_drag_start_index = -1
+		_clear_party_drag_visual()
+		return
 
 	var target_index := _get_party_slot_index_at_position(global_position)
 	if target_index == party_drag_start_index and party_drag_start_mouse_position.distance_to(global_position) <= 8.0:
@@ -13270,6 +13274,10 @@ func _finish_party_drag(global_position: Vector2) -> void:
 		PlayerSave.party_changed.emit()
 		_add_chat_message("Could not save party order. Please report this to staff.")
 		push_warning("UIOverlay: party swap failed: %s" % str(result.get("error", "Unknown error")))
+
+func _try_offer_party_drag_to_trade(global_position: Vector2) -> bool:
+	var workspace := get_node_or_null("/root/TradeWorkspace")
+	return workspace != null and workspace.has_method("try_offer_party_drop") and bool(workspace.call("try_offer_party_drop", global_position, party_drag_start_index))
 
 func _clear_party_drag_visual() -> void:
 	if party_drag_source_slot != null:
@@ -19504,6 +19512,9 @@ func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
 	_refresh_pokemon_summary()
 	pokemon_summary_popup.visible = true
 	_activate_ui_panel(pokemon_summary_popup)
+
+func open_trade_pokemon_summary(pokemon_payload: Dictionary) -> void:
+	_open_readonly_pokemon_summary(pokemon_payload)
 
 func _make_mail_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(Color("#07101bf4"), Color("#e6c777"), 12, 1)

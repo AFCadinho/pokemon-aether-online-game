@@ -7,11 +7,11 @@ const MAX_OFFER_SIZE := 5
 var trade: Dictionary = {}
 var candidates: Array[Dictionary] = []
 var selected_ids: Array[int] = []
-var candidate_list: VBoxContainer
-var local_offer_list: VBoxContainer
-var opponent_offer_list: VBoxContainer
+var local_offer_box: PanelContainer
+var opponent_offer_box: PanelContainer
+var local_offer_slots: Array[Control] = []
+var opponent_offer_slots: Array[Control] = []
 var status_label: Label
-var submit_button: Button
 var ready_button: Button
 var edit_button: Button
 var editable_root: VBoxContainer
@@ -23,7 +23,6 @@ var review_edit_button: Button
 var confirm_button: Button
 var confirmation_label: Label
 var mutation_in_flight := false
-var offer_draft_dirty := false
 
 
 func _ready() -> void:
@@ -57,15 +56,10 @@ func _build_ui() -> void:
 	var columns := HBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	editable_root.add_child(columns)
-	candidate_list = _section(columns, "Your Pokemon")
-	local_offer_list = _section(columns, "Your Offer")
-	opponent_offer_list = _section(columns, "Other Player's Offer")
+	local_offer_box = _offer_section(columns, "Your Offer", local_offer_slots)
+	opponent_offer_box = _offer_section(columns, "Other Player's Offer", opponent_offer_slots)
 	var actions := HBoxContainer.new()
 	editable_root.add_child(actions)
-	submit_button = Button.new()
-	submit_button.text = "Replace Offer"
-	submit_button.pressed.connect(_submit_offer)
-	actions.add_child(submit_button)
 	ready_button = Button.new()
 	ready_button.text = "Ready"
 	ready_button.pressed.connect(_set_ready.bind(true))
@@ -119,9 +113,58 @@ func _section(parent: Control, label_text: String) -> VBoxContainer:
 	return list
 
 
+func _offer_section(parent: Control, label_text: String, slots: Array[Control]) -> PanelContainer:
+	var section := VBoxContainer.new()
+	section.custom_minimum_size = Vector2(340, 250)
+	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	parent.add_child(section)
+	var label := Label.new()
+	label.text = label_text
+	label.add_theme_font_size_override("font_size", 18)
+	section.add_child(label)
+	var panel := PanelContainer.new()
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color("#111925f2")
+	panel_style.border_color = Color("#526b87")
+	panel_style.set_border_width_all(1)
+	panel_style.set_corner_radius_all(6)
+	panel.add_theme_stylebox_override("panel", panel_style)
+	section.add_child(panel)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+	var grid := GridContainer.new()
+	grid.columns = MAX_OFFER_SIZE
+	grid.add_theme_constant_override("h_separation", 8)
+	margin.add_child(grid)
+	for index in range(MAX_OFFER_SIZE):
+		var slot := _create_offer_slot()
+		slots.append(slot)
+		grid.add_child(slot)
+	return panel
+
+
+func _create_offer_slot() -> Control:
+	var slot := PanelContainer.new()
+	slot.custom_minimum_size = Vector2(58, 76)
+	slot.mouse_filter = Control.MOUSE_FILTER_PASS
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#09111c")
+	style.border_color = Color("#36506d")
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	slot.add_theme_stylebox_override("panel", style)
+	return slot
+
+
 func _on_trade_changed(value: Dictionary) -> void:
 	var status := str(value.get("status", ""))
-	var previous_trade_id := str(trade.get("tradeId", ""))
 	var refresh_candidates := status == "active" and _trade_snapshot_changed(value)
 	if status == "cancelled":
 		trade = value.duplicate(true)
@@ -146,8 +189,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 			hide()
 		return
 	trade = value.duplicate(true)
-	if _should_sync_selected_from_offer(previous_trade_id, status):
-		_sync_selected_from_offer()
+	_sync_selected_from_offer()
 	_render_offers()
 	_render_mode()
 	popup_centered()
@@ -165,7 +207,6 @@ func refresh_available_pokemon() -> void:
 		_show_error("Could not refresh your party.")
 		return
 	candidates = collect_candidates(party_result.get("party", []))
-	_render_candidates()
 
 
 func _trade_snapshot_changed(value: Dictionary) -> bool:
@@ -195,49 +236,22 @@ static func _add_candidate(result: Array[Dictionary], seen: Dictionary, value: V
 	result.append({"pokemonId":pokemon_id, "pokemon":payload.duplicate(true), "location":location.duplicate(true)})
 
 
-func _render_candidates() -> void:
-	_clear(candidate_list)
-	for candidate: Dictionary in candidates:
-		var pokemon_id := int(candidate.get("pokemonId", 0))
-		var check := CheckButton.new()
-		check.text = _pokemon_label(candidate.get("pokemon", {}))
-		check.button_pressed = pokemon_id in selected_ids
-		check.disabled = _any_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved() or (pokemon_id not in selected_ids and selected_ids.size() >= _offer_limit())
-		check.toggled.connect(_toggle_candidate.bind(pokemon_id))
-		candidate_list.add_child(check)
-
-
-func _toggle_candidate(enabled: bool, pokemon_id: int) -> void:
-	if enabled:
-		if pokemon_id not in selected_ids and selected_ids.size() < _offer_limit():
-			selected_ids.append(pokemon_id)
-	else:
-		selected_ids.erase(pokemon_id)
-	offer_draft_dirty = true
-	_render_candidates()
-	_refresh_submit_button()
-	if not selected_ids.is_empty():
-		status_label.text = "%d Pokemon selected. Press Send Offer to share it with the other player." % selected_ids.size()
-
-
-func _submit_offer() -> void:
-	if mutation_in_flight or selected_ids.is_empty() or _any_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
+func _replace_offer(pokemon_ids: Array[int]) -> void:
+	if mutation_in_flight or pokemon_ids.is_empty() or _any_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
 		return
 	mutation_in_flight = true
-	submit_button.disabled = true
+	_render_offers()
 	var service := get_node_or_null("/root/TradeService")
 	var result: Dictionary
 	if service == null:
 		result = {"success":false, "error":"Trade service unavailable."}
 	else:
-		result = await service.replace_offer(str(trade.get("tradeId", "")), int(trade.get("revision", 0)), selected_ids)
+		result = await service.replace_offer(str(trade.get("tradeId", "")), int(trade.get("revision", 0)), pokemon_ids)
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
 		_show_error(_friendly_error(result))
-		_refresh_submit_button()
+		_render_offers()
 		return
-	offer_draft_dirty = false
-	_refresh_submit_button()
 	trade = result.get("trade", {}).duplicate(true)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
@@ -267,7 +281,6 @@ func _set_ready(ready: bool) -> void:
 
 
 func _sync_selected_from_offer() -> void:
-	offer_draft_dirty = false
 	selected_ids.clear()
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
@@ -275,32 +288,134 @@ func _sync_selected_from_offer() -> void:
 			for pokemon_value: Variant in offer_value.get("pokemon", []):
 				if pokemon_value is Dictionary:
 					selected_ids.append(int(pokemon_value.get("pokemonId", 0)))
-	_refresh_submit_button()
-
-
-func _refresh_submit_button() -> void:
-	if submit_button == null:
-		return
-	submit_button.text = "Send Offer (%d)" % selected_ids.size() if not selected_ids.is_empty() else "Replace Offer"
-	submit_button.disabled = mutation_in_flight or selected_ids.is_empty() or selected_ids.size() > _offer_limit()
-
-
-func _should_sync_selected_from_offer(previous_trade_id: String, next_status: String) -> bool:
-	return not offer_draft_dirty or previous_trade_id != str(trade.get("tradeId", "")) or next_status == "locked"
 
 
 func _render_offers() -> void:
-	_clear(local_offer_list)
-	_clear(opponent_offer_list)
+	_clear_offer_slots(local_offer_slots)
+	_clear_offer_slots(opponent_offer_slots)
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
 		if not offer_value is Dictionary:
 			continue
-		var target := local_offer_list if int(offer_value.get("userId", 0)) == user_id else opponent_offer_list
-		for pokemon_value: Variant in offer_value.get("pokemon", []):
-			var label := Label.new()
-			label.text = _pokemon_label(pokemon_value if pokemon_value is Dictionary else {})
-			target.add_child(label)
+		var is_local := int(offer_value.get("userId", 0)) == user_id
+		var target := local_offer_slots if is_local else opponent_offer_slots
+		var pokemon_values: Array = offer_value.get("pokemon", []) if offer_value.get("pokemon", []) is Array else []
+		for index in range(mini(pokemon_values.size(), MAX_OFFER_SIZE)):
+			if pokemon_values[index] is Dictionary:
+				_render_offer_slot(target[index], pokemon_values[index], is_local, index)
+
+
+func _clear_offer_slots(slots: Array[Control]) -> void:
+	for slot in slots:
+		_clear(slot)
+
+
+func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, position: int) -> void:
+	var content := VBoxContainer.new()
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.mouse_filter = Control.MOUSE_FILTER_PASS
+	var icon_button := Button.new()
+	icon_button.custom_minimum_size = Vector2(52, 48)
+	icon_button.icon = PokemonAssets.load_party_icon(_pokemon_species(pokemon), bool(pokemon.get("shiny", false)))
+	icon_button.expand_icon = true
+	icon_button.tooltip_text = "%s\nOpen Pokemon summary" % _pokemon_label(pokemon)
+	icon_button.pressed.connect(_open_offer_summary.bind(pokemon, is_local))
+	content.add_child(icon_button)
+	var name_label := Label.new()
+	name_label.text = _pokemon_label(pokemon)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.custom_minimum_size.x = 52
+	content.add_child(name_label)
+	if is_local and selected_ids.size() > 1 and not _any_participant_ready() and not mutation_in_flight:
+		var remove_button := Button.new()
+		remove_button.text = "X"
+		remove_button.tooltip_text = "Remove from offer"
+		remove_button.focus_mode = Control.FOCUS_NONE
+		remove_button.pressed.connect(_remove_offer_position.bind(position))
+		content.add_child(remove_button)
+	slot.add_child(content)
+
+
+func _open_offer_summary(pokemon: Dictionary, is_local: bool) -> void:
+	var payload := pokemon.duplicate(true)
+	if is_local:
+		var candidate := _candidate_by_id(int(pokemon.get("pokemonId", 0)))
+		if not candidate.is_empty():
+			payload = candidate.get("pokemon", {}).duplicate(true)
+	payload = normalize_summary_payload(payload)
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("open_trade_pokemon_summary"):
+		overlay.call("open_trade_pokemon_summary", payload)
+
+
+func _remove_offer_position(position: int) -> void:
+	if selected_ids.size() <= 1 or position < 0 or position >= selected_ids.size():
+		return
+	var replacement := selected_ids.duplicate()
+	replacement.remove_at(position)
+	_replace_offer(replacement)
+
+
+func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
+	if not visible or local_offer_box == null or not local_offer_box.get_global_rect().has_point(global_position):
+		return false
+	if party_slot < 0 or party_slot >= 6 or mutation_in_flight or _any_participant_ready() or _connection_state_unresolved() or str(trade.get("status", "")) != "active":
+		return true
+	var candidate := _candidate_by_party_slot(party_slot)
+	if candidate.is_empty():
+		_show_error("That party Pokemon is unavailable. Refresh your party.")
+		return true
+	var pokemon_id := int(candidate.get("pokemonId", 0))
+	var target_position := _offer_slot_at_position(global_position)
+	var replacement := build_drop_replacement(selected_ids, pokemon_id, target_position, _offer_limit())
+	if replacement == selected_ids:
+		if pokemon_id not in selected_ids and selected_ids.size() >= _offer_limit():
+			_show_error("The other player does not have enough free party slots.")
+		return true
+	_replace_offer(replacement)
+	return true
+
+
+static func build_drop_replacement(current_ids: Array[int], pokemon_id: int, target_position: int, limit: int) -> Array[int]:
+	var result := current_ids.duplicate()
+	if pokemon_id <= 0 or pokemon_id in result:
+		return result
+	if target_position >= 0 and target_position < result.size():
+		result[target_position] = pokemon_id
+	elif result.size() < clampi(limit, 0, MAX_OFFER_SIZE):
+		result.append(pokemon_id)
+	return result
+
+
+func _offer_slot_at_position(global_position: Vector2) -> int:
+	for index in range(local_offer_slots.size()):
+		if local_offer_slots[index].get_global_rect().has_point(global_position):
+			return index
+	return -1
+
+
+func _candidate_by_party_slot(party_slot: int) -> Dictionary:
+	for candidate in candidates:
+		if int(candidate.get("location", {}).get("partySlot", -1)) == party_slot:
+			return candidate
+	return {}
+
+
+func _candidate_by_id(pokemon_id: int) -> Dictionary:
+	for candidate in candidates:
+		if int(candidate.get("pokemonId", 0)) == pokemon_id:
+			return candidate
+	return {}
+
+
+static func normalize_summary_payload(value: Dictionary) -> Dictionary:
+	var payload := value.duplicate(true)
+	if str(payload.get("species", "")).strip_edges() == "":
+		payload["species"] = str(payload.get("speciesId", payload.get("speciesName", "")))
+	if not payload.has("ownedPokemonId") and payload.has("pokemonId"):
+		payload["ownedPokemonId"] = int(payload.get("pokemonId", 0))
+	return payload
 
 
 func _render_mode() -> void:
@@ -317,8 +432,6 @@ func _render_mode() -> void:
 	ready_button.disabled = mutation_in_flight or not _both_offers_nonempty() or blocked
 	edit_button.visible = any_ready
 	edit_button.disabled = mutation_in_flight or blocked
-	_refresh_submit_button()
-	submit_button.disabled = submit_button.disabled or any_ready or blocked
 	if any_ready:
 		status_label.text = "Offer editing is paused until readiness is cleared."
 	elif _opponent_receive_capacity() <= 0:
@@ -327,7 +440,6 @@ func _render_mode() -> void:
 		status_label.text = "Both players must send at least one Pokemon before Ready is available."
 	else:
 		status_label.text = ""
-	_render_candidates()
 
 
 func _render_locked_review() -> void:
@@ -513,6 +625,10 @@ func _pokemon_label(value: Variant) -> String:
 	if name == "" or name == "<null>":
 		name = species_id if species_id != "" else "Pokemon"
 	return "%s  Lv. %d" % [name, maxi(int(pokemon.get("level", 1)), 1)]
+
+
+func _pokemon_species(value: Dictionary) -> String:
+	return str(value.get("speciesId", value.get("species", value.get("speciesName", ""))))
 
 
 func _current_user_id() -> int:
