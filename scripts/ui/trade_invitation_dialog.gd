@@ -17,6 +17,7 @@ var mode_label: Label
 var accept_button: Button
 var decline_button: Button
 var action_in_flight := false
+var notified_incoming_trade_ids: Dictionary = {}
 
 
 func setup() -> void:
@@ -151,7 +152,9 @@ func show_trade(value: Dictionary) -> void:
 	decline_button.text = "Decline" if incoming else "Cancel Invitation"
 	mode_label.text = "INCOMING REQUEST" if incoming else "REQUEST SENT"
 	_style_button(decline_button, "danger" if incoming else "secondary")
-	status_label.text = _status_text(incoming)
+	status_label.text = _invitation_status_text(incoming)
+	if incoming:
+		_notify_incoming_invitation_once()
 	size = DIALOG_SIZE
 	popup_centered(DIALOG_SIZE)
 	if accept_button.visible:
@@ -243,6 +246,37 @@ func _status_text(incoming: bool) -> String:
 		"cancelled": return "The trade invitation was cancelled."
 		"expired": return "The trade invitation expired."
 		_: return "Trade invitation state unavailable."
+
+
+func _invitation_status_text(incoming: bool) -> String:
+	if incoming and str(trade.get("status", "")) == "invited":
+		return "%s invited you to trade." % _initiator_display_name()
+	return _status_text(incoming)
+
+
+func _initiator_display_name() -> String:
+	for participant_value: Variant in trade.get("participants", []):
+		if not participant_value is Dictionary or str(participant_value.get("role", "")) != "initiator":
+			continue
+		var username := str(participant_value.get("username", "")).strip_edges()
+		var display_name := str(participant_value.get("displayName", "")).strip_edges()
+		if display_name != "" and username != "" and display_name.to_lower() != username.to_lower():
+			return "%s (@%s)" % [display_name, username]
+		if display_name != "":
+			return display_name
+		if username != "":
+			return "@%s" % username
+	return "A player"
+
+
+func _notify_incoming_invitation_once() -> void:
+	var trade_id := str(trade.get("tradeId", "")).strip_edges()
+	if trade_id == "" or notified_incoming_trade_ids.has(trade_id):
+		return
+	notified_incoming_trade_ids[trade_id] = true
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("add_system_message"):
+		overlay.call("add_system_message", "Trade request received from %s." % _initiator_display_name())
 
 
 func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
