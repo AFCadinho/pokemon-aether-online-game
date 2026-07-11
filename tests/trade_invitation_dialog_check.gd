@@ -37,6 +37,8 @@ func _init() -> void:
 	_check(source.contains("accept_invitation"), "accept command wiring")
 	_check(source.contains("decline_invitation"), "decline command wiring")
 	_check(source.contains("cancel_invitation"), "cancel command wiring")
+	_check(source.contains("get_cancel_button().pressed.connect"), "explicit cancel button owns invitation cancellation")
+	_check(not source.contains("canceled.connect"), "window close does not cancel invitation")
 	_check(source.contains("hide()"), "active trade closes invitation surface")
 	_check(not source.contains("Pokemon"), "no Pokemon offer UI")
 	dialog.queue_free()

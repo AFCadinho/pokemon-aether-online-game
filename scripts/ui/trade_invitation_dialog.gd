@@ -16,7 +16,8 @@ func setup() -> void:
 	add_child(status_label)
 	get_ok_button().text = "Accept"
 	confirmed.connect(_accept)
-	canceled.connect(_decline_or_close)
+	get_cancel_button().pressed.connect(_decline_or_close)
+	close_requested.connect(hide)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
 		realtime.invitation_received.connect(show_trade)
