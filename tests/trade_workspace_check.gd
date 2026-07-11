@@ -16,6 +16,10 @@ func _init() -> void:
 	_check(candidates[1].get("location", {}).get("boxIndex", -1) == 2, "box location")
 	var workspace := Workspace.new()
 	_check(workspace._pokemon_label({"nickname":null, "speciesName":null, "speciesId":"rattata", "level":4}) == "rattata  Lv. 4", "null nickname falls back to species id")
+	workspace.trade = {"tradeId":"trade-1"}
+	workspace.offer_draft_dirty = true
+	_check(not workspace._should_sync_selected_from_offer("trade-1", "active"), "active polling preserves an unsaved offer draft")
+	_check(workspace._should_sync_selected_from_offer("trade-2", "active"), "new trade synchronizes offer selection")
 	workspace.free()
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_workspace.gd")
 	_check(source.contains("func _ready() -> void:\n\thide()"), "workspace starts hidden without an active trade")

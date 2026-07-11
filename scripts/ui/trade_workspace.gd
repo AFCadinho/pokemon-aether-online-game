@@ -25,6 +25,7 @@ var confirmation_label: Label
 var leave_button: Button
 var close_button: Button
 var mutation_in_flight := false
+var offer_draft_dirty := false
 
 
 func _ready() -> void:
@@ -134,6 +135,7 @@ func _section(parent: Control, label_text: String) -> VBoxContainer:
 
 func _on_trade_changed(value: Dictionary) -> void:
 	var status := str(value.get("status", ""))
+	var previous_trade_id := str(trade.get("tradeId", ""))
 	if status == "cancelled":
 		trade = value.duplicate(true)
 		editable_root.visible = false
@@ -156,7 +158,8 @@ func _on_trade_changed(value: Dictionary) -> void:
 			hide()
 		return
 	trade = value.duplicate(true)
-	_sync_selected_from_offer()
+	if _should_sync_selected_from_offer(previous_trade_id, status):
+		_sync_selected_from_offer()
 	_render_offers()
 	_render_mode()
 	popup_centered()
@@ -229,6 +232,7 @@ func _toggle_candidate(enabled: bool, pokemon_id: int) -> void:
 			selected_ids.append(pokemon_id)
 	else:
 		selected_ids.erase(pokemon_id)
+	offer_draft_dirty = true
 	_render_candidates()
 	submit_button.disabled = selected_ids.is_empty() or mutation_in_flight
 
@@ -249,6 +253,7 @@ func _submit_offer() -> void:
 		_show_error(_friendly_error(result))
 		submit_button.disabled = selected_ids.is_empty()
 		return
+	offer_draft_dirty = false
 	trade = result.get("trade", {}).duplicate(true)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
@@ -278,6 +283,7 @@ func _set_ready(ready: bool) -> void:
 
 
 func _sync_selected_from_offer() -> void:
+	offer_draft_dirty = false
 	selected_ids.clear()
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
@@ -285,6 +291,10 @@ func _sync_selected_from_offer() -> void:
 			for pokemon_value: Variant in offer_value.get("pokemon", []):
 				if pokemon_value is Dictionary:
 					selected_ids.append(int(pokemon_value.get("pokemonId", 0)))
+
+
+func _should_sync_selected_from_offer(previous_trade_id: String, next_status: String) -> bool:
+	return not offer_draft_dirty or previous_trade_id != str(trade.get("tradeId", "")) or next_status == "locked"
 
 
 func _render_offers() -> void:
