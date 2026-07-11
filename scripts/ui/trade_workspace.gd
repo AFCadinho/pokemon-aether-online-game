@@ -18,6 +18,8 @@ var candidates: Array[Dictionary] = []
 var selected_ids: Array[int] = []
 var selected_item_offers: Array[Dictionary] = []
 var selected_money := 0
+var money_draft_dirty := false
+var money_input_syncing := false
 var inventory_items: Array[Dictionary] = []
 var local_offer_box: PanelContainer
 var opponent_offer_box: PanelContainer
@@ -158,6 +160,7 @@ func _build_ui() -> void:
 	money_amount_spinbox.max_value = 2147483647
 	money_amount_spinbox.step = 1
 	money_amount_spinbox.update_on_text_changed = true
+	money_amount_spinbox.value_changed.connect(_on_money_amount_changed)
 	money_amount_spinbox.custom_minimum_size.x = 130
 	actions.add_child(money_amount_spinbox)
 	update_money_button = Button.new()
@@ -636,6 +639,7 @@ func _set_ready(ready: bool) -> void:
 
 
 func _sync_selected_from_offer() -> void:
+	var previous_money := selected_money
 	selected_ids.clear()
 	selected_item_offers.clear()
 	selected_money = 0
@@ -649,8 +653,9 @@ func _sync_selected_from_offer() -> void:
 			for item_value: Variant in offer_value.get("items", []):
 				if item_value is Dictionary:
 					selected_item_offers.append({"itemId":str(item_value.get("itemId", "")), "quantity":int(item_value.get("quantity", 0))})
-	if money_amount_spinbox != null:
-		money_amount_spinbox.value = selected_money
+	if money_amount_spinbox != null and (not money_draft_dirty or selected_money != previous_money):
+		_set_money_input_value(selected_money)
+		money_draft_dirty = false
 
 
 func _render_offers() -> void:
@@ -757,7 +762,8 @@ func refresh_available_money() -> void:
 	wallet_service.apply_wallet_result(result)
 	if money_amount_spinbox != null:
 		money_amount_spinbox.max_value = maxi(balance, selected_money)
-		money_amount_spinbox.value = mini(selected_money, int(money_amount_spinbox.max_value))
+		if not money_draft_dirty:
+			_set_money_input_value(mini(selected_money, int(money_amount_spinbox.max_value)))
 	if money_balance_label != null:
 		money_balance_label.text = "Available: $%s" % format_money(balance)
 
@@ -770,6 +776,17 @@ func _update_money_offer() -> void:
 		_show_error("Offer at least one Pokemon, item, or money.")
 		return
 	_replace_offer(selected_ids.duplicate(), selected_item_offers.duplicate(true), amount)
+
+
+func _on_money_amount_changed(_value: float) -> void:
+	if not money_input_syncing:
+		money_draft_dirty = true
+
+
+func _set_money_input_value(value: int) -> void:
+	money_input_syncing = true
+	money_amount_spinbox.value = value
+	money_input_syncing = false
 
 
 func _rebuild_item_selector_rows() -> void:
@@ -1471,6 +1488,8 @@ func _pokemon_species(value: Dictionary) -> String:
 
 
 func _current_user_id() -> int:
+	if not is_inside_tree():
+		return 0
 	var auth := get_node_or_null("/root/AuthService")
 	return int(auth.current_user.get("id", 0)) if auth != null else 0
 

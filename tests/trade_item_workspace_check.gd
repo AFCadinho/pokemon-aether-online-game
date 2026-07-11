@@ -28,9 +28,23 @@ func _init() -> void:
 	_check(source.contains("_render_item_offer"), "both offer panels render item stacks")
 	_check(source.contains("money_amount_spinbox") and source.contains("func _update_money_offer"), "workspace offers authoritative wallet money")
 	_check(source.contains("update_on_text_changed = true"), "typed money is committed before Set Money is handled")
+	_check(source.contains("money_draft_dirty") and source.contains("selected_money != previous_money"), "polling snapshots preserve an unsubmitted money draft")
 	_check(source.contains("local_money_offer_label") and source.contains("MONEY  $%s"), "authoritative money offer remains prominently visible")
 	_check(source.contains("_render_money_offer") and source.contains("givesMoney") and source.contains("receivesMoney"), "workspace renders money offers and locked consent")
 	_check(source.contains("money_offer") and source.contains("_retry_offer_after_stale_revision"), "stale retry preserves the complete money offer")
+	var workspace := Workspace.new()
+	workspace.money_amount_spinbox = SpinBox.new()
+	workspace.money_amount_spinbox.max_value = 1000
+	workspace.money_amount_spinbox.value = 250
+	workspace.money_draft_dirty = true
+	workspace.trade = {"offers":[{"userId":0,"money":0,"pokemon":[],"items":[]}]}
+	workspace._sync_selected_from_offer()
+	_check(int(workspace.money_amount_spinbox.value) == 250, "unchanged server snapshot preserves typed money")
+	workspace.trade = {"offers":[{"userId":0,"money":100,"pokemon":[],"items":[]}]}
+	workspace._sync_selected_from_offer()
+	_check(int(workspace.money_amount_spinbox.value) == 100 and not workspace.money_draft_dirty, "changed server offer replaces draft authoritatively")
+	workspace.money_amount_spinbox.free()
+	workspace.free()
 	quit(1 if failed else 0)
 
 
