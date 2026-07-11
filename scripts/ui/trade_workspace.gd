@@ -122,6 +122,7 @@ func _section(parent: Control, label_text: String) -> VBoxContainer:
 func _on_trade_changed(value: Dictionary) -> void:
 	var status := str(value.get("status", ""))
 	var previous_trade_id := str(trade.get("tradeId", ""))
+	var refresh_candidates := status == "active" and _trade_snapshot_changed(value)
 	if status == "cancelled":
 		trade = value.duplicate(true)
 		editable_root.visible = false
@@ -150,7 +151,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 	_render_offers()
 	_render_mode()
 	popup_centered()
-	if status == "active":
+	if refresh_candidates:
 		refresh_available_pokemon.call_deferred()
 
 
@@ -167,7 +168,12 @@ func refresh_available_pokemon() -> void:
 		return
 	candidates = collect_candidates(party_result.get("party", []), boxes_result.get("boxes", []))
 	_render_candidates()
-	status_label.text = ""
+
+
+func _trade_snapshot_changed(value: Dictionary) -> bool:
+	return str(trade.get("tradeId", "")) != str(value.get("tradeId", "")) \
+		or int(trade.get("revision", 0)) != int(value.get("revision", 0)) \
+		or int(trade.get("lastEventSeq", 0)) != int(value.get("lastEventSeq", 0))
 
 
 static func collect_candidates(party_value: Variant, boxes_value: Variant) -> Array[Dictionary]:

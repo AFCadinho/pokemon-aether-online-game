@@ -20,6 +20,9 @@ func _init() -> void:
 	workspace.offer_draft_dirty = true
 	_check(not workspace._should_sync_selected_from_offer("trade-1", "active"), "active polling preserves an unsaved offer draft")
 	_check(workspace._should_sync_selected_from_offer("trade-2", "active"), "new trade synchronizes offer selection")
+	workspace.trade = {"tradeId":"trade-1", "revision":3, "lastEventSeq":4}
+	_check(not workspace._trade_snapshot_changed({"tradeId":"trade-1", "revision":3, "lastEventSeq":4}), "identical active snapshot does not refresh candidates")
+	_check(workspace._trade_snapshot_changed({"tradeId":"trade-1", "revision":4, "lastEventSeq":5}), "changed active snapshot refreshes candidates")
 	workspace.free()
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_workspace.gd")
 	_check(not source.contains("Leave Trade"), "workspace has no separate leave button")
@@ -29,6 +32,7 @@ func _init() -> void:
 	_check(source.contains("replace_offer"), "workspace uses complete replacement")
 	_check(source.contains("Send Offer"), "workspace distinguishes draft selection from server offer submission")
 	_check(source.contains("Both players must send at least one Pokemon"), "workspace explains disabled Ready state")
+	_check(source.contains("func _trade_snapshot_changed"), "candidate refresh is gated by authoritative snapshot changes")
 	_check(source.contains("PlayerPartyStateService"), "workspace reuses party service")
 	_check(source.contains("PokemonStorageService"), "workspace reuses storage service")
 	_check(source.contains("Ready"), "readiness control")
