@@ -34,6 +34,13 @@ var completion_refresh_attempts := 0
 var active_trade_discovery_elapsed := 0.0
 var active_trade_discovery_in_flight := false
 
+
+func _ready() -> void:
+	# Invitation discovery and reconnect recovery must continue while modal game
+	# UI temporarily pauses regular scene processing.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
 func _process(delta: float) -> void:
 	poll_trade_socket()
 	_discover_active_trade_if_needed(delta)
@@ -179,6 +186,9 @@ func stop_transport(preserve_snapshot := false) -> void:
 	connecting = false
 	connected = false
 	socket_generation += 1
+	if websocket.get_ready_state() in [WebSocketPeer.STATE_CONNECTING, WebSocketPeer.STATE_OPEN]:
+		websocket.close(1000, "trade transport stopped")
+	websocket = WebSocketPeer.new()
 	websocket_url = ""
 	active_trade_id = ""
 	last_applied_event_seq = 0

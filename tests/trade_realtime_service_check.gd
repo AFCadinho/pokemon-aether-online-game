@@ -78,9 +78,15 @@ func _init() -> void:
 	_check(service._needs_active_trade_discovery(), "active trade continues authoritative reconciliation")
 	fake.has_active_trade = false
 	fake.known_trade = {"tradeId":"restored", "status":"completed", "revision":3, "lastEventSeq":4}
+	var active_socket: WebSocketPeer = service.websocket
 	await service.discover_active_trade()
 	_check(str(service.active_trade_snapshot.get("status", "")) == "completed", "active miss reconciles the known completed trade")
 	_check(service.active_trade_id == "", "terminal reconciliation stops stale trade transport")
+	_check(service.websocket != active_socket, "terminal reconciliation discards the old trade socket")
+	fake.has_active_trade = true
+	fake.active_trade = {"tradeId":"next-trade", "status":"invited", "revision":1, "lastEventSeq":1}
+	await service.discover_active_trade()
+	_check(service.active_trade_id == "next-trade", "new invitation replaces completed trade state")
 	service.clear_active_trade()
 	fake.has_active_trade = true
 	fake.active_trade = {"tradeId":"restored", "status":"invited", "revision":1, "lastEventSeq":2}
