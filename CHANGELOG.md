@@ -4,6 +4,20 @@
 
 **Added**
 - Added client-side map sign interactions for small and large overworld signs, including local sign text loading, Pallet Town sign placements, text-only dialogue presentation, and validation checks for sign content and scene references.
+- Added Player Trade. You can request a nearby player, exchange Pokemon, item stacks, and money, then review and confirm the exact exchange together.
+- Added live trade invitations, incoming-request notifications, reconnection recovery, and clear system messages for Pokemon and item transfers.
+- Added draggable trade, invitation, and Pokemon-summary windows so you can arrange them around the game screen.
+- Added a searchable item picker for quickly finding tradable inventory items and choosing their quantities.
+
+**Changed**
+- Trade offers now use Pokemon from your current party. Drag a party slot into your offer, click an offered Pokemon to inspect its summary, and keep at least one Pokemon in your party.
+- Redesigned the trade workspace with compact Pokemon slots, player names above each offer, clearer money controls, improved invitation screens, and consistent button hover feedback.
+- Trade completion now refreshes your party immediately and closes the workspace once the transfer is complete.
+
+**Fixed**
+- Improved trade invitation delivery and state recovery so new invitations, acceptances, offers, readiness, and completed trades stay in sync for both players.
+- Fixed trade offers occasionally reverting, appearing late for the other player, or showing stale trade-state errors after quick updates.
+- Fixed money offers resetting while typing or not appearing consistently in the shared offer and final review.
 
 ## 0.3.3 - 2026-07-10
 
