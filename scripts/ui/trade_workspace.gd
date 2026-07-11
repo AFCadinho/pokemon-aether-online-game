@@ -35,6 +35,7 @@ var confirm_button: Button
 var confirmation_label: Label
 var mutation_in_flight := false
 var party_drag_preview: TextureRect
+var window_dragging := false
 
 
 func _ready() -> void:
@@ -68,6 +69,8 @@ func _build_ui() -> void:
 	margin.add_child(root)
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 12)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.gui_input.connect(_on_window_header_gui_input)
 	root.add_child(header)
 	var heading_stack := VBoxContainer.new()
 	heading_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -162,6 +165,38 @@ func _build_ui() -> void:
 	confirm_button.pressed.connect(_confirm_trade)
 	_apply_button_style(confirm_button, "primary")
 	review_root.add_child(confirm_button)
+
+
+func _on_window_header_gui_input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	window_dragging = mouse_event.pressed
+	get_viewport().set_input_as_handled()
+
+
+func _input(event: InputEvent) -> void:
+	if not window_dragging:
+		return
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			window_dragging = false
+			get_viewport().set_input_as_handled()
+		return
+	if event is InputEventMouseMotion:
+		var motion := event as InputEventMouseMotion
+		position += Vector2i(roundi(motion.relative.x), roundi(motion.relative.y))
+		_clamp_window_position()
+		get_viewport().set_input_as_handled()
+
+
+func _clamp_window_position() -> void:
+	var available := get_tree().root.size
+	position.x = clampi(position.x, 0, maxi(available.x - size.x, 0))
+	position.y = clampi(position.y, 0, maxi(available.y - size.y, 0))
 func _process(_delta: float) -> void:
 	if visible and str(trade.get("status", "")) in ["active", "locked"]:
 		_render_connection_status()

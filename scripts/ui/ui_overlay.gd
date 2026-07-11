@@ -49,6 +49,7 @@ const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.g
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
+const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
 const PVP_RANKED_DEFAULT_FORMAT_NAME := "Aether OU"
 const PVP_MATCH_COUNTDOWN_SECONDS := 10.0
@@ -12061,11 +12062,18 @@ func _on_pokemon_summary_header_gui_input(event: InputEvent, card_key: String = 
 	if mouse_event.pressed:
 		pokemon_summary_dragging = true
 		pokemon_summary_dragging_card_key = card_key
-		pokemon_summary_drag_offset = mouse_event.global_position - pokemon_summary_popup.global_position
+		var summary_window := trade_summary_windows.get(card_key) as DraggableSubwindow
+		if summary_window != null:
+			summary_window.begin_window_drag()
+		else:
+			pokemon_summary_drag_offset = mouse_event.global_position - pokemon_summary_popup.global_position
 		_activate_ui_panel(pokemon_summary_popup)
 	else:
 		pokemon_summary_dragging = false
 		pokemon_summary_dragging_card_key = ""
+		var summary_window := trade_summary_windows.get(card_key) as DraggableSubwindow
+		if summary_window != null:
+			summary_window.end_window_drag()
 	_store_active_pokemon_summary_card_context()
 	get_viewport().set_input_as_handled()
 
@@ -19558,7 +19566,7 @@ func _promote_trade_summary_to_window(card_key: String) -> void:
 	var popup := context.get("popup") as PanelContainer
 	if popup == null:
 		return
-	var host := Window.new()
+	var host := DRAGGABLE_SUBWINDOW.new() as DraggableSubwindow
 	host.name = "TradePokemonSummary"
 	host.title = "Pokemon Summary"
 	host.borderless = true

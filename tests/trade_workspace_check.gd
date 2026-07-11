@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Workspace := preload("res://scripts/ui/trade_workspace.gd")
+const DraggableWindow := preload("res://scripts/ui/draggable_subwindow.gd")
 
 var failed := false
 
@@ -24,6 +25,21 @@ func _init() -> void:
 	_check(Workspace.build_drop_replacement([11], 12, -1, 1) == [11], "drop cannot exceed recipient capacity")
 	_check(Workspace.build_drop_replacement([11], 11, 0, 5) == [11], "duplicate drop is harmless")
 	_check(Workspace.normalize_summary_payload({"pokemonId":11,"speciesId":"pidgey"}).get("species", "") == "pidgey", "public offer identity opens readonly summary")
+	var drag_parent := Window.new()
+	drag_parent.size = Vector2i(500, 400)
+	root.add_child(drag_parent)
+	var drag_window := DraggableWindow.new()
+	drag_window.size = Vector2i(120, 80)
+	drag_window.position = Vector2i(10, 10)
+	drag_parent.add_child(drag_window)
+	drag_window.begin_window_drag()
+	var drag_motion := InputEventMouseMotion.new()
+	drag_motion.relative = Vector2(24, 18)
+	drag_window._input(drag_motion)
+	_check(drag_window.position == Vector2i(34, 28), "summary host follows relative pointer movement")
+	drag_window.end_window_drag()
+	drag_window.queue_free()
+	drag_parent.queue_free()
 	workspace.trade = {"tradeId":"trade-1", "revision":3, "lastEventSeq":4}
 	_check(not workspace._trade_snapshot_changed({"tradeId":"trade-1", "revision":3, "lastEventSeq":4}), "identical active snapshot does not refresh candidates")
 	_check(workspace._trade_snapshot_changed({"tradeId":"trade-1", "revision":4, "lastEventSeq":5}), "changed active snapshot refreshes candidates")
@@ -32,6 +48,7 @@ func _init() -> void:
 	_check(not source.contains("Leave Trade"), "workspace has no separate leave button")
 	_check(source.contains("close_requested.connect(_on_close_requested)"), "window close owns authoritative trade leave")
 	_check(source.contains("borderless = true") and source.contains("close_button.pressed.connect(_on_close_requested)"), "workspace uses custom chrome without changing close semantics")
+	_check(source.contains("_on_window_header_gui_input") and source.contains("_clamp_window_position"), "trade workspace header supports bounded dragging")
 	_check(source.contains("str(trade.get(\"status\", \"\")) in [\"active\", \"locked\"]"), "only open trades are cancelled by window close")
 	_check(source.contains("func _ready() -> void:\n\thide()"), "workspace starts hidden without an active trade")
 	_check(source.contains("replace_offer"), "workspace uses complete replacement")
@@ -63,6 +80,7 @@ func _init() -> void:
 	_check(overlay_source.contains("party_drag_workspace_preview"), "party drag preview is hosted above the trade window")
 	_check(overlay_source.contains("_promote_trade_summary_to_window") and overlay_source.contains("always_on_top = true"), "trade summaries render in a higher window layer")
 	_check(overlay_source.contains("func _trade_workspace_is_visible") and overlay_source.contains("_show_pokemon_summary"), "party summaries use the higher trade window layer while trading")
+	_check(overlay_source.contains("DRAGGABLE_SUBWINDOW") and overlay_source.contains("begin_window_drag"), "promoted summary windows use their existing header as a drag handle")
 	quit(1 if failed else 0)
 
 
