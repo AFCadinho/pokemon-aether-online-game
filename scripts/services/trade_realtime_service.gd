@@ -230,7 +230,13 @@ func discover_active_trade() -> Dictionary:
 	active_trade_discovery_in_flight = true
 	var result: Dictionary = await trade_service.call("load_active_trade")
 	active_trade_discovery_in_flight = false
-	if not bool(result.get("success", false)) or not bool(result.get("hasActiveTrade", false)):
+	if not bool(result.get("success", false)):
+		return result
+	if not bool(result.get("hasActiveTrade", false)):
+		# A missed terminal websocket event must not leave this client on its old
+		# locked snapshot merely because /active correctly omits terminal trades.
+		if active_trade_id != "":
+			await refresh_known_trade_after_active_miss(active_trade_id)
 		return result
 	apply_snapshot(_dictionary(result.get("trade", {})))
 	var url := await _authenticated_websocket_url()
@@ -335,3 +341,20 @@ func refresh_completed_trade(trade_id: String) -> void:
 		if not is_inside_tree():
 			return
 		await get_tree().create_timer(0.5).timeout
+
+
+func refresh_known_trade_after_active_miss(trade_id: String) -> void:
+	if trade_id == "" or trade_id != active_trade_id:
+		return
+	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
+	if trade_service == null:
+		return
+	var result: Dictionary = await trade_service.call("load_trade", trade_id)
+	if not bool(result.get("success", false)):
+		return
+	var snapshot := _dictionary(result.get("trade", {}))
+	if str(snapshot.get("tradeId", "")) != trade_id:
+		return
+	if str(snapshot.get("status", "")) in ["declined", "cancelled", "expired", "completed"]:
+		apply_snapshot(snapshot)
+		stop_transport(true)

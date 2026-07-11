@@ -8,15 +8,17 @@ var offer_updates := 0
 class FakeTradeService extends Node:
 	var failures := 0
 	var active_trade: Dictionary = {"tradeId":"restored", "status":"invited", "revision":1, "lastEventSeq":2}
+	var has_active_trade := true
+	var known_trade: Dictionary = {"tradeId":"t", "status":"active", "revision":6, "lastEventSeq":5}
 	var discovery_calls := 0
 	func load_active_trade() -> Dictionary:
 		discovery_calls += 1
-		return {"success": true, "hasActiveTrade": true, "trade": active_trade}
+		return {"success": true, "hasActiveTrade": has_active_trade, "trade": active_trade if has_active_trade else {}}
 	func load_trade(_id: String) -> Dictionary:
 		if failures > 0:
 			failures -= 1
 			return {"success": false}
-		return {"success": true, "trade": {"tradeId":"t", "revision":6, "lastEventSeq":5}}
+		return {"success": true, "trade": known_trade}
 	func load_trade_events(_id: String, _after: int, _limit: int) -> Dictionary:
 		return {"success": true, "events": {"events": []}}
 func _init() -> void:
@@ -74,7 +76,13 @@ func _init() -> void:
 	_check(str(reconciled.get("trade", {}).get("status", "")) == "active", "pending invitation reconciles accepted trade through REST")
 	_check(str(service.active_trade_snapshot.get("status", "")) == "active", "accepted snapshot supersedes waiting invitation")
 	_check(service._needs_active_trade_discovery(), "active trade continues authoritative reconciliation")
+	fake.has_active_trade = false
+	fake.known_trade = {"tradeId":"restored", "status":"completed", "revision":3, "lastEventSeq":4}
+	await service.discover_active_trade()
+	_check(str(service.active_trade_snapshot.get("status", "")) == "completed", "active miss reconciles the known completed trade")
+	_check(service.active_trade_id == "", "terminal reconciliation stops stale trade transport")
 	service.clear_active_trade()
+	fake.has_active_trade = true
 	fake.active_trade = {"tradeId":"restored", "status":"invited", "revision":1, "lastEventSeq":2}
 	await service.restore_active_trade_and_connect()
 	_check(service.active_trade_id == "restored", "active invitation restored authoritatively")
