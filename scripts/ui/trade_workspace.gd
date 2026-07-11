@@ -49,7 +49,7 @@ var notified_completed_trade_ids: Dictionary = {}
 
 func _ready() -> void:
 	hide()
-	title = "Pokemon Trade"
+	title = "Player Trade"
 	min_size = Vector2i(1060, 610)
 	unresizable = true
 	borderless = true
@@ -91,7 +91,7 @@ func _build_ui() -> void:
 	eyebrow.add_theme_font_size_override("font_size", 12)
 	heading_stack.add_child(eyebrow)
 	var heading := Label.new()
-	heading.text = "Pokemon Trade"
+	heading.text = "Player Trade"
 	heading.add_theme_color_override("font_color", TRADE_TEXT)
 	heading.add_theme_font_size_override("font_size", 26)
 	heading_stack.add_child(heading)

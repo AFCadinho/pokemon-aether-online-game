@@ -86,7 +86,7 @@ func setup() -> void:
 	mode_label.add_theme_font_size_override("font_size", 12)
 	stack.add_child(mode_label)
 	var heading := Label.new()
-	heading.text = "Pokemon Trade"
+	heading.text = "Player Trade"
 	heading.add_theme_color_override("font_color", TRADE_TEXT)
 	heading.add_theme_font_size_override("font_size", 21)
 	stack.add_child(heading)
