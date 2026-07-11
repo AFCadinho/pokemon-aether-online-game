@@ -423,11 +423,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 	if status == "completed":
 		trade = value.duplicate(true)
 		_notify_trade_completion(trade)
-		phase_label.text = "COMPLETED"
-		editable_root.visible = false
-		review_root.visible = false
-		status_label.text = "Trade completed. Your party was refreshed."
-		popup_centered()
+		hide()
 		refresh_after_completion.call_deferred()
 		return
 	if status not in ["active", "locked"]:

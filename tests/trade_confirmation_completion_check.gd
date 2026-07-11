@@ -16,6 +16,8 @@ func _init() -> void:
 	_check(source.contains("func _confirm_trade"), "workspace owns explicit confirmation action")
 	_check(source.contains("lockedRevision") and source.contains("snapshotHash"), "workspace submits exact locked review")
 	_check(source.contains("refresh_after_completion"), "completion refreshes the party")
+	_check(not source.contains("Trade completed. Your party was refreshed."), "completion closes the workspace instead of showing an empty terminal view")
+	_check(source.contains("_notify_trade_completion(trade)\n\t\thide()\n\t\trefresh_after_completion.call_deferred()"), "completion notifies, closes, and then refreshes authoritative state")
 	_check(source.contains("party_service.refresh_party()"), "completion applies the authoritative party response to PlayerSave")
 	_check(source.contains("givesItems") and source.contains("receivesItems"), "immutable review renders item consent fields")
 	_check(source.contains("/root/InventoryService") and source.contains("inventory_service.load_inventory()"), "item completion refreshes authoritative inventory")
