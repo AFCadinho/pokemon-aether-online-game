@@ -915,12 +915,12 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			if not new_avatar is Node2D:
 				push_warning("World: remote player avatar script did not create a Node2D.")
 				continue
-		avatar = new_avatar as Node2D
-		remote_player_avatars[user_key] = avatar
-		remote_players_container.add_child(avatar)
-		var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
-		if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
-			avatar.connect("interaction_requested", interaction_callable)
+			avatar = new_avatar as Node2D
+			remote_player_avatars[user_key] = avatar
+			remote_players_container.add_child(avatar)
+			var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
+			if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
+				avatar.connect("interaction_requested", interaction_callable)
 
 		avatar.call("apply_state", player_state)
 
