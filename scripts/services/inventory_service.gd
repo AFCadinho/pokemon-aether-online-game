@@ -267,7 +267,11 @@ func _request_json(url: String, method: HTTPClient.Method, headers: PackedString
 
 func _extract_error(body: Dictionary, response_code: int) -> String:
 	if body.has("detail"):
-		return str(body.get("detail"))
+		var detail: Variant = body.get("detail")
+		if detail is Dictionary:
+			var detail_dictionary: Dictionary = detail as Dictionary
+			return str(detail_dictionary.get("message", detail_dictionary.get("code", "Request failed.")))
+		return str(detail)
 	if body.has("error"):
 		return str(body.get("error"))
 	return "Request failed with HTTP %s." % response_code

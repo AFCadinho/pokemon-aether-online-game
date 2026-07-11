@@ -218,6 +218,7 @@ const EXP_ITEM_IDS := {
 	"exp-candy-l": true,
 	"exp-candy-xl": true,
 }
+const BAG_ITEM_EFFECT_PREVIEW := preload("res://scripts/ui/bag_item_effect_preview.gd")
 const POKEMON_MAX_LEVEL := 100
 const EXP_CANDY_EXPERIENCE := {
 	"exp-candy-xs": 100,
@@ -378,6 +379,8 @@ var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var running_shoes_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot/RunningShoesButton
 @onready var repel_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot
 @onready var repel_toggle_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot/RepelToggle
+@onready var escape_rope_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot
+@onready var escape_rope_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot/EscapeRopeButton
 @onready var follower_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot
 @onready var follower_toggle_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot/FollowerToggle
 @onready var item_dex_slot: PanelContainer = $Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot
@@ -405,6 +408,11 @@ var player_interaction_coordinator: PlayerInteractionCoordinator
 
 var party_slots: Array = []
 var party_display_override: Array = []
+var escape_rope_status: Dictionary = {}
+var escape_rope_remaining_seconds: float = 0.0
+var player_action_status_refresh_seconds: float = 0.0
+var escape_rope_in_flight := false
+var escape_rope_confirmation: ConfirmationDialog
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
@@ -947,6 +955,7 @@ func _ready() -> void:
 	_setup_icon_slot_hover(pvp_slot, pvp_button)
 	_setup_icon_slot_hover(settings_slot, settings_button)
 	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
+	_setup_icon_slot_hover(escape_rope_slot, escape_rope_button)
 	_setup_icon_slot_hover(follower_slot, follower_toggle_button)
 	_setup_icon_slot_hover(item_dex_slot, item_dex_button)
 	_setup_icon_slot_hover(pokedex_slot, pokedex_button)
@@ -982,6 +991,11 @@ func _ready() -> void:
 	running_shoes_button.toggled.connect(_on_running_shoes_toggled)
 	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
 	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
+	escape_rope_button.pressed.connect(_on_escape_rope_pressed)
+	if not PlayerActionService.statuses_changed.is_connected(_on_player_action_statuses_changed):
+		PlayerActionService.statuses_changed.connect(_on_player_action_statuses_changed)
+	_setup_escape_rope_confirmation()
+	_refresh_player_actions.call_deferred()
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
 	_load_toggle_preferences.call_deferred()
@@ -5348,6 +5362,7 @@ func _process(delta: float) -> void:
 	_refresh_utc_time_label(delta)
 	_refresh_staff_tools_visibility_if_needed()
 	_refresh_pvp_room_polling(delta)
+	_refresh_player_action_cooldown(delta)
 
 func _refresh_pvp_room_polling(delta: float) -> void:
 	if not pvp_polling_active or pvp_active_room_code == "" or pvp_battle_starting:
@@ -9024,8 +9039,12 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if _is_pokemon_usable_item_id(item_id):
 		_show_bag_item_use_popup(item)
 		return
-
-	_add_chat_message("%s cannot be used from the Bag yet." % str(item.get("name", _item_name_from_id(item_id))))
+	var use_notice: Dictionary = _staff_dictionary_from_variant(item.get("useNotice", {}))
+	var notice_message := str(use_notice.get("message", "")).strip_edges()
+	if notice_message != "":
+		_add_chat_message(notice_message)
+		return
+	_add_chat_message("%s is informational and cannot be used from the Bag." % str(item.get("name", _item_name_from_id(item_id))))
 
 func _show_bag_item_use_popup(item: Dictionary) -> void:
 	if bag_item_use_popup == null:
@@ -9039,7 +9058,8 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 	var quantity: int = max(int(item.get("quantity", 1)), 1)
 	bag_item_use_title_label.text = "Use %s" % item_name
 	bag_item_use_item_label.text = "%s x%s" % [item_name, quantity]
-	bag_item_use_quantity_spinbox.max_value = min(quantity, 99)
+	var gameplay: Dictionary = _staff_dictionary_from_variant(item.get("gameplay", {}))
+	bag_item_use_quantity_spinbox.max_value = 1 if str(gameplay.get("quantityPolicy", "")) == "single" else min(quantity, 99)
 	bag_item_use_quantity_spinbox.value = 1
 	bag_item_use_quantity_spinbox.editable = false
 	if bag_item_use_confirm_button != null:
@@ -9116,6 +9136,9 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
 	if pokemon == null:
 		return {}
+	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
+	if BAG_ITEM_EFFECT_PREVIEW.supports(gameplay):
+		return BAG_ITEM_EFFECT_PREVIEW.preview(pokemon, gameplay, requested_quantity)
 	if _is_ev_item_id(item_id):
 		return _bag_ev_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
 	if not _is_exp_item_id(item_id):
@@ -9233,6 +9256,8 @@ func _bag_item_can_affect_pokemon(pokemon: Pokemon, item_id: String) -> bool:
 	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, 1)
 	if preview.is_empty():
 		return false
+	if preview.has("canApply"):
+		return bool(preview.get("canApply", false))
 	var label := str(preview.get("label", ""))
 	return not label.contains("Max level") and not label.contains("EV cap") and not label.contains("Storage full")
 
@@ -9375,6 +9400,9 @@ func _on_bag_item_use_confirm_pressed() -> void:
 		return
 
 	PlayerWalletService.apply_wallet_result(result)
+	var party_value: Variant = result.get("party", [])
+	if party_value is Array:
+		PlayerSave.replace_party_from_state(party_value as Array)
 	var inventory_value: Variant = result.get("inventory", [])
 	if inventory_value is Array:
 		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
@@ -9396,6 +9424,11 @@ func _set_bag_item_use_status(message: String, is_error: bool) -> void:
 func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> void:
 	var item_name := str(bag_item_use_pending_item.get("name", _item_name_from_id(item_id)))
 	var quantity: int = 1
+	var item_effects_value: Variant = reward.get("itemEffects", [])
+	if item_effects_value is Array:
+		var item_effects: Array = item_effects_value as Array
+		if not item_effects.is_empty() and item_effects[0] is Dictionary:
+			quantity = max(int((item_effects[0] as Dictionary).get("consumedQuantity", quantity)), 1)
 	var effort_value: Variant = reward.get("effort", [])
 	if effort_value is Array:
 		var effort_array: Array = effort_value as Array
@@ -9443,7 +9476,19 @@ func _is_ev_item_id(item_id: String) -> bool:
 	return EV_ITEM_EFFECTS.has(_normalize_item_id(item_id))
 
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
-	return _is_exp_item_id(item_id) or _is_ev_item_id(item_id)
+	return _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+
+func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
+	var normalized_id := _normalize_item_id(item_id)
+	if _normalize_item_id(str(bag_item_use_pending_item.get("id", ""))) == normalized_id:
+		var pending_gameplay: Dictionary = _staff_dictionary_from_variant(bag_item_use_pending_item.get("gameplay", {}))
+		if not pending_gameplay.is_empty():
+			return pending_gameplay
+	for item: Dictionary in bag_inventory_items:
+		if _normalize_item_id(str(item.get("id", ""))) != normalized_id:
+			continue
+		return _staff_dictionary_from_variant(item.get("gameplay", {}))
+	return {}
 
 func _load_item_icon(item_id: String) -> Texture2D:
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
@@ -9510,12 +9555,16 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 		if item_id == "":
 			continue
 		var backend_category := str(item.get("category", "")).strip_edges()
+		var gameplay: Dictionary = _staff_dictionary_from_variant(item.get("gameplay", {})).duplicate(true)
+		var use_notice: Dictionary = _staff_dictionary_from_variant(item.get("useNotice", {})).duplicate(true)
 		normalized_items.append({
 			"id": item_id,
 			"name": str(item.get("name", _item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"isHoldable": bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
+			"gameplay": gameplay,
+			"useNotice": use_notice,
 		})
 	return normalized_items
 
@@ -12015,7 +12064,7 @@ func _default_text(value: String) -> String:
 func _generate_default_inventory() -> Array[Dictionary]:
 	return [
 		{"id": "potion", "name": "Potion", "category": "medicine", "quantity": 6, "description": "Restores 20 HP to one Pokemon."},
-		{"id": "super-potion", "name": "Super Potion", "category": "medicine", "quantity": 3, "description": "Restores 60 HP to one Pokemon."},
+		{"id": "super-potion", "name": "Super Potion", "category": "medicine", "quantity": 3, "description": "Restores 50 HP to one Pokemon."},
 		{"id": "poke-ball", "name": "Poke Ball", "category": "pokeball", "quantity": 10, "description": "A standard capsule for catching wild Pokemon."},
 		{"id": "great-ball", "name": "Great Ball", "category": "pokeball", "quantity": 5, "description": "A good, high-performance Ball."},
 		{"id": "rare-candy", "name": "Rare Candy", "category": "general", "quantity": 1, "description": "Raises a Pokemon's level by one."},
@@ -14233,6 +14282,104 @@ func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 	var state_text := "enabled" if GameState.repel_enabled else "disabled"
 	_add_chat_message("Repel %s." % state_text)
 	await _save_toggle_preferences()
+
+
+func _setup_escape_rope_confirmation() -> void:
+	escape_rope_confirmation = ConfirmationDialog.new()
+	escape_rope_confirmation.title = "Use Escape Rope?"
+	escape_rope_confirmation.dialog_text = "Return to your last healing point? Your party will not be healed."
+	escape_rope_confirmation.ok_button_text = "Use Escape Rope"
+	escape_rope_confirmation.confirmed.connect(_execute_escape_rope)
+	add_child(escape_rope_confirmation)
+
+
+func _refresh_player_actions() -> void:
+	player_action_status_refresh_seconds = 30.0
+	await PlayerActionService.load_statuses()
+
+
+func _on_player_action_statuses_changed(actions: Array) -> void:
+	escape_rope_status = {}
+	for value: Variant in actions:
+		if value is Dictionary and str((value as Dictionary).get("actionId", "")) == "escape-rope":
+			escape_rope_status = (value as Dictionary).duplicate(true)
+			break
+	var cooldown: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("cooldown", {}))
+	escape_rope_remaining_seconds = float(max(int(cooldown.get("remainingSeconds", 0)), 0))
+	_update_escape_rope_action_ui()
+
+
+func _refresh_player_action_cooldown(delta: float) -> void:
+	if escape_rope_remaining_seconds > 0.0:
+		escape_rope_remaining_seconds = max(escape_rope_remaining_seconds - delta, 0.0)
+		_update_escape_rope_action_ui()
+	player_action_status_refresh_seconds -= delta
+	if player_action_status_refresh_seconds <= 0.0 and AuthService.is_authenticated():
+		_refresh_player_actions.call_deferred()
+
+
+func _update_escape_rope_action_ui() -> void:
+	var visible_unlocked := bool(escape_rope_status.get("visible", false)) and bool(escape_rope_status.get("unlocked", false))
+	escape_rope_slot.visible = visible_unlocked
+	if not visible_unlocked:
+		return
+	var block: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("blockReason", {}))
+	var cooldown_active := escape_rope_remaining_seconds > 0.0
+	escape_rope_button.disabled = escape_rope_in_flight or cooldown_active or not bool(escape_rope_status.get("available", false))
+	if cooldown_active:
+		escape_rope_button.tooltip_text = "Escape Rope\nReady in %s" % PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds)))
+	elif not block.is_empty():
+		escape_rope_button.tooltip_text = "Escape Rope\n%s" % str(block.get("message", "Unavailable."))
+	else:
+		escape_rope_button.tooltip_text = "Escape Rope\nReturn to your last healing point."
+	_refresh_action_bar_layouts()
+
+
+func _on_escape_rope_pressed() -> void:
+	if escape_rope_in_flight or escape_rope_button.disabled:
+		return
+	escape_rope_confirmation.popup_centered()
+
+
+func _execute_escape_rope() -> void:
+	if escape_rope_in_flight:
+		return
+	var world := get_tree().current_scene
+	if world == null or not world.has_method("begin_authorized_teleport") or not world.has_method("apply_authorized_teleport_state"):
+		_add_chat_message("Escape Rope is unavailable because the world is not ready.")
+		return
+	escape_rope_in_flight = true
+	_update_escape_rope_action_ui()
+	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
+	if not bool(begin_result.get("success", false)):
+		escape_rope_in_flight = false
+		_update_escape_rope_action_ui()
+		_add_chat_message(str(begin_result.get("error", "Escape Rope is unavailable.")))
+		return
+	var response: Dictionary = await PlayerActionService.execute("escape-rope")
+	if not bool(response.get("success", false)):
+		world.call("cancel_authorized_teleport")
+		escape_rope_in_flight = false
+		_update_escape_rope_action_ui()
+		_add_chat_message(str(response.get("error", "Escape Rope failed.")))
+		return
+	var result: Dictionary = _staff_dictionary_from_variant(response.get("result", {}))
+	if not bool(result.get("accepted", false)):
+		world.call("cancel_authorized_teleport")
+		escape_rope_in_flight = false
+		_update_escape_rope_action_ui()
+		var block := _staff_dictionary_from_variant(result.get("blockReason", {}))
+		_add_chat_message(str(block.get("message", "Escape Rope is unavailable.")))
+		return
+	var teleport_state := _staff_dictionary_from_variant(result.get("teleportState", {}))
+	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", teleport_state)
+	escape_rope_in_flight = false
+	_update_escape_rope_action_ui()
+	if not bool(apply_result.get("success", false)):
+		_add_chat_message("Escape Rope was authorized, but applying the teleport failed: %s" % str(apply_result.get("error", "Unknown error")))
+		return
+	_add_chat_message("Escape Rope returned you to your healing point.")
+	_refresh_player_actions.call_deferred()
 
 func _load_toggle_preferences() -> void:
 	var result: Dictionary = await PlayerGameStateService.load_player_preferences()

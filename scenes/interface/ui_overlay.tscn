@@ -22,6 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://d0sitgcr6kq4u" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
 [ext_resource type="Texture2D" uid="uid://cs0q0ycclxlgo" path="res://assets/battles/poke_ball_svg.png" id="18_pvp"]
 [ext_resource type="Texture2D" uid="uid://6ymqdgvfj4rj" path="res://assets/ui/aether_exchange_icon.svg" id="19_exchange"]
+[ext_resource type="Texture2D" path="res://assets/items/icons/ESCAPEROPE.png" id="20_escape_rope"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -509,12 +510,12 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="ToggleActionsPanel" type="PanelContainer" parent="Control" unique_id=1107239222]
-custom_minimum_size = Vector2(248, 0)
+custom_minimum_size = Vector2(308, 0)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -264.0
+offset_left = -324.0
 offset_bottom = 68.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
@@ -547,6 +548,25 @@ texture_pressed = ExtResource("8_iv6uh")
 texture_hover = ExtResource("8_iv6uh")
 texture_disabled = ExtResource("8_iv6uh")
 texture_focused = ExtResource("8_iv6uh")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="EscapeRopeSlot" type="PanelContainer" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="EscapeRopeButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Escape Rope"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("20_escape_rope")
+texture_pressed = ExtResource("20_escape_rope")
+texture_hover = ExtResource("20_escape_rope")
+texture_disabled = ExtResource("20_escape_rope")
+texture_focused = ExtResource("20_escape_rope")
 ignore_texture_size = true
 stretch_mode = 5
 

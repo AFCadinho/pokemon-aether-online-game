@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="15_khy7p"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="16_bnyo4"]
 [ext_resource type="Texture2D" uid="uid://cugmmwml7tr6y" path="res://assets/followers/PIDGEY.png" id="16_cd607"]
-[ext_resource type="Texture2D" uid="uid://dsalb0724w4wo" path="res://assets/followers/PIDGEOT.png" id="16_qefnj"]
+[ext_resource type="Texture2D" uid="uid://be0o6e0g6umxc" path="res://assets/followers/LILLIPUP.png" id="16_qefnj"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="17_bnyo4"]
 [ext_resource type="Texture2D" uid="uid://bywpecaqt7jd3" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trChampion01.png" id="17_cd607"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="20_viridian"]
@@ -1031,11 +1031,11 @@ mugshot = ExtResource("15_4m8jl")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=861955121]
 
-[node name="Pidgeot" parent="Entities/Pokemon" unique_id=2091997393 instance=ExtResource("27_pokemon")]
+[node name="Lillipup" parent="Entities/Pokemon" unique_id=2091997393 instance=ExtResource("27_pokemon")]
 position = Vector2(816, 688)
-overworld_pokemon_id = "kanto_route_1_pidgeot_1"
-species_id = "pidgeot"
-display_name = "Pidgeot"
+overworld_pokemon_id = "kanto_route_1_lillipup_1"
+species_id = "lillipup"
+display_name = "Lillipup"
 npc_sprite_frames = SubResource("SpriteFrames_oup8f")
 movement_behavior = "pace_horizontal"
 
