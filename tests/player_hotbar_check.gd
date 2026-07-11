@@ -13,6 +13,7 @@ func _init() -> void:
 	_check(not ui.contains("hotbar_panel = PanelContainer.new()"), "no duplicate horizontal hotbar")
 	_check(ui.contains("escape-rope-action"), "virtual Escape Rope key item")
 	_check(ui.contains("MOUSE_BUTTON_RIGHT"), "Bag-to-hotbar assignment")
+	_check(ui.contains("_on_hotbar_bag_item_dropped"), "Bag drag-and-drop target")
 	_check(ui.contains("PlayerHotbarService.clear_slot"), "hotbar slot removal")
 	_check(ui.contains("_show_bag_item_use_popup(item)"), "medicine target flow reuse")
 	_check(ui.contains("escape_rope_slot.visible = false"), "Escape Rope removed from toggle bar")

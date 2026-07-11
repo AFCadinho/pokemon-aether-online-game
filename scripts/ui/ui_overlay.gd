@@ -8985,13 +8985,14 @@ func _create_bag_empty_state(text: String) -> Control:
 	return label
 
 func _create_bag_item_slot(item: Dictionary) -> Control:
-	var slot := PanelContainer.new()
+	var slot := HotbarBagItemSlot.new()
+	slot.hotbar_item = item.duplicate(true)
 	slot.custom_minimum_size = Vector2(78, 92)
 	slot.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), Color("#557999"), 8, 1))
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 	slot.tooltip_text = str(item.get("name", "Item"))
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true)))
+	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 
 	var margin_container := MarginContainer.new()
 	margin_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -9017,6 +9018,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = _load_item_icon(str(item.get("id", "")))
+	slot.icon_texture = icon.texture
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_wrap.add_child(icon)
 
@@ -9037,18 +9039,16 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	stack.add_child(name_label)
 	return slot
 
-func _on_bag_item_slot_gui_input(event: InputEvent, item: Dictionary) -> void:
+func _on_bag_item_slot_gui_input(event: InputEvent, item: Dictionary, slot: HotbarBagItemSlot) -> void:
 	if not (event is InputEventMouseButton):
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
-	if not mouse_event.pressed:
-		return
-
-	get_viewport().set_input_as_handled()
-	if mouse_event.button_index == MOUSE_BUTTON_RIGHT:
+	if mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
+		get_viewport().set_input_as_handled()
 		_assign_bag_item_to_hotbar(item)
-	elif mouse_event.button_index == MOUSE_BUTTON_LEFT:
+	elif mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed and not slot.is_drag_successful():
+		get_viewport().set_input_as_handled()
 		_on_bag_item_selected(item)
 
 func _on_bag_item_selected(item: Dictionary) -> void:
@@ -14330,7 +14330,8 @@ func _setup_player_hotbar() -> void:
 		if key_label != null:
 			key_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			key_label.z_index = 2
-		var button := TextureButton.new()
+		var button := PlayerHotbarSlotButton.new()
+		button.slot_index = slot_index
 		button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		button.ignore_texture_size = true
 		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
@@ -14338,6 +14339,7 @@ func _setup_player_hotbar() -> void:
 		button.tooltip_text = "Empty hotbar slot %s" % (slot_index + 1)
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
+		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
 		slot.add_child(button)
 		slot.move_child(button, 0)
 		hotbar_buttons.append(button)
@@ -14425,6 +14427,21 @@ func _on_hotbar_slot_gui_input(event: InputEvent, slot_index: int) -> void:
 
 
 func _assign_bag_item_to_hotbar(item: Dictionary) -> void:
+	var target_slot := -1
+	for slot_index in range(8):
+		if _hotbar_entry_for_slot(slot_index).is_empty():
+			target_slot = slot_index
+			break
+	if target_slot < 0:
+		target_slot = 7
+	await _assign_bag_item_to_hotbar_slot(item, target_slot)
+
+
+func _on_hotbar_bag_item_dropped(slot_index: int, item: Dictionary) -> void:
+	await _assign_bag_item_to_hotbar_slot(item, slot_index)
+
+
+func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	var entry_type := "item"
 	var entry_id := item_id
@@ -14434,13 +14451,6 @@ func _assign_bag_item_to_hotbar(item: Dictionary) -> void:
 	elif not _is_pokemon_usable_item_id(item_id):
 		_add_chat_message("This item cannot be assigned to the overworld hotbar.")
 		return
-	var target_slot := -1
-	for slot_index in range(8):
-		if _hotbar_entry_for_slot(slot_index).is_empty():
-			target_slot = slot_index
-			break
-	if target_slot < 0:
-		target_slot = 7
 	var result: Dictionary = await PlayerHotbarService.assign(target_slot, entry_type, entry_id)
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
