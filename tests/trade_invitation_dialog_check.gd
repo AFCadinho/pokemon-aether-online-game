@@ -18,6 +18,7 @@ func _init() -> void:
 	root.add_child(dialog)
 	await process_frame
 	dialog.setup()
+	_check(not dialog.visible and dialog.trade.is_empty(), "invitation window starts hidden without authoritative trade state")
 	var auth := root.get_node_or_null("AuthService")
 	if auth != null:
 		auth.current_user = {"id": 2, "username": "misty"}

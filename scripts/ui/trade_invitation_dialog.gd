@@ -21,6 +21,8 @@ var notified_incoming_trade_ids: Dictionary = {}
 
 
 func setup() -> void:
+	hide()
+	trade.clear()
 	title = "Trade Invitation"
 	min_size = DIALOG_SIZE
 	max_size = DIALOG_SIZE
