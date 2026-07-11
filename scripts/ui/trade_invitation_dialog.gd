@@ -22,6 +22,9 @@ func setup() -> void:
 	if realtime != null:
 		realtime.invitation_received.connect(show_trade)
 		realtime.active_trade_changed.connect(_on_trade_changed)
+		var snapshot: Dictionary = realtime.active_trade_snapshot
+		if str(snapshot.get("status", "")) == "invited" and _role_for_trade(snapshot) == "recipient":
+			show_trade.call_deferred(snapshot.duplicate(true))
 
 
 func send_invitation(username: String) -> Dictionary:
@@ -101,6 +104,9 @@ func _apply_result(result: Dictionary) -> void:
 
 
 func _on_trade_changed(value: Dictionary) -> void:
+	if str(value.get("status", "")) == "invited" and _role_for_trade(value) == "recipient":
+		show_trade(value)
+		return
 	if str(value.get("tradeId", "")) == str(trade.get("tradeId", "")):
 		trade = value.duplicate(true)
 		if str(trade.get("status", "")) != "invited":
@@ -110,9 +116,13 @@ func _on_trade_changed(value: Dictionary) -> void:
 
 
 func _current_role() -> String:
+	return _role_for_trade(trade)
+
+
+func _role_for_trade(value: Dictionary) -> String:
 	var auth := get_node_or_null("/root/AuthService")
 	var user_id := int(auth.current_user.get("id", 0)) if auth != null else 0
-	for participant_value: Variant in trade.get("participants", []):
+	for participant_value: Variant in value.get("participants", []):
 		if participant_value is Dictionary and int(participant_value.get("userId", 0)) == user_id:
 			return str(participant_value.get("role", ""))
 	return ""
