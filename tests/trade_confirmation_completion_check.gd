@@ -15,7 +15,10 @@ func _init() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_workspace.gd")
 	_check(source.contains("func _confirm_trade"), "workspace owns explicit confirmation action")
 	_check(source.contains("lockedRevision") and source.contains("snapshotHash"), "workspace submits exact locked review")
-	_check(source.contains("refresh_after_completion"), "completion refreshes party and storage")
+	_check(source.contains("refresh_after_completion"), "completion refreshes the party")
+	_check(source.contains("party_service.refresh_party()"), "completion applies the authoritative party response to PlayerSave")
+	var party_service_source := FileAccess.get_file_as_string("res://scripts/services/player_party_state_service.gd")
+	_check(party_service_source.contains("func refresh_party()") and party_service_source.contains("_apply_party_response(result)"), "party refresh emits PlayerSave party replacement")
 	_check(not source.contains("owner_user_id"), "client never predicts ownership mutation")
 	var completion_messages := preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({
 		"completionResult": {"transfers": [

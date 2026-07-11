@@ -731,7 +731,11 @@ func _confirm_trade() -> void:
 func refresh_after_completion() -> void:
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
 	if party_service != null:
-		await party_service.load_party()
+		var result: Dictionary = await party_service.refresh_party()
+		if not bool(result.get("success", false)):
+			var overlay := get_tree().get_first_node_in_group("ui_overlay")
+			if overlay != null and overlay.has_method("add_system_message"):
+				overlay.call("add_system_message", "Trade completed, but your party could not be refreshed. Please reconnect.")
 
 
 func _notify_trade_completion(snapshot: Dictionary) -> void:

@@ -32,6 +32,12 @@ func load_party() -> Dictionary:
 	}
 
 
+func refresh_party() -> Dictionary:
+	var result: Dictionary = await load_party()
+	_apply_party_response(result)
+	return result
+
+
 func save_party(party_state: Dictionary) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
