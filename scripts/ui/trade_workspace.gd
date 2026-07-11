@@ -532,10 +532,13 @@ func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []
 	_render_offers()
 	var service := get_node_or_null("/root/TradeService")
 	var result: Dictionary
+	var trade_id := str(trade.get("tradeId", ""))
 	if service == null:
 		result = {"success":false, "error":"Trade service unavailable."}
 	else:
-		result = await service.replace_offer(str(trade.get("tradeId", "")), int(trade.get("revision", 0)), pokemon_ids, "", item_offers)
+		result = await service.replace_offer(trade_id, int(trade.get("revision", 0)), pokemon_ids, "", item_offers)
+		if _is_stale_revision_error(result):
+			result = await _retry_offer_after_stale_revision(service, trade_id, pokemon_ids, item_offers)
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
 		_show_error(_friendly_error(result))
@@ -546,6 +549,32 @@ func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []
 	if realtime != null:
 		realtime.apply_snapshot(trade)
 	await refresh_available_pokemon()
+
+
+func _retry_offer_after_stale_revision(service: Node, trade_id: String, pokemon_ids: Array[int], item_offers: Array[Dictionary]) -> Dictionary:
+	var refresh: Dictionary = await service.load_trade(trade_id)
+	if not bool(refresh.get("success", false)):
+		return refresh
+	var latest: Dictionary = refresh.get("trade", {}).duplicate(true)
+	if str(latest.get("tradeId", "")) != trade_id or str(latest.get("status", "")) != "active":
+		return {"success":false, "error":"The trade is no longer editable."}
+	trade = latest
+	var realtime := get_node_or_null("/root/TradeRealtimeService")
+	if realtime != null:
+		realtime.apply_snapshot(latest)
+	if _local_participant_ready() or _connection_state_unresolved():
+		return {"success":false, "error":"The trade changed and is not ready for offer updates."}
+	return await service.replace_offer(trade_id, int(latest.get("revision", 0)), pokemon_ids, "", item_offers)
+
+
+static func _is_stale_revision_error(result: Dictionary) -> bool:
+	if bool(result.get("success", false)) or int(result.get("status", 0)) != 409:
+		return false
+	var body: Dictionary = result.get("body", {}) if result.get("body", {}) is Dictionary else {}
+	var detail: Variant = body.get("detail", "")
+	if detail is Dictionary:
+		return str(detail.get("code", "")) == "stale_trade_revision" or str(detail.get("message", "")).to_lower() == "stale trade revision"
+	return str(detail).to_lower() == "stale trade revision" or str(result.get("error", "")).to_lower() == "stale trade revision"
 
 
 func _set_ready(ready: bool) -> void:
@@ -1257,6 +1286,8 @@ func _friendly_error(result: Dictionary) -> String:
 		"trade_review_not_locked": return "This trade is no longer locked for review."
 		"trade_settlement_invalidated": return "The trade changed and could not be completed. Refresh the authoritative trade state."
 		"trade_settlement_retryable": return "The trade was not committed. Refresh and try again."
+	if _is_stale_revision_error(result):
+		return "The trade changed again. Please retry your offer."
 	return str(result.get("error", "The offer could not be updated. Refresh and try again."))
 
 
