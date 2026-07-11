@@ -58,7 +58,7 @@ func handle_transport_message(message: Dictionary, generation: int) -> void:
 	if generation != socket_generation or int(message.get("v", 0)) != 1:
 		_trace("transport_message_ignored", {"messageType": str(message.get("type", "")), "messageGeneration": generation, "socketGeneration": socket_generation, "version": int(message.get("v", 0))})
 		return
-	_trace("transport_message", {"messageType": str(message.get("type", "")), "generation": generation})
+	_trace("transport_message", {"messageType": str(message.get("type", "")), "code": str(message.get("code", "")), "fatal": bool(message.get("fatal", false)), "generation": generation})
 	match str(message.get("type", "")):
 		"trade.snapshot": apply_snapshot(message.get("trade", {}))
 		"trade.events":
@@ -145,6 +145,9 @@ func apply_snapshot(trade: Dictionary) -> void:
 			_trace("invitation_snapshot_applied", {"tradeId": trade_id, "isRecipient": recipient})
 			if recipient:
 				invitation_received.emit(active_trade_snapshot.duplicate(true))
+		if str(trade.get("status", "")) in ["declined", "cancelled", "expired", "completed"]:
+			_trace("terminal_snapshot_applied", {"tradeId": trade_id, "status": str(trade.get("status", "")), "revision": revision, "lastEventSeq": event_seq})
+			stop_transport(true)
 
 func apply_event(event: Dictionary) -> void:
 	if str(event.get("tradeId", "")).strip_edges() != active_trade_id:
@@ -380,7 +383,6 @@ func refresh_completed_trade(trade_id: String) -> void:
 			var snapshot := _dictionary(result.get("trade", {}))
 			if str(snapshot.get("status", "")) == "completed":
 				apply_snapshot(snapshot)
-				stop_transport(true)
 				return
 		if not is_inside_tree():
 			return
@@ -402,7 +404,6 @@ func refresh_known_trade_after_active_miss(trade_id: String) -> void:
 		return
 	if str(snapshot.get("status", "")) in ["declined", "cancelled", "expired", "completed"]:
 		apply_snapshot(snapshot)
-		stop_transport(true)
 
 
 func _active_result_debug_fields(result: Dictionary) -> Dictionary:
