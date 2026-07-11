@@ -15,6 +15,10 @@ func _get_drag_data(_position: Vector2) -> Variant:
 		return null
 	var preview := TextureRect.new()
 	preview.custom_minimum_size = Vector2(42, 42)
+	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview.top_level = true
+	preview.z_as_relative = false
+	preview.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	preview.texture = icon_texture
 	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
