@@ -71,6 +71,7 @@ func _init() -> void:
 	_check(not source.contains("replace_offer") and not source.contains("offer_slots") and not source.contains("Ready"), "no Pokemon offer mutation UI")
 	_check(source.contains("DIALOG_SIZE") and source.contains("_style_button"), "invitation dialog uses compact trade styling")
 	_check(source.contains("borderless = true"), "invitation uses custom chrome")
+	_check(source.contains("mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND"), "invitation buttons use the pointing-hand cursor")
 	dialog.queue_free()
 	system_overlay.queue_free()
 	quit(1 if failed else 0)

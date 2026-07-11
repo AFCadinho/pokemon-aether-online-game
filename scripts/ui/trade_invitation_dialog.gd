@@ -53,6 +53,7 @@ func setup() -> void:
 	close_button.text = "X"
 	close_button.tooltip_text = "Close invitation"
 	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.custom_minimum_size = Vector2(30, 30)
 	close_button.add_theme_color_override("font_color", TRADE_MUTED)
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
@@ -301,6 +302,7 @@ func _button_style(background: Color, border: Color) -> StyleBoxFlat:
 
 
 func _style_button(button: Button, kind: String) -> void:
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var normal_bg := Color("#0d4359")
 	var hover_bg := Color("#12627f")
 	var border := TRADE_ACCENT
