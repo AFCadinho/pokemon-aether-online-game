@@ -7,6 +7,8 @@ var service: Node
 
 
 func _init() -> void:
+	var service_source := FileAccess.get_file_as_string("res://scripts/services/trade_service.gd")
+	_check_equal(service_source.contains("money_offer") and service_source.contains("\"money\":money"), true, "offer replacement includes validated money")
 	service = TradeServiceScript.new()
 	_check_capability_normalization()
 	_check_capability_defaults()

@@ -21,6 +21,7 @@ func _init() -> void:
 	_check(source.contains("party_service.refresh_party()"), "completion applies the authoritative party response to PlayerSave")
 	_check(source.contains("givesItems") and source.contains("receivesItems"), "immutable review renders item consent fields")
 	_check(source.contains("/root/InventoryService") and source.contains("inventory_service.load_inventory()"), "item completion refreshes authoritative inventory")
+	_check(source.contains("/root/PlayerWalletService") and source.contains("wallet_service.load_wallet()"), "money completion refreshes the authoritative wallet")
 	var party_service_source := FileAccess.get_file_as_string("res://scripts/services/player_party_state_service.gd")
 	_check(party_service_source.contains("func refresh_party()") and party_service_source.contains("_apply_party_response(result)"), "party refresh emits PlayerSave party replacement")
 	_check(not source.contains("owner_user_id"), "client never predicts ownership mutation")
@@ -40,6 +41,23 @@ func _init() -> void:
 	}, 1)
 	_check(item_messages.get("removed", "") == "Removed 4x Poke Ball from your inventory.", "completion reports authoritative removed items")
 	_check(item_messages.get("received", "") == "Received 2x Potion in your inventory.", "completion reports authoritative received items")
+	var money_messages := preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({
+		"completionResult": {"moneyTransfers": [
+			{"amount":300,"fromUserId":1,"toUserId":2},
+			{"amount":100,"fromUserId":2,"toUserId":1},
+		], "transfers": []}
+	}, 1)
+	_check(money_messages.get("removed", "") == "Removed $300 from your wallet.", "completion reports authoritative removed money")
+	_check(money_messages.get("received", "") == "Received $100 in your wallet.", "completion reports authoritative received money")
+	var mixed_messages := preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({
+		"completionResult": {
+			"transfers":[{"pokemonId":11,"fromUserId":1,"toUserId":2,"speciesName":"Pidgey"},{"pokemonId":12,"fromUserId":2,"toUserId":1,"speciesName":"Eevee"}],
+			"itemTransfers":[{"itemId":"potion","name":"Potion","quantity":2,"fromUserId":1,"toUserId":2},{"itemId":"antidote","name":"Antidote","quantity":1,"fromUserId":2,"toUserId":1}],
+			"moneyTransfers":[{"amount":50,"fromUserId":1,"toUserId":2},{"amount":25,"fromUserId":2,"toUserId":1}],
+		}
+	}, 1)
+	_check(mixed_messages.get("removed", "") == "Removed Pidgey from your party and 2x Potion from your inventory and $50 from your wallet.", "mixed completion reports every outgoing asset")
+	_check(mixed_messages.get("received", "") == "Received Eevee in your party and 1x Antidote in your inventory and $25 in your wallet.", "mixed completion reports every incoming asset")
 	_check(preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({"status":"completed"}, 1).is_empty(), "incomplete realtime event waits for REST completion result")
 	var service := Realtime.new()
 	var fake := FakeTradeService.new()

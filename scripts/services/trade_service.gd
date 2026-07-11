@@ -97,7 +97,7 @@ func cancel_invitation(trade_id: String, expected_revision: int, request_id := "
 	return await _invitation_transition(trade_id, "cancel", expected_revision, request_id)
 
 
-func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array, request_id := "", item_offers: Array = []) -> Dictionary:
+func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array, request_id := "", item_offers: Array = [], money_offer := 0) -> Dictionary:
 	var normalized_id := trade_id.strip_edges()
 	if normalized_id == "":
 		return _validation_error("Trade id is required.")
@@ -122,9 +122,12 @@ func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array,
 		items.append({"itemId":item_id, "quantity":int(quantity_value)})
 	if items.size() > 500:
 		return _validation_error("The item offer is too large.")
-	if ids.is_empty() and items.is_empty():
-		return _validation_error("Offer at least one Pokemon or item.")
-	return await _trade_command("/%s/offer" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0), "pokemonIds": ids, "items":items}, HTTPClient.METHOD_PUT)
+	var money := int(money_offer)
+	if money < 0 or money > 2147483647:
+		return _validation_error("Money offer is invalid.")
+	if ids.is_empty() and items.is_empty() and money == 0:
+		return _validation_error("Offer at least one Pokemon, item, or money.")
+	return await _trade_command("/%s/offer" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0), "pokemonIds": ids, "items":items, "money":money}, HTTPClient.METHOD_PUT)
 
 
 func set_readiness(trade_id: String, expected_revision: int, ready: bool, request_id := "") -> Dictionary:

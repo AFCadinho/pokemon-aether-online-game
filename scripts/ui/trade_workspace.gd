@@ -17,6 +17,7 @@ var trade: Dictionary = {}
 var candidates: Array[Dictionary] = []
 var selected_ids: Array[int] = []
 var selected_item_offers: Array[Dictionary] = []
+var selected_money := 0
 var inventory_items: Array[Dictionary] = []
 var local_offer_box: PanelContainer
 var opponent_offer_box: PanelContainer
@@ -30,6 +31,9 @@ var item_selector_rows: Dictionary = {}
 var item_selector_search: LineEdit
 var item_selector_empty_label: Label
 var add_items_button: Button
+var money_amount_spinbox: SpinBox
+var money_balance_label: Label
+var update_money_button: Button
 var local_ready_indicator: Label
 var opponent_ready_indicator: Label
 var phase_label: Label
@@ -143,6 +147,25 @@ func _build_ui() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	editable_root.add_child(actions)
+	var money_label := Label.new()
+	money_label.text = "Money"
+	money_label.add_theme_color_override("font_color", TRADE_MUTED)
+	actions.add_child(money_label)
+	money_amount_spinbox = SpinBox.new()
+	money_amount_spinbox.min_value = 0
+	money_amount_spinbox.max_value = 2147483647
+	money_amount_spinbox.step = 1
+	money_amount_spinbox.custom_minimum_size.x = 130
+	actions.add_child(money_amount_spinbox)
+	update_money_button = Button.new()
+	update_money_button.text = "Set Money"
+	update_money_button.pressed.connect(_update_money_offer)
+	_apply_button_style(update_money_button, "secondary")
+	actions.add_child(update_money_button)
+	money_balance_label = Label.new()
+	money_balance_label.text = "Available: $0"
+	money_balance_label.add_theme_color_override("font_color", TRADE_GOLD)
+	actions.add_child(money_balance_label)
 	add_items_button = Button.new()
 	add_items_button.text = "Add Items"
 	add_items_button.pressed.connect(_open_item_selector)
@@ -458,6 +481,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 	popup_centered()
 	if refresh_candidates:
 		refresh_available_pokemon.call_deferred()
+		refresh_available_money.call_deferred()
 
 
 func refresh_available_pokemon() -> void:
@@ -525,8 +549,9 @@ static func _add_candidate(result: Array[Dictionary], seen: Dictionary, value: V
 	result.append({"pokemonId":pokemon_id, "pokemon":payload.duplicate(true), "location":location.duplicate(true)})
 
 
-func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []) -> void:
-	if mutation_in_flight or (pokemon_ids.is_empty() and item_offers.is_empty()) or _local_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
+func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = [], money_offer := -1) -> void:
+	var resolved_money := selected_money if money_offer < 0 else int(money_offer)
+	if mutation_in_flight or (pokemon_ids.is_empty() and item_offers.is_empty() and resolved_money == 0) or _local_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
 		return
 	mutation_in_flight = true
 	_render_offers()
@@ -536,9 +561,9 @@ func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []
 	if service == null:
 		result = {"success":false, "error":"Trade service unavailable."}
 	else:
-		result = await service.replace_offer(trade_id, int(trade.get("revision", 0)), pokemon_ids, "", item_offers)
+		result = await service.replace_offer(trade_id, int(trade.get("revision", 0)), pokemon_ids, "", item_offers, resolved_money)
 		if _is_stale_revision_error(result):
-			result = await _retry_offer_after_stale_revision(service, trade_id, pokemon_ids, item_offers)
+			result = await _retry_offer_after_stale_revision(service, trade_id, pokemon_ids, item_offers, resolved_money)
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
 		_show_error(_friendly_error(result))
@@ -551,7 +576,7 @@ func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []
 	await refresh_available_pokemon()
 
 
-func _retry_offer_after_stale_revision(service: Node, trade_id: String, pokemon_ids: Array[int], item_offers: Array[Dictionary]) -> Dictionary:
+func _retry_offer_after_stale_revision(service: Node, trade_id: String, pokemon_ids: Array[int], item_offers: Array[Dictionary], money_offer: int) -> Dictionary:
 	var refresh: Dictionary = await service.load_trade(trade_id)
 	if not bool(refresh.get("success", false)):
 		return refresh
@@ -564,7 +589,7 @@ func _retry_offer_after_stale_revision(service: Node, trade_id: String, pokemon_
 		realtime.apply_snapshot(latest)
 	if _local_participant_ready() or _connection_state_unresolved():
 		return {"success":false, "error":"The trade changed and is not ready for offer updates."}
-	return await service.replace_offer(trade_id, int(latest.get("revision", 0)), pokemon_ids, "", item_offers)
+	return await service.replace_offer(trade_id, int(latest.get("revision", 0)), pokemon_ids, "", item_offers, money_offer)
 
 
 static func _is_stale_revision_error(result: Dictionary) -> bool:
@@ -601,15 +626,19 @@ func _set_ready(ready: bool) -> void:
 func _sync_selected_from_offer() -> void:
 	selected_ids.clear()
 	selected_item_offers.clear()
+	selected_money = 0
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
 		if offer_value is Dictionary and int(offer_value.get("userId", 0)) == user_id:
+			selected_money = maxi(int(offer_value.get("money", 0)), 0)
 			for pokemon_value: Variant in offer_value.get("pokemon", []):
 				if pokemon_value is Dictionary:
 					selected_ids.append(int(pokemon_value.get("pokemonId", 0)))
 			for item_value: Variant in offer_value.get("items", []):
 				if item_value is Dictionary:
 					selected_item_offers.append({"itemId":str(item_value.get("itemId", "")), "quantity":int(item_value.get("quantity", 0))})
+	if money_amount_spinbox != null:
+		money_amount_spinbox.value = selected_money
 
 
 func _render_offers() -> void:
@@ -632,6 +661,30 @@ func _render_offers() -> void:
 		for index in range(item_values.size()):
 			if item_values[index] is Dictionary:
 				_render_item_offer(item_target, item_values[index], is_local, index)
+		var money := maxi(int(offer_value.get("money", 0)), 0)
+		if money > 0:
+			_render_money_offer(item_target, money, is_local)
+
+
+func _render_money_offer(target: VBoxContainer, amount: int, is_local: bool) -> void:
+	var row := HBoxContainer.new()
+	row.custom_minimum_size.y = 32
+	target.add_child(row)
+	var label := Label.new()
+	label.text = "$%s" % format_money(amount)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_color_override("font_color", TRADE_GOLD)
+	row.add_child(label)
+	var kind := Label.new()
+	kind.text = "Money"
+	kind.add_theme_color_override("font_color", TRADE_MUTED)
+	row.add_child(kind)
+	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
+		var remove := Button.new()
+		remove.text = "X"
+		remove.tooltip_text = "Remove money from offer"
+		remove.pressed.connect(_replace_offer.bind(selected_ids.duplicate(), selected_item_offers.duplicate(true), 0))
+		row.add_child(remove)
 
 
 func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool, position: int) -> void:
@@ -673,6 +726,33 @@ func _open_item_selector() -> void:
 	_rebuild_item_selector_rows()
 	item_selector_popup.popup_centered(Vector2i(640, 560))
 	item_selector_search.grab_focus()
+
+
+func refresh_available_money() -> void:
+	var wallet_service := get_node_or_null("/root/PlayerWalletService")
+	if wallet_service == null:
+		return
+	var result: Dictionary = await wallet_service.load_wallet()
+	if not bool(result.get("success", false)):
+		return
+	var wallet: Dictionary = result.get("wallet", {}) if result.get("wallet", {}) is Dictionary else {}
+	var balance := maxi(int(wallet.get("money", 0)), 0)
+	wallet_service.apply_wallet_result(result)
+	if money_amount_spinbox != null:
+		money_amount_spinbox.max_value = maxi(balance, selected_money)
+		money_amount_spinbox.value = mini(selected_money, int(money_amount_spinbox.max_value))
+	if money_balance_label != null:
+		money_balance_label.text = "Available: $%s" % format_money(balance)
+
+
+func _update_money_offer() -> void:
+	if money_amount_spinbox == null:
+		return
+	var amount := maxi(int(money_amount_spinbox.value), 0)
+	if amount == 0 and selected_ids.is_empty() and selected_item_offers.is_empty():
+		_show_error("Offer at least one Pokemon, item, or money.")
+		return
+	_replace_offer(selected_ids.duplicate(), selected_item_offers.duplicate(true), amount)
 
 
 func _rebuild_item_selector_rows() -> void:
@@ -773,7 +853,7 @@ func _remove_item_offer_position(position: int) -> void:
 
 
 func _local_offer_asset_count() -> int:
-	return selected_ids.size() + selected_item_offers.size()
+	return selected_ids.size() + selected_item_offers.size() + (1 if selected_money > 0 else 0)
 
 
 func _clear_offer_slots(slots: Array[Control]) -> void:
@@ -974,14 +1054,16 @@ func _render_mode() -> void:
 	ready_button.visible = not local_ready
 	ready_button.disabled = mutation_in_flight or not _local_offer_nonempty() or blocked
 	add_items_button.disabled = mutation_in_flight or local_ready or blocked
+	update_money_button.disabled = mutation_in_flight or local_ready or blocked
+	money_amount_spinbox.editable = not mutation_in_flight and not local_ready and not blocked
 	edit_button.visible = local_ready
 	edit_button.disabled = mutation_in_flight or blocked
 	if local_ready:
 		status_label.text = "Your offer is ready and cannot be edited."
-	elif _opponent_receive_capacity() <= 0 and selected_item_offers.is_empty():
+	elif _opponent_receive_capacity() <= 0 and selected_item_offers.is_empty() and selected_money == 0:
 		status_label.text = "The other player needs a free party slot before you can offer a Pokemon."
 	elif not _local_offer_nonempty():
-		status_label.text = "Offer at least one Pokemon or item before becoming Ready."
+		status_label.text = "Offer at least one Pokemon, item, or money before becoming Ready."
 	else:
 		status_label.text = ""
 
@@ -998,6 +1080,8 @@ func _render_locked_review() -> void:
 			_add_review_pokemon(review_receive_list, participant_value.get("receives", []))
 			_add_review_items(review_give_list, participant_value.get("givesItems", []))
 			_add_review_items(review_receive_list, participant_value.get("receivesItems", []))
+			_add_review_money(review_give_list, int(participant_value.get("givesMoney", 0)))
+			_add_review_money(review_receive_list, int(participant_value.get("receivesMoney", 0)))
 	review_trust_label.text = "Locked revision %d  Review %s" % [int(review.get("lockedRevision", 0)), str(review.get("snapshotHash", "")).left(12)]
 	var local_confirmed := _local_participant_confirmed()
 	confirm_button.visible = not local_confirmed
@@ -1051,6 +1135,15 @@ func refresh_after_completion() -> void:
 		else:
 			if overlay != null and overlay.has_method("add_system_message"):
 				overlay.call("add_system_message", "Trade completed, but your inventory could not be refreshed. Please reconnect.")
+	if bool(refresh.get("wallet", false)):
+		var wallet_service := get_node_or_null("/root/PlayerWalletService")
+		var wallet_result: Dictionary = await wallet_service.load_wallet() if wallet_service != null else {"success":false,"error":"Wallet service unavailable."}
+		var overlay := get_tree().get_first_node_in_group("ui_overlay")
+		if bool(wallet_result.get("success", false)):
+			wallet_service.apply_wallet_result(wallet_result)
+			get_tree().call_group("ui_overlay", "refresh_money_display")
+		elif overlay != null and overlay.has_method("add_system_message"):
+			overlay.call("add_system_message", "Trade completed, but your wallet could not be refreshed. Please reconnect.")
 
 
 func _notify_trade_completion(snapshot: Dictionary) -> void:
@@ -1077,6 +1170,8 @@ static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> 
 	var received: Array[String] = []
 	var removed_items: Array[String] = []
 	var received_items: Array[String] = []
+	var removed_money := 0
+	var received_money := 0
 	for transfer_value: Variant in transfers:
 		if not transfer_value is Dictionary:
 			continue
@@ -1095,17 +1190,28 @@ static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> 
 				removed_items.append(item_label)
 			if int(transfer_value.get("toUserId", 0)) == user_id:
 				received_items.append(item_label)
-	if removed.is_empty() and removed_items.is_empty():
+	var money_transfers: Variant = result.get("moneyTransfers", [])
+	if money_transfers is Array:
+		for transfer_value: Variant in money_transfers:
+			if not transfer_value is Dictionary:
+				continue
+			if int(transfer_value.get("fromUserId", 0)) == user_id:
+				removed_money += maxi(int(transfer_value.get("amount", 0)), 0)
+			if int(transfer_value.get("toUserId", 0)) == user_id:
+				received_money += maxi(int(transfer_value.get("amount", 0)), 0)
+	if removed.is_empty() and removed_items.is_empty() and removed_money == 0:
 		return {}
-	var removed_message := "Removed %s from your party." % ", ".join(removed) if removed_items.is_empty() else "Removed %s from your inventory." % ", ".join(removed_items)
-	var received_message := "Received %s in your party." % ", ".join(received) if received_items.is_empty() else "Received %s in your inventory." % ", ".join(received_items)
-	if not removed.is_empty() and not removed_items.is_empty():
-		removed_message = "Removed %s from your party and %s from your inventory." % [", ".join(removed), ", ".join(removed_items)]
-	if not received.is_empty() and not received_items.is_empty():
-		received_message = "Received %s in your party and %s in your inventory." % [", ".join(received), ", ".join(received_items)]
+	var removed_parts: Array[String] = []
+	var received_parts: Array[String] = []
+	if not removed.is_empty(): removed_parts.append("%s from your party" % ", ".join(removed))
+	if not removed_items.is_empty(): removed_parts.append("%s from your inventory" % ", ".join(removed_items))
+	if removed_money > 0: removed_parts.append("$%s from your wallet" % format_money(removed_money))
+	if not received.is_empty(): received_parts.append("%s in your party" % ", ".join(received))
+	if not received_items.is_empty(): received_parts.append("%s in your inventory" % ", ".join(received_items))
+	if received_money > 0: received_parts.append("$%s in your wallet" % format_money(received_money))
 	return {
-		"removed": removed_message,
-		"received": received_message,
+		"removed": "Removed %s." % " and ".join(removed_parts),
+		"received": "Received %s." % " and ".join(received_parts),
 	}
 
 
@@ -1230,6 +1336,30 @@ func _add_review_items(target: VBoxContainer, values: Variant) -> void:
 		panel.add_child(label)
 
 
+func _add_review_money(target: VBoxContainer, amount: int) -> void:
+	if amount <= 0:
+		return
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.y = 48
+	panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_GOLD, 5, 1))
+	target.add_child(panel)
+	var label := Label.new()
+	label.text = "$%s Money" % format_money(amount)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", TRADE_GOLD)
+	label.add_theme_font_size_override("font_size", 14)
+	panel.add_child(label)
+
+
+static func format_money(value: int) -> String:
+	var digits := str(maxi(value, 0))
+	var result := ""
+	while digits.length() > 3:
+		result = ",%s%s" % [digits.right(3), result]
+		digits = digits.left(digits.length() - 3)
+	return digits + result
+
+
 func _local_participant_ready() -> bool:
 	var user_id := _current_user_id()
 	for participant_value: Variant in trade.get("participants", []):
@@ -1260,7 +1390,7 @@ func _local_offer_nonempty() -> bool:
 		if offer_value is Dictionary and int(offer_value.get("userId", 0)) == user_id:
 			var pokemon: Variant = offer_value.get("pokemon", [])
 			var items: Variant = offer_value.get("items", [])
-			return (pokemon is Array and not pokemon.is_empty()) or (items is Array and not items.is_empty())
+			return (pokemon is Array and not pokemon.is_empty()) or (items is Array and not items.is_empty()) or int(offer_value.get("money", 0)) > 0
 	return false
 
 
@@ -1278,6 +1408,8 @@ func _friendly_error(result: Dictionary) -> String:
 		"item_reserved_for_trade": return "That item stack is already reserved for a trade."
 		"trade_item_quantity_unavailable", "trade_item_quantity_changed": return "That item quantity is no longer available. Refresh your inventory."
 		"trade_item_snapshot_changed": return "That item changed. Refresh your inventory before trying again."
+		"trade_money_unavailable", "trade_money_balance_changed": return "That money is no longer available. Refresh your wallet."
+		"money_reserved_for_trade": return "That money is already reserved for an active trade."
 		"trade_offer_party_only": return "Only Pokemon currently in your party can be offered."
 		"trade_party_capacity_exceeded": return "The other player does not have enough free party slots."
 		"trade_party_space_required": return "A free party slot is required to receive a Pokemon."
