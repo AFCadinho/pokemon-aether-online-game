@@ -3,6 +3,15 @@ extends Window
 class_name TradeWorkspaceNode
 
 const MAX_OFFER_SIZE := 5
+const TRADE_BG := Color("#050912fa")
+const TRADE_SURFACE := Color("#0b1422f7")
+const TRADE_SLOT := Color("#07101cf8")
+const TRADE_BORDER := Color("#345170")
+const TRADE_ACCENT := Color("#62d7ff")
+const TRADE_GOLD := Color("#d8b767")
+const TRADE_TEXT := Color("#f4f0de")
+const TRADE_MUTED := Color("#aeb8c5")
+const TRADE_READY := Color("#63df8b")
 
 var trade: Dictionary = {}
 var candidates: Array[Dictionary] = []
@@ -13,6 +22,7 @@ var local_offer_slots: Array[Control] = []
 var opponent_offer_slots: Array[Control] = []
 var local_ready_indicator: Label
 var opponent_ready_indicator: Label
+var phase_label: Label
 var status_label: Label
 var ready_button: Button
 var edit_button: Button
@@ -31,7 +41,8 @@ var party_drag_preview: TextureRect
 func _ready() -> void:
 	hide()
 	title = "Pokemon Trade"
-	min_size = Vector2i(760, 520)
+	min_size = Vector2i(1060, 610)
+	unresizable = true
 	_build_ui()
 	close_requested.connect(_on_close_requested)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
@@ -42,42 +53,91 @@ func _ready() -> void:
 
 
 func _build_ui() -> void:
+	var background := PanelContainer.new()
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	background.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 8, 1))
+	add_child(background)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 22)
+	margin.add_theme_constant_override("margin_top", 18)
+	margin.add_theme_constant_override("margin_right", 22)
+	margin.add_theme_constant_override("margin_bottom", 18)
+	background.add_child(margin)
 	var root := VBoxContainer.new()
-	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	root.add_theme_constant_override("separation", 10)
-	add_child(root)
+	root.add_theme_constant_override("separation", 14)
+	margin.add_child(root)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	root.add_child(header)
+	var heading_stack := VBoxContainer.new()
+	heading_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading_stack.add_theme_constant_override("separation", 2)
+	header.add_child(heading_stack)
+	var eyebrow := Label.new()
+	eyebrow.text = "PLAYER EXCHANGE"
+	eyebrow.add_theme_color_override("font_color", TRADE_GOLD)
+	eyebrow.add_theme_font_size_override("font_size", 12)
+	heading_stack.add_child(eyebrow)
 	var heading := Label.new()
 	heading.text = "Pokemon Trade"
-	heading.add_theme_font_size_override("font_size", 22)
-	root.add_child(heading)
+	heading.add_theme_color_override("font_color", TRADE_TEXT)
+	heading.add_theme_font_size_override("font_size", 26)
+	heading_stack.add_child(heading)
+	phase_label = Label.new()
+	phase_label.text = "OFFER SETUP"
+	phase_label.add_theme_color_override("font_color", TRADE_ACCENT)
+	phase_label.add_theme_font_size_override("font_size", 13)
+	header.add_child(phase_label)
+	var separator := HSeparator.new()
+	root.add_child(separator)
+	var status_panel := PanelContainer.new()
+	status_panel.custom_minimum_size.y = 42
+	status_panel.add_theme_stylebox_override("panel", _panel_style(Color("#091827e8"), TRADE_BORDER, 5, 1))
+	root.add_child(status_panel)
+	var status_margin := MarginContainer.new()
+	status_margin.add_theme_constant_override("margin_left", 12)
+	status_margin.add_theme_constant_override("margin_top", 9)
+	status_margin.add_theme_constant_override("margin_right", 12)
+	status_margin.add_theme_constant_override("margin_bottom", 9)
+	status_panel.add_child(status_margin)
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	root.add_child(status_label)
+	status_label.add_theme_color_override("font_color", TRADE_MUTED)
+	status_margin.add_child(status_label)
 	editable_root = VBoxContainer.new()
+	editable_root.add_theme_constant_override("separation", 14)
 	editable_root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(editable_root)
 	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 16)
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	editable_root.add_child(columns)
 	local_offer_box = _offer_section(columns, "Your Offer", local_offer_slots)
 	opponent_offer_box = _offer_section(columns, "Other Player's Offer", opponent_offer_slots)
 	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
 	editable_root.add_child(actions)
 	ready_button = Button.new()
 	ready_button.text = "Ready"
 	ready_button.pressed.connect(_set_ready.bind(true))
+	_apply_button_style(ready_button, "primary")
 	actions.add_child(ready_button)
 	edit_button = Button.new()
 	edit_button.text = "Edit Offer"
 	edit_button.pressed.connect(_set_ready.bind(false))
+	_apply_button_style(edit_button, "secondary")
 	actions.add_child(edit_button)
 	review_root = VBoxContainer.new()
+	review_root.add_theme_constant_override("separation", 12)
 	review_root.visible = false
 	review_root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(review_root)
 	review_trust_label = Label.new()
+	review_trust_label.add_theme_color_override("font_color", TRADE_GOLD)
 	review_root.add_child(review_trust_label)
 	var review_columns := HBoxContainer.new()
+	review_columns.add_theme_constant_override("separation", 16)
 	review_columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	review_root.add_child(review_columns)
 	review_give_list = _section(review_columns, "You give")
@@ -85,13 +145,16 @@ func _build_ui() -> void:
 	review_edit_button = Button.new()
 	review_edit_button.text = "Edit Offer"
 	review_edit_button.pressed.connect(_set_ready.bind(false))
+	_apply_button_style(review_edit_button, "secondary")
 	review_root.add_child(review_edit_button)
 	confirmation_label = Label.new()
 	confirmation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	confirmation_label.add_theme_color_override("font_color", TRADE_MUTED)
 	review_root.add_child(confirmation_label)
 	confirm_button = Button.new()
 	confirm_button.text = "Confirm Trade"
 	confirm_button.pressed.connect(_confirm_trade)
+	_apply_button_style(confirm_button, "primary")
 	review_root.add_child(confirm_button)
 func _process(_delta: float) -> void:
 	if visible and str(trade.get("status", "")) in ["active", "locked"]:
@@ -105,11 +168,22 @@ func _section(parent: Control, label_text: String) -> VBoxContainer:
 	parent.add_child(section)
 	var label := Label.new()
 	label.text = label_text
-	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_font_size_override("font_size", 17)
+	label.add_theme_color_override("font_color", TRADE_TEXT)
 	section.add_child(label)
+	var panel := PanelContainer.new()
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE, TRADE_BORDER, 6, 1))
+	section.add_child(panel)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	section.add_child(scroll)
+	margin.add_child(scroll)
 	var list := VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(list)
@@ -118,21 +192,23 @@ func _section(parent: Control, label_text: String) -> VBoxContainer:
 
 func _offer_section(parent: Control, label_text: String, slots: Array[Control]) -> PanelContainer:
 	var section := VBoxContainer.new()
-	section.custom_minimum_size = Vector2(340, 250)
+	section.custom_minimum_size = Vector2(490, 330)
 	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	section.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	parent.add_child(section)
 	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
 	section.add_child(header)
 	var label := Label.new()
 	label.text = label_text
 	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", TRADE_TEXT)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(label)
 	var ready_indicator := Label.new()
 	ready_indicator.text = "READY"
 	ready_indicator.visible = false
-	ready_indicator.add_theme_color_override("font_color", Color("#63df8b"))
+	ready_indicator.add_theme_color_override("font_color", TRADE_READY)
 	ready_indicator.add_theme_font_size_override("font_size", 14)
 	header.add_child(ready_indicator)
 	if label_text == "Your Offer":
@@ -143,21 +219,23 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color("#111925f2")
-	panel_style.border_color = Color("#526b87")
+	panel_style.bg_color = TRADE_SURFACE
+	panel_style.border_color = TRADE_BORDER
 	panel_style.set_border_width_all(1)
 	panel_style.set_corner_radius_all(6)
+	panel_style.shadow_color = Color("#00000066")
+	panel_style.shadow_size = 6
 	panel.add_theme_stylebox_override("panel", panel_style)
 	section.add_child(panel)
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 18)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 18)
 	panel.add_child(margin)
 	var grid := GridContainer.new()
 	grid.columns = MAX_OFFER_SIZE
-	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("h_separation", 10)
 	margin.add_child(grid)
 	for index in range(MAX_OFFER_SIZE):
 		var slot := _create_offer_slot()
@@ -168,15 +246,48 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 
 func _create_offer_slot() -> Control:
 	var slot := PanelContainer.new()
-	slot.custom_minimum_size = Vector2(58, 76)
+	slot.custom_minimum_size = Vector2(82, 118)
 	slot.mouse_filter = Control.MOUSE_FILTER_PASS
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#09111c")
-	style.border_color = Color("#36506d")
+	style.bg_color = TRADE_SLOT
+	style.border_color = TRADE_BORDER
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(4)
 	slot.add_theme_stylebox_override("panel", style)
 	return slot
+
+
+func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(width)
+	style.set_corner_radius_all(radius)
+	return style
+
+
+func _button_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _panel_style(background, border, 5, 1)
+	style.content_margin_left = 16
+	style.content_margin_right = 16
+	style.content_margin_top = 9
+	style.content_margin_bottom = 9
+	return style
+
+
+func _apply_button_style(button: Button, kind: String) -> void:
+	var primary := kind == "primary"
+	var normal_bg := Color("#0d4359") if primary else Color("#111d2c")
+	var hover_bg := Color("#12627f") if primary else Color("#192c42")
+	var border := TRADE_ACCENT if primary else TRADE_BORDER
+	button.add_theme_color_override("font_color", TRADE_TEXT)
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_disabled_color", Color("#667382"))
+	button.add_theme_stylebox_override("normal", _button_style(normal_bg, border))
+	button.add_theme_stylebox_override("hover", _button_style(hover_bg, TRADE_ACCENT))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#081a27"), TRADE_ACCENT))
+	button.add_theme_stylebox_override("focus", _button_style(hover_bg, TRADE_GOLD))
+	button.add_theme_stylebox_override("disabled", _button_style(Color("#0a1018"), Color("#253344")))
 
 
 func _on_trade_changed(value: Dictionary) -> void:
@@ -184,6 +295,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 	var refresh_candidates := status == "active" and _trade_snapshot_changed(value)
 	if status == "cancelled":
 		trade = value.duplicate(true)
+		phase_label.text = "CANCELLED"
 		editable_root.visible = false
 		review_root.visible = false
 		if str(trade.get("cancellationReason", "")) == "reconnect_timeout":
@@ -194,6 +306,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 		return
 	if status == "completed":
 		trade = value.duplicate(true)
+		phase_label.text = "COMPLETED"
 		editable_root.visible = false
 		review_root.visible = false
 		status_label.text = "Trade completed. Your party was refreshed."
@@ -327,30 +440,63 @@ func _clear_offer_slots(slots: Array[Control]) -> void:
 
 
 func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, position: int) -> void:
+	var wrapper := Control.new()
+	wrapper.mouse_filter = Control.MOUSE_FILTER_PASS
+	slot.add_child(wrapper)
 	var content := VBoxContainer.new()
 	content.alignment = BoxContainer.ALIGNMENT_CENTER
 	content.mouse_filter = Control.MOUSE_FILTER_PASS
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.offset_left = 5
+	content.offset_top = 5
+	content.offset_right = -5
+	content.offset_bottom = -5
+	wrapper.add_child(content)
 	var icon_button := Button.new()
-	icon_button.custom_minimum_size = Vector2(52, 48)
+	icon_button.custom_minimum_size = Vector2(70, 64)
 	icon_button.icon = PokemonAssets.load_party_icon(_pokemon_species(pokemon), bool(pokemon.get("shiny", false)))
 	icon_button.expand_icon = true
+	icon_button.add_theme_constant_override("icon_max_width", 58)
+	icon_button.flat = true
+	icon_button.focus_mode = Control.FOCUS_NONE
+	icon_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
+	icon_button.add_theme_stylebox_override("hover", _panel_style(Color("#62d7ff12"), TRADE_ACCENT, 4, 1))
+	icon_button.add_theme_stylebox_override("pressed", _panel_style(Color("#62d7ff20"), TRADE_ACCENT, 4, 1))
 	icon_button.tooltip_text = "%s\nOpen Pokemon summary" % _pokemon_label(pokemon)
 	icon_button.pressed.connect(_open_offer_summary.bind(pokemon, is_local))
 	content.add_child(icon_button)
 	var name_label := Label.new()
-	name_label.text = _pokemon_label(pokemon)
+	name_label.text = _pokemon_name(pokemon)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	name_label.custom_minimum_size.x = 52
+	name_label.add_theme_color_override("font_color", TRADE_TEXT)
+	name_label.add_theme_font_size_override("font_size", 13)
+	name_label.custom_minimum_size.x = 70
 	content.add_child(name_label)
+	var level_label := Label.new()
+	level_label.text = "Lv. %d" % maxi(int(pokemon.get("level", 1)), 1)
+	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	level_label.add_theme_color_override("font_color", TRADE_MUTED)
+	level_label.add_theme_font_size_override("font_size", 11)
+	content.add_child(level_label)
 	if is_local and selected_ids.size() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove_button := Button.new()
 		remove_button.text = "X"
 		remove_button.tooltip_text = "Remove from offer"
 		remove_button.focus_mode = Control.FOCUS_NONE
+		remove_button.custom_minimum_size = Vector2(22, 22)
+		remove_button.anchor_left = 1.0
+		remove_button.anchor_right = 1.0
+		remove_button.offset_left = -25
+		remove_button.offset_top = 3
+		remove_button.offset_right = -3
+		remove_button.offset_bottom = 25
+		remove_button.add_theme_color_override("font_color", Color("#ffc6ca"))
+		remove_button.add_theme_font_size_override("font_size", 11)
+		remove_button.add_theme_stylebox_override("normal", _panel_style(Color("#2a1015e8"), Color("#7d3540"), 4, 1))
+		remove_button.add_theme_stylebox_override("hover", _panel_style(Color("#6a1f2af2"), Color("#ff6b74"), 4, 1))
 		remove_button.pressed.connect(_remove_offer_position.bind(position))
-		content.add_child(remove_button)
-	slot.add_child(content)
+		wrapper.add_child(remove_button)
 
 
 func _open_offer_summary(pokemon: Dictionary, is_local: bool) -> void:
@@ -482,6 +628,7 @@ static func normalize_summary_payload(value: Dictionary) -> Dictionary:
 
 func _render_mode() -> void:
 	var locked := str(trade.get("status", "")) == "locked"
+	phase_label.text = "FINAL REVIEW" if locked else "OFFER SETUP"
 	editable_root.visible = not locked
 	review_root.visible = locked
 	if locked:
@@ -619,9 +766,33 @@ func _add_review_pokemon(target: VBoxContainer, values: Variant) -> void:
 	if not values is Array:
 		return
 	for value: Variant in values:
+		var pokemon: Dictionary = value if value is Dictionary else {}
+		var panel := PanelContainer.new()
+		panel.custom_minimum_size.y = 66
+		panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_BORDER, 5, 1))
+		target.add_child(panel)
+		var margin := MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 10)
+		margin.add_theme_constant_override("margin_top", 7)
+		margin.add_theme_constant_override("margin_right", 10)
+		margin.add_theme_constant_override("margin_bottom", 7)
+		panel.add_child(margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		margin.add_child(row)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(48, 48)
+		icon.texture = PokemonAssets.load_party_icon(_pokemon_species(pokemon), bool(pokemon.get("shiny", false)))
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(icon)
 		var label := Label.new()
-		label.text = _pokemon_label(value if value is Dictionary else {})
-		target.add_child(label)
+		label.text = _pokemon_label(pokemon)
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_color_override("font_color", TRADE_TEXT)
+		label.add_theme_font_size_override("font_size", 14)
+		row.add_child(label)
 
 
 func _local_participant_ready() -> bool:
@@ -697,6 +868,17 @@ func _pokemon_label(value: Variant) -> String:
 	if name == "" or name == "<null>":
 		name = species_id if species_id != "" else "Pokemon"
 	return "%s  Lv. %d" % [name, maxi(int(pokemon.get("level", 1)), 1)]
+
+
+func _pokemon_name(value: Dictionary) -> String:
+	var nickname := str(value.get("nickname", "")).strip_edges()
+	var species_name := str(value.get("speciesName", "")).strip_edges()
+	var species_id := str(value.get("speciesId", value.get("species", "Pokemon"))).strip_edges()
+	if nickname != "" and nickname != "<null>":
+		return nickname
+	if species_name != "" and species_name != "<null>":
+		return species_name
+	return species_id if species_id != "" else "Pokemon"
 
 
 func _pokemon_species(value: Dictionary) -> String:
