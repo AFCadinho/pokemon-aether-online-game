@@ -350,6 +350,15 @@ func _open_offer_summary(pokemon: Dictionary, is_local: bool) -> void:
 		overlay.call("open_trade_pokemon_summary", payload)
 
 
+func hide_for_pokemon_summary() -> void:
+	hide()
+
+
+func restore_after_pokemon_summary() -> void:
+	if str(trade.get("status", "")) in ["active", "locked"]:
+		popup_centered()
+
+
 func _remove_offer_position(position: int) -> void:
 	if selected_ids.size() <= 1 or position < 0 or position >= selected_ids.size():
 		return

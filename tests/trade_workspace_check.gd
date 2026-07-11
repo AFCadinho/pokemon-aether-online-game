@@ -36,6 +36,7 @@ func _init() -> void:
 	_check(source.contains("begin_party_offer_drag") and source.contains("update_party_offer_drag"), "trade window renders its own drag preview")
 	_check(source.contains("local_offer_slots") and source.contains("opponent_offer_slots"), "workspace renders two stable offer boxes")
 	_check(source.contains("open_trade_pokemon_summary"), "offered Pokemon open the shared readonly summary")
+	_check(source.contains("hide_for_pokemon_summary") and source.contains("restore_after_pokemon_summary"), "trade window yields to the shared summary and restores afterward")
 	_check(source.contains("Both players must send at least one Pokemon"), "workspace explains disabled Ready state")
 	_check(source.contains("func _trade_snapshot_changed"), "candidate refresh is gated by authoritative snapshot changes")
 	_check(source.contains("PlayerPartyStateService"), "workspace reuses party service")
@@ -52,6 +53,7 @@ func _init() -> void:
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(overlay_source.contains("_try_offer_party_drag_to_trade"), "party drag delegates offer drops before party reordering")
 	_check(overlay_source.contains("party_drag_workspace_preview"), "party drag preview is hosted above the trade window")
+	_check(overlay_source.contains("trade_summary_card_keys") and overlay_source.contains("_restore_trade_workspace_after_summary"), "closing a trade summary restores the trade window")
 	quit(1 if failed else 0)
 
 

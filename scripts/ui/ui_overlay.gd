@@ -763,6 +763,7 @@ var pokemon_summary_selected_slot := -1
 var pokemon_summary_dragging := false
 var pokemon_summary_drag_offset := Vector2.ZERO
 var pokemon_summary_open_cards: Dictionary = {}
+var trade_summary_card_keys: Dictionary = {}
 var pokemon_summary_active_card_key := ""
 var pokemon_summary_dragging_card_key := ""
 var pokemon_summary_next_card_offset_index := 0
@@ -9847,12 +9848,16 @@ func _hide_pokemon_summary_popup(card_key: String = "") -> void:
 		pokemon_summary_popup.queue_free()
 	if card_key == "":
 		card_key = pokemon_summary_active_card_key
+	var was_trade_summary := trade_summary_card_keys.has(card_key)
 	if card_key != "":
 		pokemon_summary_open_cards.erase(card_key)
+		trade_summary_card_keys.erase(card_key)
 		if pokemon_summary_active_card_key == card_key:
 			pokemon_summary_active_card_key = ""
 		if pokemon_summary_dragging_card_key == card_key:
 			pokemon_summary_dragging_card_key = ""
+	if was_trade_summary and trade_summary_card_keys.is_empty():
+		_restore_trade_workspace_after_summary()
 	_hide_pokemon_summary_ev_allocate_popup()
 	pokemon_summary_preview_pokemon = null
 	pokemon_summary_mode = "interactive"
@@ -19531,7 +19536,21 @@ func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
 	_activate_ui_panel(pokemon_summary_popup)
 
 func open_trade_pokemon_summary(pokemon_payload: Dictionary) -> void:
+	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_payload)
+	if pokemon == null:
+		_add_chat_message("Could not open Pokemon summary: %s" % PokemonFactory.last_error_message)
+		return
+	var card_key: String = _get_pokemon_summary_card_key(pokemon, -1, "readonly")
+	trade_summary_card_keys[card_key] = true
+	var workspace := get_node_or_null("/root/TradeWorkspace")
+	if workspace != null and workspace.has_method("hide_for_pokemon_summary"):
+		workspace.call("hide_for_pokemon_summary")
 	_open_readonly_pokemon_summary(pokemon_payload)
+
+func _restore_trade_workspace_after_summary() -> void:
+	var workspace := get_node_or_null("/root/TradeWorkspace")
+	if workspace != null and workspace.has_method("restore_after_pokemon_summary"):
+		workspace.call_deferred("restore_after_pokemon_summary")
 
 func _make_mail_outer_style() -> StyleBoxFlat:
 	var style := _make_panel_style(Color("#07101bf4"), Color("#e6c777"), 12, 1)
