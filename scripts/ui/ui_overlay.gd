@@ -413,8 +413,6 @@ var escape_rope_status: Dictionary = {}
 var escape_rope_remaining_seconds: float = 0.0
 var player_action_status_refresh_seconds: float = 0.0
 var escape_rope_in_flight := false
-var hotbar_panel: PanelContainer
-var hotbar_row: HBoxContainer
 var hotbar_buttons: Array[TextureButton] = []
 var hotbar_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
@@ -5518,6 +5516,17 @@ func _input(event: InputEvent) -> void:
 		_toggle_settings_menu()
 		get_viewport().set_input_as_handled()
 		return
+
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		if key_event.pressed and not key_event.echo and not key_event.ctrl_pressed and not key_event.alt_pressed and not key_event.meta_pressed:
+			var hotbar_index := _hotbar_index_from_keycode(key_event.keycode)
+			var focus_owner := get_viewport().gui_get_focus_owner()
+			var typing := focus_owner is LineEdit or focus_owner is TextEdit
+			if hotbar_index >= 0 and not typing:
+				_on_hotbar_slot_pressed(hotbar_index)
+				get_viewport().set_input_as_handled()
+				return
 
 	if not chat_input.has_focus():
 		return
@@ -14309,35 +14318,28 @@ func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 
 
 func _setup_player_hotbar() -> void:
-	hotbar_panel = PanelContainer.new()
-	hotbar_panel.name = "PlayerHotbar"
-	hotbar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	hotbar_panel.offset_left = -236.0
-	hotbar_panel.offset_top = 76.0
-	hotbar_panel.offset_right = -8.0
-	hotbar_panel.offset_bottom = 136.0
-	hotbar_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), UI_BORDER_SOFT, 8, 1))
-	root_control.add_child(hotbar_panel)
-
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 6)
-	margin.add_theme_constant_override("margin_top", 6)
-	margin.add_theme_constant_override("margin_right", 6)
-	margin.add_theme_constant_override("margin_bottom", 6)
-	hotbar_panel.add_child(margin)
-	hotbar_row = HBoxContainer.new()
-	hotbar_row.add_theme_constant_override("separation", 6)
-	margin.add_child(hotbar_row)
-	for slot_index in range(4):
+	var slot_stack := hotkey_sidebar_panel.get_node_or_null("MarginContainer/SlotStack") as VBoxContainer
+	if slot_stack == null:
+		push_error("UIOverlay: HotkeySidebar SlotStack is missing.")
+		return
+	for slot_index in range(8):
+		var slot := slot_stack.get_node_or_null("Slot%s" % (slot_index + 1)) as PanelContainer
+		if slot == null:
+			continue
+		var key_label := slot.get_node_or_null("KeyLabel") as Label
+		if key_label != null:
+			key_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			key_label.z_index = 2
 		var button := TextureButton.new()
-		button.custom_minimum_size = Vector2(48, 48)
+		button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		button.ignore_texture_size = true
 		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.tooltip_text = "Empty hotbar slot %s" % (slot_index + 1)
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
-		hotbar_row.add_child(button)
+		slot.add_child(button)
+		slot.move_child(button, 0)
 		hotbar_buttons.append(button)
 
 
@@ -14372,6 +14374,19 @@ func _hotbar_entry_for_slot(slot_index: int) -> Dictionary:
 		if value is Dictionary and int((value as Dictionary).get("slot", -1)) == slot_index:
 			return value as Dictionary
 	return {}
+
+
+func _hotbar_index_from_keycode(keycode: Key) -> int:
+	match keycode:
+		KEY_1: return 0
+		KEY_2: return 1
+		KEY_3: return 2
+		KEY_4: return 3
+		KEY_5: return 4
+		KEY_6: return 5
+		KEY_7: return 6
+		KEY_8: return 7
+		_: return -1
 
 
 func _on_hotbar_slot_pressed(slot_index: int) -> void:
@@ -14420,12 +14435,12 @@ func _assign_bag_item_to_hotbar(item: Dictionary) -> void:
 		_add_chat_message("This item cannot be assigned to the overworld hotbar.")
 		return
 	var target_slot := -1
-	for slot_index in range(4):
+	for slot_index in range(8):
 		if _hotbar_entry_for_slot(slot_index).is_empty():
 			target_slot = slot_index
 			break
 	if target_slot < 0:
-		target_slot = 3
+		target_slot = 7
 	var result: Dictionary = await PlayerHotbarService.assign(target_slot, entry_type, entry_id)
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
