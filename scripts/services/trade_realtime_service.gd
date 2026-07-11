@@ -21,6 +21,7 @@ const MAX_RECOVERY_ATTEMPTS := 3
 const MAX_RECONNECT_ATTEMPTS := 3
 const RECONNECT_DELAY_SECONDS := 2.0
 const ACTIVE_TRADE_DISCOVERY_INTERVAL_SECONDS := 3.0
+const TRADE_DEBUG_LOGGING := true
 var websocket := WebSocketPeer.new()
 var should_reconnect := false
 var reconnect_attempts := 0
@@ -39,6 +40,7 @@ func _ready() -> void:
 	# Invitation discovery and reconnect recovery must continue while modal game
 	# UI temporarily pauses regular scene processing.
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_trace("service_ready", {"processMode": process_mode})
 
 
 func _process(delta: float) -> void:
@@ -54,7 +56,9 @@ func build_join_message() -> Dictionary:
 
 func handle_transport_message(message: Dictionary, generation: int) -> void:
 	if generation != socket_generation or int(message.get("v", 0)) != 1:
+		_trace("transport_message_ignored", {"messageType": str(message.get("type", "")), "messageGeneration": generation, "socketGeneration": socket_generation, "version": int(message.get("v", 0))})
 		return
+	_trace("transport_message", {"messageType": str(message.get("type", "")), "generation": generation})
 	match str(message.get("type", "")):
 		"trade.snapshot": apply_snapshot(message.get("trade", {}))
 		"trade.events":
@@ -66,11 +70,13 @@ func handle_transport_message(message: Dictionary, generation: int) -> void:
 
 func begin_reconnect() -> bool:
 	if connecting or active_trade_id == "" or reconnect_attempts >= MAX_RECONNECT_ATTEMPTS:
+		_trace("reconnect_skipped", {"connecting": connecting, "tradeId": active_trade_id, "attempts": reconnect_attempts})
 		return false
 	connecting = true
 	should_reconnect = true
 	reconnect_attempts += 1
 	socket_generation += 1
+	_trace("reconnect_started", {"tradeId": active_trade_id, "generation": socket_generation, "attempt": reconnect_attempts, "lastEventSeq": last_applied_event_seq})
 	return true
 
 func connect_trade_socket(websocket_url: String) -> Error:
@@ -79,6 +85,7 @@ func connect_trade_socket(websocket_url: String) -> Error:
 	self.websocket_url = websocket_url
 	websocket = WebSocketPeer.new()
 	var error := websocket.connect_to_url(websocket_url)
+	_trace("socket_connect_requested", {"tradeId": active_trade_id, "generation": socket_generation, "error": int(error)})
 	if error != OK:
 		connecting = false
 		reconnect_timer = RECONNECT_DELAY_SECONDS
@@ -98,46 +105,61 @@ func poll_trade_socket() -> void:
 
 func mark_socket_open(generation: int) -> Dictionary:
 	if generation != socket_generation:
+		_trace("socket_open_ignored", {"messageGeneration": generation, "socketGeneration": socket_generation})
 		return {}
 	connecting = false
 	connected = true
 	reconnect_attempts = 0
 	connection_changed.emit(true)
+	_trace("socket_open", {"tradeId": active_trade_id, "generation": generation, "lastEventSeq": last_applied_event_seq})
 	return build_join_message()
 
 func mark_socket_closed(generation: int) -> void:
 	if generation != socket_generation:
+		_trace("socket_close_ignored", {"messageGeneration": generation, "socketGeneration": socket_generation})
 		return
 	connected = false
 	connecting = false
 	reconnect_timer = RECONNECT_DELAY_SECONDS
 	connection_changed.emit(false)
+	_trace("socket_closed", {"tradeId": active_trade_id, "generation": generation, "lastEventSeq": last_applied_event_seq})
 
 func apply_snapshot(trade: Dictionary) -> void:
 	var trade_id := str(trade.get("tradeId", "")).strip_edges()
 	if trade_id == "":
+		_trace("snapshot_rejected", {"reason": "missing_trade_id"})
 		return
 	var revision := maxi(int(trade.get("revision", 0)), 0)
-	if trade_id != active_trade_id or revision > latest_revision or (revision == latest_revision and int(trade.get("lastEventSeq", 0)) >= last_applied_event_seq):
+	var event_seq := maxi(int(trade.get("lastEventSeq", 0)), 0)
+	var accepted := trade_id != active_trade_id or revision > latest_revision or (revision == latest_revision and event_seq >= last_applied_event_seq)
+	_trace("snapshot_received", {"tradeId": trade_id, "status": str(trade.get("status", "")), "revision": revision, "lastEventSeq": event_seq, "accepted": accepted, "currentTradeId": active_trade_id, "currentRevision": latest_revision, "currentEventSeq": last_applied_event_seq})
+	if accepted:
 		active_trade_id = trade_id
 		latest_revision = revision
-		last_applied_event_seq = maxi(int(trade.get("lastEventSeq", 0)), 0)
+		last_applied_event_seq = event_seq
 		active_trade_snapshot = trade.duplicate(true)
 		snapshot_received.emit(active_trade_snapshot.duplicate(true))
 		active_trade_changed.emit(active_trade_snapshot.duplicate(true))
-		if str(trade.get("status", "")) == "invited" and _is_recipient(trade):
-			invitation_received.emit(active_trade_snapshot.duplicate(true))
+		if str(trade.get("status", "")) == "invited":
+			var recipient := _is_recipient(trade)
+			_trace("invitation_snapshot_applied", {"tradeId": trade_id, "isRecipient": recipient})
+			if recipient:
+				invitation_received.emit(active_trade_snapshot.duplicate(true))
 
 func apply_event(event: Dictionary) -> void:
 	if str(event.get("tradeId", "")).strip_edges() != active_trade_id:
+		_trace("event_ignored", {"reason": "wrong_trade", "tradeId": str(event.get("tradeId", "")), "activeTradeId": active_trade_id, "eventSeq": int(event.get("eventSeq", 0)), "eventType": str(event.get("type", ""))})
 		return
 	var seq := int(event.get("eventSeq", 0))
 	if seq <= last_applied_event_seq:
+		_trace("event_ignored", {"reason": "duplicate_or_stale", "tradeId": active_trade_id, "eventSeq": seq, "lastEventSeq": last_applied_event_seq, "eventType": str(event.get("type", ""))})
 		return
 	if recovery_in_progress:
+		_trace("event_buffered", {"tradeId": active_trade_id, "eventSeq": seq, "eventType": str(event.get("type", ""))})
 		buffered_events.append(event.duplicate(true))
 		return
 	if seq != last_applied_event_seq + 1:
+		_trace("event_gap", {"tradeId": active_trade_id, "expectedSeq": last_applied_event_seq + 1, "receivedSeq": seq, "eventType": str(event.get("type", ""))})
 		if not recovery_in_progress:
 			recovery_in_progress = true
 			recovery_required.emit(active_trade_id, last_applied_event_seq)
@@ -146,6 +168,7 @@ func apply_event(event: Dictionary) -> void:
 	last_applied_event_seq = seq
 	latest_revision = maxi(latest_revision, int(event.get("revision", 0)))
 	var event_type := str(event.get("type", ""))
+	_trace("event_applied", {"tradeId": active_trade_id, "eventSeq": seq, "revision": latest_revision, "eventType": event_type})
 	var next_status := str(_dictionary(event.get("payload", {})).get("status", ""))
 	if next_status != "" and event_type != "trade.completed" and not active_trade_snapshot.is_empty():
 		active_trade_snapshot["status"] = next_status
@@ -182,6 +205,7 @@ func clear_active_trade() -> void:
 
 
 func stop_transport(preserve_snapshot := false) -> void:
+	_trace("transport_stopping", {"tradeId": active_trade_id, "status": str(active_trade_snapshot.get("status", "")), "generation": socket_generation, "preserveSnapshot": preserve_snapshot, "socketState": int(websocket.get_ready_state())})
 	should_reconnect = false
 	connecting = false
 	connected = false
@@ -199,15 +223,18 @@ func stop_transport(preserve_snapshot := false) -> void:
 	buffered_events.clear()
 	if not preserve_snapshot:
 		active_trade_snapshot.clear()
+	_trace("transport_stopped", {"generation": socket_generation, "preservedStatus": str(active_trade_snapshot.get("status", ""))})
 
 
 func restore_active_trade_and_connect() -> Dictionary:
+	_trace("restore_started")
 	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
 	if trade_service == null:
 		return {"success": false, "error": "Trade service unavailable."}
 	if trade_service.has_method("load_capabilities"):
 		await trade_service.call("load_capabilities", true)
 	var result: Dictionary = await trade_service.call("load_active_trade")
+	_trace("restore_result", _active_result_debug_fields(result))
 	if not bool(result.get("success", false)):
 		return result
 	if not bool(result.get("hasActiveTrade", false)):
@@ -222,24 +249,31 @@ func restore_active_trade_and_connect() -> Dictionary:
 
 
 func _discover_active_trade_if_needed(delta: float) -> void:
-	if not _needs_active_trade_discovery() or active_trade_discovery_in_flight or not _is_authenticated():
-		return
 	active_trade_discovery_elapsed += delta
 	if active_trade_discovery_elapsed < ACTIVE_TRADE_DISCOVERY_INTERVAL_SECONDS:
 		return
 	active_trade_discovery_elapsed = 0.0
+	var needed := _needs_active_trade_discovery()
+	var authenticated := _is_authenticated()
+	_trace("discovery_tick", {"needed": needed, "authenticated": authenticated, "inFlight": active_trade_discovery_in_flight, "activeTradeId": active_trade_id, "snapshotStatus": str(active_trade_snapshot.get("status", "")), "connected": connected, "connecting": connecting})
+	if not needed or active_trade_discovery_in_flight or not authenticated:
+		return
+	_trace("discovery_scheduled", {"activeTradeId": active_trade_id, "snapshotStatus": str(active_trade_snapshot.get("status", "")), "connected": connected, "connecting": connecting})
 	discover_active_trade.call_deferred()
 
 
 func discover_active_trade() -> Dictionary:
 	if not _needs_active_trade_discovery() or active_trade_discovery_in_flight:
+		_trace("discovery_skipped", {"needed": _needs_active_trade_discovery(), "inFlight": active_trade_discovery_in_flight, "activeTradeId": active_trade_id, "snapshotStatus": str(active_trade_snapshot.get("status", ""))})
 		return {"success": false, "error": "Trade discovery is not needed."}
 	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
 	if trade_service == null:
 		return {"success": false, "error": "Trade service unavailable."}
 	active_trade_discovery_in_flight = true
+	_trace("discovery_started", {"activeTradeId": active_trade_id, "snapshotStatus": str(active_trade_snapshot.get("status", ""))})
 	var result: Dictionary = await trade_service.call("load_active_trade")
 	active_trade_discovery_in_flight = false
+	_trace("discovery_result", _active_result_debug_fields(result))
 	if not bool(result.get("success", false)):
 		return result
 	if not bool(result.get("hasActiveTrade", false)):
@@ -360,6 +394,7 @@ func refresh_known_trade_after_active_miss(trade_id: String) -> void:
 	if trade_service == null:
 		return
 	var result: Dictionary = await trade_service.call("load_trade", trade_id)
+	_trace("known_trade_refresh_result", {"requestedTradeId": trade_id, "success": bool(result.get("success", false)), "tradeId": str(_dictionary(result.get("trade", {})).get("tradeId", "")), "status": str(_dictionary(result.get("trade", {})).get("status", "")), "revision": int(_dictionary(result.get("trade", {})).get("revision", 0)), "error": str(result.get("error", ""))})
 	if not bool(result.get("success", false)):
 		return
 	var snapshot := _dictionary(result.get("trade", {}))
@@ -368,3 +403,28 @@ func refresh_known_trade_after_active_miss(trade_id: String) -> void:
 	if str(snapshot.get("status", "")) in ["declined", "cancelled", "expired", "completed"]:
 		apply_snapshot(snapshot)
 		stop_transport(true)
+
+
+func _active_result_debug_fields(result: Dictionary) -> Dictionary:
+	var trade := _dictionary(result.get("trade", {}))
+	return {
+		"success": bool(result.get("success", false)),
+		"hasActiveTrade": bool(result.get("hasActiveTrade", false)),
+		"tradeId": str(trade.get("tradeId", "")),
+		"status": str(trade.get("status", "")),
+		"revision": int(trade.get("revision", 0)),
+		"lastEventSeq": int(trade.get("lastEventSeq", 0)),
+		"error": str(result.get("error", "")),
+	}
+
+
+func _trace(action: String, fields: Dictionary = {}) -> void:
+	if not TRADE_DEBUG_LOGGING:
+		return
+	var record := fields.duplicate(true)
+	record["action"] = action
+	record["timeMsec"] = Time.get_ticks_msec()
+	var auth := get_node_or_null("/root/AuthService") if is_inside_tree() else null
+	if auth != null:
+		record["userId"] = int(_dictionary(auth.get("current_user")).get("id", 0))
+	print("[TradeDebug][Realtime] ", JSON.stringify(record))

@@ -19,20 +19,24 @@ func setup() -> void:
 	get_cancel_button().pressed.connect(_decline_or_close)
 	close_requested.connect(hide)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
+	_trace("dialog_setup", {"hasRealtimeService": realtime != null})
 	if realtime != null:
 		realtime.invitation_received.connect(show_trade)
 		realtime.active_trade_changed.connect(_on_trade_changed)
 		var snapshot: Dictionary = realtime.active_trade_snapshot
+		_trace("dialog_initial_snapshot", {"tradeId": str(snapshot.get("tradeId", "")), "status": str(snapshot.get("status", "")), "role": _role_for_trade(snapshot)})
 		if str(snapshot.get("status", "")) == "invited" and _role_for_trade(snapshot) == "recipient":
 			show_trade.call_deferred(snapshot.duplicate(true))
 
 
 func send_invitation(username: String) -> Dictionary:
+	_trace("invitation_send_started", {"targetUsername": username})
 	var service := get_node_or_null("/root/TradeService")
 	if service == null:
 		return {"success": false, "error": "Trade service unavailable."}
 	action_in_flight = true
 	var result: Dictionary = await service.create_invitation(username)
+	_trace("invitation_send_result", {"success": bool(result.get("success", false)), "tradeId": str(result.get("trade", {}).get("tradeId", "")), "status": str(result.get("trade", {}).get("status", "")), "error": str(result.get("error", ""))})
 	action_in_flight = false
 	if bool(result.get("success", false)):
 		show_trade(result.get("trade", {}))
@@ -47,7 +51,9 @@ func send_invitation(username: String) -> Dictionary:
 
 func show_trade(value: Dictionary) -> void:
 	trade = value.duplicate(true)
+	_trace("dialog_show_trade", {"tradeId": str(trade.get("tradeId", "")), "status": str(trade.get("status", "")), "role": _current_role(), "wasVisible": visible})
 	if str(trade.get("status", "")) != "invited":
+		_trace("dialog_hidden_for_status", {"tradeId": str(trade.get("tradeId", "")), "status": str(trade.get("status", ""))})
 		hide()
 		return
 	var incoming := _current_role() == "recipient"
@@ -55,6 +61,7 @@ func show_trade(value: Dictionary) -> void:
 	get_cancel_button().text = "Decline" if incoming else "Cancel Invitation"
 	status_label.text = _status_text(incoming)
 	popup_centered()
+	_trace("dialog_opened", {"tradeId": str(trade.get("tradeId", "")), "incoming": incoming, "acceptVisible": get_ok_button().visible, "visible": visible})
 	if get_ok_button().visible:
 		get_ok_button().grab_focus()
 	else:
@@ -104,6 +111,7 @@ func _apply_result(result: Dictionary) -> void:
 
 
 func _on_trade_changed(value: Dictionary) -> void:
+	_trace("dialog_trade_changed", {"incomingTradeId": str(value.get("tradeId", "")), "incomingStatus": str(value.get("status", "")), "incomingRole": _role_for_trade(value), "currentTradeId": str(trade.get("tradeId", "")), "visible": visible})
 	if str(value.get("status", "")) == "invited" and _role_for_trade(value) == "recipient":
 		show_trade(value)
 		return
@@ -136,3 +144,13 @@ func _status_text(incoming: bool) -> String:
 		"cancelled": return "The trade invitation was cancelled."
 		"expired": return "The trade invitation expired."
 		_: return "Trade invitation state unavailable."
+
+
+func _trace(action: String, fields: Dictionary = {}) -> void:
+	var record := fields.duplicate(true)
+	record["action"] = action
+	record["timeMsec"] = Time.get_ticks_msec()
+	var auth := get_node_or_null("/root/AuthService")
+	if auth != null:
+		record["userId"] = int(auth.current_user.get("id", 0))
+	print("[TradeDebug][InvitationDialog] ", JSON.stringify(record))
