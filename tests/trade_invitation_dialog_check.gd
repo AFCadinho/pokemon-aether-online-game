@@ -28,6 +28,9 @@ func _init() -> void:
 	_check(dialog._status_text(true).contains("accepted"), "minimal accepted state")
 	dialog.show_trade(dialog.trade)
 	_check(not dialog.visible, "active trade closes invitation dialog")
+	dialog.trade["status"] = "completed"
+	dialog.show_trade(dialog.trade)
+	_check(not dialog.visible, "completed trade closes invitation dialog")
 	dialog.trade["status"] = "expired"
 	_check(dialog._status_text(true).contains("expired"), "expired state")
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_invitation_dialog.gd")
