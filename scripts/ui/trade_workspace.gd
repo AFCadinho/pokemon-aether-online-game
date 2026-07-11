@@ -151,27 +151,6 @@ func _build_ui() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	editable_root.add_child(actions)
-	var money_label := Label.new()
-	money_label.text = "Money"
-	money_label.add_theme_color_override("font_color", TRADE_MUTED)
-	actions.add_child(money_label)
-	money_amount_spinbox = SpinBox.new()
-	money_amount_spinbox.min_value = 0
-	money_amount_spinbox.max_value = 2147483647
-	money_amount_spinbox.step = 1
-	money_amount_spinbox.update_on_text_changed = true
-	money_amount_spinbox.value_changed.connect(_on_money_amount_changed)
-	money_amount_spinbox.custom_minimum_size.x = 130
-	actions.add_child(money_amount_spinbox)
-	update_money_button = Button.new()
-	update_money_button.text = "Set Money"
-	update_money_button.pressed.connect(_update_money_offer)
-	_apply_button_style(update_money_button, "secondary")
-	actions.add_child(update_money_button)
-	money_balance_label = Label.new()
-	money_balance_label.text = "Available: $0"
-	money_balance_label.add_theme_color_override("font_color", TRADE_GOLD)
-	actions.add_child(money_balance_label)
 	add_items_button = Button.new()
 	add_items_button.text = "Add Items"
 	add_items_button.pressed.connect(_open_item_selector)
@@ -305,15 +284,6 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		local_ready_indicator = ready_indicator
 	else:
 		opponent_ready_indicator = ready_indicator
-	var money_offer_label := Label.new()
-	money_offer_label.visible = false
-	money_offer_label.add_theme_color_override("font_color", TRADE_GOLD)
-	money_offer_label.add_theme_font_size_override("font_size", 14)
-	header.add_child(money_offer_label)
-	if label_text == "Your Offer":
-		local_money_offer_label = money_offer_label
-	else:
-		opponent_money_offer_label = money_offer_label
 	var panel := PanelContainer.new()
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -357,6 +327,55 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		local_item_offer_list = item_list
 	else:
 		opponent_item_offer_list = item_list
+	var money_separator := HSeparator.new()
+	content.add_child(money_separator)
+	var money_footer := PanelContainer.new()
+	money_footer.custom_minimum_size.y = 54
+	money_footer.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_GOLD, 5, 1))
+	content.add_child(money_footer)
+	var footer_margin := MarginContainer.new()
+	footer_margin.add_theme_constant_override("margin_left", 10)
+	footer_margin.add_theme_constant_override("margin_top", 8)
+	footer_margin.add_theme_constant_override("margin_right", 10)
+	footer_margin.add_theme_constant_override("margin_bottom", 8)
+	money_footer.add_child(footer_margin)
+	var money_row := HBoxContainer.new()
+	money_row.add_theme_constant_override("separation", 8)
+	footer_margin.add_child(money_row)
+	var money_title := Label.new()
+	money_title.text = "MONEY"
+	money_title.add_theme_color_override("font_color", TRADE_MUTED)
+	money_title.add_theme_font_size_override("font_size", 12)
+	money_row.add_child(money_title)
+	var money_offer_label := Label.new()
+	money_offer_label.text = "$0"
+	money_offer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	money_offer_label.add_theme_color_override("font_color", TRADE_GOLD)
+	money_offer_label.add_theme_font_size_override("font_size", 18)
+	money_row.add_child(money_offer_label)
+	if label_text == "Your Offer":
+		local_money_offer_label = money_offer_label
+		money_amount_spinbox = SpinBox.new()
+		money_amount_spinbox.min_value = 0
+		money_amount_spinbox.max_value = 2147483647
+		money_amount_spinbox.step = 1
+		money_amount_spinbox.update_on_text_changed = true
+		money_amount_spinbox.value_changed.connect(_on_money_amount_changed)
+		money_amount_spinbox.custom_minimum_size.x = 105
+		money_row.add_child(money_amount_spinbox)
+		update_money_button = Button.new()
+		update_money_button.text = "Set"
+		update_money_button.tooltip_text = "Update money offer"
+		update_money_button.pressed.connect(_update_money_offer)
+		_apply_button_style(update_money_button, "secondary")
+		money_row.add_child(update_money_button)
+		money_balance_label = Label.new()
+		money_balance_label.text = "Available $0"
+		money_balance_label.tooltip_text = "Current wallet balance"
+		money_balance_label.add_theme_color_override("font_color", TRADE_MUTED)
+		money_row.add_child(money_balance_label)
+	else:
+		opponent_money_offer_label = money_offer_label
 	return panel
 
 
@@ -663,8 +682,8 @@ func _render_offers() -> void:
 	_clear_offer_slots(opponent_offer_slots)
 	_clear(local_item_offer_list)
 	_clear(opponent_item_offer_list)
-	local_money_offer_label.visible = false
-	opponent_money_offer_label.visible = false
+	local_money_offer_label.text = "$0"
+	opponent_money_offer_label.text = "$0"
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
 		if not offer_value is Dictionary:
@@ -681,32 +700,8 @@ func _render_offers() -> void:
 			if item_values[index] is Dictionary:
 				_render_item_offer(item_target, item_values[index], is_local, index)
 		var money := maxi(int(offer_value.get("money", 0)), 0)
-		if money > 0:
-			var money_label := local_money_offer_label if is_local else opponent_money_offer_label
-			money_label.text = "MONEY  $%s" % format_money(money)
-			money_label.visible = true
-			_render_money_offer(item_target, money, is_local)
-
-
-func _render_money_offer(target: VBoxContainer, amount: int, is_local: bool) -> void:
-	var row := HBoxContainer.new()
-	row.custom_minimum_size.y = 32
-	target.add_child(row)
-	var label := Label.new()
-	label.text = "$%s" % format_money(amount)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_color_override("font_color", TRADE_GOLD)
-	row.add_child(label)
-	var kind := Label.new()
-	kind.text = "Money"
-	kind.add_theme_color_override("font_color", TRADE_MUTED)
-	row.add_child(kind)
-	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
-		var remove := Button.new()
-		remove.text = "X"
-		remove.tooltip_text = "Remove money from offer"
-		remove.pressed.connect(_replace_offer.bind(selected_ids.duplicate(), selected_item_offers.duplicate(true), 0))
-		row.add_child(remove)
+		var money_label := local_money_offer_label if is_local else opponent_money_offer_label
+		money_label.text = "$%s" % format_money(money)
 
 
 func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool, position: int) -> void:
@@ -765,7 +760,7 @@ func refresh_available_money() -> void:
 		if not money_draft_dirty:
 			_set_money_input_value(mini(selected_money, int(money_amount_spinbox.max_value)))
 	if money_balance_label != null:
-		money_balance_label.text = "Available: $%s" % format_money(balance)
+		money_balance_label.text = "Available $%s" % format_money(balance)
 
 
 func _update_money_offer() -> void:
