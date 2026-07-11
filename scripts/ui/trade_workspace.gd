@@ -36,6 +36,7 @@ var confirmation_label: Label
 var mutation_in_flight := false
 var party_drag_preview: TextureRect
 var window_dragging := false
+var notified_completed_trade_ids: Dictionary = {}
 
 
 func _ready() -> void:
@@ -347,6 +348,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 		return
 	if status == "completed":
 		trade = value.duplicate(true)
+		_notify_trade_completion(trade)
 		phase_label.text = "COMPLETED"
 		editable_root.visible = false
 		review_root.visible = false
@@ -730,6 +732,55 @@ func refresh_after_completion() -> void:
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
 	if party_service != null:
 		await party_service.load_party()
+
+
+func _notify_trade_completion(snapshot: Dictionary) -> void:
+	var trade_id := str(snapshot.get("tradeId", "")).strip_edges()
+	if trade_id == "" or notified_completed_trade_ids.has(trade_id):
+		return
+	var messages := completion_transfer_messages(snapshot, _current_user_id())
+	if messages.is_empty():
+		return
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay == null or not overlay.has_method("add_system_message"):
+		return
+	notified_completed_trade_ids[trade_id] = true
+	overlay.call("add_system_message", str(messages.get("removed", "")))
+	overlay.call("add_system_message", str(messages.get("received", "")))
+
+
+static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> Dictionary:
+	var result: Dictionary = snapshot.get("completionResult", {}) if snapshot.get("completionResult", {}) is Dictionary else {}
+	var transfers: Variant = result.get("transfers", [])
+	if not transfers is Array:
+		return {}
+	var removed: Array[String] = []
+	var received: Array[String] = []
+	for transfer_value: Variant in transfers:
+		if not transfer_value is Dictionary:
+			continue
+		var name := _completion_pokemon_name(transfer_value)
+		if int(transfer_value.get("fromUserId", 0)) == user_id:
+			removed.append(name)
+		if int(transfer_value.get("toUserId", 0)) == user_id:
+			received.append(name)
+	if removed.is_empty() or received.is_empty():
+		return {}
+	return {
+		"removed": "Removed %s from your party." % ", ".join(removed),
+		"received": "Received %s in your party." % ", ".join(received),
+	}
+
+
+static func _completion_pokemon_name(value: Dictionary) -> String:
+	var nickname := str(value.get("nickname", "")).strip_edges()
+	var species_name := str(value.get("speciesName", "")).strip_edges()
+	var species_id := str(value.get("speciesId", "Pokemon")).strip_edges()
+	if nickname != "" and nickname != "<null>":
+		return nickname
+	if species_name != "" and species_name != "<null>":
+		return species_name
+	return species_id if species_id != "" else "Pokemon"
 
 
 func _leave_trade() -> void:

@@ -17,6 +17,15 @@ func _init() -> void:
 	_check(source.contains("lockedRevision") and source.contains("snapshotHash"), "workspace submits exact locked review")
 	_check(source.contains("refresh_after_completion"), "completion refreshes party and storage")
 	_check(not source.contains("owner_user_id"), "client never predicts ownership mutation")
+	var completion_messages := preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({
+		"completionResult": {"transfers": [
+			{"pokemonId":11,"fromUserId":1,"toUserId":2,"speciesName":"Pidgey"},
+			{"pokemonId":22,"fromUserId":2,"toUserId":1,"nickname":"Sparky","speciesName":"Pikachu"},
+		]}
+	}, 1)
+	_check(completion_messages.get("removed", "") == "Removed Pidgey from your party.", "completion reports authoritative removed Pokemon")
+	_check(completion_messages.get("received", "") == "Received Sparky in your party.", "completion reports authoritative received Pokemon")
+	_check(preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({"status":"completed"}, 1).is_empty(), "incomplete realtime event waits for REST completion result")
 	var service := Realtime.new()
 	var fake := FakeTradeService.new()
 	service.trade_service_override = fake
