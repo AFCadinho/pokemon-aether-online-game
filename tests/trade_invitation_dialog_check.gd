@@ -26,12 +26,15 @@ func _init() -> void:
 	_check(dialog._status_text(true).contains("invited"), "incoming invitation copy")
 	dialog.trade["status"] = "active"
 	_check(dialog._status_text(true).contains("accepted"), "minimal accepted state")
+	dialog.show_trade(dialog.trade)
+	_check(not dialog.visible, "active trade closes invitation dialog")
 	dialog.trade["status"] = "expired"
 	_check(dialog._status_text(true).contains("expired"), "expired state")
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_invitation_dialog.gd")
 	_check(source.contains("accept_invitation"), "accept command wiring")
 	_check(source.contains("decline_invitation"), "decline command wiring")
 	_check(source.contains("cancel_invitation"), "cancel command wiring")
+	_check(source.contains("hide()"), "active trade closes invitation surface")
 	_check(not source.contains("Pokemon"), "no Pokemon offer UI")
 	dialog.queue_free()
 	quit(1 if failed else 0)

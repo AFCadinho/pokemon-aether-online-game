@@ -20,6 +20,7 @@ var trade_service_override: Object
 const MAX_RECOVERY_ATTEMPTS := 3
 const MAX_RECONNECT_ATTEMPTS := 3
 const RECONNECT_DELAY_SECONDS := 2.0
+const ACTIVE_TRADE_DISCOVERY_INTERVAL_SECONDS := 3.0
 var websocket := WebSocketPeer.new()
 var should_reconnect := false
 var reconnect_attempts := 0
@@ -30,9 +31,12 @@ var connecting := false
 var websocket_url := ""
 var active_trade_snapshot: Dictionary = {}
 var completion_refresh_attempts := 0
+var active_trade_discovery_elapsed := 0.0
+var active_trade_discovery_in_flight := false
 
 func _process(delta: float) -> void:
 	poll_trade_socket()
+	_discover_active_trade_if_needed(delta)
 	if should_reconnect and not connected and not connecting and active_trade_id != "" and websocket_url != "" and reconnect_attempts < MAX_RECONNECT_ATTEMPTS:
 		reconnect_timer -= delta
 		if reconnect_timer <= 0.0:
@@ -145,7 +149,7 @@ func apply_event(event: Dictionary) -> void:
 	if event_type == "trade.offer_updated":
 		offer_update_received.emit(event.duplicate(true))
 		refresh_authoritative_snapshot.call_deferred()
-	if event_type in ["trade.readiness_changed", "trade.locked", "trade.unlocked", "trade.reconnect_grace_started", "trade.reconnect_grace_cancelled"]:
+	if event_type in ["trade.accepted", "trade.readiness_changed", "trade.locked", "trade.unlocked", "trade.reconnect_grace_started", "trade.reconnect_grace_cancelled"]:
 		refresh_authoritative_snapshot.call_deferred()
 	if event_type == "trade.participant_confirmed":
 		refresh_authoritative_snapshot.call_deferred()
@@ -181,6 +185,7 @@ func stop_transport(preserve_snapshot := false) -> void:
 	latest_revision = 0
 	recovery_in_progress = false
 	recovery_attempts = 0
+	active_trade_discovery_elapsed = 0.0
 	buffered_events.clear()
 	if not preserve_snapshot:
 		active_trade_snapshot.clear()
@@ -206,6 +211,35 @@ func restore_active_trade_and_connect() -> Dictionary:
 	return result
 
 
+func _discover_active_trade_if_needed(delta: float) -> void:
+	if active_trade_id != "" or active_trade_discovery_in_flight or not _is_authenticated():
+		return
+	active_trade_discovery_elapsed += delta
+	if active_trade_discovery_elapsed < ACTIVE_TRADE_DISCOVERY_INTERVAL_SECONDS:
+		return
+	active_trade_discovery_elapsed = 0.0
+	discover_active_trade.call_deferred()
+
+
+func discover_active_trade() -> Dictionary:
+	if active_trade_id != "" or active_trade_discovery_in_flight:
+		return {"success": false, "error": "Trade discovery is not needed."}
+	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
+	if trade_service == null:
+		return {"success": false, "error": "Trade service unavailable."}
+	active_trade_discovery_in_flight = true
+	var result: Dictionary = await trade_service.call("load_active_trade")
+	active_trade_discovery_in_flight = false
+	if not bool(result.get("success", false)) or not bool(result.get("hasActiveTrade", false)):
+		return result
+	apply_snapshot(_dictionary(result.get("trade", {})))
+	var url := await _authenticated_websocket_url()
+	if url != "" and not connected and not connecting:
+		should_reconnect = true
+		connect_trade_socket(url)
+	return result
+
+
 func _authenticated_websocket_url() -> String:
 	if not is_inside_tree():
 		return ""
@@ -217,6 +251,13 @@ func _authenticated_websocket_url() -> String:
 	var scheme := "wss://" if base_url.begins_with("https://") else "ws://"
 	var host := base_url.trim_prefix("https://").trim_prefix("http://").trim_suffix("/")
 	return scheme + host + "/ws/trade?token=" + str(auth.get("session_token")).uri_encode()
+
+
+func _is_authenticated() -> bool:
+	if not is_inside_tree():
+		return trade_service_override != null
+	var auth := get_node_or_null("/root/AuthService")
+	return auth != null and bool(auth.call("is_authenticated"))
 
 
 func _is_recipient(trade: Dictionary) -> bool:

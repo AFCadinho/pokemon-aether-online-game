@@ -8,7 +8,9 @@ var offer_updates := 0
 class FakeTradeService extends Node:
 	var failures := 0
 	var active_trade: Dictionary = {"tradeId":"restored", "status":"invited", "revision":1, "lastEventSeq":2}
+	var discovery_calls := 0
 	func load_active_trade() -> Dictionary:
+		discovery_calls += 1
 		return {"success": true, "hasActiveTrade": true, "trade": active_trade}
 	func load_trade(_id: String) -> Dictionary:
 		if failures > 0:
@@ -64,9 +66,14 @@ func _init() -> void:
 	service.clear_active_trade()
 	_check(not service.begin_reconnect(), "clear cancels reconnect")
 	service.trade_service_override = fake
+	var discovered: Dictionary = await service.discover_active_trade()
+	_check(bool(discovered.get("hasActiveTrade", false)), "incoming invitation is discovered without a trade socket")
+	_check(service.active_trade_id == "restored", "discovery applies authoritative invitation snapshot")
+	service.clear_active_trade()
 	await service.restore_active_trade_and_connect()
 	_check(service.active_trade_id == "restored", "active invitation restored authoritatively")
 	_check(service.last_applied_event_seq == 2, "active restore preserves durable cursor")
+	_check(fake.discovery_calls >= 2, "active trade discovery uses the authoritative endpoint")
 	fake.free()
 	quit(1 if failed else 0)
 func _check(value: bool, label: String) -> void:

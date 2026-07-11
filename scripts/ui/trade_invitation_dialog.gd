@@ -43,6 +43,9 @@ func send_invitation(username: String) -> Dictionary:
 
 func show_trade(value: Dictionary) -> void:
 	trade = value.duplicate(true)
+	if str(trade.get("status", "")) in ["active", "locked"]:
+		hide()
+		return
 	var incoming := _current_role() == "recipient"
 	get_ok_button().visible = incoming and str(trade.get("status", "")) == "invited"
 	get_cancel_button().text = "Decline" if incoming else "Cancel Invitation"
@@ -98,7 +101,11 @@ func _apply_result(result: Dictionary) -> void:
 
 func _on_trade_changed(value: Dictionary) -> void:
 	if str(value.get("tradeId", "")) == str(trade.get("tradeId", "")):
-		show_trade(value)
+		trade = value.duplicate(true)
+		if str(trade.get("status", "")) in ["active", "locked"]:
+			hide()
+			return
+		show_trade(trade)
 
 
 func _current_role() -> String:
