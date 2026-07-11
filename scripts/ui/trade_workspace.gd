@@ -234,7 +234,9 @@ func _toggle_candidate(enabled: bool, pokemon_id: int) -> void:
 		selected_ids.erase(pokemon_id)
 	offer_draft_dirty = true
 	_render_candidates()
-	submit_button.disabled = selected_ids.is_empty() or mutation_in_flight
+	_refresh_submit_button()
+	if not selected_ids.is_empty():
+		status_label.text = "%d Pokemon selected. Press Send Offer to share it with the other player." % selected_ids.size()
 
 
 func _submit_offer() -> void:
@@ -251,9 +253,10 @@ func _submit_offer() -> void:
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
 		_show_error(_friendly_error(result))
-		submit_button.disabled = selected_ids.is_empty()
+		_refresh_submit_button()
 		return
 	offer_draft_dirty = false
+	_refresh_submit_button()
 	trade = result.get("trade", {}).duplicate(true)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
@@ -291,6 +294,14 @@ func _sync_selected_from_offer() -> void:
 			for pokemon_value: Variant in offer_value.get("pokemon", []):
 				if pokemon_value is Dictionary:
 					selected_ids.append(int(pokemon_value.get("pokemonId", 0)))
+	_refresh_submit_button()
+
+
+func _refresh_submit_button() -> void:
+	if submit_button == null:
+		return
+	submit_button.text = "Send Offer (%d)" % selected_ids.size() if not selected_ids.is_empty() else "Replace Offer"
+	submit_button.disabled = mutation_in_flight or selected_ids.is_empty()
 
 
 func _should_sync_selected_from_offer(previous_trade_id: String, next_status: String) -> bool:
@@ -325,7 +336,8 @@ func _render_mode() -> void:
 	ready_button.disabled = mutation_in_flight or not _both_offers_nonempty() or blocked
 	edit_button.visible = any_ready
 	edit_button.disabled = mutation_in_flight or blocked
-	submit_button.disabled = mutation_in_flight or selected_ids.is_empty() or any_ready or blocked
+	_refresh_submit_button()
+	submit_button.disabled = submit_button.disabled or any_ready or blocked
 	leave_button.visible = true
 	leave_button.disabled = mutation_in_flight
 	status_label.text = "Offer editing is paused until readiness is cleared." if any_ready else ""
