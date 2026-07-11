@@ -81,12 +81,14 @@ func replace_party_from_state(party_data: Array) -> void:
 			continue
 
 		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		print("[EXP_DEBUG] replace party payload id=", pokemon_data.get("ownedPokemonId", pokemon_data.get("pokemonId", 0)), " species=", pokemon_data.get("species", ""), " level=", pokemon_data.get("level", 0), " exp=", pokemon_data.get("experience", pokemon_data.get("exp", null)), " floor=", pokemon_data.get("currentLevelExp", null), " next=", pokemon_data.get("nextLevelExp", null))
 		var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_data)
 		if pokemon == null:
 			push_warning("PlayerSave: skipped persisted Pokemon: %s" % PokemonFactory.last_error_message)
 			continue
 
 		pokemon.ensure_instance_id()
+		print("[EXP_DEBUG] materialized party id=", pokemon.owned_pokemon_id, " species=", pokemon.species, " level=", pokemon.level, " exp=", pokemon.experience, " floor=", pokemon.current_level_exp, " next=", pokemon.next_level_exp)
 		loaded_party.append(pokemon)
 		if loaded_party.size() >= 6:
 			break

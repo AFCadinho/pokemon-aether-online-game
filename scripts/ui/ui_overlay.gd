@@ -412,7 +412,6 @@ var escape_rope_status: Dictionary = {}
 var escape_rope_remaining_seconds: float = 0.0
 var player_action_status_refresh_seconds: float = 0.0
 var escape_rope_in_flight := false
-var escape_rope_confirmation: ConfirmationDialog
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
@@ -994,7 +993,6 @@ func _ready() -> void:
 	escape_rope_button.pressed.connect(_on_escape_rope_pressed)
 	if not PlayerActionService.statuses_changed.is_connected(_on_player_action_statuses_changed):
 		PlayerActionService.statuses_changed.connect(_on_player_action_statuses_changed)
-	_setup_escape_rope_confirmation()
 	_refresh_player_actions.call_deferred()
 	follower_toggle_button.set_pressed_no_signal(GameState.show_follower)
 	follower_toggle_button.toggled.connect(_on_follower_toggle_toggled)
@@ -10359,6 +10357,7 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var level_exp_range: int = 1 if is_max_level else next_level_exp - current_level_exp if has_next_level_range else 1
 	var earned_level_exp: int = level_exp_range if is_max_level else clampi(current_exp - current_level_exp, 0, level_exp_range)
 	var next_level_remaining: int = max(next_level_exp - current_exp, 0) if has_next_level_range else 0
+	print("[EXP_DEBUG] summary bar id=", pokemon.owned_pokemon_id, " species=", pokemon.species, " level=", pokemon.level, " exp=", current_exp, " floor=", current_level_exp, " next=", next_level_exp, " earned=", earned_level_exp, " range=", level_exp_range)
 	var target_level: int = min(pokemon.level + 1, 100)
 	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
 	var detail_text := "%s EXP to Lv. %s" % [next_level_remaining, target_level] if has_next_level_range else "Max level"
@@ -10991,13 +10990,13 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
 	var current_value: int = int(pokemon.evs.get(stat_id, 0))
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
-	var stored_total: int = _get_summary_ev_total(pokemon.stored_evs)
+	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var total_room: int = max(510 - allocated_total, 0)
-	var max_value: int = min(252, current_value + stored_total, current_value + total_room)
+	var max_value: int = min(252, current_value + stored_for_stat, current_value + total_room)
 
 	pokemon_summary_ev_allocate_stat_id = stat_id
 	pokemon_summary_ev_allocate_stat_label.text = "Allocate %s EVs" % label_text
-	pokemon_summary_ev_allocate_current_label.text = "Current: %s    Allocated: %s / 510    Stored: %s" % [current_value, allocated_total, stored_total]
+	pokemon_summary_ev_allocate_current_label.text = "Current: %s    Allocated: %s / 510    Stored for stat: %s" % [current_value, allocated_total, stored_for_stat]
 	pokemon_summary_ev_allocate_input.min_value = current_value
 	pokemon_summary_ev_allocate_input.max_value = max(current_value, max_value)
 	pokemon_summary_ev_allocate_input.value = current_value
@@ -11066,7 +11065,7 @@ func _refresh_summary_ev_allocate_status() -> void:
 	var requested_value: int = int(pokemon_summary_ev_allocate_input.value)
 	var added_value: int = requested_value - current_value
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
-	var stored_total: int = _get_summary_ev_total(pokemon.stored_evs)
+	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var requested_allocated_total: int = allocated_total + max(added_value, 0)
 	var error_text := ""
 
@@ -11076,8 +11075,8 @@ func _refresh_summary_ev_allocate_status() -> void:
 		error_text = "A stat cannot exceed 252 EVs."
 	elif requested_allocated_total > 510:
 		error_text = "Allocated EVs cannot exceed 510 total."
-	elif added_value > stored_total:
-		error_text = "Not enough stored EVs available."
+	elif added_value > stored_for_stat:
+		error_text = "Not enough stored %s EVs available." % _summary_stat_label(stat_id)
 
 	if error_text != "":
 		pokemon_summary_ev_allocate_status_label.text = error_text
@@ -14284,15 +14283,6 @@ func _on_repel_toggle_toggled(toggled_on: bool) -> void:
 	await _save_toggle_preferences()
 
 
-func _setup_escape_rope_confirmation() -> void:
-	escape_rope_confirmation = ConfirmationDialog.new()
-	escape_rope_confirmation.title = "Use Escape Rope?"
-	escape_rope_confirmation.dialog_text = "Return to your last healing point? Your party will not be healed."
-	escape_rope_confirmation.ok_button_text = "Use Escape Rope"
-	escape_rope_confirmation.confirmed.connect(_execute_escape_rope)
-	add_child(escape_rope_confirmation)
-
-
 func _refresh_player_actions() -> void:
 	player_action_status_refresh_seconds = 30.0
 	await PlayerActionService.load_statuses()
@@ -14325,7 +14315,11 @@ func _update_escape_rope_action_ui() -> void:
 		return
 	var block: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("blockReason", {}))
 	var cooldown_active := escape_rope_remaining_seconds > 0.0
-	escape_rope_button.disabled = escape_rope_in_flight or cooldown_active or not bool(escape_rope_status.get("available", false))
+	var action_available := bool(escape_rope_status.get("available", false))
+	# Keep unavailable actions clickable so the handler can explain why no action
+	# was performed. Only an in-flight request must suppress the pressed signal.
+	escape_rope_button.disabled = escape_rope_in_flight
+	escape_rope_button.modulate = Color.WHITE if action_available and not cooldown_active else Color(1.0, 1.0, 1.0, 0.55)
 	if cooldown_active:
 		escape_rope_button.tooltip_text = "Escape Rope\nReady in %s" % PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds)))
 	elif not block.is_empty():
@@ -14336,9 +14330,24 @@ func _update_escape_rope_action_ui() -> void:
 
 
 func _on_escape_rope_pressed() -> void:
-	if escape_rope_in_flight or escape_rope_button.disabled:
+	if escape_rope_in_flight:
+		_add_chat_message("Escape Rope is already being used.")
 		return
-	escape_rope_confirmation.popup_centered()
+	if escape_rope_remaining_seconds > 0.0:
+		_add_chat_message("Escape Rope is on cooldown. Ready in %s." % PlayerActionService.format_remaining(int(ceil(escape_rope_remaining_seconds))))
+		return
+	if not bool(escape_rope_status.get("available", false)):
+		var block: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("blockReason", {}))
+		_add_chat_message(str(block.get("message", "Escape Rope is currently unavailable.")))
+		_refresh_player_actions.call_deferred()
+		return
+	_show_ui_confirm_popup(
+		"Use Escape Rope?",
+		"Return to your last healing point?\n\nYour party will not be healed.",
+		"Use Escape Rope",
+		Callable(self, "_execute_escape_rope"),
+		Vector2i(460, 190)
+	)
 
 
 func _execute_escape_rope() -> void:

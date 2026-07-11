@@ -1840,9 +1840,14 @@ func _should_claim_trainer_battle_reward(result: Dictionary) -> bool:
 func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> void:
 	var previous_money: int = max(int(PlayerSave.money), 0)
 	var wallet_result: Dictionary = await PlayerWalletService.award_wild_battle_money(battle_id)
+	print("[EXP_DEBUG] wild reward response battle=", battle_id, " success=", wallet_result.get("success", false), " reward=", wallet_result.get("reward", {}), " party=", wallet_result.get("party", []))
 	if bool(wallet_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(wallet_result)
+		for pokemon: Pokemon in PlayerSave.party:
+			if pokemon != null:
+				print("[EXP_DEBUG] party after reward id=", pokemon.owned_pokemon_id, " species=", pokemon.species, " level=", pokemon.level, " exp=", pokemon.experience, " floor=", pokemon.current_level_exp, " next=", pokemon.next_level_exp)
 		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
+		_notify_reward_experience_gains(wallet_result.get("reward", {}))
 		_notify_reward_effort_gains(wallet_result.get("reward", {}))
 		_notify_reward_level_ups(wallet_result.get("reward", {}))
 	else:
@@ -1856,6 +1861,7 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		var reward: Dictionary = reward_result.get("reward", {}) as Dictionary
 		var money_awarded: int = max(int(reward.get("money", max(int(PlayerSave.money), 0) - previous_money)), 0)
 		_notify_trainer_battle_rewards_awarded(trainer_name, money_awarded)
+		_notify_reward_experience_gains(reward)
 		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
 	else:
@@ -1887,6 +1893,35 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 
 func notify_progression_reward(reward: Dictionary) -> void:
 	_notify_reward_level_ups(reward)
+
+func _notify_reward_experience_gains(reward_value: Variant) -> void:
+	if not (reward_value is Dictionary):
+		return
+	var experience_value: Variant = (reward_value as Dictionary).get("experience", [])
+	if not (experience_value is Array):
+		return
+	for entry_value: Variant in experience_value as Array:
+		if not (entry_value is Dictionary):
+			continue
+		var entry: Dictionary = entry_value as Dictionary
+		var amount: int = max(int(entry.get("experience", 0)), 0)
+		if amount <= 0:
+			continue
+		var progression := _dictionary_from_value(entry.get("progression", {}))
+		var pokemon_name := str(progression.get("species", "")).strip_edges()
+		if pokemon_name == "":
+			pokemon_name = _reward_pokemon_name(int(entry.get("pokemonId", 0)))
+		if pokemon_name == "":
+			pokemon_name = "Your Pokemon"
+		get_tree().call_group("ui_overlay", "add_system_message", "%s gained %s EXP." % [pokemon_name, amount])
+
+func _reward_pokemon_name(pokemon_id: int) -> String:
+	if pokemon_id <= 0:
+		return ""
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon != null and pokemon.owned_pokemon_id == pokemon_id:
+			return pokemon.species
+	return ""
 
 func _notify_reward_effort_gains(reward_value: Variant) -> void:
 	if not (reward_value is Dictionary):
