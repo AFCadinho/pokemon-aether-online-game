@@ -11,6 +11,8 @@ var local_offer_box: PanelContainer
 var opponent_offer_box: PanelContainer
 var local_offer_slots: Array[Control] = []
 var opponent_offer_slots: Array[Control] = []
+var local_ready_indicator: Label
+var opponent_ready_indicator: Label
 var status_label: Label
 var ready_button: Button
 var edit_button: Button
@@ -120,10 +122,23 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	section.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	parent.add_child(section)
+	var header := HBoxContainer.new()
+	section.add_child(header)
 	var label := Label.new()
 	label.text = label_text
 	label.add_theme_font_size_override("font_size", 18)
-	section.add_child(label)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(label)
+	var ready_indicator := Label.new()
+	ready_indicator.text = "READY"
+	ready_indicator.visible = false
+	ready_indicator.add_theme_color_override("font_color", Color("#63df8b"))
+	ready_indicator.add_theme_font_size_override("font_size", 14)
+	header.add_child(ready_indicator)
+	if label_text == "Your Offer":
+		local_ready_indicator = ready_indicator
+	else:
+		opponent_ready_indicator = ready_indicator
 	var panel := PanelContainer.new()
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -473,6 +488,8 @@ func _render_mode() -> void:
 		_render_locked_review()
 		return
 	var local_ready := _local_participant_ready()
+	local_ready_indicator.visible = local_ready
+	opponent_ready_indicator.visible = _opponent_participant_ready()
 	var blocked := _connection_state_unresolved()
 	ready_button.visible = not local_ready
 	ready_button.disabled = mutation_in_flight or not _local_offer_nonempty() or blocked
@@ -619,6 +636,14 @@ func _any_participant_ready() -> bool:
 	for participant_value: Variant in trade.get("participants", []):
 		if participant_value is Dictionary and bool(participant_value.get("ready", false)):
 			return true
+	return false
+
+
+func _opponent_participant_ready() -> bool:
+	var user_id := _current_user_id()
+	for participant_value: Variant in trade.get("participants", []):
+		if participant_value is Dictionary and int(participant_value.get("userId", 0)) != user_id:
+			return bool(participant_value.get("ready", false))
 	return false
 
 
