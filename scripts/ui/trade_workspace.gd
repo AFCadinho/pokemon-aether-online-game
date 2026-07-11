@@ -42,6 +42,7 @@ func _ready() -> void:
 	title = "Pokemon Trade"
 	min_size = Vector2i(1060, 610)
 	unresizable = true
+	borderless = true
 	_build_ui()
 	close_requested.connect(_on_close_requested)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
@@ -87,6 +88,17 @@ func _build_ui() -> void:
 	phase_label.add_theme_color_override("font_color", TRADE_ACCENT)
 	phase_label.add_theme_font_size_override("font_size", 13)
 	header.add_child(phase_label)
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.tooltip_text = "Close trade"
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.custom_minimum_size = Vector2(32, 32)
+	close_button.add_theme_color_override("font_color", TRADE_MUTED)
+	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
+	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
+	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015"), Color("#b84c58"), 4, 1))
+	close_button.pressed.connect(_on_close_requested)
+	header.add_child(close_button)
 	var separator := HSeparator.new()
 	root.add_child(separator)
 	var status_panel := PanelContainer.new()

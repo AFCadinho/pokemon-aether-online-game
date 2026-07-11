@@ -34,7 +34,7 @@ var social_request_serial := 0
 var social_action_in_flight := false
 var social_state_loading := false
 var trade_capabilities: Dictionary = {}
-var trade_invitation_dialog: ConfirmationDialog
+var trade_invitation_dialog: Window
 
 
 func setup(host_control: Control) -> void:

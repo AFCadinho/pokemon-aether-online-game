@@ -1,8 +1,8 @@
-extends ConfirmationDialog
+extends Window
 
 class_name TradeInvitationDialog
 
-const DIALOG_SIZE := Vector2i(460, 230)
+const DIALOG_SIZE := Vector2i(460, 240)
 const TRADE_BG := Color("#050912fa")
 const TRADE_SURFACE := Color("#0b1422f7")
 const TRADE_BORDER := Color("#345170")
@@ -14,31 +14,58 @@ const TRADE_MUTED := Color("#aeb8c5")
 var trade: Dictionary = {}
 var status_label: Label
 var mode_label: Label
+var accept_button: Button
+var decline_button: Button
 var action_in_flight := false
 
 
 func setup() -> void:
 	title = "Trade Invitation"
-	dialog_text = ""
 	min_size = DIALOG_SIZE
 	max_size = DIALOG_SIZE
 	unresizable = true
-	get_label().visible = false
+	borderless = true
 	var background := PanelContainer.new()
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	background.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 7, 1))
 	add_child(background)
-	move_child(background, 0)
+	var header := HBoxContainer.new()
+	header.anchor_left = 0.0
+	header.anchor_top = 0.0
+	header.anchor_right = 1.0
+	header.anchor_bottom = 0.0
+	header.offset_left = 18
+	header.offset_top = 12
+	header.offset_right = -12
+	header.offset_bottom = 44
+	add_child(header)
+	var window_title := Label.new()
+	window_title.text = "Trade Invitation"
+	window_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	window_title.add_theme_color_override("font_color", TRADE_TEXT)
+	window_title.add_theme_font_size_override("font_size", 16)
+	header.add_child(window_title)
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.tooltip_text = "Close invitation"
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.add_theme_color_override("font_color", TRADE_MUTED)
+	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
+	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
+	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015"), Color("#b84c58"), 4, 1))
+	close_button.pressed.connect(hide)
+	header.add_child(close_button)
 	var content_panel := PanelContainer.new()
 	content_panel.anchor_left = 0.0
 	content_panel.anchor_top = 0.0
 	content_panel.anchor_right = 1.0
 	content_panel.anchor_bottom = 0.0
 	content_panel.offset_left = 16
-	content_panel.offset_top = 16
+	content_panel.offset_top = 52
 	content_panel.offset_right = -16
-	content_panel.offset_bottom = 145
+	content_panel.offset_bottom = 170
 	content_panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE, TRADE_BORDER, 6, 1))
 	add_child(content_panel)
 	var margin := MarginContainer.new()
@@ -64,11 +91,28 @@ func setup() -> void:
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.add_theme_color_override("font_color", TRADE_MUTED)
 	stack.add_child(status_label)
-	get_ok_button().text = "Accept"
-	_style_button(get_ok_button(), "primary")
-	_style_button(get_cancel_button(), "danger")
-	confirmed.connect(_accept)
-	get_cancel_button().pressed.connect(_decline_or_close)
+	var actions := HBoxContainer.new()
+	actions.anchor_left = 0.0
+	actions.anchor_top = 1.0
+	actions.anchor_right = 1.0
+	actions.anchor_bottom = 1.0
+	actions.offset_left = 16
+	actions.offset_top = -56
+	actions.offset_right = -16
+	actions.offset_bottom = -14
+	actions.alignment = BoxContainer.ALIGNMENT_CENTER
+	actions.add_theme_constant_override("separation", 10)
+	add_child(actions)
+	accept_button = Button.new()
+	accept_button.text = "Accept"
+	accept_button.pressed.connect(_accept)
+	_style_button(accept_button, "primary")
+	actions.add_child(accept_button)
+	decline_button = Button.new()
+	decline_button.text = "Decline"
+	decline_button.pressed.connect(_decline_or_close)
+	_style_button(decline_button, "danger")
+	actions.add_child(decline_button)
 	close_requested.connect(hide)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
@@ -103,25 +147,25 @@ func show_trade(value: Dictionary) -> void:
 		hide()
 		return
 	var incoming := _current_role() == "recipient"
-	get_ok_button().visible = incoming and str(trade.get("status", "")) == "invited"
-	get_cancel_button().text = "Decline" if incoming else "Cancel Invitation"
+	accept_button.visible = incoming and str(trade.get("status", "")) == "invited"
+	decline_button.text = "Decline" if incoming else "Cancel Invitation"
 	mode_label.text = "INCOMING REQUEST" if incoming else "REQUEST SENT"
-	_style_button(get_cancel_button(), "danger" if incoming else "secondary")
+	_style_button(decline_button, "danger" if incoming else "secondary")
 	status_label.text = _status_text(incoming)
 	size = DIALOG_SIZE
 	popup_centered(DIALOG_SIZE)
-	if get_ok_button().visible:
-		get_ok_button().grab_focus()
+	if accept_button.visible:
+		accept_button.grab_focus()
 	else:
-		get_cancel_button().grab_focus()
+		decline_button.grab_focus()
 
 
 func show_error(message: String) -> void:
 	trade.clear()
-	get_ok_button().visible = false
-	get_cancel_button().text = "Close"
+	accept_button.visible = false
+	decline_button.text = "Close"
 	mode_label.text = "REQUEST ERROR"
-	_style_button(get_cancel_button(), "secondary")
+	_style_button(decline_button, "secondary")
 	status_label.text = message
 	size = DIALOG_SIZE
 	popup_centered(DIALOG_SIZE)
@@ -137,7 +181,12 @@ func _accept() -> void:
 
 
 func _decline_or_close() -> void:
-	if action_in_flight or trade.is_empty() or str(trade.get("status", "")) != "invited":
+	if action_in_flight:
+		return
+	if trade.is_empty():
+		hide()
+		return
+	if str(trade.get("status", "")) != "invited":
 		return
 	action_in_flight = true
 	var service := get_node("/root/TradeService")

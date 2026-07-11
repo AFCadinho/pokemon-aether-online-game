@@ -31,6 +31,7 @@ func _init() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/ui/trade_workspace.gd")
 	_check(not source.contains("Leave Trade"), "workspace has no separate leave button")
 	_check(source.contains("close_requested.connect(_on_close_requested)"), "window close owns authoritative trade leave")
+	_check(source.contains("borderless = true") and source.contains("close_button.pressed.connect(_on_close_requested)"), "workspace uses custom chrome without changing close semantics")
 	_check(source.contains("str(trade.get(\"status\", \"\")) in [\"active\", \"locked\"]"), "only open trades are cancelled by window close")
 	_check(source.contains("func _ready() -> void:\n\thide()"), "workspace starts hidden without an active trade")
 	_check(source.contains("replace_offer"), "workspace uses complete replacement")
