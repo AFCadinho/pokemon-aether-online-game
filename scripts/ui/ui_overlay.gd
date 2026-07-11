@@ -413,7 +413,9 @@ var escape_rope_status: Dictionary = {}
 var escape_rope_remaining_seconds: float = 0.0
 var player_action_status_refresh_seconds: float = 0.0
 var escape_rope_in_flight := false
-var hotbar_buttons: Array[TextureButton] = []
+var hotbar_buttons: Array[PlayerHotbarSlotButton] = []
+var hotbar_slot_panels: Array[PanelContainer] = []
+var hotbar_quantity_labels: Array[Label] = []
 var hotbar_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
@@ -8973,6 +8975,7 @@ func _refresh_bag_items() -> void:
 
 	if visible_count <= 0:
 		bag_item_grid.add_child(_create_bag_empty_state("No items in this tab."))
+	_refresh_hotbar_ui()
 
 func _create_bag_empty_state(text: String) -> Control:
 	var label := Label.new()
@@ -9024,7 +9027,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 
 	var quantity_label := Label.new()
 	quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quantity_label.text = "x%s" % max(int(item.get("quantity", 1)), 1)
+	quantity_label.text = "Permanent" if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
 	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	quantity_label.add_theme_font_size_override("font_size", 11)
 	quantity_label.add_theme_color_override("font_color", UI_MONEY)
@@ -9592,9 +9595,10 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 		})
 	normalized_items.append({
 		"id": "escape-rope-action",
-		"name": "Escape Rope",
+		"name": "Escape Rope · Key Item",
 		"category": "key_items",
 		"quantity": 1,
+		"permanent": true,
 		"gameplay": {},
 		"useNotice": {"message": "Use Escape Rope from your hotbar."},
 	})
@@ -14340,9 +14344,25 @@ func _setup_player_hotbar() -> void:
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
 		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
+		button.hotbar_entry_dropped.connect(_on_hotbar_entry_dropped)
+		button.drop_highlight_changed.connect(_on_hotbar_drop_highlight_changed)
 		slot.add_child(button)
 		slot.move_child(button, 0)
+		var quantity_label := Label.new()
+		quantity_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		quantity_label.add_theme_font_size_override("font_size", 10)
+		quantity_label.add_theme_color_override("font_color", UI_MONEY)
+		quantity_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+		quantity_label.add_theme_constant_override("shadow_offset_x", 1)
+		quantity_label.add_theme_constant_override("shadow_offset_y", 1)
+		quantity_label.z_index = 3
+		slot.add_child(quantity_label)
 		hotbar_buttons.append(button)
+		hotbar_slot_panels.append(slot)
+		hotbar_quantity_labels.append(quantity_label)
 
 
 func _on_hotbar_changed(slots: Array) -> void:
@@ -14353,9 +14373,13 @@ func _on_hotbar_changed(slots: Array) -> void:
 func _refresh_hotbar_ui() -> void:
 	for slot_index in range(hotbar_buttons.size()):
 		var button := hotbar_buttons[slot_index]
+		var quantity_label := hotbar_quantity_labels[slot_index]
 		var entry := _hotbar_entry_for_slot(slot_index)
+		button.hotbar_entry = entry.duplicate(true)
 		button.texture_normal = null
+		button.preview_texture = null
 		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
+		quantity_label.text = ""
 		button.tooltip_text = "Empty hotbar slot %s\nRight-click a usable Bag item to assign it." % (slot_index + 1)
 		if entry.is_empty():
 			continue
@@ -14363,12 +14387,27 @@ func _refresh_hotbar_ui() -> void:
 		var entry_id := str(entry.get("entryId", ""))
 		if entry_type == "player_action" and entry_id == "escape-rope":
 			button.texture_normal = _load_item_icon("escape-rope")
+			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
-			button.tooltip_text = "%s\nRight-click to remove from hotbar." % escape_rope_button.tooltip_text
+			quantity_label.text = "KEY"
+			button.tooltip_text = "%s\nPermanent Key Item — never consumed.\nRight-click to remove from hotbar." % escape_rope_button.tooltip_text
 		elif entry_type == "item":
 			button.texture_normal = _load_item_icon(entry_id)
-			button.modulate = Color.WHITE
-			button.tooltip_text = "%s\nUse on a party Pokemon.\nRight-click to remove from hotbar." % _item_name_from_id(entry_id)
+			button.preview_texture = button.texture_normal
+			var quantity := _hotbar_inventory_quantity(entry_id)
+			quantity_label.text = "x%s" % quantity
+			button.modulate = Color.WHITE if quantity > 0 else Color(1.0, 1.0, 1.0, 0.28)
+			button.tooltip_text = "%s\n%s\nRight-click to remove from hotbar." % [
+				_item_name_from_id(entry_id),
+				"Use on a party Pokemon. In Bag: %s." % quantity if quantity > 0 else "Unavailable — none left in your Bag.",
+			]
+
+
+func _hotbar_inventory_quantity(item_id: String) -> int:
+	for item: Dictionary in bag_inventory_items:
+		if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(item_id):
+			return max(int(item.get("quantity", 0)), 0)
+	return 0
 
 
 func _hotbar_entry_for_slot(slot_index: int) -> Dictionary:
@@ -14439,6 +14478,22 @@ func _assign_bag_item_to_hotbar(item: Dictionary) -> void:
 
 func _on_hotbar_bag_item_dropped(slot_index: int, item: Dictionary) -> void:
 	await _assign_bag_item_to_hotbar_slot(item, slot_index)
+
+
+func _on_hotbar_entry_dropped(source_slot: int, target_slot: int) -> void:
+	var result: Dictionary = await PlayerHotbarService.move_slot(source_slot, target_slot)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not move hotbar item: %s" % str(result.get("error", "Unknown error")))
+		return
+	_add_chat_message("Moved hotbar slot %s to slot %s." % [source_slot + 1, target_slot + 1])
+
+
+func _on_hotbar_drop_highlight_changed(slot_index: int, highlighted: bool) -> void:
+	if slot_index < 0 or slot_index >= hotbar_slot_panels.size():
+		return
+	var background := Color("#10243cf2") if highlighted else Color("#0d1625e6")
+	var border := Color("#f4d78a") if highlighted else Color("#315070")
+	hotbar_slot_panels[slot_index].add_theme_stylebox_override("panel", _make_panel_style(background, border, 8, 2 if highlighted else 1))
 
 
 func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void:

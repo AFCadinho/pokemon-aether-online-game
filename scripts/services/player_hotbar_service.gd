@@ -47,6 +47,28 @@ func clear_slot(slot_index: int) -> Dictionary:
 	return await save_hotbar(updated)
 
 
+func move_slot(source_slot: int, target_slot: int) -> Dictionary:
+	if source_slot == target_slot:
+		return {"success": true, "slots": cached_slots}
+	var updated := cached_slots.duplicate(true)
+	var source_entry: Dictionary = {}
+	var target_entry: Dictionary = {}
+	for value: Variant in updated:
+		if not value is Dictionary:
+			continue
+		var entry := value as Dictionary
+		if int(entry.get("slot", -1)) == source_slot:
+			source_entry = entry
+		elif int(entry.get("slot", -1)) == target_slot:
+			target_entry = entry
+	if source_entry.is_empty():
+		return {"success": false, "error": "The source hotbar slot is empty."}
+	source_entry["slot"] = target_slot
+	if not target_entry.is_empty():
+		target_entry["slot"] = source_slot
+	return await save_hotbar(updated)
+
+
 func _request_json(method: HTTPClient.Method, body: String) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}

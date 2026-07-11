@@ -22,7 +22,10 @@ func _get_drag_data(_position: Vector2) -> Variant:
 	preview.texture = icon_texture
 	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	set_drag_preview(preview)
+	if get_viewport() != null and get_viewport().gui_is_dragging():
+		set_drag_preview(preview)
+	else:
+		preview.queue_free()
 	return {
 		"kind": "bag_hotbar_item",
 		"item": hotbar_item.duplicate(true),
