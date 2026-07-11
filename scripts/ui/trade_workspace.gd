@@ -16,10 +16,18 @@ const TRADE_READY := Color("#63df8b")
 var trade: Dictionary = {}
 var candidates: Array[Dictionary] = []
 var selected_ids: Array[int] = []
+var selected_item_offers: Array[Dictionary] = []
+var inventory_items: Array[Dictionary] = []
 var local_offer_box: PanelContainer
 var opponent_offer_box: PanelContainer
 var local_offer_slots: Array[Control] = []
 var opponent_offer_slots: Array[Control] = []
+var local_item_offer_list: VBoxContainer
+var opponent_item_offer_list: VBoxContainer
+var item_selector_popup: PopupPanel
+var item_selector_list: VBoxContainer
+var item_selector_rows: Dictionary = {}
+var add_items_button: Button
 var local_ready_indicator: Label
 var opponent_ready_indicator: Label
 var phase_label: Label
@@ -133,6 +141,14 @@ func _build_ui() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	editable_root.add_child(actions)
+	add_items_button = Button.new()
+	add_items_button.text = "Add Items"
+	add_items_button.pressed.connect(_open_item_selector)
+	_apply_button_style(add_items_button, "secondary")
+	actions.add_child(add_items_button)
+	var action_spacer := Control.new()
+	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(action_spacer)
 	ready_button = Button.new()
 	ready_button.text = "Ready"
 	ready_button.pressed.connect(_set_ready.bind(true))
@@ -166,6 +182,7 @@ func _build_ui() -> void:
 	confirm_button.pressed.connect(_confirm_trade)
 	_apply_button_style(confirm_button, "primary")
 	review_root.add_child(confirm_button)
+	_build_item_selector()
 
 
 func _on_window_header_gui_input(event: InputEvent) -> void:
@@ -275,15 +292,72 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	margin.add_theme_constant_override("margin_right", 18)
 	margin.add_theme_constant_override("margin_bottom", 18)
 	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 12)
+	margin.add_child(content)
 	var grid := GridContainer.new()
 	grid.columns = MAX_OFFER_SIZE
 	grid.add_theme_constant_override("h_separation", 10)
-	margin.add_child(grid)
+	content.add_child(grid)
 	for index in range(MAX_OFFER_SIZE):
 		var slot := _create_offer_slot()
 		slots.append(slot)
 		grid.add_child(slot)
+	var item_separator := HSeparator.new()
+	content.add_child(item_separator)
+	var item_list := VBoxContainer.new()
+	item_list.add_theme_constant_override("separation", 5)
+	content.add_child(item_list)
+	if label_text == "Your Offer":
+		local_item_offer_list = item_list
+	else:
+		opponent_item_offer_list = item_list
 	return panel
+
+
+func _build_item_selector() -> void:
+	item_selector_popup = PopupPanel.new()
+	item_selector_popup.size = Vector2i(520, 470)
+	item_selector_popup.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 7, 1))
+	add_child(item_selector_popup)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	item_selector_popup.add_child(margin)
+	var root := VBoxContainer.new()
+	root.add_theme_constant_override("separation", 10)
+	margin.add_child(root)
+	var heading := Label.new()
+	heading.text = "Choose Item Stacks"
+	heading.add_theme_font_size_override("font_size", 20)
+	heading.add_theme_color_override("font_color", TRADE_TEXT)
+	root.add_child(heading)
+	var help := Label.new()
+	help.text = "Select up to five stacks and set the offered quantity."
+	help.add_theme_color_override("font_color", TRADE_MUTED)
+	root.add_child(help)
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(scroll)
+	item_selector_list = VBoxContainer.new()
+	item_selector_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_selector_list.add_theme_constant_override("separation", 6)
+	scroll.add_child(item_selector_list)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	root.add_child(actions)
+	var cancel := Button.new()
+	cancel.text = "Cancel"
+	cancel.pressed.connect(item_selector_popup.hide)
+	_apply_button_style(cancel, "secondary")
+	actions.add_child(cancel)
+	var apply := Button.new()
+	apply.text = "Update Offer"
+	apply.pressed.connect(_apply_item_selection)
+	_apply_button_style(apply, "primary")
+	actions.add_child(apply)
 
 
 func _create_offer_slot() -> Control:
@@ -379,6 +453,32 @@ func refresh_available_pokemon() -> void:
 		_show_error("Could not refresh your party.")
 		return
 	candidates = collect_candidates(party_result.get("party", []))
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null:
+		_show_error("Your inventory is unavailable.")
+		return
+	var inventory_result: Dictionary = await inventory_service.load_inventory()
+	if not bool(inventory_result.get("success", false)):
+		_show_error("Could not refresh your inventory.")
+		return
+	inventory_items = normalize_inventory_candidates(inventory_result.get("items", []))
+
+
+static func normalize_inventory_candidates(value: Variant) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if not value is Array:
+		return result
+	for item_value: Variant in value:
+		if not item_value is Dictionary:
+			continue
+		var item_id := str(item_value.get("itemId", "")).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+		var category := str(item_value.get("category", "")).strip_edges().to_lower()
+		var quantity := int(item_value.get("quantity", 0))
+		if item_id == "" or quantity <= 0 or category in ["key-items", "key_items", "important"]:
+			continue
+		result.append({"itemId":item_id, "name":str(item_value.get("name", item_id)), "category":category, "quantity":quantity})
+	result.sort_custom(func(a: Dictionary, b: Dictionary): return str(a.get("name", "")).naturalnocasecmp_to(str(b.get("name", ""))) < 0)
+	return result
 
 
 func _trade_snapshot_changed(value: Dictionary) -> bool:
@@ -408,8 +508,8 @@ static func _add_candidate(result: Array[Dictionary], seen: Dictionary, value: V
 	result.append({"pokemonId":pokemon_id, "pokemon":payload.duplicate(true), "location":location.duplicate(true)})
 
 
-func _replace_offer(pokemon_ids: Array[int]) -> void:
-	if mutation_in_flight or pokemon_ids.is_empty() or _local_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
+func _replace_offer(pokemon_ids: Array[int], item_offers: Array[Dictionary] = []) -> void:
+	if mutation_in_flight or (pokemon_ids.is_empty() and item_offers.is_empty()) or _local_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
 		return
 	mutation_in_flight = true
 	_render_offers()
@@ -418,7 +518,7 @@ func _replace_offer(pokemon_ids: Array[int]) -> void:
 	if service == null:
 		result = {"success":false, "error":"Trade service unavailable."}
 	else:
-		result = await service.replace_offer(str(trade.get("tradeId", "")), int(trade.get("revision", 0)), pokemon_ids)
+		result = await service.replace_offer(str(trade.get("tradeId", "")), int(trade.get("revision", 0)), pokemon_ids, "", item_offers)
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
 		_show_error(_friendly_error(result))
@@ -454,17 +554,23 @@ func _set_ready(ready: bool) -> void:
 
 func _sync_selected_from_offer() -> void:
 	selected_ids.clear()
+	selected_item_offers.clear()
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
 		if offer_value is Dictionary and int(offer_value.get("userId", 0)) == user_id:
 			for pokemon_value: Variant in offer_value.get("pokemon", []):
 				if pokemon_value is Dictionary:
 					selected_ids.append(int(pokemon_value.get("pokemonId", 0)))
+			for item_value: Variant in offer_value.get("items", []):
+				if item_value is Dictionary:
+					selected_item_offers.append({"itemId":str(item_value.get("itemId", "")), "quantity":int(item_value.get("quantity", 0))})
 
 
 func _render_offers() -> void:
 	_clear_offer_slots(local_offer_slots)
 	_clear_offer_slots(opponent_offer_slots)
+	_clear(local_item_offer_list)
+	_clear(opponent_item_offer_list)
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
 		if not offer_value is Dictionary:
@@ -475,6 +581,117 @@ func _render_offers() -> void:
 		for index in range(mini(pokemon_values.size(), MAX_OFFER_SIZE)):
 			if pokemon_values[index] is Dictionary:
 				_render_offer_slot(target[index], pokemon_values[index], is_local, index)
+		var item_values: Array = offer_value.get("items", []) if offer_value.get("items", []) is Array else []
+		var item_target := local_item_offer_list if is_local else opponent_item_offer_list
+		for index in range(mini(item_values.size(), MAX_OFFER_SIZE)):
+			if item_values[index] is Dictionary:
+				_render_item_offer(item_target, item_values[index], is_local, index)
+
+
+func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool, position: int) -> void:
+	var row := HBoxContainer.new()
+	row.custom_minimum_size.y = 32
+	row.add_theme_constant_override("separation", 8)
+	target.add_child(row)
+	var name_label := Label.new()
+	name_label.text = "%dx %s" % [int(item.get("quantity", 0)), str(item.get("name", item.get("itemId", "Item")))]
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.add_theme_color_override("font_color", TRADE_TEXT)
+	row.add_child(name_label)
+	var category_label := Label.new()
+	category_label.text = str(item.get("category", "")).replace("-", " ").capitalize()
+	category_label.add_theme_color_override("font_color", TRADE_MUTED)
+	row.add_child(category_label)
+	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
+		var remove := Button.new()
+		remove.text = "X"
+		remove.tooltip_text = "Remove item stack from offer"
+		remove.focus_mode = Control.FOCUS_NONE
+		remove.pressed.connect(_remove_item_offer_position.bind(position))
+		row.add_child(remove)
+
+
+func _open_item_selector() -> void:
+	if mutation_in_flight or _local_participant_ready() or str(trade.get("status", "")) != "active":
+		return
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service == null:
+		_show_error("Your inventory is unavailable.")
+		return
+	var result: Dictionary = await inventory_service.load_inventory()
+	if not bool(result.get("success", false)):
+		_show_error("Could not refresh your inventory.")
+		return
+	inventory_items = normalize_inventory_candidates(result.get("items", []))
+	_rebuild_item_selector_rows()
+	item_selector_popup.popup_centered(Vector2i(520, 470))
+
+
+func _rebuild_item_selector_rows() -> void:
+	_clear(item_selector_list)
+	item_selector_rows.clear()
+	var selected_by_id: Dictionary = {}
+	for selected: Dictionary in selected_item_offers:
+		selected_by_id[str(selected.get("itemId", ""))] = int(selected.get("quantity", 1))
+	if inventory_items.is_empty():
+		var empty := Label.new()
+		empty.text = "No tradable inventory items are available."
+		empty.add_theme_color_override("font_color", TRADE_MUTED)
+		item_selector_list.add_child(empty)
+		return
+	for item: Dictionary in inventory_items:
+		var item_id := str(item.get("itemId", ""))
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		item_selector_list.add_child(row)
+		var enabled := CheckBox.new()
+		enabled.button_pressed = selected_by_id.has(item_id)
+		enabled.focus_mode = Control.FOCUS_NONE
+		row.add_child(enabled)
+		var label := Label.new()
+		label.text = "%s  (owned: %d)" % [str(item.get("name", item_id)), int(item.get("quantity", 0))]
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.add_theme_color_override("font_color", TRADE_TEXT)
+		row.add_child(label)
+		var quantity := SpinBox.new()
+		quantity.min_value = 1
+		quantity.max_value = mini(int(item.get("quantity", 1)), 999)
+		quantity.step = 1
+		quantity.value = clampi(int(selected_by_id.get(item_id, 1)), 1, int(quantity.max_value))
+		quantity.custom_minimum_size.x = 90
+		row.add_child(quantity)
+		item_selector_rows[item_id] = {"enabled":enabled, "quantity":quantity}
+
+
+func _apply_item_selection() -> void:
+	var replacement: Array[Dictionary] = []
+	for item: Dictionary in inventory_items:
+		var item_id := str(item.get("itemId", ""))
+		var controls: Dictionary = item_selector_rows.get(item_id, {})
+		var enabled := controls.get("enabled") as CheckBox
+		var quantity := controls.get("quantity") as SpinBox
+		if enabled != null and enabled.button_pressed and quantity != null:
+			replacement.append({"itemId":item_id, "quantity":int(quantity.value)})
+	if replacement.size() > MAX_OFFER_SIZE:
+		_show_error("Choose no more than five item stacks.")
+		return
+	if replacement.is_empty() and selected_ids.is_empty():
+		_show_error("Offer at least one Pokemon or item.")
+		return
+	item_selector_popup.hide()
+	_replace_offer(selected_ids.duplicate(), replacement)
+
+
+func _remove_item_offer_position(position: int) -> void:
+	if _local_offer_asset_count() <= 1 or position < 0 or position >= selected_item_offers.size():
+		return
+	var replacement := selected_item_offers.duplicate(true)
+	replacement.remove_at(position)
+	_replace_offer(selected_ids.duplicate(), replacement)
+
+
+func _local_offer_asset_count() -> int:
+	return selected_ids.size() + selected_item_offers.size()
 
 
 func _clear_offer_slots(slots: Array[Control]) -> void:
@@ -522,7 +739,7 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	level_label.add_theme_color_override("font_color", TRADE_MUTED)
 	level_label.add_theme_font_size_override("font_size", 11)
 	content.add_child(level_label)
-	if is_local and selected_ids.size() > 1 and not _local_participant_ready() and not mutation_in_flight:
+	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove_button := Button.new()
 		remove_button.text = "X"
 		remove_button.tooltip_text = "Remove from offer"
@@ -555,11 +772,11 @@ func _open_offer_summary(pokemon: Dictionary, is_local: bool) -> void:
 
 
 func _remove_offer_position(position: int) -> void:
-	if selected_ids.size() <= 1 or position < 0 or position >= selected_ids.size():
+	if _local_offer_asset_count() <= 1 or position < 0 or position >= selected_ids.size():
 		return
 	var replacement := selected_ids.duplicate()
 	replacement.remove_at(position)
-	_replace_offer(replacement)
+	_replace_offer(replacement, selected_item_offers)
 
 
 func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
@@ -579,7 +796,7 @@ func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
 		if pokemon_id not in selected_ids and selected_ids.size() >= _offer_limit():
 			_show_error("The other player does not have enough free party slots.")
 		return true
-	_replace_offer(replacement)
+	_replace_offer(replacement, selected_item_offers)
 	return true
 
 
@@ -674,14 +891,15 @@ func _render_mode() -> void:
 	var blocked := _connection_state_unresolved()
 	ready_button.visible = not local_ready
 	ready_button.disabled = mutation_in_flight or not _local_offer_nonempty() or blocked
+	add_items_button.disabled = mutation_in_flight or local_ready or blocked
 	edit_button.visible = local_ready
 	edit_button.disabled = mutation_in_flight or blocked
 	if local_ready:
 		status_label.text = "Your offer is ready and cannot be edited."
-	elif _opponent_receive_capacity() <= 0:
+	elif _opponent_receive_capacity() <= 0 and selected_item_offers.is_empty():
 		status_label.text = "The other player needs a free party slot before you can offer a Pokemon."
 	elif not _local_offer_nonempty():
-		status_label.text = "Offer at least one Pokemon before becoming Ready."
+		status_label.text = "Offer at least one Pokemon or item before becoming Ready."
 	else:
 		status_label.text = ""
 
@@ -974,6 +1192,10 @@ func _friendly_error(result: Dictionary) -> String:
 		"pokemon_not_tradable": return "That Pokemon cannot be traded."
 		"pokemon_not_owned_or_held": return "That Pokemon is no longer held by your account."
 		"pokemon_location_stale": return "That Pokemon moved. Refresh your party."
+		"item_not_tradable": return "That item cannot be traded."
+		"item_reserved_for_trade": return "That item stack is already reserved for a trade."
+		"trade_item_quantity_unavailable", "trade_item_quantity_changed": return "That item quantity is no longer available. Refresh your inventory."
+		"trade_item_snapshot_changed": return "That item changed. Refresh your inventory before trying again."
 		"trade_offer_party_only": return "Only Pokemon currently in your party can be offered."
 		"trade_party_capacity_exceeded": return "The other player does not have enough free party slots."
 		"trade_party_space_required": return "A free party slot is required to receive a Pokemon."

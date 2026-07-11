@@ -28,6 +28,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/tmx_visual_importer_check.gd",
 	"res://tests/social_service_contract_check.gd",
 	"res://tests/trade_service_contract_check.gd",
+	"res://tests/trade_item_workspace_check.gd",
 	"res://tests/trade_realtime_service_check.gd",
 	"res://tests/trade_invitation_dialog_check.gd",
 	"res://tests/trade_workspace_check.gd",

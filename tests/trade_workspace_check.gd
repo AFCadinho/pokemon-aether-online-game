@@ -62,7 +62,7 @@ func _init() -> void:
 	_check(not source.contains("hide_for_pokemon_summary"), "opening a summary keeps the trade workspace visible")
 	_check(source.contains("_local_offer_nonempty"), "Ready depends only on the local participant offer")
 	_check(source.contains("opponent_ready_indicator") and source.contains("_opponent_participant_ready"), "workspace shows authoritative opponent readiness")
-	_check(source.contains("Offer at least one Pokemon before becoming Ready"), "workspace explains local Ready requirement")
+	_check(source.contains("Offer at least one Pokemon or item before becoming Ready"), "workspace explains local Ready requirement")
 	_check(source.contains("func _trade_snapshot_changed"), "candidate refresh is gated by authoritative snapshot changes")
 	_check(source.contains("PlayerPartyStateService"), "workspace reuses party service")
 	_check(not source.contains("PokemonStorageService"), "PC storage is excluded from trade selection and settlement refresh")
