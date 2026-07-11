@@ -97,7 +97,7 @@ func cancel_invitation(trade_id: String, expected_revision: int, request_id := "
 	return await _invitation_transition(trade_id, "cancel", expected_revision, request_id)
 
 
-func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array, request_id := "") -> Dictionary:
+func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array, request_id := "", item_offers: Array = []) -> Dictionary:
 	var normalized_id := trade_id.strip_edges()
 	if normalized_id == "":
 		return _validation_error("Trade id is required.")
@@ -107,9 +107,24 @@ func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array,
 		if pokemon_id <= 0 or pokemon_id in ids:
 			return _validation_error("Offer contains invalid or duplicate Pokemon.")
 		ids.append(pokemon_id)
-	if ids.size() < 1 or ids.size() > 5:
-		return _validation_error("Choose between one and five Pokemon.")
-	return await _trade_command("/%s/offer" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0), "pokemonIds": ids}, HTTPClient.METHOD_PUT)
+	if ids.size() > 5:
+		return _validation_error("Choose no more than five Pokemon.")
+	var items: Array[Dictionary] = []
+	var seen_item_ids: Array[String] = []
+	for value: Variant in item_offers:
+		if not value is Dictionary:
+			return _validation_error("Item offer is invalid.")
+		var item_id := str(value.get("itemId", "")).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+		var quantity_value: Variant = value.get("quantity", null)
+		if item_id == "" or item_id.length() > 128 or not quantity_value is int or int(quantity_value) < 1 or int(quantity_value) > 999 or item_id in seen_item_ids:
+			return _validation_error("Item offer contains an invalid or duplicate stack.")
+		seen_item_ids.append(item_id)
+		items.append({"itemId":item_id, "quantity":int(quantity_value)})
+	if items.size() > 5:
+		return _validation_error("Choose no more than five item stacks.")
+	if ids.is_empty() and items.is_empty():
+		return _validation_error("Offer at least one Pokemon or item.")
+	return await _trade_command("/%s/offer" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0), "pokemonIds": ids, "items":items}, HTTPClient.METHOD_PUT)
 
 
 func set_readiness(trade_id: String, expected_revision: int, ready: bool, request_id := "") -> Dictionary:

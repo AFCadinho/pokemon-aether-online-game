@@ -66,6 +66,7 @@ func _check_snapshot_parsing() -> void:
 
 func _check_invitation_contract() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/services/trade_service.gd")
+	_check_equal(source.contains("item_offers") and source.contains('"items":items'), true, "offer command supports authoritative item stack replacements")
 	_check_equal(source.contains("func create_invitation"), true, "create invitation command")
 	_check_equal(source.contains("func accept_invitation"), true, "accept invitation command")
 	_check_equal(source.contains("func decline_invitation"), true, "decline invitation command")

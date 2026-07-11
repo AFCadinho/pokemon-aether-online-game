@@ -696,6 +696,8 @@ func _render_locked_review() -> void:
 		if participant_value is Dictionary and int(participant_value.get("userId", 0)) == user_id:
 			_add_review_pokemon(review_give_list, participant_value.get("gives", []))
 			_add_review_pokemon(review_receive_list, participant_value.get("receives", []))
+			_add_review_items(review_give_list, participant_value.get("givesItems", []))
+			_add_review_items(review_receive_list, participant_value.get("receivesItems", []))
 	review_trust_label.text = "Locked revision %d  Review %s" % [int(review.get("lockedRevision", 0)), str(review.get("snapshotHash", "")).left(12)]
 	var local_confirmed := _local_participant_confirmed()
 	confirm_button.visible = not local_confirmed
@@ -736,6 +738,19 @@ func refresh_after_completion() -> void:
 			var overlay := get_tree().get_first_node_in_group("ui_overlay")
 			if overlay != null and overlay.has_method("add_system_message"):
 				overlay.call("add_system_message", "Trade completed, but your party could not be refreshed. Please reconnect.")
+	var result: Dictionary = trade.get("completionResult", {}) if trade.get("completionResult", {}) is Dictionary else {}
+	var refresh: Dictionary = result.get("refresh", {}) if result.get("refresh", {}) is Dictionary else {}
+	if bool(refresh.get("inventory", false)):
+		var inventory_service := get_node_or_null("/root/InventoryService")
+		var inventory_result: Dictionary = await inventory_service.load_inventory() if inventory_service != null else {"success":false,"error":"Inventory service unavailable."}
+		var overlay := get_tree().get_first_node_in_group("ui_overlay")
+		if bool(inventory_result.get("success", false)):
+			if overlay != null:
+				overlay.set("bag_inventory_items", inventory_result.get("items", []).duplicate(true))
+				overlay.set("bag_inventory_loaded", true)
+		else:
+			if overlay != null and overlay.has_method("add_system_message"):
+				overlay.call("add_system_message", "Trade completed, but your inventory could not be refreshed. Please reconnect.")
 
 
 func _notify_trade_completion(snapshot: Dictionary) -> void:
@@ -760,6 +775,8 @@ static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> 
 		return {}
 	var removed: Array[String] = []
 	var received: Array[String] = []
+	var removed_items: Array[String] = []
+	var received_items: Array[String] = []
 	for transfer_value: Variant in transfers:
 		if not transfer_value is Dictionary:
 			continue
@@ -768,11 +785,27 @@ static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> 
 			removed.append(name)
 		if int(transfer_value.get("toUserId", 0)) == user_id:
 			received.append(name)
-	if removed.is_empty() or received.is_empty():
+	var item_transfers: Variant = result.get("itemTransfers", [])
+	if item_transfers is Array:
+		for transfer_value: Variant in item_transfers:
+			if not transfer_value is Dictionary:
+				continue
+			var item_label := "%dx %s" % [int(transfer_value.get("quantity", 0)), str(transfer_value.get("name", transfer_value.get("itemId", "Item")))]
+			if int(transfer_value.get("fromUserId", 0)) == user_id:
+				removed_items.append(item_label)
+			if int(transfer_value.get("toUserId", 0)) == user_id:
+				received_items.append(item_label)
+	if removed.is_empty() and removed_items.is_empty():
 		return {}
+	var removed_message := "Removed %s from your party." % ", ".join(removed) if removed_items.is_empty() else "Removed %s from your inventory." % ", ".join(removed_items)
+	var received_message := "Received %s in your party." % ", ".join(received) if received_items.is_empty() else "Received %s in your inventory." % ", ".join(received_items)
+	if not removed.is_empty() and not removed_items.is_empty():
+		removed_message = "Removed %s from your party and %s from your inventory." % [", ".join(removed), ", ".join(removed_items)]
+	if not received.is_empty() and not received_items.is_empty():
+		received_message = "Received %s in your party and %s in your inventory." % [", ".join(received), ", ".join(received_items)]
 	return {
-		"removed": "Removed %s from your party." % ", ".join(removed),
-		"received": "Received %s in your party." % ", ".join(received),
+		"removed": removed_message,
+		"received": received_message,
 	}
 
 
@@ -879,6 +912,24 @@ func _add_review_pokemon(target: VBoxContainer, values: Variant) -> void:
 		row.add_child(label)
 
 
+func _add_review_items(target: VBoxContainer, values: Variant) -> void:
+	if not values is Array:
+		return
+	for value: Variant in values:
+		if not value is Dictionary:
+			continue
+		var panel := PanelContainer.new()
+		panel.custom_minimum_size.y = 48
+		panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_BORDER, 5, 1))
+		target.add_child(panel)
+		var label := Label.new()
+		label.text = "%dx %s" % [int(value.get("quantity", 0)), str(value.get("name", value.get("itemId", "Item")))]
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_color_override("font_color", TRADE_TEXT)
+		label.add_theme_font_size_override("font_size", 14)
+		panel.add_child(label)
+
+
 func _local_participant_ready() -> bool:
 	var user_id := _current_user_id()
 	for participant_value: Variant in trade.get("participants", []):
@@ -907,7 +958,9 @@ func _local_offer_nonempty() -> bool:
 	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
 		if offer_value is Dictionary and int(offer_value.get("userId", 0)) == user_id:
-			return offer_value.get("pokemon", []) is Array and not offer_value.get("pokemon", []).is_empty()
+			var pokemon: Variant = offer_value.get("pokemon", [])
+			var items: Variant = offer_value.get("items", [])
+			return (pokemon is Array and not pokemon.is_empty()) or (items is Array and not items.is_empty())
 	return false
 
 
@@ -924,7 +977,7 @@ func _friendly_error(result: Dictionary) -> String:
 		"trade_offer_party_only": return "Only Pokemon currently in your party can be offered."
 		"trade_party_capacity_exceeded": return "The other player does not have enough free party slots."
 		"trade_party_space_required": return "A free party slot is required to receive a Pokemon."
-		"trade_offer_required": return "Offer at least one Pokemon before becoming Ready."
+		"trade_offer_required": return "Offer at least one Pokemon or item before becoming Ready."
 		"trade_review_mismatch": return "The locked review changed. Refresh before confirming."
 		"trade_review_not_locked": return "This trade is no longer locked for review."
 		"trade_settlement_invalidated": return "The trade changed and could not be completed. Refresh the authoritative trade state."
