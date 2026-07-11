@@ -238,7 +238,7 @@ static func _add_candidate(result: Array[Dictionary], seen: Dictionary, value: V
 
 
 func _replace_offer(pokemon_ids: Array[int]) -> void:
-	if mutation_in_flight or pokemon_ids.is_empty() or _any_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
+	if mutation_in_flight or pokemon_ids.is_empty() or _local_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved():
 		return
 	mutation_in_flight = true
 	_render_offers()
@@ -328,7 +328,7 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.custom_minimum_size.x = 52
 	content.add_child(name_label)
-	if is_local and selected_ids.size() > 1 and not _any_participant_ready() and not mutation_in_flight:
+	if is_local and selected_ids.size() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove_button := Button.new()
 		remove_button.text = "X"
 		remove_button.tooltip_text = "Remove from offer"
@@ -371,7 +371,7 @@ func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
 	var workspace_position := _main_to_workspace_position(global_position)
 	if not visible or local_offer_box == null or not local_offer_box.get_global_rect().has_point(workspace_position):
 		return false
-	if party_slot < 0 or party_slot >= 6 or mutation_in_flight or _any_participant_ready() or _connection_state_unresolved() or str(trade.get("status", "")) != "active":
+	if party_slot < 0 or party_slot >= 6 or mutation_in_flight or _local_participant_ready() or _connection_state_unresolved() or str(trade.get("status", "")) != "active":
 		return true
 	var candidate := _candidate_by_party_slot(party_slot)
 	if candidate.is_empty():
@@ -473,18 +473,17 @@ func _render_mode() -> void:
 		_render_locked_review()
 		return
 	var local_ready := _local_participant_ready()
-	var any_ready := _any_participant_ready()
 	var blocked := _connection_state_unresolved()
 	ready_button.visible = not local_ready
-	ready_button.disabled = mutation_in_flight or not _both_offers_nonempty() or blocked
-	edit_button.visible = any_ready
+	ready_button.disabled = mutation_in_flight or not _local_offer_nonempty() or blocked
+	edit_button.visible = local_ready
 	edit_button.disabled = mutation_in_flight or blocked
-	if any_ready:
-		status_label.text = "Offer editing is paused until readiness is cleared."
+	if local_ready:
+		status_label.text = "Your offer is ready and cannot be edited."
 	elif _opponent_receive_capacity() <= 0:
 		status_label.text = "The other player needs a free party slot before you can offer a Pokemon."
-	elif not _both_offers_nonempty():
-		status_label.text = "Both players must send at least one Pokemon before Ready is available."
+	elif not _local_offer_nonempty():
+		status_label.text = "Offer at least one Pokemon before becoming Ready."
 	else:
 		status_label.text = ""
 
@@ -631,12 +630,12 @@ func _local_participant_confirmed() -> bool:
 	return false
 
 
-func _both_offers_nonempty() -> bool:
-	var nonempty := 0
+func _local_offer_nonempty() -> bool:
+	var user_id := _current_user_id()
 	for offer_value: Variant in trade.get("offers", []):
-		if offer_value is Dictionary and offer_value.get("pokemon", []) is Array and not offer_value.get("pokemon", []).is_empty():
-			nonempty += 1
-	return nonempty == 2
+		if offer_value is Dictionary and int(offer_value.get("userId", 0)) == user_id:
+			return offer_value.get("pokemon", []) is Array and not offer_value.get("pokemon", []).is_empty()
+	return false
 
 
 func _friendly_error(result: Dictionary) -> String:
@@ -652,6 +651,7 @@ func _friendly_error(result: Dictionary) -> String:
 		"trade_offer_party_only": return "Only Pokemon currently in your party can be offered."
 		"trade_party_capacity_exceeded": return "The other player does not have enough free party slots."
 		"trade_party_space_required": return "A free party slot is required to receive a Pokemon."
+		"trade_offer_required": return "Offer at least one Pokemon before becoming Ready."
 		"trade_review_mismatch": return "The locked review changed. Refresh before confirming."
 		"trade_review_not_locked": return "This trade is no longer locked for review."
 		"trade_settlement_invalidated": return "The trade changed and could not be completed. Refresh the authoritative trade state."
