@@ -8,6 +8,7 @@ signal recovery_required(trade_id: String, after_seq: int)
 signal connection_changed(connected: bool)
 signal active_trade_changed(trade: Dictionary)
 signal invitation_received(trade: Dictionary)
+signal offer_update_received(event: Dictionary)
 
 var active_trade_id := ""
 var last_applied_event_seq := 0
@@ -28,6 +29,7 @@ var connected := false
 var connecting := false
 var websocket_url := ""
 var active_trade_snapshot: Dictionary = {}
+var completion_refresh_attempts := 0
 
 func _process(delta: float) -> void:
 	poll_trade_socket()
@@ -134,12 +136,21 @@ func apply_event(event: Dictionary) -> void:
 	latest_revision = maxi(latest_revision, int(event.get("revision", 0)))
 	var event_type := str(event.get("type", ""))
 	var next_status := str(_dictionary(event.get("payload", {})).get("status", ""))
-	if next_status != "" and not active_trade_snapshot.is_empty():
+	if next_status != "" and event_type != "trade.completed" and not active_trade_snapshot.is_empty():
 		active_trade_snapshot["status"] = next_status
 		active_trade_snapshot["revision"] = latest_revision
 		active_trade_snapshot["lastEventSeq"] = last_applied_event_seq
 		active_trade_changed.emit(active_trade_snapshot.duplicate(true))
 	event_received.emit(event.duplicate(true))
+	if event_type == "trade.offer_updated":
+		offer_update_received.emit(event.duplicate(true))
+		refresh_authoritative_snapshot.call_deferred()
+	if event_type in ["trade.readiness_changed", "trade.locked", "trade.unlocked", "trade.reconnect_grace_started", "trade.reconnect_grace_cancelled"]:
+		refresh_authoritative_snapshot.call_deferred()
+	if event_type == "trade.participant_confirmed":
+		refresh_authoritative_snapshot.call_deferred()
+	if event_type == "trade.completed":
+		refresh_completed_trade.call_deferred(active_trade_id)
 	if event_type in ["trade.declined", "trade.cancelled", "trade.expired"]:
 		stop_transport(true)
 
@@ -179,6 +190,8 @@ func restore_active_trade_and_connect() -> Dictionary:
 	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
 	if trade_service == null:
 		return {"success": false, "error": "Trade service unavailable."}
+	if trade_service.has_method("load_capabilities"):
+		await trade_service.call("load_capabilities", true)
 	var result: Dictionary = await trade_service.call("load_active_trade")
 	if not bool(result.get("success", false)):
 		return result
@@ -243,3 +256,37 @@ func recover_from_rest() -> void:
 	var page: Dictionary = events_result.get("events", {})
 	var events_value: Variant = page.get("events", [])
 	apply_recovery(snapshot, events_value if events_value is Array else [])
+
+
+func refresh_authoritative_snapshot() -> void:
+	if active_trade_id == "":
+		return
+	if trade_service_override == null and not is_inside_tree():
+		return
+	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
+	if trade_service == null:
+		return
+	var result: Dictionary = await trade_service.call("load_trade", active_trade_id)
+	if bool(result.get("success", false)):
+		apply_snapshot(_dictionary(result.get("trade", {})))
+
+
+func refresh_completed_trade(trade_id: String) -> void:
+	if trade_id == "":
+		return
+	var trade_service := trade_service_override if trade_service_override != null else get_node_or_null("/root/TradeService")
+	if trade_service == null:
+		return
+	completion_refresh_attempts = 0
+	while completion_refresh_attempts < MAX_RECOVERY_ATTEMPTS:
+		completion_refresh_attempts += 1
+		var result: Dictionary = await trade_service.call("load_trade", trade_id)
+		if bool(result.get("success", false)):
+			var snapshot := _dictionary(result.get("trade", {}))
+			if str(snapshot.get("status", "")) == "completed":
+				apply_snapshot(snapshot)
+				stop_transport(true)
+				return
+		if not is_inside_tree():
+			return
+		await get_tree().create_timer(0.5).timeout

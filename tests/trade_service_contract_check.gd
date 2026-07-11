@@ -21,6 +21,9 @@ func _init() -> void:
 func _check_capability_normalization() -> void:
 	var capabilities: Dictionary = service.normalize_capabilities({
 		"enabled": true,
+		"canCreate": true,
+		"rolloutMode": "alpha",
+		"userAccess": true,
 		"maxPokemonPerSide": 5,
 		"allowHeldItems": false,
 		"requiresSameMap": true,
@@ -29,6 +32,8 @@ func _check_capability_normalization() -> void:
 	})
 
 	_check_equal(capabilities.get("enabled", false), true, "enabled capability")
+	_check_equal(capabilities.get("rolloutMode", ""), "alpha", "rollout mode capability")
+	_check_equal(capabilities.get("userAccess", false), true, "user rollout access capability")
 	_check_equal(capabilities.get("maxPokemonPerSide", 0), 5, "max Pokemon capability")
 	_check_equal(capabilities.get("inviteExpiresInSeconds", 0), 45, "invite expiry capability")
 	_check_equal(capabilities.get("reconnectGraceSeconds", 0), 60, "reconnect grace capability")
@@ -50,9 +55,10 @@ func _check_capability_defaults() -> void:
 
 
 func _check_snapshot_parsing() -> void:
-	var snapshot: Dictionary = service.normalize_trade_snapshot({"tradeId": "trade-1", "status": "invited", "revision": 3, "lastEventSeq": 4, "participants": [{"userId": 1}]})
+	var snapshot: Dictionary = service.normalize_trade_snapshot({"tradeId": "trade-1", "status": "active", "revision": 3, "lastEventSeq": 4, "participants": [{"userId": 1}], "offers":[{"userId":1,"pokemon":[{"pokemonId":7}]}]})
 	_check_equal(snapshot.get("tradeId", ""), "trade-1", "trade snapshot id")
 	_check_equal(snapshot.get("revision", 0), 3, "trade snapshot revision")
+	_check_equal(snapshot.get("offers", []).size(), 1, "trade offers parsed")
 	var events: Dictionary = service.normalize_trade_events({"tradeId": "trade-1", "revision": 3, "lastEventSeq": 4, "afterSeq": 2, "limit": 500, "events": [{"eventSeq": 3}]})
 	_check_equal(events.get("limit", 0), 100, "trade event limit clamp")
 	_check_equal(events.get("events", []).size(), 1, "trade event parsing")
@@ -66,6 +72,15 @@ func _check_invitation_contract() -> void:
 	_check_equal(source.contains("func cancel_invitation"), true, "cancel invitation command")
 	_check_equal(source.contains("expectedRevision"), true, "revision precondition payload")
 	_check_equal(source.contains("targetUsername"), true, "target username payload")
+	_check_equal(source.contains("func replace_offer"), true, "complete offer replacement command")
+	_check_equal(source.contains("pokemonIds"), true, "offer Pokemon ids payload")
+	_check_equal(source.contains("func set_readiness"), true, "readiness command")
+	_check_equal(source.contains("/%s/readiness"), true, "readiness endpoint")
+	_check_equal(source.contains("func leave_trade"), true, "active and locked abandonment command")
+	_check_equal(source.contains("func confirm_trade"), true, "locked review confirmation command")
+	_check_equal(source.contains("lockedSnapshotHash"), true, "confirmation submits locked review hash")
+	_check_equal(source.contains("func load_trade_history"), true, "participant trade history API")
+	_check_equal(source.contains("func load_trade_receipt"), true, "participant trade receipt API")
 
 
 func _check_capabilities_require_authentication() -> void:

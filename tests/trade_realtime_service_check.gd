@@ -4,6 +4,7 @@ var failed := false
 var service: Node
 var applied: Array = []
 var gaps := 0
+var offer_updates := 0
 class FakeTradeService extends Node:
 	var failures := 0
 	var active_trade: Dictionary = {"tradeId":"restored", "status":"invited", "revision":1, "lastEventSeq":2}
@@ -20,15 +21,19 @@ func _init() -> void:
 	service = Service.new()
 	service.event_received.connect(func(event): applied.append(event.get("eventSeq")))
 	service.recovery_required.connect(func(_id, _seq): gaps += 1)
+	service.offer_update_received.connect(func(_event): offer_updates += 1)
 	service.apply_snapshot({"tradeId":"t", "revision":2, "lastEventSeq":2})
 	service.apply_event({"tradeId":"t", "eventSeq":2})
 	service.apply_event({"tradeId":"t", "eventSeq":4})
 	_check(gaps == 1, "gap detected")
 	service.apply_recovery({"tradeId":"t", "revision":4, "lastEventSeq":3}, [{"tradeId":"t", "eventSeq":4}])
 	_check(service.last_applied_event_seq == 4, "recovery applies contiguous replay")
+	service.apply_event({"tradeId":"t", "eventSeq":5, "revision":5, "type":"trade.offer_updated", "payload":{"offers":[]}})
+	service.apply_event({"tradeId":"t", "eventSeq":5, "revision":5, "type":"trade.offer_updated", "payload":{"offers":[]}})
+	_check(offer_updates == 1, "duplicate offer event suppressed")
 	service.recovery_in_progress = true
 	service.apply_event({"tradeId":"t", "eventSeq":6})
-	service.apply_recovery({"tradeId":"t", "revision":5, "lastEventSeq":5}, [])
+	service.apply_recovery({"tradeId":"t", "revision":6, "lastEventSeq":5}, [])
 	_check(service.last_applied_event_seq == 6, "buffered live event drains after recovery")
 	service.apply_snapshot({"tradeId":"t", "revision":1, "lastEventSeq":1})
 	_check(service.last_applied_event_seq == 6, "stale snapshot ignored")

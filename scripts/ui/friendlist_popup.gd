@@ -38,6 +38,7 @@ var friends_list: VBoxContainer
 var requests_list: VBoxContainer
 var requests_tab_attention_badge: Panel
 var blocked_list: VBoxContainer
+var trade_history_list: VBoxContainer
 var friend_search_input: LineEdit
 var block_user_input: LineEdit
 var status_message_input: LineEdit
@@ -176,6 +177,7 @@ func _build_ui() -> void:
 	tabs.add_child(_build_requests_tab())
 	tabs.add_child(_build_blocked_tab())
 	tabs.add_child(_build_status_tab())
+	tabs.add_child(_build_trade_history_tab())
 	_setup_friendlist_tab_buttons()
 
 
@@ -200,6 +202,12 @@ func _build_requests_tab() -> Control:
 	requests_list = VBoxContainer.new()
 	requests_list.add_theme_constant_override("separation", 8)
 	return _tab_content_margin(_scroll_for(requests_list), "Requests", 10)
+
+
+func _build_trade_history_tab() -> Control:
+	trade_history_list = VBoxContainer.new()
+	trade_history_list.add_theme_constant_override("separation", 8)
+	return _tab_content_margin(_scroll_for(trade_history_list), "Trade History", 10)
 
 
 func _build_blocked_tab() -> Control:
@@ -434,6 +442,7 @@ func _setup_friendlist_tab_buttons() -> void:
 		{"index": 1, "label": "Requests", "id": "requests"},
 		{"index": 2, "label": "Blocked", "id": "blocked"},
 		{"index": 3, "label": "Status", "id": "status"},
+		{"index": 4, "label": "Trades", "id": "trades"},
 	]
 	for spec: Dictionary in tab_specs:
 		var button := Button.new()
@@ -453,6 +462,8 @@ func _on_friendlist_tab_pressed(tab_index: int) -> void:
 		return
 	tabs.current_tab = tab_index
 	_refresh_friendlist_tab_buttons()
+	if tab_index == 4:
+		_load_trade_history()
 
 
 func _refresh_friendlist_tab_buttons() -> void:
@@ -464,6 +475,7 @@ func _refresh_friendlist_tab_buttons() -> void:
 		1: "requests",
 		2: "blocked",
 		3: "status",
+		4: "trades",
 	}
 	for index_value: Variant in id_by_index.keys():
 		var index: int = int(index_value)
@@ -471,6 +483,61 @@ func _refresh_friendlist_tab_buttons() -> void:
 		if button == null:
 			continue
 		_apply_friendlist_tab_button_style(button, index == active_index)
+
+
+func _load_trade_history() -> void:
+	if trade_history_list == null:
+		return
+	_clear_children(trade_history_list)
+	trade_history_list.add_child(_empty_label("Loading trade history..."))
+	var service := get_node_or_null("/root/TradeService")
+	if service == null:
+		_clear_children(trade_history_list)
+		trade_history_list.add_child(_empty_label("Trade history is unavailable."))
+		return
+	var result: Dictionary = await service.call("load_trade_history", 50, 0)
+	_clear_children(trade_history_list)
+	if not bool(result.get("success", false)):
+		trade_history_list.add_child(_empty_label(str(result.get("error", "Could not load trade history."))))
+		return
+	var body: Dictionary = _dictionary_from_value(result.get("body", {}))
+	var items := _array_from_value(body.get("items", []))
+	if items.is_empty():
+		trade_history_list.add_child(_empty_label("No trades yet."))
+		return
+	for item_value: Variant in items:
+		var item := _dictionary_from_value(item_value)
+		if item.is_empty():
+			continue
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		var counterparty := _dictionary_from_value(item.get("counterparty", {}))
+		var summary := Label.new()
+		summary.text = "%s  |  %s" % [str(counterparty.get("displayName", counterparty.get("username", "Unknown"))), str(item.get("status", "unknown")).capitalize()]
+		summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		summary.add_theme_color_override("font_color", UI_TEXT)
+		row.add_child(summary)
+		if str(item.get("status", "")) == "completed":
+			var receipt_button := Button.new()
+			receipt_button.text = "Receipt"
+			receipt_button.pressed.connect(_load_trade_receipt.bind(str(item.get("tradeId", ""))))
+			_apply_button_style(receipt_button, "primary")
+			row.add_child(receipt_button)
+		trade_history_list.add_child(row)
+
+
+func _load_trade_receipt(trade_id: String) -> void:
+	var service := get_node_or_null("/root/TradeService")
+	if service == null or trade_id == "":
+		return
+	var result: Dictionary = await service.call("load_trade_receipt", trade_id)
+	if not bool(result.get("success", false)):
+		_set_status(str(result.get("error", "Could not load trade receipt.")))
+		return
+	var body := _dictionary_from_value(result.get("body", {}))
+	var receipt := _dictionary_from_value(body.get("receipt", {}))
+	var transfers := _array_from_value(receipt.get("transfers", []))
+	_set_status("Completed trade receipt: %d Pokemon transferred. Placement details are limited to your account." % transfers.size())
 
 
 func _setup_requests_tab_attention_badge() -> void:

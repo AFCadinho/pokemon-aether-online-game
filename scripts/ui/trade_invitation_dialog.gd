@@ -87,7 +87,11 @@ func _decline_or_close() -> void:
 
 func _apply_result(result: Dictionary) -> void:
 	if bool(result.get("success", false)):
-		show_trade(result.get("trade", {}))
+		var result_trade: Dictionary = result.get("trade", {})
+		show_trade(result_trade)
+		var realtime := get_node_or_null("/root/TradeRealtimeService")
+		if realtime != null:
+			realtime.apply_snapshot(result_trade)
 	else:
 		show_error(str(result.get("error", "Trade invitation action failed.")))
 

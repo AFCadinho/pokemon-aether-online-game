@@ -9,12 +9,8 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 var capabilities: Dictionary = {}
 
 
-func load_capabilities(force_refresh := false) -> Dictionary:
-	if not force_refresh and not capabilities.is_empty():
-		return {
-			"success": true,
-			"capabilities": capabilities.duplicate(true),
-		}
+func load_capabilities(_force_refresh := false) -> Dictionary:
+	# Rollout access is account-specific and must always be refreshed authoritatively.
 	if not _is_authenticated():
 		return _auth_error()
 
@@ -63,6 +59,25 @@ func load_trade_events(trade_id: String, after_seq := 0, limit := 50) -> Diction
 	return await _load_trade_resource("/game/trades/%s/events?afterSeq=%d&limit=%d" % [normalized_id.uri_encode(), normalized_after, normalized_limit], false, true)
 
 
+func load_trade_history(limit := 25, offset := 0) -> Dictionary:
+	return await _load_trade_document("/game/trades/history?limit=%d&offset=%d" % [clampi(limit,1,50),maxi(offset,0)])
+
+
+func load_trade_receipt(trade_id: String) -> Dictionary:
+	var normalized_id := trade_id.strip_edges()
+	if normalized_id == "": return _validation_error("Trade id is required.")
+	return await _load_trade_document("/game/trades/%s/receipt" % normalized_id.uri_encode())
+
+
+func _load_trade_document(path: String) -> Dictionary:
+	if not _is_authenticated(): return _auth_error()
+	var gateway := _gateway_api_config()
+	if gateway == null: return _validation_error("Gateway API config is unavailable.")
+	var base_url: String = await gateway.call("get_base_url")
+	var response: Dictionary = await _request_json(base_url + path,HTTPClient.METHOD_GET,gateway.call("get_accept_headers"),"")
+	return response if not bool(response.get("success",false)) else {"success":true,"body":_dictionary_from_value(response.get("body",{}))}
+
+
 func create_invitation(target_username: String, request_id := "") -> Dictionary:
 	var username := target_username.strip_edges()
 	if username == "":
@@ -80,6 +95,43 @@ func decline_invitation(trade_id: String, expected_revision: int, request_id := 
 
 func cancel_invitation(trade_id: String, expected_revision: int, request_id := "") -> Dictionary:
 	return await _invitation_transition(trade_id, "cancel", expected_revision, request_id)
+
+
+func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array, request_id := "") -> Dictionary:
+	var normalized_id := trade_id.strip_edges()
+	if normalized_id == "":
+		return _validation_error("Trade id is required.")
+	var ids: Array[int] = []
+	for value: Variant in pokemon_ids:
+		var pokemon_id := int(value)
+		if pokemon_id <= 0 or pokemon_id in ids:
+			return _validation_error("Offer contains invalid or duplicate Pokemon.")
+		ids.append(pokemon_id)
+	if ids.size() < 1 or ids.size() > 5:
+		return _validation_error("Choose between one and five Pokemon.")
+	return await _trade_command("/%s/offer" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0), "pokemonIds": ids}, HTTPClient.METHOD_PUT)
+
+
+func set_readiness(trade_id: String, expected_revision: int, ready: bool, request_id := "") -> Dictionary:
+	var normalized_id := trade_id.strip_edges()
+	if normalized_id == "":
+		return _validation_error("Trade id is required.")
+	return await _trade_command("/%s/readiness" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0), "ready":ready}, HTTPClient.METHOD_PUT)
+
+
+func leave_trade(trade_id: String, expected_revision: int, request_id := "") -> Dictionary:
+	var normalized_id := trade_id.strip_edges()
+	if normalized_id == "":
+		return _validation_error("Trade ID is required.")
+	return await _trade_command("/%s/leave" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0)}, HTTPClient.METHOD_POST)
+
+
+func confirm_trade(trade_id: String, expected_revision: int, locked_revision: int, locked_snapshot_hash: String, request_id := "") -> Dictionary:
+	var normalized_id := trade_id.strip_edges()
+	var normalized_hash := locked_snapshot_hash.strip_edges()
+	if normalized_id == "" or normalized_hash.length() != 64:
+		return _validation_error("The locked trade review is invalid. Refresh before confirming.")
+	return await _trade_command("/%s/confirm" % normalized_id.uri_encode(), {"requestId":_request_id(request_id),"expectedRevision":maxi(expected_revision,0),"lockedRevision":maxi(locked_revision,0),"lockedSnapshotHash":normalized_hash}, HTTPClient.METHOD_POST)
 
 
 func load_trade_request_preference() -> Dictionary:
@@ -146,6 +198,8 @@ func normalize_trade_snapshot(value: Variant) -> Dictionary:
 	var source := _dictionary_from_value(value)
 	var participants_value: Variant = source.get("participants", [])
 	var participants: Array = participants_value if participants_value is Array else []
+	var offers_value: Variant = source.get("offers", [])
+	var offers: Array = offers_value if offers_value is Array else []
 	return {
 		"tradeId": str(source.get("tradeId", "")).strip_edges(),
 		"status": str(source.get("status", "")).strip_edges(),
@@ -156,6 +210,13 @@ func normalize_trade_snapshot(value: Variant) -> Dictionary:
 		"updatedAt": str(source.get("updatedAt", "")),
 		"expiresAt": str(source.get("expiresAt", "")),
 		"terminalAt": str(source.get("terminalAt", "")),
+		"offers": offers.duplicate(true),
+		"lockedReview": _dictionary_from_value(source.get("lockedReview", {})) if source.get("lockedReview", null) is Dictionary else null,
+		"cancellationReason": str(source.get("cancellationReason", "")),
+		"cancellationActorUserId": int(source.get("cancellationActorUserId", 0)) if source.get("cancellationActorUserId", null) != null else null,
+		"completedAt": str(source.get("completedAt", "")),
+		"completedRevision": int(source.get("completedRevision", 0)) if source.get("completedRevision", null) != null else null,
+		"completionResult": _dictionary_from_value(source.get("completionResult", {})) if source.get("completionResult", null) is Dictionary else null,
 	}
 
 
@@ -176,7 +237,11 @@ func normalize_trade_events(value: Variant) -> Dictionary:
 func normalize_capabilities(value: Variant) -> Dictionary:
 	var source := _dictionary_from_value(value)
 	return {
-		"enabled": bool(source.get("enabled", false)),
+		"enabled": bool(source.get("canCreate", false)),
+		"rolloutMode": str(source.get("rolloutMode", "disabled")),
+		"userAccess": bool(source.get("userAccess", false)),
+		"canCreate": bool(source.get("canCreate", false)),
+		"accessReason": str(source.get("accessReason", "disabled")),
 		"maxPokemonPerSide": clampi(int(source.get("maxPokemonPerSide", 5)), 1, 5),
 		"allowHeldItems": bool(source.get("allowHeldItems", false)),
 		"requiresSameMap": bool(source.get("requiresSameMap", true)),
