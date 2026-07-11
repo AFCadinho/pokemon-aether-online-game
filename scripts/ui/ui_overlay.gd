@@ -9821,6 +9821,8 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	var card_key: String = _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
 	if pokemon_summary_open_cards.has(card_key):
 		_focus_pokemon_summary_card(card_key)
+		if _trade_workspace_is_visible():
+			_promote_trade_summary_to_window(card_key)
 		return
 
 	_setup_pokemon_summary_popup(card_key)
@@ -9838,6 +9840,12 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	_refresh_pokemon_summary()
 	pokemon_summary_popup.visible = true
 	_activate_ui_panel(pokemon_summary_popup)
+	if _trade_workspace_is_visible():
+		_promote_trade_summary_to_window(card_key)
+
+func _trade_workspace_is_visible() -> bool:
+	var workspace := get_node_or_null("/root/TradeWorkspace")
+	return workspace != null and workspace.visible
 
 func _hide_pokemon_summary_popup(card_key: String = "") -> void:
 	if card_key != "":

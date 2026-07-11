@@ -62,6 +62,7 @@ func _init() -> void:
 	_check(overlay_source.contains("_try_offer_party_drag_to_trade"), "party drag delegates offer drops before party reordering")
 	_check(overlay_source.contains("party_drag_workspace_preview"), "party drag preview is hosted above the trade window")
 	_check(overlay_source.contains("_promote_trade_summary_to_window") and overlay_source.contains("always_on_top = true"), "trade summaries render in a higher window layer")
+	_check(overlay_source.contains("func _trade_workspace_is_visible") and overlay_source.contains("_show_pokemon_summary"), "party summaries use the higher trade window layer while trading")
 	quit(1 if failed else 0)
 
 
