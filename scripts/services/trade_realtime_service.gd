@@ -34,7 +34,6 @@ var completion_refresh_attempts := 0
 var active_trade_discovery_elapsed := 0.0
 var active_trade_discovery_in_flight := false
 var application_shutdown_in_progress := false
-var last_discovery_debug_signature := ""
 
 
 func _ready() -> void:
@@ -129,7 +128,6 @@ func apply_snapshot(trade: Dictionary) -> void:
 	var revision := maxi(int(trade.get("revision", 0)), 0)
 	var event_seq := maxi(int(trade.get("lastEventSeq", 0)), 0)
 	var accepted := trade_id != active_trade_id or revision > latest_revision or (revision == latest_revision and event_seq >= last_applied_event_seq)
-	_debug_trade_snapshot("snapshot_received", trade, {"accepted": accepted, "currentTradeId": active_trade_id, "currentRevision": latest_revision})
 	if accepted:
 		active_trade_id = trade_id
 		latest_revision = revision
@@ -253,7 +251,6 @@ func restore_active_trade_and_connect() -> Dictionary:
 	if trade_service.has_method("load_capabilities"):
 		await trade_service.call("load_capabilities", true)
 	var result: Dictionary = await trade_service.call("load_active_trade")
-	_debug_active_lookup("restore_result", result)
 	if not bool(result.get("success", false)):
 		return result
 	if not bool(result.get("hasActiveTrade", false)):
@@ -288,7 +285,6 @@ func discover_active_trade() -> Dictionary:
 	active_trade_discovery_in_flight = true
 	var result: Dictionary = await trade_service.call("load_active_trade")
 	active_trade_discovery_in_flight = false
-	_debug_active_lookup("discovery_result", result, true)
 	if not bool(result.get("success", false)):
 		return result
 	if not bool(result.get("hasActiveTrade", false)):
@@ -307,59 +303,6 @@ func discover_active_trade() -> Dictionary:
 
 func _needs_active_trade_discovery() -> bool:
 	return active_trade_id == "" or str(active_trade_snapshot.get("status", "")) in ["invited", "active", "locked"]
-
-
-func _debug_active_lookup(action: String, result: Dictionary, deduplicate := false) -> void:
-	var snapshot := _dictionary(result.get("trade", {}))
-	var signature := "%s|%s|%s|%s|%s" % [
-		str(result.get("hasActiveTrade", false)),
-		str(snapshot.get("tradeId", "")),
-		str(snapshot.get("status", "")),
-		str(snapshot.get("revision", 0)),
-		str(snapshot.get("expiresAt", "")),
-	]
-	if deduplicate and signature == last_discovery_debug_signature:
-		return
-	if deduplicate:
-		last_discovery_debug_signature = signature
-	_debug_trade_snapshot(action, snapshot, {
-		"success": bool(result.get("success", false)),
-		"hasActiveTrade": bool(result.get("hasActiveTrade", false)),
-		"error": str(result.get("error", "")),
-	})
-
-
-func _debug_trade_snapshot(action: String, snapshot: Dictionary, extra: Dictionary = {}) -> void:
-	var participants: Array[Dictionary] = []
-	for participant_value: Variant in snapshot.get("participants", []):
-		if participant_value is Dictionary:
-			participants.append({
-				"userId": int(participant_value.get("userId", 0)),
-				"username": str(participant_value.get("username", "")),
-				"displayName": str(participant_value.get("displayName", "")),
-				"role": str(participant_value.get("role", "")),
-			})
-	var payload := {
-		"action": action,
-		"userId": _debug_user_id(),
-		"tradeId": str(snapshot.get("tradeId", "")),
-		"status": str(snapshot.get("status", "")),
-		"revision": int(snapshot.get("revision", 0)),
-		"lastEventSeq": int(snapshot.get("lastEventSeq", 0)),
-		"createdAt": str(snapshot.get("createdAt", "")),
-		"expiresAt": str(snapshot.get("expiresAt", "")),
-		"participants": participants,
-	}
-	for key: Variant in extra:
-		payload[key] = extra[key]
-	print("[TradeDebug][Realtime] %s" % JSON.stringify(payload))
-
-
-func _debug_user_id() -> int:
-	if not is_inside_tree():
-		return 0
-	var auth := get_node_or_null("/root/AuthService")
-	return int(auth.current_user.get("id", 0)) if auth != null else 0
 
 
 func _authenticated_websocket_url() -> String:

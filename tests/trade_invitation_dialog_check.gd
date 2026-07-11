@@ -67,7 +67,6 @@ func _init() -> void:
 	_check(source.contains("close_requested.connect(_decline_or_close)"), "window close resolves the durable invitation")
 	_check(source.contains("active_trade_changed.connect(_on_trade_changed)"), "authoritative trade snapshots reconcile invitations")
 	_check(source.contains("notified_incoming_trade_ids") and source.contains("add_system_message"), "incoming invitations emit one deduplicated system message")
-	_check(source.contains("[TradeDebug][InvitationDialog]"), "invitation lifecycle emits structured diagnostics")
 	_check(source.contains("hide()"), "active trade closes invitation surface")
 	_check(not source.contains("replace_offer") and not source.contains("offer_slots") and not source.contains("Ready"), "no Pokemon offer mutation UI")
 	_check(source.contains("DIALOG_SIZE") and source.contains("_style_button"), "invitation dialog uses compact trade styling")

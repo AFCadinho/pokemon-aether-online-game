@@ -887,13 +887,6 @@ func _local_participant_ready() -> bool:
 	return false
 
 
-func _any_participant_ready() -> bool:
-	for participant_value: Variant in trade.get("participants", []):
-		if participant_value is Dictionary and bool(participant_value.get("ready", false)):
-			return true
-	return false
-
-
 func _opponent_participant_ready() -> bool:
 	var user_id := _current_user_id()
 	for participant_value: Variant in trade.get("participants", []):

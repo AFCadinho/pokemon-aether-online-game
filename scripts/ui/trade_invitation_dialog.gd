@@ -146,9 +146,7 @@ func send_invitation(username: String) -> Dictionary:
 
 func show_trade(value: Dictionary) -> void:
 	trade = value.duplicate(true)
-	_debug_invitation("show_trade_received")
 	if str(trade.get("status", "")) != "invited":
-		_debug_invitation("show_trade_hidden_non_invited")
 		hide()
 		return
 	var incoming := _current_role() == "recipient"
@@ -159,7 +157,6 @@ func show_trade(value: Dictionary) -> void:
 	status_label.text = _invitation_status_text(incoming)
 	if incoming:
 		_notify_incoming_invitation_once()
-	_debug_invitation("dialog_opened", {"incoming": incoming, "initiator": _initiator_display_name()})
 	size = DIALOG_SIZE
 	popup_centered(DIALOG_SIZE)
 	if accept_button.visible:
@@ -192,7 +189,6 @@ func _decline_or_close() -> void:
 	if action_in_flight:
 		return
 	if trade.is_empty():
-		_debug_invitation("dialog_closed_without_trade")
 		hide()
 		return
 	if str(trade.get("status", "")) != "invited":
@@ -201,13 +197,11 @@ func _decline_or_close() -> void:
 	var service := get_node("/root/TradeService")
 	var result: Dictionary
 	var role := _current_role()
-	_debug_invitation("close_command_started", {"role": role})
 	if role == "recipient":
 		result = await service.decline_invitation(str(trade.get("tradeId", "")), int(trade.get("revision", 0)))
 	else:
 		result = await service.cancel_invitation(str(trade.get("tradeId", "")), int(trade.get("revision", 0)))
 	action_in_flight = false
-	_debug_invitation("close_command_result", {"role": role, "success": bool(result.get("success", false)), "error": str(result.get("error", "")), "resultStatus": str(result.get("trade", {}).get("status", "")) if result.get("trade", {}) is Dictionary else ""})
 	_apply_result(result)
 
 
@@ -223,7 +217,6 @@ func _apply_result(result: Dictionary) -> void:
 
 
 func _on_trade_changed(value: Dictionary) -> void:
-	_debug_invitation("active_trade_changed", {"incomingTradeId": str(value.get("tradeId", "")), "incomingStatus": str(value.get("status", "")), "incomingRole": _role_for_trade(value)})
 	if str(value.get("status", "")) == "invited" and _role_for_trade(value) == "recipient":
 		show_trade(value)
 		return
@@ -287,29 +280,6 @@ func _notify_incoming_invitation_once() -> void:
 	var overlay := get_tree().get_first_node_in_group("ui_overlay")
 	if overlay != null and overlay.has_method("add_system_message"):
 		overlay.call("add_system_message", "Trade request received from %s." % _initiator_display_name())
-
-
-func _debug_invitation(action: String, extra: Dictionary = {}) -> void:
-	var payload := {
-		"action": action,
-		"userId": _current_user_id(),
-		"tradeId": str(trade.get("tradeId", "")),
-		"status": str(trade.get("status", "")),
-		"revision": int(trade.get("revision", 0)),
-		"createdAt": str(trade.get("createdAt", "")),
-		"expiresAt": str(trade.get("expiresAt", "")),
-		"role": _current_role(),
-		"initiator": _initiator_display_name(),
-		"visible": visible,
-	}
-	for key: Variant in extra:
-		payload[key] = extra[key]
-	print("[TradeDebug][InvitationDialog] %s" % JSON.stringify(payload))
-
-
-func _current_user_id() -> int:
-	var auth := get_node_or_null("/root/AuthService")
-	return int(auth.current_user.get("id", 0)) if auth != null else 0
 
 
 func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
