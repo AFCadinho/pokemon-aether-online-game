@@ -120,8 +120,8 @@ func replace_offer(trade_id: String, expected_revision: int, pokemon_ids: Array,
 			return _validation_error("Item offer contains an invalid or duplicate stack.")
 		seen_item_ids.append(item_id)
 		items.append({"itemId":item_id, "quantity":int(quantity_value)})
-	if items.size() > 5:
-		return _validation_error("Choose no more than five item stacks.")
+	if items.size() > 500:
+		return _validation_error("The item offer is too large.")
 	if ids.is_empty() and items.is_empty():
 		return _validation_error("Offer at least one Pokemon or item.")
 	return await _trade_command("/%s/offer" % normalized_id.uri_encode(), {"requestId": _request_id(request_id), "expectedRevision": maxi(expected_revision, 0), "pokemonIds": ids, "items":items}, HTTPClient.METHOD_PUT)

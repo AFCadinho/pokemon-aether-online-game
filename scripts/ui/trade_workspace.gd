@@ -27,6 +27,8 @@ var opponent_item_offer_list: VBoxContainer
 var item_selector_popup: PopupPanel
 var item_selector_list: VBoxContainer
 var item_selector_rows: Dictionary = {}
+var item_selector_search: LineEdit
+var item_selector_empty_label: Label
 var add_items_button: Button
 var local_ready_indicator: Label
 var opponent_ready_indicator: Label
@@ -305,9 +307,14 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		grid.add_child(slot)
 	var item_separator := HSeparator.new()
 	content.add_child(item_separator)
+	var item_scroll := ScrollContainer.new()
+	item_scroll.custom_minimum_size.y = 96
+	item_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.add_child(item_scroll)
 	var item_list := VBoxContainer.new()
+	item_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_list.add_theme_constant_override("separation", 5)
-	content.add_child(item_list)
+	item_scroll.add_child(item_list)
 	if label_text == "Your Offer":
 		local_item_offer_list = item_list
 	else:
@@ -317,7 +324,7 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 
 func _build_item_selector() -> void:
 	item_selector_popup = PopupPanel.new()
-	item_selector_popup.size = Vector2i(520, 470)
+	item_selector_popup.size = Vector2i(640, 560)
 	item_selector_popup.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 7, 1))
 	add_child(item_selector_popup)
 	var margin := MarginContainer.new()
@@ -335,9 +342,18 @@ func _build_item_selector() -> void:
 	heading.add_theme_color_override("font_color", TRADE_TEXT)
 	root.add_child(heading)
 	var help := Label.new()
-	help.text = "Select up to five stacks and set the offered quantity."
+	help.text = "Search your inventory, select stacks, and set each offered quantity."
 	help.add_theme_color_override("font_color", TRADE_MUTED)
 	root.add_child(help)
+	item_selector_search = LineEdit.new()
+	item_selector_search.placeholder_text = "Search items"
+	item_selector_search.clear_button_enabled = true
+	item_selector_search.add_theme_color_override("font_color", TRADE_TEXT)
+	item_selector_search.add_theme_color_override("font_placeholder_color", TRADE_MUTED)
+	item_selector_search.add_theme_stylebox_override("normal", _panel_style(TRADE_SLOT, TRADE_BORDER, 5, 1))
+	item_selector_search.add_theme_stylebox_override("focus", _panel_style(TRADE_SLOT, TRADE_ACCENT, 5, 1))
+	item_selector_search.text_changed.connect(_filter_item_selector_rows)
+	root.add_child(item_selector_search)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(scroll)
@@ -345,6 +361,11 @@ func _build_item_selector() -> void:
 	item_selector_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_selector_list.add_theme_constant_override("separation", 6)
 	scroll.add_child(item_selector_list)
+	item_selector_empty_label = Label.new()
+	item_selector_empty_label.text = "No matching tradable items."
+	item_selector_empty_label.add_theme_color_override("font_color", TRADE_MUTED)
+	item_selector_empty_label.visible = false
+	item_selector_list.add_child(item_selector_empty_label)
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	root.add_child(actions)
@@ -579,7 +600,7 @@ func _render_offers() -> void:
 				_render_offer_slot(target[index], pokemon_values[index], is_local, index)
 		var item_values: Array = offer_value.get("items", []) if offer_value.get("items", []) is Array else []
 		var item_target := local_item_offer_list if is_local else opponent_item_offer_list
-		for index in range(mini(item_values.size(), MAX_OFFER_SIZE)):
+		for index in range(item_values.size()):
 			if item_values[index] is Dictionary:
 				_render_item_offer(item_target, item_values[index], is_local, index)
 
@@ -619,13 +640,20 @@ func _open_item_selector() -> void:
 		_show_error("Could not refresh your inventory.")
 		return
 	inventory_items = normalize_inventory_candidates(result.get("items", []))
+	item_selector_search.text = ""
 	_rebuild_item_selector_rows()
-	item_selector_popup.popup_centered(Vector2i(520, 470))
+	item_selector_popup.popup_centered(Vector2i(640, 560))
+	item_selector_search.grab_focus()
 
 
 func _rebuild_item_selector_rows() -> void:
 	_clear(item_selector_list)
 	item_selector_rows.clear()
+	item_selector_empty_label = Label.new()
+	item_selector_empty_label.text = "No matching tradable items."
+	item_selector_empty_label.add_theme_color_override("font_color", TRADE_MUTED)
+	item_selector_empty_label.visible = false
+	item_selector_list.add_child(item_selector_empty_label)
 	var selected_by_id: Dictionary = {}
 	for selected: Dictionary in selected_item_offers:
 		selected_by_id[str(selected.get("itemId", ""))] = int(selected.get("quantity", 1))
@@ -637,9 +665,18 @@ func _rebuild_item_selector_rows() -> void:
 		return
 	for item: Dictionary in inventory_items:
 		var item_id := str(item.get("itemId", ""))
+		var row_panel := PanelContainer.new()
+		row_panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE, TRADE_BORDER, 5, 1))
+		item_selector_list.add_child(row_panel)
+		var row_margin := MarginContainer.new()
+		row_margin.add_theme_constant_override("margin_left", 10)
+		row_margin.add_theme_constant_override("margin_top", 7)
+		row_margin.add_theme_constant_override("margin_right", 10)
+		row_margin.add_theme_constant_override("margin_bottom", 7)
+		row_panel.add_child(row_margin)
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 10)
-		item_selector_list.add_child(row)
+		row_margin.add_child(row)
 		var enabled := CheckBox.new()
 		enabled.button_pressed = selected_by_id.has(item_id)
 		enabled.focus_mode = Control.FOCUS_NONE
@@ -656,7 +693,30 @@ func _rebuild_item_selector_rows() -> void:
 		quantity.value = clampi(int(selected_by_id.get(item_id, 1)), 1, int(quantity.max_value))
 		quantity.custom_minimum_size.x = 90
 		row.add_child(quantity)
-		item_selector_rows[item_id] = {"enabled":enabled, "quantity":quantity}
+		item_selector_rows[item_id] = {"enabled":enabled, "quantity":quantity, "row":row_panel, "searchText":("%s %s %s" % [item.get("name", ""), item_id, item.get("category", "")]).to_lower()}
+	_filter_item_selector_rows(item_selector_search.text)
+
+
+func _filter_item_selector_rows(query: String) -> void:
+	var normalized := query.strip_edges().to_lower()
+	var visible_count := 0
+	for controls_value: Variant in item_selector_rows.values():
+		if not controls_value is Dictionary:
+			continue
+		var controls: Dictionary = controls_value
+		var row := controls.get("row") as Control
+		if row == null:
+			continue
+		row.visible = item_matches_search(str(controls.get("searchText", "")), normalized)
+		if row.visible:
+			visible_count += 1
+	if item_selector_empty_label != null:
+		item_selector_empty_label.visible = visible_count == 0
+
+
+static func item_matches_search(search_text: String, query: String) -> bool:
+	var normalized := query.strip_edges().to_lower()
+	return normalized == "" or search_text.to_lower().contains(normalized)
 
 
 func _apply_item_selection() -> void:
@@ -668,9 +728,6 @@ func _apply_item_selection() -> void:
 		var quantity := controls.get("quantity") as SpinBox
 		if enabled != null and enabled.button_pressed and quantity != null:
 			replacement.append({"itemId":item_id, "quantity":int(quantity.value)})
-	if replacement.size() > MAX_OFFER_SIZE:
-		_show_error("Choose no more than five item stacks.")
-		return
 	if replacement.is_empty() and selected_ids.is_empty():
 		_show_error("Offer at least one Pokemon or item.")
 		return
