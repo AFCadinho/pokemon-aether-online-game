@@ -25,6 +25,7 @@ func _init() -> void:
 	_check(source.contains("func _ready() -> void:\n\thide()"), "workspace starts hidden without an active trade")
 	_check(source.contains("replace_offer"), "workspace uses complete replacement")
 	_check(source.contains("Send Offer"), "workspace distinguishes draft selection from server offer submission")
+	_check(source.contains("Both players must send at least one Pokemon"), "workspace explains disabled Ready state")
 	_check(source.contains("PlayerPartyStateService"), "workspace reuses party service")
 	_check(source.contains("PokemonStorageService"), "workspace reuses storage service")
 	_check(source.contains("Ready"), "readiness control")

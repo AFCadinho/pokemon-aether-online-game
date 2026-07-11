@@ -340,7 +340,12 @@ func _render_mode() -> void:
 	submit_button.disabled = submit_button.disabled or any_ready or blocked
 	leave_button.visible = true
 	leave_button.disabled = mutation_in_flight
-	status_label.text = "Offer editing is paused until readiness is cleared." if any_ready else ""
+	if any_ready:
+		status_label.text = "Offer editing is paused until readiness is cleared."
+	elif not _both_offers_nonempty():
+		status_label.text = "Both players must send at least one Pokemon before Ready is available."
+	else:
+		status_label.text = ""
 	_render_candidates()
 
 
