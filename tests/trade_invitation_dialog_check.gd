@@ -51,7 +51,8 @@ func _init() -> void:
 	_check(not source.contains("canceled.connect"), "window close does not cancel invitation")
 	_check(source.contains("active_trade_changed.connect(_on_trade_changed)"), "authoritative trade snapshots reconcile invitations")
 	_check(source.contains("hide()"), "active trade closes invitation surface")
-	_check(not source.contains("Pokemon"), "no Pokemon offer UI")
+	_check(not source.contains("replace_offer") and not source.contains("offer_slots") and not source.contains("Ready"), "no Pokemon offer mutation UI")
+	_check(source.contains("DIALOG_SIZE") and source.contains("_style_button"), "invitation dialog uses compact trade styling")
 	dialog.queue_free()
 	quit(1 if failed else 0)
 

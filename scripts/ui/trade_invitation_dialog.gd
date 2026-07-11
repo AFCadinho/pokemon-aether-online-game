@@ -2,19 +2,71 @@ extends ConfirmationDialog
 
 class_name TradeInvitationDialog
 
+const DIALOG_SIZE := Vector2i(460, 230)
+const TRADE_BG := Color("#050912fa")
+const TRADE_SURFACE := Color("#0b1422f7")
+const TRADE_BORDER := Color("#345170")
+const TRADE_ACCENT := Color("#62d7ff")
+const TRADE_GOLD := Color("#d8b767")
+const TRADE_TEXT := Color("#f4f0de")
+const TRADE_MUTED := Color("#aeb8c5")
+
 var trade: Dictionary = {}
 var status_label: Label
+var mode_label: Label
 var action_in_flight := false
 
 
 func setup() -> void:
 	title = "Trade Invitation"
 	dialog_text = ""
-	min_size = Vector2i(390, 180)
+	min_size = DIALOG_SIZE
+	max_size = DIALOG_SIZE
+	unresizable = true
+	get_label().visible = false
+	var background := PanelContainer.new()
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 7, 1))
+	add_child(background)
+	move_child(background, 0)
+	var content_panel := PanelContainer.new()
+	content_panel.anchor_left = 0.0
+	content_panel.anchor_top = 0.0
+	content_panel.anchor_right = 1.0
+	content_panel.anchor_bottom = 0.0
+	content_panel.offset_left = 16
+	content_panel.offset_top = 16
+	content_panel.offset_right = -16
+	content_panel.offset_bottom = 145
+	content_panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE, TRADE_BORDER, 6, 1))
+	add_child(content_panel)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	content_panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 7)
+	margin.add_child(stack)
+	mode_label = Label.new()
+	mode_label.text = "TRADE REQUEST"
+	mode_label.add_theme_color_override("font_color", TRADE_GOLD)
+	mode_label.add_theme_font_size_override("font_size", 12)
+	stack.add_child(mode_label)
+	var heading := Label.new()
+	heading.text = "Pokemon Trade"
+	heading.add_theme_color_override("font_color", TRADE_TEXT)
+	heading.add_theme_font_size_override("font_size", 21)
+	stack.add_child(heading)
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	add_child(status_label)
+	status_label.add_theme_color_override("font_color", TRADE_MUTED)
+	stack.add_child(status_label)
 	get_ok_button().text = "Accept"
+	_style_button(get_ok_button(), "primary")
+	_style_button(get_cancel_button(), "danger")
 	confirmed.connect(_accept)
 	get_cancel_button().pressed.connect(_decline_or_close)
 	close_requested.connect(hide)
@@ -53,8 +105,11 @@ func show_trade(value: Dictionary) -> void:
 	var incoming := _current_role() == "recipient"
 	get_ok_button().visible = incoming and str(trade.get("status", "")) == "invited"
 	get_cancel_button().text = "Decline" if incoming else "Cancel Invitation"
+	mode_label.text = "INCOMING REQUEST" if incoming else "REQUEST SENT"
+	_style_button(get_cancel_button(), "danger" if incoming else "secondary")
 	status_label.text = _status_text(incoming)
-	popup_centered()
+	size = DIALOG_SIZE
+	popup_centered(DIALOG_SIZE)
 	if get_ok_button().visible:
 		get_ok_button().grab_focus()
 	else:
@@ -65,8 +120,11 @@ func show_error(message: String) -> void:
 	trade.clear()
 	get_ok_button().visible = false
 	get_cancel_button().text = "Close"
+	mode_label.text = "REQUEST ERROR"
+	_style_button(get_cancel_button(), "secondary")
 	status_label.text = message
-	popup_centered()
+	size = DIALOG_SIZE
+	popup_centered(DIALOG_SIZE)
 
 
 func _accept() -> void:
@@ -136,3 +194,41 @@ func _status_text(incoming: bool) -> String:
 		"cancelled": return "The trade invitation was cancelled."
 		"expired": return "The trade invitation expired."
 		_: return "Trade invitation state unavailable."
+
+
+func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(width)
+	style.set_corner_radius_all(radius)
+	return style
+
+
+func _button_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _panel_style(background, border, 5, 1)
+	style.content_margin_left = 15
+	style.content_margin_right = 15
+	style.content_margin_top = 8
+	style.content_margin_bottom = 8
+	return style
+
+
+func _style_button(button: Button, kind: String) -> void:
+	var normal_bg := Color("#0d4359")
+	var hover_bg := Color("#12627f")
+	var border := TRADE_ACCENT
+	if kind == "secondary":
+		normal_bg = Color("#111d2c")
+		hover_bg = Color("#192c42")
+		border = TRADE_BORDER
+	elif kind == "danger":
+		normal_bg = Color("#2a1015")
+		hover_bg = Color("#5b1c26")
+		border = Color("#b84c58")
+	button.add_theme_color_override("font_color", TRADE_TEXT)
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_stylebox_override("normal", _button_style(normal_bg, border))
+	button.add_theme_stylebox_override("hover", _button_style(hover_bg, border.lightened(0.2)))
+	button.add_theme_stylebox_override("pressed", _button_style(TRADE_BG, border))
+	button.add_theme_stylebox_override("focus", _button_style(hover_bg, TRADE_GOLD))

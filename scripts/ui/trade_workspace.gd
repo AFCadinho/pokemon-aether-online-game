@@ -31,7 +31,6 @@ var review_root: VBoxContainer
 var review_give_list: VBoxContainer
 var review_receive_list: VBoxContainer
 var review_trust_label: Label
-var review_edit_button: Button
 var confirm_button: Button
 var confirmation_label: Label
 var mutation_in_flight := false
@@ -142,11 +141,6 @@ func _build_ui() -> void:
 	review_root.add_child(review_columns)
 	review_give_list = _section(review_columns, "You give")
 	review_receive_list = _section(review_columns, "You receive")
-	review_edit_button = Button.new()
-	review_edit_button.text = "Edit Offer"
-	review_edit_button.pressed.connect(_set_ready.bind(false))
-	_apply_button_style(review_edit_button, "secondary")
-	review_root.add_child(review_edit_button)
 	confirmation_label = Label.new()
 	confirmation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	confirmation_label.add_theme_color_override("font_color", TRADE_MUTED)
@@ -663,13 +657,10 @@ func _render_locked_review() -> void:
 			_add_review_pokemon(review_give_list, participant_value.get("gives", []))
 			_add_review_pokemon(review_receive_list, participant_value.get("receives", []))
 	review_trust_label.text = "Locked revision %d  Review %s" % [int(review.get("lockedRevision", 0)), str(review.get("snapshotHash", "")).left(12)]
-	review_edit_button.disabled = mutation_in_flight
 	var local_confirmed := _local_participant_confirmed()
 	confirm_button.visible = not local_confirmed
 	confirm_button.disabled = mutation_in_flight or _connection_state_unresolved()
 	confirmation_label.text = "Confirmed. Waiting for the other player." if local_confirmed else "Review the exact exchange before confirming."
-	if _connection_state_unresolved():
-		review_edit_button.disabled = true
 
 
 func _confirm_trade() -> void:
