@@ -19,6 +19,7 @@ func _init() -> void:
 	_check(ui.contains("PlayerHotbarService.clear_slot"), "hotbar slot removal")
 	_check(ui.contains("_show_bag_item_use_popup(item)"), "medicine target flow reuse")
 	_check(ui.contains("escape_rope_slot.visible = false"), "Escape Rope removed from toggle bar")
+	_check(not ui.contains("escape_rope_slot.visible = visible_unlocked"), "status refresh cannot restore legacy Escape Rope slot")
 	quit(1 if failures > 0 else 0)
 
 func _check(condition: bool, label: String) -> void:

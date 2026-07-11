@@ -14486,8 +14486,12 @@ func _refresh_player_action_cooldown(delta: float) -> void:
 
 func _update_escape_rope_action_ui() -> void:
 	var visible_unlocked := bool(escape_rope_status.get("visible", false)) and bool(escape_rope_status.get("unlocked", false))
-	escape_rope_slot.visible = visible_unlocked
+	# Escape Rope is represented by the configurable hotbar. Keep the legacy
+	# action-bar slot hidden while retaining its button as an internal status and
+	# tooltip presenter for the hotbar entry.
+	escape_rope_slot.visible = false
 	if not visible_unlocked:
+		_refresh_hotbar_ui()
 		return
 	var block: Dictionary = _staff_dictionary_from_variant(escape_rope_status.get("blockReason", {}))
 	var cooldown_active := escape_rope_remaining_seconds > 0.0

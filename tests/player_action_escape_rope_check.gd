@@ -21,7 +21,8 @@ func _init() -> void:
 	_check(ui_source.contains("begin_authorized_teleport"), "local authorized teleport preparation")
 	_check(ui_source.contains("apply_authorized_teleport_state"), "authorized teleport handoff")
 	_check(ui_source.contains("_refresh_player_actions.call_deferred()"), "status refresh after execution/reconnect lifecycle")
-	_check(scene_source.contains("EscapeRopeSlot"), "action-bar slot")
+	_check(scene_source.contains("EscapeRopeSlot"), "hidden legacy status presenter")
+	_check(ui_source.contains("escape_rope_slot.visible = false"), "legacy action-bar slot stays hidden")
 	_check(scene_source.contains("assets/items/icons/ESCAPEROPE.png"), "existing Escape Rope icon")
 	quit(1 if failures > 0 else 0)
 
