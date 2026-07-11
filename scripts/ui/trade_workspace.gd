@@ -137,7 +137,7 @@ func _on_trade_changed(value: Dictionary) -> void:
 		trade = value.duplicate(true)
 		editable_root.visible = false
 		review_root.visible = false
-		status_label.text = "Trade completed. Your party and PC storage were refreshed."
+		status_label.text = "Trade completed. Your party was refreshed."
 		popup_centered()
 		refresh_after_completion.call_deferred()
 		return
@@ -157,16 +157,14 @@ func _on_trade_changed(value: Dictionary) -> void:
 
 func refresh_available_pokemon() -> void:
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
-	var storage_service := get_node_or_null("/root/PokemonStorageService")
-	if party_service == null or storage_service == null:
-		_show_error("Pokemon storage is unavailable.")
+	if party_service == null:
+		_show_error("Your party is unavailable.")
 		return
 	var party_result: Dictionary = await party_service.load_party()
-	var boxes_result: Dictionary = await storage_service.load_boxes()
-	if not bool(party_result.get("success", false)) or not bool(boxes_result.get("success", false)):
-		_show_error("Could not refresh your Pokemon.")
+	if not bool(party_result.get("success", false)):
+		_show_error("Could not refresh your party.")
 		return
-	candidates = collect_candidates(party_result.get("party", []), boxes_result.get("boxes", []))
+	candidates = collect_candidates(party_result.get("party", []))
 	_render_candidates()
 
 
@@ -176,22 +174,12 @@ func _trade_snapshot_changed(value: Dictionary) -> bool:
 		or int(trade.get("lastEventSeq", 0)) != int(value.get("lastEventSeq", 0))
 
 
-static func collect_candidates(party_value: Variant, boxes_value: Variant) -> Array[Dictionary]:
+static func collect_candidates(party_value: Variant) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var seen: Dictionary = {}
 	if party_value is Array:
 		for index in range(party_value.size()):
 			_add_candidate(result, seen, party_value[index], {"type":"party", "partySlot":index})
-	if boxes_value is Array:
-		for box_value: Variant in boxes_value:
-			if not box_value is Dictionary:
-				continue
-			var box_index := int(box_value.get("boxIndex", -1))
-			var slots: Variant = box_value.get("slots", [])
-			if slots is Array:
-				for slot_value: Variant in slots:
-					if slot_value is Dictionary:
-						_add_candidate(result, seen, slot_value.get("pokemon", slot_value), {"type":"box", "boxIndex":box_index, "slotIndex":int(slot_value.get("slotIndex", -1))})
 	result.sort_custom(func(a: Dictionary, b: Dictionary): return int(a.get("pokemonId", 0)) < int(b.get("pokemonId", 0)))
 	return result
 
@@ -214,14 +202,14 @@ func _render_candidates() -> void:
 		var check := CheckButton.new()
 		check.text = _pokemon_label(candidate.get("pokemon", {}))
 		check.button_pressed = pokemon_id in selected_ids
-		check.disabled = _any_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved()
+		check.disabled = _any_participant_ready() or str(trade.get("status", "")) == "locked" or _connection_state_unresolved() or (pokemon_id not in selected_ids and selected_ids.size() >= _offer_limit())
 		check.toggled.connect(_toggle_candidate.bind(pokemon_id))
 		candidate_list.add_child(check)
 
 
 func _toggle_candidate(enabled: bool, pokemon_id: int) -> void:
 	if enabled:
-		if pokemon_id not in selected_ids and selected_ids.size() < MAX_OFFER_SIZE:
+		if pokemon_id not in selected_ids and selected_ids.size() < _offer_limit():
 			selected_ids.append(pokemon_id)
 	else:
 		selected_ids.erase(pokemon_id)
@@ -294,7 +282,7 @@ func _refresh_submit_button() -> void:
 	if submit_button == null:
 		return
 	submit_button.text = "Send Offer (%d)" % selected_ids.size() if not selected_ids.is_empty() else "Replace Offer"
-	submit_button.disabled = mutation_in_flight or selected_ids.is_empty()
+	submit_button.disabled = mutation_in_flight or selected_ids.is_empty() or selected_ids.size() > _offer_limit()
 
 
 func _should_sync_selected_from_offer(previous_trade_id: String, next_status: String) -> bool:
@@ -333,6 +321,8 @@ func _render_mode() -> void:
 	submit_button.disabled = submit_button.disabled or any_ready or blocked
 	if any_ready:
 		status_label.text = "Offer editing is paused until readiness is cleared."
+	elif _opponent_receive_capacity() <= 0:
+		status_label.text = "The other player needs a free party slot before you can offer a Pokemon."
 	elif not _both_offers_nonempty():
 		status_label.text = "Both players must send at least one Pokemon before Ready is available."
 	else:
@@ -387,11 +377,8 @@ func _confirm_trade() -> void:
 
 func refresh_after_completion() -> void:
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
-	var storage_service := get_node_or_null("/root/PokemonStorageService")
 	if party_service != null:
 		await party_service.load_party()
-	if storage_service != null:
-		await storage_service.load_boxes()
 
 
 func _leave_trade() -> void:
@@ -502,7 +489,10 @@ func _friendly_error(result: Dictionary) -> String:
 		"pokemon_holding_item": return "Remove the held item before offering that Pokemon."
 		"pokemon_not_tradable": return "That Pokemon cannot be traded."
 		"pokemon_not_owned_or_held": return "That Pokemon is no longer held by your account."
-		"pokemon_location_stale": return "That Pokemon moved. Refresh your party and boxes."
+		"pokemon_location_stale": return "That Pokemon moved. Refresh your party."
+		"trade_offer_party_only": return "Only Pokemon currently in your party can be offered."
+		"trade_party_capacity_exceeded": return "The other player does not have enough free party slots."
+		"trade_party_space_required": return "A free party slot is required to receive a Pokemon."
 		"trade_review_mismatch": return "The locked review changed. Refresh before confirming."
 		"trade_review_not_locked": return "This trade is no longer locked for review."
 		"trade_settlement_invalidated": return "The trade changed and could not be completed. Refresh the authoritative trade state."
@@ -528,6 +518,18 @@ func _pokemon_label(value: Variant) -> String:
 func _current_user_id() -> int:
 	var auth := get_node_or_null("/root/AuthService")
 	return int(auth.current_user.get("id", 0)) if auth != null else 0
+
+
+func _opponent_receive_capacity() -> int:
+	var user_id := _current_user_id()
+	for participant_value: Variant in trade.get("participants", []):
+		if participant_value is Dictionary and int(participant_value.get("userId", 0)) != user_id:
+			return clampi(6 - int(participant_value.get("partyCount", 0)), 0, MAX_OFFER_SIZE)
+	return MAX_OFFER_SIZE
+
+
+func _offer_limit() -> int:
+	return mini(MAX_OFFER_SIZE, _opponent_receive_capacity())
 
 
 func _clear(node: Node) -> void:

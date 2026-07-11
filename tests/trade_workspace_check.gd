@@ -7,13 +7,11 @@ var failed := false
 
 func _init() -> void:
 	var candidates := Workspace.collect_candidates(
-		[{"ownedPokemonId":11,"speciesId":"pidgey","level":12}],
-		[{"boxIndex":2,"slots":[{"slotIndex":4,"pokemon":{"id":22,"pokemon":{"speciesId":"rattata","level":8}}}]}]
+		[{"ownedPokemonId":11,"speciesId":"pidgey","level":12}]
 	)
-	_check(candidates.size() == 2, "party and box candidates collected")
+	_check(candidates.size() == 1, "only party candidates are collected")
 	_check(candidates[0].get("pokemonId", 0) == 11, "party identity preserved")
 	_check(candidates[0].get("location", {}).get("type", "") == "party", "party location")
-	_check(candidates[1].get("location", {}).get("boxIndex", -1) == 2, "box location")
 	var workspace := Workspace.new()
 	_check(workspace._pokemon_label({"nickname":null, "speciesName":null, "speciesId":"rattata", "level":4}) == "rattata  Lv. 4", "null nickname falls back to species id")
 	workspace.trade = {"tradeId":"trade-1"}
@@ -34,7 +32,8 @@ func _init() -> void:
 	_check(source.contains("Both players must send at least one Pokemon"), "workspace explains disabled Ready state")
 	_check(source.contains("func _trade_snapshot_changed"), "candidate refresh is gated by authoritative snapshot changes")
 	_check(source.contains("PlayerPartyStateService"), "workspace reuses party service")
-	_check(source.contains("PokemonStorageService"), "workspace reuses storage service")
+	_check(not source.contains("PokemonStorageService"), "PC storage is excluded from trade selection and settlement refresh")
+	_check(source.contains("partyCount"), "workspace limits offers by opponent free party slots")
 	_check(source.contains("Ready"), "readiness control")
 	_check(source.contains("Edit Offer"), "explicit edit control")
 	_check(source.contains("lockedReview"), "server locked review rendering")
