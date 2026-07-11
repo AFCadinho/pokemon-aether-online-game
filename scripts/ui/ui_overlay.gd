@@ -19571,12 +19571,14 @@ func _promote_trade_summary_to_window(card_key: String) -> void:
 	host.title = "Pokemon Summary"
 	host.borderless = true
 	host.unresizable = true
-	host.always_on_top = true
+	host.always_on_top = false
 	host.transient = true
 	host.size = Vector2i(ceili(popup.size.x), ceili(popup.size.y))
 	host.min_size = host.size
 	host.max_size = host.size
-	get_tree().root.add_child(host)
+	var workspace := get_node_or_null("/root/TradeWorkspace") as Window
+	var host_parent: Window = workspace if workspace != null and workspace.visible else get_tree().root
+	host_parent.add_child(host)
 	popup.reparent(host)
 	popup.anchor_left = 0.0
 	popup.anchor_top = 0.0
@@ -19584,7 +19586,7 @@ func _promote_trade_summary_to_window(card_key: String) -> void:
 	popup.anchor_bottom = 0.0
 	popup.position = Vector2.ZERO
 	popup.size = Vector2(host.size)
-	var root_size := get_tree().root.size
+	var root_size := host_parent.size
 	var offset := Vector2i(trade_summary_windows.size() * 24, trade_summary_windows.size() * 24)
 	host.position = (root_size - host.size) / 2 + offset
 	trade_summary_windows[card_key] = host
