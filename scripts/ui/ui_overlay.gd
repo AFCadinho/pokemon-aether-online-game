@@ -414,6 +414,7 @@ var party_drag_start_index := -1
 var party_dragging := false
 var party_drag_visual: Control
 var party_drag_source_slot: Control
+var party_drag_workspace_preview := false
 var party_drag_pointer_offset := Vector2.ZERO
 var party_drag_start_mouse_position := Vector2.ZERO
 var ui_confirm_popup: PanelContainer
@@ -13211,6 +13212,12 @@ func _start_party_drag_visual(slot_index: int) -> void:
 	party_drag_pointer_offset = party_drag_source_slot.get_global_mouse_position() - source_global_rect.position
 	party_drag_start_mouse_position = party_drag_source_slot.get_global_mouse_position()
 	party_drag_source_slot.modulate = Color(1.0, 1.0, 1.0, 0.35)
+	var workspace := get_node_or_null("/root/TradeWorkspace")
+	var pokemon: Pokemon = PlayerSave.party[slot_index]
+	party_drag_workspace_preview = workspace != null and workspace.has_method("begin_party_offer_drag") and bool(workspace.call("begin_party_offer_drag", pokemon.to_persistence_dict()))
+	if party_drag_workspace_preview:
+		workspace.call("update_party_offer_drag", party_drag_source_slot.get_global_mouse_position())
+		return
 
 	party_drag_visual = party_drag_source_slot.duplicate() as Control
 	if party_drag_visual == null:
@@ -13227,6 +13234,11 @@ func _start_party_drag_visual(slot_index: int) -> void:
 	_update_party_drag_visual_position()
 
 func _update_party_drag_visual_position() -> void:
+	if party_drag_workspace_preview:
+		var workspace := get_node_or_null("/root/TradeWorkspace")
+		if workspace != null and workspace.has_method("update_party_offer_drag"):
+			workspace.call("update_party_offer_drag", get_viewport().get_mouse_position())
+		return
 	if party_drag_visual == null:
 		return
 
@@ -13283,6 +13295,11 @@ func _clear_party_drag_visual() -> void:
 	if party_drag_source_slot != null:
 		party_drag_source_slot.modulate = Color.WHITE
 	party_drag_source_slot = null
+	if party_drag_workspace_preview:
+		var workspace := get_node_or_null("/root/TradeWorkspace")
+		if workspace != null and workspace.has_method("end_party_offer_drag"):
+			workspace.call("end_party_offer_drag")
+	party_drag_workspace_preview = false
 
 	if party_drag_visual != null:
 		party_drag_visual.queue_free()

@@ -23,6 +23,7 @@ var review_edit_button: Button
 var confirm_button: Button
 var confirmation_label: Label
 var mutation_in_flight := false
+var party_drag_preview: TextureRect
 
 
 func _ready() -> void:
@@ -358,7 +359,8 @@ func _remove_offer_position(position: int) -> void:
 
 
 func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
-	if not visible or local_offer_box == null or not local_offer_box.get_global_rect().has_point(global_position):
+	var workspace_position := _main_to_workspace_position(global_position)
+	if not visible or local_offer_box == null or not local_offer_box.get_global_rect().has_point(workspace_position):
 		return false
 	if party_slot < 0 or party_slot >= 6 or mutation_in_flight or _any_participant_ready() or _connection_state_unresolved() or str(trade.get("status", "")) != "active":
 		return true
@@ -367,7 +369,7 @@ func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
 		_show_error("That party Pokemon is unavailable. Refresh your party.")
 		return true
 	var pokemon_id := int(candidate.get("pokemonId", 0))
-	var target_position := _offer_slot_at_position(global_position)
+	var target_position := _offer_slot_at_position(workspace_position)
 	var replacement := build_drop_replacement(selected_ids, pokemon_id, target_position, _offer_limit())
 	if replacement == selected_ids:
 		if pokemon_id not in selected_ids and selected_ids.size() >= _offer_limit():
@@ -375,6 +377,42 @@ func try_offer_party_drop(global_position: Vector2, party_slot: int) -> bool:
 		return true
 	_replace_offer(replacement)
 	return true
+
+
+func begin_party_offer_drag(pokemon_payload: Dictionary) -> bool:
+	if not visible or str(trade.get("status", "")) != "active":
+		return false
+	end_party_offer_drag()
+	party_drag_preview = TextureRect.new()
+	party_drag_preview.custom_minimum_size = Vector2(58, 58)
+	party_drag_preview.size = Vector2(58, 58)
+	party_drag_preview.texture = PokemonAssets.load_party_icon(_pokemon_species(pokemon_payload), bool(pokemon_payload.get("shiny", false)))
+	party_drag_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	party_drag_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	party_drag_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	party_drag_preview.modulate = Color(1.0, 1.0, 1.0, 0.92)
+	party_drag_preview.z_index = 1000
+	add_child(party_drag_preview)
+	update_party_offer_drag(DisplayServer.mouse_get_position())
+	return true
+
+
+func update_party_offer_drag(global_position: Vector2) -> void:
+	if party_drag_preview == null:
+		return
+	party_drag_preview.position = _main_to_workspace_position(global_position) - party_drag_preview.size * 0.5
+
+
+func end_party_offer_drag() -> void:
+	if party_drag_preview != null:
+		party_drag_preview.queue_free()
+	party_drag_preview = null
+
+
+func _main_to_workspace_position(global_position: Vector2) -> Vector2:
+	if get_viewport() == get_tree().root:
+		return global_position
+	return global_position - Vector2(position)
 
 
 static func build_drop_replacement(current_ids: Array[int], pokemon_id: int, target_position: int, limit: int) -> Array[int]:

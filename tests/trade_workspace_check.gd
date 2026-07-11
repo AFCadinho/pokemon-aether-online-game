@@ -32,6 +32,8 @@ func _init() -> void:
 	_check(not source.contains("CheckButton"), "workspace no longer renders toggle candidates")
 	_check(not source.contains("Send Offer"), "valid drops immediately replace the authoritative offer")
 	_check(source.contains("try_offer_party_drop"), "workspace accepts party-slot drops")
+	_check(source.contains("_main_to_workspace_position"), "drop hit testing converts main viewport coordinates into the trade window")
+	_check(source.contains("begin_party_offer_drag") and source.contains("update_party_offer_drag"), "trade window renders its own drag preview")
 	_check(source.contains("local_offer_slots") and source.contains("opponent_offer_slots"), "workspace renders two stable offer boxes")
 	_check(source.contains("open_trade_pokemon_summary"), "offered Pokemon open the shared readonly summary")
 	_check(source.contains("Both players must send at least one Pokemon"), "workspace explains disabled Ready state")
@@ -49,6 +51,7 @@ func _init() -> void:
 	_check(not source.contains("owner_user_id"), "client does not perform ownership settlement")
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(overlay_source.contains("_try_offer_party_drag_to_trade"), "party drag delegates offer drops before party reordering")
+	_check(overlay_source.contains("party_drag_workspace_preview"), "party drag preview is hosted above the trade window")
 	quit(1 if failed else 0)
 
 
