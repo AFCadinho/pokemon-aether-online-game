@@ -24,6 +24,7 @@
 - Trade completion now refreshes your party immediately and closes the workspace once the transfer is complete.
 
 **Fixed**
+- Reduced the delay before Mega Evolution by preloading its battle effect, prewarming and caching available Mega-form sprites, and showing immediate feedback while waiting for server confirmation.
 - Fixed Pokemon sometimes receiving EVs but not keeping earned EXP after defeating a wild Pokemon.
 - Fixed EXP bars not updating after battle rewards and added clear system messages showing how much EXP each Pokemon earned.
 - Fixed Escape Rope confirmation and cooldown feedback being inconsistent, and updated its confirmation window to match the game UI.

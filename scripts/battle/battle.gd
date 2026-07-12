@@ -24,6 +24,7 @@ const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animations/status_condition_overlay.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
+const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
@@ -2895,6 +2896,7 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		_sync_player_save_party_status_from_battle_state()
 		_remember_active_player_party_moves()
 		_prewarm_current_battle_move_animations()
+		_prewarm_current_battle_mega_assets()
 		_update_pvp_phase_contract_from_response(response, source)
 		_mark_pvp_response_applied(response)
 		if _should_sync_presentation_field_from_response(response, source):
@@ -3385,6 +3387,17 @@ func _prewarm_current_battle_move_animations() -> void:
 	_append_saved_party_move_names(move_names)
 
 	animation_router.prewarm_move_animations(move_names)
+
+func _prewarm_current_battle_mega_assets() -> void:
+	animation_router.prewarm_effect_animations([MEGA_EVOLUTION_EFFECT_KEY])
+	for player_id: String in ["p1", "p2"]:
+		var mega_species := battle_state.resolve_active_mega_species(player_id)
+		if mega_species == "":
+			continue
+		var sprite_box: Control = player_sprite_box if player_id == "p1" else enemy_sprite_box
+		var side := "back" if player_id == "p1" else "front"
+		if sprite_box != null and sprite_box.has_method("prewarm_species"):
+			sprite_box.call("prewarm_species", mega_species, side, _get_active_pokemon_is_shiny(player_id))
 
 func _append_available_move_names(move_names: Array[String], player_id: String) -> void:
 	for move_value: Variant in battle_state.get_available_moves(player_id):
@@ -4724,7 +4737,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	_reset_battle_effect_tracking()
 	presentation_state.reset()
 	pending_mega_species_by_ident.clear()
-	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY])
+	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY, MEGA_EVOLUTION_EFFECT_KEY])
 
 func _apply_initial_battle_response(api_response: Dictionary) -> bool:
 	if not _apply_api_response(api_response, false):
@@ -5720,6 +5733,8 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_hide_move_hover()
 	_set_battle_input_locked(true)
 	moves_grid.visible = false
+	if use_mega:
+		current_action_panel.set_message("Preparing Mega Evolution...")
 	_clear_mega_evolution_selection()
 	var player_response: Dictionary = {}
 	if _is_pvp_battle():

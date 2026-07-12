@@ -56,6 +56,7 @@ var sprite_frames_position_offsets: Dictionary = {}
 var sprite_frames_anchors: Dictionary = {}
 var sprite_frames_frame_sizes: Dictionary = {}
 var sprite_frames_visual_bounds: Dictionary = {}
+var sprite_frames_cache: Dictionary = {}
 var current_single_species := ""
 var current_single_side := ""
 var current_single_is_shiny := false
@@ -648,7 +649,27 @@ func _get_sprite_frames_key(sprite_frames: SpriteFrames) -> String:
 
 	return str(sprite_frames.get_instance_id())
 
+func prewarm_species(species: String, side: String, is_shiny: bool = false) -> void:
+	if species.strip_edges() == "":
+		return
+	_load_sprite_frames(species, side, is_shiny)
+
 func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
+	var cache_key := "%s|%s|%s|%s" % [
+		_normalize_species_asset_id(species),
+		side.strip_edges().to_lower(),
+		str(is_shiny),
+		str(SettingsManager.sprite_style),
+	]
+	if sprite_frames_cache.has(cache_key):
+		return sprite_frames_cache[cache_key] as SpriteFrames
+
+	var frames := _load_sprite_frames_uncached(species, side, is_shiny)
+	if frames != null:
+		sprite_frames_cache[cache_key] = frames
+	return frames
+
+func _load_sprite_frames_uncached(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
 	for sprite_root in _get_sprite_asset_roots(side, is_shiny):
 		for asset_id in _get_species_asset_id_candidates(species):
 			for sheet_metadata_path in PokemonAssets.build_pokemon_sprite_path("%s/%s/animation.json" % [sprite_root, asset_id]):
