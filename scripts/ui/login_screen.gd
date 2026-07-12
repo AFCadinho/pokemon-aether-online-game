@@ -47,6 +47,7 @@ var news_items: Array[Dictionary] = []
 
 func _ready() -> void:
 	MusicManager.play_login_music()
+	_apply_remember_me_style()
 	login_button.pressed.connect(_on_login_button_pressed)
 	register_link_button.pressed.connect(_on_register_link_pressed)
 	continue_button.pressed.connect(_on_continue_button_pressed)
@@ -70,6 +71,36 @@ func _ready() -> void:
 	_refresh_server_health.call_deferred()
 	_fetch_news.call_deferred()
 	_restore_saved_session.call_deferred()
+
+
+func _apply_remember_me_style() -> void:
+	remember_me_checkbox.add_theme_icon_override("unchecked", _checkbox_icon(false, false))
+	remember_me_checkbox.add_theme_icon_override("unchecked_hover", _checkbox_icon(false, true))
+	remember_me_checkbox.add_theme_icon_override("unchecked_pressed", _checkbox_icon(false, true))
+	remember_me_checkbox.add_theme_icon_override("checked", _checkbox_icon(true, false))
+	remember_me_checkbox.add_theme_icon_override("checked_hover", _checkbox_icon(true, true))
+	remember_me_checkbox.add_theme_icon_override("checked_pressed", _checkbox_icon(true, true))
+
+
+func _checkbox_icon(checked: bool, highlighted: bool) -> ImageTexture:
+	var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
+	var border := Color("#7aa7f4") if highlighted or checked else Color("#426384")
+	var fill := Color("#315ca8") if checked else Color("#0d1c30")
+	for y: int in range(20):
+		for x: int in range(20):
+			var is_border := x < 2 or x > 17 or y < 2 or y > 17
+			image.set_pixel(x, y, border if is_border else fill)
+	if checked:
+		var check_pixels := [
+			Vector2i(5, 10), Vector2i(6, 11), Vector2i(7, 12), Vector2i(8, 13),
+			Vector2i(9, 12), Vector2i(10, 11), Vector2i(11, 10), Vector2i(12, 9),
+			Vector2i(13, 8), Vector2i(14, 7),
+		]
+		for point: Vector2i in check_pixels:
+			image.set_pixelv(point, Color.WHITE)
+			if point.y + 1 < 18:
+				image.set_pixel(point.x, point.y + 1, Color.WHITE)
+	return ImageTexture.create_from_image(image)
 
 
 func set_loading(is_loading: bool) -> void:

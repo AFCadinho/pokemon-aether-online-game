@@ -16,80 +16,92 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_side"]
-bg_color = Color(0.008, 0.014, 0.028, 0.86)
+bg_color = Color(0.02745098, 0.043137256, 0.078431375, 0.94)
 border_width_right = 1
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.38)
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 0.72)
 shadow_color = Color(0, 0, 0, 0.34)
 shadow_size = 18
 shadow_offset = Vector2(8, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_news_card"]
-bg_color = Color(0.012, 0.017, 0.03, 0.86)
+bg_color = Color(0.050980393, 0.08627451, 0.14509805, 0.88)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.39215687, 0.60784316, 0.8784314, 0.4)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.3)
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 0.85)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.015, 0.04, 0.08, 0.36)
 shadow_size = 10
 shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_status"]
-bg_color = Color(0.012, 0.018, 0.032, 0.9)
+bg_color = Color(0.050980393, 0.08627451, 0.14509805, 0.88)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.39215687, 0.60784316, 0.8784314, 0.45)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+border_color = Color(0.16, 0.94, 0.66, 0.28)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 shadow_color = Color(0, 0, 0, 0.32)
 shadow_size = 10
 shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
-bg_color = Color(0.01, 0.013, 0.024, 0.965)
+bg_color = Color(0.02745098, 0.043137256, 0.078431375, 0.97)
 border_width_left = 1
-border_width_top = 1
+border_width_top = 2
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.9)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.48)
-shadow_size = 24
-shadow_offset = Vector2(0, 10)
+border_color = Color(0.3137255, 0.49411765, 0.7607843, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0.22, 0.18, 0.62, 0.42)
+shadow_size = 38
+shadow_offset = Vector2(0, 12)
+
+[sub_resource type="Gradient" id="Gradient_login_aura"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.38, 0.28, 0.9, 0.3, 0.16, 0.35, 0.78, 0.13, 0.03, 0.08, 0.18, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_login_aura"]
+gradient = SubResource("Gradient_login_aura")
+width = 768
+height = 768
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
 content_margin_left = 14.0
 content_margin_top = 9.0
 content_margin_right = 14.0
 content_margin_bottom = 9.0
-bg_color = Color(0.019607844, 0.023529412, 0.039215688, 0.92)
+bg_color = Color(0.019607844, 0.03529412, 0.07058824, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.35686275, 0.3764706, 0.5058824, 0.6)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
 content_margin_left = 14.0
 content_margin_top = 9.0
 content_margin_right = 14.0
 content_margin_bottom = 9.0
-bg_color = Color(0.023529412, 0.02745098, 0.047058824, 0.98)
+bg_color = Color(0.02745098, 0.05882353, 0.105882354, 0.98)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -143,31 +155,31 @@ shadow_size = 10
 shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_trainer_card"]
-bg_color = Color(0.008, 0.012, 0.023, 0.88)
+bg_color = Color(0.050980393, 0.08627451, 0.14509805, 0.9)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.39215687, 0.60784316, 0.8784314, 0.72)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.34)
-shadow_size = 12
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.015, 0.05, 0.11, 0.4)
+shadow_size = 16
 shadow_offset = Vector2(0, 6)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_logout_button"]
-bg_color = Color(0.9607843, 0.9607843, 1, 0.06)
+bg_color = Color(0.16470589, 0.0627451, 0.08235294, 0.62)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.9607843, 0.9607843, 1, 0.14)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
+border_color = Color(0.47843137, 0.16862746, 0.2, 0.72)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_logout_button_hover"]
 bg_color = Color(0.18, 0.08, 0.1, 0.3)
@@ -182,12 +194,12 @@ corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_screen_action"]
-bg_color = Color(0.012, 0.017, 0.032, 0.88)
+bg_color = Color(0.02745098, 0.043137256, 0.078431375, 0.92)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.82)
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 0.9)
 corner_radius_top_left = 7
 corner_radius_top_right = 7
 corner_radius_bottom_right = 7
@@ -261,7 +273,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.006, 0.008, 0.018, 0.62)
+color = Color(0.006, 0.005, 0.02, 0.55)
 
 [node name="AetherGlow" type="ColorRect" parent="Background" unique_id=1525358796]
 layout_mode = 1
@@ -271,6 +283,24 @@ offset_bottom = 280.0
 grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.39215687, 0.60784316, 0.8784314, 0.11)
+
+[node name="LoginAura" type="TextureRect" parent="Background"]
+modulate = Color(1, 1, 1, 0.9)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.0
+offset_top = -385.0
+offset_right = 458.0
+offset_bottom = 383.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_login_aura")
+expand_mode = 1
 
 [node name="Shell" type="PanelContainer" parent="Background" unique_id=1213791378]
 layout_mode = 1
@@ -291,23 +321,23 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="BrandPanel" type="PanelContainer" parent="Background/Shell/MainSplit" unique_id=1244643311]
-custom_minimum_size = Vector2(430, 0)
+custom_minimum_size = Vector2(390, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_side")
 
 [node name="BrandMargin" type="MarginContainer" parent="Background/Shell/MainSplit/BrandPanel" unique_id=1095931933]
 layout_mode = 2
-theme_override_constants/margin_left = 46
-theme_override_constants/margin_top = 46
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 28
 
 [node name="BrandLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin" unique_id=1583259593]
 layout_mode = 2
-theme_override_constants/separation = 22
+theme_override_constants/separation = 16
 
 [node name="BrandHeader" type="TextureRect" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=947319662]
-custom_minimum_size = Vector2(0, 142)
+custom_minimum_size = Vector2(0, 132)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("4_combo_logo")
@@ -315,40 +345,41 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="SpacerTop" type="Control" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=340243640]
-custom_minimum_size = Vector2(0, 54)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
 [node name="Headline" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=799300216]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
-theme_override_font_sizes/font_size = 44
-text = "Enter PokeAether"
+theme_override_font_sizes/font_size = 34
+text = "Welcome, Trainer"
 
 [node name="Body" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=604320417]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
-theme_override_font_sizes/font_size = 15
-text = "Continue your journey, manage your trainer profile, and return to the world where you left off."
+theme_override_font_sizes/font_size = 14
+text = "Your journey through the Aether is waiting. Sign in and return to the world where you left off."
 autowrap_mode = 3
 
 [node name="AccentLine" type="ColorRect" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=1239468972]
-custom_minimum_size = Vector2(96, 3)
+custom_minimum_size = Vector2(72, 2)
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 2
-color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+color = Color(0.47843137, 0.654902, 0.95686275, 1)
 
 [node name="NewsCard" type="PanelContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=1061821209]
-custom_minimum_size = Vector2(0, 178)
+custom_minimum_size = Vector2(0, 280)
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_news_card")
 
 [node name="NewsMargin" type="MarginContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/NewsCard" unique_id=1016285227]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 14
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
 [node name="NewsLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/NewsCard/NewsMargin" unique_id=1634262016]
 layout_mode = 2
@@ -356,25 +387,24 @@ theme_override_constants/separation = 8
 
 [node name="NewsTitle" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/NewsCard/NewsMargin/NewsLayout" unique_id=1688078844]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 13
-text = "LATEST NEWS"
+text = "LATEST FROM AETHER"
 
 [node name="LoginNewsLabel" type="RichTextLabel" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/NewsCard/NewsMargin/NewsLayout" unique_id=404349432]
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 214)
 layout_mode = 2
 size_flags_vertical = 3
 mouse_default_cursor_shape = 2
 bbcode_enabled = true
-fit_content = true
-scroll_active = false
+scroll_active = true
 
 [node name="BrandSpacer" type="Control" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=717858600]
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="StatusCard" type="PanelContainer" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout" unique_id=2142424476]
-custom_minimum_size = Vector2(0, 86)
+custom_minimum_size = Vector2(0, 94)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_status")
 
@@ -403,22 +433,22 @@ text = "Server Online"
 
 [node name="OnlinePlayersValue" type="Label" parent="Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin/StatusLayout" unique_id=1167328517]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 13
 text = "Checking players online..."
 
 [node name="FormSpacerLeft" type="Control" parent="Background/Shell/MainSplit" unique_id=1533438422]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 
 [node name="LoginColumn" type="VBoxContainer" parent="Background/Shell/MainSplit" unique_id=2027706209]
-custom_minimum_size = Vector2(700, 0)
+custom_minimum_size = Vector2(650, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 6
 
 [node name="TextLogo" type="TextureRect" parent="Background/Shell/MainSplit/LoginColumn" unique_id=1583107376]
-custom_minimum_size = Vector2(0, 255)
+custom_minimum_size = Vector2(0, 220)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("7_text_logo")
@@ -426,33 +456,46 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="LoginCard" type="PanelContainer" parent="Background/Shell/MainSplit/LoginColumn" unique_id=1053201854]
-custom_minimum_size = Vector2(560, 0)
+custom_minimum_size = Vector2(540, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
 [node name="LoginMargin" type="MarginContainer" parent="Background/Shell/MainSplit/LoginColumn/LoginCard" unique_id=1367776914]
 layout_mode = 2
-theme_override_constants/margin_left = 42
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 42
-theme_override_constants/margin_bottom = 38
+theme_override_constants/margin_left = 44
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 44
+theme_override_constants/margin_bottom = 34
 
 [node name="LoginLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin" unique_id=1935653813]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
+
+[node name="AccessEyebrow" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
+theme_override_font_sizes/font_size = 12
+text = "✦  TRAINER ACCESS"
+
+[node name="HeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+custom_minimum_size = Vector2(52, 2)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+color = Color(0.47843137, 0.654902, 0.95686275, 0.85)
 
 [node name="LoginTitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=4891666]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9607843, 1, 1)
-theme_override_font_sizes/font_size = 34
-text = "Trainer Login"
+theme_override_font_sizes/font_size = 32
+text = "Step into the Aether"
 
 [node name="LoginSubtitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1418968257]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
 theme_override_font_sizes/font_size = 15
-text = "Sign in to continue your adventure."
+text = "Sign in with your trainer account to continue."
 
 [node name="FormFields" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout" unique_id=1618537617]
 layout_mode = 2
@@ -521,7 +564,14 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.74, 0.55, 1, 1)
 theme_override_colors/font_hover_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 12
-text = "No account yet? Sign up here"
+text = "New trainer? Create your account  →"
+
+[node name="ConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47, 0.59, 0.72, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "●  SECURE CONNECTION  ·  AETHER NETWORK"
+horizontal_alignment = 1
 
 [node name="SavedSessionCard" type="PanelContainer" parent="Background/Shell/MainSplit/LoginColumn" unique_id=1267162580]
 visible = false
@@ -539,7 +589,20 @@ theme_override_constants/margin_bottom = 40
 
 [node name="SavedSessionLayout" type="VBoxContainer" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin" unique_id=264898318]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
+
+[node name="SavedEyebrow" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
+theme_override_font_sizes/font_size = 12
+text = "✦  SAVED TRAINER"
+
+[node name="SavedHeaderAccent" type="ColorRect" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
+custom_minimum_size = Vector2(52, 2)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+color = Color(0.47843137, 0.654902, 0.95686275, 0.85)
 
 [node name="SavedTitle" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout" unique_id=611675276]
 layout_mode = 2
@@ -577,7 +640,7 @@ theme_override_constants/separation = 8
 
 [node name="LoggedInLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout" unique_id=815988210]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 13
 text = "LOGGED IN AS"
 
@@ -589,7 +652,7 @@ text = "Trainer"
 
 [node name="SavedUsernameLabel" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout" unique_id=832646234]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.72, 0.56, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "@trainer"
 
@@ -629,11 +692,19 @@ text = "Continue"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+theme_override_colors/font_color = Color(1, 0.42, 0.46, 1)
+theme_override_colors/font_hover_color = Color(1, 0.76, 0.78, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxFlat_logout_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_logout_button_hover")
 text = "Logout"
+
+[node name="SavedConnectionStatus" type="Label" parent="Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47, 0.59, 0.72, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "●  SESSION READY  ·  AETHER NETWORK"
+horizontal_alignment = 1
 
 [node name="FormSpacerRight" type="Control" parent="Background/Shell/MainSplit" unique_id=1699297983]
 layout_mode = 2
