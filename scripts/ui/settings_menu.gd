@@ -62,6 +62,7 @@ var account_user_label: Label
 var account_status_label: Label
 var edit_account_button: Button
 var logout_button: Button
+var exit_game_button: Button
 var logout_confirm_dialog: PanelContainer
 var logout_confirm_return_button: Button
 var logout_confirm_cancel_button: Button
@@ -97,6 +98,7 @@ func _ready() -> void:
 	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
+	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
 	close_button.pressed.connect(close)
 	_apply_settings_to_controls()
 	visible = false
@@ -271,6 +273,11 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	logout_button.text = "Return to Login"
 	logout_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(logout_button)
+
+	exit_game_button = Button.new()
+	exit_game_button.text = "Exit Game"
+	exit_game_button.focus_mode = Control.FOCUS_NONE
+	account_tab.add_child(exit_game_button)
 
 
 func _create_display_own_name_check_box() -> CheckBox:
@@ -455,7 +462,9 @@ func _apply_premium_styles() -> void:
 
 	_apply_styles_recursive(self)
 	if logout_button != null:
-		_apply_button_style(logout_button, "danger")
+		_apply_button_style(logout_button)
+	if exit_game_button != null:
+		_apply_button_style(exit_game_button, "danger")
 	_apply_button_style(close_button)
 	_apply_account_dialog_style()
 	_apply_logout_confirm_dialog_style()
@@ -748,6 +757,25 @@ func _on_logout_button_pressed() -> void:
 	_show_logout_confirm_dialog()
 
 
+func _on_exit_game_button_pressed() -> void:
+	if logging_out or not visible or not _is_account_tab_active():
+		return
+	logging_out = true
+	if exit_game_button != null:
+		exit_game_button.disabled = true
+	if logout_button != null:
+		logout_button.disabled = true
+	if close_button != null:
+		close_button.disabled = true
+	await _leave_ranked_queue_before_logout()
+	var trade_realtime_service: Object = get_node_or_null("/root/TradeRealtimeService")
+	if trade_realtime_service != null and trade_realtime_service.has_method("leave_active_trade_for_exit"):
+		await trade_realtime_service.call("leave_active_trade_for_exit")
+	var tree := get_tree()
+	if tree != null:
+		tree.quit()
+
+
 func _show_logout_confirm_dialog() -> void:
 	logout_confirmation_requested = true
 	if logout_confirm_dialog != null:
@@ -890,6 +918,8 @@ func _set_account_controls_disabled(disabled: bool) -> void:
 		edit_account_button.disabled = disabled
 	if logout_button != null:
 		logout_button.disabled = disabled
+	if exit_game_button != null:
+		exit_game_button.disabled = disabled
 	if close_button != null:
 		close_button.disabled = disabled
 	if account_confirm_button != null:
