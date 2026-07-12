@@ -640,9 +640,7 @@ func _on_news_request_completed(result: int, response_code: int, _headers: Packe
 
 	var news_data: Dictionary = parsed_json
 	var parsed_items: Array[Dictionary] = []
-	var item_variants: Variant = news_data.get("items", [])
-	if typeof(item_variants) != TYPE_ARRAY:
-		item_variants = news_data.get("articles", [])
+	var item_variants: Variant = news_data.get("items") if news_data.has("items") else news_data.get("articles", [])
 	if typeof(item_variants) == TYPE_ARRAY:
 		for item_variant: Variant in item_variants:
 			if typeof(item_variant) != TYPE_DICTIONARY:
