@@ -22,6 +22,8 @@ enum BattleActionsPanelMode {
 const DEBUG_TRAINER_TEAM_DISPLAY := false
 const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animations/status_condition_overlay.gd")
+const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
+const CALC_DRAWER_FIELD_MARGIN := 8.0
 
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
@@ -130,8 +132,8 @@ const DAMAGE_CALC_ASSUMPTIONS_PATH := "user://damage_calc_assumptions.json"
 const DAMAGE_CALC_ASSUMPTIONS_VERSION := 1
 const BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH := 1200
 const BATTLE_LOG_MEMORY_UNSET := -1
-const BATTLE_WINDOW_OPEN_SIZE := Vector2(1560.0, 828.0)
-const BATTLE_WINDOW_COLLAPSED_SIZE := Vector2(1246.0, 828.0)
+const BATTLE_WINDOW_OPEN_SIZE := Vector2(1500.0, 780.0)
+const BATTLE_WINDOW_COLLAPSED_SIZE := Vector2(1186.0, 780.0)
 
 static var remembered_battle_log_open := BATTLE_LOG_MEMORY_UNSET
 
@@ -328,6 +330,9 @@ func _ready() -> void:
 	_setup_mechanic_buttons()
 	_setup_battle_log_initial_visibility()
 	_update_battle_log_toggle_button()
+	resized.connect(_queue_calc_drawer_layout_update)
+	battle_frame.resized.connect(_queue_calc_drawer_layout_update)
+	_queue_calc_drawer_layout_update()
 
 	# Show Moves, Party or Bag
 	_reset_action_choices()
@@ -1613,6 +1618,8 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 func _sync_action_panel_mode_visibility() -> void:
 	var is_calc_mode := current_action_panel_mode == BattleActionsPanelMode.CALC
 	var is_bag_view := current_action_view == ActionView.BAG
+	if is_calc_mode:
+		_update_calc_drawer_layout()
 	if is_calc_mode or is_bag_view:
 		battle_drawer_layer.move_to_front()
 	battle_mode_button.button_pressed = not is_calc_mode
@@ -1620,18 +1627,16 @@ func _sync_action_panel_mode_visibility() -> void:
 	calc_log_button.button_pressed = is_calc_mode
 	calc_panel.visible = is_calc_mode
 	calc_drawer.visible = is_calc_mode
-	switch_party_label.visible = not is_calc_mode
+	switch_party_label.visible = not is_calc_mode and not is_bag_view
 	bag_grid.visible = not is_calc_mode and is_bag_view
 	bag_drawer.visible = not is_calc_mode and is_bag_view
 	action_buttons.visible = not is_calc_mode
 	mechanics_panel.visible = not is_calc_mode and mega_evolution_button.visible
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
-
 	if is_calc_mode:
 		moves_grid.visible = false
-		context_hint.visible = true
-		context_hint.text = "Damage Calculator opened"
+		context_hint.visible = false
 		_hide_party_hover()
 		_hide_move_hover()
 		_sync_party_rail_interaction()
@@ -1646,14 +1651,31 @@ func _sync_action_panel_mode_visibility() -> void:
 			context_hint.visible = false
 		ActionView.BAG:
 			moves_grid.visible = false
-			context_hint.visible = true
-			context_hint.text = "Bag opened"
+			context_hint.visible = false
 		_:
 			moves_grid.visible = false
-			context_hint.visible = true
-			context_hint.text = "Choose an action"
+			context_hint.visible = false
 
 	_sync_party_rail_interaction()
+
+## Houdt de calculator boven uitsluitend de spelershelft van het battlefield.
+## Daardoor blijven de battle log, tegenstander en move-informatie bereikbaar.
+func _queue_calc_drawer_layout_update() -> void:
+	call_deferred("_update_calc_drawer_layout")
+
+func _update_calc_drawer_layout() -> void:
+	if not is_instance_valid(calc_drawer) or not is_instance_valid(battle_frame):
+		return
+	var frame_rect: Rect2 = battle_frame.get_global_rect()
+	var drawer_layer_inverse: Transform2D = battle_drawer_layer.get_global_transform().affine_inverse()
+	var local_top_left: Vector2 = drawer_layer_inverse * frame_rect.position
+	var local_bottom_right: Vector2 = drawer_layer_inverse * frame_rect.end
+	var frame_size: Vector2 = local_bottom_right - local_top_left
+	calc_drawer.position = local_top_left + Vector2(CALC_DRAWER_FIELD_MARGIN, CALC_DRAWER_FIELD_MARGIN)
+	calc_drawer.size = Vector2(
+		frame_size.x * CALC_DRAWER_FIELD_WIDTH_RATIO - CALC_DRAWER_FIELD_MARGIN * 2.0,
+		frame_size.y - CALC_DRAWER_FIELD_MARGIN * 2.0
+	)
 
 func _sync_party_rail_interaction() -> void:
 	if player_party_grid == null:
@@ -2102,12 +2124,13 @@ func _can_show_full_battle_log() -> bool:
 func _set_battle_log_open(open: bool) -> void:
 	battle_log_rail.visible = open
 	custom_minimum_size = BATTLE_WINDOW_OPEN_SIZE if open else BATTLE_WINDOW_COLLAPSED_SIZE
+	_queue_calc_drawer_layout_update()
 
 ## Zet de tekst van de battle log toggle op basis van de open/dicht state.
 func _update_battle_log_toggle_button() -> void:
 	var is_open := battle_log_rail.visible
 	battle_log_toggle_button.visible = true
-	battle_log_toggle_button.text = "‹" if is_open else "›"
+	battle_log_toggle_button.text = "›" if is_open else "‹"
 	battle_log_toggle_button.tooltip_text = "Collapse Battle Log" if is_open else "Open Battle Log"
 	if mini_battle_feed != null:
 		mini_battle_feed.set_feed_enabled(false)

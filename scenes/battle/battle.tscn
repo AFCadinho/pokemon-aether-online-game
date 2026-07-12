@@ -33,7 +33,129 @@
 [ext_resource type="Script" uid="uid://dmk2xic0m1mc6" path="res://scripts/battle/battle_ui/bag_grid.gd" id="41_bag"]
 [ext_resource type="Script" uid="uid://bjpq57gr8t0k0" path="res://scripts/battle/animations/capture_ball_animation_player.gd" id="42_capture"]
 [ext_resource type="Script" uid="uid://b4h2vuys3xqnb" path="res://scripts/battle/animations/pokeball_summon_animation_player.gd" id="43_summon"]
-[ext_resource type="Script" path="res://scripts/battle/battle_ui/battle_stage_viewport.gd" id="44_stage"]
+[ext_resource type="Script" uid="uid://b1hsg2htund1y" path="res://scripts/battle/battle_ui/battle_stage_viewport.gd" id="44_stage"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_shell"]
+bg_color = Color(0.003921569, 0.007843138, 0.03137255, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.05882353, 0.3137255, 0.6862745, 0.96)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.58)
+shadow_size = 24
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kd6yx"]
+bg_color = Color(0.006, 0.014, 0.043, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.09411765, 0.38431373, 0.7607843, 0.92)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.019607844, 0.18039216, 0.4, 0.3)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_tab_normal"]
+content_margin_left = 8.0
+content_margin_top = 3.0
+content_margin_right = 8.0
+content_margin_bottom = 3.0
+bg_color = Color(0.014, 0.023, 0.043, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.92)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_tab_pressed"]
+content_margin_left = 8.0
+content_margin_top = 3.0
+content_margin_right = 8.0
+content_margin_bottom = 3.0
+bg_color = Color(0.38431373, 0.84313726, 1, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7490196, 0.92941177, 1, 0.9)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_tab_hover"]
+content_margin_left = 8.0
+content_margin_top = 3.0
+content_margin_right = 8.0
+content_margin_bottom = 3.0
+bg_color = Color(0.03137255, 0.105882354, 0.22, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38431373, 0.84313726, 1, 0.95)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8h6bs"]
+bg_color = Color(0.012, 0.03, 0.075, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.82)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dsauo"]
+content_margin_top = 9.0
+content_margin_bottom = 7.0
+bg_color = Color(0.02, 0.11, 0.23, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.38431373, 0.84313726, 1, 0.95)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ilhaa"]
+bg_color = Color(0.03, 0.09, 0.18, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.38431373, 0.84313726, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0.38431373, 0.84313726, 1, 0.22)
+shadow_size = 12
+shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgdsx"]
 content_margin_left = 8.0
@@ -275,125 +397,6 @@ scale_min = 1.1
 scale_max = 3.2
 color_initial_ramp = SubResource("GradientTexture1D_sandstorm_swirl")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kd6yx"]
-bg_color = Color(0.006, 0.014, 0.043, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.09411765, 0.38431373, 0.7607843, 0.92)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color(0.019607844, 0.18039216, 0.4, 0.3)
-shadow_size = 14
-shadow_offset = Vector2(0, 6)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1kk3"]
-bg_color = Color(0.02, 0.055, 0.12, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.38431373, 0.84313726, 1, 0.9)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_tab_normal"]
-content_margin_left = 8.0
-content_margin_top = 3.0
-content_margin_right = 8.0
-content_margin_bottom = 3.0
-bg_color = Color(0.014, 0.023, 0.043, 0.96)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.92)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_tab_pressed"]
-content_margin_left = 8.0
-content_margin_top = 3.0
-content_margin_right = 8.0
-content_margin_bottom = 3.0
-bg_color = Color(0.38431373, 0.84313726, 1, 0.96)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.7490196, 0.92941177, 1, 0.9)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_tab_hover"]
-content_margin_left = 8.0
-content_margin_top = 3.0
-content_margin_right = 8.0
-content_margin_bottom = 3.0
-bg_color = Color(0.03137255, 0.105882354, 0.22, 0.98)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.38431373, 0.84313726, 1, 0.95)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8h6bs"]
-bg_color = Color(0.012, 0.03, 0.075, 0.96)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.82)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color(0, 0, 0, 0.25)
-shadow_size = 8
-shadow_offset = Vector2(0, 3)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dsauo"]
-content_margin_top = 9.0
-content_margin_bottom = 7.0
-bg_color = Color(0.02, 0.11, 0.23, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.38431373, 0.84313726, 1, 0.95)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ilhaa"]
-bg_color = Color(0.03, 0.09, 0.18, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.38431373, 0.84313726, 1, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color(0.38431373, 0.84313726, 1, 0.22)
-shadow_size = 12
-shadow_offset = Vector2(0, 3)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m7fqn"]
 bg_color = Color(0.008, 0.022, 0.055, 0.92)
 border_width_left = 1
@@ -409,31 +412,29 @@ shadow_color = Color(0, 0, 0, 0.25)
 shadow_size = 8
 shadow_offset = Vector2(0, 3)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_shell"]
-bg_color = Color(0.003921569, 0.007843138, 0.03137255, 0.98)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1kk3"]
+bg_color = Color(0.02, 0.055, 0.12, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.05882353, 0.3137255, 0.6862745, 0.96)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-shadow_color = Color(0, 0, 0, 0.58)
-shadow_size = 24
-shadow_offset = Vector2(0, 10)
+border_color = Color(0.38431373, 0.84313726, 1, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="Battle" type="Control" unique_id=423111793]
 texture_filter = 1
-custom_minimum_size = Vector2(1560, 828)
-layout_mode = 0
-offset_right = 1560.0
-offset_bottom = 828.0
+custom_minimum_size = Vector2(1500, 780)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1500.0
+offset_bottom = 780.0
 mouse_filter = 2
 script = ExtResource("1_sgdsx")
 
-[node name="BattleBackdrop" type="Panel" parent="."]
+[node name="BattleBackdrop" type="Panel" parent="." unique_id=314696026]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -451,7 +452,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_battle_shell")
 
 [node name="DamageCalcRequest" type="HTTPRequest" parent="." unique_id=529426193]
 
-[node name="BattleDrawerLayer" type="Control" parent="."]
+[node name="BattleDrawerLayer" type="Control" parent="." unique_id=998555721]
 unique_name_in_owner = true
 z_index = 90
 layout_mode = 1
@@ -462,7 +463,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BagDrawer" type="PanelContainer" parent="BattleDrawerLayer"]
+[node name="BagDrawer" type="PanelContainer" parent="BattleDrawerLayer" unique_id=799622140]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -477,16 +478,15 @@ offset_right = 280.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 0
-mouse_filter = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
 
-[node name="BagDrawerContent" type="VBoxContainer" parent="BattleDrawerLayer/BagDrawer"]
+[node name="BagDrawerContent" type="VBoxContainer" parent="BattleDrawerLayer/BagDrawer" unique_id=1330798535]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 4
 
-[node name="BagDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent"]
+[node name="BagDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent" unique_id=54174787]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 theme_override_constants/margin_left = 12
@@ -494,11 +494,11 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 4
 
-[node name="HeaderRow" type="HBoxContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader"]
+[node name="HeaderRow" type="HBoxContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader" unique_id=802479263]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader/HeaderRow"]
+[node name="Title" type="Label" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader/HeaderRow" unique_id=222392443]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
@@ -506,7 +506,7 @@ theme_override_font_sizes/font_size = 18
 text = "BAG"
 vertical_alignment = 1
 
-[node name="BagDrawerCloseButton" type="Button" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader/HeaderRow"]
+[node name="BagDrawerCloseButton" type="Button" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader/HeaderRow" unique_id=136768042]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(34, 30)
 layout_mode = 2
@@ -518,31 +518,29 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_battle_tab_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_battle_tab_hover")
 text = "×"
 
-[node name="CalcDrawer" type="PanelContainer" parent="BattleDrawerLayer"]
+[node name="BagGrid" type="MarginContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent" unique_id=1779267922]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("41_bag")
+
+[node name="CalcDrawer" type="PanelContainer" parent="BattleDrawerLayer" unique_id=325866116]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-anchors_preset = 4
-anchor_left = 0.0
-anchor_top = 0.5
-anchor_right = 0.0
-anchor_bottom = 0.5
-offset_left = 340.0
-offset_top = -390.0
-offset_right = 816.0
-offset_bottom = 390.0
-grow_horizontal = 1
-grow_vertical = 2
-mouse_filter = 0
+offset_right = 620.0
+offset_bottom = 568.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
 
-[node name="CalcDrawerContent" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer"]
+[node name="CalcDrawerContent" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer" unique_id=1208413657]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 4
 
-[node name="CalcDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent"]
+[node name="CalcDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent" unique_id=124943495]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 theme_override_constants/margin_left = 12
@@ -550,11 +548,11 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 4
 
-[node name="HeaderRow" type="HBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader"]
+[node name="HeaderRow" type="HBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader" unique_id=1468899766]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
+[node name="Title" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" unique_id=1261325089]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
@@ -562,7 +560,7 @@ theme_override_font_sizes/font_size = 18
 text = "DAMAGE CALCULATOR"
 vertical_alignment = 1
 
-[node name="CalcDrawerCloseButton" type="Button" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
+[node name="CalcDrawerCloseButton" type="Button" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow" unique_id=2014048764]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(34, 30)
 layout_mode = 2
@@ -573,6 +571,25 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_battle_tab_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_battle_tab_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_battle_tab_hover")
 text = "×"
+
+[node name="CalcPanel" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent" unique_id=125224096]
+unique_name_in_owner = true
+visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+script = ExtResource("40_calc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcPanel" unique_id=500652918]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]
 unique_name_in_owner = true
@@ -589,76 +606,84 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 14
 
-[node name="BattleLogRail" type="VBoxContainer" parent="HBoxContainer"]
+[node name="BattleLogRail" type="VBoxContainer" parent="HBoxContainer" unique_id=1633153793]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 8
 
-[node name="CenterColumn" type="VBoxContainer" parent="HBoxContainer"]
+[node name="ActionChoices" type="PanelContainer" parent="HBoxContainer/BattleLogRail" unique_id=274714711]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_t1kk3")
+
+[node name="GridContainer" type="HBoxContainer" parent="HBoxContainer/BattleLogRail/ActionChoices" unique_id=1503994669]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="TopActionRow" type="HBoxContainer" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer" unique_id=1410596492]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CalcLogButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer/TopActionRow" unique_id=686062642]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+toggle_mode = true
+text = "Damage Calc"
+
+[node name="FightButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer/TopActionRow" unique_id=1528178288]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(140, 75)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+text = "Fight"
+icon = ExtResource("4_pll4o")
+expand_icon = true
+
+[node name="PartyButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer" unique_id=564010331]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(140, 75)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+text = "Party"
+icon = ExtResource("6_agsc7")
+expand_icon = true
+
+[node name="BattleLogPanel" parent="HBoxContainer/BattleLogRail" unique_id=2138858408 instance=ExtResource("17_6ofp8")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterColumn" type="VBoxContainer" parent="HBoxContainer" unique_id=2118255852]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 8
-
-[node name="BattlePartyRail" type="PanelContainer" parent="HBoxContainer"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(0, 0)
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
-
-[node name="PartyRailMargin" type="MarginContainer" parent="HBoxContainer/BattlePartyRail"]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="PartyRailContent" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="OpponentPartySection" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent"]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="OpponentPartyTitle" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/OpponentPartySection"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.36078432, 0.6117647, 1)
-theme_override_font_sizes/font_size = 13
-text = "OPPONENT PARTY"
-horizontal_alignment = 1
-
-[node name="PartyRailDivider" type="ColorRect" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent"]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-color = Color(0.38431373, 0.84313726, 1, 0.38)
-
-[node name="PlayerPartySection" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent"]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="PlayerPartyTitle" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/PlayerPartySection"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_font_sizes/font_size = 13
-text = "YOUR PARTY"
-horizontal_alignment = 1
-
-[node name="PartyRailStateLabel" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/PlayerPartySection"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
-theme_override_font_sizes/font_size = 11
-text = "Party status"
-horizontal_alignment = 1
 
 [node name="BattleFrame" type="Panel" parent="HBoxContainer/CenterColumn" unique_id=153800450]
 unique_name_in_owner = true
@@ -682,7 +707,7 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="BattleStageViewport" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer"]
+[node name="BattleStageViewport" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer" unique_id=935615348]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
@@ -694,7 +719,7 @@ script = ExtResource("44_stage")
 [node name="BattleStage" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport" unique_id=1414126998]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1152, 648)
-layout_mode = 0
+anchors_preset = 0
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
@@ -1378,9 +1403,9 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 42.5
-offset_top = -329.0
+offset_top = -357.0
 offset_right = 642.5
-offset_bottom = -79.0
+offset_bottom = -107.0
 grow_vertical = 0
 
 [node name="BattlePlatform2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=507540366 instance=ExtResource("3_8eh2s")]
@@ -1413,9 +1438,9 @@ anchor_top = 1.0
 anchor_right = 0.0
 anchor_bottom = 1.0
 offset_left = 53.5
-offset_top = -366.0
+offset_top = -394.0
 offset_right = 503.5
-offset_bottom = -73.5
+offset_bottom = -101.5
 grow_horizontal = 1
 grow_vertical = 0
 
@@ -1447,9 +1472,9 @@ script = ExtResource("43_summon")
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 100.0
-offset_top = 192.0
+offset_top = 164.0
 offset_right = 412.0
-offset_bottom = 274.0
+offset_bottom = 246.0
 
 [node name="EnemyHudPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1632045920 instance=ExtResource("2_01pft")]
 unique_name_in_owner = true
@@ -1470,17 +1495,14 @@ custom_minimum_size = Vector2(630, 56)
 layout_mode = 1
 anchors_preset = 2
 anchor_left = 0.0
-anchor_top = 1.0
 anchor_right = 0.0
-anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = -68.0
+offset_top = -96.0
 offset_right = 650.0
-offset_bottom = -12.0
+offset_bottom = -40.0
 grow_horizontal = 1
-grow_vertical = 0
 
-[node name="StagePartyOverlay" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage"]
+[node name="StagePartyOverlay" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=779263902]
 unique_name_in_owner = true
 z_index = 50
 layout_mode = 1
@@ -1491,17 +1513,49 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="PlayerStagePartyRail" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay"]
+[node name="PlayerStagePartyRail" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay" unique_id=682792119]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 18.0
-offset_top = 242.0
+offset_top = 214.0
 offset_right = 78.0
-offset_bottom = 242.0
+offset_bottom = 214.0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
 
-[node name="OpponentStagePartyRail" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay"]
+[node name="PlayerStagePartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail" unique_id=1879436486]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/v_separation = 3
+script = ExtResource("10_fe4ja")
+
+[node name="PlayerStagePartySlot1" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" unique_id=343401111 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" unique_id=732935989 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" unique_id=193085856 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" unique_id=184243784 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot5" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" unique_id=1061880903 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot6" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" unique_id=1377860800 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentStagePartyRail" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay" unique_id=508370759]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1074.0
@@ -1510,6 +1564,38 @@ offset_right = 1134.0
 offset_bottom = 74.0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+
+[node name="OpponentPartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail" unique_id=278916378]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/v_separation = 3
+script = ExtResource("10_fe4ja")
+
+[node name="OpponentPartySlot1" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" unique_id=315380001 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" unique_id=453795793 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" unique_id=711739496 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" unique_id=659422050 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot5" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" unique_id=279076773 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot6" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" unique_id=1481985221 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
 
 [node name="MiniBattleFeed" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1377941626 instance=ExtResource("18_mini")]
 unique_name_in_owner = true
@@ -1542,22 +1628,6 @@ offset_left = 10.0
 offset_right = 163.39575
 grow_horizontal = 1
 
-[node name="BattleLogButton" type="Button" parent="." unique_id=900280603]
-unique_name_in_owner = true
-z_index = 95
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 0
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -44.0
-offset_top = -18.0
-offset_right = -8.0
-offset_bottom = 18.0
-grow_vertical = 2
-mouse_default_cursor_shape = 2
-text = "‹"
-
 [node name="VSPanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1039531441 instance=ExtResource("9_pyfix")]
 unique_name_in_owner = true
 layout_mode = 1
@@ -1570,9 +1640,9 @@ unique_name_in_owner = true
 z_index = 58
 layout_mode = 1
 offset_left = 86.0
-offset_top = 350.0
+offset_top = 322.0
 offset_right = 186.0
-offset_bottom = 373.0
+offset_bottom = 345.0
 
 [node name="SideFieldEffectsPanel2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=35532174 instance=ExtResource("10_8eh2s")]
 unique_name_in_owner = true
@@ -1593,7 +1663,7 @@ position = Vector2(850, 226)
 
 [node name="PlayerTeamPreviewLayer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=585843366 instance=ExtResource("11_e48mi")]
 unique_name_in_owner = true
-position = Vector2(300, 440)
+position = Vector2(300, 412)
 
 [node name="ForfeitConfirmDialog" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=433129307 instance=ExtResource("12_ueicy")]
 unique_name_in_owner = true
@@ -1604,9 +1674,102 @@ offset_top = -57.5
 offset_right = 140.0
 offset_bottom = 57.5
 
+[node name="MovesGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1964814571]
+unique_name_in_owner = true
+visible = false
+z_index = 56
+custom_minimum_size = Vector2(472, 164)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -492.0
+offset_top = -212.0
+offset_right = -20.0
+offset_bottom = -48.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+script = ExtResource("8_w40i5")
+
+[node name="MoveSlot" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=165847671 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1470595780 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MechanicsPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=57273673]
+unique_name_in_owner = true
+z_index = 57
+custom_minimum_size = Vector2(118, 78)
+layout_mode = 0
+offset_left = 526.0
+offset_top = 454.0
+offset_right = 644.0
+offset_bottom = 532.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_m7fqn")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel" unique_id=562375867]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="MechanicsButtons" type="HBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer" unique_id=870879990]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="MegaEvolutionIcon" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1460977519]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 55)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("37_afkbo")
+texture_pressed = ExtResource("37_afkbo")
+texture_hover = ExtResource("37_afkbo")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Terra" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=843445618]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(80, 55)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("39_dsauo")
+texture_pressed = ExtResource("39_dsauo")
+texture_hover = ExtResource("39_dsauo")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ZMove" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1001476454]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(60, 55)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("38_8h6bs")
+texture_pressed = ExtResource("38_8h6bs")
+texture_hover = ExtResource("38_8h6bs")
+ignore_texture_size = true
+stretch_mode = 0
+
 [node name="ActionsDock" type="Panel" parent="HBoxContainer/CenterColumn" unique_id=910737858]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
@@ -1623,35 +1786,101 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_bottom = 4
 
-[node name="DockContent" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer" unique_id=166375469]
+[node name="DockContent" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer" unique_id=166375469]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 4
 
-[node name="PrimaryActionsSection" type="CenterContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent"]
+[node name="PrimaryActionsSection" type="CenterContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent" unique_id=619499966]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ContextSection" type="MarginContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent"]
+[node name="ContextSection" type="MarginContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent" unique_id=1542349482]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(820, 0)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="UtilitySection" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent"]
+[node name="ContextPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection" unique_id=212919001]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="ContextStack" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel" unique_id=505560000]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ContextHint" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack" unique_id=1183226353]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
+theme_override_font_sizes/font_size = 18
+text = "Choose an action"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SwitchPartyLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack" unique_id=1426123114]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "SWITCH"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerPartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack" unique_id=1230434731]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 6
+columns = 6
+script = ExtResource("10_fe4ja")
+
+[node name="PartySlot" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+compact_mode = true
+
+[node name="PartySlot2" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=873381061 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+compact_mode = true
+
+[node name="PartySlot3" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1808623893 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+compact_mode = true
+
+[node name="PartySlot4" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=290563093 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+compact_mode = true
+
+[node name="PartySlot5" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1562476737 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+compact_mode = true
+
+[node name="PartySlot6" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+compact_mode = true
+
+[node name="UtilitySection" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent" unique_id=1895783644]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="HeaderRow" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection" unique_id=754794856]
@@ -1716,360 +1945,111 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_battle_tab_hover")
 toggle_mode = true
 text = "Calc"
 
-[node name="BottomActionsRow" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection"]
+[node name="BottomActionsRow" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection" unique_id=1024757900]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 6
-alignment = 1
-
-[node name="ContextPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection" unique_id=212919001]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ContextStack" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel" unique_id=505560000]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 1
-
-[node name="ContextHint" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
-theme_override_font_sizes/font_size = 18
-text = "Choose an action"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MovesGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1964814571]
-unique_name_in_owner = true
-z_index = 56
-visible = false
-custom_minimum_size = Vector2(472, 164)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -492.0
-offset_top = -184.0
-offset_right = -20.0
-offset_bottom = -20.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
-columns = 2
-script = ExtResource("8_w40i5")
-
-[node name="MoveSlot" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="MoveSlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=165847671 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="MoveSlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1470595780 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="MoveSlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="SwitchPartyLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_font_sizes/font_size = 13
-text = "SWITCH"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PlayerPartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack" unique_id=1230434731]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/h_separation = 6
-columns = 6
-script = ExtResource("10_fe4ja")
-
-[node name="PartySlot" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-compact_mode = true
-
-[node name="PartySlot2" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=873381061 instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-compact_mode = true
-
-[node name="PartySlot3" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1808623893 instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-compact_mode = true
-
-[node name="PartySlot4" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=290563093 instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-compact_mode = true
-
-[node name="PartySlot5" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1562476737 instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-compact_mode = true
-
-[node name="PartySlot6" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-compact_mode = true
-
-[node name="OpponentPartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
-theme_override_constants/v_separation = 3
-columns = 1
-script = ExtResource("10_fe4ja")
-
-[node name="OpponentPartySlot1" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="OpponentPartySlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="OpponentPartySlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="OpponentPartySlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="OpponentPartySlot5" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="OpponentPartySlot6" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="PlayerStagePartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
-theme_override_constants/v_separation = 3
-columns = 1
-script = ExtResource("10_fe4ja")
-
-[node name="PlayerStagePartySlot1" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="PlayerStagePartySlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="PlayerStagePartySlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="PlayerStagePartySlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="PlayerStagePartySlot5" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="PlayerStagePartySlot6" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
-layout_mode = 2
-icon_only_mode = true
-
-[node name="BagGrid" type="MarginContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent" unique_id=1779267922]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource("41_bag")
-
-[node name="CalcPanel" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent" unique_id=125224096]
-unique_name_in_owner = true
-visible = false
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 8
-script = ExtResource("40_calc")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcPanel" unique_id=500652918]
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="ActionChoices" type="PanelContainer" parent="HBoxContainer/BattleLogRail" unique_id=274714711]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-size_flags_horizontal = 3
-script = ExtResource("8_t1kk3")
-
-[node name="GridContainer" type="HBoxContainer" parent="HBoxContainer/BattleLogRail/ActionChoices" unique_id=1503994669]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="TopActionRow" type="HBoxContainer" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="CalcLogButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer/TopActionRow"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 72)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-toggle_mode = true
-text = "Damage Calc"
-
-[node name="FightButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer/TopActionRow" unique_id=1528178288]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(140, 75)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = "Fight"
-icon = ExtResource("4_pll4o")
-expand_icon = true
+alignment = 2
 
 [node name="BagButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/BottomActionsRow" unique_id=1766657251]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 72)
+custom_minimum_size = Vector2(54, 44)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
 size_flags_vertical = 4
-mouse_default_cursor_shape = 2
 tooltip_text = "Bag"
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = ""
-icon = ExtResource("5_py4tk")
-expand_icon = true
-
-[node name="PartyButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer" unique_id=564010331]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(140, 75)
-layout_mode = 2
-size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = "Party"
-icon = ExtResource("6_agsc7")
+icon = ExtResource("5_py4tk")
 expand_icon = true
 
 [node name="RunButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/BottomActionsRow" unique_id=1623517119]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 72)
+custom_minimum_size = Vector2(54, 44)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
 size_flags_vertical = 4
-mouse_default_cursor_shape = 2
 tooltip_text = "Run"
+mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = ""
 icon = ExtResource("7_pyfix")
 expand_icon = true
 
-[node name="MechanicsPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=57273673]
+[node name="BattlePartyRail" type="PanelContainer" parent="HBoxContainer" unique_id=1870675427]
 unique_name_in_owner = true
-z_index = 57
-custom_minimum_size = Vector2(118, 78)
-layout_mode = 0
-offset_left = 526.0
-offset_top = 482.0
-offset_right = 644.0
-offset_bottom = 560.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_m7fqn")
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel" unique_id=562375867]
+visible = false
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+
+[node name="PartyRailMargin" type="MarginContainer" parent="HBoxContainer/BattlePartyRail" unique_id=1531224795]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="MechanicsButtons" type="HBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer" unique_id=870879990]
-unique_name_in_owner = true
+[node name="PartyRailContent" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin" unique_id=1854953919]
 layout_mode = 2
-theme_override_constants/separation = 25
-alignment = 1
+theme_override_constants/separation = 6
 
-[node name="MegaEvolutionIcon" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1460977519]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 55)
+[node name="OpponentPartySection" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent" unique_id=44745950]
 layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="OpponentPartyTitle" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/OpponentPartySection" unique_id=1657010509]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.36078432, 0.6117647, 1)
+theme_override_font_sizes/font_size = 13
+text = "OPPONENT PARTY"
+horizontal_alignment = 1
+
+[node name="PartyRailDivider" type="ColorRect" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent" unique_id=507523120]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.38431373, 0.84313726, 1, 0.38)
+
+[node name="PlayerPartySection" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent" unique_id=282126092]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlayerPartyTitle" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/PlayerPartySection" unique_id=560882464]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "YOUR PARTY"
+horizontal_alignment = 1
+
+[node name="PartyRailStateLabel" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/PlayerPartySection" unique_id=1950049224]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
+theme_override_font_sizes/font_size = 11
+text = "Party status"
+horizontal_alignment = 1
+
+[node name="BattleLogButton" type="Button" parent="." unique_id=900280603]
+unique_name_in_owner = true
+z_index = 95
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -18.0
+offset_right = -8.0
+offset_bottom = 18.0
+grow_vertical = 2
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("37_afkbo")
-texture_pressed = ExtResource("37_afkbo")
-texture_hover = ExtResource("37_afkbo")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Terra" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=843445618]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(80, 55)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("39_dsauo")
-texture_pressed = ExtResource("39_dsauo")
-texture_hover = ExtResource("39_dsauo")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="ZMove" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1001476454]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(60, 55)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("38_8h6bs")
-texture_pressed = ExtResource("38_8h6bs")
-texture_hover = ExtResource("38_8h6bs")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="BattleLogPanel" parent="HBoxContainer/BattleLogRail" unique_id=2138858408 instance=ExtResource("17_6ofp8")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+text = ">"
 
 [node name="PokemonHoverCard" parent="." unique_id=1550796656 instance=ExtResource("21_sgdsx")]
 unique_name_in_owner = true

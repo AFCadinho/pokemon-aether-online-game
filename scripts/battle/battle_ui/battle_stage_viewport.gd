@@ -5,6 +5,7 @@ class_name BattleStageViewport
 const DEFAULT_DESIGN_SIZE := Vector2(1152.0, 648.0)
 
 @export var design_size := DEFAULT_DESIGN_SIZE
+@export var crop_to_fill := true
 @onready var battle_stage: Control = %BattleStage
 
 
@@ -37,12 +38,16 @@ func _update_stage_transform() -> void:
 	if available_size.x <= 0.0 or available_size.y <= 0.0:
 		return
 
-	var uniform_scale := minf(
-		available_size.x / safe_design_size.x,
-		available_size.y / safe_design_size.y
-	)
+	var width_scale := available_size.x / safe_design_size.x
+	var height_scale := available_size.y / safe_design_size.y
+	var uniform_scale := maxf(width_scale, height_scale) if crop_to_fill else minf(width_scale, height_scale)
 	var rendered_size := safe_design_size * uniform_scale
 
 	battle_stage.size = safe_design_size
 	battle_stage.scale = Vector2.ONE * uniform_scale
-	battle_stage.position = ((available_size - rendered_size) * 0.5).round()
+	var stage_position := ((available_size - rendered_size) * 0.5).round()
+	if crop_to_fill:
+		# Preserve the turn/VS/header area and take the authorized crop from the
+		# bottom of the battlefield when the action dock becomes taller.
+		stage_position.y = 0.0
+	battle_stage.position = stage_position
