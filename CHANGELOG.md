@@ -3,6 +3,14 @@
 ## Unreleased
 
 **Added**
+
+**Changed**
+
+**Fixed**
+
+## 0.3.4 - 2026-07-12
+
+**Added**
 - Added overworld use for Potion, Super Potion, Hyper Potion, Max Potion, Full Restore, Antidote, Burn Heal, Ice Heal, Awakening, Paralyze Heal, Full Heal, and Revive. Select a party Pokemon from the Bag to preview and apply the effect.
 - Added a permanent Escape Rope Key Item. It returns you to your latest healing point without healing your party and has a 30-minute cooldown that continues while you are offline.
 - Added an eight-slot hotbar on the left side of the screen. Drag usable Bag items into a chosen slot and activate them by clicking or pressing keys 1–8.
