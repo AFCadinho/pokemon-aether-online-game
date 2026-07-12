@@ -37,6 +37,8 @@ var team_preview_lead_selection_active := false
 var forfeit_return_action_view: ActionView = ActionView.NONE
 var mega_evolution_selected := false
 var mega_evolution_pulse_tween: Tween
+var mechanic_orb_style: StyleBoxFlat
+var mega_mechanic_label: Label
 var pending_mega_species_by_ident: Dictionary = {}
 var pvp_room_code := ""
 var pvp_match_id := ""
@@ -1344,6 +1346,7 @@ func _hide_pokemon_hover_card() -> void:
 		pokemon_hover_card.visible = false
 
 func _setup_mechanic_buttons() -> void:
+	_apply_mechanic_orb_style()
 	for button in mechanic_buttons:
 		button.disabled = true
 		button.modulate = Color(0.45, 0.45, 0.45, 0.65)
@@ -1359,25 +1362,84 @@ func _setup_mechanic_buttons() -> void:
 		mega_evolution_button.tooltip_text = "Mega Evolution"
 	_update_mechanic_button_states()
 
+func _apply_mechanic_orb_style() -> void:
+	mechanic_orb_style = StyleBoxFlat.new()
+	mechanic_orb_style.bg_color = Color(0.008, 0.022, 0.055, 0.9)
+	mechanic_orb_style.border_width_left = 1
+	mechanic_orb_style.border_width_top = 1
+	mechanic_orb_style.border_width_right = 1
+	mechanic_orb_style.border_width_bottom = 1
+	mechanic_orb_style.border_color = Color(0.196, 0.816, 1.0, 0.95)
+	mechanic_orb_style.corner_radius_top_left = 36
+	mechanic_orb_style.corner_radius_top_right = 36
+	mechanic_orb_style.corner_radius_bottom_right = 36
+	mechanic_orb_style.corner_radius_bottom_left = 36
+	mechanic_orb_style.shadow_color = Color(0.078, 0.722, 1.0, 0.42)
+	mechanic_orb_style.shadow_size = 7
+	mechanic_orb_style.shadow_offset = Vector2(0, 1)
+	mechanics_panel.add_theme_stylebox_override("panel", mechanic_orb_style)
+	mechanics_panel.custom_minimum_size = Vector2(68.0, 68.0)
+	mechanics_panel.position = Vector2(550.0, 458.0)
+	mechanics_panel.size = Vector2(68.0, 68.0)
+	var mechanics_margin := mechanics_panel.get_child(0) as MarginContainer
+	if mechanics_margin != null:
+		for margin_name: String in ["margin_left", "margin_top", "margin_right", "margin_bottom"]:
+			mechanics_margin.add_theme_constant_override(margin_name, 6)
+	var mechanics_buttons := %MechanicsButtons as HBoxContainer
+	if mechanics_buttons != null:
+		mechanics_buttons.add_theme_constant_override("separation", 8)
+	for button: TextureButton in mechanic_buttons:
+		button.custom_minimum_size = Vector2(52.0, 52.0)
+	mega_mechanic_label = _create_mechanic_overlay_label(mega_evolution_button, "MEGA")
+
+func _create_mechanic_overlay_label(button: TextureButton, text: String) -> Label:
+	var label := Label.new()
+	label.name = "%sLabel" % text.capitalize()
+	label.text = text
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	label.offset_top = 31.0
+	label.offset_bottom = -1.0
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_color_override("font_color", Color(0.9, 0.98, 1.0, 1.0))
+	label.add_theme_color_override("font_outline_color", Color(0.005, 0.015, 0.04, 1.0))
+	label.add_theme_color_override("font_shadow_color", Color(0.15, 0.82, 1.0, 0.95))
+	label.add_theme_constant_override("outline_size", 4)
+	label.add_theme_constant_override("shadow_offset_x", 0)
+	label.add_theme_constant_override("shadow_offset_y", 1)
+	label.add_theme_constant_override("shadow_outline_size", 5)
+	button.add_child(label)
+	button.move_child(label, button.get_child_count() - 1)
+	return label
+
 func _on_mechanic_button_mouse_entered(button: TextureButton) -> void:
 	if button == null or button.disabled or not button.visible:
 		return
-	button.create_tween().tween_property(
+	button.pivot_offset = button.size * 0.5
+	var hover_tween := button.create_tween().set_parallel()
+	hover_tween.tween_property(
 		button,
 		"self_modulate",
 		Color(1.35, 1.35, 1.35, 1.0),
 		0.12
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	if button != mega_evolution_button or not mega_evolution_selected:
+		hover_tween.tween_property(button, "scale", Vector2(1.08, 1.08), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func _on_mechanic_button_mouse_exited(button: TextureButton) -> void:
 	if button == null:
 		return
-	button.create_tween().tween_property(
+	var hover_tween := button.create_tween().set_parallel()
+	hover_tween.tween_property(
 		button,
 		"self_modulate",
 		Color.WHITE,
 		0.12
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	if button != mega_evolution_button or not mega_evolution_selected:
+		hover_tween.tween_property(button, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _on_mega_evolution_pressed() -> void:
 	_focus_battle_ui_layer()
@@ -1439,10 +1501,18 @@ func _update_mechanic_button_states() -> void:
 		mega_evolution_button.tooltip_text = "Mega Evolution unavailable"
 		_stop_mega_evolution_pulse()
 	elif mega_evolution_selected:
+		mechanic_orb_style.border_color = Color(1.0, 0.78, 0.24, 1.0)
+		mechanic_orb_style.shadow_color = Color(0.8, 0.32, 1.0, 0.55)
+		mega_mechanic_label.add_theme_color_override("font_color", Color(1.0, 0.91, 0.42, 1.0))
+		mega_mechanic_label.add_theme_color_override("font_shadow_color", Color(0.86, 0.25, 1.0, 1.0))
 		mega_evolution_button.modulate = Color(1.0, 0.82, 0.2, 1.0)
 		mega_evolution_button.tooltip_text = "Mega Evolution ready"
 		_start_mega_evolution_pulse()
 	else:
+		mechanic_orb_style.border_color = Color(0.196, 0.816, 1.0, 0.95)
+		mechanic_orb_style.shadow_color = Color(0.078, 0.722, 1.0, 0.42)
+		mega_mechanic_label.add_theme_color_override("font_color", Color(0.9, 0.98, 1.0, 1.0))
+		mega_mechanic_label.add_theme_color_override("font_shadow_color", Color(0.15, 0.82, 1.0, 0.95))
 		mega_evolution_button.modulate = Color(1.0, 1.0, 1.0, 0.95)
 		mega_evolution_button.tooltip_text = "Mega Evolution"
 		_stop_mega_evolution_pulse()

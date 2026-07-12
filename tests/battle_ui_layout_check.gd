@@ -5,6 +5,7 @@ const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const BATTLE_HUD_SCENE_PATH := "res://scenes/battle/pokemon_hud_panel.tscn"
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
+const UI_OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const PartyGridScript := preload("res://scripts/battle/battle_ui/party_grid.gd")
 const StageViewportScript := preload("res://scripts/battle/battle_ui/battle_stage_viewport.gd")
 const STAGE_DESIGN_SIZE := Vector2(1152.0, 648.0)
@@ -168,16 +169,20 @@ func _check_scene_structure() -> void:
 func _check_world_battle_host() -> void:
 	var world_scene_source := FileAccess.get_file_as_string(WORLD_SCENE_PATH)
 	var world_script_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
+	var ui_overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_SCRIPT_PATH)
 	_check_contains(world_scene_source, "[node name=\"BattleUILayer\" type=\"CanvasLayer\" parent=\".\"]", "World owns a dedicated battle UI layer")
 	_check_contains(world_scene_source, "[node name=\"BattleUIHost\" type=\"CenterContainer\" parent=\"BattleUILayer\"]", "World centers the bounded battle scene")
 	var host_start := world_scene_source.find("[node name=\"BattleUIHost\"")
 	var host_end := world_scene_source.find("\n\n", host_start)
 	var host_block := world_scene_source.substr(host_start, host_end - host_start)
-	_check_contains(host_block, "mouse_filter = 0", "transparent map margins remain modal during battle")
+	_check_contains(host_block, "mouse_filter = 2", "transparent battle margins let normal map UI receive clicks")
 	_check_contains(world_script_source, "battle_ui_host.add_child(battle_instance)", "battle scene mounts inside the World battle host")
 	_check_contains(world_script_source, "battle_ui_host.visible = true", "battle host opens for a battle")
 	_check_contains(world_script_source, "battle_ui_host.visible = false", "battle host closes after a battle")
 	_check_true(not world_script_source.contains("CanvasLayer.new()"), "battle startup no longer creates a full-screen layer dynamically")
+	_check_contains(ui_overlay_source, "UI_OVERLAY_FOCUSED_LAYER := 20", "clicked map UI can render above the battle layer")
+	_check_contains(ui_overlay_source, "_focus_normal_ui_group(chat_panel)", "chat interaction promotes chat above the battle layer")
+	_check_contains(ui_overlay_source, "func focus_battle_ui_layer()", "battle interaction can restore battle layer priority")
 
 
 func _check_hp_hud_structure() -> void:
@@ -298,6 +303,12 @@ func _check_battle_selection_policy_contract() -> void:
 	_check_contains(source, "calc_log_button.pressed.connect(_on_calc_mode_button_pressed)", "battle-log Calc button opens the existing calculator flow")
 	_check_contains(source, "func _on_mechanic_button_mouse_entered", "available mechanic icons define a hover highlight")
 	_check_contains(source, "\"self_modulate\"", "mechanic hover does not overwrite mechanic availability colors")
+	_check_contains(source, "Vector2(1.08, 1.08)", "mechanic hover provides subtle scale feedback")
+	_check_contains(source, "func _apply_mechanic_orb_style", "mechanics use a dedicated floating orb style")
+	_check_contains(source, "corner_radius_top_left = 36", "mechanic orb is circular rather than a rectangular card")
+	_check_contains(source, "mechanics_panel.size = Vector2(68.0, 68.0)", "mechanic orb stays compact")
+	_check_contains(source, "_create_mechanic_overlay_label(mega_evolution_button, \"MEGA\")", "Mega orb carries a compact text overlay")
+	_check_contains(source, "shadow_outline_size", "mechanic text uses a readable light glow")
 	var action_choices_source := FileAccess.get_file_as_string("res://scripts/battle/action_choices.gd")
 	_check_contains(action_choices_source, "if action == \"bag\" or action == \"run\"", "icon-only utility actions retain dynamic labels as tooltips")
 	_check_contains(source, "event.is_action_pressed(\"ui_cancel\")", "Escape can close the active battle drawer")

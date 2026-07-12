@@ -14,6 +14,8 @@
 - Added a searchable item picker for quickly finding tradable inventory items and choosing their quantities.
 
 **Changed**
+- Redesigned the battle UI for a more competitive experience with a persistent battle log, a wider battlefield, compact HP HUDs, direct six-Pokemon switching, two-by-two move controls, contextual mechanic buttons, and separate Bag and Damage Calculator panels.
+- Battle windows now use a compact in-world layout instead of covering the full screen. During PvP, chat and other overworld UI panels remain usable and move above or below the battle UI based on the most recently clicked interface.
 - Escape Rope is now used exclusively from the configurable hotbar instead of the action bar or legacy inventory stacks.
 - The standard PokéMart now focuses on currently usable Poké Balls and medicines. Escape Rope, Repel, Super Repel, and Max Repel are no longer sold there; existing owned stacks remain in the Bag.
 - Stored EVs can now only be assigned to their matching stat. For example, stored Speed EVs can no longer be spent on Sp. Def.
