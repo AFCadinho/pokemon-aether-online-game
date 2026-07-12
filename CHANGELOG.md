@@ -3,10 +3,13 @@
 ## Unreleased
 
 **Added**
+- Added a saved-trainer login view with trainer profile preview, session status, and a direct Continue flow.
 
 **Changed**
+- Redesigned the login screen with a blue Aether-themed layout, responsive news panel, improved login and saved-session cards, atmospheric login glow, and clearer Remember Me controls.
 
 **Fixed**
+- Fixed returning from Settings to the login screen ending the saved session and forcing a full username/password login despite Remember Me being enabled.
 
 ## 0.3.4 - 2026-07-12
 

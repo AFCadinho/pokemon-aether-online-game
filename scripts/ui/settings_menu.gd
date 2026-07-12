@@ -930,7 +930,9 @@ func _logout_confirmed() -> void:
 	if logout_confirm_cancel_button != null:
 		logout_confirm_cancel_button.disabled = true
 	await _leave_ranked_queue_before_logout()
-	await AuthService.logout()
+	# This action only returns to the login scene. Keep AuthService and its
+	# remember-me session intact; the explicit Logout action on the login screen
+	# is responsible for ending the session and clearing the saved token.
 	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		logging_out = false
