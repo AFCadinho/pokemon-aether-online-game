@@ -58,7 +58,7 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="Sidebar" type="PanelContainer" parent="Shell/MainSplit" unique_id=1824810322]
-custom_minimum_size = Vector2(230, 0)
+custom_minimum_size = Vector2(248, 0)
 layout_mode = 2
 
 [node name="SidebarMargin" type="MarginContainer" parent="Shell/MainSplit/Sidebar" unique_id=1829532926]
@@ -209,7 +209,7 @@ theme_override_constants/margin_bottom = 30
 
 [node name="ContentLayout" type="HBoxContainer" parent="Shell/MainSplit/Content" unique_id=171063793]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 22
 
 [node name="CenterColumn" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout" unique_id=2113551366]
 layout_mode = 2
@@ -286,7 +286,6 @@ text = "Never"
 [node name="ShowcaseGap" type="Control" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn" unique_id=1485963702]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
-size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="PokeAetherTextLogo" type="TextureRect" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ShowcaseGap" unique_id=705951139]
@@ -382,7 +381,7 @@ disabled = true
 text = "Gen 5 Sprites"
 
 [node name="NewsCard" type="PanelContainer" parent="Shell/MainSplit/Content/ContentLayout" unique_id=983230417]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(292, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
@@ -400,17 +399,15 @@ theme_override_constants/separation = 8
 
 [node name="NewsTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout" unique_id=217464752]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68, 0.42, 1, 1)
+theme_override_colors/font_color = Color(0.47843137, 0.654902, 0.95686275, 1)
 theme_override_font_sizes/font_size = 16
-text = "NEWS"
+text = "LATEST FROM AETHER"
 
 [node name="LogLabel" type="RichTextLabel" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout" unique_id=1891686890]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "No news available."
-fit_content = true
-scroll_following = true
 
 [node name="HttpRequest" type="HTTPRequest" parent="." unique_id=342281023]
 

@@ -202,13 +202,13 @@ func _ready() -> void:
 func _apply_visual_style() -> void:
 	add_theme_font_size_override("font_size", 16)
 
-	shell_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.03, 0.034, 0.062, 0.24), Color(0.22, 0.23, 0.34, 0.68), 12, 1))
-	sidebar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.03, 0.055, 0.78), Color(0.18, 0.19, 0.29, 0.7), 10, 1))
+	shell_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.027, 0.043, 0.078, 0.38), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
+	sidebar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.027, 0.043, 0.078, 0.92), Color(0.192, 0.314, 0.439, 0.72), 12, 1))
 	brand_mark.add_theme_stylebox_override("panel", _panel_style(Color(0.48, 0.22, 0.96, 1.0), Color(0.72, 0.48, 1.0, 0.55), 28, 0))
-	server_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.095, 0.72), Color(0.22, 0.23, 0.34, 0.82), 10, 1))
-	meta_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.1, 0.58), Color(0.24, 0.25, 0.36, 0.72), 14, 1))
-	progress_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.1, 0.62), Color(0.22, 0.23, 0.34, 0.72), 14, 1))
-	news_card.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.06, 0.1, 0.60), Color(0.22, 0.23, 0.34, 0.72), 14, 1))
+	server_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.9), 12, 1))
+	meta_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.84), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
+	progress_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
+	news_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.88), 14, 1))
 
 	var nav_active := _panel_style(Color(0.18, 0.13, 0.34, 0.92), Color(0.48, 0.25, 0.92, 0.9), 8, 1)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("normal", nav_active)
