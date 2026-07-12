@@ -6,10 +6,11 @@ signal pokemon_unhovered
 
 const FAINTED_BACKGROUND := Color("#30343c")
 const FAINTED_BORDER := Color("#626a76")
-const ACTIVE_BACKGROUND := Color("#17283d")
-const ACTIVE_BORDER := Color("#d8b767")
+const ACTIVE_BACKGROUND := Color("#0a315f")
+const ACTIVE_BORDER := Color("#62d7ff")
 const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
+const ICON_FAINTED_MODULATE := Color(0.12, 0.12, 0.12, 0.92)
 const POISON_STATUS_TEXTURE: Texture2D = preload("res://assets/battles/status/poisoned.png")
 const POISON_STATUS_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const TOXIC_STATUS_MODULATE := Color("#8c58ff")
@@ -17,15 +18,25 @@ const NAME_FONT_SIZE := 14
 const LONG_NAME_FONT_SIZE := 12
 const VERY_LONG_NAME_FONT_SIZE := 11
 
+@export var compact_mode := false
+@export var icon_only_mode := false
+
+@onready var margin_container: MarginContainer = $MarginContainer
+@onready var slot_row: HBoxContainer = $MarginContainer/HBoxContainer
 @onready var pokemon_icon: TextureRect = $MarginContainer/HBoxContainer/PokemonIcon
+@onready var icon_status_badge: Label = %IconStatusBadge
+@onready var details_column: VBoxContainer = $MarginContainer/HBoxContainer/VBoxContainer
+@onready var name_row: HBoxContainer = $MarginContainer/HBoxContainer/VBoxContainer/NameRow
 @onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/ShinyBadge
 @onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/NameLabel
+@onready var bottom_row: HBoxContainer = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/HPBar
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/StatusIcon
 
 var current_pokemon_data: Dictionary = {}
 
 func _ready() -> void:
+	_apply_slot_layout()
 	_ignore_child_mouse_input(self)
 	if not pressed.is_connected(_on_pressed):
 		pressed.connect(_on_pressed)
@@ -33,6 +44,42 @@ func _ready() -> void:
 		mouse_entered.connect(_on_mouse_entered)
 	if not mouse_exited.is_connected(_on_mouse_exited):
 		mouse_exited.connect(_on_mouse_exited)
+
+
+func _apply_slot_layout() -> void:
+	if icon_only_mode:
+		custom_minimum_size = Vector2(52.0, 52.0)
+		size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		margin_container.add_theme_constant_override("margin_left", 3)
+		margin_container.add_theme_constant_override("margin_top", 3)
+		margin_container.add_theme_constant_override("margin_right", 3)
+		margin_container.add_theme_constant_override("margin_bottom", 3)
+		pokemon_icon.custom_minimum_size = Vector2(44.0, 44.0)
+		details_column.visible = false
+		return
+	if not compact_mode:
+		return
+
+	custom_minimum_size = Vector2(120.0, 46.0)
+	size_flags_vertical = Control.SIZE_FILL
+	margin_container.add_theme_constant_override("margin_left", 4)
+	margin_container.add_theme_constant_override("margin_top", 3)
+	margin_container.add_theme_constant_override("margin_right", 4)
+	margin_container.add_theme_constant_override("margin_bottom", 3)
+	slot_row.add_theme_constant_override("separation", 3)
+	pokemon_icon.custom_minimum_size = Vector2(32.0, 36.0)
+	details_column.custom_minimum_size = Vector2(76.0, 36.0)
+	details_column.add_theme_constant_override("separation", 0)
+	name_row.custom_minimum_size = Vector2(0.0, 19.0)
+	shiny_badge.custom_minimum_size = Vector2(10.0, 16.0)
+	shiny_badge.add_theme_font_size_override("font_size", 12)
+	name_label.custom_minimum_size = Vector2(54.0, 18.0)
+	bottom_row.custom_minimum_size = Vector2(0.0, 14.0)
+	hp_bar.custom_minimum_size = Vector2(50.0, 14.0)
+	hp_bar.add_theme_font_size_override("font_size", 11)
+	status_icon.custom_minimum_size = Vector2(18.0, 14.0)
+	status_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 
 func _ignore_child_mouse_input(node: Node) -> void:
 	for child in node.get_children():
@@ -51,7 +98,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 
 	visible = true
 	disabled = is_active or is_fainted
-	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
+	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
 	tooltip_text = "Active Pokemon" if is_active else ""
 
 	_set_species_name(pokemon.species, pokemon.shiny)
@@ -59,6 +106,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	_set_status_icon("")
+	_apply_icon_only_condition_badge("", is_fainted)
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	current_pokemon_data = pokemon_data.duplicate(true)
@@ -73,7 +121,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 
 	visible = true
 	disabled = is_active or is_fainted
-	modulate = FAINTED_MODULATE if is_fainted else NORMAL_MODULATE
+	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
 	tooltip_text = "Active Pokemon" if is_active else ""
 
 	var is_shiny := _get_shiny_from_data(pokemon_data)
@@ -82,7 +130,9 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	hp_bar.max_value = max_hp
 	hp_bar.value = clamp(current_hp, 0, int(hp_bar.max_value))
 	pokemon_icon.texture = PokemonAssets.load_party_icon(species, is_shiny)
-	_set_status_icon(str(pokemon_data.get("status", "")))
+	var status := str(pokemon_data.get("status", ""))
+	_set_status_icon(status)
+	_apply_icon_only_condition_badge(status, is_fainted)
 
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
 	var display_species := str(pokemon_data.get("displaySpecies", ""))
@@ -172,6 +222,51 @@ func _set_status_icon(status: String) -> void:
 	status_icon.tooltip_text = _get_status_tooltip(status) if status_icon.visible else ""
 	status_icon.modulate = _get_status_modulate(status) if status_icon.visible else NORMAL_MODULATE
 
+func _apply_icon_only_condition_badge(status: String, is_fainted: bool) -> void:
+	pokemon_icon.modulate = ICON_FAINTED_MODULATE if icon_only_mode and is_fainted else NORMAL_MODULATE
+	if not icon_only_mode:
+		icon_status_badge.visible = false
+		return
+
+	var normalized_status := status.strip_edges().to_lower()
+	icon_status_badge.text = "FNT" if is_fainted else _get_compact_status_text(normalized_status)
+	icon_status_badge.visible = is_fainted or icon_status_badge.text != ""
+	if not icon_status_badge.visible:
+		return
+
+	var badge_style := StyleBoxFlat.new()
+	badge_style.bg_color = _get_condition_badge_color("fnt" if is_fainted else normalized_status)
+	badge_style.border_width_left = 1
+	badge_style.border_width_top = 1
+	badge_style.border_width_right = 1
+	badge_style.border_width_bottom = 1
+	badge_style.border_color = Color("#ffd7de") if is_fainted else Color("#e8f4ff")
+	badge_style.corner_radius_top_left = 3
+	badge_style.corner_radius_top_right = 3
+	badge_style.corner_radius_bottom_left = 3
+	badge_style.corner_radius_bottom_right = 3
+	icon_status_badge.add_theme_stylebox_override("normal", badge_style)
+
+func _get_compact_status_text(status: String) -> String:
+	match status:
+		"brn": return "BRN"
+		"par": return "PAR"
+		"slp": return "SLP"
+		"frz": return "FRZ"
+		"psn": return "PSN"
+		"tox": return "TOX"
+	return ""
+
+func _get_condition_badge_color(status: String) -> Color:
+	match status:
+		"fnt": return Color("#c93652")
+		"brn": return Color("#c94f24")
+		"par": return Color("#b58a16")
+		"slp": return Color("#6f63b6")
+		"frz": return Color("#3a94ba")
+		"psn", "tox": return Color("#8c45a8")
+	return Color("#263247")
+
 func _get_status_texture(status: String) -> Texture2D:
 	match status.strip_edges().to_lower():
 		"psn", "tox":
@@ -205,16 +300,21 @@ func _get_status_modulate(status: String) -> Color:
 
 func set_empty() -> void:
 	current_pokemon_data = {}
-	visible = true
+	# Battlefield icon rails should only occupy space for actual team members.
+	# Interactive switch rows keep their empty positions for stable navigation.
+	visible = not icon_only_mode
 	disabled = true
 	modulate = NORMAL_MODULATE
 
 	name_label.text = ""
-	name_label.add_theme_font_size_override("font_size", NAME_FONT_SIZE)
+	name_label.add_theme_font_size_override("font_size", _get_name_font_size(""))
 	shiny_badge.text = ""
 	shiny_badge.tooltip_text = ""
 	hp_bar.value = 0
 	pokemon_icon.texture = null
+	pokemon_icon.modulate = NORMAL_MODULATE
+	icon_status_badge.visible = false
+	icon_status_badge.text = ""
 	_set_status_icon("")
 	tooltip_text = ""
 
@@ -258,7 +358,7 @@ func _set_color(background: Color, border: Color, is_active: bool) -> void:
 	normal.corner_radius_top_right = 6
 	normal.corner_radius_bottom_left = 6
 	normal.corner_radius_bottom_right = 6
-	normal.shadow_color = Color(0.85, 0.65, 0.22, 0.28) if is_active else Color(0, 0, 0, 0.22)
+	normal.shadow_color = Color(0.38431373, 0.84313726, 1, 0.3) if is_active else Color(0, 0, 0, 0.22)
 	normal.shadow_size = 10 if is_active else 6
 	normal.shadow_offset = Vector2(0, 3) if is_active else Vector2(0, 2)
 
@@ -285,6 +385,12 @@ func _set_species_name(species: String, is_shiny: bool) -> void:
 
 func _get_name_font_size(species: String) -> int:
 	var compact_name := species.replace(" ", "")
+	if compact_mode:
+		if compact_name.length() >= 11:
+			return 10
+		if compact_name.length() >= 9:
+			return 11
+		return 12
 	if compact_name.length() >= 11:
 		return VERY_LONG_NAME_FONT_SIZE
 	if compact_name.length() >= 9:

@@ -4,11 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://cljbo3g4o51sw" path="res://assets/battles/field/weather/rain.png" id="1_kc18i"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_01pft"]
-bg_color = Color(0.08235294, 0.07058824, 0.05882353, 0.74509805)
+bg_color = Color(0.006, 0.025, 0.07, 0.82)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
-border_color = Color(0.78431374, 0.6313726, 0.3529412, 1)
+border_color = Color(0.1764706, 0.5686275, 0.92941177, 0.92)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -50,6 +50,6 @@ stretch_mode = 6
 [node name="ConditionLabel" type="Label" parent="MarginContainer/VBoxContainer/FieldConditionRow" unique_id=1704827279]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.91764706, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Rain: 5/8 Turns"

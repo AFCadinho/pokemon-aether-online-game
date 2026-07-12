@@ -130,6 +130,8 @@ const DAMAGE_CALC_ASSUMPTIONS_PATH := "user://damage_calc_assumptions.json"
 const DAMAGE_CALC_ASSUMPTIONS_VERSION := 1
 const BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH := 1200
 const BATTLE_LOG_MEMORY_UNSET := -1
+const BATTLE_WINDOW_OPEN_SIZE := Vector2(1560.0, 828.0)
+const BATTLE_WINDOW_COLLAPSED_SIZE := Vector2(1246.0, 828.0)
 
 static var remembered_battle_log_open := BATTLE_LOG_MEMORY_UNSET
 
@@ -138,72 +140,89 @@ var active_player_pokemon: Pokemon
 var active_enemy_pokemon: Pokemon
 
 # Action Buttons
-@onready var battle_mode_button: Button = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/BattleModeButton
-@onready var calc_mode_button: Button = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/CalcModeButton
-@onready var action_buttons = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices
-@onready var moves_grid: MovesGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid
-@onready var party_grid: PartyGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid
-@onready var bag_grid: BattleBagGrid = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/BagGrid
-@onready var calc_panel: BattleDamageCalcPanel = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel
-@onready var mechanics_panel: Control = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel
-@onready var mega_evolution_button: TextureButton = $HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon
+@onready var action_side_panel: Control = %ActionsDock
+@onready var battle_mode_button: Button = %BattleModeButton
+@onready var calc_mode_button: Button = %CalcModeButton
+@onready var calc_log_button: Button = %CalcLogButton
+@onready var action_buttons: Control = %ActionChoices
+@onready var moves_grid: MovesGrid = %MovesGrid
+@onready var player_party_grid: PartyGrid = %PlayerPartyGrid
+@onready var player_stage_party_grid: PartyGrid = %PlayerStagePartyGrid
+@onready var opponent_party_grid: PartyGrid = %OpponentPartyGrid
+@onready var bag_grid: BattleBagGrid = %BagGrid
+@onready var calc_panel: BattleDamageCalcPanel = %CalcPanel
+@onready var battle_drawer_layer: Control = %BattleDrawerLayer
+@onready var bag_drawer: Control = %BagDrawer
+@onready var calc_drawer: Control = %CalcDrawer
+@onready var bag_drawer_close_button: Button = %BagDrawerCloseButton
+@onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
+@onready var context_hint: Label = %ContextHint
+@onready var switch_party_label: Label = %SwitchPartyLabel
+@onready var battle_party_rail: Control = %BattlePartyRail
+@onready var party_rail_state_label: Label = %PartyRailStateLabel
+@onready var mechanics_panel: Control = %MechanicsPanel
+@onready var mega_evolution_button: TextureButton = %MegaEvolutionIcon
 @onready var mechanic_buttons: Array[TextureButton] = [
-	$HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/MegaEvolutionIcon,
-	$HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/Terra,
-	$HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons/ZMove,
+	%MegaEvolutionIcon,
+	%Terra,
+	%ZMove,
 ]
 
 # Battle Log
-@onready var battle_log_panel: BattleLogPanel = $BattleLogPanel
-@onready var mini_battle_feed: MiniBattleFeed = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/MiniBattleFeed
-@onready var battle_log_toggle_button: Button = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleLogButton
+@onready var battle_log_panel: BattleLogPanel = %BattleLogPanel
+@onready var battle_log_rail: Control = %BattleLogRail
+@onready var mini_battle_feed: MiniBattleFeed = %MiniBattleFeed
+@onready var battle_log_toggle_button: Button = %BattleLogButton
 
 # Battle Sprites
-@onready var player_battle_platform: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattlePlatform
-@onready var enemy_battle_platform: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattlePlatform2
-@onready var battle_arena: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena
-@onready var enemy_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemySpriteBox
-@onready var player_sprite_box = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerSpriteBox
-@onready var capture_ball_animation_player: CaptureBallAnimationPlayer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/CaptureBallAnimationPlayer
-@onready var pokeball_summon_animation_player: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PokeballSummonAnimationPlayer
-@onready var enemy_team_preview_layer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemyTeamPreviewLayer
-@onready var player_team_preview_layer = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerTeamPreviewLayer
-@onready var pokemon_hover_card: Control = $PokemonHoverCard
-@onready var move_hover_card: Control = $MoveHoverCard
-@onready var party_hover_card: Control = $PartyHoverCard
+@onready var battle_frame: Control = %BattleFrame
+@onready var player_battle_platform: Control = %BattlePlatform
+@onready var enemy_battle_platform: Control = %BattlePlatform2
+@onready var battle_stage_viewport: Control = %BattleStageViewport
+@onready var battle_stage: Control = %BattleStage
+@onready var enemy_sprite_box: Control = %EnemySpriteBox
+@onready var player_sprite_box: Control = %PlayerSpriteBox
+@onready var capture_ball_animation_player: CaptureBallAnimationPlayer = %CaptureBallAnimationPlayer
+@onready var pokeball_summon_animation_player: Control = %PokeballSummonAnimationPlayer
+@onready var enemy_team_preview_layer: Node2D = %EnemyTeamPreviewLayer
+@onready var player_team_preview_layer: Node2D = %PlayerTeamPreviewLayer
+@onready var pokemon_hover_card: Control = %PokemonHoverCard
+@onready var move_hover_card: Control = %MoveHoverCard
+@onready var party_hover_card: Control = %PartyHoverCard
 
 # Pokemon HUD
-@onready var player_hud_panel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/PlayerHudPanel
-@onready var enemy_hud_panel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/EnemyHudPanel
+@onready var player_hud_panel: Control = %PlayerHudPanel
+@onready var enemy_hud_panel: Control = %EnemyHudPanel
 
 # Turn Nodes
-@onready var battle_status_panel: BattleStatusPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleStatusPanel
-@onready var vs_player_1_label: Label = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/VSPanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Player1") as Label
-@onready var vs_player_2_label: Label = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/VSPanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Player2") as Label
-@onready var player_side_effects_panel: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/SideFieldEffectsPanel") as Control
-@onready var enemy_side_effects_panel: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/SideFieldEffectsPanel2") as Control
-@onready var battle_background: TextureRect = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground") as TextureRect
-@onready var weather_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GPUParticles2D") as GPUParticles2D
-@onready var weather_tint: ColorRect = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherTint") as ColorRect
-@onready var terrain_tint: ColorRect = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/TerrainTint") as ColorRect
-@onready var sun_rays: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays") as Control
-@onready var sun_sparkles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunSparkles") as GPUParticles2D
-@onready var desolate_land_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer") as Control
-@onready var primordial_sea_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer") as Control
-@onready var delta_stream_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer") as Control
-@onready var delta_stream_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamParticles") as GPUParticles2D
-@onready var sandstorm_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormParticles") as GPUParticles2D
-@onready var sandstorm_swirls: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls") as Control
-@onready var snow_particles: GPUParticles2D = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SnowParticles") as GPUParticles2D
-@onready var grassy_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer") as Control
-@onready var misty_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer") as Control
-@onready var psychic_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer") as Control
-@onready var electric_terrain_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer") as Control
-@onready var trick_room_layer: Control = get_node_or_null("HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer") as Control
+@onready var battle_status_panel: BattleStatusPanel = %BattleStatusPanel
+@onready var vs_panel_container: Control = %VSPanelContainer
+@onready var vs_player_1_label: Label = vs_panel_container.get_node_or_null("MarginContainer/VBoxContainer/HBoxContainer/Player1") as Label
+@onready var vs_player_2_label: Label = vs_panel_container.get_node_or_null("MarginContainer/VBoxContainer/HBoxContainer/Player2") as Label
+@onready var player_side_effects_panel: Control = %SideFieldEffectsPanel
+@onready var enemy_side_effects_panel: Control = %SideFieldEffectsPanel2
+@onready var battle_background: TextureRect = %BattleBackground
+@onready var weather_particles: GPUParticles2D = %GPUParticles2D
+@onready var weather_tint: ColorRect = %WeatherTint
+@onready var terrain_tint: ColorRect = %TerrainTint
+@onready var sun_rays: Control = %SunRays
+@onready var sun_sparkles: GPUParticles2D = %SunSparkles
+@onready var desolate_land_layer: Control = %DesolateLandLayer
+@onready var primordial_sea_layer: Control = %PrimordialSeaLayer
+@onready var delta_stream_layer: Control = %DeltaStreamLayer
+@onready var delta_stream_particles: GPUParticles2D = %DeltaStreamParticles
+@onready var sandstorm_particles: GPUParticles2D = %SandstormParticles
+@onready var sandstorm_swirls: Control = %SandstormSwirls
+@onready var snow_particles: GPUParticles2D = %SnowParticles
+@onready var grassy_terrain_layer: Control = %GrassyTerrainLayer
+@onready var misty_terrain_layer: Control = %MistyTerrainLayer
+@onready var psychic_terrain_layer: Control = %PsychicTerrainLayer
+@onready var electric_terrain_layer: Control = %ElectricTerrainLayer
+@onready var trick_room_layer: Control = %TrickRoomLayer
 
-@onready var field_timers_panel: FieldTimersPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/FieldTimers
-@onready var current_action_panel: CurrentActionPanel = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel
-@onready var forfeit_confirm_dialog: Control = $HBoxContainer/BattleFrame/MarginContainer/BattleArena/ForfeitConfirmDialog
+@onready var field_timers_panel: FieldTimersPanel = %FieldTimers
+@onready var current_action_panel: CurrentActionPanel = %CurrentActionPanel
+@onready var forfeit_confirm_dialog: Control = %ForfeitConfirmDialog
 
 # HTTP Request
 @onready var battle_request: HTTPRequest = $BattleRequest
@@ -214,14 +233,39 @@ var active_enemy_pokemon: Pokemon
 ## Verbindt de UI-signals en zet de battle UI in de beginstand.
 func _ready() -> void:
 	_load_damage_calc_saved_assumptions()
+	# GUI hit-testing follows sibling order even when a Control draws at a higher
+	# z-index. Keep drawers last so stage controls cannot intercept their clicks.
+	battle_drawer_layer.move_to_front()
 	_setup_battle_focus_surfaces()
-	action_buttons.action_selected.connect(_on_action_selected)
+	# The action buttons are declared before the instanced log in the scene file;
+	# keep the log visually above the compact Bag/Run row.
+	if battle_log_panel.get_parent() == action_buttons.get_parent():
+		battle_log_panel.get_parent().move_child(battle_log_panel, 0)
+	if not action_buttons.action_selected.is_connected(_on_action_selected):
+		action_buttons.action_selected.connect(_on_action_selected)
+	if not battle_mode_button.pressed.is_connected(_on_battle_mode_button_pressed):
+		battle_mode_button.pressed.connect(_on_battle_mode_button_pressed)
+	if not calc_mode_button.pressed.is_connected(_on_calc_mode_button_pressed):
+		calc_mode_button.pressed.connect(_on_calc_mode_button_pressed)
+	if not calc_log_button.pressed.is_connected(_on_calc_mode_button_pressed):
+		calc_log_button.pressed.connect(_on_calc_mode_button_pressed)
+	if not bag_drawer_close_button.pressed.is_connected(_on_bag_drawer_close_pressed):
+		bag_drawer_close_button.pressed.connect(_on_bag_drawer_close_pressed)
+	if not calc_drawer_close_button.pressed.is_connected(_on_calc_drawer_close_pressed):
+		calc_drawer_close_button.pressed.connect(_on_calc_drawer_close_pressed)
+	if not moves_grid.move_selected.is_connected(_on_moves_grid_move_selected):
+		moves_grid.move_selected.connect(_on_moves_grid_move_selected)
+	if not player_party_grid.party_selected.is_connected(_on_party_grid_party_selected):
+		player_party_grid.party_selected.connect(_on_party_grid_party_selected)
+	if not player_party_grid.party_changed.is_connected(player_stage_party_grid.set_party):
+		player_party_grid.party_changed.connect(player_stage_party_grid.set_party)
+	player_stage_party_grid.set_selection_enabled(false)
+	opponent_party_grid.set_selection_enabled(false)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
 	hover_state.setup(pokemon_info_request, pokemon_stats_request)
 	pokemon_hover_service.debug_enabled = DEBUG_BATTLE_MOVE_EVENTS
 	setup_flow.setup(event_text_formatter)
 	_connect_pokemon_hover_signals()
-	_connect_hud_team_hover_signals()
 	_connect_move_hover_signals()
 	_connect_party_hover_signals()
 	_connect_forfeit_confirm_dialog_signals()
@@ -307,36 +351,25 @@ func _focus_battle_ui_layer() -> void:
 
 func _setup_battle_focus_surfaces() -> void:
 	_create_battle_scene_focus_surface()
-	var focus_surface_paths: Array[NodePath] = [
-		^"HBoxContainer/BattleFrame",
-		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena",
-		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground",
-		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel",
-		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel/MarginContainer",
-		^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/CurrentActionPanel/MarginContainer/CurrentActionLabel",
-		^"HBoxContainer/ActionSidePanel",
-		^"HBoxContainer/ActionSidePanel/MarginContainer",
-		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer",
-		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow",
-		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer",
-		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel",
-		^"HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel",
-		^"BattleLogPanel",
-		^"BattleLogPanel/MarginContainer",
-		^"BattleLogPanel/MarginContainer/VBoxContainer",
-		^"BattleLogPanel/MarginContainer/VBoxContainer/BattleLogTitle",
-		^"BattleLogPanel/MarginContainer/VBoxContainer/BattleLogText",
+	var focus_surfaces: Array[Control] = [
+		battle_frame,
+		battle_stage,
+		battle_background,
+		current_action_panel,
+		action_side_panel,
+		battle_party_rail,
+		calc_panel,
+		mechanics_panel,
+		battle_log_panel,
 	]
-	for surface_path: NodePath in focus_surface_paths:
-		_register_battle_focus_surface(get_node_or_null(surface_path) as Control)
+	for surface: Control in focus_surfaces:
+		_register_battle_focus_surface(surface)
 
 func _create_battle_scene_focus_surface() -> void:
-	var battle_arena: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena") as Control
-	var battle_background: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground") as Control
-	if battle_arena == null or battle_background == null:
+	if battle_stage == null or battle_background == null:
 		return
 
-	var existing_surface: Control = battle_arena.get_node_or_null(^"BattleSceneFocusSurface") as Control
+	var existing_surface: Control = battle_stage.get_node_or_null(^"BattleSceneFocusSurface") as Control
 	if existing_surface != null:
 		_register_battle_focus_surface(existing_surface)
 		return
@@ -345,8 +378,8 @@ func _create_battle_scene_focus_surface() -> void:
 	focus_surface.name = "BattleSceneFocusSurface"
 	focus_surface.set_anchors_preset(Control.PRESET_FULL_RECT)
 	focus_surface.mouse_filter = Control.MOUSE_FILTER_STOP
-	battle_arena.add_child(focus_surface)
-	battle_arena.move_child(focus_surface, battle_background.get_index() + 1)
+	battle_stage.add_child(focus_surface)
+	battle_stage.move_child(focus_surface, battle_background.get_index() + 1)
 	_register_battle_focus_surface(focus_surface)
 
 func _register_battle_focus_surface(surface: Control) -> void:
@@ -424,16 +457,6 @@ func _connect_pokemon_hover_signals() -> void:
 	var enemy_sprite_slot: Control = enemy_sprite_box.get_single_sprite_slot()
 	enemy_sprite_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-func _connect_hud_team_hover_signals() -> void:
-	if player_hud_panel.has_signal("team_pokemon_hovered"):
-		player_hud_panel.team_pokemon_hovered.connect(_show_hud_pokemon_hover)
-	if player_hud_panel.has_signal("team_pokemon_unhovered"):
-		player_hud_panel.team_pokemon_unhovered.connect(_hide_hud_pokemon_hover)
-	if enemy_hud_panel.has_signal("team_pokemon_hovered"):
-		enemy_hud_panel.team_pokemon_hovered.connect(_show_hud_pokemon_hover)
-	if enemy_hud_panel.has_signal("team_pokemon_unhovered"):
-		enemy_hud_panel.team_pokemon_unhovered.connect(_hide_hud_pokemon_hover)
-
 func _connect_move_hover_signals() -> void:
 	if moves_grid.has_signal("move_hovered"):
 		moves_grid.move_hovered.connect(_show_move_hover)
@@ -441,10 +464,17 @@ func _connect_move_hover_signals() -> void:
 		moves_grid.move_unhovered.connect(_hide_move_hover)
 
 func _connect_party_hover_signals() -> void:
-	if party_grid.has_signal("pokemon_hovered"):
-		party_grid.pokemon_hovered.connect(_show_party_hover)
-	if party_grid.has_signal("pokemon_unhovered"):
-		party_grid.pokemon_unhovered.connect(_hide_party_hover)
+	if player_party_grid.has_signal("pokemon_hovered"):
+		player_party_grid.pokemon_hovered.connect(_show_party_hover)
+	if player_party_grid.has_signal("pokemon_unhovered"):
+		player_party_grid.pokemon_unhovered.connect(_hide_party_hover)
+	if opponent_party_grid.has_signal("pokemon_hovered"):
+		opponent_party_grid.pokemon_hovered.connect(_show_opponent_party_hover)
+	if opponent_party_grid.has_signal("pokemon_unhovered"):
+		opponent_party_grid.pokemon_unhovered.connect(_hide_hud_pokemon_hover)
+
+func _show_opponent_party_hover(pokemon_data: Dictionary, _slot_rect: Rect2) -> void:
+	_show_hud_pokemon_hover(pokemon_data)
 
 func _connect_forfeit_confirm_dialog_signals() -> void:
 	if forfeit_confirm_dialog.has_signal("confirmed"):
@@ -1312,12 +1342,37 @@ func _setup_mechanic_buttons() -> void:
 	for button in mechanic_buttons:
 		button.disabled = true
 		button.modulate = Color(0.45, 0.45, 0.45, 0.65)
+		button.self_modulate = Color.WHITE
 		button.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
 		button.tooltip_text = "Not implemented yet"
+		if not button.mouse_entered.is_connected(_on_mechanic_button_mouse_entered.bind(button)):
+			button.mouse_entered.connect(_on_mechanic_button_mouse_entered.bind(button))
+		if not button.mouse_exited.is_connected(_on_mechanic_button_mouse_exited.bind(button)):
+			button.mouse_exited.connect(_on_mechanic_button_mouse_exited.bind(button))
 	if mega_evolution_button != null:
 		mega_evolution_button.pressed.connect(_on_mega_evolution_pressed)
 		mega_evolution_button.tooltip_text = "Mega Evolution"
 	_update_mechanic_button_states()
+
+func _on_mechanic_button_mouse_entered(button: TextureButton) -> void:
+	if button == null or button.disabled or not button.visible:
+		return
+	button.create_tween().tween_property(
+		button,
+		"self_modulate",
+		Color(1.35, 1.35, 1.35, 1.0),
+		0.12
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _on_mechanic_button_mouse_exited(button: TextureButton) -> void:
+	if button == null:
+		return
+	button.create_tween().tween_property(
+		button,
+		"self_modulate",
+		Color.WHITE,
+		0.12
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _on_mega_evolution_pressed() -> void:
 	_focus_battle_ui_layer()
@@ -1364,6 +1419,11 @@ func _update_mechanic_button_states() -> void:
 		return
 
 	var can_use_mega := _can_toggle_mega_evolution()
+	mega_evolution_button.visible = can_use_mega
+	mechanics_panel.visible = (
+		current_action_panel_mode == BattleActionsPanelMode.BATTLE
+		and can_use_mega
+	)
 	mega_evolution_button.disabled = not can_use_mega
 	mega_evolution_button.mouse_default_cursor_shape = (
 		Control.CURSOR_POINTING_HAND if can_use_mega else Control.CURSOR_FORBIDDEN
@@ -1417,6 +1477,10 @@ func _input(event: InputEvent) -> void:
 		return
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and _close_visible_battle_drawer():
+		get_viewport().set_input_as_handled()
+		return
+
 	if _is_ui_typing():
 		return
 
@@ -1481,15 +1545,12 @@ func _try_focus_battle_from_background_click(event: InputEvent) -> bool:
 	return true
 
 func _is_point_inside_battle_scene(global_position: Vector2) -> bool:
-	var battle_arena: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena") as Control
-	if battle_arena != null and battle_arena.get_global_rect().has_point(global_position):
+	if battle_stage != null and battle_stage.get_global_rect().has_point(global_position):
 		return true
 
-	var battle_background: Control = get_node_or_null(^"HBoxContainer/BattleFrame/MarginContainer/BattleArena/BattleBackground") as Control
 	if battle_background != null and battle_background.get_global_rect().has_point(global_position):
 		return true
 
-	var battle_frame: Control = get_node_or_null(^"HBoxContainer/BattleFrame") as Control
 	return battle_frame != null and battle_frame.get_global_rect().has_point(global_position)
 
 func _is_point_over_visible_overlay_ui(global_position: Vector2) -> bool:
@@ -1511,6 +1572,33 @@ func _on_calc_mode_button_pressed() -> void:
 	_focus_battle_ui_layer()
 	_set_action_panel_mode(BattleActionsPanelMode.CALC)
 
+func _on_bag_drawer_close_pressed() -> void:
+	_focus_battle_ui_layer()
+	bag_inventory_request_token += 1
+	if battle_finished:
+		current_action_view = ActionView.NONE
+		_sync_action_panel_mode_visibility()
+		return
+	# Close the drawer before restoring the contextual battle view. _show_moves()
+	# may legitimately redirect or return early during waits and forced switches;
+	# leaving BAG active in those paths would make the close button appear broken.
+	current_action_view = ActionView.MOVES
+	_sync_action_panel_mode_visibility()
+	_show_moves()
+
+func _on_calc_drawer_close_pressed() -> void:
+	_focus_battle_ui_layer()
+	_set_action_panel_mode(BattleActionsPanelMode.BATTLE)
+
+func _close_visible_battle_drawer() -> bool:
+	if calc_drawer.visible:
+		_on_calc_drawer_close_pressed()
+		return true
+	if bag_drawer.visible:
+		_on_bag_drawer_close_pressed()
+		return true
+	return false
+
 func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 	var previous_mode := current_action_panel_mode
 	current_action_panel_mode = mode
@@ -1524,37 +1612,86 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 
 func _sync_action_panel_mode_visibility() -> void:
 	var is_calc_mode := current_action_panel_mode == BattleActionsPanelMode.CALC
+	var is_bag_view := current_action_view == ActionView.BAG
+	if is_calc_mode or is_bag_view:
+		battle_drawer_layer.move_to_front()
 	battle_mode_button.button_pressed = not is_calc_mode
 	calc_mode_button.button_pressed = is_calc_mode
+	calc_log_button.button_pressed = is_calc_mode
 	calc_panel.visible = is_calc_mode
+	calc_drawer.visible = is_calc_mode
+	switch_party_label.visible = not is_calc_mode
+	bag_grid.visible = not is_calc_mode and is_bag_view
+	bag_drawer.visible = not is_calc_mode and is_bag_view
 	action_buttons.visible = not is_calc_mode
-	mechanics_panel.visible = not is_calc_mode
+	mechanics_panel.visible = not is_calc_mode and mega_evolution_button.visible
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 
 	if is_calc_mode:
 		moves_grid.visible = false
-		party_grid.visible = false
-		bag_grid.visible = false
+		context_hint.visible = true
+		context_hint.text = "Damage Calculator opened"
 		_hide_party_hover()
 		_hide_move_hover()
+		_sync_party_rail_interaction()
 		return
 
 	match current_action_view:
 		ActionView.MOVES:
 			moves_grid.visible = true
-			party_grid.visible = false
-			bag_grid.visible = false
+			context_hint.visible = false
 		ActionView.PARTY:
 			moves_grid.visible = false
-			party_grid.visible = true
-			bag_grid.visible = false
+			context_hint.visible = false
 		ActionView.BAG:
 			moves_grid.visible = false
-			party_grid.visible = false
-			bag_grid.visible = true
+			context_hint.visible = true
+			context_hint.text = "Bag opened"
 		_:
 			moves_grid.visible = false
-			party_grid.visible = false
-			bag_grid.visible = false
+			context_hint.visible = true
+			context_hint.text = "Choose an action"
+
+	_sync_party_rail_interaction()
+
+func _sync_party_rail_interaction() -> void:
+	if player_party_grid == null:
+		return
+
+	var was_selectable := player_party_grid.is_selection_enabled()
+	var party_selection_active := _is_party_rail_selection_allowed()
+	player_party_grid.set_selection_enabled(party_selection_active)
+	opponent_party_grid.set_selection_enabled(false)
+
+	if party_selection_active:
+		var explicit_party_selection := current_action_view == ActionView.PARTY
+		party_rail_state_label.text = "Select a Pokemon" if explicit_party_selection else "Select to switch"
+		party_rail_state_label.add_theme_color_override("font_color", Color(0.38431373, 0.84313726, 1.0, 1.0))
+		if explicit_party_selection and not was_selectable:
+			player_party_grid.call_deferred("focus_first_selectable")
+	elif battle_finished:
+		party_rail_state_label.text = "Battle complete"
+		party_rail_state_label.remove_theme_color_override("font_color")
+	elif battle_input_locked:
+		party_rail_state_label.text = "Waiting..."
+		party_rail_state_label.remove_theme_color_override("font_color")
+	else:
+		party_rail_state_label.text = "Party status"
+		party_rail_state_label.remove_theme_color_override("font_color")
+
+func _is_party_rail_selection_allowed() -> bool:
+	var explicit_party_selection := current_action_view == ActionView.PARTY
+	var normal_turn_direct_switch := (
+		battle_actions_ready
+		and current_action_view != ActionView.BAG
+	)
+	return PartyGrid.should_allow_selection(
+		current_action_panel_mode == BattleActionsPanelMode.BATTLE,
+		explicit_party_selection or normal_turn_direct_switch,
+		battle_input_locked,
+		battle_finished
+	)
 
 func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
@@ -1940,18 +2077,22 @@ func _on_battle_log_toggle_pressed() -> void:
 
 ## Zet de battle log bij battle start op de sessiekeuze, of anders op basis van viewport-breedte.
 func _setup_battle_log_initial_visibility() -> void:
-	_set_battle_log_open(_get_requested_battle_log_open())
+	var should_open := (
+		remembered_battle_log_open == 1
+		if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET
+		else _should_open_battle_log_by_default()
+	)
+	_set_battle_log_open(should_open)
 
 ## Geeft de door speler of responsive default gewenste log-state terug.
 func _get_requested_battle_log_open() -> bool:
 	if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET:
 		return remembered_battle_log_open == 1
-
-	return _should_open_battle_log_by_default()
+	return battle_log_rail.visible
 
 ## Bepaalt alleen de eerste default voor deze client-sessie.
 func _should_open_battle_log_by_default() -> bool:
-	return get_viewport_rect().size.x >= BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH
+	return _can_show_full_battle_log()
 
 ## Bepaalt of de grote battle log op dit scherm mag worden getoond.
 func _can_show_full_battle_log() -> bool:
@@ -1959,18 +2100,17 @@ func _can_show_full_battle_log() -> bool:
 
 ## Past de log-state toe zonder de sessiekeuze te overschrijven.
 func _set_battle_log_open(open: bool) -> void:
-	battle_log_panel.visible = open and _can_show_full_battle_log()
+	battle_log_rail.visible = open
+	custom_minimum_size = BATTLE_WINDOW_OPEN_SIZE if open else BATTLE_WINDOW_COLLAPSED_SIZE
 
 ## Zet de tekst van de battle log toggle op basis van de open/dicht state.
 func _update_battle_log_toggle_button() -> void:
-	if battle_log_panel.is_open():
-		battle_log_toggle_button.text = ">"
-		if mini_battle_feed != null:
-			mini_battle_feed.set_feed_enabled(false)
-	else:
-		battle_log_toggle_button.text = "<"
-		if mini_battle_feed != null:
-			mini_battle_feed.set_feed_enabled(true)
+	var is_open := battle_log_rail.visible
+	battle_log_toggle_button.visible = true
+	battle_log_toggle_button.text = "‹" if is_open else "›"
+	battle_log_toggle_button.tooltip_text = "Collapse Battle Log" if is_open else "Open Battle Log"
+	if mini_battle_feed != null:
+		mini_battle_feed.set_feed_enabled(false)
 
 ## Verbergt alle action views en reset de geselecteerde action state.
 func _reset_action_choices() -> void:
@@ -2041,7 +2181,8 @@ func _show_moves() -> void:
 	_update_move_slots()
 	current_action_view = ActionView.MOVES
 	moves_grid.visible = true
-	party_grid.visible = false
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	_hide_party_hover()
 	action_buttons.set_selected_action("fight")
 	_show_current_action_prompt()
@@ -2064,18 +2205,20 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 		action_buttons.set_all_actions_disabled(is_locked)
 	if moves_grid.has_method("set_input_disabled"):
 		moves_grid.set_input_disabled(is_locked)
-	if party_grid.has_method("set_input_disabled"):
-		party_grid.set_input_disabled(is_locked)
+	if player_party_grid.has_method("set_input_disabled"):
+		player_party_grid.set_input_disabled(is_locked)
 	if bag_grid.has_method("set_input_disabled"):
 		bag_grid.set_input_disabled(is_locked)
 	if not is_locked:
 		_refresh_bag_action_disabled()
 		if team_preview_lead_selection_active:
 			_restore_team_preview_lead_selection_ui()
+	_sync_party_rail_interaction()
 	_update_mechanic_button_states()
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
 	battle_actions_ready = is_ready
+	_sync_party_rail_interaction()
 	_update_mechanic_button_states()
 	if battle_actions_ready:
 		_process_queued_battle_action()
@@ -2135,7 +2278,8 @@ func _show_party(force_switch := false) -> void:
 	current_action_view = ActionView.PARTY
 	_update_party_slots()
 	moves_grid.visible = false
-	party_grid.visible = true
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	action_buttons.set_selected_action("party")
 	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
@@ -2144,12 +2288,14 @@ func _restore_team_preview_lead_selection_ui() -> void:
 	current_action_panel.set_message("Choose your Lead")
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
-	party_grid.visible = true
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	action_buttons.set_action_disabled("fight", true)
 	action_buttons.set_action_disabled("party", false)
 	action_buttons.set_action_disabled("bag", true)
 	action_buttons.set_action_disabled("run", true)
 	action_buttons.set_selected_action("party")
+	_sync_action_panel_mode_visibility()
 
 ## Zet de UI in bag-modus.
 func _open_bag() -> void:
@@ -2161,7 +2307,8 @@ func _open_bag() -> void:
 	_clear_mega_evolution_selection()
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
-	party_grid.visible = false
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	bag_grid.visible = true
 	_hide_party_hover()
 	_sync_action_panel_mode_visibility()
@@ -2455,11 +2602,15 @@ func _update_move_slots() -> void:
 
 	moves_grid.set_moves(battle_state.get_available_moves())
 
-## Vult de party slots met de huidige player party.
+## Vult beide vaste partyrails vanuit de huidige battle state.
 func _update_party_slots() -> void:
-	var display_team := _get_display_team_data("p1")
-	_mark_active_party_slot(display_team, "p1")
-	party_grid.set_party(display_team)
+	var player_display_team := _get_display_team_data("p1")
+	var opponent_display_team := _get_display_team_data("p2")
+	_mark_active_party_slot(player_display_team, "p1")
+	_mark_active_party_slot(opponent_display_team, "p2")
+	player_party_grid.set_party(player_display_team)
+	opponent_party_grid.set_party(opponent_display_team)
+	opponent_party_grid.set_selection_enabled(false)
 
 func _mark_active_party_slot(display_team: Array, player_id: String) -> void:
 	var active_slot := _get_active_canonical_party_slot(player_id)
@@ -2491,6 +2642,7 @@ func _finish_battle(result: Dictionary) -> void:
 	_warn_if_pvp_finish_has_pending_render_work(result)
 	_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
+	_sync_party_rail_interaction()
 	pending_mega_species_by_ident.clear()
 	_reset_damage_calc_assumptions()
 	if _is_pvp_battle():
@@ -3381,7 +3533,7 @@ func _safe_int(value: Variant, fallback: int) -> int:
 			return text.to_int()
 	return fallback
 
-## Werkt de player en opponent HUD panels bij vanuit de battle state.
+## Werkt actieve HP-HUDs en de losse partyrail bij vanuit de battle state.
 func _update_hud_panels(include_team_data := true) -> void:
 	_debug_battle_presentation_order("update_hud_panels.begin include_team=%s" % str(include_team_data))
 	_update_active_hud_panel("p1", player_hud_panel)
@@ -3394,15 +3546,18 @@ func _update_hud_panels(include_team_data := true) -> void:
 
 	var player_display_team := _get_display_team_data("p1")
 	var enemy_display_team := _get_display_team_data("p2")
-	_debug_battle_presentation_order("update_hud_panels.set_team_data p1=%s p2=%s" % [
+	_debug_battle_presentation_order("update_party_rails.set_team_data p1=%s p2=%s" % [
 		JSON.stringify(_summarize_team_for_order_debug(player_display_team)),
 		JSON.stringify(_summarize_team_for_order_debug(enemy_display_team)),
 	])
-	_debug_trainer_team_display("hud set_team_data", {
+	_debug_trainer_team_display("party rail set_team_data", {
 		"enemyTeam": _debug_summarize_display_team(enemy_display_team),
 	})
-	player_hud_panel.set_team_data(player_display_team)
-	enemy_hud_panel.set_team_data(enemy_display_team)
+	_mark_active_party_slot(player_display_team, "p1")
+	_mark_active_party_slot(enemy_display_team, "p2")
+	player_party_grid.set_party(player_display_team)
+	opponent_party_grid.set_party(enemy_display_team)
+	opponent_party_grid.set_selection_enabled(false)
 	_sync_status_condition_overlays()
 
 func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
@@ -4459,6 +4614,8 @@ func _clear_pvp_party_hud_display_override() -> void:
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type
+	if action_buttons.has_method("set_action_label"):
+		action_buttons.set_action_label("run", "Run" if battle_type == BattleType.WILD else "Forfeit")
 	_set_battle_actions_ready(false)
 	queued_battle_action.clear()
 	pvp_last_phase = ""
@@ -4475,8 +4632,6 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	presentation_state.reset()
 	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY])
-	player_hud_panel.clear_player_name()
-	enemy_hud_panel.clear_player_name()
 
 func _apply_initial_battle_response(api_response: Dictionary) -> bool:
 	if not _apply_api_response(api_response, false):
@@ -4494,8 +4649,6 @@ func _apply_team_preview_battle_response(api_response: Dictionary) -> bool:
 	_update_battle_status_panels()
 	player_hud_panel.clear_active_pokemon_data()
 	enemy_hud_panel.clear_active_pokemon_data()
-	player_hud_panel.set_team_data(_get_display_team_data("p1"))
-	enemy_hud_panel.set_team_data(_get_display_team_data("p2"))
 	_update_party_slots()
 	_update_vs_panel_names()
 	return true
@@ -4806,8 +4959,8 @@ func _get_summon_target_rect(sprite_box: Control) -> Rect2:
 	return sprite_box.get_global_rect()
 
 func _get_battle_arena_global_rect() -> Rect2:
-	if battle_arena != null and battle_arena.get_global_rect().size != Vector2.ZERO:
-		return battle_arena.get_global_rect()
+	if battle_stage != null and battle_stage.get_global_rect().size != Vector2.ZERO:
+		return battle_stage.get_global_rect()
 	if battle_background != null and battle_background.get_global_rect().size != Vector2.ZERO:
 		return battle_background.get_global_rect()
 	if player_sprite_box != null and player_sprite_box.get_parent() is Control:
@@ -5032,15 +5185,17 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	current_action_panel.set_message("Choose your Lead")
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
-	party_grid.set_party(_get_trainer_lead_selection_party_data())
-	party_grid.visible = true
+	player_party_grid.set_party(_get_trainer_lead_selection_party_data())
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	action_buttons.set_action_disabled("fight", true)
 	action_buttons.set_action_disabled("bag", true)
 	action_buttons.set_action_disabled("run", true)
 	action_buttons.set_selected_action("party")
+	_sync_action_panel_mode_visibility()
 
 	while team_preview_lead_selection_active:
-		var selected_slot: int = int(await party_grid.party_selected)
+		var selected_slot: int = int(await player_party_grid.party_selected)
 		if not _can_choose_trainer_lead_slot(selected_slot):
 			current_action_panel.set_message("Choose another Pokemon!")
 			continue
@@ -5064,8 +5219,11 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 
 		team_preview_lead_selection_active = false
 		_hide_team_preview_layers()
-		party_grid.visible = false
+		player_party_grid.visible = true
+		opponent_party_grid.visible = true
+		current_action_view = ActionView.NONE
 		_set_battle_input_locked(false)
+		_sync_action_panel_mode_visibility()
 		return npc_lead_response
 
 	return {}
@@ -5124,15 +5282,17 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 	current_action_panel.set_message("Choose your Lead")
 	current_action_view = ActionView.PARTY
 	moves_grid.visible = false
-	party_grid.set_party(_get_lead_selection_team_data("p1"))
-	party_grid.visible = true
+	player_party_grid.set_party(_get_lead_selection_team_data("p1"))
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	action_buttons.set_action_disabled("fight", true)
 	action_buttons.set_action_disabled("bag", true)
 	action_buttons.set_action_disabled("run", true)
 	action_buttons.set_selected_action("party")
+	_sync_action_panel_mode_visibility()
 
 	while team_preview_lead_selection_active:
-		var selected_slot: int = int(await party_grid.party_selected)
+		var selected_slot: int = int(await player_party_grid.party_selected)
 		var selected_pokemon_data := _get_party_grid_selected_pokemon_data(selected_slot)
 		var submit_slot := _get_canonical_lead_submit_slot(selected_slot, selected_pokemon_data)
 		if DEBUG_PVP_REALTIME:
@@ -5164,7 +5324,9 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 			current_action_panel.set_message("Waiting for the other player...")
 			current_action_view = ActionView.NONE
 			moves_grid.visible = false
-			party_grid.visible = false
+			player_party_grid.visible = true
+			opponent_party_grid.visible = true
+			_sync_action_panel_mode_visibility()
 			lead_response = await _wait_for_pvp_team_preview_complete(local_player_id)
 			if lead_response.is_empty():
 				_set_battle_input_locked(false)
@@ -5172,8 +5334,11 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 
 		team_preview_lead_selection_active = false
 		_hide_team_preview_layers()
-		party_grid.visible = false
+		player_party_grid.visible = true
+		opponent_party_grid.visible = true
+		current_action_view = ActionView.NONE
 		_set_battle_input_locked(false)
+		_sync_action_panel_mode_visibility()
 		return lead_response
 
 	return {}
@@ -5244,6 +5409,8 @@ func _poll_pvp_room_until_team_preview_complete(local_player_id: String) -> Dict
 func _show_team_preview_layers() -> void:
 	player_sprite_box.visible = false
 	enemy_sprite_box.visible = false
+	player_hud_panel.visible = false
+	enemy_hud_panel.visible = false
 
 	if player_team_preview_layer.has_method("show_team"):
 		player_team_preview_layer.call("show_team", _get_display_team_data("p1"), "back")
@@ -5261,6 +5428,8 @@ func _hide_team_preview_layers() -> void:
 	enemy_team_preview_layer.visible = false
 	player_sprite_box.visible = true
 	enemy_sprite_box.visible = true
+	player_hud_panel.visible = true
+	enemy_hud_panel.visible = true
 
 func _get_lead_selection_team_data(player_id: String) -> Array:
 	var lead_team: Array = []
@@ -6717,13 +6886,15 @@ func _rewind_party_slots_for_events(events: Array) -> void:
 	var player_team: Array = rewind_helper.get_rewound_team_data_for_events("p1", _get_display_team_data("p1"), events)
 	if not player_team.is_empty():
 		_debug_battle_presentation_order("rewind_party_slots.apply p1=%s" % JSON.stringify(_summarize_team_for_order_debug(player_team)))
-		player_hud_panel.set_team_data(player_team)
-		party_grid.set_party(player_team)
+		_mark_active_party_slot(player_team, "p1")
+		player_party_grid.set_party(player_team)
 
 	var enemy_team: Array = rewind_helper.get_rewound_team_data_for_events("p2", _get_display_team_data("p2"), events)
 	if not enemy_team.is_empty():
 		_debug_battle_presentation_order("rewind_party_slots.apply p2=%s" % JSON.stringify(_summarize_team_for_order_debug(enemy_team)))
-		enemy_hud_panel.set_team_data(enemy_team)
+		_mark_active_party_slot(enemy_team, "p2")
+		opponent_party_grid.set_party(enemy_team)
+		opponent_party_grid.set_selection_enabled(false)
 
 func _debug_battle_hp(message: String) -> void:
 	if DEBUG_BATTLE_HP_EVENTS:
@@ -7051,7 +7222,8 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	var submit_slot := _get_canonical_switch_submit_slot(slot, selected_pokemon_data)
 	_set_battle_input_locked(true)
 	var was_force_switch := force_switch_flow.player_needs_force_switch(_get_local_state_player_id())
-	party_grid.visible = false
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	_hide_party_hover()
 
 	var player_response: Dictionary = {}
@@ -7217,7 +7389,8 @@ func _show_pvp_opponent_force_switch_wait() -> void:
 	pvp_idle_wait_recovery_active = true
 	_refresh_force_switch_transition_presentation()
 	moves_grid.visible = false
-	party_grid.visible = false
+	player_party_grid.visible = true
+	opponent_party_grid.visible = true
 	_hide_party_hover()
 	current_action_view = ActionView.NONE
 	current_action_panel.set_message("Waiting for opponent switch...")
@@ -7225,6 +7398,7 @@ func _show_pvp_opponent_force_switch_wait() -> void:
 	action_buttons.set_action_disabled("party", true)
 	action_buttons.set_action_disabled("bag", true)
 	_set_battle_input_locked(true)
+	_sync_action_panel_mode_visibility()
 
 func _refresh_force_switch_transition_presentation() -> void:
 	_trace_pvp_flow("force_switch_transition.refresh", {}, "p1=%s p2=%s" % [
@@ -9850,8 +10024,8 @@ func _can_switch_to_selected_pokemon(visual_slot: int, pokemon_data: Dictionary)
 	return force_switch_flow.can_switch_to_slot(visual_slot, local_state_player_id)
 
 func _get_party_grid_selected_pokemon_data(visual_slot: int) -> Dictionary:
-	if party_grid != null and party_grid.has_method("get_pokemon_data_for_visual_slot"):
-		return party_grid.get_pokemon_data_for_visual_slot(visual_slot)
+	if player_party_grid != null and player_party_grid.has_method("get_pokemon_data_for_visual_slot"):
+		return player_party_grid.get_pokemon_data_for_visual_slot(visual_slot)
 
 	return {}
 

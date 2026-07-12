@@ -33,23 +33,24 @@
 [ext_resource type="Script" uid="uid://dmk2xic0m1mc6" path="res://scripts/battle/battle_ui/bag_grid.gd" id="41_bag"]
 [ext_resource type="Script" uid="uid://bjpq57gr8t0k0" path="res://scripts/battle/animations/capture_ball_animation_player.gd" id="42_capture"]
 [ext_resource type="Script" uid="uid://b4h2vuys3xqnb" path="res://scripts/battle/animations/pokeball_summon_animation_player.gd" id="43_summon"]
+[ext_resource type="Script" path="res://scripts/battle/battle_ui/battle_stage_viewport.gd" id="44_stage"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgdsx"]
 content_margin_left = 8.0
 content_margin_top = 8.0
 content_margin_right = 8.0
 content_margin_bottom = 8.0
-bg_color = Color(0.019607844, 0.043137256, 0.078431375, 1)
+bg_color = Color(0.011764706, 0.02745098, 0.0627451, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.1764706, 0.3372549, 0.5568628, 1)
+border_color = Color(0.12156863, 0.43137255, 0.78039217, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.45)
+shadow_color = Color(0.03137255, 0.2509804, 0.52156866, 0.28)
 shadow_size = 18
 shadow_offset = Vector2(0, 8)
 
@@ -275,27 +276,27 @@ scale_max = 3.2
 color_initial_ramp = SubResource("GradientTexture1D_sandstorm_swirl")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kd6yx"]
-bg_color = Color(0.008, 0.013, 0.024, 0.965)
+bg_color = Color(0.006, 0.014, 0.043, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.78)
+border_color = Color(0.09411765, 0.38431373, 0.7607843, 0.92)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.38)
+shadow_color = Color(0.019607844, 0.18039216, 0.4, 0.3)
 shadow_size = 14
 shadow_offset = Vector2(0, 6)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1kk3"]
-bg_color = Color(0.018, 0.028, 0.052, 0.98)
+bg_color = Color(0.02, 0.055, 0.12, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 0.9)
+border_color = Color(0.38431373, 0.84313726, 1, 0.9)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -311,7 +312,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.1764706, 0.3372549, 0.5568628, 0.92)
+border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.92)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -322,12 +323,12 @@ content_margin_left = 8.0
 content_margin_top = 3.0
 content_margin_right = 8.0
 content_margin_bottom = 3.0
-bg_color = Color(0.84705883, 0.7058824, 0.41568628, 0.96)
+bg_color = Color(0.38431373, 0.84313726, 1, 0.96)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.95686275, 0.94509804, 0.91764706, 0.85)
+border_color = Color(0.7490196, 0.92941177, 1, 0.9)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -338,24 +339,24 @@ content_margin_left = 8.0
 content_margin_top = 3.0
 content_margin_right = 8.0
 content_margin_bottom = 3.0
-bg_color = Color(0.035, 0.052, 0.088, 0.98)
+bg_color = Color(0.03137255, 0.105882354, 0.22, 0.98)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.8784314, 0.7607843, 0.46666667, 0.95)
+border_color = Color(0.38431373, 0.84313726, 1, 0.95)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8h6bs"]
-bg_color = Color(0.016, 0.024, 0.043, 0.96)
+bg_color = Color(0.012, 0.03, 0.075, 0.96)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.78431374, 0.6313726, 0.3529412, 0.7)
+border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.82)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -367,39 +368,39 @@ shadow_offset = Vector2(0, 3)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dsauo"]
 content_margin_top = 9.0
 content_margin_bottom = 7.0
-bg_color = Color(0.005, 0.01, 0.02, 1)
+bg_color = Color(0.02, 0.11, 0.23, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.40784314, 0.6156863, 0.9019608, 0.85)
+border_color = Color(0.38431373, 0.84313726, 1, 0.95)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ilhaa"]
-bg_color = Color(0.05, 0.06, 0.11, 0.98)
+bg_color = Color(0.03, 0.09, 0.18, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.8784314, 0.7607843, 0.46666667, 1)
+border_color = Color(0.38431373, 0.84313726, 1, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-shadow_color = Color(0.40784314, 0.6156863, 0.9019608, 0.18)
+shadow_color = Color(0.38431373, 0.84313726, 1, 0.22)
 shadow_size = 12
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m7fqn"]
-bg_color = Color(0.012, 0.019, 0.035, 0.88)
+bg_color = Color(0.008, 0.022, 0.055, 0.92)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.1764706, 0.3372549, 0.5568628, 0.9)
+border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.9)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -408,16 +409,39 @@ shadow_color = Color(0, 0, 0, 0.25)
 shadow_size = 8
 shadow_offset = Vector2(0, 3)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_shell"]
+bg_color = Color(0.003921569, 0.007843138, 0.03137255, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.05882353, 0.3137255, 0.6862745, 0.96)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.58)
+shadow_size = 24
+shadow_offset = Vector2(0, 10)
+
 [node name="Battle" type="Control" unique_id=423111793]
 texture_filter = 1
-layout_mode = 3
+custom_minimum_size = Vector2(1560, 828)
+layout_mode = 0
+offset_right = 1560.0
+offset_bottom = 828.0
+mouse_filter = 2
+script = ExtResource("1_sgdsx")
+
+[node name="BattleBackdrop" type="Panel" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_sgdsx")
+theme_override_styles/panel = SubResource("StyleBoxFlat_battle_shell")
 
 [node name="BattleRequest" type="HTTPRequest" parent="." unique_id=1293386490]
 
@@ -427,29 +451,225 @@ script = ExtResource("1_sgdsx")
 
 [node name="DamageCalcRequest" type="HTTPRequest" parent="." unique_id=529426193]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]
+[node name="BattleDrawerLayer" type="Control" parent="."]
+unique_name_in_owner = true
+z_index = 90
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -577.5
-offset_top = -455.0
-offset_right = 577.5
-offset_bottom = 195.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 0
 
-[node name="BattleFrame" type="Panel" parent="HBoxContainer" unique_id=153800450]
-custom_minimum_size = Vector2(800, 0)
+[node name="BagDrawer" type="PanelContainer" parent="BattleDrawerLayer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -560.0
+offset_right = 280.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+
+[node name="BagDrawerContent" type="VBoxContainer" parent="BattleDrawerLayer/BagDrawer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="BagDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 4
+
+[node name="HeaderRow" type="HBoxContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "BAG"
+vertical_alignment = 1
+
+[node name="BagDrawerCloseButton" type="Button" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent/BagDrawerHeader/HeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_battle_tab_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_battle_tab_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_battle_tab_hover")
+text = "×"
+
+[node name="CalcDrawer" type="PanelContainer" parent="BattleDrawerLayer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_left = 0.0
+anchor_top = 0.5
+anchor_right = 0.0
+anchor_bottom = 0.5
+offset_left = 340.0
+offset_top = -390.0
+offset_right = 816.0
+offset_bottom = 390.0
+grow_horizontal = 1
+grow_vertical = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+
+[node name="CalcDrawerContent" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="CalcDrawerHeader" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 4
+
+[node name="HeaderRow" type="HBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "DAMAGE CALCULATOR"
+vertical_alignment = 1
+
+[node name="CalcDrawerCloseButton" type="Button" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_battle_tab_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_battle_tab_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_battle_tab_hover")
+text = "×"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1662798329]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="BattleLogRail" type="VBoxContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="CenterColumn" type="VBoxContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="BattlePartyRail" type="PanelContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+
+[node name="PartyRailMargin" type="MarginContainer" parent="HBoxContainer/BattlePartyRail"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="PartyRailContent" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="OpponentPartySection" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="OpponentPartyTitle" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/OpponentPartySection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.36078432, 0.6117647, 1)
+theme_override_font_sizes/font_size = 13
+text = "OPPONENT PARTY"
+horizontal_alignment = 1
+
+[node name="PartyRailDivider" type="ColorRect" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.38431373, 0.84313726, 1, 0.38)
+
+[node name="PlayerPartySection" type="VBoxContainer" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlayerPartyTitle" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/PlayerPartySection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "YOUR PARTY"
+horizontal_alignment = 1
+
+[node name="PartyRailStateLabel" type="Label" parent="HBoxContainer/BattlePartyRail/PartyRailMargin/PartyRailContent/PlayerPartySection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
+theme_override_font_sizes/font_size = 11
+text = "Party status"
+horizontal_alignment = 1
+
+[node name="BattleFrame" type="Panel" parent="HBoxContainer/CenterColumn" unique_id=153800450]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sgdsx")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BattleFrame" unique_id=1372508023]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/BattleFrame" unique_id=1372508023]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -462,14 +682,25 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="BattleArena" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer" unique_id=1414126998]
-custom_minimum_size = Vector2(784, 634)
+[node name="BattleStageViewport" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer"]
+unique_name_in_owner = true
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
+script = ExtResource("44_stage")
 
-[node name="BattleBackground" type="TextureRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1857776522]
+[node name="BattleStage" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport" unique_id=1414126998]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1152, 648)
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 2
+
+[node name="BattleBackground" type="TextureRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1857776522]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -481,7 +712,8 @@ texture = ExtResource("2_sgdsx")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="WeatherTint" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1569297772]
+[node name="WeatherTint" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1569297772]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -494,7 +726,8 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
-[node name="TerrainTint" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=87759034]
+[node name="TerrainTint" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=87759034]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -507,7 +740,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.22, 0.84, 0.16, 0.025)
 
-[node name="WeatherLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1611221281]
+[node name="WeatherLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1611221281]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -519,7 +752,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="GrassyTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=306554720]
+[node name="GrassyTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=306554720]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -529,23 +763,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="EnemyGrassyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=1285121570]
+[node name="EnemyGrassyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=1285121570]
 color = Color(0.28, 1, 0.18, 0.07)
-polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
 
-[node name="PlayerGrassyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=14259470]
+[node name="PlayerGrassyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=14259470]
 color = Color(0.28, 1, 0.18, 0.075)
 polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
 
-[node name="EnemyGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=1517290756]
-position = Vector2(670, 292)
+[node name="EnemyGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=1517290756]
+position = Vector2(1020, 292)
 amount = 150
 lifetime = 1.35
 preprocess = 1.35
 visibility_rect = Rect2(-210, -225, 420, 250)
 process_material = SubResource("ParticleProcessMaterial_grassy_terrain")
 
-[node name="PlayerGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/GrassyTerrainLayer" unique_id=1806907282]
+[node name="PlayerGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=1806907282]
 position = Vector2(305, 548)
 amount = 270
 lifetime = 1.45
@@ -553,7 +787,8 @@ preprocess = 1.45
 visibility_rect = Rect2(-250, -245, 500, 270)
 process_material = SubResource("ParticleProcessMaterial_grassy_terrain")
 
-[node name="MistyTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1583618454]
+[node name="MistyTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1583618454]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -563,23 +798,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="EnemyMistyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=705431344]
+[node name="EnemyMistyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=705431344]
 color = Color(1, 0.58, 0.95, 0.075)
-polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
 
-[node name="PlayerMistyGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=1872648792]
+[node name="PlayerMistyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=1872648792]
 color = Color(1, 0.58, 0.95, 0.08)
 polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
 
-[node name="EnemyMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=1671770084]
-position = Vector2(670, 292)
+[node name="EnemyMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=1671770084]
+position = Vector2(1020, 292)
 amount = 140
 lifetime = 1.5
 preprocess = 1.5
 visibility_rect = Rect2(-210, -225, 420, 250)
 process_material = SubResource("ParticleProcessMaterial_misty_terrain")
 
-[node name="PlayerMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/MistyTerrainLayer" unique_id=1291941903]
+[node name="PlayerMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=1291941903]
 position = Vector2(305, 548)
 amount = 255
 lifetime = 1.6
@@ -587,7 +822,8 @@ preprocess = 1.6
 visibility_rect = Rect2(-250, -245, 500, 270)
 process_material = SubResource("ParticleProcessMaterial_misty_terrain")
 
-[node name="PsychicTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1401285031]
+[node name="PsychicTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1401285031]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -597,23 +833,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="EnemyPsychicGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=441248764]
+[node name="EnemyPsychicGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=441248764]
 color = Color(0.9, 0.25, 1, 0.075)
-polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
 
-[node name="PlayerPsychicGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=1708233847]
+[node name="PlayerPsychicGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=1708233847]
 color = Color(0.9, 0.25, 1, 0.08)
 polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
 
-[node name="EnemyPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=1482305682]
-position = Vector2(670, 292)
+[node name="EnemyPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=1482305682]
+position = Vector2(1020, 292)
 amount = 150
 lifetime = 1.35
 preprocess = 1.35
 visibility_rect = Rect2(-210, -225, 420, 250)
 process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
 
-[node name="PlayerPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PsychicTerrainLayer" unique_id=2133068261]
+[node name="PlayerPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=2133068261]
 position = Vector2(305, 548)
 amount = 270
 lifetime = 1.45
@@ -621,7 +857,8 @@ preprocess = 1.45
 visibility_rect = Rect2(-250, -245, 500, 270)
 process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
 
-[node name="ElectricTerrainLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1282446147]
+[node name="ElectricTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1282446147]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -631,23 +868,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="EnemyElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=2133370389]
+[node name="EnemyElectricGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=2133370389]
 color = Color(1, 0.86, 0.12, 0.075)
-polygon = PackedVector2Array(500, 250, 565, 218, 660, 205, 765, 218, 835, 252, 810, 286, 720, 304, 600, 298, 520, 278)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
 
-[node name="PlayerElectricGlow" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=1509654683]
+[node name="PlayerElectricGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=1509654683]
 color = Color(1, 0.86, 0.12, 0.08)
 polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
 
-[node name="EnemyElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=579223477]
-position = Vector2(670, 292)
+[node name="EnemyElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=579223477]
+position = Vector2(1020, 292)
 amount = 150
 lifetime = 1.35
 preprocess = 1.35
 visibility_rect = Rect2(-210, -225, 420, 250)
 process_material = SubResource("ParticleProcessMaterial_electric_terrain")
 
-[node name="PlayerElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/ElectricTerrainLayer" unique_id=402319053]
+[node name="PlayerElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=402319053]
 position = Vector2(305, 548)
 amount = 270
 lifetime = 1.45
@@ -655,7 +892,8 @@ preprocess = 1.45
 visibility_rect = Rect2(-250, -245, 500, 270)
 process_material = SubResource("ParticleProcessMaterial_electric_terrain")
 
-[node name="TrickRoomLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1043846889]
+[node name="TrickRoomLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1043846889]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -665,7 +903,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TrickRoomOverlay" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1190876912]
+[node name="TrickRoomOverlay" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1190876912]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -675,7 +913,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.2, 0.04, 0.46, 0.085)
 
-[node name="TopWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1079378405]
+[node name="TopWall" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1079378405]
 layout_mode = 0
 offset_left = 84.0
 offset_top = 72.0
@@ -684,7 +922,7 @@ offset_bottom = 126.0
 mouse_filter = 2
 color = Color(0.7, 0.18, 1, 0.085)
 
-[node name="BottomWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=465451865]
+[node name="BottomWall" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=465451865]
 layout_mode = 0
 offset_left = 84.0
 offset_top = 506.0
@@ -693,7 +931,7 @@ offset_bottom = 563.0
 mouse_filter = 2
 color = Color(0.7, 0.18, 1, 0.075)
 
-[node name="LeftWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1460598171]
+[node name="LeftWall" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1460598171]
 layout_mode = 0
 offset_left = 84.0
 offset_top = 126.0
@@ -702,7 +940,7 @@ offset_bottom = 506.0
 mouse_filter = 2
 color = Color(0.28, 0.78, 1, 0.06)
 
-[node name="RightWall" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1332363611]
+[node name="RightWall" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1332363611]
 layout_mode = 0
 offset_left = 818.0
 offset_top = 126.0
@@ -711,7 +949,7 @@ offset_bottom = 506.0
 mouse_filter = 2
 color = Color(0.28, 0.78, 1, 0.06)
 
-[node name="OuterTop" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=624866434]
+[node name="OuterTop" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=624866434]
 layout_mode = 0
 offset_left = 84.0
 offset_top = 72.0
@@ -720,7 +958,7 @@ offset_bottom = 75.0
 mouse_filter = 2
 color = Color(0.85, 0.28, 1, 0.36)
 
-[node name="OuterBottom" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=464754310]
+[node name="OuterBottom" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=464754310]
 layout_mode = 0
 offset_left = 84.0
 offset_top = 560.0
@@ -729,7 +967,7 @@ offset_bottom = 563.0
 mouse_filter = 2
 color = Color(0.85, 0.28, 1, 0.32)
 
-[node name="OuterLeft" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1885787438]
+[node name="OuterLeft" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1885787438]
 layout_mode = 0
 offset_left = 84.0
 offset_top = 72.0
@@ -738,7 +976,7 @@ offset_bottom = 563.0
 mouse_filter = 2
 color = Color(0.85, 0.28, 1, 0.28)
 
-[node name="OuterRight" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1513824411]
+[node name="OuterRight" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1513824411]
 layout_mode = 0
 offset_left = 889.0
 offset_top = 72.0
@@ -747,7 +985,7 @@ offset_bottom = 563.0
 mouse_filter = 2
 color = Color(0.85, 0.28, 1, 0.28)
 
-[node name="InnerTop" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1616701175]
+[node name="InnerTop" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1616701175]
 layout_mode = 0
 offset_left = 158.0
 offset_top = 126.0
@@ -756,7 +994,7 @@ offset_bottom = 128.0
 mouse_filter = 2
 color = Color(0.24, 0.9, 1, 0.22)
 
-[node name="InnerBottom" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1551239806]
+[node name="InnerBottom" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1551239806]
 layout_mode = 0
 offset_left = 158.0
 offset_top = 504.0
@@ -765,7 +1003,7 @@ offset_bottom = 506.0
 mouse_filter = 2
 color = Color(0.24, 0.9, 1, 0.18)
 
-[node name="InnerLeft" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=840283909]
+[node name="InnerLeft" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=840283909]
 layout_mode = 0
 offset_left = 158.0
 offset_top = 126.0
@@ -774,7 +1012,7 @@ offset_bottom = 506.0
 mouse_filter = 2
 color = Color(0.24, 0.9, 1, 0.18)
 
-[node name="InnerRight" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1691735061]
+[node name="InnerRight" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1691735061]
 layout_mode = 0
 offset_left = 816.0
 offset_top = 126.0
@@ -783,7 +1021,7 @@ offset_bottom = 506.0
 mouse_filter = 2
 color = Color(0.24, 0.9, 1, 0.18)
 
-[node name="Block1" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=170954248]
+[node name="Block1" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=170954248]
 layout_mode = 0
 offset_left = 118.0
 offset_top = 116.0
@@ -792,7 +1030,7 @@ offset_bottom = 164.0
 mouse_filter = 2
 color = Color(0.78, 0.22, 1, 0.13)
 
-[node name="Block2" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1964000797]
+[node name="Block2" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1964000797]
 layout_mode = 0
 offset_left = 250.0
 offset_top = 88.0
@@ -801,7 +1039,7 @@ offset_bottom = 132.0
 mouse_filter = 2
 color = Color(0.22, 0.82, 1, 0.1)
 
-[node name="Block3" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=637788640]
+[node name="Block3" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=637788640]
 layout_mode = 0
 offset_left = 444.0
 offset_top = 132.0
@@ -810,7 +1048,7 @@ offset_bottom = 184.0
 mouse_filter = 2
 color = Color(0.78, 0.22, 1, 0.12)
 
-[node name="Block4" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=1415304533]
+[node name="Block4" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=1415304533]
 layout_mode = 0
 offset_left = 708.0
 offset_top = 104.0
@@ -819,7 +1057,7 @@ offset_bottom = 152.0
 mouse_filter = 2
 color = Color(0.22, 0.82, 1, 0.105)
 
-[node name="Block5" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=327872262]
+[node name="Block5" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=327872262]
 layout_mode = 0
 offset_left = 154.0
 offset_top = 360.0
@@ -828,7 +1066,7 @@ offset_bottom = 420.0
 mouse_filter = 2
 color = Color(0.22, 0.82, 1, 0.09)
 
-[node name="Block6" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=2114639049]
+[node name="Block6" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=2114639049]
 layout_mode = 0
 offset_left = 342.0
 offset_top = 292.0
@@ -837,7 +1075,7 @@ offset_bottom = 354.0
 mouse_filter = 2
 color = Color(0.78, 0.22, 1, 0.105)
 
-[node name="Block7" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=420892729]
+[node name="Block7" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=420892729]
 layout_mode = 0
 offset_left = 604.0
 offset_top = 336.0
@@ -846,7 +1084,7 @@ offset_bottom = 398.0
 mouse_filter = 2
 color = Color(0.22, 0.82, 1, 0.09)
 
-[node name="Block8" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/TrickRoomLayer" unique_id=889051205]
+[node name="Block8" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/TrickRoomLayer" unique_id=889051205]
 layout_mode = 0
 offset_left = 774.0
 offset_top = 438.0
@@ -855,7 +1093,8 @@ offset_bottom = 498.0
 mouse_filter = 2
 color = Color(0.78, 0.22, 1, 0.11)
 
-[node name="SunRays" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=773526708]
+[node name="SunRays" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=773526708]
+unique_name_in_owner = true
 visible = false
 clip_contents = true
 layout_mode = 1
@@ -866,27 +1105,28 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Ray1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=10477820]
+[node name="Ray1" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SunRays" unique_id=10477820]
 color = Color(1, 0.93, 0.5, 0.09)
 polygon = PackedVector2Array(90, 0, 155, 0, 0, 465, 0, 330)
 
-[node name="Ray2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=1564584135]
+[node name="Ray2" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SunRays" unique_id=1564584135]
 color = Color(1, 0.86, 0.34, 0.11)
 polygon = PackedVector2Array(260, 0, 340, 0, 175, 650, 45, 650)
 
-[node name="Ray3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=938167579]
+[node name="Ray3" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SunRays" unique_id=938167579]
 color = Color(1, 0.96, 0.66, 0.1)
 polygon = PackedVector2Array(475, 0, 565, 0, 470, 650, 315, 650)
 
-[node name="Ray4" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=1149656651]
+[node name="Ray4" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SunRays" unique_id=1149656651]
 color = Color(1, 0.88, 0.38, 0.1)
 polygon = PackedVector2Array(650, 0, 735, 0, 765, 650, 620, 650)
 
-[node name="Ray5" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SunRays" unique_id=1207213241]
+[node name="Ray5" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SunRays" unique_id=1207213241]
 color = Color(1, 0.93, 0.5, 0.08)
 polygon = PackedVector2Array(850, 0, 915, 0, 975, 390, 975, 545)
 
-[node name="SunSparkles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1906947186]
+[node name="SunSparkles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1906947186]
+unique_name_in_owner = true
 visible = false
 position = Vector2(480, 245)
 amount = 70
@@ -895,7 +1135,8 @@ preprocess = 2.4
 visibility_rect = Rect2(-520, -330, 1120, 720)
 process_material = SubResource("ParticleProcessMaterial_sun_sparkles")
 
-[node name="DesolateLandLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=281789845]
+[node name="DesolateLandLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=281789845]
+unique_name_in_owner = true
 visible = false
 clip_contents = true
 layout_mode = 1
@@ -906,7 +1147,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HeatWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=389534965]
+[node name="HeatWash" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DesolateLandLayer" unique_id=389534965]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -916,15 +1157,15 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.8, 0.18, 0.02, 0.055)
 
-[node name="HorizonHeatBand" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=1593809456]
+[node name="HorizonHeatBand" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DesolateLandLayer" unique_id=1593809456]
 color = Color(1, 0.42, 0.08, 0.11)
 polygon = PackedVector2Array(-90, 238, 1060, 214, 1060, 360, 830, 336, 620, 374, 395, 332, 172, 368, -90, 340)
 
-[node name="LowerHeatBand" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=343116898]
+[node name="LowerHeatBand" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DesolateLandLayer" unique_id=343116898]
 color = Color(1, 0.72, 0.18, 0.09)
 polygon = PackedVector2Array(-115, 398, 1080, 374, 1080, 610, 865, 566, 640, 626, 412, 560, 190, 618, -115, 584)
 
-[node name="GroundHeatHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DesolateLandLayer" unique_id=819385912]
+[node name="GroundHeatHaze" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DesolateLandLayer" unique_id=819385912]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -936,7 +1177,8 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(1, 0.5, 0.08, 0.07)
 
-[node name="PrimordialSeaLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1744772215]
+[node name="PrimordialSeaLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1744772215]
+unique_name_in_owner = true
 visible = false
 clip_contents = true
 layout_mode = 1
@@ -947,7 +1189,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="StormWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=994235800]
+[node name="StormWash" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PrimordialSeaLayer" unique_id=994235800]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -961,19 +1203,19 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.01, 0.05, 0.14, 0.105)
 
-[node name="CloudBand1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=486188534]
+[node name="CloudBand1" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PrimordialSeaLayer" unique_id=486188534]
 color = Color(0.02, 0.07, 0.18, 0.26)
 polygon = PackedVector2Array(-260, -50, 1240, -50, 1240, 190, 930, 146, 730, 188, 535, 148, 350, 192, 155, 152, -260, 210)
 
-[node name="CloudBand2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=2019903279]
+[node name="CloudBand2" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PrimordialSeaLayer" unique_id=2019903279]
 color = Color(0.04, 0.12, 0.26, 0.2)
 polygon = PackedVector2Array(-300, 78, 1260, 54, 1260, 320, 912, 254, 760, 300, 555, 246, 360, 294, 160, 250, -300, 330)
 
-[node name="CloudBand3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=1372524441]
+[node name="CloudBand3" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PrimordialSeaLayer" unique_id=1372524441]
 color = Color(0.02, 0.08, 0.2, 0.15)
 polygon = PackedVector2Array(-290, 230, 1240, 210, 1240, 510, 930, 460, 735, 520, 520, 458, 330, 506, 118, 452, -290, 535)
 
-[node name="LowerStormHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=1963074563]
+[node name="LowerStormHaze" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PrimordialSeaLayer" unique_id=1963074563]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -988,7 +1230,7 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0.01, 0.05, 0.14, 0.075)
 
-[node name="StormCeiling" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/PrimordialSeaLayer" unique_id=1825426780]
+[node name="StormCeiling" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PrimordialSeaLayer" unique_id=1825426780]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -997,7 +1239,8 @@ grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.02, 0.06, 0.16, 0.15)
 
-[node name="DeltaStreamLayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1676778887]
+[node name="DeltaStreamLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1676778887]
+unique_name_in_owner = true
 visible = false
 clip_contents = true
 layout_mode = 1
@@ -1008,7 +1251,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="WindWash" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1567031014]
+[node name="WindWash" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DeltaStreamLayer" unique_id=1567031014]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1022,23 +1265,23 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.32, 0.72, 1, 0.055)
 
-[node name="UpperCloudVeil" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1043432695]
+[node name="UpperCloudVeil" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DeltaStreamLayer" unique_id=1043432695]
 color = Color(0.72, 0.92, 1, 0.135)
 polygon = PackedVector2Array(-240, -28, 1200, -34, 1200, 170, 955, 132, 735, 176, 535, 136, 330, 178, 145, 140, -240, 190)
 
-[node name="JetBand1" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=2050061389]
+[node name="JetBand1" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DeltaStreamLayer" unique_id=2050061389]
 color = Color(0.86, 0.98, 1, 0.18)
 polygon = PackedVector2Array(-210, 112, -120, 90, 980, 520, 890, 548)
 
-[node name="JetBand2" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1840194132]
+[node name="JetBand2" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DeltaStreamLayer" unique_id=1840194132]
 color = Color(0.54, 0.86, 1, 0.13)
 polygon = PackedVector2Array(-260, 306, -140, 278, 1030, 92, 910, 126)
 
-[node name="JetBand3" type="Polygon2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1890762535]
+[node name="JetBand3" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DeltaStreamLayer" unique_id=1890762535]
 color = Color(0.9, 1, 1, 0.105)
 polygon = PackedVector2Array(-190, 486, -70, 454, 1035, 338, 920, 372)
 
-[node name="LowerAirHaze" type="ColorRect" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/DeltaStreamLayer" unique_id=1543841111]
+[node name="LowerAirHaze" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/DeltaStreamLayer" unique_id=1543841111]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -1053,7 +1296,8 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0.5, 0.86, 1, 0.045)
 
-[node name="DeltaStreamParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1696554753]
+[node name="DeltaStreamParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1696554753]
+unique_name_in_owner = true
 visible = false
 position = Vector2(390, 250)
 amount = 420
@@ -1062,7 +1306,8 @@ preprocess = 1.85
 visibility_rect = Rect2(-620, -340, 1520, 820)
 process_material = SubResource("ParticleProcessMaterial_delta_stream")
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1668435119]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1668435119]
+unique_name_in_owner = true
 visible = false
 position = Vector2(480, -12)
 amount = 980
@@ -1071,7 +1316,8 @@ preprocess = 2.35
 visibility_rect = Rect2(-680, -80, 1420, 760)
 process_material = SubResource("ParticleProcessMaterial_8eh2s")
 
-[node name="SnowParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1372362631]
+[node name="SnowParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1372362631]
+unique_name_in_owner = true
 visible = false
 position = Vector2(480, -24)
 amount = 430
@@ -1080,7 +1326,8 @@ preprocess = 2.6
 visibility_rect = Rect2(-720, -120, 1500, 820)
 process_material = SubResource("ParticleProcessMaterial_snow")
 
-[node name="SandstormParticles" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=1890257023]
+[node name="SandstormParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1890257023]
+unique_name_in_owner = true
 visible = false
 position = Vector2(555, 245)
 amount = 560
@@ -1089,7 +1336,8 @@ preprocess = 1.4
 visibility_rect = Rect2(-760, -360, 1520, 820)
 process_material = SubResource("ParticleProcessMaterial_sandstorm")
 
-[node name="SandstormSwirls" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer" unique_id=379911399]
+[node name="SandstormSwirls" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=379911399]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -1099,7 +1347,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Swirl1" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls" unique_id=1073769643]
+[node name="Swirl1" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SandstormSwirls" unique_id=1073769643]
 position = Vector2(245, 455)
 amount = 95
 lifetime = 1.6
@@ -1107,7 +1355,7 @@ preprocess = 1.6
 visibility_rect = Rect2(-90, -180, 180, 260)
 process_material = SubResource("ParticleProcessMaterial_sandstorm_swirl")
 
-[node name="Swirl2" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls" unique_id=369620609]
+[node name="Swirl2" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SandstormSwirls" unique_id=369620609]
 position = Vector2(505, 315)
 amount = 75
 lifetime = 1.45
@@ -1115,7 +1363,7 @@ preprocess = 1.45
 visibility_rect = Rect2(-90, -180, 180, 260)
 process_material = SubResource("ParticleProcessMaterial_sandstorm_swirl")
 
-[node name="Swirl3" type="GPUParticles2D" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena/WeatherLayer/SandstormSwirls" unique_id=1462631029]
+[node name="Swirl3" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/SandstormSwirls" unique_id=1462631029]
 position = Vector2(760, 405)
 amount = 90
 lifetime = 1.7
@@ -1123,51 +1371,56 @@ preprocess = 1.7
 visibility_rect = Rect2(-90, -180, 180, 260)
 process_material = SubResource("ParticleProcessMaterial_sandstorm_swirl")
 
-[node name="BattlePlatform" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1225323237 instance=ExtResource("3_8eh2s")]
+[node name="BattlePlatform" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1225323237 instance=ExtResource("3_8eh2s")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = -47.5
+offset_left = 42.5
 offset_top = -329.0
-offset_right = 552.5
+offset_right = 642.5
 offset_bottom = -79.0
 grow_vertical = 0
 
-[node name="BattlePlatform2" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=507540366 instance=ExtResource("3_8eh2s")]
+[node name="BattlePlatform2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=507540366 instance=ExtResource("3_8eh2s")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 359.5
+offset_left = 619.5
 offset_top = -538.0
-offset_right = 959.5
+offset_right = 1219.5
 offset_bottom = -288.0
 grow_vertical = 0
 platform_side = 1
 
-[node name="EnemySpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=2063766200 instance=ExtResource("3_kd6yx")]
+[node name="EnemySpriteBox" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=2063766200 instance=ExtResource("3_kd6yx")]
+unique_name_in_owner = true
 layout_mode = 1
-offset_left = -419.5
+offset_left = -509.5
 offset_top = -243.0
-offset_right = 30.5
+offset_right = -59.5
 offset_bottom = 50.0
 
-[node name="PlayerSpriteBox" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=148088549 instance=ExtResource("3_kd6yx")]
+[node name="PlayerSpriteBox" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=148088549 instance=ExtResource("3_kd6yx")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
 anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 0.0
 anchor_bottom = 1.0
-offset_left = -36.5
+offset_left = 53.5
 offset_top = -366.0
-offset_right = 413.5
+offset_right = 503.5
 offset_bottom = -73.5
 grow_horizontal = 1
 grow_vertical = 0
 
-[node name="CaptureBallAnimationPlayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1852018222]
+[node name="CaptureBallAnimationPlayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1852018222]
+unique_name_in_owner = true
 z_index = 60
 layout_mode = 1
 anchors_preset = 15
@@ -1178,7 +1431,8 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("42_capture")
 
-[node name="PokeballSummonAnimationPlayer" type="Control" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=312517651]
+[node name="PokeballSummonAnimationPlayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=312517651]
+unique_name_in_owner = true
 z_index = 61
 layout_mode = 1
 anchors_preset = 15
@@ -1189,44 +1443,97 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("43_summon")
 
-[node name="PlayerHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=997269760 instance=ExtResource("2_01pft")]
+[node name="PlayerHudPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=997269760 instance=ExtResource("2_01pft")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 100.0
+offset_top = 192.0
+offset_right = 412.0
+offset_bottom = 274.0
+
+[node name="EnemyHudPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1632045920 instance=ExtResource("2_01pft")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -322.0
-offset_top = 340.0
-offset_right = -10.0
-offset_bottom = 489.0
+offset_left = -412.0
+offset_top = 48.0
+offset_right = -100.0
+offset_bottom = 130.0
 grow_horizontal = 0
 
-[node name="EnemyHudPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1632045920 instance=ExtResource("2_01pft")]
+[node name="CurrentActionPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1149733481 instance=ExtResource("5_n6gaa")]
+unique_name_in_owner = true
+z_index = 55
+custom_minimum_size = Vector2(630, 56)
 layout_mode = 1
-offset_left = 10.0
-offset_top = 44.0
-offset_right = 322.0
-offset_bottom = 193.0
+anchors_preset = 2
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -68.0
+offset_right = 650.0
+offset_bottom = -12.0
+grow_horizontal = 1
+grow_vertical = 0
 
-[node name="CurrentActionPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1149733481 instance=ExtResource("5_n6gaa")]
+[node name="StagePartyOverlay" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage"]
+unique_name_in_owner = true
+z_index = 50
 layout_mode = 1
-offset_left = -375.0
-offset_top = -60.0
-offset_right = 375.0
-offset_bottom = 0.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="MiniBattleFeed" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1377941626 instance=ExtResource("18_mini")]
+[node name="PlayerStagePartyRail" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 18.0
+offset_top = 242.0
+offset_right = 78.0
+offset_bottom = 242.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+
+[node name="OpponentStagePartyRail" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1074.0
+offset_top = 74.0
+offset_right = 1134.0
+offset_bottom = 74.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
+
+[node name="MiniBattleFeed" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1377941626 instance=ExtResource("18_mini")]
+unique_name_in_owner = true
 layout_mode = 1
 offset_left = 10.0
 offset_top = 205.0
 offset_right = 325.0
 offset_bottom = 297.0
 
-[node name="FieldTimers" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=91068280 instance=ExtResource("6_mvulk")]
+[node name="FieldTimers" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=91068280 instance=ExtResource("6_mvulk")]
+unique_name_in_owner = true
+z_index = 58
 layout_mode = 1
-offset_left = -158.0
-offset_bottom = 40.0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 10.0
+offset_top = 50.0
+offset_right = 10.0
+offset_bottom = 50.0
+grow_horizontal = 1
 
-[node name="BattleStatusPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=790300356 instance=ExtResource("7_mvulk")]
+[node name="BattleStatusPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=790300356 instance=ExtResource("7_mvulk")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 0
 anchor_left = 0.0
@@ -1235,50 +1542,61 @@ offset_left = 10.0
 offset_right = 163.39575
 grow_horizontal = 1
 
-[node name="BattleLogButton" type="Button" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=900280603]
+[node name="BattleLogButton" type="Button" parent="." unique_id=900280603]
+unique_name_in_owner = true
+z_index = 95
 custom_minimum_size = Vector2(36, 36)
-layout_mode = 1
+layout_mode = 0
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 10.0
+offset_left = -44.0
 offset_top = -18.0
-offset_right = 46.0
+offset_right = -8.0
 offset_bottom = 18.0
 grow_vertical = 2
 mouse_default_cursor_shape = 2
-text = "<"
+text = "‹"
 
-[node name="VSPanelContainer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1039531441 instance=ExtResource("9_pyfix")]
+[node name="VSPanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1039531441 instance=ExtResource("9_pyfix")]
+unique_name_in_owner = true
 layout_mode = 1
 offset_left = -95.5
 offset_right = 95.5
 offset_bottom = 42.0
 
-[node name="SideFieldEffectsPanel" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=1939591853 instance=ExtResource("10_8eh2s")]
+[node name="SideFieldEffectsPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1939591853 instance=ExtResource("10_8eh2s")]
+unique_name_in_owner = true
+z_index = 58
 layout_mode = 1
+offset_left = 86.0
 offset_top = 350.0
-offset_right = 72.0
+offset_right = 186.0
 offset_bottom = 373.0
 
-[node name="SideFieldEffectsPanel2" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=35532174 instance=ExtResource("10_8eh2s")]
+[node name="SideFieldEffectsPanel2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=35532174 instance=ExtResource("10_8eh2s")]
+unique_name_in_owner = true
+z_index = 58
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -72.0
+offset_left = -186.0
 offset_top = 160.0
-offset_right = 0.0
+offset_right = -86.0
 offset_bottom = 183.0
 grow_horizontal = 0
 
-[node name="EnemyTeamPreviewLayer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=53601656 instance=ExtResource("11_e48mi")]
-position = Vector2(632.5, 226)
+[node name="EnemyTeamPreviewLayer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=53601656 instance=ExtResource("11_e48mi")]
+unique_name_in_owner = true
+position = Vector2(850, 226)
 
-[node name="PlayerTeamPreviewLayer" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=585843366 instance=ExtResource("11_e48mi")]
-position = Vector2(198.5, 440)
+[node name="PlayerTeamPreviewLayer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=585843366 instance=ExtResource("11_e48mi")]
+unique_name_in_owner = true
+position = Vector2(300, 440)
 
-[node name="ForfeitConfirmDialog" parent="HBoxContainer/BattleFrame/MarginContainer/BattleArena" unique_id=433129307 instance=ExtResource("12_ueicy")]
+[node name="ForfeitConfirmDialog" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=433129307 instance=ExtResource("12_ueicy")]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 offset_left = -140.0
@@ -1286,14 +1604,15 @@ offset_top = -57.5
 offset_right = 140.0
 offset_bottom = 57.5
 
-[node name="ActionSidePanel" type="Panel" parent="HBoxContainer" unique_id=910737858]
-custom_minimum_size = Vector2(355, 0)
+[node name="ActionsDock" type="Panel" parent="HBoxContainer/CenterColumn" unique_id=910737858]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/ActionSidePanel" unique_id=2005950253]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/ActionsDock" unique_id=2005950253]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1308,32 +1627,58 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer" unique_id=166375469]
+[node name="DockContent" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer" unique_id=166375469]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
-[node name="HeaderRow" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=754794856]
+[node name="PrimaryActionsSection" type="CenterContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ContextSection" type="MarginContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(820, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="UtilitySection" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="HeaderRow" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection" unique_id=754794856]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="Label" type="Label" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow" unique_id=1030108819]
+[node name="Label" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/HeaderRow" unique_id=1030108819]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 18
 theme_override_styles/focus = SubResource("StyleBoxFlat_t1kk3")
 text = "BATTLE ACTIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ModeTabs" type="HBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow" unique_id=935732861]
+[node name="ModeTabs" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/HeaderRow" unique_id=935732861]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="BattleModeButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs" unique_id=2124453404]
+[node name="BattleModeButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/HeaderRow/ModeTabs" unique_id=2124453404]
+unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1352,7 +1697,8 @@ toggle_mode = true
 button_pressed = true
 text = "Battle"
 
-[node name="CalcModeButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs" unique_id=2031729883]
+[node name="CalcModeButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/HeaderRow/ModeTabs" unique_id=2031729883]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1370,71 +1716,191 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_battle_tab_hover")
 toggle_mode = true
 text = "Calc"
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=212919001]
+[node name="BottomActionsRow" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection"]
+unique_name_in_owner = true
 layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer" unique_id=505560000]
-custom_minimum_size = Vector2(0, 300)
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
 alignment = 1
 
-[node name="MovesGrid" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1964814571]
+[node name="ContextPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection" unique_id=212919001]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ContextStack" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel" unique_id=505560000]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ContextHint" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
+theme_override_font_sizes/font_size = 18
+text = "Choose an action"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MovesGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1964814571]
+unique_name_in_owner = true
+z_index = 56
 visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 10
-theme_override_constants/h_separation = 9
-theme_override_constants/v_separation = 10
-columns = 2
-script = ExtResource("8_w40i5")
-
-[node name="MoveSlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="MoveSlot2" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=165847671 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="MoveSlot3" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=1470595780 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="MoveSlot4" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
-layout_mode = 2
-
-[node name="PartyGrid" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1230434731]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 10
+custom_minimum_size = Vector2(472, 164)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -492.0
+offset_top = -184.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 2
+script = ExtResource("8_w40i5")
+
+[node name="MoveSlot" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1844128199 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=165847671 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1470595780 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="MoveSlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
+layout_mode = 2
+
+[node name="SwitchPartyLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "SWITCH"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerPartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack" unique_id=1230434731]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 6
+columns = 6
 script = ExtResource("10_fe4ja")
 
-[node name="PartySlot" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1512490557 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+compact_mode = true
 
-[node name="PartySlot2" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=873381061 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot2" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=873381061 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+compact_mode = true
 
-[node name="PartySlot3" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1808623893 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot3" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1808623893 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+compact_mode = true
 
-[node name="PartySlot4" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=290563093 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot4" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=290563093 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+compact_mode = true
 
-[node name="PartySlot5" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1562476737 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot5" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1562476737 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+compact_mode = true
 
-[node name="PartySlot6" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
+[node name="PartySlot6" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/PlayerPartyGrid" unique_id=1231047832 instance=ExtResource("3_fh7rg")]
 layout_mode = 2
+compact_mode = true
 
-[node name="BagGrid" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1779267922]
+[node name="OpponentPartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/v_separation = 3
+columns = 1
+script = ExtResource("10_fe4ja")
+
+[node name="OpponentPartySlot1" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot5" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="OpponentPartySlot6" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail/OpponentPartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/v_separation = 3
+columns = 1
+script = ExtResource("10_fe4ja")
+
+[node name="PlayerStagePartySlot1" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot2" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot3" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot5" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="PlayerStagePartySlot6" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail/PlayerStagePartyGrid" instance=ExtResource("3_fh7rg")]
+layout_mode = 2
+icon_only_mode = true
+
+[node name="BagGrid" type="MarginContainer" parent="BattleDrawerLayer/BagDrawer/BagDrawerContent" unique_id=1779267922]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("41_bag")
 
-[node name="CalcPanel" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=125224096]
+[node name="CalcPanel" type="MarginContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent" unique_id=125224096]
+unique_name_in_owner = true
 visible = false
 clip_contents = true
 layout_mode = 2
@@ -1446,25 +1912,45 @@ theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 8
 script = ExtResource("40_calc")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/CalcPanel" unique_id=500652918]
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcPanel" unique_id=500652918]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="ActionChoices" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=274714711]
+[node name="ActionChoices" type="PanelContainer" parent="HBoxContainer/BattleLogRail" unique_id=274714711]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("8_t1kk3")
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" unique_id=1503994669]
+[node name="GridContainer" type="HBoxContainer" parent="HBoxContainer/BattleLogRail/ActionChoices" unique_id=1503994669]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
-columns = 2
+theme_override_constants/separation = 8
 
-[node name="FightButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=1528178288]
+[node name="TopActionRow" type="HBoxContainer" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CalcLogButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer/TopActionRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+toggle_mode = true
+text = "Damage Calc"
+
+[node name="FightButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer/TopActionRow" unique_id=1528178288]
+unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(140, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1476,19 +1962,24 @@ text = "Fight"
 icon = ExtResource("4_pll4o")
 expand_icon = true
 
-[node name="BagButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=1766657251]
-custom_minimum_size = Vector2(140, 75)
+[node name="BagButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/BottomActionsRow" unique_id=1766657251]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 72)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 mouse_default_cursor_shape = 2
+tooltip_text = "Bag"
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = "Bag"
+text = ""
 icon = ExtResource("5_py4tk")
 expand_icon = true
 
-[node name="PartyButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=564010331]
+[node name="PartyButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer" unique_id=564010331]
+unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(140, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1500,36 +1991,47 @@ text = "Party"
 icon = ExtResource("6_agsc7")
 expand_icon = true
 
-[node name="RunButton" type="Button" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer" unique_id=1623517119]
-custom_minimum_size = Vector2(140, 75)
+[node name="RunButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/BottomActionsRow" unique_id=1623517119]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 72)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 mouse_default_cursor_shape = 2
+tooltip_text = "Run"
 theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = "Run"
+text = ""
 icon = ExtResource("7_pyfix")
 expand_icon = true
 
-[node name="MechanicsPanel" type="PanelContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer" unique_id=57273673]
-layout_mode = 2
-size_flags_vertical = 8
+[node name="MechanicsPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=57273673]
+unique_name_in_owner = true
+z_index = 57
+custom_minimum_size = Vector2(118, 78)
+layout_mode = 0
+offset_left = 526.0
+offset_top = 482.0
+offset_right = 644.0
+offset_bottom = 560.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_m7fqn")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel" unique_id=562375867]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel" unique_id=562375867]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 8
 
-[node name="MechanicsButtons" type="HBoxContainer" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer" unique_id=870879990]
+[node name="MechanicsButtons" type="HBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer" unique_id=870879990]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 25
 alignment = 1
 
-[node name="MegaEvolutionIcon" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1460977519]
+[node name="MegaEvolutionIcon" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1460977519]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 55)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -1539,7 +2041,9 @@ texture_hover = ExtResource("37_afkbo")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Terra" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=843445618]
+[node name="Terra" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=843445618]
+unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(80, 55)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -1549,7 +2053,9 @@ texture_hover = ExtResource("39_dsauo")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="ZMove" type="TextureButton" parent="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1001476454]
+[node name="ZMove" type="TextureButton" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MechanicsPanel/MarginContainer/MechanicsButtons" unique_id=1001476454]
+unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(60, 55)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -1559,37 +2065,24 @@ texture_hover = ExtResource("38_8h6bs")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="BattleLogPanel" parent="." unique_id=2138858408 instance=ExtResource("17_6ofp8")]
-visible = false
-z_index = 99
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 100.0
-offset_top = -455.0
-offset_right = 385.0
-offset_bottom = 195.0
-grow_vertical = 2
+[node name="BattleLogPanel" parent="HBoxContainer/BattleLogRail" unique_id=2138858408 instance=ExtResource("17_6ofp8")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="PokemonHoverCard" parent="." unique_id=1550796656 instance=ExtResource("21_sgdsx")]
+unique_name_in_owner = true
 z_index = 100
 layout_mode = 0
 
 [node name="MoveHoverCard" parent="." unique_id=969617656 instance=ExtResource("23_156m4")]
+unique_name_in_owner = true
 z_index = 101
 layout_mode = 0
 offset_right = 300.0
 
 [node name="PartyHoverCard" parent="." unique_id=1623525152 instance=ExtResource("28_n5ix6")]
+unique_name_in_owner = true
 z_index = 102
 layout_mode = 0
-
-[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/BattleModeButton" to="." method="_on_battle_mode_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/HeaderRow/ModeTabs/CalcModeButton" to="." method="_on_calc_mode_button_pressed"]
-[connection signal="move_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MovesGrid" to="." method="_on_moves_grid_move_selected"]
-[connection signal="party_selected" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/PartyGrid" to="." method="_on_party_grid_party_selected"]
-[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/FightButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_fight_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/BagButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_bag_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/PartyButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_party_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices/GridContainer/RunButton" to="HBoxContainer/ActionSidePanel/MarginContainer/VBoxContainer/ActionChoices" method="_on_run_button_pressed"]

@@ -1,16 +1,9 @@
 extends PanelContainer
 
-signal team_pokemon_hovered(pokemon_data: Dictionary)
-signal team_pokemon_unhovered
-
 @onready var active_info_rows: Array[Node] = [
 	$MarginContainer/VBoxContainer/PokemonInfoHud,
 	$MarginContainer/VBoxContainer/PokemonInfoHud2,
 ]
-@onready var player_name_label: Label = get_node_or_null("MarginContainer/VBoxContainer/HBoxContainer2/PlayerNameLabel") as Label
-
-@onready var team_panel: HBoxContainer = $MarginContainer/VBoxContainer/HBoxContainer2/PlayerTeamPanel
-@onready var team_slots: Array = team_panel.get_children()
 
 var experience_bar_enabled := false
 
@@ -34,19 +27,9 @@ const GENDER_COLORS := {
 var status_icon_texture_cache: Dictionary = {}
 
 func _ready() -> void:
-	_connect_team_slot_hover_signals()
-	clear_team_slots()
 	for row_index in range(active_info_rows.size()):
 		_clear_active_info_row_data(row_index)
 		_set_active_info_row_visible(row_index, false)
-
-func _connect_team_slot_hover_signals() -> void:
-	for slot_value in team_slots:
-		var slot: Node = slot_value as Node
-		if slot.has_signal("pokemon_hovered"):
-			slot.pokemon_hovered.connect(_on_team_slot_pokemon_hovered)
-		if slot.has_signal("pokemon_unhovered"):
-			slot.pokemon_unhovered.connect(_on_team_slot_pokemon_unhovered)
 
 func set_pokemon_data(
 	species: String,
@@ -257,38 +240,3 @@ func _to_visible_hp_percent(current_hp: int, max_hp: int) -> int:
 		return 0
 		
 	return ceili((float(current_hp) / float(max_hp)) * 100.0)
- 
-func set_team_data(team: Array) -> void:
-	clear_team_slots()
-	
-	for idx in range(min(team.size(), team_slots.size())):
-		var slot: Node = team_slots[idx]
-		if slot.has_method("set_pokemon_data"):
-			slot.set_pokemon_data(team[idx])
-
-func clear_team_slots() -> void:
-	for slot: Node in team_slots:
-		if slot.has_method("set_empty"):
-			slot.set_empty()
-		else:
-			slot.visible = false
-			
-func clear_player_name() -> void:
-	if player_name_label == null:
-		return
-
-	player_name_label.text = ""
-	player_name_label.visible = false
-	
-func set_player_name(player_name: String) -> void:
-	if player_name_label == null:
-		return
-
-	player_name_label.text = player_name
-	player_name_label.visible = false
-
-func _on_team_slot_pokemon_hovered(pokemon_data: Dictionary) -> void:
-	team_pokemon_hovered.emit(pokemon_data)
-
-func _on_team_slot_pokemon_unhovered() -> void:
-	team_pokemon_unhovered.emit()

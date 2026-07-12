@@ -2,19 +2,18 @@ extends PanelContainer
 
 signal action_selected(action: String)
 
-const ACTION_ACTIVE_BG := Color("#101b2cf2")
-const ACTION_ACTIVE_BG_HOVER := Color("#142238f6")
-const ACTION_ACTIVE_BORDER := Color("#b99a52")
-const ACTION_ACTIVE_BORDER_SOFT := Color("#5b83a8")
-const ACTION_ACTIVE_TEXT := Color("#ead9a8")
+const ACTION_ACTIVE_BG := Color("#082955f2")
+const ACTION_ACTIVE_BG_HOVER := Color("#0b3970f6")
+const ACTION_ACTIVE_BORDER := Color("#62d7ff")
+const ACTION_ACTIVE_BORDER_SOFT := Color("#2d7dcc")
+const ACTION_ACTIVE_TEXT := Color("#e4f7ff")
 const ACTION_DISABLED_MODULATE := Color(0.52, 0.52, 0.52, 0.72)
 
-@onready var buttons: Array[Button] = [
-	$GridContainer/FightButton,
-	$GridContainer/PartyButton,
-	$GridContainer/RunButton,
-	$GridContainer/BagButton
-]
+@onready var fight_button: Button = %FightButton
+@onready var bag_button: Button = %BagButton
+@onready var party_button: Button = %PartyButton
+@onready var run_button: Button = %RunButton
+@onready var buttons: Array[Button] = [fight_button, party_button, run_button, bag_button]
 
 var disabled_actions := {}
 var all_actions_disabled := false
@@ -22,8 +21,22 @@ var selected_action := ""
 var base_button_styles: Dictionary = {}
 
 func _ready() -> void:
+	_connect_action_buttons()
 	_capture_base_button_styles()
 	_apply_disabled_actions()
+
+func _connect_action_buttons() -> void:
+	var button_handlers: Dictionary = {
+		fight_button: Callable(self, "_on_fight_button_pressed"),
+		bag_button: Callable(self, "_on_bag_button_pressed"),
+		party_button: Callable(self, "_on_party_button_pressed"),
+		run_button: Callable(self, "_on_run_button_pressed"),
+	}
+	for button_value: Variant in button_handlers:
+		var button := button_value as Button
+		var handler: Callable = button_handlers.get(button_value)
+		if button != null and not button.pressed.is_connected(handler):
+			button.pressed.connect(handler)
 
 func _select_button(active_button: Button) -> void:
 	selected_action = _get_action_for_button(active_button)
@@ -31,13 +44,22 @@ func _select_button(active_button: Button) -> void:
 
 func set_selected_action(action: String) -> void:
 	if action == "fight":
-		_select_button($GridContainer/FightButton)
+		_select_button(fight_button)
 	elif action == "bag":
-		_select_button($GridContainer/BagButton)
+		_select_button(bag_button)
 	elif action == "party":
-		_select_button($GridContainer/PartyButton)
+		_select_button(party_button)
 	elif action == "run":
-		_select_button($GridContainer/RunButton)
+		_select_button(run_button)
+
+func set_action_label(action: String, label: String) -> void:
+	var button := _get_action_button(action)
+	if button != null:
+		if action == "bag" or action == "run":
+			button.text = ""
+			button.tooltip_text = label
+		else:
+			button.text = label
 
 func set_action_disabled(action: String, is_disabled: bool) -> void:
 	disabled_actions[action] = is_disabled
@@ -143,24 +165,24 @@ func _make_selected_button_style(background_color: Color, border_color: Color) -
 
 func _get_action_button(action: String) -> Button:
 	if action == "fight":
-		return $GridContainer/FightButton
+		return fight_button
 	if action == "bag":
-		return $GridContainer/BagButton
+		return bag_button
 	if action == "party":
-		return $GridContainer/PartyButton
+		return party_button
 	if action == "run":
-		return $GridContainer/RunButton
+		return run_button
 
 	return null
 
 func _get_action_for_button(button: Button) -> String:
-	if button == $GridContainer/FightButton:
+	if button == fight_button:
 		return "fight"
-	if button == $GridContainer/BagButton:
+	if button == bag_button:
 		return "bag"
-	if button == $GridContainer/PartyButton:
+	if button == party_button:
 		return "party"
-	if button == $GridContainer/RunButton:
+	if button == run_button:
 		return "run"
 
 	return ""

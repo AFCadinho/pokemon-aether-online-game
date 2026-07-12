@@ -67,6 +67,7 @@ func reset_timers() -> void:
 	visible = false
 	effect_timer_cache.clear()
 	_clear_effect_rows()
+	_fit_to_content.call_deferred()
 	
 func set_condition(text: String, icon: Texture2D = null) -> void:
 	_clear_effect_rows()
@@ -74,6 +75,7 @@ func set_condition(text: String, icon: Texture2D = null) -> void:
 		_add_effect_row(text, icon)
 
 	visible = text != ""
+	_fit_to_content.call_deferred()
 
 func set_effects(effects: Array, current_turn := 0) -> void:
 	_clear_effect_rows()
@@ -105,6 +107,10 @@ func set_effects(effects: Array, current_turn := 0) -> void:
 
 	_prune_timer_cache(active_effect_keys)
 	visible = has_effects
+	_fit_to_content.call_deferred()
+
+func _fit_to_content() -> void:
+	reset_size()
 
 func _should_show_field_timer_effect(effect_data: Dictionary) -> bool:
 	var effect_type: String = str(effect_data.get("effectType", ""))

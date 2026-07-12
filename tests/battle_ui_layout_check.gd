@@ -1,0 +1,344 @@
+extends SceneTree
+
+const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
+const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
+const BATTLE_HUD_SCENE_PATH := "res://scenes/battle/pokemon_hud_panel.tscn"
+const WORLD_SCENE_PATH := "res://scenes/world.tscn"
+const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
+const PartyGridScript := preload("res://scripts/battle/battle_ui/party_grid.gd")
+const StageViewportScript := preload("res://scripts/battle/battle_ui/battle_stage_viewport.gd")
+const STAGE_DESIGN_SIZE := Vector2(1152.0, 648.0)
+
+var failed := false
+
+
+func _init() -> void:
+	_check_scene_structure()
+	_check_world_battle_host()
+	_check_hp_hud_structure()
+	await _check_stage_scaling()
+	await _check_party_rail_interaction()
+	_check_battle_selection_policy_contract()
+	quit(1 if failed else 0)
+
+
+func _check_scene_structure() -> void:
+	var scene_source := FileAccess.get_file_as_string(BATTLE_SCENE_PATH)
+	_check_contains(scene_source, "[node name=\"BattleLogRail\"", "left battle-log rail exists")
+	_check_contains(scene_source, "[node name=\"CenterColumn\"", "central battle column exists")
+	_check_contains(scene_source, "[node name=\"StagePartyOverlay\"", "party teams share a battlefield overlay")
+	_check_contains(scene_source, "[node name=\"BattleStageViewport\"", "scaled stage viewport exists")
+	_check_contains(scene_source, "[node name=\"BattleStage\"", "fixed-design battle stage exists")
+	_check_contains(scene_source, "[node name=\"ActionsDock\"", "horizontal actions dock exists")
+	_check_contains(scene_source, "[node name=\"BattleBackdrop\" type=\"Panel\"", "bounded battle window uses a styled shell")
+	_check_contains(scene_source, "[sub_resource type=\"StyleBoxFlat\" id=\"StyleBoxFlat_battle_shell\"]", "battle shell style is defined")
+	_check_contains(scene_source, "theme_override_colors/font_color = Color(1, 0.36078432, 0.6117647, 1)", "opponent party uses the pink side accent")
+	_check_contains(scene_source, "theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)", "player party and controls use the normal UI cyan accent")
+	_check_contains(scene_source, "[node name=\"BattleLogPanel\" parent=\"HBoxContainer/BattleLogRail\"", "battle log is inside left rail")
+	_check_contains(scene_source, "[node name=\"OpponentPartyGrid\" type=\"GridContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/OpponentStagePartyRail", "opponent party grid is beside its battlefield sprite")
+	_check_contains(scene_source, "[node name=\"PlayerStagePartyGrid\" type=\"GridContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay/PlayerStagePartyRail", "visual player party grid is beside its battlefield sprite")
+	_check_contains(scene_source, "columns = 1", "party grid is a single vertical column")
+	_check_true(scene_source.count("icon_only_mode = true") == 12, "both six-slot party groups use the icon-only stage variant")
+	_check_contains(scene_source, "[node name=\"PlayerPartyGrid\" type=\"GridContainer\" parent=\"HBoxContainer/CenterColumn/ActionsDock", "interactive player party row lives below the moves")
+	_check_contains(scene_source, "[node name=\"SwitchPartyLabel\" type=\"Label\" parent=\"HBoxContainer/CenterColumn/ActionsDock", "switch row has a compact section title")
+	_check_contains(scene_source, "text = \"SWITCH\"", "switch section title is explicit")
+	_check_contains(scene_source, "columns = 6", "all six switch slots share one horizontal row")
+	_check_true(scene_source.count("compact_mode = true") == 6, "switch row uses six compact slots with HP bars")
+	_check_contains(scene_source, "[node name=\"CurrentActionPanel\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "message bar is inside the scaled battle stage")
+	_check_contains(scene_source, "offset_top = -68.0", "message bar sits below the player platform")
+	var player_hud_start := scene_source.find("[node name=\"PlayerHudPanel\"")
+	var player_hud_end := scene_source.find("\n\n", player_hud_start)
+	var player_hud_block := scene_source.substr(player_hud_start, player_hud_end - player_hud_start)
+	_check_contains(player_hud_block, "offset_top = 192.0", "player HP HUD sits above the sprite box")
+	_check_contains(player_hud_block, "offset_bottom = 274.0", "player HP HUD clears the sprite box with a small gap")
+	var enemy_hud_start := scene_source.find("[node name=\"EnemyHudPanel\"")
+	var enemy_hud_end := scene_source.find("\n\n", enemy_hud_start)
+	var enemy_hud_block := scene_source.substr(enemy_hud_start, enemy_hud_end - enemy_hud_start)
+	_check_contains(enemy_hud_block, "offset_top = 48.0", "enemy HP HUD sits high above the enemy sprite box")
+	_check_contains(enemy_hud_block, "offset_bottom = 130.0", "enemy HP HUD keeps its pill dimensions after moving up")
+	_check_contains(scene_source, "[node name=\"ActionsDock\" type=\"Panel\" parent=\"HBoxContainer/CenterColumn\"", "actions dock belongs to center column")
+	_check_contains(scene_source, "[node name=\"PartyButton\" type=\"Button\"", "legacy Party action remains available for internal flow compatibility")
+	var party_button_start := scene_source.find("[node name=\"PartyButton\"")
+	var party_button_end := scene_source.find("\n\n", party_button_start)
+	var party_button_block := scene_source.substr(party_button_start, party_button_end - party_button_start)
+	_check_contains(party_button_block, "visible = false", "Party action button is hidden from the dock")
+	_check_contains(scene_source, "[node name=\"ActionChoices\" type=\"PanelContainer\" parent=\"HBoxContainer/BattleLogRail\"", "Bag and Run live below the battle log")
+	_check_contains(scene_source, "[node name=\"MovesGrid\" type=\"GridContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "moves live inside the scaled battlefield")
+	_check_contains(scene_source, "columns = 2", "moves use a two-by-two battlefield grid")
+	_check_contains(scene_source, "[node name=\"BagGrid\" type=\"MarginContainer\" parent=\"BattleDrawerLayer/BagDrawer/BagDrawerContent\"", "Bag uses separate drawer content")
+	_check_contains(scene_source, "[node name=\"CalcPanel\" type=\"MarginContainer\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent\"", "Calc uses separate drawer content")
+	var calc_drawer_start := scene_source.find("[node name=\"CalcDrawer\"")
+	var calc_drawer_end := scene_source.find("\n\n", calc_drawer_start)
+	var calc_drawer_block := scene_source.substr(calc_drawer_start, calc_drawer_end - calc_drawer_start)
+	_check_contains(calc_drawer_block, "anchor_left = 0.0", "Calc drawer anchors to the left")
+	_check_contains(calc_drawer_block, "offset_left = 340.0", "Calc drawer starts after the battle log over the player field")
+	_check_contains(calc_drawer_block, "offset_right = 816.0", "Calc drawer keeps the opponent battlefield side accessible")
+	_check_contains(scene_source, "[node name=\"BagDrawerCloseButton\" type=\"Button\"", "Bag drawer has a close button")
+	_check_contains(scene_source, "[node name=\"CalcDrawerCloseButton\" type=\"Button\"", "Calc drawer has a close button")
+	var battle_script_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var bag_close_start := battle_script_source.find("func _on_bag_drawer_close_pressed()")
+	var bag_close_end := battle_script_source.find("\nfunc ", bag_close_start + 1)
+	var bag_close_block := battle_script_source.substr(bag_close_start, bag_close_end - bag_close_start)
+	_check_contains(bag_close_block, "current_action_view = ActionView.MOVES", "Bag close leaves BAG state unconditionally")
+	_check_contains(bag_close_block, "_sync_action_panel_mode_visibility()", "Bag close hides the drawer before contextual flow resumes")
+	_check_contains(scene_source, "[node name=\"MechanicsPanel\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "mechanics live beside the battlefield moves")
+	_check_contains(scene_source, "[node name=\"CalcLogButton\" type=\"Button\" parent=\"HBoxContainer/BattleLogRail/ActionChoices", "Damage Calc lives below the battle log")
+	_check_contains(scene_source, "[node name=\"BagButton\" type=\"Button\" parent=\"HBoxContainer/CenterColumn/ActionsDock", "Bag uses the freed bottom utility area")
+	_check_contains(scene_source, "[node name=\"RunButton\" type=\"Button\" parent=\"HBoxContainer/CenterColumn/ActionsDock", "Run uses the freed bottom utility area")
+	for effects_panel_name: String in ["SideFieldEffectsPanel", "SideFieldEffectsPanel2"]:
+		var effects_start := scene_source.find("[node name=\"%s\"" % effects_panel_name)
+		var effects_end := scene_source.find("\n\n", effects_start)
+		var effects_block := scene_source.substr(effects_start, effects_end - effects_start)
+		_check_contains(effects_block, "z_index = 58", "%s renders above informational party icons" % effects_panel_name)
+	_check_contains(scene_source, "offset_left = 86.0", "player field indicators sit inside the player icon rail")
+	_check_contains(scene_source, "offset_right = -86.0", "opponent field indicators sit inside the opponent icon rail")
+	var field_timers_start := scene_source.find("[node name=\"FieldTimers\"")
+	var field_timers_end := scene_source.find("\n\n", field_timers_start)
+	var field_timers_block := scene_source.substr(field_timers_start, field_timers_end - field_timers_start)
+	_check_contains(field_timers_block, "anchor_left = 0.0", "global field conditions anchor to the battlefield left")
+	_check_contains(field_timers_block, "offset_top = 50.0", "global field conditions stack below the turn indicator")
+	_check_contains(field_timers_block, "offset_right = 10.0", "global field conditions derive width from their content")
+	_check_contains(field_timers_block, "offset_bottom = 50.0", "global field conditions derive height from their content")
+	var effects_script_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/side_field_effects_panel.gd")
+	_check_contains(effects_script_source, "const EFFECT_SHORT_NAMES", "field effects define compact screen abbreviations")
+	_check_contains(effects_script_source, "label_node.visible = label_node.text != \"\"", "hazard icons retain compact readable abbreviations")
+	_check_contains(effects_script_source, "\"stealthrock\": \"SR\"", "Stealth Rock uses a compact SR label")
+	_check_contains(effects_script_source, "row.tooltip_text = full_effect_name", "compact indicators retain their full name as a tooltip")
+	var party_slot_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/party_slot.gd")
+	_check_contains(party_slot_source, "visible = not icon_only_mode", "visual party rails hide empty slots instead of reserving space")
+	_check_contains(party_slot_source, "ICON_FAINTED_MODULATE", "fainted battlefield icons use a strong dark treatment")
+	_check_contains(party_slot_source, "icon_status_badge.text = \"FNT\"", "fainted battlefield icons carry an FNT badge")
+	_check_contains(party_slot_source, "\"fnt\": return Color(\"#c93652\")", "FNT badge remains high-contrast over a darkened sprite")
+	_check_contains(party_slot_source, "func _get_compact_status_text", "battlefield icons map status conditions to compact badges")
+	var party_slot_scene_source := FileAccess.get_file_as_string("res://scenes/battle/party_slot.tscn")
+	_check_contains(party_slot_scene_source, "[node name=\"IconStatusBadge\" type=\"Label\"", "party slots contain an overlaid icon condition badge")
+	_check_contains(party_slot_scene_source, "z_index = 5", "icon condition badge renders above the darkened Pokemon sprite")
+	var field_timers_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/field_timers.gd")
+	_check_contains(field_timers_source, "func _fit_to_content()", "global field condition container refits after content changes")
+
+	var stage_prefix := "parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage"
+	for stage_node_name: String in [
+		"BattleBackground",
+		"BattlePlatform",
+		"BattlePlatform2",
+		"PlayerSpriteBox",
+		"EnemySpriteBox",
+		"PlayerHudPanel",
+		"EnemyHudPanel",
+		"CurrentActionPanel",
+		"MovesGrid",
+		"MechanicsPanel",
+		"WeatherTint",
+		"TerrainTint",
+		"GrassyTerrainLayer",
+		"TrickRoomLayer",
+		"FieldTimers",
+		"SideFieldEffectsPanel",
+		"SideFieldEffectsPanel2",
+		"PlayerTeamPreviewLayer",
+		"EnemyTeamPreviewLayer",
+		"CaptureBallAnimationPlayer",
+		"PokeballSummonAnimationPlayer",
+	]:
+		var node_start := scene_source.find("[node name=\"%s\"" % stage_node_name)
+		var node_end := scene_source.find("\n\n", node_start)
+		var node_block := scene_source.substr(node_start, node_end - node_start) if node_start >= 0 and node_end > node_start else ""
+		_check_true(node_block.contains(stage_prefix), "%s remains in scaled stage" % stage_node_name)
+
+	var battle_log_block_start := scene_source.find("[node name=\"BattleLogPanel\"")
+	var battle_log_block_end := scene_source.find("\n\n", battle_log_block_start)
+	var battle_log_block := scene_source.substr(battle_log_block_start, battle_log_block_end - battle_log_block_start)
+	_check_true(not battle_log_block.contains("visible = false"), "battle log rail can start visible on desktop")
+
+	var battle_root_start := scene_source.find("[node name=\"Battle\"")
+	var battle_root_end := scene_source.find("\n\n", battle_root_start)
+	var battle_root_block := scene_source.substr(battle_root_start, battle_root_end - battle_root_start)
+	_check_contains(battle_root_block, "custom_minimum_size = Vector2(1560, 828)", "battle scene height fits the 16:9 stage without letterboxing")
+	_check_true(not battle_root_block.contains("anchors_preset = 15"), "battle scene root no longer fills the viewport")
+
+func _check_world_battle_host() -> void:
+	var world_scene_source := FileAccess.get_file_as_string(WORLD_SCENE_PATH)
+	var world_script_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
+	_check_contains(world_scene_source, "[node name=\"BattleUILayer\" type=\"CanvasLayer\" parent=\".\"]", "World owns a dedicated battle UI layer")
+	_check_contains(world_scene_source, "[node name=\"BattleUIHost\" type=\"CenterContainer\" parent=\"BattleUILayer\"]", "World centers the bounded battle scene")
+	var host_start := world_scene_source.find("[node name=\"BattleUIHost\"")
+	var host_end := world_scene_source.find("\n\n", host_start)
+	var host_block := world_scene_source.substr(host_start, host_end - host_start)
+	_check_contains(host_block, "mouse_filter = 0", "transparent map margins remain modal during battle")
+	_check_contains(world_script_source, "battle_ui_host.add_child(battle_instance)", "battle scene mounts inside the World battle host")
+	_check_contains(world_script_source, "battle_ui_host.visible = true", "battle host opens for a battle")
+	_check_contains(world_script_source, "battle_ui_host.visible = false", "battle host closes after a battle")
+	_check_true(not world_script_source.contains("CanvasLayer.new()"), "battle startup no longer creates a full-screen layer dynamically")
+
+
+func _check_hp_hud_structure() -> void:
+	var hud_scene_source := FileAccess.get_file_as_string(BATTLE_HUD_SCENE_PATH)
+	_check_true(not hud_scene_source.contains("PlayerTeamPanel"), "HP HUD no longer owns party indicators")
+	_check_true(not hud_scene_source.contains("PokemonSheetSlot"), "HP HUD contains only active Pokemon information")
+	_check_contains(hud_scene_source, "custom_minimum_size = Vector2(312, 82)", "both sides share the compact HUD dimensions")
+	_check_contains(hud_scene_source, "corner_radius_top_left = 36", "HP HUD uses a pill-shaped outer panel")
+	_check_contains(hud_scene_source, "corner_radius_bottom_right = 36", "HP HUD pill is rounded on every side")
+
+
+func _check_stage_scaling() -> void:
+	var viewport := Control.new()
+	viewport.set_script(StageViewportScript)
+	viewport.name = "BattleStageViewport"
+	var stage := Control.new()
+	stage.name = "BattleStage"
+	stage.unique_name_in_owner = true
+	viewport.add_child(stage)
+	stage.owner = viewport
+	root.add_child(viewport)
+	viewport.size = Vector2(800.0, 600.0)
+	await process_frame
+	viewport.call("_update_stage_transform")
+
+	var expected_scale := 800.0 / STAGE_DESIGN_SIZE.x
+	_check_vector_approx(stage.size, STAGE_DESIGN_SIZE, 0.01, "stage keeps fixed 16:9 design size")
+	_check_float_approx(stage.scale.x, stage.scale.y, 0.0001, "stage uses uniform scale")
+	_check_float_approx(stage.scale.x, expected_scale, 0.001, "stage scales to viewport width")
+	_check_float_approx(stage.position.x, 0.0, 0.01, "stage centers horizontally")
+	_check_float_approx(stage.position.y, 75.0, 0.51, "stage letterboxes vertically")
+
+	viewport.size = Vector2(1600.0, 700.0)
+	viewport.call("_update_stage_transform")
+	var wide_scale := 700.0 / STAGE_DESIGN_SIZE.y
+	var wide_rendered_width := STAGE_DESIGN_SIZE.x * wide_scale
+	_check_float_approx(stage.scale.x, wide_scale, 0.001, "stage scales to wide viewport height")
+	_check_float_approx(stage.position.x, (1600.0 - wide_rendered_width) * 0.5, 0.51, "stage letterboxes wide viewport horizontally")
+	_check_float_approx(stage.position.y, 0.0, 0.01, "wide stage stays vertically centered")
+
+	viewport.queue_free()
+	await process_frame
+
+
+func _check_party_rail_interaction() -> void:
+	var party_grid := PartyGridScript.new() as GridContainer
+	for index: int in range(6):
+		var slot := Button.new()
+		slot.name = "PartySlot%s" % (index + 1)
+		slot.disabled = index == 1 or index == 2
+		party_grid.add_child(slot)
+	root.add_child(party_grid)
+	await process_frame
+
+	party_grid.set_selection_enabled(false)
+	_check_true(not party_grid.is_selection_enabled(), "informational party rail is not selectable")
+	_check_true(not party_grid.is_slot_selectable(1), "healthy slot is disabled outside Party mode")
+
+	party_grid.set_selection_enabled(true)
+	_check_true(party_grid.is_selection_enabled(), "Party mode enables rail selection")
+	_check_true(party_grid.is_slot_selectable(1), "healthy reserve becomes selectable")
+	_check_true(not party_grid.is_slot_selectable(2), "active Pokemon remains unselectable")
+	_check_true(not party_grid.is_slot_selectable(3), "fainted Pokemon remains unselectable")
+
+	party_grid.set_input_disabled(true)
+	_check_true(not party_grid.is_selection_enabled(), "battle input lock disables party rail")
+	_check_true(not party_grid.is_slot_selectable(1), "locked party rail blocks reserve selection")
+	party_grid.set_input_disabled(false)
+	_check_true(party_grid.is_slot_selectable(1), "unlock restores eligible reserve selection")
+
+	_check_true(PartyGridScript.should_allow_selection(true, true, false, false), "normal turn direct switching is allowed")
+	_check_true(PartyGridScript.should_allow_selection(true, true, false, false), "team preview Party selection is allowed")
+	_check_true(PartyGridScript.should_allow_selection(true, true, false, false), "forced-switch Party selection is allowed")
+	_check_true(not PartyGridScript.should_allow_selection(true, false, false, false), "move view blocks party selection")
+	_check_true(not PartyGridScript.should_allow_selection(false, true, false, false), "Calc mode blocks party selection")
+	_check_true(not PartyGridScript.should_allow_selection(true, true, true, false), "waiting or submit lock blocks party selection")
+	_check_true(not PartyGridScript.should_allow_selection(true, true, false, true), "battle end blocks party selection")
+
+	var opponent_grid := PartyGridScript.new() as GridContainer
+	for index: int in range(6):
+		var opponent_slot := Button.new()
+		opponent_slot.name = "OpponentPartySlot%s" % (index + 1)
+		opponent_grid.add_child(opponent_slot)
+	root.add_child(opponent_grid)
+	await process_frame
+	opponent_grid.set_selection_enabled(false)
+	_check_true(not opponent_grid.is_selection_enabled(), "opponent party grid remains informational")
+	_check_true(not opponent_grid.is_slot_selectable(1), "opponent party slots cannot submit a selection")
+
+	party_grid.queue_free()
+	opponent_grid.queue_free()
+	await process_frame
+
+
+func _check_battle_selection_policy_contract() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var battle_scene_source := FileAccess.get_file_as_string(BATTLE_SCENE_PATH)
+	_check_contains(source, "PartyGrid.should_allow_selection(", "battle delegates party interaction to tested policy")
+	_check_contains(source, "current_action_view == ActionView.PARTY", "party view drives rail selection")
+	_check_contains(source, "battle_actions_ready", "an open normal turn enables direct rail switching")
+	_check_contains(source, "battle_actions_ready = is_ready\n\t_sync_party_rail_interaction()", "opening or closing a turn immediately refreshes rail selectability")
+	_check_contains(source, "current_action_view != ActionView.BAG", "Bag blocks direct rail switching")
+	_check_contains(source, "current_action_panel_mode == BattleActionsPanelMode.BATTLE", "Calc mode cannot select party")
+	_check_contains(source, "switch_party_label.visible = not is_calc_mode", "switch title hides with the switch controls in Calc mode")
+	_check_true(not source.contains("Select a Pokemon from the party rail"), "switch row does not repeat a redundant party instruction")
+	_check_contains(source, "battle_input_locked", "battle input lock controls party rail")
+	_check_contains(source, "battle_finished", "battle end controls party rail")
+	_check_contains(source, "player_party_grid.visible = true", "battle keeps player party rail visible across states")
+	_check_contains(source, "opponent_party_grid.visible = true", "battle keeps opponent party rail visible across states")
+	_check_contains(source, "player_party_grid.set_party(", "player party data is rendered beside its stage sprite")
+	_check_contains(source, "opponent_party_grid.set_party(", "opponent party data is rendered beside its stage sprite")
+	_check_contains(source, "opponent_party_grid.set_selection_enabled(false)", "opponent party remains informational")
+	_check_contains(source, "player_stage_party_grid.set_selection_enabled(false)", "battlefield player icons remain informational")
+	_check_contains(source, "player_party_grid.party_changed.connect(player_stage_party_grid.set_party)", "interactive party data mirrors to the visual battlefield icons")
+	_check_contains(source, "func _on_bag_drawer_close_pressed()", "Bag close action is implemented")
+	_check_contains(source, "func _on_calc_drawer_close_pressed()", "Calc close action is implemented")
+	_check_contains(source, "battle_drawer_layer.move_to_front()", "drawer layer wins GUI hit-testing over the battle stage")
+	_check_contains(source, "calc_log_button.pressed.connect(_on_calc_mode_button_pressed)", "battle-log Calc button opens the existing calculator flow")
+	_check_contains(source, "func _on_mechanic_button_mouse_entered", "available mechanic icons define a hover highlight")
+	_check_contains(source, "\"self_modulate\"", "mechanic hover does not overwrite mechanic availability colors")
+	var action_choices_source := FileAccess.get_file_as_string("res://scripts/battle/action_choices.gd")
+	_check_contains(action_choices_source, "if action == \"bag\" or action == \"run\"", "icon-only utility actions retain dynamic labels as tooltips")
+	_check_contains(source, "event.is_action_pressed(\"ui_cancel\")", "Escape can close the active battle drawer")
+	_check_contains(source, "battle_log_rail.visible = open", "battle log toggle collapses the complete left rail")
+	_check_contains(source, "BATTLE_WINDOW_COLLAPSED_SIZE := Vector2(1246.0, 828.0)", "collapsed battle window removes rail width instead of stretching the stage")
+	_check_contains(source, "custom_minimum_size = BATTLE_WINDOW_OPEN_SIZE if open else BATTLE_WINDOW_COLLAPSED_SIZE", "battle window follows the rail state")
+	_check_contains(source, "remembered_battle_log_open", "battle log preference is remembered for the client session")
+	_check_contains(source, "BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH", "battle log has a mobile-friendly responsive default")
+	_check_contains(source, "battle_log_toggle_button.visible = true", "battle log toggle remains available in both states")
+	var log_toggle_start := battle_scene_source.find("[node name=\"BattleLogButton\"")
+	var log_toggle_end := battle_scene_source.find("\n\n", log_toggle_start)
+	var log_toggle_block := battle_scene_source.substr(log_toggle_start, log_toggle_end - log_toggle_start)
+	_check_contains(log_toggle_block, "parent=\".\"", "battle log toggle lives outside the battlefield")
+	_check_contains(log_toggle_block, "z_index = 95", "battle log side tab renders above the battle shell")
+	_check_contains(log_toggle_block, "offset_left = -44.0", "battle log toggle sits left of the complete log rail")
+	var preview_start := source.find("func _show_team_preview_layers()")
+	var preview_end := source.find("\nfunc ", preview_start + 1)
+	var preview_block := source.substr(preview_start, preview_end - preview_start)
+	_check_contains(preview_block, "player_team_preview_layer.call(\"show_team\"", "team preview shows the player team in its compact sprite grid")
+	_check_contains(preview_block, "enemy_team_preview_layer.call(\"show_team\"", "team preview shows the opponent team in its compact sprite grid")
+	_check_contains(preview_block, "player_hud_panel.visible = false", "team preview hides the empty player HP pill")
+	_check_contains(preview_block, "enemy_hud_panel.visible = false", "team preview hides the empty opponent HP pill")
+	var preview_layer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/team_preview_layer.gd")
+	_check_contains(preview_layer_source, "Vector2(1.35, 1.35)", "team preview preserves the original grouped sprite scale")
+	var preview_scene_source := FileAccess.get_file_as_string("res://scenes/battle/team_preview_layer.tscn")
+	_check_contains(preview_scene_source, "position = Vector2(-111, -8)", "team preview preserves the original close team grouping")
+	_check_contains(preview_scene_source, "position = Vector2(90, -16)", "team preview keeps the grouped opposing edge")
+	_check_contains(battle_scene_source, "position = Vector2(300, 440)", "player preview group shifts right as one unit")
+	_check_contains(battle_scene_source, "position = Vector2(850, 226)", "opponent preview group shifts left as one unit")
+	_check_contains(source, "player_sprite_box.get_parent()", "move animations use the scaled stage as their parent")
+
+
+func _check_contains(source: String, expected: String, label: String) -> void:
+	_check_true(source.contains(expected), label)
+
+
+func _check_true(condition: bool, label: String) -> void:
+	if condition:
+		return
+	failed = true
+	push_error("FAIL %s" % label)
+
+
+func _check_float_approx(actual: float, expected: float, tolerance: float, label: String) -> void:
+	if absf(actual - expected) <= tolerance:
+		return
+	failed = true
+	push_error("%s expected=%s actual=%s tolerance=%s" % [label, expected, actual, tolerance])
+
+
+func _check_vector_approx(actual: Vector2, expected: Vector2, tolerance: float, label: String) -> void:
+	_check_float_approx(actual.x, expected.x, tolerance, "%s x" % label)
+	_check_float_approx(actual.y, expected.y, tolerance, "%s y" % label)

@@ -4,14 +4,14 @@ class_name BattleLogPanel
 
 @onready var log_text: RichTextLabel = $MarginContainer/VBoxContainer/BattleLogText
 
-const COLOR_TEXT := "#f1ede6"
-const COLOR_MUTED := "#c7bda8"
-const COLOR_TURN := "#ffd875"
+const COLOR_TEXT := "#dfeafa"
+const COLOR_MUTED := "#91a6c8"
+const COLOR_TURN := "#62d7ff"
 const COLOR_FIELD := "#9fd7ff"
-const COLOR_DETAIL := "#d8d0bf"
+const COLOR_DETAIL := "#b8c9e3"
 const COLOR_WARNING := "#ffcf8a"
-const COLOR_DIVIDER := "#8f7544"
-const COLOR_MOVE := "#fff4c2"
+const COLOR_DIVIDER := "#2468b5"
+const COLOR_MOVE := "#c9edff"
 const COLOR_DAMAGE := "#ff8f8f"
 const COLOR_HEAL := "#8ff0a4"
 

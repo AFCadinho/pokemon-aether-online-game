@@ -27,6 +27,20 @@ const EFFECT_NAME_ALIASES := {
 	"stickywebs": "Sticky Web",
 }
 
+const EFFECT_SHORT_NAMES := {
+	"lightscreen": "LS",
+	"reflect": "Ref",
+	"auroraveil": "AV",
+	"tailwind": "TW",
+	"safeguard": "Safe",
+	"mist": "Mist",
+	"stealthrock": "SR",
+	"spikes": "Spk",
+	"toxicspikes": "TSpk",
+	"stickyweb": "Web",
+	"stickywebs": "Web",
+}
+
 func _ready() -> void:
 	clear_effects()
 
@@ -73,12 +87,21 @@ func _add_effect_row(effect_key: String, raw_effect: String, effect_data: Dictio
 		icon_node.visible = false
 
 	var label_node: Label = row.get_node("EffectLabel")
-	label_node.text = _format_effect_name(effect_key, raw_effect)
+	var full_effect_name := _format_effect_name(effect_key, raw_effect)
+	# Hazard artwork already identifies the condition. Text-only effects use a
+	# compact abbreviation so indicator chips remain recognizable without
+	# covering battle sprites.
+	label_node.text = str(EFFECT_SHORT_NAMES.get(effect_key, full_effect_name))
+	label_node.visible = label_node.text != ""
+	row.tooltip_text = full_effect_name
+	icon_node.tooltip_text = full_effect_name
+	label_node.tooltip_text = full_effect_name
 
 	var amount_node: Label = row.get_node("EffectAmount")
 	var amount_text: String = _format_effect_amount(effect_key, effect_data, current_turn)
 	amount_node.text = amount_text
 	amount_node.visible = amount_text != ""
+	amount_node.tooltip_text = full_effect_name
 
 func _format_effect_name(effect_key: String, raw_effect: String) -> String:
 	if EFFECT_NAME_ALIASES.has(effect_key):

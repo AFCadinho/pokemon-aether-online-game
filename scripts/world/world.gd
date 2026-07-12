@@ -22,10 +22,10 @@ const TREE_LAYER_Z_MAX := 4096
 @export var initial_spawn_name := "InitialSpawn"
 
 var is_in_battle := false
-var battle_layer: CanvasLayer
 var battle_instance: Node
 
 @onready var player: CharacterBody2D = $Player
+@onready var battle_ui_host: CenterContainer = %BattleUIHost
 
 var is_loading_map := false
 var position_autosave_elapsed := 0.0
@@ -1399,6 +1399,31 @@ func create_trainer_battle_response(trainer_id: String) -> Dictionary:
 	battle_request.queue_free()
 	return response
 
+
+func _mount_battle_ui() -> bool:
+	if BATTLE_SCENE == null or battle_ui_host == null:
+		return false
+
+	_clear_battle_ui_instance()
+	battle_instance = BATTLE_SCENE.instantiate()
+	battle_ui_host.add_child(battle_instance)
+	battle_ui_host.visible = true
+
+	if battle_instance.has_signal("battle_ended"):
+		battle_instance.battle_ended.connect(_on_battle_ended)
+
+	return true
+
+
+func _clear_battle_ui_instance() -> void:
+	if battle_instance != null and is_instance_valid(battle_instance):
+		if battle_instance.get_parent() != null:
+			battle_instance.get_parent().remove_child(battle_instance)
+		battle_instance.queue_free()
+	battle_instance = null
+	if battle_ui_host != null:
+		battle_ui_host.visible = false
+
 func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	if is_in_battle:
 		return
@@ -1418,24 +1443,11 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
-	battle_layer = CanvasLayer.new()
-	battle_layer.layer = 10
-	add_child(battle_layer)
-	
-	var battle_scene := BATTLE_SCENE
-	if battle_scene == null:
+	if not _mount_battle_ui():
 		push_error("World.start_dev_wild_battle failed: could not load battle scene.")
-		battle_layer.queue_free()
-		battle_layer = null
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
-
-	battle_instance = battle_scene.instantiate()
-	battle_layer.add_child(battle_instance)
-
-	if battle_instance.has_signal("battle_ended"):
-		battle_instance.battle_ended.connect(_on_battle_ended)
 
 	MusicManager.play_wild_battle_music()
 	
@@ -1473,24 +1485,11 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 		return
 	active_wild_pokemon_species = wild_pokemon.species
 
-	battle_layer = CanvasLayer.new()
-	battle_layer.layer = 10
-	add_child(battle_layer)
-
-	var battle_scene := BATTLE_SCENE
-	if battle_scene == null:
+	if not _mount_battle_ui():
 		push_error("World.start_triggered_wild_battle_for_area failed: could not load battle scene.")
-		battle_layer.queue_free()
-		battle_layer = null
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
-
-	battle_instance = battle_scene.instantiate()
-	battle_layer.add_child(battle_instance)
-
-	if battle_instance.has_signal("battle_ended"):
-		battle_instance.battle_ended.connect(_on_battle_ended)
 
 	MusicManager.play_wild_battle_music()
 
@@ -1524,23 +1523,10 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 
-	battle_layer = CanvasLayer.new()
-	battle_layer.layer = 10
-	add_child(battle_layer)
-
-	var battle_scene := BATTLE_SCENE
-	if battle_scene == null:
+	if not _mount_battle_ui():
 		push_error("World.start_trainer_battle failed: could not load battle scene.")
-		battle_layer.queue_free()
-		battle_layer = null
 		_abort_battle_start()
 		return false
-
-	battle_instance = battle_scene.instantiate()
-	battle_layer.add_child(battle_instance)
-
-	if battle_instance.has_signal("battle_ended"):
-		battle_instance.battle_ended.connect(_on_battle_ended)
 
 	MusicManager.play_trainer_battle_music()
 
@@ -1568,23 +1554,10 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_lock_overworld_for_battle()
 
-	battle_layer = CanvasLayer.new()
-	battle_layer.layer = 10
-	add_child(battle_layer)
-
-	var battle_scene := BATTLE_SCENE
-	if battle_scene == null:
+	if not _mount_battle_ui():
 		push_error("World.start_pvp_battle_from_response failed: could not load battle scene.")
-		battle_layer.queue_free()
-		battle_layer = null
 		_abort_battle_start()
 		return false
-
-	battle_instance = battle_scene.instantiate()
-	battle_layer.add_child(battle_instance)
-
-	if battle_instance.has_signal("battle_ended"):
-		battle_instance.battle_ended.connect(_on_battle_ended)
 
 	MusicManager.play_pvp_battle_music()
 	await battle_instance.setup_pvp_battle_from_response(
@@ -1635,11 +1608,7 @@ func end_wild_battle() -> void:
 		var ended_callback := Callable(self, "_on_battle_ended")
 		if battle_instance.is_connected("battle_ended", ended_callback):
 			battle_instance.disconnect("battle_ended", ended_callback)
-	if battle_layer != null:
-		battle_layer.queue_free()
-		
-	battle_layer = null
-	battle_instance = null
+	_clear_battle_ui_instance()
 	is_in_battle = false
 	active_battle_kind = ""
 	active_battle_id = ""
@@ -2085,6 +2054,7 @@ func _unlock_overworld_after_battle() -> void:
 	GameState.unlock_overworld_input()
 
 func _abort_battle_start() -> void:
+	_clear_battle_ui_instance()
 	is_in_battle = false
 	active_battle_kind = ""
 	active_battle_id = ""

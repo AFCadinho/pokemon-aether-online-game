@@ -18,4 +18,19 @@ position = Vector2(304, 350)
 
 [node name="DialogueBox" parent="." unique_id=1029700965 instance=ExtResource("4_k0juu")]
 
+[node name="BattleUILayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 10
+
+[node name="BattleUIHost" type="CenterContainer" parent="BattleUILayer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
 [node name="UIOverlay" parent="." unique_id=2126675853 instance=ExtResource("5_71j4m")]

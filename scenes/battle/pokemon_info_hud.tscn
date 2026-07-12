@@ -3,10 +3,18 @@
 [ext_resource type="Texture2D" uid="uid://b7jncpf4e5h86" path="res://assets/gender/female.png" id="1_trgae"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0kxc"]
-bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
+bg_color = Color(0.07058824, 0.13725491, 0.23529412, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fh7rg"]
 bg_color = Color(0.22352941, 0.9019608, 0.12156863, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ve8bd"]
 bg_color = Color(0.039215688, 0.047058824, 0.0627451, 0.95)
@@ -15,34 +23,36 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.6313726, 0.7294118, 0.84705883, 0.72)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qsh65"]
 bg_color = Color(0.38431373, 0.7490196, 1, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="PokemonInfoHud" type="VBoxContainer" unique_id=523398377]
-theme_override_constants/separation = -11
+theme_override_constants/separation = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=892765479]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1358635535]
 layout_mode = 2
+theme_override_constants/separation = 3
 
 [node name="TopRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1393396218]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 
 [node name="NameContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopRow" unique_id=1598553531]
 layout_mode = 2
@@ -62,6 +72,8 @@ vertical_alignment = 1
 [node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1266734243]
 layout_mode = 2
 size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
+theme_override_font_sizes/font_size = 16
 
 [node name="GenderIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=109394110]
 visible = false
@@ -85,21 +97,27 @@ stretch_mode = 5
 [node name="LevelLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/HBoxContainer" unique_id=1890596494]
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0.6509804, 0.7490196, 0.8862745, 1)
+theme_override_font_sizes/font_size = 13
 text = "Lv. --"
 
 [node name="HPRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1866931360]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 5
 
 [node name="HPTextLabel" type="Label" parent="MarginContainer/VBoxContainer/HPRow" unique_id=1319681010]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 11
 text = "HP"
 
 [node name="HpBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HPRow" unique_id=769804269]
-custom_minimum_size = Vector2(0, 12)
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
 theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
 value = 100.0

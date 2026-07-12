@@ -64,14 +64,22 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 	custom_minimum_size.x = CARD_WIDTH
 	reset_size()
 	var card_size: Vector2 = size
-	var target_position := Vector2(anchor_rect.position.x, anchor_rect.position.y - card_size.y - padding)
+	var target_position: Vector2
+	if anchor_rect.get_center().x > viewport_size.x * 0.65:
+		target_position = Vector2(
+			anchor_rect.position.x - card_size.x - padding,
+			anchor_rect.get_center().y - card_size.y * 0.5
+		)
+	else:
+		target_position = Vector2(anchor_rect.position.x, anchor_rect.position.y - card_size.y - padding)
+		if target_position.y < padding:
+			target_position.y = anchor_rect.end.y + padding
 
-	if target_position.y < padding:
-		target_position.y = anchor_rect.end.y + padding
 	if target_position.x + card_size.x > viewport_size.x - padding:
 		target_position.x = viewport_size.x - card_size.x - padding
 	if target_position.x < padding:
 		target_position.x = padding
+	target_position.y = clampf(target_position.y, padding, maxf(padding, viewport_size.y - card_size.y - padding))
 
 	global_position = target_position
 

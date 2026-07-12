@@ -4,12 +4,12 @@
 [ext_resource type="Script" path="res://scripts/battle/battle_ui/side_field_effects_panel.gd" id="1_vyowf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menk3"]
-bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.8235294)
+bg_color = Color(0.006, 0.025, 0.07, 0.86)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+border_color = Color(0.1764706, 0.5686275, 0.92941177, 0.92)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -44,12 +44,12 @@ stretch_mode = 6
 
 [node name="EffectLabel" type="Label" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=1491164831]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 12
 text = "Spikes"
 
 [node name="EffectAmount" type="Label" parent="MarginContainer/VBoxContainer/FieldEffectRow" unique_id=53707715]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 12
 text = "2x"

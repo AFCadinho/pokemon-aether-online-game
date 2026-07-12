@@ -5,12 +5,12 @@
 [ext_resource type="Script" uid="uid://difx3fgx4t7ww" path="res://scripts/battle/battle_ui/pokemon_hover_card.gd" id="3_t0lal"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coc2k"]
-bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.74509805)
+bg_color = Color(0.006, 0.025, 0.07, 0.95)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+border_color = Color(0.1764706, 0.5686275, 0.92941177, 0.95)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -41,7 +41,7 @@ text = "Garchomp"
 
 [node name="HpLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=905640361]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 text = "HP: 100%"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1341035607]
@@ -69,7 +69,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 text = "Boosts: "
 
 [node name="BoostsLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1993788108]
@@ -86,7 +86,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 text = "Drops: "
 
 [node name="DropsLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer5" unique_id=838798042]
@@ -105,12 +105,12 @@ layout_mode = 2
 
 [node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1950549048]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 text = "Possible abilities: "
 
 [node name="AbilityLabel2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=41440541]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 text = "Sand Veil / Rough Skin"
 
 [node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=915833458]
@@ -161,20 +161,20 @@ layout_mode = 2
 
 [node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1620503498]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 text = "• Swords Dance"
 
 [node name="MoveLabel2" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1036820844]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 text = "• Scale Shot"
 
 [node name="MoveLabel3" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=674428113]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 text = "• Earthquake"
 
 [node name="MoveLabel4" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=578760249]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 text = "• Fire Fang"

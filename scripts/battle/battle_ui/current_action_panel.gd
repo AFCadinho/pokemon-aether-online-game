@@ -2,9 +2,9 @@ extends Panel
 
 class_name CurrentActionPanel
 
-const MAX_FONT_SIZE := 42
-const MEDIUM_FONT_SIZE := 34
-const SMALL_FONT_SIZE := 28
+const MAX_FONT_SIZE := 24
+const MEDIUM_FONT_SIZE := 21
+const SMALL_FONT_SIZE := 18
 const MEDIUM_TEXT_LENGTH := 24
 const SMALL_TEXT_LENGTH := 34
 

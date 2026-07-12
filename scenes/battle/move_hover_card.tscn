@@ -5,7 +5,16 @@
 [ext_resource type="Script" uid="uid://bjaktpp5s0npe" path="res://scripts/battle/battle_ui/move_hover_card.gd" id="3_0qubl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qo38n"]
-bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.74509805)
+bg_color = Color(0.006, 0.025, 0.07, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1764706, 0.5686275, 0.92941177, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 shadow_color = Color(0, 0, 0, 0.39215687)
 shadow_size = 4
 
@@ -56,12 +65,12 @@ layout_mode = 2
 
 [node name="PowerLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow" unique_id=1735035573]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 text = "Base Power:"
 
 [node name="PowerValueLabel" type="Label" parent="MarginContainer/VBoxContainer/BasePowerRow" unique_id=1180221303]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 text = "90"
 
 [node name="BasePowerRow2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=945434555]
@@ -82,7 +91,7 @@ layout_mode = 2
 [node name="DescriptionLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=2055747726]
 custom_minimum_size = Vector2(290, 10)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72156864, 0.69803923, 0.6666667, 1)
+theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
 theme_override_font_sizes/font_size = 12
 text = "10% Chance to paralyze the target"
 autowrap_mode = 3

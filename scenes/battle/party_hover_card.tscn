@@ -5,12 +5,12 @@
 [ext_resource type="Texture2D" uid="uid://btouikxymfepk" path="res://assets/sprites/types/ground.png" id="2_euoy7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_euoy7"]
-bg_color = Color(0.09019608, 0.07058824, 0.050980393, 0.9411765)
+bg_color = Color(0.006, 0.025, 0.07, 0.97)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.78431374, 0.60784316, 0.3529412, 1)
+border_color = Color(0.1764706, 0.5686275, 0.92941177, 0.95)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -72,19 +72,19 @@ layout_mode = 2
 
 [node name="HpLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/HpContainer" unique_id=1549592447]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "HP:"
 
 [node name="HpPercentLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/HpContainer" unique_id=1424716853]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 14
 text = "100%"
 
 [node name="HpValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/HpContainer" unique_id=2006246769]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 14
 text = "(12/12)"
 
@@ -97,7 +97,7 @@ layout_mode = 2
 
 [node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer/HPBoxContainer/ItemContainer" unique_id=53441853]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "@"
 
@@ -114,13 +114,13 @@ layout_mode = 2
 
 [node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer" unique_id=2136584497]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Ability:"
 
 [node name="AbilityValueLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer" unique_id=664881057]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_colors/font_color = Color(0.8745098, 0.92156863, 0.9843137, 1)
 theme_override_font_sizes/font_size = 14
 text = "Rough Skin"
 
@@ -133,7 +133,7 @@ layout_mode = 2
 
 [node name="NatureLabel" type="Label" parent="MarginContainer/VBoxContainer/AbilityBoxContainer/NatureContainer" unique_id=53441854]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Nature:"
 
@@ -153,7 +153,7 @@ theme_override_constants/separation = 0
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Atk "
 
@@ -161,7 +161,7 @@ text = "Atk "
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "6"
 
@@ -177,7 +177,7 @@ theme_override_constants/separation = 0
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Def "
 
@@ -185,7 +185,7 @@ text = "Def "
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "6"
 
@@ -201,7 +201,7 @@ theme_override_constants/separation = 2
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "SpA"
 
@@ -209,7 +209,7 @@ text = "SpA"
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "6"
 
@@ -225,7 +225,7 @@ theme_override_constants/separation = 2
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "SpD"
 
@@ -233,7 +233,7 @@ text = "SpD"
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "6"
 
@@ -249,7 +249,7 @@ theme_override_constants/separation = 0
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Spe "
 
@@ -257,7 +257,7 @@ text = "Spe "
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "6"
 
@@ -275,7 +275,7 @@ size_flags_vertical = 4
 [node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1860600940]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "• Swords Dance"
 
@@ -293,7 +293,7 @@ size_flags_vertical = 4
 [node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=87306254]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "• Swords Dance"
 
@@ -311,7 +311,7 @@ size_flags_vertical = 4
 [node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=754662230]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "• Swords Dance"
 
@@ -329,7 +329,7 @@ size_flags_vertical = 4
 [node name="MoveLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=873293342]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.9529412, 0.9137255, 0.8235294, 1)
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "• Swords Dance"
 
