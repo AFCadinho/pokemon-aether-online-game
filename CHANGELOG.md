@@ -18,6 +18,7 @@
 - Fixed PvP Team Preview occasionally waiting twelve seconds after both leads were selected by keeping correlated lead responses on the realtime action path.
 - Fixed automatic lead selection and timeout-forfeit results not reaching both clients consistently, including stale Team Preview screens and missing winner names.
 - Fixed repeated and simultaneous disconnect flows so reconnect state remains visible and battles do not resume until both players are connected.
+- Fixed both PvP clients showing different remaining decision times after reconnect; timers now resume from the same refreshed server deadline.
 
 ## 0.3.4 - 2026-07-12
 

@@ -351,7 +351,9 @@ func _process_packets() -> void:
 			battle_update_received.emit(message)
 			continue
 		if message_type.begins_with("battle.timer_"):
-			if timer_projection.apply_event(message):
+			var timer_applied := _apply_timer_contract_message(message_type, message)
+			if timer_applied:
+				last_battle_event_seq = max(last_battle_event_seq, timer_projection.battle_event_seq)
 				timer_state_changed.emit(timer_projection)
 			continue
 		if message_type == "pvp.opponent_disconnected" or message_type == "pvp.opponent_reconnected" or message_type == "pvp.reconnect_grace_started":
@@ -387,6 +389,15 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 	last_battle_event_seq = max(last_battle_event_seq, timer_projection.battle_event_seq)
 	timer_state_changed.emit(timer_projection)
 	return true
+
+
+func _apply_timer_contract_message(message_type: String, message: Dictionary) -> bool:
+	if message_type == "battle.timer_sync":
+		var sync_payload: Variant = message.get("payload", {})
+		if sync_payload is Dictionary:
+			return timer_projection.apply_snapshot(sync_payload as Dictionary)
+		return false
+	return timer_projection.apply_event(message)
 
 
 static func should_apply_terminal_action_immediately(message: Dictionary, local_player_id: String) -> bool:

@@ -57,6 +57,23 @@ func _init() -> void:
 	_check_equal(service.timer_projection.participant_display("p1", service.timer_projection.monotonic_anchor_ms + 5_000).get("bankRemainingMs"), 75_000, "accepted local choice no longer drains")
 	_check_equal(service.timer_projection.participant_display("p2", service.timer_projection.monotonic_anchor_ms + 5_000).get("state"), "DECIDING", "opponent clock continues while opponent is choosing")
 	_check_equal(service.timer_projection.participant_display("p2", service.timer_projection.monotonic_anchor_ms + 5_000).get("effectiveDecisionRemainingMs"), 75_000, "opponent decision countdown continues independently")
+	service.timer_projection.pause_for_reconnect(service.timer_projection.monotonic_anchor_ms + 5_000)
+	service.timer_projection.resume_after_reconnect(service.timer_projection.monotonic_anchor_ms + 20_000)
+	var reconnect_sync_applied := service._apply_timer_contract_message("battle.timer_sync", {
+		"payload": {
+			"timerContractVersion": 1,
+			"authority": "BATTLE_BANK_V1_SHADOW",
+			"timerRevision": 5,
+			"battleEventSeq": 4,
+			"serverNowMs": 30_000,
+			"participants": {
+				"p1": {"playerId": "p1", "status": "IDLE", "mainBankRemainingMs": 75_000, "mainBankMaximumMs": 90_000},
+				"p2": {"playerId": "p2", "status": "RUNNING", "decisionId": "d2", "decisionGeneration": 1, "decisionKind": "MOVE_SELECTION", "mainBankRemainingMs": 75_000, "mainBankMaximumMs": 90_000, "maxDecisionMs": 90_000, "actionableAtMs": 20_000, "bankChargeStartsAtMs": 20_000, "decisionCapAtMs": 110_000, "bankExhaustionAtMs": 105_000, "hypotheticalDeadlineAtMs": 105_000},
+			},
+		},
+	})
+	_check_equal(reconnect_sync_applied, true, "reconnect timer sync replaces the stale pre-resume snapshot")
+	_check_equal(service.timer_projection.participant_display("p2", service.timer_projection.monotonic_anchor_ms).get("effectiveDecisionRemainingMs"), 75_000, "reconnect resumes from the server-shifted remaining time")
 
 	service._handle_battle_events_message({
 		"type": "pvp.battle_events",
