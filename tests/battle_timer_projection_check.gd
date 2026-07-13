@@ -8,7 +8,7 @@ func _init() -> void:
 		"timerContractVersion": 1, "authority": "BATTLE_BANK_V1_SHADOW",
 		"timerRevision": 2, "aggregateRevision": 1, "battleEventSeq": 10, "serverNowMs": 1000,
 		"participants": {
-			"p1": {"status":"RUNNING","decisionId":"d1","decisionGeneration":1,"mainBankRemainingMs":90000,"mainBankMaximumMs":90000,"actionableAtMs":2000,"bankChargeStartsAtMs":2000,"decisionCapAtMs":22000,"bankExhaustionAtMs":92000,"hypotheticalDeadlineAtMs":22000},
+			"p1": {"status":"RUNNING","decisionId":"d1","decisionGeneration":1,"mainBankRemainingMs":90000,"mainBankMaximumMs":90000,"maxDecisionMs":20000,"actionableAtMs":2000,"bankChargeStartsAtMs":2000,"decisionCapAtMs":22000,"bankExhaustionAtMs":92000,"hypotheticalDeadlineAtMs":22000},
 			"p2": {"status":"CHOICE_ACCEPTED","decisionId":"d2","decisionGeneration":1,"mainBankRemainingMs":80000,"mainBankMaximumMs":90000,"actionableAtMs":1000,"bankChargeStartsAtMs":1000,"decisionCapAtMs":21000,"hypotheticalDeadlineAtMs":21000},
 		}
 	}, 5000), "accepts v1 snapshot")
@@ -20,6 +20,7 @@ func _init() -> void:
 	_check_equal(projection.participant_display("p1", 5500).get("bankRemainingMs"), 90000, "no charge before actionable")
 	_check_equal(projection.participant_display("p1", 6000).get("state"), "DECIDING", "active exactly actionable")
 	_check_equal(projection.participant_display("p1", 6500).get("bankRemainingMs"), 89500, "bank drains from charge anchor")
+	_check_equal(projection.participant_display("p1", 6500).get("decisionMaximumMs"), 20000, "decision maximum supports progress presentation")
 	_check_equal(projection.participant_display("p2", 6500).get("state"), "WAITING", "locked participant waits independently")
 	_check(not projection.apply_event({"battleEventSeq":9,"payload":{"timerRevision":1,"playerId":"p1","decisionGeneration":1}}), "stale revision ignored")
 	_check(not projection.apply_event({"battleEventSeq":11,"payload":{"timerRevision":3,"playerId":"p1","decisionGeneration":0}}), "stale generation ignored")

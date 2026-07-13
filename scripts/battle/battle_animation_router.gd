@@ -113,6 +113,7 @@ func _play_animation_config(
 		parent_node.add_child(overlay)
 		_fit_animation_to_parent(animation_node, overlay)
 		_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, overlay, config, animation_options)
+		_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, overlay, config)
 		_apply_effect_target_offset(animation_node, target_ident, config, overlay)
 		overlay.add_child(animation_node)
 		await _wait_for_animation_node(animation_node, overlay)
@@ -124,6 +125,7 @@ func _play_animation_config(
 	animation_node.z_index = 50
 	_fit_animation_to_parent(animation_node, parent_node)
 	_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, parent_node, config, animation_options)
+	_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, parent_node, config)
 	_apply_effect_target_offset(animation_node, target_ident, config, parent_node)
 	parent_node.add_child(animation_node)
 	await _wait_for_animation_node(animation_node, parent_node)
@@ -826,6 +828,56 @@ func _apply_move_projectile_endpoint_anchors(
 		actor_anchor,
 		target_anchor
 	)
+
+
+func _apply_move_sheet_anchor(
+	animation_node: MoveAnimationPlayer,
+	actor_ident: String,
+	target_ident: String,
+	parent_node: Node,
+	config: Dictionary
+) -> void:
+	if animation_node == null or not animation_node.show_sheet_sprites:
+		return
+
+	var anchor_player_id := _resolve_move_sheet_anchor_player_id(config, actor_ident, target_ident)
+	if anchor_player_id == "":
+		return
+
+	var dynamic_anchor_parent := _get_effect_target_anchor_in_parent(anchor_player_id, parent_node)
+	if dynamic_anchor_parent == Vector2.ZERO:
+		return
+
+	var dynamic_anchor_source := _parent_position_to_animation_source(animation_node, dynamic_anchor_parent)
+	var fixed_anchor := EFFECT_SOURCE_PLAYER_POSITION if anchor_player_id == "p1" else EFFECT_SOURCE_ENEMY_POSITION
+	animation_node.sheet_visual_offset += dynamic_anchor_source - fixed_anchor
+
+
+func _resolve_move_sheet_anchor_player_id(config: Dictionary, actor_ident: String, target_ident: String) -> String:
+	var actor_id := _get_player_id_from_ident(actor_ident)
+	var target_id := _get_player_id_from_ident(target_ident)
+	if target_id == "" and actor_id != "":
+		target_id = "p2" if actor_id == "p1" else "p1"
+
+	match str(config.get("static_visual_anchor", "")).strip_edges().to_lower():
+		"none", "battlefield":
+			return ""
+		"actor", "source":
+			return actor_id
+		"target":
+			return target_id
+		"p1", "player":
+			return "p1"
+		"p2", "enemy":
+			return "p2"
+
+	match str(config.get("category", "")).strip_edges().to_lower():
+		"field", "field_hazard", "screen":
+			return ""
+		"status_buff":
+			return actor_id
+		_:
+			return target_id
 
 
 func _with_projectile_endpoint_anchors(config: Dictionary, actor_anchor: Vector2, target_anchor: Vector2) -> Dictionary:

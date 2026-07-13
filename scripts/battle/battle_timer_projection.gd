@@ -115,6 +115,7 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 		"bankRemainingMs": bank,
 		"bankMaximumMs": int(timer.get("mainBankMaximumMs", 0)),
 		"decisionCapRemainingMs": cap_remaining,
+		"decisionMaximumMs": int(timer.get("maxDecisionMs", 0)),
 		"effectiveDecisionRemainingMs": effective_remaining,
 		"scheduledRemainingMs": scheduled_remaining,
 		"bankExhaustionRemainingMs": max(exhaustion_at - now, 0) if exhaustion_at > 0 else 0,

@@ -62,17 +62,3 @@ size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
 theme_override_font_sizes/font_size = 16
 text = "01:24"
-
-[node name="LocalTimerLabel" type="Label" parent="MarginContainer/HBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
-theme_override_font_sizes/font_size = 14
-text = "You 01:30 · Choosing"
-
-[node name="OpponentTimerLabel" type="Label" parent="MarginContainer/HBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
-theme_override_font_sizes/font_size = 14
-text = "Opponent 01:30 · Waiting"

@@ -211,9 +211,9 @@ var active_enemy_pokemon: Pokemon
 
 # Turn Nodes
 @onready var battle_status_panel: BattleStatusPanel = %BattleStatusPanel
-@onready var vs_panel_container: Control = %VSPanelContainer
-@onready var vs_player_1_label: Label = vs_panel_container.get_node_or_null("MarginContainer/VBoxContainer/HBoxContainer/Player1") as Label
-@onready var vs_player_2_label: Label = vs_panel_container.get_node_or_null("MarginContainer/VBoxContainer/HBoxContainer/Player2") as Label
+@onready var vs_panel_container: BattleVsPanelContainer = %VSPanelContainer
+@onready var vs_player_1_label: Label = vs_panel_container.player_1_label
+@onready var vs_player_2_label: Label = vs_panel_container.player_2_label
 @onready var player_side_effects_panel: Control = %SideFieldEffectsPanel
 @onready var enemy_side_effects_panel: Control = %SideFieldEffectsPanel2
 @onready var battle_background: TextureRect = %BattleBackground
@@ -533,10 +533,9 @@ func _process(delta: float) -> void:
 		_position_party_hover_card()
 	weather_presentation.animate(delta)
 	if _should_show_bank_timer_projection():
-		var local_id := _get_local_state_player_id()
-		battle_status_panel.show_bank_timers(
-			PvpBattleRealtimeService.timer_projection.participant_display(local_id),
-			PvpBattleRealtimeService.timer_projection.participant_display("p2" if local_id == "p1" else "p1")
+		vs_panel_container.show_bank_timers(
+			PvpBattleRealtimeService.timer_projection.participant_display("p1"),
+			PvpBattleRealtimeService.timer_projection.participant_display("p2")
 		)
 
 func _connect_pokemon_hover_signals() -> void:
@@ -4047,6 +4046,7 @@ func _debug_trainer_team_display(stage: String, payload: Dictionary) -> void:
 ## Reset de battle status UI naar een lege beginstand.
 func _reset_battle_status_panel() -> void:
 	battle_status_panel.reset_status()
+	vs_panel_container.hide_bank_timers()
 	field_timers_panel.reset_timers()
 	_update_side_condition_ui([])
 
@@ -4582,12 +4582,11 @@ func _get_ability_name_from_source(source: String) -> String:
 func _update_battle_status_panels() -> void:
 	battle_status_panel.set_turn(battle_state.get_turn())
 	battle_status_panel.hide_timer()
+	vs_panel_container.hide_bank_timers()
 	if _should_show_bank_timer_projection():
-		var local_id := _get_local_state_player_id()
-		var opponent_id := "p2" if local_id == "p1" else "p1"
-		battle_status_panel.show_bank_timers(
-			PvpBattleRealtimeService.timer_projection.participant_display(local_id),
-			PvpBattleRealtimeService.timer_projection.participant_display(opponent_id)
+		vs_panel_container.show_bank_timers(
+			PvpBattleRealtimeService.timer_projection.participant_display("p1"),
+			PvpBattleRealtimeService.timer_projection.participant_display("p2")
 		)
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)

@@ -1,7 +1,9 @@
-[gd_scene format=3 uid="uid://conldqooxdm32"]
+[gd_scene load_steps=8 format=3 uid="uid://conldqooxdm32"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3f5vr"]
-bg_color = Color(0.006, 0.025, 0.07, 0.9)
+[ext_resource type="Script" path="res://scripts/battle/battle_ui/vs_panel_container.gd" id="1_timer"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name_panel"]
+bg_color = Color(0.006, 0.025, 0.07, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -12,44 +14,179 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[node name="VSPanelContainer" type="PanelContainer" unique_id=1039531441]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_timer_panel"]
+bg_color = Color(0.006, 0.025, 0.07, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.10588235, 0.3529412, 0.60784316, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_timer_background"]
+bg_color = Color(0.015, 0.045, 0.09, 0.95)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_timer"]
+bg_color = Color(0.1764706, 0.5686275, 0.92941177, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opponent_timer"]
+bg_color = Color(1, 0.36078432, 0.6117647, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="VSPanelContainer" type="HBoxContainer" unique_id=1039531441]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_right = 60.0
-offset_bottom = 40.0
+offset_left = -400.0
+offset_right = 400.0
+offset_bottom = 50.0
 grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_3f5vr")
+theme_override_constants/separation = 10
+alignment = 1
+script = ExtResource("1_timer")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=350741784]
+[node name="Player1TimerPanel" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(270, 50)
 layout_mode = 2
-theme_override_constants/margin_left = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_timer_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="Player1TimerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player1TimerPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Player1TimerStateLabel" type="Label" parent="Player1TimerPanel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+theme_override_font_sizes/font_size = 12
+text = "Team Preview · Choosing"
+text_overrun_behavior = 3
+horizontal_alignment = 2
+
+[node name="Player1TimerLabel" type="Label" parent="Player1TimerPanel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Bank 01:30 · Decision 00:45"
+text_overrun_behavior = 3
+horizontal_alignment = 2
+
+[node name="Player1TimerBar" type="ProgressBar" parent="Player1TimerPanel/MarginContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_timer_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_player_timer")
+value = 100.0
+show_percentage = false
+
+[node name="NamesPanel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_name_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="NamesPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 8
+theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 6
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=11232745]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=308555472]
+[node name="HBoxContainer" type="HBoxContainer" parent="NamesPanel/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Player1" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1591304607]
+[node name="Player1" type="Label" parent="NamesPanel/MarginContainer/HBoxContainer" unique_id=1591304607]
+custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.49019608, 0.827451, 0.9882353, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 17
 text = "Adinho"
+text_overrun_behavior = 3
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="VSLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1746658355]
+[node name="VSLabel" type="Label" parent="NamesPanel/MarginContainer/HBoxContainer" unique_id=1746658355]
+custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "vs"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Player2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=858112320]
+[node name="Player2" type="Label" parent="NamesPanel/MarginContainer/HBoxContainer" unique_id=858112320]
+custom_minimum_size = Vector2(85, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
+theme_override_font_sizes/font_size = 17
+text = "RNGesus"
+text_overrun_behavior = 3
+vertical_alignment = 1
+
+[node name="Player2TimerPanel" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(270, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_timer_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="Player2TimerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player2TimerPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Player2TimerStateLabel" type="Label" parent="Player2TimerPanel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.5411765, 0.7137255, 1)
+theme_override_font_sizes/font_size = 12
+text = "Team Preview · Choosing"
+text_overrun_behavior = 3
+
+[node name="Player2TimerLabel" type="Label" parent="Player2TimerPanel/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9019608, 0.9490196, 1, 1)
-theme_override_font_sizes/font_size = 18
-text = "RNGesus"
+theme_override_font_sizes/font_size = 12
+text = "Bank 01:30 · Decision 00:45"
+text_overrun_behavior = 3
+
+[node name="Player2TimerBar" type="ProgressBar" parent="Player2TimerPanel/MarginContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_timer_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_opponent_timer")
+value = 100.0
+show_percentage = false
