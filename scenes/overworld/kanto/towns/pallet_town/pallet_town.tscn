@@ -21,7 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="14_2p5pd"]
 [ext_resource type="Texture2D" uid="uid://wf0tl5jvqhhw" path="res://assets/sprites/mugshots/market_attendance.png" id="14_m86ow"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_3oirl"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_3oirl"]
 [ext_resource type="PackedScene" uid="uid://mkdk7jtd37sw" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]

@@ -16,6 +16,11 @@ var hp_event_helper := BattleHpEventHelper.new()
 var transformed_species_by_ident: Dictionary = {}
 var mega_species_by_ident: Dictionary = {}
 var hp_snapshot_by_ident: Dictionary = {}
+var timer_state: Dictionary = {}
+var operational_state: Dictionary = {}
+var decisions: Dictionary = {}
+var timer_contract_version := 0
+var battle_event_seq := 0
 
 
 ## Laadt een volledige battle response van de API in deze state.
@@ -40,6 +45,17 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
 	field = response.get("field", {})
+	var next_timer: Variant = response.get("timerState", {})
+	if next_timer is Dictionary:
+		timer_state = (next_timer as Dictionary).duplicate(true)
+		timer_contract_version = int(timer_state.get("timerContractVersion", 0))
+	var next_operational_state: Variant = response.get("operationalState", {})
+	if next_operational_state is Dictionary:
+		var incoming_operational_revision := int((next_operational_state as Dictionary).get("revision", 0))
+		if incoming_operational_revision >= int(operational_state.get("revision", 0)):
+			operational_state = (next_operational_state as Dictionary).duplicate(true)
+	decisions = (response.get("decisions", {}) as Dictionary).duplicate(true) if response.get("decisions", {}) is Dictionary else {}
+	battle_event_seq = max(battle_event_seq, int(response.get("battleEventSeq", 0)))
 	if apply_event_conditions:
 		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
@@ -51,6 +67,31 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	_remember_hp_fields_from_requests(requests)
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response final state")
+
+func get_active_decision(player_id: String) -> Dictionary:
+	var value: Variant = decisions.get(player_id, {})
+	return value as Dictionary if value is Dictionary else {}
+
+func is_decision_actionable(player_id: String, server_now_ms: int) -> bool:
+	if not actions_enabled():
+		return false
+	var timer_value: Variant = timer_state.get("participants", {})
+	if not (timer_value is Dictionary):
+		return true
+	var participant_value: Variant = (timer_value as Dictionary).get(player_id, {})
+	if not (participant_value is Dictionary):
+		return true
+	var participant: Dictionary = participant_value as Dictionary
+	return server_now_ms >= int(participant.get("actionableAtMs", 0))
+
+func actions_enabled() -> bool:
+	return bool(operational_state.get("actionsEnabled", true))
+
+func operational_message() -> String:
+	return str(operational_state.get("message", ""))
+
+func timer_consequences_enabled() -> bool:
+	return bool(operational_state.get("timerConsequencesEnabled", true))
 
 func apply_event_conditions(events: Array) -> void:
 	_apply_event_conditions_to_requests(events)

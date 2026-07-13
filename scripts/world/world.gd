@@ -25,7 +25,7 @@ var is_in_battle := false
 var battle_instance: Node
 
 @onready var player: CharacterBody2D = $Player
-@onready var battle_ui_host: CenterContainer = %BattleUIHost
+@onready var battle_ui_host: Control = %BattleUIHost
 
 var is_loading_map := false
 var position_autosave_elapsed := 0.0

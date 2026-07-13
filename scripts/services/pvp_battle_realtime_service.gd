@@ -2,12 +2,15 @@ extends Node
 
 class_name PvpBattleRealtimeServiceNode
 
+const BattleTimerProjectionClass = preload("res://scripts/battle/battle_timer_projection.gd")
+
 signal connection_changed(connected: bool)
 signal battle_update_received(message: Dictionary)
 signal action_response_received(request_id: String, message: Dictionary)
 signal room_joined(room_code: String, player_id: String, battle_id: String)
 signal room_ready(room_code: String, battle_id: String)
 signal session_invalid(reason: String)
+signal timer_state_changed(timer_projection: RefCounted)
 
 const RECONNECT_DELAY_SECONDS := 3.0
 const SESSION_INVALID_CLOSE_CODE := 1008
@@ -29,6 +32,11 @@ var room_is_ready := false
 var battle_event_latest_seq := 0
 var last_battle_event_seq := 0
 var received_battle_event_count := 0
+var timer_projection := BattleTimerProjectionClass.new()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_IN and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN and joined:
+		websocket.send_text(JSON.stringify({"type":"timer_sync","timerContractVersions":[1]}))
 
 
 func _process(delta: float) -> void:
@@ -67,10 +75,11 @@ func connect_room(room_code: String, player_id: String, battle_id: String, match
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("connect_room called", "room_code=%s player_id=%s battle_id=%s match_id=%s" % [room_code, player_id, battle_id, match_id])
 	var normalized_battle_id := battle_id.strip_edges()
-	if active_battle_id != "" and normalized_battle_id != "" and normalized_battle_id != active_battle_id:
+	if active_battle_id != "" and normalized_battle_id != active_battle_id:
 		battle_event_latest_seq = 0
 		last_battle_event_seq = 0
 		received_battle_event_count = 0
+		timer_projection.reset()
 	active_room_code = room_code.strip_edges().to_upper()
 	active_player_id = "p2" if player_id == "p2" else "p1"
 	active_battle_id = normalized_battle_id
@@ -153,6 +162,9 @@ func _build_join_payload() -> Dictionary:
 		"playerId": active_player_id,
 		"battleId": active_battle_id,
 		"lastBattleEventSeq": last_battle_event_seq,
+		"timerContractVersions": [1],
+		"decisionContractVersions": [1],
+		"battleCommandContractVersions": [1],
 	}
 	if active_match_id != "":
 		payload["matchId"] = active_match_id
@@ -171,6 +183,7 @@ func disconnect_room() -> void:
 	battle_event_latest_seq = 0
 	last_battle_event_seq = 0
 	received_battle_event_count = 0
+	timer_projection.reset()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
 	websocket = WebSocketPeer.new()
@@ -179,7 +192,7 @@ func disconnect_room() -> void:
 		connection_changed.emit(false)
 
 
-func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false) -> String:
+func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0) -> String:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
@@ -201,6 +214,11 @@ func send_action(action: String, battle_id: String, player_id: String, slot: int
 	}
 	if mega:
 		payload["mega"] = true
+	if str(decision_id).strip_edges() != "":
+		payload["decisionId"] = str(decision_id).strip_edges()
+	if int(decision_generation) > 0:
+		payload["decisionGeneration"] = int(decision_generation)
+	payload["idempotencyKey"] = request_id
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"Sending action packet",
@@ -313,6 +331,15 @@ func _process_packets() -> void:
 				action_response_received.emit(request_id, message)
 			continue
 		if message_type == "pvp.snapshot":
+			var response_value: Variant = message.get("response", {})
+			if response_value is Dictionary:
+				var operational_value: Variant = (response_value as Dictionary).get("operationalState", {})
+				if operational_value is Dictionary:
+					timer_projection.apply_operational_state(operational_value as Dictionary)
+				var timer_value: Variant = (response_value as Dictionary).get("timerState", {})
+				if timer_value is Dictionary and timer_projection.apply_snapshot(timer_value as Dictionary):
+					last_battle_event_seq = max(last_battle_event_seq, timer_projection.battle_event_seq)
+					timer_state_changed.emit(timer_projection)
 			battle_update_received.emit(message)
 			continue
 		if message_type == "pvp.battle_events":
@@ -320,6 +347,10 @@ func _process_packets() -> void:
 			continue
 		if message_type == "pvp.phase_update":
 			battle_update_received.emit(message)
+			continue
+		if message_type.begins_with("battle.timer_"):
+			if timer_projection.apply_event(message):
+				timer_state_changed.emit(timer_projection)
 			continue
 		if message_type == "pvp.opponent_disconnected" or message_type == "pvp.opponent_reconnected" or message_type == "pvp.reconnect_grace_started":
 			battle_update_received.emit(message)
@@ -362,7 +393,7 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 	var latest_seq := _nonnegative_int(message.get("battleEventLatestSeq", battle_event_latest_seq), battle_event_latest_seq)
 	var events_value: Variant = message.get("events", [])
 	var valid_event_count := 0
-	var max_event_seq := last_battle_event_seq
+	var pending_events: Dictionary = {}
 	if events_value is Array:
 		for event_value in events_value:
 			if not (event_value is Dictionary):
@@ -371,12 +402,28 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 			var event_seq := _nonnegative_int(event.get("battleEventSeq", -1), -1)
 			if event_seq < 0:
 				continue
-			valid_event_count += 1
-			max_event_seq = max(max_event_seq, event_seq)
+			if event_seq <= last_battle_event_seq:
+				continue
+			if pending_events.has(event_seq):
+				continue
+			pending_events[event_seq] = event
+
+	var next_event_seq := last_battle_event_seq + 1
+	while pending_events.has(next_event_seq):
+		var event: Dictionary = pending_events[next_event_seq] as Dictionary
+		valid_event_count += 1
+		if str(event.get("type", "")).begins_with("battle.timer_"):
+			timer_projection.apply_event(event)
+		else:
+			timer_projection.mark_event_applied(next_event_seq)
+		last_battle_event_seq = next_event_seq
+		next_event_seq += 1
 
 	battle_event_latest_seq = max(battle_event_latest_seq, latest_seq)
-	last_battle_event_seq = max(max(last_battle_event_seq, battle_event_latest_seq), max_event_seq)
+	# latestSeq describes the remote head, not locally applied domain order.
 	received_battle_event_count += valid_event_count
+	if valid_event_count > 0:
+		timer_state_changed.emit(timer_projection)
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"Received battle event stream update",

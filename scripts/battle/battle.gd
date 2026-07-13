@@ -57,6 +57,8 @@ var pvp_last_next_phase := ""
 var pvp_last_phase_update_server_seq := 0
 var pvp_last_phase_update_batch_id := ""
 var pvp_last_phase_update_phase := ""
+var pvp_presentation_actionable_local_msec := 0
+var pvp_presentation_schedule_token := ""
 var pvp_rendered_event_count := 0
 var pvp_allow_setup_animation := false
 var pvp_victory_message_added := false
@@ -137,8 +139,15 @@ const BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH := 1200
 const BATTLE_LOG_MEMORY_UNSET := -1
 const BATTLE_WINDOW_OPEN_SIZE := Vector2(1500.0, 780.0)
 const BATTLE_WINDOW_COLLAPSED_SIZE := Vector2(1186.0, 780.0)
+const BATTLE_UI_POSITION_PATH := "user://battle_ui_position.json"
+const BATTLE_UI_DEFAULT_VERTICAL_OFFSET := 44.0
+const BATTLE_UI_POSITION_MARGIN := 8.0
 
 static var remembered_battle_log_open := BATTLE_LOG_MEMORY_UNSET
+static var remembered_battle_ui_position := Vector2.INF
+
+var battle_ui_dragging := false
+var battle_ui_drag_offset := Vector2.ZERO
 
 #Active Pokemon
 var active_player_pokemon: Pokemon
@@ -146,6 +155,7 @@ var active_enemy_pokemon: Pokemon
 
 # Action Buttons
 @onready var action_side_panel: Control = %ActionsDock
+@onready var battle_drag_handle: Control = %BattleDragHandle
 @onready var battle_mode_button: Button = %BattleModeButton
 @onready var calc_mode_button: Button = %CalcModeButton
 @onready var calc_log_button: Button = %CalcLogButton
@@ -237,6 +247,7 @@ var active_enemy_pokemon: Pokemon
 
 ## Verbindt de UI-signals en zet de battle UI in de beginstand.
 func _ready() -> void:
+	_setup_battle_ui_position()
 	_load_damage_calc_saved_assumptions()
 	# GUI hit-testing follows sibling order even when a Control draws at a higher
 	# z-index. Keep drawers last so stage controls cannot intercept their clicks.
@@ -354,6 +365,75 @@ func _ready() -> void:
 	if PlayerSave.party.is_empty():
 		return
 
+func _setup_battle_ui_position() -> void:
+	battle_drag_handle.move_to_front()
+	if not battle_drag_handle.gui_input.is_connected(_on_battle_drag_handle_gui_input):
+		battle_drag_handle.gui_input.connect(_on_battle_drag_handle_gui_input)
+	var parent_control := get_parent_control()
+	if parent_control == null:
+		return
+	if remembered_battle_ui_position == Vector2.INF:
+		remembered_battle_ui_position = _load_battle_ui_position()
+	var default_position := Vector2(
+		(parent_control.size.x - size.x) * 0.5,
+		(parent_control.size.y - size.y) * 0.5 - BATTLE_UI_DEFAULT_VERTICAL_OFFSET
+	)
+	position = remembered_battle_ui_position if remembered_battle_ui_position != Vector2.INF else default_position
+	_clamp_battle_ui_position()
+	if not parent_control.resized.is_connected(_on_battle_ui_host_resized):
+		parent_control.resized.connect(_on_battle_ui_host_resized)
+
+func _on_battle_drag_handle_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+			return
+		if mouse_event.pressed:
+			battle_ui_dragging = true
+			battle_ui_drag_offset = mouse_event.global_position - global_position
+			_focus_battle_ui_layer()
+		else:
+			battle_ui_dragging = false
+			_save_battle_ui_position()
+		get_viewport().set_input_as_handled()
+		return
+	if event is InputEventMouseMotion and battle_ui_dragging:
+		var parent_control := get_parent_control()
+		if parent_control != null:
+			position = parent_control.get_global_mouse_position() - parent_control.global_position - battle_ui_drag_offset
+			_clamp_battle_ui_position()
+		get_viewport().set_input_as_handled()
+
+func _on_battle_ui_host_resized() -> void:
+	_clamp_battle_ui_position()
+
+func _clamp_battle_ui_position() -> void:
+	var parent_control := get_parent_control()
+	if parent_control == null:
+		return
+	position.x = clampf(position.x, BATTLE_UI_POSITION_MARGIN, maxf(parent_control.size.x - size.x - BATTLE_UI_POSITION_MARGIN, BATTLE_UI_POSITION_MARGIN))
+	position.y = clampf(position.y, BATTLE_UI_POSITION_MARGIN, maxf(parent_control.size.y - size.y - BATTLE_UI_POSITION_MARGIN, BATTLE_UI_POSITION_MARGIN))
+
+func _load_battle_ui_position() -> Vector2:
+	if not FileAccess.file_exists(BATTLE_UI_POSITION_PATH):
+		return Vector2.INF
+	var file := FileAccess.open(BATTLE_UI_POSITION_PATH, FileAccess.READ)
+	if file == null:
+		return Vector2.INF
+	var data: Variant = JSON.parse_string(file.get_as_text())
+	if not (data is Dictionary):
+		return Vector2.INF
+	var position_data: Array = data.get("position", [])
+	if position_data.size() != 2:
+		return Vector2.INF
+	return Vector2(float(position_data[0]), float(position_data[1]))
+
+func _save_battle_ui_position() -> void:
+	remembered_battle_ui_position = position
+	var file := FileAccess.open(BATTLE_UI_POSITION_PATH, FileAccess.WRITE)
+	if file != null:
+		file.store_string(JSON.stringify({"position": [position.x, position.y]}))
+
 func _focus_battle_ui_layer() -> void:
 	get_tree().call_group("ui_overlay", "focus_battle_ui_layer")
 
@@ -452,6 +532,12 @@ func _process(delta: float) -> void:
 	if party_hover_card.visible:
 		_position_party_hover_card()
 	weather_presentation.animate(delta)
+	if _should_show_bank_timer_projection():
+		var local_id := _get_local_state_player_id()
+		battle_status_panel.show_bank_timers(
+			PvpBattleRealtimeService.timer_projection.participant_display(local_id),
+			PvpBattleRealtimeService.timer_projection.participant_display("p2" if local_id == "p1" else "p1")
+		)
 
 func _connect_pokemon_hover_signals() -> void:
 	if not player_sprite_box.has_method("get_single_sprite_slot"):
@@ -2132,6 +2218,8 @@ func _on_action_selected(action: String) -> void:
 
 	if battle_input_locked:
 		return
+	if not _pvp_timer_allows_control():
+		return
 
 	if _local_player_needs_force_switch_ui():
 		if action == "party":
@@ -2194,7 +2282,12 @@ func _can_show_full_battle_log() -> bool:
 ## Past de log-state toe zonder de sessiekeuze te overschrijven.
 func _set_battle_log_open(open: bool) -> void:
 	battle_log_rail.visible = open
-	custom_minimum_size = BATTLE_WINDOW_OPEN_SIZE if open else BATTLE_WINDOW_COLLAPSED_SIZE
+	var target_size := BATTLE_WINDOW_OPEN_SIZE if open else BATTLE_WINDOW_COLLAPSED_SIZE
+	var previous_center := position + size * 0.5
+	custom_minimum_size = target_size
+	size = target_size
+	position = previous_center - size * 0.5
+	_clamp_battle_ui_position()
 	_queue_calc_drawer_layout_update()
 
 ## Zet de tekst van de battle log toggle op basis van de open/dicht state.
@@ -2294,6 +2387,8 @@ func _show_current_action_prompt() -> void:
 	current_action_panel.set_message(event_text_formatter.format_action_prompt(player_species))
 
 func _set_battle_input_locked(is_locked: bool) -> void:
+	if not is_locked and _is_pvp_presentation_hold_active():
+		is_locked = true
 	battle_input_locked = is_locked
 	if action_buttons.has_method("set_all_actions_disabled"):
 		action_buttons.set_all_actions_disabled(is_locked)
@@ -2309,6 +2404,34 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 			_restore_team_preview_lead_selection_ui()
 	_sync_party_rail_interaction()
 	_update_mechanic_button_states()
+
+func _update_pvp_presentation_schedule(response: Dictionary) -> void:
+	if not _is_pvp_battle():
+		return
+	var presentation: Dictionary = response.get("presentation", {})
+	var decisions: Dictionary = presentation.get("decisions", {})
+	var schedule: Dictionary = decisions.get(_get_local_state_player_id(), decisions.get(action_flow.local_player_id, {}))
+	if schedule.is_empty() or str(schedule.get("status", "")) != "SCHEDULED":
+		pvp_presentation_actionable_local_msec = 0
+		pvp_presentation_schedule_token = ""
+		return
+	var remaining := maxi(0, int(schedule.get("actionableAtMs", 0)) - int(presentation.get("serverNowMs", 0)))
+	pvp_presentation_actionable_local_msec = Time.get_ticks_msec() + remaining
+	pvp_presentation_schedule_token = "%s:%s" % [schedule.get("decisionId", ""), schedule.get("decisionGeneration", 0)]
+	_set_battle_input_locked(true)
+	_release_pvp_presentation_hold_after(remaining, pvp_presentation_schedule_token)
+
+func _release_pvp_presentation_hold_after(remaining_msec: int, token: String) -> void:
+	if remaining_msec > 0:
+		await get_tree().create_timer(float(remaining_msec) / 1000.0).timeout
+	if token != pvp_presentation_schedule_token:
+		return
+	pvp_presentation_actionable_local_msec = 0
+	pvp_presentation_schedule_token = ""
+	_set_battle_input_locked(false)
+
+func _is_pvp_presentation_hold_active() -> bool:
+	return _is_pvp_battle() and pvp_presentation_actionable_local_msec > Time.get_ticks_msec()
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
 	battle_actions_ready = is_ready
@@ -2892,6 +3015,7 @@ func _get_pvp_state_player_id_for_raw_player_id(player_id: String) -> String:
 func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true, source: String = "") -> bool:
 	var success: bool = action_flow.apply_response(response, apply_event_conditions)
 	if success:
+		_update_pvp_presentation_schedule(response)
 		_apply_party_state_from_api_response(response)
 		_sync_player_save_party_status_from_battle_state()
 		_remember_active_player_party_moves()
@@ -4458,6 +4582,13 @@ func _get_ability_name_from_source(source: String) -> String:
 func _update_battle_status_panels() -> void:
 	battle_status_panel.set_turn(battle_state.get_turn())
 	battle_status_panel.hide_timer()
+	if _should_show_bank_timer_projection():
+		var local_id := _get_local_state_player_id()
+		var opponent_id := "p2" if local_id == "p1" else "p1"
+		battle_status_panel.show_bank_timers(
+			PvpBattleRealtimeService.timer_projection.participant_display(local_id),
+			PvpBattleRealtimeService.timer_projection.participant_display(opponent_id)
+		)
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
 	field_timers_panel.set_effects(field_effects, battle_state.get_turn())
@@ -4465,6 +4596,12 @@ func _update_battle_status_panels() -> void:
 	weather_presentation.update_weather(_get_active_weather_effect_id(field_effects))
 	weather_presentation.update_terrain(_get_active_terrain_effect_id(field_effects))
 	weather_presentation.update_trick_room(_is_trick_room_active(field_effects))
+
+func _should_show_bank_timer_projection() -> bool:
+	return PvpBattleRealtimeService.timer_projection.should_present(
+		_is_pvp_battle(),
+		bool(ProjectSettings.get_setting("battle/show_shadow_bank_timer", true))
+	)
 
 func _get_display_field_effects() -> Array:
 	if presentation_state.has_field_snapshot:
@@ -4729,6 +4866,8 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_server_seq = 0
 	pvp_last_phase_update_batch_id = ""
 	pvp_last_phase_update_phase = ""
+	pvp_presentation_actionable_local_msec = 0
+	pvp_presentation_schedule_token = ""
 	last_rendered_event_seq = -1
 	rendered_non_pvp_event_keys.clear()
 	active_player_pokemon = player_pokemon
@@ -5726,6 +5865,8 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		return
 
 	if battle_input_locked:
+		return
+	if not _pvp_timer_allows_control():
 		return
 
 	var use_mega := mega_evolution_selected
@@ -7521,11 +7662,21 @@ func _refresh_force_switch_transition_presentation() -> void:
 func _can_submit_pvp_switch_choice() -> bool:
 	if not _is_pvp_battle():
 		return true
+	if not _pvp_timer_allows_control():
+		return false
 
 	if pvp_last_phase == "awaiting_force_switch":
 		return _local_player_needs_force_switch_ui()
 
 	return pvp_last_phase == "turn_open" or _pvp_local_request_allows_choice(_get_local_state_player_id())
+
+func _pvp_timer_allows_control() -> bool:
+	if _is_pvp_battle() and not battle_state.actions_enabled():
+		return false
+	if not _is_pvp_battle() or not PvpBattleRealtimeService.timer_projection.contract_enabled:
+		return true
+	# Only the server-owned presentation hold disables controls. Displayed zero never blocks sending.
+	return str(PvpBattleRealtimeService.timer_projection.participant_display(_get_local_state_player_id()).get("state", "WAITING")) != "SCHEDULED"
 
 func _pvp_local_request_allows_choice(local_state_player_id: String) -> bool:
 	if not _is_pvp_battle():
@@ -8113,7 +8264,16 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 			"error": "PvP realtime room is not ready.",
 		}
 
-	var request_id := PvpBattleRealtimeService.send_action(action, battle_state.battle_id, player_id, slot, mega)
+	var decision := battle_state.get_active_decision(player_id)
+	var request_id := PvpBattleRealtimeService.send_action(
+		action,
+		battle_state.battle_id,
+		player_id,
+		slot,
+		mega,
+		str(decision.get("decisionId", "")),
+		int(decision.get("decisionGeneration", 0))
+	)
 	if request_id == "":
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime("PvP realtime action send failed", "action=%s" % action)

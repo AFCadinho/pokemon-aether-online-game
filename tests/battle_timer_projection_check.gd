@@ -1,0 +1,46 @@
+extends SceneTree
+
+const BattleTimerProjectionClass = preload("res://scripts/battle/battle_timer_projection.gd")
+
+func _init() -> void:
+	var projection := BattleTimerProjectionClass.new()
+	_check(projection.apply_snapshot({
+		"timerContractVersion": 1, "authority": "BATTLE_BANK_V1_SHADOW",
+		"timerRevision": 2, "aggregateRevision": 1, "battleEventSeq": 10, "serverNowMs": 1000,
+		"participants": {
+			"p1": {"status":"RUNNING","decisionId":"d1","decisionGeneration":1,"mainBankRemainingMs":90000,"mainBankMaximumMs":90000,"actionableAtMs":2000,"bankChargeStartsAtMs":2000,"decisionCapAtMs":22000,"bankExhaustionAtMs":92000,"hypotheticalDeadlineAtMs":22000},
+			"p2": {"status":"CHOICE_ACCEPTED","decisionId":"d2","decisionGeneration":1,"mainBankRemainingMs":80000,"mainBankMaximumMs":90000,"actionableAtMs":1000,"bankChargeStartsAtMs":1000,"decisionCapAtMs":21000,"hypotheticalDeadlineAtMs":21000},
+		}
+	}, 5000), "accepts v1 snapshot")
+	_check(projection.should_present(true), "valid shadow projection presents by default")
+	_check(not projection.should_present(false), "non-PvP battle does not present bank timer")
+	_check(not projection.should_present(true, false), "debug visibility override can hide bank timer")
+	_check_equal(projection.estimated_server_now_ms(5500), 1500, "monotonic server interpolation")
+	_check_equal(projection.participant_display("p1", 5500).get("state"), "SCHEDULED", "scheduled before actionable")
+	_check_equal(projection.participant_display("p1", 5500).get("bankRemainingMs"), 90000, "no charge before actionable")
+	_check_equal(projection.participant_display("p1", 6000).get("state"), "DECIDING", "active exactly actionable")
+	_check_equal(projection.participant_display("p1", 6500).get("bankRemainingMs"), 89500, "bank drains from charge anchor")
+	_check_equal(projection.participant_display("p2", 6500).get("state"), "WAITING", "locked participant waits independently")
+	_check(not projection.apply_event({"battleEventSeq":9,"payload":{"timerRevision":1,"playerId":"p1","decisionGeneration":1}}), "stale revision ignored")
+	_check(not projection.apply_event({"battleEventSeq":11,"payload":{"timerRevision":3,"playerId":"p1","decisionGeneration":0}}), "stale generation ignored")
+	_check(projection.apply_event({"battleEventSeq":12,"payload":{"timerRevision":3,"playerId":"p1","decisionGeneration":2,"status":"PAUSED","mainBankRemainingMs":70000}}), "new generation applied")
+	_check_equal(projection.participant_display("p1", 7000).get("state"), "PAUSED", "paused state")
+	projection.apply_event({"battleEventSeq":13,"payload":{"timerRevision":4,"playerId":"p1","decisionGeneration":2,"status":"WOULD_EXPIRE","hypotheticalDeadlineAtMs":2000}})
+	_check_equal(projection.participant_display("p1", 7000).get("effectiveDecisionRemainingMs"), 0, "clamps deadline at zero")
+	_check_equal(projection.participant_display("p1", 7000).get("state"), "EXPIRED", "shadow expiry display only")
+	_check(not projection.has_method("submit_expiry"), "projection has no timeout authority")
+	projection.resync(10000, 9000)
+	_check_equal(projection.estimated_server_now_ms(9000), 10000, "foreground/reconnect snap")
+	projection.reset()
+	_check(not projection.contract_enabled, "reset removes stale projection eligibility")
+	_check(not projection.should_present(true), "battle without a valid projection remains hidden")
+	print("PASS battle_timer_projection_check")
+	quit(0)
+
+func _check(value: bool, label: String) -> void:
+	if value: return
+	push_error(label)
+	quit(1)
+
+func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
+	_check(actual == expected, "%s: expected %s got %s" % [label, str(expected), str(actual)])

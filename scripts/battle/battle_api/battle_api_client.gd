@@ -91,6 +91,11 @@ func join_pvp_queue(request_node: HTTPRequest, queue_id: String, player: Diction
 		"/account/pvp/queues/%s/join" % queue_id.strip_edges().uri_encode(),
 		{
 			"player": player,
+			"metadata": {"clientCapabilities": {
+				"timerContractVersions": [1],
+				"decisionContractVersions": [1],
+				"battleCommandContractVersions": [1],
+			}},
 		}
 	)
 

@@ -9,11 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scenes/battle/sprite_box.tscn" id="3_kd6yx"]
 [ext_resource type="Texture2D" uid="uid://b0mdtgfn4y3qi" path="res://assets/sprites/battle_buttons/fight.png" id="4_pll4o"]
 [ext_resource type="PackedScene" uid="uid://dp8he2r06cu2u" path="res://scenes/battle/current_action_panel.tscn" id="5_n6gaa"]
-[ext_resource type="Texture2D" uid="uid://dsbm3h77o41xr" path="res://assets/sprites/battle_buttons/bag.png" id="5_py4tk"]
+[ext_resource type="Texture2D" path="res://assets/battles/ui/bag_white.svg" id="5_py4tk"]
 [ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
 [ext_resource type="PackedScene" uid="uid://dv3oowqse6sjb" path="res://scenes/battle/field_timers.tscn" id="6_mvulk"]
 [ext_resource type="PackedScene" uid="uid://c2lhyxer4tw6c" path="res://scenes/battle/battle_status_panel.tscn" id="7_mvulk"]
-[ext_resource type="Texture2D" uid="uid://c4s406fdsdgxv" path="res://assets/sprites/battle_buttons/run.png" id="7_pyfix"]
+[ext_resource type="Texture2D" path="res://assets/battles/ui/exit_white.svg" id="7_pyfix"]
 [ext_resource type="Script" uid="uid://duo7cdw26ghjb" path="res://scripts/battle/action_choices.gd" id="8_t1kk3"]
 [ext_resource type="Script" uid="uid://bxqps5iqr1llo" path="res://scripts/battle/battle_ui/moves_grid.gd" id="8_w40i5"]
 [ext_resource type="PackedScene" uid="uid://conldqooxdm32" path="res://scenes/battle/vs_panel_container.tscn" id="9_pyfix"]
@@ -433,6 +433,19 @@ offset_right = 1500.0
 offset_bottom = 780.0
 mouse_filter = 2
 script = ExtResource("1_sgdsx")
+
+[node name="BattleDragHandle" type="Control" parent="." unique_id=318507241]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 18.0
+offset_top = 0.0
+offset_right = -18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 13
+
 
 [node name="BattleBackdrop" type="Panel" parent="." unique_id=314696026]
 layout_mode = 1
@@ -1708,6 +1721,58 @@ layout_mode = 2
 [node name="MoveSlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
 layout_mode = 2
 
+[node name="UtilityActions" type="HBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=140804477]
+unique_name_in_owner = true
+z_index = 57
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -108.0
+offset_top = -281.0
+offset_right = -20.0
+offset_bottom = -243.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="BagButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions" unique_id=1766657251]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 38)
+layout_mode = 2
+tooltip_text = "Bag"
+mouse_default_cursor_shape = 2
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_colors/icon_pressed_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.42)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+icon = ExtResource("5_py4tk")
+icon_max_width = 20
+expand_icon = true
+
+[node name="RunButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions" unique_id=1623517119]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 38)
+layout_mode = 2
+tooltip_text = "Run"
+mouse_default_cursor_shape = 2
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 0.36078432, 0.44313726, 1)
+theme_override_colors/icon_pressed_color = Color(1, 0.36078432, 0.44313726, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.42)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+icon = ExtResource("7_pyfix")
+icon_max_width = 20
+expand_icon = true
+
 [node name="MechanicsPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=57273673]
 unique_name_in_owner = true
 z_index = 57
@@ -1878,7 +1943,7 @@ compact_mode = true
 
 [node name="UtilitySection" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent" unique_id=1895783644]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 44)
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
@@ -1944,42 +2009,6 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_battle_tab_press
 theme_override_styles/focus = SubResource("StyleBoxFlat_battle_tab_hover")
 toggle_mode = true
 text = "Calc"
-
-[node name="BottomActionsRow" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection" unique_id=1024757900]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 6
-alignment = 2
-
-[node name="BagButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/BottomActionsRow" unique_id=1766657251]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 44)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-tooltip_text = "Bag"
-mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-icon = ExtResource("5_py4tk")
-expand_icon = true
-
-[node name="RunButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/UtilitySection/BottomActionsRow" unique_id=1623517119]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 44)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-tooltip_text = "Run"
-mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-icon = ExtResource("7_pyfix")
-expand_icon = true
 
 [node name="BattlePartyRail" type="PanelContainer" parent="HBoxContainer" unique_id=1870675427]
 unique_name_in_owner = true

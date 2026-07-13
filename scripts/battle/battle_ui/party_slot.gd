@@ -61,24 +61,24 @@ func _apply_slot_layout() -> void:
 	if not compact_mode:
 		return
 
-	custom_minimum_size = Vector2(120.0, 46.0)
+	custom_minimum_size = Vector2(120.0, 62.0)
 	size_flags_vertical = Control.SIZE_FILL
 	margin_container.add_theme_constant_override("margin_left", 4)
-	margin_container.add_theme_constant_override("margin_top", 3)
+	margin_container.add_theme_constant_override("margin_top", 5)
 	margin_container.add_theme_constant_override("margin_right", 4)
-	margin_container.add_theme_constant_override("margin_bottom", 3)
+	margin_container.add_theme_constant_override("margin_bottom", 5)
 	slot_row.add_theme_constant_override("separation", 3)
-	pokemon_icon.custom_minimum_size = Vector2(32.0, 36.0)
-	details_column.custom_minimum_size = Vector2(76.0, 36.0)
-	details_column.add_theme_constant_override("separation", 0)
-	name_row.custom_minimum_size = Vector2(0.0, 19.0)
+	pokemon_icon.custom_minimum_size = Vector2(42.0, 46.0)
+	details_column.custom_minimum_size = Vector2(76.0, 46.0)
+	details_column.add_theme_constant_override("separation", 2)
+	name_row.custom_minimum_size = Vector2(0.0, 23.0)
 	shiny_badge.custom_minimum_size = Vector2(10.0, 16.0)
 	shiny_badge.add_theme_font_size_override("font_size", 12)
-	name_label.custom_minimum_size = Vector2(54.0, 18.0)
-	bottom_row.custom_minimum_size = Vector2(0.0, 14.0)
-	hp_bar.custom_minimum_size = Vector2(50.0, 14.0)
-	hp_bar.add_theme_font_size_override("font_size", 11)
-	status_icon.custom_minimum_size = Vector2(18.0, 14.0)
+	name_label.custom_minimum_size = Vector2(54.0, 21.0)
+	bottom_row.custom_minimum_size = Vector2(0.0, 18.0)
+	hp_bar.custom_minimum_size = Vector2(50.0, 18.0)
+	hp_bar.add_theme_font_size_override("font_size", 12)
+	status_icon.custom_minimum_size = Vector2(18.0, 18.0)
 	status_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 
 func _ignore_child_mouse_input(node: Node) -> void:

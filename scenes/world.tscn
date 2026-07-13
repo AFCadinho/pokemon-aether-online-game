@@ -22,7 +22,7 @@ position = Vector2(304, 350)
 unique_name_in_owner = true
 layer = 10
 
-[node name="BattleUIHost" type="CenterContainer" parent="BattleUILayer"]
+[node name="BattleUIHost" type="Control" parent="BattleUILayer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 3
