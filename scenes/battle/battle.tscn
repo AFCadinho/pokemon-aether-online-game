@@ -1496,9 +1496,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -412.0
-offset_top = 90.0
+offset_top = 64.0
 offset_right = -100.0
-offset_bottom = 172.0
+offset_bottom = 146.0
 grow_horizontal = 0
 
 [node name="CurrentActionPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1149733481 instance=ExtResource("5_n6gaa")]
@@ -1908,6 +1908,19 @@ theme_override_font_sizes/font_size = 13
 text = "SWITCH"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PvpSwitchConfirmationLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Pokemon will switch in, replacing Pokemon."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="PlayerPartyGrid" type="GridContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack" unique_id=1230434731]
 unique_name_in_owner = true

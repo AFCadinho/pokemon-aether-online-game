@@ -60,6 +60,7 @@ var sprite_frames_cache: Dictionary = {}
 var current_single_species := ""
 var current_single_side := ""
 var current_single_is_shiny := false
+var stat_stage_panel_anchor: Control
 
 func _ready() -> void:
 	_set_sprite_filter(single_sprite)
@@ -1204,6 +1205,10 @@ func set_stat_stage_badges(badges: Array) -> void:
 
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 
+func anchor_stat_stage_panel_below(anchor: Control) -> void:
+	stat_stage_panel_anchor = anchor
+	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
 func clear_stat_stages() -> void:
 	if single_stat_stage_panel == null:
 		return
@@ -1227,6 +1232,14 @@ func _position_stat_stage_panel(sprite: AnimatedSprite2D, panel: Control) -> voi
 
 	panel.reset_size()
 	var panel_size: Vector2 = panel.size
+	if stat_stage_panel_anchor != null and is_instance_valid(stat_stage_panel_anchor):
+		var panel_parent := panel.get_parent() as Control
+		if panel_parent != null:
+			var anchor_rect := stat_stage_panel_anchor.get_global_rect()
+			var anchor_bottom_center := Vector2(anchor_rect.get_center().x, anchor_rect.end.y)
+			var local_anchor := panel_parent.get_global_transform().affine_inverse() * anchor_bottom_center
+			panel.position = local_anchor + Vector2(-panel_size.x * 0.5, STAT_STAGE_PANEL_GAP)
+			return
 	var visual_rect := _get_sprite_visual_rect_in_parent(sprite)
 	var top_center := Vector2(visual_rect.position.x + (visual_rect.size.x * 0.5), visual_rect.position.y)
 	panel.position = top_center - Vector2(panel_size.x * 0.5, panel_size.y + STAT_STAGE_PANEL_GAP)

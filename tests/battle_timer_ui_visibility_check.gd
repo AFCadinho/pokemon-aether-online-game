@@ -28,7 +28,7 @@ func _check_supported_resolutions() -> void:
 		_check(not panel.player_2_timer_panel.visible, "player 2 timer block is hidden without a PvP projection")
 		panel.player_1_label.text = "Alpha"
 		panel.player_2_label.text = "Beta"
-		panel.show_bank_timers(
+		panel.show_decision_timers(
 			{
 				"bankRemainingMs": 89_000,
 				"bankMaximumMs": 90_000,
@@ -40,8 +40,8 @@ func _check_supported_resolutions() -> void:
 			{
 				"bankRemainingMs": 80_000,
 				"bankMaximumMs": 90_000,
-				"effectiveDecisionRemainingMs": 20_000,
-				"decisionMaximumMs": 20_000,
+				"effectiveDecisionRemainingMs": 90_000,
+				"decisionMaximumMs": 90_000,
 				"decisionKind": "MOVE_SELECTION",
 				"state": "DECIDING",
 			}
@@ -50,40 +50,69 @@ func _check_supported_resolutions() -> void:
 		_check(panel.player_2_timer_panel.visible, "player 2 timer block appears for PvP")
 		_check(panel.player_1_timer_label.visible, "player 1 bank is visible at %s" % resolution)
 		_check(panel.player_2_timer_label.visible, "player 2 bank is visible at %s" % resolution)
-		_check(panel.player_1_timer_label.text.contains("Bank 01:29"), "player 1 bank value is rendered")
+		_check(not panel.player_1_timer_label.text.contains("Bank"), "player 1 bank value stays hidden")
 		_check(panel.player_1_timer_state_label.text == "Team Preview · Choosing", "Team Preview state is rendered")
-		_check(panel.player_1_timer_label.text.contains("Decision 00:45"), "Team Preview countdown is rendered")
-		_check(panel.player_2_timer_label.text.contains("Bank 01:20"), "player 2 bank value is rendered")
+		_check(panel.player_1_timer_label.text == "Time 00:45", "Team Preview countdown is rendered")
+		_check(not panel.player_2_timer_label.text.contains("Bank"), "player 2 bank value stays hidden")
 		_check(panel.player_2_timer_state_label.text == "Move · Choosing", "Move Selection state is rendered")
-		_check(panel.player_2_timer_label.text.contains("Decision 00:20"), "Move Selection countdown is rendered")
+		_check(panel.player_2_timer_label.text == "Time 01:30", "Move Selection countdown is rendered")
 		_check_equal(panel.player_1_timer_bar.value, 100.0, "player 1 decision bar starts full")
 		_check_equal(panel.player_2_timer_bar.value, 100.0, "player 2 decision bar starts full")
-		panel.show_bank_timers(
-			{"bankRemainingMs": 84_000, "bankMaximumMs": 90_000, "effectiveDecisionRemainingMs": 15_000, "decisionMaximumMs": 30_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"},
+		panel.show_decision_timers(
+			{"bankRemainingMs": 84_000, "bankMaximumMs": 90_000, "effectiveDecisionRemainingMs": 45_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"},
 			{"bankRemainingMs": 80_000, "bankMaximumMs": 90_000, "state": "WAITING"}
 		)
 		_check_equal(panel.player_1_timer_bar.value, 50.0, "active decision bar decreases with server time")
-		_check(panel.player_2_timer_bar.value > panel.player_1_timer_bar.value, "waiting side keeps an independent bar")
-		panel.show_bank_timers(
+		_check(not panel.player_2_timer_label.visible, "waiting side hides the irrelevant countdown")
+		_check(not panel.player_2_timer_bar.visible, "waiting side hides the irrelevant progress bar")
+		panel.show_decision_timers(
+			{"effectiveDecisionRemainingMs": 63_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "WAITING"},
+			{"effectiveDecisionRemainingMs": 45_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"}
+		)
+		_check(panel.player_1_timer_state_label.text == "Waiting", "accepted choice uses the Waiting heading")
+		_check(panel.player_1_timer_label.text == "Time 01:03", "accepted choice keeps its frozen decision time visible")
+		_check_equal(panel.player_1_timer_bar.value, 70.0, "accepted choice keeps its frozen progress visible")
+		panel.show_decision_timers(
 			{"bankRemainingMs": 79_000, "bankMaximumMs": 90_000, "scheduledRemainingMs": 2_000, "decisionKind": "FORCED_SWITCH", "state": "SCHEDULED"},
 			{"bankRemainingMs": 80_000, "bankMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "PAUSED"}
 		)
 		_check(panel.player_1_timer_state_label.text == "Forced Switch · Scheduled", "scheduled Forced Switch is rendered")
 		_check(panel.player_1_timer_label.text.contains("Starts 00:02"), "scheduled start countdown is rendered")
 		_check(panel.player_2_timer_state_label.text == "Paused", "paused status is rendered")
-		panel.show_bank_timers(
-			{"bankRemainingMs": 0, "bankMaximumMs": 90_000, "effectiveDecisionRemainingMs": 0, "decisionMaximumMs": 20_000, "decisionKind": "MOVE_SELECTION", "state": "EXPIRED"},
+		panel.show_decision_timers(
+			{"bankRemainingMs": 0, "bankMaximumMs": 90_000, "effectiveDecisionRemainingMs": 0, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "EXPIRED"},
 			{"bankRemainingMs": 80_000, "bankMaximumMs": 90_000, "state": "WAITING"}
 		)
 		_check(panel.player_1_timer_state_label.text == "Move · Time expired", "expired status is rendered")
-		_check(panel.player_1_timer_label.text.contains("Decision 00:00"), "expired display clamps at zero")
+		_check(panel.player_1_timer_label.text == "Time 00:00", "expired display clamps at zero")
 		_check_equal(panel.player_1_timer_bar.value, 0.0, "expired progress bar clamps at zero")
+		var reconnect_deadline := Time.get_datetime_string_from_unix_time(int(Time.get_unix_time_from_system()) + 60, true)
+		var reconnect_server_now := Time.get_datetime_string_from_unix_time(int(Time.get_unix_time_from_system()), true)
+		panel.show_reconnect_timer("p1", reconnect_deadline, 60, reconnect_server_now)
+		panel.show_reconnect_timer("p2", reconnect_deadline, 60, reconnect_server_now)
+		await process_frame
+		_check(panel.player_2_timer_state_label.text == "Disconnected", "disconnected player state is visible")
+		_check(panel.player_2_timer_label.text.begins_with("Reconnect "), "reconnect countdown is visible beside the disconnected player")
+		_check(panel.player_2_timer_bar.visible, "reconnect countdown progress is visible")
+		_check(panel.has_active_reconnect_timer(), "two disconnected players keep the decision clocks paused")
+		panel.clear_reconnect_timer("p2")
+		_check(panel.player_2_timer_state_label.text == "Waiting", "reconnect restores the decision presentation")
+		_check(panel.has_active_reconnect_timer(), "one reconnect does not clear the opponent reconnect state")
+		_check(panel.player_1_timer_state_label.text == "Disconnected", "remaining opponent reconnect countdown stays visible")
+		panel.hide_decision_timers()
+		panel.show_decision_timers(
+			{"effectiveDecisionRemainingMs": 43_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"},
+			{"effectiveDecisionRemainingMs": 43_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"}
+		)
+		_check(panel.player_1_timer_state_label.text == "Disconnected", "normal battle HUD refresh preserves the remaining reconnect countdown")
+		panel.clear_reconnect_timer("p1")
+		_check(not panel.has_active_reconnect_timer(), "decision clocks resume only after every player reconnects")
 		var player_text := "%s %s %s %s" % [panel.player_1_timer_state_label.text, panel.player_1_timer_label.text, panel.player_2_timer_state_label.text, panel.player_2_timer_label.text]
-		for forbidden: String in ["BATTLE_BANK_V1_SHADOW", "LEGACY_PHASE_V1", "configurationHash", "timerContractVersion", "shadow"]:
+		for forbidden: String in ["Bank", "BATTLE_BANK_V1_SHADOW", "LEGACY_PHASE_V1", "configurationHash", "timerContractVersion", "shadow"]:
 			_check(not player_text.contains(forbidden), "player timer text hides %s" % forbidden)
 		_check(panel.position.x >= 0.0, "timer panel stays on-screen at %s" % resolution)
 		_check(panel.position.x + panel.size.x <= float(resolution.x), "timer panel fits width at %s" % resolution)
-		panel.hide_bank_timers()
+		panel.hide_decision_timers(true)
 		_check(not panel.player_1_timer_panel.visible, "leaving PvP hides player 1 timer block")
 		_check(not panel.player_2_timer_panel.visible, "leaving PvP hides player 2 timer block")
 		host.queue_free()

@@ -320,12 +320,14 @@ func _process_packets() -> void:
 			continue
 		if message_type == "pvp.battle_update":
 			var request_id := str(message.get("requestId", ""))
+			_apply_timer_projection_from_battle_response(message)
 			battle_update_received.emit(message)
 			if request_id != "":
 				action_response_received.emit(request_id, message)
 			continue
 		if message_type == "pvp.render_batch":
 			var request_id := str(message.get("requestId", ""))
+			_apply_timer_projection_from_battle_response(message)
 			battle_update_received.emit(message)
 			if request_id != "":
 				action_response_received.emit(request_id, message)
@@ -371,6 +373,59 @@ func _process_packets() -> void:
 					},
 				})
 			continue
+
+
+func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return false
+	var timer_value: Variant = (response_value as Dictionary).get("timerState", {})
+	if not (timer_value is Dictionary):
+		return false
+	if not timer_projection.apply_snapshot(timer_value as Dictionary):
+		return false
+	last_battle_event_seq = max(last_battle_event_seq, timer_projection.battle_event_seq)
+	timer_state_changed.emit(timer_projection)
+	return true
+
+
+static func should_apply_terminal_action_immediately(message: Dictionary, local_player_id: String) -> bool:
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return false
+	var response := response_value as Dictionary
+	var match_end_value: Variant = response.get("pvpMatchEnd", {})
+	var is_server_timeout_end := (
+		str(response.get("pvpMatchEndEvent", "")).strip_edges().to_lower() == "pvp.timeout_forfeit"
+		and match_end_value is Dictionary
+		and bool((match_end_value as Dictionary).get("success", false))
+	)
+	if is_server_timeout_end:
+		return true
+
+	var message_action := str(message.get("action", "")).strip_edges().to_lower()
+	var message_player_id := str(message.get("playerId", "")).strip_edges()
+	if message_action in ["forfeit", "disconnect", "abandon"] and message_player_id == local_player_id:
+		return false
+	return message_action in ["forfeit", "disconnect", "abandon"] and message_player_id != ""
+
+
+static func is_unrequested_local_team_preview_lead(message: Dictionary, local_player_id: String) -> bool:
+	# Human command responses are correlated by requestId and must remain available
+	# to the action waiter. Server-selected timeout leads are broadcasts without one.
+	return (
+		str(message.get("requestId", "")).strip_edges() == ""
+		and str(message.get("action", "")).strip_edges().to_lower() == "choose_lead"
+		and str(message.get("playerId", "")).strip_edges() == local_player_id.strip_edges()
+		and message.get("response", {}) is Dictionary
+	)
+
+
+static func normalize_terminal_winner(value: Variant) -> String:
+	var normalized := str(value).strip_edges()
+	if normalized.to_lower() in ["none", "null", "<null>", "nil"]:
+		return ""
+	return normalized
 
 
 func _handle_closed_socket() -> void:

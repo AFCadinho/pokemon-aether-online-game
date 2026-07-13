@@ -14,6 +14,8 @@ var server_anchor_ms := 0
 var monotonic_anchor_ms := 0
 var contract_enabled := false
 var mechanically_suspended := false
+var reconnect_paused := false
+var reconnect_frozen_server_ms := 0
 
 
 func reset() -> void:
@@ -26,10 +28,24 @@ func reset() -> void:
 	monotonic_anchor_ms = 0
 	contract_enabled = false
 	mechanically_suspended = false
+	reconnect_paused = false
+	reconnect_frozen_server_ms = 0
 
 
 func should_present(is_pvp_battle: bool, debug_visibility_override: bool = true) -> bool:
 	return is_pvp_battle and contract_enabled and debug_visibility_override
+
+
+func has_advanced_beyond_team_preview() -> bool:
+	if not contract_enabled:
+		return false
+	for participant_value: Variant in participants.values():
+		if not (participant_value is Dictionary):
+			continue
+		var decision_kind := str((participant_value as Dictionary).get("decisionKind", "")).strip_edges().to_upper()
+		if decision_kind in ["MOVE_SELECTION", "FORCED_SWITCH"]:
+			return true
+	return false
 
 
 func apply_snapshot(snapshot: Dictionary, local_monotonic_ms: int = Time.get_ticks_msec()) -> bool:
@@ -87,7 +103,25 @@ func resync(server_now_ms: int, local_monotonic_ms: int = Time.get_ticks_msec())
 
 
 func estimated_server_now_ms(local_monotonic_ms: int = Time.get_ticks_msec()) -> int:
+	if reconnect_paused:
+		return reconnect_frozen_server_ms
 	return server_anchor_ms + max(local_monotonic_ms - monotonic_anchor_ms, 0)
+
+
+func pause_for_reconnect(local_monotonic_ms: int = Time.get_ticks_msec()) -> void:
+	if reconnect_paused:
+		return
+	reconnect_frozen_server_ms = estimated_server_now_ms(local_monotonic_ms)
+	reconnect_paused = true
+
+
+func resume_after_reconnect(local_monotonic_ms: int = Time.get_ticks_msec()) -> void:
+	if not reconnect_paused:
+		return
+	server_anchor_ms = reconnect_frozen_server_ms
+	monotonic_anchor_ms = local_monotonic_ms
+	reconnect_paused = false
+	reconnect_frozen_server_ms = 0
 
 
 func participant_display(player_id: String, local_monotonic_ms: int = Time.get_ticks_msec()) -> Dictionary:
@@ -101,13 +135,14 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 	var cap_at := _timestamp_ms(timer, "decisionCapAtMs", "decisionCapAt")
 	var exhaustion_at := _timestamp_ms(timer, "bankExhaustionAtMs", "bankExhaustionAt")
 	var deadline := _timestamp_ms(timer, "hypotheticalDeadlineAtMs", "deadlineAt")
+	var raw_status := str(timer.get("status", "IDLE")).to_upper()
 	var bank_anchor := int(timer.get("mainBankRemainingMs", timer.get("bankAtAnchorMs", 0)))
 	var bank := bank_anchor
 	if not mechanically_suspended and charge_start > 0 and now > charge_start and str(timer.get("status", "")) in ["RUNNING", "ACTIVE", "DECIDING"]:
 		bank = max(bank_anchor - (now - charge_start), 0)
 	var scheduled_remaining: int = max(actionable - now, 0) if actionable > 0 else 0
 	var cap_remaining: int = max(cap_at - now, 0) if cap_at > 0 else 0
-	var effective_remaining: int = max(deadline - now, 0) if deadline > 0 else 0
+	var effective_remaining: int = int(timer.get("decisionRemainingMs", 0)) if raw_status.begins_with("CHOICE_ACCEPTED") else (max(deadline - now, 0) if deadline > 0 else 0)
 	var state: String = "PAUSED" if mechanically_suspended else _display_state(timer, now, actionable, deadline)
 	return {
 		"playerId": player_id,
@@ -125,6 +160,20 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 	}
 
 
+func participant_display_for_local_player(
+	display_side: String,
+	local_player_id: String,
+	local_monotonic_ms: int = Time.get_ticks_msec()
+) -> Dictionary:
+	var server_side := display_side
+	if local_player_id == "p2":
+		if display_side == "p1":
+			server_side = "p2"
+		elif display_side == "p2":
+			server_side = "p1"
+	return participant_display(server_side, local_monotonic_ms)
+
+
 func apply_operational_state(value: Dictionary) -> void:
 	mechanically_suspended = not bool(value.get("timerConsequencesEnabled", true))
 
@@ -135,7 +184,7 @@ func _display_state(timer: Dictionary, now: int, actionable: int, deadline: int)
 		return "ENDED"
 	if raw in ["PAUSED", "FROZEN"]:
 		return "PAUSED"
-	if raw in ["LOCKED", "WAITING", "CHOICE_ACCEPTED", "IDLE"]:
+	if raw in ["LOCKED", "WAITING", "CHOICE_ACCEPTED", "CHOICE_ACCEPTED_AFTER_SHADOW_EXPIRY", "IDLE"]:
 		return "WAITING"
 	if raw in ["EXPIRED", "WOULD_EXPIRE"] or (deadline > 0 and now >= deadline):
 		return "EXPIRED"

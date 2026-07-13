@@ -287,16 +287,13 @@ func _apply_slot_style() -> void:
 func _update_experience_bar(pokemon: Pokemon) -> void:
 	var current_level_exp: int = pokemon.current_level_exp
 	var next_level_exp: int = pokemon.next_level_exp
-	print("[EXP_DEBUG] party bar id=", pokemon.owned_pokemon_id, " species=", pokemon.species, " level=", pokemon.level, " exp=", pokemon.experience, " floor=", current_level_exp, " next=", next_level_exp)
 	if next_level_exp <= current_level_exp:
-		print("[EXP_DEBUG] party bar hidden: invalid range")
 		exp_bar.value = 0.0
 		exp_bar.visible = false
 		return
 
 	var level_exp_range: int = next_level_exp - current_level_exp
 	var earned_level_exp: int = clampi(pokemon.experience - current_level_exp, 0, level_exp_range)
-	print("[EXP_DEBUG] party bar range=", level_exp_range, " earned=", earned_level_exp)
 	exp_bar.max_value = level_exp_range
 	exp_bar.value = earned_level_exp
 	exp_bar.visible = true

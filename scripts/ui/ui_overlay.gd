@@ -10395,7 +10395,6 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var level_exp_range: int = 1 if is_max_level else next_level_exp - current_level_exp if has_next_level_range else 1
 	var earned_level_exp: int = level_exp_range if is_max_level else clampi(current_exp - current_level_exp, 0, level_exp_range)
 	var next_level_remaining: int = max(next_level_exp - current_exp, 0) if has_next_level_range else 0
-	print("[EXP_DEBUG] summary bar id=", pokemon.owned_pokemon_id, " species=", pokemon.species, " level=", pokemon.level, " exp=", current_exp, " floor=", current_level_exp, " next=", next_level_exp, " earned=", earned_level_exp, " range=", level_exp_range)
 	var target_level: int = min(pokemon.level + 1, 100)
 	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
 	var detail_text := "%s EXP to Lv. %s" % [next_level_remaining, target_level] if has_next_level_range else "Max level"

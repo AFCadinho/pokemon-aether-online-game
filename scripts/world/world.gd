@@ -1809,12 +1809,8 @@ func _should_claim_trainer_battle_reward(result: Dictionary) -> bool:
 func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> void:
 	var previous_money: int = max(int(PlayerSave.money), 0)
 	var wallet_result: Dictionary = await PlayerWalletService.award_wild_battle_money(battle_id)
-	print("[EXP_DEBUG] wild reward response battle=", battle_id, " success=", wallet_result.get("success", false), " reward=", wallet_result.get("reward", {}), " party=", wallet_result.get("party", []))
 	if bool(wallet_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(wallet_result)
-		for pokemon: Pokemon in PlayerSave.party:
-			if pokemon != null:
-				print("[EXP_DEBUG] party after reward id=", pokemon.owned_pokemon_id, " species=", pokemon.species, " level=", pokemon.level, " exp=", pokemon.experience, " floor=", pokemon.current_level_exp, " next=", pokemon.next_level_exp)
 		_notify_wild_battle_money_awarded(pokemon_species, max(int(PlayerSave.money), 0) - previous_money)
 		_notify_reward_experience_gains(wallet_result.get("reward", {}))
 		_notify_reward_effort_gains(wallet_result.get("reward", {}))

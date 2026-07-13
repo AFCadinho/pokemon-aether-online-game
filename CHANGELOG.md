@@ -4,12 +4,20 @@
 
 **Added**
 - Added a saved-trainer login view with trainer profile preview, session status, and a direct Continue flow.
+- Added server-synchronized PvP decision timers for both players during Team Preview, move selection, forced switches, waiting states, and reconnect grace periods.
+- Added PvP choice confirmations that show the selected lead, move, or incoming switch while waiting for the opponent.
 
 **Changed**
 - Redesigned the login screen with a blue Aether-themed layout, responsive news panel, improved login and saved-session cards, atmospheric login glow, and clearer Remember Me controls.
+- PvP timers now show the current decision time instead of exposing the underlying bank, interpolate from server anchors without per-second events, and freeze at the submitted value while waiting.
+- Repositioned the PvP timer panels and opponent HUD so names, health, stat changes, sprites, and battlefield animations remain readable.
 
 **Fixed**
 - Fixed returning from Settings to the login screen ending the saved session and forcing a full username/password login despite Remember Me being enabled.
+- Fixed one player's PvP timer continuing after submitting a move or switch, timers resuming while an opponent was still disconnected, and reconnect countdowns disappearing behind normal turn timers.
+- Fixed PvP Team Preview occasionally waiting twelve seconds after both leads were selected by keeping correlated lead responses on the realtime action path.
+- Fixed automatic lead selection and timeout-forfeit results not reaching both clients consistently, including stale Team Preview screens and missing winner names.
+- Fixed repeated and simultaneous disconnect flows so reconnect state remains visible and battles do not resume until both players are connected.
 
 ## 0.3.4 - 2026-07-12
 

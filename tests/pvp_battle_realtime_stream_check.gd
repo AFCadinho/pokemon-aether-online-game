@@ -3,6 +3,12 @@ extends SceneTree
 
 func _init() -> void:
 	var service := PvpBattleRealtimeServiceNode.new()
+	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
+	var action_wait_start := battle_source.find("func _send_pvp_realtime_action_and_wait")
+	var queue_cursor_position := battle_source.find("var queue_start := pvp_realtime_updates.size()", action_wait_start)
+	var send_position := battle_source.find("var request_id := PvpBattleRealtimeService.send_action", action_wait_start)
+	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
+	_check_equal(queue_cursor_position >= 0 and queue_cursor_position < send_position, true, "realtime response queue cursor is captured before sending")
 
 	service.active_room_code = "ROOM"
 	service.active_player_id = "p1"
@@ -29,6 +35,28 @@ func _init() -> void:
 	_check_equal(payload.get("timerContractVersions"), [1], "join advertises timer contract v1")
 	_check_equal(payload.get("decisionContractVersions"), [1], "join advertises decision contract v1")
 	_check_equal(payload.get("battleCommandContractVersions"), [1], "join advertises command contract v1")
+
+	var timer_update_applied := service._apply_timer_projection_from_battle_response({
+		"type": "pvp.battle_update",
+		"response": {
+			"timerState": {
+				"timerContractVersion": 1,
+				"authority": "BATTLE_BANK_V1_SHADOW",
+				"timerRevision": 4,
+				"battleEventSeq": 3,
+				"serverNowMs": 10_000,
+				"participants": {
+					"p1": {"playerId": "p1", "status": "IDLE", "mainBankRemainingMs": 75_000, "mainBankMaximumMs": 90_000},
+					"p2": {"playerId": "p2", "status": "RUNNING", "decisionId": "d2", "decisionGeneration": 1, "decisionKind": "MOVE_SELECTION", "mainBankRemainingMs": 80_000, "mainBankMaximumMs": 90_000, "maxDecisionMs": 90_000, "actionableAtMs": 10_000, "bankChargeStartsAtMs": 10_000, "decisionCapAtMs": 100_000, "bankExhaustionAtMs": 90_000, "hypotheticalDeadlineAtMs": 90_000},
+				},
+			},
+		},
+	})
+	_check_equal(timer_update_applied, true, "battle update applies its timer projection")
+	_check_equal(service.timer_projection.participant_display("p1", service.timer_projection.monotonic_anchor_ms).get("state"), "WAITING", "accepted local choice stops its displayed clock")
+	_check_equal(service.timer_projection.participant_display("p1", service.timer_projection.monotonic_anchor_ms + 5_000).get("bankRemainingMs"), 75_000, "accepted local choice no longer drains")
+	_check_equal(service.timer_projection.participant_display("p2", service.timer_projection.monotonic_anchor_ms + 5_000).get("state"), "DECIDING", "opponent clock continues while opponent is choosing")
+	_check_equal(service.timer_projection.participant_display("p2", service.timer_projection.monotonic_anchor_ms + 5_000).get("effectiveDecisionRemainingMs"), 75_000, "opponent decision countdown continues independently")
 
 	service._handle_battle_events_message({
 		"type": "pvp.battle_events",
@@ -73,6 +101,52 @@ func _init() -> void:
 	_check_equal(service.battle_event_latest_seq, 0, "new battle resets latest seq")
 	_check_equal(service.received_battle_event_count, 0, "new battle resets debug count")
 	_check_equal(service.timer_projection.contract_enabled, false, "new battle clears stale timer projection")
+
+	var timeout_end_message := {
+		"action": "forfeit",
+		"playerId": "p1",
+		"response": {
+			"pvpMatchEndEvent": "pvp.timeout_forfeit",
+			"pvpMatchEnd": {"success": true, "winnerUserId": 2, "loserUserId": 1},
+		},
+	}
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(timeout_end_message, "p1"),
+		true,
+		"expired player applies the server-confirmed timeout end"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(timeout_end_message, "p2"),
+		true,
+		"winning player applies the server-confirmed timeout end"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "forfeit", "playerId": "p1", "response": {"success": true}},
+			"p1"
+		),
+		false,
+		"local manual forfeit still waits for its direct response path"
+	)
+	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner(null), "", "null terminal winner is treated as absent")
+	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("None"), "", "Python None terminal winner is treated as absent")
+	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("Admin"), "Admin", "real terminal winner name is preserved")
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_unrequested_local_team_preview_lead(
+			{"action": "choose_lead", "playerId": "p2", "requestId": "human-request", "response": {"success": true}},
+			"p2"
+		),
+		false,
+		"human lead response remains available to its realtime action waiter"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_unrequested_local_team_preview_lead(
+			{"action": "choose_lead", "playerId": "p2", "requestId": "", "response": {"success": true}},
+			"p2"
+		),
+		true,
+		"server-selected timeout lead without request id uses timeout recovery"
+	)
 
 	service.free()
 	print("PASS pvp_battle_realtime_stream_check")

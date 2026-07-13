@@ -122,11 +122,9 @@ func _wallet_result_from_response(response: Dictionary) -> Dictionary:
 
 func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
 	if not bool(response.get("success", false)):
-		print("[EXP_DEBUG] reward HTTP failure response=", response)
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	print("[EXP_DEBUG] reward HTTP body=", body)
 	return {
 		"success": true,
 		"wallet": _dictionary_from_value(body.get("wallet", {})),
