@@ -4,6 +4,10 @@ const BattleTimerProjectionClass = preload("res://scripts/battle/battle_timer_pr
 
 func _init() -> void:
 	var projection := BattleTimerProjectionClass.new()
+	_check_equal(projection.authority, "LEGACY_AUTHORITY", "legacy authority defaults to its canonical explicit mode")
+	_check(projection.apply_snapshot({"timerContractVersion": 1, "authority": "BATTLE_BANK_V1_AUTHORITY"}), "canonical authority snapshot applies")
+	_check(projection.contract_enabled, "canonical bank authority enables the timer contract")
+	projection.reset()
 	_check(projection.apply_snapshot({
 		"timerContractVersion": 1, "authority": "BATTLE_BANK_V1_SHADOW",
 		"timerRevision": 2, "aggregateRevision": 1, "battleEventSeq": 10, "serverNowMs": 1000,

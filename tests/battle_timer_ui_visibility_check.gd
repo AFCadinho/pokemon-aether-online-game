@@ -108,7 +108,7 @@ func _check_supported_resolutions() -> void:
 		panel.clear_reconnect_timer("p1")
 		_check(not panel.has_active_reconnect_timer(), "decision clocks resume only after every player reconnects")
 		var player_text := "%s %s %s %s" % [panel.player_1_timer_state_label.text, panel.player_1_timer_label.text, panel.player_2_timer_state_label.text, panel.player_2_timer_label.text]
-		for forbidden: String in ["Bank", "BATTLE_BANK_V1_SHADOW", "LEGACY_PHASE_V1", "configurationHash", "timerContractVersion", "shadow"]:
+		for forbidden: String in ["Bank", "BATTLE_BANK_V1_SHADOW", "BATTLE_BANK_V1_AUTHORITY", "LEGACY_AUTHORITY", "LEGACY_PHASE_V1", "configurationHash", "timerContractVersion", "shadow"]:
 			_check(not player_text.contains(forbidden), "player timer text hides %s" % forbidden)
 		_check(panel.position.x >= 0.0, "timer panel stays on-screen at %s" % resolution)
 		_check(panel.position.x + panel.size.x <= float(resolution.x), "timer panel fits width at %s" % resolution)

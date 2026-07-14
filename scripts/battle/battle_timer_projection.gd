@@ -4,8 +4,11 @@ class_name BattleTimerProjection
 
 const CONTRACT_VERSION := 1
 const LARGE_DRIFT_MS := 750
+const LEGACY_AUTHORITY := "LEGACY_AUTHORITY"
+const BATTLE_BANK_V1_SHADOW := "BATTLE_BANK_V1_SHADOW"
+const BATTLE_BANK_V1_AUTHORITY := "BATTLE_BANK_V1_AUTHORITY"
 
-var authority := "LEGACY_PHASE_V1"
+var authority := LEGACY_AUTHORITY
 var timer_revision := 0
 var aggregate_revision := 0
 var battle_event_seq := 0
@@ -19,7 +22,7 @@ var reconnect_frozen_server_ms := 0
 
 
 func reset() -> void:
-	authority = "LEGACY_PHASE_V1"
+	authority = LEGACY_AUTHORITY
 	timer_revision = 0
 	aggregate_revision = 0
 	battle_event_seq = 0
@@ -54,13 +57,13 @@ func apply_snapshot(snapshot: Dictionary, local_monotonic_ms: int = Time.get_tic
 	var incoming_revision := int(snapshot.get("timerRevision", 0))
 	if incoming_revision < timer_revision:
 		return false
-	authority = str(snapshot.get("authority", "LEGACY_PHASE_V1"))
+	authority = str(snapshot.get("authority", LEGACY_AUTHORITY))
 	timer_revision = incoming_revision
 	aggregate_revision = int(snapshot.get("aggregateRevision", aggregate_revision))
 	battle_event_seq = int(snapshot.get("battleEventSeq", battle_event_seq))
 	participants = (snapshot.get("participants", {}) as Dictionary).duplicate(true)
 	_sample_server_time(_server_ms(snapshot), local_monotonic_ms, true)
-	contract_enabled = authority in ["BATTLE_BANK_V1_SHADOW", "BATTLE_BANK_V1"]
+	contract_enabled = authority in [BATTLE_BANK_V1_SHADOW, BATTLE_BANK_V1_AUTHORITY]
 	return true
 
 
