@@ -340,7 +340,6 @@ func _process_packets() -> void:
 					timer_projection.apply_operational_state(operational_value as Dictionary)
 				var timer_value: Variant = (response_value as Dictionary).get("timerState", {})
 				if timer_value is Dictionary and timer_projection.apply_snapshot(timer_value as Dictionary):
-					last_battle_event_seq = max(last_battle_event_seq, timer_projection.battle_event_seq)
 					timer_state_changed.emit(timer_projection)
 			battle_update_received.emit(message)
 			continue
@@ -353,7 +352,6 @@ func _process_packets() -> void:
 		if message_type.begins_with("battle.timer_"):
 			var timer_applied := _apply_timer_contract_message(message_type, message)
 			if timer_applied:
-				last_battle_event_seq = max(last_battle_event_seq, timer_projection.battle_event_seq)
 				timer_state_changed.emit(timer_projection)
 			continue
 		if message_type == "pvp.opponent_disconnected" or message_type == "pvp.opponent_reconnected" or message_type == "pvp.reconnect_grace_started":
@@ -386,7 +384,6 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 		return false
 	if not timer_projection.apply_snapshot(timer_value as Dictionary):
 		return false
-	last_battle_event_seq = max(last_battle_event_seq, timer_projection.battle_event_seq)
 	timer_state_changed.emit(timer_projection)
 	return true
 
@@ -460,6 +457,7 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 	var events_value: Variant = message.get("events", [])
 	var valid_event_count := 0
 	var pending_events: Dictionary = {}
+	var terminal_message: Dictionary = {}
 	if events_value is Array:
 		for event_value in events_value:
 			if not (event_value is Dictionary):
@@ -482,6 +480,22 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 			timer_projection.apply_event(event)
 		else:
 			timer_projection.mark_event_applied(next_event_seq)
+		var terminal_payload_value: Variant = event.get("payload", {})
+		if str(event.get("type", "")) == "battle.ended" and terminal_payload_value is Dictionary:
+			var terminal_payload := terminal_payload_value as Dictionary
+			if is_infrastructure_no_contest_payload(terminal_payload):
+				terminal_message = {
+					"type": "pvp.infrastructure_no_contest",
+					"roomCode": str(message.get("roomCode", active_room_code)),
+					"battleId": str(message.get("battleId", active_battle_id)),
+					"matchId": str(message.get("matchId", active_match_id)),
+					"battleEventSeq": next_event_seq,
+					"terminalResultId": str(terminal_payload.get("terminalResultId", "")),
+					"terminalCategory": "INFRASTRUCTURE_NO_CONTEST",
+					"endReason": "infrastructure_no_contest",
+					"noContest": true,
+					"noPenalty": true,
+				}
 		last_battle_event_seq = next_event_seq
 		next_event_seq += 1
 
@@ -490,6 +504,8 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 	received_battle_event_count += valid_event_count
 	if valid_event_count > 0:
 		timer_state_changed.emit(timer_projection)
+	if not terminal_message.is_empty():
+		battle_update_received.emit(terminal_message)
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"Received battle event stream update",
@@ -501,6 +517,43 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 				received_battle_event_count,
 			]
 		)
+
+
+static func is_infrastructure_no_contest_payload(payload: Dictionary) -> bool:
+	return (
+		str(payload.get("category", "")) == "INFRASTRUCTURE_NO_CONTEST"
+		and str(payload.get("terminalResultId", "")).strip_edges() != ""
+		and bool(payload.get("noContest", false))
+		and bool(payload.get("noPenalty", false))
+		and normalize_terminal_winner(payload.get("winner", "")) == ""
+		and normalize_terminal_winner(payload.get("loser", "")) == ""
+		and str(payload.get("endReason", "")) == "infrastructure_no_contest"
+	)
+
+
+static func is_infrastructure_no_contest_message(message: Dictionary) -> bool:
+	return (
+		str(message.get("type", "")).strip_edges().to_lower() == "pvp.infrastructure_no_contest"
+		and str(message.get("terminalCategory", "")) == "INFRASTRUCTURE_NO_CONTEST"
+		and str(message.get("terminalResultId", "")).strip_edges() != ""
+		and bool(message.get("noContest", false))
+		and bool(message.get("noPenalty", false))
+		and str(message.get("endReason", "")) == "infrastructure_no_contest"
+	)
+
+
+static func is_infrastructure_no_contest_result(result: Dictionary) -> bool:
+	return (
+		str(result.get("terminalCategory", result.get("category", ""))) == "INFRASTRUCTURE_NO_CONTEST"
+		and str(result.get("terminalResultId", "")).strip_edges() != ""
+		and bool(result.get("noContest", false))
+		and bool(result.get("noPenalty", false))
+		and str(result.get("reason", result.get("endReason", ""))) == "infrastructure_no_contest"
+	)
+
+
+static func allows_gameplay_persistence_for_terminal(result: Dictionary) -> bool:
+	return not is_infrastructure_no_contest_result(result)
 
 
 func _to_websocket_url(base_url: String) -> String:

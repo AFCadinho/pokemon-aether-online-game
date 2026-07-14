@@ -2919,8 +2919,10 @@ func _finish_battle(result: Dictionary) -> void:
 	if battle_finished:
 		return
 
+	var allows_gameplay_persistence := PvpBattleRealtimeService.allows_gameplay_persistence_for_terminal(result)
 	_warn_if_pvp_finish_has_pending_render_work(result)
-	_add_pvp_victory_message_if_needed(result)
+	if allows_gameplay_persistence:
+		_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
 	_sync_party_rail_interaction()
 	pending_mega_species_by_ident.clear()
@@ -2929,8 +2931,9 @@ func _finish_battle(result: Dictionary) -> void:
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
 		_clear_pvp_party_hud_display_override()
-		_heal_local_party_after_pvp_battle()
-		_heal_party_after_pvp_battle.call_deferred()
+		if allows_gameplay_persistence:
+			_heal_local_party_after_pvp_battle()
+			_heal_party_after_pvp_battle.call_deferred()
 	if not result.has("localPartyDefeated"):
 		result["localPartyDefeated"] = _is_local_battle_party_defeated()
 	var skip_party_battle_sync := bool(result.get("skipPartyBattleSync", false)) or _should_skip_party_battle_sync_for_blackout(result)
@@ -8119,6 +8122,9 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
 	if _apply_pvp_connection_log_event(message_type, message):
 		return
+	if PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
+		_finish_pvp_infrastructure_no_contest.call_deferred(message.duplicate(true))
+		return
 
 	var is_snapshot_message := message_type == "pvp.snapshot"
 	if is_snapshot_message:
@@ -9393,6 +9399,21 @@ func _should_apply_pvp_realtime_end_immediately(message: Dictionary) -> bool:
 	if battle_finished:
 		return false
 	return PvpBattleRealtimeService.should_apply_terminal_action_immediately(message, action_flow.local_player_id)
+
+func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
+	if battle_finished or not PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
+		return
+	_add_battle_log_message("The battle ended as a no contest because battle authority was lost.")
+	current_action_panel.set_message("Battle ended as a no contest.")
+	_finish_battle({
+		"reason": "infrastructure_no_contest",
+		"terminalCategory": "INFRASTRUCTURE_NO_CONTEST",
+		"terminalResultId": str(message.get("terminalResultId", "")),
+		"battleEventSeq": message.get("battleEventSeq", -1),
+		"noContest": true,
+		"noPenalty": true,
+		"skipPartyBattleSync": true,
+	})
 
 func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 	if battle_finished:

@@ -28,9 +28,32 @@ func _init() -> void:
 	_check_equal(service.battle_event_latest_seq, 3, "tracks latest stream seq")
 	_check_equal(service.last_battle_event_seq, 3, "tracks last local stream seq")
 	_check_equal(service.received_battle_event_count, 3, "counts valid received events")
+	service._apply_timer_projection_from_battle_response({"response":{"timerState":{"timerContractVersion":1,"authority":"BATTLE_BANK_V1_SHADOW","timerRevision":1,"battleEventSeq":41,"serverNowMs":1,"participants":{}}}})
+	_check_equal(service.last_battle_event_seq, 3, "newer timer snapshot cannot skip unapplied durable terminal events")
+
+	var terminal_messages: Array[Dictionary] = []
+	service.battle_update_received.connect(func(message: Dictionary) -> void: terminal_messages.append(message))
+	service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"roomCode": "ROOM",
+		"battleId": "battle-1",
+		"matchId": "match-1",
+		"battleEventLatestSeq": 4,
+		"events": [{
+			"battleEventSeq": 4,
+			"type": "battle.ended",
+			"payload": {"category":"INFRASTRUCTURE_NO_CONTEST","terminalResultId":"terminal-1","winner":null,"loser":null,"noContest":true,"noPenalty":true,"endReason":"infrastructure_no_contest"},
+		}],
+	})
+	_check_equal(terminal_messages.size(), 1, "durable no-contest event emits one terminal client outcome")
+	_check_equal(terminal_messages[0].get("terminalResultId"), "terminal-1", "terminal client outcome retains canonical result id")
+	service._handle_battle_events_message({"type":"pvp.battle_events","battleId":"battle-1","battleEventLatestSeq":4,"events":[{"battleEventSeq":4,"type":"battle.ended","payload":{"category":"INFRASTRUCTURE_NO_CONTEST","terminalResultId":"terminal-1","winner":null,"loser":null,"noContest":true,"noPenalty":true,"endReason":"infrastructure_no_contest"}}]})
+	_check_equal(terminal_messages.size(), 1, "duplicate terminal delivery has no repeated client consequence")
+	_check_equal(PvpBattleRealtimeServiceNode.is_infrastructure_no_contest_result({"reason":"infrastructure_no_contest","terminalCategory":"INFRASTRUCTURE_NO_CONTEST","terminalResultId":"terminal-1","noContest":true,"noPenalty":true}), true, "canonical no-contest result is classified for no-persistence finish")
+	_check_equal(PvpBattleRealtimeServiceNode.allows_gameplay_persistence_for_terminal({"reason":"infrastructure_no_contest","terminalCategory":"INFRASTRUCTURE_NO_CONTEST","terminalResultId":"terminal-1","noContest":true,"noPenalty":true}), false, "infrastructure no-contest cannot persist healing or invalid battle gameplay")
 
 	var payload := service._build_join_payload()
-	_check_equal(payload.get("lastBattleEventSeq"), 3, "join payload includes lastBattleEventSeq")
+	_check_equal(payload.get("lastBattleEventSeq"), 4, "join payload includes lastBattleEventSeq")
 	_check_equal(payload.get("matchId"), "match-1", "join payload still includes matchId")
 	_check_equal(payload.get("timerContractVersions"), [1], "join advertises timer contract v1")
 	_check_equal(payload.get("decisionContractVersions"), [1], "join advertises decision contract v1")
@@ -78,13 +101,13 @@ func _init() -> void:
 	service._handle_battle_events_message({
 		"type": "pvp.battle_events",
 		"battleId": "battle-1",
-		"afterBattleEventSeq": 3,
+		"afterBattleEventSeq": 4,
 		"battleEventLatestSeq": 5,
 		"events": [],
 	})
 	_check_equal(service.battle_event_latest_seq, 5, "empty events still update latest seq")
-	_check_equal(service.last_battle_event_seq, 3, "remote latest does not skip unapplied pages")
-	_check_equal(service.received_battle_event_count, 3, "empty events do not increase received count")
+	_check_equal(service.last_battle_event_seq, 4, "remote latest does not skip unapplied pages")
+	_check_equal(service.received_battle_event_count, 4, "empty events do not increase received count")
 
 	service._handle_battle_events_message({
 		"type": "pvp.battle_events",
@@ -92,9 +115,8 @@ func _init() -> void:
 		"battleEventLatestSeq": "7",
 		"events": [
 			{"battleEventSeq": "6", "type": "battle.choice_submitted"},
-			{"battleEventSeq": "4", "type": "battle.timer_sync", "payload": {"timerRevision": 1}},
 			{"battleEventSeq": "5", "type": "battle.turn_resolved"},
-			{"battleEventSeq": "4", "type": "duplicate"},
+			{"battleEventSeq": "5", "type": "duplicate"},
 			{"battleEventSeq": -1, "type": "bad"},
 			{"type": "missing-seq"},
 			"not-an-event",
