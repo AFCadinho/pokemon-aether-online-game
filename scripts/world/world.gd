@@ -10,7 +10,13 @@ const PLAYTIME_FLUSH_INTERVAL_SECONDS := 60.0
 const TILE_SIZE := 32.0
 const TREE_LAYER_ROOT_NAME := "Trees"
 const TALL_GRASS_VISUAL_LAYER_NAME := "TallGrassVisual"
-const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = ["StructureTopVisual", "Structures Top"]
+const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = [
+	"StructureTopVisual",
+	"Structures Top",
+	"Structure Top",
+	"Tree Top",
+	"Objects Top",
+]
 const TALL_GRASS_DEPTH_ROW_META := "pao_tall_grass_depth_row"
 const TALL_GRASS_DEPTH_ROWS_BUILT_META := "pao_tall_grass_depth_rows_built"
 const STRUCTURE_TOP_DEPTH_GROUP_META := "pao_structure_top_depth_group"
