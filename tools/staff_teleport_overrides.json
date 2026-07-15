@@ -48,6 +48,29 @@
         }
       }
     },
+    "kanto_route_2": {
+      "label": "Route 2",
+      "points": {
+        "from_viridian_city": {
+          "facingDirection": "up",
+          "id": "viridian_city_entrance",
+          "label": "Viridian City Entrance",
+          "safe": true
+        },
+        "from_viridian_forest_north": {
+          "facingDirection": "down",
+          "id": "viridian_forest_north_entrance",
+          "label": "Viridian Forest North Entrance",
+          "safe": true
+        },
+        "from_viridian_forest_south": {
+          "facingDirection": "up",
+          "id": "viridian_forest_south_entrance",
+          "label": "Viridian Forest South Entrance",
+          "safe": true
+        }
+      }
+    },
     "kanto_viridian_city": {
       "points": {
         "from_route_1": {

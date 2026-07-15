@@ -29,6 +29,7 @@ const DECORATIVE_DEPTH_ROWS_BUILT_META := "pao_decorative_depth_rows_built"
 const STRUCTURE_TOP_DEPTH_GROUP_META := "pao_structure_top_depth_group"
 const STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META := "pao_structure_top_depth_groups_built"
 const TALL_GRASS_LAYER_Z_OFFSET := 1
+const FOREST_TOP_LAYER_Z_OFFSET := 3
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
 
@@ -806,6 +807,7 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 		group_root.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
 		parent.add_child(group_root)
 
+		var group_z_offset := _get_structure_top_group_z_offset(structure_layer)
 		for group_index in range(groups.size()):
 			var group: Array[Vector2i] = groups[group_index]
 			var group_layer := TileMapLayer.new()
@@ -815,7 +817,7 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 			group_layer.modulate = structure_layer.modulate
 			group_layer.position = structure_layer.position
 			group_layer.z_as_relative = false
-			group_layer.z_index = _get_tile_group_bottom_z_index(structure_layer, group, 0)
+			group_layer.z_index = _get_tile_group_bottom_z_index(structure_layer, group, group_z_offset)
 			group_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
 			group_root.add_child(group_layer)
 
@@ -842,6 +844,13 @@ func _collect_structure_top_visual_layers_recursive(node: Node, structure_layers
 
 	for child: Node in node.get_children():
 		_collect_structure_top_visual_layers_recursive(child, structure_layers)
+
+
+func _get_structure_top_group_z_offset(layer: TileMapLayer) -> int:
+	var tiled_name := str(layer.get_meta("tiled_name", layer.name))
+	# Viridian Forest's TreeTop and StructureTop layers sit above its grass layer
+	# in Tiled. Preserve that priority when their depth boundary is shared.
+	return FOREST_TOP_LAYER_Z_OFFSET if tiled_name in ["StructureTop", "TreeTop"] else 0
 
 func _build_connected_tile_groups(cells: Array[Vector2i]) -> Array[Array]:
 	var remaining := {}

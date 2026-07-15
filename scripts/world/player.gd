@@ -493,10 +493,10 @@ func _ready() -> void:
 		collision_tilemap = GameState.current_map.get_node_or_null("Collision")
 		block_down_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockDown"])
 		block_up_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockUp"])
-		ledge_down_tilemap = GameState.current_map.get_node_or_null("LedgeDown")
-		ledge_up_tilemap = GameState.current_map.get_node_or_null("LedgeUp")
-		ledge_left_tilemap = GameState.current_map.get_node_or_null("LedgeLeft")
-		ledge_right_tilemap = GameState.current_map.get_node_or_null("LedgeRight")
+		ledge_down_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeDown"])
+		ledge_up_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeUp"])
+		ledge_left_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeLeft"])
+		ledge_right_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeRight"])
 	
 	# Zet speler terug op laatst bekende positie in de juiste richting.
 	if GameState.has_player_position:
@@ -1535,10 +1535,10 @@ func refresh_map_layers() -> void:
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
 	block_down_tilemap = _find_tilemap_layer(current_map, ["BlockDown"])
 	block_up_tilemap = _find_tilemap_layer(current_map, ["BlockUp"])
-	ledge_down_tilemap = current_map.get_node_or_null("LedgeDown")
-	ledge_up_tilemap = current_map.get_node_or_null("LedgeUp")
-	ledge_left_tilemap = current_map.get_node_or_null("LedgeLeft")
-	ledge_right_tilemap = current_map.get_node_or_null("LedgeRight")
+	ledge_down_tilemap = _find_tilemap_layer(current_map, ["LedgeDown"])
+	ledge_up_tilemap = _find_tilemap_layer(current_map, ["LedgeUp"])
+	ledge_left_tilemap = _find_tilemap_layer(current_map, ["LedgeLeft"])
+	ledge_right_tilemap = _find_tilemap_layer(current_map, ["LedgeRight"])
 
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
