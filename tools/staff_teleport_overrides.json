@@ -57,6 +57,23 @@
           "safe": true
         }
       }
+    },
+    "kanto_viridian_forest": {
+      "label": "Viridian Forest",
+      "points": {
+        "from_route_2_south": {
+          "facingDirection": "up",
+          "id": "route_2_south_entrance",
+          "label": "Route 2 South Entrance",
+          "safe": true
+        },
+        "from_route_2_north": {
+          "facingDirection": "down",
+          "id": "route_2_north_entrance",
+          "label": "Route 2 North Entrance",
+          "safe": true
+        }
+      }
     }
   }
 }

@@ -19,6 +19,16 @@
   "kanto_pallet_town": {
     "label": "Pallet Town",
     "points": {
+      "heal_npc": {
+        "facingDirection": "down",
+        "label": "Heal Npc",
+        "safe": true,
+        "spawnMarker": "HealNPC",
+        "tile": {
+          "x": 11,
+          "y": 8
+        }
+      },
       "oaks_lab_entrance": {
         "facingDirection": "up",
         "label": "Oak's Lab Entrance",
@@ -62,8 +72,8 @@
         "safe": true,
         "spawnMarker": "FromPalletTown",
         "tile": {
-          "x": 12,
-          "y": 44
+          "x": 30,
+          "y": 72
         }
       },
       "viridian_city_entrance": {
@@ -72,7 +82,7 @@
         "safe": true,
         "spawnMarker": "FromViridianCity",
         "tile": {
-          "x": 12,
+          "x": 35,
           "y": 1
         }
       }
@@ -96,5 +106,32 @@
     },
     "regionName": "Kanto",
     "scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+  },
+  "kanto_viridian_forest": {
+    "label": "Viridian Forest",
+    "points": {
+      "route_2_north_entrance": {
+        "facingDirection": "down",
+        "label": "Route 2 North Entrance",
+        "safe": true,
+        "spawnMarker": "FromRoute2North",
+        "tile": {
+          "x": 11,
+          "y": 8
+        }
+      },
+      "route_2_south_entrance": {
+        "facingDirection": "up",
+        "label": "Route 2 South Entrance",
+        "safe": true,
+        "spawnMarker": "FromRoute2South",
+        "tile": {
+          "x": 39,
+          "y": 68
+        }
+      }
+    },
+    "regionName": "Kanto",
+    "scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn"
   }
 }

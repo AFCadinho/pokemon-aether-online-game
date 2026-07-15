@@ -122,7 +122,7 @@ const ACTIVITY_VISUAL_OFFSETS := {
 	},
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
-const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual"]
+const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
 const TALL_GRASS_RUSTLE_EFFECT_SCRIPT := preload("res://scripts/world/tall_grass_rustle_effect.gd")
 const WATER_RIPPLE_EFFECT_SCRIPT := preload("res://scripts/world/water_ripple_effect.gd")
 const ENCOUNTER_TYPE_GRASS := "grass"
@@ -162,6 +162,8 @@ var collision_tilemap: TileMapLayer
 var grass_tilemap: TileMapLayer
 var grass_visual_tilemap: TileMapLayer
 var water_tilemap: TileMapLayer
+var block_down_tilemap: TileMapLayer
+var block_up_tilemap: TileMapLayer
 var ledge_down_tilemap: TileMapLayer
 var ledge_up_tilemap: TileMapLayer
 var ledge_left_tilemap: TileMapLayer
@@ -489,6 +491,8 @@ func _ready() -> void:
 		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
 		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
 		collision_tilemap = GameState.current_map.get_node_or_null("Collision")
+		block_down_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockDown"])
+		block_up_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockUp"])
 		ledge_down_tilemap = GameState.current_map.get_node_or_null("LedgeDown")
 		ledge_up_tilemap = GameState.current_map.get_node_or_null("LedgeUp")
 		ledge_left_tilemap = GameState.current_map.get_node_or_null("LedgeLeft")
@@ -1339,6 +1343,9 @@ func _get_action_direction(action_name: String) -> Vector2:
 
 func _try_start_move(direction: Vector2) -> bool:
 	last_direction = direction
+	if _is_direction_blocked_by_current_tile(direction):
+		set_idle_frame()
+		return false
 
 	# Bepaal de volgende wereldpositie.
 	# Voorbeeld: Vector2.RIGHT * 32 = Vector2(32, 0), dus 1 tile naar rechts.
@@ -1441,6 +1448,14 @@ func can_move_to(check_position: Vector2) -> bool:
 
 	return tile_data == null
 
+func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
+	if direction == Vector2.DOWN:
+		return _tilemap_has_tile_at(block_down_tilemap, global_position)
+	if direction == Vector2.UP:
+		return _tilemap_has_tile_at(block_up_tilemap, global_position)
+
+	return false
+
 func _get_ledge_direction_for_tile(check_position: Vector2) -> Vector2:
 	refresh_map_layers()
 
@@ -1504,6 +1519,8 @@ func refresh_map_layers() -> void:
 		grass_tilemap = null	
 		grass_visual_tilemap = null
 		water_tilemap = null
+		block_down_tilemap = null
+		block_up_tilemap = null
 		ledge_down_tilemap = null
 		ledge_up_tilemap = null
 		ledge_left_tilemap = null
@@ -1514,8 +1531,10 @@ func refresh_map_layers() -> void:
 	GameState.current_map = current_map
 	collision_tilemap = current_map.get_node_or_null("Collision")
 	grass_tilemap = current_map.get_node_or_null("TallGrass")
-	grass_visual_tilemap = _find_tilemap_layer(current_map, TALL_GRASS_VISUAL_TILEMAP_NAMES)
+	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
+	block_down_tilemap = _find_tilemap_layer(current_map, ["BlockDown"])
+	block_up_tilemap = _find_tilemap_layer(current_map, ["BlockUp"])
 	ledge_down_tilemap = current_map.get_node_or_null("LedgeDown")
 	ledge_up_tilemap = current_map.get_node_or_null("LedgeUp")
 	ledge_left_tilemap = current_map.get_node_or_null("LedgeLeft")
@@ -1546,6 +1565,24 @@ func _find_tilemap_layer_recursive(node: Node, layer_names: Array[String]) -> Ti
 			return child_layer
 
 	return null
+
+
+func _find_tall_grass_visual_tilemap(parent: Node) -> TileMapLayer:
+	var candidates: Array[TileMapLayer] = []
+	_collect_tilemap_layers_by_name(parent, TALL_GRASS_VISUAL_TILEMAP_NAMES, candidates)
+	for layer: TileMapLayer in candidates:
+		if bool(layer.get_meta("tiled_visual_layer", false)):
+			return layer
+	return candidates[0] if not candidates.is_empty() else null
+
+
+func _collect_tilemap_layers_by_name(node: Node, layer_names: Array[String], layers: Array[TileMapLayer]) -> void:
+	var tilemap_layer := node as TileMapLayer
+	if tilemap_layer != null and layer_names.has(tilemap_layer.name):
+		layers.append(tilemap_layer)
+
+	for child: Node in node.get_children():
+		_collect_tilemap_layers_by_name(child, layer_names, layers)
 	
 func is_standing_on_tall_grass() -> bool:
 	if grass_tilemap == null:
@@ -1566,7 +1603,7 @@ func check_for_grass_encounter() -> void:
 func _spawn_tall_grass_rustle_effect() -> void:
 	if grass_visual_tilemap == null:
 		var current_map := _resolve_current_map()
-		grass_visual_tilemap = _find_tilemap_layer(current_map, TALL_GRASS_VISUAL_TILEMAP_NAMES)
+		grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 
 	if grass_visual_tilemap == null:
 		return

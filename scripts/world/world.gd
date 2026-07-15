@@ -9,16 +9,23 @@ const POSITION_SAVE_EPSILON := 1.0
 const PLAYTIME_FLUSH_INTERVAL_SECONDS := 60.0
 const TILE_SIZE := 32.0
 const TREE_LAYER_ROOT_NAME := "Trees"
-const TALL_GRASS_VISUAL_LAYER_NAME := "TallGrassVisual"
+const TALL_GRASS_VISUAL_LAYER_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
+# Objects may include walkable details such as stairs. Keep that mixed layer
+# below the player; tall grass uses the foreground row logic instead.
+const DECORATIVE_VISUAL_LAYER_NAMES: Array[String] = []
 const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = [
 	"StructureTopVisual",
+	"StructureTop",
 	"Structures Top",
 	"Structure Top",
+	"TreeTop",
 	"Tree Top",
 	"Objects Top",
 ]
 const TALL_GRASS_DEPTH_ROW_META := "pao_tall_grass_depth_row"
 const TALL_GRASS_DEPTH_ROWS_BUILT_META := "pao_tall_grass_depth_rows_built"
+const DECORATIVE_DEPTH_ROW_META := "pao_decorative_depth_row"
+const DECORATIVE_DEPTH_ROWS_BUILT_META := "pao_decorative_depth_rows_built"
 const STRUCTURE_TOP_DEPTH_GROUP_META := "pao_structure_top_depth_group"
 const STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META := "pao_structure_top_depth_groups_built"
 const TALL_GRASS_LAYER_Z_OFFSET := 1
@@ -616,6 +623,7 @@ func _normalize_map_depth_layer_z_indices(map: Node) -> void:
 
 	_normalize_map_tree_layer_z_indices(map)
 	_build_tall_grass_visual_depth_rows(map)
+	_build_decorative_visual_depth_rows(map)
 	_build_structure_top_visual_depth_groups(map)
 
 func _normalize_tree_layer_z_indices_recursive(node: Node) -> void:
@@ -688,7 +696,7 @@ func _collect_tall_grass_visual_layers_recursive(node: Node, grass_layers: Array
 	var tile_map_layer := node as TileMapLayer
 	if tile_map_layer != null:
 		var tiled_name := str(tile_map_layer.get_meta("tiled_name", tile_map_layer.name))
-		if tiled_name == TALL_GRASS_VISUAL_LAYER_NAME and not bool(tile_map_layer.get_meta(TALL_GRASS_DEPTH_ROW_META, false)):
+		if TALL_GRASS_VISUAL_LAYER_NAMES.has(tiled_name) and not bool(tile_map_layer.get_meta(TALL_GRASS_DEPTH_ROW_META, false)):
 			grass_layers.append(tile_map_layer)
 
 	for child: Node in node.get_children():
@@ -702,6 +710,79 @@ func _get_tall_grass_row_z_index(grass_layer: TileMapLayer, row: int) -> int:
 	var row_center_local := grass_layer.map_to_local(Vector2i(0, row))
 	var row_bottom_global := grass_layer.to_global(row_center_local + Vector2(0.0, tile_size.y * 0.5)).y
 	return clampi(floori(row_bottom_global) + TALL_GRASS_LAYER_Z_OFFSET, TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
+
+
+func _build_decorative_visual_depth_rows(map: Node) -> void:
+	var decorative_layers: Array[TileMapLayer] = []
+	_collect_decorative_visual_layers_recursive(map, decorative_layers)
+
+	for decorative_layer: TileMapLayer in decorative_layers:
+		if bool(decorative_layer.get_meta(DECORATIVE_DEPTH_ROWS_BUILT_META, false)):
+			continue
+
+		var used_cells: Array[Vector2i] = decorative_layer.get_used_cells()
+		if used_cells.is_empty():
+			continue
+
+		var parent := decorative_layer.get_parent()
+		if parent == null:
+			continue
+
+		var rows := {}
+		for cell: Vector2i in used_cells:
+			var row := cell.y
+			if not rows.has(row):
+				rows[row] = []
+			rows[row].append(cell)
+
+		var row_group := Node2D.new()
+		row_group.name = "%sDepthRows" % decorative_layer.name
+		row_group.set_meta(DECORATIVE_DEPTH_ROW_META, true)
+		parent.add_child(row_group)
+
+		for row in rows.keys():
+			var row_layer := TileMapLayer.new()
+			row_layer.name = "%sRow%d" % [decorative_layer.name, int(row)]
+			row_layer.tile_set = decorative_layer.tile_set
+			row_layer.visible = decorative_layer.visible
+			row_layer.modulate = decorative_layer.modulate
+			row_layer.position = decorative_layer.position
+			row_layer.z_as_relative = false
+			row_layer.z_index = _get_decorative_row_z_index(decorative_layer, int(row))
+			row_layer.set_meta(DECORATIVE_DEPTH_ROW_META, true)
+			row_group.add_child(row_layer)
+
+			for cell: Vector2i in rows[row]:
+				var source_id := decorative_layer.get_cell_source_id(cell)
+				if source_id == -1:
+					continue
+				row_layer.set_cell(
+					cell,
+					source_id,
+					decorative_layer.get_cell_atlas_coords(cell),
+					decorative_layer.get_cell_alternative_tile(cell)
+				)
+
+		decorative_layer.visible = false
+		decorative_layer.set_meta(DECORATIVE_DEPTH_ROWS_BUILT_META, true)
+
+
+func _collect_decorative_visual_layers_recursive(node: Node, decorative_layers: Array[TileMapLayer]) -> void:
+	var tile_map_layer := node as TileMapLayer
+	if tile_map_layer != null:
+		var tiled_name := str(tile_map_layer.get_meta("tiled_name", tile_map_layer.name))
+		if DECORATIVE_VISUAL_LAYER_NAMES.has(tiled_name) and not bool(tile_map_layer.get_meta(DECORATIVE_DEPTH_ROW_META, false)):
+			decorative_layers.append(tile_map_layer)
+
+	for child: Node in node.get_children():
+		_collect_decorative_visual_layers_recursive(child, decorative_layers)
+
+
+func _get_decorative_row_z_index(decorative_layer: TileMapLayer, row: int) -> int:
+	var row_center_global := decorative_layer.to_global(decorative_layer.map_to_local(Vector2i(0, row))).y
+	# The player's feet use the tile center for their z index. Keep decoration
+	# on the same tile just behind the player, while preserving depth by row.
+	return clampi(floori(row_center_global) - 1, TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
 
 func _build_structure_top_visual_depth_groups(map: Node) -> void:
 	var structure_layers: Array[TileMapLayer] = []
