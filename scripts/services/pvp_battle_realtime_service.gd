@@ -13,6 +13,7 @@ signal session_invalid(reason: String)
 signal timer_state_changed(timer_projection: RefCounted)
 
 const RECONNECT_DELAY_SECONDS := 3.0
+const CONNECTION_HEARTBEAT_SECONDS := 5.0
 const SESSION_INVALID_CLOSE_CODE := 1008
 const DEBUG_PVP_REALTIME := false
 
@@ -21,6 +22,7 @@ var connected := false
 var connecting := false
 var should_reconnect := false
 var reconnect_timer := 0.0
+var connection_heartbeat_timer := 0.0
 var session_invalid_handled := false
 var active_room_code := ""
 var active_player_id := "p1"
@@ -56,6 +58,11 @@ func _process(delta: float) -> void:
 	if ready_state == WebSocketPeer.STATE_OPEN:
 		connecting = false
 		session_invalid_handled = false
+		if joined:
+			connection_heartbeat_timer -= delta
+			if connection_heartbeat_timer <= 0.0:
+				var heartbeat_error := websocket.send_text(JSON.stringify({"type":"ping"}))
+				connection_heartbeat_timer = CONNECTION_HEARTBEAT_SECONDS if heartbeat_error == OK else 0.5
 		return
 
 	if ready_state == WebSocketPeer.STATE_CONNECTING:
@@ -85,6 +92,7 @@ func connect_room(room_code: String, player_id: String, battle_id: String, match
 	active_battle_id = normalized_battle_id
 	active_match_id = match_id.strip_edges()
 	joined = false
+	connection_heartbeat_timer = 0.0
 	room_is_ready = false
 	if active_room_code == "" or not _is_authenticated():
 		if DEBUG_PVP_REALTIME:
@@ -175,6 +183,7 @@ func disconnect_room() -> void:
 	should_reconnect = false
 	connecting = false
 	joined = false
+	connection_heartbeat_timer = 0.0
 	room_is_ready = false
 	active_room_code = ""
 	active_player_id = "p1"
@@ -304,12 +313,15 @@ func _process_packets() -> void:
 			_log_realtime("Incoming packet", "type=%s request=%s battle=%s player=%s action=%s room=%s" % [message_type, str(message.get("requestId", "")), str(message.get("battleId", "")), str(message.get("playerId", "")), str(message.get("action", "")), str(message.get("roomCode", ""))])
 		if message_type == "pvp.joined":
 			joined = true
+			connection_heartbeat_timer = 0.0
 			room_is_ready = false
 			active_room_code = str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
 			active_player_id = "p2" if str(message.get("playerId", active_player_id)) == "p2" else "p1"
 			active_battle_id = str(message.get("battleId", active_battle_id)).strip_edges()
 			active_match_id = str(message.get("matchId", active_match_id)).strip_edges()
 			room_joined.emit(active_room_code, active_player_id, active_battle_id)
+			continue
+		if message_type == "pong":
 			continue
 		if message_type == "pvp.room_ready":
 			var message_room := str(message.get("roomCode", active_room_code)).strip_edges().to_upper()

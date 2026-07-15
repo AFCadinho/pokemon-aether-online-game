@@ -4,11 +4,22 @@ extends SceneTree
 func _init() -> void:
 	var service := PvpBattleRealtimeServiceNode.new()
 	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
+	var realtime_source := FileAccess.get_file_as_string("res://scripts/services/pvp_battle_realtime_service.gd")
 	var action_wait_start := battle_source.find("func _send_pvp_realtime_action_and_wait")
 	var queue_cursor_position := battle_source.find("var queue_start := pvp_realtime_updates.size()", action_wait_start)
 	var send_position := battle_source.find("var request_id := PvpBattleRealtimeService.send_action", action_wait_start)
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(queue_cursor_position >= 0 and queue_cursor_position < send_position, true, "realtime response queue cursor is captured before sending")
+	_check_equal(
+		realtime_source.contains('if joined:\n\t\t\tconnection_heartbeat_timer -= delta'),
+		true,
+		"joined realtime sockets renew their server-owned connection lease"
+	)
+	_check_equal(
+		realtime_source.contains('websocket.send_text(JSON.stringify({"type":"ping"}))'),
+		true,
+		"connection heartbeat contains no authority or lease fencing data"
+	)
 
 	service.active_room_code = "ROOM"
 	service.active_player_id = "p1"
