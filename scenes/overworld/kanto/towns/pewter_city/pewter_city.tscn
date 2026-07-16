@@ -1,3 +1,7 @@
 [gd_scene format=3 uid="uid://b63qp0afy4rpd"]
 
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_city/pewter_city.visual.tscn" id="1_kr88e"]
+
 [node name="PewterCity" type="Node2D" unique_id=2051045385]
+
+[node name="PewterCity" parent="." unique_id=1507076430 instance=ExtResource("1_kr88e")]
