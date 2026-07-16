@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.5 - 2026-07-16
 
 **Added**
 - Added a saved-trainer login view with trainer profile preview, session status, and a direct Continue flow.
@@ -9,10 +9,12 @@
 
 **Changed**
 - Redesigned the login screen with a blue Aether-themed layout, responsive news panel, improved login and saved-session cards, atmospheric login glow, and clearer Remember Me controls.
+- Refreshed the launcher with a blue Aether-themed layout, improved spacing, and clearer server status, update progress, and news panels.
 - PvP timers now show the current decision time instead of exposing the underlying bank, interpolate from server anchors without per-second events, and freeze at the submitted value while waiting.
 - Repositioned the PvP timer panels and opponent HUD so names, health, stat changes, sprites, and battlefield animations remain readable.
 
 **Fixed**
+- Fixed news articles not loading in the launcher and login screen when the news feed returns its `articles` collection.
 - Fixed returning from Settings to the login screen ending the saved session and forcing a full username/password login despite Remember Me being enabled.
 - Fixed one player's PvP timer continuing after submitting a move or switch, timers resuming while an opponent was still disconnected, and reconnect countdowns disappearing behind normal turn timers.
 - Fixed PvP Team Preview occasionally waiting twelve seconds after both leads were selected by keeping correlated lead responses on the realtime action path.
