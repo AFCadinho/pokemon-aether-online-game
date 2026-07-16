@@ -1,6 +1,6 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://cmncfuqnr6nda"]
 
-[ext_resource type="TileSet" path="res://generated/tiled_visuals/viridian_forest/viridian_forest.visual.tileset.tres" id="1_b553a"]
+[ext_resource type="TileSet" uid="uid://bjrow62hlw6ba" path="res://generated/tiled_visuals/viridian_forest/viridian_forest.visual.tileset.tres" id="1_b553a"]
 
 [node name="ViridianForest" type="Node2D" unique_id=1073002427]
 metadata/pao_generated_visual = true

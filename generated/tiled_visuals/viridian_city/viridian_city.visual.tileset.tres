@@ -1,13 +1,13 @@
 [gd_resource type="TileSet" format=3 uid="uid://b1hs20f78v8lq"]
 
-[ext_resource type="Texture2D" uid="uid://e0bsxgyeh6x4" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_000.texture.res" id="1_khfwi"]
-[ext_resource type="Texture2D" uid="uid://bdl3aka3tnr4e" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_005.texture.res" id="2_r3xt0"]
-[ext_resource type="Texture2D" uid="uid://d31owpo0by44o" path="res://generated/tiled_visuals/viridian_city/assets/YCfbsjd_2794831218_000.texture.res" id="3_r3xt0"]
-[ext_resource type="Texture2D" uid="uid://bhnbtpl3k8y6g" path="res://generated/tiled_visuals/viridian_city/assets/Building1_3584349801_000.texture.res" id="4_8015n"]
-[ext_resource type="Texture2D" uid="uid://7md4fjl2lpj7" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_001.texture.res" id="5_srr8r"]
-[ext_resource type="Texture2D" uid="uid://b4du6q8nflibo" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_002.texture.res" id="6_md3dm"]
-[ext_resource type="Texture2D" uid="uid://cbydi7hjmp1q8" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_003.texture.res" id="7_lqmt4"]
-[ext_resource type="Texture2D" uid="uid://eb6wdxgppa8q" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_004.texture.res" id="8_0ggjp"]
+[ext_resource type="Texture2D" uid="uid://ctxghqdg4kmg5" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_000.texture.res" id="1_khfwi"]
+[ext_resource type="Texture2D" uid="uid://b5gvjg08ub3vg" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_005.texture.res" id="2_r3xt0"]
+[ext_resource type="Texture2D" uid="uid://c6ato8iv2woju" path="res://generated/tiled_visuals/viridian_city/assets/YCfbsjd_2794831218_000.texture.res" id="3_r3xt0"]
+[ext_resource type="Texture2D" uid="uid://b3u3qqhe8hcel" path="res://generated/tiled_visuals/viridian_city/assets/Building1_3584349801_000.texture.res" id="4_8015n"]
+[ext_resource type="Texture2D" uid="uid://bs0afa252aw74" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_001.texture.res" id="5_srr8r"]
+[ext_resource type="Texture2D" uid="uid://dyx22y8wrr0yd" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_002.texture.res" id="6_md3dm"]
+[ext_resource type="Texture2D" uid="uid://nk5ig0j0ysna" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_003.texture.res" id="7_lqmt4"]
+[ext_resource type="Texture2D" uid="uid://cf5uaf5jvj6jg" path="res://generated/tiled_visuals/viridian_city/assets/5GEN_TILESET_3444956149_004.texture.res" id="8_0ggjp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rmytf"]
 texture = ExtResource("1_khfwi")

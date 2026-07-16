@@ -1,10 +1,14 @@
 [gd_scene format=4 uid="uid://dxrgvafxdtmod"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/viridian_forest/viridian_forest.visual.tscn" id="1_rlpuh"]
+[ext_resource type="PackedScene" uid="uid://cmncfuqnr6nda" path="res://generated/tiled_visuals/viridian_forest/viridian_forest.visual.tscn" id="1_rlpuh"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="2_wkx0u"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="3_1umrn"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_j4fnm"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="6_exit"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route2_exit"]
+size = Vector2(160, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1umrn"]
 texture = ExtResource("2_wkx0u")
@@ -332,6 +336,28 @@ position = Vector2(1264, 2192)
 [node name="FromRoute2North" type="Marker2D" parent="Spawns" unique_id=932227516]
 position = Vector2(368, 272)
 
+[node name="Exits" type="Node2D" parent="." unique_id=990330494]
+
+[node name="ToRoute2North" type="Area2D" parent="Exits" unique_id=1048565723]
+position = Vector2(368, 240)
+script = ExtResource("6_exit")
+target_scene_path = "uid://cnbfksossjfg7"
+target_spawn_name = "FromViridianForestNorth"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2North" unique_id=1584323138]
+position = Vector2(-16, -16)
+shape = SubResource("RectangleShape2D_route2_exit")
+
+[node name="ToRoute2South" type="Area2D" parent="Exits" unique_id=495619208]
+position = Vector2(1232, 2256)
+script = ExtResource("6_exit")
+target_scene_path = "uid://cnbfksossjfg7"
+target_spawn_name = "FromViridianForestSouth"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2South" unique_id=1108389756]
+position = Vector2(-16, 16)
+shape = SubResource("RectangleShape2D_route2_exit")
+
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1867046597]
 visible = false
 z_index = 100
@@ -374,3 +400,6 @@ visible = false
 z_index = 1000
 tile_map_data = PackedByteArray("AAA4ACQAAAADAAIAAAA4ACUAAAADAAIAAAA4ACYAAAADAAIAAAA=")
 tile_set = SubResource("TileSet_2hhau")
+
+[connection signal="body_entered" from="Exits/ToRoute2North" to="Exits/ToRoute2North" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute2South" to="Exits/ToRoute2South" method="_on_body_entered"]

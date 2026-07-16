@@ -1034,8 +1034,6 @@ mugshot = ExtResource("15_4m8jl")
 [node name="Lillipup" parent="Entities/Pokemon" unique_id=2091997393 instance=ExtResource("27_pokemon")]
 position = Vector2(816, 688)
 overworld_pokemon_id = "kanto_route_1_lillipup_1"
-species_id = "lillipup"
-display_name = "Lillipup"
 npc_sprite_frames = SubResource("SpriteFrames_oup8f")
 movement_behavior = "pace_horizontal"
 
