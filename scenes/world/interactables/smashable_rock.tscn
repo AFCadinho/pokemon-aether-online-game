@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/field_move_obstacle.gd" id="1_obstacle"]
+[ext_resource type="Texture2D" path="res://assets/world/field_move_obstacles/object_rock.png" id="2_rock_sheet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rock"]
+atlas = ExtResource("2_rock_sheet")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rock_smash_1"]
+atlas = ExtResource("2_rock_sheet")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rock_smash_2"]
+atlas = ExtResource("2_rock_sheet")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rock_smash_3"]
+atlas = ExtResource("2_rock_sheet")
+region = Rect2(0, 96, 32, 32)
+
+[node name="SmashableRock" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_obstacle")
+required_field_move = "rock_smash"
+display_name = "Rock"
+unavailable_message = "This rock looks like it can be smashed."
+clear_frames = Array[Texture2D]([SubResource("AtlasTexture_rock_smash_1"), SubResource("AtlasTexture_rock_smash_2"), SubResource("AtlasTexture_rock_smash_3")])
+interaction_shape_size = Vector2(96, 96)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = SubResource("AtlasTexture_rock")

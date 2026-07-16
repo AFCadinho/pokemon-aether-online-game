@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+- Added temporary directional footprints for sand paths, using invisible sand overlay layers so grass-edge tiles stay clean.
+- Added reusable Cuttable Tree and Smashable Rock overworld interactables, including blocking, clearing animations, and shared field-move logic.
+- Added the first field-move flow: teach HM Cut from the Bag, choose a move slot, then use a party Pokemon that knows Cut to clear a tree.
+- Added Pokemon Home icons and system messages for overworld field-move use.
+
+**Changed**
+- Organized Route 2 and Viridian Forest interactables under map Entities so their collision blocking is discovered consistently.
+
 ## 0.3.5 - 2026-07-16
 
 **Added**

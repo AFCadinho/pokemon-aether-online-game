@@ -125,6 +125,14 @@ const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
 const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
 const TALL_GRASS_RUSTLE_EFFECT_SCRIPT := preload("res://scripts/world/tall_grass_rustle_effect.gd")
 const WATER_RIPPLE_EFFECT_SCRIPT := preload("res://scripts/world/water_ripple_effect.gd")
+const SAND_FOOTPRINT_EFFECT_SCRIPT := preload("res://scripts/world/sand_footprint_effect.gd")
+const SAND_FOOTPRINT_LAYER_OFFSETS := {
+	"Sand": Vector2.ZERO,
+	"SandLeft": Vector2(-8.0, 0.0),
+	"SandRight": Vector2(8.0, 0.0),
+	"SandUp": Vector2(0.0, -8.0),
+	"SandDown": Vector2(0.0, 8.0),
+}
 const ENCOUNTER_TYPE_GRASS := "grass"
 const ENCOUNTER_TYPE_SURF := "surf"
 const ENCOUNTER_TYPE_FISH := "fish"
@@ -162,6 +170,7 @@ var collision_tilemap: TileMapLayer
 var grass_tilemap: TileMapLayer
 var grass_visual_tilemap: TileMapLayer
 var water_tilemap: TileMapLayer
+var sand_tilemaps: Dictionary = {}
 var block_down_tilemap: TileMapLayer
 var block_up_tilemap: TileMapLayer
 var ledge_down_tilemap: TileMapLayer
@@ -173,6 +182,7 @@ var ledge_right_tilemap: TileMapLayer
 # is_moving voorkomt dat je nieuwe input verwerkt terwijl de speler nog naar
 # de volgende tile aan het lopen is.
 var is_moving := false
+var next_sand_footprint_is_left := true
 
 # target_position is een wereldpositie in pixels.
 var target_position := Vector2.ZERO
@@ -490,6 +500,7 @@ func _ready() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
 		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
 		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
+		_refresh_sand_tilemaps(GameState.current_map)
 		collision_tilemap = GameState.current_map.get_node_or_null("Collision")
 		block_down_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockDown"])
 		block_up_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockUp"])
@@ -940,6 +951,7 @@ func _process(delta: float) -> void:
 			var standing_on_tall_grass := is_standing_on_tall_grass()
 			if standing_on_tall_grass:
 				_spawn_tall_grass_rustle_effect()
+			_spawn_sand_footprint_effect()
 
 			if surf_activity_active:
 				check_for_wild_encounter(ENCOUNTER_TYPE_SURF)
@@ -1519,6 +1531,7 @@ func refresh_map_layers() -> void:
 		grass_tilemap = null	
 		grass_visual_tilemap = null
 		water_tilemap = null
+		sand_tilemaps.clear()
 		block_down_tilemap = null
 		block_up_tilemap = null
 		ledge_down_tilemap = null
@@ -1533,6 +1546,7 @@ func refresh_map_layers() -> void:
 	grass_tilemap = current_map.get_node_or_null("TallGrass")
 	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
+	_refresh_sand_tilemaps(current_map)
 	block_down_tilemap = _find_tilemap_layer(current_map, ["BlockDown"])
 	block_up_tilemap = _find_tilemap_layer(current_map, ["BlockUp"])
 	ledge_down_tilemap = _find_tilemap_layer(current_map, ["LedgeDown"])
@@ -1635,6 +1649,52 @@ func _spawn_water_ripple_effect(world_position: Vector2, kind: String, require_w
 	var effect := WATER_RIPPLE_EFFECT_SCRIPT.new()
 	effect_parent.add_child(effect)
 	effect.play(_snap_world_position(world_position), kind)
+
+func _spawn_sand_footprint_effect() -> void:
+	var footprint_offset: Variant = _get_sand_footprint_offset(global_position)
+	if footprint_offset == null:
+		return
+
+	var current_map := _resolve_current_map()
+	var effect_parent: Node = current_map if current_map != null else get_parent()
+	if effect_parent == null:
+		return
+
+	var effect := SAND_FOOTPRINT_EFFECT_SCRIPT.new()
+	effect_parent.add_child(effect)
+	effect.play(
+		_snap_world_position(global_position + footprint_offset),
+		last_direction,
+		next_sand_footprint_is_left
+	)
+	# De afdruk kan binnen de tegel verschoven zijn, maar blijft visueel onder
+	# de speler in plaats van bij een SandDown-tile vóór hem te komen.
+	effect.z_index = floori(get_feet_position().y) - 1
+	next_sand_footprint_is_left = not next_sand_footprint_is_left
+
+func _get_sand_footprint_offset(check_position: Vector2) -> Variant:
+	if sand_tilemaps.is_empty():
+		var current_map := _resolve_current_map()
+		if current_map == null:
+			return null
+		_refresh_sand_tilemaps(current_map)
+
+	for layer_name: String in SAND_FOOTPRINT_LAYER_OFFSETS:
+		var tilemap := sand_tilemaps.get(layer_name) as TileMapLayer
+		if _tilemap_has_tile_at(tilemap, check_position):
+			return SAND_FOOTPRINT_LAYER_OFFSETS[layer_name]
+
+	return null
+
+func _refresh_sand_tilemaps(current_map: Node) -> void:
+	sand_tilemaps.clear()
+	if current_map == null:
+		return
+
+	for layer_name: String in SAND_FOOTPRINT_LAYER_OFFSETS:
+		var tilemap := _find_tilemap_layer(current_map, [layer_name])
+		if tilemap != null:
+			sand_tilemaps[layer_name] = tilemap
 
 func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = Vector2.INF) -> void:
 	var current_map := GameState.current_map

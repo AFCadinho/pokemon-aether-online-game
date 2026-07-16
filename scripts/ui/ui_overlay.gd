@@ -3235,7 +3235,8 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	var move_name := _move_learn_prompt_move_name(move_learn_active_prompt)
 	var pokemon_id := int(move_learn_active_prompt.get("pokemonId", 0))
 	move_learn_status_label.text = "Saving..."
-	var result: Dictionary = await PlayerPartyStateService.learn_pokemon_move(pokemon_id, move_id, replace_slot, skip)
+	var source_item_id := str(move_learn_active_prompt.get("sourceItemId", "")).strip_edges()
+	var result: Dictionary = await PlayerPartyStateService.learn_pokemon_move(pokemon_id, move_id, replace_slot, skip, source_item_id)
 	move_learn_processing = false
 
 	if not bool(result.get("success", false)):
@@ -9161,6 +9162,19 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
 	if pokemon == null:
 		return {}
+	var machine_move_id := _bag_machine_move_id(item_id)
+	if machine_move_id != "":
+		if _pokemon_knows_move_id(pokemon, machine_move_id):
+			return {
+				"label": "Already knows %s" % _format_move_name(machine_move_id),
+				"tooltip": "%s already knows %s." % [pokemon.species, _format_move_name(machine_move_id)],
+				"canApply": false,
+			}
+		return {
+			"label": "Teach %s" % _format_move_name(machine_move_id),
+			"tooltip": "Teach %s to %s. Compatible Pokemon can learn it repeatedly from this machine." % [_format_move_name(machine_move_id), pokemon.species],
+			"canApply": true,
+		}
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
 	if BAG_ITEM_EFFECT_PREVIEW.supports(gameplay):
 		return BAG_ITEM_EFFECT_PREVIEW.preview(pokemon, gameplay, requested_quantity)
@@ -9406,6 +9420,12 @@ func _on_bag_item_use_confirm_pressed() -> void:
 		var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
 		_set_bag_item_use_status(str(preview.get("label", "This item would have no effect.")), true)
 		return
+	var machine_move_id := _bag_machine_move_id(item_id)
+	if machine_move_id != "":
+		_queue_machine_move_learn_prompt(pokemon, item_id, machine_move_id)
+		_hide_bag_item_use_popup()
+		_show_next_move_learn_prompt()
+		return
 
 	bag_item_use_in_progress = true
 	bag_item_use_quantity_spinbox.editable = false
@@ -9501,7 +9521,37 @@ func _is_ev_item_id(item_id: String) -> bool:
 	return EV_ITEM_EFFECTS.has(_normalize_item_id(item_id))
 
 func _is_pokemon_usable_item_id(item_id: String) -> bool:
-	return _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+	return _bag_machine_move_id(item_id) != "" or _is_exp_item_id(item_id) or _is_ev_item_id(item_id) or BAG_ITEM_EFFECT_PREVIEW.supports(_bag_gameplay_definition_for_item_id(item_id))
+
+func _bag_machine_move_id(item_id: String) -> String:
+	var normalized_id := _normalize_item_id(item_id)
+	if _normalize_item_id(str(bag_item_use_pending_item.get("id", ""))) == normalized_id:
+		var pending_move_id := str(bag_item_use_pending_item.get("machineMove", "")).strip_edges()
+		if pending_move_id != "":
+			return pending_move_id
+	for item: Dictionary in bag_inventory_items:
+		if _normalize_item_id(str(item.get("id", ""))) == normalized_id:
+			return str(item.get("machineMove", "")).strip_edges()
+	return ""
+
+func _pokemon_knows_move_id(pokemon: Pokemon, move_id: String) -> bool:
+	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	for move_value: Variant in pokemon.moves:
+		if move_value is Dictionary:
+			var move_data: Dictionary = move_value as Dictionary
+			var known_move_id := str(move_data.get("id", move_data.get("move", ""))).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+			if known_move_id == normalized_move_id:
+				return true
+	return false
+
+func _queue_machine_move_learn_prompt(pokemon: Pokemon, item_id: String, move_id: String) -> void:
+	_queue_move_learn_prompt({
+		"pokemonId": pokemon.owned_pokemon_id,
+		"species": pokemon.species,
+		"moveId": move_id,
+		"name": _format_move_name(move_id),
+		"sourceItemId": item_id,
+	})
 
 func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 	var normalized_id := _normalize_item_id(item_id)
@@ -9590,7 +9640,8 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"isHoldable": bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
-			"gameplay": gameplay,
+		"machineMove": str(item.get("machineMove", "")).strip_edges(),
+		"gameplay": gameplay,
 			"useNotice": use_notice,
 		})
 	normalized_items.append({

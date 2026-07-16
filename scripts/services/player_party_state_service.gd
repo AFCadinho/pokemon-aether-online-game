@@ -385,7 +385,7 @@ func allocate_pokemon_evs(pokemon_id: int, stat_id: String, value: int) -> Dicti
 	return result
 
 
-func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1, skip: bool = false) -> Dictionary:
+func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1, skip: bool = false, source_item_id: String = "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -403,6 +403,8 @@ func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1
 	}
 	if replace_slot >= 0:
 		payload["replaceSlot"] = replace_slot
+	if source_item_id.strip_edges() != "":
+		payload["sourceItemId"] = source_item_id
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(

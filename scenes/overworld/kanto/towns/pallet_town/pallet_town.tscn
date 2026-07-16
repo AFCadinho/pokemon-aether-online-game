@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
+[ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6lp0i"]
 atlas = ExtResource("4_3oirl")
@@ -2191,6 +2192,41 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_j16lr")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wfrmf"]
+texture = ExtResource("27_q27eu")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+0:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_6wa66"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_wfrmf")
+
 [node name="PalletTown" type="Node2D" unique_id=1153208337]
 script = ExtResource("1_f4ndu")
 
@@ -2333,6 +2369,13 @@ visible = false
 position = Vector2(432, 176)
 tile_map_data = PackedByteArray("AAATAAAAAAAEAAEAAAASAAAAAAAEAAEAAAARAAAAAAAEAAEAAAAQAAAAAAAEAAEAAAAPAAAAAAAEAAEAAAA=")
 tile_set = SubResource("TileSet_0ke4d")
+
+[node name="SandTiles" type="Node2D" parent="." unique_id=200742470]
+
+[node name="Sand" type="TileMapLayer" parent="SandTiles" unique_id=1433989699]
+visible = false
+tile_map_data = PackedByteArray("AAAkAB4AAAABAAEAAAAjAB4AAAABAAEAAAAiAB4AAAABAAEAAAAcAB4AAAABAAEAAAAcAB0AAAABAAEAAAAcABwAAAABAAEAAAAcABsAAAABAAEAAAAcABoAAAABAAEAAAAYAAwAAAABAAEAAAAIABIAAAABAAEAAAAIABEAAAABAAEAAAAIABAAAAABAAEAAAAIAA8AAAABAAEAAAAIAA4AAAABAAEAAAAeAAoAAAABAAEAAAAeAAkAAAABAAEAAAAeAAgAAAABAAEAAAAeAAcAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_6wa66")
 
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToOaksLab" to="Exits/ToOaksLab" method="_on_body_entered"]

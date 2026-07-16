@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="17_bnyo4"]
 [ext_resource type="Texture2D" uid="uid://bywpecaqt7jd3" path="res://assets/npcs/gen5-g4-ow-sprites/OW PACK/trChampion01.png" id="17_cd607"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="20_viridian"]
+[ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="22_qefnj"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_1/route_1.visual.tscn" id="26_c1ijh"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="27_pokemon"]
 
@@ -973,6 +974,41 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_gd1nu")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bc3mu"]
+texture = ExtResource("22_qefnj")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+0:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_gxjlh"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_bc3mu")
+
 [node name="KantoRoute1" type="Node2D" unique_id=1284880823]
 position = Vector2(16, 16)
 script = ExtResource("1_7kpb1")
@@ -1024,7 +1060,6 @@ sprite_offset = null
 
 [node name="GateNPC" parent="Entities/NPCs/Dialogue" unique_id=586724815 instance=ExtResource("13_8kkc8")]
 position = Vector2(1072, 272)
-requires_staff_role = true
 npc_id = "kanto_route_1_north_guard"
 npc_sprite_frames = SubResource("SpriteFrames_qefnj")
 mugshot = ExtResource("15_4m8jl")
@@ -1105,6 +1140,13 @@ tile_set = SubResource("TileSet_bnyo4")
 visible = false
 tile_map_data = PackedByteArray("AAAiAAcAAAAGAAQAAAAjAAcAAAAGAAQAAAAkAAcAAAAGAAQAAAAlAAcAAAAGAAQAAAAmAAcAAAAGAAQAAAA=")
 tile_set = SubResource("TileSet_bc3mu")
+
+[node name="SandTiles" type="Node2D" parent="." unique_id=1364205120]
+
+[node name="Sand" type="TileMapLayer" parent="SandTiles" unique_id=1269625389]
+visible = false
+tile_map_data = PackedByteArray("AAAdAEQAAAABAAEAAAAdAEMAAAABAAEAAAAdAEIAAAABAAEAAAAdAEEAAAABAAEAAAAdAEAAAAABAAEAAAAdAD8AAAABAAEAAAAdAD4AAAABAAEAAAAcAD8AAAABAAEAAAAbAD8AAAABAAEAAAAaAD8AAAABAAEAAAAMADgAAAABAAEAAAAMADcAAAABAAEAAAAMADYAAAABAAEAAAAMADUAAAABAAEAAAAeADMAAAABAAEAAAAfADMAAAABAAEAAAAgADMAAAABAAEAAAAhADMAAAABAAEAAAAiADMAAAABAAEAAAAjADMAAAABAAEAAAAiADIAAAABAAEAAAAiADEAAAABAAEAAAAqACYAAAABAAEAAAAqACUAAAABAAEAAAAqACQAAAABAAEAAAAqACMAAAABAAEAAAAVACIAAAABAAEAAAAUACIAAAABAAEAAAATACIAAAABAAEAAAASACIAAAABAAEAAAARACIAAAABAAEAAAAQACIAAAABAAEAAAAfABgAAAABAAEAAAAfABcAAAABAAEAAAAfABYAAAABAAEAAAAfABUAAAABAAEAAAAfABQAAAABAAEAAAAfABMAAAABAAEAAAAfABIAAAABAAEAAAAeABQAAAABAAEAAAAdABQAAAABAAEAAAAcABQAAAABAAEAAAAbABQAAAABAAEAAAAaABQAAAABAAEAAAAZABQAAAABAAEAAAAYABQAAAABAAEAAAAXABQAAAABAAEAAAAWABQAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_gxjlh")
 
 [connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_j4fnm"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="6_exit"]
+[ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="7_b5ds1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route2_exit"]
 size = Vector2(160, 32)
@@ -317,6 +318,76 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_j4fnm")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pmba4"]
+texture = ExtResource("7_b5ds1")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+0:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_1rh6e"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_pmba4")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b5ds1"]
+texture = ExtResource("7_b5ds1")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+0:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_pmba4"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_b5ds1")
+
 [node name="ViridianForest2" type="Node2D" unique_id=2013019260]
 script = ExtResource("4_metadata")
 map_id = "kanto_viridian_forest"
@@ -400,6 +471,33 @@ visible = false
 z_index = 1000
 tile_map_data = PackedByteArray("AAA4ACQAAAADAAIAAAA4ACUAAAADAAIAAAA4ACYAAAADAAIAAAA=")
 tile_set = SubResource("TileSet_2hhau")
+
+[node name="SandTiles" type="Node2D" parent="." unique_id=1647808265]
+
+[node name="Sand" type="TileMapLayer" parent="SandTiles" unique_id=759397556]
+z_index = 100
+tile_map_data = PackedByteArray("AAALAAkAAAABAAEAAAALAAoAAAABAAEAAAALAAsAAAABAAEAAAALAAwAAAABAAEAAAARABcAAAABAAEAAAARABgAAAABAAEAAAARABkAAAABAAEAAAAnAEMAAAABAAEAAAAnAEIAAAABAAEAAAAnAEEAAAABAAEAAAAnAEAAAAABAAEAAAAnAD8AAAABAAEAAAAmAEMAAAABAAEAAAAmAEIAAAABAAEAAAAmAEEAAAABAAEAAAAmAEAAAAABAAEAAAAmAD8AAAABAAEAAAA=")
+tile_set = SubResource("TileSet_1rh6e")
+
+[node name="SandLeft" type="TileMapLayer" parent="SandTiles" unique_id=22781272]
+tile_map_data = PackedByteArray("AAAmADgAAAABAAEAAAAmADcAAAABAAEAAAAmADYAAAABAAEAAAAmADUAAAABAAEAAAAmADQAAAABAAEAAAAnAC8AAAABAAEAAAAgABMAAAABAAEAAAAgABIAAAABAAEAAAA9ADgAAAABAAEAAAA9ADkAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_pmba4")
+
+[node name="SandRight" type="TileMapLayer" parent="SandTiles" unique_id=75795207]
+tile_map_data = PackedByteArray("AAAnADQAAAABAAEAAAAnADUAAAABAAEAAAAnADYAAAABAAEAAAAnADcAAAABAAEAAAAnADgAAAABAAEAAAAhABMAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_pmba4")
+
+[node name="SandUp" type="TileMapLayer" parent="SandTiles" unique_id=1645072408]
+tile_map_data = PackedByteArray("AAApAC8AAAABAAEAAAAhABEAAAABAAEAAAAiABEAAAABAAEAAAA/ADkAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_pmba4")
+
+[node name="SandDown" type="TileMapLayer" parent="SandTiles" unique_id=829046973]
+tile_map_data = PackedByteArray("AAApADAAAAABAAEAAAAoADAAAAABAAEAAAAiABIAAAABAAEAAAA+ADoAAAABAAEAAAA/ADoAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_pmba4")
+
+[node name="Entities" type="Node2D" parent="." unique_id=1962237010]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=224807989]
 
 [connection signal="body_entered" from="Exits/ToRoute2North" to="Exits/ToRoute2North" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2South" to="Exits/ToRoute2South" method="_on_body_entered"]

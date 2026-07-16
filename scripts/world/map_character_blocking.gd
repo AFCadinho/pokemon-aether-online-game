@@ -6,6 +6,8 @@ const NPC_CONTAINER_PATHS: Array[String] = [
 	"Entities/NPCs",
 	"Entities/Pokemon",
 	"Entities/Interactables",
+	# Oudere/handgemaakte maps plaatsen dit direct onder de map-root.
+	"Interactables",
 ]
 const ROUTE_GATES_LAYER_NAME := "RouteGates"
 
