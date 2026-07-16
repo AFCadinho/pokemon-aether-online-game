@@ -63,6 +63,83 @@
     "regionName": "Kanto",
     "scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
   },
+  "kanto_pewter_city": {
+    "label": "Pewter City",
+    "points": {
+      "from_gym": {
+        "facingDirection": "down",
+        "label": "From Gym",
+        "safe": true,
+        "spawnMarker": "FromGym",
+        "tile": {
+          "x": 18,
+          "y": 18
+        }
+      },
+      "from_house_1": {
+        "facingDirection": "down",
+        "label": "From House 1",
+        "safe": true,
+        "spawnMarker": "FromHouse1",
+        "tile": {
+          "x": 34,
+          "y": 31
+        }
+      },
+      "from_house_2": {
+        "facingDirection": "down",
+        "label": "From House 2",
+        "safe": true,
+        "spawnMarker": "FromHouse2",
+        "tile": {
+          "x": 14,
+          "y": 49
+        }
+      },
+      "from_museum": {
+        "facingDirection": "down",
+        "label": "From Museum",
+        "safe": true,
+        "spawnMarker": "FromMuseum",
+        "tile": {
+          "x": 43,
+          "y": 13
+        }
+      },
+      "from_pokecenter": {
+        "facingDirection": "down",
+        "label": "From Pokecenter",
+        "safe": true,
+        "spawnMarker": "FromPokecenter",
+        "tile": {
+          "x": 44,
+          "y": 49
+        }
+      },
+      "route_2_entrance": {
+        "facingDirection": "up",
+        "label": "Route 2 Entrance",
+        "safe": true,
+        "spawnMarker": "FromRoute2",
+        "tile": {
+          "x": 26,
+          "y": 58
+        }
+      },
+      "route_3_entrance": {
+        "facingDirection": "left",
+        "label": "Route 3 Entrance",
+        "safe": true,
+        "spawnMarker": "FromRoute3",
+        "tile": {
+          "x": 58,
+          "y": 33
+        }
+      }
+    },
+    "regionName": "Kanto",
+    "scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
+  },
   "kanto_route_1": {
     "label": "Route 1",
     "points": {
@@ -93,6 +170,16 @@
   "kanto_route_2": {
     "label": "Route 2",
     "points": {
+      "pewter_city_entrance": {
+        "facingDirection": "up",
+        "label": "Pewter City Entrance",
+        "safe": true,
+        "spawnMarker": "FromPewterCity",
+        "tile": {
+          "x": 46,
+          "y": 1
+        }
+      },
       "viridian_city_entrance": {
         "facingDirection": "up",
         "label": "Viridian City Entrance",

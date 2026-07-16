@@ -264,7 +264,7 @@ func sync_activity_state_for_current_tile() -> void:
 	refresh_map_layers()
 
 	if _is_water_tile_at(global_position):
-		if bool(GameState.surf_unlocked) and not surf_activity_active:
+		if bool(GameState.surf_unlocked) and _has_party_field_move("surf") and not surf_activity_active:
 			_start_surf_activity(false)
 		return
 
@@ -347,6 +347,9 @@ func get_surf_check_result() -> Dictionary:
 		return result
 	if not bool(GameState.surf_unlocked):
 		result["reason"] = "surf_locked"
+		return result
+	if not _has_party_field_move("surf"):
+		result["reason"] = "no_party_surf"
 		return result
 
 	result["allowed"] = true
@@ -1088,6 +1091,10 @@ func _try_check_surf_interaction_input() -> bool:
 	if bool(surf_check.get("allowed", false)):
 		start_surf()
 	return true
+
+
+func _has_party_field_move(move_id: String) -> bool:
+	return bool(FieldMoveService.can_use_field_move(move_id).get("success", false))
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true

@@ -1,7 +1,112 @@
 [gd_scene format=3 uid="uid://b63qp0afy4rpd"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_city/pewter_city.visual.tscn" id="1_kr88e"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="2_jtxgn"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="3_2hpv6"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
+size = Vector2(32, 32)
 
 [node name="PewterCity" type="Node2D" unique_id=2051045385]
+script = ExtResource("4_metadata")
+map_id = "kanto_pewter_city"
+map_region_name = "Kanto"
+map_display_name = "Pewter City"
+location_id = "kanto.pewter_city"
+location_name = "Pewter City"
+region_id = "kanto"
 
 [node name="PewterCity" parent="." unique_id=1507076430 instance=ExtResource("1_kr88e")]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1604106458]
+
+[node name="FromRoute2" type="Marker2D" parent="Spawns" unique_id=1771873740]
+position = Vector2(848, 1872)
+
+[node name="FromRoute3" type="Marker2D" parent="Spawns" unique_id=1643262342]
+position = Vector2(1872, 1072)
+
+[node name="FromGym" type="Marker2D" parent="Spawns" unique_id=700914719]
+position = Vector2(592, 592)
+
+[node name="FromMuseum" type="Marker2D" parent="Spawns" unique_id=776891898]
+position = Vector2(1392, 432)
+
+[node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=498605174]
+position = Vector2(1424, 1584)
+
+[node name="FromHouse1" type="Marker2D" parent="Spawns" unique_id=1453293858]
+position = Vector2(1104, 1008)
+
+[node name="FromHouse2" type="Marker2D" parent="Spawns" unique_id=1272194160]
+position = Vector2(464, 1584)
+
+[node name="Exits" type="Node2D" parent="." unique_id=109747091]
+
+[node name="ToRoute2" type="Area2D" parent="Exits" unique_id=1956639696]
+position = Vector2(848, 1904)
+script = ExtResource("2_jtxgn")
+target_scene_path = "uid://cnbfksossjfg7"
+target_spawn_name = "FromPewterCity"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2" unique_id=56126881]
+shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute2" unique_id=359876710 instance=ExtResource("3_2hpv6")]
+position = Vector2(-16, 0)
+width = 194.0
+
+[node name="ToRoute3" type="Area2D" parent="Exits" unique_id=755761727]
+position = Vector2(1936, 1072)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute3" unique_id=1591807988]
+position = Vector2(-16, 0)
+shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1851330212]
+position = Vector2(1424, 1520)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=170342928]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="ToGym" type="Area2D" parent="Exits" unique_id=1528691859]
+position = Vector2(592, 528)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym" unique_id=1730913991]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="ToMuseum" type="Area2D" parent="Exits" unique_id=1789742615]
+position = Vector2(1392, 368)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMuseum" unique_id=501270336]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="ToHouse1" type="Area2D" parent="Exits" unique_id=2138960520]
+position = Vector2(1200, 1040)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1866582334]
+position = Vector2(-96, -96)
+shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="ToHouse2" type="Area2D" parent="Exits" unique_id=321825155]
+position = Vector2(464, 1520)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2" unique_id=1165082321]
+shape = SubResource("RectangleShape2D_2mtwu")
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]

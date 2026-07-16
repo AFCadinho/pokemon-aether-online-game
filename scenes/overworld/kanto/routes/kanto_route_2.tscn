@@ -208,7 +208,7 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_3mgn4")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gac6d"]
-size = Vector2(160, 32)
+size = Vector2(192, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j62p7"]
 texture = ExtResource("9_gac6d")
@@ -296,6 +296,9 @@ position = Vector2(336, 1296)
 [node name="FromViridianCity" type="Marker2D" parent="Spawns" unique_id=193192526]
 position = Vector2(592, 2352)
 
+[node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=210662386]
+position = Vector2(1488, 48)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1183129315]
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=1185183787]
@@ -309,6 +312,19 @@ position = Vector2(-16, 0)
 shape = SubResource("RectangleShape2D_gac6d")
 
 [node name="RouteTransitionHint" parent="Exits/ToViridianCity" unique_id=868490827 instance=ExtResource("7_f8n3h")]
+position = Vector2(-16, 0)
+width = 194.0
+
+[node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=1328365275]
+position = Vector2(1488, 16)
+script = ExtResource("6_3mgn4")
+target_scene_path = "uid://b63qp0afy4rpd"
+target_spawn_name = "FromRoute2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity" unique_id=296400815]
+shape = SubResource("RectangleShape2D_gac6d")
+
+[node name="RouteTransitionHint" parent="Exits/ToPewterCity" unique_id=968794573 instance=ExtResource("7_f8n3h")]
 position = Vector2(-16, 0)
 width = 194.0
 
@@ -364,5 +380,6 @@ position = Vector2(1392, 752)
 position = Vector2(1360, 752)
 
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianForestNorth" to="Exits/ToViridianForestNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianForestSouth" to="Exits/ToViridianForestSouth" method="_on_body_entered"]

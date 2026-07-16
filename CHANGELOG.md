@@ -7,9 +7,16 @@
 - Added reusable Cuttable Tree and Smashable Rock overworld interactables, including blocking, clearing animations, and shared field-move logic.
 - Added the first field-move flow: teach HM Cut from the Bag, choose a move slot, then use a party Pokemon that knows Cut to clear a tree.
 - Added Pokemon Home icons and system messages for overworld field-move use.
+- Added Rock Smash support to reusable overworld rocks.
+- Added Pewter City map exits, spawn points, and staff teleport destinations.
 
 **Changed**
 - Organized Route 2 and Viridian Forest interactables under map Entities so their collision blocking is discovered consistently.
+- Surf now requires both its overworld unlock and a party Pokemon that knows Surf.
+- HM machine selection refreshes the Bag, shows Home icons, and lists only party Pokemon that can learn the selected move.
+
+**Fixed**
+- Fixed HM compatibility filtering failing when JSON numeric Pokemon ids were parsed as floating-point values by the client.
 
 ## 0.3.5 - 2026-07-16
 

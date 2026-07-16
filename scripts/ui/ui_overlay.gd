@@ -575,6 +575,10 @@ var staff_teleport_player_tab_button: Button
 var staff_teleport_self_section: Control
 var staff_teleport_map_select: OptionButton
 var staff_teleport_point_select: OptionButton
+var staff_teleport_destination_search: LineEdit
+var staff_teleport_spawn_search: LineEdit
+var staff_teleport_destination_results: ItemList
+var staff_teleport_selected_destination_label: Label
 var staff_teleport_self_reason_input: LineEdit
 var staff_teleport_confirm_button: Button
 var staff_teleport_player_divider: HSeparator
@@ -582,6 +586,7 @@ var staff_teleport_player_title: Label
 var staff_teleport_player_section: Control
 var staff_teleport_player_search_input: LineEdit
 var staff_teleport_player_select: OptionButton
+var staff_teleport_player_results: ItemList
 var staff_teleport_selected_player_label: Label
 var staff_teleport_to_player_mode_button: Button
 var staff_teleport_send_player_mode_button: Button
@@ -590,8 +595,13 @@ var staff_teleport_to_player_button: Button
 var staff_teleport_send_section: Control
 var staff_teleport_send_map_select: OptionButton
 var staff_teleport_send_point_select: OptionButton
+var staff_teleport_send_map_search: LineEdit
+var staff_teleport_send_spawn_search: LineEdit
+var staff_teleport_send_destination_results: ItemList
+var staff_teleport_filtered_safe_destinations: Array = []
 var staff_teleport_send_player_button: Button
 var staff_teleport_maps: Array = []
+var staff_teleport_filtered_destinations: Array = []
 var staff_teleport_safe_maps: Array = []
 var staff_teleport_online_players: Array = []
 var staff_teleport_filtered_players: Array = []
@@ -599,6 +609,7 @@ var staff_teleport_points_loading := false
 var staff_teleport_safe_points_loading := false
 var staff_teleport_players_loading := false
 var staff_teleport_in_flight := false
+var staff_teleport_player_selection_confirmed := false
 var staff_teleport_active_tab := "self"
 var staff_teleport_player_action_mode := "to_player"
 var chat_submit_in_progress: bool = false
@@ -4562,19 +4573,19 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_title.add_theme_color_override("font_color", UI_BORDER)
 	tools_layout.add_child(staff_tools_title)
 
-	staff_impersonate_button = Button.new()
-	staff_impersonate_button.text = "Impersonate"
-	staff_impersonate_button.custom_minimum_size = Vector2(190, 32)
-	staff_impersonate_button.focus_mode = Control.FOCUS_NONE
-	staff_impersonate_button.pressed.connect(_on_staff_impersonate_button_pressed)
-	tools_layout.add_child(staff_impersonate_button)
-
 	staff_teleport_button = Button.new()
 	staff_teleport_button.text = "Teleport"
 	staff_teleport_button.custom_minimum_size = Vector2(190, 32)
 	staff_teleport_button.focus_mode = Control.FOCUS_NONE
 	staff_teleport_button.pressed.connect(_on_staff_teleport_button_pressed)
 	tools_layout.add_child(staff_teleport_button)
+
+	staff_impersonate_button = Button.new()
+	staff_impersonate_button.text = "Impersonate"
+	staff_impersonate_button.custom_minimum_size = Vector2(190, 32)
+	staff_impersonate_button.focus_mode = Control.FOCUS_NONE
+	staff_impersonate_button.pressed.connect(_on_staff_impersonate_button_pressed)
+	tools_layout.add_child(staff_impersonate_button)
 
 	var staff_tools_close_button := Button.new()
 	staff_tools_close_button.text = "Close"
@@ -4734,16 +4745,37 @@ func _setup_staff_impersonation_tools() -> void:
 
 	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Self"))
 
-	staff_teleport_map_select = OptionButton.new()
-	staff_teleport_map_select.custom_minimum_size = Vector2(0, 36)
-	staff_teleport_map_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_teleport_map_select.item_selected.connect(_on_staff_teleport_map_selected)
-	staff_teleport_self_section.add_child(staff_teleport_map_select)
+	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Map"))
 
-	staff_teleport_point_select = OptionButton.new()
-	staff_teleport_point_select.custom_minimum_size = Vector2(0, 36)
-	staff_teleport_point_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_teleport_self_section.add_child(staff_teleport_point_select)
+	staff_teleport_destination_search = LineEdit.new()
+	staff_teleport_destination_search.placeholder_text = "Search map…"
+	staff_teleport_destination_search.custom_minimum_size = Vector2(0, 38)
+	staff_teleport_destination_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_destination_search.text_changed.connect(_on_staff_teleport_destination_search_changed)
+	staff_teleport_self_section.add_child(staff_teleport_destination_search)
+
+	staff_teleport_self_section.add_child(_create_staff_teleport_section_title("Spawn point"))
+
+	staff_teleport_spawn_search = LineEdit.new()
+	staff_teleport_spawn_search.placeholder_text = "Search spawn point…"
+	staff_teleport_spawn_search.custom_minimum_size = Vector2(0, 38)
+	staff_teleport_spawn_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_spawn_search.text_changed.connect(_on_staff_teleport_spawn_search_changed)
+	staff_teleport_self_section.add_child(staff_teleport_spawn_search)
+
+	staff_teleport_destination_results = ItemList.new()
+	staff_teleport_destination_results.custom_minimum_size = Vector2(0, 154)
+	staff_teleport_destination_results.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_destination_results.item_selected.connect(_on_staff_teleport_destination_selected)
+	staff_teleport_destination_results.item_activated.connect(_on_staff_teleport_destination_selected)
+	staff_teleport_self_section.add_child(staff_teleport_destination_results)
+
+	staff_teleport_selected_destination_label = Label.new()
+	staff_teleport_selected_destination_label.text = "No destination selected"
+	staff_teleport_selected_destination_label.add_theme_font_size_override("font_size", 12)
+	staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	staff_teleport_selected_destination_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	staff_teleport_self_section.add_child(staff_teleport_selected_destination_label)
 
 	staff_teleport_self_reason_input = LineEdit.new()
 	staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
@@ -4764,21 +4796,22 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_player_section.add_theme_constant_override("separation", 7)
 	teleport_body.add_child(staff_teleport_player_section)
 
-	staff_teleport_player_title = _create_staff_teleport_section_title("To Player") as Label
+	staff_teleport_player_title = _create_staff_teleport_section_title("Player") as Label
 	staff_teleport_player_section.add_child(staff_teleport_player_title)
 
 	staff_teleport_player_search_input = LineEdit.new()
-	staff_teleport_player_search_input.placeholder_text = "Search online players"
+	staff_teleport_player_search_input.placeholder_text = "Search online player…"
 	staff_teleport_player_search_input.custom_minimum_size = Vector2(0, 36)
 	staff_teleport_player_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_search_input.text_changed.connect(_on_staff_teleport_player_search_changed)
 	staff_teleport_player_section.add_child(staff_teleport_player_search_input)
 
-	staff_teleport_player_select = OptionButton.new()
-	staff_teleport_player_select.custom_minimum_size = Vector2(0, 36)
-	staff_teleport_player_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_teleport_player_select.item_selected.connect(_on_staff_teleport_player_selected)
-	staff_teleport_player_section.add_child(staff_teleport_player_select)
+	staff_teleport_player_results = ItemList.new()
+	staff_teleport_player_results.custom_minimum_size = Vector2(0, 116)
+	staff_teleport_player_results.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_results.item_selected.connect(_on_staff_teleport_player_selected)
+	staff_teleport_player_results.item_activated.connect(_on_staff_teleport_player_selected)
+	staff_teleport_player_section.add_child(staff_teleport_player_results)
 
 	staff_teleport_selected_player_label = Label.new()
 	staff_teleport_selected_player_label.text = "Selected player: none"
@@ -4812,18 +4845,31 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_section.add_theme_constant_override("separation", 7)
 	staff_teleport_player_section.add_child(staff_teleport_send_section)
 
-	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Safe Location"))
+	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Safe destination"))
+	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Map"))
 
-	staff_teleport_send_map_select = OptionButton.new()
-	staff_teleport_send_map_select.custom_minimum_size = Vector2(0, 36)
-	staff_teleport_send_map_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_teleport_send_map_select.item_selected.connect(_on_staff_teleport_send_map_selected)
-	staff_teleport_send_section.add_child(staff_teleport_send_map_select)
+	staff_teleport_send_map_search = LineEdit.new()
+	staff_teleport_send_map_search.placeholder_text = "Search map…"
+	staff_teleport_send_map_search.custom_minimum_size = Vector2(0, 38)
+	staff_teleport_send_map_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_map_search.text_changed.connect(_on_staff_teleport_send_destination_search_changed)
+	staff_teleport_send_section.add_child(staff_teleport_send_map_search)
 
-	staff_teleport_send_point_select = OptionButton.new()
-	staff_teleport_send_point_select.custom_minimum_size = Vector2(0, 36)
-	staff_teleport_send_point_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	staff_teleport_send_section.add_child(staff_teleport_send_point_select)
+	staff_teleport_send_section.add_child(_create_staff_teleport_section_title("Spawn point"))
+
+	staff_teleport_send_spawn_search = LineEdit.new()
+	staff_teleport_send_spawn_search.placeholder_text = "Search spawn point…"
+	staff_teleport_send_spawn_search.custom_minimum_size = Vector2(0, 38)
+	staff_teleport_send_spawn_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_spawn_search.text_changed.connect(_on_staff_teleport_send_destination_search_changed)
+	staff_teleport_send_section.add_child(staff_teleport_send_spawn_search)
+
+	staff_teleport_send_destination_results = ItemList.new()
+	staff_teleport_send_destination_results.custom_minimum_size = Vector2(0, 116)
+	staff_teleport_send_destination_results.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_send_destination_results.item_selected.connect(_on_staff_teleport_send_destination_selected)
+	staff_teleport_send_destination_results.item_activated.connect(_on_staff_teleport_send_destination_selected)
+	staff_teleport_send_section.add_child(staff_teleport_send_destination_results)
 
 	staff_teleport_player_reason_input = LineEdit.new()
 	staff_teleport_player_reason_input.placeholder_text = "Player action reason (optional)"
@@ -4858,6 +4904,10 @@ func _setup_staff_impersonation_tools() -> void:
 	_apply_button_style(staff_teleport_player_tab_button)
 	_apply_button_style(staff_teleport_to_player_mode_button, "primary")
 	_apply_button_style(staff_teleport_send_player_mode_button)
+	_apply_line_edit_style(staff_teleport_destination_search)
+	_apply_line_edit_style(staff_teleport_spawn_search)
+	_apply_line_edit_style(staff_teleport_send_map_search)
+	_apply_line_edit_style(staff_teleport_send_spawn_search)
 	_apply_line_edit_style(staff_teleport_self_reason_input)
 	_apply_line_edit_style(staff_teleport_player_reason_input)
 	_apply_button_style(staff_teleport_confirm_button, "primary")
@@ -9062,6 +9112,11 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if item_id == "escape-rope-action":
 		_on_escape_rope_pressed()
 		return
+	if _bag_machine_move_id(item_id) != "":
+		await _refresh_bag_inventory_for_machine_selection()
+		var refreshed_item := _bag_item_by_id(item_id)
+		if not refreshed_item.is_empty():
+			item = refreshed_item
 	if _is_pokemon_usable_item_id(item_id):
 		_show_bag_item_use_popup(item)
 		return
@@ -9115,11 +9170,20 @@ func _refresh_bag_item_use_party_list() -> void:
 		bag_item_use_party_list.add_child(_create_bag_empty_state("Your party is empty."))
 		return
 
+	var shown_pokemon_count := 0
 	for slot_index in range(PlayerSave.party.size()):
 		var pokemon: Pokemon = PlayerSave.party[slot_index]
 		if pokemon == null:
 			continue
+		var machine_move_id := _bag_machine_move_id(str(bag_item_use_pending_item.get("id", "")))
+		var can_teach_machine := _bag_machine_can_teach_pokemon(pokemon)
+		if machine_move_id != "" and not can_teach_machine:
+			continue
 		bag_item_use_party_list.add_child(_create_bag_item_use_pokemon_button(pokemon, slot_index))
+		shown_pokemon_count += 1
+
+	if shown_pokemon_count == 0:
+		bag_item_use_party_list.add_child(_create_bag_empty_state("No compatible Pokemon in your party."))
 
 func _on_bag_item_use_quantity_changed(_value: float) -> void:
 	if bag_item_use_popup == null or not bag_item_use_popup.visible:
@@ -9131,8 +9195,7 @@ func _on_bag_item_use_quantity_changed(_value: float) -> void:
 
 func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> Control:
 	var button := Button.new()
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.custom_minimum_size = Vector2(0, 44)
+	button.custom_minimum_size = Vector2(0, 58)
 	button.focus_mode = Control.FOCUS_NONE
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
 	var requested_quantity := 1
@@ -9143,11 +9206,41 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	if slot_index == bag_item_use_selected_slot:
 		preview = _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
 		preview_text = str(preview.get("label", ""))
-	button.text = "%s  Lv. %s%s" % [
-		pokemon.species,
-		max(pokemon.level, 1),
-		"  ->  %s" % preview_text if preview_text != "" else "",
-	]
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.set_anchors_preset(Control.PRESET_FULL_RECT)
+	row.add_theme_constant_override("separation", 8)
+	button.add_child(row)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(48, 48)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
+	if icon.texture == null:
+		icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+
+	var details := VBoxContainer.new()
+	details.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_child(details)
+
+	var name_label := Label.new()
+	name_label.text = "%s  Lv. %s" % [pokemon.species, max(pokemon.level, 1)]
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_label.add_theme_font_size_override("font_size", 15)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	details.add_child(name_label)
+	if preview_text != "":
+		var preview_label := Label.new()
+		preview_label.text = preview_text
+		preview_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		preview_label.add_theme_font_size_override("font_size", 11)
+		preview_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		details.add_child(preview_label)
 	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
 	if pokemon.owned_pokemon_id <= 0:
@@ -9534,6 +9627,25 @@ func _bag_machine_move_id(item_id: String) -> String:
 			return str(item.get("machineMove", "")).strip_edges()
 	return ""
 
+func _bag_item_by_id(item_id: String) -> Dictionary:
+	var normalized_id := _normalize_item_id(item_id)
+	for item: Dictionary in bag_inventory_items:
+		if _normalize_item_id(str(item.get("id", ""))) == normalized_id:
+			return item.duplicate(true)
+	return {}
+
+func _bag_machine_can_teach_pokemon(pokemon: Pokemon) -> bool:
+	if pokemon == null or pokemon.owned_pokemon_id <= 0:
+		return false
+	var compatible_ids_value: Variant = bag_item_use_pending_item.get("machineCompatiblePokemonIds", [])
+	if not (compatible_ids_value is Array):
+		return false
+	var compatible_ids: Array = compatible_ids_value as Array
+	for compatible_id_value: Variant in compatible_ids:
+		if int(compatible_id_value) == pokemon.owned_pokemon_id:
+			return not _pokemon_knows_move_id(pokemon, _bag_machine_move_id(str(bag_item_use_pending_item.get("id", ""))))
+	return false
+
 func _pokemon_knows_move_id(pokemon: Pokemon, move_id: String) -> bool:
 	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 	for move_value: Variant in pokemon.moves:
@@ -9618,6 +9730,11 @@ func _load_bag_inventory() -> void:
 		push_warning("Bag inventory failed to load: %s" % str(inventory_result.get("error", "Unknown error")))
 	_refresh_bag_items()
 
+func _refresh_bag_inventory_for_machine_selection() -> void:
+	while bag_inventory_loading:
+		await get_tree().process_frame
+	await _load_bag_inventory()
+
 func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 	var normalized_items: Array[Dictionary] = []
 	if typeof(items_value) != TYPE_ARRAY:
@@ -9640,8 +9757,9 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"isHoldable": bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
-		"machineMove": str(item.get("machineMove", "")).strip_edges(),
-		"gameplay": gameplay,
+			"machineMove": str(item.get("machineMove", "")).strip_edges(),
+			"machineCompatiblePokemonIds": item.get("machineCompatiblePokemonIds", []),
+			"gameplay": gameplay,
 			"useNotice": use_notice,
 		})
 	normalized_items.append({
@@ -14831,8 +14949,10 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_player_action_mode = "to_player"
 	var show_self := staff_teleport_active_tab == "self" and can_self
 	var show_player := staff_teleport_active_tab == "player" and can_player
-	var show_to_player := show_player and staff_teleport_player_action_mode == "to_player" and _can_teleport_to_player()
-	var show_send_safe := show_player and staff_teleport_player_action_mode == "send_safe" and _can_teleport_other_player()
+	var selected_player := _get_selected_staff_teleport_player()
+	var player_is_selected := staff_teleport_player_selection_confirmed and int(selected_player.get("targetPlayerId", 0)) > 0
+	var show_to_player := show_player and player_is_selected and staff_teleport_player_action_mode == "to_player" and _can_teleport_to_player()
+	var show_send_safe := show_player and player_is_selected and staff_teleport_player_action_mode == "send_safe" and _can_teleport_other_player()
 
 	if staff_teleport_self_tab_button != null:
 		staff_teleport_self_tab_button.visible = can_self
@@ -14845,10 +14965,10 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 	if staff_teleport_player_section != null:
 		staff_teleport_player_section.visible = show_player
 	if staff_teleport_to_player_mode_button != null:
-		staff_teleport_to_player_mode_button.visible = show_player and _can_teleport_to_player()
+		staff_teleport_to_player_mode_button.visible = show_player and player_is_selected and _can_teleport_to_player()
 		_apply_button_style(staff_teleport_to_player_mode_button, "primary" if show_to_player else "default")
 	if staff_teleport_send_player_mode_button != null:
-		staff_teleport_send_player_mode_button.visible = show_player and _can_teleport_other_player()
+		staff_teleport_send_player_mode_button.visible = show_player and player_is_selected and _can_teleport_other_player()
 		_apply_button_style(staff_teleport_send_player_mode_button, "primary" if show_send_safe else "default")
 	if staff_teleport_send_section != null:
 		staff_teleport_send_section.visible = show_send_safe
@@ -14858,7 +14978,7 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 		staff_teleport_self_reason_input.visible = show_self
 		staff_teleport_self_reason_input.placeholder_text = "Self teleport reason (optional)"
 	if staff_teleport_player_reason_input != null:
-		staff_teleport_player_reason_input.visible = show_player
+		staff_teleport_player_reason_input.visible = show_to_player or show_send_safe
 		var player_reason_required := (_current_user_requires_teleport_to_player_reason() and show_to_player) or (_current_user_requires_teleport_other_reason() and show_send_safe)
 		var player_reason_label := "Reason for teleport to player" if show_to_player else "Reason for safe-location send"
 		staff_teleport_player_reason_input.placeholder_text = "%s (required)" % player_reason_label if player_reason_required else "%s (optional)" % player_reason_label
@@ -14874,6 +14994,11 @@ func _on_staff_teleport_button_pressed() -> void:
 		return
 	if staff_teleport_popup == null:
 		return
+	var opening := not staff_teleport_popup.visible
+	if opening:
+		staff_teleport_player_selection_confirmed = false
+		if staff_teleport_player_search_input != null:
+			staff_teleport_player_search_input.clear()
 	if _can_teleport_self():
 		staff_teleport_active_tab = "self"
 	else:
@@ -14944,7 +15069,7 @@ func _load_staff_teleport_online_players_if_needed(force := false) -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_safe_maps.is_empty()
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty()
 
 
 func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
@@ -14968,23 +15093,97 @@ func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
 	staff_teleport_safe_maps = maps_value if maps_value is Array else []
 	_rebuild_staff_teleport_send_map_options()
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_safe_maps.is_empty() or staff_teleport_filtered_players.is_empty()
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_filtered_players.is_empty()
 
 
 func _rebuild_staff_teleport_map_options() -> void:
-	if staff_teleport_map_select == null:
+	if staff_teleport_destination_results == null:
 		return
-	staff_teleport_map_select.clear()
-	for index in range(staff_teleport_maps.size()):
-		var map_entry: Dictionary = _staff_dictionary_from_variant(staff_teleport_maps[index])
-		staff_teleport_map_select.add_item(str(map_entry.get("label", map_entry.get("id", "Map"))), index)
-	if staff_teleport_map_select.item_count > 0:
-		staff_teleport_map_select.select(0)
-		_rebuild_staff_teleport_point_options(0)
+
+	var selected_destination := _get_selected_staff_teleport_destination()
+	var selected_map_id := str(selected_destination.get("map", {}).get("id", "")).strip_edges()
+	var selected_point_id := str(selected_destination.get("point", {}).get("id", "")).strip_edges()
+	var map_query := ""
+	if staff_teleport_destination_search != null:
+		map_query = staff_teleport_destination_search.text.strip_edges().to_lower()
+	var spawn_query := ""
+	if staff_teleport_spawn_search != null:
+		spawn_query = staff_teleport_spawn_search.text.strip_edges().to_lower()
+
+	staff_teleport_filtered_destinations = []
+	staff_teleport_destination_results.clear()
+	var selected_index := -1
+	for map_value: Variant in staff_teleport_maps:
+		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
+		var map_id := str(map_entry.get("id", "")).strip_edges()
+		var map_label := str(map_entry.get("label", map_id)).strip_edges()
+		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
+		for point_value: Variant in points:
+			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
+			var point_id := str(point_entry.get("id", "")).strip_edges()
+			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			var map_search_text := "%s %s" % [map_label.to_lower(), map_id.to_lower()]
+			var spawn_search_text := "%s %s" % [point_label.to_lower(), point_id.to_lower()]
+			if map_query != "" and not map_search_text.contains(map_query):
+				continue
+			if spawn_query != "" and not spawn_search_text.contains(spawn_query):
+				continue
+			var destination := {
+				"map": map_entry,
+				"point": point_entry,
+			}
+			staff_teleport_filtered_destinations.append(destination)
+			var destination_index := staff_teleport_filtered_destinations.size() - 1
+			staff_teleport_destination_results.add_item("%s  ·  %s" % [map_label, point_label])
+			if map_id == selected_map_id and point_id == selected_point_id:
+				selected_index = destination_index
+
+	if not staff_teleport_filtered_destinations.is_empty():
+		if selected_index < 0:
+			selected_index = 0
+		staff_teleport_destination_results.select(selected_index)
+	_update_staff_teleport_selected_destination_label()
+	if staff_teleport_confirm_button != null:
+		staff_teleport_confirm_button.disabled = staff_teleport_filtered_destinations.is_empty() or staff_teleport_in_flight
 
 
 func _on_staff_teleport_map_selected(index: int) -> void:
 	_rebuild_staff_teleport_point_options(index)
+
+
+func _on_staff_teleport_destination_search_changed(_text: String) -> void:
+	_rebuild_staff_teleport_map_options()
+
+
+func _on_staff_teleport_spawn_search_changed(_text: String) -> void:
+	_rebuild_staff_teleport_map_options()
+
+
+func _on_staff_teleport_destination_selected(_index: int) -> void:
+	var destination := _get_selected_staff_teleport_destination()
+	var map_entry: Dictionary = _staff_dictionary_from_variant(destination.get("map", {}))
+	var point_entry: Dictionary = _staff_dictionary_from_variant(destination.get("point", {}))
+	if staff_teleport_destination_search != null:
+		staff_teleport_destination_search.text = str(map_entry.get("label", ""))
+	if staff_teleport_spawn_search != null:
+		staff_teleport_spawn_search.text = str(point_entry.get("label", ""))
+	_update_staff_teleport_selected_destination_label()
+
+
+func _update_staff_teleport_selected_destination_label() -> void:
+	if staff_teleport_selected_destination_label == null:
+		return
+	var destination := _get_selected_staff_teleport_destination()
+	var map_entry: Dictionary = _staff_dictionary_from_variant(destination.get("map", {}))
+	var point_entry: Dictionary = _staff_dictionary_from_variant(destination.get("point", {}))
+	var map_label := str(map_entry.get("label", "")).strip_edges()
+	var point_label := str(point_entry.get("label", "")).strip_edges()
+	if map_label == "" or point_label == "":
+		staff_teleport_selected_destination_label.text = "No destination selected"
+		staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		return
+	staff_teleport_selected_destination_label.text = "Selected: %s · %s" % [map_label, point_label]
+	staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_TEXT)
 
 
 func _on_staff_teleport_send_map_selected(index: int) -> void:
@@ -15008,15 +15207,43 @@ func _rebuild_staff_teleport_point_options(map_index: int) -> void:
 
 
 func _rebuild_staff_teleport_send_map_options() -> void:
-	if staff_teleport_send_map_select == null:
+	if staff_teleport_send_destination_results == null:
 		return
-	staff_teleport_send_map_select.clear()
-	for index in range(staff_teleport_safe_maps.size()):
-		var map_entry: Dictionary = _staff_dictionary_from_variant(staff_teleport_safe_maps[index])
-		staff_teleport_send_map_select.add_item(str(map_entry.get("label", map_entry.get("id", "Map"))), index)
-	if staff_teleport_send_map_select.item_count > 0:
-		staff_teleport_send_map_select.select(0)
-		_rebuild_staff_teleport_send_point_options(0)
+
+	var selected_destination := _get_selected_staff_teleport_send_destination()
+	var selected_map: Dictionary = _staff_dictionary_from_variant(selected_destination.get("map", {}))
+	var selected_point: Dictionary = _staff_dictionary_from_variant(selected_destination.get("point", {}))
+	var selected_map_id := str(selected_map.get("id", "")).strip_edges()
+	var selected_point_id := str(selected_point.get("id", "")).strip_edges()
+	var map_query := staff_teleport_send_map_search.text.strip_edges().to_lower() if staff_teleport_send_map_search != null else ""
+	var spawn_query := staff_teleport_send_spawn_search.text.strip_edges().to_lower() if staff_teleport_send_spawn_search != null else ""
+
+	staff_teleport_filtered_safe_destinations = []
+	staff_teleport_send_destination_results.clear()
+	var selected_index := -1
+	for map_value: Variant in staff_teleport_safe_maps:
+		var map_entry: Dictionary = _staff_dictionary_from_variant(map_value)
+		var map_id := str(map_entry.get("id", "")).strip_edges()
+		var map_label := str(map_entry.get("label", map_id)).strip_edges()
+		var points: Array = map_entry.get("points", []) if map_entry.get("points", []) is Array else []
+		for point_value: Variant in points:
+			var point_entry: Dictionary = _staff_dictionary_from_variant(point_value)
+			var point_id := str(point_entry.get("id", "")).strip_edges()
+			var point_label := str(point_entry.get("label", point_id)).strip_edges()
+			if map_query != "" and not ("%s %s" % [map_label.to_lower(), map_id.to_lower()]).contains(map_query):
+				continue
+			if spawn_query != "" and not ("%s %s" % [point_label.to_lower(), point_id.to_lower()]).contains(spawn_query):
+				continue
+			staff_teleport_filtered_safe_destinations.append({"map": map_entry, "point": point_entry})
+			var destination_index := staff_teleport_filtered_safe_destinations.size() - 1
+			staff_teleport_send_destination_results.add_item("%s  ·  %s" % [map_label, point_label])
+			if map_id == selected_map_id and point_id == selected_point_id:
+				selected_index = destination_index
+
+	if not staff_teleport_filtered_safe_destinations.is_empty():
+		staff_teleport_send_destination_results.select(0 if selected_index < 0 else selected_index)
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_in_flight
 
 
 func _rebuild_staff_teleport_send_point_options(map_index: int) -> void:
@@ -15034,18 +15261,38 @@ func _rebuild_staff_teleport_send_point_options(map_index: int) -> void:
 		staff_teleport_send_point_select.select(0)
 
 
+func _on_staff_teleport_send_destination_search_changed(_text: String) -> void:
+	_rebuild_staff_teleport_send_map_options()
+
+
+func _on_staff_teleport_send_destination_selected(_index: int) -> void:
+	var destination := _get_selected_staff_teleport_send_destination()
+	var map_entry: Dictionary = _staff_dictionary_from_variant(destination.get("map", {}))
+	var point_entry: Dictionary = _staff_dictionary_from_variant(destination.get("point", {}))
+	if staff_teleport_send_map_search != null:
+		staff_teleport_send_map_search.text = str(map_entry.get("label", ""))
+	if staff_teleport_send_spawn_search != null:
+		staff_teleport_send_spawn_search.text = str(point_entry.get("label", ""))
+
+
 func _on_staff_teleport_player_search_changed(_text: String) -> void:
+	staff_teleport_player_selection_confirmed = false
 	_rebuild_staff_teleport_player_options()
+	_refresh_staff_teleport_tab_visibility()
 
 
 func _on_staff_teleport_player_selected(_index: int) -> void:
+	staff_teleport_player_selection_confirmed = true
 	_update_staff_teleport_selected_player_label()
+	_refresh_staff_teleport_tab_visibility()
 
 
 func _rebuild_staff_teleport_player_options() -> void:
-	if staff_teleport_player_select == null:
+	if staff_teleport_player_results == null:
 		return
-	staff_teleport_player_select.clear()
+	var selected_player := _get_selected_staff_teleport_player()
+	var selected_player_id := int(selected_player.get("targetPlayerId", 0))
+	staff_teleport_player_results.clear()
 	staff_teleport_filtered_players = []
 	var query := ""
 	if staff_teleport_player_search_input != null:
@@ -15059,18 +15306,29 @@ func _rebuild_staff_teleport_player_options() -> void:
 			continue
 		var option_label := "%s (@%s)" % [display_name, username]
 		staff_teleport_filtered_players.append(player_entry)
-		staff_teleport_player_select.add_item(option_label, staff_teleport_filtered_players.size() - 1)
-	if staff_teleport_player_select.item_count > 0:
-		staff_teleport_player_select.select(0)
+		staff_teleport_player_results.add_item(option_label)
+	if staff_teleport_player_results.item_count > 0:
+		var selected_index := 0
+		for index in range(staff_teleport_filtered_players.size()):
+			var candidate: Dictionary = _staff_dictionary_from_variant(staff_teleport_filtered_players[index])
+			if int(candidate.get("targetPlayerId", 0)) == selected_player_id:
+				selected_index = index
+				break
+		staff_teleport_player_results.select(selected_index)
+	staff_teleport_player_results.visible = not staff_teleport_player_selection_confirmed and query != "" and staff_teleport_player_results.item_count > 0
 	_update_staff_teleport_selected_player_label()
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_in_flight
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_safe_maps.is_empty() or staff_teleport_in_flight
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_in_flight
 
 
 func _update_staff_teleport_selected_player_label() -> void:
 	if staff_teleport_selected_player_label == null:
+		return
+	if not staff_teleport_player_selection_confirmed:
+		staff_teleport_selected_player_label.text = "Search and select a player to continue"
+		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	var selected_player := _get_selected_staff_teleport_player()
 	var username := str(selected_player.get("username", "")).strip_edges()
@@ -15280,7 +15538,7 @@ func _on_staff_teleport_send_player_pressed() -> void:
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty()
 	if staff_teleport_send_player_button != null:
-		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_safe_maps.is_empty()
+		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty()
 	if not bool(result.get("success", false)):
 		var error_text := str(result.get("error", "Unknown error"))
 		if error_text == "PLAYER_BUSY":
@@ -15299,50 +15557,56 @@ func _on_staff_teleport_send_player_pressed() -> void:
 
 
 func _get_selected_staff_teleport_map() -> Dictionary:
-	if staff_teleport_map_select == null:
-		return {}
-	var selected_index := staff_teleport_map_select.selected
-	if selected_index < 0 or selected_index >= staff_teleport_maps.size():
-		return {}
-	return _staff_dictionary_from_variant(staff_teleport_maps[selected_index])
+	var destination := _get_selected_staff_teleport_destination()
+	return _staff_dictionary_from_variant(destination.get("map", {}))
 
 
 func _get_selected_staff_teleport_point(selected_map: Dictionary) -> Dictionary:
-	if staff_teleport_point_select == null:
+	var destination := _get_selected_staff_teleport_destination()
+	return _staff_dictionary_from_variant(destination.get("point", {}))
+
+
+func _get_selected_staff_teleport_destination() -> Dictionary:
+	if staff_teleport_destination_results == null:
 		return {}
-	var points_value: Variant = selected_map.get("points", [])
-	var points: Array = points_value if points_value is Array else []
-	var selected_index := staff_teleport_point_select.selected
-	if selected_index < 0 or selected_index >= points.size():
+	var selected_items := staff_teleport_destination_results.get_selected_items()
+	if selected_items.is_empty():
 		return {}
-	return _staff_dictionary_from_variant(points[selected_index])
+	var selected_index := int(selected_items[0])
+	if selected_index < 0 or selected_index >= staff_teleport_filtered_destinations.size():
+		return {}
+	return _staff_dictionary_from_variant(staff_teleport_filtered_destinations[selected_index])
 
 
 func _get_selected_staff_teleport_send_map() -> Dictionary:
-	if staff_teleport_send_map_select == null:
-		return {}
-	var selected_index := staff_teleport_send_map_select.selected
-	if selected_index < 0 or selected_index >= staff_teleport_safe_maps.size():
-		return {}
-	return _staff_dictionary_from_variant(staff_teleport_safe_maps[selected_index])
+	var destination := _get_selected_staff_teleport_send_destination()
+	return _staff_dictionary_from_variant(destination.get("map", {}))
 
 
 func _get_selected_staff_teleport_send_point(selected_map: Dictionary) -> Dictionary:
-	if staff_teleport_send_point_select == null:
+	var destination := _get_selected_staff_teleport_send_destination()
+	return _staff_dictionary_from_variant(destination.get("point", {}))
+
+
+func _get_selected_staff_teleport_send_destination() -> Dictionary:
+	if staff_teleport_send_destination_results == null:
 		return {}
-	var points: Array = selected_map.get("points", []) if selected_map.get("points", []) is Array else []
-	var selected_index := staff_teleport_send_point_select.selected
-	if selected_index < 0 or selected_index >= points.size():
+	var selected_items := staff_teleport_send_destination_results.get_selected_items()
+	if selected_items.is_empty():
 		return {}
-	return _staff_dictionary_from_variant(points[selected_index])
+	var selected_index := int(selected_items[0])
+	if selected_index < 0 or selected_index >= staff_teleport_filtered_safe_destinations.size():
+		return {}
+	return _staff_dictionary_from_variant(staff_teleport_filtered_safe_destinations[selected_index])
 
 
 func _get_selected_staff_teleport_player() -> Dictionary:
-	if staff_teleport_player_select == null:
+	if staff_teleport_player_results == null:
 		return {}
-	var selected_index := staff_teleport_player_select.get_selected_id()
-	if selected_index < 0:
-		selected_index = staff_teleport_player_select.selected
+	var selected_items := staff_teleport_player_results.get_selected_items()
+	if selected_items.is_empty():
+		return {}
+	var selected_index := int(selected_items[0])
 	if selected_index < 0 or selected_index >= staff_teleport_filtered_players.size():
 		return {}
 	return _staff_dictionary_from_variant(staff_teleport_filtered_players[selected_index])

@@ -32,6 +32,23 @@
         }
       }
     },
+    "kanto_pewter_city": {
+      "label": "Pewter City",
+      "points": {
+        "from_route_2": {
+          "facingDirection": "up",
+          "id": "route_2_entrance",
+          "label": "Route 2 Entrance",
+          "safe": true
+        },
+        "from_route_3": {
+          "facingDirection": "left",
+          "id": "route_3_entrance",
+          "label": "Route 3 Entrance",
+          "safe": true
+        }
+      }
+    },
     "kanto_route_1": {
       "points": {
         "from_pallet_town": {
@@ -51,6 +68,12 @@
     "kanto_route_2": {
       "label": "Route 2",
       "points": {
+        "from_pewter_city": {
+          "facingDirection": "up",
+          "id": "pewter_city_entrance",
+          "label": "Pewter City Entrance",
+          "safe": true
+        },
         "from_viridian_city": {
           "facingDirection": "up",
           "id": "viridian_city_entrance",

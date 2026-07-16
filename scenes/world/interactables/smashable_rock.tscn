@@ -22,7 +22,7 @@ region = Rect2(0, 96, 32, 32)
 [node name="SmashableRock" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_obstacle")
-required_field_move = "rock_smash"
+required_field_move = "rock-smash"
 display_name = "Rock"
 unavailable_message = "This rock looks like it can be smashed."
 clear_frames = Array[Texture2D]([SubResource("AtlasTexture_rock_smash_1"), SubResource("AtlasTexture_rock_smash_2"), SubResource("AtlasTexture_rock_smash_3")])

@@ -2,7 +2,7 @@ extends WorldInteractable
 
 class_name FieldMoveObstacle
 
-@export_enum("cut", "rock_smash") var required_field_move := "cut"
+@export_enum("cut", "rock-smash") var required_field_move := "cut"
 @export_multiline var unavailable_message := "This obstacle can be cleared with Cut."
 @export var clear_frames: Array[Texture2D] = []
 @export var clear_frame_duration := 0.11
@@ -68,7 +68,7 @@ func _play_clear_animation() -> void:
 
 func _show_field_move_used_message(pokemon: Pokemon) -> void:
 	var pokemon_name := pokemon.species if pokemon != null else "Pokemon"
-	var message := "%s used %s!" % [pokemon_name, required_field_move.capitalize()]
+	var message := "%s used %s!" % [pokemon_name, _format_field_move_name(required_field_move)]
 	get_tree().call_group("ui_overlay", "add_system_message", message)
 
 	var dialogue_box := _get_dialogue_box()
@@ -80,6 +80,10 @@ func _show_field_move_used_message(pokemon: Pokemon) -> void:
 		home_icon = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	dialogue_box.start_dialogue([message], pokemon_name, home_icon, home_icon != null)
 	await dialogue_box.dialogue_finished
+
+
+func _format_field_move_name(move_id: String) -> String:
+	return move_id.replace("_", "-").replace("-", " ").capitalize()
 
 
 func _can_start_field_move_interaction(player: Node2D) -> bool:
