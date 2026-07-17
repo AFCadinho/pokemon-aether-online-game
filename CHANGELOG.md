@@ -17,6 +17,10 @@
 - Added direct overworld activation for Flash from a Pokemon Summary move or the Flash Charm in the Bag.
 - Added persistent field-move hotbar bindings for both a specific party Pokemon and permanent Field Move Charms.
 - Added a large player-centered Flash light for nighttime and future maps that use the new dark lighting profile.
+- Added natural overworld rain and snow with world-space movement, smooth transitions, responsive screen coverage, and developer weather previews.
+- Added per-map weather policies so interiors such as Oak's Lab and explicitly excluded maps remain clear.
+- Added server-synchronized map weather through world presence, including automatic seasonal snow during winter months.
+- Added direct overworld use for Rain Dance, Snowscape, and Sunny Day from Pokemon Summary moves, permanent Charms, and hotbar bindings.
 
 **Changed**
 - Organized Route 2 and Viridian Forest interactables under map Entities so their collision blocking is discovered consistently.
@@ -26,6 +30,7 @@
 - HM machine selection refreshes the Bag, shows Home icons, and lists only party Pokemon that can learn the selected move.
 - TM and HM item icons now automatically use the move type: standard machine icons for TMs and TR-style machine icons for HMs. Item Dex now shows the machine kind and move type.
 - Pokemon Summary move rows now expose a compact overworld-action icon only for moves that can be activated without targeting an object.
+- Player-triggered weather changes affect everyone on the current map for ten minutes and share one server-enforced thirty-minute cooldown.
 
 **Fixed**
 - Fixed HM compatibility filtering failing when JSON numeric Pokemon ids were parsed as floating-point values by the client.
