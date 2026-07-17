@@ -34,6 +34,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pallet_town_encounter_check.gd",
 	"res://tests/route_2_viridian_forest_encounter_check.gd",
 	"res://tests/wild_pokemon_map_popup_check.gd",
+	"res://tests/location_status_card_check.gd",
 	"res://tests/world_time_service_check.gd",
 	"res://tests/day_night_system_check.gd",
 	"res://tests/night_light_check.gd",

@@ -302,10 +302,12 @@ enum DevPokemonPopupMode {
 @onready var party_slot_template: PanelContainer = $Control/PartyPanel/MarginContainer/VBoxContainer/PartySlot
 @onready var chat_panel: PanelContainer = $Control/ChatPanel
 @onready var location_panel: PanelContainer = $Control/LocationPanel
-@onready var region_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow/RegionLabel
-@onready var location_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/LocationLabel
-@onready var time_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow/TimeLabel
-@onready var wild_pokemon_button: TextureButton = $Control/LocationPanel/MarginContainer/HBoxContainer/WildPokemonButton
+@onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/RegionLabel
+@onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/LocationLabel
+@onready var time_of_day_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeOfDayLabel
+@onready var weather_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/WeatherLabel
+@onready var time_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeLabel
+@onready var wild_pokemon_button: TextureButton = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/WildPokemonButton
 @onready var options_panel: PanelContainer = $Control/OptionsPanel
 @onready var actions_panel: PanelContainer = $Control/ToggleActionsPanel
 @onready var toggle_actions_collapse_button: Button = $Control/ToggleActionsCollapseButton
@@ -938,6 +940,7 @@ func _ready() -> void:
 	_set_socials_attention("mail", false)
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
+	_refresh_location_weather(WorldPresenceService.current_weather_state)
 	_refresh_party()
 	_load_mailbox.call_deferred()
 
@@ -957,6 +960,8 @@ func _ready() -> void:
 		ChatRealtimeService.authorized_teleport_received.connect(_on_authorized_teleport_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
+	if not WorldPresenceService.weather_changed.is_connected(_on_location_weather_changed):
+		WorldPresenceService.weather_changed.connect(_on_location_weather_changed)
 	ChatRealtimeService.connect_chat.call_deferred()
 	_refresh_friend_request_attention_from_socials.call_deferred()
 
@@ -5496,6 +5501,24 @@ func _refresh_location_label() -> void:
 	if wild_pokemon_popup != null and wild_pokemon_popup.visible:
 		_hide_wild_pokemon_popup()
 
+func _on_location_weather_changed(weather_state: Dictionary) -> void:
+	_refresh_location_weather(weather_state)
+
+func _refresh_location_weather(weather_state: Dictionary) -> void:
+	if weather_label == null:
+		return
+	var weather: String = str(weather_state.get("weather", "clear")).strip_edges().to_lower()
+	match weather:
+		"rain":
+			weather_label.text = "Rain"
+			weather_label.add_theme_color_override("font_color", Color("#62d7ff"))
+		"snow":
+			weather_label.text = "Snow"
+			weather_label.add_theme_color_override("font_color", Color("#d9f3ff"))
+		_:
+			weather_label.text = "Clear"
+			weather_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
 func _get_current_encounter_area_id() -> String:
 	var current_map: Node = GameState.current_map as Node
 	if current_map == null or not current_map.has_method("get_wild_encounter_area_id"):
@@ -5796,6 +5819,23 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	if display_hour == 0:
 		display_hour = 12
 	time_label.text = "%02d:%02d %s" % [display_hour, minute, period]
+	_refresh_time_of_day_label(hour)
+
+func _refresh_time_of_day_label(hour: int) -> void:
+	if time_of_day_label == null:
+		return
+	if hour >= 5 and hour < 11:
+		time_of_day_label.text = "Morning"
+		time_of_day_label.add_theme_color_override("font_color", Color("#ffd45a"))
+	elif hour >= 11 and hour < 17:
+		time_of_day_label.text = "Afternoon"
+		time_of_day_label.add_theme_color_override("font_color", Color("#f3c969"))
+	elif hour >= 17 and hour < 21:
+		time_of_day_label.text = "Evening"
+		time_of_day_label.add_theme_color_override("font_color", Color("#ff9f68"))
+	else:
+		time_of_day_label.text = "Night"
+		time_of_day_label.add_theme_color_override("font_color", Color("#7aa7f4"))
 
 func _input(event: InputEvent) -> void:
 	if pc_dragging:
@@ -18546,6 +18586,7 @@ func _on_dev_world_weather_selected(index: int) -> void:
 			return
 		weather_controller.set_debug_weather(selected_weather)
 		_add_chat_message("World weather preview set to %s." % selected_weather.capitalize())
+	_refresh_location_weather({"weather": weather_controller.get_effective_weather()})
 	_refresh_dev_world_weather_selector()
 
 
