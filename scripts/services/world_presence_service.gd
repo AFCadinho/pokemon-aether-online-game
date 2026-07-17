@@ -10,6 +10,7 @@ signal player_left_received(user_id: int)
 signal roster_changed(players: Array, roster_revision: int)
 signal roster_player_changed(player_state: Dictionary, roster_revision: int)
 signal roster_player_removed(user_id: int, roster_revision: int)
+signal weather_changed(weather_state: Dictionary)
 signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
 
@@ -31,6 +32,7 @@ var current_map_players: Dictionary = {}
 var roster_revision := 0
 var has_authoritative_roster_revision := false
 var last_sent_map_id := ""
+var current_weather_state: Dictionary = {}
 
 
 func _process(delta: float) -> void:
@@ -109,6 +111,7 @@ func disconnect_presence() -> void:
 	should_reconnect = false
 	connecting = false
 	last_position_payload.clear()
+	_reset_weather(last_sent_map_id)
 	last_sent_map_id = ""
 	_reset_roster()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
@@ -127,6 +130,7 @@ func update_position(state: Dictionary) -> bool:
 	if map_id != last_sent_map_id:
 		last_sent_map_id = map_id
 		_reset_roster()
+		_reset_weather(map_id)
 
 	var appearance_value: Variant = state.get("appearance", {})
 	var appearance: Dictionary = appearance_value if appearance_value is Dictionary else {}
@@ -254,6 +258,8 @@ func _process_packets() -> void:
 		match str(message.get("type", "")):
 			"snapshot":
 				_apply_snapshot_message(message)
+			"weather_update":
+				_apply_weather_state(message)
 			"player_update":
 				_debug_log_player_update(message)
 				_apply_player_update_message(message)
@@ -273,6 +279,7 @@ func get_current_map_players() -> Array:
 
 
 func _apply_snapshot_message(message: Dictionary) -> void:
+	_apply_weather_state(message.get("weather", {}))
 	var incoming_revision := _incoming_roster_revision(message)
 	if not _should_apply_roster_revision(incoming_revision):
 		return
@@ -289,6 +296,22 @@ func _apply_snapshot_message(message: Dictionary) -> void:
 	var roster := get_current_map_players()
 	roster_changed.emit(roster, roster_revision)
 	snapshot_received.emit(roster)
+
+
+func _apply_weather_state(weather_value: Variant) -> void:
+	if not weather_value is Dictionary:
+		return
+	var weather_state: Dictionary = weather_value as Dictionary
+	var map_id := str(weather_state.get("mapId", "")).strip_edges()
+	if map_id == "" or (last_sent_map_id != "" and map_id != last_sent_map_id):
+		return
+	var weather := str(weather_state.get("weather", "clear")).strip_edges().to_lower()
+	if weather not in ["clear", "rain", "snow"]:
+		weather = "clear"
+	current_weather_state = weather_state.duplicate(true)
+	current_weather_state["mapId"] = map_id
+	current_weather_state["weather"] = weather
+	weather_changed.emit(current_weather_state.duplicate(true))
 
 
 func _apply_player_update_message(message: Dictionary) -> void:
@@ -349,6 +372,13 @@ func _reset_roster() -> void:
 	has_authoritative_roster_revision = false
 	if had_players:
 		roster_changed.emit([], roster_revision)
+
+
+func _reset_weather(map_id: String) -> void:
+	current_weather_state.clear()
+	var normalized_map_id := map_id.strip_edges()
+	if normalized_map_id != "":
+		weather_changed.emit({"mapId": normalized_map_id, "weather": "clear", "source": "pending"})
 
 
 func _debug_log_player_update(message: Dictionary) -> void:

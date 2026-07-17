@@ -646,7 +646,17 @@ func _apply_day_night_for_map(map_node: Node) -> void:
 
 func _apply_weather_for_map(map_node: Node) -> void:
 	if weather_controller != null:
+		weather_controller.set_server_weather(OverworldWeatherController.WEATHER_CLEAR)
 		weather_controller.apply_map(map_node)
+
+
+func _on_world_presence_weather_changed(weather_state: Dictionary) -> void:
+	if weather_controller == null or GameState.current_map == null:
+		return
+	var map_id := str(weather_state.get("mapId", "")).strip_edges()
+	if map_id == "" or map_id != _get_map_id(GameState.current_map):
+		return
+	weather_controller.set_server_weather(str(weather_state.get("weather", OverworldWeatherController.WEATHER_CLEAR)))
 
 
 func use_direct_field_move(move_id: String, source: Dictionary) -> Dictionary:
@@ -1103,6 +1113,8 @@ func _connect_world_presence_signals() -> void:
 		WorldPresenceService.roster_player_changed.connect(_on_world_presence_roster_player_changed)
 	if not WorldPresenceService.roster_player_removed.is_connected(_on_world_presence_roster_player_removed):
 		WorldPresenceService.roster_player_removed.connect(_on_world_presence_roster_player_removed)
+	if not WorldPresenceService.weather_changed.is_connected(_on_world_presence_weather_changed):
+		WorldPresenceService.weather_changed.connect(_on_world_presence_weather_changed)
 
 
 func _publish_world_presence(force := false) -> void:

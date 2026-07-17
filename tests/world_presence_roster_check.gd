@@ -5,15 +5,18 @@ const WorldPresenceServiceScript := preload("res://scripts/services/world_presen
 var failed := false
 var service: Node
 var legacy_update: Dictionary = {}
+var latest_weather: Dictionary = {}
 
 
 func _init() -> void:
 	service = WorldPresenceServiceScript.new()
 	service.player_update_received.connect(_on_legacy_player_update_received)
+	service.weather_changed.connect(_on_weather_changed)
 	_check_snapshot_and_update_roster_state()
 	_check_stale_and_duplicate_revisions_are_ignored()
 	_check_roster_resets_for_reconnect_or_map_change()
 	_check_presence_payload_includes_activity_state()
+	_check_authoritative_weather_messages()
 
 	service.free()
 	quit(1 if failed else 0)
@@ -81,6 +84,26 @@ func _check_presence_payload_includes_activity_state() -> void:
 	_check_equal(source.contains("\"activityState\": str(state.get(\"activityState\", \"idle\"))"), true, "activity state payload")
 
 
+func _check_authoritative_weather_messages() -> void:
+	service.last_sent_map_id = "kanto_route_2"
+	service._apply_snapshot_message({
+		"rosterRevision": 9,
+		"players": [],
+		"weather": {
+			"mapId": "kanto_route_2",
+			"weather": "rain",
+			"source": "natural",
+			"periodId": 42,
+		},
+	})
+	_check_equal(latest_weather.get("weather", ""), "rain", "snapshot applies authoritative weather")
+	_check_equal(service.current_weather_state.get("periodId", 0), 42, "weather metadata is retained")
+	service._apply_weather_state({"mapId": "kanto_route_1", "weather": "snow", "periodId": 43})
+	_check_equal(latest_weather.get("weather", ""), "rain", "weather for a stale map is ignored")
+	service._apply_weather_state({"mapId": "kanto_route_2", "weather": "snow", "periodId": 44})
+	_check_equal(latest_weather.get("weather", ""), "snow", "realtime weather updates the current map")
+
+
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
 	if actual == expected:
 		return
@@ -91,3 +114,7 @@ func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
 
 func _on_legacy_player_update_received(message: Dictionary) -> void:
 	legacy_update = message.duplicate(true)
+
+
+func _on_weather_changed(weather_state: Dictionary) -> void:
+	latest_weather = weather_state.duplicate(true)
