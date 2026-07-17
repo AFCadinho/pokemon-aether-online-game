@@ -44,6 +44,7 @@ var battle_instance: Node
 @onready var player: CharacterBody2D = $Player
 @onready var battle_ui_host: Control = %BattleUIHost
 @onready var day_night_controller: OverworldDayNightController = %DayNightController
+@onready var field_move_flash_light: OverworldFieldMoveFlashLight = $Player/FieldMoveFlashLight
 
 var is_loading_map := false
 var position_autosave_elapsed := 0.0
@@ -80,6 +81,10 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	if not PlayerSave.party_changed.is_connected(_validate_active_flash_source):
+		PlayerSave.party_changed.connect(_validate_active_flash_source)
+	if not FieldMoveService.owned_charms_changed.is_connected(_validate_active_flash_source):
+		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
 	_ensure_map_transition_overlay()
 	_ensure_remote_players_container()
 	_connect_world_presence_signals()
@@ -633,6 +638,42 @@ func _setup_initial_world_state() -> void:
 func _apply_day_night_for_map(map_node: Node) -> void:
 	if day_night_controller != null:
 		day_night_controller.apply_map(map_node)
+
+
+func use_direct_field_move(move_id: String, source: Dictionary) -> Dictionary:
+	if is_in_battle:
+		return {"success": false, "error": "Field moves cannot be used during a battle."}
+	if is_loading_map:
+		return {"success": false, "error": "Wait until the map has finished loading."}
+	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	if normalized_move_id != "flash":
+		return {"success": false, "error": "That direct field move is not implemented."}
+	if field_move_flash_light == null:
+		return {"success": false, "error": "The Flash light is not ready."}
+	var result: Dictionary = field_move_flash_light.activate()
+	if not bool(result.get("success", false)):
+		return result
+	if bool(result.get("deactivated", false)):
+		result["message"] = "Flash was turned off."
+		return result
+	var charm_name := str(source.get("itemName", "")).strip_edges()
+	if charm_name != "":
+		result["message"] = "%s lit the area around you." % charm_name
+		return result
+	var pokemon: Pokemon = source.get("pokemon") as Pokemon
+	var pokemon_name := pokemon.species if pokemon != null else "Your Pokemon"
+	result["message"] = "%s used Flash!" % pokemon_name
+	return result
+
+
+func _validate_active_flash_source() -> void:
+	if field_move_flash_light == null or not field_move_flash_light.active:
+		return
+	var availability: Dictionary = FieldMoveService.can_use_field_move("flash")
+	if bool(availability.get("success", false)):
+		return
+	field_move_flash_light.deactivate()
+	get_tree().call_group("ui_overlay", "add_system_message", "Flash turned off because no party Pokemon or Charm can use it anymore.")
 
 
 func _instantiate_map(scene_path: String) -> Node:

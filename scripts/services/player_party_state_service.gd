@@ -418,6 +418,40 @@ func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1
 	return result
 
 
+func reorder_pokemon_moves(pokemon_id: int, move_ids: Array[String]) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0 or move_ids.is_empty() or move_ids.size() > 4:
+		return {
+			"success": false,
+			"error": "Missing Pokemon or move order.",
+		}
+
+	var normalized_move_ids: Array[String] = []
+	for move_id: String in move_ids:
+		var normalized_move_id: String = move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+		if normalized_move_id == "" or normalized_move_ids.has(normalized_move_id):
+			return {
+				"success": false,
+				"error": "Move order contains invalid or duplicate moves.",
+			}
+		normalized_move_ids.append(normalized_move_id)
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/moves/reorder" % pokemon_id,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"moveIds": normalized_move_ids})
+	)
+	var result: Dictionary = _pokemon_move_reorder_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
 func evolve_pokemon(pokemon_id: int, target_species_id: String, confirm: bool = true) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -575,6 +609,21 @@ func _pokemon_move_learn_result_from_response(response: Dictionary) -> Dictionar
 		"learnedMove": _dictionary_from_value(body.get("learnedMove", {})),
 		"replacedMove": _dictionary_from_value(body.get("replacedMove", {})),
 		"skipped": bool(body.get("skipped", false)),
+	}
+
+
+func _pokemon_move_reorder_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	return {
+		"success": true,
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"party": _array_from_value(party.get("party", [])),
+		"hasParty": bool(party.get("hasParty", false)),
+		"moveIds": _array_from_value(body.get("moveIds", [])),
 	}
 
 

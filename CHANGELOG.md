@@ -12,7 +12,11 @@
 - Added cropped, transparent item icons for Surf, Cut, Strength, Rock Smash, Waterfall, Dive, and Flash Charms.
 - Added Pewter City map exits, spawn points, and staff teleport destinations.
 - Added a shared transition for every overworld map switch, with an immediate screen fade, centered rotating loading indicator, threaded scene loading, and matching support for staff teleports between maps.
-- Added a server-synchronized overworld day and night cycle with dawn and dusk transitions, indoor lighting profiles, developer time previews, and reusable night lights for map lanterns.
+- Added a server-synchronized overworld day and night cycle with dawn and dusk transitions, indoor lighting profiles, developer time previews, and reusable night lights for map lanterns and illuminated building windows.
+- Added persistent move reordering from Pokemon Summary cards with live drag-and-drop swapping.
+- Added direct overworld activation for Flash from a Pokemon Summary move or the Flash Charm in the Bag.
+- Added persistent field-move hotbar bindings for both a specific party Pokemon and permanent Field Move Charms.
+- Added a large player-centered Flash light for nighttime and future maps that use the new dark lighting profile.
 
 **Changed**
 - Organized Route 2 and Viridian Forest interactables under map Entities so their collision blocking is discovered consistently.
@@ -21,11 +25,13 @@
 - Successful Cut, Rock Smash, and Surf use now shows a concise system message instead of opening a dialogue window.
 - HM machine selection refreshes the Bag, shows Home icons, and lists only party Pokemon that can learn the selected move.
 - TM and HM item icons now automatically use the move type: standard machine icons for TMs and TR-style machine icons for HMs. Item Dex now shows the machine kind and move type.
+- Pokemon Summary move rows now expose a compact overworld-action icon only for moves that can be activated without targeting an object.
 
 **Fixed**
 - Fixed HM compatibility filtering failing when JSON numeric Pokemon ids were parsed as floating-point values by the client.
 - Fixed TM and HM icons and move-type metadata not appearing in Item Dex, including an incorrect `<null>` effect label for machines.
 - Fixed destination exits becoming permanently locked when a player spawned inside their trigger while the previous map transition was still finishing, including the Route 2 return to Pewter City.
+- Fixed dragged Pokemon Summary move rows appearing behind the Summary card and safely restore their original order when dropped outside the move list.
 
 ## 0.3.5 - 2026-07-16
 

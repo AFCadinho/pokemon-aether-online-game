@@ -26,6 +26,27 @@ func _run() -> void:
 	target._drop_data(Vector2.ZERO, bag_data)
 	_check(bag_drops.size() == 1 and int(bag_drops[0][0]) == 3 and str(bag_drops[0][1].get("id", "")) == "potion", "Bag drop targets exact hotbar slot")
 
+	var field_move_drops: Array = []
+	target.field_move_dropped.connect(func(slot_index: int, pokemon_id: int, move_id: String, move_name: String) -> void: field_move_drops.append([slot_index, pokemon_id, move_id, move_name]))
+	var summary_move_data := {
+		"kind": "pokemon_summary_move_reorder",
+		"pokemonId": 42,
+		"moveId": "flash",
+		"moveName": "Flash",
+		"hotbarEligible": true,
+	}
+	_check(target._can_drop_data(Vector2.ZERO, summary_move_data), "hotbar accepts eligible Summary move drag data")
+	target._drop_data(Vector2.ZERO, summary_move_data)
+	_check(field_move_drops == [[3, 42, "flash", "Flash"]], "Summary move drop retains its Pokemon source")
+
+	var charm_source := HotbarBagItemSlot.new()
+	charm_source.hotbar_item = {"id": "flash-charm", "fieldMove": "flash", "gameplay": {}}
+	host.add_child(charm_source)
+	var charm_data: Variant = charm_source._get_drag_data(Vector2.ZERO)
+	_check(charm_data is Dictionary and str((charm_data as Dictionary).get("kind", "")) == "bag_hotbar_field_move", "field move Charm creates dedicated drag data")
+	target._drop_data(Vector2.ZERO, charm_data)
+	_check(field_move_drops.size() == 2 and int(field_move_drops[1][1]) == 0 and str(field_move_drops[1][2]) == "flash", "Charm drop retains a Charm field move source")
+
 	var hotbar_source := PlayerHotbarSlotButton.new()
 	hotbar_source.slot_index = 1
 	hotbar_source.hotbar_entry = {"slot": 1, "entryType": "item", "entryId": "potion"}

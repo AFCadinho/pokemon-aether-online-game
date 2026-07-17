@@ -49,6 +49,8 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
+const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
+const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
@@ -799,6 +801,8 @@ var pokemon_summary_move_type_index: Dictionary = {}
 var pokemon_summary_move_type_index_loaded := false
 var pokemon_summary_move_summary_index: Dictionary = {}
 var pokemon_summary_move_summary_index_loaded := false
+var pokemon_summary_move_reorder_pending: Dictionary = {}
+var pokemon_summary_move_reorder_drag_states: Dictionary = {}
 var pokemon_summary_ability_summary_index: Dictionary = {}
 var pokemon_summary_ability_summary_index_loaded := false
 var pokemon_summary_status_icon_texture_cache: Dictionary = {}
@@ -1021,6 +1025,8 @@ func _ready() -> void:
 	if not PlayerActionService.statuses_changed.is_connected(_on_player_action_statuses_changed):
 		PlayerActionService.statuses_changed.connect(_on_player_action_statuses_changed)
 	_setup_player_hotbar()
+	if not FieldMoveService.owned_charms_changed.is_connected(_refresh_hotbar_ui):
+		FieldMoveService.owned_charms_changed.connect(_refresh_hotbar_ui)
 	if not PlayerHotbarService.hotbar_changed.is_connected(_on_hotbar_changed):
 		PlayerHotbarService.hotbar_changed.connect(_on_hotbar_changed)
 	PlayerHotbarService.load_hotbar.call_deferred()
@@ -2762,6 +2768,7 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	evolution_active_prompt.clear()
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
+	_refresh_hotbar_ui()
 	_show_next_evolution_prompt()
 
 func _set_evolution_prompt_controls_disabled(disabled: bool) -> void:
@@ -9399,6 +9406,14 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if item_id == "escape-rope-action":
 		_on_escape_rope_pressed()
 		return
+	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
+	if FieldMoveService.is_direct_field_move(field_move_id):
+		var field_move_result: Dictionary = FieldMoveService.use_direct_field_move(field_move_id)
+		if not bool(field_move_result.get("success", false)):
+			_add_chat_message(str(field_move_result.get("error", "That Charm cannot be used right now.")))
+		else:
+			_add_chat_message(str(field_move_result.get("message", "%s was used." % str(item.get("name", "Field Move Charm")))))
+		return
 	if _bag_machine_move_id(item_id) != "":
 		await _refresh_bag_inventory_for_machine_selection()
 		var refreshed_item := _bag_item_by_id(item_id)
@@ -11124,7 +11139,9 @@ func _render_pokemon_summary_moves_tab(pokemon: Pokemon) -> void:
 			pp_text = _get_summary_move_pp_text(move_value)
 			move_type = _get_summary_move_type(move_value)
 		pokemon_summary_content_stack.add_child(_create_summary_move_card(
-			move_index + 1,
+			pokemon,
+			move_index,
+			move_value,
 			move_name,
 			pp_text,
 			move_type,
@@ -11615,7 +11632,9 @@ func _get_summary_ev_total(evs: Dictionary) -> int:
 	return clampi(total, 0, POKEMON_EV_TOTAL_LIMIT)
 
 func _create_summary_move_card(
-	move_number: int,
+	pokemon: Pokemon,
+	move_index: int,
+	move_value: Variant,
 	move_name: String,
 	pp_text: String,
 	move_type: String = "",
@@ -11623,9 +11642,41 @@ func _create_summary_move_card(
 	accuracy_text: String = "-",
 	description_text: String = ""
 ) -> Control:
-	var panel := PanelContainer.new()
+	var panel: PanelContainer = POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT.new() as PanelContainer
+	var move_id: String = _get_summary_move_id(move_value)
+	var is_direct_field_move: bool = FieldMoveService.is_direct_field_move(move_id)
+	var can_reorder: bool = (
+		pokemon != null
+		and not _is_pokemon_summary_readonly()
+		and pokemon.owned_pokemon_id > 0
+		and move_index >= 0
+		and move_index < pokemon.moves.size()
+		and move_id != ""
+		and not pokemon_summary_move_reorder_pending.has(pokemon.owned_pokemon_id)
+		and not _is_world_battle_active()
+	)
+	panel.call(
+		"configure",
+		pokemon_summary_active_card_key,
+		pokemon.owned_pokemon_id if pokemon != null else 0,
+		move_index,
+		move_id,
+		move_name,
+		can_reorder,
+		is_direct_field_move and can_reorder
+	)
+	panel.connect("reorder_drag_started", Callable(self, "_on_pokemon_summary_move_reorder_drag_started"))
+	panel.connect("reorder_hovered", Callable(self, "_on_pokemon_summary_move_reorder_hovered"))
+	panel.connect("reorder_requested", Callable(self, "_on_pokemon_summary_move_reorder_requested"))
+	panel.connect("reorder_drag_finished", Callable(self, "_on_pokemon_summary_move_reorder_drag_finished"))
+	panel.connect("direct_action_requested", Callable(self, "_on_pokemon_summary_direct_move_requested"))
 	panel.custom_minimum_size = Vector2(0, 50)
-	panel.tooltip_text = description_text
+	if can_reorder:
+		panel.tooltip_text = "%s\nDrag to reorder moves." % description_text if description_text != "" else "Drag to reorder moves."
+	elif _is_world_battle_active() and move_id != "":
+		panel.tooltip_text = "%s\nMove order cannot be changed during a battle." % description_text if description_text != "" else "Move order cannot be changed during a battle."
+	else:
+		panel.tooltip_text = description_text
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 8, 1))
 
 	var margin := MarginContainer.new()
@@ -11647,7 +11698,8 @@ func _create_summary_move_card(
 	stack.add_child(top_row)
 
 	var number_label := Label.new()
-	number_label.text = str(move_number)
+	number_label.name = "MoveNumberLabel"
+	number_label.text = str(move_index + 1)
 	number_label.tooltip_text = description_text
 	number_label.custom_minimum_size = Vector2(22, 22)
 	number_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -11680,6 +11732,21 @@ func _create_summary_move_card(
 	elif move_type.strip_edges() != "":
 		top_row.add_child(_create_summary_move_type_label(move_type))
 
+	var direct_action_button: TextureButton
+	if is_direct_field_move:
+		direct_action_button = TextureButton.new()
+		direct_action_button.custom_minimum_size = Vector2(22, 22)
+		direct_action_button.texture_normal = OVERWORLD_MOVE_ACTION_ICON
+		direct_action_button.ignore_texture_size = true
+		direct_action_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		direct_action_button.focus_mode = Control.FOCUS_NONE
+		direct_action_button.disabled = not can_reorder
+		direct_action_button.modulate = Color.WHITE if can_reorder else Color(1, 1, 1, 0.38)
+		direct_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		direct_action_button.tooltip_text = "Use %s in the overworld." % move_name
+		direct_action_button.pressed.connect(Callable(panel, "request_direct_action"))
+		top_row.add_child(direct_action_button)
+
 	var meta_row := HBoxContainer.new()
 	meta_row.tooltip_text = description_text
 	meta_row.add_theme_constant_override("separation", 8)
@@ -11687,7 +11754,167 @@ func _create_summary_move_card(
 	meta_row.add_child(_create_summary_move_meta_label("PP", pp_text, Color("#ff5da8"), description_text))
 	meta_row.add_child(_create_summary_move_meta_label("Power", power_text, Color("#f2cf78"), description_text))
 	meta_row.add_child(_create_summary_move_meta_label("ACC", accuracy_text, Color("#d9ecff"), description_text))
+	_set_control_tree_mouse_filter(margin, Control.MOUSE_FILTER_IGNORE)
+	if direct_action_button != null:
+		direct_action_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	return panel
+
+func _on_pokemon_summary_direct_move_requested(card_key: String, pokemon_id: int, move_id: String) -> void:
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	if _is_pokemon_summary_readonly() or _is_world_battle_active():
+		return
+	var result: Dictionary = FieldMoveService.use_direct_field_move(move_id, pokemon_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message(str(result.get("error", "That overworld move cannot be used right now.")))
+		return
+	_add_chat_message(str(result.get("message", "%s was used." % _format_move_name(move_id))))
+
+func _on_pokemon_summary_move_reorder_drag_started(card_key: String, pokemon_id: int, source_move_id: String) -> void:
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	if _is_pokemon_summary_readonly() or pokemon_summary_move_reorder_pending.has(pokemon_id):
+		return
+	if _is_world_battle_active() or pokemon_summary_move_reorder_drag_states.has(pokemon_id):
+		return
+
+	var pokemon: Pokemon = _get_active_pokemon_summary_pokemon()
+	if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
+		return
+	if _find_summary_move_index_by_id(pokemon.moves, source_move_id) < 0:
+		return
+
+	pokemon_summary_move_reorder_drag_states[pokemon_id] = {
+		"cardKey": card_key,
+		"sourceMoveId": source_move_id,
+		"originalMoves": pokemon.moves.duplicate(true),
+		"previewMoves": pokemon.moves.duplicate(true),
+	}
+
+func _on_pokemon_summary_move_reorder_hovered(
+	card_key: String,
+	pokemon_id: int,
+	source_move_id: String,
+	target_move_id: String
+) -> void:
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	var drag_state: Dictionary = pokemon_summary_move_reorder_drag_states.get(pokemon_id, {})
+	if drag_state.is_empty() or str(drag_state.get("sourceMoveId", "")) != source_move_id:
+		return
+
+	var preview_moves: Array = (drag_state.get("previewMoves", []) as Array).duplicate(true)
+	var source_index: int = _find_summary_move_index_by_id(preview_moves, source_move_id)
+	var target_index: int = _find_summary_move_index_by_id(preview_moves, target_move_id)
+	if source_index < 0 or target_index < 0 or source_index == target_index:
+		return
+
+	var target_value: Variant = preview_moves[target_index]
+	preview_moves[target_index] = preview_moves[source_index]
+	preview_moves[source_index] = target_value
+	drag_state["previewMoves"] = preview_moves
+	pokemon_summary_move_reorder_drag_states[pokemon_id] = drag_state
+	_apply_pokemon_summary_move_preview_order(preview_moves)
+
+func _on_pokemon_summary_move_reorder_requested(card_key: String, pokemon_id: int, source_move_id: String) -> void:
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	var drag_state: Dictionary = pokemon_summary_move_reorder_drag_states.get(pokemon_id, {})
+	if drag_state.is_empty() or str(drag_state.get("sourceMoveId", "")) != source_move_id:
+		return
+	pokemon_summary_move_reorder_drag_states.erase(pokemon_id)
+
+	var pokemon: Pokemon = _get_active_pokemon_summary_pokemon()
+	if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
+		return
+	var original_moves: Array = (drag_state.get("originalMoves", []) as Array).duplicate(true)
+	var reordered_moves: Array = (drag_state.get("previewMoves", []) as Array).duplicate(true)
+	var original_move_ids: Array[String] = _get_summary_move_ids(original_moves)
+	var move_ids: Array[String] = _get_summary_move_ids(reordered_moves)
+	if move_ids.is_empty() or move_ids.size() != reordered_moves.size():
+		_render_pokemon_summary_content(pokemon)
+		_add_chat_message("Could not reorder moves because the move data is invalid.")
+		return
+	if move_ids == original_move_ids:
+		_render_pokemon_summary_content(pokemon)
+		return
+
+	pokemon_summary_move_reorder_pending[pokemon_id] = true
+	pokemon.moves = reordered_moves
+	_render_pokemon_summary_content(pokemon)
+	var result: Dictionary = await PlayerPartyStateService.reorder_pokemon_moves(pokemon_id, move_ids)
+	pokemon_summary_move_reorder_pending.erase(pokemon_id)
+	if bool(result.get("success", false)):
+		_refresh_open_pokemon_summary_cards()
+		return
+
+	var rollback_pokemon: Pokemon = _get_party_pokemon_by_owned_id(pokemon_id)
+	if rollback_pokemon != null:
+		rollback_pokemon.moves = original_moves
+	_refresh_open_pokemon_summary_cards()
+	_add_chat_message("Could not save the new move order. The previous order was restored.")
+	push_warning("UIOverlay: move reorder failed: %s" % str(result.get("error", "Unknown error")))
+
+func _on_pokemon_summary_move_reorder_drag_finished(
+	card_key: String,
+	pokemon_id: int,
+	source_move_id: String,
+	_successful: bool
+) -> void:
+	# A successful drop may target the hotbar instead of another move row.
+	# Reorder drops erase their state before this deferred cleanup runs.
+	call_deferred("_cancel_pokemon_summary_move_reorder", card_key, pokemon_id, source_move_id)
+
+func _cancel_pokemon_summary_move_reorder(card_key: String, pokemon_id: int, source_move_id: String) -> void:
+	var drag_state: Dictionary = pokemon_summary_move_reorder_drag_states.get(pokemon_id, {})
+	if drag_state.is_empty() or str(drag_state.get("sourceMoveId", "")) != source_move_id:
+		return
+	pokemon_summary_move_reorder_drag_states.erase(pokemon_id)
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	var pokemon: Pokemon = _get_active_pokemon_summary_pokemon()
+	if pokemon != null:
+		_render_pokemon_summary_content(pokemon)
+
+func _apply_pokemon_summary_move_preview_order(preview_moves: Array) -> void:
+	if pokemon_summary_content_stack == null:
+		return
+	var desired_move_ids: Array[String] = _get_summary_move_ids(preview_moves)
+	for desired_index in range(desired_move_ids.size()):
+		var desired_move_id: String = desired_move_ids[desired_index]
+		for child: Node in pokemon_summary_content_stack.get_children():
+			if child.get_script() != POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT:
+				continue
+			if str(child.get("move_id")) != desired_move_id:
+				continue
+			pokemon_summary_content_stack.move_child(child, desired_index + 1)
+			break
+
+	var visual_index := 0
+	for child: Node in pokemon_summary_content_stack.get_children():
+		if child.get_script() != POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT:
+			continue
+		child.call("update_visual_index", visual_index)
+		visual_index += 1
+
+func _find_summary_move_index_by_id(moves: Array, move_id: String) -> int:
+	for move_index in range(moves.size()):
+		if _get_summary_move_id(moves[move_index]) == move_id:
+			return move_index
+	return -1
+
+func _get_summary_move_ids(moves: Array) -> Array[String]:
+	var move_ids: Array[String] = []
+	for move_value: Variant in moves:
+		var move_id: String = _get_summary_move_id(move_value)
+		if move_id == "" or move_ids.has(move_id):
+			return []
+		move_ids.append(move_id)
+	return move_ids
+
+func _is_world_battle_active() -> bool:
+	var world: Node = get_tree().get_first_node_in_group("world")
+	return world != null and bool(world.get("is_in_battle"))
 
 func _create_summary_move_type_label(move_type: String) -> Control:
 	var panel := PanelContainer.new()
@@ -12456,6 +12683,16 @@ func _normalize_summary_move_lookup_key(value: String) -> String:
 	while normalized_key.contains("--"):
 		normalized_key = normalized_key.replace("--", "-")
 	return normalized_key
+
+func _get_summary_move_id(move_value: Variant) -> String:
+	if move_value is Dictionary:
+		var move_data: Dictionary = move_value as Dictionary
+		return _normalize_summary_move_lookup_key(str(_get_first_dictionary_value(
+			move_data,
+			["id", "move", "name"],
+			""
+		)))
+	return _normalize_summary_move_lookup_key(str(move_value))
 
 func _get_summary_move_pp_text(move_value: Variant) -> String:
 	if not (move_value is Dictionary):
@@ -14826,6 +15063,7 @@ func _setup_player_hotbar() -> void:
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
 		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
+		button.field_move_dropped.connect(_on_hotbar_field_move_dropped)
 		button.hotbar_entry_dropped.connect(_on_hotbar_entry_dropped)
 		button.drop_highlight_changed.connect(_on_hotbar_drop_highlight_changed)
 		slot.add_child(button)
@@ -14873,6 +15111,22 @@ func _refresh_hotbar_ui() -> void:
 			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
 			quantity_label.text = "KEY"
 			button.tooltip_text = "%s\nPermanent Key Item — never consumed.\nRight-click to remove from hotbar." % escape_rope_button.tooltip_text
+		elif entry_type == "field_move":
+			var binding: Dictionary = _parse_hotbar_field_move_binding(entry_id)
+			var move_id := str(binding.get("moveId", ""))
+			var pokemon_id := int(binding.get("pokemonId", 0))
+			var is_charm := bool(binding.get("isCharm", false))
+			button.texture_normal = _load_item_icon("%s-charm" % move_id) if is_charm else OVERWORLD_MOVE_ACTION_ICON
+			button.preview_texture = button.texture_normal
+			var availability: Dictionary = FieldMoveService.can_use_direct_field_move(move_id, pokemon_id)
+			button.modulate = Color.WHITE if bool(availability.get("success", false)) else Color(1.0, 1.0, 1.0, 0.35)
+			quantity_label.text = "KEY" if is_charm else "MOVE"
+			var source_name := "%s Charm" % _format_move_name(move_id) if is_charm else _hotbar_field_move_pokemon_name(pokemon_id)
+			button.tooltip_text = "%s · %s\n%s\nRight-click to remove from hotbar." % [
+				_format_move_name(move_id),
+				source_name,
+				"Use in the overworld." if bool(availability.get("success", false)) else str(availability.get("error", "Unavailable.")),
+			]
 		elif entry_type == "item":
 			button.texture_normal = _load_item_icon(entry_id)
 			button.preview_texture = button.texture_normal
@@ -14922,6 +15176,9 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 	if entry_type == "player_action" and entry_id == "escape-rope":
 		_on_escape_rope_pressed()
 		return
+	if entry_type == "field_move":
+		_activate_hotbar_field_move(entry_id)
+		return
 	if entry_type == "item":
 		for item: Dictionary in bag_inventory_items:
 			if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(entry_id):
@@ -14962,6 +15219,19 @@ func _on_hotbar_bag_item_dropped(slot_index: int, item: Dictionary) -> void:
 	await _assign_bag_item_to_hotbar_slot(item, slot_index)
 
 
+func _on_hotbar_field_move_dropped(slot_index: int, pokemon_id: int, move_id: String, move_name: String) -> void:
+	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	if not FieldMoveService.is_direct_field_move(normalized_move_id):
+		_add_chat_message("%s cannot be assigned as a direct overworld action." % move_name)
+		return
+	var source_id := "charm" if pokemon_id <= 0 else str(pokemon_id)
+	var result: Dictionary = await PlayerHotbarService.assign(slot_index, "field_move", "%s:%s" % [source_id, normalized_move_id])
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
+		return
+	_add_chat_message("%s assigned to hotbar slot %s." % [move_name, slot_index + 1])
+
+
 func _on_hotbar_entry_dropped(source_slot: int, target_slot: int) -> void:
 	var result: Dictionary = await PlayerHotbarService.move_slot(source_slot, target_slot)
 	if not bool(result.get("success", false)):
@@ -14982,7 +15252,11 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	var entry_type := "item"
 	var entry_id := item_id
-	if item_id == "escape-rope-action":
+	var field_move_id := str(item.get("fieldMove", "")).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	if field_move_id != "" and FieldMoveService.is_direct_field_move(field_move_id):
+		entry_type = "field_move"
+		entry_id = "charm:%s" % field_move_id
+	elif item_id == "escape-rope-action":
 		entry_type = "player_action"
 		entry_id = "escape-rope"
 	elif not _is_pokemon_usable_item_id(item_id):
@@ -14993,6 +15267,42 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 		_add_chat_message("Could not update hotbar: %s" % str(result.get("error", "Unknown error")))
 		return
 	_add_chat_message("%s assigned to hotbar slot %s." % [str(item.get("name", _item_name_from_id(item_id))), target_slot + 1])
+
+
+func _parse_hotbar_field_move_binding(entry_id: String) -> Dictionary:
+	var parts := entry_id.strip_edges().to_lower().split(":", false, 1)
+	if parts.size() != 2:
+		return {}
+	var source_id := str(parts[0])
+	var move_id := str(parts[1]).replace("_", "-").replace(" ", "-")
+	if move_id == "":
+		return {}
+	if source_id == "charm":
+		return {"isCharm": true, "pokemonId": 0, "moveId": move_id}
+	var pokemon_id := int(source_id)
+	if pokemon_id <= 0:
+		return {}
+	return {"isCharm": false, "pokemonId": pokemon_id, "moveId": move_id}
+
+
+func _hotbar_field_move_pokemon_name(pokemon_id: int) -> String:
+	var pokemon := _get_party_pokemon_by_owned_id(pokemon_id)
+	return pokemon.species if pokemon != null else "Pokemon not in party"
+
+
+func _activate_hotbar_field_move(entry_id: String) -> void:
+	var binding := _parse_hotbar_field_move_binding(entry_id)
+	if binding.is_empty():
+		_add_chat_message("This field move hotbar binding is invalid.")
+		return
+	var result: Dictionary = FieldMoveService.use_direct_field_move(
+		str(binding.get("moveId", "")),
+		int(binding.get("pokemonId", 0))
+	)
+	if not bool(result.get("success", false)):
+		_add_chat_message(str(result.get("error", "That overworld move cannot be used right now.")))
+		return
+	_add_chat_message(str(result.get("message", "Field move used.")))
 
 
 func _refresh_player_actions() -> void:

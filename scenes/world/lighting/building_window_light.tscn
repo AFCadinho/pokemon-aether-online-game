@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/building_window_light.gd" id="1_building_window_light"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_window_glow"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_building_glow"]
+offsets = PackedFloat32Array(0, 0.35, 1)
+colors = PackedColorArray(1, 1, 1, 0.9, 1, 1, 1, 0.4, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_building_glow"]
+gradient = SubResource("Gradient_building_glow")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="BuildingWindowLight" type="Node2D"]
+script = ExtResource("1_building_window_light")
+light_color = Color(1, 0.82, 0.52, 1)
+max_energy = 0.4
+light_texture_scale = 0.5
+
+[node name="WindowGlow" type="Polygon2D" parent="."]
+visible = false
+material = SubResource("CanvasItemMaterial_window_glow")
+polygon = PackedVector2Array(-16, -8, 16, -8, 16, 8, -16, 8)
+color = Color(1, 0.8666667, 0.627451, 0)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, 8)
+enabled = false
+texture = SubResource("GradientTexture2D_building_glow")
+energy = 0.0
+texture_scale = 0.5
+range_z_min = -4096
+range_z_max = 4096
+shadow_enabled = false

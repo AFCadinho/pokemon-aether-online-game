@@ -11,7 +11,8 @@ func _get_drag_data(_position: Vector2) -> Variant:
 		return null
 	var item_id := str(hotbar_item.get("id", ""))
 	var gameplay: Variant = hotbar_item.get("gameplay", {})
-	if item_id != "escape-rope-action" and (not gameplay is Dictionary or (gameplay as Dictionary).is_empty()):
+	var field_move_id := str(hotbar_item.get("fieldMove", "")).strip_edges()
+	if item_id != "escape-rope-action" and field_move_id == "" and (not gameplay is Dictionary or (gameplay as Dictionary).is_empty()):
 		return null
 	var preview := TextureRect.new()
 	preview.custom_minimum_size = Vector2(42, 42)
@@ -27,6 +28,8 @@ func _get_drag_data(_position: Vector2) -> Variant:
 	else:
 		preview.queue_free()
 	return {
-		"kind": "bag_hotbar_item",
+		"kind": "bag_hotbar_field_move" if field_move_id != "" else "bag_hotbar_item",
 		"item": hotbar_item.duplicate(true),
+		"moveId": field_move_id,
+		"moveName": field_move_id.replace("_", "-").replace("-", " ").capitalize(),
 	}

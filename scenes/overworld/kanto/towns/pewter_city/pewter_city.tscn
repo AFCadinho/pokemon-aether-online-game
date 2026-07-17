@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
 [ext_resource type="Texture2D" uid="uid://dr2fy1qoutvvi" path="res://assets/tilesets/dirt path.png" id="9_iv6v0"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 32)
@@ -277,6 +278,7 @@ z_index = 5
 
 [node name="GateNPC" parent="Entities/NPCs" unique_id=257955404 instance=ExtResource("6_iv6v0")]
 position = Vector2(1776, 1008)
+requires_staff_role = true
 blocked_dialogue_id = "kanto_pallet_town_north_guard_blocked"
 allowed_dialogue_id = "kanto_pallet_town_north_guard_default"
 npc_id = "kanto_pallet_town_north_guard"
@@ -315,49 +317,83 @@ tile_set = SubResource("TileSet_frcun")
 
 [node name="NightLights" type="Node2D" parent="." unique_id=1917691000]
 
-[node name="NightLight" parent="NightLights" unique_id=668469385 instance=ExtResource("12_vw642")]
+[node name="Lantern" type="Node2D" parent="NightLights" unique_id=431110462]
+
+[node name="NightLight" parent="NightLights/Lantern" unique_id=668469385 instance=ExtResource("12_vw642")]
 position = Vector2(816, 1104)
 
-[node name="NightLight2" parent="NightLights" unique_id=1088378325 instance=ExtResource("12_vw642")]
+[node name="NightLight2" parent="NightLights/Lantern" unique_id=1088378325 instance=ExtResource("12_vw642")]
 position = Vector2(944, 1104)
 
-[node name="NightLight3" parent="NightLights" unique_id=645409762 instance=ExtResource("12_vw642")]
+[node name="NightLight3" parent="NightLights/Lantern" unique_id=645409762 instance=ExtResource("12_vw642")]
 position = Vector2(1008, 880)
 
-[node name="NightLight4" parent="NightLights" unique_id=201677342 instance=ExtResource("12_vw642")]
+[node name="NightLight4" parent="NightLights/Lantern" unique_id=201677342 instance=ExtResource("12_vw642")]
 position = Vector2(1264, 432)
 
-[node name="NightLight5" parent="NightLights" unique_id=1021995388 instance=ExtResource("12_vw642")]
+[node name="NightLight5" parent="NightLights/Lantern" unique_id=1021995388 instance=ExtResource("12_vw642")]
 position = Vector2(1520, 432)
 
-[node name="NightLight6" parent="NightLights" unique_id=716285764 instance=ExtResource("12_vw642")]
+[node name="NightLight6" parent="NightLights/Lantern" unique_id=716285764 instance=ExtResource("12_vw642")]
 position = Vector2(752, 432)
 
-[node name="NightLight7" parent="NightLights" unique_id=284591251 instance=ExtResource("12_vw642")]
+[node name="NightLight7" parent="NightLights/Lantern" unique_id=284591251 instance=ExtResource("12_vw642")]
 position = Vector2(432, 432)
 
-[node name="NightLight8" parent="NightLights" unique_id=403770652 instance=ExtResource("12_vw642")]
+[node name="NightLight8" parent="NightLights/Lantern" unique_id=403770652 instance=ExtResource("12_vw642")]
 position = Vector2(400, 48)
 
-[node name="NightLight9" parent="NightLights" unique_id=1400109174 instance=ExtResource("12_vw642")]
+[node name="NightLight9" parent="NightLights/Lantern" unique_id=1400109174 instance=ExtResource("12_vw642")]
 position = Vector2(624, 48)
 
-[node name="NightLight10" parent="NightLights" unique_id=1257817270 instance=ExtResource("12_vw642")]
+[node name="NightLight10" parent="NightLights/Lantern" unique_id=1257817270 instance=ExtResource("12_vw642")]
 position = Vector2(880, 48)
 
-[node name="NightLight11" parent="NightLights" unique_id=1566856458 instance=ExtResource("12_vw642")]
+[node name="NightLight11" parent="NightLights/Lantern" unique_id=1566856458 instance=ExtResource("12_vw642")]
 position = Vector2(1136, 48)
 
-[node name="NightLight14" parent="NightLights" unique_id=7378325 instance=ExtResource("12_vw642")]
+[node name="NightLight14" parent="NightLights/Lantern" unique_id=7378325 instance=ExtResource("12_vw642")]
 position = Vector2(1584, 816)
 
-[node name="NightLight15" parent="NightLights" unique_id=1356353960 instance=ExtResource("12_vw642")]
+[node name="NightLight15" parent="NightLights/Lantern" unique_id=1356353960 instance=ExtResource("12_vw642")]
 position = Vector2(1712, 816)
 
-[node name="NightLight16" parent="NightLights" unique_id=776828505 instance=ExtResource("12_vw642")]
+[node name="NightLight16" parent="NightLights/Lantern" unique_id=776828505 instance=ExtResource("12_vw642")]
 position = Vector2(1584, 1424)
 
-[node name="NightLight17" parent="NightLights" unique_id=1906904010 instance=ExtResource("12_vw642")]
+[node name="NightLight17" parent="NightLights/Lantern" unique_id=1906904010 instance=ExtResource("12_vw642")]
 position = Vector2(688, 1424)
+
+[node name="Window" type="Node2D" parent="NightLights" unique_id=1588229390]
+
+[node name="BuildingWindowLight" parent="NightLights/Window" unique_id=885826475 instance=ExtResource("13_4hm78")]
+position = Vector2(496, 1488)
+
+[node name="BuildingWindowLight2" parent="NightLights/Window" unique_id=1737522633 instance=ExtResource("13_4hm78")]
+position = Vector2(592, 1488)
+
+[node name="BuildingWindowLight3" parent="NightLights/Window" unique_id=615818890 instance=ExtResource("13_4hm78")]
+position = Vector2(624, 1488)
+
+[node name="BuildingWindowLight4" parent="NightLights/Window" unique_id=1207336645 instance=ExtResource("13_4hm78")]
+position = Vector2(1136, 912)
+
+[node name="BuildingWindowLight5" parent="NightLights/Window" unique_id=121403366 instance=ExtResource("13_4hm78")]
+position = Vector2(1104, 912)
+
+[node name="BuildingWindowLight6" parent="NightLights/Window" unique_id=1807431391 instance=ExtResource("13_4hm78")]
+position = Vector2(1232, 912)
+
+[node name="BuildingWindowLight7" parent="NightLights/Window" unique_id=798139622 instance=ExtResource("13_4hm78")]
+position = Vector2(1264, 912)
+
+[node name="BuildingWindowLight8" parent="NightLights/Window" unique_id=807808523 instance=ExtResource("13_4hm78")]
+position = Vector2(1328, 1488)
+
+[node name="BuildingWindowLight9" parent="NightLights/Window" unique_id=1709418107 instance=ExtResource("13_4hm78")]
+position = Vector2(1520, 1488)
+
+[node name="BuildingWindowLight10" parent="NightLights/Window" unique_id=1544342927 instance=ExtResource("13_4hm78")]
+position = Vector2(1424, 1488)
 
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]

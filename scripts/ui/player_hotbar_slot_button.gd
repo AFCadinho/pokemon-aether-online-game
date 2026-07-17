@@ -3,6 +3,7 @@ extends TextureButton
 class_name PlayerHotbarSlotButton
 
 signal bag_item_dropped(slot_index: int, item: Dictionary)
+signal field_move_dropped(slot_index: int, pokemon_id: int, move_id: String, move_name: String)
 signal hotbar_entry_dropped(source_slot: int, target_slot: int)
 signal drop_highlight_changed(slot_index: int, highlighted: bool)
 
@@ -34,7 +35,11 @@ func _can_drop_data(_position: Vector2, data: Variant) -> bool:
 	if not data is Dictionary:
 		return false
 	var kind := str((data as Dictionary).get("kind", ""))
-	var accepted := kind == "bag_hotbar_item" or (kind == "hotbar_entry" and int((data as Dictionary).get("sourceSlot", -1)) != slot_index)
+	var accepted := (
+		kind in ["bag_hotbar_item", "bag_hotbar_field_move"]
+		or (kind == "pokemon_summary_move_reorder" and bool((data as Dictionary).get("hotbarEligible", false)))
+		or (kind == "hotbar_entry" and int((data as Dictionary).get("sourceSlot", -1)) != slot_index)
+	)
 	if accepted:
 		drop_highlight_changed.emit(slot_index, true)
 	return accepted
@@ -46,6 +51,15 @@ func _drop_data(_position: Vector2, data: Variant) -> void:
 	drop_highlight_changed.emit(slot_index, false)
 	if str((data as Dictionary).get("kind", "")) == "hotbar_entry":
 		hotbar_entry_dropped.emit(int((data as Dictionary).get("sourceSlot", -1)), slot_index)
+		return
+	var kind := str((data as Dictionary).get("kind", ""))
+	if kind in ["bag_hotbar_field_move", "pokemon_summary_move_reorder"]:
+		field_move_dropped.emit(
+			slot_index,
+			int((data as Dictionary).get("pokemonId", 0)),
+			str((data as Dictionary).get("moveId", "")),
+			str((data as Dictionary).get("moveName", "Field Move"))
+		)
 		return
 	var item: Variant = (data as Dictionary).get("item", {})
 	if item is Dictionary:

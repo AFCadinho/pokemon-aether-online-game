@@ -6,6 +6,7 @@ signal lighting_changed(color: Color, night_intensity: float)
 
 const LIGHTING_PROFILE_OUTDOOR := "outdoor"
 const LIGHTING_PROFILE_INDOOR := "indoor"
+const LIGHTING_PROFILE_DARK := "dark"
 const DAY_COLOR := Color.WHITE
 const NIGHT_COLOR := Color("65718f")
 const DAWN_COLOR := Color("b8a9b2")
@@ -47,7 +48,7 @@ func apply_map(map_node: Node) -> void:
 
 func set_lighting_profile(profile: String) -> void:
 	var normalized_profile := profile.strip_edges().to_lower()
-	if normalized_profile != LIGHTING_PROFILE_INDOOR:
+	if normalized_profile not in [LIGHTING_PROFILE_INDOOR, LIGHTING_PROFILE_DARK]:
 		normalized_profile = LIGHTING_PROFILE_OUTDOOR
 	current_lighting_profile = normalized_profile
 	_refresh_lighting()
@@ -57,7 +58,10 @@ func _refresh_lighting() -> void:
 	_refresh_elapsed = 0.0
 	var color := DAY_COLOR
 	var night_intensity := 0.0
-	if current_lighting_profile == LIGHTING_PROFILE_OUTDOOR:
+	if current_lighting_profile == LIGHTING_PROFILE_DARK:
+		color = NIGHT_COLOR
+		night_intensity = 1.0
+	elif current_lighting_profile == LIGHTING_PROFILE_OUTDOOR:
 		var seconds_since_midnight: float = _get_seconds_since_midnight()
 		color = color_for_seconds(seconds_since_midnight)
 		night_intensity = night_intensity_for_seconds(seconds_since_midnight)

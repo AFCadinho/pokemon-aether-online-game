@@ -44,6 +44,12 @@ func _init() -> void:
 	controller.call("apply_map", indoor_map)
 	_check_color(canvas_modulate.color, Color.WHITE, "indoor profile bypasses world modulation")
 
+	var dark_map: Node = MapMetadataScript.new()
+	dark_map.set("lighting_profile", "dark")
+	controller.call("apply_map", dark_map)
+	_check_color(canvas_modulate.color, Color("65718f"), "dark profile applies stable darkness independent of time")
+	_check_approx(float(controller.get("current_night_intensity")), 1.0, "dark profile exposes full darkness to local lights")
+
 	var unknown_map := Node2D.new()
 	controller.call("apply_map", unknown_map)
 	_check_color(canvas_modulate.color, Color("65718f"), "maps without metadata safely default to outdoor")
@@ -52,6 +58,7 @@ func _init() -> void:
 	world_time_service.call("clear_debug_time")
 	host.queue_free()
 	indoor_map.queue_free()
+	dark_map.queue_free()
 	unknown_map.queue_free()
 	world_time_service.queue_free()
 	quit(1 if failed else 0)
