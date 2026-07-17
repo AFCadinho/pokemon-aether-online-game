@@ -288,7 +288,7 @@ const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const UI_REPEL_BG := Color("#155f2be8")
 const PLAYER_STATUS_CARD_BACKGROUND := UI_BG
-const PLAYER_STATUS_CARD_BORDER := UI_BORDER_SOFT
+const PLAYER_STATUS_CARD_BORDER := Color("#477cb0b8")
 
 enum DevPokemonPopupMode {
 	POKEMON,
@@ -13660,10 +13660,10 @@ func _make_glass_panel_style(corner_radius: int = 10, border_width: int = 1) -> 
 
 func _make_player_status_panel_style(hovered: bool) -> StyleBoxFlat:
 	var background_color := Color("#0b1727f5") if hovered else Color("#070f19f0")
-	var style := _make_panel_style(background_color, UI_BORDER if hovered else PLAYER_STATUS_CARD_BORDER, 12, 1)
+	var border_color := UI_BORDER_FOCUS if hovered else PLAYER_STATUS_CARD_BORDER
+	var style := _make_panel_style(background_color, border_color, 12, 1)
 	style.border_width_left = 3
-	style.border_color = UI_BORDER if hovered else Color("#d8b767e6")
-	style.shadow_color = Color(UI_BORDER.r, UI_BORDER.g, UI_BORDER.b, 0.18) if hovered else Color(0, 0, 0, 0.36)
+	style.shadow_color = Color(border_color.r, border_color.g, border_color.b, 0.18) if hovered else Color(0, 0, 0, 0.36)
 	style.shadow_size = 8 if hovered else 7
 	style.shadow_offset = Vector2(0, 3)
 	return style
@@ -15415,6 +15415,8 @@ func _setup_player_hotbar() -> void:
 		button.field_move_dropped.connect(_on_hotbar_field_move_dropped)
 		button.hotbar_entry_dropped.connect(_on_hotbar_entry_dropped)
 		button.drop_highlight_changed.connect(_on_hotbar_drop_highlight_changed)
+		button.mouse_entered.connect(_on_hotbar_slot_hover_changed.bind(slot_index, true))
+		button.mouse_exited.connect(_on_hotbar_slot_hover_changed.bind(slot_index, false))
 		slot.add_child(button)
 		slot.move_child(button, 0)
 		var quantity_label := Label.new()
@@ -15432,6 +15434,9 @@ func _setup_player_hotbar() -> void:
 		hotbar_buttons.append(button)
 		hotbar_slot_panels.append(slot)
 		hotbar_quantity_labels.append(quantity_label)
+		slot.set_meta("hotbar_hovered", false)
+		slot.set_meta("hotbar_drop_highlighted", false)
+		_apply_hotbar_slot_style(slot_index)
 
 
 func _on_hotbar_changed(slots: Array) -> void:
@@ -15592,9 +15597,39 @@ func _on_hotbar_entry_dropped(source_slot: int, target_slot: int) -> void:
 func _on_hotbar_drop_highlight_changed(slot_index: int, highlighted: bool) -> void:
 	if slot_index < 0 or slot_index >= hotbar_slot_panels.size():
 		return
-	var background := Color("#10243cf2") if highlighted else Color("#0d1625e6")
-	var border := Color("#f4d78a") if highlighted else Color("#315070")
-	hotbar_slot_panels[slot_index].add_theme_stylebox_override("panel", _make_panel_style(background, border, 8, 2 if highlighted else 1))
+	hotbar_slot_panels[slot_index].set_meta("hotbar_drop_highlighted", highlighted)
+	_apply_hotbar_slot_style(slot_index)
+
+
+func _on_hotbar_slot_hover_changed(slot_index: int, hovered: bool) -> void:
+	if slot_index < 0 or slot_index >= hotbar_slot_panels.size():
+		return
+	hotbar_slot_panels[slot_index].set_meta("hotbar_hovered", hovered)
+	_apply_hotbar_slot_style(slot_index)
+
+
+func _apply_hotbar_slot_style(slot_index: int) -> void:
+	if slot_index < 0 or slot_index >= hotbar_slot_panels.size():
+		return
+	var slot := hotbar_slot_panels[slot_index]
+	var hovered := bool(slot.get_meta("hotbar_hovered", false))
+	var drop_highlighted := bool(slot.get_meta("hotbar_drop_highlighted", false))
+	var background := Color("#0a1524f2")
+	var border := UI_BORDER_SOFT
+	var border_width := 1
+	if hovered:
+		background = Color("#14243af5")
+		border = Color("#6f91bd")
+	if drop_highlighted:
+		background = Color("#182a3ff8")
+		border = Color("#f4d78a")
+		border_width = 2
+	var style := _make_panel_style(background, border, 9, border_width)
+	if hovered or drop_highlighted:
+		style.shadow_color = Color(border.r, border.g, border.b, 0.28 if hovered else 0.4)
+		style.shadow_size = 7 if hovered else 9
+		style.shadow_offset = Vector2.ZERO
+	slot.add_theme_stylebox_override("panel", style)
 
 
 func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void:

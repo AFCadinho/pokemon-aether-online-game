@@ -8,6 +8,8 @@ const FAINTED_BACKGROUND := Color("#30343c")
 const FAINTED_BORDER := Color("#626a76")
 const ACTIVE_BACKGROUND := Color("#0a315f")
 const ACTIVE_BORDER := Color("#62d7ff")
+const PARTY_BACKGROUND := Color("#081321f2")
+const PARTY_BORDER := Color("#315070")
 const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
 const ICON_FAINTED_MODULATE := Color(0.12, 0.12, 0.12, 0.92)
@@ -332,17 +334,7 @@ func _apply_slot_style(species: String, is_fainted: bool, is_active: bool, types
 		_set_color(ACTIVE_BACKGROUND, ACTIVE_BORDER, true)
 		return
 
-	var display_types := types
-	if display_types.is_empty():
-		push_warning("PartySlot missing type metadata for %s. Backend payload should include types." % species)
-		remove_theme_stylebox_override("normal")
-		remove_theme_stylebox_override("hover")
-		remove_theme_stylebox_override("pressed")
-		remove_theme_stylebox_override("disabled")
-		return
-
-	var primary_type := str(display_types[0])
-	_set_color(TypeColors.get_slot_background(primary_type), TypeColors.get_slot_border(primary_type), false)
+	_set_color(PARTY_BACKGROUND, PARTY_BORDER, false)
 
 func _set_color(background: Color, border: Color, is_active: bool) -> void:
 	var normal := StyleBoxFlat.new()

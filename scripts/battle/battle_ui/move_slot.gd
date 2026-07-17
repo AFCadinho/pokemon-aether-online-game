@@ -2,6 +2,9 @@ extends Button
 
 const TYPE_BANNER_PATH := "res://assets/sprites/types/small/%s.png"
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
+const NEUTRAL_BACKGROUND := Color("#020612f5")
+const NEUTRAL_BORDER := Color("#1e60b4dc")
+const DISABLED_BACKGROUND := Color("#10131af0")
 
 signal selected
 signal hovered(move_data: Dictionary, slot_rect: Rect2)
@@ -49,7 +52,9 @@ func set_move_data(move_data: Dictionary) -> void:
 		current_pp,
 		max_pp
 	]
-	_set_type_banner(_get_move_type(move_data))
+	var move_type := _get_move_type(move_data)
+	_set_type_banner(move_type)
+	_apply_type_style(move_type, disabled)
 	
 	_set_effectiveness(move_data)
 	
@@ -70,6 +75,46 @@ func _set_type_banner(move_type: String) -> void:
 		
 	type_banner.texture = texture
 	type_banner.visible = true
+
+
+func _apply_type_style(move_type: String, is_disabled: bool) -> void:
+	var background := NEUTRAL_BACKGROUND
+	var border := NEUTRAL_BORDER
+	if move_type != "":
+		background = TypeColors.get_slot_background(move_type, NEUTRAL_BACKGROUND)
+		border = TypeColors.get_slot_border(move_type, NEUTRAL_BORDER)
+
+	var normal := _make_slot_style(background, border, 1)
+	var hover := _make_slot_style(background.lightened(0.08), border.lightened(0.18), 2)
+	hover.shadow_color = Color(border.r, border.g, border.b, 0.22)
+	hover.shadow_size = 10
+	hover.shadow_offset = Vector2(0, 3)
+	var pressed := _make_slot_style(background.darkened(0.08), border, 2)
+	var disabled_style := _make_slot_style(background.lerp(DISABLED_BACKGROUND, 0.58), Color(border.r, border.g, border.b, 0.38), 1)
+
+	add_theme_stylebox_override("normal", disabled_style if is_disabled else normal)
+	add_theme_stylebox_override("hover", disabled_style if is_disabled else hover)
+	add_theme_stylebox_override("pressed", disabled_style if is_disabled else pressed)
+	add_theme_stylebox_override("disabled", disabled_style)
+	add_theme_stylebox_override("focus", disabled_style if is_disabled else normal)
+
+
+func _make_slot_style(background: Color, border: Color, border_width: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.border_width_left = border_width
+	style.border_width_top = border_width
+	style.border_width_right = border_width
+	style.border_width_bottom = border_width
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+	style.shadow_color = Color(0, 0, 0, 0.22)
+	style.shadow_size = 6
+	style.shadow_offset = Vector2(0, 2)
+	return style
 
 
 func _get_move_type(move_data: Dictionary) -> String:
@@ -161,6 +206,7 @@ func set_empty() -> void:
 	type_banner.texture = null
 	type_banner.visible = false
 	effectiveness_label.remove_theme_color_override("font_color")
+	_apply_type_style("", true)
 
 	
 func _set_effectiveness(move_data: Dictionary) -> void:

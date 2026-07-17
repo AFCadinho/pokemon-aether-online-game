@@ -1,31 +1,31 @@
 [gd_scene format=3 uid="uid://cnvx5qmbwl27m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.02745098, 0.043137256, 0.078431375, 0.9019608)
-border_width_left = 1
+bg_color = Color(0.02745098, 0.05882353, 0.09803922, 0.9411765)
+border_width_left = 3
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.19215687, 0.3137255, 0.4392157, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.38)
-shadow_size = 8
-shadow_offset = Vector2(0, 4)
+border_color = Color(0.2784314, 0.4862745, 0.6901961, 0.72)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.42)
+shadow_size = 9
+shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
-bg_color = Color(0.050980393, 0.08627451, 0.14509805, 0.9019608)
+bg_color = Color(0.039215688, 0.08235294, 0.14117648, 0.9490196)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.19215687, 0.3137255, 0.4392157, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+border_color = Color(0.19215687, 0.3137255, 0.4392157, 0.9)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
 [node name="HotkeySidebar" type="PanelContainer" unique_id=311861686]
 custom_minimum_size = Vector2(60, 408)
@@ -55,8 +55,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot1" unique_id=1178574102]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "1"
 
 [node name="Slot2" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2061791274]
@@ -67,8 +70,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot2" unique_id=48082752]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "2"
 
 [node name="Slot3" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=2066504344]
@@ -79,8 +85,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot3" unique_id=1002914978]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "3"
 
 [node name="Slot4" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1251088391]
@@ -91,8 +100,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot4" unique_id=1247120994]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "4"
 
 [node name="Slot5" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=182856113]
@@ -103,8 +115,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot5" unique_id=1094944983]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "5"
 
 [node name="Slot6" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=1240713832]
@@ -115,8 +130,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot6" unique_id=389905510]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "6"
 
 [node name="Slot7" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=238380532]
@@ -127,8 +145,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot7" unique_id=761348058]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "7"
 
 [node name="Slot8" type="PanelContainer" parent="MarginContainer/SlotStack" unique_id=298868661]
@@ -139,6 +160,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
 [node name="KeyLabel" type="Label" parent="MarginContainer/SlotStack/Slot8" unique_id=466349960]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.68235296, 0.72156864, 0.77254903, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
 text = "8"

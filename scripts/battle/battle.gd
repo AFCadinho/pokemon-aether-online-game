@@ -175,7 +175,6 @@ var active_enemy_pokemon: Pokemon
 @onready var bag_drawer_close_button: Button = %BagDrawerCloseButton
 @onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
 @onready var context_hint: Label = %ContextHint
-@onready var switch_party_label: Label = %SwitchPartyLabel
 @onready var pvp_switch_confirmation_label: Label = %PvpSwitchConfirmationLabel
 @onready var battle_party_rail: Control = %BattlePartyRail
 @onready var party_rail_state_label: Label = %PartyRailStateLabel
@@ -1794,9 +1793,6 @@ func _sync_action_panel_mode_visibility() -> void:
 		and not is_calc_mode
 		and not is_bag_view
 	)
-	# The label floats in the divider between the battlefield and party rail, so it
-	# communicates the action without taking a row away from the party cards.
-	switch_party_label.visible = not is_calc_mode and not is_bag_view and not show_pvp_switch_confirmation
 	pvp_switch_confirmation_label.visible = show_pvp_switch_confirmation
 	bag_grid.visible = not is_calc_mode and is_bag_view
 	bag_drawer.visible = not is_calc_mode and is_bag_view
