@@ -22,7 +22,8 @@
 [ext_resource type="Texture2D" uid="uid://wf0tl5jvqhhw" path="res://assets/sprites/mugshots/market_attendance.png" id="14_m86ow"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_3oirl"]
-[ext_resource type="PackedScene" uid="uid://mkdk7jtd37sw" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
+[ext_resource type="Script" path="res://scripts/world/map_door_animator.gd" id="22_door_animator"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
@@ -2231,6 +2232,18 @@ sources/0 = SubResource("TileSetAtlasSource_wfrmf")
 script = ExtResource("1_f4ndu")
 
 [node name="Visuals" parent="." unique_id=1489195967 instance=ExtResource("21_visual")]
+
+[node name="DoorAnimator" type="Node" parent="."]
+script = ExtResource("22_door_animator")
+visual_root_path = NodePath("../Visuals")
+door_layer_name = "Door Layer"
+door_cover_layer_names = PackedStringArray("Structures Bottom", "Objects Layer", "Structures Top")
+cell_opening_regions = {
+Vector2i(20, 16): Rect2(0, 0, 32, 24),
+Vector2i(35, 12): Rect2(0, 0, 32, 24),
+Vector2i(40, 25): Rect2(0, 0, 32, 24)
+}
+animate_all_door_groups = true
 
 [node name="Entities" type="Node2D" parent="." unique_id=1216669791]
 z_index = 5

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DoorVisualDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/door_visual_definition.gd" id="1_door_definition"]
+
+[resource]
+script = ExtResource("1_door_definition")
+door_type = "pokecenter"
+source_layer_name = "StructuresBottom"
+open_offset = Vector2(10, 0)
+tween_seconds = 0.16

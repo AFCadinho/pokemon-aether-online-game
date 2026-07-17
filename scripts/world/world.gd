@@ -3,6 +3,7 @@ extends Node2D
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
+const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -32,6 +33,8 @@ const TALL_GRASS_LAYER_Z_OFFSET := 1
 const FOREST_TOP_LAYER_Z_OFFSET := 3
 const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
+const MAP_FADE_OUT_SECONDS := 0.16
+const MAP_FADE_IN_SECONDS := 0.20
 
 @export var initial_spawn_name := "InitialSpawn"
 
@@ -64,6 +67,9 @@ var active_battle_kind := ""
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
 var active_trainer_name := ""
+var map_transition_layer: CanvasLayer
+var map_transition_rect: ColorRect
+var map_transition_content: Control
 
 func _exit_tree() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
@@ -73,6 +79,7 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	_ensure_map_transition_overlay()
 	_ensure_remote_players_container()
 	_connect_world_presence_signals()
 	await _setup_initial_world_state()
@@ -196,14 +203,24 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 
 	var current_scene_path := _get_map_scene_path(GameState.current_map)
 	var target_map: Node = GameState.current_map
-	if current_scene_path != target_scene_path:
-		target_map = _instantiate_map(target_scene_path)
-		if target_map == null:
+	var changes_map := current_scene_path != target_scene_path
+	if changes_map:
+		if not ResourceLoader.exists(target_scene_path):
+			_mark_authorized_teleport_apply_failed()
+			return {
+				"success": false,
+				"error": "Teleport map does not exist: %s" % target_scene_path,
+			}
+		await _fade_map_transition(1.0, MAP_FADE_OUT_SECONDS)
+		var target_scene := await _load_map_scene_threaded(target_scene_path)
+		if target_scene == null:
+			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
 			_mark_authorized_teleport_apply_failed()
 			return {
 				"success": false,
 				"error": "Could not load teleport map: %s" % target_scene_path,
 			}
+		target_map = target_scene.instantiate()
 		_clear_current_map()
 		$CurrentMap.add_child(target_map)
 		GameState.current_map = target_map
@@ -215,12 +232,16 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		player.call("reset_movement_state")
 	var position_result := _position_player_at_authorized_teleport_state(target_map, state)
 	if not bool(position_result.get("success", false)):
+		if changes_map:
+			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
 		_mark_authorized_teleport_apply_failed()
 		return position_result
 	current_teleport_revision = int(state.get("teleportRevision", current_teleport_revision))
 	_apply_camera_limits_for_map(target_map)
 
 	await get_tree().physics_frame
+	if changes_map:
+		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
 	is_loading_map = false
 	last_presence_position_signature = ""
 	has_pending_player_position_save = false
@@ -342,6 +363,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		return
 
 	is_loading_map = true
+	GameState.lock_overworld_input()
 	_clear_remote_players()
 
 	if target_scene_path == "":
@@ -350,9 +372,18 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		GameState.unlock_overworld_input()
 		return
 
-	var target_scene: PackedScene = load(target_scene_path) as PackedScene
+	if not ResourceLoader.exists(target_scene_path):
+		push_error("World.load_map failed: target scene does not exist: %s" % target_scene_path)
+		is_loading_map = false
+		GameState.unlock_overworld_input()
+		return
+
+	await _fade_map_transition(1.0, MAP_FADE_OUT_SECONDS)
+
+	var target_scene := await _load_map_scene_threaded(target_scene_path)
 	if target_scene == null:
 		push_error("World.load_map failed: could not load scene %s" % target_scene_path)
+		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
 		is_loading_map = false
 		GameState.unlock_overworld_input()
 		return
@@ -375,10 +406,93 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	_apply_camera_limits_for_map(new_map)
 
 	await get_tree().physics_frame
-	is_loading_map = false
 	await _save_current_player_position_if_changed(true, target_spawn_name)
 	_publish_world_presence(true)
+	await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	is_loading_map = false
 	GameState.unlock_overworld_input()
+
+
+func is_map_transition_in_progress() -> bool:
+	return is_loading_map
+
+
+func _fade_map_transition(target_alpha: float, duration: float) -> void:
+	_ensure_map_transition_overlay()
+	map_transition_rect.visible = true
+	map_transition_content.visible = true
+	if target_alpha > 0.0:
+		map_transition_content.modulate.a = 1.0
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(map_transition_rect, "color:a", target_alpha, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	if is_zero_approx(target_alpha):
+		tween.tween_property(map_transition_content, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	if is_zero_approx(target_alpha):
+		map_transition_rect.visible = false
+		map_transition_content.visible = false
+
+
+func _load_map_scene_threaded(scene_path: String) -> PackedScene:
+	var request_error := ResourceLoader.load_threaded_request(scene_path, "PackedScene")
+	if request_error != OK and request_error != ERR_BUSY:
+		push_error("World: could not start threaded map load for %s: %s" % [scene_path, error_string(request_error)])
+		return null
+
+	var progress: Array = []
+	while true:
+		var status := ResourceLoader.load_threaded_get_status(scene_path, progress)
+		match status:
+			ResourceLoader.THREAD_LOAD_LOADED:
+				return ResourceLoader.load_threaded_get(scene_path) as PackedScene
+			ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				await get_tree().process_frame
+			ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				return null
+			_:
+				return null
+	return null
+
+
+func _ensure_map_transition_overlay() -> void:
+	if map_transition_rect != null and is_instance_valid(map_transition_rect):
+		return
+	map_transition_layer = CanvasLayer.new()
+	map_transition_layer.name = "MapTransitionLayer"
+	map_transition_layer.layer = 1000
+	add_child(map_transition_layer)
+	map_transition_rect = ColorRect.new()
+	map_transition_rect.name = "MapTransitionFade"
+	map_transition_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	map_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	map_transition_rect.color = Color(0.005, 0.008, 0.015, 0.0)
+	map_transition_rect.visible = false
+	map_transition_layer.add_child(map_transition_rect)
+
+	map_transition_content = CenterContainer.new()
+	map_transition_content.name = "MapTransitionContent"
+	map_transition_content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	map_transition_content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	map_transition_content.modulate.a = 0.0
+	map_transition_content.visible = false
+	map_transition_layer.add_child(map_transition_content)
+
+	var layout := VBoxContainer.new()
+	layout.alignment = BoxContainer.ALIGNMENT_CENTER
+	layout.add_theme_constant_override("separation", 8)
+	map_transition_content.add_child(layout)
+
+	var indicator := MAP_TRANSITION_INDICATOR_SCRIPT.new() as Control
+	indicator.custom_minimum_size = Vector2(48.0, 48.0)
+	indicator.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	layout.add_child(indicator)
+
+	var label := Label.new()
+	label.text = "Loading..."
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 15)
+	label.add_theme_color_override("font_color", Color(0.78, 0.86, 1.0, 0.94))
+	layout.add_child(label)
 
 func move_player_to_map(map: Node) -> void:
 	var players: Node = map.get_node_or_null("Entities/Players")

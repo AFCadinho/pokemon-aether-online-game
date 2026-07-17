@@ -24,6 +24,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if world == null or not world.has_method("load_map"):
 		push_error("MapExit failed: could not resolve World.")
 		return
+	if world.has_method("is_map_transition_in_progress") and bool(world.call("is_map_transition_in_progress")):
+		return
 
 	is_transitioning = true
 	world.call_deferred("load_map", target_scene_path, target_spawn_name)
