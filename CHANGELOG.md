@@ -1,42 +1,48 @@
 # Changelog
 
-## Unreleased
+## 0.3.6 - 2026-07-17
 
 **Added**
-- Added temporary directional footprints for sand paths, using invisible sand overlay layers so grass-edge tiles stay clean.
-- Added reusable Cuttable Tree and Smashable Rock overworld interactables, including blocking, clearing animations, and shared field-move logic.
-- Added the first field-move flow: teach HM Cut from the Bag, choose a move slot, then use a party Pokemon that knows Cut to clear a tree.
-- Added Pokemon Home icons and system messages for overworld field-move use.
-- Added Rock Smash support to reusable overworld rocks.
-- Added permanent Field Move Charms for Cut, Defog, Dive, Flash, Rock Climb, Rock Smash, Strength, Surf, Waterfall, and Whirlpool, so field moves can later be used without teaching a Pokemon the move.
-- Added cropped, transparent item icons for Surf, Cut, Strength, Rock Smash, Waterfall, Dive, and Flash Charms.
-- Added Pewter City map exits, spawn points, and staff teleport destinations.
-- Added a shared transition for every overworld map switch, with an immediate screen fade, centered rotating loading indicator, threaded scene loading, and matching support for staff teleports between maps.
-- Added a server-synchronized overworld day and night cycle with dawn and dusk transitions, indoor lighting profiles, developer time previews, and reusable night lights for map lanterns and illuminated building windows.
-- Added persistent move reordering from Pokemon Summary cards with live drag-and-drop swapping.
-- Added direct overworld activation for Flash from a Pokemon Summary move or the Flash Charm in the Bag.
-- Added persistent field-move hotbar bindings for both a specific party Pokemon and permanent Field Move Charms.
-- Added a large player-centered Flash light for nighttime and future maps that use the new dark lighting profile.
-- Added natural overworld rain and snow with world-space movement, smooth transitions, responsive screen coverage, and developer weather previews.
-- Added per-map weather policies so interiors such as Oak's Lab and explicitly excluded maps remain clear.
-- Added server-synchronized map weather through world presence, including automatic seasonal snow during winter months.
-- Added direct overworld use for Rain Dance, Snowscape, and Sunny Day from Pokemon Summary moves, permanent Charms, and hotbar bindings.
+- Footprints now briefly appear behind you while walking on sandy paths.
+- Certain trees and cracked rocks can now be cleared with Cut and Rock Smash.
+- You can teach Cut from the Bag, choose which move to replace, and use a Pokemon that knows Cut in the overworld.
+- Field Move Charms have been added for Cut, Defog, Dive, Flash, Rock Climb, Rock Smash, Strength, Surf, Waterfall, and Whirlpool. Supported field actions can use a Charm instead of a Pokemon move.
+- Field Move Charms now have their own item icons.
+- Pewter City now has working exits to surrounding areas.
+- Moving between maps now uses a smooth fade and loading indicator.
+- The overworld now has a shared day and night cycle, including gradual dawn and dusk lighting and illuminated windows and lanterns at night.
+- Moves can now be reordered by dragging them in a Pokemon's Summary.
+- Flash can now be activated directly from a Pokemon's Summary or by using the Flash Charm from the Bag.
+- Pokemon field moves and Field Move Charms can now be assigned to the hotbar.
+- Flash creates a large light around the player in dark areas and at night.
+- Rain and snow can now appear naturally in the overworld, with seasonal snow during winter.
+- Indoor areas such as Oak's Lab stay clear and are not affected by outdoor weather.
+- Players on the same map now see the same time of day and weather.
+- Rain Dance, Snowscape, and Sunny Day can now change the current map's weather when used from a Pokemon Summary, Charm, or hotbar slot.
+- You can now open another player's Trainer Card from the player list or by right-clicking that player.
 
 **Changed**
-- Organized Route 2 and Viridian Forest interactables under map Entities so their collision blocking is discovered consistently.
-- Surf now requires its overworld unlock and either a party Pokemon that knows Surf or a Surf Charm.
-- Field moves can now be powered either by a party Pokemon that knows the move or by the matching permanent Charm.
-- Successful Cut, Rock Smash, and Surf use now shows a concise system message instead of opening a dialogue window.
-- HM machine selection refreshes the Bag, shows Home icons, and lists only party Pokemon that can learn the selected move.
-- TM and HM item icons now automatically use the move type: standard machine icons for TMs and TR-style machine icons for HMs. Item Dex now shows the machine kind and move type.
-- Pokemon Summary move rows now expose a compact overworld-action icon only for moves that can be activated without targeting an object.
-- Player-triggered weather changes affect everyone on the current map for ten minutes and share one server-enforced thirty-minute cooldown.
+- Trees and rocks on Route 2 and in Viridian Forest now block movement more reliably until they are cleared.
+- Surf now requires the Surf unlock and either a party Pokemon that knows Surf or a Surf Charm.
+- Cut, Rock Smash, and Surf now show a short system message instead of opening a dialogue window after use.
+- When using a TM or HM, the Bag now shows Pokemon icons and only lists party members that can learn the move.
+- TM and HM icons now match their move type. The Item Dex also shows whether a machine is a TM or HM and which type it belongs to.
+- Pokemon Summary only shows the overworld-use button on moves that can be activated directly.
+- Weather changed by a player lasts ten minutes for everyone on the map. These weather changes have a shared thirty-minute cooldown.
+- The mini Trainer Card, full Trainer Card, and Appearance tab have been refreshed with cleaner layouts and better avatar presentation.
+- The location card is now smaller and easier to read, with the region badge and radar placed more clearly.
+- Hotbar slots have updated styling and now react when hovered.
+- Battle party slots now use a neutral color, making active and fainted Pokemon easier to recognize. Move buttons now use the move's type color instead.
+- The floating `SWITCH` label has been removed from the battle interface for a cleaner layout.
 
 **Fixed**
-- Fixed HM compatibility filtering failing when JSON numeric Pokemon ids were parsed as floating-point values by the client.
-- Fixed TM and HM icons and move-type metadata not appearing in Item Dex, including an incorrect `<null>` effect label for machines.
-- Fixed destination exits becoming permanently locked when a player spawned inside their trigger while the previous map transition was still finishing, including the Route 2 return to Pewter City.
-- Fixed dragged Pokemon Summary move rows appearing behind the Summary card and safely restore their original order when dropped outside the move list.
+- Fixed some compatible Pokemon not appearing when choosing who should learn an HM.
+- Fixed missing TM and HM icons and move-type information in the Item Dex. Machine items no longer show an incorrect empty effect label.
+- Fixed some map exits becoming unusable after arriving on top of an exit trigger, including the return from Route 2 to Pewter City.
+- Fixed dragged Summary moves appearing behind the Summary window. Dropping a move outside the list now safely restores its previous position.
+- Fixed rain and snow sometimes appearing behind buildings and other map objects.
+- Fixed the collapse button beside the location card being positioned incorrectly.
+- Pokemon created through developer or content creator tools now receive the neutral Hardy Nature when no Nature is selected.
 
 ## 0.3.5 - 2026-07-16
 
