@@ -12,6 +12,7 @@
 - Added cropped, transparent item icons for Surf, Cut, Strength, Rock Smash, Waterfall, Dive, and Flash Charms.
 - Added Pewter City map exits, spawn points, and staff teleport destinations.
 - Added a shared transition for every overworld map switch, with an immediate screen fade, centered rotating loading indicator, threaded scene loading, and matching support for staff teleports between maps.
+- Added a server-synchronized overworld day and night cycle with dawn and dusk transitions, indoor lighting profiles, developer time previews, and reusable night lights for map lanterns.
 
 **Changed**
 - Organized Route 2 and Viridian Forest interactables under map Entities so their collision blocking is discovered consistently.

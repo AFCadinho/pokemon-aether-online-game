@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://2qey36patp5j" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_080_Worker.png" id="6_rwph1"]
 [ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
 [ext_resource type="Texture2D" uid="uid://dr2fy1qoutvvi" path="res://assets/tilesets/dirt path.png" id="9_iv6v0"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(32, 32)
@@ -311,5 +312,52 @@ tile_set = SubResource("TileSet_2pdw6")
 visible = false
 tile_map_data = PackedByteArray("AAA4AB8AAAABAAIAAAA4ACAAAAABAAIAAAA4ACEAAAABAAIAAAA4ACIAAAABAAIAAAA4ACMAAAABAAIAAAA4ACQAAAABAAIAAAA=")
 tile_set = SubResource("TileSet_frcun")
+
+[node name="NightLights" type="Node2D" parent="." unique_id=1917691000]
+
+[node name="NightLight" parent="NightLights" unique_id=668469385 instance=ExtResource("12_vw642")]
+position = Vector2(816, 1104)
+
+[node name="NightLight2" parent="NightLights" unique_id=1088378325 instance=ExtResource("12_vw642")]
+position = Vector2(944, 1104)
+
+[node name="NightLight3" parent="NightLights" unique_id=645409762 instance=ExtResource("12_vw642")]
+position = Vector2(1008, 880)
+
+[node name="NightLight4" parent="NightLights" unique_id=201677342 instance=ExtResource("12_vw642")]
+position = Vector2(1264, 432)
+
+[node name="NightLight5" parent="NightLights" unique_id=1021995388 instance=ExtResource("12_vw642")]
+position = Vector2(1520, 432)
+
+[node name="NightLight6" parent="NightLights" unique_id=716285764 instance=ExtResource("12_vw642")]
+position = Vector2(752, 432)
+
+[node name="NightLight7" parent="NightLights" unique_id=284591251 instance=ExtResource("12_vw642")]
+position = Vector2(432, 432)
+
+[node name="NightLight8" parent="NightLights" unique_id=403770652 instance=ExtResource("12_vw642")]
+position = Vector2(400, 48)
+
+[node name="NightLight9" parent="NightLights" unique_id=1400109174 instance=ExtResource("12_vw642")]
+position = Vector2(624, 48)
+
+[node name="NightLight10" parent="NightLights" unique_id=1257817270 instance=ExtResource("12_vw642")]
+position = Vector2(880, 48)
+
+[node name="NightLight11" parent="NightLights" unique_id=1566856458 instance=ExtResource("12_vw642")]
+position = Vector2(1136, 48)
+
+[node name="NightLight14" parent="NightLights" unique_id=7378325 instance=ExtResource("12_vw642")]
+position = Vector2(1584, 816)
+
+[node name="NightLight15" parent="NightLights" unique_id=1356353960 instance=ExtResource("12_vw642")]
+position = Vector2(1712, 816)
+
+[node name="NightLight16" parent="NightLights" unique_id=776828505 instance=ExtResource("12_vw642")]
+position = Vector2(1584, 1424)
+
+[node name="NightLight17" parent="NightLights" unique_id=1906904010 instance=ExtResource("12_vw642")]
+position = Vector2(688, 1424)
 
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
