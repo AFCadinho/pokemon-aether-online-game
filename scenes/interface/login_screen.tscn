@@ -718,7 +718,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -222.0
-offset_top = -160.0
+offset_top = -212.0
 offset_right = -64.0
 offset_bottom = -52.0
 grow_horizontal = 0
@@ -735,6 +735,17 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_screen_action")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_logout_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_screen_action_hover")
 text = "Options"
+
+[node name="CreditsButton" type="Button" parent="Background/ScreenActions"]
+custom_minimum_size = Vector2(158, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.82, 0.78, 0.96, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_screen_action")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_logout_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_screen_action_hover")
+text = "Credits & Legal"
 
 [node name="QuitButton" type="Button" parent="Background/ScreenActions" unique_id=1161813470]
 custom_minimum_size = Vector2(158, 42)

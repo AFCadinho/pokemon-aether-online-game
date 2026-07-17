@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://br7n6hywfrl2a"]
 
 [ext_resource type="Script" path="res://scripts/world/npcs/heal_npc.gd" id="1_0hryh"]
-[ext_resource type="SpriteFrames" uid="uid://36b8nbn22y3h" path="res://assets/npcs/trainer/bug_catcher_sprite_frames.tres" id="2_dhlew"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_dhlew"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_heal"]
 size = Vector2(96, 97)
@@ -16,7 +16,7 @@ npc_sprite_frames = ExtResource("2_dhlew")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_dhlew")
-animation = &"walk_down"
+animation = &"default"
 
 [node name="InteractionArea" type="Area2D" parent="."]
 

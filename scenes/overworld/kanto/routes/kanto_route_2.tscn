@@ -367,6 +367,10 @@ tile_set = SubResource("TileSet_bej5m")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1080027364]
 
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Players" type="Node2D" parent="Entities"]
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=2096619694]
 
 [node name="CuttableTree" parent="Entities/Interactables" unique_id=592280505 instance=ExtResource("10_j62p7")]

@@ -119,6 +119,12 @@ layout_mode = 2
 text = "  Patch Notes"
 flat = true
 
+[node name="CreditsButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "  Credits & Legal"
+flat = true
+
 [node name="GameFolderButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1480444040]
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2

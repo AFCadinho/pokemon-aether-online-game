@@ -7,7 +7,7 @@ extends Node2D
 @export var location_name := "Viridian City"
 @export var region_id := "kanto"
 @export var encounter_area_id := "kanto_viridian_city"
-@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
+@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
 
 const VISUALS_NODE_NAME := "ViridianCity"
 const DOOR_LAYER_NAME := "Door"

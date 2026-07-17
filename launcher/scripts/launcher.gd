@@ -6,6 +6,7 @@ const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
+const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
 const DEFAULT_HEALTH_URL := "https://pokeaether.com/health"
 const DEFAULT_PRESENCE_URL := "https://admin.pokeaether.com/presence/online-count"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
@@ -72,6 +73,7 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var play_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/PlayButton
 @onready var game_folder_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton
 @onready var patch_notes_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton
+@onready var credits_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton
 @onready var uninstall_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton
 @onready var discord_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton
 @onready var install_folder_dialog: FileDialog = $InstallFolderDialog
@@ -92,6 +94,7 @@ var health_url := DEFAULT_HEALTH_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
+var credits_url := DEFAULT_CREDITS_URL
 var install_dir := DEFAULT_INSTALL_DIR
 var launcher_update_info: Dictionary = {}
 var launcher_update_busy := false
@@ -178,6 +181,7 @@ func _ready() -> void:
 	play_button.pressed.connect(launch_game)
 	game_folder_button.pressed.connect(open_install_folder_dialog)
 	patch_notes_button.pressed.connect(open_patch_notes)
+	credits_button.pressed.connect(open_credits)
 	uninstall_button.pressed.connect(_on_uninstall_button_pressed)
 	launcher_update_confirm_dialog.confirmed.connect(_start_launcher_update_download)
 	launcher_update_http_request.request_completed.connect(_on_launcher_update_request_completed)
@@ -215,7 +219,9 @@ func _apply_visual_style() -> void:
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("hover", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_color_override("font_color", Color(0.96, 0.96, 1.0))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.82), Color(0.42, 0.22, 0.82, 0.72), 8, 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.82), Color(0.42, 0.22, 0.82, 0.72), 8, 1))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton.add_theme_color_override("font_color", Color(0.76, 0.78, 0.88, 1.0))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton.add_theme_color_override("font_color", Color(0.76, 0.78, 0.88, 1.0))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("normal", _panel_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 8, 1))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 8, 1))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("pressed", _panel_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 8, 1))
@@ -223,6 +229,7 @@ func _apply_visual_style() -> void:
 
 	for nav_button in [
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton,
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton,
 	]:
 		nav_button.add_theme_stylebox_override("disabled", _panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 8, 0))
 		nav_button.add_theme_color_override("font_disabled_color", Color(0.68, 0.70, 0.80, 0.82))
@@ -469,6 +476,18 @@ func open_patch_notes() -> void:
 	if open_error != OK:
 		_set_status("Could not open patch notes link.")
 		_log_error("Could not open patch notes link '%s': %s" % [normalized_patch_notes_url, error_string(open_error)])
+
+
+func open_credits() -> void:
+	var normalized_credits_url := _normalize_url(credits_url)
+	if normalized_credits_url.is_empty():
+		_set_status("Credits link is not configured.")
+		return
+
+	var open_error: Error = OS.shell_open(normalized_credits_url)
+	if open_error != OK:
+		_set_status("Could not open credits link.")
+		_log_error("Could not open credits link '%s': %s" % [normalized_credits_url, error_string(open_error)])
 
 
 func _start_launcher_update_download() -> void:
@@ -1723,12 +1742,18 @@ func _load_launcher_config() -> void:
 	var configured_patch_notes_url := str(config.get("patchNotesUrl", ""))
 	if not configured_patch_notes_url.is_empty():
 		patch_notes_url = configured_patch_notes_url
+	var configured_credits_url := str(config.get("creditsUrl", ""))
+	if not configured_credits_url.is_empty():
+		credits_url = configured_credits_url
 	discord_url = _normalize_url(discord_url)
 	patch_notes_url = _normalize_url(patch_notes_url)
+	credits_url = _normalize_url(credits_url)
 	if discord_url.is_empty():
 		discord_url = DEFAULT_DISCORD_URL
 	if patch_notes_url.is_empty():
 		patch_notes_url = DEFAULT_PATCH_NOTES_URL
+	if credits_url.is_empty():
+		credits_url = DEFAULT_CREDITS_URL
 
 
 func _load_launcher_settings() -> void:

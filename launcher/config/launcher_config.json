@@ -9,5 +9,6 @@
   "healthUrl": "https://pokeaether.com/health",
   "presenceUrl": "https://admin.pokeaether.com/presence/online-count",
   "discordUrl": "https://discord.com/invite/b6WexWT8HX",
-  "patchNotesUrl": "https://pokeaether.com/patch-notes"
+  "patchNotesUrl": "https://pokeaether.com/patch-notes",
+  "creditsUrl": "https://pokeaether.com/credits"
 }

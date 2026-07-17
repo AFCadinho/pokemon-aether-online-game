@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cqj4cmsw38oxt"]
 
 [ext_resource type="Script" uid="uid://b6q65j3pbj3go" path="res://scripts/world/npcs/dialogue_npc.gd" id="1_bm4ko"]
-[ext_resource type="SpriteFrames" uid="uid://36b8nbn22y3h" path="res://assets/npcs/trainer/bug_catcher_sprite_frames.tres" id="2_ck4ju"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_ck4ju"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3ytxu"]
 size = Vector2(96, 97)
@@ -15,7 +15,7 @@ npc_sprite_frames = ExtResource("2_ck4ju")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_ck4ju")
-animation = &"walk_down"
+animation = &"default"
 
 [node name="InteractionArea" type="Area2D" parent="."]
 

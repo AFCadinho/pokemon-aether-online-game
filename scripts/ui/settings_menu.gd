@@ -2,6 +2,7 @@ extends PanelContainer
 
 signal closed
 
+const ExternalLinks = preload("res://scripts/core/external_links.gd")
 const SPRITE_STYLE_BY_OPTION_ID: Dictionary = {
 	0: "animated",
 	1: "static",
@@ -65,6 +66,8 @@ var account_status_label: Label
 var edit_account_button: Button
 var logout_button: Button
 var exit_game_button: Button
+var credits_button: Button
+var credits_status_label: Label
 var logout_confirm_dialog: PanelContainer
 var logout_confirm_return_button: Button
 var logout_confirm_cancel_button: Button
@@ -102,6 +105,7 @@ func _ready() -> void:
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
+	credits_button.pressed.connect(_on_credits_button_pressed)
 	close_button.pressed.connect(close)
 	_apply_settings_to_controls()
 	visible = false
@@ -167,6 +171,7 @@ func _setup_tabs() -> void:
 	var graphics_tab: VBoxContainer = _create_tab_content("Graphics")
 	var sound_tab: VBoxContainer = _create_tab_content("Sound")
 	var account_tab: VBoxContainer = _create_tab_content("Account")
+	var about_tab: VBoxContainer = _create_tab_content("About")
 	account_tab_root = account_tab.get_parent() as Control
 
 	_move_nodes_to_container(general_tab, [
@@ -196,6 +201,7 @@ func _setup_tabs() -> void:
 		notification_volume_slider.get_node(".."),
 	])
 	_build_account_tab(account_tab)
+	_build_about_tab(about_tab)
 
 
 func _apply_context(context: String) -> void:
@@ -283,6 +289,45 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	exit_game_button.text = "Exit Game"
 	exit_game_button.focus_mode = Control.FOCUS_NONE
 	account_tab.add_child(exit_game_button)
+
+
+func _build_about_tab(about_tab: VBoxContainer) -> void:
+	var about_label := Label.new()
+	about_label.text = "PokeAether"
+	about_label.add_theme_font_size_override("font_size", 20)
+	about_tab.add_child(about_label)
+
+	var version_label := Label.new()
+	var version: String = str(ProjectSettings.get_setting("application/config/version", "")).strip_edges()
+	version_label.text = "Version %s" % version if version != "" and version != "dev" else "Alpha development build"
+	about_tab.add_child(version_label)
+
+	var description_label := Label.new()
+	description_label.text = "Created with the help of developers, artists, musicians, toolmakers, and community contributors."
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.add_theme_font_size_override("font_size", 13)
+	about_tab.add_child(description_label)
+
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(0, 8)
+	about_tab.add_child(spacer)
+
+	credits_button = Button.new()
+	credits_button.text = "View Credits & Licences"
+	credits_button.focus_mode = Control.FOCUS_ALL
+	about_tab.add_child(credits_button)
+
+	credits_status_label = Label.new()
+	credits_status_label.visible = false
+	credits_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	credits_status_label.add_theme_font_size_override("font_size", 12)
+	about_tab.add_child(credits_status_label)
+
+	var legal_note := Label.new()
+	legal_note.text = "Unofficial community project. Not affiliated with, endorsed by, or associated with any rights holder."
+	legal_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	legal_note.add_theme_font_size_override("font_size", 12)
+	about_tab.add_child(legal_note)
 
 
 func _create_display_own_name_check_box() -> CheckBox:
@@ -787,6 +832,16 @@ func _on_exit_game_button_pressed() -> void:
 	var tree := get_tree()
 	if tree != null:
 		tree.quit()
+
+
+func _on_credits_button_pressed() -> void:
+	if credits_status_label != null:
+		credits_status_label.visible = false
+	var open_error := OS.shell_open(ExternalLinks.CREDITS_URL)
+	if open_error != OK and credits_status_label != null:
+		credits_status_label.text = "Could not open the credits page. Visit pokeaether.com/credits in your browser."
+		credits_status_label.add_theme_color_override("font_color", UI_DANGER)
+		credits_status_label.visible = true
 
 
 func _show_logout_confirm_dialog() -> void:
