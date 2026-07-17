@@ -9412,7 +9412,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		return
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
-		var field_move_result: Dictionary = FieldMoveService.use_direct_field_move(field_move_id)
+		var field_move_result: Dictionary = await FieldMoveService.use_direct_field_move(field_move_id)
 		if not bool(field_move_result.get("success", false)):
 			_add_chat_message(str(field_move_result.get("error", "That Charm cannot be used right now.")))
 		else:
@@ -11768,7 +11768,7 @@ func _on_pokemon_summary_direct_move_requested(card_key: String, pokemon_id: int
 		return
 	if _is_pokemon_summary_readonly() or _is_world_battle_active():
 		return
-	var result: Dictionary = FieldMoveService.use_direct_field_move(move_id, pokemon_id)
+	var result: Dictionary = await FieldMoveService.use_direct_field_move(move_id, pokemon_id)
 	if not bool(result.get("success", false)):
 		_add_chat_message(str(result.get("error", "That overworld move cannot be used right now.")))
 		return
@@ -15299,7 +15299,7 @@ func _activate_hotbar_field_move(entry_id: String) -> void:
 	if binding.is_empty():
 		_add_chat_message("This field move hotbar binding is invalid.")
 		return
-	var result: Dictionary = FieldMoveService.use_direct_field_move(
+	var result: Dictionary = await FieldMoveService.use_direct_field_move(
 		str(binding.get("moveId", "")),
 		int(binding.get("pokemonId", 0))
 	)

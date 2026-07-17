@@ -9,7 +9,22 @@ const DIRECT_FIELD_MOVE_DEFINITIONS := {
 		"name": "Flash",
 		"description": "Light the area around you in dark overworld locations.",
 	},
+	"rain-dance": {
+		"name": "Rain Dance",
+		"description": "Summon rain on the current weather-enabled overworld map.",
+	},
+	"snowscape": {
+		"name": "Snowscape",
+		"description": "Summon snow on the current weather-enabled overworld map.",
+	},
+	"sunny-day": {
+		"name": "Sunny Day",
+		"description": "Clear rain or snow on the current weather-enabled overworld map.",
+	},
 }
+const WEATHER_FIELD_MOVES: Array[String] = ["rain-dance", "snowscape", "sunny-day"]
+const WEATHER_ACTION_ENDPOINT := "/world/weather/action"
+const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var owned_charm_moves: Dictionary = {}
 
@@ -69,6 +84,7 @@ func can_use_field_move(move_id: String) -> Dictionary:
 		}
 	return {
 		"success": true,
+		"source": "pokemon",
 		"pokemon": pokemon,
 	}
 
@@ -117,6 +133,8 @@ func use_direct_field_move(move_id: String, pokemon_id := 0) -> Dictionary:
 	var availability := can_use_direct_field_move(normalized_move_id, pokemon_id)
 	if not bool(availability.get("success", false)):
 		return availability
+	if normalized_move_id in WEATHER_FIELD_MOVES:
+		return await _use_weather_field_move(normalized_move_id, availability)
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("use_direct_field_move"):
 		return {"success": false, "error": "The overworld is not ready."}
@@ -124,6 +142,65 @@ func use_direct_field_move(move_id: String, pokemon_id := 0) -> Dictionary:
 	if not (result_value is Dictionary):
 		return {"success": false, "error": "The overworld action returned an invalid result."}
 	return result_value as Dictionary
+
+
+func _use_weather_field_move(move_id: String, availability: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var source := str(availability.get("source", "pokemon"))
+	var pokemon_id := 0
+	var pokemon: Pokemon = availability.get("pokemon") as Pokemon
+	if source == "pokemon" and pokemon != null:
+		pokemon_id = pokemon.owned_pokemon_id
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(
+		base_url + WEATHER_ACTION_ENDPOINT,
+		JSON.stringify({
+			"moveId": move_id,
+			"source": source,
+			"pokemonId": pokemon_id,
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body_value: Variant = response.get("body", {})
+	var body: Dictionary = body_value as Dictionary if body_value is Dictionary else {}
+	var weather_value: Variant = body.get("weather", {})
+	var weather: Dictionary = weather_value as Dictionary if weather_value is Dictionary else {}
+	return {
+		"success": true,
+		"message": "%s changed the map weather to %s." % [
+			_format_move_name(move_id),
+			str(weather.get("weather", "clear")).capitalize(),
+		],
+		"weather": weather,
+		"cooldownEndsAt": str(body.get("cooldownEndsAt", "")),
+	}
+
+
+func _request_json(url: String, body: String) -> Dictionary:
+	var request := HTTPRequest.new()
+	request.timeout = REQUEST_TIMEOUT_SECONDS
+	add_child(request)
+	var error: Error = request.request(url, GatewayApiConfig.get_json_headers(), HTTPClient.METHOD_POST, body)
+	if error != OK:
+		request.queue_free()
+		return {"success": false, "error": "Could not start weather request: %s" % error_string(error)}
+	var result: Array = await request.request_completed
+	request.queue_free()
+	var request_result := int(result[0])
+	var response_code := int(result[1])
+	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {"success": false, "status": response_code, "error": "Could not reach the weather server."}
+	var parsed_body: Variant = JSON.parse_string(response_text)
+	var parsed_dictionary: Dictionary = parsed_body as Dictionary if parsed_body is Dictionary else {}
+	if response_code < 200 or response_code >= 300:
+		var detail: Variant = parsed_dictionary.get("detail", parsed_dictionary.get("error", "Weather action failed."))
+		if detail is Dictionary:
+			detail = (detail as Dictionary).get("message", (detail as Dictionary).get("error", "Weather action failed."))
+		return {"success": false, "status": response_code, "error": str(detail), "body": parsed_dictionary}
+	return {"success": true, "status": response_code, "body": parsed_dictionary}
 
 
 func _pokemon_knows_move(pokemon: Pokemon, move_id: String) -> bool:
