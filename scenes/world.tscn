@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c16phc66hot6b" path="res://scenes/interface/ui_overlay.tscn" id="5_71j4m"]
 [ext_resource type="Script" path="res://scripts/world/day_night_controller.gd" id="6_day_night"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/field_move_flash_light.tscn" id="7_flash_light"]
+[ext_resource type="PackedScene" path="res://scenes/world/weather/overworld_weather_controller.tscn" id="8_weather"]
 
 [node name="World" type="Node2D" unique_id=618561729]
 script = ExtResource("1_4wyf3")
@@ -22,6 +23,8 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 script = ExtResource("6_day_night")
 canvas_modulate_path = NodePath("../WorldCanvasModulate")
+
+[node name="WeatherController" parent="." instance=ExtResource("8_weather")]
 
 [node name="Player" parent="." unique_id=1734997832 instance=ExtResource("2_4wyf3")]
 position = Vector2(304, 350)

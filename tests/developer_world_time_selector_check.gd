@@ -24,6 +24,13 @@ func _init() -> void:
 	_check_true(ui_source.contains("WorldTimeService.set_debug_time(selected_hour)"), "preview selections update the shared time source")
 	_check_true(ui_source.contains("_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)"), "location clock refreshes immediately after selection")
 	_check_true(not service_source.contains("user://") and not service_source.contains("SettingsManager"), "debug time is never persisted")
+	_check_true(scene_source.contains('[node name="WorldWeatherSelect" type="OptionButton"'), "developer menu contains a world-weather selector")
+	_check_true(scene_source.contains('popup/item_0/text = "Server / Default"'), "weather selector can return to server/default")
+	_check_true(scene_source.contains('popup/item_2/text = "Rain"'), "rain preview is available")
+	_check_true(scene_source.contains('popup/item_3/text = "Snow"'), "snow preview is available")
+	_check_true(ui_source.contains('const DEV_WORLD_WEATHER_OPTIONS: Array[String] = ["", "clear", "rain", "snow"]'), "weather options map to normalized renderer states")
+	_check_true(ui_source.contains("weather_controller.clear_debug_weather()"), "default weather selection clears the preview override")
+	_check_true(ui_source.contains("weather_controller.set_debug_weather(selected_weather)"), "weather previews update the overworld controller")
 
 	quit(1 if failed else 0)
 

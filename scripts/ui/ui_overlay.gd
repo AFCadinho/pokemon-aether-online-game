@@ -45,6 +45,7 @@ const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
 const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const DEV_WORLD_TIME_HOURS: Array[int] = [-1, 6, 12, 19, 0]
+const DEV_WORLD_WEATHER_OPTIONS: Array[String] = ["", "clear", "rain", "snow"]
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
@@ -411,6 +412,7 @@ var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var dev_spawn_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/SpawnPokemonButton
 @onready var dev_clear_party_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/ClearPartyButton
 @onready var dev_world_time_select: OptionButton = $Control/DevActionsPopup/MarginContainer/VBoxContainer/WorldTimeSelect
+@onready var dev_world_weather_select: OptionButton = $Control/DevActionsPopup/MarginContainer/VBoxContainer/WorldWeatherSelect
 @onready var dev_actions_close_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/CloseButton
 
 var party_slots: Array = []
@@ -1056,8 +1058,10 @@ func _ready() -> void:
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
 	dev_world_time_select.item_selected.connect(_on_dev_world_time_selected)
+	dev_world_weather_select.item_selected.connect(_on_dev_world_weather_selected)
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
 	_refresh_dev_world_time_selector()
+	_refresh_dev_world_weather_selector()
 	dev_actions_popup.visible = false
 	_refresh_dev_tools_visibility()
 	if settings_menu.has_signal("closed"):
@@ -18518,6 +18522,46 @@ func _refresh_dev_world_time_selector() -> void:
 		if matching_index >= 0:
 			selected_index = matching_index
 	dev_world_time_select.select(selected_index)
+
+
+func _on_dev_world_weather_selected(index: int) -> void:
+	if not _can_use_dev_tools():
+		_refresh_dev_world_weather_selector()
+		return
+	if index < 0 or index >= DEV_WORLD_WEATHER_OPTIONS.size():
+		return
+	var weather_controller := _get_overworld_weather_controller()
+	if weather_controller == null:
+		_add_chat_message("The overworld weather controller is not ready.")
+		_refresh_dev_world_weather_selector()
+		return
+	var selected_weather := DEV_WORLD_WEATHER_OPTIONS[index]
+	if selected_weather == "":
+		weather_controller.clear_debug_weather()
+		_add_chat_message("World weather reset to server/default.")
+	else:
+		weather_controller.set_debug_weather(selected_weather)
+		_add_chat_message("World weather preview set to %s." % selected_weather.capitalize())
+	_refresh_dev_world_weather_selector()
+
+
+func _refresh_dev_world_weather_selector() -> void:
+	if dev_world_weather_select == null:
+		return
+	var selected_index := 0
+	var weather_controller := _get_overworld_weather_controller()
+	if weather_controller != null and weather_controller.is_debug_weather_active():
+		var matching_index := DEV_WORLD_WEATHER_OPTIONS.find(weather_controller.debug_weather_override)
+		if matching_index >= 0:
+			selected_index = matching_index
+	dev_world_weather_select.select(selected_index)
+
+
+func _get_overworld_weather_controller() -> OverworldWeatherController:
+	var world := GameState.get_world()
+	if world == null:
+		return null
+	return world.get_node_or_null("WeatherController") as OverworldWeatherController
 
 func _on_dev_clear_party_option_pressed() -> void:
 	if not _can_use_dev_tools():

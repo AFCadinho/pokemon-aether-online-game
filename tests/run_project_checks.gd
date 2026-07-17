@@ -40,6 +40,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/field_move_flash_light_check.gd",
 	"res://tests/building_window_light_check.gd",
 	"res://tests/developer_world_time_selector_check.gd",
+	"res://tests/overworld_weather_controller_check.gd",
 	"res://tests/pokemon_summary_move_reorder_check.gd",
 	"res://tests/pokemon_summary_direct_field_move_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",

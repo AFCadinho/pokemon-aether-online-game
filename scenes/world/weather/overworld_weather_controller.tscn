@@ -1,0 +1,76 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/overworld_weather_controller.gd" id="1_weather"]
+
+[sub_resource type="Gradient" id="Gradient_rain"]
+offsets = PackedFloat32Array(0, 0.18, 0.82, 1)
+colors = PackedColorArray(0.65, 0.84, 1, 0, 0.72, 0.88, 1, 0.72, 0.58, 0.78, 1, 0.62, 0.5, 0.7, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture_rain"]
+gradient = SubResource("Gradient_rain")
+width = 5
+height = 26
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleMaterial_rain"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(720, 24, 1)
+direction = Vector3(0.13, 1, 0)
+spread = 3.0
+initial_velocity_min = 680.0
+initial_velocity_max = 880.0
+gravity = Vector3(55, 120, 0)
+scale_min = 0.55
+scale_max = 1.05
+
+[sub_resource type="Gradient" id="Gradient_snow"]
+offsets = PackedFloat32Array(0, 0.32, 0.72, 1)
+colors = PackedColorArray(0.9, 0.97, 1, 0, 0.96, 0.99, 1, 0.94, 0.88, 0.96, 1, 0.82, 0.82, 0.92, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture_snow"]
+gradient = SubResource("Gradient_snow")
+width = 12
+height = 12
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleMaterial_snow"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(720, 24, 1)
+direction = Vector3(-0.12, 1, 0)
+spread = 22.0
+initial_velocity_min = 62.0
+initial_velocity_max = 118.0
+gravity = Vector3(-12, 24, 0)
+scale_min = 0.45
+scale_max = 1.2
+
+[node name="WeatherController" type="Node2D"]
+z_index = 100
+script = ExtResource("1_weather")
+
+[node name="RainParticles" type="GPUParticles2D" parent="."]
+visible = false
+emitting = false
+amount = 760
+lifetime = 1.55
+preprocess = 1.55
+local_coords = false
+visibility_rect = Rect2(-720, -96, 1440, 960)
+texture = SubResource("GradientTexture_rain")
+process_material = SubResource("ParticleMaterial_rain")
+
+[node name="SnowParticles" type="GPUParticles2D" parent="."]
+visible = false
+emitting = false
+amount = 420
+lifetime = 6.0
+preprocess = 6.0
+local_coords = false
+visibility_rect = Rect2(-720, -96, 1440, 960)
+texture = SubResource("GradientTexture_snow")
+process_material = SubResource("ParticleMaterial_snow")
