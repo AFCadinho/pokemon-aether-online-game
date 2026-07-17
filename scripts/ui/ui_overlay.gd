@@ -44,6 +44,7 @@ const CONTENT_CREATOR_TOOLS_PERMISSION := "content:creator:tools"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
 const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
+const DEV_WORLD_TIME_HOURS: Array[int] = [-1, 6, 12, 19, 0]
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
@@ -407,6 +408,7 @@ var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var dev_add_team_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/AddTeamButton
 @onready var dev_spawn_pokemon_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/SpawnPokemonButton
 @onready var dev_clear_party_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/ClearPartyButton
+@onready var dev_world_time_select: OptionButton = $Control/DevActionsPopup/MarginContainer/VBoxContainer/WorldTimeSelect
 @onready var dev_actions_close_button: Button = $Control/DevActionsPopup/MarginContainer/VBoxContainer/CloseButton
 
 var party_slots: Array = []
@@ -1047,7 +1049,9 @@ func _ready() -> void:
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
+	dev_world_time_select.item_selected.connect(_on_dev_world_time_selected)
 	dev_actions_close_button.pressed.connect(_on_dev_actions_close_button_pressed)
+	_refresh_dev_world_time_selector()
 	dev_actions_popup.visible = false
 	_refresh_dev_tools_visibility()
 	if settings_menu.has_signal("closed"):
@@ -5773,7 +5777,7 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	if time_label == null:
 		return
 
-	var date_time: Dictionary = Time.get_datetime_dict_from_system(true)
+	var date_time: Dictionary = WorldTimeService.get_utc_datetime()
 	var hour: int = int(date_time.get("hour", 0))
 	var minute: int = int(date_time.get("minute", 0))
 	var period: String = "AM" if hour < 12 else "PM"
@@ -13260,6 +13264,7 @@ func _apply_premium_overlay_styles() -> void:
 		_apply_button_style(dev_add_money_button, "primary")
 	_apply_button_style(dev_clear_party_button, "danger")
 	dev_clear_party_button.text = "Clear"
+	_apply_button_style(dev_world_time_select)
 	_apply_button_style(dev_actions_close_button)
 	_apply_socials_menu_style()
 
@@ -15179,6 +15184,7 @@ func _on_dev_actions_button_pressed() -> void:
 
 	dev_actions_popup.visible = not dev_actions_popup.visible
 	if dev_actions_popup.visible:
+		_refresh_dev_world_time_selector()
 		_activate_ui_panel(dev_actions_popup)
 	else:
 		_deactivate_ui_panel(dev_actions_popup)
@@ -18170,6 +18176,38 @@ func _on_dev_clear_party_button_pressed() -> void:
 	dev_clear_menu_popup.visible = true
 	_position_dev_clear_menu_popup()
 	_activate_ui_panel(dev_clear_menu_popup)
+
+
+func _on_dev_world_time_selected(index: int) -> void:
+	if not _can_use_dev_tools():
+		_refresh_dev_world_time_selector()
+		return
+	if index < 0 or index >= DEV_WORLD_TIME_HOURS.size():
+		return
+
+	var selected_hour: int = DEV_WORLD_TIME_HOURS[index]
+	if selected_hour < 0:
+		WorldTimeService.clear_debug_time()
+		_add_chat_message("World time reset to default server UTC.")
+	else:
+		WorldTimeService.set_debug_time(selected_hour)
+		_add_chat_message("World time preview set to %02d:00 UTC." % selected_hour)
+	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
+	_refresh_dev_world_time_selector()
+
+
+func _refresh_dev_world_time_selector() -> void:
+	if dev_world_time_select == null:
+		return
+
+	var selected_index := 0
+	if WorldTimeService.is_debug_time_active():
+		var date_time: Dictionary = WorldTimeService.get_utc_datetime()
+		var debug_hour: int = int(date_time.get("hour", 0))
+		var matching_index: int = DEV_WORLD_TIME_HOURS.find(debug_hour)
+		if matching_index >= 0:
+			selected_index = matching_index
+	dev_world_time_select.select(selected_index)
 
 func _on_dev_clear_party_option_pressed() -> void:
 	if not _can_use_dev_tools():

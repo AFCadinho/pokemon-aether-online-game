@@ -18,6 +18,7 @@ config/icon="res://assets/ui/logo.png"
 [autoload]
 
 GameState="*uid://bvq8eki10oc8g"
+WorldTimeService="*res://scripts/services/world_time_service.gd"
 PlayerSave="*uid://x788vwp521n4"
 BattleApiConfig="*uid://wra74wdmekx5"
 BattleApiClient="*uid://dwil5tlkmdb7p"

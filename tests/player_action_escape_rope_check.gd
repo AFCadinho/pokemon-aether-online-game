@@ -12,6 +12,8 @@ func _init() -> void:
 	_check(service_source.contains("pending_request_ids"), "request ID retained for retry")
 	_check(service_source.contains("if retry"), "retry reuses request ID")
 	_check(service_source.contains("statuses_changed.emit"), "status changes exposed")
+	_check(service_source.contains("WorldTimeService.sync_server_time(server_time)"), "player-action response synchronizes shared world time")
+	_check(service_source.contains('body.get("serverTime", "")'), "backend serverTime remains the synchronization source")
 	_check(service_source.contains('return "%02d:%02d"'), "countdown formatting")
 	_check(ui_source.contains("_show_ui_confirm_popup("), "styled confirmation flow")
 	_check(ui_source.contains("escape_rope_button.disabled"), "disabled state")

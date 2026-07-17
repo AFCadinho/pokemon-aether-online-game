@@ -3623,6 +3623,7 @@ script = ExtResource("11_map_meta")
 map_id = "kanto_oaks_lab"
 map_region_name = "Kanto"
 map_display_name = "Oak's Lab"
+lighting_profile = "indoor"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=676273194]
 

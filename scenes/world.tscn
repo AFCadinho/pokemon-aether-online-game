@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cbb7318supm5h" path="res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn" id="2_k0juu"]
 [ext_resource type="PackedScene" uid="uid://crrp2rnop4xdb" path="res://scripts/ui/dialogue_box.tscn" id="4_k0juu"]
 [ext_resource type="PackedScene" uid="uid://c16phc66hot6b" path="res://scenes/interface/ui_overlay.tscn" id="5_71j4m"]
+[ext_resource type="Script" path="res://scripts/world/day_night_controller.gd" id="6_day_night"]
 
 [node name="World" type="Node2D" unique_id=618561729]
 script = ExtResource("1_4wyf3")
@@ -12,6 +13,14 @@ script = ExtResource("1_4wyf3")
 [node name="CurrentMap" type="Node2D" parent="." unique_id=1205265542 groups=["current_map"]]
 
 [node name="PalletTown" parent="CurrentMap" unique_id=1153208337 instance=ExtResource("2_k0juu")]
+
+[node name="WorldCanvasModulate" type="CanvasModulate" parent="."]
+unique_name_in_owner = true
+
+[node name="DayNightController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_day_night")
+canvas_modulate_path = NodePath("../WorldCanvasModulate")
 
 [node name="Player" parent="." unique_id=1734997832 instance=ExtResource("2_4wyf3")]
 position = Vector2(304, 350)

@@ -7,6 +7,7 @@ extends Node2D
 @export var location_name := ""
 @export var region_id := ""
 @export var encounter_area_id := ""
+@export_enum("outdoor", "indoor") var lighting_profile := "outdoor"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.0
 @export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/routes/route1.ogg"
 
@@ -40,6 +41,10 @@ func get_location_metadata() -> Dictionary:
 
 func get_music_track_path() -> String:
 	return music_track_path
+
+
+func get_lighting_profile() -> String:
+	return lighting_profile
 
 
 func get_wild_encounter_area_id() -> String:

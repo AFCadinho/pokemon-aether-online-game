@@ -17,9 +17,12 @@ func load_statuses() -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
 	var body: Dictionary = _dictionary(response.get("body", {}))
+	var server_time := str(body.get("serverTime", "")).strip_edges()
+	if server_time != "":
+		WorldTimeService.sync_server_time(server_time)
 	cached_actions = _array(body.get("actions", []))
 	statuses_changed.emit(cached_actions)
-	return {"success": true, "actions": cached_actions, "serverTime": str(body.get("serverTime", ""))}
+	return {"success": true, "actions": cached_actions, "serverTime": server_time}
 
 
 func execute(action_id: String, retry: bool = false) -> Dictionary:

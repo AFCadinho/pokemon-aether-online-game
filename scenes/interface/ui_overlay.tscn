@@ -830,7 +830,7 @@ anchor_right = 1.0
 offset_left = -226.0
 offset_top = 78.0
 offset_right = -16.0
-offset_bottom = 262.0
+offset_bottom = 354.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -869,6 +869,28 @@ custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Clear Party"
+
+[node name="WorldTimeLabel" type="Label" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
+theme_override_font_sizes/font_size = 12
+text = "World Time"
+
+[node name="WorldTimeSelect" type="OptionButton" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+item_count = 5
+popup/item_0/text = "Default (Server UTC)"
+popup/item_0/id = 0
+popup/item_1/text = "Morning (06:00)"
+popup/item_1/id = 1
+popup/item_2/text = "Day (12:00)"
+popup/item_2/id = 2
+popup/item_3/text = "Evening (19:00)"
+popup/item_3/id = 3
+popup/item_4/text = "Night (00:00)"
+popup/item_4/id = 4
 
 [node name="CloseButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer" unique_id=770877213]
 custom_minimum_size = Vector2(0, 32)
