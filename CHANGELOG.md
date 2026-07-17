@@ -3,6 +3,7 @@
 ## 0.3.6 - 2026-07-17
 
 **Added**
+- Ranked Battle History now shows a Battle ID that can be copied when reporting a problem.
 - Footprints now briefly appear behind you while walking on sandy paths.
 - Certain trees and cracked rocks can now be cleared with Cut and Rock Smash.
 - You can teach Cut from the Bag, choose which move to replace, and use a Pokemon that knows Cut in the overworld.

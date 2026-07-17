@@ -22706,7 +22706,7 @@ func _render_pvp_history_matches(matches: Array, user_id: int) -> void:
 func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 	var card := PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(0, 92)
+	card.custom_minimum_size = Vector2(0, 112)
 	card.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f88"), 4, 1))
 
 	var margin := MarginContainer.new()
@@ -22778,7 +22778,7 @@ func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 	matchup.add_child(summary)
 
 	var time_block := VBoxContainer.new()
-	time_block.custom_minimum_size = Vector2(130, 0)
+	time_block.custom_minimum_size = Vector2(170, 0)
 	time_block.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	time_block.alignment = BoxContainer.ALIGNMENT_CENTER
 	time_block.add_theme_constant_override("separation", 2)
@@ -22806,7 +22806,52 @@ func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 	duration_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	time_block.add_child(duration_label)
 
+	var battle_id := _pvp_history_battle_id(match)
+	if battle_id != "":
+		var battle_id_row := HBoxContainer.new()
+		battle_id_row.alignment = BoxContainer.ALIGNMENT_END
+		battle_id_row.add_theme_constant_override("separation", 4)
+		time_block.add_child(battle_id_row)
+
+		var battle_id_label := Label.new()
+		battle_id_label.text = "ID: %s" % _pvp_history_short_battle_id(battle_id)
+		battle_id_label.tooltip_text = "Battle ID: %s" % battle_id
+		battle_id_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		battle_id_label.add_theme_font_size_override("font_size", 11)
+		battle_id_row.add_child(battle_id_label)
+
+		var copy_battle_id_button := Button.new()
+		copy_battle_id_button.text = "Copy"
+		copy_battle_id_button.tooltip_text = "Copy full Battle ID"
+		copy_battle_id_button.custom_minimum_size = Vector2(62, 24)
+		copy_battle_id_button.focus_mode = Control.FOCUS_NONE
+		copy_battle_id_button.pressed.connect(
+			_on_pvp_history_copy_battle_id_pressed.bind(battle_id, copy_battle_id_button)
+		)
+		_apply_button_style(copy_battle_id_button)
+		battle_id_row.add_child(copy_battle_id_button)
+
 	return card
+
+func _pvp_history_battle_id(match: Dictionary) -> String:
+	var battle_id := str(match.get("battleId", "")).strip_edges()
+	if battle_id != "":
+		return battle_id
+	var result_value: Variant = match.get("result", {})
+	if result_value is Dictionary:
+		return str((result_value as Dictionary).get("finalBattleId", "")).strip_edges()
+	return ""
+
+func _pvp_history_short_battle_id(battle_id: String) -> String:
+	var normalized := battle_id.strip_edges()
+	if normalized.length() <= 12:
+		return normalized
+	return normalized.substr(0, 12)
+
+func _on_pvp_history_copy_battle_id_pressed(battle_id: String, button: Button) -> void:
+	DisplayServer.clipboard_set(battle_id)
+	if is_instance_valid(button):
+		button.text = "Copied"
 
 func _create_pvp_history_team_strip(team: Array) -> Control:
 	var strip := HBoxContainer.new()
