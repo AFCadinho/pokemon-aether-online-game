@@ -6,6 +6,7 @@ const TradeInvitationDialogScript := preload("res://scripts/ui/trade_invitation_
 
 signal private_message_requested(user: Dictionary)
 signal mail_requested(username: String)
+signal trainer_card_requested(player: Dictionary)
 signal social_overview_updated(overview: Dictionary)
 
 const PANEL_WIDTH := 310.0
@@ -205,6 +206,7 @@ func _render_context_menu() -> void:
 	context_title.text = _player_display_name(current_target)
 	context_status_label.text = "Loading social state..." if social_state_loading else context_status_label.text
 	_clear_children(context_actions)
+	_add_context_action("View Trainer Card", _on_trainer_card_pressed)
 	_add_context_action("Message", _on_message_pressed)
 	_add_context_action("Send Mail", _on_mail_pressed)
 	if bool(trade_capabilities.get("enabled", false)):
@@ -216,7 +218,7 @@ func _render_context_menu() -> void:
 
 func _add_context_action(label: String, action: Callable, variant: String = "default") -> void:
 	var button := _button(label, variant)
-	button.disabled = label not in ["Message", "Send Mail", "Close"] and (social_action_in_flight or social_state_loading)
+	button.disabled = label not in ["View Trainer Card", "Message", "Send Mail", "Close"] and (social_action_in_flight or social_state_loading)
 	button.pressed.connect(action)
 	context_actions.add_child(button)
 
@@ -225,6 +227,13 @@ func _on_message_pressed() -> void:
 	if current_target.is_empty():
 		return
 	private_message_requested.emit(current_target.duplicate(true))
+	close_context_menu()
+
+
+func _on_trainer_card_pressed() -> void:
+	if current_target.is_empty():
+		return
+	trainer_card_requested.emit(current_target.duplicate(true))
 	close_context_menu()
 
 

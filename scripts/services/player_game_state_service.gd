@@ -9,6 +9,7 @@ const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
 const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const PLAYER_PROFILE_ENDPOINT := "/game/profile"
+const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -51,6 +52,27 @@ func load_player_profile() -> Dictionary:
 		"stats": {
 			"stats": _dictionary_from_value(stats.get("stats", {})),
 		},
+	}
+
+
+func load_public_trainer_card(user_id: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if user_id <= 0:
+		return {"success": false, "error": "Invalid trainer."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + (PUBLIC_TRAINER_CARD_ENDPOINT % user_id),
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	return {
+		"success": true,
+		"card": _dictionary_from_value(response.get("body", {})),
 	}
 
 

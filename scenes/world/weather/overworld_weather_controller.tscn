@@ -49,8 +49,9 @@ gravity = Vector3(-12, 24, 0)
 scale_min = 0.45
 scale_max = 1.2
 
-[node name="WeatherController" type="Node2D"]
-z_index = 100
+[node name="WeatherController" type="CanvasLayer"]
+layer = 1
+follow_viewport_enabled = true
 script = ExtResource("1_weather")
 
 [node name="RainParticles" type="GPUParticles2D" parent="."]

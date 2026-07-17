@@ -23,7 +23,9 @@ func _init() -> void:
 	var rain := controller.get_node("RainParticles") as GPUParticles2D
 	var snow := controller.get_node("SnowParticles") as GPUParticles2D
 
-	_check_true(controller is Node2D, "weather renderer participates in world space")
+	_check_true(controller is CanvasLayer, "weather renderer has a dedicated canvas layer")
+	_check_equal(controller.layer, 1, "weather renders above overworld canvas items")
+	_check_true(controller.follow_viewport_enabled, "weather layer follows the world camera")
 	_check_true(not rain.local_coords and not snow.local_coords, "weather particles remain in world space when the camera moves")
 	_check_equal(controller.get_effective_weather(), "clear", "weather defaults to clear")
 	_check_true(not rain.emitting and not snow.emitting, "clear weather has no particle effect")

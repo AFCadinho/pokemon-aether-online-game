@@ -1,4 +1,4 @@
-extends Node2D
+extends CanvasLayer
 
 class_name OverworldWeatherController
 
@@ -161,12 +161,12 @@ func _update_viewport_layout() -> void:
 	var visible_top_left := inverse_canvas_transform * Vector2.ZERO
 	var visible_bottom_right := inverse_canvas_transform * viewport_size
 	var visible_world_size := (visible_bottom_right - visible_top_left).abs()
-	global_position = Vector2(
+	var weather_origin := Vector2(
 		(visible_top_left.x + visible_bottom_right.x) * 0.5,
 		minf(visible_top_left.y, visible_bottom_right.y) - 48.0
 	)
 	for particles: GPUParticles2D in [rain_particles, snow_particles]:
-		particles.position = Vector2.ZERO
+		particles.position = weather_origin
 		particles.visibility_rect = Rect2(
 			-visible_world_size.x * 0.65,
 			-96.0,
