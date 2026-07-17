@@ -314,6 +314,7 @@ func start_surf() -> bool:
 		})
 		return false
 
+	_show_field_move_system_message("surf")
 	_debug_surf_check("start", surf_check)
 	return true
 
@@ -496,6 +497,7 @@ func _ready() -> void:
 	set_role_from_user(AuthService.current_user)
 	_setup_fishing_prompt()
 	_setup_surf_prompt()
+	FieldMoveService.refresh_owned_charms.call_deferred()
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
@@ -1095,6 +1097,20 @@ func _try_check_surf_interaction_input() -> bool:
 
 func _has_party_field_move(move_id: String) -> bool:
 	return bool(FieldMoveService.can_use_field_move(move_id).get("success", false))
+
+
+func _show_field_move_system_message(move_id: String) -> void:
+	var field_move_result := FieldMoveService.can_use_field_move(move_id)
+	if not bool(field_move_result.get("success", false)):
+		return
+	var charm_name := str(field_move_result.get("itemName", "")).strip_edges()
+	if charm_name != "":
+		get_tree().call_group("ui_overlay", "add_system_message", "%s was used!" % charm_name)
+		return
+	var pokemon: Pokemon = field_move_result.get("pokemon") as Pokemon
+	var pokemon_name := pokemon.species if pokemon != null else "Pokemon"
+	var move_name := move_id.replace("_", "-").replace("-", " ").capitalize()
+	get_tree().call_group("ui_overlay", "add_system_message", "%s used %s!" % [pokemon_name, move_name])
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true

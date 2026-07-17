@@ -33,7 +33,7 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	var pokemon: Pokemon = field_move_result.get("pokemon") as Pokemon
-	await _show_field_move_used_message(pokemon)
+	_show_field_move_used_message(pokemon, str(field_move_result.get("itemName", "")))
 	await clear_obstacle()
 
 
@@ -66,20 +66,13 @@ func _play_clear_animation() -> void:
 		await get_tree().create_timer(clear_frame_duration).timeout
 
 
-func _show_field_move_used_message(pokemon: Pokemon) -> void:
+func _show_field_move_used_message(pokemon: Pokemon, charm_name := "") -> void:
+	if charm_name != "":
+		get_tree().call_group("ui_overlay", "add_system_message", "%s was used!" % charm_name)
+		return
 	var pokemon_name := pokemon.species if pokemon != null else "Pokemon"
 	var message := "%s used %s!" % [pokemon_name, _format_field_move_name(required_field_move)]
 	get_tree().call_group("ui_overlay", "add_system_message", message)
-
-	var dialogue_box := _get_dialogue_box()
-	if dialogue_box == null:
-		return
-
-	var home_icon: Texture2D = null
-	if pokemon != null:
-		home_icon = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
-	dialogue_box.start_dialogue([message], pokemon_name, home_icon, home_icon != null)
-	await dialogue_box.dialogue_finished
 
 
 func _format_field_move_name(move_id: String) -> String:

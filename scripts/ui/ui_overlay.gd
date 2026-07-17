@@ -9071,7 +9071,11 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	icon.anchor_bottom = 1.0
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = _load_item_icon(str(item.get("id", "")))
+	icon.texture = _load_item_icon(
+		str(item.get("id", "")),
+		str(item.get("machineKind", "")),
+		str(item.get("machineMoveType", "")),
+	)
 	slot.icon_texture = icon.texture
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_wrap.add_child(icon)
@@ -9677,19 +9681,41 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 		return _staff_dictionary_from_variant(item.get("gameplay", {}))
 	return {}
 
-func _load_item_icon(item_id: String) -> Texture2D:
+func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
 	if item_id == "escape-rope-action":
 		item_id = "escape-rope"
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
 	var candidates: Array[String] = [
+		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
+	]
+	var machine_icon_path := _machine_item_icon_path(item_id, machine_kind, machine_move_type)
+	if machine_icon_path != "":
+		candidates.append(machine_icon_path)
+	candidates.append_array([
 		BAG_ICON_ROOT + normalized + ".png",
 		BAG_ICON_ROOT + item_id.strip_edges() + ".png",
 		BAG_ICON_ROOT + "000.png",
-	]
+	])
 	for path: String in candidates:
 		if ResourceLoader.exists(path):
 			return load(path) as Texture2D
 	return null
+
+func _machine_item_icon_path(item_id: String, machine_kind: String, machine_move_type: String) -> String:
+	var resolved_kind := machine_kind.strip_edges().to_lower()
+	var resolved_move_type := machine_move_type.strip_edges().to_upper()
+	if resolved_kind == "" or resolved_move_type == "":
+		var normalized_item_id := _normalize_item_id(item_id)
+		for inventory_item: Dictionary in bag_inventory_items:
+			if _normalize_item_id(str(inventory_item.get("id", ""))) != normalized_item_id:
+				continue
+			resolved_kind = str(inventory_item.get("machineKind", "")).strip_edges().to_lower()
+			resolved_move_type = str(inventory_item.get("machineMoveType", "")).strip_edges().to_upper()
+			break
+	if resolved_kind not in ["tm", "hm"] or resolved_move_type == "":
+		return ""
+	var icon_prefix := "machine_tr_" if resolved_kind == "hm" else "machine_"
+	return BAG_ICON_ROOT + icon_prefix + resolved_move_type + ".png"
 
 func _ellipsize_text(value: String, max_length: int) -> String:
 	if value.length() <= max_length:
@@ -9736,6 +9762,7 @@ func _refresh_bag_inventory_for_machine_selection() -> void:
 	await _load_bag_inventory()
 
 func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
+	FieldMoveService.update_owned_charms_from_inventory(items_value)
 	var normalized_items: Array[Dictionary] = []
 	if typeof(items_value) != TYPE_ARRAY:
 		items_value = []
@@ -9758,6 +9785,9 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"isHoldable": bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
 			"machineMove": str(item.get("machineMove", "")).strip_edges(),
+			"machineKind": str(item.get("machineKind", "")).strip_edges().to_lower(),
+			"machineMoveType": str(item.get("machineMoveType", "")).strip_edges().to_lower(),
+			"fieldMove": str(item.get("fieldMove", "")).strip_edges(),
 			"machineCompatiblePokemonIds": item.get("machineCompatiblePokemonIds", []),
 			"gameplay": gameplay,
 			"useNotice": use_notice,
@@ -17252,7 +17282,11 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 
 	var icon := TextureRect.new()
 	icon.custom_minimum_size = Vector2(36, 36)
-	icon.texture = _load_item_icon(item_id)
+	icon.texture = _load_item_icon(
+		item_id,
+		str(item.get("machineKind", "")),
+		str(item.get("machineMoveType", "")),
+	)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(icon)
@@ -17280,7 +17314,11 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 
 func _on_item_dex_result_selected(item: Dictionary) -> void:
 	var item_id := str(item.get("id", ""))
-	item_dex_icon.texture = _load_item_icon(item_id)
+	item_dex_icon.texture = _load_item_icon(
+		item_id,
+		str(item.get("machineKind", "")),
+		str(item.get("machineMoveType", "")),
+	)
 	item_dex_name_label.text = str(item.get("name", item_id))
 	item_dex_meta_label.text = _format_item_dex_meta(item)
 	var description := str(item.get("shortDesc", ""))
@@ -17318,7 +17356,15 @@ func _format_item_dex_meta(item: Dictionary) -> String:
 
 func _format_item_dex_category_label(item: Dictionary) -> String:
 	var category := _format_identifier_display_name(str(item.get("category", "-")))
-	var sub_category := _format_identifier_display_name(str(item.get("subCategory", "")))
+	var sub_category_value: Variant = item.get("subCategory", "")
+	var sub_category := "" if sub_category_value == null else _format_identifier_display_name(str(sub_category_value))
+	var machine_kind := str(item.get("machineKind", "")).strip_edges()
+	var machine_move_type := str(item.get("machineMoveType", "")).strip_edges()
+	if machine_kind != "":
+		var machine_label := _format_identifier_display_name(machine_kind)
+		if machine_move_type != "":
+			machine_label += " • " + _format_identifier_display_name(machine_move_type)
+		return "%s / %s" % [category, machine_label]
 	if sub_category == "":
 		return category
 	return "%s / %s" % [category, sub_category]
@@ -17367,7 +17413,8 @@ func _format_item_dex_potency(item: Dictionary) -> String:
 			return potency_text
 
 func _format_item_dex_effect_info(item: Dictionary) -> String:
-	var sub_category := str(item.get("subCategory", "")).strip_edges()
+	var sub_category_value: Variant = item.get("subCategory", "")
+	var sub_category := "" if sub_category_value == null else str(sub_category_value).strip_edges()
 	var potency_text := _format_item_dex_potency(item)
 	if sub_category == "" and potency_text == "":
 		return ""
@@ -17761,6 +17808,8 @@ func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
 			"cost": item.get("cost", null),
 			"potency": item.get("potency", null),
 			"potencyUnit": item.get("potencyUnit", null),
+			"machineKind": str(item.get("machineKind", "")).strip_edges().to_lower(),
+			"machineMoveType": str(item.get("machineMoveType", "")).strip_edges().to_lower(),
 			"sources": item.get("sources", []),
 			"sourceSummary": item.get("sourceSummary", []),
 		})
