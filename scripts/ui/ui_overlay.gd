@@ -18540,6 +18540,10 @@ func _on_dev_world_weather_selected(index: int) -> void:
 		weather_controller.clear_debug_weather()
 		_add_chat_message("World weather reset to server/default.")
 	else:
+		if not weather_controller.is_weather_enabled_for_current_map():
+			_add_chat_message("Weather effects are disabled on this map.")
+			_refresh_dev_world_weather_selector()
+			return
 		weather_controller.set_debug_weather(selected_weather)
 		_add_chat_message("World weather preview set to %s." % selected_weather.capitalize())
 	_refresh_dev_world_weather_selector()

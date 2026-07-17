@@ -8,6 +8,8 @@ const WEATHER_CLEAR := "clear"
 const WEATHER_RAIN := "rain"
 const WEATHER_SNOW := "snow"
 const SUPPORTED_WEATHER: Array[String] = [WEATHER_CLEAR, WEATHER_RAIN, WEATHER_SNOW]
+const WEATHER_PROFILE_OUTDOOR := "outdoor"
+const WEATHER_PROFILE_DISABLED := "disabled"
 
 @export_range(0.0, 2.0, 0.05) var transition_duration := 0.45
 
@@ -17,6 +19,7 @@ const SUPPORTED_WEATHER: Array[String] = [WEATHER_CLEAR, WEATHER_RAIN, WEATHER_S
 var server_weather := WEATHER_CLEAR
 var debug_weather_override := ""
 var active_weather := WEATHER_CLEAR
+var current_weather_profile := WEATHER_PROFILE_OUTDOOR
 var _transition_tween: Tween
 
 
@@ -38,20 +41,20 @@ func set_server_weather(weather: String) -> void:
 		return
 	server_weather = normalized_weather
 	if not is_debug_weather_active():
-		_transition_to_weather(server_weather)
+		_transition_to_weather(get_effective_weather())
 
 
 func set_debug_weather(weather: String) -> void:
 	var normalized_weather := _normalize_weather(weather)
 	debug_weather_override = normalized_weather
-	_transition_to_weather(normalized_weather)
+	_transition_to_weather(get_effective_weather())
 
 
 func clear_debug_weather() -> void:
 	if not is_debug_weather_active():
 		return
 	debug_weather_override = ""
-	_transition_to_weather(server_weather)
+	_transition_to_weather(get_effective_weather())
 
 
 func is_debug_weather_active() -> bool:
@@ -59,7 +62,34 @@ func is_debug_weather_active() -> bool:
 
 
 func get_effective_weather() -> String:
+	if not is_weather_enabled_for_current_map():
+		return WEATHER_CLEAR
 	return debug_weather_override if is_debug_weather_active() else server_weather
+
+
+func apply_map(map_node: Node) -> void:
+	var profile := WEATHER_PROFILE_OUTDOOR
+	if map_node != null and map_node.has_method("get_weather_profile"):
+		profile = str(map_node.call("get_weather_profile"))
+	elif map_node != null and map_node.has_method("get_lighting_profile"):
+		var lighting_profile := str(map_node.call("get_lighting_profile")).strip_edges().to_lower()
+		if lighting_profile != WEATHER_PROFILE_OUTDOOR:
+			profile = WEATHER_PROFILE_DISABLED
+	set_weather_profile(profile)
+
+
+func set_weather_profile(profile: String) -> void:
+	var normalized_profile := profile.strip_edges().to_lower()
+	if normalized_profile != WEATHER_PROFILE_DISABLED:
+		normalized_profile = WEATHER_PROFILE_OUTDOOR
+	if current_weather_profile == normalized_profile:
+		return
+	current_weather_profile = normalized_profile
+	_transition_to_weather(get_effective_weather())
+
+
+func is_weather_enabled_for_current_map() -> bool:
+	return current_weather_profile == WEATHER_PROFILE_OUTDOOR
 
 
 func _transition_to_weather(weather: String) -> void:

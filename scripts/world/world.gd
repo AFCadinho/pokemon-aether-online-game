@@ -44,6 +44,7 @@ var battle_instance: Node
 @onready var player: CharacterBody2D = $Player
 @onready var battle_ui_host: Control = %BattleUIHost
 @onready var day_night_controller: OverworldDayNightController = %DayNightController
+@onready var weather_controller: OverworldWeatherController = $WeatherController
 @onready var field_move_flash_light: OverworldFieldMoveFlashLight = $Player/FieldMoveFlashLight
 
 var is_loading_map := false
@@ -232,6 +233,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		GameState.current_map = target_map
 		_normalize_map_depth_layer_z_indices(target_map)
 		_apply_day_night_for_map(target_map)
+		_apply_weather_for_map(target_map)
 		MusicManager.play_map_music(target_map)
 
 	move_player_to_map(target_map)
@@ -407,6 +409,7 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	GameState.current_map = new_map
 	_normalize_map_depth_layer_z_indices(new_map)
 	_apply_day_night_for_map(new_map)
+	_apply_weather_for_map(new_map)
 	MusicManager.play_map_music(new_map)
 
 	move_player_to_map(new_map)
@@ -617,6 +620,7 @@ func _setup_initial_world_state() -> void:
 	GameState.current_map = initial_map
 	_normalize_map_tree_layer_z_indices(initial_map)
 	_apply_day_night_for_map(initial_map)
+	_apply_weather_for_map(initial_map)
 	MusicManager.play_map_music(initial_map)
 	move_player_to_map(initial_map)
 
@@ -638,6 +642,11 @@ func _setup_initial_world_state() -> void:
 func _apply_day_night_for_map(map_node: Node) -> void:
 	if day_night_controller != null:
 		day_night_controller.apply_map(map_node)
+
+
+func _apply_weather_for_map(map_node: Node) -> void:
+	if weather_controller != null:
+		weather_controller.apply_map(map_node)
 
 
 func use_direct_field_move(move_id: String, source: Dictionary) -> Dictionary:

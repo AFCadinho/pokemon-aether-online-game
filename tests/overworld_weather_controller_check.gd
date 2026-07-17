@@ -1,11 +1,21 @@
 extends SceneTree
 
 const WeatherScene := preload("res://scenes/world/weather/overworld_weather_controller.tscn")
+const MapMetadataScript := preload("res://scripts/world/map_metadata.gd")
 
 var failed := false
 
 
 func _init() -> void:
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var metadata_source := FileAccess.get_file_as_string("res://scripts/world/map_metadata.gd")
+	var oaks_lab_source := FileAccess.get_file_as_string("res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn")
+	_check_true(metadata_source.contains('@export_enum("outdoor", "disabled") var weather_profile'), "map metadata exposes an explicit weather policy")
+	_check_true(world_source.contains("_apply_weather_for_map(target_map)"), "authorized teleports apply the destination weather policy")
+	_check_true(world_source.contains("_apply_weather_for_map(new_map)"), "regular map transitions apply the destination weather policy")
+	_check_true(world_source.contains("_apply_weather_for_map(initial_map)"), "initial world setup applies the map weather policy")
+	_check_true(oaks_lab_source.contains('weather_profile = "disabled"'), "Oak's Lab explicitly disables overworld weather")
+
 	var controller := WeatherScene.instantiate() as OverworldWeatherController
 	controller.transition_duration = 0.0
 	root.add_child(controller)
@@ -37,6 +47,23 @@ func _init() -> void:
 
 	controller.set_debug_weather("unsupported")
 	_check_equal(controller.get_effective_weather(), "clear", "unsupported weather safely normalizes to clear")
+	controller.clear_debug_weather()
+	controller.set_server_weather("rain")
+	var disabled_map := MapMetadataScript.new()
+	disabled_map.weather_profile = "disabled"
+	controller.apply_map(disabled_map)
+	_check_true(not controller.is_weather_enabled_for_current_map(), "maps can explicitly disable overworld weather")
+	_check_equal(controller.get_effective_weather(), "clear", "disabled maps always render clear weather")
+	_check_true(not rain.emitting and not snow.emitting, "disabled maps stop active weather particles")
+	controller.set_server_weather("snow")
+	_check_equal(controller.server_weather, "snow", "disabled maps still retain the latest server weather")
+	var outdoor_map := MapMetadataScript.new()
+	outdoor_map.weather_profile = "outdoor"
+	controller.apply_map(outdoor_map)
+	_check_equal(controller.get_effective_weather(), "snow", "weather returns after entering an enabled outdoor map")
+	_check_true(snow.emitting and snow.visible, "the retained server weather resumes outdoors")
+	disabled_map.free()
+	outdoor_map.free()
 	controller.queue_free()
 	quit(1 if failed else 0)
 
