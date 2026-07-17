@@ -253,6 +253,8 @@ map_display_name = "Route 2"
 location_id = "kanto.route_2"
 location_name = "Route 2"
 region_id = "kanto"
+encounter_area_id = "kanto_route_2"
+grass_encounter_chance = 0.21
 
 [node name="Route2" parent="." unique_id=1311042130 instance=ExtResource("1_htny7")]
 

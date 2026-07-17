@@ -216,8 +216,6 @@ var active_enemy_pokemon: Pokemon
 # Turn Nodes
 @onready var battle_status_panel: BattleStatusPanel = %BattleStatusPanel
 @onready var vs_panel_container: BattleVsPanelContainer = %VSPanelContainer
-@onready var vs_player_1_label: Label = vs_panel_container.player_1_label
-@onready var vs_player_2_label: Label = vs_panel_container.player_2_label
 @onready var player_side_effects_panel: Control = %SideFieldEffectsPanel
 @onready var enemy_side_effects_panel: Control = %SideFieldEffectsPanel2
 @onready var battle_background: TextureRect = %BattleBackground
@@ -1796,6 +1794,8 @@ func _sync_action_panel_mode_visibility() -> void:
 		and not is_calc_mode
 		and not is_bag_view
 	)
+	# The label floats in the divider between the battlefield and party rail, so it
+	# communicates the action without taking a row away from the party cards.
 	switch_party_label.visible = not is_calc_mode and not is_bag_view and not show_pvp_switch_confirmation
 	pvp_switch_confirmation_label.visible = show_pvp_switch_confirmation
 	bag_grid.visible = not is_calc_mode and is_bag_view
@@ -10797,10 +10797,8 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 	_debug_battle_presentation_order("pre_event_presentation.end switch_like")
 
 func _update_vs_panel_names() -> void:
-	if vs_player_1_label != null:
-		vs_player_1_label.text = _get_vs_player_name("p1")
-	if vs_player_2_label != null:
-		vs_player_2_label.text = _get_vs_player_name("p2")
+	if vs_panel_container != null:
+		vs_panel_container.set_names(_get_vs_player_name("p1"), _get_vs_player_name("p2"))
 
 func _get_vs_player_name(player_id: String) -> String:
 	if player_id == "p1":

@@ -47,6 +47,8 @@ var display_own_name_check_box: CheckBox
 @onready var battle_music_options_button: OptionButton = $MarginContainer/VBoxContainer/BattleMusicOptionsButton
 @onready var sfx_volume_slider: HSlider = $MarginContainer/VBoxContainer/SfxVolumeRow/SfxVolumeSlider
 @onready var sfx_volume_value_label: Label = $MarginContainer/VBoxContainer/SfxVolumeRow/SfxVolumeValueLabel
+@onready var pokemon_cry_volume_slider: HSlider = $MarginContainer/VBoxContainer/PokemonCryVolumeRow/PokemonCryVolumeSlider
+@onready var pokemon_cry_volume_value_label: Label = $MarginContainer/VBoxContainer/PokemonCryVolumeRow/PokemonCryVolumeValueLabel
 @onready var ui_volume_slider: HSlider = $MarginContainer/VBoxContainer/UiVolumeRow/UiVolumeSlider
 @onready var ui_volume_value_label: Label = $MarginContainer/VBoxContainer/UiVolumeRow/UiVolumeValueLabel
 @onready var notification_volume_slider: HSlider = $MarginContainer/VBoxContainer/NotificationVolumeRow/NotificationVolumeSlider
@@ -94,6 +96,7 @@ func _ready() -> void:
 	music_volume_slider.value_changed.connect(_on_music_volume_changed)
 	battle_music_options_button.item_selected.connect(_on_battle_music_selected)
 	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
+	pokemon_cry_volume_slider.value_changed.connect(_on_pokemon_cry_volume_changed)
 	ui_volume_slider.value_changed.connect(_on_ui_volume_changed)
 	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
 	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
@@ -142,6 +145,7 @@ func _apply_settings_to_controls() -> void:
 	_set_volume_control(music_volume_slider, music_volume_value_label, SettingsManager.music_volume)
 	_apply_battle_music_options_to_control()
 	_set_volume_control(sfx_volume_slider, sfx_volume_value_label, SettingsManager.sfx_volume)
+	_set_volume_control(pokemon_cry_volume_slider, pokemon_cry_volume_value_label, SettingsManager.pokemon_cry_volume)
 	_set_volume_control(ui_volume_slider, ui_volume_value_label, SettingsManager.ui_volume)
 	_set_volume_control(notification_volume_slider, notification_volume_value_label, SettingsManager.notification_volume)
 
@@ -187,6 +191,7 @@ func _setup_tabs() -> void:
 		battle_music_options_button.get_node("../BattleMusicLabel"),
 		battle_music_options_button,
 		sfx_volume_slider.get_node(".."),
+		pokemon_cry_volume_slider.get_node(".."),
 		ui_volume_slider.get_node(".."),
 		notification_volume_slider.get_node(".."),
 	])
@@ -733,6 +738,14 @@ func _on_sfx_volume_changed(value: float) -> void:
 		return
 
 	SettingsManager.set_sfx_volume(value)
+
+
+func _on_pokemon_cry_volume_changed(value: float) -> void:
+	_set_volume_value_label(pokemon_cry_volume_value_label, value)
+	if loading_controls:
+		return
+
+	SettingsManager.set_pokemon_cry_volume(value)
 
 
 func _on_ui_volume_changed(value: float) -> void:

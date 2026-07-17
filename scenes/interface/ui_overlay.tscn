@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://xe31cfj4j1g6" path="res://scripts/ui/ui_overlay.gd" id="1_7g5y2"]
 [ext_resource type="PackedScene" uid="uid://bqj3ifxyy7gdh" path="res://scenes/interface/party_slot.tscn" id="1_grslb"]
-[ext_resource type="Texture2D" uid="uid://bh3hhhb58uh2g" path="res://assets/ui/location.png" id="2_2onii"]
+[ext_resource type="Texture2D" path="res://assets/ui/location_waypoint.svg" id="2_2onii"]
 [ext_resource type="PackedScene" uid="uid://cnvx5qmbwl27m" path="res://scenes/interface/hotkey_sidebar.tscn" id="2_hotkeys"]
 [ext_resource type="Texture2D" uid="uid://b8qwcsde8a7l7" path="res://assets/ui/town_map.svg" id="3_riyyd"]
 [ext_resource type="PackedScene" uid="uid://dni4uwhy5b3in" path="res://scenes/interface/player_status_card.tscn" id="4_status"]
@@ -23,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://cs0q0ycclxlgo" path="res://assets/battles/poke_ball_svg.png" id="18_pvp"]
 [ext_resource type="Texture2D" uid="uid://6ymqdgvfj4rj" path="res://assets/ui/aether_exchange_icon.svg" id="19_exchange"]
 [ext_resource type="Texture2D" path="res://assets/items/icons/ESCAPEROPE.png" id="20_escape_rope"]
+[ext_resource type="Texture2D" path="res://assets/ui/wild_encounter_radar.svg" id="21_wild_radar"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
@@ -320,22 +321,22 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -170.0
-offset_right = 170.0
+offset_left = -180.0
+offset_right = 180.0
 offset_bottom = 64.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8bipm")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/LocationPanel" unique_id=1429849529]
 layout_mode = 2
-theme_override_constants/margin_left = 14
+theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 14
+theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer" unique_id=29517244]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="LocationIcon" type="TextureRect" parent="Control/LocationPanel/MarginContainer/HBoxContainer" unique_id=1573324624]
@@ -356,6 +357,7 @@ theme_override_constants/separation = 2
 [node name="MetaRow" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1040323592]
 layout_mode = 2
 theme_override_constants/separation = 8
+alignment = 1
 
 [node name="RegionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow" unique_id=1201685693]
 layout_mode = 2
@@ -374,9 +376,20 @@ text = "08:54 AM"
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Pallet Town"
+horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="WildPokemonButton" type="TextureButton" parent="Control/LocationPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Wild Pokémon on this map"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("21_wild_radar")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(368, 0)

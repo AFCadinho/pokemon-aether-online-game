@@ -396,6 +396,8 @@ map_display_name = "Viridian Forest"
 location_id = "kanto.viridian_forest"
 location_name = "Viridian Forest"
 region_id = "kanto"
+encounter_area_id = "kanto_viridian_forest"
+grass_encounter_chance = 0.21
 
 [node name="ViridianForest" parent="." unique_id=576859052 instance=ExtResource("1_rlpuh")]
 

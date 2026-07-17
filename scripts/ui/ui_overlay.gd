@@ -119,6 +119,7 @@ const PC_PARTY_SLOT_SIZE := Vector2(230, 62)
 const PC_BOX_TABS_VISIBLE := 10
 const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
+const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
 const POKEMON_SUMMARY_BODY_HEIGHT := 333.0
@@ -300,6 +301,7 @@ enum DevPokemonPopupMode {
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/LocationLabel
 @onready var time_label: Label = $Control/LocationPanel/MarginContainer/HBoxContainer/VBoxContainer/MetaRow/TimeLabel
+@onready var wild_pokemon_button: TextureButton = $Control/LocationPanel/MarginContainer/HBoxContainer/WildPokemonButton
 @onready var options_panel: PanelContainer = $Control/OptionsPanel
 @onready var actions_panel: PanelContainer = $Control/ToggleActionsPanel
 @onready var toggle_actions_collapse_button: Button = $Control/ToggleActionsCollapseButton
@@ -874,6 +876,12 @@ var pokedex_search_debounce_timer: Timer
 var pokedex_species_list_icon_cache: Dictionary = {}
 var pokedex_dragging := false
 var pokedex_drag_offset := Vector2.ZERO
+var wild_pokemon_popup: PanelContainer
+var wild_pokemon_title_label: Label
+var wild_pokemon_content: VBoxContainer
+var wild_pokemon_request_id := 0
+var wild_pokemon_button_hovered := false
+var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
 var displayed_location_map: Node
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
@@ -911,6 +919,7 @@ func _ready() -> void:
 	_setup_item_dex_popup()
 	_setup_pokedex_button()
 	_setup_pokedex_popup()
+	_setup_wild_pokemon_popup()
 	_setup_pc_ui()
 	_apply_ui_z_index_policy()
 	_apply_premium_overlay_styles()
@@ -1022,6 +1031,10 @@ func _ready() -> void:
 	staff_tools_button.pressed.connect(_on_staff_tools_button_pressed)
 	item_dex_button.pressed.connect(_on_item_dex_button_pressed)
 	pokedex_button.pressed.connect(_on_pokedex_button_pressed)
+	wild_pokemon_button.pressed.connect(_on_wild_pokemon_button_pressed)
+	wild_pokemon_button.mouse_entered.connect(_on_wild_pokemon_button_mouse_entered)
+	wild_pokemon_button.mouse_exited.connect(_on_wild_pokemon_button_mouse_exited)
+	wild_pokemon_button.pivot_offset = wild_pokemon_button.custom_minimum_size * 0.5
 	content_creator_tools_button.pressed.connect(_on_content_creator_tools_button_pressed)
 	hotkey_sidebar_panel.gui_input.connect(_on_hotkey_sidebar_gui_input)
 	dev_add_pokemon_button.pressed.connect(_on_dev_add_pokemon_button_pressed)
@@ -1632,6 +1645,7 @@ func _apply_ui_z_index_policy() -> void:
 		staff_teleport_popup,
 		item_dex_popup,
 		pokedex_popup,
+		wild_pokemon_popup,
 		settings_menu,
 	]
 	for context_value: Variant in pokemon_summary_open_cards.values():
@@ -1674,6 +1688,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		dev_pokemon_popup,
 		dev_clear_menu_popup,
 		pvp_room_popup,
+		wild_pokemon_popup,
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
@@ -5459,6 +5474,270 @@ func _refresh_location_label() -> void:
 		region_label.text = _get_current_map_region_name().to_upper()
 	if location_label != null:
 		location_label.text = _get_current_map_display_name()
+	var has_wild_pokemon := _get_current_encounter_area_id() != ""
+	if wild_pokemon_button != null:
+		wild_pokemon_button.visible = has_wild_pokemon
+		wild_pokemon_button.disabled = not has_wild_pokemon
+	if wild_pokemon_popup != null and wild_pokemon_popup.visible:
+		_hide_wild_pokemon_popup()
+
+func _get_current_encounter_area_id() -> String:
+	var current_map: Node = GameState.current_map as Node
+	if current_map == null or not current_map.has_method("get_wild_encounter_area_id"):
+		return ""
+	return str(current_map.call("get_wild_encounter_area_id")).strip_edges()
+
+func _setup_wild_pokemon_popup() -> void:
+	wild_pokemon_popup = PanelContainer.new()
+	wild_pokemon_popup.name = "WildPokemonPopup"
+	wild_pokemon_popup.visible = false
+	wild_pokemon_popup.custom_minimum_size = WILD_POKEMON_POPUP_SIZE
+	wild_pokemon_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	wild_pokemon_popup.z_index = UI_BASE_Z_INDEX
+	wild_pokemon_popup.anchor_left = 0.5
+	wild_pokemon_popup.anchor_right = 0.5
+	wild_pokemon_popup.offset_left = -WILD_POKEMON_POPUP_SIZE.x * 0.5
+	wild_pokemon_popup.offset_top = 72.0
+	wild_pokemon_popup.offset_right = WILD_POKEMON_POPUP_SIZE.x * 0.5
+	wild_pokemon_popup.offset_bottom = 72.0 + WILD_POKEMON_POPUP_SIZE.y
+	wild_pokemon_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(8, 1))
+	root_control.add_child(wild_pokemon_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	wild_pokemon_popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	wild_pokemon_title_label = Label.new()
+	wild_pokemon_title_label.text = "Wild Pokémon"
+	wild_pokemon_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	wild_pokemon_title_label.add_theme_font_size_override("font_size", 20)
+	wild_pokemon_title_label.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(wild_pokemon_title_label)
+
+	var close_button := Button.new()
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(_hide_wild_pokemon_popup)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+
+	var separator := HSeparator.new()
+	separator.modulate = UI_BORDER
+	layout.add_child(separator)
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(scroll)
+
+	wild_pokemon_content = VBoxContainer.new()
+	wild_pokemon_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	wild_pokemon_content.add_theme_constant_override("separation", 8)
+	scroll.add_child(wild_pokemon_content)
+
+func _on_wild_pokemon_button_pressed() -> void:
+	if wild_pokemon_popup.visible:
+		_hide_wild_pokemon_popup()
+		return
+
+	var area_id := _get_current_encounter_area_id()
+	if area_id == "":
+		return
+
+	wild_pokemon_popup.visible = true
+	_animate_wild_pokemon_button()
+	wild_pokemon_title_label.text = "Wild Pokémon · %s" % _get_current_map_display_name()
+	_activate_ui_panel(wild_pokemon_popup)
+	_set_wild_pokemon_message("Loading encounters…", UI_MUTED_TEXT)
+	wild_pokemon_request_id += 1
+	var request_id := wild_pokemon_request_id
+	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
+	if request_id != wild_pokemon_request_id or not wild_pokemon_popup.visible:
+		return
+	if area_id != _get_current_encounter_area_id():
+		_hide_wild_pokemon_popup()
+		return
+	if not bool(response.get("success", false)):
+		_set_wild_pokemon_message("Could not load wild Pokémon.", UI_DANGER)
+		return
+
+	_render_wild_pokemon_metadata(response.get("metadata", {}) as Dictionary)
+
+func _hide_wild_pokemon_popup() -> void:
+	wild_pokemon_request_id += 1
+	if wild_pokemon_popup != null:
+		wild_pokemon_popup.visible = false
+		_deactivate_ui_panel(wild_pokemon_popup)
+	_animate_wild_pokemon_button()
+
+func _on_wild_pokemon_button_mouse_entered() -> void:
+	wild_pokemon_button_hovered = true
+	_animate_wild_pokemon_button()
+
+func _on_wild_pokemon_button_mouse_exited() -> void:
+	wild_pokemon_button_hovered = false
+	_animate_wild_pokemon_button()
+
+func _animate_wild_pokemon_button() -> void:
+	if wild_pokemon_button == null:
+		return
+	if wild_pokemon_button_tween != null and wild_pokemon_button_tween.is_valid():
+		wild_pokemon_button_tween.kill()
+
+	var popup_active := wild_pokemon_popup != null and wild_pokemon_popup.visible
+	var highlighted := wild_pokemon_button_hovered or popup_active
+	var target_color := Color("#b9f2ff") if highlighted else Color.WHITE
+	var target_scale := Vector2(1.1, 1.1) if wild_pokemon_button_hovered else Vector2.ONE
+	wild_pokemon_button_tween = create_tween().set_parallel(true)
+	wild_pokemon_button_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	wild_pokemon_button_tween.tween_property(wild_pokemon_button, "self_modulate", target_color, 0.12)
+	wild_pokemon_button_tween.tween_property(wild_pokemon_button, "scale", target_scale, 0.12)
+
+func _set_wild_pokemon_message(message: String, color: Color) -> void:
+	_clear_wild_pokemon_content()
+	var label := Label.new()
+	label.text = message
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", color)
+	wild_pokemon_content.add_child(label)
+
+func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
+	_clear_wild_pokemon_content()
+	var encounter_types: Dictionary = metadata.get("encounterTypes", {}) as Dictionary
+	var encounter_type_ids: Array = encounter_types.keys()
+	encounter_type_ids.sort()
+	var rendered_count := 0
+	for encounter_type_value: Variant in encounter_type_ids:
+		var encounter_type := str(encounter_type_value)
+		var encounter_data: Dictionary = encounter_types.get(encounter_type, {}) as Dictionary
+		var pokemon_entries := _array_from_variant(encounter_data.get("pokemon", []))
+		if pokemon_entries.is_empty():
+			continue
+
+		var method_label := Label.new()
+		method_label.text = _wild_encounter_method_label(encounter_type)
+		method_label.add_theme_font_size_override("font_size", 13)
+		method_label.add_theme_color_override("font_color", UI_BORDER)
+		wild_pokemon_content.add_child(method_label)
+
+		for entry_value: Variant in pokemon_entries:
+			if not entry_value is Dictionary:
+				continue
+			wild_pokemon_content.add_child(_create_wild_pokemon_row(entry_value as Dictionary))
+			rendered_count += 1
+
+	if rendered_count == 0:
+		_set_wild_pokemon_message("No wild Pokémon are known for this map.", UI_MUTED_TEXT)
+
+func _create_wild_pokemon_row(entry: Dictionary) -> Control:
+	var species := str(entry.get("species", "Unknown")).strip_edges()
+	var min_level: int = max(int(entry.get("minLevel", 1)), 1)
+	var max_level: int = max(int(entry.get("maxLevel", min_level)), min_level)
+	var rarity := str(entry.get("rarity", "common")).strip_edges().to_lower()
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 54)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 6, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(42, 42)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = PokemonAssets.load_party_icon(species, false)
+	if icon.texture == null:
+		icon.texture = PokemonAssets.load_unknown_icon()
+	row.add_child(icon)
+
+	var name_label := Label.new()
+	name_label.text = _format_identifier_display_name(species)
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 15)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(name_label)
+
+	row.add_child(_create_wild_pokemon_rarity_badge(rarity))
+
+	var level_label := Label.new()
+	level_label.text = "Lv. %d" % min_level if min_level == max_level else "Lv. %d–%d" % [min_level, max_level]
+	level_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	level_label.add_theme_font_size_override("font_size", 12)
+	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(level_label)
+	return panel
+
+func _create_wild_pokemon_rarity_badge(rarity: String) -> Control:
+	var normalized_rarity := rarity.replace("-", "_").replace(" ", "_")
+	var color := _wild_pokemon_rarity_color(normalized_rarity)
+	var badge := PanelContainer.new()
+	badge.custom_minimum_size = Vector2(72, 24)
+	badge.add_theme_stylebox_override("panel", _make_panel_style(Color(color.r, color.g, color.b, 0.16), Color(color.r, color.g, color.b, 0.72), 7, 1))
+
+	var label := Label.new()
+	label.text = _format_identifier_display_name(normalized_rarity)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", color)
+	badge.add_child(label)
+	return badge
+
+func _wild_pokemon_rarity_color(rarity: String) -> Color:
+	match rarity:
+		"uncommon":
+			return Color("#67d58a")
+		"rare":
+			return Color("#62d7ff")
+		"very_rare":
+			return Color("#b980ff")
+		"ultra_rare":
+			return Color("#ff9f68")
+		"legendary":
+			return Color("#ffd45a")
+		_:
+			return Color("#aeb8c5")
+
+func _wild_encounter_method_label(encounter_type: String) -> String:
+	match encounter_type.strip_edges().to_lower():
+		"grass":
+			return "Tall grass"
+		"cave":
+			return "Cave"
+		"surf":
+			return "Surfing"
+		"fish", "fishing":
+			return "Fishing"
+		_:
+			return _format_identifier_display_name(encounter_type)
+
+func _clear_wild_pokemon_content() -> void:
+	if wild_pokemon_content == null:
+		return
+	for child: Node in wild_pokemon_content.get_children():
+		child.free()
 
 func _get_current_map_region_name() -> String:
 	var current_map: Node = GameState.current_map as Node

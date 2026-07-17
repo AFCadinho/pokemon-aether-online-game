@@ -2,6 +2,13 @@ extends HBoxContainer
 
 class_name BattleVsPanelContainer
 
+const MIN_NAMES_PANEL_WIDTH := 150.0
+const MAX_NAMES_PANEL_WIDTH := 340.0
+# Margins, both HBox gaps, the VS label, and the panel's 1 px borders.
+const NAMES_PANEL_CHROME_WIDTH := 64.0
+const MIN_PLAYER_NAME_WIDTH := 40.0
+
+@onready var names_panel: PanelContainer = $NamesPanel
 @onready var player_1_label: Label = $NamesPanel/MarginContainer/HBoxContainer/Player1
 @onready var player_2_label: Label = $NamesPanel/MarginContainer/HBoxContainer/Player2
 @onready var player_1_timer_panel: PanelContainer = $Player1TimerPanel
@@ -17,6 +24,42 @@ var _player_1_timer: Dictionary = {}
 var _player_2_timer: Dictionary = {}
 var _player_1_reconnect: Dictionary = {}
 var _player_2_reconnect: Dictionary = {}
+
+
+func _ready() -> void:
+	_refresh_names_panel_width()
+
+
+func set_names(player_1_name: String, player_2_name: String) -> void:
+	player_1_label.text = player_1_name
+	player_2_label.text = player_2_name
+	_refresh_names_panel_width()
+
+
+func _refresh_names_panel_width() -> void:
+	var player_1_width: float = _measure_name_width(player_1_label)
+	var player_2_width: float = _measure_name_width(player_2_label)
+	var maximum_names_width := MAX_NAMES_PANEL_WIDTH - NAMES_PANEL_CHROME_WIDTH
+	var desired_names_width := player_1_width + player_2_width
+	if desired_names_width > maximum_names_width:
+		var flexible_width := maximum_names_width - (MIN_PLAYER_NAME_WIDTH * 2.0)
+		var player_1_demand := maxf(player_1_width - MIN_PLAYER_NAME_WIDTH, 0.0)
+		var player_2_demand := maxf(player_2_width - MIN_PLAYER_NAME_WIDTH, 0.0)
+		var total_demand := player_1_demand + player_2_demand
+		if total_demand > 0.0:
+			player_1_width = MIN_PLAYER_NAME_WIDTH + flexible_width * (player_1_demand / total_demand)
+			player_2_width = MIN_PLAYER_NAME_WIDTH + flexible_width * (player_2_demand / total_demand)
+
+	player_1_label.custom_minimum_size.x = ceilf(player_1_width)
+	player_2_label.custom_minimum_size.x = ceilf(player_2_width)
+	var content_width := player_1_label.custom_minimum_size.x + player_2_label.custom_minimum_size.x + NAMES_PANEL_CHROME_WIDTH
+	names_panel.custom_minimum_size.x = clampf(content_width, MIN_NAMES_PANEL_WIDTH, MAX_NAMES_PANEL_WIDTH)
+
+
+func _measure_name_width(label: Label) -> float:
+	var font: Font = label.get_theme_font("font")
+	var font_size: int = label.get_theme_font_size("font_size")
+	return maxf(ceilf(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x) + 4.0, MIN_PLAYER_NAME_WIDTH)
 
 
 func _process(_delta: float) -> void:
