@@ -8464,7 +8464,10 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 	# same frame; taking this cursor afterwards can skip that valid response and
 	# leave the client waiting after the server has already advanced the battle.
 	var queue_start := pvp_realtime_updates.size()
-	var decision := battle_state.get_active_decision(player_id)
+	# PvP responses are normalized so the local player is p1 in BattleState.
+	# Keep the canonical player_id for the server command, but read the decision
+	# identity from the normalized local side.
+	var decision := battle_state.get_active_decision(_get_local_state_player_id())
 	var request_id := PvpBattleRealtimeService.send_action(
 		action,
 		battle_state.battle_id,

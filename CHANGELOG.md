@@ -37,6 +37,7 @@
 - The floating `SWITCH` label has been removed from the battle interface for a cleaner layout.
 
 **Fixed**
+- Fixed the second player in a Ranked battle being unable to confirm a lead, move, or switch and eventually timing out.
 - Fixed some compatible Pokemon not appearing when choosing who should learn an HM.
 - Fixed missing TM and HM icons and move-type information in the Item Dex. Machine items no longer show an incorrect empty effect label.
 - Fixed some map exits becoming unusable after arriving on top of an exit trigger, including the return from Route 2 to Pewter City.
