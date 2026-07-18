@@ -2,7 +2,10 @@
 
 ## Unreleased
 
+## 0.3.7 - 2026-07-18
+
 **Fixed**
+- Fixed Ranked battles getting stuck after a Pokemon fainted, including manual and automatic replacement choices.
 - Fixed long Ranked battles unexpectedly disconnecting both players while battle updates were being received.
 
 ## 0.3.6 - 2026-07-17
@@ -42,7 +45,6 @@
 - The floating `SWITCH` label has been removed from the battle interface for a cleaner layout.
 
 **Fixed**
-- Fixed Ranked battles getting stuck after a Pokemon fainted, including manual and automatic replacement choices.
 - Fixed the second player in a Ranked battle being unable to confirm a lead, move, or switch and eventually timing out.
 - Fixed some compatible Pokemon not appearing when choosing who should learn an HM.
 - Fixed missing TM and HM icons and move-type information in the Item Dex. Machine items no longer show an incorrect empty effect label.
