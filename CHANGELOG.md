@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.13 - 2026-07-18
+
 **Changed**
 - Ranked battle updates now appear more quickly after both players make a choice.
 
