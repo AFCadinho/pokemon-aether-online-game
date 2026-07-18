@@ -83,6 +83,25 @@ func _init() -> void:
 	_check_equal(terminal_messages[0].get("terminalResultId"), "terminal-1", "terminal client outcome retains canonical result id")
 	service._handle_battle_events_message({"type":"pvp.battle_events","battleId":"battle-1","battleEventLatestSeq":4,"events":[{"battleEventSeq":4,"type":"battle.ended","payload":{"category":"INFRASTRUCTURE_NO_CONTEST","terminalResultId":"terminal-1","winner":null,"loser":null,"noContest":true,"noPenalty":true,"endReason":"infrastructure_no_contest"}}]})
 	_check_equal(terminal_messages.size(), 1, "duplicate terminal delivery has no repeated client consequence")
+	var normal_terminal_service := PvpBattleRealtimeServiceNode.new()
+	var normal_terminal_messages: Array[Dictionary] = []
+	normal_terminal_service.battle_update_received.connect(func(message: Dictionary) -> void: normal_terminal_messages.append(message))
+	normal_terminal_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"roomCode": "ROOM",
+		"battleId": "battle-1",
+		"matchId": "match-1",
+		"battleEventLatestSeq": 1,
+		"events": [{
+			"battleEventSeq": 1,
+			"type": "battle.ended",
+			"payload": {"winnerSide":"p1","loserSide":"p2","endReason":"timeout","source":"AUTO_TIMEOUT"},
+		}],
+	})
+	_check_equal(normal_terminal_messages.size(), 1, "durable normal terminal event emits a client outcome")
+	_check_equal(normal_terminal_messages[0].get("type"), "pvp.authoritative_terminal", "normal terminal uses the authoritative terminal path")
+	_check_equal(normal_terminal_messages[0].get("winnerSide"), "p1", "normal terminal retains the canonical winner side")
+	_check_equal(normal_terminal_messages[0].get("endReason"), "timeout", "normal terminal retains its end reason")
 	_check_equal(PvpBattleRealtimeServiceNode.is_infrastructure_no_contest_result({"reason":"infrastructure_no_contest","terminalCategory":"INFRASTRUCTURE_NO_CONTEST","terminalResultId":"terminal-1","noContest":true,"noPenalty":true}), true, "canonical no-contest result is classified for no-persistence finish")
 	_check_equal(PvpBattleRealtimeServiceNode.allows_gameplay_persistence_for_terminal({"reason":"infrastructure_no_contest","terminalCategory":"INFRASTRUCTURE_NO_CONTEST","terminalResultId":"terminal-1","noContest":true,"noPenalty":true}), false, "infrastructure no-contest cannot persist healing or invalid battle gameplay")
 
@@ -114,6 +133,19 @@ func _init() -> void:
 	_check_equal(service.timer_projection.participant_display("p1", service.timer_projection.monotonic_anchor_ms + 5_000).get("bankRemainingMs"), 75_000, "accepted local choice no longer drains")
 	_check_equal(service.timer_projection.participant_display("p2", service.timer_projection.monotonic_anchor_ms + 5_000).get("state"), "DECIDING", "opponent clock continues while opponent is choosing")
 	_check_equal(service.timer_projection.participant_display("p2", service.timer_projection.monotonic_anchor_ms + 5_000).get("effectiveDecisionRemainingMs"), 75_000, "opponent decision countdown continues independently")
+	service.timer_projection.authority = BattleTimerProjection.BATTLE_BANK_V1_AUTHORITY
+	service.timer_projection.participants["p2"] = {
+		"decisionId": "durable-new-decision",
+		"decisionGeneration": 14,
+		"decisionKind": "MOVE_SELECTION",
+	}
+	var resynchronized_decision := service.decision_for_action("p2", {
+		"decisionId": "stale-battle-state-decision",
+		"decisionGeneration": 13,
+		"decisionKind": "MOVE_SELECTION",
+	})
+	_check_equal(resynchronized_decision.get("decisionId"), "durable-new-decision", "authority action uses a newer durable decision identity")
+	_check_equal(resynchronized_decision.get("decisionGeneration"), 14, "authority action advances beyond stale BattleState generation")
 	service.timer_projection.pause_for_reconnect(service.timer_projection.monotonic_anchor_ms + 5_000)
 	service.timer_projection.resume_after_reconnect(service.timer_projection.monotonic_anchor_ms + 20_000)
 	var reconnect_sync_applied := service._apply_timer_contract_message("battle.timer_sync", {
@@ -237,6 +269,7 @@ func _init() -> void:
 		"human forced switch remains available to its action waiter"
 	)
 
+	normal_terminal_service.free()
 	service.free()
 	print("PASS pvp_battle_realtime_stream_check")
 	quit(0)

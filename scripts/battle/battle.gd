@@ -8121,6 +8121,9 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	if PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
 		_finish_pvp_infrastructure_no_contest.call_deferred(message.duplicate(true))
 		return
+	if message_type == "pvp.authoritative_terminal":
+		_finish_pvp_authoritative_terminal.call_deferred(message.duplicate(true))
+		return
 
 	var is_snapshot_message := message_type == "pvp.snapshot"
 	if is_snapshot_message:
@@ -8491,7 +8494,10 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 	# PvP responses are normalized so the local player is p1 in BattleState.
 	# Keep the canonical player_id for the server command, but read the decision
 	# identity from the normalized local side.
-	var decision := battle_state.get_active_decision(_get_local_state_player_id())
+	var decision := PvpBattleRealtimeService.decision_for_action(
+		player_id,
+		battle_state.get_active_decision(_get_local_state_player_id())
+	)
 	var request_id := PvpBattleRealtimeService.send_action(
 		action,
 		battle_state.battle_id,
@@ -9439,6 +9445,20 @@ func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
 		"skipPartyBattleSync": true,
 	})
 
+func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
+	if battle_finished:
+		return
+	var winner_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("winnerSide", "")))
+	var loser_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("loserSide", "")))
+	var end_reason := str(message.get("endReason", "ended")).strip_edges().to_lower()
+	_finish_battle({
+		"reason": end_reason if end_reason != "" else "ended",
+		"winner": winner_side,
+		"forfeitingPlayerId": loser_side,
+		"battleEventSeq": message.get("battleEventSeq", -1),
+		"terminalSource": str(message.get("source", "DURABLE_BATTLE_EVENT")),
+	})
+
 func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 	if battle_finished:
 		return
@@ -10107,8 +10127,16 @@ func _render_pvp_opponent_response(
 	_rewind_party_slots_for_events(opponent_events)
 	var success := await _render_pvp_event_batch(opponent_response, opponent_events, true, source)
 	defer_force_switch_active_hide = false
+	_restore_pvp_authoritative_presentation(opponent_response)
 	_update_active_sprites()
 	return success
+
+func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:
+	if response.is_empty() or not bool(response.get("success", false)):
+		return
+	battle_state.load_from_api_response(response, true)
+	_update_hud_panels()
+	_update_party_slots()
 
 func _render_opponent_response(
 	opponent_response: Dictionary,
@@ -10196,6 +10224,15 @@ func _set_temporary_switch_in_condition(switch_ident: String, condition: String,
 	var target_index := _find_temporary_switch_target_index(team, switch_ident, event_data)
 	if target_index < 0:
 		return
+	var target_value: Variant = team[target_index] if target_index < team.size() else null
+	if target_value is Dictionary:
+		var target := target_value as Dictionary
+		var raw_condition := str(event_data.get("condition", event_data.get("toCondition", ""))).strip_edges().to_lower()
+		var explicit_hp := int(event_data.get("hp", 0)) if event_data.has("hp") else 0
+		var target_is_fainted := bool(target.get("fainted", false)) or int(target.get("hp", 1)) <= 0
+		var event_proves_alive := (raw_condition != "" and not raw_condition.ends_with(" fnt")) or explicit_hp > 0
+		if target_is_fainted and not event_proves_alive:
+			return
 
 	var hp_snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)
 	var hp: int = max(int(hp_snapshot.get("hp", 1)), 1)

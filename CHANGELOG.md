@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.11 - 2026-07-18
+
+**Fixed**
+- Fixed Ranked battles showing fainted Pokemon as available again, rejecting moves after the battle advanced, or leaving a player stuck after a timeout result.
+
 ## 0.3.10 - 2026-07-18
 
 **Changed**

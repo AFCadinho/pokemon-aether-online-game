@@ -528,6 +528,18 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 					"noContest": true,
 					"noPenalty": true,
 				}
+			else:
+				terminal_message = {
+					"type": "pvp.authoritative_terminal",
+					"roomCode": str(message.get("roomCode", active_room_code)),
+					"battleId": str(message.get("battleId", active_battle_id)),
+					"matchId": str(message.get("matchId", active_match_id)),
+					"battleEventSeq": next_event_seq,
+					"winnerSide": str(terminal_payload.get("winnerSide", "")),
+					"loserSide": str(terminal_payload.get("loserSide", "")),
+					"endReason": str(terminal_payload.get("endReason", terminal_payload.get("reason", "ended"))),
+					"source": str(terminal_payload.get("source", "DURABLE_BATTLE_EVENT")),
+				}
 		last_battle_event_seq = next_event_seq
 		next_event_seq += 1
 
@@ -549,6 +561,26 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 				received_battle_event_count,
 			]
 		)
+
+
+func decision_for_action(player_id: String, battle_decision: Dictionary) -> Dictionary:
+	if timer_projection.authority != BattleTimerProjection.BATTLE_BANK_V1_AUTHORITY:
+		return battle_decision
+	var timer_value: Variant = timer_projection.participants.get(player_id, {})
+	if not (timer_value is Dictionary):
+		return battle_decision
+	var timer_decision := timer_value as Dictionary
+	var timer_generation := int(timer_decision.get("decisionGeneration", 0))
+	var battle_generation := int(battle_decision.get("decisionGeneration", 0))
+	var timer_decision_id := str(timer_decision.get("decisionId", "")).strip_edges()
+	var timer_decision_kind := str(timer_decision.get("decisionKind", "")).strip_edges()
+	if timer_generation <= battle_generation or timer_decision_id == "" or timer_decision_kind == "":
+		return battle_decision
+	return {
+		"decisionId": timer_decision_id,
+		"decisionGeneration": timer_generation,
+		"decisionKind": timer_decision_kind,
+	}
 
 
 static func is_infrastructure_no_contest_payload(payload: Dictionary) -> bool:

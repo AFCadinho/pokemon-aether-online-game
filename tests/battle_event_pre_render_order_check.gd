@@ -13,6 +13,7 @@ func _init() -> void:
 	_check_initial_start_events_include_booster_energy_item_events()
 	_check_initial_setup_keeps_specific_form_species()
 	_check_team_preview_lead_selection_unlocks_party_grid()
+	_check_pvp_render_restores_canonical_party_state()
 	quit(1 if failed else 0)
 
 
@@ -213,6 +214,30 @@ func _check_team_preview_lead_selection_unlocks_party_grid() -> void:
 		true,
 		"PvP team preview unlocks input before waiting for party lead selection"
 	)
+
+
+func _check_pvp_render_restores_canonical_party_state() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var render_index := source.find("func _render_pvp_opponent_response(")
+	var render_next_index := source.find("\nfunc ", render_index + 1)
+	var render_source := source.substr(render_index, render_next_index - render_index)
+	var restore_index := source.find("func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:")
+	var restore_next_index := source.find("\nfunc ", restore_index + 1)
+	var restore_source := source.substr(restore_index, restore_next_index - restore_index)
+	var temporary_index := source.find("func _set_temporary_switch_in_condition(")
+	var temporary_next_index := source.find("\nfunc ", temporary_index + 1)
+	var temporary_source := source.substr(temporary_index, temporary_next_index - temporary_index)
+
+	_check_equal(render_index >= 0, true, "PvP opponent render function exists")
+	_check_equal(
+		render_source.find("await _render_pvp_event_batch") < render_source.find("_restore_pvp_authoritative_presentation(opponent_response)"),
+		true,
+		"PvP render restores the canonical response after presentation rewinds"
+	)
+	_check_equal(restore_index >= 0, true, "canonical PvP presentation restore exists")
+	_check_equal(restore_source.contains("battle_state.load_from_api_response(response, true)"), true, "canonical response replaces temporary BattleState changes")
+	_check_equal(restore_source.contains("_update_party_slots()"), true, "party rails refresh after canonical restore")
+	_check_equal(temporary_source.contains("target_is_fainted and not event_proves_alive"), true, "ambiguous switch presentation cannot revive a fainted target")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
