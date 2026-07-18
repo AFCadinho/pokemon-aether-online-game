@@ -8,6 +8,7 @@ func _init() -> void:
 	var action_wait_start := battle_source.find("func _send_pvp_realtime_action_and_wait")
 	var queue_cursor_position := battle_source.find("var queue_start := pvp_realtime_updates.size()", action_wait_start)
 	var local_decision_position := battle_source.find("battle_state.get_active_decision(_get_local_state_player_id())", action_wait_start)
+	var decision_kind_position := battle_source.find('str(decision.get("decisionKind", ""))', action_wait_start)
 	var send_position := battle_source.find("var request_id := PvpBattleRealtimeService.send_action", action_wait_start)
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(queue_cursor_position >= 0 and queue_cursor_position < send_position, true, "realtime response queue cursor is captured before sending")
@@ -15,6 +16,11 @@ func _init() -> void:
 		local_decision_position >= action_wait_start and local_decision_position < send_position,
 		true,
 		"realtime actions use the normalized local decision identity"
+	)
+	_check_equal(
+		decision_kind_position >= local_decision_position and decision_kind_position > send_position,
+		true,
+		"realtime actions include the authoritative decision kind"
 	)
 
 	_check_equal(
@@ -203,6 +209,22 @@ func _init() -> void:
 		),
 		true,
 		"server-selected timeout lead without request id uses timeout recovery"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_unrequested_local_forced_switch(
+			{"action": "choose_switch", "playerId": "p2", "requestId": "", "response": {"success": true}},
+			"p2"
+		),
+		true,
+		"server-selected forced switch without request id uses timeout recovery"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_unrequested_local_forced_switch(
+			{"action": "choose_switch", "playerId": "p2", "requestId": "human-request", "response": {"success": true}},
+			"p2"
+		),
+		false,
+		"human forced switch remains available to its action waiter"
 	)
 
 	service.free()

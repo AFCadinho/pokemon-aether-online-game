@@ -8162,6 +8162,8 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 
 	if _capture_local_pvp_team_preview_timeout(message):
 		return
+	if _capture_local_pvp_forced_switch_timeout(message):
+		return
 
 	pvp_realtime_updates.append(message.duplicate(true))
 	pvp_realtime_activity_seq += 1
@@ -8304,6 +8306,28 @@ func _capture_local_pvp_team_preview_timeout(message: Dictionary) -> bool:
 	pvp_realtime_activity_seq += 1
 	player_party_grid.party_selected.emit(0)
 	return true
+
+func _capture_local_pvp_forced_switch_timeout(message: Dictionary) -> bool:
+	if not PvpBattleRealtimeService.is_unrequested_local_forced_switch(message, action_flow.local_player_id):
+		return false
+	var response := _response_from_pvp_realtime_message(message)
+	if response.is_empty():
+		return false
+	pvp_realtime_activity_seq += 1
+	_apply_local_pvp_forced_switch_timeout.call_deferred(response)
+	return true
+
+func _apply_local_pvp_forced_switch_timeout(response: Dictionary) -> void:
+	if battle_finished or response.is_empty():
+		return
+	_set_battle_input_locked(true)
+	if not await _enqueue_pvp_battle_response(
+		response,
+		"pvp_choose_switch",
+		not action_flow._response_has_deferred_display_event(response)
+	):
+		_set_battle_input_locked(false)
+		_show_force_switch_if_needed()
 
 func _open_pvp_released_phase(phase: String) -> void:
 	if battle_finished:
@@ -8475,7 +8499,8 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 		slot,
 		mega,
 		str(decision.get("decisionId", "")),
-		int(decision.get("decisionGeneration", 0))
+		int(decision.get("decisionGeneration", 0)),
+		str(decision.get("decisionKind", ""))
 	)
 	if request_id == "":
 		if DEBUG_PVP_REALTIME:

@@ -201,7 +201,7 @@ func disconnect_room() -> void:
 		connection_changed.emit(false)
 
 
-func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0) -> String:
+func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0, decision_kind := "") -> String:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
@@ -227,6 +227,9 @@ func send_action(action: String, battle_id: String, player_id: String, slot: int
 		payload["decisionId"] = str(decision_id).strip_edges()
 	if int(decision_generation) > 0:
 		payload["decisionGeneration"] = int(decision_generation)
+	var normalized_decision_kind := str(decision_kind).strip_edges().to_upper()
+	if normalized_decision_kind in ["TEAM_PREVIEW", "MOVE_SELECTION", "FORCED_SWITCH"]:
+		payload["decisionKind"] = normalized_decision_kind
 	payload["idempotencyKey"] = request_id
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
@@ -436,6 +439,18 @@ static func is_unrequested_local_team_preview_lead(message: Dictionary, local_pl
 	return (
 		str(message.get("requestId", "")).strip_edges() == ""
 		and str(message.get("action", "")).strip_edges().to_lower() == "choose_lead"
+		and str(message.get("playerId", "")).strip_edges() == local_player_id.strip_edges()
+		and message.get("response", {}) is Dictionary
+	)
+
+
+static func is_unrequested_local_forced_switch(message: Dictionary, local_player_id: String) -> bool:
+	# Human switch responses remain correlated with their action waiter. An
+	# authoritative timeout switch is broadcast without a request id and must be
+	# consumed even while the local party picker is still open.
+	return (
+		str(message.get("requestId", "")).strip_edges() == ""
+		and str(message.get("action", "")).strip_edges().to_lower() == "choose_switch"
 		and str(message.get("playerId", "")).strip_edges() == local_player_id.strip_edges()
 		and message.get("response", {}) is Dictionary
 	)
