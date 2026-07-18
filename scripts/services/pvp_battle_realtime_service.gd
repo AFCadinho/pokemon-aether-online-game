@@ -16,6 +16,8 @@ const RECONNECT_DELAY_SECONDS := 3.0
 const CONNECTION_HEARTBEAT_SECONDS := 5.0
 const SESSION_INVALID_CLOSE_CODE := 1008
 const DEBUG_PVP_REALTIME := false
+const WEBSOCKET_BUFFER_BYTES := 1024 * 1024
+const WEBSOCKET_MAX_QUEUED_PACKETS := 4096
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
 var connected := false
@@ -121,6 +123,9 @@ func _connect_room_async() -> void:
 		return
 
 	websocket = WebSocketPeer.new()
+	websocket.inbound_buffer_size = WEBSOCKET_BUFFER_BYTES
+	websocket.outbound_buffer_size = WEBSOCKET_BUFFER_BYTES
+	websocket.max_queued_packets = WEBSOCKET_MAX_QUEUED_PACKETS
 	var websocket_url := _to_websocket_url(base_url) + "/ws/pvp-battle?token=%s" % _session_token().uri_encode()
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("Connecting websocket", "url=%s" % websocket_url)

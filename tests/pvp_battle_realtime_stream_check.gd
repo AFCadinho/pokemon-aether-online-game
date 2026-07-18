@@ -33,6 +33,16 @@ func _init() -> void:
 		true,
 		"connection heartbeat contains no authority or lease fencing data"
 	)
+	_check_equal(
+		realtime_source.contains("websocket.inbound_buffer_size = WEBSOCKET_BUFFER_BYTES"),
+		true,
+		"realtime sockets increase their receive buffer before connecting"
+	)
+	_check_equal(
+		realtime_source.contains("websocket.max_queued_packets = WEBSOCKET_MAX_QUEUED_PACKETS"),
+		true,
+		"realtime sockets increase their queued packet capacity before connecting"
+	)
 
 	service.active_room_code = "ROOM"
 	service.active_player_id = "p1"

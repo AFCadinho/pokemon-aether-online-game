@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+- Fixed long Ranked battles unexpectedly disconnecting both players while battle updates were being received.
+
 ## 0.3.6 - 2026-07-17
 
 **Added**
