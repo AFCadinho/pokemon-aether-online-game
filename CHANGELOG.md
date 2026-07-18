@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.3.7 - 2026-07-18
+## 0.3.9 - 2026-07-18
 
 **Fixed**
 - Fixed Ranked battles getting stuck after a Pokemon fainted, including manual and automatic replacement choices.
