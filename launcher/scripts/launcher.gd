@@ -835,11 +835,23 @@ func _on_launcher_update_request_completed(result: int, response_code: int, _hea
 
 	launcher_update_in_progress = true
 	_set_status("Applying launcher update...")
-	var applied: bool = _write_and_run_launcher_update_script(downloaded_path)
-	if not applied:
+	var updater_process_id: int = _write_and_run_launcher_update_script(downloaded_path)
+	if updater_process_id <= 0:
 		launcher_update_in_progress = false
 		_set_status("Could not start launcher updater.")
 		launch_restart_check_failed("Could not start launcher updater script.")
+		return
+
+	# The Windows updater must remain alive while this process still owns the
+	# launcher files. Merely receiving a PID is insufficient: a malformed cmd
+	# command can start and exit before the launcher closes, leaving users with
+	# no update and no restarted launcher.
+	await get_tree().create_timer(0.35).timeout
+	if not OS.is_process_running(updater_process_id):
+		launcher_update_in_progress = false
+		_set_status("Could not keep launcher updater running.")
+		_log_error("Launcher updater exited before launcher shutdown. process_id=%s" % updater_process_id)
+		launch_restart_check_failed("Launcher updater stopped before applying the update.")
 		return
 
 	_set_status("Launcher update downloaded. Restarting launcher...")
@@ -1026,15 +1038,15 @@ func _cleanup_launcher_update_files() -> void:
 		_remove_directory_contents(temp_dir)
 
 
-func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
+func _write_and_run_launcher_update_script(downloaded_path: String) -> int:
 	if not FileAccess.file_exists(downloaded_path):
 		_log_error("Launcher update package missing before launch: %s" % downloaded_path)
-		return false
+		return -1
 
 	var launcher_binary_path := _globalize_storage_path(OS.get_executable_path())
 	if launcher_binary_path.is_empty():
 		_log_error("Could not resolve running launcher executable path.")
-		return false
+		return -1
 
 	var target_dir := launcher_binary_path.get_base_dir()
 	var temp_dir := _globalize_storage_path(LAUNCHER_UPDATE_TEMP_DIR)
@@ -1043,13 +1055,13 @@ func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
 	var make_dir_error: Error = _clear_directory(staging_dir)
 	if make_dir_error != OK:
 		_log_error("Could not prepare launcher staging dir: %s" % error_string(make_dir_error))
-		return false
+		return -1
 
 	var extract_error: Error = _extract_launcher_update_zip(downloaded_path, staging_dir)
 	if extract_error != OK:
 		_log_error("Could not extract launcher update package: %s" % error_string(extract_error))
 		_cleanup_launcher_update_files()
-		return false
+		return -1
 
 	var launcher_binary_name := _read_first_string(launcher_update_info, ["binary"])
 	if launcher_binary_name.is_empty():
@@ -1062,7 +1074,7 @@ func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
 	if packaged_binary_path.is_empty():
 		_log_error("Could not find launcher binary in update package.")
 		_cleanup_launcher_update_files()
-		return false
+		return -1
 
 	var packaged_binary_relative_path := _get_relative_path(packaged_binary_path, staging_dir)
 	var updated_launcher_path := target_dir.path_join(packaged_binary_relative_path)
@@ -1074,7 +1086,7 @@ func _write_and_run_launcher_update_script(downloaded_path: String) -> bool:
 
 	var script_text := ""
 	if os_name == "Windows":
-		var executable_name := launcher_binary_path.get_file()
+		var launcher_process_id := OS.get_process_id()
 		var launcher_exe_backup := "%s.bak" % launcher_binary_path
 		var launcher_pck_path := launcher_binary_path.get_basename() + ".pck"
 		script_text = """@echo off
@@ -1085,7 +1097,7 @@ set "LAUNCHER_PCK=%s"
 set "UPDATED_LAUNCHER_EXE=%s"
 set "LAUNCHER_DIR=%s"
 set "UPDATE_DIR=%s"
-set "LAUNCHER_EXE_NAME=%s"
+set "LAUNCHER_PID=%s"
 set "UPDATE_LOG=%%~dp0launcher_update_windows.log"
 
 echo [launcher] updater started > "%%UPDATE_LOG%%"
@@ -1093,8 +1105,8 @@ echo [launcher] launcher exe: %%LAUNCHER_EXE%% >> "%%UPDATE_LOG%%"
 echo [launcher] update dir: %%UPDATE_DIR%% >> "%%UPDATE_LOG%%"
 
 :WAIT
-tasklist /FI "IMAGENAME eq %%LAUNCHER_EXE_NAME%%" | find /I "%%LAUNCHER_EXE_NAME%%" >nul
-if %%ERRORLEVEL%%==0 (
+tasklist /FI "PID eq %%LAUNCHER_PID%%" /NH | find "%%LAUNCHER_PID%%" >nul
+if not errorlevel 1 (
 	echo [launcher] waiting for launcher process to exit... >> "%%UPDATE_LOG%%"
 	timeout /t 1 /nobreak >nul
 	goto WAIT
@@ -1136,7 +1148,7 @@ if exist "%%UPDATED_LAUNCHER_EXE%%" (
 rmdir /S /Q "%%UPDATE_DIR%%" >nul 2>nul
 echo [launcher] updater finished. >> "%%UPDATE_LOG%%"
 exit /b 0
-""" % [launcher_binary_path, launcher_exe_backup, launcher_pck_path, updated_launcher_path, target_dir, staging_dir, executable_name]
+""" % [launcher_binary_path, launcher_exe_backup, launcher_pck_path, updated_launcher_path, target_dir, staging_dir, launcher_process_id]
 	else:
 		var launcher_exe_backup := "%s.bak" % launcher_binary_path
 		var launcher_pck_path := launcher_binary_path.get_basename() + ".pck"
@@ -1181,7 +1193,7 @@ rm -rf \"$UPDATE_DIR\"
 	var script_file := FileAccess.open(script_path, FileAccess.WRITE)
 	if script_file == null:
 		_log_error("Could not write launcher update script.")
-		return false
+		return -1
 
 	script_file.store_string(script_text)
 	script_file = null
@@ -1189,7 +1201,7 @@ rm -rf \"$UPDATE_DIR\"
 	var exec_args := PackedStringArray()
 	var launcher_command := ""
 	if os_name == "Windows":
-		exec_args = PackedStringArray(["/C", "start", "\"\"", "/MIN", "cmd.exe", "/C", "call \"%s\"" % script_path])
+		exec_args = PackedStringArray(["/D", "/C", script_path])
 		launcher_command = "cmd.exe"
 	else:
 		_exec_make_executable(script_path)
@@ -1200,10 +1212,10 @@ rm -rf \"$UPDATE_DIR\"
 	if process_id <= 0:
 		_log_error("Could not start launcher update process.")
 		_cleanup_launcher_update_files()
-		return false
+		return -1
 
 	_log("Launcher updater started with process_id=%s." % process_id)
-	return true
+	return process_id
 
 
 func _get_relative_path(path: String, base_path: String) -> String:
