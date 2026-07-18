@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.12 - 2026-07-18
+
+**Changed**
+- The launcher now fits its sidebar, status information, news, and action buttons more neatly inside the window.
+
 ## 0.3.11 - 2026-07-18
 
 **Fixed**

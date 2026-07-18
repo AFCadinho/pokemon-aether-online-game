@@ -305,7 +305,7 @@ func _apply_button_style(button: Button, is_primary: bool) -> void:
 
 
 func _apply_refresh_button_style(button: Button) -> void:
-	button.custom_minimum_size = Vector2(58, 62)
+	button.custom_minimum_size = Vector2(52, 56)
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.065, 0.08, 0.13, 0.65), Color(0.20, 0.24, 0.40, 0.45), 10, 0))
 	button.add_theme_stylebox_override("hover", _panel_style(Color(0.09, 0.11, 0.17, 0.78), Color(0.35, 0.22, 0.70, 0.7), 10, 1))
 	button.add_theme_stylebox_override("pressed", _panel_style(Color(0.12, 0.15, 0.2, 0.82), Color(0.5, 0.24, 1.0, 0.85), 10, 1))

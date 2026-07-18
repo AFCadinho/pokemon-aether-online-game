@@ -58,27 +58,27 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="Sidebar" type="PanelContainer" parent="Shell/MainSplit" unique_id=1824810322]
-custom_minimum_size = Vector2(232, 0)
+custom_minimum_size = Vector2(218, 0)
 layout_mode = 2
 
 [node name="SidebarMargin" type="MarginContainer" parent="Shell/MainSplit/Sidebar" unique_id=1829532926]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 18
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
 [node name="SidebarLayout" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin" unique_id=2020976424]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 14
 
 [node name="BrandRow" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=1721467597]
 layout_mode = 2
 theme_override_constants/separation = 10
-alignment = 1
+alignment = 0
 
 [node name="BrandMark" type="PanelContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow" unique_id=1644328401]
-custom_minimum_size = Vector2(46, 46)
+custom_minimum_size = Vector2(42, 42)
 layout_mode = 2
 
 [node name="BrandMarkTexture" type="TextureRect" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandMark" unique_id=1985617991]
@@ -112,22 +112,22 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.53, 0.56, 0.69, 1)
 theme_override_font_sizes/font_size = 11
 text = "MENU"
-horizontal_alignment = 1
+horizontal_alignment = 0
 
 [node name="HomeButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=2116909041]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Home"
 alignment = 0
 
 [node name="PatchNotesButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=253278925]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Patch Notes"
 alignment = 0
 
 [node name="CreditsButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav"]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Credits & Legal"
 alignment = 0
@@ -136,13 +136,13 @@ alignment = 0
 layout_mode = 2
 
 [node name="GameFolderButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1480444040]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Game Folder"
 alignment = 0
 
 [node name="UninstallButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1789910227]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Uninstall"
 alignment = 0
@@ -160,14 +160,14 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
 theme_override_font_sizes/font_size = 13
 text = "SOCIALS"
-horizontal_alignment = 1
+horizontal_alignment = 0
 
 [node name="SocialRow" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection" unique_id=331476173]
 layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="DiscordButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow" unique_id=855388307]
-custom_minimum_size = Vector2(0, 42)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Join Discord"
@@ -181,14 +181,14 @@ layout_mode = 2
 
 [node name="ServerMargin" type="MarginContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard" unique_id=620258447]
 layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 13
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 13
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 11
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 11
 
 [node name="ServerLayout" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin" unique_id=538514409]
 layout_mode = 2
-theme_override_constants/separation = 7
+theme_override_constants/separation = 6
 
 [node name="StatusHeader" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout"]
 layout_mode = 2
@@ -240,14 +240,14 @@ text = "1.0.0"
 [node name="Content" type="MarginContainer" parent="Shell/MainSplit" unique_id=1084134119]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 28
+theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 26
-theme_override_constants/margin_bottom = 30
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 24
 
 [node name="ContentLayout" type="HBoxContainer" parent="Shell/MainSplit/Content" unique_id=171063793]
 layout_mode = 2
-theme_override_constants/separation = 22
+theme_override_constants/separation = 18
 
 [node name="CenterColumn" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout" unique_id=2113551366]
 layout_mode = 2
@@ -271,8 +271,9 @@ theme_override_constants/h_separation = 35
 columns = 3
 
 [node name="VersionBlock" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid" unique_id=1173354727]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
 [node name="VersionTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/VersionBlock" unique_id=1537581666]
@@ -288,8 +289,9 @@ theme_override_font_sizes/font_size = 16
 text = "unknown"
 
 [node name="StatusBlock" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid" unique_id=502163193]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
 [node name="StatusTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/StatusBlock" unique_id=786751102]
@@ -305,8 +307,9 @@ theme_override_font_sizes/font_size = 16
 text = "Ready."
 
 [node name="LastCheckBlock" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid" unique_id=653901964]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
 [node name="LastCheckTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/LastCheckBlock" unique_id=1437692441]
@@ -322,7 +325,7 @@ theme_override_font_sizes/font_size = 16
 text = "Never"
 
 [node name="ShowcaseGap" type="Control" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn" unique_id=1485963702]
-custom_minimum_size = Vector2(0, 140)
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 mouse_filter = 2
 
@@ -394,41 +397,41 @@ theme_override_constants/separation = 14
 alignment = 1
 
 [node name="CheckButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1666491337]
-custom_minimum_size = Vector2(58, 62)
+custom_minimum_size = Vector2(52, 56)
 layout_mode = 2
 tooltip_text = "Check for updates"
 icon = ExtResource("5_refresh")
 
 [node name="PlayButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1383115794]
-custom_minimum_size = Vector2(180, 62)
+custom_minimum_size = Vector2(140, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "Play"
 
 [node name="UpdateButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=142758839]
-custom_minimum_size = Vector2(136, 62)
+custom_minimum_size = Vector2(110, 56)
 layout_mode = 2
 disabled = true
 text = "Update"
 
 [node name="Gen5SpritesButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow" unique_id=1366749803]
-custom_minimum_size = Vector2(150, 62)
+custom_minimum_size = Vector2(128, 56)
 layout_mode = 2
 disabled = true
 text = "Gen 5 Sprites"
 
 [node name="NewsCard" type="PanelContainer" parent="Shell/MainSplit/Content/ContentLayout" unique_id=983230417]
-custom_minimum_size = Vector2(292, 0)
+custom_minimum_size = Vector2(270, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 
 [node name="NewsMargin" type="MarginContainer" parent="Shell/MainSplit/Content/ContentLayout/NewsCard" unique_id=586066121]
 layout_mode = 2
-theme_override_constants/margin_left = 28
+theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 28
+theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 16
 
 [node name="NewsLayout" type="VBoxContainer" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin" unique_id=1832220344]
