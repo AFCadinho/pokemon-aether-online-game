@@ -8,10 +8,10 @@ on:
         required: true
         type: string
       build_launcher:
-        description: Build and publish the launcher self-update package (required).
+        description: Rebuild and publish the launcher only when the launcher itself changed.
         required: false
         type: boolean
-        default: true
+        default: false
       build_macos:
         description: Build and include macOS artifacts.
         required: false
@@ -100,13 +100,14 @@ jobs:
         env:
           INPUT_BUILD_LAUNCHER: ${{ inputs.build_launcher }}
         run: |
-          if [ "${INPUT_BUILD_LAUNCHER}" != "true" ]; then
-            echo "::error::build_launcher must remain enabled so published manifests retain launcher self-update metadata."
-            exit 1
+          build_launcher=false
+
+          if [ "${INPUT_BUILD_LAUNCHER}" = "true" ]; then
+            build_launcher=true
           fi
 
-          echo "BUILD_LAUNCHER=true" >> "${GITHUB_ENV}"
-          echo "Build launcher: true"
+          echo "BUILD_LAUNCHER=${build_launcher}" >> "${GITHUB_ENV}"
+          echo "Build launcher: ${build_launcher}"
 
       - name: Detect build platform
         env:
@@ -346,6 +347,49 @@ jobs:
             fi
           fi
 
+      - name: Preserve launcher metadata for game-only releases
+        if: env.BUILD_LAUNCHER != 'true'
+        run: |
+          mkdir -p /tmp/current-launcher-manifests
+          manifest_names=(manifest.json manifest-windows.json manifest-linux.json)
+          if [ "${BUILD_MACOS}" = "true" ]; then
+            manifest_names+=(manifest-macos.json)
+          fi
+          for manifest_name in "${manifest_names[@]}"; do
+            curl --fail --silent --show-error \
+              "${UPDATE_BASE_URL}/${manifest_name}" \
+              --output "/tmp/current-launcher-manifests/${manifest_name}"
+          done
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          output_dir = Path("builds/launcher")
+          current_dir = Path("/tmp/current-launcher-manifests")
+          required = {"version", "url", "sha256", "sizeBytes", "binary"}
+
+          for manifest_path in sorted(output_dir.glob("manifest*.json")):
+              current_path = current_dir / manifest_path.name
+              if not current_path.is_file():
+                  raise SystemExit(f"missing current launcher manifest: {current_path}")
+
+              generated = json.loads(manifest_path.read_text(encoding="utf-8"))
+              current = json.loads(current_path.read_text(encoding="utf-8"))
+              launcher = current.get("launcher")
+              if not isinstance(launcher, dict) or not required.issubset(launcher):
+                  raise SystemExit(f"{current_path} has no complete launcher update metadata")
+              if any(launcher.get(field) in (None, "", 0) for field in required):
+                  raise SystemExit(f"{current_path} has empty launcher update metadata")
+
+              generated["launcher"] = launcher
+              manifest_path.write_text(
+                  json.dumps(generated, indent=2) + "\n",
+                  encoding="utf-8",
+              )
+              print(f"Preserved launcher {launcher['version']} in {manifest_path}")
+          PY
+
       - name: Verify launcher manifests include required asset packs
         run: |
           python3 - <<'PY'
@@ -366,9 +410,15 @@ jobs:
               "pokemon-gen5-shiny-front",
               "pokemon-gen5-shiny-back",
           }
+          required_launcher_fields = {"version", "url", "sha256", "sizeBytes", "binary"}
 
           for manifest_path in sorted(Path("builds/launcher").glob("manifest*.json")):
               manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              launcher = manifest.get("launcher")
+              if not isinstance(launcher, dict) or not required_launcher_fields.issubset(launcher):
+                  raise SystemExit(f"{manifest_path} missing launcher self-update metadata")
+              if any(launcher.get(field) in (None, "", 0) for field in required_launcher_fields):
+                  raise SystemExit(f"{manifest_path} has incomplete launcher self-update metadata")
               packs = manifest.get("assetPacks", [])
               by_id = {
                   pack.get("id"): pack
