@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+**Changed**
+- Ranked battle updates now appear more quickly after both players make a choice.
+
+**Fixed**
+- Fixed a Ranked switch sometimes appearing for the opponent but not for the player who switched.
+- If a Ranked choice was made from an outdated screen, the battle now refreshes to the current Pokemon and lets the player choose again.
+
 ## 0.3.12 - 2026-07-18
 
 **Changed**

@@ -22,6 +22,26 @@ func _init() -> void:
 		true,
 		"realtime actions include the authoritative decision kind"
 	)
+	_check_equal(
+		battle_source.contains('bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE"'),
+		true,
+		"stale durable choices trigger canonical room reconciliation"
+	)
+	_check_equal(
+		battle_source.contains('"Opponent choice phase advanced; waiting for its render batch"'),
+		true,
+		"a newer phase cannot release the local choice wait before its render batch"
+	)
+	_check_equal(
+		battle_source.contains('"Opponent force-switch phase advanced; waiting for its render batch"'),
+		true,
+		"a newer phase cannot release forced-switch wait before canonical presentation converges"
+	)
+	_check_equal(
+		battle_source.contains('await _reconcile_pvp_battle_from_room("pvp_phase_release_recovery")'),
+		true,
+		"missing render batches recover from the canonical room snapshot"
+	)
 
 	_check_equal(
 		realtime_source.contains('if joined:\n\t\t\tconnection_heartbeat_timer -= delta'),

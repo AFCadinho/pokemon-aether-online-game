@@ -8387,6 +8387,39 @@ func _has_newer_pvp_phase_update(wait_start_server_seq: int, accepted_phases: Ar
 		return false
 	return pvp_last_phase_update_phase in accepted_phases
 
+func _reconcile_pvp_battle_from_room(source: String) -> bool:
+	if pvp_room_code == "" or action_flow.local_player_id == "":
+		return false
+
+	var response: Dictionary = await BattleApiClient.get_pvp_room(
+		battle_request,
+		pvp_room_code,
+		action_flow.local_player_id
+	)
+	if not bool(response.get("success", false)):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime("Canonical room reconciliation failed", "source=%s" % source)
+		return false
+
+	var mapped_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if mapped_response.is_empty():
+		return false
+
+	var message := {
+		"type": "pvp.snapshot",
+		"battleId": str(response.get("battleId", battle_state.battle_id)),
+		"roomCode": pvp_room_code,
+		"serverSeq": response.get("serverSeq", pvp_last_phase_update_server_seq),
+		"response": response,
+	}
+	var applied := _apply_pvp_snapshot_reconciliation(message, mapped_response, source)
+	if applied and DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"Canonical room reconciliation applied",
+			"source=%s phase=%s turn=%s" % [source, str(response.get("phase", "")), str(response.get("turn", ""))]
+		)
+	return applied
+
 func _submit_pvp_realtime_lead(player_id: String, slot: int) -> Dictionary:
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
@@ -8423,6 +8456,9 @@ func _submit_pvp_realtime_choice(
 		)
 	var response: Dictionary = await _send_pvp_realtime_action_and_wait(action, action_flow.local_player_id, slot, mega)
 	if not bool(response.get("success", false)):
+		if bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE":
+			var reconciled := await _reconcile_pvp_battle_from_room("stale_local_choice")
+			response["error"] = "Battle state refreshed. Choose again." if reconciled else "Battle state changed. Please try again."
 		return response
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
 	if choice_type == "switch" and not _response_has_renderable_battle_events(display_response):
@@ -8816,18 +8852,25 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 	var fallback_render_action := ""
 	var fallback_render_message := ""
 	var fallback_render_attempt := -1
+	var phase_release_observed_at_attempt := -1
+	var phase_reconciliation_attempted := false
 	while true:
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["turn_open", "awaiting_force_switch"]):
-			if DEBUG_PVP_REALTIME:
+			if phase_release_observed_at_attempt < 0:
+				phase_release_observed_at_attempt = attempt
+			if DEBUG_PVP_REALTIME and phase_release_observed_at_attempt == attempt:
 				_log_pvp_realtime(
-					"Opponent choice wait resolved by phase update",
+					"Opponent choice phase advanced; waiting for its render batch",
 					"phase=%s serverSeq=%d batch=%s" % [
 						pvp_last_phase_update_phase,
 						pvp_last_phase_update_server_seq,
 						pvp_last_phase_update_batch_id,
 					]
 				)
-			return true
+			if not phase_reconciliation_attempted and attempt - phase_release_observed_at_attempt >= 20:
+				phase_reconciliation_attempted = true
+				if await _reconcile_pvp_battle_from_room("pvp_phase_release_recovery"):
+					return true
 
 		if not fallback_render_response.is_empty() and attempt - fallback_render_attempt >= 5:
 			var promoted_response := _promote_pvp_battle_update_fallback_render(fallback_render_response)
@@ -8989,19 +9032,26 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 	var fallback_render_action := ""
 	var fallback_render_message := ""
 	var fallback_render_attempt := -1
+	var phase_release_observed_at_attempt := -1
+	var phase_reconciliation_attempted := false
 	while true:
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["turn_open"]):
-			_trace_pvp_flow("wait_force_switch.resolved_by_phase", {}, "attempt=%d phase=%s seq=%d" % [attempt, pvp_last_phase_update_phase, pvp_last_phase_update_server_seq])
-			if DEBUG_PVP_REALTIME:
+			if phase_release_observed_at_attempt < 0:
+				phase_release_observed_at_attempt = attempt
+				_trace_pvp_flow("wait_force_switch.phase_advanced", {}, "attempt=%d phase=%s seq=%d" % [attempt, pvp_last_phase_update_phase, pvp_last_phase_update_server_seq])
+			if DEBUG_PVP_REALTIME and phase_release_observed_at_attempt == attempt:
 				_log_pvp_realtime(
-					"Opponent force-switch wait resolved by phase update",
+					"Opponent force-switch phase advanced; waiting for its render batch",
 					"phase=%s serverSeq=%d batch=%s" % [
 						pvp_last_phase_update_phase,
 						pvp_last_phase_update_server_seq,
 						pvp_last_phase_update_batch_id,
 					]
 				)
-			return true
+			if not phase_reconciliation_attempted and attempt - phase_release_observed_at_attempt >= 20:
+				phase_reconciliation_attempted = true
+				if await _reconcile_pvp_battle_from_room("pvp_force_switch_phase_release_recovery"):
+					return true
 
 		if not fallback_render_response.is_empty() and attempt - fallback_render_attempt >= 5:
 			var promoted_response := _promote_pvp_battle_update_fallback_render(fallback_render_response)
