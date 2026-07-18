@@ -8,10 +8,10 @@ on:
         required: true
         type: string
       build_launcher:
-        description: Rebuild and upload launcher downloads too.
+        description: Build and publish the launcher self-update package (required).
         required: false
         type: boolean
-        default: false
+        default: true
       build_macos:
         description: Build and include macOS artifacts.
         required: false
@@ -100,14 +100,13 @@ jobs:
         env:
           INPUT_BUILD_LAUNCHER: ${{ inputs.build_launcher }}
         run: |
-          build_launcher=false
-
-          if [ "${INPUT_BUILD_LAUNCHER}" = "true" ]; then
-            build_launcher=true
+          if [ "${INPUT_BUILD_LAUNCHER}" != "true" ]; then
+            echo "::error::build_launcher must remain enabled so published manifests retain launcher self-update metadata."
+            exit 1
           fi
 
-          echo "BUILD_LAUNCHER=${build_launcher}" >> "${GITHUB_ENV}"
-          echo "Build launcher: ${build_launcher}"
+          echo "BUILD_LAUNCHER=true" >> "${GITHUB_ENV}"
+          echo "Build launcher: true"
 
       - name: Detect build platform
         env:

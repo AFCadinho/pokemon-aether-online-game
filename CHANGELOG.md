@@ -7,6 +7,7 @@
 **Fixed**
 - Fixed Ranked battles getting stuck after a Pokemon fainted, including manual and automatic replacement choices.
 - Fixed long Ranked battles unexpectedly disconnecting both players while battle updates were being received.
+- Fixed Windows launchers not being offered launcher updates when a new game build was published.
 
 ## 0.3.6 - 2026-07-17
 
