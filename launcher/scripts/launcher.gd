@@ -54,7 +54,7 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
 @onready var brand_mark: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandMark
 @onready var server_card: PanelContainer = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard
-@onready var server_online_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/ServerOnline
+@onready var server_online_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/StatusHeader/ServerOnline
 @onready var online_players_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/OnlinePlayers
 @onready var meta_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard
 @onready var progress_card: PanelContainer = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard
@@ -62,7 +62,7 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var version_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/VersionBlock/VersionLabel
 @onready var status_value_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/StatusBlock/StatusValueLabel
 @onready var last_check_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/MetaCard/MetaMargin/MetaGrid/LastCheckBlock/LastCheckLabel
-@onready var launcher_version_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/LauncherVersionValue
+@onready var launcher_version_label: Label = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/VersionRow/LauncherVersionValue
 @onready var status_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/StatusLabel
 @onready var progress_bar: ProgressBar = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressBar
 @onready var progress_percent_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader/ProgressPercentLabel
@@ -207,24 +207,33 @@ func _apply_visual_style() -> void:
 	add_theme_font_size_override("font_size", 16)
 
 	shell_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.027, 0.043, 0.078, 0.38), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
-	sidebar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.027, 0.043, 0.078, 0.92), Color(0.192, 0.314, 0.439, 0.72), 12, 1))
+	sidebar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.022, 0.032, 0.061, 0.95), Color(0.192, 0.314, 0.439, 0.72), 12, 1))
 	brand_mark.add_theme_stylebox_override("panel", _panel_style(Color(0.48, 0.22, 0.96, 1.0), Color(0.72, 0.48, 1.0, 0.55), 28, 0))
 	server_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.9), 12, 1))
 	meta_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.84), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
 	progress_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.82), 14, 1))
 	news_card.add_theme_stylebox_override("panel", _panel_style(Color(0.051, 0.086, 0.145, 0.9), Color(0.192, 0.314, 0.439, 0.88), 14, 1))
 
-	var nav_active := _panel_style(Color(0.18, 0.13, 0.34, 0.92), Color(0.48, 0.25, 0.92, 0.9), 8, 1)
+	var nav_buttons: Array[Button] = [
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton,
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton,
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton,
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton,
+		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton,
+	]
+	for nav_button in nav_buttons:
+		nav_button.add_theme_stylebox_override("normal", _sidebar_button_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0))
+		nav_button.add_theme_stylebox_override("hover", _sidebar_button_style(Color(0.105, 0.085, 0.19, 0.82), Color(0.42, 0.22, 0.82, 0.68), 1))
+		nav_button.add_theme_stylebox_override("pressed", _sidebar_button_style(Color(0.14, 0.10, 0.26, 0.92), Color(0.52, 0.30, 0.96, 0.82), 1))
+		nav_button.add_theme_color_override("font_color", Color(0.76, 0.78, 0.88, 1.0))
+		nav_button.add_theme_color_override("font_hover_color", Color(0.94, 0.94, 1.0, 1.0))
+	var nav_active := _sidebar_button_style(Color(0.18, 0.13, 0.34, 0.92), Color(0.48, 0.25, 0.92, 0.9), 1)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("normal", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("hover", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_color_override("font_color", Color(0.96, 0.96, 1.0))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.82), Color(0.42, 0.22, 0.82, 0.72), 8, 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.82), Color(0.42, 0.22, 0.82, 0.72), 8, 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton.add_theme_color_override("font_color", Color(0.76, 0.78, 0.88, 1.0))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton.add_theme_color_override("font_color", Color(0.76, 0.78, 0.88, 1.0))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("normal", _panel_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 8, 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 8, 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("pressed", _panel_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 8, 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("normal", _sidebar_button_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("hover", _sidebar_button_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 1))
+	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("pressed", _sidebar_button_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 1))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_constant_override("icon_max_width", 20)
 
 	for nav_button in [
@@ -263,6 +272,17 @@ func _panel_style(background_color: Color, border_color: Color, radius: int, bor
 	style_box.shadow_color = Color(0.0, 0.0, 0.0, 0.25)
 	style_box.shadow_size = 12
 	style_box.shadow_offset = Vector2(0, 6)
+	return style_box
+
+
+func _sidebar_button_style(background_color: Color, border_color: Color, border_width: int) -> StyleBoxFlat:
+	var style_box := _panel_style(background_color, border_color, 8, border_width)
+	style_box.content_margin_left = 14.0
+	style_box.content_margin_right = 12.0
+	style_box.content_margin_top = 8.0
+	style_box.content_margin_bottom = 8.0
+	style_box.shadow_size = 0
+	style_box.shadow_offset = Vector2.ZERO
 	return style_box
 
 

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.10 - 2026-07-18
+
+**Changed**
+- Refreshed the launcher sidebar with clearer navigation, a full Discord button, and a more compact server status card.
+
 ## 0.3.9 - 2026-07-18
 
 **Fixed**

@@ -58,27 +58,27 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="Sidebar" type="PanelContainer" parent="Shell/MainSplit" unique_id=1824810322]
-custom_minimum_size = Vector2(248, 0)
+custom_minimum_size = Vector2(232, 0)
 layout_mode = 2
 
 [node name="SidebarMargin" type="MarginContainer" parent="Shell/MainSplit/Sidebar" unique_id=1829532926]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
 
 [node name="SidebarLayout" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin" unique_id=2020976424]
 layout_mode = 2
-theme_override_constants/separation = 26
+theme_override_constants/separation = 20
 
 [node name="BrandRow" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=1721467597]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="BrandMark" type="PanelContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow" unique_id=1644328401]
-custom_minimum_size = Vector2(52, 52)
+custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 
 [node name="BrandMarkTexture" type="TextureRect" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandMark" unique_id=1985617991]
@@ -94,7 +94,7 @@ theme_override_constants/separation = 0
 [node name="BrandTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandText" unique_id=1486406648]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.96, 1, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 20
 text = "PokeAether"
 
 [node name="BrandSubtitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/BrandRow/BrandText" unique_id=325813364]
@@ -105,37 +105,47 @@ text = "LAUNCHER"
 
 [node name="Nav" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=1579431840]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 6
+
+[node name="NavTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.53, 0.56, 0.69, 1)
+theme_override_font_sizes/font_size = 11
+text = "MENU"
+horizontal_alignment = 1
 
 [node name="HomeButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=2116909041]
-custom_minimum_size = Vector2(0, 56)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-text = "  Home"
-flat = true
+text = "Home"
+alignment = 0
 
 [node name="PatchNotesButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=253278925]
-custom_minimum_size = Vector2(0, 54)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-text = "  Patch Notes"
-flat = true
+text = "Patch Notes"
+alignment = 0
 
 [node name="CreditsButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav"]
-custom_minimum_size = Vector2(0, 54)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-text = "  Credits & Legal"
-flat = true
+text = "Credits & Legal"
+alignment = 0
+
+[node name="NavDivider" type="HSeparator" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav"]
+layout_mode = 2
 
 [node name="GameFolderButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1480444040]
-custom_minimum_size = Vector2(0, 54)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-text = "  Game Folder"
-flat = true
+text = "Game Folder"
+alignment = 0
 
 [node name="UninstallButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav" unique_id=1789910227]
-custom_minimum_size = Vector2(0, 54)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-text = "  Uninstall"
-flat = true
+text = "Uninstall"
+alignment = 0
 
 [node name="SidebarSpacer" type="Control" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=550067109]
 layout_mode = 2
@@ -143,7 +153,7 @@ size_flags_vertical = 3
 
 [node name="SocialSection" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=785079313]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 7
 
 [node name="SocialTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection" unique_id=904809699]
 layout_mode = 2
@@ -154,55 +164,77 @@ horizontal_alignment = 1
 
 [node name="SocialRow" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection" unique_id=331476173]
 layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 1
+theme_override_constants/separation = 8
 
 [node name="DiscordButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow" unique_id=855388307]
-custom_minimum_size = Vector2(42, 42)
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Join Discord"
 theme_override_constants/icon_max_width = 20
+text = "Discord"
 icon = ExtResource("4_discord")
-flat = true
+alignment = 0
 
 [node name="ServerCard" type="PanelContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=75090192]
 layout_mode = 2
 
 [node name="ServerMargin" type="MarginContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard" unique_id=620258447]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 13
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 13
 
 [node name="ServerLayout" type="VBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin" unique_id=538514409]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 7
 
-[node name="ServerStatus" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=25484390]
+[node name="StatusHeader" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
-text = "Server Status"
 
-[node name="ServerOnline" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=284687951]
+[node name="ServerStatus" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/StatusHeader" unique_id=25484390]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
+theme_override_font_sizes/font_size = 11
+text = "SERVER"
+
+[node name="StatusSpacer" type="Control" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/StatusHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ServerOnline" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/StatusHeader" unique_id=284687951]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.94, 0.66, 1)
+theme_override_font_sizes/font_size = 13
 text = "Online"
 
 [node name="OnlinePlayers" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=759019384]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.72, 0.34, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.7, 0.73, 0.84, 1)
+theme_override_font_sizes/font_size = 12
 text = "Checking players online..."
 
-[node name="LauncherVersionTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=1974187876]
+[node name="StatusDivider" type="HSeparator" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout"]
+layout_mode = 2
+
+[node name="VersionRow" type="HBoxContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout"]
+layout_mode = 2
+
+[node name="LauncherVersionTitle" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/VersionRow" unique_id=1974187876]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.64, 0.66, 0.77, 1)
-text = "Launcher Version"
+theme_override_font_sizes/font_size = 12
+text = "Launcher"
 
-[node name="LauncherVersionValue" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout" unique_id=520326899]
+[node name="VersionSpacer" type="Control" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/VersionRow"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.76, 0.78, 0.88, 1)
+size_flags_horizontal = 3
+
+[node name="LauncherVersionValue" type="Label" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard/ServerMargin/ServerLayout/VersionRow" unique_id=520326899]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87, 0.88, 0.95, 1)
+theme_override_font_sizes/font_size = 12
 text = "1.0.0"
 
 [node name="Content" type="MarginContainer" parent="Shell/MainSplit" unique_id=1084134119]
