@@ -29,7 +29,11 @@ func _init() -> void:
 	_check_contains(settings_script, "ExternalLinks.CREDITS_URL", "settings use the shared credits URL")
 	_check_contains(settings_script, 'credits_button.text = "View Credits & Licences"', "About tab exposes full credits")
 	_check_contains(launcher_scene, '[node name="CreditsButton"', "launcher exposes credits")
+	_check_contains(launcher_scene, 'text = "Credits"', "launcher uses a clear Credits label")
+	_check_not_contains(launcher_scene, 'text = "Credits & Legal"', "launcher avoids unclear legal wording")
 	_check_contains(launcher_script, "func open_credits", "launcher credits action is connected")
+	_check_contains(launcher_script, "patch_notes_button, credits_button, uninstall_button", "launcher credits uses the pointing-hand cursor")
+	_check_contains(launcher_script, 'credits_button.tooltip_text = "View credits"', "launcher credits has a clear tooltip")
 	_check_contains(launcher_config, '"creditsUrl": "%s"' % CREDITS_URL, "launcher config uses the canonical credits URL")
 
 	quit(1 if failed else 0)
@@ -37,6 +41,13 @@ func _init() -> void:
 
 func _check_contains(source: String, expected: String, label: String) -> void:
 	if source.contains(expected):
+		return
+	failed = true
+	push_error(label)
+
+
+func _check_not_contains(source: String, unexpected: String, label: String) -> void:
+	if not source.contains(unexpected):
 		return
 	failed = true
 	push_error(label)

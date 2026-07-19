@@ -129,7 +129,7 @@ alignment = 0
 [node name="CreditsButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-text = "Credits & Legal"
+text = "Credits"
 alignment = 0
 
 [node name="NavDivider" type="HSeparator" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav"]

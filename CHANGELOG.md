@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.14 - 2026-07-19
+
+**Changed**
+- The launcher sidebar now uses a clearer Credits label and shows the expected hand cursor when hovering it.
+
 ## 0.3.13 - 2026-07-18
 
 **Changed**

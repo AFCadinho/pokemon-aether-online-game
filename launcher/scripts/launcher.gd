@@ -2021,11 +2021,12 @@ func _set_busy(is_busy: bool) -> void:
 
 
 func _sync_button_cursors() -> void:
-	for button: Button in [check_button, update_button, gen5_sprites_button, play_button, patch_notes_button, uninstall_button]:
+	for button: Button in [check_button, update_button, gen5_sprites_button, play_button, patch_notes_button, credits_button, uninstall_button]:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	patch_notes_button.tooltip_text = "Open patch notes"
+	credits_button.tooltip_text = "View credits"
 	uninstall_button.tooltip_text = "Remove installed game folder"
 
 
