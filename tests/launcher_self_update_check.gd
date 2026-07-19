@@ -36,6 +36,18 @@ func _init() -> void:
 		source.contains("if %%WAIT_ATTEMPTS%% GEQ 60 ("),
 		"Windows updater cannot wait indefinitely for a launcher process"
 	)
+	_check_true(
+		source.contains('robocopy "%%UPDATE_DIR%%" "%%LAUNCHER_DIR%%" /E /R:30 /W:1'),
+		"Windows retries temporarily locked launcher files during replacement"
+	)
+	_check_true(
+		source.contains("if %%COPY_EXIT%% GEQ 8 ("),
+		"Windows accepts successful robocopy result codes and rejects real copy failures"
+	)
+	_check_true(
+		source.contains('set "LAUNCHER_PCK_BAK=%s"'),
+		"Windows backs up the launcher package as well as its executable"
+	)
 
 	print("PASS launcher_self_update_check")
 	quit(0)

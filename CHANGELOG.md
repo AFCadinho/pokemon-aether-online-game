@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.17 - 2026-07-19
+
+**Fixed**
+- Fixed Windows launcher updates failing when Windows briefly kept a launcher file locked after shutdown.
+
 ## 0.3.15 - 2026-07-19
 
 **Fixed**

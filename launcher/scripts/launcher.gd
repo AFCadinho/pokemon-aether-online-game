@@ -1100,11 +1100,13 @@ func _write_and_run_launcher_update_script(downloaded_path: String) -> int:
 		var launcher_process_id := OS.get_process_id()
 		var launcher_exe_backup := "%s.bak" % launcher_binary_path
 		var launcher_pck_path := launcher_binary_path.get_basename() + ".pck"
+		var launcher_pck_backup := "%s.bak" % launcher_pck_path
 		script_text = """@echo off
 setlocal
 set "LAUNCHER_EXE=%s"
 set "LAUNCHER_EXE_BAK=%s"
 set "LAUNCHER_PCK=%s"
+set "LAUNCHER_PCK_BAK=%s"
 set "UPDATED_LAUNCHER_EXE=%s"
 set "LAUNCHER_DIR=%s"
 set "UPDATE_DIR=%s"
@@ -1140,17 +1142,34 @@ if not exist "%%LAUNCHER_EXE%%" (
 )
 
 echo [launcher] copying update files... >> "%%UPDATE_LOG%%"
-copy /Y "%%LAUNCHER_EXE%%" "%%LAUNCHER_EXE_BAK%%" >nul
-xcopy "%%UPDATE_DIR%%\\*" "%%LAUNCHER_DIR%%\\" /E /I /Y >nul
+copy /Y "%%LAUNCHER_EXE%%" "%%LAUNCHER_EXE_BAK%%" >> "%%UPDATE_LOG%%" 2>&1
 if errorlevel 1 (
-	copy /Y "%%LAUNCHER_EXE_BAK%%" "%%LAUNCHER_EXE%%" >nul
+	echo [launcher] could not back up launcher executable. >> "%%UPDATE_LOG%%"
+	exit /b 1
+)
+if exist "%%LAUNCHER_PCK%%" (
+	copy /Y "%%LAUNCHER_PCK%%" "%%LAUNCHER_PCK_BAK%%" >> "%%UPDATE_LOG%%" 2>&1
+	if errorlevel 1 (
+		del /F /Q "%%LAUNCHER_EXE_BAK%%" >nul 2>nul
+		echo [launcher] could not back up launcher package. >> "%%UPDATE_LOG%%"
+		exit /b 1
+	)
+)
+robocopy "%%UPDATE_DIR%%" "%%LAUNCHER_DIR%%" /E /R:30 /W:1 /NFL /NDL /NJH /NJS /NP >> "%%UPDATE_LOG%%" 2>&1
+set "COPY_EXIT=%%ERRORLEVEL%%"
+echo [launcher] robocopy exit code: %%COPY_EXIT%% >> "%%UPDATE_LOG%%"
+if %%COPY_EXIT%% GEQ 8 (
+	copy /Y "%%LAUNCHER_EXE_BAK%%" "%%LAUNCHER_EXE%%" >> "%%UPDATE_LOG%%" 2>&1
+	if exist "%%LAUNCHER_PCK_BAK%%" copy /Y "%%LAUNCHER_PCK_BAK%%" "%%LAUNCHER_PCK%%" >> "%%UPDATE_LOG%%" 2>&1
 	del /F /Q "%%LAUNCHER_EXE_BAK%%" >nul 2>nul
+	del /F /Q "%%LAUNCHER_PCK_BAK%%" >nul 2>nul
 	echo [launcher] copy failed, restoring launcher executable. >> "%%UPDATE_LOG%%"
 	start "" "%%LAUNCHER_EXE%%"
 	rmdir /S /Q "%%UPDATE_DIR%%" >nul 2>nul
 	exit /b 1
 )
 del /F /Q "%%LAUNCHER_EXE_BAK%%" >nul 2>nul
+del /F /Q "%%LAUNCHER_PCK_BAK%%" >nul 2>nul
 echo [launcher] starting updated launcher... >> "%%UPDATE_LOG%%"
 if exist "%%UPDATED_LAUNCHER_EXE%%" (
 	if /I not "%%LAUNCHER_EXE%%"=="%%UPDATED_LAUNCHER_EXE%%" (
@@ -1165,7 +1184,7 @@ if exist "%%UPDATED_LAUNCHER_EXE%%" (
 rmdir /S /Q "%%UPDATE_DIR%%" >nul 2>nul
 echo [launcher] updater finished. >> "%%UPDATE_LOG%%"
 exit /b 0
-""" % [launcher_binary_path, launcher_exe_backup, launcher_pck_path, updated_launcher_path, target_dir, staging_dir, launcher_process_id]
+""" % [launcher_binary_path, launcher_exe_backup, launcher_pck_path, launcher_pck_backup, updated_launcher_path, target_dir, staging_dir, launcher_process_id]
 	else:
 		var launcher_exe_backup := "%s.bak" % launcher_binary_path
 		var launcher_pck_path := launcher_binary_path.get_basename() + ".pck"
