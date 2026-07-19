@@ -28,6 +28,14 @@ func _init() -> void:
 		source.contains("if not OS.is_process_running(updater_process_id):"),
 		"launcher refuses to close when the updater exits prematurely"
 	)
+	_check_true(
+		source.contains('if OS.get_name() == "Windows":') and source.contains("OS.kill(OS.get_process_id())"),
+		"Windows releases launcher file locks with an explicit self-termination after updater verification"
+	)
+	_check_true(
+		source.contains("if %%WAIT_ATTEMPTS%% GEQ 60 ("),
+		"Windows updater cannot wait indefinitely for a launcher process"
+	)
 
 	print("PASS launcher_self_update_check")
 	quit(0)

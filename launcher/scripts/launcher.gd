@@ -855,6 +855,17 @@ func _on_launcher_update_request_completed(result: int, response_code: int, _hea
 		return
 
 	_set_status("Launcher update downloaded. Restarting launcher...")
+	if OS.get_name() == "Windows":
+		# A graceful tree quit can leave the Windows Godot process alive after
+		# its window has disappeared. The external updater is already verified
+		# above and is waiting on this exact PID, so terminate this process
+		# explicitly to release the executable and PCK file locks.
+		var terminate_error := OS.kill(OS.get_process_id())
+		if terminate_error != OK:
+			launcher_update_in_progress = false
+			_log_error("Could not terminate Windows launcher for update: %s" % error_string(terminate_error))
+			launch_restart_check_failed("Could not close the launcher for updating.")
+		return
 	get_tree().quit()
 
 
@@ -1103,10 +1114,16 @@ set "UPDATE_LOG=%%~dp0launcher_update_windows.log"
 echo [launcher] updater started > "%%UPDATE_LOG%%"
 echo [launcher] launcher exe: %%LAUNCHER_EXE%% >> "%%UPDATE_LOG%%"
 echo [launcher] update dir: %%UPDATE_DIR%% >> "%%UPDATE_LOG%%"
+set /A WAIT_ATTEMPTS=0
 
 :WAIT
 tasklist /FI "PID eq %%LAUNCHER_PID%%" /NH | find "%%LAUNCHER_PID%%" >nul
 if not errorlevel 1 (
+	set /A WAIT_ATTEMPTS+=1
+	if %%WAIT_ATTEMPTS%% GEQ 60 (
+		echo [launcher] launcher process did not exit within 60 seconds. >> "%%UPDATE_LOG%%"
+		exit /b 1
+	)
 	echo [launcher] waiting for launcher process to exit... >> "%%UPDATE_LOG%%"
 	timeout /t 1 /nobreak >nul
 	goto WAIT

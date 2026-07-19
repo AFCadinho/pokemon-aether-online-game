@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.15 - 2026-07-19
+
+**Fixed**
+- Fixed the Windows launcher updater waiting indefinitely after the launcher window closed.
+
 ## 0.3.14 - 2026-07-19
 
 **Changed**
