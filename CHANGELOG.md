@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.3.20 - 2026-07-20
+
+**Fixed**
+- Fixed damaged or fainted Pokemon sometimes appearing healed again during Ranked battles.
+- Fixed a previously active Pokemon sometimes being unavailable when choosing a replacement after a faint.
+
 ## 0.3.19 - 2026-07-20
 
 **Fixed**
