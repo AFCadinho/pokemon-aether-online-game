@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Fixed**
+- Fixed a fainted Pokemon sometimes appearing selectable again after Pursuit interrupted its switch.
+- Fixed a Ranked battle sometimes ending as a server error when a replacement Pokemon was chosen between turns.
+
 ## 0.3.17 - 2026-07-19
 
 **Fixed**

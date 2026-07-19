@@ -468,6 +468,17 @@ func _apply_switch_event_to_requests(event: Dictionary) -> void:
 	if target_index < 0 or target_index >= team.size():
 		return
 
+	# The request snapshot is newer than the response's render events. A past
+	# switch event (notably Pursuit intercepting a switch) must never revive a
+	# slot that the canonical snapshot already marks as fainted.
+	var target_value: Variant = team[target_index]
+	if target_value is Dictionary:
+		var target_pokemon: Dictionary = target_value as Dictionary
+		var target_condition := str(target_pokemon.get("condition", "")).strip_edges().to_lower()
+		var target_hp := int(target_pokemon.get("hp", target_pokemon.get("currentHp", 1)))
+		if bool(target_pokemon.get("fainted", false)) or target_condition.ends_with(" fnt") or target_condition == "fnt" or target_hp <= 0:
+			return
+
 	var condition := _get_condition_from_event(event)
 	for index in range(team.size()):
 		var pokemon_value: Variant = team[index]
