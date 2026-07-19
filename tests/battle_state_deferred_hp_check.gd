@@ -9,6 +9,7 @@ var failed := false
 func _init() -> void:
 	_check_damage_response_is_display_deferred()
 	_check_deferred_damage_load_rewinds_to_previous_hp()
+	_check_newer_damage_and_faint_override_hp_memory()
 	_check_stale_switch_event_does_not_revive_canonical_faint()
 	_check_status_event_normalizes_badly_poisoned()
 	quit(1 if failed else 0)
@@ -106,8 +107,66 @@ func _check_status_event_normalizes_badly_poisoned() -> void:
 	_check_equal(state.get_active_pokemon_status("p2"), "tox", "badly poisoned status normalizes to tox")
 
 
+func _check_newer_damage_and_faint_override_hp_memory() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response(_single_pokemon_response("hp-memory-test", "68/100", 68, false), false)
+
+	state.load_from_api_response(_single_pokemon_response("hp-memory-test", "40/100", 40, false), false)
+	_check_equal(state.get_active_pokemon_current_hp("p1"), 40, "newer lower HP overrides remembered HP")
+
+	state.load_from_api_response(_single_pokemon_response("hp-memory-test", "0 fnt", 0, true), false)
+	_check_equal(state.get_active_pokemon_current_hp("p1"), 0, "newer faint overrides remembered HP")
+	_check_equal(state.is_active_pokemon_fainted("p1"), true, "newer faint remains authoritative")
+
+
+func _single_pokemon_response(battle_id: String, condition: String, hp: int, fainted: bool) -> Dictionary:
+	return {
+		"success": true,
+		"battleId": battle_id,
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [{
+						"ident": "p1: Tyranitar", "species": "Tyranitar", "active": true,
+						"condition": condition, "hp": hp, "maxHp": 100, "fainted": fainted,
+						"metadataSlot": 1, "pokemonKey": "p1:slot:1",
+					}],
+				},
+			},
+		},
+		"events": [],
+	}
+
+
 func _check_stale_switch_event_does_not_revive_canonical_faint() -> void:
 	var state = BattleStateScript.new()
+	# Prime the presentation memory with the state that existed before Pursuit
+	# interrupted the switch. This is the production sequence that used to
+	# overwrite the next canonical faint snapshot.
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "pursuit-switch-faint-test",
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p1: Ceruledge", "species": "Ceruledge", "active": true,
+							"condition": "72/100", "hp": 72, "maxHp": 100, "fainted": false,
+							"metadataSlot": 2, "pokemonKey": "p1:slot:2",
+						},
+						{
+							"ident": "p1: Mawile", "species": "Mawile", "active": false,
+							"condition": "100/100", "hp": 100, "maxHp": 100, "fainted": false,
+							"metadataSlot": 3, "pokemonKey": "p1:slot:3",
+						},
+					],
+				},
+			},
+		},
+		"events": [],
+	}, true)
+
 	state.load_from_api_response({
 		"success": true,
 		"battleId": "pursuit-switch-faint-test",

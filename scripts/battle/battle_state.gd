@@ -224,6 +224,13 @@ func _should_preserve_remembered_hp_snapshot(pokemon_data: Dictionary, memory_sn
 	if memory_snapshot.is_empty():
 		return false
 
+	# Explicit server damage and faint state is newer than local presentation
+	# memory. Memory may fill an omitted or bogus full-health snapshot, but it
+	# must never undo authoritative HP loss or a faint.
+	var incoming_condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
+	if bool(pokemon_data.get("fainted", false)) or incoming_condition == "fnt" or incoming_condition.ends_with(" fnt"):
+		return false
+
 	var remembered_max_hp := int(memory_snapshot.get("max_hp", 0))
 	if remembered_max_hp <= 0:
 		return false
@@ -238,10 +245,9 @@ func _should_preserve_remembered_hp_snapshot(pokemon_data: Dictionary, memory_sn
 
 	var incoming_hp := int(incoming_snapshot.get("hp", 0))
 	var incoming_max_hp := int(incoming_snapshot.get("max_hp", 0))
+	if incoming_max_hp > 0 and incoming_hp <= 0:
+		return false
 	if incoming_hp >= incoming_max_hp and incoming_max_hp > 0:
-		return true
-
-	if incoming_max_hp == remembered_max_hp and incoming_hp < remembered_hp:
 		return true
 
 	return false
