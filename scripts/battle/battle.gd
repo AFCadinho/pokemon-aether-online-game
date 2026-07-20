@@ -2850,6 +2850,11 @@ func _on_forfeit_confirmed() -> void:
 
 	_set_battle_input_locked(true)
 	var response: Dictionary = await _submit_pvp_realtime_forfeit()
+	# A durable battle.ended event can confirm the forfeit before the correlated
+	# action response arrives. Its terminal handler already owns the result UI;
+	# do not unlock the finished battle or replace it with a timeout message.
+	if battle_finished:
+		return
 	_set_battle_input_locked(false)
 	if not bool(response.get("success", false)):
 		var error_message := str(response.get("error", "Could not forfeit the battle."))
@@ -3221,6 +3226,12 @@ func _should_sync_presentation_field_from_response(response: Dictionary, source:
 	return events.is_empty()
 
 func _sync_presentation_field_from_battle_state() -> void:
+	# Large realtime packets may deliberately omit the field snapshot to stay
+	# below the WebSocket limit. In that case the ordered fieldEffect events are
+	# the only authoritative presentation source; an omitted field must not be
+	# interpreted as an empty field and erase active weather or screens.
+	if not battle_state.field.has("effects"):
+		return
 	presentation_state.sync_field_from_snapshot(battle_state.field)
 
 func _update_pvp_phase_contract_from_response(response: Dictionary, source: String = "") -> void:
@@ -3407,7 +3418,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 				# The response can still contain already-rendered historical damage.
 				# Its presentation rewind must never survive the local forced-switch
 				# render path, otherwise a fainted party member appears healthy again.
-				_restore_pvp_authoritative_presentation(batch_display_response)
+				_restore_pvp_authoritative_presentation(batch_display_response, player_events)
 
 			if await _finish_if_battle_ended():
 				return true
@@ -5025,6 +5036,10 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		])
 	var player_species := _get_original_active_player_species(_get_active_display_species("p1"))
 	var opponent_species := _get_active_display_species("p2")
+	# A realtime Team Preview completion can arrive in the same frame as the
+	# lead intro. Clear both preview layers again at the presentation boundary so
+	# their six sprites can never overlap the Pokeball summon animation.
+	_clear_team_preview_visuals()
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
 	player_sprite_box.visible = false
@@ -5915,6 +5930,13 @@ func _show_team_preview_layers() -> void:
 
 
 func _hide_team_preview_layers() -> void:
+	_clear_team_preview_visuals()
+	player_sprite_box.visible = true
+	enemy_sprite_box.visible = true
+	player_hud_panel.visible = true
+	enemy_hud_panel.visible = true
+
+func _clear_team_preview_visuals() -> void:
 	if player_team_preview_layer.has_method("clear"):
 		player_team_preview_layer.call("clear")
 	if enemy_team_preview_layer.has_method("clear"):
@@ -5922,10 +5944,6 @@ func _hide_team_preview_layers() -> void:
 
 	player_team_preview_layer.visible = false
 	enemy_team_preview_layer.visible = false
-	player_sprite_box.visible = true
-	enemy_sprite_box.visible = true
-	player_hud_panel.visible = true
-	enemy_hud_panel.visible = true
 
 func _get_lead_selection_team_data(player_id: String) -> Array:
 	var lead_team: Array = []
@@ -8716,6 +8734,14 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 	var response_deadline_msec := Time.get_ticks_msec() + 12000
 	var response_wait_attempt := 0
 	while Time.get_ticks_msec() < response_deadline_msec:
+		if action == "forfeit" and battle_finished:
+			if PvpBattleRealtimeService.action_response_received.is_connected(listener):
+				PvpBattleRealtimeService.action_response_received.disconnect(listener)
+			_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
+			return {
+				"success": true,
+				"terminalConfirmed": true,
+			}
 		if DEBUG_PVP_REALTIME and response_wait_attempt % 60 == 0:
 			_log_pvp_realtime(
 				"Realtime wait attempt",
@@ -9639,7 +9665,12 @@ func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
 func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 	if battle_finished:
 		return
-	if PvpBattleRealtimeService.should_defer_authoritative_terminal_until_render(
+	var end_reason := str(message.get("endReason", "ended")).strip_edges().to_lower()
+	# A manual forfeit has no final move batch to animate. The durable terminal
+	# event is the canonical outcome, so waiting for a separate ended snapshot or
+	# direct action response can strand the forfeiter in the battle indefinitely.
+	var is_forfeit_terminal := end_reason == "forfeit"
+	if not is_forfeit_terminal and PvpBattleRealtimeService.should_defer_authoritative_terminal_until_render(
 		battle_state.is_battle_ended(),
 		pvp_event_queue.is_rendering,
 		str(pvp_event_queue.current_event_batch_id),
@@ -9652,7 +9683,6 @@ func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 	pvp_pending_authoritative_terminal.clear()
 	var winner_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("winnerSide", "")))
 	var loser_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("loserSide", "")))
-	var end_reason := str(message.get("endReason", "ended")).strip_edges().to_lower()
 	_finish_battle({
 		"reason": end_reason if end_reason != "" else "ended",
 		"winner": winner_side,
@@ -10350,11 +10380,11 @@ func _render_pvp_opponent_response(
 	_rewind_party_slots_for_events(opponent_events)
 	var success := await _render_pvp_event_batch(render_response, opponent_events, true, source)
 	defer_force_switch_active_hide = false
-	_restore_pvp_authoritative_presentation(batch_response)
+	_restore_pvp_authoritative_presentation(batch_response, opponent_events)
 	_update_active_sprites()
 	return success
 
-func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:
+func _restore_pvp_authoritative_presentation(response: Dictionary, rendered_events: Array = []) -> void:
 	if response.is_empty() or not bool(response.get("success", false)):
 		return
 	var canonical_response := pvp_response_order.canonical_snapshot_for_render_cursor(
@@ -10363,11 +10393,41 @@ func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:
 	)
 	_preserve_terminal_presentation_requests(canonical_response)
 	battle_state.load_from_api_response(canonical_response, false)
+	_reapply_rendered_condition_events(rendered_events)
 	_sync_player_save_party_status_from_battle_state()
 	_sync_presentation_field_from_battle_state()
+	_reapply_rendered_field_effect_events(rendered_events)
 	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_party_slots()
+
+func _reapply_rendered_condition_events(events: Array) -> void:
+	var condition_events: Array = []
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		match str(event_data.get("type", "")):
+			"damage", "heal", "faint", "status":
+				condition_events.append(event_data.duplicate(true))
+
+	if not condition_events.is_empty():
+		# Only condition events are replayed. Switch events deliberately remain
+		# canonical, which prevents Pursuit from reviving or fainting its intended
+		# switch target while retaining hazard damage from the rendered batch.
+		battle_state.apply_event_conditions(condition_events)
+
+func _reapply_rendered_field_effect_events(events: Array) -> void:
+	for event_value: Variant in events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event_data: Dictionary = event_value as Dictionary
+		if str(event_data.get("type", "")) != "fieldEffect":
+			continue
+
+		presentation_state.apply_event(event_data, battle_state.get_turn())
 
 func _preserve_terminal_presentation_requests(response: Dictionary) -> void:
 	var state_value: Variant = response.get("state", {})
