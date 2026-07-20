@@ -10,6 +10,9 @@ func _init() -> void:
 	var local_decision_position := battle_source.find("battle_state.get_active_decision(_get_local_state_player_id())", action_wait_start)
 	var decision_kind_position := battle_source.find('str(decision.get("decisionKind", ""))', action_wait_start)
 	var send_position := battle_source.find("var request_id := PvpBattleRealtimeService.send_action", action_wait_start)
+	var update_handler_start := battle_source.find("func _on_pvp_realtime_battle_update(message: Dictionary) -> void:")
+	var immediate_terminal_position := battle_source.find("if _should_apply_pvp_realtime_end_immediately(message):", update_handler_start)
+	var normal_queue_position := battle_source.find("pvp_realtime_updates.append(message.duplicate(true))", update_handler_start)
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(queue_cursor_position >= 0 and queue_cursor_position < send_position, true, "realtime response queue cursor is captured before sending")
 	_check_equal(
@@ -21,6 +24,11 @@ func _init() -> void:
 		decision_kind_position >= local_decision_position and decision_kind_position > send_position,
 		true,
 		"realtime actions include the authoritative decision kind"
+	)
+	_check_equal(
+		immediate_terminal_position >= update_handler_start and immediate_terminal_position < normal_queue_position,
+		true,
+		"confirmed terminal actions finish before they can fall into the ordinary realtime queue"
 	)
 	_check_equal(
 		battle_source.contains('bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE"'),
@@ -247,11 +255,27 @@ func _init() -> void:
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "forfeit", "playerId": "p1", "response": {"success": true, "state": {"ended": true}}},
+			"p1"
+		),
+		true,
+		"local manual forfeit terminal broadcast finishes even if its direct waiter loses the race"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
 			{"action": "forfeit", "playerId": "p1", "response": {"success": true}},
 			"p1"
 		),
 		false,
-		"local manual forfeit still waits for its direct response path"
+		"local manual forfeit requires mechanical terminal proof"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "forfeit", "playerId": "p1", "response": {"success": false, "state": {"ended": true}}},
+			"p1"
+		),
+		false,
+		"failed local forfeit cannot end the client battle"
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", false),

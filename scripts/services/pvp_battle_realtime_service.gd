@@ -417,7 +417,7 @@ func _apply_timer_contract_message(message_type: String, message: Dictionary) ->
 	return timer_projection.apply_event(message)
 
 
-static func should_apply_terminal_action_immediately(message: Dictionary, local_player_id: String) -> bool:
+static func should_apply_terminal_action_immediately(message: Dictionary, _local_player_id: String) -> bool:
 	var response_value: Variant = message.get("response", {})
 	if not (response_value is Dictionary):
 		return false
@@ -433,9 +433,20 @@ static func should_apply_terminal_action_immediately(message: Dictionary, local_
 
 	var message_action := str(message.get("action", "")).strip_edges().to_lower()
 	var message_player_id := str(message.get("playerId", "")).strip_edges()
-	if message_action in ["forfeit", "disconnect", "abandon"] and message_player_id == local_player_id:
+	if not (message_action in ["forfeit", "disconnect", "abandon"]) or message_player_id == "":
 		return false
-	return message_action in ["forfeit", "disconnect", "abandon"] and message_player_id != ""
+
+	# The action response and battle-update broadcast can race each other. Treat a
+	# mechanically terminal response as idempotent terminal confirmation even when
+	# it belongs to the local player; otherwise a late local legacy response is
+	# merely queued after the request waiter times out and the forfeiter stays in
+	# the battle. A bare `success` is insufficient proof that the battle ended.
+	if not bool(response.get("success", false)):
+		return false
+	var state_value: Variant = response.get("state", {})
+	if state_value is Dictionary and bool((state_value as Dictionary).get("ended", false)):
+		return true
+	return match_end_value is Dictionary and bool((match_end_value as Dictionary).get("success", false))
 
 
 static func should_defer_authoritative_terminal_until_render(
