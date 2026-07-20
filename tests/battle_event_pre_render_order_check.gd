@@ -13,6 +13,7 @@ func _init() -> void:
 	_check_initial_start_events_include_booster_energy_item_events()
 	_check_initial_setup_keeps_specific_form_species()
 	_check_team_preview_lead_selection_unlocks_party_grid()
+	_check_initial_shiny_lead_uses_entrance_identity()
 	_check_stat_stage_events_normalize_drops()
 	_check_pvp_render_restores_canonical_party_state()
 	_check_local_force_switch_render_restores_canonical_party_state()
@@ -276,6 +277,25 @@ func _check_stat_stage_events_normalize_drops() -> void:
 	_check_equal(apply_source.contains("event_text_formatter.get_stat_change_amount(event)"), true, "persistent stat badges use normalized signed stage changes")
 	_check_equal(normalize_source.contains('"acc", "accuracy":'), true, "accuracy stages have a persistent badge key")
 	_check_equal(normalize_source.contains('"eva", "evasion":'), true, "evasion stages have a persistent badge key")
+
+
+func _check_initial_shiny_lead_uses_entrance_identity() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var lead_index := source.find("func _show_original_player_lead_before_initial_events(")
+	var lead_next_index := source.find("\nfunc ", lead_index + 1)
+	var lead_source := source.substr(lead_index, lead_next_index - lead_index)
+
+	_check_equal(lead_index >= 0, true, "initial player lead setup exists")
+	_check_equal(
+		lead_source.contains('var is_shiny := _get_active_pokemon_is_shiny_for_entrance("p1")'),
+		true,
+		"initial lead sprite and shiny entrance resolve the same shiny identity"
+	)
+	_check_equal(
+		lead_source.contains("_get_saved_pokemon_shiny_for_active_data(active_pokemon)"),
+		false,
+		"initial lead does not depend on Team Preview retaining instanceId"
+	)
 
 
 func _check_pvp_render_restores_canonical_party_state() -> void:

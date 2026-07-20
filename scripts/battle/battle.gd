@@ -5217,13 +5217,16 @@ func _show_original_player_lead_before_initial_events(species: String, fallback_
 	if species == "":
 		return
 
-	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p1")
 	var level: int = battle_state.get_active_pokemon_level("p1")
 	var hp: int = battle_state.get_active_pokemon_current_hp("p1")
 	var max_hp: int = max(battle_state.get_active_pokemon_max_hp("p1"), 1)
 	var status: String = battle_state.get_active_pokemon_status("p1")
 	var gender: String = battle_state.get_active_pokemon_gender("p1")
-	var is_shiny := _get_saved_pokemon_shiny_for_active_data(active_pokemon)
+	# Use the exact same resolved identity as the entrance sparkle. Team Preview
+	# projections can temporarily omit instanceId while still retaining canonical
+	# slot/species identity; the old strict save lookup then loaded normal frames
+	# before the correctly resolved shiny entrance ran.
+	var is_shiny := _get_active_pokemon_is_shiny_for_entrance("p1")
 
 	_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
 	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1", fallback_pokemon))
