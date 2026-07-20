@@ -1,6 +1,7 @@
 extends SceneTree
 
 const BattleStateScript := preload("res://scripts/battle/battle_state.gd")
+const BattleForceSwitchFlowScript := preload("res://scripts/battle/battle_force_switch_flow.gd")
 const BATTLE_ACTION_FLOW_PATH := "res://scripts/battle/battle_action_flow.gd"
 
 var failed := false
@@ -11,6 +12,7 @@ func _init() -> void:
 	_check_deferred_damage_load_rewinds_to_previous_hp()
 	_check_newer_damage_and_faint_override_hp_memory()
 	_check_stale_switch_event_does_not_revive_canonical_faint()
+	_check_pursuit_faint_keeps_pending_iron_treads_available()
 	_check_historical_switch_renders_before_its_faint()
 	_check_status_event_normalizes_badly_poisoned()
 	quit(1 if failed else 0)
@@ -200,6 +202,81 @@ func _check_stale_switch_event_does_not_revive_canonical_faint() -> void:
 	_check_equal(int((team[0] as Dictionary).get("hp", -1)), 0, "stale Pursuit switch event keeps Ceruledge at zero HP")
 	_check_equal(bool((team[0] as Dictionary).get("active", true)), false, "stale Pursuit switch event cannot reactivate Ceruledge")
 	_check_equal(bool((team[1] as Dictionary).get("active", false)), true, "canonical active Pokemon remains active")
+
+
+func _check_pursuit_faint_keeps_pending_iron_treads_available() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "pursuit-pending-switch-test",
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p1: Ceruledge", "species": "Ceruledge", "active": true,
+							"condition": "72/100", "hp": 72, "maxHp": 100, "fainted": false,
+							"metadataSlot": 2, "pokemonKey": "p1:slot:2",
+						},
+						{
+							"ident": "p1: Iron Treads", "species": "Iron Treads", "active": false,
+							"condition": "100/100", "hp": 100, "maxHp": 100, "fainted": false,
+							"metadataSlot": 6, "pokemonKey": "p1:slot:6",
+						},
+					],
+				},
+			},
+		},
+		"events": [],
+	}, true)
+
+	var pursuit_events: Array = [
+		{
+			"type": "damage", "target": "p1a: Ceruledge",
+			"previousCondition": "72/100", "condition": "0 fnt",
+			"previousHp": 72, "hp": 0, "maxHp": 100,
+			"metadataSlot": 2, "pokemonKey": "p1:slot:2",
+			"targetRef": {"metadataSlot": 2, "pokemonKey": "p1:slot:2"},
+		},
+		{
+			"type": "faint", "target": "p1a: Ceruledge", "condition": "0 fnt",
+			"metadataSlot": 2, "pokemonKey": "p1:slot:2",
+			"targetRef": {"metadataSlot": 2, "pokemonKey": "p1:slot:2"},
+		},
+	]
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "pursuit-pending-switch-test",
+		"requests": {
+			"p1": {
+				"forceSwitch": [true],
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p1: Ceruledge", "species": "Ceruledge", "active": true,
+							"condition": "0 fnt", "hp": 0, "maxHp": 100, "fainted": true,
+							"metadataSlot": 2, "pokemonKey": "p1:slot:2",
+						},
+						{
+							"ident": "p1: Iron Treads", "species": "Iron Treads", "active": false,
+							"condition": "100/100", "hp": 100, "maxHp": 100, "fainted": false,
+							"metadataSlot": 6, "pokemonKey": "p1:slot:6",
+						},
+					],
+				},
+			},
+		},
+		"events": pursuit_events,
+	}, false)
+	state.apply_event_conditions(pursuit_events)
+
+	var team: Array = state.get_player_team("p1")
+	_check_equal(bool((team[0] as Dictionary).get("fainted", false)), true, "Pursuit faints Ceruledge")
+	_check_equal(bool((team[1] as Dictionary).get("fainted", true)), false, "Pursuit never faints pending Iron Treads")
+	_check_equal(int((team[1] as Dictionary).get("hp", 0)), 100, "pending Iron Treads keeps its HP")
+	var force_switch_flow = BattleForceSwitchFlowScript.new()
+	force_switch_flow.setup(state)
+	_check_equal(force_switch_flow.can_switch_to_slot(2, "p1"), true, "pending Iron Treads remains selectable after Pursuit")
 
 
 func _check_historical_switch_renders_before_its_faint() -> void:

@@ -68,6 +68,7 @@ var pvp_switch_confirmation_active := false
 var last_rendered_event_seq := -1
 var rendered_non_pvp_event_keys: Dictionary = {}
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
+var pvp_response_order := preload("res://scripts/battle/battle_response_order.gd").new()
 
 #Battle State
 var battle_state := BattleState.new()
@@ -3075,8 +3076,23 @@ func _get_pvp_state_player_id_for_raw_player_id(player_id: String) -> String:
 
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
 func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true, source: String = "") -> bool:
+	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if _is_pvp_battle() and pvp_response_order.is_stale(display_response):
+		_trace_pvp_flow(
+			"apply.skip_stale_projection",
+			display_response,
+			"source=%s incoming=%s latest=%s" % [
+				source,
+				JSON.stringify(pvp_response_order.cursor_for_response(display_response)),
+				JSON.stringify(pvp_response_order.latest_cursor),
+			]
+		)
+		return true
+
 	var success: bool = action_flow.apply_response(response, apply_event_conditions)
 	if success:
+		if _is_pvp_battle():
+			pvp_response_order.remember(display_response)
 		_update_pvp_presentation_schedule(response)
 		_apply_party_state_from_api_response(response)
 		_sync_player_save_party_status_from_battle_state()
@@ -3262,6 +3278,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 	var pending_player_choice_events: Array = pending_player_choice_events_value as Array if pending_player_choice_events_value is Array else []
 
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	display_response = pvp_response_order.merge_latest_projection_with_events(display_response)
 	pending_player_choice_events = _get_pending_player_choice_events(display_response, pending_player_choice_events)
 
 	if choice_type == "switch":
@@ -4877,7 +4894,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		if not _apply_team_preview_battle_response(api_response):
 			return
 		_set_pvp_party_hud_display_override()
-		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
+		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")), api_response)
 		lead_response = await _run_pvp_team_preview_lead_selection(local_player_id)
 		if lead_response.is_empty():
 			return
@@ -4886,7 +4903,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 			return
 		_set_pvp_party_hud_display_override()
 		_show_default_trainer_leads_before_selection(player_pokemon, display_response)
-		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")))
+		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")), api_response)
 
 	restored_history_log = _restore_battle_log_from_history_response(display_response)
 	if not restored_history_log:
@@ -4930,6 +4947,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_phase = ""
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
+	pvp_response_order.reset()
 	last_rendered_event_seq = -1
 	rendered_non_pvp_event_keys.clear()
 	active_player_pokemon = player_pokemon
@@ -6045,10 +6063,11 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 		await _render_battle_events(events, render_turn_headers, source)
 		return true
 
+	var render_batch_response := pvp_response_order.render_batch_projection_for(response)
 	_trace_pvp_flow("render_batch.enter", response, "source=%s events=%d renderTurns=%s" % [source, events.size(), str(render_turn_headers)])
 	if events.is_empty():
 		if _pvp_response_has_render_batch_metadata(response):
-			var empty_batch_context: Dictionary = pvp_event_queue.begin_render_batch(response, source)
+			var empty_batch_context: Dictionary = pvp_event_queue.begin_render_batch(render_batch_response, source)
 			if not bool(empty_batch_context.get("started", false)):
 				_trace_pvp_flow("render_batch.empty_rejected", response, "source=%s context=%s" % [source, JSON.stringify(empty_batch_context)])
 				if DEBUG_PVP_REALTIME:
@@ -6077,7 +6096,7 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 			)
 		return true
 
-	var batch_context: Dictionary = pvp_event_queue.begin_render_batch(response, source)
+	var batch_context: Dictionary = pvp_event_queue.begin_render_batch(render_batch_response, source)
 	if not bool(batch_context.get("started", false)):
 		_trace_pvp_flow("render_batch.rejected", response, "source=%s context=%s" % [source, JSON.stringify(batch_context)])
 		if DEBUG_PVP_REALTIME:
@@ -6100,8 +6119,8 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 				_get_int_from_variant(batch_context.get("batch_seq", -1), -1),
 				_get_int_from_variant(batch_context.get("event_seq_end", -1), -1),
 				events.size(),
-				str(response.get("phase", "")),
-				str(response.get("nextPhase", response.get("next_phase", ""))),
+				str(render_batch_response.get("phase", "")),
+				str(render_batch_response.get("nextPhase", render_batch_response.get("next_phase", ""))),
 			]
 		)
 
@@ -7995,7 +8014,7 @@ func _pvp_response_has_render_batch_metadata(response: Dictionary) -> bool:
 func _is_pvp_battle() -> bool:
 	return pvp_room_code.strip_edges() != ""
 
-func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
+func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_response: Dictionary = {}) -> void:
 	pvp_event_queue.debug_enabled = DEBUG_PVP_REALTIME
 	pvp_event_queue.set_render_completed_callback(Callable(self, "_on_pvp_render_batch_completed"))
 	pvp_event_queue.clear()
@@ -8015,6 +8034,8 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String) -> void:
 	pvp_idle_wait_recovery_active = false
 	pvp_last_applied_server_seq = 0
 	pvp_last_applied_snapshot_server_seq = 0
+	var initial_display_response: Dictionary = action_flow.map_response_for_local_player(initial_response)
+	pvp_response_order.reset(initial_display_response)
 	pvp_rendered_event_count = 0
 	pvp_victory_message_added = false
 	_clear_pvp_switch_confirmation()
@@ -9656,8 +9677,16 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 				"source=%s message=%s reason=unsuccessful_response" % [source, _describe_pvp_realtime_message(message)]
 			)
 		return false
+	if pvp_response_order.is_stale(reconciliation):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Snapshot reconciliation skipped",
+				"source=%s reason=older_canonical_projection" % source
+			)
+		return false
 
 	battle_state.load_from_api_response(reconciliation, false)
+	pvp_response_order.remember(reconciliation)
 	_apply_party_state_from_api_response(reconciliation)
 	_remember_active_player_party_moves()
 	_prewarm_current_battle_move_animations()
@@ -9840,6 +9869,8 @@ func _is_stale_pvp_snapshot_response(message: Dictionary, response: Dictionary) 
 	var response_battle_id := str(response.get("battleId", "")).strip_edges()
 	if battle_state.battle_id != "" and response_battle_id != "" and response_battle_id != battle_state.battle_id:
 		return true
+	if pvp_response_order.is_stale(response):
+		return true
 
 	var server_seq := _get_pvp_message_server_seq(message)
 	if server_seq <= 0:
@@ -9863,6 +9894,8 @@ func _is_stale_pvp_realtime_response(response: Dictionary) -> bool:
 
 	var response_battle_id := str(response.get("battleId", "")).strip_edges()
 	if battle_state.battle_id != "" and response_battle_id != "" and response_battle_id != battle_state.battle_id:
+		return true
+	if pvp_response_order.is_stale(response):
 		return true
 
 	var server_seq := _get_pvp_response_server_seq(response)
@@ -10163,6 +10196,7 @@ func _render_pvp_opponent_response(
 	pending_player_choice_events: Array = [],
 	source := "pvp_opponent_response"
 ) -> bool:
+	opponent_response = pvp_response_order.merge_latest_projection_with_events(opponent_response)
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
@@ -10184,7 +10218,8 @@ func _render_pvp_opponent_response(
 func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:
 	if response.is_empty() or not bool(response.get("success", false)):
 		return
-	battle_state.load_from_api_response(response, true)
+	var canonical_response := pvp_response_order.latest_projection_for(response)
+	battle_state.load_from_api_response(canonical_response, true)
 	_update_hud_panels()
 	_update_party_slots()
 
