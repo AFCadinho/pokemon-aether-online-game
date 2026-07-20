@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.22 - 2026-07-20
+
+**Fixed**
+- Fixed same-turn Ranked updates restoring an older active Pokemon during a forced switch, which could hide the fainted Pokemon and disable a valid replacement.
+
 ## 0.3.21 - 2026-07-20
 
 **Fixed**

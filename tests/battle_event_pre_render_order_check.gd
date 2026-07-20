@@ -235,7 +235,8 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 		"PvP render restores the canonical response after presentation rewinds"
 	)
 	_check_equal(restore_index >= 0, true, "canonical PvP presentation restore exists")
-	_check_equal(restore_source.contains("battle_state.load_from_api_response(response, true)"), true, "canonical response replaces temporary BattleState changes")
+	_check_equal(restore_source.contains("pvp_response_order.latest_projection_for(response)"), true, "restore selects the newest canonical PvP projection")
+	_check_equal(restore_source.contains("battle_state.load_from_api_response(canonical_response, true)"), true, "canonical response replaces temporary BattleState changes")
 	_check_equal(restore_source.contains("_update_party_slots()"), true, "party rails refresh after canonical restore")
 	_check_equal(temporary_source.contains("target_is_fainted and not event_proves_alive"), true, "ambiguous switch presentation cannot revive a fainted target")
 

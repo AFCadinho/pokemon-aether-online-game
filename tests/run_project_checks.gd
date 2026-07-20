@@ -6,6 +6,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_message_timing_check.gd",
 	"res://tests/battle_event_presentation_check.gd",
 	"res://tests/battle_presentation_state_check.gd",
+	"res://tests/battle_response_order_check.gd",
 	"res://tests/battle_event_renderer_order_check.gd",
 	"res://tests/battle_rewind_helper_check.gd",
 	"res://tests/battle_event_pre_render_order_check.gd",
