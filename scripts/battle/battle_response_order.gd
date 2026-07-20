@@ -59,6 +59,17 @@ func latest_projection_for(response: Dictionary) -> Dictionary:
 	return response.duplicate(true)
 
 
+func latest_canonical_snapshot_for(response: Dictionary) -> Dictionary:
+	var snapshot := latest_projection_for(response)
+	# Ranked authority responses carry the complete event history. Reapplying
+	# that history after rendering can activate an old switch target before a
+	# later switch to the now-fainted canonical active is rejected. The request
+	# projection already is the authoritative post-batch state.
+	snapshot["events"] = []
+	snapshot["eventBatches"] = []
+	return snapshot
+
+
 func merge_latest_projection_with_events(event_response: Dictionary) -> Dictionary:
 	var merged := latest_projection_for(event_response)
 	for key in EVENT_PAYLOAD_KEYS:

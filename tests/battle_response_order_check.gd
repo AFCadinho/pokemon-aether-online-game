@@ -1,6 +1,7 @@
 extends SceneTree
 
 const BattleResponseOrderScript := preload("res://scripts/battle/battle_response_order.gd")
+const BattleStateScript := preload("res://scripts/battle/battle_state.gd")
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 
 var failed := false
@@ -8,6 +9,7 @@ var failed := false
 
 func _init() -> void:
 	_check_same_turn_flip_turn_projection_cannot_replace_faint()
+	_check_canonical_restore_does_not_replay_full_switch_history()
 	_check_newer_same_event_request_revision_is_retained()
 	_check_battle_controller_uses_order_guard()
 	quit(1 if failed else 0)
@@ -63,6 +65,50 @@ func _check_same_turn_flip_turn_projection_cannot_replace_faint() -> void:
 	_check_equal(bool(active.get("fainted", false)), true, "restore cannot revive Alomomola")
 
 
+func _check_canonical_restore_does_not_replay_full_switch_history() -> void:
+	var order = BattleResponseOrderScript.new()
+	var response := _response(
+		18,
+		6,
+		2,
+		42,
+		"Cinderace",
+		true,
+		true,
+		[
+			{
+				"type": "switch", "pokemon": "p2a: Alomomola", "condition": "100/100",
+				"pokemonKey": "p2:slot:1", "metadataSlot": 1,
+			},
+			{
+				"type": "switch", "pokemon": "p2a: Cinderace", "condition": "100/100",
+				"pokemonKey": "p2:slot:2", "metadataSlot": 2,
+			},
+			{
+				"type": "faint", "target": "p2a: Cinderace", "condition": "0 fnt",
+				"pokemonKey": "p2:slot:2", "metadataSlot": 2,
+			},
+		]
+	)
+	var team: Array = (((response["requests"] as Dictionary)["p2"] as Dictionary)["side"] as Dictionary)["pokemon"]
+	(team[0] as Dictionary)["pokemonKey"] = "p2:slot:2"
+	(team[0] as Dictionary)["metadataSlot"] = 2
+	(team[1] as Dictionary)["pokemonKey"] = "p2:slot:1"
+	(team[1] as Dictionary)["metadataSlot"] = 1
+
+	_check(order.remember(response), "full-history canonical projection is remembered")
+	var snapshot: Dictionary = order.latest_canonical_snapshot_for(response)
+	_check_equal((snapshot.get("events", []) as Array).size(), 0, "canonical restore strips historical events")
+	_check_equal((snapshot.get("eventBatches", []) as Array).size(), 0, "canonical restore strips historical batches")
+
+	var state = BattleStateScript.new()
+	state.load_from_api_response(snapshot, false)
+	var restored_active := state.get_active_player_pokemon("p2")
+	_check_equal(str(restored_active.get("species", "")), "Cinderace", "canonical fainted active remains Cinderace")
+	_check_equal(bool(restored_active.get("fainted", false)), true, "canonical Cinderace remains fainted")
+	_check_equal(bool((state.get_player_team("p2")[1] as Dictionary).get("active", true)), false, "old Alomomola switch is not replayed")
+
+
 func _check_newer_same_event_request_revision_is_retained() -> void:
 	var order = BattleResponseOrderScript.new()
 	var scheduled := _response(18, 6, 2, 40, "Cinderace", true, true, [])
@@ -89,8 +135,8 @@ func _check_battle_controller_uses_order_guard() -> void:
 		"queued event payloads are combined with the newest canonical projection"
 	)
 	_check(
-		source.contains("pvp_response_order.latest_projection_for(response)"),
-		"post-animation restore selects the newest canonical projection"
+		source.contains("pvp_response_order.latest_canonical_snapshot_for(response)"),
+		"post-animation restore selects a newest event-free canonical snapshot"
 	)
 	_check(
 		source.contains("pvp_response_order.render_batch_projection_for(response)"),

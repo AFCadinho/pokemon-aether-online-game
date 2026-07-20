@@ -10218,8 +10218,8 @@ func _render_pvp_opponent_response(
 func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:
 	if response.is_empty() or not bool(response.get("success", false)):
 		return
-	var canonical_response := pvp_response_order.latest_projection_for(response)
-	battle_state.load_from_api_response(canonical_response, true)
+	var canonical_response := pvp_response_order.latest_canonical_snapshot_for(response)
+	battle_state.load_from_api_response(canonical_response, false)
 	_update_hud_panels()
 	_update_party_slots()
 
