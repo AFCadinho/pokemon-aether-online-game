@@ -1968,6 +1968,22 @@
       ],
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "defog": {
+      "template": "imported_sheet",
+      "category": "direct_sheet",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/defog/defog.json",
+      "sheet_path": "res://assets/battles/animations/defog/PRAS- Defog.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Defog.wav": "res://assets/battles/animations/defog/PRSFX- Defog.wav"
+      }
     }
   }
 }

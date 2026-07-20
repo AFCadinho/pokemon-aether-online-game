@@ -13,6 +13,7 @@ func _init() -> void:
 	_check_initial_start_events_include_booster_energy_item_events()
 	_check_initial_setup_keeps_specific_form_species()
 	_check_team_preview_lead_selection_unlocks_party_grid()
+	_check_stat_stage_events_normalize_drops()
 	_check_pvp_render_restores_canonical_party_state()
 	_check_local_force_switch_render_restores_canonical_party_state()
 	_check_pvp_state_and_field_wait_for_render_cursor()
@@ -189,6 +190,19 @@ func _check_team_preview_lead_selection_unlocks_party_grid() -> void:
 	var setup_index := source.find("func setup_pvp_battle_from_response(")
 	var setup_next_index := source.find("\nfunc ", setup_index + 1)
 	var setup_source := source.substr(setup_index, setup_next_index - setup_index)
+	var hide_index := source.find("func _hide_team_preview_layers() -> void:")
+	var hide_next_index := source.find("\nfunc ", hide_index + 1)
+	var hide_source := source.substr(hide_index, hide_next_index - hide_index)
+	var transition_index := source.find("func _prepare_team_preview_lead_summon_transition() -> void:")
+	var transition_next_index := source.find("\nfunc ", transition_index + 1)
+	var transition_source := source.substr(transition_index, transition_next_index - transition_index)
+	var show_index := source.find("func _show_team_preview_layers() -> void:")
+	var show_next_index := source.find("\nfunc ", show_index + 1)
+	var show_source := source.substr(show_index, show_next_index - show_index)
+	var queue_process_index := source.find("func _should_process_pvp_choice_queue_entry(")
+	var queue_process_next_index := source.find("\nfunc ", queue_process_index + 1)
+	var queue_process_source := source.substr(queue_process_index, queue_process_next_index - queue_process_index)
+	var preview_layer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/team_preview_layer.gd")
 
 	_check_equal(trainer_index >= 0, true, "trainer team preview lead selection exists")
 	_check_equal(pvp_index >= 0, true, "PvP team preview lead selection exists")
@@ -225,11 +239,43 @@ func _check_team_preview_lead_selection_unlocks_party_grid() -> void:
 		"PvP team preview unlocks input before waiting for party lead selection"
 	)
 	_check_equal(
-		setup_source.find("_clear_team_preview_visuals()") >= 0
-			and setup_source.find("_clear_team_preview_visuals()") < setup_source.find("await _play_lead_summon("),
+		setup_source.find("await _prepare_team_preview_lead_summon_transition()") >= 0
+			and setup_source.find("await _prepare_team_preview_lead_summon_transition()") < setup_source.find("await _play_lead_summon("),
 		true,
-		"PvP lead intro clears Team Preview sprites before Pokeball summons"
+		"PvP lead intro completes the Team Preview render barrier before Pokeball summons"
 	)
+	_check_equal(
+		setup_source.find("await _prepare_team_preview_lead_summon_transition()") < setup_source.find("_show_original_player_lead_before_initial_events"),
+		true,
+		"PvP lead waits for the Team Preview render barrier before populating its sprite"
+	)
+	_check_equal(
+		hide_source.contains("player_sprite_box.visible = true") or hide_source.contains("enemy_sprite_box.visible = true"),
+		false,
+		"Team Preview exit cannot reveal active sprites before Pokeball release"
+	)
+	_check_equal(preview_layer_source.contains("func clear() -> void:\n\t# Hide the owner"), true, "Team Preview layer hides its root when cleared")
+	_check_equal(preview_layer_source.contains("sprite.sprite_frames = null"), true, "cleared Team Preview sprites cannot survive in a cached viewport frame")
+	_check_equal(transition_source.contains("await RenderingServer.frame_post_draw"), true, "lead summon waits until a preview-free frame was actually drawn")
+	_check_equal(transition_source.count("_clear_team_preview_visuals()") == 2, true, "lead transition clears delayed preview redraws on both sides of the render barrier")
+	_check_equal(show_source.contains("if not team_preview_lead_selection_active:"), true, "late Team Preview redraws are ignored after lead selection")
+	_check_equal(queue_process_source.contains("if team_preview_lead_selection_active and source in ["), true, "lead completion cannot render while Team Preview is active")
+	for lead_source in ["pvp_choose_lead", "pvp_team_preview_complete", "pvp_team_preview_recovery", "pvp_room_polling_team_preview"]:
+		_check_equal(queue_process_source.contains('"%s"' % lead_source), true, "%s waits for the post-preview intro" % lead_source)
+
+
+func _check_stat_stage_events_normalize_drops() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var apply_index := source.find("func _apply_stat_stage_event(event: Dictionary) -> void:")
+	var apply_next_index := source.find("\nfunc ", apply_index + 1)
+	var apply_source := source.substr(apply_index, apply_next_index - apply_index)
+	var normalize_index := source.find("func _normalize_stat_stage_key(stat: String) -> String:")
+	var normalize_next_index := source.find("\nfunc ", normalize_index + 1)
+	var normalize_source := source.substr(normalize_index, normalize_next_index - normalize_index)
+
+	_check_equal(apply_source.contains("event_text_formatter.get_stat_change_amount(event)"), true, "persistent stat badges use normalized signed stage changes")
+	_check_equal(normalize_source.contains('"acc", "accuracy":'), true, "accuracy stages have a persistent badge key")
+	_check_equal(normalize_source.contains('"eva", "evasion":'), true, "evasion stages have a persistent badge key")
 
 
 func _check_pvp_render_restores_canonical_party_state() -> void:
@@ -373,8 +419,11 @@ func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
 	var wait_source := source.substr(wait_index, wait_next_index - wait_index)
 
 	_check_equal(confirm_source.find("if battle_finished:") < confirm_source.find("_set_battle_input_locked(false)", confirm_source.find("var response: Dictionary = await _submit_pvp_realtime_forfeit()")), true, "finished forfeit cannot unlock or overwrite its result UI")
+	_check_equal(confirm_source.contains("_finish_confirmed_pvp_forfeit(response, _get_local_state_player_id(), \"pvp_forfeit_submit\")"), true, "confirmed local forfeit bypasses the normal animation queue")
 	_check_equal(wait_source.contains('if action == "forfeit" and battle_finished:'), true, "forfeit action waiter exits when durable terminal wins the race")
 	_check_equal(wait_source.contains('"terminalConfirmed": true'), true, "forfeit waiter returns a successful terminal confirmation")
+	_check_equal(wait_source.contains('await _reconcile_pvp_battle_from_room("pvp_forfeit_timeout_recovery")'), true, "lost local forfeit response is confirmed from the canonical room")
+	_check_equal(wait_source.contains("reconciled_forfeit and battle_state.is_battle_ended()"), true, "forfeit timeout recovery only succeeds for a terminal mechanical state")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

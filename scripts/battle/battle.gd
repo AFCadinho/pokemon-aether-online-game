@@ -2862,20 +2862,10 @@ func _on_forfeit_confirmed() -> void:
 		_add_battle_log_message(error_message)
 		return
 
-	if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_submit", not action_flow._response_has_deferred_display_event(response)):
-		_finish_battle({
-			"reason": "forfeit",
-			"forfeitingPlayerId": _get_local_state_player_id(),
-		})
-		return
-
-	if await _finish_if_battle_ended():
-		return
-
-	_finish_battle({
-		"reason": "forfeit",
-		"forfeitingPlayerId": _get_local_state_player_id(),
-	})
+	# A confirmed forfeit has no move, switch or faint animation to render. Loading
+	# it through the regular event queue can leave a duplicate terminal projection
+	# pending (notably on the local legacy backend) and strand the result flow.
+	_finish_confirmed_pvp_forfeit(response, _get_local_state_player_id(), "pvp_forfeit_submit")
 
 func _on_forfeit_cancelled() -> void:
 	_set_battle_input_locked(false)
@@ -3170,6 +3160,34 @@ func _get_pvp_state_player_id_for_raw_player_id(player_id: String) -> String:
 		return player_id
 	return "p1" if player_id == "p2" else "p2"
 
+func _finish_confirmed_pvp_forfeit(response: Dictionary, forfeiting_player_id: String, source: String) -> void:
+	if battle_finished:
+		return
+
+	var response_state_value: Variant = response.get("state", {})
+	if response_state_value is Dictionary and not (response_state_value as Dictionary).is_empty():
+		var mapped_response := action_flow.map_response_for_local_player(response)
+		if not mapped_response.is_empty():
+			# Reconcile the terminal projection without replaying the response's
+			# historical event trail. Manual forfeit has no visual battle event.
+			_apply_pvp_snapshot_reconciliation({
+				"type": "pvp.snapshot",
+				"battleId": str(response.get("battleId", battle_state.battle_id)),
+				"roomCode": pvp_room_code,
+				"serverSeq": _get_pvp_response_server_seq(response),
+				"response": response,
+			}, mapped_response, source)
+
+	var winner_side := PvpBattleRealtimeService.normalize_terminal_winner(battle_state.get_winner())
+	if winner_side == "" and forfeiting_player_id in ["p1", "p2"]:
+		winner_side = "p2" if forfeiting_player_id == "p1" else "p1"
+
+	_finish_battle({
+		"reason": "forfeit",
+		"winner": winner_side,
+		"forfeitingPlayerId": forfeiting_player_id,
+	})
+
 ## Laadt een API-response in de battle state en geeft terug of dat gelukt is.
 func _apply_api_response(response: Dictionary, apply_event_conditions: bool = true, source: String = "") -> bool:
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
@@ -3382,6 +3400,17 @@ func _drain_pvp_event_queue() -> bool:
 	return all_success
 
 func _should_process_pvp_choice_queue_entry(response: Dictionary, source: String, metadata: Variant) -> bool:
+	# Lead-completion responses establish the canonical active Pokemon, but their
+	# switch events belong to the explicit post-preview intro below. Rendering an
+	# authoritative batch here would play its Pokeball/cry while the six preview
+	# sprites are still intentionally visible.
+	if team_preview_lead_selection_active and source in [
+		"pvp_choose_lead",
+		"pvp_team_preview_complete",
+		"pvp_team_preview_recovery",
+		"pvp_room_polling_team_preview",
+	]:
+		return false
 	if metadata is Dictionary and bool((metadata as Dictionary).get("is_local_choice", false)):
 		return true
 	if _is_authoritative_pvp_render_batch_response(response):
@@ -4363,7 +4392,8 @@ func _apply_stat_stage_event(event: Dictionary) -> void:
 		stages = (stages_value as Dictionary).duplicate()
 
 	var current_stage: int = int(stages.get(stat_key, 0))
-	var new_stage: int = mini(maxi(current_stage + int(event.get("amount", 0)), -6), 6)
+	var stage_change := event_text_formatter.get_stat_change_amount(event)
+	var new_stage: int = mini(maxi(current_stage + stage_change, -6), 6)
 	if new_stage == 0:
 		stages.erase(stat_key)
 	else:
@@ -4467,6 +4497,10 @@ func _normalize_stat_stage_key(stat: String) -> String:
 			return "spd"
 		"spe", "speed":
 			return "spe"
+		"acc", "accuracy":
+			return "accuracy"
+		"eva", "evasion":
+			return "evasion"
 
 	return ""
 
@@ -4984,10 +5018,12 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 		trainer_data,
 		_get_player_display_name("p2")
 	))
+	# Team Preview owns the field until both preview layers have been cleared.
+	# Keep the real lead containers hidden while their sprites are populated so
+	# they can only become visible at the Pokeball release frame.
+	await _prepare_team_preview_lead_summon_transition()
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
-	player_sprite_box.visible = false
-	enemy_sprite_box.visible = false
 	await get_tree().process_frame
 	_debug_battle_start("trainer.setup.before_lead_summons playerSpecies=%s opponentSpecies=%s lastRenderedSeq=%d" % [
 		player_species,
@@ -5039,11 +5075,9 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	# A realtime Team Preview completion can arrive in the same frame as the
 	# lead intro. Clear both preview layers again at the presentation boundary so
 	# their six sprites can never overlap the Pokeball summon animation.
-	_clear_team_preview_visuals()
+	await _prepare_team_preview_lead_summon_transition()
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
 	_show_original_active_pokemon_for_player("p2", opponent_species)
-	player_sprite_box.visible = false
-	enemy_sprite_box.visible = false
 	await get_tree().process_frame
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_pokemon.ball_item_id), player_species, player_sprite_box, "back")
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
@@ -5918,6 +5952,10 @@ func _poll_pvp_room_until_team_preview_complete(local_player_id: String) -> Dict
 	return {}
 
 func _show_team_preview_layers() -> void:
+	# A delayed recovery/update must never redraw Team Preview after lead choice.
+	if not team_preview_lead_selection_active:
+		return
+
 	player_sprite_box.visible = false
 	enemy_sprite_box.visible = false
 	player_hud_panel.visible = false
@@ -5931,10 +5969,22 @@ func _show_team_preview_layers() -> void:
 
 func _hide_team_preview_layers() -> void:
 	_clear_team_preview_visuals()
-	player_sprite_box.visible = true
-	enemy_sprite_box.visible = true
 	player_hud_panel.visible = true
 	enemy_hud_panel.visible = true
+
+func _prepare_team_preview_lead_summon_transition() -> void:
+	_clear_team_preview_visuals()
+	player_sprite_box.visible = false
+	enemy_sprite_box.visible = false
+
+	# process_frame resumes before the viewport has necessarily drawn. Waiting for
+	# frame_post_draw guarantees one complete frame with no preview Pokemon before
+	# the Pokeball throw signal, release sound, or cry can begin.
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+
+	# Close over any delayed preview redraw that arrived during the frame barrier.
+	_clear_team_preview_visuals()
 
 func _clear_team_preview_visuals() -> void:
 	if player_team_preview_layer.has_method("clear"):
@@ -8804,6 +8854,18 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 		PvpBattleRealtimeService.action_response_received.disconnect(listener)
 
 	_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
+	# The legacy local stack can commit a forfeit while its correlated websocket
+	# response is lost among the terminal broadcasts. Confirm that outcome from
+	# the canonical room before showing a misleading timeout or unlocking battle
+	# input. This is also a safe recovery for transient response loss in production.
+	if action == "forfeit":
+		var reconciled_forfeit := await _reconcile_pvp_battle_from_room("pvp_forfeit_timeout_recovery")
+		if reconciled_forfeit and battle_state.is_battle_ended():
+			return {
+				"success": true,
+				"terminalConfirmed": true,
+				"terminalRecovered": true,
+			}
 	return {
 		"success": false,
 		"error": "PvP realtime response timed out.",
@@ -9705,22 +9767,11 @@ func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 	if response.is_empty():
 		return
 
-	if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_end", not action_flow._response_has_deferred_display_event(response)):
-		_finish_battle({
-			"reason": "forfeit",
-			"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
-		})
-		return
-
-	var finish_context := {
-		"reason": "forfeit",
-		"forfeitingPlayerId": _get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
-	}
-	if await _finish_if_battle_ended(finish_context):
-		return
-
-	finish_context["winner"] = battle_state.get_winner()
-	_finish_battle(finish_context)
+	_finish_confirmed_pvp_forfeit(
+		response,
+		_get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
+		"pvp_forfeit_end"
+	)
 
 func _finish_pvp_realtime_battle_from_snapshot(message: Dictionary) -> void:
 	if battle_finished:

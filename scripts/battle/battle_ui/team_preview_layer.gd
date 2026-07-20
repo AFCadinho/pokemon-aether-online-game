@@ -28,10 +28,15 @@ func show_team(team_data: Array, side: String) -> void:
 
 
 func clear() -> void:
+	# Hide the owner before clearing individual sprites. This prevents a cached
+	# SubViewport frame or a late lead transition from drawing preview Pokemon
+	# underneath the Pokeball summon.
+	visible = false
 	_cache_slot_sprites()
 	for sprite in slot_sprites:
 		sprite.stop()
 		sprite.visible = false
+		sprite.sprite_frames = null
 
 
 func _cache_slot_sprites() -> void:

@@ -54,7 +54,7 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			if heal_effect_key != "":
 				effect_keys.append(heal_effect_key)
 		"statChange":
-			var stat_effect_key: String = _get_stat_change_effect_animation_key(int(event_data.get("amount", 0)))
+			var stat_effect_key: String = _get_stat_change_effect_animation_key(event_text_formatter.get_stat_change_amount(event_data))
 			if stat_effect_key != "":
 				effect_keys.append(stat_effect_key)
 		"status":
@@ -240,7 +240,7 @@ func build(event_data: Dictionary) -> Dictionary:
 		"statChange":
 			recent_move_event = false
 			presentation["stat_change_target_ident"] = str(event_data.get("target", ""))
-			presentation["stat_change_amount"] = int(event_data.get("amount", 0))
+			presentation["stat_change_amount"] = event_text_formatter.get_stat_change_amount(event_data)
 			presentation["effect_animation_key"] = _get_stat_change_effect_animation_key(int(presentation["stat_change_amount"]))
 			presentation["effect_animation_target_ident"] = str(presentation["stat_change_target_ident"])
 			var is_ability_detail := recent_ability_event or event_text_formatter.is_stat_change_from_ability(event_data)

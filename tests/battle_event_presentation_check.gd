@@ -15,6 +15,8 @@ func _init() -> void:
 	_check_damage_after_hazard_logs_when_conditions_repeat()
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
 	_check_booster_energy_quark_drive_messages()
+	_check_future_sight_lifecycle_messages()
+	_check_evasion_drop_uses_normalized_negative_amount()
 	_check_paralysis_status_event_uses_status_effect_animation()
 	_check_paralysis_cant_event_replays_status_effect_animation()
 	_check_freeze_status_event_uses_status_effect_animation()
@@ -179,6 +181,42 @@ func _check_booster_energy_quark_drive_messages() -> void:
 	_check_equal(str(ability_result.get("log_message", "")), "Iron Valiant's Quark Drive boosted its Speed!", "Quark Drive lead stat boost logs")
 	_check_equal(str(ability_result.get("battle_message", "")), "Iron Valiant's Quark Drive boosted its Speed!", "Quark Drive lead stat boost battle text")
 	_check_equal(str(ability_result.get("ability_boost_target_ident", "")), "p1a: Iron Valiant", "Quark Drive lead stat boost animates badge target")
+
+
+func _check_future_sight_lifecycle_messages() -> void:
+	var presentation = _make_presentation()
+	var start_result: Dictionary = presentation.build({
+		"type": "pokemonEffect",
+		"target": "p1a: Slowking",
+		"effect": "move: Future Sight",
+		"state": "start",
+	})
+	var hit_result: Dictionary = presentation.build({
+		"type": "pokemonEffect",
+		"target": "p2a: Iron Valiant",
+		"effect": "move: Future Sight",
+		"state": "end",
+	})
+
+	_check_equal(str(start_result.get("log_message", "")), "Slowking foresaw an attack!", "Future Sight setup is described as a delayed attack")
+	_check_equal(str(hit_result.get("log_message", "")), "The opposing Iron Valiant took the Future Sight attack!", "Future Sight resolution names the delayed hit")
+
+
+func _check_evasion_drop_uses_normalized_negative_amount() -> void:
+	var presentation = _make_presentation()
+	var event := {
+		"type": "statChange",
+		"target": "p1a: Ceruledge",
+		"stat": "evasion",
+		"direction": "down",
+		"stage": 1,
+	}
+	var preload_data: Dictionary = presentation.get_animation_preload_keys_for_event(event)
+	var result: Dictionary = presentation.build(event)
+
+	_check_equal(int(result.get("stat_change_amount", 0)), -1, "evasion drop retains its negative stage amount")
+	_check_equal(str(result.get("effect_animation_key", "")), "stat_down", "evasion drop uses the stat-down animation")
+	_check_equal((preload_data.get("effect_keys", []) as Array).has("stat_down"), true, "evasion drop preloads the stat-down effect")
 
 
 func _check_paralysis_status_event_uses_status_effect_animation() -> void:

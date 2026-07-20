@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PartySlotScript := preload("res://scripts/battle/battle_ui/party_slot.gd")
+const PartySlotScene := preload("res://scenes/battle/party_slot.tscn")
 
 var failed := false
 
@@ -30,6 +31,26 @@ func _init() -> void:
 	)
 
 	slot.free()
+
+	var visual_slot := PartySlotScene.instantiate()
+	visual_slot.icon_only_mode = true
+	root.add_child(visual_slot)
+	await process_frame
+	visual_slot.set_pokemon_data({
+		"species": "Pikachu",
+		"condition": "0 fnt",
+		"hp": 0,
+		"maxHp": 100,
+		"fainted": true,
+	})
+	var pokemon_icon := visual_slot.get_node("MarginContainer/HBoxContainer/PokemonIcon") as TextureRect
+	var faint_badge := visual_slot.get_node("MarginContainer/HBoxContainer/PokemonIcon/IconStatusBadge") as Label
+	_check_equal(faint_badge.text, "FNT", "fainted icon-only slot shows FNT text")
+	_check_equal(faint_badge.visible, true, "fainted icon-only slot shows its badge")
+	_check_equal(pokemon_icon.modulate, Color.WHITE, "FNT badge parent no longer passes a dark modulate to its children")
+	_check_equal(faint_badge.self_modulate, Color.WHITE, "FNT badge keeps its full text and pill brightness")
+	_check_equal(pokemon_icon.self_modulate.r < 0.2, true, "fainted Pokemon silhouette remains visibly dark")
+	visual_slot.queue_free()
 	quit(1 if failed else 0)
 
 

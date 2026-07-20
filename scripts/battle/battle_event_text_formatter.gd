@@ -502,6 +502,16 @@ func format_pokemon_effect_event(event: Dictionary) -> String:
 	if state == "activate" and _is_reflection_effect(raw_effect, effect):
 		return "%s's %s reflected the move!" % [target, effect]
 
+	# Showdown represents Future Sight's delayed lifecycle as a volatile start on
+	# the user followed by an end on the Pokemon that receives the attack. Those
+	# events describe an action, not a persistent condition on either Pokemon.
+	if _is_future_sight_effect(raw_effect):
+		match state:
+			"start":
+				return "%s foresaw an attack!" % target
+			"activate", "end":
+				return "%s took the Future Sight attack!" % target
+
 	var ability_stat_message := _format_ability_stat_pokemon_effect(target, raw_effect)
 	if ability_stat_message != "":
 		return ability_stat_message
@@ -579,6 +589,9 @@ func _is_reflection_effect(raw_effect: String, effect: String) -> bool:
 		(source_kind == "ability" and effect_key == "magicbounce")
 		or (source_kind == "move" and effect_key == "magiccoat")
 	)
+
+func _is_future_sight_effect(raw_effect: String) -> bool:
+	return _normalize_event_source(raw_effect).to_lower().replace(" ", "").replace("-", "") == "futuresight"
 
 func _is_ability_like_pokemon_effect(raw_effect: String, effect: String) -> bool:
 	var cleaned_raw: String = raw_effect.strip_edges()

@@ -225,7 +225,9 @@ func _set_status_icon(status: String) -> void:
 	status_icon.modulate = _get_status_modulate(status) if status_icon.visible else NORMAL_MODULATE
 
 func _apply_icon_only_condition_badge(status: String, is_fainted: bool) -> void:
-	pokemon_icon.modulate = ICON_FAINTED_MODULATE if icon_only_mode and is_fainted else NORMAL_MODULATE
+	# self_modulate darkens only the Pokemon silhouette. Using modulate here also
+	# darkens the child FNT badge, making white text and its red pill nearly black.
+	pokemon_icon.self_modulate = ICON_FAINTED_MODULATE if icon_only_mode and is_fainted else NORMAL_MODULATE
 	if not icon_only_mode:
 		icon_status_badge.visible = false
 		return
@@ -233,6 +235,7 @@ func _apply_icon_only_condition_badge(status: String, is_fainted: bool) -> void:
 	var normalized_status := status.strip_edges().to_lower()
 	icon_status_badge.text = "FNT" if is_fainted else _get_compact_status_text(normalized_status)
 	icon_status_badge.visible = is_fainted or icon_status_badge.text != ""
+	icon_status_badge.self_modulate = NORMAL_MODULATE
 	if not icon_status_badge.visible:
 		return
 
@@ -242,7 +245,7 @@ func _apply_icon_only_condition_badge(status: String, is_fainted: bool) -> void:
 	badge_style.border_width_top = 1
 	badge_style.border_width_right = 1
 	badge_style.border_width_bottom = 1
-	badge_style.border_color = Color("#ffd7de") if is_fainted else Color("#e8f4ff")
+	badge_style.border_color = Color("#fff1f4") if is_fainted else Color("#e8f4ff")
 	badge_style.corner_radius_top_left = 3
 	badge_style.corner_radius_top_right = 3
 	badge_style.corner_radius_bottom_left = 3
@@ -261,7 +264,7 @@ func _get_compact_status_text(status: String) -> String:
 
 func _get_condition_badge_color(status: String) -> Color:
 	match status:
-		"fnt": return Color("#c93652")
+		"fnt": return Color("#e64262")
 		"brn": return Color("#c94f24")
 		"par": return Color("#b58a16")
 		"slp": return Color("#6f63b6")
@@ -314,7 +317,7 @@ func set_empty() -> void:
 	shiny_badge.tooltip_text = ""
 	hp_bar.value = 0
 	pokemon_icon.texture = null
-	pokemon_icon.modulate = NORMAL_MODULATE
+	pokemon_icon.self_modulate = NORMAL_MODULATE
 	icon_status_badge.visible = false
 	icon_status_badge.text = ""
 	_set_status_icon("")
