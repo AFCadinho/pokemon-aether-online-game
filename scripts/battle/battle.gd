@@ -3299,6 +3299,10 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 				_rewind_party_slots_for_events(player_events)
 				if not await _render_pvp_event_batch(display_response, player_events, true, source):
 					return false
+				# The response can still contain already-rendered historical damage.
+				# Its presentation rewind must never survive the local forced-switch
+				# render path, otherwise a fainted party member appears healthy again.
+				_restore_pvp_authoritative_presentation(display_response)
 
 			if await _finish_if_battle_ended():
 				return true

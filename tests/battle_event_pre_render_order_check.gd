@@ -14,6 +14,7 @@ func _init() -> void:
 	_check_initial_setup_keeps_specific_form_species()
 	_check_team_preview_lead_selection_unlocks_party_grid()
 	_check_pvp_render_restores_canonical_party_state()
+	_check_local_force_switch_render_restores_canonical_party_state()
 	_check_authoritative_terminal_waits_for_render()
 	quit(1 if failed else 0)
 
@@ -243,6 +244,28 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 	_check_equal(restore_source.contains("_update_battle_status_panels()"), true, "canonical restore refreshes weather visuals and field timers")
 	_check_equal(restore_source.contains("_update_party_slots()"), true, "party rails refresh after canonical restore")
 	_check_equal(temporary_source.contains("target_is_fainted and not event_proves_alive"), true, "ambiguous switch presentation cannot revive a fainted target")
+
+
+func _check_local_force_switch_render_restores_canonical_party_state() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var process_index := source.find("func _process_pvp_choice_queue_entry(")
+	var process_next_index := source.find("\nfunc ", process_index + 1)
+	var process_source := source.substr(process_index, process_next_index - process_index)
+	var force_switch_index := process_source.find("if is_local_choice and was_force_switch:")
+	var regular_switch_index := process_source.find("\n\t\tif not skip_render", force_switch_index + 1)
+	var force_switch_source := process_source.substr(
+		force_switch_index,
+		regular_switch_index - force_switch_index
+	)
+
+	_check_equal(process_index >= 0, true, "PvP choice queue processor exists")
+	_check_equal(force_switch_index >= 0, true, "local forced-switch render path exists")
+	_check_equal(
+		force_switch_source.find("await _render_pvp_event_batch")
+			< force_switch_source.find("_restore_pvp_authoritative_presentation(display_response)"),
+		true,
+		"local forced-switch render restores canonical faint and HP state after historical rewinds"
+	)
 
 
 func _check_authoritative_terminal_waits_for_render() -> void:
