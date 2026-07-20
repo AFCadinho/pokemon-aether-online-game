@@ -35,11 +35,15 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 	format_id = str(response.get("formatId", ""))
 	players = response.get("players", {})
 	_remember_hp_fields_from_requests(requests)
-	var next_requests: Variant = response.get("requests", {})
-	if next_requests is Dictionary:
-		var next_requests_dictionary: Dictionary = next_requests as Dictionary
+	var next_requests_value: Variant = response.get("requests", {})
+	if next_requests_value is Dictionary:
+		# Presentation rewinds temporarily mutate request HP. Keep that state local to
+		# BattleState so the canonical response can still restore the server truth.
+		var next_requests_dictionary: Dictionary = (next_requests_value as Dictionary).duplicate(true)
 		_preserve_missing_hp_fields_in_requests(next_requests_dictionary)
-	requests = next_requests
+		requests = next_requests_dictionary
+	else:
+		requests = next_requests_value
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response after requests assignment")
 	battle_log = response.get("log", [])

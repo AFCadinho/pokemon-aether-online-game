@@ -438,6 +438,15 @@ static func should_apply_terminal_action_immediately(message: Dictionary, local_
 	return message_action in ["forfeit", "disconnect", "abandon"] and message_player_id != ""
 
 
+static func should_defer_authoritative_terminal_until_render(
+	mechanical_state_ended: bool,
+	queue_is_rendering: bool,
+	current_batch_id: String,
+	has_pending_updates: bool
+) -> bool:
+	return not mechanical_state_ended or queue_is_rendering or current_batch_id.strip_edges() != "" or has_pending_updates
+
+
 static func is_unrequested_local_team_preview_lead(message: Dictionary, local_player_id: String) -> bool:
 	# Human command responses are correlated by requestId and must remain available
 	# to the action waiter. Server-selected timeout leads are broadcasts without one.

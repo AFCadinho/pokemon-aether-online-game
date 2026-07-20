@@ -49,6 +49,7 @@ var pvp_pending_team_preview_completion: Dictionary = {}
 var pvp_team_preview_recovery_requested := false
 var pvp_realtime_activity_seq := 0
 var pvp_pending_reconciliation_snapshot: Dictionary = {}
+var pvp_pending_authoritative_terminal: Dictionary = {}
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_idle_realtime_drain_pending := false
 var pvp_idle_wait_recovery_active := false
@@ -2916,6 +2917,7 @@ func _finish_battle(result: Dictionary) -> void:
 	if battle_finished:
 		return
 
+	pvp_pending_authoritative_terminal.clear()
 	var allows_gameplay_persistence := PvpBattleRealtimeService.allows_gameplay_persistence_for_terminal(result)
 	_warn_if_pvp_finish_has_pending_render_work(result)
 	if allows_gameplay_persistence:
@@ -3481,15 +3483,15 @@ func _sync_player_save_party_status_from_battle_state() -> void:
 			saved_pokemon.status = next_status
 			changed = true
 
-			var hp_snapshot: Dictionary = _get_hp_snapshot_from_battle_pokemon_data(team_pokemon)
-			if not hp_snapshot.is_empty():
-				var next_max_hp: int = max(int(hp_snapshot.get("max_hp", saved_pokemon.max_hp)), 1)
-				var next_current_hp: int = clampi(int(hp_snapshot.get("current_hp", saved_pokemon.current_hp)), 0, next_max_hp)
-				if saved_pokemon.max_hp != next_max_hp or saved_pokemon.current_hp != next_current_hp or not saved_pokemon.has_saved_hp_state:
-					saved_pokemon.max_hp = next_max_hp
-					saved_pokemon.current_hp = next_current_hp
-					saved_pokemon.has_saved_hp_state = true
-					changed = true
+		var hp_snapshot: Dictionary = _get_hp_snapshot_from_battle_pokemon_data(team_pokemon)
+		if not hp_snapshot.is_empty():
+			var next_max_hp: int = max(int(hp_snapshot.get("max_hp", saved_pokemon.max_hp)), 1)
+			var next_current_hp: int = clampi(int(hp_snapshot.get("current_hp", saved_pokemon.current_hp)), 0, next_max_hp)
+			if saved_pokemon.max_hp != next_max_hp or saved_pokemon.current_hp != next_current_hp or not saved_pokemon.has_saved_hp_state:
+				saved_pokemon.max_hp = next_max_hp
+				saved_pokemon.current_hp = next_current_hp
+				saved_pokemon.has_saved_hp_state = true
+				changed = true
 
 	if changed:
 		PlayerSave.party_changed.emit()
@@ -8029,6 +8031,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	pvp_team_preview_recovery_requested = false
 	pvp_realtime_activity_seq = 0
 	pvp_pending_reconciliation_snapshot.clear()
+	pvp_pending_authoritative_terminal.clear()
 	pvp_retrying_reconciliation_snapshot = false
 	pvp_idle_realtime_drain_pending = false
 	pvp_idle_wait_recovery_active = false
@@ -8061,6 +8064,7 @@ func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
 	if bool(completion.get("success", false)):
 		_send_pvp_render_ack(completion)
 		_retry_pending_pvp_reconciliation_snapshot.call_deferred()
+		_retry_pending_pvp_authoritative_terminal.call_deferred()
 
 func _send_pvp_render_ack(completion: Dictionary) -> void:
 	if not _is_pvp_battle():
@@ -9519,6 +9523,17 @@ func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
 func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 	if battle_finished:
 		return
+	if PvpBattleRealtimeService.should_defer_authoritative_terminal_until_render(
+		battle_state.is_battle_ended(),
+		pvp_event_queue.is_rendering,
+		str(pvp_event_queue.current_event_batch_id),
+		pvp_event_queue.has_pending()
+			or not pvp_realtime_updates.is_empty()
+			or not pvp_realtime_deferred_updates.is_empty()
+	):
+		pvp_pending_authoritative_terminal = message.duplicate(true)
+		return
+	pvp_pending_authoritative_terminal.clear()
 	var winner_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("winnerSide", "")))
 	var loser_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("loserSide", "")))
 	var end_reason := str(message.get("endReason", "ended")).strip_edges().to_lower()
@@ -9529,6 +9544,12 @@ func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 		"battleEventSeq": message.get("battleEventSeq", -1),
 		"terminalSource": str(message.get("source", "DURABLE_BATTLE_EVENT")),
 	})
+
+
+func _retry_pending_pvp_authoritative_terminal() -> void:
+	if battle_finished or pvp_pending_authoritative_terminal.is_empty():
+		return
+	_finish_pvp_authoritative_terminal(pvp_pending_authoritative_terminal.duplicate(true))
 
 func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 	if battle_finished:
@@ -10220,6 +10241,9 @@ func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:
 		return
 	var canonical_response := pvp_response_order.latest_canonical_snapshot_for(response)
 	battle_state.load_from_api_response(canonical_response, false)
+	_sync_player_save_party_status_from_battle_state()
+	_sync_presentation_field_from_battle_state()
+	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_party_slots()
 

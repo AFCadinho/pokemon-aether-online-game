@@ -10,6 +10,7 @@ var failed := false
 func _init() -> void:
 	_check_same_turn_flip_turn_projection_cannot_replace_faint()
 	_check_canonical_restore_does_not_replay_full_switch_history()
+	_check_deferred_rewind_does_not_mutate_canonical_response()
 	_check_newer_same_event_request_revision_is_retained()
 	_check_battle_controller_uses_order_guard()
 	quit(1 if failed else 0)
@@ -107,6 +108,52 @@ func _check_canonical_restore_does_not_replay_full_switch_history() -> void:
 	_check_equal(str(restored_active.get("species", "")), "Cinderace", "canonical fainted active remains Cinderace")
 	_check_equal(bool(restored_active.get("fainted", false)), true, "canonical Cinderace remains fainted")
 	_check_equal(bool((state.get_player_team("p2")[1] as Dictionary).get("active", true)), false, "old Alomomola switch is not replayed")
+
+
+func _check_deferred_rewind_does_not_mutate_canonical_response() -> void:
+	var response := _response(
+		24,
+		8,
+		6,
+		51,
+		"Cinderace",
+		true,
+		true,
+		[
+			{
+				"type": "damage", "target": "p2a: Cinderace",
+				"previousCondition": "100/100", "condition": "0 fnt",
+				"previousHp": 100, "hp": 0, "maxHp": 100,
+				"pokemonKey": "p2:slot:1", "metadataSlot": 1,
+				"targetRef": {"pokemonKey": "p2:slot:1", "metadataSlot": 1},
+			},
+			{
+				"type": "faint", "target": "p2a: Cinderace", "condition": "0 fnt",
+				"pokemonKey": "p2:slot:1", "metadataSlot": 1,
+				"targetRef": {"pokemonKey": "p2:slot:1", "metadataSlot": 1},
+			},
+		]
+	)
+	var team: Array = (((response["requests"] as Dictionary)["p2"] as Dictionary)["side"] as Dictionary)["pokemon"]
+	(team[0] as Dictionary)["pokemonKey"] = "p2:slot:1"
+	(team[0] as Dictionary)["metadataSlot"] = 1
+	(team[1] as Dictionary)["pokemonKey"] = "p2:slot:2"
+	(team[1] as Dictionary)["metadataSlot"] = 2
+
+	var presentation_state = BattleStateScript.new()
+	presentation_state.load_from_api_response(response, false)
+	var rewound_active := presentation_state.get_active_player_pokemon("p2")
+	_check_equal(str(rewound_active.get("condition", "")), "100/100", "presentation state rewinds the deferred faint before animation")
+
+	var canonical_active := _active_pokemon(response)
+	_check_equal(str(canonical_active.get("condition", "")), "0 fnt", "deferred rewind cannot mutate the response condition")
+	_check_equal(bool(canonical_active.get("fainted", false)), true, "deferred rewind cannot revive the canonical response")
+
+	var order = BattleResponseOrderScript.new()
+	_check(order.remember(response), "unmodified canonical response is remembered after presentation rewind")
+	var restored_state = BattleStateScript.new()
+	restored_state.load_from_api_response(order.latest_canonical_snapshot_for(response), false)
+	_check_equal(bool(restored_state.get_active_player_pokemon("p2").get("fainted", false)), true, "post-animation restore keeps the canonical faint")
 
 
 func _check_newer_same_event_request_revision_is_retained() -> void:

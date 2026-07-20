@@ -253,6 +253,26 @@ func _init() -> void:
 		false,
 		"local manual forfeit still waits for its direct response path"
 	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", false),
+		true,
+		"normal authoritative terminal waits for the ended mechanical projection"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(true, true, "batch-final", false),
+		true,
+		"normal authoritative terminal waits for the active final render batch"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(true, false, "", true),
+		true,
+		"normal authoritative terminal waits for queued render work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(true, false, "", false),
+		false,
+		"normal authoritative terminal can finish after the final projection and queue are complete"
+	)
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner(null), "", "null terminal winner is treated as absent")
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("None"), "", "Python None terminal winner is treated as absent")
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("Admin"), "Admin", "real terminal winner name is preserved")

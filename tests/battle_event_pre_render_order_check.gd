@@ -14,6 +14,7 @@ func _init() -> void:
 	_check_initial_setup_keeps_specific_form_species()
 	_check_team_preview_lead_selection_unlocks_party_grid()
 	_check_pvp_render_restores_canonical_party_state()
+	_check_authoritative_terminal_waits_for_render()
 	quit(1 if failed else 0)
 
 
@@ -237,8 +238,26 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 	_check_equal(restore_index >= 0, true, "canonical PvP presentation restore exists")
 	_check_equal(restore_source.contains("pvp_response_order.latest_canonical_snapshot_for(response)"), true, "restore selects the newest event-free canonical PvP projection")
 	_check_equal(restore_source.contains("battle_state.load_from_api_response(canonical_response, false)"), true, "canonical snapshot replaces temporary BattleState changes without replaying history")
+	_check_equal(restore_source.contains("_sync_player_save_party_status_from_battle_state()"), true, "canonical restore synchronizes local party HP and faint state")
+	_check_equal(restore_source.contains("_sync_presentation_field_from_battle_state()"), true, "canonical restore synchronizes weather and field state")
+	_check_equal(restore_source.contains("_update_battle_status_panels()"), true, "canonical restore refreshes weather visuals and field timers")
 	_check_equal(restore_source.contains("_update_party_slots()"), true, "party rails refresh after canonical restore")
 	_check_equal(temporary_source.contains("target_is_fainted and not event_proves_alive"), true, "ambiguous switch presentation cannot revive a fainted target")
+
+
+func _check_authoritative_terminal_waits_for_render() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var finish_index := source.find("func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:")
+	var finish_next_index := source.find("\nfunc ", finish_index + 1)
+	var finish_source := source.substr(finish_index, finish_next_index - finish_index)
+	var callback_index := source.find("func _on_pvp_render_batch_completed(completion: Dictionary) -> void:")
+	var callback_next_index := source.find("\nfunc ", callback_index + 1)
+	var callback_source := source.substr(callback_index, callback_next_index - callback_index)
+
+	_check_equal(finish_index >= 0, true, "authoritative terminal handler exists")
+	_check_equal(finish_source.contains("should_defer_authoritative_terminal_until_render"), true, "normal terminal waits while canonical render work is unfinished")
+	_check_equal(finish_source.contains("pvp_pending_authoritative_terminal = message.duplicate(true)"), true, "early terminal is retained for post-render completion")
+	_check_equal(callback_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "render completion retries the retained terminal")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
