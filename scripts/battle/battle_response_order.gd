@@ -70,6 +70,25 @@ func latest_canonical_snapshot_for(response: Dictionary) -> Dictionary:
 	return snapshot
 
 
+func canonical_snapshot_for_render_cursor(response: Dictionary, rendered_event_seq: int) -> Dictionary:
+	var snapshot := latest_projection_for(response)
+	var snapshot_event_seq := _response_event_seq(snapshot)
+	var response_event_seq := _response_event_seq(response)
+	# Delivery may provide a newer canonical projection before an older required
+	# render batch. Presentation must only advance as far as the rendered cursor;
+	# the batch's own post-event projection is the correct fallback in that case.
+	if (
+		rendered_event_seq >= 0
+		and snapshot_event_seq > rendered_event_seq
+		and response_event_seq >= 0
+		and response_event_seq <= rendered_event_seq
+	):
+		snapshot = response.duplicate(true)
+	snapshot["events"] = []
+	snapshot["eventBatches"] = []
+	return snapshot
+
+
 func merge_latest_projection_with_events(event_response: Dictionary) -> Dictionary:
 	var merged := latest_projection_for(event_response)
 	for key in EVENT_PAYLOAD_KEYS:

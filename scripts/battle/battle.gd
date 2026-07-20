@@ -66,6 +66,8 @@ var pvp_rendered_event_count := 0
 var pvp_allow_setup_animation := false
 var pvp_victory_message_added := false
 var pvp_switch_confirmation_active := false
+var pending_battle_end_result: Dictionary = {}
+var battle_end_signal_emitted := false
 var last_rendered_event_seq := -1
 var rendered_non_pvp_event_keys: Dictionary = {}
 var pvp_event_queue := preload("res://scripts/battle/battle_event_queue.gd").new()
@@ -241,6 +243,11 @@ var active_enemy_pokemon: Pokemon
 @onready var field_timers_panel: FieldTimersPanel = %FieldTimers
 @onready var current_action_panel: CurrentActionPanel = %CurrentActionPanel
 @onready var forfeit_confirm_dialog: Control = %ForfeitConfirmDialog
+@onready var battle_result_overlay: Control = %BattleResultOverlay
+@onready var battle_result_title: Label = %BattleResultTitle
+@onready var battle_result_summary: Label = %BattleResultSummary
+@onready var battle_result_reason: Label = %BattleResultReason
+@onready var battle_result_continue_button: Button = %BattleResultContinueButton
 
 # HTTP Request
 @onready var battle_request: HTTPRequest = $BattleRequest
@@ -288,6 +295,8 @@ func _ready() -> void:
 	_connect_move_hover_signals()
 	_connect_party_hover_signals()
 	_connect_forfeit_confirm_dialog_signals()
+	if not battle_result_continue_button.pressed.is_connected(_on_battle_result_continue_pressed):
+		battle_result_continue_button.pressed.connect(_on_battle_result_continue_pressed)
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
@@ -2939,6 +2948,86 @@ func _finish_battle(result: Dictionary) -> void:
 	if not skip_party_battle_sync:
 		_sync_player_save_from_battle_state()
 		PlayerPartyStateService.save_current_battle_party_state_deferred()
+	if _should_present_pvp_battle_result(result):
+		_show_pvp_battle_result(result)
+		return
+	_emit_battle_ended(result)
+
+
+func _should_present_pvp_battle_result(result: Dictionary) -> bool:
+	if not _is_pvp_battle():
+		return false
+	var reason := str(result.get("reason", "")).strip_edges().to_lower()
+	return (
+		bool(result.get("noContest", false))
+		or str(result.get("winner", "")).strip_edges() != ""
+		or reason in ["win", "ended", "battle_end", "forfeit", "timeout", "disconnect"]
+	)
+
+
+func _show_pvp_battle_result(result: Dictionary) -> void:
+	pending_battle_end_result = result.duplicate(true)
+	_set_battle_input_locked(true)
+	moves_grid.visible = false
+	action_buttons.visible = false
+	mechanics_panel.visible = false
+
+	var is_no_contest := bool(result.get("noContest", false))
+	var winner_side := PvpBattleRealtimeService.normalize_terminal_winner(result.get("winner", battle_state.get_winner()))
+	var local_won := winner_side == _get_local_state_player_id()
+	if is_no_contest:
+		battle_result_title.text = "No Contest"
+		battle_result_title.modulate = Color("f5df9a")
+	elif local_won:
+		battle_result_title.text = "Victory"
+		battle_result_title.modulate = Color("65e38b")
+	else:
+		battle_result_title.text = "Defeat"
+		battle_result_title.modulate = Color("ff7a7a")
+
+	var winner_name := _resolve_pvp_winner_name(result)
+	var loser_name := _resolve_pvp_loser_name(result, winner_name)
+	if is_no_contest:
+		battle_result_summary.text = "The battle ended without a winner."
+	elif winner_name != "" and loser_name != "":
+		battle_result_summary.text = "%s defeated %s." % [winner_name, loser_name]
+	elif winner_name != "":
+		battle_result_summary.text = "%s won the battle." % winner_name
+	else:
+		battle_result_summary.text = "The battle has ended."
+
+	var reason := str(result.get("reason", "")).strip_edges().to_lower()
+	battle_result_reason.text = _format_battle_result_reason(reason)
+	battle_result_reason.visible = battle_result_reason.text != ""
+	battle_result_overlay.visible = true
+	battle_result_overlay.move_to_front()
+	battle_result_continue_button.grab_focus.call_deferred()
+
+
+func _format_battle_result_reason(reason: String) -> String:
+	match reason:
+		"forfeit":
+			return "Battle ended by forfeit"
+		"timeout":
+			return "Battle ended on time"
+		"disconnect":
+			return "Battle ended by disconnect"
+		"infrastructure_no_contest":
+			return "Battle authority was lost"
+		_:
+			return ""
+
+
+func _on_battle_result_continue_pressed() -> void:
+	battle_result_overlay.visible = false
+	_emit_battle_ended(pending_battle_end_result)
+
+
+func _emit_battle_ended(result: Dictionary) -> void:
+	if battle_end_signal_emitted:
+		return
+	battle_end_signal_emitted = true
+	pending_battle_end_result.clear()
 	battle_ended.emit(result)
 
 
@@ -3091,23 +3180,37 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		)
 		return true
 
-	var success: bool = action_flow.apply_response(response, apply_event_conditions)
+	var defer_state_load := _should_defer_pvp_canonical_state_until_render(display_response)
+	var success: bool = action_flow.apply_response(response, apply_event_conditions, not defer_state_load)
 	if success:
 		if _is_pvp_battle():
 			pvp_response_order.remember(display_response)
 		_update_pvp_presentation_schedule(response)
-		_apply_party_state_from_api_response(response)
-		_sync_player_save_party_status_from_battle_state()
-		_remember_active_player_party_moves()
-		_prewarm_current_battle_move_animations()
-		_prewarm_current_battle_mega_assets()
+		if not defer_state_load:
+			_apply_party_state_from_api_response(response)
+			_sync_player_save_party_status_from_battle_state()
+			_remember_active_player_party_moves()
+			_prewarm_current_battle_move_animations()
+			_prewarm_current_battle_mega_assets()
 		_update_pvp_phase_contract_from_response(response, source)
 		_mark_pvp_response_applied(response)
-		if _should_sync_presentation_field_from_response(response, source):
+		if not defer_state_load and _should_sync_presentation_field_from_response(response, source):
 			_sync_presentation_field_from_battle_state()
 		_refresh_damage_calc_results()
 
 	return success
+
+func _should_defer_pvp_canonical_state_until_render(response: Dictionary) -> bool:
+	if not _is_pvp_battle() or battle_state.battle_id == "":
+		return false
+	# Team Preview and initial lead setup establish the first presentation state
+	# before an authoritative render cursor exists.
+	if pvp_event_queue.last_rendered_seq < 0:
+		return false
+	var response_event_seq := _get_pvp_response_event_seq_end(response)
+	if response_event_seq > pvp_event_queue.last_rendered_seq:
+		return true
+	return _response_has_renderable_battle_events(response)
 
 func _should_sync_presentation_field_from_response(response: Dictionary, source: String = "") -> bool:
 	if source.begins_with("pvp_snapshot"):
@@ -3251,9 +3354,9 @@ func _drain_pvp_event_queue() -> bool:
 			source,
 			str(success),
 			str(skip_render),
-			str(_should_process_pvp_choice_queue_entry(source, metadata)),
+			str(_should_process_pvp_choice_queue_entry(queue_response, source, metadata)),
 		])
-		if success and _should_process_pvp_choice_queue_entry(source, metadata):
+		if success and _should_process_pvp_choice_queue_entry(queue_response, source, metadata):
 			var entry_metadata: Dictionary = {}
 			if metadata is Dictionary:
 				entry_metadata = metadata as Dictionary
@@ -3267,8 +3370,10 @@ func _drain_pvp_event_queue() -> bool:
 	pvp_event_queue.is_rendering = false
 	return all_success
 
-func _should_process_pvp_choice_queue_entry(source: String, metadata: Variant) -> bool:
+func _should_process_pvp_choice_queue_entry(response: Dictionary, source: String, metadata: Variant) -> bool:
 	if metadata is Dictionary and bool((metadata as Dictionary).get("is_local_choice", false)):
+		return true
+	if _is_authoritative_pvp_render_batch_response(response):
 		return true
 	return source in ["pvp_choose_move", "pvp_choose_switch"]
 
@@ -3279,8 +3384,8 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 	var pending_player_choice_events_value: Variant = metadata.get("pending_player_choice_events", [])
 	var pending_player_choice_events: Array = pending_player_choice_events_value as Array if pending_player_choice_events_value is Array else []
 
-	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
-	display_response = pvp_response_order.merge_latest_projection_with_events(display_response)
+	var batch_display_response: Dictionary = action_flow.map_response_for_local_player(response)
+	var display_response := pvp_response_order.merge_latest_projection_with_events(batch_display_response)
 	pending_player_choice_events = _get_pending_player_choice_events(display_response, pending_player_choice_events)
 
 	if choice_type == "switch":
@@ -3302,7 +3407,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 				# The response can still contain already-rendered historical damage.
 				# Its presentation rewind must never survive the local forced-switch
 				# render path, otherwise a fainted party member appears healthy again.
-				_restore_pvp_authoritative_presentation(display_response)
+				_restore_pvp_authoritative_presentation(batch_display_response)
 
 			if await _finish_if_battle_ended():
 				return true
@@ -3338,7 +3443,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 						"source=%s batch=%s" % [source, pvp_event_queue.get_response_event_batch_id(response)]
 					)
 				return true
-			if not await _render_pvp_opponent_response(display_response, {}, [], source):
+			if not await _render_pvp_opponent_response(batch_display_response, {}, [], source):
 				return false
 			await _hold_opponent_response_message()
 		elif is_local_choice:
@@ -3380,7 +3485,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 					"source=%s batch=%s" % [source, pvp_event_queue.get_response_event_batch_id(response)]
 				)
 			return true
-		if not await _render_pvp_opponent_response(display_response, {}, pending_player_choice_events, source):
+		if not await _render_pvp_opponent_response(batch_display_response, {}, pending_player_choice_events, source):
 			return false
 		await _hold_opponent_response_message()
 	elif is_local_choice:
@@ -4954,6 +5059,9 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_response_order.reset()
+	pending_battle_end_result.clear()
+	battle_end_signal_emitted = false
+	battle_result_overlay.visible = false
 	last_rendered_event_seq = -1
 	rendered_non_pvp_event_keys.clear()
 	active_player_pokemon = player_pokemon
@@ -6333,7 +6441,11 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			])
 
 	_remember_rendered_non_pvp_event_keys(ordered_events)
-	_sync_presentation_field_from_battle_state()
+	# PvP presentation advances through ordered fieldEffect events. Replacing it
+	# with a canonical projection here can erase Light Screen or weather before
+	# the render cursor reaches the projection that ended it.
+	if not _is_pvp_battle():
+		_sync_presentation_field_from_battle_state()
 	_prune_inactive_field_condition_ability_modifiers(_get_display_field_effects())
 	_update_battle_status_panels()
 	pending_status_condition_overlay_players.clear()
@@ -9625,7 +9737,8 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 		return false
 	if realtime_message_kind == "snapshot":
 		return await _apply_pvp_realtime_snapshot_when_safe(message, mapped_update)
-	if _is_stale_pvp_realtime_response(mapped_update):
+	var is_required_render_batch := _is_unrendered_authoritative_pvp_render_batch_response(mapped_update)
+	if not is_required_render_batch and _is_stale_pvp_realtime_response(mapped_update):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
 				"Skipping stale PvP realtime payload apply",
@@ -9639,7 +9752,13 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 		return false
 
 	_warn_if_pvp_battle_update_event_gap(mapped_update)
-	if not await _enqueue_pvp_battle_response(update_payload, "pvp_realtime_update"):
+	var queue_source := "pvp_realtime_update"
+	var queue_metadata: Dictionary = {}
+	var message_action := str(message.get("action", "")).strip_edges().to_lower()
+	if is_required_render_batch and message_action in ["choose_move", "choose_switch"]:
+		queue_source = "pvp_%s" % message_action
+		queue_metadata["choice_type"] = "switch" if message_action == "choose_switch" else "move"
+	if not await _enqueue_pvp_battle_response(update_payload, queue_source, true, queue_metadata):
 		return false
 
 	return true
@@ -9661,19 +9780,6 @@ func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: 
 	if _is_initial_pvp_snapshot(message, mapped_update):
 		pvp_pending_reconciliation_snapshot.clear()
 		return _apply_pvp_snapshot_reconciliation(message, mapped_update, "pvp_snapshot_bootstrap")
-
-	if _is_pvp_snapshot_recovery_bypass(mapped_update):
-		if DEBUG_PVP_REALTIME:
-			_log_pvp_realtime(
-				"Explicit ended/forfeit recovery path used",
-				"snapshotEventSeq=%d lastRenderedSeq=%d ended=%s" % [
-					snapshot_event_seq,
-					last_rendered_seq,
-					str(_pvp_response_state_ended(mapped_update)),
-				]
-			)
-		pvp_pending_reconciliation_snapshot.clear()
-		return _apply_pvp_snapshot_reconciliation(message, mapped_update, "pvp_snapshot_recovery")
 
 	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
 		_buffer_pvp_reconciliation_snapshot(message, mapped_update, snapshot_event_seq, last_rendered_seq)
@@ -9710,6 +9816,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 			)
 		return false
 
+	_preserve_terminal_presentation_requests(reconciliation)
 	battle_state.load_from_api_response(reconciliation, false)
 	pvp_response_order.remember(reconciliation)
 	_apply_party_state_from_api_response(reconciliation)
@@ -9841,9 +9948,6 @@ func _is_initial_pvp_snapshot(message: Dictionary, response: Dictionary) -> bool
 		return false
 	return true
 
-func _is_pvp_snapshot_recovery_bypass(response: Dictionary) -> bool:
-	return _pvp_response_state_ended(response)
-
 func _pvp_response_state_ended(response: Dictionary) -> bool:
 	var state_value: Variant = response.get("state", {})
 	return state_value is Dictionary and bool((state_value as Dictionary).get("ended", false))
@@ -9876,6 +9980,9 @@ func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:
 		if not snapshot_response.is_empty():
 			mapped_snapshot = action_flow.map_response_for_local_player(snapshot_response)
 		return _is_stale_pvp_snapshot_response(message, mapped_snapshot)
+	var render_response := _response_from_pvp_realtime_message(message)
+	if _is_unrendered_authoritative_pvp_render_batch_response(render_response):
+		return false
 
 	var server_seq := _get_pvp_message_server_seq(message)
 	if server_seq > 0 and server_seq <= pvp_last_applied_server_seq:
@@ -9886,6 +9993,12 @@ func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:
 		return false
 
 	return _is_stale_pvp_realtime_response(action_flow.map_response_for_local_player(response))
+
+func _is_unrendered_authoritative_pvp_render_batch_response(response: Dictionary) -> bool:
+	if not _is_authoritative_pvp_render_batch_response(response):
+		return false
+	var event_seq_end := _get_pvp_response_event_seq_end(response)
+	return event_seq_end >= 0 and event_seq_end > pvp_event_queue.last_rendered_seq
 
 func _is_stale_pvp_snapshot_response(message: Dictionary, response: Dictionary) -> bool:
 	if response.is_empty():
@@ -10221,9 +10334,10 @@ func _render_pvp_opponent_response(
 	pending_player_choice_events: Array = [],
 	source := "pvp_opponent_response"
 ) -> bool:
-	opponent_response = pvp_response_order.merge_latest_projection_with_events(opponent_response)
-	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
-	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
+	var batch_response := opponent_response.duplicate(true)
+	var render_response := pvp_response_order.merge_latest_projection_with_events(opponent_response)
+	var response_events: Array = _filter_incremental_non_pvp_response_events(render_response)
+	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, render_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
 	_debug_battle_presentation_order("pvp_opponent_response.events source=%s events=%s" % [
 		source,
@@ -10234,22 +10348,34 @@ func _render_pvp_opponent_response(
 	_update_battle_presentation_before_event_render(opponent_events)
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
-	var success := await _render_pvp_event_batch(opponent_response, opponent_events, true, source)
+	var success := await _render_pvp_event_batch(render_response, opponent_events, true, source)
 	defer_force_switch_active_hide = false
-	_restore_pvp_authoritative_presentation(opponent_response)
+	_restore_pvp_authoritative_presentation(batch_response)
 	_update_active_sprites()
 	return success
 
 func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:
 	if response.is_empty() or not bool(response.get("success", false)):
 		return
-	var canonical_response := pvp_response_order.latest_canonical_snapshot_for(response)
+	var canonical_response := pvp_response_order.canonical_snapshot_for_render_cursor(
+		response,
+		pvp_event_queue.last_rendered_seq
+	)
+	_preserve_terminal_presentation_requests(canonical_response)
 	battle_state.load_from_api_response(canonical_response, false)
 	_sync_player_save_party_status_from_battle_state()
 	_sync_presentation_field_from_battle_state()
 	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_party_slots()
+
+func _preserve_terminal_presentation_requests(response: Dictionary) -> void:
+	var state_value: Variant = response.get("state", {})
+	if not (state_value is Dictionary) or not bool((state_value as Dictionary).get("ended", false)):
+		return
+	# Ended Showdown requests can be empty. Preserve the event-applied party and
+	# active winner so the final move/faint remains visible behind the result UI.
+	response["requests"] = battle_state.requests.duplicate(true)
 
 func _render_opponent_response(
 	opponent_response: Dictionary,

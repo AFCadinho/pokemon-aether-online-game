@@ -15,6 +15,9 @@ func _init() -> void:
 	_check_team_preview_lead_selection_unlocks_party_grid()
 	_check_pvp_render_restores_canonical_party_state()
 	_check_local_force_switch_render_restores_canonical_party_state()
+	_check_pvp_state_and_field_wait_for_render_cursor()
+	_check_authoritative_render_batch_survives_transport_reordering()
+	_check_ended_snapshot_waits_for_final_render()
 	_check_authoritative_terminal_waits_for_render()
 	quit(1 if failed else 0)
 
@@ -232,12 +235,12 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 
 	_check_equal(render_index >= 0, true, "PvP opponent render function exists")
 	_check_equal(
-		render_source.find("await _render_pvp_event_batch") < render_source.find("_restore_pvp_authoritative_presentation(opponent_response)"),
+		render_source.find("await _render_pvp_event_batch") < render_source.find("_restore_pvp_authoritative_presentation(batch_response)"),
 		true,
 		"PvP render restores the canonical response after presentation rewinds"
 	)
 	_check_equal(restore_index >= 0, true, "canonical PvP presentation restore exists")
-	_check_equal(restore_source.contains("pvp_response_order.latest_canonical_snapshot_for(response)"), true, "restore selects the newest event-free canonical PvP projection")
+	_check_equal(restore_source.contains("pvp_response_order.canonical_snapshot_for_render_cursor("), true, "restore cannot select a canonical PvP projection ahead of the rendered cursor")
 	_check_equal(restore_source.contains("battle_state.load_from_api_response(canonical_response, false)"), true, "canonical snapshot replaces temporary BattleState changes without replaying history")
 	_check_equal(restore_source.contains("_sync_player_save_party_status_from_battle_state()"), true, "canonical restore synchronizes local party HP and faint state")
 	_check_equal(restore_source.contains("_sync_presentation_field_from_battle_state()"), true, "canonical restore synchronizes weather and field state")
@@ -262,10 +265,51 @@ func _check_local_force_switch_render_restores_canonical_party_state() -> void:
 	_check_equal(force_switch_index >= 0, true, "local forced-switch render path exists")
 	_check_equal(
 		force_switch_source.find("await _render_pvp_event_batch")
-			< force_switch_source.find("_restore_pvp_authoritative_presentation(display_response)"),
+			< force_switch_source.find("_restore_pvp_authoritative_presentation(batch_display_response)"),
 		true,
 		"local forced-switch render restores canonical faint and HP state after historical rewinds"
 	)
+
+
+func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var apply_index := source.find("func _apply_api_response(")
+	var apply_next_index := source.find("\nfunc ", apply_index + 1)
+	var apply_source := source.substr(apply_index, apply_next_index - apply_index)
+	var barrier_index := source.find("func _should_defer_pvp_canonical_state_until_render(")
+	var barrier_next_index := source.find("\nfunc ", barrier_index + 1)
+	var barrier_source := source.substr(barrier_index, barrier_next_index - barrier_index)
+	var render_index := source.find("func _render_battle_events(")
+	var render_next_index := source.find("\nfunc ", render_index + 1)
+	var render_source := source.substr(render_index, render_next_index - render_index)
+
+	_check_equal(apply_source.contains("_should_defer_pvp_canonical_state_until_render(display_response)"), true, "PvP state mutation is deferred while its events are unrendered")
+	_check_equal(apply_source.contains("action_flow.apply_response(response, apply_event_conditions, not defer_state_load)"), true, "action flow can retain the current presentation state until render")
+	_check_equal(barrier_source.contains("pvp_event_queue.last_rendered_seq < 0"), true, "Team Preview can establish its lead state before the first render cursor")
+	_check_equal(render_source.contains("if not _is_pvp_battle():\n\t\t_sync_presentation_field_from_battle_state()"), true, "PvP field effects are not overwritten before the render cursor advances")
+
+
+func _check_authoritative_render_batch_survives_transport_reordering() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var stale_index := source.find("func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:")
+	var stale_next_index := source.find("\nfunc ", stale_index + 1)
+	var stale_source := source.substr(stale_index, stale_next_index - stale_index)
+	var process_index := source.find("func _should_process_pvp_choice_queue_entry(")
+	var process_next_index := source.find("\nfunc ", process_index + 1)
+	var process_source := source.substr(process_index, process_next_index - process_index)
+
+	_check_equal(stale_source.contains("_is_unrendered_authoritative_pvp_render_batch_response(render_response)"), true, "required render batches bypass transport-sequence stale rejection")
+	_check_equal(process_source.contains("_is_authoritative_pvp_render_batch_response(response)"), true, "idle authoritative batches enter the animation processor")
+
+
+func _check_ended_snapshot_waits_for_final_render() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var snapshot_index := source.find("func _apply_pvp_realtime_snapshot_when_safe(")
+	var snapshot_next_index := source.find("\nfunc ", snapshot_index + 1)
+	var snapshot_source := source.substr(snapshot_index, snapshot_next_index - snapshot_index)
+
+	_check_equal(snapshot_source.contains("_is_pvp_snapshot_recovery_bypass"), false, "ended snapshots cannot bypass the final render cursor")
+	_check_equal(snapshot_source.contains("snapshot_event_seq > last_rendered_seq"), true, "ended snapshots buffer while final events are still ahead")
 
 
 func _check_authoritative_terminal_waits_for_render() -> void:

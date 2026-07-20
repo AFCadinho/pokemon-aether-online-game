@@ -1832,6 +1832,87 @@ texture_hover = ExtResource("38_8h6bs")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="BattleResultOverlay" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage"]
+unique_name_in_owner = true
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Backdrop" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.003921569, 0.007843138, 0.03137255, 0.76)
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResultPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer"]
+custom_minimum_size = Vector2(460, 260)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sgdsx")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 28
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="BattleResultTitle" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Victory"
+horizontal_alignment = 1
+
+[node name="BattleResultSummary" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.9254902, 0.972549, 1)
+theme_override_font_sizes/font_size = 20
+text = "Player defeated Opponent."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BattleResultReason" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+
+[node name="BattleResultContinueButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+text = "Continue"
+
 [node name="ActionsDock" type="Panel" parent="HBoxContainer/CenterColumn" unique_id=910737858]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 120)

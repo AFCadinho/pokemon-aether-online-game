@@ -21,7 +21,11 @@ func set_local_player_id(player_id: String) -> void:
 	local_player_id = "p2" if player_id == "p2" else "p1"
 
 
-func apply_response(response: Dictionary, apply_event_conditions: bool = true) -> bool:
+func apply_response(
+	response: Dictionary,
+	apply_event_conditions: bool = true,
+	load_battle_state: bool = true
+) -> bool:
 	if not bool(response.get("success", false)):
 		print("Battle API failed: ", response)
 		return false
@@ -30,7 +34,8 @@ func apply_response(response: Dictionary, apply_event_conditions: bool = true) -
 	if ability_response_handler.is_valid():
 		ability_response_handler.call(display_response)
 
-	battle_state.load_from_api_response(display_response, apply_event_conditions)
+	if load_battle_state:
+		battle_state.load_from_api_response(display_response, apply_event_conditions)
 	return true
 
 func map_response_for_local_player(response: Dictionary) -> Dictionary:
