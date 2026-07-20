@@ -94,7 +94,9 @@ func timer_consequences_enabled() -> bool:
 	return bool(operational_state.get("timerConsequencesEnabled", true))
 
 func apply_event_conditions(events: Array) -> void:
-	_apply_event_conditions_to_requests(events)
+	# During ordered presentation, a valid switch may precede a faint that is
+	# already reflected in the newer canonical request snapshot.
+	_apply_event_conditions_to_requests(events, true)
 
 func _preserve_missing_hp_fields_in_requests(next_requests: Dictionary) -> void:
 	if requests.is_empty() or next_requests.is_empty():
@@ -377,7 +379,7 @@ func get_player_request(player_id: String = "p1") -> Dictionary:
 func get_player_side(player_id: String = "p1") -> Dictionary:
 	return get_player_request(player_id).get("side", {})
 
-func _apply_event_conditions_to_requests(events_value: Variant) -> void:
+func _apply_event_conditions_to_requests(events_value: Variant, allow_historical_switch_to_fainted := false) -> void:
 	if not (events_value is Array):
 		return
 
@@ -388,7 +390,7 @@ func _apply_event_conditions_to_requests(events_value: Variant) -> void:
 		var event: Dictionary = event_value as Dictionary
 		var event_type := str(event.get("type", ""))
 		if event_type == "switch" or event_type == "drag":
-			_apply_switch_event_to_requests(event)
+			_apply_switch_event_to_requests(event, allow_historical_switch_to_fainted)
 			_clear_transform_event_from_requests(event)
 			continue
 
@@ -452,7 +454,7 @@ func _apply_status_event_to_requests(event: Dictionary) -> void:
 	if condition != "":
 		_apply_condition_fields(pokemon_data, condition)
 
-func _apply_switch_event_to_requests(event: Dictionary) -> void:
+func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_to_fainted := false) -> void:
 	var switch_ident := _get_switch_event_ident(event)
 	if switch_ident == "":
 		return
@@ -474,11 +476,11 @@ func _apply_switch_event_to_requests(event: Dictionary) -> void:
 	if target_index < 0 or target_index >= team.size():
 		return
 
-	# The request snapshot is newer than the response's render events. A past
-	# switch event (notably Pursuit intercepting a switch) must never revive a
-	# slot that the canonical snapshot already marks as fainted.
+	# A canonical response load must not let a past switch revive a slot that its
+	# newer request snapshot marks fainted. Ordered rendering explicitly opts in
+	# above so it can still present a legitimate switch followed by that faint.
 	var target_value: Variant = team[target_index]
-	if target_value is Dictionary:
+	if not allow_historical_switch_to_fainted and target_value is Dictionary:
 		var target_pokemon: Dictionary = target_value as Dictionary
 		var target_condition := str(target_pokemon.get("condition", "")).strip_edges().to_lower()
 		var target_hp := int(target_pokemon.get("hp", target_pokemon.get("currentHp", 1)))
