@@ -1,0 +1,30 @@
+extends SceneTree
+
+const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
+const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
+
+var failed := false
+
+
+func _init() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var scene_source := FileAccess.get_file_as_string(BATTLE_SCENE_PATH)
+	var finish_index := source.find("func _finish_battle(result: Dictionary) -> void:")
+	var finish_next_index := source.find("\nfunc ", finish_index + 1)
+	var finish_source := source.substr(finish_index, finish_next_index - finish_index)
+
+	_check(scene_source.contains('[node name="BattleResultOverlay" type="Control"'), "battle scene has a terminal result overlay")
+	_check(scene_source.contains('[node name="BattleResultContinueButton" type="Button"'), "result overlay has an explicit Continue action")
+	_check(finish_source.contains("_show_pvp_battle_result(result)"), "PvP completion presents the result before exiting")
+	_check(not finish_source.contains("battle_ended.emit(result)"), "PvP completion no longer destroys the battle scene immediately")
+	_check(source.contains("func _on_battle_result_continue_pressed() -> void:"), "Continue closes the result screen")
+	_check(source.contains("battle_result_title.text = \"Victory\""), "result screen supports a local victory")
+	_check(source.contains("battle_result_title.text = \"Defeat\""), "result screen supports a local defeat")
+	quit(1 if failed else 0)
+
+
+func _check(condition: bool, label: String) -> void:
+	if condition:
+		return
+	failed = true
+	push_error(label)

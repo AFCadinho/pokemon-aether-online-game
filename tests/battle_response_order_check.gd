@@ -12,6 +12,7 @@ func _init() -> void:
 	_check_canonical_restore_does_not_replay_full_switch_history()
 	_check_deferred_rewind_does_not_mutate_canonical_response()
 	_check_newer_same_event_request_revision_is_retained()
+	_check_render_cursor_rejects_future_canonical_projection()
 	_check_battle_controller_uses_order_guard()
 	quit(1 if failed else 0)
 
@@ -167,6 +168,34 @@ func _check_newer_same_event_request_revision_is_retained() -> void:
 	_check(order.is_stale(scheduled), "older same-event request revision is stale")
 
 
+func _check_render_cursor_rejects_future_canonical_projection() -> void:
+	var order = BattleResponseOrderScript.new()
+	var light_screen_start := _response(30, 10, 10, 70, "Cinderace", false, false, [{
+		"type": "fieldEffect",
+		"effect": "move: Light Screen",
+		"effectId": "lightscreen",
+		"state": "start",
+	}])
+	light_screen_start["field"] = {"effects": [{"effectId": "lightscreen"}]}
+	var future_screen_end := _response(36, 12, 12, 74, "Cinderace", false, false, [])
+	future_screen_end["field"] = {"effects": []}
+
+	_check(order.remember(light_screen_start), "screen-start projection is remembered")
+	_check(order.remember(future_screen_end), "future screen-end projection is remembered")
+	var at_start_cursor: Dictionary = order.canonical_snapshot_for_render_cursor(light_screen_start, 30)
+	_check_equal(
+		((at_start_cursor.get("field", {}) as Dictionary).get("effects", []) as Array).size(),
+		1,
+		"render cursor keeps Light Screen until its future end batch is rendered"
+	)
+	var at_end_cursor: Dictionary = order.canonical_snapshot_for_render_cursor(future_screen_end, 36)
+	_check_equal(
+		((at_end_cursor.get("field", {}) as Dictionary).get("effects", []) as Array).size(),
+		0,
+		"render cursor accepts the canonical Light Screen end at its own batch"
+	)
+
+
 func _check_battle_controller_uses_order_guard() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	var apply_start := source.find("func _apply_api_response(")
@@ -174,16 +203,16 @@ func _check_battle_controller_uses_order_guard() -> void:
 	var apply_source := source.substr(apply_start, apply_end - apply_start)
 	_check(
 		apply_source.find("pvp_response_order.is_stale(display_response)")
-			< apply_source.find("action_flow.apply_response(response, apply_event_conditions)"),
+			< apply_source.find("action_flow.apply_response(response, apply_event_conditions, not defer_state_load)"),
 		"stale canonical projection is rejected before mutating BattleState"
 	)
 	_check(
-		source.contains("pvp_response_order.merge_latest_projection_with_events(display_response)"),
+		source.contains("pvp_response_order.merge_latest_projection_with_events(batch_display_response)"),
 		"queued event payloads are combined with the newest canonical projection"
 	)
 	_check(
-		source.contains("pvp_response_order.latest_canonical_snapshot_for(response)"),
-		"post-animation restore selects a newest event-free canonical snapshot"
+		source.contains("pvp_response_order.canonical_snapshot_for_render_cursor("),
+		"post-animation restore selects an event-free canonical snapshot at the rendered cursor"
 	)
 	_check(
 		source.contains("pvp_response_order.render_batch_projection_for(response)"),
