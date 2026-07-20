@@ -16,9 +16,11 @@ func _init() -> void:
 	_check_pvp_render_restores_canonical_party_state()
 	_check_local_force_switch_render_restores_canonical_party_state()
 	_check_pvp_state_and_field_wait_for_render_cursor()
+	_check_pvp_restore_keeps_rendered_hp_and_field_events()
 	_check_authoritative_render_batch_survives_transport_reordering()
 	_check_ended_snapshot_waits_for_final_render()
 	_check_authoritative_terminal_waits_for_render()
+	_check_local_forfeit_terminal_unblocks_action_wait()
 	quit(1 if failed else 0)
 
 
@@ -184,6 +186,9 @@ func _check_team_preview_lead_selection_unlocks_party_grid() -> void:
 	var pvp_index := source.find("func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary:")
 	var pvp_next_index := source.find("\nfunc ", pvp_index + 1)
 	var pvp_source := source.substr(pvp_index, pvp_next_index - pvp_index)
+	var setup_index := source.find("func setup_pvp_battle_from_response(")
+	var setup_next_index := source.find("\nfunc ", setup_index + 1)
+	var setup_source := source.substr(setup_index, setup_next_index - setup_index)
 
 	_check_equal(trainer_index >= 0, true, "trainer team preview lead selection exists")
 	_check_equal(pvp_index >= 0, true, "PvP team preview lead selection exists")
@@ -219,6 +224,12 @@ func _check_team_preview_lead_selection_unlocks_party_grid() -> void:
 		true,
 		"PvP team preview unlocks input before waiting for party lead selection"
 	)
+	_check_equal(
+		setup_source.find("_clear_team_preview_visuals()") >= 0
+			and setup_source.find("_clear_team_preview_visuals()") < setup_source.find("await _play_lead_summon("),
+		true,
+		"PvP lead intro clears Team Preview sprites before Pokeball summons"
+	)
 
 
 func _check_pvp_render_restores_canonical_party_state() -> void:
@@ -226,7 +237,7 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 	var render_index := source.find("func _render_pvp_opponent_response(")
 	var render_next_index := source.find("\nfunc ", render_index + 1)
 	var render_source := source.substr(render_index, render_next_index - render_index)
-	var restore_index := source.find("func _restore_pvp_authoritative_presentation(response: Dictionary) -> void:")
+	var restore_index := source.find("func _restore_pvp_authoritative_presentation(response: Dictionary, rendered_events: Array = []) -> void:")
 	var restore_next_index := source.find("\nfunc ", restore_index + 1)
 	var restore_source := source.substr(restore_index, restore_next_index - restore_index)
 	var temporary_index := source.find("func _set_temporary_switch_in_condition(")
@@ -235,7 +246,7 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 
 	_check_equal(render_index >= 0, true, "PvP opponent render function exists")
 	_check_equal(
-		render_source.find("await _render_pvp_event_batch") < render_source.find("_restore_pvp_authoritative_presentation(batch_response)"),
+		render_source.find("await _render_pvp_event_batch") < render_source.find("_restore_pvp_authoritative_presentation(batch_response, opponent_events)"),
 		true,
 		"PvP render restores the canonical response after presentation rewinds"
 	)
@@ -265,7 +276,7 @@ func _check_local_force_switch_render_restores_canonical_party_state() -> void:
 	_check_equal(force_switch_index >= 0, true, "local forced-switch render path exists")
 	_check_equal(
 		force_switch_source.find("await _render_pvp_event_batch")
-			< force_switch_source.find("_restore_pvp_authoritative_presentation(batch_display_response)"),
+			< force_switch_source.find("_restore_pvp_authoritative_presentation(batch_display_response, player_events)"),
 		true,
 		"local forced-switch render restores canonical faint and HP state after historical rewinds"
 	)
@@ -287,6 +298,29 @@ func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 	_check_equal(apply_source.contains("action_flow.apply_response(response, apply_event_conditions, not defer_state_load)"), true, "action flow can retain the current presentation state until render")
 	_check_equal(barrier_source.contains("pvp_event_queue.last_rendered_seq < 0"), true, "Team Preview can establish its lead state before the first render cursor")
 	_check_equal(render_source.contains("if not _is_pvp_battle():\n\t\t_sync_presentation_field_from_battle_state()"), true, "PvP field effects are not overwritten before the render cursor advances")
+
+
+func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var restore_index := source.find("func _restore_pvp_authoritative_presentation(response: Dictionary, rendered_events: Array = []) -> void:")
+	var restore_next_index := source.find("\nfunc ", restore_index + 1)
+	var restore_source := source.substr(restore_index, restore_next_index - restore_index)
+	var condition_index := source.find("func _reapply_rendered_condition_events(events: Array) -> void:")
+	var condition_next_index := source.find("\nfunc ", condition_index + 1)
+	var condition_source := source.substr(condition_index, condition_next_index - condition_index)
+	var field_index := source.find("func _reapply_rendered_field_effect_events(events: Array) -> void:")
+	var field_next_index := source.find("\nfunc ", field_index + 1)
+	var field_source := source.substr(field_index, field_next_index - field_index)
+	var sync_index := source.find("func _sync_presentation_field_from_battle_state() -> void:")
+	var sync_next_index := source.find("\nfunc ", sync_index + 1)
+	var sync_source := source.substr(sync_index, sync_next_index - sync_index)
+
+	_check_equal(restore_source.contains("_reapply_rendered_condition_events(rendered_events)"), true, "canonical restore retains rendered hazard HP")
+	_check_equal(restore_source.contains("_reapply_rendered_field_effect_events(rendered_events)"), true, "canonical restore retains rendered weather changes")
+	_check_equal(condition_source.contains('"damage", "heal", "faint", "status":'), true, "restore replays only condition-changing events")
+	_check_equal(condition_source.contains('"switch"'), false, "restore never replays switch events over Pursuit canonical state")
+	_check_equal(field_source.contains('!= "fieldEffect"'), true, "field replay accepts only ordered field events")
+	_check_equal(sync_source.contains('if not battle_state.field.has("effects"):'), true, "omitted realtime field snapshot cannot erase active weather")
 
 
 func _check_authoritative_render_batch_survives_transport_reordering() -> void:
@@ -323,8 +357,24 @@ func _check_authoritative_terminal_waits_for_render() -> void:
 
 	_check_equal(finish_index >= 0, true, "authoritative terminal handler exists")
 	_check_equal(finish_source.contains("should_defer_authoritative_terminal_until_render"), true, "normal terminal waits while canonical render work is unfinished")
+	_check_equal(finish_source.contains('var is_forfeit_terminal := end_reason == "forfeit"'), true, "durable manual forfeit is recognized as animation-free terminal work")
+	_check_equal(finish_source.contains("if not is_forfeit_terminal and PvpBattleRealtimeService.should_defer_authoritative_terminal_until_render("), true, "manual forfeit does not wait forever for a separate ended projection")
 	_check_equal(finish_source.contains("pvp_pending_authoritative_terminal = message.duplicate(true)"), true, "early terminal is retained for post-render completion")
 	_check_equal(callback_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "render completion retries the retained terminal")
+
+
+func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var confirm_index := source.find("func _on_forfeit_confirmed() -> void:")
+	var confirm_next_index := source.find("\nfunc ", confirm_index + 1)
+	var confirm_source := source.substr(confirm_index, confirm_next_index - confirm_index)
+	var wait_index := source.find("func _send_pvp_realtime_action_and_wait(")
+	var wait_next_index := source.find("\nfunc ", wait_index + 1)
+	var wait_source := source.substr(wait_index, wait_next_index - wait_index)
+
+	_check_equal(confirm_source.find("if battle_finished:") < confirm_source.find("_set_battle_input_locked(false)", confirm_source.find("var response: Dictionary = await _submit_pvp_realtime_forfeit()")), true, "finished forfeit cannot unlock or overwrite its result UI")
+	_check_equal(wait_source.contains('if action == "forfeit" and battle_finished:'), true, "forfeit action waiter exits when durable terminal wins the race")
+	_check_equal(wait_source.contains('"terminalConfirmed": true'), true, "forfeit waiter returns a successful terminal confirmation")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
