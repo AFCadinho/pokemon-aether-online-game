@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.3.21 - 2026-07-20
+
+**Fixed**
+- Fixed Ranked battles sometimes applying Pursuit damage to the wrong Pokemon during a switch.
+- Fixed a Pokemon briefly appearing as the wrong active Pokemon when it switched in and fainted during the same turn.
+
 ## 0.3.20 - 2026-07-20
 
 **Fixed**
