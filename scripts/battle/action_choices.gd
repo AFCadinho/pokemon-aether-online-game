@@ -55,11 +55,12 @@ func set_selected_action(action: String) -> void:
 func set_action_label(action: String, label: String) -> void:
 	var button := _get_action_button(action)
 	if button != null:
-		if action == "bag" or action == "run":
+		if action == "bag":
 			button.text = ""
 			button.tooltip_text = label
 		else:
 			button.text = label
+			button.tooltip_text = label
 
 func set_action_disabled(action: String, is_disabled: bool) -> void:
 	disabled_actions[action] = is_disabled
