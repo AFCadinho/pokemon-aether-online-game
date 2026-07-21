@@ -2,8 +2,6 @@
 
 ## Unreleased
 
-## 0.3.23 - 2026-07-21
-
 **Changed**
 - Battle screens now clearly show Run in wild battles and Forfeit in trainer and Ranked battles.
 
