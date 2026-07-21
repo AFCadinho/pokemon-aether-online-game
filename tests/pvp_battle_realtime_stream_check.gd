@@ -301,6 +301,26 @@ func _init() -> void:
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("None"), "", "Python None terminal winner is treated as absent")
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("Admin"), "Admin", "real terminal winner name is preserved")
 	_check_equal(
+		PvpBattleRealtimeServiceNode.is_local_terminal_winner("p1", "p1", "Adinho"),
+		true,
+		"canonical local winner side produces victory"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_local_terminal_winner("p2", "p1", "Adinho"),
+		false,
+		"canonical opponent winner side produces defeat"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_local_terminal_winner(" AdInHo ", "p1", "Adinho"),
+		true,
+		"Showdown winner display name produces victory for that local player"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_local_terminal_winner("Adinho", "p1", "Faker"),
+		false,
+		"the same Showdown winner display name produces defeat for the opponent"
+	)
+	_check_equal(
 		PvpBattleRealtimeServiceNode.is_unrequested_local_team_preview_lead(
 			{"action": "choose_lead", "playerId": "p2", "requestId": "human-request", "response": {"success": true}},
 			"p2"

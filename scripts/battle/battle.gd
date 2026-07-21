@@ -2968,8 +2968,13 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 	mechanics_panel.visible = false
 
 	var is_no_contest := bool(result.get("noContest", false))
-	var winner_side := PvpBattleRealtimeService.normalize_terminal_winner(result.get("winner", battle_state.get_winner()))
-	var local_won := winner_side == _get_local_state_player_id()
+	var winner_identity := PvpBattleRealtimeService.normalize_terminal_winner(result.get("winner", battle_state.get_winner()))
+	var local_state_player_id := _get_local_state_player_id()
+	var local_won := PvpBattleRealtimeService.is_local_terminal_winner(
+		winner_identity,
+		local_state_player_id,
+		_get_player_display_name(local_state_player_id)
+	)
 	if is_no_contest:
 		battle_result_title.text = "No Contest"
 		battle_result_title.modulate = Color("f5df9a")

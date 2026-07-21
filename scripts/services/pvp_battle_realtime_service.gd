@@ -488,6 +488,26 @@ static func normalize_terminal_winner(value: Variant) -> String:
 	return normalized
 
 
+static func is_local_terminal_winner(
+	winner_value: Variant,
+	local_state_player_id: String,
+	local_display_name: String
+) -> bool:
+	var winner := normalize_terminal_winner(winner_value)
+	if winner == "":
+		return false
+
+	var normalized_winner := winner.to_lower()
+	var normalized_local_side := local_state_player_id.strip_edges().to_lower()
+	if normalized_winner in ["p1", "player 1", "player1"]:
+		return normalized_local_side == "p1"
+	if normalized_winner in ["p2", "player 2", "player2"]:
+		return normalized_local_side == "p2"
+
+	var normalized_local_name := local_display_name.strip_edges().to_lower()
+	return normalized_local_name != "" and normalized_winner == normalized_local_name
+
+
 func _handle_closed_socket() -> void:
 	if session_invalid_handled:
 		return
