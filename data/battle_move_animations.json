@@ -2042,6 +2042,66 @@
         "PRSFX- Draco Meteor1.wav": "res://assets/battles/animations/dracometeor/PRSFX- Draco Meteor1.wav",
         "PRSFX- Draco Meteor2.wav": "res://assets/battles/animations/dracometeor/PRSFX- Draco Meteor2.wav"
       }
+    },
+    "freezedry": {
+      "template": "imported_sheet",
+      "category": "direct_sheet",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.58,
+        0.86,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.88,
+        0.96,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.72,
+      "overlay_peak_alpha": 0.1,
+      "sparkle_count": 0,
+      "flash": {
+        "enabled": true,
+        "start": 0.5,
+        "peak": 0.62,
+        "end": 0.9,
+        "alpha": 0.12,
+        "color": [
+          0.76,
+          0.92,
+          1.0,
+          1.0
+        ]
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          56,
+          -20
+        ],
+        "sheet_offset": [
+          56,
+          -20
+        ],
+        "suppress_shake": true
+      },
+      "data_path": "res://assets/battles/animations/freezedry/freezedry.json",
+      "sheet_path": "res://assets/battles/animations/freezedry/PRAS- Freeze Dry.png",
+      "background_path": "res://assets/battles/animations/freezedry/PRAS- Ice Cave BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Freeze Dry1.wav": "res://assets/battles/animations/freezedry/PRSFX- Freeze Dry1.wav",
+        "PRSFX- Freeze Dry2.wav": "res://assets/battles/animations/freezedry/PRSFX- Freeze Dry2.wav",
+        "PRSFX- Freeze Dry3.wav": "res://assets/battles/animations/freezedry/PRSFX- Freeze Dry3.wav"
+      }
     }
   }
 }
