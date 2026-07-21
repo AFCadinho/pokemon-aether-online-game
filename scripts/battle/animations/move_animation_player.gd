@@ -1016,6 +1016,13 @@ func _battlefield_position(position: Vector2) -> Vector2:
 	)
 
 
+func display_position_to_battlefield_source(position: Vector2) -> Vector2:
+	# Battlefield mirroring is its own inverse. Dynamic projectile anchors arrive
+	# in display coordinates, so convert them to the source coordinates that will
+	# land on that display position after _battlefield_position() is applied.
+	return _battlefield_position(position)
+
+
 func _scale_sprite_position(position: Vector2) -> Vector2:
 	if is_equal_approx(sprite_position_scale, 1.0):
 		return position

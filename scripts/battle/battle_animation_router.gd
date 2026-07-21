@@ -936,10 +936,13 @@ func _set_projectile_path_endpoints(config: Dictionary, path_key: String, actor_
 func _parent_position_to_animation_source(animation_node: Node2D, parent_position: Vector2) -> Vector2:
 	var scale_x: float = animation_node.scale.x if absf(animation_node.scale.x) > 0.001 else 1.0
 	var scale_y: float = animation_node.scale.y if absf(animation_node.scale.y) > 0.001 else 1.0
-	return Vector2(
+	var source_position := Vector2(
 		(parent_position.x - animation_node.position.x) / scale_x,
 		(parent_position.y - animation_node.position.y) / scale_y
 	)
+	if animation_node is MoveAnimationPlayer:
+		return (animation_node as MoveAnimationPlayer).display_position_to_battlefield_source(source_position)
+	return source_position
 
 
 func _get_effect_anchor_position(anchor: String) -> Vector2:
