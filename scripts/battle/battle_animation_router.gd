@@ -116,6 +116,7 @@ func _play_animation_config(
 		_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, overlay, config)
 		_apply_effect_target_offset(animation_node, target_ident, config, overlay)
 		overlay.add_child(animation_node)
+		_move_timing_background_below_sprites(animation_node, parent_node, config)
 		await _wait_for_animation_node(animation_node, overlay)
 		_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
 		if is_instance_valid(overlay):
@@ -713,6 +714,17 @@ func _create_animation_overlay(parent_node: Node) -> Control:
 	overlay.custom_minimum_size = parent_control.size
 	overlay.size = parent_control.size
 	return overlay
+
+
+func _move_timing_background_below_sprites(animation_node: MoveAnimationPlayer, parent_node: Node, config: Dictionary) -> void:
+	if animation_node == null or parent_node == null or not bool(config.get("background_below_sprites", false)):
+		return
+
+	var sibling_index: int = parent_node.get_child_count()
+	for sprite_box: Node in [player_sprite_box, enemy_sprite_box]:
+		if sprite_box != null and sprite_box.get_parent() == parent_node:
+			sibling_index = mini(sibling_index, sprite_box.get_index())
+	animation_node.move_timing_background_to(parent_node, sibling_index)
 
 
 func _fit_animation_to_parent(animation_node: Node2D, parent_node: Node) -> void:

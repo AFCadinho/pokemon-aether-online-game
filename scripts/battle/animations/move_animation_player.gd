@@ -64,6 +64,7 @@ var projectile_sprite: Sprite2D
 var base_position := Vector2.ZERO
 var base_position_active := false
 var shake_applied := false
+var timing_background_detached := false
 
 @onready var bg: Sprite2D = Sprite2D.new()
 @onready var fg: Sprite2D = Sprite2D.new()
@@ -109,6 +110,7 @@ func stop() -> void:
 	fg_hide_frame = -1
 	pink_overlay_alpha = 0.0
 	_restore_base_position()
+	_dispose_detached_timing_background()
 	queue_redraw()
 
 
@@ -233,6 +235,23 @@ func _build_nodes() -> void:
 		player.bus = SettingsManager.SFX_BUS
 		sound_players[sound_key] = player
 		add_child(player)
+
+
+func move_timing_background_to(parent_node: Node, sibling_index: int) -> void:
+	if bg.texture == null or bg.get_parent() != self or parent_node == null:
+		return
+
+	bg.reparent(parent_node, true)
+	parent_node.move_child(bg, clampi(sibling_index, 0, parent_node.get_child_count() - 1))
+	timing_background_detached = true
+
+
+func _dispose_detached_timing_background() -> void:
+	if not timing_background_detached:
+		return
+	if is_instance_valid(bg):
+		bg.queue_free()
+	timing_background_detached = false
 
 
 func _draw() -> void:
