@@ -2243,6 +2243,52 @@
         "PRSFX- Parting Shot": "res://assets/battles/animations/chillyreception/PRSFX- Parting Shot.wav",
         "PRSFX- Sketch": "res://assets/battles/animations/chillyreception/PRSFX- Sketch.wav"
       }
+    },
+    "futuresight": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.15,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.58,
+        0.26,
+        0.96,
+        1.0
+      ],
+      "sprite_tint": [
+        0.96,
+        0.82,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.24,
+      "sparkle_count": 12,
+      "sparkle_center": [
+        128.0,
+        210.0
+      ],
+      "sparkle_radius_min": 16.0,
+      "sparkle_radius_max": 48.0,
+      "orb": {
+        "enabled": true,
+        "center": [
+          128.0,
+          210.0
+        ],
+        "radius": 38.0,
+        "alpha": 0.9
+      },
+      "data_path": "res://assets/battles/animations/futuresight/futuresight.json",
+      "sheet_path": "res://assets/battles/animations/futuresight/PRAS- Kenesis.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Future Sight1.wav": "res://assets/battles/animations/futuresight/PRSFX- Future Sight1.wav"
+      }
     }
   }
 }

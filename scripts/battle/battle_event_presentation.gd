@@ -479,10 +479,19 @@ func _get_cant_status_effect_animation_key(event: Dictionary) -> String:
 
 func _get_pokemon_effect_animation_key(event: Dictionary) -> String:
 	var state := str(event.get("state", "start")).strip_edges().to_lower()
+	var raw_effect := str(event.get("effect", ""))
+	# Future Sight plays its setup as the move animation. Showdown emits the
+	# delayed hit separately as a pokemonEffect, so only its activation gets the
+	# target-centered impact animation.
+	if event_text_formatter._is_future_sight_effect(raw_effect):
+		if state == "activate" or state == "end":
+			return "future_sight_impact"
+		return ""
+
 	if state == "end" or state == "cure" or state == "cured":
 		return ""
 
-	var effect_key := _normalize_animation_key(str(event.get("effect", "")))
+	var effect_key := _normalize_animation_key(raw_effect)
 	match effect_key:
 		"confusion", "confused":
 			return "status_confused"
@@ -491,6 +500,10 @@ func _get_pokemon_effect_animation_key(event: Dictionary) -> String:
 
 
 func _get_residual_status_damage_effect_animation_key(event: Dictionary) -> String:
+	for source_field in ["source", "effect", "from", "fromMove", "move"]:
+		if event_text_formatter._is_future_sight_effect(str(event.get(source_field, ""))):
+			return "future_sight_impact"
+
 	var source_key := _normalize_animation_key(str(event.get("source", "")))
 	match source_key:
 		"psn", "poison", "poisoned":

@@ -200,6 +200,20 @@ func _check_future_sight_lifecycle_messages() -> void:
 
 	_check_equal(str(start_result.get("log_message", "")), "Slowking foresaw an attack!", "Future Sight setup is described as a delayed attack")
 	_check_equal(str(hit_result.get("log_message", "")), "The opposing Iron Valiant took the Future Sight attack!", "Future Sight resolution names the delayed hit")
+	_check_equal(str(start_result.get("effect_animation_key", "")), "", "Future Sight setup does not replay the move animation")
+	_check_equal(str(hit_result.get("effect_animation_key", "")), "future_sight_impact", "Future Sight resolution plays its delayed impact animation")
+
+	var damage_result: Dictionary = presentation.build({
+		"type": "damage",
+		"target": "p2a: Iron Valiant",
+		"source": "move: Future Sight",
+		"previousCondition": "100/100",
+		"condition": "42/100",
+		"previousHp": 100,
+		"hp": 42,
+		"maxHp": 100,
+	})
+	_check_equal(str(damage_result.get("effect_animation_key", "")), "future_sight_impact", "Future Sight damage source plays its delayed impact animation")
 
 
 func _check_evasion_drop_uses_normalized_negative_amount() -> void:

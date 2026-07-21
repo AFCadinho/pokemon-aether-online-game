@@ -1,6 +1,59 @@
 {
   "version": 1,
   "effects": {
+    "future_sight_impact": {
+      "template": "imported_sheet",
+      "source": "Move:FUTURESIGHT",
+      "source_anchor": "player",
+      "category": "delayed_attack",
+      "data_path": "res://assets/battles/animations/futuresight/futuresight.json",
+      "sheet_path": "res://assets/battles/animations/futuresight/PRAS- Kenesis.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Future Sight1.wav": "res://assets/battles/animations/futuresight/PRSFX- Future Sight1.wav"
+      },
+      "speed_scale": 0.95,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": true,
+      "keep_screen_overlay_fullscreen": true,
+      "visual_color": [
+        0.48,
+        0.18,
+        0.86,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.86,
+        1.0,
+        1.0
+      ],
+      "overlay_peak_alpha": 0.18,
+      "sparkle_count": 22,
+      "sparkle_center": [
+        128.0,
+        204.0
+      ],
+      "effect_position_offset": [
+        0.0,
+        -12.0
+      ],
+      "sparkle_radius_min": 24.0,
+      "sparkle_radius_max": 74.0,
+      "orb": {
+        "enabled": true,
+        "center": [
+          128.0,
+          204.0
+        ],
+        "radius": 58.0,
+        "alpha": 1.0
+      }
+    },
     "health_up": {
       "template": "imported_sheet",
       "source": "Common:HealthUp",
