@@ -20,8 +20,8 @@
         1.0
       ],
       "sparkle_count": 14,
-      "show_pink_visual": true,
-      "show_sheet_sprites": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
       "projectile": {
         "enabled": true,
         "texture_region": [
@@ -2163,6 +2163,51 @@
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Earth Power.wav": "res://assets/battles/animations/earthpower/PRSFX- Earth Power.wav"
+      }
+    },
+    "sludgebomb": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.72,
+        0.28,
+        0.82,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.7,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          56,
+          -20
+        ],
+        "sheet_offset": [
+          56,
+          -20
+        ],
+        "suppress_shake": true
+      },
+      "data_path": "res://assets/battles/animations/sludgebomb/sludgebomb.json",
+      "sheet_path": "res://assets/battles/animations/sludgebomb/PRAS- Sludge Bomb.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Sludge Bomb1.wav": "res://assets/battles/animations/sludgebomb/PRSFX- Sludge Bomb1.wav",
+        "PRSFX- Sludge Bomb2.wav": "res://assets/battles/animations/sludgebomb/PRSFX- Sludge Bomb2.wav"
       }
     }
   }
