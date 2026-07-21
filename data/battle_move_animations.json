@@ -2065,7 +2065,7 @@
         1.0,
         1.0
       ],
-      "sprite_zoom_multiplier": 0.72,
+      "sprite_zoom_multiplier": 0.58,
       "overlay_peak_alpha": 0.1,
       "sparkle_count": 0,
       "flash": {
@@ -2208,6 +2208,40 @@
       "sound_paths": {
         "PRSFX- Sludge Bomb1.wav": "res://assets/battles/animations/sludgebomb/PRSFX- Sludge Bomb1.wav",
         "PRSFX- Sludge Bomb2.wav": "res://assets/battles/animations/sludgebomb/PRSFX- Sludge Bomb2.wav"
+      }
+    },
+    "chillyreception": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.1,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.48,
+        0.84,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.72,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/chillyreception/chillyreception.json",
+      "sheet_path": "res://assets/battles/animations/chillyreception/Custom_Chilly Reception.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Freeze Dry3": "res://assets/battles/animations/chillyreception/PRSFX- Freeze Dry3.wav",
+        "PRSFX- Parting Shot": "res://assets/battles/animations/chillyreception/PRSFX- Parting Shot.wav",
+        "PRSFX- Sketch": "res://assets/battles/animations/chillyreception/PRSFX- Sketch.wav"
       }
     }
   }
