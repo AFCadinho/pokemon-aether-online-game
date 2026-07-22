@@ -41,6 +41,8 @@ signal animation_finished
 @export_range(0.25, 2.0, 0.05) var sprite_position_scale: float = 1.0
 @export var sprite_position_anchor: Vector2 = Vector2(128, 224)
 @export var sprite_position_offset: Vector2 = Vector2.ZERO
+@export var sheet_start_offset: Vector2 = Vector2.ZERO
+@export_range(0, 999, 1) var sheet_start_offset_end_frame: int = 0
 @export var sheet_visual_offset: Vector2 = Vector2.ZERO
 @export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
 @export var sparkle_center: Vector2 = Vector2(256, 188)
@@ -1197,6 +1199,7 @@ func _apply_frame(index: int) -> void:
 			tile_h
 		)
 		var sheet_position := _scale_sprite_position(Vector2(float(cell["x"]), float(cell["y"]))) + sprite_position_offset
+		sheet_position += _sheet_start_offset_for_frame(index)
 		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
@@ -1271,6 +1274,14 @@ func _scale_sprite_position(position: Vector2) -> Vector2:
 		return position
 
 	return sprite_position_anchor + (position - sprite_position_anchor) * sprite_position_scale
+
+
+func _sheet_start_offset_for_frame(index: int) -> Vector2:
+	if sheet_start_offset == Vector2.ZERO or sheet_start_offset_end_frame <= 0:
+		return Vector2.ZERO
+
+	var progress := clampf(float(index) / float(sheet_start_offset_end_frame), 0.0, 1.0)
+	return sheet_start_offset * (1.0 - progress)
 
 
 func _projectile_battlefield_position(position: Vector2, config: Dictionary) -> Vector2:
