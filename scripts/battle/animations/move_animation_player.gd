@@ -31,6 +31,7 @@ signal animation_finished
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
 @export var dragon_dance_config: Dictionary = {}
+@export var dragon_claw_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -304,6 +305,7 @@ func _draw() -> void:
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
 	_draw_dragon_dance_visual()
+	_draw_dragon_claw_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -677,6 +679,85 @@ func _draw_dragon_dance_visual() -> void:
 		var spark_alpha := alpha * (0.28 + (1.0 - life) * 0.5)
 		draw_circle(spark_position, size, _color_with_alpha(core_color, spark_alpha))
 		draw_line(spark_position + Vector2(-size * 1.8, 0.0), spark_position + Vector2(size * 1.8, 0.0), _color_with_alpha(ribbon_color, spark_alpha * 0.78), 0.9)
+
+
+func _draw_dragon_claw_visual() -> void:
+	if not bool(dragon_claw_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(dragon_claw_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(dragon_claw_config.get("visible_end", 0.75)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, dragon_claw_config)
+	if alpha <= 0.02:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(dragon_claw_config.get("center", [384.0, 96.0])))
+	center += _vector2_from_value(dragon_claw_config.get("center_offset", [0.0, 0.0]))
+	var outer_color := _color_from_value(dragon_claw_config.get("outer_color", [0.44, 0.08, 0.82, 1.0]), Color(0.44, 0.08, 0.82, 1.0))
+	var slash_color := _color_from_value(dragon_claw_config.get("slash_color", [0.88, 0.66, 1.0, 1.0]), Color(0.88, 0.66, 1.0, 1.0))
+	var core_color := _color_from_value(dragon_claw_config.get("core_color", [1.0, 0.96, 1.0, 1.0]), Color(1.0, 0.96, 1.0, 1.0))
+	var animation_progress := clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 0.999)
+	var strike_index := mini(1, int(animation_progress * 2.0))
+	var impact_progress := fmod(animation_progress * 2.0, 1.0)
+	center += Vector2(4.0, -4.0) if strike_index == 0 else Vector2(-4.0, -4.0)
+	var slash_length := maxf(float(dragon_claw_config.get("slash_length", 94.0)), 16.0)
+	var spread := maxf(float(dragon_claw_config.get("spread", 25.0)), 4.0)
+	var direction := Vector2(0.62 if strike_index == 0 else -0.62, 0.78).normalized()
+	var normal := direction.orthogonal()
+
+	var burst_radius := 18.0 + impact_progress * 28.0
+	draw_circle(center, burst_radius, _color_with_alpha(outer_color, alpha * (1.0 - impact_progress) * 0.16))
+	draw_circle(center, burst_radius * 0.48, _color_with_alpha(slash_color, alpha * (1.0 - impact_progress) * 0.18))
+	var ring_radius := maxf(float(dragon_claw_config.get("ring_radius", 48.0)), 12.0) * (0.84 + impact_progress * 0.16)
+	var ring_alpha := alpha * (0.72 + (1.0 - impact_progress) * 0.18)
+	var ring_phase := float(frame_index) * 0.18 + float(strike_index) * 0.9
+	draw_arc(center, ring_radius + 3.0, ring_phase, ring_phase + TAU * 0.94, 64, _color_with_alpha(outer_color, ring_alpha * 0.28), 6.5)
+	draw_arc(center, ring_radius, ring_phase, ring_phase + TAU * 0.94, 64, _color_with_alpha(outer_color, ring_alpha), 3.1)
+	draw_arc(center, ring_radius - 1.4, ring_phase + 0.06, ring_phase + TAU * 0.94, 64, _color_with_alpha(core_color, ring_alpha * 0.92), 1.05)
+
+	for slash_index: int in range(3):
+		var offset := normal * (float(slash_index) - 1.0) * spread
+		var slash_center := center + offset
+		var slash_delay := float(slash_index) * 0.055
+		var slash_alpha := alpha * clampf((impact_progress - slash_delay) / 0.16, 0.0, 1.0)
+		if slash_alpha <= 0.02:
+			continue
+		var start := slash_center - direction * slash_length * 0.43
+		var end := slash_center + direction * slash_length * 0.43
+		var bend := normal * (5.0 if slash_index % 2 == 0 else -5.0)
+		var middle := start.lerp(end, 0.5) + bend
+		var tip := end + direction * 11.0
+		var outer_points := PackedVector2Array([
+			start - normal * 2.4,
+			start + normal * 2.4,
+			middle + normal * 5.4,
+			end + normal * 3.8,
+			tip,
+			end - normal * 3.8,
+			middle - normal * 5.4,
+		])
+		var inner_points := PackedVector2Array([
+			start - normal * 0.9,
+			start + normal * 0.9,
+			middle + normal * 2.4,
+			end + normal * 1.8,
+			tip - direction * 3.0,
+			end - normal * 1.8,
+			middle - normal * 2.4,
+		])
+		draw_colored_polygon(outer_points, _color_with_alpha(outer_color, slash_alpha * 0.94))
+		draw_colored_polygon(inner_points, _color_with_alpha(slash_color, slash_alpha))
+		draw_polyline(PackedVector2Array([start, middle, end]), _color_with_alpha(core_color, slash_alpha * 0.9), 1.35, true)
+		for spark_index: int in range(3):
+			var spark_at := 0.2 + float(spark_index) * 0.28
+			var spark_position := start.lerp(end, spark_at) + normal * sin(float(frame_index + spark_index * 4)) * 4.0
+			draw_circle(spark_position, 1.6 + float(spark_index) * 0.5, _color_with_alpha(core_color, slash_alpha * 0.8))
 
 
 func _draw_solar_beam_visual() -> void:

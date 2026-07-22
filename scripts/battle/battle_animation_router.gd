@@ -353,6 +353,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
+	animation_node.dragon_claw_config = (config.get("dragon_claw", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -911,6 +912,7 @@ func _apply_move_projectile_endpoint_anchors(
 		target_anchor
 	)
 	animation_node.dragon_dance_config = _with_self_effect_anchor(animation_node.dragon_dance_config, actor_anchor)
+	animation_node.dragon_claw_config = _with_target_effect_anchor(animation_node.dragon_claw_config, target_anchor)
 
 
 func _apply_move_sheet_anchor(
@@ -984,6 +986,17 @@ func _with_self_effect_anchor(config: Dictionary, actor_anchor: Vector2) -> Dict
 	var updated_config: Dictionary = config.duplicate(true)
 	actor_anchor += _vector2_from_config_value(updated_config.get("center_offset", [0.0, 0.0]), Vector2.ZERO)
 	updated_config["center"] = [actor_anchor.x, actor_anchor.y]
+	updated_config.erase("center_offset")
+	return updated_config
+
+
+func _with_target_effect_anchor(config: Dictionary, target_anchor: Vector2) -> Dictionary:
+	if config.is_empty():
+		return config
+
+	var updated_config: Dictionary = config.duplicate(true)
+	target_anchor += _vector2_from_config_value(updated_config.get("center_offset", [0.0, 0.0]), Vector2.ZERO)
+	updated_config["center"] = [target_anchor.x, target_anchor.y]
 	updated_config.erase("center_offset")
 	return updated_config
 

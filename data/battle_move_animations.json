@@ -4268,12 +4268,25 @@
         "visible_end": 0.94,
         "fade_in": 0.1,
         "fade_out": 0.18,
-        "center_offset": [0.0, -2.0],
+        "center_offset": [
+          0.0,
+          -2.0
+        ],
         "radius": 56.0,
         "ring_count": 4,
         "rotation_speed": 0.34,
-        "ribbon_color": [1.0, 0.28, 0.9, 1.0],
-        "core_color": [1.0, 0.82, 1.0, 1.0],
+        "ribbon_color": [
+          1.0,
+          0.28,
+          0.9,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.82,
+          1.0,
+          1.0
+        ],
         "spark_count": 18,
         "spark_height": 86.0,
         "spark_spread": 62.0
@@ -4284,6 +4297,36 @@
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Dragon Dance.wav": "res://assets/battles/animations/dragondance/PRSFX- Dragon Dance.wav"
+      }
+    },
+    "dragonclaw": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "dragon_claw": {
+        "enabled": true,
+        "visible_start": 0.06,
+        "visible_end": 0.76,
+        "fade_in": 0.04,
+        "fade_out": 0.18,
+        "center_offset": [0.0, -12.0],
+        "slash_length": 68.0,
+        "spread": 17.0,
+        "ring_radius": 48.0,
+        "outer_color": [0.44, 0.08, 0.82, 1.0],
+        "slash_color": [0.88, 0.66, 1.0, 1.0],
+        "core_color": [1.0, 0.96, 1.0, 1.0]
+      },
+      "data_path": "res://assets/battles/animations/dragonclaw/dragonclaw.json",
+      "sheet_path": "res://assets/battles/animations/dragonclaw/PRAS- Dragon Claw.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Dragon Claw.wav": "res://assets/battles/animations/dragonclaw/PRSFX- Dragon Claw.wav"
       }
     }
   }
