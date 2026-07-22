@@ -35,6 +35,7 @@ signal animation_finished
 @export var thunder_punch_config: Dictionary = {}
 @export var bullet_punch_config: Dictionary = {}
 @export var dark_pulse_config: Dictionary = {}
+@export var nasty_plot_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -312,6 +313,7 @@ func _draw() -> void:
 	_draw_thunder_punch_visual()
 	_draw_bullet_punch_visual()
 	_draw_dark_pulse_visual()
+	_draw_nasty_plot_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -885,6 +887,64 @@ func _draw_dark_pulse_visual() -> void:
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 36, _color_with_alpha(purple, alpha), 2.7)
 		draw_arc(Vector2.ZERO, radius - 1.2, 0.0, TAU, 36, _color_with_alpha(Color(1.0, 0.42, 0.82, 1.0), alpha * 0.8), 0.8)
 		draw_set_transform(Vector2.ZERO)
+
+
+func _draw_nasty_plot_visual() -> void:
+	if not bool(nasty_plot_config.get("enabled", false)):
+		return
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var alpha := _get_timed_alpha(
+		progress,
+		float(nasty_plot_config.get("visible_start", 0.02)),
+		float(nasty_plot_config.get("visible_end", 0.94)),
+		nasty_plot_config
+	)
+	if alpha <= 0.02:
+		return
+	var center := _battlefield_position(_vector2_from_value(nasty_plot_config.get("center", [128.0, 174.0])))
+	var cloud_radius := maxf(float(nasty_plot_config.get("cloud_radius", 25.0)), 8.0)
+	var cloud_offsets := [Vector2(-43.0, 10.0), Vector2(0.0, -34.0), Vector2(43.0, 10.0)]
+	for cloud_index: int in range(cloud_offsets.size()):
+		var appear := clampf((progress - float(cloud_index) * 0.055) / 0.14, 0.0, 1.0)
+		appear = 1.0 - pow(1.0 - appear, 3.0)
+		var pulse := 1.0 + sin(float(frame_index) * 0.42 + float(cloud_index) * 1.7) * 0.035
+		var bob := sin(float(frame_index) * 0.29 + float(cloud_index) * 2.1) * float(nasty_plot_config.get("bob_amount", 2.5))
+		_draw_nasty_plot_cloud(center + cloud_offsets[cloud_index] + Vector2(0.0, bob), cloud_radius * pulse * appear, alpha)
+
+
+func _draw_nasty_plot_cloud(center: Vector2, radius: float, alpha: float) -> void:
+	if radius <= 1.0:
+		return
+	var outline := Color(0.42, 0.12, 0.62, alpha * 0.9)
+	var shadow := Color(0.68, 0.72, 1.0, alpha)
+	var white := Color(1.0, 1.0, 1.0, alpha)
+	var lobes := [
+		[Vector2(-0.64, 0.06), 0.5],
+		[Vector2(-0.32, -0.4), 0.58],
+		[Vector2(0.12, -0.52), 0.64],
+		[Vector2(0.55, -0.18), 0.56],
+		[Vector2(0.6, 0.28), 0.48],
+		[Vector2(0.1, 0.34), 0.72],
+		[Vector2(-0.42, 0.34), 0.58],
+	]
+	for lobe: Array in lobes:
+		draw_circle(center + (lobe[0] as Vector2) * radius, float(lobe[1]) * radius + 2.0, outline)
+	for lobe: Array in lobes:
+		var lobe_center := center + (lobe[0] as Vector2) * radius
+		var lobe_radius := float(lobe[1]) * radius
+		draw_circle(lobe_center + Vector2(0.0, 2.0), lobe_radius, shadow)
+		draw_circle(lobe_center, lobe_radius, white)
+	var tail := center + Vector2(0.0, radius * 1.12)
+	draw_circle(tail, radius * 0.22 + 1.5, outline)
+	draw_circle(tail, radius * 0.22, white)
+	draw_circle(tail + Vector2(0.0, radius * 0.38), radius * 0.11 + 1.0, outline)
+	draw_circle(tail + Vector2(0.0, radius * 0.38), radius * 0.11, white)
+	var question_color := Color(0.55, 0.08, 0.7, alpha)
+	var question_center := center + Vector2(0.0, -radius * 0.12)
+	draw_arc(question_center, radius * 0.34, -PI * 0.92, PI * 0.58, 20, question_color, maxf(2.5, radius * 0.17), true)
+	draw_line(question_center + Vector2(radius * 0.19, radius * 0.26), question_center + Vector2(0.0, radius * 0.53), question_color, maxf(2.5, radius * 0.17), true)
+	draw_circle(question_center + Vector2(0.0, radius * 0.78), maxf(2.0, radius * 0.09), question_color)
 
 
 func _draw_bullet_punch_visual() -> void:

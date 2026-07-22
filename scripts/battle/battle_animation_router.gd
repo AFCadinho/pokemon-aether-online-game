@@ -357,6 +357,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.thunder_punch_config = (config.get("thunder_punch", {}) as Dictionary).duplicate(true)
 	animation_node.bullet_punch_config = (config.get("bullet_punch", {}) as Dictionary).duplicate(true)
 	animation_node.dark_pulse_config = (config.get("dark_pulse", {}) as Dictionary).duplicate(true)
+	animation_node.nasty_plot_config = (config.get("nasty_plot", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -919,6 +920,7 @@ func _apply_move_projectile_endpoint_anchors(
 	animation_node.thunder_punch_config = _with_target_effect_anchor(animation_node.thunder_punch_config, target_anchor)
 	animation_node.bullet_punch_config = _with_target_effect_anchor(animation_node.bullet_punch_config, target_anchor)
 	animation_node.dark_pulse_config = _with_projectile_endpoint_anchors(animation_node.dark_pulse_config, actor_anchor, target_anchor)
+	animation_node.nasty_plot_config = _with_self_effect_anchor(animation_node.nasty_plot_config, actor_anchor)
 
 
 func _apply_move_sheet_anchor(
