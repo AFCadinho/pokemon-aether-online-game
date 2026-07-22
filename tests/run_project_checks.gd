@@ -18,6 +18,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_timer_projection_check.gd",
 	"res://tests/battle_timer_ui_visibility_check.gd",
 	"res://tests/battle_vs_panel_layout_check.gd",
+	"res://tests/moves_grid_disabled_state_check.gd",
 	"res://tests/battle_ui_layout_check.gd",
 	"res://tests/battle_animation_anchor_check.gd",
 	"res://tests/battle_substitute_presentation_check.gd",

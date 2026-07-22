@@ -2,6 +2,9 @@ extends GridContainer
 
 class_name MovesGrid
 
+const INPUT_ENABLED_MODULATE := Color.WHITE
+const INPUT_DISABLED_MODULATE := Color(0.48, 0.50, 0.56, 0.62)
+
 signal move_selected(slot: int)
 signal move_hovered(move_data: Dictionary, slot_rect: Rect2)
 signal move_unhovered
@@ -49,8 +52,11 @@ func set_input_disabled(is_disabled: bool) -> void:
 	if is_disabled:
 		_capture_current_disabled_states()
 		_disable_current_buttons()
+		self_modulate = INPUT_DISABLED_MODULATE
+		move_unhovered.emit()
 	else:
 		_restore_previous_disabled_states()
+		self_modulate = INPUT_ENABLED_MODULATE
 
 func _capture_current_disabled_states() -> void:
 	previous_disabled_by_slot.clear()
@@ -83,6 +89,9 @@ func _on_slot_selected(slot: int) -> void:
 
 
 func _on_slot_hovered(move_data: Dictionary, slot_rect: Rect2) -> void:
+	if input_disabled:
+		return
+
 	move_hovered.emit(move_data, slot_rect)
 
 
