@@ -2776,6 +2776,38 @@
         "PRSFX- Sucker Punch1.wav": "res://assets/battles/animations/suckerpunch/PRSFX- Sucker Punch1.wav",
         "PRSFX- Sucker Punch2.wav": "res://assets/battles/animations/suckerpunch/PRSFX- Sucker Punch2.wav"
       }
+    },
+    "ironhead": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "speed_scale": 1.5,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.94,
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.27,
+        "duration": 0.1
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.27,
+        "duration": 0.25,
+        "amplitude": 8.0,
+        "interval": 0.035,
+        "vertical_scale": 0.12,
+        "decay": true
+      },
+      "data_path": "res://assets/battles/animations/ironhead/ironhead.json",
+      "sheet_path": "res://assets/battles/animations/ironhead/PRAS- Iron Head.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Iron Head.wav": "res://assets/battles/animations/ironhead/PRSFX- Iron Head.wav"
+      }
     }
   }
 }
