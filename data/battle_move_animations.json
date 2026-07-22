@@ -2661,6 +2661,121 @@
         "Ace": "res://assets/battles/animations/kowtowcleave/Ace.ogg",
         "Darkness2": "res://assets/battles/animations/kowtowcleave/Darkness2.ogg"
       }
+    },
+    "suckerpunch": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "speed_scale": 1.5,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.5,
+        0.12,
+        0.84,
+        1.0
+      ],
+      "sprite_tint": [
+        0.9,
+        0.62,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.88,
+      "sprite_position_offset": [
+        128,
+        -54
+      ],
+      "flash": {
+        "enabled": true,
+        "start": 0.16,
+        "peak": 0.5,
+        "end": 0.78,
+        "alpha": 0.1,
+        "color": [
+          0.07,
+          0.02,
+          0.13,
+          1.0
+        ]
+      },
+      "orb_projectile": {
+        "enabled": true,
+        "radius": 17.0,
+        "fade_in": 0.04,
+        "fade_out": 0.06,
+        "trail_count": 9,
+        "trail_spacing": 0.024,
+        "visible_window_feather": 0.02,
+        "visible_windows": [
+          [
+            0.0,
+            0.56
+          ]
+        ],
+        "return_to_actor": true,
+        "target_point_index": 1,
+        "actor_offset": [
+          0,
+          -18
+        ],
+        "target_offset": [
+          0,
+          -18
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 0.7
+          },
+          {
+            "at": 0.26,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.05,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 0.56,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 0.7,
+            "ease": "ease_in_quad"
+          }
+        ]
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.55,
+        "duration": 0.1
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.55,
+        "duration": 0.25,
+        "amplitude": 7.0,
+        "interval": 0.04,
+        "vertical_scale": 0.16,
+        "decay": true
+      },
+      "data_path": "res://assets/battles/animations/suckerpunch/suckerpunch.json",
+      "sheet_path": "res://assets/battles/animations/suckerpunch/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Sucker Punch1.wav": "res://assets/battles/animations/suckerpunch/PRSFX- Sucker Punch1.wav",
+        "PRSFX- Sucker Punch2.wav": "res://assets/battles/animations/suckerpunch/PRSFX- Sucker Punch2.wav"
+      }
     }
   }
 }
