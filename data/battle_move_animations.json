@@ -341,7 +341,7 @@
     "thunderbolt": {
       "category": "beam",
       "show_timing_foregrounds": false,
-      "sparkle_count": 8,
+      "sparkle_count": 0,
       "show_timing_backgrounds": false,
       "template": "imported_sheet",
       "visual_color": [
@@ -357,13 +357,126 @@
         1.0
       ],
       "sprite_zoom_multiplier": 0.6,
-      "sprite_position_offset": [
-        0,
-        24
-      ],
-      "overlay_peak_alpha": 0.08,
-      "show_pink_visual": true,
-      "speed_scale": 1.25,
+      "overlay_peak_alpha": 0.0,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "speed_scale": 1.15,
+      "electric_switch": {
+        "enabled": true,
+        "visible_start": 0.05,
+        "visible_end": 0.92,
+        "fade_in": 0.05,
+        "fade_out": 0.12,
+        "trail_length": 0.34,
+        "segments": 20,
+        "jitter": 14.0,
+        "width": 6.2,
+        "branch_length": 28.0,
+        "core_enabled": true,
+        "core_radius": 18.0,
+        "core_spark_count": 9,
+        "source_aura_enabled": true,
+        "source_aura_start": 0.05,
+        "source_aura_end": 0.5,
+        "source_aura_fade_in": 0.06,
+        "source_aura_fade_out": 0.16,
+        "source_aura_radius": 48.0,
+        "source_aura_arc_count": 5,
+        "source_aura_bolt_count": 10,
+        "impact_start": 0.64,
+        "impact_at": 1.0,
+        "impact_radius": 60.0,
+        "impact_alpha": 0.96,
+        "impact_spark_count": 18,
+        "bolt_color": [
+          1.0,
+          0.68,
+          0.02,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.98,
+          0.62,
+          1.0
+        ],
+        "shadow_color": [
+          0.82,
+          0.26,
+          0.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              198
+            ],
+            "scale": 0.72
+          },
+          {
+            "at": 0.42,
+            "position": [
+              250,
+              144
+            ],
+            "scale": 1.16,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              86
+            ],
+            "scale": 1.0,
+            "ease": "ease_in_quad"
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              86
+            ],
+            "scale": 0.72
+          },
+          {
+            "at": 0.42,
+            "position": [
+              262,
+              144
+            ],
+            "scale": 1.16,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              198
+            ],
+            "scale": 1.0,
+            "ease": "ease_in_quad"
+          }
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.64,
+        "peak": 0.72,
+        "end": 0.86,
+        "alpha": 0.13,
+        "color": [
+          1.0,
+          0.82,
+          0.2,
+          1.0
+        ]
+      },
       "data_path": "res://assets/battles/animations/thunderbolt/thunderbolt.json",
       "sheet_path": "res://assets/battles/animations/thunderbolt/PRAS- Electric.png",
       "background_path": "res://assets/battles/animations/thunderbolt/PRAS- Black BG.png",

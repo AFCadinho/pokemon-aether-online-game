@@ -791,6 +791,7 @@ func _draw_electric_switch_visual() -> void:
 	var bolt_color: Color = _color_from_value(electric_switch_config.get("bolt_color", [1.0, 0.88, 0.08, 1.0]), Color(1.0, 0.88, 0.08, 1.0))
 	var core_color: Color = _color_from_value(electric_switch_config.get("core_color", [1.0, 1.0, 0.86, 1.0]), Color(1.0, 1.0, 0.86, 1.0))
 	var shadow_color: Color = _color_from_value(electric_switch_config.get("shadow_color", [0.38, 0.12, 0.9, 1.0]), Color(0.38, 0.12, 0.9, 1.0))
+	_draw_electric_switch_source_aura(progress, alpha, bolt_color, core_color, shadow_color)
 	var trail_progress: float = clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
 	var trail_start: float = clampf(trail_progress - float(electric_switch_config.get("trail_length", 0.18)), 0.0, 1.0)
 	var segments: int = maxi(6, int(electric_switch_config.get("segments", 12)))
@@ -815,6 +816,55 @@ func _draw_electric_switch_visual() -> void:
 	if bool(electric_switch_config.get("core_enabled", true)):
 		_draw_electric_switch_core(progress, bolt_color, core_color, shadow_color, alpha)
 	_draw_electric_switch_impact(progress, visible_end, bolt_color, core_color, shadow_color)
+
+
+func _draw_electric_switch_source_aura(progress: float, alpha: float, bolt_color: Color, core_color: Color, shadow_color: Color) -> void:
+	if not bool(electric_switch_config.get("source_aura_enabled", false)):
+		return
+
+	var start: float = clampf(float(electric_switch_config.get("source_aura_start", 0.0)), 0.0, 1.0)
+	var end: float = clampf(float(electric_switch_config.get("source_aura_end", 0.42)), start, 1.0)
+	if progress < start or progress > end:
+		return
+
+	var fade_in: float = maxf(float(electric_switch_config.get("source_aura_fade_in", 0.06)), 0.001)
+	var fade_out: float = maxf(float(electric_switch_config.get("source_aura_fade_out", 0.14)), 0.001)
+	var aura_alpha := alpha * minf(
+		clampf((progress - start) / fade_in, 0.0, 1.0),
+		clampf((end - progress) / fade_out, 0.0, 1.0)
+	)
+	if aura_alpha <= 0.02:
+		return
+
+	var state: Dictionary = _get_projectile_state_from_config(0.0, electric_switch_config)
+	var center: Vector2 = _projectile_battlefield_position(state.get("position", Vector2.ZERO) as Vector2, electric_switch_config)
+	var base_radius := maxf(float(electric_switch_config.get("source_aura_radius", 46.0)), 4.0)
+	var pulse := 0.9 + 0.16 * sin(float(frame_index) * 0.72)
+	var radius := base_radius * pulse
+	var phase := float(frame_index) * 0.26
+	draw_circle(center, radius * 0.78, _color_with_alpha(bolt_color, aura_alpha * 0.08))
+	draw_circle(center, radius * 0.44, _color_with_alpha(core_color, aura_alpha * 0.12))
+
+	var arc_count := maxi(2, int(electric_switch_config.get("source_aura_arc_count", 5)))
+	for arc_index: int in range(arc_count):
+		var arc_radius := radius * (0.62 + float(arc_index) * 0.16)
+		var arc_start := phase * (1.0 + float(arc_index) * 0.1) + float(arc_index) * 1.31
+		draw_arc(center, arc_radius, arc_start, arc_start + PI * 0.78, 24, _color_with_alpha(core_color, aura_alpha * 0.74), 1.8)
+
+	var bolt_count := maxi(3, int(electric_switch_config.get("source_aura_bolt_count", 8)))
+	for bolt_index: int in range(bolt_count):
+		var angle := float(bolt_index) * TAU / float(bolt_count) + phase * (0.58 + float(bolt_index % 3) * 0.07)
+		var direction := Vector2(cos(angle), sin(angle))
+		var perpendicular := direction.orthogonal()
+		var inner := center + direction * radius * 0.28
+		var middle := center + direction * radius * 0.62 + perpendicular * sin(phase + float(bolt_index) * 1.7) * radius * 0.18
+		var outer := center + direction * radius * (0.88 + 0.14 * sin(phase * 1.6 + float(bolt_index)))
+		draw_line(inner, middle, _color_with_alpha(shadow_color, aura_alpha * 0.36), 4.4)
+		draw_line(middle, outer, _color_with_alpha(shadow_color, aura_alpha * 0.36), 4.4)
+		draw_line(inner, middle, _color_with_alpha(bolt_color, aura_alpha * 0.92), 2.3)
+		draw_line(middle, outer, _color_with_alpha(bolt_color, aura_alpha * 0.92), 2.3)
+		draw_line(inner, middle, _color_with_alpha(core_color, aura_alpha * 0.76), 0.9)
+		draw_line(middle, outer, _color_with_alpha(core_color, aura_alpha * 0.76), 0.9)
 
 
 func _draw_electric_switch_core(progress: float, bolt_color: Color, core_color: Color, shadow_color: Color, alpha: float) -> void:
