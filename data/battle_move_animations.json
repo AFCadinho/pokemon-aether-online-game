@@ -2966,6 +2966,46 @@
       "sound_paths": {
         "PRSFX- Heat Wave.wav": "res://assets/battles/animations/heatwave/PRSFX- Heat Wave.wav"
       }
+    },
+    "closecombat": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "speed_scale": 1.22,
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.84,
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.14,
+        "duration": 1.05,
+        "amplitude": 5.0,
+        "interval": 0.045,
+        "vertical_scale": 0.18,
+        "decay": true
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          70,
+          -30
+        ],
+        "sheet_offset": [
+          70,
+          -30
+        ],
+        "suppress_target_feedback": true
+      },
+      "data_path": "res://assets/battles/animations/closecombat/closecombat.json",
+      "sheet_path": "res://assets/battles/animations/closecombat/PRAS- Strike.png",
+      "background_path": "res://assets/battles/animations/closecombat/PRAS- Spotlight BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Close Combat.wav": "res://assets/battles/animations/closecombat/PRSFX- Close Combat.wav"
+      }
     }
   }
 }
