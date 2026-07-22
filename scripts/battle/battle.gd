@@ -3402,6 +3402,7 @@ func _drain_pvp_event_queue() -> bool:
 		all_success = all_success and success
 
 	pvp_event_queue.is_rendering = false
+	_retry_pending_pvp_authoritative_terminal.call_deferred()
 	return all_success
 
 func _should_process_pvp_choice_queue_entry(response: Dictionary, source: String, metadata: Variant) -> bool:
@@ -9614,6 +9615,7 @@ func _drain_idle_pvp_realtime_updates() -> void:
 			break
 		_recover_pvp_idle_wait_ui_after_update(message)
 	pvp_idle_realtime_drain_pending = false
+	_retry_pending_pvp_authoritative_terminal.call_deferred()
 
 func _recover_pvp_idle_wait_ui_after_update(message: Dictionary) -> void:
 	if not _is_pvp_battle():
@@ -9861,17 +9863,18 @@ func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 	if battle_finished:
 		return
 	var end_reason := str(message.get("endReason", "ended")).strip_edges().to_lower()
-	# A manual forfeit has no final move batch to animate. The durable terminal
-	# event is the canonical outcome, so waiting for a separate ended snapshot or
-	# direct action response can strand the forfeiter in the battle indefinitely.
-	var is_forfeit_terminal := end_reason == "forfeit"
-	if not is_forfeit_terminal and PvpBattleRealtimeService.should_defer_authoritative_terminal_until_render(
+	# Timeout, disconnect, and manual forfeit have no final move batch of their
+	# own. Their durable terminal event is sufficient mechanical proof, while any
+	# render work that was already in flight must still finish first.
+	var is_animation_free_terminal := PvpBattleRealtimeService.is_animation_free_authoritative_terminal_reason(end_reason)
+	if PvpBattleRealtimeService.should_defer_authoritative_terminal_until_render(
 		battle_state.is_battle_ended(),
 		pvp_event_queue.is_rendering,
 		str(pvp_event_queue.current_event_batch_id),
 		pvp_event_queue.has_pending()
 			or not pvp_realtime_updates.is_empty()
-			or not pvp_realtime_deferred_updates.is_empty()
+			or not pvp_realtime_deferred_updates.is_empty(),
+		not is_animation_free_terminal
 	):
 		pvp_pending_authoritative_terminal = message.duplicate(true)
 		return
@@ -10055,6 +10058,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 				str(_pvp_response_state_ended(mapped_update)),
 			]
 		)
+	_retry_pending_pvp_authoritative_terminal.call_deferred()
 	return true
 
 func _buffer_pvp_reconciliation_snapshot(message: Dictionary, mapped_update: Dictionary, snapshot_event_seq: int, last_rendered_seq: int) -> void:

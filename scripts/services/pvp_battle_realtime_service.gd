@@ -453,9 +453,19 @@ static func should_defer_authoritative_terminal_until_render(
 	mechanical_state_ended: bool,
 	queue_is_rendering: bool,
 	current_batch_id: String,
-	has_pending_updates: bool
+	has_pending_updates: bool,
+	require_mechanical_state_ended := true
 ) -> bool:
-	return not mechanical_state_ended or queue_is_rendering or current_batch_id.strip_edges() != "" or has_pending_updates
+	return (
+		(require_mechanical_state_ended and not mechanical_state_ended)
+		or queue_is_rendering
+		or current_batch_id.strip_edges() != ""
+		or has_pending_updates
+	)
+
+
+static func is_animation_free_authoritative_terminal_reason(end_reason: String) -> bool:
+	return end_reason.strip_edges().to_lower() in ["timeout", "disconnect", "forfeit"]
 
 
 static func is_unrequested_local_team_preview_lead(message: Dictionary, local_player_id: String) -> bool:

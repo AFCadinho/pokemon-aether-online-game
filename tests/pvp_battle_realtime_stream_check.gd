@@ -297,6 +297,41 @@ func _init() -> void:
 		false,
 		"normal authoritative terminal can finish after the final projection and queue are complete"
 	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", false, false),
+		false,
+		"animation-free durable terminal does not wait for a separate ended projection"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, true, "batch-final", false, false),
+		true,
+		"animation-free durable terminal still waits for an active render batch"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", true, false),
+		true,
+		"animation-free durable terminal still waits for queued work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason(" timeout "),
+		true,
+		"timeout is recognized as animation-free terminal work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("disconnect"),
+		true,
+		"disconnect is recognized as animation-free terminal work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("forfeit"),
+		true,
+		"forfeit is recognized as animation-free terminal work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("battle_end"),
+		false,
+		"normal battle end still waits for its final mechanical projection"
+	)
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner(null), "", "null terminal winner is treated as absent")
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("None"), "", "Python None terminal winner is treated as absent")
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("Admin"), "Admin", "real terminal winner name is preserved")

@@ -420,13 +420,25 @@ func _check_authoritative_terminal_waits_for_render() -> void:
 	var callback_index := source.find("func _on_pvp_render_batch_completed(completion: Dictionary) -> void:")
 	var callback_next_index := source.find("\nfunc ", callback_index + 1)
 	var callback_source := source.substr(callback_index, callback_next_index - callback_index)
+	var drain_index := source.find("func _drain_pvp_event_queue() -> bool:")
+	var drain_next_index := source.find("\nfunc ", drain_index + 1)
+	var drain_source := source.substr(drain_index, drain_next_index - drain_index)
+	var idle_drain_index := source.find("func _drain_idle_pvp_realtime_updates() -> void:")
+	var idle_drain_next_index := source.find("\nfunc ", idle_drain_index + 1)
+	var idle_drain_source := source.substr(idle_drain_index, idle_drain_next_index - idle_drain_index)
+	var reconciliation_index := source.find("func _apply_pvp_snapshot_reconciliation(")
+	var reconciliation_next_index := source.find("\nfunc ", reconciliation_index + 1)
+	var reconciliation_source := source.substr(reconciliation_index, reconciliation_next_index - reconciliation_index)
 
 	_check_equal(finish_index >= 0, true, "authoritative terminal handler exists")
 	_check_equal(finish_source.contains("should_defer_authoritative_terminal_until_render"), true, "normal terminal waits while canonical render work is unfinished")
-	_check_equal(finish_source.contains('var is_forfeit_terminal := end_reason == "forfeit"'), true, "durable manual forfeit is recognized as animation-free terminal work")
-	_check_equal(finish_source.contains("if not is_forfeit_terminal and PvpBattleRealtimeService.should_defer_authoritative_terminal_until_render("), true, "manual forfeit does not wait forever for a separate ended projection")
+	_check_equal(finish_source.contains("is_animation_free_authoritative_terminal_reason(end_reason)"), true, "durable timeout, disconnect, and forfeit are recognized as animation-free terminal work")
+	_check_equal(finish_source.contains("not is_animation_free_terminal"), true, "animation-free terminal work does not wait forever for a separate ended projection")
 	_check_equal(finish_source.contains("pvp_pending_authoritative_terminal = message.duplicate(true)"), true, "early terminal is retained for post-render completion")
 	_check_equal(callback_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "render completion retries the retained terminal")
+	_check_equal(drain_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "render queue exhaustion retries the retained terminal")
+	_check_equal(idle_drain_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "realtime queue exhaustion retries the retained terminal")
+	_check_equal(reconciliation_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "ended snapshot reconciliation retries the retained terminal")
 
 
 func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
