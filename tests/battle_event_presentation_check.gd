@@ -17,6 +17,7 @@ func _init() -> void:
 	_check_booster_energy_quark_drive_messages()
 	_check_future_sight_lifecycle_messages()
 	_check_solar_beam_prepare_uses_charge_animation()
+	_check_electro_shot_prepare_uses_charge_animation()
 	_check_wish_heal_uses_delayed_animation()
 	_check_protect_activation_uses_block_animation()
 	_check_evasion_drop_uses_normalized_negative_amount()
@@ -229,6 +230,18 @@ func _check_solar_beam_prepare_uses_charge_animation() -> void:
 	_check_equal(str(result.get("log_message", "")), "Venusaur is absorbing light!", "Solar Beam charge uses player-facing text")
 	_check_equal(str(result.get("effect_animation_key", "")), "solar_beam_charge", "Solar Beam charge uses its separate charge animation")
 	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Venusaur", "Solar Beam charge is anchored to the attacker")
+
+
+func _check_electro_shot_prepare_uses_charge_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "prepare",
+		"actor": "p1a: Raging Bolt",
+		"move": "Electro Shot",
+	})
+	_check_equal(str(result.get("log_message", "")), "Raging Bolt is charging electricity!", "Electro Shot charge uses player-facing text")
+	_check_equal(str(result.get("effect_animation_key", "")), "electro_shot_charge", "Electro Shot charge uses its separate charge animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Raging Bolt", "Electro Shot charge is anchored to the attacker")
 
 
 func _check_wish_heal_uses_delayed_animation() -> void:

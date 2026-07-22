@@ -109,9 +109,10 @@ func _play_animation_config(
 	_play_move_target_shake_if_needed(config, move_target_ident, animation_options)
 	_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)
 
-	var overlay: Control = _create_animation_overlay(parent_node)
+	var overlay: Control = _create_animation_overlay(parent_node, config)
 	if overlay != null:
 		parent_node.add_child(overlay)
+		_move_overlay_below_sprites(overlay, parent_node, config)
 		_fit_animation_to_parent(animation_node, overlay)
 		_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, overlay, config, animation_options)
 		_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, overlay, config)
@@ -329,6 +330,8 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.sheet_pattern_min = int(config.get("sheet_pattern_min", 0))
 	animation_node.sheet_pattern_max = int(config.get("sheet_pattern_max", 999))
 	animation_node.sheet_visible_start_frame = int(config.get("sheet_visible_start_frame", 0))
+	animation_node.animation_start_frame = int(config.get("animation_start_frame", 0))
+	animation_node.animation_end_frame = int(config.get("animation_end_frame", -1))
 	animation_node.loop = false
 	animation_node.free_on_finish = true
 	animation_node.show_timing_backgrounds = bool(config.get("show_timing_backgrounds", false))
@@ -732,7 +735,7 @@ func _animation_assets_available(config: Dictionary) -> bool:
 	return true
 
 
-func _create_animation_overlay(parent_node: Node) -> Control:
+func _create_animation_overlay(parent_node: Node, config: Dictionary = {}) -> Control:
 	if not parent_node is Control:
 		return null
 
@@ -741,7 +744,7 @@ func _create_animation_overlay(parent_node: Node) -> Control:
 	overlay.name = "MoveAnimationOverlay"
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.clip_contents = true
-	overlay.z_index = 50
+	overlay.z_index = 0 if bool(config.get("render_below_sprites", false)) else 50
 	overlay.anchor_left = 0.0
 	overlay.anchor_top = 0.0
 	overlay.anchor_right = 0.0
@@ -750,6 +753,17 @@ func _create_animation_overlay(parent_node: Node) -> Control:
 	overlay.custom_minimum_size = parent_control.size
 	overlay.size = parent_control.size
 	return overlay
+
+
+func _move_overlay_below_sprites(overlay: Control, parent_node: Node, config: Dictionary) -> void:
+	if overlay == null or parent_node == null or not bool(config.get("render_below_sprites", false)):
+		return
+
+	var sibling_index: int = parent_node.get_child_count()
+	for sprite_box: Node in [player_sprite_box, enemy_sprite_box]:
+		if sprite_box != null and sprite_box.get_parent() == parent_node:
+			sibling_index = mini(sibling_index, sprite_box.get_index())
+	parent_node.move_child(overlay, sibling_index)
 
 
 func _move_timing_background_below_sprites(animation_node: MoveAnimationPlayer, parent_node: Node, config: Dictionary) -> void:

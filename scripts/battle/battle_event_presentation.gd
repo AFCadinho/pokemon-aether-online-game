@@ -105,7 +105,12 @@ func build(event_data: Dictionary) -> Dictionary:
 			var prepared_move := str(event_data.get("move", ""))
 			var prepare_effect_key := _get_prepare_effect_animation_key(prepared_move)
 			if prepare_actor != "" and prepared_move != "":
-				presentation["log_message"] = "%s is absorbing light!" % prepare_actor if prepare_effect_key == "solar_beam_charge" else "%s is preparing %s!" % [prepare_actor, prepared_move]
+				if prepare_effect_key == "solar_beam_charge":
+					presentation["log_message"] = "%s is absorbing light!" % prepare_actor
+				elif prepare_effect_key == "electro_shot_charge":
+					presentation["log_message"] = "%s is charging electricity!" % prepare_actor
+				else:
+					presentation["log_message"] = "%s is preparing %s!" % [prepare_actor, prepared_move]
 				presentation["battle_message"] = str(presentation["log_message"])
 			presentation["effect_animation_key"] = prepare_effect_key
 			presentation["effect_animation_target_ident"] = str(event_data.get("actor", ""))
@@ -436,6 +441,8 @@ func _get_stat_change_effect_animation_key(amount: int) -> String:
 func _get_prepare_effect_animation_key(move_name: String) -> String:
 	if _normalize_animation_key(move_name) in ["solarbeam", "solar_beam"]:
 		return "solar_beam_charge"
+	if _normalize_animation_key(move_name) in ["electroshot", "electro_shot"]:
+		return "electro_shot_charge"
 	return ""
 
 

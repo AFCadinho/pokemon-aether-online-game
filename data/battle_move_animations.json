@@ -3279,6 +3279,150 @@
       "sound_paths": {
         "PRSFX- Solar Beam2.wav": "res://assets/battles/animations/solarbeam/PRSFX- Solar Beam2.wav"
       }
+    },
+    "electroshot": {
+      "template": "imported_sheet",
+      "category": "projectile",
+      "speed_scale": 1.12,
+      "animation_start_frame": 13,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "sheet_pattern_min": 48,
+      "sheet_pattern_max": 57,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.82,
+      "sheet_visual_offset": [
+        0,
+        -18
+      ],
+      "solar_beam": {
+        "enabled": true,
+        "actor_offset": [
+          2,
+          -8
+        ],
+        "target_offset": [
+          0,
+          12
+        ],
+        "visible_start": 0.42,
+        "visible_end": 0.94,
+        "beam_start": 0.45,
+        "beam_fade_in": 0.045,
+        "fade_in": 0.035,
+        "fade_out": 0.09,
+        "outer_width": 27.0,
+        "middle_width": 15.0,
+        "core_width": 5.2,
+        "ribbon_count": 2,
+        "segments": 28,
+        "curve_amplitude": 7.0,
+        "source_radius": 21.0,
+        "impact_start": 0.76,
+        "impact_radius": 45.0,
+        "impact_alpha": 0.72,
+        "impact_ray_count": 10,
+        "outer_color": [
+          0.08,
+          0.42,
+          1.0,
+          1.0
+        ],
+        "middle_color": [
+          0.2,
+          0.82,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.88,
+          0.98,
+          1.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              196
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              68
+            ]
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              68
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              196
+            ]
+          }
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.3,
+        "peak": 0.56,
+        "end": 0.9,
+        "alpha": 0.1,
+        "color": [
+          0.36,
+          0.72,
+          1.0,
+          1.0
+        ]
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.42,
+        "duration": 0.12
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.42,
+        "duration": 0.32,
+        "amplitude": 8.0,
+        "interval": 0.04,
+        "vertical_scale": 0.18,
+        "decay": true
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          76,
+          -38
+        ],
+        "sheet_offset": [
+          76,
+          -38
+        ],
+        "suppress_target_feedback": true
+      },
+      "data_path": "res://assets/battles/animations/electroshot/electroshot.json",
+      "sheet_path": "res://assets/battles/animations/electroshot/PRAS- Catastropika.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "GEN8- Electricity1": "res://assets/battles/animations/electroshot/GEN8- Electricity1.wav",
+        "PRSFX- Thunderbolt2": "res://assets/battles/animations/electroshot/PRSFX- Thunderbolt2.wav",
+        "PRSFX- Wild Charge2": "res://assets/battles/animations/electroshot/PRSFX- Wild Charge2.wav"
+      }
     }
   }
 }

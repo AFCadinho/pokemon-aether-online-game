@@ -248,6 +248,45 @@
       "pattern_offset": 0,
       "pattern_override": -1
     },
+    "electro_shot_charge": {
+      "template": "imported_sheet",
+      "source": "Move:ELECTROSHOT",
+      "category": "charge_up",
+      "data_path": "res://assets/battles/animations/electroshot/electroshot.json",
+      "sheet_path": "res://assets/battles/animations/electroshot/PRAS- Catastropika.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "GEN8- Electricity1": "res://assets/battles/animations/electroshot/GEN8- Electricity1.wav"
+      },
+      "speed_scale": 1.1,
+      "animation_end_frame": 12,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "sheet_pattern_min": 0,
+      "sheet_pattern_max": 8,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.72,
+      "sprite_position_offset": [
+        -103,
+        -18
+      ],
+      "flash": {
+        "enabled": true,
+        "start": 0.12,
+        "peak": 0.48,
+        "end": 0.9,
+        "alpha": 0.06,
+        "color": [
+          0.32,
+          0.68,
+          1.0,
+          1.0
+        ]
+      }
+    },
     "grassy_terrain_start": {
       "template": "imported_sheet",
       "source": "Common:GrassyTerrain",

@@ -51,6 +51,8 @@ signal animation_finished
 @export_range(0, 999, 1) var sheet_pattern_min: int = 0
 @export_range(0, 999, 1) var sheet_pattern_max: int = 999
 @export_range(0, 999, 1) var sheet_visible_start_frame: int = 0
+@export_range(0, 999, 1) var animation_start_frame: int = 0
+@export_range(-1, 999, 1) var animation_end_frame: int = -1
 
 var data: Dictionary = {}
 var sprites: Array[Sprite2D] = []
@@ -94,7 +96,7 @@ func play() -> void:
 			queue_free()
 		return
 
-	frame_index = 0
+	frame_index = clampi(animation_start_frame, 0, maxi((data.get("frames", []) as Array).size() - 1, 0))
 	frame_time = 0.0
 	pink_overlay_alpha = 0.0
 	bg_hide_frame = -1
@@ -134,9 +136,13 @@ func _process(delta: float) -> void:
 	while frame_time >= seconds_per_frame:
 		frame_time -= seconds_per_frame
 		frame_index += 1
-		if frame_index >= (data["frames"] as Array).size():
+		var final_frame: int = mini(
+			(data["frames"] as Array).size() - 1,
+			animation_end_frame if animation_end_frame >= 0 else (data["frames"] as Array).size() - 1
+		)
+		if frame_index > final_frame:
 			if loop:
-				frame_index = 0
+				frame_index = clampi(animation_start_frame, 0, final_frame)
 				played_events.clear()
 			else:
 				stop()
