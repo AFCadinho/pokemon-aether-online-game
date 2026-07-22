@@ -4313,13 +4313,31 @@
         "visible_end": 0.76,
         "fade_in": 0.04,
         "fade_out": 0.18,
-        "center_offset": [0.0, -12.0],
+        "center_offset": [
+          0.0,
+          -12.0
+        ],
         "slash_length": 68.0,
         "spread": 17.0,
         "ring_radius": 48.0,
-        "outer_color": [0.44, 0.08, 0.82, 1.0],
-        "slash_color": [0.88, 0.66, 1.0, 1.0],
-        "core_color": [1.0, 0.96, 1.0, 1.0]
+        "outer_color": [
+          0.44,
+          0.08,
+          0.82,
+          1.0
+        ],
+        "slash_color": [
+          0.88,
+          0.66,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.96,
+          1.0,
+          1.0
+        ]
       },
       "data_path": "res://assets/battles/animations/dragonclaw/dragonclaw.json",
       "sheet_path": "res://assets/battles/animations/dragonclaw/PRAS- Dragon Claw.png",
@@ -4327,6 +4345,76 @@
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Dragon Claw.wav": "res://assets/battles/animations/dragonclaw/PRSFX- Dragon Claw.wav"
+      }
+    },
+    "firepunch": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.82,
+      "data_path": "res://assets/battles/animations/firepunch/firepunch.json",
+      "sheet_path": "res://assets/battles/animations/firepunch/PRAS- Elemental Punch.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Fire Punch1.wav": "res://assets/battles/animations/firepunch/PRSFX- Fire Punch1.wav",
+        "PRSFX- Fire Punch2.wav": "res://assets/battles/animations/firepunch/PRSFX- Fire Punch2.wav",
+        "PRSFX- Fire Punch3.wav": "res://assets/battles/animations/firepunch/PRSFX- Fire Punch3.wav"
+      }
+    },
+    "icepunch": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.82,
+      "data_path": "res://assets/battles/animations/icepunch/icepunch.json",
+      "sheet_path": "res://assets/battles/animations/icepunch/PRAS- Elemental Punch.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Ice Punch1.wav": "res://assets/battles/animations/icepunch/PRSFX- Ice Punch1.wav",
+        "PRSFX- Ice Punch2.wav": "res://assets/battles/animations/icepunch/PRSFX- Ice Punch2.wav"
+      }
+    },
+    "thunderpunch": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.58,
+      "sprite_position_offset": [0.0, 16.0],
+      "sheet_pattern_min": 0,
+      "sheet_pattern_max": 0,
+      "thunder_punch": {
+        "enabled": true,
+        "visible_start": 0.26,
+        "visible_end": 0.9,
+        "fade_in": 0.04,
+        "fade_out": 0.16,
+        "center_offset": [0.0, -8.0],
+        "bolt_height": 62.0,
+        "bolt_width": 34.0,
+        "bolt_color": [1.0, 0.76, 0.06, 1.0],
+        "core_color": [1.0, 1.0, 0.82, 1.0]
+      },
+      "data_path": "res://assets/battles/animations/thunderpunch/thunderpunch.json",
+      "sheet_path": "res://assets/battles/animations/thunderpunch/PRAS- Elemental Punch.png",
+      "background_path": "res://assets/battles/animations/thunderpunch/PRAS- Black BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Thunder Punch1.wav": "res://assets/battles/animations/thunderpunch/PRSFX- Thunder Punch1.wav",
+        "PRSFX- Thunder Punch2.wav": "res://assets/battles/animations/thunderpunch/PRSFX- Thunder Punch2.wav"
       }
     }
   }

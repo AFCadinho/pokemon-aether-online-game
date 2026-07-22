@@ -32,6 +32,7 @@ signal animation_finished
 @export var celestial_charge_config: Dictionary = {}
 @export var dragon_dance_config: Dictionary = {}
 @export var dragon_claw_config: Dictionary = {}
+@export var thunder_punch_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -306,6 +307,7 @@ func _draw() -> void:
 	_draw_celestial_charge_visual()
 	_draw_dragon_dance_visual()
 	_draw_dragon_claw_visual()
+	_draw_thunder_punch_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -758,6 +760,48 @@ func _draw_dragon_claw_visual() -> void:
 			var spark_at := 0.2 + float(spark_index) * 0.28
 			var spark_position := start.lerp(end, spark_at) + normal * sin(float(frame_index + spark_index * 4)) * 4.0
 			draw_circle(spark_position, 1.6 + float(spark_index) * 0.5, _color_with_alpha(core_color, slash_alpha * 0.8))
+
+
+func _draw_thunder_punch_visual() -> void:
+	if not bool(thunder_punch_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(thunder_punch_config.get("visible_start", 0.2)), 0.0, 1.0)
+	var visible_end: float = clampf(float(thunder_punch_config.get("visible_end", 0.9)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, thunder_punch_config)
+	if alpha <= 0.02:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(thunder_punch_config.get("center", [384.0, 96.0])))
+	center += _vector2_from_value(thunder_punch_config.get("center_offset", [0.0, 0.0]))
+	var bolt_color := _color_from_value(thunder_punch_config.get("bolt_color", [1.0, 0.76, 0.06, 1.0]), Color(1.0, 0.76, 0.06, 1.0))
+	var core_color := _color_from_value(thunder_punch_config.get("core_color", [1.0, 1.0, 0.82, 1.0]), Color(1.0, 1.0, 0.82, 1.0))
+	var bolt_height := maxf(float(thunder_punch_config.get("bolt_height", 62.0)), 16.0)
+	var bolt_width := maxf(float(thunder_punch_config.get("bolt_width", 34.0)), 8.0)
+	var phase := float(frame_index) * 0.74
+
+	for bolt_index: int in range(2):
+		var side := -1.0 if bolt_index == 0 else 1.0
+		var start := center + Vector2(side * bolt_width, -bolt_height)
+		var points := PackedVector2Array([start])
+		for segment_index: int in range(1, 5):
+			var t := float(segment_index) / 4.0
+			var wobble := sin(phase + float(segment_index) * 2.17 + float(bolt_index) * 1.43) * bolt_width * (0.46 - t * 0.18)
+			points.append(center.lerp(start, 1.0 - t) + Vector2(wobble, 0.0))
+		points[points.size() - 1] = center + Vector2(side * 4.0, 1.0)
+		draw_polyline(points, _color_with_alpha(bolt_color, alpha * 0.3), 7.2, true)
+		draw_polyline(points, _color_with_alpha(bolt_color, alpha), 3.4, true)
+		draw_polyline(points, _color_with_alpha(core_color, alpha * 0.9), 1.1, true)
+
+	var pulse_radius := 18.0 + sin(phase * 0.7) * 3.0
+	draw_circle(center, pulse_radius, _color_with_alpha(bolt_color, alpha * 0.12))
+	draw_arc(center, pulse_radius * 1.16, phase, phase + PI * 1.48, 32, _color_with_alpha(core_color, alpha * 0.82), 1.5)
 
 
 func _draw_solar_beam_visual() -> void:

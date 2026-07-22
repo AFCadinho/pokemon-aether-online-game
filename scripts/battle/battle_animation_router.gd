@@ -354,6 +354,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_claw_config = (config.get("dragon_claw", {}) as Dictionary).duplicate(true)
+	animation_node.thunder_punch_config = (config.get("thunder_punch", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -913,6 +914,7 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.dragon_dance_config = _with_self_effect_anchor(animation_node.dragon_dance_config, actor_anchor)
 	animation_node.dragon_claw_config = _with_target_effect_anchor(animation_node.dragon_claw_config, target_anchor)
+	animation_node.thunder_punch_config = _with_target_effect_anchor(animation_node.thunder_punch_config, target_anchor)
 
 
 func _apply_move_sheet_anchor(
