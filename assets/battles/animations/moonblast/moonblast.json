@@ -6172,7 +6172,7 @@
       "frame": 0,
       "type": 1,
       "name": "PRAS- Starry BG.png",
-      "duration": 5,
+      "duration": 60,
       "opacity": 0,
       "volume": 80,
       "pitch": 100,
@@ -6187,7 +6187,7 @@
       "frame": 0,
       "type": 2,
       "name": "",
-      "duration": 15,
+      "duration": 60,
       "opacity": 255,
       "volume": 80,
       "pitch": 100,
@@ -6229,7 +6229,7 @@
       ]
     },
     {
-      "frame": 45,
+      "frame": 59,
       "type": 2,
       "name": "",
       "duration": 15,

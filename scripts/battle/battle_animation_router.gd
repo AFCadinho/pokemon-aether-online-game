@@ -351,6 +351,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.heat_wave_config = (config.get("heat_wave", {}) as Dictionary).duplicate(true)
 	animation_node.solar_beam_config = (config.get("solar_beam", {}) as Dictionary).duplicate(true)
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
+	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))

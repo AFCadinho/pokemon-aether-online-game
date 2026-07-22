@@ -29,6 +29,7 @@ signal animation_finished
 @export var heat_wave_config: Dictionary = {}
 @export var solar_beam_config: Dictionary = {}
 @export var solar_charge_config: Dictionary = {}
+@export var celestial_charge_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -300,6 +301,7 @@ func _draw() -> void:
 	_draw_heat_wave_visual()
 	_draw_solar_beam_visual()
 	_draw_solar_charge_visual()
+	_draw_celestial_charge_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -573,6 +575,52 @@ func _draw_solar_charge_visual() -> void:
 		var arc_radius: float = orb_radius * (1.15 + float(arc_index) * 0.42)
 		var arc_start: float = phase + float(arc_index) * 2.05
 		draw_arc(center, arc_radius, arc_start, arc_start + PI * 1.12, 24, _color_with_alpha(core_color, alpha * 0.72), 1.8)
+
+
+func _draw_celestial_charge_visual() -> void:
+	if not bool(celestial_charge_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(celestial_charge_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(celestial_charge_config.get("visible_end", 0.45)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, celestial_charge_config)
+	if alpha <= 0.02:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(celestial_charge_config.get("center", [128.0, 224.0])))
+	var outer_color := _color_from_value(celestial_charge_config.get("outer_color", [0.58, 0.28, 1.0, 1.0]), Color(0.58, 0.28, 1.0, 1.0))
+	var core_color := _color_from_value(celestial_charge_config.get("core_color", [1.0, 0.86, 1.0, 1.0]), Color(1.0, 0.86, 1.0, 1.0))
+	var radius := maxf(float(celestial_charge_config.get("radius", 46.0)), 4.0)
+	var ground_squash := clampf(float(celestial_charge_config.get("ground_squash", 0.32)), 0.1, 1.0)
+	var phase := float(frame_index) * 0.22
+	draw_set_transform(center, 0.0, Vector2(1.0, ground_squash))
+	draw_circle(Vector2.ZERO, radius * 0.72, _color_with_alpha(outer_color, alpha * 0.09))
+	for ring_index: int in range(3):
+		var ring_radius := radius * (0.58 + float(ring_index) * 0.24)
+		var start := phase * (0.76 + float(ring_index) * 0.13) + float(ring_index) * 1.8
+		draw_arc(Vector2.ZERO, ring_radius, start, start + PI * 1.22, 32, _color_with_alpha(core_color, alpha * (0.72 - float(ring_index) * 0.14)), 1.8)
+	draw_set_transform(Vector2.ZERO)
+
+	var particle_count := maxi(3, int(celestial_charge_config.get("particle_count", 14)))
+	var particle_height := maxf(float(celestial_charge_config.get("particle_height", 72.0)), 1.0)
+	var particle_spread := maxf(float(celestial_charge_config.get("particle_spread", 52.0)), 1.0)
+	for particle_index: int in range(particle_count):
+		var life := fmod(float(particle_index) * 0.173 + progress * 2.6, 1.0)
+		var particle_phase := phase + float(particle_index) * 1.91
+		var position := center + Vector2(
+			sin(particle_phase) * particle_spread * (0.28 + life * 0.72),
+			-particle_height * life
+		)
+		var size := 1.4 + float(particle_index % 3) * 0.72
+		var particle_alpha := alpha * (0.2 + 0.52 * (1.0 - life))
+		draw_circle(position, size, _color_with_alpha(core_color, particle_alpha))
+		draw_line(position + Vector2(-size * 1.6, 0.0), position + Vector2(size * 1.6, 0.0), _color_with_alpha(outer_color, particle_alpha * 0.74), 1.0)
 
 
 func _draw_solar_beam_visual() -> void:
