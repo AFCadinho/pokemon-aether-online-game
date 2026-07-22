@@ -322,6 +322,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 		EFFECT_SOURCE_PLAYER_POSITION
 	)
 	animation_node.sprite_position_offset = _vector2_from_config_value(config.get("sprite_position_offset", [0.0, 0.0]), Vector2.ZERO)
+	animation_node.sheet_visual_offset = _vector2_from_config_value(config.get("sheet_visual_offset", [0.0, 0.0]), Vector2.ZERO)
 	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))
 	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
 	animation_node.pattern_override = int(config.get("pattern_override", -1))
@@ -345,6 +346,8 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
 	animation_node.fire_stream_config = (config.get("fire_stream", {}) as Dictionary).duplicate(true)
 	animation_node.heat_wave_config = (config.get("heat_wave", {}) as Dictionary).duplicate(true)
+	animation_node.solar_beam_config = (config.get("solar_beam", {}) as Dictionary).duplicate(true)
+	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -807,6 +810,12 @@ func _apply_effect_visual_offset(animation_node: MoveAnimationPlayer, visual_off
 			orb_center.x + visual_offset.x,
 			orb_center.y + visual_offset.y,
 		]
+	if animation_node.solar_charge_config.has("center"):
+		var charge_center := _vector2_from_config_value(animation_node.solar_charge_config.get("center", []), animation_node.sparkle_center - visual_offset)
+		animation_node.solar_charge_config["center"] = [
+			charge_center.x + visual_offset.x,
+			charge_center.y + visual_offset.y,
+		]
 
 
 func _apply_move_projectile_endpoint_anchors(
@@ -875,6 +884,11 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.heat_wave_config = _with_projectile_endpoint_anchors(
 		animation_node.heat_wave_config,
+		actor_anchor,
+		target_anchor
+	)
+	animation_node.solar_beam_config = _with_projectile_endpoint_anchors(
+		animation_node.solar_beam_config,
 		actor_anchor,
 		target_anchor
 	)

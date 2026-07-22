@@ -6453,9 +6453,20 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 
 		var presentation: Dictionary = event_presentation.build(event_data)
 		if event_type == "move":
-			var move_animation_result := _get_move_animation_result_for_event(ordered_events, event_index)
-			if move_animation_result != "":
-				presentation["move_animation_result"] = move_animation_result
+			var starts_charge_turn := _move_event_starts_a_charge_turn(ordered_events, event_index)
+			if starts_charge_turn:
+				_suppress_charge_turn_move_presentation(presentation)
+			else:
+				var move_animation_result := _get_move_animation_result_for_event(ordered_events, event_index)
+				if move_animation_result != "":
+					presentation["move_animation_result"] = move_animation_result
+		elif event_type == "damage":
+			var direct_release_move := _get_direct_prepare_release_move(ordered_events, event_index, event_data)
+			if not direct_release_move.is_empty():
+				presentation["attack_actor_ident"] = str(direct_release_move.get("actor", ""))
+				presentation["move_animation_name"] = str(direct_release_move.get("move", ""))
+				presentation["move_animation_actor_ident"] = str(direct_release_move.get("actor", ""))
+				presentation["move_animation_target_ident"] = str(direct_release_move.get("target", ""))
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
 			if render_turn_headers:
@@ -6558,6 +6569,84 @@ func _get_move_animation_result_for_event(events: Array, event_index: int) -> St
 			return ""
 
 	return ""
+
+
+func _move_event_starts_a_charge_turn(events: Array, event_index: int) -> bool:
+	if event_index < 0 or event_index >= events.size():
+		return false
+	if not (events[event_index] is Dictionary):
+		return false
+
+	var move_event: Dictionary = events[event_index] as Dictionary
+	if str(move_event.get("type", "")) != "move":
+		return false
+
+	for next_index: int in range(event_index + 1, events.size()):
+		var next_value: Variant = events[next_index]
+		if not (next_value is Dictionary):
+			continue
+		var next_event: Dictionary = next_value as Dictionary
+		var next_type := str(next_event.get("type", ""))
+		if next_type == "prepare":
+			var matching_prepare := _normalize_battle_ident(str(next_event.get("actor", ""))) == _normalize_battle_ident(str(move_event.get("actor", ""))) \
+				and _normalize_item_key(str(next_event.get("move", ""))) == _normalize_item_key(str(move_event.get("move", "")))
+			return matching_prepare
+		if _is_move_animation_result_boundary_event(next_event):
+			return false
+
+	return false
+
+
+func _get_direct_prepare_release_move(events: Array, damage_index: int, damage_event: Dictionary) -> Dictionary:
+	var damage_target := _normalize_battle_ident(str(damage_event.get("target", "")))
+	if damage_target == "":
+		return {}
+
+	for previous_index: int in range(damage_index - 1, -1, -1):
+		var previous_value: Variant = events[previous_index]
+		if not (previous_value is Dictionary):
+			continue
+		var prepare_event: Dictionary = previous_value as Dictionary
+		var previous_type := str(prepare_event.get("type", ""))
+		if previous_type == "turn":
+			return {}
+		if previous_type != "prepare":
+			continue
+
+		var prepare_actor := _normalize_battle_ident(str(prepare_event.get("actor", "")))
+		var prepare_move := _normalize_item_key(str(prepare_event.get("move", "")))
+		for move_index: int in range(previous_index - 1, -1, -1):
+			var move_value: Variant = events[move_index]
+			if not (move_value is Dictionary):
+				continue
+			var move_event: Dictionary = move_value as Dictionary
+			if str(move_event.get("type", "")) == "turn":
+				return {}
+			if str(move_event.get("type", "")) != "move":
+				continue
+			if _normalize_battle_ident(str(move_event.get("actor", ""))) != prepare_actor:
+				continue
+			if _normalize_item_key(str(move_event.get("move", ""))) != prepare_move:
+				continue
+			var move_target := _normalize_battle_ident(str(move_event.get("target", "")))
+			if move_target != "" and move_target != damage_target:
+				return {}
+			if move_target == "" and damage_target == _normalize_battle_ident(str(move_event.get("actor", ""))):
+				return {}
+			return move_event
+
+	return {}
+
+
+func _suppress_charge_turn_move_presentation(presentation: Dictionary) -> void:
+	presentation["pre_log_message"] = ""
+	presentation["log_message"] = ""
+	presentation["battle_message"] = ""
+	presentation["attack_actor_ident"] = ""
+	presentation["move_animation_name"] = ""
+	presentation["move_animation_actor_ident"] = ""
+	presentation["move_animation_target_ident"] = ""
+
 
 func _miss_event_matches_move_event(move_event: Dictionary, miss_event: Dictionary) -> bool:
 	var move_actor := _normalize_battle_ident(str(move_event.get("actor", "")))

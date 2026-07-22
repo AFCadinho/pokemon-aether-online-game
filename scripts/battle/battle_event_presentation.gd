@@ -41,6 +41,11 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 	var needs_damage_sound: bool = false
 
 	match str(event_data.get("type", "")):
+		"prepare":
+			var prepared_move := str(event_data.get("move", ""))
+			var prepare_effect_key := _get_prepare_effect_animation_key(prepared_move)
+			if prepare_effect_key != "":
+				effect_keys.append(prepare_effect_key)
 		"move":
 			var move_name: String = str(event_data.get("move", ""))
 			if move_name != "":
@@ -92,6 +97,18 @@ func build(event_data: Dictionary) -> Dictionary:
 	var presentation := _new_presentation()
 
 	match event_type:
+		"prepare":
+			recent_field_effect_source = ""
+			recent_ability_event = false
+			recent_move_event = false
+			var prepare_actor := _format_actor(str(event_data.get("actor", "")))
+			var prepared_move := str(event_data.get("move", ""))
+			var prepare_effect_key := _get_prepare_effect_animation_key(prepared_move)
+			if prepare_actor != "" and prepared_move != "":
+				presentation["log_message"] = "%s is absorbing light!" % prepare_actor if prepare_effect_key == "solar_beam_charge" else "%s is preparing %s!" % [prepare_actor, prepared_move]
+				presentation["battle_message"] = str(presentation["log_message"])
+			presentation["effect_animation_key"] = prepare_effect_key
+			presentation["effect_animation_target_ident"] = str(event_data.get("actor", ""))
 		"move":
 			recent_field_effect_source = ""
 			recent_ability_event = false
@@ -413,6 +430,12 @@ func _get_stat_change_effect_animation_key(amount: int) -> String:
 		return "stat_up"
 	if amount < 0:
 		return "stat_down"
+	return ""
+
+
+func _get_prepare_effect_animation_key(move_name: String) -> String:
+	if _normalize_animation_key(move_name) in ["solarbeam", "solar_beam"]:
+		return "solar_beam_charge"
 	return ""
 
 

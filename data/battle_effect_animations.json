@@ -191,6 +191,63 @@
       "pattern_offset": 0,
       "pattern_override": -1
     },
+    "solar_beam_charge": {
+      "template": "imported_sheet",
+      "source": "Move:CHARGE",
+      "category": "charge_up",
+      "data_path": "res://assets/battles/animations/charge/charge.json",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Charge.wav": "res://assets/battles/animations/charge/PRSFX- Solar Beam1.wav"
+      },
+      "speed_scale": 0.92,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.62,
+      "solar_charge": {
+        "enabled": true,
+        "center": [
+          128,
+          224
+        ],
+        "ray_count": 7,
+        "ray_height": 132.0,
+        "ray_spread": 96.0,
+        "orb_radius": 21.0,
+        "outer_color": [
+          0.58,
+          0.94,
+          0.16,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          1.0,
+          0.72,
+          1.0
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.08,
+        "peak": 0.38,
+        "end": 0.76,
+        "alpha": 0.06,
+        "color": [
+          0.9,
+          1.0,
+          0.3,
+          1.0
+        ]
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
+    },
     "grassy_terrain_start": {
       "template": "imported_sheet",
       "source": "Common:GrassyTerrain",

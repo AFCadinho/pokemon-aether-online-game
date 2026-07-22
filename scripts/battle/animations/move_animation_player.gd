@@ -27,6 +27,8 @@ signal animation_finished
 @export var electric_switch_config: Dictionary = {}
 @export var fire_stream_config: Dictionary = {}
 @export var heat_wave_config: Dictionary = {}
+@export var solar_beam_config: Dictionary = {}
+@export var solar_charge_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -289,6 +291,8 @@ func _draw() -> void:
 	_draw_electric_switch_visual()
 	_draw_fire_stream_visual()
 	_draw_heat_wave_visual()
+	_draw_solar_beam_visual()
+	_draw_solar_charge_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -524,6 +528,137 @@ func _draw_energy_blast_impact(progress: float, visible_end: float, aura_color: 
 		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * impact_radius * 0.34
 		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * impact_radius * (1.02 + 0.24 * sin(float(burst_index) + float(frame_index) * 0.2))
 		draw_line(start, end, _color_with_alpha(core_color, impact_alpha * 0.58), 1.5)
+
+
+func _draw_solar_charge_visual() -> void:
+	if not bool(solar_charge_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var alpha: float = _get_timed_alpha(progress, 0.0, 1.0, solar_charge_config)
+	if alpha <= 0.02:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(solar_charge_config.get("center", [128.0, 224.0])))
+	var ray_count: int = maxi(3, int(solar_charge_config.get("ray_count", 7)))
+	var ray_height: float = float(solar_charge_config.get("ray_height", 132.0))
+	var ray_spread: float = float(solar_charge_config.get("ray_spread", 96.0))
+	var outer_color := _color_from_value(solar_charge_config.get("outer_color", [0.58, 0.94, 0.16, 1.0]), Color(0.58, 0.94, 0.16, 1.0))
+	var core_color := _color_from_value(solar_charge_config.get("core_color", [1.0, 1.0, 0.72, 1.0]), Color(1.0, 1.0, 0.72, 1.0))
+	var phase: float = float(frame_index) * 0.28
+
+	for ray_index: int in range(ray_count):
+		var ray_ratio: float = (float(ray_index) / float(ray_count - 1)) * 2.0 - 1.0 if ray_count > 1 else 0.0
+		var origin := center + Vector2(ray_ratio * ray_spread + sin(phase + float(ray_index)) * 7.0, -ray_height - float(ray_index % 3) * 12.0)
+		var landing := center + Vector2(ray_ratio * 16.0, -10.0 + cos(phase + float(ray_index)) * 6.0)
+		var ray_alpha: float = alpha * (0.28 + 0.3 * absf(sin(phase + float(ray_index) * 1.3)))
+		draw_line(origin, landing, _color_with_alpha(outer_color, ray_alpha * 0.38), 8.0)
+		draw_line(origin, landing, _color_with_alpha(core_color, ray_alpha), 2.2)
+
+	var pulse: float = 0.84 + 0.16 * sin(phase * 1.5)
+	var orb_radius: float = float(solar_charge_config.get("orb_radius", 21.0)) * pulse
+	draw_circle(center, orb_radius * 1.7, _color_with_alpha(outer_color, alpha * 0.11))
+	draw_circle(center, orb_radius * 0.9, _color_with_alpha(outer_color, alpha * 0.28))
+	draw_circle(center, orb_radius * 0.42, _color_with_alpha(core_color, alpha * 0.9))
+	for arc_index: int in range(3):
+		var arc_radius: float = orb_radius * (1.15 + float(arc_index) * 0.42)
+		var arc_start: float = phase + float(arc_index) * 2.05
+		draw_arc(center, arc_radius, arc_start, arc_start + PI * 1.12, 24, _color_with_alpha(core_color, alpha * 0.72), 1.8)
+
+
+func _draw_solar_beam_visual() -> void:
+	if not bool(solar_beam_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(solar_beam_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(solar_beam_config.get("visible_end", 1.0)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha: float = _get_timed_alpha(progress, visible_start, visible_end, solar_beam_config)
+	if alpha <= 0.02:
+		return
+
+	var source_state: Dictionary = _get_projectile_state_from_config(0.0, solar_beam_config)
+	var target_state: Dictionary = _get_projectile_state_from_config(1.0, solar_beam_config)
+	var source := _projectile_battlefield_position(source_state.get("position", Vector2.ZERO) as Vector2, solar_beam_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2.ZERO) as Vector2, solar_beam_config)
+	var beam_vector := target - source
+	if beam_vector.length_squared() <= 1.0:
+		return
+
+	var direction := beam_vector.normalized()
+	var perpendicular := Vector2(-direction.y, direction.x)
+	var pulse := 0.78 + 0.22 * sin(float(frame_index) * 0.82)
+	var outer_width := float(solar_beam_config.get("outer_width", 18.0)) * pulse
+	var middle_width := float(solar_beam_config.get("middle_width", 10.0)) * pulse
+	var core_width := float(solar_beam_config.get("core_width", 4.0)) * pulse
+	var outer_color := _color_from_value(solar_beam_config.get("outer_color", [0.48, 0.92, 0.12, 1.0]), Color(0.48, 0.92, 0.12, 1.0))
+	var middle_color := _color_from_value(solar_beam_config.get("middle_color", [0.84, 1.0, 0.22, 1.0]), Color(0.84, 1.0, 0.22, 1.0))
+	var core_color := _color_from_value(solar_beam_config.get("core_color", [1.0, 1.0, 0.86, 1.0]), Color(1.0, 1.0, 0.86, 1.0))
+	var beam_phase: float = float(frame_index) * 0.34
+	var source_radius: float = float(solar_beam_config.get("source_radius", 24.0)) * pulse
+	draw_circle(source, source_radius * 1.45, _color_with_alpha(outer_color, alpha * 0.13))
+	draw_circle(source, source_radius * 0.82, _color_with_alpha(middle_color, alpha * 0.2))
+	draw_circle(source, source_radius * 0.38, _color_with_alpha(core_color, alpha * 0.86))
+	for arc_index: int in range(3):
+		var arc_radius: float = source_radius * (0.9 + float(arc_index) * 0.36)
+		var arc_start: float = beam_phase * (1.0 + float(arc_index) * 0.12) + float(arc_index) * 1.8
+		draw_arc(source, arc_radius, arc_start, arc_start + PI * 1.18, 24, _color_with_alpha(middle_color, alpha * 0.72), 2.0)
+
+	var beam_start: float = clampf(float(solar_beam_config.get("beam_start", visible_start)), visible_start, visible_end)
+	if progress < beam_start:
+		return
+	var beam_fade_in: float = maxf(float(solar_beam_config.get("beam_fade_in", 0.08)), 0.001)
+	var beam_alpha: float = alpha * clampf((progress - beam_start) / beam_fade_in, 0.0, 1.0)
+	var segments: int = maxi(8, int(solar_beam_config.get("segments", 24)))
+	var ribbon_count: int = maxi(1, int(solar_beam_config.get("ribbon_count", 3)))
+	var curve_amplitude: float = float(solar_beam_config.get("curve_amplitude", 12.0))
+
+	# The soft core keeps the attack legible, while the three offset ribbons give
+	# Solar Beam the looping, gathered-light silhouette of the reference.
+	var previous_core := source
+	for segment_index: int in range(1, segments + 1):
+		var t: float = float(segment_index) / float(segments)
+		var envelope: float = sin(PI * t)
+		var core_offset := perpendicular * sin(t * TAU * 1.12 + beam_phase) * curve_amplitude * 0.22 * envelope
+		var core_point := source.lerp(target, t) + core_offset
+		var segment_alpha: float = beam_alpha * (0.62 + 0.28 * sin(t * PI))
+		draw_line(previous_core, core_point, _color_with_alpha(outer_color, segment_alpha * 0.34), outer_width)
+		draw_line(previous_core, core_point, _color_with_alpha(middle_color, segment_alpha * 0.72), middle_width)
+		draw_line(previous_core, core_point, _color_with_alpha(core_color, segment_alpha), core_width)
+		previous_core = core_point
+
+	for ribbon_index: int in range(ribbon_count):
+		var ribbon_phase: float = beam_phase + float(ribbon_index) * TAU / float(ribbon_count)
+		var previous_ribbon := source
+		for segment_index: int in range(1, segments + 1):
+			var t: float = float(segment_index) / float(segments)
+			var envelope: float = sin(PI * t)
+			var wave := sin(t * TAU * 1.25 + ribbon_phase) * curve_amplitude * envelope
+			var ribbon_point := source.lerp(target, t) + perpendicular * wave
+			var ribbon_alpha: float = beam_alpha * (0.34 + 0.22 * absf(sin(t * TAU + ribbon_phase)))
+			draw_line(previous_ribbon, ribbon_point, _color_with_alpha(middle_color, ribbon_alpha), 2.3)
+			if segment_index % 3 == 0:
+				draw_circle(ribbon_point, 1.8, _color_with_alpha(core_color, ribbon_alpha * 0.9))
+			previous_ribbon = ribbon_point
+
+	var impact_progress: float = clampf((progress - float(solar_beam_config.get("impact_start", 0.66))) / maxf(visible_end - float(solar_beam_config.get("impact_start", 0.66)), 0.001), 0.0, 1.0)
+	if impact_progress <= 0.0:
+		return
+	var impact_radius: float = float(solar_beam_config.get("impact_radius", 46.0)) * (0.35 + impact_progress * 0.9)
+	var impact_alpha: float = beam_alpha * (1.0 - impact_progress) * float(solar_beam_config.get("impact_alpha", 0.8))
+	draw_circle(target, impact_radius * 0.5, _color_with_alpha(middle_color, impact_alpha * 0.22))
+	for ray_index: int in range(maxi(4, int(solar_beam_config.get("impact_ray_count", 12)))):
+		var angle := float(ray_index) * TAU / float(maxi(4, int(solar_beam_config.get("impact_ray_count", 12)))) + float(frame_index) * 0.08
+		var ray_start := target + Vector2(cos(angle), sin(angle)) * impact_radius * 0.2
+		var ray_end := target + Vector2(cos(angle), sin(angle)) * impact_radius
+		draw_line(ray_start, ray_end, _color_with_alpha(core_color, impact_alpha * 0.72), 1.8)
 
 
 func _draw_water_splash_visual() -> void:

@@ -16,6 +16,7 @@ func _init() -> void:
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
 	_check_booster_energy_quark_drive_messages()
 	_check_future_sight_lifecycle_messages()
+	_check_solar_beam_prepare_uses_charge_animation()
 	_check_wish_heal_uses_delayed_animation()
 	_check_protect_activation_uses_block_animation()
 	_check_evasion_drop_uses_normalized_negative_amount()
@@ -216,6 +217,18 @@ func _check_future_sight_lifecycle_messages() -> void:
 		"maxHp": 100,
 	})
 	_check_equal(str(damage_result.get("effect_animation_key", "")), "future_sight_impact", "Future Sight damage source plays its delayed impact animation")
+
+
+func _check_solar_beam_prepare_uses_charge_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "prepare",
+		"actor": "p1a: Venusaur",
+		"move": "Solar Beam",
+	})
+	_check_equal(str(result.get("log_message", "")), "Venusaur is absorbing light!", "Solar Beam charge uses player-facing text")
+	_check_equal(str(result.get("effect_animation_key", "")), "solar_beam_charge", "Solar Beam charge uses its separate charge animation")
+	_check_equal(str(result.get("effect_animation_target_ident", "")), "p1a: Venusaur", "Solar Beam charge is anchored to the attacker")
 
 
 func _check_wish_heal_uses_delayed_animation() -> void:
