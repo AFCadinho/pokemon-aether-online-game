@@ -368,8 +368,14 @@
         "visible_end": 0.9,
         "travel_start": 0.5,
         "travel_end": 0.7,
-        "actor_offset": [0.0, -26.0],
-        "target_offset": [0.0, -10.0],
+        "actor_offset": [
+          0.0,
+          -26.0
+        ],
+        "target_offset": [
+          0.0,
+          -10.0
+        ],
         "beam_start": 0.14,
         "beam_fade_in": 0.06,
         "fade_in": 0.05,
@@ -4588,8 +4594,14 @@
         "visible_end": 0.9,
         "travel_start": 0.5,
         "travel_end": 0.7,
-        "actor_offset": [0.0, -26.0],
-        "target_offset": [0.0, -10.0],
+        "actor_offset": [
+          0.0,
+          -26.0
+        ],
+        "target_offset": [
+          0.0,
+          -10.0
+        ],
         "fade_in": 0.08,
         "fade_out": 0.12,
         "radius": 31.0,
@@ -4597,21 +4609,69 @@
         "trail_spacing": 0.04,
         "ray_count": 0,
         "shadow_ray_count": 13,
-        "shadow_ray_color": [0.0, 0.0, 0.0, 1.0],
+        "shadow_ray_color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
         "particle_count": 14,
         "impact_start": 0.72,
         "impact_radius": 64.0,
         "impact_alpha": 0.95,
         "impact_ray_count": 14,
-        "aura_color": [0.22, 0.01, 0.38, 1.0],
-        "core_color": [0.01, 0.0, 0.03, 1.0],
-        "ring_color": [0.9, 0.12, 1.0, 1.0],
-        "particle_color": [0.94, 0.4, 1.0, 1.0],
-        "shadow_color": [0.01, 0.0, 0.04, 1.0],
-        "impact_core_color": [1.0, 0.9, 1.0, 1.0],
+        "aura_color": [
+          0.22,
+          0.01,
+          0.38,
+          1.0
+        ],
+        "core_color": [
+          0.01,
+          0.0,
+          0.03,
+          1.0
+        ],
+        "ring_color": [
+          0.9,
+          0.12,
+          1.0,
+          1.0
+        ],
+        "particle_color": [
+          0.94,
+          0.4,
+          1.0,
+          1.0
+        ],
+        "shadow_color": [
+          0.01,
+          0.0,
+          0.04,
+          1.0
+        ],
+        "impact_core_color": [
+          1.0,
+          0.9,
+          1.0,
+          1.0
+        ],
         "path": [
-          {"at": 0.0, "position": [128.0, 224.0]},
-          {"at": 1.0, "position": [384.0, 96.0], "ease": "out_quad"}
+          {
+            "at": 0.0,
+            "position": [
+              128.0,
+              224.0
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384.0,
+              96.0
+            ],
+            "ease": "out_quad"
+          }
         ]
       },
       "data_path": "res://assets/battles/animations/shadowball/shadowball.json",
@@ -4621,6 +4681,38 @@
       "sound_paths": {
         "PRSFX- Shadow Ball1.wav": "res://assets/battles/animations/shadowball/PRSFX- Shadow Ball1.wav",
         "PRSFX- Shadow Ball2.wav": "res://assets/battles/animations/shadowball/PRSFX- Shadow Ball2.wav"
+      }
+    },
+    "darkpulse": {
+      "template": "imported_sheet",
+      "category": "special",
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "dark_pulse": {
+        "enabled": true,
+        "visible_start": 0.04,
+        "visible_end": 0.9,
+        "fade_in": 0.05,
+        "fade_out": 0.12,
+        "charge_end": 0.32,
+        "ring_count": 8,
+        "color": [1.0, 0.12, 0.68, 1.0],
+        "path": [
+          {"at": 0.0, "position": [128.0, 224.0]},
+          {"at": 1.0, "position": [384.0, 96.0]}
+        ]
+      },
+      "data_path": "res://assets/battles/animations/darkpulse/darkpulse.json",
+      "sheet_path": "res://assets/battles/animations/darkpulse/PRAS- Dark Pulse.png",
+      "background_path": "res://assets/battles/animations/darkpulse/PRAS- Ominous Wind BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Dark Pulse1.wav": "res://assets/battles/animations/darkpulse/PRSFX- Dark Pulse1.wav",
+        "PRSFX- Dark Pulse2.wav": "res://assets/battles/animations/darkpulse/PRSFX- Dark Pulse2.wav"
       }
     }
   }

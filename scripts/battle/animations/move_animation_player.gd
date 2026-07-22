@@ -34,6 +34,7 @@ signal animation_finished
 @export var dragon_claw_config: Dictionary = {}
 @export var thunder_punch_config: Dictionary = {}
 @export var bullet_punch_config: Dictionary = {}
+@export var dark_pulse_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -310,6 +311,7 @@ func _draw() -> void:
 	_draw_dragon_claw_visual()
 	_draw_thunder_punch_visual()
 	_draw_bullet_punch_visual()
+	_draw_dark_pulse_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -830,6 +832,59 @@ func _draw_thunder_punch_visual() -> void:
 	var pulse_radius := 18.0 + sin(phase * 0.7) * 3.0
 	draw_circle(center, pulse_radius, _color_with_alpha(bolt_color, alpha * 0.12))
 	draw_arc(center, pulse_radius * 1.16, phase, phase + PI * 1.48, 32, _color_with_alpha(core_color, alpha * 0.82), 1.5)
+
+
+func _draw_dark_pulse_visual() -> void:
+	if not bool(dark_pulse_config.get("enabled", false)):
+		return
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var alpha := _get_timed_alpha(progress, float(dark_pulse_config.get("visible_start", 0.0)), float(dark_pulse_config.get("visible_end", 0.9)), dark_pulse_config)
+	if alpha <= 0.02:
+		return
+	var source := _projectile_battlefield_position(_get_projectile_state_from_config(0.0, dark_pulse_config).get("position", Vector2.ZERO) as Vector2, dark_pulse_config)
+	var target := _projectile_battlefield_position(_get_projectile_state_from_config(1.0, dark_pulse_config).get("position", Vector2.ZERO) as Vector2, dark_pulse_config)
+	var direction := (target - source).normalized()
+	var normal := direction.orthogonal()
+	var purple := _color_from_value(dark_pulse_config.get("color", [0.72, 0.08, 0.92, 1.0]), Color(0.72, 0.08, 0.92, 1.0))
+	var charge_end := clampf(float(dark_pulse_config.get("charge_end", 0.32)), 0.0, 0.8)
+	if progress < charge_end:
+		var charge := clampf(progress / maxf(charge_end, 0.001), 0.0, 1.0)
+		var ground := source + Vector2(0.0, 24.0)
+		draw_set_transform(ground, 0.0, Vector2(1.0, 0.28))
+		draw_circle(Vector2.ZERO, 68.0 + charge * 16.0, _color_with_alpha(Color(0.08, 0.26, 0.88, 1.0), alpha * 0.2))
+		draw_arc(Vector2.ZERO, 58.0 + charge * 14.0, 0.0, TAU, 48, _color_with_alpha(Color.BLACK, alpha * 0.9), 5.2)
+		draw_arc(Vector2.ZERO, 50.0 + charge * 12.0, float(frame_index) * 0.18, float(frame_index) * 0.18 + TAU * 0.86, 48, _color_with_alpha(purple, alpha), 2.6)
+		draw_set_transform(Vector2.ZERO)
+		for ring_index in range(11):
+			var ring_angle := float(ring_index) * TAU / 11.0 + float(frame_index) * 0.11
+			var outer_distance := 48.0 + float(ring_index % 4) * 16.0
+			var gather_distance := 16.0 + float(ring_index % 3) * 5.0
+			var ring_distance := lerpf(outer_distance, gather_distance, charge)
+			var gather_point := source + direction * (18.0 + charge * 16.0) + Vector2(0.0, -16.0)
+			var ring_center := gather_point + Vector2(cos(ring_angle) * ring_distance, sin(ring_angle) * ring_distance * 0.5)
+			var ring_radius := 8.0 + float(ring_index % 3) * 4.5
+			draw_circle(ring_center, ring_radius, _color_with_alpha(purple, alpha * 0.12))
+			draw_arc(ring_center, ring_radius, 0.0, TAU, 24, _color_with_alpha(Color(1.0, 0.12, 0.68, 1.0), alpha), 1.8)
+		return
+	# The fired waves start at the same forward point where the charge rings converge.
+	source += direction * 34.0 + Vector2(0.0, -16.0)
+	direction = (target - source).normalized()
+	normal = direction.orthogonal()
+	var ring_count := maxi(3, int(dark_pulse_config.get("ring_count", 8)))
+	for ring_index in range(ring_count):
+		var t := ((progress - charge_end) / maxf(1.0 - charge_end, 0.001)) * 1.65 - float(ring_index) / float(ring_count)
+		if t < 0.0 or t > 1.0:
+			continue
+		var center := source.lerp(target, t)
+		var radius := 12.0 + t * 24.0
+		draw_set_transform(center, atan2(direction.y, direction.x), Vector2(1.0, 0.46))
+		draw_circle(Vector2.ZERO, radius + 7.0, _color_with_alpha(Color(0.08, 0.28, 0.96, 1.0), alpha * 0.13))
+		draw_arc(Vector2.ZERO, radius + 3.0, 0.0, TAU, 36, _color_with_alpha(Color(0.12, 0.42, 1.0, 1.0), alpha * 0.32), 6.4)
+		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 36, _color_with_alpha(Color.BLACK, alpha * 0.68), 3.6)
+		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 36, _color_with_alpha(purple, alpha), 2.7)
+		draw_arc(Vector2.ZERO, radius - 1.2, 0.0, TAU, 36, _color_with_alpha(Color(1.0, 0.42, 0.82, 1.0), alpha * 0.8), 0.8)
+		draw_set_transform(Vector2.ZERO)
 
 
 func _draw_bullet_punch_visual() -> void:
