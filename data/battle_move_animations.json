@@ -2496,20 +2496,79 @@
         "steam_count": 0,
         "steam_height": 52.0,
         "steam_spread": 30.0,
-        "flame_color": [0.05, 0.38, 0.95, 1.0],
-        "hot_color": [0.18, 0.7, 1.0, 1.0],
-        "core_color": [0.88, 0.98, 1.0, 1.0],
-        "smoke_color": [0.42, 0.72, 0.98, 1.0],
-        "steam_color": [0.96, 0.99, 1.0, 1.0],
-        "actor_offset": [0, -26],
-        "target_offset": [0, -16],
+        "flame_color": [
+          0.05,
+          0.38,
+          0.95,
+          1.0
+        ],
+        "hot_color": [
+          0.18,
+          0.7,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.88,
+          0.98,
+          1.0,
+          1.0
+        ],
+        "smoke_color": [
+          0.42,
+          0.72,
+          0.98,
+          1.0
+        ],
+        "steam_color": [
+          0.96,
+          0.99,
+          1.0,
+          1.0
+        ],
+        "actor_offset": [
+          0,
+          -26
+        ],
+        "target_offset": [
+          0,
+          -16
+        ],
         "path": [
-          {"at": 0.0, "position": [128, 224], "scale": 1.0},
-          {"at": 1.0, "position": [384, 96], "scale": 1.0}
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0
+          }
         ],
         "reverse_path": [
-          {"at": 0.0, "position": [384, 96], "scale": 1.0},
-          {"at": 1.0, "position": [128, 224], "scale": 1.0}
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0
+          }
         ]
       },
       "target_hit_flash": {
@@ -2524,6 +2583,49 @@
       "sound_paths": {
         "PRSFX- Scald1.wav": "res://assets/battles/animations/scald/PRSFX- Scald1.wav",
         "PRSFX- Scald2.wav": "res://assets/battles/animations/scald/PRSFX- Scald2.wav"
+      }
+    },
+    "pursuit": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "speed_scale": 1.35,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.78,
+      "sheet_pattern_min": 1,
+      "sheet_pattern_max": 1,
+      "flash": {
+        "enabled": true,
+        "start": 0.04,
+        "peak": 0.18,
+        "end": 0.72,
+        "alpha": 0.18,
+        "color": [
+          0.04,
+          0.02,
+          0.1,
+          1.0
+        ]
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.3,
+        "duration": 0.32,
+        "amplitude": 5.0,
+        "interval": 0.045,
+        "vertical_scale": 0.18,
+        "decay": true
+      },
+      "data_path": "res://assets/battles/animations/pursuit/pursuit.json",
+      "sheet_path": "res://assets/battles/animations/pursuit/PRAS- Shadow Sneak.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Pursuit1.wav": "res://assets/battles/animations/pursuit/PRSFX- Pursuit1.wav",
+        "PRSFX- Pursuit2.wav": "res://assets/battles/animations/pursuit/PRSFX- Pursuit2.wav"
       }
     }
   }
