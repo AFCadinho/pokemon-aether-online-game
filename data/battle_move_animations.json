@@ -2808,6 +2808,43 @@
       "sound_paths": {
         "PRSFX- Iron Head.wav": "res://assets/battles/animations/ironhead/PRSFX- Iron Head.wav"
       }
+    },
+    "bleakwindstorm": {
+      "template": "imported_sheet",
+      "category": "projectile",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.7,
+      "sprite_position_offset": [
+        0,
+        -28
+      ],
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.32,
+        "duration": 0.1
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.32,
+        "duration": 0.55,
+        "amplitude": 5.0,
+        "interval": 0.045,
+        "vertical_scale": 0.28,
+        "decay": true
+      },
+      "data_path": "res://assets/battles/animations/bleakwindstorm/bleakwindstorm.json",
+      "sheet_path": "res://assets/battles/animations/bleakwindstorm/PRAS- Twister.png",
+      "background_path": "res://assets/battles/animations/bleakwindstorm/PRAS- Blizzard BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Icy Wind1": "res://assets/battles/animations/bleakwindstorm/PRSFX- Icy Wind1.wav"
+      }
     }
   }
 }
