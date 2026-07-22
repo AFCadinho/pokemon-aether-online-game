@@ -102,8 +102,8 @@
       "pattern_override": -1
     },
     "icebeam": {
-      "show_pink_visual": true,
-      "speed_scale": 1.35,
+      "show_pink_visual": false,
+      "speed_scale": 1.16,
       "category": "beam",
       "show_timing_foregrounds": false,
       "sprite_tint": [
@@ -113,18 +113,9 @@
         1.0
       ],
       "sprite_zoom_multiplier": 0.6,
-      "sprite_position_offset": [
-        0,
-        -12
-      ],
-      "sheet_start_offset": [
-        0,
-        -56
-      ],
-      "sheet_start_offset_end_frame": 6,
       "show_timing_backgrounds": false,
-      "sparkle_count": 8,
-      "overlay_peak_alpha": 0.12,
+      "sparkle_count": 0,
+      "overlay_peak_alpha": 0.0,
       "visual_color": [
         0.45,
         0.9,
@@ -132,6 +123,100 @@
         1.0
       ],
       "template": "imported_sheet",
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "solar_beam": {
+        "enabled": true,
+        "visible_start": 0.06,
+        "visible_end": 0.9,
+        "beam_start": 0.14,
+        "beam_fade_in": 0.06,
+        "fade_in": 0.05,
+        "fade_out": 0.12,
+        "outer_width": 32.0,
+        "middle_width": 18.0,
+        "core_width": 7.5,
+        "ribbon_count": 3,
+        "segments": 30,
+        "curve_amplitude": 4.0,
+        "source_radius": 25.0,
+        "impact_start": 0.66,
+        "impact_radius": 64.0,
+        "impact_alpha": 0.94,
+        "impact_ray_count": 20,
+        "impact_snowflake_count": 18,
+        "impact_snowflake_size": 5.5,
+        "impact_snowflake_spread": 1.2,
+        "impact_snowflake_color": [
+          0.84,
+          0.98,
+          1.0,
+          1.0
+        ],
+        "outer_color": [
+          0.08,
+          0.54,
+          0.98,
+          1.0
+        ],
+        "middle_color": [
+          0.46,
+          0.88,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.96,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              198
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              86
+            ]
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              86
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              198
+            ]
+          }
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.66,
+        "peak": 0.74,
+        "end": 0.88,
+        "alpha": 0.14,
+        "color": [
+          0.54,
+          0.86,
+          1.0,
+          1.0
+        ]
+      },
       "data_path": "res://assets/battles/animations/icebeam/icebeam.json",
       "sheet_path": "res://assets/battles/animations/icebeam/PRAS- Ice.png",
       "background_path": "",

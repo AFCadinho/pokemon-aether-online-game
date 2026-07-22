@@ -41,8 +41,6 @@ signal animation_finished
 @export_range(0.25, 2.0, 0.05) var sprite_position_scale: float = 1.0
 @export var sprite_position_anchor: Vector2 = Vector2(128, 224)
 @export var sprite_position_offset: Vector2 = Vector2.ZERO
-@export var sheet_start_offset: Vector2 = Vector2.ZERO
-@export_range(0, 999, 1) var sheet_start_offset_end_frame: int = 0
 @export var sheet_visual_offset: Vector2 = Vector2.ZERO
 @export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
 @export var sparkle_center: Vector2 = Vector2(256, 188)
@@ -668,6 +666,31 @@ func _draw_solar_beam_visual() -> void:
 		var ray_end := target + Vector2(cos(angle), sin(angle)) * impact_radius
 		draw_line(ray_start, ray_end, _color_with_alpha(core_color, impact_alpha * 0.72), 1.8)
 
+	_draw_solar_beam_impact_snowflakes(target, impact_radius, impact_alpha)
+
+
+func _draw_solar_beam_impact_snowflakes(center: Vector2, impact_radius: float, impact_alpha: float) -> void:
+	var snowflake_count := maxi(0, int(solar_beam_config.get("impact_snowflake_count", 0)))
+	if snowflake_count <= 0:
+		return
+
+	var snowflake_color := _color_from_value(solar_beam_config.get("impact_snowflake_color", [0.86, 0.98, 1.0, 1.0]), Color(0.86, 0.98, 1.0, 1.0))
+	var snowflake_size := maxf(float(solar_beam_config.get("impact_snowflake_size", 5.0)), 1.0)
+	var snowflake_spread := maxf(float(solar_beam_config.get("impact_snowflake_spread", 1.0)), 0.1)
+	var phase := float(frame_index) * 0.19
+	for snowflake_index: int in range(snowflake_count):
+		var ratio := fmod(float(snowflake_index) * 0.618 + phase * 0.11, 1.0)
+		var angle := float(snowflake_index) * 2.399 + phase * (0.7 + float(snowflake_index % 3) * 0.08)
+		var distance := impact_radius * snowflake_spread * (0.25 + ratio * 0.82)
+		var snowflake_center := center + Vector2(cos(angle), sin(angle)) * distance
+		var size := snowflake_size * (0.65 + 0.55 * ratio)
+		var alpha := impact_alpha * (0.22 + 0.46 * (1.0 - ratio))
+		for arm_index: int in range(3):
+			var arm_angle := angle + float(arm_index) * PI / 3.0
+			var arm := Vector2(cos(arm_angle), sin(arm_angle)) * size
+			draw_line(snowflake_center - arm, snowflake_center + arm, _color_with_alpha(snowflake_color, alpha), 1.25)
+		draw_circle(snowflake_center, size * 0.22, _color_with_alpha(snowflake_color, alpha * 0.8))
+
 
 func _draw_water_splash_visual() -> void:
 	if not bool(water_splash_config.get("enabled", false)):
@@ -1199,7 +1222,6 @@ func _apply_frame(index: int) -> void:
 			tile_h
 		)
 		var sheet_position := _scale_sprite_position(Vector2(float(cell["x"]), float(cell["y"]))) + sprite_position_offset
-		sheet_position += _sheet_start_offset_for_frame(index)
 		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
@@ -1274,14 +1296,6 @@ func _scale_sprite_position(position: Vector2) -> Vector2:
 		return position
 
 	return sprite_position_anchor + (position - sprite_position_anchor) * sprite_position_scale
-
-
-func _sheet_start_offset_for_frame(index: int) -> Vector2:
-	if sheet_start_offset == Vector2.ZERO or sheet_start_offset_end_frame <= 0:
-		return Vector2.ZERO
-
-	var progress := clampf(float(index) / float(sheet_start_offset_end_frame), 0.0, 1.0)
-	return sheet_start_offset * (1.0 - progress)
 
 
 func _projectile_battlefield_position(position: Vector2, config: Dictionary) -> Vector2:
