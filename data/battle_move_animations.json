@@ -3051,6 +3051,63 @@
       "sound_paths": {
         "PRSFX- Bulldoze": "res://assets/battles/animations/headlongrush/PRSFX- Bulldoze.wav"
       }
+    },
+    "headsmash": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "speed_scale": 1.25,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.78,
+      "flash": {
+        "enabled": true,
+        "start": 0.12,
+        "peak": 0.24,
+        "end": 0.58,
+        "alpha": 0.08,
+        "color": [
+          0.72,
+          0.44,
+          0.18,
+          1.0
+        ]
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.12,
+        "duration": 0.1
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.12,
+        "duration": 0.46,
+        "amplitude": 10.0,
+        "interval": 0.035,
+        "vertical_scale": 0.16,
+        "decay": true
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          72,
+          -34
+        ],
+        "sheet_offset": [
+          72,
+          -34
+        ],
+        "suppress_target_feedback": true
+      },
+      "data_path": "res://assets/battles/animations/headsmash/headsmash.json",
+      "sheet_path": "res://assets/battles/animations/headsmash/PRAS- Rock.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Head Smash.wav": "res://assets/battles/animations/headsmash/PRSFX- Head Smash.wav"
+      }
     }
   }
 }
