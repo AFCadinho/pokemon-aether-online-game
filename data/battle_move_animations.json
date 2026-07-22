@@ -3006,6 +3006,51 @@
       "sound_paths": {
         "PRSFX- Close Combat.wav": "res://assets/battles/animations/closecombat/PRSFX- Close Combat.wav"
       }
+    },
+    "headlongrush": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "speed_scale": 1.3,
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.85,
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.31,
+        "duration": 0.11
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.31,
+        "duration": 0.42,
+        "amplitude": 9.0,
+        "interval": 0.04,
+        "vertical_scale": 0.16,
+        "decay": true
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          66,
+          -28
+        ],
+        "sheet_offset": [
+          66,
+          -28
+        ],
+        "suppress_target_feedback": true
+      },
+      "data_path": "res://assets/battles/animations/headlongrush/headlongrush.json",
+      "sheet_path": "res://assets/battles/animations/headlongrush/PRAS- Strike.png",
+      "background_path": "res://assets/battles/animations/headlongrush/PRAS- Earthquake BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Bulldoze": "res://assets/battles/animations/headlongrush/PRSFX- Bulldoze.wav"
+      }
     }
   }
 }
