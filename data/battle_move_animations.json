@@ -2845,6 +2845,127 @@
       "sound_paths": {
         "PRSFX- Icy Wind1": "res://assets/battles/animations/bleakwindstorm/PRSFX- Icy Wind1.wav"
       }
+    },
+    "heatwave": {
+      "template": "imported_sheet",
+      "category": "projectile",
+      "speed_scale": 1.22,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": true,
+      "timing_foreground_scale": [
+        4.0,
+        3.0
+      ],
+      "foreground_opacity_multiplier": 0.38,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        0.25,
+        0.05,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.78,
+        0.18,
+        1.0
+      ],
+      "heat_wave": {
+        "enabled": true,
+        "visible_start": 0.04,
+        "visible_end": 0.82,
+        "fade_in": 0.08,
+        "fade_out": 0.14,
+        "travel_scale": 1.32,
+        "wave_count": 9,
+        "segments": 24,
+        "spacing": 11.0,
+        "amplitude": 7.0,
+        "frequency": 2.8,
+        "wave_speed": 0.52,
+        "outer_width": 9.0,
+        "inner_width": 3.6,
+        "outer_color": [
+          1.0,
+          0.15,
+          0.02,
+          1.0
+        ],
+        "inner_color": [
+          1.0,
+          0.82,
+          0.16,
+          1.0
+        ],
+        "actor_offset": [
+          0,
+          -18
+        ],
+        "target_offset": [
+          0,
+          -18
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              96
+            ]
+          }
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.18,
+        "peak": 0.52,
+        "end": 0.9,
+        "alpha": 0.1,
+        "color": [
+          1.0,
+          0.3,
+          0.06,
+          1.0
+        ]
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.72,
+        "duration": 0.11
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.72,
+        "duration": 0.42,
+        "amplitude": 6.0,
+        "interval": 0.045,
+        "vertical_scale": 0.2,
+        "decay": true
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [
+          94,
+          -64
+        ],
+        "suppress_target_feedback": true
+      },
+      "data_path": "res://assets/battles/animations/heatwave/heatwave.json",
+      "sheet_path": "res://assets/battles/animations/heatwave/fly copy.png",
+      "background_path": "",
+      "foreground_path": "res://assets/battles/animations/heatwave/PRAS- Heat Wave.png",
+      "sound_paths": {
+        "PRSFX- Heat Wave.wav": "res://assets/battles/animations/heatwave/PRSFX- Heat Wave.wav"
+      }
     }
   }
 }

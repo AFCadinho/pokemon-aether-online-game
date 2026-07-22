@@ -106,8 +106,8 @@ func _play_animation_config(
 	_apply_move_animation_options(animation_node, config, animation_options)
 	var hidden_actor_sprites: Array = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 	_play_move_actor_motion_if_needed(config, move_actor_ident)
-	_play_move_target_shake_if_needed(config, move_target_ident)
-	_play_move_target_hit_flash_if_needed(config, move_target_ident)
+	_play_move_target_shake_if_needed(config, move_target_ident, animation_options)
+	_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)
 
 	var overlay: Control = _create_animation_overlay(parent_node)
 	if overlay != null:
@@ -332,6 +332,8 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.free_on_finish = true
 	animation_node.show_timing_backgrounds = bool(config.get("show_timing_backgrounds", false))
 	animation_node.show_timing_foregrounds = bool(config.get("show_timing_foregrounds", false))
+	animation_node.timing_foreground_scale = _vector2_from_config_value(config.get("timing_foreground_scale", [1.0, 1.0]), Vector2.ONE)
+	animation_node.foreground_opacity_multiplier = clampf(float(config.get("foreground_opacity_multiplier", 1.0)), 0.0, 1.0)
 	animation_node.show_pink_visual = bool(config.get("show_pink_visual", false))
 	animation_node.show_sheet_sprites = bool(config.get("show_sheet_sprites", true))
 	animation_node.overlay_fill_enabled = bool(config.get("overlay_fill_enabled", true))
@@ -342,6 +344,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.water_splash_config = (config.get("water_splash", {}) as Dictionary).duplicate(true)
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
 	animation_node.fire_stream_config = (config.get("fire_stream", {}) as Dictionary).duplicate(true)
+	animation_node.heat_wave_config = (config.get("heat_wave", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -381,8 +384,10 @@ func _apply_move_animation_options(animation_node: MoveAnimationPlayer, config: 
 		animation_node.shake_config.clear()
 
 
-func _play_move_target_shake_if_needed(config: Dictionary, target_ident: String) -> void:
+func _play_move_target_shake_if_needed(config: Dictionary, target_ident: String, animation_options: Dictionary = {}) -> void:
 	if target_ident == "":
+		return
+	if _should_suppress_target_feedback_for_miss(config, animation_options):
 		return
 
 	var shake_config: Dictionary = (config.get("target_shake", {}) as Dictionary).duplicate(true)
@@ -396,8 +401,10 @@ func _play_move_target_shake_if_needed(config: Dictionary, target_ident: String)
 			enemy_sprite_box.play_shake_tween(shake_config)
 
 
-func _play_move_target_hit_flash_if_needed(config: Dictionary, target_ident: String) -> void:
+func _play_move_target_hit_flash_if_needed(config: Dictionary, target_ident: String, animation_options: Dictionary = {}) -> void:
 	if target_ident == "":
+		return
+	if _should_suppress_target_feedback_for_miss(config, animation_options):
 		return
 
 	var flash_config: Dictionary = (config.get("target_hit_flash", {}) as Dictionary).duplicate(true)
@@ -409,6 +416,13 @@ func _play_move_target_hit_flash_if_needed(config: Dictionary, target_ident: Str
 			player_sprite_box.play_hit_flash_tween(flash_config)
 		"p2":
 			enemy_sprite_box.play_hit_flash_tween(flash_config)
+
+
+func _should_suppress_target_feedback_for_miss(config: Dictionary, animation_options: Dictionary) -> bool:
+	if not _is_miss_animation(animation_options):
+		return false
+	var miss_config := _get_miss_animation_config(config)
+	return miss_config.is_empty() or bool(miss_config.get("suppress_target_feedback", true))
 
 
 func _is_miss_animation(animation_options: Dictionary) -> bool:
@@ -856,6 +870,11 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.fire_stream_config = _with_projectile_endpoint_anchors(
 		animation_node.fire_stream_config,
+		actor_anchor,
+		target_anchor
+	)
+	animation_node.heat_wave_config = _with_projectile_endpoint_anchors(
+		animation_node.heat_wave_config,
 		actor_anchor,
 		target_anchor
 	)

@@ -14,6 +14,8 @@ signal animation_finished
 @export var free_on_finish: bool = false
 @export var show_timing_backgrounds: bool = false
 @export var show_timing_foregrounds: bool = false
+@export var timing_foreground_scale: Vector2 = Vector2.ONE
+@export_range(0.0, 1.0, 0.01) var foreground_opacity_multiplier: float = 1.0
 @export var show_pink_visual: bool = true
 @export var show_sheet_sprites: bool = true
 @export var overlay_fill_enabled: bool = true
@@ -24,6 +26,7 @@ signal animation_finished
 @export var water_splash_config: Dictionary = {}
 @export var electric_switch_config: Dictionary = {}
 @export var fire_stream_config: Dictionary = {}
+@export var heat_wave_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -220,6 +223,7 @@ func _build_nodes() -> void:
 	elif foreground_path != "":
 		fg.texture = load(foreground_path) as Texture2D
 	fg.centered = false
+	fg.scale = timing_foreground_scale
 	fg.modulate.a = 0.0
 	add_child(fg)
 
@@ -284,6 +288,7 @@ func _draw() -> void:
 	_draw_water_splash_visual()
 	_draw_electric_switch_visual()
 	_draw_fire_stream_visual()
+	_draw_heat_wave_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -751,6 +756,57 @@ func _draw_fire_stream_visual() -> void:
 	_draw_fire_stream_impact(progress, visible_end, flame_color, hot_color, core_color)
 
 
+func _draw_heat_wave_visual() -> void:
+	if not bool(heat_wave_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(heat_wave_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(heat_wave_config.get("visible_end", 0.88)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha: float = _get_timed_alpha(progress, visible_start, visible_end, heat_wave_config)
+	if alpha <= 0.02:
+		return
+
+	var wave_progress: float = clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var head_progress: float = clampf(wave_progress * float(heat_wave_config.get("travel_scale", 1.25)), 0.0, 1.0)
+	var start_state: Dictionary = _get_projectile_state_from_config(0.0, heat_wave_config)
+	var end_state: Dictionary = _get_projectile_state_from_config(1.0, heat_wave_config)
+	var start: Vector2 = _projectile_battlefield_position(start_state.get("position", Vector2.ZERO) as Vector2, heat_wave_config)
+	var end: Vector2 = _projectile_battlefield_position(end_state.get("position", Vector2.ZERO) as Vector2, heat_wave_config)
+	var direction: Vector2 = (end - start).normalized()
+	if direction == Vector2.ZERO:
+		direction = Vector2.RIGHT
+	var perpendicular := direction.orthogonal()
+	var wave_count: int = maxi(3, int(heat_wave_config.get("wave_count", 7)))
+	var segments: int = maxi(8, int(heat_wave_config.get("segments", 22)))
+	var spacing: float = float(heat_wave_config.get("spacing", 10.0))
+	var amplitude: float = float(heat_wave_config.get("amplitude", 5.0))
+	var frequency: float = float(heat_wave_config.get("frequency", 2.8))
+	var wave_speed: float = float(heat_wave_config.get("wave_speed", 0.5))
+	var outer_width: float = float(heat_wave_config.get("outer_width", 7.0))
+	var inner_width: float = float(heat_wave_config.get("inner_width", 2.8))
+	var outer_color: Color = _color_from_value(heat_wave_config.get("outer_color", [1.0, 0.2, 0.03, 1.0]), Color(1.0, 0.2, 0.03, 1.0))
+	var inner_color: Color = _color_from_value(heat_wave_config.get("inner_color", [1.0, 0.82, 0.18, 1.0]), Color(1.0, 0.82, 0.18, 1.0))
+
+	for wave_index: int in range(wave_count):
+		var lane: float = (float(wave_index) - float(wave_count - 1) * 0.5) * spacing
+		var phase: float = float(frame_index) * wave_speed + float(wave_index) * 0.92
+		var previous := start + perpendicular * lane
+		for segment_index: int in range(1, segments + 1):
+			var t: float = head_progress * float(segment_index) / float(segments)
+			var displacement: float = sin(t * TAU * frequency + phase) * amplitude * sin(t * PI)
+			var current := start.lerp(end, t) + perpendicular * (lane + displacement)
+			var segment_alpha: float = alpha * (0.28 + 0.72 * t)
+			draw_line(previous, current, _color_with_alpha(outer_color, segment_alpha * 0.48), outer_width)
+			draw_line(previous, current, _color_with_alpha(inner_color, segment_alpha * 0.72), inner_width)
+			previous = current
+
+
 func _fire_stream_point(t: float, jitter: float, wave_speed: float) -> Vector2:
 	var state: Dictionary = _get_projectile_state_from_config(t, fire_stream_config)
 	var base: Vector2 = _projectile_battlefield_position(state.get("position", Vector2.ZERO) as Vector2, fire_stream_config)
@@ -1207,11 +1263,11 @@ func _apply_timing_events(index: int) -> void:
 					bg_hide_frame = _timing_hide_frame(index, event) if bg.modulate.a > 0.0 else -1
 			3:
 				if show_timing_foregrounds:
-					fg.modulate.a = float(event["opacity"]) / 255.0 if event["opacity"] != null else 1.0
+					fg.modulate.a = (float(event["opacity"]) / 255.0 if event["opacity"] != null else 1.0) * foreground_opacity_multiplier
 					fg_hide_frame = _timing_hide_frame(index, event)
 			4:
 				if show_timing_foregrounds:
-					fg.modulate.a = float(event["opacity"]) / 255.0 if event["opacity"] != null else fg.modulate.a
+					fg.modulate.a = float(event["opacity"]) / 255.0 * foreground_opacity_multiplier if event["opacity"] != null else fg.modulate.a
 					fg_hide_frame = _timing_hide_frame(index, event) if fg.modulate.a > 0.0 else -1
 
 

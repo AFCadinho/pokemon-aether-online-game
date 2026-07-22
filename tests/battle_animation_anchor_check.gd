@@ -18,13 +18,16 @@ func _init() -> void:
 	_check_contains(router_source, '"field", "field_hazard", "screen":', "battlefield-wide animations remain globally anchored")
 	_check_contains(router_source, '"status_buff":\n\t\t\treturn actor_id', "self-buff animations follow their actor")
 	_check_contains(router_source, 'config.get("static_visual_anchor", "")', "catalog entries can override the default visual binding")
-	_check_contains(router_source, "_play_move_target_hit_flash_if_needed(config, move_target_ident)", "moves can flash their target at impact timing")
+	_check_contains(router_source, "_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)", "moves can flash their target at impact timing")
+	_check_contains(router_source, "func _should_suppress_target_feedback_for_miss", "misses can suppress hit-only target feedback")
+	_check_contains(router_source, "animation_node.heat_wave_config = _with_projectile_endpoint_anchors(", "heat waves receive live attacker and target anchors")
 	_check_contains(player_source, "@export var sheet_visual_offset: Vector2 = Vector2.ZERO", "sheet visual offset is explicit and defaults to no movement")
 	_check_contains(player_source, "_battlefield_position(sheet_position) + sheet_visual_offset", "sheet correction is applied after battlefield mirroring")
 	_check_contains(player_source, "func display_position_to_battlefield_source(position: Vector2) -> Vector2:", "mirrored animations can convert display anchors to source coordinates")
 	_check_contains(player_source, "var steam_count: int = maxi(0, int(fire_stream_config.get(\"steam_count\", 0)))", "stream effects can add a steam impact without a separate sprite sheet")
 	_check_contains(player_source, "if cell_pattern < sheet_pattern_min or cell_pattern > sheet_pattern_max:", "moves can show only the relevant portion of an imported sheet")
 	_check_contains(player_source, "if index < sheet_visible_start_frame:", "sheet impact effects can wait until their projectile arrives")
+	_check_contains(player_source, "func _draw_heat_wave_visual() -> void:", "moves can render a configurable multi-lane heat wave")
 
 	quit(1 if failed else 0)
 
