@@ -43,6 +43,9 @@ signal animation_finished
 @export_range(8.0, 220.0, 1.0) var sparkle_radius_max: float = 78.0
 @export_range(-8, 8, 1) var pattern_offset: int = 0
 @export_range(-1, 999, 1) var pattern_override: int = -1
+@export_range(0, 999, 1) var sheet_pattern_min: int = 0
+@export_range(0, 999, 1) var sheet_pattern_max: int = 999
+@export_range(0, 999, 1) var sheet_visible_start_frame: int = 0
 
 var data: Dictionary = {}
 var sprites: Array[Sprite2D] = []
@@ -714,6 +717,7 @@ func _draw_fire_stream_visual() -> void:
 	var end_width: float = float(fire_stream_config.get("end_width", 28.0))
 	var jitter: float = float(fire_stream_config.get("jitter", 7.0))
 	var wave_speed: float = float(fire_stream_config.get("wave_speed", 0.48))
+	var draw_tongues: bool = bool(fire_stream_config.get("draw_tongues", true))
 	var stream_direction: Vector2 = _fire_stream_direction()
 
 	var previous: Vector2 = _fire_stream_point(0.0, jitter, wave_speed)
@@ -725,7 +729,7 @@ func _draw_fire_stream_visual() -> void:
 		var segment_alpha: float = alpha * (0.24 + 0.76 * local)
 		draw_line(previous, current, _color_with_alpha(smoke_color, segment_alpha * 0.16), width * 0.9)
 		draw_line(previous, current, _color_with_alpha(flame_color, segment_alpha * 0.24), width * 0.52)
-		if segment_index % 2 == 0:
+		if draw_tongues and segment_index % 2 == 0:
 			var tongue_phase: float = float(frame_index) * 0.34 + float(segment_index) * 1.19
 			var side: float = sin(tongue_phase)
 			var tongue_center: Vector2 = current + stream_direction.orthogonal() * side * width * 0.18
@@ -814,6 +818,24 @@ func _draw_fire_stream_impact(progress: float, visible_end: float, flame_color: 
 		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * 0.25
 		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * (0.86 + 0.22 * sin(float(burst_index) + float(frame_index) * 0.2))
 		draw_line(start, end, _color_with_alpha(core_color, impact_alpha * 0.54), 1.4)
+
+	var steam_count: int = maxi(0, int(fire_stream_config.get("steam_count", 0)))
+	if steam_count <= 0:
+		return
+
+	var steam_color: Color = _color_from_value(fire_stream_config.get("steam_color", [0.94, 0.98, 1.0, 1.0]), Color(0.94, 0.98, 1.0, 1.0))
+	var steam_height: float = maxf(float(fire_stream_config.get("steam_height", 48.0)), 1.0)
+	var steam_spread: float = maxf(float(fire_stream_config.get("steam_spread", 28.0)), 0.0)
+	for steam_index: int in range(steam_count):
+		var steam_progress: float = fmod(float(steam_index) * 0.31 + impact_progress * 1.25, 1.0)
+		var steam_phase: float = float(frame_index) * 0.16 + float(steam_index) * 1.71
+		var steam_offset := Vector2(
+			sin(steam_phase) * steam_spread * (0.32 + steam_progress * 0.68),
+			-steam_height * steam_progress
+		)
+		var puff_radius: float = (4.5 + float(steam_index % 3) * 2.0) * (0.7 + steam_progress * 0.85)
+		var puff_alpha: float = impact_alpha * (0.25 - steam_progress * 0.09)
+		draw_circle(center + steam_offset, puff_radius, _color_with_alpha(steam_color, puff_alpha))
 
 
 func _electric_jitter(index: int, t: float, amount: float) -> Vector2:
@@ -947,6 +969,8 @@ func _apply_frame(index: int) -> void:
 	_update_projectile(index)
 	if not show_sheet_sprites:
 		return
+	if index < sheet_visible_start_frame:
+		return
 
 	var tile_size: Array = data["tile_size"] as Array
 	var tile_w: int = int(tile_size[0])
@@ -963,9 +987,12 @@ func _apply_frame(index: int) -> void:
 		var cell: Dictionary = cell_value as Dictionary
 		if int(cell["source"]) < 0:
 			continue
+		var cell_pattern: int = int(cell["pattern"])
+		if cell_pattern < sheet_pattern_min or cell_pattern > sheet_pattern_max:
+			continue
 
 		var sprite: Sprite2D = sprites[sprite_i]
-		var pattern: int = pattern_override if pattern_override >= 0 else maxi(0, int(cell["pattern"]) + pattern_offset)
+		var pattern: int = pattern_override if pattern_override >= 0 else maxi(0, cell_pattern + pattern_offset)
 		sprite.region_rect = Rect2(
 			(pattern % columns) * tile_w,
 			int(pattern / columns) * tile_h,

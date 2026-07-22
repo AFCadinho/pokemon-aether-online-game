@@ -107,6 +107,7 @@ func _play_animation_config(
 	var hidden_actor_sprites: Array = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 	_play_move_actor_motion_if_needed(config, move_actor_ident)
 	_play_move_target_shake_if_needed(config, move_target_ident)
+	_play_move_target_hit_flash_if_needed(config, move_target_ident)
 
 	var overlay: Control = _create_animation_overlay(parent_node)
 	if overlay != null:
@@ -324,6 +325,9 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))
 	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
 	animation_node.pattern_override = int(config.get("pattern_override", -1))
+	animation_node.sheet_pattern_min = int(config.get("sheet_pattern_min", 0))
+	animation_node.sheet_pattern_max = int(config.get("sheet_pattern_max", 999))
+	animation_node.sheet_visible_start_frame = int(config.get("sheet_visible_start_frame", 0))
 	animation_node.loop = false
 	animation_node.free_on_finish = true
 	animation_node.show_timing_backgrounds = bool(config.get("show_timing_backgrounds", false))
@@ -390,6 +394,21 @@ func _play_move_target_shake_if_needed(config: Dictionary, target_ident: String)
 			player_sprite_box.play_shake_tween(shake_config)
 		"p2":
 			enemy_sprite_box.play_shake_tween(shake_config)
+
+
+func _play_move_target_hit_flash_if_needed(config: Dictionary, target_ident: String) -> void:
+	if target_ident == "":
+		return
+
+	var flash_config: Dictionary = (config.get("target_hit_flash", {}) as Dictionary).duplicate(true)
+	if not bool(flash_config.get("enabled", false)):
+		return
+
+	match _get_player_id_from_ident(target_ident):
+		"p1":
+			player_sprite_box.play_hit_flash_tween(flash_config)
+		"p2":
+			enemy_sprite_box.play_hit_flash_tween(flash_config)
 
 
 func _is_miss_animation(animation_options: Dictionary) -> bool:

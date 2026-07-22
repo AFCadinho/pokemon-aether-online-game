@@ -251,6 +251,26 @@ func play_damage_tween() -> void:
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
 
+
+func play_hit_flash_tween(flash_config: Dictionary = {}) -> void:
+	var sprites := _get_visible_sprites()
+	if sprites.is_empty():
+		return
+
+	var delay: float = maxf(float(flash_config.get("delay", 0.0)), 0.0)
+	var flash_duration: float = maxf(float(flash_config.get("duration", 0.09)), 0.02)
+	_stop_active_tween()
+	_reset_sprites_pose(sprites)
+	active_tween = create_tween()
+	active_tween.set_parallel(true)
+
+	for sprite in sprites:
+		active_tween.tween_property(sprite, "modulate", DAMAGE_FLASH_COLOR, flash_duration * 0.36).set_delay(delay)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, flash_duration * 0.64).set_delay(delay + flash_duration * 0.36)
+
+	await active_tween.finished
+	_reset_sprites_pose(sprites)
+
 func play_shake_tween(shake_config: Dictionary = {}) -> void:
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():

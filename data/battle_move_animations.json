@@ -2355,6 +2355,176 @@
       "sound_paths": {
         "PRSFX- Protect.wav": "res://assets/battles/animations/protect/PRSFX- Protect.wav"
       }
+    },
+    "scald": {
+      "template": "imported_sheet",
+      "category": "projectile",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "sheet_pattern_min": 1,
+      "sheet_visible_start_frame": 9,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.42,
+        0.78,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.9,
+        0.96,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.76,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "water_splash": {
+        "enabled": false,
+        "visible_start": 0.02,
+        "visible_end": 0.9,
+        "fade_in": 0.04,
+        "fade_out": 0.12,
+        "trail_length": 0.2,
+        "trail_width": 6.0,
+        "segments": 18,
+        "droplet_count": 5,
+        "impact_start": 0.62,
+        "impact_at": 1.0,
+        "impact_radius": 40.0,
+        "impact_alpha": 0.78,
+        "impact_splash_count": 10,
+        "actor_offset": [
+          0,
+          -26
+        ],
+        "target_offset": [
+          0,
+          -12
+        ],
+        "water_color": [
+          0.12,
+          0.62,
+          1.0,
+          1.0
+        ],
+        "foam_color": [
+          0.9,
+          0.98,
+          1.0,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 0.42,
+            "position": [
+              256,
+              148
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0,
+            "ease": "smoothstep"
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              96
+            ],
+            "scale": 1.0
+          },
+          {
+            "at": 0.42,
+            "position": [
+              256,
+              156
+            ],
+            "scale": 1.0,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              224
+            ],
+            "scale": 1.0,
+            "ease": "smoothstep"
+          }
+        ]
+      },
+      "fire_stream": {
+        "enabled": true,
+        "visible_start": 0.03,
+        "visible_end": 0.43,
+        "fade_in": 0.04,
+        "fade_out": 0.06,
+        "travel_scale": 2.4,
+        "segments": 24,
+        "start_width": 10.0,
+        "end_width": 24.0,
+        "jitter": 1.4,
+        "wave_speed": 0.3,
+        "draw_tongues": false,
+        "ember_count": 0,
+        "impact_start": 0.56,
+        "impact_at": 1.0,
+        "impact_radius": 38.0,
+        "impact_alpha": 0.0,
+        "impact_burst_count": 8,
+        "steam_count": 0,
+        "steam_height": 52.0,
+        "steam_spread": 30.0,
+        "flame_color": [0.05, 0.38, 0.95, 1.0],
+        "hot_color": [0.18, 0.7, 1.0, 1.0],
+        "core_color": [0.88, 0.98, 1.0, 1.0],
+        "smoke_color": [0.42, 0.72, 0.98, 1.0],
+        "steam_color": [0.96, 0.99, 1.0, 1.0],
+        "actor_offset": [0, -26],
+        "target_offset": [0, -16],
+        "path": [
+          {"at": 0.0, "position": [128, 224], "scale": 1.0},
+          {"at": 1.0, "position": [384, 96], "scale": 1.0}
+        ],
+        "reverse_path": [
+          {"at": 0.0, "position": [384, 96], "scale": 1.0},
+          {"at": 1.0, "position": [128, 224], "scale": 1.0}
+        ]
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.4,
+        "duration": 0.11
+      },
+      "data_path": "res://assets/battles/animations/scald/scald.json",
+      "sheet_path": "res://assets/battles/animations/scald/PRAS- Scald.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Scald1.wav": "res://assets/battles/animations/scald/PRSFX- Scald1.wav",
+        "PRSFX- Scald2.wav": "res://assets/battles/animations/scald/PRSFX- Scald2.wav"
+      }
     }
   }
 }
