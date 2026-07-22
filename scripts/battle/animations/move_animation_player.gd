@@ -30,6 +30,7 @@ signal animation_finished
 @export var solar_beam_config: Dictionary = {}
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
+@export var dragon_dance_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -302,6 +303,7 @@ func _draw() -> void:
 	_draw_solar_beam_visual()
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
+	_draw_dragon_dance_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -621,6 +623,60 @@ func _draw_celestial_charge_visual() -> void:
 		var particle_alpha := alpha * (0.2 + 0.52 * (1.0 - life))
 		draw_circle(position, size, _color_with_alpha(core_color, particle_alpha))
 		draw_line(position + Vector2(-size * 1.6, 0.0), position + Vector2(size * 1.6, 0.0), _color_with_alpha(outer_color, particle_alpha * 0.74), 1.0)
+
+
+func _draw_dragon_dance_visual() -> void:
+	if not bool(dragon_dance_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(dragon_dance_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(dragon_dance_config.get("visible_end", 1.0)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, dragon_dance_config)
+	if alpha <= 0.02:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(dragon_dance_config.get("center", [128.0, 224.0])))
+	center += _vector2_from_value(dragon_dance_config.get("center_offset", [0.0, 0.0]))
+	var ribbon_color := _color_from_value(dragon_dance_config.get("ribbon_color", [1.0, 0.28, 0.9, 1.0]), Color(1.0, 0.28, 0.9, 1.0))
+	var core_color := _color_from_value(dragon_dance_config.get("core_color", [1.0, 0.82, 1.0, 1.0]), Color(1.0, 0.82, 1.0, 1.0))
+	var ring_radius := maxf(float(dragon_dance_config.get("radius", 58.0)), 8.0)
+	var ring_count := maxi(2, int(dragon_dance_config.get("ring_count", 4)))
+	var phase := float(frame_index) * float(dragon_dance_config.get("rotation_speed", 0.34))
+
+	for ring_index: int in range(ring_count):
+		var ring_progress := float(ring_index) / float(maxi(ring_count - 1, 1))
+		var radius := ring_radius * (0.68 + ring_progress * 0.42)
+		var height := lerpf(18.0, -34.0, ring_progress) + sin(phase * 0.7 + float(ring_index) * 1.8) * 5.0
+		var angle := phase * (1.0 if ring_index % 2 == 0 else -0.82) + float(ring_index) * 1.42
+		var start := angle
+		var end := start + PI * 1.42
+		var ring_alpha := alpha * (0.52 + (1.0 - ring_progress) * 0.27)
+		draw_set_transform(center + Vector2(0.0, height), 0.0, Vector2(1.0, 0.28))
+		draw_arc(Vector2.ZERO, radius, start, end, 40, _color_with_alpha(ribbon_color, ring_alpha * 0.34), 5.2)
+		draw_arc(Vector2.ZERO, radius, start, end, 40, _color_with_alpha(ribbon_color, ring_alpha), 2.2)
+		draw_arc(Vector2.ZERO, radius - 2.0, start + 0.03, end - 0.03, 40, _color_with_alpha(core_color, ring_alpha * 0.82), 0.85)
+		draw_set_transform(Vector2.ZERO)
+
+	var spark_count := maxi(6, int(dragon_dance_config.get("spark_count", 18)))
+	var spark_height := maxf(float(dragon_dance_config.get("spark_height", 84.0)), 12.0)
+	var spark_spread := maxf(float(dragon_dance_config.get("spark_spread", 62.0)), 12.0)
+	for spark_index: int in range(spark_count):
+		var life := fmod(progress * 2.15 + float(spark_index) * 0.173, 1.0)
+		var spark_phase := phase * 1.3 + float(spark_index) * 2.18
+		var spark_position := center + Vector2(
+			cos(spark_phase) * spark_spread * (0.24 + life * 0.76),
+			-spark_height * life + sin(spark_phase * 1.6) * 8.0
+		)
+		var size := 1.2 + float(spark_index % 3) * 0.7
+		var spark_alpha := alpha * (0.28 + (1.0 - life) * 0.5)
+		draw_circle(spark_position, size, _color_with_alpha(core_color, spark_alpha))
+		draw_line(spark_position + Vector2(-size * 1.8, 0.0), spark_position + Vector2(size * 1.8, 0.0), _color_with_alpha(ribbon_color, spark_alpha * 0.78), 0.9)
 
 
 func _draw_solar_beam_visual() -> void:

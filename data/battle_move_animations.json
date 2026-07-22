@@ -4253,6 +4253,38 @@
       "sound_paths": {
         "Slam": "res://assets/battles/animations/bodypress/Slam.ogg"
       }
+    },
+    "dragondance": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "dragon_dance": {
+        "enabled": true,
+        "visible_start": 0.04,
+        "visible_end": 0.94,
+        "fade_in": 0.1,
+        "fade_out": 0.18,
+        "center_offset": [0.0, -2.0],
+        "radius": 56.0,
+        "ring_count": 4,
+        "rotation_speed": 0.34,
+        "ribbon_color": [1.0, 0.28, 0.9, 1.0],
+        "core_color": [1.0, 0.82, 1.0, 1.0],
+        "spark_count": 18,
+        "spark_height": 86.0,
+        "spark_spread": 62.0
+      },
+      "data_path": "res://assets/battles/animations/dragondance/dragondance.json",
+      "sheet_path": "res://assets/battles/animations/dragondance/PRAS- Dragon Dance.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Dragon Dance.wav": "res://assets/battles/animations/dragondance/PRSFX- Dragon Dance.wav"
+      }
     }
   }
 }
