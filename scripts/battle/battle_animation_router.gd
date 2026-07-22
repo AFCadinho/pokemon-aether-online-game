@@ -455,6 +455,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.focus_aura_config = (config.get("focus_aura", {}) as Dictionary).duplicate(true)
 	animation_node.stat_change_config = (config.get("stat_change", {}) as Dictionary).duplicate(true)
+	animation_node.heal_energy_config = (config.get("heal_energy", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_claw_config = (config.get("dragon_claw", {}) as Dictionary).duplicate(true)
 	animation_node.thunder_punch_config = (config.get("thunder_punch", {}) as Dictionary).duplicate(true)
@@ -1263,6 +1264,17 @@ func play_heal_tween_for_target(target_ident: String, event_data: Dictionary = {
 			await player_sprite_box.play_heal_tween()
 		"p2":
 			await enemy_sprite_box.play_heal_tween()
+
+
+func play_heal_presentation_for_target(target_ident: String, effect_key: String = "", event_data: Dictionary = {}) -> void:
+	if effect_key == "":
+		await play_heal_tween_for_target(target_ident, event_data)
+		return
+
+	# The glow pulse belongs to the same beat as the energy particles. Starting
+	# it without awaiting lets both finish together instead of playing serially.
+	play_heal_tween_for_target(target_ident, event_data)
+	await play_effect_animation(effect_key, target_ident)
 
 
 func play_faint_tween_for_target(target_ident: String) -> void:

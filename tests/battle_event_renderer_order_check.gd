@@ -8,6 +8,7 @@ var failed := false
 func _init() -> void:
 	_check_faint_hp_update_is_before_faint_animation()
 	_check_stat_particles_and_sprite_response_share_one_presentation()
+	_check_heal_particles_and_sprite_response_share_one_presentation()
 	quit(1 if failed else 0)
 
 
@@ -39,6 +40,18 @@ func _check_stat_particles_and_sprite_response_share_one_presentation() -> void:
 		true,
 		"stat-change effect is deferred before the combined presentation starts"
 	)
+
+
+func _check_heal_particles_and_sprite_response_share_one_presentation() -> void:
+	var source := FileAccess.get_file_as_string(RENDERER_PATH)
+	var heal_block_index := source.find("if heal_target_ident != \"\":")
+	var wish_effect_index := source.find("await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)", heal_block_index)
+	var combined_index := source.find("await animation_router.play_heal_presentation_for_target(", heal_block_index)
+
+	_check_equal(heal_block_index >= 0, true, "heal block exists")
+	_check_equal(combined_index >= 0, true, "healing particles and sprite response use one presentation path")
+	_check_equal(wish_effect_index >= 0, true, "Wish fulfillment retains its dedicated first effect")
+	_check_equal(wish_effect_index < combined_index, true, "Wish fulfillment plays before the combined normal heal presentation")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

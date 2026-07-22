@@ -484,10 +484,10 @@ func play_heal_tween() -> void:
 
 	for sprite in sprites:
 		var target_scale: Vector2 = _get_sprite_target_scale(sprite)
-		active_tween.tween_property(sprite, "modulate", HEAL_FLASH_COLOR, 0.08)
-		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.14).set_delay(0.08)
-		active_tween.tween_property(sprite, "scale", target_scale * 1.06, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		active_tween.tween_property(sprite, "scale", target_scale, 0.14).set_delay(0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		active_tween.tween_property(sprite, "modulate", HEAL_FLASH_COLOR, 0.1)
+		active_tween.tween_property(sprite, "modulate", Color.WHITE, 0.18).set_delay(0.1)
+		active_tween.tween_property(sprite, "scale", target_scale * 1.025, 0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		active_tween.tween_property(sprite, "scale", target_scale, 0.17).set_delay(0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)

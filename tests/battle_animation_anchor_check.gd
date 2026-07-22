@@ -24,6 +24,7 @@ func _init() -> void:
 	_check_contains(router_source, "animation_node.draco_meteor_config = _with_target_effect_anchor(animation_node.draco_meteor_config, target_anchor)", "Draco Meteor rain follows the live target anchor")
 	_check_contains(router_source, "animation_node.focus_aura_config = (config.get(\"focus_aura\", {}) as Dictionary).duplicate(true)", "focus auras are configured through the move catalog")
 	_check_contains(router_source, "animation_node.stat_change_config = (config.get(\"stat_change\", {}) as Dictionary).duplicate(true)", "stat-change energy is configured through the effect catalog")
+	_check_contains(router_source, "animation_node.heal_energy_config = (config.get(\"heal_energy\", {}) as Dictionary).duplicate(true)", "healing energy is configured through the effect catalog")
 	_check_contains(router_source, "func _create_dark_pulse_underlay_if_needed(", "Dark Pulse can split its floor and orbit particles around the actor sprite")
 	_check_order(router_source, "_move_timing_background_below_sprites(animation_node, parent_node, config)", "var underlay_overlay := _create_dark_pulse_underlay_if_needed(", "Dark Pulse floor ring is layered above its opaque background")
 	_check_contains(player_source, "@export var sheet_visual_offset: Vector2 = Vector2.ZERO", "sheet visual offset is explicit and defaults to no movement")
@@ -38,6 +39,7 @@ func _init() -> void:
 	_check_contains(player_source, "func _draw_draco_meteor_impact(", "Draco Meteor stops each projectile in an impact burst")
 	_check_contains(player_source, "func _draw_focus_aura_visual() -> void:", "status moves can render a reusable multicolor focus aura")
 	_check_contains(player_source, "func _draw_stat_change_visual() -> void:", "stat changes can render directional energy particles")
+	_check_contains(player_source, "func _draw_heal_energy_visual() -> void:", "recovery events can render compact rising healing energy")
 	_check_contains(player_source, 'var draw_layer := str(dark_pulse_config.get("draw_layer", "all"))', "Dark Pulse supports separate underlay and foreground passes")
 
 	quit(1 if failed else 0)

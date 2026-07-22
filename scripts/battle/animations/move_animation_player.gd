@@ -33,6 +33,7 @@ signal animation_finished
 @export var celestial_charge_config: Dictionary = {}
 @export var focus_aura_config: Dictionary = {}
 @export var stat_change_config: Dictionary = {}
+@export var heal_energy_config: Dictionary = {}
 @export var dragon_dance_config: Dictionary = {}
 @export var dragon_claw_config: Dictionary = {}
 @export var thunder_punch_config: Dictionary = {}
@@ -315,6 +316,7 @@ func _draw() -> void:
 	_draw_celestial_charge_visual()
 	_draw_focus_aura_visual()
 	_draw_stat_change_visual()
+	_draw_heal_energy_visual()
 	_draw_dragon_dance_visual()
 	_draw_dragon_claw_visual()
 	_draw_thunder_punch_visual()
@@ -1026,6 +1028,68 @@ func _draw_stat_change_visual() -> void:
 		var mote_size := 1.4 + float(mote_index % 3) * 0.75
 		draw_circle(mote_position, mote_size * 1.8, _color_with_alpha(primary_color, mote_alpha * 0.2))
 		draw_circle(mote_position, mote_size, _color_with_alpha(core_color, mote_alpha))
+
+
+func _draw_heal_energy_visual() -> void:
+	if not bool(heal_energy_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(heal_energy_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end := clampf(float(heal_energy_config.get("visible_end", 0.98)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, heal_energy_config)
+	if alpha <= 0.02:
+		return
+
+	var local_progress := clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var center := _battlefield_position(_vector2_from_value(heal_energy_config.get("center", [128.0, 224.0])))
+	center += _vector2_from_value(heal_energy_config.get("center_offset", [0.0, 0.0]))
+	var radius := maxf(float(heal_energy_config.get("radius", 44.0)), 14.0)
+	var rise_height := maxf(float(heal_energy_config.get("rise_height", 82.0)), 24.0)
+	var particle_count := clampi(int(heal_energy_config.get("particle_count", 13)), 6, 24)
+	var green := _color_from_value(heal_energy_config.get("primary_color", [0.24, 1.0, 0.48, 1.0]), Color(0.24, 1.0, 0.48, 1.0))
+	var cyan := _color_from_value(heal_energy_config.get("secondary_color", [0.32, 1.0, 0.84, 1.0]), Color(0.32, 1.0, 0.84, 1.0))
+	var core := _color_from_value(heal_energy_config.get("core_color", [0.9, 1.0, 0.84, 1.0]), Color(0.9, 1.0, 0.84, 1.0))
+
+	var pulse := 1.0 + sin(float(frame_index) * 0.74) * 0.06
+	draw_circle(center, radius * 0.88 * pulse, _color_with_alpha(green, alpha * 0.04))
+	var ground := center + Vector2(0.0, radius * 0.48)
+	draw_set_transform(ground, 0.0, Vector2(1.0, 0.28))
+	draw_circle(Vector2.ZERO, radius * 0.92 * pulse, _color_with_alpha(green, alpha * 0.075))
+	draw_arc(Vector2.ZERO, radius * 0.82 * pulse, 0.0, TAU, 40, _color_with_alpha(green, alpha * 0.48), 2.4, true)
+	draw_arc(Vector2.ZERO, radius * 0.58 * pulse, float(frame_index) * 0.18, float(frame_index) * 0.18 + TAU * 0.78, 34, _color_with_alpha(cyan, alpha * 0.7), 1.25, true)
+	draw_set_transform(Vector2.ZERO)
+
+	for particle_index: int in range(particle_count):
+		var life := fmod(local_progress * 1.42 + float(particle_index) * 0.137, 1.0)
+		var particle_alpha := alpha * sin(PI * life)
+		if particle_alpha <= 0.02:
+			continue
+		var angle := float(particle_index) * 2.399 + sin(float(frame_index) * 0.08 + float(particle_index)) * 0.18
+		var orbit_radius := radius * (0.24 + float(particle_index % 5) * 0.13)
+		var particle_position := center + Vector2(
+			cos(angle) * orbit_radius,
+			radius * 0.52 - life * rise_height + sin(angle * 1.7) * 4.0
+		)
+		var particle_size := 2.2 + float(particle_index % 3) * 1.0
+		var particle_color := green.lerp(cyan, float(particle_index % 4) / 3.0)
+		draw_circle(particle_position, particle_size * 2.1, _color_with_alpha(particle_color, particle_alpha * 0.17))
+		draw_circle(particle_position, particle_size, _color_with_alpha(particle_color, particle_alpha * 0.82))
+		draw_circle(particle_position + Vector2(-particle_size * 0.24, -particle_size * 0.3), particle_size * 0.42, _color_with_alpha(core, particle_alpha))
+
+		if particle_index % 3 == 0:
+			var glint_size := particle_size * (1.25 + sin(PI * life) * 0.45)
+			draw_line(particle_position + Vector2(-glint_size, 0.0), particle_position + Vector2(glint_size, 0.0), _color_with_alpha(core, particle_alpha * 0.85), 1.0, true)
+			draw_line(particle_position + Vector2(0.0, -glint_size), particle_position + Vector2(0.0, glint_size), _color_with_alpha(core, particle_alpha * 0.85), 1.0, true)
+
+	var finish_alpha := alpha * clampf((local_progress - 0.46) / 0.28, 0.0, 1.0)
+	if finish_alpha > 0.02:
+		var finish_radius := radius * (0.22 + local_progress * 0.16)
+		draw_arc(center, finish_radius, float(frame_index) * 0.2, float(frame_index) * 0.2 + TAU * 0.72, 28, _color_with_alpha(core, finish_alpha * 0.64), 1.5, true)
 
 
 func _draw_dragon_dance_visual() -> void:

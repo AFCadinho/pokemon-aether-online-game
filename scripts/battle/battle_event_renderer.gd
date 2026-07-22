@@ -144,12 +144,21 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			heal_target_visible = animation_router.is_event_target_currently_visible(heal_target_ident, event_data)
 		if heal_target_visible:
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
-			if animations_allowed and effect_animation_key != "":
-				await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
-			if animations_allowed and heal_followup_effect_animation_key != "":
-				await animation_router.play_effect_animation(heal_followup_effect_animation_key, effect_animation_target_ident)
 			if animations_allowed:
-				await animation_router.play_heal_tween_for_target(heal_target_ident, event_data)
+				if heal_followup_effect_animation_key != "":
+					if effect_animation_key != "":
+						await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
+					await animation_router.play_heal_presentation_for_target(
+						heal_target_ident,
+						heal_followup_effect_animation_key,
+						event_data
+					)
+				else:
+					await animation_router.play_heal_presentation_for_target(
+						heal_target_ident,
+						effect_animation_key,
+						event_data
+					)
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
 	if animations_allowed and stat_change_target_ident != "":
 		await animation_router.play_stat_change_presentation_for_target(
