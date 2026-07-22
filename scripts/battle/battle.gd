@@ -25,6 +25,9 @@ const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animation
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
+const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
+const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
+const PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC := 5000
 
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
@@ -50,6 +53,7 @@ var pvp_team_preview_recovery_requested := false
 var pvp_realtime_activity_seq := 0
 var pvp_pending_reconciliation_snapshot: Dictionary = {}
 var pvp_pending_authoritative_terminal: Dictionary = {}
+var pvp_pending_render_ack_completion: Dictionary = {}
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_idle_realtime_drain_pending := false
 var pvp_idle_wait_recovery_active := false
@@ -2922,6 +2926,7 @@ func _finish_battle(result: Dictionary) -> void:
 		return
 
 	pvp_pending_authoritative_terminal.clear()
+	pvp_pending_render_ack_completion.clear()
 	var allows_gameplay_persistence := PvpBattleRealtimeService.allows_gameplay_persistence_for_terminal(result)
 	_warn_if_pvp_finish_has_pending_render_work(result)
 	if allows_gameplay_persistence:
@@ -3323,6 +3328,8 @@ func _update_pvp_phase_contract_from_response(response: Dictionary, source: Stri
 
 	pvp_last_phase = current_phase
 	pvp_last_next_phase = current_next_phase
+	if current_phase != "rendering_events":
+		pvp_pending_render_ack_completion.clear()
 
 func _log_pvp_phase_warning(message: String, details: String) -> void:
 	if not DEBUG_PVP_REALTIME:
@@ -8064,6 +8071,9 @@ func _wait_for_pvp_force_switch_phase_release(source: String) -> bool:
 		return pvp_last_phase == "awaiting_force_switch"
 
 	var wait_start_server_seq := pvp_last_phase_update_server_seq
+	var next_ack_retry_msec := Time.get_ticks_msec() + PVP_FORCE_SWITCH_ACK_RETRY_MSEC
+	var next_reconciliation_msec := Time.get_ticks_msec() + PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC
+	var reconciliation_attempt := 0
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
 			"Waiting for PvP force-switch phase release",
@@ -8077,8 +8087,27 @@ func _wait_for_pvp_force_switch_phase_release(source: String) -> bool:
 
 	while _pvp_is_waiting_for_force_switch_phase_release():
 		await get_tree().process_frame
+		if battle_finished:
+			return false
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["awaiting_force_switch"]):
 			break
+
+		var now_msec := Time.get_ticks_msec()
+		if now_msec >= next_ack_retry_msec:
+			_retry_pending_pvp_render_ack()
+			next_ack_retry_msec = now_msec + PVP_FORCE_SWITCH_ACK_RETRY_MSEC
+
+		if now_msec >= next_reconciliation_msec:
+			reconciliation_attempt += 1
+			await _reconcile_pvp_battle_from_room("pvp_force_switch_phase_release_recovery")
+			if battle_state.is_battle_ended():
+				await _finish_if_battle_ended()
+				return false
+			var retry_delay_msec := mini(
+				PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC + reconciliation_attempt * 500,
+				PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC
+			)
+			next_reconciliation_msec = Time.get_ticks_msec() + retry_delay_msec
 
 	var released := pvp_last_phase == "awaiting_force_switch"
 	if DEBUG_PVP_REALTIME:
@@ -8350,6 +8379,7 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 	pvp_realtime_activity_seq = 0
 	pvp_pending_reconciliation_snapshot.clear()
 	pvp_pending_authoritative_terminal.clear()
+	pvp_pending_render_ack_completion.clear()
 	pvp_retrying_reconciliation_snapshot = false
 	pvp_idle_realtime_drain_pending = false
 	pvp_idle_wait_recovery_active = false
@@ -8380,6 +8410,7 @@ func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
 			]
 		)
 	if bool(completion.get("success", false)):
+		pvp_pending_render_ack_completion = completion.duplicate(true)
 		_send_pvp_render_ack(completion)
 		_retry_pending_pvp_reconciliation_snapshot.call_deferred()
 		_retry_pending_pvp_authoritative_terminal.call_deferred()
@@ -8447,6 +8478,11 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 		turn,
 		phase
 	)
+
+func _retry_pending_pvp_render_ack() -> void:
+	if battle_finished or pvp_pending_render_ack_completion.is_empty():
+		return
+	_send_pvp_render_ack(pvp_pending_render_ack_completion.duplicate(true))
 
 func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	var room_code := str(message.get("roomCode", "")).strip_edges().to_upper()
@@ -8609,6 +8645,8 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 	pvp_last_phase_update_server_seq = server_seq
 	pvp_last_phase_update_batch_id = str(message.get("eventBatchId", "")).strip_edges()
 	pvp_last_phase_update_phase = phase
+	if phase != "rendering_events":
+		pvp_pending_render_ack_completion.clear()
 	if server_seq > pvp_last_applied_server_seq:
 		pvp_last_applied_server_seq = server_seq
 
@@ -8734,6 +8772,8 @@ func _reconcile_pvp_battle_from_room(source: String) -> bool:
 	if pvp_room_code == "" or action_flow.local_player_id == "":
 		return false
 
+	var request_start_server_seq := pvp_last_applied_server_seq
+	var request_start_phase_seq := pvp_last_phase_update_server_seq
 	var response: Dictionary = await BattleApiClient.get_pvp_room(
 		battle_request,
 		pvp_room_code,
@@ -8746,6 +8786,27 @@ func _reconcile_pvp_battle_from_room(source: String) -> bool:
 
 	var mapped_response: Dictionary = action_flow.map_response_for_local_player(response)
 	if mapped_response.is_empty():
+		return false
+
+	var response_server_seq := _get_pvp_response_server_seq(response)
+	var realtime_advanced_during_request := (
+		pvp_last_applied_server_seq > request_start_server_seq
+		or pvp_last_phase_update_server_seq > request_start_phase_seq
+	)
+	if realtime_advanced_during_request and (
+		response_server_seq <= 0
+		or response_server_seq <= pvp_last_applied_server_seq
+	):
+		if DEBUG_PVP_REALTIME:
+			_log_pvp_realtime(
+				"Canonical room reconciliation superseded by realtime update",
+				"source=%s responseSeq=%d currentSeq=%d phaseSeq=%d" % [
+					source,
+					response_server_seq,
+					pvp_last_applied_server_seq,
+					pvp_last_phase_update_server_seq,
+				]
+			)
 		return false
 
 	var message := {
@@ -9483,7 +9544,31 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 	var fallback_render_attempt := -1
 	var phase_release_observed_at_attempt := -1
 	var phase_reconciliation_attempted := false
+	var next_barrier_ack_retry_msec := Time.get_ticks_msec() + PVP_FORCE_SWITCH_ACK_RETRY_MSEC
+	var next_barrier_reconciliation_msec := Time.get_ticks_msec() + PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC
+	var barrier_reconciliation_attempt := 0
 	while true:
+		if battle_finished:
+			return true
+		if _pvp_is_waiting_for_force_switch_phase_release():
+			var now_msec := Time.get_ticks_msec()
+			if now_msec >= next_barrier_ack_retry_msec:
+				_retry_pending_pvp_render_ack()
+				next_barrier_ack_retry_msec = now_msec + PVP_FORCE_SWITCH_ACK_RETRY_MSEC
+			if now_msec >= next_barrier_reconciliation_msec:
+				barrier_reconciliation_attempt += 1
+				await _reconcile_pvp_battle_from_room("pvp_opponent_force_switch_barrier_recovery")
+				if battle_state.is_battle_ended():
+					await _finish_if_battle_ended()
+					return true
+				if pvp_last_phase == "turn_open" and not _opponent_player_needs_force_switch_ui():
+					return true
+				var barrier_retry_delay_msec := mini(
+					PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC + barrier_reconciliation_attempt * 500,
+					PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC
+				)
+				next_barrier_reconciliation_msec = Time.get_ticks_msec() + barrier_retry_delay_msec
+
 		if _has_newer_pvp_phase_update(wait_start_server_seq, ["turn_open"]):
 			if phase_release_observed_at_attempt < 0:
 				phase_release_observed_at_attempt = attempt

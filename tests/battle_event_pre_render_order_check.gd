@@ -23,6 +23,7 @@ func _init() -> void:
 	_check_ended_snapshot_waits_for_final_render()
 	_check_authoritative_terminal_waits_for_render()
 	_check_local_forfeit_terminal_unblocks_action_wait()
+	_check_force_switch_phase_release_recovers()
 	quit(1 if failed else 0)
 
 
@@ -460,6 +461,31 @@ func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
 	_check_equal(wait_source.contains('"terminalConfirmed": true'), true, "action waiter returns a successful terminal confirmation")
 	_check_equal(wait_source.contains("await _recover_pvp_realtime_action_timeout(action, player_id, decision)"), true, "lost action responses are classified from the canonical room")
 	_check_equal(recovery_source.contains("await _finish_if_battle_ended"), true, "canonical timeout recovery only finishes from a terminal mechanical state")
+
+
+func _check_force_switch_phase_release_recovers() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var wait_index := source.find("func _wait_for_pvp_force_switch_phase_release(source: String) -> bool:")
+	var wait_next_index := source.find("\nfunc ", wait_index + 1)
+	var wait_source := source.substr(wait_index, wait_next_index - wait_index)
+	var completion_index := source.find("func _on_pvp_render_batch_completed(completion: Dictionary) -> void:")
+	var completion_next_index := source.find("\nfunc ", completion_index + 1)
+	var completion_source := source.substr(completion_index, completion_next_index - completion_index)
+	var reconciliation_index := source.find("func _reconcile_pvp_battle_from_room(source: String) -> bool:")
+	var reconciliation_next_index := source.find("\nfunc ", reconciliation_index + 1)
+	var reconciliation_source := source.substr(reconciliation_index, reconciliation_next_index - reconciliation_index)
+	var opponent_wait_index := source.find("func _wait_for_pvp_opponent_force_switch_and_render() -> bool:")
+	var opponent_wait_next_index := source.find("\nfunc ", opponent_wait_index + 1)
+	var opponent_wait_source := source.substr(opponent_wait_index, opponent_wait_next_index - opponent_wait_index)
+
+	_check_equal(wait_index >= 0, true, "force-switch phase release wait exists")
+	_check_equal(wait_source.contains("_retry_pending_pvp_render_ack()"), true, "stalled pivot phase retries its idempotent render acknowledgement")
+	_check_equal(wait_source.contains('await _reconcile_pvp_battle_from_room("pvp_force_switch_phase_release_recovery")'), true, "stalled pivot phase polls the canonical room")
+	_check_equal(wait_source.contains("PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC"), true, "canonical pivot recovery uses a bounded polling interval")
+	_check_equal(completion_source.contains("pvp_pending_render_ack_completion = completion.duplicate(true)"), true, "successful render completion retains retryable ACK evidence")
+	_check_equal(reconciliation_source.contains("realtime_advanced_during_request"), true, "late room polling cannot overwrite a newer realtime phase")
+	_check_equal(opponent_wait_source.contains("_retry_pending_pvp_render_ack()"), true, "the non-pivoting client also retries its barrier acknowledgement")
+	_check_equal(opponent_wait_source.contains('await _reconcile_pvp_battle_from_room("pvp_opponent_force_switch_barrier_recovery")'), true, "the non-pivoting client also recovers a missed barrier release")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
