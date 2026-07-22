@@ -480,7 +480,8 @@ func _draw_energy_blast_visual() -> void:
 	if alpha <= 0.02:
 		return
 
-	var projectile_state: Dictionary = _get_projectile_state_from_config(progress, energy_blast_config)
+	var travel_progress := _get_energy_blast_travel_progress(progress)
+	var projectile_state: Dictionary = _get_projectile_state_from_config(travel_progress, energy_blast_config)
 	var center: Vector2 = _projectile_battlefield_position(projectile_state.get("position", Vector2.ZERO) as Vector2, energy_blast_config)
 	var scale_value: float = float(projectile_state.get("scale", 1.0))
 	var base_radius: float = float(energy_blast_config.get("radius", 18.0))
@@ -493,7 +494,7 @@ func _draw_energy_blast_visual() -> void:
 	var trail_count: int = maxi(0, int(energy_blast_config.get("trail_count", 5)))
 	var trail_spacing: float = float(energy_blast_config.get("trail_spacing", 0.035))
 	for trail_index: int in range(trail_count, 0, -1):
-		var trail_progress: float = clampf(progress - float(trail_index) * trail_spacing, visible_start, visible_end)
+		var trail_progress: float = clampf(travel_progress - float(trail_index) * trail_spacing, 0.0, 1.0)
 		if trail_progress >= progress:
 			continue
 		var trail_state: Dictionary = _get_projectile_state_from_config(trail_progress, energy_blast_config)
@@ -519,7 +520,30 @@ func _draw_energy_blast_visual() -> void:
 		var outer: Vector2 = center + Vector2(cos(angle), sin(angle)) * radius * (1.25 + 0.18 * sin(spin + float(ray_index)))
 		draw_line(inner, outer, _color_with_alpha(ring_color, alpha * 0.42), 1.3)
 
+	var shadow_ray_count: int = maxi(0, int(energy_blast_config.get("shadow_ray_count", 0)))
+	var shadow_ray_color: Color = _color_from_value(energy_blast_config.get("shadow_ray_color", [0.0, 0.0, 0.0, 1.0]), Color.BLACK)
+	for shadow_ray_index: int in range(shadow_ray_count):
+		var shadow_angle := -spin * 0.66 + float(shadow_ray_index) * TAU / float(shadow_ray_count) + sin(float(shadow_ray_index) * 2.4) * 0.16
+		var shadow_inner := center + Vector2(cos(shadow_angle), sin(shadow_angle)) * radius * 0.42
+		var shadow_outer := center + Vector2(cos(shadow_angle), sin(shadow_angle)) * radius * (1.02 + float(shadow_ray_index % 3) * 0.18)
+		draw_line(shadow_inner, shadow_outer, _color_with_alpha(shadow_ray_color, alpha * 0.86), 2.0)
+
+	var particle_count: int = maxi(0, int(energy_blast_config.get("particle_count", 0)))
+	var particle_color: Color = _color_from_value(energy_blast_config.get("particle_color", [ring_color.r, ring_color.g, ring_color.b, ring_color.a]), ring_color)
+	for particle_index: int in range(particle_count):
+		var particle_angle := spin * (0.76 + float(particle_index % 3) * 0.09) + float(particle_index) * TAU / float(particle_count)
+		var particle_radius := radius * (1.45 + 0.32 * sin(float(frame_index) * 0.18 + float(particle_index) * 1.7))
+		var particle_center := center + Vector2(cos(particle_angle), sin(particle_angle)) * particle_radius
+		var particle_size := 1.2 + float(particle_index % 3) * 0.55
+		draw_circle(particle_center, particle_size, _color_with_alpha(particle_color, alpha * 0.78))
+
 	_draw_energy_blast_impact(progress, visible_end, aura_color, core_color, ring_color)
+
+
+func _get_energy_blast_travel_progress(progress: float) -> float:
+	var travel_start := clampf(float(energy_blast_config.get("travel_start", 0.0)), 0.0, 0.95)
+	var travel_end := clampf(float(energy_blast_config.get("travel_end", 1.0)), travel_start + 0.001, 1.0)
+	return clampf((progress - travel_start) / maxf(travel_end - travel_start, 0.001), 0.0, 1.0)
 
 
 func _draw_energy_blast_impact(progress: float, visible_end: float, aura_color: Color, core_color: Color, ring_color: Color) -> void:
@@ -535,7 +559,9 @@ func _draw_energy_blast_impact(progress: float, visible_end: float, aura_color: 
 		return
 
 	var impact_radius: float = float(energy_blast_config.get("impact_radius", 46.0)) * (0.38 + impact_progress * 0.9)
+	var impact_core_color: Color = _color_from_value(energy_blast_config.get("impact_core_color", [core_color.r, core_color.g, core_color.b, core_color.a]), core_color)
 	draw_circle(center, impact_radius * 0.72, _color_with_alpha(aura_color, impact_alpha * 0.16))
+	draw_circle(center, impact_radius * 0.42, _color_with_alpha(impact_core_color, impact_alpha * 0.45))
 	for ring_index: int in range(3):
 		draw_arc(center, impact_radius + float(ring_index) * 9.0, 0.0, TAU, 72, _color_with_alpha(ring_color, impact_alpha * (0.7 - float(ring_index) * 0.16)), 2.0)
 
@@ -544,7 +570,7 @@ func _draw_energy_blast_impact(progress: float, visible_end: float, aura_color: 
 		var angle: float = float(burst_index) * TAU / float(burst_count) + float(frame_index) * 0.05
 		var start: Vector2 = center + Vector2(cos(angle), sin(angle)) * impact_radius * 0.34
 		var end: Vector2 = center + Vector2(cos(angle), sin(angle)) * impact_radius * (1.02 + 0.24 * sin(float(burst_index) + float(frame_index) * 0.2))
-		draw_line(start, end, _color_with_alpha(core_color, impact_alpha * 0.58), 1.5)
+		draw_line(start, end, _color_with_alpha(impact_core_color, impact_alpha * 0.68), 1.5)
 
 
 func _draw_solar_charge_visual() -> void:
