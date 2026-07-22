@@ -61,7 +61,7 @@ func set_action_label(action: String, label: String) -> void:
 	var button := _get_action_button(action)
 	if button != null:
 		button.text = label
-		button.tooltip_text = label
+		button.tooltip_text = "" if action in ["bag", "run"] else label
 
 func set_action_visible(action: String, is_visible: bool) -> void:
 	var button := _get_action_button(action)
@@ -69,6 +69,7 @@ func set_action_visible(action: String, is_visible: bool) -> void:
 		button.visible = is_visible
 	if action == "bag" and utility_action_divider != null:
 		utility_action_divider.visible = is_visible
+		_apply_disabled_actions()
 
 func set_action_disabled(action: String, is_disabled: bool) -> void:
 	disabled_actions[action] = is_disabled
@@ -129,7 +130,11 @@ func _apply_button_default_state(button: Button) -> void:
 		if styles.has(style_name):
 			var style_box: StyleBox = styles.get(style_name) as StyleBox
 			if style_box != null:
-				button.add_theme_stylebox_override(style_name, style_box)
+				var applied_style := style_box
+				if (button == bag_button or button == run_button) and style_box is StyleBoxFlat:
+					applied_style = style_box.duplicate() as StyleBoxFlat
+					_apply_utility_segment_corners(button, applied_style as StyleBoxFlat)
+				button.add_theme_stylebox_override(style_name, applied_style)
 	button.remove_theme_color_override("font_color")
 	button.remove_theme_color_override("font_hover_color")
 	button.remove_theme_color_override("font_pressed_color")
@@ -152,10 +157,10 @@ func _apply_button_selected_state(button: Button) -> void:
 	var active_border_soft := UTILITY_EXIT_ACCENT if button == run_button else ACTION_ACTIVE_BORDER_SOFT
 	var active_text := UTILITY_EXIT_ACCENT if button == run_button else ACTION_ACTIVE_TEXT
 	if button == bag_button or button == run_button:
-		button.add_theme_stylebox_override("normal", _make_utility_selected_button_style(active_background))
-		button.add_theme_stylebox_override("hover", _make_utility_selected_button_style(active_hover_background))
-		button.add_theme_stylebox_override("pressed", _make_utility_selected_button_style(active_hover_background))
-		button.add_theme_stylebox_override("focus", _make_utility_selected_button_style(active_background))
+		button.add_theme_stylebox_override("normal", _make_utility_selected_button_style(button, active_background))
+		button.add_theme_stylebox_override("hover", _make_utility_selected_button_style(button, active_hover_background))
+		button.add_theme_stylebox_override("pressed", _make_utility_selected_button_style(button, active_hover_background))
+		button.add_theme_stylebox_override("focus", _make_utility_selected_button_style(button, active_background))
 		button.add_theme_color_override("font_color", active_text)
 		button.add_theme_color_override("font_hover_color", active_text)
 		button.add_theme_color_override("font_pressed_color", active_text)
@@ -170,10 +175,19 @@ func _apply_button_selected_state(button: Button) -> void:
 	button.add_theme_color_override("font_pressed_color", active_text)
 	button.add_theme_color_override("font_focus_color", active_text)
 
-func _make_utility_selected_button_style(background_color: Color) -> StyleBoxFlat:
+func _make_utility_selected_button_style(button: Button, background_color: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = background_color
+	_apply_utility_segment_corners(button, style)
 	return style
+
+func _apply_utility_segment_corners(button: Button, style: StyleBoxFlat) -> void:
+	var rounds_left := button == bag_button or (button == run_button and not bag_button.visible)
+	var rounds_right := button == run_button
+	style.corner_radius_top_left = 5 if rounds_left else 0
+	style.corner_radius_bottom_left = 5 if rounds_left else 0
+	style.corner_radius_top_right = 5 if rounds_right else 0
+	style.corner_radius_bottom_right = 5 if rounds_right else 0
 
 func _apply_button_disabled_state(button: Button) -> void:
 	var action: String = _get_action_for_button(button)
