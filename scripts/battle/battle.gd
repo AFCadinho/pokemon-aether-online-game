@@ -4132,6 +4132,29 @@ func _apply_volatile_condition_event(event_data: Dictionary) -> void:
 		"end", "cure", "cured":
 			_remove_volatile_condition_for_ident(ident_key, condition_key)
 
+func _apply_substitute_presentation_event(event_data: Dictionary) -> void:
+	if not _is_substitute_effect(str(event_data.get("effect", ""))):
+		return
+
+	var target_ident := str(event_data.get("target", event_data.get("pokemon", "")))
+	if _get_player_id_from_ident(target_ident) == "":
+		return
+
+	match str(event_data.get("state", "")).strip_edges().to_lower():
+		"start":
+			await animation_router.set_substitute_active(target_ident, true, SettingsManager.battle_animations)
+		"activate":
+			if SettingsManager.battle_animations:
+				await animation_router.play_substitute_damage_tween(target_ident)
+		"end", "cure", "cured":
+			await animation_router.set_substitute_active(target_ident, false, SettingsManager.battle_animations)
+
+func _is_substitute_effect(effect: String) -> bool:
+	var cleaned_effect := effect.strip_edges().to_lower()
+	if cleaned_effect.begins_with("move:"):
+		cleaned_effect = cleaned_effect.substr("move:".length()).strip_edges()
+	return cleaned_effect.replace(" ", "").replace("_", "").replace("-", "") == "substitute"
+
 func _clear_volatile_condition_for_ident(ident: String) -> void:
 	var ident_key := _normalize_battle_ident(ident)
 	if ident_key == "":
@@ -4174,6 +4197,8 @@ func _get_volatile_condition_key(effect: String) -> String:
 			return "taunt"
 		"encore", "encored":
 			return "encore"
+		"substitute":
+			return "substitute"
 		_:
 			return ""
 
@@ -4294,6 +4319,7 @@ func _reset_battle_effect_tracking() -> void:
 	pending_booster_energy_modifier_targets_by_ident.clear()
 	stat_stages_by_ident.clear()
 	ability_stat_modifiers_by_ident.clear()
+	animation_router.clear_all_substitutes()
 	player_party_moves_by_key.clear()
 	_update_stat_stage_panels()
 	event_presentation.reset()
@@ -4362,6 +4388,10 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 	_remember_public_confirmed_item_from_event(event)
 	match str(event.get("type", "")):
 		"switch", "drag":
+			var substitute_switch_ident := str(event.get("fromIdent", ""))
+			if substitute_switch_ident == "":
+				substitute_switch_ident = str(event.get("toIdent", event.get("pokemon", event.get("playerId", ""))))
+			animation_router.clear_substitute_for_ident(substitute_switch_ident)
 			_clear_volatile_condition_for_ident(str(event.get("fromIdent", "")))
 			_clear_volatile_condition_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 			_clear_stat_stages_for_ident(str(event.get("fromIdent", "")))
@@ -4371,6 +4401,7 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("fromIdent", "")))
 			_clear_pending_booster_energy_modifier_for_ident(str(event.get("toIdent", event.get("pokemon", ""))))
 		"faint":
+			animation_router.clear_substitute_for_ident(str(event.get("target", "")))
 			_clear_volatile_condition_for_ident(str(event.get("target", "")))
 			_clear_stat_stages_for_ident(str(event.get("target", "")))
 			_clear_ability_stat_modifier_for_ident(str(event.get("target", "")))
@@ -4563,7 +4594,7 @@ func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
 	var volatile_value: Variant = volatile_conditions_by_ident.get(ident_key, {})
 	if volatile_value is Dictionary:
 		var volatile_conditions: Dictionary = volatile_value as Dictionary
-		for condition_key in ["confused", "taunt", "encore"]:
+		for condition_key in ["confused", "taunt", "encore", "substitute"]:
 			if not volatile_conditions.has(condition_key):
 				continue
 
@@ -4589,6 +4620,8 @@ func _format_volatile_condition_badge_name(condition_key: String) -> String:
 			return "Taunt:"
 		"encore":
 			return "Encore:"
+		"substitute":
+			return "Substitute"
 
 	return condition_key.capitalize()
 
@@ -5101,6 +5134,8 @@ func _clear_pvp_party_hud_display_override() -> void:
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type
+	if action_buttons.has_method("set_action_visible"):
+		action_buttons.set_action_visible("bag", battle_type == BattleType.WILD)
 	if action_buttons.has_method("set_action_label"):
 		action_buttons.set_action_label("run", "Run" if battle_type == BattleType.WILD else "Forfeit")
 	_set_battle_actions_ready(false)
@@ -6484,6 +6519,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			])
 		await event_renderer.render_event(event_data, presentation)
 		if event_type == "pokemonEffect":
+			await _apply_substitute_presentation_event(event_data)
 			_apply_volatile_condition_event(event_data)
 		if event_type == "damage" or event_type == "heal" or event_type == "faint":
 			_debug_battle_presentation_order("render_event.after type=%s event=%s" % [

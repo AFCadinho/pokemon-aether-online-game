@@ -37,6 +37,13 @@ const STAT_STAGE_PANEL_GAP := 8.0
 const FAINT_TWEEN_OFFSET := Vector2(0, 34)
 const SPRITE_HOVER_PADDING := Vector2(8, 8)
 const SPRITE_ALPHA_BOUNDS_THRESHOLD := 0.02
+const SUBSTITUTE_SHEET: Texture2D = preload("res://assets/battles/animations/substitute/PRAS- Substitute.png")
+const SUBSTITUTE_CELL_SIZE := Vector2(192.0, 192.0)
+const SUBSTITUTE_DISPLAY_SCALE := Vector2(2.0, 2.0)
+const SUBSTITUTE_FRONT_REGION := Rect2(Vector2.ZERO, SUBSTITUTE_CELL_SIZE)
+const SUBSTITUTE_BACK_REGION := Rect2(Vector2(SUBSTITUTE_CELL_SIZE.x, 0.0), SUBSTITUTE_CELL_SIZE)
+const SUBSTITUTE_CROSSFADE_SECONDS := 0.14
+const SUBSTITUTE_RETREAT_OFFSET := Vector2(18.0, 7.0)
 
 @onready var single_container: Control = $SingleBattleContainer
 @onready var double_container: Control = $DoubleBattleContainer
@@ -61,12 +68,17 @@ var current_single_species := ""
 var current_single_side := ""
 var current_single_is_shiny := false
 var stat_stage_panel_anchor: Control
+var substitute_sprite: Sprite2D
+var substitute_tween: Tween
+var substitute_active := false
+var substitute_revealed_for_move := false
 
 func _ready() -> void:
 	_set_sprite_filter(single_sprite)
 	_set_sprite_filter(double_sprite_1)
 	_set_sprite_filter(double_sprite_2)
 	_cache_base_sprite_positions()
+	_create_substitute_sprite()
 	set_battle_type(default_is_double_battle)
 	clear_stat_stages()
 	_snap_all_sprites_to_pixel_grid.call_deferred()
@@ -159,6 +171,7 @@ func reset_battle_pose() -> void:
 
 func clear_pokemon() -> void:
 	_stop_active_tween()
+	clear_substitute_immediately()
 	set_battle_type(false)
 	clear_stat_stages()
 	current_single_species = ""
@@ -185,6 +198,143 @@ func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)
+
+func set_substitute_active(is_active: bool, animate := true) -> void:
+	if substitute_sprite == null:
+		return
+	if substitute_active == is_active and not substitute_revealed_for_move:
+		_sync_substitute_idle_pose()
+		return
+
+	_stop_active_tween()
+	_stop_substitute_tween()
+	substitute_revealed_for_move = false
+	var should_animate := animate and is_inside_tree() and single_sprite.visible
+	if is_active:
+		_reset_sprite_pose(single_sprite)
+		substitute_active = true
+		_sync_substitute_region()
+		substitute_sprite.visible = true
+		substitute_sprite.position = _get_substitute_idle_position()
+		substitute_sprite.rotation = 0.0
+		if not should_animate:
+			substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
+			substitute_sprite.modulate = Color.WHITE
+			single_sprite.modulate = _with_alpha(single_sprite.modulate, 0.0)
+			return
+
+		substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE * 1.08
+		substitute_sprite.modulate = Color(1.0, 1.0, 1.0, 0.0)
+		substitute_tween = create_tween().set_parallel(true)
+		substitute_tween.tween_property(single_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
+		substitute_tween.tween_property(substitute_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
+		substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		await substitute_tween.finished
+		_sync_substitute_idle_pose()
+		return
+
+	substitute_active = false
+	if not should_animate:
+		substitute_sprite.visible = false
+		substitute_sprite.modulate = Color.WHITE
+		substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
+		single_sprite.modulate = Color.WHITE
+		return
+
+	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween.tween_property(substitute_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
+	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE * 0.82, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	substitute_tween.tween_property(single_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
+	await substitute_tween.finished
+	substitute_sprite.visible = false
+	substitute_sprite.modulate = Color.WHITE
+	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
+	single_sprite.modulate = Color.WHITE
+
+func reveal_pokemon_from_substitute_for_move() -> bool:
+	if not substitute_active or substitute_sprite == null or not single_sprite.visible:
+		return false
+
+	_stop_active_tween()
+	_stop_substitute_tween()
+	_reset_sprite_pose(single_sprite)
+	substitute_revealed_for_move = true
+	var retreat_direction := -1.0 if current_single_side == "back" else 1.0
+	var retreat_offset := Vector2(SUBSTITUTE_RETREAT_OFFSET.x * retreat_direction, SUBSTITUTE_RETREAT_OFFSET.y)
+	substitute_sprite.visible = true
+	substitute_sprite.position = _get_substitute_idle_position()
+	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
+	substitute_sprite.modulate = Color.WHITE
+	single_sprite.modulate = _with_alpha(single_sprite.modulate, 0.0)
+
+	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween.tween_property(substitute_sprite, "position", _get_substitute_idle_position() + retreat_offset, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	substitute_tween.tween_property(substitute_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
+	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE * 0.88, SUBSTITUTE_CROSSFADE_SECONDS)
+	substitute_tween.tween_property(single_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
+	await substitute_tween.finished
+	substitute_sprite.visible = false
+	_reset_sprite_pose(single_sprite)
+	return true
+
+func restore_substitute_after_move() -> void:
+	if not substitute_active or substitute_sprite == null:
+		return
+
+	_stop_active_tween()
+	_stop_substitute_tween()
+	_reset_sprite_pose(single_sprite)
+	var retreat_direction := -1.0 if current_single_side == "back" else 1.0
+	var retreat_offset := Vector2(SUBSTITUTE_RETREAT_OFFSET.x * retreat_direction, SUBSTITUTE_RETREAT_OFFSET.y)
+	substitute_sprite.visible = true
+	substitute_sprite.position = _get_substitute_idle_position() + retreat_offset
+	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE * 0.88
+	substitute_sprite.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	single_sprite.modulate = Color.WHITE
+
+	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween.tween_property(single_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
+	substitute_tween.tween_property(substitute_sprite, "position", _get_substitute_idle_position(), SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	substitute_tween.tween_property(substitute_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
+	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await substitute_tween.finished
+	substitute_revealed_for_move = false
+	_sync_substitute_idle_pose()
+
+func play_substitute_damage_tween() -> void:
+	if not substitute_active or substitute_sprite == null or substitute_revealed_for_move:
+		return
+
+	_stop_substitute_tween()
+	_sync_substitute_idle_pose()
+	var base_position := _get_substitute_idle_position()
+	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween.tween_property(substitute_sprite, "modulate", DAMAGE_IMPACT_COLOR, 0.03)
+	substitute_tween.tween_property(substitute_sprite, "modulate", DAMAGE_FLASH_COLOR, 0.05).set_delay(0.03)
+	substitute_tween.tween_property(substitute_sprite, "modulate", Color.WHITE, 0.08).set_delay(0.08)
+	substitute_tween.tween_property(substitute_sprite, "position", base_position + Vector2(-10.0, 0.0), 0.035)
+	substitute_tween.tween_property(substitute_sprite, "position", base_position + Vector2(9.0, 0.0), 0.04).set_delay(0.035)
+	substitute_tween.tween_property(substitute_sprite, "position", base_position + Vector2(-4.0, 0.0), 0.035).set_delay(0.075)
+	substitute_tween.tween_property(substitute_sprite, "position", base_position, 0.05).set_delay(0.11)
+	await substitute_tween.finished
+	_sync_substitute_idle_pose()
+
+func clear_substitute_immediately() -> void:
+	_stop_active_tween()
+	_stop_substitute_tween()
+	substitute_active = false
+	substitute_revealed_for_move = false
+	if substitute_sprite != null:
+		substitute_sprite.visible = false
+		substitute_sprite.position = _get_substitute_idle_position()
+		substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
+		substitute_sprite.rotation = 0.0
+		substitute_sprite.modulate = Color.WHITE
+	if single_sprite != null:
+		single_sprite.modulate = Color.WHITE
+
+func has_active_substitute() -> bool:
+	return substitute_active
 
 func play_move_actor_motion(motion_config: Dictionary = {}, horizontal_direction: float = 1.0) -> void:
 	var sprites := _get_visible_sprites()
@@ -232,6 +382,10 @@ func play_move_actor_motion(motion_config: Dictionary = {}, horizontal_direction
 	_reset_sprites_pose(sprites)
 
 func play_damage_tween() -> void:
+	if substitute_active and not substitute_revealed_for_move:
+		await play_substitute_damage_tween()
+		return
+
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -256,6 +410,10 @@ func play_damage_tween() -> void:
 
 
 func play_hit_flash_tween(flash_config: Dictionary = {}) -> void:
+	if substitute_active and not substitute_revealed_for_move:
+		await _play_substitute_hit_flash_tween(flash_config)
+		return
+
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -275,6 +433,10 @@ func play_hit_flash_tween(flash_config: Dictionary = {}) -> void:
 	_reset_sprites_pose(sprites)
 
 func play_shake_tween(shake_config: Dictionary = {}) -> void:
+	if substitute_active and not substitute_revealed_for_move:
+		await _play_substitute_shake_tween(shake_config)
+		return
+
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -417,6 +579,97 @@ func _stop_active_tween() -> void:
 
 	active_tween = null
 
+func _create_substitute_sprite() -> void:
+	substitute_sprite = Sprite2D.new()
+	substitute_sprite.name = "SubstituteSprite"
+	substitute_sprite.texture = SUBSTITUTE_SHEET
+	substitute_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	substitute_sprite.region_enabled = true
+	substitute_sprite.centered = true
+	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
+	substitute_sprite.z_index = 12
+	substitute_sprite.visible = false
+	single_sprite_slot.add_child(substitute_sprite)
+	_sync_substitute_region()
+	_sync_substitute_idle_pose()
+
+func _sync_substitute_region() -> void:
+	if substitute_sprite == null:
+		return
+	substitute_sprite.region_rect = SUBSTITUTE_BACK_REGION if current_single_side == "back" else SUBSTITUTE_FRONT_REGION
+
+func _sync_substitute_idle_pose() -> void:
+	if substitute_sprite == null:
+		return
+	_sync_substitute_region()
+	substitute_sprite.position = _get_substitute_idle_position()
+	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
+	substitute_sprite.rotation = 0.0
+	substitute_sprite.modulate = Color.WHITE
+	substitute_sprite.visible = substitute_active and not substitute_revealed_for_move
+	if single_sprite != null:
+		single_sprite.modulate = _with_alpha(single_sprite.modulate, 0.0 if substitute_active and not substitute_revealed_for_move else 1.0)
+
+func _get_substitute_idle_position() -> Vector2:
+	if single_sprite == null:
+		return Vector2.ZERO
+	# The imported cells keep generous transparent margins. These offsets place
+	# the visible doll's feet exactly on the Pokemon battle anchor.
+	var battle_anchor := get_single_battle_anchor_in_node(single_sprite_slot)
+	if battle_anchor == Vector2.ZERO:
+		battle_anchor = _get_base_sprite_position(single_sprite)
+	var horizontal_offset := -2.0 if current_single_side == "back" else 4.0
+	return battle_anchor + Vector2(horizontal_offset, -52.0)
+
+func _play_substitute_hit_flash_tween(flash_config: Dictionary = {}) -> void:
+	if substitute_sprite == null:
+		return
+	var delay: float = maxf(float(flash_config.get("delay", 0.0)), 0.0)
+	var flash_duration: float = maxf(float(flash_config.get("duration", 0.09)), 0.02)
+	_stop_substitute_tween()
+	_sync_substitute_idle_pose()
+	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween.tween_property(substitute_sprite, "modulate", DAMAGE_FLASH_COLOR, flash_duration * 0.36).set_delay(delay)
+	substitute_tween.tween_property(substitute_sprite, "modulate", Color.WHITE, flash_duration * 0.64).set_delay(delay + flash_duration * 0.36)
+	await substitute_tween.finished
+	_sync_substitute_idle_pose()
+
+func _play_substitute_shake_tween(shake_config: Dictionary = {}) -> void:
+	if substitute_sprite == null:
+		return
+	var duration: float = maxf(float(shake_config.get("duration", 0.65)), 0.05)
+	var interval: float = maxf(float(shake_config.get("interval", 0.045)), 0.01)
+	var amplitude: float = maxf(float(shake_config.get("amplitude", 8.0)), 0.0)
+	var vertical_scale: float = maxf(float(shake_config.get("vertical_scale", 0.35)), 0.0)
+	var decay := bool(shake_config.get("decay", true))
+	var delay: float = maxf(float(shake_config.get("delay", 0.0)), 0.0)
+	var step_count: int = maxi(int(ceil(duration / interval)), 1)
+	var base_position := _get_substitute_idle_position()
+	_stop_substitute_tween()
+	_sync_substitute_idle_pose()
+	substitute_tween = create_tween().set_parallel(true)
+	for step: int in range(step_count):
+		var progress := float(step) / float(maxi(step_count - 1, 1))
+		var step_amplitude := amplitude * (1.0 - progress if decay else 1.0)
+		var direction := -1.0 if step % 2 == 0 else 1.0
+		var vertical_direction := -1.0 if step % 4 < 2 else 1.0
+		var offset := Vector2(
+			roundf(step_amplitude * direction),
+			roundf(step_amplitude * vertical_scale * vertical_direction)
+		)
+		substitute_tween.tween_property(substitute_sprite, "position", base_position + offset, interval).set_delay(delay + float(step) * interval).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	substitute_tween.tween_property(substitute_sprite, "position", base_position, interval).set_delay(delay + duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await substitute_tween.finished
+	_sync_substitute_idle_pose()
+
+func _stop_substitute_tween() -> void:
+	if substitute_tween != null and substitute_tween.is_valid():
+		substitute_tween.kill()
+	substitute_tween = null
+
+func _with_alpha(color: Color, alpha: float) -> Color:
+	return Color(color.r, color.g, color.b, clampf(alpha, 0.0, 1.0))
+
 func _reset_sprites_pose(sprites: Array[AnimatedSprite2D]) -> void:
 	for sprite in sprites:
 		_reset_sprite_pose(sprite)
@@ -427,7 +680,10 @@ func _reset_sprite_pose(sprite: AnimatedSprite2D) -> void:
 	sprite.scale = _get_sprite_target_scale(sprite)
 	sprite.rotation = 0.0
 	_apply_sprite_anchor(sprite)
-	sprite.modulate = Color.WHITE
+	if sprite == single_sprite and substitute_active and not substitute_revealed_for_move:
+		sprite.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	else:
+		sprite.modulate = Color.WHITE
 
 func _read_motion_offset(value: Variant) -> Vector2:
 	if value is Vector2:
@@ -1207,6 +1463,8 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	single_sprite.visible = true
 	_apply_sprite_playback_mode(single_sprite)
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+	if substitute_active:
+		_sync_substitute_idle_pose()
 
 func _apply_sprite_playback_mode(sprite: AnimatedSprite2D) -> void:
 	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_STATIC:

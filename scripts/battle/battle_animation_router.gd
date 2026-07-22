@@ -31,6 +31,46 @@ func setup(player_box: Node, enemy_box: Node, parent_node: Node = null, animatio
 	animation_guard = animation_guard_callback
 
 
+func reveal_pokemon_from_substitute_for_move(actor_ident: String) -> bool:
+	var actor_box := _get_sprite_box_for_ident(actor_ident)
+	if actor_box == null or not actor_box.has_method("reveal_pokemon_from_substitute_for_move"):
+		return false
+	return bool(await actor_box.call("reveal_pokemon_from_substitute_for_move"))
+
+
+func restore_substitute_after_move(actor_ident: String) -> void:
+	var actor_box := _get_sprite_box_for_ident(actor_ident)
+	if actor_box == null or not actor_box.has_method("restore_substitute_after_move"):
+		return
+	await actor_box.call("restore_substitute_after_move")
+
+
+func set_substitute_active(target_ident: String, is_active: bool, animate := true) -> void:
+	var target_box := _get_sprite_box_for_ident(target_ident)
+	if target_box == null or not target_box.has_method("set_substitute_active"):
+		return
+	await target_box.call("set_substitute_active", is_active, animate)
+
+
+func play_substitute_damage_tween(target_ident: String) -> void:
+	var target_box := _get_sprite_box_for_ident(target_ident)
+	if target_box == null or not target_box.has_method("play_substitute_damage_tween"):
+		return
+	await target_box.call("play_substitute_damage_tween")
+
+
+func clear_substitute_for_ident(target_ident: String) -> void:
+	var target_box := _get_sprite_box_for_ident(target_ident)
+	if target_box != null and target_box.has_method("clear_substitute_immediately"):
+		target_box.call("clear_substitute_immediately")
+
+
+func clear_all_substitutes() -> void:
+	for sprite_box in [player_sprite_box, enemy_sprite_box]:
+		if sprite_box != null and sprite_box.has_method("clear_substitute_immediately"):
+			sprite_box.call("clear_substitute_immediately")
+
+
 func play_attack_tween_for_actor(actor_ident: String) -> void:
 	if not SettingsManager.battle_animations:
 		return
@@ -327,6 +367,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))
 	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
 	animation_node.pattern_override = int(config.get("pattern_override", -1))
+	animation_node.reverse_pattern_override = int(config.get("reverse_pattern_override", -1))
 	animation_node.sheet_pattern_min = int(config.get("sheet_pattern_min", 0))
 	animation_node.sheet_pattern_max = int(config.get("sheet_pattern_max", 999))
 	animation_node.sheet_visible_start_frame = int(config.get("sheet_visible_start_frame", 0))

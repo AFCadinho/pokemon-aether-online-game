@@ -113,12 +113,16 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		if animations_allowed:
 			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
 	if attack_actor_ident != "":
+		var substitute_revealed := false
 		if animations_allowed:
+			substitute_revealed = await animation_router.reveal_pokemon_from_substitute_for_move(attack_actor_ident)
 			await animation_router.play_attack_tween_for_actor(attack_actor_ident)
 		if animations_allowed and move_animation_name != "":
 			await animation_router.play_move_animation(move_animation_name, move_animation_actor_ident, move_animation_target_ident, {
 				"result": move_animation_result,
 			})
+		if substitute_revealed:
+			await animation_router.restore_substitute_after_move(attack_actor_ident)
 		var move_hold_seconds := message_timing.get_move_animation_hold_seconds()
 		artificial_hold_seconds += move_hold_seconds
 		await _wait(move_hold_seconds)

@@ -4700,10 +4700,27 @@
         "fade_out": 0.12,
         "charge_end": 0.32,
         "ring_count": 8,
-        "color": [1.0, 0.12, 0.68, 1.0],
+        "color": [
+          1.0,
+          0.12,
+          0.68,
+          1.0
+        ],
         "path": [
-          {"at": 0.0, "position": [128.0, 224.0]},
-          {"at": 1.0, "position": [384.0, 96.0]}
+          {
+            "at": 0.0,
+            "position": [
+              128.0,
+              224.0
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384.0,
+              96.0
+            ]
+          }
         ]
       },
       "data_path": "res://assets/battles/animations/darkpulse/darkpulse.json",
@@ -4743,6 +4760,61 @@
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Nasty Plot.wav": "res://assets/battles/animations/nastyplot/PRSFX- Nasty Plot.wav"
+      }
+    },
+    "substitute": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.0,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.82,
+      "pattern_override": 1,
+      "reverse_pattern_override": 0,
+      "actor_motion": {
+        "enabled": true,
+        "duration": 0.7,
+        "points": [
+          {
+            "at": 0.0,
+            "offset": [0, 0],
+            "scale": 1.0,
+            "opacity": 1.0,
+            "duration": 0.03
+          },
+          {
+            "at": 0.12,
+            "offset": [0, 0],
+            "scale": 0.92,
+            "opacity": 0.08,
+            "duration": 0.12
+          },
+          {
+            "at": 0.74,
+            "offset": [0, 0],
+            "scale": 0.92,
+            "opacity": 0.08,
+            "duration": 0.03
+          },
+          {
+            "at": 0.86,
+            "offset": [0, 0],
+            "scale": 1.0,
+            "opacity": 1.0,
+            "duration": 0.1
+          }
+        ]
+      },
+      "data_path": "res://assets/battles/animations/substitute/substitute.json",
+      "sheet_path": "res://assets/battles/animations/substitute/PRAS- Substitute.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Substitute1.wav": "res://assets/battles/animations/substitute/PRSFX- Substitute1.wav",
+        "PRSFX- Substitute2.wav": "res://assets/battles/animations/substitute/PRSFX- Substitute2.wav"
       }
     }
   }

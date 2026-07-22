@@ -516,6 +516,15 @@ func format_pokemon_effect_event(event: Dictionary) -> String:
 		if state == "start" or state == "activate":
 			return "%s protected itself!" % target
 
+	if _is_substitute_effect(raw_effect):
+		match state:
+			"start":
+				return "%s put in a substitute!" % target
+			"activate":
+				return "The substitute took the hit for %s!" % target
+			"end":
+				return "%s's substitute faded!" % target
+
 	var ability_stat_message := _format_ability_stat_pokemon_effect(target, raw_effect)
 	if ability_stat_message != "":
 		return ability_stat_message
@@ -555,6 +564,12 @@ func format_pokemon_effect_event(event: Dictionary) -> String:
 
 func format_pokemon_effect_name(effect: String) -> String:
 	return _format_pokemon_effect_name(effect)
+
+func _is_substitute_effect(effect: String) -> bool:
+	var cleaned_effect := effect.strip_edges().to_lower()
+	if cleaned_effect.begins_with("move:"):
+		cleaned_effect = cleaned_effect.substr("move:".length()).strip_edges()
+	return cleaned_effect.replace(" ", "").replace("_", "").replace("-", "") == "substitute"
 
 func is_trapping_pokemon_effect(effect: String) -> bool:
 	match effect.to_lower().replace(" ", ""):

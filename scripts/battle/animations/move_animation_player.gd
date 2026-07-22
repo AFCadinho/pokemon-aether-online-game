@@ -55,6 +55,7 @@ signal animation_finished
 @export_range(8.0, 220.0, 1.0) var sparkle_radius_max: float = 78.0
 @export_range(-8, 8, 1) var pattern_offset: int = 0
 @export_range(-1, 999, 1) var pattern_override: int = -1
+@export_range(-1, 999, 1) var reverse_pattern_override: int = -1
 @export_range(0, 999, 1) var sheet_pattern_min: int = 0
 @export_range(0, 999, 1) var sheet_pattern_max: int = 999
 @export_range(0, 999, 1) var sheet_visible_start_frame: int = 0
@@ -1705,7 +1706,8 @@ func _apply_frame(index: int) -> void:
 			continue
 
 		var sprite: Sprite2D = sprites[sprite_i]
-		var pattern: int = pattern_override if pattern_override >= 0 else maxi(0, cell_pattern + pattern_offset)
+		var active_pattern_override := reverse_pattern_override if reverse_battlefield and reverse_pattern_override >= 0 else pattern_override
+		var pattern: int = active_pattern_override if active_pattern_override >= 0 else maxi(0, cell_pattern + pattern_offset)
 		sprite.region_rect = Rect2(
 			(pattern % columns) * tile_w,
 			int(pattern / columns) * tile_h,

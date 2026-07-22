@@ -26,6 +26,7 @@ func _init() -> void:
 	_check_contains(player_source, "func display_position_to_battlefield_source(position: Vector2) -> Vector2:", "mirrored animations can convert display anchors to source coordinates")
 	_check_contains(player_source, "var steam_count: int = maxi(0, int(fire_stream_config.get(\"steam_count\", 0)))", "stream effects can add a steam impact without a separate sprite sheet")
 	_check_contains(player_source, "if cell_pattern < sheet_pattern_min or cell_pattern > sheet_pattern_max:", "moves can show only the relevant portion of an imported sheet")
+	_check_contains(player_source, "reverse_pattern_override if reverse_battlefield", "mirrored animations can select an opponent-facing sheet pattern")
 	_check_contains(player_source, "if index < sheet_visible_start_frame:", "sheet impact effects can wait until their projectile arrives")
 	_check_contains(player_source, "func _draw_heat_wave_visual() -> void:", "moves can render a configurable multi-lane heat wave")
 

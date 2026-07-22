@@ -67,6 +67,21 @@ func _init() -> void:
 		"Kyogre underwent Primal Reversion into Kyogre-Primal!",
 		"primal reversion message"
 	)
+	_check_equal(
+		formatter.format_pokemon_effect_event({"target": "p1a: Gengar", "effect": "move: Substitute", "state": "start"}),
+		"Gengar put in a substitute!",
+		"substitute start message"
+	)
+	_check_equal(
+		formatter.format_pokemon_effect_event({"target": "p1a: Gengar", "effect": "Substitute", "state": "activate"}),
+		"The substitute took the hit for Gengar!",
+		"substitute hit message"
+	)
+	_check_equal(
+		formatter.format_pokemon_effect_event({"target": "p1a: Gengar", "effect": "Substitute", "state": "end"}),
+		"Gengar's substitute faded!",
+		"substitute end message"
+	)
 
 	quit(1 if failed else 0)
 
