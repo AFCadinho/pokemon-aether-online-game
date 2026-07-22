@@ -8,11 +8,16 @@ const ACTION_ACTIVE_BORDER := Color("#62d7ff")
 const ACTION_ACTIVE_BORDER_SOFT := Color("#2d7dcc")
 const ACTION_ACTIVE_TEXT := Color("#e4f7ff")
 const ACTION_DISABLED_MODULATE := Color(0.52, 0.52, 0.52, 0.72)
+const UTILITY_BAG_ACCENT := Color("#62d7ff")
+const UTILITY_EXIT_ACCENT := Color("#ff8068")
+const UTILITY_EXIT_ACTIVE_BG := Color("#32100df2")
+const UTILITY_EXIT_ACTIVE_BG_HOVER := Color("#48130ff6")
 
 @onready var fight_button: Button = %FightButton
 @onready var bag_button: Button = %BagButton
 @onready var party_button: Button = %PartyButton
 @onready var run_button: Button = %RunButton
+@onready var utility_action_divider: ColorRect = %UtilityActionDivider
 @onready var buttons: Array[Button] = [fight_button, party_button, run_button, bag_button]
 
 var disabled_actions := {}
@@ -55,12 +60,15 @@ func set_selected_action(action: String) -> void:
 func set_action_label(action: String, label: String) -> void:
 	var button := _get_action_button(action)
 	if button != null:
-		if action == "bag":
-			button.text = ""
-			button.tooltip_text = label
-		else:
-			button.text = label
-			button.tooltip_text = label
+		button.text = label
+		button.tooltip_text = label
+
+func set_action_visible(action: String, is_visible: bool) -> void:
+	var button := _get_action_button(action)
+	if button != null:
+		button.visible = is_visible
+	if action == "bag" and utility_action_divider != null:
+		utility_action_divider.visible = is_visible
 
 func set_action_disabled(action: String, is_disabled: bool) -> void:
 	disabled_actions[action] = is_disabled
@@ -125,17 +133,47 @@ func _apply_button_default_state(button: Button) -> void:
 	button.remove_theme_color_override("font_color")
 	button.remove_theme_color_override("font_hover_color")
 	button.remove_theme_color_override("font_pressed_color")
+	button.remove_theme_color_override("font_focus_color")
+	if button == bag_button:
+		button.add_theme_color_override("font_hover_color", UTILITY_BAG_ACCENT)
+		button.add_theme_color_override("font_pressed_color", UTILITY_BAG_ACCENT)
+		button.add_theme_color_override("font_focus_color", UTILITY_BAG_ACCENT)
+	elif button == run_button:
+		button.add_theme_color_override("font_hover_color", UTILITY_EXIT_ACCENT)
+		button.add_theme_color_override("font_pressed_color", UTILITY_EXIT_ACCENT)
+		button.add_theme_color_override("font_focus_color", UTILITY_EXIT_ACCENT)
 
 func _apply_button_selected_state(button: Button) -> void:
 	button.modulate = Color.WHITE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.add_theme_stylebox_override("normal", _make_selected_button_style(ACTION_ACTIVE_BG, ACTION_ACTIVE_BORDER))
-	button.add_theme_stylebox_override("hover", _make_selected_button_style(ACTION_ACTIVE_BG_HOVER, ACTION_ACTIVE_BORDER))
-	button.add_theme_stylebox_override("pressed", _make_selected_button_style(ACTION_ACTIVE_BG_HOVER, ACTION_ACTIVE_BORDER_SOFT))
-	button.add_theme_stylebox_override("focus", _make_selected_button_style(ACTION_ACTIVE_BG, ACTION_ACTIVE_BORDER_SOFT))
-	button.add_theme_color_override("font_color", ACTION_ACTIVE_TEXT)
-	button.add_theme_color_override("font_hover_color", ACTION_ACTIVE_TEXT)
-	button.add_theme_color_override("font_pressed_color", ACTION_ACTIVE_TEXT)
+	var active_background := UTILITY_EXIT_ACTIVE_BG if button == run_button else ACTION_ACTIVE_BG
+	var active_hover_background := UTILITY_EXIT_ACTIVE_BG_HOVER if button == run_button else ACTION_ACTIVE_BG_HOVER
+	var active_border := UTILITY_EXIT_ACCENT if button == run_button else ACTION_ACTIVE_BORDER
+	var active_border_soft := UTILITY_EXIT_ACCENT if button == run_button else ACTION_ACTIVE_BORDER_SOFT
+	var active_text := UTILITY_EXIT_ACCENT if button == run_button else ACTION_ACTIVE_TEXT
+	if button == bag_button or button == run_button:
+		button.add_theme_stylebox_override("normal", _make_utility_selected_button_style(active_background))
+		button.add_theme_stylebox_override("hover", _make_utility_selected_button_style(active_hover_background))
+		button.add_theme_stylebox_override("pressed", _make_utility_selected_button_style(active_hover_background))
+		button.add_theme_stylebox_override("focus", _make_utility_selected_button_style(active_background))
+		button.add_theme_color_override("font_color", active_text)
+		button.add_theme_color_override("font_hover_color", active_text)
+		button.add_theme_color_override("font_pressed_color", active_text)
+		button.add_theme_color_override("font_focus_color", active_text)
+		return
+	button.add_theme_stylebox_override("normal", _make_selected_button_style(active_background, active_border))
+	button.add_theme_stylebox_override("hover", _make_selected_button_style(active_hover_background, active_border))
+	button.add_theme_stylebox_override("pressed", _make_selected_button_style(active_hover_background, active_border_soft))
+	button.add_theme_stylebox_override("focus", _make_selected_button_style(active_background, active_border_soft))
+	button.add_theme_color_override("font_color", active_text)
+	button.add_theme_color_override("font_hover_color", active_text)
+	button.add_theme_color_override("font_pressed_color", active_text)
+	button.add_theme_color_override("font_focus_color", active_text)
+
+func _make_utility_selected_button_style(background_color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background_color
+	return style
 
 func _apply_button_disabled_state(button: Button) -> void:
 	var action: String = _get_action_for_button(button)

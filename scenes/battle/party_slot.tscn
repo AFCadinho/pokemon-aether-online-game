@@ -9,7 +9,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.11764706, 0.3764706, 0.7058824, 0.9)
+border_color = Color(0.13333334, 0.23137255, 0.33333334, 0.9)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -22,7 +22,7 @@ shadow_offset = Vector2(0, 2)
 bg_color = Color(0.015, 0.11, 0.23, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u1w4d"]
-bg_color = Color(0.025, 0.085, 0.18, 0.98)
+bg_color = Color(0.025, 0.105, 0.19, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -32,7 +32,7 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-shadow_color = Color(0.40784314, 0.6156863, 0.9019608, 0.18)
+shadow_color = Color(0.38431373, 0.84313726, 1, 0.2)
 shadow_size = 10
 shadow_offset = Vector2(0, 3)
 

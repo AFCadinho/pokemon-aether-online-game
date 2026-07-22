@@ -10,9 +10,10 @@ const ACTIVE_BACKGROUND := Color("#0a315f")
 const ACTIVE_BORDER := Color("#62d7ff")
 const PARTY_BACKGROUND := Color("#081321f2")
 const PARTY_BORDER := Color("#315070")
+const ICON_PARTY_BORDER := Color("#223b55")
 const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
-const ICON_FAINTED_MODULATE := Color(0.12, 0.12, 0.12, 0.92)
+const ICON_FAINTED_MODULATE := Color(0.38, 0.38, 0.38, 0.84)
 const POISON_STATUS_TEXTURE: Texture2D = preload("res://assets/battles/status/poisoned.png")
 const POISON_STATUS_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const TOXIC_STATUS_MODULATE := Color("#8c58ff")
@@ -53,11 +54,11 @@ func _apply_slot_layout() -> void:
 		custom_minimum_size = Vector2(52.0, 52.0)
 		size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		margin_container.add_theme_constant_override("margin_left", 3)
-		margin_container.add_theme_constant_override("margin_top", 3)
-		margin_container.add_theme_constant_override("margin_right", 3)
-		margin_container.add_theme_constant_override("margin_bottom", 3)
-		pokemon_icon.custom_minimum_size = Vector2(44.0, 44.0)
+		margin_container.add_theme_constant_override("margin_left", 2)
+		margin_container.add_theme_constant_override("margin_top", 2)
+		margin_container.add_theme_constant_override("margin_right", 2)
+		margin_container.add_theme_constant_override("margin_bottom", 2)
+		pokemon_icon.custom_minimum_size = Vector2(46.0, 46.0)
 		details_column.visible = false
 		return
 	if not compact_mode:
@@ -337,7 +338,7 @@ func _apply_slot_style(species: String, is_fainted: bool, is_active: bool, types
 		_set_color(ACTIVE_BACKGROUND, ACTIVE_BORDER, true)
 		return
 
-	_set_color(PARTY_BACKGROUND, PARTY_BORDER, false)
+	_set_color(PARTY_BACKGROUND, ICON_PARTY_BORDER if icon_only_mode else PARTY_BORDER, false)
 
 func _set_color(background: Color, border: Color, is_active: bool) -> void:
 	var normal := StyleBoxFlat.new()
@@ -358,9 +359,9 @@ func _set_color(background: Color, border: Color, is_active: bool) -> void:
 	normal.shadow_offset = Vector2(0, 3) if is_active else Vector2(0, 2)
 
 	var hover := normal.duplicate() as StyleBoxFlat
-	hover.bg_color = background.lightened(0.08)
-	hover.border_color = border.lightened(0.18)
-	hover.shadow_color = Color(0.40784314, 0.6156863, 0.9019608, 0.18)
+	hover.bg_color = background.lightened(0.1 if icon_only_mode else 0.08)
+	hover.border_color = ACTIVE_BORDER if icon_only_mode else border.lightened(0.18)
+	hover.shadow_color = Color(0.38431373, 0.84313726, 1, 0.2) if icon_only_mode else Color(0.40784314, 0.6156863, 0.9019608, 0.18)
 	hover.shadow_size = 10
 	hover.shadow_offset = Vector2(0, 3)
 

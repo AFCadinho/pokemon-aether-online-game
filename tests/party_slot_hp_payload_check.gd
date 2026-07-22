@@ -44,12 +44,22 @@ func _init() -> void:
 		"fainted": true,
 	})
 	var pokemon_icon := visual_slot.get_node("MarginContainer/HBoxContainer/PokemonIcon") as TextureRect
+	var margin_container := visual_slot.get_node("MarginContainer") as MarginContainer
 	var faint_badge := visual_slot.get_node("MarginContainer/HBoxContainer/PokemonIcon/IconStatusBadge") as Label
+	_check_equal(visual_slot.custom_minimum_size, Vector2(52.0, 52.0), "icon-only preview slot keeps its compact footprint")
+	_check_equal(pokemon_icon.custom_minimum_size, Vector2(46.0, 46.0), "preview icon fills more of its slot")
+	_check_equal(margin_container.get_theme_constant("margin_left"), 2, "preview icon uses compact left padding")
+	_check_equal(margin_container.get_theme_constant("margin_right"), 2, "preview icon uses matching right padding")
 	_check_equal(faint_badge.text, "FNT", "fainted icon-only slot shows FNT text")
 	_check_equal(faint_badge.visible, true, "fainted icon-only slot shows its badge")
 	_check_equal(pokemon_icon.modulate, Color.WHITE, "FNT badge parent no longer passes a dark modulate to its children")
 	_check_equal(faint_badge.self_modulate, Color.WHITE, "FNT badge keeps its full text and pill brightness")
-	_check_equal(pokemon_icon.self_modulate.r < 0.2, true, "fainted Pokemon silhouette remains visibly dark")
+	_check_equal(
+		pokemon_icon.self_modulate.r >= 0.3 and pokemon_icon.self_modulate.r < 0.5,
+		true,
+		"fainted Pokemon silhouette uses a readable grayscale treatment"
+	)
+	_check_equal(pokemon_icon.self_modulate.a < 1.0, true, "fainted Pokemon silhouette remains visibly subdued")
 	visual_slot.queue_free()
 	quit(1 if failed else 0)
 

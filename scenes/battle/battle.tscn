@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scenes/battle/sprite_box.tscn" id="3_kd6yx"]
 [ext_resource type="Texture2D" uid="uid://b0mdtgfn4y3qi" path="res://assets/sprites/battle_buttons/fight.png" id="4_pll4o"]
 [ext_resource type="PackedScene" uid="uid://dp8he2r06cu2u" path="res://scenes/battle/current_action_panel.tscn" id="5_n6gaa"]
-[ext_resource type="Texture2D" path="res://assets/battles/ui/bag_white.svg" id="5_py4tk"]
 [ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
 [ext_resource type="PackedScene" uid="uid://dv3oowqse6sjb" path="res://scenes/battle/field_timers.tscn" id="6_mvulk"]
 [ext_resource type="PackedScene" uid="uid://c2lhyxer4tw6c" path="res://scenes/battle/battle_status_panel.tscn" id="7_mvulk"]
@@ -396,6 +395,40 @@ scale_min = 1.1
 scale_max = 3.2
 color_initial_ramp = SubResource("GradientTexture1D_sandstorm_swirl")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_normal"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.011764706, 0.025, 0.050980393, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.105882354, 0.28627452, 0.45490196, 0.82)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_segment_normal"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_bag_pressed"]
+bg_color = Color(0.019607844, 0.105882354, 0.18431373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_bag_hover"]
+bg_color = Color(0.019607844, 0.078431375, 0.13725491, 0.98)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_exit_pressed"]
+bg_color = Color(0.19607843, 0.047058824, 0.03137255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_exit_hover"]
+bg_color = Color(0.13725491, 0.047058824, 0.039215688, 0.98)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m7fqn"]
 bg_color = Color(0.008, 0.022, 0.055, 0.92)
 border_width_left = 1
@@ -439,12 +472,10 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 18.0
-offset_top = 0.0
 offset_right = -18.0
 offset_bottom = 18.0
 grow_horizontal = 2
 mouse_default_cursor_shape = 13
-
 
 [node name="BattleBackdrop" type="Panel" parent="." unique_id=314696026]
 layout_mode = 1
@@ -1530,7 +1561,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = 18.0
 offset_top = 214.0
-offset_right = 78.0
+offset_right = 74.0
 offset_bottom = 214.0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
@@ -1570,7 +1601,7 @@ icon_only_mode = true
 [node name="OpponentStagePartyRail" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/StagePartyOverlay" unique_id=508370759]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 1074.0
+offset_left = 1078.0
 offset_top = 32.0
 offset_right = 1134.0
 offset_bottom = 32.0
@@ -1643,15 +1674,12 @@ grow_horizontal = 1
 [node name="VSPanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1039531441 instance=ExtResource("9_pyfix")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = -400.0
-offset_right = 400.0
-offset_bottom = 50.0
 
 [node name="SideFieldEffectsPanel" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1939591853 instance=ExtResource("10_8eh2s")]
 unique_name_in_owner = true
 z_index = 58
 layout_mode = 1
-offset_left = 86.0
+offset_left = 82.0
 offset_top = 322.0
 offset_right = 186.0
 offset_bottom = 345.0
@@ -1665,7 +1693,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -186.0
 offset_top = 202.0
-offset_right = -86.0
+offset_right = -82.0
 offset_bottom = 225.0
 grow_horizontal = 0
 
@@ -1720,51 +1748,64 @@ layout_mode = 2
 [node name="MoveSlot4" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MovesGrid" unique_id=1055746111 instance=ExtResource("2_h0kxc")]
 layout_mode = 2
 
-[node name="UtilityActions" type="HBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=140804477]
+[node name="UtilityActions" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=140804477]
 unique_name_in_owner = true
 z_index = 57
+custom_minimum_size = Vector2(146, 34)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -281.0
+offset_left = -166.0
+offset_top = -277.0
 offset_right = -20.0
 offset_bottom = -243.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_constants/separation = 8
-alignment = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_utility_normal")
 
-[node name="BagButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions" unique_id=1766657251]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 38)
+[node name="ActionSegments" type="HBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions" unique_id=904891987]
 layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="BagButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions/ActionSegments" unique_id=1766657251]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Bag"
 mouse_default_cursor_shape = 2
-theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
-theme_override_colors/icon_hover_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_colors/icon_pressed_color = Color(0.38431373, 0.84313726, 1, 1)
-theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.42)
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-icon = ExtResource("5_py4tk")
-icon_max_width = 20
-expand_icon = true
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_bag_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_bag_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_bag_hover")
+text = "Bag"
 
-[node name="RunButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions" unique_id=1623517119]
+[node name="UtilityActionDivider" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions/ActionSegments" unique_id=1094135919]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(72, 38)
+visible = false
+custom_minimum_size = Vector2(1, 0)
 layout_mode = 2
+mouse_filter = 2
+color = Color(0.14901961, 0.3764706, 0.56078434, 0.68)
+
+[node name="RunButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/UtilityActions/ActionSegments" unique_id=1623517119]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Run"
-text = "Run"
 mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_exit_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_exit_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_exit_hover")
+text = "Run"
 
 [node name="MechanicsPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=57273673]
 unique_name_in_owner = true
@@ -1825,7 +1866,7 @@ texture_hover = ExtResource("38_8h6bs")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="BattleResultOverlay" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage"]
+[node name="BattleResultOverlay" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1386717943]
 unique_name_in_owner = true
 visible = false
 z_index = 100
@@ -1835,9 +1876,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
-[node name="Backdrop" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay"]
+[node name="Backdrop" type="ColorRect" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay" unique_id=1834892766]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1847,7 +1887,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.003921569, 0.007843138, 0.03137255, 0.76)
 
-[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay"]
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay" unique_id=612853102]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1855,31 +1895,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ResultPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer"]
+[node name="ResultPanel" type="PanelContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer" unique_id=557116321]
 custom_minimum_size = Vector2(460, 260)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sgdsx")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel" unique_id=729589909]
 layout_mode = 2
 theme_override_constants/margin_left = 36
 theme_override_constants/margin_top = 28
 theme_override_constants/margin_right = 36
 theme_override_constants/margin_bottom = 28
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer" unique_id=1326581294]
 layout_mode = 2
 theme_override_constants/separation = 14
 alignment = 1
 
-[node name="BattleResultTitle" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+[node name="BattleResultTitle" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer" unique_id=1955500014]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Victory"
 horizontal_alignment = 1
 
-[node name="BattleResultSummary" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+[node name="BattleResultSummary" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer" unique_id=255086977]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.9254902, 0.972549, 1)
@@ -1888,14 +1928,14 @@ text = "Player defeated Opponent."
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="BattleResultReason" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+[node name="BattleResultReason" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer" unique_id=2143579480]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
 theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="BattleResultContinueButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+[node name="BattleResultContinueButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer" unique_id=683998306]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
@@ -1972,7 +2012,7 @@ text = "Choose an action"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PvpSwitchConfirmationLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
+[node name="PvpSwitchConfirmationLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack" unique_id=858306366]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 58)
