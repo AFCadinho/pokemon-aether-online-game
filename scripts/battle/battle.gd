@@ -8776,6 +8776,8 @@ func _submit_pvp_realtime_lead(player_id: String, slot: int) -> Dictionary:
 	var response: Dictionary = await _send_pvp_realtime_action_and_wait("choose_lead", player_id, slot)
 	if not bool(response.get("success", false)):
 		return response
+	if str(response.get("pvpActionTimeoutRecovery", "")) == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_TERMINAL:
+		return response
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
 	if _should_show_team_preview(display_response):
 		return display_response
@@ -8802,6 +8804,12 @@ func _submit_pvp_realtime_choice(
 		if bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE":
 			var reconciled := await _reconcile_pvp_battle_from_room("stale_local_choice")
 			response["error"] = "Battle state refreshed. Choose again." if reconciled else "Battle state changed. Please try again."
+		return response
+	var timeout_recovery := str(response.get("pvpActionTimeoutRecovery", ""))
+	if timeout_recovery == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_TERMINAL:
+		return response
+	if timeout_recovery == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_ADVANCED:
+		_resume_pvp_after_action_timeout_recovery()
 		return response
 	var display_response: Dictionary = action_flow.map_response_for_local_player(response)
 	if choice_type == "switch" and not _response_has_renderable_battle_events(display_response):
@@ -8918,13 +8926,14 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 	var response_deadline_msec := Time.get_ticks_msec() + 12000
 	var response_wait_attempt := 0
 	while Time.get_ticks_msec() < response_deadline_msec:
-		if action == "forfeit" and battle_finished:
+		if battle_finished:
 			if PvpBattleRealtimeService.action_response_received.is_connected(listener):
 				PvpBattleRealtimeService.action_response_received.disconnect(listener)
 			_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
 			return {
 				"success": true,
 				"terminalConfirmed": true,
+				"pvpActionTimeoutRecovery": PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_TERMINAL,
 			}
 		if DEBUG_PVP_REALTIME and response_wait_attempt % 60 == 0:
 			_log_pvp_realtime(
@@ -8988,22 +8997,99 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 		PvpBattleRealtimeService.action_response_received.disconnect(listener)
 
 	_discard_realtime_updates_for_request(request_id, action, expected_player_id, battle_state.battle_id)
-	# The legacy local stack can commit a forfeit while its correlated websocket
-	# response is lost among the terminal broadcasts. Confirm that outcome from
-	# the canonical room before showing a misleading timeout or unlocking battle
-	# input. This is also a safe recovery for transient response loss in production.
-	if action == "forfeit":
-		var reconciled_forfeit := await _reconcile_pvp_battle_from_room("pvp_forfeit_timeout_recovery")
-		if reconciled_forfeit and battle_state.is_battle_ended():
-			return {
-				"success": true,
-				"terminalConfirmed": true,
-				"terminalRecovered": true,
-			}
+	var recovered_response := await _recover_pvp_realtime_action_timeout(action, player_id, decision)
+	if not recovered_response.is_empty():
+		return recovered_response
 	return {
 		"success": false,
 		"error": "PvP realtime response timed out.",
 	}
+
+func _recover_pvp_realtime_action_timeout(action: String, player_id: String, submitted_decision: Dictionary) -> Dictionary:
+	if pvp_room_code == "" or player_id == "":
+		return {}
+
+	var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, player_id)
+	var recovery_status := PvpBattleRealtimeService.classify_action_timeout_recovery(
+		response,
+		player_id,
+		str(submitted_decision.get("decisionId", "")),
+		int(submitted_decision.get("decisionGeneration", 0))
+	)
+	if recovery_status == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_UNAVAILABLE:
+		return {}
+
+	var mapped_response: Dictionary = action_flow.map_response_for_local_player(response)
+	if mapped_response.is_empty():
+		return {}
+	var message := {
+		"type": "pvp.snapshot",
+		"battleId": str(response.get("battleId", battle_state.battle_id)),
+		"roomCode": pvp_room_code,
+		"serverSeq": response.get("serverSeq", pvp_last_phase_update_server_seq),
+		"response": response,
+	}
+	if not _apply_pvp_snapshot_reconciliation(message, mapped_response, "pvp_action_timeout_recovery"):
+		return {}
+
+	if DEBUG_PVP_REALTIME:
+		_log_pvp_realtime(
+			"PvP realtime action timeout recovered from canonical room",
+			"action=%s player=%s status=%s phase=%s turn=%s" % [
+				action,
+				player_id,
+				recovery_status,
+				str(response.get("phase", "")),
+				str(response.get("turn", "")),
+			]
+		)
+
+	if recovery_status == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_TERMINAL:
+		await _finish_if_battle_ended({"reason": _get_pvp_timeout_recovery_end_reason(response)})
+		return {
+			"success": true,
+			"terminalConfirmed": true,
+			"terminalRecovered": true,
+			"pvpActionTimeoutRecovery": recovery_status,
+		}
+
+	if recovery_status == PvpBattleRealtimeService.ACTION_TIMEOUT_RECOVERY_RETRY:
+		return {
+			"success": false,
+			"error": "Battle state refreshed. Choose again.",
+			"pvpActionTimeoutRecovery": recovery_status,
+		}
+
+	var recovered_response := response.duplicate(true)
+	# Room snapshots can contain historical events. They establish whether the
+	# command was accepted, but must never replay an already-rendered turn.
+	recovered_response["events"] = []
+	recovered_response["eventBatches"] = []
+	recovered_response["pvpActionTimeoutRecovery"] = recovery_status
+	return recovered_response
+
+func _get_pvp_timeout_recovery_end_reason(response: Dictionary) -> String:
+	var match_end_value: Variant = response.get("pvpMatchEnd", {})
+	if match_end_value is Dictionary:
+		var match_end := match_end_value as Dictionary
+		var match_end_reason := str(match_end.get("reason", match_end.get("endReason", ""))).strip_edges().to_lower()
+		if match_end_reason != "":
+			return match_end_reason
+	var terminal_reason := str(response.get("terminalReason", "")).strip_edges().to_lower()
+	return terminal_reason if terminal_reason != "" else "ended"
+
+func _resume_pvp_after_action_timeout_recovery() -> void:
+	if battle_finished:
+		return
+	pvp_idle_wait_recovery_active = true
+	current_action_view = ActionView.NONE
+	moves_grid.visible = false
+	current_action_panel.set_message("Waiting for battle update...")
+	_set_battle_input_locked(true)
+	_sync_action_panel_mode_visibility()
+	_recover_pvp_idle_wait_ui_after_update({"type": "pvp.snapshot"})
+	if _should_drain_idle_pvp_realtime_updates():
+		_drain_idle_pvp_realtime_updates.call_deferred()
 
 func _discard_realtime_updates_for_request(
 	request_id: String,
@@ -10040,6 +10126,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 	_remember_active_player_party_moves()
 	_prewarm_current_battle_move_animations()
 	_sync_presentation_field_from_battle_state()
+	_update_pvp_phase_contract_from_response(reconciliation, source)
 	_update_battle_presentation("snapshot_reconciliation")
 
 	var snapshot_server_seq := _get_pvp_response_server_seq(reconciliation)

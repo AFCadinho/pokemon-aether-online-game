@@ -332,6 +332,47 @@ func _init() -> void:
 		false,
 		"normal battle end still waits for its final mechanical projection"
 	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.classify_action_timeout_recovery(
+			{"success": false}, "p1", "decision-1", 1
+		),
+		PvpBattleRealtimeServiceNode.ACTION_TIMEOUT_RECOVERY_UNAVAILABLE,
+		"failed canonical lookup cannot claim action recovery"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.classify_action_timeout_recovery(
+			{"success": true, "state": {"ended": true}}, "p1", "decision-1", 1
+		),
+		PvpBattleRealtimeServiceNode.ACTION_TIMEOUT_RECOVERY_TERMINAL,
+		"ended canonical state recovers a lost terminal response"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.classify_action_timeout_recovery(
+			{"success": true, "requests": {"p2": {"wait": true}}}, "p2", "decision-1", 1
+		),
+		PvpBattleRealtimeServiceNode.ACTION_TIMEOUT_RECOVERY_ACCEPTED,
+		"waiting canonical request proves the submitted choice was accepted"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.classify_action_timeout_recovery(
+			{"success": true, "requests": {"p1": {}}, "decisions": {"p1": {"decisionId": "decision-2", "decisionGeneration": 2}}},
+			"p1",
+			"decision-1",
+			1
+		),
+		PvpBattleRealtimeServiceNode.ACTION_TIMEOUT_RECOVERY_ADVANCED,
+		"new canonical decision proves the battle advanced beyond the lost response"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.classify_action_timeout_recovery(
+			{"success": true, "phase": "turn_open", "requests": {"p1": {"active": []}}, "decisions": {"p1": {"decisionId": "decision-1", "decisionGeneration": 1}}},
+			"p1",
+			"decision-1",
+			1
+		),
+		PvpBattleRealtimeServiceNode.ACTION_TIMEOUT_RECOVERY_RETRY,
+		"unchanged actionable decision safely asks the player to choose again"
+	)
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner(null), "", "null terminal winner is treated as absent")
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("None"), "", "Python None terminal winner is treated as absent")
 	_check_equal(PvpBattleRealtimeServiceNode.normalize_terminal_winner("Admin"), "Admin", "real terminal winner name is preserved")

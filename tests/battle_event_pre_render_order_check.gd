@@ -439,6 +439,7 @@ func _check_authoritative_terminal_waits_for_render() -> void:
 	_check_equal(drain_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "render queue exhaustion retries the retained terminal")
 	_check_equal(idle_drain_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "realtime queue exhaustion retries the retained terminal")
 	_check_equal(reconciliation_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "ended snapshot reconciliation retries the retained terminal")
+	_check_equal(reconciliation_source.contains("_update_pvp_phase_contract_from_response(reconciliation, source)"), true, "canonical reconciliation also restores the authoritative phase")
 
 
 func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
@@ -449,13 +450,16 @@ func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
 	var wait_index := source.find("func _send_pvp_realtime_action_and_wait(")
 	var wait_next_index := source.find("\nfunc ", wait_index + 1)
 	var wait_source := source.substr(wait_index, wait_next_index - wait_index)
+	var recovery_index := source.find("func _recover_pvp_realtime_action_timeout(")
+	var recovery_next_index := source.find("\nfunc ", recovery_index + 1)
+	var recovery_source := source.substr(recovery_index, recovery_next_index - recovery_index)
 
 	_check_equal(confirm_source.find("if battle_finished:") < confirm_source.find("_set_battle_input_locked(false)", confirm_source.find("var response: Dictionary = await _submit_pvp_realtime_forfeit()")), true, "finished forfeit cannot unlock or overwrite its result UI")
 	_check_equal(confirm_source.contains("_finish_confirmed_pvp_forfeit(response, _get_local_state_player_id(), \"pvp_forfeit_submit\")"), true, "confirmed local forfeit bypasses the normal animation queue")
-	_check_equal(wait_source.contains('if action == "forfeit" and battle_finished:'), true, "forfeit action waiter exits when durable terminal wins the race")
-	_check_equal(wait_source.contains('"terminalConfirmed": true'), true, "forfeit waiter returns a successful terminal confirmation")
-	_check_equal(wait_source.contains('await _reconcile_pvp_battle_from_room("pvp_forfeit_timeout_recovery")'), true, "lost local forfeit response is confirmed from the canonical room")
-	_check_equal(wait_source.contains("reconciled_forfeit and battle_state.is_battle_ended()"), true, "forfeit timeout recovery only succeeds for a terminal mechanical state")
+	_check_equal(wait_source.contains("if battle_finished:"), true, "every action waiter exits when a durable terminal wins the race")
+	_check_equal(wait_source.contains('"terminalConfirmed": true'), true, "action waiter returns a successful terminal confirmation")
+	_check_equal(wait_source.contains("await _recover_pvp_realtime_action_timeout(action, player_id, decision)"), true, "lost action responses are classified from the canonical room")
+	_check_equal(recovery_source.contains("await _finish_if_battle_ended"), true, "canonical timeout recovery only finishes from a terminal mechanical state")
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

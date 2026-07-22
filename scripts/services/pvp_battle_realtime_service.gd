@@ -18,6 +18,11 @@ const SESSION_INVALID_CLOSE_CODE := 1008
 const DEBUG_PVP_REALTIME := false
 const WEBSOCKET_BUFFER_BYTES := 1024 * 1024
 const WEBSOCKET_MAX_QUEUED_PACKETS := 4096
+const ACTION_TIMEOUT_RECOVERY_UNAVAILABLE := "unavailable"
+const ACTION_TIMEOUT_RECOVERY_TERMINAL := "terminal"
+const ACTION_TIMEOUT_RECOVERY_ACCEPTED := "accepted"
+const ACTION_TIMEOUT_RECOVERY_ADVANCED := "advanced"
+const ACTION_TIMEOUT_RECOVERY_RETRY := "retry"
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
 var connected := false
@@ -466,6 +471,53 @@ static func should_defer_authoritative_terminal_until_render(
 
 static func is_animation_free_authoritative_terminal_reason(end_reason: String) -> bool:
 	return end_reason.strip_edges().to_lower() in ["timeout", "disconnect", "forfeit"]
+
+
+static func classify_action_timeout_recovery(
+	response: Dictionary,
+	player_id: String,
+	submitted_decision_id: String,
+	submitted_decision_generation: int
+) -> String:
+	if not bool(response.get("success", false)):
+		return ACTION_TIMEOUT_RECOVERY_UNAVAILABLE
+
+	var state_value: Variant = response.get("state", {})
+	var match_end_value: Variant = response.get("pvpMatchEnd", {})
+	if (
+		(state_value is Dictionary and bool((state_value as Dictionary).get("ended", false)))
+		or (match_end_value is Dictionary and bool((match_end_value as Dictionary).get("success", false)))
+		or str(response.get("phase", "")).strip_edges().to_lower() == "ended"
+	):
+		return ACTION_TIMEOUT_RECOVERY_TERMINAL
+
+	var normalized_player_id := "p2" if player_id.strip_edges().to_lower() == "p2" else "p1"
+	var requests_value: Variant = response.get("requests", {})
+	if requests_value is Dictionary:
+		var request_value: Variant = (requests_value as Dictionary).get(normalized_player_id, {})
+		if request_value is Dictionary and bool((request_value as Dictionary).get("wait", false)):
+			return ACTION_TIMEOUT_RECOVERY_ACCEPTED
+
+	var decisions_value: Variant = response.get("decisions", {})
+	if decisions_value is Dictionary:
+		var decision_value: Variant = (decisions_value as Dictionary).get(normalized_player_id, {})
+		if decision_value is Dictionary:
+			var current_decision := decision_value as Dictionary
+			var current_decision_id := str(current_decision.get("decisionId", "")).strip_edges()
+			var current_generation := int(current_decision.get("decisionGeneration", 0))
+			if submitted_decision_generation > 0 and current_generation > submitted_decision_generation:
+				return ACTION_TIMEOUT_RECOVERY_ADVANCED
+			if (
+				submitted_decision_id.strip_edges() != ""
+				and current_decision_id != ""
+				and current_decision_id != submitted_decision_id.strip_edges()
+			):
+				return ACTION_TIMEOUT_RECOVERY_ADVANCED
+
+	var phase := str(response.get("phase", "")).strip_edges().to_lower()
+	if phase in ["rendering_events", "awaiting_force_switch"]:
+		return ACTION_TIMEOUT_RECOVERY_ADVANCED
+	return ACTION_TIMEOUT_RECOVERY_RETRY
 
 
 static func is_unrequested_local_team_preview_lead(message: Dictionary, local_player_id: String) -> bool:
