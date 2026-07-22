@@ -27,6 +27,7 @@ signal animation_finished
 @export var electric_switch_config: Dictionary = {}
 @export var fire_stream_config: Dictionary = {}
 @export var heat_wave_config: Dictionary = {}
+@export var draco_meteor_config: Dictionary = {}
 @export var solar_beam_config: Dictionary = {}
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
@@ -308,6 +309,7 @@ func _draw() -> void:
 	_draw_electric_switch_visual()
 	_draw_fire_stream_visual()
 	_draw_heat_wave_visual()
+	_draw_draco_meteor_visual()
 	_draw_solar_beam_visual()
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
@@ -664,6 +666,193 @@ func _draw_celestial_charge_visual() -> void:
 		var particle_alpha := alpha * (0.2 + 0.52 * (1.0 - life))
 		draw_circle(position, size, _color_with_alpha(core_color, particle_alpha))
 		draw_line(position + Vector2(-size * 1.6, 0.0), position + Vector2(size * 1.6, 0.0), _color_with_alpha(outer_color, particle_alpha * 0.74), 1.0)
+
+
+func _draw_draco_meteor_visual() -> void:
+	if not bool(draco_meteor_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var rain_start := clampf(float(draco_meteor_config.get("rain_start", 0.47)), 0.0, 1.0)
+	var rain_end := clampf(float(draco_meteor_config.get("rain_end", 0.92)), rain_start + 0.01, 1.0)
+	if progress < rain_start or progress > rain_end:
+		return
+
+	var rain_progress := clampf((progress - rain_start) / maxf(rain_end - rain_start, 0.001), 0.0, 1.0)
+	var center := _battlefield_position(_vector2_from_value(draco_meteor_config.get("center", [384.0, 96.0])))
+	var meteor_count := clampi(int(draco_meteor_config.get("meteor_count", 11)), 5, 18)
+	var spread_x := maxf(float(draco_meteor_config.get("spread_x", 74.0)), 24.0)
+	var spread_y := maxf(float(draco_meteor_config.get("spread_y", 26.0)), 8.0)
+	var flight_height := maxf(float(draco_meteor_config.get("flight_height", 190.0)), 80.0)
+	var flight_duration := clampf(float(draco_meteor_config.get("flight_duration", 0.29)), 0.12, 0.48)
+	var impact_duration := clampf(float(draco_meteor_config.get("impact_duration", 0.2)), 0.08, 0.36)
+	var meteor_scale := maxf(float(draco_meteor_config.get("meteor_scale", 0.68)), 0.18)
+	var aura_color := _color_from_value(draco_meteor_config.get("aura_color", [0.4, 0.16, 0.98, 1.0]), Color(0.4, 0.16, 0.98, 1.0))
+	var trail_color := _color_from_value(draco_meteor_config.get("trail_color", [0.76, 0.32, 1.0, 1.0]), Color(0.76, 0.32, 1.0, 1.0))
+	var core_color := _color_from_value(draco_meteor_config.get("core_color", [1.0, 0.84, 0.42, 1.0]), Color(1.0, 0.84, 0.42, 1.0))
+	var impact_color := _color_from_value(draco_meteor_config.get("impact_color", [1.0, 0.22, 0.08, 1.0]), Color(1.0, 0.22, 0.08, 1.0))
+
+	for meteor_index: int in range(meteor_count):
+		var lane_seed := fmod(float(meteor_index) * 0.61803398875, 1.0)
+		var lane := lane_seed * 2.0 - 1.0
+		if meteor_index == 0:
+			lane = 0.0
+		var row_seed := fmod(float(meteor_index * 37), 7.0) / 6.0
+		var impact_offset := Vector2(
+			lane * spread_x,
+			lerpf(-spread_y * 0.45, spread_y, row_seed) + 10.0
+		)
+		var impact_position := center + impact_offset
+		var stagger := float(meteor_index) / float(maxi(meteor_count - 1, 1)) * 0.62
+		stagger += sin(float(meteor_index) * 2.41) * 0.018
+		var meteor_flight_duration := flight_duration * (0.88 + float(meteor_index % 4) * 0.055)
+		var meteor_life := (rain_progress - stagger) / meteor_flight_duration
+
+		if meteor_life >= 0.0 and meteor_life < 1.0:
+			var fall := meteor_life * meteor_life * (3.0 - 2.0 * meteor_life)
+			var diagonal_x := -54.0 + float((meteor_index % 3) - 1) * 18.0
+			var start_position := impact_position + Vector2(diagonal_x, -flight_height - float(meteor_index % 4) * 14.0)
+			var meteor_position := start_position.lerp(impact_position, fall)
+			var velocity := (impact_position - start_position).normalized()
+			var appear := clampf(meteor_life / 0.12, 0.0, 1.0)
+			var meteor_alpha := appear * clampf((1.03 - meteor_life) / 0.08, 0.0, 1.0)
+			var size_multiplier := 0.82 + float(meteor_index % 4) * 0.09
+			_draw_draco_meteor_trail(
+				meteor_position,
+				velocity,
+				meteor_scale * size_multiplier,
+				meteor_alpha,
+				aura_color,
+				trail_color,
+				core_color,
+				meteor_index
+			)
+			_draw_draco_meteor_rock(
+				meteor_position,
+				6 + meteor_index % 4,
+				meteor_scale * size_multiplier,
+				meteor_alpha,
+				sin(float(frame_index) * 0.08 + float(meteor_index)) * 0.09
+			)
+
+		var impact_progress := (meteor_life - 1.0) / impact_duration
+		if impact_progress >= 0.0 and impact_progress <= 1.0:
+			_draw_draco_meteor_impact(
+				impact_position,
+				impact_progress,
+				meteor_index,
+				aura_color,
+				trail_color,
+				core_color,
+				impact_color
+			)
+
+
+func _draw_draco_meteor_trail(
+	meteor_position: Vector2,
+	velocity: Vector2,
+	scale_value: float,
+	alpha: float,
+	aura_color: Color,
+	trail_color: Color,
+	core_color: Color,
+	meteor_index: int
+) -> void:
+	var trail_length := (58.0 + float(meteor_index % 4) * 8.0) * scale_value
+	var trail_end := meteor_position - velocity * trail_length
+	var side := velocity.orthogonal()
+	var wave := sin(float(frame_index) * 0.48 + float(meteor_index) * 1.7)
+	trail_end += side * wave * 5.0
+	draw_line(trail_end, meteor_position, _color_with_alpha(aura_color, alpha * 0.13), 22.0 * scale_value, true)
+	draw_line(trail_end, meteor_position, _color_with_alpha(trail_color, alpha * 0.38), 10.0 * scale_value, true)
+	draw_line(trail_end.lerp(meteor_position, 0.28), meteor_position, _color_with_alpha(core_color, alpha * 0.78), 3.2 * scale_value, true)
+
+	for spark_index: int in range(4):
+		var spark_t := fmod(float(frame_index) * 0.075 + float(spark_index) * 0.23 + float(meteor_index) * 0.17, 1.0)
+		var spark_position := meteor_position.lerp(trail_end, spark_t)
+		spark_position += side * sin(float(spark_index) * 2.7 + float(frame_index) * 0.31) * 8.0 * scale_value
+		var spark_alpha := alpha * sin(PI * spark_t) * 0.72
+		draw_circle(spark_position, (1.5 + float(spark_index % 2)) * scale_value, _color_with_alpha(core_color, spark_alpha))
+
+
+func _draw_draco_meteor_rock(position: Vector2, pattern: int, scale_value: float, alpha: float, rotation: float) -> void:
+	var pulse := 1.0 + sin(float(frame_index) * 0.46 + float(pattern)) * 0.07
+	var shell_radius := 36.0 * scale_value * pulse
+	var shell_purple := Color(0.56, 0.08, 0.96, alpha * 0.34)
+	var shell_pink := Color(1.0, 0.22, 0.84, alpha * 0.82)
+	var shell_core := Color(1.0, 0.76, 1.0, alpha * 0.66)
+	draw_circle(position, shell_radius * 1.22, Color(0.32, 0.04, 0.72, alpha * 0.12))
+	draw_circle(position, shell_radius, shell_purple)
+	draw_arc(position, shell_radius * 1.03, rotation + float(frame_index) * 0.12, rotation + float(frame_index) * 0.12 + TAU * 0.8, 34, shell_pink, 3.8 * scale_value, true)
+	draw_arc(position, shell_radius * 0.76, -rotation - float(frame_index) * 0.16, -rotation - float(frame_index) * 0.16 + TAU * 0.68, 30, shell_core, 1.8 * scale_value, true)
+
+	if sheet_texture == null:
+		draw_circle(position, 20.0 * scale_value, Color(0.18, 0.02, 0.28, alpha))
+		draw_circle(position + Vector2(0.0, 5.0 * scale_value), 14.0 * scale_value, Color(1.0, 0.18, 0.62, alpha))
+		return
+
+	var tile_size_value := _vector2_from_value(data.get("tile_size", [192.0, 192.0]))
+	var tile_size := Vector2(maxf(tile_size_value.x, 1.0), maxf(tile_size_value.y, 1.0))
+	var sheet_columns := maxi(int(floor(float(sheet_texture.get_width()) / tile_size.x)), 1)
+	var source_region := Rect2(
+		Vector2(float(pattern % sheet_columns) * tile_size.x, floor(float(pattern) / float(sheet_columns)) * tile_size.y),
+		tile_size
+	)
+	draw_set_transform(position, rotation, Vector2(scale_value, scale_value))
+	draw_texture_rect_region(
+		sheet_texture,
+		Rect2(-tile_size * 0.5, tile_size),
+		source_region,
+		Color(1.0, 0.48, 1.0, alpha * 0.9)
+	)
+	draw_set_transform(Vector2.ZERO)
+	draw_circle(position + Vector2(-7.0, -7.0) * scale_value, 5.0 * scale_value, Color(1.0, 0.84, 1.0, alpha * 0.72))
+
+
+func _draw_draco_meteor_impact(
+	position: Vector2,
+	impact_progress: float,
+	meteor_index: int,
+	aura_color: Color,
+	trail_color: Color,
+	core_color: Color,
+	impact_color: Color
+) -> void:
+	var impact_alpha := sin(PI * impact_progress)
+	var burst := 1.0 - pow(1.0 - impact_progress, 2.0)
+	var radius := (18.0 + float(meteor_index % 3) * 3.0) + burst * (35.0 + float(meteor_index % 4) * 4.0)
+	draw_circle(position, radius * 0.86, _color_with_alpha(aura_color, impact_alpha * 0.13))
+	draw_circle(position, radius * 0.5, _color_with_alpha(impact_color, impact_alpha * 0.3))
+	draw_circle(position, radius * 0.22, _color_with_alpha(core_color, impact_alpha * 0.88))
+	draw_arc(position, radius, float(meteor_index) * 0.71, float(meteor_index) * 0.71 + TAU * 0.86, 34, _color_with_alpha(trail_color, impact_alpha * 0.78), 2.4, true)
+
+	var cloud_progress := clampf((impact_progress - 0.08) / 0.92, 0.0, 1.0)
+	var cloud_alpha := impact_alpha * clampf(cloud_progress / 0.18, 0.0, 1.0)
+	for cloud_index: int in range(7):
+		var cloud_angle := float(cloud_index) * TAU / 7.0 + float(meteor_index) * 0.57
+		var cloud_distance := radius * (0.14 + cloud_progress * (0.32 + float(cloud_index % 3) * 0.09))
+		var cloud_position := position + Vector2(
+			cos(cloud_angle) * cloud_distance,
+			sin(cloud_angle) * cloud_distance * 0.62 - cloud_progress * (8.0 + float(cloud_index % 3) * 3.0)
+		)
+		var puff_radius := (8.0 + float(cloud_index % 3) * 3.5) * (0.48 + cloud_progress * 0.72)
+		draw_circle(cloud_position, puff_radius * 1.24, _color_with_alpha(trail_color, cloud_alpha * 0.38))
+		draw_circle(cloud_position, puff_radius, _color_with_alpha(aura_color, cloud_alpha * 0.62))
+		draw_circle(cloud_position + Vector2(-puff_radius * 0.18, -puff_radius * 0.22), puff_radius * 0.42, _color_with_alpha(Color(1.0, 0.66, 1.0, 1.0), cloud_alpha * 0.66))
+
+	var ray_count := 8
+	for ray_index: int in range(ray_count):
+		var angle := float(ray_index) * TAU / float(ray_count) + float(meteor_index) * 0.43
+		var ray_start := position + Vector2.from_angle(angle) * radius * 0.24
+		var ray_end := position + Vector2.from_angle(angle) * radius * (0.7 + float(ray_index % 3) * 0.16)
+		draw_line(ray_start, ray_end, _color_with_alpha(core_color, impact_alpha * 0.72), 1.5, true)
+
+	var ground := position + Vector2(0.0, 12.0)
+	draw_set_transform(ground, 0.0, Vector2(1.0, 0.3))
+	draw_arc(Vector2.ZERO, radius * 1.08, 0.0, TAU, 40, _color_with_alpha(impact_color, impact_alpha * 0.5), 2.2, true)
+	draw_arc(Vector2.ZERO, radius * 0.72, 0.0, TAU, 36, _color_with_alpha(aura_color, impact_alpha * 0.72), 1.4, true)
+	draw_set_transform(Vector2.ZERO)
 
 
 func _draw_focus_aura_visual() -> void:

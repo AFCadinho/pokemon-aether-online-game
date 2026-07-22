@@ -2439,11 +2439,12 @@
       "template": "imported_sheet",
       "category": "special_projectile",
       "speed_scale": 1.15,
+      "animation_start_frame": 29,
       "show_timing_backgrounds": true,
       "background_below_sprites": true,
       "show_timing_foregrounds": false,
-      "show_pink_visual": true,
-      "show_sheet_sprites": true,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
       "overlay_fill_enabled": false,
       "visual_color": [
         0.48,
@@ -2459,18 +2460,71 @@
       ],
       "overlay_peak_alpha": 0.12,
       "sparkle_count": 0,
+      "draco_meteor": {
+        "enabled": true,
+        "rain_start": 0.48,
+        "rain_end": 0.94,
+        "center": [
+          384.0,
+          96.0
+        ],
+        "center_offset": [
+          0.0,
+          10.0
+        ],
+        "meteor_count": 10,
+        "spread_x": 86.0,
+        "spread_y": 28.0,
+        "flight_height": 205.0,
+        "flight_duration": 0.29,
+        "impact_duration": 0.22,
+        "meteor_scale": 0.82,
+        "aura_color": [
+          0.42,
+          0.06,
+          0.92,
+          1.0
+        ],
+        "trail_color": [
+          1.0,
+          0.16,
+          0.76,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.8,
+          0.96,
+          1.0
+        ],
+        "impact_color": [
+          1.0,
+          0.3,
+          0.08,
+          1.0
+        ]
+      },
       "flash": {
         "enabled": true,
         "start": 0.46,
         "peak": 0.58,
         "end": 0.84,
-        "alpha": 0.16,
+        "alpha": 0.14,
         "color": [
-          0.7,
-          0.84,
           1.0,
+          0.34,
+          0.88,
           1.0
         ]
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 1.48,
+        "duration": 0.78,
+        "interval": 0.055,
+        "amplitude": 4.5,
+        "vertical_scale": 0.3,
+        "decay": true
       },
       "miss": {
         "enabled": true,

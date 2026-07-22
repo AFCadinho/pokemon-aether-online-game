@@ -449,6 +449,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
 	animation_node.fire_stream_config = (config.get("fire_stream", {}) as Dictionary).duplicate(true)
 	animation_node.heat_wave_config = (config.get("heat_wave", {}) as Dictionary).duplicate(true)
+	animation_node.draco_meteor_config = (config.get("draco_meteor", {}) as Dictionary).duplicate(true)
 	animation_node.solar_beam_config = (config.get("solar_beam", {}) as Dictionary).duplicate(true)
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
@@ -1012,6 +1013,7 @@ func _apply_move_projectile_endpoint_anchors(
 		actor_anchor,
 		target_anchor
 	)
+	animation_node.draco_meteor_config = _with_target_effect_anchor(animation_node.draco_meteor_config, target_anchor)
 	animation_node.solar_beam_config = _with_projectile_endpoint_anchors(
 		animation_node.solar_beam_config,
 		actor_anchor,
