@@ -4393,7 +4393,10 @@
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
       "sprite_zoom_multiplier": 0.58,
-      "sprite_position_offset": [0.0, 16.0],
+      "sprite_position_offset": [
+        0.0,
+        16.0
+      ],
       "sheet_pattern_min": 0,
       "sheet_pattern_max": 0,
       "thunder_punch": {
@@ -4402,11 +4405,24 @@
         "visible_end": 0.9,
         "fade_in": 0.04,
         "fade_out": 0.16,
-        "center_offset": [0.0, -8.0],
+        "center_offset": [
+          0.0,
+          -8.0
+        ],
         "bolt_height": 62.0,
         "bolt_width": 34.0,
-        "bolt_color": [1.0, 0.76, 0.06, 1.0],
-        "core_color": [1.0, 1.0, 0.82, 1.0]
+        "bolt_color": [
+          1.0,
+          0.76,
+          0.06,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          1.0,
+          0.82,
+          1.0
+        ]
       },
       "data_path": "res://assets/battles/animations/thunderpunch/thunderpunch.json",
       "sheet_path": "res://assets/battles/animations/thunderpunch/PRAS- Elemental Punch.png",
@@ -4415,6 +4431,37 @@
       "sound_paths": {
         "PRSFX- Thunder Punch1.wav": "res://assets/battles/animations/thunderpunch/PRSFX- Thunder Punch1.wav",
         "PRSFX- Thunder Punch2.wav": "res://assets/battles/animations/thunderpunch/PRSFX- Thunder Punch2.wav"
+      }
+    },
+    "bulletpunch": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 1.0,
+      "bullet_punch": {
+        "enabled": true,
+        "visible_start": 0.02,
+        "visible_end": 0.92,
+        "fade_in": 0.04,
+        "fade_out": 0.12,
+        "punch_count": 6,
+        "punch_interval": 0.09,
+        "punch_travel": 0.34,
+        "fist_scale": 0.56,
+        "center_offset": [0.0, -6.0],
+        "start_radius": 54.0,
+        "impact_radius": 9.0
+      },
+      "data_path": "res://assets/battles/animations/bulletpunch/bulletpunch.json",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Bullet Punch.wav": "res://assets/battles/animations/bulletpunch/PRSFX- Bullet Punch.wav"
       }
     }
   }

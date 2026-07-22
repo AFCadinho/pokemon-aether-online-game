@@ -33,6 +33,7 @@ signal animation_finished
 @export var dragon_dance_config: Dictionary = {}
 @export var dragon_claw_config: Dictionary = {}
 @export var thunder_punch_config: Dictionary = {}
+@export var bullet_punch_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -308,6 +309,7 @@ func _draw() -> void:
 	_draw_dragon_dance_visual()
 	_draw_dragon_claw_visual()
 	_draw_thunder_punch_visual()
+	_draw_bullet_punch_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -802,6 +804,74 @@ func _draw_thunder_punch_visual() -> void:
 	var pulse_radius := 18.0 + sin(phase * 0.7) * 3.0
 	draw_circle(center, pulse_radius, _color_with_alpha(bolt_color, alpha * 0.12))
 	draw_arc(center, pulse_radius * 1.16, phase, phase + PI * 1.48, 32, _color_with_alpha(core_color, alpha * 0.82), 1.5)
+
+
+func _draw_bullet_punch_visual() -> void:
+	if not bool(bullet_punch_config.get("enabled", false)) or sheet_texture == null:
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var visible_start: float = clampf(float(bullet_punch_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end: float = clampf(float(bullet_punch_config.get("visible_end", 0.9)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, bullet_punch_config)
+	if alpha <= 0.02:
+		return
+
+	var local_progress := clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var punch_count := maxi(2, int(bullet_punch_config.get("punch_count", 6)))
+	var interval := maxf(float(bullet_punch_config.get("punch_interval", 0.09)), 0.01)
+	var travel_time := maxf(float(bullet_punch_config.get("punch_travel", 0.34)), 0.05)
+	var fist_scale := maxf(float(bullet_punch_config.get("fist_scale", 0.56)), 0.1)
+	var impact_center := _battlefield_position(_vector2_from_value(bullet_punch_config.get("center", [384.0, 96.0])))
+	impact_center += _vector2_from_value(bullet_punch_config.get("center_offset", [0.0, 0.0]))
+	var start_radius := maxf(float(bullet_punch_config.get("start_radius", 56.0)), 8.0)
+	var impact_radius := maxf(float(bullet_punch_config.get("impact_radius", 10.0)), 0.0)
+	var tile_size: Array = data.get("tile_size", [192, 192]) as Array
+	if tile_size.size() < 2:
+		return
+	var tile_width := float(tile_size[0])
+	var tile_height := float(tile_size[1])
+	var source_rect := Rect2(tile_width, 0.0, tile_width, tile_height)
+
+	for punch_index: int in range(punch_count):
+		var launch_at := float(punch_index) * interval
+		if local_progress < launch_at:
+			continue
+		var elapsed := local_progress - launch_at
+		var punch_progress := clampf(elapsed / travel_time, 0.0, 1.0)
+		var linger := clampf((travel_time + 0.13 - elapsed) / 0.13, 0.0, 1.0)
+		if punch_progress >= 1.0 and linger <= 0.02:
+			continue
+		var angle := -PI * 0.78 + float(punch_index) * TAU / float(punch_count) + sin(float(punch_index) * 1.7) * 0.22
+		var direction := Vector2(cos(angle), sin(angle))
+		var radius := lerpf(start_radius, impact_radius, _ease_projectile_progress(punch_progress, "out_quad"))
+		var fist_position := impact_center + direction * radius
+		var scale := fist_scale * (0.82 + punch_progress * 0.22)
+		var fist_size := Vector2(tile_width, tile_height) * scale
+		var fist_alpha := alpha * (0.28 + 0.72 * minf(1.0, punch_progress * 3.0)) * maxf(linger, 0.35)
+		var fist_rect := Rect2(fist_position - fist_size * 0.5, fist_size)
+		draw_texture_rect_region(sheet_texture, fist_rect, source_rect, Color(0.9, 0.96, 1.0, fist_alpha))
+
+		var impact_alpha := alpha * clampf((punch_progress - 0.62) / 0.28, 0.0, 1.0) * maxf(linger, 0.2)
+		if impact_alpha <= 0.02:
+			continue
+		var glow_radius := 13.0 + impact_alpha * 16.0
+		draw_circle(fist_position, glow_radius, Color(0.78, 0.88, 1.0, impact_alpha * 0.12))
+		draw_circle(fist_position, glow_radius * 0.48, Color(1.0, 1.0, 1.0, impact_alpha * 0.18))
+		for sparkle_index: int in range(4):
+			var sparkle_angle := float(sparkle_index) * TAU / 4.0 + float(punch_index) * 0.71
+			var sparkle_direction := Vector2(cos(sparkle_angle), sin(sparkle_angle))
+			var sparkle_center := fist_position + sparkle_direction * glow_radius * 0.74
+			var sparkle_size := 2.0 + float(sparkle_index % 2) * 1.25
+			var sparkle_color := Color(1.0, 1.0, 1.0, impact_alpha * (0.68 + float(sparkle_index % 2) * 0.16))
+			draw_line(sparkle_center - sparkle_direction * sparkle_size, sparkle_center + sparkle_direction * sparkle_size, sparkle_color, 1.2)
+			var cross_direction := sparkle_direction.orthogonal()
+			draw_line(sparkle_center - cross_direction * sparkle_size * 0.65, sparkle_center + cross_direction * sparkle_size * 0.65, sparkle_color, 0.9)
 
 
 func _draw_solar_beam_visual() -> void:
