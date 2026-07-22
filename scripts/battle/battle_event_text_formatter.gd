@@ -512,6 +512,10 @@ func format_pokemon_effect_event(event: Dictionary) -> String:
 			"activate", "end":
 				return "%s took the Future Sight attack!" % target
 
+	if _is_protect_effect(raw_effect):
+		if state == "start" or state == "activate":
+			return "%s protected itself!" % target
+
 	var ability_stat_message := _format_ability_stat_pokemon_effect(target, raw_effect)
 	if ability_stat_message != "":
 		return ability_stat_message
@@ -592,6 +596,10 @@ func _is_reflection_effect(raw_effect: String, effect: String) -> bool:
 
 func _is_future_sight_effect(raw_effect: String) -> bool:
 	return _normalize_event_source(raw_effect).to_lower().replace(" ", "").replace("-", "") == "futuresight"
+
+
+func _is_protect_effect(raw_effect: String) -> bool:
+	return _normalize_event_source(raw_effect).to_lower().replace(" ", "").replace("-", "") == "protect"
 
 func _is_ability_like_pokemon_effect(raw_effect: String, effect: String) -> bool:
 	var cleaned_raw: String = raw_effect.strip_edges()

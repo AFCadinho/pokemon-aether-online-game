@@ -2289,6 +2289,72 @@
       "sound_paths": {
         "PRSFX- Future Sight1.wav": "res://assets/battles/animations/futuresight/PRSFX- Future Sight1.wav"
       }
+    },
+    "wish": {
+      "template": "imported_sheet",
+      "category": "field",
+      "static_visual_anchor": "battlefield",
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.82,
+        0.72,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.96,
+        0.7,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.78,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/wish/wish.json",
+      "sheet_path": "res://assets/battles/animations/wish/PRAS- Wish.png",
+      "background_path": "res://assets/battles/animations/wish/PRAS- Starry BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Wish.wav": "res://assets/battles/animations/wish/PRSFX- Wish.wav"
+      }
+    },
+    "protect": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.16,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.24,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.82,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.82,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/protect/protect.json",
+      "sheet_path": "res://assets/battles/animations/protect/PRAS- Protect.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Protect.wav": "res://assets/battles/animations/protect/PRSFX- Protect.wav"
+      }
     }
   }
 }

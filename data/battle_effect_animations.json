@@ -1,6 +1,108 @@
 {
   "version": 1,
   "effects": {
+    "protect_block": {
+      "template": "imported_sheet",
+      "source": "Move:PROTECT",
+      "source_anchor": "player",
+      "category": "shield",
+      "data_path": "res://assets/battles/animations/protect/protect.json",
+      "sheet_path": "res://assets/battles/animations/protect/PRAS- Protect.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Protect.wav": "res://assets/battles/animations/protect/PRSFX- Protect.wav"
+      },
+      "speed_scale": 1.3,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        0.22,
+        0.82,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        0.9,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.94,
+      "overlay_peak_alpha": 0.12,
+      "sparkle_count": 10,
+      "sparkle_center": [
+        128.0,
+        210.0
+      ],
+      "sparkle_radius_min": 20.0,
+      "sparkle_radius_max": 58.0,
+      "effect_position_offset": [
+        0.0,
+        -8.0
+      ]
+    },
+    "wish_fulfilled": {
+      "template": "imported_sheet",
+      "source": "Move:WISH",
+      "source_anchor": "player",
+      "category": "recovery",
+      "data_path": "res://assets/battles/animations/wish/wish.json",
+      "sheet_path": "res://assets/battles/animations/wish/PRAS- Wish.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Wish.wav": "res://assets/battles/animations/wish/PRSFX- Wish.wav"
+      },
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": true,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [
+        1.0,
+        0.74,
+        0.26,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        0.94,
+        0.62,
+        1.0
+      ],
+      "sprite_zoom_multiplier": 0.88,
+      "sprite_position_scale": 0.25,
+      "sprite_position_anchor": [
+        128.0,
+        210.0
+      ],
+      "overlay_peak_alpha": 0.14,
+      "sparkle_count": 16,
+      "sparkle_center": [
+        128.0,
+        210.0
+      ],
+      "sparkle_radius_min": 16.0,
+      "sparkle_radius_max": 68.0,
+      "effect_position_offset": [
+        0.0,
+        -8.0
+      ],
+      "orb": {
+        "enabled": true,
+        "center": [
+          128.0,
+          210.0
+        ],
+        "radius": 42.0,
+        "alpha": 0.72
+      }
+    },
     "future_sight_impact": {
       "template": "imported_sheet",
       "source": "Move:FUTURESIGHT",

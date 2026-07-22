@@ -60,6 +60,7 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	var move_animation_result := str(presentation.get("move_animation_result", ""))
 	var damage_target_ident := str(presentation.get("damage_target_ident", ""))
 	var heal_target_ident := str(presentation.get("heal_target_ident", ""))
+	var heal_followup_effect_animation_key := str(presentation.get("heal_followup_effect_animation_key", ""))
 	var faint_target_ident := str(presentation.get("faint_target_ident", ""))
 	var stat_change_target_ident := str(presentation.get("stat_change_target_ident", ""))
 	var stat_change_amount := int(presentation.get("stat_change_amount", 0))
@@ -90,6 +91,7 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		or move_animation_name != ""
 		or damage_target_ident != ""
 		or heal_target_ident != ""
+		or heal_followup_effect_animation_key != ""
 		or faint_target_ident != ""
 		or stat_change_target_ident != ""
 		or ability_boost_target_ident != ""
@@ -102,7 +104,8 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			"move": move_animation_name,
 			"effect": effect_animation_key,
 			"damage_target": damage_target_ident,
-			"heal_target": heal_target_ident,
+		"heal_target": heal_target_ident,
+		"heal_followup_effect": heal_followup_effect_animation_key,
 			"faint_target": faint_target_ident,
 			"stat_target": stat_change_target_ident,
 		})
@@ -135,6 +138,8 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, true)
 			if animations_allowed and effect_animation_key != "":
 				await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
+			if animations_allowed and heal_followup_effect_animation_key != "":
+				await animation_router.play_effect_animation(heal_followup_effect_animation_key, effect_animation_target_ident)
 			if animations_allowed:
 				await animation_router.play_heal_tween_for_target(heal_target_ident, event_data)
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)

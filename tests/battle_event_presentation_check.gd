@@ -16,6 +16,8 @@ func _init() -> void:
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
 	_check_booster_energy_quark_drive_messages()
 	_check_future_sight_lifecycle_messages()
+	_check_wish_heal_uses_delayed_animation()
+	_check_protect_activation_uses_block_animation()
 	_check_evasion_drop_uses_normalized_negative_amount()
 	_check_paralysis_status_event_uses_status_effect_animation()
 	_check_paralysis_cant_event_replays_status_effect_animation()
@@ -214,6 +216,40 @@ func _check_future_sight_lifecycle_messages() -> void:
 		"maxHp": 100,
 	})
 	_check_equal(str(damage_result.get("effect_animation_key", "")), "future_sight_impact", "Future Sight damage source plays its delayed impact animation")
+
+
+func _check_wish_heal_uses_delayed_animation() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "heal",
+		"target": "p1a: Jirachi",
+		"source": "[from] move: Wish",
+		"previousHp": 40,
+		"hp": 90,
+		"maxHp": 100,
+	})
+	_check_equal(str(result.get("effect_animation_key", "")), "wish_fulfilled", "Wish healing uses its delayed fulfillment animation")
+	_check_equal(str(result.get("heal_followup_effect_animation_key", "")), "generic_heal", "Wish fulfillment is followed by the normal heal animation")
+
+
+func _check_protect_activation_uses_block_animation() -> void:
+	var presentation = _make_presentation()
+	var setup_result: Dictionary = presentation.build({
+		"type": "pokemonEffect",
+		"target": "p1a: Alomomola",
+		"effect": "move: Protect",
+		"state": "start",
+	})
+	var block_result: Dictionary = presentation.build({
+		"type": "pokemonEffect",
+		"target": "p1a: Alomomola",
+		"effect": "move: Protect",
+		"state": "activate",
+	})
+	_check_equal(str(setup_result.get("log_message", "")), "Alomomola protected itself!", "Protect setup uses player-facing text")
+	_check_equal(str(setup_result.get("effect_animation_key", "")), "", "Protect setup does not replay its move animation")
+	_check_equal(str(block_result.get("log_message", "")), "Alomomola protected itself!", "Protect activation uses player-facing text")
+	_check_equal(str(block_result.get("effect_animation_key", "")), "protect_block", "Protect activation plays the shield block animation")
 
 
 func _check_evasion_drop_uses_normalized_negative_amount() -> void:

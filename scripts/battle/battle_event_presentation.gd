@@ -53,6 +53,9 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var heal_effect_key: String = _get_heal_effect_animation_key(event_data)
 			if heal_effect_key != "":
 				effect_keys.append(heal_effect_key)
+			var heal_followup_effect_key: String = _get_heal_followup_effect_animation_key(event_data)
+			if heal_followup_effect_key != "":
+				effect_keys.append(heal_followup_effect_key)
 		"statChange":
 			var stat_effect_key: String = _get_stat_change_effect_animation_key(event_text_formatter.get_stat_change_amount(event_data))
 			if stat_effect_key != "":
@@ -357,6 +360,7 @@ func build(event_data: Dictionary) -> Dictionary:
 			recent_move_event = false
 			presentation["heal_target_ident"] = str(event_data.get("target", ""))
 			presentation["effect_animation_key"] = _get_heal_effect_animation_key(event_data)
+			presentation["heal_followup_effect_animation_key"] = _get_heal_followup_effect_animation_key(event_data)
 			presentation["effect_animation_target_ident"] = str(presentation["heal_target_ident"])
 			var target := _format_actor(str(presentation["heal_target_ident"]))
 			var previous_hp := int(event_data.get("previousHp", 0))
@@ -393,6 +397,7 @@ func _new_presentation() -> Dictionary:
 		"move_animation_result": "",
 		"damage_target_ident": "",
 		"heal_target_ident": "",
+		"heal_followup_effect_animation_key": "",
 		"faint_target_ident": "",
 		"stat_change_target_ident": "",
 		"stat_change_amount": 0,
@@ -425,6 +430,10 @@ func _get_field_effect_animation_key(event: Dictionary) -> String:
 
 
 func _get_heal_effect_animation_key(event: Dictionary) -> String:
+	for source_field in ["source", "effect", "from", "fromMove", "move", "reason", "moveName", "moveId"]:
+		if _is_wish_effect(str(event.get(source_field, ""))):
+			return "wish_fulfilled"
+
 	var source_key: String = _normalize_animation_key(str(event.get("source", "")))
 	match source_key:
 		"leftovers":
@@ -439,6 +448,23 @@ func _get_heal_effect_animation_key(event: Dictionary) -> String:
 			return "recover_heal"
 
 	return "generic_heal"
+
+
+func _get_heal_followup_effect_animation_key(event: Dictionary) -> String:
+	for source_field in ["source", "effect", "from", "fromMove", "move", "reason", "moveName", "moveId"]:
+		if _is_wish_effect(str(event.get(source_field, ""))):
+			return "generic_heal"
+
+	return ""
+
+
+func _is_wish_effect(raw_effect: String) -> bool:
+	var normalized := raw_effect.strip_edges().to_lower()
+	if normalized.begins_with("[from] "):
+		normalized = normalized.substr("[from] ".length()).strip_edges()
+	if normalized.begins_with("move:"):
+		normalized = normalized.substr("move:".length()).strip_edges()
+	return normalized.replace(" ", "").replace("-", "").replace("_", "") == "wish"
 
 
 func _get_status_condition_effect_animation_key(event: Dictionary) -> String:
@@ -480,6 +506,11 @@ func _get_cant_status_effect_animation_key(event: Dictionary) -> String:
 func _get_pokemon_effect_animation_key(event: Dictionary) -> String:
 	var state := str(event.get("state", "start")).strip_edges().to_lower()
 	var raw_effect := str(event.get("effect", ""))
+	if event_text_formatter._is_protect_effect(raw_effect):
+		if state == "activate":
+			return "protect_block"
+		return ""
+
 	# Future Sight plays its setup as the move animation. Showdown emits the
 	# delayed hit separately as a pokemonEffect, so only its activation gets the
 	# target-centered impact animation.
