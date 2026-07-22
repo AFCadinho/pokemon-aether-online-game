@@ -394,6 +394,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.focus_aura_config = (config.get("focus_aura", {}) as Dictionary).duplicate(true)
+	animation_node.stat_change_config = (config.get("stat_change", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_claw_config = (config.get("dragon_claw", {}) as Dictionary).duplicate(true)
 	animation_node.thunder_punch_config = (config.get("thunder_punch", {}) as Dictionary).duplicate(true)
@@ -1239,6 +1240,20 @@ func play_stat_change_tween_for_target(target_ident: String, amount: int) -> voi
 				await enemy_sprite_box.play_stat_raise_tween()
 			else:
 				await enemy_sprite_box.play_stat_drop_tween()
+
+
+func play_stat_change_presentation_for_target(target_ident: String, amount: int, effect_key: String = "") -> void:
+	if amount == 0:
+		return
+
+	var resolved_effect_key := effect_key
+	if resolved_effect_key == "":
+		resolved_effect_key = "stat_up" if amount > 0 else "stat_down"
+
+	# Start the sprite response without awaiting it so the colored flash and
+	# movement belong to the same beat as the surrounding energy particles.
+	play_stat_change_tween_for_target(target_ident, amount)
+	await play_effect_animation(resolved_effect_key, target_ident)
 
 
 func _normalize_move_name(move_name: String) -> String:

@@ -109,7 +109,11 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			"faint_target": faint_target_ident,
 			"stat_target": stat_change_target_ident,
 		})
-	if effect_animation_key != "" and heal_target_ident == "":
+	var defer_stat_change_effect := (
+		stat_change_target_ident != ""
+		and effect_animation_key in ["stat_up", "stat_down"]
+	)
+	if effect_animation_key != "" and heal_target_ident == "" and not defer_stat_change_effect:
 		if animations_allowed:
 			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
 	if attack_actor_ident != "":
@@ -148,12 +152,16 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 				await animation_router.play_heal_tween_for_target(heal_target_ident, event_data)
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
 	if animations_allowed and stat_change_target_ident != "":
-		await animation_router.play_stat_change_tween_for_target(stat_change_target_ident, stat_change_amount)
+		await animation_router.play_stat_change_presentation_for_target(
+			stat_change_target_ident,
+			stat_change_amount,
+			effect_animation_key
+		)
 		var stat_change_hold_seconds := message_timing.get_stat_change_animation_hold_seconds()
 		artificial_hold_seconds += stat_change_hold_seconds
 		await _wait(stat_change_hold_seconds)
 	if animations_allowed and ability_boost_target_ident != "":
-		await animation_router.play_stat_change_tween_for_target(ability_boost_target_ident, 1)
+		await animation_router.play_stat_change_presentation_for_target(ability_boost_target_ident, 1, "stat_up")
 		var ability_boost_hold_seconds := message_timing.get_stat_change_animation_hold_seconds()
 		artificial_hold_seconds += ability_boost_hold_seconds
 		await _wait(ability_boost_hold_seconds)

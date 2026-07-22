@@ -7,6 +7,7 @@ var failed := false
 
 func _init() -> void:
 	_check_faint_hp_update_is_before_faint_animation()
+	_check_stat_particles_and_sprite_response_share_one_presentation()
 	quit(1 if failed else 0)
 
 
@@ -23,6 +24,20 @@ func _check_faint_hp_update_is_before_faint_animation() -> void:
 		hp_update_index < animation_index,
 		true,
 		"faint HP update is before faint animation"
+	)
+
+
+func _check_stat_particles_and_sprite_response_share_one_presentation() -> void:
+	var source := FileAccess.get_file_as_string(RENDERER_PATH)
+	var defer_index := source.find("var defer_stat_change_effect := (")
+	var presentation_index := source.find("await animation_router.play_stat_change_presentation_for_target(")
+
+	_check_equal(defer_index >= 0, true, "stat-change effect is deferred from generic effect playback")
+	_check_equal(presentation_index >= 0, true, "stat-change particles and sprite response use one presentation path")
+	_check_equal(
+		defer_index < presentation_index,
+		true,
+		"stat-change effect is deferred before the combined presentation starts"
 	)
 
 

@@ -332,7 +332,9 @@
       },
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
-      "show_pink_visual": true,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
       "visual_color": [
         0.45,
         0.72,
@@ -352,10 +354,48 @@
         224.0
       ],
       "overlay_peak_alpha": 0.04,
-      "sparkle_count": 4,
+      "sparkle_count": 0,
       "sparkle_radius_min": 14.0,
       "sparkle_radius_max": 38.0,
       "speed_scale": 1.2,
+      "stat_change": {
+        "enabled": true,
+        "direction": "up",
+        "visible_start": 0.0,
+        "visible_end": 0.96,
+        "fade_in": 0.08,
+        "fade_out": 0.14,
+        "center": [
+          128.0,
+          224.0
+        ],
+        "center_offset": [
+          0.0,
+          0.0
+        ],
+        "particle_count": 16,
+        "mote_count": 14,
+        "spread": 58.0,
+        "travel_distance": 120.0,
+        "primary_color": [
+          0.12,
+          0.82,
+          1.0,
+          1.0
+        ],
+        "secondary_color": [
+          0.2,
+          0.36,
+          1.0,
+          1.0
+        ],
+        "core_color": [
+          0.88,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
       "pattern_offset": 0,
       "pattern_override": -1
     },
@@ -372,7 +412,9 @@
       },
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
-      "show_pink_visual": true,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
       "visual_color": [
         0.9,
         0.38,
@@ -392,10 +434,48 @@
         224.0
       ],
       "overlay_peak_alpha": 0.04,
-      "sparkle_count": 4,
+      "sparkle_count": 0,
       "sparkle_radius_min": 14.0,
       "sparkle_radius_max": 38.0,
       "speed_scale": 1.2,
+      "stat_change": {
+        "enabled": true,
+        "direction": "down",
+        "visible_start": 0.0,
+        "visible_end": 0.96,
+        "fade_in": 0.08,
+        "fade_out": 0.14,
+        "center": [
+          128.0,
+          224.0
+        ],
+        "center_offset": [
+          0.0,
+          0.0
+        ],
+        "particle_count": 16,
+        "mote_count": 14,
+        "spread": 58.0,
+        "travel_distance": 120.0,
+        "primary_color": [
+          1.0,
+          0.18,
+          0.48,
+          1.0
+        ],
+        "secondary_color": [
+          0.42,
+          0.16,
+          0.92,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.86,
+          1.0,
+          1.0
+        ]
+      },
       "pattern_offset": 0,
       "pattern_override": -1
     },

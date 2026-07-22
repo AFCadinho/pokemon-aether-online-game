@@ -31,6 +31,7 @@ signal animation_finished
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
 @export var focus_aura_config: Dictionary = {}
+@export var stat_change_config: Dictionary = {}
 @export var dragon_dance_config: Dictionary = {}
 @export var dragon_claw_config: Dictionary = {}
 @export var thunder_punch_config: Dictionary = {}
@@ -311,6 +312,7 @@ func _draw() -> void:
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
 	_draw_focus_aura_visual()
+	_draw_stat_change_visual()
 	_draw_dragon_dance_visual()
 	_draw_dragon_claw_visual()
 	_draw_thunder_punch_visual()
@@ -748,6 +750,93 @@ func _draw_focus_aura_sparkle(position: Vector2, size: float, color: Color, core
 	draw_line(position + Vector2(0.0, -size * 2.4), position + Vector2(0.0, size * 2.4), core, 1.1, true)
 	draw_line(position + Vector2(-size, -size), position + Vector2(size, size), outer, 0.8, true)
 	draw_line(position + Vector2(-size, size), position + Vector2(size, -size), outer, 0.8, true)
+
+
+func _draw_stat_change_visual() -> void:
+	if not bool(stat_change_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(stat_change_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end := clampf(float(stat_change_config.get("visible_end", 0.96)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, stat_change_config)
+	if alpha <= 0.02:
+		return
+
+	var local_progress := clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var center := _battlefield_position(_vector2_from_value(stat_change_config.get("center", [128.0, 224.0])))
+	center += _vector2_from_value(stat_change_config.get("center_offset", [0.0, 0.0]))
+	var direction_name := str(stat_change_config.get("direction", "up")).strip_edges().to_lower()
+	var vertical_direction := -1.0 if direction_name != "down" else 1.0
+	var particle_count := clampi(int(stat_change_config.get("particle_count", 15)), 6, 28)
+	var spread := maxf(float(stat_change_config.get("spread", 58.0)), 12.0)
+	var travel_distance := maxf(float(stat_change_config.get("travel_distance", 118.0)), 32.0)
+	var primary_color := _color_from_value(stat_change_config.get("primary_color", [0.18, 0.78, 1.0, 1.0]), Color(0.18, 0.78, 1.0, 1.0))
+	var secondary_color := _color_from_value(stat_change_config.get("secondary_color", [0.24, 0.4, 1.0, 1.0]), Color(0.24, 0.4, 1.0, 1.0))
+	var core_color := _color_from_value(stat_change_config.get("core_color", [0.9, 1.0, 1.0, 1.0]), Color(0.9, 1.0, 1.0, 1.0))
+
+	var aura_pulse := 0.86 + sin(float(frame_index) * 0.54) * 0.14
+	var aura_center := center + Vector2(0.0, vertical_direction * -8.0)
+	draw_circle(aura_center, spread * 0.72, _color_with_alpha(primary_color, alpha * 0.035 * aura_pulse))
+	draw_set_transform(center + Vector2(0.0, vertical_direction * -travel_distance * 0.08), 0.0, Vector2(1.0, 0.28))
+	draw_arc(Vector2.ZERO, spread * 0.64, 0.0, TAU, 44, _color_with_alpha(primary_color, alpha * 0.2), 3.4, true)
+	draw_arc(Vector2.ZERO, spread * 0.48, 0.0, TAU, 36, _color_with_alpha(core_color, alpha * 0.3), 1.1, true)
+	draw_set_transform(Vector2.ZERO)
+
+	for particle_index: int in range(particle_count):
+		var spawn_phase := float(particle_index) / float(particle_count)
+		var life := fmod(local_progress * 1.7 + spawn_phase * 1.18, 1.0)
+		var envelope := sin(PI * life) * alpha
+		if envelope <= 0.025:
+			continue
+
+		var lane_seed := fmod(float(particle_index * 37), float(particle_count)) / float(maxi(particle_count - 1, 1))
+		var lane_x := lerpf(-spread, spread, lane_seed)
+		var sway := sin(life * PI * 2.0 + float(particle_index) * 1.73) * (4.0 + float(particle_index % 3) * 1.8)
+		var start_y := center.y - vertical_direction * travel_distance * 0.48
+		var tip := Vector2(
+			center.x + lane_x + sway,
+			start_y + vertical_direction * travel_distance * life
+		)
+		var velocity := Vector2(cos(float(particle_index) * 2.11) * 0.1, vertical_direction).normalized()
+		var streak_length := (18.0 + float(particle_index % 5) * 4.6) * (0.7 + envelope * 0.45)
+		var trail := tip - velocity * streak_length
+		var particle_color := primary_color.lerp(secondary_color, float(particle_index % 4) / 3.0)
+
+		draw_line(trail, tip, _color_with_alpha(particle_color, envelope * 0.14), 9.0, true)
+		draw_line(trail, tip, _color_with_alpha(particle_color, envelope * 0.58), 4.0, true)
+		draw_line(trail.lerp(tip, 0.2), tip, _color_with_alpha(core_color, envelope * 0.9), 1.35, true)
+
+		var side := Vector2(-velocity.y, velocity.x)
+		var tip_size := 2.2 + float(particle_index % 3) * 0.65
+		var shard := PackedVector2Array([
+			tip + velocity * tip_size * 2.3,
+			tip + side * tip_size,
+			tip - velocity * tip_size * 1.25,
+			tip - side * tip_size,
+		])
+		draw_colored_polygon(shard, _color_with_alpha(core_color, envelope * 0.92))
+
+		if particle_index % 3 == 0:
+			var glint_position := tip - velocity * streak_length * 0.35
+			var glint_size := 2.0 + envelope * 2.4
+			draw_line(glint_position + Vector2(-glint_size, 0.0), glint_position + Vector2(glint_size, 0.0), _color_with_alpha(core_color, envelope * 0.72), 1.0, true)
+			draw_line(glint_position + Vector2(0.0, -glint_size), glint_position + Vector2(0.0, glint_size), _color_with_alpha(core_color, envelope * 0.72), 1.0, true)
+
+	var mote_count := maxi(8, int(stat_change_config.get("mote_count", 14)))
+	for mote_index: int in range(mote_count):
+		var mote_life := fmod(local_progress * 1.35 + float(mote_index) * 0.173, 1.0)
+		var mote_alpha := alpha * sin(PI * mote_life) * 0.72
+		var mote_x := center.x + sin(float(mote_index) * 2.47) * spread * (0.28 + float(mote_index % 4) * 0.16)
+		var mote_y := center.y - vertical_direction * travel_distance * 0.42 + vertical_direction * travel_distance * mote_life
+		var mote_position := Vector2(mote_x, mote_y)
+		var mote_size := 1.4 + float(mote_index % 3) * 0.75
+		draw_circle(mote_position, mote_size * 1.8, _color_with_alpha(primary_color, mote_alpha * 0.2))
+		draw_circle(mote_position, mote_size, _color_with_alpha(core_color, mote_alpha))
 
 
 func _draw_dragon_dance_visual() -> void:
