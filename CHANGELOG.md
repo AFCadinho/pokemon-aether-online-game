@@ -1,9 +1,23 @@
 # Changelog
 
-## Unreleased
+## 0.3.30 - 2026-07-22
+
+**Added**
+- Added battle animations for more than 50 moves, including multi-turn moves, delayed effects, protection interactions, switching attacks, and a persistent Substitute presentation.
 
 **Changed**
 - Battle screens now clearly show Run in wild battles and Forfeit in trainer and Ranked battles.
+- Refreshed and polished many existing move animations, including their timing, sizing, effects, sounds, backgrounds, and impact presentation.
+- Battle move animations now follow the live attacker and target positions and correctly mirror when used by the opposing Pokemon.
+- Refreshed the standard healing and stat-change effects used by moves, items, abilities, and held items.
+- Refined the battle utility bar with clearer contextual Bag, Run, and Forfeit actions and improved hover feedback.
+- Improved compact battle party previews with clearer borders, larger Pokemon icons, and more readable fainted states.
+- Move buttons now visibly dim and stop showing hover details while waiting for the opponent after submitting a PvP choice.
+
+**Fixed**
+- Fixed the PvP result overlay sometimes showing Defeat for the winning player when the server identified the winner by trainer name.
+- Fixed several opposing move animations travelling from the player's side, using inverted vertical offsets, or appearing on the wrong Pokemon.
+- Fixed Kowtow Cleave slicing its source spritesheet at the wrong size, which made its impact animation almost invisible.
 
 ## 0.3.22 - 2026-07-20
 
