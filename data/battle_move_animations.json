@@ -3423,6 +3423,107 @@
         "PRSFX- Thunderbolt2": "res://assets/battles/animations/electroshot/PRSFX- Thunderbolt2.wav",
         "PRSFX- Wild Charge2": "res://assets/battles/animations/electroshot/PRSFX- Wild Charge2.wav"
       }
+    },
+    "hyperbeam": {
+      "template": "imported_sheet",
+      "category": "beam",
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "solar_beam": {
+        "enabled": true,
+        "visible_start": 0.08,
+        "visible_end": 0.9,
+        "beam_start": 0.16,
+        "beam_fade_in": 0.06,
+        "fade_in": 0.05,
+        "fade_out": 0.12,
+        "outer_width": 36.0,
+        "middle_width": 20.0,
+        "core_width": 7.0,
+        "ribbon_count": 4,
+        "segments": 28,
+        "curve_amplitude": 7.0,
+        "source_radius": 30.0,
+        "impact_start": 0.68,
+        "impact_radius": 60.0,
+        "impact_alpha": 0.9,
+        "impact_ray_count": 16,
+        "outer_color": [
+          0.64,
+          0.04,
+          0.38,
+          1.0
+        ],
+        "middle_color": [
+          1.0,
+          0.16,
+          0.66,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.9,
+          0.98,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              204
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              86
+            ]
+          }
+        ],
+        "reverse_path": [
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              86
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              204
+            ]
+          }
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.68,
+        "peak": 0.76,
+        "end": 0.9,
+        "alpha": 0.14,
+        "color": [
+          1.0,
+          0.24,
+          0.7,
+          1.0
+        ]
+      },
+      "data_path": "res://assets/battles/animations/hyperbeam/hyperbeam.json",
+      "sheet_path": "res://assets/battles/animations/hyperbeam/PRAS- Hyper Beam.png",
+      "background_path": "res://assets/battles/animations/hyperbeam/PRAS- Hyper Beam BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Hyper Beam.wav": "res://assets/battles/animations/hyperbeam/PRSFX- Hyper Beam.wav"
+      }
     }
   }
 }
