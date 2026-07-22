@@ -30,6 +30,7 @@ signal animation_finished
 @export var solar_beam_config: Dictionary = {}
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
+@export var focus_aura_config: Dictionary = {}
 @export var dragon_dance_config: Dictionary = {}
 @export var dragon_claw_config: Dictionary = {}
 @export var thunder_punch_config: Dictionary = {}
@@ -309,6 +310,7 @@ func _draw() -> void:
 	_draw_solar_beam_visual()
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
+	_draw_focus_aura_visual()
 	_draw_dragon_dance_visual()
 	_draw_dragon_claw_visual()
 	_draw_thunder_punch_visual()
@@ -660,6 +662,92 @@ func _draw_celestial_charge_visual() -> void:
 		var particle_alpha := alpha * (0.2 + 0.52 * (1.0 - life))
 		draw_circle(position, size, _color_with_alpha(core_color, particle_alpha))
 		draw_line(position + Vector2(-size * 1.6, 0.0), position + Vector2(size * 1.6, 0.0), _color_with_alpha(outer_color, particle_alpha * 0.74), 1.0)
+
+
+func _draw_focus_aura_visual() -> void:
+	if not bool(focus_aura_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(focus_aura_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end := clampf(float(focus_aura_config.get("visible_end", 0.94)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, focus_aura_config)
+	if alpha <= 0.02:
+		return
+
+	var local_progress := clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var appear := 1.0 - pow(1.0 - clampf(local_progress / 0.2, 0.0, 1.0), 3.0)
+	var center := _battlefield_position(_vector2_from_value(focus_aura_config.get("center", [128.0, 224.0])))
+	center += _vector2_from_value(focus_aura_config.get("center_offset", [0.0, -6.0]))
+	var radius := maxf(float(focus_aura_config.get("radius", 56.0)), 12.0) * appear
+	var squash := clampf(float(focus_aura_config.get("ring_squash", 0.55)), 0.18, 1.0)
+	var rotation_speed := float(focus_aura_config.get("rotation_speed", 0.16))
+	var phase := float(frame_index) * rotation_speed
+	var glow_color := _color_from_value(focus_aura_config.get("glow_color", [0.42, 0.96, 0.72, 1.0]), Color(0.42, 0.96, 0.72, 1.0))
+	var core_color := _color_from_value(focus_aura_config.get("core_color", [1.0, 1.0, 0.9, 1.0]), Color(1.0, 1.0, 0.9, 1.0))
+	var ring_colors: Array[Color] = [
+		_color_from_value(focus_aura_config.get("ring_color_green", [0.68, 1.0, 0.18, 1.0]), Color(0.68, 1.0, 0.18, 1.0)),
+		_color_from_value(focus_aura_config.get("ring_color_cyan", [0.2, 0.92, 1.0, 1.0]), Color(0.2, 0.92, 1.0, 1.0)),
+		_color_from_value(focus_aura_config.get("ring_color_pink", [1.0, 0.32, 0.82, 1.0]), Color(1.0, 0.32, 0.82, 1.0)),
+		_color_from_value(focus_aura_config.get("ring_color_gold", [1.0, 0.9, 0.22, 1.0]), Color(1.0, 0.9, 0.22, 1.0)),
+	]
+
+	var pulse := 1.0 + sin(float(frame_index) * 0.42) * 0.055
+	draw_circle(center, radius * 1.08 * pulse, _color_with_alpha(glow_color, alpha * 0.055))
+	draw_circle(center, radius * 0.72 * pulse, _color_with_alpha(core_color, alpha * 0.035))
+
+	var ring_count := clampi(int(focus_aura_config.get("ring_count", 4)), 2, 6)
+	for ring_index: int in range(ring_count):
+		var ring_progress := float(ring_index) / float(maxi(ring_count - 1, 1))
+		var ring_radius := radius * (0.7 + ring_progress * 0.38)
+		var rotation := -0.42 + ring_progress * 0.84 + sin(phase * 0.62 + float(ring_index)) * 0.08
+		var ring_phase := phase * (1.0 if ring_index % 2 == 0 else -0.82) + float(ring_index) * 1.48
+		var arc_length := PI * (1.28 + 0.18 * sin(float(ring_index) * 1.7 + phase))
+		var ring_color: Color = ring_colors[ring_index % ring_colors.size()]
+		var ring_alpha := alpha * (0.68 + (1.0 - ring_progress) * 0.2)
+		draw_set_transform(center, rotation, Vector2(1.0, squash + ring_progress * 0.08))
+		draw_arc(Vector2.ZERO, ring_radius + 1.4, ring_phase, ring_phase + arc_length, 42, _color_with_alpha(ring_color, ring_alpha * 0.2), 6.2, true)
+		draw_arc(Vector2.ZERO, ring_radius, ring_phase, ring_phase + arc_length, 42, _color_with_alpha(ring_color, ring_alpha), 2.5, true)
+		draw_arc(Vector2.ZERO, ring_radius - 1.0, ring_phase + 0.04, ring_phase + arc_length - 0.04, 42, _color_with_alpha(core_color, ring_alpha * 0.72), 0.9, true)
+		draw_set_transform(Vector2.ZERO)
+
+	var sparkle_count := maxi(8, int(focus_aura_config.get("sparkle_count", 20)))
+	var sparkle_radius_min := maxf(float(focus_aura_config.get("sparkle_radius_min", 36.0)), 8.0)
+	var sparkle_radius_max := maxf(float(focus_aura_config.get("sparkle_radius_max", 82.0)), sparkle_radius_min)
+	for sparkle_index: int in range(sparkle_count):
+		var life := fmod(local_progress * 1.9 + float(sparkle_index) * 0.137, 1.0)
+		var sparkle_phase := float(sparkle_index) * 2.399 + phase * (0.62 + float(sparkle_index % 3) * 0.12)
+		var sparkle_radius := lerpf(sparkle_radius_min, sparkle_radius_max, life)
+		var sparkle_position := center + Vector2(
+			cos(sparkle_phase) * sparkle_radius,
+			sin(sparkle_phase) * sparkle_radius * 0.66 - life * 18.0
+		)
+		var sparkle_alpha := alpha * sin(PI * life) * (0.48 + float(sparkle_index % 3) * 0.13)
+		var sparkle_size := 1.5 + float(sparkle_index % 4) * 0.65
+		var sparkle_color: Color = ring_colors[sparkle_index % ring_colors.size()]
+		_draw_focus_aura_sparkle(sparkle_position, sparkle_size, sparkle_color, core_color, sparkle_alpha)
+
+	var focus_alpha := alpha * clampf((local_progress - 0.45) / 0.22, 0.0, 1.0) * clampf((0.98 - local_progress) / 0.18, 0.0, 1.0)
+	if focus_alpha > 0.02:
+		var focus_radius := radius * (0.22 + (1.0 - local_progress) * 0.12)
+		draw_circle(center, focus_radius * 1.8, _color_with_alpha(glow_color, focus_alpha * 0.08))
+		draw_arc(center, focus_radius, phase, phase + PI * 1.54, 28, _color_with_alpha(core_color, focus_alpha * 0.84), 1.8, true)
+
+
+func _draw_focus_aura_sparkle(position: Vector2, size: float, color: Color, core_color: Color, alpha: float) -> void:
+	if alpha <= 0.02:
+		return
+	var outer := _color_with_alpha(color, alpha * 0.42)
+	var core := _color_with_alpha(core_color, alpha)
+	draw_circle(position, size * 1.5, outer)
+	draw_line(position + Vector2(-size * 2.4, 0.0), position + Vector2(size * 2.4, 0.0), core, 1.1, true)
+	draw_line(position + Vector2(0.0, -size * 2.4), position + Vector2(0.0, size * 2.4), core, 1.1, true)
+	draw_line(position + Vector2(-size, -size), position + Vector2(size, size), outer, 0.8, true)
+	draw_line(position + Vector2(-size, size), position + Vector2(size, -size), outer, 0.8, true)
 
 
 func _draw_dragon_dance_visual() -> void:

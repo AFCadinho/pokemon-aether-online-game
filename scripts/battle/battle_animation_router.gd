@@ -393,6 +393,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.solar_beam_config = (config.get("solar_beam", {}) as Dictionary).duplicate(true)
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
+	animation_node.focus_aura_config = (config.get("focus_aura", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_claw_config = (config.get("dragon_claw", {}) as Dictionary).duplicate(true)
 	animation_node.thunder_punch_config = (config.get("thunder_punch", {}) as Dictionary).duplicate(true)

@@ -4816,6 +4816,97 @@
         "PRSFX- Substitute1.wav": "res://assets/battles/animations/substitute/PRSFX- Substitute1.wav",
         "PRSFX- Substitute2.wav": "res://assets/battles/animations/substitute/PRSFX- Substitute2.wav"
       }
+    },
+    "calmmind": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 1.0,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.58,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "focus_aura": {
+        "enabled": true,
+        "visible_start": 0.02,
+        "visible_end": 0.94,
+        "fade_in": 0.1,
+        "fade_out": 0.18,
+        "center": [
+          128.0,
+          224.0
+        ],
+        "center_offset": [
+          0.0,
+          -7.0
+        ],
+        "radius": 56.0,
+        "ring_count": 4,
+        "ring_squash": 0.54,
+        "rotation_speed": 0.16,
+        "sparkle_count": 20,
+        "sparkle_radius_min": 36.0,
+        "sparkle_radius_max": 82.0,
+        "glow_color": [
+          0.42,
+          0.96,
+          0.72,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          1.0,
+          0.9,
+          1.0
+        ],
+        "ring_color_green": [
+          0.68,
+          1.0,
+          0.18,
+          1.0
+        ],
+        "ring_color_cyan": [
+          0.2,
+          0.92,
+          1.0,
+          1.0
+        ],
+        "ring_color_pink": [
+          1.0,
+          0.32,
+          0.82,
+          1.0
+        ],
+        "ring_color_gold": [
+          1.0,
+          0.9,
+          0.22,
+          1.0
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.04,
+        "peak": 0.46,
+        "end": 0.78,
+        "alpha": 0.055,
+        "color": [
+          0.48,
+          0.38,
+          0.92,
+          1.0
+        ]
+      },
+      "data_path": "res://assets/battles/animations/calmmind/calmmind.json",
+      "sheet_path": "res://assets/battles/animations/calmmind/PRAS- Screech.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Calm Mind.wav": "res://assets/battles/animations/calmmind/PRSFX- Calm Mind.wav"
+      }
     }
   }
 }
