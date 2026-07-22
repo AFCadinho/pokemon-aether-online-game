@@ -713,11 +713,13 @@ func _get_cached_resource(resource_path: String) -> Resource:
 func _animation_assets_available(config: Dictionary) -> bool:
 	var data_path: String = str(config.get("data_path", ""))
 	var sheet_path: String = str(config.get("sheet_path", ""))
-	if data_path == "" or sheet_path == "":
+	if data_path == "":
 		return false
 	if not FileAccess.file_exists(data_path):
 		return false
-	if not ResourceLoader.exists(sheet_path):
+	if sheet_path == "" and bool(config.get("show_sheet_sprites", true)):
+		return false
+	if sheet_path != "" and not ResourceLoader.exists(sheet_path):
 		return false
 
 	var optional_resource_path_keys: Array[String] = ["background_path", "foreground_path"]

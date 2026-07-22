@@ -3924,6 +3924,98 @@
       "sound_paths": {
         "PRSFX- Flash Cannon.wav": "res://assets/battles/animations/flashcannon/PRSFX- Flash Cannon.wav"
       }
+    },
+    "bodypress": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "actor_motion": {
+        "enabled": true,
+        "duration": 0.82,
+        "points": [
+          {
+            "at": 0.0,
+            "offset": [
+              0,
+              0
+            ],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.01
+          },
+          {
+            "at": 0.14,
+            "offset": [
+              -12,
+              2
+            ],
+            "rotation_degrees": -4,
+            "scale": 0.96,
+            "duration": 0.08
+          },
+          {
+            "at": 0.26,
+            "offset": [
+              92,
+              -62
+            ],
+            "rotation_degrees": 7,
+            "scale": 1.1,
+            "duration": 0.1
+          },
+          {
+            "at": 0.37,
+            "offset": [
+              350,
+              -110
+            ],
+            "rotation_degrees": 12,
+            "scale": 1.24,
+            "duration": 0.08
+          },
+          {
+            "at": 0.56,
+            "offset": [
+              300,
+              -58
+            ],
+            "rotation_degrees": 6,
+            "scale": 1.14,
+            "duration": 0.12
+          },
+          {
+            "at": 0.78,
+            "offset": [
+              132,
+              -12
+            ],
+            "rotation_degrees": 2,
+            "scale": 1.05,
+            "duration": 0.1
+          },
+          {
+            "at": 1.0,
+            "offset": [
+              0,
+              0
+            ],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.08
+          }
+        ]
+      },
+      "data_path": "res://assets/battles/animations/bodypress/bodypress.json",
+      "sheet_path": "",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "Slam": "res://assets/battles/animations/bodypress/Slam.ogg"
+      }
     }
   }
 }

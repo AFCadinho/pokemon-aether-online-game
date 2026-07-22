@@ -196,7 +196,7 @@ func _build_nodes() -> void:
 	sheet_texture = sheet_texture_override
 	if sheet_texture == null:
 		sheet_texture = load(sheet_path) as Texture2D
-	if sheet_texture == null:
+	if sheet_texture == null and (show_sheet_sprites or _projectile_enabled()):
 		push_error("Could not load move animation sheet: %s" % sheet_path)
 		return
 
@@ -208,16 +208,17 @@ func _build_nodes() -> void:
 	bg.modulate.a = 0.0
 	add_child(bg)
 
-	for i: int in range(32):
-		var sprite: Sprite2D = Sprite2D.new()
-		sprite.texture = sheet_texture
-		sprite.region_enabled = true
-		sprite.visible = false
-		sprite.centered = true
-		sprites.append(sprite)
-		add_child(sprite)
+	if sheet_texture != null:
+		for i: int in range(32):
+			var sprite: Sprite2D = Sprite2D.new()
+			sprite.texture = sheet_texture
+			sprite.region_enabled = true
+			sprite.visible = false
+			sprite.centered = true
+			sprites.append(sprite)
+			add_child(sprite)
 
-	if _projectile_enabled():
+	if _projectile_enabled() and sheet_texture != null:
 		projectile_sprite = Sprite2D.new()
 		projectile_sprite.texture = sheet_texture
 		projectile_sprite.region_enabled = true
