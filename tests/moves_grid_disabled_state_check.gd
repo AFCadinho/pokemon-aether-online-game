@@ -29,9 +29,9 @@ func _run_check() -> void:
 	_check(available_move.disabled, "available move is not clickable while waiting")
 	_check(unavailable_move.disabled, "unavailable move stays disabled while waiting")
 	_check_equal(
-		moves_grid.self_modulate,
+		moves_grid.modulate,
 		MovesGrid.INPUT_DISABLED_MODULATE,
-		"waiting moves are visibly dimmed"
+		"waiting state dims the complete move-button subtree"
 	)
 	_check_equal(unhovered_count[0], 1, "locking clears any active move hover presentation")
 
@@ -43,9 +43,9 @@ func _run_check() -> void:
 	_check(not available_move.disabled, "previously available move becomes clickable again")
 	_check(unavailable_move.disabled, "move-specific disabled state survives the waiting lock")
 	_check_equal(
-		moves_grid.self_modulate,
+		moves_grid.modulate,
 		MovesGrid.INPUT_ENABLED_MODULATE,
-		"next decision restores full move brightness"
+		"next decision restores the complete move-button subtree"
 	)
 
 	moves_grid._on_slot_hovered({"name": "Substitute"}, Rect2())

@@ -52,11 +52,11 @@ func set_input_disabled(is_disabled: bool) -> void:
 	if is_disabled:
 		_capture_current_disabled_states()
 		_disable_current_buttons()
-		self_modulate = INPUT_DISABLED_MODULATE
+		modulate = INPUT_DISABLED_MODULATE
 		move_unhovered.emit()
 	else:
 		_restore_previous_disabled_states()
-		self_modulate = INPUT_ENABLED_MODULATE
+		modulate = INPUT_ENABLED_MODULATE
 
 func _capture_current_disabled_states() -> void:
 	previous_disabled_by_slot.clear()
