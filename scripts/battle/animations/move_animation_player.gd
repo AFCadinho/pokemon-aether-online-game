@@ -1027,15 +1027,17 @@ func _draw_dark_pulse_visual() -> void:
 	var direction := (target - source).normalized()
 	var normal := direction.orthogonal()
 	var purple := _color_from_value(dark_pulse_config.get("color", [0.72, 0.08, 0.92, 1.0]), Color(0.72, 0.08, 0.92, 1.0))
+	var draw_layer := str(dark_pulse_config.get("draw_layer", "all")).strip_edges().to_lower()
 	var charge_end := clampf(float(dark_pulse_config.get("charge_end", 0.32)), 0.0, 0.8)
 	if progress < charge_end:
 		var charge := clampf(progress / maxf(charge_end, 0.001), 0.0, 1.0)
-		var ground := source + Vector2(0.0, 24.0)
-		draw_set_transform(ground, 0.0, Vector2(1.0, 0.28))
-		draw_circle(Vector2.ZERO, 68.0 + charge * 16.0, _color_with_alpha(Color(0.08, 0.26, 0.88, 1.0), alpha * 0.2))
-		draw_arc(Vector2.ZERO, 58.0 + charge * 14.0, 0.0, TAU, 48, _color_with_alpha(Color.BLACK, alpha * 0.9), 5.2)
-		draw_arc(Vector2.ZERO, 50.0 + charge * 12.0, float(frame_index) * 0.18, float(frame_index) * 0.18 + TAU * 0.86, 48, _color_with_alpha(purple, alpha), 2.6)
-		draw_set_transform(Vector2.ZERO)
+		if draw_layer in ["all", "underlay"]:
+			var ground := source + Vector2(0.0, 24.0)
+			draw_set_transform(ground, 0.0, Vector2(1.0, 0.28))
+			draw_circle(Vector2.ZERO, 68.0 + charge * 16.0, _color_with_alpha(Color(0.08, 0.26, 0.88, 1.0), alpha * 0.2))
+			draw_arc(Vector2.ZERO, 58.0 + charge * 14.0, 0.0, TAU, 48, _color_with_alpha(Color.BLACK, alpha * 0.9), 5.2)
+			draw_arc(Vector2.ZERO, 50.0 + charge * 12.0, float(frame_index) * 0.18, float(frame_index) * 0.18 + TAU * 0.86, 48, _color_with_alpha(purple, alpha), 2.6)
+			draw_set_transform(Vector2.ZERO)
 		for ring_index in range(11):
 			var ring_angle := float(ring_index) * TAU / 11.0 + float(frame_index) * 0.11
 			var outer_distance := 48.0 + float(ring_index % 4) * 16.0
@@ -1043,9 +1045,16 @@ func _draw_dark_pulse_visual() -> void:
 			var ring_distance := lerpf(outer_distance, gather_distance, charge)
 			var gather_point := source + direction * (18.0 + charge * 16.0) + Vector2(0.0, -16.0)
 			var ring_center := gather_point + Vector2(cos(ring_angle) * ring_distance, sin(ring_angle) * ring_distance * 0.5)
+			var ring_is_foreground := ring_center.y >= source.y - 4.0
+			if draw_layer == "underlay" and ring_is_foreground:
+				continue
+			if draw_layer == "foreground" and not ring_is_foreground:
+				continue
 			var ring_radius := 8.0 + float(ring_index % 3) * 4.5
 			draw_circle(ring_center, ring_radius, _color_with_alpha(purple, alpha * 0.12))
 			draw_arc(ring_center, ring_radius, 0.0, TAU, 24, _color_with_alpha(Color(1.0, 0.12, 0.68, 1.0), alpha), 1.8)
+		return
+	if draw_layer == "underlay":
 		return
 	# The fired waves start at the same forward point where the charge rings converge.
 	source += direction * 34.0 + Vector2(0.0, -16.0)

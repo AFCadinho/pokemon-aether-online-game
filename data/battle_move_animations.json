@@ -4686,6 +4686,7 @@
     "darkpulse": {
       "template": "imported_sheet",
       "category": "special",
+      "split_dark_pulse_layers": true,
       "show_timing_backgrounds": true,
       "background_below_sprites": true,
       "show_timing_foregrounds": false,

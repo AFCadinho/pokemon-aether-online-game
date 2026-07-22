@@ -23,6 +23,8 @@ func _init() -> void:
 	_check_contains(router_source, "animation_node.heat_wave_config = _with_projectile_endpoint_anchors(", "heat waves receive live attacker and target anchors")
 	_check_contains(router_source, "animation_node.focus_aura_config = (config.get(\"focus_aura\", {}) as Dictionary).duplicate(true)", "focus auras are configured through the move catalog")
 	_check_contains(router_source, "animation_node.stat_change_config = (config.get(\"stat_change\", {}) as Dictionary).duplicate(true)", "stat-change energy is configured through the effect catalog")
+	_check_contains(router_source, "func _create_dark_pulse_underlay_if_needed(", "Dark Pulse can split its floor and orbit particles around the actor sprite")
+	_check_order(router_source, "_move_timing_background_below_sprites(animation_node, parent_node, config)", "var underlay_overlay := _create_dark_pulse_underlay_if_needed(", "Dark Pulse floor ring is layered above its opaque background")
 	_check_contains(player_source, "@export var sheet_visual_offset: Vector2 = Vector2.ZERO", "sheet visual offset is explicit and defaults to no movement")
 	_check_contains(player_source, "_battlefield_position(sheet_position) + sheet_visual_offset", "sheet correction is applied after battlefield mirroring")
 	_check_contains(player_source, "func display_position_to_battlefield_source(position: Vector2) -> Vector2:", "mirrored animations can convert display anchors to source coordinates")
@@ -33,6 +35,7 @@ func _init() -> void:
 	_check_contains(player_source, "func _draw_heat_wave_visual() -> void:", "moves can render a configurable multi-lane heat wave")
 	_check_contains(player_source, "func _draw_focus_aura_visual() -> void:", "status moves can render a reusable multicolor focus aura")
 	_check_contains(player_source, "func _draw_stat_change_visual() -> void:", "stat changes can render directional energy particles")
+	_check_contains(player_source, 'var draw_layer := str(dark_pulse_config.get("draw_layer", "all"))', "Dark Pulse supports separate underlay and foreground passes")
 
 	quit(1 if failed else 0)
 
@@ -43,3 +46,13 @@ func _check_contains(source: String, needle: String, label: String) -> void:
 		return
 	failed = true
 	push_error("FAIL %s: expected source contract '%s'" % [label, needle])
+
+
+func _check_order(source: String, first: String, second: String, label: String) -> void:
+	var first_index := source.find(first)
+	var second_index := source.find(second)
+	if first_index >= 0 and second_index > first_index:
+		print("PASS %s" % label)
+		return
+	failed = true
+	push_error("FAIL %s: expected '%s' before '%s'" % [label, first, second])

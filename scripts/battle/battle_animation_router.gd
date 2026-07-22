@@ -143,6 +143,8 @@ func _play_animation_config(
 		return
 
 	var animation_node: MoveAnimationPlayer = _create_move_animation_node(config, resources, reverse_battlefield)
+	if bool(config.get("split_dark_pulse_layers", false)):
+		animation_node.dark_pulse_config["draw_layer"] = "foreground"
 	_apply_move_animation_options(animation_node, config, animation_options)
 	var hidden_actor_sprites: Array = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 	_play_move_actor_motion_if_needed(config, move_actor_ident)
@@ -159,10 +161,24 @@ func _play_animation_config(
 		_apply_effect_target_offset(animation_node, target_ident, config, overlay)
 		overlay.add_child(animation_node)
 		_move_timing_background_below_sprites(animation_node, parent_node, config)
+		# Add the procedural underlay only after the opaque timing background has
+		# been detached. This keeps the floor ring above the background while it
+		# remains below the Pokemon sprites.
+		var underlay_overlay := _create_dark_pulse_underlay_if_needed(
+			parent_node,
+			config,
+			resources,
+			reverse_battlefield,
+			move_actor_ident,
+			move_target_ident,
+			animation_options
+		)
 		await _wait_for_animation_node(animation_node, overlay)
 		_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
 		if is_instance_valid(overlay):
 			overlay.queue_free()
+		if is_instance_valid(underlay_overlay):
+			underlay_overlay.queue_free()
 		return
 
 	animation_node.z_index = 50
@@ -173,6 +189,49 @@ func _play_animation_config(
 	parent_node.add_child(animation_node)
 	await _wait_for_animation_node(animation_node, parent_node)
 	_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
+
+
+func _create_dark_pulse_underlay_if_needed(
+	parent_node: Node,
+	config: Dictionary,
+	resources: Dictionary,
+	reverse_battlefield: bool,
+	move_actor_ident: String,
+	move_target_ident: String,
+	animation_options: Dictionary
+) -> Control:
+	if not bool(config.get("split_dark_pulse_layers", false)) or not parent_node is Control:
+		return null
+
+	var underlay_config := config.duplicate(true)
+	underlay_config["render_below_sprites"] = true
+	underlay_config["show_timing_backgrounds"] = false
+	underlay_config["show_timing_foregrounds"] = false
+	underlay_config["show_sheet_sprites"] = false
+	underlay_config["show_pink_visual"] = false
+	underlay_config["sound_paths"] = {}
+
+	var underlay_node := _create_move_animation_node(underlay_config, resources, reverse_battlefield)
+	underlay_node.dark_pulse_config["draw_layer"] = "underlay"
+	underlay_node.sound_paths.clear()
+	underlay_node.sound_streams.clear()
+	_apply_move_animation_options(underlay_node, underlay_config, animation_options)
+
+	var underlay_overlay := _create_animation_overlay(parent_node, underlay_config)
+	parent_node.add_child(underlay_overlay)
+	_move_overlay_below_sprites(underlay_overlay, parent_node, underlay_config)
+	_fit_animation_to_parent(underlay_node, underlay_overlay)
+	_apply_move_projectile_endpoint_anchors(
+		underlay_node,
+		move_actor_ident,
+		move_target_ident,
+		underlay_overlay,
+		underlay_config,
+		animation_options
+	)
+	_apply_effect_target_offset(underlay_node, "", underlay_config, underlay_overlay)
+	underlay_overlay.add_child(underlay_node)
+	return underlay_overlay
 
 
 func prewarm_move_animations(move_names: Array) -> void:
