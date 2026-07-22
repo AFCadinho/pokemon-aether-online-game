@@ -7,6 +7,7 @@ const EFFECT_ANIMATION_CATALOG_PATH := "res://data/battle_effect_animations.json
 const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/normaldamage.ogg"
 const EFFECT_SOURCE_PLAYER_POSITION := Vector2(128, 224)
 const EFFECT_SOURCE_ENEMY_POSITION := Vector2(384, 96)
+const REVERSED_BATTLEFIELD_AXIS := Vector2(512, 320)
 
 var player_sprite_box: Node
 var enemy_sprite_box: Node
@@ -394,9 +395,9 @@ func _play_move_actor_motion_if_needed(config: Dictionary, actor_ident: String) 
 	if actor_box == null or not actor_box.has_method("play_move_actor_motion"):
 		return
 
-	var direction := 1.0
+	var direction := Vector2.ONE
 	if _get_player_id_from_ident(actor_ident) == "p2":
-		direction = -1.0
+		direction = Vector2(-1.0, -1.0)
 	actor_box.call("play_move_actor_motion", motion_config, direction)
 
 
@@ -982,50 +983,104 @@ func _apply_move_projectile_endpoint_anchors(
 	animation_node.projectile_config = _with_projectile_endpoint_anchors(
 		animation_node.projectile_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
 	animation_node.orb_projectile_config = _with_projectile_endpoint_anchors(
 		animation_node.orb_projectile_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
 	animation_node.energy_blast_config = _with_projectile_endpoint_anchors(
 		animation_node.energy_blast_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
 	animation_node.water_splash_config = _with_projectile_endpoint_anchors(
 		animation_node.water_splash_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
 	animation_node.electric_switch_config = _with_projectile_endpoint_anchors(
 		animation_node.electric_switch_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
 	animation_node.fire_stream_config = _with_projectile_endpoint_anchors(
 		animation_node.fire_stream_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
 	animation_node.heat_wave_config = _with_projectile_endpoint_anchors(
 		animation_node.heat_wave_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
-	animation_node.draco_meteor_config = _with_target_effect_anchor(animation_node.draco_meteor_config, target_anchor)
 	animation_node.solar_beam_config = _with_projectile_endpoint_anchors(
 		animation_node.solar_beam_config,
 		actor_anchor,
-		target_anchor
+		target_anchor,
+		animation_node.reverse_battlefield
 	)
-	animation_node.dragon_dance_config = _with_self_effect_anchor(animation_node.dragon_dance_config, actor_anchor)
-	animation_node.dragon_claw_config = _with_target_effect_anchor(animation_node.dragon_claw_config, target_anchor)
-	animation_node.thunder_punch_config = _with_target_effect_anchor(animation_node.thunder_punch_config, target_anchor)
-	animation_node.bullet_punch_config = _with_target_effect_anchor(animation_node.bullet_punch_config, target_anchor)
-	animation_node.dark_pulse_config = _with_projectile_endpoint_anchors(animation_node.dark_pulse_config, actor_anchor, target_anchor)
-	animation_node.nasty_plot_config = _with_self_effect_anchor(animation_node.nasty_plot_config, actor_anchor)
+	animation_node.draco_meteor_config = _with_target_effect_anchor(
+		animation_node.draco_meteor_config,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.celestial_charge_config = _with_self_effect_anchor(
+		animation_node.celestial_charge_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.focus_aura_config = _with_self_effect_anchor(
+		animation_node.focus_aura_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.orb_config = _with_self_effect_anchor(
+		animation_node.orb_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	if animation_node.orb_config.has("center"):
+		animation_node.sparkle_center = _vector2_from_config_value(animation_node.orb_config.get("center", []), animation_node.sparkle_center)
+	animation_node.dragon_dance_config = _with_self_effect_anchor(
+		animation_node.dragon_dance_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.dragon_claw_config = _with_target_effect_anchor(
+		animation_node.dragon_claw_config,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.thunder_punch_config = _with_target_effect_anchor(
+		animation_node.thunder_punch_config,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.bullet_punch_config = _with_target_effect_anchor(
+		animation_node.bullet_punch_config,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.dark_pulse_config = _with_projectile_endpoint_anchors(
+		animation_node.dark_pulse_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.nasty_plot_config = _with_self_effect_anchor(
+		animation_node.nasty_plot_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
 
 
 func _apply_move_sheet_anchor(
@@ -1047,8 +1102,13 @@ func _apply_move_sheet_anchor(
 		return
 
 	var dynamic_anchor_source := _parent_position_to_animation_source(animation_node, dynamic_anchor_parent)
-	var fixed_anchor := EFFECT_SOURCE_PLAYER_POSITION if anchor_player_id == "p1" else EFFECT_SOURCE_ENEMY_POSITION
-	animation_node.sheet_visual_offset += dynamic_anchor_source - fixed_anchor
+	var source_anchor_player_id := anchor_player_id
+	if animation_node.reverse_battlefield:
+		source_anchor_player_id = "p2" if anchor_player_id == "p1" else "p1"
+	var fixed_anchor_source := EFFECT_SOURCE_PLAYER_POSITION if source_anchor_player_id == "p1" else EFFECT_SOURCE_ENEMY_POSITION
+	var source_anchor_offset := dynamic_anchor_source - fixed_anchor_source
+	var display_anchor_offset := -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset
+	animation_node.sheet_visual_offset += display_anchor_offset
 
 
 func _resolve_move_sheet_anchor_player_id(config: Dictionary, actor_ident: String, target_ident: String) -> String:
@@ -1078,37 +1138,63 @@ func _resolve_move_sheet_anchor_player_id(config: Dictionary, actor_ident: Strin
 			return target_id
 
 
-func _with_projectile_endpoint_anchors(config: Dictionary, actor_anchor: Vector2, target_anchor: Vector2) -> Dictionary:
+func _with_projectile_endpoint_anchors(
+	config: Dictionary,
+	actor_anchor: Vector2,
+	target_anchor: Vector2,
+	reverse_battlefield := false
+) -> Dictionary:
 	if config.is_empty():
 		return config
 
 	var updated_config: Dictionary = config.duplicate(true)
-	actor_anchor += _vector2_from_config_value(updated_config.get("actor_offset", [0.0, 0.0]), Vector2.ZERO)
-	target_anchor += _vector2_from_config_value(updated_config.get("target_offset", [0.0, 0.0]), Vector2.ZERO)
+	var actor_offset := _vector2_from_config_value(updated_config.get("actor_offset", [0.0, 0.0]), Vector2.ZERO)
+	var target_offset := _vector2_from_config_value(updated_config.get("target_offset", [0.0, 0.0]), Vector2.ZERO)
+	var source_actor_offset := -actor_offset if reverse_battlefield else actor_offset
+	var source_target_offset := -target_offset if reverse_battlefield else target_offset
+	var source_actor_anchor := actor_anchor + source_actor_offset
+	var source_target_anchor := target_anchor + source_target_offset
 	if updated_config.has("path"):
-		_set_projectile_path_endpoints(updated_config, "path", actor_anchor, target_anchor)
+		_set_projectile_path_endpoints(updated_config, "path", source_actor_anchor, source_target_anchor)
 	if updated_config.has("reverse_path"):
-		_set_projectile_path_endpoints(updated_config, "reverse_path", actor_anchor, target_anchor)
+		var reverse_actor_anchor := source_actor_anchor
+		var reverse_target_anchor := source_target_anchor
+		if reverse_battlefield:
+			# Explicit reverse paths are already authored in display coordinates and
+			# bypass the renderer's battlefield mirror. Convert live source anchors
+			# back to display space while keeping visual offsets screen-relative.
+			reverse_actor_anchor = _reverse_battlefield_position(actor_anchor) + actor_offset
+			reverse_target_anchor = _reverse_battlefield_position(target_anchor) + target_offset
+		_set_projectile_path_endpoints(updated_config, "reverse_path", reverse_actor_anchor, reverse_target_anchor)
 	return updated_config
 
 
-func _with_self_effect_anchor(config: Dictionary, actor_anchor: Vector2) -> Dictionary:
+func _reverse_battlefield_position(position: Vector2) -> Vector2:
+	return Vector2(
+		REVERSED_BATTLEFIELD_AXIS.x - position.x,
+		REVERSED_BATTLEFIELD_AXIS.y - position.y
+	)
+
+
+func _with_self_effect_anchor(config: Dictionary, actor_anchor: Vector2, reverse_battlefield := false) -> Dictionary:
 	if config.is_empty():
 		return config
 
 	var updated_config: Dictionary = config.duplicate(true)
-	actor_anchor += _vector2_from_config_value(updated_config.get("center_offset", [0.0, 0.0]), Vector2.ZERO)
+	var center_offset := _vector2_from_config_value(updated_config.get("center_offset", [0.0, 0.0]), Vector2.ZERO)
+	actor_anchor += -center_offset if reverse_battlefield else center_offset
 	updated_config["center"] = [actor_anchor.x, actor_anchor.y]
 	updated_config.erase("center_offset")
 	return updated_config
 
 
-func _with_target_effect_anchor(config: Dictionary, target_anchor: Vector2) -> Dictionary:
+func _with_target_effect_anchor(config: Dictionary, target_anchor: Vector2, reverse_battlefield := false) -> Dictionary:
 	if config.is_empty():
 		return config
 
 	var updated_config: Dictionary = config.duplicate(true)
-	target_anchor += _vector2_from_config_value(updated_config.get("center_offset", [0.0, 0.0]), Vector2.ZERO)
+	var center_offset := _vector2_from_config_value(updated_config.get("center_offset", [0.0, 0.0]), Vector2.ZERO)
+	target_anchor += -center_offset if reverse_battlefield else center_offset
 	updated_config["center"] = [target_anchor.x, target_anchor.y]
 	updated_config.erase("center_offset")
 	return updated_config

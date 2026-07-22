@@ -336,7 +336,7 @@ func clear_substitute_immediately() -> void:
 func has_active_substitute() -> bool:
 	return substitute_active
 
-func play_move_actor_motion(motion_config: Dictionary = {}, horizontal_direction: float = 1.0) -> void:
+func play_move_actor_motion(motion_config: Dictionary = {}, motion_direction: Vector2 = Vector2.ONE) -> void:
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -366,8 +366,8 @@ func play_move_actor_motion(motion_config: Dictionary = {}, horizontal_direction
 			var at: float = clamp(float(point.get("at", 0.0)), 0.0, 1.0)
 			var delay: float = at * duration
 			var offset: Vector2 = _read_motion_offset(point.get("offset", [0, 0]))
-			offset.x *= horizontal_direction
-			var rotation: float = deg_to_rad(float(point.get("rotation_degrees", 0.0)) * horizontal_direction)
+			offset *= motion_direction
+			var rotation: float = deg_to_rad(float(point.get("rotation_degrees", 0.0)) * motion_direction.x)
 			var scale_multiplier: float = max(float(point.get("scale", 1.0)), 0.1)
 			var segment_duration: float = max(float(point.get("duration", 0.05)), 0.01)
 

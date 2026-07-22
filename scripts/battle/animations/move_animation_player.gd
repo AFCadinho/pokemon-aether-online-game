@@ -694,6 +694,7 @@ func _draw_draco_meteor_visual() -> void:
 	var trail_color := _color_from_value(draco_meteor_config.get("trail_color", [0.76, 0.32, 1.0, 1.0]), Color(0.76, 0.32, 1.0, 1.0))
 	var core_color := _color_from_value(draco_meteor_config.get("core_color", [1.0, 0.84, 0.42, 1.0]), Color(1.0, 0.84, 0.42, 1.0))
 	var impact_color := _color_from_value(draco_meteor_config.get("impact_color", [1.0, 0.22, 0.08, 1.0]), Color(1.0, 0.22, 0.08, 1.0))
+	var approach_direction := -1.0 if reverse_battlefield else 1.0
 
 	for meteor_index: int in range(meteor_count):
 		var lane_seed := fmod(float(meteor_index) * 0.61803398875, 1.0)
@@ -713,7 +714,7 @@ func _draw_draco_meteor_visual() -> void:
 
 		if meteor_life >= 0.0 and meteor_life < 1.0:
 			var fall := meteor_life * meteor_life * (3.0 - 2.0 * meteor_life)
-			var diagonal_x := -54.0 + float((meteor_index % 3) - 1) * 18.0
+			var diagonal_x := (-54.0 + float((meteor_index % 3) - 1) * 18.0) * approach_direction
 			var start_position := impact_position + Vector2(diagonal_x, -flight_height - float(meteor_index % 4) * 14.0)
 			var meteor_position := start_position.lerp(impact_position, fall)
 			var velocity := (impact_position - start_position).normalized()

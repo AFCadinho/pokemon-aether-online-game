@@ -3,8 +3,8 @@
   "fps": 20,
   "sheet": "009-Weapon04",
   "tile_size": [
-    96,
-    96
+    192,
+    192
   ],
   "frames": [
     [

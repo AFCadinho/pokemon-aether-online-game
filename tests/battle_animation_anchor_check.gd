@@ -2,6 +2,7 @@ extends SceneTree
 
 const ROUTER_PATH := "res://scripts/battle/battle_animation_router.gd"
 const PLAYER_PATH := "res://scripts/battle/animations/move_animation_player.gd"
+const SPRITE_BOX_PATH := "res://scripts/battle/battle_ui/sprite_box.gd"
 
 var failed := false
 
@@ -9,19 +10,26 @@ var failed := false
 func _init() -> void:
 	var router_source := FileAccess.get_file_as_string(ROUTER_PATH)
 	var player_source := FileAccess.get_file_as_string(PLAYER_PATH)
+	var sprite_box_source := FileAccess.get_file_as_string(SPRITE_BOX_PATH)
 
 	_check_contains(router_source, "_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, overlay, config)", "overlay animations receive the live sheet anchor")
 	_check_contains(router_source, "_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, parent_node, config)", "fallback animations receive the live sheet anchor")
-	_check_contains(router_source, "dynamic_anchor_source - fixed_anchor", "fixed sheet coordinates are corrected from the current sprite anchor")
+	_check_contains(router_source, "var source_anchor_player_id := anchor_player_id", "sheet anchors resolve their canonical source side")
+	_check_contains(router_source, "var display_anchor_offset := -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset", "sheet anchor corrections return to display coordinates after mirroring")
 	_check_contains(router_source, "if animation_node == null or not animation_node.show_sheet_sprites:", "procedural-only animations cannot receive a duplicate sheet offset")
 	_check_contains(router_source, "display_position_to_battlefield_source(source_position)", "projectile anchors are converted before mirrored battlefield rendering")
+	_check_contains(router_source, "_reverse_battlefield_position(actor_anchor) + actor_offset", "explicit opponent projectile paths restore live actor anchors to display space")
+	_check_contains(router_source, "var source_actor_offset := -actor_offset if reverse_battlefield else actor_offset", "projectile offsets remain screen-relative when the opponent attacks")
 	_check_contains(router_source, '"field", "field_hazard", "screen":', "battlefield-wide animations remain globally anchored")
 	_check_contains(router_source, '"status_buff":\n\t\t\treturn actor_id', "self-buff animations follow their actor")
 	_check_contains(router_source, 'config.get("static_visual_anchor", "")', "catalog entries can override the default visual binding")
 	_check_contains(router_source, "_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)", "moves can flash their target at impact timing")
 	_check_contains(router_source, "func _should_suppress_target_feedback_for_miss", "misses can suppress hit-only target feedback")
 	_check_contains(router_source, "animation_node.heat_wave_config = _with_projectile_endpoint_anchors(", "heat waves receive live attacker and target anchors")
-	_check_contains(router_source, "animation_node.draco_meteor_config = _with_target_effect_anchor(animation_node.draco_meteor_config, target_anchor)", "Draco Meteor rain follows the live target anchor")
+	_check_contains(router_source, "animation_node.draco_meteor_config = _with_target_effect_anchor(", "Draco Meteor rain follows the live target anchor")
+	_check_contains(router_source, "animation_node.celestial_charge_config = _with_self_effect_anchor(", "Moonblast charge effects follow the live attacker anchor")
+	_check_contains(router_source, "actor_anchor += -center_offset if reverse_battlefield else center_offset", "self-effect offsets remain screen-relative for opposing users")
+	_check_contains(router_source, "target_anchor += -center_offset if reverse_battlefield else center_offset", "target-effect offsets remain screen-relative for opposing users")
 	_check_contains(router_source, "animation_node.focus_aura_config = (config.get(\"focus_aura\", {}) as Dictionary).duplicate(true)", "focus auras are configured through the move catalog")
 	_check_contains(router_source, "animation_node.stat_change_config = (config.get(\"stat_change\", {}) as Dictionary).duplicate(true)", "stat-change energy is configured through the effect catalog")
 	_check_contains(router_source, "animation_node.heal_energy_config = (config.get(\"heal_energy\", {}) as Dictionary).duplicate(true)", "healing energy is configured through the effect catalog")
@@ -36,11 +44,14 @@ func _init() -> void:
 	_check_contains(player_source, "if index < sheet_visible_start_frame:", "sheet impact effects can wait until their projectile arrives")
 	_check_contains(player_source, "func _draw_heat_wave_visual() -> void:", "moves can render a configurable multi-lane heat wave")
 	_check_contains(player_source, "func _draw_draco_meteor_visual() -> void:", "Draco Meteor can render staggered target-bound meteor rain")
+	_check_contains(player_source, "var approach_direction := -1.0 if reverse_battlefield else 1.0", "opposing Draco Meteors approach from the opponent's side")
 	_check_contains(player_source, "func _draw_draco_meteor_impact(", "Draco Meteor stops each projectile in an impact burst")
 	_check_contains(player_source, "func _draw_focus_aura_visual() -> void:", "status moves can render a reusable multicolor focus aura")
 	_check_contains(player_source, "func _draw_stat_change_visual() -> void:", "stat changes can render directional energy particles")
 	_check_contains(player_source, "func _draw_heal_energy_visual() -> void:", "recovery events can render compact rising healing energy")
 	_check_contains(player_source, 'var draw_layer := str(dark_pulse_config.get("draw_layer", "all"))', "Dark Pulse supports separate underlay and foreground passes")
+	_check_contains(sprite_box_source, "motion_direction: Vector2 = Vector2.ONE", "move actor motion supports two-axis battlefield direction")
+	_check_contains(sprite_box_source, "offset *= motion_direction", "opposing move actors invert both travel axes")
 
 	quit(1 if failed else 0)
 

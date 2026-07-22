@@ -127,6 +127,10 @@
           128,
           270
         ],
+        "center_offset": [
+          0,
+          46
+        ],
         "radius": 48.0,
         "ground_squash": 0.3,
         "particle_count": 18,
@@ -2782,6 +2786,10 @@
         "center": [
           128.0,
           210.0
+        ],
+        "center_offset": [
+          0.0,
+          -14.0
         ],
         "radius": 38.0,
         "alpha": 0.9
