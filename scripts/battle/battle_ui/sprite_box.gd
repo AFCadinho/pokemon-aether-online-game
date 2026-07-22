@@ -224,6 +224,9 @@ func play_move_actor_motion(motion_config: Dictionary = {}, horizontal_direction
 			active_tween.tween_property(sprite, "position", base_position + offset, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 			active_tween.tween_property(sprite, "rotation", rotation, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 			active_tween.tween_property(sprite, "scale", target_scale * scale_multiplier, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			if point.has("opacity"):
+				var opacity: float = clampf(float(point.get("opacity", 1.0)), 0.0, 1.0)
+				active_tween.tween_property(sprite, "modulate:a", opacity, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 	await active_tween.finished
 	_reset_sprites_pose(sprites)

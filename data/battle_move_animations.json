@@ -4452,7 +4452,10 @@
         "punch_interval": 0.09,
         "punch_travel": 0.34,
         "fist_scale": 0.56,
-        "center_offset": [0.0, -6.0],
+        "center_offset": [
+          0.0,
+          -6.0
+        ],
         "start_radius": 54.0,
         "impact_radius": 9.0
       },
@@ -4462,6 +4465,39 @@
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Bullet Punch.wav": "res://assets/battles/animations/bulletpunch/PRSFX- Bullet Punch.wav"
+      }
+    },
+    "extremespeed": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "speed_scale": 1.15,
+      "show_timing_backgrounds": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.86,
+      "actor_motion": {
+        "enabled": true,
+        "duration": 0.9,
+        "points": [
+          {"at": 0.0, "offset": [0, 0], "rotation_degrees": 0, "scale": 1.0, "opacity": 1.0, "duration": 0.01},
+          {"at": 0.1, "offset": [26, -8], "rotation_degrees": -3, "scale": 1.05, "opacity": 0.34, "duration": 0.05},
+          {"at": 0.18, "offset": [72, -30], "rotation_degrees": 2, "scale": 1.06, "opacity": 1.0, "duration": 0.05},
+          {"at": 0.36, "offset": [178, -82], "rotation_degrees": 5, "scale": 1.08, "opacity": 0.22, "duration": 0.12},
+          {"at": 0.5, "offset": [128, -56], "rotation_degrees": -2, "scale": 1.04, "opacity": 1.0, "duration": 0.06},
+          {"at": 0.58, "offset": [78, -34], "rotation_degrees": -2, "scale": 1.03, "opacity": 0.38, "duration": 0.1},
+          {"at": 1.0, "offset": [0, 0], "rotation_degrees": 0, "scale": 1.0, "opacity": 1.0, "duration": 0.16}
+        ]
+      },
+      "data_path": "res://assets/battles/animations/extremespeed/extremespeed.json",
+      "sheet_path": "res://assets/battles/animations/extremespeed/PRAS- Strike.png",
+      "background_path": "res://assets/battles/animations/extremespeed/PRAS- Speed BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Extremespeed1.wav": "res://assets/battles/animations/extremespeed/PRSFX- Extremespeed1.wav",
+        "PRSFX- Extremespeed2.wav": "res://assets/battles/animations/extremespeed/PRSFX- Extremespeed2.wav"
       }
     }
   }
