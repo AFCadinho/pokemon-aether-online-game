@@ -22,6 +22,7 @@ enum BattleActionsPanelMode {
 const DEBUG_TRAINER_TEAM_DISPLAY := false
 const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animations/status_condition_overlay.gd")
+const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_slot_resolver.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
 const CALC_DRAWER_FIELD_MARGIN := 8.0
 const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
@@ -46,6 +47,7 @@ var mega_mechanic_label: Label
 var pending_mega_species_by_ident: Dictionary = {}
 var pvp_room_code := ""
 var pvp_match_id := ""
+var pvp_local_canonical_roster: Array = []
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
 var pvp_pending_team_preview_completion: Dictionary = {}
@@ -5090,6 +5092,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 	pvp_match_id = str(api_response.get("matchId", "")).strip_edges()
 	var display_response: Dictionary = action_flow.map_response_for_local_player(api_response)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null)
+	_capture_pvp_local_canonical_roster()
 
 	var is_team_preview_response := _should_show_team_preview(display_response)
 	var restored_history_log := false
@@ -5156,6 +5159,7 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_response_order.reset()
+	pvp_local_canonical_roster.clear()
 	pending_battle_end_result.clear()
 	battle_end_signal_emitted = false
 	battle_result_overlay.visible = false
@@ -7937,10 +7941,19 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		return
 
 	var selected_pokemon_data := _get_party_grid_selected_pokemon_data(slot)
+	var submit_slot := _get_canonical_switch_submit_slot(slot, selected_pokemon_data)
+	if _is_pvp_battle() and submit_slot <= 0:
+		current_action_panel.set_message("Could not verify that Pokemon's team slot. Please try again.")
+		push_warning(
+			"Blocked PvP switch with unresolved canonical party slot visualSlot=%d selected=%s" % [
+				slot,
+				_describe_pokemon_debug_ref(selected_pokemon_data),
+			]
+		)
+		return
 	if not _can_switch_to_selected_pokemon(slot, selected_pokemon_data):
 		return
 
-	var submit_slot := _get_canonical_switch_submit_slot(slot, selected_pokemon_data)
 	var pvp_switch_context := {
 		"incoming_name": _get_switch_confirmation_pokemon_name(selected_pokemon_data),
 		"replaced_name": _get_active_display_species(_get_local_state_player_id()),
@@ -11226,10 +11239,14 @@ func _get_party_grid_selected_pokemon_data(visual_slot: int) -> Dictionary:
 	return {}
 
 func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	if _is_pvp_battle() and pokemon_data.is_empty():
+		return -1
 	if _is_pvp_battle() and not pokemon_data.is_empty():
 		var resolved_slot := _resolve_pvp_selected_local_party_slot(visual_slot, pokemon_data)
 		if resolved_slot > 0:
 			return resolved_slot
+		if not pvp_local_canonical_roster.is_empty():
+			return -1
 
 	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if canonical_slot > 0:
@@ -11237,19 +11254,24 @@ func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionar
 
 	if _is_pvp_battle() and not pokemon_data.is_empty():
 		push_warning(
-			"PvP switch selection has no canonical party slot; falling back to visual slot %d pokemonKey=%s" % [
+			"PvP switch selection has no canonical party slot; refusing visual slot fallback %d pokemonKey=%s" % [
 				visual_slot,
 				str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))),
 			]
 		)
+		return -1
 
 	return visual_slot
 
 func _get_canonical_lead_submit_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	if _is_pvp_battle() and pokemon_data.is_empty():
+		return -1
 	if _is_pvp_battle() and not pokemon_data.is_empty():
 		var resolved_slot := _resolve_pvp_selected_local_party_slot(visual_slot, pokemon_data)
 		if resolved_slot > 0:
 			return resolved_slot
+		if not pvp_local_canonical_roster.is_empty():
+			return -1
 
 	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if canonical_slot > 0:
@@ -11257,17 +11279,33 @@ func _get_canonical_lead_submit_slot(visual_slot: int, pokemon_data: Dictionary)
 
 	if _is_pvp_battle() and not pokemon_data.is_empty():
 		push_warning(
-			"PvP lead selection has no canonical party slot; falling back to visual slot %d pokemonKey=%s partySlot=%s metadataSlot=%s" % [
+			"PvP lead selection has no canonical party slot; refusing visual slot fallback %d pokemonKey=%s partySlot=%s metadataSlot=%s" % [
 				visual_slot,
 				str(pokemon_data.get("pokemonKey", pokemon_data.get("pokemon_key", ""))),
 				str(pokemon_data.get("partySlot", pokemon_data.get("party_slot", ""))),
 				str(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", ""))),
 			]
 		)
+		return -1
 
 	return visual_slot
 
 func _resolve_pvp_selected_local_party_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
+	if not pvp_local_canonical_roster.is_empty():
+		var roster_slot: int = BATTLE_PARTY_SLOT_RESOLVER.resolve_selected_slot(
+			pokemon_data,
+			pvp_local_canonical_roster
+		)
+		if roster_slot > 0:
+			var declared_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+			if roster_slot != declared_slot:
+				_log_pvp_slot_resolution_correction("local-roster", visual_slot, declared_slot, roster_slot, pokemon_data)
+			return roster_slot
+
+		# The local roster is the immutable team submitted for this match. Once it
+		# exists, ambiguous request metadata must not fall through to a visual index.
+		return -1
+
 	var local_state_player_id := _get_local_state_player_id()
 	var metadata_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if metadata_slot > 0:
@@ -11376,6 +11414,10 @@ func _log_pvp_slot_resolution_correction(
 	pass
 
 func _get_pokemon_data_canonical_party_slot(pokemon_data: Dictionary) -> int:
+	var canonical_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["canonicalPartySlot", "canonical_party_slot"])
+	if canonical_slot > 0:
+		return canonical_slot
+
 	var party_slot := _get_positive_slot_from_pokemon_data(pokemon_data, ["partySlot", "party_slot"])
 	if party_slot > 0:
 		return party_slot
@@ -11409,14 +11451,18 @@ func _get_positive_slot_from_pokemon_data(pokemon_data: Dictionary, keys: Array)
 	return -1
 
 func _can_choose_lead_slot(slot: int, pokemon_data: Dictionary = {}) -> bool:
-	var team := battle_state.get_player_team("p1")
-	if slot < 1 or slot > team.size():
+	var team_size := pvp_local_canonical_roster.size() if _is_pvp_battle() and not pvp_local_canonical_roster.is_empty() else battle_state.get_player_team("p1").size()
+	if slot < 1 or slot > team_size:
 		return false
 
 	if not pokemon_data.is_empty() and not _is_pokemon_data_usable_for_lead(pokemon_data):
 		return false
 
-	var team_pokemon := _get_team_pokemon_data_for_canonical_party_slot("p1", slot)
+	var team_pokemon: Dictionary = {}
+	if _is_pvp_battle() and not pvp_local_canonical_roster.is_empty():
+		team_pokemon = BATTLE_PARTY_SLOT_RESOLVER.get_roster_pokemon_for_slot(pvp_local_canonical_roster, slot)
+	else:
+		team_pokemon = _get_team_pokemon_data_for_canonical_party_slot("p1", slot)
 	if team_pokemon.is_empty():
 		return false
 
@@ -11442,6 +11488,21 @@ func _get_team_pokemon_data_for_canonical_party_slot(player_id: String, canonica
 			return fallback_value as Dictionary
 
 	return {}
+
+func _capture_pvp_local_canonical_roster() -> void:
+	pvp_local_canonical_roster.clear()
+	for index in range(PlayerSave.party.size()):
+		var saved_pokemon: Pokemon = PlayerSave.party[index] as Pokemon
+		if saved_pokemon == null:
+			continue
+
+		var pokemon_data: Dictionary = saved_pokemon.to_battle_dict()
+		var canonical_slot := index + 1
+		pokemon_data["canonicalPartySlot"] = canonical_slot
+		pokemon_data["partySlot"] = canonical_slot
+		pokemon_data["metadataSlot"] = canonical_slot
+		pokemon_data["pokemonKey"] = "%s:slot:%d" % [_get_local_state_player_id(), canonical_slot]
+		pvp_local_canonical_roster.append(pokemon_data)
 
 func _is_pokemon_data_usable_for_lead(pokemon_data: Dictionary) -> bool:
 	if bool(pokemon_data.get("fainted", false)):
@@ -11586,6 +11647,7 @@ func _normalize_pvp_local_display_team_slots(display_team: Array) -> Array:
 		_repair_pvp_local_display_species_from_ident(pokemon_data)
 		var resolved_slot := _resolve_pvp_selected_local_party_slot(index + 1, pokemon_data)
 		if resolved_slot > 0:
+			pokemon_data["canonicalPartySlot"] = resolved_slot
 			pokemon_data["partySlot"] = resolved_slot
 			pokemon_data["metadataSlot"] = resolved_slot
 			pokemon_data["pokemonKey"] = "%s:slot:%d" % [_get_local_state_player_id(), resolved_slot]
@@ -11594,15 +11656,14 @@ func _normalize_pvp_local_display_team_slots(display_team: Array) -> Array:
 	return _sort_pokemon_display_team_by_canonical_slot(normalized_team)
 
 func _repair_pvp_local_display_species_from_ident(pokemon_data: Dictionary) -> void:
+	# Showdown ident is nickname-capable. Never replace explicit species data
+	# with the text after "p1: "; that can turn a nickname into a fake species.
+	for key in ["species", "details", "displaySpecies"]:
+		if str(pokemon_data.get(key, "")).strip_edges() != "":
+			return
+
 	var ident_species := _get_species_from_battle_ident(str(pokemon_data.get("ident", "")))
 	if ident_species == "":
-		return
-
-	var payload_species := _get_pokemon_data_compare_species(pokemon_data)
-	var ident_compare_species := _normalize_species_for_compare(ident_species)
-	if payload_species != "" and payload_species == ident_compare_species:
-		return
-	if _is_specific_battle_form_species(str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))):
 		return
 
 	pokemon_data["species"] = ident_species
