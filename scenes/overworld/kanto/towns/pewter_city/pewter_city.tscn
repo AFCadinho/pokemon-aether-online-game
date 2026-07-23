@@ -231,6 +231,9 @@ shape = SubResource("RectangleShape2D_2mtwu")
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1851330212]
 position = Vector2(1424, 1520)
+script = ExtResource("2_jtxgn")
+target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn"
+target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=170342928]
 position = Vector2(0, -16)
@@ -398,3 +401,4 @@ position = Vector2(1520, 1488)
 position = Vector2(1424, 1488)
 
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bfy37wf81vi6g"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_center/pokemon_center.visual.tscn" id="1_7j0le"]
+
+[node name="PokecenterTemplate" type="Node2D" unique_id=1877715722]
+
+[node name="PokémonCenter" parent="." unique_id=1140960568 instance=ExtResource("1_7j0le")]

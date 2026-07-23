@@ -1,11 +1,11 @@
-[gd_resource type="TileSet" format=3 uid="uid://2t4bfm2rog58"]
+[gd_resource type="TileSet" format=3 uid="uid://3g2t5vhiscrw"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_7uwux"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_2b1qc"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_i4t07"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_laboratory/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_tf0t5"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_laboratory/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_yet4q"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_laboratory/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_f3n5e"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbqjh"]
-texture = ExtResource("1_7uwux")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b852n"]
+texture = ExtResource("1_tf0t5")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 1:0/0 = 0
@@ -2056,8 +2056,8 @@ texture_region_size = Vector2i(32, 32)
 6:255/0 = 0
 7:255/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c6uxv"]
-texture = ExtResource("2_2b1qc")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aodro"]
+texture = ExtResource("2_yet4q")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 1:0/0 = 0
@@ -4108,8 +4108,8 @@ texture_region_size = Vector2i(32, 32)
 6:255/0 = 0
 7:255/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ghf17"]
-texture = ExtResource("3_i4t07")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xrhc0"]
+texture = ExtResource("3_f3n5e")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 1:0/0 = 0
@@ -5834,9 +5834,9 @@ texture_region_size = Vector2i(32, 32)
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_lbqjh")
-sources/2049 = SubResource("TileSetAtlasSource_c6uxv")
-sources/4097 = SubResource("TileSetAtlasSource_ghf17")
+sources/1 = SubResource("TileSetAtlasSource_b852n")
+sources/2049 = SubResource("TileSetAtlasSource_aodro")
+sources/4097 = SubResource("TileSetAtlasSource_xrhc0")
 metadata/tiled_source_signature = "32
 32
 |
@@ -5849,7 +5849,7 @@ Indoors Tileset_0
 0
 2048
 8
-res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res
+res://generated/tiled_visuals/pokemon_laboratory/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res
 |
 2049
 /home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/Indoors Tileset.tsx
@@ -5860,7 +5860,7 @@ Indoors Tileset_1
 0
 2048
 8
-res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res
+res://generated/tiled_visuals/pokemon_laboratory/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res
 |
 4097
 /home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/Indoors Tileset.tsx
@@ -5871,5 +5871,5 @@ Indoors Tileset_2
 0
 1720
 8
-res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res"
-metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/Pokémon Center.tmx"
+res://generated/tiled_visuals/pokemon_laboratory/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res"
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/Pokémon Laboratory.tmx"
