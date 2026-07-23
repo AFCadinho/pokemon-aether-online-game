@@ -2,6 +2,8 @@ extends SceneTree
 
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
+const PARTY_SLOT_SCENE_PATH := "res://scenes/interface/party_slot.tscn"
+const PARTY_SLOT_SCRIPT_PATH := "res://scripts/ui/party_slot.gd"
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const SETTINGS_MANAGER_PATH := "res://scripts/services/settings_manager.gd"
 
@@ -11,11 +13,15 @@ var failed := false
 func _init() -> void:
 	var scene_source := FileAccess.get_file_as_string(OVERLAY_SCENE_PATH)
 	var script_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
+	var party_slot_scene_source := FileAccess.get_file_as_string(PARTY_SLOT_SCENE_PATH)
+	var party_slot_script_source := FileAccess.get_file_as_string(PARTY_SLOT_SCRIPT_PATH)
 	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	var settings_source := FileAccess.get_file_as_string(SETTINGS_MANAGER_PATH)
 	var hotbar_block := _node_block(scene_source, '[node name="HotkeySidebar"')
 	var player_status_block := _node_block(scene_source, '[node name="PlayerStatusPanel"')
 	var party_block := _node_block(scene_source, '[node name="PartyPanel"')
+	var party_margin_block := _node_block(scene_source, '[node name="MarginContainer" type="MarginContainer" parent="Control/PartyPanel"')
+	var party_container_block := _node_block(scene_source, '[node name="VBoxContainer" type="VBoxContainer" parent="Control/PartyPanel/MarginContainer"')
 	var chat_block := _node_block(scene_source, '[node name="ChatPanel"')
 	var chat_tabs_block := _node_block(scene_source, '[node name="ChatTabsPanel"')
 	var global_buffs_block := _node_block(scene_source, '[node name="GlobalBuffsPanel"')
@@ -27,7 +33,16 @@ func _init() -> void:
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
-	_check(party_block.contains("offset_top = 160.0"), "normal party leaves clear space above the chat")
+	_check(party_block.contains("offset_top = 132.0"), "normal party sits higher while clearing the top toolbar")
+	_check(party_margin_block.contains("margin_top = 7") and party_container_block.contains("separation = 5"), "normal party rail uses compact spacing")
+	_check(script_source.contains("func _make_party_panel_style()"), "normal party uses a dedicated lighter glass rail")
+	_check(party_slot_scene_source.contains("custom_minimum_size = Vector2(260, 68)"), "normal party slots use a compact readable height")
+	_check(party_slot_scene_source.contains('[node name="LeadAccent" type="Panel" parent="ClickButton"]'), "lead Pokémon accent avoids PanelContainer stretching")
+	_check(party_slot_scene_source.contains("custom_minimum_size = Vector2(160, 16)"), "party HP bars use a slimmer profile")
+	_check(party_slot_scene_source.contains('text = "✦"'), "Shiny state uses a compact sparkle instead of a heavy card border")
+	_check(party_slot_script_source.contains("func _update_health_bar_style()"), "party HP bars adapt their color to remaining health")
+	_check(party_slot_script_source.contains("func set_dragging(value: bool)") and party_slot_script_source.contains("func set_drop_target(value: bool)"), "party slots distinguish dragging and drop targets")
+	_check(script_source.contains("_set_party_drag_drop_target(_get_party_slot_index_at_position"), "party dragging previews the destination slot")
 	_check(not player_status_block.contains("anchors_preset = 2"), "mini trainer card keeps its inherited bottom-right layout")
 	_check(chat_block.contains("anchors_preset = 2"), "chat is anchored bottom-left")
 	_check(chat_tabs_block.contains("anchors_preset = 2"), "chat tabs follow the left-side chat")

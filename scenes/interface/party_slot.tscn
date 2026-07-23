@@ -3,45 +3,47 @@
 [ext_resource type="Script" uid="uid://dmbromlkpmfd" path="res://scripts/ui/party_slot.gd" id="1_kmnus"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmnus"]
-bg_color = Color(0.050980393, 0.08235294, 0.13725491, 0.94)
+bg_color = Color(0.03137255, 0.07058824, 0.12156863, 0.86)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.19215687, 0.3137255, 0.4392157, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nd8rq"]
-bg_color = Color(0.105882354, 0.14509805, 0.21176471, 1)
+border_color = Color(0.17254902, 0.29803923, 0.4392157, 0.72)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nd8rq"]
+bg_color = Color(0.023529412, 0.043137256, 0.07450981, 0.92)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rmfdk"]
 bg_color = Color(0.34509805, 0.8509804, 0.4392157, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exp_bg"]
-bg_color = Color(0.039215688, 0.047058824, 0.0627451, 0.95)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.6313726, 0.7294118, 0.84705883, 0.72)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+bg_color = Color(0.023529412, 0.043137256, 0.07450981, 0.88)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exp_fill"]
-bg_color = Color(0.38431373, 0.7490196, 1, 1)
+bg_color = Color(0.3372549, 0.7019608, 0.96862745, 0.92)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lead_accent"]
+bg_color = Color(0.9490196, 0.75686276, 0.27450982, 0.96)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -58,23 +60,23 @@ corner_radius_bottom_left = 2
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jup6d"]
 
 [node name="PartySlot" type="PanelContainer" unique_id=899956667]
-custom_minimum_size = Vector2(260, 76)
+custom_minimum_size = Vector2(260, 68)
 theme_override_styles/panel = SubResource("StyleBoxFlat_kmnus")
 script = ExtResource("1_kmnus")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1270644811]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1102260050]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 7
 
 [node name="PokemonSprite" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=595868958]
-custom_minimum_size = Vector2(54, 54)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -84,7 +86,7 @@ stretch_mode = 5
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1673202340]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 3
+theme_override_constants/separation = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=890851186]
 layout_mode = 2
@@ -97,14 +99,19 @@ tooltip_text = "Shiny Pokemon"
 theme_override_colors/font_color = Color(1, 0.84313726, 0.3529412, 1)
 theme_override_colors/font_outline_color = Color(0.12, 0.08, 0.02, 0.9)
 theme_override_constants/outline_size = 1
-theme_override_font_sizes/font_size = 18
-text = "S"
+theme_override_font_sizes/font_size = 14
+text = "✦"
 vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=714565378]
 custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95686275, 0.96862745, 0.9882353, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.05882353, 0.10980392, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
 text = "Archaludon"
 text_overrun_behavior = 3
 
@@ -122,19 +129,25 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(46, 0)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0.6745098, 0.75686276, 0.84705883, 1)
+theme_override_font_sizes/font_size = 12
 text = "Lv.100"
 horizontal_alignment = 2
 
 [node name="HPBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1214713841]
-custom_minimum_size = Vector2(160, 22)
+custom_minimum_size = Vector2(160, 16)
 layout_mode = 2
 size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.96862745, 0.9843137, 1, 1)
+theme_override_colors/font_outline_color = Color(0.007843138, 0.02745098, 0.047058824, 0.95)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 10
 theme_override_styles/background = SubResource("StyleBoxFlat_nd8rq")
 theme_override_styles/fill = SubResource("StyleBoxFlat_rmfdk")
 value = 100.0
 
 [node name="ExpBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1544924806]
-custom_minimum_size = Vector2(160, 5)
+custom_minimum_size = Vector2(160, 3)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_exp_bg")
@@ -151,3 +164,17 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_rmfdk")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_ohghb")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_jup6d")
 flat = true
+
+[node name="LeadAccent" type="Panel" parent="ClickButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 2.0
+offset_top = -22.0
+offset_right = 5.0
+offset_bottom = 22.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lead_accent")

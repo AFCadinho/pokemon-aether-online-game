@@ -4,22 +4,20 @@ signal drag_started(slot_index: int)
 signal drag_released(slot_index: int, global_position: Vector2)
 signal clicked(slot_index: int)
 
-const SLOT_BG := Color("#111e31f4")
-const SLOT_BORDER := Color("#628bb8")
-const SLOT_HOVER_BG := Color("#17345af8")
-const SLOT_HOVER_BORDER := Color("#c5e0ff")
-const SHINY_SLOT_BG := Color("#121d2df4")
-const SHINY_SLOT_BORDER := Color("#8f7847")
-const SHINY_SLOT_HOVER_BG := Color("#2b2740f8")
-const SHINY_SLOT_HOVER_BORDER := Color("#f0ca72")
-const SLOT_SHADOW := Color(0.16, 0.24, 0.34, 0.0)
-const SLOT_HOVER_SHADOW := Color(0.58, 0.78, 1.0, 0.24)
-const SHINY_SLOT_SHADOW := Color(0.58, 0.46, 0.24, 0.05)
-const SHINY_SLOT_HOVER_SHADOW := Color(0.95, 0.72, 0.32, 0.18)
+const SLOT_BG := Color("#081321dc")
+const SLOT_BORDER := Color("#2c5076b8")
+const SLOT_HOVER_BG := Color("#10243cf2")
+const SLOT_HOVER_BORDER := Color("#69b9e8")
+const SLOT_PRESSED_BG := Color("#132c49fa")
+const SLOT_PRESSED_BORDER := Color("#8ed7ff")
+const SLOT_DROP_BG := Color("#102c3df8")
+const SLOT_DROP_BORDER := Color("#63e6d0")
+const SLOT_SHADOW := Color(0.0, 0.0, 0.0, 0.18)
+const SLOT_HOVER_SHADOW := Color(0.36, 0.7, 0.95, 0.18)
+const SLOT_PRESSED_SHADOW := Color(0.42, 0.78, 1.0, 0.28)
+const SLOT_DROP_SHADOW := Color(0.34, 0.94, 0.78, 0.3)
 const SLOT_BORDER_WIDTH := 1
-const SHINY_SLOT_BORDER_WIDTH := 2
-const SLOT_SHADOW_SIZE := 0
-const SHINY_SLOT_SHADOW_SIZE := 8
+const SLOT_SHADOW_SIZE := 3
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
 const STATUS_ICON_WIDTH := 44
 const STATUS_ICON_HEIGHT := 16
@@ -39,12 +37,17 @@ const STATUS_ICON_ROWS := {
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/HPBar
 @onready var exp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/ExpBar
 @onready var click_button: Button = $ClickButton
+@onready var lead_accent: Panel = $ClickButton/LeadAccent
 @onready var seperator: Control = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Seperator
 @onready var level_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LevelLabel
 
 var slot_index: int = -1
 var press_global_position: Vector2 = Vector2.ZERO
 var is_hovered: bool = false
+var is_pressed: bool = false
+var is_dragging: bool = false
+var is_drop_target: bool = false
+var is_lead: bool = false
 var current_is_shiny: bool = false
 var held_item_marker: Control
 var status_icon_texture_cache: Dictionary = {}
@@ -61,10 +64,12 @@ func _ready() -> void:
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):
 		click_button.mouse_exited.connect(_on_click_button_mouse_exited)
 	_setup_held_item_marker()
+	_refresh_lead_accent()
 	_apply_slot_style()
 	
 func set_pokemon(pokemon: Pokemon) -> void:
 	visible = true
+	_refresh_lead_accent()
 	current_is_shiny = pokemon.shiny
 	name_label.text = pokemon.species
 	name_label.tooltip_text = pokemon.species
@@ -72,6 +77,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	level_label.text = "Lv. " + str(pokemon.level)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
+	_update_health_bar_style()
 	_update_experience_bar(pokemon)
 	
 	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
@@ -82,6 +88,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	visible = true
+	_refresh_lead_accent()
 	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", ""))).strip_edges()
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
@@ -94,6 +101,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	level_label.text = "Lv. " + str(level) if level > 0 else ""
 	hp_bar.max_value = max_hp
 	hp_bar.value = clampi(current_hp, 0, max_hp)
+	_update_health_bar_style()
 	exp_bar.value = 0.0
 	exp_bar.visible = false
 	pokemon_sprite.texture = PokemonAssets.load_party_icon(species, is_shiny)
@@ -106,6 +114,9 @@ func set_empty() -> void:
 	visible = false
 	current_is_shiny = false
 	is_hovered = false
+	is_pressed = false
+	is_dragging = false
+	is_drop_target = false
 	name_label.text = ""
 	name_label.tooltip_text = ""
 	shiny_badge.visible = false
@@ -116,7 +127,28 @@ func set_empty() -> void:
 	exp_bar.value = 0.0
 	exp_bar.visible = false
 	click_button.disabled = true
+	_refresh_lead_accent()
 	_apply_slot_style()
+
+func set_lead(value: bool) -> void:
+	is_lead = value
+	_refresh_lead_accent()
+
+func set_dragging(value: bool) -> void:
+	is_dragging = value
+	if not value:
+		is_pressed = false
+	_apply_slot_style()
+
+func set_drop_target(value: bool) -> void:
+	if is_drop_target == value:
+		return
+	is_drop_target = value
+	_apply_slot_style()
+
+func _refresh_lead_accent() -> void:
+	if lead_accent != null:
+		lead_accent.visible = is_lead and visible
 
 func _setup_held_item_marker() -> void:
 	if held_item_marker != null:
@@ -250,9 +282,13 @@ func _on_click_button_gui_input(event: InputEvent) -> void:
 		return
 
 	if mouse_event.pressed:
+		is_pressed = true
+		_apply_slot_style()
 		press_global_position = mouse_event.global_position
 		drag_started.emit(slot_index)
 	else:
+		is_pressed = false
+		_apply_slot_style()
 		if press_global_position.distance_to(mouse_event.global_position) <= 6.0:
 			clicked.emit(slot_index)
 		drag_released.emit(slot_index, mouse_event.global_position)
@@ -271,18 +307,32 @@ func _apply_slot_style() -> void:
 	var shadow: Color = SLOT_SHADOW
 	var border_width: int = SLOT_BORDER_WIDTH
 	var shadow_size: int = SLOT_SHADOW_SIZE
-	if current_is_shiny:
-		background = SHINY_SLOT_BG
-		border = SHINY_SLOT_BORDER
-		shadow = SHINY_SLOT_SHADOW
-		border_width = SHINY_SLOT_BORDER_WIDTH
-		shadow_size = SHINY_SLOT_SHADOW_SIZE
 	if is_hovered:
-		background = SHINY_SLOT_HOVER_BG if current_is_shiny else SLOT_HOVER_BG
-		border = SHINY_SLOT_HOVER_BORDER if current_is_shiny else SLOT_HOVER_BORDER
-		shadow = SHINY_SLOT_HOVER_SHADOW if current_is_shiny else SLOT_HOVER_SHADOW
+		background = SLOT_HOVER_BG
+		border = SLOT_HOVER_BORDER
+		shadow = SLOT_HOVER_SHADOW
+		shadow_size = 5
+	if is_pressed or is_dragging:
+		background = SLOT_PRESSED_BG
+		border = SLOT_PRESSED_BORDER
+		shadow = SLOT_PRESSED_SHADOW
+		shadow_size = 6
+	if is_drop_target:
+		background = SLOT_DROP_BG
+		border = SLOT_DROP_BORDER
+		shadow = SLOT_DROP_SHADOW
+		shadow_size = 7
 
 	add_theme_stylebox_override("panel", _make_slot_style(background, border, shadow, border_width, shadow_size))
+
+func _update_health_bar_style() -> void:
+	var ratio := hp_bar.value / maxf(hp_bar.max_value, 1.0)
+	var fill_color := Color("#58dc78")
+	if ratio <= 0.2:
+		fill_color = Color("#ef5c67")
+	elif ratio <= 0.5:
+		fill_color = Color("#efc34f")
+	hp_bar.add_theme_stylebox_override("fill", _make_bar_style(fill_color, 5))
 
 func _update_experience_bar(pokemon: Pokemon) -> void:
 	var current_level_exp: int = pokemon.current_level_exp
@@ -312,12 +362,21 @@ func _make_slot_style(
 	style.border_width_top = border_width
 	style.border_width_right = border_width
 	style.border_width_bottom = border_width
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_right = 12
-	style.corner_radius_bottom_left = 12
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_right = 8
+	style.corner_radius_bottom_left = 8
 	style.shadow_color = shadow
 	style.shadow_size = shadow_size
-	style.shadow_offset = Vector2(0, 2)
+	style.shadow_offset = Vector2(0, 1)
+	return style
+
+func _make_bar_style(color: Color, corner_radius: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = color
+	style.corner_radius_top_left = corner_radius
+	style.corner_radius_top_right = corner_radius
+	style.corner_radius_bottom_right = corner_radius
+	style.corner_radius_bottom_left = corner_radius
 	return style
 	

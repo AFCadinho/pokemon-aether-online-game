@@ -14109,6 +14109,13 @@ func _make_glass_panel_style(corner_radius: int = 10, border_width: int = 1) -> 
 	style.shadow_offset = Vector2(0, 4)
 	return style
 
+func _make_party_panel_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#050c16b8"), Color("#28486699"), 10, 1)
+	style.shadow_color = Color(0, 0, 0, 0.32)
+	style.shadow_size = 7
+	style.shadow_offset = Vector2(0, 3)
+	return style
+
 
 func _make_chat_panel_style() -> StyleBoxFlat:
 	var style := _make_panel_style(Color("#040912ed"), Color("#38658b"), 10, 1)
@@ -14343,7 +14350,7 @@ func _on_icon_slot_mouse_exited(panel: PanelContainer) -> void:
 	_apply_icon_slot_hover_style(panel, false)
 
 func _apply_premium_overlay_styles() -> void:
-	party_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	party_panel.add_theme_stylebox_override("panel", _make_party_panel_style())
 	chat_panel.add_theme_stylebox_override("panel", _make_chat_panel_style())
 	message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())
 	message_list.add_theme_constant_override("separation", 5)
@@ -14929,6 +14936,8 @@ func _refresh_party() -> void:
 	for slot_number in range(party_slots.size()):
 		var slot = party_slots[slot_number]
 		slot.set("slot_index", slot_number)
+		if slot.has_method("set_lead"):
+			slot.call("set_lead", slot_number == 0)
 
 		if slot_number < display_party.size():
 			var pokemon_value: Variant = display_party[slot_number]
@@ -15008,6 +15017,8 @@ func _start_party_drag_visual(slot_index: int) -> void:
 	var source_global_rect := party_drag_source_slot.get_global_rect()
 	party_drag_pointer_offset = party_drag_source_slot.get_global_mouse_position() - source_global_rect.position
 	party_drag_start_mouse_position = party_drag_source_slot.get_global_mouse_position()
+	if party_drag_source_slot.has_method("set_dragging"):
+		party_drag_source_slot.call("set_dragging", true)
 	party_drag_source_slot.modulate = Color(1.0, 1.0, 1.0, 0.35)
 	var workspace := get_node_or_null("/root/TradeWorkspace")
 	var pokemon: Pokemon = PlayerSave.party[slot_index]
@@ -15020,6 +15031,8 @@ func _start_party_drag_visual(slot_index: int) -> void:
 	if party_drag_visual == null:
 		return
 
+	if party_drag_visual.has_method("set_dragging"):
+		party_drag_visual.call("set_dragging", true)
 	party_drag_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	party_drag_visual.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	party_drag_visual.custom_minimum_size = source_global_rect.size
@@ -15041,6 +15054,7 @@ func _update_party_drag_visual_position() -> void:
 
 	var local_mouse_position := root_control.get_local_mouse_position()
 	party_drag_visual.position = local_mouse_position - party_drag_pointer_offset
+	_set_party_drag_drop_target(_get_party_slot_index_at_position(get_viewport().get_mouse_position()))
 
 func _finish_party_drag(global_position: Vector2) -> void:
 	if not party_dragging:
@@ -15090,8 +15104,11 @@ func _try_offer_party_drag_to_trade(global_position: Vector2) -> bool:
 
 func _clear_party_drag_visual() -> void:
 	if party_drag_source_slot != null:
+		if party_drag_source_slot.has_method("set_dragging"):
+			party_drag_source_slot.call("set_dragging", false)
 		party_drag_source_slot.modulate = Color.WHITE
 	party_drag_source_slot = null
+	_set_party_drag_drop_target(-1)
 	if party_drag_workspace_preview:
 		var workspace := get_node_or_null("/root/TradeWorkspace")
 		if workspace != null and workspace.has_method("end_party_offer_drag"):
@@ -15101,6 +15118,12 @@ func _clear_party_drag_visual() -> void:
 	if party_drag_visual != null:
 		party_drag_visual.queue_free()
 	party_drag_visual = null
+
+func _set_party_drag_drop_target(target_index: int) -> void:
+	for slot_index in range(party_slots.size()):
+		var slot := party_slots[slot_index] as Control
+		if slot != null and slot.has_method("set_drop_target"):
+			slot.call("set_drop_target", slot_index == target_index and slot_index != party_drag_start_index)
 
 func _setup_chat_pokemon_attachment_preview() -> void:
 	_refresh_pending_chat_pokemon_attachment_preview()

@@ -549,7 +549,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_store_button_hover")
 layout_mode = 1
 anchors_preset = 0
 offset_left = 0.0
-offset_top = 160.0
+offset_top = 132.0
 offset_right = 282.0
 offset_bottom = 256.0
 grow_horizontal = 1
@@ -557,18 +557,18 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_grslb")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/PartyPanel" unique_id=2122536773]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 7
+theme_override_constants/margin_bottom = 7
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/PartyPanel/MarginContainer" unique_id=1573994115]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 5
 alignment = 1
 
 [node name="PartySlot" parent="Control/PartyPanel/MarginContainer/VBoxContainer" unique_id=899956667 instance=ExtResource("1_grslb")]
-custom_minimum_size = Vector2(260, 44)
+custom_minimum_size = Vector2(260, 68)
 layout_mode = 2
 
 [node name="ChatTabsPanel" type="Control" parent="Control" unique_id=1039747907]
