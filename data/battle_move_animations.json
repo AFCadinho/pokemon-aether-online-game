@@ -5153,6 +5153,72 @@
         "Fire2": "res://assets/battles/animations/pyroball/Fire2.ogg",
         "RockFall1": "res://assets/battles/animations/pyroball/RockFall1.wav"
       }
+    },
+    "courtchange": {
+      "template": "custom_godot_effect",
+      "category": "field",
+      "static_visual_anchor": "battlefield",
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "court_change": {
+        "enabled": true,
+        "visible_start": 0.03,
+        "visible_end": 0.94,
+        "fade_in": 0.08,
+        "fade_out": 0.16,
+        "player_center": [
+          146.0,
+          232.0
+        ],
+        "enemy_center": [
+          366.0,
+          112.0
+        ],
+        "ring_radius": 76.0,
+        "ring_squash": 0.34,
+        "spin_speed": 0.2,
+        "swap_start": 0.18,
+        "swap_end": 0.78,
+        "arc_height": 46.0,
+        "trail_steps": 9,
+        "blue_color": [
+          0.06,
+          0.72,
+          1.0,
+          1.0
+        ],
+        "white_color": [
+          0.82,
+          0.98,
+          1.0,
+          1.0
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.48,
+        "peak": 0.56,
+        "end": 0.68,
+        "alpha": 0.08,
+        "color": [
+          0.42,
+          0.9,
+          1.0,
+          1.0
+        ]
+      },
+      "data_path": "res://assets/battles/animations/courtchange/courtchange.json",
+      "sheet_path": "",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Ally Switch.wav": "res://assets/battles/animations/courtchange/PRSFX- Ally Switch.wav"
+      }
     }
   }
 }

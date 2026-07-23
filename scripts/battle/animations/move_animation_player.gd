@@ -40,6 +40,7 @@ signal animation_finished
 @export var bullet_punch_config: Dictionary = {}
 @export var dark_pulse_config: Dictionary = {}
 @export var nasty_plot_config: Dictionary = {}
+@export var court_change_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -323,6 +324,7 @@ func _draw() -> void:
 	_draw_bullet_punch_visual()
 	_draw_dark_pulse_visual()
 	_draw_nasty_plot_visual()
+	_draw_court_change_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -592,6 +594,76 @@ func _draw_energy_blast_launch_ring(progress: float, aura_color: Color, ring_col
 		var ember_angle := spin * 0.65 + float(ember_index) * TAU / float(maxi(ember_count, 1))
 		var ember_center := center + Vector2(cos(ember_angle), sin(ember_angle)) * radius * (0.76 + 0.22 * sin(float(ember_index) + fade_progress * 4.0))
 		draw_circle(ember_center, 1.5 + float(ember_index % 2), _color_with_alpha(core_color, alpha * 0.8))
+
+
+func _draw_court_change_visual() -> void:
+	if not bool(court_change_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var total_frames: int = max(frames.size() - 1, 1)
+	var progress: float = clampf(float(frame_index) / float(total_frames), 0.0, 1.0)
+	var alpha := _get_timed_alpha(
+		progress,
+		float(court_change_config.get("visible_start", 0.02)),
+		float(court_change_config.get("visible_end", 0.96)),
+		court_change_config
+	)
+	if alpha <= 0.02:
+		return
+
+	var player_center := _battlefield_position(_vector2_from_value(court_change_config.get("player_center", [146.0, 232.0])))
+	var enemy_center := _battlefield_position(_vector2_from_value(court_change_config.get("enemy_center", [366.0, 112.0])))
+	var blue := _color_from_value(court_change_config.get("blue_color", [0.08, 0.76, 1.0, 1.0]), Color(0.08, 0.76, 1.0, 1.0))
+	var white := _color_from_value(court_change_config.get("white_color", [0.84, 0.98, 1.0, 1.0]), Color(0.84, 0.98, 1.0, 1.0))
+	var pulse := 0.82 + 0.18 * sin(float(frame_index) * 0.42)
+	var ring_radius := float(court_change_config.get("ring_radius", 72.0)) * (0.9 + 0.1 * pulse)
+	var ring_squash := float(court_change_config.get("ring_squash", 0.34))
+	var spin := float(frame_index) * float(court_change_config.get("spin_speed", 0.18))
+
+	_draw_court_change_ellipse(player_center, ring_radius, ring_squash, spin, blue, alpha * 0.38, 4.0)
+	_draw_court_change_ellipse(enemy_center, ring_radius, ring_squash, -spin, blue, alpha * 0.38, 4.0)
+	_draw_court_change_ellipse(player_center, ring_radius * 0.7, ring_squash, -spin * 1.3, white, alpha * 0.58, 2.0)
+	_draw_court_change_ellipse(enemy_center, ring_radius * 0.7, ring_squash, spin * 1.3, white, alpha * 0.58, 2.0)
+
+	var swap_start := clampf(float(court_change_config.get("swap_start", 0.2)), 0.0, 0.9)
+	var swap_end := clampf(float(court_change_config.get("swap_end", 0.76)), swap_start + 0.001, 1.0)
+	var swap_progress := clampf((progress - swap_start) / maxf(swap_end - swap_start, 0.001), 0.0, 1.0)
+	if swap_progress <= 0.0:
+		return
+
+	var arc_height := float(court_change_config.get("arc_height", 42.0))
+	var forward := player_center.lerp(enemy_center, swap_progress) + Vector2(0.0, -sin(swap_progress * PI) * arc_height)
+	var backward := enemy_center.lerp(player_center, swap_progress) + Vector2(0.0, sin(swap_progress * PI) * arc_height)
+	var trail_steps := maxi(2, int(court_change_config.get("trail_steps", 8)))
+	for trail_index in range(trail_steps, 0, -1):
+		var trail_progress := clampf(swap_progress - float(trail_index) * 0.045, 0.0, 1.0)
+		var forward_trail := player_center.lerp(enemy_center, trail_progress) + Vector2(0.0, -sin(trail_progress * PI) * arc_height)
+		var backward_trail := enemy_center.lerp(player_center, trail_progress) + Vector2(0.0, sin(trail_progress * PI) * arc_height)
+		var trail_alpha := alpha * (1.0 - float(trail_index) / float(trail_steps + 1)) * 0.22
+		draw_circle(forward_trail, 5.0, _color_with_alpha(blue, trail_alpha))
+		draw_circle(backward_trail, 5.0, _color_with_alpha(white, trail_alpha))
+
+	draw_circle(forward, 13.0 * pulse, _color_with_alpha(blue, alpha * 0.22))
+	draw_circle(forward, 6.0, _color_with_alpha(white, alpha * 0.95))
+	draw_circle(backward, 13.0 * pulse, _color_with_alpha(white, alpha * 0.2))
+	draw_circle(backward, 6.0, _color_with_alpha(blue, alpha * 0.95))
+
+	if swap_progress >= 0.48 and swap_progress <= 0.62:
+		var center := (player_center + enemy_center) * 0.5
+		var flash_alpha := alpha * (1.0 - absf(swap_progress - 0.55) / 0.07) * 0.48
+		draw_circle(center, 48.0 * pulse, _color_with_alpha(white, flash_alpha * 0.22))
+		draw_arc(center, 34.0 * pulse, 0.0, TAU, 48, _color_with_alpha(white, flash_alpha), 2.4)
+
+
+func _draw_court_change_ellipse(center: Vector2, radius: float, squash: float, phase: float, color: Color, alpha: float, width: float) -> void:
+	var segments := 48
+	var previous := center + Vector2(cos(phase) * radius, sin(phase) * radius * squash)
+	for segment in range(1, segments + 1):
+		var angle := phase + TAU * float(segment) / float(segments)
+		var point := center + Vector2(cos(angle) * radius, sin(angle) * radius * squash)
+		draw_line(previous, point, _color_with_alpha(color, alpha), width)
+		previous = point
 
 
 func _draw_energy_blast_impact(progress: float, visible_end: float, aura_color: Color, core_color: Color, ring_color: Color) -> void:

@@ -463,6 +463,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.bullet_punch_config = (config.get("bullet_punch", {}) as Dictionary).duplicate(true)
 	animation_node.dark_pulse_config = (config.get("dark_pulse", {}) as Dictionary).duplicate(true)
 	animation_node.nasty_plot_config = (config.get("nasty_plot", {}) as Dictionary).duplicate(true)
+	animation_node.court_change_config = (config.get("court_change", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -969,6 +970,14 @@ func _apply_move_projectile_endpoint_anchors(
 	var target_anchor_point := str(config.get("projectile_target_anchor_point", "center")).strip_edges().to_lower()
 	var actor_anchor_parent := _get_effect_target_anchor_in_parent(actor_id, parent_node, actor_anchor_point)
 	var target_anchor_parent := _get_effect_target_anchor_in_parent(target_id, parent_node, target_anchor_point)
+	var player_feet_parent := _get_effect_target_anchor_in_parent("p1", parent_node, "feet")
+	var enemy_feet_parent := _get_effect_target_anchor_in_parent("p2", parent_node, "feet")
+	if player_feet_parent != Vector2.ZERO and enemy_feet_parent != Vector2.ZERO:
+		animation_node.court_change_config = _with_court_change_anchors(
+			animation_node.court_change_config,
+			_parent_position_to_animation_source(animation_node, player_feet_parent),
+			_parent_position_to_animation_source(animation_node, enemy_feet_parent)
+		)
 	if actor_anchor_parent == Vector2.ZERO or target_anchor_parent == Vector2.ZERO:
 		return
 
@@ -1204,6 +1213,16 @@ func _with_target_effect_anchor(config: Dictionary, target_anchor: Vector2, reve
 	target_anchor += -center_offset if reverse_battlefield else center_offset
 	updated_config["center"] = [target_anchor.x, target_anchor.y]
 	updated_config.erase("center_offset")
+	return updated_config
+
+
+func _with_court_change_anchors(config: Dictionary, player_feet: Vector2, enemy_feet: Vector2) -> Dictionary:
+	if config.is_empty():
+		return config
+
+	var updated_config: Dictionary = config.duplicate(true)
+	updated_config["player_center"] = [player_feet.x, player_feet.y]
+	updated_config["enemy_center"] = [enemy_feet.x, enemy_feet.y]
 	return updated_config
 
 
