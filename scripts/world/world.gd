@@ -64,6 +64,7 @@ var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var pending_map_chat_messages: Dictionary = {}
 var pending_remote_player_interaction: Dictionary = {}
 var remote_player_interaction_pending := false
 var active_battle_kind := ""
@@ -1204,6 +1205,9 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 				avatar.connect("interaction_requested", interaction_callable)
 
 		avatar.call("apply_state", player_state)
+		if pending_map_chat_messages.has(user_key) and avatar.has_method("show_map_chat_message"):
+			avatar.call("show_map_chat_message", str(pending_map_chat_messages.get(user_key, "")))
+			pending_map_chat_messages.erase(user_key)
 
 	_sort_remote_player_avatar_nodes()
 
@@ -1245,8 +1249,30 @@ func _get_remote_player_avatar_user_id(avatar: Node) -> int:
 	return int(user_id_value)
 
 
+func show_map_chat_message(user_id: int, text: String, force_local: bool = false) -> void:
+	var cleaned_text := text.strip_edges()
+	if cleaned_text == "":
+		return
+	if force_local:
+		if player != null and player.has_method("show_map_chat_message"):
+			player.call("show_map_chat_message", cleaned_text)
+		return
+	if user_id <= 0:
+		return
+	if str(user_id) == str(PlayerSave.player_id).strip_edges():
+		if player != null and player.has_method("show_map_chat_message"):
+			player.call("show_map_chat_message", cleaned_text)
+		return
+	var avatar: Node2D = remote_player_avatars.get(str(user_id), null)
+	if avatar != null and is_instance_valid(avatar) and avatar.has_method("show_map_chat_message"):
+		avatar.call("show_map_chat_message", cleaned_text)
+		return
+	pending_map_chat_messages[str(user_id)] = cleaned_text
+
+
 func _clear_remote_players() -> void:
 	get_tree().call_group("player_interaction_coordinator", "close_for_map_transition")
+	pending_map_chat_messages.clear()
 	pending_remote_player_interaction.clear()
 	remote_player_interaction_pending = false
 	for avatar in remote_player_avatars.values():
@@ -1257,6 +1283,7 @@ func _clear_remote_players() -> void:
 
 func _remove_remote_player(user_id: int) -> void:
 	var user_key := str(user_id)
+	pending_map_chat_messages.erase(user_key)
 	var avatar: Node2D = remote_player_avatars.get(user_key, null)
 	remote_player_avatars.erase(user_key)
 	if avatar != null and is_instance_valid(avatar):

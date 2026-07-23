@@ -29,6 +29,7 @@ const EYES_SPRITE_NAME := "EyesSprite"
 const EYEBROWS_SPRITE_NAME := "EyebrowsSprite"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
+const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
@@ -162,6 +163,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 @onready var nameplate_label: Label = $Nameplate/NameLabel
 @onready var role_badge_panel: Panel = $Nameplate/RoleBadgePanel
 @onready var role_badge_label: Label = $Nameplate/RoleBadgePanel/RoleBadge
+var map_chat_bubble: PanelContainer
 
 # TileMapLayer nodes die speciale map-informatie bevatten.
 # Collision bevat de onzichtbare/blokkerende tegels.
@@ -495,6 +497,7 @@ func _ready() -> void:
 	_cache_appearance_sprites()
 	set_display_name(PlayerSave.player_name, true)
 	set_role_from_user(AuthService.current_user)
+	_setup_map_chat_bubble()
 	_setup_fishing_prompt()
 	_setup_surf_prompt()
 	FieldMoveService.refresh_owned_charms.call_deferred()
@@ -553,6 +556,23 @@ func _sync_nameplate_visibility(visible: bool) -> void:
 	var should_show_nameplate: bool = visible and SettingsManager.display_own_name and nameplate_label.text != ""
 	nameplate_label.visible = should_show_nameplate
 	nameplate.visible = should_show_nameplate
+
+
+func show_map_chat_message(text: String) -> void:
+	_setup_map_chat_bubble()
+	if map_chat_bubble != null:
+		map_chat_bubble.call("show_message", text)
+
+
+func _setup_map_chat_bubble() -> void:
+	if map_chat_bubble != null and is_instance_valid(map_chat_bubble):
+		return
+	var bubble_value: Variant = MapChatBubbleScript.new()
+	if not bubble_value is PanelContainer:
+		return
+	map_chat_bubble = bubble_value as PanelContainer
+	map_chat_bubble.name = "MapChatBubble"
+	add_child(map_chat_bubble)
 
 func _sync_nameplate_layout() -> void:
 	if nameplate_label == null:

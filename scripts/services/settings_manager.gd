@@ -15,12 +15,14 @@ const POKEMON_CRY_BUS := "Pokemon Cries"
 const UI_BUS := "UI"
 const NOTIFICATION_BUS := "Notifications"
 const CHAT_TAB_GENERAL := "general"
+const CHAT_TAB_MAP := "map"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_CLAN := "clan"
 const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_GENERAL,
 	CHAT_TAB_SYSTEM,
+	CHAT_TAB_MAP,
 	CHAT_TAB_PM,
 	CHAT_TAB_CLAN,
 ]
@@ -47,6 +49,7 @@ var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
 var chat_tab_visibility: Dictionary = {
 	CHAT_TAB_GENERAL: true,
+	CHAT_TAB_MAP: true,
 	CHAT_TAB_SYSTEM: true,
 	CHAT_TAB_PM: true,
 	CHAT_TAB_CLAN: true,
@@ -276,6 +279,7 @@ func set_chat_tab_preferences(visibility: Dictionary, order: Array[String]) -> v
 func reset_chat_tab_preferences() -> void:
 	set_chat_tab_preferences({
 		CHAT_TAB_GENERAL: true,
+		CHAT_TAB_MAP: true,
 		CHAT_TAB_SYSTEM: true,
 		CHAT_TAB_PM: true,
 		CHAT_TAB_CLAN: true,
@@ -318,6 +322,10 @@ func _validated_chat_tab_order(value: Variant) -> Array[String]:
 			var tab_id := str(tab_value)
 			if tab_id in DEFAULT_CHAT_TAB_ORDER and not order.has(tab_id):
 				order.append(tab_id)
+	if not order.has(CHAT_TAB_MAP):
+		var system_index := order.find(CHAT_TAB_SYSTEM)
+		if system_index >= 0:
+			order.insert(system_index + 1, CHAT_TAB_MAP)
 	for tab_id: String in DEFAULT_CHAT_TAB_ORDER:
 		if not order.has(tab_id):
 			order.append(tab_id)

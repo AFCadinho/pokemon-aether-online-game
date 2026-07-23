@@ -3,12 +3,14 @@
 ## 0.3.31 - 2026-07-23
 
 **Added**
+- Added a Map chat tab for nearby conversations, with messages briefly appearing above each speaking trainer.
 - Added new battle animations for Pyro Ball, Court Change, High Jump Kick, Sparkling Aria, Draining Kiss, Psychic Noise, Grassy Glide, Wood Hammer, Drain Punch, Superpower, Psychic Terrain, Grassy Terrain, Electric Terrain, and Misty Terrain.
 - Psychic, Grassy, Electric, and Misty Terrain now have their own animated battlefield effects that remain visible while active.
 - Added chat settings for choosing which main chat tabs are visible and changing their order.
 - Added early previews for the upcoming Quest Log, Donator Gems Store, Redeem Codes, server-wide and personal buffs, and Clan chat. These features are not fully active yet.
 
 **Changed**
+- General chat now opens on an All view that combines Global, Trade, Help, and system messages while keeping Global separately selectable.
 - Reorganized the overworld interface so the Party and chat sit on the left, while the hotbar and Trainer Card sit on the right. Party Pokémon remain clickable during battles so their summaries can still be opened.
 - The Battle UI now opens slightly farther to the right, leaving more room for the Party list and making the Battle Log button easier to spot.
 - Refreshed the Party list, Trainer Card, chatbox, menus, and navigation icons with a cleaner and more consistent style.
@@ -16,6 +18,7 @@
 - Terrain effects now use stronger colors and more visible particles across the battlefield.
 
 **Fixed**
+- Fixed Map chat messages appearing in the chatbox without showing a speech bubble above the speaking trainer.
 - Fixed some Ranked battles getting stuck after an opponent timed out, disconnected, or when a battle update arrived late.
 - Fixed moves such as Chilly Reception sometimes locking the battle controls before a replacement Pokémon could be chosen.
 - Fixed Team Preview and switch menus occasionally selecting a different Pokémon than the one clicked.

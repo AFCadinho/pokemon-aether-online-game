@@ -28,7 +28,9 @@ const CHAT_SEPARATOR_COLOR := "#778194"
 const CHAT_MESSAGE_COLOR := "#d7dce8"
 const CHAT_SYSTEM_LABEL_COLOR := "#d8b767"
 const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
+const CHAT_TAB_ALL := "all"
 const CHAT_TAB_GENERAL := "general"
+const CHAT_TAB_MAP := "map"
 const CHAT_TAB_TRADE := "trade"
 const CHAT_TAB_HELP := "help"
 const CHAT_TAB_SYSTEM := "system"
@@ -37,11 +39,13 @@ const CHAT_TAB_CLAN := "clan"
 const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_GENERAL,
 	CHAT_TAB_SYSTEM,
+	CHAT_TAB_MAP,
 	CHAT_TAB_PM,
 	CHAT_TAB_CLAN,
 ]
 const CHAT_TAB_LABELS := {
 	CHAT_TAB_GENERAL: "General",
+	CHAT_TAB_MAP: "Map",
 	CHAT_TAB_SYSTEM: "System",
 	CHAT_TAB_PM: "PM",
 	CHAT_TAB_CLAN: "Clan",
@@ -49,6 +53,7 @@ const CHAT_TAB_LABELS := {
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
 const CHAT_CHANNEL_GLOBAL := "global"
+const CHAT_CHANNEL_MAP := "map"
 const CHAT_CHANNEL_TRADE := "trade"
 const CHAT_CHANNEL_HELP := "help"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
@@ -705,7 +710,7 @@ var staff_teleport_player_selection_confirmed := false
 var staff_teleport_active_tab := "self"
 var staff_teleport_player_action_mode := "to_player"
 var chat_submit_in_progress: bool = false
-var active_chat_tab: String = CHAT_TAB_GENERAL
+var active_chat_tab: String = CHAT_TAB_ALL
 var pending_chat_pokemon_attachments: Array[Dictionary] = []
 var chat_pokemon_attachment_buttons: Array[Button] = []
 var pm_tab_button: Button
@@ -717,7 +722,8 @@ var chat_settings_popup: PanelContainer
 var chat_settings_rows: VBoxContainer
 var chat_tab_visibility: Dictionary = {}
 var chat_tab_order: Array[String] = []
-var selected_general_chat_tab := CHAT_TAB_GENERAL
+var selected_general_chat_tab := CHAT_TAB_ALL
+var map_chat_tab_button: Button
 var clan_chat_tab_button: Button
 var clan_chat_container: CenterContainer
 var chat_context_selector_button: Button
@@ -1083,6 +1089,7 @@ func _ready() -> void:
 	trade_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_TRADE))
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
 	_setup_help_chat_tab()
+	_setup_map_chat_tab()
 	_setup_pm_chat_ui()
 	_setup_clan_chat_ui()
 	_setup_chat_context_selector_ui()
@@ -1091,6 +1098,7 @@ func _ready() -> void:
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	clan_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
@@ -16361,6 +16369,7 @@ func _rebuild_chat_context_options() -> void:
 
 	var primary_tab := _active_primary_chat_tab_id()
 	if primary_tab == CHAT_TAB_GENERAL:
+		_add_chat_context_option("All", CHAT_TAB_ALL, active_chat_tab == CHAT_TAB_ALL)
 		_add_chat_context_option("Global", CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
 		_add_chat_context_option("Trade", CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
 		_add_chat_context_option("Help", CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
@@ -16415,7 +16424,7 @@ func _create_chat_context_option_button(label_text: String, selected: bool) -> B
 
 
 func _on_general_chat_context_selected(channel_tab_id: String) -> void:
-	if channel_tab_id not in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+	if channel_tab_id not in [CHAT_TAB_ALL, CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
 		return
 	selected_general_chat_tab = channel_tab_id
 	active_chat_tab = channel_tab_id
@@ -16437,7 +16446,7 @@ func _hide_chat_context_popup() -> void:
 
 
 func _active_primary_chat_tab_id() -> String:
-	if active_chat_tab in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+	if active_chat_tab in [CHAT_TAB_ALL, CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
 		return CHAT_TAB_GENERAL
 	return active_chat_tab
 
@@ -16451,13 +16460,19 @@ func _refresh_chat_context_selector() -> void:
 	chat_context_selector_button.disabled = false
 	match primary_tab:
 		CHAT_TAB_GENERAL:
-			var channel_label := "Global"
-			if active_chat_tab == CHAT_TAB_TRADE:
+			var channel_label := "All"
+			if active_chat_tab == CHAT_TAB_GENERAL:
+				channel_label = "Global"
+			elif active_chat_tab == CHAT_TAB_TRADE:
 				channel_label = "Trade"
 			elif active_chat_tab == CHAT_TAB_HELP:
 				channel_label = "Help"
 			chat_context_selector_button.text = "%s  ▴" % channel_label
 			chat_context_selector_button.tooltip_text = "Choose General chat channel"
+		CHAT_TAB_MAP:
+			chat_context_selector_button.text = "Map"
+			chat_context_selector_button.disabled = true
+			chat_context_selector_button.tooltip_text = "Only trainers on your current map can see this chat"
 		CHAT_TAB_PM:
 			if active_pm_user_id != 0 and pm_conversations_by_user_id.has(active_pm_user_id):
 				var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
@@ -16475,6 +16490,22 @@ func _refresh_chat_context_selector() -> void:
 			chat_context_selector_button.text = "Clan"
 			chat_context_selector_button.disabled = true
 			chat_context_selector_button.tooltip_text = "Clan chat is not connected yet"
+
+
+func _setup_map_chat_tab() -> void:
+	if map_chat_tab_button != null:
+		return
+
+	map_chat_tab_button = Button.new()
+	map_chat_tab_button.name = "MapButton"
+	map_chat_tab_button.custom_minimum_size = Vector2(70, 28)
+	map_chat_tab_button.text = "Map"
+	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	map_chat_tab_button.tooltip_text = "Chat with trainers on your current map"
+	map_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_MAP))
+	$Control/ChatTabsPanel/TabRow.add_child(map_chat_tab_button)
+	_apply_button_style(map_chat_tab_button, "primary")
+	_reorder_chat_tab_buttons()
 
 
 func _setup_help_chat_tab() -> void:
@@ -16733,6 +16764,8 @@ func _apply_chat_tab_preferences() -> void:
 			chat_tab_visibility[tab_id] = true
 
 	general_chat_tab_button.visible = true
+	if map_chat_tab_button != null:
+		map_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_MAP, true))
 	system_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_SYSTEM, true))
 	trade_chat_tab_button.visible = false
 	if help_chat_tab_button != null:
@@ -16743,8 +16776,8 @@ func _apply_chat_tab_preferences() -> void:
 		clan_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_CLAN, true))
 
 	if not bool(chat_tab_visibility.get(_active_primary_chat_tab_id(), true)):
-		active_chat_tab = CHAT_TAB_GENERAL
-		selected_general_chat_tab = CHAT_TAB_GENERAL
+		active_chat_tab = CHAT_TAB_ALL
+		selected_general_chat_tab = CHAT_TAB_ALL
 
 	_reorder_chat_tab_buttons()
 	_render_chat_tab_settings_rows()
@@ -16756,6 +16789,8 @@ func _chat_tab_button_for_id(tab_id: String) -> Button:
 	match tab_id:
 		CHAT_TAB_GENERAL:
 			return general_chat_tab_button
+		CHAT_TAB_MAP:
+			return map_chat_tab_button
 		CHAT_TAB_SYSTEM:
 			return system_chat_tab_button
 		CHAT_TAB_PM:
@@ -17025,6 +17060,7 @@ func _apply_chat_tab_state() -> void:
 	var primary_tab := _active_primary_chat_tab_id()
 	var general_active: bool = primary_tab == CHAT_TAB_GENERAL
 	_apply_chat_main_tab_style(general_chat_tab_button, general_active)
+	_apply_chat_main_tab_style(map_chat_tab_button, active_chat_tab == CHAT_TAB_MAP)
 	_apply_chat_main_tab_style(system_chat_tab_button, active_chat_tab == CHAT_TAB_SYSTEM)
 	_apply_chat_main_tab_style(pm_tab_button, active_chat_tab == CHAT_TAB_PM)
 	_apply_chat_main_tab_style(clan_chat_tab_button, active_chat_tab == CHAT_TAB_CLAN)
@@ -17040,6 +17076,10 @@ func _apply_chat_tab_state() -> void:
 	chat_input.editable = input_active
 	if active_chat_tab == CHAT_TAB_PM:
 		chat_input.placeholder_text = "Private message"
+	elif active_chat_tab == CHAT_TAB_ALL:
+		chat_input.placeholder_text = "All channels · messages send to Global"
+	elif active_chat_tab == CHAT_TAB_MAP:
+		chat_input.placeholder_text = "Only trainers on this map can see this"
 	elif active_chat_tab == CHAT_TAB_TRADE:
 		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
 	elif active_chat_tab == CHAT_TAB_HELP:
@@ -17193,6 +17233,10 @@ func _share_party_to_pm() -> void:
 	await _submit_pm_message_with_attachments("", attachments)
 
 func _get_active_chat_channel() -> String:
+	if active_chat_tab == CHAT_TAB_ALL:
+		return CHAT_CHANNEL_GLOBAL
+	if active_chat_tab == CHAT_TAB_MAP:
+		return CHAT_CHANNEL_MAP
 	if active_chat_tab == CHAT_TAB_TRADE:
 		return CHAT_CHANNEL_TRADE
 	if active_chat_tab == CHAT_TAB_HELP:
@@ -26216,11 +26260,15 @@ func _disable_icon_button_focus() -> void:
 		if button != null:
 			button.focus_mode = Control.FOCUS_NONE
 
-func _add_chat_message(text: String, use_bbcode: bool = false) -> void:
+func _add_chat_message(
+	text: String,
+	use_bbcode: bool = false,
+	category: String = CHAT_CATEGORY_SYSTEM
+) -> void:
 	var entry := message_entry_template.duplicate() as RichTextLabel
 	message_list.add_child(entry)
-	entry.set_meta("chat_category", CHAT_CATEGORY_SYSTEM)
-	entry.visible = _should_show_chat_category(CHAT_CATEGORY_SYSTEM)
+	entry.set_meta("chat_category", category)
+	entry.visible = _should_show_chat_category(category)
 	entry.bbcode_enabled = true
 	entry.clear()
 	if use_bbcode:
@@ -26323,7 +26371,13 @@ func _scroll_chat_to_bottom() -> void:
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if str(message.get("type", "")) == "chat_error":
 		var error_text: String = str(message.get("message", "Chat message could not be sent."))
-		_add_chat_message(error_text)
+		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
+		var error_category := (
+			error_channel
+			if error_channel in [CHAT_CHANNEL_MAP, CHAT_CHANNEL_TRADE, CHAT_CHANNEL_HELP]
+			else CHAT_CATEGORY_SYSTEM
+		)
+		_add_chat_message(error_text, false, error_category)
 		return
 
 	if str(message.get("type", "")) != "chat":
@@ -26342,6 +26396,35 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 
 	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
 	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments)
+	if channel == CHAT_CHANNEL_MAP and text != "":
+		_show_map_chat_bubble(user, text, str(message.get("mapId", "")))
+
+
+func _show_map_chat_bubble(user: Dictionary, text: String, map_id: String) -> void:
+	var current_map_id := str(WorldPresenceService.last_sent_map_id).strip_edges()
+	var message_map_id := map_id.strip_edges()
+	if message_map_id != "" and current_map_id != "" and message_map_id != current_map_id:
+		return
+	var sender_user_id := _user_id_from_state(user)
+	var current_user_id_text := AuthService.get_user_id_text()
+	var is_local_sender := (
+		sender_user_id > 0
+		and current_user_id_text.is_valid_int()
+		and sender_user_id == int(current_user_id_text)
+	)
+	if not is_local_sender:
+		var sender_username := str(user.get("username", "")).strip_edges().to_lower()
+		var current_username := str(AuthService.current_user.get("username", "")).strip_edges().to_lower()
+		is_local_sender = sender_username != "" and sender_username == current_username
+	if is_local_sender:
+		var local_player := get_tree().get_first_node_in_group("player")
+		if local_player != null and local_player.has_method("show_map_chat_message"):
+			local_player.call("show_map_chat_message", text)
+			return
+	var world := GameState.get_world()
+	if world == null or not world.has_method("show_map_chat_message"):
+		return
+	world.call("show_map_chat_message", sender_user_id, text)
 
 
 func _on_realtime_mail_received(mail_id: int) -> void:
@@ -26499,7 +26582,9 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 	row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	row.add_theme_constant_override("separation", 4)
 	var chat_category: String = CHAT_CHANNEL_GLOBAL
-	if channel == CHAT_CHANNEL_TRADE:
+	if channel == CHAT_CHANNEL_MAP:
+		chat_category = CHAT_CHANNEL_MAP
+	elif channel == CHAT_CHANNEL_TRADE:
 		chat_category = CHAT_CHANNEL_TRADE
 	elif channel == CHAT_CHANNEL_HELP:
 		chat_category = CHAT_CHANNEL_HELP
@@ -26598,9 +26683,18 @@ func _pokemon_preview_payload_with_current_trainer(
 
 func _should_show_chat_category(category: String) -> bool:
 	if category == CHAT_CATEGORY_SYSTEM:
-		return active_chat_tab == CHAT_TAB_GENERAL or active_chat_tab == CHAT_TAB_SYSTEM
+		return active_chat_tab == CHAT_TAB_ALL or active_chat_tab == CHAT_TAB_SYSTEM
+	if active_chat_tab == CHAT_TAB_ALL:
+		return category in [
+			CHAT_CHANNEL_GLOBAL,
+			CHAT_CHANNEL_TRADE,
+			CHAT_CHANNEL_HELP,
+			CHAT_CATEGORY_USER,
+		]
 	if active_chat_tab == CHAT_TAB_GENERAL:
 		return category == CHAT_CHANNEL_GLOBAL or category == CHAT_CATEGORY_USER
+	if active_chat_tab == CHAT_TAB_MAP:
+		return category == CHAT_CHANNEL_MAP
 	if active_chat_tab == CHAT_TAB_TRADE:
 		return category == CHAT_CHANNEL_TRADE
 	if active_chat_tab == CHAT_TAB_HELP:

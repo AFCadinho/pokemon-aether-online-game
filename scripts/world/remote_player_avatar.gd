@@ -6,6 +6,7 @@ signal interaction_requested(player_state: Dictionary, world_position: Vector2)
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const SORT_Z_MIN := -4096
@@ -112,6 +113,7 @@ var nameplate_background: Panel
 var nameplate_label: Label
 var role_badge_panel: Panel
 var role_badge_label: Label
+var map_chat_bubble: PanelContainer
 var pokemon_follower: PokemonFollower
 var current_follower_species := ""
 var current_follower_shiny := false
@@ -559,6 +561,7 @@ func _create_visual() -> void:
 	_collect_appearance_sprites(look_copy)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
+	_setup_map_chat_bubble()
 	_create_interaction_hit_area()
 	player_instance.queue_free()
 
@@ -614,6 +617,23 @@ func _create_nameplate_from_player_scene(player_instance: Node) -> void:
 
 	nameplate.visible = false
 	_update_nameplate()
+
+
+func show_map_chat_message(text: String) -> void:
+	_setup_map_chat_bubble()
+	if map_chat_bubble != null:
+		map_chat_bubble.call("show_message", text)
+
+
+func _setup_map_chat_bubble() -> void:
+	if map_chat_bubble != null and is_instance_valid(map_chat_bubble):
+		return
+	var bubble_value: Variant = MapChatBubbleScript.new()
+	if not bubble_value is PanelContainer:
+		return
+	map_chat_bubble = bubble_value as PanelContainer
+	map_chat_bubble.name = "MapChatBubble"
+	add_child(map_chat_bubble)
 
 
 func _update_nameplate() -> void:
