@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://dxi5ghtfb65wq"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/players_house/players_house.visual.tscn" id="1_3tk4s"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_map_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
+[ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="5_floor_transition"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_stairs"]
+size = Vector2(16, 48)
+
+[node name="PlayersHouse" type="Node2D" unique_id=1155053495]
+script = ExtResource("2_map_meta")
+map_id = "kanto_players_house"
+map_region_name = "Kanto"
+map_display_name = "Player's House"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+
+[node name="Visuals" parent="." unique_id=966731536 instance=ExtResource("1_3tk4s")]
+
+[node name="Entities" type="Node2D" parent="." unique_id=564070698]
+z_index = 10
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=1334826896]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1574395695]
+
+[node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=1017066124]
+position = Vector2(432, 976)
+
+[node name="GroundFloorStairs" type="Marker2D" parent="Spawns" unique_id=880081472]
+position = Vector2(464, 784)
+
+[node name="UpperFloorStairs" type="Marker2D" parent="Spawns" unique_id=136482848]
+position = Vector2(368, 272)
+
+[node name="Exits" type="Node2D" parent="." unique_id=642094233]
+
+[node name="ToPalletTown" type="Area2D" parent="Exits" unique_id=135073037]
+script = ExtResource("3_map_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+target_spawn_name = "FromPlayersHouse"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=732909904]
+position = Vector2(432, 1008)
+shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1789801119]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("4_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(64, 608, 480, 416),
+&"upper_floor": Rect2(160, 0, 320, 448)
+}
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=302715345]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=639722611]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1210585843]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=721094213]
+
+[node name="FloorTransitions" type="Node2D" parent="." unique_id=1619473154]
+
+[node name="GroundToUpper" type="Area2D" parent="FloorTransitions" unique_id=948874892]
+position = Vector2(464, 720)
+script = ExtResource("5_floor_transition")
+destination_marker_path = NodePath("../../Spawns/UpperFloorStairs")
+target_floor = &"upper_floor"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/GroundToUpper" unique_id=771893444]
+position = Vector2(-24, 8)
+shape = SubResource("RectangleShape2D_stairs")
+
+[node name="UpperToGround" type="Area2D" parent="FloorTransitions" unique_id=477963810]
+position = Vector2(400, 256)
+script = ExtResource("5_floor_transition")
+destination_marker_path = NodePath("../../Spawns/GroundFloorStairs")
+target_floor = &"ground_floor"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/UpperToGround" unique_id=964179945]
+z_index = 100
+position = Vector2(24, 0)
+shape = SubResource("RectangleShape2D_stairs")
+
+[connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/GroundToUpper" to="FloorTransitions/GroundToUpper" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/UpperToGround" to="FloorTransitions/UpperToGround" method="_on_body_entered"]
