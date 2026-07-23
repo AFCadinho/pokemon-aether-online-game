@@ -51,6 +51,7 @@ func _init() -> void:
 	_check_contains(player_source, "func _draw_energy_blast_launch_ring", "projectiles can leave a configurable launch ring behind")
 	_check_contains(player_source, "func _draw_court_change_visual", "Court Change can render a configurable battlefield swap")
 	_check_contains(player_source, "func _draw_sound_wave_visual", "sound moves can send layered rings towards the target")
+	_check_contains(player_source, "func _draw_leaf_rush_visual", "grass moves can send a configurable leaf rush towards the target")
 	_check_contains(player_source, "func _draw_draco_meteor_visual() -> void:", "Draco Meteor can render staggered target-bound meteor rain")
 	_check_contains(player_source, "var approach_direction := -1.0 if reverse_battlefield else 1.0", "opposing Draco Meteors approach from the opponent's side")
 	_check_contains(player_source, "func _draw_draco_meteor_impact(", "Draco Meteor stops each projectile in an impact burst")

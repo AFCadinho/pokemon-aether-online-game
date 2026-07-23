@@ -42,6 +42,7 @@ signal animation_finished
 @export var nasty_plot_config: Dictionary = {}
 @export var court_change_config: Dictionary = {}
 @export var sound_wave_config: Dictionary = {}
+@export var leaf_rush_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -328,6 +329,7 @@ func _draw() -> void:
 	_draw_nasty_plot_visual()
 	_draw_court_change_visual()
 	_draw_sound_wave_visual()
+	_draw_leaf_rush_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -1519,6 +1521,72 @@ func _draw_sound_wave_visual() -> void:
 		draw_polyline(points, _color_with_alpha(lightning, impact_alpha * 0.92), 1.25, true)
 
 
+func _draw_leaf_rush_visual() -> void:
+	if not bool(leaf_rush_config.get("enabled", false)):
+		return
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := float(leaf_rush_config.get("visible_start", 0.02))
+	var visible_end := float(leaf_rush_config.get("visible_end", 0.94))
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, leaf_rush_config)
+	if alpha <= 0.02:
+		return
+	var source := _projectile_battlefield_position(_get_projectile_state_from_config(0.0, leaf_rush_config).get("position", Vector2.ZERO) as Vector2, leaf_rush_config)
+	var target := _projectile_battlefield_position(_get_projectile_state_from_config(1.0, leaf_rush_config).get("position", Vector2.ZERO) as Vector2, leaf_rush_config)
+	var travel_end := clampf(float(leaf_rush_config.get("travel_end", 0.7)), visible_start + 0.1, visible_end)
+	var travel := clampf((progress - visible_start) / maxf(travel_end - visible_start, 0.001), 0.0, 1.0)
+	var direction := (target - source).normalized()
+	var normal := direction.orthogonal()
+	var green := _color_from_value(leaf_rush_config.get("leaf_color", [0.38, 0.96, 0.18, 1.0]), Color(0.38, 0.96, 0.18, 1.0))
+	var light_green := _color_from_value(leaf_rush_config.get("core_color", [0.88, 1.0, 0.58, 1.0]), Color(0.88, 1.0, 0.58, 1.0))
+	var impact_color := _color_from_value(leaf_rush_config.get("impact_color", [0.98, 1.0, 0.74, 1.0]), Color(0.98, 1.0, 0.74, 1.0))
+	var head := source.lerp(target, travel)
+	var beam_start := source.lerp(target, maxf(travel - 0.42, 0.0))
+	draw_line(beam_start, head, _color_with_alpha(green, alpha * 0.2), float(leaf_rush_config.get("beam_width", 34.0)))
+	draw_line(beam_start, head, _color_with_alpha(light_green, alpha * 0.38), float(leaf_rush_config.get("beam_width", 34.0)) * 0.36)
+	var slash_rotation := atan2(direction.y, direction.x)
+	var slash_radius := float(leaf_rush_config.get("slash_radius", 27.0)) * (0.88 + 0.12 * sin(float(frame_index) * 0.6))
+	draw_set_transform(head, slash_rotation, Vector2(1.6, 0.56))
+	draw_circle(Vector2.ZERO, slash_radius * 1.28, _color_with_alpha(green, alpha * 0.18))
+	draw_circle(Vector2.ZERO, slash_radius * 0.9, _color_with_alpha(green, alpha * 0.7))
+	draw_circle(Vector2(-slash_radius * 0.12, 0.0), slash_radius * 0.48, _color_with_alpha(light_green, alpha * 0.95))
+	draw_arc(Vector2.ZERO, slash_radius * 1.08, -PI * 0.72, PI * 0.72, 36, _color_with_alpha(light_green, alpha * 0.92), 3.4)
+	draw_arc(Vector2.ZERO, slash_radius * 1.42, -PI * 0.64, PI * 0.54, 36, _color_with_alpha(green, alpha * 0.78), 4.6)
+	draw_set_transform(Vector2.ZERO)
+	var leaf_count := maxi(4, int(leaf_rush_config.get("leaf_count", 14)))
+	for leaf_index in range(leaf_count):
+		var delay := float(leaf_index) * 0.045
+		var leaf_progress := clampf((travel - delay) / maxf(1.0 - delay, 0.001), 0.0, 1.0)
+		if leaf_progress <= 0.0:
+			continue
+		var sway := sin(float(frame_index) * 0.38 + float(leaf_index) * 1.71) * (12.0 + float(leaf_index % 3) * 7.0)
+		var center := source.lerp(target, leaf_progress) + normal * sway * sin(leaf_progress * PI)
+		var rotation := atan2(direction.y, direction.x) + sin(float(leaf_index) * 1.9 + float(frame_index) * 0.3) * 0.65
+		var size := 7.0 + float(leaf_index % 3) * 2.4
+		draw_set_transform(center, rotation)
+		draw_colored_polygon(PackedVector2Array([Vector2(-size, 0.0), Vector2(0.0, -size * 0.46), Vector2(size, 0.0), Vector2(0.0, size * 0.46)]), _color_with_alpha(green, alpha * 0.9))
+		draw_line(Vector2(-size * 0.72, 0.0), Vector2(size * 0.72, 0.0), _color_with_alpha(light_green, alpha * 0.86), 1.1)
+		draw_set_transform(Vector2.ZERO)
+	if progress < travel_end:
+		return
+	var impact_progress := clampf((progress - travel_end) / maxf(visible_end - travel_end, 0.001), 0.0, 1.0)
+	var impact_alpha := alpha * (1.0 - impact_progress)
+	var impact_radius := lerpf(18.0, float(leaf_rush_config.get("impact_radius", 56.0)), impact_progress)
+	draw_circle(target, impact_radius * 0.68, _color_with_alpha(green, impact_alpha * 0.2))
+	for ray_index in range(10):
+		var ray_angle := float(ray_index) * TAU / 10.0 + float(frame_index) * 0.08
+		var ray_start := target + Vector2(cos(ray_angle), sin(ray_angle)) * impact_radius * 0.2
+		var ray_end := target + Vector2(cos(ray_angle), sin(ray_angle)) * impact_radius * (0.72 + float(ray_index % 3) * 0.14)
+		draw_line(ray_start, ray_end, _color_with_alpha(impact_color, impact_alpha * 0.9), 2.1)
+	for burst_leaf_index in range(12):
+		var burst_angle := float(burst_leaf_index) * TAU / 12.0 + float(frame_index) * 0.12
+		var burst_center := target + Vector2(cos(burst_angle), sin(burst_angle)) * impact_radius * (0.42 + impact_progress * 0.5)
+		var burst_size := 7.0 + float(burst_leaf_index % 3) * 2.6
+		draw_set_transform(burst_center, burst_angle)
+		draw_colored_polygon(PackedVector2Array([Vector2(-burst_size, 0.0), Vector2(0.0, -burst_size * 0.46), Vector2(burst_size, 0.0), Vector2(0.0, burst_size * 0.46)]), _color_with_alpha(green, impact_alpha * 0.94))
+		draw_set_transform(Vector2.ZERO)
+
+
 func _draw_nasty_plot_visual() -> void:
 	if not bool(nasty_plot_config.get("enabled", false)):
 		return
@@ -2362,7 +2430,10 @@ func _get_sheet_frame_offset(index: int) -> Vector2:
 		var start_frame := int(offset_config.get("start_frame", 0))
 		var end_frame := int(offset_config.get("end_frame", start_frame))
 		if index >= start_frame and index <= end_frame:
-			return _vector2_from_value(offset_config.get("offset", [0.0, 0.0]))
+			var offset := _vector2_from_value(offset_config.get("offset", [0.0, 0.0]))
+			if reverse_battlefield and bool(offset_config.get("mirror_with_battlefield", false)):
+				offset = -offset
+			return offset
 	return Vector2.ZERO
 
 func _projectile_enabled() -> bool:

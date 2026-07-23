@@ -5415,18 +5415,56 @@
       }
     },
     "grassyglide": {
-      "template": "imported_sheet",
+      "template": "custom_godot_effect",
       "category": "physical",
       "show_sheet_sprites": false,
+      "projectile_actor_anchor_point": "feet",
+      "projectile_target_anchor_point": "center",
+      "hide_actor_sprite": true,
+      "hide_actor_delay": 0.18,
+      "keep_screen_overlay_fullscreen": true,
+      "actor_motion": {
+        "enabled": true,
+        "duration": 0.18,
+        "points": [
+          {"at": 0.0, "offset": [0.0, 0.0], "scale": 1.0, "duration": 0.01},
+          {"at": 1.0, "offset": [30.0, -8.0], "scale": 1.03, "duration": 0.17}
+        ]
+      },
+      "leaf_rush": {
+        "enabled": true,
+        "actor_offset": [0.0, -14.0],
+        "target_offset": [0.0, -12.0],
+        "visible_start": 0.02,
+        "visible_end": 0.94,
+        "fade_in": 0.04,
+        "fade_out": 0.12,
+        "travel_end": 0.7,
+        "beam_width": 34.0,
+        "slash_radius": 27.0,
+        "leaf_count": 14,
+        "impact_radius": 56.0,
+        "leaf_color": [0.38, 0.96, 0.18, 1.0],
+        "core_color": [0.88, 1.0, 0.58, 1.0],
+        "impact_color": [0.98, 1.0, 0.74, 1.0],
+        "path": [
+          {"at": 0.0, "position": [128.0, 210.0], "scale": 1.0},
+          {"at": 1.0, "position": [384.0, 84.0], "scale": 1.0}
+        ]
+      },
       "data_path": "res://assets/battles/animations/grassyglide/grassyglide.json",
       "sheet_path": "",
       "background_path": "",
       "foreground_path": "",
-      "sound_paths": {}
+      "sound_paths": {
+        "PRSFX- Leaf Blade.wav": "res://assets/battles/animations/grassyglide/PRSFX- Leaf Blade.wav",
+        "PRSFX- Leafage 2.wav": "res://assets/battles/animations/grassyglide/PRSFX- Leafage 2.wav"
+      }
     },
     "woodhammer": {
       "template": "imported_sheet",
       "category": "physical",
+      "sprite_zoom_multiplier": 0.78,
       "data_path": "res://assets/battles/animations/woodhammer/woodhammer.json",
       "sheet_path": "res://assets/battles/animations/woodhammer/PRAS- Wood Hammer.png",
       "background_path": "",
@@ -5454,7 +5492,8 @@
         {
           "start_frame": 0,
           "end_frame": 18,
-          "offset": [0.0, -30.0]
+          "offset": [0.0, -30.0],
+          "mirror_with_battlefield": true
         }
       ],
       "data_path": "res://assets/battles/animations/superpower/superpower.json",

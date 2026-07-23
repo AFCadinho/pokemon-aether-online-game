@@ -296,5 +296,26 @@
       }
     ]
   ],
-  "timings": []
+  "timings": [
+    {
+      "frame": 1,
+      "type": 0,
+      "name": "PRSFX- Leaf Blade.wav",
+      "duration": 4,
+      "opacity": null,
+      "volume": 92,
+      "pitch": 112,
+      "color": [0, 0, 0, 0]
+    },
+    {
+      "frame": 8,
+      "type": 0,
+      "name": "PRSFX- Leafage 2.wav",
+      "duration": 4,
+      "opacity": null,
+      "volume": 100,
+      "pitch": 100,
+      "color": [0, 0, 0, 0]
+    }
+  ]
 }

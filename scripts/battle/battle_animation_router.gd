@@ -147,8 +147,11 @@ func _play_animation_config(
 	if bool(config.get("split_dark_pulse_layers", false)):
 		animation_node.dark_pulse_config["draw_layer"] = "foreground"
 	_apply_move_animation_options(animation_node, config, animation_options)
-	var hidden_actor_sprites: Array = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
+	var hidden_actor_sprites: Array = []
 	_play_move_actor_motion_if_needed(config, move_actor_ident)
+	var hide_actor_delay := maxf(float(config.get("hide_actor_delay", 0.0)), 0.0)
+	if hide_actor_delay > 0.0 and bool(config.get("hide_actor_sprite", false)) and parent_node.get_tree() != null:
+		await parent_node.get_tree().create_timer(hide_actor_delay).timeout
 	_play_move_target_shake_if_needed(config, move_target_ident, animation_options)
 	_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)
 
@@ -160,6 +163,7 @@ func _play_animation_config(
 		_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, overlay, config, animation_options)
 		_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, overlay, config)
 		_apply_effect_target_offset(animation_node, target_ident, config, overlay)
+		hidden_actor_sprites = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 		overlay.add_child(animation_node)
 		_move_timing_background_below_sprites(animation_node, parent_node, config)
 		# Add the procedural underlay only after the opaque timing background has
@@ -187,6 +191,7 @@ func _play_animation_config(
 	_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, parent_node, config, animation_options)
 	_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, parent_node, config)
 	_apply_effect_target_offset(animation_node, target_ident, config, parent_node)
+	hidden_actor_sprites = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 	parent_node.add_child(animation_node)
 	await _wait_for_animation_node(animation_node, parent_node)
 	_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
@@ -468,6 +473,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.nasty_plot_config = (config.get("nasty_plot", {}) as Dictionary).duplicate(true)
 	animation_node.court_change_config = (config.get("court_change", {}) as Dictionary).duplicate(true)
 	animation_node.sound_wave_config = (config.get("sound_wave", {}) as Dictionary).duplicate(true)
+	animation_node.leaf_rush_config = (config.get("leaf_rush", {}) as Dictionary).duplicate(true)
 	animation_node.flash_config = (config.get("flash", {}) as Dictionary).duplicate(true)
 	animation_node.shake_config = (config.get("shake", {}) as Dictionary).duplicate(true)
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
@@ -1093,6 +1099,12 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.sound_wave_config = _with_projectile_endpoint_anchors(
 		animation_node.sound_wave_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.leaf_rush_config = _with_projectile_endpoint_anchors(
+		animation_node.leaf_rush_config,
 		actor_anchor,
 		target_anchor,
 		animation_node.reverse_battlefield
