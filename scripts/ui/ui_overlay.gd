@@ -75,6 +75,9 @@ const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.
 const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const GLOBAL_RARE_ENCOUNTER_BUFF_ICON: Texture2D = preload("res://assets/ui/global_rare_encounter_boost.svg")
 const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")
+const PVP_MODE_RANKED_ICON: Texture2D = preload("res://assets/ui/pvp_battles.svg")
+const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_battle.svg")
+const PVP_MODE_TOURNAMENT_ICON: Texture2D = preload("res://assets/ui/pvp_tournament.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
@@ -4151,55 +4154,191 @@ func _setup_pvp_mode_menu() -> void:
 	pvp_mode_menu = PanelContainer.new()
 	pvp_mode_menu.name = "PvpModeMenu"
 	pvp_mode_menu.visible = false
-	pvp_mode_menu.custom_minimum_size = Vector2(230, 0)
+	pvp_mode_menu.custom_minimum_size = Vector2(390, 0)
 	pvp_mode_menu.mouse_filter = Control.MOUSE_FILTER_STOP
 	pvp_mode_menu.z_index = UI_BASE_Z_INDEX
-	pvp_mode_menu.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	var menu_style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SOFT, 12, 1)
+	menu_style.shadow_color = Color(0, 0, 0, 0.4)
+	menu_style.shadow_size = 10
+	menu_style.shadow_offset = Vector2(0, 4)
+	pvp_mode_menu.add_theme_stylebox_override("panel", menu_style)
 	root_control.add_child(pvp_mode_menu)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 14)
 	pvp_mode_menu.add_child(margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
+	layout.add_theme_constant_override("separation", 10)
 	margin.add_child(layout)
 
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
+	layout.add_child(header)
+
+	var heading_stack := VBoxContainer.new()
+	heading_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading_stack.add_theme_constant_override("separation", 1)
+	header.add_child(heading_stack)
+
 	var title := Label.new()
-	title.text = "PvP"
+	title.text = "PvP Battles"
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	layout.add_child(title)
+	heading_stack.add_child(title)
 
-	pvp_mode_ranked_button = _create_pvp_mode_menu_button("Ranked")
+	var subtitle := Label.new()
+	subtitle.text = "Choose how you want to battle"
+	subtitle.add_theme_font_size_override("font_size", 12)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading_stack.add_child(subtitle)
+
+	pvp_mode_close_button = Button.new()
+	pvp_mode_close_button.text = "×"
+	pvp_mode_close_button.tooltip_text = "Close"
+	pvp_mode_close_button.custom_minimum_size = Vector2(32, 32)
+	pvp_mode_close_button.focus_mode = Control.FOCUS_NONE
+	pvp_mode_close_button.pressed.connect(_hide_pvp_mode_menu)
+	_apply_button_style(pvp_mode_close_button)
+	header.add_child(pvp_mode_close_button)
+
+	pvp_mode_ranked_button = _create_pvp_mode_menu_button(
+		"Ranked",
+		"Competitive matchmaking",
+		PVP_MODE_RANKED_ICON,
+		Color("#f0cc70")
+	)
 	pvp_mode_ranked_button.pressed.connect(_on_pvp_mode_ranked_pressed)
 	layout.add_child(pvp_mode_ranked_button)
 
-	pvp_mode_tournaments_button = _create_pvp_mode_menu_button("Tournaments")
-	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
-	layout.add_child(pvp_mode_tournaments_button)
-
-	pvp_mode_casual_button = _create_pvp_mode_menu_button("Custom / Casual")
+	pvp_mode_casual_button = _create_pvp_mode_menu_button(
+		"Custom / Casual",
+		"Create or join a private battle",
+		PVP_MODE_CUSTOM_ICON,
+		Color("#60d3ff")
+	)
 	pvp_mode_casual_button.pressed.connect(_on_pvp_mode_casual_pressed)
 	layout.add_child(pvp_mode_casual_button)
 
-	pvp_mode_close_button = _create_pvp_mode_menu_button("Close")
-	pvp_mode_close_button.pressed.connect(_hide_pvp_mode_menu)
-	layout.add_child(pvp_mode_close_button)
+	pvp_mode_tournaments_button = _create_pvp_mode_menu_button(
+		"Tournaments",
+		"Scheduled competitive events",
+		PVP_MODE_TOURNAMENT_ICON,
+		Color("#b28ae8"),
+		"COMING SOON"
+	)
+	pvp_mode_tournaments_button.disabled = true
+	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.58)
+	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	pvp_mode_tournaments_button.tooltip_text = "Tournaments are coming soon."
+	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
+	layout.add_child(pvp_mode_tournaments_button)
 
-	_apply_button_style(pvp_mode_ranked_button, "primary")
-	_apply_button_style(pvp_mode_tournaments_button, "primary")
-	_apply_button_style(pvp_mode_casual_button, "primary")
-	_apply_button_style(pvp_mode_close_button)
-
-func _create_pvp_mode_menu_button(text: String) -> Button:
+func _create_pvp_mode_menu_button(
+	title_text: String,
+	subtitle_text: String,
+	icon_texture: Texture2D,
+	accent_color: Color,
+	badge_text: String = ""
+) -> Button:
 	var button := Button.new()
-	button.text = text
-	button.custom_minimum_size = Vector2(0, 32)
+	button.custom_minimum_size = Vector2(0, 72)
 	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_stylebox_override("normal", _make_button_style(UI_SURFACE_RAISED, Color(accent_color.r, accent_color.g, accent_color.b, 0.55), 10, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, accent_color, 10, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_BASE, accent_color, 10, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 10, 1))
+	button.add_theme_stylebox_override("disabled", _make_button_style(Color("#050b1499"), Color("#29384a88"), 10, 1))
+
+	var content := MarginContainer.new()
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(content)
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.add_theme_constant_override("margin_left", 10)
+	content.add_theme_constant_override("margin_top", 8)
+	content.add_theme_constant_override("margin_right", 10)
+	content.add_theme_constant_override("margin_bottom", 8)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 10)
+	content.add_child(row)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.custom_minimum_size = Vector2(52, 52)
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(
+			Color(accent_color.r, accent_color.g, accent_color.b, 0.1),
+			Color(accent_color.r, accent_color.g, accent_color.b, 0.55),
+			9,
+			1
+		)
+	)
+	row.add_child(icon_frame)
+
+	var icon_center := CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_child(icon_center)
+
+	var icon := TextureRect.new()
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.custom_minimum_size = Vector2(42, 42)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = icon_texture
+	icon_center.add_child(icon)
+
+	var labels := VBoxContainer.new()
+	labels.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	labels.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	labels.alignment = BoxContainer.ALIGNMENT_CENTER
+	labels.add_theme_constant_override("separation", 2)
+	row.add_child(labels)
+
+	var title := Label.new()
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 15)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	labels.add_child(title)
+
+	var subtitle := Label.new()
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle.text = subtitle_text
+	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	subtitle.add_theme_font_size_override("font_size", 12)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	labels.add_child(subtitle)
+
+	if badge_text != "":
+		var badge := PanelContainer.new()
+		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		badge.add_theme_stylebox_override(
+			"panel",
+			_make_panel_style(Color("#241d35d9"), Color("#735d91aa"), 8, 1)
+		)
+		row.add_child(badge)
+
+		var badge_margin := MarginContainer.new()
+		badge_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		badge_margin.add_theme_constant_override("margin_left", 7)
+		badge_margin.add_theme_constant_override("margin_top", 3)
+		badge_margin.add_theme_constant_override("margin_right", 7)
+		badge_margin.add_theme_constant_override("margin_bottom", 3)
+		badge.add_child(badge_margin)
+
+		var badge_label := Label.new()
+		badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		badge_label.text = badge_text
+		badge_label.add_theme_font_size_override("font_size", 10)
+		badge_label.add_theme_color_override("font_color", Color("#c9afd9"))
+		badge_margin.add_child(badge_label)
 	return button
 
 func _create_pvp_ranked_tab_page(tab_name: String) -> MarginContainer:
