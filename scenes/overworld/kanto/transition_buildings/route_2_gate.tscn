@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/vertical_transition_building_template.tscn" id="1_template"]
+
+[node name="Route2Gate" instance=ExtResource("1_template")]
+map_id = "kanto_route_2_gate"
+map_display_name = "Route 2 Gate"
+location_id = "kanto.route_2.gate"
+location_name = "Route 2 Gate"
+music_track_path = "res://assets/music/overworld/kanto/routes/route1.ogg"
+
+[node name="ToNorth" parent="Exits" index="0"]
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+target_spawn_name = "FromRoute2GateNorth"
+
+[node name="ToSouth" parent="Exits" index="1"]
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+target_spawn_name = "FromRoute2GateSouth"

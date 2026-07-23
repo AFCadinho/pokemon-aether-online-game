@@ -1,0 +1,114 @@
+[gd_scene load_steps=10 format=3 uid="uid://dl6evgbok52k2"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/transition_building_horizontal/transition_building_horizontal.visual.tscn" id="1_visual"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_map_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
+[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="5_collision_tiles"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(32, 96)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_horizontal_wall"]
+size = Vector2(512, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_side_upper"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_side_lower"]
+size = Vector2(32, 96)
+
+[node name="HorizontalTransitionBuildingTemplate" type="Node2D" unique_id=526469889]
+script = ExtResource("2_map_meta")
+map_region_name = "Kanto"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+
+[node name="Visuals" parent="." unique_id=158870148 instance=ExtResource("1_visual")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("4_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(64, 32, 512, 448)
+}
+follow_player_floor = false
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Collision" type="TileMapLayer" parent="."]
+visible = false
+z_index = 1000
+tile_map_data = PackedByteArray("AAACAAgAAAAAAAAAAAACAA4AAAAAAAAAAAADAAgAAAAAAAAAAAADAA4AAAAAAAAAAAAEAAgAAAAAAAAAAAAEAA4AAAAAAAAAAAAFAAgAAAAAAAAAAAAFAA4AAAAAAAAAAAAGAAgAAAAAAAAAAAAGAA4AAAAAAAAAAAAHAAgAAAAAAAAAAAAHAA4AAAAAAAAAAAAIAAgAAAAAAAAAAAAIAA4AAAAAAAAAAAAJAAgAAAAAAAAAAAAJAA4AAAAAAAAAAAAKAAgAAAAAAAAAAAAKAA4AAAAAAAAAAAALAAgAAAAAAAAAAAALAA4AAAAAAAAAAAAMAAgAAAAAAAAAAAAMAA4AAAAAAAAAAAANAAgAAAAAAAAAAAANAA4AAAAAAAAAAAAOAAgAAAAAAAAAAAAOAA4AAAAAAAAAAAAPAAgAAAAAAAAAAAAPAA4AAAAAAAAAAAAQAAgAAAAAAAAAAAAQAA4AAAAAAAAAAAARAAgAAAAAAAAAAAARAA4AAAAAAAAAAAACAAwAAAAAAAAAAAARAAwAAAAAAAAAAAACAA0AAAAAAAAAAAARAA0AAAAAAAAAAAA=")
+tile_set = ExtResource("5_collision_tiles")
+
+[node name="PhysicsCollision" type="StaticBody2D" parent="."]
+
+[node name="TopWall" type="CollisionShape2D" parent="PhysicsCollision"]
+position = Vector2(320, 272)
+shape = SubResource("RectangleShape2D_horizontal_wall")
+
+[node name="BottomWall" type="CollisionShape2D" parent="PhysicsCollision"]
+position = Vector2(320, 464)
+shape = SubResource("RectangleShape2D_horizontal_wall")
+
+[node name="WestWallUpper" type="CollisionShape2D" parent="PhysicsCollision"]
+position = Vector2(80, 272)
+shape = SubResource("RectangleShape2D_side_upper")
+
+[node name="WestWallLower" type="CollisionShape2D" parent="PhysicsCollision"]
+position = Vector2(80, 432)
+shape = SubResource("RectangleShape2D_side_lower")
+
+[node name="EastWallUpper" type="CollisionShape2D" parent="PhysicsCollision"]
+position = Vector2(560, 272)
+shape = SubResource("RectangleShape2D_side_upper")
+
+[node name="EastWallLower" type="CollisionShape2D" parent="PhysicsCollision"]
+position = Vector2(560, 432)
+shape = SubResource("RectangleShape2D_side_lower")
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 10
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromWest" type="Marker2D" parent="Spawns"]
+position = Vector2(112, 336)
+
+[node name="FromEast" type="Marker2D" parent="Spawns"]
+position = Vector2(528, 336)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToWest" type="Area2D" parent="Exits"]
+position = Vector2(80, 336)
+script = ExtResource("3_map_exit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToWest"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="ToEast" type="Area2D" parent="Exits"]
+position = Vector2(560, 336)
+script = ExtResource("3_map_exit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToEast"]
+shape = SubResource("RectangleShape2D_exit")
+
+[connection signal="body_entered" from="Exits/ToWest" to="Exits/ToWest" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToEast" to="Exits/ToEast" method="_on_body_entered"]

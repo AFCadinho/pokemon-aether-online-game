@@ -301,6 +301,12 @@ position = Vector2(592, 2352)
 [node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=210662386]
 position = Vector2(1488, 48)
 
+[node name="FromRoute2GateNorth" type="Marker2D" parent="Spawns" unique_id=585857577]
+position = Vector2(1376, 784)
+
+[node name="FromRoute2GateSouth" type="Marker2D" parent="Spawns" unique_id=1928536631]
+position = Vector2(1376, 1136)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1183129315]
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=1185183787]
@@ -350,6 +356,24 @@ target_spawn_name = "FromRoute2South"
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_gac6d")
 
+[node name="ToRoute2GateNorth" type="Area2D" parent="Exits" unique_id=1207811318]
+position = Vector2(1376, 848)
+script = ExtResource("6_3mgn4")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn"
+target_spawn_name = "FromNorth"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2GateNorth" unique_id=139787917]
+shape = SubResource("RectangleShape2D_gac6d")
+
+[node name="ToRoute2GateSouth" type="Area2D" parent="Exits" unique_id=2132258533]
+position = Vector2(1376, 1040)
+script = ExtResource("6_3mgn4")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn"
+target_spawn_name = "FromSouth"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2GateSouth" unique_id=2132130911]
+shape = SubResource("RectangleShape2D_gac6d")
+
 [node name="SandTiles" type="Node2D" parent="." unique_id=597055844]
 
 [node name="Sand" type="TileMapLayer" parent="SandTiles" unique_id=1466692618]
@@ -367,9 +391,9 @@ tile_set = SubResource("TileSet_bej5m")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1080027364]
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=563925856]
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=2131252454]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=2096619694]
 
@@ -389,3 +413,5 @@ position = Vector2(1360, 752)
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianForestNorth" to="Exits/ToViridianForestNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianForestSouth" to="Exits/ToViridianForestSouth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute2GateNorth" to="Exits/ToRoute2GateNorth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute2GateSouth" to="Exits/ToRoute2GateSouth" method="_on_body_entered"]
