@@ -965,8 +965,10 @@ func _apply_move_projectile_endpoint_anchors(
 	if target_id == "":
 		target_id = "p2" if actor_id == "p1" else "p1"
 
-	var actor_anchor_parent := _get_effect_target_anchor_in_parent(actor_id, parent_node)
-	var target_anchor_parent := _get_effect_target_anchor_in_parent(target_id, parent_node)
+	var actor_anchor_point := str(config.get("projectile_actor_anchor_point", "center")).strip_edges().to_lower()
+	var target_anchor_point := str(config.get("projectile_target_anchor_point", "center")).strip_edges().to_lower()
+	var actor_anchor_parent := _get_effect_target_anchor_in_parent(actor_id, parent_node, actor_anchor_point)
+	var target_anchor_parent := _get_effect_target_anchor_in_parent(target_id, parent_node, target_anchor_point)
 	if actor_anchor_parent == Vector2.ZERO or target_anchor_parent == Vector2.ZERO:
 		return
 
@@ -1097,7 +1099,8 @@ func _apply_move_sheet_anchor(
 	if anchor_player_id == "":
 		return
 
-	var dynamic_anchor_parent := _get_effect_target_anchor_in_parent(anchor_player_id, parent_node)
+	var anchor_point := str(config.get("sheet_anchor_point", "center")).strip_edges().to_lower()
+	var dynamic_anchor_parent := _get_effect_target_anchor_in_parent(anchor_player_id, parent_node, anchor_point)
 	if dynamic_anchor_parent == Vector2.ZERO:
 		return
 
@@ -1105,7 +1108,11 @@ func _apply_move_sheet_anchor(
 	var source_anchor_player_id := anchor_player_id
 	if animation_node.reverse_battlefield:
 		source_anchor_player_id = "p2" if anchor_player_id == "p1" else "p1"
-	var fixed_anchor_source := EFFECT_SOURCE_PLAYER_POSITION if source_anchor_player_id == "p1" else EFFECT_SOURCE_ENEMY_POSITION
+	var default_fixed_anchor_source := EFFECT_SOURCE_PLAYER_POSITION if source_anchor_player_id == "p1" else EFFECT_SOURCE_ENEMY_POSITION
+	var fixed_anchor_source := _vector2_from_config_value(
+		config.get("sheet_anchor_source_position", [default_fixed_anchor_source.x, default_fixed_anchor_source.y]),
+		default_fixed_anchor_source
+	)
 	var source_anchor_offset := dynamic_anchor_source - fixed_anchor_source
 	var display_anchor_offset := -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset
 	animation_node.sheet_visual_offset += display_anchor_offset
@@ -1261,11 +1268,17 @@ func _get_effect_anchor_position(anchor: String) -> Vector2:
 			return Vector2.ZERO
 
 
-func _get_effect_target_anchor_in_parent(player_id: String, parent_node: Node) -> Vector2:
+func _get_effect_target_anchor_in_parent(player_id: String, parent_node: Node, anchor_point := "center") -> Vector2:
 	if player_id != "p1" and player_id != "p2":
 		return Vector2.ZERO
 
 	var target_box: Node = player_sprite_box if player_id == "p1" else enemy_sprite_box
+	var use_battle_anchor := anchor_point == "feet" or anchor_point == "battle"
+	if use_battle_anchor and target_box != null and parent_node is CanvasItem and target_box.has_method("get_single_battle_anchor_in_node"):
+		var battle_anchor: Variant = target_box.call("get_single_battle_anchor_in_node", parent_node as CanvasItem)
+		if battle_anchor is Vector2 and battle_anchor != Vector2.ZERO:
+			return battle_anchor as Vector2
+
 	if target_box != null and parent_node is CanvasItem and target_box.has_method("get_single_animation_anchor_in_node"):
 		var animation_anchor: Variant = target_box.call("get_single_animation_anchor_in_node", parent_node as CanvasItem)
 		if animation_anchor is Vector2 and animation_anchor != Vector2.ZERO:

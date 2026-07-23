@@ -550,6 +550,7 @@ func _draw_energy_blast_visual() -> void:
 		var particle_size := 1.2 + float(particle_index % 3) * 0.55
 		draw_circle(particle_center, particle_size, _color_with_alpha(particle_color, alpha * 0.78))
 
+	_draw_energy_blast_launch_ring(progress, aura_color, ring_color)
 	_draw_energy_blast_impact(progress, visible_end, aura_color, core_color, ring_color)
 
 
@@ -557,6 +558,40 @@ func _get_energy_blast_travel_progress(progress: float) -> float:
 	var travel_start := clampf(float(energy_blast_config.get("travel_start", 0.0)), 0.0, 0.95)
 	var travel_end := clampf(float(energy_blast_config.get("travel_end", 1.0)), travel_start + 0.001, 1.0)
 	return clampf((progress - travel_start) / maxf(travel_end - travel_start, 0.001), 0.0, 1.0)
+
+
+func _draw_energy_blast_launch_ring(progress: float, aura_color: Color, ring_color: Color) -> void:
+	var ring_value: Variant = energy_blast_config.get("launch_ring", {})
+	if not ring_value is Dictionary:
+		return
+
+	var ring_config := ring_value as Dictionary
+	if not bool(ring_config.get("enabled", false)):
+		return
+
+	var start: float = clampf(float(ring_config.get("start", 0.3)), 0.0, 1.0)
+	var end: float = clampf(float(ring_config.get("end", 0.7)), start + 0.001, 1.0)
+	if progress < start or progress > end:
+		return
+
+	var fade_progress := clampf((progress - start) / maxf(end - start, 0.001), 0.0, 1.0)
+	var alpha := (1.0 - fade_progress) * float(ring_config.get("alpha", 0.8))
+	if alpha <= 0.02:
+		return
+
+	var launch_state: Dictionary = _get_projectile_state_from_config(0.0, energy_blast_config)
+	var center: Vector2 = _projectile_battlefield_position(launch_state.get("position", Vector2.ZERO) as Vector2, energy_blast_config)
+	var radius: float = float(ring_config.get("radius", 34.0)) * (0.72 + fade_progress * 0.58)
+	var ring_color_override: Color = _color_from_value(ring_config.get("color", [ring_color.r, ring_color.g, ring_color.b, ring_color.a]), ring_color)
+	var core_color: Color = _color_from_value(ring_config.get("core_color", [aura_color.r, aura_color.g, aura_color.b, aura_color.a]), aura_color)
+	var spin := float(frame_index) * float(ring_config.get("spin_speed", 0.24))
+	draw_arc(center, radius, spin, spin + PI * 1.55, 48, _color_with_alpha(ring_color_override, alpha), 2.8)
+	draw_arc(center, radius * 0.72, -spin * 0.8, -spin * 0.8 + PI * 1.2, 40, _color_with_alpha(core_color, alpha * 0.78), 1.8)
+	var ember_count := maxi(0, int(ring_config.get("ember_count", 0)))
+	for ember_index in range(ember_count):
+		var ember_angle := spin * 0.65 + float(ember_index) * TAU / float(maxi(ember_count, 1))
+		var ember_center := center + Vector2(cos(ember_angle), sin(ember_angle)) * radius * (0.76 + 0.22 * sin(float(ember_index) + fade_progress * 4.0))
+		draw_circle(ember_center, 1.5 + float(ember_index % 2), _color_with_alpha(core_color, alpha * 0.8))
 
 
 func _draw_energy_blast_impact(progress: float, visible_end: float, aura_color: Color, core_color: Color, ring_color: Color) -> void:
