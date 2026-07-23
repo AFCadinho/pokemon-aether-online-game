@@ -18,7 +18,7 @@ const CHAT_MIN_SIZE := Vector2(360, 190)
 const CHAT_MAX_SIZE := Vector2(760, 520)
 const CHAT_RESIZE_BUTTON_GAP := 10.0
 const CHAT_TABS_GAP := 8.0
-const CHAT_TABS_LEFT_INSET := 76.0
+const CHAT_TABS_LEFT_INSET := 4.0
 const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 38.0
 const PERSONAL_BUFF_ROW_HEIGHT := 26.0
 const PERSONAL_BUFF_ROW_GAP := 4.0
@@ -33,6 +33,19 @@ const CHAT_TAB_TRADE := "trade"
 const CHAT_TAB_HELP := "help"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
+const CHAT_TAB_CLAN := "clan"
+const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
+	CHAT_TAB_GENERAL,
+	CHAT_TAB_SYSTEM,
+	CHAT_TAB_PM,
+	CHAT_TAB_CLAN,
+]
+const CHAT_TAB_LABELS := {
+	CHAT_TAB_GENERAL: "General",
+	CHAT_TAB_SYSTEM: "System",
+	CHAT_TAB_PM: "PM",
+	CHAT_TAB_CLAN: "Clan",
+}
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
 const CHAT_CHANNEL_GLOBAL := "global"
@@ -56,6 +69,7 @@ const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
+const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
 const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.svg")
 const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
@@ -461,6 +475,8 @@ var hotbar_slots: Array = []
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
+var chat_input_dock: PanelContainer
+var chat_tabs_background: Panel
 var chat_resize_dragging := false
 var chat_resize_drag_start_mouse := Vector2.ZERO
 var chat_resize_drag_start_rect := Rect2()
@@ -660,12 +676,30 @@ var chat_pokemon_attachment_buttons: Array[Button] = []
 var pm_tab_button: Button
 var pm_tab_attention_badge: Panel
 var help_chat_tab_button: Button
+var chat_settings_button: Button
+var chat_settings_attention_badge: Panel
+var chat_settings_popup: PanelContainer
+var chat_settings_rows: VBoxContainer
+var chat_tab_visibility: Dictionary = {}
+var chat_tab_order: Array[String] = []
+var selected_general_chat_tab := CHAT_TAB_GENERAL
+var clan_chat_tab_button: Button
+var clan_chat_container: CenterContainer
+var chat_context_selector_button: Button
+var chat_context_popup: PanelContainer
+var chat_context_scroll: ScrollContainer
+var chat_context_options: VBoxContainer
 var pm_chat_container: HBoxContainer
-var pm_conversation_list: VBoxContainer
+var pm_message_area: PanelContainer
 var pm_active_conversation_label: Label
 var pm_message_scroll: ScrollContainer
 var pm_message_list: VBoxContainer
-var pm_empty_label: Label
+var pm_empty_state: CenterContainer
+var pm_empty_title_label: Label
+var pm_empty_hint_label: Label
+var pm_message_empty_state: CenterContainer
+var pm_message_empty_title_label: Label
+var pm_message_empty_hint_label: Label
 var pm_conversations_by_user_id: Dictionary = {}
 var active_pm_user_id: int = 0
 var pm_unread_counts_by_user_id: Dictionary = {}
@@ -948,6 +982,7 @@ func _ready() -> void:
 	_build_party_slots()
 	_setup_collapsible_panels()
 	_setup_chat_resize_button()
+	_setup_chat_surface_ui()
 	_setup_normal_ui_focus_groups()
 	_setup_chat_pokemon_attachment_preview()
 	_setup_ui_confirm_popup()
@@ -1011,10 +1046,14 @@ func _ready() -> void:
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
 	_setup_help_chat_tab()
 	_setup_pm_chat_ui()
+	_setup_clan_chat_ui()
+	_setup_chat_context_selector_ui()
+	_setup_chat_tab_settings_ui()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	clan_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
 	dev_pokemon_button.disabled = true
@@ -1677,6 +1716,8 @@ func _get_scene_action_bar_row(panel: PanelContainer) -> HBoxContainer:
 func _apply_ui_z_index_policy() -> void:
 	var panels: Array[Control] = [
 		chat_panel,
+		chat_settings_popup,
+		chat_context_popup,
 		location_panel,
 		global_buffs_panel,
 		global_buff_details_panel,
@@ -1745,6 +1786,8 @@ func focus_battle_ui_layer() -> void:
 func _has_visible_priority_overlay_panel() -> bool:
 	var panels: Array[Control] = [
 		global_buff_details_panel,
+		chat_settings_popup,
+		chat_context_popup,
 		bag_popup,
 		trainer_card_popup,
 		dev_actions_popup,
@@ -1832,7 +1875,8 @@ func _setup_normal_ui_focus_groups() -> void:
 			^"ChatPanel/MarginContainer",
 			^"ChatPanel/MarginContainer/VBoxContainer",
 			^"ChatPanel/MarginContainer/VBoxContainer/ChatScroll",
-			^"ChatPanel/MarginContainer/VBoxContainer/InputRow",
+			^"ChatPanel/MarginContainer/VBoxContainer/ChatInputDock",
+			^"ChatPanel/MarginContainer/VBoxContainer/ChatInputDock/MarginContainer/InputRow",
 			^"ChatTabsPanel",
 			^"ChatTabsPanel/TabRow",
 		],
@@ -6024,6 +6068,8 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 	var panels: Array[Control] = [
 		chat_panel,
 		chat_tabs_panel,
+		chat_settings_popup,
+		chat_context_popup,
 		location_panel,
 		global_buffs_panel,
 		global_buff_details_panel,
@@ -6153,7 +6199,7 @@ func _setup_status_docks() -> void:
 			"name": "Global EXP Boost",
 			"description": "When funded, the entire server earns double Pokémon experience.",
 			"state": "funding",
-			"current": 64000,
+			"current": 0,
 			"goal": 100000,
 			"active_duration": "1h",
 		},
@@ -6162,10 +6208,10 @@ func _setup_status_docks() -> void:
 			"icon": GLOBAL_EV_BUFF_ICON,
 			"name": "Global EV Boost",
 			"description": "The entire server earns double Effort Values while this buff is active.",
-			"state": "active",
-			"current": 100000,
+			"state": "funding",
+			"current": 0,
 			"goal": 100000,
-			"remaining": "18m",
+			"active_duration": "1h",
 		},
 		{
 			"id": "global_shiny",
@@ -6173,7 +6219,7 @@ func _setup_status_docks() -> void:
 			"name": "Global Shiny Boost",
 			"description": "When funded, the entire server receives increased Shiny encounter odds.",
 			"state": "funding",
-			"current": 41000,
+			"current": 0,
 			"goal": 100000,
 			"active_duration": "1h",
 		},
@@ -6183,7 +6229,7 @@ func _setup_status_docks() -> void:
 			"name": "Rare Encounter Boost",
 			"description": "When funded, rarer Pokémon become more likely to appear for the entire server.",
 			"state": "funding",
-			"current": 22000,
+			"current": 0,
 			"goal": 100000,
 			"active_duration": "1h",
 		},
@@ -14063,6 +14109,93 @@ func _make_glass_panel_style(corner_radius: int = 10, border_width: int = 1) -> 
 	style.shadow_offset = Vector2(0, 4)
 	return style
 
+
+func _make_chat_panel_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#040912ed"), Color("#38658b"), 10, 1)
+	style.border_width_left = 2
+	style.content_margin_left = 5
+	style.content_margin_top = 5
+	style.content_margin_right = 5
+	style.content_margin_bottom = 5
+	style.shadow_color = Color(0, 0, 0, 0.46)
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(0, 4)
+	return style
+
+
+func _make_chat_message_surface_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#03081278"), Color("#25415d88"), 7, 1)
+	style.shadow_color = Color("#00000000")
+	style.shadow_size = 0
+	style.shadow_offset = Vector2.ZERO
+	return style
+
+
+func _make_chat_input_dock_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#07111ee8"), Color("#294a68"), 8, 1)
+	style.border_width_top = 2
+	style.shadow_color = Color(0, 0, 0, 0.24)
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, -1)
+	return style
+
+
+func _make_chat_popup_style(corner_radius: int = 8) -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#050b15f5"), Color("#38658b"), corner_radius, 1)
+	style.shadow_color = Color(0, 0, 0, 0.48)
+	style.shadow_size = 9
+	style.shadow_offset = Vector2(0, 3)
+	return style
+
+
+func _make_chat_tab_style(background_color: Color, border_color: Color, selected: bool) -> StyleBoxFlat:
+	var style := _make_button_style(background_color, border_color, 8, 1)
+	style.content_margin_left = 10
+	style.content_margin_top = 5
+	style.content_margin_right = 10
+	style.content_margin_bottom = 5
+	if selected:
+		style.border_width_bottom = 2
+		style.shadow_color = Color(UI_BORDER.r, UI_BORDER.g, UI_BORDER.b, 0.14)
+		style.shadow_size = 3
+		style.shadow_offset = Vector2.ZERO
+	return style
+
+
+func _apply_chat_main_tab_style(button: Button, selected: bool) -> void:
+	if button == null:
+		return
+	var normal_background := Color("#12213be8") if selected else Color("#08111ee0")
+	var normal_border := Color("#d8b767aa") if selected else Color("#294a68")
+	var hover_background := Color("#192c4dee") if selected else Color("#101f38ea")
+	var hover_border := UI_BORDER if selected else UI_BORDER_FOCUS
+	button.add_theme_color_override("font_color", CHAT_SYSTEM_LABEL_COLOR if selected else CHAT_MESSAGE_COLOR)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_stylebox_override("normal", _make_chat_tab_style(normal_background, normal_border, selected))
+	button.add_theme_stylebox_override("hover", _make_chat_tab_style(hover_background, hover_border, selected))
+	button.add_theme_stylebox_override("pressed", _make_chat_tab_style(Color("#07101de8"), hover_border, selected))
+	button.add_theme_stylebox_override("focus", _make_chat_tab_style(Color("#10213aee"), UI_BORDER_FOCUS, selected))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+func _apply_chat_dock_button_style(button: Button, accent: bool = false) -> void:
+	if button == null:
+		return
+	var normal_border := UI_BORDER_FOCUS if accent else Color("#315070")
+	var hover_border := UI_BORDER if accent else UI_BORDER_FOCUS
+	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_stylebox_override("normal", _make_chat_tab_style(Color("#0b182ae8"), normal_border, false))
+	button.add_theme_stylebox_override("hover", _make_chat_tab_style(Color("#142844ee"), hover_border, false))
+	button.add_theme_stylebox_override("pressed", _make_chat_tab_style(Color("#07101de8"), hover_border, false))
+	button.add_theme_stylebox_override("focus", _make_chat_tab_style(Color("#10213aee"), UI_BORDER_FOCUS, false))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
 func _make_player_status_panel_style(hovered: bool) -> StyleBoxFlat:
 	var background_color := Color("#0b1727f5") if hovered else Color("#070f19f0")
 	var border_color := UI_BORDER_FOCUS if hovered else PLAYER_STATUS_CARD_BORDER
@@ -14211,7 +14344,11 @@ func _on_icon_slot_mouse_exited(panel: PanelContainer) -> void:
 
 func _apply_premium_overlay_styles() -> void:
 	party_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
-	chat_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
+	chat_panel.add_theme_stylebox_override("panel", _make_chat_panel_style())
+	message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())
+	message_list.add_theme_constant_override("separation", 5)
+	if chat_input_dock != null:
+		chat_input_dock.add_theme_stylebox_override("panel", _make_chat_input_dock_style())
 	location_panel.add_theme_stylebox_override("panel", _make_glass_panel_style(12))
 	options_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
 	actions_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
@@ -14227,7 +14364,7 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(general_chat_tab_button, "primary")
 	_apply_button_style(trade_chat_tab_button, "primary")
 	_apply_button_style(system_chat_tab_button, "primary")
-	_apply_button_style(send_button, "primary")
+	_apply_chat_dock_button_style(send_button, true)
 	_apply_button_style(global_buff_details_close_button)
 	_apply_button_style(global_buff_contribute_button, "primary")
 	_refresh_global_buff_contribution_buttons()
@@ -14275,7 +14412,8 @@ func _apply_premium_overlay_styles() -> void:
 		if button != null:
 			_apply_button_style(button)
 	if chat_resize_button != null:
-		_apply_button_style(chat_resize_button)
+		_apply_chat_dock_button_style(chat_resize_button)
+		_apply_compact_chat_settings_button_style(chat_resize_button)
 
 func _apply_socials_menu_style() -> void:
 	var title_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Title") as Label
@@ -14310,15 +14448,54 @@ func _setup_chat_resize_button() -> void:
 	chat_resize_button = Button.new()
 	chat_resize_button.custom_minimum_size = COLLAPSE_BUTTON_SIZE
 	chat_resize_button.size = COLLAPSE_BUTTON_SIZE
-	chat_resize_button.text = "[]"
-	chat_resize_button.tooltip_text = "Resize chat"
-	chat_resize_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	chat_resize_button.icon = CHAT_RESIZE_ICON
+	chat_resize_button.expand_icon = true
+	chat_resize_button.add_theme_constant_override("icon_max_width", 16)
+	chat_resize_button.tooltip_text = "Drag to resize chat"
+	chat_resize_button.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
 	chat_resize_button.focus_mode = Control.FOCUS_NONE
 	chat_resize_button.z_index = UI_BASE_Z_INDEX
 	chat_resize_button.gui_input.connect(_on_chat_resize_button_gui_input)
 	_connect_normal_ui_group_focus(chat_resize_button, chat_panel, false)
 	root_control.add_child(chat_resize_button)
 	_position_chat_resize_button()
+
+
+func _setup_chat_surface_ui() -> void:
+	if chat_input_dock != null:
+		return
+
+	var chat_vbox := chat_input_row.get_parent() as VBoxContainer
+	if chat_vbox == null:
+		return
+	var input_row_index := chat_input_row.get_index()
+	chat_vbox.remove_child(chat_input_row)
+
+	chat_input_dock = PanelContainer.new()
+	chat_input_dock.name = "ChatInputDock"
+	chat_input_dock.mouse_filter = Control.MOUSE_FILTER_PASS
+	chat_vbox.add_child(chat_input_dock)
+	chat_vbox.move_child(chat_input_dock, input_row_index)
+
+	var dock_margin := MarginContainer.new()
+	dock_margin.add_theme_constant_override("margin_left", 6)
+	dock_margin.add_theme_constant_override("margin_top", 5)
+	dock_margin.add_theme_constant_override("margin_right", 6)
+	dock_margin.add_theme_constant_override("margin_bottom", 5)
+	chat_input_dock.add_child(dock_margin)
+	dock_margin.add_child(chat_input_row)
+
+	chat_tabs_background = Panel.new()
+	chat_tabs_background.name = "ChatTabsBackground"
+	chat_tabs_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chat_tabs_background.set_anchors_preset(Control.PRESET_FULL_RECT)
+	chat_tabs_background.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#040912c9"), Color("#294a68cc"), 9, 1)
+	)
+	chat_tabs_panel.add_child(chat_tabs_background)
+	chat_tabs_panel.move_child(chat_tabs_background, 0)
+
 
 func _on_chat_resize_button_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):
@@ -14423,6 +14600,9 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 			pokedex_popup.visible = false
 	if panel_id == "chat":
 		chat_tabs_panel.visible = available and not collapsed
+		if collapsed:
+			_hide_chat_settings_popup()
+			_hide_chat_context_popup()
 		_position_chat_tabs_panel()
 		_position_chat_resize_button()
 	if panel_id == "location" and wild_pokemon_button != null:
@@ -14545,7 +14725,12 @@ func _position_chat_tabs_panel() -> void:
 	var viewport_size := root_control.size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
 		viewport_size = get_viewport().get_visible_rect().size
+	var tab_row := $Control/ChatTabsPanel/TabRow as HBoxContainer
 	var tabs_size := chat_tabs_panel.get_combined_minimum_size()
+	if tab_row != null:
+		var row_minimum_size := tab_row.get_combined_minimum_size()
+		tabs_size.x = maxf(tabs_size.x, row_minimum_size.x)
+		tabs_size.y = maxf(tabs_size.y, row_minimum_size.y)
 	var max_tabs_width: float = max(0.0, viewport_size.x)
 	tabs_size.x = min(tabs_size.x, max_tabs_width)
 	chat_tabs_panel.size = tabs_size
@@ -14553,6 +14738,10 @@ func _position_chat_tabs_panel() -> void:
 		clampf(chat_panel.position.x + CHAT_TABS_LEFT_INSET, 0.0, max(0.0, viewport_size.x - tabs_size.x)),
 		max(0.0, chat_panel.position.y - tabs_size.y - CHAT_TABS_GAP)
 	)
+	if chat_settings_popup != null and chat_settings_popup.visible:
+		_position_action_slot_popup(chat_settings_popup, chat_settings_button)
+	if chat_context_popup != null and chat_context_popup.visible:
+		_position_action_slot_popup(chat_context_popup, chat_context_selector_button)
 
 func _set_chat_panel_size(size: Vector2) -> void:
 	var clamped_size := Vector2(
@@ -14600,6 +14789,8 @@ func _get_active_escape_close_candidate() -> Dictionary:
 func _get_escape_close_candidates() -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = [
 		{"panel": global_buff_details_panel, "close": Callable(self, "_hide_global_buff_details")},
+		{"panel": chat_settings_popup, "close": Callable(self, "_hide_chat_settings_popup")},
+		{"panel": chat_context_popup, "close": Callable(self, "_hide_chat_context_popup")},
 		{"panel": mail_compose_help_popup, "close": Callable(self, "_hide_mail_compose_help_popup")},
 		{"panel": pokemon_summary_ev_allocate_popup, "close": Callable(self, "_hide_pokemon_summary_ev_allocate_popup")},
 		{"panel": pokemon_summary_ball_picker, "close": Callable(self, "_hide_pokemon_summary_ball_picker_for_escape")},
@@ -14982,6 +15173,42 @@ func _set_control_tree_mouse_filter(node: Node, mouse_filter_value: int) -> void
 	for child: Node in node.get_children():
 		_set_control_tree_mouse_filter(child, mouse_filter_value)
 
+
+func _create_chat_empty_state(title_text: String, hint_text: String) -> Dictionary:
+	var container := CenterContainer.new()
+	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var column := VBoxContainer.new()
+	column.custom_minimum_size = Vector2(180, 0)
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.alignment = BoxContainer.ALIGNMENT_CENTER
+	column.add_theme_constant_override("separation", 5)
+	container.add_child(column)
+
+	var title := Label.new()
+	title.text = title_text
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	column.add_child(title)
+
+	var hint := Label.new()
+	hint.text = hint_text
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 11)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	column.add_child(hint)
+
+	return {
+		"container": container,
+		"title": title,
+		"hint": hint,
+	}
+
+
 func _setup_pm_chat_ui() -> void:
 	if pm_tab_button != null:
 		return
@@ -15002,52 +15229,51 @@ func _setup_pm_chat_ui() -> void:
 	pm_chat_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pm_chat_container.add_theme_constant_override("separation", 8)
 
-	var conversation_margin := MarginContainer.new()
-	conversation_margin.custom_minimum_size = Vector2(132, 0)
-	conversation_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	conversation_margin.add_theme_constant_override("margin_left", 4)
-	conversation_margin.add_theme_constant_override("margin_top", 4)
-	conversation_margin.add_theme_constant_override("margin_right", 6)
-	conversation_margin.add_theme_constant_override("margin_bottom", 4)
-	pm_chat_container.add_child(conversation_margin)
+	var global_empty_state := _create_chat_empty_state(
+		"No private messages yet",
+		"Open a trainer card or use /pm username in chat to start a conversation."
+	)
+	pm_empty_state = global_empty_state.get("container") as CenterContainer
+	pm_empty_title_label = global_empty_state.get("title") as Label
+	pm_empty_hint_label = global_empty_state.get("hint") as Label
+	pm_empty_state.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_empty_state.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_chat_container.add_child(pm_empty_state)
 
-	var conversation_scroll := ScrollContainer.new()
-	conversation_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	conversation_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pm_conversation_list = VBoxContainer.new()
-	pm_conversation_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pm_conversation_list.add_theme_constant_override("separation", 5)
-	conversation_scroll.add_child(pm_conversation_list)
-	conversation_margin.add_child(conversation_scroll)
-
-	var separator := PanelContainer.new()
-	separator.custom_minimum_size = Vector2(1, 0)
-	separator.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	separator.add_theme_stylebox_override("panel", _make_panel_style(Color(UI_BORDER_SOFT.r, UI_BORDER_SOFT.g, UI_BORDER_SOFT.b, 0.72), Color.TRANSPARENT, 0, 0))
-	pm_chat_container.add_child(separator)
+	pm_message_area = PanelContainer.new()
+	pm_message_area.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_message_area.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_message_area.add_theme_stylebox_override(
+		"panel",
+		_make_chat_message_surface_style()
+	)
+	pm_chat_container.add_child(pm_message_area)
 
 	var message_margin := MarginContainer.new()
-	message_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	message_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	message_margin.add_theme_constant_override("margin_left", 4)
-	message_margin.add_theme_constant_override("margin_top", 4)
-	message_margin.add_theme_constant_override("margin_right", 6)
-	message_margin.add_theme_constant_override("margin_bottom", 4)
-	pm_chat_container.add_child(message_margin)
+	message_margin.add_theme_constant_override("margin_left", 10)
+	message_margin.add_theme_constant_override("margin_top", 7)
+	message_margin.add_theme_constant_override("margin_right", 10)
+	message_margin.add_theme_constant_override("margin_bottom", 7)
+	pm_message_area.add_child(message_margin)
 
 	var pm_message_column := VBoxContainer.new()
 	pm_message_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pm_message_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pm_message_column.add_theme_constant_override("separation", 5)
+	pm_message_column.add_theme_constant_override("separation", 6)
 	message_margin.add_child(pm_message_column)
 
 	pm_active_conversation_label = Label.new()
 	pm_active_conversation_label.clip_text = true
 	pm_active_conversation_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	pm_active_conversation_label.custom_minimum_size = Vector2(0, 22)
+	pm_active_conversation_label.custom_minimum_size = Vector2(0, 24)
 	pm_active_conversation_label.add_theme_color_override("font_color", CHAT_SYSTEM_LABEL_COLOR)
-	pm_active_conversation_label.add_theme_font_size_override("font_size", 13)
+	pm_active_conversation_label.add_theme_font_size_override("font_size", 14)
 	pm_message_column.add_child(pm_active_conversation_label)
+
+	var message_body := MarginContainer.new()
+	message_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	message_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pm_message_column.add_child(message_body)
 
 	pm_message_scroll = ScrollContainer.new()
 	pm_message_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -15056,14 +15282,235 @@ func _setup_pm_chat_ui() -> void:
 	pm_message_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pm_message_list.add_theme_constant_override("separation", 4)
 	pm_message_scroll.add_child(pm_message_list)
-	pm_message_column.add_child(pm_message_scroll)
+	message_body.add_child(pm_message_scroll)
+
+	var message_empty_state := _create_chat_empty_state("", "")
+	pm_message_empty_state = message_empty_state.get("container") as CenterContainer
+	pm_message_empty_title_label = message_empty_state.get("title") as Label
+	pm_message_empty_hint_label = message_empty_state.get("hint") as Label
+	message_body.add_child(pm_message_empty_state)
 
 	var chat_vbox := $Control/ChatPanel/MarginContainer/VBoxContainer
 	chat_vbox.add_child(pm_chat_container)
 	chat_vbox.move_child(pm_chat_container, message_scroll.get_index() + 1)
-	_render_pm_conversation_list()
+	_refresh_pm_context_navigation()
 	_render_active_pm_conversation()
 	_reorder_chat_tab_buttons()
+
+
+func _setup_clan_chat_ui() -> void:
+	if clan_chat_tab_button != null:
+		return
+
+	clan_chat_tab_button = Button.new()
+	clan_chat_tab_button.name = "ClanButton"
+	clan_chat_tab_button.custom_minimum_size = Vector2(70, 28)
+	clan_chat_tab_button.text = "Clan"
+	clan_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	clan_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_CLAN))
+	$Control/ChatTabsPanel/TabRow.add_child(clan_chat_tab_button)
+	_apply_button_style(clan_chat_tab_button, "primary")
+
+	var clan_empty_state := _create_chat_empty_state(
+		"Clan chat",
+		"Clan conversations will appear here once the clan system is connected."
+	)
+	clan_chat_container = clan_empty_state.get("container") as CenterContainer
+	clan_chat_container.visible = false
+	clan_chat_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	clan_chat_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var chat_vbox := $Control/ChatPanel/MarginContainer/VBoxContainer
+	chat_vbox.add_child(clan_chat_container)
+	chat_vbox.move_child(clan_chat_container, pm_chat_container.get_index() + 1)
+	_reorder_chat_tab_buttons()
+
+
+func _setup_chat_context_selector_ui() -> void:
+	if chat_context_selector_button != null:
+		return
+
+	chat_context_selector_button = Button.new()
+	chat_context_selector_button.name = "ChatContextSelectorButton"
+	chat_context_selector_button.custom_minimum_size = Vector2(108, 34)
+	chat_context_selector_button.focus_mode = Control.FOCUS_NONE
+	chat_context_selector_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	chat_context_selector_button.clip_text = true
+	chat_context_selector_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	chat_context_selector_button.pressed.connect(_on_chat_context_selector_pressed)
+	chat_input_row.add_child(chat_context_selector_button)
+	chat_input_row.move_child(chat_context_selector_button, 0)
+	_apply_chat_dock_button_style(chat_context_selector_button)
+
+	chat_context_popup = PanelContainer.new()
+	chat_context_popup.name = "ChatContextPopup"
+	chat_context_popup.visible = false
+	chat_context_popup.custom_minimum_size = Vector2(180, 0)
+	chat_context_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	chat_context_popup.z_index = UI_ACTIVE_Z_INDEX
+	chat_context_popup.add_theme_stylebox_override("panel", _make_chat_popup_style(8))
+	root_control.add_child(chat_context_popup)
+
+	var popup_margin := MarginContainer.new()
+	popup_margin.add_theme_constant_override("margin_left", 6)
+	popup_margin.add_theme_constant_override("margin_top", 6)
+	popup_margin.add_theme_constant_override("margin_right", 6)
+	popup_margin.add_theme_constant_override("margin_bottom", 6)
+	chat_context_popup.add_child(popup_margin)
+
+	chat_context_scroll = ScrollContainer.new()
+	chat_context_scroll.custom_minimum_size = Vector2(168, 0)
+	chat_context_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	popup_margin.add_child(chat_context_scroll)
+
+	chat_context_options = VBoxContainer.new()
+	chat_context_options.name = "Options"
+	chat_context_options.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	chat_context_options.add_theme_constant_override("separation", 4)
+	chat_context_scroll.add_child(chat_context_options)
+
+	chat_context_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(chat_context_popup))
+	_refresh_chat_context_selector()
+
+
+func _on_chat_context_selector_pressed() -> void:
+	if chat_context_popup == null or chat_context_selector_button == null:
+		return
+	if chat_context_popup.visible:
+		_hide_chat_context_popup()
+		return
+
+	_hide_chat_settings_popup()
+	_rebuild_chat_context_options()
+	if chat_context_options == null or chat_context_options.get_child_count() == 0:
+		return
+	chat_context_popup.visible = true
+	_position_action_slot_popup(chat_context_popup, chat_context_selector_button)
+	_activate_ui_panel(chat_context_popup)
+
+
+func _rebuild_chat_context_options() -> void:
+	if chat_context_options == null:
+		return
+	for child: Node in chat_context_options.get_children():
+		chat_context_options.remove_child(child)
+		child.queue_free()
+
+	var primary_tab := _active_primary_chat_tab_id()
+	if primary_tab == CHAT_TAB_GENERAL:
+		_add_chat_context_option("Global", CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
+		_add_chat_context_option("Trade", CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
+		_add_chat_context_option("Help", CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
+		_refresh_chat_context_scroll_size()
+		return
+	if primary_tab != CHAT_TAB_PM:
+		return
+
+	var user_ids: Array = pm_conversations_by_user_id.keys()
+	user_ids.sort()
+	for user_id_value: Variant in user_ids:
+		var user_id := int(user_id_value)
+		var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
+		var user := _dictionary_from_value(conversation.get("user", {}))
+		var unread := int(pm_unread_counts_by_user_id.get(user_id, 0))
+		var label := _pm_conversation_title(user, unread)
+		_add_pm_context_option(label, user_id, user_id == active_pm_user_id)
+	_refresh_chat_context_scroll_size()
+
+
+func _refresh_chat_context_scroll_size() -> void:
+	if chat_context_scroll == null or chat_context_options == null:
+		return
+	var option_count := chat_context_options.get_child_count()
+	chat_context_scroll.custom_minimum_size.y = minf(float(option_count * 34), 238.0)
+
+
+func _add_chat_context_option(label_text: String, channel_tab_id: String, selected: bool) -> void:
+	var button := _create_chat_context_option_button(label_text, selected)
+	button.pressed.connect(_on_general_chat_context_selected.bind(channel_tab_id))
+	chat_context_options.add_child(button)
+
+
+func _add_pm_context_option(label_text: String, user_id: int, selected: bool) -> void:
+	var button := _create_chat_context_option_button(label_text, selected)
+	button.pressed.connect(_on_pm_chat_context_selected.bind(user_id))
+	chat_context_options.add_child(button)
+
+
+func _create_chat_context_option_button(label_text: String, selected: bool) -> Button:
+	var button := Button.new()
+	button.text = label_text
+	button.custom_minimum_size = Vector2(0, 30)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.clip_text = true
+	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_apply_button_style(button, "primary" if selected else "default")
+	_apply_compact_chat_settings_button_style(button)
+	return button
+
+
+func _on_general_chat_context_selected(channel_tab_id: String) -> void:
+	if channel_tab_id not in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+		return
+	selected_general_chat_tab = channel_tab_id
+	active_chat_tab = channel_tab_id
+	_hide_chat_context_popup()
+	_apply_chat_tab_state()
+	chat_input.grab_focus()
+
+
+func _on_pm_chat_context_selected(user_id: int) -> void:
+	_hide_chat_context_popup()
+	_on_pm_conversation_selected(user_id)
+
+
+func _hide_chat_context_popup() -> void:
+	if chat_context_popup == null or not chat_context_popup.visible:
+		return
+	chat_context_popup.visible = false
+	_deactivate_ui_panel(chat_context_popup)
+
+
+func _active_primary_chat_tab_id() -> String:
+	if active_chat_tab in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+		return CHAT_TAB_GENERAL
+	return active_chat_tab
+
+
+func _refresh_chat_context_selector() -> void:
+	if chat_context_selector_button == null:
+		return
+
+	var primary_tab := _active_primary_chat_tab_id()
+	chat_context_selector_button.visible = primary_tab != CHAT_TAB_SYSTEM
+	chat_context_selector_button.disabled = false
+	match primary_tab:
+		CHAT_TAB_GENERAL:
+			var channel_label := "Global"
+			if active_chat_tab == CHAT_TAB_TRADE:
+				channel_label = "Trade"
+			elif active_chat_tab == CHAT_TAB_HELP:
+				channel_label = "Help"
+			chat_context_selector_button.text = "%s  ▴" % channel_label
+			chat_context_selector_button.tooltip_text = "Choose General chat channel"
+		CHAT_TAB_PM:
+			if active_pm_user_id != 0 and pm_conversations_by_user_id.has(active_pm_user_id):
+				var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
+				var user := _dictionary_from_value(conversation.get("user", {}))
+				chat_context_selector_button.text = "%s  ▴" % _pm_conversation_title(user, 0)
+			else:
+				chat_context_selector_button.text = "Select PM  ▴"
+			chat_context_selector_button.disabled = pm_conversations_by_user_id.is_empty()
+			chat_context_selector_button.tooltip_text = (
+				"No PM conversations yet"
+				if pm_conversations_by_user_id.is_empty()
+				else "Choose private conversation"
+			)
+		CHAT_TAB_CLAN:
+			chat_context_selector_button.text = "Clan"
+			chat_context_selector_button.disabled = true
+			chat_context_selector_button.tooltip_text = "Clan chat is not connected yet"
 
 
 func _setup_help_chat_tab() -> void:
@@ -15080,24 +15527,292 @@ func _setup_help_chat_tab() -> void:
 	_reorder_chat_tab_buttons()
 
 
+func _setup_chat_tab_settings_ui() -> void:
+	if chat_settings_button != null:
+		return
+
+	chat_tab_visibility = SettingsManager.chat_tab_visibility.duplicate()
+	chat_tab_visibility[CHAT_TAB_GENERAL] = true
+	chat_tab_order.clear()
+	for tab_value: Variant in SettingsManager.chat_tab_order:
+		var tab_id := str(tab_value)
+		if tab_id in CHAT_TAB_DEFAULT_ORDER and not chat_tab_order.has(tab_id):
+			chat_tab_order.append(tab_id)
+	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
+		if not chat_tab_order.has(tab_id):
+			chat_tab_order.append(tab_id)
+
+	var tab_row := $Control/ChatTabsPanel/TabRow
+	chat_settings_button = Button.new()
+	chat_settings_button.name = "ChatSettingsButton"
+	chat_settings_button.text = "⋯"
+	chat_settings_button.custom_minimum_size = Vector2(32, 28)
+	chat_settings_button.focus_mode = Control.FOCUS_NONE
+	chat_settings_button.tooltip_text = "Chat settings"
+	chat_settings_button.pressed.connect(_on_chat_settings_button_pressed)
+	tab_row.add_child(chat_settings_button)
+	_apply_button_style(chat_settings_button)
+	_apply_compact_chat_settings_button_style(chat_settings_button)
+	chat_settings_attention_badge = _create_attention_badge_for_button(chat_settings_button, 3.0, 3.0)
+
+	chat_settings_popup = PanelContainer.new()
+	chat_settings_popup.name = "ChatSettingsPopup"
+	chat_settings_popup.visible = false
+	chat_settings_popup.custom_minimum_size = Vector2(320, 0)
+	chat_settings_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	chat_settings_popup.z_index = UI_ACTIVE_Z_INDEX
+	chat_settings_popup.add_theme_stylebox_override("panel", _make_chat_popup_style(9))
+	root_control.add_child(chat_settings_popup)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	chat_settings_popup.add_child(margin)
+
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 7)
+	margin.add_child(content)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	content.add_child(header)
+
+	var title := Label.new()
+	title.text = "Chat tabs"
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 15)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(title)
+
+	var close_button := Button.new()
+	close_button.name = "CloseButton"
+	close_button.text = "×"
+	close_button.custom_minimum_size = Vector2(28, 26)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.tooltip_text = "Close"
+	close_button.pressed.connect(_hide_chat_settings_popup)
+	_apply_button_style(close_button)
+	_apply_compact_chat_settings_button_style(close_button)
+	header.add_child(close_button)
+
+	var description := Label.new()
+	description.text = "Choose visible main tabs and their order."
+	description.add_theme_font_size_override("font_size", 11)
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	content.add_child(description)
+
+	var divider := HSeparator.new()
+	divider.add_theme_constant_override("separation", 2)
+	content.add_child(divider)
+
+	chat_settings_rows = VBoxContainer.new()
+	chat_settings_rows.name = "TabRows"
+	chat_settings_rows.add_theme_constant_override("separation", 3)
+	content.add_child(chat_settings_rows)
+
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 8)
+	content.add_child(footer)
+
+	var saved_label := Label.new()
+	saved_label.text = "Saved automatically"
+	saved_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	saved_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	saved_label.add_theme_font_size_override("font_size", 10)
+	saved_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
+	footer.add_child(saved_label)
+
+	var reset_button := Button.new()
+	reset_button.name = "ResetButton"
+	reset_button.text = "Reset"
+	reset_button.custom_minimum_size = Vector2(62, 28)
+	reset_button.focus_mode = Control.FOCUS_NONE
+	reset_button.tooltip_text = "Restore the default chat tabs"
+	reset_button.pressed.connect(_on_chat_tab_settings_reset_pressed)
+	_apply_button_style(reset_button)
+	_apply_compact_chat_settings_button_style(reset_button)
+	footer.add_child(reset_button)
+
+	chat_settings_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(chat_settings_popup))
+	_apply_chat_tab_preferences()
+
+
+func _apply_compact_chat_settings_button_style(button: Button) -> void:
+	if button == null:
+		return
+	button.add_theme_font_size_override("font_size", 12)
+	for style_name: String in ["normal", "hover", "pressed", "focus"]:
+		var source_style := button.get_theme_stylebox(style_name) as StyleBoxFlat
+		if source_style == null:
+			continue
+		var compact_style := source_style.duplicate() as StyleBoxFlat
+		compact_style.content_margin_left = 5
+		compact_style.content_margin_right = 5
+		compact_style.content_margin_top = 3
+		compact_style.content_margin_bottom = 3
+		button.add_theme_stylebox_override(style_name, compact_style)
+
+
+func _render_chat_tab_settings_rows() -> void:
+	if chat_settings_rows == null:
+		return
+	for child: Node in chat_settings_rows.get_children():
+		chat_settings_rows.remove_child(child)
+		child.queue_free()
+
+	for order_index: int in range(chat_tab_order.size()):
+		var tab_id := chat_tab_order[order_index]
+		var row := HBoxContainer.new()
+		row.name = "%sRow" % str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+		row.custom_minimum_size = Vector2(0, 30)
+		row.add_theme_constant_override("separation", 5)
+		chat_settings_rows.add_child(row)
+
+		var visibility_toggle := CheckButton.new()
+		visibility_toggle.name = "VisibilityToggle"
+		visibility_toggle.text = str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+		visibility_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		visibility_toggle.focus_mode = Control.FOCUS_NONE
+		visibility_toggle.set_pressed_no_signal(bool(chat_tab_visibility.get(tab_id, true)))
+		visibility_toggle.disabled = tab_id == CHAT_TAB_GENERAL
+		visibility_toggle.tooltip_text = "General always stays visible." if tab_id == CHAT_TAB_GENERAL else "Show or hide this chat tab."
+		visibility_toggle.add_theme_font_size_override("font_size", 13)
+		visibility_toggle.add_theme_color_override("font_color", UI_TEXT)
+		visibility_toggle.add_theme_color_override("font_disabled_color", Color(UI_TEXT.r, UI_TEXT.g, UI_TEXT.b, 0.72))
+		visibility_toggle.toggled.connect(_on_chat_tab_visibility_toggled.bind(tab_id))
+		row.add_child(visibility_toggle)
+
+		var move_up_button := Button.new()
+		move_up_button.name = "MoveUpButton"
+		move_up_button.text = "↑"
+		move_up_button.custom_minimum_size = Vector2(28, 26)
+		move_up_button.focus_mode = Control.FOCUS_NONE
+		move_up_button.disabled = order_index == 0
+		move_up_button.tooltip_text = "Move tab left"
+		move_up_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, -1))
+		_apply_button_style(move_up_button)
+		_apply_compact_chat_settings_button_style(move_up_button)
+		row.add_child(move_up_button)
+
+		var move_down_button := Button.new()
+		move_down_button.name = "MoveDownButton"
+		move_down_button.text = "↓"
+		move_down_button.custom_minimum_size = Vector2(28, 26)
+		move_down_button.focus_mode = Control.FOCUS_NONE
+		move_down_button.disabled = order_index == chat_tab_order.size() - 1
+		move_down_button.tooltip_text = "Move tab right"
+		move_down_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, 1))
+		_apply_button_style(move_down_button)
+		_apply_compact_chat_settings_button_style(move_down_button)
+		row.add_child(move_down_button)
+
+
+func _on_chat_settings_button_pressed() -> void:
+	if chat_settings_popup == null:
+		return
+	if chat_settings_popup.visible:
+		_hide_chat_settings_popup()
+		return
+
+	_hide_chat_context_popup()
+	_render_chat_tab_settings_rows()
+	chat_settings_popup.visible = true
+	_position_action_slot_popup(chat_settings_popup, chat_settings_button)
+	_activate_ui_panel(chat_settings_popup)
+
+
+func _hide_chat_settings_popup() -> void:
+	if chat_settings_popup == null or not chat_settings_popup.visible:
+		return
+	chat_settings_popup.visible = false
+	_deactivate_ui_panel(chat_settings_popup)
+
+
+func _on_chat_tab_visibility_toggled(visible: bool, tab_id: String) -> void:
+	if tab_id == CHAT_TAB_GENERAL:
+		chat_tab_visibility[CHAT_TAB_GENERAL] = true
+		return
+	chat_tab_visibility[tab_id] = visible
+	_apply_chat_tab_preferences()
+	SettingsManager.set_chat_tab_preferences(chat_tab_visibility, chat_tab_order)
+
+
+func _on_chat_tab_move_pressed(tab_id: String, direction: int) -> void:
+	var current_index := chat_tab_order.find(tab_id)
+	if current_index < 0:
+		return
+	var target_index := clampi(current_index + direction, 0, chat_tab_order.size() - 1)
+	if target_index == current_index:
+		return
+
+	chat_tab_order.remove_at(current_index)
+	chat_tab_order.insert(target_index, tab_id)
+	_apply_chat_tab_preferences()
+	SettingsManager.set_chat_tab_preferences(chat_tab_visibility, chat_tab_order)
+
+
+func _on_chat_tab_settings_reset_pressed() -> void:
+	chat_tab_visibility = {}
+	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
+		chat_tab_visibility[tab_id] = true
+	chat_tab_order = CHAT_TAB_DEFAULT_ORDER.duplicate()
+	_apply_chat_tab_preferences()
+	SettingsManager.reset_chat_tab_preferences()
+
+
+func _apply_chat_tab_preferences() -> void:
+	chat_tab_visibility[CHAT_TAB_GENERAL] = true
+	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
+		if not chat_tab_visibility.has(tab_id):
+			chat_tab_visibility[tab_id] = true
+
+	general_chat_tab_button.visible = true
+	system_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_SYSTEM, true))
+	trade_chat_tab_button.visible = false
+	if help_chat_tab_button != null:
+		help_chat_tab_button.visible = false
+	if pm_tab_button != null:
+		pm_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_PM, true))
+	if clan_chat_tab_button != null:
+		clan_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_CLAN, true))
+
+	if not bool(chat_tab_visibility.get(_active_primary_chat_tab_id(), true)):
+		active_chat_tab = CHAT_TAB_GENERAL
+		selected_general_chat_tab = CHAT_TAB_GENERAL
+
+	_reorder_chat_tab_buttons()
+	_render_chat_tab_settings_rows()
+	_apply_chat_tab_state()
+	_position_chat_tabs_panel()
+
+
+func _chat_tab_button_for_id(tab_id: String) -> Button:
+	match tab_id:
+		CHAT_TAB_GENERAL:
+			return general_chat_tab_button
+		CHAT_TAB_SYSTEM:
+			return system_chat_tab_button
+		CHAT_TAB_PM:
+			return pm_tab_button
+		CHAT_TAB_CLAN:
+			return clan_chat_tab_button
+	return null
+
+
 func _reorder_chat_tab_buttons() -> void:
 	var tab_row := $Control/ChatTabsPanel/TabRow
-	var order: Array[Button] = [
-		general_chat_tab_button,
-		system_chat_tab_button,
-		trade_chat_tab_button,
-	]
-	if help_chat_tab_button != null:
-		order.append(help_chat_tab_button)
-	if pm_tab_button != null:
-		order.append(pm_tab_button)
-
+	var effective_order: Array[String] = chat_tab_order if not chat_tab_order.is_empty() else CHAT_TAB_DEFAULT_ORDER
 	var index: int = 0
-	for button: Button in order:
+	for tab_id: String in effective_order:
+		var button := _chat_tab_button_for_id(tab_id)
 		if button == null or button.get_parent() != tab_row:
 			continue
 		tab_row.move_child(button, index)
 		index += 1
+	if chat_settings_button != null and chat_settings_button.get_parent() == tab_row:
+		tab_row.move_child(chat_settings_button, index)
 
 func open_private_message_conversation(user: Dictionary) -> void:
 	var conversation_key: int = _pm_conversation_key_from_user(user)
@@ -15143,57 +15858,72 @@ func _ensure_pm_conversation(user: Dictionary) -> Dictionary:
 		conversation["user"] = _merge_pm_user(_dictionary_from_value(conversation.get("user", {})), user)
 	return conversation
 
-func _render_pm_conversation_list() -> void:
-	if pm_conversation_list == null:
-		return
-	_clear_children(pm_conversation_list)
-	if pm_conversations_by_user_id.is_empty():
-		pm_conversation_list.add_child(_pm_empty_label("No PMs yet."))
-		return
-
-	var user_ids: Array = pm_conversations_by_user_id.keys()
-	user_ids.sort()
-	for user_id_value: Variant in user_ids:
-		var user_id: int = int(user_id_value)
-		var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
-		var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
-		var unread: int = int(pm_unread_counts_by_user_id.get(user_id, 0))
-		var active := user_id == active_pm_user_id
-		var button := Button.new()
-		button.text = _pm_conversation_title(user, 0)
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.clip_text = true
-		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		button.pressed.connect(_on_pm_conversation_selected.bind(user_id))
-		_apply_pm_conversation_button_style(button, active)
-		if unread > 0:
-			var unread_badge: Panel = _create_attention_badge_for_button(button, 5.0, 5.0)
-			if unread_badge != null:
-				unread_badge.visible = true
-		pm_conversation_list.add_child(button)
+func _refresh_pm_context_navigation() -> void:
+	if (
+		chat_context_popup != null
+		and chat_context_popup.visible
+		and _active_primary_chat_tab_id() == CHAT_TAB_PM
+	):
+		_rebuild_chat_context_options()
 
 func _render_active_pm_conversation() -> void:
 	if pm_message_list == null:
 		return
 	_clear_children(pm_message_list)
+	var has_conversations := not pm_conversations_by_user_id.is_empty()
+	if pm_empty_state != null:
+		pm_empty_state.visible = not has_conversations
+	if pm_message_area != null:
+		pm_message_area.visible = has_conversations
+	if not has_conversations:
+		if pm_empty_title_label != null:
+			pm_empty_title_label.text = "No private messages yet"
+		if pm_empty_hint_label != null:
+			pm_empty_hint_label.text = "Open a trainer card or use /pm username in chat to start a conversation."
+		return
+
 	if active_pm_user_id == 0 or not pm_conversations_by_user_id.has(active_pm_user_id):
 		if pm_active_conversation_label != null:
-			pm_active_conversation_label.text = "No PM selected"
-		pm_message_list.add_child(_pm_empty_label("Select a PM conversation."))
+			pm_active_conversation_label.visible = false
+		_show_pm_message_empty_state(
+			"Select a conversation",
+			"Choose a trainer from the PM menu below."
+		)
 		return
 
 	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
 	var user: Dictionary = _dictionary_from_value(conversation.get("user", {}))
 	if pm_active_conversation_label != null:
-		pm_active_conversation_label.text = "Chat with %s" % _pm_conversation_title(user, 0)
+		pm_active_conversation_label.visible = true
+		pm_active_conversation_label.text = _pm_conversation_title(user, 0)
 	var messages: Array = _array_from_variant(conversation.get("messages", []))
 	if messages.is_empty():
-		pm_message_list.add_child(_pm_empty_label("No messages yet."))
+		_show_pm_message_empty_state(
+			"No messages yet",
+			"Send the first message below."
+		)
 		return
+
+	if pm_message_scroll != null:
+		pm_message_scroll.visible = true
+	if pm_message_empty_state != null:
+		pm_message_empty_state.visible = false
 	for message_value: Variant in messages:
 		if message_value is Dictionary:
 			pm_message_list.add_child(_create_pm_message_row(message_value as Dictionary))
 	_scroll_pm_to_bottom.call_deferred()
+
+
+func _show_pm_message_empty_state(title_text: String, hint_text: String) -> void:
+	if pm_message_scroll != null:
+		pm_message_scroll.visible = false
+	if pm_message_empty_state != null:
+		pm_message_empty_state.visible = true
+	if pm_message_empty_title_label != null:
+		pm_message_empty_title_label.text = title_text
+	if pm_message_empty_hint_label != null:
+		pm_message_empty_hint_label.text = hint_text
+
 
 func _create_pm_message_row(message: Dictionary) -> Control:
 	var row := HBoxContainer.new()
@@ -15239,12 +15969,6 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 
 	return row
 
-func _pm_empty_label(text: String) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.modulate = Color(0.75, 0.75, 0.75)
-	return label
-
 func _pm_conversation_title(user: Dictionary, unread: int) -> String:
 	var title := str(user.get("displayName", user.get("username", "Trainer"))).strip_edges()
 	if title == "":
@@ -15252,24 +15976,6 @@ func _pm_conversation_title(user: Dictionary, unread: int) -> String:
 	if unread > 0:
 		return "%s (%s)" % [title, unread]
 	return title
-
-func _apply_pm_conversation_button_style(button: Button, active: bool) -> void:
-	var normal_bg: Color = Color("#111f3af0") if active else Color("#07111ee0")
-	var hover_bg: Color = Color("#182b52f4") if active else Color("#101f38ee")
-	var pressed_bg: Color = Color("#0c1830f4")
-	var border: Color = UI_BORDER_FOCUS if active else Color("#29415f")
-	var hover_border: Color = UI_BORDER if active else UI_BORDER_FOCUS
-	var font_color: Color = CHAT_SYSTEM_LABEL_COLOR if active else UI_TEXT
-
-	button.add_theme_color_override("font_color", font_color)
-	button.add_theme_color_override("font_hover_color", UI_TEXT)
-	button.add_theme_color_override("font_pressed_color", UI_TEXT)
-	button.add_theme_font_size_override("font_size", 13)
-	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 6, 1))
-	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 6, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 6, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 6, 1))
-	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 func _on_pm_conversation_selected(user_id: int) -> void:
 	active_pm_user_id = user_id
@@ -15293,7 +15999,13 @@ func _refresh_pm_tab_label() -> void:
 		return
 	pm_tab_button.text = "PM"
 	if pm_tab_attention_badge != null:
-		pm_tab_attention_badge.visible = pm_total_unread_count > 0
+		pm_tab_attention_badge.visible = pm_total_unread_count > 0 and pm_tab_button.visible
+	if chat_settings_attention_badge != null:
+		chat_settings_attention_badge.visible = (
+			pm_total_unread_count > 0
+			and not bool(chat_tab_visibility.get(CHAT_TAB_PM, true))
+		)
+	_refresh_chat_context_selector()
 
 func _scroll_pm_to_bottom() -> void:
 	var tree := get_tree()
@@ -15317,54 +16029,75 @@ func _get_party_slot_index_at_position(global_position: Vector2) -> int:
 	return -1
 
 func _on_send_button_pressed() -> void:
-	if active_chat_tab == CHAT_TAB_SYSTEM:
+	if active_chat_tab in [CHAT_TAB_SYSTEM, CHAT_TAB_CLAN] or (active_chat_tab == CHAT_TAB_PM and active_pm_user_id == 0):
 		return
 
 	_submit_chat_input_deferred()
 
 func _on_chat_text_submitted(_text: String) -> void:
-	if active_chat_tab == CHAT_TAB_SYSTEM:
+	if active_chat_tab in [CHAT_TAB_SYSTEM, CHAT_TAB_CLAN] or (active_chat_tab == CHAT_TAB_PM and active_pm_user_id == 0):
 		return
 
 	_submit_chat_input_deferred()
 
 func _on_chat_tab_pressed(tab_id: String) -> void:
-	if active_chat_tab == tab_id:
+	var resolved_tab_id := selected_general_chat_tab if tab_id == CHAT_TAB_GENERAL else tab_id
+	if active_chat_tab == resolved_tab_id:
 		return
 
-	active_chat_tab = tab_id
+	_hide_chat_context_popup()
+	active_chat_tab = resolved_tab_id
 	_apply_chat_tab_state()
 
 func _apply_chat_tab_state() -> void:
-	var input_active: bool = active_chat_tab != CHAT_TAB_SYSTEM
-	var general_active: bool = active_chat_tab == CHAT_TAB_GENERAL
-	general_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if general_active else CHAT_MESSAGE_COLOR))
-	trade_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_TRADE else CHAT_MESSAGE_COLOR))
-	system_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_SYSTEM else CHAT_MESSAGE_COLOR))
-	if help_chat_tab_button != null:
-		help_chat_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_HELP else CHAT_MESSAGE_COLOR))
-	if pm_tab_button != null:
-		pm_tab_button.add_theme_color_override("font_color", Color(CHAT_SYSTEM_LABEL_COLOR if active_chat_tab == CHAT_TAB_PM else CHAT_MESSAGE_COLOR))
+	var pm_conversation_selected := (
+		active_pm_user_id != 0
+		and pm_conversations_by_user_id.has(active_pm_user_id)
+	)
+	var input_active: bool = (
+		active_chat_tab not in [CHAT_TAB_SYSTEM, CHAT_TAB_CLAN]
+		and (active_chat_tab != CHAT_TAB_PM or pm_conversation_selected)
+	)
+	var primary_tab := _active_primary_chat_tab_id()
+	var general_active: bool = primary_tab == CHAT_TAB_GENERAL
+	_apply_chat_main_tab_style(general_chat_tab_button, general_active)
+	_apply_chat_main_tab_style(system_chat_tab_button, active_chat_tab == CHAT_TAB_SYSTEM)
+	_apply_chat_main_tab_style(pm_tab_button, active_chat_tab == CHAT_TAB_PM)
+	_apply_chat_main_tab_style(clan_chat_tab_button, active_chat_tab == CHAT_TAB_CLAN)
+	var dock_visible := primary_tab != CHAT_TAB_SYSTEM
+	chat_input_row.visible = dock_visible
+	if chat_input_dock != null:
+		chat_input_dock.visible = dock_visible
+	chat_input.visible = input_active
+	send_button.visible = input_active
+	for attachment_button: Button in chat_pokemon_attachment_buttons:
+		if attachment_button != null:
+			attachment_button.visible = input_active
 	chat_input.editable = input_active
 	if active_chat_tab == CHAT_TAB_PM:
-		chat_input.placeholder_text = "Select a PM conversation" if active_pm_user_id == 0 else "Private message"
+		chat_input.placeholder_text = "Private message"
 	elif active_chat_tab == CHAT_TAB_TRADE:
 		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
 	elif active_chat_tab == CHAT_TAB_HELP:
 		chat_input.placeholder_text = "Help chat has a 5 minute cooldown"
+	elif active_chat_tab == CHAT_TAB_CLAN:
+		chat_input.placeholder_text = "Clan chat is not connected yet"
 	else:
 		chat_input.placeholder_text = "" if input_active else "System messages only"
 	send_button.disabled = not input_active
 	if not input_active:
 		chat_input.release_focus()
 	if message_scroll != null:
-		message_scroll.visible = active_chat_tab != CHAT_TAB_PM
+		message_scroll.visible = active_chat_tab not in [CHAT_TAB_PM, CHAT_TAB_CLAN]
 	if pm_chat_container != null:
 		pm_chat_container.visible = active_chat_tab == CHAT_TAB_PM
+	if clan_chat_container != null:
+		clan_chat_container.visible = active_chat_tab == CHAT_TAB_CLAN
 	_refresh_chat_message_visibility()
-	_render_pm_conversation_list()
+	_refresh_pm_context_navigation()
 	_render_active_pm_conversation()
 	_refresh_pm_tab_label()
+	_refresh_chat_context_selector()
 	_scroll_chat_to_bottom.call_deferred()
 
 func _refresh_chat_message_visibility() -> void:
@@ -15551,7 +16284,7 @@ func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Arra
 	_clear_pending_chat_pokemon_attachments()
 	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == target_pm_user_id:
 		_render_active_pm_conversation()
-	_render_pm_conversation_list()
+	_refresh_pm_context_navigation()
 
 func _add_pm_notice(user_id: int, text: String) -> void:
 	if user_id == 0:
@@ -15573,9 +16306,15 @@ func _show_pm_empty_state(text: String) -> void:
 		_add_chat_message(text)
 		return
 	_clear_children(pm_message_list)
+	if pm_conversations_by_user_id.is_empty():
+		if pm_empty_title_label != null:
+			pm_empty_title_label.text = "Private messages"
+		if pm_empty_hint_label != null:
+			pm_empty_hint_label.text = text
+		return
 	if pm_active_conversation_label != null and active_pm_user_id == 0:
-		pm_active_conversation_label.text = "No PM selected"
-	pm_message_list.add_child(_pm_empty_label(text))
+		pm_active_conversation_label.visible = false
+	_show_pm_message_empty_state("Private messages", text)
 
 func _keep_chat_input_focused() -> void:
 	_restore_chat_input_focus.call_deferred()
@@ -24354,7 +25093,7 @@ func _on_private_message_received(message: Dictionary) -> void:
 	else:
 		_clear_pm_unread(sender_key)
 
-	_render_pm_conversation_list()
+	_refresh_pm_context_navigation()
 	if active_chat_tab == CHAT_TAB_PM:
 		_render_active_pm_conversation()
 	_refresh_pm_tab_label()

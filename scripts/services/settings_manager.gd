@@ -14,6 +14,16 @@ const SFX_BUS := "SFX"
 const POKEMON_CRY_BUS := "Pokemon Cries"
 const UI_BUS := "UI"
 const NOTIFICATION_BUS := "Notifications"
+const CHAT_TAB_GENERAL := "general"
+const CHAT_TAB_SYSTEM := "system"
+const CHAT_TAB_PM := "pm"
+const CHAT_TAB_CLAN := "clan"
+const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
+	CHAT_TAB_GENERAL,
+	CHAT_TAB_SYSTEM,
+	CHAT_TAB_PM,
+	CHAT_TAB_CLAN,
+]
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
 const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
@@ -35,6 +45,13 @@ var pokemon_cry_volume := 75.0
 var ui_volume := 75.0
 var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
+var chat_tab_visibility: Dictionary = {
+	CHAT_TAB_GENERAL: true,
+	CHAT_TAB_SYSTEM: true,
+	CHAT_TAB_PM: true,
+	CHAT_TAB_CLAN: true,
+}
+var chat_tab_order: Array[String] = DEFAULT_CHAT_TAB_ORDER.duplicate()
 
 
 func _ready() -> void:
@@ -71,6 +88,8 @@ func load_settings() -> void:
 	battle_music_track = str(data.get("battle_music_track", battle_music_track)).strip_edges()
 	if battle_music_track == "":
 		battle_music_track = BATTLE_MUSIC_DEFAULT
+	chat_tab_visibility = _validated_chat_tab_visibility(data.get("chat_tab_visibility", chat_tab_visibility))
+	chat_tab_order = _validated_chat_tab_order(data.get("chat_tab_order", chat_tab_order))
 	_apply_runtime_settings()
 
 
@@ -93,6 +112,8 @@ func save_settings() -> void:
 		"ui_volume": ui_volume,
 		"notification_volume": notification_volume,
 		"battle_music_track": battle_music_track,
+		"chat_tab_visibility": chat_tab_visibility,
+		"chat_tab_order": chat_tab_order,
 	}
 
 	var file: FileAccess = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
@@ -241,6 +262,26 @@ func set_battle_music_track(track_id: String) -> void:
 	_save_and_emit()
 
 
+func set_chat_tab_preferences(visibility: Dictionary, order: Array[String]) -> void:
+	var validated_visibility := _validated_chat_tab_visibility(visibility)
+	var validated_order := _validated_chat_tab_order(order)
+	if chat_tab_visibility == validated_visibility and chat_tab_order == validated_order:
+		return
+
+	chat_tab_visibility = validated_visibility
+	chat_tab_order = validated_order
+	_save_and_emit()
+
+
+func reset_chat_tab_preferences() -> void:
+	set_chat_tab_preferences({
+		CHAT_TAB_GENERAL: true,
+		CHAT_TAB_SYSTEM: true,
+		CHAT_TAB_PM: true,
+		CHAT_TAB_CLAN: true,
+	}, DEFAULT_CHAT_TAB_ORDER.duplicate())
+
+
 func _save_and_emit() -> void:
 	save_settings()
 	settings_changed.emit()
@@ -260,6 +301,27 @@ func _validated_sprite_style(style: String) -> String:
 
 func _validated_volume(volume: Variant) -> float:
 	return clampf(float(volume), 0.0, 100.0)
+
+
+func _validated_chat_tab_visibility(value: Variant) -> Dictionary:
+	var source: Dictionary = value as Dictionary if value is Dictionary else {}
+	var visibility: Dictionary = {}
+	for tab_id: String in DEFAULT_CHAT_TAB_ORDER:
+		visibility[tab_id] = true if tab_id == CHAT_TAB_GENERAL else bool(source.get(tab_id, true))
+	return visibility
+
+
+func _validated_chat_tab_order(value: Variant) -> Array[String]:
+	var order: Array[String] = []
+	if value is Array:
+		for tab_value: Variant in value as Array:
+			var tab_id := str(tab_value)
+			if tab_id in DEFAULT_CHAT_TAB_ORDER and not order.has(tab_id):
+				order.append(tab_id)
+	for tab_id: String in DEFAULT_CHAT_TAB_ORDER:
+		if not order.has(tab_id):
+			order.append(tab_id)
+	return order
 
 
 func _validated_window_resolution(resolution: Variant) -> Vector2i:
