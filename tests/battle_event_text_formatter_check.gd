@@ -82,6 +82,16 @@ func _init() -> void:
 		"Gengar's substitute faded!",
 		"substitute end message"
 	)
+	_check_equal(
+		formatter.format_field_effect_event({"effectType": "weather", "effect": "none", "endedEffect": "Snow", "state": "end"}),
+		"The snow stopped.",
+		"snow end message retains the ended weather"
+	)
+	_check_equal(
+		formatter.format_field_effect_event({"effectType": "weather", "effect": "none", "state": "end"}),
+		"The weather returned to normal.",
+		"legacy weather end message never displays None ended"
+	)
 
 	quit(1 if failed else 0)
 

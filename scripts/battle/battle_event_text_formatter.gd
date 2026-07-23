@@ -469,11 +469,21 @@ func _is_heal_from_ability(event: Dictionary) -> bool:
 	return source.begins_with("ability:")
 
 func format_field_effect_event(event: Dictionary) -> String:
-	var effect_name := _format_field_effect_name(str(event.get("effect", "")))
+	var state := str(event.get("state", ""))
+	var raw_effect := str(event.get("effect", ""))
+	var is_weather_end := (
+		state == "end"
+		and str(event.get("effectType", "")) == "weather"
+	)
+	if is_weather_end and raw_effect.strip_edges().to_lower() == "none":
+		raw_effect = str(event.get("endedEffect", event.get("ended_effect", "")))
+		if raw_effect.strip_edges() == "":
+			return "The weather returned to normal."
+
+	var effect_name := _format_field_effect_name(raw_effect)
 	if effect_name == "":
 		return ""
 
-	var state := str(event.get("state", ""))
 	match state:
 		"start":
 			var source_message := _format_field_effect_start_source_message(event, effect_name)
@@ -484,9 +494,26 @@ func format_field_effect_event(event: Dictionary) -> String:
 		"upkeep":
 			return "%s continues." % effect_name
 		"end":
+			if is_weather_end:
+				return _format_weather_end_message(effect_name)
 			return "%s ended." % effect_name
 
 	return "%s changed." % effect_name
+
+func _format_weather_end_message(effect_name: String) -> String:
+	match effect_name.to_lower().replace(" ", ""):
+		"rain", "primordialsea":
+			return "The rain stopped."
+		"sun", "harshsun", "desolateland":
+			return "The sunlight faded."
+		"sandstorm":
+			return "The sandstorm subsided."
+		"hail":
+			return "The hail stopped."
+		"snow":
+			return "The snow stopped."
+
+	return "%s ended." % effect_name
 
 func format_field_effect_name(effect: String) -> String:
 	return _format_field_effect_name(effect)
