@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+- Fixed Ranked battles sometimes leaving one player stuck after their opponent timed out or disconnected. Both players now recover the authoritative result and reach the correct end screen.
+- Fixed lost or delayed realtime action responses leaving players waiting indefinitely or causing repeated response-timeout messages. The client now safely refreshes the latest battle state without submitting the action twice.
+- Fixed pivot moves such as Chilly Reception sometimes leaving the battle controls locked when the user still needed to choose a replacement Pokemon.
+- Fixed Team Preview and switch choices sometimes selecting a different Pokemon, such as Ogerpon-Wellspring, after the visible party order changed during a battle. PvP choices now preserve each Pokemon's original team-slot identity.
+- Fixed ended weather displaying messages such as `None ended.` instead of describing which weather condition stopped.
+
 ## 0.3.30 - 2026-07-22
 
 **Added**
