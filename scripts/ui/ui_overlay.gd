@@ -132,7 +132,7 @@ const KANTO_BADGES := [
 const PLAYER_STATUS_AVATAR_VIEWPORT_SIZE := Vector2i(68, 68)
 const PLAYER_STATUS_AVATAR_POSITION := Vector2(34, 38)
 const PLAYER_STATUS_AVATAR_SCALE := Vector2(1.5, 1.5)
-const TRAINER_CARD_SIZE := Vector2(700, 430)
+const TRAINER_CARD_SIZE := Vector2(720, 500)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
@@ -292,8 +292,11 @@ const BAG_CATEGORIES := [
 	{"id": "cosmetics", "label": "Skin & Mounts"},
 	{"id": "currency", "label": "Currency"},
 ]
-const TRAINER_CARD_CYAN := Color("#00f5ff")
-const TRAINER_CARD_GREEN := Color("#4cff76")
+const TRAINER_CARD_CYAN := Color("#8bd8f4")
+const TRAINER_CARD_GREEN := Color("#73d98b")
+const TRAINER_CARD_ACCENT := Color("#d8b767")
+const TRAINER_CARD_ACCENT_SOFT := Color("#d8b76766")
+const TRAINER_CARD_SECTION_BORDER := Color("#2d4b66b3")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
 const UI_SURFACE_BASE := Color("#050b14ed")
 const UI_SURFACE_RAISED := Color("#081522eb")
@@ -6981,6 +6984,65 @@ func _refresh_player_status_card() -> void:
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
 
+func _make_trainer_card_outer_style() -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 14, 1)
+	style.border_width_top = 2
+	style.shadow_color = Color(0, 0, 0, 0.48)
+	style.shadow_size = 16
+	style.shadow_offset = Vector2(0, 7)
+	return style
+
+func _make_trainer_card_section_style(emphasized: bool = false) -> StyleBoxFlat:
+	var border := TRAINER_CARD_ACCENT_SOFT if emphasized else TRAINER_CARD_SECTION_BORDER
+	var style := _make_panel_style(UI_SURFACE_RAISED, border, 9, 1)
+	style.shadow_color = Color(0, 0, 0, 0.16)
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+func _make_trainer_card_inset_style() -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SURFACE_INSET, Color("#25415d88"), 8, 1)
+	style.shadow_color = Color.TRANSPARENT
+	style.shadow_size = 0
+	return style
+
+func _make_trainer_card_tab_style(background: Color, border: Color, selected: bool) -> StyleBoxFlat:
+	var style := _make_button_style(background, border, 7, 1)
+	style.content_margin_left = 14
+	style.content_margin_right = 14
+	style.content_margin_top = 6
+	style.content_margin_bottom = 6
+	if selected:
+		style.border_width_bottom = 2
+	return style
+
+func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
+	var tab_bar := tabs.get_tab_bar()
+	tab_bar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	tabs.add_theme_constant_override("side_margin", 8)
+	tabs.add_theme_constant_override("tab_separation", 4)
+	tabs.add_theme_constant_override("outline_size", 0)
+	tabs.add_theme_color_override("font_selected_color", UI_TEXT)
+	tabs.add_theme_color_override("font_unselected_color", UI_MUTED_TEXT)
+	tabs.add_theme_color_override("font_hovered_color", UI_TEXT)
+	tabs.add_theme_stylebox_override(
+		"tab_selected",
+		_make_trainer_card_tab_style(UI_SURFACE_INTERACTIVE, TRAINER_CARD_ACCENT, true)
+	)
+	tabs.add_theme_stylebox_override(
+		"tab_unselected",
+		_make_trainer_card_tab_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, false)
+	)
+	tabs.add_theme_stylebox_override(
+		"tab_hovered",
+		_make_trainer_card_tab_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, false)
+	)
+	tabs.add_theme_stylebox_override(
+		"tab_focus",
+		_make_trainer_card_tab_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, false)
+	)
+	tabs.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+
 func _setup_trainer_card_popup() -> void:
 	trainer_card_popup = PanelContainer.new()
 	trainer_card_popup.name = "TrainerCardPopup"
@@ -6996,57 +7058,68 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_popup.offset_top = -TRAINER_CARD_SIZE.y * 0.5
 	trainer_card_popup.offset_right = TRAINER_CARD_SIZE.x * 0.5
 	trainer_card_popup.offset_bottom = TRAINER_CARD_SIZE.y * 0.5
-	trainer_card_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	trainer_card_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	root_control.add_child(trainer_card_popup)
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_left", 14)
 	margin_container.add_theme_constant_override("margin_top", 12)
-	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_right", 14)
 	margin_container.add_theme_constant_override("margin_bottom", 14)
 	trainer_card_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 6)
+	layout.add_theme_constant_override("separation", 8)
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 46)
 	header.add_theme_constant_override("separation", 10)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_trainer_card_header_gui_input)
 	layout.add_child(header)
 
-	var header_spacer := Control.new()
-	header_spacer.custom_minimum_size = Vector2(90, 0)
-	header.add_child(header_spacer)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_stack.add_theme_constant_override("separation", 0)
+	title_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(title_stack)
 
 	var title := Label.new()
-	title.text = "Trainer Card"
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.text = PlayerSave.player_name
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.add_theme_font_size_override("font_size", 28)
-	title.add_theme_color_override("font_color", UI_MONEY)
-	title.add_theme_color_override("font_shadow_color", Color("#000000"))
-	title.add_theme_constant_override("shadow_offset_x", 3)
-	title.add_theme_constant_override("shadow_offset_y", 3)
-	header.add_child(title)
+	title.add_theme_font_size_override("font_size", 22)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	trainer_card_name_label = title
+	title_stack.add_child(title)
+
+	var subtitle := Label.new()
+	subtitle.text = "TRAINER PASSPORT  ·  ID %s" % _get_trainer_id_text()
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle.add_theme_font_size_override("font_size", 10)
+	subtitle.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	title_stack.add_child(subtitle)
+
+	header.add_child(_create_trainer_card_redeem_button())
 
 	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.text = "×"
+	close_button.custom_minimum_size = Vector2(32, 30)
+	close_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_trainer_card)
-	_apply_button_style(close_button, "danger")
+	_apply_button_style(close_button)
 	header.add_child(close_button)
 
 	var tabs := TabContainer.new()
 	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	tabs.add_theme_font_size_override("font_size", 14)
+	tabs.add_theme_font_size_override("font_size", 13)
 	tabs.add_child(_create_trainer_card_stats_tab())
 	tabs.add_child(_create_trainer_card_appearance_tab())
 	tabs.add_child(_create_trainer_card_badges_tab())
+	_apply_trainer_card_tabs_style(tabs)
 	layout.add_child(tabs)
 
 func _show_public_trainer_card(card: Dictionary) -> void:
@@ -7065,7 +7138,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	public_trainer_card_popup.offset_top = -175
 	public_trainer_card_popup.offset_right = 310
 	public_trainer_card_popup.offset_bottom = 175
-	public_trainer_card_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	public_trainer_card_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	root_control.add_child(public_trainer_card_popup)
 
 	var margin := MarginContainer.new()
@@ -7088,11 +7161,8 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	title.text = "Trainer Card"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", UI_MONEY)
-	title.add_theme_color_override("font_shadow_color", Color.BLACK)
-	title.add_theme_constant_override("shadow_offset_x", 2)
-	title.add_theme_constant_override("shadow_offset_y", 2)
+	title.add_theme_font_size_override("font_size", 22)
+	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
 	var close_button := Button.new()
 	close_button.text = "X"
@@ -7145,7 +7215,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(210, 0)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b5872"), 8, 2))
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 12)
 	margin.add_theme_constant_override("margin_top", 12)
@@ -7199,7 +7269,7 @@ func _create_public_trainer_info_panel(title_text: String, rows: Array[Dictionar
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b5872"), 8, 1))
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 14)
 	margin.add_theme_constant_override("margin_top", 10)
@@ -7212,7 +7282,7 @@ func _create_public_trainer_info_panel(title_text: String, rows: Array[Dictionar
 	var title := Label.new()
 	title.text = title_text
 	title.add_theme_font_size_override("font_size", 11)
-	title.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	stack.add_child(title)
 	for row: Dictionary in rows:
 		var line := HBoxContainer.new()
@@ -7256,7 +7326,7 @@ func _create_trainer_card_avatar_panel(
 ) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(210, 198)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b5872"), 8, 2))
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 12)
@@ -7267,8 +7337,16 @@ func _create_trainer_card_avatar_panel(
 
 	var layout := VBoxContainer.new()
 	layout.alignment = BoxContainer.ALIGNMENT_CENTER
-	layout.add_theme_constant_override("separation", 6)
+	layout.add_theme_constant_override("separation", 4)
 	margin_container.add_child(layout)
+
+	if show_name:
+		var preview_label := Label.new()
+		preview_label.text = "TRAINER"
+		preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		preview_label.add_theme_font_size_override("font_size", 10)
+		preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+		layout.add_child(preview_label)
 
 	var viewport_frame := MarginContainer.new()
 	viewport_frame.custom_minimum_size = Vector2(160, 160)
@@ -7289,22 +7367,6 @@ func _create_trainer_card_avatar_panel(
 	viewport_container.add_child(trainer_card_avatar_viewport)
 	trainer_card_avatar_viewports.append(trainer_card_avatar_viewport)
 	_populate_avatar_preview(trainer_card_avatar_viewport, preview_position, preview_scale)
-
-	if show_name:
-		var name_plate := PanelContainer.new()
-		name_plate.custom_minimum_size = Vector2(0, 26)
-		name_plate.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		name_plate.add_theme_stylebox_override("panel", _make_panel_style(Color("#070f19e8"), Color("#d8b76773"), 6, 1))
-		layout.add_child(name_plate)
-
-		var name_label := Label.new()
-		name_label.text = PlayerSave.player_name
-		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		name_label.add_theme_font_size_override("font_size", 15)
-		name_label.add_theme_color_override("font_color", UI_TEXT)
-		trainer_card_name_label = name_label
-		name_plate.add_child(name_label)
 
 	return panel
 
@@ -7353,44 +7415,29 @@ func _create_trainer_card_stats_tab() -> Control:
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(spacer)
-	layout.add_child(_create_trainer_card_redeem_row())
 
 	return tab
 
-func _create_trainer_card_redeem_row() -> Control:
-	var row := HBoxContainer.new()
-	row.name = "RedeemCodeRow"
-	row.custom_minimum_size = Vector2(0, 36)
-	row.add_theme_constant_override("separation", 10)
-
-	var hint_label := Label.new()
-	hint_label.text = "Have a gift code?"
-	hint_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hint_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hint_label.add_theme_font_size_override("font_size", 13)
-	hint_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	row.add_child(hint_label)
-
+func _create_trainer_card_redeem_button() -> Button:
 	var redeem_button := Button.new()
 	redeem_button.name = "RedeemCodeButton"
 	redeem_button.text = "Redeem Code"
 	redeem_button.icon = REDEEM_CODE_ICON
-	redeem_button.add_theme_constant_override("icon_max_width", 20)
+	redeem_button.add_theme_constant_override("icon_max_width", 18)
 	redeem_button.expand_icon = true
-	redeem_button.custom_minimum_size = Vector2(152, 34)
+	redeem_button.custom_minimum_size = Vector2(142, 30)
+	redeem_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	redeem_button.focus_mode = Control.FOCUS_NONE
 	redeem_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	redeem_button.tooltip_text = "Enter a promotional gift code"
-	_apply_button_style(redeem_button, "primary")
-	row.add_child(redeem_button)
-
-	return row
+	_apply_button_style(redeem_button)
+	return redeem_button
 
 func _create_trainer_card_identity_panel() -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.custom_minimum_size = Vector2(0, 116)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b5872"), 8, 2))
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style(true))
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 16)
@@ -7401,12 +7448,17 @@ func _create_trainer_card_identity_panel() -> Control:
 
 	var rows := VBoxContainer.new()
 	rows.alignment = BoxContainer.ALIGNMENT_CENTER
-	rows.add_theme_constant_override("separation", 4)
+	rows.add_theme_constant_override("separation", 5)
 	margin_container.add_child(rows)
 
-	rows.add_child(_create_trainer_card_stat_row("Name", PlayerSave.player_name, 104, 22, TRAINER_CARD_CYAN))
-	rows.add_child(_create_trainer_card_stat_row("ID", _get_trainer_id_text(), 104, 22, TRAINER_CARD_CYAN))
-	rows.add_child(_create_trainer_card_stat_row("Guild", _get_trainer_stat_text("guild", "-"), 104, 22, TRAINER_CARD_CYAN))
+	var heading := Label.new()
+	heading.text = "PROFILE"
+	heading.add_theme_font_size_override("font_size", 11)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	rows.add_child(heading)
+
+	rows.add_child(_create_trainer_card_stat_row("Trainer ID", _get_trainer_id_text(), 104, 15, TRAINER_CARD_CYAN))
+	rows.add_child(_create_trainer_card_stat_row("Guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
 	rows.add_child(_create_trainer_card_badge_row())
 	return panel
 
@@ -7420,10 +7472,7 @@ func _create_trainer_card_badge_row() -> Control:
 	label.custom_minimum_size = Vector2(104, 0)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_color", UI_TEXT)
-	label.add_theme_color_override("font_shadow_color", Color("#000000"))
-	label.add_theme_constant_override("shadow_offset_x", 1)
-	label.add_theme_constant_override("shadow_offset_y", 1)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	row.add_child(label)
 
 	var option_wrap := HBoxContainer.new()
@@ -7452,17 +7501,17 @@ func _create_trainer_card_badge_row() -> Control:
 	return row
 
 func _apply_trainer_card_badge_option_style(option: OptionButton) -> void:
-	var normal := _make_button_style(Color("#111827f2"), Color("#2ba7ddaa"), 5, 1)
+	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 6, 1)
 	normal.content_margin_left = 10
 	normal.content_margin_right = 24
 	normal.content_margin_top = 2
 	normal.content_margin_bottom = 2
-	var hover := _make_button_style(Color("#16233af2"), Color("#00cfffcc"), 5, 1)
+	var hover := _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 6, 1)
 	hover.content_margin_left = 10
 	hover.content_margin_right = 24
 	hover.content_margin_top = 2
 	hover.content_margin_bottom = 2
-	var pressed := _make_button_style(Color("#0a1120f2"), Color("#00f5ffcc"), 5, 1)
+	var pressed := _make_button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 6, 1)
 	pressed.content_margin_left = 10
 	pressed.content_margin_right = 24
 	pressed.content_margin_top = 2
@@ -7471,9 +7520,9 @@ func _apply_trainer_card_badge_option_style(option: OptionButton) -> void:
 	option.add_theme_stylebox_override("hover", hover)
 	option.add_theme_stylebox_override("pressed", pressed)
 	option.add_theme_stylebox_override("focus", hover)
-	option.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
-	option.add_theme_color_override("font_hover_color", TRAINER_CARD_CYAN)
-	option.add_theme_color_override("font_pressed_color", TRAINER_CARD_CYAN)
+	option.add_theme_color_override("font_color", UI_TEXT)
+	option.add_theme_color_override("font_hover_color", UI_TEXT)
+	option.add_theme_color_override("font_pressed_color", UI_TEXT)
 	option.add_theme_font_size_override("font_size", 14)
 
 func _populate_trainer_card_badge_option() -> void:
@@ -7535,11 +7584,11 @@ func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#4b5872"), 8, 2))
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 14)
-	margin_container.add_theme_constant_override("margin_top", 6)
+	margin_container.add_theme_constant_override("margin_top", 10)
 	margin_container.add_theme_constant_override("margin_right", 14)
 	margin_container.add_theme_constant_override("margin_bottom", 10)
 	panel.add_child(margin_container)
@@ -7549,12 +7598,9 @@ func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]
 	margin_container.add_child(layout)
 
 	var title := Label.new()
-	title.text = title_text
-	title.add_theme_font_size_override("font_size", 22)
-	title.add_theme_color_override("font_color", Color("#1ea8ff"))
-	title.add_theme_color_override("font_shadow_color", Color("#001427"))
-	title.add_theme_constant_override("shadow_offset_x", 2)
-	title.add_theme_constant_override("shadow_offset_y", 2)
+	title.text = title_text.to_upper()
+	title.add_theme_font_size_override("font_size", 11)
+	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	layout.add_child(title)
 
 	var row_stack := VBoxContainer.new()
@@ -7566,7 +7612,7 @@ func _create_trainer_card_stat_panel(title_text: String, rows: Array[Dictionary]
 	for row_value: Dictionary in rows:
 		var label_text: String = str(row_value.get("label", ""))
 		var value_text: String = str(row_value.get("value", ""))
-		var value_color: Color = TRAINER_CARD_GREEN if bool(row_value.get("money", false)) else TRAINER_CARD_CYAN
+		var value_color: Color = TRAINER_CARD_GREEN if bool(row_value.get("money", false)) else UI_TEXT
 		row_stack.add_child(_create_trainer_card_stat_row(label_text, value_text, 130, 15, value_color))
 
 	return panel
@@ -7585,10 +7631,7 @@ func _create_trainer_card_stat_row(
 	label.text = "%s:" % label_text
 	label.custom_minimum_size = Vector2(label_width, 0)
 	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", UI_TEXT)
-	label.add_theme_color_override("font_shadow_color", Color("#000000"))
-	label.add_theme_constant_override("shadow_offset_x", 1)
-	label.add_theme_constant_override("shadow_offset_y", 1)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	row.add_child(label)
 
 	var value := Label.new()
@@ -7597,9 +7640,6 @@ func _create_trainer_card_stat_row(
 	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	value.add_theme_font_size_override("font_size", font_size)
 	value.add_theme_color_override("font_color", value_color)
-	value.add_theme_color_override("font_shadow_color", Color("#000000"))
-	value.add_theme_constant_override("shadow_offset_x", 1)
-	value.add_theme_constant_override("shadow_offset_y", 1)
 	value.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	row.add_child(value)
 	if label_text == "Money":
@@ -7632,7 +7672,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	preview_label.text = "LIVE PREVIEW"
 	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_label.add_theme_font_size_override("font_size", 10)
-	preview_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	preview_column.add_child(preview_label)
 
 	var preview_panel := _create_trainer_card_avatar_panel(
@@ -7645,7 +7685,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 
 	var sidebar_panel := PanelContainer.new()
 	sidebar_panel.custom_minimum_size = Vector2(108, 0)
-	sidebar_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#303e54"), 8, 1))
+	sidebar_panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 	layout.add_child(sidebar_panel)
 
 	var sidebar_margin := MarginContainer.new()
@@ -7670,7 +7710,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	var editor_panel := PanelContainer.new()
 	editor_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	editor_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	editor_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#09121fee"), Color("#303e54"), 8, 1))
+	editor_panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 	layout.add_child(editor_panel)
 
 	var editor_margin := MarginContainer.new()
@@ -7718,7 +7758,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 func _create_trainer_card_appearance_save_row() -> Control:
 	var bar := PanelContainer.new()
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar.add_theme_stylebox_override("panel", _make_panel_style(Color("#070f19e8"), Color("#d8b76759"), 7, 1))
+	bar.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 10)
@@ -7759,7 +7799,7 @@ func _create_trainer_card_badges_tab() -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#0a0f19e8"), Color("#26344a"), 8, 1))
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 	tab.add_child(panel)
 
 	var margin_container := MarginContainer.new()
@@ -7798,7 +7838,7 @@ func _create_trainer_card_badges_tab() -> Control:
 	var badge_grid_panel := PanelContainer.new()
 	badge_grid_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	badge_grid_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	badge_grid_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, Color("#303744"), 8, 2))
+	badge_grid_panel.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
 	layout.add_child(badge_grid_panel)
 
 	var grid_margin := MarginContainer.new()
@@ -7828,7 +7868,7 @@ func _create_trainer_card_badge_slot(badge: Dictionary) -> Control:
 	slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	slot.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	slot.tooltip_text = str(badge.get("name", "Badge"))
-	slot.add_theme_stylebox_override("panel", _make_panel_style(Color("#07101dcc"), Color("#17263a"), 8, 1))
+	slot.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 
 	var center := CenterContainer.new()
 	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
