@@ -41,6 +41,7 @@ signal animation_finished
 @export var dark_pulse_config: Dictionary = {}
 @export var nasty_plot_config: Dictionary = {}
 @export var court_change_config: Dictionary = {}
+@export var sound_wave_config: Dictionary = {}
 @export var flash_config: Dictionary = {}
 @export var shake_config: Dictionary = {}
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
@@ -325,6 +326,7 @@ func _draw() -> void:
 	_draw_dark_pulse_visual()
 	_draw_nasty_plot_visual()
 	_draw_court_change_visual()
+	_draw_sound_wave_visual()
 
 
 func _draw_orb_visual() -> void:
@@ -1435,6 +1437,85 @@ func _draw_dark_pulse_visual() -> void:
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 36, _color_with_alpha(purple, alpha), 2.7)
 		draw_arc(Vector2.ZERO, radius - 1.2, 0.0, TAU, 36, _color_with_alpha(Color(1.0, 0.42, 0.82, 1.0), alpha * 0.8), 0.8)
 		draw_set_transform(Vector2.ZERO)
+
+
+func _draw_sound_wave_visual() -> void:
+	if not bool(sound_wave_config.get("enabled", false)):
+		return
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := float(sound_wave_config.get("visible_start", 0.06))
+	var visible_end := float(sound_wave_config.get("visible_end", 0.94))
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, sound_wave_config)
+	if alpha <= 0.02:
+		return
+	var source := _projectile_battlefield_position(_get_projectile_state_from_config(0.0, sound_wave_config).get("position", Vector2.ZERO) as Vector2, sound_wave_config)
+	var target := _projectile_battlefield_position(_get_projectile_state_from_config(1.0, sound_wave_config).get("position", Vector2.ZERO) as Vector2, sound_wave_config)
+	var direction := (target - source).normalized()
+	var rotation := atan2(direction.y, direction.x)
+	var wave_color := _color_from_value(sound_wave_config.get("wave_color", [0.18, 0.86, 1.0, 1.0]), Color(0.18, 0.86, 1.0, 1.0))
+	var core_color := _color_from_value(sound_wave_config.get("core_color", [0.9, 0.98, 1.0, 1.0]), Color(0.9, 0.98, 1.0, 1.0))
+	var aura_color := _color_from_value(sound_wave_config.get("aura_color", [0.72, 0.18, 0.96, 1.0]), Color(0.72, 0.18, 0.96, 1.0))
+	var impact_color := _color_from_value(sound_wave_config.get("impact_color", [0.86, 0.12, 0.7, 1.0]), Color(0.86, 0.12, 0.7, 1.0))
+	var launch_start := clampf(float(sound_wave_config.get("launch_start", 0.12)), visible_start, visible_end - 0.1)
+	var impact_start := clampf(float(sound_wave_config.get("impact_start", 0.72)), launch_start + 0.1, visible_end)
+	var ring_count := maxi(2, int(sound_wave_config.get("ring_count", 5)))
+	var travel := clampf((progress - launch_start) / maxf(impact_start - launch_start, 0.001), 0.0, 1.0)
+	for ring_index in range(ring_count):
+		# The leading wave stays small while the two following wavefronts expand
+		# behind it, matching Psychic Noise's stacked sonic portals.
+		var ring_progress := travel - float(ring_index) * 0.19
+		if ring_progress < 0.0 or ring_progress > 1.0:
+			continue
+		var center := source.lerp(target, ring_progress)
+		var radius := lerpf(float(sound_wave_config.get("rear_radius", 36.0)), float(sound_wave_config.get("front_radius", 14.0)), ring_progress)
+		var ring_alpha := alpha * (0.98 - float(ring_index) * 0.12)
+		# Compress the wave along its travel axis, not vertically: this makes a
+		# portal-like upright ellipse rather than a flat floor ring.
+		draw_set_transform(center, rotation, Vector2(float(sound_wave_config.get("ring_depth", 0.38)), 1.0))
+		draw_arc(Vector2.ZERO, radius + 12.0, 0.0, TAU, 48, _color_with_alpha(aura_color, ring_alpha * 0.12), 18.0)
+		draw_arc(Vector2.ZERO, radius + 5.0, 0.0, TAU, 48, _color_with_alpha(aura_color, ring_alpha * 0.34), 7.0)
+		draw_arc(Vector2.ZERO, radius + 7.0, 0.0, TAU, 48, _color_with_alpha(wave_color, ring_alpha * 0.2), 12.0)
+		draw_arc(Vector2.ZERO, radius + 1.0, 0.0, TAU, 48, _color_with_alpha(wave_color, ring_alpha), 4.6)
+		draw_arc(Vector2.ZERO, radius - 3.0, 0.14, TAU - 0.14, 48, _color_with_alpha(core_color, ring_alpha * 0.9), 1.6)
+		for mote_index in range(3):
+			var mote_angle := float(frame_index) * 0.21 + float(ring_index) * 1.8 + float(mote_index) * TAU / 3.0
+			var mote_center := Vector2(cos(mote_angle), sin(mote_angle)) * (radius + 13.0)
+			draw_circle(mote_center, 2.0 + float(mote_index % 2), _color_with_alpha(aura_color, ring_alpha * 0.86))
+		draw_set_transform(Vector2.ZERO)
+
+	if progress < impact_start:
+		return
+	var impact_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var impact_alpha := alpha * (1.0 - impact_progress)
+	var impact_center := target + _vector2_from_value(sound_wave_config.get("impact_offset", [0.0, -8.0]))
+	var impact_radius := lerpf(22.0, float(sound_wave_config.get("impact_radius", 68.0)), impact_progress)
+	var impact_core := _color_from_value(sound_wave_config.get("impact_core_color", [0.34, 0.04, 0.58, 1.0]), Color(0.34, 0.04, 0.58, 1.0))
+	var lightning := _color_from_value(sound_wave_config.get("lightning_color", [1.0, 0.72, 1.0, 1.0]), Color(1.0, 0.72, 1.0, 1.0))
+	draw_circle(impact_center, impact_radius * 1.18, _color_with_alpha(impact_color, impact_alpha * 0.1))
+	draw_circle(impact_center, impact_radius * 0.78, _color_with_alpha(impact_core, impact_alpha * 0.38))
+	draw_circle(impact_center, impact_radius * 0.48, _color_with_alpha(impact_color, impact_alpha * 0.3))
+	for impact_ring in range(3):
+		var ring_phase := float(frame_index) * 0.16 + float(impact_ring) * 1.7
+		draw_arc(impact_center, impact_radius * (0.42 + float(impact_ring) * 0.23), ring_phase, ring_phase + PI * 1.48, 42, _color_with_alpha(impact_color, impact_alpha * (0.92 - float(impact_ring) * 0.18)), 3.0)
+	var ray_count := maxi(6, int(sound_wave_config.get("impact_ray_count", 12)))
+	for ray_index in range(ray_count):
+		var ray_angle := float(ray_index) * TAU / float(ray_count) + float(frame_index) * 0.07
+		var inner := impact_center + Vector2(cos(ray_angle), sin(ray_angle)) * impact_radius * 0.18
+		var outer := impact_center + Vector2(cos(ray_angle), sin(ray_angle)) * impact_radius * (0.88 + 0.28 * sin(float(ray_index) * 1.9 + float(frame_index) * 0.2))
+		draw_line(inner, outer, _color_with_alpha(impact_color, impact_alpha * 0.62), 2.4)
+	var bolt_count := maxi(3, int(sound_wave_config.get("impact_bolt_count", 5)))
+	for bolt_index in range(bolt_count):
+		var bolt_angle := float(bolt_index) * TAU / float(bolt_count) + float(frame_index) * 0.11
+		var bolt_direction := Vector2(cos(bolt_angle), sin(bolt_angle))
+		var bolt_normal := bolt_direction.orthogonal()
+		var points := PackedVector2Array([impact_center + bolt_direction * impact_radius * 0.12])
+		for segment_index in range(1, 4):
+			var segment_progress := float(segment_index) / 3.0
+			var jitter := sin(float(bolt_index) * 3.1 + float(segment_index) * 2.4 + float(frame_index) * 0.32) * impact_radius * 0.14
+			points.append(impact_center + bolt_direction * impact_radius * (0.18 + segment_progress * 0.78) + bolt_normal * jitter)
+		draw_polyline(points, _color_with_alpha(impact_color, impact_alpha * 0.72), 3.8, true)
+		draw_polyline(points, _color_with_alpha(lightning, impact_alpha * 0.92), 1.25, true)
 
 
 func _draw_nasty_plot_visual() -> void:
