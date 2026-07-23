@@ -1,26 +1,25 @@
 # Changelog
 
-## Unreleased
+## 0.3.31 - 2026-07-23
 
 **Added**
-- Added battle animations for 14 moves: Pyro Ball, Court Change, High Jump Kick, Sparkling Aria, Draining Kiss, Psychic Noise, Grassy Glide, Wood Hammer, Drain Punch, Superpower, Psychic Terrain, Grassy Terrain, Electric Terrain, and Misty Terrain.
-- Added persistent battlefield visuals for Psychic, Grassy, Electric, and Misty Terrain, using terrain-specific particles and colors for the full duration of each field effect.
-- Added animated field indicators for all four terrain effects, matching the looping presentation used by weather indicators while keeping their backgrounds visually stable.
-- Added UI foundations for future Quest Log, Donator Gems Store, Redeem Code, global and personal buff, Clan chat, and configurable chat-tab features.
+- Added new battle animations for Pyro Ball, Court Change, High Jump Kick, Sparkling Aria, Draining Kiss, Psychic Noise, Grassy Glide, Wood Hammer, Drain Punch, Superpower, Psychic Terrain, Grassy Terrain, Electric Terrain, and Misty Terrain.
+- Psychic, Grassy, Electric, and Misty Terrain now have their own animated battlefield effects that remain visible while active.
+- Added chat settings for choosing which main chat tabs are visible and changing their order.
+- Added early previews for the upcoming Quest Log, Donator Gems Store, Redeem Codes, server-wide and personal buffs, and Clan chat. These features are not fully active yet.
 
 **Changed**
-- Reorganized the overworld UI so party slots sit above the chat on the left, while the hotbar sits above the trainer card on the right. Party slots remain available for opening Pokemon summaries during battles.
-- Shifted the default Battle UI position to the right so it leaves clearer space for the overworld party column, and made the Battle Log toggle more prominent.
-- Added clickable global community-buff goals with dedicated icons, funding progress, active timers, and contribution UI; added a compact personal-buff counter with hover details, an expandable buff list, an empty state, and a future Donator Gems Store entry point grouped with the existing location and trainer-card collapse controls.
-- Active terrain effects now apply a stronger battlefield tint and denser particles, with particles layered across the platforms and Pokemon so the effect remains clearly visible.
-- Polished the overworld UI with more consistent surfaces, refreshed Party and Trainer Card presentation, cleaner chat controls, and a clearer navigation icon set.
+- Reorganized the overworld interface so the Party and chat sit on the left, while the hotbar and Trainer Card sit on the right. Party Pokémon remain clickable during battles so their summaries can still be opened.
+- The Battle UI now opens slightly farther to the right, leaving more room for the Party list and making the Battle Log button easier to spot.
+- Refreshed the Party list, Trainer Card, chatbox, menus, and navigation icons with a cleaner and more consistent style.
+- Shiny Pokémon now stand out more clearly in the Party list.
+- Terrain effects now use stronger colors and more visible particles across the battlefield.
 
 **Fixed**
-- Fixed Ranked battles sometimes leaving one player stuck after their opponent timed out or disconnected. Both players now recover the authoritative result and reach the correct end screen.
-- Fixed lost or delayed realtime action responses leaving players waiting indefinitely or causing repeated response-timeout messages. The client now safely refreshes the latest battle state without submitting the action twice.
-- Fixed pivot moves such as Chilly Reception sometimes leaving the battle controls locked when the user still needed to choose a replacement Pokemon.
-- Fixed Team Preview and switch choices sometimes selecting a different Pokemon, such as Ogerpon-Wellspring, after the visible party order changed during a battle. PvP choices now preserve each Pokemon's original team-slot identity.
-- Fixed ended weather displaying messages such as `None ended.` instead of describing which weather condition stopped.
+- Fixed some Ranked battles getting stuck after an opponent timed out, disconnected, or when a battle update arrived late.
+- Fixed moves such as Chilly Reception sometimes locking the battle controls before a replacement Pokémon could be chosen.
+- Fixed Team Preview and switch menus occasionally selecting a different Pokémon than the one clicked.
+- Weather-ending messages now correctly name the weather that stopped.
 
 ## 0.3.30 - 2026-07-22
 
