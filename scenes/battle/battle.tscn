@@ -32,6 +32,11 @@
 [ext_resource type="Script" uid="uid://bjpq57gr8t0k0" path="res://scripts/battle/animations/capture_ball_animation_player.gd" id="42_capture"]
 [ext_resource type="Script" uid="uid://b4h2vuys3xqnb" path="res://scripts/battle/animations/pokeball_summon_animation_player.gd" id="43_summon"]
 [ext_resource type="Script" uid="uid://b1hsg2htund1y" path="res://scripts/battle/battle_ui/battle_stage_viewport.gd" id="44_stage"]
+[ext_resource type="Script" uid="uid://gdi4f4hyqhq1" path="res://scripts/battle/animations/terrain_field_visual.gd" id="45_terrain_visual"]
+[ext_resource type="Texture2D" uid="uid://cdara3t7peet1" path="res://assets/battles/animations/grassyterrain/PRAS- Grass.png" id="46_grassy_terrain_sheet"]
+[ext_resource type="Texture2D" uid="uid://3sbmdo3n8kqu" path="res://assets/battles/animations/mistyterrain/PRAS- Orbs.png" id="47_misty_terrain_sheet"]
+[ext_resource type="Texture2D" uid="uid://ctx3v2w13r8kg" path="res://assets/battles/animations/psychicterrain/PRAS- Mirror Coat.png" id="48_psychic_terrain_sheet"]
+[ext_resource type="Texture2D" uid="uid://c3084hqqvasl4" path="res://assets/battles/animations/electricterrain/PRAS- Electric.png" id="49_electric_terrain_sheet"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_shell"]
 bg_color = Color(0.003921569, 0.007843138, 0.03137255, 0.98)
@@ -173,86 +178,6 @@ corner_radius_bottom_left = 10
 shadow_color = Color(0.03137255, 0.2509804, 0.52156866, 0.28)
 shadow_size = 18
 shadow_offset = Vector2(0, 8)
-
-[sub_resource type="Gradient" id="Gradient_grassy_terrain"]
-offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
-colors = PackedColorArray(0.28, 1, 0.18, 0, 0.44, 1, 0.18, 0.72, 0.78, 1, 0.38, 0.86, 0.28, 1, 0.18, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_grassy_terrain"]
-gradient = SubResource("Gradient_grassy_terrain")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_grassy_terrain"]
-particle_flag_disable_z = true
-emission_shape = 3
-emission_box_extents = Vector3(155, 14, 1)
-direction = Vector3(0, -1, 0)
-spread = 34.0
-initial_velocity_min = 82.0
-initial_velocity_max = 155.0
-gravity = Vector3(5, 32, 0)
-scale_min = 2.4
-scale_max = 5.2
-color_initial_ramp = SubResource("GradientTexture1D_grassy_terrain")
-
-[sub_resource type="Gradient" id="Gradient_misty_terrain"]
-offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
-colors = PackedColorArray(1, 0.62, 0.98, 0, 1, 0.58, 0.95, 0.66, 0.72, 0.88, 1, 0.82, 1, 0.62, 0.98, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_misty_terrain"]
-gradient = SubResource("Gradient_misty_terrain")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_misty_terrain"]
-particle_flag_disable_z = true
-emission_shape = 3
-emission_box_extents = Vector3(155, 14, 1)
-direction = Vector3(0, -1, 0)
-spread = 42.0
-initial_velocity_min = 68.0
-initial_velocity_max = 132.0
-gravity = Vector3(-4, 22, 0)
-scale_min = 2.6
-scale_max = 5.6
-color_initial_ramp = SubResource("GradientTexture1D_misty_terrain")
-
-[sub_resource type="Gradient" id="Gradient_psychic_terrain"]
-offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
-colors = PackedColorArray(0.96, 0.28, 1, 0, 0.9, 0.26, 1, 0.7, 0.55, 0.34, 1, 0.88, 0.96, 0.28, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_psychic_terrain"]
-gradient = SubResource("Gradient_psychic_terrain")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_psychic_terrain"]
-particle_flag_disable_z = true
-emission_shape = 3
-emission_box_extents = Vector3(155, 14, 1)
-direction = Vector3(0, -1, 0)
-spread = 30.0
-initial_velocity_min = 88.0
-initial_velocity_max = 162.0
-gravity = Vector3(8, 28, 0)
-scale_min = 2.4
-scale_max = 5.2
-color_initial_ramp = SubResource("GradientTexture1D_psychic_terrain")
-
-[sub_resource type="Gradient" id="Gradient_electric_terrain"]
-offsets = PackedFloat32Array(0, 0.34, 0.76, 1)
-colors = PackedColorArray(1, 0.92, 0.2, 0, 1, 0.86, 0.12, 0.72, 1, 0.98, 0.46, 0.9, 1, 0.92, 0.2, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_electric_terrain"]
-gradient = SubResource("Gradient_electric_terrain")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_electric_terrain"]
-particle_flag_disable_z = true
-emission_shape = 3
-emission_box_extents = Vector3(155, 14, 1)
-direction = Vector3(0, -1, 0)
-spread = 30.0
-initial_velocity_min = 88.0
-initial_velocity_max = 162.0
-gravity = Vector3(8, 28, 0)
-scale_min = 2.4
-scale_max = 5.2
-color_initial_ramp = SubResource("GradientTexture1D_electric_terrain")
 
 [sub_resource type="Gradient" id="Gradient_sun_sparkles"]
 offsets = PackedFloat32Array(0, 0.35, 0.72, 1)
@@ -820,146 +745,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="GrassyTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=306554720]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="EnemyGrassyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=1285121570]
-color = Color(0.28, 1, 0.18, 0.07)
-polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
-
-[node name="PlayerGrassyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=14259470]
-color = Color(0.28, 1, 0.18, 0.075)
-polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
-
-[node name="EnemyGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=1517290756]
-position = Vector2(1020, 292)
-amount = 150
-lifetime = 1.35
-preprocess = 1.35
-visibility_rect = Rect2(-210, -225, 420, 250)
-process_material = SubResource("ParticleProcessMaterial_grassy_terrain")
-
-[node name="PlayerGrassyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/GrassyTerrainLayer" unique_id=1806907282]
-position = Vector2(305, 548)
-amount = 270
-lifetime = 1.45
-preprocess = 1.45
-visibility_rect = Rect2(-250, -245, 500, 270)
-process_material = SubResource("ParticleProcessMaterial_grassy_terrain")
-
-[node name="MistyTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1583618454]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="EnemyMistyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=705431344]
-color = Color(1, 0.58, 0.95, 0.075)
-polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
-
-[node name="PlayerMistyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=1872648792]
-color = Color(1, 0.58, 0.95, 0.08)
-polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
-
-[node name="EnemyMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=1671770084]
-position = Vector2(1020, 292)
-amount = 140
-lifetime = 1.5
-preprocess = 1.5
-visibility_rect = Rect2(-210, -225, 420, 250)
-process_material = SubResource("ParticleProcessMaterial_misty_terrain")
-
-[node name="PlayerMistyTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/MistyTerrainLayer" unique_id=1291941903]
-position = Vector2(305, 548)
-amount = 255
-lifetime = 1.6
-preprocess = 1.6
-visibility_rect = Rect2(-250, -245, 500, 270)
-process_material = SubResource("ParticleProcessMaterial_misty_terrain")
-
-[node name="PsychicTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1401285031]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="EnemyPsychicGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=441248764]
-color = Color(0.9, 0.25, 1, 0.075)
-polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
-
-[node name="PlayerPsychicGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=1708233847]
-color = Color(0.9, 0.25, 1, 0.08)
-polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
-
-[node name="EnemyPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=1482305682]
-position = Vector2(1020, 292)
-amount = 150
-lifetime = 1.35
-preprocess = 1.35
-visibility_rect = Rect2(-210, -225, 420, 250)
-process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
-
-[node name="PlayerPsychicTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/PsychicTerrainLayer" unique_id=2133068261]
-position = Vector2(305, 548)
-amount = 270
-lifetime = 1.45
-preprocess = 1.45
-visibility_rect = Rect2(-250, -245, 500, 270)
-process_material = SubResource("ParticleProcessMaterial_psychic_terrain")
-
-[node name="ElectricTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1282446147]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="EnemyElectricGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=2133370389]
-color = Color(1, 0.86, 0.12, 0.075)
-polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
-
-[node name="PlayerElectricGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=1509654683]
-color = Color(1, 0.86, 0.12, 0.08)
-polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
-
-[node name="EnemyElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=579223477]
-position = Vector2(1020, 292)
-amount = 150
-lifetime = 1.35
-preprocess = 1.35
-visibility_rect = Rect2(-210, -225, 420, 250)
-process_material = SubResource("ParticleProcessMaterial_electric_terrain")
-
-[node name="PlayerElectricTerrainParticles" type="GPUParticles2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer/ElectricTerrainLayer" unique_id=402319053]
-position = Vector2(305, 548)
-amount = 270
-lifetime = 1.45
-preprocess = 1.45
-visibility_rect = Rect2(-250, -245, 500, 270)
-process_material = SubResource("ParticleProcessMaterial_electric_terrain")
-
 [node name="TrickRoomLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/WeatherLayer" unique_id=1043846889]
 unique_name_in_owner = true
 visible = false
@@ -1486,6 +1271,101 @@ offset_right = 503.5
 offset_bottom = -101.5
 grow_horizontal = 1
 grow_vertical = 0
+
+[node name="GrassyTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=306554720]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyGrassyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/GrassyTerrainLayer" unique_id=1285121570]
+color = Color(0.28, 1, 0.18, 0.12)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
+
+[node name="PlayerGrassyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/GrassyTerrainLayer" unique_id=14259470]
+color = Color(0.28, 1, 0.18, 0.13)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="GrassyTerrainVisual" type="Node2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/GrassyTerrainLayer" unique_id=1544015433]
+script = ExtResource("45_terrain_visual")
+source_texture = ExtResource("46_grassy_terrain_sheet")
+
+[node name="MistyTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1583618454]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyMistyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MistyTerrainLayer" unique_id=705431344]
+color = Color(1, 0.58, 0.95, 0.075)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
+
+[node name="PlayerMistyGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MistyTerrainLayer" unique_id=1872648792]
+color = Color(1, 0.58, 0.95, 0.08)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="MistyTerrainVisual" type="Node2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/MistyTerrainLayer" unique_id=1503072641]
+script = ExtResource("45_terrain_visual")
+terrain_type = "misty"
+source_texture = ExtResource("47_misty_terrain_sheet")
+
+[node name="PsychicTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1401285031]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyPsychicGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/PsychicTerrainLayer" unique_id=441248764]
+color = Color(0.9, 0.25, 1, 0.075)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
+
+[node name="PlayerPsychicGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/PsychicTerrainLayer" unique_id=1708233847]
+color = Color(0.9, 0.25, 1, 0.08)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="PsychicTerrainVisual" type="Node2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/PsychicTerrainLayer" unique_id=1353561936]
+script = ExtResource("45_terrain_visual")
+terrain_type = "psychic"
+source_texture = ExtResource("48_psychic_terrain_sheet")
+
+[node name="ElectricTerrainLayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1282446147]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyElectricGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/ElectricTerrainLayer" unique_id=2133370389]
+color = Color(1, 0.86, 0.12, 0.075)
+polygon = PackedVector2Array(850, 250, 915, 218, 1010, 205, 1115, 218, 1185, 252, 1160, 286, 1070, 304, 950, 298, 870, 278)
+
+[node name="PlayerElectricGlow" type="Polygon2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/ElectricTerrainLayer" unique_id=1509654683]
+color = Color(1, 0.86, 0.12, 0.08)
+polygon = PackedVector2Array(110, 492, 185, 452, 310, 430, 445, 452, 535, 500, 505, 545, 370, 566, 210, 558, 115, 530)
+
+[node name="ElectricTerrainVisual" type="Node2D" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/ElectricTerrainLayer" unique_id=425077759]
+script = ExtResource("45_terrain_visual")
+terrain_type = "electric"
+source_texture = ExtResource("49_electric_terrain_sheet")
 
 [node name="CaptureBallAnimationPlayer" type="Control" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" unique_id=1852018222]
 unique_name_in_owner = true

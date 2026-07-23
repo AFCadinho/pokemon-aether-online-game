@@ -387,13 +387,13 @@ func _get_terrain_tint_alpha(terrain_effect: String, time: float) -> float:
 	var pulse: float = sin(time * 0.9)
 	match _normalize_field_effect_key(terrain_effect):
 		"electricterrain":
-			return 0.052 + (pulse * 0.012)
+			return 0.09 + (pulse * 0.018)
 		"mistyterrain":
-			return 0.046 + (pulse * 0.01)
+			return 0.078 + (pulse * 0.015)
 		"psychicterrain":
-			return 0.044 + (pulse * 0.01)
+			return 0.086 + (pulse * 0.017)
 		"grassyterrain":
-			return 0.04 + (pulse * 0.01)
+			return 0.082 + (pulse * 0.016)
 
 	return 0.0
 
