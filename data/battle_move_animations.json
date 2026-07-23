@@ -5326,6 +5326,61 @@
         "PRSFX- Hi Jump Kick1.wav": "res://assets/battles/animations/highjumpkick/PRSFX- Hi Jump Kick1.wav",
         "PRSFX- Hi Jump Kick2.wav": "res://assets/battles/animations/highjumpkick/PRSFX- Hi Jump Kick2.wav"
       }
+    },
+    "sparklingaria": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/sparklingaria/sparklingaria.json",
+      "sheet_path": "res://assets/battles/animations/sparklingaria/PRAS- Sparkling Aria.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Sparkling Aria1.wav": "res://assets/battles/animations/sparklingaria/PRSFX- Sparkling Aria1.wav",
+        "PRSFX- Sparkling Aria2.wav": "res://assets/battles/animations/sparklingaria/PRSFX- Sparkling Aria2.wav"
+      }
+    },
+    "drainingkiss": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 1.1,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/drainingkiss/drainingkiss.json",
+      "sheet_path": "res://assets/battles/animations/drainingkiss/PRAS- Draining Kiss.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Draining Kiss1.wav": "res://assets/battles/animations/drainingkiss/PRSFX- Draining Kiss1.wav",
+        "PRSFX- Draining Kiss2.wav": "res://assets/battles/animations/drainingkiss/PRSFX- Draining Kiss2.wav"
+      }
+    },
+    "psychicnoise": {
+      "template": "imported_sheet",
+      "category": "special",
+      "static_visual_anchor": "actor",
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/psychicnoise/psychicnoise.json",
+      "sheet_path": "res://assets/battles/animations/psychicnoise/PRAS- Screech.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Calm Mind.wav": "res://assets/battles/animations/psychicnoise/PRSFX- Calm Mind.wav",
+        "PRSFX- Disable": "res://assets/battles/animations/psychicnoise/PRSFX- Disable.wav"
+      }
     }
   }
 }
