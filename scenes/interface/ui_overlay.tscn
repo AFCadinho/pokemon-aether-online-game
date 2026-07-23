@@ -28,6 +28,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/global_ev_boost.svg" id="24_global_ev"]
 [ext_resource type="Texture2D" path="res://assets/ui/global_shiny_boost.svg" id="25_global_shiny"]
 [ext_resource type="Texture2D" path="res://assets/ui/global_rare_encounter_boost.svg" id="26_global_rare"]
+[ext_resource type="Texture2D" path="res://assets/ui/quest_log.svg" id="27_quest_log"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
@@ -297,6 +298,34 @@ corner_radius_bottom_left = 10
 shadow_color = Color(0.7254902, 0.43137255, 1, 0.4)
 shadow_size = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_button"]
+bg_color = Color(0.03137255, 0.08235294, 0.13333334, 0.92156863)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.28)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utility_button_hover"]
+bg_color = Color(0.06666667, 0.16470589, 0.26666668, 0.9490196)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.47843137, 0.654902, 0.95686275, 0.94)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.32156864, 0.6509804, 0.9490196, 0.3)
+shadow_size = 7
+
 [node name="UIOverlay" type="CanvasLayer" unique_id=2126675853]
 script = ExtResource("1_7g5y2")
 
@@ -544,6 +573,30 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_store_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_store_button_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_store_button_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_store_button_hover")
+
+[node name="SettingsButton" type="Button" parent="Control"]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -194.0
+offset_right = -16.0
+offset_bottom = -152.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "Settings"
+icon = ExtResource("7_settings_icon")
+icon_max_width = 26
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
 
 [node name="PartyPanel" type="PanelContainer" parent="Control" unique_id=1949206887]
 layout_mode = 1
@@ -1228,20 +1281,21 @@ texture_focused = ExtResource("18_pvp")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="SettingsSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=798433036]
+[node name="QuestSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=798433036]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 
-[node name="SettingsButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot" unique_id=302294960]
+[node name="QuestButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/QuestSlot" unique_id=302294960]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+tooltip_text = "Quest Log"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("7_settings_icon")
-texture_pressed = ExtResource("7_settings_icon")
-texture_hover = ExtResource("7_settings_icon")
-texture_disabled = ExtResource("7_settings_icon")
-texture_focused = ExtResource("7_settings_icon")
+texture_normal = ExtResource("27_quest_log")
+texture_pressed = ExtResource("27_quest_log")
+texture_hover = ExtResource("27_quest_log")
+texture_disabled = ExtResource("27_quest_log")
+texture_focused = ExtResource("27_quest_log")
 ignore_texture_size = true
 stretch_mode = 5
 

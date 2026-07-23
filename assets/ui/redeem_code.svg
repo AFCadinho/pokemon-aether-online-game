@@ -1,0 +1,25 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="box" x1="12" y1="25" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1C5376"/>
+      <stop offset="1" stop-color="#0A2034"/>
+    </linearGradient>
+    <linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFF0A6"/>
+      <stop offset="1" stop-color="#D8B767"/>
+    </linearGradient>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#54D9FF" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <path d="M9 27h46v28H9V27Z" fill="url(#box)" stroke="#A9DFF2" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M7 21h50v10H7V21Z" fill="#123E5C" stroke="#D5ECF4" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M28 21h8v34h-8V21Z" fill="url(#ribbon)" stroke="#7C6120" stroke-width="1.5"/>
+  <path d="M32 20C24 20 18 15 19 10c1-4 7-4 10 0 2 3 3 7 3 10Z" fill="#D8B767" stroke="#FFF0A6" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M32 20c8 0 14-5 13-10-1-4-7-4-10 0-2 3-3 7-3 10Z" fill="#D8B767" stroke="#FFF0A6" stroke-width="2" stroke-linejoin="round"/>
+  <g filter="url(#glow)" stroke="#74E4FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m20 38-4 4 4 4"/>
+    <path d="m44 38 4 4-4 4"/>
+    <path d="m37 36-10 12"/>
+  </g>
+</svg>

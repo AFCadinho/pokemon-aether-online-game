@@ -74,6 +74,7 @@ const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boos
 const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.svg")
 const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const GLOBAL_RARE_ENCOUNTER_BUFF_ICON: Texture2D = preload("res://assets/ui/global_rare_encounter_boost.svg")
+const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
@@ -339,6 +340,7 @@ enum DevPokemonPopupMode {
 @onready var personal_buffs_summary_button: Button = $Control/PersonalBuffsPanel/MarginContainer/Row/ActiveSummaryButton
 @onready var personal_buff_slots: VBoxContainer = $Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots
 @onready var donator_store_button: Button = $Control/DonatorStoreButton
+@onready var settings_button: Button = $Control/SettingsButton
 @onready var global_buff_details_panel: PanelContainer = $Control/GlobalBuffDetailsPanel
 @onready var global_buff_details_icon: TextureRect = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Icon
 @onready var global_buff_details_title: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Heading/TitleLabel
@@ -397,8 +399,8 @@ enum DevPokemonPopupMode {
 @onready var guild_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot/GuildButton
 @onready var pvp_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot
 @onready var pvp_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton
-@onready var settings_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot
-@onready var settings_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/SettingsSlot/SettingsButton
+@onready var quest_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/QuestSlot
+@onready var quest_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/QuestSlot/QuestButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
 @onready var socials_menu: PanelContainer = $Control/SocialsMenu
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
@@ -1073,7 +1075,7 @@ func _ready() -> void:
 	_setup_icon_slot_hover(socials_slot, socials_button)
 	_setup_icon_slot_hover(guild_slot, guild_button)
 	_setup_icon_slot_hover(pvp_slot, pvp_button)
-	_setup_icon_slot_hover(settings_slot, settings_button)
+	_setup_icon_slot_hover(quest_slot, quest_button)
 	_setup_icon_slot_hover(repel_slot, repel_toggle_button)
 	_setup_icon_slot_hover(escape_rope_slot, escape_rope_button)
 	_setup_icon_slot_hover(follower_slot, follower_toggle_button)
@@ -1105,6 +1107,7 @@ func _ready() -> void:
 	mail_compose_close_button.pressed.connect(_on_mail_compose_close_button_pressed)
 	guild_button.pressed.connect(_on_guild_button_pressed)
 	pvp_button.pressed.connect(_on_pvp_button_pressed)
+	quest_button.pressed.connect(_on_quest_log_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
@@ -1730,6 +1733,7 @@ func _apply_ui_z_index_policy() -> void:
 		global_buff_details_panel,
 		personal_buffs_panel,
 		donator_store_button,
+		settings_button,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -1938,6 +1942,9 @@ func _setup_normal_ui_focus_groups() -> void:
 		donator_store_button: [
 			^"DonatorStoreButton",
 		],
+		settings_button: [
+			^"SettingsButton",
+		],
 	}
 
 	for panel_value: Variant in panel_paths_by_group.keys():
@@ -1959,6 +1966,7 @@ func _setup_normal_ui_focus_groups() -> void:
 		global_buff_details_panel: [global_buff_details_panel],
 		personal_buffs_panel: [personal_buffs_panel],
 		donator_store_button: [donator_store_button],
+		settings_button: [settings_button],
 	}
 	for panel_value: Variant in focus_tree_panels.keys():
 		var panel: Control = panel_value as Control
@@ -6082,6 +6090,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		global_buff_details_panel,
 		personal_buffs_panel,
 		donator_store_button,
+		settings_button,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -6181,6 +6190,7 @@ func _setup_status_docks() -> void:
 	if not donator_store_button.pressed.is_connected(_on_donator_store_button_pressed):
 		donator_store_button.pressed.connect(_on_donator_store_button_pressed)
 	donator_store_button.focus_mode = Control.FOCUS_NONE
+	settings_button.focus_mode = Control.FOCUS_NONE
 	global_buff_details_close_button.pressed.connect(_hide_global_buff_details)
 	global_buff_amount_1000_button.pressed.connect(_select_global_buff_contribution.bind(1000))
 	global_buff_amount_10000_button.pressed.connect(_select_global_buff_contribution.bind(10000))
@@ -7343,8 +7353,38 @@ func _create_trainer_card_stats_tab() -> Control:
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(spacer)
+	layout.add_child(_create_trainer_card_redeem_row())
 
 	return tab
+
+func _create_trainer_card_redeem_row() -> Control:
+	var row := HBoxContainer.new()
+	row.name = "RedeemCodeRow"
+	row.custom_minimum_size = Vector2(0, 36)
+	row.add_theme_constant_override("separation", 10)
+
+	var hint_label := Label.new()
+	hint_label.text = "Have a gift code?"
+	hint_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hint_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hint_label.add_theme_font_size_override("font_size", 13)
+	hint_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(hint_label)
+
+	var redeem_button := Button.new()
+	redeem_button.name = "RedeemCodeButton"
+	redeem_button.text = "Redeem Code"
+	redeem_button.icon = REDEEM_CODE_ICON
+	redeem_button.add_theme_constant_override("icon_max_width", 20)
+	redeem_button.expand_icon = true
+	redeem_button.custom_minimum_size = Vector2(152, 34)
+	redeem_button.focus_mode = Control.FOCUS_NONE
+	redeem_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	redeem_button.tooltip_text = "Enter a promotional gift code"
+	_apply_button_style(redeem_button, "primary")
+	row.add_child(redeem_button)
+
+	return row
 
 func _create_trainer_card_identity_panel() -> Control:
 	var panel := PanelContainer.new()
@@ -14456,8 +14496,8 @@ func _apply_premium_overlay_styles() -> void:
 		_apply_icon_slot_hover_style(map_slot, false)
 	if bag_slot != null:
 		_apply_icon_slot_hover_style(bag_slot, false)
-	if settings_slot != null:
-		_apply_icon_slot_hover_style(settings_slot, false)
+	if quest_slot != null:
+		_apply_icon_slot_hover_style(quest_slot, false)
 	if repel_slot != null:
 		_set_icon_slot_active(repel_slot, GameState.repel_enabled)
 	if follower_slot != null:
@@ -14499,7 +14539,7 @@ func _setup_collapsible_panels() -> void:
 		player_status_panel,
 		"left",
 		null,
-		[personal_buffs_panel, donator_store_button]
+		[personal_buffs_panel, settings_button, donator_store_button]
 	)
 	_register_collapsible_panel("party", party_panel, "right")
 	_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])
@@ -20365,6 +20405,10 @@ func _on_settings_button_pressed() -> void:
 	settings_menu.visible = true
 	_activate_ui_panel(settings_menu)
 
+func _on_quest_log_button_pressed() -> void:
+	_focus_normal_ui_group(options_panel)
+	_add_chat_message("Quest Log is not implemented yet.")
+
 func _on_socials_button_pressed() -> void:
 	if socials_menu.visible:
 		_hide_socials_menu()
@@ -25010,6 +25054,7 @@ func _disable_icon_button_focus() -> void:
 		socials_button,
 		guild_button,
 		pvp_button,
+		quest_button,
 		settings_button,
 		repel_toggle_button,
 		follower_toggle_button,
