@@ -562,8 +562,12 @@ var pvp_mode_casual_button: Button
 var pvp_mode_close_button: Button
 var pvp_room_popup: PanelContainer
 var pvp_popup_title_label: Label
+var pvp_popup_subtitle_label: Label
+var pvp_popup_icon: TextureRect
 var pvp_root_tabs: TabContainer
 var pvp_ranked_tabs: TabContainer
+var pvp_ranked_battles_tabs: TabContainer
+var pvp_ranked_rules_tabs: TabContainer
 var pvp_queue_compact_panel: PanelContainer
 var pvp_queue_compact_status_label: Label
 var pvp_queue_compact_time_label: Label
@@ -599,6 +603,7 @@ var pvp_queue_select: OptionButton
 var pvp_mode_select: OptionButton
 var pvp_team_source_select: OptionButton
 var pvp_team_preview_grid: HBoxContainer
+var pvp_team_validator_panel: PanelContainer
 var pvp_team_validator_status_label: Label
 var pvp_team_validator_list: VBoxContainer
 var pvp_join_queue_button: Button
@@ -3625,7 +3630,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_popup.offset_top = -310
 	pvp_room_popup.offset_right = 490
 	pvp_room_popup.offset_bottom = 310
-	pvp_room_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	var ranked_shell_style := _make_glass_panel_style(14)
+	ranked_shell_style.border_color = Color("#456784cc")
+	pvp_room_popup.add_theme_stylebox_override("panel", ranked_shell_style)
 	pvp_room_popup.gui_input.connect(_on_pvp_room_panel_gui_input)
 	root_control.add_child(pvp_room_popup)
 
@@ -3641,19 +3648,65 @@ func _setup_pvp_room_popup() -> void:
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 48)
 	header.add_theme_constant_override("separation", 8)
 	layout.add_child(header)
 
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_MONEY, UI_MONEY, 2, 0)
+	)
+	header.add_child(header_accent)
+
+	var header_icon_frame := PanelContainer.new()
+	header_icon_frame.custom_minimum_size = Vector2(42, 42)
+	header_icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#251d12cc"), Color("#a98b43aa"), 9, 1)
+	)
+	header.add_child(header_icon_frame)
+
+	var header_icon_center := CenterContainer.new()
+	header_icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_child(header_icon_center)
+
+	var header_icon := TextureRect.new()
+	header_icon.custom_minimum_size = Vector2(34, 34)
+	header_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	header_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header_icon.texture = PVP_MODE_RANKED_ICON
+	header_icon_center.add_child(header_icon)
+	pvp_popup_icon = header_icon
+
+	var header_heading := VBoxContainer.new()
+	header_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	header_heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_heading.add_theme_constant_override("separation", 1)
+	header.add_child(header_heading)
+
 	var title := Label.new()
-	title.text = "PvP"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.mouse_default_cursor_shape = Control.CURSOR_MOVE
-	title.add_theme_font_size_override("font_size", 22)
-	title.add_theme_color_override("font_color", Color("#f5df9a"))
-	title.gui_input.connect(_on_pvp_room_header_gui_input)
-	header.add_child(title)
+	title.text = "Ranked"
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	header_heading.add_child(title)
 	pvp_popup_title_label = title
+
+	var subtitle := Label.new()
+	subtitle.text = "Competitive matchmaking · Aether OU"
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	header_heading.add_child(subtitle)
+	pvp_popup_subtitle_label = subtitle
+
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_pvp_room_header_gui_input)
 
@@ -3667,7 +3720,8 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(minimize_button)
 
 	var close_button := Button.new()
-	close_button.text = "X"
+	close_button.text = "×"
+	close_button.tooltip_text = "Close"
 	close_button.custom_minimum_size = Vector2(30, 30)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pvp_room_popup)
@@ -3723,84 +3777,166 @@ func _setup_pvp_room_popup() -> void:
 	play_tab.add_theme_constant_override("separation", 14)
 	play_tab_page.add_child(play_tab)
 
-	var ladder_sidebar := PanelContainer.new()
-	ladder_sidebar.custom_minimum_size = Vector2(340, 0)
-	ladder_sidebar.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	ladder_sidebar.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#315070"), 6, 1))
-	play_tab.add_child(ladder_sidebar)
+	var team_panel := PanelContainer.new()
+	team_panel.custom_minimum_size = Vector2(515, 0)
+	team_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	team_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 11, 1))
+	play_tab.add_child(team_panel)
 
-	var sidebar_margin := MarginContainer.new()
-	sidebar_margin.add_theme_constant_override("margin_left", 12)
-	sidebar_margin.add_theme_constant_override("margin_top", 10)
-	sidebar_margin.add_theme_constant_override("margin_right", 12)
-	sidebar_margin.add_theme_constant_override("margin_bottom", 10)
-	ladder_sidebar.add_child(sidebar_margin)
+	var team_margin := MarginContainer.new()
+	team_margin.add_theme_constant_override("margin_left", 14)
+	team_margin.add_theme_constant_override("margin_top", 12)
+	team_margin.add_theme_constant_override("margin_right", 14)
+	team_margin.add_theme_constant_override("margin_bottom", 12)
+	team_panel.add_child(team_margin)
 
-	var play_controls := VBoxContainer.new()
-	play_controls.add_theme_constant_override("separation", 10)
-	sidebar_margin.add_child(play_controls)
+	var team_layout := VBoxContainer.new()
+	team_layout.add_theme_constant_override("separation", 11)
+	team_margin.add_child(team_layout)
 
-	play_controls.add_child(_create_pvp_section_title("Team"))
+	var team_header := HBoxContainer.new()
+	team_header.add_theme_constant_override("separation", 8)
+	team_layout.add_child(team_header)
+	team_header.add_child(_create_pvp_section_title("Selected Team"))
 
-	var team_source_row := HBoxContainer.new()
-	team_source_row.add_theme_constant_override("separation", 8)
-	play_controls.add_child(team_source_row)
-	team_source_row.add_child(_create_pvp_field_label("Team", 104))
+	var team_header_spacer := Control.new()
+	team_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	team_header.add_child(team_header_spacer)
+
+	var team_source_badge := PanelContainer.new()
+	team_source_badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#0b1d30e8"), Color("#456784aa"), 8, 1))
+	team_header.add_child(team_source_badge)
+
+	var team_source_badge_margin := MarginContainer.new()
+	team_source_badge_margin.add_theme_constant_override("margin_left", 8)
+	team_source_badge_margin.add_theme_constant_override("margin_top", 3)
+	team_source_badge_margin.add_theme_constant_override("margin_right", 8)
+	team_source_badge_margin.add_theme_constant_override("margin_bottom", 3)
+	team_source_badge.add_child(team_source_badge_margin)
+
+	var team_source_badge_label := Label.new()
+	team_source_badge_label.text = "CURRENT PARTY"
+	team_source_badge_label.add_theme_font_size_override("font_size", 10)
+	team_source_badge_label.add_theme_color_override("font_color", Color("#60d3ff"))
+	team_source_badge_margin.add_child(team_source_badge_label)
 
 	pvp_team_source_select = OptionButton.new()
-	pvp_team_source_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_team_source_select.focus_mode = Control.FOCUS_NONE
+	pvp_team_source_select.visible = false
 	pvp_team_source_select.add_item("Current Party")
 	pvp_team_source_select.set_item_metadata(0, "party")
-	for team_index in range(1, 4):
-		pvp_team_source_select.add_item("PvP Team %d" % team_index)
-		pvp_team_source_select.set_item_metadata(team_index, "pvp_team_%d" % team_index)
-		pvp_team_source_select.set_item_disabled(team_index, true)
 	pvp_team_source_select.item_selected.connect(_on_pvp_team_source_selected)
-	team_source_row.add_child(pvp_team_source_select)
+	team_layout.add_child(pvp_team_source_select)
 
 	pvp_team_preview_grid = HBoxContainer.new()
 	pvp_team_preview_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_team_preview_grid.add_theme_constant_override("separation", 6)
-	play_controls.add_child(pvp_team_preview_grid)
+	pvp_team_preview_grid.add_theme_constant_override("separation", 7)
+	team_layout.add_child(pvp_team_preview_grid)
 	_render_pvp_team_preview()
 
-	play_controls.add_child(HSeparator.new())
-	play_controls.add_child(_create_pvp_section_title("Matchmaking"))
+	pvp_team_validator_panel = PanelContainer.new()
+	pvp_team_validator_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_team_validator_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pvp_team_validator_panel.add_theme_stylebox_override("panel", _make_pvp_validator_panel_style("checking"))
+	team_layout.add_child(pvp_team_validator_panel)
 
-	var mode_row := HBoxContainer.new()
-	mode_row.visible = false
-	mode_row.add_theme_constant_override("separation", 8)
-	play_controls.add_child(mode_row)
-	mode_row.add_child(_create_pvp_field_label("Battle Type", 104))
+	var validator_margin := MarginContainer.new()
+	validator_margin.add_theme_constant_override("margin_left", 11)
+	validator_margin.add_theme_constant_override("margin_top", 10)
+	validator_margin.add_theme_constant_override("margin_right", 11)
+	validator_margin.add_theme_constant_override("margin_bottom", 10)
+	pvp_team_validator_panel.add_child(validator_margin)
 
-	pvp_mode_select = OptionButton.new()
-	pvp_mode_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_mode_select.focus_mode = Control.FOCUS_NONE
-	pvp_mode_select.add_item("Ranked")
-	pvp_mode_select.set_item_metadata(0, "ranked")
-	pvp_mode_select.add_item("Casual")
-	pvp_mode_select.set_item_metadata(1, "casual")
-	pvp_mode_select.item_selected.connect(_on_pvp_mode_selected)
-	mode_row.add_child(pvp_mode_select)
+	var validator_layout := VBoxContainer.new()
+	validator_layout.add_theme_constant_override("separation", 8)
+	validator_margin.add_child(validator_layout)
 
-	var queue_select_row := HBoxContainer.new()
-	queue_select_row.add_theme_constant_override("separation", 8)
-	play_controls.add_child(queue_select_row)
-	queue_select_row.add_child(_create_pvp_field_label("Tier", 104))
+	var validator_heading := Label.new()
+	validator_heading.text = "TEAM VALIDATION"
+	validator_heading.add_theme_font_size_override("font_size", 10)
+	validator_heading.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	validator_layout.add_child(validator_heading)
+
+	pvp_team_validator_status_label = Label.new()
+	pvp_team_validator_status_label.text = "Checking current party..."
+	pvp_team_validator_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_team_validator_status_label.add_theme_font_size_override("font_size", 15)
+	pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	validator_layout.add_child(pvp_team_validator_status_label)
+
+	var validator_scroll := ScrollContainer.new()
+	validator_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	validator_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	validator_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	validator_layout.add_child(validator_scroll)
+
+	pvp_team_validator_list = VBoxContainer.new()
+	pvp_team_validator_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_team_validator_list.add_theme_constant_override("separation", 6)
+	validator_scroll.add_child(pvp_team_validator_list)
+
+	var matchmaking_panel := PanelContainer.new()
+	matchmaking_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	matchmaking_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	matchmaking_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 11, 1))
+	play_tab.add_child(matchmaking_panel)
+
+	var matchmaking_margin := MarginContainer.new()
+	matchmaking_margin.add_theme_constant_override("margin_left", 16)
+	matchmaking_margin.add_theme_constant_override("margin_top", 12)
+	matchmaking_margin.add_theme_constant_override("margin_right", 16)
+	matchmaking_margin.add_theme_constant_override("margin_bottom", 12)
+	matchmaking_panel.add_child(matchmaking_margin)
+
+	var matchmaking_layout := VBoxContainer.new()
+	matchmaking_layout.add_theme_constant_override("separation", 12)
+	matchmaking_margin.add_child(matchmaking_layout)
+	matchmaking_layout.add_child(_create_pvp_section_title("Ranked Matchmaking"))
+
+	var format_caption := Label.new()
+	format_caption.text = "FORMAT"
+	format_caption.add_theme_font_size_override("font_size", 10)
+	format_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	matchmaking_layout.add_child(format_caption)
 
 	pvp_queue_select = OptionButton.new()
+	pvp_queue_select.custom_minimum_size = Vector2(0, 38)
 	pvp_queue_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_queue_select.focus_mode = Control.FOCUS_NONE
 	pvp_queue_select.item_selected.connect(_on_pvp_queue_selected)
-	queue_select_row.add_child(pvp_queue_select)
+	matchmaking_layout.add_child(pvp_queue_select)
+
+	pvp_mode_select = OptionButton.new()
+	pvp_mode_select.visible = false
+	pvp_mode_select.add_item("Ranked")
+	pvp_mode_select.set_item_metadata(0, "ranked")
+	pvp_mode_select.item_selected.connect(_on_pvp_mode_selected)
+	matchmaking_layout.add_child(pvp_mode_select)
+
 	_populate_pvp_queue_select([
 		{"id": "ranked_queue_v1", "name": "Ranked Queue", "mode": "ranked"},
 	])
 
+	var queue_note := Label.new()
+	queue_note.text = "Your selected team is checked by the server before matchmaking begins."
+	queue_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	queue_note.add_theme_font_size_override("font_size", 11)
+	queue_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	matchmaking_layout.add_child(queue_note)
+
+	var queue_status_panel := PanelContainer.new()
+	queue_status_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, Color("#2d4b66aa"), 9, 1))
+	matchmaking_layout.add_child(queue_status_panel)
+
+	var queue_status_margin := MarginContainer.new()
+	queue_status_margin.add_theme_constant_override("margin_left", 10)
+	queue_status_margin.add_theme_constant_override("margin_top", 8)
+	queue_status_margin.add_theme_constant_override("margin_right", 10)
+	queue_status_margin.add_theme_constant_override("margin_bottom", 8)
+	queue_status_panel.add_child(queue_status_margin)
+
 	var queue_status_row := HBoxContainer.new()
-	queue_status_row.add_theme_constant_override("separation", 6)
-	play_controls.add_child(queue_status_row)
+	queue_status_row.add_theme_constant_override("separation", 7)
+	queue_status_margin.add_child(queue_status_row)
 
 	pvp_queue_status_spinner_label = Label.new()
 	pvp_queue_status_spinner_label.text = ""
@@ -3812,76 +3948,55 @@ func _setup_pvp_room_popup() -> void:
 	queue_status_row.add_child(pvp_queue_status_spinner_label)
 
 	pvp_queue_status_label = Label.new()
-	pvp_queue_status_label.text = "Queue Status: idle"
+	pvp_queue_status_label.text = "Ready to search."
 	pvp_queue_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_queue_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_queue_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_queue_status_label.add_theme_color_override("font_color", UI_TEXT)
 	queue_status_row.add_child(pvp_queue_status_label)
 
-	var queue_actions := HBoxContainer.new()
+	var queue_spacer := Control.new()
+	queue_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	matchmaking_layout.add_child(queue_spacer)
+
+	var queue_actions := VBoxContainer.new()
 	queue_actions.add_theme_constant_override("separation", 8)
-	play_controls.add_child(queue_actions)
+	matchmaking_layout.add_child(queue_actions)
 
 	pvp_join_queue_button = Button.new()
-	pvp_join_queue_button.text = "Join Queue"
-	pvp_join_queue_button.custom_minimum_size = Vector2(106, 34)
+	pvp_join_queue_button.text = "Find Match"
+	pvp_join_queue_button.custom_minimum_size = Vector2(0, 46)
+	pvp_join_queue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_join_queue_button.focus_mode = Control.FOCUS_NONE
 	pvp_join_queue_button.pressed.connect(_on_pvp_join_queue_pressed)
 	queue_actions.add_child(pvp_join_queue_button)
 
 	pvp_leave_queue_button = Button.new()
 	pvp_leave_queue_button.text = "Leave Queue"
-	pvp_leave_queue_button.custom_minimum_size = Vector2(110, 34)
+	pvp_leave_queue_button.custom_minimum_size = Vector2(0, 46)
+	pvp_leave_queue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_leave_queue_button.focus_mode = Control.FOCUS_NONE
+	pvp_leave_queue_button.visible = false
 	pvp_leave_queue_button.disabled = true
+	pvp_leave_queue_button.tooltip_text = "Stop searching for an opponent"
 	pvp_leave_queue_button.pressed.connect(_on_pvp_leave_queue_pressed)
 	queue_actions.add_child(pvp_leave_queue_button)
 
 	pvp_reconnect_battle_button = Button.new()
-	pvp_reconnect_battle_button.text = "Reconnect"
-	pvp_reconnect_battle_button.custom_minimum_size = Vector2(110, 34)
+	pvp_reconnect_battle_button.text = "Reconnect Battle"
+	pvp_reconnect_battle_button.custom_minimum_size = Vector2(0, 46)
+	pvp_reconnect_battle_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_reconnect_battle_button.focus_mode = Control.FOCUS_NONE
+	pvp_reconnect_battle_button.visible = false
+	pvp_reconnect_battle_button.tooltip_text = "Return to your active ranked battle"
 	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
 	queue_actions.add_child(pvp_reconnect_battle_button)
 
-	var play_main := PanelContainer.new()
-	play_main.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	play_main.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	play_main.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#8aa0b8aa"), 6, 1))
-	play_tab.add_child(play_main)
-
-	var play_main_margin := MarginContainer.new()
-	play_main_margin.add_theme_constant_override("margin_left", 12)
-	play_main_margin.add_theme_constant_override("margin_top", 10)
-	play_main_margin.add_theme_constant_override("margin_right", 12)
-	play_main_margin.add_theme_constant_override("margin_bottom", 10)
-	play_main.add_child(play_main_margin)
-
-	var play_main_layout := VBoxContainer.new()
-	play_main_layout.add_theme_constant_override("separation", 10)
-	play_main_margin.add_child(play_main_layout)
-
-	play_main_layout.add_child(_create_pvp_section_title("General Information"))
-	play_main_layout.add_child(_create_pvp_info_row("Ladder Integrity", "Wintrading and ladder manipulation can result in a ladder ban."))
-	play_main_layout.add_child(_create_pvp_info_row("Tier Banlists", "Bans can differ per tier. The Bans tab shows the current list for the selected tier."))
-
-	play_main_layout.add_child(HSeparator.new())
-	play_main_layout.add_child(_create_pvp_section_title("Team Validator"))
-
-	pvp_team_validator_status_label = Label.new()
-	pvp_team_validator_status_label.text = "Checking current party..."
-	pvp_team_validator_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	play_main_layout.add_child(pvp_team_validator_status_label)
-
-	pvp_team_validator_list = VBoxContainer.new()
-	pvp_team_validator_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_team_validator_list.add_theme_constant_override("separation", 6)
-	play_main_layout.add_child(pvp_team_validator_list)
-
-	var validator_spacer := Control.new()
-	validator_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	play_main_layout.add_child(validator_spacer)
+	var integrity_note := Label.new()
+	integrity_note.text = "Fair play is enforced. Wintrading and ladder manipulation can result in a ranked ban."
+	integrity_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	integrity_note.add_theme_font_size_override("font_size", 10)
+	integrity_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	matchmaking_layout.add_child(integrity_note)
 
 	var room_tab := VBoxContainer.new()
 	room_tab.name = "Custom / Casual"
@@ -3963,15 +4078,26 @@ func _setup_pvp_room_popup() -> void:
 	var rules_tab_page := _create_pvp_ranked_tab_page("Rules")
 	ranked_tabs.add_child(rules_tab_page)
 
+	pvp_ranked_rules_tabs = TabContainer.new()
+	pvp_ranked_rules_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ranked_rules_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pvp_ranked_rules_tabs.add_theme_font_size_override("font_size", 12)
+	pvp_ranked_rules_tabs.tab_changed.connect(_on_pvp_ranked_rules_tab_changed)
+	_apply_pvp_ranked_subtabs_style(pvp_ranked_rules_tabs)
+	rules_tab_page.add_child(pvp_ranked_rules_tabs)
+
+	var format_tab_page := _create_pvp_ranked_tab_page("Format", 8)
+	pvp_ranked_rules_tabs.add_child(format_tab_page)
+
 	var rules_tab := VBoxContainer.new()
 	rules_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	rules_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rules_tab.add_theme_constant_override("separation", 10)
-	rules_tab_page.add_child(rules_tab)
+	format_tab_page.add_child(rules_tab)
 	rules_tab.add_child(_create_pvp_ruleset_panel())
 
-	var bans_tab_page := _create_pvp_ranked_tab_page("Bans")
-	ranked_tabs.add_child(bans_tab_page)
+	var bans_tab_page := _create_pvp_ranked_tab_page("Banlist", 8)
+	pvp_ranked_rules_tabs.add_child(bans_tab_page)
 
 	var bans_tab := VBoxContainer.new()
 	bans_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -4019,8 +4145,18 @@ func _setup_pvp_room_popup() -> void:
 	pvp_bans_list.add_theme_constant_override("separation", 10)
 	bans_content.add_child(pvp_bans_list)
 
-	var live_tab_page := _create_pvp_ranked_tab_page("Live")
-	ranked_tabs.add_child(live_tab_page)
+	var battles_tab_page := _create_pvp_ranked_tab_page("Battles")
+	ranked_tabs.add_child(battles_tab_page)
+
+	pvp_ranked_battles_tabs = TabContainer.new()
+	pvp_ranked_battles_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ranked_battles_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pvp_ranked_battles_tabs.add_theme_font_size_override("font_size", 12)
+	_apply_pvp_ranked_subtabs_style(pvp_ranked_battles_tabs)
+	battles_tab_page.add_child(pvp_ranked_battles_tabs)
+
+	var live_tab_page := _create_pvp_ranked_tab_page("Live", 8)
+	pvp_ranked_battles_tabs.add_child(live_tab_page)
 
 	var live_tab := VBoxContainer.new()
 	live_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -4063,21 +4199,59 @@ func _setup_pvp_room_popup() -> void:
 	var leaderboard_tab := VBoxContainer.new()
 	leaderboard_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	leaderboard_tab.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	leaderboard_tab.add_theme_constant_override("separation", 10)
+	leaderboard_tab.add_theme_constant_override("separation", 12)
 	leaderboard_tab_page.add_child(leaderboard_tab)
 
+	var leaderboard_overview := PanelContainer.new()
+	leaderboard_overview.custom_minimum_size = Vector2(0, 82)
+	leaderboard_overview.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, Color("#456784cc"), 11, 1)
+	)
+	leaderboard_tab.add_child(leaderboard_overview)
+
+	var leaderboard_overview_margin := MarginContainer.new()
+	leaderboard_overview_margin.add_theme_constant_override("margin_left", 14)
+	leaderboard_overview_margin.add_theme_constant_override("margin_top", 10)
+	leaderboard_overview_margin.add_theme_constant_override("margin_right", 12)
+	leaderboard_overview_margin.add_theme_constant_override("margin_bottom", 10)
+	leaderboard_overview.add_child(leaderboard_overview_margin)
+
 	var leaderboard_header := HBoxContainer.new()
-	leaderboard_header.add_theme_constant_override("separation", 8)
-	leaderboard_tab.add_child(leaderboard_header)
+	leaderboard_header.add_theme_constant_override("separation", 12)
+	leaderboard_overview_margin.add_child(leaderboard_header)
+
+	var leaderboard_heading := VBoxContainer.new()
+	leaderboard_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	leaderboard_heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	leaderboard_heading.add_theme_constant_override("separation", 2)
+	leaderboard_header.add_child(leaderboard_heading)
+
+	var leaderboard_title := Label.new()
+	leaderboard_title.text = "Aether OU Ladder"
+	leaderboard_title.add_theme_font_size_override("font_size", 18)
+	leaderboard_title.add_theme_color_override("font_color", UI_TEXT)
+	leaderboard_heading.add_child(leaderboard_title)
 
 	pvp_leaderboard_status_label = Label.new()
-	pvp_leaderboard_status_label.text = "Ranked points"
-	pvp_leaderboard_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_leaderboard_status_label.add_theme_color_override("font_color", UI_TEXT)
-	leaderboard_header.add_child(pvp_leaderboard_status_label)
+	pvp_leaderboard_status_label.text = "All Time standings · Win +10 · Loss -10"
+	pvp_leaderboard_status_label.add_theme_font_size_override("font_size", 11)
+	pvp_leaderboard_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	leaderboard_heading.add_child(pvp_leaderboard_status_label)
+
+	var leaderboard_scope_stack := VBoxContainer.new()
+	leaderboard_scope_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	leaderboard_scope_stack.add_theme_constant_override("separation", 3)
+	leaderboard_header.add_child(leaderboard_scope_stack)
+
+	var leaderboard_scope_caption := Label.new()
+	leaderboard_scope_caption.text = "PERIOD"
+	leaderboard_scope_caption.add_theme_font_size_override("font_size", 9)
+	leaderboard_scope_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	leaderboard_scope_stack.add_child(leaderboard_scope_caption)
 
 	pvp_leaderboard_scope_select = OptionButton.new()
-	pvp_leaderboard_scope_select.custom_minimum_size = Vector2(130, 32)
+	pvp_leaderboard_scope_select.custom_minimum_size = Vector2(132, 36)
 	pvp_leaderboard_scope_select.focus_mode = Control.FOCUS_NONE
 	for scope_index in range(PVP_LEADERBOARD_SCOPES.size()):
 		var scope: Dictionary = PVP_LEADERBOARD_SCOPES[scope_index]
@@ -4085,38 +4259,63 @@ func _setup_pvp_room_popup() -> void:
 		pvp_leaderboard_scope_select.set_item_metadata(scope_index, str(scope.get("id", "")))
 	pvp_leaderboard_scope_select.select(_pvp_leaderboard_scope_index(pvp_active_leaderboard_scope))
 	pvp_leaderboard_scope_select.item_selected.connect(_on_pvp_leaderboard_scope_selected)
-	leaderboard_header.add_child(pvp_leaderboard_scope_select)
+	_apply_pvp_leaderboard_scope_style(pvp_leaderboard_scope_select)
+	leaderboard_scope_stack.add_child(pvp_leaderboard_scope_select)
 
 	pvp_leaderboard_refresh_button = Button.new()
 	pvp_leaderboard_refresh_button.text = "Refresh"
-	pvp_leaderboard_refresh_button.custom_minimum_size = Vector2(92, 32)
+	pvp_leaderboard_refresh_button.custom_minimum_size = Vector2(88, 36)
 	pvp_leaderboard_refresh_button.focus_mode = Control.FOCUS_NONE
+	pvp_leaderboard_refresh_button.tooltip_text = "Update leaderboard"
 	pvp_leaderboard_refresh_button.pressed.connect(_on_pvp_leaderboard_refresh_pressed)
 	leaderboard_header.add_child(pvp_leaderboard_refresh_button)
 
+	var leaderboard_table := PanelContainer.new()
+	leaderboard_table.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	leaderboard_table.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	leaderboard_table.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 10, 1)
+	)
+	leaderboard_tab.add_child(leaderboard_table)
+
+	var leaderboard_table_margin := MarginContainer.new()
+	leaderboard_table_margin.add_theme_constant_override("margin_left", 8)
+	leaderboard_table_margin.add_theme_constant_override("margin_top", 8)
+	leaderboard_table_margin.add_theme_constant_override("margin_right", 8)
+	leaderboard_table_margin.add_theme_constant_override("margin_bottom", 8)
+	leaderboard_table.add_child(leaderboard_table_margin)
+
+	var leaderboard_table_layout := VBoxContainer.new()
+	leaderboard_table_layout.add_theme_constant_override("separation", 7)
+	leaderboard_table_margin.add_child(leaderboard_table_layout)
+
 	var leaderboard_columns := HBoxContainer.new()
 	leaderboard_columns.add_theme_constant_override("separation", 10)
-	leaderboard_tab.add_child(leaderboard_columns)
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("#", 46, HORIZONTAL_ALIGNMENT_CENTER))
+	leaderboard_table_layout.add_child(leaderboard_columns)
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("RANK", 54, HORIZONTAL_ALIGNMENT_CENTER))
 	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Player", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Points", 88, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("W", 46, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("L", 46, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Games", 72, HORIZONTAL_ALIGNMENT_RIGHT))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Win %", 72, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Points", 96, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Record", 104, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("Win Rate", 86, HORIZONTAL_ALIGNMENT_RIGHT))
 
 	var leaderboard_scroll := ScrollContainer.new()
 	leaderboard_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	leaderboard_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	leaderboard_tab.add_child(leaderboard_scroll)
+	leaderboard_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	leaderboard_table_layout.add_child(leaderboard_scroll)
 
 	pvp_leaderboard_list = VBoxContainer.new()
 	pvp_leaderboard_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_leaderboard_list.add_theme_constant_override("separation", 6)
 	leaderboard_scroll.add_child(pvp_leaderboard_list)
+	_render_pvp_leaderboard_state(
+		"Leaderboard not loaded",
+		"Open Ranked to fetch the latest standings."
+	)
 
-	var history_tab_page := _create_pvp_ranked_tab_page("History")
-	ranked_tabs.add_child(history_tab_page)
+	var history_tab_page := _create_pvp_ranked_tab_page("My History", 8)
+	pvp_ranked_battles_tabs.add_child(history_tab_page)
 
 	var history_tab := VBoxContainer.new()
 	history_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -4151,6 +4350,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_history_list.add_theme_constant_override("separation", 8)
 	history_scroll.add_child(pvp_history_list)
 
+	ranked_tabs.move_child(leaderboard_tab_page, 1)
+	ranked_tabs.move_child(battles_tab_page, 2)
+
 	var tournaments_tab := VBoxContainer.new()
 	tournaments_tab.name = "Tournaments"
 	tournaments_tab.add_theme_constant_override("separation", 10)
@@ -4169,6 +4371,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_history_refresh_button)
 	_render_pvp_banlists()
 	_render_pvp_banlists.call_deferred()
+	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 
 	pvp_poll_timer = Timer.new()
 	pvp_poll_timer.wait_time = 2.0
@@ -4537,12 +4740,12 @@ func _configure_tool_tile_button(
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	labels.add_child(subtitle)
 
-func _create_pvp_ranked_tab_page(tab_name: String) -> MarginContainer:
+func _create_pvp_ranked_tab_page(tab_name: String, top_margin: int = 12) -> MarginContainer:
 	var page := MarginContainer.new()
 	page.name = tab_name
 	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	page.add_theme_constant_override("margin_top", 12)
+	page.add_theme_constant_override("margin_top", top_margin)
 	return page
 
 func _create_pvp_ruleset_panel() -> Control:
@@ -4670,15 +4873,15 @@ func _render_pvp_team_preview() -> void:
 
 func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(46, 46)
+	panel.custom_minimum_size = Vector2(62, 62)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#315070aa"), 6, 1))
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, Color("#315070cc"), 9, 1))
 
 	var center := CenterContainer.new()
 	panel.add_child(center)
 
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(38, 38)
+	icon.custom_minimum_size = Vector2(52, 52)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	center.add_child(icon)
@@ -14936,29 +15139,60 @@ func _apply_pvp_ranked_tabs_style(tabs: TabContainer) -> void:
 	var tab_bar: TabBar = tabs.get_tab_bar()
 	tab_bar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	tabs.add_theme_constant_override("side_margin", 8)
-	tabs.add_theme_constant_override("tab_separation", 3)
+	tabs.add_theme_constant_override("tab_separation", 4)
 	tabs.add_theme_constant_override("outline_size", 0)
-	tabs.add_theme_color_override("font_selected_color", Color("#17120a"))
+	tabs.add_theme_color_override("font_selected_color", UI_MONEY)
 	tabs.add_theme_color_override("font_unselected_color", UI_MUTED_TEXT)
 	tabs.add_theme_color_override("font_hovered_color", UI_TEXT)
 	tabs.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.42))
-	tabs.add_theme_stylebox_override("tab_selected", _make_pvp_ranked_tab_style(Color("#f5d884"), Color("#f0cc70"), true))
-	tabs.add_theme_stylebox_override("tab_unselected", _make_pvp_ranked_tab_style(Color("#07111ed8"), Color("#2d405b99"), false))
-	tabs.add_theme_stylebox_override("tab_hovered", _make_pvp_ranked_tab_style(Color("#10213aee"), Color("#d6c78faa"), false))
+	tabs.add_theme_stylebox_override("tab_selected", _make_pvp_ranked_tab_style(UI_SURFACE_RAISED, UI_MONEY, true))
+	tabs.add_theme_stylebox_override("tab_unselected", _make_pvp_ranked_tab_style(Color("#07111ed8"), Color("#2d405b66"), false))
+	tabs.add_theme_stylebox_override("tab_hovered", _make_pvp_ranked_tab_style(UI_SURFACE_HOVER, Color("#d6c78faa"), false))
 	tabs.add_theme_stylebox_override("tab_disabled", _make_pvp_ranked_tab_style(Color("#05091288"), Color("#25324755"), false))
-	tabs.add_theme_stylebox_override("tab_focus", _make_pvp_ranked_tab_style(Color("#10213aee"), UI_BORDER_FOCUS, false))
+	tabs.add_theme_stylebox_override("tab_focus", _make_pvp_ranked_tab_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, false))
 	tabs.add_theme_stylebox_override("panel", _make_panel_style(Color("#05091200"), Color("#00000000"), 0, 0))
 
 func _make_pvp_ranked_tab_style(background_color: Color, border_color: Color, selected: bool) -> StyleBoxFlat:
-	var style := _make_button_style(background_color, border_color, 4, 1)
+	var style := _make_button_style(background_color, border_color, 7, 1)
 	style.content_margin_left = 12
 	style.content_margin_right = 12
 	style.content_margin_top = 7
 	style.content_margin_bottom = 7
 	if selected:
+		style.border_width_left = 0
+		style.border_width_top = 0
+		style.border_width_right = 0
 		style.border_width_bottom = 2
-		style.border_color = Color("#f0cc70")
+		style.border_color = UI_MONEY
 	return style
+
+func _apply_pvp_ranked_subtabs_style(tabs: TabContainer) -> void:
+	_apply_pvp_ranked_tabs_style(tabs)
+	tabs.add_theme_constant_override("side_margin", 0)
+	tabs.add_theme_constant_override("tab_separation", 2)
+	tabs.add_theme_color_override("font_selected_color", Color("#60d3ff"))
+	tabs.add_theme_stylebox_override("tab_selected", _make_pvp_ranked_tab_style(UI_SURFACE_INTERACTIVE, Color("#60d3ff"), true))
+
+func _make_pvp_validator_panel_style(state: String) -> StyleBoxFlat:
+	var normalized_state := state.strip_edges().to_lower()
+	var background := Color("#071522e8")
+	var border := Color("#456784aa")
+	match normalized_state:
+		"valid":
+			background = Color("#071d15e8")
+			border = Color("#4fbd78cc")
+		"invalid":
+			background = Color("#241016e8")
+			border = Color("#d65d6dcc")
+		"checking":
+			background = Color("#071522e8")
+			border = Color("#4e7898aa")
+	return _make_panel_style(background, border, 10, 1)
+
+func _set_pvp_validator_visual_state(state: String) -> void:
+	if pvp_team_validator_panel == null:
+		return
+	pvp_team_validator_panel.add_theme_stylebox_override("panel", _make_pvp_validator_panel_style(state))
 
 func _apply_text_edit_style(text_edit: TextEdit) -> void:
 	text_edit.add_theme_color_override("font_color", UI_TEXT)
@@ -23477,6 +23711,10 @@ func _open_pvp_popup_section(section_name: String) -> void:
 	_select_pvp_root_tab(section_name)
 	if pvp_popup_title_label != null:
 		pvp_popup_title_label.text = _pvp_popup_title_for_section(section_name)
+	if pvp_popup_subtitle_label != null:
+		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section(section_name)
+	if pvp_popup_icon != null:
+		pvp_popup_icon.texture = _pvp_popup_icon_for_section(section_name)
 	if section_name != "Ranked":
 		return
 	if section_name == "Ranked":
@@ -23499,6 +23737,26 @@ func _pvp_popup_title_for_section(section_name: String) -> String:
 			return "Custom / Casual"
 		_:
 			return "PvP"
+
+func _pvp_popup_subtitle_for_section(section_name: String) -> String:
+	match section_name:
+		"Ranked":
+			return "Competitive matchmaking · %s" % pvp_active_format_name
+		"Tournaments":
+			return "Scheduled competitive events"
+		"Custom / Casual":
+			return "Create or join a private battle"
+		_:
+			return "Choose how you want to battle"
+
+func _pvp_popup_icon_for_section(section_name: String) -> Texture2D:
+	match section_name:
+		"Tournaments":
+			return PVP_MODE_TOURNAMENT_ICON
+		"Custom / Casual":
+			return PVP_MODE_CUSTOM_ICON
+		_:
+			return PVP_MODE_RANKED_ICON
 
 func _select_pvp_root_tab(section_name: String) -> void:
 	if pvp_root_tabs == null:
@@ -23630,6 +23888,7 @@ func _refresh_pvp_team_validator() -> void:
 		return
 	for child in pvp_team_validator_list.get_children():
 		child.queue_free()
+	_set_pvp_validator_visual_state("checking")
 
 	var issues: Array[String] = []
 	var warnings: Array[String] = []
@@ -23638,8 +23897,6 @@ func _refresh_pvp_team_validator() -> void:
 		issues.append("Your current party is empty.")
 	elif party_size > MAX_PARTY_SIZE:
 		issues.append("Your party has more than %d Pokemon." % MAX_PARTY_SIZE)
-	else:
-		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "%d Pokemon selected from your current party." % party_size, Color("#62e36e")))
 
 	var species_counts: Dictionary = {}
 	for pokemon: Pokemon in PlayerSave.party:
@@ -23658,19 +23915,20 @@ func _refresh_pvp_team_validator() -> void:
 
 	if pvp_active_queue_id == "":
 		warnings.append("No queue is selected.")
-	else:
-		var mode: String = _get_pvp_queue_mode(pvp_active_queue_id)
-		var mode_text: String = mode.capitalize() if mode != "" else "Selected"
-		pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "%s queue selected." % mode_text, Color("#62e36e")))
 
 	if issues.is_empty() and not _is_selected_pvp_queue_ranked():
 		if pvp_team_validator_status_label != null:
 			pvp_team_validator_status_label.text = "Eligible for the selected queue."
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
+		_set_pvp_validator_visual_state("valid")
 	elif not issues.is_empty():
 		if pvp_team_validator_status_label != null:
-			pvp_team_validator_status_label.text = "Team is not eligible."
+			pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
+				issues.size(),
+				"issue" if issues.size() == 1 else "issues",
+			]
 			pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
+		_set_pvp_validator_visual_state("invalid")
 
 	if _is_selected_pvp_queue_ranked():
 		var server_state := str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
@@ -23681,17 +23939,23 @@ func _refresh_pvp_team_validator() -> void:
 		]
 		if not server_is_authoritative:
 			for issue: String in issues:
-				pvp_team_validator_list.add_child(_create_pvp_validator_row("Hint", issue, Color("#f5df9a")))
+				pvp_team_validator_list.add_child(_create_pvp_validator_row("Issue", issue, Color("#ff7979")))
 			for warning: String in warnings:
 				pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
-		_render_pvp_ranked_server_validation()
+		if issues.is_empty():
+			_render_pvp_ranked_server_validation()
+		elif pvp_team_validator_status_label != null:
+			pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
+				issues.size(),
+				"issue" if issues.size() == 1 else "issues",
+			]
 	else:
 		for issue: String in issues:
 			pvp_team_validator_list.add_child(_create_pvp_validator_row("Local", issue, Color("#f5df9a")))
 		for warning: String in warnings:
 			pvp_team_validator_list.add_child(_create_pvp_validator_row("Note", warning, Color("#f5df9a")))
 		if issues.is_empty() and warnings.is_empty():
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", "No client-side validation issues found.", Color("#62e36e")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row("Allowed", "No validation issues found.", Color("#62e36e")))
 	_refresh_pvp_queue_buttons(_current_pvp_queue_status_for_buttons())
 
 func _render_pvp_ranked_server_validation() -> void:
@@ -23699,15 +23963,24 @@ func _render_pvp_ranked_server_validation() -> void:
 	var server_message := PvpRankedTeamValidation.display_message(pvp_ranked_team_validation_result)
 	match server_state:
 		PvpRankedTeamValidation.STATE_VALID:
+			_set_pvp_validator_visual_state("valid")
 			if pvp_team_validator_status_label != null:
 				pvp_team_validator_status_label.text = "Ranked Ready"
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#62e36e"))
-			pvp_team_validator_list.add_child(_create_pvp_validator_row("OK", server_message, Color("#62e36e")))
+			pvp_team_validator_list.add_child(_create_pvp_validator_row(
+				"Allowed",
+				"Team is allowed in %s." % pvp_active_format_name,
+				Color("#62e36e")
+			))
 		PvpRankedTeamValidation.STATE_INVALID:
-			if pvp_team_validator_status_label != null:
-				pvp_team_validator_status_label.text = "Team is not eligible."
-				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
+			_set_pvp_validator_visual_state("invalid")
 			var server_issues := PvpRankedTeamValidation.display_issues(pvp_ranked_team_validation_result)
+			if pvp_team_validator_status_label != null:
+				pvp_team_validator_status_label.text = "Team not allowed · %d %s" % [
+					server_issues.size(),
+					"issue" if server_issues.size() == 1 else "issues",
+				]
+				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
 			for issue: Dictionary in server_issues:
 				pvp_team_validator_list.add_child(_create_pvp_validator_row(
 					_pvp_ranked_validation_issue_label(issue),
@@ -23715,11 +23988,13 @@ func _render_pvp_ranked_server_validation() -> void:
 					Color("#ff7979")
 				))
 		PvpRankedTeamValidation.STATE_CHECKING:
+			_set_pvp_validator_visual_state("checking")
 			if pvp_team_validator_status_label != null:
 				pvp_team_validator_status_label.text = "Checking ranked team..."
 				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 			pvp_team_validator_list.add_child(_create_pvp_validator_row("Checking", server_message, UI_MUTED_TEXT))
 		PvpRankedTeamValidation.STATE_ERROR:
+			_set_pvp_validator_visual_state("invalid")
 			if pvp_team_validator_status_label != null:
 				pvp_team_validator_status_label.text = "Server validation unavailable."
 				pvp_team_validator_status_label.add_theme_color_override("font_color", Color("#ff7979"))
@@ -23727,6 +24002,7 @@ func _render_pvp_ranked_server_validation() -> void:
 			for error: String in errors:
 				pvp_team_validator_list.add_child(_create_pvp_validator_row("Error", error, Color("#ff7979")))
 		_:
+			_set_pvp_validator_visual_state("checking")
 			if pvp_team_validator_status_label != null:
 				pvp_team_validator_status_label.text = "Checking current party..."
 				pvp_team_validator_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -24135,6 +24411,8 @@ func _populate_pvp_queue_select(queues: Array[Dictionary]) -> void:
 		pvp_queue_select.select(0)
 	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
+	if pvp_popup_subtitle_label != null:
+		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("Ranked")
 	_refresh_pvp_team_validator()
 
 func _select_pvp_queue_by_id(queue_id: String) -> bool:
@@ -24162,6 +24440,8 @@ func _on_pvp_queue_selected(index: int) -> void:
 	var previous_format_key := pvp_active_format_key
 	pvp_active_queue_id = queue_id
 	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
+	if pvp_popup_subtitle_label != null:
+		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("Ranked")
 	if pvp_active_format_key != previous_format_key:
 		pvp_banlists_loaded = false
 		pvp_banlists_result = PvpRankedBanlists.not_loaded()
@@ -24201,7 +24481,18 @@ func _on_pvp_ranked_tab_changed(tab_index: int) -> void:
 	if pvp_ranked_tabs == null:
 		return
 	var tab := pvp_ranked_tabs.get_child(tab_index)
-	if tab == null or tab.name != "Bans":
+	if tab == null or tab.name != "Rules":
+		return
+	_refresh_pvp_banlists_if_selected()
+
+func _on_pvp_ranked_rules_tab_changed(_tab_index: int) -> void:
+	_refresh_pvp_banlists_if_selected()
+
+func _refresh_pvp_banlists_if_selected() -> void:
+	if pvp_ranked_rules_tabs == null:
+		return
+	var selected_tab := pvp_ranked_rules_tabs.get_child(pvp_ranked_rules_tabs.current_tab)
+	if selected_tab == null or selected_tab.name != "Banlist":
 		return
 	_refresh_pvp_banlists.call_deferred(false)
 
@@ -24460,8 +24751,13 @@ func _refresh_pvp_leaderboard() -> void:
 	pvp_leaderboard_in_flight = true
 	if pvp_leaderboard_refresh_button != null:
 		pvp_leaderboard_refresh_button.disabled = true
+	var scope_label := _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)
 	if pvp_leaderboard_status_label != null:
-		pvp_leaderboard_status_label.text = "Loading %s leaderboard..." % _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope).to_lower()
+		pvp_leaderboard_status_label.text = "Updating %s standings..." % scope_label.to_lower()
+	_render_pvp_leaderboard_state(
+		"Updating leaderboard",
+		"Fetching the latest %s standings." % scope_label.to_lower()
+	)
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.get_pvp_leaderboard(request, 50, 0, pvp_active_format_key, pvp_active_leaderboard_scope)
 	request.queue_free()
@@ -24472,14 +24768,26 @@ func _refresh_pvp_leaderboard() -> void:
 	if not bool(response.get("success", false)):
 		if pvp_leaderboard_status_label != null:
 			pvp_leaderboard_status_label.text = "Could not load leaderboard."
-		_render_pvp_leaderboard([])
+		_render_pvp_leaderboard_state(
+			"Leaderboard unavailable",
+			"The standings could not be loaded. Try Refresh again.",
+			UI_DANGER
+		)
 		return
 
 	var entries_value: Variant = response.get("entries", [])
 	var entries: Array = entries_value as Array if entries_value is Array else []
 	if pvp_leaderboard_status_label != null:
-		var scope_label := str(response.get("scopeLabel", _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope))).strip_edges()
-		pvp_leaderboard_status_label.text = "%s ranked points: Win +10, Loss -10" % scope_label
+		scope_label = str(response.get("scopeLabel", scope_label)).strip_edges()
+		var policy_value: Variant = response.get("pointsPolicy", {})
+		var points_policy: Dictionary = policy_value as Dictionary if policy_value is Dictionary else {}
+		var win_points := _pvp_history_variant_to_int(points_policy.get("win", 10))
+		var loss_points := _pvp_history_variant_to_int(points_policy.get("loss", -10))
+		pvp_leaderboard_status_label.text = "%s standings · Win %s · Loss %s" % [
+			scope_label,
+			_pvp_leaderboard_point_delta(win_points),
+			_pvp_leaderboard_point_delta(loss_points),
+		]
 	_render_pvp_leaderboard(entries)
 
 func _pvp_leaderboard_scope_index(scope: String) -> int:
@@ -24496,32 +24804,114 @@ func _pvp_leaderboard_scope_label(scope: String) -> String:
 			return str(entry.get("label", "All Time"))
 	return "All Time"
 
+func _apply_pvp_leaderboard_scope_style(option: OptionButton) -> void:
+	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 7, 1)
+	normal.content_margin_left = 11
+	normal.content_margin_right = 25
+	var hover := _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 7, 1)
+	hover.content_margin_left = 11
+	hover.content_margin_right = 25
+	var pressed := _make_button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 7, 1)
+	pressed.content_margin_left = 11
+	pressed.content_margin_right = 25
+	option.add_theme_stylebox_override("normal", normal)
+	option.add_theme_stylebox_override("hover", hover)
+	option.add_theme_stylebox_override("pressed", pressed)
+	option.add_theme_stylebox_override("focus", hover)
+	option.add_theme_color_override("font_color", UI_TEXT)
+	option.add_theme_color_override("font_hover_color", UI_TEXT)
+	option.add_theme_color_override("font_pressed_color", UI_TEXT)
+	option.add_theme_font_size_override("font_size", 13)
+
 func _render_pvp_leaderboard(entries: Array) -> void:
 	if pvp_leaderboard_list == null:
 		return
+	if entries.is_empty():
+		_render_pvp_leaderboard_state(
+			"No ranked results yet",
+			"Complete a ranked battle to appear in the %s standings." % _pvp_leaderboard_scope_label(pvp_active_leaderboard_scope)
+		)
+		return
 	for child in pvp_leaderboard_list.get_children():
 		child.queue_free()
-	if entries.is_empty():
-		var empty_label := Label.new()
-		empty_label.text = "No ranked results yet."
-		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-		pvp_leaderboard_list.add_child(empty_label)
-		return
 	for entry_value: Variant in entries:
 		if entry_value is Dictionary:
 			pvp_leaderboard_list.add_child(_create_pvp_leaderboard_row(entry_value as Dictionary))
 
-func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
+func _render_pvp_leaderboard_state(title_text: String, detail_text: String, accent: Color = UI_BORDER_FOCUS) -> void:
+	if pvp_leaderboard_list == null:
+		return
+	for child in pvp_leaderboard_list.get_children():
+		child.queue_free()
+
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 46)
+	panel.custom_minimum_size = Vector2(0, 176)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#d9b45f88"), 4, 1))
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, Color(accent.r, accent.g, accent.b, 0.34), 8, 1)
+	)
+	pvp_leaderboard_list.add_child(panel)
+
+	var center := CenterContainer.new()
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_child(center)
+
+	var content := VBoxContainer.new()
+	content.custom_minimum_size = Vector2(430, 0)
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.add_theme_constant_override("separation", 5)
+	center.add_child(content)
+
+	var marker := Label.new()
+	marker.text = "LADDER"
+	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	marker.add_theme_font_size_override("font_size", 9)
+	marker.add_theme_color_override("font_color", accent)
+	content.add_child(marker)
+
+	var title := Label.new()
+	title.text = title_text
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 17)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	content.add_child(title)
+
+	var detail := Label.new()
+	detail.text = detail_text
+	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_theme_font_size_override("font_size", 12)
+	detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	content.add_child(detail)
+
+func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
+	var rank := _pvp_history_variant_to_int(entry.get("rank", 0))
+	var is_current_player := _is_current_auth_user(entry)
+	var games_played := _pvp_history_variant_to_int(entry.get("gamesPlayed", 0))
+	var wins := _pvp_history_variant_to_int(entry.get("wins", 0))
+	var losses := _pvp_history_variant_to_int(entry.get("losses", 0))
+	var points := _pvp_history_variant_to_int(entry.get("points", 0))
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 56 if rank > 0 and rank <= 3 else 50)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_pvp_leaderboard_row_style(rank, is_current_player))
+	panel.tooltip_text = "%s\nRank #%d · %d points\n%d wins · %d losses · %d battles" % [
+		_pvp_leaderboard_display_name(entry),
+		rank,
+		points,
+		wins,
+		losses,
+		games_played,
+	]
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
 	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 6)
+	margin.add_theme_constant_override("margin_bottom", 5)
 	panel.add_child(margin)
 
 	var row := HBoxContainer.new()
@@ -24529,18 +24919,147 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	margin.add_child(row)
 
-	row.add_child(_create_pvp_leaderboard_value_label("#%d" % _pvp_history_variant_to_int(entry.get("rank", 0)), 46, HORIZONTAL_ALIGNMENT_CENTER, Color("#f5df9a")))
-	row.add_child(_create_pvp_leaderboard_value_label(_pvp_leaderboard_display_name(entry), 0, HORIZONTAL_ALIGNMENT_LEFT, UI_TEXT, true))
-	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("points", 0)), 88, HORIZONTAL_ALIGNMENT_RIGHT, Color("#65e38b")))
-	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("wins", 0)), 46, HORIZONTAL_ALIGNMENT_RIGHT))
-	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("losses", 0)), 46, HORIZONTAL_ALIGNMENT_RIGHT))
-	row.add_child(_create_pvp_leaderboard_value_label("%d" % _pvp_history_variant_to_int(entry.get("gamesPlayed", 0)), 72, HORIZONTAL_ALIGNMENT_RIGHT))
-	row.add_child(_create_pvp_leaderboard_value_label(_pvp_leaderboard_win_rate(entry.get("winRate", 0)), 72, HORIZONTAL_ALIGNMENT_RIGHT))
+	row.add_child(_create_pvp_leaderboard_rank_cell(rank))
+	row.add_child(_create_pvp_leaderboard_player_cell(entry, games_played, is_current_player))
+	row.add_child(_create_pvp_leaderboard_value_label(
+		"%d" % points,
+		96,
+		HORIZONTAL_ALIGNMENT_RIGHT,
+		_pvp_leaderboard_points_color(points)
+	))
+	row.add_child(_create_pvp_leaderboard_value_label(
+		"%dW · %dL" % [wins, losses],
+		104,
+		HORIZONTAL_ALIGNMENT_RIGHT
+	))
+	row.add_child(_create_pvp_leaderboard_value_label(
+		_pvp_leaderboard_win_rate(entry.get("winRate", 0)),
+		86,
+		HORIZONTAL_ALIGNMENT_RIGHT
+	))
 	return panel
+
+func _make_pvp_leaderboard_row_style(rank: int, is_current_player: bool) -> StyleBoxFlat:
+	var background := UI_SURFACE_RAISED
+	var border := UI_BORDER_SUBTLE
+	var border_width := 1
+	match rank:
+		1:
+			background = Color("#17170fed")
+			border = Color("#d6b44eaa")
+		2:
+			background = Color("#111922ed")
+			border = Color("#9fafbe99")
+		3:
+			background = Color("#17130fed")
+			border = Color("#b7794e99")
+	if is_current_player:
+		background = Color("#0a2030f2")
+		border = Color("#62d8ffdd")
+		border_width = 2
+	return _make_panel_style(background, border, 8, border_width)
+
+func _create_pvp_leaderboard_rank_cell(rank: int) -> Control:
+	var cell := CenterContainer.new()
+	cell.custom_minimum_size = Vector2(54, 0)
+
+	var badge := PanelContainer.new()
+	badge.custom_minimum_size = Vector2(38, 28)
+	var rank_color := _pvp_leaderboard_rank_color(rank)
+	badge.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(
+			Color(rank_color.r, rank_color.g, rank_color.b, 0.12),
+			Color(rank_color.r, rank_color.g, rank_color.b, 0.72),
+			7,
+			1
+		)
+	)
+	cell.add_child(badge)
+
+	var label := Label.new()
+	label.text = "%d" % rank if rank > 0 else "—"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 15 if rank > 0 and rank <= 3 else 13)
+	label.add_theme_color_override("font_color", rank_color)
+	badge.add_child(label)
+	return cell
+
+func _create_pvp_leaderboard_player_cell(entry: Dictionary, games_played: int, is_current_player: bool) -> Control:
+	var cell := VBoxContainer.new()
+	cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cell.alignment = BoxContainer.ALIGNMENT_CENTER
+	cell.add_theme_constant_override("separation", 0)
+
+	var name_row := HBoxContainer.new()
+	name_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_row.add_theme_constant_override("separation", 7)
+	cell.add_child(name_row)
+
+	var player_name := Label.new()
+	player_name.text = _pvp_leaderboard_display_name(entry)
+	player_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	player_name.add_theme_font_size_override("font_size", 14)
+	player_name.add_theme_color_override("font_color", UI_TEXT)
+	name_row.add_child(player_name)
+
+	if is_current_player:
+		var you_badge := PanelContainer.new()
+		you_badge.add_theme_stylebox_override(
+			"panel",
+			_make_panel_style(Color("#0b2a3be8"), Color("#62d8ff99"), 6, 1)
+		)
+		name_row.add_child(you_badge)
+
+		var you_margin := MarginContainer.new()
+		you_margin.add_theme_constant_override("margin_left", 6)
+		you_margin.add_theme_constant_override("margin_top", 1)
+		you_margin.add_theme_constant_override("margin_right", 6)
+		you_margin.add_theme_constant_override("margin_bottom", 1)
+		you_badge.add_child(you_margin)
+
+		var you_label := Label.new()
+		you_label.text = "YOU"
+		you_label.add_theme_font_size_override("font_size", 9)
+		you_label.add_theme_color_override("font_color", Color("#8fe7ff"))
+		you_margin.add_child(you_label)
+
+	var name_spacer := Control.new()
+	name_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_row.add_child(name_spacer)
+
+	var games_label := Label.new()
+	games_label.text = "%d %s" % [games_played, "battle" if games_played == 1 else "battles"]
+	games_label.add_theme_font_size_override("font_size", 10)
+	games_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	cell.add_child(games_label)
+	return cell
+
+func _pvp_leaderboard_rank_color(rank: int) -> Color:
+	match rank:
+		1:
+			return Color("#ffd45a")
+		2:
+			return Color("#d3deea")
+		3:
+			return Color("#e0a06c")
+		_:
+			return UI_MUTED_TEXT
+
+func _pvp_leaderboard_points_color(points: int) -> Color:
+	if points > 0:
+		return Color("#65e38b")
+	if points < 0:
+		return Color("#ff7b83")
+	return UI_MUTED_TEXT
+
+func _pvp_leaderboard_point_delta(points: int) -> String:
+	return "+%d" % points if points > 0 else "%d" % points
 
 func _create_pvp_leaderboard_header_label(text: String, width: float, alignment: HorizontalAlignment, expand: bool = false) -> Label:
 	var label := _create_pvp_leaderboard_value_label(text, width, alignment, UI_MUTED_TEXT, expand)
-	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_font_size_override("font_size", 10)
 	return label
 
 func _create_pvp_leaderboard_value_label(
@@ -25460,14 +25979,40 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 	if pvp_join_queue_button == null or pvp_leave_queue_button == null:
 		return
 	var normalized_status := status.strip_edges().to_lower()
+	var has_match := normalized_status == "matched" or pvp_active_queue_match_id.strip_edges() != ""
+	var is_waiting := normalized_status == "waiting"
 	var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
-	pvp_join_queue_button.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched" or ranked_blocked
-	pvp_leave_queue_button.disabled = pvp_battle_starting or normalized_status != "waiting"
+	var validation_state := str(pvp_ranked_team_validation_result.get("state", "")).strip_edges()
+	var validation_pending := validation_state in [
+		PvpRankedTeamValidation.STATE_NOT_CHECKED,
+		PvpRankedTeamValidation.STATE_CHECKING,
+	]
+	var has_visible_validation_issues := (
+		pvp_team_validator_status_label != null
+		and pvp_team_validator_status_label.text.begins_with("Team not allowed")
+	)
+	pvp_join_queue_button.visible = not is_waiting and not has_match
+	pvp_leave_queue_button.visible = is_waiting and not has_match
+	pvp_join_queue_button.disabled = pvp_battle_starting or is_waiting or has_match or ranked_blocked
+	pvp_leave_queue_button.disabled = pvp_battle_starting or not is_waiting
+	if ranked_blocked and has_visible_validation_issues:
+		pvp_join_queue_button.text = "Team Not Ready"
+		pvp_join_queue_button.tooltip_text = "Resolve the team validation issues before matchmaking"
+	elif validation_pending:
+		pvp_join_queue_button.text = "Checking Team..."
+		pvp_join_queue_button.tooltip_text = "Waiting for server team validation"
+	elif ranked_blocked:
+		pvp_join_queue_button.text = "Team Not Ready"
+		pvp_join_queue_button.tooltip_text = "Your team must pass server validation before matchmaking"
+	else:
+		pvp_join_queue_button.text = "Find Match"
+		pvp_join_queue_button.tooltip_text = "Search for a ranked opponent"
 	if pvp_queue_select != null:
-		pvp_queue_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
+		pvp_queue_select.disabled = pvp_battle_starting or is_waiting or has_match
 	if pvp_mode_select != null:
-		pvp_mode_select.disabled = pvp_battle_starting or normalized_status == "waiting" or normalized_status == "matched"
+		pvp_mode_select.disabled = pvp_battle_starting or is_waiting or has_match
 	if pvp_reconnect_battle_button != null:
+		pvp_reconnect_battle_button.visible = has_match
 		pvp_reconnect_battle_button.disabled = pvp_battle_starting
 
 func _poll_pvp_room() -> void:
@@ -25619,7 +26164,17 @@ func _set_pvp_status(message: String) -> void:
 
 func _set_pvp_queue_status(message: String) -> void:
 	if pvp_queue_status_label != null:
-		pvp_queue_status_label.text = message
+		var display_message := message.strip_edges()
+		if display_message.begins_with("Queue Status:"):
+			display_message = display_message.trim_prefix("Queue Status:").strip_edges()
+		match display_message.to_lower():
+			"idle":
+				display_message = "Ready to search."
+			"searching for opponent...":
+				display_message = "Searching for an opponent..."
+			"match found.":
+				display_message = "Match found."
+		pvp_queue_status_label.text = display_message
 
 func _on_map_button_pressed() -> void:
 	_add_chat_message("Town Map is not implemented yet.")
