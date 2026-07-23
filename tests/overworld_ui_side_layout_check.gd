@@ -6,6 +6,8 @@ const PARTY_SLOT_SCENE_PATH := "res://scenes/interface/party_slot.tscn"
 const PARTY_SLOT_SCRIPT_PATH := "res://scripts/ui/party_slot.gd"
 const HOTKEY_SIDEBAR_SCENE_PATH := "res://scenes/interface/hotkey_sidebar.tscn"
 const PLAYER_STATUS_SCENE_PATH := "res://scenes/interface/player_status_card.tscn"
+const DONATOR_STORE_SCENE_PATH := "res://scenes/interface/donator_store_popup.tscn"
+const DONATOR_STORE_SCRIPT_PATH := "res://scripts/ui/donator_store_popup.gd"
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const SETTINGS_MANAGER_PATH := "res://scripts/services/settings_manager.gd"
 
@@ -20,6 +22,8 @@ func _init() -> void:
 	var party_separator_block := _node_block(party_slot_scene_source, '[node name="Seperator"')
 	var hotkey_sidebar_scene_source := FileAccess.get_file_as_string(HOTKEY_SIDEBAR_SCENE_PATH)
 	var player_status_scene_source := FileAccess.get_file_as_string(PLAYER_STATUS_SCENE_PATH)
+	var donator_store_scene_source := FileAccess.get_file_as_string(DONATOR_STORE_SCENE_PATH)
+	var donator_store_script_source := FileAccess.get_file_as_string(DONATOR_STORE_SCRIPT_PATH)
 	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	var settings_source := FileAccess.get_file_as_string(SETTINGS_MANAGER_PATH)
 	var hotbar_block := _node_block(scene_source, '[node name="HotkeySidebar"')
@@ -212,7 +216,13 @@ func _init() -> void:
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")
 	_check(script_source.contains("Community contributions are not connected yet."), "community contribution placeholder cannot silently spend currency")
 	_check(script_source.contains('name_label.text = str(buff.get("name", "Buff"))'), "personal buff rows receive readable names")
-	_check(script_source.contains("The Donator Gems Store is not connected yet."), "placeholder Store interaction gives clear feedback")
+	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(920, 620)"), "Donator Store opens as a full catalog interface")
+	_check(donator_store_script_source.contains('const CATEGORY_ORDER: Array[String] = ["featured", "style", "profile", "services"]'), "Donator Store provides scalable catalog categories")
+	_check(donator_store_script_source.contains('"COSMETIC-FIRST"') and donator_store_script_source.contains("do not affect battle power"), "Donator Store establishes a cosmetic-first direction")
+	_check(donator_store_script_source.contains("func set_gem_balance(amount: int)") and donator_store_script_source.contains('balance_label.text = "%s Gems"'), "Donator Store has a future-ready authoritative balance display")
+	_check(donator_store_script_source.contains("purchase_button.disabled = true") and donator_store_script_source.contains("purchases are not connected yet"), "Donator Store cannot perform placeholder purchases")
+	_check(script_source.contains("donator_store_popup.open_store()") and not script_source.contains("The Donator Gems Store is not connected yet."), "purple gem button opens the Store interface")
+	_check(script_source.contains('{"panel": donator_store_popup, "close": Callable(self, "_hide_donator_store_popup")}'), "Escape closes the Donator Store")
 	_check(script_source.contains("Quest Log is not implemented yet."), "placeholder Quest Log interaction gives clear feedback")
 	_check(script_source.contains('const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")'), "Trainer Card redeem action uses its own gift-code icon")
 	_check(script_source.contains("func _create_trainer_card_redeem_button()") and script_source.contains('header.add_child(_create_trainer_card_redeem_button())'), "Trainer Card places the future Redeem Code action beside Close")

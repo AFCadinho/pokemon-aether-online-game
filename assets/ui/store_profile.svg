@@ -1,0 +1,20 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="profileCard" x1="6" y1="10" x2="58" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#61DDF5"/>
+      <stop offset="1" stop-color="#2477C8"/>
+    </linearGradient>
+    <linearGradient id="profileAccent" x1="15" y1="17" x2="32" y2="41" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2A3"/>
+      <stop offset="1" stop-color="#D59A2C"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#07101D" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="10" width="54" height="44" rx="8" fill="url(#profileCard)" stroke-width="3"/>
+    <rect x="11" y="16" width="21" height="31" rx="6" fill="#071522" stroke="#EAF8FF" stroke-width="2"/>
+    <circle cx="21.5" cy="27" r="6" fill="#EFC3A5" stroke-width="2"/>
+    <path d="M13 44c1-8 3-11 8.5-11S29 36 30 44H13Z" fill="url(#profileAccent)" stroke-width="2"/>
+    <path d="M38 22h14M38 30h14M38 38h9" stroke="#EAF8FF" stroke-width="3"/>
+    <path d="M48 44v9M43.5 48.5h9" stroke="#FFF1A0" stroke-width="2.5"/>
+  </g>
+</svg>

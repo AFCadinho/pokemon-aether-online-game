@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="chatBubble" x1="7" y1="10" x2="54" y2="49" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E4FF"/>
+      <stop offset="1" stop-color="#2477C8"/>
+    </linearGradient>
+    <linearGradient id="chatBadge" x1="35" y1="30" x2="57" y2="55" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D7B2FF"/>
+      <stop offset="1" stop-color="#744AB8"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#07101D" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 11h43a7 7 0 0 1 7 7v20a7 7 0 0 1-7 7H27L13 54l3-9H8a7 7 0 0 1-7-7V18a7 7 0 0 1 7-7Z" fill="url(#chatBubble)" stroke-width="3"/>
+    <path d="M13 23h32M13 32h22" stroke="#EAF8FF" stroke-width="3"/>
+    <path d="m47 33 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6Z" fill="url(#chatBadge)" stroke-width="2.5"/>
+  </g>
+</svg>

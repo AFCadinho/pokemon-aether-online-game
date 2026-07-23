@@ -102,6 +102,7 @@ const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
 	{"id": "all_time", "label": "All Time"},
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
+const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
@@ -358,6 +359,7 @@ enum DevPokemonPopupMode {
 @onready var personal_buffs_summary_button: Button = $Control/PersonalBuffsPanel/MarginContainer/Row/ActiveSummaryButton
 @onready var personal_buff_slots: VBoxContainer = $Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots
 @onready var donator_store_button: Button = $Control/DonatorStoreButton
+var donator_store_popup: DonatorStorePopup
 @onready var settings_button: Button = $Control/SettingsButton
 @onready var global_buff_details_panel: PanelContainer = $Control/GlobalBuffDetailsPanel
 @onready var global_buff_details_icon: TextureRect = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Icon
@@ -1004,6 +1006,7 @@ func _ready() -> void:
 	_setup_player_status_card()
 	_setup_status_docks()
 	_setup_trainer_card_popup()
+	_setup_donator_store_popup()
 	_setup_bag_popup()
 	_setup_market_popup()
 	_setup_bag_item_use_popup()
@@ -1762,6 +1765,7 @@ func _apply_ui_z_index_policy() -> void:
 		party_panel,
 		player_status_panel,
 		hotkey_sidebar_panel,
+		donator_store_popup,
 		bag_popup,
 		pokemon_summary_popup,
 		trainer_card_popup,
@@ -1821,6 +1825,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		global_buff_details_panel,
 		chat_settings_popup,
 		chat_context_popup,
+		donator_store_popup,
 		bag_popup,
 		trainer_card_popup,
 		dev_actions_popup,
@@ -6592,6 +6597,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		party_panel,
 		player_status_panel,
 		hotkey_sidebar_panel,
+		donator_store_popup,
 		bag_popup,
 		trainer_card_popup,
 		dev_actions_popup,
@@ -7051,9 +7057,33 @@ func _hide_global_buff_details() -> void:
 	selected_global_buff.clear()
 	_deactivate_ui_panel(global_buff_details_panel)
 
+func _setup_donator_store_popup() -> void:
+	if donator_store_popup != null:
+		return
+	donator_store_popup = DONATOR_STORE_POPUP_SCENE.instantiate() as DonatorStorePopup
+	if donator_store_popup == null:
+		return
+	donator_store_popup.z_index = UI_BASE_Z_INDEX
+	donator_store_popup.closed.connect(_hide_donator_store_popup)
+	donator_store_popup.gui_input.connect(
+		_on_focusable_overlay_panel_gui_input.bind(donator_store_popup)
+	)
+	root_control.add_child(donator_store_popup)
+
 func _on_donator_store_button_pressed() -> void:
-	_focus_normal_ui_group(donator_store_button)
-	_add_chat_message("The Donator Gems Store is not connected yet.")
+	if donator_store_popup == null:
+		return
+	if donator_store_popup.visible:
+		_hide_donator_store_popup()
+		return
+	donator_store_popup.open_store()
+	_activate_ui_panel(donator_store_popup)
+
+func _hide_donator_store_popup() -> void:
+	if donator_store_popup == null:
+		return
+	donator_store_popup.visible = false
+	_deactivate_ui_panel(donator_store_popup)
 
 func _setup_player_status_card() -> void:
 	player_status_panel.gui_input.connect(_on_player_status_panel_gui_input)
@@ -15253,6 +15283,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 			staff_impersonate_popup.visible = false
 		if staff_teleport_popup != null:
 			staff_teleport_popup.visible = false
+	if collapsed and panel_id == "player_status":
+		_hide_donator_store_popup()
 	if collapsed and panel_id == "dex_actions":
 		if item_dex_popup != null:
 			item_dex_popup.visible = false
@@ -15474,6 +15506,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": pokemon_summary_ball_picker, "close": Callable(self, "_hide_pokemon_summary_ball_picker_for_escape")},
 		{"panel": pokemon_summary_item_picker, "close": Callable(self, "_hide_pokemon_summary_item_picker_for_escape")},
 		{"panel": bag_item_use_popup, "close": Callable(self, "_hide_bag_item_use_popup_for_escape")},
+		{"panel": donator_store_popup, "close": Callable(self, "_hide_donator_store_popup")},
 		{"panel": mail_compose_popup, "close": Callable(self, "_on_mail_compose_close_button_pressed")},
 		{"panel": staff_impersonate_popup, "close": Callable(self, "_hide_staff_impersonate_popup")},
 		{"panel": staff_teleport_popup, "close": Callable(self, "_hide_staff_teleport_popup")},
