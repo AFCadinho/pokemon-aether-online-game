@@ -58,6 +58,7 @@ func _init() -> void:
 	_check_contains(player_source, 'var draw_layer := str(dark_pulse_config.get("draw_layer", "all"))', "Dark Pulse supports separate underlay and foreground passes")
 	_check_contains(sprite_box_source, "motion_direction: Vector2 = Vector2.ONE", "move actor motion supports two-axis battlefield direction")
 	_check_contains(sprite_box_source, "offset *= motion_direction", "opposing move actors invert both travel axes")
+	_check_contains(router_source, "config.get(\"actor_motion_mirror_vertical\", true)", "jumping moves can preserve their vertical arc for opposing users")
 
 	quit(1 if failed else 0)
 

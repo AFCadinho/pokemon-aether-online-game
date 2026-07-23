@@ -398,6 +398,8 @@ func _play_move_actor_motion_if_needed(config: Dictionary, actor_ident: String) 
 	var direction := Vector2.ONE
 	if _get_player_id_from_ident(actor_ident) == "p2":
 		direction = Vector2(-1.0, -1.0)
+		if not bool(config.get("actor_motion_mirror_vertical", true)):
+			direction.y = 1.0
 	actor_box.call("play_move_actor_motion", motion_config, direction)
 
 

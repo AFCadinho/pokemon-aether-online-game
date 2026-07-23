@@ -5219,6 +5219,113 @@
       "sound_paths": {
         "PRSFX- Ally Switch.wav": "res://assets/battles/animations/courtchange/PRSFX- Ally Switch.wav"
       }
+    },
+    "highjumpkick": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "sprite_zoom_multiplier": 0.78,
+      "sparkle_count": 0,
+      "actor_motion_mirror_vertical": false,
+      "sheet_anchor_source_position": [
+        432,
+        84
+      ],
+      "actor_motion": {
+        "enabled": true,
+        "duration": 1.22,
+        "points": [
+          {
+            "at": 0.0,
+            "offset": [0, 0],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.03
+          },
+          {
+            "at": 0.1,
+            "offset": [14, -8],
+            "rotation_degrees": 0,
+            "scale": 1.02,
+            "duration": 0.09
+          },
+          {
+            "at": 0.27,
+            "offset": [62, -52],
+            "rotation_degrees": -2,
+            "scale": 1.04,
+            "duration": 0.13
+          },
+          {
+            "at": 0.44,
+            "offset": [138, -96],
+            "rotation_degrees": -1,
+            "scale": 1.05,
+            "duration": 0.12
+          },
+          {
+            "at": 0.56,
+            "offset": [210, -86],
+            "rotation_degrees": 2,
+            "scale": 1.04,
+            "duration": 0.08
+          },
+          {
+            "at": 0.7,
+            "offset": [154, -60],
+            "rotation_degrees": 0,
+            "scale": 1.03,
+            "duration": 0.1
+          },
+          {
+            "at": 0.84,
+            "offset": [70, -24],
+            "rotation_degrees": 0,
+            "scale": 1.01,
+            "duration": 0.12
+          },
+          {
+            "at": 1.0,
+            "offset": [0, 0],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.16
+          }
+        ]
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.5,
+        "duration": 0.42,
+        "amplitude": 9.0,
+        "interval": 0.04,
+        "vertical_scale": 0.18,
+        "decay": true
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.5,
+        "duration": 0.16,
+        "color": [
+          1.0,
+          0.94,
+          0.72,
+          1.0
+        ]
+      },
+      "data_path": "res://assets/battles/animations/highjumpkick/highjumpkick.json",
+      "sheet_path": "res://assets/battles/animations/highjumpkick/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Hi Jump Kick1.wav": "res://assets/battles/animations/highjumpkick/PRSFX- Hi Jump Kick1.wav",
+        "PRSFX- Hi Jump Kick2.wav": "res://assets/battles/animations/highjumpkick/PRSFX- Hi Jump Kick2.wav"
+      }
     }
   }
 }
