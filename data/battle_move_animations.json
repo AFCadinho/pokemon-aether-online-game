@@ -5331,6 +5331,7 @@
       "template": "imported_sheet",
       "category": "special_projectile",
       "speed_scale": 1.08,
+      "sprite_zoom_multiplier": 0.72,
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
