@@ -3,7 +3,7 @@ extends SceneTree
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
 const PLAYERS_HOUSE_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
-const EXPECTED_INITIAL_POSITION := Vector2(304, 912)
+const EXPECTED_INITIAL_POSITION := Vector2(304, 336)
 
 var failed := false
 
@@ -46,11 +46,11 @@ func _check_players_house_initial_spawn() -> void:
 			int(EXPECTED_INITIAL_POSITION.x),
 			int(EXPECTED_INITIAL_POSITION.y),
 		]),
-		"InitialSpawn is centered on the free ground-floor area"
+		"InitialSpawn is centered in the player's upstairs bedroom"
 	)
 	_check(
-		players_house_source.contains('&"ground_floor": Rect2(64, 608, 480, 416)'),
-		"Player's House keeps InitialSpawn inside its ground-floor visibility region"
+		players_house_source.contains('&"upper_floor": Rect2(160, 0, 320, 448)'),
+		"Player's House keeps InitialSpawn inside its upper-floor visibility region"
 	)
 
 
