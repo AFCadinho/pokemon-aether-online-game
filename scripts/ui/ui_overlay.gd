@@ -10,6 +10,7 @@ const ACTION_BAR_SLOT_GAP := 8.0
 const UI_BASE_Z_INDEX := 100
 const UI_ACTIVE_Z_INDEX := 1000
 const UI_CHAT_TABS_Z_INDEX := UI_ACTIVE_Z_INDEX + 1
+const UI_BAG_Z_INDEX := UI_CHAT_TABS_Z_INDEX + 1
 const UI_DRAG_Z_INDEX := 1100
 const UI_MODAL_Z_INDEX := 2000
 const UI_OVERLAY_BASE_LAYER := 1
@@ -159,7 +160,7 @@ const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
-const BAG_SIZE := Vector2(920, 620)
+const BAG_SIZE := Vector2(1120, 660)
 const MAIL_POPUP_SIZE := Vector2(760, 500)
 const PC_POPUP_SIZE := Vector2(980, 600)
 const PC_BOX_SLOTS_PER_ROW := 6
@@ -301,17 +302,19 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 	"red-orb": true,
 }
 const BAG_ICON_ROOT := "res://assets/items/icons/"
+const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
-	{"id": "general", "label": "General"},
-	{"id": "pokeball", "label": "Pokeball"},
-	{"id": "medicine", "label": "Medicine"},
-	{"id": "key_items", "label": "Key Items"},
-	{"id": "machines", "label": "Machines"},
-	{"id": "held_items", "label": "Held Items"},
-	{"id": "power_stones", "label": "Mega & Z"},
-	{"id": "cosmetics", "label": "Skin & Mounts"},
-	{"id": "currency", "label": "Currency"},
+	{"id": "all", "label": "All Items", "iconItemId": ""},
+	{"id": "medicine", "label": "Medicine", "iconItemId": "potion"},
+	{"id": "pokeball", "label": "Poke Balls", "iconItemId": "poke-ball"},
+	{"id": "key_items", "label": "Key Items", "iconItemId": "bicycle"},
+	{"id": "machines", "label": "TMs & HMs", "iconItemId": "tm-material"},
+	{"id": "held_items", "label": "Held Items", "iconItemId": "leftovers"},
+	{"id": "power_stones", "label": "Mega & Z", "iconItemId": "charizardite-x"},
+	{"id": "cosmetics", "label": "Cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
+	{"id": "currency", "label": "Currency", "iconItemId": "coin-case"},
+	{"id": "general", "label": "Other", "iconItemId": "ability-capsule"},
 ]
 const TRAINER_CARD_CYAN := Color("#8bd8f4")
 const TRAINER_CARD_GREEN := Color("#73d98b")
@@ -769,7 +772,16 @@ var bag_popup: PanelContainer
 var bag_item_grid: GridContainer
 var bag_search_input: LineEdit
 var bag_category_buttons: Dictionary = {}
-var active_bag_category := "general"
+var bag_item_slots: Dictionary = {}
+var bag_summary_label: Label
+var bag_detail_icon: TextureRect
+var bag_detail_name_label: Label
+var bag_detail_meta_label: Label
+var bag_detail_description_label: Label
+var bag_detail_use_button: Button
+var bag_detail_hotbar_button: Button
+var bag_selected_item: Dictionary = {}
+var active_bag_category := "all"
 var bag_dragging := false
 var bag_drag_offset := Vector2.ZERO
 var bag_inventory_items: Array[Dictionary] = []
@@ -1818,7 +1830,7 @@ func _apply_ui_z_index_policy() -> void:
 
 func _set_ui_panel_base_z(panel: Control) -> void:
 	if panel != null:
-		panel.z_index = UI_BASE_Z_INDEX
+		panel.z_index = UI_BAG_Z_INDEX if panel == bag_popup else UI_BASE_Z_INDEX
 
 func _focus_overlay_ui_layer() -> void:
 	layer = UI_OVERLAY_FOCUSED_LAYER
@@ -1875,7 +1887,7 @@ func _activate_ui_panel(panel: Control) -> void:
 	if panel == null:
 		return
 	_focus_overlay_ui_layer()
-	panel.z_index = UI_ACTIVE_Z_INDEX
+	panel.z_index = UI_BAG_Z_INDEX if panel == bag_popup else UI_ACTIVE_Z_INDEX
 	panel.move_to_front()
 
 func _deactivate_ui_panel(panel: Control) -> void:
@@ -10337,7 +10349,7 @@ func _setup_bag_popup() -> void:
 	bag_popup.visible = false
 	bag_popup.custom_minimum_size = BAG_SIZE
 	bag_popup.mouse_filter = Control.MOUSE_FILTER_STOP
-	bag_popup.z_index = UI_BASE_Z_INDEX
+	bag_popup.z_index = UI_BAG_Z_INDEX
 	bag_popup.anchor_left = 0.5
 	bag_popup.anchor_top = 0.5
 	bag_popup.anchor_right = 0.5
@@ -10346,85 +10358,352 @@ func _setup_bag_popup() -> void:
 	bag_popup.offset_top = -BAG_SIZE.y * 0.5
 	bag_popup.offset_right = BAG_SIZE.x * 0.5
 	bag_popup.offset_bottom = BAG_SIZE.y * 0.5
-	bag_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	var bag_shell_style := _make_glass_panel_style(14)
+	bag_shell_style.border_color = Color("#456784cc")
+	bag_popup.add_theme_stylebox_override("panel", bag_shell_style)
 	root_control.add_child(bag_popup)
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 14)
-	margin_container.add_theme_constant_override("margin_top", 10)
-	margin_container.add_theme_constant_override("margin_right", 14)
-	margin_container.add_theme_constant_override("margin_bottom", 12)
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 14)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 14)
 	bag_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 12)
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
+	header.custom_minimum_size = Vector2(0, 48)
+	header.add_theme_constant_override("separation", 10)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_bag_header_gui_input)
 	layout.add_child(header)
 
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_MONEY, UI_MONEY, 2, 0)
+	)
+	header.add_child(header_accent)
+
+	var header_icon_frame := PanelContainer.new()
+	header_icon_frame.custom_minimum_size = Vector2(42, 42)
+	header_icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#151d24e8"), Color("#a98b43aa"), 9, 1)
+	)
+	header.add_child(header_icon_frame)
+
+	var header_icon_center := CenterContainer.new()
+	header_icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_child(header_icon_center)
+
+	var header_icon := TextureRect.new()
+	header_icon.custom_minimum_size = Vector2(30, 30)
+	header_icon.texture = BAG_INTERFACE_ICON
+	header_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	header_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_center.add_child(header_icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
+
 	var title_label := Label.new()
 	title_label.text = "Bag"
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.add_theme_font_size_override("font_size", 20)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
-	header.add_child(title_label)
+	heading.add_child(title_label)
+
+	bag_summary_label = Label.new()
+	bag_summary_label.text = "Inventory"
+	bag_summary_label.add_theme_font_size_override("font_size", 11)
+	bag_summary_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(bag_summary_label)
+
+	bag_search_input = LineEdit.new()
+	bag_search_input.placeholder_text = "Search items..."
+	bag_search_input.clear_button_enabled = true
+	bag_search_input.custom_minimum_size = Vector2(300, 36)
+	bag_search_input.focus_mode = Control.FOCUS_ALL
+	bag_search_input.text_changed.connect(_on_bag_search_changed)
+	_apply_line_edit_style(bag_search_input)
+	header.add_child(bag_search_input)
 
 	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.text = "×"
+	close_button.tooltip_text = "Close"
+	close_button.custom_minimum_size = Vector2(32, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_bag_popup)
 	_apply_button_style(close_button)
 	header.add_child(close_button)
 
-	bag_search_input = LineEdit.new()
-	bag_search_input.placeholder_text = ""
-	bag_search_input.custom_minimum_size = Vector2(420, 30)
-	bag_search_input.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	bag_search_input.text_changed.connect(_on_bag_search_changed)
-	_apply_line_edit_style(bag_search_input)
-	layout.add_child(bag_search_input)
-
 	var content_row := HBoxContainer.new()
+	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_row.add_theme_constant_override("separation", 14)
+	content_row.add_theme_constant_override("separation", 12)
 	layout.add_child(content_row)
 
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	content_row.add_child(scroll)
+	var category_panel := PanelContainer.new()
+	category_panel.custom_minimum_size = Vector2(178, 0)
+	category_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	category_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1)
+	)
+	content_row.add_child(category_panel)
 
-	bag_item_grid = GridContainer.new()
-	bag_item_grid.columns = 7
-	bag_item_grid.add_theme_constant_override("h_separation", 10)
-	bag_item_grid.add_theme_constant_override("v_separation", 10)
-	scroll.add_child(bag_item_grid)
+	var category_margin := MarginContainer.new()
+	category_margin.add_theme_constant_override("margin_left", 8)
+	category_margin.add_theme_constant_override("margin_top", 10)
+	category_margin.add_theme_constant_override("margin_right", 8)
+	category_margin.add_theme_constant_override("margin_bottom", 8)
+	category_panel.add_child(category_margin)
+
+	var category_layout := VBoxContainer.new()
+	category_layout.add_theme_constant_override("separation", 8)
+	category_margin.add_child(category_layout)
+
+	var category_caption := Label.new()
+	category_caption.text = "CATEGORIES"
+	category_caption.add_theme_font_size_override("font_size", 10)
+	category_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	category_layout.add_child(category_caption)
+
+	var category_scroll := ScrollContainer.new()
+	category_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	category_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	category_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	category_layout.add_child(category_scroll)
 
 	var category_column := VBoxContainer.new()
-	category_column.custom_minimum_size = Vector2(150, 0)
-	category_column.add_theme_constant_override("separation", 10)
-	content_row.add_child(category_column)
+	category_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	category_column.add_theme_constant_override("separation", 5)
+	category_scroll.add_child(category_column)
 
 	for category_value: Variant in BAG_CATEGORIES:
 		var category: Dictionary = category_value as Dictionary
 		var category_id := str(category.get("id", ""))
-		var category_button := Button.new()
-		category_button.text = str(category.get("label", category_id))
-		category_button.custom_minimum_size = Vector2(140, 44)
-		category_button.focus_mode = Control.FOCUS_NONE
-		category_button.pressed.connect(_on_bag_category_selected.bind(category_id))
+		var category_button := _create_bag_category_button(category)
 		category_column.add_child(category_button)
 		bag_category_buttons[category_id] = category_button
 
+	var inventory_panel := PanelContainer.new()
+	inventory_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inventory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	inventory_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 10, 1)
+	)
+	content_row.add_child(inventory_panel)
+
+	var inventory_margin := MarginContainer.new()
+	inventory_margin.add_theme_constant_override("margin_left", 10)
+	inventory_margin.add_theme_constant_override("margin_top", 10)
+	inventory_margin.add_theme_constant_override("margin_right", 10)
+	inventory_margin.add_theme_constant_override("margin_bottom", 10)
+	inventory_panel.add_child(inventory_margin)
+
+	var inventory_layout := VBoxContainer.new()
+	inventory_layout.add_theme_constant_override("separation", 8)
+	inventory_margin.add_child(inventory_layout)
+
+	var inventory_header := HBoxContainer.new()
+	inventory_header.add_theme_constant_override("separation", 8)
+	inventory_layout.add_child(inventory_header)
+
+	var inventory_caption := Label.new()
+	inventory_caption.text = "ITEMS"
+	inventory_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inventory_caption.add_theme_font_size_override("font_size", 10)
+	inventory_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	inventory_header.add_child(inventory_caption)
+
+	var inventory_hint := Label.new()
+	inventory_hint.text = "Click to inspect · drag or right-click for hotbar"
+	inventory_hint.add_theme_font_size_override("font_size", 10)
+	inventory_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
+	inventory_header.add_child(inventory_hint)
+
+	var item_scroll := ScrollContainer.new()
+	item_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	item_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	inventory_layout.add_child(item_scroll)
+
+	bag_item_grid = GridContainer.new()
+	bag_item_grid.columns = 5
+	bag_item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bag_item_grid.add_theme_constant_override("h_separation", 9)
+	bag_item_grid.add_theme_constant_override("v_separation", 9)
+	item_scroll.add_child(bag_item_grid)
+
+	var detail_panel := PanelContainer.new()
+	detail_panel.custom_minimum_size = Vector2(282, 0)
+	detail_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 10, 1)
+	)
+	content_row.add_child(detail_panel)
+	_setup_bag_detail_panel(detail_panel)
+
 	_refresh_bag_category_buttons()
 	_refresh_bag_items()
+
+func _create_bag_category_button(category: Dictionary) -> Button:
+	var category_id := str(category.get("id", "")).strip_edges()
+	var button := Button.new()
+	button.name = "BagCategory_%s" % category_id
+	button.custom_minimum_size = Vector2(158, 42)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.pressed.connect(_on_bag_category_selected.bind(category_id))
+
+	var content_margin := MarginContainer.new()
+	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content_margin.add_theme_constant_override("margin_left", 10)
+	content_margin.add_theme_constant_override("margin_top", 5)
+	content_margin.add_theme_constant_override("margin_right", 9)
+	content_margin.add_theme_constant_override("margin_bottom", 5)
+	button.add_child(content_margin)
+
+	var content := HBoxContainer.new()
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_theme_constant_override("separation", 8)
+	content_margin.add_child(content)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(24, 24)
+	icon.texture = _bag_category_icon(category)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_child(icon)
+
+	var label := Label.new()
+	label.text = str(category.get("label", category_id))
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	content.add_child(label)
+
+	var count := Label.new()
+	count.name = "Count"
+	count.text = "0"
+	count.custom_minimum_size = Vector2(24, 0)
+	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	count.add_theme_font_size_override("font_size", 11)
+	count.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	content.add_child(count)
+	return button
+
+func _bag_category_icon(category: Dictionary) -> Texture2D:
+	if str(category.get("id", "")) == "all":
+		return BAG_INTERFACE_ICON
+	return _load_item_icon(str(category.get("iconItemId", "")))
+
+func _setup_bag_detail_panel(panel: PanelContainer) -> void:
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 15)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 15)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 9)
+	margin.add_child(layout)
+
+	var caption := Label.new()
+	caption.text = "SELECTED ITEM"
+	caption.add_theme_font_size_override("font_size", 10)
+	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(caption)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(0, 116)
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 9, 1)
+	)
+	layout.add_child(icon_frame)
+
+	var icon_center := CenterContainer.new()
+	icon_frame.add_child(icon_center)
+
+	bag_detail_icon = TextureRect.new()
+	bag_detail_icon.custom_minimum_size = Vector2(82, 82)
+	bag_detail_icon.texture = BAG_INTERFACE_ICON
+	bag_detail_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bag_detail_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	bag_detail_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	bag_detail_icon.modulate = Color(1, 1, 1, 0.35)
+	icon_center.add_child(bag_detail_icon)
+
+	bag_detail_name_label = Label.new()
+	bag_detail_name_label.text = "Select an item"
+	bag_detail_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	bag_detail_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bag_detail_name_label.add_theme_font_size_override("font_size", 18)
+	bag_detail_name_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(bag_detail_name_label)
+
+	bag_detail_meta_label = Label.new()
+	bag_detail_meta_label.text = "Choose an item from your Bag"
+	bag_detail_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	bag_detail_meta_label.add_theme_font_size_override("font_size", 11)
+	bag_detail_meta_label.add_theme_color_override("font_color", UI_MONEY)
+	layout.add_child(bag_detail_meta_label)
+
+	bag_detail_description_label = Label.new()
+	bag_detail_description_label.text = "Item details and actions will appear here."
+	bag_detail_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bag_detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bag_detail_description_label.add_theme_font_size_override("font_size", 12)
+	bag_detail_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(bag_detail_description_label)
+
+	var hotbar_hint := Label.new()
+	hotbar_hint.text = "Tip: drag an item onto a specific hotbar slot."
+	hotbar_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hotbar_hint.add_theme_font_size_override("font_size", 10)
+	hotbar_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
+	layout.add_child(hotbar_hint)
+
+	bag_detail_use_button = Button.new()
+	bag_detail_use_button.text = "Select an Item"
+	bag_detail_use_button.custom_minimum_size = Vector2(0, 40)
+	bag_detail_use_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bag_detail_use_button.focus_mode = Control.FOCUS_NONE
+	bag_detail_use_button.disabled = true
+	bag_detail_use_button.pressed.connect(_on_bag_detail_use_pressed)
+	_apply_button_style(bag_detail_use_button, "primary")
+	layout.add_child(bag_detail_use_button)
+
+	bag_detail_hotbar_button = Button.new()
+	bag_detail_hotbar_button.text = "Assign to Hotbar"
+	bag_detail_hotbar_button.custom_minimum_size = Vector2(0, 38)
+	bag_detail_hotbar_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bag_detail_hotbar_button.focus_mode = Control.FOCUS_NONE
+	bag_detail_hotbar_button.disabled = true
+	bag_detail_hotbar_button.pressed.connect(_on_bag_detail_hotbar_pressed)
+	_apply_button_style(bag_detail_hotbar_button)
+	layout.add_child(bag_detail_hotbar_button)
 
 func _setup_market_popup() -> void:
 	market_popup = PanelContainer.new()
@@ -10937,72 +11216,124 @@ func _refresh_bag_items() -> void:
 		return
 	for child: Node in bag_item_grid.get_children():
 		child.queue_free()
+	bag_item_slots.clear()
+	_refresh_bag_category_buttons()
 
 	var search_text := ""
 	if bag_search_input != null:
 		search_text = bag_search_input.text.strip_edges().to_lower()
 
 	if bag_inventory_loading:
+		bag_selected_item = {}
+		_refresh_bag_detail()
+		_set_bag_summary("Loading inventory...")
 		bag_item_grid.add_child(_create_bag_empty_state("Loading bag..."))
 		return
 
 	if not bag_inventory_loaded:
+		bag_selected_item = {}
+		_refresh_bag_detail()
+		_set_bag_summary("Inventory not loaded")
 		bag_item_grid.add_child(_create_bag_empty_state("Open your bag to load items."))
 		return
 
-	var visible_count := 0
+	var visible_items: Array[Dictionary] = []
 	for item_value: Variant in bag_inventory_items:
 		var item: Dictionary = item_value as Dictionary
 		var item_category := str(item.get("category", "general"))
 		var item_name := str(item.get("name", ""))
 		var item_id := str(item.get("id", ""))
-		if active_bag_category != "general" and item_category != active_bag_category:
+		if active_bag_category != "all" and item_category != active_bag_category:
 			continue
 		if search_text != "" and not item_name.to_lower().contains(search_text) and not item_id.to_lower().contains(search_text):
 			continue
-		bag_item_grid.add_child(_create_bag_item_slot(item))
-		visible_count += 1
+		visible_items.append(item)
 
-	if visible_count <= 0:
-		bag_item_grid.add_child(_create_bag_empty_state("No items in this tab."))
+	var category_label := _bag_category_label(active_bag_category)
+	if visible_items.is_empty():
+		bag_selected_item = {}
+		_refresh_bag_detail()
+		_set_bag_summary("No results · %s" % category_label)
+		bag_item_grid.add_child(_create_bag_empty_state(
+			"No items match your search." if search_text != "" else "No items in %s." % category_label
+		))
+		_refresh_hotbar_ui()
+		return
+
+	var selected_id := _normalize_item_id(str(bag_selected_item.get("id", "")))
+	var selected_is_visible := false
+	for item: Dictionary in visible_items:
+		if _normalize_item_id(str(item.get("id", ""))) == selected_id:
+			bag_selected_item = item.duplicate(true)
+			selected_is_visible = true
+			break
+	if not selected_is_visible:
+		bag_selected_item = visible_items[0].duplicate(true)
+
+	for item: Dictionary in visible_items:
+		bag_item_grid.add_child(_create_bag_item_slot(item))
+
+	var noun := "item" if visible_items.size() == 1 else "items"
+	var summary_prefix := "%d result" % visible_items.size() if search_text != "" else "%d %s" % [visible_items.size(), noun]
+	if search_text != "" and visible_items.size() != 1:
+		summary_prefix += "s"
+	_set_bag_summary("%s · %s" % [summary_prefix, category_label])
+	_refresh_bag_detail()
 	_refresh_hotbar_ui()
 
 func _create_bag_empty_state(text: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(520, 170)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, Color("#31507088"), 9, 1)
+	)
+
+	var center := CenterContainer.new()
+	panel.add_child(center)
+
 	var label := Label.new()
 	label.text = text
-	label.custom_minimum_size = Vector2(360, 80)
+	label.custom_minimum_size = Vector2(400, 0)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_font_size_override("font_size", 15)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	return label
+	center.add_child(label)
+	return panel
 
 func _create_bag_item_slot(item: Dictionary) -> Control:
 	var slot := HotbarBagItemSlot.new()
 	slot.hotbar_item = item.duplicate(true)
-	slot.custom_minimum_size = Vector2(78, 92)
-	slot.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), Color("#557999"), 8, 1))
+	slot.custom_minimum_size = Vector2(106, 118)
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
-	slot.tooltip_text = str(item.get("name", "Item"))
+	slot.tooltip_text = "%s\nClick to inspect · drag or right-click for hotbar" % str(item.get("name", "Item"))
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
+	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
+	slot.mouse_exited.connect(_on_bag_item_slot_hover_changed.bind(slot, false))
+	slot.set_meta("bag_hovered", false)
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	bag_item_slots[item_id] = slot
+	_apply_bag_item_slot_style(slot, item)
 
 	var margin_container := MarginContainer.new()
 	margin_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	margin_container.add_theme_constant_override("margin_left", 5)
-	margin_container.add_theme_constant_override("margin_top", 5)
-	margin_container.add_theme_constant_override("margin_right", 5)
-	margin_container.add_theme_constant_override("margin_bottom", 5)
+	margin_container.add_theme_constant_override("margin_left", 7)
+	margin_container.add_theme_constant_override("margin_top", 7)
+	margin_container.add_theme_constant_override("margin_right", 7)
+	margin_container.add_theme_constant_override("margin_bottom", 7)
 	slot.add_child(margin_container)
 
 	var stack := VBoxContainer.new()
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	stack.add_theme_constant_override("separation", 2)
+	stack.add_theme_constant_override("separation", 4)
 	margin_container.add_child(stack)
 
 	var icon_wrap := Control.new()
 	icon_wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_wrap.custom_minimum_size = Vector2(64, 44)
+	icon_wrap.custom_minimum_size = Vector2(90, 64)
 	stack.add_child(icon_wrap)
 
 	var icon := TextureRect.new()
@@ -11019,22 +11350,72 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_wrap.add_child(icon)
 
+	var quantity_badge := PanelContainer.new()
+	quantity_badge.anchor_left = 1.0
+	quantity_badge.anchor_right = 1.0
+	quantity_badge.offset_left = -38
+	quantity_badge.offset_top = 0
+	quantity_badge.offset_right = 0
+	quantity_badge.offset_bottom = 20
+	quantity_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quantity_badge.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#09111ce8"), Color("#b5964d99"), 6, 1)
+	)
+	icon_wrap.add_child(quantity_badge)
+
 	var quantity_label := Label.new()
 	quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quantity_label.text = "Permanent" if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
-	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	quantity_label.add_theme_font_size_override("font_size", 11)
+	quantity_label.text = "KEY" if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
+	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quantity_label.add_theme_font_size_override("font_size", 9)
 	quantity_label.add_theme_color_override("font_color", UI_MONEY)
-	stack.add_child(quantity_label)
+	quantity_badge.add_child(quantity_label)
 
 	var name_label := Label.new()
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	name_label.text = _ellipsize_text(str(item.get("name", "Item")), 12)
+	name_label.text = str(item.get("name", "Item"))
+	name_label.custom_minimum_size = Vector2(0, 29)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 10)
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	name_label.max_lines_visible = 2
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 11)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(name_label)
 	return slot
+
+func _on_bag_item_slot_hover_changed(slot: HotbarBagItemSlot, hovered: bool) -> void:
+	if slot == null:
+		return
+	slot.set_meta("bag_hovered", hovered)
+	_apply_bag_item_slot_style(slot, slot.hotbar_item)
+
+func _apply_bag_item_slot_style(slot: HotbarBagItemSlot, item: Dictionary) -> void:
+	if slot == null:
+		return
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	var selected_id := _normalize_item_id(str(bag_selected_item.get("id", "")))
+	var selected := item_id != "" and item_id == selected_id
+	var hovered := bool(slot.get_meta("bag_hovered", false))
+	var background := UI_SURFACE_INTERACTIVE
+	var border := UI_BORDER_SUBTLE
+	var border_width := 1
+	if hovered:
+		background = UI_SURFACE_HOVER
+		border = UI_BORDER_FOCUS
+	if selected:
+		background = Color("#0b2235f2")
+		border = Color("#62d8ffdd")
+		border_width = 2
+	var style := _make_panel_style(background, border, 9, border_width)
+	if hovered or selected:
+		style.shadow_color = Color(border.r, border.g, border.b, 0.26)
+		style.shadow_size = 7
+		style.shadow_offset = Vector2.ZERO
+	slot.add_theme_stylebox_override("panel", style)
 
 func _on_bag_item_slot_gui_input(event: InputEvent, item: Dictionary, slot: HotbarBagItemSlot) -> void:
 	if not (event is InputEventMouseButton):
@@ -11043,10 +11424,147 @@ func _on_bag_item_slot_gui_input(event: InputEvent, item: Dictionary, slot: Hotb
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 	if mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
 		get_viewport().set_input_as_handled()
+		_select_bag_item(item)
 		_assign_bag_item_to_hotbar(item)
 	elif mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed and not slot.is_drag_successful():
 		get_viewport().set_input_as_handled()
-		_on_bag_item_selected(item)
+		_select_bag_item(item)
+
+func _select_bag_item(item: Dictionary) -> void:
+	bag_selected_item = item.duplicate(true)
+	for item_id_value: Variant in bag_item_slots.keys():
+		var item_id := str(item_id_value)
+		var slot := bag_item_slots.get(item_id) as HotbarBagItemSlot
+		if slot != null:
+			_apply_bag_item_slot_style(slot, slot.hotbar_item)
+	_refresh_bag_detail()
+
+func _refresh_bag_detail() -> void:
+	if bag_detail_icon == null:
+		return
+	if bag_selected_item.is_empty():
+		bag_detail_icon.texture = BAG_INTERFACE_ICON
+		bag_detail_icon.modulate = Color(1, 1, 1, 0.35)
+		bag_detail_name_label.text = "Select an item"
+		bag_detail_meta_label.text = "Choose an item from your Bag"
+		bag_detail_description_label.text = "Item details and actions will appear here."
+		bag_detail_use_button.text = "Select an Item"
+		bag_detail_use_button.disabled = true
+		bag_detail_hotbar_button.text = "Assign to Hotbar"
+		bag_detail_hotbar_button.disabled = true
+		return
+
+	var item_id := _normalize_item_id(str(bag_selected_item.get("id", "")))
+	var item_name := str(bag_selected_item.get("name", _item_name_from_id(item_id)))
+	var quantity := maxi(int(bag_selected_item.get("quantity", 1)), 1)
+	var category := str(bag_selected_item.get("category", "general"))
+	bag_detail_icon.texture = _load_item_icon(
+		item_id,
+		str(bag_selected_item.get("machineKind", "")),
+		str(bag_selected_item.get("machineMoveType", ""))
+	)
+	bag_detail_icon.modulate = Color.WHITE
+	bag_detail_name_label.text = item_name
+	bag_detail_meta_label.text = "%s · %s" % [
+		_bag_category_label(category),
+		"KEY ITEM" if bool(bag_selected_item.get("permanent", false)) else "x%d owned" % quantity,
+	]
+	bag_detail_description_label.text = _bag_item_detail_description(bag_selected_item)
+
+	var can_use := _bag_item_can_use_from_bag(bag_selected_item)
+	bag_detail_use_button.text = _bag_item_use_action_label(bag_selected_item)
+	bag_detail_use_button.disabled = not can_use
+	var can_assign := _bag_item_can_assign_to_hotbar(bag_selected_item)
+	bag_detail_hotbar_button.text = "Assign to Hotbar" if can_assign else "Not Hotbar Compatible"
+	bag_detail_hotbar_button.disabled = not can_assign
+
+func _bag_item_detail_description(item: Dictionary) -> String:
+	var description := str(item.get("shortDesc", item.get("description", ""))).strip_edges()
+	if description != "":
+		return description
+	var use_notice := _staff_dictionary_from_variant(item.get("useNotice", {}))
+	var notice_message := str(use_notice.get("message", "")).strip_edges()
+	if notice_message != "":
+		return notice_message
+
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
+	if FieldMoveService.is_direct_field_move(field_move_id):
+		return "A permanent field Charm. Use it here or assign it to your hotbar for quick access."
+	if _bag_machine_move_id(item_id) != "":
+		return "Teach this move to a compatible Pokemon in your party."
+	if _is_pokemon_usable_item_id(item_id):
+		return "Use this item on a compatible Pokemon in your party."
+
+	match str(item.get("category", "general")):
+		"pokeball":
+			return "Use this item from the Bag during a wild battle."
+		"held_items":
+			return "Give this item to a Pokemon from its Summary."
+		"power_stones":
+			return "A special battle item. Manage compatible items from a Pokemon Summary."
+		"key_items":
+			return "An important item used during your adventure."
+		"cosmetics":
+			return "A cosmetic unlock connected to your account."
+		"currency":
+			return "A special currency or collectible."
+		_:
+			return "This item is stored safely in your Bag."
+
+func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	if item_id == "escape-rope-action":
+		return true
+	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
+	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
+
+func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	if item_id == "escape-rope-action":
+		return true
+	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
+	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
+
+func _bag_item_use_action_label(item: Dictionary) -> String:
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	if item_id == "escape-rope-action":
+		return "Use Escape Rope"
+	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
+	if FieldMoveService.is_direct_field_move(field_move_id):
+		return "Use Charm"
+	if _bag_machine_move_id(item_id) != "":
+		return "Teach Move"
+	if _is_pokemon_usable_item_id(item_id):
+		return "Use Item"
+	match str(item.get("category", "general")):
+		"pokeball":
+			return "Battle Item"
+		"held_items", "power_stones":
+			return "Use Pokemon Summary"
+		_:
+			return "Not Usable Here"
+
+func _on_bag_detail_use_pressed() -> void:
+	if bag_selected_item.is_empty() or not _bag_item_can_use_from_bag(bag_selected_item):
+		return
+	await _on_bag_item_selected(bag_selected_item.duplicate(true))
+
+func _on_bag_detail_hotbar_pressed() -> void:
+	if bag_selected_item.is_empty() or not _bag_item_can_assign_to_hotbar(bag_selected_item):
+		return
+	await _assign_bag_item_to_hotbar(bag_selected_item.duplicate(true))
+
+func _set_bag_summary(text: String) -> void:
+	if bag_summary_label != null:
+		bag_summary_label.text = text
+
+func _bag_category_label(category_id: String) -> String:
+	for category_value: Variant in BAG_CATEGORIES:
+		var category := category_value as Dictionary
+		if str(category.get("id", "")) == category_id:
+			return str(category.get("label", category_id))
+	return category_id.replace("_", " ").capitalize()
 
 func _on_bag_item_selected(item: Dictionary) -> void:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
@@ -11729,6 +12247,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"id": item_id,
 			"name": str(item.get("name", _item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
+			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
 			"isHoldable": bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
 			"machineMove": str(item.get("machineMove", "")).strip_edges(),
@@ -11745,6 +12264,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 		"category": "key_items",
 		"quantity": 1,
 		"permanent": true,
+		"shortDesc": "Return to the last safe indoor location you visited.",
 		"gameplay": {},
 		"useNotice": {"message": "Use Escape Rope from your hotbar."},
 	})
@@ -11817,7 +12337,39 @@ func _refresh_bag_category_buttons() -> void:
 		var category_button: Button = bag_category_buttons.get(category_id) as Button
 		if category_button == null:
 			continue
-		_apply_button_style(category_button, "primary" if category_id == active_bag_category else "default")
+		var selected := category_id == active_bag_category
+		_apply_bag_category_button_style(category_button, selected)
+		var count_label := category_button.find_child("Count", true, false) as Label
+		if count_label != null:
+			count_label.text = "%d" % _bag_category_item_count(category_id)
+			count_label.add_theme_color_override("font_color", UI_MONEY if selected else UI_MUTED_TEXT)
+		var label := category_button.find_child("Label", true, false) as Label
+		if label != null:
+			label.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+
+func _apply_bag_category_button_style(button: Button, selected: bool) -> void:
+	var normal_background := UI_SURFACE_INTERACTIVE if selected else Color("#07111ed8")
+	var normal_border := Color("#d8b767aa") if selected else Color("#2d4b6666")
+	var normal := _make_button_style(normal_background, normal_border, 8, 1)
+	if selected:
+		normal.border_width_left = 3
+	var hover := _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1)
+	hover.border_width_left = 3 if selected else 1
+	var pressed := _make_button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8, 1)
+	pressed.border_width_left = 3 if selected else 1
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", hover)
+	button.add_theme_stylebox_override("pressed", pressed)
+	button.add_theme_stylebox_override("focus", hover)
+
+func _bag_category_item_count(category_id: String) -> int:
+	if category_id == "all":
+		return bag_inventory_items.size()
+	var count := 0
+	for item: Dictionary in bag_inventory_items:
+		if str(item.get("category", "general")) == category_id:
+			count += 1
+	return count
 
 func _on_bag_header_gui_input(event: InputEvent) -> void:
 	if bag_popup == null:
