@@ -1,0 +1,31 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="itemDexPage" x1="8" y1="13" x2="56" y2="53" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF8FF"/>
+      <stop offset="1" stop-color="#9DCCE5"/>
+    </linearGradient>
+    <linearGradient id="itemDexCover" x1="7" y1="10" x2="57" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2D78B3"/>
+      <stop offset="1" stop-color="#102D5C"/>
+    </linearGradient>
+    <filter id="itemDexShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000814" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#itemDexShadow)" stroke-linejoin="round">
+    <path d="M6 14c9-3 18-1 26 5 8-6 17-8 26-5v40c-9-3-18-1-26 5-8-6-17-8-26-5V14Z" fill="url(#itemDexCover)" stroke="#07101D" stroke-width="3"/>
+    <path d="M10 17c7-2 14 0 22 5v31c-7-5-15-7-22-5V17ZM54 17c-7-2-14 0-22 5v31c7-5 15-7 22-5V17Z" fill="url(#itemDexPage)" stroke="#46779D" stroke-width="2"/>
+    <path d="M32 21v33" stroke="#D8B767" stroke-width="2.5" stroke-linecap="round"/>
+
+    <path d="M15 31h12M16 42h10" stroke="#6F97AE" stroke-width="2" stroke-linecap="round"/>
+    <path d="M18 23h6v4l3 4v7c0 2-2 3-4 3h-4c-2 0-4-1-4-3v-7l3-4v-4Z" fill="#70DDF4" stroke="#07101D" stroke-width="2"/>
+    <path d="M17 33h8v5h-8v-5Z" fill="#D94B67" stroke="none"/>
+
+    <circle cx="43.5" cy="34" r="8.5" fill="#F5F8FB" stroke="#07101D" stroke-width="2"/>
+    <path d="M35 33a8.5 8.5 0 0 1 17 0H35Z" fill="#E94A59"/>
+    <path d="M35 34h17" stroke="#07101D" stroke-width="2"/>
+    <circle cx="43.5" cy="34" r="2.8" fill="#F5F8FB" stroke="#07101D" stroke-width="2"/>
+    <path d="M39 45h9" stroke="#6F97AE" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

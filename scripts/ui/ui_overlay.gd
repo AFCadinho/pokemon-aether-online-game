@@ -280,7 +280,7 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 	"red-orb": true,
 }
 const BAG_ICON_ROOT := "res://assets/items/icons/"
-const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.png")
+const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
 	{"id": "general", "label": "General"},
 	{"id": "pokeball", "label": "Pokeball"},

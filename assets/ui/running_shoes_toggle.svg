@@ -1,0 +1,28 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shoeUpper" x1="17" y1="15" x2="48" y2="45" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#69E5FF"/>
+      <stop offset="0.55" stop-color="#268BC8"/>
+      <stop offset="1" stop-color="#174A89"/>
+    </linearGradient>
+    <linearGradient id="shoeAccent" x1="26" y1="26" x2="48" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF1A1"/>
+      <stop offset="1" stop-color="#D69B2D"/>
+    </linearGradient>
+    <filter id="shoeShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.7" flood-color="#000814" flood-opacity="0.58"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shoeShadow)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 14h12c0 9 3 14 9 17 4 2 9 2 14 4 4 1 6 5 6 9v4H12c-5 0-8-3-8-7 0-3 2-5 6-7l9-4-3-11 4-5Z" fill="url(#shoeUpper)" stroke="#07101D" stroke-width="3.5"/>
+    <path d="M12 48h47v5H11c-5 0-8-2-8-6 0-2 1-4 3-5 1 4 3 6 6 6Z" fill="#EAF8FF" stroke="#07101D" stroke-width="3"/>
+    <path d="M20 14h12l1 8H18l-2-3 4-5Z" fill="#173653" stroke="#07101D" stroke-width="2.5"/>
+
+    <path d="m27 27 5 4-4 3 7 5 10-8" fill="none" stroke="url(#shoeAccent)" stroke-width="4"/>
+    <path d="M22 24h10M23 28h9" stroke="#EAF8FF" stroke-width="2.2"/>
+    <path d="M45 43h9" stroke="#7EA9C7" stroke-width="2"/>
+
+    <path d="M3 22h10M1 28h13M5 34h8" stroke="#D8B767" stroke-width="3"/>
+  </g>
+</svg>

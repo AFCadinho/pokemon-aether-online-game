@@ -1,0 +1,30 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pvpRed" x1="7" y1="18" x2="25" y2="39" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6B73"/>
+      <stop offset="1" stop-color="#D9213F"/>
+    </linearGradient>
+    <linearGradient id="pvpBlue" x1="39" y1="18" x2="57" y2="39" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#69E5FF"/>
+      <stop offset="1" stop-color="#1689D1"/>
+    </linearGradient>
+    <filter id="pvpShadow" x="-25%" y="-25%" width="150%" height="160%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000814" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#pvpShadow)">
+    <circle cx="17" cy="32" r="14" fill="#F4F8FC" stroke="#07101D" stroke-width="3"/>
+    <path d="M4 31a13 13 0 0 1 26 0H4Z" fill="url(#pvpRed)"/>
+    <path d="M4 32h26" stroke="#07101D" stroke-width="3"/>
+    <circle cx="17" cy="32" r="4.5" fill="#F4F8FC" stroke="#07101D" stroke-width="3"/>
+
+    <circle cx="47" cy="32" r="14" fill="#F4F8FC" stroke="#07101D" stroke-width="3"/>
+    <path d="M34 31a13 13 0 0 1 26 0H34Z" fill="url(#pvpBlue)"/>
+    <path d="M34 32h26" stroke="#07101D" stroke-width="3"/>
+    <circle cx="47" cy="32" r="4.5" fill="#F4F8FC" stroke="#07101D" stroke-width="3"/>
+
+    <rect x="22.5" y="23.5" width="19" height="17" rx="7" fill="#081522" stroke="#E3BE59" stroke-width="2"/>
+    <path d="M26.5 28l3 8 3-8M38.5 29c-1-1-4-1-4 1 0 2 4 1 4 4 0 2-3 3-5 1" stroke="#FFF0A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="staffShield" x1="14" y1="9" x2="50" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#68E4FF"/>
+      <stop offset="0.52" stop-color="#287EBE"/>
+      <stop offset="1" stop-color="#173A75"/>
+    </linearGradient>
+    <linearGradient id="staffStar" x1="23" y1="21" x2="42" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF3A8"/>
+      <stop offset="1" stop-color="#D49A2B"/>
+    </linearGradient>
+    <filter id="staffShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.7" flood-color="#000814" flood-opacity="0.58"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#staffShadow)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 6c7 6 14 8 23 9v16c0 14-8 23-23 28C17 54 9 45 9 31V15c9-1 16-3 23-9Z" fill="#081522" stroke="#07101D" stroke-width="3"/>
+    <path d="M32 10c6 4 12 7 19 8v13c0 11-6 19-19 24-13-5-19-13-19-24V18c7-1 13-4 19-8Z" fill="url(#staffShield)" stroke="#D8B767" stroke-width="2.5"/>
+    <path d="m32 19 4 8 9 1-6.5 6 2 9L32 38.5 23.5 43l2-9-6.5-6 9-1 4-8Z" fill="url(#staffStar)" stroke="#07101D" stroke-width="2.2"/>
+    <path d="M29 31l2.2 2.2L36 28" stroke="#FFF8CF" stroke-width="2.5"/>
+  </g>
+</svg>

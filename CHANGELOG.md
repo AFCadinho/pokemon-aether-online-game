@@ -2,10 +2,18 @@
 
 ## Unreleased
 
+**Added**
+- Added battle animations for 14 moves: Pyro Ball, Court Change, High Jump Kick, Sparkling Aria, Draining Kiss, Psychic Noise, Grassy Glide, Wood Hammer, Drain Punch, Superpower, Psychic Terrain, Grassy Terrain, Electric Terrain, and Misty Terrain.
+- Added persistent battlefield visuals for Psychic, Grassy, Electric, and Misty Terrain, using terrain-specific particles and colors for the full duration of each field effect.
+- Added animated field indicators for all four terrain effects, matching the looping presentation used by weather indicators while keeping their backgrounds visually stable.
+- Added UI foundations for future Quest Log, Donator Gems Store, Redeem Code, global and personal buff, Clan chat, and configurable chat-tab features.
+
 **Changed**
 - Reorganized the overworld UI so party slots sit above the chat on the left, while the hotbar sits above the trainer card on the right. Party slots remain available for opening Pokemon summaries during battles.
 - Shifted the default Battle UI position to the right so it leaves clearer space for the overworld party column, and made the Battle Log toggle more prominent.
 - Added clickable global community-buff goals with dedicated icons, funding progress, active timers, and contribution UI; added a compact personal-buff counter with hover details, an expandable buff list, an empty state, and a future Donator Gems Store entry point grouped with the existing location and trainer-card collapse controls.
+- Active terrain effects now apply a stronger battlefield tint and denser particles, with particles layered across the platforms and Pokemon so the effect remains clearly visible.
+- Polished the overworld UI with more consistent surfaces, refreshed Party and Trainer Card presentation, cleaner chat controls, and a clearer navigation icon set.
 
 **Fixed**
 - Fixed Ranked battles sometimes leaving one player stuck after their opponent timed out or disconnected. Both players now recover the authoritative result and reach the correct end screen.

@@ -19,7 +19,7 @@
   <path d="M25 34h20M25 41h16M25 48h12" stroke="#AFC4D8" stroke-width="2.5" stroke-linecap="round"/>
   <g filter="url(#glow)">
     <circle cx="31" cy="22" r="8" fill="#2A210A" stroke="#F2C95E" stroke-width="2"/>
-    <path d="M31 17v6" stroke="#FFF0A6" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="31" cy="26" r="1.4" fill="#FFF0A6"/>
+    <circle cx="31" cy="21.5" r="4" fill="none" stroke="#FFF0A6" stroke-width="2.2"/>
+    <path d="m31.7 22.4 3.3 3.3" stroke="#FFF0A6" stroke-width="2.2" stroke-linecap="round"/>
   </g>
 </svg>

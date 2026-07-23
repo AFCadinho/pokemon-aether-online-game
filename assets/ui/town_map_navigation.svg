@@ -1,0 +1,38 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mapLeft" x1="7" y1="13" x2="25" y2="55" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#46CFE4"/>
+      <stop offset="1" stop-color="#2379A5"/>
+    </linearGradient>
+    <linearGradient id="mapMiddle" x1="23" y1="9" x2="42" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#173E61"/>
+      <stop offset="1" stop-color="#0A2038"/>
+    </linearGradient>
+    <linearGradient id="mapRight" x1="40" y1="14" x2="58" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#56BCA9"/>
+      <stop offset="1" stop-color="#287D77"/>
+    </linearGradient>
+    <linearGradient id="mapPin" x1="38" y1="18" x2="50" y2="37" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF1A1"/>
+      <stop offset="1" stop-color="#D69B2D"/>
+    </linearGradient>
+    <filter id="mapShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#000814" flood-opacity="0.58"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#mapShadow)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 14 23 8l18 7 16-6v41l-16 6-18-7-16 6V14Z" fill="#081522" stroke="#07101D" stroke-width="4"/>
+    <path d="M9 15 23 10v37L9 52V15Z" fill="url(#mapLeft)"/>
+    <path d="m23 10 17 6v37l-17-6V10Z" fill="url(#mapMiddle)"/>
+    <path d="m40 16 15-5v37l-15 5V16Z" fill="url(#mapRight)"/>
+    <path d="M23 10v37M40 16v37" stroke="#07101D" stroke-width="2.5"/>
+
+    <path d="M12 43c7-2 7-11 14-12 5-1 7 5 12 4 6-1 7-7 13-9" stroke="#EAF8FF" stroke-width="3" stroke-dasharray="2 4"/>
+    <circle cx="14" cy="42" r="3" fill="#EAF8FF" stroke="#07101D" stroke-width="2"/>
+    <circle cx="29" cy="32" r="2.5" fill="#69E5FF" stroke="#07101D" stroke-width="2"/>
+
+    <path d="M44 16c-6 0-10 4-10 10 0 8 10 16 10 16s10-8 10-16c0-6-4-10-10-10Z" fill="url(#mapPin)" stroke="#07101D" stroke-width="3"/>
+    <circle cx="44" cy="26" r="3.5" fill="#2477C8" stroke="#FFF8CF" stroke-width="1.5"/>
+  </g>
+</svg>
