@@ -19,6 +19,9 @@ const CHAT_MAX_SIZE := Vector2(760, 520)
 const CHAT_RESIZE_BUTTON_GAP := 10.0
 const CHAT_TABS_GAP := 8.0
 const CHAT_TABS_LEFT_INSET := 76.0
+const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 38.0
+const PERSONAL_BUFF_ROW_HEIGHT := 26.0
+const PERSONAL_BUFF_ROW_GAP := 4.0
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
 const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
 const CHAT_SEPARATOR_COLOR := "#778194"
@@ -53,6 +56,10 @@ const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
+const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
+const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.svg")
+const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
+const GLOBAL_RARE_ENCOUNTER_BUFF_ICON: Texture2D = preload("res://assets/ui/global_rare_encounter_boost.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
@@ -304,6 +311,28 @@ enum DevPokemonPopupMode {
 @onready var party_slot_template: PanelContainer = $Control/PartyPanel/MarginContainer/VBoxContainer/PartySlot
 @onready var chat_panel: PanelContainer = $Control/ChatPanel
 @onready var location_panel: PanelContainer = $Control/LocationPanel
+@onready var global_buffs_panel: PanelContainer = $Control/GlobalBuffsPanel
+@onready var global_buff_slots: HBoxContainer = $Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots
+@onready var personal_buffs_panel: PanelContainer = $Control/PersonalBuffsPanel
+@onready var personal_buffs_empty_label: Label = $Control/PersonalBuffsPanel/MarginContainer/Row/EmptyLabel
+@onready var personal_buffs_summary_button: Button = $Control/PersonalBuffsPanel/MarginContainer/Row/ActiveSummaryButton
+@onready var personal_buff_slots: VBoxContainer = $Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots
+@onready var donator_store_button: Button = $Control/DonatorStoreButton
+@onready var global_buff_details_panel: PanelContainer = $Control/GlobalBuffDetailsPanel
+@onready var global_buff_details_icon: TextureRect = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Icon
+@onready var global_buff_details_title: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Heading/TitleLabel
+@onready var global_buff_details_status: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/Heading/StatusLabel
+@onready var global_buff_details_close_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/Header/CloseButton
+@onready var global_buff_details_description: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DescriptionLabel
+@onready var global_buff_details_progress: ProgressBar = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel/MarginContainer/Content/ProgressBar
+@onready var global_buff_details_progress_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel/MarginContainer/Content/ProgressRow/ProgressLabel
+@onready var global_buff_details_percent_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GoalPanel/MarginContainer/Content/ProgressRow/PercentLabel
+@onready var global_buff_details_active_label: Label = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/ActiveLabel
+@onready var global_buff_donation_section: VBoxContainer = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection
+@onready var global_buff_amount_1000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount1000Button
+@onready var global_buff_amount_10000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount10000Button
+@onready var global_buff_amount_25000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount25000Button
+@onready var global_buff_contribute_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/ContributeButton
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
 @onready var time_of_day_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeOfDayLabel
@@ -898,6 +927,10 @@ var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
 var displayed_location_map: Node
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
+var selected_global_buff: Dictionary = {}
+var selected_global_buff_contribution := 10000
+var active_personal_buffs: Array = []
+var personal_buffs_expanded := false
 var staff_tools_visibility_key := ""
 
 # Called when the node enters the scene tree for the first time.
@@ -906,6 +939,7 @@ func _ready() -> void:
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_setup_player_status_card()
+	_setup_status_docks()
 	_setup_trainer_card_popup()
 	_setup_bag_popup()
 	_setup_market_popup()
@@ -1644,6 +1678,10 @@ func _apply_ui_z_index_policy() -> void:
 	var panels: Array[Control] = [
 		chat_panel,
 		location_panel,
+		global_buffs_panel,
+		global_buff_details_panel,
+		personal_buffs_panel,
+		donator_store_button,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -1706,6 +1744,7 @@ func focus_battle_ui_layer() -> void:
 
 func _has_visible_priority_overlay_panel() -> bool:
 	var panels: Array[Control] = [
+		global_buff_details_panel,
 		bag_popup,
 		trainer_card_popup,
 		dev_actions_popup,
@@ -1828,6 +1867,26 @@ func _setup_normal_ui_focus_groups() -> void:
 		player_status_panel: [
 			^"PlayerStatusPanel",
 		],
+		global_buffs_panel: [
+			^"GlobalBuffsPanel",
+			^"GlobalBuffsPanel/MarginContainer",
+			^"GlobalBuffsPanel/MarginContainer/Row",
+			^"GlobalBuffsPanel/MarginContainer/Row/BuffSlots",
+		],
+		global_buff_details_panel: [
+			^"GlobalBuffDetailsPanel",
+			^"GlobalBuffDetailsPanel/MarginContainer",
+			^"GlobalBuffDetailsPanel/MarginContainer/Content",
+		],
+		personal_buffs_panel: [
+			^"PersonalBuffsPanel",
+			^"PersonalBuffsPanel/MarginContainer",
+			^"PersonalBuffsPanel/MarginContainer/Row",
+			^"PersonalBuffsPanel/MarginContainer/Row/BuffSlots",
+		],
+		donator_store_button: [
+			^"DonatorStoreButton",
+		],
 	}
 
 	for panel_value: Variant in panel_paths_by_group.keys():
@@ -1845,6 +1904,10 @@ func _setup_normal_ui_focus_groups() -> void:
 		options_panel: [options_panel],
 		hotkey_sidebar_panel: [hotkey_sidebar_panel],
 		player_status_panel: [player_status_panel],
+		global_buffs_panel: [global_buffs_panel],
+		global_buff_details_panel: [global_buff_details_panel],
+		personal_buffs_panel: [personal_buffs_panel],
+		donator_store_button: [donator_store_button],
 	}
 	for panel_value: Variant in focus_tree_panels.keys():
 		var panel: Control = panel_value as Control
@@ -5962,6 +6025,10 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		chat_panel,
 		chat_tabs_panel,
 		location_panel,
+		global_buffs_panel,
+		global_buff_details_panel,
+		personal_buffs_panel,
+		donator_store_button,
 		options_panel,
 		actions_panel,
 		dex_actions_panel,
@@ -6056,6 +6123,331 @@ func _update_hotkey_sidebar_collapse_side() -> void:
 	var panel_center_x := hotkey_sidebar_panel.position.x + (hotkey_sidebar_panel.size.x * 0.5)
 	state["side"] = "right_center" if panel_center_x <= root_control.size.x * 0.5 else "left_center"
 	collapsible_panels["hotkey_sidebar"] = state
+
+func _setup_status_docks() -> void:
+	if not donator_store_button.pressed.is_connected(_on_donator_store_button_pressed):
+		donator_store_button.pressed.connect(_on_donator_store_button_pressed)
+	donator_store_button.focus_mode = Control.FOCUS_NONE
+	global_buff_details_close_button.pressed.connect(_hide_global_buff_details)
+	global_buff_amount_1000_button.pressed.connect(_select_global_buff_contribution.bind(1000))
+	global_buff_amount_10000_button.pressed.connect(_select_global_buff_contribution.bind(10000))
+	global_buff_amount_25000_button.pressed.connect(_select_global_buff_contribution.bind(25000))
+	global_buff_contribute_button.pressed.connect(_on_global_buff_contribute_pressed)
+	for child: Node in global_buff_slots.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		button.focus_mode = Control.FOCUS_NONE
+		button.pressed.connect(_on_global_buff_button_pressed.bind(button))
+	personal_buffs_summary_button.focus_mode = Control.FOCUS_NONE
+	personal_buffs_summary_button.pressed.connect(_on_personal_buffs_summary_pressed)
+	for child: Node in personal_buff_slots.get_children():
+		var button := child as Button
+		if button != null:
+			button.focus_mode = Control.FOCUS_NONE
+
+	set_global_buffs([
+		{
+			"id": "global_exp",
+			"icon": GLOBAL_EXP_BUFF_ICON,
+			"name": "Global EXP Boost",
+			"description": "When funded, the entire server earns double Pokémon experience.",
+			"state": "funding",
+			"current": 64000,
+			"goal": 100000,
+			"active_duration": "1h",
+		},
+		{
+			"id": "global_ev",
+			"icon": GLOBAL_EV_BUFF_ICON,
+			"name": "Global EV Boost",
+			"description": "The entire server earns double Effort Values while this buff is active.",
+			"state": "active",
+			"current": 100000,
+			"goal": 100000,
+			"remaining": "18m",
+		},
+		{
+			"id": "global_shiny",
+			"icon": GLOBAL_SHINY_BUFF_ICON,
+			"name": "Global Shiny Boost",
+			"description": "When funded, the entire server receives increased Shiny encounter odds.",
+			"state": "funding",
+			"current": 41000,
+			"goal": 100000,
+			"active_duration": "1h",
+		},
+		{
+			"id": "global_rare_encounter",
+			"icon": GLOBAL_RARE_ENCOUNTER_BUFF_ICON,
+			"name": "Rare Encounter Boost",
+			"description": "When funded, rarer Pokémon become more likely to appear for the entire server.",
+			"state": "funding",
+			"current": 22000,
+			"goal": 100000,
+			"active_duration": "1h",
+		},
+	])
+	set_personal_buffs([])
+
+func set_global_buffs(buffs: Array) -> void:
+	var tray_available := not buffs.is_empty()
+	global_buffs_panel.set_meta("group_available", tray_available)
+	_apply_buff_tray_group_visibility(global_buffs_panel, tray_available)
+	var slot_count := global_buff_slots.get_child_count()
+	for slot_index in range(slot_count):
+		var button := global_buff_slots.get_child(slot_index) as Button
+		if button == null:
+			continue
+		button.visible = slot_index < buffs.size()
+		button.set_meta("buff_data", {})
+		if not button.visible:
+			button.icon = null
+			button.tooltip_text = ""
+			continue
+
+		if slot_index == slot_count - 1 and buffs.size() > slot_count:
+			button.icon = null
+			button.text = "+%d" % (buffs.size() - slot_count + 1)
+			button.tooltip_text = _buff_overflow_tooltip(buffs, slot_index)
+			continue
+
+		var buff: Dictionary = buffs[slot_index] as Dictionary
+		var state := str(buff.get("state", "funding"))
+		var current := maxi(int(buff.get("current", 0)), 0)
+		var goal := maxi(int(buff.get("goal", 100000)), 1)
+		var progress := clampf(float(current) / float(goal) * 100.0, 0.0, 100.0)
+		var progress_bar := button.get_node_or_null("ProgressBar") as ProgressBar
+		button.text = ""
+		button.icon = _global_buff_icon_for(buff)
+		button.modulate = Color.WHITE if state == "active" else Color(0.76, 0.82, 0.9, 1.0)
+		button.tooltip_text = _global_buff_tooltip(buff)
+		button.set_meta("buff_data", buff.duplicate(true))
+		if progress_bar != null:
+			progress_bar.value = 100.0 if state == "active" else progress
+			progress_bar.add_theme_stylebox_override(
+				"fill",
+				_make_panel_style(
+					Color("#60e887") if state == "active" else Color("#44c4fa"),
+					Color.TRANSPARENT,
+					2,
+					0
+				)
+			)
+
+func set_personal_buffs(buffs: Array) -> void:
+	var had_active_buffs := not active_personal_buffs.is_empty()
+	active_personal_buffs = buffs.duplicate(true)
+	var has_active_buffs := not buffs.is_empty()
+	if not has_active_buffs or not had_active_buffs:
+		personal_buffs_expanded = false
+	personal_buffs_panel.set_meta("group_available", true)
+	_apply_buff_tray_group_visibility(personal_buffs_panel, true)
+	var slot_count := personal_buff_slots.get_child_count()
+	for slot_index in range(slot_count):
+		var button := personal_buff_slots.get_child(slot_index) as Button
+		if button == null:
+			continue
+		button.visible = slot_index < buffs.size()
+		button.set_meta("buff_data", {})
+		var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
+		var name_label := button.get_node_or_null("Content/NameLabel") as Label
+		var time_label := button.get_node_or_null("Content/TimeLabel") as Label
+		if not button.visible:
+			button.tooltip_text = ""
+			continue
+
+		if slot_index == slot_count - 1 and buffs.size() > slot_count:
+			if badge_label != null:
+				badge_label.text = "+"
+			if name_label != null:
+				name_label.text = "%d more buffs" % (buffs.size() - slot_count + 1)
+			if time_label != null:
+				time_label.text = ""
+			button.tooltip_text = _buff_overflow_tooltip(buffs, slot_index)
+			continue
+
+		var buff: Dictionary = buffs[slot_index] as Dictionary
+		if badge_label != null:
+			badge_label.text = str(buff.get("label", "?")).strip_edges().left(3)
+		if name_label != null:
+			name_label.text = str(buff.get("name", "Buff"))
+		if time_label != null:
+			time_label.text = str(buff.get("remaining", "")).strip_edges().left(5)
+		button.tooltip_text = _buff_tooltip(buff)
+		button.set_meta("buff_data", buff.duplicate(true))
+	_refresh_personal_buffs_compact_state()
+
+func _on_personal_buffs_summary_pressed() -> void:
+	if active_personal_buffs.is_empty():
+		return
+	personal_buffs_expanded = not personal_buffs_expanded
+	_refresh_personal_buffs_compact_state()
+
+func _refresh_personal_buffs_compact_state() -> void:
+	var active_count := active_personal_buffs.size()
+	var has_active_buffs := active_count > 0
+	personal_buffs_empty_label.visible = not has_active_buffs
+	personal_buffs_summary_button.visible = has_active_buffs
+	personal_buff_slots.visible = has_active_buffs and personal_buffs_expanded
+	if has_active_buffs:
+		var noun := "buff" if active_count == 1 else "buffs"
+		var toggle_marker := "−" if personal_buffs_expanded else "+"
+		personal_buffs_summary_button.text = "%d %s active  %s" % [active_count, noun, toggle_marker]
+		personal_buffs_summary_button.tooltip_text = _personal_buffs_summary_tooltip()
+	else:
+		personal_buffs_summary_button.tooltip_text = ""
+
+	var panel_height := PERSONAL_BUFF_PANEL_COMPACT_HEIGHT
+	if has_active_buffs and personal_buffs_expanded:
+		var visible_rows := mini(active_count, personal_buff_slots.get_child_count())
+		panel_height += (
+			PERSONAL_BUFF_ROW_GAP
+			+ (float(visible_rows) * PERSONAL_BUFF_ROW_HEIGHT)
+			+ (float(maxi(visible_rows - 1, 0)) * PERSONAL_BUFF_ROW_GAP)
+		)
+	personal_buffs_panel.custom_minimum_size.y = panel_height
+	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
+
+func _personal_buffs_summary_tooltip() -> String:
+	var lines: Array[String] = ["Active personal buffs"]
+	for buff_value: Variant in active_personal_buffs:
+		var buff := buff_value as Dictionary
+		var remaining := str(buff.get("remaining", "")).strip_edges()
+		var suffix := "" if remaining == "" else " · %s" % remaining
+		lines.append("%s%s" % [str(buff.get("name", "Buff")), suffix])
+	lines.append("Click to hide details" if personal_buffs_expanded else "Click to show details")
+	return "\n".join(lines)
+
+func _global_buff_tooltip(buff: Dictionary) -> String:
+	var lines: Array[String] = [str(buff.get("name", "Global Buff"))]
+	if str(buff.get("state", "funding")) == "active":
+		lines.append("ACTIVE · %s remaining" % str(buff.get("remaining", "")))
+	else:
+		var current := maxi(int(buff.get("current", 0)), 0)
+		var goal := maxi(int(buff.get("goal", 100000)), 1)
+		lines.append("$%s / $%s contributed" % [_format_money(current), _format_money(goal)])
+	lines.append("Click for details")
+	return "\n".join(lines)
+
+func _global_buff_icon_for(buff: Dictionary) -> Texture2D:
+	var explicit_icon := buff.get("icon") as Texture2D
+	if explicit_icon != null:
+		return explicit_icon
+	match str(buff.get("id", "")):
+		"global_exp":
+			return GLOBAL_EXP_BUFF_ICON
+		"global_ev":
+			return GLOBAL_EV_BUFF_ICON
+		"global_shiny":
+			return GLOBAL_SHINY_BUFF_ICON
+		"global_rare_encounter":
+			return GLOBAL_RARE_ENCOUNTER_BUFF_ICON
+	return GLOBAL_EXP_BUFF_ICON
+
+func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bool) -> void:
+	var panel_id := "location" if panel == global_buffs_panel else "player_status"
+	var state: Dictionary = collapsible_panels.get(panel_id, {})
+	if state.is_empty():
+		panel.visible = tray_available
+		return
+	panel.visible = (
+		tray_available
+		and bool(state.get("available", true))
+		and not bool(state.get("collapsed", false))
+	)
+
+func _buff_tooltip(buff: Dictionary) -> String:
+	var lines: Array[String] = [str(buff.get("name", "Buff"))]
+	var description := str(buff.get("description", "")).strip_edges()
+	if description != "":
+		lines.append(description)
+	var remaining := str(buff.get("remaining", "")).strip_edges()
+	if remaining != "":
+		lines.append("Remaining: %s" % remaining)
+	return "\n".join(lines)
+
+func _buff_overflow_tooltip(buffs: Array, start_index: int) -> String:
+	var names: Array[String] = []
+	for buff_index in range(start_index, buffs.size()):
+		var buff: Dictionary = buffs[buff_index] as Dictionary
+		names.append(str(buff.get("name", "Buff")))
+	return "More active buffs:\n%s" % "\n".join(names)
+
+func _on_global_buff_button_pressed(button: Button) -> void:
+	var buff: Dictionary = button.get_meta("buff_data", {}) as Dictionary
+	if buff.is_empty():
+		return
+	selected_global_buff = buff.duplicate(true)
+	_render_global_buff_details()
+	global_buff_details_panel.visible = true
+	_position_action_slot_popup(global_buff_details_panel, button)
+	_activate_ui_panel(global_buff_details_panel)
+
+func _render_global_buff_details() -> void:
+	if selected_global_buff.is_empty():
+		return
+	var state := str(selected_global_buff.get("state", "funding"))
+	var active := state == "active"
+	var current := maxi(int(selected_global_buff.get("current", 0)), 0)
+	var goal := maxi(int(selected_global_buff.get("goal", 100000)), 1)
+	var progress := clampf(float(current) / float(goal) * 100.0, 0.0, 100.0)
+	global_buff_details_icon.texture = _global_buff_icon_for(selected_global_buff)
+	global_buff_details_title.text = str(selected_global_buff.get("name", "Global Buff"))
+	global_buff_details_description.text = str(selected_global_buff.get("description", ""))
+	global_buff_details_progress.value = 100.0 if active else progress
+	global_buff_details_progress_label.text = "$%s / $%s" % [_format_money(current), _format_money(goal)]
+	global_buff_details_percent_label.text = "%d%%" % roundi(100.0 if active else progress)
+	global_buff_details_status.text = "ACTIVE SERVER BUFF" if active else "COMMUNITY GOAL"
+	global_buff_details_status.add_theme_color_override(
+		"font_color",
+		Color("#85f29c") if active else Color("#60d3ff")
+	)
+	global_buff_details_progress.add_theme_stylebox_override(
+		"fill",
+		_make_panel_style(
+			Color("#60e887") if active else Color("#46c4fa"),
+			Color.TRANSPARENT,
+			6,
+			0
+		)
+	)
+	global_buff_details_active_label.visible = active
+	global_buff_details_active_label.text = "Active server-wide · %s remaining" % str(selected_global_buff.get("remaining", ""))
+	global_buff_donation_section.visible = not active
+	_refresh_global_buff_contribution_buttons()
+
+func _select_global_buff_contribution(amount: int) -> void:
+	selected_global_buff_contribution = amount
+	_refresh_global_buff_contribution_buttons()
+
+func _refresh_global_buff_contribution_buttons() -> void:
+	var amount_buttons: Dictionary = {
+		1000: global_buff_amount_1000_button,
+		10000: global_buff_amount_10000_button,
+		25000: global_buff_amount_25000_button,
+	}
+	for amount_value: Variant in amount_buttons:
+		var amount := int(amount_value)
+		var button: Button = amount_buttons[amount] as Button
+		_apply_button_style(button, "primary" if amount == selected_global_buff_contribution else "default")
+
+func _on_global_buff_contribute_pressed() -> void:
+	if selected_global_buff.is_empty() or str(selected_global_buff.get("state", "funding")) == "active":
+		return
+	_add_chat_message(
+		"Community contributions are not connected yet. Selected contribution: $%s."
+		% _format_money(selected_global_buff_contribution)
+	)
+
+func _hide_global_buff_details() -> void:
+	global_buff_details_panel.visible = false
+	selected_global_buff.clear()
+	_deactivate_ui_panel(global_buff_details_panel)
+
+func _on_donator_store_button_pressed() -> void:
+	_focus_normal_ui_group(donator_store_button)
+	_add_chat_message("The Donator Gems Store is not connected yet.")
 
 func _setup_player_status_card() -> void:
 	player_status_panel.gui_input.connect(_on_player_status_panel_gui_input)
@@ -13836,6 +14228,9 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_button_style(trade_chat_tab_button, "primary")
 	_apply_button_style(system_chat_tab_button, "primary")
 	_apply_button_style(send_button, "primary")
+	_apply_button_style(global_buff_details_close_button)
+	_apply_button_style(global_buff_contribute_button, "primary")
+	_refresh_global_buff_contribution_buttons()
 	_apply_button_style(dev_pokemon_add_button, "primary")
 	_apply_button_style(dev_pokemon_close_button)
 	_apply_button_style(dev_add_pokemon_button, "primary")
@@ -13895,9 +14290,15 @@ func _apply_socials_menu_style() -> void:
 func _setup_collapsible_panels() -> void:
 	_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "left_center")
 	_register_collapsible_panel("chat", chat_panel, "right")
-	_register_collapsible_panel("player_status", player_status_panel, "left")
+	_register_collapsible_panel(
+		"player_status",
+		player_status_panel,
+		"left",
+		null,
+		[personal_buffs_panel, donator_store_button]
+	)
 	_register_collapsible_panel("party", party_panel, "right")
-	_register_collapsible_panel("location", location_panel, "right_center")
+	_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])
 	_register_collapsible_panel("options", options_panel, "right")
 	_register_collapsible_panel("actions", actions_panel, "action_bar", toggle_actions_collapse_button)
 	_register_collapsible_panel("dex_actions", dex_actions_panel, "action_bar", dex_actions_collapse_button)
@@ -13934,7 +14335,13 @@ func _on_chat_resize_button_gui_input(event: InputEvent) -> void:
 		chat_resize_drag_start_rect = chat_panel.get_rect()
 		get_viewport().set_input_as_handled()
 
-func _register_collapsible_panel(panel_id: String, panel: Control, side: String, existing_button: Button = null) -> void:
+func _register_collapsible_panel(
+	panel_id: String,
+	panel: Control,
+	side: String,
+	existing_button: Button = null,
+	companions: Array[Control] = []
+) -> void:
 	var button := existing_button
 	if button == null:
 		button = Button.new()
@@ -13955,6 +14362,7 @@ func _register_collapsible_panel(panel_id: String, panel: Control, side: String,
 		"side": side,
 		"collapsed": false,
 		"available": true,
+		"companions": companions,
 	}
 
 func _on_collapsible_panel_button_pressed(panel_id: String) -> void:
@@ -13991,7 +14399,12 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 
 	var available := bool(state.get("available", true))
 	var collapsed := bool(state.get("collapsed", false))
-	panel.visible = available and not collapsed
+	var group_visible := available and not collapsed
+	panel.visible = group_visible
+	for companion_value: Variant in state.get("companions", []):
+		var companion := companion_value as Control
+		if companion != null:
+			companion.visible = group_visible and bool(companion.get_meta("group_available", true))
 	button.visible = available
 	button.text = "+" if collapsed else "-"
 	button.tooltip_text = "Expand" if collapsed else "Collapse"
@@ -14014,6 +14427,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 		_position_chat_resize_button()
 	if panel_id == "location" and wild_pokemon_button != null:
 		wild_pokemon_button.visible = available and not collapsed and _get_current_encounter_area_id() != ""
+		if collapsed and global_buff_details_panel.visible:
+			_hide_global_buff_details()
 	if panel_id == "options":
 		_refresh_socials_attention_badge()
 	_position_collapsible_button(panel_id)
@@ -14184,6 +14599,7 @@ func _get_active_escape_close_candidate() -> Dictionary:
 
 func _get_escape_close_candidates() -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = [
+		{"panel": global_buff_details_panel, "close": Callable(self, "_hide_global_buff_details")},
 		{"panel": mail_compose_help_popup, "close": Callable(self, "_hide_mail_compose_help_popup")},
 		{"panel": pokemon_summary_ev_allocate_popup, "close": Callable(self, "_hide_pokemon_summary_ev_allocate_popup")},
 		{"panel": pokemon_summary_ball_picker, "close": Callable(self, "_hide_pokemon_summary_ball_picker_for_escape")},

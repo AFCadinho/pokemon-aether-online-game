@@ -5,6 +5,7 @@
 **Changed**
 - Reorganized the overworld UI so party slots sit above the chat on the left, while the hotbar sits above the trainer card on the right. Party slots remain available for opening Pokemon summaries during battles.
 - Shifted the default Battle UI position to the right so it leaves clearer space for the overworld party column, and made the Battle Log toggle more prominent.
+- Added clickable global community-buff goals with dedicated icons, funding progress, active timers, and contribution UI; added a compact personal-buff counter with hover details, an expandable buff list, an empty state, and a future Donator Gems Store entry point grouped with the existing location and trainer-card collapse controls.
 
 **Fixed**
 - Fixed Ranked battles sometimes leaving one player stuck after their opponent timed out or disconnected. Both players now recover the authoritative result and reach the correct end screen.

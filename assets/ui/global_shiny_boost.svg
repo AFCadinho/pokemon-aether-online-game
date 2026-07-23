@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="shiny-core" x1="18" y1="14" x2="46" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff2a6"/>
+      <stop offset="0.48" stop-color="#f38dff"/>
+      <stop offset="1" stop-color="#8556ed"/>
+    </linearGradient>
+  </defs>
+  <path fill="#21183d" stroke="#d5b2ff" stroke-linejoin="round" stroke-width="3" d="m32 6 6 18 18 8-18 7-6 19-7-19-18-7 18-8z"/>
+  <path fill="url(#shiny-core)" stroke="#fff4d0" stroke-linejoin="round" stroke-width="2" d="m32 13 4 14 13 5-13 5-4 14-5-14-13-5 13-5z"/>
+  <path fill="#fffbe8" d="m32 22 2 7 7 3-7 2-2 8-3-8-7-2 7-3z"/>
+  <path fill="#ffe670" d="m50 7 2 6 6 2-6 2-2 6-2-6-6-2 6-2zM13 42l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="exp-core" x1="17" y1="13" x2="48" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff2a6"/>
+      <stop offset="0.48" stop-color="#ffc84f"/>
+      <stop offset="1" stop-color="#e17822"/>
+    </linearGradient>
+  </defs>
+  <path fill="#10213a" stroke="#7edcff" stroke-width="3" d="M32 5 40 17l14 3-9 11 1 15-14-6-14 6 1-15-9-11 14-3z"/>
+  <path fill="url(#exp-core)" stroke="#fff4bd" stroke-linejoin="round" stroke-width="2" d="m32 11 6 11 12 2-8 9 1 9-11-5-11 5 1-9-8-9 12-2z"/>
+  <path fill="#fff8d6" d="m32 18 4 8 8 1-6 6 1 4-7-3-7 3 1-4-6-6 8-1z"/>
+  <path fill="none" stroke="#69dcff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="m22 53 5-5 5 5 5-5 5 5"/>
+</svg>

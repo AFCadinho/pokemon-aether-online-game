@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="rare-core" x1="16" y1="48" x2="47" y2="16" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#37c98a"/>
+      <stop offset="1" stop-color="#a8f37d"/>
+    </linearGradient>
+  </defs>
+  <path fill="#102927" stroke="#67e4aa" stroke-linejoin="round" stroke-width="3" d="M32 6 54 18v28L32 58 10 46V18z"/>
+  <path fill="none" stroke="#3c8f78" stroke-width="2" d="M18 41c8-8 20-8 28 0M22 46c6-5 14-5 20 0"/>
+  <path fill="url(#rare-core)" stroke="#d4ffc5" stroke-linejoin="round" stroke-width="2" d="M20 38c-2-11 3-18 12-21 9 3 14 10 12 21-7-5-17-5-24 0z"/>
+  <circle cx="32" cy="32" r="9" fill="#f3f7f4" stroke="#173a37" stroke-width="2"/>
+  <path fill="#ef5d6b" d="M24 31a8 8 0 0 1 16 0z"/>
+  <path fill="#263d3b" d="M24 31h16v3H24z"/>
+  <circle cx="32" cy="32.5" r="3.5" fill="#f7fbf9" stroke="#263d3b" stroke-width="2"/>
+  <path fill="none" stroke="#b5ffd4" stroke-linecap="round" stroke-width="2" d="M17 22c2-4 5-7 9-9m21 9c-2-4-5-7-9-9"/>
+</svg>
