@@ -5504,6 +5504,89 @@
         "PRSFX- Superpower1.wav": "res://assets/battles/animations/superpower/PRSFX- Superpower1.wav",
         "PRSFX- Superpower2.wav": "res://assets/battles/animations/superpower/PRSFX- Superpower2.wav"
       }
+    },
+    "psychicterrain": {
+      "template": "imported_sheet",
+      "category": "field",
+      "static_visual_anchor": "battlefield",
+      "keep_screen_overlay_fullscreen": true,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/psychicterrain/psychicterrain.json",
+      "sheet_path": "res://assets/battles/animations/psychicterrain/PRAS- Mirror Coat.png",
+      "background_path": "res://assets/battles/animations/psychicterrain/PRAS- Psychic Terrain BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Psychic Terrain1.wav": "res://assets/battles/animations/psychicterrain/PRSFX- Psychic Terrain1.wav",
+        "PRSFX- Psychic Terrain2.wav": "res://assets/battles/animations/psychicterrain/PRSFX- Psychic Terrain2.wav",
+        "PRSFX- Psychic Terrain3.wav": "res://assets/battles/animations/psychicterrain/PRSFX- Psychic Terrain3.wav"
+      }
+    },
+    "grassyterrain": {
+      "template": "imported_sheet",
+      "category": "field",
+      "static_visual_anchor": "battlefield",
+      "keep_screen_overlay_fullscreen": true,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/grassyterrain/grassyterrain.json",
+      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
+      "background_path": "res://assets/battles/animations/grassyterrain/PRAS- Giga Drain BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Grassy Terrain.wav": "res://assets/battles/animations/grassyterrain/PRSFX- Grassy Terrain.wav"
+      }
+    },
+    "electricterrain": {
+      "template": "imported_sheet",
+      "category": "field",
+      "static_visual_anchor": "battlefield",
+      "keep_screen_overlay_fullscreen": true,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/electricterrain/electricterrain.json",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
+      "background_path": "res://assets/battles/animations/electricterrain/PRAS- Electric Terrain BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Electric Terrain.wav": "res://assets/battles/animations/electricterrain/PRSFX- Electric Terrain.wav",
+        "PRSFX- Electric Terrain2.wav": "res://assets/battles/animations/electricterrain/PRSFX- Electric Terrain2.wav"
+      }
+    },
+    "mistyterrain": {
+      "template": "imported_sheet",
+      "category": "field",
+      "static_visual_anchor": "battlefield",
+      "keep_screen_overlay_fullscreen": true,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "show_pink_visual": false,
+      "overlay_fill_enabled": false,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/mistyterrain/mistyterrain.json",
+      "sheet_path": "res://assets/battles/animations/mistyterrain/PRAS- Orbs.png",
+      "background_path": "res://assets/battles/animations/mistyterrain/PRAS- Misty Terrain BG.png",
+      "foreground_path": "res://assets/battles/animations/mistyterrain/PRAS- Mist FG.png",
+      "sound_paths": {
+        "PRSFX- Misty Terrain.wav": "res://assets/battles/animations/mistyterrain/PRSFX- Misty Terrain.wav"
+      }
     }
   }
 }

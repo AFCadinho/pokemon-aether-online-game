@@ -13,6 +13,7 @@ signal animation_finished
 @export var loop: bool = false
 @export var free_on_finish: bool = false
 @export var show_timing_backgrounds: bool = false
+@export var timing_background_fill_canvas: bool = false
 @export var show_timing_foregrounds: bool = false
 @export var timing_foreground_scale: Vector2 = Vector2.ONE
 @export_range(0.0, 1.0, 0.01) var foreground_opacity_multiplier: float = 1.0
@@ -96,6 +97,7 @@ var timing_background_detached := false
 @onready var fg: Sprite2D = Sprite2D.new()
 
 const REVERSED_BATTLEFIELD_AXIS := Vector2(512.0, 320.0)
+const ANIMATION_CANVAS_SIZE := Vector2(512.0, 384.0)
 
 
 func _ready() -> void:
@@ -221,6 +223,8 @@ func _build_nodes() -> void:
 	elif background_path != "":
 		bg.texture = load(background_path) as Texture2D
 	bg.centered = false
+	if timing_background_fill_canvas:
+		_fit_timing_background_to_canvas()
 	bg.modulate.a = 0.0
 	add_child(bg)
 
@@ -267,6 +271,22 @@ func _build_nodes() -> void:
 		player.bus = SettingsManager.SFX_BUS
 		sound_players[sound_key] = player
 		add_child(player)
+
+
+func _fit_timing_background_to_canvas() -> void:
+	if bg.texture == null:
+		return
+
+	var texture_size := bg.texture.get_size()
+	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+		return
+
+	var cover_scale := maxf(
+		ANIMATION_CANVAS_SIZE.x / texture_size.x,
+		ANIMATION_CANVAS_SIZE.y / texture_size.y
+	)
+	bg.scale = Vector2(cover_scale, cover_scale)
+	bg.position = (ANIMATION_CANVAS_SIZE - texture_size * cover_scale) * 0.5
 
 
 func move_timing_background_to(parent_node: Node, sibling_index: int) -> void:
