@@ -5413,6 +5413,58 @@
         "PRSFX- Calm Mind.wav": "res://assets/battles/animations/psychicnoise/PRSFX- Calm Mind.wav",
         "PRSFX- Disable": "res://assets/battles/animations/psychicnoise/PRSFX- Disable.wav"
       }
+    },
+    "grassyglide": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "show_sheet_sprites": false,
+      "data_path": "res://assets/battles/animations/grassyglide/grassyglide.json",
+      "sheet_path": "",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {}
+    },
+    "woodhammer": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "data_path": "res://assets/battles/animations/woodhammer/woodhammer.json",
+      "sheet_path": "res://assets/battles/animations/woodhammer/PRAS- Wood Hammer.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Wood Hammer.wav": "res://assets/battles/animations/woodhammer/PRSFX- Wood Hammer.wav"
+      }
+    },
+    "drainpunch": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "data_path": "res://assets/battles/animations/drainpunch/drainpunch.json",
+      "sheet_path": "res://assets/battles/animations/drainpunch/PRAS- Drain Punch.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Drain Punch1.wav": "res://assets/battles/animations/drainpunch/PRSFX- Drain Punch1.wav",
+        "PRSFX- Drain Punch2.wav": "res://assets/battles/animations/drainpunch/PRSFX- Drain Punch2.wav"
+      }
+    },
+    "superpower": {
+      "template": "imported_sheet",
+      "category": "physical",
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 0,
+          "end_frame": 18,
+          "offset": [0.0, -30.0]
+        }
+      ],
+      "data_path": "res://assets/battles/animations/superpower/superpower.json",
+      "sheet_path": "res://assets/battles/animations/superpower/PRAS- Strike.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Superpower1.wav": "res://assets/battles/animations/superpower/PRSFX- Superpower1.wav",
+        "PRSFX- Superpower2.wav": "res://assets/battles/animations/superpower/PRSFX- Superpower2.wav"
+      }
     }
   }
 }

@@ -55,6 +55,7 @@ signal animation_finished
 @export var sprite_position_anchor: Vector2 = Vector2(128, 224)
 @export var sprite_position_offset: Vector2 = Vector2.ZERO
 @export var sheet_visual_offset: Vector2 = Vector2.ZERO
+@export var sheet_frame_offsets: Array = []
 @export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
 @export var sparkle_center: Vector2 = Vector2(256, 188)
 @export_range(8.0, 180.0, 1.0) var sparkle_radius_min: float = 26.0
@@ -2343,7 +2344,7 @@ func _apply_frame(index: int) -> void:
 			tile_h
 		)
 		var sheet_position := _scale_sprite_position(Vector2(float(cell["x"]), float(cell["y"]))) + sprite_position_offset
-		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset
+		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset + _get_sheet_frame_offset(index)
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
 		sprite.rotation_degrees = float(cell["angle"])
@@ -2351,6 +2352,18 @@ func _apply_frame(index: int) -> void:
 		sprite.modulate = Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, alpha) if show_pink_visual else Color(1.0, 1.0, 1.0, alpha)
 		sprite.visible = true
 		sprite_i += 1
+
+
+func _get_sheet_frame_offset(index: int) -> Vector2:
+	for offset_value: Variant in sheet_frame_offsets:
+		if not offset_value is Dictionary:
+			continue
+		var offset_config := offset_value as Dictionary
+		var start_frame := int(offset_config.get("start_frame", 0))
+		var end_frame := int(offset_config.get("end_frame", start_frame))
+		if index >= start_frame and index <= end_frame:
+			return _vector2_from_value(offset_config.get("offset", [0.0, 0.0]))
+	return Vector2.ZERO
 
 func _projectile_enabled() -> bool:
 	return bool(projectile_config.get("enabled", not projectile_config.is_empty()))

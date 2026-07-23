@@ -426,6 +426,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	)
 	animation_node.sprite_position_offset = _vector2_from_config_value(config.get("sprite_position_offset", [0.0, 0.0]), Vector2.ZERO)
 	animation_node.sheet_visual_offset = _vector2_from_config_value(config.get("sheet_visual_offset", [0.0, 0.0]), Vector2.ZERO)
+	animation_node.sheet_frame_offsets = (config.get("sheet_frame_offsets", []) as Array).duplicate(true)
 	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))
 	animation_node.pattern_offset = int(config.get("pattern_offset", 0))
 	animation_node.pattern_override = int(config.get("pattern_override", -1))

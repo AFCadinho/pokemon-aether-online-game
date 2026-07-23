@@ -40,6 +40,7 @@ func _init() -> void:
 	_check_contains(router_source, "func _create_dark_pulse_underlay_if_needed(", "Dark Pulse can split its floor and orbit particles around the actor sprite")
 	_check_order(router_source, "_move_timing_background_below_sprites(animation_node, parent_node, config)", "var underlay_overlay := _create_dark_pulse_underlay_if_needed(", "Dark Pulse floor ring is layered above its opaque background")
 	_check_contains(player_source, "@export var sheet_visual_offset: Vector2 = Vector2.ZERO", "sheet visual offset is explicit and defaults to no movement")
+	_check_contains(player_source, "func _get_sheet_frame_offset", "sheet effects can apply an offset to only selected frames")
 	_check_contains(player_source, "_battlefield_position(sheet_position) + sheet_visual_offset", "sheet correction is applied after battlefield mirroring")
 	_check_contains(player_source, "func display_position_to_battlefield_source(position: Vector2) -> Vector2:", "mirrored animations can convert display anchors to source coordinates")
 	_check_contains(player_source, "var steam_count: int = maxi(0, int(fire_stream_config.get(\"steam_count\", 0)))", "stream effects can add a steam impact without a separate sprite sheet")
