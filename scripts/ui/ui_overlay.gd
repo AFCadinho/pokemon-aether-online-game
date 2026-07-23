@@ -679,6 +679,7 @@ var staff_teleport_destination_search: LineEdit
 var staff_teleport_spawn_search: LineEdit
 var staff_teleport_destination_results: ItemList
 var staff_teleport_selected_destination_label: Label
+var staff_teleport_destination_status_label: Label
 var staff_teleport_self_reason_input: LineEdit
 var staff_teleport_confirm_button: Button
 var staff_teleport_player_divider: HSeparator
@@ -688,6 +689,8 @@ var staff_teleport_player_search_input: LineEdit
 var staff_teleport_player_select: OptionButton
 var staff_teleport_player_results: ItemList
 var staff_teleport_selected_player_label: Label
+var staff_teleport_player_results_status_label: Label
+var staff_teleport_player_action_hint: Label
 var staff_teleport_to_player_mode_button: Button
 var staff_teleport_send_player_mode_button: Button
 var staff_teleport_player_reason_input: LineEdit
@@ -698,6 +701,7 @@ var staff_teleport_send_point_select: OptionButton
 var staff_teleport_send_map_search: LineEdit
 var staff_teleport_send_spawn_search: LineEdit
 var staff_teleport_send_destination_results: ItemList
+var staff_teleport_safe_destination_status_label: Label
 var staff_teleport_filtered_safe_destinations: Array = []
 var staff_teleport_send_player_button: Button
 var staff_teleport_maps: Array = []
@@ -5548,18 +5552,20 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_popup = PanelContainer.new()
 	staff_teleport_popup.name = "StaffTeleportPopup"
 	staff_teleport_popup.visible = false
-	staff_teleport_popup.custom_minimum_size = Vector2(500, 560)
+	staff_teleport_popup.custom_minimum_size = Vector2(900, 700)
 	staff_teleport_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	staff_teleport_popup.z_index = UI_BASE_Z_INDEX
 	staff_teleport_popup.anchor_left = 0.5
 	staff_teleport_popup.anchor_top = 0.5
 	staff_teleport_popup.anchor_right = 0.5
 	staff_teleport_popup.anchor_bottom = 0.5
-	staff_teleport_popup.offset_left = -250
-	staff_teleport_popup.offset_top = -280
-	staff_teleport_popup.offset_right = 250
-	staff_teleport_popup.offset_bottom = 280
-	staff_teleport_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	staff_teleport_popup.offset_left = -450
+	staff_teleport_popup.offset_top = -350
+	staff_teleport_popup.offset_right = 450
+	staff_teleport_popup.offset_bottom = 350
+	var teleport_shell_style := _make_glass_panel_style(14)
+	teleport_shell_style.border_color = Color("#55799acc")
+	staff_teleport_popup.add_theme_stylebox_override("panel", teleport_shell_style)
 	root_control.add_child(staff_teleport_popup)
 
 	var teleport_margin := MarginContainer.new()
@@ -5580,7 +5586,7 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_layout.add_child(teleport_header)
 
 	var teleport_title := Label.new()
-	teleport_title.text = "Staff Teleport"
+	teleport_title.text = "Staff Teleporter"
 	teleport_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	teleport_title.add_theme_font_size_override("font_size", 18)
 	teleport_title.add_theme_color_override("font_color", UI_TEXT)
@@ -5589,8 +5595,9 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_header.add_child(teleport_title)
 
 	var teleport_close_button := Button.new()
-	teleport_close_button.text = "X"
-	teleport_close_button.custom_minimum_size = Vector2(34, 30)
+	teleport_close_button.text = "×"
+	teleport_close_button.tooltip_text = "Close"
+	teleport_close_button.custom_minimum_size = Vector2(34, 34)
 	teleport_close_button.focus_mode = Control.FOCUS_NONE
 	teleport_close_button.pressed.connect(_hide_staff_teleport_popup)
 	teleport_header.add_child(teleport_close_button)
@@ -5600,16 +5607,16 @@ func _setup_staff_impersonation_tools() -> void:
 	teleport_layout.add_child(teleport_tab_bar)
 
 	staff_teleport_self_tab_button = Button.new()
-	staff_teleport_self_tab_button.text = "Self"
-	staff_teleport_self_tab_button.custom_minimum_size = Vector2(0, 34)
+	staff_teleport_self_tab_button.text = "Teleport Self"
+	staff_teleport_self_tab_button.custom_minimum_size = Vector2(0, 40)
 	staff_teleport_self_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_self_tab_button.focus_mode = Control.FOCUS_NONE
 	staff_teleport_self_tab_button.pressed.connect(_on_staff_teleport_self_tab_pressed)
 	teleport_tab_bar.add_child(staff_teleport_self_tab_button)
 
 	staff_teleport_player_tab_button = Button.new()
-	staff_teleport_player_tab_button.text = "Player"
-	staff_teleport_player_tab_button.custom_minimum_size = Vector2(0, 34)
+	staff_teleport_player_tab_button.text = "Player Actions"
+	staff_teleport_player_tab_button.custom_minimum_size = Vector2(0, 40)
 	staff_teleport_player_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	staff_teleport_player_tab_button.focus_mode = Control.FOCUS_NONE
 	staff_teleport_player_tab_button.pressed.connect(_on_staff_teleport_player_tab_pressed)
@@ -5797,7 +5804,14 @@ func _setup_staff_impersonation_tools() -> void:
 	_apply_button_style(staff_teleport_confirm_button, "primary")
 	_apply_line_edit_style(staff_teleport_player_search_input)
 	_apply_button_style(staff_teleport_to_player_button, "primary")
-	_apply_button_style(staff_teleport_send_player_button, "primary")
+	_apply_button_style(staff_teleport_send_player_button, "danger")
+	_apply_staff_teleport_revamp(
+		teleport_header,
+		teleport_title,
+		teleport_close_button,
+		teleport_tab_bar,
+		teleport_body
+	)
 
 func _create_staff_teleport_section_title(title_text: String) -> Label:
 	var label := Label.new()
@@ -5808,6 +5822,353 @@ func _create_staff_teleport_section_title(title_text: String) -> Label:
 	label.add_theme_constant_override("shadow_offset_x", 0)
 	label.add_theme_constant_override("shadow_offset_y", 1)
 	return label
+
+func _apply_staff_teleport_revamp(
+	header: HBoxContainer,
+	title: Label,
+	close_button: Button,
+	tab_bar: HBoxContainer,
+	body: VBoxContainer
+) -> void:
+	header.custom_minimum_size = Vector2(0, 52)
+	header.add_theme_constant_override("separation", 10)
+
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#67d5f5"), Color("#67d5f5"), 2, 0)
+	)
+	header.add_child(header_accent)
+	header.move_child(header_accent, 0)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(42, 42)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a1724e8"), Color("#4e8bb8aa"), 9, 1)
+	)
+	header.add_child(icon_frame)
+	header.move_child(icon_frame, 1)
+
+	var icon_center := CenterContainer.new()
+	icon_frame.add_child(icon_center)
+	var icon := TextureRect.new()
+	icon.texture = STAFF_TELEPORT_ICON
+	icon.custom_minimum_size = Vector2(28, 28)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
+	header.move_child(heading, 2)
+	title.reparent(heading)
+	title.text = "Staff Teleporter"
+	title.add_theme_font_size_override("font_size", 20)
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var subtitle := Label.new()
+	subtitle.text = "Move yourself or assist an online player"
+	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_child(subtitle)
+
+	close_button.text = "×"
+	close_button.tooltip_text = "Close teleporter"
+	tab_bar.add_theme_constant_override("separation", 8)
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 0)
+
+	_build_staff_teleport_self_workspace()
+	_build_staff_teleport_player_workspace()
+	_apply_staff_teleport_item_list_style(staff_teleport_destination_results)
+	_apply_staff_teleport_item_list_style(staff_teleport_player_results)
+	_apply_staff_teleport_item_list_style(staff_teleport_send_destination_results)
+
+func _build_staff_teleport_self_workspace() -> void:
+	if staff_teleport_self_section == null:
+		return
+	for child: Node in staff_teleport_self_section.get_children():
+		if child is Label and child != staff_teleport_selected_destination_label:
+			(child as Label).visible = false
+
+	staff_teleport_self_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	staff_teleport_self_section.add_theme_constant_override("separation", 0)
+	var columns := HBoxContainer.new()
+	columns.custom_minimum_size = Vector2(0, 510)
+	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	columns.add_theme_constant_override("separation", 12)
+	staff_teleport_self_section.add_child(columns)
+
+	var browser_surface := _create_staff_teleport_surface(columns, Vector2(480, 0))
+	var browser_layout := browser_surface.get("layout") as VBoxContainer
+	var browser_header := HBoxContainer.new()
+	browser_header.add_theme_constant_override("separation", 8)
+	browser_layout.add_child(browser_header)
+	browser_header.add_child(_create_staff_teleport_caption("DESTINATIONS"))
+	staff_teleport_destination_status_label = _create_staff_teleport_status_label("Waiting for destinations")
+	staff_teleport_destination_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_destination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	browser_header.add_child(staff_teleport_destination_status_label)
+
+	var self_search_row := HBoxContainer.new()
+	self_search_row.add_theme_constant_override("separation", 8)
+	browser_layout.add_child(self_search_row)
+	staff_teleport_destination_search.placeholder_text = "Search map..."
+	staff_teleport_destination_search.reparent(self_search_row)
+	staff_teleport_spawn_search.placeholder_text = "Search spawn point..."
+	staff_teleport_spawn_search.reparent(self_search_row)
+	staff_teleport_destination_results.custom_minimum_size = Vector2(0, 350)
+	staff_teleport_destination_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	staff_teleport_destination_results.reparent(browser_layout)
+
+	var action_surface := _create_staff_teleport_surface(columns, Vector2(356, 0), Color("#4e8bb899"))
+	var action_layout := action_surface.get("layout") as VBoxContainer
+	action_layout.add_child(_create_staff_teleport_caption("SELECTED DESTINATION"))
+	var destination_card := _create_staff_teleport_selection_card(STAFF_TELEPORT_ICON)
+	action_layout.add_child(destination_card.get("panel") as PanelContainer)
+	var destination_card_row := destination_card.get("row") as HBoxContainer
+	staff_teleport_selected_destination_label.reparent(destination_card_row)
+	staff_teleport_selected_destination_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_selected_destination_label.custom_minimum_size = Vector2(0, 48)
+	staff_teleport_selected_destination_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	staff_teleport_selected_destination_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	staff_teleport_selected_destination_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	staff_teleport_selected_destination_label.add_theme_font_size_override("font_size", 14)
+
+	var self_hint := Label.new()
+	self_hint.text = "Choose a map and spawn point. Your current session will move through the authorized teleport flow."
+	self_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	self_hint.add_theme_font_size_override("font_size", 11)
+	self_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	action_layout.add_child(self_hint)
+
+	var self_spacer := Control.new()
+	self_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_layout.add_child(self_spacer)
+	action_layout.add_child(_create_staff_teleport_caption("STAFF NOTE"))
+	staff_teleport_self_reason_input.placeholder_text = "Reason (optional)"
+	staff_teleport_self_reason_input.reparent(action_layout)
+	staff_teleport_confirm_button.text = "Teleport Self"
+	staff_teleport_confirm_button.custom_minimum_size = Vector2(0, 44)
+	staff_teleport_confirm_button.reparent(action_layout)
+
+func _build_staff_teleport_player_workspace() -> void:
+	if staff_teleport_player_section == null:
+		return
+	for child: Node in staff_teleport_player_section.get_children():
+		if child is Label and child != staff_teleport_selected_player_label:
+			(child as Label).visible = false
+
+	staff_teleport_player_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_section.add_theme_constant_override("separation", 0)
+	var columns := HBoxContainer.new()
+	columns.custom_minimum_size = Vector2(0, 510)
+	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	columns.add_theme_constant_override("separation", 12)
+	staff_teleport_player_section.add_child(columns)
+
+	var player_surface := _create_staff_teleport_surface(columns, Vector2(360, 0))
+	var player_layout := player_surface.get("layout") as VBoxContainer
+	var player_header := HBoxContainer.new()
+	player_header.add_theme_constant_override("separation", 8)
+	player_layout.add_child(player_header)
+	player_header.add_child(_create_staff_teleport_caption("ONLINE PLAYERS"))
+	staff_teleport_player_results_status_label = _create_staff_teleport_status_label("Waiting for players")
+	staff_teleport_player_results_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_results_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	player_header.add_child(staff_teleport_player_results_status_label)
+	staff_teleport_player_search_input.placeholder_text = "Search name or username..."
+	staff_teleport_player_search_input.reparent(player_layout)
+	staff_teleport_player_results.custom_minimum_size = Vector2(0, 350)
+	staff_teleport_player_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	staff_teleport_player_results.reparent(player_layout)
+
+	var action_surface := _create_staff_teleport_surface(columns, Vector2(488, 0), Color("#4e8bb899"))
+	var action_layout := action_surface.get("layout") as VBoxContainer
+	action_layout.add_child(_create_staff_teleport_caption("SELECTED PLAYER"))
+	var player_card := _create_staff_teleport_selection_card(SOCIALS_NEARBY_ICON)
+	action_layout.add_child(player_card.get("panel") as PanelContainer)
+	var player_card_row := player_card.get("row") as HBoxContainer
+	staff_teleport_selected_player_label.reparent(player_card_row)
+	staff_teleport_selected_player_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	staff_teleport_selected_player_label.custom_minimum_size = Vector2(0, 48)
+	staff_teleport_selected_player_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	staff_teleport_selected_player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	staff_teleport_selected_player_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	staff_teleport_selected_player_label.add_theme_font_size_override("font_size", 14)
+
+	staff_teleport_player_action_hint = Label.new()
+	staff_teleport_player_action_hint.text = "Select a player to unlock staff actions."
+	staff_teleport_player_action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	staff_teleport_player_action_hint.add_theme_font_size_override("font_size", 11)
+	staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	action_layout.add_child(staff_teleport_player_action_hint)
+
+	action_layout.add_child(_create_staff_teleport_caption("ACTION"))
+	var mode_bar := staff_teleport_to_player_mode_button.get_parent() as HBoxContainer
+	if mode_bar != null:
+		mode_bar.reparent(action_layout)
+	staff_teleport_to_player_mode_button.text = "Go to Player"
+	staff_teleport_send_player_mode_button.text = "Move Player Safely"
+
+	var send_content := staff_teleport_send_section as VBoxContainer
+	if send_content != null:
+		for child: Node in send_content.get_children():
+			if child is Label:
+				(child as Label).visible = false
+		var safe_header := HBoxContainer.new()
+		safe_header.add_theme_constant_override("separation", 8)
+		send_content.add_child(safe_header)
+		send_content.move_child(safe_header, 0)
+		safe_header.add_child(_create_staff_teleport_caption("SAFE DESTINATION"))
+		staff_teleport_safe_destination_status_label = _create_staff_teleport_status_label("Waiting for destinations")
+		staff_teleport_safe_destination_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		staff_teleport_safe_destination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		safe_header.add_child(staff_teleport_safe_destination_status_label)
+
+		var safe_search_row := HBoxContainer.new()
+		safe_search_row.add_theme_constant_override("separation", 8)
+		send_content.add_child(safe_search_row)
+		send_content.move_child(safe_search_row, 1)
+		staff_teleport_send_map_search.placeholder_text = "Search map..."
+		staff_teleport_send_map_search.reparent(safe_search_row)
+		staff_teleport_send_spawn_search.placeholder_text = "Search spawn..."
+		staff_teleport_send_spawn_search.reparent(safe_search_row)
+		staff_teleport_send_destination_results.custom_minimum_size = Vector2(0, 100)
+		staff_teleport_send_destination_results.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		staff_teleport_send_destination_results.reparent(send_content)
+
+		var safe_panel := PanelContainer.new()
+		safe_panel.add_theme_stylebox_override(
+			"panel",
+			_make_panel_style(Color("#180e12b8"), Color("#7a3d4a88"), 9, 1)
+		)
+		var safe_margin := MarginContainer.new()
+		safe_margin.add_theme_constant_override("margin_left", 9)
+		safe_margin.add_theme_constant_override("margin_top", 8)
+		safe_margin.add_theme_constant_override("margin_right", 9)
+		safe_margin.add_theme_constant_override("margin_bottom", 8)
+		safe_panel.add_child(safe_margin)
+		send_content.reparent(safe_margin)
+		action_layout.add_child(safe_panel)
+		staff_teleport_send_section = safe_panel
+
+	var player_spacer := Control.new()
+	player_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_layout.add_child(player_spacer)
+	action_layout.add_child(_create_staff_teleport_caption("STAFF NOTE"))
+	staff_teleport_player_reason_input.placeholder_text = "Player action reason (optional)"
+	staff_teleport_player_reason_input.reparent(action_layout)
+	staff_teleport_to_player_button.text = "Teleport to Player"
+	staff_teleport_to_player_button.custom_minimum_size = Vector2(0, 44)
+	staff_teleport_to_player_button.reparent(action_layout)
+	staff_teleport_send_player_button.text = "Move Player to Safe Location"
+	staff_teleport_send_player_button.custom_minimum_size = Vector2(0, 44)
+	staff_teleport_send_player_button.reparent(action_layout)
+
+func _create_staff_teleport_surface(
+	parent: Container,
+	minimum_size: Vector2,
+	border_color: Color = UI_BORDER_SUBTLE
+) -> Dictionary:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = minimum_size
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, border_color, 10, 1)
+	)
+	parent.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 11)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 11)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 9)
+	margin.add_child(layout)
+	return {"panel": panel, "layout": layout}
+
+func _create_staff_teleport_caption(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	return label
+
+func _create_staff_teleport_status_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.76))
+	return label
+
+func _create_staff_teleport_selection_card(texture: Texture2D) -> Dictionary:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 72)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, Color("#355a7899"), 9, 1)
+	)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	var icon := TextureRect.new()
+	icon.texture = texture
+	icon.custom_minimum_size = Vector2(42, 42)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	return {"panel": panel, "row": row}
+
+func _apply_staff_teleport_item_list_style(item_list: ItemList) -> void:
+	if item_list == null:
+		return
+	item_list.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	item_list.add_theme_color_override("font_selected_color", UI_TEXT)
+	item_list.add_theme_color_override("font_hovered_color", UI_TEXT)
+	item_list.add_theme_constant_override("line_separation", 6)
+	item_list.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 8, 1)
+	)
+	item_list.add_theme_stylebox_override(
+		"selected",
+		_make_panel_style(Color("#0b2940eb"), Color("#58c8ebaa"), 6, 1)
+	)
+	item_list.add_theme_stylebox_override(
+		"selected_focus",
+		_make_panel_style(Color("#0b2940f5"), Color("#72dcf7dd"), 6, 1)
+	)
+	item_list.add_theme_stylebox_override(
+		"hovered",
+		_make_panel_style(UI_SURFACE_HOVER, Color("#4e789988"), 6, 1)
+	)
 
 func _setup_item_dex_button() -> void:
 	if item_dex_button != null:
@@ -18723,6 +19084,16 @@ func _refresh_staff_teleport_tab_visibility() -> void:
 	if staff_teleport_send_player_mode_button != null:
 		staff_teleport_send_player_mode_button.visible = show_player and player_is_selected and _can_teleport_other_player()
 		_apply_button_style(staff_teleport_send_player_mode_button, "primary" if show_send_safe else "default")
+	if staff_teleport_player_action_hint != null:
+		if not player_is_selected:
+			staff_teleport_player_action_hint.text = "Select a player from the list to unlock staff actions."
+			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		elif show_send_safe:
+			staff_teleport_player_action_hint.text = "This action moves another player. Confirm the safe destination and staff note carefully."
+			staff_teleport_player_action_hint.add_theme_color_override("font_color", UI_DANGER)
+		else:
+			staff_teleport_player_action_hint.text = "You will be teleported to the selected player's current location."
+			staff_teleport_player_action_hint.add_theme_color_override("font_color", Color("#79d9f2"))
 	if staff_teleport_send_section != null:
 		staff_teleport_send_section.visible = show_send_safe
 	if staff_teleport_player_divider != null:
@@ -18783,10 +19154,14 @@ func _load_staff_teleport_points_if_needed(force := false) -> void:
 	staff_teleport_points_loading = true
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = true
+	if staff_teleport_destination_status_label != null:
+		staff_teleport_destination_status_label.text = "Loading..."
 
 	var result: Dictionary = await ModeratorTeleportService.load_teleport_points()
 	staff_teleport_points_loading = false
 	if not bool(result.get("success", false)):
+		if staff_teleport_destination_status_label != null:
+			staff_teleport_destination_status_label.text = "Unavailable"
 		if staff_teleport_confirm_button != null:
 			staff_teleport_confirm_button.disabled = false
 		_add_chat_message("Could not load teleport points: %s" % str(result.get("error", "Unknown error")))
@@ -18807,10 +19182,14 @@ func _load_staff_teleport_online_players_if_needed(force := false) -> void:
 	staff_teleport_players_loading = true
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = true
+	if staff_teleport_player_results_status_label != null:
+		staff_teleport_player_results_status_label.text = "Loading..."
 
 	var result: Dictionary = await ModeratorTeleportService.load_online_teleport_players()
 	staff_teleport_players_loading = false
 	if not bool(result.get("success", false)):
+		if staff_teleport_player_results_status_label != null:
+			staff_teleport_player_results_status_label.text = "Unavailable"
 		if staff_teleport_to_player_button != null:
 			staff_teleport_to_player_button.disabled = false
 		_add_chat_message("Could not load online players: %s" % str(result.get("error", "Unknown error")))
@@ -18833,10 +19212,14 @@ func _load_staff_teleport_safe_points_if_needed(force := false) -> void:
 	staff_teleport_safe_points_loading = true
 	if staff_teleport_send_player_button != null:
 		staff_teleport_send_player_button.disabled = true
+	if staff_teleport_safe_destination_status_label != null:
+		staff_teleport_safe_destination_status_label.text = "Loading..."
 
 	var result: Dictionary = await ModeratorTeleportService.load_safe_teleport_points()
 	staff_teleport_safe_points_loading = false
 	if not bool(result.get("success", false)):
+		if staff_teleport_safe_destination_status_label != null:
+			staff_teleport_safe_destination_status_label.text = "Unavailable"
 		if staff_teleport_send_player_button != null:
 			staff_teleport_send_player_button.disabled = false
 		_add_chat_message("Could not load safe teleport points: %s" % str(result.get("error", "Unknown error")))
@@ -18895,6 +19278,12 @@ func _rebuild_staff_teleport_map_options() -> void:
 		if selected_index < 0:
 			selected_index = 0
 		staff_teleport_destination_results.select(selected_index)
+	if staff_teleport_destination_status_label != null:
+		staff_teleport_destination_status_label.text = (
+			"%d found" % staff_teleport_filtered_destinations.size()
+			if not staff_teleport_filtered_destinations.is_empty()
+			else "No matches"
+		)
 	_update_staff_teleport_selected_destination_label()
 	if staff_teleport_confirm_button != null:
 		staff_teleport_confirm_button.disabled = staff_teleport_filtered_destinations.is_empty() or staff_teleport_in_flight
@@ -18913,13 +19302,6 @@ func _on_staff_teleport_spawn_search_changed(_text: String) -> void:
 
 
 func _on_staff_teleport_destination_selected(_index: int) -> void:
-	var destination := _get_selected_staff_teleport_destination()
-	var map_entry: Dictionary = _staff_dictionary_from_variant(destination.get("map", {}))
-	var point_entry: Dictionary = _staff_dictionary_from_variant(destination.get("point", {}))
-	if staff_teleport_destination_search != null:
-		staff_teleport_destination_search.text = str(map_entry.get("label", ""))
-	if staff_teleport_spawn_search != null:
-		staff_teleport_spawn_search.text = str(point_entry.get("label", ""))
 	_update_staff_teleport_selected_destination_label()
 
 
@@ -18932,10 +19314,10 @@ func _update_staff_teleport_selected_destination_label() -> void:
 	var map_label := str(map_entry.get("label", "")).strip_edges()
 	var point_label := str(point_entry.get("label", "")).strip_edges()
 	if map_label == "" or point_label == "":
-		staff_teleport_selected_destination_label.text = "No destination selected"
+		staff_teleport_selected_destination_label.text = "Select a destination"
 		staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
-	staff_teleport_selected_destination_label.text = "Selected: %s · %s" % [map_label, point_label]
+	staff_teleport_selected_destination_label.text = "%s\n%s" % [map_label, point_label]
 	staff_teleport_selected_destination_label.add_theme_color_override("font_color", UI_TEXT)
 
 
@@ -18995,6 +19377,12 @@ func _rebuild_staff_teleport_send_map_options() -> void:
 
 	if not staff_teleport_filtered_safe_destinations.is_empty():
 		staff_teleport_send_destination_results.select(0 if selected_index < 0 else selected_index)
+	if staff_teleport_safe_destination_status_label != null:
+		staff_teleport_safe_destination_status_label.text = (
+			"%d found" % staff_teleport_filtered_safe_destinations.size()
+			if not staff_teleport_filtered_safe_destinations.is_empty()
+			else "No matches"
+		)
 	if staff_teleport_send_player_button != null:
 		staff_teleport_send_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_filtered_safe_destinations.is_empty() or staff_teleport_in_flight
 
@@ -19019,13 +19407,12 @@ func _on_staff_teleport_send_destination_search_changed(_text: String) -> void:
 
 
 func _on_staff_teleport_send_destination_selected(_index: int) -> void:
-	var destination := _get_selected_staff_teleport_send_destination()
-	var map_entry: Dictionary = _staff_dictionary_from_variant(destination.get("map", {}))
-	var point_entry: Dictionary = _staff_dictionary_from_variant(destination.get("point", {}))
-	if staff_teleport_send_map_search != null:
-		staff_teleport_send_map_search.text = str(map_entry.get("label", ""))
-	if staff_teleport_send_spawn_search != null:
-		staff_teleport_send_spawn_search.text = str(point_entry.get("label", ""))
+	if staff_teleport_send_player_button != null:
+		staff_teleport_send_player_button.disabled = (
+			staff_teleport_filtered_players.is_empty()
+			or _get_selected_staff_teleport_send_destination().is_empty()
+			or staff_teleport_in_flight
+		)
 
 
 func _on_staff_teleport_player_search_changed(_text: String) -> void:
@@ -19068,7 +19455,13 @@ func _rebuild_staff_teleport_player_options() -> void:
 				selected_index = index
 				break
 		staff_teleport_player_results.select(selected_index)
-	staff_teleport_player_results.visible = not staff_teleport_player_selection_confirmed and query != "" and staff_teleport_player_results.item_count > 0
+	staff_teleport_player_results.visible = true
+	if staff_teleport_player_results_status_label != null:
+		staff_teleport_player_results_status_label.text = (
+			"%d online" % staff_teleport_filtered_players.size()
+			if not staff_teleport_filtered_players.is_empty()
+			else "No matches"
+		)
 	_update_staff_teleport_selected_player_label()
 	if staff_teleport_to_player_button != null:
 		staff_teleport_to_player_button.disabled = staff_teleport_filtered_players.is_empty() or staff_teleport_in_flight
@@ -19080,17 +19473,17 @@ func _update_staff_teleport_selected_player_label() -> void:
 	if staff_teleport_selected_player_label == null:
 		return
 	if not staff_teleport_player_selection_confirmed:
-		staff_teleport_selected_player_label.text = "Search and select a player to continue"
+		staff_teleport_selected_player_label.text = "Select a player"
 		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
 	var selected_player := _get_selected_staff_teleport_player()
 	var username := str(selected_player.get("username", "")).strip_edges()
 	var display_name := str(selected_player.get("displayName", username)).strip_edges()
 	if username == "" and display_name == "":
-		staff_teleport_selected_player_label.text = "Selected player: none"
+		staff_teleport_selected_player_label.text = "Select a player"
 		staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		return
-	staff_teleport_selected_player_label.text = "Selected player: %s (@%s)" % [display_name, username]
+	staff_teleport_selected_player_label.text = "%s\n@%s" % [display_name, username]
 	staff_teleport_selected_player_label.add_theme_color_override("font_color", UI_TEXT)
 
 
