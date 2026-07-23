@@ -23,6 +23,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_ui_layout_check.gd",
 	"res://tests/battle_animation_anchor_check.gd",
 	"res://tests/battle_terrain_field_visual_check.gd",
+	"res://tests/field_timer_animated_terrain_icon_check.gd",
 	"res://tests/battle_substitute_presentation_check.gd",
 	"res://tests/party_slot_hp_payload_check.gd",
 	"res://tests/pokemon_ball_metadata_check.gd",

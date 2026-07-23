@@ -332,6 +332,14 @@ func _get_animated_effect_icon_path(effect_data: Dictionary) -> String:
 			file_name = "weatherhail.png"
 		"snow", "snowscape":
 			file_name = "weathersnow.png"
+		"grassyterrain":
+			file_name = "terraingrassy.png"
+		"mistyterrain":
+			file_name = "terrainmisty.png"
+		"psychicterrain":
+			file_name = "terrainpsychic.png"
+		"electricterrain":
+			file_name = "terrainelectric.png"
 		"trickroom":
 			file_name = "trickroom.png"
 		"magicroom":
