@@ -1,0 +1,20 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="defogCharm" x1="14" y1="17" x2="48" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D9F5FF"/>
+      <stop offset="1" stop-color="#5CA8D8"/>
+    </linearGradient>
+    <linearGradient id="defogCord" x1="22" y1="7" x2="42" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2A3"/>
+      <stop offset="1" stop-color="#D59A2C"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#07101D" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M25 18 21 9l6-4 5 10 5-10 6 4-4 9" fill="none" stroke="url(#defogCord)" stroke-width="4"/>
+    <circle cx="32" cy="36" r="19" fill="url(#defogCharm)" stroke-width="3"/>
+    <path d="M16 33h21c5 0 5-7 0-7-3 0-5 2-5 4" stroke="#F8FDFF" stroke-width="3"/>
+    <path d="M13 40h31c7 0 7 9 1 9-4 0-6-2-6-5" stroke="#F8FDFF" stroke-width="3"/>
+    <path d="M20 47h11" stroke="#B6E9FF" stroke-width="3"/>
+    <path d="M48 17v8M44 21h8" stroke="#FFF2A3" stroke-width="2.5"/>
+  </g>
+</svg>

@@ -6,10 +6,21 @@ signal get_gems_requested
 signal purchase_requested(item_id: String)
 
 const GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
+const MEMBERSHIP_ICON: Texture2D = preload("res://assets/ui/store_membership.svg")
 const STYLE_ICON: Texture2D = preload("res://assets/ui/store_style.svg")
 const PROFILE_ICON: Texture2D = preload("res://assets/ui/store_profile.svg")
 const CHAT_FLAIR_ICON: Texture2D = preload("res://assets/ui/store_chat_flair.svg")
+const MOUNT_ICON: Texture2D = preload("res://assets/ui/store_mount.svg")
 const SERVICE_ICON: Texture2D = preload("res://assets/ui/store_service_ticket.svg")
+const SURF_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SURFCHARM.png")
+const CUT_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/CUTCHARM.png")
+const STRENGTH_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/STRENGTHCHARM.png")
+const ROCK_SMASH_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/ROCKSMASHCHARM.png")
+const FLASH_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/FLASHCHARM.png")
+const DIVE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/DIVECHARM.png")
+const DEFOG_CHARM_ICON: Texture2D = preload("res://assets/ui/store_defog_charm.svg")
+const RAIN_DANCE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/RAINDANCECHARM.png")
+const SNOWSCAPE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SNOWSCAPECHARM.png")
 
 const UI_SURFACE_BASE := Color("#050b14f7")
 const UI_SURFACE_RAISED := Color("#081522f0")
@@ -25,28 +36,83 @@ const UI_GOLD := Color("#f0cc70")
 const UI_CYAN := Color("#60d3ff")
 const UI_DANGER := Color("#ef7085")
 
-const CATEGORY_ORDER: Array[String] = ["featured", "style", "profile", "services"]
+const CATEGORY_ORDER: Array[String] = [
+	"featured",
+	"membership",
+	"cosmetics",
+	"mounts",
+	"charms",
+	"services",
+]
 const CATEGORY_LABELS := {
 	"featured": "Featured",
-	"style": "Trainer Style",
-	"profile": "Profile",
-	"services": "Services",
+	"membership": "Membership",
+	"cosmetics": "Cosmetics",
+	"mounts": "Mounts",
+	"charms": "Charms",
+	"services": "Trainer Services",
 }
 const CATEGORY_DESCRIPTIONS := {
-	"featured": "A first look at cosmetic supporter rewards.",
-	"style": "Appearance concepts that do not affect battle power.",
-	"profile": "Cosmetic ways to personalize your trainer identity.",
-	"services": "Optional account services planned for the future.",
+	"featured": "A curated mix of supporter items, style and permanent conveniences.",
+	"membership": "Support PokéAether with cosmetic and account-comfort perks. No battle advantages.",
+	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
+	"mounts": "Travel through the overworld in your own style.",
+	"charms": "Use supported field moves without carrying a Pokémon that knows them. Progression and area rules still apply.",
+	"services": "Optional changes to your trainer identity and account.",
+}
+const CATEGORY_PROMISES := {
+	"featured": "FAIR SUPPORT",
+	"membership": "NO BATTLE POWER",
+	"cosmetics": "COSMETIC",
+	"mounts": "TRAVEL STYLE",
+	"charms": "FIELD CONVENIENCE",
+	"services": "TRAINER SERVICE",
 }
 const CATALOG: Array[Dictionary] = [
 	{
-		"id": "trainer_style_voucher",
-		"name": "Trainer Style Voucher",
-		"description": "Unlock a premium outfit voucher for your wardrobe.",
-		"price": 120,
+		"id": "aether_membership_3",
+		"name": "Aether Membership · 3 Days",
+		"description": "A short supporter pass with account comforts and no battle advantages.",
+		"price": 60,
+		"icon": MEMBERSHIP_ICON,
+		"categories": ["membership"],
+		"badge": "3 DAYS",
+	},
+	{
+		"id": "aether_membership_7",
+		"name": "Aether Membership · 7 Days",
+		"description": "One week of fair supporter benefits without battle advantages.",
+		"price": 130,
+		"icon": MEMBERSHIP_ICON,
+		"categories": ["membership"],
+		"badge": "7 DAYS",
+	},
+	{
+		"id": "aether_membership_14",
+		"name": "Aether Membership · 14 Days",
+		"description": "Two weeks of fair supporter benefits without battle advantages.",
+		"price": 250,
+		"icon": MEMBERSHIP_ICON,
+		"categories": ["membership"],
+		"badge": "14 DAYS",
+	},
+	{
+		"id": "aether_membership_30",
+		"name": "Aether Membership · 30 Days",
+		"description": "A full month of supporter cosmetics and account comforts without battle advantages.",
+		"price": 500,
+		"icon": MEMBERSHIP_ICON,
+		"categories": ["featured", "membership"],
+		"badge": "30 DAYS",
+	},
+	{
+		"id": "aurora_outfit",
+		"name": "Aurora Outfit",
+		"description": "A complete premium outfit concept for your wardrobe.",
+		"price": 300,
 		"icon": STYLE_ICON,
-		"categories": ["featured", "style"],
-		"badge": "CONCEPT",
+		"categories": ["featured", "cosmetics"],
+		"badge": "COSMETIC",
 	},
 	{
 		"id": "profile_accent_pack",
@@ -54,8 +120,8 @@ const CATALOG: Array[Dictionary] = [
 		"description": "Give your Trainer Passport a new visual accent.",
 		"price": 80,
 		"icon": PROFILE_ICON,
-		"categories": ["featured", "profile"],
-		"badge": "CONCEPT",
+		"categories": ["cosmetics"],
+		"badge": "COSMETIC",
 	},
 	{
 		"id": "chat_flair_pack",
@@ -63,8 +129,8 @@ const CATALOG: Array[Dictionary] = [
 		"description": "Add a cosmetic supporter flair beside your chat name.",
 		"price": 100,
 		"icon": CHAT_FLAIR_ICON,
-		"categories": ["featured", "profile"],
-		"badge": "CONCEPT",
+		"categories": ["cosmetics"],
+		"badge": "COSMETIC",
 	},
 	{
 		"id": "wardrobe_preset_slot",
@@ -72,35 +138,134 @@ const CATALOG: Array[Dictionary] = [
 		"description": "Save another complete trainer appearance preset.",
 		"price": 90,
 		"icon": STYLE_ICON,
-		"categories": ["style"],
-		"badge": "CONCEPT",
+		"categories": ["cosmetics"],
+		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "passport_background",
-		"name": "Passport Background",
-		"description": "Choose an alternate background for your trainer profile.",
-		"price": 70,
-		"icon": PROFILE_ICON,
-		"categories": ["profile"],
-		"badge": "CONCEPT",
+		"id": "nimbus_mount",
+		"name": "Nimbus Mount",
+		"description": "A cloud-inspired overworld mount for travelling in style.",
+		"price": 450,
+		"icon": MOUNT_ICON,
+		"categories": ["featured", "mounts"],
+		"badge": "MOUNT",
+	},
+	{
+		"id": "aether_board_mount",
+		"name": "Aether Board Mount",
+		"description": "A sleek supporter mount with its own overworld look.",
+		"price": 450,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT",
+	},
+	{
+		"id": "surf_charm",
+		"name": "Surf Charm",
+		"description": "Use Surf without an HM Pokémon. Badge and story requirements still apply.",
+		"price": 350,
+		"icon": SURF_CHARM_ICON,
+		"categories": ["featured", "charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "cut_charm",
+		"name": "Cut Charm",
+		"description": "Use Cut without an HM Pokémon. Badge and story requirements still apply.",
+		"price": 250,
+		"icon": CUT_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "strength_charm",
+		"name": "Strength Charm",
+		"description": "Use Strength without an HM Pokémon. Badge and story requirements still apply.",
+		"price": 300,
+		"icon": STRENGTH_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "rock_smash_charm",
+		"name": "Rock Smash Charm",
+		"description": "Use Rock Smash without an HM Pokémon. Badge and story requirements still apply.",
+		"price": 250,
+		"icon": ROCK_SMASH_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "flash_charm",
+		"name": "Flash Charm",
+		"description": "Use Flash without a Pokémon that knows it. Progression requirements still apply.",
+		"price": 200,
+		"icon": FLASH_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "dive_charm",
+		"name": "Dive Charm",
+		"description": "Use Dive without a Pokémon that knows it. Badge and story requirements still apply.",
+		"price": 350,
+		"icon": DIVE_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "defog_charm",
+		"name": "Defog Charm",
+		"description": "Use Defog without a Pokémon that knows it. Progression requirements still apply.",
+		"price": 250,
+		"icon": DEFOG_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "rain_dance_charm",
+		"name": "Rain Dance Charm",
+		"description": "Call rain without carrying a Pokémon that knows Rain Dance. Area rules still apply.",
+		"price": 250,
+		"icon": RAIN_DANCE_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "snowscape_charm",
+		"name": "Snowscape Charm",
+		"description": "Call snow without carrying a Pokémon that knows Snowscape. Area rules still apply.",
+		"price": 250,
+		"icon": SNOWSCAPE_CHARM_ICON,
+		"categories": ["charms"],
+		"badge": "CONVENIENCE",
 	},
 	{
 		"id": "trainer_name_ticket",
-		"name": "Trainer Name Ticket",
-		"description": "Reserve a future one-time trainer name change.",
+		"name": "Trainer Name Change",
+		"description": "Change your trainer name once.",
 		"price": 150,
 		"icon": SERVICE_ICON,
+		"categories": ["featured", "services"],
+		"badge": "SERVICE",
+	},
+	{
+		"id": "gender_change_ticket",
+		"name": "Gender Change",
+		"description": "Revisit your trainer's gender selection.",
+		"price": 80,
+		"icon": SERVICE_ICON,
 		"categories": ["services"],
-		"badge": "PLANNED",
+		"badge": "SERVICE",
 	},
 	{
 		"id": "appearance_reset_ticket",
-		"name": "Appearance Reset Ticket",
+		"name": "Appearance Reset",
 		"description": "Revisit your trainer's base appearance choices.",
 		"price": 60,
 		"icon": SERVICE_ICON,
-		"categories": ["services", "style"],
-		"badge": "PLANNED",
+		"categories": ["services"],
+		"badge": "SERVICE",
 	},
 ]
 
@@ -112,6 +277,7 @@ var product_buttons: Dictionary = {}
 var balance_label: Label
 var hero_title_label: Label
 var hero_description_label: Label
+var hero_promise_label: Label
 var product_grid: GridContainer
 var selection_title_label: Label
 var selection_description_label: Label
@@ -205,13 +371,13 @@ func _create_header() -> Control:
 	row.add_child(heading)
 
 	var title := Label.new()
-	title.text = "Donator Store"
+	title.text = "Aether Store"
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Cosmetic rewards for supporting PokéAether"
+	subtitle.text = "Membership, style, convenience and trainer services"
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle)
@@ -308,7 +474,7 @@ func _create_category_rail() -> Control:
 	layout.add_child(spacer)
 
 	var note := Label.new()
-	note.text = "Concept catalog\nNo purchases are live"
+	note.text = "Preview catalog\nNames and prices may change"
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.add_theme_font_size_override("font_size", 10)
 	note.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -380,12 +546,11 @@ func _create_hero_panel() -> Control:
 	hero_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(hero_description_label)
 
-	var promise := Label.new()
-	promise.text = "COSMETIC-FIRST"
-	promise.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	promise.add_theme_font_size_override("font_size", 10)
-	promise.add_theme_color_override("font_color", UI_GOLD)
-	row.add_child(promise)
+	hero_promise_label = Label.new()
+	hero_promise_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hero_promise_label.add_theme_font_size_override("font_size", 10)
+	hero_promise_label.add_theme_color_override("font_color", UI_GOLD)
+	row.add_child(hero_promise_label)
 	return panel
 
 
@@ -466,6 +631,8 @@ func _select_category(category_id: String) -> void:
 		hero_title_label.text = str(CATEGORY_LABELS.get(active_category, "Store"))
 	if hero_description_label != null:
 		hero_description_label.text = str(CATEGORY_DESCRIPTIONS.get(active_category, ""))
+	if hero_promise_label != null:
+		hero_promise_label.text = str(CATEGORY_PROMISES.get(active_category, "FAIR SUPPORT"))
 	_reset_selection_footer()
 	_render_products()
 

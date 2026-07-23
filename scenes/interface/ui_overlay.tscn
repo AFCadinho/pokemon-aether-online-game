@@ -805,30 +805,13 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="LocationLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow" unique_id=1820518854]
-custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
 theme_override_font_sizes/font_size = 17
 text = "Pallet Town"
 text_overrun_behavior = 3
 vertical_alignment = 1
-
-[node name="RegionBadge" type="PanelContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_location_region")
-
-[node name="RegionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/RegionBadge" unique_id=1201685693]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
-theme_override_font_sizes/font_size = 10
-text = "KANTO"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HeaderSpacer" type="Control" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow"]
-layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="WildPokemonButton" type="TextureButton" parent="Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow"]
 custom_minimum_size = Vector2(32, 32)
@@ -842,6 +825,19 @@ stretch_mode = 5
 [node name="StatusRow" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 6
+
+[node name="RegionBadge" type="PanelContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_location_region")
+
+[node name="RegionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge" unique_id=1201685693]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_font_sizes/font_size = 10
+text = "KANTO"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow" unique_id=750957603]
 layout_mode = 2

@@ -376,7 +376,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_buff_amount_10000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount10000Button
 @onready var global_buff_amount_25000_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/Amount25000Button
 @onready var global_buff_contribute_button: Button = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow/ContributeButton
-@onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/RegionBadge/RegionLabel
+@onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
 @onready var time_of_day_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeOfDayLabel
 @onready var weather_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/WeatherLabel
@@ -6119,7 +6119,9 @@ func _refresh_location_label() -> void:
 	if region_label != null:
 		region_label.text = _get_current_map_region_name().to_upper()
 	if location_label != null:
-		location_label.text = _get_current_map_display_name()
+		var display_name := _get_current_map_display_name()
+		location_label.text = display_name
+		location_label.tooltip_text = display_name
 	var has_wild_pokemon := _get_current_encounter_area_id() != ""
 	if wild_pokemon_button != null:
 		wild_pokemon_button.visible = has_wild_pokemon
