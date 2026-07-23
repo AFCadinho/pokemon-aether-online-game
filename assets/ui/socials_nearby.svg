@@ -1,0 +1,26 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="nearbyPin" x1="16" y1="6" x2="48" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#69E5FF"/>
+      <stop offset="1" stop-color="#2477C8"/>
+    </linearGradient>
+    <linearGradient id="nearbyPeople" x1="19" y1="24" x2="45" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2A3"/>
+      <stop offset="1" stop-color="#D59A2C"/>
+    </linearGradient>
+    <filter id="nearbyShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.7" flood-color="#000814" flood-opacity="0.58"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#nearbyShadow)" stroke="#07101D" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 5C19 5 10 14 10 27c0 17 22 32 22 32s22-15 22-32C54 14 45 5 32 5Z" fill="url(#nearbyPin)" stroke-width="3"/>
+    <circle cx="32" cy="27" r="15" fill="#081522" stroke="#EAF8FF" stroke-width="2"/>
+
+    <circle cx="25" cy="25" r="5" fill="#EFC3A5" stroke-width="2"/>
+    <path d="M16 38c1-7 4-10 9-10s8 3 9 10H16Z" fill="url(#nearbyPeople)" stroke-width="2.5"/>
+    <circle cx="39" cy="25" r="5" fill="#EFC3A5" stroke-width="2"/>
+    <path d="M30 38c1-7 4-10 9-10s8 3 9 10H30Z" fill="#A986E8" stroke-width="2.5"/>
+    <path d="M20 22c1-4 3-6 6-6s5 2 5 5c-4 0-7-1-9-3 0 2-1 3-2 4ZM34 22c1-4 3-6 6-6s5 2 5 5c-4 0-7-1-9-3 0 2-1 3-2 4Z" fill="#4E3B62" stroke-width="1.8"/>
+  </g>
+</svg>

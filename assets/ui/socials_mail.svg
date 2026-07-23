@@ -1,0 +1,30 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mailPaper" x1="7" y1="15" x2="57" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF8FF"/>
+      <stop offset="1" stop-color="#94C9E1"/>
+    </linearGradient>
+    <linearGradient id="mailFold" x1="8" y1="23" x2="55" y2="49" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4ACADF"/>
+      <stop offset="1" stop-color="#2477C8"/>
+    </linearGradient>
+    <linearGradient id="mailSeal" x1="25" y1="31" x2="40" y2="47" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2A3"/>
+      <stop offset="1" stop-color="#D59A2C"/>
+    </linearGradient>
+    <filter id="mailShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.7" flood-color="#000814" flood-opacity="0.58"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#mailShadow)" stroke="#07101D" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="13" width="54" height="40" rx="7" fill="url(#mailPaper)" stroke-width="3"/>
+    <path d="m8 18 24 19 24-19" fill="none" stroke="#315D79" stroke-width="3"/>
+    <path d="m7 49 18-16 7 5 7-5 18 16" fill="url(#mailFold)" stroke-width="3"/>
+
+    <circle cx="32" cy="41" r="8" fill="url(#mailSeal)" stroke-width="2.5"/>
+    <path d="M27 40a5 5 0 0 1 10 0H27Z" fill="#E94A59"/>
+    <path d="M27 41h10" stroke-width="2"/>
+    <circle cx="32" cy="41" r="2" fill="#F4F8FC" stroke-width="1.5"/>
+  </g>
+</svg>

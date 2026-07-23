@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="healBall" x1="11" y1="12" x2="51" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFF9FF"/>
+      <stop offset="1" stop-color="#78C6E8"/>
+    </linearGradient>
+    <linearGradient id="healHeart" x1="23" y1="19" x2="43" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF8298"/>
+      <stop offset="1" stop-color="#D92C55"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#07101D" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="31" cy="34" r="22" fill="url(#healBall)" stroke-width="3"/>
+    <path d="M10 34h42" stroke-width="3"/>
+    <path d="M10 32a22 22 0 0 1 42 0H10Z" fill="#48C47A" stroke-width="3"/>
+    <circle cx="31" cy="34" r="7" fill="#F7FBFF" stroke-width="3"/>
+    <circle cx="31" cy="34" r="2.5" fill="#48C47A" stroke-width="1.5"/>
+    <path d="M31 24c-8-5-13 4-9 9l9 9 9-9c4-5-1-14-9-9Z" fill="url(#healHeart)" stroke-width="2.5"/>
+    <path d="M49 7v11M43.5 12.5h11" stroke="#FFF1A0" stroke-width="3"/>
+  </g>
+</svg>

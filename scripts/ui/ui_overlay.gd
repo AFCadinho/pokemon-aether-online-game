@@ -78,6 +78,18 @@ const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")
 const PVP_MODE_RANKED_ICON: Texture2D = preload("res://assets/ui/pvp_battles.svg")
 const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_battle.svg")
 const PVP_MODE_TOURNAMENT_ICON: Texture2D = preload("res://assets/ui/pvp_tournament.svg")
+const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
+const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
+const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
+const DEV_CREATE_POKEMON_ICON: Texture2D = preload("res://assets/ui/pokedex.svg")
+const DEV_SPAWN_ENCOUNTER_ICON: Texture2D = preload("res://assets/ui/wild_encounter_radar.svg")
+const DEV_ADD_RESOURCES_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
+const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
+const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
+const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
+const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
+const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
+const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/content_creator.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
@@ -412,7 +424,7 @@ enum DevPokemonPopupMode {
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
 @onready var socials_players_on_map_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/PlayersOnMapButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
-@onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/CloseButton
+@onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
 var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var mail_popup: PanelContainer = $Control/MailPopup
@@ -540,6 +552,7 @@ var evolution_prompt_processing := false
 var evolution_prompt_review_total := 0
 var evolution_prompt_review_index := 0
 var dev_clear_menu_popup: PanelContainer
+var dev_clear_menu_close_button: Button
 var pvp_mode_menu: PanelContainer
 var pvp_mode_ranked_button: Button
 var pvp_mode_tournaments_button: Button
@@ -913,6 +926,7 @@ var content_creator_close_button: Button
 var dev_add_button: Button
 var dev_preview_evolution_button: Button
 var dev_add_menu_popup: PanelContainer
+var dev_add_menu_close_button: Button
 var dev_add_item_button: Button
 var dev_add_item_popup: PanelContainer
 var dev_item_search_input: LineEdit
@@ -1011,6 +1025,7 @@ func _ready() -> void:
 	_setup_pvp_match_countdown_overlay()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
+	_setup_dev_tools_menu_surface()
 	_setup_staff_impersonation_tools()
 	_setup_item_dex_button()
 	_setup_item_dex_popup()
@@ -1758,6 +1773,7 @@ func _apply_ui_z_index_policy() -> void:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
+		content_creator_menu_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -1815,6 +1831,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
+		content_creator_menu_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -3528,7 +3545,7 @@ func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup = PanelContainer.new()
 	dev_clear_menu_popup.name = "DevClearMenuPopup"
 	dev_clear_menu_popup.visible = false
-	dev_clear_menu_popup.custom_minimum_size = Vector2(220, 164)
+	dev_clear_menu_popup.custom_minimum_size = Vector2(360, 0)
 	dev_clear_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	dev_clear_menu_popup.z_index = UI_BASE_Z_INDEX
 	dev_clear_menu_popup.anchor_left = 0.0
@@ -3537,9 +3554,11 @@ func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup.anchor_bottom = 0.0
 	dev_clear_menu_popup.offset_left = 0.0
 	dev_clear_menu_popup.offset_top = 0.0
-	dev_clear_menu_popup.offset_right = 220.0
-	dev_clear_menu_popup.offset_bottom = 164.0
-	dev_clear_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	dev_clear_menu_popup.offset_right = 360.0
+	dev_clear_menu_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#a54b5caa"), 12, 1)
+	)
 	root_control.add_child(dev_clear_menu_popup)
 
 	var margin_container := MarginContainer.new()
@@ -3550,35 +3569,41 @@ func _setup_dev_clear_menu_popup() -> void:
 	dev_clear_menu_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
+	layout.add_theme_constant_override("separation", 10)
 	margin_container.add_child(layout)
 
-	var header := HBoxContainer.new()
-	header.alignment = BoxContainer.ALIGNMENT_END
-	layout.add_child(header)
-
-	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(32, 28)
-	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(_hide_dev_clear_menu_popup)
-	header.add_child(close_button)
+	dev_clear_menu_close_button = Button.new()
+	dev_clear_menu_close_button.pressed.connect(_hide_dev_clear_menu_popup)
+	layout.add_child(
+		_create_tool_launcher_header(
+			"Clear Data",
+			"Choose exactly what should be removed",
+			dev_clear_menu_close_button,
+			Color("#ef7085")
+		)
+	)
 
 	var party_button := Button.new()
-	party_button.text = "Party"
-	party_button.focus_mode = Control.FOCUS_NONE
 	party_button.pressed.connect(_on_dev_clear_party_option_pressed)
 	layout.add_child(party_button)
+	_configure_tool_tile_button(
+		party_button,
+		"Clear Party",
+		"Remove every party Pokémon",
+		TOOL_CLEAR_DATA_ICON,
+		Color("#ef7085")
+	)
 
 	var inventory_button := Button.new()
-	inventory_button.text = "Inventory"
-	inventory_button.focus_mode = Control.FOCUS_NONE
 	inventory_button.pressed.connect(_on_dev_clear_inventory_option_pressed)
 	layout.add_child(inventory_button)
-
-	_apply_button_style(close_button)
-	_apply_button_style(party_button, "danger")
-	_apply_button_style(inventory_button, "danger")
+	_configure_tool_tile_button(
+		inventory_button,
+		"Clear Inventory",
+		"Remove every stored item",
+		DEV_ADD_RESOURCES_ICON,
+		Color("#ef7085")
+	)
 
 func _setup_pvp_room_popup() -> void:
 	pvp_room_popup = PanelContainer.new()
@@ -4245,6 +4270,28 @@ func _create_pvp_mode_menu_button(
 	badge_text: String = ""
 ) -> Button:
 	var button := Button.new()
+	_configure_launcher_card_button(
+		button,
+		title_text,
+		subtitle_text,
+		icon_texture,
+		accent_color,
+		badge_text
+	)
+	return button
+
+func _configure_launcher_card_button(
+	button: Button,
+	title_text: String,
+	subtitle_text: String,
+	icon_texture: Texture2D,
+	accent_color: Color,
+	badge_text: String = ""
+) -> void:
+	if button == null or button.has_meta("launcher_card_configured"):
+		return
+	button.set_meta("launcher_card_configured", true)
+	button.text = ""
 	button.custom_minimum_size = Vector2(0, 72)
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -4255,6 +4302,7 @@ func _create_pvp_mode_menu_button(
 	button.add_theme_stylebox_override("disabled", _make_button_style(Color("#050b1499"), Color("#29384a88"), 10, 1))
 
 	var content := MarginContainer.new()
+	content.name = "LauncherCardContent"
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(content)
 	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -4339,7 +4387,150 @@ func _create_pvp_mode_menu_button(
 		badge_label.add_theme_font_size_override("font_size", 10)
 		badge_label.add_theme_color_override("font_color", Color("#c9afd9"))
 		badge_margin.add_child(badge_label)
-	return button
+
+func _create_tool_launcher_header(
+	title_text: String,
+	subtitle_text: String,
+	close_button: Button,
+	accent_color: Color
+) -> HBoxContainer:
+	var header := HBoxContainer.new()
+	header.name = "%sHeader" % title_text.replace(" ", "")
+	header.add_theme_constant_override("separation", 10)
+
+	var accent := Panel.new()
+	accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	accent.custom_minimum_size = Vector2(3, 0)
+	accent.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(accent_color, accent_color, 2, 0)
+	)
+	header.add_child(accent)
+
+	var heading := VBoxContainer.new()
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
+
+	var title := Label.new()
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(title)
+
+	var subtitle := Label.new()
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle.text = subtitle_text
+	subtitle.add_theme_font_size_override("font_size", 12)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(subtitle)
+
+	if close_button != null:
+		var current_parent := close_button.get_parent()
+		if current_parent != null:
+			current_parent.remove_child(close_button)
+		close_button.text = "×"
+		close_button.tooltip_text = "Close"
+		close_button.custom_minimum_size = Vector2(32, 32)
+		close_button.focus_mode = Control.FOCUS_NONE
+		_apply_button_style(close_button)
+		header.add_child(close_button)
+
+	return header
+
+func _create_tool_section_label(label_text: String, accent_color: Color) -> Label:
+	var label := Label.new()
+	label.text = label_text.to_upper()
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", accent_color)
+	return label
+
+func _configure_tool_tile_button(
+	button: Button,
+	title_text: String,
+	subtitle_text: String,
+	icon_texture: Texture2D,
+	accent_color: Color
+) -> void:
+	if button == null or button.has_meta("tool_tile_configured"):
+		return
+	button.set_meta("tool_tile_configured", true)
+	button.text = ""
+	button.custom_minimum_size = Vector2(0, 62)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_stylebox_override("normal", _make_button_style(UI_SURFACE_RAISED, Color(accent_color.r, accent_color.g, accent_color.b, 0.48), 9, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, accent_color, 9, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_BASE, accent_color, 9, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 9, 1))
+	button.add_theme_stylebox_override("disabled", _make_button_style(Color("#050b1499"), Color("#29384a88"), 9, 1))
+
+	var content := MarginContainer.new()
+	content.name = "ToolTileContent"
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(content)
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.add_theme_constant_override("margin_left", 9)
+	content.add_theme_constant_override("margin_top", 7)
+	content.add_theme_constant_override("margin_right", 9)
+	content.add_theme_constant_override("margin_bottom", 7)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 8)
+	content.add_child(row)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.custom_minimum_size = Vector2(42, 42)
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(
+			Color(accent_color.r, accent_color.g, accent_color.b, 0.1),
+			Color(accent_color.r, accent_color.g, accent_color.b, 0.5),
+			8,
+			1
+		)
+	)
+	row.add_child(icon_frame)
+
+	var icon_center := CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_child(icon_center)
+
+	var icon := TextureRect.new()
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.custom_minimum_size = Vector2(33, 33)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = icon_texture
+	icon_center.add_child(icon)
+
+	var labels := VBoxContainer.new()
+	labels.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	labels.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	labels.alignment = BoxContainer.ALIGNMENT_CENTER
+	labels.add_theme_constant_override("separation", 1)
+	row.add_child(labels)
+
+	var title := Label.new()
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.text = title_text
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	labels.add_child(title)
+
+	var subtitle := Label.new()
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle.text = subtitle_text
+	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	subtitle.add_theme_font_size_override("font_size", 10)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	labels.add_child(subtitle)
 
 func _create_pvp_ranked_tab_page(tab_name: String) -> MarginContainer:
 	var page := MarginContainer.new()
@@ -4546,47 +4737,58 @@ func _setup_content_creator_menu_popup() -> void:
 	content_creator_menu_popup = PanelContainer.new()
 	content_creator_menu_popup.name = "ContentCreatorMenuPopup"
 	content_creator_menu_popup.visible = false
-	content_creator_menu_popup.custom_minimum_size = Vector2(220, 164)
+	content_creator_menu_popup.custom_minimum_size = Vector2(390, 0)
 	content_creator_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	content_creator_menu_popup.z_index = UI_BASE_Z_INDEX
-	content_creator_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	content_creator_menu_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#8065b0aa"), 12, 1)
+	)
 	root_control.add_child(content_creator_menu_popup)
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 12)
+	margin_container.add_theme_constant_override("margin_left", 14)
 	margin_container.add_theme_constant_override("margin_top", 12)
-	margin_container.add_theme_constant_override("margin_right", 12)
-	margin_container.add_theme_constant_override("margin_bottom", 12)
+	margin_container.add_theme_constant_override("margin_right", 14)
+	margin_container.add_theme_constant_override("margin_bottom", 14)
 	content_creator_menu_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
+	layout.add_theme_constant_override("separation", 10)
 	margin_container.add_child(layout)
 
+	content_creator_close_button = Button.new()
+	content_creator_close_button.pressed.connect(_hide_content_creator_menu_popup)
+	layout.add_child(
+		_create_tool_launcher_header(
+			"Content Creator",
+			"Prepare showcase-ready Pokémon",
+			content_creator_close_button,
+			Color("#b28ae8")
+		)
+	)
+
 	content_creator_create_pokemon_button = Button.new()
-	content_creator_create_pokemon_button.text = "Create Pokemon"
-	content_creator_create_pokemon_button.custom_minimum_size = Vector2(190, 34)
-	content_creator_create_pokemon_button.focus_mode = Control.FOCUS_NONE
 	content_creator_create_pokemon_button.pressed.connect(_on_content_creator_create_pokemon_button_pressed)
 	layout.add_child(content_creator_create_pokemon_button)
+	_configure_launcher_card_button(
+		content_creator_create_pokemon_button,
+		"Create Pokémon",
+		"Generate a rule-compliant creator team",
+		CONTENT_CREATOR_MENU_ICON,
+		Color("#b28ae8")
+	)
 
 	content_creator_clear_party_button = Button.new()
-	content_creator_clear_party_button.text = "Clear Party"
-	content_creator_clear_party_button.custom_minimum_size = Vector2(190, 34)
-	content_creator_clear_party_button.focus_mode = Control.FOCUS_NONE
 	content_creator_clear_party_button.pressed.connect(_on_content_creator_clear_party_button_pressed)
 	layout.add_child(content_creator_clear_party_button)
-
-	content_creator_close_button = Button.new()
-	content_creator_close_button.text = "Close"
-	content_creator_close_button.custom_minimum_size = Vector2(190, 34)
-	content_creator_close_button.focus_mode = Control.FOCUS_NONE
-	content_creator_close_button.pressed.connect(_hide_content_creator_menu_popup)
-	layout.add_child(content_creator_close_button)
-
-	_apply_button_style(content_creator_create_pokemon_button, "primary")
-	_apply_button_style(content_creator_clear_party_button, "danger")
-	_apply_button_style(content_creator_close_button)
+	_configure_launcher_card_button(
+		content_creator_clear_party_button,
+		"Clear Creator Pokémon",
+		"Remove generated creator Pokémon only",
+		TOOL_CLEAR_DATA_ICON,
+		Color("#ef7085")
+	)
 
 func _setup_dev_add_item_tools() -> void:
 	var dev_actions_container := dev_clear_party_button.get_parent()
@@ -4618,7 +4820,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_menu_popup = PanelContainer.new()
 	dev_add_menu_popup.name = "DevAddMenuPopup"
 	dev_add_menu_popup.visible = false
-	dev_add_menu_popup.custom_minimum_size = Vector2(220, 168)
+	dev_add_menu_popup.custom_minimum_size = Vector2(360, 0)
 	dev_add_menu_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	dev_add_menu_popup.z_index = UI_BASE_Z_INDEX
 	dev_add_menu_popup.anchor_left = 0.0
@@ -4627,9 +4829,11 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_menu_popup.anchor_bottom = 0.0
 	dev_add_menu_popup.offset_left = 0.0
 	dev_add_menu_popup.offset_top = 0.0
-	dev_add_menu_popup.offset_right = 220.0
-	dev_add_menu_popup.offset_bottom = 168.0
-	dev_add_menu_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	dev_add_menu_popup.offset_right = 360.0
+	dev_add_menu_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#a98c45aa"), 12, 1)
+	)
 	root_control.add_child(dev_add_menu_popup)
 
 	var add_margin_container := MarginContainer.new()
@@ -4640,34 +4844,43 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_menu_popup.add_child(add_margin_container)
 
 	var add_layout := VBoxContainer.new()
-	add_layout.add_theme_constant_override("separation", 8)
+	add_layout.add_theme_constant_override("separation", 10)
 	add_margin_container.add_child(add_layout)
 
+	dev_add_menu_close_button = Button.new()
+	dev_add_menu_close_button.pressed.connect(_hide_dev_add_menu_popup)
+	add_layout.add_child(
+		_create_tool_launcher_header(
+			"Add Resources",
+			"Prepare a test account quickly",
+			dev_add_menu_close_button,
+			Color("#f0cc70")
+		)
+	)
+
 	dev_add_item_button = Button.new()
-	dev_add_item_button.text = "Add Item"
-	dev_add_item_button.custom_minimum_size = Vector2(190, 34)
-	dev_add_item_button.focus_mode = Control.FOCUS_NONE
 	add_layout.add_child(dev_add_item_button)
+	_configure_tool_tile_button(
+		dev_add_item_button,
+		"Add Items",
+		"Search the item catalogue",
+		DEV_ADD_RESOURCES_ICON,
+		Color("#f0cc70")
+	)
 
 	dev_add_money_button = Button.new()
-	dev_add_money_button.text = "Add Money"
-	dev_add_money_button.custom_minimum_size = Vector2(190, 34)
-	dev_add_money_button.focus_mode = Control.FOCUS_NONE
 	add_layout.add_child(dev_add_money_button)
-
-	var add_close_button := Button.new()
-	add_close_button.text = "Close"
-	add_close_button.custom_minimum_size = Vector2(190, 34)
-	add_close_button.focus_mode = Control.FOCUS_NONE
-	add_close_button.pressed.connect(_hide_dev_add_menu_popup)
-	add_layout.add_child(add_close_button)
+	_configure_tool_tile_button(
+		dev_add_money_button,
+		"Add Pokédollars",
+		"Credit currency to the account",
+		DEV_ADD_RESOURCES_ICON,
+		Color("#f0cc70")
+	)
 
 	_apply_button_style(dev_add_button, "primary")
 	_apply_button_style(dev_heal_party_button, "primary")
 	_apply_button_style(dev_preview_evolution_button, "primary")
-	_apply_button_style(dev_add_item_button, "primary")
-	_apply_button_style(dev_add_money_button, "primary")
-	_apply_button_style(add_close_button)
 
 	dev_add_item_popup = PanelContainer.new()
 	dev_add_item_popup.name = "DevAddItemPopup"
@@ -4838,6 +5051,148 @@ func _setup_dev_add_item_tools() -> void:
 	_apply_button_style(money_close_button)
 	_apply_button_style(dev_money_confirm_button, "primary")
 
+func _setup_dev_tools_menu_surface() -> void:
+	var layout := dev_actions_popup.get_node_or_null("MarginContainer/VBoxContainer") as VBoxContainer
+	if layout == null or layout.has_node("DeveloperToolsHeader"):
+		return
+
+	dev_actions_popup.custom_minimum_size = Vector2(420, 0)
+	dev_actions_popup.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	dev_actions_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#7f6ab5aa"), 12, 1)
+	)
+	var header := _create_tool_launcher_header(
+		"Developer Tools",
+		"Test gameplay and world states",
+		dev_actions_close_button,
+		Color("#b28ae8")
+	)
+	layout.add_child(header)
+	layout.move_child(header, 0)
+
+	var quick_actions_label := _create_tool_section_label("Quick actions", Color("#bda4e8"))
+	layout.add_child(quick_actions_label)
+	layout.move_child(quick_actions_label, 1)
+
+	var action_grid := GridContainer.new()
+	action_grid.name = "DeveloperQuickActions"
+	action_grid.columns = 2
+	action_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_grid.add_theme_constant_override("h_separation", 8)
+	action_grid.add_theme_constant_override("v_separation", 8)
+	layout.add_child(action_grid)
+	layout.move_child(action_grid, 2)
+
+	for action_button: Button in [
+		dev_add_pokemon_button,
+		dev_add_team_button,
+		dev_spawn_pokemon_button,
+		dev_add_button,
+		dev_heal_party_button,
+		dev_preview_evolution_button,
+		dev_clear_party_button,
+	]:
+		_move_tool_menu_control(action_button, action_grid)
+
+	_configure_tool_tile_button(
+		dev_add_pokemon_button,
+		"Create Pokémon",
+		"Build a party member",
+		DEV_CREATE_POKEMON_ICON,
+		Color("#7aa7f4")
+	)
+	_configure_tool_tile_button(
+		dev_spawn_pokemon_button,
+		"Start Encounter",
+		"Spawn a wild battle",
+		DEV_SPAWN_ENCOUNTER_ICON,
+		Color("#60d3ff")
+	)
+	_configure_tool_tile_button(
+		dev_add_button,
+		"Add Resources",
+		"Items or Pokédollars",
+		DEV_ADD_RESOURCES_ICON,
+		Color("#f0cc70")
+	)
+	_configure_tool_tile_button(
+		dev_heal_party_button,
+		"Heal Party",
+		"Restore the active team",
+		DEV_HEAL_PARTY_ICON,
+		Color("#6ee7a2")
+	)
+	_configure_tool_tile_button(
+		dev_preview_evolution_button,
+		"Preview Evolution",
+		"Play the evolution flow",
+		DEV_PREVIEW_EVOLUTION_ICON,
+		Color("#b28ae8")
+	)
+	_configure_tool_tile_button(
+		dev_clear_party_button,
+		"Clear Data",
+		"Party or inventory",
+		TOOL_CLEAR_DATA_ICON,
+		Color("#ef7085")
+	)
+
+	var world_label := _create_tool_section_label("World preview", Color("#75d9ed"))
+	layout.add_child(world_label)
+
+	var world_panel := PanelContainer.new()
+	world_panel.name = "DeveloperWorldPreview"
+	world_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, Color("#3f7890aa"), 9, 1)
+	)
+	layout.add_child(world_panel)
+
+	var world_margin := MarginContainer.new()
+	world_margin.add_theme_constant_override("margin_left", 10)
+	world_margin.add_theme_constant_override("margin_top", 8)
+	world_margin.add_theme_constant_override("margin_right", 10)
+	world_margin.add_theme_constant_override("margin_bottom", 10)
+	world_panel.add_child(world_margin)
+
+	var world_layout := VBoxContainer.new()
+	world_layout.add_theme_constant_override("separation", 7)
+	world_margin.add_child(world_layout)
+
+	var world_time_label := dev_actions_popup.get_node_or_null("MarginContainer/VBoxContainer/WorldTimeLabel") as Label
+	var time_group := VBoxContainer.new()
+	time_group.add_theme_constant_override("separation", 3)
+	world_layout.add_child(time_group)
+	_move_tool_menu_control(world_time_label, time_group)
+	_move_tool_menu_control(dev_world_time_select, time_group)
+	if world_time_label != null:
+		world_time_label.text = "Time"
+		world_time_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		world_time_label.add_theme_font_size_override("font_size", 11)
+
+	var world_weather_label := dev_actions_popup.get_node_or_null("MarginContainer/VBoxContainer/WorldWeatherLabel") as Label
+	var weather_group := VBoxContainer.new()
+	weather_group.add_theme_constant_override("separation", 3)
+	world_layout.add_child(weather_group)
+	_move_tool_menu_control(world_weather_label, weather_group)
+	_move_tool_menu_control(dev_world_weather_select, weather_group)
+	if world_weather_label != null:
+		world_weather_label.text = "Weather"
+		world_weather_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		world_weather_label.add_theme_font_size_override("font_size", 11)
+
+	_apply_button_style(dev_world_time_select)
+	_apply_button_style(dev_world_weather_select)
+
+func _move_tool_menu_control(control: Control, target: Container) -> void:
+	if control == null or target == null:
+		return
+	var current_parent := control.get_parent()
+	if current_parent != null:
+		current_parent.remove_child(control)
+	target.add_child(control)
+
 func _setup_staff_impersonation_tools() -> void:
 	if staff_tools_popup != null:
 		return
@@ -4845,58 +5200,58 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_tools_popup = PanelContainer.new()
 	staff_tools_popup.name = "StaffToolsPopup"
 	staff_tools_popup.visible = false
-	staff_tools_popup.custom_minimum_size = Vector2(250, 170)
+	staff_tools_popup.custom_minimum_size = Vector2(390, 0)
 	staff_tools_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	staff_tools_popup.z_index = UI_BASE_Z_INDEX
-	staff_tools_popup.anchor_left = 0.5
-	staff_tools_popup.anchor_top = 0.5
-	staff_tools_popup.anchor_right = 0.5
-	staff_tools_popup.anchor_bottom = 0.5
-	staff_tools_popup.offset_left = -125
-	staff_tools_popup.offset_top = -85
-	staff_tools_popup.offset_right = 125
-	staff_tools_popup.offset_bottom = 85
-	staff_tools_popup.add_theme_stylebox_override("panel", _make_glass_panel_style(10, 1))
+	staff_tools_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#4a85a3aa"), 12, 1)
+	)
 	root_control.add_child(staff_tools_popup)
 
 	var tools_margin := MarginContainer.new()
-	tools_margin.add_theme_constant_override("margin_left", 12)
+	tools_margin.add_theme_constant_override("margin_left", 14)
 	tools_margin.add_theme_constant_override("margin_top", 12)
-	tools_margin.add_theme_constant_override("margin_right", 12)
-	tools_margin.add_theme_constant_override("margin_bottom", 12)
+	tools_margin.add_theme_constant_override("margin_right", 14)
+	tools_margin.add_theme_constant_override("margin_bottom", 14)
 	staff_tools_popup.add_child(tools_margin)
 
 	var tools_layout := VBoxContainer.new()
-	tools_layout.add_theme_constant_override("separation", 7)
+	tools_layout.add_theme_constant_override("separation", 10)
 	tools_margin.add_child(tools_layout)
 
-	var staff_tools_title: Label = Label.new()
-	staff_tools_title.text = "Staff Tools"
-	staff_tools_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	staff_tools_title.add_theme_font_size_override("font_size", 16)
-	staff_tools_title.add_theme_color_override("font_color", UI_BORDER)
-	tools_layout.add_child(staff_tools_title)
+	var staff_tools_close_button := Button.new()
+	staff_tools_close_button.pressed.connect(_hide_staff_tools_popup)
+	tools_layout.add_child(
+		_create_tool_launcher_header(
+			"Staff Tools",
+			"Moderation and player assistance",
+			staff_tools_close_button,
+			Color("#60d3ff")
+		)
+	)
 
 	staff_teleport_button = Button.new()
-	staff_teleport_button.text = "Teleport"
-	staff_teleport_button.custom_minimum_size = Vector2(190, 32)
-	staff_teleport_button.focus_mode = Control.FOCUS_NONE
 	staff_teleport_button.pressed.connect(_on_staff_teleport_button_pressed)
 	tools_layout.add_child(staff_teleport_button)
+	_configure_launcher_card_button(
+		staff_teleport_button,
+		"Teleport",
+		"Move yourself or assist another trainer",
+		STAFF_TELEPORT_ICON,
+		Color("#60d3ff")
+	)
 
 	staff_impersonate_button = Button.new()
-	staff_impersonate_button.text = "Impersonate"
-	staff_impersonate_button.custom_minimum_size = Vector2(190, 32)
-	staff_impersonate_button.focus_mode = Control.FOCUS_NONE
 	staff_impersonate_button.pressed.connect(_on_staff_impersonate_button_pressed)
 	tools_layout.add_child(staff_impersonate_button)
-
-	var staff_tools_close_button := Button.new()
-	staff_tools_close_button.text = "Close"
-	staff_tools_close_button.custom_minimum_size = Vector2(190, 32)
-	staff_tools_close_button.focus_mode = Control.FOCUS_NONE
-	staff_tools_close_button.pressed.connect(_hide_staff_tools_popup)
-	tools_layout.add_child(staff_tools_close_button)
+	_configure_launcher_card_button(
+		staff_impersonate_button,
+		"Impersonate",
+		"Enter a secure staff session",
+		STAFF_IMPERSONATE_ICON,
+		Color("#b28ae8")
+	)
 
 	staff_impersonate_popup = PanelContainer.new()
 	staff_impersonate_popup.name = "StaffImpersonatePopup"
@@ -5197,9 +5552,6 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_teleport_send_player_button.pressed.connect(_on_staff_teleport_send_player_pressed)
 	staff_teleport_player_section.add_child(staff_teleport_send_player_button)
 
-	_apply_button_style(staff_impersonate_button, "primary")
-	_apply_button_style(staff_teleport_button, "primary")
-	_apply_button_style(staff_tools_close_button)
 	_apply_button_style(close_button)
 	_apply_line_edit_style(staff_impersonate_token_input)
 	_apply_button_style(staff_impersonate_confirm_button, "primary")
@@ -6249,6 +6601,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		dev_add_item_popup,
 		dev_add_money_popup,
 		dev_add_menu_popup,
+		content_creator_menu_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
 		staff_teleport_popup,
@@ -14635,7 +14988,10 @@ func _apply_premium_overlay_styles() -> void:
 	actions_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
 	socials_menu.add_theme_stylebox_override("panel", _make_glass_panel_style())
 	dev_pokemon_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(12, 1))
-	dev_actions_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	dev_actions_popup.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#7f6ab5aa"), 12, 1)
+	)
 	if player_status_panel != null:
 		player_status_panel.add_theme_stylebox_override("panel", _make_player_status_panel_style(false))
 
@@ -14651,21 +15007,8 @@ func _apply_premium_overlay_styles() -> void:
 	_refresh_global_buff_contribution_buttons()
 	_apply_button_style(dev_pokemon_add_button, "primary")
 	_apply_button_style(dev_pokemon_close_button)
-	_apply_button_style(dev_add_pokemon_button, "primary")
-	_apply_button_style(dev_spawn_pokemon_button, "primary")
-	if dev_add_button != null:
-		_apply_button_style(dev_add_button, "primary")
-	if dev_heal_party_button != null:
-		_apply_button_style(dev_heal_party_button, "primary")
-	if dev_preview_evolution_button != null:
-		_apply_button_style(dev_preview_evolution_button, "primary")
-	if dev_add_item_button != null:
-		_apply_button_style(dev_add_item_button, "primary")
-	if dev_add_money_button != null:
-		_apply_button_style(dev_add_money_button, "primary")
-	_apply_button_style(dev_clear_party_button, "danger")
-	dev_clear_party_button.text = "Clear"
 	_apply_button_style(dev_world_time_select)
+	_apply_button_style(dev_world_weather_select)
 	_apply_button_style(dev_actions_close_button)
 	_apply_socials_menu_style()
 
@@ -14701,13 +15044,41 @@ func _apply_premium_overlay_styles() -> void:
 		_apply_compact_chat_settings_button_style(chat_resize_button)
 
 func _apply_socials_menu_style() -> void:
-	var title_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Title") as Label
+	socials_menu.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, UI_BORDER_SOFT, 12, 1)
+	)
+
+	var title_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/Title") as Label
 	if title_label != null:
 		title_label.add_theme_color_override("font_color", UI_TEXT)
 		title_label.add_theme_font_size_override("font_size", 18)
 
-	_apply_button_style(socials_friend_list_button, "primary")
-	_apply_button_style(socials_mail_button, "primary")
+	var subtitle_label: Label = socials_menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/Subtitle") as Label
+	if subtitle_label != null:
+		subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+	_configure_launcher_card_button(
+		socials_friend_list_button,
+		"Friends",
+		"Manage friends and requests",
+		SOCIALS_FRIENDS_ICON,
+		Color("#7aa7f4")
+	)
+	_configure_launcher_card_button(
+		socials_players_on_map_button,
+		"Nearby Trainers",
+		"See who is on this map",
+		SOCIALS_NEARBY_ICON,
+		Color("#60d3ff")
+	)
+	_configure_launcher_card_button(
+		socials_mail_button,
+		"Mail",
+		"Read and send messages",
+		SOCIALS_MAIL_ICON,
+		Color("#f0cc70")
+	)
 	_apply_button_style(socials_close_button)
 
 func _setup_collapsible_panels() -> void:
@@ -14874,6 +15245,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 	_apply_collapsible_button_style(button, str(state.get("side", "right")), collapsed)
 	if collapsed and panel_id == "staff_actions":
 		dev_actions_popup.visible = false
+		if content_creator_menu_popup != null:
+			content_creator_menu_popup.visible = false
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
 		if staff_impersonate_popup != null:
@@ -15115,6 +15488,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
 		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
+		{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
 		{"panel": dev_actions_popup, "close": Callable(self, "_hide_dev_actions_popup_for_escape")},
@@ -17382,6 +17756,7 @@ func _on_dev_actions_button_pressed() -> void:
 	dev_actions_popup.visible = not dev_actions_popup.visible
 	if dev_actions_popup.visible:
 		_refresh_dev_world_time_selector()
+		_position_action_slot_popup(dev_actions_popup, dev_actions_slot)
 		_activate_ui_panel(dev_actions_popup)
 	else:
 		_deactivate_ui_panel(dev_actions_popup)
@@ -17394,6 +17769,7 @@ func _on_staff_tools_button_pressed() -> void:
 
 	staff_tools_popup.visible = not staff_tools_popup.visible
 	if staff_tools_popup.visible:
+		_position_action_slot_popup(staff_tools_popup, staff_tools_slot)
 		_activate_ui_panel(staff_tools_popup)
 	else:
 		_deactivate_ui_panel(staff_tools_popup)
@@ -20515,6 +20891,7 @@ func _save_party_state_after_change() -> void:
 func _on_dev_actions_close_button_pressed() -> void:
 	dev_actions_popup.visible = false
 	_hide_dev_add_menu_popup()
+	_deactivate_ui_panel(dev_actions_popup)
 
 func _show_dev_pokemon_popup(mode: int) -> void:
 	if mode == DevPokemonPopupMode.CONTENT_CREATOR:
@@ -25229,14 +25606,21 @@ func _disable_icon_button_focus() -> void:
 		aether_exchange_button,
 		map_button,
 		running_shoes_button,
+		repel_toggle_button,
+		escape_rope_button,
+		follower_toggle_button,
 		bag_button,
 		socials_button,
 		guild_button,
 		pvp_button,
 		quest_button,
 		settings_button,
-		repel_toggle_button,
-		follower_toggle_button,
+		donator_store_button,
+		wild_pokemon_button,
+		item_dex_button,
+		pokedex_button,
+		content_creator_tools_button,
+		staff_tools_button,
 		dev_actions_button,
 	]:
 		if button != null:

@@ -36,6 +36,8 @@ func _init() -> void:
 	var settings_block := _node_block(scene_source, '[node name="SettingsButton" type="Button" parent="Control"]')
 	var quest_slot_block := _node_block(scene_source, '[node name="QuestSlot"')
 	var quest_button_block := _node_block(scene_source, '[node name="QuestButton"')
+	var socials_menu_block := _node_block(scene_source, '[node name="SocialsMenu"')
+	var disable_icon_focus_block := _function_block(script_source, "func _disable_icon_button_focus()")
 
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
@@ -75,6 +77,38 @@ func _init() -> void:
 	_check(script_source.contains('"Competitive matchmaking"') and script_source.contains('"Create or join a private battle"'), "PvP mode cards explain Ranked and Custom battles")
 	_check(script_source.contains('pvp_mode_tournaments_button.disabled = true') and script_source.contains('"COMING SOON"'), "unavailable Tournaments are clearly disabled")
 	_check(script_source.contains('pvp_mode_close_button.text = "×"') and not script_source.contains('_create_pvp_mode_menu_button("Close")'), "PvP launcher uses a compact header close action")
+	_check(socials_menu_block.contains("custom_minimum_size = Vector2(390, 0)"), "Social opens as a readable launcher instead of a narrow button list")
+	_check(scene_source.contains('text = "Stay connected with other trainers"'), "Social launcher explains its purpose")
+	_check(script_source.contains('"Friends"') and script_source.contains('"Nearby Trainers"') and script_source.contains('"Mail"'), "Social launcher keeps all existing destinations")
+	_check(script_source.contains('const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")'), "Nearby Trainers uses a dedicated location icon")
+	_check(script_source.contains('const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")'), "Mail uses a dedicated envelope icon")
+	_check(script_source.contains('$Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton'), "Social launcher uses a compact header close action")
+	_check(script_source.contains('content.name = "LauncherCardContent"') and script_source.contains("func _configure_launcher_card_button("), "PvP and Social launchers share one card language")
+	_check(script_source.contains("socials_friend_list_attention_badge = _create_socials_menu_attention_badge(socials_friend_list_button)"), "friend requests remain visible on the refreshed launcher")
+	_check(script_source.contains("socials_mail_attention_badge = _create_socials_menu_attention_badge(socials_mail_button)"), "unread mail remains visible on the refreshed launcher")
+	_check(script_source.contains('dev_actions_popup.custom_minimum_size = Vector2(420, 0)') and script_source.contains('"Developer Tools"'), "Developer Tools uses a structured launcher surface")
+	_check(script_source.contains('"DeveloperQuickActions"') and script_source.contains('"World preview"'), "Developer actions and world preview have separate visual groups")
+	_check(script_source.contains('"Create Pokémon"') and script_source.contains('"Start Encounter"') and script_source.contains('"Add Resources"'), "Developer quick actions use clear task-oriented labels")
+	_check(script_source.contains('"Heal Party"') and script_source.contains('"Preview Evolution"') and script_source.contains('"Clear Data"'), "Developer utility and destructive actions remain available")
+	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"Moderation and player assistance"'), "Staff Tools uses the shared compact launcher")
+	_check(script_source.contains('"Move yourself or assist another trainer"') and script_source.contains('"Enter a secure staff session"'), "Staff actions explain Teleport and Impersonate")
+	_check(script_source.contains('content_creator_menu_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"Prepare showcase-ready Pokémon"'), "Content Creator uses the shared compact launcher")
+	_check(script_source.contains('"Generate a rule-compliant creator team"') and script_source.contains('"Remove generated creator Pokémon only"'), "Content Creator actions explain their scope")
+	_check(script_source.contains('const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")') and script_source.contains('const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")'), "internal tool launchers use dedicated action icons")
+	_check(script_source.contains('_position_action_slot_popup(dev_actions_popup, dev_actions_slot)') and script_source.contains('_position_action_slot_popup(staff_tools_popup, staff_tools_slot)'), "internal tool menus open beside their toolbar actions")
+	_check(script_source.contains('{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")}'), "Escape closes the Content Creator launcher")
+	_check(script_source.contains("content_creator_create_pokemon_button.visible = can_use_content_creator_generation") and script_source.contains("staff_impersonate_button.visible = can_impersonate"), "launcher polish preserves permission-based action visibility")
+	_check(
+		disable_icon_focus_block.contains("socials_button")
+		and disable_icon_focus_block.contains("pvp_button")
+		and disable_icon_focus_block.contains("content_creator_tools_button")
+		and disable_icon_focus_block.contains("staff_tools_button")
+		and disable_icon_focus_block.contains("dev_actions_button")
+		and disable_icon_focus_block.contains("item_dex_button")
+		and disable_icon_focus_block.contains("pokedex_button")
+		and disable_icon_focus_block.contains("button.focus_mode = Control.FOCUS_NONE"),
+		"toolbar menu buttons cannot retain Space-triggerable keyboard focus"
+	)
 	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "Clan"'), "Clan uses a three-member group crest instead of a guild building")
 	_check(scene_source.contains('path="res://assets/ui/follower_toggle.svg" id="10_follower"'), "Follower toggle shows a trainer and companion")
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
@@ -205,6 +239,14 @@ func _node_block(source: String, header_prefix: String) -> String:
 	if start < 0:
 		return ""
 	var end := source.find("\n\n", start)
+	return source.substr(start) if end < 0 else source.substr(start, end - start)
+
+
+func _function_block(source: String, function_header: String) -> String:
+	var start := source.find(function_header)
+	if start < 0:
+		return ""
+	var end := source.find("\nfunc ", start + function_header.length())
 	return source.substr(start) if end < 0 else source.substr(start, end - start)
 
 
