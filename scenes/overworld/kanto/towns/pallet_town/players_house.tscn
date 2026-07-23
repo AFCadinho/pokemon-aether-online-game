@@ -30,6 +30,9 @@ y_sort_enabled = true
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1574395695]
 
+[node name="InitialSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(304, 912)
+
 [node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=1017066124]
 position = Vector2(432, 976)
 

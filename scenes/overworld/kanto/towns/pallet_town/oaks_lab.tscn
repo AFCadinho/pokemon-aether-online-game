@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="9_10jo1"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="10_7ad88"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="11_map_meta"]
-[ext_resource type="Script" uid="uid://cgdgofhey0jqf" path="res://scripts/world/interactables/pokemon_pc_interactable.gd" id="12_pc_interactable"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="12_pc_interactable"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_laboratory/pokemon_laboratory.visual.tscn" id="14_fkl8t"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="15_floor_mask"]
 
@@ -60,9 +60,6 @@ animations = [{
 "name": &"idle_up",
 "speed": 5.0
 }]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pc_interaction"]
-size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_10jo1"]
 size = Vector2(96, 16)
@@ -159,20 +156,11 @@ npc_sprite_frames = SubResource("SpriteFrames_aw12e")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1966677725]
 
-[node name="PokemonPC" type="Node2D" parent="Entities" unique_id=2026070501]
-position = Vector2(112, 0)
-script = ExtResource("12_pc_interactable")
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=458338910]
+
+[node name="PokemonPC" parent="Entities/Interactables" unique_id=2026070501 instance=ExtResource("12_pc_interactable")]
+position = Vector2(304, 464)
 interactable_id = "oak_lab_pc"
-interactable_kind = "pokemon_pc"
-display_name = "PC"
-blocks_movement = false
-interaction_shape_size = Vector2(32, 32)
-
-[node name="InteractionArea" type="Area2D" parent="Entities/PokemonPC" unique_id=2026070502]
-position = Vector2(0, 32)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/PokemonPC/InteractionArea" unique_id=2026070503]
-shape = SubResource("RectangleShape2D_pc_interaction")
 
 [node name="Exits" type="Node2D" parent="." unique_id=1399009799]
 

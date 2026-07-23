@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cgdgofhey0jqf" path="res://scripts/world/interactables/pokemon_pc_interactable.gd" id="1_pc_interactable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interaction"]
+size = Vector2(32, 32)
+
+[node name="PokemonPC" type="Node2D"]
+script = ExtResource("1_pc_interactable")
+interactable_kind = "pokemon_pc"
+display_name = "PC"
+blocks_movement = false
+interaction_shape_size = Vector2(32, 32)
+
+[node name="InteractionArea" type="Area2D" parent="."]
+position = Vector2(0, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_interaction")

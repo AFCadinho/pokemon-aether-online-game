@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PokemonPcInteractableScript := preload("res://scripts/world/interactables/pokemon_pc_interactable.gd")
+const PokemonPcInteractableScene := preload("res://scenes/world/interactables/pokemon_pc_interactable.tscn")
 const PcPokemonSlotButtonScript := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const UI_OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const OAKS_LAB_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
@@ -10,6 +11,7 @@ var failed := false
 
 func _init() -> void:
 	_check_interactable_script_compiles()
+	_check_interactable_scene_defaults()
 	_check_pc_slot_button_script_compiles()
 	_check_ui_overlay_wrapper_exists()
 	_check_oaks_lab_has_pc_interactable()
@@ -32,6 +34,28 @@ func _check_interactable_script_compiles() -> void:
 	_check_equal(source.contains("func _required_facing_vector() -> Vector2:"), true, "PokemonPcInteractable maps editor facing direction")
 	_check_equal(source.contains("func _start_manual_interaction(body: Node2D) -> void:"), true, "PokemonPcInteractable controls manual interaction")
 	_check_equal(source.contains("body.set(\"last_direction\", _required_facing_vector())"), true, "PokemonPcInteractable keeps player facing the configured direction")
+
+
+func _check_interactable_scene_defaults() -> void:
+	var interactable := PokemonPcInteractableScene.instantiate()
+	_check_equal(interactable is PokemonPcInteractable, true, "Reusable PokemonPC scene uses PokemonPcInteractable")
+	_check_equal(interactable.get("interactable_kind"), "pokemon_pc", "Reusable PokemonPC kind")
+	_check_equal(interactable.get("display_name"), "PC", "Reusable PokemonPC display name")
+	_check_equal(interactable.get("blocks_movement"), false, "Reusable PokemonPC does not add collision")
+	_check_equal(interactable.get("interaction_shape_size"), Vector2(32, 32), "Reusable PokemonPC interaction size")
+
+	var interaction_area := interactable.get_node_or_null("InteractionArea") as Area2D
+	_check_equal(interaction_area != null, true, "Reusable PokemonPC has InteractionArea")
+	if interaction_area != null:
+		_check_equal(interaction_area.position, Vector2(0, 32), "Reusable PokemonPC standing tile")
+		var collision_shape := interaction_area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		_check_equal(collision_shape != null, true, "Reusable PokemonPC has interaction collision")
+		if collision_shape != null:
+			var rectangle := collision_shape.shape as RectangleShape2D
+			_check_equal(rectangle != null, true, "Reusable PokemonPC uses rectangle interaction shape")
+			if rectangle != null:
+				_check_equal(rectangle.size, Vector2(32, 32), "Reusable PokemonPC rectangle size")
+	interactable.free()
 
 
 func _check_pc_slot_button_script_compiles() -> void:
@@ -96,14 +120,12 @@ func _check_ui_overlay_wrapper_exists() -> void:
 
 func _check_oaks_lab_has_pc_interactable() -> void:
 	var scene_source := _read_text_file(OAKS_LAB_SCENE_PATH)
-	_check_equal(scene_source.contains("res://scripts/world/interactables/pokemon_pc_interactable.gd"), true, "Oak's Lab references PokemonPcInteractable")
-	_check_equal(scene_source.contains("[node name=\"PokemonPC\" type=\"Node2D\" parent=\"Entities\""), true, "Oak's Lab has PokemonPC node")
-	_check_equal(scene_source.contains("position = Vector2(112, 0)"), true, "PokemonPC node is aligned with the blue PC")
-	_check_equal(scene_source.contains("interactable_kind = \"pokemon_pc\""), true, "PokemonPC interactable kind")
-	_check_equal(scene_source.contains("blocks_movement = false"), true, "PokemonPC interactable does not add collision")
-	_check_equal(scene_source.contains("[node name=\"InteractionArea\" type=\"Area2D\" parent=\"Entities/PokemonPC\""), true, "PokemonPC uses explicit interaction area")
-	_check_equal(scene_source.contains("position = Vector2(0, 32)"), true, "PokemonPC interaction area is on the standing tile")
-	_check_equal(scene_source.contains("[node name=\"DeskPc\" type=\"TileMapLayer\" parent=\"Objects\""), true, "DeskPc remains visual TileMapLayer")
+	_check_equal(scene_source.contains("res://scenes/world/interactables/pokemon_pc_interactable.tscn"), true, "Oak's Lab references reusable PokemonPC scene")
+	_check_equal(scene_source.contains("[node name=\"Interactables\" type=\"Node2D\" parent=\"Entities\""), true, "Oak's Lab has Interactables container")
+	_check_equal(scene_source.contains("[node name=\"PokemonPC\" parent=\"Entities/Interactables\""), true, "Oak's Lab instances PokemonPC under Interactables")
+	_check_equal(scene_source.contains("position = Vector2(304, 464)"), true, "PokemonPC node is aligned with the blue PC")
+	_check_equal(scene_source.contains("interactable_id = \"oak_lab_pc\""), true, "Oak's Lab assigns its PokemonPC id")
+	_check_equal(scene_source.contains("[node name=\"PokémonLaboratory\" parent=\".\""), true, "Oak's Lab keeps the generated laboratory visual")
 
 
 func _read_text_file(path: String) -> String:
