@@ -9,6 +9,7 @@ const ACTION_BAR_MARGIN_X := 8.0
 const ACTION_BAR_SLOT_GAP := 8.0
 const UI_BASE_Z_INDEX := 100
 const UI_ACTIVE_Z_INDEX := 1000
+const UI_CHAT_TABS_Z_INDEX := UI_ACTIVE_Z_INDEX + 1
 const UI_DRAG_Z_INDEX := 1100
 const UI_MODAL_Z_INDEX := 2000
 const UI_OVERLAY_BASE_LAYER := 1
@@ -1676,6 +1677,8 @@ func _apply_ui_z_index_policy() -> void:
 			panels.append(summary_panel)
 	for panel: Control in panels:
 		_set_ui_panel_base_z(panel)
+	if chat_tabs_panel != null:
+		chat_tabs_panel.z_index = UI_CHAT_TABS_Z_INDEX
 	if chat_resize_button != null:
 		chat_resize_button.z_index = UI_BASE_Z_INDEX
 	for state_value: Variant in collapsible_panels.values():
@@ -6042,7 +6045,17 @@ func _set_hotkey_sidebar_position(position: Vector2) -> void:
 		clampf(position.y, 8.0, maxf(8.0, root_size.y - panel_size.y - 8.0))
 	)
 	hotkey_sidebar_panel.position = clamped_position
+	_update_hotkey_sidebar_collapse_side()
 	_position_collapsible_button("hotkey_sidebar")
+
+func _update_hotkey_sidebar_collapse_side() -> void:
+	var state: Dictionary = collapsible_panels.get("hotkey_sidebar", {})
+	if state.is_empty() or hotkey_sidebar_panel == null:
+		return
+
+	var panel_center_x := hotkey_sidebar_panel.position.x + (hotkey_sidebar_panel.size.x * 0.5)
+	state["side"] = "right_center" if panel_center_x <= root_control.size.x * 0.5 else "left_center"
+	collapsible_panels["hotkey_sidebar"] = state
 
 func _setup_player_status_card() -> void:
 	player_status_panel.gui_input.connect(_on_player_status_panel_gui_input)
@@ -13880,10 +13893,10 @@ func _apply_socials_menu_style() -> void:
 	_apply_button_style(socials_close_button)
 
 func _setup_collapsible_panels() -> void:
-	_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "right_center")
+	_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "left_center")
 	_register_collapsible_panel("chat", chat_panel, "right")
 	_register_collapsible_panel("player_status", player_status_panel, "left")
-	_register_collapsible_panel("party", party_panel, "left")
+	_register_collapsible_panel("party", party_panel, "right")
 	_register_collapsible_panel("location", location_panel, "right_center")
 	_register_collapsible_panel("options", options_panel, "right")
 	_register_collapsible_panel("actions", actions_panel, "action_bar", toggle_actions_collapse_button)
@@ -14040,6 +14053,9 @@ func _position_collapsible_button(panel_id: String) -> void:
 			"right_center":
 				position.x = rect.position.x
 				position.y = rect.position.y + ((rect.size.y - COLLAPSE_BUTTON_SIZE.y) / 2.0)
+			"left_center":
+				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x
+				position.y = rect.position.y + ((rect.size.y - COLLAPSE_BUTTON_SIZE.y) / 2.0)
 			"bottom":
 				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x
 				position.y = rect.position.y
@@ -14059,6 +14075,9 @@ func _position_collapsible_button(panel_id: String) -> void:
 				position.y = rect.position.y
 			"right_center":
 				position.x = rect.position.x + rect.size.x + COLLAPSE_BUTTON_MARGIN
+				position.y = rect.position.y + ((rect.size.y - COLLAPSE_BUTTON_SIZE.y) / 2.0)
+			"left_center":
+				position.x = rect.position.x - COLLAPSE_BUTTON_SIZE.x - COLLAPSE_BUTTON_MARGIN
 				position.y = rect.position.y + ((rect.size.y - COLLAPSE_BUTTON_SIZE.y) / 2.0)
 			"bottom":
 				position.x = rect.position.x + rect.size.x - COLLAPSE_BUTTON_SIZE.x

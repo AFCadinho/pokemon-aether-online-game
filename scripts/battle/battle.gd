@@ -153,6 +153,7 @@ const BATTLE_LOG_MEMORY_UNSET := -1
 const BATTLE_WINDOW_OPEN_SIZE := Vector2(1500.0, 780.0)
 const BATTLE_WINDOW_COLLAPSED_SIZE := Vector2(1186.0, 780.0)
 const BATTLE_UI_POSITION_PATH := "user://battle_ui_position.json"
+const BATTLE_UI_DEFAULT_HORIZONTAL_OFFSET := 130.0
 const BATTLE_UI_DEFAULT_VERTICAL_OFFSET := 44.0
 const BATTLE_UI_POSITION_MARGIN := 8.0
 
@@ -395,7 +396,7 @@ func _setup_battle_ui_position() -> void:
 	if remembered_battle_ui_position == Vector2.INF:
 		remembered_battle_ui_position = _load_battle_ui_position()
 	var default_position := Vector2(
-		(parent_control.size.x - size.x) * 0.5,
+		(parent_control.size.x - size.x) * 0.5 + BATTLE_UI_DEFAULT_HORIZONTAL_OFFSET,
 		(parent_control.size.y - size.y) * 0.5 - BATTLE_UI_DEFAULT_VERTICAL_OFFSET
 	)
 	position = remembered_battle_ui_position if remembered_battle_ui_position != Vector2.INF else default_position
@@ -2367,7 +2368,7 @@ func _set_battle_log_open(open: bool) -> void:
 func _update_battle_log_toggle_button() -> void:
 	var is_open := battle_log_rail.visible
 	battle_log_toggle_button.visible = true
-	battle_log_toggle_button.text = "›" if is_open else "‹"
+	battle_log_toggle_button.text = "»" if is_open else "«"
 	battle_log_toggle_button.tooltip_text = "Collapse Battle Log" if is_open else "Open Battle Log"
 	if mini_battle_feed != null:
 		mini_battle_feed.set_feed_enabled(false)

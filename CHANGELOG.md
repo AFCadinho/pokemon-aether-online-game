@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Changed**
+- Reorganized the overworld UI so party slots sit above the chat on the left, while the hotbar sits above the trainer card on the right. Party slots remain available for opening Pokemon summaries during battles.
+- Shifted the default Battle UI position to the right so it leaves clearer space for the overworld party column, and made the Battle Log toggle more prominent.
+
 **Fixed**
 - Fixed Ranked battles sometimes leaving one player stuck after their opponent timed out or disconnected. Both players now recover the authoritative result and reach the correct end screen.
 - Fixed lost or delayed realtime action responses leaving players waiting indefinitely or causing repeated response-timeout messages. The client now safely refreshes the latest battle state without submitting the action twice.

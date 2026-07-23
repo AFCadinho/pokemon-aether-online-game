@@ -139,26 +139,28 @@ grow_vertical = 2
 
 [node name="HotkeySidebar" parent="Control" unique_id=1290422948 instance=ExtResource("2_hotkeys")]
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 6
+anchor_left = 1.0
 anchor_top = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 0.0
-offset_top = -389.5
-offset_right = 62.0
-offset_bottom = 20.5
+offset_left = -62.0
+offset_top = -245.0
+offset_right = 0.0
+offset_bottom = 165.0
+grow_horizontal = 0
 grow_vertical = 2
 
 [node name="PlayerStatusPanel" parent="Control" unique_id=2085471070 instance=ExtResource("4_status")]
 
 [node name="PartyPanel" type="PanelContainer" parent="Control" unique_id=1949206887]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -282.0
-offset_top = 275.0
-offset_bottom = 371.0
-grow_horizontal = 0
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 160.0
+offset_right = 282.0
+offset_bottom = 256.0
+grow_horizontal = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_grslb")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/PartyPanel" unique_id=2122536773]
