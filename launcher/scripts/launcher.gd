@@ -23,6 +23,7 @@ const GEN5_SPRITES_FOLDER_PATH := "assets/sprites/pokemon/gen5"
 const ASSET_PACK_REQUIRED_PATHS := {
 	"music": "assets/music",
 	"pokemon-home": "assets/sprites/pokemon/pokemon_home",
+	"pokemon-home-shiny": "assets/sprites/pokemon/pokemon_home_shiny",
 	"pokemon-front": "assets/sprites/pokemon/front",
 	"pokemon-back": "assets/sprites/pokemon/back",
 	"pokemon-shiny-front": "assets/sprites/pokemon/shiny_front",

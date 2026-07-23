@@ -111,7 +111,10 @@ static func _get_home_sprite_names(species: String) -> Array[String]:
 	var names: Array[String] = []
 	var cleaned := species.strip_edges()
 	_add_home_sprite_name(names, cleaned)
+	_add_home_sprite_name(names, cleaned.to_lower())
 	_add_home_sprite_name(names, cleaned.replace(" ", "-"))
+	_add_home_sprite_name(names, cleaned.replace(" ", "-").to_lower())
+	_add_home_sprite_name(names, _to_showdown_compact_sprite_name(cleaned))
 	_add_home_sprite_name(names, cleaned.replace(" ", "-").replace("-Mega-X", "-Megax").replace("-Mega-Y", "-Megay"))
 	_add_home_sprite_name(names, _to_home_sprite_case(cleaned))
 	_add_home_sprite_name(names, _to_home_sprite_case(cleaned.replace("'", "")))
@@ -137,6 +140,9 @@ static func _to_home_sprite_case(value: String) -> String:
 			continue
 		formatted_parts.append(part.substr(0, 1).to_upper() + part.substr(1).to_lower())
 	return "-".join(formatted_parts)
+
+static func _to_showdown_compact_sprite_name(value: String) -> String:
+	return value.strip_edges().to_lower().replace(" ", "").replace("_", "").replace("-", "").replace("'", "").replace(".", "")
 
 static func _normalize_home_sprite_key(value: String) -> String:
 	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-").replace(".", "")

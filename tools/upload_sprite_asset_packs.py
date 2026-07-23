@@ -35,6 +35,13 @@ SPRITE_PACKS: tuple[SpritePack, ...] = (
         "POKEMON_HOME_ASSET_SIZE",
     ),
     SpritePack(
+        "pokemon-home-shiny",
+        "pokemon-home-shiny",
+        PROJECT_ROOT / "assets" / "sprites" / "pokemon" / "pokemon_home_shiny",
+        "POKEMON_HOME_SHINY_ASSET_VERSION",
+        "POKEMON_HOME_SHINY_ASSET_SIZE",
+    ),
+    SpritePack(
         "pokemon-front",
         "pokemon-front-scale1-128",
         PROJECT_ROOT / "assets" / "sprites" / "pokemon" / "front",

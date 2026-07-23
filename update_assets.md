@@ -56,6 +56,7 @@ Available pack ids:
 
 ```text
 pokemon-home
+pokemon-home-shiny
 pokemon-front
 pokemon-back
 pokemon-shiny-front
