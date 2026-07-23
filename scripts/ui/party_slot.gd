@@ -4,18 +4,24 @@ signal drag_started(slot_index: int)
 signal drag_released(slot_index: int, global_position: Vector2)
 signal clicked(slot_index: int)
 
-const SLOT_BG := Color("#081321dc")
-const SLOT_BORDER := Color("#2c5076b8")
-const SLOT_HOVER_BG := Color("#10243cf2")
+const SLOT_BG := Color("#081522eb")
+const SLOT_BORDER := Color("#2d4b66b3")
+const SLOT_HOVER_BG := Color("#112a44f2")
 const SLOT_HOVER_BORDER := Color("#69b9e8")
-const SLOT_PRESSED_BG := Color("#132c49fa")
+const SLOT_PRESSED_BG := Color("#0e2740f5")
 const SLOT_PRESSED_BORDER := Color("#8ed7ff")
 const SLOT_DROP_BG := Color("#102c3df8")
 const SLOT_DROP_BORDER := Color("#63e6d0")
+const SHINY_SLOT_BG := Color("#0b1927f2")
+const SHINY_SLOT_BORDER := Color("#4d7890cc")
+const SHINY_SLOT_HOVER_BG := Color("#132b3ef5")
+const SHINY_SLOT_HOVER_BORDER := Color("#78d8f6")
 const SLOT_SHADOW := Color(0.0, 0.0, 0.0, 0.18)
 const SLOT_HOVER_SHADOW := Color(0.36, 0.7, 0.95, 0.18)
 const SLOT_PRESSED_SHADOW := Color(0.42, 0.78, 1.0, 0.28)
 const SLOT_DROP_SHADOW := Color(0.34, 0.94, 0.78, 0.3)
+const SHINY_SLOT_SHADOW := Color(0.32, 0.82, 1.0, 0.16)
+const SHINY_SLOT_HOVER_SHADOW := Color(0.32, 0.82, 1.0, 0.28)
 const SLOT_BORDER_WIDTH := 1
 const SLOT_SHADOW_SIZE := 3
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
@@ -38,6 +44,7 @@ const STATUS_ICON_ROWS := {
 @onready var exp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/ExpBar
 @onready var click_button: Button = $ClickButton
 @onready var lead_accent: Panel = $ClickButton/LeadAccent
+@onready var shiny_accent: Panel = $ClickButton/ShinyAccent
 @onready var seperator: Control = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Seperator
 @onready var level_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LevelLabel
 
@@ -302,25 +309,33 @@ func _on_click_button_mouse_exited() -> void:
 	_apply_slot_style()
 
 func _apply_slot_style() -> void:
+	if shiny_accent != null:
+		shiny_accent.visible = current_is_shiny and visible
 	var background: Color = SLOT_BG
 	var border: Color = SLOT_BORDER
 	var shadow: Color = SLOT_SHADOW
 	var border_width: int = SLOT_BORDER_WIDTH
 	var shadow_size: int = SLOT_SHADOW_SIZE
+	if current_is_shiny:
+		background = SHINY_SLOT_BG
+		border = SHINY_SLOT_BORDER
+		shadow = SHINY_SLOT_SHADOW
+		shadow_size = 4
 	if is_hovered:
-		background = SLOT_HOVER_BG
-		border = SLOT_HOVER_BORDER
-		shadow = SLOT_HOVER_SHADOW
-		shadow_size = 5
+		background = SHINY_SLOT_HOVER_BG if current_is_shiny else SLOT_HOVER_BG
+		border = SHINY_SLOT_HOVER_BORDER if current_is_shiny else SLOT_HOVER_BORDER
+		shadow = SHINY_SLOT_HOVER_SHADOW if current_is_shiny else SLOT_HOVER_SHADOW
+		shadow_size = 6 if current_is_shiny else 5
 	if is_pressed or is_dragging:
 		background = SLOT_PRESSED_BG
-		border = SLOT_PRESSED_BORDER
-		shadow = SLOT_PRESSED_SHADOW
+		border = SHINY_SLOT_HOVER_BORDER if current_is_shiny else SLOT_PRESSED_BORDER
+		shadow = SHINY_SLOT_HOVER_SHADOW if current_is_shiny else SLOT_PRESSED_SHADOW
 		shadow_size = 6
 	if is_drop_target:
 		background = SLOT_DROP_BG
 		border = SLOT_DROP_BORDER
 		shadow = SLOT_DROP_SHADOW
+		border_width = 2
 		shadow_size = 7
 
 	add_theme_stylebox_override("panel", _make_slot_style(background, border, shadow, border_width, shadow_size))

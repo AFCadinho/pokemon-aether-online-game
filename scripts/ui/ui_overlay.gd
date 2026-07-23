@@ -19,7 +19,7 @@ const CHAT_MAX_SIZE := Vector2(760, 520)
 const CHAT_RESIZE_BUTTON_GAP := 10.0
 const CHAT_TABS_GAP := 8.0
 const CHAT_TABS_LEFT_INSET := 4.0
-const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 38.0
+const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0
 const PERSONAL_BUFF_ROW_HEIGHT := 26.0
 const PERSONAL_BUFF_ROW_GAP := 4.0
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
@@ -294,11 +294,18 @@ const BAG_CATEGORIES := [
 const TRAINER_CARD_CYAN := Color("#00f5ff")
 const TRAINER_CARD_GREEN := Color("#4cff76")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
-const UI_BG := Color("#070b14e6")
+const UI_SURFACE_BASE := Color("#050b14ed")
+const UI_SURFACE_RAISED := Color("#081522eb")
+const UI_SURFACE_INTERACTIVE := Color("#0b1a2bea")
+const UI_SURFACE_HOVER := Color("#112a44f2")
+const UI_SURFACE_PRESSED := Color("#060e18f2")
+const UI_SURFACE_INSET := Color("#030812d6")
+const UI_BORDER_SUBTLE := Color("#2d4b66b3")
+const UI_BG := UI_SURFACE_BASE
 const UI_PANEL_BG := UI_BG
 const UI_BG_STRONG := Color("#05070bf2")
-const UI_SLOT_BG := Color("#0d1625e6")
-const UI_INPUT_BG := Color("#050912e8")
+const UI_SLOT_BG := UI_SURFACE_INTERACTIVE
+const UI_INPUT_BG := UI_SURFACE_INSET
 const UI_BORDER := Color("#d8b767")
 const UI_BORDER_SOFT := Color("#315070")
 const UI_BORDER_FOCUS := Color("#7aa7f4")
@@ -6185,6 +6192,9 @@ func _setup_status_docks() -> void:
 			continue
 		button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(_on_global_buff_button_pressed.bind(button))
+		button.set_meta("buff_hovered", false)
+		button.mouse_entered.connect(_on_global_buff_hover_changed.bind(button, true))
+		button.mouse_exited.connect(_on_global_buff_hover_changed.bind(button, false))
 	personal_buffs_summary_button.focus_mode = Control.FOCUS_NONE
 	personal_buffs_summary_button.pressed.connect(_on_personal_buffs_summary_pressed)
 	for child: Node in personal_buff_slots.get_children():
@@ -6266,20 +6276,11 @@ func set_global_buffs(buffs: Array) -> void:
 		var progress_bar := button.get_node_or_null("ProgressBar") as ProgressBar
 		button.text = ""
 		button.icon = _global_buff_icon_for(buff)
-		button.modulate = Color.WHITE if state == "active" else Color(0.76, 0.82, 0.9, 1.0)
 		button.tooltip_text = _global_buff_tooltip(buff)
 		button.set_meta("buff_data", buff.duplicate(true))
 		if progress_bar != null:
 			progress_bar.value = 100.0 if state == "active" else progress
-			progress_bar.add_theme_stylebox_override(
-				"fill",
-				_make_panel_style(
-					Color("#60e887") if state == "active" else Color("#44c4fa"),
-					Color.TRANSPARENT,
-					2,
-					0
-				)
-			)
+		_apply_global_buff_slot_visual(button, buff, progress_bar)
 
 func set_personal_buffs(buffs: Array) -> void:
 	var had_active_buffs := not active_personal_buffs.is_empty()
@@ -6372,9 +6373,63 @@ func _global_buff_tooltip(buff: Dictionary) -> String:
 	else:
 		var current := maxi(int(buff.get("current", 0)), 0)
 		var goal := maxi(int(buff.get("goal", 100000)), 1)
+		if current == 0:
+			lines.append("INACTIVE · awaiting community funding")
 		lines.append("$%s / $%s contributed" % [_format_money(current), _format_money(goal)])
 	lines.append("Click for details")
 	return "\n".join(lines)
+
+func _on_global_buff_hover_changed(button: Button, hovered: bool) -> void:
+	button.set_meta("buff_hovered", hovered)
+	var buff := button.get_meta("buff_data", {}) as Dictionary
+	if buff.is_empty():
+		return
+	var progress_bar := button.get_node_or_null("ProgressBar") as ProgressBar
+	_apply_global_buff_slot_visual(button, buff, progress_bar)
+
+func _apply_global_buff_slot_visual(button: Button, buff: Dictionary, progress_bar: ProgressBar) -> void:
+	var active := str(buff.get("state", "funding")) == "active"
+	var current := maxi(int(buff.get("current", 0)), 0)
+	var hovered := bool(button.get_meta("buff_hovered", false))
+	var funded := current > 0
+
+	var background := UI_SURFACE_RAISED
+	var border := UI_BORDER_SUBTLE
+	var hover_background := UI_SURFACE_HOVER
+	var hover_border := Color("#5e9bc2dd")
+	var icon_tint := Color(0.52, 0.57, 0.64, 0.84)
+	if funded:
+		background = UI_SURFACE_INTERACTIVE
+		border = UI_BORDER_SOFT
+		icon_tint = Color(0.72, 0.8, 0.88, 0.94)
+	if active:
+		background = UI_SURFACE_INTERACTIVE
+		border = Color("#56cce8d9")
+		hover_background = UI_SURFACE_HOVER
+		hover_border = Color("#94efffff")
+		icon_tint = Color.WHITE
+	elif hovered:
+		icon_tint = Color(0.9, 0.94, 0.98, 1.0)
+
+	button.modulate = icon_tint
+	button.add_theme_stylebox_override("normal", _make_panel_style(background, border, 8, 1))
+	button.add_theme_stylebox_override("hover", _make_panel_style(hover_background, hover_border, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_panel_style(hover_background.darkened(0.08), hover_border, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_panel_style(hover_background, hover_border, 8, 1))
+	if progress_bar != null:
+		progress_bar.add_theme_stylebox_override(
+			"background",
+			_make_panel_style(Color("#030811d9"), Color.TRANSPARENT, 2, 0)
+		)
+		progress_bar.add_theme_stylebox_override(
+			"fill",
+			_make_panel_style(
+				Color("#60e887") if active else Color("#3d9fbd") if funded else Color("#294654"),
+				Color.TRANSPARENT,
+				2,
+				0
+			)
+		)
 
 func _global_buff_icon_for(buff: Dictionary) -> Texture2D:
 	var explicit_icon := buff.get("icon") as Texture2D
@@ -14103,14 +14158,14 @@ func _make_pokemon_summary_held_item_button_style(background_color: Color, borde
 	return style
 
 func _make_glass_panel_style(corner_radius: int = 10, border_width: int = 1) -> StyleBoxFlat:
-	var style := _make_panel_style(UI_BG, UI_BORDER_SOFT, corner_radius, border_width)
+	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, corner_radius, border_width)
 	style.shadow_color = Color(0, 0, 0, 0.38)
 	style.shadow_size = 8
 	style.shadow_offset = Vector2(0, 4)
 	return style
 
 func _make_party_panel_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#050c16b8"), Color("#28486699"), 10, 1)
+	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 10, 1)
 	style.shadow_color = Color(0, 0, 0, 0.32)
 	style.shadow_size = 7
 	style.shadow_offset = Vector2(0, 3)
@@ -14118,7 +14173,7 @@ func _make_party_panel_style() -> StyleBoxFlat:
 
 
 func _make_chat_panel_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#040912ed"), Color("#38658b"), 10, 1)
+	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 10, 1)
 	style.border_width_left = 2
 	style.content_margin_left = 5
 	style.content_margin_top = 5
@@ -14131,7 +14186,7 @@ func _make_chat_panel_style() -> StyleBoxFlat:
 
 
 func _make_chat_message_surface_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#03081278"), Color("#25415d88"), 7, 1)
+	var style := _make_panel_style(UI_SURFACE_INSET, Color("#25415d88"), 7, 1)
 	style.shadow_color = Color("#00000000")
 	style.shadow_size = 0
 	style.shadow_offset = Vector2.ZERO
@@ -14139,7 +14194,7 @@ func _make_chat_message_surface_style() -> StyleBoxFlat:
 
 
 func _make_chat_input_dock_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#07111ee8"), Color("#294a68"), 8, 1)
+	var style := _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1)
 	style.border_width_top = 2
 	style.shadow_color = Color(0, 0, 0, 0.24)
 	style.shadow_size = 4
@@ -14148,7 +14203,7 @@ func _make_chat_input_dock_style() -> StyleBoxFlat:
 
 
 func _make_chat_popup_style(corner_radius: int = 8) -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#050b15f5"), Color("#38658b"), corner_radius, 1)
+	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SOFT, corner_radius, 1)
 	style.shadow_color = Color(0, 0, 0, 0.48)
 	style.shadow_size = 9
 	style.shadow_offset = Vector2(0, 3)
@@ -14172,9 +14227,9 @@ func _make_chat_tab_style(background_color: Color, border_color: Color, selected
 func _apply_chat_main_tab_style(button: Button, selected: bool) -> void:
 	if button == null:
 		return
-	var normal_background := Color("#12213be8") if selected else Color("#08111ee0")
-	var normal_border := Color("#d8b767aa") if selected else Color("#294a68")
-	var hover_background := Color("#192c4dee") if selected else Color("#101f38ea")
+	var normal_background := UI_SURFACE_INTERACTIVE if selected else UI_SURFACE_RAISED
+	var normal_border := Color("#d8b767aa") if selected else UI_BORDER_SUBTLE
+	var hover_background := UI_SURFACE_HOVER
 	var hover_border := UI_BORDER if selected else UI_BORDER_FOCUS
 	button.add_theme_color_override("font_color", CHAT_SYSTEM_LABEL_COLOR if selected else CHAT_MESSAGE_COLOR)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
@@ -14182,8 +14237,8 @@ func _apply_chat_main_tab_style(button: Button, selected: bool) -> void:
 	button.add_theme_font_size_override("font_size", 13)
 	button.add_theme_stylebox_override("normal", _make_chat_tab_style(normal_background, normal_border, selected))
 	button.add_theme_stylebox_override("hover", _make_chat_tab_style(hover_background, hover_border, selected))
-	button.add_theme_stylebox_override("pressed", _make_chat_tab_style(Color("#07101de8"), hover_border, selected))
-	button.add_theme_stylebox_override("focus", _make_chat_tab_style(Color("#10213aee"), UI_BORDER_FOCUS, selected))
+	button.add_theme_stylebox_override("pressed", _make_chat_tab_style(UI_SURFACE_PRESSED, hover_border, selected))
+	button.add_theme_stylebox_override("focus", _make_chat_tab_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, selected))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
@@ -14191,20 +14246,20 @@ func _apply_chat_dock_button_style(button: Button, accent: bool = false) -> void
 	if button == null:
 		return
 	var normal_border := UI_BORDER_FOCUS if accent else Color("#315070")
-	var hover_border := UI_BORDER if accent else UI_BORDER_FOCUS
+	var hover_border := Color("#a8c7ff") if accent else UI_BORDER_FOCUS
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
 	button.add_theme_font_size_override("font_size", 13)
-	button.add_theme_stylebox_override("normal", _make_chat_tab_style(Color("#0b182ae8"), normal_border, false))
-	button.add_theme_stylebox_override("hover", _make_chat_tab_style(Color("#142844ee"), hover_border, false))
-	button.add_theme_stylebox_override("pressed", _make_chat_tab_style(Color("#07101de8"), hover_border, false))
-	button.add_theme_stylebox_override("focus", _make_chat_tab_style(Color("#10213aee"), UI_BORDER_FOCUS, false))
+	button.add_theme_stylebox_override("normal", _make_chat_tab_style(UI_SURFACE_INTERACTIVE, normal_border, false))
+	button.add_theme_stylebox_override("hover", _make_chat_tab_style(UI_SURFACE_HOVER, hover_border, false))
+	button.add_theme_stylebox_override("pressed", _make_chat_tab_style(UI_SURFACE_PRESSED, hover_border, false))
+	button.add_theme_stylebox_override("focus", _make_chat_tab_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, false))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
 func _make_player_status_panel_style(hovered: bool) -> StyleBoxFlat:
-	var background_color := Color("#0b1727f5") if hovered else Color("#070f19f0")
+	var background_color := UI_SURFACE_HOVER if hovered else UI_SURFACE_BASE
 	var border_color := UI_BORDER_FOCUS if hovered else PLAYER_STATUS_CARD_BORDER
 	var style := _make_panel_style(background_color, border_color, 12, 1)
 	style.border_width_left = 3
@@ -14230,18 +14285,18 @@ func _make_button_style(background_color: Color, border_color: Color, corner_rad
 
 func _apply_button_style(button: Button, variant: String = "default") -> void:
 	var normal_bg := UI_SLOT_BG
-	var hover_bg := Color("#151f36f2")
-	var pressed_bg := Color("#080d18f2")
+	var hover_bg := UI_SURFACE_HOVER
+	var pressed_bg := UI_SURFACE_PRESSED
 	var border := UI_BORDER_SOFT
-	var hover_border := UI_BORDER
+	var hover_border := UI_BORDER_FOCUS
 	var font_color := UI_TEXT
 
 	if variant == "primary":
-		normal_bg = Color("#152447ee")
-		hover_bg = Color("#1d3268f2")
-		pressed_bg = Color("#0d1730f2")
+		normal_bg = UI_SURFACE_INTERACTIVE
+		hover_bg = UI_SURFACE_HOVER
+		pressed_bg = UI_SURFACE_PRESSED
 		border = UI_BORDER_FOCUS
-		hover_border = UI_PURPLE_HOVER
+		hover_border = Color("#a8c7ff")
 	elif variant == "danger":
 		normal_bg = UI_DANGER_BG
 		hover_bg = Color("#3a151cee")
@@ -14258,7 +14313,7 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border))
 	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border))
 	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
-	button.add_theme_stylebox_override("focus", _make_button_style(Color("#0e1a30ee"), UI_BORDER_FOCUS, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 func _apply_line_edit_style(line_edit: LineEdit) -> void:
@@ -14318,8 +14373,8 @@ func _apply_icon_slot_hover_style(panel: PanelContainer, hovered: bool) -> void:
 		background_color = UI_REPEL_BG
 		border_color = Color("#58d96f")
 	if hovered:
-		background_color = Color("#1b6f34e8") if active else Color("#151f36f2")
-		border_color = Color("#72f28a") if active else UI_BORDER
+		background_color = Color("#1b6f34e8") if active else UI_SURFACE_HOVER
+		border_color = Color("#72f28a") if active else UI_BORDER_FOCUS
 	var style := _make_panel_style(background_color, border_color, 8, 1)
 	if hovered:
 		style.shadow_color = Color(UI_BORDER.r, UI_BORDER.g, UI_BORDER.b, 0.34)
@@ -14417,7 +14472,11 @@ func _apply_premium_overlay_styles() -> void:
 		var state: Dictionary = collapsible_panels.get(panel_id, {})
 		var button: Button = state.get("button") as Button
 		if button != null:
-			_apply_button_style(button)
+			_apply_collapsible_button_style(
+				button,
+				str(state.get("side", "right")),
+				bool(state.get("collapsed", false))
+			)
 	if chat_resize_button != null:
 		_apply_chat_dock_button_style(chat_resize_button)
 		_apply_compact_chat_settings_button_style(chat_resize_button)
@@ -14498,7 +14557,7 @@ func _setup_chat_surface_ui() -> void:
 	chat_tabs_background.set_anchors_preset(Control.PRESET_FULL_RECT)
 	chat_tabs_background.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#040912c9"), Color("#294a68cc"), 9, 1)
+		_make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 9, 1)
 	)
 	chat_tabs_panel.add_child(chat_tabs_background)
 	chat_tabs_panel.move_child(chat_tabs_background, 0)
@@ -14534,9 +14593,10 @@ func _register_collapsible_panel(
 	button.size = COLLAPSE_BUTTON_SIZE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.z_index = UI_BASE_Z_INDEX
-	button.text = "-"
+	button.text = _collapsible_button_glyph(side, false)
 	button.tooltip_text = "Collapse"
 	button.focus_mode = Control.FOCUS_NONE
+	_apply_collapsible_button_style(button, side, false)
 	button.pressed.connect(_on_collapsible_panel_button_pressed.bind(panel_id))
 	_connect_normal_ui_group_focus(button, panel, false)
 
@@ -14590,8 +14650,9 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 		if companion != null:
 			companion.visible = group_visible and bool(companion.get_meta("group_available", true))
 	button.visible = available
-	button.text = "+" if collapsed else "-"
+	button.text = _collapsible_button_glyph(str(state.get("side", "right")), collapsed)
 	button.tooltip_text = "Expand" if collapsed else "Collapse"
+	_apply_collapsible_button_style(button, str(state.get("side", "right")), collapsed)
 	if collapsed and panel_id == "staff_actions":
 		dev_actions_popup.visible = false
 		if staff_tools_popup != null:
@@ -14619,6 +14680,24 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 	if panel_id == "options":
 		_refresh_socials_attention_badge()
 	_position_collapsible_button(panel_id)
+
+func _collapsible_button_glyph(side: String, collapsed: bool) -> String:
+	var panel_opens_left := side in ["left", "left_center", "action_bar"]
+	if collapsed:
+		return "‹" if panel_opens_left else "›"
+	return "›" if panel_opens_left else "‹"
+
+func _apply_collapsible_button_style(button: Button, _side: String, collapsed: bool) -> void:
+	var normal_background := UI_SURFACE_RAISED if not collapsed else UI_SURFACE_INTERACTIVE
+	var normal_border := UI_BORDER_SUBTLE if not collapsed else UI_BORDER_FOCUS
+	button.add_theme_color_override("font_color", Color("#a8bdcf"))
+	button.add_theme_color_override("font_hover_color", Color("#f1f7ff"))
+	button.add_theme_color_override("font_pressed_color", Color("#d7edff"))
+	button.add_theme_font_size_override("font_size", 18)
+	button.add_theme_stylebox_override("normal", _make_panel_style(normal_background, normal_border, 8, 1))
+	button.add_theme_stylebox_override("hover", _make_panel_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_panel_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_panel_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 
 func _position_collapsible_buttons() -> void:
 	for panel_id_value: Variant in collapsible_panels.keys():
@@ -16652,6 +16731,7 @@ func _refresh_hotbar_ui() -> void:
 		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
 		quantity_label.text = ""
 		button.tooltip_text = "Empty hotbar slot %s\nRight-click a usable Bag item to assign it." % (slot_index + 1)
+		_apply_hotbar_slot_style(slot_index)
 		if entry.is_empty():
 			continue
 		var entry_type := str(entry.get("entryType", ""))
@@ -16811,14 +16891,15 @@ func _apply_hotbar_slot_style(slot_index: int) -> void:
 	var slot := hotbar_slot_panels[slot_index]
 	var hovered := bool(slot.get_meta("hotbar_hovered", false))
 	var drop_highlighted := bool(slot.get_meta("hotbar_drop_highlighted", false))
-	var background := Color("#0a1524f2")
-	var border := UI_BORDER_SOFT
+	var occupied := not _hotbar_entry_for_slot(slot_index).is_empty()
+	var background := UI_SURFACE_INTERACTIVE if occupied else UI_SURFACE_RAISED
+	var border := UI_BORDER_SOFT if occupied else UI_BORDER_SUBTLE
 	var border_width := 1
 	if hovered:
-		background = Color("#14243af5")
-		border = Color("#6f91bd")
+		background = UI_SURFACE_HOVER
+		border = UI_BORDER_FOCUS
 	if drop_highlighted:
-		background = Color("#182a3ff8")
+		background = UI_SURFACE_HOVER
 		border = Color("#f4d78a")
 		border_width = 2
 	var style := _make_panel_style(background, border, 9, border_width)
@@ -16827,6 +16908,12 @@ func _apply_hotbar_slot_style(slot_index: int) -> void:
 		style.shadow_size = 7 if hovered else 9
 		style.shadow_offset = Vector2.ZERO
 	slot.add_theme_stylebox_override("panel", style)
+	var key_label := slot.get_node_or_null("KeyLabel") as Label
+	if key_label != null:
+		key_label.add_theme_color_override(
+			"font_color",
+			UI_MONEY if occupied else Color("#a7976c8c") if hovered else Color("#8f856b73")
+		)
 
 
 func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void:

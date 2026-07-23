@@ -30,12 +30,12 @@
 [ext_resource type="Texture2D" path="res://assets/ui/global_rare_encounter_boost.svg" id="26_global_rare"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
-bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7411765)
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -46,44 +46,44 @@ content_margin_left = 14.0
 content_margin_top = 6.0
 content_margin_right = 14.0
 content_margin_bottom = 6.0
-bg_color = Color(0.05882353, 0.105882354, 0.1764706, 1)
+bg_color = Color(0.043137256, 0.101960786, 0.16862746, 0.91764706)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.16470589, 0.2627451, 0.39607844, 1)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2onii"]
-bg_color = Color(0.03137255, 0.06666667, 0.12156863, 0.7058824)
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7g5y2"]
-bg_color = Color(0.03137255, 0.06666667, 0.12156863, 1)
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8bipm"]
-bg_color = Color(0.050980393, 0.09019608, 0.15686275, 0.74509805)
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -106,12 +106,12 @@ content_margin_right = 6.0
 content_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jwbg5"]
-bg_color = Color(0.03137255, 0.06666667, 0.12156863, 1)
+bg_color = Color(0.043137256, 0.101960786, 0.16862746, 0.91764706)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.13333334, 0.20784314, 0.32941177, 1)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -132,12 +132,12 @@ shadow_color = Color(0.9, 0.2, 0.2, 0.6)
 shadow_size = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_global_buff_tray"]
-bg_color = Color(0.02745098, 0.05882353, 0.09803922, 0.88)
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.2509804, 0.42745098, 0.6117647, 0.62)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -147,39 +147,39 @@ shadow_size = 8
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_personal_buff_tray"]
-bg_color = Color(0.02745098, 0.05882353, 0.09803922, 0.88)
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.45490196, 0.35686275, 0.6509804, 0.62)
+border_color = Color(0.40392157, 0.3529412, 0.5529412, 0.58)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.34)
-shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 6
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_global_buff_slot"]
-bg_color = Color(0.03137255, 0.105882354, 0.18039216, 0.96)
+bg_color = Color(0.043137256, 0.101960786, 0.16862746, 0.91764706)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.38431373, 0.84313726, 1, 0.78)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_global_buff_slot_hover"]
-bg_color = Color(0.047058824, 0.2, 0.3372549, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6862745, 0.9411765, 1, 1)
+bg_color = Color(0.06666667, 0.16470589, 0.26666668, 0.9490196)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.47058824, 0.7607843, 0.9137255, 0.9)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -200,7 +200,7 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_personal_buff_slot"]
-bg_color = Color(0.06666667, 0.043137256, 0.11764706, 0.96)
+bg_color = Color(0.043137256, 0.101960786, 0.16862746, 0.91764706)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -212,7 +212,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_global_buff_details"]
-bg_color = Color(0.019607844, 0.043137256, 0.07450981, 0.98)
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -227,7 +227,7 @@ shadow_size = 12
 shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_global_buff_goal"]
-bg_color = Color(0.03137255, 0.078431375, 0.12156863, 0.96)
+bg_color = Color(0.03137255, 0.08235294, 0.13333334, 0.92156863)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -258,7 +258,7 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_personal_buff_slot_hover"]
-bg_color = Color(0.18039216, 0.101960786, 0.32156864, 1)
+bg_color = Color(0.06666667, 0.16470589, 0.26666668, 0.9490196)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -270,32 +270,32 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_store_button"]
-bg_color = Color(0.09019608, 0.043137256, 0.14901961, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6431373, 0.3764706, 0.90588236, 0.92)
+bg_color = Color(0.03137255, 0.08235294, 0.13333334, 0.92156863)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6117647, 0.42352942, 0.827451, 0.78)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-shadow_color = Color(0.6431373, 0.3764706, 0.90588236, 0.3)
-shadow_size = 9
+shadow_color = Color(0.5019608, 0.3137255, 0.7411765, 0.22)
+shadow_size = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_store_button_hover"]
-bg_color = Color(0.18039216, 0.078431375, 0.3019608, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+bg_color = Color(0.06666667, 0.16470589, 0.26666668, 0.9490196)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color(0.8627451, 0.6862745, 1, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-shadow_color = Color(0.7254902, 0.43137255, 1, 0.52)
-shadow_size = 12
+shadow_color = Color(0.7254902, 0.43137255, 1, 0.4)
+shadow_size = 8
 
 [node name="UIOverlay" type="CanvasLayer" unique_id=2126675853]
 script = ExtResource("1_7g5y2")
@@ -353,7 +353,7 @@ theme_override_constants/separation = 4
 
 [node name="EmptyLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row"]
 visible = false
-custom_minimum_size = Vector2(148, 26)
+custom_minimum_size = Vector2(148, 30)
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.59607846, 0.627451, 0.69803923, 1)
@@ -364,7 +364,7 @@ vertical_alignment = 1
 
 [node name="ActiveSummaryButton" type="Button" parent="Control/PersonalBuffsPanel/MarginContainer/Row"]
 visible = false
-custom_minimum_size = Vector2(148, 26)
+custom_minimum_size = Vector2(148, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.8980392, 0.8392157, 1, 1)
@@ -522,23 +522,23 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="DonatorStoreButton" type="Button" parent="Control"]
-custom_minimum_size = Vector2(44, 44)
+custom_minimum_size = Vector2(42, 42)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -148.0
+offset_left = -58.0
+offset_top = -146.0
 offset_right = -16.0
 offset_bottom = -104.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Donator Gems Store placeholder"
+tooltip_text = "Donator Gems Store"
 icon = ExtResource("22_donator_gem")
-icon_max_width = 30
+icon_max_width = 26
 expand_icon = true
 theme_override_styles/normal = SubResource("StyleBoxFlat_store_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_store_button_hover")
@@ -870,7 +870,7 @@ offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-value = 64.0
+value = 0.0
 show_percentage = false
 theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")
@@ -899,7 +899,7 @@ offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-value = 100.0
+value = 0.0
 show_percentage = false
 theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")
@@ -928,7 +928,7 @@ offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-value = 22.0
+value = 0.0
 show_percentage = false
 theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")
@@ -957,7 +957,7 @@ offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-value = 22.0
+value = 0.0
 show_percentage = false
 theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")

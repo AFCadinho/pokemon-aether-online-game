@@ -4,6 +4,8 @@ const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const PARTY_SLOT_SCENE_PATH := "res://scenes/interface/party_slot.tscn"
 const PARTY_SLOT_SCRIPT_PATH := "res://scripts/ui/party_slot.gd"
+const HOTKEY_SIDEBAR_SCENE_PATH := "res://scenes/interface/hotkey_sidebar.tscn"
+const PLAYER_STATUS_SCENE_PATH := "res://scenes/interface/player_status_card.tscn"
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const SETTINGS_MANAGER_PATH := "res://scripts/services/settings_manager.gd"
 
@@ -15,6 +17,9 @@ func _init() -> void:
 	var script_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 	var party_slot_scene_source := FileAccess.get_file_as_string(PARTY_SLOT_SCENE_PATH)
 	var party_slot_script_source := FileAccess.get_file_as_string(PARTY_SLOT_SCRIPT_PATH)
+	var party_separator_block := _node_block(party_slot_scene_source, '[node name="Seperator"')
+	var hotkey_sidebar_scene_source := FileAccess.get_file_as_string(HOTKEY_SIDEBAR_SCENE_PATH)
+	var player_status_scene_source := FileAccess.get_file_as_string(PLAYER_STATUS_SCENE_PATH)
 	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	var settings_source := FileAccess.get_file_as_string(SETTINGS_MANAGER_PATH)
 	var hotbar_block := _node_block(scene_source, '[node name="HotkeySidebar"')
@@ -37,9 +42,13 @@ func _init() -> void:
 	_check(party_margin_block.contains("margin_top = 7") and party_container_block.contains("separation = 5"), "normal party rail uses compact spacing")
 	_check(script_source.contains("func _make_party_panel_style()"), "normal party uses a dedicated lighter glass rail")
 	_check(party_slot_scene_source.contains("custom_minimum_size = Vector2(260, 68)"), "normal party slots use a compact readable height")
+	_check(party_separator_block.contains("custom_minimum_size = Vector2(2, 0)") and not party_separator_block.contains("size_flags_horizontal"), "party names receive the available header width")
 	_check(party_slot_scene_source.contains('[node name="LeadAccent" type="Panel" parent="ClickButton"]'), "lead Pokémon accent avoids PanelContainer stretching")
 	_check(party_slot_scene_source.contains("custom_minimum_size = Vector2(160, 16)"), "party HP bars use a slimmer profile")
-	_check(party_slot_scene_source.contains('text = "✦"'), "Shiny state uses a compact sparkle instead of a heavy card border")
+	_check(party_slot_scene_source.contains('text = "✦"') and not party_slot_scene_source.contains('StyleBoxFlat_shiny_badge'), "Shiny state uses a clean unboxed sparkle")
+	_check(party_slot_scene_source.contains('[node name="ShinyAccent" type="Panel" parent="ClickButton"]'), "Shiny party slots use a dedicated edge accent")
+	_check(party_slot_script_source.contains("SHINY_SLOT_BORDER") and party_slot_script_source.contains("SHINY_SLOT_HOVER_BORDER"), "Shiny party slots retain a distinct cool-toned surface state")
+	_check(party_slot_script_source.contains("shiny_accent.visible = current_is_shiny and visible"), "Shiny edge accents follow slot visibility")
 	_check(party_slot_script_source.contains("func _update_health_bar_style()"), "party HP bars adapt their color to remaining health")
 	_check(party_slot_script_source.contains("func set_dragging(value: bool)") and party_slot_script_source.contains("func set_drop_target(value: bool)"), "party slots distinguish dragging and drop targets")
 	_check(script_source.contains("_set_party_drag_drop_target(_get_party_slot_index_at_position"), "party dragging previews the destination slot")
@@ -54,6 +63,15 @@ func _init() -> void:
 	_check(personal_buffs_block.contains("custom_minimum_size = Vector2(160, 98)"), "personal buffs have room for three readable text rows")
 	_check(store_block.contains("anchors_preset = 3"), "Donator Store is anchored near the trainer card")
 	_check(store_block.contains('icon = ExtResource("22_donator_gem")'), "Donator Store uses the purple gem icon")
+	_check(store_block.contains("custom_minimum_size = Vector2(42, 42)") and store_block.contains("icon_max_width = 26"), "Donator Store aligns with the personal status rail")
+	_check(hotkey_sidebar_scene_source.contains("border_width_left = 2") and hotkey_sidebar_scene_source.contains("0.92941177)"), "hotbar rail uses the shared stable-opacity frame")
+	_check(script_source.contains('const UI_SURFACE_BASE := Color("#050b14ed")'), "overworld UI declares one semantic base surface")
+	_check(script_source.contains('const UI_SURFACE_RAISED := Color("#081522eb")'), "overworld UI declares one semantic raised surface")
+	_check(script_source.contains('const UI_SURFACE_HOVER := Color("#112a44f2")'), "overworld UI declares one semantic hover surface")
+	_check(party_slot_script_source.contains('const SLOT_BG := Color("#081522eb")') and party_slot_script_source.contains('const SLOT_HOVER_BG := Color("#112a44f2")'), "party slots follow the shared surface hierarchy")
+	_check(player_status_scene_source.contains("Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)"), "trainer card follows the shared base surface")
+	_check(scene_source.count("Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)") >= 5, "major overworld frames share one neutral navy base")
+	_check(scene_source.contains("StyleBoxFlat_personal_buff_slot") and scene_source.contains("Color(0.043137256, 0.101960786, 0.16862746, 0.91764706)"), "buff and action slots use a neutral interactive surface")
 	_check(not scene_source.contains('[node name="ScopeLabel"'), "buff tray context labels are removed")
 	_check(scene_source.count('parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"') == 4, "global buff tray exposes four community-goal slots")
 	_check(scene_source.count('parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots"') == 3, "personal buff tray exposes three placeholder slots")
@@ -75,6 +93,7 @@ func _init() -> void:
 	_check(script_source.contains("[personal_buffs_panel, donator_store_button]"), "trainer collapse includes personal buffs and the Donator Store")
 	_check(script_source.contains('_register_collapsible_panel("party", party_panel, "right")'), "party collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])'), "location collapse includes global buffs")
+	_check(script_source.contains("func _collapsible_button_glyph") and script_source.contains("func _apply_collapsible_button_style"), "collapse controls use one directional visual language")
 	_check(script_source.contains('"companions": companions'), "collapse state tracks grouped companion controls")
 	_check(script_source.contains('bool(companion.get_meta("group_available", true))'), "grouped buff docks stay hidden when no buffs are active")
 	_check(script_source.contains("chat_tabs_panel.z_index = UI_CHAT_TABS_Z_INDEX"), "chat tabs render above active party slots")
@@ -126,10 +145,13 @@ func _init() -> void:
 	_check(script_source.contains("func set_global_buffs(buffs: Array)"), "global buff tray accepts future live data")
 	_check(script_source.count('"current": 0') == 4, "global buffs start with no community funding")
 	_check(script_source.count('"state": "funding"') == 4 and not script_source.contains('"state": "active"'), "global buffs start inactive")
+	_check(script_source.contains("func _apply_global_buff_slot_visual") and script_source.contains("INACTIVE · awaiting community funding"), "unfunded global buffs use a clear inactive visual state")
+	_check(scene_source.count("value = 0.0") >= 4, "global buff scene defaults avoid flashing funded progress")
 	_check(script_source.contains("func set_personal_buffs(buffs: Array)"), "personal buff tray accepts future live data")
 	_check(script_source.contains("set_personal_buffs([])"), "personal buffs default to the empty state")
 	_check(script_source.contains('personal_buffs_panel.set_meta("group_available", true)'), "personal empty state remains part of the trainer collapse group")
 	_check(script_source.contains("PERSONAL_BUFF_PANEL_COMPACT_HEIGHT"), "empty and collapsed active states use a compact panel height")
+	_check(script_source.contains("const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0"), "personal buff and Store controls share a status-rail height")
 	_check(script_source.contains("func _on_personal_buffs_summary_pressed()"), "personal buff count can expand and collapse its details")
 	_check(script_source.contains("func _personal_buffs_summary_tooltip()"), "personal buff count exposes hover details")
 	_check(script_source.contains('personal_buffs_summary_button.text = "%d %s active  %s"'), "personal buff summary reports the active count")
@@ -140,6 +162,7 @@ func _init() -> void:
 	_check(script_source.contains("Community contributions are not connected yet."), "community contribution placeholder cannot silently spend currency")
 	_check(script_source.contains('name_label.text = str(buff.get("name", "Buff"))'), "personal buff rows receive readable names")
 	_check(script_source.contains("The Donator Gems Store is not connected yet."), "placeholder Store interaction gives clear feedback")
+	_check(script_source.contains("var occupied := not _hotbar_entry_for_slot(slot_index).is_empty()"), "empty hotbar slots use reduced visual priority")
 	_check(battle_source.contains("BATTLE_UI_DEFAULT_HORIZONTAL_OFFSET := 130.0"), "battle UI defaults to the right of the party column")
 	_check(battle_source.contains("(parent_control.size.x - size.x) * 0.5 + BATTLE_UI_DEFAULT_HORIZONTAL_OFFSET"), "battle UI applies its horizontal default offset")
 

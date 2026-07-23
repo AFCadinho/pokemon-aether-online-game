@@ -1,27 +1,27 @@
 [gd_scene format=3 uid="uid://cnvx5qmbwl27m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.02745098, 0.05882353, 0.09803922, 0.9411765)
-border_width_left = 3
+bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
+border_width_left = 2
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.2784314, 0.4862745, 0.6901961, 0.72)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.42)
-shadow_size = 9
+shadow_color = Color(0, 0, 0, 0.34)
+shadow_size = 7
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
-bg_color = Color(0.039215688, 0.08235294, 0.14117648, 0.9490196)
+bg_color = Color(0.03137255, 0.08235294, 0.13333334, 0.92156863)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.19215687, 0.3137255, 0.4392157, 0.9)
+border_color = Color(0.1764706, 0.29411766, 0.4, 0.7019608)
 corner_radius_top_left = 9
 corner_radius_top_right = 9
 corner_radius_bottom_right = 9
