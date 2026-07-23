@@ -4,6 +4,7 @@ class_name FloorVisibilityMask
 @export var floor_regions: Dictionary = {}
 @export var active_floor: StringName = &"ground_floor"
 @export var follow_player_floor := true
+@export var constrain_camera_to_active_floor := false
 @export var mask_color := Color.BLACK
 @export_range(1024.0, 131072.0, 256.0) var mask_extent := 65536.0
 
@@ -15,6 +16,7 @@ class_name FloorVisibilityMask
 
 func _ready() -> void:
 	_apply_active_floor()
+	_sync_camera_limits_to_active_floor()
 
 
 func _process(_delta: float) -> void:
@@ -33,6 +35,8 @@ func _process(_delta: float) -> void:
 		if region_value is Rect2 and (region_value as Rect2).has_point(player_position):
 			if floor_name != active_floor:
 				show_floor(floor_name)
+			elif constrain_camera_to_active_floor:
+				_sync_camera_limits_to_active_floor(player)
 			return
 
 
@@ -43,6 +47,7 @@ func show_floor(floor_name: StringName) -> void:
 
 	active_floor = floor_name
 	_apply_active_floor()
+	_sync_camera_limits_to_active_floor()
 
 
 func get_active_floor_region() -> Rect2:
@@ -85,3 +90,57 @@ func _rectangle_polygon(left: float, top: float, right: float, bottom: float) ->
 		Vector2(right, bottom),
 		Vector2(left, bottom),
 	])
+
+
+func _sync_camera_limits_to_active_floor(player: Node2D = null) -> void:
+	if not constrain_camera_to_active_floor:
+		return
+
+	if player == null:
+		player = get_tree().get_first_node_in_group("player") as Node2D
+
+	var map_root := get_parent()
+	if player == null or map_root == null or not map_root.is_ancestor_of(player):
+		return
+
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera == null:
+		return
+
+	var floor_region := get_active_floor_region()
+	if floor_region.size.x <= 0.0 or floor_region.size.y <= 0.0:
+		return
+
+	var top_left := to_global(floor_region.position)
+	var bottom_right := to_global(floor_region.end)
+	var global_floor_region := Rect2(top_left, bottom_right - top_left).abs()
+
+	var viewport_size := camera.get_viewport_rect().size
+	var camera_zoom := Vector2(
+		maxf(absf(camera.zoom.x), 0.001),
+		maxf(absf(camera.zoom.y), 0.001)
+	)
+	var visible_world_size := viewport_size / camera_zoom
+	var padded_size := Vector2(
+		maxf(global_floor_region.size.x, visible_world_size.x),
+		maxf(global_floor_region.size.y, visible_world_size.y)
+	)
+	var padded_region := Rect2(global_floor_region.get_center() - padded_size * 0.5, padded_size)
+
+	var new_left := floori(padded_region.position.x)
+	var new_top := floori(padded_region.position.y)
+	var new_right := ceili(padded_region.end.x)
+	var new_bottom := ceili(padded_region.end.y)
+	if (
+		camera.limit_left == new_left
+		and camera.limit_top == new_top
+		and camera.limit_right == new_right
+		and camera.limit_bottom == new_bottom
+	):
+		return
+
+	camera.limit_left = new_left
+	camera.limit_top = new_top
+	camera.limit_right = new_right
+	camera.limit_bottom = new_bottom
+	camera.reset_smoothing()

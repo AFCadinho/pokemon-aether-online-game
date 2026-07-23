@@ -39,10 +39,10 @@ metadata/tiled_name = "Capa de patrones 3"
 metadata/tiled_layer_id = 3
 metadata/tiled_visual_layer = true
 
-[node name="Capa de patrones 4" type="TileMapLayer" parent="." unique_id=1430613048]
+[node name="Objects Top" type="TileMapLayer" parent="." unique_id=1430613048]
 z_index = 3
 tile_map_data = PackedByteArray("AAAOAAcAARADAK8AAAAMAAgAAQgDAPUAAAAOAAgAARADALAAAAAFAAkAAQgCAPcAAAACABcAAQgBAM0AAAADABcAAQgBAM0AAAAEABcAAQgBAM0AAAAFABcAAQgEAPwAAAAGABcAAQgEAMoAAAAMABcAAQgEAPUAAAAMABgAAQgEAPYAAAAQABgAARAHAA4AAAACABoAAQgAAPAAAAAEABoAAQgAAP4AAAAGABoAAQgBAPAAAAACABwAAQgGAPkAAAAQABwAAQgHAPkAAAACAB0AAQgGAPoAAAAQAB0AAQgHAPoAAAA=")
 tile_set = ExtResource("1_v5gw6")
-metadata/tiled_name = "Capa de patrones 4"
+metadata/tiled_name = "Objects Top"
 metadata/tiled_layer_id = 4
 metadata/tiled_visual_layer = true

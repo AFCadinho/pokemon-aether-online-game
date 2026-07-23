@@ -38,7 +38,7 @@ func _check_world_initial_map() -> void:
 func _check_players_house_initial_spawn() -> void:
 	var players_house_source := FileAccess.get_file_as_string(PLAYERS_HOUSE_SCENE_PATH)
 	_check(
-		players_house_source.contains('[node name="InitialSpawn" type="Marker2D" parent="Spawns"]'),
+		players_house_source.contains('[node name="InitialSpawn" type="Marker2D" parent="Spawns"'),
 		"Player's House exposes Spawns/InitialSpawn"
 	)
 	_check(

@@ -57,6 +57,7 @@ shape = SubResource("RectangleShape2D_house_exit")
 z_index = 4096
 z_as_relative = false
 script = ExtResource("4_floor_mask")
+constrain_camera_to_active_floor = true
 floor_regions = {
 &"ground_floor": Rect2(64, 608, 480, 416),
 &"upper_floor": Rect2(160, 0, 320, 448)
