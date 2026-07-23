@@ -144,7 +144,7 @@ y_sort_enabled = true
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1406348437]
 
 [node name="Oak" parent="Entities/NPCs" unique_id=944228146 instance=ExtResource("10_7ad88")]
-position = Vector2(400, 768)
+position = Vector2(400, 784)
 script = ExtResource("6_m2ga1")
 starter_gift_dialogue_id = ""
 starter_received_dialogue_id = ""
