@@ -79,7 +79,12 @@ const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var discord_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton
 @onready var install_folder_dialog: FileDialog = $InstallFolderDialog
 @onready var uninstall_confirm_dialog: ConfirmationDialog = $UninstallConfirmDialog
-@onready var launcher_update_confirm_dialog: ConfirmationDialog = $LauncherUpdateConfirmDialog
+@onready var launcher_update_overlay: Control = $LauncherUpdateOverlay
+@onready var launcher_update_card: PanelContainer = $LauncherUpdateOverlay/UpdateCard
+@onready var launcher_update_version_badge: PanelContainer = $LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow/VersionBadge
+@onready var launcher_update_version_label: Label = $LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow/VersionBadge/Label
+@onready var launcher_update_later_button: Button = $LauncherUpdateOverlay/UpdateCard/Margin/Layout/ButtonRow/LaterButton
+@onready var launcher_update_now_button: Button = $LauncherUpdateOverlay/UpdateCard/Margin/Layout/ButtonRow/UpdateNowButton
 @onready var launcher_update_http_request: HTTPRequest = $LauncherUpdateHttpRequest
 @onready var http_request: HTTPRequest = $HttpRequest
 @onready var news_request: HTTPRequest = $NewsRequest
@@ -184,7 +189,8 @@ func _ready() -> void:
 	patch_notes_button.pressed.connect(open_patch_notes)
 	credits_button.pressed.connect(open_credits)
 	uninstall_button.pressed.connect(_on_uninstall_button_pressed)
-	launcher_update_confirm_dialog.confirmed.connect(_start_launcher_update_download)
+	launcher_update_later_button.pressed.connect(_hide_launcher_update_prompt)
+	launcher_update_now_button.pressed.connect(_on_launcher_update_now_pressed)
 	launcher_update_http_request.request_completed.connect(_on_launcher_update_request_completed)
 	discord_button.pressed.connect(open_discord)
 	install_folder_dialog.dir_selected.connect(_on_install_folder_selected)
@@ -256,6 +262,20 @@ func _apply_visual_style() -> void:
 	progress_bar.add_theme_stylebox_override("background", _panel_style(Color(0.14, 0.16, 0.27, 0.86), Color(0, 0, 0, 0), 7, 0))
 	progress_bar.add_theme_stylebox_override("fill", _panel_style(Color(0.55, 0.26, 0.96, 1.0), Color(0, 0, 0, 0), 7, 0))
 	log_label.add_theme_color_override("default_color", Color(0.80, 0.81, 0.88))
+
+	launcher_update_card.add_theme_stylebox_override("panel", _panel_style(Color(0.035, 0.055, 0.105, 0.99), Color(0.48, 0.29, 0.92, 0.95), 18, 1))
+	launcher_update_version_badge.add_theme_stylebox_override("panel", _panel_style(Color(0.27, 0.14, 0.54, 0.9), Color(0.66, 0.42, 1.0, 0.7), 12, 1))
+	launcher_update_version_label.add_theme_color_override("font_color", Color(0.94, 0.89, 1.0, 1.0))
+	launcher_update_version_label.add_theme_font_size_override("font_size", 13)
+	$LauncherUpdateOverlay/UpdateCard/Margin/Layout/EyebrowRow/Eyebrow.add_theme_color_override("font_color", Color(0.70, 0.48, 1.0, 1.0))
+	$LauncherUpdateOverlay/UpdateCard/Margin/Layout/Title.add_theme_color_override("font_color", Color(0.98, 0.98, 1.0, 1.0))
+	$LauncherUpdateOverlay/UpdateCard/Margin/Layout/Description.add_theme_color_override("font_color", Color(0.76, 0.79, 0.90, 1.0))
+	$LauncherUpdateOverlay/UpdateCard/Margin/Layout/RestartNote.add_theme_color_override("font_color", Color(0.57, 0.68, 0.87, 1.0))
+	$LauncherUpdateOverlay/UpdateCard/Margin/Layout/Divider.add_theme_stylebox_override("separator", _panel_style(Color(0.20, 0.27, 0.43, 0.8), Color(0, 0, 0, 0), 1, 0))
+	_apply_button_style(launcher_update_later_button, false)
+	_apply_button_style(launcher_update_now_button, true)
+	launcher_update_later_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	launcher_update_now_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
 func _panel_style(background_color: Color, border_color: Color, radius: int, border_width: int) -> StyleBoxFlat:
@@ -775,10 +795,7 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 	_refresh_launcher_update_status()
 	if launcher_update_pending and not launcher_update_shown:
 		launcher_update_shown = true
-		launcher_update_confirm_dialog.dialog_text = "A new launcher version (%s) is available. Install it now?" % str(
-			launcher_update_info.get("version", "unknown")
-		)
-		launcher_update_confirm_dialog.popup_centered()
+		_show_launcher_update_prompt()
 	elif not launcher_update_pending:
 		launcher_update_shown = false
 
@@ -786,6 +803,21 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 		_log("Update available.")
 	else:
 		_log("Everything is up to date.")
+
+
+func _show_launcher_update_prompt() -> void:
+	launcher_update_version_label.text = "v%s" % str(launcher_update_info.get("version", "unknown"))
+	launcher_update_overlay.show()
+	launcher_update_now_button.grab_focus()
+
+
+func _hide_launcher_update_prompt() -> void:
+	launcher_update_overlay.hide()
+
+
+func _on_launcher_update_now_pressed() -> void:
+	_hide_launcher_update_prompt()
+	_start_launcher_update_download()
 
 
 func _on_launcher_update_request_completed(result: int, response_code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:

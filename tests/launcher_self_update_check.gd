@@ -3,6 +3,20 @@ extends SceneTree
 
 func _init() -> void:
 	var source := FileAccess.get_file_as_string("res://launcher/scripts/launcher.gd")
+	var scene := FileAccess.get_file_as_string("res://launcher/scenes/launcher.tscn")
+
+	_check_true(
+		scene.contains('[node name="LauncherUpdateOverlay" type="Control"'),
+		"launcher update uses a custom overlay instead of a Godot confirmation dialog"
+	)
+	_check_true(
+		not scene.contains('[node name="LauncherUpdateConfirmDialog" type="ConfirmationDialog"'),
+		"launcher update no longer exposes the default Godot confirmation dialog"
+	)
+	_check_true(
+		scene.contains('text = "Update & restart"') and source.contains("func _show_launcher_update_prompt"),
+		"launcher update prompt presents a clear modern update action"
+	)
 
 	_check_true(
 		source.contains('exec_args = PackedStringArray(["/D", "/C", script_path])'),
