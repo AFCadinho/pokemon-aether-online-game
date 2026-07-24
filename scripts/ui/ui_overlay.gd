@@ -95,6 +95,8 @@ const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage
 const DEV_CREATE_POKEMON_ICON: Texture2D = preload("res://assets/ui/pokedex.svg")
 const DEV_SPAWN_ENCOUNTER_ICON: Texture2D = preload("res://assets/ui/wild_encounter_radar.svg")
 const DEV_ADD_RESOURCES_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
+const TRAINER_WALLET_MONEY_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.png")
+const TRAINER_WALLET_AETHER_GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
@@ -123,21 +125,15 @@ const APPEARANCE_CATEGORIES := [
 	{"id": "body", "label": "Body"},
 	{"id": "hair", "label": "Hair"},
 	{"id": "headgear", "label": "Headgear"},
+	{"id": "facial_hair", "label": "Facial Hair"},
 	{"id": "facegear", "label": "Facegear"},
 	{"id": "top", "label": "Top"},
 	{"id": "bottom", "label": "Bottom"},
 	{"id": "shoes", "label": "Shoes"},
 ]
-const HAIR_COLOR_SWATCHES := [
-	{"id": "#5a3728", "label": "Dark Brown", "color": Color("#5a3728")},
-	{"id": "#6b4632", "label": "Warm Brown", "color": Color("#6b4632")},
-	{"id": "#2a2421", "label": "Soft Black", "color": Color("#2a2421")},
-	{"id": "#b99555", "label": "Dirty Blond", "color": Color("#b99555")},
-	{"id": "#d6b66b", "label": "Ash Blond", "color": Color("#d6b66b")},
-	{"id": "#7a4632", "label": "Chestnut", "color": Color("#7a4632")},
-	{"id": "#813a2f", "label": "Auburn", "color": Color("#813a2f")},
-	{"id": "#2b5f64", "label": "Deep Teal", "color": Color("#2b5f64")},
-]
+const HAIR_COLOR_SWATCHES := CharacterAppearanceService.HAIR_COLOR_SWATCHES
+const CHROMA_COLOR_SWATCHES := CharacterAppearanceService.CHROMA_COLOR_SWATCHES
+const SKIN_TONE_SWATCHES := CharacterAppearanceService.SKIN_TONE_SWATCHES
 const EYE_COLOR_SWATCHES := [
 	{"id": "#3d6f86", "label": "Blue Gray", "color": Color("#3d6f86")},
 	{"id": "#456f4a", "label": "Moss Green", "color": Color("#456f4a")},
@@ -324,6 +320,7 @@ const BAG_CATEGORIES := [
 	{"id": "pokeball", "label": "Poke Balls", "iconItemId": "poke-ball"},
 	{"id": "key_items", "label": "Key Items", "iconItemId": "bicycle"},
 	{"id": "machines", "label": "TMs & HMs", "iconItemId": "tm-material"},
+	{"id": "charms", "label": "Charms", "iconItemId": "surf-charm"},
 	{"id": "held_items", "label": "Held Items", "iconItemId": "leftovers"},
 	{"id": "power_stones", "label": "Mega & Z", "iconItemId": "charizardite-x"},
 	{"id": "cosmetics", "label": "Cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
@@ -775,11 +772,17 @@ var trainer_card_popup: PanelContainer
 var public_trainer_card_popup: PanelContainer
 var trainer_card_avatar_viewports: Array[SubViewport] = []
 var trainer_card_money_label: Label
+var trainer_card_aether_gems_label: Label
 var trainer_card_playtime_label: Label
 var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
 var trainer_card_part_buttons: Dictionary = {}
+var trainer_card_part_rows: Dictionary = {}
+var trainer_card_part_return_buttons: Dictionary = {}
 var trainer_card_color_buttons: Dictionary = {}
+var owned_appearance_parts: Dictionary = {}
+var appearance_inventory_loading := false
+var appearance_inventory_returning := false
 var trainer_card_appearance_save_button: Button
 var trainer_card_appearance_status_label: Label
 var trainer_card_badge_option: OptionButton
@@ -1000,6 +1003,7 @@ var dev_add_money_button: Button
 var dev_add_money_popup: PanelContainer
 var dev_money_amount_spinbox: SpinBox
 var dev_money_confirm_button: Button
+var dev_gems_confirm_button: Button
 var dev_heal_party_button: Button
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
@@ -5743,17 +5747,17 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_money_popup = PanelContainer.new()
 	dev_add_money_popup.name = "DevAddMoneyPopup"
 	dev_add_money_popup.visible = false
-	dev_add_money_popup.custom_minimum_size = Vector2(360, 190)
+	dev_add_money_popup.custom_minimum_size = Vector2(390, 200)
 	dev_add_money_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	dev_add_money_popup.z_index = UI_BASE_Z_INDEX
 	dev_add_money_popup.anchor_left = 0.5
 	dev_add_money_popup.anchor_top = 0.5
 	dev_add_money_popup.anchor_right = 0.5
 	dev_add_money_popup.anchor_bottom = 0.5
-	dev_add_money_popup.offset_left = -180
-	dev_add_money_popup.offset_top = -95
-	dev_add_money_popup.offset_right = 180
-	dev_add_money_popup.offset_bottom = 95
+	dev_add_money_popup.offset_left = -195
+	dev_add_money_popup.offset_top = -100
+	dev_add_money_popup.offset_right = 195
+	dev_add_money_popup.offset_bottom = 100
 	dev_add_money_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	root_control.add_child(dev_add_money_popup)
 
@@ -5773,7 +5777,7 @@ func _setup_dev_add_item_tools() -> void:
 	money_layout.add_child(money_header)
 
 	var money_title := Label.new()
-	money_title.text = "Add Money"
+	money_title.text = "Add Currency"
 	money_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	money_title.add_theme_font_size_override("font_size", 18)
 	money_title.add_theme_color_override("font_color", UI_TEXT)
@@ -5805,15 +5809,29 @@ func _setup_dev_add_item_tools() -> void:
 	dev_money_amount_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	money_row.add_child(dev_money_amount_spinbox)
 
+	var currency_buttons := HBoxContainer.new()
+	currency_buttons.add_theme_constant_override("separation", 8)
+	money_layout.add_child(currency_buttons)
+
 	dev_money_confirm_button = Button.new()
-	dev_money_confirm_button.text = "Confirm"
+	dev_money_confirm_button.text = "Add Pokédollars"
 	dev_money_confirm_button.custom_minimum_size = Vector2(0, 36)
+	dev_money_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dev_money_confirm_button.focus_mode = Control.FOCUS_NONE
 	dev_money_confirm_button.pressed.connect(_on_dev_money_confirm_pressed)
-	money_layout.add_child(dev_money_confirm_button)
+	currency_buttons.add_child(dev_money_confirm_button)
+
+	dev_gems_confirm_button = Button.new()
+	dev_gems_confirm_button.text = "Add Aether Gems"
+	dev_gems_confirm_button.custom_minimum_size = Vector2(0, 36)
+	dev_gems_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	dev_gems_confirm_button.focus_mode = Control.FOCUS_NONE
+	dev_gems_confirm_button.pressed.connect(_on_dev_gems_confirm_pressed)
+	currency_buttons.add_child(dev_gems_confirm_button)
 
 	_apply_button_style(money_close_button)
 	_apply_button_style(dev_money_confirm_button, "primary")
+	_apply_button_style(dev_gems_confirm_button, "primary")
 
 func _setup_dev_tools_menu_surface() -> void:
 	var layout := dev_actions_popup.get_node_or_null("MarginContainer/VBoxContainer") as VBoxContainer
@@ -5876,7 +5894,7 @@ func _setup_dev_tools_menu_surface() -> void:
 	_configure_tool_tile_button(
 		dev_add_button,
 		"Add Resources",
-		"Items or Pokédollars",
+		"Items, Pokédollars or Aether Gems",
 		DEV_ADD_RESOURCES_ICON,
 		Color("#f0cc70")
 	)
@@ -8401,7 +8419,9 @@ func _setup_donator_store_popup() -> void:
 	if donator_store_popup == null:
 		return
 	donator_store_popup.z_index = UI_BASE_Z_INDEX
+	donator_store_popup.set_trainer_appearance(PlayerSave.to_appearance_state())
 	donator_store_popup.closed.connect(_hide_donator_store_popup)
+	donator_store_popup.purchase_requested.connect(_on_donator_store_purchase_requested)
 	donator_store_popup.gui_input.connect(
 		_on_focusable_overlay_panel_gui_input.bind(donator_store_popup)
 	)
@@ -8413,8 +8433,50 @@ func _on_donator_store_button_pressed() -> void:
 	if donator_store_popup.visible:
 		_hide_donator_store_popup()
 		return
+	donator_store_popup.set_trainer_appearance(PlayerSave.to_appearance_state())
 	donator_store_popup.open_store()
 	_activate_ui_panel(donator_store_popup)
+	await _load_donator_store_state()
+
+
+func _load_donator_store_state() -> void:
+	if donator_store_popup == null:
+		return
+	donator_store_popup.set_store_loading(true)
+	var result: Dictionary = await DonatorStoreService.load_store()
+	if not bool(result.get("success", false)):
+		donator_store_popup.show_store_error(
+			"Could not load Store: %s" % str(result.get("error", "Unknown error"))
+		)
+		return
+	var wallet := result.get("wallet", {}) as Dictionary
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet})
+	donator_store_popup.apply_store_state(wallet, result.get("store", {}) as Dictionary)
+
+
+func _on_donator_store_purchase_requested(item_id: String) -> void:
+	if donator_store_popup == null:
+		return
+	var result: Dictionary = await DonatorStoreService.purchase_item(item_id)
+	if not bool(result.get("success", false)):
+		donator_store_popup.show_store_error(
+			"Purchase failed: %s" % str(result.get("error", "Unknown error"))
+		)
+		return
+
+	var wallet := result.get("wallet", {}) as Dictionary
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet})
+	_refresh_player_status_card()
+	donator_store_popup.set_gem_balance(PlayerSave.gems)
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	if bag_popup != null and bag_popup.visible:
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+	var purchase := result.get("purchase", {}) as Dictionary
+	var purchased_item_id := str(purchase.get("itemId", item_id))
+	donator_store_popup.show_purchase_success(_item_name_from_id(purchased_item_id))
 
 func _hide_donator_store_popup() -> void:
 	if donator_store_popup == null:
@@ -8674,11 +8736,16 @@ func _apply_avatar_preview_appearance(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
 		if sprite.name == "BodySprite":
-			var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id, PlayerSave.gender)
+			var body_frames: SpriteFrames = CharacterAppearanceService.get_skin_tinted_body_frames(
+				PlayerSave.appearance_body_id,
+				PlayerSave.gender,
+				CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+				PlayerSave.appearance_skin_tone
+			)
 			if body_frames != null:
 				sprite.sprite_frames = body_frames
 				sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-				sprite.modulate = _get_avatar_preview_body_modulate()
+				sprite.modulate = Color.WHITE
 		else:
 			_apply_avatar_preview_part(sprite)
 
@@ -8720,6 +8787,8 @@ func _get_appearance_category_for_sprite(sprite_name: String) -> String:
 			return "hair"
 		"HeadgearSprite":
 			return "headgear"
+		"FacialHairSprite":
+			return "facial_hair"
 		"FaceGearSprite":
 			return "facegear"
 		"TopSprite":
@@ -8741,6 +8810,8 @@ func _get_preview_part_id(category_id: String) -> String:
 			return PlayerSave.appearance_hair_id
 		"headgear":
 			return PlayerSave.appearance_headgear_id
+		"facial_hair":
+			return PlayerSave.appearance_facial_hair_id
 		"facegear":
 			return PlayerSave.appearance_facegear_id
 		"top":
@@ -8752,7 +8823,7 @@ func _get_preview_part_id(category_id: String) -> String:
 		"eyes":
 			return CharacterAppearanceService.get_default_part_id("eyes", PlayerSave.gender)
 		"eyebrows":
-			return CharacterAppearanceService.get_default_part_id("eyebrows", PlayerSave.gender)
+			return CharacterAppearanceService.get_eyebrows_for_hair(PlayerSave.appearance_hair_id, PlayerSave.gender)
 		_:
 			return ""
 
@@ -8779,13 +8850,49 @@ func _get_avatar_preview_part_frames(category_id: String, part_id: String) -> Sp
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_appearance_color(PlayerSave.appearance_eye_color, Color.WHITE)
 		)
-	if normalized_category == "hair" or normalized_category == "eyebrows":
+	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category_id,
 			part_id,
 			PlayerSave.gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_appearance_color(PlayerSave.appearance_hair_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_appearance_color(PlayerSave.appearance_facegear_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "top" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_appearance_color(PlayerSave.appearance_top_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "bottom" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_appearance_color(PlayerSave.appearance_bottom_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "shoes" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_appearance_color(PlayerSave.appearance_shoes_color, Color.WHITE),
 			true
 		)
 	return CharacterAppearanceService.get_part_frames(category_id, part_id, PlayerSave.gender)
@@ -8840,6 +8947,8 @@ func _refresh_player_status_card() -> void:
 		player_status_money_label.text = _format_money(displayed_money)
 	if trainer_card_money_label != null:
 		trainer_card_money_label.text = _format_money(displayed_money)
+	if trainer_card_aether_gems_label != null:
+		trainer_card_aether_gems_label.text = _format_money(PlayerSave.gems)
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
 
@@ -8976,6 +9085,7 @@ func _setup_trainer_card_popup() -> void:
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.add_theme_font_size_override("font_size", 13)
 	tabs.add_child(_create_trainer_card_stats_tab())
+	tabs.add_child(_create_trainer_card_wallet_tab())
 	tabs.add_child(_create_trainer_card_appearance_tab())
 	tabs.add_child(_create_trainer_card_badges_tab())
 	_apply_trainer_card_tabs_style(tabs)
@@ -9266,7 +9376,6 @@ func _create_trainer_card_stats_tab() -> Control:
 	var battle_rows: Array[Dictionary] = [
 		{"label": "Victories", "value": _get_trainer_stat_text("victories", "0")},
 		{"label": "Defeats", "value": _get_trainer_stat_text("defeats", "0")},
-		{"label": "Money", "value": _format_money(_get_player_money_value()), "money": true},
 	]
 	stats_row.add_child(_create_trainer_card_stat_panel("Adventure Stats", adventure_rows))
 	stats_row.add_child(_create_trainer_card_stat_panel("Battle Stats", battle_rows))
@@ -9276,6 +9385,130 @@ func _create_trainer_card_stats_tab() -> Control:
 	layout.add_child(spacer)
 
 	return tab
+
+
+func _create_trainer_card_wallet_tab() -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Wallet"
+	tab.add_theme_constant_override("margin_left", 12)
+	tab.add_theme_constant_override("margin_top", 12)
+	tab.add_theme_constant_override("margin_right", 12)
+	tab.add_theme_constant_override("margin_bottom", 12)
+
+	var layout := VBoxContainer.new()
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 12)
+	tab.add_child(layout)
+
+	var heading := Label.new()
+	heading.text = "CURRENCY WALLET"
+	heading.add_theme_font_size_override("font_size", 12)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(heading)
+
+	var introduction := Label.new()
+	introduction.text = "Your account balances. Future voucher items remain in the Bag until they are used."
+	introduction.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	introduction.add_theme_font_size_override("font_size", 13)
+	introduction.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(introduction)
+
+	var cards := HBoxContainer.new()
+	cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	cards.add_theme_constant_override("separation", 12)
+	layout.add_child(cards)
+	cards.add_child(
+		_create_trainer_card_currency_card(
+			"Pokédollars",
+			"Earned through normal gameplay and used by regular shops and services.",
+			TRAINER_WALLET_MONEY_ICON,
+			TRAINER_CARD_GREEN,
+			false
+		)
+	)
+	cards.add_child(
+		_create_trainer_card_currency_card(
+			"Aether Gems",
+			"Supporter currency used for available products in the Aether Store.",
+			TRAINER_WALLET_AETHER_GEM_ICON,
+			UI_PURPLE_HOVER,
+			true
+		)
+	)
+
+	var future_note := Label.new()
+	future_note.text = "Additional gameplay currencies will appear here when they are introduced."
+	future_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	future_note.add_theme_font_size_override("font_size", 11)
+	future_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(future_note)
+	return tab
+
+
+func _create_trainer_card_currency_card(
+	title_text: String,
+	description_text: String,
+	icon_texture: Texture2D,
+	accent: Color,
+	is_aether_gems: bool
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, accent.darkened(0.2), 10, 1)
+	)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	panel.add_child(margin)
+
+	var content := VBoxContainer.new()
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.add_theme_constant_override("separation", 8)
+	margin.add_child(content)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(48, 48)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = icon_texture
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	content.add_child(icon)
+
+	var title := Label.new()
+	title.text = title_text
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	content.add_child(title)
+
+	var balance := Label.new()
+	balance.text = _format_money(PlayerSave.gems if is_aether_gems else _get_player_money_value())
+	balance.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	balance.add_theme_font_size_override("font_size", 28)
+	balance.add_theme_color_override("font_color", accent)
+	content.add_child(balance)
+	if is_aether_gems:
+		trainer_card_aether_gems_label = balance
+	else:
+		trainer_card_money_label = balance
+
+	var description := Label.new()
+	description.text = description_text
+	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.add_theme_font_size_override("font_size", 12)
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	content.add_child(description)
+	return panel
+
 
 func _create_trainer_card_redeem_button() -> Button:
 	var redeem_button := Button.new()
@@ -9585,11 +9818,17 @@ func _create_trainer_card_appearance_tab() -> Control:
 	editor_stack.add_theme_constant_override("separation", 10)
 	editor_margin.add_child(editor_stack)
 
+	var content_scroll := ScrollContainer.new()
+	content_scroll.name = "AppearanceContentScroll"
+	content_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	editor_stack.add_child(content_scroll)
+
 	var content_stack := VBoxContainer.new()
 	content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content_stack.add_theme_constant_override("separation", 8)
-	editor_stack.add_child(content_stack)
+	content_scroll.add_child(content_stack)
 
 	for category_value: Variant in APPEARANCE_CATEGORIES:
 		if not category_value is Dictionary:
@@ -9916,7 +10155,12 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 			_apply_button_style(side_button, "primary" if selected else "default")
 
 	_clear_container_children(content_stack)
+	var content_scroll := content_stack.get_parent() as ScrollContainer
+	if content_scroll != null:
+		content_scroll.scroll_vertical = 0
 	trainer_card_part_buttons.clear()
+	trainer_card_part_rows.clear()
+	trainer_card_part_return_buttons.clear()
 	trainer_card_color_buttons.clear()
 	if category_id == "body":
 		_create_trainer_card_body_appearance_content(content_stack)
@@ -9927,24 +10171,19 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	_create_trainer_card_appearance_section_header(
 		content_stack,
 		"Body",
-		"Choose your base look and eye colour."
+		"Choose your body model, skin tone and eye colour."
 	)
 
 	var search_input := _create_trainer_card_appearance_search_input("Search bodies")
 	search_input.text_changed.connect(_filter_trainer_card_body_buttons)
 	content_stack.add_child(search_input)
 
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_stack.add_child(scroll)
-
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 8)
 	grid.add_theme_constant_override("v_separation", 8)
-	scroll.add_child(grid)
+	content_stack.add_child(grid)
 
 	trainer_card_body_buttons.clear()
 	for body_id: String in _get_body_appearance_ids():
@@ -9957,7 +10196,8 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 		trainer_card_body_buttons[body_id] = body_button
 
 	_refresh_trainer_card_body_buttons()
-	_create_trainer_card_color_palette(content_stack, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
+	_create_trainer_card_color_palette(content_stack, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES, false)
+	_create_trainer_card_color_palette(content_stack, "Eye Color", "eye_color", EYE_COLOR_SWATCHES, false)
 
 func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
@@ -9972,38 +10212,64 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	search_input.text_changed.connect(_filter_trainer_card_part_buttons)
 	content_stack.add_child(search_input)
 
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_stack.add_child(scroll)
-
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 8)
 	grid.add_theme_constant_override("v_separation", 8)
-	scroll.add_child(grid)
+	content_stack.add_child(grid)
 
+	var none_row := HBoxContainer.new()
+	none_row.add_theme_constant_override("separation", 6)
+	grid.add_child(none_row)
 	var none_button := Button.new()
 	none_button.text = "None"
 	none_button.focus_mode = Control.FOCUS_NONE
 	none_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	none_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, ""))
-	grid.add_child(none_button)
+	none_row.add_child(none_button)
 	trainer_card_part_buttons["%s:" % normalized_category] = none_button
+	trainer_card_part_rows["%s:" % normalized_category] = none_row
 
 	for part_id: String in CharacterAppearanceService.get_available_part_ids(normalized_category, PlayerSave.gender):
+		var option_key := "%s:%s" % [normalized_category, part_id]
+		var option_row := HBoxContainer.new()
+		option_row.add_theme_constant_override("separation", 6)
+		grid.add_child(option_row)
+
 		var part_button := Button.new()
 		part_button.text = _format_appearance_option_name(normalized_category, part_id)
 		part_button.focus_mode = Control.FOCUS_NONE
 		part_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		part_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, part_id))
-		grid.add_child(part_button)
-		trainer_card_part_buttons["%s:%s" % [normalized_category, part_id]] = part_button
+		option_row.add_child(part_button)
+		trainer_card_part_buttons[option_key] = part_button
+		trainer_card_part_rows[option_key] = option_row
+
+		var return_button := Button.new()
+		return_button.text = "×"
+		return_button.tooltip_text = "Return this cosmetic box to the Bag"
+		return_button.custom_minimum_size = Vector2(30, 30)
+		return_button.focus_mode = Control.FOCUS_NONE
+		return_button.visible = false
+		return_button.pressed.connect(
+			_on_trainer_card_return_appearance_pressed.bind(normalized_category, part_id)
+		)
+		_apply_button_style(return_button, "danger")
+		option_row.add_child(return_button)
+		trainer_card_part_return_buttons[option_key] = return_button
 
 	_refresh_trainer_card_part_buttons()
-	if normalized_category == "hair":
-		_create_trainer_card_color_palette(content_stack, "Hair Color", "hair_color", HAIR_COLOR_SWATCHES)
+	if normalized_category == "hair" or normalized_category == "facial_hair":
+		_create_trainer_card_color_palette(content_stack, "Hair & Facial Hair Color", "hair_color", HAIR_COLOR_SWATCHES)
+	elif normalized_category == "facegear":
+		_create_trainer_card_color_palette(content_stack, "Chroma Color", "facegear_color", CHROMA_COLOR_SWATCHES)
+	elif normalized_category == "top":
+		_create_trainer_card_color_palette(content_stack, "Chroma Color", "top_color", CHROMA_COLOR_SWATCHES)
+	elif normalized_category == "bottom":
+		_create_trainer_card_color_palette(content_stack, "Chroma Color", "bottom_color", CHROMA_COLOR_SWATCHES)
+	elif normalized_category == "shoes":
+		_create_trainer_card_color_palette(content_stack, "Chroma Color", "shoes_color", CHROMA_COLOR_SWATCHES)
 
 func _create_trainer_card_appearance_section_header(
 	content_stack: VBoxContainer,
@@ -10030,7 +10296,8 @@ func _create_trainer_card_color_palette(
 	content_stack: VBoxContainer,
 	title_text: String,
 	color_key: String,
-	swatches: Array
+	swatches: Array,
+	allow_custom: bool = true
 ) -> void:
 	var title := Label.new()
 	title.text = title_text
@@ -10039,7 +10306,7 @@ func _create_trainer_card_color_palette(
 	content_stack.add_child(title)
 
 	var grid := GridContainer.new()
-	grid.columns = 6
+	grid.columns = 8
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 6)
 	grid.add_theme_constant_override("v_separation", 6)
@@ -10064,6 +10331,28 @@ func _create_trainer_card_color_palette(
 		}
 		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_id)
 
+	if allow_custom:
+		var custom_row := HBoxContainer.new()
+		custom_row.add_theme_constant_override("separation", 8)
+		content_stack.add_child(custom_row)
+
+		var custom_label := Label.new()
+		custom_label.text = "Custom"
+		custom_label.add_theme_font_size_override("font_size", 12)
+		custom_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		custom_row.add_child(custom_label)
+
+		var custom_picker := ColorPickerButton.new()
+		custom_picker.tooltip_text = "Choose any custom color"
+		custom_picker.custom_minimum_size = Vector2(54, 26)
+		custom_picker.focus_mode = Control.FOCUS_NONE
+		custom_picker.color = Color.from_string(
+			_get_player_save_color_value(color_key),
+			Color.WHITE
+		)
+		custom_picker.color_changed.connect(_on_trainer_card_custom_color_changed.bind(color_key))
+		custom_row.add_child(custom_picker)
+
 func _create_trainer_card_appearance_search_input(placeholder: String) -> LineEdit:
 	var search_input := LineEdit.new()
 	search_input.placeholder_text = placeholder
@@ -10078,7 +10367,7 @@ func _clear_container_children(container: Container) -> void:
 		child.queue_free()
 
 func _get_body_appearance_ids() -> Array[String]:
-	var ids: Array[String] = CharacterAppearanceService.get_available_body_ids(PlayerSave.gender)
+	var ids: Array[String] = CharacterAppearanceService.get_available_body_model_ids(PlayerSave.gender)
 	if ids.is_empty():
 		ids.append(CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID)
 	return ids
@@ -10141,6 +10430,8 @@ func _format_appearance_category_name(category_id: String) -> String:
 			return "Hair"
 		"headgear":
 			return "Headgear"
+		"facial_hair":
+			return "Facial Hair"
 		"facegear":
 			return "Facegear"
 		"top":
@@ -10179,6 +10470,26 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return "Starter Eyes"
 			"Eyebrows":
 				return "Starter Eyebrows"
+			"Adinho_Hair":
+				return "Adinho Hair"
+			"Adinho_Beard":
+				return "Adinho Beard"
+			"Adinho_Glasses":
+				return "Adinho Glasses"
+			"Adinho_Glasses_Chroma":
+				return "Adinho Chroma Glasses"
+			"Adinho_Shirt":
+				return "Adinho Shirt"
+			"Adinho_Shirt_Chroma":
+				return "Adinho Chroma Shirt"
+			"Adinho_Trousers":
+				return "Adinho Trousers"
+			"Adinho_Trousers_Chroma":
+				return "Adinho Chroma Trousers"
+			"Adinho_Shoes":
+				return "Adinho Shoes"
+			"Adinho_Shoes_Chroma":
+				return "Adinho Chroma Shoes"
 	return _humanize_appearance_id(normalized_part_id)
 
 func _humanize_appearance_id(raw_id: String) -> String:
@@ -10213,7 +10524,13 @@ func _filter_trainer_card_part_buttons(search_text: String) -> void:
 		var category_id: String = key.substr(0, separator_index)
 		var part_id: String = key.substr(separator_index + 1)
 		var label_text: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
-		button.visible = _matches_appearance_search(label_text, part_id, search_text)
+		var row := trainer_card_part_rows.get(key) as Control
+		var should_show := _is_appearance_part_owned(category_id, part_id) \
+			and _matches_appearance_search(label_text, part_id, search_text)
+		if row != null:
+			row.visible = should_show
+		else:
+			button.visible = should_show
 
 func _refresh_trainer_card_body_buttons() -> void:
 	for body_id_value: Variant in trainer_card_body_buttons.keys():
@@ -10254,6 +10571,19 @@ func _refresh_trainer_card_part_buttons() -> void:
 		var part_id: String = key.substr(separator_index + 1)
 		var selected_part_id: String = _get_preview_part_id(category_id)
 		var display_name: String = "None" if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		var is_owned := _is_appearance_part_owned(category_id, part_id)
+		var row := trainer_card_part_rows.get(key) as Control
+		if row != null:
+			row.visible = is_owned
+		else:
+			button.visible = is_owned
+		var return_button := trainer_card_part_return_buttons.get(key) as Button
+		if return_button != null:
+			var source_item_id := _appearance_source_item_for_part(category_id, part_id)
+			return_button.visible = is_owned and source_item_id != ""
+			return_button.disabled = appearance_inventory_returning
+			if source_item_id != "":
+				return_button.tooltip_text = "Return %s to the Bag" % _item_name_from_id(source_item_id)
 		if part_id == selected_part_id:
 			button.text = "%s  *" % display_name
 			_apply_button_style(button, "primary")
@@ -10271,10 +10601,20 @@ func _apply_color_swatch_button_style(button: Button, color: Color, selected: bo
 
 func _get_player_save_color_value(color_key: String) -> String:
 	match color_key:
+		"skin_tone":
+			return PlayerSave.appearance_skin_tone
 		"hair_color":
 			return PlayerSave.appearance_hair_color
 		"eye_color":
 			return PlayerSave.appearance_eye_color
+		"facegear_color":
+			return PlayerSave.appearance_facegear_color
+		"top_color":
+			return PlayerSave.appearance_top_color
+		"bottom_color":
+			return PlayerSave.appearance_bottom_color
+		"shoes_color":
+			return PlayerSave.appearance_shoes_color
 		_:
 			return ""
 
@@ -10382,12 +10722,56 @@ func _show_trainer_card() -> void:
 	if trainer_card_popup == null:
 		return
 
+	_load_owned_appearance_parts()
 	_refresh_trainer_card_body_buttons()
+	_refresh_trainer_card_part_buttons()
 	_refresh_avatar_previews()
 	_refresh_player_status_card()
 	_update_trainer_card_appearance_save_state()
 	trainer_card_popup.visible = true
 	_activate_ui_panel(trainer_card_popup)
+
+func _load_owned_appearance_parts() -> void:
+	if appearance_inventory_loading:
+		return
+	appearance_inventory_loading = true
+	var result: Dictionary = await InventoryService.load_appearance_inventory()
+	appearance_inventory_loading = false
+	if not bool(result.get("success", false)):
+		push_warning("Appearance inventory failed to load: %s" % str(result.get("error", "Unknown error")))
+		return
+	_apply_owned_appearance_unlocks(result.get("unlocks", []))
+
+func _apply_owned_appearance_unlocks(unlocks_value: Variant) -> void:
+	owned_appearance_parts.clear()
+	if unlocks_value is Array:
+		for unlock_value: Variant in unlocks_value as Array:
+			if not unlock_value is Dictionary:
+				continue
+			var unlock: Dictionary = unlock_value as Dictionary
+			var slot := CharacterAppearanceService.normalize_part_category(str(unlock.get("slot", "")))
+			var appearance_id := str(unlock.get("appearanceId", unlock.get("appearance_id", ""))).strip_edges()
+			if slot != "" and appearance_id != "":
+				owned_appearance_parts["%s:%s" % [slot, appearance_id]] = unlock.duplicate(true)
+	_refresh_trainer_card_part_buttons()
+
+func _is_appearance_part_owned(category_id: String, part_id: String) -> bool:
+	var normalized_category := CharacterAppearanceService.normalize_part_category(category_id)
+	var normalized_part_id := part_id.strip_edges()
+	if normalized_part_id == "" or CharacterAppearanceService.is_free_part_id(normalized_category, normalized_part_id):
+		return true
+	return owned_appearance_parts.has("%s:%s" % [normalized_category, normalized_part_id])
+
+func _appearance_source_item_for_part(category_id: String, part_id: String) -> String:
+	var key := "%s:%s" % [
+		CharacterAppearanceService.normalize_part_category(category_id),
+		part_id.strip_edges(),
+	]
+	var unlock_value: Variant = owned_appearance_parts.get(key)
+	if not unlock_value is Dictionary:
+		return ""
+	var unlock := unlock_value as Dictionary
+	return str(unlock.get("sourceItemId", unlock.get("source_item_id", ""))).strip_edges()
 
 func _mark_trainer_card_appearance_dirty() -> void:
 	trainer_card_has_unsaved_appearance_changes = true
@@ -10474,6 +10858,7 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 		"body",
 		"hair",
 		"headgear",
+		"facial_hair",
 		"facegear",
 		"top",
 		"bottom",
@@ -10481,6 +10866,10 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 		"hair_color",
 		"skin_tone",
 		"eye_color",
+		"facegear_color",
+		"top_color",
+		"bottom_color",
+		"shoes_color",
 	]
 	for key: String in keys:
 		if str(appearance.get(key, "")).strip_edges() != str(current_appearance.get(key, "")).strip_edges():
@@ -10508,6 +10897,9 @@ func _on_trainer_card_body_selected(body_id: String) -> void:
 
 func _on_trainer_card_part_selected(category_id: String, part_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	if not _is_appearance_part_owned(normalized_category, part_id):
+		_update_trainer_card_appearance_save_state("Unlock this cosmetic from your Bag first")
+		return
 	_ensure_layered_body_for_part_selection()
 	var player := get_tree().get_first_node_in_group("player")
 	if player != null and player.has_method("set_appearance_part"):
@@ -10519,13 +10911,94 @@ func _on_trainer_card_part_selected(category_id: String, part_id: String) -> voi
 	_refresh_avatar_previews()
 	_mark_trainer_card_appearance_dirty()
 
+
+func _on_trainer_card_return_appearance_pressed(category_id: String, part_id: String) -> void:
+	if appearance_inventory_returning:
+		return
+	var source_item_id := _appearance_source_item_for_part(category_id, part_id)
+	if source_item_id == "":
+		_update_trainer_card_appearance_save_state("This starter item cannot be returned")
+		return
+
+	appearance_inventory_returning = true
+	_refresh_trainer_card_part_buttons()
+	_update_trainer_card_appearance_save_state("Returning %s to the Bag..." % _item_name_from_id(source_item_id))
+	var result: Dictionary = await InventoryService.return_appearance_item(source_item_id)
+	appearance_inventory_returning = false
+	if not bool(result.get("success", false)):
+		_refresh_trainer_card_part_buttons()
+		_update_trainer_card_appearance_save_state(
+			"Return failed: %s" % str(result.get("error", "Unknown error"))
+		)
+		return
+
+	_apply_returned_appearance_defaults(result.get("returnedUnlocks", []))
+	_apply_owned_appearance_unlocks(result.get("appearanceUnlocks", []))
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	if bag_popup != null and bag_popup.visible:
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and player.has_method("refresh_appearance"):
+		player.call("refresh_appearance")
+	_refresh_trainer_card_part_buttons()
+	_refresh_avatar_previews()
+	_refresh_player_status_card()
+
+	trainer_card_has_unsaved_appearance_changes = true
+	var save_result := await _save_trainer_card_appearance_to_backend()
+	var saved := bool(save_result.get("success", false)) \
+		and _save_response_matches_current_appearance(save_result)
+	trainer_card_has_unsaved_appearance_changes = not saved
+	_update_trainer_card_appearance_save_state(
+		"%s returned to the Bag%s" % [
+			_item_name_from_id(source_item_id),
+			"" if saved else " · appearance save pending",
+		]
+	)
+	var world := GameState.get_world()
+	if world != null and world.has_method("_publish_world_presence"):
+		world.call("_publish_world_presence", true)
+
+
+func _apply_returned_appearance_defaults(returned_unlocks_value: Variant) -> void:
+	if not returned_unlocks_value is Array:
+		return
+	for unlock_value: Variant in returned_unlocks_value as Array:
+		if not unlock_value is Dictionary:
+			continue
+		var unlock := unlock_value as Dictionary
+		var slot := CharacterAppearanceService.normalize_part_category(str(unlock.get("slot", "")))
+		var appearance_id := str(unlock.get("appearanceId", unlock.get("appearance_id", ""))).strip_edges()
+		if slot == "" or appearance_id == "" or _get_preview_part_id(slot) != appearance_id:
+			continue
+		_apply_player_save_appearance_part(
+			slot,
+			CharacterAppearanceService.get_default_part_id(slot, PlayerSave.gender)
+		)
+	PlayerSave.ensure_layered_appearance_defaults(false)
+
+
 func _on_trainer_card_color_selected(color_key: String, color_value: String) -> void:
 	_ensure_layered_body_for_part_selection()
 	match color_key:
+		"skin_tone":
+			PlayerSave.appearance_skin_tone = color_value
 		"hair_color":
 			PlayerSave.appearance_hair_color = color_value
 		"eye_color":
 			PlayerSave.appearance_eye_color = color_value
+		"facegear_color":
+			PlayerSave.appearance_facegear_color = color_value
+		"top_color":
+			PlayerSave.appearance_top_color = color_value
+		"bottom_color":
+			PlayerSave.appearance_bottom_color = color_value
+		"shoes_color":
+			PlayerSave.appearance_shoes_color = color_value
 		_:
 			return
 
@@ -10536,6 +11009,11 @@ func _on_trainer_card_color_selected(color_key: String, color_value: String) -> 
 	_refresh_trainer_card_color_buttons()
 	_refresh_avatar_previews()
 	_mark_trainer_card_appearance_dirty()
+
+
+func _on_trainer_card_custom_color_changed(color: Color, color_key: String) -> void:
+	_on_trainer_card_color_selected(color_key, "#%s" % color.to_html(false))
+
 
 func _ensure_layered_body_for_part_selection() -> void:
 	if CharacterAppearanceService.body_supports_layered_parts(PlayerSave.appearance_body_id, PlayerSave.gender):
@@ -10551,6 +11029,8 @@ func _apply_player_save_appearance_part(category_id: String, part_id: String) ->
 			PlayerSave.sync_hair_style_index_from_id()
 		"headgear":
 			PlayerSave.appearance_headgear_id = normalized_part_id
+		"facial_hair":
+			PlayerSave.appearance_facial_hair_id = normalized_part_id
 		"facegear":
 			PlayerSave.appearance_facegear_id = normalized_part_id
 		"top":
@@ -13094,6 +13574,8 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 			return "A special battle item. Manage compatible items from a Pokemon Summary."
 		"key_items":
 			return "An important item used during your adventure."
+		"charms":
+			return "A permanent tradeable field Charm. It can also be assigned to your hotbar."
 		"cosmetics":
 			return "A cosmetic unlock connected to your account."
 		"currency":
@@ -13104,6 +13586,8 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "escape-rope-action":
+		return true
+	if str(item.get("useAction", "")).strip_edges() == "unlock_appearance":
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -13122,6 +13606,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
 		return "Use Charm"
+	if str(item.get("useAction", "")).strip_edges() == "unlock_appearance":
+		return "Move to Customization"
 	if _bag_machine_move_id(item_id) != "":
 		return "Teach Move"
 	if _is_pokemon_usable_item_id(item_id):
@@ -13161,6 +13647,18 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		return
 	if item_id == "escape-rope-action":
 		_on_escape_rope_pressed()
+		return
+	if str(item.get("useAction", "")).strip_edges() == "unlock_appearance":
+		var unlock_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(unlock_result.get("success", false)):
+			_add_chat_message(str(unlock_result.get("error", "That cosmetic could not be moved to Character Customization.")))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(unlock_result.get("inventory", []))
+		_apply_owned_appearance_unlocks(unlock_result.get("appearanceUnlocks", []))
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		_add_chat_message("%s was added to Character Customization." % str(item.get("name", _item_name_from_id(item_id))))
 		return
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
@@ -13738,6 +14236,9 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
 	if item_id == "escape-rope-action":
 		item_id = "escape-rope"
+	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(item_id, "male")
+	if cosmetic_icon != null:
+		return cosmetic_icon
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
 	var candidates: Array[String] = [
 		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
@@ -13846,6 +14347,8 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"machineCompatiblePokemonIds": item.get("machineCompatiblePokemonIds", []),
 			"gameplay": gameplay,
 			"useNotice": use_notice,
+			"useAction": str(item.get("useAction", "")).strip_edges(),
+			"appearanceUnlocks": item.get("appearanceUnlocks", []),
 		})
 	normalized_items.append({
 		"id": "escape-rope-action",
@@ -13866,7 +14369,7 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 			return "held_items"
 		"poke_balls", "pokeballs":
 			return "pokeball"
-		"medicine", "machines", "power_stones", "cosmetics", "currency", "key_items":
+		"medicine", "machines", "charms", "power_stones", "cosmetics", "currency", "key_items":
 			return normalized
 
 	return _guess_bag_category(item_id)
@@ -21136,6 +21639,7 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	PlayerSave.gender = CharacterAppearanceService.normalize_gender(str(user.get("gender", PlayerSave.gender)))
 	PlayerSave.ensure_body_matches_gender()
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
+	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
 	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
 	_apply_impersonated_saved_world_state(position_response)
 
@@ -21278,6 +21782,7 @@ func _reset_impersonated_appearance_to_defaults() -> void:
 	PlayerSave.appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
 	PlayerSave.appearance_hair_id = CharacterAppearanceService.get_default_part_id("hair", PlayerSave.gender)
 	PlayerSave.appearance_headgear_id = CharacterAppearanceService.get_default_part_id("headgear", PlayerSave.gender)
+	PlayerSave.appearance_facial_hair_id = CharacterAppearanceService.get_default_part_id("facial_hair", PlayerSave.gender)
 	PlayerSave.appearance_facegear_id = CharacterAppearanceService.get_default_part_id("facegear", PlayerSave.gender)
 	PlayerSave.appearance_top_id = CharacterAppearanceService.get_default_part_id("top", PlayerSave.gender)
 	PlayerSave.appearance_bottom_id = CharacterAppearanceService.get_default_part_id("bottom", PlayerSave.gender)
@@ -21286,6 +21791,10 @@ func _reset_impersonated_appearance_to_defaults() -> void:
 	PlayerSave.appearance_hair_color = CharacterAppearanceService.get_default_hair_color(PlayerSave.gender)
 	PlayerSave.appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
 	PlayerSave.appearance_eye_color = CharacterAppearanceService.get_default_eye_color(PlayerSave.gender)
+	PlayerSave.appearance_facegear_color = "#ffffff"
+	PlayerSave.appearance_top_color = "#ffffff"
+	PlayerSave.appearance_bottom_color = "#ffffff"
+	PlayerSave.appearance_shoes_color = "#ffffff"
 	PlayerSave.ensure_body_matches_gender()
 
 func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
@@ -21301,10 +21810,13 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_avatar_viewports.clear()
 	trainer_card_body_buttons.clear()
 	trainer_card_part_buttons.clear()
+	trainer_card_part_rows.clear()
+	trainer_card_part_return_buttons.clear()
 	trainer_card_color_buttons.clear()
 	trainer_card_appearance_save_button = null
 	trainer_card_appearance_status_label = null
 	trainer_card_money_label = null
+	trainer_card_aether_gems_label = null
 	trainer_card_playtime_label = null
 	trainer_card_name_label = null
 	_setup_trainer_card_popup()
@@ -23383,6 +23895,27 @@ func _on_dev_money_confirm_pressed() -> void:
 	refresh_money_display()
 	_add_chat_message("Added %s." % _format_money(amount))
 	_hide_dev_add_money_popup()
+
+
+func _on_dev_gems_confirm_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	dev_gems_confirm_button.disabled = true
+	var result: Dictionary = await PlayerWalletService.dev_add_gems(amount)
+	dev_gems_confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not add Aether Gems: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	PlayerWalletService.apply_wallet_result(result)
+	_refresh_player_status_card()
+	if donator_store_popup != null:
+		donator_store_popup.set_gem_balance(PlayerSave.gems)
+	_add_chat_message("Added %s Aether Gems." % _format_money(amount))
+	_hide_dev_add_money_popup()
+
 
 func _load_dev_item_catalog() -> void:
 	dev_item_catalog.clear()

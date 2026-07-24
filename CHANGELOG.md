@@ -1,5 +1,15 @@
 # Changelog
 
+- Added the male-only Adinho Classic full-outfit unlock alongside separate male-only, colour-customizable hair, beard, glasses, shirt, trousers and shoes products; Store purchases and wardrobe use enforce character-model compatibility, and the eyebrows remain linked to the hairstyle.
+- Tradeable cosmetic Bag items can now be moved into Character Customization and returned to the Bag later; active wardrobe items themselves cannot be traded.
+- Aether Gems now have a durable wallet balance, and the seven available Adinho cosmetics can be purchased through a server-authoritative, replay-safe checkout that adds the tradeable box directly to the Bag.
+- The nine implemented field and weather Charms shown in the Aether Store are now purchasable permanent, stackable and tradeable Bag items in their own Charms category; gameplay reset preserves them.
+- The Trainer Card now includes a Wallet tab for Pokédollars and Aether Gems, ready to accommodate future gameplay currencies when they are introduced.
+- The Aether Store can now preview cosmetics on the player's current trainer from the front, sides, and back, with temporary colour choices for grayscale items.
+- Character Customization now shares expanded Hair and Chroma palettes with the Store preview, offers custom Hair and Chroma colours, and includes the original Default skin plus twelve curated skin tones without recolouring body outlines or clothing details.
+- Adinho cosmetic products now reuse a single front-facing spritesheet frame as their shared Store and Bag icon.
+- Legacy Tan and Dark body selections now migrate to the matching skin tone on the standard body model.
+
 ## 0.3.31 - 2026-07-23
 
 **Added**
@@ -7,7 +17,7 @@
 - Added new battle animations for Pyro Ball, Court Change, High Jump Kick, Sparkling Aria, Draining Kiss, Psychic Noise, Grassy Glide, Wood Hammer, Drain Punch, Superpower, Psychic Terrain, Grassy Terrain, Electric Terrain, and Misty Terrain.
 - Psychic, Grassy, Electric, and Misty Terrain now have their own animated battlefield effects that remain visible while active.
 - Added chat settings for choosing which main chat tabs are visible and changing their order.
-- Added early previews for the upcoming Quest Log, Donator Gems Store, Redeem Codes, server-wide and personal buffs, and Clan chat. These features are not fully active yet.
+- Added early previews for the upcoming Quest Log, Aether Store, Redeem Codes, server-wide and personal buffs, and Clan chat. These features are not fully active yet.
 
 **Changed**
 - Added a dedicated All chat tab that combines every available channel, while General now opens Global by default and keeps Global, Trade, and Help as subchannels.

@@ -216,7 +216,7 @@ func _init() -> void:
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")
 	_check(script_source.contains("Community contributions are not connected yet."), "community contribution placeholder cannot silently spend currency")
 	_check(script_source.contains('name_label.text = str(buff.get("name", "Buff"))'), "personal buff rows receive readable names")
-	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(920, 620)"), "Donator Store opens as a full catalog interface")
+	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
 	_check(donator_store_script_source.contains('"membership": "NO BATTLE POWER"') and donator_store_script_source.contains("without battle advantages"), "Membership establishes a fair supporter direction")
 	_check(donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Membership offers the intended four pass durations")
@@ -225,12 +225,35 @@ func _init() -> void:
 	_check(donator_store_script_source.contains('"name": "Flash Charm"') and donator_store_script_source.contains('"name": "Dive Charm"') and donator_store_script_source.contains('"name": "Defog Charm"'), "Store includes additional traversal Charms")
 	_check(donator_store_script_source.contains('"name": "Rain Dance Charm"') and donator_store_script_source.contains('"name": "Snowscape Charm"'), "Store includes overworld weather Charms")
 	_check(donator_store_script_source.contains('"charms": "FIELD CONVENIENCE"') and donator_store_script_source.contains("Progression and area rules still apply."), "Charm category covers field convenience without promising progression bypasses")
+	_check(
+		script_source.contains('{"id": "charms", "label": "Charms", "iconItemId": "surf-charm"}')
+			and script_source.contains('"medicine", "machines", "charms",'),
+		"tradeable field Charms use their own Bag category instead of Key Items"
+	)
 	_check(donator_store_script_source.contains('"name": "Trainer Name Change"') and donator_store_script_source.contains('"name": "Gender Change"'), "Trainer Services prepare identity change options")
 	_check(donator_store_script_source.contains('title.text = "Aether Store"') and donator_store_script_source.contains("Names and prices may change"), "Store presents itself as a clearly labeled preview catalog")
 	_check(not donator_store_script_source.contains('"personal_buffs"') and not donator_store_script_source.contains('"personal_buff"'), "paid personal buffs stay outside the Store catalog")
-	_check(donator_store_script_source.contains("func set_gem_balance(amount: int)") and donator_store_script_source.contains('balance_label.text = "%s Gems"'), "Donator Store has a future-ready authoritative balance display")
-	_check(donator_store_script_source.contains("purchase_button.disabled = true") and donator_store_script_source.contains("purchases are not connected yet"), "Donator Store cannot perform placeholder purchases")
-	_check(script_source.contains("donator_store_popup.open_store()") and not script_source.contains("The Donator Gems Store is not connected yet."), "purple gem button opens the Store interface")
+	_check(donator_store_script_source.contains("func set_gem_balance(amount: int)") and donator_store_script_source.contains('balance_label.text = "%s Aether Gems"'), "Donator Store labels its authoritative Aether Gem balance")
+	_check(
+		donator_store_script_source.contains("authoritative_gem_prices")
+		and donator_store_script_source.contains("purchase_requested.emit(selected_item_id)")
+		and script_source.contains("DonatorStoreService.purchase_item(item_id)"),
+		"Donator Store purchases use the authoritative Aether Gem checkout"
+	)
+	_check(
+		script_source.contains("func _create_trainer_card_wallet_tab()")
+		and script_source.contains('tab.name = "Wallet"')
+		and script_source.contains('"Pokédollars"')
+		and script_source.contains('"Aether Gems"'),
+		"Trainer Card has a Wallet tab for current currencies"
+	)
+	_check(script_source.contains("donator_store_popup.open_store()") and not script_source.contains("The Aether Store is not connected yet."), "purple gem button opens the Store interface")
+	_check(
+		script_source.contains('content_scroll.name = "AppearanceContentScroll"')
+		and script_source.contains("content_scroll.add_child(content_stack)")
+		and script_source.contains("content_stack.add_child(grid)"),
+		"Appearance items and palettes share one usable scrolling content area"
+	)
 	_check(script_source.contains('{"panel": donator_store_popup, "close": Callable(self, "_hide_donator_store_popup")}'), "Escape closes the Donator Store")
 	_check(script_source.contains("Quest Log is not implemented yet."), "placeholder Quest Log interaction gives clear feedback")
 	_check(script_source.contains('const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")'), "Trainer Card redeem action uses its own gift-code icon")

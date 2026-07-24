@@ -568,10 +568,15 @@ func _apply_player_preview_body(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite: AnimatedSprite2D = node as AnimatedSprite2D
 		if sprite.name == "BodySprite":
-			var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(PlayerSave.appearance_body_id, PlayerSave.gender)
+			var body_frames: SpriteFrames = CharacterAppearanceService.get_skin_tinted_body_frames(
+				PlayerSave.appearance_body_id,
+				PlayerSave.gender,
+				CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+				PlayerSave.appearance_skin_tone
+			)
 			if body_frames != null:
 				sprite.sprite_frames = body_frames
-				sprite.modulate = _get_player_preview_body_modulate()
+				sprite.modulate = Color.WHITE
 				_set_preview_sprite_idle_down(sprite)
 		else:
 			_apply_player_preview_part(sprite)
@@ -621,6 +626,8 @@ func _get_player_preview_category_for_sprite(sprite_name: String) -> String:
 			return "hair"
 		"HeadgearSprite":
 			return "headgear"
+		"FacialHairSprite":
+			return "facial_hair"
 		"FaceGearSprite":
 			return "facegear"
 		"TopSprite":
@@ -642,6 +649,8 @@ func _get_player_preview_part_id(category_id: String) -> String:
 			return PlayerSave.appearance_hair_id
 		"headgear":
 			return PlayerSave.appearance_headgear_id
+		"facial_hair":
+			return PlayerSave.appearance_facial_hair_id
 		"facegear":
 			return PlayerSave.appearance_facegear_id
 		"top":
@@ -653,7 +662,7 @@ func _get_player_preview_part_id(category_id: String) -> String:
 		"eyes":
 			return CharacterAppearanceService.get_default_part_id("eyes", PlayerSave.gender)
 		"eyebrows":
-			return CharacterAppearanceService.get_default_part_id("eyebrows", PlayerSave.gender)
+			return CharacterAppearanceService.get_eyebrows_for_hair(PlayerSave.appearance_hair_id, PlayerSave.gender)
 		_:
 			return ""
 
@@ -680,13 +689,49 @@ func _get_player_preview_part_frames(category_id: String, part_id: String) -> Sp
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_player_preview_color(PlayerSave.appearance_eye_color, Color.WHITE)
 		)
-	if normalized_category == "hair" or normalized_category == "eyebrows":
+	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category_id,
 			part_id,
 			PlayerSave.gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_player_preview_color(PlayerSave.appearance_hair_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_player_preview_color(PlayerSave.appearance_facegear_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "top" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_player_preview_color(PlayerSave.appearance_top_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "bottom" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_player_preview_color(PlayerSave.appearance_bottom_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "shoes" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_player_preview_color(PlayerSave.appearance_shoes_color, Color.WHITE),
 			true
 		)
 	return CharacterAppearanceService.get_part_frames(category_id, part_id, PlayerSave.gender)

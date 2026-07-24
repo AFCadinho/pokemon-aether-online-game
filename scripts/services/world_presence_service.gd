@@ -155,6 +155,7 @@ func update_position(state: Dictionary) -> bool:
 		"appearanceHair": str(appearance.get("hair", "")),
 		"appearanceHairStyleIndex": int(appearance.get("hair_style_index", 0)),
 		"appearanceHeadgear": str(appearance.get("headgear", "")),
+		"appearanceFacialHair": str(appearance.get("facial_hair", "")),
 		"appearanceFacegear": str(appearance.get("facegear", "")),
 		"appearanceTop": str(appearance.get("top", "")),
 		"appearanceBottom": str(appearance.get("bottom", "")),
@@ -162,11 +163,16 @@ func update_position(state: Dictionary) -> bool:
 		"appearanceHairColor": str(appearance.get("hair_color", "")),
 		"appearanceSkinTone": str(appearance.get("skin_tone", "")),
 		"appearanceEyeColor": str(appearance.get("eye_color", "")),
+		"appearanceFacegearColor": str(appearance.get("facegear_color", "")),
+		"appearanceTopColor": str(appearance.get("top_color", "")),
+		"appearanceBottomColor": str(appearance.get("bottom_color", "")),
+		"appearanceShoesColor": str(appearance.get("shoes_color", "")),
 		"body": presence_body,
 		"hair": str(appearance.get("hair", "")),
 		"hair_style_index": int(appearance.get("hair_style_index", 0)),
 		"hairStyleIndex": int(appearance.get("hair_style_index", 0)),
 		"headgear": str(appearance.get("headgear", "")),
+		"facial_hair": str(appearance.get("facial_hair", "")),
 		"facegear": str(appearance.get("facegear", "")),
 		"top": str(appearance.get("top", "")),
 		"bottom": str(appearance.get("bottom", "")),
@@ -177,6 +183,14 @@ func update_position(state: Dictionary) -> bool:
 		"skinTone": str(appearance.get("skin_tone", "")),
 		"eye_color": str(appearance.get("eye_color", "")),
 		"eyeColor": str(appearance.get("eye_color", "")),
+		"facegear_color": str(appearance.get("facegear_color", "")),
+		"facegearColor": str(appearance.get("facegear_color", "")),
+		"top_color": str(appearance.get("top_color", "")),
+		"topColor": str(appearance.get("top_color", "")),
+		"bottom_color": str(appearance.get("bottom_color", "")),
+		"bottomColor": str(appearance.get("bottom_color", "")),
+		"shoes_color": str(appearance.get("shoes_color", "")),
+		"shoesColor": str(appearance.get("shoes_color", "")),
 	}
 	last_position_payload = payload
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
@@ -192,6 +206,10 @@ func _build_appearance_payload(appearance: Dictionary) -> Dictionary:
 	payload["hairColor"] = str(appearance.get("hair_color", ""))
 	payload["skinTone"] = str(appearance.get("skin_tone", ""))
 	payload["eyeColor"] = str(appearance.get("eye_color", ""))
+	payload["facegearColor"] = str(appearance.get("facegear_color", ""))
+	payload["topColor"] = str(appearance.get("top_color", ""))
+	payload["bottomColor"] = str(appearance.get("bottom_color", ""))
+	payload["shoesColor"] = str(appearance.get("shoes_color", ""))
 	return payload
 
 
@@ -205,6 +223,7 @@ func _build_movement_payload(movement_value: Variant, appearance_payload: Dictio
 	payload["appearanceHair"] = str(appearance.get("hair", ""))
 	payload["appearanceHairStyleIndex"] = int(appearance.get("hair_style_index", 0))
 	payload["appearanceHeadgear"] = str(appearance.get("headgear", ""))
+	payload["appearanceFacialHair"] = str(appearance.get("facial_hair", ""))
 	payload["appearanceFacegear"] = str(appearance.get("facegear", ""))
 	payload["appearanceTop"] = str(appearance.get("top", ""))
 	payload["appearanceBottom"] = str(appearance.get("bottom", ""))
@@ -212,6 +231,10 @@ func _build_movement_payload(movement_value: Variant, appearance_payload: Dictio
 	payload["appearanceHairColor"] = str(appearance.get("hair_color", ""))
 	payload["appearanceSkinTone"] = str(appearance.get("skin_tone", ""))
 	payload["appearanceEyeColor"] = str(appearance.get("eye_color", ""))
+	payload["appearanceFacegearColor"] = str(appearance.get("facegear_color", ""))
+	payload["appearanceTopColor"] = str(appearance.get("top_color", ""))
+	payload["appearanceBottomColor"] = str(appearance.get("bottom_color", ""))
+	payload["appearanceShoesColor"] = str(appearance.get("shoes_color", ""))
 	payload["body"] = presence_body
 	payload["hair"] = str(appearance.get("hair", ""))
 	payload["hair_color"] = str(appearance.get("hair_color", ""))
@@ -219,7 +242,17 @@ func _build_movement_payload(movement_value: Variant, appearance_payload: Dictio
 	payload["eye_color"] = str(appearance.get("eye_color", ""))
 	payload["eyeColor"] = str(appearance.get("eye_color", ""))
 	payload["headgear"] = str(appearance.get("headgear", ""))
+	payload["facial_hair"] = str(appearance.get("facial_hair", ""))
+	payload["facegear"] = str(appearance.get("facegear", ""))
 	payload["top"] = str(appearance.get("top", ""))
+	payload["facegear_color"] = str(appearance.get("facegear_color", ""))
+	payload["facegearColor"] = str(appearance.get("facegear_color", ""))
+	payload["top_color"] = str(appearance.get("top_color", ""))
+	payload["topColor"] = str(appearance.get("top_color", ""))
+	payload["bottom_color"] = str(appearance.get("bottom_color", ""))
+	payload["bottomColor"] = str(appearance.get("bottom_color", ""))
+	payload["shoes_color"] = str(appearance.get("shoes_color", ""))
+	payload["shoesColor"] = str(appearance.get("shoes_color", ""))
 	return payload
 
 

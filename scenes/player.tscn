@@ -73,11 +73,14 @@ z_index = 5
 [node name="HairSprite" type="AnimatedSprite2D" parent="Look" unique_id=1296752566]
 z_index = 6
 
-[node name="FaceGearSprite" type="AnimatedSprite2D" parent="Look" unique_id=148469229]
+[node name="FacialHairSprite" type="AnimatedSprite2D" parent="Look"]
 z_index = 7
 
-[node name="HeadgearSprite" type="AnimatedSprite2D" parent="Look" unique_id=1757423084]
+[node name="FaceGearSprite" type="AnimatedSprite2D" parent="Look" unique_id=148469229]
 z_index = 8
+
+[node name="HeadgearSprite" type="AnimatedSprite2D" parent="Look" unique_id=1757423084]
+z_index = 9
 
 [node name="Nameplate" type="Control" parent="." unique_id=1400626741]
 visible = false

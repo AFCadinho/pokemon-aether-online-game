@@ -2,14 +2,12 @@ class_name DonatorStorePopup
 extends PanelContainer
 
 signal closed
-signal get_gems_requested
 signal purchase_requested(item_id: String)
 
 const GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const MEMBERSHIP_ICON: Texture2D = preload("res://assets/ui/store_membership.svg")
 const STYLE_ICON: Texture2D = preload("res://assets/ui/store_style.svg")
 const PROFILE_ICON: Texture2D = preload("res://assets/ui/store_profile.svg")
-const CHAT_FLAIR_ICON: Texture2D = preload("res://assets/ui/store_chat_flair.svg")
 const MOUNT_ICON: Texture2D = preload("res://assets/ui/store_mount.svg")
 const SERVICE_ICON: Texture2D = preload("res://assets/ui/store_service_ticket.svg")
 const SURF_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SURFCHARM.png")
@@ -21,6 +19,7 @@ const DIVE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_
 const DEFOG_CHARM_ICON: Texture2D = preload("res://assets/ui/store_defog_charm.svg")
 const RAIN_DANCE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/RAINDANCECHARM.png")
 const SNOWSCAPE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SNOWSCAPECHARM.png")
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 
 const UI_SURFACE_BASE := Color("#050b14f7")
 const UI_SURFACE_RAISED := Color("#081522f0")
@@ -35,6 +34,15 @@ const UI_PURPLE_DARK := Color("#6840b1")
 const UI_GOLD := Color("#f0cc70")
 const UI_CYAN := Color("#60d3ff")
 const UI_DANGER := Color("#ef7085")
+const PREVIEW_VIEWPORT_SIZE := Vector2i(236, 260)
+const PREVIEW_AVATAR_POSITION := Vector2(118, 158)
+const PREVIEW_AVATAR_SCALE := Vector2(3.0, 3.0)
+const PREVIEW_DIRECTIONS: Array[Dictionary] = [
+	{"id": "down", "label": "Front"},
+	{"id": "left", "label": "Left"},
+	{"id": "right", "label": "Right"},
+	{"id": "up", "label": "Back"},
+]
 
 const CATEGORY_ORDER: Array[String] = [
 	"featured",
@@ -130,133 +138,103 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "30 DAYS",
 	},
 	{
-		"id": "aurora_outfit",
-		"name": "Aurora Outfit",
-		"description": "A complete premium outfit concept for your wardrobe.",
-		"price": 300,
+		"id": "adinho-classic-outfit",
+		"name": "Adinho Classic",
+		"description": "Tradeable outfit box. Use it to move the complete Adinho look into Character Customization.",
+		"price": 500,
 		"icon": STYLE_ICON,
 		"categories": ["featured", "cosmetics"],
 		"cosmetic_subcategory": "outfits",
-		"appearance_slots": ["headgear", "top", "bottom", "shoes"],
+		"appearance_slots": ["hair", "facial_hair", "facegear", "top", "bottom", "shoes"],
+		"preview_parts": [
+			{"slot": "hair", "appearance_id": "Adinho_Hair", "tint": "hair_color"},
+			{"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "hair_color"},
+			{"slot": "facegear", "appearance_id": "Adinho_Glasses"},
+			{"slot": "top", "appearance_id": "Adinho_Shirt"},
+			{"slot": "bottom", "appearance_id": "Adinho_Trousers"},
+			{"slot": "shoes", "appearance_id": "Adinho_Shoes"},
+		],
+		"genders": ["male"],
 		"badge": "FULL OUTFIT",
 	},
 	{
-		"id": "profile_accent_pack",
-		"name": "Profile Accent Pack",
-		"description": "Give your Trainer Passport a new visual accent.",
-		"price": 80,
-		"icon": PROFILE_ICON,
-		"categories": ["cosmetics"],
-		"cosmetic_subcategory": "extras",
-		"badge": "COSMETIC",
-	},
-	{
-		"id": "chat_flair_pack",
-		"name": "Chat Flair Pack",
-		"description": "Add a cosmetic supporter flair beside your chat name.",
-		"price": 100,
-		"icon": CHAT_FLAIR_ICON,
-		"categories": ["cosmetics"],
-		"cosmetic_subcategory": "extras",
-		"badge": "COSMETIC",
-	},
-	{
-		"id": "wardrobe_preset_slot",
-		"name": "Wardrobe Preset Slot",
-		"description": "Save another complete trainer appearance preset.",
-		"price": 90,
-		"icon": STYLE_ICON,
-		"categories": ["cosmetics"],
-		"cosmetic_subcategory": "extras",
-		"badge": "CONVENIENCE",
-	},
-	{
-		"id": "aether_body_style",
-		"name": "Aether Body Style",
-		"description": "A premium body-style concept for your trainer preview.",
-		"price": 120,
-		"icon": STYLE_ICON,
-		"categories": ["cosmetics"],
-		"cosmetic_subcategory": "body",
-		"appearance_slots": ["body"],
-		"badge": "BODY",
-	},
-	{
-		"id": "aurora_hair",
-		"name": "Aurora Hair",
-		"description": "A luminous hairstyle concept for your trainer.",
+		"id": "adinho-chroma-hair",
+		"name": "Adinho Chroma Hair",
+		"description": "Tradeable hair box with matching eyebrows, both using your selected hair colour.",
 		"price": 100,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "hair",
 		"appearance_slots": ["hair"],
-		"badge": "HAIR",
+		"preview_part": {"slot": "hair", "appearance_id": "Adinho_Hair", "tint": "hair_color"},
+		"genders": ["male"],
+		"badge": "HAIR + BROWS",
 	},
 	{
-		"id": "aurora_headgear",
-		"name": "Aurora Headgear",
-		"description": "A premium headwear concept for your wardrobe.",
-		"price": 90,
-		"icon": STYLE_ICON,
-		"categories": ["cosmetics"],
-		"cosmetic_subcategory": "headgear",
-		"appearance_slots": ["headgear"],
-		"badge": "HEADGEAR",
-	},
-	{
-		"id": "trailblazer_beard",
-		"name": "Trailblazer Beard",
-		"description": "A beard style concept for the future Face slot.",
+		"id": "adinho-chroma-beard",
+		"name": "Adinho Chroma Beard",
+		"description": "Tradeable grayscale beard box using your selected hair colour.",
 		"price": 80,
 		"icon": PROFILE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "face",
-		"appearance_slots": ["face"],
-		"badge": "FACE",
+		"appearance_slots": ["facial_hair"],
+		"preview_part": {"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "hair_color"},
+		"genders": ["male"],
+		"badge": "CHROMA",
 	},
 	{
-		"id": "aurora_facegear",
-		"name": "Aurora Visor",
-		"description": "A face accessory concept for your trainer.",
-		"price": 85,
+		"id": "adinho-chroma-glasses",
+		"name": "Adinho Chroma Glasses",
+		"description": "A tradeable grayscale edition whose colour can be selected in Character Customization.",
+		"price": 100,
 		"icon": PROFILE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "facegear",
 		"appearance_slots": ["facegear"],
-		"badge": "FACEGEAR",
+		"preview_part": {"slot": "facegear", "appearance_id": "Adinho_Glasses_Chroma", "tint": "facegear_color"},
+		"genders": ["male"],
+		"badge": "CHROMA",
 	},
 	{
-		"id": "aurora_top",
-		"name": "Aurora Jacket",
-		"description": "The top piece from the Aurora outfit concept.",
-		"price": 110,
+		"id": "adinho-chroma-shirt",
+		"name": "Adinho Chroma Shirt",
+		"description": "A tradeable grayscale edition whose colour can be selected in Character Customization.",
+		"price": 130,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "top",
+		"cosmetic_subcategories": ["body", "top"],
 		"appearance_slots": ["top"],
-		"badge": "TOP",
+		"preview_part": {"slot": "top", "appearance_id": "Adinho_Shirt_Chroma", "tint": "top_color"},
+		"genders": ["male"],
+		"badge": "CHROMA",
 	},
 	{
-		"id": "aurora_bottom",
-		"name": "Aurora Trousers",
-		"description": "The bottom piece from the Aurora outfit concept.",
+		"id": "adinho-chroma-trousers",
+		"name": "Adinho Chroma Trousers",
+		"description": "A tradeable, colour-customizable edition of the Adinho trousers.",
 		"price": 95,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "bottom",
 		"appearance_slots": ["bottom"],
-		"badge": "BOTTOM",
+		"preview_part": {"slot": "bottom", "appearance_id": "Adinho_Trousers_Chroma", "tint": "bottom_color"},
+		"genders": ["male"],
+		"badge": "CHROMA",
 	},
 	{
-		"id": "aurora_shoes",
-		"name": "Aurora Shoes",
-		"description": "The shoes from the Aurora outfit concept.",
+		"id": "adinho-chroma-shoes",
+		"name": "Adinho Chroma Shoes",
+		"description": "A tradeable, colour-customizable edition of the Adinho shoes.",
 		"price": 75,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "shoes",
 		"appearance_slots": ["shoes"],
-		"badge": "SHOES",
+		"preview_part": {"slot": "shoes", "appearance_id": "Adinho_Shoes_Chroma", "tint": "shoes_color"},
+		"genders": ["male"],
+		"badge": "CHROMA",
 	},
 	{
 		"id": "nimbus_mount",
@@ -277,7 +255,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT",
 	},
 	{
-		"id": "surf_charm",
+		"id": "surf-charm",
 		"name": "Surf Charm",
 		"description": "Use Surf without an HM Pokémon. Badge and story requirements still apply.",
 		"price": 350,
@@ -286,7 +264,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "cut_charm",
+		"id": "cut-charm",
 		"name": "Cut Charm",
 		"description": "Use Cut without an HM Pokémon. Badge and story requirements still apply.",
 		"price": 250,
@@ -295,7 +273,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "strength_charm",
+		"id": "strength-charm",
 		"name": "Strength Charm",
 		"description": "Use Strength without an HM Pokémon. Badge and story requirements still apply.",
 		"price": 300,
@@ -304,7 +282,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "rock_smash_charm",
+		"id": "rock-smash-charm",
 		"name": "Rock Smash Charm",
 		"description": "Use Rock Smash without an HM Pokémon. Badge and story requirements still apply.",
 		"price": 250,
@@ -313,7 +291,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "flash_charm",
+		"id": "flash-charm",
 		"name": "Flash Charm",
 		"description": "Use Flash without a Pokémon that knows it. Progression requirements still apply.",
 		"price": 200,
@@ -322,7 +300,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "dive_charm",
+		"id": "dive-charm",
 		"name": "Dive Charm",
 		"description": "Use Dive without a Pokémon that knows it. Badge and story requirements still apply.",
 		"price": 350,
@@ -331,7 +309,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "defog_charm",
+		"id": "defog-charm",
 		"name": "Defog Charm",
 		"description": "Use Defog without a Pokémon that knows it. Progression requirements still apply.",
 		"price": 250,
@@ -340,7 +318,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "rain_dance_charm",
+		"id": "rain-dance-charm",
 		"name": "Rain Dance Charm",
 		"description": "Call rain without carrying a Pokémon that knows Rain Dance. Area rules still apply.",
 		"price": 250,
@@ -349,7 +327,7 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "snowscape_charm",
+		"id": "snowscape-charm",
 		"name": "Snowscape Charm",
 		"description": "Call snow without carrying a Pokémon that knows Snowscape. Area rules still apply.",
 		"price": 250,
@@ -387,6 +365,13 @@ const CATALOG: Array[Dictionary] = [
 ]
 
 var gem_balance := 0
+var authoritative_gem_prices: Dictionary = {}
+var authoritative_item_genders: Dictionary = {}
+var store_catalog_loaded := false
+var store_catalog_loading := false
+var purchase_in_progress := false
+var trainer_gender := "male"
+var trainer_appearance: Dictionary = {}
 var active_category := "featured"
 var active_cosmetic_subcategory := "all"
 var selected_item_id := ""
@@ -404,26 +389,137 @@ var selection_description_label: Label
 var selection_price_label: Label
 var purchase_button: Button
 var status_label: Label
+var character_preview_viewport: SubViewport
+var character_preview_title_label: Label
+var character_preview_note_label: Label
+var character_preview_palette: Control
+var character_preview_color_label: Label
+var character_preview_swatch_grid: GridContainer
+var character_preview_color_picker: ColorPickerButton
+var character_preview_palette_tint_key := ""
+var character_preview_direction := "down"
+var character_preview_direction_buttons: Dictionary = {}
+var character_preview_color_buttons: Dictionary = {}
+var character_preview_colors: Dictionary = {}
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	add_theme_stylebox_override("panel", _panel_style(UI_SURFACE_BASE, Color("#74549ebf"), 14, 1))
+	if trainer_appearance.is_empty():
+		trainer_appearance = CharacterAppearanceService.get_default_appearance(trainer_gender)
 	_build_interface()
-	set_gem_balance(0)
+	_sync_character_preview_colors()
+	set_gem_balance(gem_balance)
 	_select_category("featured")
 
 
 func set_gem_balance(amount: int) -> void:
 	gem_balance = maxi(amount, 0)
 	if balance_label != null:
-		balance_label.text = "%s Gems" % _format_number(gem_balance)
+		balance_label.text = "%s Aether Gems" % _format_number(gem_balance)
+	_refresh_purchase_state()
+
+
+func set_store_loading(loading: bool) -> void:
+	store_catalog_loading = loading
+	if loading and status_label != null:
+		status_label.text = "Loading Aether Gem balance and available items..."
+	_refresh_purchase_state()
+
+
+func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
+	set_gem_balance(int(wallet.get("gems", gem_balance)))
+	authoritative_gem_prices.clear()
+	authoritative_item_genders.clear()
+	var items_value: Variant = store.get("items", [])
+	if items_value is Array:
+		for item_value: Variant in items_value as Array:
+			if not item_value is Dictionary:
+				continue
+			var offer := item_value as Dictionary
+			var item_id := str(offer.get("itemId", "")).strip_edges()
+			var costs_value: Variant = offer.get("costs", [])
+			if item_id == "":
+				continue
+			var normalized_genders: Array[String] = []
+			var genders_value: Variant = offer.get("genders", [])
+			if genders_value is Array:
+				for gender_value: Variant in genders_value as Array:
+					var gender := str(gender_value).strip_edges().to_lower()
+					if ["male", "female"].has(gender) and not normalized_genders.has(gender):
+						normalized_genders.append(gender)
+			authoritative_item_genders[item_id] = normalized_genders
+			if not costs_value is Array:
+				continue
+			for cost_value: Variant in costs_value as Array:
+				if not cost_value is Dictionary:
+					continue
+				var cost := cost_value as Dictionary
+				if str(cost.get("currency", "")).strip_edges().to_lower() == "gems":
+					authoritative_gem_prices[item_id] = maxi(int(cost.get("amount", 0)), 0)
+					break
+	store_catalog_loaded = true
+	store_catalog_loading = false
+	if selected_item_id != "" and not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
+		selected_item_id = ""
+		_reset_selection_footer()
+	_render_products()
+	_refresh_purchase_state()
+
+
+func show_store_error(message: String) -> void:
+	store_catalog_loading = false
+	purchase_in_progress = false
+	if status_label != null:
+		status_label.text = message
+	_refresh_purchase_state(false)
+
+
+func set_purchase_in_progress(active: bool) -> void:
+	purchase_in_progress = active
+	if active and status_label != null:
+		status_label.text = "Completing secure Aether Gem purchase..."
+	_refresh_purchase_state()
+
+
+func show_purchase_success(item_name: String) -> void:
+	purchase_in_progress = false
+	if status_label != null:
+		status_label.text = "%s was added to your Bag" % item_name
+	_refresh_purchase_state(false)
+
+
+func set_trainer_gender(value: String) -> void:
+	trainer_gender = "female" if value.strip_edges().to_lower() == "female" else "male"
+	if selected_item_id != "" and not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
+		selected_item_id = ""
+		_reset_selection_footer()
+	_render_products()
+	_refresh_character_preview()
+
+
+func set_trainer_appearance(value: Dictionary) -> void:
+	trainer_appearance = value.duplicate(true)
+	trainer_gender = (
+		"female"
+		if str(trainer_appearance.get("gender", trainer_gender)).strip_edges().to_lower() == "female"
+		else "male"
+	)
+	if selected_item_id != "" and not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
+		selected_item_id = ""
+		_reset_selection_footer()
+	_sync_character_preview_colors()
+	_render_products()
+	_refresh_character_preview()
 
 
 func open_store() -> void:
+	_sync_character_preview_colors()
+	_refresh_character_preview()
 	visible = true
 	if status_label != null:
-		status_label.text = "Store preview · purchases are not connected yet"
+		status_label.text = "Loading Aether Gem balance and available items..."
 
 
 func close_store() -> void:
@@ -450,6 +546,7 @@ func _build_interface() -> void:
 	layout.add_child(body)
 	body.add_child(_create_category_rail())
 	body.add_child(_create_catalog_area())
+	body.add_child(_create_character_preview_panel())
 
 	layout.add_child(_create_selection_footer())
 
@@ -503,15 +600,6 @@ func _create_header() -> Control:
 	heading.add_child(subtitle)
 
 	row.add_child(_create_balance_pill())
-
-	var get_gems_button := Button.new()
-	get_gems_button.text = "Get Gems"
-	get_gems_button.custom_minimum_size = Vector2(96, 36)
-	get_gems_button.focus_mode = Control.FOCUS_NONE
-	get_gems_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	get_gems_button.pressed.connect(_on_get_gems_pressed)
-	_apply_text_button_style(get_gems_button, UI_PURPLE)
-	row.add_child(get_gems_button)
 
 	var close_button := Button.new()
 	close_button.text = "×"
@@ -622,7 +710,7 @@ func _create_catalog_area() -> Control:
 	layout.add_child(scroll)
 
 	product_grid = GridContainer.new()
-	product_grid.columns = 3
+	product_grid.columns = 2
 	product_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	product_grid.add_theme_constant_override("h_separation", 9)
 	product_grid.add_theme_constant_override("v_separation", 9)
@@ -718,6 +806,128 @@ func _create_hero_panel() -> Control:
 	return panel
 
 
+func _create_character_preview_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "CharacterPreviewPanel"
+	panel.custom_minimum_size = Vector2(260, 0)
+	var style := _panel_style(Color("#0b1524f2"), Color("#694f8eb8"), 11, 1)
+	style.shadow_color = Color("#00000055")
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 3)
+	panel.add_theme_stylebox_override("panel", style)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 11)
+	margin.add_theme_constant_override("margin_top", 11)
+	margin.add_theme_constant_override("margin_right", 11)
+	margin.add_theme_constant_override("margin_bottom", 11)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
+	margin.add_child(layout)
+
+	var eyebrow := Label.new()
+	eyebrow.text = "ON YOUR TRAINER"
+	eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	eyebrow.add_theme_font_size_override("font_size", 10)
+	eyebrow.add_theme_color_override("font_color", UI_CYAN)
+	layout.add_child(eyebrow)
+
+	character_preview_title_label = Label.new()
+	character_preview_title_label.text = "Select a cosmetic"
+	character_preview_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	character_preview_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	character_preview_title_label.add_theme_font_size_override("font_size", 14)
+	character_preview_title_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(character_preview_title_label)
+
+	var viewport_frame := PanelContainer.new()
+	viewport_frame.custom_minimum_size = Vector2(PREVIEW_VIEWPORT_SIZE)
+	viewport_frame.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#07111de8"), Color("#324d65aa"), 10, 1)
+	)
+	layout.add_child(viewport_frame)
+
+	var viewport_container := SubViewportContainer.new()
+	viewport_container.name = "CharacterPreviewViewportContainer"
+	viewport_container.custom_minimum_size = Vector2(PREVIEW_VIEWPORT_SIZE)
+	viewport_container.stretch = false
+	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	viewport_frame.add_child(viewport_container)
+
+	character_preview_viewport = SubViewport.new()
+	character_preview_viewport.name = "CharacterPreviewViewport"
+	character_preview_viewport.transparent_bg = true
+	character_preview_viewport.size = PREVIEW_VIEWPORT_SIZE
+	character_preview_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport_container.add_child(character_preview_viewport)
+
+	var direction_row := HBoxContainer.new()
+	direction_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	direction_row.add_theme_constant_override("separation", 3)
+	layout.add_child(direction_row)
+	for direction: Dictionary in PREVIEW_DIRECTIONS:
+		var direction_id := str(direction.get("id", "down"))
+		var direction_button := Button.new()
+		direction_button.text = str(direction.get("label", direction_id.capitalize()))
+		direction_button.custom_minimum_size = Vector2(51, 27)
+		direction_button.focus_mode = Control.FOCUS_NONE
+		direction_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		direction_button.pressed.connect(_select_character_preview_direction.bind(direction_id))
+		direction_row.add_child(direction_button)
+		character_preview_direction_buttons[direction_id] = direction_button
+
+	character_preview_palette = VBoxContainer.new()
+	character_preview_palette.visible = false
+	character_preview_palette.add_theme_constant_override("separation", 4)
+	layout.add_child(character_preview_palette)
+
+	character_preview_color_label = Label.new()
+	character_preview_color_label.text = "PREVIEW COLOR"
+	character_preview_color_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	character_preview_color_label.add_theme_font_size_override("font_size", 9)
+	character_preview_color_label.add_theme_color_override("font_color", UI_PURPLE)
+	character_preview_palette.add_child(character_preview_color_label)
+
+	character_preview_swatch_grid = GridContainer.new()
+	character_preview_swatch_grid.columns = 8
+	character_preview_swatch_grid.add_theme_constant_override("h_separation", 3)
+	character_preview_swatch_grid.add_theme_constant_override("v_separation", 3)
+	character_preview_palette.add_child(character_preview_swatch_grid)
+
+	var custom_color_row := HBoxContainer.new()
+	custom_color_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	custom_color_row.add_theme_constant_override("separation", 6)
+	character_preview_palette.add_child(custom_color_row)
+
+	var custom_color_label := Label.new()
+	custom_color_label.text = "Custom"
+	custom_color_label.add_theme_font_size_override("font_size", 10)
+	custom_color_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	custom_color_row.add_child(custom_color_label)
+
+	character_preview_color_picker = ColorPickerButton.new()
+	character_preview_color_picker.tooltip_text = "Choose any custom preview color"
+	character_preview_color_picker.custom_minimum_size = Vector2(54, 24)
+	character_preview_color_picker.focus_mode = Control.FOCUS_NONE
+	character_preview_color_picker.color_changed.connect(_select_character_preview_custom_color)
+	custom_color_row.add_child(character_preview_color_picker)
+
+	character_preview_note_label = Label.new()
+	character_preview_note_label.text = "Preview only · your equipped outfit is unchanged"
+	character_preview_note_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	character_preview_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	character_preview_note_label.add_theme_font_size_override("font_size", 10)
+	character_preview_note_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(character_preview_note_label)
+
+	_refresh_character_preview_direction_buttons()
+	_refresh_character_preview()
+	return panel
+
+
 func _create_selection_footer() -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 62)
@@ -747,7 +957,7 @@ func _create_selection_footer() -> Control:
 	selection.add_child(selection_title_label)
 
 	selection_description_label = Label.new()
-	selection_description_label.text = "Checkout will be connected to an authoritative Store service later."
+	selection_description_label.text = "Select an available item to purchase it safely with Aether Gems."
 	selection_description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	selection_description_label.add_theme_font_size_override("font_size", 10)
 	selection_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -764,7 +974,7 @@ func _create_selection_footer() -> Control:
 
 	purchase_button = Button.new()
 	purchase_button.text = "Purchase"
-	purchase_button.tooltip_text = "Purchases are not connected yet"
+	purchase_button.tooltip_text = "Select an available Store item"
 	purchase_button.custom_minimum_size = Vector2(112, 36)
 	purchase_button.focus_mode = Control.FOCUS_NONE
 	purchase_button.disabled = true
@@ -773,11 +983,11 @@ func _create_selection_footer() -> Control:
 	row.add_child(purchase_button)
 
 	status_label = Label.new()
-	status_label.text = "Store preview · purchases are not connected yet"
+	status_label.text = "Loading Aether Gem balance and available items..."
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.add_theme_font_size_override("font_size", 10)
 	status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	status_label.tooltip_text = "The catalog, gem balance and checkout still require backend integration."
+	status_label.tooltip_text = "Aether Gem prices and purchases are verified by the game server."
 	row.add_child(status_label)
 	return panel
 
@@ -834,6 +1044,8 @@ func _render_products() -> void:
 		var categories: Array = item.get("categories", [])
 		if not categories.has(active_category):
 			continue
+		if not _item_matches_trainer_gender(item):
+			continue
 		if active_category == "cosmetics" and not _matches_cosmetic_subcategory(item):
 			continue
 		var card := _create_product_card(item)
@@ -844,6 +1056,11 @@ func _render_products() -> void:
 func _matches_cosmetic_subcategory(item: Dictionary) -> bool:
 	if active_cosmetic_subcategory == "all":
 		return true
+	var subcategories_value: Variant = item.get("cosmetic_subcategories", [])
+	if subcategories_value is Array:
+		for subcategory_value: Variant in subcategories_value as Array:
+			if str(subcategory_value) == active_cosmetic_subcategory:
+				return true
 	return str(item.get("cosmetic_subcategory", "")) == active_cosmetic_subcategory
 
 
@@ -874,7 +1091,13 @@ func _create_product_card(item: Dictionary) -> Button:
 
 	var badge := Label.new()
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	badge.text = str(item.get("badge", "CONCEPT"))
+	var badge_text := str(item.get("badge", "CONCEPT"))
+	var compatibility_badge := _item_gender_badge(item)
+	badge.text = (
+		"%s · %s" % [compatibility_badge, badge_text]
+		if compatibility_badge != ""
+		else badge_text
+	)
 	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	badge.add_theme_font_size_override("font_size", 9)
 	badge.add_theme_color_override("font_color", UI_PURPLE)
@@ -900,7 +1123,9 @@ func _create_product_card(item: Dictionary) -> Button:
 	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = item.get("icon") as Texture2D
+	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(item_id, trainer_gender)
+	icon.texture = cosmetic_icon if cosmetic_icon != null else item.get("icon") as Texture2D
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	center.add_child(icon)
 
 	var title := Label.new()
@@ -924,7 +1149,12 @@ func _create_product_card(item: Dictionary) -> Button:
 
 	var price := Label.new()
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	price.text = "◆  %s" % _format_number(int(item.get("price", 0)))
+	var authoritative_price := _gem_price(item_id)
+	price.text = (
+		"COMING LATER"
+		if store_catalog_loaded and authoritative_price < 0
+		else "◆  %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
+	)
 	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	price.add_theme_font_size_override("font_size", 12)
 	price.add_theme_color_override("font_color", UI_GOLD)
@@ -944,20 +1174,436 @@ func _select_product(item_id: String) -> void:
 			_apply_product_card_style(button, product_id == selected_item_id)
 
 	selection_title_label.text = str(item.get("name", "Store Item"))
-	selection_description_label.text = str(item.get("description", ""))
-	selection_price_label.text = "◆ %s" % _format_number(int(item.get("price", 0)))
-	status_label.text = "Selected for preview · checkout is unavailable"
+	var description := str(item.get("description", ""))
+	var compatibility_note := _item_gender_compatibility_note(item)
+	selection_description_label.text = (
+		"%s · %s" % [description, compatibility_note]
+		if compatibility_note != ""
+		else description
+	)
+	var authoritative_price := _gem_price(item_id)
+	selection_price_label.text = (
+		"COMING LATER"
+		if store_catalog_loaded and authoritative_price < 0
+		else "◆ %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
+	)
+	_refresh_purchase_state()
+	_refresh_character_preview()
 
 
 func _reset_selection_footer() -> void:
 	if selection_title_label != null:
 		selection_title_label.text = "Select an item to preview"
 	if selection_description_label != null:
-		selection_description_label.text = "Checkout will be connected to an authoritative Store service later."
+		selection_description_label.text = "Select an available item to purchase it safely with Aether Gems."
 	if selection_price_label != null:
 		selection_price_label.text = "—"
 	if status_label != null:
-		status_label.text = "Store preview · purchases are not connected yet"
+		status_label.text = "Select an item to preview"
+	_refresh_purchase_state()
+	_refresh_character_preview()
+
+
+func _sync_character_preview_colors() -> void:
+	character_preview_colors = {
+		"hair_color": str(trainer_appearance.get("hair_color", CharacterAppearanceService.get_default_hair_color(trainer_gender))),
+		"facegear_color": str(trainer_appearance.get("facegear_color", "#ffffff")),
+		"top_color": str(trainer_appearance.get("top_color", "#ffffff")),
+		"bottom_color": str(trainer_appearance.get("bottom_color", "#ffffff")),
+		"shoes_color": str(trainer_appearance.get("shoes_color", "#ffffff")),
+	}
+
+
+func _current_character_preview_appearance() -> Dictionary:
+	var body_id := str(trainer_appearance.get("body", ""))
+	if not CharacterAppearanceService.body_supports_layered_parts(body_id, trainer_gender):
+		body_id = (
+			CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID
+			if trainer_gender == "female"
+			else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+		)
+	body_id = CharacterAppearanceService.resolve_body_model_id(body_id, trainer_gender)
+	var appearance := {
+		"body": body_id,
+		"hair": CharacterAppearanceService.deserialize_part_id(str(trainer_appearance.get("hair", CharacterAppearanceService.get_default_part_id("hair", trainer_gender)))),
+		"headgear": "",
+		"facial_hair": "",
+		"facegear": "",
+		"top": CharacterAppearanceService.get_default_part_id("top", trainer_gender),
+		"bottom": CharacterAppearanceService.get_default_part_id("bottom", trainer_gender),
+		"shoes": CharacterAppearanceService.get_default_part_id("shoes", trainer_gender),
+		"hair_color": str(character_preview_colors.get("hair_color", CharacterAppearanceService.get_default_hair_color(trainer_gender))),
+		"skin_tone": CharacterAppearanceService.resolve_skin_tone(
+			str(trainer_appearance.get("body", body_id)),
+			str(trainer_appearance.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE)),
+			trainer_gender
+		),
+		"eye_color": str(trainer_appearance.get("eye_color", CharacterAppearanceService.get_default_eye_color(trainer_gender))),
+		"facegear_color": str(character_preview_colors.get("facegear_color", "#ffffff")),
+		"top_color": str(character_preview_colors.get("top_color", "#ffffff")),
+		"bottom_color": str(character_preview_colors.get("bottom_color", "#ffffff")),
+		"shoes_color": str(character_preview_colors.get("shoes_color", "#ffffff")),
+	}
+	var item := _catalog_item(selected_item_id)
+	for preview_part: Dictionary in _preview_parts_for_item(item):
+		var slot := CharacterAppearanceService.normalize_part_category(str(preview_part.get("slot", "")))
+		var appearance_id := str(preview_part.get("appearance_id", "")).strip_edges()
+		if slot != "" and appearance_id != "":
+			appearance[slot] = appearance_id
+	return appearance
+
+
+func _refresh_character_preview() -> void:
+	if character_preview_viewport == null:
+		return
+	for child: Node in character_preview_viewport.get_children():
+		character_preview_viewport.remove_child(child)
+		child.queue_free()
+
+	var appearance := _current_character_preview_appearance()
+	var preview_visual := _create_character_preview_visual(appearance)
+	if preview_visual != null:
+		character_preview_viewport.add_child(preview_visual)
+		preview_visual.position = PREVIEW_AVATAR_POSITION
+		preview_visual.scale = PREVIEW_AVATAR_SCALE
+		_disable_character_preview_processing(preview_visual)
+		_set_character_preview_direction(preview_visual)
+
+	var item := _catalog_item(selected_item_id)
+	var preview_parts := _preview_parts_for_item(item)
+	var tint_key := ""
+	for preview_part: Dictionary in preview_parts:
+		tint_key = str(preview_part.get("tint", "")).strip_edges()
+		if tint_key != "":
+			break
+	if character_preview_title_label != null:
+		character_preview_title_label.text = (
+			str(item.get("name", "Select a cosmetic"))
+			if not preview_parts.is_empty()
+			else "Select a cosmetic"
+		)
+	if character_preview_note_label != null:
+		character_preview_note_label.text = (
+			"Preview only · your equipped outfit is unchanged"
+			if not preview_parts.is_empty()
+			else "Choose a cosmetic to try it on"
+		)
+	if character_preview_palette != null:
+		character_preview_palette.visible = tint_key != ""
+	if character_preview_color_label != null and tint_key != "":
+		character_preview_color_label.text = (
+			"HAIR & EYEBROW COLOR"
+			if tint_key == "hair_color"
+			else "PREVIEW COLOR"
+		)
+	_rebuild_character_preview_color_buttons(tint_key)
+	_refresh_character_preview_color_buttons(tint_key)
+
+
+func _create_character_preview_visual(appearance: Dictionary) -> Node2D:
+	var visual_root := Node2D.new()
+	for layer: Dictionary in [
+		{"name": "BodySprite", "z": 0},
+		{"name": "BottomSprite", "z": 1},
+		{"name": "ShoesSprite", "z": 2},
+		{"name": "TopSprite", "z": 3},
+		{"name": "EyebrowsSprite", "z": 4},
+		{"name": "EyesSprite", "z": 5},
+		{"name": "HairSprite", "z": 6},
+		{"name": "FacialHairSprite", "z": 7},
+		{"name": "FaceGearSprite", "z": 8},
+		{"name": "HeadgearSprite", "z": 9},
+	]:
+		var sprite := AnimatedSprite2D.new()
+		sprite.name = str(layer.get("name", "AppearanceSprite"))
+		sprite.z_index = int(layer.get("z", 0))
+		visual_root.add_child(sprite)
+
+	_apply_character_preview_appearance(visual_root, appearance)
+	return visual_root
+
+
+func _apply_character_preview_appearance(node: Node, appearance: Dictionary) -> void:
+	if node is AnimatedSprite2D:
+		var sprite := node as AnimatedSprite2D
+		if sprite.name == "BodySprite":
+			var body_frames := CharacterAppearanceService.get_skin_tinted_body_frames(
+				str(appearance.get("body", "")),
+				trainer_gender,
+				CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+				str(appearance.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE))
+			)
+			if body_frames != null:
+				sprite.sprite_frames = body_frames
+				sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+				sprite.modulate = Color.WHITE
+		else:
+			_apply_character_preview_part(sprite, appearance)
+
+	for child: Node in node.get_children():
+		_apply_character_preview_appearance(child, appearance)
+
+
+func _apply_character_preview_part(sprite: AnimatedSprite2D, appearance: Dictionary) -> void:
+	var category := _character_preview_category_for_sprite(sprite.name)
+	if category == "":
+		return
+	if not CharacterAppearanceService.body_supports_layered_parts(
+		str(appearance.get("body", "")),
+		trainer_gender
+	):
+		sprite.visible = false
+		sprite.sprite_frames = null
+		return
+
+	var part_id := _character_preview_part_id(category, appearance)
+	if part_id == "":
+		sprite.visible = false
+		sprite.sprite_frames = null
+		return
+
+	var frames := _character_preview_part_frames(category, part_id, appearance)
+	if frames == null:
+		sprite.visible = false
+		sprite.sprite_frames = null
+		return
+	sprite.sprite_frames = frames
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.material = null
+	sprite.modulate = Color.WHITE
+	sprite.visible = true
+
+
+func _character_preview_category_for_sprite(sprite_name: String) -> String:
+	match sprite_name:
+		"HairSprite":
+			return "hair"
+		"HeadgearSprite":
+			return "headgear"
+		"FacialHairSprite":
+			return "facial_hair"
+		"FaceGearSprite":
+			return "facegear"
+		"TopSprite":
+			return "top"
+		"BottomSprite":
+			return "bottom"
+		"ShoesSprite":
+			return "shoes"
+		"EyesSprite":
+			return "eyes"
+		"EyebrowsSprite":
+			return "eyebrows"
+		_:
+			return ""
+
+
+func _character_preview_part_id(category: String, appearance: Dictionary) -> String:
+	match CharacterAppearanceService.normalize_part_category(category):
+		"eyes":
+			return CharacterAppearanceService.get_default_part_id("eyes", trainer_gender)
+		"eyebrows":
+			return CharacterAppearanceService.get_eyebrows_for_hair(
+				str(appearance.get("hair", "")),
+				trainer_gender
+			)
+		_:
+			return str(appearance.get(category, "")).strip_edges()
+
+
+func _character_preview_part_frames(
+	category: String,
+	part_id: String,
+	appearance: Dictionary
+) -> SpriteFrames:
+	var normalized_category := CharacterAppearanceService.normalize_part_category(category)
+	if normalized_category == "eyes":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			trainer_gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_character_preview_color(str(appearance.get("eye_color", "#ffffff")), Color.WHITE)
+		)
+	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			trainer_gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_character_preview_color(str(appearance.get("hair_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			trainer_gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_character_preview_color(str(appearance.get("facegear_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "top" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			trainer_gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_character_preview_color(str(appearance.get("top_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "bottom" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			trainer_gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_character_preview_color(str(appearance.get("bottom_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "shoes" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			trainer_gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_character_preview_color(str(appearance.get("shoes_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	return CharacterAppearanceService.get_part_frames(category, part_id, trainer_gender)
+
+
+func _parse_character_preview_color(color_text: String, fallback: Color) -> Color:
+	var normalized := color_text.strip_edges()
+	if normalized == "" or not normalized.begins_with("#"):
+		return fallback
+	return Color(normalized)
+
+
+func _disable_character_preview_processing(node: Node) -> void:
+	node.set_process(false)
+	node.set_physics_process(false)
+	node.set_process_input(false)
+	node.set_process_unhandled_input(false)
+	node.set_process_unhandled_key_input(false)
+	for child: Node in node.get_children():
+		_disable_character_preview_processing(child)
+
+
+func _set_character_preview_direction(node: Node) -> void:
+	if node is AnimatedSprite2D:
+		var sprite := node as AnimatedSprite2D
+		var animation_name := StringName("idle_%s" % character_preview_direction)
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(animation_name):
+			sprite.animation = animation_name
+		sprite.frame = 0
+		sprite.stop()
+	for child: Node in node.get_children():
+		_set_character_preview_direction(child)
+
+
+func _select_character_preview_direction(direction: String) -> void:
+	if not ["down", "left", "right", "up"].has(direction):
+		return
+	character_preview_direction = direction
+	_refresh_character_preview_direction_buttons()
+	if character_preview_viewport != null:
+		for child: Node in character_preview_viewport.get_children():
+			_set_character_preview_direction(child)
+
+
+func _refresh_character_preview_direction_buttons() -> void:
+	for direction_value: Variant in character_preview_direction_buttons.keys():
+		var direction := str(direction_value)
+		var button := character_preview_direction_buttons.get(direction) as Button
+		if button != null:
+			_apply_cosmetic_subcategory_style(button, direction == character_preview_direction)
+
+
+func _select_character_preview_color(color_id: String) -> void:
+	var item := _catalog_item(selected_item_id)
+	var tint_key := ""
+	for preview_part: Dictionary in _preview_parts_for_item(item):
+		tint_key = str(preview_part.get("tint", "")).strip_edges()
+		if tint_key != "":
+			break
+	if tint_key == "":
+		return
+	character_preview_colors[tint_key] = color_id
+	_refresh_character_preview()
+
+
+func _select_character_preview_custom_color(color: Color) -> void:
+	_select_character_preview_color("#%s" % color.to_html(false))
+
+
+func _rebuild_character_preview_color_buttons(tint_key: String) -> void:
+	if tint_key == character_preview_palette_tint_key:
+		return
+	character_preview_palette_tint_key = tint_key
+	character_preview_color_buttons.clear()
+	if character_preview_swatch_grid == null:
+		return
+	for child: Node in character_preview_swatch_grid.get_children():
+		character_preview_swatch_grid.remove_child(child)
+		child.queue_free()
+	if tint_key == "":
+		return
+
+	var swatches: Array[Dictionary] = (
+		CharacterAppearanceService.HAIR_COLOR_SWATCHES
+		if tint_key == "hair_color"
+		else CharacterAppearanceService.CHROMA_COLOR_SWATCHES
+	)
+	for swatch: Dictionary in swatches:
+		var color_id := str(swatch.get("id", "#ffffff"))
+		var swatch_button := Button.new()
+		swatch_button.custom_minimum_size = Vector2(24, 24)
+		swatch_button.tooltip_text = str(swatch.get("label", color_id))
+		swatch_button.focus_mode = Control.FOCUS_NONE
+		swatch_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		swatch_button.pressed.connect(_select_character_preview_color.bind(color_id))
+		_apply_preview_swatch_style(swatch_button, swatch.get("color", Color.WHITE) as Color, false)
+		character_preview_swatch_grid.add_child(swatch_button)
+		character_preview_color_buttons[color_id] = swatch_button
+
+
+func _refresh_character_preview_color_buttons(tint_key: String) -> void:
+	var selected_color := str(character_preview_colors.get(tint_key, "")).to_lower()
+	if character_preview_color_picker != null and tint_key != "":
+		character_preview_color_picker.set_block_signals(true)
+		character_preview_color_picker.color = Color.from_string(selected_color, Color.WHITE)
+		character_preview_color_picker.set_block_signals(false)
+	for color_value: Variant in character_preview_color_buttons.keys():
+		var color_id := str(color_value)
+		var button := character_preview_color_buttons.get(color_id) as Button
+		if button == null:
+			continue
+		_apply_preview_swatch_style(button, Color(color_id), color_id.to_lower() == selected_color)
+
+
+func _apply_preview_swatch_style(button: Button, color: Color, selected: bool) -> void:
+	var border := UI_GOLD if selected else Color("#ffffff55")
+	var border_width := 2 if selected else 1
+	button.add_theme_stylebox_override("normal", _button_style(color, border, 6, border_width))
+	button.add_theme_stylebox_override("hover", _button_style(color.lightened(0.12), UI_TEXT, 6, 2))
+	button.add_theme_stylebox_override("pressed", _button_style(color.darkened(0.12), UI_GOLD, 6, 2))
+	button.add_theme_stylebox_override("focus", _button_style(color, border, 6, border_width))
+
+
+func _preview_parts_for_item(item: Dictionary) -> Array[Dictionary]:
+	var normalized: Array[Dictionary] = []
+	var preview_parts_value: Variant = item.get("preview_parts", [])
+	if preview_parts_value is Array:
+		for preview_part_value: Variant in preview_parts_value as Array:
+			if preview_part_value is Dictionary:
+				normalized.append((preview_part_value as Dictionary).duplicate(true))
+	if not normalized.is_empty():
+		return normalized
+	var preview_part_value: Variant = item.get("preview_part", {})
+	if preview_part_value is Dictionary and not (preview_part_value as Dictionary).is_empty():
+		normalized.append((preview_part_value as Dictionary).duplicate(true))
+	return normalized
 
 
 func _catalog_item(item_id: String) -> Dictionary:
@@ -967,15 +1613,103 @@ func _catalog_item(item_id: String) -> Dictionary:
 	return {}
 
 
-func _on_get_gems_pressed() -> void:
-	status_label.text = "Gem purchases are not connected yet"
-	get_gems_requested.emit()
+func _item_genders(item: Dictionary) -> Array[String]:
+	var item_id := str(item.get("id", "")).strip_edges()
+	var genders_value: Variant = item.get("genders", [])
+	if store_catalog_loaded and authoritative_item_genders.has(item_id):
+		var authoritative_value: Variant = authoritative_item_genders.get(item_id, [])
+		var authoritative_genders: Array = authoritative_value if authoritative_value is Array else []
+		var fallback_genders: Array = genders_value if genders_value is Array else []
+		if not authoritative_genders.is_empty() or fallback_genders.is_empty():
+			genders_value = authoritative_value
+	var genders: Array[String] = []
+	if genders_value is Array:
+		for gender_value: Variant in genders_value as Array:
+			var gender := str(gender_value).strip_edges().to_lower()
+			if ["male", "female"].has(gender) and not genders.has(gender):
+				genders.append(gender)
+	return genders
+
+
+func _item_matches_trainer_gender(item: Dictionary) -> bool:
+	if item.is_empty():
+		return false
+	var genders := _item_genders(item)
+	return genders.is_empty() or genders.has(trainer_gender)
+
+
+func _item_gender_badge(item: Dictionary) -> String:
+	var genders := _item_genders(item)
+	if genders == ["male"]:
+		return "MALE ONLY"
+	if genders == ["female"]:
+		return "FEMALE ONLY"
+	return ""
+
+
+func _item_gender_compatibility_note(item: Dictionary) -> String:
+	var badge := _item_gender_badge(item)
+	if badge == "MALE ONLY":
+		return "Male character models only."
+	if badge == "FEMALE ONLY":
+		return "Female character models only."
+	return ""
+
+
+func _gem_price(item_id: String) -> int:
+	if not authoritative_gem_prices.has(item_id):
+		return -1
+	return maxi(int(authoritative_gem_prices.get(item_id, -1)), 0)
+
+
+func _refresh_purchase_state(update_status: bool = true) -> void:
+	if purchase_button == null:
+		return
+	if purchase_in_progress:
+		purchase_button.disabled = true
+		purchase_button.text = "Purchasing..."
+		purchase_button.tooltip_text = "Waiting for the server to complete this purchase"
+		return
+	purchase_button.text = "Purchase"
+	if selected_item_id == "":
+		purchase_button.disabled = true
+		purchase_button.tooltip_text = "Select an available Store item"
+		return
+	if not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
+		purchase_button.disabled = true
+		purchase_button.tooltip_text = "This item is not compatible with your character model"
+		if update_status:
+			status_label.text = "This cosmetic is not compatible with your character model"
+		return
+	if store_catalog_loading or not store_catalog_loaded:
+		purchase_button.disabled = true
+		purchase_button.tooltip_text = "Loading the authoritative Store catalog"
+		if update_status:
+			status_label.text = "Loading Aether Gem balance and available items..."
+		return
+	var price := _gem_price(selected_item_id)
+	if price < 0:
+		purchase_button.disabled = true
+		purchase_button.tooltip_text = "This preview item is not available yet"
+		if update_status:
+			status_label.text = "Preview only · this item is coming later"
+		return
+	if gem_balance < price:
+		purchase_button.disabled = true
+		purchase_button.tooltip_text = "You need %s more Aether Gems" % _format_number(price - gem_balance)
+		if update_status:
+			status_label.text = "Not enough Aether Gems · need %s more" % _format_number(price - gem_balance)
+		return
+	purchase_button.disabled = false
+	purchase_button.tooltip_text = "Purchase for %s Aether Gems and add it to your Bag" % _format_number(price)
+	if update_status:
+		status_label.text = "Ready to purchase · item goes to your Bag"
 
 
 func _on_purchase_pressed() -> void:
-	if selected_item_id == "":
+	if selected_item_id == "" or purchase_button.disabled:
 		return
-	status_label.text = "Checkout is not connected yet"
+	set_purchase_in_progress(true)
 	purchase_requested.emit(selected_item_id)
 
 

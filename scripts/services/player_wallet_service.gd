@@ -4,6 +4,7 @@ class_name PlayerWalletServiceNode
 
 const PLAYER_WALLET_ENDPOINT := "/game/wallet"
 const DEV_ADD_MONEY_ENDPOINT := "/game/dev/wallet/money"
+const DEV_ADD_GEMS_ENDPOINT := "/game/dev/wallet/gems"
 const WILD_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/wild-battle"
 const TRAINER_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/trainer-battle"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -41,6 +42,30 @@ func dev_add_money(amount: int) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + DEV_ADD_MONEY_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"amount": amount,
+		})
+	)
+	return _wallet_result_from_response(response)
+
+
+func dev_add_gems(amount: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if amount <= 0:
+		return {
+			"success": false,
+			"error": "Amount must be positive.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_ADD_GEMS_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({
@@ -104,6 +129,7 @@ func apply_wallet_result(result: Dictionary) -> void:
 
 	var wallet: Dictionary = _dictionary_from_value(result.get("wallet", {}))
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
+	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
 	var party: Array = _array_from_value(result.get("party", []))
 	if not party.is_empty():
 		PlayerSave.replace_party_from_state(party)

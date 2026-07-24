@@ -16,12 +16,12 @@ const MOVE_ACTIONS := ["move_right", "move_left", "move_down", "move_up"]
 const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
 const HIDDEN_FOR_MISSING_ANIMATION_META := "hidden_for_missing_animation"
 const UNEQUIPPED_APPEARANCE_PART_META := "unequipped_appearance_part"
-const BASE_SPRITE_OFFSET_META := "base_sprite_offset"
 const ACTIVITY_BASE_SPRITE_OFFSET_META := "activity_base_sprite_offset"
 const FACE_GEAR_SPRITE_NAME := "FaceGearSprite"
 const BODY_SPRITE_NAME := "BodySprite"
 const HAIR_SPRITE_NAME := "HairSprite"
 const HEADGEAR_SPRITE_NAME := "HeadgearSprite"
+const FACIAL_HAIR_SPRITE_NAME := "FacialHairSprite"
 const TOP_SPRITE_NAME := "TopSprite"
 const BOTTOM_SPRITE_NAME := "BottomSprite"
 const SHOES_SPRITE_NAME := "ShoesSprite"
@@ -36,6 +36,7 @@ const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENS
 const APPEARANCE_PART_SPRITES := {
 	"hair": HAIR_SPRITE_NAME,
 	"headgear": HEADGEAR_SPRITE_NAME,
+	"facial_hair": FACIAL_HAIR_SPRITE_NAME,
 	"facegear": FACE_GEAR_SPRITE_NAME,
 	"top": TOP_SPRITE_NAME,
 	"bottom": BOTTOM_SPRITE_NAME,
@@ -43,7 +44,7 @@ const APPEARANCE_PART_SPRITES := {
 	"eyes": EYES_SPRITE_NAME,
 	"eyebrows": EYEBROWS_SPRITE_NAME,
 }
-const RIDE_STATIC_PART_CATEGORIES := ["hair", "headgear", "facegear", "eyes", "eyebrows"]
+const RIDE_STATIC_PART_CATEGORIES := ["hair", "headgear", "facial_hair", "facegear", "eyes", "eyebrows"]
 const ROLE_BADGE_COLORS := {
 	"alpha": Color(0.851, 0.722, 1.0),
 	"gamemaster": Color(0.0, 0.749, 1.0),
@@ -65,6 +66,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"default": {
 			"hair": Vector2(0.0, 1.0),
 			"headgear": Vector2(0.0, 1.0),
+			"facial_hair": Vector2(0.0, 2.0),
 			"facegear": Vector2(0.0, 2.0),
 			"eyes": Vector2(0.0, 2.0),
 			"eyebrows": Vector2(0.0, 2.0),
@@ -72,6 +74,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"left": {
 			"hair": Vector2(12.0, 1.0),
 			"headgear": Vector2(12.0, 1.0),
+			"facial_hair": Vector2(12.0, 2.0),
 			"facegear": Vector2(12.0, 2.0),
 			"eyes": Vector2(12.0, 2.0),
 			"eyebrows": Vector2(12.0, 2.0),
@@ -79,6 +82,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"right": {
 			"hair": Vector2(-12.0, 1.0),
 			"headgear": Vector2(-12.0, 1.0),
+			"facial_hair": Vector2(-12.0, 2.0),
 			"facegear": Vector2(-12.0, 2.0),
 			"eyes": Vector2(-12.0, 2.0),
 			"eyebrows": Vector2(-12.0, 2.0),
@@ -88,6 +92,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"default": {
 			"hair": Vector2(0.0, 4.0),
 			"headgear": Vector2(0.0, 4.0),
+			"facial_hair": Vector2(0.0, 4.0),
 			"facegear": Vector2(0.0, 4.0),
 			"eyes": Vector2(0.0, 4.0),
 			"eyebrows": Vector2(0.0, 4.0),
@@ -95,6 +100,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"down": {
 			"hair": Vector2(0.0, 4.0),
 			"headgear": Vector2(0.0, 4.0),
+			"facial_hair": Vector2(0.0, 4.0),
 			"facegear": Vector2(0.0, 4.0),
 			"eyes": Vector2(0.0, 6.0),
 			"eyebrows": Vector2(0.0, 5.0),
@@ -102,6 +108,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"left": {
 			"hair": Vector2(-4.0, 4.0),
 			"headgear": Vector2(-4.0, 4.0),
+			"facial_hair": Vector2(-4.0, 4.0),
 			"facegear": Vector2(-4.0, 4.0),
 			"eyes": Vector2(-4.0, 4.0),
 			"eyebrows": Vector2(-4.0, 4.0),
@@ -109,6 +116,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"right": {
 			"hair": Vector2(4.0, 4.0),
 			"headgear": Vector2(4.0, 4.0),
+			"facial_hair": Vector2(4.0, 4.0),
 			"facegear": Vector2(4.0, 4.0),
 			"eyes": Vector2(4.0, 4.0),
 			"eyebrows": Vector2(4.0, 4.0),
@@ -201,7 +209,6 @@ var input_buffer_time_left := 0.0
 var held_direction := Vector2.ZERO
 var held_direction_time := 0.0
 var route_gate_interaction_in_progress := false
-var frame_opaque_center_y_cache := {}
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var master_appearance_sprite: AnimatedSprite2D
 var pokemon_follower: PokemonFollower
@@ -379,6 +386,8 @@ func set_appearance_part(category: String, part_id: String) -> void:
 			PlayerSave.sync_hair_style_index_from_id()
 		"headgear":
 			PlayerSave.appearance_headgear_id = normalized_part_id
+		"facial_hair":
+			PlayerSave.appearance_facial_hair_id = normalized_part_id
 		"facegear":
 			PlayerSave.appearance_facegear_id = normalized_part_id
 		"top":
@@ -1453,7 +1462,6 @@ func play_walk_animation(direction: Vector2) -> void:
 			if should_restart_animation:
 				sprite.frame = 0
 				sprite.frame_progress = 0.0
-			_apply_face_gear_frame_alignment(sprite)
 			sprite.play(animation_name)
 		else:
 			_hide_layer_for_missing_animation(sprite)
@@ -1880,20 +1888,27 @@ func _apply_body_appearance(body_id: String) -> void:
 		push_warning("Player: BodySprite node is missing.")
 		return
 
-	var normalized_body_id: String = body_id.strip_edges()
-	var available_body_ids: Array[String] = CharacterAppearanceService.get_available_body_ids(PlayerSave.gender)
+	var source_body_id: String = body_id.strip_edges()
+	var normalized_body_id: String = CharacterAppearanceService.resolve_body_model_id(source_body_id, PlayerSave.gender)
+	PlayerSave.appearance_skin_tone = CharacterAppearanceService.resolve_skin_tone(
+		source_body_id,
+		PlayerSave.appearance_skin_tone,
+		PlayerSave.gender
+	)
+	var available_body_ids: Array[String] = CharacterAppearanceService.get_available_body_model_ids(PlayerSave.gender)
 	if normalized_body_id == "" or not available_body_ids.has(normalized_body_id):
 		normalized_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID \
 			if PlayerSave.gender == "female" \
 			else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
-		PlayerSave.appearance_body_id = normalized_body_id
 		PlayerSave.ensure_layered_appearance_defaults()
+	PlayerSave.appearance_body_id = normalized_body_id
 
 	var movement_style: String = _get_current_body_movement_style()
-	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_skin_tinted_body_frames(
 		normalized_body_id,
 		PlayerSave.gender,
-		movement_style
+		movement_style,
+		PlayerSave.appearance_skin_tone
 	)
 	if body_frames == null:
 		push_warning("Player: body appearance '%s' could not be loaded." % normalized_body_id)
@@ -1918,10 +1933,11 @@ func _sync_body_sprite_frames_for_movement() -> void:
 	var current_frame: int = body_sprite.frame
 	var current_frame_progress: float = body_sprite.frame_progress
 	var was_playing: bool = body_sprite.is_playing()
-	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_skin_tinted_body_frames(
 		PlayerSave.appearance_body_id,
 		PlayerSave.gender,
-		movement_style
+		movement_style,
+		PlayerSave.appearance_skin_tone
 	)
 	if body_frames == null:
 		return
@@ -1966,6 +1982,8 @@ func _get_player_appearance_part_id(category: String) -> String:
 			return PlayerSave.appearance_hair_id
 		"headgear":
 			return PlayerSave.appearance_headgear_id
+		"facial_hair":
+			return PlayerSave.appearance_facial_hair_id
 		"facegear":
 			return PlayerSave.appearance_facegear_id
 		"top":
@@ -1977,7 +1995,7 @@ func _get_player_appearance_part_id(category: String) -> String:
 		"eyes":
 			return CharacterAppearanceService.get_default_part_id("eyes", PlayerSave.gender)
 		"eyebrows":
-			return CharacterAppearanceService.get_default_part_id("eyebrows", PlayerSave.gender)
+			return CharacterAppearanceService.get_eyebrows_for_hair(PlayerSave.appearance_hair_id, PlayerSave.gender)
 		_:
 			return ""
 
@@ -2056,10 +2074,7 @@ func _clear_appearance_part_sprite(category: String) -> void:
 func _apply_body_modulate(body_sprite: AnimatedSprite2D, body_id: String) -> void:
 	if body_sprite == null:
 		return
-	if CharacterAppearanceService.body_supports_layered_parts(body_id, PlayerSave.gender):
-		body_sprite.modulate = _parse_appearance_color(PlayerSave.appearance_skin_tone, Color.WHITE)
-	else:
-		body_sprite.modulate = Color.WHITE
+	body_sprite.modulate = Color.WHITE
 
 func _get_appearance_part_modulate(category: String) -> Color:
 	return Color.WHITE
@@ -2068,8 +2083,7 @@ func _apply_appearance_part_visuals(sprite: AnimatedSprite2D, category: String) 
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	sprite.material = null
 	sprite.modulate = _get_appearance_part_modulate(normalized_category)
-	if normalized_category != "facegear":
-		_apply_activity_layer_offset(sprite, normalized_category)
+	_apply_activity_layer_offset(sprite, normalized_category)
 
 func _apply_activity_layer_offset(sprite: AnimatedSprite2D, category: String) -> void:
 	if sprite == null:
@@ -2083,8 +2097,6 @@ func _apply_activity_layer_offset(sprite: AnimatedSprite2D, category: String) ->
 func _sync_activity_layer_offsets() -> void:
 	for category_value: Variant in APPEARANCE_PART_SPRITES.keys():
 		var category: String = str(category_value)
-		if category == "facegear":
-			continue
 		var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[category]))
 		if sprite == null or _is_unequipped_appearance_part_sprite(sprite):
 			continue
@@ -2117,8 +2129,6 @@ func _restore_sprite_base_offset(sprite: AnimatedSprite2D) -> void:
 		return
 	if sprite.has_meta(ACTIVITY_BASE_SPRITE_OFFSET_META):
 		sprite.offset = sprite.get_meta(ACTIVITY_BASE_SPRITE_OFFSET_META)
-	elif sprite.has_meta(BASE_SPRITE_OFFSET_META):
-		sprite.offset = sprite.get_meta(BASE_SPRITE_OFFSET_META)
 
 func _get_activity_layer_offset(category: String) -> Vector2:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
@@ -2243,13 +2253,49 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 			movement_style,
 			_parse_appearance_color(PlayerSave.appearance_eye_color, Color.WHITE)
 		)
-	if normalized_category == "hair" or normalized_category == "eyebrows":
+	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
 			PlayerSave.gender,
 			movement_style,
 			_parse_appearance_color(PlayerSave.appearance_hair_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			PlayerSave.gender,
+			movement_style,
+			_parse_appearance_color(PlayerSave.appearance_facegear_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "top" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			PlayerSave.gender,
+			movement_style,
+			_parse_appearance_color(PlayerSave.appearance_top_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "bottom" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			PlayerSave.gender,
+			movement_style,
+			_parse_appearance_color(PlayerSave.appearance_bottom_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "shoes" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			PlayerSave.gender,
+			movement_style,
+			_parse_appearance_color(PlayerSave.appearance_shoes_color, Color.WHITE),
 			true
 		)
 	return CharacterAppearanceService.get_part_frames(
@@ -2293,7 +2339,6 @@ func _sync_appearance_sprite_frames() -> void:
 
 		sprite.frame = mini(frame, frame_count - 1)
 		sprite.frame_progress = frame_progress
-		_apply_face_gear_frame_alignment(sprite)
 		if not sprite.is_playing():
 			sprite.play(animation_name)
 
@@ -2329,7 +2374,6 @@ func _sync_activity_idle_layer(sprite: AnimatedSprite2D, direction: Vector2) -> 
 	sprite.frame = 0
 	sprite.frame_progress = 0.0
 	sprite.stop()
-	_apply_face_gear_frame_alignment(sprite)
 
 func _should_keep_activity_layer_idle(sprite: AnimatedSprite2D) -> bool:
 	if sprite == null or sprite == master_appearance_sprite:
@@ -2362,7 +2406,6 @@ func _set_idle_animation(sprite: AnimatedSprite2D, direction: Vector2) -> void:
 		_restore_layer_visibility_if_needed(sprite)
 		sprite.play(animation_name)
 		sprite.stop()
-		_apply_face_gear_frame_alignment(sprite)
 		return
 	
 	animation_name = _get_walk_animation_name(direction)
@@ -2371,81 +2414,9 @@ func _set_idle_animation(sprite: AnimatedSprite2D, direction: Vector2) -> void:
 		sprite.animation = animation_name
 		sprite.frame = 0
 		sprite.stop()
-		_apply_face_gear_frame_alignment(sprite)
 		return
 
 	_hide_layer_for_missing_animation(sprite)
-
-func _apply_face_gear_frame_alignment(sprite: AnimatedSprite2D) -> void:
-	if sprite == null or sprite.name != FACE_GEAR_SPRITE_NAME or sprite.sprite_frames == null:
-		return
-
-	if master_appearance_sprite == null or master_appearance_sprite.sprite_frames == null:
-		return
-
-	if not sprite.has_meta(BASE_SPRITE_OFFSET_META):
-		sprite.set_meta(BASE_SPRITE_OFFSET_META, sprite.offset)
-
-	var animation_name: StringName = sprite.animation
-	if not sprite.sprite_frames.has_animation(animation_name):
-		return
-
-	if not master_appearance_sprite.sprite_frames.has_animation(animation_name):
-		return
-
-	var frame_count := sprite.sprite_frames.get_frame_count(animation_name)
-	var master_frame_count := master_appearance_sprite.sprite_frames.get_frame_count(animation_name)
-	if frame_count <= 0 or master_frame_count <= 0:
-		return
-
-	var frame_index := clampi(sprite.frame, 0, frame_count - 1)
-	var master_frame_index := clampi(master_appearance_sprite.frame, 0, master_frame_count - 1)
-
-	var reference_face_center_y := _get_frame_opaque_center_y(sprite.sprite_frames, animation_name, 0)
-	var current_face_center_y := _get_frame_opaque_center_y(sprite.sprite_frames, animation_name, frame_index)
-	var reference_body_center_y := _get_frame_opaque_center_y(master_appearance_sprite.sprite_frames, animation_name, 0)
-	var current_body_center_y := _get_frame_opaque_center_y(master_appearance_sprite.sprite_frames, animation_name, master_frame_index)
-	if reference_face_center_y < 0.0 or current_face_center_y < 0.0:
-		return
-	if reference_body_center_y < 0.0 or current_body_center_y < 0.0:
-		return
-
-	var base_offset: Vector2 = sprite.get_meta(BASE_SPRITE_OFFSET_META)
-	var body_bob_y := current_body_center_y - reference_body_center_y
-	sprite.offset = base_offset \
-		+ Vector2(0.0, reference_face_center_y + body_bob_y - current_face_center_y) \
-		+ _get_activity_layer_offset("facegear")
-
-func _get_frame_opaque_center_y(sprite_frames: SpriteFrames, animation_name: StringName, frame_index: int) -> float:
-	var cache_key := "%s:%s:%d" % [str(sprite_frames.get_instance_id()), str(animation_name), frame_index]
-	if frame_opaque_center_y_cache.has(cache_key):
-		return float(frame_opaque_center_y_cache[cache_key])
-
-	var texture := sprite_frames.get_frame_texture(animation_name, frame_index)
-	if texture == null:
-		frame_opaque_center_y_cache[cache_key] = -1.0
-		return -1.0
-
-	var image := texture.get_image()
-	if image == null:
-		frame_opaque_center_y_cache[cache_key] = -1.0
-		return -1.0
-
-	var top_y := image.get_height()
-	var bottom_y := -1
-	for y in range(image.get_height()):
-		for x in range(image.get_width()):
-			if image.get_pixel(x, y).a > 0.05:
-				top_y = mini(top_y, y)
-				bottom_y = maxi(bottom_y, y)
-
-	if bottom_y < top_y:
-		frame_opaque_center_y_cache[cache_key] = -1.0
-		return -1.0
-
-	var center_y := (float(top_y) + float(bottom_y)) * 0.5
-	frame_opaque_center_y_cache[cache_key] = center_y
-	return center_y
 
 func _hide_layer_for_missing_animation(sprite: AnimatedSprite2D) -> void:
 	if sprite == null or sprite == master_appearance_sprite:

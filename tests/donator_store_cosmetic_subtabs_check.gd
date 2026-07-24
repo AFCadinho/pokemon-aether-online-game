@@ -36,9 +36,23 @@ func _run() -> void:
 	]:
 		_check(source.contains('"%s",' % subcategory_id), "cosmetics include %s" % subcategory_id)
 
-	_check(source.contains('"appearance_slots": ["headgear", "top", "bottom", "shoes"]'), "complete outfits declare their included appearance slots")
-	_check(source.contains('"name": "Trailblazer Beard"') and source.contains('"cosmetic_subcategory": "face"'), "Face prepares a beard-style product")
+	for placeholder_id: String in [
+		"aurora_outfit",
+		"profile_accent_pack",
+		"chat_flair_pack",
+		"wardrobe_preset_slot",
+		"aether_body_style",
+		"aurora_hair",
+		"aurora_headgear",
+		"trailblazer_beard",
+		"aurora_facegear",
+		"aurora_top",
+		"aurora_bottom",
+		"aurora_shoes",
+	]:
+		_check(not source.contains('"id": "%s"' % placeholder_id), "placeholder cosmetic %s is absent" % placeholder_id)
 	_check(source.contains("ScrollContainer.SCROLL_MODE_AUTO"), "cosmetic subtabs can scroll on smaller layouts")
+	_check(not source.contains("get_gems_button"), "Store does not expose public Aether Gem top-ups yet")
 
 	store.call("_select_category", "cosmetics")
 	_check(store.cosmetic_subcategory_bar.visible, "cosmetic subtabs appear inside Cosmetics")
@@ -46,14 +60,140 @@ func _run() -> void:
 
 	store.call("_select_cosmetic_subcategory", "face")
 	_check(store.active_cosmetic_subcategory == "face", "Face can become the active cosmetic subtab")
-	_check(store.product_buttons.has("trailblazer_beard"), "Face filters the catalog to beard and face styles")
-	_check(not store.product_buttons.has("aurora_outfit"), "Face hides unrelated outfit products")
+	_check(store.product_buttons.has("adinho-chroma-beard"), "grayscale beard is sold separately")
+	_check(not store.product_buttons.has("adinho-classic-outfit"), "Face hides the complete Classic bundle")
 
 	store.call("_select_cosmetic_subcategory", "outfits")
-	_check(store.product_buttons.has("aurora_outfit"), "Outfits expose complete appearance bundles")
+	_check(store.product_buttons.has("adinho-classic-outfit"), "Outfits lists Adinho Classic as one complete bundle")
+	store.call("_select_product", "adinho-classic-outfit")
+	var classic_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(classic_preview.get("hair", "") == "Adinho_Hair", "Classic preview includes the hairstyle")
+	_check(classic_preview.get("facial_hair", "") == "Adinho_Beard", "Classic preview includes the beard")
+	_check(classic_preview.get("facegear", "") == "Adinho_Glasses", "Classic preview includes the original glasses")
+	_check(classic_preview.get("top", "") == "Adinho_Shirt", "Classic preview includes the original shirt")
+	_check(classic_preview.get("bottom", "") == "Adinho_Trousers", "Classic preview includes the trousers")
+	_check(classic_preview.get("shoes", "") == "Adinho_Shoes", "Classic preview includes the shoes")
+	_check(store.character_preview_palette.visible, "Classic preview exposes its grayscale hair colour")
+	_check(store.character_preview_viewport.get_child_count() == 1, "character preview renders the current trainer")
+	var preview_visual := store.character_preview_viewport.get_child(0) as Node2D
+	_check(preview_visual.position.y <= 160.0 and preview_visual.scale.y <= 3.0, "preview camera leaves room for the trainer's legs and feet")
+
+	store.set_trainer_gender("female")
+	_check(not store.product_buttons.has("adinho-classic-outfit"), "male-only Adinho Classic stays hidden for female models")
+	store.set_trainer_gender("male")
+	_check(store.product_buttons.has("adinho-classic-outfit"), "Adinho Classic is listed for compatible male models")
+	var classic_item: Dictionary = store.call("_catalog_item", "adinho-classic-outfit")
+	_check(store.call("_item_gender_badge", classic_item) == "MALE ONLY", "Adinho cards visibly identify male-only compatibility")
+	_check(
+		store.call("_item_gender_compatibility_note", classic_item) == "Male character models only.",
+		"Adinho selection details explain male-only compatibility"
+	)
+	store.call("_select_product", "adinho-classic-outfit")
+	store.call("_select_character_preview_color", "#2b5f64")
+	var recolored_classic_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(recolored_classic_preview.get("hair_color", "") == "#2b5f64", "Classic hair and beard colour changes stay inside the Store preview")
+	_check(store.trainer_appearance.get("hair", "") != "Adinho_Hair", "preview never equips the cosmetic on the saved trainer")
+	store.call("_select_character_preview_direction", "up")
+	_check(store.character_preview_direction == "up", "preview can show the cosmetic from the back")
+
+	store.call("_select_cosmetic_subcategory", "hair")
+	_check(store.product_buttons.has("adinho-chroma-hair"), "grayscale hair is sold separately")
+	store.call("_select_product", "adinho-chroma-hair")
+	var hair_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(hair_preview.get("hair", "") == "Adinho_Hair", "separate hair product previews the hair with linked eyebrows")
+	_check(
+		hair_preview.get("top", "") == "Shirt"
+			and hair_preview.get("bottom", "") == "Trousers"
+			and hair_preview.get("shoes", "") == "Shoes",
+		"hair preview keeps the complete starter outfit"
+	)
+
+	store.call("_select_cosmetic_subcategory", "body")
+	_check(store.product_buttons.has("adinho-chroma-shirt"), "Chroma shirt is listed in the Body tab")
+
+	store.call("_select_cosmetic_subcategory", "top")
+	_check(store.product_buttons.has("adinho-chroma-shirt"), "Chroma shirt remains listed in the Top tab")
+	store.call("_select_product", "adinho-chroma-shirt")
+	var shirt_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(shirt_preview.get("top", "") == "Adinho_Shirt_Chroma", "selected Chroma shirt is the only clothing applied to the preview")
+	_check(
+		shirt_preview.get("bottom", "") == "Trousers" and shirt_preview.get("shoes", "") == "Shoes",
+		"starter bottom and shoes remain while previewing a shirt"
+	)
+
+	store.call("_select_cosmetic_subcategory", "bottom")
+	_check(store.product_buttons.has("adinho-chroma-trousers"), "grayscale trousers are sold separately")
+	store.call("_select_product", "adinho-chroma-trousers")
+	store.call("_select_character_preview_color", "#6b5c91")
+	var trousers_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(trousers_preview.get("bottom", "") == "Adinho_Trousers_Chroma", "separate trousers use the Chroma appearance")
+	_check(
+		trousers_preview.get("top", "") == "Shirt" and trousers_preview.get("shoes", "") == "Shoes",
+		"starter top and shoes remain while previewing trousers"
+	)
+	_check(trousers_preview.get("bottom_color", "") == "#6b5c91", "trousers have an independent preview colour")
+	store.call("_select_cosmetic_subcategory", "shoes")
+	_check(store.product_buttons.has("adinho-chroma-shoes"), "grayscale shoes are sold separately")
+	store.call("_select_product", "adinho-chroma-shoes")
+	var shoes_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(shoes_preview.get("shoes", "") == "Adinho_Shoes_Chroma", "separate shoes replace the starter shoes")
+	_check(
+		shoes_preview.get("top", "") == "Shirt" and shoes_preview.get("bottom", "") == "Trousers",
+		"starter top and bottom remain while previewing shoes"
+	)
+
+	store.apply_store_state(
+		{"gems": 500},
+		{
+			"items": [
+				{
+					"itemId": "adinho-chroma-shirt",
+					"genders": ["male"],
+					"costs": [{"currency": "gems", "amount": 130}],
+				},
+				{"itemId": "surf-charm", "genders": [], "costs": [{"currency": "gems", "amount": 350}]},
+				{"itemId": "cut-charm", "genders": [], "costs": [{"currency": "gems", "amount": 250}]},
+				{"itemId": "strength-charm", "genders": [], "costs": [{"currency": "gems", "amount": 300}]},
+				{"itemId": "rock-smash-charm", "genders": [], "costs": [{"currency": "gems", "amount": 250}]},
+				{"itemId": "flash-charm", "genders": [], "costs": [{"currency": "gems", "amount": 200}]},
+				{"itemId": "dive-charm", "genders": [], "costs": [{"currency": "gems", "amount": 350}]},
+				{"itemId": "defog-charm", "genders": [], "costs": [{"currency": "gems", "amount": 250}]},
+				{"itemId": "rain-dance-charm", "genders": [], "costs": [{"currency": "gems", "amount": 250}]},
+				{"itemId": "snowscape-charm", "genders": [], "costs": [{"currency": "gems", "amount": 250}]},
+			],
+		}
+	)
+	store.call("_select_category", "charms")
+	var charm_prices := {
+		"surf-charm": 350,
+		"cut-charm": 250,
+		"strength-charm": 300,
+		"rock-smash-charm": 250,
+		"flash-charm": 200,
+		"dive-charm": 350,
+		"defog-charm": 250,
+		"rain-dance-charm": 250,
+		"snowscape-charm": 250,
+	}
+	for charm_id: String in charm_prices:
+		_check(store.product_buttons.has(charm_id), "%s is listed as an available Charm" % charm_id)
+		_check(store.call("_gem_price", charm_id) == charm_prices[charm_id], "%s uses its server Aether Gem price" % charm_id)
+	store.call("_select_product", "surf-charm")
+	_check(not store.purchase_button.disabled, "server-listed Surf Charm can be purchased")
+
+	store.call("_select_category", "cosmetics")
+	store.call("_select_cosmetic_subcategory", "top")
+	store.call("_select_product", "adinho-chroma-shirt")
+	_check(not store.purchase_button.disabled, "server-listed cosmetic can be purchased with enough Aether Gems")
+	_check(store.selection_price_label.text.contains("130"), "server Aether Gem price overrides the preview catalog price")
+	store.set_gem_balance(100)
+	_check(store.purchase_button.disabled, "purchase is disabled when the Aether Gem balance is insufficient")
 
 	store.call("_select_category", "membership")
 	_check(not store.cosmetic_subcategory_bar.visible, "cosmetic subtabs stay out of other Store categories")
+	store.call("_select_product", "aether_membership_3")
+	_check(store.purchase_button.disabled, "preview-only products cannot spend Aether Gems")
+	_check(store.selection_price_label.text == "COMING LATER", "preview-only products are clearly marked")
 
 	store.queue_free()
 	quit(1 if failed else 0)

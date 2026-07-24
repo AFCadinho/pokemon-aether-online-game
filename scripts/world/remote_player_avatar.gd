@@ -42,6 +42,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"default": {
 			"hair": Vector2(0.0, 1.0),
 			"headgear": Vector2(0.0, 1.0),
+			"facial_hair": Vector2(0.0, 2.0),
 			"facegear": Vector2(0.0, 2.0),
 			"eyes": Vector2(0.0, 2.0),
 			"eyebrows": Vector2(0.0, 2.0),
@@ -49,6 +50,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"left": {
 			"hair": Vector2(12.0, 1.0),
 			"headgear": Vector2(12.0, 1.0),
+			"facial_hair": Vector2(12.0, 2.0),
 			"facegear": Vector2(12.0, 2.0),
 			"eyes": Vector2(12.0, 2.0),
 			"eyebrows": Vector2(12.0, 2.0),
@@ -56,6 +58,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"right": {
 			"hair": Vector2(-12.0, 1.0),
 			"headgear": Vector2(-12.0, 1.0),
+			"facial_hair": Vector2(-12.0, 2.0),
 			"facegear": Vector2(-12.0, 2.0),
 			"eyes": Vector2(-12.0, 2.0),
 			"eyebrows": Vector2(-12.0, 2.0),
@@ -65,6 +68,7 @@ const ACTIVITY_LAYER_OFFSETS := {
 		"default": {
 			"hair": Vector2(0.0, 2.0),
 			"headgear": Vector2(0.0, 2.0),
+			"facial_hair": Vector2(0.0, 2.0),
 			"facegear": Vector2(0.0, 2.0),
 			"eyes": Vector2(0.0, 2.0),
 			"eyebrows": Vector2(0.0, 2.0),
@@ -82,6 +86,7 @@ const ACTIVITY_VISUAL_OFFSETS := {
 const APPEARANCE_PART_SPRITES := {
 	"hair": "HairSprite",
 	"headgear": "HeadgearSprite",
+	"facial_hair": "FacialHairSprite",
 	"facegear": "FaceGearSprite",
 	"top": "TopSprite",
 	"bottom": "BottomSprite",
@@ -260,6 +265,7 @@ func _merge_presence_appearance_values_from_container(appearance_state: Dictiona
 	_merge_presence_appearance_value(appearance_state, container, "hair", ["appearanceHair", "hair"])
 	_merge_presence_appearance_value(appearance_state, container, "hair_style_index", ["appearanceHairStyleIndex", "hair_style_index", "hairStyleIndex"])
 	_merge_presence_appearance_value(appearance_state, container, "headgear", ["appearanceHeadgear", "headgear"])
+	_merge_presence_appearance_value(appearance_state, container, "facial_hair", ["appearanceFacialHair", "facial_hair", "facialHair"])
 	_merge_presence_appearance_value(appearance_state, container, "facegear", ["appearanceFacegear", "facegear"])
 	_merge_presence_appearance_value(appearance_state, container, "top", ["appearanceTop", "top"])
 	_merge_presence_appearance_value(appearance_state, container, "bottom", ["appearanceBottom", "bottom", "legs"])
@@ -267,6 +273,10 @@ func _merge_presence_appearance_values_from_container(appearance_state: Dictiona
 	_merge_presence_appearance_value(appearance_state, container, "hair_color", ["appearanceHairColor", "hair_color", "hairColor"])
 	_merge_presence_appearance_value(appearance_state, container, "skin_tone", ["appearanceSkinTone", "skin_tone", "skinTone"])
 	_merge_presence_appearance_value(appearance_state, container, "eye_color", ["appearanceEyeColor", "eye_color", "eyeColor"])
+	_merge_presence_appearance_value(appearance_state, container, "facegear_color", ["appearanceFacegearColor", "facegear_color", "facegearColor"])
+	_merge_presence_appearance_value(appearance_state, container, "top_color", ["appearanceTopColor", "top_color", "topColor"])
+	_merge_presence_appearance_value(appearance_state, container, "bottom_color", ["appearanceBottomColor", "bottom_color", "bottomColor"])
+	_merge_presence_appearance_value(appearance_state, container, "shoes_color", ["appearanceShoesColor", "shoes_color", "shoesColor"])
 
 
 func _merge_encoded_body_appearance(appearance_state: Dictionary) -> void:
@@ -347,11 +357,17 @@ func _apply_follower_state(follower_state: Dictionary) -> void:
 
 func _apply_appearance_state(appearance_state: Dictionary) -> void:
 	var fallback_body_id: String = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if current_gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
-	var body_id: String = str(appearance_state.get("body", fallback_body_id)).strip_edges()
-	if body_id == "":
-		body_id = fallback_body_id
+	var source_body_id: String = str(appearance_state.get("body", fallback_body_id)).strip_edges()
+	if source_body_id == "":
+		source_body_id = fallback_body_id
+	var body_id := CharacterAppearanceService.resolve_body_model_id(source_body_id, current_gender)
 	var next_appearance_state: Dictionary = appearance_state.duplicate()
 	next_appearance_state["body"] = body_id
+	next_appearance_state["skin_tone"] = CharacterAppearanceService.resolve_skin_tone(
+		source_body_id,
+		str(appearance_state.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE)),
+		current_gender
+	)
 	var next_body_movement_style: String = _get_current_body_movement_style(
 		tile_move_duration if is_replaying_tile_move else TILE_MOVE_DURATION
 	)
@@ -872,17 +888,23 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 	var fallback_body_id: String = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID \
 		if normalized_gender == "female" \
 		else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
-	var normalized_body_id: String = body_id.strip_edges()
+	var source_body_id: String = body_id.strip_edges()
+	var normalized_body_id: String = CharacterAppearanceService.resolve_body_model_id(source_body_id, normalized_gender)
 	if normalized_body_id == "":
 		normalized_body_id = fallback_body_id
-	var available_body_ids: Array[String] = CharacterAppearanceService.get_available_body_ids(normalized_gender)
+	var available_body_ids: Array[String] = CharacterAppearanceService.get_available_body_model_ids(normalized_gender)
 	if not available_body_ids.has(normalized_body_id):
 		normalized_body_id = fallback_body_id
 
-	var body_frames: SpriteFrames = CharacterAppearanceService.get_body_frames(
+	var body_frames: SpriteFrames = CharacterAppearanceService.get_skin_tinted_body_frames(
 		normalized_body_id,
 		normalized_gender,
-		movement_style
+		movement_style,
+		CharacterAppearanceService.resolve_skin_tone(
+			source_body_id,
+			str(current_appearance_state.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE)),
+			normalized_gender
+		)
 	)
 	if body_frames == null:
 		return
@@ -938,6 +960,8 @@ func _get_appearance_part_id(category: String) -> String:
 			return _get_appearance_hair_id()
 		"headgear":
 			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("headgear", CharacterAppearanceService.get_default_part_id("headgear", current_body_gender))))
+		"facial_hair":
+			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("facial_hair", "")))
 		"facegear":
 			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("facegear", "")))
 		"top":
@@ -949,7 +973,7 @@ func _get_appearance_part_id(category: String) -> String:
 		"eyes":
 			return CharacterAppearanceService.get_default_part_id("eyes", current_body_gender)
 		"eyebrows":
-			return CharacterAppearanceService.get_default_part_id("eyebrows", current_body_gender)
+			return CharacterAppearanceService.get_eyebrows_for_hair(_get_appearance_hair_id(), current_body_gender)
 		_:
 			return ""
 
@@ -1059,10 +1083,7 @@ func _clear_appearance_part_sprite(category: String) -> void:
 func _apply_body_modulate(body_sprite: AnimatedSprite2D, body_id: String, gender: String) -> void:
 	if body_sprite == null:
 		return
-	if CharacterAppearanceService.body_supports_layered_parts(body_id, gender):
-		body_sprite.modulate = _parse_appearance_color(str(current_appearance_state.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE)), Color.WHITE)
-	else:
-		body_sprite.modulate = Color.WHITE
+	body_sprite.modulate = Color.WHITE
 
 
 func _get_appearance_part_modulate(category: String) -> Color:
@@ -1169,7 +1190,7 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 				Color.WHITE
 			)
 		)
-	if normalized_category == "hair" or normalized_category == "eyebrows":
+	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
@@ -1182,6 +1203,42 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 				),
 				Color.WHITE
 			),
+			true
+		)
+	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			current_body_gender,
+			movement_style,
+			_parse_appearance_color(str(current_appearance_state.get("facegear_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "top" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			current_body_gender,
+			movement_style,
+			_parse_appearance_color(str(current_appearance_state.get("top_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "bottom" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			current_body_gender,
+			movement_style,
+			_parse_appearance_color(str(current_appearance_state.get("bottom_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "shoes" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			current_body_gender,
+			movement_style,
+			_parse_appearance_color(str(current_appearance_state.get("shoes_color", "#ffffff")), Color.WHITE),
 			true
 		)
 	return CharacterAppearanceService.get_part_frames(
@@ -1200,11 +1257,12 @@ func _parse_appearance_color(color_text: String, fallback: Color) -> Color:
 
 
 func _get_appearance_signature(appearance_state: Dictionary) -> String:
-	return "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	return "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		str(appearance_state.get("body", "")),
 		str(appearance_state.get("hair", "")),
 		str(appearance_state.get("hair_style_index", "")),
 		str(appearance_state.get("headgear", "")),
+		str(appearance_state.get("facial_hair", "")),
 		str(appearance_state.get("facegear", "")),
 		str(appearance_state.get("top", "")),
 		str(appearance_state.get("bottom", appearance_state.get("legs", ""))),
@@ -1212,6 +1270,10 @@ func _get_appearance_signature(appearance_state: Dictionary) -> String:
 		str(appearance_state.get("hair_color", "")),
 		str(appearance_state.get("skin_tone", "")),
 		str(appearance_state.get("eye_color", "")),
+		str(appearance_state.get("facegear_color", "")),
+		str(appearance_state.get("top_color", "")),
+		str(appearance_state.get("bottom_color", "")),
+		str(appearance_state.get("shoes_color", "")),
 	]
 
 

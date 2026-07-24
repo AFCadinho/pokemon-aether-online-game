@@ -173,6 +173,19 @@ def write_json(path: Path, value: list[str]) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n")
 
 
+def merge_json_ids(path: Path, required_ids: list[str]) -> None:
+    existing_ids: list[str] = []
+    if path.exists():
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, list):
+            raise ValueError(f"{path} must contain a JSON array")
+        existing_ids = [str(value) for value in payload if str(value).strip()]
+    for required_id in required_ids:
+        if required_id not in existing_ids:
+            existing_ids.append(required_id)
+    write_json(path, existing_ids)
+
+
 def copy_sheet(source_path: Path, destination_path: Path, overwrite: bool) -> bool:
     if destination_path.exists() and not overwrite:
         print(f"skip existing {destination_path}")
@@ -194,7 +207,7 @@ def import_delivery_2(source_root: Path, project_root: Path, overwrite: bool) ->
             destination = body_dir / f"{body_id}.png"
             copy_sheet(source_path, destination, overwrite)
             write_texture_import(project_root, destination.relative_to(project_root))
-        write_json(body_dir / "body_manifest.json", BODY_MANIFESTS[gender])
+        merge_json_ids(body_dir / "body_manifest.json", BODY_MANIFESTS[gender])
 
     for gender, folder_name in GENDER_SOURCES.items():
         for category, (source_file, part_id) in LAYER_FILES.items():
@@ -213,7 +226,10 @@ def import_delivery_2(source_root: Path, project_root: Path, overwrite: bool) ->
             write_texture_import(project_root, destination.relative_to(project_root))
 
         for category, part_ids in PART_MANIFESTS.items():
-            write_json(project_root / "assets" / "player" / gender / category / "parts_manifest.json", part_ids)
+            merge_json_ids(
+                project_root / "assets" / "player" / gender / category / "parts_manifest.json",
+                part_ids,
+            )
 
 
 def main() -> None:

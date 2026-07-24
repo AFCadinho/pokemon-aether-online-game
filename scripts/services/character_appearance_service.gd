@@ -8,6 +8,7 @@ const BODY_DIRECTORY := "res://assets/player/body"
 const BODY_MANIFEST_PATH := "res://assets/player/body/body_manifest.json"
 const HAIR_CATEGORY := "hair"
 const HEADGEAR_CATEGORY := "headgear"
+const FACIAL_HAIR_CATEGORY := "facial_hair"
 const FACEGEAR_CATEGORY := "facegear"
 const TOP_CATEGORY := "top"
 const BOTTOM_CATEGORY := "bottom"
@@ -21,6 +22,7 @@ const DEFAULT_MALE_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_FEMALE_BODY_ID := "Gen4_Base_F_v1"
 const DEFAULT_MALE_HAIR_ID := "Hair"
 const DEFAULT_MALE_HEADGEAR_ID := "Cap"
+const DEFAULT_MALE_FACIAL_HAIR_ID := ""
 const DEFAULT_MALE_FACEGEAR_ID := ""
 const DEFAULT_MALE_TOP_ID := "Shirt"
 const DEFAULT_MALE_BOTTOM_ID := "Trousers"
@@ -29,6 +31,7 @@ const DEFAULT_MALE_EYES_ID := "Eyes"
 const DEFAULT_MALE_EYEBROWS_ID := "Eyebrows"
 const DEFAULT_FEMALE_HAIR_ID := "Hair"
 const DEFAULT_FEMALE_HEADGEAR_ID := "Cap"
+const DEFAULT_FEMALE_FACIAL_HAIR_ID := ""
 const DEFAULT_FEMALE_FACEGEAR_ID := ""
 const DEFAULT_FEMALE_TOP_ID := "Shirt"
 const DEFAULT_FEMALE_BOTTOM_ID := "Trousers"
@@ -40,10 +43,65 @@ const LEGACY_DEFAULT_EYE_COLOR := "#0fff00"
 const DEFAULT_MALE_HAIR_COLOR := "#5a3728"
 const DEFAULT_FEMALE_HAIR_COLOR := "#6b4632"
 const DEFAULT_HAIR_COLOR := DEFAULT_MALE_HAIR_COLOR
-const DEFAULT_SKIN_TONE := "#ffffff"
+const DEFAULT_SKIN_TONE := "#f8d0b8"
+const LEGACY_TAN_SKIN_TONE := "#c58a5c"
+const LEGACY_DARK_SKIN_TONE := "#68402f"
 const DEFAULT_MALE_EYE_COLOR := "#3d6f86"
 const DEFAULT_FEMALE_EYE_COLOR := "#456f4a"
 const DEFAULT_EYE_COLOR := DEFAULT_MALE_EYE_COLOR
+const HAIR_COLOR_SWATCHES: Array[Dictionary] = [
+	{"id": "#201a18", "label": "Soft Black", "color": Color("#201a18")},
+	{"id": "#3b241c", "label": "Espresso", "color": Color("#3b241c")},
+	{"id": "#5a3728", "label": "Dark Brown", "color": Color("#5a3728")},
+	{"id": "#6b4632", "label": "Warm Brown", "color": Color("#6b4632")},
+	{"id": "#7a4632", "label": "Chestnut", "color": Color("#7a4632")},
+	{"id": "#813a2f", "label": "Auburn", "color": Color("#813a2f")},
+	{"id": "#a85f3f", "label": "Copper", "color": Color("#a85f3f")},
+	{"id": "#b99555", "label": "Dirty Blond", "color": Color("#b99555")},
+	{"id": "#d6b66b", "label": "Ash Blond", "color": Color("#d6b66b")},
+	{"id": "#e8dfc7", "label": "Platinum", "color": Color("#e8dfc7")},
+	{"id": "#a9afb8", "label": "Silver", "color": Color("#a9afb8")},
+	{"id": "#2b5f64", "label": "Deep Teal", "color": Color("#2b5f64")},
+	{"id": "#6b5c91", "label": "Muted Violet", "color": Color("#6b5c91")},
+	{"id": "#a64f70", "label": "Dusty Rose", "color": Color("#a64f70")},
+]
+const CHROMA_COLOR_SWATCHES: Array[Dictionary] = [
+	{"id": "#171a21", "label": "Charcoal", "color": Color("#171a21")},
+	{"id": "#555c66", "label": "Slate", "color": Color("#555c66")},
+	{"id": "#aeb6c2", "label": "Silver", "color": Color("#aeb6c2")},
+	{"id": "#f2f2ec", "label": "Pearl", "color": Color("#f2f2ec")},
+	{"id": "#efe2c1", "label": "Cream", "color": Color("#efe2c1")},
+	{"id": "#6f4935", "label": "Brown", "color": Color("#6f4935")},
+	{"id": "#b53a3f", "label": "Crimson", "color": Color("#b53a3f")},
+	{"id": "#e45d4f", "label": "Coral", "color": Color("#e45d4f")},
+	{"id": "#d97932", "label": "Orange", "color": Color("#d97932")},
+	{"id": "#d6a629", "label": "Gold", "color": Color("#d6a629")},
+	{"id": "#d7dc55", "label": "Lime", "color": Color("#d7dc55")},
+	{"id": "#3d8b52", "label": "Green", "color": Color("#3d8b52")},
+	{"id": "#2b7f78", "label": "Teal", "color": Color("#2b7f78")},
+	{"id": "#36a7b4", "label": "Cyan", "color": Color("#36a7b4")},
+	{"id": "#3f6fb2", "label": "Blue", "color": Color("#3f6fb2")},
+	{"id": "#314a85", "label": "Navy", "color": Color("#314a85")},
+	{"id": "#6b5c91", "label": "Violet", "color": Color("#6b5c91")},
+	{"id": "#8c4fa3", "label": "Purple", "color": Color("#8c4fa3")},
+	{"id": "#b84f8e", "label": "Magenta", "color": Color("#b84f8e")},
+	{"id": "#e77ba8", "label": "Pink", "color": Color("#e77ba8")},
+]
+const SKIN_TONE_SWATCHES: Array[Dictionary] = [
+	{"id": "#f8d0b8", "label": "Default", "color": Color("#f8d0b8")},
+	{"id": "#f2d2bd", "label": "Tone 1 · Neutral", "color": Color("#f2d2bd")},
+	{"id": "#ebc0ae", "label": "Tone 2 · Cool", "color": Color("#ebc0ae")},
+	{"id": "#e7b894", "label": "Tone 3 · Warm", "color": Color("#e7b894")},
+	{"id": "#d6a07c", "label": "Tone 4 · Neutral", "color": Color("#d6a07c")},
+	{"id": "#c58a5c", "label": "Tone 5 · Golden", "color": Color("#c58a5c")},
+	{"id": "#b17a57", "label": "Tone 6 · Olive", "color": Color("#b17a57")},
+	{"id": "#9b6549", "label": "Tone 7 · Neutral", "color": Color("#9b6549")},
+	{"id": "#825137", "label": "Tone 8 · Warm", "color": Color("#825137")},
+	{"id": "#68402f", "label": "Tone 9 · Deep", "color": Color("#68402f")},
+	{"id": "#533327", "label": "Tone 10 · Deep Warm", "color": Color("#533327")},
+	{"id": "#3f271f", "label": "Tone 11 · Rich Deep", "color": Color("#3f271f")},
+	{"id": "#2d1c18", "label": "Tone 12 · Espresso", "color": Color("#2d1c18")},
+]
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 5.0
@@ -58,6 +116,7 @@ const BODY_MOVEMENT_MOUNT := "mount"
 const LAYERED_PART_CATEGORIES: Array[String] = [
 	HAIR_CATEGORY,
 	HEADGEAR_CATEGORY,
+	FACIAL_HAIR_CATEGORY,
 	FACEGEAR_CATEGORY,
 	TOP_CATEGORY,
 	BOTTOM_CATEGORY,
@@ -77,8 +136,10 @@ const DEFAULT_LAYERED_FEMALE_BODY_IDS: Array[String] = [
 ]
 
 static var _body_frames_cache: Dictionary = {}
+static var _skin_tinted_body_frames_cache: Dictionary = {}
 static var _part_frames_cache: Dictionary = {}
 static var _tinted_part_frames_cache: Dictionary = {}
+static var _cosmetic_item_icon_cache: Dictionary = {}
 
 
 static func get_default_appearance(gender: String = "") -> Dictionary:
@@ -88,6 +149,7 @@ static func get_default_appearance(gender: String = "") -> Dictionary:
 		"body": body_id,
 		"hair": "",
 		"headgear": "",
+		"facial_hair": "",
 		"facegear": "",
 		"top": "",
 		"bottom": "",
@@ -102,6 +164,118 @@ static func get_default_appearance(gender: String = "") -> Dictionary:
 				continue
 			appearance[category] = get_default_part_id(category, normalized_gender)
 	return appearance
+
+
+static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> Texture2D:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	var normalized_gender := normalize_gender(gender)
+	if normalized_gender == "":
+		normalized_gender = "male"
+	var cache_key := "%s:%s" % [normalized_gender, normalized_item_id]
+	if _cosmetic_item_icon_cache.has(cache_key):
+		return _cosmetic_item_icon_cache.get(cache_key) as Texture2D
+
+	var layers: Array[Dictionary] = []
+	match normalized_item_id:
+		"adinho-classic-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "Adinho_Trousers"},
+				{"category": SHOES_CATEGORY, "id": "Adinho_Shoes"},
+				{"category": TOP_CATEGORY, "id": "Adinho_Shirt"},
+				{"category": EYEBROWS_CATEGORY, "id": "Adinho_Eyebrows", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
+				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(DEFAULT_EYE_COLOR)},
+				{"category": HAIR_CATEGORY, "id": "Adinho_Hair", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
+				{"category": FACIAL_HAIR_CATEGORY, "id": "Adinho_Beard", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
+				{"category": FACEGEAR_CATEGORY, "id": "Adinho_Glasses"},
+			]
+		"adinho-chroma-hair":
+			layers = [
+				{"category": EYEBROWS_CATEGORY, "id": "Adinho_Eyebrows", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
+				{"category": HAIR_CATEGORY, "id": "Adinho_Hair", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
+			]
+		"adinho-chroma-beard":
+			layers = [
+				{"category": FACIAL_HAIR_CATEGORY, "id": "Adinho_Beard", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
+			]
+		"adinho-chroma-glasses":
+			layers = [
+				{"category": FACEGEAR_CATEGORY, "id": "Adinho_Glasses_Chroma", "tint": Color("#aeb6c2"), "preserve": true},
+			]
+		"adinho-chroma-shirt":
+			layers = [
+				{"category": TOP_CATEGORY, "id": "Adinho_Shirt_Chroma", "tint": Color("#3f6fb2"), "preserve": true},
+			]
+		"adinho-chroma-trousers":
+			layers = [
+				{"category": BOTTOM_CATEGORY, "id": "Adinho_Trousers_Chroma", "tint": Color("#8c4fa3"), "preserve": true},
+			]
+		"adinho-chroma-shoes":
+			layers = [
+				{"category": SHOES_CATEGORY, "id": "Adinho_Shoes_Chroma", "tint": Color("#e77ba8"), "preserve": true},
+			]
+		_:
+			return null
+
+	var icon_image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+	icon_image.fill(Color.TRANSPARENT)
+	for layer: Dictionary in layers:
+		var frames: SpriteFrames
+		if str(layer.get("kind", "")) == "body":
+			frames = get_skin_tinted_body_frames(
+				DEFAULT_FEMALE_BODY_ID if normalized_gender == "female" else DEFAULT_MALE_BODY_ID,
+				normalized_gender,
+				BODY_MOVEMENT_DEFAULT,
+				DEFAULT_SKIN_TONE
+			)
+		else:
+			var category := str(layer.get("category", ""))
+			var appearance_id := str(layer.get("id", ""))
+			if layer.has("tint"):
+				frames = get_tinted_part_frames(
+					category,
+					appearance_id,
+					normalized_gender,
+					BODY_MOVEMENT_DEFAULT,
+					layer.get("tint", Color.WHITE) as Color,
+					bool(layer.get("preserve", false))
+				)
+			else:
+				frames = get_part_frames(category, appearance_id, normalized_gender)
+		_blend_idle_front_frame(icon_image, frames)
+
+	var used_rect := icon_image.get_used_rect()
+	if used_rect.size.x <= 0 or used_rect.size.y <= 0:
+		_cosmetic_item_icon_cache[cache_key] = null
+		return null
+	var padded_position := Vector2i(
+		maxi(used_rect.position.x - 2, 0),
+		maxi(used_rect.position.y - 2, 0)
+	)
+	var padded_end := Vector2i(
+		mini(used_rect.end.x + 2, icon_image.get_width()),
+		mini(used_rect.end.y + 2, icon_image.get_height())
+	)
+	var cropped_image := icon_image.get_region(Rect2i(padded_position, padded_end - padded_position))
+	var icon_texture := ImageTexture.create_from_image(cropped_image)
+	_cosmetic_item_icon_cache[cache_key] = icon_texture
+	return icon_texture
+
+
+static func _blend_idle_front_frame(target: Image, frames: SpriteFrames) -> void:
+	if target == null or frames == null or not frames.has_animation(&"idle_down"):
+		return
+	if frames.get_frame_count(&"idle_down") <= 0:
+		return
+	var texture := frames.get_frame_texture(&"idle_down", 0)
+	var source := _get_texture_image(texture)
+	if source == null:
+		return
+	var copy_size := Vector2i(
+		mini(source.get_width(), target.get_width()),
+		mini(source.get_height(), target.get_height())
+	)
+	target.blend_rect(source, Rect2i(Vector2i.ZERO, copy_size), Vector2i.ZERO)
 
 
 static func get_default_hair_color(gender: String = "") -> String:
@@ -126,9 +300,46 @@ static func resolve_eye_color(color_text: String, gender: String = "") -> String
 	return normalized_color
 
 
+static func resolve_body_model_id(body_id: String, gender: String = "") -> String:
+	var normalized_gender := normalize_gender(gender)
+	var normalized_body_id := _normalize_body_id(body_id)
+	if normalized_body_id in [
+		"Gen4_Base_M_Tan",
+		"Gen4_Base_M_Dark",
+		"Gen4_Base_F_Tan",
+		"Gen4_Base_F_Dark",
+	]:
+		return DEFAULT_FEMALE_BODY_ID if normalized_gender == "female" else DEFAULT_MALE_BODY_ID
+	return normalized_body_id
+
+
+static func resolve_skin_tone(body_id: String, color_text: String, gender: String = "") -> String:
+	var normalized_color := color_text.strip_edges().to_lower()
+	var normalized_body_id := _normalize_body_id(body_id)
+	if normalized_color == "" or normalized_color in ["#ffffff", "#ffffffff"]:
+		if normalized_body_id in ["Gen4_Base_M_Tan", "Gen4_Base_F_Tan"]:
+			return LEGACY_TAN_SKIN_TONE
+		if normalized_body_id in ["Gen4_Base_M_Dark", "Gen4_Base_F_Dark"]:
+			return LEGACY_DARK_SKIN_TONE
+		return DEFAULT_SKIN_TONE
+	return normalized_color
+
+
+static func get_available_body_model_ids(gender: String = "") -> Array[String]:
+	var ids := get_available_body_ids(gender)
+	for legacy_id: String in [
+		"Gen4_Base_M_Tan",
+		"Gen4_Base_M_Dark",
+		"Gen4_Base_F_Tan",
+		"Gen4_Base_F_Dark",
+	]:
+		ids.erase(legacy_id)
+	return ids
+
+
 static func body_supports_layered_parts(body_id: String, gender: String = "") -> bool:
 	var normalized_gender: String = normalize_gender(gender)
-	var normalized_body_id: String = _normalize_body_id(body_id)
+	var normalized_body_id: String = resolve_body_model_id(body_id, normalized_gender)
 	if normalized_gender == "female":
 		return DEFAULT_LAYERED_FEMALE_BODY_IDS.has(normalized_body_id)
 	return DEFAULT_LAYERED_MALE_BODY_IDS.has(normalized_body_id)
@@ -141,6 +352,8 @@ static func get_default_part_id(category: String, gender: String = "") -> String
 			return DEFAULT_FEMALE_HAIR_ID if normalized_gender == "female" else DEFAULT_MALE_HAIR_ID
 		HEADGEAR_CATEGORY:
 			return DEFAULT_FEMALE_HEADGEAR_ID if normalized_gender == "female" else DEFAULT_MALE_HEADGEAR_ID
+		FACIAL_HAIR_CATEGORY:
+			return DEFAULT_FEMALE_FACIAL_HAIR_ID if normalized_gender == "female" else DEFAULT_MALE_FACIAL_HAIR_ID
 		FACEGEAR_CATEGORY:
 			return DEFAULT_FEMALE_FACEGEAR_ID if normalized_gender == "female" else DEFAULT_MALE_FACEGEAR_ID
 		TOP_CATEGORY:
@@ -164,6 +377,8 @@ static func normalize_part_category(category: String) -> String:
 			return HAIR_CATEGORY
 		"headgear", "headwear", "hat", "cap":
 			return HEADGEAR_CATEGORY
+		"facialhair", "beard", "facialhairstyle":
+			return FACIAL_HAIR_CATEGORY
 		"facegear", "facewear", "faceaccessory", "faceaccessories", "glasses", "mask":
 			return FACEGEAR_CATEGORY
 		"top", "shirt", "upper":
@@ -178,6 +393,37 @@ static func normalize_part_category(category: String) -> String:
 			return EYEBROWS_CATEGORY
 		_:
 			return normalized
+
+
+static func is_free_part_id(category: String, part_id: String) -> bool:
+	var normalized_category: String = normalize_part_category(category)
+	var normalized_part_id: String = part_id.strip_edges()
+	if normalized_part_id == "":
+		return true
+	return normalized_part_id == get_default_part_id(normalized_category, "male") \
+		or normalized_part_id == get_default_part_id(normalized_category, "female")
+
+
+static func is_tintable_part(category: String, part_id: String) -> bool:
+	var normalized_category: String = normalize_part_category(category)
+	var normalized_part_id: String = part_id.strip_edges()
+	if normalized_category == HAIR_CATEGORY or normalized_category == FACIAL_HAIR_CATEGORY:
+		return true
+	if normalized_category == FACEGEAR_CATEGORY:
+		return normalized_part_id == "Adinho_Glasses_Chroma"
+	if normalized_category == TOP_CATEGORY:
+		return normalized_part_id == "Adinho_Shirt_Chroma"
+	if normalized_category == BOTTOM_CATEGORY:
+		return normalized_part_id == "Adinho_Trousers_Chroma"
+	if normalized_category == SHOES_CATEGORY:
+		return normalized_part_id == "Adinho_Shoes_Chroma"
+	return false
+
+
+static func get_eyebrows_for_hair(hair_id: String, gender: String = "") -> String:
+	if normalize_gender(gender) == "male" and hair_id.strip_edges() == "Adinho_Hair":
+		return "Adinho_Eyebrows"
+	return get_default_part_id(EYEBROWS_CATEGORY, gender)
 
 
 static func serialize_part_id(part_id: String) -> String:
@@ -441,6 +687,44 @@ static func get_body_frames(body_id: String, gender: String = "", movement_style
 	var sprite_frames: SpriteFrames = _build_sprite_frames(texture)
 	_body_frames_cache[cache_key] = sprite_frames
 	return sprite_frames
+
+
+static func get_skin_tinted_body_frames(
+	body_id: String,
+	gender: String = "",
+	movement_style: String = BODY_MOVEMENT_DEFAULT,
+	skin_tone: String = DEFAULT_SKIN_TONE
+) -> SpriteFrames:
+	var normalized_gender := normalize_gender(gender)
+	var source_body_id := _normalize_body_id(body_id)
+	var normalized_body_id := resolve_body_model_id(source_body_id, normalized_gender)
+	if normalized_body_id == "":
+		normalized_body_id = _get_fallback_body_id(normalized_gender)
+	var normalized_movement_style := _normalize_movement_style(movement_style)
+	var resolved_skin_tone := resolve_skin_tone(source_body_id, skin_tone, normalized_gender)
+	var tint_color := Color.from_string(resolved_skin_tone, Color(DEFAULT_SKIN_TONE))
+
+	var base_frames := get_body_frames(normalized_body_id, normalized_gender, normalized_movement_style)
+	if base_frames == null or not body_supports_layered_parts(normalized_body_id, normalized_gender):
+		return base_frames
+	if resolved_skin_tone.to_lower() == DEFAULT_SKIN_TONE:
+		return base_frames
+
+	var cache_key := "%s:%s:%s:%s" % [
+		normalized_gender,
+		normalized_body_id,
+		normalized_movement_style,
+		tint_color.to_html(false),
+	]
+	if _skin_tinted_body_frames_cache.has(cache_key):
+		var cached_value: Variant = _skin_tinted_body_frames_cache[cache_key]
+		if cached_value is SpriteFrames:
+			return cached_value as SpriteFrames
+		return null
+
+	var tinted_frames := _build_skin_tinted_sprite_frames(base_frames, tint_color)
+	_skin_tinted_body_frames_cache[cache_key] = tinted_frames
+	return tinted_frames
 
 
 static func normalize_movement_style(movement_style: String) -> String:
@@ -712,6 +996,31 @@ static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: C
 	return sprite_frames
 
 
+static func _build_skin_tinted_sprite_frames(base_frames: SpriteFrames, skin_tone: Color) -> SpriteFrames:
+	var sprite_frames := SpriteFrames.new()
+	if sprite_frames.has_animation(&"default"):
+		sprite_frames.remove_animation(&"default")
+
+	for animation_name_text: String in base_frames.get_animation_names():
+		var animation_name := StringName(animation_name_text)
+		if not sprite_frames.has_animation(animation_name):
+			sprite_frames.add_animation(animation_name)
+		sprite_frames.set_animation_speed(animation_name, base_frames.get_animation_speed(animation_name))
+		sprite_frames.set_animation_loop(animation_name, base_frames.get_animation_loop(animation_name))
+
+		var frame_count := base_frames.get_frame_count(animation_name)
+		for frame_index: int in range(frame_count):
+			var frame_texture := base_frames.get_frame_texture(animation_name, frame_index)
+			var frame_duration := base_frames.get_frame_duration(animation_name, frame_index)
+			sprite_frames.add_frame(
+				animation_name,
+				_make_skin_tinted_texture(frame_texture, skin_tone),
+				frame_duration
+			)
+
+	return sprite_frames
+
+
 static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve_luminance: bool) -> Texture2D:
 	if texture == null:
 		return null
@@ -723,24 +1032,118 @@ static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve
 	var width: int = source_image.get_width()
 	var height: int = source_image.get_height()
 	var tinted_image := Image.create(width, height, false, Image.FORMAT_RGBA8)
+	var minimum_luminance := 1.0
+	var maximum_luminance := 0.0
+	if preserve_luminance:
+		for y: int in range(height):
+			for x: int in range(width):
+				var range_pixel := source_image.get_pixel(x, y)
+				if range_pixel.a <= 0.001:
+					continue
+				var range_luminance := _color_luminance(range_pixel)
+				if range_luminance <= 0.035:
+					continue
+				minimum_luminance = minf(minimum_luminance, range_luminance)
+				maximum_luminance = maxf(maximum_luminance, range_luminance)
+
 	for y: int in range(height):
 		for x: int in range(width):
 			var source_pixel: Color = source_image.get_pixel(x, y)
 			var alpha: float = source_pixel.a * tint_color.a
+			if source_pixel.a <= 0.001:
+				tinted_image.set_pixel(x, y, Color(0.0, 0.0, 0.0, 0.0))
+				continue
 			if preserve_luminance:
-				var luminance: float = clampf(
-					(source_pixel.r * 0.2126) + (source_pixel.g * 0.7152) + (source_pixel.b * 0.0722),
+				var luminance := _color_luminance(source_pixel)
+				if luminance <= 0.035:
+					tinted_image.set_pixel(x, y, Color(
+						source_pixel.r,
+						source_pixel.g,
+						source_pixel.b,
+						alpha
+					))
+					continue
+				var luminance_span := maxf(maximum_luminance - minimum_luminance, 0.001)
+				var normalized_luminance := clampf(
+					(luminance - minimum_luminance) / luminance_span,
 					0.0,
 					1.0
 				)
-				var normalized_luminance: float = clampf((luminance - 0.05) / 0.43, 0.0, 1.0)
-				var shade_value: float = lerpf(0.45, 1.15, pow(normalized_luminance, 0.85))
+				var shade_value: float = lerpf(0.38, 1.18, pow(normalized_luminance, 0.9))
 				var tinted_value: float = clampf(tint_color.v * shade_value, 0.0, 1.0)
 				tinted_image.set_pixel(x, y, Color.from_hsv(tint_color.h, tint_color.s, tinted_value, alpha))
 			else:
 				tinted_image.set_pixel(x, y, Color(tint_color.r, tint_color.g, tint_color.b, alpha))
 
 	return ImageTexture.create_from_image(tinted_image)
+
+
+static func _make_skin_tinted_texture(texture: Texture2D, skin_tone: Color) -> Texture2D:
+	if texture == null:
+		return null
+
+	var source_image := _get_texture_image(texture)
+	if source_image == null:
+		return texture
+
+	var width := source_image.get_width()
+	var height := source_image.get_height()
+	var minimum_luminance := 1.0
+	var maximum_luminance := 0.0
+	for y: int in range(height):
+		for x: int in range(width):
+			var range_pixel := source_image.get_pixel(x, y)
+			if not _is_skin_palette_pixel(range_pixel):
+				continue
+			var range_luminance := _color_luminance(range_pixel)
+			minimum_luminance = minf(minimum_luminance, range_luminance)
+			maximum_luminance = maxf(maximum_luminance, range_luminance)
+
+	if maximum_luminance <= 0.0:
+		return texture
+
+	var tinted_image := Image.create(width, height, false, Image.FORMAT_RGBA8)
+	var luminance_span := maxf(maximum_luminance - minimum_luminance, 0.001)
+	for y: int in range(height):
+		for x: int in range(width):
+			var source_pixel := source_image.get_pixel(x, y)
+			if source_pixel.a <= 0.001:
+				tinted_image.set_pixel(x, y, Color(0.0, 0.0, 0.0, 0.0))
+				continue
+			if not _is_skin_palette_pixel(source_pixel):
+				tinted_image.set_pixel(x, y, source_pixel)
+				continue
+
+			var normalized_luminance := clampf(
+				(_color_luminance(source_pixel) - minimum_luminance) / luminance_span,
+				0.0,
+				1.0
+			)
+			var shade_value := lerpf(0.52, 1.24, pow(normalized_luminance, 0.9))
+			var tinted_value := clampf(skin_tone.v * shade_value, 0.0, 1.0)
+			tinted_image.set_pixel(
+				x,
+				y,
+				Color.from_hsv(skin_tone.h, skin_tone.s, tinted_value, source_pixel.a * skin_tone.a)
+			)
+
+	return ImageTexture.create_from_image(tinted_image)
+
+
+static func _is_skin_palette_pixel(color: Color) -> bool:
+	if color.a <= 0.001:
+		return false
+	if _color_luminance(color) <= 0.035:
+		return false
+	return color.r > color.g * 1.04 and color.g >= color.b * 0.98
+
+
+static func _color_luminance(color: Color) -> float:
+	return clampf(
+		(color.r * 0.2126) + (color.g * 0.7152) + (color.b * 0.0722),
+		0.0,
+		1.0
+	)
 
 
 static func _get_texture_image(texture: Texture2D) -> Image:

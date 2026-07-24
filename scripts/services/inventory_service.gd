@@ -3,6 +3,9 @@ extends Node
 class_name InventoryServiceNode
 
 const INVENTORY_ENDPOINT := "/game/inventory"
+const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
+const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
+const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
 const WILD_BATTLE_CATCH_ENDPOINT := "/game/wild-battles/%s/catch"
 const POKEMON_ITEM_USE_ENDPOINT := "/game/pokemon/%s/items/use"
 const DEV_ADD_ITEM_ENDPOINT := "/game/dev/inventory/items"
@@ -33,6 +36,78 @@ func load_inventory() -> Dictionary:
 	return {
 		"success": true,
 		"items": _array_from_value(body.get("items", [])),
+	}
+
+
+func load_appearance_inventory() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + APPEARANCE_INVENTORY_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {"success": true, "unlocks": _array_from_value(body.get("unlocks", []))}
+
+
+func use_inventory_item(item_id: String) -> Dictionary:
+	var normalized_item_id := item_id.strip_edges()
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if normalized_item_id == "":
+		return {"success": false, "error": "Missing item id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + INVENTORY_ITEM_USE_ENDPOINT % normalized_item_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
+	var appearance_inventory: Dictionary = _dictionary_from_value(body.get("appearanceInventory", {}))
+	return {
+		"success": true,
+		"itemId": str(body.get("itemId", normalized_item_id)),
+		"inventory": _array_from_value(inventory.get("items", [])),
+		"appearanceUnlocks": _array_from_value(appearance_inventory.get("unlocks", [])),
+	}
+
+
+func return_appearance_item(item_id: String) -> Dictionary:
+	var normalized_item_id := item_id.strip_edges()
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	if normalized_item_id == "":
+		return {"success": false, "error": "Missing item id."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + APPEARANCE_ITEM_RETURN_ENDPOINT % normalized_item_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
+	var appearance_inventory: Dictionary = _dictionary_from_value(body.get("appearanceInventory", {}))
+	return {
+		"success": true,
+		"itemId": str(body.get("itemId", normalized_item_id)),
+		"returnedUnlocks": _array_from_value(body.get("returnedUnlocks", [])),
+		"inventory": _array_from_value(inventory.get("items", [])),
+		"appearanceUnlocks": _array_from_value(appearance_inventory.get("unlocks", [])),
 	}
 
 
