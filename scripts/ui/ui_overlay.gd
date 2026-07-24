@@ -40,6 +40,7 @@ const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_CLAN := "clan"
 const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
+	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
 	CHAT_TAB_SYSTEM,
 	CHAT_TAB_MAP,
@@ -47,6 +48,7 @@ const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_CLAN,
 ]
 const CHAT_TAB_LABELS := {
+	CHAT_TAB_ALL: "All",
 	CHAT_TAB_GENERAL: "General",
 	CHAT_TAB_MAP: "Map",
 	CHAT_TAB_SYSTEM: "System",
@@ -89,6 +91,7 @@ const PVP_MODE_TOURNAMENT_ICON: Texture2D = preload("res://assets/ui/pvp_tournam
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
+const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")
 const DEV_CREATE_POKEMON_ICON: Texture2D = preload("res://assets/ui/pokedex.svg")
 const DEV_SPAWN_ENCOUNTER_ICON: Texture2D = preload("res://assets/ui/wild_encounter_radar.svg")
 const DEV_ADD_RESOURCES_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
@@ -165,11 +168,14 @@ const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
 const BAG_SIZE := Vector2(1120, 660)
 const MAIL_POPUP_SIZE := Vector2(920, 600)
 const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 650)
-const PC_POPUP_SIZE := Vector2(980, 600)
+const PC_POPUP_SIZE := Vector2(1160, 720)
 const PC_BOX_SLOTS_PER_ROW := 6
-const PC_BOX_SLOT_SIZE := Vector2(106, 86)
-const PC_PARTY_SLOT_SIZE := Vector2(230, 62)
+const PC_BOX_SLOT_SIZE := Vector2(116, 76)
+const PC_PARTY_SLOT_SIZE := Vector2(248, 66)
 const PC_BOX_TABS_VISIBLE := 10
+const PC_ACCENT := Color("#60d3ff")
+const PC_ACCENT_SOFT := Color("#60d3ff88")
+const PC_ACCENT_FAINT := Color("#60d3ff33")
 const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEDEX_ACCENT := Color("#ef5a68")
@@ -737,7 +743,8 @@ var chat_settings_popup: PanelContainer
 var chat_settings_rows: VBoxContainer
 var chat_tab_visibility: Dictionary = {}
 var chat_tab_order: Array[String] = []
-var selected_general_chat_tab := CHAT_TAB_ALL
+var selected_general_chat_tab := CHAT_TAB_GENERAL
+var all_chat_tab_button: Button
 var map_chat_tab_button: Button
 var clan_chat_tab_button: Button
 var clan_chat_container: CenterContainer
@@ -845,9 +852,13 @@ var pc_box_tab_bar: HBoxContainer
 var pc_box_tab_prev_button: Button
 var pc_box_tab_next_button: Button
 var pc_search_input: LineEdit
+var pc_search_results_label: Label
 var pc_party_list: VBoxContainer
+var pc_party_count_label: Label
 var pc_box_scroll: ScrollContainer
 var pc_box_grid: GridContainer
+var pc_box_title_label: Label
+var pc_box_capacity_label: Label
 var pc_status_label: Label
 var pc_close_button: Button
 var pc_release_mode_button: Button
@@ -1027,6 +1038,7 @@ var wild_pokemon_button_hovered := false
 var wild_pokemon_button_tween: Tween
 var displayed_money: int = -1
 var displayed_location_map: Node
+var displayed_location_name := ""
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 var selected_global_buff: Dictionary = {}
 var selected_global_buff_contribution := 10000
@@ -1113,6 +1125,7 @@ func _ready() -> void:
 	general_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GENERAL))
 	trade_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_TRADE))
 	system_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_SYSTEM))
+	_setup_all_chat_tab()
 	_setup_help_chat_tab()
 	_setup_map_chat_tab()
 	_setup_pm_chat_ui()
@@ -1122,6 +1135,7 @@ func _ready() -> void:
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	clan_chat_tab_button.focus_mode = Control.FOCUS_NONE
@@ -1734,185 +1748,293 @@ func _setup_pc_ui() -> void:
 	pc_popup.offset_top = -PC_POPUP_SIZE.y / 2.0
 	pc_popup.offset_right = PC_POPUP_SIZE.x / 2.0
 	pc_popup.offset_bottom = PC_POPUP_SIZE.y / 2.0
-	pc_popup.add_theme_stylebox_override("panel", _make_panel_style(UI_PANEL_BG, UI_BORDER, 10, 1))
+	pc_popup.add_theme_stylebox_override("panel", _make_pc_outer_style())
 	root_control.add_child(pc_popup)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 15)
+	margin.add_theme_constant_override("margin_right", 16)
 	margin.add_theme_constant_override("margin_bottom", 14)
 	pc_popup.add_child(margin)
 
 	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 10)
+	stack.add_theme_constant_override("separation", 12)
 	margin.add_child(stack)
 
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 10)
+	header.name = "StorageHeader"
+	header.custom_minimum_size = Vector2(0, 50)
+	header.add_theme_constant_override("separation", 12)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_pc_header_gui_input)
 	stack.add_child(header)
 
+	var icon_frame := PanelContainer.new()
+	icon_frame.name = "StorageIconFrame"
+	icon_frame.custom_minimum_size = Vector2(46, 46)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override("panel", _make_pc_icon_frame_style())
+	header.add_child(icon_frame)
+
+	var icon_margin := MarginContainer.new()
+	icon_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_margin.add_theme_constant_override("margin_left", 6)
+	icon_margin.add_theme_constant_override("margin_top", 6)
+	icon_margin.add_theme_constant_override("margin_right", 6)
+	icon_margin.add_theme_constant_override("margin_bottom", 6)
+	icon_frame.add_child(icon_margin)
+
+	var storage_icon := TextureRect.new()
+	storage_icon.name = "StorageIcon"
+	storage_icon.texture = POKEMON_STORAGE_ICON
+	storage_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	storage_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	storage_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_margin.add_child(storage_icon)
+
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_stack.add_theme_constant_override("separation", 1)
+	header.add_child(title_stack)
+
 	var title := Label.new()
-	title.text = "PC Boxes"
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.text = "Pokémon Storage"
 	title.mouse_filter = Control.MOUSE_FILTER_STOP
 	title.gui_input.connect(_on_pc_header_gui_input)
-	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_font_size_override("font_size", 21)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	header.add_child(title)
+	title_stack.add_child(title)
 
-	pc_status_label = Label.new()
-	pc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pc_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	pc_status_label.mouse_filter = Control.MOUSE_FILTER_STOP
-	pc_status_label.gui_input.connect(_on_pc_header_gui_input)
-	pc_status_label.add_theme_font_size_override("font_size", 13)
-	pc_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	header.add_child(pc_status_label)
+	var subtitle := Label.new()
+	subtitle.text = "Organize your party and stored Pokémon"
+	subtitle.mouse_filter = Control.MOUSE_FILTER_STOP
+	subtitle.gui_input.connect(_on_pc_header_gui_input)
+	subtitle.add_theme_font_size_override("font_size", 12)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	title_stack.add_child(subtitle)
 
 	pc_release_mode_button = Button.new()
-	pc_release_mode_button.text = "Release"
-	pc_release_mode_button.custom_minimum_size = Vector2(88, 32)
+	pc_release_mode_button.text = "Release Mode"
+	pc_release_mode_button.custom_minimum_size = Vector2(118, 36)
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
-	pc_release_mode_button.tooltip_text = "Enable release mode"
+	pc_release_mode_button.tooltip_text = "Enable the permanent Pokémon release drop zone"
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
 	_apply_button_style(pc_release_mode_button, "danger")
 	header.add_child(pc_release_mode_button)
 
 	pc_close_button = Button.new()
-	pc_close_button.text = "Close"
-	pc_close_button.custom_minimum_size = Vector2(78, 32)
+	pc_close_button.text = "×"
+	pc_close_button.custom_minimum_size = Vector2(38, 36)
 	pc_close_button.focus_mode = Control.FOCUS_NONE
+	pc_close_button.tooltip_text = "Close Pokémon Storage"
 	pc_close_button.pressed.connect(_on_pc_close_button_pressed)
 	_apply_button_style(pc_close_button)
 	header.add_child(pc_close_button)
 
 	var body := HBoxContainer.new()
+	body.name = "StorageWorkspace"
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_theme_constant_override("separation", 14)
 	stack.add_child(body)
 
 	var party_panel := PanelContainer.new()
-	party_panel.custom_minimum_size = Vector2(250, 0)
+	party_panel.name = "PartyPanel"
+	party_panel.custom_minimum_size = Vector2(272, 0)
 	party_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	party_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
+	party_panel.add_theme_stylebox_override("panel", _make_pc_workspace_panel_style())
 	body.add_child(party_panel)
 
 	var party_margin := MarginContainer.new()
-	party_margin.add_theme_constant_override("margin_left", 10)
-	party_margin.add_theme_constant_override("margin_top", 10)
-	party_margin.add_theme_constant_override("margin_right", 10)
-	party_margin.add_theme_constant_override("margin_bottom", 10)
+	party_margin.add_theme_constant_override("margin_left", 11)
+	party_margin.add_theme_constant_override("margin_top", 11)
+	party_margin.add_theme_constant_override("margin_right", 11)
+	party_margin.add_theme_constant_override("margin_bottom", 11)
 	party_panel.add_child(party_margin)
 
 	var party_stack := VBoxContainer.new()
-	party_stack.add_theme_constant_override("separation", 8)
+	party_stack.add_theme_constant_override("separation", 7)
 	party_margin.add_child(party_stack)
 
+	var party_section_label := _create_pc_section_caption("YOUR PARTY")
+	party_stack.add_child(party_section_label)
+
+	var party_heading_row := HBoxContainer.new()
+	party_heading_row.add_theme_constant_override("separation", 8)
+	party_stack.add_child(party_heading_row)
+
 	var party_title := Label.new()
-	party_title.text = "Party"
-	party_title.add_theme_font_size_override("font_size", 16)
+	party_title.text = "Ready Team"
+	party_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	party_title.add_theme_font_size_override("font_size", 17)
 	party_title.add_theme_color_override("font_color", UI_TEXT)
-	party_stack.add_child(party_title)
+	party_heading_row.add_child(party_title)
+
+	pc_party_count_label = Label.new()
+	pc_party_count_label.text = "0 / 6"
+	pc_party_count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pc_party_count_label.add_theme_font_size_override("font_size", 11)
+	pc_party_count_label.add_theme_color_override("font_color", PC_ACCENT)
+	party_heading_row.add_child(pc_party_count_label)
+
+	var party_help := Label.new()
+	party_help.text = "Click to inspect  ·  Drag to move"
+	party_help.add_theme_font_size_override("font_size", 10)
+	party_help.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	party_stack.add_child(party_help)
 
 	pc_party_list = VBoxContainer.new()
 	pc_party_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pc_party_list.add_theme_constant_override("separation", 7)
+	pc_party_list.add_theme_constant_override("separation", 6)
 	party_stack.add_child(pc_party_list)
 
 	var box_panel := PanelContainer.new()
+	box_panel.name = "BoxWorkspacePanel"
 	box_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
+	box_panel.add_theme_stylebox_override("panel", _make_pc_workspace_panel_style())
 	body.add_child(box_panel)
 
 	var box_margin := MarginContainer.new()
-	box_margin.add_theme_constant_override("margin_left", 10)
-	box_margin.add_theme_constant_override("margin_top", 10)
-	box_margin.add_theme_constant_override("margin_right", 10)
-	box_margin.add_theme_constant_override("margin_bottom", 10)
+	box_margin.add_theme_constant_override("margin_left", 11)
+	box_margin.add_theme_constant_override("margin_top", 11)
+	box_margin.add_theme_constant_override("margin_right", 11)
+	box_margin.add_theme_constant_override("margin_bottom", 11)
 	box_panel.add_child(box_margin)
 
 	var box_stack := VBoxContainer.new()
-	box_stack.add_theme_constant_override("separation", 10)
+	box_stack.add_theme_constant_override("separation", 8)
 	box_margin.add_child(box_stack)
 
 	var box_header := HBoxContainer.new()
+	box_header.name = "BoxHeader"
 	box_header.add_theme_constant_override("separation", 8)
 	box_stack.add_child(box_header)
 
-	var box_title := Label.new()
-	box_title.text = "Box"
-	box_title.add_theme_font_size_override("font_size", 16)
-	box_title.add_theme_color_override("font_color", UI_TEXT)
-	box_header.add_child(box_title)
+	var box_heading_stack := VBoxContainer.new()
+	box_heading_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box_heading_stack.add_theme_constant_override("separation", 0)
+	box_header.add_child(box_heading_stack)
+
+	pc_box_title_label = Label.new()
+	pc_box_title_label.text = "Box 1"
+	pc_box_title_label.add_theme_font_size_override("font_size", 18)
+	pc_box_title_label.add_theme_color_override("font_color", UI_TEXT)
+	box_heading_stack.add_child(pc_box_title_label)
+
+	pc_box_capacity_label = Label.new()
+	pc_box_capacity_label.text = "0 / 30 Pokémon"
+	pc_box_capacity_label.add_theme_font_size_override("font_size", 10)
+	pc_box_capacity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	box_heading_stack.add_child(pc_box_capacity_label)
 
 	pc_box_tab_prev_button = Button.new()
-	pc_box_tab_prev_button.text = "<"
-	pc_box_tab_prev_button.custom_minimum_size = Vector2(34, 30)
+	pc_box_tab_prev_button.text = "‹"
+	pc_box_tab_prev_button.custom_minimum_size = Vector2(36, 34)
 	pc_box_tab_prev_button.focus_mode = Control.FOCUS_NONE
 	pc_box_tab_prev_button.tooltip_text = "Previous box"
 	pc_box_tab_prev_button.pressed.connect(_on_pc_box_step_pressed.bind(-1))
 	_apply_button_style(pc_box_tab_prev_button)
 	box_header.add_child(pc_box_tab_prev_button)
 
-	pc_box_tab_bar = HBoxContainer.new()
-	pc_box_tab_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pc_box_tab_bar.add_theme_constant_override("separation", 5)
-	box_header.add_child(pc_box_tab_bar)
-
 	pc_box_tab_next_button = Button.new()
-	pc_box_tab_next_button.text = ">"
-	pc_box_tab_next_button.custom_minimum_size = Vector2(34, 30)
+	pc_box_tab_next_button.text = "›"
+	pc_box_tab_next_button.custom_minimum_size = Vector2(36, 34)
 	pc_box_tab_next_button.focus_mode = Control.FOCUS_NONE
 	pc_box_tab_next_button.tooltip_text = "Next box"
 	pc_box_tab_next_button.pressed.connect(_on_pc_box_step_pressed.bind(1))
 	_apply_button_style(pc_box_tab_next_button)
 	box_header.add_child(pc_box_tab_next_button)
 
+	var box_tabs_row := HBoxContainer.new()
+	box_tabs_row.name = "BoxTabsRow"
+	box_tabs_row.add_theme_constant_override("separation", 8)
+	box_stack.add_child(box_tabs_row)
+
+	var boxes_caption := _create_pc_section_caption("BOXES")
+	boxes_caption.custom_minimum_size = Vector2(42, 0)
+	boxes_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	box_tabs_row.add_child(boxes_caption)
+
+	pc_box_tab_bar = HBoxContainer.new()
+	pc_box_tab_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_box_tab_bar.add_theme_constant_override("separation", 4)
+	box_tabs_row.add_child(pc_box_tab_bar)
+
+	var search_row := HBoxContainer.new()
+	search_row.name = "StorageSearchRow"
+	search_row.add_theme_constant_override("separation", 8)
+	box_stack.add_child(search_row)
+
 	pc_search_input = LineEdit.new()
-	pc_search_input.placeholder_text = "Search name, type, ability, held item..."
+	pc_search_input.placeholder_text = "Search all boxes by species, type, ability or held item"
+	pc_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_search_input.custom_minimum_size = Vector2(0, 38)
 	pc_search_input.clear_button_enabled = true
+	pc_search_input.tooltip_text = "Searches every loaded box"
 	pc_search_input.text_changed.connect(_on_pc_search_text_changed)
 	_apply_line_edit_style(pc_search_input)
-	box_stack.add_child(pc_search_input)
+	search_row.add_child(pc_search_input)
+
+	pc_search_results_label = Label.new()
+	pc_search_results_label.text = "ALL BOXES"
+	pc_search_results_label.custom_minimum_size = Vector2(94, 0)
+	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	pc_search_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pc_search_results_label.add_theme_font_size_override("font_size", 10)
+	pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	search_row.add_child(pc_search_results_label)
+
+	var box_grid_frame := PanelContainer.new()
+	box_grid_frame.name = "BoxGridFrame"
+	box_grid_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box_grid_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box_grid_frame.add_theme_stylebox_override("panel", _make_pc_grid_frame_style())
+	box_stack.add_child(box_grid_frame)
+
+	var grid_margin := MarginContainer.new()
+	grid_margin.add_theme_constant_override("margin_left", 8)
+	grid_margin.add_theme_constant_override("margin_top", 8)
+	grid_margin.add_theme_constant_override("margin_right", 8)
+	grid_margin.add_theme_constant_override("margin_bottom", 8)
+	box_grid_frame.add_child(grid_margin)
 
 	pc_box_scroll = ScrollContainer.new()
 	pc_box_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_box_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pc_box_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	box_stack.add_child(pc_box_scroll)
+	grid_margin.add_child(pc_box_scroll)
 
 	pc_box_grid = GridContainer.new()
 	pc_box_grid.columns = PC_BOX_SLOTS_PER_ROW
 	pc_box_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_box_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pc_box_grid.add_theme_constant_override("h_separation", 8)
-	pc_box_grid.add_theme_constant_override("v_separation", 8)
+	pc_box_grid.add_theme_constant_override("h_separation", 7)
+	pc_box_grid.add_theme_constant_override("v_separation", 6)
 	pc_box_scroll.add_child(pc_box_grid)
 
 	pc_release_drop_panel = PanelContainer.new()
+	pc_release_drop_panel.name = "ReleaseDropZone"
 	pc_release_drop_panel.visible = false
-	pc_release_drop_panel.custom_minimum_size = Vector2(0, 64)
-	pc_release_drop_panel.tooltip_text = "Drag a Pokemon here to release it."
-	pc_release_drop_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#2a1015e8"), UI_DANGER, 6, 1))
+	pc_release_drop_panel.custom_minimum_size = Vector2(0, 58)
+	pc_release_drop_panel.tooltip_text = "Drag a Pokémon here to permanently release it"
+	pc_release_drop_panel.add_theme_stylebox_override("panel", _make_pc_release_zone_style())
 	box_stack.add_child(pc_release_drop_panel)
 
 	var release_margin := MarginContainer.new()
-	release_margin.add_theme_constant_override("margin_left", 8)
-	release_margin.add_theme_constant_override("margin_top", 8)
-	release_margin.add_theme_constant_override("margin_right", 8)
-	release_margin.add_theme_constant_override("margin_bottom", 8)
+	release_margin.add_theme_constant_override("margin_left", 10)
+	release_margin.add_theme_constant_override("margin_top", 7)
+	release_margin.add_theme_constant_override("margin_right", 10)
+	release_margin.add_theme_constant_override("margin_bottom", 7)
 	pc_release_drop_panel.add_child(release_margin)
 
 	var release_stack := VBoxContainer.new()
-	release_stack.add_theme_constant_override("separation", 6)
+	release_stack.add_theme_constant_override("separation", 1)
 	release_margin.add_child(release_stack)
 
 	pc_release_hint_label = Label.new()
-	pc_release_hint_label.text = "Drag Pokemon here to release"
+	pc_release_hint_label.text = "Drop a Pokémon here to release it"
 	pc_release_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pc_release_hint_label.add_theme_font_size_override("font_size", 13)
 	pc_release_hint_label.add_theme_color_override("font_color", Color("#ffd0d4"))
@@ -1921,13 +2043,100 @@ func _setup_pc_ui() -> void:
 	release_stack.add_child(pc_release_hint_label)
 
 	var release_warning_label := Label.new()
-	release_warning_label.text = "Permanent"
+	release_warning_label.text = "PERMANENT · THIS CANNOT BE UNDONE"
 	release_warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	release_warning_label.add_theme_font_size_override("font_size", 11)
+	release_warning_label.add_theme_font_size_override("font_size", 9)
 	release_warning_label.add_theme_color_override("font_color", UI_DANGER)
 	release_stack.add_child(release_warning_label)
 
+	var status_panel := PanelContainer.new()
+	status_panel.name = "StorageStatusBar"
+	status_panel.custom_minimum_size = Vector2(0, 34)
+	status_panel.add_theme_stylebox_override("panel", _make_pc_status_style())
+	stack.add_child(status_panel)
+
+	var status_margin := MarginContainer.new()
+	status_margin.add_theme_constant_override("margin_left", 10)
+	status_margin.add_theme_constant_override("margin_top", 6)
+	status_margin.add_theme_constant_override("margin_right", 10)
+	status_margin.add_theme_constant_override("margin_bottom", 6)
+	status_panel.add_child(status_margin)
+
+	var status_row := HBoxContainer.new()
+	status_row.add_theme_constant_override("separation", 7)
+	status_margin.add_child(status_row)
+
+	var status_dot := Label.new()
+	status_dot.text = "●"
+	status_dot.add_theme_font_size_override("font_size", 9)
+	status_dot.add_theme_color_override("font_color", PC_ACCENT)
+	status_row.add_child(status_dot)
+
+	pc_status_label = Label.new()
+	pc_status_label.text = "Drag Pokémon to move them · Click a Pokémon to inspect it"
+	pc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pc_status_label.add_theme_font_size_override("font_size", 11)
+	pc_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pc_status_label.clip_text = true
+	pc_status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	status_row.add_child(pc_status_label)
+
 	pc_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(pc_popup))
+
+
+func _create_pc_section_caption(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", PC_ACCENT)
+	return label
+
+
+func _make_pc_outer_style() -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SURFACE_BASE, PC_ACCENT_SOFT, 13, 1)
+	style.border_width_top = 2
+	style.shadow_color = Color("#0000008f")
+	style.shadow_size = 18
+	style.shadow_offset = Vector2(0, 8)
+	return style
+
+
+func _make_pc_workspace_panel_style() -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1)
+	style.shadow_color = Color("#00000032")
+	style.shadow_size = 6
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+
+func _make_pc_icon_frame_style() -> StyleBoxFlat:
+	var style := _make_panel_style(PC_ACCENT_FAINT, PC_ACCENT_SOFT, 10, 1)
+	style.shadow_color = Color("#00000036")
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+
+func _make_pc_grid_frame_style() -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SURFACE_INSET, Color("#24445e99"), 9, 1)
+	style.shadow_color = Color("#00000024")
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 1)
+	return style
+
+
+func _make_pc_release_zone_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#2a1015e8"), Color("#9e3e48cc"), 8, 1)
+	style.border_width_left = 3
+	return style
+
+
+func _make_pc_status_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#06111dd9"), Color("#28496399"), 8, 1)
+	style.border_width_left = 2
+	style.border_color = Color("#3d7596aa")
+	return style
+
 
 func _setup_mail_compose_help_button() -> void:
 	if mail_compose_help_button != null:
@@ -3713,6 +3922,7 @@ func _create_move_learn_type_label(type_name: String) -> Control:
 		return _create_move_learn_detail_chip(type_name, Color("#34312a"), Color("#f4f0de"))
 
 	var icon := TextureRect.new()
+	icon.name = "Icon"
 	icon.texture = texture
 	icon.custom_minimum_size = Vector2(94, 19)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -4980,6 +5190,7 @@ func _create_tool_launcher_header(
 
 func _create_tool_section_label(label_text: String, accent_color: Color) -> Label:
 	var label := Label.new()
+	label.name = "Label"
 	label.text = label_text.to_upper()
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", accent_color)
@@ -7217,16 +7428,18 @@ func _get_staff_tools_visibility_key() -> String:
 
 func _refresh_location_label_if_needed() -> void:
 	var current_map: Node = GameState.current_map as Node
-	if displayed_location_map == current_map:
+	var current_location_name := _get_current_map_display_name()
+	if displayed_location_map == current_map and displayed_location_name == current_location_name:
 		return
 	_refresh_location_label()
 
 func _refresh_location_label() -> void:
 	displayed_location_map = GameState.current_map as Node
+	displayed_location_name = _get_current_map_display_name()
 	if region_label != null:
 		region_label.text = _get_current_map_region_name().to_upper()
 	if location_label != null:
-		var display_name := _get_current_map_display_name()
+		var display_name := displayed_location_name
 		location_label.text = display_name
 		location_label.tooltip_text = display_name
 	var has_wild_pokemon := _get_current_encounter_area_id() != ""
@@ -17805,7 +18018,6 @@ func _rebuild_chat_context_options() -> void:
 
 	var primary_tab := _active_primary_chat_tab_id()
 	if primary_tab == CHAT_TAB_GENERAL:
-		_add_chat_context_option("All", CHAT_TAB_ALL, active_chat_tab == CHAT_TAB_ALL)
 		_add_chat_context_option("Global", CHAT_TAB_GENERAL, active_chat_tab == CHAT_TAB_GENERAL)
 		_add_chat_context_option("Trade", CHAT_TAB_TRADE, active_chat_tab == CHAT_TAB_TRADE)
 		_add_chat_context_option("Help", CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
@@ -17860,7 +18072,7 @@ func _create_chat_context_option_button(label_text: String, selected: bool) -> B
 
 
 func _on_general_chat_context_selected(channel_tab_id: String) -> void:
-	if channel_tab_id not in [CHAT_TAB_ALL, CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+	if channel_tab_id not in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
 		return
 	selected_general_chat_tab = channel_tab_id
 	active_chat_tab = channel_tab_id
@@ -17882,7 +18094,7 @@ func _hide_chat_context_popup() -> void:
 
 
 func _active_primary_chat_tab_id() -> String:
-	if active_chat_tab in [CHAT_TAB_ALL, CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
+	if active_chat_tab in [CHAT_TAB_GENERAL, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
 		return CHAT_TAB_GENERAL
 	return active_chat_tab
 
@@ -17895,11 +18107,13 @@ func _refresh_chat_context_selector() -> void:
 	chat_context_selector_button.visible = primary_tab != CHAT_TAB_SYSTEM
 	chat_context_selector_button.disabled = false
 	match primary_tab:
+		CHAT_TAB_ALL:
+			chat_context_selector_button.text = "To: Global"
+			chat_context_selector_button.disabled = true
+			chat_context_selector_button.tooltip_text = "All combines every channel; messages send to Global"
 		CHAT_TAB_GENERAL:
-			var channel_label := "All"
-			if active_chat_tab == CHAT_TAB_GENERAL:
-				channel_label = "Global"
-			elif active_chat_tab == CHAT_TAB_TRADE:
+			var channel_label := "Global"
+			if active_chat_tab == CHAT_TAB_TRADE:
 				channel_label = "Trade"
 			elif active_chat_tab == CHAT_TAB_HELP:
 				channel_label = "Help"
@@ -17926,6 +18140,22 @@ func _refresh_chat_context_selector() -> void:
 			chat_context_selector_button.text = "Clan"
 			chat_context_selector_button.disabled = true
 			chat_context_selector_button.tooltip_text = "Clan chat is not connected yet"
+
+
+func _setup_all_chat_tab() -> void:
+	if all_chat_tab_button != null:
+		return
+
+	all_chat_tab_button = Button.new()
+	all_chat_tab_button.name = "AllButton"
+	all_chat_tab_button.custom_minimum_size = Vector2(70, 28)
+	all_chat_tab_button.text = "All"
+	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	all_chat_tab_button.tooltip_text = "Show every message you can receive"
+	all_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_ALL))
+	$Control/ChatTabsPanel/TabRow.add_child(all_chat_tab_button)
+	_apply_button_style(all_chat_tab_button, "primary")
+	_reorder_chat_tab_buttons()
 
 
 func _setup_map_chat_tab() -> void:
@@ -17963,6 +18193,7 @@ func _setup_chat_tab_settings_ui() -> void:
 		return
 
 	chat_tab_visibility = SettingsManager.chat_tab_visibility.duplicate()
+	chat_tab_visibility[CHAT_TAB_ALL] = true
 	chat_tab_visibility[CHAT_TAB_GENERAL] = true
 	chat_tab_order.clear()
 	for tab_value: Variant in SettingsManager.chat_tab_order:
@@ -18107,8 +18338,12 @@ func _render_chat_tab_settings_rows() -> void:
 		visibility_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		visibility_toggle.focus_mode = Control.FOCUS_NONE
 		visibility_toggle.set_pressed_no_signal(bool(chat_tab_visibility.get(tab_id, true)))
-		visibility_toggle.disabled = tab_id == CHAT_TAB_GENERAL
-		visibility_toggle.tooltip_text = "General always stays visible." if tab_id == CHAT_TAB_GENERAL else "Show or hide this chat tab."
+		visibility_toggle.disabled = tab_id in [CHAT_TAB_ALL, CHAT_TAB_GENERAL]
+		visibility_toggle.tooltip_text = (
+			"%s always stays visible." % str(CHAT_TAB_LABELS.get(tab_id, tab_id))
+			if visibility_toggle.disabled
+			else "Show or hide this chat tab."
+		)
 		visibility_toggle.add_theme_font_size_override("font_size", 13)
 		visibility_toggle.add_theme_color_override("font_color", UI_TEXT)
 		visibility_toggle.add_theme_color_override("font_disabled_color", Color(UI_TEXT.r, UI_TEXT.g, UI_TEXT.b, 0.72))
@@ -18162,7 +18397,8 @@ func _hide_chat_settings_popup() -> void:
 
 
 func _on_chat_tab_visibility_toggled(visible: bool, tab_id: String) -> void:
-	if tab_id == CHAT_TAB_GENERAL:
+	if tab_id in [CHAT_TAB_ALL, CHAT_TAB_GENERAL]:
+		chat_tab_visibility[CHAT_TAB_ALL] = true
 		chat_tab_visibility[CHAT_TAB_GENERAL] = true
 		return
 	chat_tab_visibility[tab_id] = visible
@@ -18194,11 +18430,14 @@ func _on_chat_tab_settings_reset_pressed() -> void:
 
 
 func _apply_chat_tab_preferences() -> void:
+	chat_tab_visibility[CHAT_TAB_ALL] = true
 	chat_tab_visibility[CHAT_TAB_GENERAL] = true
 	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
 		if not chat_tab_visibility.has(tab_id):
 			chat_tab_visibility[tab_id] = true
 
+	if all_chat_tab_button != null:
+		all_chat_tab_button.visible = true
 	general_chat_tab_button.visible = true
 	if map_chat_tab_button != null:
 		map_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_MAP, true))
@@ -18213,7 +18452,7 @@ func _apply_chat_tab_preferences() -> void:
 
 	if not bool(chat_tab_visibility.get(_active_primary_chat_tab_id(), true)):
 		active_chat_tab = CHAT_TAB_ALL
-		selected_general_chat_tab = CHAT_TAB_ALL
+		selected_general_chat_tab = CHAT_TAB_GENERAL
 
 	_reorder_chat_tab_buttons()
 	_render_chat_tab_settings_rows()
@@ -18223,6 +18462,8 @@ func _apply_chat_tab_preferences() -> void:
 
 func _chat_tab_button_for_id(tab_id: String) -> Button:
 	match tab_id:
+		CHAT_TAB_ALL:
+			return all_chat_tab_button
 		CHAT_TAB_GENERAL:
 			return general_chat_tab_button
 		CHAT_TAB_MAP:
@@ -18495,6 +18736,7 @@ func _apply_chat_tab_state() -> void:
 	)
 	var primary_tab := _active_primary_chat_tab_id()
 	var general_active: bool = primary_tab == CHAT_TAB_GENERAL
+	_apply_chat_main_tab_style(all_chat_tab_button, active_chat_tab == CHAT_TAB_ALL)
 	_apply_chat_main_tab_style(general_chat_tab_button, general_active)
 	_apply_chat_main_tab_style(map_chat_tab_button, active_chat_tab == CHAT_TAB_MAP)
 	_apply_chat_main_tab_style(system_chat_tab_button, active_chat_tab == CHAT_TAB_SYSTEM)
@@ -18513,7 +18755,7 @@ func _apply_chat_tab_state() -> void:
 	if active_chat_tab == CHAT_TAB_PM:
 		chat_input.placeholder_text = "Private message"
 	elif active_chat_tab == CHAT_TAB_ALL:
-		chat_input.placeholder_text = "All channels · messages send to Global"
+		chat_input.placeholder_text = "All messages · reply sends to Global"
 	elif active_chat_tab == CHAT_TAB_MAP:
 		chat_input.placeholder_text = "Only trainers on this map can see this"
 	elif active_chat_tab == CHAT_TAB_TRADE:
@@ -18547,6 +18789,9 @@ func _refresh_chat_message_visibility() -> void:
 
 		var category: String = str(child.get_meta("chat_category", CHAT_CATEGORY_USER))
 		child.visible = _should_show_chat_category(category)
+		var channel_badge := child.get_node_or_null("ChannelBadge") as Control
+		if channel_badge != null:
+			channel_badge.visible = active_chat_tab == CHAT_TAB_ALL
 
 func _submit_chat_input_deferred() -> void:
 	if chat_submit_in_progress:
@@ -18725,6 +18970,14 @@ func _submit_pm_message_with_attachments(text: String, pokemon_attachments: Arra
 		"username": sender_username,
 		"displayName": sender_display_name,
 	})
+	_add_user_chat_message(
+		AuthService.current_user,
+		sender_display_name,
+		str(message.get("body", target_body)),
+		CHAT_TAB_PM,
+		response_attachments,
+		target_pm_user_id
+	)
 	_clear_pending_chat_pokemon_attachments()
 	if active_chat_tab == CHAT_TAB_PM and active_pm_user_id == target_pm_user_id:
 		_render_active_pm_conversation()
@@ -23331,7 +23584,7 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 	_render_pc_party()
 	_render_pc_box()
 	if _pc_search_query() == "":
-		pc_status_label.text = "Select a Pokemon, then a destination."
+		pc_status_label.text = "Drag Pokémon to move them · Click a Pokémon to inspect it"
 
 
 func _update_pc_all_boxes_cache(box_state: Dictionary) -> void:
@@ -23363,7 +23616,7 @@ func _refresh_pc_box_tabs() -> void:
 	for index in range(pc_box_tab_page_start, visible_end):
 		var button := Button.new()
 		button.text = str(index + 1)
-		button.custom_minimum_size = Vector2(38, 30)
+		button.custom_minimum_size = Vector2(40, 32)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
 		button.tooltip_text = "Box %d" % (index + 1)
@@ -23378,20 +23631,27 @@ func _refresh_pc_box_tabs() -> void:
 
 
 func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
-	var normal_bg := Color("#141b2bee") if selected else Color("#07111ed8")
-	var hover_bg := Color("#1f2b42f2") if selected else Color("#10213aee")
-	var pressed_bg := Color("#0c1322f2")
-	var border := UI_MONEY if selected else UI_BORDER_SOFT
-	var hover_border := Color("#ffe28acc") if selected else UI_BORDER
-	var font_color := UI_MONEY if selected else UI_TEXT
+	var normal_bg := Color("#0c2235f2") if selected else Color("#07111ed8")
+	var hover_bg := UI_SURFACE_HOVER
+	var pressed_bg := UI_SURFACE_PRESSED
+	var border := PC_ACCENT_SOFT if selected else Color("#29465e99")
+	var hover_border := PC_ACCENT if selected else UI_BORDER_FOCUS
+	var font_color := Color.WHITE if selected else UI_MUTED_TEXT
 	button.add_theme_color_override("font_color", font_color)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
-	button.add_theme_font_size_override("font_size", 14)
-	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 4, 1))
-	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 4, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 4, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 4, 1))
+	button.add_theme_font_size_override("font_size", 12)
+	var normal_style := _make_button_style(normal_bg, border, 7, 1)
+	if selected:
+		normal_style.border_width_left = 0
+		normal_style.border_width_top = 0
+		normal_style.border_width_right = 0
+		normal_style.border_width_bottom = 2
+		normal_style.border_color = PC_ACCENT
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 7, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, PC_ACCENT, 7, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
@@ -23410,28 +23670,38 @@ func _box_state_from_boxes(boxes: Array, box_index: int) -> Dictionary:
 
 func _render_pc_party() -> void:
 	_clear_children(pc_party_list)
+	var occupied_count := 0
 	for slot_index in range(MAX_PARTY_SIZE):
 		var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index < PlayerSave.party.size() else null
+		if pokemon != null:
+			occupied_count += 1
 		var storage_slot := _pc_storage_slot_for_party_pokemon(pokemon, slot_index)
 		var button := _create_pc_party_slot_button(slot_index, storage_slot, pokemon, _pc_source_matches("party", storage_slot))
 		button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
 		pc_party_list.add_child(button)
+	if pc_party_count_label != null:
+		pc_party_count_label.text = "%d / %d" % [occupied_count, MAX_PARTY_SIZE]
 
 
 func _render_pc_box() -> void:
 	_clear_children(pc_box_grid)
+	pc_box_grid.columns = PC_BOX_SLOTS_PER_ROW
 	var search_query := _pc_search_query()
 	if search_query != "":
 		_render_pc_box_search_results(search_query)
 		return
 
 	var slot_map := _pc_box_slot_map()
+	var occupied_count := 0
 	for slot_index in range(pc_slots_per_box):
 		var slot_state: Dictionary = _dictionary_from_value(slot_map.get(slot_index, {}))
 		var pokemon_response: Dictionary = _dictionary_from_value(slot_state.get("pokemon", {}))
+		if not pokemon_response.is_empty():
+			occupied_count += 1
 		var button := _create_pc_box_slot_button(slot_index, pokemon_response, _pc_source_matches("box", slot_index))
 		button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
 		pc_box_grid.add_child(button)
+	_refresh_pc_box_overview(occupied_count)
 
 
 func _render_pc_box_search_results(search_query: String) -> void:
@@ -23450,11 +23720,67 @@ func _render_pc_box_search_results(search_query: String) -> void:
 			var slot_index := int(slot_state.get("slotIndex", -1))
 			if slot_index < 0:
 				continue
-			var button := _create_pc_box_slot_button_for_location(box_index, slot_index, pokemon_response, _pc_source_matches_location("box", box_index, slot_index), "B%d S%02d" % [box_index + 1, slot_index + 1])
+			var button := _create_pc_box_slot_button_for_location(box_index, slot_index, pokemon_response, _pc_source_matches_location("box", box_index, slot_index), "B%d · %02d" % [box_index + 1, slot_index + 1])
 			button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
 			pc_box_grid.add_child(button)
 			result_count += 1
-	pc_status_label.text = "%d result%s." % [result_count, "" if result_count == 1 else "s"]
+	if result_count == 0:
+		pc_box_grid.columns = 1
+		pc_box_grid.add_child(_create_pc_search_empty_state(search_query))
+	if pc_box_title_label != null:
+		pc_box_title_label.text = "Search Results"
+	if pc_box_capacity_label != null:
+		pc_box_capacity_label.text = "Across %d box%s" % [pc_box_count, "" if pc_box_count == 1 else "es"]
+	if pc_search_results_label != null:
+		pc_search_results_label.text = "%d FOUND" % result_count
+		pc_search_results_label.add_theme_color_override("font_color", PC_ACCENT if result_count > 0 else UI_MUTED_TEXT)
+	pc_status_label.text = "Showing matches from every box · Clear search to return to Box %d" % (pc_selected_box_index + 1)
+
+
+func _refresh_pc_box_overview(occupied_count: int) -> void:
+	if pc_box_title_label != null:
+		pc_box_title_label.text = "Box %d" % (pc_selected_box_index + 1)
+	if pc_box_capacity_label != null:
+		pc_box_capacity_label.text = "%d / %d Pokémon stored" % [occupied_count, pc_slots_per_box]
+	if pc_search_results_label != null:
+		pc_search_results_label.text = "ALL BOXES"
+		pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+
+func _create_pc_search_empty_state(search_query: String) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.name = "SearchEmptyState"
+	panel.custom_minimum_size = Vector2(0, 170)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07121fd9"), Color("#29465e77"), 8, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 28)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 28)
+	panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 7)
+	margin.add_child(stack)
+
+	var title := Label.new()
+	title.text = "No Pokémon found"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(title)
+
+	var hint := Label.new()
+	hint.text = "Nothing matched “%s”. Try a species, type, ability or held item." % search_query
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 11)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(hint)
+	return panel
 
 
 func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, pokemon: Pokemon, selected: bool) -> Button:
@@ -23543,75 +23869,83 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
 	if not occupied:
-		button.modulate = Color(1.0, 1.0, 1.0, 0.70)
+		button.modulate = Color(1.0, 1.0, 1.0, 0.76)
 
 	var stack := VBoxContainer.new()
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.anchor_right = 1.0
 	stack.anchor_bottom = 1.0
-	stack.offset_left = 6
-	stack.offset_top = 5
-	stack.offset_right = -6
+	stack.offset_left = 7
+	stack.offset_top = 4
+	stack.offset_right = -7
 	stack.offset_bottom = -5
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
-	stack.add_theme_constant_override("separation", 0)
+	stack.add_theme_constant_override("separation", 1)
 	button.add_child(stack)
 
-	var title_row := HBoxContainer.new()
-	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title_row.custom_minimum_size = Vector2(0, 16)
-	title_row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	title_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	title_row.add_theme_constant_override("separation", 2)
-	stack.add_child(title_row)
+	var meta_row := HBoxContainer.new()
+	meta_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	meta_row.custom_minimum_size = Vector2(0, 13)
+	meta_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	meta_row.add_theme_constant_override("separation", 3)
+	stack.add_child(meta_row)
+
+	var badge := Label.new()
+	badge.name = "SlotBadge"
+	badge.text = slot_badge
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	badge.add_theme_font_size_override("font_size", 9)
+	badge.add_theme_color_override("font_color", PC_ACCENT if occupied else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.62))
+	meta_row.add_child(badge)
 
 	if occupied and shiny:
 		var shiny_badge := Label.new()
-		shiny_badge.text = "S"
+		shiny_badge.name = "ShinyBadge"
+		shiny_badge.text = "✦"
 		shiny_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		shiny_badge.custom_minimum_size = Vector2(9, 0)
-		shiny_badge.add_theme_font_size_override("font_size", 11)
+		shiny_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		shiny_badge.add_theme_font_size_override("font_size", 12)
 		shiny_badge.add_theme_color_override("font_color", Color("#ffe14d"))
 		shiny_badge.add_theme_color_override("font_shadow_color", Color("#3b2200"))
 		shiny_badge.add_theme_constant_override("shadow_offset_x", 1)
 		shiny_badge.add_theme_constant_override("shadow_offset_y", 1)
-		title_row.add_child(shiny_badge)
-
-	var title := Label.new()
-	title.text = _pc_compact_text(title_text, 13)
-	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.custom_minimum_size = Vector2(68 if occupied and shiny else 82, 0)
-	title.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if occupied and shiny else HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 12)
-	title.add_theme_color_override("font_color", UI_TEXT if occupied else UI_MUTED_TEXT)
-	title.clip_text = true
-	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	title_row.add_child(title)
+		meta_row.add_child(shiny_badge)
 
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(42, 36)
+	icon.name = "PokemonIcon"
+	icon.custom_minimum_size = Vector2(44, 38)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
-	icon.modulate = Color(1, 1, 1, 1) if occupied else Color(1, 1, 1, 0.26)
+	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.15)
 	stack.add_child(icon)
 
 	var footer := HBoxContainer.new()
 	footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	footer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	footer.alignment = BoxContainer.ALIGNMENT_CENTER
-	footer.add_theme_constant_override("separation", 6)
+	footer.add_theme_constant_override("separation", 4)
 	stack.add_child(footer)
 
+	var title := Label.new()
+	title.name = "PokemonName"
+	title.text = _pc_compact_text(title_text, 12) if occupied else "EMPTY"
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 10 if occupied else 9)
+	title.add_theme_color_override("font_color", UI_TEXT if occupied else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.56))
+	title.clip_text = true
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	footer.add_child(title)
+
 	var level_label := Label.new()
-	level_label.text = "Lv %s" % level if occupied else "Box"
+	level_label.name = "Level"
+	level_label.text = "Lv.%s" % level if occupied else ""
 	level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	level_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	level_label.add_theme_font_size_override("font_size", 11)
-	level_label.add_theme_color_override("font_color", UI_TEXT if occupied else UI_MUTED_TEXT)
+	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	level_label.add_theme_font_size_override("font_size", 9)
+	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	footer.add_child(level_label)
 	if occupied and held_item_id != "":
 		_add_pc_held_item_marker(icon, held_item_id)
@@ -23630,31 +23964,43 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	button.drag_texture = texture if texture != null else PokemonAssets.load_unknown_icon()
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
 	if not occupied:
-		button.modulate = Color(1.0, 1.0, 1.0, 0.70)
+		button.modulate = Color(1.0, 1.0, 1.0, 0.76)
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.anchor_right = 1.0
 	row.anchor_bottom = 1.0
 	row.offset_left = 8
-	row.offset_top = 6
+	row.offset_top = 5
 	row.offset_right = -8
-	row.offset_bottom = -6
-	row.add_theme_constant_override("separation", 7)
+	row.offset_bottom = -5
+	row.add_theme_constant_override("separation", 8)
 	button.add_child(row)
+
+	var badge := Label.new()
+	badge.name = "SlotBadge"
+	badge.text = slot_badge
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.custom_minimum_size = Vector2(18, 0)
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	badge.add_theme_font_size_override("font_size", 10)
+	badge.add_theme_color_override("font_color", PC_ACCENT if occupied else UI_MUTED_TEXT)
+	row.add_child(badge)
 
 	var icon_stack := VBoxContainer.new()
 	icon_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_stack.custom_minimum_size = Vector2(38, 0)
+	icon_stack.custom_minimum_size = Vector2(42, 0)
 	icon_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_child(icon_stack)
 
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(34, 34)
+	icon.name = "PokemonIcon"
+	icon.custom_minimum_size = Vector2(40, 40)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
-	icon.modulate = Color(1, 1, 1, 1) if occupied else Color(1, 1, 1, 0.30)
+	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.16)
 	icon_stack.add_child(icon)
 
 	var text_stack := VBoxContainer.new()
@@ -23673,10 +24019,11 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 
 	if occupied and shiny:
 		var shiny_badge := Label.new()
-		shiny_badge.text = "S"
+		shiny_badge.name = "ShinyBadge"
+		shiny_badge.text = "✦"
 		shiny_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		shiny_badge.custom_minimum_size = Vector2(9, 0)
-		shiny_badge.add_theme_font_size_override("font_size", 11)
+		shiny_badge.custom_minimum_size = Vector2(11, 0)
+		shiny_badge.add_theme_font_size_override("font_size", 12)
 		shiny_badge.add_theme_color_override("font_color", Color("#ffe14d"))
 		shiny_badge.add_theme_color_override("font_shadow_color", Color("#3b2200"))
 		shiny_badge.add_theme_constant_override("shadow_offset_x", 1)
@@ -23694,23 +24041,14 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	title_row.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = subtitle_text
+	subtitle.text = subtitle_text if occupied else "Open party slot"
 	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	subtitle.add_theme_font_size_override("font_size", 12)
+	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	subtitle.clip_text = true
 	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	text_stack.add_child(subtitle)
 
-	var badge := Label.new()
-	badge.text = slot_badge
-	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	badge.custom_minimum_size = Vector2(22, 0)
-	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	badge.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	badge.add_theme_font_size_override("font_size", 10)
-	badge.add_theme_color_override("font_color", UI_MONEY if occupied else UI_MUTED_TEXT)
-	row.add_child(badge)
 	if occupied and held_item_id != "":
 		_add_pc_held_item_marker(icon, held_item_id)
 	return button
@@ -23759,26 +24097,29 @@ func _pc_payload_types(payload: Dictionary) -> Array[String]:
 
 
 func _apply_pc_pokemon_slot_style(button: Button, occupied: bool, selected: bool, types: Array) -> void:
-	if not occupied or types.is_empty():
-		_apply_button_style(button, "primary" if selected else "default")
-		return
-
-	var primary_type: String = str(types[0]).strip_edges()
-	if primary_type == "":
-		_apply_button_style(button, "primary" if selected else "default")
-		return
-
-	var background: Color = TypeColors.get_slot_background(primary_type, UI_SLOT_BG)
-	var border: Color = UI_MONEY if selected else TypeColors.get_slot_border(primary_type, UI_BORDER_SOFT)
-	var hover_border: Color = UI_MONEY if selected else border.lightened(0.18)
+	var background := UI_SURFACE_INSET if not occupied else UI_SURFACE_INTERACTIVE
+	var border := Color("#223d54a3") if not occupied else UI_BORDER_SUBTLE
+	if occupied and not types.is_empty():
+		var primary_type: String = str(types[0]).strip_edges()
+		if primary_type != "":
+			var type_background: Color = TypeColors.get_slot_background(primary_type, UI_SURFACE_INTERACTIVE)
+			background = type_background.lerp(UI_SURFACE_INTERACTIVE, 0.38)
+			border = TypeColors.get_slot_border(primary_type, UI_BORDER_SUBTLE)
+	if selected:
+		border = PC_ACCENT
+	var hover_border := PC_ACCENT if selected else border.lightened(0.22)
 	var normal_bg: Color = background.lightened(0.04) if selected else background
 	var hover_bg: Color = background.lightened(0.10)
 	var pressed_bg: Color = background.darkened(0.08)
-	var border_width: int = 2 if selected else 1
-	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 4, border_width))
-	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border, 4, border_width))
-	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 4, border_width))
-	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 4, border_width))
+	var normal_style := _make_button_style(normal_bg, border, 8, 1)
+	if selected:
+		normal_style.border_width_left = 3
+	var hover_style := _make_button_style(hover_bg, hover_border, 8, 1)
+	hover_style.border_width_left = 3
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, PC_ACCENT, 8, 1))
 
 
 func _add_pc_held_item_marker(icon: Control, held_item_id: String) -> void:
@@ -23845,7 +24186,7 @@ func _on_pc_search_text_changed(_text: String) -> void:
 	_render_pc_box()
 	var query := _pc_search_query()
 	if query == "":
-		pc_status_label.text = "Select a Pokemon, then a destination."
+		pc_status_label.text = "Drag Pokémon to move them · Click a Pokémon to inspect it"
 
 
 func _pc_pokemon_matches_search(pokemon_response: Dictionary, query: String) -> bool:
@@ -24181,11 +24522,11 @@ func _refresh_pc_release_controls() -> void:
 	if pc_release_drop_panel != null:
 		pc_release_drop_panel.visible = pc_release_mode_active
 	if pc_release_mode_button != null:
-		pc_release_mode_button.text = "Cancel Release" if pc_release_mode_active else "Release"
+		pc_release_mode_button.text = "Cancel Release" if pc_release_mode_active else "Release Mode"
 		pc_release_mode_button.disabled = pc_release_in_progress
-		pc_release_mode_button.tooltip_text = "Cancel release mode" if pc_release_mode_active else "Enable release mode"
+		pc_release_mode_button.tooltip_text = "Cancel release mode" if pc_release_mode_active else "Enable the permanent Pokémon release drop zone"
 		_apply_button_style(pc_release_mode_button, "danger")
-	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop Pokemon here to release"
+	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop a Pokémon here to release it"
 
 
 func _confirm_pc_release_from_source(source: Dictionary) -> void:
@@ -28445,14 +28786,25 @@ func _on_private_message_received(message: Dictionary) -> void:
 	var active_sender_key: int = _existing_pm_conversation_key_for_user(sender)
 	if active_sender_key != 0:
 		sender_key = active_sender_key
+	var body := str(message.get("body", ""))
+	var pokemon_attachments := _get_chat_pokemon_attachments(message)
+	var display_name := str(sender.get("displayName", sender.get("username", "Trainer")))
 	_append_pm_message(sender_key, {
 		"outgoing": false,
-		"body": str(message.get("body", "")),
-		"pokemonAttachments": _get_chat_pokemon_attachments(message),
+		"body": body,
+		"pokemonAttachments": pokemon_attachments,
 		"sentAt": str(message.get("sentAt", "")),
 		"username": str(sender.get("username", "")),
-		"displayName": str(sender.get("displayName", sender.get("username", "Trainer"))),
+		"displayName": display_name,
 	})
+	_add_user_chat_message(
+		sender,
+		display_name,
+		body,
+		CHAT_TAB_PM,
+		pokemon_attachments,
+		sender_key
+	)
 
 	var conversation_active: bool = active_chat_tab == CHAT_TAB_PM and active_pm_user_id == sender_key
 	if not conversation_active:
@@ -28549,7 +28901,14 @@ func _merge_pm_user(existing: Dictionary, user: Dictionary) -> Dictionary:
 	return merged
 
 
-func _add_user_chat_message(user: Dictionary, display_name: String, text: String, channel: String = CHAT_CHANNEL_GLOBAL, pokemon_attachments: Array[Dictionary] = []) -> void:
+func _add_user_chat_message(
+	user: Dictionary,
+	display_name: String,
+	text: String,
+	channel: String = CHAT_CHANNEL_GLOBAL,
+	pokemon_attachments: Array[Dictionary] = [],
+	target_user_id: int = 0
+) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
 	var name_color: String = role_color if not role.is_empty() else CHAT_DEFAULT_NAME_COLOR
@@ -28565,9 +28924,15 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 		chat_category = CHAT_CHANNEL_TRADE
 	elif channel == CHAT_CHANNEL_HELP:
 		chat_category = CHAT_CHANNEL_HELP
+	elif channel == CHAT_TAB_PM:
+		chat_category = CHAT_TAB_PM
+	elif channel == CHAT_TAB_CLAN:
+		chat_category = CHAT_TAB_CLAN
 	row.set_meta("chat_category", chat_category)
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
+
+	row.add_child(_create_chat_channel_badge(channel, target_user_id))
 
 	if not role.is_empty():
 		var role_name: String = str(role.get("badge", "")).strip_edges()
@@ -28603,6 +28968,87 @@ func _add_user_chat_message(user: Dictionary, display_name: String, text: String
 		entry.scroll_active = false
 		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll_chat_to_bottom.call_deferred()
+
+
+func _create_chat_channel_badge(channel: String, target_user_id: int = 0) -> Button:
+	var badge := Button.new()
+	badge.name = "ChannelBadge"
+	badge.custom_minimum_size = Vector2(38, 18)
+	badge.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	badge.focus_mode = Control.FOCUS_NONE
+	badge.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	badge.add_theme_font_size_override("font_size", 9)
+	var badge_color := Color("#557999")
+	match channel:
+		CHAT_CHANNEL_MAP:
+			badge.text = "MAP"
+			badge_color = Color("#65b8e8")
+		CHAT_CHANNEL_TRADE:
+			badge.text = "TRADE"
+			badge_color = Color("#d8b767")
+		CHAT_CHANNEL_HELP:
+			badge.text = "HELP"
+			badge_color = Color("#73d98b")
+		CHAT_TAB_PM:
+			badge.text = "PM"
+			badge_color = Color("#b980ff")
+		CHAT_TAB_CLAN:
+			badge.text = "CLAN"
+			badge_color = Color("#e58ba8")
+		_:
+			badge.text = "GLOBAL"
+	var normal_style := _make_panel_style(
+		Color(badge_color.r, badge_color.g, badge_color.b, 0.16),
+		Color(badge_color.r, badge_color.g, badge_color.b, 0.72),
+		6,
+		1
+	)
+	var hover_style := _make_panel_style(
+		Color(badge_color.r, badge_color.g, badge_color.b, 0.28),
+		badge_color,
+		6,
+		1
+	)
+	badge.add_theme_stylebox_override("normal", normal_style)
+	badge.add_theme_stylebox_override("hover", hover_style)
+	badge.add_theme_stylebox_override("pressed", hover_style)
+	badge.add_theme_stylebox_override("focus", hover_style)
+	badge.add_theme_color_override("font_color", badge_color)
+	badge.add_theme_color_override("font_hover_color", Color.WHITE)
+	badge.visible = active_chat_tab == CHAT_TAB_ALL
+	if channel == CHAT_TAB_PM and target_user_id != 0:
+		badge.tooltip_text = "Open this private conversation"
+		badge.pressed.connect(_on_all_pm_channel_pressed.bind(target_user_id))
+	else:
+		badge.tooltip_text = "Open %s chat" % badge.text.capitalize()
+		badge.pressed.connect(_on_all_channel_badge_pressed.bind(channel))
+	return badge
+
+
+func _on_all_channel_badge_pressed(channel: String) -> void:
+	match channel:
+		CHAT_CHANNEL_MAP:
+			active_chat_tab = CHAT_TAB_MAP
+		CHAT_CHANNEL_TRADE:
+			selected_general_chat_tab = CHAT_TAB_TRADE
+			active_chat_tab = CHAT_TAB_TRADE
+		CHAT_CHANNEL_HELP:
+			selected_general_chat_tab = CHAT_TAB_HELP
+			active_chat_tab = CHAT_TAB_HELP
+		CHAT_TAB_CLAN:
+			active_chat_tab = CHAT_TAB_CLAN
+		_:
+			selected_general_chat_tab = CHAT_TAB_GENERAL
+			active_chat_tab = CHAT_TAB_GENERAL
+	_apply_chat_tab_state()
+
+
+func _on_all_pm_channel_pressed(user_id: int) -> void:
+	if user_id == 0 or not pm_conversations_by_user_id.has(user_id):
+		return
+	active_chat_tab = CHAT_TAB_PM
+	_on_pm_conversation_selected(user_id)
 
 func _get_chat_pokemon_attachments(message: Dictionary) -> Array[Dictionary]:
 	var attachments: Array[Dictionary] = []
@@ -28664,8 +29110,11 @@ func _should_show_chat_category(category: String) -> bool:
 	if active_chat_tab == CHAT_TAB_ALL:
 		return category in [
 			CHAT_CHANNEL_GLOBAL,
+			CHAT_CHANNEL_MAP,
 			CHAT_CHANNEL_TRADE,
 			CHAT_CHANNEL_HELP,
+			CHAT_TAB_PM,
+			CHAT_TAB_CLAN,
 			CHAT_CATEGORY_USER,
 		]
 	if active_chat_tab == CHAT_TAB_GENERAL:

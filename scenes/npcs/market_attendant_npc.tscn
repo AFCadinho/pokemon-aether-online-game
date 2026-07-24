@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cnektxhofuvol"]
 
 [ext_resource type="Script" uid="uid://clh0faxnqo8op" path="res://scripts/world/npcs/market_attendant_npc.gd" id="1_4gxk4"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_4yape"]
+[ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_4yape"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_market"]
-size = Vector2(96, 97)
+size = Vector2(96, 32)
 
 [node name="MarketAttendantNPC" type="Node2D" unique_id=854794050]
 script = ExtResource("1_4gxk4")
@@ -16,7 +16,6 @@ npc_sprite_frames = ExtResource("2_4yape")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=514659326]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_4yape")
-animation = &"default"
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=1201885725]
 

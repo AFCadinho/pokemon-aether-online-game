@@ -73,9 +73,9 @@ func _init() -> void:
 	)
 	_check(
 		settings_source.contains(
-			"CHAT_TAB_GENERAL,\n\tCHAT_TAB_SYSTEM,\n\tCHAT_TAB_MAP,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_CLAN,"
+			"CHAT_TAB_ALL,\n\tCHAT_TAB_GENERAL,\n\tCHAT_TAB_SYSTEM,\n\tCHAT_TAB_MAP,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_CLAN,"
 		),
-		"default top tab order is General, System, Map, PM, Clan"
+		"default top tab order is All, General, System, Map, PM, Clan"
 	)
 	_check(
 		settings_source.contains("order.insert(system_index + 1, CHAT_TAB_MAP)"),
@@ -83,13 +83,32 @@ func _init() -> void:
 	)
 	_check(
 		overlay_source.contains("var active_chat_tab: String = CHAT_TAB_ALL")
-		and overlay_source.contains('_add_chat_context_option("All", CHAT_TAB_ALL'),
-		"General defaults to the All subtab"
+		and overlay_source.contains("var selected_general_chat_tab := CHAT_TAB_GENERAL")
+		and overlay_source.contains("func _setup_all_chat_tab()")
+		and not overlay_source.contains('_add_chat_context_option("All", CHAT_TAB_ALL'),
+		"All is a main tab and General defaults to Global"
 	)
 	_check(
-		overlay_source.contains('chat_input.placeholder_text = "All channels · messages send to Global"')
+		overlay_source.contains('chat_input.placeholder_text = "All messages · reply sends to Global"')
 		and overlay_source.contains("if active_chat_tab == CHAT_TAB_ALL:\n\t\treturn CHAT_CHANNEL_GLOBAL"),
 		"All is an aggregate view that sends through Global"
+	)
+	_check(
+		overlay_source.contains("CHAT_CHANNEL_MAP,\n\t\t\tCHAT_CHANNEL_TRADE,")
+		and overlay_source.contains("CHAT_TAB_PM,\n\t\t\tCHAT_TAB_CLAN,"),
+		"All includes Map, PM, and Clan messages alongside the public channels"
+	)
+	_check(
+		overlay_source.contains("func _create_chat_channel_badge")
+		and overlay_source.contains("func _on_all_channel_badge_pressed")
+		and overlay_source.contains("func _on_all_pm_channel_pressed"),
+		"All messages identify their channel and can navigate to it"
+	)
+	_check(
+		overlay_source.contains(
+			"sender,\n\t\tdisplay_name,\n\t\tbody,\n\t\tCHAT_TAB_PM,\n\t\tpokemon_attachments,\n\t\tsender_key"
+		),
+		"incoming private messages are mirrored into All"
 	)
 	_check(
 		world_source.contains(

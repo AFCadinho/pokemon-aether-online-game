@@ -23,6 +23,11 @@ func get_map_id() -> String:
 
 
 func get_map_display_name() -> String:
+	var floor_mask := get_node_or_null("FloorVisibilityMask")
+	if floor_mask != null and floor_mask.has_method("get_active_floor_display_name"):
+		var floor_display_name := str(floor_mask.call("get_active_floor_display_name")).strip_edges()
+		if floor_display_name != "":
+			return floor_display_name
 	return map_display_name
 
 
@@ -33,7 +38,7 @@ func get_map_region_name() -> String:
 func get_location_metadata() -> Dictionary:
 	return {
 		"locationId": location_id if location_id.strip_edges() != "" else map_id,
-		"locationName": location_name if location_name.strip_edges() != "" else map_display_name,
+		"locationName": location_name if location_name.strip_edges() != "" else get_map_display_name(),
 		"regionId": region_id if region_id.strip_edges() != "" else map_region_name.to_lower().replace(" ", "_"),
 		"regionName": map_region_name,
 		"mapId": map_id,

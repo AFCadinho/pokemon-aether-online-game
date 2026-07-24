@@ -10,7 +10,7 @@
 - Added early previews for the upcoming Quest Log, Donator Gems Store, Redeem Codes, server-wide and personal buffs, and Clan chat. These features are not fully active yet.
 
 **Changed**
-- General chat now opens on an All view that combines Global, Trade, Help, and system messages while keeping Global separately selectable.
+- Added a dedicated All chat tab that combines every available channel, while General now opens Global by default and keeps Global, Trade, and Help as subchannels.
 - Reorganized the overworld interface so the Party and chat sit on the left, while the hotbar and Trainer Card sit on the right. Party Pokémon remain clickable during battles so their summaries can still be opened.
 - The Battle UI now opens slightly farther to the right, leaving more room for the Party list and making the Battle Log button easier to spot.
 - Refreshed the Party list, Trainer Card, chatbox, menus, and navigation icons with a cleaner and more consistent style.

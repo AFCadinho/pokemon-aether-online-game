@@ -1,63 +1,25 @@
-[gd_scene format=3 uid="uid://dgo4lvw2as13c"]
+[gd_scene load_steps=2 format=3 uid="uid://dgo4lvw2as13c"]
 
 [ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
-[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
-[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_map_exit"]
-[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_center_exit"]
-size = Vector2(32, 32)
-
-[node name="PokemonCenter" type="Node2D" unique_id=514331162]
-script = ExtResource("2_map_meta")
+[node name="PokemonCenter" unique_id=514331162 instance=ExtResource("1_template")]
 map_id = "kanto_pewter_city_pokemon_center"
-map_region_name = "Kanto"
 map_display_name = "Pewter City Pokémon Center"
 location_id = "kanto.pewter_city.pokemon_center"
 location_name = "Pewter City Pokémon Center"
-region_id = "kanto"
-lighting_profile = "indoor"
-weather_profile = "disabled"
-music_track_path = "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
 
-[node name="Visuals" parent="." unique_id=1636080888 instance=ExtResource("1_template")]
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0" unique_id=1839105410]
+npc_id = "kanto_pewter_city_pokemon_center_nurse_joy"
+respawn_point_id = "kanto_pewter_city_pokemon_center"
 
-[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1034708315]
-z_index = 4096
-z_as_relative = false
-script = ExtResource("4_floor_mask")
-floor_regions = {
-&"ground_floor": Rect2(256, 224, 416, 832)
-}
+[node name="Clerk" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="1" unique_id=554856490]
+npc_id = "kanto_pewter_city_pokemon_center_clerk"
+market_id = "standard"
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1098633758]
+[node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="2" unique_id=854794050]
+npc_id = "kanto_pewter_city_pokemon_center_clerk_2"
+market_id = "standard"
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1779875746]
-
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=431804331]
-
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1189140885]
-
-[node name="Spawns" type="Node2D" parent="." unique_id=335357181]
-
-[node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=174681522]
-position = Vector2(464, 1008)
-
-[node name="Exits" type="Node2D" parent="." unique_id=686759643]
-
-[node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=476605758]
-script = ExtResource("3_map_exit")
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0" unique_id=1126740257]
 target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 target_spawn_name = "FromPokecenter"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity" unique_id=146611020]
-position = Vector2(464, 1040)
-shape = SubResource("RectangleShape2D_center_exit")
-
-[node name="Entities" type="Node2D" parent="." unique_id=1604555286]
-z_index = 10
-y_sort_enabled = true
-
-[node name="Players" type="Node2D" parent="Entities" unique_id=870024810]
-
-[connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]

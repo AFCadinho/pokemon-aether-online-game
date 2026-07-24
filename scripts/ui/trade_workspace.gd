@@ -2,12 +2,16 @@ extends Window
 
 class_name TradeWorkspaceNode
 
+const TRADE_ICON: Texture2D = preload("res://assets/ui/player_trade.svg")
 const MAX_OFFER_SIZE := 5
 const TRADE_BG := Color("#050912fa")
-const TRADE_SURFACE := Color("#0b1422f7")
-const TRADE_SLOT := Color("#07101cf8")
-const TRADE_BORDER := Color("#345170")
+const TRADE_SURFACE := Color("#081522f7")
+const TRADE_SURFACE_RAISED := Color("#0b1a2bf7")
+const TRADE_SLOT := Color("#050d18f2")
+const TRADE_BORDER := Color("#2d4b66b3")
 const TRADE_ACCENT := Color("#62d7ff")
+const TRADE_ACCENT_SOFT := Color("#62d7ff88")
+const TRADE_ACCENT_FAINT := Color("#62d7ff22")
 const TRADE_GOLD := Color("#d8b767")
 const TRADE_TEXT := Color("#f4f0de")
 const TRADE_MUTED := Color("#aeb8c5")
@@ -59,8 +63,8 @@ var party_drag_preview: TextureRect
 var window_dragging := false
 var notified_completed_trade_ids: Dictionary = {}
 
-const DESIRED_WINDOW_SIZE := Vector2i(1060, 610)
-const MINIMUM_WINDOW_SIZE := Vector2i(900, 540)
+const DESIRED_WINDOW_SIZE := Vector2i(1120, 680)
+const MINIMUM_WINDOW_SIZE := Vector2i(920, 580)
 const VIEWPORT_MARGIN := Vector2i(20, 20)
 
 
@@ -83,117 +87,267 @@ func _ready() -> void:
 func _build_ui() -> void:
 	var background := PanelContainer.new()
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	background.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 8, 1))
+	background.add_theme_stylebox_override("panel", _trade_outer_style())
 	add_child(background)
+
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 22)
-	margin.add_theme_constant_override("margin_top", 18)
-	margin.add_theme_constant_override("margin_right", 22)
-	margin.add_theme_constant_override("margin_bottom", 18)
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 15)
 	background.add_child(margin)
+
 	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 14)
+	root.add_theme_constant_override("separation", 11)
 	margin.add_child(root)
+
 	var header := HBoxContainer.new()
+	header.name = "TradeHeader"
+	header.custom_minimum_size = Vector2(0, 48)
 	header.add_theme_constant_override("separation", 12)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.gui_input.connect(_on_window_header_gui_input)
 	root.add_child(header)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(46, 46)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override("panel", _trade_icon_frame_style())
+	header.add_child(icon_frame)
+
+	var icon_margin := MarginContainer.new()
+	icon_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_margin.add_theme_constant_override("margin_left", 6)
+	icon_margin.add_theme_constant_override("margin_top", 6)
+	icon_margin.add_theme_constant_override("margin_right", 6)
+	icon_margin.add_theme_constant_override("margin_bottom", 6)
+	icon_frame.add_child(icon_margin)
+
+	var trade_icon := TextureRect.new()
+	trade_icon.texture = TRADE_ICON
+	trade_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	trade_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	trade_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_margin.add_child(trade_icon)
+
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_stack.add_theme_constant_override("separation", 0)
+	header.add_child(title_stack)
+
 	var heading := Label.new()
-	heading.text = "Trade"
-	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.text = "Player Trade"
+	heading.mouse_filter = Control.MOUSE_FILTER_STOP
+	heading.gui_input.connect(_on_window_header_gui_input)
 	heading.add_theme_color_override("font_color", TRADE_TEXT)
-	heading.add_theme_font_size_override("font_size", 26)
-	header.add_child(heading)
+	heading.add_theme_font_size_override("font_size", 21)
+	title_stack.add_child(heading)
+
+	var subtitle := Label.new()
+	subtitle.text = "Build both offers, lock them, then confirm the exact exchange"
+	subtitle.mouse_filter = Control.MOUSE_FILTER_STOP
+	subtitle.gui_input.connect(_on_window_header_gui_input)
+	subtitle.add_theme_color_override("font_color", TRADE_MUTED)
+	subtitle.add_theme_font_size_override("font_size", 11)
+	title_stack.add_child(subtitle)
+
+	var phase_chip := PanelContainer.new()
+	phase_chip.name = "TradePhaseChip"
+	phase_chip.custom_minimum_size = Vector2(118, 32)
+	phase_chip.add_theme_stylebox_override("panel", _panel_style(TRADE_ACCENT_FAINT, TRADE_ACCENT_SOFT, 7, 1))
+	header.add_child(phase_chip)
+
 	phase_label = Label.new()
 	phase_label.text = "OFFER SETUP"
+	phase_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	phase_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	phase_label.add_theme_color_override("font_color", TRADE_ACCENT)
-	phase_label.add_theme_font_size_override("font_size", 13)
-	header.add_child(phase_label)
+	phase_label.add_theme_font_size_override("font_size", 10)
+	phase_chip.add_child(phase_label)
+
 	var close_button := Button.new()
-	close_button.text = "X"
+	close_button.text = "×"
 	close_button.tooltip_text = "Close trade"
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	close_button.custom_minimum_size = Vector2(32, 32)
+	close_button.custom_minimum_size = Vector2(38, 34)
 	close_button.add_theme_color_override("font_color", TRADE_MUTED)
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
-	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
-	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015"), Color("#b84c58"), 4, 1))
+	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#07111ed8"), TRADE_BORDER, 7, 1))
+	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015"), Color("#b84c58"), 7, 1))
 	close_button.pressed.connect(_on_close_requested)
 	header.add_child(close_button)
-	var separator := HSeparator.new()
-	root.add_child(separator)
+
 	status_panel = PanelContainer.new()
+	status_panel.name = "TradeStatusBanner"
 	status_panel.custom_minimum_size.y = 42
 	status_panel.visible = false
-	status_panel.add_theme_stylebox_override("panel", _panel_style(Color("#091827e8"), TRADE_BORDER, 5, 1))
+	status_panel.add_theme_stylebox_override("panel", _trade_status_style())
 	root.add_child(status_panel)
+
 	var status_margin := MarginContainer.new()
 	status_margin.add_theme_constant_override("margin_left", 12)
-	status_margin.add_theme_constant_override("margin_top", 9)
+	status_margin.add_theme_constant_override("margin_top", 8)
 	status_margin.add_theme_constant_override("margin_right", 12)
-	status_margin.add_theme_constant_override("margin_bottom", 9)
+	status_margin.add_theme_constant_override("margin_bottom", 8)
 	status_panel.add_child(status_margin)
+
+	var status_row := HBoxContainer.new()
+	status_row.add_theme_constant_override("separation", 8)
+	status_margin.add_child(status_row)
+
+	var status_dot := Label.new()
+	status_dot.text = "●"
+	status_dot.add_theme_color_override("font_color", TRADE_ACCENT)
+	status_dot.add_theme_font_size_override("font_size", 9)
+	status_row.add_child(status_dot)
+
 	status_label = Label.new()
+	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.add_theme_color_override("font_color", TRADE_MUTED)
-	status_margin.add_child(status_label)
+	status_row.add_child(status_label)
+
 	editable_root = VBoxContainer.new()
-	editable_root.add_theme_constant_override("separation", 14)
+	editable_root.add_theme_constant_override("separation", 10)
 	editable_root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(editable_root)
+
 	var columns := HBoxContainer.new()
-	columns.add_theme_constant_override("separation", 16)
+	columns.name = "OfferColumns"
+	columns.add_theme_constant_override("separation", 14)
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	editable_root.add_child(columns)
 	local_offer_box = _offer_section(columns, "Your Offer", local_offer_slots)
 	opponent_offer_box = _offer_section(columns, "Other Player's Offer", opponent_offer_slots)
+
+	var action_panel := PanelContainer.new()
+	action_panel.name = "TradeActionBar"
+	action_panel.custom_minimum_size = Vector2(0, 46)
+	action_panel.add_theme_stylebox_override("panel", _trade_action_bar_style())
+	editable_root.add_child(action_panel)
+
+	var action_margin := MarginContainer.new()
+	action_margin.add_theme_constant_override("margin_left", 9)
+	action_margin.add_theme_constant_override("margin_top", 6)
+	action_margin.add_theme_constant_override("margin_right", 9)
+	action_margin.add_theme_constant_override("margin_bottom", 6)
+	action_panel.add_child(action_margin)
+
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
-	editable_root.add_child(actions)
+	action_margin.add_child(actions)
+
 	add_items_button = Button.new()
-	add_items_button.text = "Add Items"
+	add_items_button.text = "+  Add Items"
+	add_items_button.focus_mode = Control.FOCUS_NONE
 	add_items_button.pressed.connect(_open_item_selector)
 	_apply_button_style(add_items_button, "secondary")
 	actions.add_child(add_items_button)
+
+	var action_hint := Label.new()
+	action_hint.text = "Drag Pokémon from your party into an open slot"
+	action_hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	action_hint.add_theme_color_override("font_color", TRADE_MUTED)
+	action_hint.add_theme_font_size_override("font_size", 10)
+	actions.add_child(action_hint)
+
 	var action_spacer := Control.new()
 	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions.add_child(action_spacer)
+
 	ready_button = Button.new()
-	ready_button.text = "Ready"
+	ready_button.text = "Ready Offer"
+	ready_button.custom_minimum_size = Vector2(128, 34)
+	ready_button.focus_mode = Control.FOCUS_NONE
 	ready_button.pressed.connect(_set_ready.bind(true))
 	_apply_button_style(ready_button, "primary")
 	actions.add_child(ready_button)
+
 	edit_button = Button.new()
 	edit_button.text = "Edit Offer"
+	edit_button.custom_minimum_size = Vector2(118, 34)
+	edit_button.focus_mode = Control.FOCUS_NONE
 	edit_button.pressed.connect(_set_ready.bind(false))
 	_apply_button_style(edit_button, "secondary")
 	actions.add_child(edit_button)
+
 	review_root = VBoxContainer.new()
-	review_root.add_theme_constant_override("separation", 12)
+	review_root.add_theme_constant_override("separation", 10)
 	review_root.visible = false
 	review_root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(review_root)
+
+	var review_banner := PanelContainer.new()
+	review_banner.name = "LockedReviewBanner"
+	review_banner.add_theme_stylebox_override("panel", _panel_style(Color("#0b241bf2"), Color("#63df8b99"), 8, 1))
+	review_root.add_child(review_banner)
+
+	var review_banner_margin := MarginContainer.new()
+	review_banner_margin.add_theme_constant_override("margin_left", 12)
+	review_banner_margin.add_theme_constant_override("margin_top", 9)
+	review_banner_margin.add_theme_constant_override("margin_right", 12)
+	review_banner_margin.add_theme_constant_override("margin_bottom", 9)
+	review_banner.add_child(review_banner_margin)
+
+	var review_banner_row := HBoxContainer.new()
+	review_banner_row.add_theme_constant_override("separation", 9)
+	review_banner_margin.add_child(review_banner_row)
+
+	var locked_mark := Label.new()
+	locked_mark.text = "✓"
+	locked_mark.add_theme_color_override("font_color", TRADE_READY)
+	locked_mark.add_theme_font_size_override("font_size", 16)
+	review_banner_row.add_child(locked_mark)
+
 	review_trust_label = Label.new()
-	review_trust_label.add_theme_color_override("font_color", TRADE_GOLD)
-	review_root.add_child(review_trust_label)
+	review_trust_label.text = "Offers locked · Review both sides before confirming"
+	review_trust_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	review_trust_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	review_trust_label.add_theme_color_override("font_color", TRADE_READY)
+	review_banner_row.add_child(review_trust_label)
+
 	var review_columns := HBoxContainer.new()
-	review_columns.add_theme_constant_override("separation", 16)
+	review_columns.name = "LockedReviewColumns"
+	review_columns.add_theme_constant_override("separation", 14)
 	review_columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	review_root.add_child(review_columns)
-	review_give_list = _section(review_columns, "You give")
-	review_receive_list = _section(review_columns, "You receive")
+	review_give_list = _section(review_columns, "YOU GIVE")
+	review_receive_list = _section(review_columns, "YOU RECEIVE")
+
+	var confirmation_panel := PanelContainer.new()
+	confirmation_panel.name = "ConfirmationBar"
+	confirmation_panel.add_theme_stylebox_override("panel", _trade_action_bar_style())
+	review_root.add_child(confirmation_panel)
+
+	var confirmation_margin := MarginContainer.new()
+	confirmation_margin.add_theme_constant_override("margin_left", 10)
+	confirmation_margin.add_theme_constant_override("margin_top", 7)
+	confirmation_margin.add_theme_constant_override("margin_right", 9)
+	confirmation_margin.add_theme_constant_override("margin_bottom", 7)
+	confirmation_panel.add_child(confirmation_margin)
+
+	var confirmation_row := HBoxContainer.new()
+	confirmation_row.add_theme_constant_override("separation", 10)
+	confirmation_margin.add_child(confirmation_row)
+
 	confirmation_label = Label.new()
+	confirmation_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	confirmation_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	confirmation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	confirmation_label.add_theme_color_override("font_color", TRADE_MUTED)
-	review_root.add_child(confirmation_label)
+	confirmation_row.add_child(confirmation_label)
+
 	confirm_button = Button.new()
 	confirm_button.text = "Confirm Trade"
+	confirm_button.custom_minimum_size = Vector2(148, 36)
+	confirm_button.focus_mode = Control.FOCUS_NONE
 	confirm_button.pressed.connect(_confirm_trade)
 	_apply_button_style(confirm_button, "primary")
-	review_root.add_child(confirm_button)
+	confirmation_row.add_child(confirm_button)
 	_build_item_selector()
 
 
@@ -249,27 +403,36 @@ func _section(parent: Control, label_text: String) -> VBoxContainer:
 	var section := VBoxContainer.new()
 	section.custom_minimum_size = Vector2(235, 0)
 	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	section.add_theme_constant_override("separation", 6)
 	parent.add_child(section)
+
 	var label := Label.new()
 	label.text = label_text
-	label.add_theme_font_size_override("font_size", 17)
-	label.add_theme_color_override("font_color", TRADE_TEXT)
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", TRADE_ACCENT)
 	section.add_child(label)
+
 	var panel := PanelContainer.new()
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE, TRADE_BORDER, 6, 1))
+	panel.add_theme_stylebox_override("panel", _trade_workspace_panel_style())
 	section.add_child(panel)
+
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	panel.add_child(margin)
+
 	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_child(scroll)
+
 	var list := VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 7)
 	scroll.add_child(list)
 	return list
 
@@ -279,101 +442,142 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 	section.custom_minimum_size = Vector2(0, 300)
 	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	section.add_theme_constant_override("separation", 6)
 	parent.add_child(section)
+
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 10)
+	header.add_theme_constant_override("separation", 8)
 	section.add_child(header)
-	var label := Label.new()
-	label.text = label_text
-	label.add_theme_font_size_override("font_size", 18)
-	label.add_theme_color_override("font_color", TRADE_TEXT)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(label)
+
+	var identity_stack := VBoxContainer.new()
+	identity_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity_stack.add_theme_constant_override("separation", 0)
+	header.add_child(identity_stack)
+
+	var side_caption := Label.new()
+	side_caption.text = "YOUR OFFER" if label_text == "Your Offer" else "THEIR OFFER"
+	side_caption.add_theme_font_size_override("font_size", 9)
+	side_caption.add_theme_color_override("font_color", TRADE_ACCENT if label_text == "Your Offer" else TRADE_MUTED)
+	identity_stack.add_child(side_caption)
+
+	var participant_label := Label.new()
+	participant_label.text = "You" if label_text == "Your Offer" else "Other Trainer"
+	participant_label.add_theme_font_size_override("font_size", 16)
+	participant_label.add_theme_color_override("font_color", TRADE_TEXT)
+	identity_stack.add_child(participant_label)
 	if label_text == "Your Offer":
-		local_offer_title_label = label
+		local_offer_title_label = participant_label
 	else:
-		opponent_offer_title_label = label
+		opponent_offer_title_label = participant_label
+
 	var ready_indicator := Label.new()
-	ready_indicator.text = "READY"
+	ready_indicator.text = "●  READY"
 	ready_indicator.visible = false
+	ready_indicator.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ready_indicator.add_theme_color_override("font_color", TRADE_READY)
-	ready_indicator.add_theme_font_size_override("font_size", 14)
+	ready_indicator.add_theme_font_size_override("font_size", 11)
 	header.add_child(ready_indicator)
 	if label_text == "Your Offer":
 		local_ready_indicator = ready_indicator
 	else:
 		opponent_ready_indicator = ready_indicator
+
 	var panel := PanelContainer.new()
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = TRADE_SURFACE
-	panel_style.border_color = TRADE_BORDER
-	panel_style.set_border_width_all(1)
-	panel_style.set_corner_radius_all(6)
-	panel_style.shadow_color = Color("#00000066")
-	panel_style.shadow_size = 6
-	panel.add_theme_stylebox_override("panel", panel_style)
+	panel.add_theme_stylebox_override("panel", _trade_workspace_panel_style())
 	section.add_child(panel)
+
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 14)
+	margin.add_theme_constant_override("margin_left", 11)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 11)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	panel.add_child(margin)
+
 	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 12)
+	content.add_theme_constant_override("separation", 7)
 	margin.add_child(content)
+
+	var pokemon_caption := Label.new()
+	pokemon_caption.text = "POKÉMON  ·  DRAG FROM YOUR PARTY" if label_text == "Your Offer" else "POKÉMON"
+	pokemon_caption.add_theme_font_size_override("font_size", 9)
+	pokemon_caption.add_theme_color_override("font_color", TRADE_MUTED)
+	content.add_child(pokemon_caption)
+
 	var grid := GridContainer.new()
 	grid.columns = MAX_OFFER_SIZE
-	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("h_separation", 7)
 	content.add_child(grid)
 	for index in range(MAX_OFFER_SIZE):
-		var slot := _create_offer_slot()
+		var slot := _create_offer_slot(index, label_text == "Your Offer")
 		slots.append(slot)
 		grid.add_child(slot)
-	var item_separator := HSeparator.new()
-	content.add_child(item_separator)
+
+	var item_heading := HBoxContainer.new()
+	item_heading.add_theme_constant_override("separation", 8)
+	content.add_child(item_heading)
+
+	var item_caption := Label.new()
+	item_caption.text = "ITEMS"
+	item_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_caption.add_theme_font_size_override("font_size", 9)
+	item_caption.add_theme_color_override("font_color", TRADE_MUTED)
+	item_heading.add_child(item_caption)
+
+	var item_hint := Label.new()
+	item_hint.text = "Added from inventory" if label_text == "Your Offer" else "Offered by trainer"
+	item_hint.add_theme_font_size_override("font_size", 9)
+	item_hint.add_theme_color_override("font_color", Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.62))
+	item_heading.add_child(item_hint)
+
 	var item_scroll := ScrollContainer.new()
-	item_scroll.custom_minimum_size.y = 72
+	item_scroll.custom_minimum_size.y = 62
+	item_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	item_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content.add_child(item_scroll)
+
 	var item_list := VBoxContainer.new()
 	item_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_list.add_theme_constant_override("separation", 5)
+	item_list.add_theme_constant_override("separation", 4)
 	item_scroll.add_child(item_list)
 	if label_text == "Your Offer":
 		local_item_offer_list = item_list
 	else:
 		opponent_item_offer_list = item_list
-	var money_separator := HSeparator.new()
-	content.add_child(money_separator)
+
 	var money_footer := PanelContainer.new()
-	money_footer.custom_minimum_size.y = 82
-	money_footer.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_GOLD, 5, 1))
+	money_footer.custom_minimum_size.y = 78 if label_text == "Your Offer" else 64
+	money_footer.add_theme_stylebox_override("panel", _trade_money_style())
 	content.add_child(money_footer)
+
 	var footer_margin := MarginContainer.new()
 	footer_margin.add_theme_constant_override("margin_left", 10)
-	footer_margin.add_theme_constant_override("margin_top", 8)
+	footer_margin.add_theme_constant_override("margin_top", 7)
 	footer_margin.add_theme_constant_override("margin_right", 10)
-	footer_margin.add_theme_constant_override("margin_bottom", 8)
+	footer_margin.add_theme_constant_override("margin_bottom", 7)
 	money_footer.add_child(footer_margin)
+
 	var money_content := VBoxContainer.new()
-	money_content.add_theme_constant_override("separation", 6)
+	money_content.add_theme_constant_override("separation", 4)
 	footer_margin.add_child(money_content)
+
 	var money_header := HBoxContainer.new()
 	money_header.add_theme_constant_override("separation", 8)
 	money_content.add_child(money_header)
+
 	var money_title := Label.new()
 	money_title.text = "MONEY OFFER"
 	money_title.add_theme_color_override("font_color", TRADE_MUTED)
-	money_title.add_theme_font_size_override("font_size", 12)
+	money_title.add_theme_font_size_override("font_size", 9)
 	money_header.add_child(money_title)
+
 	var money_offer_label := Label.new()
 	money_offer_label.text = "$0"
 	money_offer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	money_offer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	money_offer_label.add_theme_color_override("font_color", TRADE_GOLD)
-	money_offer_label.add_theme_font_size_override("font_size", 18)
+	money_offer_label.add_theme_font_size_override("font_size", 16)
 	money_header.add_child(money_offer_label)
 	if label_text == "Your Offer":
 		local_money_offer_label = money_offer_label
@@ -382,16 +586,20 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		money_balance_label.tooltip_text = "Current wallet balance"
 		money_balance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		money_balance_label.add_theme_color_override("font_color", TRADE_MUTED)
+		money_balance_label.add_theme_font_size_override("font_size", 9)
 		money_header.add_child(money_balance_label)
+
 		var money_controls := HBoxContainer.new()
 		money_controls.add_theme_constant_override("separation", 8)
 		money_content.add_child(money_controls)
+
 		var currency_prefix := Label.new()
 		currency_prefix.text = "$"
 		currency_prefix.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		currency_prefix.add_theme_color_override("font_color", TRADE_GOLD)
-		currency_prefix.add_theme_font_size_override("font_size", 18)
+		currency_prefix.add_theme_font_size_override("font_size", 16)
 		money_controls.add_child(currency_prefix)
+
 		money_amount_spinbox = SpinBox.new()
 		money_amount_spinbox.min_value = 0
 		money_amount_spinbox.max_value = 2147483647
@@ -400,9 +608,12 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		money_amount_spinbox.value_changed.connect(_on_money_amount_changed)
 		money_amount_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		money_amount_spinbox.custom_minimum_size.x = 140
+		money_amount_spinbox.focus_mode = Control.FOCUS_ALL
 		money_controls.add_child(money_amount_spinbox)
+
 		update_money_button = Button.new()
 		update_money_button.text = "Update"
+		update_money_button.focus_mode = Control.FOCUS_NONE
 		update_money_button.tooltip_text = "Update money offer"
 		update_money_button.pressed.connect(_update_money_offer)
 		_apply_button_style(update_money_button, "secondary")
@@ -412,80 +623,206 @@ func _offer_section(parent: Control, label_text: String, slots: Array[Control]) 
 		var opponent_hint := Label.new()
 		opponent_hint.text = "Offered by this player"
 		opponent_hint.add_theme_color_override("font_color", TRADE_MUTED)
+		opponent_hint.add_theme_font_size_override("font_size", 10)
 		money_content.add_child(opponent_hint)
 	return panel
 
 
 func _build_item_selector() -> void:
 	item_selector_popup = PopupPanel.new()
-	item_selector_popup.size = Vector2i(640, 560)
-	item_selector_popup.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 7, 1))
+	item_selector_popup.size = Vector2i(680, 590)
+	item_selector_popup.add_theme_stylebox_override("panel", _trade_outer_style())
 	add_child(item_selector_popup)
+
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_top", 15)
 	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.add_theme_constant_override("margin_bottom", 15)
 	item_selector_popup.add_child(margin)
+
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 10)
 	margin.add_child(root)
+
+	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 42)
+	header.add_theme_constant_override("separation", 10)
+	root.add_child(header)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(40, 40)
+	icon_frame.add_theme_stylebox_override("panel", _trade_icon_frame_style())
+	header.add_child(icon_frame)
+
+	var icon_margin := MarginContainer.new()
+	icon_margin.add_theme_constant_override("margin_left", 6)
+	icon_margin.add_theme_constant_override("margin_top", 6)
+	icon_margin.add_theme_constant_override("margin_right", 6)
+	icon_margin.add_theme_constant_override("margin_bottom", 6)
+	icon_frame.add_child(icon_margin)
+
+	var icon := TextureRect.new()
+	icon.texture = TRADE_ICON
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon_margin.add_child(icon)
+
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_stack.add_theme_constant_override("separation", 0)
+	header.add_child(title_stack)
+
 	var heading := Label.new()
-	heading.text = "Choose Item Stacks"
-	heading.add_theme_font_size_override("font_size", 20)
+	heading.text = "Add Items to Offer"
+	heading.add_theme_font_size_override("font_size", 19)
 	heading.add_theme_color_override("font_color", TRADE_TEXT)
-	root.add_child(heading)
+	title_stack.add_child(heading)
+
 	var help := Label.new()
-	help.text = "Search your inventory, select stacks, and set each offered quantity."
+	help.text = "Select tradable stacks and choose how many to offer"
+	help.add_theme_font_size_override("font_size", 10)
 	help.add_theme_color_override("font_color", TRADE_MUTED)
-	root.add_child(help)
+	title_stack.add_child(help)
+
+	var close_button := Button.new()
+	close_button.text = "×"
+	close_button.custom_minimum_size = Vector2(36, 34)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.tooltip_text = "Close item selection"
+	close_button.pressed.connect(item_selector_popup.hide)
+	_apply_button_style(close_button, "secondary")
+	header.add_child(close_button)
+
 	item_selector_search = LineEdit.new()
-	item_selector_search.placeholder_text = "Search items"
+	item_selector_search.placeholder_text = "Search tradable items by name or category"
+	item_selector_search.custom_minimum_size = Vector2(0, 38)
 	item_selector_search.clear_button_enabled = true
 	item_selector_search.add_theme_color_override("font_color", TRADE_TEXT)
 	item_selector_search.add_theme_color_override("font_placeholder_color", TRADE_MUTED)
-	item_selector_search.add_theme_stylebox_override("normal", _panel_style(TRADE_SLOT, TRADE_BORDER, 5, 1))
-	item_selector_search.add_theme_stylebox_override("focus", _panel_style(TRADE_SLOT, TRADE_ACCENT, 5, 1))
+	item_selector_search.add_theme_stylebox_override("normal", _trade_input_style(TRADE_BORDER))
+	item_selector_search.add_theme_stylebox_override("focus", _trade_input_style(TRADE_ACCENT))
 	item_selector_search.text_changed.connect(_filter_item_selector_rows)
 	root.add_child(item_selector_search)
+
+	var list_frame := PanelContainer.new()
+	list_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	list_frame.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, Color("#28496399"), 8, 1))
+	root.add_child(list_frame)
+
+	var list_margin := MarginContainer.new()
+	list_margin.add_theme_constant_override("margin_left", 8)
+	list_margin.add_theme_constant_override("margin_top", 8)
+	list_margin.add_theme_constant_override("margin_right", 8)
+	list_margin.add_theme_constant_override("margin_bottom", 8)
+	list_frame.add_child(list_margin)
+
 	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	root.add_child(scroll)
+	list_margin.add_child(scroll)
+
 	item_selector_list = VBoxContainer.new()
 	item_selector_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_selector_list.add_theme_constant_override("separation", 6)
 	scroll.add_child(item_selector_list)
+
 	item_selector_empty_label = Label.new()
-	item_selector_empty_label.text = "No matching tradable items."
+	item_selector_empty_label.text = "No matching tradable items"
+	item_selector_empty_label.custom_minimum_size = Vector2(0, 70)
+	item_selector_empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	item_selector_empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	item_selector_empty_label.add_theme_color_override("font_color", TRADE_MUTED)
 	item_selector_empty_label.visible = false
 	item_selector_list.add_child(item_selector_empty_label)
+
+	var action_panel := PanelContainer.new()
+	action_panel.add_theme_stylebox_override("panel", _trade_action_bar_style())
+	root.add_child(action_panel)
+
+	var action_margin := MarginContainer.new()
+	action_margin.add_theme_constant_override("margin_left", 9)
+	action_margin.add_theme_constant_override("margin_top", 6)
+	action_margin.add_theme_constant_override("margin_right", 9)
+	action_margin.add_theme_constant_override("margin_bottom", 6)
+	action_panel.add_child(action_margin)
+
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
-	root.add_child(actions)
+	actions.add_theme_constant_override("separation", 8)
+	action_margin.add_child(actions)
+
+	var selection_hint := Label.new()
+	selection_hint.text = "Your offer updates after you apply this selection"
+	selection_hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	selection_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	selection_hint.add_theme_color_override("font_color", TRADE_MUTED)
+	selection_hint.add_theme_font_size_override("font_size", 10)
+	actions.add_child(selection_hint)
+
 	var cancel := Button.new()
 	cancel.text = "Cancel"
+	cancel.focus_mode = Control.FOCUS_NONE
 	cancel.pressed.connect(item_selector_popup.hide)
 	_apply_button_style(cancel, "secondary")
 	actions.add_child(cancel)
+
 	var apply := Button.new()
 	apply.text = "Update Offer"
+	apply.custom_minimum_size = Vector2(130, 34)
+	apply.focus_mode = Control.FOCUS_NONE
 	apply.pressed.connect(_apply_item_selection)
 	_apply_button_style(apply, "primary")
 	actions.add_child(apply)
 
 
-func _create_offer_slot() -> Control:
+func _create_offer_slot(slot_index: int = -1, accepts_drop: bool = false) -> Control:
 	var slot := PanelContainer.new()
-	slot.custom_minimum_size = Vector2(74, 84)
+	slot.custom_minimum_size = Vector2(82, 86)
 	slot.mouse_filter = Control.MOUSE_FILTER_PASS
-	var style := StyleBoxFlat.new()
-	style.bg_color = TRADE_SLOT
-	style.border_color = TRADE_BORDER
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("panel", style)
+	slot.add_theme_stylebox_override("panel", _trade_offer_slot_style(false))
+	if slot_index >= 0:
+		_render_empty_offer_slot(slot, slot_index, accepts_drop)
 	return slot
+
+
+func _render_empty_offer_slot(slot: Control, slot_index: int, accepts_drop: bool) -> void:
+	slot.add_theme_stylebox_override("panel", _trade_offer_slot_style(false))
+	var stack := VBoxContainer.new()
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	stack.offset_left = 5
+	stack.offset_top = 5
+	stack.offset_right = -5
+	stack.offset_bottom = -5
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 1)
+	slot.add_child(stack)
+
+	var badge := Label.new()
+	badge.text = "%02d" % (slot_index + 1)
+	badge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	badge.add_theme_font_size_override("font_size", 9)
+	badge.add_theme_color_override("font_color", Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.56))
+	stack.add_child(badge)
+
+	var plus := Label.new()
+	plus.text = "+" if accepts_drop else "·"
+	plus.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	plus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	plus.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	plus.add_theme_font_size_override("font_size", 19)
+	plus.add_theme_color_override("font_color", Color(TRADE_ACCENT.r, TRADE_ACCENT.g, TRADE_ACCENT.b, 0.48) if accepts_drop else Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.34))
+	stack.add_child(plus)
+
+	var hint := Label.new()
+	hint.text = "DROP" if accepts_drop else "EMPTY"
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_font_size_override("font_size", 8)
+	hint.add_theme_color_override("font_color", Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.48))
+	stack.add_child(hint)
 
 
 func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
@@ -497,17 +834,78 @@ func _panel_style(background: Color, border: Color, radius: int, width: int) -> 
 	return style
 
 
+func _trade_outer_style() -> StyleBoxFlat:
+	var style := _panel_style(TRADE_BG, TRADE_ACCENT_SOFT, 12, 1)
+	style.border_width_top = 2
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 18
+	style.shadow_offset = Vector2(0, 8)
+	return style
+
+
+func _trade_workspace_panel_style() -> StyleBoxFlat:
+	var style := _panel_style(TRADE_SURFACE_RAISED, TRADE_BORDER, 9, 1)
+	style.shadow_color = Color("#0000003d")
+	style.shadow_size = 6
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+
+func _trade_icon_frame_style() -> StyleBoxFlat:
+	var style := _panel_style(TRADE_ACCENT_FAINT, TRADE_ACCENT_SOFT, 9, 1)
+	style.shadow_color = Color("#00000036")
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+
+func _trade_status_style() -> StyleBoxFlat:
+	var style := _panel_style(Color("#071522ec"), Color("#3d7596aa"), 8, 1)
+	style.border_width_left = 3
+	return style
+
+
+func _trade_action_bar_style() -> StyleBoxFlat:
+	return _panel_style(Color("#07121fd9"), Color("#28496399"), 8, 1)
+
+
+func _trade_money_style() -> StyleBoxFlat:
+	var style := _panel_style(Color("#171408d9"), Color("#9c7d2f99"), 7, 1)
+	style.border_width_left = 3
+	style.border_color = Color("#d8b76799")
+	return style
+
+
+func _trade_offer_slot_style(occupied: bool) -> StyleBoxFlat:
+	var background := Color("#0a1d2ef2") if occupied else TRADE_SLOT
+	var border := TRADE_ACCENT_SOFT if occupied else Color("#28496399")
+	var style := _panel_style(background, border, 7, 1)
+	if occupied:
+		style.border_width_bottom = 2
+	return style
+
+
+func _trade_input_style(border: Color) -> StyleBoxFlat:
+	var style := _panel_style(TRADE_SLOT, border, 7, 1)
+	style.content_margin_left = 11
+	style.content_margin_right = 11
+	style.content_margin_top = 8
+	style.content_margin_bottom = 8
+	return style
+
+
 func _button_style(background: Color, border: Color) -> StyleBoxFlat:
-	var style := _panel_style(background, border, 5, 1)
-	style.content_margin_left = 16
-	style.content_margin_right = 16
-	style.content_margin_top = 9
-	style.content_margin_bottom = 9
+	var style := _panel_style(background, border, 7, 1)
+	style.content_margin_left = 14
+	style.content_margin_right = 14
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
 	return style
 
 
 func _apply_button_style(button: Button, kind: String) -> void:
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.focus_mode = Control.FOCUS_NONE
 	var primary := kind == "primary"
 	var normal_bg := Color("#0d4359") if primary else Color("#111d2c")
 	var hover_bg := Color("#12627f") if primary else Color("#192c42")
@@ -515,6 +913,7 @@ func _apply_button_style(button: Button, kind: String) -> void:
 	button.add_theme_color_override("font_color", TRADE_TEXT)
 	button.add_theme_color_override("font_hover_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color("#667382"))
+	button.add_theme_font_size_override("font_size", 12)
 	button.add_theme_stylebox_override("normal", _button_style(normal_bg, border))
 	button.add_theme_stylebox_override("hover", _button_style(hover_bg, TRADE_ACCENT))
 	button.add_theme_stylebox_override("pressed", _button_style(Color("#081a27"), TRADE_ACCENT))
@@ -727,8 +1126,8 @@ func _sync_selected_from_offer() -> void:
 
 
 func _render_offers() -> void:
-	_clear_offer_slots(local_offer_slots)
-	_clear_offer_slots(opponent_offer_slots)
+	_clear_offer_slots(local_offer_slots, true)
+	_clear_offer_slots(opponent_offer_slots, false)
 	_clear(local_item_offer_list)
 	_clear(opponent_item_offer_list)
 	local_money_offer_label.text = "$0"
@@ -751,30 +1150,73 @@ func _render_offers() -> void:
 		var money := maxi(int(offer_value.get("money", 0)), 0)
 		var money_label := local_money_offer_label if is_local else opponent_money_offer_label
 		money_label.text = "$%s" % format_money(money)
+	if local_item_offer_list.get_child_count() == 0:
+		_render_empty_item_offer(local_item_offer_list, "No items added")
+	if opponent_item_offer_list.get_child_count() == 0:
+		_render_empty_item_offer(opponent_item_offer_list, "No items offered")
 
 
 func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool, position: int) -> void:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 34)
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#091827df"), Color("#28496399"), 6, 1))
+	target.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	panel.add_child(margin)
+
 	var row := HBoxContainer.new()
-	row.custom_minimum_size.y = 32
 	row.add_theme_constant_override("separation", 8)
-	target.add_child(row)
+	margin.add_child(row)
+
+	var item_mark := Label.new()
+	item_mark.text = "◆"
+	item_mark.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	item_mark.add_theme_color_override("font_color", TRADE_GOLD)
+	item_mark.add_theme_font_size_override("font_size", 9)
+	row.add_child(item_mark)
+
 	var name_label := Label.new()
 	name_label.text = "%dx %s" % [int(item.get("quantity", 0)), str(item.get("name", item.get("itemId", "Item")))]
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.add_theme_color_override("font_color", TRADE_TEXT)
+	name_label.add_theme_font_size_override("font_size", 11)
 	row.add_child(name_label)
+
 	var category_label := Label.new()
 	category_label.text = str(item.get("category", "")).replace("-", " ").capitalize()
+	category_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	category_label.add_theme_color_override("font_color", TRADE_MUTED)
+	category_label.add_theme_font_size_override("font_size", 9)
 	row.add_child(category_label)
 	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove := Button.new()
-		remove.text = "X"
+		remove.text = "×"
 		remove.tooltip_text = "Remove item stack from offer"
 		remove.focus_mode = Control.FOCUS_NONE
 		remove.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		remove.custom_minimum_size = Vector2(24, 24)
+		remove.add_theme_color_override("font_color", Color("#ffc6ca"))
+		remove.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 5, 0))
+		remove.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015e8"), Color("#b84c58"), 5, 1))
 		remove.pressed.connect(_remove_item_offer_position.bind(position))
 		row.add_child(remove)
+
+
+func _render_empty_item_offer(target: VBoxContainer, message: String) -> void:
+	var label := Label.new()
+	label.text = message
+	label.custom_minimum_size = Vector2(0, 38)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.58))
+	label.add_theme_font_size_override("font_size", 10)
+	target.add_child(label)
 
 
 func _open_item_selector() -> void:
@@ -791,7 +1233,7 @@ func _open_item_selector() -> void:
 	inventory_items = normalize_inventory_candidates(result.get("items", []))
 	item_selector_search.text = ""
 	_rebuild_item_selector_rows()
-	item_selector_popup.popup_centered(Vector2i(640, 560))
+	item_selector_popup.popup_centered(Vector2i(680, 590))
 	item_selector_search.grab_focus()
 
 
@@ -838,7 +1280,10 @@ func _rebuild_item_selector_rows() -> void:
 	_clear(item_selector_list)
 	item_selector_rows.clear()
 	item_selector_empty_label = Label.new()
-	item_selector_empty_label.text = "No matching tradable items."
+	item_selector_empty_label.text = "No matching tradable items"
+	item_selector_empty_label.custom_minimum_size = Vector2(0, 70)
+	item_selector_empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	item_selector_empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	item_selector_empty_label.add_theme_color_override("font_color", TRADE_MUTED)
 	item_selector_empty_label.visible = false
 	item_selector_list.add_child(item_selector_empty_label)
@@ -847,20 +1292,24 @@ func _rebuild_item_selector_rows() -> void:
 		selected_by_id[str(selected.get("itemId", ""))] = int(selected.get("quantity", 1))
 	if inventory_items.is_empty():
 		var empty := Label.new()
-		empty.text = "No tradable inventory items are available."
+		empty.text = "No tradable inventory items are available"
+		empty.custom_minimum_size = Vector2(0, 70)
+		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		empty.add_theme_color_override("font_color", TRADE_MUTED)
 		item_selector_list.add_child(empty)
 		return
 	for item: Dictionary in inventory_items:
 		var item_id := str(item.get("itemId", ""))
 		var row_panel := PanelContainer.new()
-		row_panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE, TRADE_BORDER, 5, 1))
+		row_panel.custom_minimum_size = Vector2(0, 54)
+		row_panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE_RAISED, TRADE_BORDER, 7, 1))
 		item_selector_list.add_child(row_panel)
 		var row_margin := MarginContainer.new()
-		row_margin.add_theme_constant_override("margin_left", 10)
-		row_margin.add_theme_constant_override("margin_top", 7)
-		row_margin.add_theme_constant_override("margin_right", 10)
-		row_margin.add_theme_constant_override("margin_bottom", 7)
+		row_margin.add_theme_constant_override("margin_left", 11)
+		row_margin.add_theme_constant_override("margin_top", 6)
+		row_margin.add_theme_constant_override("margin_right", 9)
+		row_margin.add_theme_constant_override("margin_bottom", 6)
 		row_panel.add_child(row_margin)
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 10)
@@ -871,11 +1320,35 @@ func _rebuild_item_selector_rows() -> void:
 		enabled.custom_minimum_size = Vector2(24, 24)
 		_apply_trade_checkbox_style(enabled)
 		row.add_child(enabled)
+
+		var identity := VBoxContainer.new()
+		identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		identity.alignment = BoxContainer.ALIGNMENT_CENTER
+		identity.add_theme_constant_override("separation", 0)
+		row.add_child(identity)
+
 		var label := Label.new()
-		label.text = "%s  (owned: %d)" % [str(item.get("name", item_id)), int(item.get("quantity", 0))]
-		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.text = str(item.get("name", item_id))
 		label.add_theme_color_override("font_color", TRADE_TEXT)
-		row.add_child(label)
+		label.add_theme_font_size_override("font_size", 12)
+		identity.add_child(label)
+
+		var item_meta := Label.new()
+		item_meta.text = "%s  ·  %d owned" % [
+			str(item.get("category", "item")).replace("-", " ").capitalize(),
+			int(item.get("quantity", 0)),
+		]
+		item_meta.add_theme_color_override("font_color", TRADE_MUTED)
+		item_meta.add_theme_font_size_override("font_size", 9)
+		identity.add_child(item_meta)
+
+		var quantity_caption := Label.new()
+		quantity_caption.text = "QTY"
+		quantity_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		quantity_caption.add_theme_color_override("font_color", TRADE_MUTED)
+		quantity_caption.add_theme_font_size_override("font_size", 9)
+		row.add_child(quantity_caption)
+
 		var quantity := SpinBox.new()
 		quantity.min_value = 1
 		quantity.max_value = mini(int(item.get("quantity", 1)), 999)
@@ -963,12 +1436,16 @@ func _local_offer_asset_count() -> int:
 	return selected_ids.size() + selected_item_offers.size() + (1 if selected_money > 0 else 0)
 
 
-func _clear_offer_slots(slots: Array[Control]) -> void:
-	for slot in slots:
+func _clear_offer_slots(slots: Array[Control], accepts_drop: bool) -> void:
+	for index in range(slots.size()):
+		var slot := slots[index]
 		_clear(slot)
+		_render_empty_offer_slot(slot, index, accepts_drop)
 
 
 func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, position: int) -> void:
+	_clear(slot)
+	slot.add_theme_stylebox_override("panel", _trade_offer_slot_style(true))
 	var wrapper := Control.new()
 	wrapper.mouse_filter = Control.MOUSE_FILTER_PASS
 	slot.add_child(wrapper)
@@ -981,6 +1458,22 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	content.offset_right = -5
 	content.offset_bottom = -5
 	wrapper.add_child(content)
+
+	var slot_badge := Label.new()
+	slot_badge.text = "%02d" % (position + 1)
+	slot_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	slot_badge.anchor_left = 0.0
+	slot_badge.anchor_top = 0.0
+	slot_badge.anchor_right = 0.0
+	slot_badge.anchor_bottom = 0.0
+	slot_badge.offset_left = 5
+	slot_badge.offset_top = 4
+	slot_badge.offset_right = 25
+	slot_badge.offset_bottom = 18
+	slot_badge.add_theme_font_size_override("font_size", 8)
+	slot_badge.add_theme_color_override("font_color", TRADE_ACCENT)
+	wrapper.add_child(slot_badge)
+
 	var icon_button := Button.new()
 	icon_button.custom_minimum_size = Vector2(66, 52)
 	icon_button.icon = PokemonAssets.load_party_icon(_pokemon_species(pokemon), bool(pokemon.get("shiny", false)))
@@ -1003,7 +1496,7 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	content.add_child(level_label)
 	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove_button := Button.new()
-		remove_button.text = "X"
+		remove_button.text = "×"
 		remove_button.tooltip_text = "Remove from offer"
 		remove_button.focus_mode = Control.FOCUS_NONE
 		remove_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1212,11 +1705,23 @@ func _render_locked_review() -> void:
 			_add_review_items(review_receive_list, participant_value.get("receivesItems", []))
 			_add_review_money(review_give_list, int(participant_value.get("givesMoney", 0)))
 			_add_review_money(review_receive_list, int(participant_value.get("receivesMoney", 0)))
-	review_trust_label.text = "Locked revision %d  Review %s" % [int(review.get("lockedRevision", 0)), str(review.get("snapshotHash", "")).left(12)]
+	if review_give_list.get_child_count() == 0:
+		_render_review_empty_state(review_give_list, "You are not giving any assets")
+	if review_receive_list.get_child_count() == 0:
+		_render_review_empty_state(review_receive_list, "You are not receiving any assets")
+	review_trust_label.text = "Offers locked · Any change requires both trainers to review again"
+	review_trust_label.tooltip_text = "Locked revision %d · Verification %s" % [
+		int(review.get("lockedRevision", 0)),
+		str(review.get("snapshotHash", "")).left(12),
+	]
 	var local_confirmed := _local_participant_confirmed()
 	confirm_button.visible = not local_confirmed
 	confirm_button.disabled = mutation_in_flight or _connection_state_unresolved()
-	confirmation_label.text = "Confirmed. Waiting for the other player." if local_confirmed else "Review the exact exchange before confirming."
+	confirmation_label.text = (
+		"Confirmed · Waiting for the other trainer"
+		if local_confirmed
+		else "Confirm only when both columns match what you agreed to exchange."
+	)
 
 
 func _confirm_trade() -> void:
@@ -1422,7 +1927,7 @@ func _add_review_pokemon(target: VBoxContainer, values: Variant) -> void:
 		var pokemon: Dictionary = value if value is Dictionary else {}
 		var panel := PanelContainer.new()
 		panel.custom_minimum_size.y = 66
-		panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_BORDER, 5, 1))
+		panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE_RAISED, TRADE_BORDER, 7, 1))
 		target.add_child(panel)
 		var margin := MarginContainer.new()
 		margin.add_theme_constant_override("margin_left", 10)
@@ -1439,13 +1944,24 @@ func _add_review_pokemon(target: VBoxContainer, values: Variant) -> void:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		row.add_child(icon)
+
+		var identity := VBoxContainer.new()
+		identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		identity.alignment = BoxContainer.ALIGNMENT_CENTER
+		identity.add_theme_constant_override("separation", 1)
+		row.add_child(identity)
+
 		var label := Label.new()
-		label.text = _pokemon_label(pokemon)
-		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.text = _pokemon_name(pokemon)
 		label.add_theme_color_override("font_color", TRADE_TEXT)
-		label.add_theme_font_size_override("font_size", 14)
-		row.add_child(label)
+		label.add_theme_font_size_override("font_size", 13)
+		identity.add_child(label)
+
+		var level_label := Label.new()
+		level_label.text = "Level %d" % maxi(int(pokemon.get("level", 1)), 1)
+		level_label.add_theme_color_override("font_color", TRADE_MUTED)
+		level_label.add_theme_font_size_override("font_size", 10)
+		identity.add_child(level_label)
 
 
 func _add_review_items(target: VBoxContainer, values: Variant) -> void:
@@ -1456,14 +1972,34 @@ func _add_review_items(target: VBoxContainer, values: Variant) -> void:
 			continue
 		var panel := PanelContainer.new()
 		panel.custom_minimum_size.y = 48
-		panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_BORDER, 5, 1))
+		panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE_RAISED, TRADE_BORDER, 7, 1))
 		target.add_child(panel)
+
+		var margin := MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 11)
+		margin.add_theme_constant_override("margin_top", 7)
+		margin.add_theme_constant_override("margin_right", 11)
+		margin.add_theme_constant_override("margin_bottom", 7)
+		panel.add_child(margin)
+
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		margin.add_child(row)
+
+		var mark := Label.new()
+		mark.text = "◆"
+		mark.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		mark.add_theme_color_override("font_color", TRADE_GOLD)
+		mark.add_theme_font_size_override("font_size", 9)
+		row.add_child(mark)
+
 		var label := Label.new()
 		label.text = "%dx %s" % [int(value.get("quantity", 0)), str(value.get("name", value.get("itemId", "Item")))]
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_color_override("font_color", TRADE_TEXT)
-		label.add_theme_font_size_override("font_size", 14)
-		panel.add_child(label)
+		label.add_theme_font_size_override("font_size", 12)
+		row.add_child(label)
 
 
 func _add_review_money(target: VBoxContainer, amount: int) -> void:
@@ -1471,13 +2007,36 @@ func _add_review_money(target: VBoxContainer, amount: int) -> void:
 		return
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size.y = 48
-	panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, TRADE_GOLD, 5, 1))
+	panel.add_theme_stylebox_override("panel", _trade_money_style())
 	target.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 11)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 11)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+
 	var label := Label.new()
-	label.text = "$%s Money" % format_money(amount)
+	label.text = "$%s Pokédollars" % format_money(amount)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_color_override("font_color", TRADE_GOLD)
-	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_font_size_override("font_size", 12)
+	margin.add_child(label)
+
+
+func _render_review_empty_state(target: VBoxContainer, message: String) -> void:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 86)
+	panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SLOT, Color("#28496377"), 7, 1))
+	target.add_child(panel)
+
+	var label := Label.new()
+	label.text = message
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", Color(TRADE_MUTED.r, TRADE_MUTED.g, TRADE_MUTED.b, 0.68))
+	label.add_theme_font_size_override("font_size", 11)
 	panel.add_child(label)
 
 

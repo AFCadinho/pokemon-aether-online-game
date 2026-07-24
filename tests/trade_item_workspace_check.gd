@@ -22,7 +22,7 @@ func _init() -> void:
 	_check(source.contains("func _open_item_selector"), "workspace exposes item selector")
 	_check(source.contains("func _apply_item_selection"), "workspace applies item selection")
 	_check(source.contains("selected_item_offers") and source.contains("service.replace_offer"), "workspace sends combined complete replacements")
-	_check(source.contains("placeholder_text = \"Search items\"") and source.contains("func _filter_item_selector_rows"), "item selector supports scalable inventory search")
+	_check(source.contains('placeholder_text = "Search tradable items by name or category"') and source.contains("func _filter_item_selector_rows"), "item selector supports scalable inventory search")
 	_check(source.contains("func _apply_trade_checkbox_style") and source.contains("checked_hover"), "item selector checkboxes have explicit visible states")
 	_check(not source.contains("Choose no more than five item stacks"), "workspace does not impose a five-stack product limit")
 	_check(source.contains("func _retry_offer_after_stale_revision") and source.contains("service.load_trade(trade_id)"), "stale offer retry refreshes the authoritative snapshot")

@@ -2,10 +2,12 @@ extends Window
 
 class_name TradeInvitationDialog
 
-const DIALOG_SIZE := Vector2i(460, 240)
+const DIALOG_SIZE := Vector2i(510, 300)
+const TRADE_ICON: Texture2D = preload("res://assets/ui/player_trade.svg")
 const TRADE_BG := Color("#050912fa")
-const TRADE_SURFACE := Color("#0b1422f7")
-const TRADE_BORDER := Color("#345170")
+const TRADE_SURFACE := Color("#081522f7")
+const TRADE_SURFACE_RAISED := Color("#0b1a2bf7")
+const TRADE_BORDER := Color("#2d4b66b3")
 const TRADE_ACCENT := Color("#62d7ff")
 const TRADE_GOLD := Color("#d8b767")
 const TRADE_TEXT := Color("#f4f0de")
@@ -14,6 +16,7 @@ const TRADE_MUTED := Color("#aeb8c5")
 var trade: Dictionary = {}
 var status_label: Label
 var mode_label: Label
+var heading_label: Label
 var accept_button: Button
 var decline_button: Button
 var action_in_flight := false
@@ -31,92 +34,140 @@ func setup() -> void:
 	var background := PanelContainer.new()
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background.add_theme_stylebox_override("panel", _panel_style(TRADE_BG, TRADE_GOLD, 7, 1))
+	background.add_theme_stylebox_override("panel", _outer_style())
 	add_child(background)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 15)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 15)
+	background.add_child(margin)
+
+	var root := VBoxContainer.new()
+	root.add_theme_constant_override("separation", 12)
+	margin.add_child(root)
+
 	var header := HBoxContainer.new()
-	header.anchor_left = 0.0
-	header.anchor_top = 0.0
-	header.anchor_right = 1.0
-	header.anchor_bottom = 0.0
-	header.offset_left = 18
-	header.offset_top = 12
-	header.offset_right = -12
-	header.offset_bottom = 44
-	add_child(header)
+	header.custom_minimum_size = Vector2(0, 46)
+	header.add_theme_constant_override("separation", 11)
+	root.add_child(header)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(44, 44)
+	icon_frame.add_theme_stylebox_override("panel", _panel_style(Color("#62d7ff1f"), Color("#62d7ff88"), 9, 1))
+	header.add_child(icon_frame)
+
+	var icon_margin := MarginContainer.new()
+	icon_margin.add_theme_constant_override("margin_left", 6)
+	icon_margin.add_theme_constant_override("margin_top", 6)
+	icon_margin.add_theme_constant_override("margin_right", 6)
+	icon_margin.add_theme_constant_override("margin_bottom", 6)
+	icon_frame.add_child(icon_margin)
+
+	var icon := TextureRect.new()
+	icon.texture = TRADE_ICON
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon_margin.add_child(icon)
+
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_stack.add_theme_constant_override("separation", 0)
+	header.add_child(title_stack)
+
 	var window_title := Label.new()
-	window_title.text = "Trade Invitation"
-	window_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	window_title.text = "Trade Request"
 	window_title.add_theme_color_override("font_color", TRADE_TEXT)
-	window_title.add_theme_font_size_override("font_size", 16)
-	header.add_child(window_title)
+	window_title.add_theme_font_size_override("font_size", 19)
+	title_stack.add_child(window_title)
+
+	var window_subtitle := Label.new()
+	window_subtitle.text = "Secure player-to-player exchange"
+	window_subtitle.add_theme_color_override("font_color", TRADE_MUTED)
+	window_subtitle.add_theme_font_size_override("font_size", 11)
+	title_stack.add_child(window_subtitle)
+
 	var close_button := Button.new()
-	close_button.text = "X"
+	close_button.text = "×"
 	close_button.tooltip_text = "Close invitation"
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.custom_minimum_size = Vector2(36, 34)
 	close_button.add_theme_color_override("font_color", TRADE_MUTED)
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
-	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
-	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015"), Color("#b84c58"), 4, 1))
+	close_button.add_theme_stylebox_override("normal", _panel_style(Color("#07111ed8"), TRADE_BORDER, 7, 1))
+	close_button.add_theme_stylebox_override("hover", _panel_style(Color("#2a1015"), Color("#b84c58"), 7, 1))
 	close_button.pressed.connect(_decline_or_close)
 	header.add_child(close_button)
+
 	var content_panel := PanelContainer.new()
-	content_panel.anchor_left = 0.0
-	content_panel.anchor_top = 0.0
-	content_panel.anchor_right = 1.0
-	content_panel.anchor_bottom = 0.0
-	content_panel.offset_left = 16
-	content_panel.offset_top = 52
-	content_panel.offset_right = -16
-	content_panel.offset_bottom = 170
-	content_panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE, TRADE_BORDER, 6, 1))
-	add_child(content_panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 14)
-	content_panel.add_child(margin)
+	content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_panel.add_theme_stylebox_override("panel", _panel_style(TRADE_SURFACE_RAISED, TRADE_BORDER, 9, 1))
+	root.add_child(content_panel)
+
+	var content_margin := MarginContainer.new()
+	content_margin.add_theme_constant_override("margin_left", 15)
+	content_margin.add_theme_constant_override("margin_top", 13)
+	content_margin.add_theme_constant_override("margin_right", 15)
+	content_margin.add_theme_constant_override("margin_bottom", 13)
+	content_panel.add_child(content_margin)
+
 	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 7)
-	margin.add_child(stack)
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 6)
+	content_margin.add_child(stack)
+
 	mode_label = Label.new()
-	mode_label.text = "TRADE REQUEST"
-	mode_label.add_theme_color_override("font_color", TRADE_GOLD)
-	mode_label.add_theme_font_size_override("font_size", 12)
+	mode_label.text = "INCOMING REQUEST"
+	mode_label.add_theme_color_override("font_color", TRADE_ACCENT)
+	mode_label.add_theme_font_size_override("font_size", 10)
 	stack.add_child(mode_label)
-	var heading := Label.new()
-	heading.text = "Player Trade"
-	heading.add_theme_color_override("font_color", TRADE_TEXT)
-	heading.add_theme_font_size_override("font_size", 21)
-	stack.add_child(heading)
+
+	heading_label = Label.new()
+	heading_label.text = "A trainer wants to trade"
+	heading_label.add_theme_color_override("font_color", TRADE_TEXT)
+	heading_label.add_theme_font_size_override("font_size", 18)
+	stack.add_child(heading_label)
+
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.add_theme_color_override("font_color", TRADE_MUTED)
 	stack.add_child(status_label)
+
+	var safety_label := Label.new()
+	safety_label.text = "Nothing is exchanged until both trainers confirm the final review."
+	safety_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	safety_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	safety_label.add_theme_color_override("font_color", Color("#75d99a"))
+	safety_label.add_theme_font_size_override("font_size", 10)
+	stack.add_child(safety_label)
+
 	var actions := HBoxContainer.new()
-	actions.anchor_left = 0.0
-	actions.anchor_top = 1.0
-	actions.anchor_right = 1.0
-	actions.anchor_bottom = 1.0
-	actions.offset_left = 16
-	actions.offset_top = -56
-	actions.offset_right = -16
-	actions.offset_bottom = -14
-	actions.alignment = BoxContainer.ALIGNMENT_CENTER
+	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 10)
-	add_child(actions)
+	root.add_child(actions)
+
+	var action_spacer := Control.new()
+	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(action_spacer)
+
+	decline_button = Button.new()
+	decline_button.text = "Decline"
+	decline_button.custom_minimum_size = Vector2(112, 38)
+	decline_button.pressed.connect(_decline_or_close)
+	_style_button(decline_button, "secondary")
+	actions.add_child(decline_button)
+
 	accept_button = Button.new()
-	accept_button.text = "Accept"
+	accept_button.text = "Accept Trade"
+	accept_button.custom_minimum_size = Vector2(132, 38)
 	accept_button.pressed.connect(_accept)
 	_style_button(accept_button, "primary")
 	actions.add_child(accept_button)
-	decline_button = Button.new()
-	decline_button.text = "Decline"
-	decline_button.pressed.connect(_decline_or_close)
-	_style_button(decline_button, "danger")
-	actions.add_child(decline_button)
+
 	close_requested.connect(_decline_or_close)
 	var realtime := get_node_or_null("/root/TradeRealtimeService")
 	if realtime != null:
@@ -154,16 +205,13 @@ func show_trade(value: Dictionary) -> void:
 	accept_button.visible = incoming and str(trade.get("status", "")) == "invited"
 	decline_button.text = "Decline" if incoming else "Cancel Invitation"
 	mode_label.text = "INCOMING REQUEST" if incoming else "REQUEST SENT"
-	_style_button(decline_button, "danger" if incoming else "secondary")
+	heading_label.text = "%s wants to trade" % _initiator_display_name() if incoming else "Invitation sent"
+	_style_button(decline_button, "secondary")
 	status_label.text = _invitation_status_text(incoming)
 	if incoming:
 		_notify_incoming_invitation_once()
 	size = DIALOG_SIZE
 	popup_centered(DIALOG_SIZE)
-	if accept_button.visible:
-		accept_button.grab_focus()
-	else:
-		decline_button.grab_focus()
 
 
 func show_error(message: String) -> void:
@@ -171,6 +219,7 @@ func show_error(message: String) -> void:
 	accept_button.visible = false
 	decline_button.text = "Close"
 	mode_label.text = "REQUEST ERROR"
+	heading_label.text = "Unable to start trade"
 	_style_button(decline_button, "secondary")
 	status_label.text = message
 	size = DIALOG_SIZE
@@ -292,8 +341,17 @@ func _panel_style(background: Color, border: Color, radius: int, width: int) -> 
 	return style
 
 
+func _outer_style() -> StyleBoxFlat:
+	var style := _panel_style(TRADE_BG, Color("#62d7ff99"), 12, 1)
+	style.border_width_top = 2
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 16
+	style.shadow_offset = Vector2(0, 7)
+	return style
+
+
 func _button_style(background: Color, border: Color) -> StyleBoxFlat:
-	var style := _panel_style(background, border, 5, 1)
+	var style := _panel_style(background, border, 7, 1)
 	style.content_margin_left = 15
 	style.content_margin_right = 15
 	style.content_margin_top = 8
@@ -303,6 +361,7 @@ func _button_style(background: Color, border: Color) -> StyleBoxFlat:
 
 func _style_button(button: Button, kind: String) -> void:
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.focus_mode = Control.FOCUS_NONE
 	var normal_bg := Color("#0d4359")
 	var hover_bg := Color("#12627f")
 	var border := TRADE_ACCENT

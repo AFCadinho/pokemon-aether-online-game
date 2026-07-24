@@ -2,6 +2,7 @@ extends Node2D
 class_name FloorVisibilityMask
 
 @export var floor_regions: Dictionary = {}
+@export var floor_display_names: Dictionary = {}
 @export var active_floor: StringName = &"ground_floor"
 @export var follow_player_floor := true
 @export var constrain_camera_to_active_floor := false
@@ -55,6 +56,10 @@ func get_active_floor_region() -> Rect2:
 	if region_value is Rect2:
 		return region_value as Rect2
 	return Rect2()
+
+
+func get_active_floor_display_name() -> String:
+	return str(floor_display_names.get(active_floor, "")).strip_edges()
 
 
 func _apply_active_floor() -> void:

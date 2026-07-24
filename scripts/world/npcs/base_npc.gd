@@ -31,6 +31,7 @@ const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const NAMEPLATE_TEXT_PADDING := 10.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
+const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 
 @onready var sprite: AnimatedSprite2D = $Look/AnimatedSprite2D
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -463,7 +464,7 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 		if player_node != null and _to_tile(_get_body_target_feet_position(player_node)) == _to_tile(world_position):
 			return false
 
-	var collision_tilemap: TileMapLayer = current_map.get_node_or_null("Collision") as TileMapLayer
+	var collision_tilemap := MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"])
 	if collision_tilemap != null:
 		var local_position := collision_tilemap.to_local(world_position)
 		var tile_position := collision_tilemap.local_to_map(local_position)

@@ -339,8 +339,8 @@ width = 194.0
 [node name="ToViridianForestNorth" type="Area2D" parent="Exits" unique_id=418307891]
 position = Vector2(368, 592)
 script = ExtResource("6_3mgn4")
-target_scene_path = "uid://dxrgvafxdtmod"
-target_spawn_name = "FromRoute2North"
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn"
+target_spawn_name = "FromNorth"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianForestNorth" unique_id=514723512]
 position = Vector2(-16, 16)
@@ -349,8 +349,8 @@ shape = SubResource("RectangleShape2D_gac6d")
 [node name="ToViridianForestSouth" type="Area2D" parent="Exits" unique_id=1400118060]
 position = Vector2(368, 1200)
 script = ExtResource("6_3mgn4")
-target_scene_path = "uid://dxrgvafxdtmod"
-target_spawn_name = "FromRoute2South"
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn"
+target_spawn_name = "FromSouth"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianForestSouth" unique_id=438819904]
 position = Vector2(-16, 16)

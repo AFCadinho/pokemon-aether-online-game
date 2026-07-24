@@ -4,6 +4,7 @@ const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
+const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -17,6 +18,7 @@ const DECORATIVE_VISUAL_LAYER_NAMES: Array[String] = []
 const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = [
 	"StructureTopVisual",
 	"StructureTop",
+	"StructuresTop",
 	"Structures Top",
 	"Structure Top",
 	"TreeTop",
@@ -1643,15 +1645,10 @@ func _snap_world_position_to_map_tile_center(map: Node, position: Vector2) -> Ve
 
 
 func _get_position_reference_tilemap(map: Node) -> TileMapLayer:
-	if map == null or not is_instance_valid(map):
-		return null
-
-	for layer_name in ["Collision", "TallGrass", "LedgeDown", "LedgeUp", "LedgeLeft", "LedgeRight"]:
-		var tilemap := map.get_node_or_null(layer_name) as TileMapLayer
-		if tilemap != null:
-			return tilemap
-
-	return null
+	return MapLayerResolverScript.find_tilemap_layer(
+		map,
+		["Collision", "TallGrass", "LedgeDown", "LedgeUp", "LedgeLeft", "LedgeRight"]
+	)
 
 
 func _load_player_party_state() -> void:

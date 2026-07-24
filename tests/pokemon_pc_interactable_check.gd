@@ -86,7 +86,7 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains("await _show_pc_popup()"), true, "open_pokemon_pc opens existing PC popup")
 	_check_equal(source.contains("func _create_pc_pokemon_slot_button"), true, "UIOverlay renders visual PC Pokemon slots")
 	_check_equal(source.contains("func _create_pc_box_pokemon_slot_button"), true, "UIOverlay renders vertical PC box Pokemon slots")
-	_check_equal(source.contains("shiny_badge.text = \"S\""), true, "UIOverlay marks shiny boxed Pokemon")
+	_check_equal(source.contains('shiny_badge.text = "✦"'), true, "UIOverlay marks shiny boxed Pokemon")
 	_check_equal(source.contains("func _open_pc_box_pokemon_summary"), true, "UIOverlay opens boxed Pokemon summary from slot click")
 	_check_equal(source.contains("party_drag_visual = party_drag_source_slot.duplicate() as Control"), true, "UIOverlay drags whole normal party slot preview")
 	_check_equal(source.contains("func _handle_pc_drag_input"), true, "UIOverlay uses custom PC drag input")

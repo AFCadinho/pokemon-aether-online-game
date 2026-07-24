@@ -1,7 +1,176 @@
-[gd_scene format=3 uid="uid://bfy37wf81vi6g"]
+[gd_scene format=4 uid="uid://bfy37wf81vi6g"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_center/pokemon_center.visual.tscn" id="1_7j0le"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_ehdw6"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_map_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
+[ext_resource type="Texture2D" uid="uid://cf588mgea7cyu" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_023_Youngster.png" id="6_dqdo4"]
+[ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_nurse"]
+[ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="7_clerk"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="8_dptnb"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y5qkb"]
+texture = ExtResource("2_ehdw6")
+texture_region_size = Vector2i(32, 32)
+1:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+1:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_3fapf"]
+tile_size = Vector2i(32, 32)
+sources/1 = SubResource("TileSetAtlasSource_y5qkb")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fallback"]
+atlas = ExtResource("6_dqdo4")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dqdo4"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fallback")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dptnb"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fallback")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hw1h2"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fallback")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_center_exit"]
+size = Vector2(32, 32)
 
 [node name="PokecenterTemplate" type="Node2D" unique_id=1877715722]
+script = ExtResource("3_map_meta")
+map_region_name = "Kanto"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_track_path = "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
 
-[node name="PokémonCenter" parent="." unique_id=1140960568 instance=ExtResource("1_7j0le")]
+[node name="Visuals" parent="." unique_id=1140960568 instance=ExtResource("1_7j0le")]
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1604750129]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAARAB8AAQABAAEAAAASAB8AAQABAAEAAAATAB8AAQABAAEAAAAUAB8AAQABAAEAAAAVAB8AAQABAAEAAAAQAB8AAQABAAEAAAAMAB8AAQABAAEAAAAHAB8AAQABAAEAAAAIAB8AAQABAAEAAAAJAB8AAQABAAEAAAAKAB8AAQABAAEAAAALAB8AAQABAAEAAAAHAAgAAQABAAEAAAAHAAkAAQABAAEAAAAHAAoAAQABAAEAAAAHAAsAAQABAAEAAAAHAAwAAQABAAEAAAAHAA0AAQABAAEAAAAHAA4AAQABAAEAAAAHAA8AAQABAAEAAAAHABAAAQABAAEAAAAHABEAAQABAAEAAAAHABIAAQABAAEAAAAHABMAAQABAAEAAAAHABQAAQABAAEAAAAHABUAAQABAAEAAAAHABYAAQABAAEAAAAHABcAAQABAAEAAAAHABgAAQABAAEAAAAHABkAAQABAAEAAAAHABoAAQABAAEAAAAHABsAAQABAAEAAAAHAB0AAQABAAEAAAAHAB4AAQABAAEAAAAIAAcAAQABAAEAAAAIAAgAAQABAAEAAAAJAAcAAQABAAEAAAAKAAcAAQABAAEAAAALAAcAAQABAAEAAAAMAAcAAQABAAEAAAANAAcAAQABAAEAAAAOAAcAAQABAAEAAAAPAAcAAQABAAEAAAAQAAcAAQABAAEAAAARAAcAAQABAAEAAAASAAcAAQABAAEAAAATAAcAAQABAAEAAAAUAAcAAQABAAEAAAAUAAgAAQABAAEAAAAVAAkAAQABAAEAAAAVAAoAAQABAAEAAAAVAAsAAQABAAEAAAAVAAwAAQABAAEAAAAVAA0AAQABAAEAAAAVAA4AAQABAAEAAAAVAA8AAQABAAEAAAAVABAAAQABAAEAAAAVABEAAQABAAEAAAAVABIAAQABAAEAAAAVABMAAQABAAEAAAAVABQAAQABAAEAAAAVABUAAQABAAEAAAAVABYAAQABAAEAAAAVABcAAQABAAEAAAAVABgAAQABAAEAAAAVABoAAQABAAEAAAAVABsAAQABAAEAAAAVABwAAQABAAEAAAAVAB0AAQABAAEAAAAVAB4AAQABAAEAAAARABsAAQABAAEAAAARABwAAQABAAEAAAARAB0AAQABAAEAAAARAB4AAQABAAEAAAASABoAAQABAAEAAAATABoAAQABAAEAAAAUABoAAQABAAEAAAALAB4AAQABAAEAAAAIAB0AAQABAAEAAAAIAB4AAQABAAEAAAAJAB0AAQABAAEAAAAJAB4AAQABAAEAAAAKAB0AAQABAAEAAAAKAB4AAQABAAEAAAAIABkAAQABAAEAAAAIABoAAQABAAEAAAAIABsAAQABAAEAAAANABYAAQABAAEAAAAOABYAAQABAAEAAAAPABYAAQABAAEAAAAQABYAAQABAAEAAAAQABUAAQABAAEAAAARABUAAQABAAEAAAARABQAAQABAAEAAAARABMAAQABAAEAAAAMABYAAQABAAEAAAALABUAAQABAAEAAAAMABUAAQABAAEAAAANABUAAQABAAEAAAAOABUAAQABAAEAAAAPABUAAQABAAEAAAARABEAAQABAAEAAAARABIAAQABAAEAAAAQABEAAQABAAEAAAAQABAAAQABAAEAAAAMABAAAQABAAEAAAANABAAAQABAAEAAAAOABAAAQABAAEAAAAPABAAAQABAAEAAAAMABEAAQABAAEAAAALABEAAQABAAEAAAALABIAAQABAAEAAAALABMAAQABAAEAAAALABQAAQABAAEAAAAMABIAAQABAAEAAAAMABMAAQABAAEAAAAMABQAAQABAAEAAAANABIAAQABAAEAAAANABMAAQABAAEAAAANABQAAQABAAEAAAAOABIAAQABAAEAAAAOABMAAQABAAEAAAAOABQAAQABAAEAAAAPABIAAQABAAEAAAAPABMAAQABAAEAAAAPABQAAQABAAEAAAAQABIAAQABAAEAAAAQABMAAQABAAEAAAAQABQAAQABAAEAAAANABEAAQABAAEAAAAOABEAAQABAAEAAAAPABEAAQABAAEAAAAIAA0AAQABAAEAAAAJAA0AAQABAAEAAAAKAA0AAQABAAEAAAALAA0AAQABAAEAAAAMAA0AAQABAAEAAAANAA0AAQABAAEAAAAOAA0AAQABAAEAAAAPAA0AAQABAAEAAAAQAA0AAQABAAEAAAARAA0AAQABAAEAAAASAA0AAQABAAEAAAATAA0AAQABAAEAAAAUAA0AAQABAAEAAAASAAoAAQABAAEAAAASAAsAAQABAAEAAAATAAoAAQABAAEAAAATAAsAAQABAAEAAAAQAAgAAQABAAEAAAAQAAkAAQABAAEAAAAQAAoAAQABAAEAAAARAAgAAQABAAEAAAARAAkAAQABAAEAAAARAAoAAQABAAEAAAANAAsAAQABAAEAAAAOAAsAAQABAAEAAAAPAAsAAQABAAEAAAAOAAkAAQABAAEAAAAOAAoAAQABAAEAAAALAAgAAQABAAEAAAALAAkAAQABAAEAAAALAAoAAQABAAEAAAAMAAgAAQABAAEAAAAMAAkAAQABAAEAAAAMAAoAAQABAAEAAAAJAAoAAQABAAEAAAAJAAsAAQABAAEAAAAKAAoAAQABAAEAAAAKAAsAAQABAAEAAAASAAkAAQABAAEAAAAKAAkAAQABAAEAAAALAB0AAQABAAEAAAARABoAAQABAAEAAAAOACEAAQABAAEAAAAPACEAAQABAAEAAAANACEAAQABAAEAAAAMACAAAQABAAEAAAAQACAAAQABAAEAAAAQACEAAQABAAEAAAAMACEAAQABAAEAAAAUABEAAQABAAEAAAAUABIAAQABAAEAAAAUABMAAQABAAEAAAAUABQAAQABAAEAAAAUABUAAQABAAEAAAAUABAAAQABAAEAAAASABEAAQABAAEAAAASABIAAQABAAEAAAASABMAAQABAAEAAAASABQAAQABAAEAAAASABUAAQABAAEAAAAIABEAAQABAAEAAAAIABIAAQABAAEAAAAIABMAAQABAAEAAAAIABQAAQABAAEAAAAIABUAAQABAAEAAAAIABAAAQABAAEAAAAKABEAAQABAAEAAAAKABIAAQABAAEAAAAKABMAAQABAAEAAAAKABQAAQABAAEAAAAKABUAAQABAAEAAAAVABkAAQABAAEAAAAHABwAAQABAAEAAAA=")
+tile_set = SubResource("TileSet_3fapf")
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=2010171678]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("5_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(256, 224, 416, 832)
+}
+follow_player_floor = false
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=233012157]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1210373311]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=931459091]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1199654191]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1761485951]
+z_index = 10
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=1528566026]
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1229880396]
+
+[node name="NurseJoy" parent="Entities/NPCs" unique_id=1839105410 instance=ExtResource("6_nurse")]
+position = Vector2(464, 688)
+display_name = "Nurse Joy"
+npc_sprite_frames = SubResource("SpriteFrames_dqdo4")
+
+[node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_clerk")]
+position = Vector2(592, 912)
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = SubResource("SpriteFrames_dptnb")
+
+[node name="Clerk2" parent="Entities/NPCs" unique_id=854794050 instance=ExtResource("7_clerk")]
+position = Vector2(592, 976)
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = SubResource("SpriteFrames_hw1h2")
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1615845431]
+
+[node name="PokemonPC" parent="Entities/Interactables" unique_id=889844523 instance=ExtResource("8_dptnb")]
+position = Vector2(368, 688)
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1449395448]
+
+[node name="FromOutside" type="Marker2D" parent="Spawns" unique_id=981401450]
+position = Vector2(464, 1008)
+
+[node name="HealNPC" type="Marker2D" parent="Spawns" unique_id=890239612]
+position = Vector2(464, 752)
+
+[node name="Exits" type="Node2D" parent="." unique_id=1112148501]
+
+[node name="ToOutside" type="Area2D" parent="Exits" unique_id=1126740257]
+position = Vector2(464, 1040)
+script = ExtResource("4_map_exit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside" unique_id=1579254416]
+shape = SubResource("RectangleShape2D_center_exit")
+
+[connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]

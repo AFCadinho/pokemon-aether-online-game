@@ -30,6 +30,7 @@ const EYEBROWS_SPRITE_NAME := "EyebrowsSprite"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
+const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
@@ -509,7 +510,7 @@ func _ready() -> void:
 		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
 		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
 		_refresh_sand_tilemaps(GameState.current_map)
-		collision_tilemap = GameState.current_map.get_node_or_null("Collision")
+		collision_tilemap = _find_tilemap_layer(GameState.current_map, ["Collision"])
 		block_down_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockDown"])
 		block_up_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockUp"])
 		ledge_down_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeDown"])
@@ -1585,7 +1586,7 @@ func refresh_map_layers() -> void:
 		return
 
 	GameState.current_map = current_map
-	collision_tilemap = current_map.get_node_or_null("Collision")
+	collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])
 	grass_tilemap = current_map.get_node_or_null("TallGrass")
 	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
@@ -1601,27 +1602,7 @@ func refresh_map_layers() -> void:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
 
 func _find_tilemap_layer(parent: Node, layer_names: Array[String]) -> TileMapLayer:
-	if parent == null:
-		return null
-
-	for layer_name: String in layer_names:
-		var direct_layer := parent.get_node_or_null(layer_name) as TileMapLayer
-		if direct_layer != null:
-			return direct_layer
-
-	return _find_tilemap_layer_recursive(parent, layer_names)
-
-func _find_tilemap_layer_recursive(node: Node, layer_names: Array[String]) -> TileMapLayer:
-	var tilemap_layer := node as TileMapLayer
-	if tilemap_layer != null and layer_names.has(tilemap_layer.name):
-		return tilemap_layer
-
-	for child: Node in node.get_children():
-		var child_layer := _find_tilemap_layer_recursive(child, layer_names)
-		if child_layer != null:
-			return child_layer
-
-	return null
+	return MapLayerResolverScript.find_tilemap_layer(parent, layer_names)
 
 
 func _find_tall_grass_visual_tilemap(parent: Node) -> TileMapLayer:
