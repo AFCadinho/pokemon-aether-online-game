@@ -2,6 +2,7 @@ extends SceneTree
 
 const MARKET_ATTENDANT_SCRIPT := "res://scripts/world/npcs/market_attendant_npc.gd"
 const MARKET_ATTENDANT_SCENE := "res://scenes/npcs/market_attendant_npc.tscn"
+const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 
 var failed := false
 
@@ -32,6 +33,15 @@ func _check_market_attendant_scene() -> void:
 	_check_true(text.contains("display_name = \"Clerk\""), "MarketAttendant scene has display name")
 	_check_true(text.contains("InteractionArea"), "MarketAttendant scene has interaction area")
 	_check_true(text.contains("FeetMarker"), "MarketAttendant scene has feet marker")
+
+	var pallet_source := _read_text(PALLET_TOWN_SCENE)
+	var clerk_start := pallet_source.find('[node name="MarketAttendantNPC" parent="Entities/NPCs"')
+	var players_start := pallet_source.find('[node name="Players"', clerk_start)
+	var placed_clerk_source := pallet_source.substr(clerk_start, players_start - clerk_start)
+	_check_true(
+		not placed_clerk_source.contains("npc_sprite_frames"),
+		"Pallet Town clerk inherits sprite frames from the shared clerk scene"
+	)
 
 
 func _read_text(path: String) -> String:

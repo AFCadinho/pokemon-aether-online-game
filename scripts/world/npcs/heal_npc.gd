@@ -2,6 +2,10 @@ extends DialogueNPC
 
 class_name HealNPC
 
+signal heal_sequence_started(duration_seconds: float, pokemon_count: int)
+
+const DEFAULT_HEAL_ANIMATION_DURATION_SECONDS := 0.8
+
 @export var success_dialogue_lines: Array[String] = [
 	"Your party is fully healed.",
 ]
@@ -20,6 +24,7 @@ class_name HealNPC
 @export var no_party_dialogue_id := ""
 @export var failure_dialogue_id := ""
 @export var healed_system_message := "Your party was healed."
+@export var heal_animation_name := &"heal_down"
 @export var respawn_point_id := ""
 @export var respawn_marker_path: NodePath = ^"RespawnMarker"
 @export_enum("up", "down", "left", "right") var respawn_facing_direction := "down"
@@ -51,12 +56,62 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	if bool(result.get("changed", false)):
+		await _play_heal_animation(_get_player_party().size())
 		_add_system_message(healed_system_message)
 		await _save_respawn_point()
-		await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))
 	else:
 		await _save_respawn_point()
 		await show_dialogue(await _resolve_dialogue_lines(already_healed_dialogue_id, already_healed_dialogue_lines))
+
+
+func _play_heal_animation(pokemon_count: int) -> void:
+	var duration_seconds := DEFAULT_HEAL_ANIMATION_DURATION_SECONDS
+	var has_heal_animation := (
+		sprite != null
+		and sprite.sprite_frames != null
+		and not heal_animation_name.is_empty()
+		and sprite.sprite_frames.has_animation(heal_animation_name)
+	)
+	if has_heal_animation:
+		duration_seconds = maxf(
+			_get_animation_duration_seconds(heal_animation_name),
+			DEFAULT_HEAL_ANIMATION_DURATION_SECONDS
+		)
+
+	heal_sequence_started.emit(duration_seconds, clampi(pokemon_count, 0, 6))
+	if not has_heal_animation:
+		await get_tree().create_timer(duration_seconds).timeout
+		return
+
+	var previous_animation := sprite.animation
+	var previous_frame := sprite.frame
+	var was_playing := sprite.is_playing()
+
+	sprite.play(heal_animation_name)
+	if duration_seconds > 0.0:
+		await get_tree().create_timer(duration_seconds).timeout
+
+	if sprite.sprite_frames.has_animation(previous_animation):
+		sprite.animation = previous_animation
+		sprite.frame = clampi(previous_frame, 0, sprite.sprite_frames.get_frame_count(previous_animation) - 1)
+		if was_playing:
+			sprite.play()
+		else:
+			sprite.stop()
+	else:
+		_set_idle_frame(facing_direction)
+
+
+func _get_animation_duration_seconds(animation_name: StringName) -> float:
+	var frames := sprite.sprite_frames
+	var frames_per_second := frames.get_animation_speed(animation_name) * absf(sprite.speed_scale)
+	if frames_per_second <= 0.0:
+		return 0.0
+
+	var total_frame_duration := 0.0
+	for frame_index: int in range(frames.get_frame_count(animation_name)):
+		total_frame_duration += frames.get_frame_duration(animation_name, frame_index)
+	return total_frame_duration / frames_per_second
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:

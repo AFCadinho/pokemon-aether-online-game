@@ -107,6 +107,11 @@ func _check_base_npc_movement_behavior() -> void:
 	_check_true(text.contains("func _can_npc_move_to(world_position: Vector2) -> bool:"), "BaseNPC checks movement collision")
 	_check_true(text.contains("MapCharacterBlocking.is_position_blocked_by_character"), "BaseNPC respects character blocking")
 	_check_true(text.contains("collision_tilemap.get_cell_source_id(tile_position)"), "BaseNPC respects collision tilemap")
+	_check_true(
+		text.contains("_copy_missing_animations(source_sprite_frames, generated_sprite_frames)")
+		and text.contains("func _copy_missing_animations(source: SpriteFrames, target: SpriteFrames) -> void:"),
+		"BaseNPC preserves custom animations while generating directional frames"
+	)
 
 
 func _check_existing_npc_behavior_entrypoints() -> void:
@@ -130,6 +135,24 @@ func _check_existing_npc_behavior_entrypoints() -> void:
 	var heal_text := _read_text(HEAL_NPC_SCRIPT)
 	_check_true(heal_text.contains("extends DialogueNPC"), "HealNPC still extends DialogueNPC")
 	_check_true(heal_text.contains("func interact_with_player"), "HealNPC interaction entrypoint remains")
+	_check_true(
+		heal_text.contains("await _play_heal_animation(_get_player_party().size())")
+		and heal_text.contains("@export var heal_animation_name := &\"heal_down\""),
+		"HealNPC plays heal_down after a changed party heal"
+	)
+	_check_true(
+		heal_text.contains("signal heal_sequence_started(duration_seconds: float, pokemon_count: int)")
+		and heal_text.contains("heal_sequence_started.emit(duration_seconds, clampi(pokemon_count, 0, 6))"),
+		"HealNPC announces party size with its visual heal sequence"
+	)
+	_check_true(
+		heal_text.contains("func _get_animation_duration_seconds(animation_name: StringName) -> float:"),
+		"HealNPC limits looping heal animations to one cycle"
+	)
+	_check_true(
+		not heal_text.contains("await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))"),
+		"HealNPC uses the system message without a duplicate success dialogue"
+	)
 	_check_true(heal_text.contains("func _load_npc_metadata_if_needed()"), "HealNPC metadata loading remains")
 	_check_true(heal_text.contains("func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:"), "HealNPC resolves dialogue IDs with inline fallback")
 	_check_true(heal_text.contains("successDialogueId"), "HealNPC supports successDialogueId")

@@ -2262,7 +2262,6 @@ mugshot = ExtResource("7_66okb")
 [node name="HealNPC" parent="Entities/NPCs" unique_id=437133988 instance=ExtResource("6_jhh0g")]
 position = Vector2(368, 240)
 npc_id = "kanto_pallet_town_nurse"
-npc_sprite_frames = SubResource("SpriteFrames_ltoox")
 mugshot = ExtResource("8_j16lr")
 
 [node name="BossBattle" type="Node2D" parent="Entities/NPCs" unique_id=1297212386]
@@ -2284,7 +2283,6 @@ mugshot = ExtResource("11_fec28")
 position = Vector2(272, 240)
 npc_id = "kanto_pallet_town_market_attendant"
 npc_definition_id = "pokemon_center_clerk"
-npc_sprite_frames = SubResource("SpriteFrames_3oirl")
 mugshot = ExtResource("14_m86ow")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]

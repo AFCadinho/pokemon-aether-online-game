@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_nurse"]
 [ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="7_clerk"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="8_dptnb"]
+[ext_resource type="Script" path="res://scripts/world/npcs/heal_machine_effect.gd" id="9_heal_effect"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y5qkb"]
 texture = ExtResource("2_ehdw6")
@@ -139,19 +140,20 @@ y_sort_enabled = true
 [node name="NurseJoy" parent="Entities/NPCs" unique_id=1839105410 instance=ExtResource("6_nurse")]
 position = Vector2(464, 688)
 display_name = "Nurse Joy"
-npc_sprite_frames = SubResource("SpriteFrames_dqdo4")
+
+[node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs"]
+position = Vector2(464, 600)
+script = ExtResource("9_heal_effect")
 
 [node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_clerk")]
 position = Vector2(592, 912)
 npc_definition_id = "pokemon_center_clerk"
 facing_direction = Vector2(-1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_dptnb")
 
 [node name="Clerk2" parent="Entities/NPCs" unique_id=854794050 instance=ExtResource("7_clerk")]
 position = Vector2(592, 976)
 npc_definition_id = "pokemon_center_clerk"
 facing_direction = Vector2(-1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_hw1h2")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1615845431]
 
@@ -176,3 +178,4 @@ script = ExtResource("4_map_exit")
 shape = SubResource("RectangleShape2D_center_exit")
 
 [connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]
+[connection signal="heal_sequence_started" from="Entities/NPCs/NurseJoy" to="Entities/NPCs/HealMachineEffect" method="play_heal_sequence"]

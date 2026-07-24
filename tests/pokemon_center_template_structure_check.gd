@@ -1,5 +1,6 @@
 extends SceneTree
 
+const HealMachineEffectScript := preload("res://scripts/world/npcs/heal_machine_effect.gd")
 const TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn"
 const HEAL_NPC_PATH := "res://scenes/npcs/heal_npc.tscn"
 const PEWTER_CENTER_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn"
@@ -38,6 +39,39 @@ func _init() -> void:
 		and template_source.count('npc_definition_id = "pokemon_center_clerk"') == 2,
 		"Pokémon Center template provides staff with shared definitions"
 	)
+	var first_clerk_start := template_source.find('[node name="Clerk" parent="Entities/NPCs"')
+	var second_clerk_start := template_source.find('[node name="Clerk2" parent="Entities/NPCs"')
+	var interactables_start := template_source.find('[node name="Interactables"', second_clerk_start)
+	var first_clerk_source := template_source.substr(first_clerk_start, second_clerk_start - first_clerk_start)
+	var second_clerk_source := template_source.substr(second_clerk_start, interactables_start - second_clerk_start)
+	_check(
+		not first_clerk_source.contains("npc_sprite_frames")
+		and not second_clerk_source.contains("npc_sprite_frames"),
+		"Pokémon Center clerks inherit sprite frames from the shared clerk scene"
+	)
+	_check(
+		template_source.contains('path="res://scripts/world/npcs/heal_machine_effect.gd"')
+		and template_source.contains('[node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs"]')
+		and template_source.contains("position = Vector2(464, 600)")
+		and template_source.contains('signal="heal_sequence_started"')
+		and template_source.contains('method="play_heal_sequence"'),
+		"Pokémon Center connects Nurse Joy to the healing machine light sequence"
+	)
+	var heal_machine_effect := HealMachineEffectScript.new()
+	_check(
+		heal_machine_effect.has_method("play_heal_sequence"),
+		"Healing machine effect exposes its reusable playback entrypoint"
+	)
+	_check(
+		int(heal_machine_effect.get("indicator_columns")) == 2,
+		"Healing machine arranges party indicators in two columns"
+	)
+	heal_machine_effect.call("play_heal_sequence", 0.8, 3)
+	_check(
+		int(heal_machine_effect.get("_visible_indicator_count")) == 3,
+		"Healing machine limits indicators to the current party size"
+	)
+	heal_machine_effect.free()
 	var heal_npc_source := FileAccess.get_file_as_string(HEAL_NPC_PATH)
 	_check(
 		heal_npc_source.contains('npc_definition_id = "pokemon_center_nurse"'),

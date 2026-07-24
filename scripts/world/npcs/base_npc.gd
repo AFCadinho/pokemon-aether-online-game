@@ -306,7 +306,25 @@ func _get_directional_sprite_frames(source_sprite_frames: SpriteFrames) -> Sprit
 	_add_directional_animation(generated_sprite_frames, atlas_texture.atlas, frame_size, "left", 1)
 	_add_directional_animation(generated_sprite_frames, atlas_texture.atlas, frame_size, "right", 2)
 	_add_directional_animation(generated_sprite_frames, atlas_texture.atlas, frame_size, "up", 3)
+	_copy_missing_animations(source_sprite_frames, generated_sprite_frames)
 	return generated_sprite_frames
+
+
+func _copy_missing_animations(source: SpriteFrames, target: SpriteFrames) -> void:
+	for animation_name: StringName in source.get_animation_names():
+		if target.has_animation(animation_name) and target.get_frame_count(animation_name) > 0:
+			continue
+
+		if not target.has_animation(animation_name):
+			target.add_animation(animation_name)
+		target.set_animation_loop(animation_name, source.get_animation_loop(animation_name))
+		target.set_animation_speed(animation_name, source.get_animation_speed(animation_name))
+		for frame_index: int in range(source.get_frame_count(animation_name)):
+			target.add_frame(
+				animation_name,
+				source.get_frame_texture(animation_name, frame_index),
+				source.get_frame_duration(animation_name, frame_index)
+			)
 
 
 func _get_first_atlas_texture(source_sprite_frames: SpriteFrames) -> AtlasTexture:
