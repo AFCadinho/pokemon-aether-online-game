@@ -166,6 +166,7 @@ const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
 const BAG_SIZE := Vector2(1120, 660)
+const MARKET_SIZE := Vector2(930, 610)
 const MAIL_POPUP_SIZE := Vector2(920, 600)
 const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 650)
 const PC_POPUP_SIZE := Vector2(1160, 720)
@@ -315,6 +316,7 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 }
 const BAG_ICON_ROOT := "res://assets/items/icons/"
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
+const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
 	{"id": "all", "label": "All Items", "iconItemId": ""},
@@ -818,8 +820,17 @@ var bag_item_use_selected_slot := -1
 var bag_item_use_in_progress := false
 var market_popup: PanelContainer
 var market_title_label: Label
+var market_subtitle_label: Label
 var market_money_label: Label
+var market_search_input: LineEdit
+var market_catalog_summary_label: Label
 var market_item_list: VBoxContainer
+var market_detail_icon: TextureRect
+var market_detail_name_label: Label
+var market_detail_category_label: Label
+var market_detail_description_label: Label
+var market_unit_price_label: Label
+var market_total_price_label: Label
 var market_quantity_spinbox: SpinBox
 var market_status_label: Label
 var market_buy_button: Button
@@ -11806,109 +11817,370 @@ func _setup_market_popup() -> void:
 	market_popup = PanelContainer.new()
 	market_popup.name = "MarketPopup"
 	market_popup.visible = false
-	market_popup.custom_minimum_size = Vector2(640, 500)
+	market_popup.custom_minimum_size = MARKET_SIZE
 	market_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	market_popup.z_index = UI_MODAL_Z_INDEX
 	market_popup.anchor_left = 0.5
 	market_popup.anchor_top = 0.5
 	market_popup.anchor_right = 0.5
 	market_popup.anchor_bottom = 0.5
-	market_popup.offset_left = -320
-	market_popup.offset_top = -250
-	market_popup.offset_right = 320
-	market_popup.offset_bottom = 250
-	market_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912ff"), UI_BORDER, 8, 1))
+	market_popup.offset_left = -MARKET_SIZE.x * 0.5
+	market_popup.offset_top = -MARKET_SIZE.y * 0.5
+	market_popup.offset_right = MARKET_SIZE.x * 0.5
+	market_popup.offset_bottom = MARKET_SIZE.y * 0.5
+	var market_shell_style := _make_glass_panel_style(14)
+	market_shell_style.border_color = Color("#4f86a3cc")
+	market_popup.add_theme_stylebox_override("panel", market_shell_style)
 	root_control.add_child(market_popup)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
 	market_popup.add_child(margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 12)
 	margin.add_child(layout)
 
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
+	header.name = "MarketHeader"
+	header.custom_minimum_size = Vector2(0, 48)
+	header.add_theme_constant_override("separation", 10)
 	layout.add_child(header)
 
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#75d7f2"), Color("#75d7f2"), 2, 0)
+	)
+	header.add_child(header_accent)
+
+	var header_icon_frame := PanelContainer.new()
+	header_icon_frame.custom_minimum_size = Vector2(42, 42)
+	header_icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INTERACTIVE, Color("#4f86a3aa"), 9, 1)
+	)
+	header.add_child(header_icon_frame)
+
+	var header_icon_center := CenterContainer.new()
+	header_icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_child(header_icon_center)
+
+	var header_icon := TextureRect.new()
+	header_icon.name = "MarketIcon"
+	header_icon.custom_minimum_size = Vector2(31, 31)
+	header_icon.texture = MARKET_INTERFACE_ICON
+	header_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	header_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_center.add_child(header_icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
+
 	market_title_label = Label.new()
-	market_title_label.text = "Market"
-	market_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	market_title_label.add_theme_font_size_override("font_size", 22)
+	market_title_label.name = "MarketTitle"
+	market_title_label.text = "Poké Mart"
+	market_title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	market_title_label.add_theme_font_size_override("font_size", 20)
 	market_title_label.add_theme_color_override("font_color", UI_TEXT)
-	header.add_child(market_title_label)
+	heading.add_child(market_title_label)
+
+	market_subtitle_label = Label.new()
+	market_subtitle_label.name = "MarketSubtitle"
+	market_subtitle_label.text = "Trainer supplies and everyday essentials"
+	market_subtitle_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	market_subtitle_label.add_theme_font_size_override("font_size", 11)
+	market_subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(market_subtitle_label)
+
+	var wallet_panel := PanelContainer.new()
+	wallet_panel.name = "WalletPanel"
+	wallet_panel.custom_minimum_size = Vector2(176, 38)
+	wallet_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, Color("#806d34aa"), 9, 1)
+	)
+	header.add_child(wallet_panel)
+
+	var wallet_margin := MarginContainer.new()
+	wallet_margin.add_theme_constant_override("margin_left", 11)
+	wallet_margin.add_theme_constant_override("margin_top", 5)
+	wallet_margin.add_theme_constant_override("margin_right", 11)
+	wallet_margin.add_theme_constant_override("margin_bottom", 5)
+	wallet_panel.add_child(wallet_margin)
+
+	var wallet_row := HBoxContainer.new()
+	wallet_row.add_theme_constant_override("separation", 7)
+	wallet_margin.add_child(wallet_row)
+
+	var wallet_coin := Label.new()
+	wallet_coin.text = "●"
+	wallet_coin.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	wallet_coin.add_theme_font_size_override("font_size", 13)
+	wallet_coin.add_theme_color_override("font_color", UI_MONEY)
+	wallet_row.add_child(wallet_coin)
 
 	market_money_label = Label.new()
 	market_money_label.text = "Money: %s" % _format_money(PlayerSave.money)
-	market_money_label.custom_minimum_size = Vector2(170, 0)
-	market_money_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	market_money_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	market_money_label.add_theme_font_size_override("font_size", 14)
+	market_money_label.add_theme_font_size_override("font_size", 13)
 	market_money_label.add_theme_color_override("font_color", UI_MONEY)
-	header.add_child(market_money_label)
+	wallet_row.add_child(market_money_label)
 
 	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.text = "×"
+	close_button.tooltip_text = "Close"
+	close_button.custom_minimum_size = Vector2(32, 32)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_market_popup)
 	_apply_button_style(close_button)
 	header.add_child(close_button)
 
-	var column_header := HBoxContainer.new()
-	column_header.add_theme_constant_override("separation", 10)
-	layout.add_child(column_header)
+	var content_row := HBoxContainer.new()
+	content_row.name = "MarketWorkspace"
+	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_row.add_theme_constant_override("separation", 12)
+	layout.add_child(content_row)
 
-	var item_header := Label.new()
-	item_header.text = "Item"
-	item_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_header.add_theme_font_size_override("font_size", 11)
-	item_header.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	column_header.add_child(item_header)
+	var catalog_panel := PanelContainer.new()
+	catalog_panel.name = "CatalogPanel"
+	catalog_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	catalog_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	catalog_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 10, 1)
+	)
+	content_row.add_child(catalog_panel)
 
-	var price_header := Label.new()
-	price_header.text = "Price"
-	price_header.custom_minimum_size = Vector2(120, 0)
-	price_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	price_header.add_theme_font_size_override("font_size", 11)
-	price_header.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	column_header.add_child(price_header)
+	var catalog_margin := MarginContainer.new()
+	catalog_margin.add_theme_constant_override("margin_left", 11)
+	catalog_margin.add_theme_constant_override("margin_top", 10)
+	catalog_margin.add_theme_constant_override("margin_right", 11)
+	catalog_margin.add_theme_constant_override("margin_bottom", 10)
+	catalog_panel.add_child(catalog_margin)
+
+	var catalog_layout := VBoxContainer.new()
+	catalog_layout.add_theme_constant_override("separation", 9)
+	catalog_margin.add_child(catalog_layout)
+
+	var catalog_header := HBoxContainer.new()
+	catalog_header.add_theme_constant_override("separation", 8)
+	catalog_layout.add_child(catalog_header)
+
+	catalog_caption = Label.new()
+	catalog_caption.text = "SHOP CATALOG"
+	catalog_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	catalog_caption.add_theme_font_size_override("font_size", 10)
+	catalog_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	catalog_header.add_child(catalog_caption)
+
+	market_catalog_summary_label = Label.new()
+	market_catalog_summary_label.name = "CatalogSummary"
+	market_catalog_summary_label.text = "0 items available"
+	market_catalog_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	market_catalog_summary_label.add_theme_font_size_override("font_size", 10)
+	market_catalog_summary_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.78))
+	catalog_header.add_child(market_catalog_summary_label)
+
+	market_search_input = LineEdit.new()
+	market_search_input.name = "MarketSearch"
+	market_search_input.placeholder_text = "Search the catalog..."
+	market_search_input.clear_button_enabled = true
+	market_search_input.custom_minimum_size = Vector2(0, 36)
+	market_search_input.focus_mode = Control.FOCUS_ALL
+	market_search_input.text_changed.connect(_on_market_search_changed)
+	_apply_line_edit_style(market_search_input)
+	catalog_layout.add_child(market_search_input)
 
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, 310)
+	scroll.name = "CatalogScroll"
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	layout.add_child(scroll)
+	catalog_layout.add_child(scroll)
 
 	market_item_list = VBoxContainer.new()
+	market_item_list.name = "MarketItemList"
 	market_item_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_item_list.add_theme_constant_override("separation", 7)
 	scroll.add_child(market_item_list)
 
-	var footer_panel := PanelContainer.new()
-	footer_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#08111fff"), UI_BORDER_SOFT, 6, 1))
-	layout.add_child(footer_panel)
+	var detail_panel := PanelContainer.new()
+	detail_panel.name = "PurchasePanel"
+	detail_panel.custom_minimum_size = Vector2(306, 0)
+	detail_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, Color("#3f6782cc"), 10, 1)
+	)
+	content_row.add_child(detail_panel)
+	_setup_market_detail_panel(detail_panel)
 
-	var footer_margin := MarginContainer.new()
-	footer_margin.add_theme_constant_override("margin_left", 10)
-	footer_margin.add_theme_constant_override("margin_top", 8)
-	footer_margin.add_theme_constant_override("margin_right", 10)
-	footer_margin.add_theme_constant_override("margin_bottom", 8)
-	footer_panel.add_child(footer_margin)
+	var status_panel := PanelContainer.new()
+	status_panel.name = "MarketStatusPanel"
+	status_panel.custom_minimum_size = Vector2(0, 38)
+	status_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, Color("#29465f99"), 8, 1)
+	)
+	layout.add_child(status_panel)
+
+	var status_margin := MarginContainer.new()
+	status_margin.add_theme_constant_override("margin_left", 11)
+	status_margin.add_theme_constant_override("margin_top", 6)
+	status_margin.add_theme_constant_override("margin_right", 11)
+	status_margin.add_theme_constant_override("margin_bottom", 6)
+	status_panel.add_child(status_margin)
+
+	market_status_label = Label.new()
+	market_status_label.name = "MarketStatus"
+	market_status_label.text = "Select an item to view its details."
+	market_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	market_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	market_status_label.add_theme_font_size_override("font_size", 12)
+	market_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	status_margin.add_child(market_status_label)
+
+	_refresh_market_items()
+
+func _setup_market_detail_panel(panel: PanelContainer) -> void:
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 15)
+	margin.add_theme_constant_override("margin_top", 11)
+	margin.add_theme_constant_override("margin_right", 15)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	caption = Label.new()
+	caption.text = "PURCHASE"
+	caption.add_theme_font_size_override("font_size", 10)
+	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(caption)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.name = "SelectedItemPreview"
+	icon_frame.custom_minimum_size = Vector2(0, 118)
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 9, 1)
+	)
+	layout.add_child(icon_frame)
+
+	var icon_center := CenterContainer.new()
+	icon_frame.add_child(icon_center)
+
+	market_detail_icon = TextureRect.new()
+	market_detail_icon.custom_minimum_size = Vector2(82, 82)
+	market_detail_icon.texture = MARKET_INTERFACE_ICON
+	market_detail_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	market_detail_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	market_detail_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	market_detail_icon.modulate = Color(1, 1, 1, 0.32)
+	icon_center.add_child(market_detail_icon)
+
+	market_detail_name_label = Label.new()
+	market_detail_name_label.text = "Select an item"
+	market_detail_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	market_detail_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	market_detail_name_label.add_theme_font_size_override("font_size", 18)
+	market_detail_name_label.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(market_detail_name_label)
+
+	market_detail_category_label = Label.new()
+	market_detail_category_label.text = "CATALOG ITEM"
+	market_detail_category_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	market_detail_category_label.add_theme_font_size_override("font_size", 10)
+	market_detail_category_label.add_theme_color_override("font_color", Color("#75d7f2"))
+	layout.add_child(market_detail_category_label)
+
+	market_detail_description_label = Label.new()
+	market_detail_description_label.text = "Choose an item from the catalog to see its description and price."
+	market_detail_description_label.custom_minimum_size = Vector2(0, 48)
+	market_detail_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	market_detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	market_detail_description_label.add_theme_font_size_override("font_size", 12)
+	market_detail_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(market_detail_description_label)
+
+	var price_panel := PanelContainer.new()
+	price_panel.name = "PriceSummary"
+	price_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, Color("#806d3477"), 8, 1)
+	)
+	layout.add_child(price_panel)
+
+	var price_margin := MarginContainer.new()
+	price_margin.add_theme_constant_override("margin_left", 10)
+	price_margin.add_theme_constant_override("margin_top", 7)
+	price_margin.add_theme_constant_override("margin_right", 10)
+	price_margin.add_theme_constant_override("margin_bottom", 7)
+	price_panel.add_child(price_margin)
+
+	var price_rows := VBoxContainer.new()
+	price_rows.add_theme_constant_override("separation", 5)
+	price_margin.add_child(price_rows)
+
+	var unit_row := HBoxContainer.new()
+	price_rows.add_child(unit_row)
+
+	var unit_caption := Label.new()
+	unit_caption.text = "Unit price"
+	unit_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	unit_caption.add_theme_font_size_override("font_size", 11)
+	unit_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	unit_row.add_child(unit_caption)
+
+	market_unit_price_label = Label.new()
+	market_unit_price_label.text = "—"
+	market_unit_price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	market_unit_price_label.add_theme_font_size_override("font_size", 12)
+	market_unit_price_label.add_theme_color_override("font_color", UI_TEXT)
+	unit_row.add_child(market_unit_price_label)
+
+	var total_row := HBoxContainer.new()
+	price_rows.add_child(total_row)
+
+	var total_caption := Label.new()
+	total_caption.text = "Total"
+	total_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	total_caption.add_theme_font_size_override("font_size", 12)
+	total_caption.add_theme_color_override("font_color", UI_TEXT)
+	total_row.add_child(total_caption)
+
+	market_total_price_label = Label.new()
+	market_total_price_label.text = "—"
+	market_total_price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	market_total_price_label.add_theme_font_size_override("font_size", 15)
+	market_total_price_label.add_theme_color_override("font_color", UI_MONEY)
+	total_row.add_child(market_total_price_label)
 
 	var quantity_row := HBoxContainer.new()
+	quantity_row.custom_minimum_size = Vector2(0, 38)
 	quantity_row.add_theme_constant_override("separation", 10)
-	footer_margin.add_child(quantity_row)
+	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "Amount"
-	quantity_label.custom_minimum_size = Vector2(72, 0)
+	quantity_label.text = "Quantity"
+	quantity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	quantity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	quantity_label.add_theme_font_size_override("font_size", 12)
+	quantity_label.add_theme_color_override("font_color", UI_TEXT)
 	quantity_row.add_child(quantity_label)
 
 	market_quantity_spinbox = SpinBox.new()
@@ -11916,55 +12188,54 @@ func _setup_market_popup() -> void:
 	market_quantity_spinbox.max_value = 99
 	market_quantity_spinbox.value = 1
 	market_quantity_spinbox.step = 1
-	market_quantity_spinbox.custom_minimum_size = Vector2(104, 0)
+	market_quantity_spinbox.custom_minimum_size = Vector2(112, 36)
 	market_quantity_spinbox.value_changed.connect(_on_market_quantity_changed)
 	quantity_row.add_child(market_quantity_spinbox)
-
-	market_status_label = Label.new()
-	market_status_label.text = "Select an item."
-	market_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	market_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	market_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	market_status_label.add_theme_font_size_override("font_size", 13)
-	market_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	quantity_row.add_child(market_status_label)
-
-	var action_row := HBoxContainer.new()
-	action_row.alignment = BoxContainer.ALIGNMENT_END
-	action_row.add_theme_constant_override("separation", 8)
-	layout.add_child(action_row)
-
-	var cancel_button := Button.new()
-	cancel_button.text = "Cancel"
-	cancel_button.custom_minimum_size = Vector2(110, 32)
-	cancel_button.focus_mode = Control.FOCUS_NONE
-	cancel_button.pressed.connect(_hide_market_popup)
-	_apply_button_style(cancel_button)
-	action_row.add_child(cancel_button)
+	_apply_line_edit_style(market_quantity_spinbox.get_line_edit())
 
 	market_buy_button = Button.new()
-	market_buy_button.text = "Buy"
-	market_buy_button.custom_minimum_size = Vector2(156, 32)
+	market_buy_button.name = "BuyButton"
+	market_buy_button.text = "Select an Item"
+	market_buy_button.custom_minimum_size = Vector2(0, 42)
+	market_buy_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_buy_button.focus_mode = Control.FOCUS_NONE
 	market_buy_button.disabled = true
 	market_buy_button.pressed.connect(_on_market_buy_pressed)
 	_apply_button_style(market_buy_button, "primary")
-	action_row.add_child(market_buy_button)
+	layout.add_child(market_buy_button)
 
-	_refresh_market_items()
+	delivery_hint = Label.new()
+	delivery_hint.text = "Purchases are delivered directly to your Bag."
+	delivery_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	delivery_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	delivery_hint.add_theme_font_size_override("font_size", 10)
+	delivery_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
+	layout.add_child(delivery_hint)
 
 func open_market(market: Dictionary) -> void:
 	if market_popup == null:
 		return
-	market_title_label.text = str(market.get("name", "Market"))
+	var market_name := str(market.get("name", "")).strip_edges()
+	market_title_label.text = market_name if market_name != "" else "Poké Mart"
+	var location_name := str(market.get("locationName", "")).strip_edges()
+	var region_name := str(market.get("region", "")).strip_edges()
+	if location_name != "":
+		market_subtitle_label.text = "%s · Trainer supplies and everyday essentials" % location_name
+	elif region_name != "":
+		market_subtitle_label.text = "%s · Trainer supplies and everyday essentials" % region_name
+	else:
+		market_subtitle_label.text = "Trainer supplies and everyday essentials"
 	market_items = _normalize_market_items(market.get("items", []))
-	market_selected_item = {}
+	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
 	market_quantity_spinbox.value = 1
+	market_search_input.text = ""
+	market_search_input.release_focus()
 	market_popup.visible = true
 	_activate_ui_panel(market_popup)
 	_refresh_market_money()
 	_refresh_market_items()
-	_set_market_status("Select an item.", false)
+	if market_items.is_empty():
+		_set_market_status("This shop does not have any items available right now.", false)
 
 func _hide_market_popup() -> void:
 	if market_popup != null:
@@ -12014,16 +12285,50 @@ func _refresh_market_items() -> void:
 	for child: Node in market_item_list.get_children():
 		child.queue_free()
 
-	if market_items.is_empty():
-		market_item_list.add_child(_create_bag_empty_state("No market items available."))
+	var filtered_items := _filtered_market_items()
+	if market_catalog_summary_label != null:
+		if market_search_input != null and market_search_input.text.strip_edges() != "":
+			market_catalog_summary_label.text = "%d of %d items" % [filtered_items.size(), market_items.size()]
+		else:
+			market_catalog_summary_label.text = "%d item%s available" % [
+				filtered_items.size(),
+				"" if filtered_items.size() == 1 else "s",
+			]
+
+	if filtered_items.is_empty():
+		var empty_message := "No items match your search." if not market_items.is_empty() else "No market items available."
+		market_item_list.add_child(_create_bag_empty_state(empty_message))
 		if market_buy_button != null:
-			market_buy_button.disabled = true
+			market_buy_button.disabled = market_selected_item.is_empty()
+		_refresh_market_purchase_state()
 		return
 
-	for item: Dictionary in market_items:
+	for item: Dictionary in filtered_items:
 		market_item_list.add_child(_create_market_item_button(item))
 
 	_refresh_market_purchase_state()
+
+func _filtered_market_items() -> Array[Dictionary]:
+	if market_search_input == null:
+		return market_items.duplicate(true)
+	var query := market_search_input.text.strip_edges().to_lower()
+	if query == "":
+		return market_items.duplicate(true)
+
+	var filtered: Array[Dictionary] = []
+	for item: Dictionary in market_items:
+		var haystack := " ".join([
+			str(item.get("name", "")),
+			str(item.get("id", "")),
+			str(item.get("category", "")),
+			str(item.get("shortDesc", "")),
+		]).to_lower()
+		if haystack.contains(query):
+			filtered.append(item)
+	return filtered
+
+func _on_market_search_changed(_new_text: String) -> void:
+	_refresh_market_items()
 
 func _create_market_item_button(item: Dictionary) -> Control:
 	var item_id := str(item.get("id", ""))
@@ -12031,57 +12336,97 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	var price: int = int(item.get("price", 0))
 	var selected := _is_same_market_item(item, market_selected_item)
 	var row := PanelContainer.new()
-	row.custom_minimum_size = Vector2(0, 62)
+	row.name = "MarketItem_%s" % item_id
+	row.custom_minimum_size = Vector2(0, 72)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	row.tooltip_text = str(item.get("shortDesc", ""))
 	row.gui_input.connect(_on_market_item_row_gui_input.bind(item.duplicate(true)))
-	_apply_market_item_row_style(row, selected)
+	row.mouse_entered.connect(_on_market_item_row_hovered.bind(row, selected, true))
+	row.mouse_exited.connect(_on_market_item_row_hovered.bind(row, selected, false))
+	_apply_market_item_row_style(row, selected, false)
 
 	var margin := MarginContainer.new()
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 8)
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
 	row.add_child(margin)
 
 	var content := HBoxContainer.new()
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	content.add_theme_constant_override("separation", 10)
+	content.add_theme_constant_override("separation", 11)
 	margin.add_child(content)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(52, 52)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, Color("#31507088"), 8, 1)
+	)
+	content.add_child(icon_frame)
+
+	var icon_center := CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_child(icon_center)
+
+	var item_icon := TextureRect.new()
+	item_icon.custom_minimum_size = Vector2(42, 42)
+	item_icon.texture = _load_item_icon(item_id)
+	item_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	item_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	item_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	item_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(item_icon)
 
 	var text_stack := VBoxContainer.new()
 	text_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	text_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	text_stack.add_theme_constant_override("separation", 2)
+	text_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	text_stack.add_theme_constant_override("separation", 3)
 	content.add_child(text_stack)
 
 	var name_label := Label.new()
 	name_label.text = item_name
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	name_label.add_theme_font_size_override("font_size", 15)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 14)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
 	text_stack.add_child(name_label)
 
 	var desc_label := Label.new()
 	desc_label.text = _market_item_subtitle(item)
 	desc_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	desc_label.clip_text = true
+	desc_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	desc_label.add_theme_font_size_override("font_size", 11)
 	desc_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	text_stack.add_child(desc_label)
 
+	var price_stack := VBoxContainer.new()
+	price_stack.custom_minimum_size = Vector2(110, 0)
+	price_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	price_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	price_stack.add_theme_constant_override("separation", 1)
+	content.add_child(price_stack)
+
 	var price_label := Label.new()
 	price_label.text = _format_money(price)
 	price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	price_label.custom_minimum_size = Vector2(120, 0)
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	price_label.add_theme_font_size_override("font_size", 15)
+	price_label.add_theme_font_size_override("font_size", 14)
 	price_label.add_theme_color_override("font_color", UI_MONEY)
-	content.add_child(price_label)
+	price_stack.add_child(price_label)
+
+	var each_label := Label.new()
+	each_label.text = "each"
+	each_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	each_label.add_theme_font_size_override("font_size", 9)
+	each_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
+	price_stack.add_child(each_label)
 
 	return row
 
@@ -12094,19 +12439,36 @@ func _on_market_item_row_gui_input(event: InputEvent, item: Dictionary) -> void:
 	_on_market_item_selected(item)
 	get_viewport().set_input_as_handled()
 
-func _apply_market_item_row_style(row: PanelContainer, selected: bool) -> void:
-	var background := Color("#0b1524ff") if not selected else Color("#14284aff")
-	var border := UI_BORDER_SOFT if not selected else UI_BORDER_FOCUS
-	row.add_theme_stylebox_override("panel", _make_panel_style(background, border, 6, 1))
+func _on_market_item_row_hovered(row: PanelContainer, selected: bool, hovered: bool) -> void:
+	if is_instance_valid(row):
+		_apply_market_item_row_style(row, selected, hovered)
+
+func _apply_market_item_row_style(row: PanelContainer, selected: bool, hovered: bool = false) -> void:
+	var background := UI_SURFACE_INTERACTIVE if not selected else Color("#102b3ded")
+	var border := Color("#2d4b6688") if not selected else Color("#75d7f2")
+	if hovered and not selected:
+		background = UI_SURFACE_HOVER
+		border = UI_BORDER_FOCUS
+	var style := _make_panel_style(background, border, 8, 1)
+	if selected:
+		style.border_width_left = 3
+		style.shadow_color = Color("#75d7f226")
+		style.shadow_size = 4
+		style.shadow_offset = Vector2.ZERO
+	row.add_theme_stylebox_override("panel", style)
 
 func _market_item_subtitle(item: Dictionary) -> String:
 	var description := str(item.get("shortDesc", "")).strip_edges()
 	if description != "":
-		return _ellipsize_text(description, 72)
+		return _ellipsize_text(description, 58)
 	var category := str(item.get("category", "")).strip_edges()
 	if category != "":
-		return category.replace("-", " ").replace("_", " ").capitalize()
+		return _market_category_label(category)
 	return str(item.get("id", ""))
+
+func _market_category_label(category: String) -> String:
+	var normalized := category.strip_edges().replace("-", " ").replace("_", " ")
+	return normalized.capitalize() if normalized != "" else "General goods"
 
 func _on_market_item_selected(item: Dictionary) -> void:
 	if market_purchase_in_progress:
@@ -12114,7 +12476,6 @@ func _on_market_item_selected(item: Dictionary) -> void:
 	market_selected_item = item
 	market_quantity_spinbox.value = 1
 	_refresh_market_items()
-	_refresh_market_purchase_state()
 
 func _on_market_quantity_changed(_value: float) -> void:
 	_refresh_market_purchase_state()
@@ -12123,9 +12484,10 @@ func _refresh_market_purchase_state() -> void:
 	_refresh_market_money()
 	if market_buy_button == null or market_status_label == null:
 		return
+	_refresh_market_detail()
 	if market_selected_item.is_empty():
 		market_buy_button.disabled = true
-		market_buy_button.text = "Buy"
+		market_buy_button.text = "Select an Item"
 		return
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
@@ -12133,12 +12495,41 @@ func _refresh_market_purchase_state() -> void:
 	var total: int = price * quantity
 	var has_enough_money := total <= PlayerSave.money
 	market_buy_button.disabled = market_purchase_in_progress or not has_enough_money
-	market_buy_button.text = "Buying..." if market_purchase_in_progress else "Buy %s" % _format_money(total)
+	market_buy_button.text = "Purchasing..." if market_purchase_in_progress else "Buy · %s" % _format_money(total)
 	var item_name := str(market_selected_item.get("name", "Item"))
-	var status_text := "%sx %s selected. Total: %s" % [quantity, item_name, _format_money(total)]
+	var status_text := "%sx %s · Total %s" % [quantity, item_name, _format_money(total)]
 	if not has_enough_money:
-		status_text += "  Not enough money."
+		status_text += " · Not enough money."
 	_set_market_status(status_text, not has_enough_money)
+
+func _refresh_market_detail() -> void:
+	if market_detail_icon == null or market_quantity_spinbox == null:
+		return
+	if market_selected_item.is_empty():
+		market_detail_icon.texture = MARKET_INTERFACE_ICON
+		market_detail_icon.modulate = Color(1, 1, 1, 0.32)
+		market_detail_name_label.text = "Select an item"
+		market_detail_category_label.text = "CATALOG ITEM"
+		market_detail_description_label.text = "Choose an item from the catalog to see its description and price."
+		market_unit_price_label.text = "—"
+		market_total_price_label.text = "—"
+		market_quantity_spinbox.editable = false
+		return
+
+	var item_id := str(market_selected_item.get("id", ""))
+	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
+	var category := str(market_selected_item.get("category", ""))
+	var description := str(market_selected_item.get("shortDesc", "")).strip_edges()
+	var quantity: int = max(int(market_quantity_spinbox.value), 1)
+	var unit_price: int = max(int(market_selected_item.get("price", 0)), 0)
+	market_detail_icon.texture = _load_item_icon(item_id)
+	market_detail_icon.modulate = Color.WHITE
+	market_detail_name_label.text = item_name
+	market_detail_category_label.text = _market_category_label(category).to_upper()
+	market_detail_description_label.text = description if description != "" else "A useful item available from this shop."
+	market_unit_price_label.text = _format_money(unit_price)
+	market_total_price_label.text = _format_money(unit_price * quantity)
+	market_quantity_spinbox.editable = not market_purchase_in_progress
 
 func _refresh_market_money() -> void:
 	if market_money_label != null:

@@ -20,6 +20,8 @@ func _check_market_popup_contract() -> void:
 	_check_true(text.contains("func open_market(market: Dictionary) -> void:"), "UIOverlay exposes open_market")
 	_check_true(text.contains("func _apply_market_item_row_style"), "UIOverlay styles market item rows")
 	_check_true(text.contains("func _market_item_subtitle"), "UIOverlay shows market item subtitles")
+	_check_true(text.contains("func _refresh_market_detail"), "UIOverlay refreshes selected item details")
+	_check_true(text.contains("func _on_market_search_changed"), "UIOverlay supports catalog search")
 	_check_true(text.contains("Money: %s"), "UIOverlay labels market money")
 	_check_true(text.contains("MarketService.purchase_standard_item(item_id, quantity)"), "UIOverlay purchases through MarketService")
 	_check_true(text.contains("PlayerWalletService.apply_wallet_result(result)"), "UIOverlay applies wallet updates")
