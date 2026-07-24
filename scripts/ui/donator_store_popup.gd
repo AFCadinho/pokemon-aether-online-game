@@ -68,6 +68,30 @@ const CATEGORY_PROMISES := {
 	"charms": "FIELD CONVENIENCE",
 	"services": "TRAINER SERVICE",
 }
+const COSMETIC_SUBCATEGORY_ORDER: Array[String] = [
+	"all",
+	"outfits",
+	"body",
+	"hair",
+	"headgear",
+	"face",
+	"facegear",
+	"top",
+	"bottom",
+	"shoes",
+]
+const COSMETIC_SUBCATEGORY_LABELS := {
+	"all": "All",
+	"outfits": "Outfits",
+	"body": "Body",
+	"hair": "Hair",
+	"headgear": "Headgear",
+	"face": "Face",
+	"facegear": "Facegear",
+	"top": "Tops",
+	"bottom": "Bottoms",
+	"shoes": "Shoes",
+}
 const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether_membership_3",
@@ -112,7 +136,9 @@ const CATALOG: Array[Dictionary] = [
 		"price": 300,
 		"icon": STYLE_ICON,
 		"categories": ["featured", "cosmetics"],
-		"badge": "COSMETIC",
+		"cosmetic_subcategory": "outfits",
+		"appearance_slots": ["headgear", "top", "bottom", "shoes"],
+		"badge": "FULL OUTFIT",
 	},
 	{
 		"id": "profile_accent_pack",
@@ -121,6 +147,7 @@ const CATALOG: Array[Dictionary] = [
 		"price": 80,
 		"icon": PROFILE_ICON,
 		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "extras",
 		"badge": "COSMETIC",
 	},
 	{
@@ -130,6 +157,7 @@ const CATALOG: Array[Dictionary] = [
 		"price": 100,
 		"icon": CHAT_FLAIR_ICON,
 		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "extras",
 		"badge": "COSMETIC",
 	},
 	{
@@ -139,7 +167,96 @@ const CATALOG: Array[Dictionary] = [
 		"price": 90,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "extras",
 		"badge": "CONVENIENCE",
+	},
+	{
+		"id": "aether_body_style",
+		"name": "Aether Body Style",
+		"description": "A premium body-style concept for your trainer preview.",
+		"price": 120,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "body",
+		"appearance_slots": ["body"],
+		"badge": "BODY",
+	},
+	{
+		"id": "aurora_hair",
+		"name": "Aurora Hair",
+		"description": "A luminous hairstyle concept for your trainer.",
+		"price": 100,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "hair",
+		"appearance_slots": ["hair"],
+		"badge": "HAIR",
+	},
+	{
+		"id": "aurora_headgear",
+		"name": "Aurora Headgear",
+		"description": "A premium headwear concept for your wardrobe.",
+		"price": 90,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "headgear",
+		"appearance_slots": ["headgear"],
+		"badge": "HEADGEAR",
+	},
+	{
+		"id": "trailblazer_beard",
+		"name": "Trailblazer Beard",
+		"description": "A beard style concept for the future Face slot.",
+		"price": 80,
+		"icon": PROFILE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "face",
+		"appearance_slots": ["face"],
+		"badge": "FACE",
+	},
+	{
+		"id": "aurora_facegear",
+		"name": "Aurora Visor",
+		"description": "A face accessory concept for your trainer.",
+		"price": 85,
+		"icon": PROFILE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "facegear",
+		"appearance_slots": ["facegear"],
+		"badge": "FACEGEAR",
+	},
+	{
+		"id": "aurora_top",
+		"name": "Aurora Jacket",
+		"description": "The top piece from the Aurora outfit concept.",
+		"price": 110,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "top",
+		"appearance_slots": ["top"],
+		"badge": "TOP",
+	},
+	{
+		"id": "aurora_bottom",
+		"name": "Aurora Trousers",
+		"description": "The bottom piece from the Aurora outfit concept.",
+		"price": 95,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "bottom",
+		"appearance_slots": ["bottom"],
+		"badge": "BOTTOM",
+	},
+	{
+		"id": "aurora_shoes",
+		"name": "Aurora Shoes",
+		"description": "The shoes from the Aurora outfit concept.",
+		"price": 75,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "shoes",
+		"appearance_slots": ["shoes"],
+		"badge": "SHOES",
 	},
 	{
 		"id": "nimbus_mount",
@@ -271,13 +388,16 @@ const CATALOG: Array[Dictionary] = [
 
 var gem_balance := 0
 var active_category := "featured"
+var active_cosmetic_subcategory := "all"
 var selected_item_id := ""
 var category_buttons: Dictionary = {}
+var cosmetic_subcategory_buttons: Dictionary = {}
 var product_buttons: Dictionary = {}
 var balance_label: Label
 var hero_title_label: Label
 var hero_description_label: Label
 var hero_promise_label: Label
+var cosmetic_subcategory_bar: PanelContainer
 var product_grid: GridContainer
 var selection_title_label: Label
 var selection_description_label: Label
@@ -488,6 +608,7 @@ func _create_catalog_area() -> Control:
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
 	layout.add_child(_create_hero_panel())
+	layout.add_child(_create_cosmetic_subcategory_bar())
 
 	var products_label := Label.new()
 	products_label.text = "STORE CATALOG"
@@ -507,6 +628,49 @@ func _create_catalog_area() -> Control:
 	product_grid.add_theme_constant_override("v_separation", 9)
 	scroll.add_child(product_grid)
 	return layout
+
+
+func _create_cosmetic_subcategory_bar() -> PanelContainer:
+	cosmetic_subcategory_bar = PanelContainer.new()
+	cosmetic_subcategory_bar.name = "CosmeticSubcategoryBar"
+	cosmetic_subcategory_bar.visible = false
+	cosmetic_subcategory_bar.custom_minimum_size = Vector2(0, 42)
+	cosmetic_subcategory_bar.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#0a1422e8"), Color("#493b66a8"), 9, 1)
+	)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 6)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	cosmetic_subcategory_bar.add_child(margin)
+
+	var scroll := ScrollContainer.new()
+	scroll.name = "CosmeticSubcategoryScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.add_child(scroll)
+
+	var row := HBoxContainer.new()
+	row.name = "CosmeticSubcategoryTabs"
+	row.add_theme_constant_override("separation", 5)
+	scroll.add_child(row)
+
+	for subcategory_id: String in COSMETIC_SUBCATEGORY_ORDER:
+		var button := Button.new()
+		button.name = "CosmeticTab_%s" % subcategory_id
+		button.text = str(COSMETIC_SUBCATEGORY_LABELS.get(subcategory_id, subcategory_id.capitalize()))
+		button.custom_minimum_size = Vector2(56, 30)
+		button.focus_mode = Control.FOCUS_NONE
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.pressed.connect(_select_cosmetic_subcategory.bind(subcategory_id))
+		row.add_child(button)
+		cosmetic_subcategory_buttons[subcategory_id] = button
+
+	return cosmetic_subcategory_bar
 
 
 func _create_hero_panel() -> Control:
@@ -633,8 +797,29 @@ func _select_category(category_id: String) -> void:
 		hero_description_label.text = str(CATEGORY_DESCRIPTIONS.get(active_category, ""))
 	if hero_promise_label != null:
 		hero_promise_label.text = str(CATEGORY_PROMISES.get(active_category, "FAIR SUPPORT"))
+	_refresh_cosmetic_subcategory_bar()
 	_reset_selection_footer()
 	_render_products()
+
+
+func _select_cosmetic_subcategory(subcategory_id: String) -> void:
+	if not COSMETIC_SUBCATEGORY_ORDER.has(subcategory_id):
+		return
+	active_cosmetic_subcategory = subcategory_id
+	selected_item_id = ""
+	_refresh_cosmetic_subcategory_bar()
+	_reset_selection_footer()
+	_render_products()
+
+
+func _refresh_cosmetic_subcategory_bar() -> void:
+	if cosmetic_subcategory_bar == null:
+		return
+	cosmetic_subcategory_bar.visible = active_category == "cosmetics"
+	for subcategory_id: String in COSMETIC_SUBCATEGORY_ORDER:
+		var button := cosmetic_subcategory_buttons.get(subcategory_id) as Button
+		if button != null:
+			_apply_cosmetic_subcategory_style(button, subcategory_id == active_cosmetic_subcategory)
 
 
 func _render_products() -> void:
@@ -649,9 +834,17 @@ func _render_products() -> void:
 		var categories: Array = item.get("categories", [])
 		if not categories.has(active_category):
 			continue
+		if active_category == "cosmetics" and not _matches_cosmetic_subcategory(item):
+			continue
 		var card := _create_product_card(item)
 		product_grid.add_child(card)
 		product_buttons[str(item.get("id", ""))] = card
+
+
+func _matches_cosmetic_subcategory(item: Dictionary) -> bool:
+	if active_cosmetic_subcategory == "all":
+		return true
+	return str(item.get("cosmetic_subcategory", "")) == active_cosmetic_subcategory
 
 
 func _create_product_card(item: Dictionary) -> Button:
@@ -796,6 +989,30 @@ func _apply_category_button_style(button: Button, active: bool) -> void:
 	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, UI_PURPLE, 8, 1))
 	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_BASE, UI_PURPLE, 8, 1))
 	button.add_theme_stylebox_override("focus", _button_style(background, accent, 8, 1))
+
+
+func _apply_cosmetic_subcategory_style(button: Button, active: bool) -> void:
+	var accent := UI_PURPLE if active else Color("#3b536999")
+	var background := Color("#24183be8") if active else Color("#091725d9")
+	var normal := _cosmetic_subcategory_button_style(background, accent)
+	if active:
+		normal.border_width_bottom = 2
+	button.add_theme_color_override("font_color", UI_TEXT if active else UI_MUTED_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 10)
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", _cosmetic_subcategory_button_style(UI_SURFACE_HOVER, UI_PURPLE))
+	button.add_theme_stylebox_override("pressed", _cosmetic_subcategory_button_style(UI_SURFACE_BASE, UI_PURPLE))
+	button.add_theme_stylebox_override("focus", normal)
+
+
+func _cosmetic_subcategory_button_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _button_style(background, border, 7, 1)
+	style.content_margin_left = 7
+	style.content_margin_top = 5
+	style.content_margin_right = 7
+	style.content_margin_bottom = 5
+	return style
 
 
 func _apply_product_card_style(button: Button, selected: bool) -> void:
