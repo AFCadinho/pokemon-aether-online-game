@@ -5016,13 +5016,18 @@ func _update_battle_platform_hazards() -> void:
 
 ## Initialiseert een wild battle vanuit een al gemaakte API battle response.
 func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> void:
+	if not prepare_wild_battle_from_response(player_pokemon, enemy_pokemon, api_response):
+		return
+	await play_wild_battle_intro(player_pokemon, api_response)
+
+func prepare_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pokemon, api_response: Dictionary) -> bool:
 	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon)
 
 	player_sprite_box.set_single_pokemon(player_pokemon, "back")
 	enemy_sprite_box.set_single_pokemon(enemy_pokemon, "front")
 
 	if not _apply_initial_battle_response(api_response):
-		return
+		return false
 
 	var player_species := _get_original_active_player_species(player_pokemon.species)
 	var opponent_species := _get_active_display_species("p2")
@@ -5031,6 +5036,11 @@ func setup_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: Pok
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
+	return true
+
+func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -> void:
+	var player_species := _get_original_active_player_species(player_pokemon.species)
+	var opponent_species := _get_active_display_species("p2")
 	await get_tree().process_frame
 	_debug_battle_start("wild.setup.before_player_lead_summon playerSpecies=%s opponentSpecies=%s lastRenderedSeq=%d" % [
 		player_species,

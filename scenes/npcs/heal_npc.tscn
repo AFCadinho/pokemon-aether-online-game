@@ -1,30 +1,80 @@
 [gd_scene format=3 uid="uid://br7n6hywfrl2a"]
 
-[ext_resource type="Script" path="res://scripts/world/npcs/heal_npc.gd" id="1_0hryh"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_dhlew"]
+[ext_resource type="Script" uid="uid://dp5ajvsmrdk31" path="res://scripts/world/npcs/heal_npc.gd" id="1_0hryh"]
+[ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_dhlew"]
+[ext_resource type="Texture2D" uid="uid://37bkd5m5mh8f" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_115_Nurse_2.png" id="2_ok64d"]
+[ext_resource type="Texture2D" uid="uid://dvw4u17xvuce4" path="res://assets/sprites/mugshots/nurse_joy_mugshot.png" id="3_71rpj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71rpj"]
+atlas = ExtResource("2_ok64d")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lq7iu"]
+atlas = ExtResource("2_ok64d")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fh1rj"]
+atlas = ExtResource("2_ok64d")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yhdhi"]
+atlas = ExtResource("2_ok64d")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_id8qp"]
+atlas = ExtResource("2_ok64d")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pocyk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71rpj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lq7iu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fh1rj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yhdhi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_id8qp")
+}],
+"loop": true,
+"name": &"heal_down",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_heal"]
 size = Vector2(96, 97)
 
-[node name="HealNPC" type="Node2D"]
+[node name="HealNPC" type="Node2D" unique_id=581918462]
 script = ExtResource("1_0hryh")
 npc_definition_id = "pokemon_center_nurse"
 display_name = "Nurse Joy"
-npc_sprite_frames = ExtResource("2_dhlew")
+npc_sprite_frames = SubResource("SpriteFrames_pocyk")
+mugshot = ExtResource("3_71rpj")
 
-[node name="Look" type="Node2D" parent="."]
+[node name="Look" type="Node2D" parent="." unique_id=2089434404]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=2072125479]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_dhlew")
-animation = &"default"
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=632230410]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=796625362]
 shape = SubResource("RectangleShape2D_heal")
 
-[node name="FeetMarker" type="Marker2D" parent="."]
+[node name="FeetMarker" type="Marker2D" parent="." unique_id=664202945]
 
-[node name="RespawnMarker" type="Marker2D" parent="."]
+[node name="RespawnMarker" type="Marker2D" parent="." unique_id=1682468270]
 position = Vector2(0, 32)

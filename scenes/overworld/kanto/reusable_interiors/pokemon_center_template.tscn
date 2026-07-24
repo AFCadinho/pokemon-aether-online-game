@@ -58,18 +58,6 @@ sources/1 = SubResource("TileSetAtlasSource_y5qkb")
 atlas = ExtResource("6_dqdo4")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_dqdo4"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fallback")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_dptnb"]
 resource_local_to_scene = true
 animations = [{
@@ -140,7 +128,6 @@ y_sort_enabled = true
 
 [node name="NurseJoy" parent="Entities/NPCs" unique_id=1839105410 instance=ExtResource("6_nurse")]
 position = Vector2(464, 688)
-display_name = "Nurse Joy"
 
 [node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs"]
 position = Vector2(464, 600)

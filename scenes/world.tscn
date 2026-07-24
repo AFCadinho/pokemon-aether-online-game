@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/world/day_night_controller.gd" id="6_day_night"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/field_move_flash_light.tscn" id="7_flash_light"]
 [ext_resource type="PackedScene" path="res://scenes/world/weather/overworld_weather_controller.tscn" id="8_weather"]
+[ext_resource type="Script" path="res://scripts/ui/wild_encounter_transition.gd" id="9_wild_encounter_transition"]
 
 [node name="World" type="Node2D" unique_id=618561729]
 script = ExtResource("1_4wyf3")
@@ -47,5 +48,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="WildEncounterTransitionLayer" type="CanvasLayer" parent="."]
+layer = 1001
+
+[node name="WildEncounterTransition" type="Control" parent="WildEncounterTransitionLayer"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("9_wild_encounter_transition")
 
 [node name="UIOverlay" parent="." unique_id=2126675853 instance=ExtResource("5_71j4m")]

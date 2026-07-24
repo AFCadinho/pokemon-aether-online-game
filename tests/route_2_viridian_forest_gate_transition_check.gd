@@ -14,6 +14,11 @@ func _init() -> void:
 	var forest_source := FileAccess.get_file_as_string(VIRIDIAN_FOREST_PATH)
 	var north_gate_source := FileAccess.get_file_as_string(NORTH_GATE_PATH)
 	var south_gate_source := FileAccess.get_file_as_string(SOUTH_GATE_PATH)
+	var template_source := FileAccess.get_file_as_string(TEMPLATE_PATH)
+	_check(
+		template_source.contains('&"ground_floor": Rect2(192, 64, 320, 576)'),
+		"vertical gate mask leaves room for the guard nameplate"
+	)
 
 	_check_transition(
 		route_2_source,

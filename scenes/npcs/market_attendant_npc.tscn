@@ -2,6 +2,58 @@
 
 [ext_resource type="Script" uid="uid://clh0faxnqo8op" path="res://scripts/world/npcs/market_attendant_npc.gd" id="1_4gxk4"]
 [ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_4yape"]
+[ext_resource type="Texture2D" uid="uid://ctkqf2tbs46jv" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Zaffre's Overworlds/NPC_Z07_Breeder_M.png" id="2_qxn0h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhpe1"]
+atlas = ExtResource("2_qxn0h")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rkyg8"]
+atlas = ExtResource("2_qxn0h")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bkk2c"]
+atlas = ExtResource("2_qxn0h")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyxtu"]
+atlas = ExtResource("2_qxn0h")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d06u6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qhpe1")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkyg8")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bkk2c")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyxtu")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_market"]
 size = Vector2(96, 32)
@@ -9,7 +61,8 @@ size = Vector2(96, 32)
 [node name="MarketAttendantNPC" type="Node2D" unique_id=854794050]
 script = ExtResource("1_4gxk4")
 display_name = "Clerk"
-npc_sprite_frames = ExtResource("2_4yape")
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = SubResource("SpriteFrames_d06u6")
 
 [node name="Look" type="Node2D" parent="." unique_id=556909464]
 

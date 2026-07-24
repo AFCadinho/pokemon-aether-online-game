@@ -1,8 +1,8 @@
 [gd_resource type="TileSet" format=3 uid="uid://b831asinj0jxw"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/players_house/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_3j0r1"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/players_house/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_80q42"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/players_house/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_d2sad"]
+[ext_resource type="Texture2D" uid="uid://4ah87b37kyq4" path="res://generated/tiled_visuals/players_house/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_3j0r1"]
+[ext_resource type="Texture2D" uid="uid://bcgn5ch8o6hw0" path="res://generated/tiled_visuals/players_house/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_80q42"]
+[ext_resource type="Texture2D" uid="uid://cch153y1wdudx" path="res://generated/tiled_visuals/players_house/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_d2sad"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gn4n5"]
 texture = ExtResource("1_3j0r1")

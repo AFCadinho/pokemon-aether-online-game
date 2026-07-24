@@ -1,8 +1,8 @@
 [gd_resource type="TileSet" format=3 uid="uid://2t4bfm2rog58"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_7uwux"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_2b1qc"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_i4t07"]
+[ext_resource type="Texture2D" uid="uid://bcgrnd1o1qfme" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_7uwux"]
+[ext_resource type="Texture2D" uid="uid://bi7cjc7wp1ahy" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_2b1qc"]
+[ext_resource type="Texture2D" uid="uid://dueg21cnruy7r" path="res://generated/tiled_visuals/pokemon_center/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_i4t07"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbqjh"]
 texture = ExtResource("1_7uwux")

@@ -3,7 +3,9 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/transition_building_vertical/transition_building_vertical.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_map_exit"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="4_c8c1k"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
+[ext_resource type="Texture2D" uid="uid://clkvciqjhtjin" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_088_Policeman.png" id="5_c8c1k"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_qigtg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_side_wall"]
@@ -11,6 +13,57 @@ size = Vector2(32, 416)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_north_wall"]
 size = Vector2(96, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pchm"]
+atlas = ExtResource("5_c8c1k")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c8oog"]
+atlas = ExtResource("5_c8c1k")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uafaw"]
+atlas = ExtResource("5_c8c1k")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q1faa"]
+atlas = ExtResource("5_c8c1k")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wex85"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6pchm")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c8oog")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uafaw")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q1faa")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(96, 32)
@@ -71,7 +124,7 @@ z_index = 4096
 z_as_relative = false
 script = ExtResource("4_floor_mask")
 floor_regions = {
-&"ground_floor": Rect2(192, 64, 288, 576)
+&"ground_floor": Rect2(192, 64, 320, 576)
 }
 follow_player_floor = false
 
@@ -116,6 +169,11 @@ y_sort_enabled = true
 [node name="Players" type="Node2D" parent="Entities" unique_id=602599561]
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1880606859]
+
+[node name="GateNPC" parent="Entities/NPCs" unique_id=2061354104 instance=ExtResource("4_c8c1k")]
+position = Vector2(464, 528)
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = SubResource("SpriteFrames_wex85")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1971354937]
 

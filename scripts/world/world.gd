@@ -37,6 +37,8 @@ const TREE_LAYER_Z_MIN := -4096
 const TREE_LAYER_Z_MAX := 4096
 const MAP_FADE_OUT_SECONDS := 0.16
 const MAP_FADE_IN_SECONDS := 0.20
+const WILD_ENCOUNTER_MINIMUM_COVER_SECONDS := 0.46
+const WILD_BATTLE_REVEAL_SECONDS := 0.20
 
 @export var initial_spawn_name := "InitialSpawn"
 
@@ -48,6 +50,7 @@ var battle_instance: Node
 @onready var day_night_controller: OverworldDayNightController = %DayNightController
 @onready var weather_controller: OverworldWeatherController = $WeatherController
 @onready var field_move_flash_light: OverworldFieldMoveFlashLight = $Player/FieldMoveFlashLight
+@onready var wild_encounter_transition: WildEncounterTransition = %WildEncounterTransition
 
 var is_loading_map := false
 var position_autosave_elapsed := 0.0
@@ -542,6 +545,59 @@ func _ensure_map_transition_overlay() -> void:
 	label.add_theme_font_size_override("font_size", 15)
 	label.add_theme_color_override("font_color", Color(0.78, 0.86, 1.0, 0.94))
 	layout.add_child(label)
+
+
+func _begin_wild_encounter_transition() -> int:
+	wild_encounter_transition.begin()
+	return Time.get_ticks_msec()
+
+
+func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
+	var elapsed_seconds := float(Time.get_ticks_msec() - started_at_msec) / 1000.0
+	var remaining_seconds := maxf(WILD_ENCOUNTER_MINIMUM_COVER_SECONDS - elapsed_seconds, 0.0)
+	if remaining_seconds > 0.0:
+		await get_tree().create_timer(remaining_seconds).timeout
+	await wild_encounter_transition.wait_until_covered()
+
+
+func _prepare_battle_instance_reveal() -> void:
+	if battle_instance == null or not (battle_instance is Control):
+		return
+	var battle_control := battle_instance as Control
+	battle_control.pivot_offset = battle_control.size * 0.5
+	battle_control.modulate.a = 0.0
+	battle_control.scale = Vector2(0.965, 0.965)
+
+
+func _reveal_prepared_wild_battle() -> void:
+	if battle_instance == null or not (battle_instance is Control):
+		await wild_encounter_transition.reveal()
+		return
+
+	var battle_control := battle_instance as Control
+	var reveal_tween := create_tween().set_parallel(true)
+	reveal_tween.tween_property(
+		battle_control,
+		"modulate:a",
+		1.0,
+		WILD_BATTLE_REVEAL_SECONDS
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	reveal_tween.tween_property(
+		battle_control,
+		"scale",
+		Vector2.ONE,
+		WILD_BATTLE_REVEAL_SECONDS
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+	await wild_encounter_transition.reveal()
+	if reveal_tween.is_valid():
+		await reveal_tween.finished
+
+
+func _cancel_wild_encounter_transition() -> void:
+	if wild_encounter_transition == null or not is_instance_valid(wild_encounter_transition):
+		return
+	await wild_encounter_transition.reveal()
 
 func move_player_to_map(map: Node) -> void:
 	var players: Node = map.get_node_or_null("Entities/Players")
@@ -1811,10 +1867,12 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	active_battle_id = ""
 	active_wild_pokemon_species = "wild Pokemon"
 	_lock_overworld_for_battle()
+	var transition_started_at_msec := _begin_wild_encounter_transition()
 
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type)
 	if not response.get("success", false):
 		push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
+		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
@@ -1825,22 +1883,38 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
 	if wild_pokemon == null:
 		push_warning("World.start_triggered_wild_battle_for_area failed: backend wild Pokemon payload could not be loaded for display.")
+		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	active_wild_pokemon_species = wild_pokemon.species
 
+	await _wait_for_wild_encounter_cover(transition_started_at_msec)
+
 	if not _mount_battle_ui():
 		push_error("World.start_triggered_wild_battle_for_area failed: could not load battle scene.")
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+
+	_prepare_battle_instance_reveal()
+	if not battle_instance.prepare_wild_battle_from_response(
+		PlayerSave.party[0],
+		wild_pokemon,
+		response
+	):
+		push_error("World.start_triggered_wild_battle_for_area failed: battle response could not be prepared.")
+		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
 	MusicManager.play_wild_battle_music()
+	await _reveal_prepared_wild_battle()
 
-	await battle_instance.setup_wild_battle_from_response(
+	await battle_instance.play_wild_battle_intro(
 		PlayerSave.party[0],
-		wild_pokemon,
 		response
 	)
 

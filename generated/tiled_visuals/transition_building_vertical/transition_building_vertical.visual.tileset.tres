@@ -1,8 +1,8 @@
 [gd_resource type="TileSet" format=3 uid="uid://yjtbpubwc2n1"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/transition_building_vertical/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_xhn2k"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/transition_building_vertical/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_xc4pi"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/transition_building_vertical/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_lbxdb"]
+[ext_resource type="Texture2D" uid="uid://d3fsk67ll76ys" path="res://generated/tiled_visuals/transition_building_vertical/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_xhn2k"]
+[ext_resource type="Texture2D" uid="uid://ck82cxqiejj6m" path="res://generated/tiled_visuals/transition_building_vertical/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="2_xc4pi"]
+[ext_resource type="Texture2D" uid="uid://dxpk46hhpx232" path="res://generated/tiled_visuals/transition_building_vertical/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="3_lbxdb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2prfu"]
 texture = ExtResource("1_xhn2k")

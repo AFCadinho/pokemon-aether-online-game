@@ -1,26 +1,79 @@
 [gd_scene format=3 uid="uid://ded086gk741xq"]
 
 [ext_resource type="Script" uid="uid://d2h473tsb8r3a" path="res://scripts/world/npcs/gate_npc.gd" id="1_3cqkf"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_tkf64"]
+[ext_resource type="Texture2D" uid="uid://clkvciqjhtjin" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_088_Policeman.png" id="2_reiw8"]
+[ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_tkf64"]
+[ext_resource type="Texture2D" uid="uid://d2gv5y1jhfkvj" path="res://assets/sprites/mugshots/policeman.png" id="3_nhg1y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhg1y"]
+atlas = ExtResource("2_reiw8")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qn5bw"]
+atlas = ExtResource("2_reiw8")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krku4"]
+atlas = ExtResource("2_reiw8")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k6tq1"]
+atlas = ExtResource("2_reiw8")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cwv1k"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhg1y")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qn5bw")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krku4")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k6tq1")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajb6c"]
 size = Vector2(96, 97)
 
-[node name="GateNPC" type="Node2D"]
+[node name="GateNPC" type="Node2D" unique_id=441392445]
 script = ExtResource("1_3cqkf")
-npc_sprite_frames = ExtResource("2_tkf64")
 display_name = "Route Guard"
+npc_sprite_frames = SubResource("SpriteFrames_cwv1k")
+mugshot = ExtResource("3_nhg1y")
 
-[node name="Look" type="Node2D" parent="."]
+[node name="Look" type="Node2D" parent="." unique_id=1154537641]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look" unique_id=1154074731]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_tkf64")
-animation = &"default"
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=112793544]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1171222835]
 shape = SubResource("RectangleShape2D_ajb6c")
 
-[node name="FeetMarker" type="Marker2D" parent="."]
+[node name="FeetMarker" type="Marker2D" parent="." unique_id=1324248436]
