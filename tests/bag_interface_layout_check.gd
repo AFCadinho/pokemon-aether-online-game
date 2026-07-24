@@ -9,8 +9,8 @@ func _init() -> void:
 	var source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 
 	_check(source.contains("const BAG_SIZE := Vector2(1120, 660)"), "Bag has room for navigation, inventory and item details")
-	_check(source.contains("const UI_BAG_Z_INDEX := UI_CHAT_TABS_Z_INDEX + 1") and source.contains("bag_popup.z_index = UI_BAG_Z_INDEX"), "Bag always renders above chat tabs")
-	_check(source.contains("panel.z_index = UI_BAG_Z_INDEX if panel == bag_popup else UI_ACTIVE_Z_INDEX"), "Refocusing the Bag preserves its chat-tab priority")
+	_check(source.contains("const UI_WINDOW_Z_INDEX := UI_CHAT_TABS_Z_INDEX + 1") and source.contains("const UI_BAG_Z_INDEX := UI_WINDOW_Z_INDEX"), "Bag shares the window layer above chat tabs")
+	_check(source.contains("panel.z_index = UI_WINDOW_Z_INDEX"), "Refocusing the Bag preserves its window priority")
 	_check(source.contains("var bag_shell_style := _make_glass_panel_style(14)"), "Bag uses the shared modern glass shell")
 	_check(source.contains('"id": "all", "label": "All Items"'), "Bag starts with a complete inventory category")
 	_check(source.contains('category_panel.custom_minimum_size = Vector2(178, 0)'), "Bag categories use a compact left sidebar")

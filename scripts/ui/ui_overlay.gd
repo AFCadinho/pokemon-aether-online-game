@@ -10,7 +10,8 @@ const ACTION_BAR_SLOT_GAP := 8.0
 const UI_BASE_Z_INDEX := 100
 const UI_ACTIVE_Z_INDEX := 1000
 const UI_CHAT_TABS_Z_INDEX := UI_ACTIVE_Z_INDEX + 1
-const UI_BAG_Z_INDEX := UI_CHAT_TABS_Z_INDEX + 1
+const UI_WINDOW_Z_INDEX := UI_CHAT_TABS_Z_INDEX + 1
+const UI_BAG_Z_INDEX := UI_WINDOW_Z_INDEX
 const UI_DRAG_Z_INDEX := 1100
 const UI_MODAL_Z_INDEX := 2000
 const UI_OVERLAY_BASE_LAYER := 1
@@ -169,6 +170,9 @@ const PC_PARTY_SLOT_SIZE := Vector2(230, 62)
 const PC_BOX_TABS_VISIBLE := 10
 const ITEM_DEX_SIZE := Vector2(920, 620)
 const POKEDEX_SIZE := Vector2(1180, 720)
+const POKEDEX_ACCENT := Color("#ef5a68")
+const POKEDEX_ACCENT_SOFT := Color("#ef5a68aa")
+const POKEDEX_ACCENT_FAINT := Color("#ef5a6855")
 const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
@@ -667,6 +671,8 @@ var staff_teleport_button: Button
 var staff_impersonate_popup: PanelContainer
 var staff_impersonate_token_input: LineEdit
 var staff_impersonate_confirm_button: Button
+var staff_impersonate_status_label: Label
+var staff_impersonate_in_flight := false
 var staff_teleport_popup: PanelContainer
 var staff_teleport_dragging := false
 var staff_teleport_drag_offset := Vector2.ZERO
@@ -988,6 +994,7 @@ var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
 var pokedex_search_input: LineEdit
 var pokedex_results_list: VBoxContainer
+var pokedex_results_count_label: Label
 var pokedex_name_label: Label
 var pokedex_meta_label: Label
 var pokedex_type_row: HBoxContainer
@@ -1834,7 +1841,7 @@ func _apply_ui_z_index_policy() -> void:
 
 func _set_ui_panel_base_z(panel: Control) -> void:
 	if panel != null:
-		panel.z_index = UI_BAG_Z_INDEX if panel == bag_popup else UI_BASE_Z_INDEX
+		panel.z_index = UI_BASE_Z_INDEX
 
 func _focus_overlay_ui_layer() -> void:
 	layer = UI_OVERLAY_FOCUSED_LAYER
@@ -1891,7 +1898,7 @@ func _activate_ui_panel(panel: Control) -> void:
 	if panel == null:
 		return
 	_focus_overlay_ui_layer()
-	panel.z_index = UI_BAG_Z_INDEX if panel == bag_popup else UI_ACTIVE_Z_INDEX
+	panel.z_index = UI_WINDOW_Z_INDEX
 	panel.move_to_front()
 
 func _deactivate_ui_panel(panel: Control) -> void:
@@ -5488,66 +5495,170 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_impersonate_popup = PanelContainer.new()
 	staff_impersonate_popup.name = "StaffImpersonatePopup"
 	staff_impersonate_popup.visible = false
-	staff_impersonate_popup.custom_minimum_size = Vector2(500, 210)
+	staff_impersonate_popup.custom_minimum_size = Vector2(620, 350)
 	staff_impersonate_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	staff_impersonate_popup.z_index = UI_BASE_Z_INDEX
 	staff_impersonate_popup.anchor_left = 0.5
 	staff_impersonate_popup.anchor_top = 0.5
 	staff_impersonate_popup.anchor_right = 0.5
 	staff_impersonate_popup.anchor_bottom = 0.5
-	staff_impersonate_popup.offset_left = -250
-	staff_impersonate_popup.offset_top = -105
-	staff_impersonate_popup.offset_right = 250
-	staff_impersonate_popup.offset_bottom = 105
-	staff_impersonate_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	staff_impersonate_popup.offset_left = -310
+	staff_impersonate_popup.offset_top = -175
+	staff_impersonate_popup.offset_right = 310
+	staff_impersonate_popup.offset_bottom = 175
+	var impersonate_shell_style := _make_glass_panel_style(14)
+	impersonate_shell_style.border_color = Color("#8e68bdcc")
+	staff_impersonate_popup.add_theme_stylebox_override("panel", impersonate_shell_style)
 	root_control.add_child(staff_impersonate_popup)
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 16)
-	margin_container.add_theme_constant_override("margin_top", 14)
-	margin_container.add_theme_constant_override("margin_right", 16)
-	margin_container.add_theme_constant_override("margin_bottom", 16)
+	margin_container.add_theme_constant_override("margin_left", 18)
+	margin_container.add_theme_constant_override("margin_top", 16)
+	margin_container.add_theme_constant_override("margin_right", 18)
+	margin_container.add_theme_constant_override("margin_bottom", 18)
 	staff_impersonate_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 12)
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
+	header.custom_minimum_size = Vector2(0, 52)
+	header.add_theme_constant_override("separation", 10)
 	layout.add_child(header)
+
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#b88cf0"), Color("#b88cf0"), 2, 0)
+	)
+	header.add_child(header_accent)
+
+	var impersonate_icon_frame := PanelContainer.new()
+	impersonate_icon_frame.custom_minimum_size = Vector2(42, 42)
+	impersonate_icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#160f22e8"), Color("#8e68bdaa"), 9, 1)
+	)
+	header.add_child(impersonate_icon_frame)
+	var impersonate_icon_center := CenterContainer.new()
+	impersonate_icon_frame.add_child(impersonate_icon_center)
+	var impersonate_icon := TextureRect.new()
+	impersonate_icon.texture = STAFF_IMPERSONATE_ICON
+	impersonate_icon.custom_minimum_size = Vector2(28, 28)
+	impersonate_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	impersonate_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	impersonate_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	impersonate_icon_center.add_child(impersonate_icon)
+
+	var impersonate_heading := VBoxContainer.new()
+	impersonate_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	impersonate_heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	impersonate_heading.add_theme_constant_override("separation", 1)
+	header.add_child(impersonate_heading)
 
 	var title_label := Label.new()
 	title_label.text = "Staff Impersonation"
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.add_theme_font_size_override("font_size", 18)
+	title_label.add_theme_font_size_override("font_size", 20)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
-	header.add_child(title_label)
+	impersonate_heading.add_child(title_label)
+
+	var impersonate_subtitle := Label.new()
+	impersonate_subtitle.text = "Start a temporary secure account session"
+	impersonate_subtitle.add_theme_font_size_override("font_size", 11)
+	impersonate_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	impersonate_heading.add_child(impersonate_subtitle)
 
 	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.text = "×"
+	close_button.tooltip_text = "Close"
+	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_staff_impersonate_popup)
 	header.add_child(close_button)
 
-	var description_label := Label.new()
-	description_label.text = "Paste the impersonation token generated in the admin portal."
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(description_label)
+	var security_notice := PanelContainer.new()
+	security_notice.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#1b1424dc"), Color("#8e68bd88"), 9, 1)
+	)
+	layout.add_child(security_notice)
+	var security_margin := MarginContainer.new()
+	security_margin.add_theme_constant_override("margin_left", 12)
+	security_margin.add_theme_constant_override("margin_top", 10)
+	security_margin.add_theme_constant_override("margin_right", 12)
+	security_margin.add_theme_constant_override("margin_bottom", 10)
+	security_notice.add_child(security_margin)
+	var security_row := HBoxContainer.new()
+	security_row.add_theme_constant_override("separation", 10)
+	security_margin.add_child(security_row)
+	var security_icon := Label.new()
+	security_icon.text = "!"
+	security_icon.custom_minimum_size = Vector2(28, 28)
+	security_icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	security_icon.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	security_icon.add_theme_font_size_override("font_size", 18)
+	security_icon.add_theme_color_override("font_color", Color("#d9b5ff"))
+	security_row.add_child(security_icon)
+	var security_copy := VBoxContainer.new()
+	security_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	security_copy.add_theme_constant_override("separation", 2)
+	security_row.add_child(security_copy)
+	var security_title := Label.new()
+	security_title.text = "SECURE STAFF ACTION"
+	security_title.add_theme_font_size_override("font_size", 10)
+	security_title.add_theme_color_override("font_color", Color("#d9b5ff"))
+	security_copy.add_child(security_title)
+	var security_description := Label.new()
+	security_description.text = "Use a single-use token from the admin portal. This replaces the active account for this client and clears the saved session."
+	security_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	security_description.add_theme_font_size_override("font_size", 11)
+	security_description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	security_copy.add_child(security_description)
+
+	var token_caption := Label.new()
+	token_caption.text = "IMPERSONATION TOKEN"
+	token_caption.add_theme_font_size_override("font_size", 10)
+	token_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(token_caption)
 
 	staff_impersonate_token_input = LineEdit.new()
-	staff_impersonate_token_input.placeholder_text = "Impersonation token"
-	staff_impersonate_token_input.custom_minimum_size = Vector2(0, 38)
+	staff_impersonate_token_input.placeholder_text = "Paste single-use token"
+	staff_impersonate_token_input.custom_minimum_size = Vector2(0, 42)
+	staff_impersonate_token_input.secret = true
+	staff_impersonate_token_input.secret_character = "•"
+	staff_impersonate_token_input.clear_button_enabled = true
+	staff_impersonate_token_input.text_changed.connect(_on_staff_impersonate_token_changed)
+	staff_impersonate_token_input.text_submitted.connect(_on_staff_impersonate_token_submitted)
 	layout.add_child(staff_impersonate_token_input)
 
+	staff_impersonate_status_label = Label.new()
+	staff_impersonate_status_label.text = "The token is never displayed or stored by the client."
+	staff_impersonate_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	staff_impersonate_status_label.add_theme_font_size_override("font_size", 11)
+	staff_impersonate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(staff_impersonate_status_label)
+
+	var impersonate_actions := HBoxContainer.new()
+	impersonate_actions.alignment = BoxContainer.ALIGNMENT_END
+	impersonate_actions.add_theme_constant_override("separation", 8)
+	layout.add_child(impersonate_actions)
+	var impersonate_cancel_button := Button.new()
+	impersonate_cancel_button.text = "Cancel"
+	impersonate_cancel_button.custom_minimum_size = Vector2(112, 40)
+	impersonate_cancel_button.focus_mode = Control.FOCUS_NONE
+	impersonate_cancel_button.pressed.connect(_hide_staff_impersonate_popup)
+	impersonate_actions.add_child(impersonate_cancel_button)
+
 	staff_impersonate_confirm_button = Button.new()
-	staff_impersonate_confirm_button.text = "Start impersonation"
-	staff_impersonate_confirm_button.custom_minimum_size = Vector2(0, 36)
+	staff_impersonate_confirm_button.text = "Start Secure Session"
+	staff_impersonate_confirm_button.custom_minimum_size = Vector2(210, 40)
 	staff_impersonate_confirm_button.focus_mode = Control.FOCUS_NONE
+	staff_impersonate_confirm_button.disabled = true
 	staff_impersonate_confirm_button.pressed.connect(_on_staff_impersonate_confirm_pressed)
-	layout.add_child(staff_impersonate_confirm_button)
+	impersonate_actions.add_child(staff_impersonate_confirm_button)
 
 	staff_teleport_popup = PanelContainer.new()
 	staff_teleport_popup.name = "StaffTeleportPopup"
@@ -5789,6 +5900,7 @@ func _setup_staff_impersonation_tools() -> void:
 
 	_apply_button_style(close_button)
 	_apply_line_edit_style(staff_impersonate_token_input)
+	_apply_button_style(impersonate_cancel_button)
 	_apply_button_style(staff_impersonate_confirm_button, "primary")
 	_apply_button_style(teleport_close_button)
 	_apply_button_style(staff_teleport_self_tab_button, "primary")
@@ -6415,56 +6527,96 @@ func _setup_pokedex_popup() -> void:
 	pokedex_popup.anchor_top = 0.5
 	pokedex_popup.anchor_right = 0.5
 	pokedex_popup.anchor_bottom = 0.5
-	pokedex_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#020711fa"), Color("#d6c78faa"), 4, 1))
+	var pokedex_shell_style := _make_glass_panel_style(14)
+	pokedex_shell_style.border_color = Color("#7f4654cc")
+	pokedex_popup.add_theme_stylebox_override("panel", pokedex_shell_style)
 	root_control.add_child(pokedex_popup)
 	_position_pokedex_popup()
 
 	var margin_container := MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 18)
+	margin_container.add_theme_constant_override("margin_left", 16)
 	margin_container.add_theme_constant_override("margin_top", 14)
-	margin_container.add_theme_constant_override("margin_right", 18)
-	margin_container.add_theme_constant_override("margin_bottom", 18)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 16)
 	pokedex_popup.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 12)
 	margin_container.add_child(layout)
 
-	var header_panel := PanelContainer.new()
-	header_panel.custom_minimum_size = Vector2(0, 44)
-	header_panel.mouse_default_cursor_shape = Control.CURSOR_MOVE
-	header_panel.gui_input.connect(_on_pokedex_header_gui_input)
-	header_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#c7bea0dd"), Color("#f2ead2aa"), 2, 1))
-	layout.add_child(header_panel)
-
-	var header_margin := MarginContainer.new()
-	header_margin.mouse_default_cursor_shape = Control.CURSOR_MOVE
-	header_margin.gui_input.connect(_on_pokedex_header_gui_input)
-	header_margin.add_theme_constant_override("margin_left", 12)
-	header_margin.add_theme_constant_override("margin_top", 4)
-	header_margin.add_theme_constant_override("margin_right", 8)
-	header_margin.add_theme_constant_override("margin_bottom", 4)
-	header_panel.add_child(header_margin)
-
 	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 50)
 	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	header.gui_input.connect(_on_pokedex_header_gui_input)
-	header.add_theme_constant_override("separation", 8)
-	header_margin.add_child(header)
+	header.add_theme_constant_override("separation", 10)
+	layout.add_child(header)
+
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(POKEDEX_ACCENT, POKEDEX_ACCENT, 2, 0)
+	)
+	header.add_child(header_accent)
+
+	var header_icon_frame := PanelContainer.new()
+	header_icon_frame.custom_minimum_size = Vector2(42, 42)
+	header_icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#211018e8"), POKEDEX_ACCENT_SOFT, 9, 1)
+	)
+	header.add_child(header_icon_frame)
+
+	var header_icon_center := CenterContainer.new()
+	header_icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_child(header_icon_center)
+
+	var header_icon := TextureRect.new()
+	header_icon.custom_minimum_size = Vector2(30, 30)
+	header_icon.texture = pokedex_button.texture_normal if pokedex_button != null else null
+	header_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	header_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_center.add_child(header_icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
 
 	var title_label := Label.new()
 	title_label.text = "Pokédex"
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title_label.gui_input.connect(_on_pokedex_header_gui_input)
-	title_label.add_theme_font_size_override("font_size", 26)
-	title_label.add_theme_color_override("font_color", Color("#ffffff"))
-	header.add_child(title_label)
+	title_label.add_theme_font_size_override("font_size", 20)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(title_label)
+
+	var subtitle_label := Label.new()
+	subtitle_label.text = "Species research and habitat data"
+	subtitle_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle_label.add_theme_font_size_override("font_size", 11)
+	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(subtitle_label)
+
+	var header_hint := Label.new()
+	header_hint.text = "Search · inspect · compare"
+	header_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_hint.add_theme_font_size_override("font_size", 10)
+	header_hint.add_theme_color_override(
+		"font_color",
+		Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72)
+	)
+	header.add_child(header_hint)
 
 	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(40, 34)
+	close_button.text = "×"
+	close_button.tooltip_text = "Close"
+	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_pokedex_popup)
 	header.add_child(close_button)
@@ -6475,29 +6627,46 @@ func _setup_pokedex_popup() -> void:
 	layout.add_child(content_row)
 
 	var browser_panel := PanelContainer.new()
-	browser_panel.custom_minimum_size = Vector2(320, 0)
-	browser_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#061120f0"), Color("#d6c78f66"), 4, 1))
+	browser_panel.custom_minimum_size = Vector2(330, 0)
+	browser_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1)
+	)
 	content_row.add_child(browser_panel)
 
 	var browser_margin := MarginContainer.new()
-	browser_margin.add_theme_constant_override("margin_left", 10)
-	browser_margin.add_theme_constant_override("margin_top", 10)
-	browser_margin.add_theme_constant_override("margin_right", 10)
-	browser_margin.add_theme_constant_override("margin_bottom", 10)
+	browser_margin.add_theme_constant_override("margin_left", 11)
+	browser_margin.add_theme_constant_override("margin_top", 11)
+	browser_margin.add_theme_constant_override("margin_right", 11)
+	browser_margin.add_theme_constant_override("margin_bottom", 11)
 	browser_panel.add_child(browser_margin)
 
 	var browser_stack := VBoxContainer.new()
-	browser_stack.add_theme_constant_override("separation", 8)
+	browser_stack.add_theme_constant_override("separation", 9)
 	browser_margin.add_child(browser_stack)
 
+	var browser_header := HBoxContainer.new()
+	browser_header.add_theme_constant_override("separation", 8)
+	browser_stack.add_child(browser_header)
+
 	var browser_label := Label.new()
-	browser_label.text = "SPECIES"
+	browser_label.text = "SPECIES INDEX"
+	browser_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	browser_label.add_theme_font_size_override("font_size", 10)
-	browser_label.add_theme_color_override("font_color", Color("#d6c78f"))
-	browser_stack.add_child(browser_label)
+	browser_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	browser_header.add_child(browser_label)
+
+	pokedex_results_count_label = Label.new()
+	pokedex_results_count_label.text = "Loading..."
+	pokedex_results_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	pokedex_results_count_label.add_theme_font_size_override("font_size", 10)
+	pokedex_results_count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	browser_header.add_child(pokedex_results_count_label)
 
 	pokedex_search_input = LineEdit.new()
-	pokedex_search_input.placeholder_text = "Search species..."
+	pokedex_search_input.placeholder_text = "Search by name or number..."
+	pokedex_search_input.clear_button_enabled = true
+	pokedex_search_input.custom_minimum_size = Vector2(0, 36)
 	pokedex_search_input.text_changed.connect(_on_pokedex_search_changed)
 	browser_stack.add_child(pokedex_search_input)
 
@@ -6513,42 +6682,66 @@ func _setup_pokedex_popup() -> void:
 	browser_stack.add_child(results_scroll)
 
 	pokedex_results_list = VBoxContainer.new()
-	pokedex_results_list.add_theme_constant_override("separation", 6)
+	pokedex_results_list.add_theme_constant_override("separation", 7)
 	pokedex_results_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	results_scroll.add_child(pokedex_results_list)
 
 	var detail_panel := PanelContainer.new()
 	detail_panel.custom_minimum_size = Vector2(660, 0)
 	detail_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ef2"), Color("#d6c78f66"), 4, 1))
+	detail_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 10, 1)
+	)
 	content_row.add_child(detail_panel)
 
 	var detail_margin := MarginContainer.new()
-	detail_margin.add_theme_constant_override("margin_left", 14)
-	detail_margin.add_theme_constant_override("margin_top", 12)
-	detail_margin.add_theme_constant_override("margin_right", 14)
-	detail_margin.add_theme_constant_override("margin_bottom", 12)
+	detail_margin.add_theme_constant_override("margin_left", 12)
+	detail_margin.add_theme_constant_override("margin_top", 11)
+	detail_margin.add_theme_constant_override("margin_right", 12)
+	detail_margin.add_theme_constant_override("margin_bottom", 11)
 	detail_panel.add_child(detail_margin)
 
 	var detail_layout := VBoxContainer.new()
-	detail_layout.add_theme_constant_override("separation", 9)
+	detail_layout.add_theme_constant_override("separation", 10)
 	detail_margin.add_child(detail_layout)
 
+	var hero_panel := PanelContainer.new()
+	hero_panel.custom_minimum_size = Vector2(0, 158)
+	hero_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, Color("#49313bbb"), 11, 1)
+	)
+	detail_layout.add_child(hero_panel)
+
+	var hero_margin := MarginContainer.new()
+	hero_margin.add_theme_constant_override("margin_left", 14)
+	hero_margin.add_theme_constant_override("margin_top", 10)
+	hero_margin.add_theme_constant_override("margin_right", 14)
+	hero_margin.add_theme_constant_override("margin_bottom", 10)
+	hero_panel.add_child(hero_margin)
+
 	var detail_header := HBoxContainer.new()
-	detail_header.custom_minimum_size = Vector2(0, 140)
-	detail_header.add_theme_constant_override("separation", 8)
-	detail_layout.add_child(detail_header)
+	detail_header.add_theme_constant_override("separation", 12)
+	hero_margin.add_child(detail_header)
 
 	var title_stack := VBoxContainer.new()
-	title_stack.custom_minimum_size = Vector2(230, 0)
-	title_stack.add_theme_constant_override("separation", 6)
+	title_stack.custom_minimum_size = Vector2(205, 0)
+	title_stack.add_theme_constant_override("separation", 7)
 	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	detail_header.add_child(title_stack)
 
+	var record_label := Label.new()
+	record_label.text = "SPECIES RECORD"
+	record_label.add_theme_font_size_override("font_size", 10)
+	record_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	title_stack.add_child(record_label)
+
 	pokedex_name_label = Label.new()
 	pokedex_name_label.text = "Select a species"
-	pokedex_name_label.add_theme_font_size_override("font_size", 24)
+	pokedex_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pokedex_name_label.add_theme_font_size_override("font_size", 25)
 	pokedex_name_label.add_theme_color_override("font_color", UI_TEXT)
 	title_stack.add_child(pokedex_name_label)
 
@@ -6558,18 +6751,25 @@ func _setup_pokedex_popup() -> void:
 	pokedex_meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(pokedex_meta_label)
 
+	pokedex_type_row = HBoxContainer.new()
+	pokedex_type_row.add_theme_constant_override("separation", 5)
+	title_stack.add_child(pokedex_type_row)
+
 	var sprite_stack := VBoxContainer.new()
-	sprite_stack.custom_minimum_size = Vector2(190, 0)
+	sprite_stack.custom_minimum_size = Vector2(198, 0)
 	sprite_stack.alignment = BoxContainer.ALIGNMENT_CENTER
-	sprite_stack.add_theme_constant_override("separation", 8)
 	detail_header.add_child(sprite_stack)
 
 	pokedex_sprite_panel = PanelContainer.new()
-	pokedex_sprite_panel.custom_minimum_size = Vector2(176, 132)
+	pokedex_sprite_panel.custom_minimum_size = Vector2(190, 138)
 	pokedex_sprite_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	pokedex_sprite_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pokedex_sprite_panel.tooltip_text = "Show back sprite"
-	pokedex_sprite_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071b2ce8"), Color("#d6c78f66"), 3, 1))
+	var sprite_stage_style := _make_panel_style(UI_SURFACE_INSET, Color("#653642aa"), 11, 1)
+	sprite_stage_style.shadow_color = Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.12)
+	sprite_stage_style.shadow_size = 8
+	sprite_stage_style.shadow_offset = Vector2.ZERO
+	pokedex_sprite_panel.add_theme_stylebox_override("panel", sprite_stage_style)
 	pokedex_sprite_panel.gui_input.connect(_on_pokedex_sprite_panel_gui_input)
 	sprite_stack.add_child(pokedex_sprite_panel)
 
@@ -6580,15 +6780,15 @@ func _setup_pokedex_popup() -> void:
 	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	pokedex_sprite_viewport = SubViewport.new()
-	pokedex_sprite_viewport.size = Vector2i(176, 132)
+	pokedex_sprite_viewport.size = Vector2i(190, 138)
 	pokedex_sprite_viewport.transparent_bg = true
 	pokedex_sprite_viewport.disable_3d = true
 	pokedex_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	sprite_viewport_container.add_child(pokedex_sprite_viewport)
 
 	pokedex_animated_sprite = AnimatedSprite2D.new()
-	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	pokedex_animated_sprite.position = Vector2(88, 70)
+	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	pokedex_animated_sprite.position = Vector2(95, 73)
 	pokedex_animated_sprite.visible = false
 	pokedex_sprite_viewport.add_child(pokedex_animated_sprite)
 
@@ -6596,23 +6796,47 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite.custom_minimum_size = Vector2(132, 112)
 	pokedex_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pokedex_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	pokedex_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	pokedex_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	pokedex_type_row = HBoxContainer.new()
-	pokedex_type_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	pokedex_type_row.add_theme_constant_override("separation", 5)
-	sprite_stack.add_child(pokedex_type_row)
+	var stats_panel := PanelContainer.new()
+	stats_panel.custom_minimum_size = Vector2(220, 0)
+	stats_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#050c16b8"), UI_BORDER_SUBTLE, 9, 1)
+	)
+	detail_header.add_child(stats_panel)
+
+	var stats_margin := MarginContainer.new()
+	stats_margin.add_theme_constant_override("margin_left", 8)
+	stats_margin.add_theme_constant_override("margin_top", 7)
+	stats_margin.add_theme_constant_override("margin_right", 8)
+	stats_margin.add_theme_constant_override("margin_bottom", 7)
+	stats_panel.add_child(stats_margin)
 
 	pokedex_header_stats_stack = VBoxContainer.new()
-	pokedex_header_stats_stack.custom_minimum_size = Vector2(208, 0)
-	pokedex_header_stats_stack.add_theme_constant_override("separation", 4)
-	detail_header.add_child(pokedex_header_stats_stack)
+	pokedex_header_stats_stack.add_theme_constant_override("separation", 2)
+	stats_margin.add_child(pokedex_header_stats_stack)
+
+	var tab_panel := PanelContainer.new()
+	tab_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 9, 1)
+	)
+	detail_layout.add_child(tab_panel)
+
+	var tab_margin := MarginContainer.new()
+	tab_margin.add_theme_constant_override("margin_left", 5)
+	tab_margin.add_theme_constant_override("margin_top", 5)
+	tab_margin.add_theme_constant_override("margin_right", 5)
+	tab_margin.add_theme_constant_override("margin_bottom", 5)
+	tab_panel.add_child(tab_margin)
 
 	var tab_row := HBoxContainer.new()
-	tab_row.add_theme_constant_override("separation", 6)
-	detail_layout.add_child(tab_row)
+	tab_row.add_theme_constant_override("separation", 4)
+	tab_margin.add_child(tab_row)
 
 	var general_tab := _create_pokedex_tab_button("general", "General")
 	tab_row.add_child(general_tab)
@@ -6632,7 +6856,7 @@ func _setup_pokedex_popup() -> void:
 	detail_layout.add_child(detail_scroll)
 
 	pokedex_detail_stack = VBoxContainer.new()
-	pokedex_detail_stack.add_theme_constant_override("separation", 8)
+	pokedex_detail_stack.add_theme_constant_override("separation", 9)
 	pokedex_detail_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_scroll.add_child(pokedex_detail_stack)
 
@@ -19014,14 +19238,42 @@ func _on_staff_impersonate_button_pressed() -> void:
 	staff_impersonate_popup.visible = not staff_impersonate_popup.visible
 	if staff_impersonate_popup.visible and staff_impersonate_token_input != null:
 		_activate_ui_panel(staff_impersonate_popup)
+		_set_staff_impersonate_status("The token is never displayed or stored by the client.")
+		staff_impersonate_confirm_button.disabled = staff_impersonate_token_input.text.strip_edges() == ""
 		staff_impersonate_token_input.grab_focus()
 	elif not staff_impersonate_popup.visible:
 		_deactivate_ui_panel(staff_impersonate_popup)
 
 func _hide_staff_impersonate_popup() -> void:
+	if staff_impersonate_in_flight:
+		return
 	if staff_impersonate_popup != null:
 		staff_impersonate_popup.visible = false
 		_deactivate_ui_panel(staff_impersonate_popup)
+	if staff_impersonate_token_input != null:
+		staff_impersonate_token_input.clear()
+		staff_impersonate_token_input.editable = true
+	_set_staff_impersonate_status("The token is never displayed or stored by the client.")
+
+func _on_staff_impersonate_token_changed(token: String) -> void:
+	if staff_impersonate_confirm_button != null:
+		staff_impersonate_confirm_button.disabled = staff_impersonate_in_flight or token.strip_edges() == ""
+	if not staff_impersonate_in_flight:
+		_set_staff_impersonate_status("Ready to verify this single-use token." if token.strip_edges() != "" else "The token is never displayed or stored by the client.")
+
+func _on_staff_impersonate_token_submitted(_token: String) -> void:
+	if staff_impersonate_confirm_button == null or staff_impersonate_confirm_button.disabled:
+		return
+	await _on_staff_impersonate_confirm_pressed()
+
+func _set_staff_impersonate_status(message: String, is_error: bool = false) -> void:
+	if staff_impersonate_status_label == null:
+		return
+	staff_impersonate_status_label.text = message
+	staff_impersonate_status_label.add_theme_color_override(
+		"font_color",
+		UI_DANGER if is_error else UI_MUTED_TEXT
+	)
 
 
 func _on_staff_teleport_self_tab_pressed() -> void:
@@ -19774,26 +20026,48 @@ func _on_staff_impersonate_confirm_pressed() -> void:
 		return
 	if staff_impersonate_token_input == null:
 		return
+	if staff_impersonate_in_flight:
+		return
 
 	var token := staff_impersonate_token_input.text.strip_edges()
 	if token == "":
+		_set_staff_impersonate_status("Paste a valid single-use token first.", true)
 		_add_chat_message("Enter an impersonation token first.")
+		staff_impersonate_token_input.grab_focus()
 		return
 
+	staff_impersonate_in_flight = true
+	staff_impersonate_token_input.editable = false
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = true
+		staff_impersonate_confirm_button.text = "Verifying..."
+	_set_staff_impersonate_status("Verifying the token with the authentication service...")
 
 	var auth_result: Dictionary = await AuthService.impersonate_with_token(token)
 	if not auth_result.get("success", false):
+		staff_impersonate_in_flight = false
+		staff_impersonate_token_input.editable = true
 		if staff_impersonate_confirm_button != null:
 			staff_impersonate_confirm_button.disabled = false
+			staff_impersonate_confirm_button.text = "Start Secure Session"
+		_set_staff_impersonate_status(str(auth_result.get("error", "The token is invalid or expired.")), true)
+		staff_impersonate_token_input.select_all()
+		staff_impersonate_token_input.grab_focus()
 		_add_chat_message("Impersonation failed: %s" % str(auth_result.get("error", "Invalid token")))
 		return
 
+	if staff_impersonate_confirm_button != null:
+		staff_impersonate_confirm_button.text = "Loading Profile..."
+	_set_staff_impersonate_status("Token accepted. Loading the impersonated profile...")
 	var profile_result: Dictionary = await PlayerGameStateService.load_player_profile()
+	staff_impersonate_in_flight = false
+	staff_impersonate_token_input.editable = true
 	if staff_impersonate_confirm_button != null:
 		staff_impersonate_confirm_button.disabled = false
+		staff_impersonate_confirm_button.text = "Start Secure Session"
 	if not profile_result.get("success", false):
+		staff_impersonate_token_input.clear()
+		_set_staff_impersonate_status("The secure session started, but its profile could not be loaded. Reconnect before continuing.", true)
 		_add_chat_message("Impersonated login succeeded, but profile loading failed.")
 		return
 
@@ -20110,9 +20384,14 @@ func _refresh_pokedex_results() -> void:
 		query = pokedex_search_input.text.strip_edges()
 
 	var loading_label := Label.new()
-	loading_label.text = "Searching..."
+	loading_label.text = "Searching species..."
+	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading_label.custom_minimum_size = Vector2(0, 44)
+	loading_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pokedex_results_list.add_child(loading_label)
+	if pokedex_results_count_label != null:
+		pokedex_results_count_label.text = "Searching..."
 
 	pokedex_search_request_id += 1
 	var request_id := pokedex_search_request_id
@@ -20126,8 +20405,13 @@ func _refresh_pokedex_results() -> void:
 	if not bool(search_result.get("success", false)):
 		var error_label := Label.new()
 		error_label.text = "Could not load species."
+		error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		error_label.custom_minimum_size = Vector2(0, 44)
+		error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		error_label.add_theme_color_override("font_color", UI_DANGER)
 		pokedex_results_list.add_child(error_label)
+		if pokedex_results_count_label != null:
+			pokedex_results_count_label.text = "Unavailable"
 		return
 
 	var species_results: Array = _array_from_variant(search_result.get("species", []))
@@ -20145,11 +20429,16 @@ func _refresh_pokedex_results() -> void:
 
 	if count == 0:
 		var empty_label := Label.new()
-		empty_label.text = "No species results."
+		empty_label.text = "No species match this search."
+		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty_label.custom_minimum_size = Vector2(0, 44)
+		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pokedex_results_list.add_child(empty_label)
 	elif pokedex_selected_species_id == "" and pokedex_selected_species.is_empty() and first_species_id != "":
 		await _on_pokedex_species_selected(first_species_id)
+	if pokedex_results_count_label != null:
+		pokedex_results_count_label.text = "%d %s" % [count, "result" if count == 1 else "results"]
 
 func _create_pokedex_species_button(species: Dictionary) -> Control:
 	var species_id := str(species.get("id", "")).strip_edges()
@@ -20157,59 +20446,106 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	var national_number := int(species.get("nationalDexNumber", 0))
 	var type_text := _format_pokedex_type_list(_array_from_variant(species.get("types", [])))
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(0, 58)
+	button.name = "Species_%s" % species_id
+	button.custom_minimum_size = Vector2(0, 64)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.tooltip_text = "%s%s" % [species_name, " - %s" % type_text if type_text != "" else ""]
 	button.pressed.connect(_on_pokedex_species_selected.bind(species_id))
-	button.add_theme_stylebox_override("normal", _make_button_style(Color("#07111ed8"), Color("#d6c78f44"), 3, 1))
-	button.add_theme_stylebox_override("hover", _make_button_style(Color("#10213aee"), Color("#d6c78faa"), 3, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#050a12ee"), Color("#d6c78f"), 3, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(Color("#10213aee"), UI_BORDER_FOCUS, 3, 1))
+	button.set_meta("species_id", species_id)
+
+	var content_margin := MarginContainer.new()
+	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content_margin.add_theme_constant_override("margin_left", 8)
+	content_margin.add_theme_constant_override("margin_top", 5)
+	content_margin.add_theme_constant_override("margin_right", 9)
+	content_margin.add_theme_constant_override("margin_bottom", 5)
+	button.add_child(content_margin)
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.anchor_right = 1.0
-	row.anchor_bottom = 1.0
 	row.add_theme_constant_override("separation", 8)
-	button.add_child(row)
+	content_margin.add_child(row)
+
+	var accent := ColorRect.new()
+	accent.name = "Accent"
+	accent.custom_minimum_size = Vector2(3, 0)
+	accent.color = POKEDEX_ACCENT
+	accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(accent)
 
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(40, 40)
+	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = _load_pokedex_species_list_icon(species)
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
 
-	var number_label := Label.new()
-	number_label.text = "#%03d" % national_number if national_number > 0 else "#---"
-	number_label.custom_minimum_size = Vector2(44, 0)
-	number_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	number_label.add_theme_font_size_override("font_size", 11)
-	number_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
-	row.add_child(number_label)
-
 	var label_stack := VBoxContainer.new()
 	label_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label_stack.add_theme_constant_override("separation", 0)
+	label_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	label_stack.add_theme_constant_override("separation", 2)
 	row.add_child(label_stack)
 
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 6)
+	label_stack.add_child(title_row)
+
 	var name_label := Label.new()
+	name_label.name = "Name"
 	name_label.text = species_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.add_theme_font_size_override("font_size", 13)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
-	label_stack.add_child(name_label)
+	title_row.add_child(name_label)
+
+	var number_label := Label.new()
+	number_label.name = "Number"
+	number_label.text = "#%03d" % national_number if national_number > 0 else "#---"
+	number_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	number_label.add_theme_font_size_override("font_size", 10)
+	number_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	title_row.add_child(number_label)
 
 	var meta_label := Label.new()
+	meta_label.name = "Meta"
 	meta_label.text = type_text if type_text != "" else "Unknown type"
 	meta_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	label_stack.add_child(meta_label)
+	_style_pokedex_species_button(button, species_id == pokedex_selected_species_id)
 	return button
+
+func _style_pokedex_species_button(button: Button, selected: bool) -> void:
+	if button == null:
+		return
+	var normal_background := UI_SURFACE_INTERACTIVE if selected else UI_SURFACE_INSET
+	var normal_border := POKEDEX_ACCENT_SOFT if selected else UI_BORDER_SUBTLE
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_background, normal_border, 8, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, POKEDEX_ACCENT_SOFT, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, POKEDEX_ACCENT, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
+	var accent := button.find_child("Accent", true, false) as ColorRect
+	if accent != null:
+		accent.color = POKEDEX_ACCENT if selected else Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.18)
+
+func _refresh_pokedex_species_selection_state() -> void:
+	if pokedex_results_list == null:
+		return
+	for child: Node in pokedex_results_list.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		_style_pokedex_species_button(
+			button,
+			str(button.get_meta("species_id", "")) == pokedex_selected_species_id
+		)
 
 func _on_pokedex_species_selected(species_id: String) -> void:
 	var normalized_species_id := species_id.strip_edges()
@@ -20235,14 +20571,18 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 	pokedex_selected_species_id = normalized_species_id
 	pokedex_move_search_text = ""
 	pokedex_sprite_side = "front"
+	_refresh_pokedex_species_selection_state()
 	_set_pokedex_header_from_species(pokedex_selected_species)
 	_refresh_pokedex_detail()
 
 func _create_pokedex_tab_button(tab_id: String, label_text: String) -> Button:
 	var button := Button.new()
+	button.name = "PokedexTab_%s" % tab_id
 	button.text = label_text
-	button.custom_minimum_size = Vector2(84, 30)
+	button.custom_minimum_size = Vector2(0, 34)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.pressed.connect(_on_pokedex_tab_pressed.bind(tab_id))
 	pokedex_tab_buttons[tab_id] = button
 	return button
@@ -20260,7 +20600,16 @@ func _refresh_pokedex_tab_buttons() -> void:
 		var button: Button = pokedex_tab_buttons.get(tab_id) as Button
 		if button == null:
 			continue
-		_apply_button_style(button, "primary" if tab_id == pokedex_active_tab else "default")
+		var selected := tab_id == pokedex_active_tab
+		var normal_background := Color("#26121aec") if selected else Color("#00000000")
+		var normal_border := POKEDEX_ACCENT_SOFT if selected else Color("#00000000")
+		button.add_theme_stylebox_override("normal", _make_button_style(normal_background, normal_border, 7, 1))
+		button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, POKEDEX_ACCENT_FAINT, 7, 1))
+		button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, POKEDEX_ACCENT, 7, 1))
+		button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 7, 1))
+		button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+		button.add_theme_color_override("font_hover_color", UI_TEXT)
+		button.add_theme_color_override("font_pressed_color", UI_TEXT)
 
 func _set_pokedex_header_from_species(species: Dictionary) -> void:
 	if pokedex_name_label == null or pokedex_meta_label == null:
@@ -20397,6 +20746,7 @@ func _get_pokedex_sprite_scale(frames: SpriteFrames) -> Vector2:
 		104.0 / max(normalized_frame_size.y, 1.0)
 	)
 	var scale_value: float = clamp(fit_scale * display_scale_multiplier, 0.65, 2.0)
+	scale_value = round(scale_value * 4.0) / 4.0
 	var texture_scale: float = scale_value / max(render_scale, 1.0)
 	return Vector2(texture_scale, texture_scale)
 
@@ -20524,10 +20874,17 @@ func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
 	for child: Node in pokedex_header_stats_stack.get_children():
 		child.queue_free()
 
+	var caption := Label.new()
+	caption.text = "BASE STATS"
+	caption.add_theme_font_size_override("font_size", 9)
+	caption.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	pokedex_header_stats_stack.add_child(caption)
+
 	if stats.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "BASE STATS"
-		empty_label.add_theme_font_size_override("font_size", 10)
+		empty_label.text = "Select a species to compare stats."
+		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		empty_label.add_theme_font_size_override("font_size", 11)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pokedex_header_stats_stack.add_child(empty_label)
 		return
@@ -20545,7 +20902,7 @@ func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
 
 func _create_pokedex_header_stat_row(label_text: String, value: int, color: Color) -> Control:
 	var row := HBoxContainer.new()
-	row.custom_minimum_size = Vector2(0, 18)
+	row.custom_minimum_size = Vector2(0, 15)
 	row.add_theme_constant_override("separation", 6)
 
 	var label := Label.new()
@@ -20553,7 +20910,7 @@ func _create_pokedex_header_stat_row(label_text: String, value: int, color: Colo
 	label.custom_minimum_size = Vector2(48, 0)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(label)
 
@@ -20561,9 +20918,9 @@ func _create_pokedex_header_stat_row(label_text: String, value: int, color: Colo
 	bar.max_value = POKEDEX_BASE_STAT_BAR_MAX
 	bar.value = clampi(value, 0, POKEDEX_BASE_STAT_BAR_MAX)
 	bar.show_percentage = false
-	bar.custom_minimum_size = Vector2(96, 9)
+	bar.custom_minimum_size = Vector2(96, 7)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#06101be8"), Color("#d6c78f44"), 2, 1))
+	bar.add_theme_stylebox_override("background", _make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 3, 1))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(color, color, 2, 0))
 	row.add_child(bar)
 
@@ -20571,14 +20928,14 @@ func _create_pokedex_header_stat_row(label_text: String, value: int, color: Colo
 	value_label.text = str(value)
 	value_label.custom_minimum_size = Vector2(32, 0)
 	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	value_label.add_theme_font_size_override("font_size", 11)
-	value_label.add_theme_color_override("font_color", Color("#f2ead2"))
+	value_label.add_theme_font_size_override("font_size", 10)
+	value_label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(value_label)
 	return row
 
 func _create_pokedex_header_stat_total_row(total: int) -> Control:
 	var row := HBoxContainer.new()
-	row.custom_minimum_size = Vector2(0, 20)
+	row.custom_minimum_size = Vector2(0, 16)
 	row.add_theme_constant_override("separation", 6)
 
 	var label := Label.new()
@@ -20587,7 +20944,7 @@ func _create_pokedex_header_stat_total_row(total: int) -> Control:
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 11)
-	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	row.add_child(label)
 
 	var spacer := Control.new()
@@ -20600,7 +20957,7 @@ func _create_pokedex_header_stat_total_row(total: int) -> Control:
 	value_label.custom_minimum_size = Vector2(32, 0)
 	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	value_label.add_theme_font_size_override("font_size", 11)
-	value_label.add_theme_color_override("font_color", Color("#f2ead2"))
+	value_label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(value_label)
 	return row
 
@@ -20632,38 +20989,73 @@ func _set_pokedex_detail_message(message: String) -> void:
 	for child: Node in pokedex_detail_stack.get_children():
 		child.queue_free()
 
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 112)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1)
+	)
+	pokedex_detail_stack.add_child(panel)
+
+	var center := CenterContainer.new()
+	panel.add_child(center)
+
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 6)
+	center.add_child(stack)
+
+	var caption := Label.new()
+	caption.text = "POKÉDEX STATUS"
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caption.add_theme_font_size_override("font_size", 10)
+	caption.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	stack.add_child(caption)
+
 	var label := Label.new()
 	label.text = message
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	pokedex_detail_stack.add_child(label)
+	stack.add_child(label)
 
 func _build_pokedex_general_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_section_title("Profile"))
-
-	pokedex_detail_stack.add_child(_create_pokedex_info_line(
-		"Egg Groups",
+	var profile_card := _create_pokedex_dossier_card("Species Profile", "Biology and training overview")
+	pokedex_detail_stack.add_child(profile_card.get("panel") as Control)
+	var profile_content: VBoxContainer = profile_card.get("content") as VBoxContainer
+	var profile_facts := GridContainer.new()
+	profile_facts.columns = 3
+	profile_facts.add_theme_constant_override("h_separation", 18)
+	profile_facts.add_theme_constant_override("v_separation", 6)
+	profile_content.add_child(profile_facts)
+	profile_facts.add_child(_create_pokedex_profile_fact(
+		"EGG GROUPS",
 		_format_pokedex_value_list(_array_from_variant(pokedex_selected_species.get("eggGroups", pokedex_selected_species.get("egg_groups", []))))
 	))
-
-	pokedex_detail_stack.add_child(_create_pokedex_section_title("Abilities"))
-	var abilities := _array_from_variant(pokedex_selected_species.get("abilities", []))
-	var added_abilities := _add_pokedex_ability_rows(abilities)
-	if added_abilities <= 0:
-		pokedex_detail_stack.add_child(_create_pokedex_muted_message("No abilities available."))
-
-	pokedex_detail_stack.add_child(_create_pokedex_section_title("Training"))
-	pokedex_detail_stack.add_child(_create_pokedex_info_line(
-		"Growth",
+	profile_facts.add_child(_create_pokedex_profile_fact(
+		"GROWTH RATE",
 		_format_identifier_display_name(str(pokedex_selected_species.get("growthRate", ""))) if str(pokedex_selected_species.get("growthRate", "")).strip_edges() != "" else "Unknown"
 	))
-	pokedex_detail_stack.add_child(_create_pokedex_info_line(
-		"Base EXP",
+	profile_facts.add_child(_create_pokedex_profile_fact(
+		"BASE EXP",
 		str(int(pokedex_selected_species.get("baseExperience", 0)))
 	))
-	pokedex_detail_stack.add_child(_create_pokedex_ev_yield_panel(_get_pokedex_ev_yield()))
 
-func _add_pokedex_ability_rows(abilities: Array) -> int:
+	var abilities_card := _create_pokedex_dossier_card("Abilities", "Hover an ability for its effect")
+	pokedex_detail_stack.add_child(abilities_card.get("panel") as Control)
+	var abilities_content: VBoxContainer = abilities_card.get("content") as VBoxContainer
+	var abilities := _array_from_variant(pokedex_selected_species.get("abilities", []))
+	var added_abilities := _add_pokedex_ability_rows(abilities, abilities_content)
+	if added_abilities <= 0:
+		abilities_content.add_child(_create_pokedex_muted_message("No abilities available."))
+
+	var training_card := _create_pokedex_dossier_card("Effort Values", "Stats gained after defeating this species")
+	pokedex_detail_stack.add_child(training_card.get("panel") as Control)
+	var training_content: VBoxContainer = training_card.get("content") as VBoxContainer
+	training_content.add_child(_create_pokedex_ev_yield_panel(_get_pokedex_ev_yield()))
+
+func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -> int:
+	var target_stack := target if target != null else pokedex_detail_stack
 	var added_count := 0
 	for ability_value: Variant in abilities:
 		if typeof(ability_value) != TYPE_DICTIONARY:
@@ -20678,7 +21070,7 @@ func _add_pokedex_ability_rows(abilities: Array) -> int:
 		var ability_description := _get_summary_ability_description_text(ability_name)
 		if ability_description != "":
 			ability_row.tooltip_text = ability_description
-		pokedex_detail_stack.add_child(ability_row)
+		target_stack.add_child(ability_row)
 		added_count += 1
 	return added_count
 
@@ -20708,13 +21100,9 @@ func _create_pokedex_ev_yield_panel(ev_yield: Dictionary) -> Control:
 	for value: Variant in ev_yield.values():
 		total += max(0, int(value))
 
-	var wrapper := HBoxContainer.new()
-	wrapper.alignment = BoxContainer.ALIGNMENT_BEGIN
-
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(192, 0)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912e8"), Color("#38bdf866"), 5, 1))
-	wrapper.add_child(panel)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, POKEDEX_ACCENT_FAINT, 8, 1))
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 10)
@@ -20735,7 +21123,7 @@ func _create_pokedex_ev_yield_panel(ev_yield: Dictionary) -> Control:
 	title.text = "EV YIELD"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 10)
-	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	title.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	header.add_child(title)
 
 	var total_label := Label.new()
@@ -20746,7 +21134,7 @@ func _create_pokedex_ev_yield_panel(ev_yield: Dictionary) -> Control:
 
 	if total <= 0:
 		stack.add_child(_create_pokedex_muted_message("No EV yield data available."))
-		return wrapper
+		return panel
 
 	var chip_row := HBoxContainer.new()
 	chip_row.add_theme_constant_override("separation", 6)
@@ -20763,7 +21151,7 @@ func _create_pokedex_ev_yield_panel(ev_yield: Dictionary) -> Control:
 			value,
 			stat.get("color", UI_BORDER_FOCUS) as Color
 		))
-	return wrapper
+	return panel
 
 func _create_pokedex_ev_yield_chip(label_text: String, value: int, color: Color) -> Control:
 	var chip := PanelContainer.new()
@@ -20789,7 +21177,7 @@ func _create_pokedex_ev_yield_chip(label_text: String, value: int, color: Color)
 	return chip
 
 func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_section_title(title_text))
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(title_text))
 	if entries.is_empty():
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message("%s data is not available yet." % title_text))
 		return
@@ -20797,7 +21185,7 @@ func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(str(entry_value)))
 
 func _build_pokedex_locations_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_section_title("Wild Locations"))
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title("Wild Locations"))
 
 	var locations := _array_from_variant(pokedex_selected_species.get("locations", []))
 	if locations.is_empty():
@@ -20812,7 +21200,7 @@ func _build_pokedex_locations_tab() -> void:
 func _create_pokedex_location_row(location: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 48)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1))
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 10)
@@ -20832,7 +21220,7 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	area_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	area_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	area_label.add_theme_font_size_override("font_size", 14)
-	area_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	area_label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(area_label)
 
 	var encounter_stack := VBoxContainer.new()
@@ -20871,7 +21259,7 @@ func _get_pokedex_selected_rarity_label() -> String:
 	return _format_identifier_display_name(rarity) if rarity != "" else "Unknown"
 
 func _build_pokedex_evolutions_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_section_title("Evolves Into"))
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title("Evolves Into"))
 
 	var evolutions := _array_from_variant(pokedex_selected_species.get("evolutions", []))
 	if evolutions.is_empty():
@@ -20886,7 +21274,7 @@ func _build_pokedex_evolutions_tab() -> void:
 func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 54)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1))
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 10)
@@ -20905,7 +21293,7 @@ func _create_pokedex_evolution_row(evolution: Dictionary) -> Control:
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.add_theme_font_size_override("font_size", 14)
-	name_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	name_label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(name_label)
 
 	var detail_stack := VBoxContainer.new()
@@ -21088,8 +21476,8 @@ func _create_pokedex_move_header_row(first_column_label: String) -> Control:
 
 func _create_pokedex_move_section_title(title_text: String, move_count: int) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 30)
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071827f2"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+	panel.custom_minimum_size = Vector2(0, 34)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, POKEDEX_ACCENT_FAINT, 8, 1))
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 8)
@@ -21104,7 +21492,7 @@ func _create_pokedex_move_section_title(title_text: String, move_count: int) -> 
 
 	var accent := ColorRect.new()
 	accent.custom_minimum_size = Vector2(3, 0)
-	accent.color = POKEMON_SUMMARY_ACCENT
+	accent.color = POKEDEX_ACCENT
 	row.add_child(accent)
 
 	var label := Label.new()
@@ -21120,7 +21508,7 @@ func _create_pokedex_move_section_title(title_text: String, move_count: int) -> 
 	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	count_label.add_theme_font_size_override("font_size", 11)
-	count_label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	count_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	row.add_child(count_label)
 	return panel
 
@@ -21131,13 +21519,141 @@ func _create_pokedex_section_title(title_text: String) -> Control:
 	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	return label
 
+func _create_pokedex_dossier_card(title_text: String, subtitle_text: String = "") -> Dictionary:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1)
+	)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	margin.add_child(stack)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 9)
+	stack.add_child(header)
+
+	var accent := ColorRect.new()
+	accent.custom_minimum_size = Vector2(3, 0)
+	accent.color = POKEDEX_ACCENT
+	header.add_child(accent)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
+
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(title)
+
+	if subtitle_text != "":
+		var subtitle := Label.new()
+		subtitle.text = subtitle_text
+		subtitle.add_theme_font_size_override("font_size", 10)
+		subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		heading.add_child(subtitle)
+
+	var divider := ColorRect.new()
+	divider.custom_minimum_size = Vector2(0, 1)
+	divider.color = Color(UI_BORDER_SUBTLE.r, UI_BORDER_SUBTLE.g, UI_BORDER_SUBTLE.b, 0.62)
+	stack.add_child(divider)
+
+	var content := VBoxContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation", 0)
+	stack.add_child(content)
+	return {
+		"panel": panel,
+		"content": content,
+	}
+
+func _create_pokedex_profile_fact(label_text: String, value_text: String) -> Control:
+	var stack := VBoxContainer.new()
+	stack.custom_minimum_size = Vector2(160, 44)
+	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 3)
+
+	var label := Label.new()
+	label.text = label_text
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	stack.add_child(label)
+
+	var value := Label.new()
+	value.text = value_text
+	value.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	value.add_theme_font_size_override("font_size", 12)
+	value.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(value)
+	return stack
+
+func _create_pokedex_detail_section_title(title_text: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 30)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1)
+	)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 9)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 9)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+
+	var accent := ColorRect.new()
+	accent.custom_minimum_size = Vector2(3, 0)
+	accent.color = POKEDEX_ACCENT
+	row.add_child(accent)
+
+	var label := Label.new()
+	label.text = title_text.to_upper()
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(label)
+	return panel
+
 func _create_pokedex_muted_message(message: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1)
+	)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 9)
+	panel.add_child(margin)
+
 	var label := Label.new()
 	label.text = message
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_font_size_override("font_size", 12)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	return label
+	margin.add_child(label)
+	return panel
 
 func _create_pokedex_section_spacer() -> Control:
 	var spacer := Control.new()
@@ -21145,13 +21661,27 @@ func _create_pokedex_section_spacer() -> Control:
 	return spacer
 
 func _create_pokedex_info_line(label_text: String, value_text: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 36)
+	var row_style := _make_panel_style(Color("#00000000"), UI_BORDER_SUBTLE, 0, 0)
+	row_style.border_width_bottom = 1
+	row_style.border_color = Color(UI_BORDER_SUBTLE.r, UI_BORDER_SUBTLE.g, UI_BORDER_SUBTLE.b, 0.55)
+	panel.add_theme_stylebox_override("panel", row_style)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+
 	var row := HBoxContainer.new()
-	row.custom_minimum_size = Vector2(0, 30)
 	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
 
 	var label := Label.new()
 	label.text = label_text
-	label.custom_minimum_size = Vector2(86, 0)
+	label.custom_minimum_size = Vector2(104, 0)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 11)
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -21165,7 +21695,7 @@ func _create_pokedex_info_line(label_text: String, value_text: String) -> Contro
 	value.add_theme_font_size_override("font_size", 12)
 	value.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(value)
-	return row
+	return panel
 
 func _create_pokedex_stat_chip(label_text: String, value: int, color: Color) -> Control:
 	var panel := PanelContainer.new()
@@ -21198,13 +21728,13 @@ func _create_pokedex_move_header_label(label_text: String, width: float) -> Cont
 	label.text = label_text
 	label.custom_minimum_size = Vector2(width, 0)
 	label.add_theme_font_size_override("font_size", 10)
-	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	return label
 
 func _create_pokedex_move_row(move: Dictionary, source_label: String = "") -> Control:
 	var row_panel := PanelContainer.new()
-	row_panel.custom_minimum_size = Vector2(0, 34)
-	row_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 5, 1))
+	row_panel.custom_minimum_size = Vector2(0, 36)
+	row_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 7, 1))
 	var move_description := _get_summary_move_description_text(move)
 	if move_description != "":
 		row_panel.tooltip_text = move_description
@@ -21223,7 +21753,7 @@ func _create_pokedex_move_row(move: Dictionary, source_label: String = "") -> Co
 	var first_column_text := source_label
 	if first_column_text == "":
 		first_column_text = str(int(move.get("level", 1)))
-	row.add_child(_create_pokedex_move_value_label(first_column_text, 54, POKEMON_SUMMARY_ACCENT, true))
+	row.add_child(_create_pokedex_move_value_label(first_column_text, 54, POKEDEX_ACCENT, true))
 	row.add_child(_create_pokedex_move_value_label(str(move.get("name", move.get("id", ""))), 172, UI_TEXT, true))
 	row.add_child(_create_pokedex_move_type_cell(str(move.get("type", "")), 92))
 	row.add_child(_create_pokedex_move_category_cell(str(move.get("category", "")), 92))
