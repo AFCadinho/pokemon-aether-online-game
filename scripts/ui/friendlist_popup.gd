@@ -7,18 +7,21 @@ signal private_message_requested(user: Dictionary)
 signal mail_requested(user: Dictionary)
 signal incoming_friend_requests_changed(count: int)
 
-const POPUP_SIZE := Vector2(720, 560)
-const UI_BG := Color("#070b14f2")
-const UI_SLOT_BG := Color("#0d1625e6")
-const UI_INPUT_BG := Color("#050912e8")
-const UI_BORDER := Color("#d8b767")
+const POPUP_SIZE := Vector2(880, 620)
+const FRIENDLIST_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
+const UI_BG := Color("#050b14ed")
+const UI_SURFACE_RAISED := Color("#081522eb")
+const UI_SLOT_BG := Color("#0b1a2bea")
+const UI_HOVER_BG := Color("#112a44f2")
+const UI_INPUT_BG := Color("#030812d6")
+const UI_BORDER := Color("#60d3ff")
 const UI_BORDER_SOFT := Color("#315070")
-const UI_BORDER_FRIENDLIST := Color("#7fadde")
-const UI_BORDER_FRIENDLIST_INNER := Color("#7fadde55")
+const UI_BORDER_FRIENDLIST := Color("#3d7596cc")
+const UI_BORDER_FRIENDLIST_INNER := Color("#2d4b66b3")
 const UI_BORDER_FOCUS := Color("#7aa7f4")
 const UI_TEXT := Color("#f4f0de")
 const UI_MUTED_TEXT := Color("#aeb8c5")
-const UI_SECTION_TEXT := Color("#d8b767")
+const UI_SECTION_TEXT := Color("#60d3ff")
 const UI_DANGER := Color("#ff6b74")
 const UI_DANGER_BG := Color("#2a1015e8")
 const UI_SUCCESS := Color("#79e49b")
@@ -38,10 +41,11 @@ var friends_list: VBoxContainer
 var requests_list: VBoxContainer
 var requests_tab_attention_badge: Panel
 var blocked_list: VBoxContainer
-var trade_history_list: VBoxContainer
 var friend_search_input: LineEdit
+var friends_summary_label: Label
 var block_user_input: LineEdit
 var status_message_input: LineEdit
+var status_character_label: Label
 var save_status_button: Button
 var remove_friend_confirm_dialog: PanelContainer
 var remove_friend_confirm_label: Label
@@ -103,64 +107,105 @@ func _input(event: InputEvent) -> void:
 
 func _build_ui() -> void:
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_left", 18)
 	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 18)
 	add_child(margin)
 
 	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 12)
+	root.add_theme_constant_override("separation", 10)
 	margin.add_child(root)
 
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
+	header.custom_minimum_size = Vector2(0, 52)
+	header.add_theme_constant_override("separation", 10)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
 	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	header.gui_input.connect(_on_drag_handle_gui_input)
 	root.add_child(header)
 
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(44, 44)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a2133e8"), Color("#60d3ff99"), 10, 1)
+	)
+	header.add_child(icon_frame)
+
+	var icon_center := CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_child(icon_center)
+
+	var icon := TextureRect.new()
+	icon.texture = FRIENDLIST_ICON
+	icon.custom_minimum_size = Vector2(31, 31)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.add_theme_constant_override("separation", 0)
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(heading)
+
 	var title := Label.new()
-	title.text = "Friendlist"
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	title.add_theme_font_size_override("font_size", 20)
-	title.add_theme_color_override("font_shadow_color", Color("#000000aa"))
-	title.add_theme_constant_override("shadow_offset_x", 1)
-	title.add_theme_constant_override("shadow_offset_y", 1)
+	title.text = "Friends"
+	title.add_theme_color_override("font_color", UI_TEXT)
+	title.add_theme_font_size_override("font_size", 21)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	header.add_child(title)
+	heading.add_child(title)
+
+	var subtitle := Label.new()
+	subtitle.text = "Your trainer network and social activity"
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_child(subtitle)
 
 	var add_friend_button := Button.new()
-	add_friend_button.text = "Add Friend"
+	add_friend_button.text = "+  Add Friend"
+	add_friend_button.custom_minimum_size = Vector2(126, 38)
 	add_friend_button.pressed.connect(_show_add_friend_dialog)
-	_apply_button_style(add_friend_button, "success")
+	_apply_button_style(add_friend_button, "primary")
 	header.add_child(add_friend_button)
 
 	var refresh_button := Button.new()
-	refresh_button.text = "Refresh"
+	refresh_button.text = "↻"
+	refresh_button.tooltip_text = "Refresh friends"
+	refresh_button.custom_minimum_size = Vector2(38, 38)
 	refresh_button.pressed.connect(_on_refresh_pressed)
-	_apply_button_style(refresh_button, "primary")
+	_apply_button_style(refresh_button)
+	refresh_button.add_theme_font_size_override("font_size", 18)
 	header.add_child(refresh_button)
 
 	var close_button := Button.new()
-	close_button.text = "Close"
+	close_button.text = "×"
+	close_button.tooltip_text = "Close friends"
+	close_button.custom_minimum_size = Vector2(38, 38)
 	close_button.pressed.connect(close)
-	_apply_button_style(close_button, "danger")
+	_apply_button_style(close_button)
+	close_button.add_theme_font_size_override("font_size", 18)
 	header.add_child(close_button)
 
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.text = ""
-	status_label.custom_minimum_size = Vector2(0, 22)
+	status_label.visible = false
+	status_label.custom_minimum_size = Vector2(0, 28)
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	status_label.add_theme_font_size_override("font_size", 13)
+	status_label.add_theme_font_size_override("font_size", 12)
 	root.add_child(status_label)
 
 	var tab_shell := MarginContainer.new()
-	tab_shell.add_theme_constant_override("margin_left", 18)
+	tab_shell.add_theme_constant_override("margin_left", 0)
 	tab_shell.add_theme_constant_override("margin_top", 2)
-	tab_shell.add_theme_constant_override("margin_right", 18)
+	tab_shell.add_theme_constant_override("margin_right", 0)
 	root.add_child(tab_shell)
 
 	tab_button_row = HBoxContainer.new()
@@ -177,7 +222,6 @@ func _build_ui() -> void:
 	tabs.add_child(_build_requests_tab())
 	tabs.add_child(_build_blocked_tab())
 	tabs.add_child(_build_status_tab())
-	tabs.add_child(_build_trade_history_tab())
 	_setup_friendlist_tab_buttons()
 
 
@@ -185,29 +229,36 @@ func _build_friends_tab() -> Control:
 	var tab := VBoxContainer.new()
 	tab.add_theme_constant_override("separation", 10)
 
+	var tools_row := HBoxContainer.new()
+	tools_row.add_theme_constant_override("separation", 10)
+	tab.add_child(tools_row)
+
+	friends_summary_label = Label.new()
+	friends_summary_label.text = "0 friends"
+	friends_summary_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	friends_summary_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	friends_summary_label.add_theme_font_size_override("font_size", 12)
+	friends_summary_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	tools_row.add_child(friends_summary_label)
+
 	friend_search_input = LineEdit.new()
-	friend_search_input.placeholder_text = "Search friends"
-	friend_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	friend_search_input.placeholder_text = "Search by name or username"
+	friend_search_input.custom_minimum_size = Vector2(300, 38)
+	friend_search_input.clear_button_enabled = true
 	friend_search_input.text_changed.connect(_on_friend_search_changed)
 	_apply_line_edit_style(friend_search_input)
-	tab.add_child(friend_search_input)
+	tools_row.add_child(friend_search_input)
 
 	friends_list = VBoxContainer.new()
-	friends_list.add_theme_constant_override("separation", 7)
+	friends_list.add_theme_constant_override("separation", 8)
 	tab.add_child(_scroll_for(friends_list))
-	return _tab_content_margin(tab, "Friends", 10)
+	return _tab_content_margin(tab, "Friends", 12)
 
 
 func _build_requests_tab() -> Control:
 	requests_list = VBoxContainer.new()
-	requests_list.add_theme_constant_override("separation", 8)
-	return _tab_content_margin(_scroll_for(requests_list), "Requests", 10)
-
-
-func _build_trade_history_tab() -> Control:
-	trade_history_list = VBoxContainer.new()
-	trade_history_list.add_theme_constant_override("separation", 8)
-	return _tab_content_margin(_scroll_for(trade_history_list), "Trade History", 10)
+	requests_list.add_theme_constant_override("separation", 9)
+	return _tab_content_margin(_scroll_for(requests_list), "Requests", 12)
 
 
 func _build_blocked_tab() -> Control:
@@ -219,7 +270,8 @@ func _build_blocked_tab() -> Control:
 	tab.add_child(block_row)
 
 	block_user_input = LineEdit.new()
-	block_user_input.placeholder_text = "Username"
+	block_user_input.placeholder_text = "Enter a username to block"
+	block_user_input.custom_minimum_size = Vector2(0, 38)
 	block_user_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	block_user_input.text_submitted.connect(_on_block_user_submitted)
 	_apply_line_edit_style(block_user_input)
@@ -227,6 +279,7 @@ func _build_blocked_tab() -> Control:
 
 	var block_button := Button.new()
 	block_button.text = "Block"
+	block_button.custom_minimum_size = Vector2(96, 38)
 	block_button.pressed.connect(_on_block_user_pressed)
 	_apply_button_style(block_button, "danger")
 	block_row.add_child(block_button)
@@ -234,32 +287,49 @@ func _build_blocked_tab() -> Control:
 	blocked_list = VBoxContainer.new()
 	blocked_list.add_theme_constant_override("separation", 7)
 	tab.add_child(_scroll_for(blocked_list))
-	return _tab_content_margin(tab, "Blocked", 10)
+	return _tab_content_margin(tab, "Blocked", 12)
 
 
 func _build_status_tab() -> Control:
 	var tab := VBoxContainer.new()
-	tab.add_theme_constant_override("separation", 10)
+	tab.add_theme_constant_override("separation", 9)
 
 	var hint := Label.new()
-	hint.text = "Status message"
+	hint.text = "YOUR STATUS"
 	hint.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	hint.add_theme_font_size_override("font_size", 15)
+	hint.add_theme_font_size_override("font_size", 10)
 	tab.add_child(hint)
+
+	var description := Label.new()
+	description.text = "Let friends know what you are currently doing."
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	description.add_theme_font_size_override("font_size", 12)
+	tab.add_child(description)
 
 	status_message_input = LineEdit.new()
 	status_message_input.max_length = 100
-	status_message_input.placeholder_text = "What are you doing?"
+	status_message_input.placeholder_text = "Training, trading, exploring..."
+	status_message_input.custom_minimum_size = Vector2(0, 40)
+	status_message_input.text_changed.connect(_on_status_message_changed)
 	_apply_line_edit_style(status_message_input)
 	tab.add_child(status_message_input)
 
+	status_character_label = Label.new()
+	status_character_label.text = "0 / 100"
+	status_character_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	status_character_label.add_theme_font_size_override("font_size", 10)
+	status_character_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	tab.add_child(status_character_label)
+
 	save_status_button = Button.new()
-	save_status_button.text = "Save"
+	save_status_button.text = "Save Status"
+	save_status_button.custom_minimum_size = Vector2(132, 38)
+	save_status_button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	save_status_button.pressed.connect(_on_save_status_pressed)
 	_apply_button_style(save_status_button, "primary")
 	tab.add_child(save_status_button)
 
-	return _tab_content_margin(tab, "Status", 10)
+	return _tab_content_margin(tab, "Status", 18)
 
 
 func _scroll_for(content: Control) -> ScrollContainer:
@@ -304,25 +374,42 @@ func _load_socials_async() -> void:
 
 
 func _render_overview() -> void:
+	var friends: Array = _array_from_value(overview.get("friends", []))
 	var incoming_requests: Array = _array_from_value(overview.get("incomingFriendRequests", []))
-	_render_friends(_array_from_value(overview.get("friends", [])))
+	var outgoing_requests: Array = _array_from_value(overview.get("outgoingFriendRequests", []))
+	var blocked_users: Array = _array_from_value(overview.get("blockedUsers", []))
+	_render_friends(friends)
 	_render_requests(
 		incoming_requests,
-		_array_from_value(overview.get("outgoingFriendRequests", []))
+		outgoing_requests
 	)
-	_render_blocked(_array_from_value(overview.get("blockedUsers", [])))
+	_render_blocked(blocked_users)
+	_refresh_tab_counts(friends.size(), incoming_requests.size() + outgoing_requests.size(), blocked_users.size())
 	_set_requests_attention(incoming_requests.size())
 	incoming_friend_requests_changed.emit(incoming_requests.size())
 
 	var profile: Dictionary = _dictionary_from_value(overview.get("profile", {}))
 	if status_message_input != null:
 		status_message_input.text = str(profile.get("statusMessage", ""))
+		_on_status_message_changed(status_message_input.text)
 
 
 func _render_friends(friends: Array) -> void:
 	_clear_children(friends_list)
+	var online_count := 0
+	for friend_value: Variant in friends:
+		var friend: Dictionary = _dictionary_from_value(friend_value)
+		var friend_user: Dictionary = _dictionary_from_value(friend.get("user", {}))
+		if bool(friend_user.get("online", false)):
+			online_count += 1
+	if friends_summary_label != null:
+		friends_summary_label.text = "%s friend%s  ·  %s online" % [
+			friends.size(),
+			"" if friends.size() == 1 else "s",
+			online_count,
+		]
 	if friends.is_empty():
-		friends_list.add_child(_empty_label("No friends yet."))
+		friends_list.add_child(_empty_label("No friends yet.\nAdd a trainer to start building your network."))
 		return
 
 	var rendered_count := 0
@@ -335,69 +422,93 @@ func _render_friends(friends: Array) -> void:
 		rendered_count += 1
 
 	if rendered_count == 0:
-		friends_list.add_child(_empty_label("No friends match your search."))
+		friends_list.add_child(_empty_label("No friends match this search."))
 
 
 func _friend_row(user: Dictionary) -> Control:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", 11)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	var online := bool(user.get("online", false))
-	var status_dot := Label.new()
-	status_dot.text = _presence_label_text(user)
-	status_dot.custom_minimum_size = Vector2(132, 0)
-	status_dot.add_theme_color_override("font_color", UI_SUCCESS if online else UI_OFFLINE)
-	status_dot.add_theme_font_size_override("font_size", 13)
-	row.add_child(status_dot)
+	row.add_child(_create_user_avatar(user, online))
+
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	identity.add_theme_constant_override("separation", 1)
+	row.add_child(identity)
+
+	var identity_header := HBoxContainer.new()
+	identity_header.add_theme_constant_override("separation", 8)
+	identity.add_child(identity_header)
 
 	var name_label := Label.new()
-	name_label.text = _display_user_name(user)
+	name_label.text = _user_display_name(user)
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.add_theme_color_override("font_color", UI_TEXT)
-	name_label.add_theme_font_size_override("font_size", 14)
-	row.add_child(name_label)
+	name_label.add_theme_font_size_override("font_size", 15)
+	identity_header.add_child(name_label)
 
-	var status_message := str(user.get("statusMessage", "")).strip_edges()
+	var presence_label := Label.new()
+	presence_label.text = _presence_label_text(user).to_upper()
+	presence_label.add_theme_color_override("font_color", UI_SUCCESS if online else UI_OFFLINE)
+	presence_label.add_theme_font_size_override("font_size", 9)
+	identity_header.add_child(presence_label)
+
+	var username_label := Label.new()
+	username_label.text = "@%s" % _user_handle(user)
+	username_label.add_theme_color_override("font_color", Color("#79d9ff"))
+	username_label.add_theme_font_size_override("font_size", 10)
+	identity.add_child(username_label)
+
+	var status_message: String = str(user.get("statusMessage", "")).strip_edges()
 	var status_message_label := Label.new()
-	status_message_label.text = status_message if status_message != "" else "No status"
-	status_message_label.custom_minimum_size = Vector2(180, 0)
+	status_message_label.text = status_message if status_message != "" else "No status message"
 	status_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_message_label.max_lines_visible = FRIEND_STATUS_PREVIEW_LINES
+	status_message_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	status_message_label.tooltip_text = status_message_label.text
 	status_message_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	status_message_label.add_theme_font_size_override("font_size", 13)
-	row.add_child(status_message_label)
+	status_message_label.add_theme_font_size_override("font_size", 11)
+	identity.add_child(status_message_label)
+
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_CENTER
+	actions.add_theme_constant_override("separation", 6)
+	row.add_child(actions)
+
+	var message_button := Button.new()
+	message_button.text = "Message"
+	message_button.tooltip_text = "Open a private conversation." if online else "This friend is offline."
+	message_button.custom_minimum_size = Vector2(96, 34)
+	message_button.disabled = not online
+	message_button.pressed.connect(_on_private_message_pressed.bind(user.duplicate(true)))
+	_apply_button_style(message_button, "primary")
+	actions.add_child(message_button)
+
+	var mail_button := Button.new()
+	mail_button.text = "Mail"
+	mail_button.tooltip_text = "Send mail to this trainer."
+	mail_button.custom_minimum_size = Vector2(72, 34)
+	mail_button.pressed.connect(_on_mail_pressed.bind(user.duplicate(true)))
+	_apply_button_style(mail_button)
+	actions.add_child(mail_button)
 
 	var remove_button := Button.new()
-	remove_button.text = "-"
-	remove_button.tooltip_text = "Remove friend"
-	remove_button.custom_minimum_size = Vector2(34, 30)
+	remove_button.text = "Remove"
+	remove_button.tooltip_text = "Remove this trainer from your friends."
+	remove_button.custom_minimum_size = Vector2(82, 34)
 	remove_button.pressed.connect(_on_remove_friend_pressed.bind(
 		str(user.get("username", "")),
 		_display_user_name(user)
 	))
-	_apply_compact_remove_button_style(remove_button)
-	row.add_child(remove_button)
+	_apply_button_style(remove_button, "danger")
+	remove_button.add_theme_font_size_override("font_size", 12)
+	actions.add_child(remove_button)
 
-	var mail_button := Button.new()
-	mail_button.text = "Mail"
-	mail_button.tooltip_text = "Send mail."
-	mail_button.custom_minimum_size = Vector2(70, 30)
-	mail_button.pressed.connect(_on_mail_pressed.bind(user.duplicate(true)))
-	_apply_button_style(mail_button, "success")
-	row.add_child(mail_button)
-
-	var message_button := Button.new()
-	message_button.text = "Message"
-	message_button.tooltip_text = "Open private message." if online else "Friend is offline."
-	message_button.custom_minimum_size = Vector2(92, 30)
-	message_button.disabled = not online
-	message_button.pressed.connect(_on_private_message_pressed.bind(user.duplicate(true)))
-	_apply_button_style(message_button, "primary")
-	row.add_child(message_button)
-
-	return _row_panel(row)
+	return _row_panel(row, UI_SUCCESS if online else UI_BORDER_SOFT)
 
 
 func _friend_matches_search(user: Dictionary) -> bool:
@@ -413,21 +524,21 @@ func _render_requests(incoming: Array, outgoing: Array) -> void:
 	_clear_children(requests_list)
 
 	var incoming_title := Label.new()
-	incoming_title.text = "Incoming"
+	incoming_title.text = "INCOMING  ·  %s" % incoming.size()
 	_apply_section_label_style(incoming_title)
 	requests_list.add_child(incoming_title)
 	if incoming.is_empty():
-		requests_list.add_child(_empty_label("No incoming requests."))
+		requests_list.add_child(_empty_label("No incoming friend requests."))
 	else:
 		for request_value: Variant in incoming:
 			requests_list.add_child(_incoming_request_row(_dictionary_from_value(request_value)))
 
 	var outgoing_title := Label.new()
-	outgoing_title.text = "Outgoing"
+	outgoing_title.text = "SENT  ·  %s" % outgoing.size()
 	_apply_section_label_style(outgoing_title)
 	requests_list.add_child(outgoing_title)
 	if outgoing.is_empty():
-		requests_list.add_child(_empty_label("No outgoing requests."))
+		requests_list.add_child(_empty_label("No pending requests sent."))
 	else:
 		for request_value: Variant in outgoing:
 			requests_list.add_child(_outgoing_request_row(_dictionary_from_value(request_value)))
@@ -442,13 +553,14 @@ func _setup_friendlist_tab_buttons() -> void:
 		{"index": 1, "label": "Requests", "id": "requests"},
 		{"index": 2, "label": "Blocked", "id": "blocked"},
 		{"index": 3, "label": "Status", "id": "status"},
-		{"index": 4, "label": "Trades", "id": "trades"},
 	]
 	for spec: Dictionary in tab_specs:
 		var button := Button.new()
 		button.text = str(spec.get("label", ""))
+		button.set_meta("base_label", str(spec.get("label", "")))
 		button.focus_mode = Control.FOCUS_NONE
-		button.custom_minimum_size = Vector2(78, 31)
+		button.custom_minimum_size = Vector2(0, 36)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.pressed.connect(_on_friendlist_tab_pressed.bind(int(spec.get("index", 0))))
 		tab_button_row.add_child(button)
 		tab_buttons[str(spec.get("id", ""))] = button
@@ -457,13 +569,29 @@ func _setup_friendlist_tab_buttons() -> void:
 	_refresh_friendlist_tab_buttons()
 
 
+func _refresh_tab_counts(friend_count: int, request_count: int, blocked_count: int) -> void:
+	var counts := {
+		"friends": friend_count,
+		"requests": request_count,
+		"blocked": blocked_count,
+	}
+	for tab_id: String in tab_buttons:
+		var button: Button = tab_buttons.get(tab_id) as Button
+		if button == null:
+			continue
+		var base_label: String = str(button.get_meta("base_label", button.text))
+		button.text = (
+			"%s  %s" % [base_label, int(counts.get(tab_id, 0))]
+			if counts.has(tab_id)
+			else base_label
+		)
+
+
 func _on_friendlist_tab_pressed(tab_index: int) -> void:
 	if tabs == null:
 		return
 	tabs.current_tab = tab_index
 	_refresh_friendlist_tab_buttons()
-	if tab_index == 4:
-		_load_trade_history()
 
 
 func _refresh_friendlist_tab_buttons() -> void:
@@ -475,7 +603,6 @@ func _refresh_friendlist_tab_buttons() -> void:
 		1: "requests",
 		2: "blocked",
 		3: "status",
-		4: "trades",
 	}
 	for index_value: Variant in id_by_index.keys():
 		var index: int = int(index_value)
@@ -483,61 +610,6 @@ func _refresh_friendlist_tab_buttons() -> void:
 		if button == null:
 			continue
 		_apply_friendlist_tab_button_style(button, index == active_index)
-
-
-func _load_trade_history() -> void:
-	if trade_history_list == null:
-		return
-	_clear_children(trade_history_list)
-	trade_history_list.add_child(_empty_label("Loading trade history..."))
-	var service := get_node_or_null("/root/TradeService")
-	if service == null:
-		_clear_children(trade_history_list)
-		trade_history_list.add_child(_empty_label("Trade history is unavailable."))
-		return
-	var result: Dictionary = await service.call("load_trade_history", 50, 0)
-	_clear_children(trade_history_list)
-	if not bool(result.get("success", false)):
-		trade_history_list.add_child(_empty_label(str(result.get("error", "Could not load trade history."))))
-		return
-	var body: Dictionary = _dictionary_from_value(result.get("body", {}))
-	var items := _array_from_value(body.get("items", []))
-	if items.is_empty():
-		trade_history_list.add_child(_empty_label("No trades yet."))
-		return
-	for item_value: Variant in items:
-		var item := _dictionary_from_value(item_value)
-		if item.is_empty():
-			continue
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 8)
-		var counterparty := _dictionary_from_value(item.get("counterparty", {}))
-		var summary := Label.new()
-		summary.text = "%s  |  %s" % [str(counterparty.get("displayName", counterparty.get("username", "Unknown"))), str(item.get("status", "unknown")).capitalize()]
-		summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		summary.add_theme_color_override("font_color", UI_TEXT)
-		row.add_child(summary)
-		if str(item.get("status", "")) == "completed":
-			var receipt_button := Button.new()
-			receipt_button.text = "Receipt"
-			receipt_button.pressed.connect(_load_trade_receipt.bind(str(item.get("tradeId", ""))))
-			_apply_button_style(receipt_button, "primary")
-			row.add_child(receipt_button)
-		trade_history_list.add_child(row)
-
-
-func _load_trade_receipt(trade_id: String) -> void:
-	var service := get_node_or_null("/root/TradeService")
-	if service == null or trade_id == "":
-		return
-	var result: Dictionary = await service.call("load_trade_receipt", trade_id)
-	if not bool(result.get("success", false)):
-		_set_status(str(result.get("error", "Could not load trade receipt.")))
-		return
-	var body := _dictionary_from_value(result.get("body", {}))
-	var receipt := _dictionary_from_value(body.get("receipt", {}))
-	var transfers := _array_from_value(receipt.get("transfers", []))
-	_set_status("Completed trade receipt: %d Pokemon transferred. Placement details are limited to your account." % transfers.size())
 
 
 func _setup_requests_tab_attention_badge() -> void:
@@ -560,7 +632,7 @@ func _setup_add_friend_dialog() -> void:
 	add_friend_dialog.visible = false
 	add_friend_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_friend_dialog.z_index = 120
-	add_friend_dialog.custom_minimum_size = Vector2(340, 156)
+	add_friend_dialog.custom_minimum_size = Vector2(390, 184)
 	add_friend_dialog.add_theme_stylebox_override("panel", _make_outer_style())
 	add_child(add_friend_dialog)
 
@@ -577,12 +649,19 @@ func _setup_add_friend_dialog() -> void:
 
 	var title := Label.new()
 	title.text = "Add Friend"
-	title.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	title.add_theme_font_size_override("font_size", 17)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	title.add_theme_font_size_override("font_size", 18)
 	layout.add_child(title)
 
+	var hint := Label.new()
+	hint.text = "Send a friend request using a trainer's username."
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	hint.add_theme_font_size_override("font_size", 11)
+	layout.add_child(hint)
+
 	add_friend_input = LineEdit.new()
-	add_friend_input.placeholder_text = "Username"
+	add_friend_input.placeholder_text = "Trainer username"
+	add_friend_input.custom_minimum_size = Vector2(0, 38)
 	add_friend_input.text_submitted.connect(_on_add_friend_submitted)
 	_apply_line_edit_style(add_friend_input)
 	layout.add_child(add_friend_input)
@@ -600,8 +679,8 @@ func _setup_add_friend_dialog() -> void:
 	button_row.add_child(add_friend_cancel_button)
 
 	add_friend_confirm_button = Button.new()
-	add_friend_confirm_button.text = "Add"
-	add_friend_confirm_button.custom_minimum_size = Vector2(92, 32)
+	add_friend_confirm_button.text = "Send Request"
+	add_friend_confirm_button.custom_minimum_size = Vector2(126, 34)
 	add_friend_confirm_button.pressed.connect(_confirm_add_friend)
 	_apply_button_style(add_friend_confirm_button, "success")
 	button_row.add_child(add_friend_confirm_button)
@@ -612,7 +691,7 @@ func _show_add_friend_dialog() -> void:
 		return
 	_hide_remove_friend_confirm_dialog()
 	add_friend_input.text = ""
-	add_friend_dialog.size = Vector2(340, 156)
+	add_friend_dialog.size = Vector2(390, 184)
 	add_friend_dialog.position = (size - add_friend_dialog.size) * 0.5
 	add_friend_dialog.visible = true
 	add_friend_dialog.move_to_front()
@@ -641,7 +720,7 @@ func _setup_remove_friend_confirm_dialog() -> void:
 	remove_friend_confirm_dialog.visible = false
 	remove_friend_confirm_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
 	remove_friend_confirm_dialog.z_index = 120
-	remove_friend_confirm_dialog.custom_minimum_size = Vector2(320, 150)
+	remove_friend_confirm_dialog.custom_minimum_size = Vector2(380, 170)
 	remove_friend_confirm_dialog.add_theme_stylebox_override("panel", _make_outer_style())
 	add_child(remove_friend_confirm_dialog)
 
@@ -658,8 +737,8 @@ func _setup_remove_friend_confirm_dialog() -> void:
 
 	var title := Label.new()
 	title.text = "Remove Friend"
-	title.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	title.add_theme_font_size_override("font_size", 17)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	title.add_theme_font_size_override("font_size", 18)
 	layout.add_child(title)
 
 	remove_friend_confirm_label = Label.new()
@@ -696,12 +775,11 @@ func _show_remove_friend_confirm_dialog(username: String, display_name: String) 
 	var name_text: String = display_name.strip_edges()
 	if name_text == "":
 		name_text = pending_remove_friend_username
-	remove_friend_confirm_label.text = "Remove %s from your friendlist?" % name_text
-	remove_friend_confirm_dialog.size = Vector2(320, 150)
+	remove_friend_confirm_label.text = "Remove %s from your friends?" % name_text
+	remove_friend_confirm_dialog.size = Vector2(380, 170)
 	remove_friend_confirm_dialog.position = (size - remove_friend_confirm_dialog.size) * 0.5
 	remove_friend_confirm_dialog.visible = true
 	remove_friend_confirm_dialog.move_to_front()
-	remove_friend_confirm_button.grab_focus()
 
 
 func _hide_remove_friend_confirm_dialog() -> void:
@@ -730,47 +808,44 @@ func _make_attention_badge_style() -> StyleBoxFlat:
 
 func _incoming_request_row(request: Dictionary) -> Control:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", 10)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var requester: Dictionary = _dictionary_from_value(request.get("requester", {}))
 	var friendship_id := int(request.get("id", 0))
 
-	var label := Label.new()
-	label.text = _display_user_name(requester)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(label)
+	row.add_child(_create_user_avatar(requester, true))
+	row.add_child(_create_request_identity(requester, "Wants to add you as a friend"))
 
 	var accept_button := Button.new()
 	accept_button.text = "Accept"
+	accept_button.custom_minimum_size = Vector2(92, 34)
 	accept_button.pressed.connect(_on_accept_request_pressed.bind(friendship_id))
 	_apply_button_style(accept_button, "primary")
 	row.add_child(accept_button)
 
 	var decline_button := Button.new()
 	decline_button.text = "Decline"
+	decline_button.custom_minimum_size = Vector2(92, 34)
 	decline_button.pressed.connect(_on_decline_request_pressed.bind(friendship_id))
 	_apply_button_style(decline_button, "danger")
 	row.add_child(decline_button)
 
-	return _row_panel(row)
+	return _row_panel(row, UI_BORDER)
 
 
 func _outgoing_request_row(request: Dictionary) -> Control:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", 10)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var addressee: Dictionary = _dictionary_from_value(request.get("addressee", {}))
 	var friendship_id := int(request.get("id", 0))
 
-	var label := Label.new()
-	label.text = _display_user_name(addressee)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(label)
+	row.add_child(_create_user_avatar(addressee, false))
+	row.add_child(_create_request_identity(addressee, "Waiting for a response"))
 
 	var cancel_button := Button.new()
 	cancel_button.text = "Cancel"
+	cancel_button.custom_minimum_size = Vector2(92, 34)
 	cancel_button.pressed.connect(_on_cancel_request_pressed.bind(friendship_id))
 	_apply_button_style(cancel_button)
 	row.add_child(cancel_button)
@@ -781,7 +856,7 @@ func _outgoing_request_row(request: Dictionary) -> Control:
 func _render_blocked(blocked_users: Array) -> void:
 	_clear_children(blocked_list)
 	if blocked_users.is_empty():
-		blocked_list.add_child(_empty_label("No blocked users."))
+		blocked_list.add_child(_empty_label("No blocked trainers.\nBlocked trainers will be listed here."))
 		return
 
 	for block_value: Variant in blocked_users:
@@ -792,22 +867,75 @@ func _render_blocked(blocked_users: Array) -> void:
 
 func _blocked_row(user: Dictionary) -> Control:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", 10)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
-	var label := Label.new()
-	label.text = _display_user_name(user)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(label)
+	row.add_child(_create_user_avatar(user, false, true))
+	row.add_child(_create_request_identity(user, "Messages and social invites are hidden"))
 
 	var unblock_button := Button.new()
 	unblock_button.text = "Unblock"
+	unblock_button.custom_minimum_size = Vector2(104, 34)
 	unblock_button.pressed.connect(_on_unblock_user_pressed.bind(str(user.get("username", ""))))
 	_apply_button_style(unblock_button)
 	row.add_child(unblock_button)
 
-	return _row_panel(row)
+	return _row_panel(row, Color("#8f4650"))
+
+
+func _create_user_avatar(user: Dictionary, online: bool, blocked: bool = false) -> Control:
+	var frame := PanelContainer.new()
+	frame.custom_minimum_size = Vector2(46, 46)
+	var border_color := Color("#8f4650") if blocked else (UI_SUCCESS if online else UI_BORDER_SOFT)
+	frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a1b2be8"), border_color, 10, 1)
+	)
+
+	var initials := Label.new()
+	initials.text = _user_initials(user)
+	initials.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	initials.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	initials.add_theme_font_size_override("font_size", 13)
+	initials.add_theme_color_override("font_color", UI_MUTED_TEXT if blocked else UI_TEXT)
+	initials.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_child(initials)
+	return frame
+
+
+func _create_request_identity(user: Dictionary, detail_text: String) -> Control:
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	identity.add_theme_constant_override("separation", 1)
+
+	var name_label := Label.new()
+	name_label.text = _user_display_name(user)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	identity.add_child(name_label)
+
+	var detail_label := Label.new()
+	detail_label.text = "@%s  ·  %s" % [_user_handle(user), detail_text]
+	detail_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	detail_label.add_theme_font_size_override("font_size", 10)
+	detail_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	identity.add_child(detail_label)
+	return identity
+
+
+func _user_initials(user: Dictionary) -> String:
+	var source: String = _user_display_name(user).strip_edges()
+	if source == "":
+		source = _user_handle(user)
+	var words: PackedStringArray = source.split(" ", false)
+	if words.is_empty():
+		return "?"
+	var initials := words[0].substr(0, 1)
+	if words.size() > 1:
+		initials += words[words.size() - 1].substr(0, 1)
+	return initials.to_upper()
 
 
 func _on_refresh_pressed() -> void:
@@ -828,6 +956,11 @@ func _on_mail_pressed(user: Dictionary) -> void:
 func _on_friend_search_changed(query: String) -> void:
 	friend_search_query = query
 	_render_friends(_array_from_value(overview.get("friends", [])))
+
+
+func _on_status_message_changed(message: String) -> void:
+	if status_character_label != null:
+		status_character_label.text = "%s / 100" % message.length()
 
 
 func _on_add_friend_submitted(_username: String) -> void:
@@ -922,8 +1055,8 @@ func _apply_action_result(result: Dictionary, success_message: String) -> void:
 
 
 func _display_user_name(user: Dictionary) -> String:
-	var username := str(user.get("username", "")).strip_edges()
-	var display_name := str(user.get("displayName", "")).strip_edges()
+	var username := _user_handle(user)
+	var display_name := _user_display_name(user)
 	if display_name != "" and display_name.to_lower() != username.to_lower():
 		return "%s (@%s)" % [display_name, username]
 	if display_name != "":
@@ -931,13 +1064,25 @@ func _display_user_name(user: Dictionary) -> String:
 	return username
 
 
+func _user_display_name(user: Dictionary) -> String:
+	var display_name := str(user.get("displayName", "")).strip_edges()
+	if display_name != "":
+		return display_name
+	return _user_handle(user)
+
+
+func _user_handle(user: Dictionary) -> String:
+	var username := str(user.get("username", "")).strip_edges()
+	return username if username != "" else "unknown"
+
+
 func _presence_label_text(user: Dictionary) -> String:
 	if bool(user.get("online", false)):
-		return "● Online"
+		return "Online"
 	var last_seen_at: String = str(user.get("lastSeenAt", "")).strip_edges()
 	if last_seen_at == "":
-		return "● Offline"
-	return "● Last seen %s" % _relative_last_seen_text(last_seen_at)
+		return "Offline"
+	return "Last seen %s" % _relative_last_seen_text(last_seen_at)
 
 
 func _relative_last_seen_text(last_seen_at: String) -> String:
@@ -991,14 +1136,19 @@ func _unix_from_iso_datetime(value: String) -> float:
 func _empty_label(text: String) -> Label:
 	var label := Label.new()
 	label.text = text
+	label.custom_minimum_size = Vector2(0, 72)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_font_size_override("font_size", 12)
 	return label
 
 
 func _set_status(message: String) -> void:
 	if status_label != null:
 		status_label.text = message
+		status_label.visible = message != ""
 		status_label.add_theme_color_override("font_color", UI_MUTED_TEXT if message == "" else UI_SECTION_TEXT)
 
 
@@ -1046,15 +1196,16 @@ func _array_from_value(value: Variant) -> Array:
 	return array
 
 
-func _row_panel(content: Control) -> PanelContainer:
+func _row_panel(content: Control, accent_color: Color = UI_BORDER_SOFT) -> PanelContainer:
 	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 72)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_row_style())
+	panel.add_theme_stylebox_override("panel", _make_row_style(accent_color))
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_left", 11)
+	margin.add_theme_constant_override("margin_top", 8)
 	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 7)
+	margin.add_theme_constant_override("margin_bottom", 8)
 	panel.add_child(margin)
 	margin.add_child(content)
 	return panel
@@ -1062,22 +1213,22 @@ func _row_panel(content: Control) -> PanelContainer:
 
 func _apply_section_label_style(label: Label) -> void:
 	label.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	label.add_theme_font_size_override("font_size", 15)
+	label.add_theme_font_size_override("font_size", 10)
 
 
 func _apply_button_style(button: Button, variant: String = "default") -> void:
 	var normal_bg := UI_SLOT_BG
-	var hover_bg := Color("#151f36f2")
-	var pressed_bg := Color("#080d18f2")
+	var hover_bg := UI_HOVER_BG
+	var pressed_bg := Color("#060e18f2")
 	var border := UI_BORDER_SOFT
-	var hover_border := UI_BORDER
+	var hover_border := UI_BORDER_FOCUS
 	var font_color := UI_TEXT
 	if variant == "primary":
-		normal_bg = Color("#17345ff0")
-		hover_bg = Color("#22508eee")
-		pressed_bg = Color("#0d2344f2")
-		border = Color("#4f82c6")
-		hover_border = Color("#8eb8ff")
+		normal_bg = Color("#0b2235f2")
+		hover_bg = Color("#12334df2")
+		pressed_bg = Color("#071624f2")
+		border = Color("#4b9dc4cc")
+		hover_border = Color("#79d9ff")
 		font_color = Color("#e9f2ff")
 	elif variant == "success":
 		normal_bg = Color("#123b26f0")
@@ -1108,6 +1259,7 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 		8,
 		1
 	))
+	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
@@ -1128,15 +1280,15 @@ func _apply_compact_remove_button_style(button: Button) -> void:
 
 
 func _apply_friendlist_tab_button_style(button: Button, selected: bool) -> void:
-	var background: Color = Color("#152447ee") if selected else Color("#07111edc")
-	var hover_background: Color = Color("#1d3268f2")
-	var border: Color = UI_BORDER if selected else Color("#29415f")
+	var background: Color = UI_SLOT_BG if selected else Color("#07111edc")
+	var hover_background: Color = UI_HOVER_BG
+	var border: Color = Color("#60d3ffbb") if selected else Color("#29415f")
 	var hover_border: Color = UI_BORDER_FOCUS
-	var font_color: Color = UI_SECTION_TEXT if selected else UI_MUTED_TEXT
+	var font_color: Color = UI_TEXT if selected else UI_MUTED_TEXT
 	button.add_theme_color_override("font_color", font_color)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
-	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_font_size_override("font_size", 13)
 	button.add_theme_stylebox_override("normal", _make_tab_style(background, border, selected))
 	button.add_theme_stylebox_override("hover", _make_tab_style(hover_background, hover_border, selected))
 	button.add_theme_stylebox_override("pressed", _make_tab_style(Color("#0d1730f2"), hover_border, selected))
@@ -1152,7 +1304,7 @@ func _make_tab_style(background_color: Color, border_color: Color, selected: boo
 	style.content_margin_bottom = 7
 	if selected:
 		style.border_width_bottom = 2
-		style.border_color = UI_BORDER
+		style.border_color = Color("#60d3ff")
 	return style
 
 
@@ -1179,7 +1331,7 @@ func _create_attention_badge_for_button(button: Button, right_offset: float = 2.
 func _apply_line_edit_style(input: LineEdit) -> void:
 	input.add_theme_color_override("font_color", UI_TEXT)
 	input.add_theme_color_override("font_placeholder_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.7))
-	input.add_theme_color_override("caret_color", UI_SECTION_TEXT)
+	input.add_theme_color_override("caret_color", Color("#79d9ff"))
 	input.add_theme_font_size_override("font_size", 14)
 	input.add_theme_stylebox_override("normal", _make_input_style(UI_INPUT_BG, UI_BORDER_SOFT))
 	input.add_theme_stylebox_override("focus", _make_input_style(Color("#071225f2"), UI_BORDER_FOCUS, 2))
@@ -1202,19 +1354,25 @@ func _make_panel_style(background_color: Color, border_color: Color, corner_radi
 
 
 func _make_outer_style() -> StyleBoxFlat:
-	var style := _make_panel_style(UI_BG, UI_BORDER_FRIENDLIST, 10, 1)
-	style.shadow_color = Color(0, 0, 0, 0.38)
-	style.shadow_size = 10
-	style.shadow_offset = Vector2(0, 4)
+	var style := _make_panel_style(UI_BG, UI_BORDER_FRIENDLIST, 13, 1)
+	style.border_width_top = 2
+	style.shadow_color = Color(0, 0, 0, 0.48)
+	style.shadow_size = 16
+	style.shadow_offset = Vector2(0, 7)
 	return style
 
 
 func _make_inner_style() -> StyleBoxFlat:
-	return _make_panel_style(Color("#05091288"), UI_BORDER_FRIENDLIST_INNER, 8, 1)
+	return _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FRIENDLIST_INNER, 10, 1)
 
 
-func _make_row_style() -> StyleBoxFlat:
-	return _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1)
+func _make_row_style(accent_color: Color = UI_BORDER_SOFT) -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SLOT_BG, Color(accent_color.r, accent_color.g, accent_color.b, 0.58), 9, 1)
+	style.border_width_left = 3
+	style.shadow_color = Color("#00000026")
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 1)
+	return style
 
 
 func _make_button_style(background_color: Color, border_color: Color, corner_radius: int = 8, border_width: int = 1) -> StyleBoxFlat:

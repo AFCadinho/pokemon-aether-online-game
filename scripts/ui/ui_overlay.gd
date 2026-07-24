@@ -162,7 +162,8 @@ const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
 const BAG_SIZE := Vector2(1120, 660)
-const MAIL_POPUP_SIZE := Vector2(760, 500)
+const MAIL_POPUP_SIZE := Vector2(920, 600)
+const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 650)
 const PC_POPUP_SIZE := Vector2(980, 600)
 const PC_BOX_SLOTS_PER_ROW := 6
 const PC_BOX_SLOT_SIZE := Vector2(106, 86)
@@ -1401,6 +1402,8 @@ func _apply_mail_ui_styles() -> void:
 	mail_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
 	mail_compose_popup.add_theme_stylebox_override("panel", _make_mail_outer_style())
 	_setup_mail_compose_help_button()
+	_setup_mail_workspace_structure()
+	_setup_mail_compose_workspace_structure()
 	_set_mail_popup_size()
 	var mail_header_row: Control = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow
 	mail_header_row.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -1410,15 +1413,23 @@ func _apply_mail_ui_styles() -> void:
 	var mail_detail_panel: PanelContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel
 	mail_list_panel.add_theme_stylebox_override("panel", _make_mail_inner_style())
 	mail_detail_panel.add_theme_stylebox_override("panel", _make_mail_inner_style())
+	var mail_list_scroll: ScrollContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll
+	var mail_body_scroll: ScrollContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll
+	var mail_attachment_scroll: ScrollContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll
+	mail_list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	mail_body_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	mail_attachment_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	mail_body_scroll.add_theme_stylebox_override("panel", _make_mail_message_style())
+	mail_attachment_scroll.add_theme_stylebox_override("panel", _make_mail_attachment_area_style())
 	mail_subject_label.add_theme_color_override("font_color", UI_TEXT)
-	mail_subject_label.add_theme_color_override("font_shadow_color", Color("#000000aa"))
-	mail_subject_label.add_theme_constant_override("shadow_offset_x", 1)
-	mail_subject_label.add_theme_constant_override("shadow_offset_y", 1)
-	mail_sender_label.add_theme_color_override("font_color", Color("#f2cf78"))
+	mail_subject_label.add_theme_font_size_override("font_size", 22)
+	mail_subject_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	mail_sender_label.add_theme_color_override("font_color", Color("#79d9ff"))
+	mail_sender_label.add_theme_font_size_override("font_size", 12)
 	mail_body_label.add_theme_color_override("font_color", UI_TEXT)
+	mail_body_label.add_theme_font_size_override("font_size", 14)
 	_apply_button_style(mail_compose_button, "primary")
 	_apply_button_style(mail_close_button)
-	_apply_button_style(mail_close_button, "danger")
 	_apply_button_style(mail_inbox_button, "primary")
 	_apply_button_style(mail_sent_button)
 	_apply_button_style(mail_claim_button, "primary")
@@ -1431,7 +1442,282 @@ func _apply_mail_ui_styles() -> void:
 	_apply_line_edit_style(mail_compose_recipient_input)
 	_apply_line_edit_style(mail_compose_subject_input)
 	_apply_line_edit_style(mail_item_search_input)
+	_apply_line_edit_style(mail_item_quantity.get_line_edit())
+	_apply_button_style(mail_pokemon_option)
 	_apply_text_edit_style(mail_compose_body_input)
+	var selected_attachments_scroll: ScrollContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll
+	selected_attachments_scroll.add_theme_stylebox_override("panel", _make_mail_attachment_area_style())
+
+func _setup_mail_workspace_structure() -> void:
+	if bool(mail_popup.get_meta("workspace_structure_ready", false)):
+		return
+	mail_popup.set_meta("workspace_structure_ready", true)
+	mail_popup.z_index = UI_BASE_Z_INDEX
+
+	var outer_margin: MarginContainer = $Control/MailPopup/MarginContainer
+	outer_margin.add_theme_constant_override("margin_left", 18)
+	outer_margin.add_theme_constant_override("margin_top", 16)
+	outer_margin.add_theme_constant_override("margin_right", 18)
+	outer_margin.add_theme_constant_override("margin_bottom", 18)
+
+	var layout: VBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer
+	layout.add_theme_constant_override("separation", 12)
+
+	var header: HBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow
+	header.custom_minimum_size = Vector2(0, 52)
+	header.add_theme_constant_override("separation", 10)
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+
+	var title_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/Title
+	var icon_frame := PanelContainer.new()
+	icon_frame.name = "MailIconFrame"
+	icon_frame.custom_minimum_size = Vector2(44, 44)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a2133e8"), Color("#60d3ff99"), 10, 1)
+	)
+	header.add_child(icon_frame)
+	header.move_child(icon_frame, 0)
+
+	var icon_center := CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_child(icon_center)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(31, 31)
+	icon.texture = SOCIALS_MAIL_ICON
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(icon)
+
+	var heading := VBoxContainer.new()
+	heading.name = "Heading"
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_theme_constant_override("separation", 0)
+	header.add_child(heading)
+	header.move_child(heading, 1)
+	title_label.reparent(heading)
+	title_label.text = "Mailbox"
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_label.add_theme_font_size_override("font_size", 21)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+
+	var subtitle := Label.new()
+	subtitle.name = "Subtitle"
+	subtitle.text = "Messages, deliveries and trainer gifts"
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(subtitle)
+
+	mail_compose_button.text = "+  New Mail"
+	mail_compose_button.custom_minimum_size = Vector2(132, 38)
+	mail_close_button.text = "×"
+	mail_close_button.tooltip_text = "Close mailbox"
+	mail_close_button.custom_minimum_size = Vector2(38, 38)
+	mail_close_button.add_theme_font_size_override("font_size", 18)
+
+	var tab_row: HBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer/MailTabRow
+	tab_row.custom_minimum_size = Vector2(0, 38)
+	tab_row.add_theme_constant_override("separation", 6)
+	mail_inbox_button.custom_minimum_size = Vector2(124, 36)
+	mail_sent_button.custom_minimum_size = Vector2(124, 36)
+	for button: Button in [
+		mail_compose_button,
+		mail_close_button,
+		mail_inbox_button,
+		mail_sent_button,
+		mail_claim_button,
+		mail_reply_button,
+		mail_delete_button,
+	]:
+		button.focus_mode = Control.FOCUS_NONE
+
+	var tab_spacer := Control.new()
+	tab_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tab_row.add_child(tab_spacer)
+
+	var mailbox_hint := Label.new()
+	mailbox_hint.text = "Select a message to read it"
+	mailbox_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	mailbox_hint.add_theme_font_size_override("font_size", 11)
+	mailbox_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	tab_row.add_child(mailbox_hint)
+
+	var body_row: HBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow
+	body_row.add_theme_constant_override("separation", 12)
+	var list_panel: PanelContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel
+	list_panel.custom_minimum_size = Vector2(306, 0)
+	var list_margin: MarginContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer
+	list_margin.add_theme_constant_override("margin_left", 12)
+	list_margin.add_theme_constant_override("margin_top", 12)
+	list_margin.add_theme_constant_override("margin_right", 10)
+	list_margin.add_theme_constant_override("margin_bottom", 12)
+	mail_list.add_theme_constant_override("separation", 7)
+
+	var inbox_label: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList/InboxLabel
+	inbox_label.text = "INBOX"
+	inbox_label.add_theme_font_size_override("font_size", 10)
+	inbox_label.add_theme_color_override("font_color", Color("#60d3ff"))
+
+	mail_empty_inbox_label.custom_minimum_size = Vector2(0, 84)
+	mail_empty_inbox_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	mail_empty_inbox_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	mail_empty_inbox_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	mail_empty_inbox_label.add_theme_font_size_override("font_size", 13)
+	mail_empty_inbox_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+	var detail_margin: MarginContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer
+	detail_margin.add_theme_constant_override("margin_left", 18)
+	detail_margin.add_theme_constant_override("margin_top", 15)
+	detail_margin.add_theme_constant_override("margin_right", 18)
+	detail_margin.add_theme_constant_override("margin_bottom", 16)
+	var detail_stack: VBoxContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack
+	detail_stack.add_theme_constant_override("separation", 9)
+
+	var message_caption := Label.new()
+	message_caption.name = "MessageCaption"
+	message_caption.text = "MESSAGE"
+	message_caption.add_theme_font_size_override("font_size", 10)
+	message_caption.add_theme_color_override("font_color", Color("#60d3ff"))
+	detail_stack.add_child(message_caption)
+	detail_stack.move_child(message_caption, 0)
+
+	var metadata_divider := ColorRect.new()
+	metadata_divider.name = "MetadataDivider"
+	metadata_divider.custom_minimum_size = Vector2(0, 1)
+	metadata_divider.color = Color("#31507088")
+	metadata_divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	detail_stack.add_child(metadata_divider)
+	detail_stack.move_child(metadata_divider, mail_sender_label.get_index() + 1)
+
+	var body_scroll: ScrollContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/BodyScroll
+	body_scroll.custom_minimum_size = Vector2(0, 170)
+	var body_label_margin := 12
+	mail_body_label.add_theme_constant_override("outline_size", 0)
+	mail_body_label.custom_minimum_size = Vector2(0, body_label_margin)
+
+	var attachment_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentTitle
+	attachment_title.text = "ATTACHMENTS"
+	attachment_title.add_theme_font_size_override("font_size", 10)
+	attachment_title.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	var attachment_scroll: ScrollContainer = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentScroll
+	attachment_scroll.custom_minimum_size = Vector2(0, 112)
+	attachment_scroll.size_flags_vertical = Control.SIZE_FILL
+
+	var action_row := HBoxContainer.new()
+	action_row.name = "ActionRow"
+	action_row.add_theme_constant_override("separation", 8)
+	detail_stack.add_child(action_row)
+	mail_claim_button.reparent(action_row)
+	mail_claim_button.custom_minimum_size = Vector2(144, 38)
+	var action_spacer := Control.new()
+	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_row.add_child(action_spacer)
+	mail_reply_button.reparent(action_row)
+	mail_reply_button.custom_minimum_size = Vector2(92, 38)
+	mail_delete_button.reparent(action_row)
+	mail_delete_button.custom_minimum_size = Vector2(104, 38)
+
+func _setup_mail_compose_workspace_structure() -> void:
+	if bool(mail_compose_popup.get_meta("workspace_structure_ready", false)):
+		return
+	mail_compose_popup.set_meta("workspace_structure_ready", true)
+	mail_compose_popup.custom_minimum_size = MAIL_COMPOSE_POPUP_SIZE
+	mail_compose_popup.size = MAIL_COMPOSE_POPUP_SIZE
+	mail_compose_popup.offset_left = -MAIL_COMPOSE_POPUP_SIZE.x / 2.0
+	mail_compose_popup.offset_top = -MAIL_COMPOSE_POPUP_SIZE.y / 2.0
+	mail_compose_popup.offset_right = MAIL_COMPOSE_POPUP_SIZE.x / 2.0
+	mail_compose_popup.offset_bottom = MAIL_COMPOSE_POPUP_SIZE.y / 2.0
+
+	var outer_margin: MarginContainer = $Control/MailComposePopup/MarginContainer
+	outer_margin.add_theme_constant_override("margin_left", 18)
+	outer_margin.add_theme_constant_override("margin_top", 16)
+	outer_margin.add_theme_constant_override("margin_right", 18)
+	outer_margin.add_theme_constant_override("margin_bottom", 18)
+	var layout: VBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer
+	layout.add_theme_constant_override("separation", 8)
+
+	var title_label: Label = layout.find_child("Title", true, false) as Label
+	if title_label == null:
+		return
+	var header: HBoxContainer = title_label.get_parent() as HBoxContainer
+	header.custom_minimum_size = Vector2(0, 42)
+	header.add_theme_constant_override("separation", 8)
+	title_label.text = "Compose Mail"
+	title_label.add_theme_font_size_override("font_size", 21)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+	mail_compose_help_button.tooltip_text = "View mail rules and delivery fees"
+	_apply_button_style(mail_compose_help_button)
+
+	mail_compose_close_button.reparent(header)
+	mail_compose_close_button.text = "×"
+	mail_compose_close_button.tooltip_text = "Close composer"
+	mail_compose_close_button.custom_minimum_size = Vector2(36, 34)
+	mail_compose_close_button.add_theme_font_size_override("font_size", 18)
+
+	var subtitle := Label.new()
+	subtitle.name = "Subtitle"
+	subtitle.text = "Send a message or safely deliver items and Pokémon."
+	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(subtitle)
+	layout.move_child(subtitle, header.get_index() + 1)
+
+	_add_mail_compose_field_caption(layout, mail_compose_recipient_input, "TO")
+	_add_mail_compose_field_caption(layout, mail_compose_subject_input, "SUBJECT")
+	_add_mail_compose_field_caption(layout, mail_compose_body_input, "MESSAGE")
+	mail_compose_recipient_input.custom_minimum_size = Vector2(0, 38)
+	mail_compose_subject_input.custom_minimum_size = Vector2(0, 38)
+	mail_compose_body_input.custom_minimum_size = Vector2(0, 112)
+
+	var attachments_title: Label = $Control/MailComposePopup/MarginContainer/VBoxContainer/AttachmentsTitle
+	attachments_title.text = "ATTACHMENTS"
+	attachments_title.add_theme_font_size_override("font_size", 10)
+	attachments_title.add_theme_color_override("font_color", Color("#60d3ff"))
+	var item_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow
+	var pokemon_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/PokemonAttachmentRow
+	_add_mail_compose_field_caption(layout, item_row, "FROM YOUR BAG")
+	_add_mail_compose_field_caption(layout, pokemon_row, "FROM YOUR PARTY")
+	mail_item_search_input.custom_minimum_size = Vector2(300, 36)
+	mail_item_quantity.custom_minimum_size = Vector2(88, 36)
+	mail_add_item_button.custom_minimum_size = Vector2(112, 36)
+	mail_pokemon_option.custom_minimum_size = Vector2(390, 36)
+	mail_add_pokemon_button.custom_minimum_size = Vector2(138, 36)
+	for button: Button in [
+		mail_compose_help_button,
+		mail_compose_close_button,
+		mail_add_item_button,
+		mail_pokemon_option,
+		mail_add_pokemon_button,
+		mail_compose_send_button,
+	]:
+		button.focus_mode = Control.FOCUS_NONE
+
+	var selected_scroll: ScrollContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/SelectedAttachmentsScroll
+	selected_scroll.custom_minimum_size = Vector2(0, 118)
+	selected_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	mail_selected_attachments_list.add_theme_constant_override("separation", 6)
+
+	var button_row: HBoxContainer = $Control/MailComposePopup/MarginContainer/VBoxContainer/ButtonRow
+	button_row.add_theme_constant_override("separation", 8)
+	mail_compose_send_button.text = "Send Mail"
+	mail_compose_send_button.custom_minimum_size = Vector2(136, 40)
+
+func _add_mail_compose_field_caption(layout: VBoxContainer, target: Control, caption_text: String) -> void:
+	var caption := Label.new()
+	caption.name = "%sCaption" % caption_text.to_pascal_case().replace(" ", "")
+	caption.text = caption_text
+	caption.add_theme_font_size_override("font_size", 9)
+	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	var target_index: int = target.get_index()
+	layout.add_child(caption)
+	layout.move_child(caption, target_index)
 
 func _setup_pc_ui() -> void:
 	if pc_popup != null:
@@ -24590,53 +24876,123 @@ func _refresh_mail_attachment_summary() -> void:
 		child.queue_free()
 
 	var has_attachments: bool = not mail_selected_item_attachments.is_empty() or not mail_selected_pokemon_ids.is_empty()
-	var has_item_attachments: bool = not mail_selected_item_attachments.is_empty()
-	var has_pokemon_attachments: bool = not mail_selected_pokemon_ids.is_empty()
+	if not has_attachments:
+		var empty_label := Label.new()
+		empty_label.text = "No attachments selected\nYou can also send mail without an attachment."
+		empty_label.custom_minimum_size = Vector2(0, 56)
+		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		empty_label.add_theme_font_size_override("font_size", 12)
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		mail_selected_attachments_list.add_child(empty_label)
 
-	_add_mail_summary_text("Attachment Overview")
-	_add_mail_summary_divider()
-
-	_add_mail_summary_text("Items")
 	for attachment: Dictionary in mail_selected_item_attachments:
-		_add_mail_summary_text("%sx %s" % [
-			int(attachment.get("quantity", 1)),
-			str(attachment.get("name", attachment.get("itemId", "Item"))),
-		])
-	if not has_item_attachments:
-		_add_mail_summary_text("None")
+		var item_id: String = str(attachment.get("itemId", "")).strip_edges()
+		var item_name: String = str(attachment.get("name", item_id if item_id != "" else "Item"))
+		var quantity: int = max(int(attachment.get("quantity", 1)), 1)
+		mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
+			_load_item_icon(item_id),
+			item_name,
+			"Item stack  ·  x%s" % quantity,
+			_on_mail_remove_item_attachment_pressed.bind(item_id)
+		))
 
-	if has_item_attachments and has_pokemon_attachments:
-		_add_mail_summary_divider()
-	_add_mail_summary_text("Pokemon")
 	for pokemon_id: int in mail_selected_pokemon_ids:
 		var pokemon: Pokemon = _get_party_pokemon_by_owned_id(pokemon_id)
 		if pokemon != null:
-			_add_mail_summary_text("%s Lv. %s" % [pokemon.species, pokemon.level])
-	if not has_pokemon_attachments:
-		_add_mail_summary_text("None")
+			mail_selected_attachments_list.add_child(_create_mail_compose_attachment_row(
+				PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny),
+				pokemon.species,
+				"Pokémon  ·  Lv. %s" % pokemon.level,
+				_on_mail_remove_pokemon_attachment_pressed.bind(pokemon_id)
+			))
 
-	if not has_attachments:
-		_add_mail_summary_text("Selected attachments: none")
-	_add_mail_summary_divider()
-	_add_mail_summary_text("Item attachments: %s / 5" % mail_selected_item_attachments.size())
-	_add_mail_summary_text("Pokemon attachments: %s / 5" % mail_selected_pokemon_ids.size())
-	_add_mail_summary_text("Party kept: %s Pokemon" % max(PlayerSave.party.size() - mail_selected_pokemon_ids.size(), 0))
+	var limit_label := Label.new()
+	limit_label.text = "ITEM STACKS  %s/5     ·     POKÉMON  %s/5     ·     PARTY KEPT  %s" % [
+		mail_selected_item_attachments.size(),
+		mail_selected_pokemon_ids.size(),
+		max(PlayerSave.party.size() - mail_selected_pokemon_ids.size(), 0),
+	]
+	limit_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	limit_label.add_theme_font_size_override("font_size", 9)
+	limit_label.add_theme_color_override("font_color", Color("#79d9ff"))
+	mail_selected_attachments_list.add_child(limit_label)
 
-func _add_mail_summary_text(text: String) -> void:
-	var label := Label.new()
-	label.text = text
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_font_size_override("font_size", 13)
-	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	mail_selected_attachments_list.add_child(label)
+func _create_mail_compose_attachment_row(
+	icon_texture: Texture2D,
+	title_text: String,
+	detail_text: String,
+	remove_callback: Callable
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 48)
+	panel.add_theme_stylebox_override("panel", _make_mail_attachment_style())
 
-func _add_mail_summary_divider() -> void:
-	var divider := ColorRect.new()
-	divider.custom_minimum_size = Vector2(0, 1)
-	divider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	divider.color = Color("#d8b76766")
-	mail_selected_attachments_list.add_child(divider)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 7)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(32, 32)
+	icon.texture = icon_texture
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.add_theme_constant_override("separation", 0)
+	row.add_child(heading)
+
+	var title := Label.new()
+	title.text = title_text
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(title)
+
+	var detail := Label.new()
+	detail.text = detail_text
+	detail.add_theme_font_size_override("font_size", 9)
+	detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(detail)
+
+	var remove_button := Button.new()
+	remove_button.text = "Remove"
+	remove_button.custom_minimum_size = Vector2(74, 30)
+	remove_button.focus_mode = Control.FOCUS_NONE
+	remove_button.tooltip_text = "Remove this attachment"
+	remove_button.pressed.connect(remove_callback)
+	_apply_button_style(remove_button)
+	remove_button.add_theme_font_size_override("font_size", 11)
+	row.add_child(remove_button)
+	return panel
+
+func _on_mail_remove_item_attachment_pressed(item_id: String) -> void:
+	var normalized_item_id: String = item_id.strip_edges().to_lower()
+	for index: int in range(mail_selected_item_attachments.size() - 1, -1, -1):
+		if str(mail_selected_item_attachments[index].get("itemId", "")).strip_edges().to_lower() == normalized_item_id:
+			mail_selected_item_attachments.remove_at(index)
+			break
+	mail_selected_item_for_attachment = {}
+	mail_item_search_input.clear()
+	mail_add_item_button.disabled = true
+	_refresh_mail_attachment_summary()
+
+func _on_mail_remove_pokemon_attachment_pressed(pokemon_id: int) -> void:
+	mail_selected_pokemon_ids.erase(pokemon_id)
+	_refresh_mail_pokemon_attachment_options()
+	_refresh_mail_attachment_summary()
 
 func _get_party_pokemon_by_owned_id(owned_pokemon_id: int) -> Pokemon:
 	for pokemon: Pokemon in PlayerSave.party:
@@ -24743,27 +25099,47 @@ func _refresh_mail_list() -> void:
 			continue
 		child.queue_free()
 
+	var list_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailListPanel/MarginContainer/MailListScroll/MailList/InboxLabel
+	list_title.text = "%s  ·  %s" % ["SENT" if active_mail_box == "sent" else "INBOX", mailbox_messages.size()]
 	mail_empty_inbox_label.visible = mailbox_messages.is_empty()
-	mail_empty_inbox_label.text = "No sent mail yet." if active_mail_box == "sent" else "No mail yet."
+	mail_empty_inbox_label.text = (
+		"No sent messages yet.\nMessages you send will appear here."
+		if active_mail_box == "sent"
+		else "Your inbox is empty.\nNew deliveries will appear here."
+	)
 	for mail: Dictionary in mailbox_messages:
 		var button := Button.new()
 		var mail_id: int = int(mail.get("id", -1))
 		var subject: String = str(mail.get("subject", "Mail")).strip_edges()
 		var sender: String = str(mail.get("senderDisplayName", mail.get("senderUsername", "Unknown"))).strip_edges()
+		var sender_username: String = str(mail.get("senderUsername", "")).strip_edges()
 		var recipient: String = str(mail.get("recipientUsername", "Unknown")).strip_edges()
 		var attachment_count: int = _array_from_variant(mail.get("attachments", [])).size()
-		button.text = "%s\n%s %s%s" % [
+		var is_unread: bool = active_mail_box == "inbox" and not _mail_message_is_read(mail)
+		var contact_text: String = (
+			"To  @%s" % (recipient if recipient != "" else "unknown")
+			if active_mail_box == "sent"
+			else "From  %s%s" % [
+				sender if sender != "" else "Unknown",
+				"  ·  @%s" % sender_username if sender_username != "" else "",
+			]
+		)
+		var attachment_text := ""
+		if attachment_count > 0:
+			attachment_text = "  ·  %s attachment%s" % [attachment_count, "" if attachment_count == 1 else "s"]
+		button.text = "%s%s\n%s%s" % [
+			"●  " if is_unread else "",
 			subject if subject != "" else "Mail",
-			"To:" if active_mail_box == "sent" else "From:",
-			(recipient if recipient != "" else "Unknown") if active_mail_box == "sent" else (sender if sender != "" else "Unknown"),
-			" - %s attachment(s)" % attachment_count if attachment_count > 0 else "",
+			contact_text,
+			attachment_text,
 		]
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		button.custom_minimum_size = Vector2(0, 54)
+		button.custom_minimum_size = Vector2(0, 66)
 		button.focus_mode = Control.FOCUS_NONE
 		button.disabled = mail_id <= 0
-		_apply_mail_card_style(button, mail_id == selected_mail_id, attachment_count > 0)
+		button.tooltip_text = subject if subject != "" else "Mail"
+		_apply_mail_card_style(button, mail_id == selected_mail_id, attachment_count > 0, is_unread)
 		button.pressed.connect(_on_mail_selected.bind(mail_id))
 		mail_list.add_child(button)
 
@@ -24814,23 +25190,25 @@ func _replace_mailbox_message(mail: Dictionary) -> void:
 
 func _refresh_mail_detail() -> void:
 	var mail: Dictionary = _get_mail_by_id(selected_mail_id)
+	var attachment_title: Label = $Control/MailPopup/MarginContainer/VBoxContainer/BodyRow/MailDetailPanel/MarginContainer/DetailStack/AttachmentTitle
 	if mail.is_empty():
-		mail_subject_label.text = "Select a mail"
-		mail_sender_label.text = "Sender: -"
-		mail_body_label.text = "Mail messages and reward attachments will appear here."
+		mail_subject_label.text = "Choose a message"
+		mail_sender_label.text = "Select an item from your mailbox to read it."
+		mail_body_label.text = "Your message will appear here."
+		attachment_title.text = "ATTACHMENTS"
 		_render_mail_attachments([])
-		mail_claim_button.visible = true
+		mail_claim_button.visible = false
 		mail_reply_button.visible = false
-		mail_claim_button.text = "Claim Attachments" if active_mail_box == "inbox" else "No Claim Action"
-		mail_claim_button.disabled = true
+		mail_delete_button.visible = false
 		mail_delete_button.disabled = true
 		return
 
-	mail_subject_label.text = str(mail.get("subject", "Mail"))
+	var subject: String = str(mail.get("subject", "Mail")).strip_edges()
+	mail_subject_label.text = subject if subject != "" else "Mail"
 	if active_mail_box == "sent":
-		mail_sender_label.text = "To: @%s" % str(mail.get("recipientUsername", "-"))
+		mail_sender_label.text = "TO  ·  @%s" % str(mail.get("recipientUsername", "-"))
 	else:
-		mail_sender_label.text = "Sender: %s (@%s)" % [
+		mail_sender_label.text = "FROM  ·  %s  ·  @%s" % [
 			str(mail.get("senderDisplayName", "Unknown")),
 			str(mail.get("senderUsername", "-")),
 		]
@@ -24839,12 +25217,15 @@ func _refresh_mail_detail() -> void:
 		mail_body_label.text = "(No message)"
 
 	var attachments: Array = _array_from_variant(mail.get("attachments", []))
+	attachment_title.text = "ATTACHMENTS  ·  %s" % attachments.size()
 	_render_mail_attachments(attachments)
-	mail_claim_button.visible = true
+	var has_unclaimed_attachments: bool = _mail_has_unclaimed_attachments(attachments)
+	mail_claim_button.visible = active_mail_box == "inbox" and not attachments.is_empty()
 	mail_reply_button.visible = _mail_can_reply(mail)
-	mail_claim_button.text = "Claim Attachments" if active_mail_box == "inbox" else "No Claim Action"
-	mail_claim_button.disabled = active_mail_box != "inbox" or not _mail_has_unclaimed_attachments(attachments)
-	mail_delete_button.disabled = active_mail_box == "inbox" and _mail_has_unclaimed_attachments(attachments)
+	mail_delete_button.visible = true
+	mail_claim_button.text = "Claim All" if has_unclaimed_attachments else "All Claimed"
+	mail_claim_button.disabled = not has_unclaimed_attachments
+	mail_delete_button.disabled = active_mail_box == "inbox" and has_unclaimed_attachments
 
 func _on_mail_reply_button_pressed() -> void:
 	if selected_mail_id <= 0:
@@ -24895,7 +25276,10 @@ func _render_mail_attachments(attachments: Array) -> void:
 
 	if attachments.is_empty():
 		var empty_label := Label.new()
-		empty_label.text = "None"
+		empty_label.text = "No attachments included"
+		empty_label.custom_minimum_size = Vector2(0, 48)
+		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		mail_attachment_list.add_child(empty_label)
 		return
@@ -25097,44 +25481,65 @@ func _on_trade_summary_popup_exited(card_key: String, host: Window) -> void:
 		host.queue_free()
 
 func _make_mail_outer_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#07101bf4"), Color("#e6c777"), 12, 1)
+	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 13, 1)
+	style.border_width_top = 2
+	style.border_color = Color("#3d7596cc")
 	style.shadow_color = Color("#00000088")
 	style.shadow_size = 18
 	style.shadow_offset = Vector2(0, 8)
-	style.content_margin_left = 2
-	style.content_margin_top = 2
-	style.content_margin_right = 2
-	style.content_margin_bottom = 2
 	return style
 
 func _make_mail_inner_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#0a1423e8"), Color("#315070"), 8, 1)
-	style.shadow_color = Color("#00000044")
-	style.shadow_size = 8
-	style.shadow_offset = Vector2(0, 3)
-	return style
-
-func _make_mail_attachment_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#101b2cf0"), Color("#d8b76755"), 8, 1)
-	style.shadow_color = Color("#00000044")
-	style.shadow_size = 5
+	var style := _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1)
+	style.shadow_color = Color("#00000036")
+	style.shadow_size = 6
 	style.shadow_offset = Vector2(0, 2)
 	return style
 
-func _apply_mail_card_style(button: Button, selected: bool, has_attachments: bool) -> void:
-	var border := Color("#d8b767") if selected else Color("#315070")
-	if has_attachments and not selected:
-		border = Color("#7aa7f4")
-	var normal_bg := Color("#172234f2") if selected else Color("#101724e8")
-	var hover_bg := Color("#1f2b42f2")
-	var pressed_bg := Color("#0b1322f2")
-	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, border, 7, 1))
-	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, UI_BORDER, 7, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, UI_BORDER, 7, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, UI_BORDER_FOCUS, 7, 1))
-	button.add_theme_color_override("font_color", UI_TEXT)
+func _make_mail_attachment_style() -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SURFACE_INTERACTIVE, Color("#315070aa"), 8, 1)
+	style.shadow_color = Color("#00000026")
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 1)
+	return style
+
+func _make_mail_message_style() -> StyleBoxFlat:
+	var style := _make_panel_style(UI_SURFACE_INSET, Color("#26445e88"), 8, 1)
+	style.content_margin_left = 12
+	style.content_margin_top = 11
+	style.content_margin_right = 12
+	style.content_margin_bottom = 11
+	return style
+
+func _make_mail_attachment_area_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#050d17bd"), Color("#26445e77"), 8, 1)
+	style.content_margin_left = 8
+	style.content_margin_top = 8
+	style.content_margin_right = 8
+	style.content_margin_bottom = 8
+	return style
+
+func _apply_mail_card_style(button: Button, selected: bool, has_attachments: bool, unread: bool = false) -> void:
+	var border := Color("#60d3ff") if selected else UI_BORDER_SUBTLE
+	if unread and not selected:
+		border = Color("#4b9dc4cc")
+	elif has_attachments and not selected:
+		border = Color("#526b82cc")
+	var normal_bg := Color("#0c2235f2") if selected else UI_SURFACE_INTERACTIVE
+	var hover_bg := UI_SURFACE_HOVER
+	var pressed_bg := UI_SURFACE_PRESSED
+	var normal_style := _make_button_style(normal_bg, border, 8, 1)
+	normal_style.border_width_left = 3 if selected or unread else 1
+	var hover_style := _make_button_style(hover_bg, UI_BORDER_FOCUS, 8, 1)
+	hover_style.border_width_left = 3
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, UI_BORDER_FOCUS, 8, 1))
+	button.add_theme_stylebox_override("focus", hover_style)
+	button.add_theme_color_override("font_color", Color("#ffffff") if unread else UI_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 13)
 
 func _mail_has_unclaimed_attachments(attachments: Array) -> bool:
 	for attachment_value: Variant in attachments:

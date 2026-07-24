@@ -3,20 +3,30 @@ extends Node
 class_name PlayerInteractionCoordinator
 
 const TradeInvitationDialogScript := preload("res://scripts/ui/trade_invitation_dialog.gd")
+const NEARBY_TRAINERS_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 
 signal private_message_requested(user: Dictionary)
 signal mail_requested(username: String)
 signal trainer_card_requested(player: Dictionary)
 signal social_overview_updated(overview: Dictionary)
 
-const PANEL_WIDTH := 310.0
-const CONTEXT_MENU_WIDTH := 216.0
+const PANEL_WIDTH := 410.0
+const CONTEXT_MENU_WIDTH := 344.0
 const VIEWPORT_MARGIN := 12.0
-const UI_BG := Color("#070b14f2")
-const UI_SLOT_BG := Color("#0d1625e6")
-const UI_BORDER := Color("#d8b767")
+const WINDOW_Z_INDEX := 1002
+const CONTEXT_Z_INDEX := WINDOW_Z_INDEX + 1
+const UI_SURFACE_BASE := Color("#050b14ed")
+const UI_SURFACE_RAISED := Color("#081522eb")
+const UI_SURFACE_INTERACTIVE := Color("#0b1a2bea")
+const UI_SURFACE_HOVER := Color("#112a44f2")
+const UI_SURFACE_PRESSED := Color("#060e18f2")
+const UI_SURFACE_INSET := Color("#030812d6")
+const UI_BORDER_SUBTLE := Color("#2d4b66b3")
 const UI_BORDER_SOFT := Color("#315070")
 const UI_BORDER_FOCUS := Color("#7aa7f4")
+const UI_ACCENT := Color("#60d3ff")
+const UI_ACCENT_SOFT := Color("#60d3ffaa")
+const UI_ACCENT_FAINT := Color("#60d3ff4d")
 const UI_TEXT := Color("#f4f0de")
 const UI_MUTED_TEXT := Color("#aeb8c5")
 const UI_DANGER := Color("#ff6b74")
@@ -27,6 +37,7 @@ var players_list: VBoxContainer
 var players_status_label: Label
 var context_menu: PanelContainer
 var context_title: Label
+var context_username_label: Label
 var context_status_label: Label
 var context_actions: VBoxContainer
 var current_target: Dictionary = {}
@@ -34,6 +45,8 @@ var social_overview: Dictionary = {}
 var social_request_serial := 0
 var social_action_in_flight := false
 var social_state_loading := false
+var social_status_message := ""
+var social_status_is_error := false
 var trade_capabilities: Dictionary = {}
 var trade_invitation_dialog: Window
 
@@ -73,7 +86,8 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 		_refresh_trade_capabilities()
 	social_overview.clear()
 	social_state_loading = true
-	close_players_panel()
+	social_status_message = ""
+	social_status_is_error = false
 	context_menu.visible = true
 	_position_panel(context_menu, screen_position + Vector2(10.0, 10.0))
 	context_menu.move_to_front()
@@ -105,64 +119,170 @@ func _build_ui() -> void:
 	players_panel.visible = false
 	players_panel.custom_minimum_size = Vector2(PANEL_WIDTH, 0.0)
 	players_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	players_panel.z_index = 1000
-	players_panel.add_theme_stylebox_override("panel", _panel_style(UI_BG, UI_BORDER))
+	players_panel.z_index = WINDOW_Z_INDEX
+	players_panel.add_theme_stylebox_override("panel", _glass_panel_style(13))
 	host.add_child(players_panel)
-	var players_margin := _margin_container(12)
+	var players_margin := _margin_container(14)
 	players_panel.add_child(players_margin)
 	var players_root := VBoxContainer.new()
-	players_root.add_theme_constant_override("separation", 8)
+	players_root.add_theme_constant_override("separation", 11)
 	players_margin.add_child(players_root)
+
 	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 48)
+	header.add_theme_constant_override("separation", 10)
 	players_root.add_child(header)
+
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override("panel", _panel_style(UI_ACCENT, UI_ACCENT, 2, 0))
+	header.add_child(header_accent)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.custom_minimum_size = Vector2(42, 42)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#071c29e8"), UI_ACCENT_SOFT, 9)
+	)
+	header.add_child(icon_frame)
+	var icon_center := CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_child(icon_center)
+	var icon := TextureRect.new()
+	icon.texture = NEARBY_TRAINERS_ICON
+	icon.custom_minimum_size = Vector2(28, 28)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
 	var title := Label.new()
-	title.text = "Players on Map"
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_color_override("font_color", UI_BORDER)
-	title.add_theme_font_size_override("font_size", 18)
-	header.add_child(title)
-	var close_button := _button("Close", "default")
+	title.text = "Nearby Trainers"
+	title.add_theme_color_override("font_color", UI_TEXT)
+	title.add_theme_font_size_override("font_size", 19)
+	heading.add_child(title)
+	var subtitle := Label.new()
+	subtitle.text = "Trainers currently exploring this map"
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	subtitle.add_theme_font_size_override("font_size", 10)
+	heading.add_child(subtitle)
+
+	var close_button := _compact_close_button()
 	close_button.pressed.connect(close_players_panel)
 	header.add_child(close_button)
+
+	var roster_header := HBoxContainer.new()
+	roster_header.add_theme_constant_override("separation", 8)
+	players_root.add_child(roster_header)
+	var roster_caption := Label.new()
+	roster_caption.text = "LIVE ROSTER"
+	roster_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	roster_caption.add_theme_font_size_override("font_size", 10)
+	roster_caption.add_theme_color_override("font_color", UI_ACCENT)
+	roster_header.add_child(roster_caption)
 	players_status_label = Label.new()
 	players_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	players_status_label.add_theme_font_size_override("font_size", 13)
-	players_root.add_child(players_status_label)
+	players_status_label.add_theme_font_size_override("font_size", 10)
+	roster_header.add_child(players_status_label)
+
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0.0, 260.0)
+	scroll.custom_minimum_size = Vector2(0.0, 318.0)
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	players_root.add_child(scroll)
 	players_list = VBoxContainer.new()
 	players_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	players_list.add_theme_constant_override("separation", 6)
+	players_list.add_theme_constant_override("separation", 7)
 	scroll.add_child(players_list)
+
+	var roster_hint := Label.new()
+	roster_hint.text = "Select a trainer to open social actions"
+	roster_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	roster_hint.add_theme_font_size_override("font_size", 10)
+	roster_hint.add_theme_color_override(
+		"font_color",
+		Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72)
+	)
+	players_root.add_child(roster_hint)
 
 	context_menu = PanelContainer.new()
 	context_menu.name = "PlayerContextMenu"
 	context_menu.visible = false
 	context_menu.custom_minimum_size = Vector2(CONTEXT_MENU_WIDTH, 0.0)
 	context_menu.mouse_filter = Control.MOUSE_FILTER_STOP
-	context_menu.z_index = 1100
-	context_menu.add_theme_stylebox_override("panel", _panel_style(UI_BG, UI_BORDER))
+	context_menu.z_index = CONTEXT_Z_INDEX
+	var context_style := _glass_panel_style(13)
+	context_style.border_color = Color("#456784cc")
+	context_menu.add_theme_stylebox_override("panel", context_style)
 	host.add_child(context_menu)
-	var context_margin := _margin_container(10)
+	var context_margin := _margin_container(13)
 	context_menu.add_child(context_margin)
 	var context_root := VBoxContainer.new()
-	context_root.add_theme_constant_override("separation", 7)
+	context_root.add_theme_constant_override("separation", 9)
 	context_margin.add_child(context_root)
+
+	var context_header := HBoxContainer.new()
+	context_header.add_theme_constant_override("separation", 10)
+	context_root.add_child(context_header)
+	var identity_badge := PanelContainer.new()
+	identity_badge.name = "IdentityBadge"
+	identity_badge.custom_minimum_size = Vector2(42, 42)
+	identity_badge.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#071c29e8"), UI_ACCENT_SOFT, 10)
+	)
+	context_header.add_child(identity_badge)
+	var identity_initial := Label.new()
+	identity_initial.name = "Initial"
+	identity_initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	identity_initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	identity_initial.add_theme_font_size_override("font_size", 18)
+	identity_initial.add_theme_color_override("font_color", UI_ACCENT)
+	identity_badge.add_child(identity_initial)
+
+	var context_identity := VBoxContainer.new()
+	context_identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	context_identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	context_identity.add_theme_constant_override("separation", 1)
+	context_header.add_child(context_identity)
 	context_title = Label.new()
-	context_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	context_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	context_title.add_theme_color_override("font_color", UI_TEXT)
-	context_title.add_theme_font_size_override("font_size", 16)
-	context_root.add_child(context_title)
+	context_title.add_theme_font_size_override("font_size", 17)
+	context_identity.add_child(context_title)
+	context_username_label = Label.new()
+	context_username_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	context_username_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	context_username_label.add_theme_font_size_override("font_size", 10)
+	context_identity.add_child(context_username_label)
+
+	var context_close_button := _compact_close_button()
+	context_close_button.pressed.connect(close_context_menu)
+	context_header.add_child(context_close_button)
+
+	var status_panel := PanelContainer.new()
+	status_panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 8)
+	)
+	context_root.add_child(status_panel)
+	var status_margin := _margin_container(8)
+	status_panel.add_child(status_margin)
 	context_status_label = Label.new()
 	context_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	context_status_label.add_theme_font_size_override("font_size", 12)
-	context_root.add_child(context_status_label)
-	context_root.add_child(HSeparator.new())
+	context_status_label.add_theme_font_size_override("font_size", 10)
+	status_margin.add_child(context_status_label)
+
 	context_actions = VBoxContainer.new()
-	context_actions.add_theme_constant_override("separation", 5)
+	context_actions.add_theme_constant_override("separation", 6)
 	context_root.add_child(context_actions)
 
 
@@ -178,20 +298,128 @@ func _render_players() -> void:
 		return
 	_clear_children(players_list)
 	var players := _current_map_players()
-	players_status_label.text = "%d player%s nearby" % [players.size(), "" if players.size() == 1 else "s"]
+	players_status_label.text = "%d trainer%s nearby" % [players.size(), "" if players.size() == 1 else "s"]
 	if players.is_empty():
-		var empty := Label.new()
-		empty.text = "No other players are on this map."
-		empty.add_theme_color_override("font_color", UI_MUTED_TEXT)
-		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		players_list.add_child(empty)
+		players_list.add_child(_create_empty_roster_state())
 		return
 	for player: Dictionary in players:
-		var row := _button(_player_display_name(player), "default")
-		row.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		row.tooltip_text = "Open player actions"
-		row.pressed.connect(_on_player_row_pressed.bind(player))
-		players_list.add_child(row)
+		players_list.add_child(_create_player_row(player))
+
+
+func _create_player_row(player: Dictionary) -> Button:
+	var row := Button.new()
+	row.name = "Trainer_%s" % int(player.get("userId", 0))
+	row.custom_minimum_size = Vector2(0, 66)
+	row.focus_mode = Control.FOCUS_ALL
+	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	row.tooltip_text = "Open actions for %s" % _player_primary_name(player)
+	row.pressed.connect(_on_player_row_pressed.bind(player))
+	_apply_player_row_style(row)
+
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_left", 9)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	row.add_child(margin)
+
+	var content := HBoxContainer.new()
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+
+	var identity_badge := PanelContainer.new()
+	identity_badge.custom_minimum_size = Vector2(44, 44)
+	identity_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	identity_badge.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#071c29d9"), UI_ACCENT_FAINT, 10)
+	)
+	content.add_child(identity_badge)
+	var initial := Label.new()
+	initial.text = _player_initial(player)
+	initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	initial.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	initial.add_theme_font_size_override("font_size", 17)
+	initial.add_theme_color_override("font_color", UI_ACCENT)
+	identity_badge.add_child(initial)
+
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	identity.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	identity.add_theme_constant_override("separation", 1)
+	content.add_child(identity)
+	var name_label := Label.new()
+	name_label.text = _player_primary_name(player)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_label.add_theme_font_size_override("font_size", 13)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	identity.add_child(name_label)
+	var username_label := Label.new()
+	username_label.text = "@%s" % str(player.get("username", "")).strip_edges()
+	username_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	username_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	username_label.add_theme_font_size_override("font_size", 10)
+	username_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	identity.add_child(username_label)
+
+	var nearby_label := Label.new()
+	nearby_label.text = "NEARBY"
+	nearby_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	nearby_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	nearby_label.add_theme_font_size_override("font_size", 9)
+	nearby_label.add_theme_color_override("font_color", UI_ACCENT)
+	content.add_child(nearby_label)
+	var chevron := Label.new()
+	chevron.text = "›"
+	chevron.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	chevron.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chevron.add_theme_font_size_override("font_size", 20)
+	chevron.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	content.add_child(chevron)
+	return row
+
+
+func _create_empty_roster_state() -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 150)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 10)
+	)
+	var center := CenterContainer.new()
+	panel.add_child(center)
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 5)
+	center.add_child(stack)
+	var icon := TextureRect.new()
+	icon.texture = NEARBY_TRAINERS_ICON
+	icon.custom_minimum_size = Vector2(34, 34)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.modulate = Color(1, 1, 1, 0.55)
+	stack.add_child(icon)
+	var title := Label.new()
+	title.text = "No trainers nearby"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(title)
+	var description := Label.new()
+	description.text = "Other trainers on this map will appear here automatically."
+	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.custom_minimum_size = Vector2(270, 0)
+	description.add_theme_font_size_override("font_size", 10)
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(description)
+	return panel
 
 
 func _on_player_row_pressed(player: Dictionary) -> void:
@@ -203,22 +431,65 @@ func _on_player_row_pressed(player: Dictionary) -> void:
 func _render_context_menu() -> void:
 	if context_menu == null or current_target.is_empty():
 		return
-	context_title.text = _player_display_name(current_target)
-	context_status_label.text = "Loading social state..." if social_state_loading else context_status_label.text
+	context_title.text = _player_primary_name(current_target)
+	context_username_label.text = "@%s" % str(current_target.get("username", "")).strip_edges()
+	var initial_label := context_menu.find_child("Initial", true, false) as Label
+	if initial_label != null:
+		initial_label.text = _player_initial(current_target)
+	_refresh_context_status()
 	_clear_children(context_actions)
-	_add_context_action("View Trainer Card", _on_trainer_card_pressed)
-	_add_context_action("Message", _on_message_pressed)
-	_add_context_action("Send Mail", _on_mail_pressed)
+	context_actions.add_child(_context_section_label("TRAINER ACTIONS"))
+	_add_context_action("View Trainer Card", "Inspect profile, badges and stats", _on_trainer_card_pressed)
+	_add_context_action("Message", "Start a private conversation", _on_message_pressed)
+	_add_context_action("Send Mail", "Send a message or attachment", _on_mail_pressed)
 	if bool(trade_capabilities.get("enabled", false)):
-		_add_context_action("Trade", _on_trade_pressed)
-	_add_context_action("Remove Friend" if _is_friend(current_target) else "Add Friend", _on_friend_pressed)
-	_add_context_action("Unblock" if _is_blocked(current_target) else "Block", _on_block_pressed, "default" if _is_blocked(current_target) else "danger")
-	_add_context_action("Close", close_context_menu)
+		_add_context_action("Trade", "Invite this trainer to trade", _on_trade_pressed)
+	context_actions.add_child(_context_section_label("SOCIAL"))
+	_add_context_action(
+		"Remove Friend" if _is_friend(current_target) else "Add Friend",
+		"Update your friends list",
+		_on_friend_pressed
+	)
+	_add_context_action(
+		"Unblock" if _is_blocked(current_target) else "Block",
+		"Restore contact" if _is_blocked(current_target) else "Prevent future contact",
+		_on_block_pressed,
+		"default" if _is_blocked(current_target) else "danger"
+	)
 
 
-func _add_context_action(label: String, action: Callable, variant: String = "default") -> void:
-	var button := _button(label, variant)
-	button.disabled = label not in ["View Trainer Card", "Message", "Send Mail", "Close"] and (social_action_in_flight or social_state_loading)
+func _refresh_context_status() -> void:
+	if context_status_label == null:
+		return
+	if social_state_loading:
+		context_status_label.text = "Checking friendship and block status..."
+		context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		return
+	if social_action_in_flight:
+		context_status_label.text = "Updating social state..."
+		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
+		return
+	if social_status_message != "":
+		context_status_label.text = social_status_message
+		context_status_label.add_theme_color_override(
+			"font_color",
+			UI_DANGER if social_status_is_error else UI_MUTED_TEXT
+		)
+		return
+	if _is_blocked(current_target):
+		context_status_label.text = "Blocked trainer · direct contact is restricted"
+		context_status_label.add_theme_color_override("font_color", UI_DANGER)
+	elif _is_friend(current_target):
+		context_status_label.text = "Friend · currently on this map"
+		context_status_label.add_theme_color_override("font_color", Color("#6fe49a"))
+	else:
+		context_status_label.text = "Trainer currently active on this map"
+		context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+
+
+func _add_context_action(label: String, description: String, action: Callable, variant: String = "default") -> void:
+	var button := _context_action_button(label, description, variant)
+	button.disabled = label not in ["View Trainer Card", "Message", "Send Mail"] and (social_action_in_flight or social_state_loading)
 	button.pressed.connect(action)
 	context_actions.add_child(button)
 
@@ -308,11 +579,13 @@ func _apply_social_result(result: Dictionary) -> void:
 	if bool(result.get("success", false)):
 		social_overview = _dictionary_from_value(result.get("overview", {}))
 		social_state_loading = false
-		context_status_label.text = ""
+		social_status_message = ""
+		social_status_is_error = false
 		social_overview_updated.emit(social_overview.duplicate(true))
 	else:
 		social_state_loading = false
-		context_status_label.text = str(result.get("error", "Action failed."))
+		social_status_message = str(result.get("error", "Action failed."))
+		social_status_is_error = true
 	_render_context_menu()
 	if bool(result.get("success", false)):
 		_refresh_social_overview_for_target(current_target)
@@ -332,11 +605,13 @@ func _refresh_social_overview_for_target(target: Dictionary) -> void:
 	if bool(result.get("success", false)):
 		social_overview = _dictionary_from_value(result.get("overview", {}))
 		social_state_loading = false
-		context_status_label.text = ""
+		social_status_message = ""
+		social_status_is_error = false
 		social_overview_updated.emit(social_overview.duplicate(true))
 	else:
 		social_state_loading = false
-		context_status_label.text = str(result.get("error", "Could not refresh social state."))
+		social_status_message = str(result.get("error", "Could not refresh social state."))
+		social_status_is_error = true
 	_render_context_menu()
 
 
@@ -352,6 +627,8 @@ func close_context_menu() -> void:
 	social_request_serial += 1
 	social_action_in_flight = false
 	social_state_loading = false
+	social_status_message = ""
+	social_status_is_error = false
 
 
 func _current_map_players() -> Array[Dictionary]:
@@ -432,6 +709,17 @@ func _player_display_name(player: Dictionary) -> String:
 	return "%s (@%s)" % [display_name, username] if display_name != "" and display_name.to_lower() != username.to_lower() else (display_name if display_name != "" else username)
 
 
+func _player_primary_name(player: Dictionary) -> String:
+	var display_name := str(player.get("displayName", "")).strip_edges()
+	var username := str(player.get("username", "")).strip_edges()
+	return display_name if display_name != "" else username
+
+
+func _player_initial(player: Dictionary) -> String:
+	var display_name := _player_primary_name(player)
+	return display_name.left(1).to_upper() if display_name != "" else "?"
+
+
 func _position_panel(panel: Control, requested_position: Vector2) -> void:
 	panel.reset_size()
 	var viewport_size := get_viewport().get_visible_rect().size
@@ -467,42 +755,135 @@ func _margin_container(amount: int) -> MarginContainer:
 	return margin
 
 
-func _button(label: String, variant: String) -> Button:
+func _compact_close_button() -> Button:
 	var button := Button.new()
-	button.text = label
-	button.custom_minimum_size = Vector2(0.0, 32.0)
-	button.focus_mode = Control.FOCUS_ALL
+	button.text = "×"
+	button.tooltip_text = "Close"
+	button.custom_minimum_size = Vector2(32, 32)
+	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	var normal_background := UI_SLOT_BG
-	var border := UI_BORDER_SOFT
-	var hover_background := Color("#151f36f2")
-	if variant == "danger":
-		normal_background = Color("#2a1015e8")
-		border = Color("#7a2b33")
-		hover_background = Color("#3a151cee")
-		button.add_theme_color_override("font_color", UI_DANGER)
-	else:
-		button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_font_size_override("font_size", 16)
+	button.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
-	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.45))
-	button.add_theme_stylebox_override("normal", _panel_style(normal_background, border))
-	button.add_theme_stylebox_override("hover", _panel_style(hover_background, UI_BORDER))
-	button.add_theme_stylebox_override("pressed", _panel_style(Color("#080d18f2"), UI_BORDER_FOCUS))
-	button.add_theme_stylebox_override("focus", _panel_style(normal_background, UI_BORDER_FOCUS))
+	button.add_theme_stylebox_override("normal", _button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 8))
+	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8))
+	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8))
 	return button
 
 
-func _panel_style(background: Color, border: Color) -> StyleBoxFlat:
+func _context_section_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", UI_ACCENT)
+	return label
+
+
+func _context_action_button(label_text: String, description_text: String, variant: String) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 50)
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+	var normal_background := UI_SURFACE_INTERACTIVE
+	var normal_border := UI_BORDER_SUBTLE
+	var hover_border := UI_ACCENT_SOFT
+	var title_color := UI_TEXT
+	if variant == "danger":
+		normal_background = Color("#241016e8")
+		normal_border = Color("#7a2b33aa")
+		hover_border = UI_DANGER
+		title_color = Color("#ff9aa2")
+	button.add_theme_stylebox_override("normal", _button_style(normal_background, normal_border, 8))
+	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, hover_border, 8))
+	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_PRESSED, hover_border, 8))
+	button.add_theme_stylebox_override("focus", _button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8))
+
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	button.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.alignment = BoxContainer.ALIGNMENT_CENTER
+	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	copy.add_theme_constant_override("separation", 0)
+	row.add_child(copy)
+	var title := Label.new()
+	title.text = label_text
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_color_override("font_color", title_color)
+	copy.add_child(title)
+	var description := Label.new()
+	description.text = description_text
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	description.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	description.add_theme_font_size_override("font_size", 9)
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	copy.add_child(description)
+	var chevron := Label.new()
+	chevron.text = "›"
+	chevron.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	chevron.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chevron.add_theme_font_size_override("font_size", 18)
+	chevron.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(chevron)
+	return button
+
+
+func _apply_player_row_style(button: Button) -> void:
+	button.add_theme_stylebox_override(
+		"normal",
+		_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 9)
+	)
+	button.add_theme_stylebox_override(
+		"hover",
+		_button_style(UI_SURFACE_HOVER, UI_ACCENT_SOFT, 9)
+	)
+	button.add_theme_stylebox_override(
+		"pressed",
+		_button_style(UI_SURFACE_PRESSED, UI_ACCENT, 9)
+	)
+	button.add_theme_stylebox_override(
+		"focus",
+		_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 9)
+	)
+
+
+func _button_style(background: Color, border: Color, corner_radius: int) -> StyleBoxFlat:
+	var style := _panel_style(background, border, corner_radius)
+	style.content_margin_left = 0
+	style.content_margin_top = 0
+	style.content_margin_right = 0
+	style.content_margin_bottom = 0
+	return style
+
+
+func _glass_panel_style(corner_radius: int) -> StyleBoxFlat:
+	var style := _panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, corner_radius)
+	style.shadow_color = Color(0, 0, 0, 0.4)
+	style.shadow_size = 9
+	style.shadow_offset = Vector2(0, 4)
+	return style
+
+
+func _panel_style(background: Color, border: Color, corner_radius: int = 8, border_width: int = 1) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = background
 	style.border_color = border
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(6)
-	style.content_margin_left = 9
-	style.content_margin_top = 5
-	style.content_margin_right = 9
-	style.content_margin_bottom = 5
+	style.set_border_width_all(border_width)
+	style.set_corner_radius_all(corner_radius)
 	return style
 
 

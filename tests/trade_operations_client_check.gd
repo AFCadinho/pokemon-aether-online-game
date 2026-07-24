@@ -11,8 +11,8 @@ func _init() -> void:
 	_check(service_source.contains("func load_trade_receipt"), "receipt service method")
 	_check(service_source.contains("source.get(\"canCreate\", false)"), "account-specific rollout capability")
 	_check(realtime_source.contains('call("load_capabilities", true)'), "capability refresh during reconnect recovery")
-	_check(social_source.contains('label": "Trades"'), "trade history social tab")
-	_check(social_source.contains("func _load_trade_receipt"), "participant receipt action")
+	_check(not social_source.contains('label": "Trades"'), "trade history stays out of social tabs")
+	_check(not social_source.contains("func _load_trade_receipt"), "friend management does not own trade receipts")
 	_check(not social_source.contains("/admin/api/trades"), "normal client excludes admin audit API")
 	quit(1 if failed else 0)
 
