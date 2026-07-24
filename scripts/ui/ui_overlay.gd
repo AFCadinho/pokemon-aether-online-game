@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const MAX_PARTY_SIZE := 6
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
+const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const COLLAPSE_BUTTON_SIZE := Vector2(28, 28)
 const COLLAPSE_BUTTON_MARGIN := 10.0
 const ACTION_BAR_SLOT_SIZE := 52.0
@@ -3930,6 +3931,18 @@ func _setup_dev_clear_menu_popup() -> void:
 		"Remove every stored item",
 		DEV_ADD_RESOURCES_ICON,
 		Color("#ef7085")
+	)
+
+	var reset_game_button := Button.new()
+	reset_game_button.name = "ResetNewGameButton"
+	reset_game_button.pressed.connect(_on_dev_reset_game_option_pressed)
+	layout.add_child(reset_game_button)
+	_configure_tool_tile_button(
+		reset_game_button,
+		"Reset / New Game",
+		"Return this trainer to first-login gameplay state",
+		TOOL_CLEAR_DATA_ICON,
+		Color("#ef405d")
 	)
 
 func _setup_pvp_room_popup() -> void:
@@ -22929,6 +22942,78 @@ func _on_dev_clear_inventory_option_pressed() -> void:
 		true
 	)
 
+func _on_dev_reset_game_option_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	dev_clear_menu_popup.visible = false
+	_show_ui_confirm_popup(
+		"Reset / New Game",
+		"This permanently resets your location, party, boxes, inventory, money, playtime and gameplay unlocks.\n\nYour account, roles, friends, mail history and PvP history remain.",
+		"Reset Everything",
+		Callable(self, "_on_dev_reset_game_confirmed"),
+		Vector2i(540, 0),
+		true
+	)
+
+
+func _on_dev_reset_game_confirmed() -> void:
+	if not _can_use_dev_tools():
+		return
+	var world := GameState.get_world()
+	if world == null or not world.has_method("prepare_for_gameplay_reset"):
+		_add_chat_message("Could not start reset: the overworld is not ready.")
+		return
+
+	var prepare_value: Variant = await world.call("prepare_for_gameplay_reset")
+	var prepare_result: Dictionary = prepare_value as Dictionary if prepare_value is Dictionary else {}
+	if not bool(prepare_result.get("success", false)):
+		_add_chat_message("Could not start reset: %s" % str(prepare_result.get("error", "Unknown error")))
+		return
+
+	var result: Dictionary = await PlayerGameplayResetService.reset_gameplay()
+	if not bool(result.get("success", false)) and (
+		int(result.get("status", 0)) == 0 or int(result.get("status", 0)) >= 500
+	):
+		result = await PlayerGameplayResetService.reset_gameplay()
+
+	if not bool(result.get("success", false)):
+		var status := int(result.get("status", 0))
+		if status >= 400 and status < 500:
+			PlayerGameplayResetService.abandon_pending_request()
+			GameState.cancel_gameplay_reset()
+			WorldPresenceService.connect_presence.call_deferred()
+			_add_chat_message("Could not reset gameplay: %s" % str(result.get("error", "Unknown error")))
+			return
+
+		# A transport failure is ambiguous: the server may already have committed
+		# the reset. Leave the overworld without allowing another autosave.
+		PlayerSave.reset_gameplay_progress()
+		GameState.reset_gameplay_runtime_state()
+		PlayerHotbarService.clear_cached_state()
+		PlayerActionService.clear_cached_state()
+		FieldMoveService.update_owned_charms_from_inventory([])
+		var fallback_error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+		if fallback_error != OK:
+			push_error("UIOverlay: could not leave the overworld after an ambiguous reset: %s" % error_string(fallback_error))
+		else:
+			GameState.finish_gameplay_reset()
+		return
+
+	PlayerSave.reset_gameplay_progress()
+	GameState.reset_gameplay_runtime_state()
+	PlayerHotbarService.clear_cached_state()
+	PlayerActionService.clear_cached_state()
+	FieldMoveService.update_owned_charms_from_inventory([])
+	AuthService.current_user["selectedRoleBadge"] = ""
+	var reload_error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
+	if reload_error != OK:
+		push_error("UIOverlay: failed to reload after gameplay reset: %s" % error_string(reload_error))
+		var login_error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+		if login_error == OK:
+			GameState.finish_gameplay_reset()
+
+
 func _on_clear_party_confirmed() -> void:
 	if not _can_use_dev_tools():
 		return
@@ -25292,9 +25377,15 @@ func _render_mail_attachments(attachments: Array) -> void:
 		if attachment.get("payload", {}) is Dictionary:
 			payload = attachment.get("payload", {}) as Dictionary
 		var claimed: bool = _mail_attachment_is_claimed(attachment)
-		var suffix := " (claimed)" if claimed else ""
+		var voided: bool = _mail_attachment_is_voided(attachment)
+		var suffix := " (unavailable)" if voided else (" (claimed)" if claimed else "")
 		var attachment_id: int = int(attachment.get("id", -1))
-		var can_claim: bool = active_mail_box == "inbox" and attachment_id > 0 and not claimed
+		var can_claim: bool = (
+			active_mail_box == "inbox"
+			and attachment_id > 0
+			and not claimed
+			and not voided
+		)
 		match str(attachment.get("type", "")):
 			"item":
 				mail_attachment_list.add_child(_create_mail_attachment_row(
@@ -25546,7 +25637,7 @@ func _mail_has_unclaimed_attachments(attachments: Array) -> bool:
 		if not (attachment_value is Dictionary):
 			continue
 		var attachment: Dictionary = attachment_value as Dictionary
-		if not _mail_attachment_is_claimed(attachment):
+		if not _mail_attachment_is_claimed(attachment) and not _mail_attachment_is_voided(attachment):
 			return true
 	return false
 
@@ -25555,6 +25646,12 @@ func _mail_attachment_is_claimed(attachment: Dictionary) -> bool:
 	if claimed_at == null:
 		return false
 	return str(claimed_at).strip_edges() != ""
+
+func _mail_attachment_is_voided(attachment: Dictionary) -> bool:
+	var voided_at: Variant = attachment.get("voidedAt", attachment.get("voided_at", null))
+	if voided_at == null:
+		return false
+	return str(voided_at).strip_edges() != ""
 
 func _mail_dictionary_from_variant(value: Variant) -> Dictionary:
 	if value is Dictionary:

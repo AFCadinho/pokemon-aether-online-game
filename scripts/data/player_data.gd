@@ -26,6 +26,34 @@ var appearance_eye_color: String = ""
 var appearance_hair_style_index := 0
 var flags := {}
 
+func reset_gameplay_progress() -> void:
+	var join_date: Variant = flags.get("join_date", null)
+	party = []
+	money = 0
+	playtime_seconds = 0
+	flags = {}
+	if join_date != null:
+		flags["join_date"] = join_date
+
+	appearance_body_id = (
+		CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID
+		if gender == "female"
+		else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
+	)
+	appearance_hair_id = CharacterAppearanceService.get_default_part_id("hair", gender)
+	appearance_headgear_id = CharacterAppearanceService.get_default_part_id("headgear", gender)
+	appearance_facegear_id = ""
+	appearance_top_id = CharacterAppearanceService.get_default_part_id("top", gender)
+	appearance_bottom_id = CharacterAppearanceService.get_default_part_id("bottom", gender)
+	appearance_shoes_id = CharacterAppearanceService.get_default_part_id("shoes", gender)
+	appearance_hair_color = CharacterAppearanceService.resolve_hair_color("", gender)
+	appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
+	appearance_eye_color = CharacterAppearanceService.resolve_eye_color("", gender)
+	appearance_hair_style_index = 0
+	ensure_body_matches_gender(true)
+	party_changed.emit()
+
+
 func to_battle_dict() -> Dictionary:
 	return {
 		"playerId": player_id,

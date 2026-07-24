@@ -33,6 +33,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_factory_hp_snapshot_check.gd",
 	"res://tests/pokemon_pc_interactable_check.gd",
 	"res://tests/new_player_spawn_check.gd",
+	"res://tests/gameplay_reset_contract_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
 	"res://tests/players_house_visual_depth_check.gd",
 	"res://tests/sign_interactable_check.gd",

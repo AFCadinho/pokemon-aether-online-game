@@ -9,6 +9,10 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var cached_slots: Array = []
 
+func clear_cached_state() -> void:
+	cached_slots = []
+	hotbar_changed.emit(cached_slots)
+
 
 func load_hotbar() -> Dictionary:
 	var response := await _request_json(HTTPClient.METHOD_GET, "")

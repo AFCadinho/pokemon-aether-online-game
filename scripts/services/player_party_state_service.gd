@@ -161,6 +161,10 @@ func create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true, origin_
 	return await _create_owned_pokemon("/game/pokemon", _with_current_origin(pokemon_data, origin_method), add_to_party)
 
 
+func claim_starter(pokemon_data: Dictionary) -> Dictionary:
+	return await _create_owned_pokemon("/game/starter", _with_current_origin(pokemon_data, "gift"), true)
+
+
 func dev_create_pokemon(pokemon_data: Dictionary, add_to_party: bool = true) -> Dictionary:
 	return await _create_owned_pokemon("/game/dev/pokemon", _with_current_origin(pokemon_data, "generated"), add_to_party)
 
@@ -592,6 +596,7 @@ func _pokemon_create_result_from_response(response: Dictionary) -> Dictionary:
 		"hasParty": bool(party.get("hasParty", false)),
 		"party": _array_from_value(party.get("party", [])),
 		"storageLocation": PokemonStorageService.normalize_storage_location(body.get("storageLocation", {})),
+		"alreadyClaimed": bool(body.get("alreadyClaimed", false)),
 	}
 
 

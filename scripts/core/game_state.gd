@@ -18,6 +18,33 @@ var selected_role_badge := ""
 var fishing_unlocked := true
 var fishing_tier := 1
 var surf_unlocked := true
+var gameplay_reset_in_progress := false
+
+func begin_gameplay_reset() -> void:
+	gameplay_reset_in_progress = true
+	lock_input()
+
+func cancel_gameplay_reset() -> void:
+	gameplay_reset_in_progress = false
+	unlock_input()
+
+func reset_gameplay_runtime_state() -> void:
+	player_position = Vector2.ZERO
+	has_player_position = false
+	player_direction = Vector2.DOWN
+	current_map = null
+	prepared_world_state = {}
+	repel_enabled = false
+	show_follower = true
+	running_shoes_enabled = false
+	selected_role_badge = ""
+	fishing_unlocked = true
+	fishing_tier = 1
+	surf_unlocked = true
+
+func finish_gameplay_reset() -> void:
+	gameplay_reset_in_progress = false
+	unlock_input()
 
 func lock_input() -> void:
 	input_locked = true
@@ -32,7 +59,8 @@ func unlock_input() -> void:
 func clear_world_runtime_state() -> void:
 	current_map = null
 	prepared_world_state = {}
-	unlock_input()
+	if not gameplay_reset_in_progress:
+		unlock_input()
 
 func set_prepared_world_state(state: Dictionary) -> void:
 	prepared_world_state = state

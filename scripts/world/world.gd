@@ -92,6 +92,8 @@ func _ready() -> void:
 	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 	_normalize_map_depth_layer_z_indices(GameState.current_map)
+	if GameState.gameplay_reset_in_progress:
+		GameState.finish_gameplay_reset()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -113,14 +115,41 @@ func _process(delta: float) -> void:
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST and not GameState.gameplay_reset_in_progress:
 		_save_current_player_position_if_changed(true)
 		_flush_playtime_if_needed.call_deferred(true)
 
 func save_current_player_state() -> void:
+	if GameState.gameplay_reset_in_progress:
+		return
 	_save_current_player_position_if_changed.call_deferred(true)
 	_flush_playtime_if_needed.call_deferred(true)
 	_publish_world_presence.call_deferred(true)
+
+func prepare_for_gameplay_reset() -> Dictionary:
+	if is_in_battle:
+		return {"success": false, "error": "Finish the active battle before resetting gameplay."}
+	if is_loading_map or authorized_teleport_in_progress:
+		return {"success": false, "error": "Wait for the map transition to finish before resetting gameplay."}
+	if authorized_teleport_apply_failed_autosave_blocked:
+		return {"success": false, "error": "Reload after the interrupted teleport before resetting gameplay."}
+
+	GameState.begin_gameplay_reset()
+	WorldPresenceService.disconnect_presence()
+	has_pending_player_position_save = false
+
+	var deadline_msec := Time.get_ticks_msec() + 12000
+	while is_saving_player_position or is_flushing_playtime:
+		if Time.get_ticks_msec() >= deadline_msec:
+			GameState.cancel_gameplay_reset()
+			WorldPresenceService.connect_presence.call_deferred()
+			return {
+				"success": false,
+				"error": "A save is still finishing. Wait a moment and try again.",
+			}
+		await get_tree().process_frame
+
+	return {"success": true}
 
 func save_current_player_state_now() -> Dictionary:
 	if _is_player_position_save_blocked_by_teleport():
@@ -324,10 +353,16 @@ func _mark_authorized_teleport_apply_failed() -> void:
 
 
 func _is_player_position_save_blocked_by_teleport() -> bool:
-	return authorized_teleport_in_progress or authorized_teleport_apply_failed_autosave_blocked
+	return (
+		GameState.gameplay_reset_in_progress
+		or authorized_teleport_in_progress
+		or authorized_teleport_apply_failed_autosave_blocked
+	)
 
 
 func _get_player_position_save_block_reason() -> String:
+	if GameState.gameplay_reset_in_progress:
+		return "Gameplay reset is in progress."
 	if authorized_teleport_apply_failed_autosave_blocked:
 		return "A server-authorized teleport did not finish locally; position autosave is blocked to protect the new server position."
 	return "Authorized teleport is in progress."
@@ -1119,7 +1154,12 @@ func _connect_world_presence_signals() -> void:
 
 
 func _publish_world_presence(force := false) -> void:
-	if not AuthService.is_authenticated() or player == null or GameState.current_map == null:
+	if (
+		GameState.gameplay_reset_in_progress
+		or not AuthService.is_authenticated()
+		or player == null
+		or GameState.current_map == null
+	):
 		return
 
 	var signature := _get_current_player_position_signature()
@@ -1131,7 +1171,7 @@ func _publish_world_presence(force := false) -> void:
 
 
 func _track_playtime(delta: float) -> void:
-	if not AuthService.is_authenticated() or is_loading_map:
+	if GameState.gameplay_reset_in_progress or not AuthService.is_authenticated() or is_loading_map:
 		return
 
 	playtime_elapsed += delta
@@ -1147,7 +1187,7 @@ func _track_playtime(delta: float) -> void:
 
 
 func _flush_playtime_if_needed(force: bool = false) -> void:
-	if is_flushing_playtime or not AuthService.is_authenticated():
+	if GameState.gameplay_reset_in_progress or is_flushing_playtime or not AuthService.is_authenticated():
 		return
 	if unflushed_playtime_seconds <= 0:
 		return

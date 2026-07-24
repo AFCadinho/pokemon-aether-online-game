@@ -13,6 +13,7 @@ extends DialogueNPC
 
 var is_creating_starter := false
 var create_pokemon_request: HTTPRequest
+var last_starter_claim_already_completed := false
 
 
 func _ready() -> void:
@@ -42,8 +43,10 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	PlayerSave.flags["received_starter"] = true
-
-	await show_dialogue(await _resolve_dialogue_lines(starter_gift_dialogue_id, starter_gift_dialogue_lines))
+	if last_starter_claim_already_completed:
+		await show_dialogue(await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines))
+	else:
+		await show_dialogue(await _resolve_dialogue_lines(starter_gift_dialogue_id, starter_gift_dialogue_lines))
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
@@ -73,6 +76,7 @@ func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Arra
 	return lines
 	
 func give_starter_pokemon(pokemon_name: String) -> Pokemon:
+	last_starter_claim_already_completed = false
 	var response: Dictionary = await PokemonDataApiClient.create_pokemon(
 		create_pokemon_request,
 		{
@@ -94,10 +98,11 @@ func give_starter_pokemon(pokemon_name: String) -> Pokemon:
 		push_warning("Oak.give_starter_pokemon failed: backend Pokemon payload could not be loaded.")
 		return null
 
-	var create_result: Dictionary = await PlayerPartyStateService.create_pokemon(pokemon_value as Dictionary, true)
+	var create_result: Dictionary = await PlayerPartyStateService.claim_starter(pokemon_value as Dictionary)
 	if not bool(create_result.get("success", false)):
 		push_warning("Oak.give_starter_pokemon failed: Pokemon could not be saved: %s" % str(create_result.get("error", "Unknown error")))
 		return null
+	last_starter_claim_already_completed = bool(create_result.get("alreadyClaimed", false))
 
 	var owned_pokemon_response: Dictionary = {}
 	var owned_pokemon_response_value: Variant = create_result.get("pokemon", {})

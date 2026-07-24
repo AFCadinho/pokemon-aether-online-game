@@ -11,6 +11,11 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 var cached_actions: Array = []
 var pending_request_ids: Dictionary = {}
 
+func clear_cached_state() -> void:
+	cached_actions = []
+	pending_request_ids.clear()
+	statuses_changed.emit(cached_actions)
+
 
 func load_statuses() -> Dictionary:
 	var response := await _request_json(ACTIONS_ENDPOINT, HTTPClient.METHOD_GET, "")
