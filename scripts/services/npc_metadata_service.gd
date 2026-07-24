@@ -98,11 +98,14 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["alreadyHealedDialogueId"] = str(npc_metadata.get("alreadyHealedDialogueId", npc_metadata.get("already_healed_dialogue_id", "")))
 	npc_metadata["noPartyDialogueId"] = str(npc_metadata.get("noPartyDialogueId", npc_metadata.get("no_party_dialogue_id", "")))
 	npc_metadata["failureDialogueId"] = str(npc_metadata.get("failureDialogueId", npc_metadata.get("failure_dialogue_id", "")))
+	npc_metadata["openingDialogueId"] = str(npc_metadata.get("openingDialogueId", npc_metadata.get("opening_dialogue_id", "")))
 	npc_metadata["successDialogue"] = _get_string_array(npc_metadata.get("successDialogue", []))
 	npc_metadata["alreadyHealedDialogue"] = _get_string_array(npc_metadata.get("alreadyHealedDialogue", []))
 	npc_metadata["noPartyDialogue"] = _get_string_array(npc_metadata.get("noPartyDialogue", []))
 	npc_metadata["failureDialogue"] = _get_string_array(npc_metadata.get("failureDialogue", []))
+	npc_metadata["openingDialogue"] = _get_string_array(npc_metadata.get("openingDialogue", []))
 	npc_metadata["healedSystemMessage"] = str(npc_metadata.get("healedSystemMessage", ""))
+	npc_metadata["marketId"] = str(npc_metadata.get("marketId", npc_metadata.get("market_id", "")))
 	npc_metadata["requiresPartyPokemon"] = bool(npc_metadata.get("requiresPartyPokemon", false))
 	return npc_metadata
 

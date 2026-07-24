@@ -19,7 +19,9 @@ func _check_market_attendant_script() -> void:
 	_check_true(text.contains("class_name MarketAttendantNPC"), "MarketAttendantNPC class exists")
 	_check_true(text.contains("@export var market_id := \"standard\""), "MarketAttendantNPC exports market_id")
 	_check_true(text.contains("get_node_or_null(\"/root/MarketService\")"), "MarketAttendantNPC uses MarketService autoload")
-	_check_true(text.contains("load_standard_market"), "MarketAttendantNPC loads standard market")
+	_check_true(text.contains("await _load_npc_metadata()"), "MarketAttendantNPC loads shared NPC metadata")
+	_check_true(text.contains('market_service.call("load_market", market_id)'), "MarketAttendantNPC loads its configured market")
+	_check_true(text.contains("openingDialogueId"), "MarketAttendantNPC supports opening dialogue metadata")
 	_check_true(text.contains("ui_overlay.call(\"open_market\", market)"), "MarketAttendantNPC can open market UI")
 	_check_true(text.contains("failure_dialogue_lines"), "MarketAttendantNPC has fallback failure dialogue")
 

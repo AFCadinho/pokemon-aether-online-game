@@ -143,11 +143,13 @@ npc_sprite_frames = SubResource("SpriteFrames_dqdo4")
 
 [node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_clerk")]
 position = Vector2(592, 912)
+npc_definition_id = "pokemon_center_clerk"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_dptnb")
 
 [node name="Clerk2" parent="Entities/NPCs" unique_id=854794050 instance=ExtResource("7_clerk")]
 position = Vector2(592, 976)
+npc_definition_id = "pokemon_center_clerk"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_hw1h2")
 

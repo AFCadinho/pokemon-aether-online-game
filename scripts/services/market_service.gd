@@ -7,6 +7,15 @@ const STANDARD_MARKET_PURCHASE_ENDPOINT := "/game/markets/standard/purchase"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
+func load_market(market_id: String) -> Dictionary:
+	var normalized_market_id := market_id.strip_edges().to_lower()
+	match normalized_market_id:
+		"", "standard", "standard_pokemart":
+			return await load_standard_market()
+		_:
+			return _validation_error("Unsupported market id: %s" % market_id)
+
+
 func load_standard_market() -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()

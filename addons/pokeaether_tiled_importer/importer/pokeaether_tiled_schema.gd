@@ -69,6 +69,7 @@ const PROP_TARGET_SPAWN_ALIAS := "target_spawn"
 const PROP_ENABLED := "enabled"
 
 const PROP_NPC_ID := "npc_id"
+const PROP_NPC_DEFINITION_ID := "npc_definition_id"
 const PROP_NPC_KIND := "npc_kind"
 const PROP_SCENE_PATH := "scene_path"
 const PROP_DISPLAY_NAME := "display_name"

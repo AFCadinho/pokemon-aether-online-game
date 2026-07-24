@@ -11,21 +11,27 @@ class_name MarketAttendantNPC
 	"I could not load the market right now.",
 	"Please try again in a moment.",
 ]
+@export var opening_dialogue_id := ""
+@export var failure_dialogue_id := ""
 
 
 func interact_with_player(_player: Node2D) -> void:
-	if not opening_dialogue_lines.is_empty():
-		await show_dialogue(opening_dialogue_lines)
-
-	var market_service := get_node_or_null("/root/MarketService")
-	if market_service == null or not market_service.has_method("load_standard_market"):
-		await show_dialogue(failure_dialogue_lines)
+	var metadata_response: Dictionary = await _load_npc_metadata()
+	if not bool(metadata_response.get("success", false)):
+		await _show_report_to_staff_message()
 		return
 
-	var result: Dictionary = await market_service.call("load_standard_market")
+	await show_dialogue(await _resolve_dialogue_lines(opening_dialogue_id, opening_dialogue_lines))
+
+	var market_service := get_node_or_null("/root/MarketService")
+	if market_service == null or not market_service.has_method("load_market"):
+		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+		return
+
+	var result: Dictionary = await market_service.call("load_market", market_id)
 	if not bool(result.get("success", false)):
 		push_warning("MarketAttendantNPC: market load failed: %s" % str(result.get("error", "Unknown error")))
-		await show_dialogue(failure_dialogue_lines)
+		await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
 		return
 
 	var market: Dictionary = _dictionary_from_value(result.get("market", {}))
@@ -48,10 +54,49 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	var metadata_opening_dialogue := _get_string_array(metadata.get("openingDialogue", []))
 	if not metadata_opening_dialogue.is_empty():
 		opening_dialogue_lines = metadata_opening_dialogue
+	opening_dialogue_id = _get_metadata_dialogue_id(
+		metadata,
+		"openingDialogueId",
+		"opening_dialogue_id",
+		opening_dialogue_id
+	)
 
 	var metadata_failure_dialogue := _get_string_array(metadata.get("failureDialogue", []))
 	if not metadata_failure_dialogue.is_empty():
 		failure_dialogue_lines = metadata_failure_dialogue
+	failure_dialogue_id = _get_metadata_dialogue_id(
+		metadata,
+		"failureDialogueId",
+		"failure_dialogue_id",
+		failure_dialogue_id
+	)
+
+
+func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:
+	var metadata_dialogue_id := str(metadata.get(camel_key, metadata.get(snake_key, ""))).strip_edges()
+	if metadata_dialogue_id.is_empty():
+		return current_value
+	return metadata_dialogue_id
+
+
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
+	if resolved_dialogue_id.is_empty():
+		return fallback_lines
+
+	var lines: Array[String] = await DialogueMetadataService.get_lines(resolved_dialogue_id)
+	if lines.is_empty():
+		push_warning("MarketAttendantNPC: Dialogue metadata was empty for %s; falling back to inline dialogue." % resolved_dialogue_id)
+		return fallback_lines
+	return lines
+
+
+func _show_report_to_staff_message() -> void:
+	var error_dialog_service := get_node_or_null("/root/GameErrorDialogService")
+	if error_dialog_service != null and error_dialog_service.has_method("show_report_to_staff_message"):
+		await error_dialog_service.call("show_report_to_staff_message")
+		return
+	await show_dialogue(failure_dialogue_lines)
 
 
 func _dictionary_from_value(value: Variant) -> Dictionary:

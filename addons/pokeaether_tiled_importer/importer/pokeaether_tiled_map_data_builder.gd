@@ -81,6 +81,7 @@ func _build_npc(layer_name: String, object_data: Dictionary) -> Resource:
 	var properties: Dictionary = object_data.get("properties", {})
 	var resource := NpcData.new()
 	resource.npc_id = _property_text(properties, Schema.PROP_NPC_ID)
+	resource.npc_definition_id = _property_text(properties, Schema.PROP_NPC_DEFINITION_ID)
 	resource.npc_kind = _property_text(properties, Schema.PROP_NPC_KIND)
 	resource.position = _point_to_tile_center(object_data)
 	resource.facing = _property_text(properties, Schema.PROP_FACING, "down")

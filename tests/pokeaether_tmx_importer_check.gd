@@ -47,6 +47,8 @@ func _check_success_import(importer: RefCounted) -> void:
 		_check_equal((map_data.get("spawns") as Array).size(), 1, "spawn data count")
 		_check_equal((map_data.get("warps") as Array).size(), 1, "warp data count")
 		_check_equal((map_data.get("npcs") as Array).size(), 1, "npc data count")
+		var npc_data: Resource = (map_data.get("npcs") as Array)[0]
+		_check_equal(str(npc_data.get("npc_definition_id")), "shared_guide", "npc definition id")
 		_check_equal((map_data.get("interactables") as Array).size(), 1, "interactable data count")
 		_check_equal((map_data.get("items") as Array).size(), 1, "item data count")
 		_check_equal((map_data.get("encounter_regions") as Array).size(), 1, "encounter region data count")

@@ -25,7 +25,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> vo
 
 
 func _get_dialogue_metadata_lines() -> Array[String]:
-	if dialogue_id.strip_edges().is_empty() and not npc_id.strip_edges().is_empty():
+	if dialogue_id.strip_edges().is_empty() and not _get_npc_metadata_id().is_empty():
 		var metadata_response: Dictionary = await _load_npc_metadata()
 		if not metadata_response.get("success", false):
 			return []

@@ -3,6 +3,7 @@ extends Resource
 class_name PokeAetherTiledNpcData
 
 @export var npc_id := ""
+@export var npc_definition_id := ""
 @export var npc_kind := ""
 @export var position := Vector2.ZERO
 @export var facing := "down"

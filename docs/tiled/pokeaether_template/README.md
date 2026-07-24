@@ -50,6 +50,15 @@ Use these object layers exactly:
 10. Keep ids unique within each object layer, for example unique `spawn_id`, `warp_id`, `npc_id`, and `interactable_id`.
 11. Run the importer/check workflow before handing the map to engineering.
 
+## NPCs
+
+Use `PA_NPCs` for placed characters.
+
+- `npc_id`: required unique placement id within the map.
+- `npc_definition_id`: optional shared content definition for NPCs that use the same metadata, dialogue, and behavior configuration.
+- `npc_kind`: required behavior category.
+- `display_name`, `dialogue_id`, `trainer_id`, `facing`, and `sight_range_tiles`: optional placement overrides.
+
 ## Interactables
 
 Use `PA_Interactables` for map-owned objects that can be talked to, read, inspected, or otherwise activated. Common examples are road signs, trainer tips signs, bookshelves, statues, computers, switches, and hidden map objects.

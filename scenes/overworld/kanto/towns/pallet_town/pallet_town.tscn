@@ -2282,6 +2282,8 @@ mugshot = ExtResource("11_fec28")
 
 [node name="MarketAttendantNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
 position = Vector2(272, 240)
+npc_id = "kanto_pallet_town_market_attendant"
+npc_definition_id = "pokemon_center_clerk"
 npc_sprite_frames = SubResource("SpriteFrames_3oirl")
 mugshot = ExtResource("14_m86ow")
 

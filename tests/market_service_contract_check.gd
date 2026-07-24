@@ -13,6 +13,7 @@ func _init() -> void:
 
 	_check_service_is_autoloaded()
 	_check_endpoints()
+	_check_market_selection()
 	_check_purchase_payload()
 	_check_catalog_response_parsing()
 	_check_purchase_response_parsing()
@@ -31,6 +32,13 @@ func _check_endpoints() -> void:
 	var text := _read_text(MARKET_SERVICE_SCRIPT)
 	_check_true(text.contains("STANDARD_MARKET_ENDPOINT := \"/game/markets/standard\""), "catalog endpoint")
 	_check_true(text.contains("STANDARD_MARKET_PURCHASE_ENDPOINT := \"/game/markets/standard/purchase\""), "purchase endpoint")
+
+
+func _check_market_selection() -> void:
+	var text := _read_text(MARKET_SERVICE_SCRIPT)
+	_check_true(text.contains("func load_market(market_id: String) -> Dictionary:"), "market selection entrypoint")
+	_check_true(text.contains('"standard", "standard_pokemart":'), "standard market aliases")
+	_check_true(text.contains("Unsupported market id:"), "unsupported markets fail explicitly")
 
 
 func _check_purchase_payload() -> void:

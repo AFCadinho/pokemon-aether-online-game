@@ -8,6 +8,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ]
 
 @export var npc_id := ""
+@export var npc_definition_id := ""
 @export var dialogue_id := ""
 @export var display_name := ""
 @export var facing_direction := Vector2.DOWN
@@ -531,7 +532,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> vo
 
 	var source_dialogue_lines := lines
 	if source_dialogue_lines.is_empty():
-		if not npc_id.is_empty():
+		if not _get_npc_metadata_id().is_empty():
 			var metadata_response: Dictionary = await _load_npc_metadata()
 			if not metadata_response.get("success", false):
 				await GameErrorDialogService.show_report_to_staff_message(dialogue_box)
@@ -556,6 +557,13 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> vo
 
 
 func _load_npc_metadata() -> Dictionary:
+	var metadata_id := _get_npc_metadata_id()
+	if metadata_id.is_empty():
+		return {
+			"success": true,
+			"metadata": {},
+		}
+
 	if npc_metadata_loaded:
 		return {
 			"success": true,
@@ -565,15 +573,15 @@ func _load_npc_metadata() -> Dictionary:
 	if npc_metadata_load_failed:
 		return {
 			"success": false,
-			"error": "NPC metadata already failed for %s" % npc_id,
+			"error": "NPC metadata already failed for %s" % metadata_id,
 		}
 
-	var response: Dictionary = await NpcMetadataService.get_npc_metadata(npc_id)
+	var response: Dictionary = await NpcMetadataService.get_npc_metadata(metadata_id)
 	if not response.get("success", false):
 		npc_metadata_load_failed = true
 		push_error("%s metadata failed for %s: %s" % [
 			name,
-			npc_id,
+			metadata_id,
 			str(response.get("error", "Unknown API error")),
 		])
 		return response
@@ -582,6 +590,13 @@ func _load_npc_metadata() -> Dictionary:
 	_apply_npc_metadata(metadata)
 	npc_metadata_loaded = true
 	return response
+
+
+func _get_npc_metadata_id() -> String:
+	var definition_id := npc_definition_id.strip_edges()
+	if not definition_id.is_empty():
+		return definition_id
+	return npc_id.strip_edges()
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:

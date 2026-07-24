@@ -108,7 +108,7 @@ func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Arra
 
 
 func _load_npc_metadata_if_needed() -> Dictionary:
-	if npc_id.is_empty():
+	if _get_npc_metadata_id().is_empty():
 		return {
 			"success": true,
 			"metadata": {},

@@ -14,11 +14,9 @@ respawn_point_id = "kanto_pewter_city_pokemon_center"
 
 [node name="Clerk" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="1" unique_id=554856490]
 npc_id = "kanto_pewter_city_pokemon_center_clerk"
-market_id = "standard"
 
 [node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="2" unique_id=854794050]
 npc_id = "kanto_pewter_city_pokemon_center_clerk_2"
-market_id = "standard"
 
 [node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0" unique_id=1126740257]
 target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"

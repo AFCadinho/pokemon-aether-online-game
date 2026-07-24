@@ -1,6 +1,7 @@
 extends SceneTree
 
 const TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn"
+const HEAL_NPC_PATH := "res://scenes/npcs/heal_npc.tscn"
 const PEWTER_CENTER_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn"
 const PEWTER_CITY_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 
@@ -33,8 +34,14 @@ func _init() -> void:
 	)
 	_check(
 		template_source.contains('[node name="NurseJoy" parent="Entities/NPCs"')
-		and template_source.contains('[node name="Clerk" parent="Entities/NPCs"'),
-		"Pokémon Center template provides standard staff"
+		and template_source.contains('[node name="Clerk" parent="Entities/NPCs"')
+		and template_source.count('npc_definition_id = "pokemon_center_clerk"') == 2,
+		"Pokémon Center template provides staff with shared definitions"
+	)
+	var heal_npc_source := FileAccess.get_file_as_string(HEAL_NPC_PATH)
+	_check(
+		heal_npc_source.contains('npc_definition_id = "pokemon_center_nurse"'),
+		"Heal NPC scene defaults to the shared nurse definition"
 	)
 	_check(
 		template_source.contains('[node name="FromOutside" type="Marker2D" parent="Spawns"')

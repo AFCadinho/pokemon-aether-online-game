@@ -60,6 +60,7 @@
   <object id="3" name="Guide" x="96" y="32">
    <properties>
     <property name="npc_id" value="guide"/>
+    <property name="npc_definition_id" value="shared_guide"/>
     <property name="npc_kind" value="dialogue"/>
     <property name="facing" value="left"/>
    </properties>

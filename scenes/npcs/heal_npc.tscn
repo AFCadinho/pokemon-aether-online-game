@@ -8,7 +8,8 @@ size = Vector2(96, 97)
 
 [node name="HealNPC" type="Node2D"]
 script = ExtResource("1_0hryh")
-display_name = "Nurse"
+npc_definition_id = "pokemon_center_nurse"
+display_name = "Nurse Joy"
 npc_sprite_frames = ExtResource("2_dhlew")
 
 [node name="Look" type="Node2D" parent="."]

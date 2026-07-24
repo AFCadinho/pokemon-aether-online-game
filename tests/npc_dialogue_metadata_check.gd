@@ -13,6 +13,7 @@ var failed := false
 
 func _init() -> void:
 	_check_base_npc_exports_dialogue_id()
+	_check_base_npc_exports_definition_id()
 	_check_scene_defined_dialogue_id_is_allowed()
 	_check_metadata_populates_dialogue_id()
 	_check_metadata_preserves_scene_dialogue_id_without_override()
@@ -27,6 +28,19 @@ func _init() -> void:
 func _check_base_npc_exports_dialogue_id() -> void:
 	var text := _read_text(BASE_NPC_SCRIPT)
 	_check_true(text.contains("@export var dialogue_id := \"\""), "BaseNPC exports dialogue_id")
+
+
+func _check_base_npc_exports_definition_id() -> void:
+	var text := _read_text(BASE_NPC_SCRIPT)
+	_check_true(text.contains("@export var npc_definition_id := \"\""), "BaseNPC exports npc_definition_id")
+	_check_true(
+		text.contains("func _get_npc_metadata_id() -> String:"),
+		"BaseNPC resolves a shared NPC definition id"
+	)
+	_check_true(
+		text.contains("return npc_id.strip_edges()"),
+		"BaseNPC falls back to the placed npc_id"
+	)
 
 
 func _check_scene_defined_dialogue_id_is_allowed() -> void:
@@ -74,6 +88,11 @@ func _check_npc_metadata_service_normalizes_dialogue_id() -> void:
 	_check_true(
 		text.contains("npc_metadata[\"successDialogueId\"]"),
 		"NPC metadata normalizes healer dialogue IDs"
+	)
+	_check_true(
+		text.contains("npc_metadata[\"openingDialogueId\"]")
+		and text.contains("npc_metadata[\"marketId\"]"),
+		"NPC metadata normalizes market attendant fields"
 	)
 
 
