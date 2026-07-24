@@ -36,8 +36,10 @@ func _init() -> void:
 	_check(
 		template_source.contains('[node name="NurseJoy" parent="Entities/NPCs"')
 		and template_source.contains('[node name="Clerk" parent="Entities/NPCs"')
-		and template_source.count('npc_definition_id = "pokemon_center_clerk"') == 2,
-		"Pokémon Center template provides staff with shared definitions"
+		and template_source.contains('[node name="Clerk2" parent="Entities/NPCs"')
+		and template_source.contains('path="res://scenes/npcs/market_seller_npc.tscn"')
+		and template_source.contains('path="res://scenes/npcs/market_buyer_npc.tscn"'),
+		"Pokémon Center template provides generic buyer and seller roles"
 	)
 	var first_clerk_start := template_source.find('[node name="Clerk" parent="Entities/NPCs"')
 	var second_clerk_start := template_source.find('[node name="Clerk2" parent="Entities/NPCs"')

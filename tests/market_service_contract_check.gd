@@ -15,8 +15,10 @@ func _init() -> void:
 	_check_endpoints()
 	_check_market_selection()
 	_check_purchase_payload()
+	_check_sale_payload()
 	_check_catalog_response_parsing()
 	_check_purchase_response_parsing()
+	_check_sale_response_parsing()
 	_check_error_detail_extraction()
 
 	service.free()
@@ -32,6 +34,7 @@ func _check_endpoints() -> void:
 	var text := _read_text(MARKET_SERVICE_SCRIPT)
 	_check_true(text.contains("STANDARD_MARKET_ENDPOINT := \"/game/markets/standard\""), "catalog endpoint")
 	_check_true(text.contains("STANDARD_MARKET_PURCHASE_ENDPOINT := \"/game/markets/standard/purchase\""), "purchase endpoint")
+	_check_true(text.contains("STANDARD_MARKET_SALE_ENDPOINT := \"/game/markets/standard/sell\""), "sale endpoint")
 
 
 func _check_market_selection() -> void:
@@ -50,6 +53,12 @@ func _check_purchase_payload() -> void:
 	_check_equal(minimum_payload.get("quantity", 0), 1, "purchase payload minimum quantity")
 
 
+func _check_sale_payload() -> void:
+	var payload: Dictionary = service.build_sale_payload("Poke Ball", 2)
+	_check_equal(payload.get("itemId", ""), "poke-ball", "sale payload item id")
+	_check_equal(payload.get("quantity", 0), 2, "sale payload quantity")
+
+
 func _check_catalog_response_parsing() -> void:
 	var result: Dictionary = service.parse_market_catalog_response({
 		"success": true,
@@ -66,6 +75,7 @@ func _check_catalog_response_parsing() -> void:
 						"name": "Poke Ball",
 						"category": "poke-balls",
 						"shortDesc": "A device for catching Pokemon.",
+						"sellPrice": 100,
 						"costs": [{"currency": "money", "amount": 200}],
 					},
 				],
@@ -80,6 +90,7 @@ func _check_catalog_response_parsing() -> void:
 	_check_equal(items.size(), 1, "catalog item count")
 	var first_item: Dictionary = items[0]
 	_check_equal(first_item.get("itemId", ""), "poke-ball", "catalog item id")
+	_check_equal(first_item.get("sellPrice", 0), 100, "catalog item sale price")
 	_check_equal(((first_item.get("costs", []) as Array)[0] as Dictionary).get("amount", 0), 200, "catalog item price")
 
 
@@ -103,6 +114,28 @@ func _check_purchase_response_parsing() -> void:
 	_check_equal((result.get("wallet", {}) as Dictionary).get("money", 0), 600, "purchase wallet money")
 	_check_equal((result.get("inventory", []) as Array).size(), 1, "purchase inventory size")
 	_check_equal((result.get("purchase", {}) as Dictionary).get("totalPrice", 0), 400, "purchase total")
+
+
+func _check_sale_response_parsing() -> void:
+	var result: Dictionary = service.parse_sale_response({
+		"success": true,
+		"body": {
+			"wallet": {"money": 800},
+			"inventory": {"items": [{"itemId": "poke-ball", "quantity": 1}]},
+			"sale": {
+				"marketId": "standard_pokemart",
+				"itemId": "poke-ball",
+				"quantity": 2,
+				"unitPrice": 100,
+				"totalPrice": 200,
+			},
+		},
+	})
+
+	_check_equal(result.get("success", false), true, "sale parse success")
+	_check_equal((result.get("wallet", {}) as Dictionary).get("money", 0), 800, "sale wallet money")
+	_check_equal((result.get("inventory", []) as Array).size(), 1, "sale inventory size")
+	_check_equal((result.get("sale", {}) as Dictionary).get("totalPrice", 0), 200, "sale total")
 
 
 func _check_error_detail_extraction() -> void:

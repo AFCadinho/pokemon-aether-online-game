@@ -2,7 +2,11 @@ extends DialogueNPC
 
 class_name MarketAttendantNPC
 
+const MARKET_MODE_PLAYER_BUYS := "player_buys"
+const MARKET_MODE_PLAYER_SELLS := "player_sells"
+
 @export var market_id := "standard"
+@export_enum("player_buys", "player_sells") var market_mode := MARKET_MODE_PLAYER_BUYS
 @export var opening_dialogue_lines: Array[String] = [
 	"Welcome! How may I help you?",
 ]
@@ -35,9 +39,21 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	var market: Dictionary = _dictionary_from_value(result.get("market", {}))
+	var inventory_items: Array = []
+	if market_mode == MARKET_MODE_PLAYER_SELLS:
+		var inventory_service := get_node_or_null("/root/InventoryService")
+		if inventory_service == null or not inventory_service.has_method("load_inventory"):
+			await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+			return
+		var inventory_result: Dictionary = await inventory_service.call("load_inventory")
+		if not bool(inventory_result.get("success", false)):
+			await show_dialogue(await _resolve_dialogue_lines(failure_dialogue_id, failure_dialogue_lines))
+			return
+		inventory_items = _array_from_value(inventory_result.get("items", []))
+
 	var ui_overlay := get_tree().current_scene.get_node_or_null("UIOverlay") if get_tree().current_scene != null else null
 	if ui_overlay != null and ui_overlay.has_method("open_market"):
-		ui_overlay.call("open_market", market)
+		ui_overlay.call("open_market", market, market_mode, inventory_items)
 		return
 
 	var items: Array = _array_from_value(market.get("items", []))
@@ -50,6 +66,9 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	var metadata_market_id := str(metadata.get("marketId", metadata.get("market_id", ""))).strip_edges()
 	if not metadata_market_id.is_empty():
 		market_id = metadata_market_id
+	var metadata_market_mode := str(metadata.get("marketMode", metadata.get("market_mode", ""))).strip_edges()
+	if metadata_market_mode in [MARKET_MODE_PLAYER_BUYS, MARKET_MODE_PLAYER_SELLS]:
+		market_mode = metadata_market_mode
 
 	var metadata_opening_dialogue := _get_string_array(metadata.get("openingDialogue", []))
 	if not metadata_opening_dialogue.is_empty():

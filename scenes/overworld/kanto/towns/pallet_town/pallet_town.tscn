@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/boss_battle_npc.tscn" id="9_s3ag2"]
 [ext_resource type="Texture2D" uid="uid://30fkhs34v51d" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/DP Beta Overworlds/DP_Beta027.png" id="10_s3ag2"]
 [ext_resource type="Texture2D" uid="uid://ckc4i8557tm1l" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="11_fec28"]
-[ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="12_4x353"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/market_seller_npc.tscn" id="12_4x353"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
 [ext_resource type="Texture2D" uid="uid://d3tf216kfmai2" path="res://assets/npcs/gen4-ow-sprites/trchar118.png" id="13_4x353"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
@@ -2279,10 +2279,9 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_s3ag2")
 mugshot = ExtResource("11_fec28")
 
-[node name="MarketAttendantNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
+[node name="MarketSellerNPC" parent="Entities/NPCs" unique_id=634307267 instance=ExtResource("12_4x353")]
 position = Vector2(272, 240)
 npc_id = "kanto_pallet_town_market_attendant"
-npc_definition_id = "pokemon_center_clerk"
 mugshot = ExtResource("14_m86ow")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=245092271]

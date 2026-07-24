@@ -17,22 +17,24 @@ func _check_market_popup_contract() -> void:
 	var text := _read_text(UI_OVERLAY_SCRIPT)
 	_check_true(text.contains("var market_popup: PanelContainer"), "UIOverlay tracks market popup")
 	_check_true(text.contains("_setup_market_popup()"), "UIOverlay sets up market popup")
-	_check_true(text.contains("func open_market(market: Dictionary) -> void:"), "UIOverlay exposes open_market")
+	_check_true(text.contains('func open_market(market: Dictionary, requested_mode: String = "player_buys"'), "UIOverlay exposes mode-aware open_market")
 	_check_true(text.contains("func _apply_market_item_row_style"), "UIOverlay styles market item rows")
 	_check_true(text.contains("func _market_item_subtitle"), "UIOverlay shows market item subtitles")
 	_check_true(text.contains("func _refresh_market_detail"), "UIOverlay refreshes selected item details")
 	_check_true(text.contains("func _on_market_search_changed"), "UIOverlay supports catalog search")
 	_check_true(text.contains("Money: %s"), "UIOverlay labels market money")
 	_check_true(text.contains("MarketService.purchase_standard_item(item_id, quantity)"), "UIOverlay purchases through MarketService")
+	_check_true(text.contains("MarketService.sell_standard_item(item_id, quantity)"), "UIOverlay sells through MarketService")
+	_check_true(text.contains('market_mode == "player_sells"'), "UIOverlay supports the player-sells mode")
 	_check_true(text.contains("PlayerWalletService.apply_wallet_result(result)"), "UIOverlay applies wallet updates")
 	_check_true(text.contains("bag_inventory_items = _normalize_bag_inventory_items(inventory_value)"), "UIOverlay refreshes bag inventory")
 	_check_true(text.contains("Not enough money."), "UIOverlay explains insufficient money")
-	_check_true(text.contains("Bought %sx %s."), "UIOverlay posts purchase feedback")
+	_check_true(text.contains('"Sold" if player_is_selling else "Bought"'), "UIOverlay posts role-aware transaction feedback")
 
 
 func _check_market_attendant_uses_ui() -> void:
 	var text := _read_text(MARKET_ATTENDANT_SCRIPT)
-	_check_true(text.contains("ui_overlay.call(\"open_market\", market)"), "Market attendant opens market UI")
+	_check_true(text.contains('ui_overlay.call("open_market", market, market_mode, inventory_items)'), "Market attendant opens the selected market mode")
 
 
 func _read_text(path: String) -> String:

@@ -4,6 +4,7 @@ class_name MarketServiceNode
 
 const STANDARD_MARKET_ENDPOINT := "/game/markets/standard"
 const STANDARD_MARKET_PURCHASE_ENDPOINT := "/game/markets/standard/purchase"
+const STANDARD_MARKET_SALE_ENDPOINT := "/game/markets/standard/sell"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -54,11 +55,35 @@ func purchase_standard_item(item_id: String, quantity: int = 1) -> Dictionary:
 	return parse_purchase_response(response)
 
 
+func sell_standard_item(item_id: String, quantity: int = 1) -> Dictionary:
+	if not _is_authenticated():
+		return _auth_error()
+	if item_id.strip_edges() == "":
+		return _validation_error("Missing item id.")
+
+	var gateway := _gateway_api_config()
+	if gateway == null:
+		return _validation_error("Gateway API config is unavailable.")
+
+	var base_url: String = await gateway.call("get_base_url")
+	var response: Dictionary = await _request_json(
+		base_url + STANDARD_MARKET_SALE_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		gateway.call("get_json_headers"),
+		JSON.stringify(build_sale_payload(item_id, quantity))
+	)
+	return parse_sale_response(response)
+
+
 func build_purchase_payload(item_id: String, quantity: int = 1) -> Dictionary:
 	return {
 		"itemId": item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-"),
 		"quantity": max(quantity, 1),
 	}
+
+
+func build_sale_payload(item_id: String, quantity: int = 1) -> Dictionary:
+	return build_purchase_payload(item_id, quantity)
 
 
 func parse_market_catalog_response(response: Dictionary) -> Dictionary:
@@ -86,6 +111,20 @@ func parse_purchase_response(response: Dictionary) -> Dictionary:
 	}
 
 
+func parse_sale_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
+	return {
+		"success": true,
+		"wallet": _dictionary_from_value(body.get("wallet", {})),
+		"inventory": _array_from_value(inventory.get("items", [])),
+		"sale": _dictionary_from_value(body.get("sale", {})),
+	}
+
+
 func normalize_market(value: Variant) -> Dictionary:
 	var market: Dictionary = _dictionary_from_value(value)
 	var normalized_items: Array = []
@@ -110,6 +149,7 @@ func normalize_market_item(value: Variant) -> Dictionary:
 		"name": str(item.get("name", "")),
 		"category": str(item.get("category", "")),
 		"shortDesc": str(item.get("shortDesc", "")),
+		"sellPrice": max(int(item.get("sellPrice", 0)), 0),
 		"costs": normalize_costs(item.get("costs", [])),
 	}
 

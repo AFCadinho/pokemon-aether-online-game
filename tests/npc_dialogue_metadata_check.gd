@@ -91,7 +91,8 @@ func _check_npc_metadata_service_normalizes_dialogue_id() -> void:
 	)
 	_check_true(
 		text.contains("npc_metadata[\"openingDialogueId\"]")
-		and text.contains("npc_metadata[\"marketId\"]"),
+		and text.contains("npc_metadata[\"marketId\"]")
+		and text.contains("npc_metadata[\"marketMode\"]"),
 		"NPC metadata normalizes market attendant fields"
 	)
 

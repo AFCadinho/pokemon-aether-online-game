@@ -7,7 +7,8 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
 [ext_resource type="Texture2D" uid="uid://cf588mgea7cyu" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_023_Youngster.png" id="6_dqdo4"]
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="6_nurse"]
-[ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="7_clerk"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/market_seller_npc.tscn" id="7_seller"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/market_buyer_npc.tscn" id="7_buyer"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="8_dptnb"]
 [ext_resource type="Script" path="res://scripts/world/npcs/heal_machine_effect.gd" id="9_heal_effect"]
 
@@ -145,14 +146,12 @@ display_name = "Nurse Joy"
 position = Vector2(464, 600)
 script = ExtResource("9_heal_effect")
 
-[node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_clerk")]
+[node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_seller")]
 position = Vector2(592, 912)
-npc_definition_id = "pokemon_center_clerk"
 facing_direction = Vector2(-1, 0)
 
-[node name="Clerk2" parent="Entities/NPCs" unique_id=854794050 instance=ExtResource("7_clerk")]
+[node name="Clerk2" parent="Entities/NPCs" unique_id=854794050 instance=ExtResource("7_buyer")]
 position = Vector2(592, 976)
-npc_definition_id = "pokemon_center_clerk"
 facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1615845431]

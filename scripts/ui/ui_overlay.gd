@@ -824,6 +824,7 @@ var market_subtitle_label: Label
 var market_money_label: Label
 var market_search_input: LineEdit
 var market_catalog_summary_label: Label
+var market_catalog_caption_label: Label
 var market_item_list: VBoxContainer
 var market_detail_icon: TextureRect
 var market_detail_name_label: Label
@@ -834,9 +835,12 @@ var market_total_price_label: Label
 var market_quantity_spinbox: SpinBox
 var market_status_label: Label
 var market_buy_button: Button
+var market_action_caption_label: Label
+var market_delivery_hint_label: Label
 var market_items: Array[Dictionary] = []
 var market_selected_item: Dictionary = {}
 var market_purchase_in_progress := false
+var market_mode := "player_buys"
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
 var active_mail_box := "inbox"
@@ -11979,12 +11983,12 @@ func _setup_market_popup() -> void:
 	catalog_header.add_theme_constant_override("separation", 8)
 	catalog_layout.add_child(catalog_header)
 
-	catalog_caption = Label.new()
-	catalog_caption.text = "SHOP CATALOG"
-	catalog_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	catalog_caption.add_theme_font_size_override("font_size", 10)
-	catalog_caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	catalog_header.add_child(catalog_caption)
+	market_catalog_caption_label = Label.new()
+	market_catalog_caption_label.text = "SHOP CATALOG"
+	market_catalog_caption_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	market_catalog_caption_label.add_theme_font_size_override("font_size", 10)
+	market_catalog_caption_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	catalog_header.add_child(market_catalog_caption_label)
 
 	market_catalog_summary_label = Label.new()
 	market_catalog_summary_label.name = "CatalogSummary"
@@ -12066,11 +12070,11 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
 
-	caption = Label.new()
-	caption.text = "PURCHASE"
-	caption.add_theme_font_size_override("font_size", 10)
-	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(caption)
+	market_action_caption_label = Label.new()
+	market_action_caption_label.text = "PURCHASE"
+	market_action_caption_label.add_theme_font_size_override("font_size", 10)
+	market_action_caption_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(market_action_caption_label)
 
 	var icon_frame := PanelContainer.new()
 	icon_frame.name = "SelectedItemPreview"
@@ -12204,29 +12208,44 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	_apply_button_style(market_buy_button, "primary")
 	layout.add_child(market_buy_button)
 
-	delivery_hint = Label.new()
-	delivery_hint.text = "Purchases are delivered directly to your Bag."
-	delivery_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	delivery_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	delivery_hint.add_theme_font_size_override("font_size", 10)
-	delivery_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
-	layout.add_child(delivery_hint)
+	market_delivery_hint_label = Label.new()
+	market_delivery_hint_label.text = "Purchases are delivered directly to your Bag."
+	market_delivery_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	market_delivery_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	market_delivery_hint_label.add_theme_font_size_override("font_size", 10)
+	market_delivery_hint_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68))
+	layout.add_child(market_delivery_hint_label)
 
-func open_market(market: Dictionary) -> void:
+func open_market(market: Dictionary, requested_mode: String = "player_buys", inventory_items: Array = []) -> void:
 	if market_popup == null:
 		return
+	market_mode = requested_mode if requested_mode in ["player_buys", "player_sells"] else "player_buys"
+	var player_is_selling := market_mode == "player_sells"
 	var market_name := str(market.get("name", "")).strip_edges()
-	market_title_label.text = market_name if market_name != "" else "Poké Mart"
+	market_title_label.text = ("%s Buyer" % market_name) if player_is_selling and market_name != "" else (
+		"Market Buyer" if player_is_selling else (market_name if market_name != "" else "Poké Mart")
+	)
 	var location_name := str(market.get("locationName", "")).strip_edges()
 	var region_name := str(market.get("region", "")).strip_edges()
+	var activity_description := "Sell items from your Bag" if player_is_selling else "Trainer supplies and everyday essentials"
 	if location_name != "":
-		market_subtitle_label.text = "%s · Trainer supplies and everyday essentials" % location_name
+		market_subtitle_label.text = "%s · %s" % [location_name, activity_description]
 	elif region_name != "":
-		market_subtitle_label.text = "%s · Trainer supplies and everyday essentials" % region_name
+		market_subtitle_label.text = "%s · %s" % [region_name, activity_description]
 	else:
-		market_subtitle_label.text = "Trainer supplies and everyday essentials"
-	market_items = _normalize_market_items(market.get("items", []))
+		market_subtitle_label.text = activity_description
+	market_catalog_caption_label.text = "YOUR SELLABLE ITEMS" if player_is_selling else "SHOP CATALOG"
+	market_action_caption_label.text = "SALE" if player_is_selling else "PURCHASE"
+	market_delivery_hint_label.text = (
+		"Sold items are removed from your Bag immediately."
+		if player_is_selling
+		else "Purchases are delivered directly to your Bag."
+	)
+	market_search_input.placeholder_text = "Search your sellable items..." if player_is_selling else "Search the catalog..."
+	var catalog_items := _normalize_market_items(market.get("items", []))
+	market_items = _market_sell_items(catalog_items, inventory_items) if player_is_selling else catalog_items
 	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
+	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if player_is_selling else 99
 	market_quantity_spinbox.value = 1
 	market_search_input.text = ""
 	market_search_input.release_focus()
@@ -12235,7 +12254,12 @@ func open_market(market: Dictionary) -> void:
 	_refresh_market_money()
 	_refresh_market_items()
 	if market_items.is_empty():
-		_set_market_status("This shop does not have any items available right now.", false)
+		_set_market_status(
+			"You do not have any items this buyer accepts."
+			if player_is_selling
+			else "This shop does not have any items available right now.",
+			false
+		)
 
 func _hide_market_popup() -> void:
 	if market_popup != null:
@@ -12263,8 +12287,33 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
 			"price": _market_item_money_price(item),
+			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
 		})
 	return normalized_items
+
+
+func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array) -> Array[Dictionary]:
+	var inventory_by_id := {}
+	for inventory_value: Variant in inventory_items:
+		if typeof(inventory_value) != TYPE_DICTIONARY:
+			continue
+		var inventory_item: Dictionary = inventory_value
+		var item_id := str(inventory_item.get("itemId", inventory_item.get("id", ""))).strip_edges()
+		if item_id != "":
+			inventory_by_id[item_id] = max(int(inventory_item.get("quantity", 0)), 0)
+
+	var sell_items: Array[Dictionary] = []
+	for catalog_item: Dictionary in catalog_items:
+		var item_id := str(catalog_item.get("id", ""))
+		var owned_quantity: int = int(inventory_by_id.get(item_id, 0))
+		var sell_price: int = int(catalog_item.get("sellPrice", 0))
+		if owned_quantity <= 0 or sell_price <= 0:
+			continue
+		var sell_item := catalog_item.duplicate(true)
+		sell_item["price"] = sell_price
+		sell_item["quantity"] = owned_quantity
+		sell_items.append(sell_item)
+	return sell_items
 
 func _market_item_money_price(item: Dictionary) -> int:
 	var costs_value: Variant = item.get("costs", [])
@@ -12290,13 +12339,16 @@ func _refresh_market_items() -> void:
 		if market_search_input != null and market_search_input.text.strip_edges() != "":
 			market_catalog_summary_label.text = "%d of %d items" % [filtered_items.size(), market_items.size()]
 		else:
-			market_catalog_summary_label.text = "%d item%s available" % [
+			market_catalog_summary_label.text = "%d item%s %s" % [
 				filtered_items.size(),
 				"" if filtered_items.size() == 1 else "s",
+				"accepted" if market_mode == "player_sells" else "available",
 			]
 
 	if filtered_items.is_empty():
-		var empty_message := "No items match your search." if not market_items.is_empty() else "No market items available."
+		var empty_message := "No items match your search." if not market_items.is_empty() else (
+			"No accepted items in your Bag." if market_mode == "player_sells" else "No market items available."
+		)
 		market_item_list.add_child(_create_bag_empty_state(empty_message))
 		if market_buy_button != null:
 			market_buy_button.disabled = market_selected_item.is_empty()
@@ -12458,6 +12510,11 @@ func _apply_market_item_row_style(row: PanelContainer, selected: bool, hovered: 
 	row.add_theme_stylebox_override("panel", style)
 
 func _market_item_subtitle(item: Dictionary) -> String:
+	if market_mode == "player_sells":
+		return "%s · %d in Bag" % [
+			_market_category_label(str(item.get("category", ""))),
+			int(item.get("quantity", 0)),
+		]
 	var description := str(item.get("shortDesc", "")).strip_edges()
 	if description != "":
 		return _ellipsize_text(description, 58)
@@ -12475,6 +12532,7 @@ func _on_market_item_selected(item: Dictionary) -> void:
 		return
 	market_selected_item = item
 	market_quantity_spinbox.value = 1
+	market_quantity_spinbox.max_value = max(int(item.get("quantity", 1)), 1) if market_mode == "player_sells" else 99
 	_refresh_market_items()
 
 func _on_market_quantity_changed(_value: float) -> void:
@@ -12493,14 +12551,18 @@ func _refresh_market_purchase_state() -> void:
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var price: int = int(market_selected_item.get("price", 0))
 	var total: int = price * quantity
-	var has_enough_money := total <= PlayerSave.money
-	market_buy_button.disabled = market_purchase_in_progress or not has_enough_money
-	market_buy_button.text = "Purchasing..." if market_purchase_in_progress else "Buy · %s" % _format_money(total)
+	var player_is_selling := market_mode == "player_sells"
+	var allowed := quantity <= int(market_selected_item.get("quantity", 0)) if player_is_selling else total <= PlayerSave.money
+	market_buy_button.disabled = market_purchase_in_progress or not allowed
+	if market_purchase_in_progress:
+		market_buy_button.text = "Selling..." if player_is_selling else "Purchasing..."
+	else:
+		market_buy_button.text = "%s · %s" % ["Sell" if player_is_selling else "Buy", _format_money(total)]
 	var item_name := str(market_selected_item.get("name", "Item"))
 	var status_text := "%sx %s · Total %s" % [quantity, item_name, _format_money(total)]
-	if not has_enough_money:
-		status_text += " · Not enough money."
-	_set_market_status(status_text, not has_enough_money)
+	if not allowed:
+		status_text += " · Not enough items." if player_is_selling else " · Not enough money."
+	_set_market_status(status_text, not allowed)
 
 func _refresh_market_detail() -> void:
 	if market_detail_icon == null or market_quantity_spinbox == null:
@@ -12526,9 +12588,12 @@ func _refresh_market_detail() -> void:
 	market_detail_icon.modulate = Color.WHITE
 	market_detail_name_label.text = item_name
 	market_detail_category_label.text = _market_category_label(category).to_upper()
-	market_detail_description_label.text = description if description != "" else "A useful item available from this shop."
+	market_detail_description_label.text = description if description != "" else (
+		"An item this buyer accepts." if market_mode == "player_sells" else "A useful item available from this shop."
+	)
 	market_unit_price_label.text = _format_money(unit_price)
 	market_total_price_label.text = _format_money(unit_price * quantity)
+	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if market_mode == "player_sells" else 99
 	market_quantity_spinbox.editable = not market_purchase_in_progress
 
 func _refresh_market_money() -> void:
@@ -12544,13 +12609,24 @@ func _on_market_buy_pressed() -> void:
 
 	market_purchase_in_progress = true
 	_refresh_market_purchase_state()
-	_set_market_status("Buying item...", false)
+	var player_is_selling := market_mode == "player_sells"
+	_set_market_status("Selling item..." if player_is_selling else "Buying item...", false)
 
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
-	var result: Dictionary = await MarketService.purchase_standard_item(item_id, quantity)
+	var result: Dictionary
+	if player_is_selling:
+		result = await MarketService.sell_standard_item(item_id, quantity)
+	else:
+		result = await MarketService.purchase_standard_item(item_id, quantity)
 	market_purchase_in_progress = false
 	if not bool(result.get("success", false)):
-		_set_market_status("Could not buy item: %s" % str(result.get("error", "Unknown error")), true)
+		_set_market_status(
+			"Could not %s item: %s" % [
+				"sell" if player_is_selling else "buy",
+				str(result.get("error", "Unknown error")),
+			],
+			true
+		)
 		_refresh_market_purchase_state()
 		return
 
@@ -12562,11 +12638,36 @@ func _on_market_buy_pressed() -> void:
 		bag_inventory_loaded = true
 		_refresh_bag_items()
 
-	var purchase: Dictionary = _staff_dictionary_from_variant(result.get("purchase", {}))
-	var purchased_quantity: int = max(int(purchase.get("quantity", quantity)), 1)
+	var transaction_key := "sale" if player_is_selling else "purchase"
+	var transaction: Dictionary = _staff_dictionary_from_variant(result.get(transaction_key, {}))
+	var transacted_quantity: int = max(int(transaction.get("quantity", quantity)), 1)
 	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
-	_add_chat_message("Bought %sx %s." % [purchased_quantity, item_name])
+	_add_chat_message("%s %sx %s." % ["Sold" if player_is_selling else "Bought", transacted_quantity, item_name])
+	if player_is_selling:
+		_update_market_sell_items_from_inventory(inventory_value)
 	_refresh_market_purchase_state()
+
+
+func _update_market_sell_items_from_inventory(inventory_value: Variant) -> void:
+	var remaining_by_id := {}
+	if inventory_value is Array:
+		for item_value: Variant in inventory_value:
+			if typeof(item_value) != TYPE_DICTIONARY:
+				continue
+			var item: Dictionary = item_value
+			remaining_by_id[str(item.get("itemId", item.get("id", "")))] = int(item.get("quantity", 0))
+
+	for item_index: int in range(market_items.size() - 1, -1, -1):
+		var item: Dictionary = market_items[item_index]
+		var remaining: int = int(remaining_by_id.get(str(item.get("id", "")), 0))
+		if remaining <= 0:
+			market_items.remove_at(item_index)
+		else:
+			item["quantity"] = remaining
+			market_items[item_index] = item
+	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
+	market_quantity_spinbox.value = 1
+	_refresh_market_items()
 
 func _set_market_status(message: String, is_error: bool) -> void:
 	if market_status_label == null:

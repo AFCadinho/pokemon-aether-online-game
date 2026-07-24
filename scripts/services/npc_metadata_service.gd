@@ -106,6 +106,7 @@ func _normalize_npc_metadata(npc_id: String, metadata: Dictionary) -> Dictionary
 	npc_metadata["openingDialogue"] = _get_string_array(npc_metadata.get("openingDialogue", []))
 	npc_metadata["healedSystemMessage"] = str(npc_metadata.get("healedSystemMessage", ""))
 	npc_metadata["marketId"] = str(npc_metadata.get("marketId", npc_metadata.get("market_id", "")))
+	npc_metadata["marketMode"] = str(npc_metadata.get("marketMode", npc_metadata.get("market_mode", "")))
 	npc_metadata["requiresPartyPokemon"] = bool(npc_metadata.get("requiresPartyPokemon", false))
 	return npc_metadata
 
