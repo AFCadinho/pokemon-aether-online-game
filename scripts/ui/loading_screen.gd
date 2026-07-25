@@ -144,6 +144,8 @@ func _apply_profile_response(profile_response: Dictionary) -> void:
 	var wallet: Dictionary = _dictionary_from_value(profile_response.get("wallet", {}))
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
 	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
+	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
+	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
 
 	var stats_response: Dictionary = _dictionary_from_value(profile_response.get("stats", {}))
 	var stats: Dictionary = _dictionary_from_value(stats_response.get("stats", {}))

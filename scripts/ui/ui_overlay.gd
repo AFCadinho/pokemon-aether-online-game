@@ -106,6 +106,8 @@ const DEV_ADD_RESOURCES_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg"
 const DEV_ADD_CURRENCY_ICON: Texture2D = preload("res://assets/items/icons/KOFUSWALLET.png")
 const TRAINER_WALLET_MONEY_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.png")
 const TRAINER_WALLET_AETHER_GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
+const TRAINER_WALLET_AETHERITE_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
+const TRAINER_WALLET_BATTLE_POINTS_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
@@ -790,6 +792,8 @@ var public_trainer_card_popup: PanelContainer
 var trainer_card_avatar_viewports: Array[SubViewport] = []
 var trainer_card_money_label: Label
 var trainer_card_aether_gems_label: Label
+var trainer_card_aetherite_label: Label
+var trainer_card_battle_points_label: Label
 var trainer_card_playtime_label: Label
 var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
@@ -1033,6 +1037,8 @@ var dev_add_money_popup: PanelContainer
 var dev_money_amount_spinbox: SpinBox
 var dev_money_confirm_button: Button
 var dev_gems_confirm_button: Button
+var dev_aetherite_confirm_button: Button
+var dev_battle_points_confirm_button: Button
 var dev_heal_party_button: Button
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
@@ -5674,7 +5680,7 @@ func _setup_dev_add_item_tools() -> void:
 	_configure_tool_tile_button(
 		dev_add_money_button,
 		"Add Currency",
-		"Add Pokédollars or Aether Gems",
+		"Add any wallet currency",
 		DEV_ADD_CURRENCY_ICON,
 		Color("#f0cc70")
 	)
@@ -5780,17 +5786,17 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_money_popup = PanelContainer.new()
 	dev_add_money_popup.name = "DevAddMoneyPopup"
 	dev_add_money_popup.visible = false
-	dev_add_money_popup.custom_minimum_size = Vector2(390, 200)
+	dev_add_money_popup.custom_minimum_size = Vector2(460, 300)
 	dev_add_money_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	dev_add_money_popup.z_index = UI_BASE_Z_INDEX
 	dev_add_money_popup.anchor_left = 0.5
 	dev_add_money_popup.anchor_top = 0.5
 	dev_add_money_popup.anchor_right = 0.5
 	dev_add_money_popup.anchor_bottom = 0.5
-	dev_add_money_popup.offset_left = -195
-	dev_add_money_popup.offset_top = -100
-	dev_add_money_popup.offset_right = 195
-	dev_add_money_popup.offset_bottom = 100
+	dev_add_money_popup.offset_left = -230
+	dev_add_money_popup.offset_top = -150
+	dev_add_money_popup.offset_right = 230
+	dev_add_money_popup.offset_bottom = 150
 	dev_add_money_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
 	root_control.add_child(dev_add_money_popup)
 
@@ -5842,8 +5848,10 @@ func _setup_dev_add_item_tools() -> void:
 	dev_money_amount_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	money_row.add_child(dev_money_amount_spinbox)
 
-	var currency_buttons := HBoxContainer.new()
-	currency_buttons.add_theme_constant_override("separation", 8)
+	var currency_buttons := GridContainer.new()
+	currency_buttons.columns = 2
+	currency_buttons.add_theme_constant_override("h_separation", 8)
+	currency_buttons.add_theme_constant_override("v_separation", 8)
 	money_layout.add_child(currency_buttons)
 
 	dev_money_confirm_button = Button.new()
@@ -5862,9 +5870,27 @@ func _setup_dev_add_item_tools() -> void:
 	dev_gems_confirm_button.pressed.connect(_on_dev_gems_confirm_pressed)
 	currency_buttons.add_child(dev_gems_confirm_button)
 
+	dev_aetherite_confirm_button = Button.new()
+	dev_aetherite_confirm_button.text = "Add Aetherite"
+	dev_aetherite_confirm_button.custom_minimum_size = Vector2(0, 36)
+	dev_aetherite_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	dev_aetherite_confirm_button.focus_mode = Control.FOCUS_NONE
+	dev_aetherite_confirm_button.pressed.connect(_on_dev_aetherite_confirm_pressed)
+	currency_buttons.add_child(dev_aetherite_confirm_button)
+
+	dev_battle_points_confirm_button = Button.new()
+	dev_battle_points_confirm_button.text = "Add Battle Points"
+	dev_battle_points_confirm_button.custom_minimum_size = Vector2(0, 36)
+	dev_battle_points_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	dev_battle_points_confirm_button.focus_mode = Control.FOCUS_NONE
+	dev_battle_points_confirm_button.pressed.connect(_on_dev_battle_points_confirm_pressed)
+	currency_buttons.add_child(dev_battle_points_confirm_button)
+
 	_apply_button_style(money_close_button)
 	_apply_button_style(dev_money_confirm_button, "primary")
 	_apply_button_style(dev_gems_confirm_button, "primary")
+	_apply_button_style(dev_aetherite_confirm_button, "primary")
+	_apply_button_style(dev_battle_points_confirm_button, "primary")
 
 func _setup_dev_tools_menu_surface() -> void:
 	var layout := dev_actions_popup.get_node_or_null("MarginContainer/VBoxContainer") as VBoxContainer
@@ -5927,7 +5953,7 @@ func _setup_dev_tools_menu_surface() -> void:
 	_configure_tool_tile_button(
 		dev_add_button,
 		"Add Resources",
-		"Items, Pokédollars or Aether Gems",
+		"Items or wallet currencies",
 		DEV_ADD_RESOURCES_ICON,
 		Color("#f0cc70")
 	)
@@ -9100,6 +9126,10 @@ func _refresh_player_status_card() -> void:
 		trainer_card_money_label.text = _format_money(displayed_money)
 	if trainer_card_aether_gems_label != null:
 		trainer_card_aether_gems_label.text = _format_money(PlayerSave.gems)
+	if trainer_card_aetherite_label != null:
+		trainer_card_aetherite_label.text = _format_money(PlayerSave.aetherite)
+	if trainer_card_battle_points_label != null:
+		trainer_card_battle_points_label.text = _format_money(PlayerSave.battle_points)
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
 
@@ -9574,10 +9604,12 @@ func _create_trainer_card_wallet_tab() -> Control:
 	introduction.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(introduction)
 
-	var cards := HBoxContainer.new()
+	var cards := GridContainer.new()
+	cards.columns = 2
 	cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	cards.add_theme_constant_override("separation", 12)
+	cards.add_theme_constant_override("h_separation", 12)
+	cards.add_theme_constant_override("v_separation", 12)
 	layout.add_child(cards)
 	cards.add_child(
 		_create_trainer_card_currency_card(
@@ -9585,7 +9617,7 @@ func _create_trainer_card_wallet_tab() -> Control:
 			"Earned through normal gameplay and used by regular shops and services.",
 			TRAINER_WALLET_MONEY_ICON,
 			TRAINER_CARD_GREEN,
-			false
+			"money"
 		)
 	)
 	cards.add_child(
@@ -9594,16 +9626,27 @@ func _create_trainer_card_wallet_tab() -> Control:
 			"Supporter currency used for available products in the Aether Gift Store.",
 			TRAINER_WALLET_AETHER_GEM_ICON,
 			UI_PURPLE_HOVER,
-			true
+			"gems"
 		)
 	)
-
-	var future_note := Label.new()
-	future_note.text = "Additional gameplay currencies will appear here when they are introduced."
-	future_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	future_note.add_theme_font_size_override("font_size", 11)
-	future_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(future_note)
+	cards.add_child(
+		_create_trainer_card_currency_card(
+			"Aetherite",
+			"Future gameplay currency. Earning and spending options are coming later.",
+			TRAINER_WALLET_AETHERITE_ICON,
+			TRAINER_CARD_CYAN,
+			"aetherite"
+		)
+	)
+	cards.add_child(
+		_create_trainer_card_currency_card(
+			"Battle Points",
+			"Future battle currency. Earning and spending options are coming later.",
+			TRAINER_WALLET_BATTLE_POINTS_ICON,
+			TRAINER_CARD_ACCENT,
+			"battle_points"
+		)
+	)
 	return tab
 
 
@@ -9612,9 +9655,10 @@ func _create_trainer_card_currency_card(
 	description_text: String,
 	icon_texture: Texture2D,
 	accent: Color,
-	is_aether_gems: bool
+	currency_key: String
 ) -> Control:
 	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 116)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override(
@@ -9623,51 +9667,77 @@ func _create_trainer_card_currency_card(
 	)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 18)
-	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_right", 18)
-	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	panel.add_child(margin)
 
-	var content := VBoxContainer.new()
+	var content := HBoxContainer.new()
 	content.alignment = BoxContainer.ALIGNMENT_CENTER
-	content.add_theme_constant_override("separation", 8)
+	content.add_theme_constant_override("separation", 12)
 	margin.add_child(content)
 
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(48, 48)
+	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = icon_texture
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	content.add_child(icon)
 
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.alignment = BoxContainer.ALIGNMENT_CENTER
+	details.add_theme_constant_override("separation", 2)
+	content.add_child(details)
+
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 8)
+	details.add_child(title_row)
+
 	var title := Label.new()
 	title.text = title_text
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 16)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	content.add_child(title)
+	title_row.add_child(title)
 
 	var balance := Label.new()
-	balance.text = _format_money(PlayerSave.gems if is_aether_gems else _get_player_money_value())
-	balance.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	balance.add_theme_font_size_override("font_size", 28)
+	balance.text = _format_money(_get_trainer_card_currency_balance(currency_key))
+	balance.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	balance.add_theme_font_size_override("font_size", 22)
 	balance.add_theme_color_override("font_color", accent)
-	content.add_child(balance)
-	if is_aether_gems:
-		trainer_card_aether_gems_label = balance
-	else:
-		trainer_card_money_label = balance
+	title_row.add_child(balance)
+	match currency_key:
+		"money":
+			trainer_card_money_label = balance
+		"gems":
+			trainer_card_aether_gems_label = balance
+		"aetherite":
+			trainer_card_aetherite_label = balance
+		"battle_points":
+			trainer_card_battle_points_label = balance
 
 	var description := Label.new()
 	description.text = description_text
-	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description.add_theme_font_size_override("font_size", 12)
+	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	content.add_child(description)
+	details.add_child(description)
 	return panel
+
+
+func _get_trainer_card_currency_balance(currency_key: String) -> int:
+	match currency_key:
+		"gems":
+			return PlayerSave.gems
+		"aetherite":
+			return PlayerSave.aetherite
+		"battle_points":
+			return PlayerSave.battle_points
+		_:
+			return _get_player_money_value()
 
 
 func _create_trainer_card_redeem_button() -> Button:
@@ -22112,6 +22182,8 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	PlayerSave.ensure_body_matches_gender()
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
 	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
+	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
+	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
 	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
 	_apply_impersonated_saved_world_state(position_response)
 
@@ -22289,6 +22361,8 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_appearance_status_label = null
 	trainer_card_money_label = null
 	trainer_card_aether_gems_label = null
+	trainer_card_aetherite_label = null
+	trainer_card_battle_points_label = null
 	trainer_card_playtime_label = null
 	trainer_card_name_label = null
 	_setup_trainer_card_popup()
@@ -24403,6 +24477,42 @@ func _on_dev_gems_confirm_pressed() -> void:
 	if donator_store_popup != null:
 		donator_store_popup.set_gem_balance(PlayerSave.gems)
 	_add_chat_message("Added %s Aether Gems." % _format_money(amount))
+	_hide_dev_add_money_popup()
+
+
+func _on_dev_aetherite_confirm_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	dev_aetherite_confirm_button.disabled = true
+	var result: Dictionary = await PlayerWalletService.dev_add_aetherite(amount)
+	dev_aetherite_confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not add Aetherite: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	PlayerWalletService.apply_wallet_result(result)
+	_refresh_player_status_card()
+	_add_chat_message("Added %s Aetherite." % _format_money(amount))
+	_hide_dev_add_money_popup()
+
+
+func _on_dev_battle_points_confirm_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	var amount: int = max(int(dev_money_amount_spinbox.value), 1)
+	dev_battle_points_confirm_button.disabled = true
+	var result: Dictionary = await PlayerWalletService.dev_add_battle_points(amount)
+	dev_battle_points_confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not add Battle Points: %s" % str(result.get("error", "Unknown error")))
+		return
+
+	PlayerWalletService.apply_wallet_result(result)
+	_refresh_player_status_card()
+	_add_chat_message("Added %s Battle Points." % _format_money(amount))
 	_hide_dev_add_money_popup()
 
 

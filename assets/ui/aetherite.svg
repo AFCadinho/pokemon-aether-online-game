@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="aetherite-core" x1="17" y1="10" x2="47" y2="55" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d8fbff"/>
+      <stop offset="0.42" stop-color="#65dcf2"/>
+      <stop offset="1" stop-color="#247aa8"/>
+    </linearGradient>
+  </defs>
+  <path fill="#102b3f" stroke="#bff7ff" stroke-linejoin="round" stroke-width="2.5" d="m32 5 17 14-6 34-11 7-11-7-6-34z"/>
+  <path fill="url(#aetherite-core)" d="m32 8 14 12-6 31-8 5-8-5-6-31z"/>
+  <path fill="#ebfeff" fill-opacity=".72" d="m32 8-5 13 5 35 5-35z"/>
+  <path fill="#2493bd" fill-opacity=".72" d="m18 20 9 1 5 35-8-5z"/>
+  <path fill="#12628f" fill-opacity=".68" d="m46 20-9 1-5 35 8-5z"/>
+  <path fill="none" stroke="#e7fdff" stroke-linecap="round" stroke-width="2" d="m24 18 7-6"/>
+  <circle cx="32" cy="31" r="3" fill="#fff" fill-opacity=".9"/>
+</svg>

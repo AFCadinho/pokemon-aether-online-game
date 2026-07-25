@@ -285,8 +285,11 @@ func _init() -> void:
 		script_source.contains("func _create_trainer_card_wallet_tab()")
 		and script_source.contains('tab.name = "Wallet"')
 		and script_source.contains('"Pokédollars"')
-		and script_source.contains('"Aether Gems"'),
-		"Trainer Card has a Wallet tab for current currencies"
+		and script_source.contains('"Aether Gems"')
+		and script_source.contains('"Aetherite"')
+		and script_source.contains('"Battle Points"')
+		and script_source.contains('cards.columns = 2'),
+		"Trainer Card has a 2x2 Wallet grid for all currencies"
 	)
 	_check(script_source.contains("donator_store_popup.open_store()") and not script_source.contains("The Aether Store is not connected yet."), "purple gem button opens the Store interface")
 	_check(

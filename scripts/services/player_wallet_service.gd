@@ -5,6 +5,8 @@ class_name PlayerWalletServiceNode
 const PLAYER_WALLET_ENDPOINT := "/game/wallet"
 const DEV_ADD_MONEY_ENDPOINT := "/game/dev/wallet/money"
 const DEV_ADD_GEMS_ENDPOINT := "/game/dev/wallet/gems"
+const DEV_ADD_AETHERITE_ENDPOINT := "/game/dev/wallet/aetherite"
+const DEV_ADD_BATTLE_POINTS_ENDPOINT := "/game/dev/wallet/battle-points"
 const WILD_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/wild-battle"
 const TRAINER_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/trainer-battle"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -75,6 +77,54 @@ func dev_add_gems(amount: int) -> Dictionary:
 	return _wallet_result_from_response(response)
 
 
+func dev_add_aetherite(amount: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if amount <= 0:
+		return {
+			"success": false,
+			"error": "Amount must be positive.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_ADD_AETHERITE_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"amount": amount,
+		})
+	)
+	return _wallet_result_from_response(response)
+
+
+func dev_add_battle_points(amount: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if amount <= 0:
+		return {
+			"success": false,
+			"error": "Amount must be positive.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_ADD_BATTLE_POINTS_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"amount": amount,
+		})
+	)
+	return _wallet_result_from_response(response)
+
+
 func award_wild_battle_money(battle_id: String) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -130,6 +180,8 @@ func apply_wallet_result(result: Dictionary) -> void:
 	var wallet: Dictionary = _dictionary_from_value(result.get("wallet", {}))
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
 	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
+	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
+	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
 	var party: Array = _array_from_value(result.get("party", []))
 	if not party.is_empty():
 		PlayerSave.replace_party_from_state(party)

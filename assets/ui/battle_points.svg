@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bp-medal" x1="15" y1="10" x2="50" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff0a8"/>
+      <stop offset=".5" stop-color="#d8b767"/>
+      <stop offset="1" stop-color="#9b6428"/>
+    </linearGradient>
+  </defs>
+  <path fill="#172538" stroke="#ffe9a2" stroke-linejoin="round" stroke-width="2.5" d="m32 5 23 13v27L32 59 9 45V18z"/>
+  <path fill="url(#bp-medal)" d="m32 9 19 11v23L32 54 13 43V20z"/>
+  <circle cx="32" cy="31.5" r="19" fill="#172538" stroke="#fff0b8" stroke-width="2"/>
+  <path fill="none" stroke="#ffe7a0" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M18 20v24m0-24h9c5 0 8 2 8 6s-3 6-8 6h-9m9 0c5 0 8 2 8 6s-3 6-8 6h-9M39 44V20h5c4 0 6 3 6 7s-2 7-6 7h-5"/>
+  <path fill="none" stroke="#fff8da" stroke-linecap="round" stroke-width="1.5" d="m18 18 5-3"/>
+</svg>
