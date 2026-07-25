@@ -833,6 +833,8 @@ var bag_item_use_confirm_button: Button
 var bag_item_use_pending_item: Dictionary = {}
 var bag_item_use_selected_slot := -1
 var bag_item_use_in_progress := false
+var bag_item_context_menu: PopupMenu
+var bag_item_context_item: Dictionary = {}
 var trainer_name_change_popup: PanelContainer
 var trainer_name_change_username_input: LineEdit
 var trainer_name_change_display_name_input: LineEdit
@@ -1095,6 +1097,7 @@ func _ready() -> void:
 	_setup_trainer_card_popup()
 	_setup_donator_store_popup()
 	_setup_bag_popup()
+	_setup_bag_item_context_menu()
 	_setup_market_popup()
 	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
@@ -12334,7 +12337,7 @@ func _setup_bag_popup() -> void:
 	inventory_header.add_child(inventory_caption)
 
 	var inventory_hint := Label.new()
-	inventory_hint.text = "Click to inspect · drag or right-click for hotbar"
+	inventory_hint.text = "Click to inspect · drag or right-click for actions"
 	inventory_hint.add_theme_font_size_override("font_size", 10)
 	inventory_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	inventory_header.add_child(inventory_hint)
@@ -13589,7 +13592,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.hotbar_item = item.duplicate(true)
 	slot.custom_minimum_size = Vector2(106, 118)
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
-	slot.tooltip_text = "%s\nClick to inspect · drag or right-click for hotbar" % str(item.get("name", "Item"))
+	slot.tooltip_text = "%s\nClick to inspect · drag or right-click for actions" % str(item.get("name", "Item"))
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
@@ -13706,7 +13709,7 @@ func _on_bag_item_slot_gui_input(event: InputEvent, item: Dictionary, slot: Hotb
 	if mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
 		get_viewport().set_input_as_handled()
 		_select_bag_item(item)
-		_assign_bag_item_to_hotbar(item)
+		_show_bag_item_context_menu(item)
 	elif mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed and not slot.is_drag_successful():
 		get_viewport().set_input_as_handled()
 		_select_bag_item(item)
@@ -13851,6 +13854,45 @@ func _on_bag_detail_hotbar_pressed() -> void:
 	if bag_selected_item.is_empty() or not _bag_item_can_assign_to_hotbar(bag_selected_item):
 		return
 	await _assign_bag_item_to_hotbar(bag_selected_item.duplicate(true))
+
+func _setup_bag_item_context_menu() -> void:
+	bag_item_context_menu = PopupMenu.new()
+	bag_item_context_menu.name = "BagItemContextMenu"
+	bag_item_context_menu.min_size = Vector2i(190, 0)
+	bag_item_context_menu.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FOCUS, 8, 1)
+	)
+	bag_item_context_menu.id_pressed.connect(_on_bag_item_context_menu_id_pressed)
+	root_control.add_child(bag_item_context_menu)
+
+func _show_bag_item_context_menu(item: Dictionary) -> void:
+	if bag_item_context_menu == null:
+		_setup_bag_item_context_menu()
+	bag_item_context_item = item.duplicate(true)
+	bag_item_context_menu.clear()
+	bag_item_context_menu.add_item("Inspect", 0)
+	if _bag_item_can_use_from_bag(item):
+		bag_item_context_menu.add_item(_bag_item_use_action_label(item), 1)
+	if _bag_item_can_assign_to_hotbar(item):
+		bag_item_context_menu.add_item("Assign to Hotbar", 2)
+	var viewport_size := get_viewport_rect().size
+	var menu_position := get_viewport().get_mouse_position()
+	menu_position.x = minf(menu_position.x, viewport_size.x - 200.0)
+	menu_position.y = minf(menu_position.y, viewport_size.y - 120.0)
+	bag_item_context_menu.position = Vector2i(menu_position.max(Vector2.ZERO))
+	bag_item_context_menu.popup()
+
+func _on_bag_item_context_menu_id_pressed(action_id: int) -> void:
+	if bag_item_context_item.is_empty():
+		return
+	var item := bag_item_context_item.duplicate(true)
+	bag_item_context_item = {}
+	match action_id:
+		1:
+			await _on_bag_item_selected(item)
+		2:
+			await _assign_bag_item_to_hotbar(item)
 
 func _set_bag_summary(text: String) -> void:
 	if bag_summary_label != null:

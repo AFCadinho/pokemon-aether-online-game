@@ -1,5 +1,9 @@
 # Changelog
 
+- Bag-items now open a context-aware action menu with a right-click. Depending on the item, you can use or open it, move it to Character Customization, redeem it, or assign it to the hotbar.
+- Name Change Tickets now let Trainers update both their username and display name; previous usernames stay reserved to prevent impersonation.
+- Gender Chance Tickets now safely return every unlocked cosmetic to the Bag before changing gender, then reset the Trainer to the appropriate default appearance.
+- Aether Gift Store cosmetic previews now keep the Trainer in a neutral default top and bottom, while the item being considered replaces the matching appearance part.
 - Renamed Aether Membership to Aether Blessing and added tradeable 3, 7, 14, and 30-day vouchers to the Aether Gift Store. Each duration has a dedicated colour-coded 48x48 pixel-art icon. Vouchers remain in the Bag until redeemed; redeemed time stacks, appears with a live countdown in personal buffs, and unlocks the optional `Blessed` Trainer Card title for chat only until expiry.
 - Renamed the player-facing Aether Store to Aether Gift Store.
 - Adinho Classic Sunglasses are now gender-neutral and render on both male and female character models; the rest of the Adinho Classic outfit remains male-only.
