@@ -6883,49 +6883,70 @@
         "points": [
           {
             "at": 0.0,
-            "offset": [0, 0],
+            "offset": [
+              0,
+              0
+            ],
             "rotation_degrees": 0,
             "scale": 1.0,
             "duration": 0.01
           },
           {
             "at": 0.28,
-            "offset": [18, 10],
+            "offset": [
+              18,
+              10
+            ],
             "rotation_degrees": -4,
             "scale": 1.08,
             "duration": 0.16
           },
           {
             "at": 0.48,
-            "offset": [150, -82],
+            "offset": [
+              150,
+              -82
+            ],
             "rotation_degrees": -18,
             "scale": 1.12,
             "duration": 0.24
           },
           {
             "at": 0.66,
-            "offset": [310, -148],
+            "offset": [
+              310,
+              -148
+            ],
             "rotation_degrees": -160,
             "scale": 0.92,
             "duration": 0.22
           },
           {
             "at": 0.82,
-            "offset": [480, -48],
+            "offset": [
+              480,
+              -48
+            ],
             "rotation_degrees": -345,
             "scale": 1.18,
             "duration": 0.18
           },
           {
             "at": 0.9,
-            "offset": [510, -12],
+            "offset": [
+              510,
+              -12
+            ],
             "rotation_degrees": -360,
             "scale": 1.32,
             "duration": 0.1
           },
           {
             "at": 1.0,
-            "offset": [0, 0],
+            "offset": [
+              0,
+              0
+            ],
             "rotation_degrees": 0,
             "scale": 1.0,
             "duration": 0.2
@@ -7029,6 +7050,157 @@
         "PRSFX- Stoked Sparksurfer5.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer5.ogg",
         "PRSFX- Stoked Sparksurfer6.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer6.ogg",
         "PRSFX- Stoked Sparksurfer7.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer7.ogg"
+      }
+    },
+    "pulverizingpancake": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.9,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.28,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/pulverizingpancake/pulverizingpancake.json",
+      "sheet_path": "res://assets/battles/animations/pulverizingpancake/PRAS- Pulverizing Pancake.png",
+      "background_path": "res://assets/battles/animations/pulverizingpancake/PRAS- Pulverizing Pancake BG.png",
+      "foreground_path": "res://assets/battles/animations/pulverizingpancake/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Pulverizing Pancake1.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake1.wav",
+        "PRSFX- Pulverizing Pancake2.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake2.wav",
+        "PRSFX- Pulverizing Pancake3.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake3.wav",
+        "PRSFX- Pulverizing Pancake4.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake4.wav",
+        "PRSFX- Pulverizing Pancake5.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake5.wav",
+        "PRSFX- Sleep.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Sleep.wav"
+      }
+    },
+    "extremeevoboost": {
+      "template": "imported_sheet",
+      "category": "status_buff",
+      "speed_scale": 0.94,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/extremeevoboost/extremeevoboost.json",
+      "sheet_path": "res://assets/battles/animations/extremeevoboost/PRAS- Extreme Evoboost.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Extreme Evoboost1.wav": "res://assets/battles/animations/extremeevoboost/PRSFX- Extreme Evoboost1.wav",
+        "PRSFX- Extreme Evoboost2.wav": "res://assets/battles/animations/extremeevoboost/PRSFX- Extreme Evoboost2.wav",
+        "PRSFX- Extreme Evoboost3.wav": "res://assets/battles/animations/extremeevoboost/PRSFX- Extreme Evoboost3.wav"
+      }
+    },
+    "genesissupernova": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.9,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.32,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/genesissupernova/genesissupernova.json",
+      "sheet_path": "res://assets/battles/animations/genesissupernova/PRAS- Genesis Supernova.png",
+      "background_path": "res://assets/battles/animations/genesissupernova/PRAS- Space BG.png",
+      "foreground_path": "res://assets/battles/animations/genesissupernova/PRAS- Genesis Supernova BG.png",
+      "sound_paths": {
+        "PRSFX- Genesis Supernova1.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova1.ogg",
+        "PRSFX- Genesis Supernova10.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova10.ogg",
+        "PRSFX- Genesis Supernova11.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova11.ogg",
+        "PRSFX- Genesis Supernova12.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova12.ogg",
+        "PRSFX- Genesis Supernova2.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova2.ogg",
+        "PRSFX- Genesis Supernova3.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova3.ogg",
+        "PRSFX- Genesis Supernova4.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova4.ogg",
+        "PRSFX- Genesis Supernova5.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova5.ogg",
+        "PRSFX- Genesis Supernova6.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova6.ogg",
+        "PRSFX- Genesis Supernova7.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova7.ogg",
+        "PRSFX- Genesis Supernova8.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova8.ogg",
+        "PRSFX- Genesis Supernova9.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova9.ogg"
+      }
+    },
+    "lightthatburnsthesky": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.9,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.2,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/lightthatburnsthesky/lightthatburnsthesky.json",
+      "sheet_path": "res://assets/battles/animations/lightthatburnsthesky/PRAS- Light that Burns the Sky.png",
+      "background_path": "res://assets/battles/animations/lightthatburnsthesky/PRAS- LTBTS BG1.png",
+      "foreground_path": "res://assets/battles/animations/lightthatburnsthesky/PRAS- Black BG.png",
+      "sound_paths": {
+        "PRSFX- LTBTS1.wav": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS1.wav",
+        "PRSFX- LTBTS2.wav": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS2.wav",
+        "PRSFX- LTBTS3.wav": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS3.wav",
+        "PRSFX- LTBTS4.wav": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS4.wav"
+      }
+    },
+    "searingsunrazesmash": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.92,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.3,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/searingsunrazesmash/searingsunrazesmash.json",
+      "sheet_path": "res://assets/battles/animations/searingsunrazesmash/PRAS- SunMoonZ.png",
+      "background_path": "res://assets/battles/animations/searingsunrazesmash/PRAS- Space BG.png",
+      "foreground_path": "res://assets/battles/animations/searingsunrazesmash/PRAS- Fire BG.png",
+      "sound_paths": {
+        "PRSFX- SSS1.ogg": "res://assets/battles/animations/searingsunrazesmash/PRSFX- SSS1.ogg",
+        "PRSFX- Searing Sunraze Smash1.ogg": "res://assets/battles/animations/searingsunrazesmash/PRSFX- Searing Sunraze Smash1.ogg",
+        "PRSFX- Searing Sunraze Smash2.ogg": "res://assets/battles/animations/searingsunrazesmash/PRSFX- Searing Sunraze Smash2.ogg",
+        "PRSFX- Searing Sunraze Smash3.ogg": "res://assets/battles/animations/searingsunrazesmash/PRSFX- Searing Sunraze Smash3.ogg"
+      }
+    },
+    "10000000voltthunderbolt": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.92,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.28,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/catastropika/catastropika.json",
+      "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
+      "background_path": "res://assets/battles/animations/catastropika/PRAS- Thunder BG.png",
+      "foreground_path": "res://assets/battles/animations/catastropika/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Catastropika1.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika1.wav",
+        "PRSFX- Catastropika2.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika2.wav",
+        "PRSFX- Catastropika3.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika3.wav",
+        "PRSFX- Catastropika4.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika4.wav",
+        "PRSFX- Catastropika5.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika5.wav",
+        "PRSFX- Catastropika6.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika6.wav"
       }
     }
   }
