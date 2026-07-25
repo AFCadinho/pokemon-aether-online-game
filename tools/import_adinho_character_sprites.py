@@ -39,6 +39,12 @@ ASSETS = {
     },
 }
 
+UNISEX_ASSETS = {
+    "facegear": {
+        "Adinho_Glasses": ("Colors", "Glasses.png"),
+    },
+}
+
 
 def read_manifest(path: Path) -> list[str]:
     if not path.exists():
@@ -71,6 +77,27 @@ def import_adinho(source_root: Path, project_root: Path, overwrite: bool) -> Non
                 destination_path.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source_path, destination_path)
                 print(f"imported {source_path} -> {destination_path}")
+            write_texture_import(project_root, destination_path.relative_to(project_root))
+            if appearance_id not in manifest_ids:
+                manifest_ids.append(appearance_id)
+        write_manifest(manifest_path, manifest_ids)
+
+    for category, entries in UNISEX_ASSETS.items():
+        destination_dir = project_root / "assets" / "player" / "female" / category
+        manifest_path = destination_dir / "parts_manifest.json"
+        manifest_ids = read_manifest(manifest_path)
+        for appearance_id, (source_dir, source_name) in entries.items():
+            source_path = source_root / source_dir / source_name
+            if not source_path.exists():
+                raise FileNotFoundError(source_path)
+            validate_sheet(source_path)
+            destination_path = destination_dir / f"{appearance_id}.png"
+            if destination_path.exists() and not overwrite:
+                print(f"skip existing {destination_path}")
+            else:
+                destination_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source_path, destination_path)
+                print(f"imported unisex {source_path} -> {destination_path}")
             write_texture_import(project_root, destination_path.relative_to(project_root))
             if appearance_id not in manifest_ids:
                 manifest_ids.append(appearance_id)

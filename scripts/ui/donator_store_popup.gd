@@ -5,11 +5,15 @@ signal closed
 signal purchase_requested(item_id: String)
 
 const GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
-const MEMBERSHIP_ICON: Texture2D = preload("res://assets/ui/store_membership.svg")
 const STYLE_ICON: Texture2D = preload("res://assets/ui/store_style.svg")
 const PROFILE_ICON: Texture2D = preload("res://assets/ui/store_profile.svg")
 const MOUNT_ICON: Texture2D = preload("res://assets/ui/store_mount.svg")
-const SERVICE_ICON: Texture2D = preload("res://assets/ui/store_service_ticket.svg")
+const NAME_CHANGE_TICKET_ICON: Texture2D = preload("res://assets/items/icons/NAMECHANGETICKET.png")
+const GENDER_CHANCE_TICKET_ICON: Texture2D = preload("res://assets/items/icons/GENDERCHANCETICKET.png")
+const AETHER_BLESSING_VOUCHER_3_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER3DAYS.png")
+const AETHER_BLESSING_VOUCHER_7_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER7DAYS.png")
+const AETHER_BLESSING_VOUCHER_14_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER14DAYS.png")
+const AETHER_BLESSING_VOUCHER_30_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER30DAYS.png")
 const SURF_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SURFCHARM.png")
 const CUT_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/CUTCHARM.png")
 const STRENGTH_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/STRENGTHCHARM.png")
@@ -54,7 +58,7 @@ const CATEGORY_ORDER: Array[String] = [
 ]
 const CATEGORY_LABELS := {
 	"featured": "Featured",
-	"membership": "Membership",
+	"membership": "Blessings",
 	"cosmetics": "Cosmetics",
 	"mounts": "Mounts",
 	"charms": "Charms",
@@ -62,7 +66,7 @@ const CATEGORY_LABELS := {
 }
 const CATEGORY_DESCRIPTIONS := {
 	"featured": "A curated mix of supporter items, style and permanent conveniences.",
-	"membership": "Support PokéAether with cosmetic and account-comfort perks. No battle advantages.",
+	"membership": "Temporary supporter recognition. No battle advantages.",
 	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
 	"charms": "Use supported field moves without carrying a Pokémon that knows them. Progression and area rules still apply.",
@@ -102,45 +106,45 @@ const COSMETIC_SUBCATEGORY_LABELS := {
 }
 const CATALOG: Array[Dictionary] = [
 	{
-		"id": "aether_membership_3",
-		"name": "Aether Membership · 3 Days",
-		"description": "A short supporter pass with account comforts and no battle advantages.",
+		"id": "aether-blessing-voucher-3-days",
+		"name": "Aether Blessing Voucher · 3 Days",
+		"description": "Tradeable voucher. Use it from the Bag to add three days of Aether Blessing.",
 		"price": 60,
-		"icon": MEMBERSHIP_ICON,
+		"icon": AETHER_BLESSING_VOUCHER_3_DAYS_ICON,
 		"categories": ["membership"],
 		"badge": "3 DAYS",
 	},
 	{
-		"id": "aether_membership_7",
-		"name": "Aether Membership · 7 Days",
-		"description": "One week of fair supporter benefits without battle advantages.",
+		"id": "aether-blessing-voucher-7-days",
+		"name": "Aether Blessing Voucher · 7 Days",
+		"description": "Tradeable voucher. Use it from the Bag to add one week of Aether Blessing.",
 		"price": 130,
-		"icon": MEMBERSHIP_ICON,
+		"icon": AETHER_BLESSING_VOUCHER_7_DAYS_ICON,
 		"categories": ["membership"],
 		"badge": "7 DAYS",
 	},
 	{
-		"id": "aether_membership_14",
-		"name": "Aether Membership · 14 Days",
-		"description": "Two weeks of fair supporter benefits without battle advantages.",
+		"id": "aether-blessing-voucher-14-days",
+		"name": "Aether Blessing Voucher · 14 Days",
+		"description": "Tradeable voucher. Use it from the Bag to add two weeks of Aether Blessing.",
 		"price": 250,
-		"icon": MEMBERSHIP_ICON,
+		"icon": AETHER_BLESSING_VOUCHER_14_DAYS_ICON,
 		"categories": ["membership"],
 		"badge": "14 DAYS",
 	},
 	{
-		"id": "aether_membership_30",
-		"name": "Aether Membership · 30 Days",
-		"description": "A full month of supporter cosmetics and account comforts without battle advantages.",
+		"id": "aether-blessing-voucher-30-days",
+		"name": "Aether Blessing Voucher · 30 Days",
+		"description": "Tradeable voucher. Use it from the Bag to add thirty days of Aether Blessing.",
 		"price": 500,
-		"icon": MEMBERSHIP_ICON,
+		"icon": AETHER_BLESSING_VOUCHER_30_DAYS_ICON,
 		"categories": ["featured", "membership"],
 		"badge": "30 DAYS",
 	},
 	{
 		"id": "adinho-classic-outfit",
-		"name": "Adinho Classic",
-		"description": "Tradeable outfit box. Use it to move the complete Adinho look into Character Customization.",
+		"name": "Adinho Classic Box",
+		"description": "Tradeable outfit box. Open it in your Bag to receive all six cosmetic components as separate tradeable items.",
 		"price": 500,
 		"icon": STYLE_ICON,
 		"categories": ["featured", "cosmetics"],
@@ -155,7 +159,7 @@ const CATALOG: Array[Dictionary] = [
 			{"slot": "shoes", "appearance_id": "Adinho_Shoes"},
 		],
 		"genders": ["male"],
-		"badge": "FULL OUTFIT",
+		"badge": "6-ITEM BOX",
 	},
 	{
 		"id": "adinho-chroma-hair",
@@ -336,29 +340,20 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "CONVENIENCE",
 	},
 	{
-		"id": "trainer_name_ticket",
-		"name": "Trainer Name Change",
+		"id": "name-change-ticket",
+		"name": "Name Change Ticket",
 		"description": "Change your trainer name once.",
 		"price": 150,
-		"icon": SERVICE_ICON,
+		"icon": NAME_CHANGE_TICKET_ICON,
 		"categories": ["featured", "services"],
 		"badge": "SERVICE",
 	},
 	{
-		"id": "gender_change_ticket",
-		"name": "Gender Change",
-		"description": "Revisit your trainer's gender selection.",
+		"id": "gender-chance-ticket",
+		"name": "Gender Chance Ticket",
+		"description": "Change your trainer's gender once.",
 		"price": 80,
-		"icon": SERVICE_ICON,
-		"categories": ["services"],
-		"badge": "SERVICE",
-	},
-	{
-		"id": "appearance_reset_ticket",
-		"name": "Appearance Reset",
-		"description": "Revisit your trainer's base appearance choices.",
-		"price": 60,
-		"icon": SERVICE_ICON,
+		"icon": GENDER_CHANCE_TICKET_ICON,
 		"categories": ["services"],
 		"badge": "SERVICE",
 	},
@@ -588,13 +583,13 @@ func _create_header() -> Control:
 	row.add_child(heading)
 
 	var title := Label.new()
-	title.text = "Aether Store"
+	title.text = "Aether Gift Store"
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Membership, style, convenience and trainer services"
+	subtitle.text = "Blessings, style, convenience and trainer services"
 	subtitle.add_theme_font_size_override("font_size", 12)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(subtitle)
@@ -682,7 +677,7 @@ func _create_category_rail() -> Control:
 	layout.add_child(spacer)
 
 	var note := Label.new()
-	note.text = "Preview catalog\nNames and prices may change"
+	note.text = "Server-verified catalog\nUnavailable items are clearly marked"
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.add_theme_font_size_override("font_size", 10)
 	note.add_theme_color_override("font_color", UI_MUTED_TEXT)

@@ -13,6 +13,8 @@ func _run() -> void:
 	_check(APPEARANCE.get_available_part_ids("hair", "male").has("Adinho_Hair"), "Adinho hair asset is imported")
 	_check(APPEARANCE.get_available_part_ids("facial_hair", "male").has("Adinho_Beard"), "facial-hair slot loads the beard")
 	_check(not APPEARANCE.get_available_part_ids("hair", "female").has("Adinho_Hair"), "male delivery is not exposed to female models")
+	_check(APPEARANCE.get_available_part_ids("facegear", "female").has("Adinho_Glasses"), "Classic sunglasses are available to female models")
+	_check(APPEARANCE.get_part_frames("facegear", "Adinho_Glasses", "female") != null, "female Classic sunglasses frames render")
 	_check(not APPEARANCE.is_free_part_id("hair", "Adinho_Hair"), "Adinho hair is not a starter cosmetic")
 	_check(APPEARANCE.is_free_part_id("hair", "Hair"), "starter hair remains free")
 	_check(APPEARANCE.is_tintable_part("hair", "Adinho_Hair"), "grayscale hair supports colour")

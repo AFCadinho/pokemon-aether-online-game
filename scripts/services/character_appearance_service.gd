@@ -189,6 +189,22 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 				{"category": FACIAL_HAIR_CATEGORY, "id": "Adinho_Beard", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},
 				{"category": FACEGEAR_CATEGORY, "id": "Adinho_Glasses"},
 			]
+		"adinho-classic-sunglasses":
+			layers = [
+				{"category": FACEGEAR_CATEGORY, "id": "Adinho_Glasses"},
+			]
+		"adinho-classic-shirt":
+			layers = [
+				{"category": TOP_CATEGORY, "id": "Adinho_Shirt"},
+			]
+		"adinho-classic-trousers":
+			layers = [
+				{"category": BOTTOM_CATEGORY, "id": "Adinho_Trousers"},
+			]
+		"adinho-classic-shoes":
+			layers = [
+				{"category": SHOES_CATEGORY, "id": "Adinho_Shoes"},
+			]
 		"adinho-chroma-hair":
 			layers = [
 				{"category": EYEBROWS_CATEGORY, "id": "Adinho_Eyebrows", "tint": Color(DEFAULT_HAIR_COLOR), "preserve": true},

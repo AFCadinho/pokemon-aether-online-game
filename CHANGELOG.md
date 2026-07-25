@@ -1,6 +1,12 @@
 # Changelog
 
-- Added the male-only Adinho Classic full-outfit unlock alongside separate male-only, colour-customizable hair, beard, glasses, shirt, trousers and shoes products; Store purchases and wardrobe use enforce character-model compatibility, and the eyebrows remain linked to the hairstyle.
+- Renamed Aether Membership to Aether Blessing and added tradeable 3, 7, 14, and 30-day vouchers to the Aether Gift Store. Each duration has a dedicated colour-coded 48x48 pixel-art icon. Vouchers remain in the Bag until redeemed; redeemed time stacks, appears with a live countdown in personal buffs, and unlocks the optional `Blessed` Trainer Card title for chat only until expiry.
+- Renamed the player-facing Aether Store to Aether Gift Store.
+- Adinho Classic Sunglasses are now gender-neutral and render on both male and female character models; the rest of the Adinho Classic outfit remains male-only.
+- Trainer Services now contains only the Name Change Ticket and Gender Chance Ticket, each with a dedicated transparent pixel-art item icon.
+- The Adinho Classic Store product is now a tradeable six-item box. Opening it in the Bag grants separate Hair, Beard, Sunglasses, Shirt, Trousers and Shoes cosmetics, which can each be moved to or returned from Character Customization independently.
+- Character Customization now shows the active paid-cosmetic count per component and respects the server-authoritative limit of eight; starter options, `None`, and colour choices do not consume space.
+- Added the male-only Adinho Classic outfit box alongside separate male-only, colour-customizable hair, beard, glasses, shirt, trousers and shoes products; Store purchases and wardrobe use enforce character-model compatibility, and equipping hair immediately refreshes its linked eyebrows in the overworld.
 - Tradeable cosmetic Bag items can now be moved into Character Customization and returned to the Bag later; active wardrobe items themselves cannot be traded.
 - Aether Gems now have a durable wallet balance, and the seven available Adinho cosmetics can be purchased through a server-authoritative, replay-safe checkout that adds the tradeable box directly to the Bag.
 - The nine implemented field and weather Charms shown in the Aether Store are now purchasable permanent, stackable and tradeable Bag items in their own Charms category; gameplay reset preserves them.

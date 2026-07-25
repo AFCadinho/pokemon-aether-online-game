@@ -223,6 +223,12 @@ func get_display_name() -> String:
 	return str(current_user.get("displayName", current_user.get("username", "")))
 
 
+func apply_current_user(value: Dictionary) -> void:
+	current_user = value.duplicate(true)
+	if session_token != "":
+		_save_session()
+
+
 func get_user_id_text() -> String:
 	for key: String in ["id", "userId", "user_id"]:
 		var value: Variant = current_user.get(key, "")

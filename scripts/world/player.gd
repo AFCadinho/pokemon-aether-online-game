@@ -400,6 +400,15 @@ func set_appearance_part(category: String, part_id: String) -> void:
 			return
 
 	_apply_appearance_part(normalized_category, normalized_part_id, body_sprite_frames_movement_style)
+	if normalized_category == "hair":
+		_apply_appearance_part(
+			"eyebrows",
+			CharacterAppearanceService.get_eyebrows_for_hair(
+				PlayerSave.appearance_hair_id,
+				PlayerSave.gender
+			),
+			body_sprite_frames_movement_style
+		)
 	set_idle_frame()
 
 func _ensure_layered_body_for_part_appearance() -> void:

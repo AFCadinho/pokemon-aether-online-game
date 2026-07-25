@@ -53,7 +53,12 @@ func load_appearance_inventory() -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	return {"success": true, "unlocks": _array_from_value(body.get("unlocks", []))}
+	return {
+		"success": true,
+		"slotLimit": int(body.get("slotLimit", 8)),
+		"slotCounts": _dictionary_from_value(body.get("slotCounts", {})),
+		"unlocks": _array_from_value(body.get("unlocks", [])),
+	}
 
 
 func use_inventory_item(item_id: String) -> Dictionary:
@@ -78,7 +83,13 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	return {
 		"success": true,
 		"itemId": str(body.get("itemId", normalized_item_id)),
+		"useAction": str(body.get("useAction", "")),
+		"durationDays": maxi(int(body.get("durationDays", 0)), 0),
+		"grantedItems": _array_from_value(body.get("grantedItems", [])),
+		"user": _dictionary_from_value(body.get("user", {})),
 		"inventory": _array_from_value(inventory.get("items", [])),
+		"appearanceSlotLimit": int(appearance_inventory.get("slotLimit", 8)),
+		"appearanceSlotCounts": _dictionary_from_value(appearance_inventory.get("slotCounts", {})),
 		"appearanceUnlocks": _array_from_value(appearance_inventory.get("unlocks", [])),
 	}
 
@@ -107,6 +118,8 @@ func return_appearance_item(item_id: String) -> Dictionary:
 		"itemId": str(body.get("itemId", normalized_item_id)),
 		"returnedUnlocks": _array_from_value(body.get("returnedUnlocks", [])),
 		"inventory": _array_from_value(inventory.get("items", [])),
+		"appearanceSlotLimit": int(appearance_inventory.get("slotLimit", 8)),
+		"appearanceSlotCounts": _dictionary_from_value(appearance_inventory.get("slotCounts", {})),
 		"appearanceUnlocks": _array_from_value(appearance_inventory.get("unlocks", [])),
 	}
 

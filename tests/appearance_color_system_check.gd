@@ -106,6 +106,10 @@ func _run() -> void:
 	_check(ui_source.contains("ColorPickerButton.new()"), "customization includes custom Hair and Chroma colours")
 	for cosmetic_item_id: String in [
 		"adinho-classic-outfit",
+		"adinho-classic-sunglasses",
+		"adinho-classic-shirt",
+		"adinho-classic-trousers",
+		"adinho-classic-shoes",
 		"adinho-chroma-hair",
 		"adinho-chroma-beard",
 		"adinho-chroma-glasses",
@@ -140,9 +144,35 @@ func _run() -> void:
 		"inventory service exposes the wardrobe-to-Bag return action"
 	)
 	_check(
+		player_source.contains(
+			'CharacterAppearanceService.get_eyebrows_for_hair(\n'
+				+ "\t\t\t\tPlayerSave.appearance_hair_id,"
+		),
+		"equipping hair refreshes its linked eyebrows on the overworld player"
+	)
+	_check(
+		inventory_service_source.contains('"slotLimit"')
+			and inventory_service_source.contains('"slotCounts"')
+			and inventory_service_source.contains('"appearanceSlotLimit"')
+			and inventory_service_source.contains('"appearanceSlotCounts"'),
+		"inventory service preserves authoritative per-slot wardrobe capacity"
+	)
+	_check(
+		inventory_service_source.contains('"grantedItems"')
+			and ui_source.contains('use_action == "open_item_bundle"')
+			and ui_source.contains('return "Open Box"'),
+		"Bag can open the Classic box and refresh its granted component items"
+	)
+	_check(
 		ui_source.contains('return_button.text = "×"')
 			and ui_source.contains("InventoryService.return_appearance_item(source_item_id)"),
 		"Character Customization exposes a return-to-Bag cross"
+	)
+	_check(
+		ui_source.contains("const DEFAULT_APPEARANCE_SLOT_LIMIT := 8")
+			and ui_source.contains("func _refresh_trainer_card_appearance_capacity_label()")
+			and ui_source.contains('"%s wardrobe · %d/%d unlocked"'),
+		"Character Customization shows the eight-item limit for each cosmetic slot"
 	)
 	_check(
 		not player_source.contains("_apply_face_gear_frame_alignment")

@@ -69,7 +69,7 @@ func _init() -> void:
 	_check(global_buffs_block.contains("custom_minimum_size = Vector2(197, 50)"), "global buffs use a compact four-icon tray")
 	_check(personal_buffs_block.contains("anchors_preset = 3"), "personal buffs sit above the bottom-right trainer card")
 	_check(personal_buffs_block.contains("offset_bottom = -104.0"), "personal buffs leave space above the trainer card")
-	_check(personal_buffs_block.contains("custom_minimum_size = Vector2(160, 98)"), "personal buffs have room for three readable text rows")
+	_check(personal_buffs_block.contains("custom_minimum_size = Vector2(188, 98)"), "personal buffs have room for readable detail cards")
 	_check(store_block.contains("anchors_preset = 3"), "Donator Store is anchored near the trainer card")
 	_check(store_block.contains('icon = ExtResource("22_donator_gem")'), "Donator Store uses the purple gem icon")
 	_check(store_block.contains("custom_minimum_size = Vector2(42, 42)") and store_block.contains("icon_max_width = 26"), "Donator Store aligns with the personal status rail")
@@ -138,6 +138,7 @@ func _init() -> void:
 	_check(global_buff_details_block.contains("visible = false"), "global buff details start closed")
 	_check(scene_source.contains('[node name="DonationSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel'), "global buff details expose contribution controls")
 	_check(scene_source.count('[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect names")
+	_check(scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect descriptions")
 	_check(scene_source.count('[node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render remaining durations")
 	_check(scene_source.contains('[node name="EmptyLabel" type="Label" parent="Control/PersonalBuffsPanel'), "personal buffs provide an empty-state label")
 	_check(scene_source.contains('text = "No buffs active"'), "personal empty state clearly reports that no buffs are active")
@@ -204,6 +205,17 @@ func _init() -> void:
 	_check(scene_source.count("value = 0.0") >= 4, "global buff scene defaults avoid flashing funded progress")
 	_check(script_source.contains("func set_personal_buffs(buffs: Array)"), "personal buff tray accepts future live data")
 	_check(script_source.contains("set_personal_buffs([])"), "personal buffs default to the empty state")
+	_check(
+		script_source.contains("func _current_aether_blessing_buff()")
+		and script_source.contains('"name": "Aether Blessing"')
+		and script_source.contains('"expiresAt": expires_at'),
+		"active Aether Blessings appear in the personal buff tray with their expiry"
+	)
+	_check(
+		script_source.contains("func _refresh_personal_buffs_if_needed(delta: float)")
+		and script_source.contains("_format_aether_blessing_remaining"),
+		"the personal buff tray keeps the Blessing countdown current"
+	)
 	_check(script_source.contains('personal_buffs_panel.set_meta("group_available", true)'), "personal empty state remains part of the trainer collapse group")
 	_check(script_source.contains("PERSONAL_BUFF_PANEL_COMPACT_HEIGHT"), "empty and collapsed active states use a compact panel height")
 	_check(script_source.contains("const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0"), "personal buff and Store controls share a status-rail height")
@@ -218,8 +230,16 @@ func _init() -> void:
 	_check(script_source.contains('name_label.text = str(buff.get("name", "Buff"))'), "personal buff rows receive readable names")
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
-	_check(donator_store_script_source.contains('"membership": "NO BATTLE POWER"') and donator_store_script_source.contains("without battle advantages"), "Membership establishes a fair supporter direction")
-	_check(donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Membership offers the intended four pass durations")
+	_check(donator_store_script_source.contains('"membership": "Blessings"') and donator_store_script_source.contains('"membership": "NO BATTLE POWER"') and donator_store_script_source.contains("No battle advantages"), "Blessings establish a fair supporter direction")
+	_check(donator_store_script_source.contains('"name": "Aether Blessing Voucher · 3 Days"') and donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Aether Blessing offers the intended four tradeable voucher durations")
+	_check(
+		donator_store_script_source.contains("AETHERBLESSINGVOUCHER3DAYS.png")
+		and donator_store_script_source.contains("AETHERBLESSINGVOUCHER7DAYS.png")
+		and donator_store_script_source.contains("AETHERBLESSINGVOUCHER14DAYS.png")
+		and donator_store_script_source.contains("AETHERBLESSINGVOUCHER30DAYS.png")
+		and not script_source.contains("AETHER_BLESSING_VOUCHER_ICON"),
+		"each Blessing duration uses its own pixel-art icon in both Store and Bag"
+	)
 	_check(donator_store_script_source.contains('"name": "Surf Charm"') and donator_store_script_source.contains("Badge and story requirements still apply."), "Store explains that Charms replace HM party requirements without bypassing progression")
 	_check(donator_store_script_source.contains('preload("res://assets/items/icons/field_move_charms/SURFCHARM.png")'), "Store Charms use their authentic item icons")
 	_check(donator_store_script_source.contains('"name": "Flash Charm"') and donator_store_script_source.contains('"name": "Dive Charm"') and donator_store_script_source.contains('"name": "Defog Charm"'), "Store includes additional traversal Charms")
@@ -230,8 +250,18 @@ func _init() -> void:
 			and script_source.contains('"medicine", "machines", "charms",'),
 		"tradeable field Charms use their own Bag category instead of Key Items"
 	)
-	_check(donator_store_script_source.contains('"name": "Trainer Name Change"') and donator_store_script_source.contains('"name": "Gender Change"'), "Trainer Services prepare identity change options")
-	_check(donator_store_script_source.contains('title.text = "Aether Store"') and donator_store_script_source.contains("Names and prices may change"), "Store presents itself as a clearly labeled preview catalog")
+	_check(
+		donator_store_script_source.contains('"name": "Name Change Ticket"')
+		and donator_store_script_source.contains('"name": "Gender Chance Ticket"')
+		and not donator_store_script_source.contains('"id": "appearance_reset_ticket"'),
+		"Trainer Services contain only the requested name and gender tickets"
+	)
+	_check(
+		donator_store_script_source.contains("NAMECHANGETICKET.png")
+		and donator_store_script_source.contains("GENDERCHANCETICKET.png"),
+		"Trainer Service tickets use dedicated pixel-art item icons"
+	)
+	_check(donator_store_script_source.contains('title.text = "Aether Gift Store"') and donator_store_script_source.contains("Server-verified catalog"), "Gift Store presents itself as a clearly labeled authoritative catalog")
 	_check(not donator_store_script_source.contains('"personal_buffs"') and not donator_store_script_source.contains('"personal_buff"'), "paid personal buffs stay outside the Store catalog")
 	_check(donator_store_script_source.contains("func set_gem_balance(amount: int)") and donator_store_script_source.contains('balance_label.text = "%s Aether Gems"'), "Donator Store labels its authoritative Aether Gem balance")
 	_check(
@@ -239,6 +269,17 @@ func _init() -> void:
 		and donator_store_script_source.contains("purchase_requested.emit(selected_item_id)")
 		and script_source.contains("DonatorStoreService.purchase_item(item_id)"),
 		"Donator Store purchases use the authoritative Aether Gem checkout"
+	)
+	_check(
+		script_source.contains('add_system_message("Aether Gift Store: Purchased %s. It was added to your Bag." % purchased_item_name)'),
+		"successful Aether Gift Store purchases announce themselves in System chat"
+	)
+	_check(
+		donator_store_script_source.contains("Tradeable voucher. Use it from the Bag")
+		and script_source.contains('"id": "vouchers", "label": "Vouchers"')
+		and script_source.contains('use_action == "redeem_aether_blessing"')
+		and script_source.contains("Aether Blessing extended by %d days."),
+		"Blessing purchases remain tradeable vouchers until redeemed from the Bag"
 	)
 	_check(
 		script_source.contains("func _create_trainer_card_wallet_tab()")

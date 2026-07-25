@@ -23,8 +23,14 @@ const CHAT_RESIZE_BUTTON_GAP := 10.0
 const CHAT_TABS_GAP := 8.0
 const CHAT_TABS_LEFT_INSET := 4.0
 const PERSONAL_BUFF_PANEL_COMPACT_HEIGHT := 42.0
-const PERSONAL_BUFF_ROW_HEIGHT := 26.0
-const PERSONAL_BUFF_ROW_GAP := 4.0
+const PERSONAL_BUFF_ROW_HEIGHT := 52.0
+const PERSONAL_BUFF_ROW_GAP := 5.0
+const PERSONAL_BUFF_DEFAULT_BADGE_COLOR := Color("#c2a0ff")
+const PERSONAL_BUFF_DEFAULT_NAME_COLOR := Color("#ece7f8")
+const PERSONAL_BUFF_DEFAULT_TIME_COLOR := Color("#b8a7d6")
+const AETHER_BLESSING_BADGE_COLOR := Color("#f2cb70")
+const AETHER_BLESSING_NAME_COLOR := Color("#fff0c7")
+const AETHER_BLESSING_TIME_COLOR := Color("#86dcf4")
 const CHAT_BADGE_TEXT_COLOR: Color = Color("#07101d")
 const CHAT_DEFAULT_NAME_COLOR := "#aeb8c5"
 const CHAT_SEPARATOR_COLOR := "#778194"
@@ -121,6 +127,7 @@ const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
 const PLAYER_PREVIEW_SCENE: PackedScene = preload("res://scenes/player.tscn")
+const DEFAULT_APPEARANCE_SLOT_LIMIT := 8
 const APPEARANCE_CATEGORIES := [
 	{"id": "body", "label": "Body"},
 	{"id": "hair", "label": "Hair"},
@@ -324,6 +331,7 @@ const BAG_CATEGORIES := [
 	{"id": "held_items", "label": "Held Items", "iconItemId": "leftovers"},
 	{"id": "power_stones", "label": "Mega & Z", "iconItemId": "charizardite-x"},
 	{"id": "cosmetics", "label": "Cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
+	{"id": "vouchers", "label": "Vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
 	{"id": "currency", "label": "Currency", "iconItemId": "coin-case"},
 	{"id": "general", "label": "Other", "iconItemId": "ability-capsule"},
 ]
@@ -781,6 +789,10 @@ var trainer_card_part_rows: Dictionary = {}
 var trainer_card_part_return_buttons: Dictionary = {}
 var trainer_card_color_buttons: Dictionary = {}
 var owned_appearance_parts: Dictionary = {}
+var appearance_inventory_slot_limit := DEFAULT_APPEARANCE_SLOT_LIMIT
+var appearance_inventory_slot_counts: Dictionary = {}
+var trainer_card_active_appearance_category := "body"
+var trainer_card_appearance_capacity_label: Label
 var appearance_inventory_loading := false
 var appearance_inventory_returning := false
 var trainer_card_appearance_save_button: Button
@@ -1062,7 +1074,9 @@ var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 var selected_global_buff: Dictionary = {}
 var selected_global_buff_contribution := 10000
 var active_personal_buffs: Array = []
+var personal_buff_source_buffs: Array = []
 var personal_buffs_expanded := false
+var personal_buffs_refresh_elapsed := 0.0
 var staff_tools_visibility_key := ""
 
 # Called when the node enters the scene tree for the first time.
@@ -7430,6 +7444,7 @@ func _process(delta: float) -> void:
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
 	_refresh_utc_time_label(delta)
+	_refresh_personal_buffs_if_needed(delta)
 	_refresh_staff_tools_visibility_if_needed()
 	_refresh_pvp_room_polling(delta)
 	_refresh_player_action_cooldown(delta)
@@ -8149,6 +8164,82 @@ func set_global_buffs(buffs: Array) -> void:
 		_apply_global_buff_slot_visual(button, buff, progress_bar)
 
 func set_personal_buffs(buffs: Array) -> void:
+	personal_buff_source_buffs = buffs.duplicate(true)
+	_refresh_personal_buffs_from_entitlements()
+
+
+func _refresh_personal_buffs_if_needed(delta: float) -> void:
+	personal_buffs_refresh_elapsed -= delta
+	if personal_buffs_refresh_elapsed > 0.0:
+		return
+	personal_buffs_refresh_elapsed = 1.0
+	_refresh_personal_buffs_from_entitlements()
+
+
+func _refresh_personal_buffs_from_entitlements() -> void:
+	var buffs := personal_buff_source_buffs.duplicate(true)
+	var blessing_buff := _current_aether_blessing_buff()
+	if not blessing_buff.is_empty():
+		buffs.push_front(blessing_buff)
+	_render_personal_buffs(buffs)
+
+
+func _current_aether_blessing_buff() -> Dictionary:
+	var roles_value: Variant = AuthService.current_user.get("roles", [])
+	if not roles_value is Array:
+		return {}
+	for role_value: Variant in roles_value as Array:
+		if not role_value is Dictionary:
+			continue
+		var role := role_value as Dictionary
+		if str(role.get("id", "")).strip_edges().to_lower() != "blessed":
+			continue
+		if not _is_role_badge_current(role):
+			return {}
+		var expires_at := str(role.get("expiresAt", "")).strip_edges()
+		var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+		var remaining_seconds := maxi(
+			int(ceil(expires_unix - Time.get_unix_time_from_system())),
+			0
+		)
+		if remaining_seconds <= 0:
+			return {}
+		return {
+			"id": "aether_blessing",
+			"label": "AE",
+			"name": "Aether Blessing",
+			"description": "Supporter recognition without battle advantages.",
+			"remaining": _format_aether_blessing_remaining(remaining_seconds),
+			"compactRemaining": _format_aether_blessing_remaining(remaining_seconds, true),
+			"expiresAt": expires_at,
+		}
+	return {}
+
+
+func _format_aether_blessing_remaining(total_seconds: int, compact: bool = false) -> String:
+	var safe_seconds := maxi(total_seconds, 0)
+	var days := safe_seconds / 86400
+	var hours := (safe_seconds % 86400) / 3600
+	var minutes := (safe_seconds % 3600) / 60
+	var seconds := safe_seconds % 60
+	if compact:
+		if days > 0:
+			return "%dd" % days
+		if hours > 0:
+			return "%dh" % hours
+		if minutes > 0:
+			return "%dm" % minutes
+		return "<1m"
+	if days > 0:
+		return "%dd %dh" % [days, hours]
+	if hours > 0:
+		return "%dh %dm" % [hours, minutes]
+	if minutes > 0:
+		return "%dm %ds" % [minutes, seconds]
+	return "%ds" % seconds
+
+
+func _render_personal_buffs(buffs: Array) -> void:
 	var had_active_buffs := not active_personal_buffs.is_empty()
 	active_personal_buffs = buffs.duplicate(true)
 	var has_active_buffs := not buffs.is_empty()
@@ -8164,7 +8255,8 @@ func set_personal_buffs(buffs: Array) -> void:
 		button.visible = slot_index < buffs.size()
 		button.set_meta("buff_data", {})
 		var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
-		var name_label := button.get_node_or_null("Content/NameLabel") as Label
+		var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
+		var description_label := button.get_node_or_null("Content/Details/DescriptionLabel") as Label
 		var time_label := button.get_node_or_null("Content/TimeLabel") as Label
 		if not button.visible:
 			button.tooltip_text = ""
@@ -8175,8 +8267,11 @@ func set_personal_buffs(buffs: Array) -> void:
 				badge_label.text = "+"
 			if name_label != null:
 				name_label.text = "%d more buffs" % (buffs.size() - slot_count + 1)
+			if description_label != null:
+				description_label.text = "Hover for the complete list."
 			if time_label != null:
 				time_label.text = ""
+			_apply_personal_buff_row_visual(button, {})
 			button.tooltip_text = _buff_overflow_tooltip(buffs, slot_index)
 			continue
 
@@ -8185,11 +8280,39 @@ func set_personal_buffs(buffs: Array) -> void:
 			badge_label.text = str(buff.get("label", "?")).strip_edges().left(3)
 		if name_label != null:
 			name_label.text = str(buff.get("name", "Buff"))
+		if description_label != null:
+			description_label.text = str(buff.get("description", "")).strip_edges()
 		if time_label != null:
-			time_label.text = str(buff.get("remaining", "")).strip_edges().left(5)
+			time_label.text = str(
+				buff.get("compactRemaining", buff.get("remaining", ""))
+			).strip_edges().left(5)
+		_apply_personal_buff_row_visual(button, buff)
 		button.tooltip_text = _buff_tooltip(buff)
 		button.set_meta("buff_data", buff.duplicate(true))
 	_refresh_personal_buffs_compact_state()
+
+func _apply_personal_buff_row_visual(button: Button, buff: Dictionary) -> void:
+	if button == null:
+		return
+	var badge_label := button.get_node_or_null("Content/BadgeLabel") as Label
+	var name_label := button.get_node_or_null("Content/Details/NameLabel") as Label
+	var time_label := button.get_node_or_null("Content/TimeLabel") as Label
+	var is_aether_blessing := str(buff.get("id", "")).strip_edges().to_lower() == "aether_blessing"
+	if badge_label != null:
+		badge_label.add_theme_color_override(
+			"font_color",
+			AETHER_BLESSING_BADGE_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_BADGE_COLOR
+		)
+	if name_label != null:
+		name_label.add_theme_color_override(
+			"font_color",
+			AETHER_BLESSING_NAME_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_NAME_COLOR
+		)
+	if time_label != null:
+		time_label.add_theme_color_override(
+			"font_color",
+			AETHER_BLESSING_TIME_COLOR if is_aether_blessing else PERSONAL_BUFF_DEFAULT_TIME_COLOR
+		)
 
 func _on_personal_buffs_summary_pressed() -> void:
 	if active_personal_buffs.is_empty():
@@ -8205,7 +8328,7 @@ func _refresh_personal_buffs_compact_state() -> void:
 	personal_buff_slots.visible = has_active_buffs and personal_buffs_expanded
 	if has_active_buffs:
 		var noun := "buff" if active_count == 1 else "buffs"
-		var toggle_marker := "−" if personal_buffs_expanded else "+"
+		var toggle_marker := "▴" if personal_buffs_expanded else "▾"
 		personal_buffs_summary_button.text = "%d %s active  %s" % [active_count, noun, toggle_marker]
 		personal_buffs_summary_button.tooltip_text = _personal_buffs_summary_tooltip()
 	else:
@@ -8221,14 +8344,19 @@ func _refresh_personal_buffs_compact_state() -> void:
 		)
 	personal_buffs_panel.custom_minimum_size.y = panel_height
 	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
-
 func _personal_buffs_summary_tooltip() -> String:
-	var lines: Array[String] = ["Active personal buffs"]
+	var noun := "buff" if active_personal_buffs.size() == 1 else "buffs"
+	var lines: Array[String] = ["%d active personal %s" % [active_personal_buffs.size(), noun]]
 	for buff_value: Variant in active_personal_buffs:
 		var buff := buff_value as Dictionary
+		var description := str(buff.get("description", "")).strip_edges()
 		var remaining := str(buff.get("remaining", "")).strip_edges()
-		var suffix := "" if remaining == "" else " · %s" % remaining
-		lines.append("%s%s" % [str(buff.get("name", "Buff")), suffix])
+		lines.append("")
+		lines.append(str(buff.get("name", "Buff")))
+		if description != "":
+			lines.append(description)
+		if remaining != "":
+			lines.append("Remaining: %s" % remaining)
 	lines.append("Click to hide details" if personal_buffs_expanded else "Click to show details")
 	return "\n".join(lines)
 
@@ -8476,7 +8604,9 @@ func _on_donator_store_purchase_requested(item_id: String) -> void:
 		_refresh_bag_detail()
 	var purchase := result.get("purchase", {}) as Dictionary
 	var purchased_item_id := str(purchase.get("itemId", item_id))
-	donator_store_popup.show_purchase_success(_item_name_from_id(purchased_item_id))
+	var purchased_item_name := _item_name_from_id(purchased_item_id)
+	donator_store_popup.show_purchase_success(purchased_item_name)
+	add_system_message("Aether Gift Store: Purchased %s. It was added to your Bag." % purchased_item_name)
 
 func _hide_donator_store_popup() -> void:
 	if donator_store_popup == null:
@@ -9277,7 +9407,16 @@ func _get_public_trainer_badge_text(card: Dictionary) -> String:
 	for role_value: Variant in roles:
 		if role_value is Dictionary:
 			var role := role_value as Dictionary
-			if str(role.get("id", "")).strip_edges().to_lower() == selected:
+			var display: Dictionary = (
+				role.get("display", {})
+				if role.get("display", {}) is Dictionary
+				else {}
+			)
+			if (
+				str(role.get("id", "")).strip_edges().to_lower() == selected
+				and bool(display.get("profileBadge", true))
+				and _is_role_badge_current(role)
+			):
 				return str(role.get("badge", role.get("displayName", "-")))
 	return "-"
 
@@ -9431,7 +9570,7 @@ func _create_trainer_card_wallet_tab() -> Control:
 	cards.add_child(
 		_create_trainer_card_currency_card(
 			"Aether Gems",
-			"Supporter currency used for available products in the Aether Store.",
+			"Supporter currency used for available products in the Aether Gift Store.",
 			TRAINER_WALLET_AETHER_GEM_ICON,
 			UI_PURPLE_HOVER,
 			true
@@ -9742,6 +9881,8 @@ func _create_trainer_card_stat_row(
 	return row
 
 func _create_trainer_card_appearance_tab() -> Control:
+	trainer_card_active_appearance_category = "body"
+	trainer_card_appearance_capacity_label = null
 	var tab := MarginContainer.new()
 	tab.name = "Appearance"
 	tab.add_theme_constant_override("margin_left", 10)
@@ -10154,6 +10295,8 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 			side_button.button_pressed = selected
 			_apply_button_style(side_button, "primary" if selected else "default")
 
+	trainer_card_active_appearance_category = CharacterAppearanceService.normalize_part_category(category_id)
+	trainer_card_appearance_capacity_label = null
 	_clear_container_children(content_stack)
 	var content_scroll := content_stack.get_parent() as ScrollContainer
 	if content_scroll != null:
@@ -10168,6 +10311,7 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 		_create_trainer_card_part_appearance_content(content_stack, category_id)
 
 func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) -> void:
+	trainer_card_appearance_capacity_label = null
 	_create_trainer_card_appearance_section_header(
 		content_stack,
 		"Body",
@@ -10207,6 +10351,11 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		category_name,
 		"Select the %s that fits your trainer." % category_name.to_lower()
 	)
+
+	trainer_card_appearance_capacity_label = Label.new()
+	trainer_card_appearance_capacity_label.add_theme_font_size_override("font_size", 12)
+	content_stack.add_child(trainer_card_appearance_capacity_label)
+	_refresh_trainer_card_appearance_capacity_label()
 
 	var search_input := _create_trainer_card_appearance_search_input("Search %s" % category_name.to_lower())
 	search_input.text_changed.connect(_filter_trainer_card_part_buttons)
@@ -10740,10 +10889,25 @@ func _load_owned_appearance_parts() -> void:
 	if not bool(result.get("success", false)):
 		push_warning("Appearance inventory failed to load: %s" % str(result.get("error", "Unknown error")))
 		return
-	_apply_owned_appearance_unlocks(result.get("unlocks", []))
+	_apply_owned_appearance_unlocks(
+		result.get("unlocks", []),
+		result.get("slotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT),
+		result.get("slotCounts", {})
+	)
 
-func _apply_owned_appearance_unlocks(unlocks_value: Variant) -> void:
+func _apply_owned_appearance_unlocks(
+	unlocks_value: Variant,
+	slot_limit_value: Variant = DEFAULT_APPEARANCE_SLOT_LIMIT,
+	slot_counts_value: Variant = {}
+) -> void:
 	owned_appearance_parts.clear()
+	appearance_inventory_slot_counts.clear()
+	var parsed_slot_limit := int(slot_limit_value)
+	appearance_inventory_slot_limit = (
+		parsed_slot_limit
+		if parsed_slot_limit > 0
+		else DEFAULT_APPEARANCE_SLOT_LIMIT
+	)
 	if unlocks_value is Array:
 		for unlock_value: Variant in unlocks_value as Array:
 			if not unlock_value is Dictionary:
@@ -10753,7 +10917,45 @@ func _apply_owned_appearance_unlocks(unlocks_value: Variant) -> void:
 			var appearance_id := str(unlock.get("appearanceId", unlock.get("appearance_id", ""))).strip_edges()
 			if slot != "" and appearance_id != "":
 				owned_appearance_parts["%s:%s" % [slot, appearance_id]] = unlock.duplicate(true)
+				if (
+					appearance_id != "__none__"
+					and not CharacterAppearanceService.is_free_part_id(slot, appearance_id)
+				):
+					appearance_inventory_slot_counts[slot] = int(
+						appearance_inventory_slot_counts.get(slot, 0)
+					) + 1
+	if slot_counts_value is Dictionary:
+		for slot_value: Variant in (slot_counts_value as Dictionary).keys():
+			var slot := CharacterAppearanceService.normalize_part_category(str(slot_value))
+			if slot != "" and slot != "body":
+				appearance_inventory_slot_counts[slot] = maxi(
+					0,
+					int((slot_counts_value as Dictionary).get(slot_value, 0))
+				)
 	_refresh_trainer_card_part_buttons()
+	_refresh_trainer_card_appearance_capacity_label()
+
+func _refresh_trainer_card_appearance_capacity_label() -> void:
+	if not is_instance_valid(trainer_card_appearance_capacity_label):
+		return
+	var category := CharacterAppearanceService.normalize_part_category(
+		trainer_card_active_appearance_category
+	)
+	if category == "" or category == "body":
+		trainer_card_appearance_capacity_label.visible = false
+		return
+	var count := int(appearance_inventory_slot_counts.get(category, 0))
+	var category_name := _format_appearance_category_name(category)
+	trainer_card_appearance_capacity_label.visible = true
+	trainer_card_appearance_capacity_label.text = "%s wardrobe · %d/%d unlocked" % [
+		category_name,
+		count,
+		appearance_inventory_slot_limit,
+	]
+	trainer_card_appearance_capacity_label.add_theme_color_override(
+		"font_color",
+		UI_DANGER if count >= appearance_inventory_slot_limit else TRAINER_CARD_ACCENT
+	)
 
 func _is_appearance_part_owned(category_id: String, part_id: String) -> bool:
 	var normalized_category := CharacterAppearanceService.normalize_part_category(category_id)
@@ -10933,7 +11135,11 @@ func _on_trainer_card_return_appearance_pressed(category_id: String, part_id: St
 		return
 
 	_apply_returned_appearance_defaults(result.get("returnedUnlocks", []))
-	_apply_owned_appearance_unlocks(result.get("appearanceUnlocks", []))
+	_apply_owned_appearance_unlocks(
+		result.get("appearanceUnlocks", []),
+		result.get("appearanceSlotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT),
+		result.get("appearanceSlotCounts", {})
+	)
 	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
 	bag_inventory_loaded = true
 	if bag_popup != null and bag_popup.visible:
@@ -13587,7 +13793,8 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "escape-rope-action":
 		return true
-	if str(item.get("useAction", "")).strip_edges() == "unlock_appearance":
+	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -13606,8 +13813,13 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
 		return "Use Charm"
-	if str(item.get("useAction", "")).strip_edges() == "unlock_appearance":
+	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "open_item_bundle":
+		return "Open Box"
+	if use_action == "unlock_appearance":
 		return "Move to Customization"
+	if use_action == "redeem_aether_blessing":
+		return "Redeem Voucher"
 	if _bag_machine_move_id(item_id) != "":
 		return "Teach Move"
 	if _is_pokemon_usable_item_id(item_id):
@@ -13648,17 +13860,67 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if item_id == "escape-rope-action":
 		_on_escape_rope_pressed()
 		return
-	if str(item.get("useAction", "")).strip_edges() == "unlock_appearance":
+	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "open_item_bundle":
+		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(open_result.get("success", false)):
+			_add_chat_message(str(open_result.get("error", "That box could not be opened.")))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(open_result.get("inventory", []))
+		_apply_owned_appearance_unlocks(
+			open_result.get("appearanceUnlocks", []),
+			open_result.get("appearanceSlotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT),
+			open_result.get("appearanceSlotCounts", {})
+		)
+		var granted_count := 0
+		for granted_value: Variant in open_result.get("grantedItems", []):
+			if granted_value is Dictionary:
+				granted_count += maxi(int((granted_value as Dictionary).get("quantity", 1)), 0)
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		_add_chat_message("%s was opened. %d cosmetic items were added to your Bag." % [
+			str(item.get("name", _item_name_from_id(item_id))),
+			granted_count,
+		])
+		return
+	if use_action == "unlock_appearance":
 		var unlock_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(unlock_result.get("success", false)):
 			_add_chat_message(str(unlock_result.get("error", "That cosmetic could not be moved to Character Customization.")))
 			return
 		bag_inventory_items = _normalize_bag_inventory_items(unlock_result.get("inventory", []))
-		_apply_owned_appearance_unlocks(unlock_result.get("appearanceUnlocks", []))
+		_apply_owned_appearance_unlocks(
+			unlock_result.get("appearanceUnlocks", []),
+			unlock_result.get("appearanceSlotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT),
+			unlock_result.get("appearanceSlotCounts", {})
+		)
 		bag_selected_item = {}
 		_refresh_bag_items()
 		_refresh_bag_detail()
 		_add_chat_message("%s was added to Character Customization." % str(item.get("name", _item_name_from_id(item_id))))
+		return
+	if use_action == "redeem_aether_blessing":
+		var redeem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(redeem_result.get("success", false)):
+			_add_chat_message(str(redeem_result.get("error", "That voucher could not be redeemed.")))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(redeem_result.get("inventory", []))
+		var updated_user := redeem_result.get("user", {}) as Dictionary
+		if not updated_user.is_empty():
+			AuthService.apply_current_user(updated_user)
+			_apply_selected_role_badge_preference(
+				str(updated_user.get("selectedRoleBadge", GameState.selected_role_badge))
+			)
+			_refresh_personal_buffs_from_entitlements()
+			_populate_trainer_card_badge_option()
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		_add_chat_message(
+			"Aether Blessing extended by %d days."
+			% int(redeem_result.get("durationDays", 0))
+		)
 		return
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
@@ -14369,7 +14631,7 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 			return "held_items"
 		"poke_balls", "pokeballs":
 			return "pokeball"
-		"medicine", "machines", "charms", "power_stones", "cosmetics", "currency", "key_items":
+		"medicine", "machines", "charms", "power_stones", "cosmetics", "vouchers", "currency", "key_items":
 			return normalized
 
 	return _guess_bag_category(item_id)
@@ -30229,6 +30491,8 @@ func _get_primary_visible_chat_role(user: Dictionary, ignore_selected_badge: boo
 			continue
 
 		var role: Dictionary = role_value as Dictionary
+		if bool(role.get("requiresSelection", false)):
+			continue
 		if not _should_show_chat_role_badge(role):
 			continue
 		var badge: String = _get_chat_role_badge(role)
@@ -30298,10 +30562,20 @@ func _get_selectable_chat_badge_roles(user: Dictionary) -> Array[Dictionary]:
 
 
 func _should_show_chat_role_badge(role: Dictionary) -> bool:
+	if not _is_role_badge_current(role):
+		return false
 	var display: Dictionary = role.get("display", {}) if role.get("display", {}) is Dictionary else {}
 	if display.has("chatBadge"):
 		return bool(display.get("chatBadge", false))
 	return _get_legacy_chat_role_badge(str(role.get("id", ""))).strip_edges() != ""
+
+
+func _is_role_badge_current(role: Dictionary) -> bool:
+	var expires_at := str(role.get("expiresAt", "")).strip_edges()
+	if expires_at == "":
+		return true
+	var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+	return expires_unix > Time.get_unix_time_from_system()
 
 
 func _get_chat_role_badge(role: Dictionary) -> String:
@@ -30324,6 +30598,8 @@ func _get_legacy_chat_role_badge(role_id: String) -> String:
 			return "DEV"
 		"moderator":
 			return "MOD"
+		"blessed":
+			return "Blessed"
 		_:
 			return ""
 
@@ -30340,6 +30616,8 @@ func _get_chat_role_color(role_id: String, fallback: String) -> String:
 			return "#00e5a8"
 		"moderator":
 			return "#7b2cbf"
+		"blessed":
+			return "#b980ff"
 		_:
 			return fallback
 
