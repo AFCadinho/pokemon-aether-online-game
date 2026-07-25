@@ -80,17 +80,22 @@ func _set_type_banner(move_type: String) -> void:
 func _apply_type_style(move_type: String, is_disabled: bool) -> void:
 	var background := NEUTRAL_BACKGROUND
 	var border := NEUTRAL_BORDER
+	var accent := Color("#d8dee9")
 	if move_type != "":
 		background = TypeColors.get_slot_background(move_type, NEUTRAL_BACKGROUND)
 		border = TypeColors.get_slot_border(move_type, NEUTRAL_BORDER)
+		accent = TypeColors.get_slot_accent(move_type, border)
 
-	var normal := _make_slot_style(background, border, 1)
-	var hover := _make_slot_style(background.lightened(0.08), border.lightened(0.18), 2)
+	# Keep the text surface dark, but make each move type immediately recognisable
+	# through a saturated card tint and a deliberately heavier top/left type edge.
+	var type_surface := background.lerp(border, 0.18)
+	var normal := _make_slot_style(type_surface, border, 1)
+	var hover := _make_slot_style(type_surface.lightened(0.08), accent, 2)
 	hover.shadow_color = Color(border.r, border.g, border.b, 0.22)
 	hover.shadow_size = 10
 	hover.shadow_offset = Vector2(0, 3)
-	var pressed := _make_slot_style(background.darkened(0.08), border, 2)
-	var disabled_style := _make_slot_style(background.lerp(DISABLED_BACKGROUND, 0.58), Color(border.r, border.g, border.b, 0.38), 1)
+	var pressed := _make_slot_style(type_surface.darkened(0.08), accent, 2)
+	var disabled_style := _make_slot_style(type_surface.lerp(DISABLED_BACKGROUND, 0.58), Color(border.r, border.g, border.b, 0.38), 1)
 
 	add_theme_stylebox_override("normal", disabled_style if is_disabled else normal)
 	add_theme_stylebox_override("hover", disabled_style if is_disabled else hover)
@@ -103,8 +108,8 @@ func _make_slot_style(background: Color, border: Color, border_width: int) -> St
 	var style := StyleBoxFlat.new()
 	style.bg_color = background
 	style.border_color = border
-	style.border_width_left = border_width
-	style.border_width_top = border_width
+	style.border_width_left = border_width + 3
+	style.border_width_top = border_width + 2
 	style.border_width_right = border_width
 	style.border_width_bottom = border_width
 	style.corner_radius_top_left = 6

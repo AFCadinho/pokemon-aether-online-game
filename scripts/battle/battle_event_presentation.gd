@@ -350,8 +350,16 @@ func build(event_data: Dictionary) -> Dictionary:
 			var has_hp_loss: bool = hp_event_helper.event_has_hp_loss(event_data)
 			var has_sub_percent_hp_loss: bool = hp_event_helper.event_has_sub_percent_hp_loss(event_data)
 			var visible_hp_change: int = hp_event_helper.get_event_visible_hp_change(event_data)
+			var has_visible_hp_loss := visible_hp_change > 0 or has_sub_percent_hp_loss
 			if not has_hp_loss and not has_sub_percent_hp_loss:
 				recent_field_effect_source = ""
+			elif not has_visible_hp_loss:
+				# A non-damaging mixed snapshot must not manufacture a one-percent hit.
+				presentation["damage_target_ident"] = ""
+				presentation["log_message"] = ""
+				presentation["add_blank_after"] = false
+				recent_field_effect_source = ""
+				recent_move_event = false
 			else:
 				presentation["damage_target_ident"] = damage_target_ident
 				presentation["effect_animation_key"] = _get_residual_status_damage_effect_animation_key(event_data)

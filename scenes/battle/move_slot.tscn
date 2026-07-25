@@ -87,7 +87,7 @@ text = "Breaking Swipe"
 autowrap_mode = 3
 
 [node name="TypeBanner" type="TextureRect" parent="MarginContainer/VBoxContainer/TopRow" unique_id=313495218]
-custom_minimum_size = Vector2(20, 20)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 8
 texture = ExtResource("2_g72os")

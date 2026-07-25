@@ -29,6 +29,47 @@ const MEGA_EVOLUTION_EFFECT_KEY := "mega_evolution"
 const PVP_FORCE_SWITCH_ACK_RETRY_MSEC := 1000
 const PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC := 2500
 const PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC := 5000
+const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
+const Z_MOVE_TYPE_ICON_PATH := "res://assets/battles/types/%s.svg"
+const Z_CRYSTAL_NAMES := {
+	"normal": "Normalium Z",
+	"fighting": "Fightinium Z",
+	"flying": "Flyinium Z",
+	"poison": "Poisonium Z",
+	"ground": "Groundium Z",
+	"rock": "Rockium Z",
+	"bug": "Buginium Z",
+	"ghost": "Ghostium Z",
+	"steel": "Steelium Z",
+	"fire": "Firium Z",
+	"water": "Waterium Z",
+	"grass": "Grassium Z",
+	"electric": "Electrium Z",
+	"psychic": "Psychium Z",
+	"ice": "Icium Z",
+	"dragon": "Dragonium Z",
+	"dark": "Darkinium Z",
+	"fairy": "Fairium Z",
+}
+const SIGNATURE_Z_MOVE_NAMES := {
+	"10,000,000 volt thunderbolt": true,
+	"catastropika": true,
+	"clangorous soulblaze": true,
+	"extreme evoboost": true,
+	"genesis supernova": true,
+	"guardian of alola": true,
+	"let's snuggle forever": true,
+	"light that burns the sky": true,
+	"malicious moonsault": true,
+	"menacing moonraze maelstrom": true,
+	"oceanic operetta": true,
+	"pulverizing pancake": true,
+	"searing sunraze smash": true,
+	"soul-stealing 7-star strike": true,
+	"sinister arrow raid": true,
+	"splintered stormshards": true,
+	"stoked sparksurfer": true,
+}
 
 var battle_type: BattleType = BattleType.WILD
 var current_action_view: ActionView = ActionView.NONE
@@ -44,6 +85,7 @@ var mega_evolution_selected := false
 var mega_evolution_pulse_tween: Tween
 var z_move_selected := false
 var z_move_pulse_tween: Tween
+var z_move_type_icon_cache: Dictionary = {}
 var mechanic_orb_style: StyleBoxFlat
 var mega_mechanic_label: Label
 var z_move_mechanic_label: Label
@@ -1518,7 +1560,7 @@ func _create_mechanic_overlay_label(button: TextureButton, text: String) -> Labe
 	label.offset_bottom = -1.0
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_font_size_override("font_size", 16 if text == "Z" else 13)
 	label.add_theme_color_override("font_color", Color(0.9, 0.98, 1.0, 1.0))
 	label.add_theme_color_override("font_outline_color", Color(0.005, 0.015, 0.04, 1.0))
 	label.add_theme_color_override("font_shadow_color", Color(0.15, 0.82, 1.0, 0.95))
@@ -1589,7 +1631,12 @@ func _on_z_move_pressed() -> void:
 	_update_mechanic_button_states()
 	_update_move_slots()
 	if z_move_selected:
-		current_action_panel.set_message("Z-Power ready. Choose a Z-Move!")
+		var crystal_name := _get_z_move_crystal_name(_get_available_generic_z_move_type())
+		current_action_panel.set_message(
+			"%s ready. Choose a Z-Move!" % crystal_name
+			if crystal_name != ""
+			else "Z-Move ready. Choose a Z-Move!"
+		)
 	elif current_action_view == ActionView.MOVES:
 		_show_current_action_prompt()
 
@@ -1647,6 +1694,7 @@ func _update_mechanic_button_states() -> void:
 	var can_use_z_move := _can_toggle_z_move()
 	mega_evolution_button.visible = can_use_mega
 	z_move_button.visible = can_use_z_move
+	var z_move_type := _update_z_move_button_icon()
 	mechanics_panel.visible = (
 		current_action_panel_mode == BattleActionsPanelMode.BATTLE
 		and (can_use_mega or can_use_z_move)
@@ -1696,7 +1744,8 @@ func _update_mechanic_button_states() -> void:
 		z_move_mechanic_label.add_theme_color_override("font_color", Color(0.9, 0.98, 1.0, 1.0))
 		z_move_mechanic_label.add_theme_color_override("font_shadow_color", Color(0.15, 0.82, 1.0, 0.95))
 		z_move_button.modulate = Color(1.0, 1.0, 1.0, 0.95)
-		z_move_button.tooltip_text = "Z-Move"
+		var crystal_name := _get_z_move_crystal_name(z_move_type)
+		z_move_button.tooltip_text = "%s — Z-Move" % crystal_name if crystal_name != "" else "Z-Move"
 		_stop_z_move_pulse()
 
 	if mega_evolution_selected or z_move_selected:
@@ -1705,6 +1754,47 @@ func _update_mechanic_button_states() -> void:
 	else:
 		mechanic_orb_style.border_color = Color(0.196, 0.816, 1.0, 0.95)
 		mechanic_orb_style.shadow_color = Color(0.078, 0.722, 1.0, 0.42)
+
+func _update_z_move_button_icon() -> String:
+	if z_move_button == null:
+		return ""
+
+	var texture := Z_MOVE_FALLBACK_ICON
+	var move_type := _get_available_generic_z_move_type()
+	if move_type != "":
+		var icon_path := Z_MOVE_TYPE_ICON_PATH % move_type
+		if not ResourceLoader.exists(icon_path):
+			move_type = ""
+		elif not z_move_type_icon_cache.has(move_type):
+			z_move_type_icon_cache[move_type] = load(icon_path) as Texture2D
+		if move_type != "":
+			var type_texture: Texture2D = z_move_type_icon_cache.get(move_type) as Texture2D
+			if type_texture == null:
+				move_type = ""
+			else:
+				texture = type_texture
+
+	z_move_button.texture_normal = texture
+	z_move_button.texture_pressed = texture
+	z_move_button.texture_hover = texture
+	z_move_button.texture_disabled = texture
+	z_move_button.texture_focused = texture
+	return move_type
+
+func _get_available_generic_z_move_type() -> String:
+	var local_state_player_id := _get_local_state_player_id()
+	for z_move_value: Variant in battle_state.get_available_z_moves(local_state_player_id):
+		if not z_move_value is Dictionary:
+			continue
+		var z_move: Dictionary = z_move_value as Dictionary
+		var z_move_name := str(z_move.get("name", z_move.get("move", ""))).strip_edges().to_lower()
+		if SIGNATURE_Z_MOVE_NAMES.has(z_move_name):
+			return ""
+		return str(z_move.get("type", "")).strip_edges().to_lower()
+	return ""
+
+func _get_z_move_crystal_name(move_type: String) -> String:
+	return str(Z_CRYSTAL_NAMES.get(move_type, ""))
 
 func _start_mega_evolution_pulse() -> void:
 	if mega_evolution_button == null:

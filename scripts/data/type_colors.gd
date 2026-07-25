@@ -45,3 +45,13 @@ static func get_slot_border(type_name: String, fallback := Color("#555555")) -> 
 		return fallback
 		
 	return Color(str(colors.get("border", fallback.to_html(false))))
+
+static func get_slot_accent(type_name: String, fallback := Color("#d8dee9")) -> Color:
+	_ensure_loaded()
+
+	var key := type_name.to_lower()
+	var colors = _slot_colors.get(key, {})
+	if typeof(colors) != TYPE_DICTIONARY:
+		return fallback
+
+	return Color(str(colors.get("accent", fallback.to_html(false))))

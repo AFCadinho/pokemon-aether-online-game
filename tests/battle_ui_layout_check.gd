@@ -183,6 +183,9 @@ func _check_scene_structure() -> void:
 	var move_slot_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/move_slot.gd")
 	_check_contains(move_slot_source, "TypeColors.get_slot_background(move_type", "move backgrounds encode move type")
 	_check_contains(move_slot_source, "TypeColors.get_slot_border(move_type", "move borders encode move type")
+	_check_contains(move_slot_source, "TypeColors.get_slot_accent(move_type", "move hover state uses the readable type accent")
+	_check_contains(move_slot_source, "background.lerp(border, 0.18)", "move cards visibly tint their surface by type")
+	_check_contains(move_slot_source, "style.border_width_left = border_width + 3", "move cards use a clear type-color edge")
 	var field_timers_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/field_timers.gd")
 	_check_contains(field_timers_source, "func _fit_to_content()", "global field condition container refits after content changes")
 
