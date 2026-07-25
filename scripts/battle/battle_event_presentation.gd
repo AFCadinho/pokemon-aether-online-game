@@ -79,6 +79,8 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 				effect_keys.append(cant_effect_key)
 		"mega", "primal":
 			effect_keys.append("mega_evolution")
+		"zPower":
+			effect_keys.append("z_power")
 		"damage":
 			var damage_effect_key: String = _get_residual_status_damage_effect_animation_key(event_data)
 			if damage_effect_key != "":
@@ -211,6 +213,8 @@ func build(event_data: Dictionary) -> Dictionary:
 				presentation["log_message"] = "%s surrounded itself with Z-Power!" % actor
 				presentation["battle_message"] = str(presentation["log_message"])
 				presentation["add_blank_after"] = true
+			presentation["effect_animation_key"] = "z_power"
+			presentation["effect_animation_target_ident"] = str(event_data.get("target", ""))
 
 		"primal":
 			recent_field_effect_source = ""

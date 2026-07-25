@@ -1015,6 +1015,53 @@
       ],
       "pattern_offset": 0,
       "pattern_override": -1
+    },
+    "z_power": {
+      "template": "imported_sheet",
+      "source": "Common:ZPower",
+      "source_anchor": "player",
+      "category": "z_move_activation",
+      "data_path": "res://assets/battles/animations/zpower/zpower.json",
+      "sheet_path": "res://assets/battles/animations/zpower/PRAS- ZPower.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- ZPower1.wav": "res://assets/battles/animations/zpower/PRSFX- Zpower1.wav",
+        "PRSFX- ZPower2.wav": "res://assets/battles/animations/zpower/PRSFX- ZPower2.wav",
+        "PRSFX- ZPower3.wav": "res://assets/battles/animations/zpower/PRSFX- ZPower3.wav"
+      },
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [1.0, 0.72, 0.12, 1.0],
+      "sprite_tint": [1.0, 0.9, 0.48, 1.0],
+      "sprite_zoom_multiplier": 1.08,
+      "sprite_position_offset": [0.0, -14.0],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 14,
+      "sparkle_center": [128.0, 210.0],
+      "sparkle_radius_min": 18.0,
+      "sparkle_radius_max": 72.0,
+      "effect_position_offset": [0.0, -8.0],
+      "speed_scale": 1.04,
+      "orb": {
+        "enabled": true,
+        "center": [128.0, 210.0],
+        "radius": 44.0,
+        "alpha": 0.72
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.08,
+        "peak": 0.42,
+        "end": 0.88,
+        "alpha": 0.12,
+        "color": [1.0, 0.7, 0.1, 1.0]
+      },
+      "pattern_offset": 0,
+      "pattern_override": -1
     }
   },
   "aliases": {
