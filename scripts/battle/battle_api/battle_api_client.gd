@@ -205,7 +205,8 @@ func send_choice(
 	choice_type: String,
 	slot: int,
 	mega := false,
-	since_event_seq := -1
+	since_event_seq := -1,
+	z_move := false
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -214,6 +215,8 @@ func send_choice(
 	}
 	if mega:
 		body["mega"] = true
+	if z_move:
+		body["zMove"] = true
 	
 	return await send_post_request(
 		request_node,
@@ -230,7 +233,8 @@ func send_choice_and_resolve(
 	mega := false,
 	strategy := "basic",
 	npc_player_id := "p2",
-	since_event_seq := -1
+	since_event_seq := -1,
+	z_move := false
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -241,6 +245,8 @@ func send_choice_and_resolve(
 	}
 	if mega:
 		body["mega"] = true
+	if z_move:
+		body["zMove"] = true
 
 	return await send_post_request(
 		request_node,

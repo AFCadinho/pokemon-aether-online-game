@@ -42,7 +42,7 @@ func get_battle_message_hold_seconds(event: Dictionary, battle_message: String) 
 			return SWITCH_MESSAGE_HOLD_SECONDS
 		"heal":
 			return HEAL_MESSAGE_HOLD_SECONDS
-		"mega", "primal":
+		"mega", "primal", "zPower":
 			return MEGA_MESSAGE_HOLD_SECONDS
 		"fieldEffect", "pokemonEffect", "ability", "statChange", "status", "fail", "cant", "miss", "effectiveness", "hitCount", "criticalHit":
 			return EFFECT_MESSAGE_HOLD_SECONDS

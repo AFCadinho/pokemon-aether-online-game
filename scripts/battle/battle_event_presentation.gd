@@ -202,6 +202,16 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["effect_animation_key"] = "mega_evolution"
 			presentation["effect_animation_target_ident"] = str(event_data.get("target", ""))
 
+		"zPower":
+			recent_field_effect_source = ""
+			recent_ability_event = false
+			recent_move_event = false
+			var actor := _format_actor(str(event_data.get("target", "")))
+			if actor != "":
+				presentation["log_message"] = "%s surrounded itself with Z-Power!" % actor
+				presentation["battle_message"] = str(presentation["log_message"])
+				presentation["add_blank_after"] = true
+
 		"primal":
 			recent_field_effect_source = ""
 			recent_ability_event = false

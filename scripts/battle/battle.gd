@@ -42,8 +42,11 @@ var team_preview_lead_selection_active := false
 var forfeit_return_action_view: ActionView = ActionView.NONE
 var mega_evolution_selected := false
 var mega_evolution_pulse_tween: Tween
+var z_move_selected := false
+var z_move_pulse_tween: Tween
 var mechanic_orb_style: StyleBoxFlat
 var mega_mechanic_label: Label
+var z_move_mechanic_label: Label
 var pending_mega_species_by_ident: Dictionary = {}
 var pvp_room_code := ""
 var pvp_match_id := ""
@@ -191,6 +194,7 @@ var active_enemy_pokemon: Pokemon
 @onready var party_rail_state_label: Label = %PartyRailStateLabel
 @onready var mechanics_panel: Control = %MechanicsPanel
 @onready var mega_evolution_button: TextureButton = %MegaEvolutionIcon
+@onready var z_move_button: TextureButton = %ZMove
 @onready var mechanic_buttons: Array[TextureButton] = [
 	%MegaEvolutionIcon,
 	%Terra,
@@ -1468,6 +1472,9 @@ func _setup_mechanic_buttons() -> void:
 	if mega_evolution_button != null:
 		mega_evolution_button.pressed.connect(_on_mega_evolution_pressed)
 		mega_evolution_button.tooltip_text = "Mega Evolution"
+	if z_move_button != null:
+		z_move_button.pressed.connect(_on_z_move_pressed)
+		z_move_button.tooltip_text = "Z-Move"
 	_update_mechanic_button_states()
 
 func _apply_mechanic_orb_style() -> void:
@@ -1499,6 +1506,7 @@ func _apply_mechanic_orb_style() -> void:
 	for button: TextureButton in mechanic_buttons:
 		button.custom_minimum_size = Vector2(52.0, 52.0)
 	mega_mechanic_label = _create_mechanic_overlay_label(mega_evolution_button, "MEGA")
+	z_move_mechanic_label = _create_mechanic_overlay_label(z_move_button, "Z")
 
 func _create_mechanic_overlay_label(button: TextureButton, text: String) -> Label:
 	var label := Label.new()
@@ -1533,7 +1541,7 @@ func _on_mechanic_button_mouse_entered(button: TextureButton) -> void:
 		Color(1.35, 1.35, 1.35, 1.0),
 		0.12
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	if button != mega_evolution_button or not mega_evolution_selected:
+	if not _is_selected_mechanic_button(button):
 		hover_tween.tween_property(button, "scale", Vector2(1.08, 1.08), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func _on_mechanic_button_mouse_exited(button: TextureButton) -> void:
@@ -1546,8 +1554,14 @@ func _on_mechanic_button_mouse_exited(button: TextureButton) -> void:
 		Color.WHITE,
 		0.12
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	if button != mega_evolution_button or not mega_evolution_selected:
+	if not _is_selected_mechanic_button(button):
 		hover_tween.tween_property(button, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _is_selected_mechanic_button(button: TextureButton) -> bool:
+	return (
+		(button == mega_evolution_button and mega_evolution_selected)
+		or (button == z_move_button and z_move_selected)
+	)
 
 func _on_mega_evolution_pressed() -> void:
 	_focus_battle_ui_layer()
@@ -1555,9 +1569,27 @@ func _on_mega_evolution_pressed() -> void:
 		return
 
 	mega_evolution_selected = not mega_evolution_selected
+	if mega_evolution_selected:
+		z_move_selected = false
 	_update_mechanic_button_states()
+	_update_move_slots()
 	if mega_evolution_selected:
 		current_action_panel.set_message("Mega Evolution ready. Choose a move!")
+	elif current_action_view == ActionView.MOVES:
+		_show_current_action_prompt()
+
+func _on_z_move_pressed() -> void:
+	_focus_battle_ui_layer()
+	if not _can_toggle_z_move():
+		return
+
+	z_move_selected = not z_move_selected
+	if z_move_selected:
+		mega_evolution_selected = false
+	_update_mechanic_button_states()
+	_update_move_slots()
+	if z_move_selected:
+		current_action_panel.set_message("Z-Power ready. Choose a Z-Move!")
 	elif current_action_view == ActionView.MOVES:
 		_show_current_action_prompt()
 
@@ -1566,6 +1598,13 @@ func _clear_mega_evolution_selection() -> void:
 		return
 
 	mega_evolution_selected = false
+	_update_mechanic_button_states()
+
+func _clear_z_move_selection() -> void:
+	if not z_move_selected:
+		return
+
+	z_move_selected = false
 	_update_mechanic_button_states()
 
 func _can_toggle_mega_evolution() -> bool:
@@ -1579,6 +1618,17 @@ func _can_toggle_mega_evolution() -> bool:
 		and battle_state.can_active_pokemon_mega_evolve(local_state_player_id)
 	)
 
+func _can_toggle_z_move() -> bool:
+	var local_state_player_id := _get_local_state_player_id()
+	return (
+		battle_actions_ready
+		and not battle_input_locked
+		and not battle_finished
+		and not team_preview_lead_selection_active
+		and not force_switch_flow.player_needs_force_switch(local_state_player_id)
+		and battle_state.can_active_pokemon_use_z_move(local_state_player_id)
+	)
+
 func _get_local_state_player_id() -> String:
 	if not _is_pvp_battle():
 		return action_flow.local_player_id
@@ -1590,18 +1640,24 @@ func _get_opponent_state_player_id() -> String:
 	return "p2" if local_state_player_id == "p1" else "p1"
 
 func _update_mechanic_button_states() -> void:
-	if mega_evolution_button == null:
+	if mega_evolution_button == null or z_move_button == null:
 		return
 
 	var can_use_mega := _can_toggle_mega_evolution()
+	var can_use_z_move := _can_toggle_z_move()
 	mega_evolution_button.visible = can_use_mega
+	z_move_button.visible = can_use_z_move
 	mechanics_panel.visible = (
 		current_action_panel_mode == BattleActionsPanelMode.BATTLE
-		and can_use_mega
+		and (can_use_mega or can_use_z_move)
 	)
 	mega_evolution_button.disabled = not can_use_mega
+	z_move_button.disabled = not can_use_z_move
 	mega_evolution_button.mouse_default_cursor_shape = (
 		Control.CURSOR_POINTING_HAND if can_use_mega else Control.CURSOR_FORBIDDEN
+	)
+	z_move_button.mouse_default_cursor_shape = (
+		Control.CURSOR_POINTING_HAND if can_use_z_move else Control.CURSOR_FORBIDDEN
 	)
 	if not can_use_mega:
 		mega_evolution_selected = false
@@ -1624,6 +1680,31 @@ func _update_mechanic_button_states() -> void:
 		mega_evolution_button.modulate = Color(1.0, 1.0, 1.0, 0.95)
 		mega_evolution_button.tooltip_text = "Mega Evolution"
 		_stop_mega_evolution_pulse()
+
+	if not can_use_z_move:
+		z_move_selected = false
+		z_move_button.modulate = Color(0.45, 0.45, 0.45, 0.65)
+		z_move_button.tooltip_text = "Z-Move unavailable"
+		_stop_z_move_pulse()
+	elif z_move_selected:
+		z_move_mechanic_label.add_theme_color_override("font_color", Color(1.0, 0.94, 0.56, 1.0))
+		z_move_mechanic_label.add_theme_color_override("font_shadow_color", Color(1.0, 0.22, 0.28, 1.0))
+		z_move_button.modulate = Color(1.0, 0.72, 0.24, 1.0)
+		z_move_button.tooltip_text = "Z-Move ready"
+		_start_z_move_pulse()
+	else:
+		z_move_mechanic_label.add_theme_color_override("font_color", Color(0.9, 0.98, 1.0, 1.0))
+		z_move_mechanic_label.add_theme_color_override("font_shadow_color", Color(0.15, 0.82, 1.0, 0.95))
+		z_move_button.modulate = Color(1.0, 1.0, 1.0, 0.95)
+		z_move_button.tooltip_text = "Z-Move"
+		_stop_z_move_pulse()
+
+	if mega_evolution_selected or z_move_selected:
+		mechanic_orb_style.border_color = Color(1.0, 0.78, 0.24, 1.0)
+		mechanic_orb_style.shadow_color = Color(0.8, 0.32, 1.0, 0.55)
+	else:
+		mechanic_orb_style.border_color = Color(0.196, 0.816, 1.0, 0.95)
+		mechanic_orb_style.shadow_color = Color(0.078, 0.722, 1.0, 0.42)
 
 func _start_mega_evolution_pulse() -> void:
 	if mega_evolution_button == null:
@@ -1654,6 +1735,36 @@ func _stop_mega_evolution_pulse() -> void:
 	mega_evolution_pulse_tween = null
 	if mega_evolution_button != null:
 		mega_evolution_button.scale = Vector2.ONE
+
+func _start_z_move_pulse() -> void:
+	if z_move_button == null:
+		return
+	if z_move_pulse_tween != null and z_move_pulse_tween.is_valid():
+		return
+
+	z_move_button.pivot_offset = z_move_button.size * 0.5
+	z_move_button.scale = Vector2(1.06, 1.06)
+	z_move_pulse_tween = create_tween()
+	z_move_pulse_tween.set_loops()
+	z_move_pulse_tween.tween_property(
+		z_move_button,
+		"scale",
+		Vector2(1.18, 1.18),
+		0.35
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	z_move_pulse_tween.tween_property(
+		z_move_button,
+		"scale",
+		Vector2(1.06, 1.06),
+		0.35
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func _stop_z_move_pulse() -> void:
+	if z_move_pulse_tween != null and z_move_pulse_tween.is_valid():
+		z_move_pulse_tween.kill()
+	z_move_pulse_tween = null
+	if z_move_button != null:
+		z_move_button.scale = Vector2.ONE
 
 func _input(event: InputEvent) -> void:
 	if _try_focus_battle_from_background_click(event):
@@ -1815,7 +1926,7 @@ func _sync_action_panel_mode_visibility() -> void:
 	bag_grid.visible = not is_calc_mode and is_bag_view
 	bag_drawer.visible = not is_calc_mode and is_bag_view
 	action_buttons.visible = not is_calc_mode
-	mechanics_panel.visible = not is_calc_mode and mega_evolution_button.visible
+	mechanics_panel.visible = not is_calc_mode and (mega_evolution_button.visible or z_move_button.visible)
 	player_party_grid.visible = not show_pvp_switch_confirmation
 	opponent_party_grid.visible = true
 	if is_calc_mode:
@@ -2379,6 +2490,7 @@ func _reset_action_choices() -> void:
 	current_action_view = ActionView.NONE
 	_hide_party_hover()
 	_clear_mega_evolution_selection()
+	_clear_z_move_selection()
 	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
 
@@ -2566,6 +2678,7 @@ func _show_party(force_switch := false) -> void:
 		return
 
 	_clear_mega_evolution_selection()
+	_clear_z_move_selection()
 	action_buttons.set_action_disabled("fight", force_switch)
 	action_buttons.set_action_disabled("bag", force_switch or not _can_use_bag_in_current_battle())
 	action_buttons.set_action_disabled("run", force_switch)
@@ -2599,6 +2712,7 @@ func _open_bag() -> void:
 		return
 
 	_clear_mega_evolution_selection()
+	_clear_z_move_selection()
 	current_action_view = ActionView.BAG
 	moves_grid.visible = false
 	player_party_grid.visible = true
@@ -2815,10 +2929,12 @@ func _try_run() -> void:
 
 	if battle_type != BattleType.WILD:
 		_clear_mega_evolution_selection()
+		_clear_z_move_selection()
 		_show_forfeit_confirm_dialog()
 		return
 
 	_clear_mega_evolution_selection()
+	_clear_z_move_selection()
 	_set_battle_input_locked(true)
 	var response: Dictionary = await action_flow.submit_player_choice("run", 1, false, last_rendered_event_seq)
 	_set_battle_input_locked(false)
@@ -2889,7 +3005,42 @@ func _update_move_slots() -> void:
 	if active_player_pokemon == null:
 		return
 
-	moves_grid.set_moves(battle_state.get_available_moves())
+	moves_grid.set_moves(_get_display_moves_for_selected_mechanic())
+
+func _get_display_moves_for_selected_mechanic() -> Array:
+	var local_state_player_id := _get_local_state_player_id()
+	var base_moves: Array = battle_state.get_available_moves(local_state_player_id)
+	if not z_move_selected:
+		return base_moves
+
+	var display_moves: Array = []
+	for index in range(base_moves.size()):
+		var base_value: Variant = base_moves[index]
+		var base_move: Dictionary = (
+			(base_value as Dictionary).duplicate(true)
+			if base_value is Dictionary
+			else {}
+		)
+		var z_move := battle_state.get_z_move_for_slot(index + 1, local_state_player_id)
+		if z_move.is_empty():
+			base_move["disabled"] = true
+			display_moves.append(base_move)
+			continue
+
+		var current_pp: Variant = base_move.get("pp", null)
+		var max_pp: Variant = base_move.get("maxpp", base_move.get("maxPp", null))
+		base_move.merge(z_move, true)
+		base_move["name"] = str(z_move.get("name", z_move.get("move", base_move.get("name", ""))))
+		base_move["move"] = str(z_move.get("move", z_move.get("name", base_move.get("move", ""))))
+		base_move["disabled"] = false
+		base_move["zMove"] = true
+		if current_pp != null:
+			base_move["pp"] = current_pp
+		if max_pp != null:
+			base_move["maxpp"] = max_pp
+		display_moves.append(base_move)
+
+	return display_moves
 
 ## Vult beide vaste partyrails vanuit de huidige battle state.
 func _update_party_slots() -> void:
@@ -6255,9 +6406,15 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 		return
 
 	var use_mega := mega_evolution_selected
+	var use_z_move := z_move_selected
 	var pending_player_choice_events: Array = _build_pending_player_mega_events(use_mega)
 	var local_state_player_id := _get_local_state_player_id()
-	var available_moves := battle_state.get_available_moves(local_state_player_id)
+	if use_z_move and not battle_state.can_active_pokemon_use_z_move_slot(slot, local_state_player_id):
+		_clear_z_move_selection()
+		_update_move_slots()
+		current_action_panel.set_message("That move cannot use Z-Power.")
+		return
+	var available_moves := _get_display_moves_for_selected_mechanic()
 	var selected_move_data: Dictionary = available_moves[slot - 1] if slot > 0 and slot <= available_moves.size() and available_moves[slot - 1] is Dictionary else {}
 	var pvp_move_context := {
 		"pokemon_name": _get_active_display_species(local_state_player_id),
@@ -6268,12 +6425,15 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	moves_grid.visible = false
 	if use_mega:
 		current_action_panel.set_message("Preparing Mega Evolution...")
+	elif use_z_move:
+		current_action_panel.set_message("Unleashing Z-Power...")
 	_clear_mega_evolution_selection()
+	_clear_z_move_selection()
 	var player_response: Dictionary = {}
 	if _is_pvp_battle():
-		player_response = await _submit_player_choice("move", slot, use_mega, pending_player_choice_events, pvp_move_context)
+		player_response = await _submit_player_choice("move", slot, use_mega, pending_player_choice_events, pvp_move_context, use_z_move)
 	else:
-		player_response = await _submit_player_choice_and_resolve("move", slot, use_mega)
+		player_response = await _submit_player_choice_and_resolve("move", slot, use_mega, use_z_move)
 
 	if not player_response.get("success", false):
 		_clear_pending_mega_species_for_events(pending_player_choice_events)
@@ -8291,7 +8451,8 @@ func _submit_player_choice(
 	slot: int,
 	mega := false,
 	pending_player_choice_events: Array = [],
-	choice_context: Dictionary = {}
+	choice_context: Dictionary = {},
+	z_move := false
 ) -> Dictionary:
 	if (choice_type == "item" or choice_type == "bag") and not _can_use_bag_in_current_battle():
 		return {
@@ -8314,13 +8475,27 @@ func _submit_player_choice(
 		if mega_evolution_selected:
 			_clear_mega_evolution_selection()
 		mega = false
+	if choice_type == "move" and z_move and not battle_state.can_active_pokemon_use_z_move_slot(slot, local_state_player_id):
+		if z_move_selected:
+			_clear_z_move_selection()
+		return {
+			"success": false,
+			"code": "stale_z_move_selection",
+			"error": "Z-Move availability changed. Choose a move again.",
+		}
+	if mega and z_move:
+		return {
+			"success": false,
+			"code": "conflicting_battle_mechanics",
+			"error": "Mega Evolution and Z-Moves cannot be used together.",
+		}
 	if _is_pvp_battle():
-		return await _submit_pvp_realtime_choice(choice_type, slot, mega, pending_player_choice_events, choice_context)
-	return await action_flow.submit_player_choice(choice_type, slot, mega, last_rendered_event_seq)
+		return await _submit_pvp_realtime_choice(choice_type, slot, mega, pending_player_choice_events, choice_context, z_move)
+	return await action_flow.submit_player_choice(choice_type, slot, mega, last_rendered_event_seq, z_move)
 
-func _submit_player_choice_and_resolve(choice_type: String, slot: int, mega := false) -> Dictionary:
+func _submit_player_choice_and_resolve(choice_type: String, slot: int, mega := false, z_move := false) -> Dictionary:
 	if _is_pvp_battle():
-		return await _submit_player_choice(choice_type, slot, mega)
+		return await _submit_player_choice(choice_type, slot, mega, [], {}, z_move)
 	if (choice_type == "item" or choice_type == "bag") and not _can_use_bag_in_current_battle():
 		return {
 			"success": false,
@@ -8332,8 +8507,22 @@ func _submit_player_choice_and_resolve(choice_type: String, slot: int, mega := f
 		if mega_evolution_selected:
 			_clear_mega_evolution_selection()
 		mega = false
+	if choice_type == "move" and z_move and not battle_state.can_active_pokemon_use_z_move_slot(slot, local_state_player_id):
+		if z_move_selected:
+			_clear_z_move_selection()
+		return {
+			"success": false,
+			"code": "stale_z_move_selection",
+			"error": "Z-Move availability changed. Choose a move again.",
+		}
+	if mega and z_move:
+		return {
+			"success": false,
+			"code": "conflicting_battle_mechanics",
+			"error": "Mega Evolution and Z-Moves cannot be used together.",
+		}
 
-	return await action_flow.submit_player_choice_and_resolve(choice_type, slot, mega, last_rendered_event_seq)
+	return await action_flow.submit_player_choice_and_resolve(choice_type, slot, mega, last_rendered_event_seq, z_move)
 
 func _submit_lead(player_id: String, slot: int) -> Dictionary:
 	if _is_pvp_battle():
@@ -8875,16 +9064,17 @@ func _submit_pvp_realtime_choice(
 	slot: int,
 	mega := false,
 	pending_player_choice_events: Array = [],
-	choice_context: Dictionary = {}
+	choice_context: Dictionary = {},
+	z_move := false
 ) -> Dictionary:
 	var action := "choose_switch" if choice_type == "switch" else "choose_move"
 	if DEBUG_PVP_REALTIME:
 		var choice_identity := _get_debug_choice_identity(choice_type, slot)
 		_log_pvp_realtime(
 			"Submitting PvP realtime choice",
-			"choice_type=%s action=%s slot=%s mega=%s local_player_id=%s identity=%s" % [choice_type, action, slot, mega, action_flow.local_player_id, choice_identity]
+			"choice_type=%s action=%s slot=%s mega=%s z_move=%s local_player_id=%s identity=%s" % [choice_type, action, slot, mega, z_move, action_flow.local_player_id, choice_identity]
 		)
-	var response: Dictionary = await _send_pvp_realtime_action_and_wait(action, action_flow.local_player_id, slot, mega)
+	var response: Dictionary = await _send_pvp_realtime_action_and_wait(action, action_flow.local_player_id, slot, mega, z_move)
 	if not bool(response.get("success", false)):
 		if bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE":
 			var reconciled := await _reconcile_pvp_battle_from_room("stale_local_choice")
@@ -8935,9 +9125,9 @@ func _submit_pvp_realtime_forfeit() -> Dictionary:
 		return response
 	return response
 
-func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot: int, mega := false) -> Dictionary:
+func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot: int, mega := false, z_move := false) -> Dictionary:
 	if DEBUG_PVP_REALTIME:
-		_log_pvp_realtime("Preparing PvP realtime action wait", "action=%s player_id=%s slot=%s mega=%s" % [action, player_id, slot, mega])
+		_log_pvp_realtime("Preparing PvP realtime action wait", "action=%s player_id=%s slot=%s mega=%s z_move=%s" % [action, player_id, slot, mega, z_move])
 	var ready_deadline_msec := Time.get_ticks_msec() + 2000
 	while Time.get_ticks_msec() < ready_deadline_msec:
 		if PvpBattleRealtimeService.connected and PvpBattleRealtimeService.joined and PvpBattleRealtimeService.room_is_ready:
@@ -8978,7 +9168,8 @@ func _send_pvp_realtime_action_and_wait(action: String, player_id: String, slot:
 		mega,
 		str(decision.get("decisionId", "")),
 		int(decision.get("decisionGeneration", 0)),
-		str(decision.get("decisionKind", ""))
+		str(decision.get("decisionKind", "")),
+		z_move
 	)
 	if request_id == "":
 		if DEBUG_PVP_REALTIME:

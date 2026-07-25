@@ -211,7 +211,7 @@ func disconnect_room() -> void:
 		connection_changed.emit(false)
 
 
-func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0, decision_kind := "") -> String:
+func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0, decision_kind := "", z_move := false) -> String:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
@@ -233,6 +233,8 @@ func send_action(action: String, battle_id: String, player_id: String, slot: int
 	}
 	if mega:
 		payload["mega"] = true
+	if z_move:
+		payload["zMove"] = true
 	if str(decision_id).strip_edges() != "":
 		payload["decisionId"] = str(decision_id).strip_edges()
 	if int(decision_generation) > 0:
@@ -244,7 +246,7 @@ func send_action(action: String, battle_id: String, player_id: String, slot: int
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"Sending action packet",
-			"request_id=%s type=%s action=%s battle_id=%s player=%s slot=%s mega=%s" % [request_id, payload.get("type", ""), payload.get("action", ""), payload.get("battleId", ""), payload.get("playerId", ""), slot, mega]
+			"request_id=%s type=%s action=%s battle_id=%s player=%s slot=%s mega=%s z_move=%s" % [request_id, payload.get("type", ""), payload.get("action", ""), payload.get("battleId", ""), payload.get("playerId", ""), slot, mega, z_move]
 		)
 
 	var error := websocket.send_text(JSON.stringify(payload))

@@ -357,7 +357,7 @@ func _check_battle_selection_policy_contract() -> void:
 	_check_contains(source, '"%s will lead."', "lead confirmation names the selected lead Pokemon")
 	_check_contains(source, '"%s will use %s."', "move confirmation names the acting Pokemon and selected move")
 	_check_contains(source, "_show_pvp_lead_confirmation(selected_lead_name)", "PvP Team Preview shows the lead confirmation while waiting")
-	_check_contains(source, '_submit_player_choice("move", slot, use_mega, pending_player_choice_events, pvp_move_context)', "PvP move submission retains local confirmation context")
+	_check_contains(source, '_submit_player_choice("move", slot, use_mega, pending_player_choice_events, pvp_move_context, use_z_move)', "PvP move submission retains mechanics and local confirmation context")
 	_check_contains(FileAccess.get_file_as_string(BATTLE_SCENE_PATH), "[node name=\"PvpSwitchConfirmationLabel\"", "actions dock contains the PvP switch confirmation label")
 	_check_true(not source.contains("Select a Pokemon from the party rail"), "switch row does not repeat a redundant party instruction")
 	_check_true(not source.contains("context_hint.text = \"Choose an action\""), "compact dock does not stack a redundant generic hint")
@@ -381,6 +381,14 @@ func _check_battle_selection_policy_contract() -> void:
 	_check_contains(source, "corner_radius_top_left = 36", "mechanic orb is circular rather than a rectangular card")
 	_check_contains(source, "mechanics_panel.size = Vector2(68.0, 68.0)", "mechanic orb stays compact")
 	_check_contains(source, "_create_mechanic_overlay_label(mega_evolution_button, \"MEGA\")", "Mega orb carries a compact text overlay")
+	_check_contains(source, "_create_mechanic_overlay_label(z_move_button, \"Z\")", "Z-Move orb carries a compact text overlay")
+	_check_contains(source, "battle_state.can_active_pokemon_use_z_move(local_state_player_id)", "Z-Move orb follows authoritative request availability")
+	_check_contains(source, "battle_state.can_active_pokemon_use_z_move_slot(slot, local_state_player_id)", "Z-Move submission revalidates its exact slot")
+	_check_contains(
+		FileAccess.get_file_as_string("res://scripts/battle/battle_api/battle_api_client.gd"),
+		'body["zMove"] = true',
+		"Z-Move transport is explicit and additive"
+	)
 	_check_contains(source, "shadow_outline_size", "mechanic text uses a readable light glow")
 	_check_contains(source, "_prewarm_current_battle_mega_assets()", "battle responses prewarm available Mega assets")
 	_check_contains(source, "Preparing Mega Evolution...", "Mega submission gives immediate waiting feedback")

@@ -1516,6 +1516,36 @@ func can_active_pokemon_mega_evolve(player_id: String = "p1", active_index := 0)
 
 	return _get_active_mega_species_from_request_slot(player_id, active_index) != ""
 
+func get_available_z_moves(player_id: String = "p1", active_index := 0) -> Array:
+	var active_slots: Array = get_player_request(player_id).get("active", [])
+	if active_index < 0 or active_index >= active_slots.size():
+		return []
+
+	var active_data: Variant = active_slots[active_index]
+	if not (active_data is Dictionary):
+		return []
+
+	var z_moves: Variant = (active_data as Dictionary).get("canZMove", [])
+	return z_moves if z_moves is Array else []
+
+func get_z_move_for_slot(slot: int, player_id: String = "p1", active_index := 0) -> Dictionary:
+	var z_moves := get_available_z_moves(player_id, active_index)
+	var index := slot - 1
+	if index < 0 or index >= z_moves.size():
+		return {}
+
+	var z_move_value: Variant = z_moves[index]
+	return z_move_value as Dictionary if z_move_value is Dictionary else {}
+
+func can_active_pokemon_use_z_move(player_id: String = "p1", active_index := 0) -> bool:
+	for z_move_value in get_available_z_moves(player_id, active_index):
+		if z_move_value is Dictionary and not (z_move_value as Dictionary).is_empty():
+			return true
+	return false
+
+func can_active_pokemon_use_z_move_slot(slot: int, player_id: String = "p1", active_index := 0) -> bool:
+	return not get_z_move_for_slot(slot, player_id, active_index).is_empty()
+
 ## Geeft terug of de speler nog in team preview zit.
 func is_team_preview(player_id: String = "p1") -> bool:
 	var request = get_player_request(player_id)

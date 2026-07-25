@@ -36,6 +36,7 @@ func _init() -> void:
 	_check_poison_damage_replays_status_effect_animation()
 	_check_badly_poisoned_damage_replays_status_effect_animation()
 	_check_burn_damage_replays_status_effect_animation()
+	_check_z_power_event_has_visible_message()
 	quit(1 if failed else 0)
 
 
@@ -48,6 +49,20 @@ func _make_presentation():
 		Callable(self, "_get_player_display_name")
 	)
 	return presentation
+
+
+func _check_z_power_event_has_visible_message() -> void:
+	var presentation = _make_presentation()
+	var result: Dictionary = presentation.build({
+		"type": "zPower",
+		"target": "p1a: Pikachu",
+	})
+
+	_check_equal(
+		str(result.get("battle_message", "")),
+		"Pikachu surrounded itself with Z-Power!",
+		"Z-Power event receives visible battle presentation"
+	)
 
 
 func _check_previous_condition_uses_visible_scale() -> void:

@@ -44,8 +44,8 @@ func map_response_for_local_player(response: Dictionary) -> Dictionary:
 	return _swap_pokemon_sides(response.duplicate(true)) as Dictionary
 
 
-func submit_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
-	var response: Dictionary = await send_player_choice(choice_type, slot, mega, since_event_seq)
+func submit_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
+	var response: Dictionary = await send_player_choice(choice_type, slot, mega, since_event_seq, z_move)
 	if not _is_successful_response(response):
 		print("Player choice failed: ", response)
 		return response
@@ -56,8 +56,8 @@ func submit_player_choice(choice_type: String, slot: int, mega := false, since_e
 	return map_response_for_local_player(response)
 
 
-func submit_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
-	var response: Dictionary = await send_player_choice_and_resolve(choice_type, slot, mega, since_event_seq)
+func submit_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
+	var response: Dictionary = await send_player_choice_and_resolve(choice_type, slot, mega, since_event_seq, z_move)
 	if not _is_successful_response(response):
 		print("Player choice resolution failed: ", response)
 		return response
@@ -92,7 +92,7 @@ func submit_pass_turn(pass_player_id: String = "p1", player_id: String = "p2", s
 	return map_response_for_local_player(response)
 
 
-func send_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
+func send_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
 	return await BattleApiClient.send_choice(
 		request_node,
 		battle_state.battle_id,
@@ -100,11 +100,12 @@ func send_player_choice(choice_type: String, slot: int, mega := false, since_eve
 		choice_type,
 		slot,
 		mega,
-		since_event_seq
+		since_event_seq,
+		z_move
 		)
 
 
-func send_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1) -> Dictionary:
+func send_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
 	return await BattleApiClient.send_choice_and_resolve(
 		request_node,
 		battle_state.battle_id,
@@ -114,7 +115,8 @@ func send_player_choice_and_resolve(choice_type: String, slot: int, mega := fals
 		mega,
 		"basic",
 		"p2",
-		since_event_seq
+		since_event_seq,
+		z_move
 	)
 
 
