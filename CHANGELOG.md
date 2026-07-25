@@ -1,24 +1,31 @@
 # Changelog
 
-- Bag-items now open a context-aware action menu with a right-click. Depending on the item, you can use or open it, move it to Character Customization, redeem it, or assign it to the hotbar.
-- Name Change Tickets now let Trainers update both their username and display name; previous usernames stay reserved to prevent impersonation.
-- Gender Chance Tickets now safely return every unlocked cosmetic to the Bag before changing gender, then reset the Trainer to the appropriate default appearance.
-- Aether Gift Store cosmetic previews now keep the Trainer in a neutral default top and bottom, while the item being considered replaces the matching appearance part.
-- Renamed Aether Membership to Aether Blessing and added tradeable 3, 7, 14, and 30-day vouchers to the Aether Gift Store. Each duration has a dedicated colour-coded 48x48 pixel-art icon. Vouchers remain in the Bag until redeemed; redeemed time stacks, appears with a live countdown in personal buffs, and unlocks the optional `Blessed` Trainer Card title for chat only until expiry.
-- Renamed the player-facing Aether Store to Aether Gift Store.
-- Adinho Classic Sunglasses are now gender-neutral and render on both male and female character models; the rest of the Adinho Classic outfit remains male-only.
-- Trainer Services now contains only the Name Change Ticket and Gender Chance Ticket, each with a dedicated transparent pixel-art item icon.
-- The Adinho Classic Store product is now a tradeable six-item box. Opening it in the Bag grants separate Hair, Beard, Sunglasses, Shirt, Trousers and Shoes cosmetics, which can each be moved to or returned from Character Customization independently.
-- Character Customization now shows the active paid-cosmetic count per component and respects the server-authoritative limit of eight; starter options, `None`, and colour choices do not consume space.
-- Added the male-only Adinho Classic outfit box alongside separate male-only, colour-customizable hair, beard, glasses, shirt, trousers and shoes products; Store purchases and wardrobe use enforce character-model compatibility, and equipping hair immediately refreshes its linked eyebrows in the overworld.
-- Tradeable cosmetic Bag items can now be moved into Character Customization and returned to the Bag later; active wardrobe items themselves cannot be traded.
-- Aether Gems now have a durable wallet balance, and the seven available Adinho cosmetics can be purchased through a server-authoritative, replay-safe checkout that adds the tradeable box directly to the Bag.
-- The nine implemented field and weather Charms shown in the Aether Store are now purchasable permanent, stackable and tradeable Bag items in their own Charms category; gameplay reset preserves them.
-- The Trainer Card now includes a Wallet tab for Pokédollars and Aether Gems, ready to accommodate future gameplay currencies when they are introduced.
-- The Aether Store can now preview cosmetics on the player's current trainer from the front, sides, and back, with temporary colour choices for grayscale items.
-- Character Customization now shares expanded Hair and Chroma palettes with the Store preview, offers custom Hair and Chroma colours, and includes the original Default skin plus twelve curated skin tones without recolouring body outlines or clothing details.
-- Adinho cosmetic products now reuse a single front-facing spritesheet frame as their shared Store and Bag icon.
-- Legacy Tan and Dark body selections now migrate to the matching skin tone on the standard body model.
+## 0.3.32 - 2026-07-25
+
+**Added**
+
+- Added the Aether Gift Store, where Aether Gems can be spent on cosmetics, Charms, Trainer Services, and Blessing vouchers.
+- Added Aether Blessing vouchers for 3, 7, 14, and 30 days. Vouchers can be traded before use, Blessing time stacks when redeemed, and active time is shown in Player Buffs. Active supporters can choose the `Blessed` chat title from their Trainer Card.
+- Added the Adinho Classic Box. Open it from the Bag to receive its Hair, Beard, Sunglasses, Shirt, Trousers, and Shoes as separate cosmetic items.
+- Added individual colour-customizable Adinho cosmetics and a clearer Store preview, so you can see clothing and colour choices on your own Trainer before buying.
+- Added a Wallet tab to the Trainer Card for Pokédollars and Aether Gems.
+- Added permanent, tradeable Field and Weather Charms to their own Bag category.
+- Added Name Change Tickets for changing both your username and display name. Your old username remains unavailable to other players.
+- Added Gender Chance Tickets. Using one returns your unlocked cosmetics to the Bag before switching gender and restoring the matching starter appearance.
+- Added right-click actions in the Bag. Depending on the item, you can use, open, redeem, move it to Character Customization, or assign it to the hotbar.
+
+**Changed**
+
+- Renamed Aether Store to Aether Gift Store and Aether Membership to Aether Blessing.
+- Cosmetics can now be moved between the Bag and Character Customization. Cosmetics in the Bag can be traded; equipped cosmetics cannot.
+- Character Customization now shows how many cosmetic choices you own for each part, with room for up to eight purchased choices per part. Starter options and colours do not use these slots.
+- Hair, Chroma, and skin-colour choices have been expanded and refined. The original Default skin tone remains available alongside twelve additional tones.
+- Adinho Classic Sunglasses can now be worn by every Trainer. The rest of the Adinho Classic outfit is for male Trainers.
+- Cosmetic Store and Bag icons now use a consistent front-facing sprite frame.
+
+**Fixed**
+
+- Existing Tan and Dark body choices now correctly use the matching skin tone on the standard character model.
 
 ## 0.3.31 - 2026-07-23
 
