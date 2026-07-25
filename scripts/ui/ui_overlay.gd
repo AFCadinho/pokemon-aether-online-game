@@ -14823,6 +14823,8 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 	return normalized_items
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
+	if _is_power_stone_item_id(item_id):
+		return "power_stones"
 	var normalized := category.strip_edges().to_lower().replace("-", "_")
 	match normalized:
 		"held_items", "berries":
@@ -14865,6 +14867,16 @@ func _guess_bag_category(item_id: String) -> String:
 	if normalized.contains("coin") or normalized.contains("token") or normalized.contains("currency"):
 		return "currency"
 	return "general"
+
+## Mega Stones and Z-Crystals may be stored under different backend categories
+## (the bag and battle-held forms are intentionally separate IDs).  Their item
+## ID is the stable signal for the player-facing Mega & Z Bag category.
+func _is_power_stone_item_id(item_id: String) -> bool:
+	var normalized := _normalize_item_id(item_id)
+	var base_item_id := normalized.trim_suffix("--bag").trim_suffix("--held")
+	return base_item_id.ends_with("-z") \
+		or base_item_id.ends_with("ite") \
+		or base_item_id.contains("ite-")
 
 func _hide_bag_popup() -> void:
 	if bag_popup != null:
@@ -23907,7 +23919,7 @@ func _refresh_item_dex_results() -> void:
 		return
 
 	var items := _normalize_dev_item_results(search_result.get("items", []))
-	items = _filter_item_dex_variants(items)
+	items = _filter_player_facing_item_variants(items)
 	var count := 0
 	for item_value: Variant in items:
 		var item: Dictionary = item_value as Dictionary
@@ -24471,7 +24483,9 @@ func _refresh_dev_item_results() -> void:
 		dev_item_results_list.add_child(error_label)
 		return
 
-	dev_item_catalog = _normalize_dev_item_results(search_result.get("items", []))
+	dev_item_catalog = _filter_player_facing_item_variants(
+		_normalize_dev_item_results(search_result.get("items", []))
+	)
 	var count := 0
 	for item_value: Variant in dev_item_catalog:
 		var item: Dictionary = item_value as Dictionary
