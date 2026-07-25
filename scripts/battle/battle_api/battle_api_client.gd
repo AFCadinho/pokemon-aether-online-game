@@ -116,6 +116,12 @@ func leave_pvp_queue(request_node: HTTPRequest, queue_id: String) -> Dictionary:
 func get_pvp_queue_status(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/queues/status/me")
 
+func get_pvp_queue_availability(request_node: HTTPRequest, queue_id: String) -> Dictionary:
+	return await send_get_request(
+		request_node,
+		"/account/pvp/queues/%s/availability" % queue_id.strip_edges().uri_encode()
+	)
+
 func get_pvp_leaderboard(
 	request_node: HTTPRequest,
 	limit: int = 50,

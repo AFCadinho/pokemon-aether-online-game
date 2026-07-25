@@ -29,6 +29,9 @@
 [ext_resource type="Texture2D" path="res://assets/ui/global_shiny_boost.svg" id="25_global_shiny"]
 [ext_resource type="Texture2D" path="res://assets/ui/global_rare_encounter_boost.svg" id="26_global_rare"]
 [ext_resource type="Texture2D" path="res://assets/ui/quest_log.svg" id="27_quest_log"]
+[ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ball_red.svg" id="28_pvp_red_ball"]
+[ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ball_blue.svg" id="29_pvp_blue_ball"]
+[ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ranked_emblem.svg" id="30_pvp_ranked_emblem"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
@@ -1302,6 +1305,45 @@ texture_hover = ExtResource("18_pvp")
 texture_disabled = ExtResource("18_pvp")
 texture_focused = ExtResource("18_pvp")
 ignore_texture_size = true
+stretch_mode = 5
+
+[node name="QueueAnimation" type="Control" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton" unique_id=1004688401]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RedBall" type="TextureRect" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton/QueueAnimation" unique_id=2097870361]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 8.0
+offset_right = 17.0
+offset_bottom = 25.0
+texture = ExtResource("28_pvp_red_ball")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BlueBall" type="TextureRect" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton/QueueAnimation" unique_id=144263432]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 8.0
+offset_right = 32.0
+offset_bottom = 25.0
+texture = ExtResource("29_pvp_blue_ball")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RankedEmblem" type="TextureRect" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton/QueueAnimation" unique_id=107038899]
+layout_mode = 0
+offset_left = 10.5
+offset_top = 11.25
+offset_right = 21.5
+offset_bottom = 20.75
+texture = ExtResource("30_pvp_ranked_emblem")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="QuestSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=798433036]

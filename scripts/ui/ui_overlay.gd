@@ -8,6 +8,7 @@ const COLLAPSE_BUTTON_MARGIN := 10.0
 const ACTION_BAR_SLOT_SIZE := 52.0
 const ACTION_BAR_MARGIN_X := 8.0
 const ACTION_BAR_SLOT_GAP := 8.0
+const RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS := 10.0
 const UI_BASE_Z_INDEX := 100
 const UI_ACTIVE_Z_INDEX := 1000
 const UI_CHAT_TABS_Z_INDEX := UI_ACTIVE_Z_INDEX + 1
@@ -94,6 +95,7 @@ const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")
 const PVP_MODE_RANKED_ICON: Texture2D = preload("res://assets/ui/pvp_battles.svg")
 const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_battle.svg")
 const PVP_MODE_TOURNAMENT_ICON: Texture2D = preload("res://assets/ui/pvp_tournament.svg")
+const PVP_QUEUE_BALL_ROTATION_SPEED := 3.4
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
@@ -447,6 +449,9 @@ var donator_store_popup: DonatorStorePopup
 @onready var guild_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot/GuildButton
 @onready var pvp_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot
 @onready var pvp_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton
+@onready var pvp_queue_animation: Control = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton/QueueAnimation
+@onready var pvp_queue_red_ball: TextureRect = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton/QueueAnimation/RedBall
+@onready var pvp_queue_blue_ball: TextureRect = $Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot/PvpButton/QueueAnimation/BlueBall
 @onready var quest_slot: PanelContainer = $Control/OptionsPanel/MarginContainer/HBoxContainer/QuestSlot
 @onready var quest_button: TextureButton = $Control/OptionsPanel/MarginContainer/HBoxContainer/QuestSlot/QuestButton
 @onready var settings_menu: PanelContainer = $Control/SettingsMenu
@@ -651,6 +656,9 @@ var pvp_active_queue_starts_at := ""
 var pvp_queue_list_in_flight := false
 var pvp_queue_polling_active := false
 var pvp_queue_poll_in_flight := false
+var pvp_ranked_queue_availability_in_flight := false
+var pvp_ranked_queue_availability_elapsed := RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS
+var pvp_ranked_queue_has_waiting_player := false
 var pvp_queue_auto_open_in_flight := false
 var pvp_queue_leave_in_flight := false
 var pvp_queue_compact_minimized := false
@@ -1139,6 +1147,7 @@ func _ready() -> void:
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
 	_refresh_party()
 	_load_mailbox.call_deferred()
+	_poll_pvp_ranked_queue_availability.call_deferred()
 
 	if not PlayerSave.party_changed.is_connected(_refresh_party):
 		PlayerSave.party_changed.connect(_refresh_party)
@@ -7449,6 +7458,8 @@ func _position_pokedex_popup() -> void:
 func _process(delta: float) -> void:
 	_position_collapsible_buttons()
 	_refresh_pvp_queue_compact_panel(delta)
+	_refresh_pvp_queue_button_animation(delta)
+	_refresh_pvp_ranked_queue_availability(delta)
 	_refresh_pvp_match_countdown(delta)
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
@@ -23896,6 +23907,7 @@ func _refresh_item_dex_results() -> void:
 		return
 
 	var items := _normalize_dev_item_results(search_result.get("items", []))
+	items = _filter_item_dex_variants(items)
 	var count := 0
 	for item_value: Variant in items:
 		var item: Dictionary = item_value as Dictionary
@@ -23903,12 +23915,29 @@ func _refresh_item_dex_results() -> void:
 		count += 1
 		if count >= 40:
 			break
+	if item_dex_results_count_label != null:
+		item_dex_results_count_label.text = "%d result%s" % [count, "" if count == 1 else "s"]
 
 	if count == 0:
 		var empty_label := Label.new()
 		empty_label.text = "No item results."
+		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty_label.custom_minimum_size = Vector2(0, 44)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		item_dex_results_list.add_child(empty_label)
+
+## The data model keeps a held-item form for battle validation and a bag form
+## for the inventory.  The latter is the player-facing Item Dex entry; showing
+## both would present the same Z-Crystal twice.
+func _filter_item_dex_variants(items: Array[Dictionary]) -> Array[Dictionary]:
+	var filtered: Array[Dictionary] = []
+	for item_value: Variant in items:
+		var item := item_value as Dictionary
+		var item_id := str(item.get("id", "")).strip_edges().to_lower()
+		if item_id.ends_with("-z--held"):
+			continue
+		filtered.append(item)
+	return filtered
 
 func _create_item_dex_result_button(item: Dictionary) -> Control:
 	var item_id := str(item.get("id", ""))
@@ -29678,6 +29707,67 @@ func _refresh_pvp_queue_compact_panel(delta: float = 0.0) -> void:
 		pvp_queue_compact_open_button.disabled = pvp_battle_starting
 	if pvp_queue_compact_leave_button != null:
 		pvp_queue_compact_leave_button.disabled = pvp_battle_starting or pvp_queue_leave_in_flight or has_match
+
+
+func _refresh_pvp_ranked_queue_availability(delta: float) -> void:
+	pvp_ranked_queue_availability_elapsed += delta
+	if pvp_ranked_queue_availability_in_flight or pvp_ranked_queue_availability_elapsed < RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS:
+		return
+	pvp_ranked_queue_availability_elapsed = 0.0
+	_poll_pvp_ranked_queue_availability.call_deferred()
+
+
+func _poll_pvp_ranked_queue_availability() -> void:
+	if pvp_ranked_queue_availability_in_flight:
+		return
+	pvp_ranked_queue_availability_in_flight = true
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_pvp_queue_availability(request, "ranked_queue_v1")
+	if is_instance_valid(request):
+		request.queue_free()
+	pvp_ranked_queue_availability_in_flight = false
+	if not bool(response.get("success", false)):
+		return
+	pvp_ranked_queue_has_waiting_player = bool(response.get("hasWaitingPlayer", false))
+	_refresh_pvp_button_tooltip()
+
+
+func _refresh_pvp_button_tooltip() -> void:
+	if pvp_button == null:
+		return
+	var queue_label := PVP_RANKED_DEFAULT_FORMAT_NAME
+	if pvp_ranked_queue_has_waiting_player:
+		pvp_button.tooltip_text = "PvP Battles (%s) · Player waiting" % queue_label
+		return
+	pvp_button.tooltip_text = "PvP Battles"
+
+
+func _refresh_pvp_queue_button_animation(delta: float) -> void:
+	if pvp_button == null or pvp_queue_animation == null:
+		return
+	if not pvp_ranked_queue_has_waiting_player:
+		if pvp_queue_animation.visible:
+			pvp_queue_animation.visible = false
+			pvp_button.texture_normal = PVP_MODE_RANKED_ICON
+			pvp_button.texture_pressed = PVP_MODE_RANKED_ICON
+			pvp_button.texture_hover = PVP_MODE_RANKED_ICON
+			pvp_button.texture_disabled = PVP_MODE_RANKED_ICON
+			pvp_button.texture_focused = PVP_MODE_RANKED_ICON
+		return
+
+	if not pvp_queue_animation.visible:
+		pvp_queue_animation.visible = true
+		pvp_queue_red_ball.rotation = 0.0
+		pvp_queue_blue_ball.rotation = 0.0
+		pvp_button.texture_normal = null
+		pvp_button.texture_pressed = null
+		pvp_button.texture_hover = null
+		pvp_button.texture_disabled = null
+		pvp_button.texture_focused = null
+	pvp_queue_red_ball.pivot_offset = pvp_queue_red_ball.size * 0.5
+	pvp_queue_blue_ball.pivot_offset = pvp_queue_blue_ball.size * 0.5
+	pvp_queue_red_ball.rotation += PVP_QUEUE_BALL_ROTATION_SPEED * delta
+	pvp_queue_blue_ball.rotation -= PVP_QUEUE_BALL_ROTATION_SPEED * delta
 
 func _position_pvp_queue_compact_panel() -> void:
 	if pvp_queue_compact_panel == null or player_status_panel == null:
