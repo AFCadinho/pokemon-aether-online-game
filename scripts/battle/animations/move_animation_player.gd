@@ -59,6 +59,7 @@ signal animation_finished
 @export var sprite_position_offset: Vector2 = Vector2.ZERO
 @export var sheet_visual_offset: Vector2 = Vector2.ZERO
 @export var sheet_frame_offsets: Array = []
+@export var sheet_pattern_visual_offsets: Dictionary = {}
 @export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
 @export var sparkle_center: Vector2 = Vector2(256, 188)
 @export_range(8.0, 180.0, 1.0) var sparkle_radius_min: float = 26.0
@@ -68,6 +69,7 @@ signal animation_finished
 @export_range(-1, 999, 1) var reverse_pattern_override: int = -1
 @export_range(0, 999, 1) var sheet_pattern_min: int = 0
 @export_range(0, 999, 1) var sheet_pattern_max: int = 999
+@export var sheet_pattern_exclude: Array = []
 @export_range(0, 999, 1) var sheet_visible_start_frame: int = 0
 @export_range(0, 999, 1) var animation_start_frame: int = 0
 @export_range(-1, 999, 1) var animation_end_frame: int = -1
@@ -2422,6 +2424,8 @@ func _apply_frame(index: int) -> void:
 		var cell_pattern: int = int(cell["pattern"])
 		if cell_pattern < sheet_pattern_min or cell_pattern > sheet_pattern_max:
 			continue
+		if sheet_pattern_exclude.has(cell_pattern):
+			continue
 
 		var sprite: Sprite2D = sprites[sprite_i]
 		var active_pattern_override := reverse_pattern_override if reverse_battlefield and reverse_pattern_override >= 0 else pattern_override
@@ -2433,7 +2437,7 @@ func _apply_frame(index: int) -> void:
 			tile_h
 		)
 		var sheet_position := _scale_sprite_position(Vector2(float(cell["x"]), float(cell["y"]))) + sprite_position_offset
-		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset + _get_sheet_frame_offset(index)
+		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset + _get_sheet_pattern_visual_offset(cell_pattern) + _get_sheet_frame_offset(index)
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
 		sprite.rotation_degrees = float(cell["angle"])
@@ -2456,6 +2460,11 @@ func _get_sheet_frame_offset(index: int) -> Vector2:
 				offset = -offset
 			return offset
 	return Vector2.ZERO
+
+
+func _get_sheet_pattern_visual_offset(pattern: int) -> Vector2:
+	var offset_value: Variant = sheet_pattern_visual_offsets.get(str(pattern), Vector2.ZERO)
+	return offset_value as Vector2 if offset_value is Vector2 else Vector2.ZERO
 
 func _projectile_enabled() -> bool:
 	return bool(projectile_config.get("enabled", not projectile_config.is_empty()))

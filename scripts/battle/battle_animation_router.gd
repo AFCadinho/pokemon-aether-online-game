@@ -438,6 +438,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.reverse_pattern_override = int(config.get("reverse_pattern_override", -1))
 	animation_node.sheet_pattern_min = int(config.get("sheet_pattern_min", 0))
 	animation_node.sheet_pattern_max = int(config.get("sheet_pattern_max", 999))
+	animation_node.sheet_pattern_exclude = (config.get("sheet_pattern_exclude", []) as Array).duplicate()
 	animation_node.sheet_visible_start_frame = int(config.get("sheet_visible_start_frame", 0))
 	animation_node.animation_start_frame = int(config.get("animation_start_frame", 0))
 	animation_node.animation_end_frame = int(config.get("animation_end_frame", -1))
@@ -1148,6 +1149,24 @@ func _apply_move_sheet_anchor(
 	)
 	var source_anchor_offset := dynamic_anchor_source - fixed_anchor_source
 	var display_anchor_offset := -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset
+	var pattern_groups_value: Variant = config.get("sheet_pattern_anchor_groups", [])
+	if pattern_groups_value is Array and not (pattern_groups_value as Array).is_empty():
+		for group_value: Variant in pattern_groups_value as Array:
+			if not group_value is Dictionary:
+				continue
+			var group: Dictionary = group_value as Dictionary
+			var group_anchor_source := _vector2_from_config_value(
+				group.get("source_anchor", [fixed_anchor_source.x, fixed_anchor_source.y]),
+				fixed_anchor_source
+			)
+			var group_source_offset := dynamic_anchor_source - group_anchor_source
+			var group_display_offset := -group_source_offset if animation_node.reverse_battlefield else group_source_offset
+			var patterns_value: Variant = group.get("patterns", [])
+			if not patterns_value is Array:
+				continue
+			for pattern_value: Variant in patterns_value as Array:
+				animation_node.sheet_pattern_visual_offsets[str(int(pattern_value))] = group_display_offset
+		return
 	animation_node.sheet_visual_offset += display_anchor_offset
 
 
