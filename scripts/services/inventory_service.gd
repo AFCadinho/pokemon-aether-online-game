@@ -6,6 +6,8 @@ const INVENTORY_ENDPOINT := "/game/inventory"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
 const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
+const TRAINER_NAME_CHANGE_ENDPOINT := "/game/trainer-services/name-change"
+const TRAINER_GENDER_CHANGE_ENDPOINT := "/game/trainer-services/gender-change"
 const WILD_BATTLE_CATCH_ENDPOINT := "/game/wild-battles/%s/catch"
 const POKEMON_ITEM_USE_ENDPOINT := "/game/pokemon/%s/items/use"
 const DEV_ADD_ITEM_ENDPOINT := "/game/dev/inventory/items"
@@ -121,6 +123,35 @@ func return_appearance_item(item_id: String) -> Dictionary:
 		"appearanceSlotLimit": int(appearance_inventory.get("slotLimit", 8)),
 		"appearanceSlotCounts": _dictionary_from_value(appearance_inventory.get("slotCounts", {})),
 		"appearanceUnlocks": _array_from_value(appearance_inventory.get("unlocks", [])),
+	}
+
+
+func change_trainer_name(username: String, display_name: String) -> Dictionary:
+	return await _trainer_service_request(TRAINER_NAME_CHANGE_ENDPOINT, {"username": username, "displayName": display_name})
+
+
+func change_trainer_gender(gender: String) -> Dictionary:
+	return await _trainer_service_request(TRAINER_GENDER_CHANGE_ENDPOINT, {"gender": gender})
+
+
+func _trainer_service_request(endpoint: String, payload: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(base_url + endpoint, HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(), JSON.stringify(payload))
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	var inventory := _dictionary_from_value(body.get("inventory", {}))
+	var appearance_inventory := _dictionary_from_value(body.get("appearanceInventory", {}))
+	return {
+		"success": true,
+		"user": _dictionary_from_value(body.get("user", {})),
+		"inventory": _array_from_value(inventory.get("items", [])),
+		"appearanceUnlocks": _array_from_value(appearance_inventory.get("unlocks", [])),
+		"appearanceSlotLimit": int(appearance_inventory.get("slotLimit", 8)),
+		"appearanceSlotCounts": _dictionary_from_value(appearance_inventory.get("slotCounts", {})),
+		"returnedCosmeticItemCount": int(body.get("returnedCosmeticItemCount", 0)),
 	}
 
 

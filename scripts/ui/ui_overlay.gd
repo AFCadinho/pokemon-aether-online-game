@@ -833,6 +833,12 @@ var bag_item_use_confirm_button: Button
 var bag_item_use_pending_item: Dictionary = {}
 var bag_item_use_selected_slot := -1
 var bag_item_use_in_progress := false
+var trainer_name_change_popup: PanelContainer
+var trainer_name_change_username_input: LineEdit
+var trainer_name_change_display_name_input: LineEdit
+var trainer_name_change_status_label: Label
+var trainer_name_change_confirm_button: Button
+var trainer_name_change_in_progress := false
 var market_popup: PanelContainer
 var market_title_label: Label
 var market_subtitle_label: Label
@@ -13794,7 +13800,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	if item_id == "escape-rope-action":
 		return true
 	var use_action := str(item.get("useAction", "")).strip_edges()
-	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing"]:
+	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -13814,6 +13820,10 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 	if FieldMoveService.is_direct_field_move(field_move_id):
 		return "Use Charm"
 	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "trainer_name_change":
+		return "Change Name"
+	if use_action == "trainer_gender_change":
+		return "Change Gender"
 	if use_action == "open_item_bundle":
 		return "Open Box"
 	if use_action == "unlock_appearance":
@@ -13861,6 +13871,13 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_on_escape_rope_pressed()
 		return
 	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "trainer_name_change":
+		_show_trainer_name_change_popup()
+		return
+	if use_action == "trainer_gender_change":
+		var target_gender := "female" if PlayerSave.gender == "male" else "male"
+		_show_ui_confirm_popup("Change gender?", "Change to %s?\n\nAll cosmetics in Character Customization will be returned to your Bag. Your equipped appearance and colours will reset." % target_gender.capitalize(), "Change to %s" % target_gender.capitalize(), Callable(self, "_execute_trainer_gender_change").bind(target_gender), Vector2i(480, 220), true)
+		return
 	if use_action == "open_item_bundle":
 		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(open_result.get("success", false)):
@@ -13944,6 +13961,133 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_add_chat_message(notice_message)
 		return
 	_add_chat_message("%s is informational and cannot be used from the Bag." % str(item.get("name", _item_name_from_id(item_id))))
+
+
+func _show_trainer_name_change_popup() -> void:
+	if trainer_name_change_popup == null:
+		_setup_trainer_name_change_popup()
+	trainer_name_change_username_input.text = str(AuthService.current_user.get("username", "")).strip_edges()
+	trainer_name_change_display_name_input.text = str(AuthService.current_user.get("displayName", PlayerSave.player_name)).strip_edges()
+	trainer_name_change_status_label.text = "Your previous username will remain reserved permanently."
+	trainer_name_change_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	trainer_name_change_popup.visible = true
+	_activate_ui_panel(trainer_name_change_popup)
+	trainer_name_change_username_input.grab_focus()
+
+
+func _setup_trainer_name_change_popup() -> void:
+	trainer_name_change_popup = PanelContainer.new()
+	trainer_name_change_popup.name = "TrainerNameChangePopup"
+	trainer_name_change_popup.custom_minimum_size = Vector2(440, 270)
+	trainer_name_change_popup.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	trainer_name_change_popup.position -= Vector2(220, 135)
+	trainer_name_change_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	trainer_name_change_popup.z_index = UI_MODAL_Z_INDEX
+	trainer_name_change_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912fa"), POKEMON_SUMMARY_ACCENT_SOFT, 10, 1))
+	root_control.add_child(trainer_name_change_popup)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	trainer_name_change_popup.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+	var title := Label.new()
+	title.text = "Name Change Ticket"
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
+	layout.add_child(title)
+	var hint := Label.new()
+	hint.text = "Change both your account username and public Trainer name."
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 12)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(hint)
+	trainer_name_change_username_input = LineEdit.new()
+	trainer_name_change_username_input.placeholder_text = "Username (letters, numbers, underscores)"
+	trainer_name_change_username_input.max_length = 32
+	layout.add_child(trainer_name_change_username_input)
+	trainer_name_change_display_name_input = LineEdit.new()
+	trainer_name_change_display_name_input.placeholder_text = "Display name"
+	trainer_name_change_display_name_input.max_length = 32
+	layout.add_child(trainer_name_change_display_name_input)
+	trainer_name_change_status_label = Label.new()
+	trainer_name_change_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	trainer_name_change_status_label.add_theme_font_size_override("font_size", 11)
+	layout.add_child(trainer_name_change_status_label)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+	var cancel := Button.new()
+	cancel.text = "Cancel"
+	cancel.pressed.connect(func(): trainer_name_change_popup.visible = false)
+	_apply_button_style(cancel)
+	actions.add_child(cancel)
+	trainer_name_change_confirm_button = Button.new()
+	trainer_name_change_confirm_button.text = "Change Name"
+	trainer_name_change_confirm_button.pressed.connect(_execute_trainer_name_change)
+	_apply_button_style(trainer_name_change_confirm_button, "primary")
+	actions.add_child(trainer_name_change_confirm_button)
+
+
+func _execute_trainer_name_change() -> void:
+	if trainer_name_change_in_progress:
+		return
+	var username := trainer_name_change_username_input.text.strip_edges()
+	var display_name := trainer_name_change_display_name_input.text.strip_edges()
+	if username.length() < 3 or display_name.is_empty():
+		trainer_name_change_status_label.text = "Enter a username of at least 3 characters and a display name."
+		trainer_name_change_status_label.add_theme_color_override("font_color", UI_DANGER)
+		return
+	trainer_name_change_in_progress = true
+	trainer_name_change_confirm_button.disabled = true
+	trainer_name_change_status_label.text = "Changing name securely..."
+	var result: Dictionary = await InventoryService.change_trainer_name(username, display_name)
+	trainer_name_change_in_progress = false
+	trainer_name_change_confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		trainer_name_change_status_label.text = str(result.get("error", "Name change failed."))
+		trainer_name_change_status_label.add_theme_color_override("font_color", UI_DANGER)
+		return
+	_apply_trainer_service_result(result, false)
+	trainer_name_change_popup.visible = false
+	add_system_message("Your Trainer name is now %s." % PlayerSave.player_name)
+
+
+func _execute_trainer_gender_change(target_gender: String) -> void:
+	var result: Dictionary = await InventoryService.change_trainer_gender(target_gender)
+	if not bool(result.get("success", false)):
+		add_system_message("Gender change failed: %s" % str(result.get("error", "Unknown error")))
+		return
+	_apply_trainer_service_result(result, true)
+	add_system_message("Gender updated. %d cosmetics were returned to your Bag." % int(result.get("returnedCosmeticItemCount", 0)))
+
+
+func _apply_trainer_service_result(result: Dictionary, gender_changed: bool) -> void:
+	var updated_user := result.get("user", {}) as Dictionary
+	if not updated_user.is_empty():
+		AuthService.apply_current_user(updated_user)
+		PlayerSave.player_name = str(updated_user.get("displayName", updated_user.get("username", PlayerSave.player_name)))
+		PlayerSave.gender = CharacterAppearanceService.normalize_gender(str(updated_user.get("gender", PlayerSave.gender)))
+	if gender_changed:
+		_reset_impersonated_appearance_to_defaults()
+	_apply_owned_appearance_unlocks(result.get("appearanceUnlocks", []), int(result.get("appearanceSlotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT)), result.get("appearanceSlotCounts", {}))
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	bag_selected_item = {}
+	_refresh_bag_items()
+	_refresh_bag_detail()
+	_refresh_world_player_display_name()
+	_refresh_player_status_card()
+	_refresh_avatar_previews()
+	if trainer_card_popup != null and trainer_card_popup.visible:
+		_rebuild_trainer_card_popup(true)
+	var world := GameState.get_world()
+	if world != null and world.has_method("_publish_world_presence"):
+		world.call("_publish_world_presence", true)
 
 func _show_bag_item_use_popup(item: Dictionary) -> void:
 	if bag_item_use_popup == null:
