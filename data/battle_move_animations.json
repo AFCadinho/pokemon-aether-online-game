@@ -5611,6 +5611,32 @@
         "PRSFX- Devastating Drake2.wav": "res://assets/battles/animations/devastatingdrake/PRSFX- Devastating Drake2.wav",
         "PRSFX- Devastating Drake3": "res://assets/battles/animations/devastatingdrake/PRSFX- Devastating Drake3.wav"
       }
+    },
+    "oceanicoperetta": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 1.0,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "visual_color": [0.24, 0.72, 1.0, 1.0],
+      "sprite_tint": [1.0, 1.0, 1.0, 1.0],
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "data_path": "res://assets/battles/animations/oceanicoperetta/oceanicoperetta.json",
+      "sheet_path": "res://assets/battles/animations/oceanicoperetta/PRAS- Oceanic Operetta.png",
+      "background_path": "res://assets/battles/animations/oceanicoperetta/PRAS- Oceanic Operetta BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Oceanic Operetta1.wav": "res://assets/battles/animations/oceanicoperetta/PRSFX- Oceanic Operetta1.wav",
+        "PRSFX- Oceanic Operetta2.wav": "res://assets/battles/animations/oceanicoperetta/PRSFX- Oceanic Operetta2.wav",
+        "PRSFX- Oceanic Operetta3.wav": "res://assets/battles/animations/oceanicoperetta/PRSFX- Oceanic Operetta3.wav",
+        "PRSFX- Oceanic Operetta4.wav": "res://assets/battles/animations/oceanicoperetta/PRSFX- Oceanic Operetta4.wav"
+      }
     }
   }
 }
