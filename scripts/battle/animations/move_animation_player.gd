@@ -31,6 +31,7 @@ signal animation_finished
 @export var heat_wave_config: Dictionary = {}
 @export var draco_meteor_config: Dictionary = {}
 @export var solar_beam_config: Dictionary = {}
+@export var bloom_doom_config: Dictionary = {}
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
 @export var focus_aura_config: Dictionary = {}
@@ -339,6 +340,7 @@ func _draw() -> void:
 	_draw_heat_wave_visual()
 	_draw_draco_meteor_visual()
 	_draw_solar_beam_visual()
+	_draw_bloom_doom_visual()
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
 	_draw_focus_aura_visual()
@@ -1829,6 +1831,61 @@ func _draw_solar_beam_visual() -> void:
 		draw_line(ray_start, ray_end, _color_with_alpha(core_color, impact_alpha * 0.72), 1.8)
 
 	_draw_solar_beam_impact_snowflakes(target, impact_radius, impact_alpha)
+
+
+func _draw_bloom_doom_visual() -> void:
+	if not bool(bloom_doom_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := float(bloom_doom_config.get("visible_start", 0.06))
+	var visible_end := float(bloom_doom_config.get("visible_end", 0.78))
+	if progress < visible_start or progress > visible_end:
+		return
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, bloom_doom_config)
+	if alpha <= 0.02:
+		return
+
+	var source_state := _get_projectile_state_from_config(0.0, bloom_doom_config)
+	var target_state := _get_projectile_state_from_config(1.0, bloom_doom_config)
+	var source := _projectile_battlefield_position(source_state.get("position", Vector2.ZERO) as Vector2, bloom_doom_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2.ZERO) as Vector2, bloom_doom_config)
+	var ascent_end := float(bloom_doom_config.get("ascent_end", 0.42))
+	var descent_end := float(bloom_doom_config.get("descent_end", 0.78))
+	var apex := source + Vector2(0.0, float(bloom_doom_config.get("apex_height", -174.0)))
+	var travel: float = clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var position: Vector2
+	if travel < ascent_end:
+		position = source.lerp(apex, ease(travel / maxf(ascent_end, 0.001), 0.75))
+	else:
+		position = apex.lerp(target, ease((travel - ascent_end) / maxf(descent_end - ascent_end, 0.001), 0.78))
+
+	var leaf_color := _color_from_value(bloom_doom_config.get("leaf_color", [0.56, 1.0, 0.22, 1.0]), Color(0.56, 1.0, 0.22, 1.0))
+	var petal_color := _color_from_value(bloom_doom_config.get("petal_color", [1.0, 0.38, 0.72, 1.0]), Color(1.0, 0.38, 0.72, 1.0))
+	var core_color := _color_from_value(bloom_doom_config.get("core_color", [1.0, 0.88, 0.22, 1.0]), Color(1.0, 0.88, 0.22, 1.0))
+	var phase := float(frame_index) * 0.46
+	for trail_index: int in range(7):
+		var trail_t := maxf(0.0, travel - float(trail_index) * 0.035)
+		var trail_position := source.lerp(apex, ease(trail_t / maxf(ascent_end, 0.001), 0.75)) if trail_t < ascent_end else apex.lerp(target, ease((trail_t - ascent_end) / maxf(descent_end - ascent_end, 0.001), 0.78))
+		var sway := Vector2(cos(phase + float(trail_index) * 1.7), sin(phase * 1.2 + float(trail_index))) * (5.0 + float(trail_index) * 1.5)
+		draw_circle(trail_position + sway, 4.6 - float(trail_index) * 0.42, _color_with_alpha(leaf_color if trail_index % 2 == 0 else petal_color, alpha * (0.78 - float(trail_index) * 0.08)))
+
+	for petal_index: int in range(5):
+		var angle := phase + float(petal_index) * TAU / 5.0
+		var radial := Vector2(cos(angle), sin(angle))
+		var petal_center := position + radial * 13.0
+		draw_line(position + radial * 4.0, petal_center, _color_with_alpha(petal_color, alpha * 0.76), 3.0)
+		draw_circle(petal_center, 4.6, _color_with_alpha(petal_color, alpha * 0.9))
+	draw_circle(position, 14.0, _color_with_alpha(leaf_color, alpha * 0.16))
+	draw_circle(position, 7.0, _color_with_alpha(core_color, alpha * 0.92))
+
+	if travel > descent_end * 0.82:
+		var impact_progress := clampf((travel - descent_end * 0.82) / maxf(1.0 - descent_end * 0.82, 0.001), 0.0, 1.0)
+		for burst_index: int in range(12):
+			var angle := float(burst_index) * TAU / 12.0 + phase * 0.35
+			var offset := Vector2(cos(angle), sin(angle)) * (14.0 + impact_progress * 42.0)
+			draw_circle(target + offset, 3.6, _color_with_alpha(petal_color if burst_index % 2 else leaf_color, alpha * (1.0 - impact_progress) * 0.9))
 
 
 func _draw_solar_beam_impact_snowflakes(center: Vector2, impact_radius: float, impact_alpha: float) -> void:

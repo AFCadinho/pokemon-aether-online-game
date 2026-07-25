@@ -6382,6 +6382,7 @@
       "template": "imported_sheet",
       "category": "special_projectile",
       "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.7,
       "show_timing_backgrounds": true,
       "timing_background_fill_canvas": true,
       "timing_background_persist_until_clear": true,
@@ -6390,6 +6391,16 @@
       "foreground_opacity_multiplier": 0.45,
       "show_pink_visual": false,
       "show_sheet_sprites": true,
+      "sheet_frame_offsets": [
+        {
+          "start_frame": 0,
+          "end_frame": 17,
+          "offset": [
+            0,
+            -34
+          ]
+        }
+      ],
       "overlay_fill_enabled": false,
       "visual_color": [1.0, 0.34, 0.08, 1.0],
       "sprite_tint": [1.0, 1.0, 1.0, 1.0],
@@ -6413,6 +6424,7 @@
       "template": "imported_sheet",
       "category": "special_projectile",
       "speed_scale": 1.0,
+      "sprite_zoom_multiplier": 0.55,
       "show_timing_backgrounds": true,
       "timing_background_fill_canvas": true,
       "timing_background_persist_until_clear": true,
@@ -6448,11 +6460,67 @@
       "foreground_opacity_multiplier": 0.35,
       "show_pink_visual": false,
       "show_sheet_sprites": true,
+      "sheet_pattern_exclude": [
+        0,
+        12
+      ],
       "overlay_fill_enabled": false,
       "visual_color": [0.42, 0.92, 0.3, 1.0],
       "sprite_tint": [1.0, 1.0, 1.0, 1.0],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
+      "bloom_doom": {
+        "enabled": true,
+        "actor_offset": [
+          0,
+          -12
+        ],
+        "target_offset": [
+          0,
+          14
+        ],
+        "visible_start": 0.06,
+        "visible_end": 0.78,
+        "fade_in": 0.08,
+        "fade_out": 0.12,
+        "ascent_end": 0.42,
+        "descent_end": 0.78,
+        "apex_height": -174.0,
+        "leaf_color": [
+          0.56,
+          1.0,
+          0.22,
+          1.0
+        ],
+        "petal_color": [
+          1.0,
+          0.38,
+          0.72,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.88,
+          0.22,
+          1.0
+        ],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              196
+            ]
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              68
+            ]
+          }
+        ]
+      },
       "data_path": "res://assets/battles/animations/bloomdoom/bloomdoom.json",
       "sheet_path": "res://assets/battles/animations/bloomdoom/PRAS- Bloom Doom.png",
       "background_path": "res://assets/battles/animations/bloomdoom/PRAS- Petal BG.png",
