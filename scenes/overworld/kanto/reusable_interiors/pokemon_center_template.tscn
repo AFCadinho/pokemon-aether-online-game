@@ -91,7 +91,7 @@ map_region_name = "Kanto"
 region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_track_path = "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
+music_track_path = "res://assets/music/overworld/kanto/interiors/pokemon_center.ogg"
 
 [node name="Visuals" parent="." unique_id=1140960568 instance=ExtResource("1_7j0le")]
 

@@ -62,6 +62,7 @@ map_region_name = "Kanto"
 map_display_name = "Player's House"
 lighting_profile = "indoor"
 weather_profile = "disabled"
+music_profile_id = "kanto.pallet_town"
 
 [node name="Visuals" parent="." unique_id=966731536 instance=ExtResource("1_3tk4s")]
 
@@ -80,7 +81,7 @@ position = Vector2(304, 336)
 position = Vector2(432, 976)
 
 [node name="GroundFloorStairs" type="Marker2D" parent="Spawns" unique_id=880081472]
-position = Vector2(464, 784)
+position = Vector2(496, 736)
 
 [node name="UpperFloorStairs" type="Marker2D" parent="Spawns" unique_id=136482848]
 position = Vector2(368, 272)
@@ -100,7 +101,6 @@ shape = SubResource("RectangleShape2D_house_exit")
 z_index = 4096
 z_as_relative = false
 script = ExtResource("4_floor_mask")
-constrain_camera_to_active_floor = true
 floor_regions = {
 &"ground_floor": Rect2(64, 608, 480, 416),
 &"upper_floor": Rect2(160, 0, 320, 448)
@@ -109,6 +109,7 @@ floor_display_names = {
 &"ground_floor": "Player's House",
 &"upper_floor": "Player's Room"
 }
+constrain_camera_to_active_floor = true
 
 [node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=302715345]
 

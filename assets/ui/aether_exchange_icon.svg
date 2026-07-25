@@ -1,65 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Aether Exchange icon">
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aether Exchange">
   <defs>
-    <linearGradient id="aetherBlue" x1="170" y1="220" x2="460" y2="760" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#22d8ff"/>
-      <stop offset="1" stop-color="#008ed6"/>
+    <linearGradient id="exchange-aether" x1="28" y1="24" x2="77" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9CEBFF"/>
+      <stop offset="1" stop-color="#238ED2"/>
     </linearGradient>
+    <linearGradient id="exchange-gold" x1="51" y1="47" x2="101" y2="105" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF0A8"/>
+      <stop offset="1" stop-color="#B9872E"/>
+    </linearGradient>
+    <filter id="exchange-shadow" x="9" y="10" width="110" height="109" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#050B14" flood-opacity="0.5"/>
+    </filter>
   </defs>
 
-  <!-- Transparent background by design -->
+  <g filter="url(#exchange-shadow)" stroke-linejoin="round">
+    <!-- Aether gem -->
+    <path d="M37 19H67L82 43L52 73L22 43L37 19Z" fill="url(#exchange-aether)" stroke="#E8F7FF" stroke-width="4"/>
+    <path d="M37 19L52 43L67 19M22 43H82M52 43V73" stroke="#D8F7FF" stroke-width="3" stroke-linejoin="round" opacity="0.78"/>
 
-  <!-- White right exchange arrow -->
-  <path d="M470 178
-           H760
-           L960 512
-           L760 846
-           H470
-           L610 674
-           H408
-           L312 512
-           L408 350
-           H610
-           Z"
-        fill="#ffffff"
-        stroke="#1f1a17"
-        stroke-width="42"
-        stroke-linejoin="miter"/>
+    <!-- Pokédollar coin -->
+    <circle cx="82" cy="84" r="25" fill="url(#exchange-gold)" stroke="#FFF6D6" stroke-width="4"/>
+    <circle cx="82" cy="84" r="16" fill="#193149" stroke="#D8B767" stroke-width="3"/>
+    <path d="M82 74V94M75 78H84C88 78 90 80 90 83C90 86 88 88 84 88H80C76 88 74 90 74 92" stroke="#FFF1B8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- Blue left exchange arrow -->
-  <path d="M554 178
-           H264
-           L64 512
-           L264 846
-           H554
-           L414 674
-           H616
-           L712 512
-           L616 350
-           H414
-           Z"
-        fill="url(#aetherBlue)"
-        stroke="#1f1a17"
-        stroke-width="42"
-        stroke-linejoin="miter"/>
-
-  <!-- Aether swoosh -->
-  <path d="M170 574
-           C250 650 355 698 492 704
-           C396 668 306 612 244 528
-           C216 490 195 444 186 392
-           C155 448 146 513 170 574Z"
-        fill="#006fa9"
-        opacity="0.75"/>
-
-  <!-- Sparkles -->
-  <path d="M300 318 L326 374 L382 400 L326 426 L300 482 L274 426 L218 400 L274 374 Z"
-        fill="#ffffff"/>
-  <path d="M420 410 L436 444 L470 460 L436 476 L420 510 L404 476 L370 460 L404 444 Z"
-        fill="#ffffff"/>
-
-  <!-- Center emblem -->
-  <circle cx="512" cy="512" r="98" fill="#1f1a17"/>
-  <circle cx="512" cy="512" r="70" fill="#ffffff"/>
-  <path d="M442 512 H582" stroke="#1f1a17" stroke-width="22" stroke-linecap="butt"/>
-  <circle cx="512" cy="512" r="40" fill="#ffffff" stroke="#1f1a17" stroke-width="12"/>
+    <!-- Exchange arrows -->
+    <path d="M27 84H50L43 76M50 84L43 92" stroke="#D8DEE9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M101 46H78L85 38M78 46L85 54" stroke="#D8DEE9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M29 84C34 105 56 113 74 105" stroke="#75D6FF" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <path d="M99 46C94 25 72 17 54 25" stroke="#D8B767" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.85"/>
+  </g>
 </svg>

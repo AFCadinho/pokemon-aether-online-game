@@ -11,6 +11,11 @@ const MUSIC_RES_ROOT := "res://assets/music"
 const MUSIC_RELATIVE_ROOT := "assets/music"
 const DEFAULT_BATTLE_MUSIC_ID := "lysandre_remix_pokemon_legends_z_a_zame"
 const FADE_SECONDS := 0.35
+const MAP_MUSIC_PROFILE_TRACKS := {
+	"kanto.pallet_town": "res://assets/music/overworld/kanto/towns/pallet_town.ogg",
+	"kanto.viridian_city": "res://assets/music/overworld/kanto/towns/viridian_city.ogg",
+	"kanto.pewter_city": "res://assets/music/overworld/kanto/towns/viridian_city.ogg",
+}
 
 var music_player: AudioStreamPlayer
 var current_track_path := ""
@@ -61,14 +66,31 @@ func get_map_music_path(map_node: Node) -> String:
 		if map_track_path != "":
 			return map_track_path
 
+		var map_profile_track_path := get_music_profile_track_path(_get_map_music_profile_id(map_node))
+		if map_profile_track_path != "":
+			return map_profile_track_path
+
 	if map_node != null:
 		var map_music_node: Node = map_node.get_node_or_null("MapMusic")
 		if map_music_node != null and map_music_node.has_method("get_music_track_path"):
 			var component_track_path: String = str(map_music_node.call("get_music_track_path")).strip_edges()
 			if component_track_path != "":
 				return component_track_path
+			var component_profile_track_path := get_music_profile_track_path(_get_map_music_profile_id(map_music_node))
+			if component_profile_track_path != "":
+				return component_profile_track_path
 
 	return DEFAULT_OVERWORLD_MUSIC_PATH
+
+
+func get_music_profile_track_path(profile_id: String) -> String:
+	return str(MAP_MUSIC_PROFILE_TRACKS.get(profile_id.strip_edges(), ""))
+
+
+func _get_map_music_profile_id(map_node: Node) -> String:
+	if map_node != null and map_node.has_method("get_music_profile_id"):
+		return str(map_node.call("get_music_profile_id")).strip_edges()
+	return ""
 
 
 func get_battle_music_path(track_id: String) -> String:

@@ -101,6 +101,7 @@ const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage
 const DEV_CREATE_POKEMON_ICON: Texture2D = preload("res://assets/ui/pokedex.svg")
 const DEV_SPAWN_ENCOUNTER_ICON: Texture2D = preload("res://assets/ui/wild_encounter_radar.svg")
 const DEV_ADD_RESOURCES_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
+const DEV_ADD_CURRENCY_ICON: Texture2D = preload("res://assets/items/icons/KOFUSWALLET.png")
 const TRAINER_WALLET_MONEY_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.png")
 const TRAINER_WALLET_AETHER_GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
@@ -5663,9 +5664,9 @@ func _setup_dev_add_item_tools() -> void:
 	add_layout.add_child(dev_add_money_button)
 	_configure_tool_tile_button(
 		dev_add_money_button,
-		"Add Pokédollars",
-		"Credit currency to the account",
-		DEV_ADD_RESOURCES_ICON,
+		"Add Currency",
+		"Add Pokédollars or Aether Gems",
+		DEV_ADD_CURRENCY_ICON,
 		Color("#f0cc70")
 	)
 
@@ -13876,7 +13877,7 @@ func _show_bag_item_context_menu(item: Dictionary) -> void:
 		bag_item_context_menu.add_item(_bag_item_use_action_label(item), 1)
 	if _bag_item_can_assign_to_hotbar(item):
 		bag_item_context_menu.add_item("Assign to Hotbar", 2)
-	var viewport_size := get_viewport_rect().size
+	var viewport_size := get_viewport().get_visible_rect().size
 	var menu_position := get_viewport().get_mouse_position()
 	menu_position.x = minf(menu_position.x, viewport_size.x - 200.0)
 	menu_position.y = minf(menu_position.y, viewport_size.y - 120.0)

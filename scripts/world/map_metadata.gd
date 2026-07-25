@@ -10,7 +10,10 @@ extends Node2D
 @export_enum("outdoor", "indoor", "dark") var lighting_profile := "outdoor"
 @export_enum("outdoor", "disabled") var weather_profile := "outdoor"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.0
-@export_file("*.ogg") var music_track_path := "res://assets/music/overworld/kanto/routes/route1.ogg"
+# An explicit track always wins. Leave this empty for a regular interior that
+# should inherit the track associated with its town or city music profile.
+@export_file("*.ogg") var music_track_path := ""
+@export var music_profile_id := ""
 
 
 func _ready() -> void:
@@ -47,6 +50,10 @@ func get_location_metadata() -> Dictionary:
 
 func get_music_track_path() -> String:
 	return music_track_path
+
+
+func get_music_profile_id() -> String:
+	return music_profile_id
 
 
 func get_lighting_profile() -> String:

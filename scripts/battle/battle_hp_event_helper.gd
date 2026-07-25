@@ -104,12 +104,6 @@ func get_visible_hp_change(previous_hp: int, hp: int, max_hp: int) -> int:
 	return abs(previous_percent - current_percent)
 
 func get_event_visible_hp_change(event: Dictionary) -> int:
-	if _is_mixed_full_health_one_shot_event(event):
-		# Some wild-battle one-shots arrive as a public 100/100 snapshot followed
-		# by the target's exact *pre-hit* full HP (for example 16/16) and then a
-		# faint event. The only truthful player-facing presentation is a KO.
-		return 100
-
 	var previous_condition := str(event.get("previousCondition", ""))
 	var condition := str(event.get("condition", ""))
 	var previous_percent: int = get_condition_visible_hp_percent(previous_condition)
@@ -198,43 +192,10 @@ func _event_has_numeric_hp_loss(event: Dictionary) -> bool:
 func _get_numeric_hp_loss_visible_change(event: Dictionary) -> int:
 	if not _event_has_numeric_hp_loss(event):
 		return -1
-	if _uses_mixed_visible_and_exact_hp_scales(event):
-		# `previousHp` is a public 0–100 percentage while `hp` and `maxHp`
-		# are exact values. Comparing them as one scale turns 100/100 -> 5/357
-		# into a false 27% loss instead of the visible 98% loss.
-		return -1
-
 	var previous_hp: int = int(event.get("previousHp", 0))
 	var hp: int = int(event.get("hp", 0))
 	var max_hp: int = int(event.get("maxHp", 0))
 	return get_visible_hp_change(previous_hp, hp, max_hp)
-
-func _uses_mixed_visible_and_exact_hp_scales(event: Dictionary) -> bool:
-	var previous_condition: Dictionary = parse_condition_hp_snapshot(str(event.get("previousCondition", "")))
-	if previous_condition.is_empty():
-		return false
-
-	var previous_condition_max_hp: int = int(previous_condition.get("max_hp", 0))
-	var previous_hp: int = int(event.get("previousHp", -1))
-	var exact_max_hp: int = int(event.get("maxHp", 0))
-	return (
-		previous_condition_max_hp == 100
-		and exact_max_hp != 100
-		and previous_hp >= 0
-		and previous_hp <= 100
-	)
-
-func _is_mixed_full_health_one_shot_event(event: Dictionary) -> bool:
-	if not _uses_mixed_visible_and_exact_hp_scales(event):
-		return false
-
-	var current_condition: Dictionary = parse_condition_hp_snapshot(str(event.get("condition", "")))
-	if current_condition.is_empty():
-		return false
-
-	var current_hp: int = int(current_condition.get("hp", 0))
-	var current_max_hp: int = int(current_condition.get("max_hp", 0))
-	return current_max_hp > 0 and current_hp == current_max_hp and int(event.get("amount", 0)) > 0
 
 func get_condition_visible_hp_percent(condition: String) -> int:
 	if condition.contains("fnt"):

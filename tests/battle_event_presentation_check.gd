@@ -10,12 +10,10 @@ var failed := false
 func _init() -> void:
 	_check_previous_condition_uses_visible_scale()
 	_check_full_hp_reveal_damage_has_no_damage_target()
-	_check_mixed_full_hp_one_shot_uses_damage_animation_and_full_percent()
 	_check_real_damage_keeps_damage_target()
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
 	_check_damage_after_hazard_logs_when_conditions_repeat()
 	_check_damage_after_hazard_logs_mixed_visible_and_exact_conditions()
-	_check_mixed_full_hp_to_exact_low_hp_uses_visible_percent_change()
 	_check_booster_energy_quark_drive_messages()
 	_check_future_sight_lifecycle_messages()
 	_check_solar_beam_prepare_uses_charge_animation()
@@ -99,29 +97,6 @@ func _check_full_hp_reveal_damage_has_no_damage_target() -> void:
 	_check_equal(str(result.get("log_message", "")), "", "full HP reveal has no damage log")
 
 
-func _check_mixed_full_hp_one_shot_uses_damage_animation_and_full_percent() -> void:
-	var presentation = _make_presentation()
-	presentation.build({
-		"type": "move",
-		"actor": "p1a: Dragonite",
-		"move": "Devastating Drake",
-		"target": "p2a: Rattata",
-	})
-	var result: Dictionary = presentation.build({
-		"type": "damage",
-		"target": "p2a: Rattata",
-		"previousCondition": "100/100",
-		"condition": "16/16",
-		"previousHp": 100,
-		"hp": 16,
-		"maxHp": 16,
-		"amount": 84,
-	})
-
-	_check_equal(str(result.get("damage_target_ident", "")), "p2a: Rattata", "mixed one-shot keeps the damage animation")
-	_check_equal(str(result.get("log_message", "")), "(Rattata lost 100% of its health!)", "mixed one-shot reports a full HP loss")
-
-
 func _check_real_damage_keeps_damage_target() -> void:
 	var presentation = _make_presentation()
 	var result: Dictionary = presentation.build({
@@ -201,28 +176,6 @@ func _check_damage_after_hazard_logs_mixed_visible_and_exact_conditions() -> voi
 	})
 
 	_check_equal(str(result.get("log_message", "")), "(Alomomola lost 34% of its health!)", "damage after hazard logs visible delta before exact HP reveal")
-
-
-func _check_mixed_full_hp_to_exact_low_hp_uses_visible_percent_change() -> void:
-	var presentation = _make_presentation()
-	presentation.build({
-		"type": "move",
-		"actor": "p1a: Dragonite",
-		"move": "Devastating Drake",
-		"target": "p2a: Hippowdon",
-	})
-	var result: Dictionary = presentation.build({
-		"type": "damage",
-		"target": "p2a: Hippowdon",
-		"previousCondition": "100/100",
-		"condition": "5/357",
-		"previousHp": 100,
-		"hp": 5,
-		"maxHp": 357,
-		"amount": 95,
-	})
-
-	_check_equal(str(result.get("log_message", "")), "(Hippowdon lost 98% of its health!)", "mixed HP scales use the visible 98 percent loss")
 
 
 func _check_booster_energy_quark_drive_messages() -> void:

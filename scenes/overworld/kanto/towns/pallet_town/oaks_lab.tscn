@@ -111,6 +111,7 @@ script = ExtResource("11_map_meta")
 map_id = "kanto_oaks_lab"
 map_region_name = "Kanto"
 map_display_name = "Oak's Lab"
+music_track_path = "res://assets/music/overworld/kanto/interiors/oaks_lab.ogg"
 lighting_profile = "indoor"
 weather_profile = "disabled"
 
