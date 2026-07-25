@@ -14858,7 +14858,7 @@ func _guess_bag_category(item_id: String) -> String:
 		return "machines"
 	if normalized.ends_with("berry"):
 		return "held_items"
-	if normalized.ends_with("ite") or normalized.contains("ite-") or normalized.ends_with("-z") or normalized.ends_with("ium-z"):
+	if _is_power_stone_item_id(normalized):
 		return "power_stones"
 	if normalized.contains("leftovers") or normalized.contains("choice-") or normalized.contains("scarf") or normalized.contains("band") or normalized.contains("orb") or normalized.contains("vest"):
 		return "held_items"
@@ -23938,15 +23938,14 @@ func _refresh_item_dex_results() -> void:
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		item_dex_results_list.add_child(empty_label)
 
-## The data model keeps a held-item form for battle validation and a bag form
-## for the inventory.  The latter is the player-facing Item Dex entry; showing
-## both would present the same Z-Crystal twice.
-func _filter_item_dex_variants(items: Array[Dictionary]) -> Array[Dictionary]:
+## Z-Crystals use their holdable form as the player-facing inventory item.  A
+## legacy bag form may still exist in old data, but must never be offered.
+func _filter_player_facing_item_variants(items: Array[Dictionary]) -> Array[Dictionary]:
 	var filtered: Array[Dictionary] = []
 	for item_value: Variant in items:
 		var item := item_value as Dictionary
 		var item_id := str(item.get("id", "")).strip_edges().to_lower()
-		if item_id.ends_with("-z--held"):
+		if item_id.ends_with("-z--bag"):
 			continue
 		filtered.append(item)
 	return filtered
