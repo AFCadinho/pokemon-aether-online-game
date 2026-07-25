@@ -6625,17 +6625,73 @@
         "impact_start": 0.58,
         "impact_radius": 82.0,
         "impact_spark_count": 26,
-        "bolt_color": [1.0, 0.78, 0.02, 1.0],
-        "core_color": [1.0, 0.96, 0.55, 1.0],
+        "bolt_color": [
+          1.0,
+          0.78,
+          0.02,
+          1.0
+        ],
+        "core_color": [
+          1.0,
+          0.96,
+          0.55,
+          1.0
+        ],
         "path": [
-          {"at": 0.0, "position": [128, 198], "scale": 0.72},
-          {"at": 0.42, "position": [250, 144], "scale": 1.16, "ease": "ease_out_quad"},
-          {"at": 1.0, "position": [384, 86], "scale": 1.0, "ease": "ease_in_quad"}
+          {
+            "at": 0.0,
+            "position": [
+              128,
+              198
+            ],
+            "scale": 0.72
+          },
+          {
+            "at": 0.42,
+            "position": [
+              250,
+              144
+            ],
+            "scale": 1.16,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              384,
+              86
+            ],
+            "scale": 1.0,
+            "ease": "ease_in_quad"
+          }
         ],
         "reverse_path": [
-          {"at": 0.0, "position": [384, 86], "scale": 0.72},
-          {"at": 0.42, "position": [262, 144], "scale": 1.16, "ease": "ease_out_quad"},
-          {"at": 1.0, "position": [128, 198], "scale": 1.0, "ease": "ease_in_quad"}
+          {
+            "at": 0.0,
+            "position": [
+              384,
+              86
+            ],
+            "scale": 0.72
+          },
+          {
+            "at": 0.42,
+            "position": [
+              262,
+              144
+            ],
+            "scale": 1.16,
+            "ease": "ease_out_quad"
+          },
+          {
+            "at": 1.0,
+            "position": [
+              128,
+              198
+            ],
+            "scale": 1.0,
+            "ease": "ease_in_quad"
+          }
         ]
       },
       "data_path": "res://assets/battles/animations/gigavolthavoc/gigavolthavoc.json",
@@ -6754,6 +6810,225 @@
         "PRSFX- Twinkle Tackle1.wav": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle1.wav",
         "PRSFX- Twinkle Tackle2.wav": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle2.wav",
         "PRSFX- Twinkle Tackle3.wav": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle3.wav"
+      }
+    },
+    "catastropika": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.92,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.28,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/catastropika/catastropika.json",
+      "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
+      "background_path": "res://assets/battles/animations/catastropika/PRAS- Thunder BG.png",
+      "foreground_path": "res://assets/battles/animations/catastropika/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Catastropika1.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika1.wav",
+        "PRSFX- Catastropika2.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika2.wav",
+        "PRSFX- Catastropika3.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika3.wav",
+        "PRSFX- Catastropika4.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika4.wav",
+        "PRSFX- Catastropika5.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika5.wav",
+        "PRSFX- Catastropika6.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika6.wav"
+      }
+    },
+    "sinisterarrowraid": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.94,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.26,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/sinisterarrowraid/sinisterarrowraid.json",
+      "sheet_path": "res://assets/battles/animations/sinisterarrowraid/PRAS- Sinister Arrow Raid.png",
+      "background_path": "res://assets/battles/animations/sinisterarrowraid/PRAS- Curse BG.png",
+      "foreground_path": "res://assets/battles/animations/sinisterarrowraid/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- SinisterArrowRaid1.wav": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid1.wav",
+        "PRSFX- SinisterArrowRaid2.wav": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid2.wav",
+        "PRSFX- SinisterArrowRaid3.wav": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid3.wav",
+        "PRSFX- SinisterArrowRaid4.wav": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid4.wav",
+        "PRSFX- SinisterArrowRaid5.wav": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid5.wav"
+      }
+    },
+    "maliciousmoonsault": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.92,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.3,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "actor_motion_mirror_vertical": false,
+      "actor_motion": {
+        "enabled": true,
+        "duration": 2.88,
+        "points": [
+          {
+            "at": 0.0,
+            "offset": [0, 0],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.01
+          },
+          {
+            "at": 0.28,
+            "offset": [18, 10],
+            "rotation_degrees": -4,
+            "scale": 1.08,
+            "duration": 0.16
+          },
+          {
+            "at": 0.48,
+            "offset": [150, -82],
+            "rotation_degrees": -18,
+            "scale": 1.12,
+            "duration": 0.24
+          },
+          {
+            "at": 0.66,
+            "offset": [310, -148],
+            "rotation_degrees": -160,
+            "scale": 0.92,
+            "duration": 0.22
+          },
+          {
+            "at": 0.82,
+            "offset": [480, -48],
+            "rotation_degrees": -345,
+            "scale": 1.18,
+            "duration": 0.18
+          },
+          {
+            "at": 0.9,
+            "offset": [510, -12],
+            "rotation_degrees": -360,
+            "scale": 1.32,
+            "duration": 0.1
+          },
+          {
+            "at": 1.0,
+            "offset": [0, 0],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.2
+          }
+        ]
+      },
+      "data_path": "res://assets/battles/animations/maliciousmoonsault/maliciousmoonsault.json",
+      "sheet_path": "res://assets/battles/animations/maliciousmoonsault/PRAS- Fire.png",
+      "background_path": "res://assets/battles/animations/maliciousmoonsault/PRAS- Malicious Moonsault BG.png",
+      "foreground_path": "res://assets/battles/animations/maliciousmoonsault/PRAS- Speed Up BG.png",
+      "sound_paths": {
+        "PRSFX- Malicious Moonsault1.ogg": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault1.ogg",
+        "PRSFX- Malicious Moonsault2.ogg": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault2.ogg",
+        "PRSFX- Malicious Moonsault3.ogg": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault3.ogg",
+        "PRSFX- Malicious Moonsault4.ogg": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault4.ogg",
+        "PRSFX- Malicious Moonsault5.ogg": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault5.ogg",
+        "PRSFX- Malicious Moonsault6.ogg": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault6.ogg"
+      }
+    },
+    "guardianofalola": {
+      "template": "imported_sheet",
+      "category": "field_impact",
+      "speed_scale": 0.94,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "sheet_pattern_anchor_groups": [
+        {
+          "patterns": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            11
+          ],
+          "source_anchor": [
+            272,
+            193
+          ]
+        }
+      ],
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/guardianofalola/guardianofalola.json",
+      "sheet_path": "res://assets/battles/animations/guardianofalola/PRAS- GOA.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Gaurdian of Alola1.ogg": "res://assets/battles/animations/guardianofalola/PRSFX- Gaurdian of Alola1.ogg",
+        "PRSFX- Gaurdian of Alola2.ogg": "res://assets/battles/animations/guardianofalola/PRSFX- Gaurdian of Alola2.ogg"
+      }
+    },
+    "soulstealing7starstrike": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.9,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/soulstealing7starstrike/soulstealing7starstrike.json",
+      "sheet_path": "res://assets/battles/animations/soulstealing7starstrike/PRAS- Soul-Stealing 7-Star Strike.png",
+      "background_path": "res://assets/battles/animations/soulstealing7starstrike/PRAS- Soul-Stealing 7-Star Strike BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- S-S7-SS1.ogg": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS1.ogg",
+        "PRSFX- S-S7-SS2.ogg": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS2.ogg",
+        "PRSFX- S-S7-SS3.ogg": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS3.ogg",
+        "PRSFX- S-S7-SS4.ogg": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS4.ogg",
+        "PRSFX- S-S7-SS5.ogg": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS5.ogg",
+        "PRSFX- S-S7-SS6.ogg": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS6.ogg",
+        "PRSFX- S-S7-SS7.ogg": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS7.ogg"
+      }
+    },
+    "stokedsparksurfer": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.92,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/stokedsparksurfer/stokedsparksurfer.json",
+      "sheet_path": "res://assets/battles/animations/stokedsparksurfer/PRAS- Electric.png",
+      "background_path": "res://assets/battles/animations/stokedsparksurfer/PRAS- Electric Terrain BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Stoked Sparksurfer1.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer1.ogg",
+        "PRSFX- Stoked Sparksurfer2.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer2.ogg",
+        "PRSFX- Stoked Sparksurfer3.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer3.ogg",
+        "PRSFX- Stoked Sparksurfer4.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer4.ogg",
+        "PRSFX- Stoked Sparksurfer5.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer5.ogg",
+        "PRSFX- Stoked Sparksurfer6.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer6.ogg",
+        "PRSFX- Stoked Sparksurfer7.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer7.ogg"
       }
     }
   }
