@@ -6245,8 +6245,18 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
-      "visual_color": [0.72, 0.94, 0.32, 1.0],
-      "sprite_tint": [1.0, 1.0, 1.0, 1.0],
+      "visual_color": [
+        0.72,
+        0.94,
+        0.32,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/savagespinout/savagespinout.json",
@@ -6332,8 +6342,18 @@
         }
       ],
       "overlay_fill_enabled": false,
-      "visual_color": [0.45, 0.2, 0.7, 1.0],
-      "sprite_tint": [1.0, 1.0, 1.0, 1.0],
+      "visual_color": [
+        0.45,
+        0.2,
+        0.7,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/neverendingnightmare/neverendingnightmare.json",
@@ -6358,8 +6378,18 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
-      "visual_color": [0.74, 0.82, 0.92, 1.0],
-      "sprite_tint": [1.0, 1.0, 1.0, 1.0],
+      "visual_color": [
+        0.74,
+        0.82,
+        0.92,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/corkscrewcrash/corkscrewcrash.json",
@@ -6402,8 +6432,18 @@
         }
       ],
       "overlay_fill_enabled": false,
-      "visual_color": [1.0, 0.34, 0.08, 1.0],
-      "sprite_tint": [1.0, 1.0, 1.0, 1.0],
+      "visual_color": [
+        1.0,
+        0.34,
+        0.08,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/infernooverdrive/infernooverdrive.json",
@@ -6434,8 +6474,18 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
-      "visual_color": [0.14, 0.62, 1.0, 1.0],
-      "sprite_tint": [1.0, 1.0, 1.0, 1.0],
+      "visual_color": [
+        0.14,
+        0.62,
+        1.0,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/hydrovortex/hydrovortex.json",
@@ -6465,8 +6515,18 @@
         12
       ],
       "overlay_fill_enabled": false,
-      "visual_color": [0.42, 0.92, 0.3, 1.0],
-      "sprite_tint": [1.0, 1.0, 1.0, 1.0],
+      "visual_color": [
+        0.42,
+        0.92,
+        0.3,
+        1.0
+      ],
+      "sprite_tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "bloom_doom": {
@@ -6529,6 +6589,171 @@
         "PRSFX- Bloom Doom1.wav": "res://assets/battles/animations/bloomdoom/PRSFX- Bloom Doom1.wav",
         "PRSFX- Bloom Doom2.wav": "res://assets/battles/animations/bloomdoom/PRSFX- Bloom Doom2.wav",
         "PRSFX- Bloom Doom3.wav": "res://assets/battles/animations/bloomdoom/PRSFX- Bloom Doom3.wav"
+      }
+    },
+    "gigavolthavoc": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.9,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.28,
+      "show_pink_visual": false,
+      "show_sheet_sprites": false,
+      "overlay_fill_enabled": false,
+      "electric_switch": {
+        "enabled": true,
+        "visible_start": 0.08,
+        "visible_end": 0.9,
+        "fade_in": 0.05,
+        "fade_out": 0.12,
+        "trail_length": 0.42,
+        "segments": 26,
+        "jitter": 20.0,
+        "width": 8.0,
+        "branch_length": 38.0,
+        "core_enabled": true,
+        "core_radius": 26.0,
+        "core_spark_count": 14,
+        "source_aura_enabled": true,
+        "source_aura_radius": 58.0,
+        "source_aura_arc_count": 7,
+        "source_aura_bolt_count": 14,
+        "impact_start": 0.58,
+        "impact_radius": 82.0,
+        "impact_spark_count": 26,
+        "bolt_color": [1.0, 0.78, 0.02, 1.0],
+        "core_color": [1.0, 0.96, 0.55, 1.0],
+        "path": [
+          {"at": 0.0, "position": [128, 198], "scale": 0.72},
+          {"at": 0.42, "position": [250, 144], "scale": 1.16, "ease": "ease_out_quad"},
+          {"at": 1.0, "position": [384, 86], "scale": 1.0, "ease": "ease_in_quad"}
+        ],
+        "reverse_path": [
+          {"at": 0.0, "position": [384, 86], "scale": 0.72},
+          {"at": 0.42, "position": [262, 144], "scale": 1.16, "ease": "ease_out_quad"},
+          {"at": 1.0, "position": [128, 198], "scale": 1.0, "ease": "ease_in_quad"}
+        ]
+      },
+      "data_path": "res://assets/battles/animations/gigavolthavoc/gigavolthavoc.json",
+      "sheet_path": "res://assets/battles/animations/gigavolthavoc/PRAS- Electric.png",
+      "background_path": "res://assets/battles/animations/gigavolthavoc/PRAS- Thunder BG.png",
+      "foreground_path": "res://assets/battles/animations/gigavolthavoc/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Gigavolt Havoc1.wav": "res://assets/battles/animations/gigavolthavoc/PRSFX- Gigavolt Havoc1.wav",
+        "PRSFX- Gigavolt Havoc2.wav": "res://assets/battles/animations/gigavolthavoc/PRSFX- Gigavolt Havoc2.wav",
+        "PRSFX- Gigavolt Havoc3.wav": "res://assets/battles/animations/gigavolthavoc/PRSFX- Gigavolt Havoc3.wav"
+      }
+    },
+    "shatteredpsyche": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.94,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.24,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "sheet_pattern_anchor_groups": [
+        {
+          "patterns": [
+            4
+          ],
+          "source_anchor": [
+            384,
+            96
+          ]
+        }
+      ],
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/shatteredpsyche/shatteredpsyche.json",
+      "sheet_path": "res://assets/battles/animations/shatteredpsyche/PRAS- Shattered Psyche.png",
+      "background_path": "",
+      "foreground_path": "res://assets/battles/animations/shatteredpsyche/PRAS- Black BG.png",
+      "sound_paths": {
+        "PRSFX- Shattered Psyche1.wav": "res://assets/battles/animations/shatteredpsyche/PRSFX- Shattered Psyche1.wav",
+        "PRSFX- Shattered Psyche2.wav": "res://assets/battles/animations/shatteredpsyche/PRSFX- Shattered Psyche2.wav",
+        "PRSFX- Shattered Psyche3.wav": "res://assets/battles/animations/shatteredpsyche/PRSFX- Shattered Psyche3.wav"
+      }
+    },
+    "subzeroslammer": {
+      "template": "imported_sheet",
+      "category": "field_impact",
+      "speed_scale": 0.92,
+      "sprite_zoom_multiplier": 0.6,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.3,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/subzeroslammer/subzeroslammer.json",
+      "sheet_path": "res://assets/battles/animations/subzeroslammer/PRAS- Ice.png",
+      "background_path": "res://assets/battles/animations/subzeroslammer/PRAS- Icy Wind BG.png",
+      "foreground_path": "res://assets/battles/animations/subzeroslammer/PRAS- Blizzard FG.png",
+      "sound_paths": {
+        "PRSFX- Subzero Slammer1.wav": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer1.wav",
+        "PRSFX- Subzero Slammer2.wav": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer2.wav",
+        "PRSFX- Subzero Slammer3.wav": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer3.wav",
+        "PRSFX- Subzero Slammer4.wav": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer4.wav"
+      }
+    },
+    "blackholeeclipse": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.9,
+      "sheet_anchor_source_position": [
+        350,
+        127
+      ],
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.18,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/blackholeeclipse/blackholeeclipse.json",
+      "sheet_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black Hole Eclipse.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Space BG.png",
+      "foreground_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
+      "sound_paths": {
+        "PRSFX- Black Hole Eclipse1.wav": "res://assets/battles/animations/blackholeeclipse/PRSFX- Black Hole Eclipse1.wav",
+        "PRSFX- Black Hole Eclipse2.wav": "res://assets/battles/animations/blackholeeclipse/PRSFX- Black Hole Eclipse2.wav",
+        "PRSFX- Black Hole Eclipse3.wav": "res://assets/battles/animations/blackholeeclipse/PRSFX- Black Hole Eclipse3.wav",
+        "PRSFX- Black Hole Eclipse4.wav": "res://assets/battles/animations/blackholeeclipse/PRSFX- Black Hole Eclipse4.wav"
+      }
+    },
+    "twinkletackle": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.95,
+      "sprite_zoom_multiplier": 0.7,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.32,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/twinkletackle/twinkletackle.json",
+      "sheet_path": "res://assets/battles/animations/twinkletackle/PRAS- Twinkle Tackle.png",
+      "background_path": "res://assets/battles/animations/twinkletackle/PRAS- Attract BG.png",
+      "foreground_path": "res://assets/battles/animations/twinkletackle/PRAS- Twinkle Tackle FG.png",
+      "sound_paths": {
+        "PRSFX- Twinkle Tackle1.wav": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle1.wav",
+        "PRSFX- Twinkle Tackle2.wav": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle2.wav",
+        "PRSFX- Twinkle Tackle3.wav": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle3.wav"
       }
     }
   }
