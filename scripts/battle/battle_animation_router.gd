@@ -445,6 +445,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.free_on_finish = true
 	animation_node.show_timing_backgrounds = bool(config.get("show_timing_backgrounds", false))
 	animation_node.timing_background_fill_canvas = bool(config.get("timing_background_fill_canvas", false))
+	animation_node.timing_background_persist_until_clear = bool(config.get("timing_background_persist_until_clear", false))
 	animation_node.show_timing_foregrounds = bool(config.get("show_timing_foregrounds", false))
 	animation_node.timing_foreground_scale = _vector2_from_config_value(config.get("timing_foreground_scale", [1.0, 1.0]), Vector2.ONE)
 	animation_node.foreground_opacity_multiplier = clampf(float(config.get("foreground_opacity_multiplier", 1.0)), 0.0, 1.0)

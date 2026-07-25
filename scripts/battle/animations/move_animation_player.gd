@@ -14,6 +14,7 @@ signal animation_finished
 @export var free_on_finish: bool = false
 @export var show_timing_backgrounds: bool = false
 @export var timing_background_fill_canvas: bool = false
+@export var timing_background_persist_until_clear: bool = false
 @export var show_timing_foregrounds: bool = false
 @export var timing_foreground_scale: Vector2 = Vector2.ONE
 @export_range(0.0, 1.0, 0.01) var foreground_opacity_multiplier: float = 1.0
@@ -2647,11 +2648,15 @@ func _apply_timing_events(index: int) -> void:
 			1:
 				if show_timing_backgrounds:
 					bg.modulate.a = 1.0
-					bg_hide_frame = _timing_hide_frame(index, event)
+					bg_hide_frame = -1 if timing_background_persist_until_clear else _timing_hide_frame(index, event)
 			2:
 				if show_timing_backgrounds:
 					bg.modulate.a = float(event["opacity"]) / 255.0 if event["opacity"] != null else bg.modulate.a
-					bg_hide_frame = _timing_hide_frame(index, event) if bg.modulate.a > 0.0 else -1
+					bg_hide_frame = (
+						-1
+						if timing_background_persist_until_clear or bg.modulate.a <= 0.0
+						else _timing_hide_frame(index, event)
+					)
 			3:
 				if show_timing_foregrounds:
 					fg.modulate.a = (float(event["opacity"]) / 255.0 if event["opacity"] != null else 1.0) * foreground_opacity_multiplier
