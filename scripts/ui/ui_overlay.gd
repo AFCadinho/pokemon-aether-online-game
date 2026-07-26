@@ -22898,6 +22898,7 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	button.tooltip_text = "%s%s" % [species_name, " - %s" % type_text if type_text != "" else ""]
 	button.pressed.connect(_on_pokedex_species_selected.bind(species_id))
 	button.set_meta("species_id", species_id)
+	button.set_meta("owned", bool(species.get("owned", false)))
 
 	var content_margin := MarginContainer.new()
 	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -22940,9 +22941,6 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	title_row.add_theme_constant_override("separation", 6)
 	label_stack.add_child(title_row)
 
-	if bool(species.get("owned", false)):
-		title_row.add_child(_create_owned_pokeball_icon(Vector2(16, 16)))
-
 	var name_label := Label.new()
 	name_label.name = "Name"
 	name_label.text = species_name
@@ -22951,6 +22949,9 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	name_label.add_theme_font_size_override("font_size", 13)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
 	title_row.add_child(name_label)
+
+	if bool(species.get("owned", false)):
+		title_row.add_child(_create_owned_pokeball_icon(Vector2(14, 14)))
 
 	var number_label := Label.new()
 	number_label.name = "Number"
@@ -22985,15 +22986,61 @@ func _create_owned_pokeball_icon(icon_size: Vector2) -> TextureRect:
 func _style_pokedex_species_button(button: Button, selected: bool) -> void:
 	if button == null:
 		return
-	var normal_background := UI_SURFACE_INTERACTIVE if selected else UI_SURFACE_INSET
-	var normal_border := POKEDEX_ACCENT_SOFT if selected else UI_BORDER_SUBTLE
-	button.add_theme_stylebox_override("normal", _make_button_style(normal_background, normal_border, 8, 1))
-	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, POKEDEX_ACCENT_SOFT, 8, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, POKEDEX_ACCENT, 8, 1))
+	var owned := bool(button.get_meta("owned", false))
+	var owned_accent := POKEDEX_SHINY_ACCENT if pokedex_shiny_mode else POKEDEX_ACCENT
+	var owned_accent_soft := POKEDEX_SHINY_ACCENT_SOFT if pokedex_shiny_mode else POKEDEX_ACCENT_SOFT
+	var owned_accent_faint := POKEDEX_SHINY_ACCENT_FAINT if pokedex_shiny_mode else POKEDEX_ACCENT_FAINT
+	var owned_background := Color("#282313ec") if pokedex_shiny_mode else Color("#25151bec")
+	var selection_accent := Color("#62d7ff")
+	var selection_accent_soft := Color("#62d7ffaa")
+	var selection_background := Color("#102b3dee")
+	var normal_background := (
+		selection_background if selected
+		else owned_background if owned
+		else UI_SURFACE_INSET
+	)
+	var normal_border := (
+		selection_accent if selected
+		else owned_accent_faint if owned
+		else UI_BORDER_SUBTLE
+	)
+	var normal_style := _make_button_style(normal_background, normal_border, 8, 2 if selected else 1)
+	if selected:
+		normal_style.shadow_color = Color("#62d7ff38")
+		normal_style.shadow_size = 6
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override(
+		"hover",
+		_make_button_style(
+			selection_background.lightened(0.08) if selected else UI_SURFACE_HOVER,
+			selection_accent if selected else owned_accent_soft,
+			8,
+			2 if selected else 1
+		)
+	)
+	button.add_theme_stylebox_override(
+		"pressed",
+		_make_button_style(
+			selection_background.darkened(0.08) if selected else UI_SURFACE_PRESSED,
+			selection_accent_soft if selected else owned_accent,
+			8,
+			2 if selected else 1
+		)
+	)
 	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 	var accent := button.find_child("Accent", true, false) as ColorRect
 	if accent != null:
-		accent.color = POKEDEX_ACCENT if selected else Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.18)
+		var accent_alpha := 1.0 if selected else 0.62 if owned else 0.18
+		var accent_color := selection_accent if selected else owned_accent
+		accent.color = Color(accent_color.r, accent_color.g, accent_color.b, accent_alpha)
+	var number_label := button.find_child("Number", true, false) as Label
+	if number_label != null:
+		number_label.add_theme_color_override(
+			"font_color",
+			selection_accent if selected
+			else owned_accent if owned
+			else Color(owned_accent.r, owned_accent.g, owned_accent.b, 0.72)
+		)
 
 func _refresh_pokedex_species_selection_state() -> void:
 	if pokedex_results_list == null:

@@ -24,6 +24,8 @@ func _init() -> void:
 	_check(source.contains('candidate,\n\t\t\t_get_pokedex_sprite_side(),\n\t\t\tpokedex_shiny_mode'), "Selected species loads its shiny battle sprite when requested")
 	_check(source.contains('pokedex_results_count_label.text = "OWNED %d / %d"'), "Each Pokédex variant shows its owned-over-total progress")
 	_check(source.contains("OwnedPokeballIcon") and source.contains('bool(species.get("owned", false))'), "Owned Pokédex entries show a Poké Ball beside their name")
+	_check(source.contains('button.set_meta("owned"') and source.contains("owned_background"), "Owned Pokédex entries receive a restrained highlighted card")
+	_check(source.contains('selection_accent := Color("#62d7ff")') and source.contains("2 if selected else 1"), "Selected species uses a distinct cyan two-pixel selection ring")
 	_check(source.contains("pokedex_owned_icon.visible = PokedexService.is_species_owned"), "Selected owned species keeps the Poké Ball in its detail header")
 	_check(source.contains('record_label.text = "SPECIES RECORD"'), "Selected species uses a dedicated dossier header")
 	_check(source.contains("var hero_panel := PanelContainer.new()"), "Species identity and stats share a focused hero card")
