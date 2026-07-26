@@ -8820,6 +8820,7 @@ func _on_global_buff_button_pressed(button: Button) -> void:
 		return
 	selected_global_buff = buff.duplicate(true)
 	_render_global_buff_details()
+	global_buff_details_panel.reset_size()
 	global_buff_details_panel.visible = true
 	_position_action_slot_popup(global_buff_details_panel, button)
 	_activate_ui_panel(global_buff_details_panel)
@@ -8856,6 +8857,8 @@ func _render_global_buff_details() -> void:
 	global_buff_details_active_label.text = "Active server-wide · %s remaining" % str(selected_global_buff.get("remaining", ""))
 	global_buff_donation_section.visible = not active
 	_refresh_global_buff_contribution_buttons()
+	if global_buff_details_panel != null:
+		global_buff_details_panel.reset_size()
 
 func _select_global_buff_contribution(amount: int) -> void:
 	selected_global_buff_contribution = amount
