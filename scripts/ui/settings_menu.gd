@@ -15,7 +15,7 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 }
 const GEN5_SPRITE_MISSING_MESSAGE := "Gen 5 Animated sprites are not installed. Download them from the launcher."
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
-const MINIMUM_MENU_SIZE := Vector2(440, 540)
+const MINIMUM_MENU_SIZE := Vector2(500, 520)
 const UI_BG := Color("#070b14f2")
 const UI_SLOT_BG := Color("#0d1625e6")
 const UI_INPUT_BG := Color("#050912e8")
@@ -54,7 +54,7 @@ var display_own_name_check_box: CheckBox
 @onready var ui_volume_value_label: Label = $MarginContainer/VBoxContainer/UiVolumeRow/UiVolumeValueLabel
 @onready var notification_volume_slider: HSlider = $MarginContainer/VBoxContainer/NotificationVolumeRow/NotificationVolumeSlider
 @onready var notification_volume_value_label: Label = $MarginContainer/VBoxContainer/NotificationVolumeRow/NotificationVolumeValueLabel
-@onready var close_button: Button = $MarginContainer/VBoxContainer/CloseButton
+@onready var close_button: Button = $MarginContainer/VBoxContainer/Header/CloseButton
 
 var loading_controls := false
 var logging_out := false
@@ -180,10 +180,22 @@ func _setup_tabs() -> void:
 		terrain_effects_check_box,
 		_create_display_own_name_check_box(),
 	])
+	_wrap_settings_section(general_tab, "Gameplay", "Choose which in-world feedback is shown", general_tab.get_children())
 	_move_nodes_to_container(graphics_tab, [
 		sprite_style_options_button.get_node("../SpriteStyleLabel"),
 		sprite_style_options_button,
 		sprite_style_status_label,
+		fullscreen_check_box.get_node("../DisplayLabel"),
+		fullscreen_check_box,
+		resolution_options_button.get_node("../ResolutionLabel"),
+		resolution_options_button,
+	])
+	_wrap_settings_section(graphics_tab, "Sprites", "Select how Pokémon are displayed", [
+		sprite_style_options_button.get_node("../SpriteStyleLabel"),
+		sprite_style_options_button,
+		sprite_style_status_label,
+	])
+	_wrap_settings_section(graphics_tab, "Display", "Adjust the game window", [
 		fullscreen_check_box.get_node("../DisplayLabel"),
 		fullscreen_check_box,
 		resolution_options_button.get_node("../ResolutionLabel"),
@@ -200,6 +212,7 @@ func _setup_tabs() -> void:
 		ui_volume_slider.get_node(".."),
 		notification_volume_slider.get_node(".."),
 	])
+	_wrap_settings_section(sound_tab, "Audio mix", "Set separate levels for every part of the game", sound_tab.get_children())
 	_build_account_tab(account_tab)
 	_build_about_tab(about_tab)
 
@@ -249,6 +262,46 @@ func _move_nodes_to_container(container: VBoxContainer, nodes: Array) -> void:
 		if current_parent != null:
 			current_parent.remove_child(node)
 		container.add_child(node)
+
+
+func _wrap_settings_section(container: VBoxContainer, title_text: String, subtitle_text: String, nodes: Array) -> void:
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", _make_panel_style(UI_SLOT_BG, UI_BORDER_SOFT, 10, 1))
+	container.add_child(card)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	card.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 9)
+	margin.add_child(stack)
+
+	var title := Label.new()
+	title.text = title_text.to_upper()
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", UI_SECTION_TEXT)
+	stack.add_child(title)
+
+	var subtitle := Label.new()
+	subtitle.text = subtitle_text
+	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	subtitle.add_theme_font_size_override("font_size", 11)
+	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(subtitle)
+
+	for node_value: Variant in nodes.duplicate():
+		var node := node_value as Node
+		if node == null or node == card:
+			continue
+		var current_parent := node.get_parent()
+		if current_parent != null:
+			current_parent.remove_child(node)
+		stack.add_child(node)
 
 
 func _build_account_tab(account_tab: VBoxContainer) -> void:
@@ -500,17 +553,28 @@ func _create_account_line_edit(placeholder: String, secret: bool) -> LineEdit:
 
 
 func _apply_premium_styles() -> void:
-	add_theme_stylebox_override("panel", _make_gold_panel_style(12, 1))
+	add_theme_stylebox_override("panel", _make_glass_panel_style(14, 1))
 	if tab_container != null:
+		tab_container.add_theme_constant_override("tab_separation", 4)
+		tab_container.add_theme_constant_override("side_margin", 4)
 		tab_container.add_theme_stylebox_override("panel", _make_panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 0))
-		tab_container.add_theme_stylebox_override("tab_selected", _make_button_style(Color("#152447ee"), UI_BORDER, 8, 1))
-		tab_container.add_theme_stylebox_override("tab_hovered", _make_button_style(Color("#1d3268f2"), UI_PURPLE_HOVER, 8, 1))
+		tab_container.add_theme_stylebox_override("tab_selected", _make_button_style(Color("#1b2c4eee"), UI_BORDER, 8, 1))
+		tab_container.add_theme_stylebox_override("tab_hovered", _make_button_style(Color("#203966f2"), UI_BORDER_FOCUS, 8, 1))
 		tab_container.add_theme_stylebox_override("tab_unselected", _make_button_style(UI_SLOT_BG, UI_BORDER_SOFT, 8, 1))
 		tab_container.add_theme_color_override("font_selected_color", UI_TEXT)
 		tab_container.add_theme_color_override("font_unselected_color", UI_MUTED_TEXT)
 		tab_container.add_theme_color_override("font_hovered_color", UI_TEXT)
 
 	_apply_styles_recursive(self)
+	for slider: HSlider in [
+		master_volume_slider,
+		music_volume_slider,
+		sfx_volume_slider,
+		pokemon_cry_volume_slider,
+		ui_volume_slider,
+		notification_volume_slider,
+	]:
+		_apply_slider_style(slider)
 	if logout_button != null:
 		_apply_button_style(logout_button)
 	if exit_game_button != null:
@@ -525,6 +589,8 @@ func _apply_styles_recursive(node: Node) -> void:
 		_apply_label_style(node as Label)
 	elif node is CheckBox:
 		_apply_checkbox_style(node as CheckBox)
+	elif node is HSlider:
+		_apply_slider_style(node as HSlider)
 	elif node is OptionButton:
 		_apply_button_style(node as Button)
 	elif node is Button:
@@ -551,6 +617,42 @@ func _apply_checkbox_style(check_box: CheckBox) -> void:
 	check_box.add_theme_color_override("font_hover_color", UI_TEXT)
 	check_box.add_theme_color_override("font_pressed_color", UI_TEXT)
 	check_box.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.45))
+	check_box.add_theme_font_size_override("font_size", 13)
+	check_box.add_theme_icon_override("unchecked", _settings_checkbox_icon(false, false))
+	check_box.add_theme_icon_override("unchecked_hover", _settings_checkbox_icon(false, true))
+	check_box.add_theme_icon_override("unchecked_pressed", _settings_checkbox_icon(false, true))
+	check_box.add_theme_icon_override("checked", _settings_checkbox_icon(true, false))
+	check_box.add_theme_icon_override("checked_hover", _settings_checkbox_icon(true, true))
+	check_box.add_theme_icon_override("checked_pressed", _settings_checkbox_icon(true, true))
+
+
+static func _settings_checkbox_icon(checked: bool, highlighted: bool) -> ImageTexture:
+	var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
+	var border := UI_BORDER_FOCUS if highlighted else (UI_SECTION_TEXT if checked else Color("#5d7692"))
+	var fill := Color("#274b79") if checked else Color("#0a1423")
+	for y: int in range(20):
+		for x: int in range(20):
+			var is_border := x < 2 or x > 17 or y < 2 or y > 17
+			image.set_pixel(x, y, border if is_border else fill)
+	if checked:
+		var check_pixels := [
+			Vector2i(5, 10), Vector2i(6, 11), Vector2i(7, 12), Vector2i(8, 13),
+			Vector2i(9, 12), Vector2i(10, 11), Vector2i(11, 10), Vector2i(12, 9),
+			Vector2i(13, 8), Vector2i(14, 7),
+		]
+		for point: Vector2i in check_pixels:
+			image.set_pixelv(point, Color.WHITE)
+			if point.y + 1 < 18:
+				image.set_pixel(point.x, point.y + 1, Color.WHITE)
+	return ImageTexture.create_from_image(image)
+
+
+func _apply_slider_style(slider: HSlider) -> void:
+	if slider == null:
+		return
+	slider.custom_minimum_size.y = max(slider.custom_minimum_size.y, 22.0)
+	slider.add_theme_stylebox_override("slider", _make_panel_style(UI_BORDER_SOFT, UI_BORDER_SOFT, 4, 0))
+	slider.add_theme_stylebox_override("grabber_area", _make_panel_style(UI_BORDER, UI_BORDER, 4, 0))
 
 
 func _apply_button_style(button: Button, variant: String = "default") -> void:
@@ -644,6 +746,14 @@ func _make_panel_style(background_color: Color, border_color: Color, corner_radi
 
 func _make_gold_panel_style(corner_radius: int, border_width: int) -> StyleBoxFlat:
 	var style := _make_panel_style(UI_BG, UI_BORDER, corner_radius, border_width)
+	style.shadow_color = Color(0, 0, 0, 0.38)
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(0, 4)
+	return style
+
+
+func _make_glass_panel_style(corner_radius: int, border_width: int) -> StyleBoxFlat:
+	var style := _make_panel_style(UI_BG, Color("#75613bcc"), corner_radius, border_width)
 	style.shadow_color = Color(0, 0, 0, 0.38)
 	style.shadow_size = 10
 	style.shadow_offset = Vector2(0, 4)

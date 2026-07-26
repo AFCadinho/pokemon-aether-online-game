@@ -15,6 +15,10 @@
 - Status Z-Moves now show their proper name and the bonus effect they provide.
 - Pokémon Storage now shows a dropped Pokémon in its destination slot immediately while saving the move.
 - Hovering over a Pokémon in Storage now shows the same detailed information card used for the player's party in battle.
+- The Pokédex can now switch between the National Dex and a canonical 151-species Kanto Dex without regional or alternate forms.
+- Each Pokédex now has a separate Normal and Shiny view for both the species index and detail preview.
+- Every Pokédex view now shows OT-registered species over the total available species.
+- OT-registered species now show a Poké Ball beside their name in the Pokédex, the map's wild Pokémon list, and wild battles.
 - Ranked matchmaking now clearly shows when the queue is unavailable.
 - Improved the Item Dex, Alpha Tools, Pokémon import, and other tools with clearer layouts and selections.
 - Made many messages and tooltips easier to understand across battles, trading, mail, storage, the Store, and the overworld.

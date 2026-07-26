@@ -35,11 +35,34 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1425384229]
+[node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=110582525]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Heading" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Header" unique_id=557770168]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/Header/Heading" unique_id=1425384229]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
 theme_override_font_sizes/font_size = 20
-text = "SETTINGS"
+text = "Settings"
+
+[node name="SubtitleLabel" type="Label" parent="MarginContainer/VBoxContainer/Header/Heading" unique_id=152440169]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.61, 0.69, 1)
+theme_override_font_sizes/font_size = 11
+text = "Personalise gameplay, display, sound and account preferences"
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/Header" unique_id=419436035]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_5f1cv")
+tooltip_text = "Close settings"
+text = "×"
 
 [node name="BattleAnimationsCheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=2079479511]
 layout_mode = 2
@@ -254,9 +277,3 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
 text = "75%"
 horizontal_alignment = 2
-
-[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=419436035]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_5f1cv")
-text = "Close"

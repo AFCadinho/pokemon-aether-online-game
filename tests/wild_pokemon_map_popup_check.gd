@@ -18,6 +18,7 @@ func _init() -> void:
 	_check_contains(script_source, "PokemonAssets.load_party_icon(species, false)", "popup renders Pokémon icons")
 	_check_contains(script_source, '"Lv. %d–%d"', "popup renders encounter level ranges")
 	_check_contains(script_source, "func _create_wild_pokemon_rarity_badge", "popup renders rarity badges")
+	_check_contains(script_source, "PokedexService.is_species_owned(species, false)", "owned wild species show their Pokédex Poké Ball")
 	_check_contains(script_source, "func _animate_wild_pokemon_button()", "radar button has hover feedback")
 
 	quit(1 if failed else 0)

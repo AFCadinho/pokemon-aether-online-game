@@ -211,6 +211,7 @@ var battle_ui_drag_offset := Vector2.ZERO
 #Active Pokemon
 var active_player_pokemon: Pokemon
 var active_enemy_pokemon: Pokemon
+var wild_owned_request_id := 0
 
 # Action Buttons
 @onready var action_side_panel: Control = %ActionsDock
@@ -2893,6 +2894,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	_add_battle_log_message(capture_message)
 
 	if caught:
+		PokedexService.invalidate_owned_species_cache()
 		var party_value: Variant = capture_result.get("party", [])
 		if party_value is Array:
 			PlayerSave.replace_party_from_state(party_value)
@@ -5279,7 +5281,19 @@ func prepare_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: P
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
+	_refresh_wild_opponent_owned_icon.call_deferred(
+		enemy_pokemon.species,
+		enemy_pokemon.shiny,
+		wild_owned_request_id
+	)
 	return true
+
+func _refresh_wild_opponent_owned_icon(species: String, is_shiny: bool, request_id: int) -> void:
+	await PokedexService.get_owned_species_ids(is_shiny)
+	if request_id != wild_owned_request_id or battle_type != BattleType.WILD:
+		return
+	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
+		enemy_hud_panel.set_owned_icon_visible(PokedexService.is_species_owned(species, is_shiny))
 
 func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -> void:
 	var player_species := _get_original_active_player_species(player_pokemon.species)
@@ -5399,6 +5413,9 @@ func _clear_pvp_party_hud_display_override() -> void:
 
 func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_pokemon: Pokemon) -> void:
 	battle_type = type
+	wild_owned_request_id += 1
+	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
+		enemy_hud_panel.set_owned_icon_visible(false)
 	if action_buttons.has_method("set_action_visible"):
 		action_buttons.set_action_visible("bag", battle_type == BattleType.WILD)
 	if action_buttons.has_method("set_action_label"):

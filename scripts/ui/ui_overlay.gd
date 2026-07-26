@@ -101,6 +101,7 @@ const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg"
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
 const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")
+const POKEDEX_OWNED_ICON: Texture2D = preload("res://assets/items/icons/POKEBALL.png")
 const DEV_CREATE_POKEMON_ICON: Texture2D = preload("res://assets/ui/pokedex.svg")
 const DEV_SPAWN_ENCOUNTER_ICON: Texture2D = preload("res://assets/ui/wild_encounter_radar.svg")
 const DEV_ADD_RESOURCES_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
@@ -196,6 +197,9 @@ const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEDEX_ACCENT := Color("#ef5a68")
 const POKEDEX_ACCENT_SOFT := Color("#ef5a68aa")
 const POKEDEX_ACCENT_FAINT := Color("#ef5a6855")
+const POKEDEX_SHINY_ACCENT := Color("#f3cc68")
+const POKEDEX_SHINY_ACCENT_SOFT := Color("#f3cc68aa")
+const POKEDEX_SHINY_ACCENT_FAINT := Color("#f3cc6844")
 const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
@@ -1069,10 +1073,13 @@ var item_dex_selected_item_id := ""
 var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
+var pokedex_dex_selector: OptionButton
+var pokedex_variant_buttons: Dictionary = {}
 var pokedex_search_input: LineEdit
 var pokedex_results_list: VBoxContainer
 var pokedex_results_count_label: Label
 var pokedex_name_label: Label
+var pokedex_owned_icon: TextureRect
 var pokedex_meta_label: Label
 var pokedex_type_row: HBoxContainer
 var pokedex_sprite: TextureRect
@@ -1088,8 +1095,11 @@ var pokedex_tab_buttons: Dictionary = {}
 var pokedex_selected_species: Dictionary = {}
 var pokedex_selected_species_id := ""
 var pokedex_active_tab := "general"
+var pokedex_active_dex := "national"
+var pokedex_shiny_mode := false
 var pokedex_move_search_text := ""
 var pokedex_search_request_id := 0
+var pokedex_detail_request_id := 0
 var pokedex_search_debounce_timer: Timer
 var pokedex_species_list_icon_cache: Dictionary = {}
 var pokedex_dragging := false
@@ -7400,7 +7410,53 @@ func _setup_pokedex_popup() -> void:
 	pokedex_results_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pokedex_results_count_label.add_theme_font_size_override("font_size", 10)
 	pokedex_results_count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pokedex_results_count_label.tooltip_text = "Unique species registered to your Trainer ID"
 	browser_header.add_child(pokedex_results_count_label)
+
+	var dex_selector_row := HBoxContainer.new()
+	dex_selector_row.add_theme_constant_override("separation", 8)
+	browser_stack.add_child(dex_selector_row)
+
+	var dex_selector_label := Label.new()
+	dex_selector_label.text = "DEX"
+	dex_selector_label.custom_minimum_size = Vector2(38, 0)
+	dex_selector_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	dex_selector_label.add_theme_font_size_override("font_size", 10)
+	dex_selector_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	dex_selector_row.add_child(dex_selector_label)
+
+	pokedex_dex_selector = OptionButton.new()
+	pokedex_dex_selector.name = "PokedexDexSelector"
+	pokedex_dex_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokedex_dex_selector.custom_minimum_size = Vector2(0, 36)
+	pokedex_dex_selector.focus_mode = Control.FOCUS_NONE
+	pokedex_dex_selector.add_item("National Dex")
+	pokedex_dex_selector.set_item_metadata(0, "national")
+	pokedex_dex_selector.add_item("Kanto Dex")
+	pokedex_dex_selector.set_item_metadata(1, "kanto")
+	pokedex_dex_selector.item_selected.connect(_on_pokedex_dex_selected)
+	_apply_pokedex_dex_selector_style(pokedex_dex_selector)
+	dex_selector_row.add_child(pokedex_dex_selector)
+
+	var variant_selector_row := HBoxContainer.new()
+	variant_selector_row.add_theme_constant_override("separation", 8)
+	browser_stack.add_child(variant_selector_row)
+
+	var variant_selector_label := Label.new()
+	variant_selector_label.text = "VIEW"
+	variant_selector_label.custom_minimum_size = Vector2(38, 0)
+	variant_selector_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	variant_selector_label.add_theme_font_size_override("font_size", 10)
+	variant_selector_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
+	variant_selector_row.add_child(variant_selector_label)
+
+	var variant_button_row := HBoxContainer.new()
+	variant_button_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	variant_button_row.add_theme_constant_override("separation", 5)
+	variant_selector_row.add_child(variant_button_row)
+	variant_button_row.add_child(_create_pokedex_variant_button("normal", "Normal"))
+	variant_button_row.add_child(_create_pokedex_variant_button("shiny", "✦ Shiny"))
+	_refresh_pokedex_variant_buttons()
 
 	pokedex_search_input = LineEdit.new()
 	pokedex_search_input.placeholder_text = "Search by name or number..."
@@ -7477,12 +7533,21 @@ func _setup_pokedex_popup() -> void:
 	record_label.add_theme_color_override("font_color", POKEDEX_ACCENT)
 	title_stack.add_child(record_label)
 
+	var pokedex_name_row := HBoxContainer.new()
+	pokedex_name_row.add_theme_constant_override("separation", 7)
+	title_stack.add_child(pokedex_name_row)
+
+	pokedex_owned_icon = _create_owned_pokeball_icon(Vector2(22, 22))
+	pokedex_owned_icon.visible = false
+	pokedex_name_row.add_child(pokedex_owned_icon)
+
 	pokedex_name_label = Label.new()
 	pokedex_name_label.text = "Select a species"
+	pokedex_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokedex_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pokedex_name_label.add_theme_font_size_override("font_size", 25)
 	pokedex_name_label.add_theme_color_override("font_color", UI_TEXT)
-	title_stack.add_child(pokedex_name_label)
+	pokedex_name_row.add_child(pokedex_name_label)
 
 	pokedex_meta_label = Label.new()
 	pokedex_meta_label.text = "No species selected."
@@ -7603,6 +7668,95 @@ func _setup_pokedex_popup() -> void:
 	_apply_line_edit_style(pokedex_search_input)
 	_refresh_pokedex_header_stats({})
 	_refresh_pokedex_detail()
+
+func _apply_pokedex_dex_selector_style(selector: OptionButton) -> void:
+	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 7, 1)
+	normal.content_margin_left = 10
+	normal.content_margin_right = 24
+	var hover := _make_button_style(UI_SURFACE_HOVER, POKEDEX_ACCENT_SOFT, 7, 1)
+	hover.content_margin_left = 10
+	hover.content_margin_right = 24
+	var pressed := _make_button_style(UI_SURFACE_PRESSED, POKEDEX_ACCENT, 7, 1)
+	pressed.content_margin_left = 10
+	pressed.content_margin_right = 24
+	selector.add_theme_stylebox_override("normal", normal)
+	selector.add_theme_stylebox_override("hover", hover)
+	selector.add_theme_stylebox_override("pressed", pressed)
+	selector.add_theme_stylebox_override("focus", hover)
+	selector.add_theme_color_override("font_color", UI_TEXT)
+	selector.add_theme_color_override("font_hover_color", UI_TEXT)
+	selector.add_theme_color_override("font_pressed_color", UI_TEXT)
+	selector.add_theme_font_size_override("font_size", 12)
+
+	var popup := selector.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_stylebox_override(
+		"panel",
+		_make_pokedex_dex_popup_panel_style()
+	)
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_panel_style(Color("#351725f2"), POKEDEX_ACCENT_SOFT, 6, 1)
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_make_panel_style(Color("#00000000"), Color("#7f465466"), 0, 0)
+	)
+	popup.add_theme_color_override("font_color", UI_TEXT)
+	popup.add_theme_color_override("font_hover_color", Color("#fff3f6"))
+	popup.add_theme_color_override("font_disabled_color", UI_MUTED_TEXT)
+	popup.add_theme_color_override("font_separator_color", POKEDEX_ACCENT)
+	popup.add_theme_color_override("font_outline_color", Color("#08030a"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_font_size_override("font_size", 12)
+
+func _make_pokedex_dex_popup_panel_style() -> StyleBoxFlat:
+	var style := _make_panel_style(Color("#130b14fa"), POKEDEX_ACCENT_SOFT, 8, 1)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 5)
+	return style
+
+func _create_pokedex_variant_button(variant_id: String, label_text: String) -> Button:
+	var button := Button.new()
+	button.name = "PokedexVariant_%s" % variant_id
+	button.text = label_text
+	button.custom_minimum_size = Vector2(0, 32)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.pressed.connect(_on_pokedex_variant_selected.bind(variant_id))
+	pokedex_variant_buttons[variant_id] = button
+	return button
+
+func _refresh_pokedex_variant_buttons() -> void:
+	for variant_id_value: Variant in pokedex_variant_buttons.keys():
+		var variant_id := str(variant_id_value)
+		var button := pokedex_variant_buttons.get(variant_id) as Button
+		if button == null:
+			continue
+		var selected := (variant_id == "shiny") == pokedex_shiny_mode
+		var accent := POKEDEX_SHINY_ACCENT if variant_id == "shiny" else POKEDEX_ACCENT
+		var accent_soft := POKEDEX_SHINY_ACCENT_SOFT if variant_id == "shiny" else POKEDEX_ACCENT_SOFT
+		var accent_faint := POKEDEX_SHINY_ACCENT_FAINT if variant_id == "shiny" else POKEDEX_ACCENT_FAINT
+		var normal_background := Color("#292214ec") if selected and variant_id == "shiny" else UI_SURFACE_INTERACTIVE
+		var normal_border := accent_soft if selected else UI_BORDER_SUBTLE
+		button.add_theme_stylebox_override("normal", _make_button_style(normal_background, normal_border, 7, 1))
+		button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, accent_faint, 7, 1))
+		button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, accent, 7, 1))
+		button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, accent_soft, 7, 1))
+		button.add_theme_color_override("font_color", accent if selected else UI_MUTED_TEXT)
+		button.add_theme_color_override("font_hover_color", UI_TEXT)
+		button.add_theme_color_override("font_pressed_color", UI_TEXT)
+		button.add_theme_font_size_override("font_size", 11)
 
 func _position_pokedex_popup() -> void:
 	if pokedex_popup == null:
@@ -7792,6 +7946,9 @@ func _on_wild_pokemon_button_pressed() -> void:
 		_set_wild_pokemon_message("Could not load wild Pokémon.", UI_DANGER)
 		return
 
+	await PokedexService.get_owned_species_ids(false)
+	if request_id != wild_pokemon_request_id or not wild_pokemon_popup.visible:
+		return
 	_render_wild_pokemon_metadata(response.get("metadata", {}) as Dictionary)
 
 func _hide_wild_pokemon_popup() -> void:
@@ -7889,6 +8046,9 @@ func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	if icon.texture == null:
 		icon.texture = PokemonAssets.load_unknown_icon()
 	row.add_child(icon)
+
+	if PokedexService.is_species_owned(species, false):
+		row.add_child(_create_owned_pokeball_icon(Vector2(18, 18)))
 
 	var name_label := Label.new()
 	name_label.text = _format_identifier_display_name(species)
@@ -22616,6 +22776,35 @@ func _on_pokedex_search_changed(_text: String) -> void:
 		return
 	pokedex_search_debounce_timer.start()
 
+func _on_pokedex_dex_selected(index: int) -> void:
+	if pokedex_dex_selector == null or index < 0 or index >= pokedex_dex_selector.item_count:
+		return
+	var selected_dex := str(pokedex_dex_selector.get_item_metadata(index)).strip_edges().to_lower()
+	if selected_dex != "kanto":
+		selected_dex = "national"
+	if selected_dex == pokedex_active_dex:
+		return
+
+	pokedex_active_dex = selected_dex
+	pokedex_detail_request_id += 1
+	pokedex_selected_species = {}
+	pokedex_selected_species_id = ""
+	_set_pokedex_header_from_species({})
+	_refresh_pokedex_detail()
+	await _refresh_pokedex_results()
+
+func _on_pokedex_variant_selected(variant_id: String) -> void:
+	var use_shiny := variant_id == "shiny"
+	if use_shiny == pokedex_shiny_mode:
+		return
+	pokedex_shiny_mode = use_shiny
+	_refresh_pokedex_variant_buttons()
+	if not pokedex_selected_species.is_empty():
+		_set_pokedex_header_from_species(pokedex_selected_species)
+	await _refresh_pokedex_results()
+	if not pokedex_selected_species.is_empty():
+		_set_pokedex_header_from_species(pokedex_selected_species)
+
 func _refresh_pokedex_results() -> void:
 	if pokedex_results_list == null:
 		return
@@ -22638,7 +22827,13 @@ func _refresh_pokedex_results() -> void:
 
 	pokedex_search_request_id += 1
 	var request_id := pokedex_search_request_id
-	var search_result: Dictionary = await PokedexService.search_species(query, 80)
+	var result_limit := 200 if pokedex_active_dex == "kanto" else 80
+	var search_result: Dictionary = await PokedexService.search_species(
+		query,
+		result_limit,
+		pokedex_active_dex,
+		pokedex_shiny_mode
+	)
 	if request_id != pokedex_search_request_id:
 		return
 
@@ -22681,7 +22876,13 @@ func _refresh_pokedex_results() -> void:
 	elif pokedex_selected_species_id == "" and pokedex_selected_species.is_empty() and first_species_id != "":
 		await _on_pokedex_species_selected(first_species_id)
 	if pokedex_results_count_label != null:
-		pokedex_results_count_label.text = "%d %s" % [count, "result" if count == 1 else "results"]
+		var owned_total := int(search_result.get("ownedTotal", 0))
+		var dex_total := int(search_result.get("dexTotal", count))
+		pokedex_results_count_label.text = "OWNED %d / %d" % [owned_total, dex_total]
+		pokedex_results_count_label.add_theme_color_override(
+			"font_color",
+			POKEDEX_SHINY_ACCENT if pokedex_shiny_mode else POKEDEX_ACCENT
+		)
 
 func _create_pokedex_species_button(species: Dictionary) -> Control:
 	var species_id := str(species.get("id", "")).strip_edges()
@@ -22720,6 +22921,7 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	row.add_child(accent)
 
 	var icon := TextureRect.new()
+	icon.name = "SpeciesIcon"
 	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -22737,6 +22939,9 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 6)
 	label_stack.add_child(title_row)
+
+	if bool(species.get("owned", false)):
+		title_row.add_child(_create_owned_pokeball_icon(Vector2(16, 16)))
 
 	var name_label := Label.new()
 	name_label.name = "Name"
@@ -22764,6 +22969,18 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	label_stack.add_child(meta_label)
 	_style_pokedex_species_button(button, species_id == pokedex_selected_species_id)
 	return button
+
+func _create_owned_pokeball_icon(icon_size: Vector2) -> TextureRect:
+	var owned_icon := TextureRect.new()
+	owned_icon.name = "OwnedPokeballIcon"
+	owned_icon.custom_minimum_size = icon_size
+	owned_icon.texture = POKEDEX_OWNED_ICON
+	owned_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	owned_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	owned_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	owned_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	owned_icon.tooltip_text = "Registered to your Trainer ID"
+	return owned_icon
 
 func _style_pokedex_species_button(button: Button, selected: bool) -> void:
 	if button == null:
@@ -22795,8 +23012,12 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 	if normalized_species_id == "":
 		return
 
+	pokedex_detail_request_id += 1
+	var detail_request_id := pokedex_detail_request_id
 	_set_pokedex_detail_message("Loading species...")
 	var detail_result: Dictionary = await PokedexService.get_species_detail(normalized_species_id)
+	if detail_request_id != pokedex_detail_request_id:
+		return
 	if not bool(detail_result.get("success", false)):
 		pokedex_selected_species = {}
 		_set_pokedex_header_from_species({})
@@ -22860,6 +23081,8 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 
 	if species.is_empty():
 		pokedex_name_label.text = "Select a species"
+		if pokedex_owned_icon != null:
+			pokedex_owned_icon.visible = false
 		pokedex_meta_label.text = "No species selected."
 		_clear_pokedex_species_sprite()
 		_refresh_pokedex_type_row([])
@@ -22874,8 +23097,15 @@ func _set_pokedex_header_from_species(species: Dictionary) -> void:
 		meta_parts.append("#%03d" % national_number)
 	if rarity != "":
 		meta_parts.append(_format_identifier_display_name(rarity))
+	if pokedex_shiny_mode:
+		meta_parts.append("✦ Shiny")
 
 	pokedex_name_label.text = species_name
+	if pokedex_owned_icon != null:
+		pokedex_owned_icon.visible = PokedexService.is_species_owned(
+			str(species.get("id", species_name)),
+			pokedex_shiny_mode
+		)
 	pokedex_meta_label.text = " / ".join(meta_parts) if not meta_parts.is_empty() else "Species data"
 	_set_pokedex_species_sprite(species)
 	_refresh_pokedex_type_row(_array_from_variant(species.get("types", [])))
@@ -22915,7 +23145,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 			"_load_sprite_frames",
 			candidate,
 			_get_pokedex_sprite_side(),
-			false
+			pokedex_shiny_mode
 		)
 		loaded_frames = frames_value as SpriteFrames
 		if loaded_frames != null:
@@ -23061,23 +23291,24 @@ func _load_pokedex_species_texture(species: Dictionary) -> Texture2D:
 	for candidate: String in [species_name, species_id, showdown_id]:
 		if candidate == "":
 			continue
-		var texture := PokemonAssets.load_home_sprite(candidate, false)
+		var texture := PokemonAssets.load_home_sprite(candidate, pokedex_shiny_mode)
 		if texture != null:
 			return texture
-		texture = PokemonAssets.load_party_icon(candidate, false)
+		texture = PokemonAssets.load_party_icon(candidate, pokedex_shiny_mode)
 		if texture != null:
 			return texture
 	return PokemonAssets.load_unknown_icon()
 
 func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
-	var cache_key := str(species.get("id", species.get("showdownId", species.get("name", "")))).strip_edges()
+	var species_cache_key := str(species.get("id", species.get("showdownId", species.get("name", "")))).strip_edges()
+	var cache_key := "%s|%s" % ["shiny" if pokedex_shiny_mode else "normal", species_cache_key]
 	if cache_key != "" and pokedex_species_list_icon_cache.has(cache_key):
 		return pokedex_species_list_icon_cache[cache_key] as Texture2D
 
 	var texture: Texture2D = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
-		if PokemonAssets.load_home_sprite(candidate, false) != null:
-			texture = PokemonAssets.load_party_icon(candidate, false)
+		if PokemonAssets.load_home_sprite(candidate, pokedex_shiny_mode) != null:
+			texture = PokemonAssets.load_party_icon(candidate, pokedex_shiny_mode)
 			break
 
 	if texture == null:
@@ -23094,7 +23325,12 @@ func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
 
 func _load_first_pokedex_sprite_frame(species: Dictionary) -> Texture2D:
 	for candidate: String in _pokedex_species_sprite_candidates(species):
-		var frames_value: Variant = pokedex_sprite_loader.call("_load_sprite_frames", candidate, "front", false)
+		var frames_value: Variant = pokedex_sprite_loader.call(
+			"_load_sprite_frames",
+			candidate,
+			"front",
+			pokedex_shiny_mode
+		)
 		var frames := frames_value as SpriteFrames
 		if frames == null:
 			continue

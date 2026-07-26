@@ -52,6 +52,14 @@ func clear_active_pokemon_data() -> void:
 	_clear_active_info_row_data(0)
 	_set_active_info_row_visible(0, false)
 
+func set_owned_icon_visible(is_owned: bool) -> void:
+	for row: Node in active_info_rows:
+		var owned_icon := row.get_node_or_null(
+			"MarginContainer/VBoxContainer/TopRow/NameContainer/OwnedIcon"
+		) as TextureRect
+		if owned_icon != null:
+			owned_icon.visible = is_owned
+
 
 func _clear_active_info_row_data(row_index: int) -> void:
 	if row_index < 0 or row_index >= active_info_rows.size():
@@ -61,6 +69,12 @@ func _clear_active_info_row_data(row_index: int) -> void:
 	var name_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/NameLabel") as Label
 	if name_label != null:
 		name_label.text = ""
+
+	var owned_icon := row.get_node_or_null(
+		"MarginContainer/VBoxContainer/TopRow/NameContainer/OwnedIcon"
+	) as TextureRect
+	if owned_icon != null:
+		owned_icon.visible = false
 
 	_set_shiny_badge(row, false)
 	_set_gender(row, "")
