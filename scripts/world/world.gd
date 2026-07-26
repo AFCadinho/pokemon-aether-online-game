@@ -2251,8 +2251,37 @@ func _award_trainer_battle_rewards(battle_id: String, trainer_name: String) -> v
 		_notify_reward_experience_gains(reward)
 		_notify_reward_effort_gains(reward)
 		_notify_reward_level_ups(reward)
+		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
+
+func _notify_gym_badge_award(value: Variant) -> void:
+	if not (value is Dictionary):
+		return
+	var award: Dictionary = value as Dictionary
+	if bool(award.get("awarded", false)):
+		var badge_name := str(award.get("name", "Gym Badge")).strip_edges()
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			"You earned the %s!" % badge_name
+		)
+		return
+	if bool(award.get("eligible", true)):
+		return
+	var missing_names: Array[String] = []
+	var missing_value: Variant = award.get("missingBadgeIds", [])
+	if missing_value is Array:
+		for missing_id: Variant in missing_value:
+			missing_names.append("%s Badge" % str(missing_id).capitalize())
+	var requirement_text := ", ".join(missing_names)
+	if requirement_text == "":
+		requirement_text = "the preceding Gym Badge"
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		"No Gym Badge was awarded. First earn %s." % requirement_text
+	)
 
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
 	if money_awarded <= 0:

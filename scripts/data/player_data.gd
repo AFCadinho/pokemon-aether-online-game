@@ -5,6 +5,7 @@ class_name PlayerData # PlayerSave Autoload
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 
 signal party_changed
+signal gym_badges_changed
 
 var player_name := "Player"
 var player_id := ""
@@ -33,6 +34,7 @@ var appearance_bottom_color: String = "#ffffff"
 var appearance_shoes_color: String = "#ffffff"
 var appearance_hair_style_index := 0
 var flags := {}
+var earned_gym_badges: Array[String] = []
 
 func reset_gameplay_progress() -> void:
 	var join_date: Variant = flags.get("join_date", null)
@@ -42,6 +44,7 @@ func reset_gameplay_progress() -> void:
 	battle_points = 0
 	playtime_seconds = 0
 	flags = {}
+	earned_gym_badges.clear()
 	if join_date != null:
 		flags["join_date"] = join_date
 
@@ -67,6 +70,40 @@ func reset_gameplay_progress() -> void:
 	appearance_hair_style_index = 0
 	ensure_body_matches_gender(true)
 	party_changed.emit()
+	gym_badges_changed.emit()
+
+
+func apply_gym_badge_state(state: Dictionary) -> void:
+	var badge_keys: Array[String] = []
+	var badge_values: Variant = state.get("badges", [])
+	if badge_values is Array:
+		for badge_value: Variant in badge_values:
+			if not (badge_value is Dictionary):
+				continue
+			var badge: Dictionary = badge_value as Dictionary
+			if not bool(badge.get("earned", false)):
+				continue
+			var region := str(badge.get("region", "")).strip_edges().to_lower()
+			var badge_id := str(badge.get("badgeId", badge.get("id", ""))).strip_edges().to_lower()
+			if region == "" or badge_id == "":
+				continue
+			var badge_key := "%s:%s" % [region, badge_id]
+			if badge_key not in badge_keys:
+				badge_keys.append(badge_key)
+	earned_gym_badges = badge_keys
+	gym_badges_changed.emit()
+
+
+func has_gym_badge(region: String, badge_id: String) -> bool:
+	var badge_key := "%s:%s" % [
+		region.strip_edges().to_lower(),
+		badge_id.strip_edges().to_lower(),
+	]
+	return badge_key in earned_gym_badges
+
+
+func gym_badge_count() -> int:
+	return earned_gym_badges.size()
 
 
 func to_battle_dict() -> Dictionary:

@@ -113,6 +113,7 @@ const TRAINER_WALLET_AETHERITE_ICON: Texture2D = preload("res://assets/ui/aether
 const TRAINER_WALLET_BATTLE_POINTS_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
+const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/kanto_badges/Boulder_Badge.png")
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
@@ -129,6 +130,8 @@ const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
 	{"id": "all_time", "label": "All Time"},
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
+const GUILD_POPUP_SCENE: PackedScene = preload("res://scenes/interface/guild_popup.tscn")
+const DEV_BADGE_PROGRESS_POPUP_SCENE: PackedScene = preload("res://scenes/interface/dev_badge_progress_popup.tscn")
 const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
@@ -475,6 +478,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
+var guild_popup: GuildPopup
 var player_interaction_coordinator: PlayerInteractionCoordinator
 @onready var mail_popup: PanelContainer = $Control/MailPopup
 @onready var mail_compose_button: Button = $Control/MailPopup/MarginContainer/VBoxContainer/HeaderRow/ComposeButton
@@ -1053,6 +1057,8 @@ var dev_gems_confirm_button: Button
 var dev_aetherite_confirm_button: Button
 var dev_battle_points_confirm_button: Button
 var dev_heal_party_button: Button
+var dev_badge_progress_button: Button
+var dev_badge_progress_popup: DevBadgeProgressPopup
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
 var dev_item_search_request_id := 0
@@ -1300,6 +1306,7 @@ func _ready() -> void:
 	dev_add_button.pressed.connect(_on_dev_add_button_pressed)
 	dev_preview_evolution_button.pressed.connect(_on_dev_preview_evolution_button_pressed)
 	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
+	dev_badge_progress_button.pressed.connect(_on_dev_badge_progress_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
@@ -1447,6 +1454,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if dev_heal_party_button != null:
 		dev_heal_party_button.visible = can_use_dev_tools
 		dev_heal_party_button.disabled = not can_use_dev_tools
+	if dev_badge_progress_button != null:
+		dev_badge_progress_button.visible = can_use_dev_tools
+		dev_badge_progress_button.disabled = not can_use_dev_tools
 	dev_clear_party_button.visible = can_use_dev_tools
 	dev_clear_party_button.disabled = not can_use_dev_tools
 	dev_pokemon_add_button.disabled = not can_use_dev_tools
@@ -1482,6 +1492,8 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_add_money_popup.visible = false
 		if dev_clear_menu_popup != null:
 			dev_clear_menu_popup.visible = false
+		if dev_badge_progress_popup != null:
+			dev_badge_progress_popup.close()
 	if not can_open_content_creator_menu and content_creator_menu_popup != null:
 		content_creator_menu_popup.visible = false
 	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
@@ -2386,6 +2398,7 @@ func _apply_ui_z_index_policy() -> void:
 		pokemon_summary_popup,
 		trainer_card_popup,
 		dev_actions_popup,
+		dev_badge_progress_popup,
 		dev_pokemon_popup,
 		dev_clear_menu_popup,
 		pvp_mode_menu,
@@ -2401,6 +2414,7 @@ func _apply_ui_z_index_policy() -> void:
 		pokedex_popup,
 		wild_pokemon_popup,
 		settings_menu,
+		guild_popup,
 	]
 	for context_value: Variant in pokemon_summary_open_cards.values():
 		var context: Dictionary = context_value as Dictionary
@@ -2445,6 +2459,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		bag_popup,
 		trainer_card_popup,
 		dev_actions_popup,
+		dev_badge_progress_popup,
 		dev_pokemon_popup,
 		dev_clear_menu_popup,
 		pvp_room_popup,
@@ -2463,6 +2478,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 		mail_popup,
 		mail_compose_popup,
 		pc_popup,
+		guild_popup,
 	]
 	for panel: Control in panels:
 		if panel != null and panel.visible:
@@ -5650,6 +5666,14 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_preview_evolution_button)
 		dev_actions_container.move_child(dev_preview_evolution_button, dev_clear_party_button.get_index())
 
+	dev_badge_progress_button = Button.new()
+	dev_badge_progress_button.text = "Trainer Progress"
+	dev_badge_progress_button.custom_minimum_size = Vector2(190, 34)
+	dev_badge_progress_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_badge_progress_button)
+		dev_actions_container.move_child(dev_badge_progress_button, dev_clear_party_button.get_index())
+
 	dev_add_menu_popup = PanelContainer.new()
 	dev_add_menu_popup.name = "DevAddMenuPopup"
 	dev_add_menu_popup.visible = false
@@ -6028,6 +6052,7 @@ func _setup_dev_tools_menu_surface() -> void:
 		dev_add_button,
 		dev_heal_party_button,
 		dev_preview_evolution_button,
+		dev_badge_progress_button,
 		dev_clear_party_button,
 	]:
 		_move_tool_menu_control(action_button, action_grid)
@@ -6066,6 +6091,13 @@ func _setup_dev_tools_menu_surface() -> void:
 		"Play the evolution flow",
 		DEV_PREVIEW_EVOLUTION_ICON,
 		Color("#b28ae8")
+	)
+	_configure_tool_tile_button(
+		dev_badge_progress_button,
+		"Trainer Progress",
+		"Manage server Gym Badges",
+		DEV_TRAINER_PROGRESS_ICON,
+		Color("#e3bd68")
 	)
 	_configure_tool_tile_button(
 		dev_clear_party_button,
@@ -8317,6 +8349,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		bag_popup,
 		trainer_card_popup,
 		dev_actions_popup,
+		dev_badge_progress_popup,
 		dev_pokemon_popup,
 		dev_clear_menu_popup,
 		pvp_room_popup,
@@ -10515,8 +10548,14 @@ func _create_trainer_card_badge_slot(badge: Dictionary) -> Control:
 	var texture_path: String = str(badge.get("texture", ""))
 	if ResourceLoader.exists(texture_path):
 		texture_rect.texture = load(texture_path) as Texture2D
-	if not bool(badge.get("unlocked", false)):
-		texture_rect.modulate = Color("#ffffffbf")
+	var region := str(badge.get("region", "kanto"))
+	var badge_id := str(badge.get("id", ""))
+	var unlocked := PlayerSave.has_gym_badge(region, badge_id)
+	if not unlocked:
+		texture_rect.modulate = Color("#6873839a")
+		slot.tooltip_text = "%s · Locked" % str(badge.get("name", "Badge"))
+	else:
+		slot.tooltip_text = "%s · Earned" % str(badge.get("name", "Badge"))
 	center.add_child(texture_rect)
 	return slot
 
@@ -19262,6 +19301,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
+		{"panel": dev_badge_progress_popup, "close": Callable(self, "_hide_dev_badge_progress_popup_for_escape")},
 		{"panel": dev_actions_popup, "close": Callable(self, "_hide_dev_actions_popup_for_escape")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
 		{"panel": public_trainer_card_popup, "close": Callable(self, "_hide_public_trainer_card")},
@@ -19318,6 +19358,10 @@ func _hide_dev_actions_popup_for_escape() -> void:
 	if dev_actions_popup != null:
 		dev_actions_popup.visible = false
 		_deactivate_ui_panel(dev_actions_popup)
+
+func _hide_dev_badge_progress_popup_for_escape() -> void:
+	if dev_badge_progress_popup != null:
+		dev_badge_progress_popup.close()
 
 func _hide_dev_pokemon_popup_for_escape() -> void:
 	_on_dev_pokemon_close_button_pressed()
@@ -21622,6 +21666,23 @@ func _on_dev_actions_button_pressed() -> void:
 	else:
 		_deactivate_ui_panel(dev_actions_popup)
 
+func _on_dev_badge_progress_button_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+	if dev_badge_progress_popup == null:
+		dev_badge_progress_popup = DEV_BADGE_PROGRESS_POPUP_SCENE.instantiate() as DevBadgeProgressPopup
+		$Control.add_child(dev_badge_progress_popup)
+		if not dev_badge_progress_popup.closed.is_connected(_on_dev_badge_progress_popup_closed):
+			dev_badge_progress_popup.closed.connect(_on_dev_badge_progress_popup_closed)
+	dev_actions_popup.visible = false
+	_deactivate_ui_panel(dev_actions_popup)
+	dev_badge_progress_popup.open()
+	_activate_ui_panel(dev_badge_progress_popup)
+
+func _on_dev_badge_progress_popup_closed() -> void:
+	if dev_badge_progress_popup != null:
+		_deactivate_ui_panel(dev_badge_progress_popup)
+
 func _on_staff_tools_button_pressed() -> void:
 	if not (_can_impersonate_accounts() or _can_teleport_self() or _can_teleport_to_player() or _can_teleport_other_player()):
 		return
@@ -22498,6 +22559,7 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	var wallet: Dictionary = _staff_dictionary_from_variant(profile_response.get("wallet", {}))
 	var stats_response: Dictionary = _staff_dictionary_from_variant(profile_response.get("stats", {}))
 	var stats: Dictionary = _staff_dictionary_from_variant(stats_response.get("stats", {}))
+	var badges: Dictionary = _staff_dictionary_from_variant(profile_response.get("badges", {}))
 
 	PlayerSave.player_name = str(user.get("displayName", user.get("username", PlayerSave.player_name)))
 	PlayerSave.gender = CharacterAppearanceService.normalize_gender(str(user.get("gender", PlayerSave.gender)))
@@ -22507,6 +22569,7 @@ func _apply_impersonated_profile(profile_response: Dictionary) -> void:
 	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
 	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
 	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
+	PlayerSave.apply_gym_badge_state(badges)
 	_apply_impersonated_saved_world_state(position_response)
 
 	if bool(party_response.get("hasParty", false)):
@@ -28246,7 +28309,25 @@ func _clear_children(container: Node) -> void:
 		child.queue_free()
 
 func _on_guild_button_pressed() -> void:
-	_add_chat_message("Guild is not implemented yet.")
+	if guild_popup != null and guild_popup.visible:
+		guild_popup.close()
+		return
+	_open_guild_popup()
+
+func _open_guild_popup() -> void:
+	if guild_popup == null:
+		guild_popup = GUILD_POPUP_SCENE.instantiate() as GuildPopup
+		$Control.add_child(guild_popup)
+		if not guild_popup.closed.is_connected(_on_guild_popup_closed):
+			guild_popup.closed.connect(_on_guild_popup_closed)
+		if OS.is_debug_build():
+			guild_popup.show_debug_preview()
+	guild_popup.open()
+	_activate_ui_panel(guild_popup)
+
+func _on_guild_popup_closed() -> void:
+	if guild_popup != null:
+		_deactivate_ui_panel(guild_popup)
 
 func _on_aether_exchange_button_pressed() -> void:
 	_add_chat_message("Aether Exchange is not implemented yet.")

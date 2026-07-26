@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/guild_popup.gd" id="1_guild_popup"]
+
+[node name="GuildPopup" type="PanelContainer"]
+visible = false
+offset_right = 1040.0
+offset_bottom = 700.0
+script = ExtResource("1_guild_popup")

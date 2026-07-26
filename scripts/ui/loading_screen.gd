@@ -219,6 +219,7 @@ func _apply_profile_response(profile_response: Dictionary) -> void:
 	var stats_response: Dictionary = _dictionary_from_value(profile_response.get("stats", {}))
 	var stats: Dictionary = _dictionary_from_value(stats_response.get("stats", {}))
 	PlayerSave.playtime_seconds = max(int(stats.get("playtimeSeconds", PlayerSave.playtime_seconds)), 0)
+	PlayerSave.apply_gym_badge_state(_dictionary_from_value(profile_response.get("badges", {})))
 
 
 func _load_legacy_world_state() -> void:

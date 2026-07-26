@@ -36,6 +36,7 @@ func load_player_profile() -> Dictionary:
 	var preferences: Dictionary = _dictionary_from_value(body.get("preferences", {}))
 	var wallet: Dictionary = _dictionary_from_value(body.get("wallet", {}))
 	var stats: Dictionary = _dictionary_from_value(body.get("stats", {}))
+	var badges: Dictionary = _dictionary_from_value(body.get("badges", {}))
 	return {
 		"success": true,
 		"user": _dictionary_from_value(body.get("user", {})),
@@ -52,6 +53,7 @@ func load_player_profile() -> Dictionary:
 		"stats": {
 			"stats": _dictionary_from_value(stats.get("stats", {})),
 		},
+		"badges": badges,
 	}
 
 

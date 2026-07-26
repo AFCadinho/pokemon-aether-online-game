@@ -1,0 +1,16 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_007_Black_Belt.png" id="1_texture"]
+
+[sub_resource type="AtlasTexture" id="Atlas"]
+atlas = ExtResource("1_texture")
+region = Rect2(0, 0, 64, 64)
+
+[resource]
+resource_local_to_scene = true
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas")}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
