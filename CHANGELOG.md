@@ -1,5 +1,30 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Added full Z-Move support to battles against other players, Trainers, and wild Pokémon. Every available Z-Move can now be used, including all special Z-Moves tied to specific Pokémon.
+- Added clear icons for Z-Crystals in the Bag and on Pokémon.
+- Added Aetherite and Battle Points to the Wallet alongside Pokédollars and Aether Gems.
+- Added Alpha Tools that let Alpha players create Alpha Pokémon which are ready to use.
+
+**Changed**
+
+- Available Z-Moves now stand out more clearly during battle, while moves that cannot use Z-Power are visibly dimmed.
+- Status Z-Moves now show their proper name and the bonus effect they provide.
+- Ranked matchmaking now clearly shows when the queue is unavailable.
+- Improved the Item Dex, Alpha Tools, Pokémon import, and other tools with clearer layouts and selections.
+- Made many messages and tooltips easier to understand across battles, trading, mail, storage, the Store, and the overworld.
+- Refreshed the post-login loading screen with the current Aether styling, a continuous loading spinner, and visible Trainer, Party, and World preparation stages.
+- Updated the music and visuals on several maps and interface screens.
+
+**Fixed**
+
+- Fixed some Z-Crystals not activating the correct Z-Move depending on how they were equipped.
+- Fixed status Z-Moves showing an incorrect name or missing their bonus effect.
+- Fixed missing HOME party icons for the Jangmo-o line and Ultra Necrozma.
+
 ## 0.3.32 - 2026-07-25
 
 **Added**

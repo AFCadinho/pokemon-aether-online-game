@@ -5,8 +5,17 @@ const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const LOGO_TEXTURE := preload("res://assets/ui/pokeaether_text_logo.png")
 const BACKGROUND_TEXTURE := preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
+const UI_TEXT := Color("#eef4ff")
+const UI_MUTED_TEXT := Color("#8fa3bf")
+const UI_CYAN := Color("#63d7ff")
+const UI_GOLD := Color("#d8b767")
+const UI_SUCCESS := Color("#58dfa2")
 
 var status_label: Label
+var loading_spinner: Control
+var spinner_tween: Tween
+var stage_panels: Array[PanelContainer] = []
+var stage_labels: Array[Label] = []
 
 
 func _ready() -> void:
@@ -23,51 +32,81 @@ func _build_layout() -> void:
 	add_child(background)
 
 	var overlay := ColorRect.new()
-	overlay.color = Color(0.005, 0.011, 0.024, 0.76)
+	overlay.color = Color(0.004, 0.012, 0.027, 0.82)
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(overlay)
+
+	var aura := TextureRect.new()
+	aura.texture = _create_aura_texture()
+	aura.custom_minimum_size = Vector2(760, 520)
+	aura.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	aura.set_anchors_preset(Control.PRESET_CENTER)
+	aura.position = Vector2(-380, -260)
+	add_child(aura)
 
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(520, 300)
+	panel.custom_minimum_size = Vector2(570, 350)
 	panel.add_theme_stylebox_override("panel", _create_panel_style())
 	center.add_child(panel)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 44)
-	margin.add_theme_constant_override("margin_top", 36)
-	margin.add_theme_constant_override("margin_right", 44)
-	margin.add_theme_constant_override("margin_bottom", 36)
+	margin.add_theme_constant_override("margin_left", 38)
+	margin.add_theme_constant_override("margin_top", 28)
+	margin.add_theme_constant_override("margin_right", 38)
+	margin.add_theme_constant_override("margin_bottom", 30)
 	panel.add_child(margin)
 
 	var layout := VBoxContainer.new()
 	layout.alignment = BoxContainer.ALIGNMENT_CENTER
-	layout.add_theme_constant_override("separation", 22)
+	layout.add_theme_constant_override("separation", 14)
 	margin.add_child(layout)
+
+	var session_label := Label.new()
+	session_label.text = "●  SECURE TRAINER SESSION"
+	session_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	session_label.add_theme_font_size_override("font_size", 10)
+	session_label.add_theme_color_override("font_color", UI_SUCCESS)
+	layout.add_child(session_label)
 
 	var logo := TextureRect.new()
 	logo.texture = LOGO_TEXTURE
-	logo.custom_minimum_size = Vector2(340, 110)
+	logo.custom_minimum_size = Vector2(300, 86)
 	logo.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	layout.add_child(logo)
 
 	var title := Label.new()
-	title.text = "Entering PokeAether"
+	title.text = "Preparing your adventure"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 32)
-	title.add_theme_color_override("font_color", Color(0.96, 0.96, 1.0))
+	title.add_theme_font_size_override("font_size", 26)
+	title.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(title)
 
 	status_label = Label.new()
-	status_label.text = "Loading your trainer..."
+	status_label.text = "Loading your trainer profile..."
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	status_label.add_theme_font_size_override("font_size", 16)
-	status_label.add_theme_color_override("font_color", Color(0.76, 0.78, 0.86))
+	status_label.add_theme_font_size_override("font_size", 14)
+	status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(status_label)
+
+	var spinner_center := CenterContainer.new()
+	spinner_center.custom_minimum_size = Vector2(0, 34)
+	layout.add_child(spinner_center)
+	loading_spinner = _create_loading_spinner()
+	spinner_center.add_child(loading_spinner)
+
+	var stages := HBoxContainer.new()
+	stages.alignment = BoxContainer.ALIGNMENT_CENTER
+	stages.add_theme_constant_override("separation", 8)
+	layout.add_child(stages)
+	for stage_text: String in ["TRAINER", "PARTY", "WORLD"]:
+		_add_stage_indicator(stages, stage_text)
+	_refresh_stage_indicators(0)
+	_start_spinner_animation.call_deferred()
 
 
 func _prepare_world() -> void:
@@ -75,7 +114,7 @@ func _prepare_world() -> void:
 		_return_to_login("Your session expired. Please sign in again.")
 		return
 
-	status_label.text = "Loading your trainer profile..."
+	_set_loading_status("Loading your trainer profile...", 0)
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	var saved_state: Dictionary = {}
 	if bool(profile_response.get("success", false)):
@@ -99,7 +138,7 @@ func _prepare_world() -> void:
 		"hasSavedState": not saved_state.is_empty(),
 	})
 
-	status_label.text = "Entering the world..."
+	_set_loading_status("Opening the path to your adventure...", 2)
 	var error: Error = get_tree().change_scene_to_file(WORLD_SCENE_PATH)
 	if error != OK:
 		push_error("LoadingScreen: failed to load world scene: %s" % error_string(error))
@@ -153,7 +192,7 @@ func _apply_profile_response(profile_response: Dictionary) -> void:
 
 
 func _load_legacy_world_state() -> void:
-	status_label.text = "Loading your party..."
+	_set_loading_status("Restoring your Pokémon party...", 1)
 	var party_response: Dictionary = await PlayerPartyStateService.load_party()
 	if not bool(party_response.get("success", false)):
 		push_warning("LoadingScreen: player party load failed: %s" % str(party_response.get("error", "Unknown error")))
@@ -164,7 +203,7 @@ func _load_legacy_world_state() -> void:
 	else:
 		PlayerSave.replace_party_from_state([])
 
-	status_label.text = "Loading your location..."
+	_set_loading_status("Finding your last location...", 2)
 
 
 func _apply_saved_appearance_state(state: Dictionary) -> void:
@@ -178,17 +217,132 @@ func _apply_saved_appearance_state(state: Dictionary) -> void:
 
 func _create_panel_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.008, 0.012, 0.023, 0.94)
+	style.bg_color = Color(0.018, 0.031, 0.057, 0.97)
+	style.border_width_left = 1
+	style.border_width_top = 2
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.31, 0.55, 0.82, 0.9)
+	style.corner_radius_top_left = 18
+	style.corner_radius_top_right = 18
+	style.corner_radius_bottom_right = 18
+	style.corner_radius_bottom_left = 18
+	style.shadow_color = Color(0.18, 0.16, 0.58, 0.42)
+	style.shadow_size = 36
+	style.shadow_offset = Vector2(0, 12)
+	return style
+
+
+func _create_surface_style(background: Color, border: Color, radius: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
 	style.border_width_left = 1
 	style.border_width_top = 1
 	style.border_width_right = 1
 	style.border_width_bottom = 1
-	style.border_color = Color(0.784, 0.608, 0.353, 0.86)
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_right = 10
-	style.corner_radius_bottom_left = 10
-	style.shadow_color = Color(0, 0, 0, 0.46)
-	style.shadow_size = 22
-	style.shadow_offset = Vector2(0, 10)
+	style.border_color = border
+	style.corner_radius_top_left = radius
+	style.corner_radius_top_right = radius
+	style.corner_radius_bottom_right = radius
+	style.corner_radius_bottom_left = radius
 	return style
+
+
+func _create_aura_texture() -> GradientTexture2D:
+	var gradient := Gradient.new()
+	gradient.offsets = PackedFloat32Array([0.0, 0.42, 1.0])
+	gradient.colors = PackedColorArray([
+		Color(0.34, 0.22, 0.85, 0.28),
+		Color(0.08, 0.48, 0.72, 0.12),
+		Color(0.02, 0.08, 0.16, 0.0),
+	])
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.width = 760
+	texture.height = 520
+	texture.fill = GradientTexture2D.FILL_RADIAL
+	texture.fill_from = Vector2(0.5, 0.5)
+	texture.fill_to = Vector2(1.0, 0.5)
+	return texture
+
+
+func _add_stage_indicator(parent: HBoxContainer, stage_text: String) -> void:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(104, 30)
+	parent.add_child(panel)
+	stage_panels.append(panel)
+
+	var label := Label.new()
+	label.text = stage_text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 10)
+	panel.add_child(label)
+	stage_labels.append(label)
+
+
+func _set_loading_status(message: String, active_stage: int) -> void:
+	status_label.text = message
+	_refresh_stage_indicators(active_stage)
+
+
+func _refresh_stage_indicators(active_stage: int) -> void:
+	for index in range(stage_panels.size()):
+		var panel := stage_panels[index]
+		var label := stage_labels[index]
+		var base_text := label.text.trim_prefix("✓ ").trim_prefix("● ").trim_prefix("○ ")
+		if index < active_stage:
+			label.text = "✓ %s" % base_text
+			label.add_theme_color_override("font_color", UI_SUCCESS)
+			panel.add_theme_stylebox_override(
+				"panel",
+				_create_surface_style(Color(0.04, 0.18, 0.16, 0.72), Color(0.21, 0.72, 0.56, 0.5), 8)
+			)
+		elif index == active_stage:
+			label.text = "● %s" % base_text
+			label.add_theme_color_override("font_color", UI_CYAN)
+			panel.add_theme_stylebox_override(
+				"panel",
+				_create_surface_style(Color(0.04, 0.13, 0.23, 0.9), Color(0.39, 0.84, 1.0, 0.75), 8)
+			)
+		else:
+			label.text = "○ %s" % base_text
+			label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+			panel.add_theme_stylebox_override(
+				"panel",
+				_create_surface_style(Color(0.03, 0.06, 0.11, 0.68), Color(0.18, 0.28, 0.4, 0.62), 8)
+			)
+
+
+func _create_loading_spinner() -> Control:
+	var spinner := Control.new()
+	spinner.custom_minimum_size = Vector2(32, 32)
+	spinner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var center := Vector2(16, 16)
+	var segment_count := 10
+	for index in range(segment_count):
+		var angle := TAU * float(index) / float(segment_count)
+		var segment := Line2D.new()
+		segment.width = 3.0
+		segment.begin_cap_mode = Line2D.LINE_CAP_ROUND
+		segment.end_cap_mode = Line2D.LINE_CAP_ROUND
+		segment.points = PackedVector2Array([
+			center + Vector2(0, -9).rotated(angle),
+			center + Vector2(0, -14).rotated(angle),
+		])
+		var emphasis := float(index + 1) / float(segment_count)
+		segment.default_color = UI_CYAN.lerp(UI_GOLD, emphasis * 0.45)
+		segment.default_color.a = lerp(0.16, 1.0, emphasis)
+		spinner.add_child(segment)
+	return spinner
+
+
+func _start_spinner_animation() -> void:
+	if loading_spinner == null:
+		return
+	if spinner_tween != null and spinner_tween.is_valid():
+		spinner_tween.kill()
+	loading_spinner.pivot_offset = loading_spinner.size * 0.5
+	spinner_tween = create_tween()
+	spinner_tween.set_loops()
+	spinner_tween.tween_property(loading_spinner, "rotation", TAU, 0.85).from(0.0).set_trans(Tween.TRANS_LINEAR)

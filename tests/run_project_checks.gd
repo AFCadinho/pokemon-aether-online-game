@@ -56,6 +56,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/route_2_viridian_forest_gate_transition_check.gd",
 	"res://tests/wild_pokemon_map_popup_check.gd",
 	"res://tests/location_status_card_check.gd",
+	"res://tests/loading_screen_layout_check.gd",
 	"res://tests/launcher_self_update_check.gd",
 	"res://tests/credits_access_check.gd",
 	"res://tests/world_time_service_check.gd",
