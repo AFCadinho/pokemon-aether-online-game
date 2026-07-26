@@ -1,0 +1,44 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="alphaBody" x1="14" y1="8" x2="50" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D9B8FF"/>
+      <stop offset="0.5" stop-color="#8B5CDA"/>
+      <stop offset="1" stop-color="#4B2B91"/>
+    </linearGradient>
+    <linearGradient id="alphaBall" x1="24" y1="34" x2="40" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#72E6FF"/>
+      <stop offset="1" stop-color="#2584C7"/>
+    </linearGradient>
+    <linearGradient id="alphaCheck" x1="44" y1="10" x2="57" y2="25" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF3A8"/>
+      <stop offset="1" stop-color="#D49A2B"/>
+    </linearGradient>
+    <filter id="alphaShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#000814" flood-opacity="0.58"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#alphaShadow)" stroke-linecap="round" stroke-linejoin="round">
+    <path
+      d="M7 55 26 9h12l19 46H45l-4.5-12h-17L19 55H7Zm20-22h10l-5-14-5 14Z"
+      fill="url(#alphaBody)"
+      fill-rule="evenodd"
+      stroke="#07101D"
+      stroke-width="3"
+    />
+    <path d="M17 51 31 14" stroke="#F0DEFF" stroke-width="2.5" opacity="0.55"/>
+
+    <circle cx="32" cy="43" r="10.5" fill="#F4F8FC" stroke="#07101D" stroke-width="3"/>
+    <path d="M22 42.5a10 10 0 0 1 20 0H22Z" fill="url(#alphaBall)"/>
+    <path d="M22 43h20" stroke="#07101D" stroke-width="3"/>
+    <circle cx="32" cy="43" r="3.5" fill="#F4F8FC" stroke="#07101D" stroke-width="2.5"/>
+
+    <path
+      d="M50 7.5c5 0 9 4 9 9s-4 9-9 9-9-4-9-9 4-9 9-9Z"
+      fill="url(#alphaCheck)"
+      stroke="#07101D"
+      stroke-width="3"
+    />
+    <path d="m45.5 16.5 3 3 6-6" stroke="#FFFBE0" stroke-width="2.8"/>
+  </g>
+</svg>

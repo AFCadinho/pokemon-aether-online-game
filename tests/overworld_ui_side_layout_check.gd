@@ -96,11 +96,12 @@ func _init() -> void:
 	_check(script_source.contains('"Heal Party"') and script_source.contains('"Preview Evolution"') and script_source.contains('"Clear Data"'), "Developer utility and destructive actions remain available")
 	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"Moderation and player assistance"'), "Staff Tools uses the shared compact launcher")
 	_check(script_source.contains('"Move yourself or assist another trainer"') and script_source.contains('"Enter a secure staff session"'), "Staff actions explain Teleport and Impersonate")
-	_check(script_source.contains('content_creator_menu_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"Prepare showcase-ready Pokémon"'), "Content Creator uses the shared compact launcher")
-	_check(script_source.contains('"Generate a rule-compliant creator team"') and script_source.contains('"Remove generated creator Pokémon only"'), "Content Creator actions explain their scope")
+	_check(script_source.contains('content_creator_menu_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"Create Pokémon for the Alpha"'), "Alpha Tools uses the shared compact launcher")
+	_check(script_source.contains('"Build a team for your Alpha adventure"') and script_source.contains('"Remove only Pokémon made with Alpha Tools"'), "Alpha Tools actions explain their scope")
+	_check(scene_source.contains('path="res://assets/ui/alpha_tools.svg" id="15_content_creator"') and script_source.contains('preload("res://assets/ui/alpha_tools.svg")'), "Alpha Tools uses its dedicated validated Alpha icon")
 	_check(script_source.contains('const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")') and script_source.contains('const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")'), "internal tool launchers use dedicated action icons")
 	_check(script_source.contains('_position_action_slot_popup(dev_actions_popup, dev_actions_slot)') and script_source.contains('_position_action_slot_popup(staff_tools_popup, staff_tools_slot)'), "internal tool menus open beside their toolbar actions")
-	_check(script_source.contains('{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")}'), "Escape closes the Content Creator launcher")
+	_check(script_source.contains('{"panel": content_creator_menu_popup, "close": Callable(self, "_hide_content_creator_menu_popup")}'), "Escape closes the Alpha Tools launcher")
 	_check(script_source.contains("content_creator_create_pokemon_button.visible = can_use_content_creator_generation") and script_source.contains("staff_impersonate_button.visible = can_impersonate"), "launcher polish preserves permission-based action visibility")
 	_check(
 		disable_icon_focus_block.contains("socials_button")
@@ -113,7 +114,7 @@ func _init() -> void:
 		and disable_icon_focus_block.contains("button.focus_mode = Control.FOCUS_NONE"),
 		"toolbar menu buttons cannot retain Space-triggerable keyboard focus"
 	)
-	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "Clan"'), "Clan uses a three-member group crest instead of a guild building")
+	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "Open your Clan"'), "Clan uses a three-member group crest instead of a guild building")
 	_check(scene_source.contains('path="res://assets/ui/follower_toggle.svg" id="10_follower"'), "Follower toggle shows a trainer and companion")
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
@@ -201,7 +202,7 @@ func _init() -> void:
 	_check(script_source.contains("func set_global_buffs(buffs: Array)"), "global buff tray accepts future live data")
 	_check(script_source.count('"current": 0') == 4, "global buffs start with no community funding")
 	_check(script_source.count('"state": "funding"') == 4 and not script_source.contains('"state": "active"'), "global buffs start inactive")
-	_check(script_source.contains("func _apply_global_buff_slot_visual") and script_source.contains("INACTIVE · awaiting community funding"), "unfunded global buffs use a clear inactive visual state")
+	_check(script_source.contains("func _apply_global_buff_slot_visual") and script_source.contains("Waiting for community contributions"), "unfunded global buffs use a clear inactive visual state")
 	_check(scene_source.count("value = 0.0") >= 4, "global buff scene defaults avoid flashing funded progress")
 	_check(script_source.contains("func set_personal_buffs(buffs: Array)"), "personal buff tray accepts future live data")
 	_check(script_source.contains("set_personal_buffs([])"), "personal buffs default to the empty state")

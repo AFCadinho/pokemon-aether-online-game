@@ -16,7 +16,7 @@ func _init() -> void:
 	_check(source.contains('record_label.text = "SPECIES RECORD"'), "Selected species uses a dedicated dossier header")
 	_check(source.contains("var hero_panel := PanelContainer.new()"), "Species identity and stats share a focused hero card")
 	_check(source.contains("var sprite_stage_style :=") and source.contains("TEXTURE_FILTER_NEAREST"), "Species sprites use a crisp softly elevated display stage")
-	_check(not source.contains("pokedex_sprite_view_label") and source.contains('pokedex_sprite_panel.tooltip_text = "Show %s sprite"'), "Sprite controls never cover the Pokémon preview")
+	_check(not source.contains("pokedex_sprite_view_label") and source.contains('pokedex_sprite_panel.tooltip_text = "Show the %s view"'), "View controls never cover the Pokémon preview")
 	_check(source.contains("round(scale_value * 4.0) / 4.0"), "Animated sprites use pixel-friendly scale steps")
 	_check(source.contains("var stats_panel := PanelContainer.new()"), "Base stats use their own balanced dossier surface")
 	_check(source.contains("var tab_panel := PanelContainer.new()"), "Pokédex tabs use an integrated navigation surface")

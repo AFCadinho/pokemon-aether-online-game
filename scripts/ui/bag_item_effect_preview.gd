@@ -108,7 +108,7 @@ static func preview(pokemon: Pokemon, gameplay: Dictionary, requested_quantity: 
 	return {
 		"canApply": true,
 		"label": label,
-		"tooltip": "%s\nUses %sx item(s)\n%s" % [pokemon.species, consumed_quantity, label],
+		"tooltip": "%s\nItems used: %s\n%s" % [pokemon.species, consumed_quantity, label],
 		"usedQuantity": consumed_quantity,
 		"previousHp": pokemon.current_hp,
 		"currentHp": current_hp,

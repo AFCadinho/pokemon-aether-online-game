@@ -113,7 +113,7 @@ const DEV_PREVIEW_EVOLUTION_ICON: Texture2D = preload("res://assets/ui/global_sh
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
-const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/content_creator.svg")
+const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
 const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box.gd")
 const DRAGGABLE_SUBWINDOW := preload("res://scripts/ui/draggable_subwindow.gd")
 const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
@@ -186,6 +186,11 @@ const PC_ACCENT := Color("#60d3ff")
 const PC_ACCENT_SOFT := Color("#60d3ff88")
 const PC_ACCENT_FAINT := Color("#60d3ff33")
 const ITEM_DEX_SIZE := Vector2(920, 620)
+const ITEM_DEX_ACCENT := Color("#d8b767")
+const ITEM_DEX_ACCENT_SOFT := Color("#d8b767aa")
+const ITEM_DEX_ACCENT_FAINT := Color("#d8b76744")
+const DEVELOPER_TOOLS_ACCENT := Color("#b69a5d")
+const DEVELOPER_TOOLS_ACCENT_SOFT := Color("#b69a5daa")
 const POKEDEX_SIZE := Vector2(1180, 720)
 const POKEDEX_ACCENT := Color("#ef5a68")
 const POKEDEX_ACCENT_SOFT := Color("#ef5a68aa")
@@ -437,6 +442,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var parse_pokemon_request: HTTPRequest = $ParsePokemonRequest
 @onready var dev_pokemon_popup: PanelContainer = $Control/DevPokemonPopup
 @onready var dev_pokemon_title: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Title
+@onready var dev_pokemon_subtitle: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Subtitle
 @onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
 @onready var dev_pokemon_add_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/AddButton
 @onready var dev_pokemon_close_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/CloseButton
@@ -1046,6 +1052,7 @@ var dev_item_search_request_id := 0
 var item_dex_popup: PanelContainer
 var item_dex_search_input: LineEdit
 var item_dex_results_list: VBoxContainer
+var item_dex_results_count_label: Label
 var item_dex_icon: TextureRect
 var item_dex_name_label: Label
 var item_dex_meta_label: Label
@@ -1056,6 +1063,7 @@ var item_dex_capture_section_label: Control
 var item_dex_capture_label: Label
 var item_dex_sources_label: Label
 var item_dex_search_request_id := 0
+var item_dex_selected_item_id := ""
 var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
 var pokedex_popup: PanelContainer
@@ -1877,7 +1885,7 @@ func _setup_pc_ui() -> void:
 	pc_release_mode_button.text = "Release Mode"
 	pc_release_mode_button.custom_minimum_size = Vector2(118, 36)
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
-	pc_release_mode_button.tooltip_text = "Enable the permanent Pokémon release drop zone"
+	pc_release_mode_button.tooltip_text = "Choose Pokémon to release"
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
 	_apply_button_style(pc_release_mode_button, "danger")
 	header.add_child(pc_release_mode_button)
@@ -2030,7 +2038,7 @@ func _setup_pc_ui() -> void:
 	pc_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pc_search_input.custom_minimum_size = Vector2(0, 38)
 	pc_search_input.clear_button_enabled = true
-	pc_search_input.tooltip_text = "Searches every loaded box"
+	pc_search_input.tooltip_text = "Search all storage boxes"
 	pc_search_input.text_changed.connect(_on_pc_search_text_changed)
 	_apply_line_edit_style(pc_search_input)
 	search_row.add_child(pc_search_input)
@@ -2076,7 +2084,7 @@ func _setup_pc_ui() -> void:
 	pc_release_drop_panel.name = "ReleaseDropZone"
 	pc_release_drop_panel.visible = false
 	pc_release_drop_panel.custom_minimum_size = Vector2(0, 58)
-	pc_release_drop_panel.tooltip_text = "Drag a Pokémon here to permanently release it"
+	pc_release_drop_panel.tooltip_text = "Drag a Pokémon here to release it permanently"
 	pc_release_drop_panel.add_theme_stylebox_override("panel", _make_pc_release_zone_style())
 	box_stack.add_child(pc_release_drop_panel)
 
@@ -2217,7 +2225,7 @@ func _setup_mail_compose_help_button() -> void:
 	mail_compose_help_button.text = "?"
 	mail_compose_help_button.custom_minimum_size = Vector2(32, 30)
 	mail_compose_help_button.focus_mode = Control.FOCUS_NONE
-	mail_compose_help_button.tooltip_text = "Mail rules\nFee without attachments: 50\nFee with attachments: 400\nCooldown: 2 minutes\nMax item stacks: 5\nMax Pokemon: 5\nPokemon attachments cannot hold items."
+	mail_compose_help_button.tooltip_text = "Mail rules\nMessage only: 50\nWith gifts: 400\nWait 2 minutes between mails\nUp to 5 kinds of items and 5 Pokémon\nPokémon must not be holding an item"
 	mail_compose_help_button.pressed.connect(_toggle_mail_compose_help_popup)
 	header.add_child(mail_compose_help_button)
 	_apply_button_style(mail_compose_help_button, "primary")
@@ -4585,7 +4593,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_reconnect_battle_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_reconnect_battle_button.focus_mode = Control.FOCUS_NONE
 	pvp_reconnect_battle_button.visible = false
-	pvp_reconnect_battle_button.tooltip_text = "Return to your active ranked battle"
+	pvp_reconnect_battle_button.tooltip_text = "Return to your current ranked battle"
 	pvp_reconnect_battle_button.pressed.connect(_on_pvp_reconnect_battle_pressed)
 	queue_actions.add_child(pvp_reconnect_battle_button)
 
@@ -5568,8 +5576,8 @@ func _setup_content_creator_menu_popup() -> void:
 	content_creator_close_button.pressed.connect(_hide_content_creator_menu_popup)
 	layout.add_child(
 		_create_tool_launcher_header(
-			"Content Creator",
-			"Prepare showcase-ready Pokémon",
+			"Alpha Tools",
+			"Create Pokémon for the Alpha",
 			content_creator_close_button,
 			Color("#b28ae8")
 		)
@@ -5581,7 +5589,7 @@ func _setup_content_creator_menu_popup() -> void:
 	_configure_launcher_card_button(
 		content_creator_create_pokemon_button,
 		"Create Pokémon",
-		"Generate a rule-compliant creator team",
+		"Build a team for your Alpha adventure",
 		CONTENT_CREATOR_MENU_ICON,
 		Color("#b28ae8")
 	)
@@ -5591,8 +5599,8 @@ func _setup_content_creator_menu_popup() -> void:
 	layout.add_child(content_creator_clear_party_button)
 	_configure_launcher_card_button(
 		content_creator_clear_party_button,
-		"Clear Creator Pokémon",
-		"Remove generated creator Pokémon only",
+		"Clear Alpha Pokémon",
+		"Remove only Pokémon made with Alpha Tools",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
 	)
@@ -5703,7 +5711,9 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_item_popup.offset_top = -215
 	dev_add_item_popup.offset_right = 230
 	dev_add_item_popup.offset_bottom = 215
-	dev_add_item_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	var add_item_shell_style := _make_glass_panel_style(14)
+	add_item_shell_style.border_color = Color("#75613bcc")
+	dev_add_item_popup.add_theme_stylebox_override("panel", add_item_shell_style)
 	root_control.add_child(dev_add_item_popup)
 
 	var margin_container := MarginContainer.new()
@@ -5718,33 +5728,65 @@ func _setup_dev_add_item_tools() -> void:
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
+	header.custom_minimum_size = Vector2(0, 42)
+	header.add_theme_constant_override("separation", 10)
 	layout.add_child(header)
+
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.add_theme_stylebox_override("panel", _make_panel_style(DEVELOPER_TOOLS_ACCENT, DEVELOPER_TOOLS_ACCENT, 2, 0))
+	header.add_child(header_accent)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
 
 	var title_label := Label.new()
 	title_label.text = "Add Item"
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.add_theme_font_size_override("font_size", 18)
+	title_label.add_theme_font_size_override("font_size", 19)
 	title_label.add_theme_color_override("font_color", UI_TEXT)
-	header.add_child(title_label)
+	heading.add_child(title_label)
+
+	var subtitle_label := Label.new()
+	subtitle_label.text = "Choose an item and set the amount"
+	subtitle_label.add_theme_font_size_override("font_size", 11)
+	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(subtitle_label)
 
 	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(34, 30)
+	close_button.text = "×"
+	close_button.tooltip_text = "Close"
+	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_dev_add_item_popup)
 	header.add_child(close_button)
 
 	dev_item_search_input = LineEdit.new()
 	dev_item_search_input.placeholder_text = "Search item..."
+	dev_item_search_input.clear_button_enabled = true
+	dev_item_search_input.custom_minimum_size = Vector2(0, 36)
 	dev_item_search_input.text_changed.connect(_on_dev_item_search_changed)
 	layout.add_child(dev_item_search_input)
+
+	var results_panel := PanelContainer.new()
+	results_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	results_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 9, 1))
+	layout.add_child(results_panel)
+
+	var results_margin := MarginContainer.new()
+	results_margin.add_theme_constant_override("margin_left", 7)
+	results_margin.add_theme_constant_override("margin_top", 6)
+	results_margin.add_theme_constant_override("margin_right", 7)
+	results_margin.add_theme_constant_override("margin_bottom", 6)
+	results_panel.add_child(results_margin)
 
 	var results_scroll := ScrollContainer.new()
 	results_scroll.custom_minimum_size = Vector2(0, 220)
 	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	layout.add_child(results_scroll)
+	results_margin.add_child(results_scroll)
 
 	dev_item_results_list = VBoxContainer.new()
 	dev_item_results_list.add_theme_constant_override("separation", 6)
@@ -5756,10 +5798,11 @@ func _setup_dev_add_item_tools() -> void:
 	layout.add_child(quantity_row)
 
 	var quantity_label := Label.new()
-	quantity_label.text = "Amount"
+	quantity_label.text = "AMOUNT"
 	quantity_label.custom_minimum_size = Vector2(96, 0)
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_color_override("font_color", UI_TEXT)
+	quantity_label.add_theme_font_size_override("font_size", 10)
 	quantity_row.add_child(quantity_label)
 
 	dev_item_quantity_spinbox = SpinBox.new()
@@ -5772,7 +5815,7 @@ func _setup_dev_add_item_tools() -> void:
 	quantity_row.add_child(dev_item_quantity_spinbox)
 
 	dev_item_confirm_button = Button.new()
-	dev_item_confirm_button.text = "Confirm"
+	dev_item_confirm_button.text = "Add selected item"
 	dev_item_confirm_button.custom_minimum_size = Vector2(0, 36)
 	dev_item_confirm_button.disabled = true
 	dev_item_confirm_button.focus_mode = Control.FOCUS_NONE
@@ -5781,6 +5824,7 @@ func _setup_dev_add_item_tools() -> void:
 
 	_apply_button_style(close_button)
 	_apply_line_edit_style(dev_item_search_input)
+	_apply_line_edit_style(dev_item_quantity_spinbox.get_line_edit())
 	_apply_button_style(dev_item_confirm_button, "primary")
 
 	dev_add_money_popup = PanelContainer.new()
@@ -5797,7 +5841,9 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_money_popup.offset_top = -150
 	dev_add_money_popup.offset_right = 230
 	dev_add_money_popup.offset_bottom = 150
-	dev_add_money_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	var add_currency_shell_style := _make_glass_panel_style(14)
+	add_currency_shell_style.border_color = Color("#75613bcc")
+	dev_add_money_popup.add_theme_stylebox_override("panel", add_currency_shell_style)
 	root_control.add_child(dev_add_money_popup)
 
 	var money_margin := MarginContainer.new()
@@ -5812,32 +5858,62 @@ func _setup_dev_add_item_tools() -> void:
 	money_margin.add_child(money_layout)
 
 	var money_header := HBoxContainer.new()
-	money_header.add_theme_constant_override("separation", 8)
+	money_header.custom_minimum_size = Vector2(0, 42)
+	money_header.add_theme_constant_override("separation", 10)
 	money_layout.add_child(money_header)
+
+	var money_header_accent := Panel.new()
+	money_header_accent.custom_minimum_size = Vector2(3, 0)
+	money_header_accent.add_theme_stylebox_override("panel", _make_panel_style(DEVELOPER_TOOLS_ACCENT, DEVELOPER_TOOLS_ACCENT, 2, 0))
+	money_header.add_child(money_header_accent)
+
+	var money_heading := VBoxContainer.new()
+	money_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	money_heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	money_heading.add_theme_constant_override("separation", 1)
+	money_header.add_child(money_heading)
 
 	var money_title := Label.new()
 	money_title.text = "Add Currency"
-	money_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	money_title.add_theme_font_size_override("font_size", 18)
+	money_title.add_theme_font_size_override("font_size", 19)
 	money_title.add_theme_color_override("font_color", UI_TEXT)
-	money_header.add_child(money_title)
+	money_heading.add_child(money_title)
+
+	var money_subtitle := Label.new()
+	money_subtitle.text = "Set an amount, then choose the balance to update"
+	money_subtitle.add_theme_font_size_override("font_size", 11)
+	money_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	money_heading.add_child(money_subtitle)
 
 	var money_close_button := Button.new()
-	money_close_button.text = "X"
-	money_close_button.custom_minimum_size = Vector2(34, 30)
+	money_close_button.text = "×"
+	money_close_button.tooltip_text = "Close"
+	money_close_button.custom_minimum_size = Vector2(34, 34)
 	money_close_button.focus_mode = Control.FOCUS_NONE
 	money_close_button.pressed.connect(_hide_dev_add_money_popup)
 	money_header.add_child(money_close_button)
 
+	var amount_panel := PanelContainer.new()
+	amount_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 9, 1))
+	money_layout.add_child(amount_panel)
+
+	var amount_margin := MarginContainer.new()
+	amount_margin.add_theme_constant_override("margin_left", 10)
+	amount_margin.add_theme_constant_override("margin_top", 8)
+	amount_margin.add_theme_constant_override("margin_right", 10)
+	amount_margin.add_theme_constant_override("margin_bottom", 8)
+	amount_panel.add_child(amount_margin)
+
 	var money_row := HBoxContainer.new()
 	money_row.add_theme_constant_override("separation", 8)
-	money_layout.add_child(money_row)
+	amount_margin.add_child(money_row)
 
 	var money_label := Label.new()
-	money_label.text = "Amount"
+	money_label.text = "AMOUNT"
 	money_label.custom_minimum_size = Vector2(96, 0)
 	money_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	money_label.add_theme_color_override("font_color", UI_TEXT)
+	money_label.add_theme_font_size_override("font_size", 10)
 	money_row.add_child(money_label)
 
 	dev_money_amount_spinbox = SpinBox.new()
@@ -5845,6 +5921,7 @@ func _setup_dev_add_item_tools() -> void:
 	dev_money_amount_spinbox.max_value = 999999999
 	dev_money_amount_spinbox.value = 1000
 	dev_money_amount_spinbox.step = 1
+	dev_money_amount_spinbox.custom_minimum_size = Vector2(0, 36)
 	dev_money_amount_spinbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	money_row.add_child(dev_money_amount_spinbox)
 
@@ -5887,6 +5964,7 @@ func _setup_dev_add_item_tools() -> void:
 	currency_buttons.add_child(dev_battle_points_confirm_button)
 
 	_apply_button_style(money_close_button)
+	_apply_line_edit_style(dev_money_amount_spinbox.get_line_edit())
 	_apply_button_style(dev_money_confirm_button, "primary")
 	_apply_button_style(dev_gems_confirm_button, "primary")
 	_apply_button_style(dev_aetherite_confirm_button, "primary")
@@ -6903,7 +6981,9 @@ func _setup_item_dex_popup() -> void:
 	item_dex_popup.anchor_top = 0.5
 	item_dex_popup.anchor_right = 0.5
 	item_dex_popup.anchor_bottom = 0.5
-	item_dex_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#020711fa"), Color("#d6c78faa"), 4, 1))
+	var item_dex_shell_style := _make_glass_panel_style(14)
+	item_dex_shell_style.border_color = Color("#75613bcc")
+	item_dex_popup.add_theme_stylebox_override("panel", item_dex_shell_style)
 	root_control.add_child(item_dex_popup)
 	_position_item_dex_popup()
 
@@ -6918,41 +6998,66 @@ func _setup_item_dex_popup() -> void:
 	layout.add_theme_constant_override("separation", 12)
 	margin_container.add_child(layout)
 
-	var header_panel := PanelContainer.new()
-	header_panel.custom_minimum_size = Vector2(0, 44)
-	header_panel.mouse_default_cursor_shape = Control.CURSOR_MOVE
-	header_panel.gui_input.connect(_on_item_dex_header_gui_input)
-	header_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#c7bea0dd"), Color("#f2ead2aa"), 2, 1))
-	layout.add_child(header_panel)
-
-	var header_margin := MarginContainer.new()
-	header_margin.mouse_default_cursor_shape = Control.CURSOR_MOVE
-	header_margin.gui_input.connect(_on_item_dex_header_gui_input)
-	header_margin.add_theme_constant_override("margin_left", 12)
-	header_margin.add_theme_constant_override("margin_top", 4)
-	header_margin.add_theme_constant_override("margin_right", 8)
-	header_margin.add_theme_constant_override("margin_bottom", 4)
-	header_panel.add_child(header_margin)
-
 	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 50)
 	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	header.gui_input.connect(_on_item_dex_header_gui_input)
-	header.add_theme_constant_override("separation", 8)
-	header_margin.add_child(header)
+	header.add_theme_constant_override("separation", 10)
+	layout.add_child(header)
+
+	var header_accent := Panel.new()
+	header_accent.custom_minimum_size = Vector2(3, 0)
+	header_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_accent.add_theme_stylebox_override("panel", _make_panel_style(ITEM_DEX_ACCENT, ITEM_DEX_ACCENT, 2, 0))
+	header.add_child(header_accent)
+
+	var header_icon_frame := PanelContainer.new()
+	header_icon_frame.custom_minimum_size = Vector2(42, 42)
+	header_icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#211b10e8"), ITEM_DEX_ACCENT_SOFT, 9, 1))
+	header.add_child(header_icon_frame)
+
+	var header_icon_center := CenterContainer.new()
+	header_icon_frame.add_child(header_icon_center)
+	var header_icon := TextureRect.new()
+	header_icon.custom_minimum_size = Vector2(30, 30)
+	header_icon.texture = item_dex_button.texture_normal if item_dex_button != null else null
+	header_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	header_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_icon_center.add_child(header_icon)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_theme_constant_override("separation", 1)
+	header.add_child(heading)
 
 	var title_label := Label.new()
 	title_label.text = "Item Dex"
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	title_label.gui_input.connect(_on_item_dex_header_gui_input)
-	title_label.add_theme_font_size_override("font_size", 26)
-	title_label.add_theme_color_override("font_color", Color("#ffffff"))
-	header.add_child(title_label)
+	title_label.add_theme_font_size_override("font_size", 20)
+	title_label.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(title_label)
+
+	var subtitle_label := Label.new()
+	subtitle_label.text = "Item catalogue and field notes"
+	subtitle_label.add_theme_font_size_override("font_size", 11)
+	subtitle_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(subtitle_label)
+
+	var header_hint := Label.new()
+	header_hint.text = "Search · inspect · collect"
+	header_hint.add_theme_font_size_override("font_size", 10)
+	header_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
+	header.add_child(header_hint)
 
 	var close_button := Button.new()
-	close_button.text = "X"
-	close_button.custom_minimum_size = Vector2(40, 34)
+	close_button.text = "×"
+	close_button.tooltip_text = "Close"
+	close_button.custom_minimum_size = Vector2(34, 34)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(_hide_item_dex_popup)
 	header.add_child(close_button)
@@ -6964,7 +7069,7 @@ func _setup_item_dex_popup() -> void:
 
 	var browser_panel := PanelContainer.new()
 	browser_panel.custom_minimum_size = Vector2(320, 0)
-	browser_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#061120f0"), Color("#d6c78f66"), 4, 1))
+	browser_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 10, 1))
 	content_row.add_child(browser_panel)
 
 	var browser_margin := MarginContainer.new()
@@ -6978,14 +7083,28 @@ func _setup_item_dex_popup() -> void:
 	browser_stack.add_theme_constant_override("separation", 8)
 	browser_margin.add_child(browser_stack)
 
+	var browser_header := HBoxContainer.new()
+	browser_header.add_theme_constant_override("separation", 8)
+	browser_stack.add_child(browser_header)
+
 	var browser_label := Label.new()
-	browser_label.text = "ITEMS"
+	browser_label.text = "ITEM INDEX"
+	browser_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	browser_label.add_theme_font_size_override("font_size", 10)
-	browser_label.add_theme_color_override("font_color", Color("#d6c78f"))
-	browser_stack.add_child(browser_label)
+	browser_label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
+	browser_header.add_child(browser_label)
+
+	item_dex_results_count_label = Label.new()
+	item_dex_results_count_label.text = "Loading..."
+	item_dex_results_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	item_dex_results_count_label.add_theme_font_size_override("font_size", 10)
+	item_dex_results_count_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	browser_header.add_child(item_dex_results_count_label)
 
 	item_dex_search_input = LineEdit.new()
 	item_dex_search_input.placeholder_text = "Search item..."
+	item_dex_search_input.clear_button_enabled = true
+	item_dex_search_input.custom_minimum_size = Vector2(0, 36)
 	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
 	browser_stack.add_child(item_dex_search_input)
 
@@ -7002,7 +7121,7 @@ func _setup_item_dex_popup() -> void:
 	var summary_panel := PanelContainer.new()
 	summary_panel.custom_minimum_size = Vector2(560, 0)
 	summary_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	summary_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ef2"), Color("#d6c78f66"), 4, 1))
+	summary_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 10, 1))
 	content_row.add_child(summary_panel)
 
 	var summary_margin := MarginContainer.new()
@@ -7017,14 +7136,25 @@ func _setup_item_dex_popup() -> void:
 	summary_layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	summary_margin.add_child(summary_layout)
 
+	var hero_panel := PanelContainer.new()
+	hero_panel.custom_minimum_size = Vector2(0, 150)
+	hero_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, Color("#59482bbb"), 11, 1))
+	summary_layout.add_child(hero_panel)
+
+	var hero_margin := MarginContainer.new()
+	hero_margin.add_theme_constant_override("margin_left", 14)
+	hero_margin.add_theme_constant_override("margin_top", 10)
+	hero_margin.add_theme_constant_override("margin_right", 14)
+	hero_margin.add_theme_constant_override("margin_bottom", 10)
+	hero_panel.add_child(hero_margin)
+
 	var hero_row := HBoxContainer.new()
-	hero_row.custom_minimum_size = Vector2(0, 150)
 	hero_row.add_theme_constant_override("separation", 16)
-	summary_layout.add_child(hero_row)
+	hero_margin.add_child(hero_row)
 
 	var icon_panel := PanelContainer.new()
 	icon_panel.custom_minimum_size = Vector2(150, 132)
-	icon_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#071b2ce8"), Color("#d6c78f66"), 3, 1))
+	icon_panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, ITEM_DEX_ACCENT_FAINT, 11, 1))
 	hero_row.add_child(icon_panel)
 
 	var icon_center := CenterContainer.new()
@@ -7052,10 +7182,10 @@ func _setup_item_dex_popup() -> void:
 	item_dex_meta_label.text = "Category: -    Base price: Unknown"
 	item_dex_meta_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_dex_meta_label.add_theme_font_size_override("font_size", 12)
-	item_dex_meta_label.add_theme_color_override("font_color", Color("#d6c78f"))
+	item_dex_meta_label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
 	hero_stack.add_child(item_dex_meta_label)
 
-	summary_layout.add_child(_create_pokedex_section_title("Description"))
+	summary_layout.add_child(_create_item_dex_section_title("Description"))
 
 	item_dex_description_label = Label.new()
 	item_dex_description_label.text = "Search and select an item to view its summary."
@@ -7064,7 +7194,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	summary_layout.add_child(item_dex_description_label)
 
-	item_dex_effect_section_label = _create_pokedex_section_title("Effect")
+	item_dex_effect_section_label = _create_item_dex_section_title("Effect")
 	item_dex_effect_section_label.visible = false
 	summary_layout.add_child(item_dex_effect_section_label)
 
@@ -7075,7 +7205,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_effect_label.add_theme_color_override("font_color", Color("#f2cf78"))
 	summary_layout.add_child(item_dex_effect_label)
 
-	item_dex_capture_section_label = _create_pokedex_section_title("Capture")
+	item_dex_capture_section_label = _create_item_dex_section_title("Capture")
 	item_dex_capture_section_label.visible = false
 	summary_layout.add_child(item_dex_capture_section_label)
 
@@ -7086,7 +7216,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_capture_label.add_theme_color_override("font_color", Color("#f2cf78"))
 	summary_layout.add_child(item_dex_capture_label)
 
-	summary_layout.add_child(_create_pokedex_section_title("Where to get"))
+	summary_layout.add_child(_create_item_dex_section_title("Where to get"))
 
 	var sources_scroll := ScrollContainer.new()
 	sources_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -7366,7 +7496,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_panel.custom_minimum_size = Vector2(190, 138)
 	pokedex_sprite_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	pokedex_sprite_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pokedex_sprite_panel.tooltip_text = "Show back sprite"
+	pokedex_sprite_panel.tooltip_text = "Show the back view"
 	var sprite_stage_style := _make_panel_style(UI_SURFACE_INSET, Color("#653642aa"), 11, 1)
 	sprite_stage_style.shadow_color = Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.12)
 	sprite_stage_style.shadow_size = 8
@@ -8392,14 +8522,13 @@ func _refresh_personal_buffs_compact_state() -> void:
 	personal_buffs_panel.custom_minimum_size.y = panel_height
 	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
 func _personal_buffs_summary_tooltip() -> String:
-	var noun := "buff" if active_personal_buffs.size() == 1 else "buffs"
-	var lines: Array[String] = ["%d active personal %s" % [active_personal_buffs.size(), noun]]
+	var lines: Array[String] = ["%d personal %s active" % [active_personal_buffs.size(), "boost" if active_personal_buffs.size() == 1 else "boosts"]]
 	for buff_value: Variant in active_personal_buffs:
 		var buff := buff_value as Dictionary
 		var description := str(buff.get("description", "")).strip_edges()
 		var remaining := str(buff.get("remaining", "")).strip_edges()
 		lines.append("")
-		lines.append(str(buff.get("name", "Buff")))
+		lines.append(str(buff.get("name", "Boost")))
 		if description != "":
 			lines.append(description)
 		if remaining != "":
@@ -8408,15 +8537,15 @@ func _personal_buffs_summary_tooltip() -> String:
 	return "\n".join(lines)
 
 func _global_buff_tooltip(buff: Dictionary) -> String:
-	var lines: Array[String] = [str(buff.get("name", "Global Buff"))]
+	var lines: Array[String] = [str(buff.get("name", "Community Boost"))]
 	if str(buff.get("state", "funding")) == "active":
 		lines.append("ACTIVE · %s remaining" % str(buff.get("remaining", "")))
 	else:
 		var current := maxi(int(buff.get("current", 0)), 0)
 		var goal := maxi(int(buff.get("goal", 100000)), 1)
 		if current == 0:
-			lines.append("INACTIVE · awaiting community funding")
-		lines.append("$%s / $%s contributed" % [_format_money(current), _format_money(goal)])
+			lines.append("Waiting for community contributions")
+		lines.append("$%s of $%s contributed" % [_format_money(current), _format_money(goal)])
 	lines.append("Click for details")
 	return "\n".join(lines)
 
@@ -8500,7 +8629,7 @@ func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bo
 	)
 
 func _buff_tooltip(buff: Dictionary) -> String:
-	var lines: Array[String] = [str(buff.get("name", "Buff"))]
+	var lines: Array[String] = [str(buff.get("name", "Boost"))]
 	var description := str(buff.get("description", "")).strip_edges()
 	if description != "":
 		lines.append(description)
@@ -8513,8 +8642,8 @@ func _buff_overflow_tooltip(buffs: Array, start_index: int) -> String:
 	var names: Array[String] = []
 	for buff_index in range(start_index, buffs.size()):
 		var buff: Dictionary = buffs[buff_index] as Dictionary
-		names.append(str(buff.get("name", "Buff")))
-	return "More active buffs:\n%s" % "\n".join(names)
+		names.append(str(buff.get("name", "Boost")))
+	return "More active boosts:\n%s" % "\n".join(names)
 
 func _on_global_buff_button_pressed(button: Button) -> void:
 	var buff: Dictionary = button.get_meta("buff_data", {}) as Dictionary
@@ -11411,7 +11540,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	)
 	sprite_frame.mouse_filter = Control.MOUSE_FILTER_STOP
 	sprite_frame.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	sprite_frame.tooltip_text = "Toggle front/back sprite"
+	sprite_frame.tooltip_text = "Switch between the front and back view"
 	sprite_frame.gui_input.connect(_on_pokemon_summary_sprite_frame_gui_input.bind(card_key))
 	left_stack.add_child(sprite_frame)
 
@@ -11485,7 +11614,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_ball_button = Button.new()
 	pokemon_summary_ball_button.text = ""
 	pokemon_summary_ball_button.pressed.connect(_on_pokemon_summary_ball_button_pressed.bind(card_key))
-	pokemon_summary_ball_button.tooltip_text = "Change Poké Ball."
+	pokemon_summary_ball_button.tooltip_text = "Change this Pokémon's Poké Ball"
 	pokemon_summary_ball_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_ball_button.flat = true
 	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -11725,7 +11854,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_held_item_slot_button = Button.new()
 	pokemon_summary_held_item_slot_button.text = ""
 	pokemon_summary_held_item_slot_button.pressed.connect(_on_pokemon_summary_held_item_slot_pressed.bind(card_key))
-	pokemon_summary_held_item_slot_button.tooltip_text = "Show held item actions."
+	pokemon_summary_held_item_slot_button.tooltip_text = "Give or take a held item"
 	pokemon_summary_held_item_slot_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_held_item_slot_button.flat = true
 	pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -12027,7 +12156,7 @@ func _create_pokemon_summary_shiny_badge() -> PanelContainer:
 	var badge := PanelContainer.new()
 	badge.visible = false
 	badge.custom_minimum_size = Vector2(16, 16)
-	badge.tooltip_text = "Shiny Pokemon"
+	badge.tooltip_text = "Shiny Pokémon"
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var badge_style := StyleBoxFlat.new()
 	badge_style.bg_color = Color("#15191fee")
@@ -13674,7 +13803,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.hotbar_item = item.duplicate(true)
 	slot.custom_minimum_size = Vector2(106, 118)
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
-	slot.tooltip_text = "%s\nClick to inspect · drag or right-click for actions" % str(item.get("name", "Item"))
+	slot.tooltip_text = "%s\nClick for details. Drag or right-click for more options." % str(item.get("name", "Item"))
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
@@ -14330,7 +14459,7 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	button.tooltip_text = str(preview.get("tooltip", button.text))
 	button.disabled = bag_item_use_in_progress or pokemon.owned_pokemon_id <= 0 or not _bag_item_can_affect_pokemon(pokemon, item_id)
 	if pokemon.owned_pokemon_id <= 0:
-		button.tooltip_text = "%s is missing an ownership id." % pokemon.species
+		button.tooltip_text = "%s cannot use this item right now." % pokemon.species
 	elif button.disabled and not bag_item_use_in_progress:
 		var disabled_preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
 		button.tooltip_text = str(disabled_preview.get("tooltip", button.tooltip_text))
@@ -14351,7 +14480,7 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 			}
 		return {
 			"label": "Teach %s" % _format_move_name(machine_move_id),
-			"tooltip": "Teach %s to %s. Compatible Pokemon can learn it repeatedly from this machine." % [_format_move_name(machine_move_id), pokemon.species],
+			"tooltip": "Teach %s to %s. If a Pokémon can learn this move, the machine can be used again." % [_format_move_name(machine_move_id), pokemon.species],
 			"canApply": true,
 		}
 	var gameplay := _bag_gameplay_definition_for_item_id(item_id)
@@ -14404,7 +14533,7 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 
 	return {
 		"label": label,
-		"tooltip": "%s\nUses %sx item(s)\nEstimated gain: %s EXP\nEstimated level: %s -> %s" % [
+		"tooltip": "%s\nItems used: %s\nExperience gained: %s\nLevel: %s → %s" % [
 			pokemon.species,
 			used_quantity,
 			gained_exp,
@@ -14433,7 +14562,7 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 	if max_gain <= 0:
 		return {
 			"label": "Storage full",
-			"tooltip": "%s cannot store more EVs right now.\nStored %s EVs: %s/%s\nAllocated EVs: %s/%s\nStored EVs: %s" % [
+			"tooltip": "%s cannot gain more training points right now.\n%s training points waiting: %s/%s\nAlready assigned: %s/%s\nTotal waiting: %s" % [
 				pokemon.species,
 				stat_label,
 				current_value,
@@ -14455,7 +14584,7 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 
 	return {
 		"label": label,
-		"tooltip": "%s\nUses %sx item(s)\nStored %s EVs: %s -> %s\nStored EV total: %s -> %s\nAllocated EVs: %s / %s" % [
+		"tooltip": "%s\nItems used: %s\n%s training points waiting: %s → %s\nTotal waiting: %s → %s\nAlready assigned: %s/%s" % [
 			pokemon.species,
 			used_quantity,
 			stat_label,
@@ -14541,7 +14670,7 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 
 	var pokemon: Pokemon = PlayerSave.party[slot_index]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		_set_bag_item_use_status("This Pokemon is missing an ownership id.", true)
+		_set_bag_item_use_status("This Pokémon can’t be changed right now.", true)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
@@ -14587,7 +14716,7 @@ func _on_bag_item_use_confirm_pressed() -> void:
 
 	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		_set_bag_item_use_status("This Pokemon is missing an ownership id.", true)
+		_set_bag_item_use_status("This Pokémon can’t be changed right now.", true)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
@@ -15730,7 +15859,7 @@ func _create_summary_experience_metric_card(pokemon: Pokemon, accent_color: Colo
 	var target_level: int = min(pokemon.level + 1, 100)
 	var value_text := str(current_exp) if current_exp > 0 or has_next_level_range else "-"
 	var detail_text := "%s EXP to Lv. %s" % [next_level_remaining, target_level] if has_next_level_range else "Max level"
-	var tooltip_text := "Current EXP: %s\n%s" % [value_text, detail_text]
+	var tooltip_text := "Current experience: %s\n%s" % [value_text, detail_text]
 
 	var stack := VBoxContainer.new()
 	stack.custom_minimum_size = Vector2(min_width, 30)
@@ -16099,7 +16228,7 @@ func _create_summary_ev_box(stat_id: String, label_text: String, value: int, col
 	if panel is Button:
 		var button: Button = panel as Button
 		button.focus_mode = Control.FOCUS_NONE
-		button.tooltip_text = "Allocate %s EVs" % label_text
+		button.tooltip_text = "Assign training points to %s" % label_text
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.pressed.connect(_on_summary_allocated_ev_pressed.bind(stat_id, label_text, pokemon_summary_active_card_key))
 		button.add_theme_stylebox_override("normal", _make_panel_style(Color("#081321ef"), Color(color.r, color.g, color.b, 0.42), 7, 1))
@@ -16210,7 +16339,7 @@ func _create_summary_ev_total_panel(total_evs: int) -> Control:
 	bar.show_percentage = false
 	bar.custom_minimum_size = Vector2(0, 8)
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar.tooltip_text = "Total EVs: %s / %s" % [clamped_total, POKEMON_EV_TOTAL_LIMIT]
+	bar.tooltip_text = "Training points assigned: %s/%s" % [clamped_total, POKEMON_EV_TOTAL_LIMIT]
 	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#050912e8"), Color("#263b58"), 3, 1))
 	bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#62d7ff"), Color("#62d7ff"), 3, 0))
 	stack.add_child(bar)
@@ -16223,7 +16352,7 @@ func _create_summary_ev_training_row(stat_id: String, label_text: String, value:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 31)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.tooltip_text = "%s EVs: %s / %s" % [label_text, clamped_value, POKEMON_EV_STAT_LIMIT]
+	panel.tooltip_text = "%s training points: %s/%s" % [label_text, clamped_value, POKEMON_EV_STAT_LIMIT]
 	panel.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(
@@ -16394,7 +16523,7 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 
 	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
-		pokemon_summary_ev_allocate_status_label.text = "This Pokemon is missing an ownership id."
+		pokemon_summary_ev_allocate_status_label.text = "This Pokémon can’t be changed right now."
 		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
 		return
 
@@ -16578,7 +16707,7 @@ func _create_summary_move_card(
 		direct_action_button.disabled = not can_reorder
 		direct_action_button.modulate = Color.WHITE if can_reorder else Color(1, 1, 1, 0.38)
 		direct_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		direct_action_button.tooltip_text = "Use %s in the overworld." % move_name
+		direct_action_button.tooltip_text = "Use %s while exploring." % move_name
 		direct_action_button.pressed.connect(Callable(panel, "request_direct_action"))
 		top_row.add_child(direct_action_button)
 
@@ -16939,7 +17068,7 @@ func _set_pokemon_summary_ball_button(pokemon: Pokemon) -> void:
 	pokemon_summary_ball_icon.modulate = Color(1, 1, 1, 0.45) if ball_texture == null else Color(1, 1, 1, 1)
 	pokemon_summary_ball_button.disabled = _is_pokemon_summary_readonly()
 	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
-	pokemon_summary_ball_button.tooltip_text = "Read-only preview." if _is_pokemon_summary_readonly() else "Change Poké Ball: %s" % _item_name_from_id(ball_item_id)
+	pokemon_summary_ball_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Current Poké Ball: %s. Click to change it." % _item_name_from_id(ball_item_id)
 
 func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
 	_apply_pokemon_summary_card_context(card_key)
@@ -16947,11 +17076,11 @@ func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 
 	await _ensure_bag_inventory_loaded()
@@ -17027,7 +17156,7 @@ func _create_summary_ball_choice(item: Dictionary, current_ball_item_id: String)
 	var is_current := _normalize_item_id(item_id) == _normalize_item_id(current_ball_item_id)
 	var prefix := "✓ " if is_current else ""
 	button.text = "%s%s  x%s" % [prefix, _ellipsize_text(str(item.get("name", _item_name_from_id(item_id))), 18), max(int(item.get("quantity", 1)), 1)]
-	button.tooltip_text = item_id
+	button.tooltip_text = str(item.get("name", _item_name_from_id(item_id)))
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size = Vector2(0, 30)
 	button.focus_mode = Control.FOCUS_NONE
@@ -17042,11 +17171,11 @@ func _on_pokemon_summary_ball_selected(item_id: String, card_key: String = "") -
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 
 	var current_ball_item_id := _get_pokemon_ball_item_id(pokemon)
@@ -17084,11 +17213,11 @@ func _apply_pokemon_summary_ball_change(item_id: String, card_key: String = "") 
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 
 	var result: Dictionary = await PlayerPartyStateService.set_pokemon_ball(pokemon.owned_pokemon_id, item_id)
@@ -17110,11 +17239,11 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 
 	var held_item_id: String = _get_pokemon_held_item_id(pokemon)
@@ -17154,12 +17283,12 @@ func _set_pokemon_summary_held_item_slot(pokemon: Pokemon) -> void:
 		pokemon_summary_held_item_slot_name_label.text = _item_name_from_id(held_item_id)
 		pokemon_summary_held_item_slot_name_label.tooltip_text = pokemon_summary_held_item_slot_name_label.text
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "Read-only preview." if _is_pokemon_summary_readonly() else "Click to take held item."
+			pokemon_summary_held_item_slot_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Take this held item"
 	else:
 		pokemon_summary_held_item_slot_name_label.text = "No held item"
 		pokemon_summary_held_item_slot_name_label.tooltip_text = pokemon_summary_held_item_slot_name_label.text
 		if pokemon_summary_held_item_slot_button != null:
-			pokemon_summary_held_item_slot_button.tooltip_text = "Read-only preview." if _is_pokemon_summary_readonly() else "Click to give a held item."
+			pokemon_summary_held_item_slot_button.tooltip_text = "You can view this Pokémon, but not change it here." if _is_pokemon_summary_readonly() else "Give this Pokémon an item"
 	if pokemon_summary_held_item_slot_button != null:
 		pokemon_summary_held_item_slot_button.disabled = _is_pokemon_summary_readonly()
 		pokemon_summary_held_item_slot_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
@@ -17207,7 +17336,7 @@ func _create_summary_item_choice(item: Dictionary) -> Control:
 	var button := Button.new()
 	var item_id: String = str(item.get("id", ""))
 	button.text = "%s  x%s" % [_ellipsize_text(str(item.get("name", item_id)), 18), max(int(item.get("quantity", 1)), 1)]
-	button.tooltip_text = item_id
+	button.tooltip_text = str(item.get("name", _item_name_from_id(item_id)))
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size = Vector2(0, 30)
 	button.focus_mode = Control.FOCUS_NONE
@@ -17221,11 +17350,11 @@ func _on_pokemon_summary_item_selected(item_id: String, card_key: String = "") -
 		return
 	var pokemon_value: Variant = _get_selected_summary_pokemon()
 	if not (pokemon_value is Pokemon):
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
-		_add_chat_message("This Pokemon is missing an ownership id.")
+		_add_chat_message("This Pokémon can’t be changed right now.")
 		return
 
 	var result: Dictionary = await PlayerPartyStateService.give_pokemon_held_item(pokemon.owned_pokemon_id, item_id)
@@ -18447,7 +18576,9 @@ func _apply_premium_overlay_styles() -> void:
 	options_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
 	actions_panel.add_theme_stylebox_override("panel", _make_glass_panel_style())
 	socials_menu.add_theme_stylebox_override("panel", _make_glass_panel_style())
-	dev_pokemon_popup.add_theme_stylebox_override("panel", _make_gold_panel_style(12, 1))
+	var pokemon_import_shell_style := _make_glass_panel_style(14)
+	pokemon_import_shell_style.border_color = Color("#75613bcc")
+	dev_pokemon_popup.add_theme_stylebox_override("panel", pokemon_import_shell_style)
 	dev_actions_popup.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(UI_SURFACE_BASE, Color("#7f6ab5aa"), 12, 1)
@@ -18457,6 +18588,9 @@ func _apply_premium_overlay_styles() -> void:
 
 	_apply_line_edit_style(chat_input)
 	_apply_text_edit_style(dev_pokemon_text)
+	dev_pokemon_title.add_theme_color_override("font_color", UI_TEXT)
+	if dev_pokemon_subtitle != null:
+		dev_pokemon_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 	_apply_button_style(general_chat_tab_button, "primary")
 	_apply_button_style(trade_chat_tab_button, "primary")
@@ -19296,7 +19430,7 @@ func _create_pending_chat_pokemon_button(pokemon_payload: Dictionary, index: int
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(44, 34)
 	button.focus_mode = Control.FOCUS_NONE
-	button.tooltip_text = "Attached: %s. Click to remove." % species
+	button.tooltip_text = "Gift: %s. Click to remove." % species
 	button.pressed.connect(_remove_pending_chat_pokemon_attachment.bind(index))
 	_apply_button_style(button)
 
@@ -19647,7 +19781,7 @@ func _refresh_chat_context_selector() -> void:
 		CHAT_TAB_ALL:
 			chat_context_selector_button.text = "To: Global"
 			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = "All combines every channel; messages send to Global"
+			chat_context_selector_button.tooltip_text = "You are viewing all chats. New messages are sent to Global."
 		CHAT_TAB_GENERAL:
 			var channel_label := "Global"
 			if active_chat_tab == CHAT_TAB_TRADE:
@@ -19655,11 +19789,11 @@ func _refresh_chat_context_selector() -> void:
 			elif active_chat_tab == CHAT_TAB_HELP:
 				channel_label = "Help"
 			chat_context_selector_button.text = "%s  ▴" % channel_label
-			chat_context_selector_button.tooltip_text = "Choose General chat channel"
+			chat_context_selector_button.tooltip_text = "Choose Global, Trade, or Help chat"
 		CHAT_TAB_MAP:
 			chat_context_selector_button.text = "Map"
 			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = "Only trainers on your current map can see this chat"
+			chat_context_selector_button.tooltip_text = "Only nearby trainers on this map can see these messages"
 		CHAT_TAB_PM:
 			if active_pm_user_id != 0 and pm_conversations_by_user_id.has(active_pm_user_id):
 				var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
@@ -19688,7 +19822,7 @@ func _setup_all_chat_tab() -> void:
 	all_chat_tab_button.custom_minimum_size = Vector2(70, 28)
 	all_chat_tab_button.text = "All"
 	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	all_chat_tab_button.tooltip_text = "Show every message you can receive"
+	all_chat_tab_button.tooltip_text = "Show messages from every chat"
 	all_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_ALL))
 	$Control/ChatTabsPanel/TabRow.add_child(all_chat_tab_button)
 	_apply_button_style(all_chat_tab_button, "primary")
@@ -20641,7 +20775,7 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 		_add_chat_message("Paste a Showdown/Pokepaste set or team first.")
 		return false
 
-	_add_chat_message("Creating content creator Pokemon...")
+	_add_chat_message("Creating Alpha Pokemon...")
 	var response: Dictionary = await PokemonDataApiClient.create_team_from_text(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
@@ -20684,7 +20818,7 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 			return false
 		created_count += 1
 
-	_add_chat_message("Created %s content creator Pokemon." % created_count)
+	_add_chat_message("Created %s Alpha Pokemon." % created_count)
 	return true
 
 func _handle_add_team_command(team_text: String) -> bool:
@@ -20816,7 +20950,7 @@ func _setup_player_hotbar() -> void:
 		button.ignore_texture_size = true
 		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.tooltip_text = "Empty hotbar slot %s" % (slot_index + 1)
+		button.tooltip_text = "Empty shortcut %s" % (slot_index + 1)
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
 		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
 		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
@@ -20862,7 +20996,7 @@ func _refresh_hotbar_ui() -> void:
 		button.preview_texture = null
 		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
 		quantity_label.text = ""
-		button.tooltip_text = "Empty hotbar slot %s\nRight-click a usable Bag item to assign it." % (slot_index + 1)
+		button.tooltip_text = "Empty shortcut %s\nRight-click a usable item in your Bag to place it here." % (slot_index + 1)
 		_apply_hotbar_slot_style(slot_index)
 		if entry.is_empty():
 			continue
@@ -20873,7 +21007,7 @@ func _refresh_hotbar_ui() -> void:
 			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
 			quantity_label.text = "KEY"
-			button.tooltip_text = "%s\nPermanent Key Item — never consumed.\nRight-click to remove from hotbar." % escape_rope_button.tooltip_text
+			button.tooltip_text = "%s\nThis key item is never used up.\nRight-click to remove this shortcut." % escape_rope_button.tooltip_text
 		elif entry_type == "field_move":
 			var binding: Dictionary = _parse_hotbar_field_move_binding(entry_id)
 			var move_id := str(binding.get("moveId", ""))
@@ -20885,10 +21019,10 @@ func _refresh_hotbar_ui() -> void:
 			button.modulate = Color.WHITE if bool(availability.get("success", false)) else Color(1.0, 1.0, 1.0, 0.35)
 			quantity_label.text = "KEY" if is_charm else "MOVE"
 			var source_name := "%s Charm" % _format_move_name(move_id) if is_charm else _hotbar_field_move_pokemon_name(pokemon_id)
-			button.tooltip_text = "%s · %s\n%s\nRight-click to remove from hotbar." % [
+			button.tooltip_text = "%s · %s\n%s\nRight-click to remove this shortcut." % [
 				_format_move_name(move_id),
 				source_name,
-				"Use in the overworld." if bool(availability.get("success", false)) else str(availability.get("error", "Unavailable.")),
+				"Use while exploring." if bool(availability.get("success", false)) else str(availability.get("error", "Unavailable.")),
 			]
 		elif entry_type == "item":
 			button.texture_normal = _load_item_icon(entry_id)
@@ -20896,9 +21030,9 @@ func _refresh_hotbar_ui() -> void:
 			var quantity := _hotbar_inventory_quantity(entry_id)
 			quantity_label.text = "x%s" % quantity
 			button.modulate = Color.WHITE if quantity > 0 else Color(1.0, 1.0, 1.0, 0.28)
-			button.tooltip_text = "%s\n%s\nRight-click to remove from hotbar." % [
+			button.tooltip_text = "%s\n%s\nRight-click to remove this shortcut." % [
 				_item_name_from_id(entry_id),
-				"Use on a party Pokemon. In Bag: %s." % quantity if quantity > 0 else "Unavailable — none left in your Bag.",
+				"Use on a party Pokémon. You have %s left." % quantity if quantity > 0 else "None left in your Bag.",
 			]
 
 
@@ -22408,8 +22542,8 @@ func _on_content_creator_clear_party_button_pressed() -> void:
 		return
 	_hide_content_creator_menu_popup()
 	_show_ui_confirm_popup(
-		"Clear Content Creator Pokemon",
-		"This will remove party Pokemon with Original Trainer Content Creator and generated origin. Other party Pokemon stay untouched.",
+		"Clear Alpha Pokemon",
+		"This will remove generated Alpha Pokemon from your party. Other party Pokemon stay untouched.",
 		"Clear Pokemon",
 		Callable(self, "_on_content_creator_clear_party_confirmed"),
 		Vector2i(500, 0),
@@ -22423,15 +22557,15 @@ func _on_content_creator_clear_party_confirmed() -> void:
 	var before_count := PlayerSave.party.size()
 	var result: Dictionary = await PlayerPartyStateService.content_creator_clear_party_pokemon()
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not clear content creator Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message("Could not clear Alpha Pokemon: %s" % str(result.get("error", "Unknown error")))
 		return
 
 	var after_count := PlayerSave.party.size()
 	var removed_count: int = max(before_count - after_count, 0)
 	if removed_count > 0:
-		_add_chat_message("Removed %s content creator Pokemon from party." % removed_count)
+		_add_chat_message("Removed %s Alpha Pokemon from party." % removed_count)
 	else:
-		_add_chat_message("No content creator Pokemon found in party.")
+		_add_chat_message("No Alpha Pokemon found in party.")
 
 func _position_content_creator_menu_popup() -> void:
 	_position_action_slot_popup(content_creator_menu_popup, content_creator_tools_slot)
@@ -22762,7 +22896,7 @@ func _clear_pokedex_species_sprite() -> void:
 		pokedex_sprite.texture = null
 		pokedex_sprite.visible = true
 	if pokedex_sprite_panel != null:
-		pokedex_sprite_panel.tooltip_text = "Select a Pokemon"
+		pokedex_sprite_panel.tooltip_text = "Select a Pokémon"
 
 func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	if pokedex_animated_sprite == null or pokedex_sprite == null:
@@ -22801,7 +22935,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite.texture = _load_pokedex_species_texture(species)
 
 	if pokedex_sprite_panel != null:
-		pokedex_sprite_panel.tooltip_text = "Show %s sprite" % ("front" if _get_pokedex_sprite_side() == "back" else "back")
+		pokedex_sprite_panel.tooltip_text = "Show the %s view" % ("front" if _get_pokedex_sprite_side() == "back" else "back")
 
 func _pokedex_species_sprite_candidates(species: Dictionary) -> Array[String]:
 	var candidates: Array[String] = []
@@ -23621,6 +23755,13 @@ func _create_pokedex_section_title(title_text: String) -> Control:
 	label.add_theme_color_override("font_color", POKEMON_SUMMARY_ACCENT)
 	return label
 
+func _create_item_dex_section_title(title_text: String) -> Control:
+	var label := Label.new()
+	label.text = title_text.to_upper()
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
+	return label
+
 func _create_pokedex_dossier_card(title_text: String, subtitle_text: String = "") -> Dictionary:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -23973,8 +24114,12 @@ func _refresh_item_dex_results() -> void:
 
 	var loading_label := Label.new()
 	loading_label.text = "Searching..."
+	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading_label.custom_minimum_size = Vector2(0, 44)
 	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	item_dex_results_list.add_child(loading_label)
+	if item_dex_results_count_label != null:
+		item_dex_results_count_label.text = "Searching..."
 
 	item_dex_search_request_id += 1
 	var request_id := item_dex_search_request_id
@@ -23986,6 +24131,8 @@ func _refresh_item_dex_results() -> void:
 		child.queue_free()
 
 	if not bool(search_result.get("success", false)):
+		if item_dex_results_count_label != null:
+			item_dex_results_count_label.text = "Unavailable"
 		var error_label := Label.new()
 		error_label.text = "Could not load items."
 		error_label.add_theme_color_override("font_color", UI_DANGER)
@@ -24033,10 +24180,7 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = str(item.get("shortDesc", item.get("desc", "")))
 	button.pressed.connect(_on_item_dex_result_selected.bind(item))
-	button.add_theme_stylebox_override("normal", _make_button_style(Color("#07111ed8"), Color("#d6c78f44"), 3, 1))
-	button.add_theme_stylebox_override("hover", _make_button_style(Color("#10213aee"), Color("#d6c78faa"), 3, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#050a12ee"), Color("#d6c78f"), 3, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(Color("#10213aee"), UI_BORDER_FOCUS, 3, 1))
+	button.set_meta("item_id", item_id)
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -24044,6 +24188,11 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	row.anchor_bottom = 1.0
 	row.add_theme_constant_override("separation", 10)
 	button.add_child(row)
+
+	var accent := ColorRect.new()
+	accent.name = "Accent"
+	accent.custom_minimum_size = Vector2(3, 0)
+	row.add_child(accent)
 
 	var icon := TextureRect.new()
 	icon.custom_minimum_size = Vector2(36, 36)
@@ -24075,10 +24224,35 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	meta_label.add_theme_font_size_override("font_size", 10)
 	meta_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	label_stack.add_child(meta_label)
+	_style_item_dex_result_button(button, item_id == item_dex_selected_item_id)
 	return button
+
+func _style_item_dex_result_button(button: Button, selected: bool) -> void:
+	if button == null:
+		return
+	var normal_background := UI_SURFACE_INTERACTIVE if selected else UI_SURFACE_INSET
+	var normal_border := ITEM_DEX_ACCENT_SOFT if selected else UI_BORDER_SUBTLE
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_background, normal_border, 8, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, ITEM_DEX_ACCENT_SOFT, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, ITEM_DEX_ACCENT, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
+	var accent := button.find_child("Accent", true, false) as ColorRect
+	if accent != null:
+		accent.color = ITEM_DEX_ACCENT if selected else Color(ITEM_DEX_ACCENT.r, ITEM_DEX_ACCENT.g, ITEM_DEX_ACCENT.b, 0.18)
+
+func _refresh_item_dex_selection_state() -> void:
+	if item_dex_results_list == null:
+		return
+	for child: Node in item_dex_results_list.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		_style_item_dex_result_button(button, str(button.get_meta("item_id", "")) == item_dex_selected_item_id)
 
 func _on_item_dex_result_selected(item: Dictionary) -> void:
 	var item_id := str(item.get("id", ""))
+	item_dex_selected_item_id = item_id
+	_refresh_item_dex_selection_state()
 	item_dex_icon.texture = _load_item_icon(
 		item_id,
 		str(item.get("machineKind", "")),
@@ -24647,8 +24821,8 @@ func _create_dev_item_result_button(item: Dictionary) -> Control:
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = str(item.get("shortDesc", item.get("desc", "")))
+	button.set_meta("item_id", item_id)
 	button.pressed.connect(_on_dev_item_result_selected.bind(item))
-	_apply_button_style(button, "primary" if item_id == str(dev_selected_item.get("id", "")) else "default")
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -24671,7 +24845,27 @@ func _create_dev_item_result_button(item: Dictionary) -> Control:
 	label.add_theme_font_size_override("font_size", 13)
 	label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(label)
+	_style_dev_item_result_button(button, item_id == str(dev_selected_item.get("id", "")))
 	return button
+
+func _style_dev_item_result_button(button: Button, selected: bool) -> void:
+	if button == null:
+		return
+	var normal_background := UI_SURFACE_INTERACTIVE if selected else UI_SURFACE_INSET
+	var normal_border := DEVELOPER_TOOLS_ACCENT_SOFT if selected else UI_BORDER_SUBTLE
+	button.add_theme_stylebox_override("normal", _make_button_style(normal_background, normal_border, 8, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, DEVELOPER_TOOLS_ACCENT_SOFT, 8, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, DEVELOPER_TOOLS_ACCENT, 8, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
+
+func _refresh_dev_item_selection_state() -> void:
+	if dev_item_results_list == null:
+		return
+	var selected_id := str(dev_selected_item.get("id", ""))
+	for child: Node in dev_item_results_list.get_children():
+		var button := child as Button
+		if button != null:
+			_style_dev_item_result_button(button, str(button.get_meta("item_id", "")) == selected_id)
 
 func _on_dev_item_result_selected(item: Dictionary) -> void:
 	if not _can_use_dev_tools():
@@ -24679,10 +24873,7 @@ func _on_dev_item_result_selected(item: Dictionary) -> void:
 
 	dev_selected_item = item.duplicate(true)
 	dev_item_confirm_button.disabled = false
-	for child: Node in dev_item_results_list.get_children():
-		if child is Button:
-			var button: Button = child as Button
-			_apply_button_style(button, "primary" if button.tooltip_text == str(dev_selected_item.get("shortDesc", dev_selected_item.get("desc", ""))) else "default")
+	_refresh_dev_item_selection_state()
 
 func _on_dev_item_confirm_pressed() -> void:
 	if not _can_use_dev_tools():
@@ -24941,19 +25132,23 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 	dev_pokemon_popup_mode = mode
 	match dev_pokemon_popup_mode:
 		DevPokemonPopupMode.CONTENT_CREATOR:
-			dev_pokemon_title.text = "Content Creator Pokemon"
+			dev_pokemon_title.text = "Alpha Pokemon"
+			dev_pokemon_subtitle.text = "Paste a Pokémon or Showdown team here"
 			dev_pokemon_add_button.text = "Create"
 			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team. Shiny, invalid EVs, and non-held items are rejected."
 		DevPokemonPopupMode.TEAM:
 			dev_pokemon_title.text = "Create Pokemon"
+			dev_pokemon_subtitle.text = "Paste one Pokémon or a complete Showdown / Pokepaste team"
 			dev_pokemon_add_button.text = "Create"
 			dev_pokemon_text.placeholder_text = "Paste one Pokemon or a full Showdown/Pokepaste team here"
 		DevPokemonPopupMode.SPAWN:
 			dev_pokemon_title.text = "Spawn Pokemon"
+			dev_pokemon_subtitle.text = "Start a wild encounter from a name, set, or Pokepaste"
 			dev_pokemon_add_button.text = "Spawn"
 			dev_pokemon_text.placeholder_text = "Enter a Pokemon name, Showdown set, or Pokepaste"
 		_:
 			dev_pokemon_title.text = "Add Pokemon"
+			dev_pokemon_subtitle.text = "Paste Showdown or Pokepaste text to add a Pokémon"
 			dev_pokemon_add_button.text = "Add"
 			dev_pokemon_text.placeholder_text = "Paste Showdown/Pokepaste text here"
 
@@ -26150,7 +26345,7 @@ func _refresh_pc_release_controls() -> void:
 	if pc_release_mode_button != null:
 		pc_release_mode_button.text = "Cancel Release" if pc_release_mode_active else "Release Mode"
 		pc_release_mode_button.disabled = pc_release_in_progress
-		pc_release_mode_button.tooltip_text = "Cancel release mode" if pc_release_mode_active else "Enable the permanent Pokémon release drop zone"
+		pc_release_mode_button.tooltip_text = "Stop choosing Pokémon to release" if pc_release_mode_active else "Choose Pokémon to release"
 		_apply_button_style(pc_release_mode_button, "danger")
 	pc_release_hint_label.text = "Releasing..." if pc_release_in_progress else "Drop a Pokémon here to release it"
 
@@ -27023,7 +27218,7 @@ func _create_mail_compose_attachment_row(
 	remove_button.text = "Remove"
 	remove_button.custom_minimum_size = Vector2(74, 30)
 	remove_button.focus_mode = Control.FOCUS_NONE
-	remove_button.tooltip_text = "Remove this attachment"
+	remove_button.tooltip_text = "Remove this gift"
 	remove_button.pressed.connect(remove_callback)
 	_apply_button_style(remove_button)
 	remove_button.add_theme_font_size_override("font_size", 11)
@@ -27438,7 +27633,7 @@ func _create_mail_attachment_row(
 		summary_button.custom_minimum_size = Vector2(74, 26)
 		summary_button.focus_mode = Control.FOCUS_NONE
 		summary_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		summary_button.tooltip_text = "View Pokemon summary"
+		summary_button.tooltip_text = "View Pokémon summary"
 		summary_button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
 		_apply_button_style(summary_button)
 		row.add_child(summary_button)
@@ -29241,14 +29436,14 @@ func _create_pvp_history_card(match: Dictionary, user_id: int) -> Control:
 
 		var battle_id_label := Label.new()
 		battle_id_label.text = "ID: %s" % _pvp_history_short_battle_id(battle_id)
-		battle_id_label.tooltip_text = "Battle ID: %s" % battle_id
+		battle_id_label.tooltip_text = "Battle code: %s" % battle_id
 		battle_id_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		battle_id_label.add_theme_font_size_override("font_size", 11)
 		battle_id_row.add_child(battle_id_label)
 
 		var copy_battle_id_button := Button.new()
 		copy_battle_id_button.text = "Copy"
-		copy_battle_id_button.tooltip_text = "Copy full Battle ID"
+		copy_battle_id_button.tooltip_text = "Copy the full battle code"
 		copy_battle_id_button.custom_minimum_size = Vector2(62, 24)
 		copy_battle_id_button.focus_mode = Control.FOCUS_NONE
 		copy_battle_id_button.pressed.connect(
@@ -29308,7 +29503,7 @@ func _create_pvp_history_team_icon(pokemon_data: Dictionary) -> TextureRect:
 	icon.texture = PokemonAssets.load_party_icon(species, shiny)
 	if icon.texture == null:
 		icon.texture = PokemonAssets.load_unknown_icon()
-	icon.tooltip_text = species if species != "" else "Pokemon"
+	icon.tooltip_text = species if species != "" else "Pokémon"
 	if _pvp_history_pokemon_fainted(pokemon_data):
 		icon.modulate = Color(0.65, 0.65, 0.65, 0.65)
 	return icon
@@ -30046,13 +30241,13 @@ func _refresh_pvp_queue_buttons(status: String) -> void:
 	pvp_leave_queue_button.disabled = pvp_battle_starting or not is_waiting
 	if ranked_blocked and has_visible_validation_issues:
 		pvp_join_queue_button.text = "Team Not Ready"
-		pvp_join_queue_button.tooltip_text = "Resolve the team validation issues before matchmaking"
+		pvp_join_queue_button.tooltip_text = "Fix the team issues shown above before finding a match"
 	elif validation_pending:
 		pvp_join_queue_button.text = "Checking Team..."
-		pvp_join_queue_button.tooltip_text = "Waiting for server team validation"
+		pvp_join_queue_button.tooltip_text = "Checking whether your team can enter ranked battles..."
 	elif ranked_blocked:
 		pvp_join_queue_button.text = "Team Not Ready"
-		pvp_join_queue_button.tooltip_text = "Your team must pass server validation before matchmaking"
+		pvp_join_queue_button.tooltip_text = "Your team is not ready for ranked battles yet"
 	else:
 		pvp_join_queue_button.text = "Find Match"
 		pvp_join_queue_button.tooltip_text = "Search for a ranked opponent"

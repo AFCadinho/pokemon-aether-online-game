@@ -217,7 +217,11 @@ func _set_held_item_marker(item_id: String) -> void:
 		return
 	var normalized_item_id: String = item_id.strip_edges()
 	held_item_marker.visible = normalized_item_id != ""
-	held_item_marker.tooltip_text = "Holding %s" % normalized_item_id if normalized_item_id != "" else ""
+	held_item_marker.tooltip_text = (
+		"Holding %s" % normalized_item_id.replace("-", " ").capitalize()
+		if normalized_item_id != ""
+		else ""
+	)
 
 func _set_status_icon(status: String) -> void:
 	if status_icon == null:

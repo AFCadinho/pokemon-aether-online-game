@@ -1197,7 +1197,7 @@ func _render_item_offer(target: VBoxContainer, item: Dictionary, is_local: bool,
 	if is_local and _local_offer_asset_count() > 1 and not _local_participant_ready() and not mutation_in_flight:
 		var remove := Button.new()
 		remove.text = "×"
-		remove.tooltip_text = "Remove item stack from offer"
+		remove.tooltip_text = "Remove this item from your offer"
 		remove.focus_mode = Control.FOCUS_NONE
 		remove.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		remove.custom_minimum_size = Vector2(24, 24)
@@ -1485,7 +1485,7 @@ func _render_offer_slot(slot: Control, pokemon: Dictionary, is_local: bool, posi
 	icon_button.add_theme_stylebox_override("normal", _panel_style(Color("#00000000"), Color("#00000000"), 4, 0))
 	icon_button.add_theme_stylebox_override("hover", _panel_style(Color("#62d7ff12"), TRADE_ACCENT, 4, 1))
 	icon_button.add_theme_stylebox_override("pressed", _panel_style(Color("#62d7ff20"), TRADE_ACCENT, 4, 1))
-	icon_button.tooltip_text = "%s\nOpen Pokemon summary" % _pokemon_label(pokemon)
+	icon_button.tooltip_text = "%s\nOpen Pokémon summary" % _pokemon_label(pokemon)
 	icon_button.pressed.connect(_open_offer_summary.bind(pokemon, is_local))
 	content.add_child(icon_button)
 	var level_label := Label.new()
@@ -1710,10 +1710,7 @@ func _render_locked_review() -> void:
 	if review_receive_list.get_child_count() == 0:
 		_render_review_empty_state(review_receive_list, "You are not receiving any assets")
 	review_trust_label.text = "Offers locked · Any change requires both trainers to review again"
-	review_trust_label.tooltip_text = "Locked revision %d · Verification %s" % [
-		int(review.get("lockedRevision", 0)),
-		str(review.get("snapshotHash", "")).left(12),
-	]
+	review_trust_label.tooltip_text = "The offers are locked. If either trainer changes anything, both trainers must check the trade again."
 	var local_confirmed := _local_participant_confirmed()
 	confirm_button.visible = not local_confirmed
 	confirm_button.disabled = mutation_in_flight or _connection_state_unresolved()

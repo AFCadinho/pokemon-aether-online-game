@@ -34,7 +34,7 @@ func _init() -> void:
 	_check(workspace.contains('review_give_list = _section(review_columns, "YOU GIVE")'), "Final review clearly labels outgoing assets")
 	_check(workspace.contains('review_receive_list = _section(review_columns, "YOU RECEIVE")'), "Final review clearly labels incoming assets")
 	_check(workspace.contains('review_trust_label.text = "Offers locked · Any change requires both trainers to review again"'), "Final review explains why offers are locked")
-	_check(workspace.contains('review_trust_label.tooltip_text = "Locked revision %d · Verification %s"'), "Technical verification remains available without dominating the UI")
+	_check(workspace.contains('review_trust_label.tooltip_text = "The offers are locked. If either trainer changes anything, both trainers must check the trade again."'), "Trade safety is explained without technical verification terms")
 	_check(workspace.contains('confirmation_label.text = ('), "Final confirmation includes a dedicated safety message")
 	_check(workspace.contains("service.replace_offer("), "Workspace revamp preserves authoritative offer replacement")
 	_check(workspace.contains("service.confirm_trade("), "Workspace revamp preserves locked confirmation")

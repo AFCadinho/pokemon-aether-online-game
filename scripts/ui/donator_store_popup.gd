@@ -904,7 +904,7 @@ func _create_character_preview_panel() -> Control:
 	custom_color_row.add_child(custom_color_label)
 
 	character_preview_color_picker = ColorPickerButton.new()
-	character_preview_color_picker.tooltip_text = "Choose any custom preview color"
+	character_preview_color_picker.tooltip_text = "Choose a custom color"
 	character_preview_color_picker.custom_minimum_size = Vector2(54, 24)
 	character_preview_color_picker.focus_mode = Control.FOCUS_NONE
 	character_preview_color_picker.color_changed.connect(_select_character_preview_custom_color)
@@ -982,7 +982,7 @@ func _create_selection_footer() -> Control:
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.add_theme_font_size_override("font_size", 10)
 	status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	status_label.tooltip_text = "Aether Gem prices and purchases are verified by the game server."
+	status_label.tooltip_text = "Your Aether Gem balance and purchases are kept safe."
 	row.add_child(status_label)
 	return panel
 
@@ -1663,7 +1663,7 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 	if purchase_in_progress:
 		purchase_button.disabled = true
 		purchase_button.text = "Purchasing..."
-		purchase_button.tooltip_text = "Waiting for the server to complete this purchase"
+		purchase_button.tooltip_text = "Completing your purchase..."
 		return
 	purchase_button.text = "Purchase"
 	if selected_item_id == "":
@@ -1672,13 +1672,13 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		return
 	if not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
 		purchase_button.disabled = true
-		purchase_button.tooltip_text = "This item is not compatible with your character model"
+		purchase_button.tooltip_text = "This item does not fit your character"
 		if update_status:
 			status_label.text = "This cosmetic is not compatible with your character model"
 		return
 	if store_catalog_loading or not store_catalog_loaded:
 		purchase_button.disabled = true
-		purchase_button.tooltip_text = "Loading the authoritative Store catalog"
+		purchase_button.tooltip_text = "Loading Store items..."
 		if update_status:
 			status_label.text = "Loading Aether Gem balance and available items..."
 		return

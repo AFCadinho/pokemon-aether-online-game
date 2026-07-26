@@ -1506,7 +1506,7 @@ func _setup_mechanic_buttons() -> void:
 		button.modulate = Color(0.45, 0.45, 0.45, 0.65)
 		button.self_modulate = Color.WHITE
 		button.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
-		button.tooltip_text = "Not implemented yet"
+		button.tooltip_text = "This option is not available yet"
 		if not button.mouse_entered.is_connected(_on_mechanic_button_mouse_entered.bind(button)):
 			button.mouse_entered.connect(_on_mechanic_button_mouse_entered.bind(button))
 		if not button.mouse_exited.is_connected(_on_mechanic_button_mouse_exited.bind(button)):

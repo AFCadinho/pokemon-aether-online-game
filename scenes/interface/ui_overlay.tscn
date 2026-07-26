@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://b8eogooab7wv7" path="res://assets/ui/friendlist.svg" id="13_friendlist"]
 [ext_resource type="Texture2D" path="res://assets/ui/staff_tools.svg" id="13_staff_tools"]
 [ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
-[ext_resource type="Texture2D" uid="uid://m2mkbq1umppx" path="res://assets/ui/content_creator.svg" id="15_content_creator"]
+[ext_resource type="Texture2D" path="res://assets/ui/alpha_tools.svg" id="15_content_creator"]
 [ext_resource type="Texture2D" path="res://assets/ui/clan.svg" id="16_guild"]
 [ext_resource type="AudioStream" uid="uid://d0sitgcr6kq4u" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_battles.svg" id="18_pvp"]
@@ -595,7 +595,7 @@ offset_bottom = -104.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Aether Gift Store"
+tooltip_text = "Buy cosmetics and gifts"
 icon = ExtResource("22_donator_gem")
 icon_max_width = 26
 expand_icon = true
@@ -619,7 +619,7 @@ offset_bottom = -152.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Settings"
+tooltip_text = "Change game settings"
 icon = ExtResource("7_settings_icon")
 icon_max_width = 26
 expand_icon = true
@@ -756,27 +756,27 @@ text = "Send"
 
 [node name="DevPokemonPopup" type="PanelContainer" parent="Control" unique_id=1288104280]
 visible = false
-custom_minimum_size = Vector2(520, 420)
+custom_minimum_size = Vector2(560, 460)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -210.0
-offset_right = 260.0
-offset_bottom = 210.0
+offset_left = -280.0
+offset_top = -230.0
+offset_right = 280.0
+offset_bottom = 230.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/DevPokemonPopup" unique_id=1001866330]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/DevPokemonPopup/MarginContainer" unique_id=158355187]
 layout_mode = 2
@@ -785,11 +785,17 @@ theme_override_constants/separation = 10
 [node name="Title" type="Label" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=476478871]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.90588236, 0.92156863, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 20
 text = "Add Pokemon"
 
+[node name="Subtitle" type="Label" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=121503219]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.61, 0.69, 1)
+theme_override_font_sizes/font_size = 11
+text = "Paste a Pokémon or an entire Showdown team"
+
 [node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
-custom_minimum_size = Vector2(0, 320)
+custom_minimum_size = Vector2(0, 338)
 layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "Paste Showdown/Pokepaste text here"
@@ -801,10 +807,12 @@ alignment = 2
 
 [node name="CloseButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1066928572]
 layout_mode = 2
+custom_minimum_size = Vector2(72, 36)
 text = "Close"
 
 [node name="AddButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1635496109]
 layout_mode = 2
+custom_minimum_size = Vector2(108, 36)
 text = "Add"
 
 [node name="LocationPanel" type="PanelContainer" parent="Control" unique_id=907156867]
@@ -1236,7 +1244,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="SocialsButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/SocialsSlot" unique_id=442590352]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Socials"
+tooltip_text = "Friends, mail, and nearby trainers"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("13_friendlist")
 texture_pressed = ExtResource("13_friendlist")
@@ -1261,7 +1269,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot" unique_id=1721297434]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Aether Exchange"
+tooltip_text = "Aether Exchange (coming soon)"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("19_exchange")
 texture_pressed = ExtResource("19_exchange")
@@ -1279,7 +1287,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="GuildButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/GuildSlot" unique_id=2000857235]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Clan"
+tooltip_text = "Open your Clan"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("16_guild")
 texture_pressed = ExtResource("16_guild")
@@ -1297,7 +1305,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="PvpButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/PvpSlot" unique_id=342526372]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "PvP Battles"
+tooltip_text = "Battle other trainers"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("18_pvp")
 texture_pressed = ExtResource("18_pvp")
@@ -1354,7 +1362,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="QuestButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/QuestSlot" unique_id=302294960]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Quest Log"
+tooltip_text = "View your quests"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("27_quest_log")
 texture_pressed = ExtResource("27_quest_log")
@@ -1395,7 +1403,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="RepelToggle" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot" unique_id=2085702693]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Repel"
+tooltip_text = "Turn wild encounter protection on or off"
 mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("8_iv6uh")
@@ -1415,7 +1423,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="EscapeRopeButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Escape Rope"
+tooltip_text = "Return to your last healing point"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("20_escape_rope")
 texture_pressed = ExtResource("20_escape_rope")
@@ -1433,7 +1441,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="RunningShoesButton" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot" unique_id=9405703]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Running Shoes"
+tooltip_text = "Turn running on or off"
 mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("11_running_shoe")
@@ -1452,7 +1460,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="FollowerToggle" type="TextureButton" parent="Control/ToggleActionsPanel/MarginContainer/HBoxContainer/FollowerSlot" unique_id=1273127839]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Show Follower"
+tooltip_text = "Show or hide your following Pokémon"
 mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("10_follower")
@@ -1508,7 +1516,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="MapButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/MapSlot" unique_id=1031341535]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Open Town Map"
+tooltip_text = "View the Town Map"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_riyyd")
 texture_pressed = ExtResource("3_riyyd")
@@ -1526,7 +1534,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="PokedexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/PokedexSlot" unique_id=1188406318]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Pokedex"
+tooltip_text = "Browse Pokémon you have seen"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("14_pokedex")
 texture_pressed = ExtResource("14_pokedex")
@@ -1544,7 +1552,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="ItemDexButton" type="TextureButton" parent="Control/DexActionsPanel/MarginContainer/HBoxContainer/ItemDexSlot" unique_id=496092701]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Item Dex"
+tooltip_text = "Browse items and where to find them"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("12_item_dex")
 texture_pressed = ExtResource("12_item_dex")
@@ -1600,7 +1608,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="ContentCreatorToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/ContentCreatorToolsSlot" unique_id=1492568340]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Content Creator Tools"
+tooltip_text = "Create Pokémon for the Alpha"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("15_content_creator")
 texture_pressed = ExtResource("15_content_creator")
@@ -1619,7 +1627,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="StaffToolsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/StaffToolsSlot" unique_id=309118989]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Staff Tools"
+tooltip_text = "Help and manage players"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("13_staff_tools")
 texture_pressed = ExtResource("13_staff_tools")
@@ -1638,7 +1646,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
 [node name="DevActionsButton" type="TextureButton" parent="Control/StaffActionsPanel/MarginContainer/HBoxContainer/DevActionsSlot" unique_id=1939088199]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-tooltip_text = "Developer Menu"
+tooltip_text = "Open developer tools"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("9_s0khl")
 texture_pressed = ExtResource("9_s0khl")

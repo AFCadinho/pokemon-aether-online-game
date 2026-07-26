@@ -102,7 +102,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	visible = true
 	disabled = is_active or is_fainted
 	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
-	tooltip_text = "Active Pokemon" if is_active else ""
+	tooltip_text = "Active Pokémon" if is_active else ""
 
 	_set_species_name(pokemon.species, pokemon.shiny)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
@@ -125,7 +125,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	visible = true
 	disabled = is_active or is_fainted
 	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
-	tooltip_text = "Active Pokemon" if is_active else ""
+	tooltip_text = "Active Pokémon" if is_active else ""
 
 	var is_shiny := _get_shiny_from_data(pokemon_data)
 	_set_species_name(species, is_shiny)
@@ -377,7 +377,7 @@ func _set_species_name(species: String, is_shiny: bool) -> void:
 	name_label.text = species
 	name_label.add_theme_font_size_override("font_size", _get_name_font_size(species))
 	shiny_badge.text = "S" if is_shiny else ""
-	shiny_badge.tooltip_text = "Shiny Pokemon" if is_shiny else ""
+	shiny_badge.tooltip_text = "Shiny Pokémon" if is_shiny else ""
 
 func _get_name_font_size(species: String) -> int:
 	var compact_name := species.replace(" ", "")
