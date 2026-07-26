@@ -26484,8 +26484,9 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 		return
 
 	pc_move_in_progress = true
-	pc_status_label.text = "Moving..."
 	var source := pc_selected_source.duplicate(true)
+	_preview_pc_slot_move(source, target)
+	pc_status_label.text = "Saving move..."
 	var target_party_pokemon_before := _pc_party_pokemon_at_storage_slot(int(target.get("partySlot", -1))) if str(target.get("type", "")) == "party" else null
 	var target_box_pokemon_id_before := _pc_box_pokemon_id_at_target(target) if str(target.get("type", "")) == "box" else 0
 	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
@@ -26493,6 +26494,8 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	if not bool(result.get("success", false)):
 		pc_status_label.text = "Move failed."
 		_add_chat_message("Could not move Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_render_pc_party()
+		_render_pc_box()
 		return
 
 	pc_selected_source = {}
@@ -26504,6 +26507,40 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	_add_chat_message("Pokemon moved to %s." % PokemonStorageService.storage_location_label(location))
 	_refresh_party()
 	await _refresh_pc_state(_pc_search_query() != "")
+
+
+func _preview_pc_slot_move(source: Dictionary, target: Dictionary) -> void:
+	var source_button := _pc_button_for_location(source)
+	var target_button := _pc_button_for_location(target)
+	if source_button == null or target_button == null:
+		return
+
+	var source_icon := source_button.find_child("PokemonIcon", true, false) as TextureRect
+	var target_icon := target_button.find_child("PokemonIcon", true, false) as TextureRect
+	if source_icon == null or target_icon == null:
+		return
+
+	var source_texture: Texture2D = source_button.drag_texture
+	var target_occupied := not target_button.drag_source.is_empty()
+	var target_texture: Texture2D = target_button.drag_texture if target_occupied else null
+
+	target_icon.texture = source_texture
+	target_icon.modulate = Color.WHITE
+	target_button.modulate = Color.WHITE
+	source_icon.texture = target_texture if target_occupied else PokemonAssets.load_unknown_icon()
+	source_icon.modulate = Color.WHITE if target_occupied else Color(1.0, 1.0, 1.0, 0.16)
+	source_button.modulate = Color.WHITE if target_occupied else Color(1.0, 1.0, 1.0, 0.76)
+
+
+func _pc_button_for_location(location: Dictionary) -> PcPokemonSlotButton:
+	for container in [pc_party_list, pc_box_grid]:
+		if container == null:
+			continue
+		for child: Node in container.get_children():
+			var button := child as PcPokemonSlotButton
+			if button != null and _pc_locations_match(button.drop_target, location):
+				return button
+	return null
 
 
 func _pc_box_pokemon_id_at_target(target: Dictionary) -> int:

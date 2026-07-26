@@ -139,10 +139,40 @@ func _prepare_world() -> void:
 	})
 
 	_set_loading_status("Opening the path to your adventure...", 2)
-	var error: Error = get_tree().change_scene_to_file(WORLD_SCENE_PATH)
+	var world_scene: PackedScene = await _load_world_scene_threaded()
+	if world_scene == null:
+		_return_to_login("Could not load the world. Please contact staff.")
+		return
+
+	var error: Error = get_tree().change_scene_to_packed(world_scene)
 	if error != OK:
 		push_error("LoadingScreen: failed to load world scene: %s" % error_string(error))
 		_return_to_login("Could not enter the world. Please contact staff.")
+
+
+func _load_world_scene_threaded() -> PackedScene:
+	var request_error: Error = ResourceLoader.load_threaded_request(WORLD_SCENE_PATH, "PackedScene")
+	if request_error != OK and request_error != ERR_BUSY:
+		push_error(
+			"LoadingScreen: could not start threaded world load: %s"
+			% error_string(request_error)
+		)
+		return null
+
+	while true:
+		var status: int = ResourceLoader.load_threaded_get_status(WORLD_SCENE_PATH)
+		match status:
+			ResourceLoader.THREAD_LOAD_LOADED:
+				return ResourceLoader.load_threaded_get(WORLD_SCENE_PATH) as PackedScene
+			ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				await get_tree().process_frame
+			ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				push_error("LoadingScreen: threaded world load failed with status %d" % status)
+				return null
+			_:
+				push_error("LoadingScreen: threaded world load returned unexpected status %d" % status)
+				return null
+	return null
 
 
 func _return_to_login(message: String) -> void:

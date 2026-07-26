@@ -13,6 +13,7 @@
 
 - Available Z-Moves now stand out more clearly during battle, while moves that cannot use Z-Power are visibly dimmed.
 - Status Z-Moves now show their proper name and the bonus effect they provide.
+- Pokémon Storage now shows a dropped Pokémon in its destination slot immediately while saving the move.
 - Ranked matchmaking now clearly shows when the queue is unavailable.
 - Improved the Item Dex, Alpha Tools, Pokémon import, and other tools with clearer layouts and selections.
 - Made many messages and tooltips easier to understand across battles, trading, mail, storage, the Store, and the overworld.
@@ -21,6 +22,7 @@
 
 **Fixed**
 
+- Fixed the post-login loading spinner freezing while the world scene was being loaded.
 - Fixed some Z-Crystals not activating the correct Z-Move depending on how they were equipped.
 - Fixed status Z-Moves showing an incorrect name or missing their bonus effect.
 - Fixed missing HOME party icons for the Jangmo-o line and Ultra Necrozma.

@@ -12,6 +12,12 @@ func _init() -> void:
 	_check(source.contains("GradientTexture2D.FILL_RADIAL"), "loading screen uses the current aura treatment")
 	_check(source.contains("func _create_loading_spinner()"), "loading screen builds a dedicated activity spinner")
 	_check(source.contains('"rotation", TAU, 0.85'), "loading spinner rotates continuously without implying percentage progress")
+	_check(
+		source.contains("ResourceLoader.load_threaded_request(WORLD_SCENE_PATH")
+		and source.contains("await get_tree().process_frame")
+		and source.contains("change_scene_to_packed(world_scene)"),
+		"world loads in the background so the spinner keeps animating"
+	)
 	_check(source.contains('["TRAINER", "PARTY", "WORLD"]'), "loading screen communicates its three preparation stages")
 	_check(source.contains("_set_loading_status"), "loading flow updates stage and status together")
 	quit(1 if failed else 0)
