@@ -14,6 +14,7 @@
 - Available Z-Moves now stand out more clearly during battle, while moves that cannot use Z-Power are visibly dimmed.
 - Status Z-Moves now show their proper name and the bonus effect they provide.
 - Pokémon Storage now shows a dropped Pokémon in its destination slot immediately while saving the move.
+- Hovering over a Pokémon in Storage now shows the same detailed information card used for the player's party in battle.
 - Ranked matchmaking now clearly shows when the queue is unavailable.
 - Improved the Item Dex, Alpha Tools, Pokémon import, and other tools with clearer layouts and selections.
 - Made many messages and tooltips easier to understand across battles, trading, mail, storage, the Store, and the overworld.

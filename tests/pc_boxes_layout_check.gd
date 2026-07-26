@@ -36,6 +36,7 @@ func _init() -> void:
 	_check(source.contains("PokemonStorageService.move_pokemon("), "Storage revamp preserves moving Pokémon")
 	_check(source.contains("PokemonStorageService.release_pokemon("), "Storage revamp preserves releasing Pokémon")
 	_check(source.contains("_open_pc_box_pokemon_summary("), "Storage revamp preserves Pokémon summaries")
+	_check(source.contains("PcPokemonHoverCard"), "Storage exposes battle-style Pokémon information on hover")
 
 	quit(1 if failures > 0 else 0)
 

@@ -84,6 +84,7 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const PvpRankedBanlists := preload("res://scripts/services/pvp_ranked_banlists.gd")
 const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team_validation.gd")
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
+const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
@@ -917,6 +918,7 @@ var pc_box_grid: GridContainer
 var pc_box_title_label: Label
 var pc_box_capacity_label: Label
 var pc_status_label: Label
+var pc_pokemon_hover_card: PartyHoverCard
 var pc_close_button: Button
 var pc_release_mode_button: Button
 var pc_release_drop_panel: PanelContainer
@@ -1816,6 +1818,11 @@ func _setup_pc_ui() -> void:
 	pc_popup.offset_bottom = PC_POPUP_SIZE.y / 2.0
 	pc_popup.add_theme_stylebox_override("panel", _make_pc_outer_style())
 	root_control.add_child(pc_popup)
+
+	pc_pokemon_hover_card = PC_PARTY_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
+	pc_pokemon_hover_card.name = "PcPokemonHoverCard"
+	pc_pokemon_hover_card.z_index = UI_DRAG_Z_INDEX - 1
+	root_control.add_child(pc_pokemon_hover_card)
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 16)
@@ -25347,6 +25354,7 @@ func _show_pc_popup() -> void:
 func _on_pc_close_button_pressed() -> void:
 	if pc_popup == null:
 		return
+	_hide_pc_pokemon_hover()
 	pc_popup.visible = false
 	pc_popup_dragging = false
 	pc_selected_source = {}
@@ -25355,6 +25363,7 @@ func _on_pc_close_button_pressed() -> void:
 
 
 func _on_pc_box_selected(index: int) -> void:
+	_hide_pc_pokemon_hover()
 	pc_selected_box_index = max(index, 0)
 	pc_selected_source = {}
 	_clear_pc_release_selection()
@@ -25631,6 +25640,7 @@ func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, poke
 		}
 	if occupied:
 		button.drop_target = PokemonStorageService.party_location(storage_slot_index)
+		_connect_pc_pokemon_hover(button, pokemon.to_persistence_dict())
 	elif slot_index == PlayerSave.party.size():
 		button.drop_target = PokemonStorageService.party_location(slot_index)
 	button.slot_dropped.connect(_on_pc_slot_dropped)
@@ -25674,6 +25684,8 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 				"pokemonId": pokemon_id,
 			}
 	button.drop_target = PokemonStorageService.box_location(box_index, slot_index)
+	if occupied:
+		_connect_pc_pokemon_hover(button, payload)
 	button.slot_dropped.connect(_on_pc_slot_dropped)
 	return button
 
@@ -25915,6 +25927,46 @@ func _pc_payload_types(payload: Dictionary) -> Array[String]:
 		if value != "" and not types.has(value):
 			types.append(value)
 	return types
+
+
+func _connect_pc_pokemon_hover(button: PcPokemonSlotButton, pokemon_payload: Dictionary) -> void:
+	var hover_data := _pc_pokemon_hover_data(pokemon_payload)
+	button.mouse_entered.connect(_show_pc_pokemon_hover.bind(button, hover_data))
+	button.mouse_exited.connect(_hide_pc_pokemon_hover)
+
+
+func _pc_pokemon_hover_data(pokemon_payload: Dictionary) -> Dictionary:
+	var hover_data := pokemon_payload.duplicate(true)
+	hover_data["types"] = _pc_payload_types(hover_data)
+	if str(hover_data.get("item", "")).strip_edges() == "":
+		hover_data["item"] = _pc_payload_held_item_id(hover_data)
+
+	var display_moves: Array = []
+	for move_value: Variant in _array_from_variant(hover_data.get("moves", [])):
+		if move_value is Dictionary:
+			var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
+			if str(move_data.get("name", "")).strip_edges() == "":
+				var move_id := str(move_data.get("id", move_data.get("move", ""))).strip_edges()
+				move_data["name"] = _format_move_name(move_id)
+			display_moves.append(move_data)
+		else:
+			display_moves.append(move_value)
+	hover_data["moves"] = display_moves
+	return hover_data
+
+
+func _show_pc_pokemon_hover(button: PcPokemonSlotButton, pokemon_data: Dictionary) -> void:
+	if pc_pokemon_hover_card == null or pc_popup == null or not pc_popup.visible:
+		return
+	if pc_dragging or pc_move_in_progress or pokemon_data.is_empty():
+		return
+	pc_pokemon_hover_card.show_for_pokemon(pokemon_data)
+	pc_pokemon_hover_card.position_near_rect(button.get_global_rect(), get_viewport().get_visible_rect().size)
+
+
+func _hide_pc_pokemon_hover() -> void:
+	if pc_pokemon_hover_card != null:
+		pc_pokemon_hover_card.hide_card()
 
 
 func _apply_pc_pokemon_slot_style(button: Button, occupied: bool, selected: bool, types: Array) -> void:
@@ -26185,6 +26237,7 @@ func _on_pc_slot_button_gui_input(event: InputEvent, button: PcPokemonSlotButton
 
 
 func _start_pc_drag(button: PcPokemonSlotButton, global_position: Vector2) -> void:
+	_hide_pc_pokemon_hover()
 	_clear_pc_drag_visual()
 	pc_drag_source_button = button
 	pc_drag_source = button.drag_source.duplicate(true)
