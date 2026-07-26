@@ -13,8 +13,11 @@ const CATEGORY_ICON_PATHS := {
 @onready var name_label: Label = $MarginContainer/VBoxContainer/NameLabel
 @onready var type_node: Node = $MarginContainer/VBoxContainer/MetaRow/TypeLabel
 @onready var category_node: Node = $MarginContainer/VBoxContainer/MetaRow/TypeLabel2
+@onready var power_row: HBoxContainer = $MarginContainer/VBoxContainer/BasePowerRow
 @onready var power_value_label: Label = $MarginContainer/VBoxContainer/BasePowerRow/PowerValueLabel
 @onready var accuracy_value_label: Label = $MarginContainer/VBoxContainer/BasePowerRow2/AccuracyLabel2
+@onready var z_effect_row: HBoxContainer = $MarginContainer/VBoxContainer/ZEffectRow
+@onready var z_effect_value_label: Label = $MarginContainer/VBoxContainer/ZEffectRow/ZEffectValueLabel
 @onready var description_label: Label = $MarginContainer/VBoxContainer/DescriptionLabel
 
 
@@ -69,9 +72,14 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 func _set_move_data(move_data: Dictionary) -> void:
 	name_label.text = str(move_data.get("name", move_data.get("move", move_data.get("id", "Unknown Move"))))
 	_set_icon_or_text(type_node, str(move_data.get("type", "")), TYPE_ICON_PATH)
-	_set_category_icon_or_text(str(move_data.get("category", "")))
+	var category := str(move_data.get("category", ""))
+	_set_category_icon_or_text(category)
+	power_row.visible = category.to_lower() != "status"
 	power_value_label.text = _format_power(move_data.get("basePower", move_data.get("base_power", "")))
 	accuracy_value_label.text = _format_accuracy(move_data.get("accuracy", ""))
+	var z_effect := str(move_data.get("zEffect", move_data.get("z_effect", ""))).strip_edges()
+	z_effect_row.visible = z_effect != ""
+	z_effect_value_label.text = z_effect
 	_set_description(move_data)
 
 

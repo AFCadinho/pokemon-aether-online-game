@@ -3114,6 +3114,8 @@ func _get_display_moves_for_selected_mechanic() -> Array:
 		var z_move := battle_state.get_z_move_for_slot(index + 1, local_state_player_id)
 		if z_move.is_empty():
 			base_move["disabled"] = true
+			base_move["zMoveUnavailable"] = true
+			base_move["disabledReason"] = "This move cannot be used as a Z-Move."
 			display_moves.append(base_move)
 			continue
 

@@ -345,6 +345,7 @@ func _check_party_rail_interaction() -> void:
 
 func _check_battle_selection_policy_contract() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var move_slot_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/move_slot.gd")
 	var battle_scene_source := FileAccess.get_file_as_string(BATTLE_SCENE_PATH)
 	_check_contains(source, "PartyGrid.should_allow_selection(", "battle delegates party interaction to tested policy")
 	_check_contains(source, "current_action_view == ActionView.PARTY", "party view drives rail selection")
@@ -387,6 +388,11 @@ func _check_battle_selection_policy_contract() -> void:
 	_check_contains(source, "_create_mechanic_overlay_label(z_move_button, \"Z\")", "Z-Move orb carries a compact text overlay")
 	_check_contains(source, "battle_state.can_active_pokemon_use_z_move(local_state_player_id)", "Z-Move orb follows authoritative request availability")
 	_check_contains(source, "battle_state.can_active_pokemon_use_z_move_slot(slot, local_state_player_id)", "Z-Move submission revalidates its exact slot")
+	_check_contains(source, 'base_move["zMoveUnavailable"] = true', "moves without a Z-Move are explicitly marked for the battle UI")
+	_check_contains(move_slot_source, "DISABLED_MODULATE", "unavailable moves have a clearly muted visual state")
+	_check_contains(move_slot_source, 'effectiveness_label.text = "no Z-Move"', "unavailable Z-Move slots explain why they cannot be selected")
+	_check_contains(move_slot_source, "Z_MOVE_BORDER", "available Z-Moves have a distinct golden highlight")
+	_check_contains(move_slot_source, 'effectiveness_label.text = "Z-POWER"', "available Z-Moves carry a compact Z-Power label")
 	_check_contains(
 		FileAccess.get_file_as_string("res://scripts/battle/battle_api/battle_api_client.gd"),
 		'body["zMove"] = true',

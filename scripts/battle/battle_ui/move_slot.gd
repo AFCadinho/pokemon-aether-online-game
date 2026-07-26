@@ -5,6 +5,9 @@ const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const NEUTRAL_BACKGROUND := Color("#020612f5")
 const NEUTRAL_BORDER := Color("#1e60b4dc")
 const DISABLED_BACKGROUND := Color("#10131af0")
+const DISABLED_MODULATE := Color(0.42, 0.45, 0.52, 0.72)
+const Z_MOVE_BORDER := Color("#ffd35a")
+const Z_MOVE_GLOW := Color("#ff8a2a")
 
 signal selected
 signal hovered(move_data: Dictionary, slot_rect: Rect2)
@@ -31,6 +34,8 @@ func set_move_data(move_data: Dictionary) -> void:
 	visible = true
 	current_move_data = move_data.duplicate(true)
 	disabled = move_data.get("disabled", false) == true
+	modulate = DISABLED_MODULATE if disabled else Color.WHITE
+	tooltip_text = str(move_data.get("disabledReason", "")) if disabled else ""
 	
 	move_name_label.text = str(move_data.get("name", ""))
 	
@@ -54,9 +59,18 @@ func set_move_data(move_data: Dictionary) -> void:
 	]
 	var move_type := _get_move_type(move_data)
 	_set_type_banner(move_type)
-	_apply_type_style(move_type, disabled)
+	var is_z_move := bool(move_data.get("zMove", false))
+	_apply_type_style(move_type, disabled, is_z_move)
 	
-	_set_effectiveness(move_data)
+	if bool(move_data.get("zMoveUnavailable", false)):
+		effectiveness_label.text = "no Z-Move"
+		effectiveness_label.add_theme_color_override("font_color", Color("#9ba5b8"))
+	elif is_z_move:
+		effectiveness_label.text = "Z-POWER"
+		effectiveness_label.add_theme_color_override("font_color", Z_MOVE_BORDER)
+		tooltip_text = "Z-Power move"
+	else:
+		_set_effectiveness(move_data)
 	
 func _set_type_banner(move_type: String) -> void:
 	if move_type == "":
@@ -77,7 +91,7 @@ func _set_type_banner(move_type: String) -> void:
 	type_banner.visible = true
 
 
-func _apply_type_style(move_type: String, is_disabled: bool) -> void:
+func _apply_type_style(move_type: String, is_disabled: bool, is_z_move := false) -> void:
 	var background := NEUTRAL_BACKGROUND
 	var border := NEUTRAL_BORDER
 	var accent := Color("#d8dee9")
@@ -96,6 +110,16 @@ func _apply_type_style(move_type: String, is_disabled: bool) -> void:
 	hover.shadow_offset = Vector2(0, 3)
 	var pressed := _make_slot_style(type_surface.darkened(0.08), accent, 2)
 	var disabled_style := _make_slot_style(type_surface.lerp(DISABLED_BACKGROUND, 0.58), Color(border.r, border.g, border.b, 0.38), 1)
+	if is_z_move and not is_disabled:
+		normal = _make_slot_style(type_surface.lerp(Color("#6b3b17"), 0.34), Z_MOVE_BORDER, 2)
+		normal.shadow_color = Color(Z_MOVE_GLOW.r, Z_MOVE_GLOW.g, Z_MOVE_GLOW.b, 0.38)
+		normal.shadow_size = 12
+		normal.shadow_offset = Vector2(0, 3)
+		hover = _make_slot_style(type_surface.lightened(0.12), Z_MOVE_BORDER.lightened(0.1), 3)
+		hover.shadow_color = Color(Z_MOVE_GLOW.r, Z_MOVE_GLOW.g, Z_MOVE_GLOW.b, 0.58)
+		hover.shadow_size = 16
+		hover.shadow_offset = Vector2(0, 3)
+		pressed = _make_slot_style(type_surface.darkened(0.04), Z_MOVE_BORDER, 3)
 
 	add_theme_stylebox_override("normal", disabled_style if is_disabled else normal)
 	add_theme_stylebox_override("hover", disabled_style if is_disabled else hover)
@@ -205,6 +229,8 @@ func set_empty() -> void:
 	visible = true
 	current_move_data = {}
 	disabled = true
+	modulate = DISABLED_MODULATE
+	tooltip_text = ""
 	move_name_label.text = "Empty"
 	pp_label.text = "--/--"
 	effectiveness_label.text = ""

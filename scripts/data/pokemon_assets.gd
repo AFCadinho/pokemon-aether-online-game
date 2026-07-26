@@ -12,6 +12,9 @@ const GEN5_SPRITE_ROOT := "gen5"
 const PARTY_ICON_CROP_PADDING := 4
 const PARTY_ICON_ALPHA_THRESHOLD := 0.01
 const HOME_SPRITE_ALIASES := {
+	"jangmo-o": ["Jangmo-o"],
+	"hakamo-o": ["Hakamo-o"],
+	"kommo-o": ["Kommo-o"],
 	"ninetales-alola": ["Ninetales-Alola"],
 	"vulpix-alola": ["Vulpix-Alola"],
 	"oricorio": ["Oricorio"],

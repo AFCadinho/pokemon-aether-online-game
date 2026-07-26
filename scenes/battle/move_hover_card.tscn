@@ -84,6 +84,24 @@ text = "Accuracy:"
 layout_mode = 2
 text = "100%"
 
+[node name="ZEffectRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ZEffectLabel" type="Label" parent="MarginContainer/VBoxContainer/ZEffectRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.827451, 0.352941, 1)
+text = "Z-Effect:"
+
+[node name="ZEffectValueLabel" type="Label" parent="MarginContainer/VBoxContainer/ZEffectRow"]
+custom_minimum_size = Vector2(218, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.941176, 0.886275, 0.682353, 1)
+text = "Attack +1"
+autowrap_mode = 3
+
 [node name="ColorRect2" type="ColorRect" parent="MarginContainer/VBoxContainer" unique_id=457702315]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
