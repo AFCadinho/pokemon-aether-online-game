@@ -16,6 +16,11 @@ func _init() -> void:
 	_check_true(ResourceLoader.exists("res://assets/items/icons/field_move_charms/SNOWSCAPECHARM.png"), "Snowscape Charm has a dedicated cropped icon")
 	_check_true(ResourceLoader.exists("res://assets/items/icons/field_move_charms/RAINDANCECHARM.png"), "Rain Dance Charm has a dedicated cropped icon")
 	_check_true(service_source.contains("func can_use_direct_field_move"), "direct moves receive exact source validation")
+	_check_true(
+		service_source.contains('"playerCooldownEndsAt"')
+		and service_source.contains('"mapCooldownEndsAt"'),
+		"weather field moves retain both player and map cooldown results"
+	)
 	_check_true(service_source.contains('world.call("use_direct_field_move"'), "direct moves are dispatched to the active overworld")
 	_check_true(ui_source.contains("OVERWORLD_MOVE_ACTION_ICON"), "summary cards use the compact overworld action icon")
 	_check_true(ui_source.contains("FieldMoveService.use_direct_field_move(move_id, pokemon_id)"), "summary actions use the shared field move service")

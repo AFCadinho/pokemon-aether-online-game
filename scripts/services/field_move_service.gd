@@ -24,6 +24,7 @@ const DIRECT_FIELD_MOVE_DEFINITIONS := {
 }
 const WEATHER_FIELD_MOVES: Array[String] = ["rain-dance", "snowscape", "sunny-day"]
 const WEATHER_ACTION_ENDPOINT := "/world/weather/action"
+const DEVELOPER_WEATHER_ENDPOINT := "/world/weather/developer"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var owned_charm_moves: Dictionary = {}
@@ -175,6 +176,33 @@ func _use_weather_field_move(move_id: String, availability: Dictionary) -> Dicti
 		],
 		"weather": weather,
 		"cooldownEndsAt": str(body.get("cooldownEndsAt", "")),
+		"playerCooldownEndsAt": str(body.get("playerCooldownEndsAt", body.get("cooldownEndsAt", ""))),
+		"mapCooldownEndsAt": str(body.get("mapCooldownEndsAt", "")),
+	}
+
+
+func set_developer_world_weather(weather: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var normalized_weather := weather.strip_edges().to_lower()
+	if normalized_weather == "":
+		normalized_weather = "default"
+	if normalized_weather not in ["default", "clear", "rain", "snow"]:
+		return {"success": false, "error": "Unsupported overworld weather."}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(
+		base_url + DEVELOPER_WEATHER_ENDPOINT,
+		JSON.stringify({"weather": normalized_weather})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body_value: Variant = response.get("body", {})
+	var body: Dictionary = body_value as Dictionary if body_value is Dictionary else {}
+	var weather_value: Variant = body.get("weather", {})
+	var weather_state: Dictionary = weather_value as Dictionary if weather_value is Dictionary else {}
+	return {
+		"success": true,
+		"weather": weather_state,
 	}
 
 

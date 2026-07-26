@@ -14,6 +14,7 @@ func _init() -> void:
 	_check_true(world_source.contains("_apply_weather_for_map(target_map)"), "authorized teleports apply the destination weather policy")
 	_check_true(world_source.contains("_apply_weather_for_map(new_map)"), "regular map transitions apply the destination weather policy")
 	_check_true(world_source.contains("_apply_weather_for_map(initial_map)"), "initial world setup applies the map weather policy")
+	_check_true(world_source.contains("weather_controller.clear_debug_weather()"), "legacy local previews cannot leak into the next map")
 	_check_true(oaks_lab_source.contains('weather_profile = "disabled"'), "Oak's Lab explicitly disables overworld weather")
 
 	var controller := WeatherScene.instantiate() as OverworldWeatherController

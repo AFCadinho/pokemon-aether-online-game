@@ -99,10 +99,25 @@ func _init() -> void:
 		"All includes Map, PM, and Clan messages alongside the public channels"
 	)
 	_check(
-		overlay_source.contains("func _create_chat_channel_badge")
+		overlay_source.contains("func _create_chat_channel_prefix")
+		and overlay_source.contains('prefix.text = "[Global]"')
+		and overlay_source.contains('prefix_color = Color("#d8b767")')
+		and overlay_source.contains("prefix.flat = true")
+		and overlay_source.contains("StyleBoxEmpty.new()")
 		and overlay_source.contains("func _on_all_channel_badge_pressed")
 		and overlay_source.contains("func _on_all_pm_channel_pressed"),
-		"All messages identify their channel and can navigate to it"
+		"All messages use a muted text channel prefix that can navigate to its chat"
+	)
+	_check(
+		overlay_source.contains("func _apply_chat_row_emphasis")
+		and overlay_source.contains("CHAT_ALL_SECONDARY_CONTENT_ALPHA := 0.68")
+		and overlay_source.contains(
+			'category not in [CHAT_CHANNEL_GLOBAL, CHAT_CATEGORY_USER]'
+		)
+		and overlay_source.contains(
+			'for node_name: StringName in [&"RoleBadge", &"SenderName", &"MessageText"]'
+		),
+		"All keeps Global prominent and softens secondary channel message content"
 	)
 	_check(
 		overlay_source.contains(

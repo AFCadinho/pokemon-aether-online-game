@@ -733,7 +733,8 @@ func _get_label_text_width(label: Label) -> float:
 
 
 func _get_role_badge_width(badge_text: String) -> float:
-	match badge_text.strip_edges():
+	var normalized_badge := badge_text.strip_edges()
+	match normalized_badge:
 		"alpha":
 			return 38.0
 		"GM":
@@ -741,10 +742,20 @@ func _get_role_badge_width(badge_text: String) -> float:
 		"SR", "DEV", "MOD":
 			return 32.0
 		_:
-			return ROLE_BADGE_DEFAULT_WIDTH
+			return clampf(
+				float(normalized_badge.length() * 5 + 8),
+				ROLE_BADGE_DEFAULT_WIDTH,
+				NAMEPLATE_MAX_NAME_WIDTH
+			)
 
 
-func _get_primary_visible_role(role_values: Array, _selected_badge: String = "") -> Dictionary:
+func _get_primary_visible_role(role_values: Array, selected_badge: String = "") -> Dictionary:
+	var normalized_selected_badge := selected_badge.strip_edges().to_lower()
+	if normalized_selected_badge == "none":
+		return {}
+	if normalized_selected_badge != "":
+		return _find_selected_overworld_role(role_values, normalized_selected_badge)
+
 	var primary_role: Dictionary = {}
 	var primary_priority: int = -999999
 	for role_value: Variant in role_values:
@@ -766,6 +777,23 @@ func _get_primary_visible_role(role_values: Array, _selected_badge: String = "")
 			primary_priority = priority
 
 	return primary_role
+
+func _find_selected_overworld_role(role_values: Array, selected_badge: String) -> Dictionary:
+	for role_value: Variant in role_values:
+		if not role_value is Dictionary:
+			continue
+		var role := role_value as Dictionary
+		if str(role.get("id", "")).strip_edges().to_lower() != selected_badge:
+			continue
+		if not _should_show_overworld_role_badge(role):
+			return {}
+		var badge := _get_role_badge(role)
+		if badge.is_empty():
+			return {}
+		var role_with_badge := role.duplicate()
+		role_with_badge["badge"] = badge
+		return role_with_badge
+	return {}
 
 func _should_show_overworld_role_badge(role: Dictionary) -> bool:
 	var role_id := str(role.get("id", "")).strip_edges().to_lower()
@@ -793,8 +821,12 @@ func _get_role_badge(role: Dictionary) -> String:
 			return "DEV"
 		"moderator":
 			return "MOD"
-		_:
-			return ""
+	var display_name := str(
+		role.get("displayName", role.get("label", role.get("name", "")))
+	).strip_edges()
+	if display_name != "":
+		return display_name
+	return role_id.replace("_", " ").capitalize()
 
 
 func _get_role_color(role_id: String, fallback: String) -> Color:

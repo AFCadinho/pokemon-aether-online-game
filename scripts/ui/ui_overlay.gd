@@ -38,6 +38,7 @@ const CHAT_SEPARATOR_COLOR := "#778194"
 const CHAT_MESSAGE_COLOR := "#d7dce8"
 const CHAT_SYSTEM_LABEL_COLOR := "#d8b767"
 const CHAT_SYSTEM_MESSAGE_COLOR := "#f0d992"
+const CHAT_ALL_SECONDARY_CONTENT_ALPHA := 0.68
 const CHAT_TAB_ALL := "all"
 const CHAT_TAB_GENERAL := "general"
 const CHAT_TAB_MAP := "map"
@@ -7838,6 +7839,7 @@ func _refresh_location_label() -> void:
 
 func _on_location_weather_changed(weather_state: Dictionary) -> void:
 	_refresh_location_weather(weather_state)
+	_refresh_dev_world_weather_selector(weather_state)
 
 func _refresh_location_weather(weather_state: Dictionary) -> void:
 	if weather_label == null:
@@ -9752,19 +9754,21 @@ func _get_public_trainer_badge_text(card: Dictionary) -> String:
 	var selected := str(card.get("selectedRoleBadge", "")).strip_edges().to_lower()
 	var roles: Array = card.get("roles", []) if card.get("roles", []) is Array else []
 	for role_value: Variant in roles:
-		if role_value is Dictionary:
-			var role := role_value as Dictionary
-			var display: Dictionary = (
-				role.get("display", {})
-				if role.get("display", {}) is Dictionary
-				else {}
-			)
-			if (
-				str(role.get("id", "")).strip_edges().to_lower() == selected
-				and bool(display.get("profileBadge", true))
-				and _is_role_badge_current(role)
-			):
-				return str(role.get("badge", role.get("displayName", "-")))
+		var role := _role_dictionary_from_value(role_value)
+		if role.is_empty():
+			continue
+		var display: Dictionary = (
+			role.get("display", {})
+			if role.get("display", {}) is Dictionary
+			else {}
+		)
+		if (
+			str(role.get("id", "")).strip_edges().to_lower() == selected
+			and bool(display.get("profileBadge", true))
+			and _is_role_badge_current(role)
+		):
+			var badge_text := _get_chat_role_badge(role)
+			return badge_text if badge_text != "" else str(role.get("displayName", "-"))
 	return "-"
 
 func _hide_public_trainer_card() -> void:
@@ -20627,9 +20631,23 @@ func _refresh_chat_message_visibility() -> void:
 
 		var category: String = str(child.get_meta("chat_category", CHAT_CATEGORY_USER))
 		child.visible = _should_show_chat_category(category)
-		var channel_badge := child.get_node_or_null("ChannelBadge") as Control
-		if channel_badge != null:
-			channel_badge.visible = active_chat_tab == CHAT_TAB_ALL
+		var channel_prefix := child.get_node_or_null("ChannelPrefix") as Control
+		if channel_prefix != null:
+			channel_prefix.visible = active_chat_tab == CHAT_TAB_ALL
+		_apply_chat_row_emphasis(child)
+
+
+func _apply_chat_row_emphasis(row: Node) -> void:
+	var category: String = str(row.get_meta("chat_category", CHAT_CATEGORY_USER))
+	var is_secondary_in_all := (
+		active_chat_tab == CHAT_TAB_ALL
+		and category not in [CHAT_CHANNEL_GLOBAL, CHAT_CATEGORY_USER]
+	)
+	var content_alpha := CHAT_ALL_SECONDARY_CONTENT_ALPHA if is_secondary_in_all else 1.0
+	for node_name: StringName in [&"RoleBadge", &"SenderName", &"MessageText"]:
+		var content := row.get_node_or_null(NodePath(node_name)) as CanvasItem
+		if content != null:
+			content.modulate = Color(1.0, 1.0, 1.0, content_alpha)
 
 func _submit_chat_input_deferred() -> void:
 	if chat_submit_in_progress:
@@ -25242,27 +25260,42 @@ func _on_dev_world_weather_selected(index: int) -> void:
 		_refresh_dev_world_weather_selector()
 		return
 	var selected_weather := DEV_WORLD_WEATHER_OPTIONS[index]
+	if selected_weather != "" and not weather_controller.is_weather_enabled_for_current_map():
+		_add_chat_message("Weather effects are disabled on this map.")
+		_refresh_dev_world_weather_selector()
+		return
+
+	dev_world_weather_select.disabled = true
+	var result: Dictionary = await FieldMoveService.set_developer_world_weather(selected_weather)
+	dev_world_weather_select.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not change map weather: %s" % str(result.get("error", "Unknown error")))
+		_refresh_dev_world_weather_selector()
+		return
+
+	weather_controller.clear_debug_weather()
+	var weather_value: Variant = result.get("weather", {})
+	var weather_state: Dictionary = weather_value as Dictionary if weather_value is Dictionary else {}
+	weather_controller.set_server_weather(str(weather_state.get("weather", OverworldWeatherController.WEATHER_CLEAR)))
+	_refresh_location_weather(weather_state)
 	if selected_weather == "":
-		weather_controller.clear_debug_weather()
-		_add_chat_message("World weather reset to server/default.")
+		_add_chat_message("Map weather reset to its server/default weather for everyone.")
 	else:
-		if not weather_controller.is_weather_enabled_for_current_map():
-			_add_chat_message("Weather effects are disabled on this map.")
-			_refresh_dev_world_weather_selector()
-			return
-		weather_controller.set_debug_weather(selected_weather)
-		_add_chat_message("World weather preview set to %s." % selected_weather.capitalize())
-	_refresh_location_weather({"weather": weather_controller.get_effective_weather()})
-	_refresh_dev_world_weather_selector()
+		_add_chat_message("Map weather set to %s for everyone on this map." % selected_weather.capitalize())
+	_refresh_dev_world_weather_selector(weather_state)
 
 
-func _refresh_dev_world_weather_selector() -> void:
+func _refresh_dev_world_weather_selector(weather_state: Dictionary = {}) -> void:
 	if dev_world_weather_select == null:
 		return
 	var selected_index := 0
-	var weather_controller := _get_overworld_weather_controller()
-	if weather_controller != null and weather_controller.is_debug_weather_active():
-		var matching_index := DEV_WORLD_WEATHER_OPTIONS.find(weather_controller.debug_weather_override)
+	var resolved_weather_state := weather_state
+	if resolved_weather_state.is_empty():
+		resolved_weather_state = WorldPresenceService.current_weather_state
+	if str(resolved_weather_state.get("source", "")).strip_edges().to_lower() == "developer":
+		var matching_index := DEV_WORLD_WEATHER_OPTIONS.find(
+			str(resolved_weather_state.get("weather", "")).strip_edges().to_lower()
+		)
 		if matching_index >= 0:
 			selected_index = matching_index
 	dev_world_weather_select.select(selected_index)
@@ -30962,6 +30995,7 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		user = user_value as Dictionary
 
 	var display_name: String = str(user.get("displayName", user.get("username", "Trainer")))
+	user = _with_local_chat_role_state(user, display_name)
 	var text: String = str(message.get("text", "")).strip_edges()
 	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
 	if text == "" and pokemon_attachments.is_empty():
@@ -30971,6 +31005,26 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments)
 	if channel == CHAT_CHANNEL_MAP and text != "":
 		_show_map_chat_bubble(user, text, str(message.get("mapId", "")))
+
+
+func _with_local_chat_role_state(user: Dictionary, display_name: String) -> Dictionary:
+	var resolved_user := user.duplicate(true)
+	var current_display_name := AuthService.get_display_name().strip_edges()
+	var is_local_user := _is_current_auth_user(resolved_user)
+	if not is_local_user and current_display_name != "":
+		is_local_user = display_name.strip_edges().to_lower() == current_display_name.to_lower()
+	if not is_local_user:
+		return resolved_user
+
+	var current_roles: Variant = AuthService.current_user.get("roles", [])
+	if not current_roles is Array:
+		current_roles = []
+	if not (current_roles as Array).is_empty():
+		resolved_user["roles"] = (current_roles as Array).duplicate(true)
+	resolved_user["selectedRoleBadge"] = str(
+		AuthService.current_user.get("selectedRoleBadge", GameState.selected_role_badge)
+	).strip_edges().to_lower()
+	return resolved_user
 
 
 func _show_map_chat_bubble(user: Dictionary, text: String, map_id: String) -> void:
@@ -31187,7 +31241,7 @@ func _add_user_chat_message(
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
 
-	row.add_child(_create_chat_channel_badge(channel, target_user_id))
+	row.add_child(_create_chat_channel_prefix(channel, target_user_id))
 
 	if not role.is_empty():
 		var role_name: String = str(role.get("badge", "")).strip_edges()
@@ -31195,6 +31249,7 @@ func _add_user_chat_message(
 			row.add_child(_create_chat_role_badge(role_name, role_color))
 
 	var name_label := Label.new()
+	name_label.name = "SenderName"
 	name_label.text = "%s:" % display_name
 	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	name_label.clip_text = false
@@ -31211,6 +31266,7 @@ func _add_user_chat_message(
 		)))
 	if text != "":
 		var entry: RichTextLabel = message_entry_template.duplicate() as RichTextLabel
+		entry.name = "MessageText"
 		row.add_child(entry)
 		entry.visible = true
 		entry.bbcode_enabled = true
@@ -31222,63 +31278,49 @@ func _add_user_chat_message(
 		entry.fit_content = true
 		entry.scroll_active = false
 		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_chat_row_emphasis(row)
 	_scroll_chat_to_bottom.call_deferred()
 
 
-func _create_chat_channel_badge(channel: String, target_user_id: int = 0) -> Button:
-	var badge := Button.new()
-	badge.name = "ChannelBadge"
-	badge.custom_minimum_size = Vector2(38, 18)
-	badge.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	badge.focus_mode = Control.FOCUS_NONE
-	badge.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	badge.add_theme_font_size_override("font_size", 9)
-	var badge_color := Color("#557999")
+func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Button:
+	var prefix := Button.new()
+	prefix.name = "ChannelPrefix"
+	prefix.custom_minimum_size = Vector2(0, 18)
+	prefix.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	prefix.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	prefix.focus_mode = Control.FOCUS_NONE
+	prefix.flat = true
+	prefix.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	prefix.add_theme_font_size_override("font_size", 11)
+	var prefix_color := Color("#70859b")
 	match channel:
 		CHAT_CHANNEL_MAP:
-			badge.text = "MAP"
-			badge_color = Color("#65b8e8")
+			prefix.text = "[Map]"
 		CHAT_CHANNEL_TRADE:
-			badge.text = "TRADE"
-			badge_color = Color("#d8b767")
+			prefix.text = "[Trade]"
 		CHAT_CHANNEL_HELP:
-			badge.text = "HELP"
-			badge_color = Color("#73d98b")
+			prefix.text = "[Help]"
 		CHAT_TAB_PM:
-			badge.text = "PM"
-			badge_color = Color("#b980ff")
+			prefix.text = "[PM]"
 		CHAT_TAB_CLAN:
-			badge.text = "CLAN"
-			badge_color = Color("#e58ba8")
+			prefix.text = "[Clan]"
 		_:
-			badge.text = "GLOBAL"
-	var normal_style := _make_panel_style(
-		Color(badge_color.r, badge_color.g, badge_color.b, 0.16),
-		Color(badge_color.r, badge_color.g, badge_color.b, 0.72),
-		6,
-		1
-	)
-	var hover_style := _make_panel_style(
-		Color(badge_color.r, badge_color.g, badge_color.b, 0.28),
-		badge_color,
-		6,
-		1
-	)
-	badge.add_theme_stylebox_override("normal", normal_style)
-	badge.add_theme_stylebox_override("hover", hover_style)
-	badge.add_theme_stylebox_override("pressed", hover_style)
-	badge.add_theme_stylebox_override("focus", hover_style)
-	badge.add_theme_color_override("font_color", badge_color)
-	badge.add_theme_color_override("font_hover_color", Color.WHITE)
-	badge.visible = active_chat_tab == CHAT_TAB_ALL
+			prefix.text = "[Global]"
+			prefix_color = Color("#d8b767")
+	var empty_style := StyleBoxEmpty.new()
+	for state: String in ["normal", "hover", "pressed", "focus"]:
+		prefix.add_theme_stylebox_override(state, empty_style)
+	prefix.add_theme_color_override("font_color", prefix_color)
+	prefix.add_theme_color_override("font_hover_color", prefix_color.lightened(0.25))
+	prefix.add_theme_color_override("font_pressed_color", prefix_color.lightened(0.4))
+	prefix.visible = active_chat_tab == CHAT_TAB_ALL
 	if channel == CHAT_TAB_PM and target_user_id != 0:
-		badge.tooltip_text = "Open this private conversation"
-		badge.pressed.connect(_on_all_pm_channel_pressed.bind(target_user_id))
+		prefix.tooltip_text = "Open this private conversation"
+		prefix.pressed.connect(_on_all_pm_channel_pressed.bind(target_user_id))
 	else:
-		badge.tooltip_text = "Open %s chat" % badge.text.capitalize()
-		badge.pressed.connect(_on_all_channel_badge_pressed.bind(channel))
-	return badge
+		prefix.tooltip_text = "Open %s chat" % prefix.text.trim_prefix("[").trim_suffix("]")
+		prefix.pressed.connect(_on_all_channel_badge_pressed.bind(channel))
+	return prefix
 
 
 func _on_all_channel_badge_pressed(channel: String) -> void:
@@ -31385,6 +31427,7 @@ func _should_show_chat_category(category: String) -> bool:
 
 func _create_chat_role_badge(role_name: String, role_color: String) -> PanelContainer:
 	var badge: PanelContainer = PanelContainer.new()
+	badge.name = "RoleBadge"
 	badge.custom_minimum_size = Vector2(28, 16)
 	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
@@ -31455,13 +31498,12 @@ func _get_primary_visible_chat_role(user: Dictionary, ignore_selected_badge: boo
 	var primary_role: Dictionary = {}
 	var primary_priority: int = -999999
 	for role_value: Variant in roles:
-		if not role_value is Dictionary:
+		var role := _role_dictionary_from_value(role_value)
+		if role.is_empty():
 			continue
-
-		var role: Dictionary = role_value as Dictionary
 		if bool(role.get("requiresSelection", false)):
 			continue
-		if not _should_show_chat_role_badge(role):
+		if not _is_selectable_chat_badge_role(role):
 			continue
 		var badge: String = _get_chat_role_badge(role)
 		if badge.is_empty():
@@ -31488,13 +31530,13 @@ func _is_current_auth_user(user: Dictionary) -> bool:
 
 func _find_visible_chat_role(roles: Array, selected_badge: String) -> Dictionary:
 	for role_value: Variant in roles:
-		if not role_value is Dictionary:
+		var role := _role_dictionary_from_value(role_value)
+		if role.is_empty():
 			continue
-		var role: Dictionary = role_value as Dictionary
 		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
 		if role_id != selected_badge:
 			continue
-		if not _should_show_chat_role_badge(role):
+		if not _is_selectable_chat_badge_role(role):
 			return {}
 		var badge: String = _get_chat_role_badge(role)
 		if badge.is_empty():
@@ -31504,6 +31546,8 @@ func _find_visible_chat_role(roles: Array, selected_badge: String) -> Dictionary
 		role_with_badge["badge"] = badge
 		role_with_badge["color"] = _get_chat_role_color(role_id, str(role.get("color", "#d8b767")))
 		return role_with_badge
+	if selected_badge == "developer" and _has_developer_chat_badge_entitlement():
+		return _make_developer_chat_badge_role()
 	return {}
 
 func _get_selectable_chat_badge_roles(user: Dictionary) -> Array[Dictionary]:
@@ -31513,11 +31557,11 @@ func _get_selectable_chat_badge_roles(user: Dictionary) -> Array[Dictionary]:
 		return options
 	var roles: Array = roles_value as Array
 	for role_value: Variant in roles:
-		if not role_value is Dictionary:
+		var role := _role_dictionary_from_value(role_value)
+		if role.is_empty():
 			continue
-		var role: Dictionary = role_value as Dictionary
 		var role_id: String = str(role.get("id", "")).strip_edges().to_lower()
-		if not _should_show_chat_role_badge(role):
+		if not _is_selectable_chat_badge_role(role):
 			continue
 		var badge: String = _get_chat_role_badge(role)
 		if badge.is_empty():
@@ -31526,20 +31570,52 @@ func _get_selectable_chat_badge_roles(user: Dictionary) -> Array[Dictionary]:
 			"id": role_id,
 			"label": badge,
 		})
+	if _has_developer_chat_badge_entitlement() and not _chat_badge_options_include(options, "developer"):
+		options.append({
+			"id": "developer",
+			"label": "DEV",
+		})
 	return options
 
 
-func _should_show_chat_role_badge(role: Dictionary) -> bool:
+func _role_dictionary_from_value(role_value: Variant) -> Dictionary:
+	if role_value is Dictionary:
+		return (role_value as Dictionary).duplicate(true)
+	var role_id := str(role_value).strip_edges().to_lower()
+	return {"id": role_id} if role_id != "" else {}
+
+
+func _has_developer_chat_badge_entitlement() -> bool:
+	return _has_user_permission(DEV_TOOLS_PERMISSION)
+
+
+func _make_developer_chat_badge_role() -> Dictionary:
+	return {
+		"id": "developer",
+		"badge": "DEV",
+		"color": _get_chat_role_color("developer", "#00e5a8"),
+		"priority": 0,
+	}
+
+
+func _chat_badge_options_include(options: Array[Dictionary], role_id: String) -> bool:
+	for option: Dictionary in options:
+		if str(option.get("id", "")).strip_edges().to_lower() == role_id:
+			return true
+	return false
+
+
+func _is_selectable_chat_badge_role(role: Dictionary) -> bool:
 	if not _is_role_badge_current(role):
 		return false
-	var display: Dictionary = role.get("display", {}) if role.get("display", {}) is Dictionary else {}
-	if display.has("chatBadge"):
-		return bool(display.get("chatBadge", false))
-	return _get_legacy_chat_role_badge(str(role.get("id", ""))).strip_edges() != ""
+	return _get_chat_role_badge(role).strip_edges() != ""
 
 
 func _is_role_badge_current(role: Dictionary) -> bool:
-	var expires_at := str(role.get("expiresAt", "")).strip_edges()
+	var expires_at_value: Variant = role.get("expiresAt", null)
+	if expires_at_value == null:
+		return true
+	var expires_at := str(expires_at_value).strip_edges()
 	if expires_at == "":
 		return true
 	var expires_unix := _pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
@@ -31550,7 +31626,16 @@ func _get_chat_role_badge(role: Dictionary) -> String:
 	var short_label := str(role.get("shortLabel", role.get("badge", ""))).strip_edges()
 	if short_label != "":
 		return short_label
-	return _get_legacy_chat_role_badge(str(role.get("id", "")))
+	var role_id := str(role.get("id", "")).strip_edges().to_lower()
+	var legacy_badge := _get_legacy_chat_role_badge(role_id)
+	if legacy_badge != "":
+		return legacy_badge
+	var display_name := str(
+		role.get("displayName", role.get("label", role.get("name", "")))
+	).strip_edges()
+	if display_name != "":
+		return display_name
+	return role_id.replace("_", " ").capitalize()
 
 
 func _get_legacy_chat_role_badge(role_id: String) -> String:

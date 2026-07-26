@@ -29,8 +29,10 @@ func _init() -> void:
 	_check_true(scene_source.contains('popup/item_2/text = "Rain"'), "rain preview is available")
 	_check_true(scene_source.contains('popup/item_3/text = "Snow"'), "snow preview is available")
 	_check_true(ui_source.contains('const DEV_WORLD_WEATHER_OPTIONS: Array[String] = ["", "clear", "rain", "snow"]'), "weather options map to normalized renderer states")
-	_check_true(ui_source.contains("weather_controller.clear_debug_weather()"), "default weather selection clears the preview override")
-	_check_true(ui_source.contains("weather_controller.set_debug_weather(selected_weather)"), "weather previews update the overworld controller")
+	_check_true(ui_source.contains("await FieldMoveService.set_developer_world_weather(selected_weather)"), "weather changes use the authoritative server endpoint")
+	_check_true(ui_source.contains("for everyone on this map"), "weather changes explicitly apply to every player on the map")
+	_check_true(ui_source.contains('"source", "")).strip_edges().to_lower() == "developer"'), "selector only shows persisted developer overrides")
+	_check_true(not ui_source.contains("weather_controller.set_debug_weather(selected_weather)"), "developer weather no longer creates a local-only preview")
 
 	quit(1 if failed else 0)
 

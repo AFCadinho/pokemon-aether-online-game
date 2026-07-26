@@ -740,6 +740,7 @@ func _apply_day_night_for_map(map_node: Node) -> void:
 
 func _apply_weather_for_map(map_node: Node) -> void:
 	if weather_controller != null:
+		weather_controller.clear_debug_weather()
 		weather_controller.set_server_weather(OverworldWeatherController.WEATHER_CLEAR)
 		weather_controller.apply_map(map_node)
 
@@ -1577,7 +1578,9 @@ func _get_current_role_presence_state() -> Array:
 		presence_roles.append({
 			"id": str(role.get("id", "")),
 			"category": str(role.get("category", "")),
-			"label": str(role.get("label", role.get("name", ""))),
+			"displayName": str(
+				role.get("displayName", role.get("label", role.get("name", "")))
+			),
 			"shortLabel": str(role.get("shortLabel", role.get("badge", ""))),
 			"color": str(role.get("color", "")),
 			"priority": int(role.get("priority", 0)),
