@@ -7202,6 +7202,106 @@
         "PRSFX- Catastropika5.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika5.wav",
         "PRSFX- Catastropika6.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika6.wav"
       }
+    },
+    "menacingmoonrazemaelstrom": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.9,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.26,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/menacingmoonrazemaelstrom.json",
+      "sheet_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- SunMoonZ.png",
+      "background_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- Space BG.png",
+      "foreground_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- MMM1.ogg": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- MMM1.ogg",
+        "PRSFX- MMM3.ogg": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- MMM3.ogg",
+        "PRSFX- MMM4.ogg": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- MMM4.ogg",
+        "PRSFX- SSS1.ogg": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- SSS1.ogg"
+      }
+    },
+    "letssnuggleforever": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 0.9,
+      "sprite_zoom_multiplier": 0.72,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/letssnuggleforever/letssnuggleforever.json",
+      "sheet_path": "res://assets/battles/animations/letssnuggleforever/PRAS- Lets Snuggle Forever.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Let's Snuggle Forever1.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever1.ogg",
+        "PRSFX- Let's Snuggle Forever10.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever10.ogg",
+        "PRSFX- Let's Snuggle Forever11.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever11.ogg",
+        "PRSFX- Let's Snuggle Forever12.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever12.ogg",
+        "PRSFX- Let's Snuggle Forever2.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever2.ogg",
+        "PRSFX- Let's Snuggle Forever3.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever3.ogg",
+        "PRSFX- Let's Snuggle Forever4.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever4.ogg",
+        "PRSFX- Let's Snuggle Forever5.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever5.ogg",
+        "PRSFX- Let's Snuggle Forever6.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever6.ogg",
+        "PRSFX- Let's Snuggle Forever7.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever7.ogg",
+        "PRSFX- Let's Snuggle Forever8.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever8.ogg",
+        "PRSFX- Let's Snuggle Forever9.ogg": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever9.ogg"
+      }
+    },
+    "splinteredstormshards": {
+      "template": "imported_sheet",
+      "category": "field_impact",
+      "speed_scale": 0.92,
+      "sprite_zoom_multiplier": 0.62,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.24,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/splinteredstormshards/splinteredstormshards.json",
+      "sheet_path": "res://assets/battles/animations/splinteredstormshards/PRAS- Splintered Stormshards.png",
+      "background_path": "res://assets/battles/animations/splinteredstormshards/PRAS- Magnitude BG.png",
+      "foreground_path": "res://assets/battles/animations/splinteredstormshards/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Splintered Stormshards1.ogg": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards1.ogg",
+        "PRSFX- Splintered Stormshards2.ogg": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards2.ogg",
+        "PRSFX- Splintered Stormshards3.ogg": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards3.ogg",
+        "PRSFX- Splintered Stormshards4.ogg": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards4.ogg"
+      }
+    },
+    "clangoroussoulblaze": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 0.92,
+      "sprite_zoom_multiplier": 0.78,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "data_path": "res://assets/battles/animations/clangoroussoulblaze/clangoroussoulblaze.json",
+      "sheet_path": "res://assets/battles/animations/clangoroussoulblaze/PRAS- Clanging Scales.png",
+      "background_path": "res://assets/battles/animations/clangoroussoulblaze/PRAS- Clangorous Soulblaze BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Clangorous Soulblaze1.ogg": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze1.ogg",
+        "PRSFX- Clangorous Soulblaze2.ogg": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze2.ogg"
+      }
     }
   }
 }

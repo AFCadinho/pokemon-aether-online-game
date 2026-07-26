@@ -1498,7 +1498,17 @@ func play_stat_change_presentation_for_target(target_ident: String, amount: int,
 
 
 func _normalize_move_name(move_name: String) -> String:
-	return move_name.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	return (
+		move_name.strip_edges()
+		.to_lower()
+		.replace(" ", "")
+		.replace("-", "")
+		.replace("_", "")
+		.replace(",", "")
+		.replace("'", "")
+		.replace("’", "")
+		.replace("*", "")
+	)
 
 
 func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bool:
