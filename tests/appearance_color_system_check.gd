@@ -49,6 +49,20 @@ func _run() -> void:
 	})
 	_check(player_data.appearance_body_id == APPEARANCE.DEFAULT_MALE_BODY_ID, "loaded legacy body migrates to the base model")
 	_check(player_data.appearance_skin_tone == APPEARANCE.LEGACY_DARK_SKIN_TONE, "loaded legacy body migrates its skin tone")
+	player_data.apply_appearance_state({
+		"facegear_color": null,
+		"top_color": null,
+		"bottom_color": null,
+		"shoes_color": null,
+	})
+	var normalized_legacy_appearance := player_data.to_appearance_state()
+	_check(
+		normalized_legacy_appearance.get("facegear_color") == "#ffffff"
+			and normalized_legacy_appearance.get("top_color") == "#ffffff"
+			and normalized_legacy_appearance.get("bottom_color") == "#ffffff"
+			and normalized_legacy_appearance.get("shoes_color") == "#ffffff",
+		"legacy null Chroma colours normalize to save-safe defaults"
+	)
 	player_data.free()
 
 	var shirt_frames := APPEARANCE.get_tinted_part_frames(

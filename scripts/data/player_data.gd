@@ -197,24 +197,32 @@ func apply_appearance_state(appearance_state: Dictionary) -> void:
 		str(appearance_state.get("eye_color", appearance_eye_color)),
 		gender
 	)
-	appearance_facegear_color = str(appearance_state.get("facegear_color", appearance_facegear_color)).strip_edges()
-	appearance_top_color = str(appearance_state.get("top_color", appearance_top_color)).strip_edges()
-	appearance_bottom_color = str(appearance_state.get("bottom_color", appearance_bottom_color)).strip_edges()
-	appearance_shoes_color = str(appearance_state.get("shoes_color", appearance_shoes_color)).strip_edges()
-	if appearance_facegear_color == "":
-		appearance_facegear_color = "#ffffff"
-	if appearance_top_color == "":
-		appearance_top_color = "#ffffff"
-	if appearance_bottom_color == "":
-		appearance_bottom_color = "#ffffff"
-	if appearance_shoes_color == "":
-		appearance_shoes_color = "#ffffff"
+	appearance_facegear_color = _resolve_optional_chroma_color(
+		appearance_state.get("facegear_color", appearance_facegear_color)
+	)
+	appearance_top_color = _resolve_optional_chroma_color(
+		appearance_state.get("top_color", appearance_top_color)
+	)
+	appearance_bottom_color = _resolve_optional_chroma_color(
+		appearance_state.get("bottom_color", appearance_bottom_color)
+	)
+	appearance_shoes_color = _resolve_optional_chroma_color(
+		appearance_state.get("shoes_color", appearance_shoes_color)
+	)
 	if appearance_state.has("hair"):
 		if appearance_hair_id != "":
 			sync_hair_style_index_from_id()
 	elif appearance_state.has("hair_style_index"):
 		apply_hair_style_index_to_id()
 	ensure_body_matches_gender(false)
+
+
+func _resolve_optional_chroma_color(value: Variant) -> String:
+	if value == null:
+		return "#ffffff"
+	var normalized_color := str(value).strip_edges()
+	return "#ffffff" if normalized_color == "" else normalized_color
+
 
 func ensure_body_matches_gender(fill_empty_parts: bool = true) -> void:
 	var source_body_id := appearance_body_id

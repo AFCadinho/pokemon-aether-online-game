@@ -24,6 +24,7 @@
 - Fixed some Z-Crystals not activating the correct Z-Move depending on how they were equipped.
 - Fixed status Z-Moves showing an incorrect name or missing their bonus effect.
 - Fixed missing HOME party icons for the Jangmo-o line and Ultra Necrozma.
+- Fixed existing Trainers being unable to save appearance changes when Chroma colours had not been set yet.
 
 ## 0.3.32 - 2026-07-25
 
