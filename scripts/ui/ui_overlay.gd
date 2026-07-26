@@ -1,6 +1,9 @@
 extends CanvasLayer
 
 const MAX_PARTY_SIZE := 6
+const PARTY_SLOT_HEIGHT := 68.0
+const PARTY_SLOT_GAP := 5.0
+const PARTY_PANEL_VERTICAL_PADDING := 14.0
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const COLLAPSE_BUTTON_SIZE := Vector2(28, 28)
@@ -19418,6 +19421,7 @@ func _build_party_slots() -> void:
 func _refresh_party() -> void:
 	var display_party := party_display_override if not party_display_override.is_empty() else PlayerSave.party
 	_set_collapsible_panel_available("party", display_party.size() > 0)
+	_resize_party_panel(display_party.size())
 	_render_pvp_team_preview()
 
 	for slot_number in range(party_slots.size()):
@@ -19438,6 +19442,16 @@ func _refresh_party() -> void:
 			slot.set_empty()
 
 	_refresh_open_pokemon_summary_cards()
+
+
+func _resize_party_panel(party_size: int) -> void:
+	if party_panel == null:
+		return
+
+	var visible_slot_count := clampi(party_size, 1, MAX_PARTY_SIZE)
+	var panel_height := PARTY_PANEL_VERTICAL_PADDING + (PARTY_SLOT_HEIGHT * visible_slot_count)
+	panel_height += PARTY_SLOT_GAP * maxi(visible_slot_count - 1, 0)
+	party_panel.offset_bottom = party_panel.offset_top + panel_height
 
 func set_party_display_override(party_data: Array) -> void:
 	party_display_override = party_data.duplicate(true)

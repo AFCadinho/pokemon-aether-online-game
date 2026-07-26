@@ -2343,6 +2343,9 @@ position = Vector2(1296, 848)
 [node name="FromPlayersHouse" type="Marker2D" parent="Spawns"]
 position = Vector2(656, 560)
 
+[node name="FromRivalsHouse" type="Marker2D" parent="Spawns"]
+position = Vector2(1136, 432)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1482608450]
 
 [node name="ToRoute1" type="Area2D" parent="Exits" unique_id=247861442]
@@ -2385,6 +2388,18 @@ shape = SubResource("RectangleShape2D_3e7rq")
 [node name="DoorTransitionHint" parent="Exits/ToPlayersHouse" instance=ExtResource("24_door_hint")]
 position = Vector2(0, 32)
 
+[node name="ToRivalsHouse" type="Area2D" parent="Exits"]
+position = Vector2(1136, 368)
+script = ExtResource("14_voysl")
+target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn"
+target_spawn_name = "FromPalletTown"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRivalsHouse"]
+shape = SubResource("RectangleShape2D_3e7rq")
+
+[node name="DoorTransitionHint" parent="Exits/ToRivalsHouse" instance=ExtResource("24_door_hint")]
+position = Vector2(0, 32)
+
 [node name="Collision" type="TileMapLayer" parent="." unique_id=136807931]
 visible = false
 z_index = 1000
@@ -2407,3 +2422,4 @@ tile_set = SubResource("TileSet_6wa66")
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToOaksLab" to="Exits/ToOaksLab" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPlayersHouse" to="Exits/ToPlayersHouse" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRivalsHouse" to="Exits/ToRivalsHouse" method="_on_body_entered"]

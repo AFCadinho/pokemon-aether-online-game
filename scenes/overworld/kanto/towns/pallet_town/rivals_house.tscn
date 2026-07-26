@@ -1,0 +1,150 @@
+[gd_scene format=4 uid="uid://c5ohbprcq5fyb"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/rivals_house/rivals_house.visual.tscn" id="1_lpfvw"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_map_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
+[ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="5_floor_transition"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="6_estsk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_stairs"]
+size = Vector2(16, 48)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2m22q"]
+texture = ExtResource("6_estsk")
+texture_region_size = Vector2i(32, 32)
+1:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+1:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_o54x3"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_2m22q")
+
+[node name="RivalsHouse" type="Node2D" unique_id=1891643819]
+script = ExtResource("2_map_meta")
+map_id = "kanto_rivals_house"
+map_region_name = "Kanto"
+map_display_name = "Rival's House"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.pallet_town"
+
+[node name="Visuals" parent="." unique_id=1853302477 instance=ExtResource("1_lpfvw")]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1714104150]
+z_index = 10
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=2100926305]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=2003925552]
+
+[node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=1043872146]
+position = Vector2(176, 944)
+
+[node name="GroundFloorStairs" type="Marker2D" parent="Spawns" unique_id=787624868]
+position = Vector2(112, 752)
+
+[node name="UpperFloorStairs" type="Marker2D" parent="Spawns" unique_id=569882746]
+position = Vector2(272, 240)
+
+[node name="Exits" type="Node2D" parent="." unique_id=977073684]
+
+[node name="ToPalletTown" type="Area2D" parent="Exits" unique_id=496841703]
+position = Vector2(176, 1008)
+script = ExtResource("3_map_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+target_spawn_name = "FromRivalsHouse"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=1051296460]
+shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1591845095]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("4_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(64, 608, 480, 416),
+&"upper_floor": Rect2(160, 0, 320, 448)
+}
+floor_display_names = {
+&"ground_floor": "Rival's House",
+&"upper_floor": "Rival's Room"
+}
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=91231320]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=767544293]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1203005188]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1362522707]
+
+[node name="FloorTransitions" type="Node2D" parent="." unique_id=626462000]
+
+[node name="GroundToUpper" type="Area2D" parent="FloorTransitions" unique_id=197455525]
+position = Vector2(176, 720)
+script = ExtResource("5_floor_transition")
+destination_marker_path = NodePath("../../Spawns/UpperFloorStairs")
+target_floor = &"upper_floor"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/GroundToUpper" unique_id=368172259]
+position = Vector2(-24, 8)
+shape = SubResource("RectangleShape2D_stairs")
+
+[node name="UpperToGround" type="Area2D" parent="FloorTransitions" unique_id=1958484730]
+position = Vector2(208, 256)
+script = ExtResource("5_floor_transition")
+destination_marker_path = NodePath("../../Spawns/GroundFloorStairs")
+target_floor = &"ground_floor"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/UpperToGround" unique_id=1986527684]
+z_index = 100
+position = Vector2(24, 0)
+shape = SubResource("RectangleShape2D_stairs")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=2143608343]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAABABIAAAABAAEAAAABABMAAAABAAEAAAABABQAAAABAAEAAAABABUAAAABAAEAAAABABYAAAABAAEAAAABABcAAAABAAEAAAABABgAAAABAAEAAAABABkAAAABAAEAAAABABoAAAABAAEAAAABABsAAAABAAEAAAABABwAAAABAAEAAAABAB0AAAABAAEAAAABAB4AAAABAAEAAAABAB8AAAABAAEAAAACAB8AAAABAAEAAAADAB8AAAABAAEAAAADACAAAAABAAEAAAAEACAAAAABAAEAAAAFACAAAAABAAEAAAAGACAAAAABAAEAAAAHACAAAAABAAEAAAAHAB8AAAABAAEAAAAIAB8AAAABAAEAAAAJAB8AAAABAAEAAAAKAB8AAAABAAEAAAALAB8AAAABAAEAAAAMAB8AAAABAAEAAAANAB8AAAABAAEAAAAOAB8AAAABAAEAAAAPAB8AAAABAAEAAAAQAB8AAAABAAEAAAARAB8AAAABAAEAAAARAB4AAAABAAEAAAARAB0AAAABAAEAAAARABwAAAABAAEAAAARABsAAAABAAEAAAARABoAAAABAAEAAAARABkAAAABAAEAAAARABgAAAABAAEAAAARABcAAAABAAEAAAARABYAAAABAAEAAAARABUAAAABAAEAAAARABQAAAABAAEAAAARABMAAAABAAEAAAARABIAAAABAAEAAAAQABIAAAABAAEAAAAPABIAAAABAAEAAAAOABIAAAABAAEAAAANABIAAAABAAEAAAAMABIAAAABAAEAAAALABIAAAABAAEAAAAKABIAAAABAAEAAAAJABIAAAABAAEAAAAJABMAAAABAAEAAAAJABQAAAABAAEAAAAJABUAAAABAAEAAAACABIAAAABAAEAAAADABIAAAABAAEAAAAEABIAAAABAAEAAAAFABIAAAABAAEAAAAGABIAAAABAAEAAAAHABIAAAABAAEAAAAHABMAAAABAAEAAAAHABQAAAABAAEAAAAHABUAAAABAAEAAAAIABUAAAABAAEAAAAPAA4AAAABAAEAAAAOAA4AAAABAAEAAAANAA4AAAABAAEAAAAMAA4AAAABAAEAAAALAA4AAAABAAEAAAAKAA4AAAABAAEAAAAJAA4AAAABAAEAAAAIAA4AAAABAAEAAAAHAA4AAAABAAEAAAAGAA4AAAABAAEAAAAFAA4AAAABAAEAAAAEAA4AAAABAAEAAAAPAA0AAAABAAEAAAAPAAwAAAABAAEAAAAPAAsAAAABAAEAAAAPAAoAAAABAAEAAAAPAAkAAAABAAEAAAAPAAgAAAABAAEAAAAPAAcAAAABAAEAAAAPAAYAAAABAAEAAAAPAAUAAAABAAEAAAAOAAUAAAABAAEAAAAOAAQAAAABAAEAAAANAAQAAAABAAEAAAANAAMAAAABAAEAAAAMAAMAAAABAAEAAAAMAAIAAAABAAEAAAALAAIAAAABAAEAAAAKAAIAAAABAAEAAAALAAEAAAABAAEAAAAKAAEAAAABAAEAAAAKAAAAAAABAAEAAAAJAAAAAAABAAEAAAAJAAEAAAABAAEAAAAIAAEAAAABAAEAAAAIAAIAAAABAAEAAAAJAAIAAAABAAEAAAAHAAIAAAABAAEAAAAHAAMAAAABAAEAAAAGAAMAAAABAAEAAAAGAAQAAAABAAEAAAAFAAQAAAABAAEAAAAFAAUAAAABAAEAAAAEAAUAAAABAAEAAAAEAAYAAAABAAEAAAAEAAcAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAEAAoAAAABAAEAAAAEAAsAAAABAAEAAAAEAAwAAAABAAEAAAAEAA0AAAABAAEAAAACAB4AAAABAAEAAAAQAB4AAAABAAEAAAAQABsAAAABAAEAAAAMABsAAAABAAEAAAAHABYAAAABAAEAAAAHABcAAAABAAEAAAAHABgAAAABAAEAAAAHABkAAAABAAEAAAAIABYAAAABAAEAAAAIABcAAAABAAEAAAAIABgAAAABAAEAAAAIABkAAAABAAEAAAAJABYAAAABAAEAAAAJABcAAAABAAEAAAAJABgAAAABAAEAAAAJABkAAAABAAEAAAAGABkAAAABAAEAAAACABkAAAABAAEAAAACABoAAAABAAEAAAACABsAAAABAAEAAAACABUAAAABAAEAAAACABYAAAABAAEAAAAPABYAAAABAAEAAAAQABYAAAABAAEAAAAMABYAAAABAAEAAAALABYAAAABAAEAAAAKABYAAAABAAEAAAANABoAAAABAAEAAAANABsAAAABAAEAAAANABwAAAABAAEAAAAOABoAAAABAAEAAAAOABsAAAABAAEAAAAOABwAAAABAAEAAAAPABoAAAABAAEAAAAPABsAAAABAAEAAAAPABwAAAABAAEAAAAMABgAAAABAAEAAAANABgAAAABAAEAAAAOABgAAAABAAEAAAAPABgAAAABAAEAAAAQABgAAAABAAEAAAAKABMAAAABAAEAAAAKABQAAAABAAEAAAAKABUAAAABAAEAAAALABMAAAABAAEAAAALABQAAAABAAEAAAALABUAAAABAAEAAAAMABMAAAABAAEAAAAMABQAAAABAAEAAAAMABUAAAABAAEAAAANABMAAAABAAEAAAANABQAAAABAAEAAAANABUAAAABAAEAAAAOABMAAAABAAEAAAAOABQAAAABAAEAAAAOABUAAAABAAEAAAAPABMAAAABAAEAAAAPABQAAAABAAEAAAAPABUAAAABAAEAAAAQABMAAAABAAEAAAAQABQAAAABAAEAAAAQABUAAAABAAEAAAAFABcAAAABAAEAAAAGABcAAAABAAEAAAAGABYAAAABAAEAAAADABMAAAABAAEAAAADABQAAAABAAEAAAADABUAAAABAAEAAAAEABMAAAABAAEAAAAEABQAAAABAAEAAAAEABUAAAABAAEAAAAFABMAAAABAAEAAAAFABQAAAABAAEAAAAFABUAAAABAAEAAAACABMAAAABAAEAAAACABQAAAABAAEAAAAGABMAAAABAAEAAAAGABQAAAABAAEAAAAGABUAAAABAAEAAAAOAAwAAAABAAEAAAANAAwAAAABAAEAAAAOAAoAAAABAAEAAAAOAAsAAAABAAEAAAAFAAoAAAABAAEAAAAFAAsAAAABAAEAAAAFAAwAAAABAAEAAAAGAAoAAAABAAEAAAAGAAsAAAABAAEAAAAGAAwAAAABAAEAAAAHAAoAAAABAAEAAAAHAAsAAAABAAEAAAAHAAwAAAABAAEAAAAFAAkAAAABAAEAAAAGAAkAAAABAAEAAAAHAAkAAAABAAEAAAAFAAMAAAABAAEAAAAFAAYAAAABAAEAAAAGAAUAAAABAAEAAAAGAAYAAAABAAEAAAAHAAQAAAABAAEAAAAHAAUAAAABAAEAAAAHAAYAAAABAAEAAAAIAAMAAAABAAEAAAAIAAQAAAABAAEAAAAIAAUAAAABAAEAAAAIAAYAAAABAAEAAAAJAAMAAAABAAEAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAJAAYAAAABAAEAAAAKAAMAAAABAAEAAAAKAAQAAAABAAEAAAAKAAUAAAABAAEAAAAKAAYAAAABAAEAAAALAAMAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAALAAYAAAABAAEAAAAMAAcAAAABAAEAAAANAAcAAAABAAEAAAAOAAcAAAABAAEAAAAMAAQAAAABAAEAAAAMAAUAAAABAAEAAAAMAAYAAAABAAEAAAANAAUAAAABAAEAAAANAAYAAAABAAEAAAAOAAYAAAABAAEAAAALAAcAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_o54x3")
+
+[connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/GroundToUpper" to="FloorTransitions/GroundToUpper" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/UpperToGround" to="FloorTransitions/UpperToGround" method="_on_body_entered"]

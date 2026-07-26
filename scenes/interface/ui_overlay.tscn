@@ -634,7 +634,7 @@ anchors_preset = 0
 offset_left = 0.0
 offset_top = 132.0
 offset_right = 282.0
-offset_bottom = 256.0
+offset_bottom = 214.0
 grow_horizontal = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_grslb")
 
