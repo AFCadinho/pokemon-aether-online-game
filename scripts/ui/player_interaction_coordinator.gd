@@ -48,6 +48,9 @@ var social_state_loading := false
 var social_status_message := ""
 var social_status_is_error := false
 var trade_capabilities: Dictionary = {}
+var trade_capabilities_loaded := false
+var trade_capabilities_loading := false
+var trade_capabilities_error := ""
 var trade_invitation_dialog: Window
 
 
@@ -58,7 +61,6 @@ func setup(host_control: Control) -> void:
 	add_to_group("player_interaction_coordinator")
 	_build_ui()
 	_setup_trade_invitation_dialog()
-	_refresh_trade_capabilities()
 	var presence := get_node_or_null("/root/WorldPresenceService")
 	if presence != null and presence.has_signal("roster_changed"):
 		var roster_callable := Callable(self, "_on_roster_changed")
@@ -82,7 +84,7 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 	if normalized.is_empty() or _is_self(normalized):
 		return
 	current_target = normalized
-	if trade_capabilities.is_empty():
+	if not trade_capabilities_loaded and not trade_capabilities_loading:
 		_refresh_trade_capabilities()
 	social_overview.clear()
 	social_state_loading = true
@@ -442,8 +444,14 @@ func _render_context_menu() -> void:
 	_add_context_action("View Trainer Card", "Inspect profile, badges and stats", _on_trainer_card_pressed)
 	_add_context_action("Message", "Start a private conversation", _on_message_pressed)
 	_add_context_action("Send Mail", "Send a message or attachment", _on_mail_pressed)
-	if bool(trade_capabilities.get("enabled", false)):
-		_add_context_action("Trade", "Invite this trainer to trade", _on_trade_pressed)
+	var trade_enabled := bool(trade_capabilities.get("enabled", false))
+	_add_context_action(
+		"Trade",
+		_trade_action_description(trade_enabled),
+		_on_trade_pressed,
+		"default",
+		trade_capabilities_loading or (trade_capabilities_loaded and not trade_enabled)
+	)
 	context_actions.add_child(_context_section_label("SOCIAL"))
 	_add_context_action(
 		"Remove Friend" if _is_friend(current_target) else "Add Friend",
@@ -487,11 +495,34 @@ func _refresh_context_status() -> void:
 		context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 
-func _add_context_action(label: String, description: String, action: Callable, variant: String = "default") -> void:
+func _add_context_action(
+	label: String,
+	description: String,
+	action: Callable,
+	variant: String = "default",
+	force_disabled := false
+) -> void:
 	var button := _context_action_button(label, description, variant)
-	button.disabled = label not in ["View Trainer Card", "Message", "Send Mail"] and (social_action_in_flight or social_state_loading)
+	button.disabled = (
+		force_disabled
+		or (
+			label not in ["View Trainer Card", "Message", "Send Mail"]
+			and (social_action_in_flight or social_state_loading)
+		)
+	)
 	button.pressed.connect(action)
 	context_actions.add_child(button)
+
+func _trade_action_description(trade_enabled: bool) -> String:
+	if trade_enabled:
+		return "Invite this trainer to trade"
+	if trade_capabilities_loading:
+		return "Checking trade availability..."
+	if trade_capabilities_error != "":
+		return "Could not check trade availability · select to retry"
+	if trade_capabilities_loaded:
+		return "Trading is currently unavailable"
+	return "Check whether trading is available"
 
 
 func _on_message_pressed() -> void:
@@ -517,6 +548,9 @@ func _on_mail_pressed() -> void:
 
 
 func _on_trade_pressed() -> void:
+	if not bool(trade_capabilities.get("enabled", false)):
+		_refresh_trade_capabilities()
+		return
 	var username := str(current_target.get("username", "")).strip_edges()
 	if username == "" or trade_invitation_dialog == null:
 		return
@@ -533,11 +567,29 @@ func _setup_trade_invitation_dialog() -> void:
 
 
 func _refresh_trade_capabilities() -> void:
+	if trade_capabilities_loading:
+		return
 	var service := get_node_or_null("/root/TradeService")
 	if service == null:
+		trade_capabilities.clear()
+		trade_capabilities_loaded = false
+		trade_capabilities_error = "Trade service is unavailable."
+		if context_menu != null and context_menu.visible:
+			_render_context_menu()
 		return
+	trade_capabilities_loading = true
+	trade_capabilities_error = ""
+	if context_menu != null and context_menu.visible:
+		_render_context_menu()
 	var result: Dictionary = await service.load_capabilities()
-	trade_capabilities = result.get("capabilities", {}).duplicate(true) if bool(result.get("success", false)) else {}
+	trade_capabilities_loading = false
+	trade_capabilities_loaded = bool(result.get("success", false))
+	if trade_capabilities_loaded:
+		trade_capabilities = result.get("capabilities", {}).duplicate(true)
+		trade_capabilities_error = ""
+	else:
+		trade_capabilities.clear()
+		trade_capabilities_error = str(result.get("error", "Could not check trade availability."))
 	if context_menu != null and context_menu.visible:
 		_render_context_menu()
 
@@ -782,6 +834,7 @@ func _context_section_label(text: String) -> Label:
 
 func _context_action_button(label_text: String, description_text: String, variant: String) -> Button:
 	var button := Button.new()
+	button.set_meta("player_action", label_text)
 	button.custom_minimum_size = Vector2(0, 50)
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND

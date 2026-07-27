@@ -22,6 +22,7 @@ func _init() -> void:
 	coordinator = PlayerInteractionCoordinatorScript.new()
 	root.add_child(coordinator)
 	await process_frame
+	await _check_trade_context_action()
 	_check_player_normalization()
 	_check_self_exclusion_and_roster_ordering()
 	_check_deterministic_player_ordering()
@@ -32,6 +33,58 @@ func _init() -> void:
 	presence_service.queue_free()
 	auth_service.queue_free()
 	quit(1 if failed else 0)
+
+func _check_trade_context_action() -> void:
+	var host := Control.new()
+	host.size = Vector2(1152, 648)
+	root.add_child(host)
+	coordinator.setup(host)
+	coordinator.trade_capabilities = {"enabled": true}
+	coordinator.trade_capabilities_loaded = true
+	coordinator.open_context_for_player(
+		{"userId": 7, "username": "misty", "displayName": "Misty"},
+		Vector2(400, 200)
+	)
+	await process_frame
+
+	var trade_button := _find_player_action("Trade")
+	_check_equal(trade_button != null, true, "enabled trade capability renders a Trade action")
+	if trade_button != null:
+		var viewport_rect := get_root().get_visible_rect()
+		_check_equal(viewport_rect.encloses(trade_button.get_global_rect()), true, "Trade action remains inside the viewport")
+
+	coordinator.trade_capabilities.clear()
+	coordinator.trade_capabilities_loaded = false
+	coordinator.trade_capabilities_loading = true
+	coordinator.trade_capabilities_error = ""
+	coordinator._render_context_menu()
+	await process_frame
+	trade_button = _find_player_action("Trade")
+	_check_equal(trade_button != null and trade_button.disabled, true, "loading capabilities keeps a disabled Trade action visible")
+
+	coordinator.trade_capabilities_loading = false
+	coordinator.trade_capabilities_error = "temporary failure"
+	coordinator._render_context_menu()
+	await process_frame
+	trade_button = _find_player_action("Trade")
+	_check_equal(trade_button != null and not trade_button.disabled, true, "failed capability check leaves Trade available for retry")
+
+	coordinator.trade_capabilities_loaded = true
+	coordinator.trade_capabilities_error = ""
+	coordinator.trade_capabilities = {"enabled": false}
+	coordinator._render_context_menu()
+	await process_frame
+	trade_button = _find_player_action("Trade")
+	_check_equal(trade_button != null and trade_button.disabled, true, "authoritatively disabled trading remains visible but cannot start")
+
+	coordinator.close_context_menu()
+	host.queue_free()
+
+func _find_player_action(action_name: String) -> Button:
+	for child: Node in coordinator.context_actions.get_children():
+		if child is Button and str(child.get_meta("player_action", "")) == action_name:
+			return child as Button
+	return null
 
 func _check_player_normalization() -> void:
 	var valid: Dictionary = coordinator._normalized_player({"userId": 7, "username": "misty"})
