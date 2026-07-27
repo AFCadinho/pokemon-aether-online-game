@@ -832,6 +832,7 @@ var trainer_card_appearance_status_label: Label
 var trainer_card_badge_option: OptionButton
 var trainer_card_badge_status_label: Label
 var trainer_card_badge_options: Array[Dictionary] = []
+var trainer_card_gym_badge_slots: Dictionary = {}
 var trainer_card_has_unsaved_appearance_changes := false
 var trainer_card_is_saving_appearance := false
 var trainer_card_dragging: bool = false
@@ -1189,6 +1190,8 @@ func _ready() -> void:
 		PlayerSave.party_changed.connect(_refresh_party)
 	if not PlayerSave.party_changed.is_connected(_on_pvp_party_changed):
 		PlayerSave.party_changed.connect(_on_pvp_party_changed)
+	if not PlayerSave.gym_badges_changed.is_connected(_refresh_trainer_card_gym_badges):
+		PlayerSave.gym_badges_changed.connect(_refresh_trainer_card_gym_badges)
 	if not ChatRealtimeService.message_received.is_connected(_on_chat_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_chat_realtime_message_received)
 	if not ChatRealtimeService.mail_received.is_connected(_on_realtime_mail_received):
@@ -9614,17 +9617,17 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	_hide_public_trainer_card()
 	public_trainer_card_popup = PanelContainer.new()
 	public_trainer_card_popup.name = "PublicTrainerCardPopup"
-	public_trainer_card_popup.custom_minimum_size = Vector2(620, 350)
+	public_trainer_card_popup.custom_minimum_size = TRAINER_CARD_SIZE
 	public_trainer_card_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	public_trainer_card_popup.z_index = UI_ACTIVE_Z_INDEX
 	public_trainer_card_popup.anchor_left = 0.5
 	public_trainer_card_popup.anchor_top = 0.5
 	public_trainer_card_popup.anchor_right = 0.5
 	public_trainer_card_popup.anchor_bottom = 0.5
-	public_trainer_card_popup.offset_left = -310
-	public_trainer_card_popup.offset_top = -175
-	public_trainer_card_popup.offset_right = 310
-	public_trainer_card_popup.offset_bottom = 175
+	public_trainer_card_popup.offset_left = -TRAINER_CARD_SIZE.x * 0.5
+	public_trainer_card_popup.offset_top = -TRAINER_CARD_SIZE.y * 0.5
+	public_trainer_card_popup.offset_right = TRAINER_CARD_SIZE.x * 0.5
+	public_trainer_card_popup.offset_bottom = TRAINER_CARD_SIZE.y * 0.5
 	public_trainer_card_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	root_control.add_child(public_trainer_card_popup)
 
@@ -9678,6 +9681,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 		{"label": "Badge", "value": _get_public_trainer_badge_text(card)},
 	]
 	details.add_child(_create_public_trainer_info_panel("TRAINER PROFILE", identity_rows))
+	details.add_child(_create_public_trainer_gym_badges_panel(card))
 
 	var summary_row := HBoxContainer.new()
 	summary_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -9698,6 +9702,78 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	summary_row.add_child(_create_public_trainer_info_panel("PRESENCE", presence_rows))
 
 	_activate_ui_panel(public_trainer_card_popup)
+
+func _create_public_trainer_gym_badges_panel(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 5)
+	margin.add_child(stack)
+
+	var badge_state := _dictionary_from_value(card.get("badges", {}))
+	var earned_count := 0
+	for badge_value: Variant in KANTO_BADGES:
+		if not (badge_value is Dictionary):
+			continue
+		var badge := badge_value as Dictionary
+		if _gym_badge_state_has(
+			badge_state,
+			str(badge.get("region", "kanto")),
+			str(badge.get("id", ""))
+		):
+			earned_count += 1
+
+	var heading := Label.new()
+	heading.text = "GYM BADGES  ·  %d/%d" % [earned_count, KANTO_BADGES.size()]
+	heading.add_theme_font_size_override("font_size", 11)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	stack.add_child(heading)
+
+	var badge_row := HBoxContainer.new()
+	badge_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	badge_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	badge_row.add_theme_constant_override("separation", 5)
+	stack.add_child(badge_row)
+	for badge_value: Variant in KANTO_BADGES:
+		if not (badge_value is Dictionary):
+			continue
+		var badge := badge_value as Dictionary
+		var earned := _gym_badge_state_has(
+			badge_state,
+			str(badge.get("region", "kanto")),
+			str(badge.get("id", ""))
+		)
+		badge_row.add_child(_create_public_trainer_gym_badge_icon(badge, earned))
+	return panel
+
+func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> Control:
+	var icon_center := CenterContainer.new()
+	icon_center.custom_minimum_size = Vector2(43, 43)
+	icon_center.tooltip_text = "%s · %s" % [
+		str(badge.get("name", "Badge")),
+		"Earned" if earned else "Locked",
+	]
+
+	var texture_rect := TextureRect.new()
+	texture_rect.custom_minimum_size = Vector2(39, 39)
+	texture_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var texture_path := str(badge.get("texture", ""))
+	if ResourceLoader.exists(texture_path):
+		texture_rect.texture = load(texture_path) as Texture2D
+	texture_rect.modulate = Color.WHITE if earned else Color("#6873839a")
+	icon_center.add_child(texture_rect)
+	return icon_center
 
 func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	var panel := PanelContainer.new()
@@ -10554,13 +10630,81 @@ func _create_trainer_card_badge_slot(badge: Dictionary) -> Control:
 	var region := str(badge.get("region", "kanto"))
 	var badge_id := str(badge.get("id", ""))
 	var unlocked := PlayerSave.has_gym_badge(region, badge_id)
-	if not unlocked:
-		texture_rect.modulate = Color("#6873839a")
-		slot.tooltip_text = "%s · Locked" % str(badge.get("name", "Badge"))
-	else:
-		slot.tooltip_text = "%s · Earned" % str(badge.get("name", "Badge"))
 	center.add_child(texture_rect)
+	var badge_key := _gym_badge_key(region, badge_id)
+	trainer_card_gym_badge_slots[badge_key] = {
+		"slot": slot,
+		"texture": texture_rect,
+		"name": str(badge.get("name", "Badge")),
+	}
+	_apply_trainer_card_gym_badge_slot_state(
+		slot,
+		texture_rect,
+		str(badge.get("name", "Badge")),
+		unlocked
+	)
 	return slot
+
+func _refresh_trainer_card_gym_badges() -> void:
+	for badge_value: Variant in KANTO_BADGES:
+		if not (badge_value is Dictionary):
+			continue
+		var badge := badge_value as Dictionary
+		var region := str(badge.get("region", "kanto"))
+		var badge_id := str(badge.get("id", ""))
+		var badge_key := _gym_badge_key(region, badge_id)
+		var slot_value: Variant = trainer_card_gym_badge_slots.get(badge_key, {})
+		if not (slot_value is Dictionary):
+			continue
+		var slot_data := slot_value as Dictionary
+		var slot := slot_data.get("slot") as PanelContainer
+		var texture_rect := slot_data.get("texture") as TextureRect
+		if (
+			slot == null
+			or not is_instance_valid(slot)
+			or texture_rect == null
+			or not is_instance_valid(texture_rect)
+		):
+			continue
+		_apply_trainer_card_gym_badge_slot_state(
+			slot,
+			texture_rect,
+			str(slot_data.get("name", badge.get("name", "Badge"))),
+			PlayerSave.has_gym_badge(region, badge_id)
+		)
+
+func _apply_trainer_card_gym_badge_slot_state(
+	slot: PanelContainer,
+	texture_rect: TextureRect,
+	badge_name: String,
+	earned: bool
+) -> void:
+	texture_rect.modulate = Color.WHITE if earned else Color("#6873839a")
+	slot.tooltip_text = "%s · %s" % [badge_name, "Earned" if earned else "Locked"]
+
+func _gym_badge_state_has(state: Dictionary, region: String, badge_id: String) -> bool:
+	var wanted_key := _gym_badge_key(region, badge_id)
+	var badges_value: Variant = state.get("badges", [])
+	if not (badges_value is Array):
+		return false
+	for badge_value: Variant in badges_value:
+		if not (badge_value is Dictionary):
+			continue
+		var badge := badge_value as Dictionary
+		if not bool(badge.get("earned", false)):
+			continue
+		if _gym_badge_key(
+			str(badge.get("region", "")),
+			str(badge.get("badgeId", badge.get("id", "")))
+		) == wanted_key:
+			return true
+	return false
+
+func _gym_badge_key(region: String, badge_id: String) -> String:
+	return "%s:%s" % [
+		region.strip_edges().to_lower(),
+		badge_id.strip_edges().to_lower(),
+	]
 
 func _on_trainer_card_region_mark_draw(mark: Control) -> void:
 	var center := mark.size * 0.5
@@ -11307,6 +11451,7 @@ func _show_trainer_card() -> void:
 	if trainer_card_popup == null:
 		return
 
+	_refresh_trainer_card_gym_badges()
 	_load_owned_appearance_parts()
 	_refresh_trainer_card_body_buttons()
 	_refresh_trainer_card_part_buttons()
@@ -22756,6 +22901,7 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_part_rows.clear()
 	trainer_card_part_return_buttons.clear()
 	trainer_card_color_buttons.clear()
+	trainer_card_gym_badge_slots.clear()
 	trainer_card_appearance_save_button = null
 	trainer_card_appearance_status_label = null
 	trainer_card_money_label = null

@@ -73,6 +73,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/guild_popup_check.gd",
 	"res://tests/guild_popup_runtime_check.gd",
 	"res://tests/badge_progression_check.gd",
+	"res://tests/trainer_card_gym_badges_runtime_check.gd",
 	"res://tests/dev_badge_progress_popup_runtime_check.gd",
 	"res://tests/gym_leader_alpha_hub_check.gd",
 	"res://tests/trade_service_contract_check.gd",
