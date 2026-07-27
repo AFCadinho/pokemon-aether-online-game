@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.3.35 - 2026-07-27
+
+**Added**
+
+- Added a preview of the upcoming Guild system. You can explore the Guild screen, search the Guild list, view Guild information, and preview creating your own Guild. Guilds are not live yet. Creating one will eventually require three Gym Badges and 100,000 Pokédollars.
+- Added Kanto Gym Badges. Earned and locked Badges now appear on your Trainer Card and on the Trainer Cards of other players.
+- Added the first Alpha League trials against Brock, Misty, and Lt. Surge in Pewter City. Defeat them in order to earn their Gym Badges. You can challenge them again after winning.
+- Added Rival's House as a new two-floor interior in Pallet Town.
+
+**Changed**
+
+- Air Balloon is now shown in the main battle text and above the Pokémon holding it. The indicator disappears when the Balloon pops or is removed.
+- The Party panel is now smaller when you have fewer Pokémon with you.
+- Pokémon you own and the Pokémon you are currently viewing are now easier to tell apart in the Pokédex.
+- Your chosen chat title now appears more consistently in chat and above your Trainer.
+- Weather changed by a player now stays on the correct map and no longer affects unrelated areas.
+
+**Fixed**
+
+- Fixed players sometimes getting stuck in a Ranked battle after their opponent forfeited.
+- Fixed damaged or fainted Pokémon sometimes appearing fully healed again. This could happen in battles against other players and Trainers.
+- Fixed Pain Split not updating the HP bars of both Pokémon.
+- Fixed the Trade option disappearing when right-clicking another player or selecting someone from Nearby Trainers.
+- Fixed newly earned Gym Badges not appearing immediately on open Trainer Cards.
+- Fixed the Global Buff information window sometimes using the wrong size.
+
 ## 0.3.33 - 2026-07-26
 
 **Added**
