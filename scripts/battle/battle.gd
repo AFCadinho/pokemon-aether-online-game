@@ -5380,7 +5380,11 @@ func setup_trainer_battle_from_response(player_pokemon: Pokemon, trainer_data: D
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
-func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dictionary) -> void:
+func setup_pvp_battle_from_response(
+	player_pokemon: Pokemon,
+	api_response: Dictionary,
+	entry_ready_callback: Callable = Callable()
+) -> void:
 	var local_player_id := str(api_response.get("playerId", "p1"))
 	action_flow.set_local_player_id(local_player_id)
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
@@ -5397,6 +5401,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 			return
 		_set_pvp_party_hud_display_override()
 		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")), api_response)
+		await _notify_pvp_entry_ready(entry_ready_callback)
 		lead_response = await _run_pvp_team_preview_lead_selection(local_player_id)
 		if lead_response.is_empty():
 			return
@@ -5406,6 +5411,7 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		_set_pvp_party_hud_display_override()
 		_show_default_trainer_leads_before_selection(player_pokemon, display_response)
 		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")), api_response)
+		await _notify_pvp_entry_ready(entry_ready_callback)
 
 	restored_history_log = _restore_battle_log_from_history_response(display_response)
 	if not restored_history_log:
@@ -5429,6 +5435,12 @@ func setup_pvp_battle_from_response(player_pokemon: Pokemon, api_response: Dicti
 		await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
+
+
+func _notify_pvp_entry_ready(entry_ready_callback: Callable) -> void:
+	if entry_ready_callback.is_valid():
+		await entry_ready_callback.call()
+
 
 func _set_pvp_party_hud_display_override() -> void:
 	if not _is_pvp_battle():

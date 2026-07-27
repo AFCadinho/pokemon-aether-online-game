@@ -1020,6 +1020,7 @@
     },
     "knockoff": {
       "speed_scale": 1.35,
+      "reverse_battlefield_vertical": false,
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -2368,34 +2369,15 @@
       "sprite_zoom_multiplier": 0.5,
       "sprite_position_offset": [
         14,
-        28
+        -28
       ],
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "speed_scale": 1.12,
-      "sheet_pattern_anchor_groups": [
-        {
-          "anchor": "actor",
-          "source_anchor": [
-            128,
-            224
-          ],
-          "patterns": [
-            0,
-            1,
-            2
-          ]
-        },
-        {
-          "anchor": "target",
-          "source_anchor": [
-            384,
-            96
-          ],
-          "patterns": [
-            6
-          ]
-        }
+      "source_anchor": "target",
+      "effect_position_offset": [
+        0,
+        8
       ],
       "pattern_offset": 0,
       "pattern_override": -1

@@ -1138,46 +1138,16 @@ func _apply_move_sheet_anchor(
 	if animation_node == null or not animation_node.show_sheet_sprites:
 		return
 
-	var pattern_groups_value: Variant = config.get("sheet_pattern_anchor_groups", [])
-	if pattern_groups_value is Array and not (pattern_groups_value as Array).is_empty():
-		for group_value: Variant in pattern_groups_value as Array:
-			if not group_value is Dictionary:
-				continue
-			var group: Dictionary = group_value as Dictionary
-			var group_anchor_config := config
-			var group_anchor := str(group.get("anchor", "")).strip_edges()
-			if group_anchor != "":
-				group_anchor_config = config.duplicate()
-				group_anchor_config["static_visual_anchor"] = group_anchor
-			var group_anchor_player_id := _resolve_move_sheet_anchor_player_id(
-				group_anchor_config,
-				actor_ident,
-				target_ident
-			)
-			if group_anchor_player_id == "":
-				continue
-			var group_source_anchor := _vector2_from_config_value(
-				group.get("source_anchor", []),
-				EFFECT_SOURCE_PLAYER_POSITION if group_anchor == "actor" else EFFECT_SOURCE_ENEMY_POSITION
-			)
-			var group_display_offset := _get_move_sheet_anchor_display_offset(
-				animation_node,
-				group_anchor_player_id,
-				parent_node,
-				config,
-				group_source_anchor
-			)
-			var patterns_value: Variant = group.get("patterns", [])
-			if not patterns_value is Array:
-				continue
-			for pattern_value: Variant in patterns_value as Array:
-				animation_node.sheet_pattern_visual_offsets[str(int(pattern_value))] = group_display_offset
-		return
-
 	var anchor_player_id := _resolve_move_sheet_anchor_player_id(config, actor_ident, target_ident)
 	if anchor_player_id == "":
 		return
 
+	var anchor_point := str(config.get("sheet_anchor_point", "center")).strip_edges().to_lower()
+	var dynamic_anchor_parent := _get_effect_target_anchor_in_parent(anchor_player_id, parent_node, anchor_point)
+	if dynamic_anchor_parent == Vector2.ZERO:
+		return
+
+	var dynamic_anchor_source := _parent_position_to_animation_source(animation_node, dynamic_anchor_parent)
 	var source_anchor_player_id := anchor_player_id
 	if animation_node.reverse_battlefield:
 		source_anchor_player_id = "p2" if anchor_player_id == "p1" else "p1"
@@ -1186,30 +1156,27 @@ func _apply_move_sheet_anchor(
 		config.get("sheet_anchor_source_position", [default_fixed_anchor_source.x, default_fixed_anchor_source.y]),
 		default_fixed_anchor_source
 	)
-	animation_node.sheet_visual_offset += _get_move_sheet_anchor_display_offset(
-		animation_node,
-		anchor_player_id,
-		parent_node,
-		config,
-		fixed_anchor_source
-	)
-
-
-func _get_move_sheet_anchor_display_offset(
-	animation_node: MoveAnimationPlayer,
-	anchor_player_id: String,
-	parent_node: Node,
-	config: Dictionary,
-	fixed_anchor_source: Vector2
-) -> Vector2:
-	var anchor_point := str(config.get("sheet_anchor_point", "center")).strip_edges().to_lower()
-	var dynamic_anchor_parent := _get_effect_target_anchor_in_parent(anchor_player_id, parent_node, anchor_point)
-	if dynamic_anchor_parent == Vector2.ZERO:
-		return Vector2.ZERO
-
-	var dynamic_anchor_source := _parent_position_to_animation_source(animation_node, dynamic_anchor_parent)
 	var source_anchor_offset := dynamic_anchor_source - fixed_anchor_source
-	return -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset
+	var display_anchor_offset := animation_node.battlefield_offset_to_display(source_anchor_offset)
+	var pattern_groups_value: Variant = config.get("sheet_pattern_anchor_groups", [])
+	if pattern_groups_value is Array and not (pattern_groups_value as Array).is_empty():
+		for group_value: Variant in pattern_groups_value as Array:
+			if not group_value is Dictionary:
+				continue
+			var group: Dictionary = group_value as Dictionary
+			var group_anchor_source := _vector2_from_config_value(
+				group.get("source_anchor", [fixed_anchor_source.x, fixed_anchor_source.y]),
+				fixed_anchor_source
+			)
+			var group_source_offset := dynamic_anchor_source - group_anchor_source
+			var group_display_offset := animation_node.battlefield_offset_to_display(group_source_offset)
+			var patterns_value: Variant = group.get("patterns", [])
+			if not patterns_value is Array:
+				continue
+			for pattern_value: Variant in patterns_value as Array:
+				animation_node.sheet_pattern_visual_offsets[str(int(pattern_value))] = group_display_offset
+		return
+	animation_node.sheet_visual_offset += display_anchor_offset
 
 
 func _resolve_move_sheet_anchor_player_id(config: Dictionary, actor_ident: String, target_ident: String) -> String:

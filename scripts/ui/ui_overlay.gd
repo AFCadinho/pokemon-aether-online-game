@@ -30511,6 +30511,7 @@ func _open_pvp_queue_match(auto_open: bool) -> void:
 	if not bool(response.get("success", false)):
 		if await _recover_already_bound_pvp_queue_match(response):
 			return
+		await _cancel_ranked_battle_entry_transition()
 		_clear_pvp_match_countdown(true)
 		_set_pvp_queue_status("Queue Status: could not start battle: %s" % str(response.get("error", "Unknown error")))
 		_refresh_pvp_queue_buttons("matched")
@@ -30598,7 +30599,21 @@ func _finish_pvp_match_countdown() -> void:
 		_clear_pvp_match_countdown(false)
 		return
 	pvp_active_queue_match_id = match_id
+	_begin_ranked_battle_entry_transition()
 	await _open_pvp_queue_match(true)
+
+
+func _begin_ranked_battle_entry_transition() -> void:
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and world.has_method("begin_pvp_battle_transition"):
+		world.call("begin_pvp_battle_transition")
+
+
+func _cancel_ranked_battle_entry_transition() -> void:
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and world.has_method("cancel_pvp_battle_transition"):
+		await world.call("cancel_pvp_battle_transition")
+
 
 func _clear_pvp_match_countdown(unlock_input: bool) -> void:
 	pvp_match_countdown_active = false
@@ -31075,6 +31090,7 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_pvp_battle_from_response"):
+		await _cancel_ranked_battle_entry_transition()
 		_set_pvp_status("Could not start PvP battle from this scene.")
 		pvp_battle_starting = false
 		return

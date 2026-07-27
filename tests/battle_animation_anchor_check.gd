@@ -18,7 +18,7 @@ func _init() -> void:
 	_check_contains(router_source, "_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, overlay, config)", "overlay animations receive the live sheet anchor")
 	_check_contains(router_source, "_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, parent_node, config)", "fallback animations receive the live sheet anchor")
 	_check_contains(router_source, "var source_anchor_player_id := anchor_player_id", "sheet anchors resolve their canonical source side")
-	_check_contains(router_source, "return -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset", "sheet anchor corrections return to display coordinates after mirroring")
+	_check_contains(router_source, "animation_node.battlefield_offset_to_display(source_anchor_offset)", "sheet anchor corrections return to display coordinates after mirroring")
 	_check_contains(router_source, "if animation_node == null or not animation_node.show_sheet_sprites:", "procedural-only animations cannot receive a duplicate sheet offset")
 	_check_contains(router_source, "config.get(\"sheet_anchor_point\", \"center\")", "imported sheets can choose a live sprite anchor")
 	_check_contains(router_source, "get_single_battle_anchor_in_node", "grounded sheet impacts can use a Pokemon's feet")
@@ -30,7 +30,6 @@ func _init() -> void:
 	_check_contains(router_source, '"field", "field_hazard", "screen":', "battlefield-wide animations remain globally anchored")
 	_check_contains(router_source, '"status_buff":\n\t\t\treturn actor_id', "self-buff animations follow their actor")
 	_check_contains(router_source, 'config.get("static_visual_anchor", "")', "catalog entries can override the default visual binding")
-	_check_contains(router_source, 'group.get("anchor", "")', "imported sheet pattern groups can independently follow their actor or target")
 	_check_contains(router_source, "_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)", "moves can flash their target at impact timing")
 	_check_contains(router_source, "func _should_suppress_target_feedback_for_miss", "misses can suppress hit-only target feedback")
 	_check_contains(router_source, "animation_node.heat_wave_config = _with_projectile_endpoint_anchors(", "heat waves receive live attacker and target anchors")
@@ -50,6 +49,7 @@ func _init() -> void:
 	_check_contains(player_source, "_battlefield_position(sheet_position) + sheet_visual_offset", "sheet correction is applied after battlefield mirroring")
 	_check_contains(player_source, "func display_position_to_battlefield_source(position: Vector2) -> Vector2:", "mirrored animations can convert display anchors to source coordinates")
 	_check_contains(player_source, "if reverse_battlefield_vertical else position.y", "animations can preserve their vertical travel when mirrored")
+	_check_contains(player_source, "func battlefield_offset_to_display(offset: Vector2) -> Vector2:", "live sheet anchors respect horizontal-only battlefield mirroring")
 	_check_contains(router_source, 'config.get("reverse_battlefield_vertical", true)', "moves can opt out of vertical battlefield mirroring")
 	_check_contains(player_source, "if reverse_battlefield and mirror_sheet_sprites_on_reverse:", "directional sheet sprites can face the mirrored target")
 	_check_contains(router_source, 'config.get("mirror_sheet_sprites_on_reverse", false)', "moves can opt into directional sprite mirroring")
@@ -73,14 +73,12 @@ func _init() -> void:
 	_check_contains(sprite_box_source, "offset *= motion_direction", "opposing move actors invert both travel axes")
 	_check_contains(router_source, "config.get(\"actor_motion_mirror_vertical\", true)", "jumping moves can preserve their vertical arc for opposing users")
 	_check_equal(bool((moves.get("knockoff", {}) as Dictionary).get("show_sheet_sprites", false)), true, "Knock Off renders its imported impact frames")
+	_check_equal(bool((moves.get("knockoff", {}) as Dictionary).get("reverse_battlefield_vertical", true)), false, "opposing Knock Off preserves its top-to-bottom travel")
 	var wish_config: Dictionary = moves.get("wish", {}) as Dictionary
 	_check_equal(str(wish_config.get("static_visual_anchor", "")), "battlefield", "Wish keeps its original battlefield position")
 	_check_equal(bool(wish_config.get("reverse_battlefield_vertical", true)), false, "opposing Wish preserves its top-to-bottom travel")
-	var taunt_groups: Array = (moves.get("taunt", {}) as Dictionary).get("sheet_pattern_anchor_groups", []) as Array
-	_check_equal(taunt_groups.size(), 2, "Taunt separates its actor and target visuals")
-	_check_equal(str((taunt_groups[0] as Dictionary).get("anchor", "")), "actor", "Taunt hand visuals follow the user")
-	_check_equal(str((taunt_groups[1] as Dictionary).get("anchor", "")), "target", "Taunt anger visual follows the target")
 	_check_equal(bool((moves.get("taunt", {}) as Dictionary).get("mirror_sheet_sprites_on_reverse", false)), true, "opposing Taunt points back toward the player")
+	_check_equal(int(((moves.get("taunt", {}) as Dictionary).get("sprite_position_offset", []) as Array)[1]), -28, "Taunt moves symmetrically toward the battlefield center")
 
 	quit(1 if failed else 0)
 

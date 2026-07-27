@@ -2588,6 +2588,15 @@ func display_position_to_battlefield_source(position: Vector2) -> Vector2:
 	return _battlefield_position(position)
 
 
+func battlefield_offset_to_display(offset: Vector2) -> Vector2:
+	if not reverse_battlefield:
+		return offset
+	return Vector2(
+		-offset.x,
+		-offset.y if reverse_battlefield_vertical else offset.y
+	)
+
+
 func _scale_sprite_position(position: Vector2) -> Vector2:
 	if is_equal_approx(sprite_position_scale, 1.0):
 		return position

@@ -7,6 +7,8 @@ const COVER_SECONDS := 0.38
 const REVEAL_SECONDS := 0.24
 const BAND_COUNT := 12
 const BAND_STAGGER_SHARE := 0.28
+const STYLE_WILD := "wild"
+const STYLE_RANKED := "ranked"
 
 var cover_progress := 0.0:
 	set(value):
@@ -15,6 +17,7 @@ var cover_progress := 0.0:
 
 var animation_elapsed := 0.0
 var active_tween: Tween
+var transition_style := STYLE_WILD
 
 
 func _ready() -> void:
@@ -34,8 +37,9 @@ func _notification(what: int) -> void:
 		queue_redraw()
 
 
-func begin() -> void:
+func begin(style: String = STYLE_WILD) -> void:
 	_stop_active_tween()
+	transition_style = STYLE_RANKED if style == STYLE_RANKED else STYLE_WILD
 	animation_elapsed = 0.0
 	cover_progress = 0.0
 	visible = true
@@ -81,9 +85,55 @@ func _draw() -> void:
 		Rect2(Vector2.ZERO, viewport_size),
 		Color(0.006, 0.012, 0.035, 0.72 * cover_progress)
 	)
-	_draw_bands(viewport_size)
+	if transition_style == STYLE_RANKED:
+		_draw_ranked_panels(viewport_size)
+	else:
+		_draw_bands(viewport_size)
 	_draw_moving_streaks(viewport_size)
 	_draw_encounter_flash(viewport_size)
+
+
+func _draw_ranked_panels(viewport_size: Vector2) -> void:
+	var panel_progress := ease(cover_progress, 0.72)
+	var overlap := 3.0
+	var skew := minf(viewport_size.x * 0.12, 150.0) * panel_progress
+	var left_edge := (viewport_size.x * 0.5 + overlap) * panel_progress
+	var right_edge := viewport_size.x - (viewport_size.x * 0.5 + overlap) * panel_progress
+	draw_colored_polygon(
+		PackedVector2Array([
+			Vector2(0.0, 0.0),
+			Vector2(left_edge + skew, 0.0),
+			Vector2(left_edge, viewport_size.y),
+			Vector2(0.0, viewport_size.y),
+		]),
+		Color(0.015, 0.13, 0.3, 1.0)
+	)
+	draw_colored_polygon(
+		PackedVector2Array([
+			Vector2(right_edge, 0.0),
+			Vector2(viewport_size.x, 0.0),
+			Vector2(viewport_size.x, viewport_size.y),
+			Vector2(right_edge - skew, viewport_size.y),
+		]),
+		Color(0.28, 0.025, 0.18, 1.0)
+	)
+
+	var hold_strength := smoothstep(0.82, 1.0, cover_progress)
+	if hold_strength <= 0.0:
+		return
+	var center_x := viewport_size.x * 0.5
+	draw_line(
+		Vector2(center_x + skew * 0.5, 0.0),
+		Vector2(center_x - skew * 0.5, viewport_size.y),
+		Color(0.62, 0.9, 1.0, 0.72 * hold_strength),
+		3.0
+	)
+	draw_line(
+		Vector2(center_x + skew * 0.5 + 8.0, 0.0),
+		Vector2(center_x - skew * 0.5 + 8.0, viewport_size.y),
+		Color(1.0, 0.32, 0.72, 0.55 * hold_strength),
+		2.0
+	)
 
 
 func _draw_bands(viewport_size: Vector2) -> void:

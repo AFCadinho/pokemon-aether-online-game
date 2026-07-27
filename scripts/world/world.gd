@@ -73,6 +73,7 @@ var pending_map_chat_messages: Dictionary = {}
 var pending_remote_player_interaction: Dictionary = {}
 var remote_player_interaction_pending := false
 var active_battle_kind := ""
+var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
 var active_trainer_name := ""
@@ -550,6 +551,29 @@ func _ensure_map_transition_overlay() -> void:
 func _begin_wild_encounter_transition() -> int:
 	wild_encounter_transition.begin()
 	return Time.get_ticks_msec()
+
+
+func begin_pvp_battle_transition() -> void:
+	if wild_encounter_transition == null or not is_instance_valid(wild_encounter_transition):
+		return
+	pvp_battle_transition_started_at_msec = Time.get_ticks_msec()
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_RANKED)
+
+
+func cancel_pvp_battle_transition() -> void:
+	pvp_battle_transition_started_at_msec = -1
+	await _cancel_wild_encounter_transition()
+
+
+func _wait_for_pvp_battle_cover() -> void:
+	if pvp_battle_transition_started_at_msec < 0:
+		begin_pvp_battle_transition()
+	await _wait_for_wild_encounter_cover(pvp_battle_transition_started_at_msec)
+
+
+func _reveal_prepared_pvp_battle() -> void:
+	pvp_battle_transition_started_at_msec = -1
+	await _reveal_prepared_wild_battle()
 
 
 func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
@@ -1963,11 +1987,14 @@ func start_trainer_battle(trainer_data: Dictionary) -> bool:
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle:
 		if not await _interrupt_current_battle_for_pvp_match():
+			await cancel_pvp_battle_transition()
 			return false
 	if not bool(response.get("success", false)):
 		push_warning("World.start_pvp_battle_from_response failed: %s" % str(response.get("error", "Unknown error")))
+		await cancel_pvp_battle_transition()
 		return false
 
+	await _wait_for_pvp_battle_cover()
 	is_in_battle = true
 	active_battle_kind = "pvp"
 	active_battle_id = str(response.get("battleId", ""))
@@ -1978,14 +2005,19 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 
 	if not _mount_battle_ui():
 		push_error("World.start_pvp_battle_from_response failed: could not load battle scene.")
+		await cancel_pvp_battle_transition()
 		_abort_battle_start()
 		return false
 
+	_prepare_battle_instance_reveal()
 	MusicManager.play_pvp_battle_music()
 	await battle_instance.setup_pvp_battle_from_response(
 		PlayerSave.party[0] if not PlayerSave.party.is_empty() else null,
-		response
+		response,
+		Callable(self, "_reveal_prepared_pvp_battle")
 	)
+	if pvp_battle_transition_started_at_msec >= 0:
+		await _reveal_prepared_pvp_battle()
 	return true
 
 func _interrupt_current_battle_for_pvp_match() -> bool:
