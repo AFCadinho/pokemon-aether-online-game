@@ -1,11 +1,11 @@
 [gd_resource type="TileSet" format=3 uid="uid://3egqt4yxri8s"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_201205659_000.texture.res" id="1_vbtsi"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_201205659_001.texture.res" id="2_syy7u"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_201205659_002.texture.res" id="3_gfr8f"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="4_fv2vu"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="5_x6k5o"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="6_0jn7p"]
+[ext_resource type="Texture2D" uid="uid://cebjndlxtlbok" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_201205659_000.texture.res" id="1_vbtsi"]
+[ext_resource type="Texture2D" uid="uid://b2xlbpiyj8c4a" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_201205659_001.texture.res" id="2_syy7u"]
+[ext_resource type="Texture2D" uid="uid://0s6im3i6ks41" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_201205659_002.texture.res" id="3_gfr8f"]
+[ext_resource type="Texture2D" uid="uid://cuujtprd0pat3" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="4_fv2vu"]
+[ext_resource type="Texture2D" uid="uid://dyy0fhohx7i0n" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_1354810058_001.texture.res" id="5_x6k5o"]
+[ext_resource type="Texture2D" uid="uid://bmq41ahm3j1s8" path="res://generated/tiled_visuals/rivals_house/assets/5GEN_INTERIOR_TILESET_1354810058_002.texture.res" id="6_0jn7p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ogt3"]
 texture = ExtResource("1_vbtsi")
