@@ -31,6 +31,7 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
@@ -61,6 +62,10 @@ const ROLE_BADGE_TEXT_HEIGHT := 13.0
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
 const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
+const GUILD_EMBLEM_DISPLAY_SIZE := 24.0
+const NAMEPLATE_NAME_HEIGHT := 22.0
+const NAMEPLATE_LAYER_GAP := 2.0
+const NAMEPLATE_STACK_BOTTOM := 63.0
 const ACTIVITY_LAYER_OFFSETS := {
 	"fish": {
 		"default": {
@@ -170,6 +175,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 @onready var nameplate: Control = $Nameplate
 @onready var nameplate_background: Panel = $Nameplate/NameplateBackground
 @onready var nameplate_label: Label = $Nameplate/NameLabel
+@onready var guild_emblem: TextureRect = $Nameplate/GuildEmblem
 @onready var role_badge_panel: Panel = $Nameplate/RoleBadgePanel
 @onready var role_badge_label: Label = $Nameplate/RoleBadgePanel/RoleBadge
 var map_chat_bubble: PanelContainer
@@ -434,6 +440,13 @@ func set_display_name(display_name: String, visible: bool = true) -> void:
 	nameplate_label.text = display_name.strip_edges()
 	_sync_nameplate_visibility(visible and SettingsManager.display_own_name)
 
+func set_guild_emblem(emblem: Dictionary) -> void:
+	if guild_emblem == null:
+		return
+	guild_emblem.texture = GuildEmblemTexture.create_texture(emblem)
+	guild_emblem.visible = guild_emblem.texture != null
+	_sync_nameplate_visibility(nameplate_label != null and nameplate_label.text != "")
+
 func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 0.404), role_id: String = "") -> void:
 	if role_badge_label == null:
 		return
@@ -516,6 +529,9 @@ func _ready() -> void:
 	_cache_appearance_sprites()
 	set_display_name(PlayerSave.player_name, true)
 	set_role_from_user(AuthService.current_user)
+	set_guild_emblem(_current_guild_emblem())
+	if not GuildService.guild_changed.is_connected(_on_guild_changed):
+		GuildService.guild_changed.connect(_on_guild_changed)
 	_setup_map_chat_bubble()
 	_setup_fishing_prompt()
 	_setup_surf_prompt()
@@ -598,30 +614,56 @@ func _sync_nameplate_layout() -> void:
 		return
 
 	var has_role_badge: bool = role_badge_panel != null and role_badge_label != null and role_badge_label.text.strip_edges() != ""
+	var has_guild_emblem: bool = guild_emblem != null and guild_emblem.texture != null
 	var name_width: float = clampf(
 		_get_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
 		NAMEPLATE_MIN_NAME_WIDTH,
 		NAMEPLATE_MAX_NAME_WIDTH
 	)
+
 	nameplate_label.offset_left = NAMEPLATE_CENTER_X - (name_width * 0.5)
 	nameplate_label.offset_right = nameplate_label.offset_left + name_width
+	nameplate_label.offset_top = NAMEPLATE_STACK_BOTTOM - NAMEPLATE_NAME_HEIGHT
+	nameplate_label.offset_bottom = NAMEPLATE_STACK_BOTTOM
 	nameplate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if nameplate_background != null:
 		nameplate_background.offset_left = nameplate_label.offset_left - 5.0
 		nameplate_background.offset_right = nameplate_label.offset_right + 5.0
-		nameplate_background.offset_top = 14.0
-		nameplate_background.offset_bottom = 32.0
+		nameplate_background.offset_top = nameplate_label.offset_top + 2.0
+		nameplate_background.offset_bottom = nameplate_label.offset_bottom - 2.0
+
+	var next_layer_bottom := nameplate_label.offset_top - NAMEPLATE_LAYER_GAP
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
 		var start_x := NAMEPLATE_CENTER_X - (badge_width * 0.5)
 		role_badge_panel.offset_left = start_x
 		role_badge_panel.offset_right = start_x + badge_width
-		role_badge_panel.offset_top = 2.0
-		role_badge_panel.offset_bottom = role_badge_panel.offset_top + ROLE_BADGE_TEXT_HEIGHT
+		role_badge_panel.offset_bottom = next_layer_bottom
+		role_badge_panel.offset_top = role_badge_panel.offset_bottom - ROLE_BADGE_TEXT_HEIGHT
 		role_badge_label.offset_left = 1.0
 		role_badge_label.offset_right = badge_width - 1.0
 		role_badge_label.offset_top = 0.0
 		role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
+		next_layer_bottom = role_badge_panel.offset_top - NAMEPLATE_LAYER_GAP
+	if has_guild_emblem:
+		guild_emblem.offset_left = NAMEPLATE_CENTER_X - (GUILD_EMBLEM_DISPLAY_SIZE * 0.5)
+		guild_emblem.offset_right = guild_emblem.offset_left + GUILD_EMBLEM_DISPLAY_SIZE
+		guild_emblem.offset_bottom = next_layer_bottom
+		guild_emblem.offset_top = guild_emblem.offset_bottom - GUILD_EMBLEM_DISPLAY_SIZE
+
+
+func _current_guild_emblem() -> Dictionary:
+	var guild_value: Variant = GuildService.current_guild
+	if not guild_value is Dictionary:
+		return {}
+	var emblem_value: Variant = (guild_value as Dictionary).get("emblem", {})
+	return emblem_value as Dictionary if emblem_value is Dictionary else {}
+
+
+func _on_guild_changed(guild: Dictionary) -> void:
+	var emblem_value: Variant = guild.get("emblem", {})
+	set_guild_emblem(emblem_value as Dictionary if emblem_value is Dictionary else {})
+
 
 func _get_label_text_width(label: Label) -> float:
 	var text: String = label.text.strip_edges()

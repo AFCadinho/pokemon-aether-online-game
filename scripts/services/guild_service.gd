@@ -3,6 +3,7 @@ extends Node
 class_name GuildServiceNode
 
 signal membership_changed(membership: Dictionary)
+signal guild_changed(guild: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
@@ -10,6 +11,7 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
 var current_membership: Dictionary = {}
+var current_guild: Dictionary = {}
 var membership_loaded := false
 
 
@@ -50,6 +52,7 @@ func create_guild(
 	var body := _dictionary(response.get("body", {}))
 	pending_creation_request_id = ""
 	_set_current_membership(body.get("membership", {}))
+	_set_current_guild(_normalize_guild(body.get("guild", {})))
 	return {
 		"success": true,
 		"guild": _normalize_guild(body.get("guild", {})),
@@ -62,6 +65,7 @@ func load_home() -> Dictionary:
 	var response := await _authenticated_request(GUILD_HOME_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)) and int(response.get("status", 0)) == 404:
 		_set_current_membership({})
+		_set_current_guild({})
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
 
@@ -142,6 +146,8 @@ func _directory_result(value: Variant) -> Dictionary:
 	for guild_value: Variant in _array(body.get("guilds", [])):
 		if guild_value is Dictionary:
 			normalized_guilds.append(_normalize_guild(guild_value))
+	var membership := _dictionary(body.get("membership", {}))
+	_set_current_guild(_guild_with_id(normalized_guilds, int(membership.get("guildId", 0))))
 	return {
 		"success": true,
 		"guilds": normalized_guilds,
@@ -153,6 +159,7 @@ func _directory_result(value: Variant) -> Dictionary:
 func _home_result(value: Variant) -> Dictionary:
 	var body := _dictionary(value)
 	_set_current_membership(body.get("membership", {}))
+	_set_current_guild(_normalize_guild(body.get("guild", {})))
 	return {
 		"success": true,
 		"guild": _normalize_guild(body.get("guild", {})),
@@ -185,6 +192,21 @@ func _set_current_membership(value: Variant) -> void:
 	membership_changed.emit(current_membership.duplicate(true))
 
 
+func _set_current_guild(value: Variant) -> void:
+	var guild := _dictionary(value).duplicate(true)
+	if current_guild == guild:
+		return
+	current_guild = guild
+	guild_changed.emit(current_guild.duplicate(true))
+
+
+func _guild_with_id(guilds: Array[Dictionary], guild_id: int) -> Dictionary:
+	if guild_id <= 0:
+		return {}
+	for guild: Dictionary in guilds:
+		if int(guild.get("id", 0)) == guild_id:
+			return guild
+	return {}
 
 
 func _authenticated_request(path: String, method: HTTPClient.Method, body: String) -> Dictionary:

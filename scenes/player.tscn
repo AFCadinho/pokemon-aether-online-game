@@ -88,9 +88,9 @@ z_index = 512
 layout_mode = 3
 anchors_preset = 0
 offset_left = -82.0
-offset_top = -92.0
+offset_top = -120.0
 offset_right = 82.0
-offset_bottom = -56.0
+offset_bottom = -50.0
 mouse_filter = 2
 
 [node name="NameplateBackground" type="Panel" parent="Nameplate" unique_id=1937719014]
@@ -111,6 +111,18 @@ offset_right = 97.0
 offset_bottom = 15.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_role_badge")
+
+[node name="GuildEmblem" type="TextureRect" parent="Nameplate"]
+visible = false
+layout_mode = 0
+offset_left = 41.0
+offset_top = 10.0
+offset_right = 65.0
+offset_bottom = 34.0
+mouse_filter = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
 
 [node name="RoleBadge" type="Label" parent="Nameplate/RoleBadgePanel" unique_id=30648506]
 layout_mode = 0

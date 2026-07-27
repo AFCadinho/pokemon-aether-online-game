@@ -5,6 +5,7 @@
 **Added**
 - Added an Add Gems button to the Aether Gift Store that clearly marks Gem top-ups as not implemented yet.
 - Added Guild chat with a red unread indicator for Guild members, plus an Invite to Guild action when Guild Leaders or Officers right-click another Trainer.
+- Added a centered overworld nameplate stack with each Trainer's 24×24 Guild emblem, optional staff badge, and anchored name arranged vertically.
 
 - Added the Aether Atelier tailor to Pokémon Centers. Its searchable catalog repacks complete outfit sets for ₽1,000 and previews permanent per-item Chroma dyes for ₽2,500.
 - Added catalog search to the Aether Gift Store and direct hex colour entry to Store previews and Trainer Card appearance editing.
