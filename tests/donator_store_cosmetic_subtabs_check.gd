@@ -66,7 +66,14 @@ func _run() -> void:
 		not source.contains('scroll.name = "CosmeticSubcategoryScroll"'),
 		"cosmetic filters no longer require horizontal scrolling"
 	)
-	_check(not source.contains("get_gems_button"), "Store does not expose public Aether Gem top-ups yet")
+	var add_gems_button := store.find_child("AddGemsButton", true, false) as Button
+	_check(add_gems_button != null, "Store exposes an Add Gems action beside the balance")
+	if add_gems_button != null:
+		add_gems_button.pressed.emit()
+		_check(
+			store.status_label.text == "Adding Aether Gems is not implemented yet.",
+			"Add Gems clearly reports that top-ups are not implemented yet"
+		)
 
 	store.call("_select_category", "cosmetics")
 	_check(store.cosmetic_subcategory_bar.visible, "cosmetic filters appear inside Cosmetics")
@@ -283,6 +290,9 @@ func _run() -> void:
 		"squirtle-guild-emblem-template": 150,
 		"charmander-guild-emblem-template": 150,
 		"bulbasaur-guild-emblem-template": 150,
+		"venusaur-guild-emblem-template": 150,
+		"charizard-guild-emblem-template": 150,
+		"blastoise-guild-emblem-template": 150,
 	}
 	for item_id: String in client_target_prices:
 		var priced_item: Dictionary = store.call("_catalog_item", item_id)
@@ -321,6 +331,9 @@ func _run() -> void:
 					"genders": [],
 					"costs": [{"currency": "gems", "amount": 150}],
 				},
+				{"itemId": "venusaur-guild-emblem-template", "genders": [], "costs": [{"currency": "gems", "amount": 150}]},
+				{"itemId": "charizard-guild-emblem-template", "genders": [], "costs": [{"currency": "gems", "amount": 150}]},
+				{"itemId": "blastoise-guild-emblem-template", "genders": [], "costs": [{"currency": "gems", "amount": 150}]},
 				{"itemId": "surf-charm", "genders": [], "costs": [{"currency": "gems", "amount": 350}]},
 				{"itemId": "cut-charm", "genders": [], "costs": [{"currency": "gems", "amount": 250}]},
 				{"itemId": "strength-charm", "genders": [], "costs": [{"currency": "gems", "amount": 300}]},
@@ -362,6 +375,9 @@ func _run() -> void:
 	for starter_id: String in [
 		"charmander-guild-emblem-template",
 		"bulbasaur-guild-emblem-template",
+		"venusaur-guild-emblem-template",
+		"charizard-guild-emblem-template",
+		"blastoise-guild-emblem-template",
 	]:
 		_check(store.product_buttons.has(starter_id), "Guilds lists %s" % starter_id)
 		var starter_template: Dictionary = store.call("_catalog_item", starter_id)

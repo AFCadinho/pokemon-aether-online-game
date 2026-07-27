@@ -3,11 +3,12 @@
 ## 0.3.35 - 2026-07-27
 
 **Added**
+- Added an Add Gems button to the Aether Gift Store that clearly marks Gem top-ups as not implemented yet.
 
 - Added the Aether Atelier tailor to Pokémon Centers. Its searchable catalog repacks complete outfit sets for ₽1,000 and previews permanent per-item Chroma dyes for ₽2,500.
 - Added catalog search to the Aether Gift Store and direct hex colour entry to Store previews and Trainer Card appearance editing.
 - Added the first live Guild features. You can browse and create Guilds, use separate Overview, Members, and Management tabs, update Guild settings, edit a 32×32 emblem with exact hex palette colours by clicking the Guild icon, and invite other Trainers. Creating a Guild requires three Gym Badges and 100,000 Pokédollars.
-- Added consumable Squirtle, Charmander, and Bulbasaur Guild Emblem templates to the Aether Gift Store. Using one permanently unlocks its transparent 32×32 template for the current Guild, where Guild Leaders can always reapply it.
+- Added consumable Squirtle, Charmander, Bulbasaur, Venusaur, Charizard, and Blastoise Guild Emblem templates to the Aether Gift Store. Using one permanently unlocks its transparent 32×32 template for the current Guild, where Guild Leaders can always reapply it.
 - Added Kanto Gym Badges. Earned and locked Badges now appear on your Trainer Card and on the Trainer Cards of other players.
 - Added the first Alpha League trials against Brock, Misty, and Lt. Surge in Pewter City. Defeat them in order to earn their Gym Badges. You can challenge them again after winning.
 - Added Rival's House as a new two-floor interior in Pallet Town.

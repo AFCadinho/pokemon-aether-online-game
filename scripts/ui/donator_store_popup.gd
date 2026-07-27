@@ -29,6 +29,9 @@ const SNOWSCAPE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_
 const SQUIRTLE_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/SQUIRTLEGUILDEMBLEMTEMPLATE.png")
 const CHARMANDER_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/CHARMANDERGUILDEMBLEMTEMPLATE.png")
 const BULBASAUR_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/BULBASAURGUILDEMBLEMTEMPLATE.png")
+const VENUSAUR_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/VENUSAURGUILDEMBLEMTEMPLATE.png")
+const CHARIZARD_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/CHARIZARDGUILDEMBLEMTEMPLATE.png")
+const BLASTOISE_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/BLASTOISEGUILDEMBLEMTEMPLATE.png")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 
 const UI_SURFACE_BASE := Color("#050b14f7")
@@ -184,6 +187,36 @@ const CATALOG: Array[Dictionary] = [
 		"description": "Consume it from your Bag to permanently unlock this 32×32 template for your current Guild.",
 		"price": 150,
 		"icon": BULBASAUR_GUILD_EMBLEM_TEMPLATE_ICON,
+		"categories": ["featured", "guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_emblem_template": true,
+	},
+	{
+		"id": "venusaur-guild-emblem-template",
+		"name": "Venusaur Guild Emblem",
+		"description": "Consume it from your Bag to permanently unlock this 32×32 template for your current Guild.",
+		"price": 150,
+		"icon": VENUSAUR_GUILD_EMBLEM_TEMPLATE_ICON,
+		"categories": ["featured", "guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_emblem_template": true,
+	},
+	{
+		"id": "charizard-guild-emblem-template",
+		"name": "Charizard Guild Emblem",
+		"description": "Consume it from your Bag to permanently unlock this 32×32 template for your current Guild.",
+		"price": 150,
+		"icon": CHARIZARD_GUILD_EMBLEM_TEMPLATE_ICON,
+		"categories": ["featured", "guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_emblem_template": true,
+	},
+	{
+		"id": "blastoise-guild-emblem-template",
+		"name": "Blastoise Guild Emblem",
+		"description": "Consume it from your Bag to permanently unlock this 32×32 template for your current Guild.",
+		"price": 150,
+		"icon": BLASTOISE_GUILD_EMBLEM_TEMPLATE_ICON,
 		"categories": ["featured", "guilds"],
 		"badge": "GUILD UNLOCK",
 		"guild_emblem_template": true,
@@ -708,6 +741,17 @@ func _create_header() -> Control:
 
 	row.add_child(_create_balance_pill())
 
+	var add_gems_button := Button.new()
+	add_gems_button.name = "AddGemsButton"
+	add_gems_button.text = "+ Add Gems"
+	add_gems_button.tooltip_text = "Aether Gem top-ups are coming later"
+	add_gems_button.custom_minimum_size = Vector2(96, 36)
+	add_gems_button.focus_mode = Control.FOCUS_NONE
+	add_gems_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	add_gems_button.pressed.connect(_on_add_gems_pressed)
+	_apply_text_button_style(add_gems_button, UI_GOLD)
+	row.add_child(add_gems_button)
+
 	var close_button := Button.new()
 	close_button.text = "×"
 	close_button.tooltip_text = "Close"
@@ -718,6 +762,14 @@ func _create_header() -> Control:
 	_apply_text_button_style(close_button, UI_BORDER)
 	row.add_child(close_button)
 	return panel
+
+
+func _on_add_gems_pressed() -> void:
+	var message := "Adding Aether Gems is not implemented yet."
+	if status_label != null:
+		status_label.text = message
+	if selection_description_label != null:
+		selection_description_label.text = message
 
 
 func _create_balance_pill() -> Control:
