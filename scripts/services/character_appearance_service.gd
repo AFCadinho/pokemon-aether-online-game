@@ -38,6 +38,11 @@ const DEFAULT_FEMALE_BOTTOM_ID := "Trousers"
 const DEFAULT_FEMALE_SHOES_ID := "Shoes"
 const DEFAULT_FEMALE_EYES_ID := "Eyes"
 const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
+const EYEBROWS_BY_HAIR_ID := {
+	"male:Hair": DEFAULT_MALE_EYEBROWS_ID,
+	"female:Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"male:Adinho_Hair": "Adinho_Eyebrows",
+}
 const LEGACY_DEFAULT_HAIR_COLOR := "#ffffff"
 const LEGACY_DEFAULT_EYE_COLOR := "#0fff00"
 const DEFAULT_MALE_HAIR_COLOR := "#5a3728"
@@ -183,7 +188,6 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 				{"category": BOTTOM_CATEGORY, "id": get_default_part_id(BOTTOM_CATEGORY, normalized_gender)},
 				{"category": SHOES_CATEGORY, "id": "Aether_Blossom_Shoes"},
 				{"category": TOP_CATEGORY, "id": "Aether_Blossom_Dress"},
-				{"category": EYEBROWS_CATEGORY, "id": get_default_part_id(EYEBROWS_CATEGORY, normalized_gender), "tint": Color(DEFAULT_FEMALE_HAIR_COLOR)},
 				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(DEFAULT_FEMALE_EYE_COLOR)},
 				{"category": HAIR_CATEGORY, "id": "Aether_Blossom_Hair"},
 				{"category": FACEGEAR_CATEGORY, "id": "Aether_Blossom_Earrings"},
@@ -507,9 +511,11 @@ static func get_directional_part_z_index(
 
 
 static func get_eyebrows_for_hair(hair_id: String, gender: String = "") -> String:
-	if normalize_gender(gender) == "male" and hair_id.strip_edges() == "Adinho_Hair":
-		return "Adinho_Eyebrows"
-	return get_default_part_id(EYEBROWS_CATEGORY, gender)
+	var normalized_hair_id := hair_id.strip_edges()
+	if normalized_hair_id == "":
+		return ""
+	var mapping_key := "%s:%s" % [normalize_gender(gender), normalized_hair_id]
+	return str(EYEBROWS_BY_HAIR_ID.get(mapping_key, ""))
 
 
 static func serialize_part_id(part_id: String) -> String:

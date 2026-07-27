@@ -48,6 +48,22 @@ func _init() -> void:
 		not APPEARANCE.is_tintable_part("hair", "Aether_Blossom_Hair"),
 		"Aether Blossom Hair preserves its original blue colour"
 	)
+	_check(
+		APPEARANCE.get_eyebrows_for_hair("Hair", "female") == "Eyebrows",
+		"female starter hair selects only its matching starter eyebrows"
+	)
+	_check(
+		APPEARANCE.get_eyebrows_for_hair("Aether_Blossom_Hair", "female") == "",
+		"Aether Blossom Hair does not inherit unrelated starter eyebrows"
+	)
+	_check(
+		APPEARANCE.get_eyebrows_for_hair("Aether_Blossom_Hair_Chroma", "female") == "",
+		"Aether Blossom Chroma Hair does not inherit unrelated starter eyebrows"
+	)
+	_check(
+		APPEARANCE.get_eyebrows_for_hair("Unknown_Hair", "female") == "",
+		"unmapped hairstyles do not receive random eyebrows"
+	)
 	for category_and_id_value: Variant in [
 		["hair", "Aether_Blossom_Hair_Chroma"],
 		["facegear", "Aether_Blossom_Earrings_Chroma"],
