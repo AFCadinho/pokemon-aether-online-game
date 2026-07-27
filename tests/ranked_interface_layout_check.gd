@@ -17,6 +17,7 @@ func _init() -> void:
 	_check(source.contains('_create_pvp_leaderboard_header_label("RANK", 54') and source.contains('_create_pvp_leaderboard_header_label("Record", 104') and source.contains('_create_pvp_leaderboard_header_label("Win Rate", 86'), "Leaderboard columns prioritize rank, points, record and win rate")
 	_check(source.contains("func _pvp_leaderboard_rank_color(rank: int)") and source.contains('return Color("#ffd45a")') and source.contains('return Color("#d3deea")') and source.contains('return Color("#e0a06c")'), "Top three ladder ranks have distinct medal colors")
 	_check(source.contains("var is_current_player := _is_current_auth_user(entry)") and source.contains('you_label.text = "YOU"'), "Leaderboard highlights the signed-in player")
+	_check(not source.contains("player_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS"), "Leaderboard player names retain their content width")
 	_check(source.contains('"%dW · %dL" % [wins, losses]') and source.contains("func _pvp_leaderboard_points_color(points: int)"), "Leaderboard renders compact records and signed point states")
 	_check(source.contains('"No ranked results yet"') and source.contains('"Leaderboard unavailable"') and source.contains('"Updating leaderboard"'), "Leaderboard has dedicated empty, error and loading states")
 	_check(source.contains('var battles_tab_page := _create_pvp_ranked_tab_page("Battles")'), "Live battles and player history share one Battles destination")

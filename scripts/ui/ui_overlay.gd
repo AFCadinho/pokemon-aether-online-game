@@ -29917,7 +29917,6 @@ func _create_pvp_leaderboard_player_cell(entry: Dictionary, games_played: int, i
 
 	var player_name := Label.new()
 	player_name.text = _pvp_leaderboard_display_name(entry)
-	player_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	player_name.add_theme_font_size_override("font_size", 14)
 	player_name.add_theme_color_override("font_color", UI_TEXT)
 	name_row.add_child(player_name)
