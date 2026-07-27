@@ -17,6 +17,8 @@ func _init() -> void:
 	_check_stat_stage_events_normalize_drops()
 	_check_pvp_render_restores_canonical_party_state()
 	_check_local_force_switch_render_restores_canonical_party_state()
+	_check_api_response_uses_rendered_event_cursor()
+	_check_chained_force_switch_request_survives_entry_hazard_faint()
 	_check_pvp_state_and_field_wait_for_render_cursor()
 	_check_pvp_restore_keeps_rendered_hp_and_field_events()
 	_check_authoritative_render_batch_survives_transport_reordering()
@@ -348,6 +350,54 @@ func _check_local_force_switch_render_restores_canonical_party_state() -> void:
 		"local forced-switch render restores canonical faint and HP state after historical rewinds"
 	)
 
+func _check_api_response_uses_rendered_event_cursor() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var apply_index := source.find("func _apply_api_response(")
+	var apply_next_index := source.find("\nfunc ", apply_index + 1)
+	var apply_source := source.substr(apply_index, apply_next_index - apply_index)
+
+	_check_equal(apply_index >= 0, true, "shared API response loader exists")
+	_check_equal(
+		apply_source.contains(
+			"action_flow.apply_response(\n"
+			+ "\t\tresponse,\n"
+			+ "\t\tapply_event_conditions,\n"
+			+ "\t\tnot defer_state_load,\n"
+			+ "\t\tlast_rendered_event_seq\n"
+			+ "\t)"
+		),
+		true,
+		"NPC and PvP responses cannot rewind HP events that were already rendered"
+	)
+
+
+func _check_chained_force_switch_request_survives_entry_hazard_faint() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var process_index := source.find("func _process_pvp_choice_queue_entry(")
+	var process_next_index := source.find("\nfunc ", process_index + 1)
+	var process_source := source.substr(process_index, process_next_index - process_index)
+	var preserve_index := source.find("func _clear_completed_local_force_switch_request(")
+	var preserve_next_index := source.find("\nfunc ", preserve_index + 1)
+	var preserve_source := source.substr(preserve_index, preserve_next_index - preserve_index)
+
+	_check_equal(
+		process_source.contains("_clear_completed_local_force_switch_request(display_response)"),
+		true,
+		"completed local forced switch checks for a chained request"
+	)
+	_check_equal(
+		preserve_source.contains(
+			"BattleForceSwitchFlow.should_preserve_chained_request("
+		),
+		true,
+		"entry-hazard faint keeps the newly issued forced-switch request selectable"
+	)
+	_check_equal(
+		preserve_source.contains("_clear_force_switch_request_for_player(_get_local_state_player_id())"),
+		true,
+		"resolved forced switches still clear their completed request"
+	)
+
 
 func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
@@ -362,7 +412,11 @@ func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 	var render_source := source.substr(render_index, render_next_index - render_index)
 
 	_check_equal(apply_source.contains("_should_defer_pvp_canonical_state_until_render(display_response)"), true, "PvP state mutation is deferred while its events are unrendered")
-	_check_equal(apply_source.contains("action_flow.apply_response(response, apply_event_conditions, not defer_state_load)"), true, "action flow can retain the current presentation state until render")
+	_check_equal(
+		apply_source.contains("not defer_state_load,\n\t\tlast_rendered_event_seq"),
+		true,
+		"action flow retains the current presentation state and ignores already rendered HP history"
+	)
 	_check_equal(barrier_source.contains("pvp_event_queue.last_rendered_seq < 0"), true, "Team Preview can establish its lead state before the first render cursor")
 	_check_equal(render_source.contains("if not _is_pvp_battle():\n\t\t_sync_presentation_field_from_battle_state()"), true, "PvP field effects are not overwritten before the render cursor advances")
 

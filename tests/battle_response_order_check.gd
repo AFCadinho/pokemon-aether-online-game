@@ -203,7 +203,7 @@ func _check_battle_controller_uses_order_guard() -> void:
 	var apply_source := source.substr(apply_start, apply_end - apply_start)
 	_check(
 		apply_source.find("pvp_response_order.is_stale(display_response)")
-			< apply_source.find("action_flow.apply_response(response, apply_event_conditions, not defer_state_load)"),
+			< apply_source.find("var success: bool = action_flow.apply_response("),
 		"stale canonical projection is rejected before mutating BattleState"
 	)
 	_check(

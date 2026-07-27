@@ -3462,7 +3462,12 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		return true
 
 	var defer_state_load := _should_defer_pvp_canonical_state_until_render(display_response)
-	var success: bool = action_flow.apply_response(response, apply_event_conditions, not defer_state_load)
+	var success: bool = action_flow.apply_response(
+		response,
+		apply_event_conditions,
+		not defer_state_load,
+		last_rendered_event_seq
+	)
 	if success:
 		if _is_pvp_battle():
 			pvp_response_order.remember(display_response)
@@ -3713,7 +3718,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 			if await _finish_if_battle_ended():
 				return true
 
-			_clear_force_switch_request_for_player(_get_local_state_player_id())
+			_clear_completed_local_force_switch_request(display_response)
 			_update_move_slots()
 
 			if await _hold_pvp_moves_until_force_switch_phase_release(display_response, source):
@@ -8369,6 +8374,22 @@ func _clear_force_switch_request_for_player(player_id: String) -> void:
 		force_switch[index] = false
 	request["forceSwitch"] = force_switch
 	_trace_pvp_flow("force_switch.clear", {}, "player=%s" % player_id)
+
+func _clear_completed_local_force_switch_request(display_response: Dictionary) -> void:
+	var next_phase := str(
+		display_response.get("nextPhase", display_response.get("phase", ""))
+	).strip_edges()
+	if BattleForceSwitchFlow.should_preserve_chained_request(
+		next_phase,
+		_local_player_needs_force_switch_ui()
+	):
+		# The selected Pokemon can immediately faint to entry hazards. In that
+		# case this response already contains a new forced-switch request, which
+		# must remain available after the switch and faint animations finish.
+		_trace_pvp_flow("force_switch.preserve_chained", display_response, "")
+		return
+
+	_clear_force_switch_request_for_player(_get_local_state_player_id())
 
 func _pvp_is_waiting_for_force_switch_phase_release() -> bool:
 	return (

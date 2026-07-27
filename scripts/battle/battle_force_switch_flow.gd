@@ -33,6 +33,9 @@ func should_show_player_force_switch() -> bool:
 
 	return battle_state.needs_force_switch("p1")
 
+static func should_preserve_chained_request(next_phase: String, local_player_needs_force_switch: bool) -> bool:
+	return next_phase.strip_edges() == "awaiting_force_switch" and local_player_needs_force_switch
+
 
 func can_switch_to_slot(slot: int, player_id := "p1") -> bool:
 	if battle_state == null:

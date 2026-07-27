@@ -14,6 +14,7 @@ func _init() -> void:
 	_check_stale_switch_event_does_not_revive_canonical_faint()
 	_check_pursuit_faint_keeps_pending_iron_treads_available()
 	_check_historical_switch_renders_before_its_faint()
+	_check_entry_hazard_faint_preserves_chained_force_switch()
 	_check_status_event_normalizes_badly_poisoned()
 	quit(1 if failed else 0)
 
@@ -320,6 +321,32 @@ func _check_historical_switch_renders_before_its_faint() -> void:
 	var team_after_faint: Array = state.get_player_team("p1")
 	_check_equal(bool((team_after_faint[1] as Dictionary).get("fainted", false)), true, "later faint event re-applies Cinderace faint")
 	_check_equal(int((team_after_faint[1] as Dictionary).get("hp", -1)), 0, "later faint event restores zero HP")
+
+func _check_entry_hazard_faint_preserves_chained_force_switch() -> void:
+	_check_equal(
+		BattleForceSwitchFlowScript.should_preserve_chained_request(
+			"awaiting_force_switch",
+			true
+		),
+		true,
+		"a hazard KO keeps the newly issued forced-switch request"
+	)
+	_check_equal(
+		BattleForceSwitchFlowScript.should_preserve_chained_request(
+			"turn_open",
+			true
+		),
+		false,
+		"a completed forced switch does not keep its old request"
+	)
+	_check_equal(
+		BattleForceSwitchFlowScript.should_preserve_chained_request(
+			"awaiting_force_switch",
+			false
+		),
+		false,
+		"an opponent-only forced switch does not retain a local request"
+	)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
