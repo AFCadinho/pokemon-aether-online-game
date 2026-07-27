@@ -822,6 +822,8 @@ var trainer_card_part_rows: Dictionary = {}
 var trainer_card_part_return_buttons: Dictionary = {}
 var trainer_card_color_buttons: Dictionary = {}
 var trainer_card_hex_inputs: Dictionary = {}
+var trainer_card_natural_color_summary_buttons: Dictionary = {}
+var trainer_card_natural_colors_popup: PopupPanel
 var owned_appearance_parts: Dictionary = {}
 var appearance_inventory_slot_limit := DEFAULT_APPEARANCE_SLOT_LIMIT
 var appearance_inventory_slot_counts: Dictionary = {}
@@ -10902,6 +10904,8 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 	trainer_card_part_return_buttons.clear()
 	trainer_card_color_buttons.clear()
 	trainer_card_hex_inputs.clear()
+	trainer_card_natural_color_summary_buttons.clear()
+	_hide_trainer_card_natural_colors_popup()
 	if category_id == "body":
 		_create_trainer_card_body_appearance_content(content_stack)
 	else:
@@ -10912,7 +10916,7 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	_create_trainer_card_appearance_section_header(
 		content_stack,
 		"Body",
-		"Choose your body model and natural trainer colours."
+		"Choose the body model for your trainer."
 	)
 
 	var search_input := _create_trainer_card_appearance_search_input("Search bodies")
@@ -10937,14 +10941,155 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 		trainer_card_body_buttons[body_id] = body_button
 
 	_refresh_trainer_card_body_buttons()
-	_create_trainer_card_color_palette(content_stack, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES)
-	_create_trainer_card_color_palette(content_stack, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
+	_create_trainer_card_natural_colors_summary(content_stack)
+
+func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "NaturalColorsSummary"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	content_stack.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 7)
+	margin.add_child(row)
+
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 0)
+	row.add_child(copy)
+
+	var title := Label.new()
+	title.text = "Natural Colors"
+	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	copy.add_child(title)
+
+	var hint := Label.new()
+	hint.text = "Skin · eyes · starter hair"
+	hint.add_theme_font_size_override("font_size", 10)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	copy.add_child(hint)
+
+	for color_entry: Dictionary in [
+		{"key": "skin_tone", "label": "Skin tone"},
+		{"key": "eye_color", "label": "Eye color"},
+		{"key": "hair_color", "label": "Starter hair color"},
+	]:
+		var color_key := str(color_entry.get("key", ""))
+		var swatch := Button.new()
+		swatch.text = ""
+		swatch.tooltip_text = str(color_entry.get("label", "Color"))
+		swatch.custom_minimum_size = Vector2(27, 27)
+		swatch.focus_mode = Control.FOCUS_NONE
+		swatch.pressed.connect(_open_trainer_card_natural_colors_popup)
+		row.add_child(swatch)
+		trainer_card_natural_color_summary_buttons[color_key] = swatch
+
+	var edit_button := Button.new()
+	edit_button.text = "Edit"
+	edit_button.tooltip_text = "Edit natural trainer colors"
+	edit_button.custom_minimum_size = Vector2(58, 30)
+	edit_button.focus_mode = Control.FOCUS_NONE
+	edit_button.pressed.connect(_open_trainer_card_natural_colors_popup)
+	_apply_button_style(edit_button, "primary")
+	row.add_child(edit_button)
+	_refresh_trainer_card_natural_color_summary()
+
+func _open_trainer_card_natural_colors_popup() -> void:
+	if is_instance_valid(trainer_card_natural_colors_popup):
+		trainer_card_natural_colors_popup.queue_free()
+
+	var popup := PopupPanel.new()
+	popup.name = "NaturalColorsPopup"
+	popup.exclusive = true
+	popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
+	root_control.add_child(popup)
+	trainer_card_natural_colors_popup = popup
+
+	var margin := MarginContainer.new()
+	margin.custom_minimum_size = Vector2(430, 500)
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	popup.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
+
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 0)
+	header.add_child(heading)
+
+	var title := Label.new()
+	title.text = "Natural Colors"
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(title)
+
+	var description := Label.new()
+	description.text = "Free trainer colors. Chroma items are dyed at Aether Atelier."
+	description.add_theme_font_size_override("font_size", 10)
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	heading.add_child(description)
+
+	var close_button := Button.new()
+	close_button.text = "×"
+	close_button.custom_minimum_size = Vector2(32, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(popup.hide)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 430)
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(scroll)
+
+	var palettes := VBoxContainer.new()
+	palettes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	palettes.add_theme_constant_override("separation", 8)
+	scroll.add_child(palettes)
+	_create_trainer_card_color_palette(palettes, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES)
+	_create_trainer_card_color_palette(palettes, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
 	_create_trainer_card_color_palette(
-		content_stack,
-		"Natural Hair Color · Starter Hair Only",
+		palettes,
+		"Starter Hair Color · Free",
 		"hair_color",
 		HAIR_COLOR_SWATCHES
 	)
+
+	popup.popup_centered(Vector2i(430, 500))
+
+func _hide_trainer_card_natural_colors_popup() -> void:
+	if is_instance_valid(trainer_card_natural_colors_popup):
+		trainer_card_natural_colors_popup.hide()
+
+func _refresh_trainer_card_natural_color_summary() -> void:
+	for color_key_value: Variant in trainer_card_natural_color_summary_buttons.keys():
+		var color_key := str(color_key_value)
+		var button := trainer_card_natural_color_summary_buttons.get(color_key) as Button
+		if not is_instance_valid(button):
+			trainer_card_natural_color_summary_buttons.erase(color_key)
+			continue
+		var color := Color.from_string(_get_player_save_color_value(color_key), Color.WHITE)
+		_apply_color_swatch_button_style(button, color, false)
 
 func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
@@ -11433,6 +11578,7 @@ func _refresh_trainer_card_color_buttons() -> void:
 		input.text = _get_player_save_color_value(color_key)
 		input.set_block_signals(false)
 		input.add_theme_color_override("font_color", UI_TEXT)
+	_refresh_trainer_card_natural_color_summary()
 
 func _on_player_status_panel_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):
@@ -11754,6 +11900,7 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 	return int(appearance.get("hair_style_index", 0)) == int(current_appearance.get("hair_style_index", 0))
 
 func _hide_trainer_card() -> void:
+	_hide_trainer_card_natural_colors_popup()
 	if trainer_card_popup != null:
 		trainer_card_popup.visible = false
 
@@ -11913,6 +12060,7 @@ func _on_trainer_card_color_selected(color_key: String, color_value: String) -> 
 		player.call("refresh_appearance")
 
 	_refresh_trainer_card_color_buttons()
+	_refresh_trainer_card_natural_color_summary()
 	_refresh_avatar_previews()
 	_mark_trainer_card_appearance_dirty()
 

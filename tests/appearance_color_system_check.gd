@@ -129,6 +129,12 @@ func _run() -> void:
 	_check(ui_source.contains('"skin_tone":'), "customization can read and update skin tone")
 	_check(ui_source.contains("ColorPickerButton.new()"), "customization includes custom natural trainer colours")
 	_check(
+		ui_source.contains('panel.name = "NaturalColorsSummary"')
+			and ui_source.contains('popup.name = "NaturalColorsPopup"')
+			and ui_source.contains("func _open_trainer_card_natural_colors_popup"),
+		"Body keeps natural colours behind a compact styled editor"
+	)
+	_check(
 		ui_source.contains('hex_input.placeholder_text = "#RRGGBB"')
 			and ui_source.contains("func _on_trainer_card_hex_color_changed"),
 		"Trainer Card natural colours accept validated hex colour codes"
