@@ -241,8 +241,12 @@ func build(event_data: Dictionary) -> Dictionary:
 						presentation["log_message"] = "%s's %s got knocked off!" % [actor, item_name]
 					elif _normalize_item_key(item_name) == "boosterenergy":
 						presentation["log_message"] = "%s's %s activated!" % [actor, item_name]
+					elif _normalize_item_key(item_name) == "airballoon":
+						presentation["log_message"] = "%s's Air Balloon popped!" % actor
 					else:
 						presentation["log_message"] = "%s used its %s!" % [actor, item_name]
+				elif _normalize_item_key(item_name) == "airballoon":
+					presentation["log_message"] = "%s floats in the air with its Air Balloon!" % actor
 				else:
 					presentation["log_message"] = "%s's %s was revealed!" % [actor, item_name]
 				presentation["battle_message"] = str(presentation["log_message"])

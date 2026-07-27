@@ -37,6 +37,11 @@ func _init() -> void:
 		0.32,
 		"major status message keeps normal hold"
 	)
+	_check_equal(
+		timing.get_battle_message_hold_seconds({"type": "item", "item": "Air Balloon"}, "Wailord floats in the air with its Air Balloon!"),
+		0.70,
+		"Air Balloon message remains visible long enough to notice"
+	)
 
 	quit(1 if failed else 0)
 

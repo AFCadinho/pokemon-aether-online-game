@@ -13,6 +13,7 @@ const RESULT_MESSAGE_HOLD_SECONDS := 0.55
 const EFFECT_MESSAGE_HOLD_SECONDS := 0.32
 const HEAL_MESSAGE_HOLD_SECONDS := 0.35
 const MEGA_MESSAGE_HOLD_SECONDS := 0.60
+const AIR_BALLOON_MESSAGE_HOLD_SECONDS := 0.70
 const RESIDUAL_MESSAGE_HOLD_SECONDS := 0.18
 
 
@@ -35,6 +36,12 @@ func get_battle_message_hold_seconds(event: Dictionary, battle_message: String) 
 	if _is_low_impact_residual_event(event):
 		return RESIDUAL_MESSAGE_HOLD_SECONDS
 
+	if (
+		str(event.get("type", "")) == "item"
+		and _normalize_item_key(str(event.get("item", ""))) == "airballoon"
+	):
+		return AIR_BALLOON_MESSAGE_HOLD_SECONDS
+
 	match str(event.get("type", "")):
 		"move":
 			return MOVE_MESSAGE_HOLD_SECONDS
@@ -50,6 +57,10 @@ func get_battle_message_hold_seconds(event: Dictionary, battle_message: String) 
 			return RESULT_MESSAGE_HOLD_SECONDS
 
 	return DEFAULT_MESSAGE_HOLD_SECONDS
+
+
+func _normalize_item_key(item_name: String) -> String:
+	return item_name.strip_edges().to_lower().replace(" ", "").replace("_", "").replace("-", "")
 
 
 func _is_low_impact_residual_event(event: Dictionary) -> bool:

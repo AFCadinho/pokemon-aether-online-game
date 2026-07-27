@@ -4668,6 +4668,22 @@ func _remember_battle_modifier_event(event: Dictionary) -> void:
 			_apply_ability_stat_modifier_event(event)
 		"statChange":
 			_apply_stat_stage_event(event)
+		"item":
+			_apply_item_modifier_event(event)
+
+func _apply_item_modifier_event(event: Dictionary) -> void:
+	if _normalize_item_key(str(event.get("item", ""))) != "airballoon":
+		return
+
+	var ident_key := _normalize_battle_ident(str(event.get("target", "")))
+	if ident_key == "":
+		return
+
+	match str(event.get("state", "")).strip_edges().to_lower():
+		"start":
+			_add_volatile_condition_for_ident(ident_key, "air_balloon", event)
+		"end":
+			_remove_volatile_condition_for_ident(ident_key, "air_balloon")
 
 func _apply_stat_stage_event(event: Dictionary) -> void:
 	var ident_key: String = _normalize_battle_ident(str(event.get("target", "")))
@@ -4850,7 +4866,7 @@ func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
 	var volatile_value: Variant = volatile_conditions_by_ident.get(ident_key, {})
 	if volatile_value is Dictionary:
 		var volatile_conditions: Dictionary = volatile_value as Dictionary
-		for condition_key in ["confused", "taunt", "encore", "substitute"]:
+		for condition_key in ["air_balloon", "confused", "taunt", "encore", "substitute"]:
 			if not volatile_conditions.has(condition_key):
 				continue
 
@@ -4870,6 +4886,8 @@ func _get_stat_stage_badges_for_ident(ident_key: String) -> Array:
 
 func _format_volatile_condition_badge_name(condition_key: String) -> String:
 	match condition_key:
+		"air_balloon":
+			return "Air Balloon"
 		"confused":
 			return "Confused"
 		"taunt":
