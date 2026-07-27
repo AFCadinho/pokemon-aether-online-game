@@ -24,7 +24,8 @@ func set_local_player_id(player_id: String) -> void:
 func apply_response(
 	response: Dictionary,
 	apply_event_conditions: bool = true,
-	load_battle_state: bool = true
+	load_battle_state: bool = true,
+	since_event_seq := -1
 ) -> bool:
 	if not bool(response.get("success", false)):
 		print("Battle API failed: ", response)
@@ -35,7 +36,7 @@ func apply_response(
 		ability_response_handler.call(display_response)
 
 	if load_battle_state:
-		battle_state.load_from_api_response(display_response, apply_event_conditions)
+		battle_state.load_from_api_response(display_response, apply_event_conditions, since_event_seq)
 	return true
 
 func map_response_for_local_player(response: Dictionary) -> Dictionary:
@@ -50,7 +51,7 @@ func submit_player_choice(choice_type: String, slot: int, mega := false, since_e
 		print("Player choice failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
 		return response
 
 	return map_response_for_local_player(response)
@@ -62,7 +63,7 @@ func submit_player_choice_and_resolve(choice_type: String, slot: int, mega := fa
 		print("Player choice resolution failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
 		return response
 
 	return map_response_for_local_player(response)
@@ -74,7 +75,7 @@ func submit_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Dicti
 		print("NPC choice failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
 		return response
 
 	return map_response_for_local_player(response)
@@ -86,7 +87,7 @@ func submit_pass_turn(pass_player_id: String = "p1", player_id: String = "p2", s
 		print("Pass turn failed: ", response)
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq)):
+	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
 		return response
 
 	return map_response_for_local_player(response)

@@ -14,6 +14,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_rewind_helper_check.gd",
 	"res://tests/battle_event_pre_render_order_check.gd",
 	"res://tests/battle_state_deferred_hp_check.gd",
+	"res://tests/battle_state_hp_cursor_check.gd",
 	"res://tests/battle_state_primal_forms_check.gd",
 	"res://tests/battle_mechanical_suspension_state_check.gd",
 	"res://tests/battle_timer_projection_check.gd",

@@ -24,7 +24,11 @@ var battle_event_seq := 0
 
 
 ## Laadt een volledige battle response van de API in deze state.
-func load_from_api_response(response: Dictionary, apply_event_conditions: bool = true) -> void:
+func load_from_api_response(
+	response: Dictionary,
+	apply_event_conditions: bool = true,
+	since_event_seq := -1
+) -> void:
 	var next_battle_id := str(response.get("battleId", ""))
 	if battle_id != "" and next_battle_id != battle_id:
 		transformed_species_by_ident.clear()
@@ -60,17 +64,39 @@ func load_from_api_response(response: Dictionary, apply_event_conditions: bool =
 			operational_state = (next_operational_state as Dictionary).duplicate(true)
 	decisions = (response.get("decisions", {}) as Dictionary).duplicate(true) if response.get("decisions", {}) is Dictionary else {}
 	battle_event_seq = max(battle_event_seq, int(response.get("battleEventSeq", 0)))
+	var response_events := _get_response_events_after_cursor(response, since_event_seq)
 	if apply_event_conditions:
 		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
-		_apply_event_conditions_to_requests(response.get("events", []))
+		_apply_event_conditions_to_requests(response_events)
 	else:
 		_apply_mega_species_to_requests()
-		_remove_deferred_display_fields_from_requests(response.get("events", []))
-		_rewind_deferred_hp_events_from_requests(response.get("events", []))
+		_remove_deferred_display_fields_from_requests(response_events)
+		_rewind_deferred_hp_events_from_requests(response_events)
 	_remember_hp_fields_from_requests(requests)
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response final state")
+
+func _get_response_events_after_cursor(response: Dictionary, since_event_seq: int) -> Array:
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return []
+
+	var events: Array = events_value as Array
+	if since_event_seq < 0:
+		return events
+
+	var response_event_seq := int(response.get("eventSeq", -1))
+	if response_event_seq < 0:
+		return events
+
+	var first_event_seq := response_event_seq - events.size() + 1
+	var unrendered_events: Array = []
+	for index in range(events.size()):
+		if first_event_seq + index > since_event_seq:
+			unrendered_events.append(events[index])
+
+	return unrendered_events
 
 func get_active_decision(player_id: String) -> Dictionary:
 	var value: Variant = decisions.get(player_id, {})
