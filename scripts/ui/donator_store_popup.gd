@@ -232,7 +232,7 @@ const CATALOG: Array[Dictionary] = [
 		"appearance_slots": ["hair", "facial_hair", "facegear", "top", "bottom", "shoes"],
 		"preview_parts": [
 			{"slot": "hair", "appearance_id": "Adinho_Hair", "tint": "hair_color"},
-			{"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "facial_hair_color"},
+			{"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "hair_color"},
 			{"slot": "facegear", "appearance_id": "Adinho_Glasses"},
 			{"slot": "top", "appearance_id": "Adinho_Shirt"},
 			{"slot": "bottom", "appearance_id": "Adinho_Trousers"},
@@ -1547,6 +1547,12 @@ func _current_character_preview_appearance() -> Dictionary:
 		var appearance_id := str(preview_part.get("appearance_id", "")).strip_edges()
 		if slot != "" and appearance_id != "":
 			appearance[slot] = appearance_id
+			var tint_key := str(preview_part.get("tint", "")).strip_edges()
+			var slot_color_key := "%s_color" % slot
+			if tint_key != "" and appearance.has(slot_color_key):
+				appearance[slot_color_key] = str(
+					character_preview_colors.get(tint_key, appearance.get(slot_color_key, "#ffffff"))
+				)
 	return appearance
 
 

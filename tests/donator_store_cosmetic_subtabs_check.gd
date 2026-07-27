@@ -129,6 +129,10 @@ func _run() -> void:
 	var classic_preview: Dictionary = store.call("_current_character_preview_appearance")
 	_check(classic_preview.get("hair", "") == "Adinho_Hair", "Classic preview includes the hairstyle")
 	_check(classic_preview.get("facial_hair", "") == "Adinho_Beard", "Classic preview includes the beard")
+	_check(
+		classic_preview.get("facial_hair_color", "") == classic_preview.get("hair_color", ""),
+		"Classic preview keeps the beard colour equal to the hair"
+	)
 	_check(classic_preview.get("facegear", "") == "Adinho_Glasses", "Classic preview includes the original glasses")
 	_check(classic_preview.get("top", "") == "Adinho_Shirt", "Classic preview includes the original shirt")
 	_check(classic_preview.get("bottom", "") == "Adinho_Trousers", "Classic preview includes the trousers")
@@ -208,6 +212,10 @@ func _run() -> void:
 	store.call("_select_character_preview_color", "#2b5f64")
 	var recolored_classic_preview: Dictionary = store.call("_current_character_preview_appearance")
 	_check(recolored_classic_preview.get("hair_color", "") == "#2b5f64", "Classic hair and beard colour changes stay inside the Store preview")
+	_check(
+		recolored_classic_preview.get("facial_hair_color", "") == "#2b5f64",
+		"Classic beard follows the selected hair colour"
+	)
 	_check(store.trainer_appearance.get("hair", "") != "Adinho_Hair", "preview never equips the cosmetic on the saved trainer")
 	store.call("_select_character_preview_direction", "up")
 	_check(store.character_preview_direction == "up", "preview can show the cosmetic from the back")
