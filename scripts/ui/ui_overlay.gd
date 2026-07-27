@@ -49,14 +49,14 @@ const CHAT_TAB_TRADE := "trade"
 const CHAT_TAB_HELP := "help"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
-const CHAT_TAB_CLAN := "clan"
+const CHAT_TAB_GUILD := "guild"
 const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
 	CHAT_TAB_SYSTEM,
 	CHAT_TAB_MAP,
 	CHAT_TAB_PM,
-	CHAT_TAB_CLAN,
+	CHAT_TAB_GUILD,
 ]
 const CHAT_TAB_LABELS := {
 	CHAT_TAB_ALL: "All",
@@ -64,7 +64,7 @@ const CHAT_TAB_LABELS := {
 	CHAT_TAB_MAP: "Map",
 	CHAT_TAB_SYSTEM: "System",
 	CHAT_TAB_PM: "PM",
-	CHAT_TAB_CLAN: "Clan",
+	CHAT_TAB_GUILD: "Guild",
 }
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
@@ -784,8 +784,11 @@ var chat_tab_order: Array[String] = []
 var selected_general_chat_tab := CHAT_TAB_GENERAL
 var all_chat_tab_button: Button
 var map_chat_tab_button: Button
-var clan_chat_tab_button: Button
-var clan_chat_container: CenterContainer
+var guild_chat_tab_button: Button
+var guild_chat_attention_badge: Panel
+var guild_chat_has_unread := false
+var guild_chat_membership: Dictionary = {}
+var guild_chat_membership_loading := true
 var chat_context_selector_button: Button
 var chat_context_popup: PanelContainer
 var chat_context_scroll: ScrollContainer
@@ -1226,7 +1229,7 @@ func _ready() -> void:
 	_setup_help_chat_tab()
 	_setup_map_chat_tab()
 	_setup_pm_chat_ui()
-	_setup_clan_chat_ui()
+	_setup_guild_chat_ui()
 	_setup_chat_context_selector_ui()
 	_setup_chat_tab_settings_ui()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
@@ -1235,7 +1238,10 @@ func _ready() -> void:
 	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	map_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	clan_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	guild_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	if not GuildService.membership_changed.is_connected(_on_guild_chat_membership_changed):
+		GuildService.membership_changed.connect(_on_guild_chat_membership_changed)
+	_refresh_guild_chat_membership.call_deferred()
 	_apply_chat_tab_state()
 	dev_pokemon_button.visible = false
 	dev_pokemon_button.disabled = true
@@ -20418,31 +20424,44 @@ func _setup_pm_chat_ui() -> void:
 	_reorder_chat_tab_buttons()
 
 
-func _setup_clan_chat_ui() -> void:
-	if clan_chat_tab_button != null:
+func _setup_guild_chat_ui() -> void:
+	if guild_chat_tab_button != null:
 		return
 
-	clan_chat_tab_button = Button.new()
-	clan_chat_tab_button.name = "ClanButton"
-	clan_chat_tab_button.custom_minimum_size = Vector2(70, 28)
-	clan_chat_tab_button.text = "Clan"
-	clan_chat_tab_button.focus_mode = Control.FOCUS_NONE
-	clan_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_CLAN))
-	$Control/ChatTabsPanel/TabRow.add_child(clan_chat_tab_button)
-	_apply_button_style(clan_chat_tab_button, "primary")
-
-	var clan_empty_state := _create_chat_empty_state(
-		"Clan chat",
-		"Clan conversations will appear here once the clan system is connected."
+	guild_chat_tab_button = Button.new()
+	guild_chat_tab_button.name = "GuildButton"
+	guild_chat_tab_button.custom_minimum_size = Vector2(70, 28)
+	guild_chat_tab_button.text = "Guild"
+	guild_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	guild_chat_tab_button.tooltip_text = "Chat with members of your guild"
+	guild_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GUILD))
+	$Control/ChatTabsPanel/TabRow.add_child(guild_chat_tab_button)
+	_apply_button_style(guild_chat_tab_button, "primary")
+	guild_chat_attention_badge = _create_attention_badge_for_button(
+		guild_chat_tab_button,
+		4.0,
+		3.0
 	)
-	clan_chat_container = clan_empty_state.get("container") as CenterContainer
-	clan_chat_container.visible = false
-	clan_chat_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	clan_chat_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	var chat_vbox := $Control/ChatPanel/MarginContainer/VBoxContainer
-	chat_vbox.add_child(clan_chat_container)
-	chat_vbox.move_child(clan_chat_container, pm_chat_container.get_index() + 1)
 	_reorder_chat_tab_buttons()
+
+
+func _refresh_guild_chat_membership() -> void:
+	guild_chat_membership_loading = true
+	_apply_chat_tab_state()
+	var result: Dictionary = await GuildService.load_directory()
+	guild_chat_membership_loading = false
+	if bool(result.get("success", false)):
+		_on_guild_chat_membership_changed(
+			_dictionary_from_value(result.get("membership", {}))
+		)
+	else:
+		_apply_chat_tab_state()
+
+
+func _on_guild_chat_membership_changed(membership: Dictionary) -> void:
+	guild_chat_membership = membership.duplicate(true)
+	guild_chat_membership_loading = false
+	_apply_chat_tab_state()
 
 
 func _setup_chat_context_selector_ui() -> void:
@@ -20635,10 +20654,14 @@ func _refresh_chat_context_selector() -> void:
 				if pm_conversations_by_user_id.is_empty()
 				else "Choose private conversation"
 			)
-		CHAT_TAB_CLAN:
-			chat_context_selector_button.text = "Clan"
-			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = "Clan chat is not connected yet"
+		CHAT_TAB_GUILD:
+			chat_context_selector_button.text = "Guild"
+			chat_context_selector_button.disabled = guild_chat_membership.is_empty()
+			chat_context_selector_button.tooltip_text = (
+				"Chat with members of your guild"
+				if not guild_chat_membership.is_empty()
+				else "Join a guild to use Guild chat"
+			)
 
 
 func _setup_all_chat_tab() -> void:
@@ -20946,8 +20969,9 @@ func _apply_chat_tab_preferences() -> void:
 		help_chat_tab_button.visible = false
 	if pm_tab_button != null:
 		pm_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_PM, true))
-	if clan_chat_tab_button != null:
-		clan_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_CLAN, true))
+	if guild_chat_tab_button != null:
+		guild_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_GUILD, true))
+	_refresh_guild_chat_attention_badge()
 
 	if not bool(chat_tab_visibility.get(_active_primary_chat_tab_id(), true)):
 		active_chat_tab = CHAT_TAB_ALL
@@ -20971,8 +20995,8 @@ func _chat_tab_button_for_id(tab_id: String) -> Button:
 			return system_chat_tab_button
 		CHAT_TAB_PM:
 			return pm_tab_button
-		CHAT_TAB_CLAN:
-			return clan_chat_tab_button
+		CHAT_TAB_GUILD:
+			return guild_chat_tab_button
 	return null
 
 
@@ -21175,12 +21199,32 @@ func _refresh_pm_tab_label() -> void:
 	pm_tab_button.text = "PM"
 	if pm_tab_attention_badge != null:
 		pm_tab_attention_badge.visible = pm_total_unread_count > 0 and pm_tab_button.visible
+	_refresh_hidden_chat_attention_badge()
+	_refresh_chat_context_selector()
+
+
+func _refresh_guild_chat_attention_badge() -> void:
+	if guild_chat_attention_badge != null:
+		guild_chat_attention_badge.visible = (
+			guild_chat_has_unread
+			and guild_chat_tab_button != null
+			and guild_chat_tab_button.visible
+		)
+	_refresh_hidden_chat_attention_badge()
+
+
+func _refresh_hidden_chat_attention_badge() -> void:
 	if chat_settings_attention_badge != null:
 		chat_settings_attention_badge.visible = (
-			pm_total_unread_count > 0
-			and not bool(chat_tab_visibility.get(CHAT_TAB_PM, true))
+			(
+				pm_total_unread_count > 0
+				and not bool(chat_tab_visibility.get(CHAT_TAB_PM, true))
+			)
+			or (
+				guild_chat_has_unread
+				and not bool(chat_tab_visibility.get(CHAT_TAB_GUILD, true))
+			)
 		)
-	_refresh_chat_context_selector()
 
 func _scroll_pm_to_bottom() -> void:
 	var tree := get_tree()
@@ -21204,13 +21248,13 @@ func _get_party_slot_index_at_position(global_position: Vector2) -> int:
 	return -1
 
 func _on_send_button_pressed() -> void:
-	if active_chat_tab in [CHAT_TAB_SYSTEM, CHAT_TAB_CLAN] or (active_chat_tab == CHAT_TAB_PM and active_pm_user_id == 0):
+	if active_chat_tab == CHAT_TAB_SYSTEM or (active_chat_tab == CHAT_TAB_PM and active_pm_user_id == 0):
 		return
 
 	_submit_chat_input_deferred()
 
 func _on_chat_text_submitted(_text: String) -> void:
-	if active_chat_tab in [CHAT_TAB_SYSTEM, CHAT_TAB_CLAN] or (active_chat_tab == CHAT_TAB_PM and active_pm_user_id == 0):
+	if active_chat_tab == CHAT_TAB_SYSTEM or (active_chat_tab == CHAT_TAB_PM and active_pm_user_id == 0):
 		return
 
 	_submit_chat_input_deferred()
@@ -21225,13 +21269,20 @@ func _on_chat_tab_pressed(tab_id: String) -> void:
 	_apply_chat_tab_state()
 
 func _apply_chat_tab_state() -> void:
+	if active_chat_tab == CHAT_TAB_GUILD and guild_chat_has_unread:
+		guild_chat_has_unread = false
+		_refresh_guild_chat_attention_badge()
 	var pm_conversation_selected := (
 		active_pm_user_id != 0
 		and pm_conversations_by_user_id.has(active_pm_user_id)
 	)
 	var input_active: bool = (
-		active_chat_tab not in [CHAT_TAB_SYSTEM, CHAT_TAB_CLAN]
+		active_chat_tab != CHAT_TAB_SYSTEM
 		and (active_chat_tab != CHAT_TAB_PM or pm_conversation_selected)
+		and (
+			active_chat_tab != CHAT_TAB_GUILD
+			or (not guild_chat_membership_loading and not guild_chat_membership.is_empty())
+		)
 	)
 	var primary_tab := _active_primary_chat_tab_id()
 	var general_active: bool = primary_tab == CHAT_TAB_GENERAL
@@ -21240,7 +21291,7 @@ func _apply_chat_tab_state() -> void:
 	_apply_chat_main_tab_style(map_chat_tab_button, active_chat_tab == CHAT_TAB_MAP)
 	_apply_chat_main_tab_style(system_chat_tab_button, active_chat_tab == CHAT_TAB_SYSTEM)
 	_apply_chat_main_tab_style(pm_tab_button, active_chat_tab == CHAT_TAB_PM)
-	_apply_chat_main_tab_style(clan_chat_tab_button, active_chat_tab == CHAT_TAB_CLAN)
+	_apply_chat_main_tab_style(guild_chat_tab_button, active_chat_tab == CHAT_TAB_GUILD)
 	var dock_visible := primary_tab != CHAT_TAB_SYSTEM
 	chat_input_row.visible = dock_visible
 	if chat_input_dock != null:
@@ -21261,19 +21312,25 @@ func _apply_chat_tab_state() -> void:
 		chat_input.placeholder_text = "Trade chat has a 2 minute cooldown"
 	elif active_chat_tab == CHAT_TAB_HELP:
 		chat_input.placeholder_text = "Help chat has a 5 minute cooldown"
-	elif active_chat_tab == CHAT_TAB_CLAN:
-		chat_input.placeholder_text = "Clan chat is not connected yet"
+	elif active_chat_tab == CHAT_TAB_GUILD:
+		chat_input.placeholder_text = (
+			"Checking guild membership..."
+			if guild_chat_membership_loading
+			else (
+				"Message your guild"
+				if not guild_chat_membership.is_empty()
+				else "Join a guild to use Guild chat"
+			)
+		)
 	else:
 		chat_input.placeholder_text = "" if input_active else "System messages only"
 	send_button.disabled = not input_active
 	if not input_active:
 		chat_input.release_focus()
 	if message_scroll != null:
-		message_scroll.visible = active_chat_tab not in [CHAT_TAB_PM, CHAT_TAB_CLAN]
+		message_scroll.visible = active_chat_tab != CHAT_TAB_PM
 	if pm_chat_container != null:
 		pm_chat_container.visible = active_chat_tab == CHAT_TAB_PM
-	if clan_chat_container != null:
-		clan_chat_container.visible = active_chat_tab == CHAT_TAB_CLAN
 	_refresh_chat_message_visibility()
 	_refresh_pm_context_navigation()
 	_render_active_pm_conversation()
@@ -21435,6 +21492,8 @@ func _get_active_chat_channel() -> String:
 		return CHAT_CHANNEL_TRADE
 	if active_chat_tab == CHAT_TAB_HELP:
 		return CHAT_CHANNEL_HELP
+	if active_chat_tab == CHAT_TAB_GUILD:
+		return CHAT_TAB_GUILD
 	return CHAT_CHANNEL_GLOBAL
 
 func _submit_pm_input_async(text: String) -> void:
@@ -31689,7 +31748,7 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
 		var error_category := (
 			error_channel
-			if error_channel in [CHAT_CHANNEL_MAP, CHAT_CHANNEL_TRADE, CHAT_CHANNEL_HELP]
+			if error_channel in [CHAT_CHANNEL_MAP, CHAT_CHANNEL_TRADE, CHAT_CHANNEL_HELP, CHAT_TAB_GUILD]
 			else CHAT_CATEGORY_SYSTEM
 		)
 		_add_chat_message(error_text, false, error_category)
@@ -31712,6 +31771,9 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 
 	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
 	_add_user_chat_message(user, display_name, text, channel, pokemon_attachments)
+	if channel == CHAT_TAB_GUILD and active_chat_tab != CHAT_TAB_GUILD:
+		guild_chat_has_unread = true
+		_refresh_guild_chat_attention_badge()
 	if channel == CHAT_CHANNEL_MAP and text != "":
 		_show_map_chat_bubble(user, text, str(message.get("mapId", "")))
 
@@ -31944,8 +32006,8 @@ func _add_user_chat_message(
 		chat_category = CHAT_CHANNEL_HELP
 	elif channel == CHAT_TAB_PM:
 		chat_category = CHAT_TAB_PM
-	elif channel == CHAT_TAB_CLAN:
-		chat_category = CHAT_TAB_CLAN
+	elif channel == CHAT_TAB_GUILD:
+		chat_category = CHAT_TAB_GUILD
 	row.set_meta("chat_category", chat_category)
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
@@ -32011,8 +32073,8 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 			prefix.text = "[Help]"
 		CHAT_TAB_PM:
 			prefix.text = "[PM]"
-		CHAT_TAB_CLAN:
-			prefix.text = "[Clan]"
+		CHAT_TAB_GUILD:
+			prefix.text = "[Guild]"
 		_:
 			prefix.text = "[Global]"
 			prefix_color = Color("#d8b767")
@@ -32042,8 +32104,8 @@ func _on_all_channel_badge_pressed(channel: String) -> void:
 		CHAT_CHANNEL_HELP:
 			selected_general_chat_tab = CHAT_TAB_HELP
 			active_chat_tab = CHAT_TAB_HELP
-		CHAT_TAB_CLAN:
-			active_chat_tab = CHAT_TAB_CLAN
+		CHAT_TAB_GUILD:
+			active_chat_tab = CHAT_TAB_GUILD
 		_:
 			selected_general_chat_tab = CHAT_TAB_GENERAL
 			active_chat_tab = CHAT_TAB_GENERAL
@@ -32120,7 +32182,7 @@ func _should_show_chat_category(category: String) -> bool:
 			CHAT_CHANNEL_TRADE,
 			CHAT_CHANNEL_HELP,
 			CHAT_TAB_PM,
-			CHAT_TAB_CLAN,
+			CHAT_TAB_GUILD,
 			CHAT_CATEGORY_USER,
 		]
 	if active_chat_tab == CHAT_TAB_GENERAL:
@@ -32131,6 +32193,8 @@ func _should_show_chat_category(category: String) -> bool:
 		return category == CHAT_CHANNEL_TRADE
 	if active_chat_tab == CHAT_TAB_HELP:
 		return category == CHAT_CHANNEL_HELP
+	if active_chat_tab == CHAT_TAB_GUILD:
+		return category == CHAT_TAB_GUILD
 	return false
 
 

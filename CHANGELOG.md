@@ -4,6 +4,7 @@
 
 **Added**
 - Added an Add Gems button to the Aether Gift Store that clearly marks Gem top-ups as not implemented yet.
+- Added Guild chat with a red unread indicator for Guild members, plus an Invite to Guild action when Guild Leaders or Officers right-click another Trainer.
 
 - Added the Aether Atelier tailor to Pokémon Centers. Its searchable catalog repacks complete outfit sets for ₽1,000 and previews permanent per-item Chroma dyes for ₽2,500.
 - Added catalog search to the Aether Gift Store and direct hex colour entry to Store previews and Trainer Card appearance editing.
@@ -15,6 +16,7 @@
 - Added the female-only Aether Blossom Box to the Aether Gift Store. It contains original-colour Hair, Earrings, Dress, and Shoes cosmetics, with separate Chroma editions of the Hair, Earrings, and Shoes.
 
 **Changed**
+- Renamed the unfinished Clan chat tab to Guild and preserved existing saved tab preferences.
 - Chroma colours are now applied to individual wardrobe items at the Aether Atelier instead of being changed for free in Character Customization. Returning an item to the Bag removes its dye.
 - Guild members now land on their own Guild dashboard when opening Guilds, while the directory remains available through Browse Guilds.
 

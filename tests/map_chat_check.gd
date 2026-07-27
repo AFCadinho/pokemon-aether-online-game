@@ -73,9 +73,9 @@ func _init() -> void:
 	)
 	_check(
 		settings_source.contains(
-			"CHAT_TAB_ALL,\n\tCHAT_TAB_GENERAL,\n\tCHAT_TAB_SYSTEM,\n\tCHAT_TAB_MAP,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_CLAN,"
+			"CHAT_TAB_ALL,\n\tCHAT_TAB_GENERAL,\n\tCHAT_TAB_SYSTEM,\n\tCHAT_TAB_MAP,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_GUILD,"
 		),
-		"default top tab order is All, General, System, Map, PM, Clan"
+		"default top tab order is All, General, System, Map, PM, Guild"
 	)
 	_check(
 		settings_source.contains("order.insert(system_index + 1, CHAT_TAB_MAP)"),
@@ -95,8 +95,8 @@ func _init() -> void:
 	)
 	_check(
 		overlay_source.contains("CHAT_CHANNEL_MAP,\n\t\t\tCHAT_CHANNEL_TRADE,")
-		and overlay_source.contains("CHAT_TAB_PM,\n\t\t\tCHAT_TAB_CLAN,"),
-		"All includes Map, PM, and Clan messages alongside the public channels"
+		and overlay_source.contains("CHAT_TAB_PM,\n\t\t\tCHAT_TAB_GUILD,"),
+		"All includes Map, PM, and Guild messages alongside the public channels"
 	)
 	_check(
 		overlay_source.contains("func _create_chat_channel_prefix")

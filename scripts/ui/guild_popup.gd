@@ -136,6 +136,7 @@ var emblem_pixel_buttons: Array[Button] = []
 var emblem_palette_grid: GridContainer
 var emblem_color_buttons: Array[Button] = []
 var emblem_color_code_input: LineEdit
+var emblem_color_code_preview: PanelContainer
 var emblem_color_code_status_label: Label
 var emblem_template_select: OptionButton
 var apply_emblem_template_button: Button
@@ -908,8 +909,15 @@ func _build_emblem_editor() -> Control:
 	emblem_color_code_input.max_length = 7
 	emblem_color_code_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	emblem_color_code_input.text_submitted.connect(_on_emblem_color_code_submitted)
+	emblem_color_code_input.text_changed.connect(_on_emblem_color_code_changed)
 	_apply_line_edit_style(emblem_color_code_input)
 	code_row.add_child(emblem_color_code_input)
+	emblem_color_code_preview = PanelContainer.new()
+	emblem_color_code_preview.name = "GuildEmblemColorCodePreview"
+	emblem_color_code_preview.custom_minimum_size = Vector2(34, 34)
+	emblem_color_code_preview.tooltip_text = "Preview of the entered hex colour"
+	emblem_color_code_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	code_row.add_child(emblem_color_code_preview)
 	var apply_color_button := Button.new()
 	apply_color_button.name = "ApplyGuildEmblemColorCodeButton"
 	apply_color_button.text = "Apply"
@@ -1695,6 +1703,12 @@ func _on_emblem_color_code_submitted(_code: String) -> void:
 	_apply_emblem_color_code()
 
 
+func _on_emblem_color_code_changed(code: String) -> void:
+	var normalized_code := code.strip_edges().to_lower()
+	if _is_hex_color_code(normalized_code):
+		_set_emblem_color_code_preview(Color(normalized_code))
+
+
 func _apply_emblem_color_code() -> void:
 	if emblem_color_code_input == null or selected_emblem_color < 0 or selected_emblem_color >= emblem_palette.size():
 		return
@@ -1736,8 +1750,20 @@ func _refresh_emblem_palette_controls() -> void:
 		emblem_color_code_input.editable = has_color
 		emblem_color_code_input.text = emblem_palette[selected_emblem_color] if has_color else ""
 		emblem_color_code_input.add_theme_color_override("font_color", UI_TEXT)
+		_set_emblem_color_code_preview(
+			Color(emblem_palette[selected_emblem_color]) if has_color else UI_INPUT
+		)
 	if emblem_color_code_status_label != null:
 		emblem_color_code_status_label.visible = false
+
+
+func _set_emblem_color_code_preview(color: Color) -> void:
+	if emblem_color_code_preview == null:
+		return
+	emblem_color_code_preview.add_theme_stylebox_override(
+		"panel",
+		_button_style(color, UI_BORDER, 7, 1)
+	)
 
 
 func _clear_emblem() -> void:

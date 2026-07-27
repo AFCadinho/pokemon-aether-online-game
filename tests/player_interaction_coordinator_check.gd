@@ -77,6 +77,7 @@ func _check_trade_context_action() -> void:
 	trade_button = _find_player_action("Trade")
 	_check_equal(trade_button != null and trade_button.disabled, true, "authoritatively disabled trading remains visible but cannot start")
 
+	await _check_guild_invite_context_action()
 	coordinator.close_context_menu()
 	host.queue_free()
 
@@ -85,6 +86,27 @@ func _find_player_action(action_name: String) -> Button:
 		if child is Button and str(child.get_meta("player_action", "")) == action_name:
 			return child as Button
 	return null
+
+func _check_guild_invite_context_action() -> void:
+	coordinator.guild_membership = {"guildId": 4, "role": "officer"}
+	coordinator.guild_membership_loaded = true
+	coordinator.social_state_loading = false
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Invite to Guild") != null,
+		true,
+		"guild leaders and officers receive the right-click guild invite action"
+	)
+
+	coordinator.guild_membership = {"guildId": 4, "role": "member"}
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Invite to Guild") == null,
+		true,
+		"regular guild members do not receive the invite action"
+	)
 
 func _check_player_normalization() -> void:
 	var valid: Dictionary = coordinator._normalized_player({"userId": 7, "username": "misty"})
@@ -132,6 +154,7 @@ func _check_phase_scope_contract() -> void:
 	_check_equal(source.contains("TradeInvitationDialog"), true, "dedicated invitation dialog")
 	_check_equal(source.contains("WorldPresenceService"), true, "canonical roster dependency")
 	_check_equal(source.contains("_social_action(\"load_socials\")"), true, "authoritative social refresh")
+	_check_equal(source.contains("service.invite_member(username)"), true, "guild action uses the authoritative invitation endpoint")
 	_check_equal(source.contains("load_map_players"), false, "no secondary map-player projection")
 
 func _check_remote_avatar_interaction_contract() -> void:

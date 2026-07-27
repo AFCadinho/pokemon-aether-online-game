@@ -113,9 +113,21 @@ func _run() -> void:
 	)
 	var color_code_input := popup.find_child("GuildEmblemColorCode", true, false) as LineEdit
 	_check(color_code_input != null, "emblem editor accepts a hex colour code")
+	var color_code_preview := popup.find_child("GuildEmblemColorCodePreview", true, false) as PanelContainer
+	_check(color_code_preview != null, "emblem editor shows a colour preview beside the hex code")
 	if color_code_input != null:
 		popup._select_emblem_color(0)
 		color_code_input.text = "#ff00aa"
+		popup._on_emblem_color_code_changed(color_code_input.text)
+		var live_preview_style := (
+			color_code_preview.get_theme_stylebox("panel") as StyleBoxFlat
+			if color_code_preview != null
+			else null
+		)
+		_check(
+			live_preview_style != null and live_preview_style.bg_color.is_equal_approx(Color("#ff00aa")),
+			"valid hex input updates the colour preview immediately"
+		)
 		popup._apply_emblem_color_code()
 		_check(popup.emblem_palette[0] == "#ff00aa", "valid emblem hex colour is applied")
 		color_code_input.text = "#invalid"

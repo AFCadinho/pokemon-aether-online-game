@@ -19,14 +19,15 @@ const CHAT_TAB_GENERAL := "general"
 const CHAT_TAB_MAP := "map"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
-const CHAT_TAB_CLAN := "clan"
+const CHAT_TAB_GUILD := "guild"
+const LEGACY_CHAT_TAB_CLAN := "clan"
 const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
 	CHAT_TAB_SYSTEM,
 	CHAT_TAB_MAP,
 	CHAT_TAB_PM,
-	CHAT_TAB_CLAN,
+	CHAT_TAB_GUILD,
 ]
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
 const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
@@ -55,7 +56,7 @@ var chat_tab_visibility: Dictionary = {
 	CHAT_TAB_MAP: true,
 	CHAT_TAB_SYSTEM: true,
 	CHAT_TAB_PM: true,
-	CHAT_TAB_CLAN: true,
+	CHAT_TAB_GUILD: true,
 }
 var chat_tab_order: Array[String] = DEFAULT_CHAT_TAB_ORDER.duplicate()
 
@@ -286,7 +287,7 @@ func reset_chat_tab_preferences() -> void:
 		CHAT_TAB_MAP: true,
 		CHAT_TAB_SYSTEM: true,
 		CHAT_TAB_PM: true,
-		CHAT_TAB_CLAN: true,
+		CHAT_TAB_GUILD: true,
 	}, DEFAULT_CHAT_TAB_ORDER.duplicate())
 
 
@@ -313,6 +314,9 @@ func _validated_volume(volume: Variant) -> float:
 
 func _validated_chat_tab_visibility(value: Variant) -> Dictionary:
 	var source: Dictionary = value as Dictionary if value is Dictionary else {}
+	if not source.has(CHAT_TAB_GUILD) and source.has(LEGACY_CHAT_TAB_CLAN):
+		source = source.duplicate()
+		source[CHAT_TAB_GUILD] = source.get(LEGACY_CHAT_TAB_CLAN, true)
 	var visibility: Dictionary = {}
 	for tab_id: String in DEFAULT_CHAT_TAB_ORDER:
 		visibility[tab_id] = (
@@ -328,6 +332,8 @@ func _validated_chat_tab_order(value: Variant) -> Array[String]:
 	if value is Array:
 		for tab_value: Variant in value as Array:
 			var tab_id := str(tab_value)
+			if tab_id == LEGACY_CHAT_TAB_CLAN:
+				tab_id = CHAT_TAB_GUILD
 			if tab_id in DEFAULT_CHAT_TAB_ORDER and not order.has(tab_id):
 				order.append(tab_id)
 	if not order.has(CHAT_TAB_ALL):

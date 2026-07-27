@@ -2,11 +2,15 @@ extends Node
 
 class_name GuildServiceNode
 
+signal membership_changed(membership: Dictionary)
+
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
+var current_membership: Dictionary = {}
+var membership_loaded := false
 
 
 func load_directory() -> Dictionary:
@@ -45,6 +49,7 @@ func create_guild(
 		return response
 	var body := _dictionary(response.get("body", {}))
 	pending_creation_request_id = ""
+	_set_current_membership(body.get("membership", {}))
 	return {
 		"success": true,
 		"guild": _normalize_guild(body.get("guild", {})),
@@ -55,6 +60,8 @@ func create_guild(
 
 func load_home() -> Dictionary:
 	var response := await _authenticated_request(GUILD_HOME_ENDPOINT, HTTPClient.METHOD_GET, "")
+	if not bool(response.get("success", false)) and int(response.get("status", 0)) == 404:
+		_set_current_membership({})
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
 
@@ -130,6 +137,7 @@ func abandon_pending_creation() -> void:
 
 func _directory_result(value: Variant) -> Dictionary:
 	var body := _dictionary(value)
+	_set_current_membership(body.get("membership", {}))
 	var normalized_guilds: Array[Dictionary] = []
 	for guild_value: Variant in _array(body.get("guilds", [])):
 		if guild_value is Dictionary:
@@ -144,6 +152,7 @@ func _directory_result(value: Variant) -> Dictionary:
 
 func _home_result(value: Variant) -> Dictionary:
 	var body := _dictionary(value)
+	_set_current_membership(body.get("membership", {}))
 	return {
 		"success": true,
 		"guild": _normalize_guild(body.get("guild", {})),
@@ -160,6 +169,22 @@ func _invitation_action(path: String) -> Dictionary:
 		"success": true,
 		"invitation": _dictionary(response.get("body", {})),
 	}
+
+
+func can_invite_members() -> bool:
+	return str(current_membership.get("role", "")).to_lower() in ["leader", "officer"]
+
+
+func _set_current_membership(value: Variant) -> void:
+	var membership := _dictionary(value).duplicate(true)
+	var was_loaded := membership_loaded
+	membership_loaded = true
+	if current_membership == membership and was_loaded:
+		return
+	current_membership = membership
+	membership_changed.emit(current_membership.duplicate(true))
+
+
 
 
 func _authenticated_request(path: String, method: HTTPClient.Method, body: String) -> Dictionary:

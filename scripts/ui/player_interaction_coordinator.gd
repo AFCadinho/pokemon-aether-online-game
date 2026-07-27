@@ -52,6 +52,12 @@ var trade_capabilities_loaded := false
 var trade_capabilities_loading := false
 var trade_capabilities_error := ""
 var trade_invitation_dialog: Window
+var guild_membership: Dictionary = {}
+var guild_membership_loaded := false
+var guild_membership_loading := false
+var guild_action_in_flight := false
+var guild_status_message := ""
+var guild_status_is_error := false
 
 
 func setup(host_control: Control) -> void:
@@ -66,6 +72,15 @@ func setup(host_control: Control) -> void:
 		var roster_callable := Callable(self, "_on_roster_changed")
 		if not presence.roster_changed.is_connected(roster_callable):
 			presence.roster_changed.connect(roster_callable)
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service != null:
+		var membership_callable := Callable(self, "_on_guild_membership_changed")
+		if guild_service.has_signal("membership_changed") and not guild_service.membership_changed.is_connected(membership_callable):
+			guild_service.membership_changed.connect(membership_callable)
+		if bool(guild_service.get("membership_loaded")):
+			_on_guild_membership_changed(
+				_dictionary_from_value(guild_service.get("current_membership"))
+			)
 
 
 func open_players_on_map(anchor_rect: Rect2) -> void:
@@ -86,6 +101,8 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 	current_target = normalized
 	if not trade_capabilities_loaded and not trade_capabilities_loading:
 		_refresh_trade_capabilities()
+	if not guild_membership_loaded and not guild_membership_loading:
+		_refresh_guild_membership()
 	social_overview.clear()
 	social_state_loading = true
 	social_status_message = ""
@@ -452,6 +469,15 @@ func _render_context_menu() -> void:
 		"default",
 		trade_capabilities_loading or (trade_capabilities_loaded and not trade_enabled)
 	)
+	if _can_invite_to_guild():
+		context_actions.add_child(_context_section_label("GUILD"))
+		_add_context_action(
+			"Invite to Guild",
+			"Invite this trainer to join your guild",
+			_on_guild_invite_pressed,
+			"default",
+			guild_action_in_flight
+		)
 	context_actions.add_child(_context_section_label("SOCIAL"))
 	_add_context_action(
 		"Remove Friend" if _is_friend(current_target) else "Add Friend",
@@ -476,6 +502,17 @@ func _refresh_context_status() -> void:
 	if social_action_in_flight:
 		context_status_label.text = "Updating social state..."
 		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
+		return
+	if guild_action_in_flight:
+		context_status_label.text = "Sending guild invitation..."
+		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
+		return
+	if guild_status_message != "":
+		context_status_label.text = guild_status_message
+		context_status_label.add_theme_color_override(
+			"font_color",
+			UI_DANGER if guild_status_is_error else Color("#6fe49a")
+		)
 		return
 	if social_status_message != "":
 		context_status_label.text = social_status_message
@@ -594,6 +631,62 @@ func _refresh_trade_capabilities() -> void:
 		_render_context_menu()
 
 
+func _refresh_guild_membership() -> void:
+	if guild_membership_loading:
+		return
+	var service := get_node_or_null("/root/GuildService")
+	if service == null:
+		guild_membership.clear()
+		guild_membership_loaded = false
+		return
+	guild_membership_loading = true
+	var result: Dictionary = await service.load_directory()
+	guild_membership_loading = false
+	guild_membership_loaded = bool(result.get("success", false))
+	guild_membership = (
+		_dictionary_from_value(result.get("membership", {}))
+		if guild_membership_loaded
+		else {}
+	)
+	if context_menu != null and context_menu.visible:
+		_render_context_menu()
+
+
+func _on_guild_membership_changed(membership: Dictionary) -> void:
+	guild_membership = membership.duplicate(true)
+	guild_membership_loaded = true
+	guild_membership_loading = false
+	if context_menu != null and context_menu.visible:
+		_render_context_menu()
+
+
+func _can_invite_to_guild() -> bool:
+	return str(guild_membership.get("role", "")).to_lower() in ["leader", "officer"]
+
+
+func _on_guild_invite_pressed() -> void:
+	if current_target.is_empty() or guild_action_in_flight or not _can_invite_to_guild():
+		return
+	var username := str(current_target.get("username", "")).strip_edges()
+	var service := get_node_or_null("/root/GuildService")
+	if username == "" or service == null:
+		return
+	guild_action_in_flight = true
+	guild_status_message = ""
+	guild_status_is_error = false
+	_render_context_menu()
+	var result: Dictionary = await service.invite_member(username)
+	guild_action_in_flight = false
+	guild_status_is_error = not bool(result.get("success", false))
+	guild_status_message = (
+		"Guild invitation sent to %s." % username
+		if not guild_status_is_error
+		else str(result.get("error", "Could not send the guild invitation."))
+	)
+	if context_menu != null and context_menu.visible:
+		_render_context_menu()
+
+
 func _on_friend_pressed() -> void:
 	if current_target.is_empty() or social_action_in_flight:
 		return
@@ -681,6 +774,9 @@ func close_context_menu() -> void:
 	social_state_loading = false
 	social_status_message = ""
 	social_status_is_error = false
+	guild_action_in_flight = false
+	guild_status_message = ""
+	guild_status_is_error = false
 
 
 func _current_map_players() -> Array[Dictionary]:
