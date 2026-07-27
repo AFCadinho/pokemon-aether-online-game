@@ -162,7 +162,7 @@ const CATALOG: Array[Dictionary] = [
 		"appearance_slots": ["hair", "facial_hair", "facegear", "top", "bottom", "shoes"],
 		"preview_parts": [
 			{"slot": "hair", "appearance_id": "Adinho_Hair", "tint": "hair_color"},
-			{"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "hair_color"},
+			{"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "facial_hair_color"},
 			{"slot": "facegear", "appearance_id": "Adinho_Glasses"},
 			{"slot": "top", "appearance_id": "Adinho_Shirt"},
 			{"slot": "bottom", "appearance_id": "Adinho_Trousers"},
@@ -250,7 +250,7 @@ const CATALOG: Array[Dictionary] = [
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "face",
 		"appearance_slots": ["facial_hair"],
-		"preview_part": {"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "hair_color"},
+		"preview_part": {"slot": "facial_hair", "appearance_id": "Adinho_Beard", "tint": "facial_hair_color"},
 		"genders": ["male"],
 		"badge": "CHROMA",
 	},
@@ -1411,6 +1411,7 @@ func _reset_selection_footer() -> void:
 func _sync_character_preview_colors() -> void:
 	character_preview_colors = {
 		"hair_color": str(trainer_appearance.get("hair_color", CharacterAppearanceService.get_default_hair_color(trainer_gender))),
+		"facial_hair_color": str(trainer_appearance.get("facial_hair_color", "#ffffff")),
 		"facegear_color": str(trainer_appearance.get("facegear_color", "#ffffff")),
 		"top_color": str(trainer_appearance.get("top_color", "#ffffff")),
 		"bottom_color": str(trainer_appearance.get("bottom_color", "#ffffff")),
@@ -1437,6 +1438,7 @@ func _current_character_preview_appearance() -> Dictionary:
 		"bottom": CharacterAppearanceService.get_default_part_id("bottom", trainer_gender),
 		"shoes": CharacterAppearanceService.get_default_part_id("shoes", trainer_gender),
 		"hair_color": str(character_preview_colors.get("hair_color", CharacterAppearanceService.get_default_hair_color(trainer_gender))),
+		"facial_hair_color": str(character_preview_colors.get("facial_hair_color", "#ffffff")),
 		"skin_tone": CharacterAppearanceService.resolve_skin_tone(
 			str(trainer_appearance.get("body", body_id)),
 			str(trainer_appearance.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE)),
@@ -1630,7 +1632,7 @@ func _character_preview_part_frames(
 			_parse_character_preview_color(str(appearance.get("eye_color", "#ffffff")), Color.WHITE)
 		)
 	if normalized_category == "eyebrows" or (
-		normalized_category in ["hair", "facial_hair"]
+		normalized_category == "hair"
 		and CharacterAppearanceService.is_tintable_part(category, part_id)
 	):
 		return CharacterAppearanceService.get_tinted_part_frames(
@@ -1639,6 +1641,18 @@ func _character_preview_part_frames(
 			trainer_gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(str(appearance.get("hair_color", "#ffffff")), Color.WHITE),
+			true
+		)
+	if normalized_category == "facial_hair" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			trainer_gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_character_preview_color(
+				str(appearance.get("facial_hair_color", "#ffffff")),
+				Color.WHITE
+			),
 			true
 		)
 	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category, part_id):

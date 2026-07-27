@@ -342,6 +342,7 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 const BAG_ICON_ROOT := "res://assets/items/icons/"
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
+const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
 	{"id": "all", "label": "All Items", "iconItemId": ""},
@@ -875,6 +876,7 @@ var trainer_name_change_display_name_input: LineEdit
 var trainer_name_change_status_label: Label
 var trainer_name_change_confirm_button: Button
 var trainer_name_change_in_progress := false
+var aether_atelier_popup: AetherAtelierPopup
 var market_popup: PanelContainer
 var market_title_label: Label
 var market_subtitle_label: Label
@@ -1146,6 +1148,7 @@ func _ready() -> void:
 	_setup_bag_popup()
 	_setup_bag_item_context_menu()
 	_setup_market_popup()
+	_setup_aether_atelier_popup()
 	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
@@ -9369,7 +9372,7 @@ func _get_avatar_preview_part_frames(category_id: String, part_id: String) -> Sp
 			_parse_appearance_color(PlayerSave.appearance_eye_color, Color.WHITE)
 		)
 	if normalized_category == "eyebrows" or (
-		normalized_category in ["hair", "facial_hair"]
+		normalized_category == "hair"
 		and CharacterAppearanceService.is_tintable_part(category_id, part_id)
 	):
 		return CharacterAppearanceService.get_tinted_part_frames(
@@ -9378,6 +9381,15 @@ func _get_avatar_preview_part_frames(category_id: String, part_id: String) -> Sp
 			PlayerSave.gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_appearance_color(PlayerSave.appearance_hair_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "facial_hair" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_appearance_color(PlayerSave.appearance_facial_hair_color, Color.WHITE),
 			true
 		)
 	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
@@ -10900,7 +10912,7 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	_create_trainer_card_appearance_section_header(
 		content_stack,
 		"Body",
-		"Choose your body model, skin tone and eye colour."
+		"Choose your body model and natural trainer colours."
 	)
 
 	var search_input := _create_trainer_card_appearance_search_input("Search bodies")
@@ -10927,6 +10939,12 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	_refresh_trainer_card_body_buttons()
 	_create_trainer_card_color_palette(content_stack, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES)
 	_create_trainer_card_color_palette(content_stack, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
+	_create_trainer_card_color_palette(
+		content_stack,
+		"Natural Hair Color · Starter Hair Only",
+		"hair_color",
+		HAIR_COLOR_SWATCHES
+	)
 
 func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
@@ -10982,7 +11000,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 
 		var return_button := Button.new()
 		return_button.text = "×"
-		return_button.tooltip_text = "Return this cosmetic box to the Bag"
+		return_button.tooltip_text = "Return this cosmetic to the Bag; applied Chroma dye is removed"
 		return_button.custom_minimum_size = Vector2(30, 30)
 		return_button.focus_mode = Control.FOCUS_NONE
 		return_button.visible = false
@@ -10994,16 +11012,6 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		trainer_card_part_return_buttons[option_key] = return_button
 
 	_refresh_trainer_card_part_buttons()
-	if normalized_category == "hair" or normalized_category == "facial_hair":
-		_create_trainer_card_color_palette(content_stack, "Hair & Facial Hair Color", "hair_color", HAIR_COLOR_SWATCHES)
-	elif normalized_category == "facegear":
-		_create_trainer_card_color_palette(content_stack, "Chroma Color", "facegear_color", CHROMA_COLOR_SWATCHES)
-	elif normalized_category == "top":
-		_create_trainer_card_color_palette(content_stack, "Chroma Color", "top_color", CHROMA_COLOR_SWATCHES)
-	elif normalized_category == "bottom":
-		_create_trainer_card_color_palette(content_stack, "Chroma Color", "bottom_color", CHROMA_COLOR_SWATCHES)
-	elif normalized_category == "shoes":
-		_create_trainer_card_color_palette(content_stack, "Chroma Color", "shoes_color", CHROMA_COLOR_SWATCHES)
 
 func _create_trainer_card_appearance_section_header(
 	content_stack: VBoxContainer,
@@ -11352,7 +11360,10 @@ func _refresh_trainer_card_part_buttons() -> void:
 			return_button.visible = is_owned and source_item_id != ""
 			return_button.disabled = appearance_inventory_returning
 			if source_item_id != "":
-				return_button.tooltip_text = "Return %s to the Bag" % _item_name_from_id(source_item_id)
+				return_button.tooltip_text = (
+					"Return %s to the Bag; applied Chroma dye is removed"
+					% _item_name_from_id(source_item_id)
+				)
 		if part_id == selected_part_id:
 			button.text = "%s  *" % display_name
 			_apply_button_style(button, "primary")
@@ -11378,6 +11389,8 @@ func _get_player_save_color_value(color_key: String) -> String:
 			return PlayerSave.appearance_eye_color
 		"facegear_color":
 			return PlayerSave.appearance_facegear_color
+		"facial_hair_color":
+			return PlayerSave.appearance_facial_hair_color
 		"top_color":
 			return PlayerSave.appearance_top_color
 		"bottom_color":
@@ -11606,6 +11619,35 @@ func _appearance_source_item_for_part(category_id: String, part_id: String) -> S
 	var unlock := unlock_value as Dictionary
 	return str(unlock.get("sourceItemId", unlock.get("source_item_id", ""))).strip_edges()
 
+func _apply_saved_chroma_color_for_part(category_id: String, part_id: String) -> void:
+	var normalized_category := CharacterAppearanceService.normalize_part_category(category_id)
+	if not CharacterAppearanceService.is_tintable_part(normalized_category, part_id):
+		return
+	var unlock_value: Variant = owned_appearance_parts.get("%s:%s" % [
+		normalized_category,
+		part_id.strip_edges(),
+	])
+	if not unlock_value is Dictionary:
+		return
+	var color_value := CharacterAppearanceService.normalize_hex_color_code(
+		str((unlock_value as Dictionary).get("chromaColor", "#ffffff"))
+	)
+	if color_value == "":
+		color_value = "#ffffff"
+	match normalized_category:
+		"hair":
+			PlayerSave.appearance_hair_color = color_value
+		"facial_hair":
+			PlayerSave.appearance_facial_hair_color = color_value
+		"facegear":
+			PlayerSave.appearance_facegear_color = color_value
+		"top":
+			PlayerSave.appearance_top_color = color_value
+		"bottom":
+			PlayerSave.appearance_bottom_color = color_value
+		"shoes":
+			PlayerSave.appearance_shoes_color = color_value
+
 func _mark_trainer_card_appearance_dirty() -> void:
 	trainer_card_has_unsaved_appearance_changes = true
 	_update_trainer_card_appearance_save_state()
@@ -11700,6 +11742,7 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 		"skin_tone",
 		"eye_color",
 		"facegear_color",
+		"facial_hair_color",
 		"top_color",
 		"bottom_color",
 		"shoes_color",
@@ -11734,6 +11777,7 @@ func _on_trainer_card_part_selected(category_id: String, part_id: String) -> voi
 		_update_trainer_card_appearance_save_state("Unlock this cosmetic from your Bag first")
 		return
 	_ensure_layered_body_for_part_selection()
+	_apply_saved_chroma_color_for_part(normalized_category, part_id)
 	var player := get_tree().get_first_node_in_group("player")
 	if player != null and player.has_method("set_appearance_part"):
 		player.call("set_appearance_part", normalized_category, part_id)
@@ -11816,10 +11860,33 @@ func _apply_returned_appearance_defaults(returned_unlocks_value: Variant) -> voi
 			slot,
 			CharacterAppearanceService.get_default_part_id(slot, PlayerSave.gender)
 		)
+		match slot:
+			"hair":
+				PlayerSave.appearance_hair_color = CharacterAppearanceService.get_default_hair_color(
+					PlayerSave.gender
+				)
+			"facial_hair":
+				PlayerSave.appearance_facial_hair_color = "#ffffff"
+			"facegear":
+				PlayerSave.appearance_facegear_color = "#ffffff"
+			"top":
+				PlayerSave.appearance_top_color = "#ffffff"
+			"bottom":
+				PlayerSave.appearance_bottom_color = "#ffffff"
+			"shoes":
+				PlayerSave.appearance_shoes_color = "#ffffff"
 	PlayerSave.ensure_layered_appearance_defaults(false)
 
 
 func _on_trainer_card_color_selected(color_key: String, color_value: String) -> void:
+	if (
+		color_key == "hair_color"
+		and not CharacterAppearanceService.is_free_part_id("hair", PlayerSave.appearance_hair_id)
+	):
+		_update_trainer_card_appearance_save_state(
+			"Chroma item colours are changed at the Aether Atelier"
+		)
+		return
 	_ensure_layered_body_for_part_selection()
 	match color_key:
 		"skin_tone":
@@ -11830,6 +11897,8 @@ func _on_trainer_card_color_selected(color_key: String, color_value: String) -> 
 			PlayerSave.appearance_eye_color = color_value
 		"facegear_color":
 			PlayerSave.appearance_facegear_color = color_value
+		"facial_hair_color":
+			PlayerSave.appearance_facial_hair_color = color_value
 		"top_color":
 			PlayerSave.appearance_top_color = color_value
 		"bottom_color":
@@ -13620,6 +13689,77 @@ func _hide_market_popup() -> void:
 	market_selected_item = {}
 	market_purchase_in_progress = false
 
+func _setup_aether_atelier_popup() -> void:
+	aether_atelier_popup = AETHER_ATELIER_POPUP_SCENE.instantiate() as AetherAtelierPopup
+	if aether_atelier_popup == null:
+		return
+	root_control.add_child(aether_atelier_popup)
+	aether_atelier_popup.closed.connect(_hide_aether_atelier)
+	aether_atelier_popup.bundle_created.connect(_on_aether_atelier_bundle_created)
+	aether_atelier_popup.chroma_dyed.connect(_on_aether_atelier_chroma_dyed)
+
+func open_aether_atelier() -> void:
+	if aether_atelier_popup == null:
+		return
+	aether_atelier_popup.visible = true
+	_activate_ui_panel(aether_atelier_popup)
+	aether_atelier_popup.open_atelier()
+
+func _hide_aether_atelier() -> void:
+	if aether_atelier_popup == null:
+		return
+	aether_atelier_popup.visible = false
+	_deactivate_ui_panel(aether_atelier_popup)
+
+func _on_aether_atelier_bundle_created(result: Dictionary) -> void:
+	PlayerWalletService.apply_wallet_result(result)
+	refresh_money_display()
+	var inventory_value: Variant = result.get("inventory", [])
+	if inventory_value is Array:
+		bag_inventory_items = _normalize_bag_inventory_items(inventory_value)
+		bag_inventory_loaded = true
+		_refresh_bag_items()
+	var box_item_id := str(result.get("createdBoxItemId", "outfit-box"))
+	_add_chat_message("%s was packed into a tradeable box." % _item_name_from_id(box_item_id))
+
+func _on_aether_atelier_chroma_dyed(result: Dictionary) -> void:
+	PlayerWalletService.apply_wallet_result(result)
+	refresh_money_display()
+	_apply_owned_appearance_unlocks(
+		result.get("appearanceUnlocks", []),
+		result.get("appearanceSlotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT),
+		result.get("appearanceSlotCounts", {})
+	)
+	var item := result.get("item", {}) as Dictionary
+	var slot := CharacterAppearanceService.normalize_part_category(str(item.get("slot", "")))
+	var appearance_id := str(item.get("appearanceId", ""))
+	var color := CharacterAppearanceService.normalize_hex_color_code(str(item.get("color", "")))
+	if color != "" and _get_preview_part_id(slot) == appearance_id:
+		match slot:
+			"hair":
+				PlayerSave.appearance_hair_color = color
+			"facial_hair":
+				PlayerSave.appearance_facial_hair_color = color
+			"facegear":
+				PlayerSave.appearance_facegear_color = color
+			"top":
+				PlayerSave.appearance_top_color = color
+			"bottom":
+				PlayerSave.appearance_bottom_color = color
+			"shoes":
+				PlayerSave.appearance_shoes_color = color
+		var player := get_tree().get_first_node_in_group("player")
+		if player != null and player.has_method("refresh_appearance"):
+			player.call("refresh_appearance")
+		_refresh_avatar_previews()
+		var world := GameState.get_world()
+		if world != null and world.has_method("_publish_world_presence"):
+			world.call("_publish_world_presence", true)
+	_add_chat_message("%s was dyed %s." % [
+		str(item.get("name", _item_name_from_id(str(item.get("itemId", ""))))),
+		color.to_upper(),
+	])
+
 func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 	var normalized_items: Array[Dictionary] = []
 	if typeof(items_value) != TYPE_ARRAY:
@@ -14420,6 +14560,11 @@ func _refresh_bag_detail() -> void:
 	bag_detail_hotbar_button.disabled = not can_assign
 
 func _bag_item_detail_description(item: Dictionary) -> String:
+	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
+		var allowed_models := _bag_item_allowed_genders(item)
+		var model_label := " or ".join(allowed_models).capitalize()
+		return "%s character models only. Keep this item in your Bag or trade it; it cannot be moved to Character Customization." % model_label
 	var description := str(item.get("shortDesc", item.get("description", ""))).strip_edges()
 	if description != "":
 		return description
@@ -14460,6 +14605,8 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	if item_id == "escape-rope-action":
 		return true
 	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
+		return false
 	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
@@ -14487,6 +14634,9 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 	if use_action == "open_item_bundle":
 		return "Open Box"
 	if use_action == "unlock_appearance":
+		if not _bag_item_matches_player_gender(item):
+			var allowed_models := _bag_item_allowed_genders(item)
+			return "%s Model Only" % " or ".join(allowed_models).capitalize()
 		return "Move to Customization"
 	if use_action == "redeem_aether_blessing":
 		return "Redeem Voucher"
@@ -14576,6 +14726,9 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if use_action == "trainer_gender_change":
 		var target_gender := "female" if PlayerSave.gender == "male" else "male"
 		_show_ui_confirm_popup("Change gender?", "Change to %s?\n\nAll cosmetics in Character Customization will be returned to your Bag. Your equipped appearance and colours will reset." % target_gender.capitalize(), "Change to %s" % target_gender.capitalize(), Callable(self, "_execute_trainer_gender_change").bind(target_gender), Vector2i(480, 220), true)
+		return
+	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
+		_add_chat_message(_bag_item_detail_description(item))
 		return
 	if use_action == "open_item_bundle":
 		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)
@@ -15295,6 +15448,48 @@ func _bag_item_by_id(item_id: String) -> Dictionary:
 			return item.duplicate(true)
 	return {}
 
+
+func _bag_item_allowed_genders(item: Dictionary) -> Array[String]:
+	var allowed_genders: Array[String] = []
+	var gender_values: Variant = item.get("genders", [])
+	if gender_values is Array:
+		for gender_value: Variant in gender_values as Array:
+			var normalized_gender := CharacterAppearanceService.normalize_gender(str(gender_value))
+			if normalized_gender != "" and not allowed_genders.has(normalized_gender):
+				allowed_genders.append(normalized_gender)
+	if not allowed_genders.is_empty():
+		return allowed_genders
+	var unlocks_value: Variant = item.get("appearanceUnlocks", [])
+	if not unlocks_value is Array:
+		return allowed_genders
+	for unlock_value: Variant in unlocks_value as Array:
+		if not unlock_value is Dictionary:
+			continue
+		var unlock_genders_value: Variant = (unlock_value as Dictionary).get("genders", [])
+		if not unlock_genders_value is Array:
+			continue
+		for gender_value: Variant in unlock_genders_value as Array:
+			var normalized_gender := CharacterAppearanceService.normalize_gender(str(gender_value))
+			if normalized_gender != "" and not allowed_genders.has(normalized_gender):
+				allowed_genders.append(normalized_gender)
+	return allowed_genders
+
+
+func _bag_item_matches_player_gender(item: Dictionary) -> bool:
+	var allowed_genders := _bag_item_allowed_genders(item)
+	return allowed_genders.is_empty() or allowed_genders.has(
+		CharacterAppearanceService.normalize_gender(PlayerSave.gender)
+	)
+
+
+func _bag_item_icon_gender(item_id: String) -> String:
+	var item := _bag_item_by_id(item_id)
+	return CharacterAppearanceService.resolve_cosmetic_icon_gender(
+		PlayerSave.gender,
+		_bag_item_allowed_genders(item)
+	)
+
+
 func _bag_machine_can_teach_pokemon(pokemon: Pokemon) -> bool:
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
 		return false
@@ -15341,7 +15536,10 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
 	if item_id == "escape-rope-action":
 		item_id = "escape-rope"
-	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(item_id, PlayerSave.gender)
+	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(
+		item_id,
+		_bag_item_icon_gender(item_id)
+	)
 	if cosmetic_icon != null:
 		return cosmetic_icon
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
@@ -19536,6 +19734,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
 		{"panel": dev_badge_progress_popup, "close": Callable(self, "_hide_dev_badge_progress_popup_for_escape")},
 		{"panel": dev_actions_popup, "close": Callable(self, "_hide_dev_actions_popup_for_escape")},
+		{"panel": aether_atelier_popup, "close": Callable(self, "_hide_aether_atelier")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
 		{"panel": public_trainer_card_popup, "close": Callable(self, "_hide_public_trainer_card")},
 		{"panel": trainer_card_popup, "close": Callable(self, "_hide_trainer_card_for_escape")},
@@ -22965,6 +23164,7 @@ func _reset_impersonated_appearance_to_defaults() -> void:
 	PlayerSave.appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
 	PlayerSave.appearance_eye_color = CharacterAppearanceService.get_default_eye_color(PlayerSave.gender)
 	PlayerSave.appearance_facegear_color = "#ffffff"
+	PlayerSave.appearance_facial_hair_color = "#ffffff"
 	PlayerSave.appearance_top_color = "#ffffff"
 	PlayerSave.appearance_bottom_color = "#ffffff"
 	PlayerSave.appearance_shoes_color = "#ffffff"

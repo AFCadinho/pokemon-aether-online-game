@@ -41,11 +41,23 @@ func _init() -> void:
 		and template_source.contains('path="res://scenes/npcs/market_buyer_npc.tscn"'),
 		"Pokémon Center template provides generic buyer and seller roles"
 	)
+	_check(
+		template_source.contains(
+			'path="res://scenes/npcs/aether_atelier_npc.tscn"'
+		)
+			and template_source.contains(
+				'[node name="AetherAtelier" parent="Entities/NPCs"'
+			),
+		"Pokémon Center template provides the reusable Aether Atelier tailor"
+	)
 	var first_clerk_start := template_source.find('[node name="Clerk" parent="Entities/NPCs"')
 	var second_clerk_start := template_source.find('[node name="Clerk2" parent="Entities/NPCs"')
-	var interactables_start := template_source.find('[node name="Interactables"', second_clerk_start)
+	var atelier_start := template_source.find('[node name="AetherAtelier" parent="Entities/NPCs"', second_clerk_start)
+	var second_clerk_end := atelier_start
+	if second_clerk_end < 0:
+		second_clerk_end = template_source.find('[node name="Interactables"', second_clerk_start)
 	var first_clerk_source := template_source.substr(first_clerk_start, second_clerk_start - first_clerk_start)
-	var second_clerk_source := template_source.substr(second_clerk_start, interactables_start - second_clerk_start)
+	var second_clerk_source := template_source.substr(second_clerk_start, second_clerk_end - second_clerk_start)
 	_check(
 		not first_clerk_source.contains("npc_sprite_frames")
 		and not second_clerk_source.contains("npc_sprite_frames"),
@@ -53,7 +65,7 @@ func _init() -> void:
 	)
 	_check(
 		template_source.contains('path="res://scripts/world/npcs/heal_machine_effect.gd"')
-		and template_source.contains('[node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs"]')
+		and template_source.contains('[node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs"')
 		and template_source.contains("position = Vector2(464, 600)")
 		and template_source.contains('signal="heal_sequence_started"')
 		and template_source.contains('method="play_heal_sequence"'),

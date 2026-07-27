@@ -233,6 +233,7 @@ func _get_appearance_state_from_presence(state: Dictionary) -> Dictionary:
 	_merge_appearance_alias(appearance_state, "hair_color", "hairColor")
 	_merge_appearance_alias(appearance_state, "skin_tone", "skinTone")
 	_merge_appearance_alias(appearance_state, "eye_color", "eyeColor")
+	_merge_appearance_alias(appearance_state, "facial_hair_color", "facialHairColor")
 	_merge_presence_appearance_values_from_container(appearance_state, state)
 	var movement_state: Dictionary = _dictionary_from_value(state.get("movement", {}))
 	var movement_appearance: Dictionary = _dictionary_from_value(movement_state.get("appearance", {}))
@@ -243,6 +244,7 @@ func _get_appearance_state_from_presence(state: Dictionary) -> Dictionary:
 		_merge_appearance_alias(appearance_state, "hair_color", "hairColor")
 		_merge_appearance_alias(appearance_state, "skin_tone", "skinTone")
 		_merge_appearance_alias(appearance_state, "eye_color", "eyeColor")
+		_merge_appearance_alias(appearance_state, "facial_hair_color", "facialHairColor")
 	_merge_presence_appearance_values_from_container(appearance_state, movement_state)
 	_merge_encoded_body_appearance(appearance_state)
 	return appearance_state
@@ -274,6 +276,7 @@ func _merge_presence_appearance_values_from_container(appearance_state: Dictiona
 	_merge_presence_appearance_value(appearance_state, container, "skin_tone", ["appearanceSkinTone", "skin_tone", "skinTone"])
 	_merge_presence_appearance_value(appearance_state, container, "eye_color", ["appearanceEyeColor", "eye_color", "eyeColor"])
 	_merge_presence_appearance_value(appearance_state, container, "facegear_color", ["appearanceFacegearColor", "facegear_color", "facegearColor"])
+	_merge_presence_appearance_value(appearance_state, container, "facial_hair_color", ["appearanceFacialHairColor", "facial_hair_color", "facialHairColor"])
 	_merge_presence_appearance_value(appearance_state, container, "top_color", ["appearanceTopColor", "top_color", "topColor"])
 	_merge_presence_appearance_value(appearance_state, container, "bottom_color", ["appearanceBottomColor", "bottom_color", "bottomColor"])
 	_merge_presence_appearance_value(appearance_state, container, "shoes_color", ["appearanceShoesColor", "shoes_color", "shoesColor"])
@@ -1236,7 +1239,7 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 			)
 		)
 	if normalized_category == "eyebrows" or (
-		normalized_category in ["hair", "facial_hair"]
+		normalized_category == "hair"
 		and CharacterAppearanceService.is_tintable_part(category, part_id)
 	):
 		return CharacterAppearanceService.get_tinted_part_frames(
@@ -1249,6 +1252,18 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 					str(current_appearance_state.get("hair_color", "")),
 					current_body_gender
 				),
+				Color.WHITE
+			),
+			true
+		)
+	if normalized_category == "facial_hair" and CharacterAppearanceService.is_tintable_part(category, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category,
+			part_id,
+			current_body_gender,
+			movement_style,
+			_parse_appearance_color(
+				str(current_appearance_state.get("facial_hair_color", "#ffffff")),
 				Color.WHITE
 			),
 			true
@@ -1305,7 +1320,7 @@ func _parse_appearance_color(color_text: String, fallback: Color) -> Color:
 
 
 func _get_appearance_signature(appearance_state: Dictionary) -> String:
-	return "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	return "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		str(appearance_state.get("body", "")),
 		str(appearance_state.get("hair", "")),
 		str(appearance_state.get("hair_style_index", "")),
@@ -1319,6 +1334,7 @@ func _get_appearance_signature(appearance_state: Dictionary) -> String:
 		str(appearance_state.get("skin_tone", "")),
 		str(appearance_state.get("eye_color", "")),
 		str(appearance_state.get("facegear_color", "")),
+		str(appearance_state.get("facial_hair_color", "")),
 		str(appearance_state.get("top_color", "")),
 		str(appearance_state.get("bottom_color", "")),
 		str(appearance_state.get("shoes_color", "")),

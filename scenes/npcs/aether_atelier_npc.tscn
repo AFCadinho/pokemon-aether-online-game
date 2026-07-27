@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/npcs/aether_atelier_npc.gd" id="1_atelier"]
+[ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_fallback"]
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_044_Beauty.png" id="3_tailor"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tailor"]
+atlas = ExtResource("3_tailor")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tailor"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tailor")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_atelier"]
+size = Vector2(96, 32)
+
+[node name="AetherAtelierNPC" type="Node2D"]
+script = ExtResource("1_atelier")
+npc_definition_id = "aether_atelier_tailor"
+display_name = "Aether Atelier"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = SubResource("SpriteFrames_tailor")
+
+[node name="Look" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
+position = Vector2(0, -16)
+sprite_frames = ExtResource("2_fallback")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_atelier")
+
+[node name="FeetMarker" type="Marker2D" parent="."]

@@ -29,6 +29,7 @@ var appearance_hair_color: String = ""
 var appearance_skin_tone: String = CharacterAppearanceService.DEFAULT_SKIN_TONE
 var appearance_eye_color: String = ""
 var appearance_facegear_color: String = "#ffffff"
+var appearance_facial_hair_color: String = "#ffffff"
 var appearance_top_color: String = "#ffffff"
 var appearance_bottom_color: String = "#ffffff"
 var appearance_shoes_color: String = "#ffffff"
@@ -64,6 +65,7 @@ func reset_gameplay_progress() -> void:
 	appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
 	appearance_eye_color = CharacterAppearanceService.resolve_eye_color("", gender)
 	appearance_facegear_color = "#ffffff"
+	appearance_facial_hair_color = "#ffffff"
 	appearance_top_color = "#ffffff"
 	appearance_bottom_color = "#ffffff"
 	appearance_shoes_color = "#ffffff"
@@ -192,6 +194,7 @@ func to_appearance_state() -> Dictionary:
 		"skin_tone": appearance_skin_tone,
 		"eye_color": appearance_eye_color,
 		"facegear_color": appearance_facegear_color,
+		"facial_hair_color": appearance_facial_hair_color,
 		"top_color": appearance_top_color,
 		"bottom_color": appearance_bottom_color,
 		"shoes_color": appearance_shoes_color,
@@ -236,6 +239,9 @@ func apply_appearance_state(appearance_state: Dictionary) -> void:
 	)
 	appearance_facegear_color = _resolve_optional_chroma_color(
 		appearance_state.get("facegear_color", appearance_facegear_color)
+	)
+	appearance_facial_hair_color = _resolve_optional_chroma_color(
+		appearance_state.get("facial_hair_color", appearance_facial_hair_color)
 	)
 	appearance_top_color = _resolve_optional_chroma_color(
 		appearance_state.get("top_color", appearance_top_color)

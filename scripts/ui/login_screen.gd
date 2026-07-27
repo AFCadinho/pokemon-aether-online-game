@@ -690,7 +690,7 @@ func _get_player_preview_part_frames(category_id: String, part_id: String) -> Sp
 			_parse_player_preview_color(PlayerSave.appearance_eye_color, Color.WHITE)
 		)
 	if normalized_category == "eyebrows" or (
-		normalized_category in ["hair", "facial_hair"]
+		normalized_category == "hair"
 		and CharacterAppearanceService.is_tintable_part(category_id, part_id)
 	):
 		return CharacterAppearanceService.get_tinted_part_frames(
@@ -699,6 +699,15 @@ func _get_player_preview_part_frames(category_id: String, part_id: String) -> Sp
 			PlayerSave.gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_player_preview_color(PlayerSave.appearance_hair_color, Color.WHITE),
+			true
+		)
+	if normalized_category == "facial_hair" and CharacterAppearanceService.is_tintable_part(category_id, part_id):
+		return CharacterAppearanceService.get_tinted_part_frames(
+			category_id,
+			part_id,
+			PlayerSave.gender,
+			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+			_parse_player_preview_color(PlayerSave.appearance_facial_hair_color, Color.WHITE),
 			true
 		)
 	if normalized_category == "facegear" and CharacterAppearanceService.is_tintable_part(category_id, part_id):

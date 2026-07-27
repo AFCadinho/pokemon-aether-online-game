@@ -147,6 +147,19 @@ static var _tinted_part_frames_cache: Dictionary = {}
 static var _cosmetic_item_icon_cache: Dictionary = {}
 
 
+static func resolve_cosmetic_icon_gender(gender: String, allowed_genders_value: Variant = []) -> String:
+	var normalized_gender := normalize_gender(gender)
+	var allowed_genders: Array[String] = []
+	if allowed_genders_value is Array:
+		for gender_value: Variant in allowed_genders_value as Array:
+			var allowed_gender := normalize_gender(str(gender_value))
+			if allowed_gender != "" and not allowed_genders.has(allowed_gender):
+				allowed_genders.append(allowed_gender)
+	if allowed_genders.is_empty() or allowed_genders.has(normalized_gender):
+		return normalized_gender if normalized_gender != "" else "male"
+	return allowed_genders[0]
+
+
 static func get_default_appearance(gender: String = "") -> Dictionary:
 	var normalized_gender: String = normalize_gender(gender)
 	var body_id: String = DEFAULT_FEMALE_BODY_ID if normalized_gender == "female" else DEFAULT_MALE_BODY_ID
@@ -162,6 +175,11 @@ static func get_default_appearance(gender: String = "") -> Dictionary:
 		"hair_color": get_default_hair_color(normalized_gender),
 		"skin_tone": DEFAULT_SKIN_TONE,
 		"eye_color": get_default_eye_color(normalized_gender),
+		"facial_hair_color": "#ffffff",
+		"facegear_color": "#ffffff",
+		"top_color": "#ffffff",
+		"bottom_color": "#ffffff",
+		"shoes_color": "#ffffff",
 	}
 	if body_supports_layered_parts(body_id, normalized_gender):
 		for category: String in LAYERED_PART_CATEGORIES:

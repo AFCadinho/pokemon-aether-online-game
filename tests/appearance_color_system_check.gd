@@ -127,11 +127,18 @@ func _run() -> void:
 	)
 	_check(ui_source.contains("CharacterAppearanceService.SKIN_TONE_SWATCHES"), "customization uses the shared skin palette")
 	_check(ui_source.contains('"skin_tone":'), "customization can read and update skin tone")
-	_check(ui_source.contains("ColorPickerButton.new()"), "customization includes custom Hair and Chroma colours")
+	_check(ui_source.contains("ColorPickerButton.new()"), "customization includes custom natural trainer colours")
 	_check(
 		ui_source.contains('hex_input.placeholder_text = "#RRGGBB"')
 			and ui_source.contains("func _on_trainer_card_hex_color_changed"),
-		"Trainer Card appearance editing accepts validated hex colour codes"
+		"Trainer Card natural colours accept validated hex colour codes"
+	)
+	_check(
+		not ui_source.contains(
+			'_create_trainer_card_color_palette(content_stack, "Chroma Color"'
+		)
+			and ui_source.contains("func _apply_saved_chroma_color_for_part"),
+		"Character Customization no longer edits Chroma colours for free"
 	)
 	for cosmetic_item_id: String in [
 		"aether-blossom-outfit",
@@ -169,12 +176,28 @@ func _run() -> void:
 		"cosmetic frame icons are cached"
 	)
 	_check(
+		APPEARANCE.resolve_cosmetic_icon_gender("male", ["female"]) == "female",
+		"gender-specific cosmetic icons use the item's compatible model"
+	)
+	_check(
+		APPEARANCE.resolve_cosmetic_icon_gender("male", ["male", "female"]) == "male",
+		"unisex cosmetic icons keep the current trainer model"
+	)
+	_check(
 		store_source.contains("get_cosmetic_item_icon(item_id, trainer_gender)"),
 		"Store cards use the shared spritesheet-frame icons"
 	)
 	_check(
-		ui_source.contains("get_cosmetic_item_icon(item_id, PlayerSave.gender)"),
-		"Bag slots use gender-compatible spritesheet-frame icons"
+		ui_source.contains("_bag_item_icon_gender(item_id)")
+			and ui_source.contains("func _bag_item_allowed_genders"),
+		"Bag slots render cosmetic icons with the item's compatible gender"
+	)
+	_check(
+		ui_source.contains(
+			'use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item)'
+		)
+			and ui_source.contains('return "%s Model Only"'),
+		"Bag disables moving incompatible cosmetics to Character Customization"
 	)
 	_check(
 		inventory_service_source.contains("APPEARANCE_ITEM_RETURN_ENDPOINT")

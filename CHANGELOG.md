@@ -4,6 +4,7 @@
 
 **Added**
 
+- Added the Aether Atelier tailor to Pokémon Centers. Its searchable catalog repacks complete outfit sets for ₽1,000 and previews permanent per-item Chroma dyes for ₽2,500.
 - Added catalog search to the Aether Gift Store and direct hex colour entry to Store previews and Trainer Card appearance editing.
 - Added a preview of the upcoming Guild system. You can explore the Guild screen, search the Guild list, view Guild information, and preview creating your own Guild. Guilds are not live yet. Creating one will eventually require three Gym Badges and 100,000 Pokédollars.
 - Added Kanto Gym Badges. Earned and locked Badges now appear on your Trainer Card and on the Trainer Cards of other players.
@@ -22,6 +23,7 @@
 
 **Fixed**
 
+- Fixed gender-specific cosmetics losing their Bag icons on another character model, and clearly disabled moving incompatible pieces to Character Customization.
 - Fixed players sometimes getting stuck in a Ranked battle after their opponent forfeited.
 - Fixed damaged or fainted Pokémon sometimes appearing fully healed again. This could happen in battles against other players and Trainers.
 - Fixed Pain Split not updating the HP bars of both Pokémon.
