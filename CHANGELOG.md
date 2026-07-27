@@ -6,13 +6,16 @@
 
 - Added the Aether Atelier tailor to Pokémon Centers. Its searchable catalog repacks complete outfit sets for ₽1,000 and previews permanent per-item Chroma dyes for ₽2,500.
 - Added catalog search to the Aether Gift Store and direct hex colour entry to Store previews and Trainer Card appearance editing.
-- Added a preview of the upcoming Guild system. You can explore the Guild screen, search the Guild list, view Guild information, and preview creating your own Guild. Guilds are not live yet. Creating one will eventually require three Gym Badges and 100,000 Pokédollars.
+- Added the first live Guild features. You can browse and create Guilds, use separate Overview, Members, and Management tabs, update Guild settings, edit a 32×32 emblem with exact hex palette colours by clicking the Guild icon, and invite other Trainers. Creating a Guild requires three Gym Badges and 100,000 Pokédollars.
+- Added consumable Squirtle, Charmander, and Bulbasaur Guild Emblem templates to the Aether Gift Store. Using one permanently unlocks its transparent 32×32 template for the current Guild, where Guild Leaders can always reapply it.
 - Added Kanto Gym Badges. Earned and locked Badges now appear on your Trainer Card and on the Trainer Cards of other players.
 - Added the first Alpha League trials against Brock, Misty, and Lt. Surge in Pewter City. Defeat them in order to earn their Gym Badges. You can challenge them again after winning.
 - Added Rival's House as a new two-floor interior in Pallet Town.
 - Added the female-only Aether Blossom Box to the Aether Gift Store. It contains original-colour Hair, Earrings, Dress, and Shoes cosmetics, with separate Chroma editions of the Hair, Earrings, and Shoes.
 
 **Changed**
+- Chroma colours are now applied to individual wardrobe items at the Aether Atelier instead of being changed for free in Character Customization. Returning an item to the Bag removes its dye.
+- Guild members now land on their own Guild dashboard when opening Guilds, while the directory remains available through Browse Guilds.
 
 - Simplified Cosmetics browsing in the Aether Gift Store with All, Outfits, and Loose Items filters plus a compact item-category dropdown.
 - Air Balloon is now shown in the main battle text and above the Pokémon holding it. The indicator disappears when the Balloon pops or is removed.

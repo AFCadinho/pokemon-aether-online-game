@@ -2,6 +2,8 @@ extends SceneTree
 
 const STORE_SCENE := preload("res://scenes/interface/donator_store_popup.tscn")
 const STORE_SCRIPT_PATH := "res://scripts/ui/donator_store_popup.gd"
+const INVENTORY_SERVICE_PATH := "res://scripts/services/inventory_service.gd"
+const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 
 var failed := false
 
@@ -21,6 +23,8 @@ func _run() -> void:
 		return
 
 	var source := FileAccess.get_file_as_string(STORE_SCRIPT_PATH)
+	var inventory_service_source := FileAccess.get_file_as_string(INVENTORY_SERVICE_PATH)
+	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 	_check(
 		source.contains('const COSMETIC_FILTER_GROUP_ORDER: Array[String]'),
 		"cosmetics define a compact primary filter layer"
@@ -247,6 +251,47 @@ func _run() -> void:
 		"starter top and bottom remain while previewing shoes"
 	)
 
+	var client_target_prices := {
+		"aether-blessing-voucher-3-days": 75,
+		"aether-blessing-voucher-7-days": 150,
+		"aether-blessing-voucher-14-days": 275,
+		"aether-blessing-voucher-30-days": 500,
+		"adinho-classic-outfit": 500,
+		"aether-blossom-outfit": 400,
+		"aether-blossom-chroma-hair": 100,
+		"aether-blossom-chroma-earrings": 100,
+		"aether-blossom-chroma-shoes": 75,
+		"adinho-chroma-hair": 100,
+		"adinho-chroma-beard": 75,
+		"adinho-chroma-glasses": 100,
+		"adinho-chroma-shirt": 150,
+		"adinho-chroma-trousers": 125,
+		"adinho-chroma-shoes": 75,
+		"nimbus_mount": 600,
+		"aether_board_mount": 600,
+		"surf-charm": 350,
+		"cut-charm": 250,
+		"strength-charm": 300,
+		"rock-smash-charm": 250,
+		"flash-charm": 200,
+		"dive-charm": 350,
+		"defog-charm": 250,
+		"rain-dance-charm": 250,
+		"snowscape-charm": 250,
+		"name-change-ticket": 250,
+		"gender-chance-ticket": 100,
+		"squirtle-guild-emblem-template": 150,
+		"charmander-guild-emblem-template": 150,
+		"bulbasaur-guild-emblem-template": 150,
+	}
+	for item_id: String in client_target_prices:
+		var priced_item: Dictionary = store.call("_catalog_item", item_id)
+		_check(not priced_item.is_empty(), "%s exists in the client pricing catalog" % item_id)
+		_check(
+			int(priced_item.get("price", -1)) == int(client_target_prices[item_id]),
+			"%s uses its canonical client preview price" % item_id
+		)
+
 	store.apply_store_state(
 		{"gems": 500},
 		{
@@ -254,12 +299,27 @@ func _run() -> void:
 				{
 					"itemId": "aether-blessing-voucher-3-days",
 					"genders": [],
-					"costs": [{"currency": "gems", "amount": 60}],
+					"costs": [{"currency": "gems", "amount": 75}],
 				},
 				{
 					"itemId": "adinho-chroma-shirt",
 					"genders": ["male"],
-					"costs": [{"currency": "gems", "amount": 130}],
+					"costs": [{"currency": "gems", "amount": 150}],
+				},
+				{
+					"itemId": "squirtle-guild-emblem-template",
+					"genders": [],
+					"costs": [{"currency": "gems", "amount": 150}],
+				},
+				{
+					"itemId": "charmander-guild-emblem-template",
+					"genders": [],
+					"costs": [{"currency": "gems", "amount": 150}],
+				},
+				{
+					"itemId": "bulbasaur-guild-emblem-template",
+					"genders": [],
+					"costs": [{"currency": "gems", "amount": 150}],
 				},
 				{"itemId": "surf-charm", "genders": [], "costs": [{"currency": "gems", "amount": 350}]},
 				{"itemId": "cut-charm", "genders": [], "costs": [{"currency": "gems", "amount": 250}]},
@@ -273,6 +333,50 @@ func _run() -> void:
 			],
 		}
 	)
+	store.call("_select_category", "guilds")
+	_check(store.product_buttons.has("squirtle-guild-emblem-template"), "Guilds lists the Squirtle emblem template")
+	store.call("_select_product", "squirtle-guild-emblem-template")
+	var emblem_template: Dictionary = store.call("_catalog_item", "squirtle-guild-emblem-template")
+	var emblem_icon := load("res://assets/items/icons/SQUIRTLEGUILDEMBLEMTEMPLATE.png") as Texture2D
+	_check(
+		emblem_icon != null and emblem_icon.get_width() == 32 and emblem_icon.get_height() == 32,
+		"Squirtle Guild emblem uses a transparent 32 by 32 pixel asset"
+	)
+	_check(emblem_template.get("icon") == emblem_icon, "Guild emblem Store product uses its template preview")
+	_check(store.find_child("GuildEmblemStorePreview", true, false) != null, "Gift Store previews the Guild emblem")
+	_check(store.call("_gem_price", "squirtle-guild-emblem-template") == 150, "Guild emblem uses its server Aether Gem price")
+	_check(
+		str(emblem_template.get("description", "")).contains("Consume")
+		and str(emblem_template.get("badge", "")) == "GUILD UNLOCK",
+		"Guild emblem Store product explains its consumable Guild unlock"
+	)
+	_check(
+		inventory_service_source.contains('"guild": _dictionary_from_value(body.get("guild", {}))'),
+		"inventory service returns the Guild updated by a template"
+	)
+	_check(
+		overlay_source.contains('"apply_guild_emblem_template"')
+		and overlay_source.contains('return "Unlock for Guild"'),
+		"Bag exposes the consumable Guild emblem unlock action"
+	)
+	for starter_id: String in [
+		"charmander-guild-emblem-template",
+		"bulbasaur-guild-emblem-template",
+	]:
+		_check(store.product_buttons.has(starter_id), "Guilds lists %s" % starter_id)
+		var starter_template: Dictionary = store.call("_catalog_item", starter_id)
+		var starter_icon := starter_template.get("icon") as Texture2D
+		_check(
+			starter_icon != null
+			and starter_icon.get_width() == 32
+			and starter_icon.get_height() == 32,
+			"%s uses a 32 by 32 pixel asset" % starter_id
+		)
+		_check(
+			store.call("_gem_price", starter_id) == 150,
+			"%s uses its server Aether Gem price" % starter_id
+		)
+
 	store.call("_select_category", "charms")
 	var charm_prices := {
 		"surf-charm": 350,
@@ -295,7 +399,7 @@ func _run() -> void:
 	store.call("_select_cosmetic_subcategory", "top")
 	store.call("_select_product", "adinho-chroma-shirt")
 	_check(not store.purchase_button.disabled, "server-listed cosmetic can be purchased with enough Aether Gems")
-	_check(store.selection_price_label.text.contains("130"), "server Aether Gem price overrides the preview catalog price")
+	_check(store.selection_price_label.text.contains("150"), "server Aether Gem price overrides the preview catalog price")
 	store.set_gem_balance(100)
 	_check(store.purchase_button.disabled, "purchase is disabled when the Aether Gem balance is insufficient")
 
@@ -308,7 +412,7 @@ func _run() -> void:
 		"temporary supporter benefit is sold as a voucher"
 	)
 	_check(not store.purchase_button.disabled, "server-listed Blessing Vouchers can be purchased with Aether Gems")
-	_check(store.selection_price_label.text.contains("60"), "Blessing Vouchers use their authoritative Aether Gem price")
+	_check(store.selection_price_label.text.contains("75"), "Blessing Vouchers use their authoritative Aether Gem price")
 	_check(store.status_label.text.contains("item goes to your Bag"), "Blessing checkout sends the voucher to the Bag")
 	var blessing_icon_paths := {
 		"aether-blessing-voucher-3-days": "res://assets/items/icons/AETHERBLESSINGVOUCHER3DAYS.png",

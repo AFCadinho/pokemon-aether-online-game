@@ -26,6 +26,9 @@ const DIVE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_
 const DEFOG_CHARM_ICON: Texture2D = preload("res://assets/ui/store_defog_charm.svg")
 const RAIN_DANCE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/RAINDANCECHARM.png")
 const SNOWSCAPE_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SNOWSCAPECHARM.png")
+const SQUIRTLE_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/SQUIRTLEGUILDEMBLEMTEMPLATE.png")
+const CHARMANDER_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/CHARMANDERGUILDEMBLEMTEMPLATE.png")
+const BULBASAUR_GUILD_EMBLEM_TEMPLATE_ICON: Texture2D = preload("res://assets/items/icons/BULBASAURGUILDEMBLEMTEMPLATE.png")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 
 const UI_SURFACE_BASE := Color("#050b14f7")
@@ -55,6 +58,7 @@ const CATEGORY_ORDER: Array[String] = [
 	"featured",
 	"membership",
 	"cosmetics",
+	"guilds",
 	"mounts",
 	"charms",
 	"services",
@@ -63,6 +67,7 @@ const CATEGORY_LABELS := {
 	"featured": "Featured",
 	"membership": "Blessings",
 	"cosmetics": "Cosmetics",
+	"guilds": "Guilds",
 	"mounts": "Mounts",
 	"charms": "Charms",
 	"services": "Trainer Services",
@@ -71,6 +76,7 @@ const CATEGORY_DESCRIPTIONS := {
 	"featured": "A curated mix of supporter items, style and permanent conveniences.",
 	"membership": "Temporary supporter recognition. No battle advantages.",
 	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
+	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
 	"charms": "Use supported field moves without carrying a Pokémon that knows them. Progression and area rules still apply.",
 	"services": "Optional changes to your trainer identity and account.",
@@ -79,6 +85,7 @@ const CATEGORY_PROMISES := {
 	"featured": "FAIR SUPPORT",
 	"membership": "NO BATTLE POWER",
 	"cosmetics": "COSMETIC",
+	"guilds": "GUILD COSMETIC",
 	"mounts": "TRAVEL STYLE",
 	"charms": "FIELD CONVENIENCE",
 	"services": "TRAINER SERVICE",
@@ -119,7 +126,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "aether-blessing-voucher-3-days",
 		"name": "Aether Blessing Voucher · 3 Days",
 		"description": "Tradeable voucher. Use it from the Bag to add three days of Aether Blessing.",
-		"price": 60,
+		"price": 75,
 		"icon": AETHER_BLESSING_VOUCHER_3_DAYS_ICON,
 		"categories": ["membership"],
 		"badge": "3 DAYS",
@@ -128,7 +135,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "aether-blessing-voucher-7-days",
 		"name": "Aether Blessing Voucher · 7 Days",
 		"description": "Tradeable voucher. Use it from the Bag to add one week of Aether Blessing.",
-		"price": 130,
+		"price": 150,
 		"icon": AETHER_BLESSING_VOUCHER_7_DAYS_ICON,
 		"categories": ["membership"],
 		"badge": "7 DAYS",
@@ -137,7 +144,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "aether-blessing-voucher-14-days",
 		"name": "Aether Blessing Voucher · 14 Days",
 		"description": "Tradeable voucher. Use it from the Bag to add two weeks of Aether Blessing.",
-		"price": 250,
+		"price": 275,
 		"icon": AETHER_BLESSING_VOUCHER_14_DAYS_ICON,
 		"categories": ["membership"],
 		"badge": "14 DAYS",
@@ -150,6 +157,36 @@ const CATALOG: Array[Dictionary] = [
 		"icon": AETHER_BLESSING_VOUCHER_30_DAYS_ICON,
 		"categories": ["featured", "membership"],
 		"badge": "30 DAYS",
+	},
+	{
+		"id": "squirtle-guild-emblem-template",
+		"name": "Squirtle Guild Emblem",
+		"description": "Consume it from your Bag to permanently unlock this 32×32 template for your current Guild.",
+		"price": 150,
+		"icon": SQUIRTLE_GUILD_EMBLEM_TEMPLATE_ICON,
+		"categories": ["featured", "guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_emblem_template": true,
+	},
+	{
+		"id": "charmander-guild-emblem-template",
+		"name": "Charmander Guild Emblem",
+		"description": "Consume it from your Bag to permanently unlock this 32×32 template for your current Guild.",
+		"price": 150,
+		"icon": CHARMANDER_GUILD_EMBLEM_TEMPLATE_ICON,
+		"categories": ["featured", "guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_emblem_template": true,
+	},
+	{
+		"id": "bulbasaur-guild-emblem-template",
+		"name": "Bulbasaur Guild Emblem",
+		"description": "Consume it from your Bag to permanently unlock this 32×32 template for your current Guild.",
+		"price": 150,
+		"icon": BULBASAUR_GUILD_EMBLEM_TEMPLATE_ICON,
+		"categories": ["featured", "guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_emblem_template": true,
 	},
 	{
 		"id": "adinho-classic-outfit",
@@ -245,7 +282,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "adinho-chroma-beard",
 		"name": "Adinho Chroma Beard",
 		"description": "Tradeable grayscale beard box using your selected hair colour.",
-		"price": 80,
+		"price": 75,
 		"icon": PROFILE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "face",
@@ -271,7 +308,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "adinho-chroma-shirt",
 		"name": "Adinho Chroma Shirt",
 		"description": "A tradeable grayscale edition whose colour can be selected in Character Customization.",
-		"price": 130,
+		"price": 150,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "top",
@@ -285,7 +322,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "adinho-chroma-trousers",
 		"name": "Adinho Chroma Trousers",
 		"description": "A tradeable, colour-customizable edition of the Adinho trousers.",
-		"price": 95,
+		"price": 125,
 		"icon": STYLE_ICON,
 		"categories": ["cosmetics"],
 		"cosmetic_subcategory": "bottom",
@@ -311,7 +348,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "nimbus_mount",
 		"name": "Nimbus Mount",
 		"description": "A cloud-inspired overworld mount for travelling in style.",
-		"price": 450,
+		"price": 600,
 		"icon": MOUNT_ICON,
 		"categories": ["featured", "mounts"],
 		"badge": "MOUNT",
@@ -320,7 +357,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "aether_board_mount",
 		"name": "Aether Board Mount",
 		"description": "A sleek supporter mount with its own overworld look.",
-		"price": 450,
+		"price": 600,
 		"icon": MOUNT_ICON,
 		"categories": ["mounts"],
 		"badge": "MOUNT",
@@ -410,7 +447,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "name-change-ticket",
 		"name": "Name Change Ticket",
 		"description": "Change your trainer name once.",
-		"price": 150,
+		"price": 250,
 		"icon": NAME_CHANGE_TICKET_ICON,
 		"categories": ["featured", "services"],
 		"badge": "SERVICE",
@@ -419,7 +456,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "gender-chance-ticket",
 		"name": "Gender Chance Ticket",
 		"description": "Change your trainer's gender once.",
-		"price": 80,
+		"price": 100,
 		"icon": GENDER_CHANCE_TICKET_ICON,
 		"categories": ["services"],
 		"badge": "SERVICE",
@@ -457,6 +494,8 @@ var selection_price_label: Label
 var purchase_button: Button
 var status_label: Label
 var character_preview_viewport: SubViewport
+var character_preview_eyebrow_label: Label
+var character_preview_direction_row: HBoxContainer
 var character_preview_title_label: Label
 var character_preview_note_label: Label
 var character_preview_palette: Control
@@ -938,12 +977,12 @@ func _create_character_preview_panel() -> Control:
 	layout.add_theme_constant_override("separation", 7)
 	margin.add_child(layout)
 
-	var eyebrow := Label.new()
-	eyebrow.text = "ON YOUR TRAINER"
-	eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	eyebrow.add_theme_font_size_override("font_size", 10)
-	eyebrow.add_theme_color_override("font_color", UI_CYAN)
-	layout.add_child(eyebrow)
+	character_preview_eyebrow_label = Label.new()
+	character_preview_eyebrow_label.text = "ON YOUR TRAINER"
+	character_preview_eyebrow_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	character_preview_eyebrow_label.add_theme_font_size_override("font_size", 10)
+	character_preview_eyebrow_label.add_theme_color_override("font_color", UI_CYAN)
+	layout.add_child(character_preview_eyebrow_label)
 
 	character_preview_title_label = Label.new()
 	character_preview_title_label.text = "Select a cosmetic"
@@ -975,10 +1014,10 @@ func _create_character_preview_panel() -> Control:
 	character_preview_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(character_preview_viewport)
 
-	var direction_row := HBoxContainer.new()
-	direction_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	direction_row.add_theme_constant_override("separation", 3)
-	layout.add_child(direction_row)
+	character_preview_direction_row = HBoxContainer.new()
+	character_preview_direction_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	character_preview_direction_row.add_theme_constant_override("separation", 3)
+	layout.add_child(character_preview_direction_row)
 	for direction: Dictionary in PREVIEW_DIRECTIONS:
 		var direction_id := str(direction.get("id", "down"))
 		var direction_button := Button.new()
@@ -987,7 +1026,7 @@ func _create_character_preview_panel() -> Control:
 		direction_button.focus_mode = Control.FOCUS_NONE
 		direction_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		direction_button.pressed.connect(_select_character_preview_direction.bind(direction_id))
-		direction_row.add_child(direction_button)
+		character_preview_direction_row.add_child(direction_button)
 		character_preview_direction_buttons[direction_id] = direction_button
 
 	character_preview_palette = VBoxContainer.new()
@@ -1466,6 +1505,24 @@ func _refresh_character_preview() -> void:
 		character_preview_viewport.remove_child(child)
 		child.queue_free()
 
+	var item := _catalog_item(selected_item_id)
+	if bool(item.get("guild_emblem_template", false)):
+		var emblem_sprite := Sprite2D.new()
+		emblem_sprite.name = "GuildEmblemStorePreview"
+		emblem_sprite.texture = item.get("icon") as Texture2D
+		emblem_sprite.position = Vector2(PREVIEW_VIEWPORT_SIZE) * 0.5
+		emblem_sprite.scale = Vector2(6.0, 6.0)
+		emblem_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		character_preview_viewport.add_child(emblem_sprite)
+		character_preview_eyebrow_label.text = "FOR YOUR GUILD"
+		character_preview_title_label.text = str(item.get("name", "Guild Emblem"))
+		character_preview_note_label.text = "Permanent template · apply it from your Bag"
+		character_preview_direction_row.visible = false
+		character_preview_palette.visible = false
+		return
+
+	character_preview_eyebrow_label.text = "ON YOUR TRAINER"
+	character_preview_direction_row.visible = true
 	var appearance := _current_character_preview_appearance()
 	var preview_visual := _create_character_preview_visual(appearance)
 	if preview_visual != null:
@@ -1475,7 +1532,6 @@ func _refresh_character_preview() -> void:
 		_disable_character_preview_processing(preview_visual)
 		_set_character_preview_direction(preview_visual)
 
-	var item := _catalog_item(selected_item_id)
 	var preview_parts := _preview_parts_for_item(item)
 	var tint_key := ""
 	for preview_part: Dictionary in preview_parts:

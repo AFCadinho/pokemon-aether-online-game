@@ -14755,7 +14755,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change"]:
+	if use_action in ["unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -14788,6 +14788,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return "Move to Customization"
 	if use_action == "redeem_aether_blessing":
 		return "Redeem Voucher"
+	if use_action == "apply_guild_emblem_template":
+		return "Unlock for Guild"
 	if _bag_machine_move_id(item_id) != "":
 		return "Teach Move"
 	if _is_pokemon_usable_item_id(item_id):
@@ -14938,6 +14940,23 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 			"Aether Blessing extended by %d days."
 			% int(redeem_result.get("durationDays", 0))
 		)
+		return
+	if use_action == "apply_guild_emblem_template":
+		var emblem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(emblem_result.get("success", false)):
+			_add_chat_message(str(emblem_result.get("error", "That Guild emblem could not be applied.")))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(emblem_result.get("inventory", []))
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		if guild_popup != null and guild_popup.visible:
+			await guild_popup._refresh_from_server()
+		var applied_guild := emblem_result.get("guild", {}) as Dictionary
+		_add_chat_message("%s was consumed, unlocked and applied to %s." % [
+			str(item.get("name", _item_name_from_id(item_id))),
+			str(applied_guild.get("name", "your Guild")),
+		])
 		return
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
@@ -28913,8 +28932,6 @@ func _open_guild_popup() -> void:
 		$Control.add_child(guild_popup)
 		if not guild_popup.closed.is_connected(_on_guild_popup_closed):
 			guild_popup.closed.connect(_on_guild_popup_closed)
-		if OS.is_debug_build():
-			guild_popup.show_debug_preview()
 	guild_popup.open()
 	_activate_ui_panel(guild_popup)
 

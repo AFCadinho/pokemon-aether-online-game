@@ -8,6 +8,11 @@ const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
 const CREATION_COST := 100000
 const REQUIRED_BADGES := 3
+const GUILD_EMBLEM_SIZE := 32
+const GUILD_EMBLEM_PIXEL_COUNT := GUILD_EMBLEM_SIZE * GUILD_EMBLEM_SIZE
+const LEGACY_GUILD_EMBLEM_SIZE := 8
+const EMBLEM_EDITOR_PIXEL_SIZE := 11
+const EMBLEM_EDITOR_POPUP_SIZE := Vector2i(630, 500)
 
 const UI_BG := Color("#050b14f5")
 const UI_SURFACE := Color("#081522f2")
@@ -24,8 +29,8 @@ const UI_MUTED := Color("#aeb8c5")
 const UI_SUCCESS := Color("#79e49b")
 const UI_WARNING := Color("#f0c875")
 
-# Preview-only data. The overlay loads this exclusively in debug builds; release
-# builds keep the directory empty until the guild service supplies real entries.
+# Preview-only data used by the isolated interface checks. Normal gameplay always
+# loads the authoritative directory from the guild service.
 const DEBUG_GUILDS: Array[Dictionary] = [
 	{
 		"id": 1,
@@ -82,13 +87,25 @@ const DEBUG_GUILDS: Array[Dictionary] = [
 ]
 
 var guilds: Array[Dictionary] = []
+var membership: Dictionary = {}
+var guild_home: Dictionary = {}
+var incoming_invitations: Array = []
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
+var is_debug_preview := false
+var is_loading_guilds := false
+var is_creating_guild := false
+var directory_request_generation := 0
+var has_explicit_page_selection := false
+var active_guild_section := "overview"
+var guild_section_buttons: Dictionary = {}
 
 var browse_tab_button: Button
+var my_guild_tab_button: Button
 var create_tab_button: Button
 var browse_page: Control
+var member_page: Control
 var create_page: Control
 var search_input: LineEdit
 var guild_list: VBoxContainer
@@ -100,6 +117,31 @@ var guild_name_input: LineEdit
 var guild_description_input: TextEdit
 var money_requirement_label: Label
 var badge_requirement_label: Label
+var membership_label: Label
+var language_select: OptionButton
+var focus_select: OptionButton
+var recruitment_select: OptionButton
+var submit_create_button: Button
+var incoming_invitations_container: VBoxContainer
+var member_content: VBoxContainer
+var member_status_label: Label
+var settings_description_input: TextEdit
+var settings_language_select: OptionButton
+var settings_focus_select: OptionButton
+var settings_recruitment_select: OptionButton
+var invite_username_input: LineEdit
+var emblem_editor_popup: PopupPanel
+var emblem_grid: GridContainer
+var emblem_pixel_buttons: Array[Button] = []
+var emblem_palette_grid: GridContainer
+var emblem_color_buttons: Array[Button] = []
+var emblem_color_code_input: LineEdit
+var emblem_color_code_status_label: Label
+var emblem_template_select: OptionButton
+var apply_emblem_template_button: Button
+var emblem_palette: Array[String] = ["#60d3ff", "#79e49b", "#e3bd68", "#a78bfa", "#f4f0de"]
+var emblem_pixels: Array[int] = []
+var selected_emblem_color := 0
 
 
 func _ready() -> void:
@@ -113,14 +155,20 @@ func _ready() -> void:
 
 func open() -> void:
 	visible = true
+	has_explicit_page_selection = false
 	_center_in_viewport()
 	_clamp_to_viewport()
 	_refresh_creation_requirements()
 	_render_guild_list()
+	_show_page("member" if not membership.is_empty() else "browse")
+	if not is_debug_preview:
+		call_deferred("_refresh_from_server")
 
 
 func close() -> void:
 	is_dragging_popup = false
+	if emblem_editor_popup != null:
+		emblem_editor_popup.hide()
 	visible = false
 	closed.emit()
 
@@ -130,15 +178,68 @@ func set_guilds(entries: Array) -> void:
 	for entry_value: Variant in entries:
 		if entry_value is Dictionary:
 			guilds.append((entry_value as Dictionary).duplicate(true))
-	selected_guild_id = int(guilds[0].get("id", 0)) if not guilds.is_empty() else 0
+	var membership_guild_id := int(membership.get("guildId", 0))
+	if membership_guild_id > 0 and _contains_guild_id(guilds, membership_guild_id):
+		selected_guild_id = membership_guild_id
+	elif not _contains_guild_id(guilds, selected_guild_id):
+		selected_guild_id = int(guilds[0].get("id", 0)) if not guilds.is_empty() else 0
 	_render_guild_list()
+	_refresh_membership_state()
 
 
 func show_debug_preview() -> void:
+	is_debug_preview = true
+	membership = {}
 	set_guilds(DEBUG_GUILDS)
 	if browse_status_label != null:
 		browse_status_label.text = "Interface preview · guild data is local"
 		browse_status_label.visible = true
+
+
+func show_debug_member_preview() -> void:
+	is_debug_preview = true
+	active_guild_section = "overview"
+	var guild := DEBUG_GUILDS[0].duplicate(true)
+	guild["members"] = 3
+	guild["emblem"] = {
+		"version": 1,
+		"size": GUILD_EMBLEM_SIZE,
+		"palette": emblem_palette.duplicate(),
+		"pixels": _upscale_legacy_emblem_pixels([
+			-1, -1, 0, 0, 0, 0, -1, -1,
+			-1, 0, 1, 1, 1, 1, 0, -1,
+			0, 1, 0, 1, 1, 0, 1, 0,
+			0, 1, 1, 1, 1, 1, 1, 0,
+			0, 1, 1, 1, 1, 1, 1, 0,
+			-1, 0, 1, 1, 1, 1, 0, -1,
+			-1, -1, 0, 1, 1, 0, -1, -1,
+			-1, -1, -1, 0, 0, -1, -1, -1,
+		]),
+	}
+	membership = {"guildId": int(guild.get("id", 1)), "role": "leader"}
+	guild_home = {
+		"guild": guild,
+		"membership": membership.duplicate(),
+		"members": [
+			{"userId": 1, "username": "nova", "displayName": "Nova", "role": "leader"},
+			{"userId": 2, "username": "maple", "displayName": "Maple", "role": "officer"},
+			{"userId": 3, "username": "pecha", "displayName": "Pecha", "role": "member"},
+		],
+		"pendingInvitations": [
+			{"id": 1, "invitedUsername": "leaf", "invitedDisplayName": "Leaf"},
+		],
+		"emblemTemplates": [
+			{
+				"templateId": "squirtle-guild-emblem-template",
+				"name": "Squirtle Guild Emblem",
+				"emblem": guild["emblem"],
+			},
+		],
+	}
+	set_guilds([guild])
+	_refresh_membership_state()
+	_render_guild_home()
+	_show_page("member")
 
 
 func _input(event: InputEvent) -> void:
@@ -184,6 +285,9 @@ func _build_ui() -> void:
 	browse_page = _build_browse_page()
 	browse_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	pages.add_child(browse_page)
+	member_page = _build_member_page()
+	member_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pages.add_child(member_page)
 	create_page = _build_create_page()
 	create_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	pages.add_child(create_page)
@@ -237,20 +341,28 @@ func _build_navigation() -> Control:
 	browse_tab_button.name = "BrowseGuildsButton"
 	browse_tab_button.text = "⌕  Browse Guilds"
 	browse_tab_button.custom_minimum_size = Vector2(190, 40)
-	browse_tab_button.pressed.connect(_show_page.bind("browse"))
+	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
 	navigation.add_child(browse_tab_button)
+
+	my_guild_tab_button = Button.new()
+	my_guild_tab_button.name = "MyGuildButton"
+	my_guild_tab_button.text = "◆  My Guild"
+	my_guild_tab_button.custom_minimum_size = Vector2(170, 40)
+	my_guild_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("member"))
+	my_guild_tab_button.visible = false
+	navigation.add_child(my_guild_tab_button)
 
 	create_tab_button = Button.new()
 	create_tab_button.name = "CreateGuildButton"
 	create_tab_button.text = "+  Create a Guild"
 	create_tab_button.custom_minimum_size = Vector2(190, 40)
-	create_tab_button.pressed.connect(_show_page.bind("create"))
+	create_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("create"))
 	navigation.add_child(create_tab_button)
 
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	navigation.add_child(spacer)
-	var membership_label := _label("You are not currently in a guild", 11, UI_MUTED)
+	membership_label = _label("You are not currently in a guild", 11, UI_MUTED)
 	membership_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	navigation.add_child(membership_label)
 	return navigation
@@ -264,6 +376,11 @@ func _build_browse_page() -> Control:
 	directory.custom_minimum_size = Vector2(370, 0)
 	directory.add_theme_constant_override("separation", 9)
 	body.add_child(directory)
+
+	incoming_invitations_container = VBoxContainer.new()
+	incoming_invitations_container.name = "GuildInvitations"
+	incoming_invitations_container.add_theme_constant_override("separation", 6)
+	directory.add_child(incoming_invitations_container)
 
 	var heading := HBoxContainer.new()
 	directory.add_child(heading)
@@ -283,8 +400,10 @@ func _build_browse_page() -> Control:
 	directory.add_child(search_input)
 
 	guild_list = VBoxContainer.new()
+	guild_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	guild_list.add_theme_constant_override("separation", 7)
 	var guild_scroll := ScrollContainer.new()
+	guild_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	guild_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	guild_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	guild_scroll.add_child(guild_list)
@@ -304,6 +423,17 @@ func _build_browse_page() -> Control:
 	detail_content.add_theme_constant_override("separation", 11)
 	body.add_child(detail_content)
 	return body
+
+
+func _build_member_page() -> Control:
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	member_content = VBoxContainer.new()
+	member_content.name = "GuildMemberDashboard"
+	member_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	member_content.add_theme_constant_override("separation", 12)
+	scroll.add_child(member_content)
+	return scroll
 
 
 func _build_create_page() -> Control:
@@ -362,9 +492,12 @@ func _build_create_page() -> Control:
 	var choices := HBoxContainer.new()
 	choices.add_theme_constant_override("separation", 10)
 	form.add_child(choices)
-	choices.add_child(_labeled_field("LANGUAGE", _option_button(["English", "Dutch", "Dutch / English", "German", "French", "Other"])))
-	choices.add_child(_labeled_field("FOCUS", _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])))
-	choices.add_child(_labeled_field("RECRUITMENT", _option_button(["Applications open", "Open", "Invite only", "Closed"])))
+	language_select = _option_button(["English", "Dutch", "Dutch / English", "German", "French", "Other"])
+	focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
+	recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
+	choices.add_child(_labeled_field("LANGUAGE", language_select))
+	choices.add_child(_labeled_field("FOCUS", focus_select))
+	choices.add_child(_labeled_field("RECRUITMENT", recruitment_select))
 
 	var emblem_note := PanelContainer.new()
 	emblem_note.add_theme_stylebox_override("panel", _panel_style(Color("#0a2133d9"), Color("#3d759699"), 8, 1))
@@ -396,19 +529,504 @@ func _build_create_page() -> Control:
 	cancel_button.pressed.connect(_show_page.bind("browse"))
 	_apply_button_style(cancel_button)
 	action_row.add_child(cancel_button)
-	var create_button := Button.new()
-	create_button.name = "SubmitGuildCreationButton"
-	create_button.text = "Create Guild"
-	create_button.custom_minimum_size = Vector2(150, 40)
-	create_button.pressed.connect(_on_create_pressed)
-	_apply_button_style(create_button, "primary")
-	action_row.add_child(create_button)
+	submit_create_button = Button.new()
+	submit_create_button.name = "SubmitGuildCreationButton"
+	submit_create_button.text = "Create Guild"
+	submit_create_button.custom_minimum_size = Vector2(150, 40)
+	submit_create_button.pressed.connect(_on_create_pressed)
+	_apply_button_style(submit_create_button, "primary")
+	action_row.add_child(submit_create_button)
 	return scroll
+
+
+func _render_incoming_invitations() -> void:
+	if incoming_invitations_container == null:
+		return
+	_clear_children(incoming_invitations_container)
+	incoming_invitations_container.visible = not incoming_invitations.is_empty() and membership.is_empty()
+	if not incoming_invitations_container.visible:
+		return
+	incoming_invitations_container.add_child(_label("GUILD INVITATIONS", 10, UI_GOLD))
+	for invitation_value: Variant in incoming_invitations:
+		if not invitation_value is Dictionary:
+			continue
+		var invitation := invitation_value as Dictionary
+		var panel := PanelContainer.new()
+		panel.add_theme_stylebox_override("panel", _panel_style(Color("#19170de8"), Color("#8f743dcc"), 8, 1))
+		incoming_invitations_container.add_child(panel)
+		var margin := MarginContainer.new()
+		_set_margins(margin, 10, 8, 10, 8)
+		panel.add_child(margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 7)
+		margin.add_child(row)
+		var text := _label(
+			"%s\nInvited by %s" % [
+				str(invitation.get("guildName", "Guild")),
+				str(invitation.get("invitedBy", "Unknown")),
+			],
+			11,
+			UI_TEXT
+		)
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text)
+		var accept_button := Button.new()
+		accept_button.name = "AcceptGuildInvitationButton"
+		accept_button.text = "Accept"
+		accept_button.pressed.connect(_on_accept_invitation.bind(int(invitation.get("id", 0))))
+		_apply_button_style(accept_button, "primary")
+		row.add_child(accept_button)
+		var decline_button := Button.new()
+		decline_button.name = "DeclineGuildInvitationButton"
+		decline_button.text = "Decline"
+		decline_button.pressed.connect(_on_decline_invitation.bind(int(invitation.get("id", 0))))
+		_apply_button_style(decline_button)
+		row.add_child(decline_button)
+
+
+func _render_guild_home() -> void:
+	if member_content == null:
+		return
+	_clear_children(member_content)
+	if guild_home.is_empty():
+		member_status_label = _label("Loading your guild...", 14, UI_MUTED)
+		member_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		member_content.add_child(member_status_label)
+		return
+	var guild := _dictionary(guild_home.get("guild", {}))
+	var own_membership := _dictionary(guild_home.get("membership", {}))
+	var role := str(own_membership.get("role", "member"))
+	var is_leader := role == "leader"
+	var can_invite := role in ["leader", "officer"]
+	var can_manage := is_leader or can_invite
+	if active_guild_section == "management" and not can_manage:
+		active_guild_section = "overview"
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 14)
+	member_content.add_child(header)
+	header.add_child(_build_guild_header_emblem(guild, is_leader))
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(heading)
+	heading.add_child(_label(str(guild.get("name", "Your Guild")), 25, UI_TEXT))
+	heading.add_child(_label("You are the %s" % _membership_role_label(role).to_lower(), 12, UI_ACCENT))
+	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	heading.add_child(description)
+	header.add_child(_status_pill(str(guild.get("recruitment", "Closed"))))
+
+	member_content.add_child(_build_guild_section_navigation(can_manage))
+	match active_guild_section:
+		"members":
+			member_content.add_child(_build_member_roster())
+		"management":
+			member_content.add_child(_build_member_management(guild, is_leader, can_invite))
+		_:
+			member_content.add_child(_build_guild_overview(guild))
+
+	member_status_label = _label("", 11, UI_MUTED)
+	member_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	member_content.add_child(member_status_label)
+
+
+func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control:
+	if not is_editable:
+		return _guild_emblem(guild, 88, UI_ACCENT)
+	var button := Button.new()
+	button.name = "EditGuildEmblemButton"
+	button.tooltip_text = "Edit Guild emblem"
+	button.custom_minimum_size = Vector2(88, 88)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.pressed.connect(_open_emblem_editor)
+	button.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#60d3ff12"), UI_ACCENT, 11, 2))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#60d3ff24"), UI_ACCENT, 11, 2))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(center)
+	center.add_child(_guild_emblem(guild, 78, UI_ACCENT))
+	return button
+
+
+func _build_guild_section_navigation(can_manage: bool) -> Control:
+	var navigation := HBoxContainer.new()
+	navigation.name = "GuildSectionNavigation"
+	navigation.add_theme_constant_override("separation", 6)
+	guild_section_buttons.clear()
+	var sections: Array[Dictionary] = [
+		{"id": "overview", "label": "Overview", "name": "GuildOverviewTab"},
+		{"id": "members", "label": "Members", "name": "GuildMembersTab"},
+	]
+	if can_manage:
+		sections.append({"id": "management", "label": "Management", "name": "GuildManagementTab"})
+	for section: Dictionary in sections:
+		var section_id := str(section.get("id", "overview"))
+		var button := Button.new()
+		button.name = str(section.get("name", "GuildSectionTab"))
+		button.text = str(section.get("label", "Overview"))
+		button.custom_minimum_size = Vector2(145, 36)
+		button.pressed.connect(_show_guild_section.bind(section_id))
+		_apply_tab_style(button, active_guild_section == section_id)
+		navigation.add_child(button)
+		guild_section_buttons[section_id] = button
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	navigation.add_child(spacer)
+	return navigation
+
+
+func _show_guild_section(section: String) -> void:
+	if section not in ["overview", "members", "management"]:
+		return
+	active_guild_section = section
+	_render_guild_home()
+
+
+func _build_guild_overview(guild: Dictionary) -> Control:
+	var overview := VBoxContainer.new()
+	overview.name = "GuildOverviewSection"
+	overview.add_theme_constant_override("separation", 10)
+	var metadata := GridContainer.new()
+	metadata.columns = 4
+	metadata.add_theme_constant_override("h_separation", 8)
+	overview.add_child(metadata)
+	metadata.add_child(_metadata_card("LEVEL", str(guild.get("level", 1)), UI_ACCENT))
+	metadata.add_child(_metadata_card(
+		"MEMBERS",
+		"%d / %d" % [_array_from_value(guild_home.get("members", [])).size(), int(guild.get("capacity", 50))],
+		UI_SUCCESS
+	))
+	metadata.add_child(_metadata_card("LANGUAGE", str(guild.get("language", "Not set")), UI_GOLD))
+	metadata.add_child(_metadata_card("FOCUS", str(guild.get("focus", "Not set")), UI_ACCENT))
+	var welcome := PanelContainer.new()
+	welcome.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	welcome.custom_minimum_size = Vector2(0, 190)
+	welcome.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 16, 14, 16, 14)
+	welcome.add_child(margin)
+	var copy := VBoxContainer.new()
+	copy.add_theme_constant_override("separation", 6)
+	margin.add_child(copy)
+	copy.add_child(_label("GUILD OVERVIEW", 10, UI_ACCENT))
+	var overview_description := _label(str(guild.get("description", "")), 13, UI_TEXT)
+	overview_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	copy.add_child(overview_description)
+	copy.add_child(_label(
+		"Use the Members tab for the roster and Management for settings, invitations and the Guild emblem.",
+		11,
+		UI_MUTED
+	))
+	overview.add_child(welcome)
+	return overview
+
+
+func _build_member_roster() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildMembersSection"
+	panel.custom_minimum_size = Vector2(330, 330)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 13, 12, 13, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 7)
+	margin.add_child(content)
+	content.add_child(_label("MEMBER ROSTER", 10, UI_ACCENT))
+	for member_value: Variant in _array_from_value(guild_home.get("members", [])):
+		if not member_value is Dictionary:
+			continue
+		var member := member_value as Dictionary
+		var row := HBoxContainer.new()
+		content.add_child(row)
+		var identity := _label(str(member.get("displayName", member.get("username", "Trainer"))), 12, UI_TEXT)
+		identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(identity)
+		row.add_child(_label(_membership_role_label(str(member.get("role", "member"))), 10, UI_GOLD))
+	return panel
+
+
+func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bool) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildManagementSection"
+	panel.custom_minimum_size = Vector2(610, 300)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 13, 12, 13, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 8)
+	margin.add_child(content)
+
+	if is_leader:
+		content.add_child(_label("GUILD SETTINGS", 10, UI_ACCENT))
+		settings_description_input = TextEdit.new()
+		settings_description_input.name = "GuildSettingsDescription"
+		settings_description_input.text = str(guild.get("description", ""))
+		settings_description_input.custom_minimum_size = Vector2(0, 58)
+		settings_description_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+		_apply_text_edit_style(settings_description_input)
+		content.add_child(settings_description_input)
+		var choices := HBoxContainer.new()
+		choices.add_theme_constant_override("separation", 7)
+		content.add_child(choices)
+		settings_language_select = _option_button(["English", "Dutch", "Dutch / English", "German", "French", "Other"])
+		settings_focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
+		settings_recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
+		_select_option_text(settings_language_select, str(guild.get("language", "English")))
+		_select_option_text(settings_focus_select, str(guild.get("focus", "Social")))
+		_select_option_text(settings_recruitment_select, str(guild.get("recruitment", "Applications open")))
+		choices.add_child(settings_language_select)
+		choices.add_child(settings_focus_select)
+		choices.add_child(settings_recruitment_select)
+		var save_settings := Button.new()
+		save_settings.text = "Save Settings"
+		save_settings.pressed.connect(_on_save_settings)
+		_apply_button_style(save_settings, "primary")
+		content.add_child(save_settings)
+
+	if can_invite:
+		content.add_child(_label("INVITE A TRAINER", 10, UI_ACCENT))
+		var invite_row := HBoxContainer.new()
+		content.add_child(invite_row)
+		invite_username_input = LineEdit.new()
+		invite_username_input.name = "GuildInviteUsername"
+		invite_username_input.placeholder_text = "Trainer username"
+		invite_username_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_line_edit_style(invite_username_input)
+		invite_row.add_child(invite_username_input)
+		var invite_button := Button.new()
+		invite_button.text = "Send Invite"
+		invite_button.pressed.connect(_on_invite_member)
+		_apply_button_style(invite_button, "primary")
+		invite_row.add_child(invite_button)
+		_render_pending_invitations(content)
+	elif not is_leader:
+		content.add_child(_label("Guild management is available to leaders and officers.", 12, UI_MUTED))
+	return panel
+
+
+func _open_emblem_editor() -> void:
+	var guild := _dictionary(guild_home.get("guild", {}))
+	_load_emblem_editor(_dictionary(guild.get("emblem", {})))
+	if emblem_editor_popup == null:
+		emblem_editor_popup = _build_emblem_editor_popup()
+		add_child(emblem_editor_popup)
+	else:
+		_refresh_emblem_grid()
+		_refresh_emblem_palette_controls()
+	_refresh_emblem_template_controls()
+	emblem_editor_popup.popup_centered(EMBLEM_EDITOR_POPUP_SIZE)
+
+
+func _build_emblem_editor_popup() -> PopupPanel:
+	var popup := PopupPanel.new()
+	popup.name = "GuildEmblemEditorPopup"
+	popup.exclusive = true
+	popup.unresizable = true
+	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 16, 14, 16, 16)
+	popup.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	var header := HBoxContainer.new()
+	content.add_child(header)
+	var title := _label("Edit Guild Emblem", 19, UI_TEXT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var close_button := Button.new()
+	close_button.name = "CloseGuildEmblemEditorButton"
+	close_button.text = "×"
+	close_button.tooltip_text = "Cancel emblem changes"
+	close_button.custom_minimum_size = Vector2(36, 34)
+	close_button.pressed.connect(_cancel_emblem_edit)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+	content.add_child(_label("Choose a colour, then paint the 32×32 canvas. Changes are only applied after saving.", 11, UI_MUTED))
+	content.add_child(_build_emblem_editor())
+	return popup
+
+
+func _build_emblem_editor() -> Control:
+	var editor := HBoxContainer.new()
+	editor.add_theme_constant_override("separation", 12)
+	emblem_grid = GridContainer.new()
+	emblem_grid.name = "GuildEmblemGrid"
+	emblem_grid.columns = GUILD_EMBLEM_SIZE
+	emblem_grid.add_theme_constant_override("h_separation", 1)
+	emblem_grid.add_theme_constant_override("v_separation", 1)
+	editor.add_child(emblem_grid)
+	emblem_pixel_buttons.clear()
+	for pixel_index: int in range(GUILD_EMBLEM_PIXEL_COUNT):
+		var pixel := Button.new()
+		pixel.custom_minimum_size = Vector2(EMBLEM_EDITOR_PIXEL_SIZE, EMBLEM_EDITOR_PIXEL_SIZE)
+		pixel.focus_mode = Control.FOCUS_NONE
+		pixel.pressed.connect(_on_emblem_pixel_pressed.bind(pixel_index))
+		emblem_grid.add_child(pixel)
+		emblem_pixel_buttons.append(pixel)
+	var tools := VBoxContainer.new()
+	tools.custom_minimum_size = Vector2(185, 0)
+	tools.add_theme_constant_override("separation", 5)
+	editor.add_child(tools)
+	tools.add_child(_label("SAVED TEMPLATES", 9, UI_MUTED))
+	emblem_template_select = OptionButton.new()
+	emblem_template_select.name = "GuildSavedEmblemSelect"
+	emblem_template_select.fit_to_longest_item = false
+	emblem_template_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_option_button_style(emblem_template_select)
+	tools.add_child(emblem_template_select)
+	apply_emblem_template_button = Button.new()
+	apply_emblem_template_button.name = "ApplySavedGuildEmblemButton"
+	apply_emblem_template_button.text = "Apply Saved Template"
+	apply_emblem_template_button.pressed.connect(_on_apply_saved_emblem_template)
+	_apply_button_style(apply_emblem_template_button, "primary")
+	tools.add_child(apply_emblem_template_button)
+	_refresh_emblem_template_controls()
+	tools.add_child(_label("PALETTE", 9, UI_MUTED))
+	emblem_palette_grid = GridContainer.new()
+	emblem_palette_grid.name = "GuildEmblemPaletteGrid"
+	emblem_palette_grid.columns = 2
+	emblem_palette_grid.add_theme_constant_override("h_separation", 5)
+	emblem_palette_grid.add_theme_constant_override("v_separation", 5)
+	tools.add_child(emblem_palette_grid)
+	_rebuild_emblem_palette_buttons()
+	tools.add_child(_label("HEX COLOR", 9, UI_MUTED))
+	var code_row := HBoxContainer.new()
+	code_row.add_theme_constant_override("separation", 5)
+	tools.add_child(code_row)
+	emblem_color_code_input = LineEdit.new()
+	emblem_color_code_input.name = "GuildEmblemColorCode"
+	emblem_color_code_input.placeholder_text = "#rrggbb"
+	emblem_color_code_input.max_length = 7
+	emblem_color_code_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	emblem_color_code_input.text_submitted.connect(_on_emblem_color_code_submitted)
+	_apply_line_edit_style(emblem_color_code_input)
+	code_row.add_child(emblem_color_code_input)
+	var apply_color_button := Button.new()
+	apply_color_button.name = "ApplyGuildEmblemColorCodeButton"
+	apply_color_button.text = "Apply"
+	apply_color_button.pressed.connect(_apply_emblem_color_code)
+	_apply_button_style(apply_color_button, "primary")
+	code_row.add_child(apply_color_button)
+	emblem_color_code_status_label = _label("", 9, UI_WARNING)
+	emblem_color_code_status_label.name = "GuildEmblemColorCodeStatus"
+	emblem_color_code_status_label.visible = false
+	tools.add_child(emblem_color_code_status_label)
+	var canvas_actions := HBoxContainer.new()
+	canvas_actions.add_theme_constant_override("separation", 5)
+	tools.add_child(canvas_actions)
+	var erase_button := Button.new()
+	erase_button.text = "Erase"
+	erase_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	erase_button.pressed.connect(_select_emblem_color.bind(-1))
+	_apply_button_style(erase_button)
+	canvas_actions.add_child(erase_button)
+	var clear_button := Button.new()
+	clear_button.text = "Clear"
+	clear_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	clear_button.pressed.connect(_clear_emblem)
+	_apply_button_style(clear_button)
+	canvas_actions.add_child(clear_button)
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tools.add_child(spacer)
+	var commit_actions := HBoxContainer.new()
+	commit_actions.add_theme_constant_override("separation", 5)
+	tools.add_child(commit_actions)
+	var cancel_button := Button.new()
+	cancel_button.name = "CancelGuildEmblemButton"
+	cancel_button.text = "Cancel"
+	cancel_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cancel_button.pressed.connect(_cancel_emblem_edit)
+	_apply_button_style(cancel_button)
+	commit_actions.add_child(cancel_button)
+	var save_button := Button.new()
+	save_button.name = "SaveGuildEmblemButton"
+	save_button.text = "Save Emblem"
+	save_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	save_button.pressed.connect(_on_save_emblem)
+	_apply_button_style(save_button, "primary")
+	commit_actions.add_child(save_button)
+	_refresh_emblem_palette_controls()
+	_refresh_emblem_grid()
+	return editor
+
+
+func _rebuild_emblem_palette_buttons() -> void:
+	if emblem_palette_grid == null:
+		return
+	_clear_children(emblem_palette_grid)
+	emblem_color_buttons.clear()
+	for color_index: int in range(emblem_palette.size()):
+		var color_button := Button.new()
+		color_button.name = "GuildEmblemColor_%d" % (color_index + 1)
+		color_button.text = "Color %d" % (color_index + 1)
+		color_button.custom_minimum_size = Vector2(88, 34)
+		color_button.pressed.connect(_select_emblem_color.bind(color_index))
+		emblem_palette_grid.add_child(color_button)
+		emblem_color_buttons.append(color_button)
+
+
+func _refresh_emblem_template_controls() -> void:
+	if emblem_template_select == null or apply_emblem_template_button == null:
+		return
+	emblem_template_select.clear()
+	var templates := _array_from_value(guild_home.get("emblemTemplates", []))
+	for template_value: Variant in templates:
+		var template := _dictionary(template_value)
+		var template_id := str(template.get("templateId", "")).strip_edges()
+		if template_id == "":
+			continue
+		emblem_template_select.add_item(str(template.get("name", template_id)))
+		emblem_template_select.set_item_metadata(
+			emblem_template_select.item_count - 1,
+			template_id
+		)
+	var has_templates := emblem_template_select.item_count > 0
+	if not has_templates:
+		emblem_template_select.add_item("No saved templates")
+	emblem_template_select.disabled = not has_templates
+	apply_emblem_template_button.disabled = not has_templates
+
+
+func _cancel_emblem_edit() -> void:
+	if emblem_editor_popup != null:
+		emblem_editor_popup.hide()
+
+
+func _render_pending_invitations(content: VBoxContainer) -> void:
+	var invitations := _array_from_value(guild_home.get("pendingInvitations", []))
+	if invitations.is_empty():
+		return
+	content.add_child(_label("PENDING INVITATIONS", 9, UI_MUTED))
+	for invitation_value: Variant in invitations:
+		if not invitation_value is Dictionary:
+			continue
+		var invitation := invitation_value as Dictionary
+		var row := HBoxContainer.new()
+		content.add_child(row)
+		var target := _label(str(invitation.get("invitedDisplayName", invitation.get("invitedUsername", "Trainer"))), 11, UI_TEXT)
+		target.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(target)
+		var cancel := Button.new()
+		cancel.text = "Cancel"
+		cancel.pressed.connect(_on_cancel_invitation.bind(int(invitation.get("id", 0))))
+		_apply_button_style(cancel)
+		row.add_child(cancel)
 
 
 func _render_guild_list() -> void:
 	if guild_list == null:
 		return
+	_render_incoming_invitations()
 	_clear_children(guild_list)
 	var filtered := _filtered_guilds()
 	guild_count_label.text = "%d guild%s" % [filtered.size(), "" if filtered.size() == 1 else "s"]
@@ -449,7 +1067,7 @@ func _guild_row(guild: Dictionary) -> Control:
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_theme_constant_override("separation", 10)
 	margin.add_child(row)
-	row.add_child(_emblem(50, accent))
+	row.add_child(_guild_emblem(guild, 50, accent))
 	var info := VBoxContainer.new()
 	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -489,7 +1107,7 @@ func _render_selected_guild() -> void:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 13)
 	detail_content.add_child(header)
-	header.add_child(_emblem(82, accent))
+	header.add_child(_guild_emblem(guild, 82, accent))
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -541,8 +1159,9 @@ func _render_selected_guild() -> void:
 	var apply_button := Button.new()
 	apply_button.name = "GuildApplyButton"
 	var recruitment := str(guild.get("recruitment", "Closed"))
-	apply_button.text = _application_button_text(recruitment)
-	apply_button.disabled = recruitment.to_lower() in ["closed", "invite only"]
+	var is_own_guild := int(membership.get("guildId", 0)) == int(guild.get("id", 0))
+	apply_button.text = "Your Guild" if is_own_guild else _application_button_text(recruitment)
+	apply_button.disabled = is_own_guild or recruitment.to_lower() in ["closed", "invite only"]
 	apply_button.custom_minimum_size = Vector2(150, 40)
 	apply_button.pressed.connect(_on_application_pressed.bind(guild))
 	_apply_button_style(apply_button, "primary")
@@ -579,10 +1198,14 @@ func _render_empty_detail() -> void:
 
 func _directory_empty_state() -> Control:
 	var panel := PanelContainer.new()
+	panel.name = "GuildDirectoryEmptyState"
 	panel.custom_minimum_size = Vector2(0, 150)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07111edc"), UI_BORDER_INNER, 9, 1))
 	var text := "No guilds match your search." if search_input.text.strip_edges() != "" else "The guild directory is empty.\nBe the first trainer to create one."
 	var label := _label(text, 12, UI_MUTED)
+	label.name = "GuildDirectoryEmptyMessage"
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -599,6 +1222,36 @@ func _emblem(emblem_size: int, accent: Color) -> Control:
 	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	frame.add_child(center)
 	center.add_child(_icon_rect(int(emblem_size * 0.58), Color(accent.r, accent.g, accent.b, 0.82)))
+	return frame
+
+
+func _guild_emblem(guild: Dictionary, emblem_size: int, accent: Color) -> Control:
+	var emblem := _dictionary(guild.get("emblem", {}))
+	var palette := _array_from_value(emblem.get("palette", []))
+	var pixels := _normalized_emblem_pixels(emblem)
+	if palette.is_empty() or pixels.is_empty() or not pixels.any(func(value: Variant) -> bool: return int(value) >= 0):
+		return _emblem(emblem_size, accent)
+	var frame := PanelContainer.new()
+	frame.custom_minimum_size = Vector2(emblem_size, emblem_size)
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_theme_stylebox_override("panel", _panel_style(Color("#07111eee"), Color(accent.r, accent.g, accent.b, 0.72), 8, 1))
+	var center := CenterContainer.new()
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_child(center)
+	var grid := GridContainer.new()
+	grid.columns = GUILD_EMBLEM_SIZE
+	grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	grid.add_theme_constant_override("h_separation", 0)
+	grid.add_theme_constant_override("v_separation", 0)
+	center.add_child(grid)
+	var pixel_size := maxf(float(emblem_size - 10) / float(GUILD_EMBLEM_SIZE), 1.0)
+	for pixel_value: Variant in pixels:
+		var pixel := ColorRect.new()
+		pixel.custom_minimum_size = Vector2(pixel_size, pixel_size)
+		pixel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var color_index := int(pixel_value)
+		pixel.color = Color(str(palette[color_index])) if color_index >= 0 and color_index < palette.size() else Color(0, 0, 0, 0)
+		grid.add_child(pixel)
 	return frame
 
 
@@ -682,15 +1335,29 @@ func _option_button(options: Array[String]) -> OptionButton:
 
 
 func _show_page(page: String) -> void:
-	active_page = page if page in ["browse", "create"] else "browse"
+	active_page = page if page in ["browse", "member", "create"] else "browse"
+	if active_page == "create" and not membership.is_empty():
+		active_page = "member"
+	if active_page == "member" and membership.is_empty():
+		active_page = "browse"
 	if browse_page != null:
 		browse_page.visible = active_page == "browse"
+	if member_page != null:
+		member_page.visible = active_page == "member"
 	if create_page != null:
 		create_page.visible = active_page == "create"
 	_apply_tab_style(browse_tab_button, active_page == "browse")
+	_apply_tab_style(my_guild_tab_button, active_page == "member")
 	_apply_tab_style(create_tab_button, active_page == "create")
 	if active_page == "create":
 		_refresh_creation_requirements()
+	elif active_page == "member":
+		_render_guild_home()
+
+
+func _on_primary_navigation_pressed(page: String) -> void:
+	has_explicit_page_selection = true
+	_show_page(page)
 
 
 func _select_guild(guild_id: int) -> void:
@@ -713,6 +1380,11 @@ func _on_create_form_changed(_unused: Variant = null) -> void:
 
 
 func _on_create_pressed() -> void:
+	if is_creating_guild:
+		return
+	if not membership.is_empty():
+		_set_create_status("You are already in a guild.", true)
+		return
 	var guild_name := guild_name_input.text.strip_edges()
 	var description := guild_description_input.text.strip_edges()
 	if guild_name.length() < 3:
@@ -727,7 +1399,419 @@ func _on_create_pressed() -> void:
 	if _player_badge_count() < REQUIRED_BADGES:
 		_set_create_status("You need at least %d Gym Badges to create a guild." % REQUIRED_BADGES, true)
 		return
-	_set_create_status("Guild creation is ready for backend integration; no Pokédollars were deducted.", false)
+	is_creating_guild = true
+	submit_create_button.disabled = true
+	submit_create_button.text = "Creating..."
+	_set_create_status("Creating your guild...", false)
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_creating_guild = false
+		submit_create_button.disabled = false
+		submit_create_button.text = "Create Guild"
+		_set_create_status("Guild service is unavailable.", true)
+		return
+	var response: Variant = await guild_service.call(
+		"create_guild",
+		guild_name,
+		description,
+		language_select.get_item_text(language_select.selected),
+		focus_select.get_item_text(focus_select.selected),
+		recruitment_select.get_item_text(recruitment_select.selected)
+	)
+	var result := _dictionary(response)
+	is_creating_guild = false
+	submit_create_button.disabled = false
+	submit_create_button.text = "Create Guild"
+	if not bool(result.get("success", false)):
+		_set_create_status(str(result.get("error", "Guild creation failed.")), true)
+		return
+	var wallet: Variant = result.get("wallet", {})
+	if wallet is Dictionary:
+		var player_wallet_service := get_node_or_null("/root/PlayerWalletService")
+		if player_wallet_service != null:
+			player_wallet_service.call("apply_wallet_result", {"success": true, "wallet": wallet})
+	membership = _dictionary(result.get("membership", {})).duplicate(true)
+	var created_guild := _dictionary(result.get("guild", {})).duplicate(true)
+	_upsert_guild(created_guild)
+	selected_guild_id = int(created_guild.get("id", 0))
+	_refresh_creation_requirements()
+	_refresh_membership_state()
+	await _refresh_home_from_server()
+	_show_page("member")
+	_set_member_status("%s was created successfully." % str(created_guild.get("name", guild_name)), false)
+
+
+func _refresh_from_server() -> void:
+	if is_loading_guilds or is_debug_preview or not visible:
+		return
+	is_loading_guilds = true
+	directory_request_generation += 1
+	var request_generation := directory_request_generation
+	browse_status_label.text = "Loading guilds..."
+	browse_status_label.visible = true
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_loading_guilds = false
+		browse_status_label.text = "Guild service is unavailable."
+		return
+	var response: Variant = await guild_service.call("load_directory")
+	var result := _dictionary(response)
+	if request_generation != directory_request_generation:
+		return
+	is_loading_guilds = false
+	if not bool(result.get("success", false)):
+		browse_status_label.text = str(result.get("error", "Could not load guilds."))
+		browse_status_label.visible = true
+		return
+	membership = _dictionary(result.get("membership", {})).duplicate(true)
+	incoming_invitations = _array_from_value(result.get("incomingInvitations", [])).duplicate(true)
+	set_guilds(_array_from_value(result.get("guilds", [])))
+	browse_status_label.visible = false
+	if not membership.is_empty():
+		await _refresh_home_from_server()
+		if visible and not has_explicit_page_selection:
+			_show_page("member")
+	else:
+		guild_home.clear()
+		_render_guild_home()
+
+
+func _refresh_home_from_server() -> void:
+	if membership.is_empty():
+		guild_home.clear()
+		_render_guild_home()
+		return
+	if guild_home.is_empty():
+		_render_guild_home()
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		return
+	var response: Variant = await guild_service.call("load_home")
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", "Could not load your guild.")), true)
+		return
+	_apply_home_result(result)
+
+
+func _apply_home_result(result: Dictionary) -> void:
+	guild_home = result.duplicate(true)
+	membership = _dictionary(result.get("membership", {})).duplicate(true)
+	var home_guild := _dictionary(result.get("guild", {})).duplicate(true)
+	if not home_guild.is_empty():
+		_upsert_guild(home_guild)
+		selected_guild_id = int(home_guild.get("id", selected_guild_id))
+	_refresh_membership_state()
+	_render_guild_home()
+
+
+func _upsert_guild(guild: Dictionary) -> void:
+	var guild_id := int(guild.get("id", 0))
+	for index: int in range(guilds.size()):
+		if int(guilds[index].get("id", 0)) == guild_id:
+			guilds[index] = guild
+			return
+	guilds.append(guild)
+
+
+func _refresh_membership_state() -> void:
+	if membership_label == null:
+		return
+	var guild_id := int(membership.get("guildId", 0))
+	if guild_id <= 0:
+		membership_label.text = "You are not currently in a guild"
+		create_tab_button.disabled = false
+		my_guild_tab_button.visible = false
+		return
+	var guild := _guild_by_id(guild_id)
+	var guild_name := str(guild.get("name", "your guild"))
+	var role := str(membership.get("role", "member"))
+	membership_label.text = "%s · %s" % [guild_name, _membership_role_label(role)]
+	create_tab_button.disabled = true
+	my_guild_tab_button.visible = true
+	if active_page == "create":
+		_show_page("member")
+
+
+func _membership_role_label(role: String) -> String:
+	match role.to_lower():
+		"leader":
+			return "Leader"
+		"officer":
+			return "Officer"
+		_:
+			return "Member"
+
+
+func _on_save_settings() -> void:
+	if settings_description_input == null:
+		return
+	var description := settings_description_input.text.strip_edges()
+	if description.length() < 12:
+		_set_member_status("Tell trainers a little more about your guild.", true)
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status("Guild service is unavailable.", true)
+		return
+	_set_member_status("Saving guild settings...", false)
+	var response: Variant = await guild_service.call(
+		"update_settings",
+		description,
+		settings_language_select.get_item_text(settings_language_select.selected),
+		settings_focus_select.get_item_text(settings_focus_select.selected),
+		settings_recruitment_select.get_item_text(settings_recruitment_select.selected)
+	)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", "Could not save guild settings.")), true)
+		return
+	_apply_home_result(result)
+	_set_member_status("Guild settings saved.", false)
+
+
+func _on_invite_member() -> void:
+	if invite_username_input == null:
+		return
+	var username := invite_username_input.text.strip_edges()
+	if username.length() < 3:
+		_set_member_status("Enter a trainer username.", true)
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status("Guild service is unavailable.", true)
+		return
+	var response: Variant = await guild_service.call("invite_member", username)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", "Could not send the invitation.")), true)
+		return
+	await _refresh_home_from_server()
+	_set_member_status("Invitation sent to %s." % username, false)
+
+
+func _on_accept_invitation(invitation_id: int) -> void:
+	if invitation_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		return
+	var response: Variant = await guild_service.call("accept_invitation", invitation_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		browse_status_label.text = str(result.get("error", "Could not accept the invitation."))
+		browse_status_label.visible = true
+		return
+	incoming_invitations.clear()
+	_apply_home_result(result)
+	_show_page("member")
+	_set_member_status("Guild invitation accepted.", false)
+
+
+func _on_decline_invitation(invitation_id: int) -> void:
+	if invitation_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		return
+	var response: Variant = await guild_service.call("decline_invitation", invitation_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		browse_status_label.text = str(result.get("error", "Could not decline the invitation."))
+		browse_status_label.visible = true
+		return
+	var remaining: Array = []
+	for invitation_value: Variant in incoming_invitations:
+		if not invitation_value is Dictionary or int((invitation_value as Dictionary).get("id", 0)) != invitation_id:
+			remaining.append(invitation_value)
+	incoming_invitations = remaining
+	_render_incoming_invitations()
+
+
+func _on_cancel_invitation(invitation_id: int) -> void:
+	if invitation_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		return
+	var response: Variant = await guild_service.call("cancel_invitation", invitation_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", "Could not cancel the invitation.")), true)
+		return
+	await _refresh_home_from_server()
+	_set_member_status("Invitation cancelled.", false)
+
+
+func _load_emblem_editor(emblem: Dictionary) -> void:
+	var palette_value := _array_from_value(emblem.get("palette", []))
+	if not palette_value.is_empty():
+		emblem_palette.clear()
+		for color_value: Variant in palette_value:
+			emblem_palette.append(str(color_value))
+	if emblem_palette.is_empty():
+		emblem_palette = ["#60d3ff", "#79e49b", "#e3bd68", "#a78bfa", "#f4f0de"]
+	emblem_pixels.clear()
+	var pixels_value := _normalized_emblem_pixels(emblem)
+	for pixel_index: int in range(GUILD_EMBLEM_PIXEL_COUNT):
+		var color_index := int(pixels_value[pixel_index]) if pixel_index < pixels_value.size() else -1
+		emblem_pixels.append(color_index if color_index >= -1 and color_index < emblem_palette.size() else -1)
+	selected_emblem_color = 0
+
+
+func _normalized_emblem_pixels(emblem: Dictionary) -> Array:
+	var pixels := _array_from_value(emblem.get("pixels", []))
+	if pixels.size() == GUILD_EMBLEM_PIXEL_COUNT:
+		return pixels
+	if pixels.size() == LEGACY_GUILD_EMBLEM_SIZE * LEGACY_GUILD_EMBLEM_SIZE:
+		return _upscale_legacy_emblem_pixels(pixels)
+	return []
+
+
+func _upscale_legacy_emblem_pixels(legacy_pixels: Array) -> Array:
+	var pixels: Array = []
+	var scale := GUILD_EMBLEM_SIZE / LEGACY_GUILD_EMBLEM_SIZE
+	for y: int in range(GUILD_EMBLEM_SIZE):
+		for x: int in range(GUILD_EMBLEM_SIZE):
+			var source_y := int(y / scale)
+			var source_x := int(x / scale)
+			pixels.append(int(legacy_pixels[source_y * LEGACY_GUILD_EMBLEM_SIZE + source_x]))
+	return pixels
+
+
+func _on_emblem_pixel_pressed(pixel_index: int) -> void:
+	if pixel_index < 0 or pixel_index >= emblem_pixels.size():
+		return
+	emblem_pixels[pixel_index] = selected_emblem_color
+	_refresh_emblem_grid()
+
+
+func _select_emblem_color(color_index: int) -> void:
+	selected_emblem_color = color_index
+	_refresh_emblem_palette_controls()
+
+
+func _on_emblem_color_code_submitted(_code: String) -> void:
+	_apply_emblem_color_code()
+
+
+func _apply_emblem_color_code() -> void:
+	if emblem_color_code_input == null or selected_emblem_color < 0 or selected_emblem_color >= emblem_palette.size():
+		return
+	var code := emblem_color_code_input.text.strip_edges().to_lower()
+	if not _is_hex_color_code(code):
+		emblem_color_code_status_label.text = "Use #rrggbb"
+		emblem_color_code_status_label.visible = true
+		emblem_color_code_input.add_theme_color_override("font_color", UI_WARNING)
+		return
+	emblem_palette[selected_emblem_color] = code
+	emblem_color_code_input.text = code
+	emblem_color_code_input.add_theme_color_override("font_color", UI_TEXT)
+	emblem_color_code_status_label.visible = false
+	_refresh_emblem_palette_controls()
+	_refresh_emblem_grid()
+
+
+func _is_hex_color_code(code: String) -> bool:
+	if code.length() != 7 or not code.begins_with("#"):
+		return false
+	for character_index: int in range(1, code.length()):
+		if not code.substr(character_index, 1).to_lower() in "0123456789abcdef":
+			return false
+	return true
+
+
+func _refresh_emblem_palette_controls() -> void:
+	if emblem_color_buttons.size() != emblem_palette.size():
+		_rebuild_emblem_palette_buttons()
+	for color_index: int in range(mini(emblem_color_buttons.size(), emblem_palette.size())):
+		var color_button := emblem_color_buttons[color_index]
+		var color := Color(emblem_palette[color_index])
+		var border := UI_TEXT if color_index == selected_emblem_color else UI_BORDER
+		color_button.add_theme_stylebox_override("normal", _button_style(color, border))
+		color_button.add_theme_stylebox_override("hover", _button_style(color.lightened(0.12), UI_ACCENT))
+		color_button.add_theme_stylebox_override("pressed", _button_style(color.darkened(0.12), UI_ACCENT))
+	if emblem_color_code_input != null:
+		var has_color := selected_emblem_color >= 0 and selected_emblem_color < emblem_palette.size()
+		emblem_color_code_input.editable = has_color
+		emblem_color_code_input.text = emblem_palette[selected_emblem_color] if has_color else ""
+		emblem_color_code_input.add_theme_color_override("font_color", UI_TEXT)
+	if emblem_color_code_status_label != null:
+		emblem_color_code_status_label.visible = false
+
+
+func _clear_emblem() -> void:
+	for pixel_index: int in range(emblem_pixels.size()):
+		emblem_pixels[pixel_index] = -1
+	_refresh_emblem_grid()
+
+
+func _refresh_emblem_grid() -> void:
+	for pixel_index: int in range(mini(emblem_pixel_buttons.size(), emblem_pixels.size())):
+		var color_index := emblem_pixels[pixel_index]
+		var background := Color("#07111e")
+		if color_index >= 0 and color_index < emblem_palette.size():
+			background = Color(emblem_palette[color_index])
+		var pixel := emblem_pixel_buttons[pixel_index]
+		pixel.add_theme_stylebox_override("normal", _emblem_pixel_style(background, UI_BORDER_INNER))
+		pixel.add_theme_stylebox_override("hover", _emblem_pixel_style(background.lightened(0.2), UI_ACCENT))
+		pixel.add_theme_stylebox_override("pressed", _emblem_pixel_style(background.darkened(0.15), UI_ACCENT))
+
+
+func _on_save_emblem() -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status("Guild service is unavailable.", true)
+		return
+	var response: Variant = await guild_service.call("update_emblem", emblem_palette, emblem_pixels)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", "Could not save the guild emblem.")), true)
+		return
+	_apply_home_result(result)
+	if emblem_editor_popup != null:
+		emblem_editor_popup.hide()
+	_set_member_status("Guild emblem saved.", false)
+
+
+func _on_apply_saved_emblem_template() -> void:
+	if emblem_template_select == null or emblem_template_select.disabled:
+		return
+	var selected_index := emblem_template_select.selected
+	if selected_index < 0 or selected_index >= emblem_template_select.item_count:
+		return
+	var template_id := str(emblem_template_select.get_item_metadata(selected_index))
+	if template_id == "":
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status("Guild service is unavailable.", true)
+		return
+	apply_emblem_template_button.disabled = true
+	var response: Variant = await guild_service.call("apply_emblem_template", template_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		apply_emblem_template_button.disabled = false
+		_set_member_status(str(result.get("error", "Could not apply the saved emblem.")), true)
+		return
+	_apply_home_result(result)
+	if emblem_editor_popup != null:
+		emblem_editor_popup.hide()
+	_set_member_status("Saved Guild emblem applied.", false)
+
+
+func _select_option_text(select: OptionButton, value: String) -> void:
+	for item_index: int in range(select.item_count):
+		if select.get_item_text(item_index) == value:
+			select.select(item_index)
+			return
+
+
+func _set_member_status(message: String, is_error: bool) -> void:
+	if member_status_label == null:
+		return
+	member_status_label.text = message
+	member_status_label.add_theme_color_override("font_color", UI_WARNING if is_error else UI_SUCCESS)
 
 
 func _refresh_creation_requirements() -> void:
@@ -843,6 +1927,14 @@ func _clear_children(container: Node) -> void:
 	for child: Node in container.get_children():
 		container.remove_child(child)
 		child.queue_free()
+
+
+func _dictionary(value: Variant) -> Dictionary:
+	return value as Dictionary if value is Dictionary else {}
+
+
+func _array_from_value(value: Variant) -> Array:
+	return value as Array if value is Array else []
 
 
 func _set_margins(container: MarginContainer, left: int, top: int, right: int, bottom: int) -> void:
@@ -972,6 +2064,15 @@ func _button_style(background: Color, border: Color, radius: int = 8, width: int
 	style.content_margin_right = 12
 	style.content_margin_top = 7
 	style.content_margin_bottom = 7
+	return style
+
+
+func _emblem_pixel_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _panel_style(background, border, 1, 1)
+	style.content_margin_left = 0
+	style.content_margin_right = 0
+	style.content_margin_top = 0
+	style.content_margin_bottom = 0
 	return style
 
 

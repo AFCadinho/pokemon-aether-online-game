@@ -88,6 +88,7 @@ func use_inventory_item(item_id: String) -> Dictionary:
 		"useAction": str(body.get("useAction", "")),
 		"durationDays": maxi(int(body.get("durationDays", 0)), 0),
 		"grantedItems": _array_from_value(body.get("grantedItems", [])),
+		"guild": _dictionary_from_value(body.get("guild", {})),
 		"user": _dictionary_from_value(body.get("user", {})),
 		"inventory": _array_from_value(inventory.get("items", [])),
 		"appearanceSlotLimit": int(appearance_inventory.get("slotLimit", 8)),
