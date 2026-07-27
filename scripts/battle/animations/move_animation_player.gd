@@ -20,6 +20,7 @@ signal animation_finished
 @export_range(0.0, 1.0, 0.01) var foreground_opacity_multiplier: float = 1.0
 @export var show_pink_visual: bool = true
 @export var show_sheet_sprites: bool = true
+@export var mirror_sheet_sprites_on_reverse: bool = false
 @export var overlay_fill_enabled: bool = true
 @export var projectile_config: Dictionary = {}
 @export var orb_config: Dictionary = {}
@@ -51,6 +52,7 @@ signal animation_finished
 @export var visual_color: Color = Color(1.0, 0.2, 0.75, 1.0)
 @export var sprite_tint: Color = Color(1.0, 0.78, 1.0, 1.0)
 @export var reverse_battlefield: bool = false
+@export var reverse_battlefield_vertical: bool = true
 @export_range(0.0, 0.5, 0.01) var overlay_peak_alpha: float = 0.20
 @export_range(0, 48, 1) var sparkle_count: int = 14
 @export_range(0.25, 4.0, 0.05) var speed_scale: float = 1.0
@@ -2496,7 +2498,10 @@ func _apply_frame(index: int) -> void:
 		var sheet_position := _scale_sprite_position(Vector2(float(cell["x"]), float(cell["y"]))) + sprite_position_offset
 		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset + _get_sheet_pattern_visual_offset(cell_pattern) + _get_sheet_frame_offset(index)
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
-		sprite.scale = Vector2(-zoom if bool(cell["mirror"]) else zoom, zoom)
+		var mirror_sprite := bool(cell["mirror"])
+		if reverse_battlefield and mirror_sheet_sprites_on_reverse:
+			mirror_sprite = not mirror_sprite
+		sprite.scale = Vector2(-zoom if mirror_sprite else zoom, zoom)
 		sprite.rotation_degrees = float(cell["angle"])
 		var alpha: float = float(cell["opacity"]) / 255.0
 		sprite.modulate = Color(sprite_tint.r, sprite_tint.g, sprite_tint.b, alpha) if show_pink_visual else Color(1.0, 1.0, 1.0, alpha)
@@ -2572,7 +2577,7 @@ func _battlefield_position(position: Vector2) -> Vector2:
 
 	return Vector2(
 		REVERSED_BATTLEFIELD_AXIS.x - position.x,
-		REVERSED_BATTLEFIELD_AXIS.y - position.y
+		REVERSED_BATTLEFIELD_AXIS.y - position.y if reverse_battlefield_vertical else position.y
 	)
 
 

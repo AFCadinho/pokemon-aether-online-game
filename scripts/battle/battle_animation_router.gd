@@ -452,6 +452,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.foreground_opacity_multiplier = clampf(float(config.get("foreground_opacity_multiplier", 1.0)), 0.0, 1.0)
 	animation_node.show_pink_visual = bool(config.get("show_pink_visual", false))
 	animation_node.show_sheet_sprites = bool(config.get("show_sheet_sprites", true))
+	animation_node.mirror_sheet_sprites_on_reverse = bool(config.get("mirror_sheet_sprites_on_reverse", false))
 	animation_node.overlay_fill_enabled = bool(config.get("overlay_fill_enabled", true))
 	animation_node.projectile_config = (config.get("projectile", {}) as Dictionary).duplicate(true)
 	animation_node.orb_config = (config.get("orb", {}) as Dictionary).duplicate(true)
@@ -483,6 +484,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.visual_color = _color_from_config(config.get("visual_color", [1.0, 0.2, 0.75, 1.0]), Color(1.0, 0.2, 0.75, 1.0))
 	animation_node.sprite_tint = _color_from_config(config.get("sprite_tint", [1.0, 1.0, 1.0, 1.0]), Color.WHITE)
 	animation_node.reverse_battlefield = reverse_battlefield
+	animation_node.reverse_battlefield_vertical = bool(config.get("reverse_battlefield_vertical", true))
 	animation_node.overlay_peak_alpha = float(config.get("overlay_peak_alpha", 0.20))
 	animation_node.sparkle_count = int(config.get("sparkle_count", 14))
 	animation_node.sparkle_center = _vector2_from_config_value(config.get("sparkle_center", [256.0, 188.0]), Vector2(256, 188))
@@ -1136,16 +1138,46 @@ func _apply_move_sheet_anchor(
 	if animation_node == null or not animation_node.show_sheet_sprites:
 		return
 
+	var pattern_groups_value: Variant = config.get("sheet_pattern_anchor_groups", [])
+	if pattern_groups_value is Array and not (pattern_groups_value as Array).is_empty():
+		for group_value: Variant in pattern_groups_value as Array:
+			if not group_value is Dictionary:
+				continue
+			var group: Dictionary = group_value as Dictionary
+			var group_anchor_config := config
+			var group_anchor := str(group.get("anchor", "")).strip_edges()
+			if group_anchor != "":
+				group_anchor_config = config.duplicate()
+				group_anchor_config["static_visual_anchor"] = group_anchor
+			var group_anchor_player_id := _resolve_move_sheet_anchor_player_id(
+				group_anchor_config,
+				actor_ident,
+				target_ident
+			)
+			if group_anchor_player_id == "":
+				continue
+			var group_source_anchor := _vector2_from_config_value(
+				group.get("source_anchor", []),
+				EFFECT_SOURCE_PLAYER_POSITION if group_anchor == "actor" else EFFECT_SOURCE_ENEMY_POSITION
+			)
+			var group_display_offset := _get_move_sheet_anchor_display_offset(
+				animation_node,
+				group_anchor_player_id,
+				parent_node,
+				config,
+				group_source_anchor
+			)
+			var patterns_value: Variant = group.get("patterns", [])
+			if not patterns_value is Array:
+				continue
+			for pattern_value: Variant in patterns_value as Array:
+				animation_node.sheet_pattern_visual_offsets[str(int(pattern_value))] = group_display_offset
+		return
+
 	var anchor_player_id := _resolve_move_sheet_anchor_player_id(config, actor_ident, target_ident)
 	if anchor_player_id == "":
 		return
 
-	var anchor_point := str(config.get("sheet_anchor_point", "center")).strip_edges().to_lower()
-	var dynamic_anchor_parent := _get_effect_target_anchor_in_parent(anchor_player_id, parent_node, anchor_point)
-	if dynamic_anchor_parent == Vector2.ZERO:
-		return
-
-	var dynamic_anchor_source := _parent_position_to_animation_source(animation_node, dynamic_anchor_parent)
 	var source_anchor_player_id := anchor_player_id
 	if animation_node.reverse_battlefield:
 		source_anchor_player_id = "p2" if anchor_player_id == "p1" else "p1"
@@ -1154,27 +1186,30 @@ func _apply_move_sheet_anchor(
 		config.get("sheet_anchor_source_position", [default_fixed_anchor_source.x, default_fixed_anchor_source.y]),
 		default_fixed_anchor_source
 	)
+	animation_node.sheet_visual_offset += _get_move_sheet_anchor_display_offset(
+		animation_node,
+		anchor_player_id,
+		parent_node,
+		config,
+		fixed_anchor_source
+	)
+
+
+func _get_move_sheet_anchor_display_offset(
+	animation_node: MoveAnimationPlayer,
+	anchor_player_id: String,
+	parent_node: Node,
+	config: Dictionary,
+	fixed_anchor_source: Vector2
+) -> Vector2:
+	var anchor_point := str(config.get("sheet_anchor_point", "center")).strip_edges().to_lower()
+	var dynamic_anchor_parent := _get_effect_target_anchor_in_parent(anchor_player_id, parent_node, anchor_point)
+	if dynamic_anchor_parent == Vector2.ZERO:
+		return Vector2.ZERO
+
+	var dynamic_anchor_source := _parent_position_to_animation_source(animation_node, dynamic_anchor_parent)
 	var source_anchor_offset := dynamic_anchor_source - fixed_anchor_source
-	var display_anchor_offset := -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset
-	var pattern_groups_value: Variant = config.get("sheet_pattern_anchor_groups", [])
-	if pattern_groups_value is Array and not (pattern_groups_value as Array).is_empty():
-		for group_value: Variant in pattern_groups_value as Array:
-			if not group_value is Dictionary:
-				continue
-			var group: Dictionary = group_value as Dictionary
-			var group_anchor_source := _vector2_from_config_value(
-				group.get("source_anchor", [fixed_anchor_source.x, fixed_anchor_source.y]),
-				fixed_anchor_source
-			)
-			var group_source_offset := dynamic_anchor_source - group_anchor_source
-			var group_display_offset := -group_source_offset if animation_node.reverse_battlefield else group_source_offset
-			var patterns_value: Variant = group.get("patterns", [])
-			if not patterns_value is Array:
-				continue
-			for pattern_value: Variant in patterns_value as Array:
-				animation_node.sheet_pattern_visual_offsets[str(int(pattern_value))] = group_display_offset
-		return
-	animation_node.sheet_visual_offset += display_anchor_offset
+	return -source_anchor_offset if animation_node.reverse_battlefield else source_anchor_offset
 
 
 func _resolve_move_sheet_anchor_player_id(config: Dictionary, actor_ident: String, target_ident: String) -> String:
