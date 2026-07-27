@@ -115,10 +115,33 @@ func _run() -> void:
 	_check(not store_source.contains("PREVIEW_COLOR_SWATCHES"), "Store preview no longer keeps a divergent local palette")
 	_check(store_source.contains("CharacterAppearanceService.CHROMA_COLOR_SWATCHES"), "Store preview uses the shared Chroma palette")
 	_check(store_source.contains("ColorPickerButton.new()"), "Store preview includes a custom colour picker")
+	_check(
+		store_source.contains('placeholder_text = "Search Store..."')
+			and store_source.contains("func _item_matches_catalog_search"),
+		"Gift Store exposes catalog search"
+	)
+	_check(
+		store_source.contains('character_preview_hex_input.placeholder_text = "#RRGGBB"')
+			and store_source.contains("normalize_hex_color_code"),
+		"Store Chroma preview accepts validated hex colour codes"
+	)
 	_check(ui_source.contains("CharacterAppearanceService.SKIN_TONE_SWATCHES"), "customization uses the shared skin palette")
 	_check(ui_source.contains('"skin_tone":'), "customization can read and update skin tone")
 	_check(ui_source.contains("ColorPickerButton.new()"), "customization includes custom Hair and Chroma colours")
+	_check(
+		ui_source.contains('hex_input.placeholder_text = "#RRGGBB"')
+			and ui_source.contains("func _on_trainer_card_hex_color_changed"),
+		"Trainer Card appearance editing accepts validated hex colour codes"
+	)
 	for cosmetic_item_id: String in [
+		"aether-blossom-outfit",
+		"aether-blossom-hair",
+		"aether-blossom-earrings",
+		"aether-blossom-dress",
+		"aether-blossom-shoes",
+		"aether-blossom-chroma-hair",
+		"aether-blossom-chroma-earrings",
+		"aether-blossom-chroma-shoes",
 		"adinho-classic-outfit",
 		"adinho-classic-sunglasses",
 		"adinho-classic-shirt",
@@ -131,7 +154,8 @@ func _run() -> void:
 		"adinho-chroma-trousers",
 		"adinho-chroma-shoes",
 	]:
-		var cosmetic_icon := APPEARANCE.get_cosmetic_item_icon(cosmetic_item_id, "male")
+		var icon_gender := "female" if cosmetic_item_id.begins_with("aether-blossom") else "male"
+		var cosmetic_icon := APPEARANCE.get_cosmetic_item_icon(cosmetic_item_id, icon_gender)
 		_check(cosmetic_icon != null, "%s has a spritesheet-frame icon" % cosmetic_item_id)
 		if cosmetic_icon != null:
 			var icon_image := cosmetic_icon.get_image()
@@ -149,8 +173,8 @@ func _run() -> void:
 		"Store cards use the shared spritesheet-frame icons"
 	)
 	_check(
-		ui_source.contains("get_cosmetic_item_icon(item_id, \"male\")"),
-		"Bag slots use the shared spritesheet-frame icons"
+		ui_source.contains("get_cosmetic_item_icon(item_id, PlayerSave.gender)"),
+		"Bag slots use gender-compatible spritesheet-frame icons"
 	)
 	_check(
 		inventory_service_source.contains("APPEARANCE_ITEM_RETURN_ENDPOINT")

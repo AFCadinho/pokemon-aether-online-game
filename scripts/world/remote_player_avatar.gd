@@ -984,6 +984,19 @@ func _apply_appearance_parts(movement_style: String) -> void:
 		var category: String = str(category_value)
 		var part_id: String = _get_appearance_part_id(category)
 		_apply_appearance_part(category, part_id, movement_style)
+	_apply_directional_appearance_layer_order()
+
+
+func _apply_directional_appearance_layer_order() -> void:
+	var facegear_sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES["facegear"]))
+	if facegear_sprite == null:
+		return
+	facegear_sprite.z_index = CharacterAppearanceService.get_directional_part_z_index(
+		"facegear",
+		_get_appearance_part_id("facegear"),
+		_get_activity_offset_direction(),
+		8
+	)
 
 
 func _get_appearance_part_id(category: String) -> String:
@@ -1222,7 +1235,10 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 				Color.WHITE
 			)
 		)
-	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
+	if normalized_category == "eyebrows" or (
+		normalized_category in ["hair", "facial_hair"]
+		and CharacterAppearanceService.is_tintable_part(category, part_id)
+	):
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
@@ -1310,6 +1326,7 @@ func _get_appearance_signature(appearance_state: Dictionary) -> String:
 
 
 func _update_animation(is_moving: bool) -> void:
+	_apply_directional_appearance_layer_order()
 	var animation_name := _get_walk_animation_name(last_direction) if is_moving else _get_idle_animation_name(last_direction)
 	for sprite in appearance_sprites:
 		if _is_unequipped_appearance_part_sprite(sprite):

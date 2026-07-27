@@ -57,6 +57,13 @@ func _run() -> void:
 	store.call("_select_category", "cosmetics")
 	_check(store.cosmetic_subcategory_bar.visible, "cosmetic subtabs appear inside Cosmetics")
 	_check(store.cosmetic_subcategory_buttons.size() == 10, "all cosmetic subtabs are built")
+	_check(store.catalog_search_input != null, "Gift Store includes a catalog search bar")
+	store.call("_on_catalog_search_changed", "adinho chroma beard")
+	_check(
+		store.product_buttons.size() == 1 and store.product_buttons.has("adinho-chroma-beard"),
+		"catalog search filters products in the active category"
+	)
+	store.call("_on_catalog_search_changed", "")
 
 	store.call("_select_cosmetic_subcategory", "face")
 	_check(store.active_cosmetic_subcategory == "face", "Face can become the active cosmetic subtab")
@@ -65,6 +72,7 @@ func _run() -> void:
 
 	store.call("_select_cosmetic_subcategory", "outfits")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Outfits lists Adinho Classic as one six-item box")
+	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom stays hidden for male models")
 	store.call("_select_product", "adinho-classic-outfit")
 	var classic_item: Dictionary = store.call("_catalog_item", "adinho-classic-outfit")
 	_check(classic_item.get("name", "") == "Adinho Classic Box", "Classic product is clearly labelled as a box")
@@ -83,8 +91,65 @@ func _run() -> void:
 
 	store.set_trainer_gender("female")
 	_check(not store.product_buttons.has("adinho-classic-outfit"), "male-only Adinho Classic stays hidden for female models")
+	_check(store.product_buttons.has("aether-blossom-outfit"), "Aether Blossom is listed for compatible female models")
+	store.call("_select_product", "aether-blossom-outfit")
+	var blossom_item: Dictionary = store.call("_catalog_item", "aether-blossom-outfit")
+	_check(blossom_item.get("name", "") == "Aether Blossom Box", "Aether Blossom product is clearly labelled as a box")
+	_check(blossom_item.get("badge", "") == "4-ITEM BOX", "Aether Blossom communicates its four loose contents")
+	var blossom_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(blossom_preview.get("hair", "") == "Aether_Blossom_Hair", "Aether Blossom preview includes the hairstyle")
+	_check(blossom_preview.get("facegear", "") == "Aether_Blossom_Earrings", "Aether Blossom preview includes the earrings")
+	_check(blossom_preview.get("top", "") == "Aether_Blossom_Dress", "Aether Blossom preview includes the dress")
+	_check(blossom_preview.get("shoes", "") == "Aether_Blossom_Shoes", "Aether Blossom preview includes the shoes")
+	_check(store.call("_item_gender_badge", blossom_item) == "FEMALE ONLY", "Aether Blossom cards identify female-only compatibility")
+	store.call("_select_character_preview_direction", "up")
+	var blossom_preview_visual := store.character_preview_viewport.get_child(0) as Node2D
+	var blossom_hair_sprite := blossom_preview_visual.find_child("HairSprite", true, false) as AnimatedSprite2D
+	var blossom_earrings_sprite := blossom_preview_visual.find_child("FaceGearSprite", true, false) as AnimatedSprite2D
+	_check(
+		blossom_earrings_sprite.z_index < blossom_hair_sprite.z_index,
+		"Aether Blossom earrings render behind the hair while facing up"
+	)
+	store.call("_select_character_preview_direction", "down")
+	_check(
+		blossom_earrings_sprite.z_index > blossom_hair_sprite.z_index,
+		"Aether Blossom earrings render in front of the hair while facing down"
+	)
+	store.call("_select_cosmetic_subcategory", "hair")
+	_check(store.product_buttons.has("aether-blossom-chroma-hair"), "Aether Blossom Chroma Hair is sold separately")
+	store.call("_select_product", "aether-blossom-chroma-hair")
+	var blossom_chroma_hair_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(
+		blossom_chroma_hair_preview.get("hair", "") == "Aether_Blossom_Hair_Chroma",
+		"Aether Blossom Chroma Hair previews the BlackWhite asset"
+	)
+	_check(store.character_preview_palette.visible, "Aether Blossom Chroma Hair exposes the colour palette")
+	var blossom_chroma_before_invalid: Dictionary = store.call("_current_character_preview_appearance")
+	store.call("_on_character_preview_hex_text_changed", "#12zz34")
+	var blossom_chroma_after_invalid: Dictionary = store.call("_current_character_preview_appearance")
+	_check(
+		blossom_chroma_after_invalid.get("hair_color", "")
+			== blossom_chroma_before_invalid.get("hair_color", ""),
+		"invalid Store preview hex colours are ignored"
+	)
+	store.call("_on_character_preview_hex_text_changed", "7A46C5")
+	var blossom_chroma_custom_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(
+		blossom_chroma_custom_preview.get("hair_color", "") == "#7a46c5",
+		"Store Chroma preview accepts a custom hex colour"
+	)
+	store.call("_select_cosmetic_subcategory", "facegear")
+	_check(store.product_buttons.has("aether-blossom-chroma-earrings"), "Aether Blossom Chroma Earrings are sold separately")
+	store.call("_select_cosmetic_subcategory", "shoes")
+	_check(store.product_buttons.has("aether-blossom-chroma-shoes"), "Aether Blossom Chroma Shoes are sold separately")
+	_check(
+		not source.contains("Aether_Blossom_Dress_Chroma"),
+		"Aether Blossom Dress has no Chroma Store product"
+	)
+	store.call("_select_cosmetic_subcategory", "outfits")
 	store.set_trainer_gender("male")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Adinho Classic is listed for compatible male models")
+	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom stays hidden for male models")
 	_check(store.call("_item_gender_badge", classic_item) == "MALE ONLY", "Adinho cards visibly identify male-only compatibility")
 	_check(
 		store.call("_item_gender_compatibility_note", classic_item) == "Male character models only.",

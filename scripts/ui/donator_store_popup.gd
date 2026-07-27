@@ -162,6 +162,63 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "6-ITEM BOX",
 	},
 	{
+		"id": "aether-blossom-outfit",
+		"name": "Aether Blossom Box",
+		"description": "Tradeable female-only outfit box. Open it in your Bag to receive all four cosmetic components as separate tradeable items.",
+		"price": 400,
+		"icon": STYLE_ICON,
+		"categories": ["featured", "cosmetics"],
+		"cosmetic_subcategory": "outfits",
+		"appearance_slots": ["hair", "facegear", "top", "shoes"],
+		"preview_parts": [
+			{"slot": "hair", "appearance_id": "Aether_Blossom_Hair"},
+			{"slot": "facegear", "appearance_id": "Aether_Blossom_Earrings"},
+			{"slot": "top", "appearance_id": "Aether_Blossom_Dress"},
+			{"slot": "shoes", "appearance_id": "Aether_Blossom_Shoes"},
+		],
+		"genders": ["female"],
+		"badge": "4-ITEM BOX",
+	},
+	{
+		"id": "aether-blossom-chroma-hair",
+		"name": "Aether Blossom Chroma Hair",
+		"description": "A tradeable female-only grayscale hairstyle whose colour can be selected in Character Customization.",
+		"price": 100,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "hair",
+		"appearance_slots": ["hair"],
+		"preview_part": {"slot": "hair", "appearance_id": "Aether_Blossom_Hair_Chroma", "tint": "hair_color"},
+		"genders": ["female"],
+		"badge": "CHROMA",
+	},
+	{
+		"id": "aether-blossom-chroma-earrings",
+		"name": "Aether Blossom Chroma Earrings",
+		"description": "Tradeable female-only grayscale earrings whose colour can be selected in Character Customization.",
+		"price": 100,
+		"icon": PROFILE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "facegear",
+		"appearance_slots": ["facegear"],
+		"preview_part": {"slot": "facegear", "appearance_id": "Aether_Blossom_Earrings_Chroma", "tint": "facegear_color"},
+		"genders": ["female"],
+		"badge": "CHROMA",
+	},
+	{
+		"id": "aether-blossom-chroma-shoes",
+		"name": "Aether Blossom Chroma Shoes",
+		"description": "Tradeable female-only grayscale shoes whose colour can be selected in Character Customization.",
+		"price": 75,
+		"icon": STYLE_ICON,
+		"categories": ["cosmetics"],
+		"cosmetic_subcategory": "shoes",
+		"appearance_slots": ["shoes"],
+		"preview_part": {"slot": "shoes", "appearance_id": "Aether_Blossom_Shoes_Chroma", "tint": "shoes_color"},
+		"genders": ["female"],
+		"badge": "CHROMA",
+	},
+	{
 		"id": "adinho-chroma-hair",
 		"name": "Adinho Chroma Hair",
 		"description": "Tradeable hair box with matching eyebrows, both using your selected hair colour.",
@@ -373,6 +430,8 @@ var selected_item_id := ""
 var category_buttons: Dictionary = {}
 var cosmetic_subcategory_buttons: Dictionary = {}
 var product_buttons: Dictionary = {}
+var catalog_search_input: LineEdit
+var catalog_search_text := ""
 var balance_label: Label
 var hero_title_label: Label
 var hero_description_label: Label
@@ -391,6 +450,7 @@ var character_preview_palette: Control
 var character_preview_color_label: Label
 var character_preview_swatch_grid: GridContainer
 var character_preview_color_picker: ColorPickerButton
+var character_preview_hex_input: LineEdit
 var character_preview_palette_tint_key := ""
 var character_preview_direction := "down"
 var character_preview_direction_buttons: Dictionary = {}
@@ -693,11 +753,27 @@ func _create_catalog_area() -> Control:
 	layout.add_child(_create_hero_panel())
 	layout.add_child(_create_cosmetic_subcategory_bar())
 
+	var catalog_header := HBoxContainer.new()
+	catalog_header.add_theme_constant_override("separation", 8)
+	layout.add_child(catalog_header)
+
 	var products_label := Label.new()
 	products_label.text = "STORE CATALOG"
+	products_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	products_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	products_label.add_theme_font_size_override("font_size", 10)
 	products_label.add_theme_color_override("font_color", UI_CYAN)
-	layout.add_child(products_label)
+	catalog_header.add_child(products_label)
+
+	catalog_search_input = LineEdit.new()
+	catalog_search_input.name = "CatalogSearchInput"
+	catalog_search_input.placeholder_text = "Search Store..."
+	catalog_search_input.clear_button_enabled = true
+	catalog_search_input.custom_minimum_size = Vector2(210, 34)
+	catalog_search_input.tooltip_text = "Search the active Store category"
+	catalog_search_input.text_changed.connect(_on_catalog_search_changed)
+	_apply_line_edit_style(catalog_search_input)
+	catalog_header.add_child(catalog_search_input)
 
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -910,6 +986,18 @@ func _create_character_preview_panel() -> Control:
 	character_preview_color_picker.color_changed.connect(_select_character_preview_custom_color)
 	custom_color_row.add_child(character_preview_color_picker)
 
+	character_preview_hex_input = LineEdit.new()
+	character_preview_hex_input.name = "CharacterPreviewHexInput"
+	character_preview_hex_input.placeholder_text = "#RRGGBB"
+	character_preview_hex_input.max_length = 7
+	character_preview_hex_input.custom_minimum_size = Vector2(88, 24)
+	character_preview_hex_input.tooltip_text = "Enter a hex colour code, for example #7a46c5"
+	character_preview_hex_input.text_changed.connect(_on_character_preview_hex_text_changed)
+	character_preview_hex_input.text_submitted.connect(_commit_character_preview_hex_color)
+	character_preview_hex_input.focus_exited.connect(_commit_character_preview_hex_color)
+	_apply_line_edit_style(character_preview_hex_input)
+	custom_color_row.add_child(character_preview_hex_input)
+
 	character_preview_note_label = Label.new()
 	character_preview_note_label.text = "Preview only · your equipped outfit is unchanged"
 	character_preview_note_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1043,9 +1131,34 @@ func _render_products() -> void:
 			continue
 		if active_category == "cosmetics" and not _matches_cosmetic_subcategory(item):
 			continue
+		if not _item_matches_catalog_search(item):
+			continue
 		var card := _create_product_card(item)
 		product_grid.add_child(card)
 		product_buttons[str(item.get("id", ""))] = card
+
+
+func _on_catalog_search_changed(search_text: String) -> void:
+	catalog_search_text = search_text.strip_edges().to_lower()
+	if selected_item_id != "" and not _item_matches_catalog_search(_catalog_item(selected_item_id)):
+		selected_item_id = ""
+		_reset_selection_footer()
+		_refresh_character_preview()
+	_render_products()
+
+
+func _item_matches_catalog_search(item: Dictionary) -> bool:
+	if catalog_search_text == "":
+		return true
+	var searchable_parts := PackedStringArray([
+		str(item.get("id", "")),
+		str(item.get("name", "")),
+		str(item.get("description", "")),
+		str(item.get("badge", "")),
+		str(item.get("cosmetic_subcategory", "")),
+	])
+	var searchable_text := " ".join(searchable_parts).to_lower()
+	return searchable_text.contains(catalog_search_text)
 
 
 func _matches_cosmetic_subcategory(item: Dictionary) -> bool:
@@ -1420,7 +1533,10 @@ func _character_preview_part_frames(
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(str(appearance.get("eye_color", "#ffffff")), Color.WHITE)
 		)
-	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
+	if normalized_category == "eyebrows" or (
+		normalized_category in ["hair", "facial_hair"]
+		and CharacterAppearanceService.is_tintable_part(category, part_id)
+	):
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
@@ -1488,6 +1604,14 @@ func _disable_character_preview_processing(node: Node) -> void:
 func _set_character_preview_direction(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite := node as AnimatedSprite2D
+		if sprite.name == "FaceGearSprite":
+			var preview_appearance := _current_character_preview_appearance()
+			sprite.z_index = CharacterAppearanceService.get_directional_part_z_index(
+				"facegear",
+				str(preview_appearance.get("facegear", "")),
+				character_preview_direction,
+				8
+			)
 		var animation_name := StringName("idle_%s" % character_preview_direction)
 		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(animation_name):
 			sprite.animation = animation_name
@@ -1532,6 +1656,31 @@ func _select_character_preview_custom_color(color: Color) -> void:
 	_select_character_preview_color("#%s" % color.to_html(false))
 
 
+func _on_character_preview_hex_text_changed(color_text: String) -> void:
+	var normalized := CharacterAppearanceService.normalize_hex_color_code(color_text)
+	if character_preview_hex_input != null:
+		character_preview_hex_input.add_theme_color_override(
+			"font_color",
+			UI_TEXT if normalized != "" or color_text.strip_edges() == "" else UI_DANGER
+		)
+	if normalized != "":
+		_select_character_preview_color(normalized)
+
+
+func _commit_character_preview_hex_color(_submitted_text: String = "") -> void:
+	if character_preview_hex_input == null:
+		return
+	var normalized := CharacterAppearanceService.normalize_hex_color_code(character_preview_hex_input.text)
+	if normalized == "":
+		normalized = str(
+			character_preview_colors.get(character_preview_palette_tint_key, "#ffffff")
+		)
+	character_preview_hex_input.set_block_signals(true)
+	character_preview_hex_input.text = normalized
+	character_preview_hex_input.set_block_signals(false)
+	character_preview_hex_input.add_theme_color_override("font_color", UI_TEXT)
+
+
 func _rebuild_character_preview_color_buttons(tint_key: String) -> void:
 	if tint_key == character_preview_palette_tint_key:
 		return
@@ -1569,6 +1718,11 @@ func _refresh_character_preview_color_buttons(tint_key: String) -> void:
 		character_preview_color_picker.set_block_signals(true)
 		character_preview_color_picker.color = Color.from_string(selected_color, Color.WHITE)
 		character_preview_color_picker.set_block_signals(false)
+	if character_preview_hex_input != null and tint_key != "":
+		character_preview_hex_input.set_block_signals(true)
+		character_preview_hex_input.text = selected_color
+		character_preview_hex_input.set_block_signals(false)
+		character_preview_hex_input.add_theme_color_override("font_color", UI_TEXT)
 	for color_value: Variant in character_preview_color_buttons.keys():
 		var color_id := str(color_value)
 		var button := character_preview_color_buttons.get(color_id) as Button
@@ -1763,6 +1917,14 @@ func _apply_text_button_style(button: Button, accent: Color) -> void:
 	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_BASE, accent, 8, 1))
 	button.add_theme_stylebox_override("focus", _button_style(UI_SURFACE_INTERACTIVE, accent, 8, 1))
 	button.add_theme_stylebox_override("disabled", _button_style(Color("#080f19d9"), Color("#26394a99"), 8, 1))
+
+
+func _apply_line_edit_style(input: LineEdit) -> void:
+	input.add_theme_color_override("font_color", UI_TEXT)
+	input.add_theme_color_override("font_placeholder_color", UI_MUTED_TEXT)
+	input.add_theme_color_override("caret_color", UI_CYAN)
+	input.add_theme_stylebox_override("normal", _button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SOFT, 8, 1))
+	input.add_theme_stylebox_override("focus", _button_style(UI_SURFACE_HOVER, UI_PURPLE, 8, 1))
 
 
 func _panel_style(background: Color, border: Color, radius: int, border_width: int) -> StyleBoxFlat:

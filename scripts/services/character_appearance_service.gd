@@ -177,6 +177,45 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 
 	var layers: Array[Dictionary] = []
 	match normalized_item_id:
+		"aether-blossom-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": get_default_part_id(BOTTOM_CATEGORY, normalized_gender)},
+				{"category": SHOES_CATEGORY, "id": "Aether_Blossom_Shoes"},
+				{"category": TOP_CATEGORY, "id": "Aether_Blossom_Dress"},
+				{"category": EYEBROWS_CATEGORY, "id": get_default_part_id(EYEBROWS_CATEGORY, normalized_gender), "tint": Color(DEFAULT_FEMALE_HAIR_COLOR)},
+				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(DEFAULT_FEMALE_EYE_COLOR)},
+				{"category": HAIR_CATEGORY, "id": "Aether_Blossom_Hair"},
+				{"category": FACEGEAR_CATEGORY, "id": "Aether_Blossom_Earrings"},
+			]
+		"aether-blossom-hair":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "Aether_Blossom_Hair"},
+			]
+		"aether-blossom-earrings":
+			layers = [
+				{"category": FACEGEAR_CATEGORY, "id": "Aether_Blossom_Earrings"},
+			]
+		"aether-blossom-dress":
+			layers = [
+				{"category": TOP_CATEGORY, "id": "Aether_Blossom_Dress"},
+			]
+		"aether-blossom-shoes":
+			layers = [
+				{"category": SHOES_CATEGORY, "id": "Aether_Blossom_Shoes"},
+			]
+		"aether-blossom-chroma-hair":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "Aether_Blossom_Hair_Chroma", "tint": Color(DEFAULT_FEMALE_HAIR_COLOR), "preserve": true},
+			]
+		"aether-blossom-chroma-earrings":
+			layers = [
+				{"category": FACEGEAR_CATEGORY, "id": "Aether_Blossom_Earrings_Chroma", "tint": Color("#e77ba8"), "preserve": true},
+			]
+		"aether-blossom-chroma-shoes":
+			layers = [
+				{"category": SHOES_CATEGORY, "id": "Aether_Blossom_Shoes_Chroma", "tint": Color("#d6a629"), "preserve": true},
+			]
 		"adinho-classic-outfit":
 			layers = [
 				{"kind": "body"},
@@ -424,16 +463,47 @@ static func is_tintable_part(category: String, part_id: String) -> bool:
 	var normalized_category: String = normalize_part_category(category)
 	var normalized_part_id: String = part_id.strip_edges()
 	if normalized_category == HAIR_CATEGORY or normalized_category == FACIAL_HAIR_CATEGORY:
-		return true
+		return normalized_part_id != "Aether_Blossom_Hair"
 	if normalized_category == FACEGEAR_CATEGORY:
-		return normalized_part_id == "Adinho_Glasses_Chroma"
+		return normalized_part_id in ["Adinho_Glasses_Chroma", "Aether_Blossom_Earrings_Chroma"]
 	if normalized_category == TOP_CATEGORY:
 		return normalized_part_id == "Adinho_Shirt_Chroma"
 	if normalized_category == BOTTOM_CATEGORY:
 		return normalized_part_id == "Adinho_Trousers_Chroma"
 	if normalized_category == SHOES_CATEGORY:
-		return normalized_part_id == "Adinho_Shoes_Chroma"
+		return normalized_part_id in ["Adinho_Shoes_Chroma", "Aether_Blossom_Shoes_Chroma"]
 	return false
+
+
+static func normalize_hex_color_code(value: String) -> String:
+	var normalized := value.strip_edges().to_lower()
+	if normalized.begins_with("#"):
+		normalized = normalized.substr(1)
+	if normalized.length() != 6:
+		return ""
+	for index: int in normalized.length():
+		var character := normalized.substr(index, 1)
+		if not "0123456789abcdef".contains(character):
+			return ""
+	return "#%s" % normalized
+
+
+static func get_directional_part_z_index(
+	category: String,
+	part_id: String,
+	direction: String,
+	default_z_index: int
+) -> int:
+	if (
+		normalize_part_category(category) == FACEGEAR_CATEGORY
+		and part_id.strip_edges() in [
+			"Aether_Blossom_Earrings",
+			"Aether_Blossom_Earrings_Chroma",
+		]
+		and direction.strip_edges().to_lower() == "up"
+	):
+		return 5
+	return default_z_index
 
 
 static func get_eyebrows_for_hair(hair_id: String, gender: String = "") -> String:

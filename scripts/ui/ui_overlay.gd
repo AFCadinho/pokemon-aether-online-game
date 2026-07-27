@@ -820,6 +820,7 @@ var trainer_card_part_buttons: Dictionary = {}
 var trainer_card_part_rows: Dictionary = {}
 var trainer_card_part_return_buttons: Dictionary = {}
 var trainer_card_color_buttons: Dictionary = {}
+var trainer_card_hex_inputs: Dictionary = {}
 var owned_appearance_parts: Dictionary = {}
 var appearance_inventory_slot_limit := DEFAULT_APPEARANCE_SLOT_LIMIT
 var appearance_inventory_slot_counts: Dictionary = {}
@@ -9367,7 +9368,10 @@ func _get_avatar_preview_part_frames(category_id: String, part_id: String) -> Sp
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_appearance_color(PlayerSave.appearance_eye_color, Color.WHITE)
 		)
-	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
+	if normalized_category == "eyebrows" or (
+		normalized_category in ["hair", "facial_hair"]
+		and CharacterAppearanceService.is_tintable_part(category_id, part_id)
+	):
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category_id,
 			part_id,
@@ -10885,6 +10889,7 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 	trainer_card_part_rows.clear()
 	trainer_card_part_return_buttons.clear()
 	trainer_card_color_buttons.clear()
+	trainer_card_hex_inputs.clear()
 	if category_id == "body":
 		_create_trainer_card_body_appearance_content(content_stack)
 	else:
@@ -10920,8 +10925,8 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 		trainer_card_body_buttons[body_id] = body_button
 
 	_refresh_trainer_card_body_buttons()
-	_create_trainer_card_color_palette(content_stack, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES, false)
-	_create_trainer_card_color_palette(content_stack, "Eye Color", "eye_color", EYE_COLOR_SWATCHES, false)
+	_create_trainer_card_color_palette(content_stack, "Skin Tone", "skin_tone", SKIN_TONE_SWATCHES)
+	_create_trainer_card_color_palette(content_stack, "Eye Color", "eye_color", EYE_COLOR_SWATCHES)
 
 func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
@@ -11082,6 +11087,27 @@ func _create_trainer_card_color_palette(
 		custom_picker.color_changed.connect(_on_trainer_card_custom_color_changed.bind(color_key))
 		custom_row.add_child(custom_picker)
 
+		var hex_input := LineEdit.new()
+		hex_input.name = "AppearanceHexInput_%s" % color_key
+		hex_input.placeholder_text = "#RRGGBB"
+		hex_input.max_length = 7
+		hex_input.custom_minimum_size = Vector2(100, 26)
+		hex_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		hex_input.tooltip_text = "Enter a hex colour code, for example #7a46c5"
+		hex_input.text = _get_player_save_color_value(color_key)
+		hex_input.text_changed.connect(
+			_on_trainer_card_hex_color_changed.bind(color_key, hex_input)
+		)
+		hex_input.text_submitted.connect(
+			_on_trainer_card_hex_color_submitted.bind(color_key, hex_input)
+		)
+		hex_input.focus_exited.connect(
+			_commit_trainer_card_hex_color.bind(color_key, hex_input)
+		)
+		_apply_line_edit_style(hex_input)
+		custom_row.add_child(hex_input)
+		trainer_card_hex_inputs[color_key] = hex_input
+
 func _create_trainer_card_appearance_search_input(placeholder: String) -> LineEdit:
 	var search_input := LineEdit.new()
 	search_input.placeholder_text = placeholder
@@ -11219,6 +11245,20 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return "Adinho Shoes"
 			"Adinho_Shoes_Chroma":
 				return "Adinho Chroma Shoes"
+			"Aether_Blossom_Hair":
+				return "Aether Blossom Hair"
+			"Aether_Blossom_Earrings":
+				return "Aether Blossom Earrings"
+			"Aether_Blossom_Dress":
+				return "Aether Blossom Dress"
+			"Aether_Blossom_Shoes":
+				return "Aether Blossom Shoes"
+			"Aether_Blossom_Hair_Chroma":
+				return "Aether Blossom Chroma Hair"
+			"Aether_Blossom_Earrings_Chroma":
+				return "Aether Blossom Chroma Earrings"
+			"Aether_Blossom_Shoes_Chroma":
+				return "Aether Blossom Chroma Shoes"
 	return _humanize_appearance_id(normalized_part_id)
 
 func _humanize_appearance_id(raw_id: String) -> String:
@@ -11370,6 +11410,16 @@ func _refresh_trainer_card_color_buttons() -> void:
 		var color_value: String = key.substr(separator_index + 1)
 		var swatch_color: Color = entry.get("color", Color.WHITE) as Color
 		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_value)
+	for color_key_value: Variant in trainer_card_hex_inputs.keys():
+		var color_key := str(color_key_value)
+		var input := trainer_card_hex_inputs.get(color_key) as LineEdit
+		if not is_instance_valid(input):
+			trainer_card_hex_inputs.erase(color_key)
+			continue
+		input.set_block_signals(true)
+		input.text = _get_player_save_color_value(color_key)
+		input.set_block_signals(false)
+		input.add_theme_color_override("font_color", UI_TEXT)
 
 func _on_player_status_panel_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):
@@ -11800,6 +11850,41 @@ func _on_trainer_card_color_selected(color_key: String, color_value: String) -> 
 
 func _on_trainer_card_custom_color_changed(color: Color, color_key: String) -> void:
 	_on_trainer_card_color_selected(color_key, "#%s" % color.to_html(false))
+
+
+func _on_trainer_card_hex_color_changed(
+	color_text: String,
+	color_key: String,
+	input: LineEdit
+) -> void:
+	var normalized := CharacterAppearanceService.normalize_hex_color_code(color_text)
+	if input != null:
+		input.add_theme_color_override(
+			"font_color",
+			UI_TEXT if normalized != "" or color_text.strip_edges() == "" else UI_DANGER
+		)
+	if normalized != "" and normalized != _get_player_save_color_value(color_key).to_lower():
+		_on_trainer_card_color_selected(color_key, normalized)
+
+
+func _on_trainer_card_hex_color_submitted(
+	_submitted_text: String,
+	color_key: String,
+	input: LineEdit
+) -> void:
+	_commit_trainer_card_hex_color(color_key, input)
+
+
+func _commit_trainer_card_hex_color(color_key: String, input: LineEdit) -> void:
+	if input == null:
+		return
+	var normalized := CharacterAppearanceService.normalize_hex_color_code(input.text)
+	if normalized == "":
+		normalized = _get_player_save_color_value(color_key)
+	input.set_block_signals(true)
+	input.text = normalized
+	input.set_block_signals(false)
+	input.add_theme_color_override("font_color", UI_TEXT)
 
 
 func _ensure_layered_body_for_part_selection() -> void:
@@ -15256,7 +15341,7 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
 	if item_id == "escape-rope-action":
 		item_id = "escape-rope"
-	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(item_id, "male")
+	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(item_id, PlayerSave.gender)
 	if cosmetic_icon != null:
 		return cosmetic_icon
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")

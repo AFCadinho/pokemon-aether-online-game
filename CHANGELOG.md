@@ -4,10 +4,12 @@
 
 **Added**
 
+- Added catalog search to the Aether Gift Store and direct hex colour entry to Store previews and Trainer Card appearance editing.
 - Added a preview of the upcoming Guild system. You can explore the Guild screen, search the Guild list, view Guild information, and preview creating your own Guild. Guilds are not live yet. Creating one will eventually require three Gym Badges and 100,000 Pokédollars.
 - Added Kanto Gym Badges. Earned and locked Badges now appear on your Trainer Card and on the Trainer Cards of other players.
 - Added the first Alpha League trials against Brock, Misty, and Lt. Surge in Pewter City. Defeat them in order to earn their Gym Badges. You can challenge them again after winning.
 - Added Rival's House as a new two-floor interior in Pallet Town.
+- Added the female-only Aether Blossom Box to the Aether Gift Store. It contains original-colour Hair, Earrings, Dress, and Shoes cosmetics, with separate Chroma editions of the Hair, Earrings, and Shoes.
 
 **Changed**
 

@@ -1488,6 +1488,7 @@ func play_walk_animation(direction: Vector2) -> void:
 		set_idle_frame()
 		return
 
+	_apply_directional_appearance_layer_order(direction)
 	var animation_name := _get_walk_animation_name(direction)
 	var should_restart_animation := master_appearance_sprite == null \
 		or master_appearance_sprite.animation != animation_name \
@@ -1611,6 +1612,7 @@ func _handle_route_gate_interaction(gate_npc: Node) -> void:
 	route_gate_interaction_in_progress = false
 	
 func set_idle_frame() -> void:
+	_apply_directional_appearance_layer_order(last_direction)
 	for sprite in appearance_sprites:
 		sprite.stop()
 		_set_idle_animation(sprite, last_direction)
@@ -2016,6 +2018,19 @@ func _apply_appearance_parts(movement_style: String) -> void:
 		var category: String = str(category_value)
 		var part_id: String = _get_player_appearance_part_id(category)
 		_apply_appearance_part(category, part_id, normalized_movement_style)
+	_apply_directional_appearance_layer_order(last_direction)
+
+func _apply_directional_appearance_layer_order(direction: Vector2) -> void:
+	var facegear_sprite := _get_appearance_sprite(FACE_GEAR_SPRITE_NAME)
+	if facegear_sprite == null:
+		return
+	var direction_id := "up" if direction == Vector2.UP else "down"
+	facegear_sprite.z_index = CharacterAppearanceService.get_directional_part_z_index(
+		"facegear",
+		PlayerSave.appearance_facegear_id,
+		direction_id,
+		8
+	)
 
 func _get_player_appearance_part_id(category: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category):
@@ -2294,7 +2309,10 @@ func _get_appearance_part_frames(category: String, part_id: String, movement_sty
 			movement_style,
 			_parse_appearance_color(PlayerSave.appearance_eye_color, Color.WHITE)
 		)
-	if normalized_category == "hair" or normalized_category == "facial_hair" or normalized_category == "eyebrows":
+	if normalized_category == "eyebrows" or (
+		normalized_category in ["hair", "facial_hair"]
+		and CharacterAppearanceService.is_tintable_part(category, part_id)
+	):
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
