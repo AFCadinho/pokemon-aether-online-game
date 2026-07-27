@@ -3462,11 +3462,12 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		return true
 
 	var defer_state_load := _should_defer_pvp_canonical_state_until_render(display_response)
+	var rendered_event_cursor := _get_battle_state_render_cursor()
 	var success: bool = action_flow.apply_response(
 		response,
 		apply_event_conditions,
 		not defer_state_load,
-		last_rendered_event_seq
+		rendered_event_cursor
 	)
 	if success:
 		if _is_pvp_battle():
@@ -3485,6 +3486,9 @@ func _apply_api_response(response: Dictionary, apply_event_conditions: bool = tr
 		_refresh_damage_calc_results()
 
 	return success
+
+func _get_battle_state_render_cursor() -> int:
+	return pvp_event_queue.last_rendered_seq if _is_pvp_battle() else last_rendered_event_seq
 
 func _should_defer_pvp_canonical_state_until_render(response: Dictionary) -> bool:
 	if not _is_pvp_battle() or battle_state.battle_id == "":

@@ -7,6 +7,7 @@ var failed := false
 
 func _init() -> void:
 	_check_historical_damage_does_not_rewind_an_undamaged_slot()
+	_check_percentage_damage_survives_a_quiet_turn()
 	quit(1 if failed else 0)
 
 
@@ -45,6 +46,75 @@ func _check_historical_damage_does_not_rewind_an_undamaged_slot() -> void:
 		state.get_active_pokemon_current_hp("p2"),
 		80,
 		"the current damage event reaches its authoritative HP after animation"
+	)
+
+func _check_percentage_damage_survives_a_quiet_turn() -> void:
+	var state = BattleStateScript.new()
+	var damage_event := _damage_event("p1a: Kingambit", "p1:slot:3", 3, 100, 32)
+	var full_health_kingambit := {
+		"ident": "p1: Kingambit",
+		"species": "Kingambit",
+		"active": true,
+		"condition": "341/341",
+		"hp": 341,
+		"maxHp": 341,
+		"fainted": false,
+		"metadataSlot": 3,
+		"pokemonKey": "p1:slot:3",
+	}
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "percentage-hp-quiet-turn-test",
+		"eventSeq": 0,
+		"requests": {"p1": {"side": {"pokemon": [full_health_kingambit]}}},
+		"events": [],
+	})
+
+	state.apply_event_conditions([damage_event])
+	_check_equal(
+		state.get_active_pokemon_current_hp("p1"),
+		109,
+		"public 32 percent damage is projected onto the known 341 max HP"
+	)
+	_check_equal(
+		state.get_active_pokemon_max_hp("p1"),
+		341,
+		"percentage damage retains the known maximum HP"
+	)
+
+	var quiet_turn_response := {
+		"success": true,
+		"battleId": "percentage-hp-quiet-turn-test",
+		"eventSeq": 1,
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [{
+						"ident": "p1: Kingambit",
+						"species": "Kingambit",
+						"active": true,
+						"condition": "32/100",
+						"hp": 32,
+						"maxHp": 100,
+						"fainted": false,
+						"metadataSlot": 3,
+						"pokemonKey": "p1:slot:3",
+					}],
+				},
+			},
+		},
+		"events": [damage_event],
+	}
+	state.load_from_api_response(quiet_turn_response, false, 1)
+	_check_equal(
+		state.get_active_pokemon_current_hp("p1"),
+		109,
+		"a later turn without damage does not visually heal Kingambit"
+	)
+	_check_equal(
+		str(state.get_active_player_pokemon("p1").get("condition", "")),
+		"109/341",
+		"the canonical condition remains on the known HP scale"
 	)
 
 

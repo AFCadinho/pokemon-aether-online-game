@@ -363,7 +363,7 @@ func _check_api_response_uses_rendered_event_cursor() -> void:
 			+ "\t\tresponse,\n"
 			+ "\t\tapply_event_conditions,\n"
 			+ "\t\tnot defer_state_load,\n"
-			+ "\t\tlast_rendered_event_seq\n"
+			+ "\t\trendered_event_cursor\n"
 			+ "\t)"
 		),
 		true,
@@ -413,9 +413,16 @@ func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 
 	_check_equal(apply_source.contains("_should_defer_pvp_canonical_state_until_render(display_response)"), true, "PvP state mutation is deferred while its events are unrendered")
 	_check_equal(
-		apply_source.contains("not defer_state_load,\n\t\tlast_rendered_event_seq"),
+		apply_source.contains("not defer_state_load,\n\t\trendered_event_cursor"),
 		true,
 		"action flow retains the current presentation state and ignores already rendered HP history"
+	)
+	_check_equal(
+		apply_source.contains(
+			"var rendered_event_cursor := _get_battle_state_render_cursor()"
+		),
+		true,
+		"PvP state loading uses its render-batch cursor instead of the non-PvP cursor"
 	)
 	_check_equal(barrier_source.contains("pvp_event_queue.last_rendered_seq < 0"), true, "Team Preview can establish its lead state before the first render cursor")
 	_check_equal(render_source.contains("if not _is_pvp_battle():\n\t\t_sync_presentation_field_from_battle_state()"), true, "PvP field effects are not overwritten before the render cursor advances")

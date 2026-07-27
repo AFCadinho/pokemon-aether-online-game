@@ -532,7 +532,12 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 		pokemon_data["condition"] = condition
 		_apply_condition_fields(pokemon_data, condition)
 		pokemon_data["fainted"] = false
-		_remember_hp_snapshot_for_condition_event(switch_ident, pokemon_data, condition, index)
+		_remember_hp_snapshot_for_condition_event(
+			switch_ident,
+			pokemon_data,
+			str(pokemon_data.get("condition", condition)),
+			index
+		)
 
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		print(DEBUG_PREFIX, " apply switch event result", {
@@ -679,7 +684,12 @@ func _set_pokemon_condition(target_ident: String, condition: String, source_even
 	var pokemon_data: Dictionary = pokemon_value as Dictionary
 	pokemon_data["condition"] = condition
 	_apply_condition_fields(pokemon_data, condition)
-	_remember_hp_snapshot_for_condition_event(target_ident, pokemon_data, condition, target_index)
+	_remember_hp_snapshot_for_condition_event(
+		target_ident,
+		pokemon_data,
+		str(pokemon_data.get("condition", condition)),
+		target_index
+	)
 
 func _remember_hp_snapshot_for_condition_event(target_ident: String, pokemon_data: Dictionary, condition: String, team_index := -1) -> void:
 	var snapshot: Dictionary = hp_event_helper.parse_condition_hp_snapshot(condition)
@@ -1652,6 +1662,37 @@ func is_active_pokemon_fainted(player_id: String = "p1") -> bool:
 	return int(pokemon_data.get("hp", 1)) <= 0 and int(pokemon_data.get("maxHp", 0)) > 0
 
 func _apply_condition_fields(pokemon_data: Dictionary, condition: String) -> void:
+	var existing_max_hp := int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 0)))
+	var condition_snapshot := hp_event_helper.parse_condition_hp_snapshot(condition)
+	if (
+		not condition.contains("fnt")
+		and existing_max_hp > 100
+		and int(condition_snapshot.get("max_hp", 0)) == 100
+	):
+		var visible_percent := clampi(int(condition_snapshot.get("hp", 0)), 0, 100)
+		var scaled_hp := 0
+		if visible_percent > 0:
+			# Showdown's public condition is a displayed percentage. Use the
+			# greatest HP value that still renders as that same percentage.
+			scaled_hp = maxi(
+				int(floor(float(visible_percent * existing_max_hp) / 100.0)),
+				1
+			)
+		var condition_suffix := ""
+		var suffix_index := condition.find(" ")
+		if suffix_index >= 0:
+			condition_suffix = condition.substr(suffix_index)
+		pokemon_data["condition"] = "%d/%d%s" % [
+			scaled_hp,
+			existing_max_hp,
+			condition_suffix,
+		]
+		pokemon_data["status"] = hp_event_helper.get_status_from_condition(condition)
+		pokemon_data["fainted"] = false
+		pokemon_data["hp"] = scaled_hp
+		pokemon_data["maxHp"] = existing_max_hp
+		return
+
 	hp_event_helper.apply_condition_fields(pokemon_data, condition)
 
 ## Geeft huidige turn terug
