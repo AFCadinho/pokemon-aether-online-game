@@ -13,6 +13,7 @@
 
 **Changed**
 
+- Simplified Cosmetics browsing in the Aether Gift Store with All, Outfits, and Loose Items filters plus a compact item-category dropdown.
 - Air Balloon is now shown in the main battle text and above the Pokémon holding it. The indicator disappears when the Balloon pops or is removed.
 - The Party panel is now smaller when you have fewer Pokémon with you.
 - Pokémon you own and the Pokémon you are currently viewing are now easier to tell apart in the Pokédex.

@@ -8,6 +8,9 @@ const GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const STYLE_ICON: Texture2D = preload("res://assets/ui/store_style.svg")
 const PROFILE_ICON: Texture2D = preload("res://assets/ui/store_profile.svg")
 const MOUNT_ICON: Texture2D = preload("res://assets/ui/store_mount.svg")
+const STORE_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/store_dropdown_arrow.svg")
+const STORE_RADIO_CHECKED: Texture2D = preload("res://assets/ui/store_radio_checked.svg")
+const STORE_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/store_radio_unchecked.svg")
 const NAME_CHANGE_TICKET_ICON: Texture2D = preload("res://assets/items/icons/NAMECHANGETICKET.png")
 const GENDER_CHANCE_TICKET_ICON: Texture2D = preload("res://assets/items/icons/GENDERCHANCETICKET.png")
 const AETHER_BLESSING_VOUCHER_3_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER3DAYS.png")
@@ -80,9 +83,17 @@ const CATEGORY_PROMISES := {
 	"charms": "FIELD CONVENIENCE",
 	"services": "TRAINER SERVICE",
 }
-const COSMETIC_SUBCATEGORY_ORDER: Array[String] = [
+const COSMETIC_FILTER_GROUP_ORDER: Array[String] = [
 	"all",
 	"outfits",
+	"items",
+]
+const COSMETIC_FILTER_GROUP_LABELS := {
+	"all": "All",
+	"outfits": "Outfits",
+	"items": "Loose Items",
+}
+const COSMETIC_ITEM_CATEGORY_ORDER: Array[String] = [
 	"body",
 	"hair",
 	"headgear",
@@ -93,8 +104,7 @@ const COSMETIC_SUBCATEGORY_ORDER: Array[String] = [
 	"shoes",
 ]
 const COSMETIC_SUBCATEGORY_LABELS := {
-	"all": "All",
-	"outfits": "Outfits",
+	"all": "All item types",
 	"body": "Body",
 	"hair": "Hair",
 	"headgear": "Headgear",
@@ -425,10 +435,13 @@ var purchase_in_progress := false
 var trainer_gender := "male"
 var trainer_appearance: Dictionary = {}
 var active_category := "featured"
+var active_cosmetic_filter_group := "all"
 var active_cosmetic_subcategory := "all"
 var selected_item_id := ""
 var category_buttons: Dictionary = {}
-var cosmetic_subcategory_buttons: Dictionary = {}
+var cosmetic_filter_group_buttons: Dictionary = {}
+var cosmetic_item_category_control: HBoxContainer
+var cosmetic_item_category_select: OptionButton
 var product_buttons: Dictionary = {}
 var catalog_search_input: LineEdit
 var catalog_search_text := ""
@@ -806,28 +819,55 @@ func _create_cosmetic_subcategory_bar() -> PanelContainer:
 	margin.add_theme_constant_override("margin_bottom", 5)
 	cosmetic_subcategory_bar.add_child(margin)
 
-	var scroll := ScrollContainer.new()
-	scroll.name = "CosmeticSubcategoryScroll"
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	margin.add_child(scroll)
-
 	var row := HBoxContainer.new()
-	row.name = "CosmeticSubcategoryTabs"
-	row.add_theme_constant_override("separation", 5)
-	scroll.add_child(row)
+	row.name = "CosmeticFilterControls"
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 6)
+	margin.add_child(row)
 
-	for subcategory_id: String in COSMETIC_SUBCATEGORY_ORDER:
+	for group_id: String in COSMETIC_FILTER_GROUP_ORDER:
 		var button := Button.new()
-		button.name = "CosmeticTab_%s" % subcategory_id
-		button.text = str(COSMETIC_SUBCATEGORY_LABELS.get(subcategory_id, subcategory_id.capitalize()))
-		button.custom_minimum_size = Vector2(56, 30)
+		button.name = "CosmeticFilter_%s" % group_id
+		button.text = str(COSMETIC_FILTER_GROUP_LABELS.get(group_id, group_id.capitalize()))
+		button.custom_minimum_size = Vector2(70, 30)
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.pressed.connect(_select_cosmetic_subcategory.bind(subcategory_id))
+		button.pressed.connect(_select_cosmetic_filter_group.bind(group_id))
 		row.add_child(button)
-		cosmetic_subcategory_buttons[subcategory_id] = button
+		cosmetic_filter_group_buttons[group_id] = button
+
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(spacer)
+
+	cosmetic_item_category_control = HBoxContainer.new()
+	cosmetic_item_category_control.name = "CosmeticItemCategoryControl"
+	cosmetic_item_category_control.add_theme_constant_override("separation", 6)
+	row.add_child(cosmetic_item_category_control)
+
+	var category_label := Label.new()
+	category_label.text = "ITEM CATEGORY"
+	category_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	category_label.add_theme_font_size_override("font_size", 9)
+	category_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	cosmetic_item_category_control.add_child(category_label)
+
+	cosmetic_item_category_select = OptionButton.new()
+	cosmetic_item_category_select.name = "CosmeticItemCategorySelect"
+	cosmetic_item_category_select.custom_minimum_size = Vector2(150, 30)
+	cosmetic_item_category_select.add_item(str(COSMETIC_SUBCATEGORY_LABELS.get("all", "All item types")))
+	cosmetic_item_category_select.set_item_metadata(0, "all")
+	for subcategory_id: String in COSMETIC_ITEM_CATEGORY_ORDER:
+		cosmetic_item_category_select.add_item(
+			str(COSMETIC_SUBCATEGORY_LABELS.get(subcategory_id, subcategory_id.capitalize()))
+		)
+		cosmetic_item_category_select.set_item_metadata(
+			cosmetic_item_category_select.item_count - 1,
+			subcategory_id
+		)
+	cosmetic_item_category_select.item_selected.connect(_on_cosmetic_item_category_selected)
+	_apply_cosmetic_item_category_style(cosmetic_item_category_select)
+	cosmetic_item_category_control.add_child(cosmetic_item_category_select)
 
 	return cosmetic_subcategory_bar
 
@@ -1096,8 +1136,45 @@ func _select_category(category_id: String) -> void:
 
 
 func _select_cosmetic_subcategory(subcategory_id: String) -> void:
-	if not COSMETIC_SUBCATEGORY_ORDER.has(subcategory_id):
+	if subcategory_id == "all":
+		_select_cosmetic_filter_group("all")
 		return
+	if subcategory_id == "outfits":
+		_select_cosmetic_filter_group("outfits")
+		return
+	if not COSMETIC_ITEM_CATEGORY_ORDER.has(subcategory_id):
+		return
+	active_cosmetic_filter_group = "items"
+	active_cosmetic_subcategory = subcategory_id
+	selected_item_id = ""
+	_refresh_cosmetic_subcategory_bar()
+	_reset_selection_footer()
+	_render_products()
+
+
+func _select_cosmetic_filter_group(group_id: String) -> void:
+	if not COSMETIC_FILTER_GROUP_ORDER.has(group_id):
+		return
+	active_cosmetic_filter_group = group_id
+	if group_id == "all":
+		active_cosmetic_subcategory = "all"
+	elif group_id == "outfits":
+		active_cosmetic_subcategory = "outfits"
+	elif not COSMETIC_ITEM_CATEGORY_ORDER.has(active_cosmetic_subcategory):
+		active_cosmetic_subcategory = "all"
+	selected_item_id = ""
+	_refresh_cosmetic_subcategory_bar()
+	_reset_selection_footer()
+	_render_products()
+
+
+func _on_cosmetic_item_category_selected(index: int) -> void:
+	if cosmetic_item_category_select == null or index < 0:
+		return
+	var subcategory_id := str(cosmetic_item_category_select.get_item_metadata(index))
+	if subcategory_id != "all" and not COSMETIC_ITEM_CATEGORY_ORDER.has(subcategory_id):
+		return
+	active_cosmetic_filter_group = "items"
 	active_cosmetic_subcategory = subcategory_id
 	selected_item_id = ""
 	_refresh_cosmetic_subcategory_bar()
@@ -1109,10 +1186,19 @@ func _refresh_cosmetic_subcategory_bar() -> void:
 	if cosmetic_subcategory_bar == null:
 		return
 	cosmetic_subcategory_bar.visible = active_category == "cosmetics"
-	for subcategory_id: String in COSMETIC_SUBCATEGORY_ORDER:
-		var button := cosmetic_subcategory_buttons.get(subcategory_id) as Button
+	for group_id: String in COSMETIC_FILTER_GROUP_ORDER:
+		var button := cosmetic_filter_group_buttons.get(group_id) as Button
 		if button != null:
-			_apply_cosmetic_subcategory_style(button, subcategory_id == active_cosmetic_subcategory)
+			_apply_cosmetic_subcategory_style(button, group_id == active_cosmetic_filter_group)
+	if cosmetic_item_category_control != null:
+		cosmetic_item_category_control.visible = active_cosmetic_filter_group == "items"
+	if cosmetic_item_category_select != null and active_cosmetic_filter_group == "items":
+		var selected_index := 0
+		for index: int in range(cosmetic_item_category_select.item_count):
+			if str(cosmetic_item_category_select.get_item_metadata(index)) == active_cosmetic_subcategory:
+				selected_index = index
+				break
+		cosmetic_item_category_select.select(selected_index)
 
 
 func _render_products() -> void:
@@ -1162,14 +1248,24 @@ func _item_matches_catalog_search(item: Dictionary) -> bool:
 
 
 func _matches_cosmetic_subcategory(item: Dictionary) -> bool:
+	if active_cosmetic_filter_group == "all":
+		return true
+	if active_cosmetic_filter_group == "outfits":
+		return _item_has_cosmetic_subcategory(item, "outfits")
+	if _item_has_cosmetic_subcategory(item, "outfits"):
+		return false
 	if active_cosmetic_subcategory == "all":
 		return true
+	return _item_has_cosmetic_subcategory(item, active_cosmetic_subcategory)
+
+
+func _item_has_cosmetic_subcategory(item: Dictionary, subcategory_id: String) -> bool:
 	var subcategories_value: Variant = item.get("cosmetic_subcategories", [])
 	if subcategories_value is Array:
 		for subcategory_value: Variant in subcategories_value as Array:
-			if str(subcategory_value) == active_cosmetic_subcategory:
+			if str(subcategory_value) == subcategory_id:
 				return true
-	return str(item.get("cosmetic_subcategory", "")) == active_cosmetic_subcategory
+	return str(item.get("cosmetic_subcategory", "")) == subcategory_id
 
 
 func _create_product_card(item: Dictionary) -> Button:
@@ -1895,6 +1991,68 @@ func _cosmetic_subcategory_button_style(background: Color, border: Color) -> Sty
 	style.content_margin_top = 5
 	style.content_margin_right = 7
 	style.content_margin_bottom = 5
+	return style
+
+
+func _apply_cosmetic_item_category_style(select: OptionButton) -> void:
+	select.focus_mode = Control.FOCUS_NONE
+	select.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	select.add_theme_color_override("font_color", UI_TEXT)
+	select.add_theme_color_override("font_hover_color", UI_TEXT)
+	select.add_theme_color_override("font_pressed_color", UI_TEXT)
+	select.add_theme_font_size_override("font_size", 10)
+	select.add_theme_icon_override("arrow", STORE_DROPDOWN_ARROW)
+	select.add_theme_stylebox_override(
+		"normal",
+		_cosmetic_subcategory_button_style(Color("#091725d9"), Color("#3b536999"))
+	)
+	select.add_theme_stylebox_override(
+		"hover",
+		_cosmetic_subcategory_button_style(UI_SURFACE_HOVER, UI_PURPLE)
+	)
+	select.add_theme_stylebox_override(
+		"pressed",
+		_cosmetic_subcategory_button_style(UI_SURFACE_BASE, UI_PURPLE)
+	)
+	select.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
+	var popup := select.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_stylebox_override("panel", _cosmetic_item_category_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_cosmetic_subcategory_button_style(Color("#24183bf2"), UI_PURPLE)
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_panel_style(Color("#00000000"), Color("#493b6688"), 0, 0)
+	)
+	popup.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	popup.add_theme_color_override("font_hover_color", UI_TEXT)
+	popup.add_theme_color_override("font_disabled_color", Color("#657487"))
+	popup.add_theme_color_override("font_separator_color", UI_PURPLE)
+	popup.add_theme_color_override("font_outline_color", Color("#03070d"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 9)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 5)
+	popup.add_theme_font_size_override("font_size", 11)
+	popup.add_theme_icon_override("radio_checked", STORE_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", STORE_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", STORE_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", STORE_RADIO_UNCHECKED)
+
+
+func _cosmetic_item_category_popup_style() -> StyleBoxFlat:
+	var style := _panel_style(Color("#07111dfb"), Color("#6f5596d9"), 8, 1)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 5)
 	return style
 
 

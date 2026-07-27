@@ -21,10 +21,17 @@ func _run() -> void:
 		return
 
 	var source := FileAccess.get_file_as_string(STORE_SCRIPT_PATH)
-	_check(source.contains('const COSMETIC_SUBCATEGORY_ORDER: Array[String]'), "cosmetics define a second category layer")
+	_check(
+		source.contains('const COSMETIC_FILTER_GROUP_ORDER: Array[String]'),
+		"cosmetics define a compact primary filter layer"
+	)
+	for group_id: String in ["all", "outfits", "items"]:
+		_check(source.contains('"%s",' % group_id), "cosmetics include the %s primary filter" % group_id)
+	_check(
+		source.contains('const COSMETIC_ITEM_CATEGORY_ORDER: Array[String]'),
+		"loose cosmetic items define a category dropdown"
+	)
 	for subcategory_id: String in [
-		"all",
-		"outfits",
 		"body",
 		"hair",
 		"headgear",
@@ -51,12 +58,43 @@ func _run() -> void:
 		"aurora_shoes",
 	]:
 		_check(not source.contains('"id": "%s"' % placeholder_id), "placeholder cosmetic %s is absent" % placeholder_id)
-	_check(source.contains("ScrollContainer.SCROLL_MODE_AUTO"), "cosmetic subtabs can scroll on smaller layouts")
+	_check(
+		not source.contains('scroll.name = "CosmeticSubcategoryScroll"'),
+		"cosmetic filters no longer require horizontal scrolling"
+	)
 	_check(not source.contains("get_gems_button"), "Store does not expose public Aether Gem top-ups yet")
 
 	store.call("_select_category", "cosmetics")
-	_check(store.cosmetic_subcategory_bar.visible, "cosmetic subtabs appear inside Cosmetics")
-	_check(store.cosmetic_subcategory_buttons.size() == 10, "all cosmetic subtabs are built")
+	_check(store.cosmetic_subcategory_bar.visible, "cosmetic filters appear inside Cosmetics")
+	_check(store.cosmetic_filter_group_buttons.size() == 3, "three compact cosmetic primary filters are built")
+	_check(store.cosmetic_item_category_select != null, "loose items use a category dropdown")
+	_check(store.cosmetic_item_category_select.item_count == 9, "dropdown includes all eight item types")
+	var item_category_popup := store.cosmetic_item_category_select.get_popup()
+	_check(item_category_popup.has_theme_stylebox_override("panel"), "item category popup uses Store panel styling")
+	_check(item_category_popup.has_theme_stylebox_override("hover"), "item category popup has a styled hover state")
+	_check(item_category_popup.has_theme_icon_override("radio_checked"), "item category popup uses a custom selected indicator")
+	_check(
+		store.cosmetic_item_category_select.has_theme_icon_override("arrow"),
+		"item category selector uses a custom dropdown arrow"
+	)
+	_check(not store.cosmetic_item_category_control.visible, "item category dropdown stays hidden for All")
+	store.call("_select_cosmetic_filter_group", "items")
+	_check(store.active_cosmetic_filter_group == "items", "Loose Items can become the active primary filter")
+	_check(store.cosmetic_item_category_control.visible, "item category dropdown appears for Loose Items")
+	_check(
+		not store.product_buttons.has("adinho-classic-outfit"),
+		"Loose Items excludes complete outfit boxes"
+	)
+	var hair_category_index := -1
+	for index: int in range(store.cosmetic_item_category_select.item_count):
+		if str(store.cosmetic_item_category_select.get_item_metadata(index)) == "hair":
+			hair_category_index = index
+			break
+	store.call("_on_cosmetic_item_category_selected", hair_category_index)
+	_check(store.active_cosmetic_subcategory == "hair", "dropdown applies the selected loose-item category")
+	_check(store.product_buttons.has("adinho-chroma-hair"), "Hair dropdown category lists hair products")
+	store.call("_select_cosmetic_filter_group", "all")
+	_check(store.product_buttons.has("adinho-classic-outfit"), "All includes complete outfit boxes")
 	_check(store.catalog_search_input != null, "Gift Store includes a catalog search bar")
 	store.call("_on_catalog_search_changed", "adinho chroma beard")
 	_check(
