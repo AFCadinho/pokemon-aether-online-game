@@ -9,6 +9,7 @@ const FORM_SUFFIXES := [
 	"wellspring", "hearthflame", "cornerstone", "teal",
 	"wash", "heat", "frost", "fan", "mow",
 	"sky", "land", "blade", "shield",
+	"disguised", "busted",
 ]
 
 

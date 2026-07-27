@@ -18,6 +18,11 @@ func _init() -> void:
 		APPEARANCE.normalize_hex_color_code("#12345g") == "",
 		"invalid hex colours are rejected"
 	)
+	_check(
+		APPEARANCE.resolve_hair_color("<null>", "female")
+			== APPEARANCE.DEFAULT_FEMALE_HAIR_COLOR,
+		"legacy null hair colours recover to the female default before saving"
+	)
 	for category_and_id_value: Variant in [
 		["hair", "Aether_Blossom_Hair"],
 		["facegear", "Aether_Blossom_Earrings"],

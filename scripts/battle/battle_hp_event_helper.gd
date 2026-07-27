@@ -17,6 +17,47 @@ func get_event_hp_snapshot(event: Dictionary, use_previous_hp: bool) -> Dictiona
 
 	return condition_snapshot
 
+
+func get_rewind_hp_snapshot(event: Dictionary, state_snapshot: Dictionary) -> Dictionary:
+	var previous_snapshot: Dictionary = get_event_hp_snapshot(event, true)
+	if previous_snapshot.is_empty():
+		return previous_snapshot
+
+	var current_snapshot: Dictionary = get_event_hp_snapshot(event, false)
+	if current_snapshot.is_empty():
+		return previous_snapshot
+
+	var previous_percent := to_visible_hp_percent(
+		int(previous_snapshot.get("hp", 0)),
+		int(previous_snapshot.get("max_hp", 0))
+	)
+	var current_percent := to_visible_hp_percent(
+		int(current_snapshot.get("hp", 0)),
+		int(current_snapshot.get("max_hp", 0))
+	)
+	if event.has("previousHp") and event.has("hp") and int(event.get("maxHp", 0)) > 0:
+		var numeric_max_hp := int(event.get("maxHp", 0))
+		var numeric_previous_percent := to_visible_hp_percent(int(event.get("previousHp", 0)), numeric_max_hp)
+		if current_percent < numeric_previous_percent and numeric_previous_percent < previous_percent:
+			return {
+				"hp": int(event.get("previousHp", 0)),
+				"max_hp": numeric_max_hp,
+			}
+
+	if state_snapshot.is_empty():
+		return previous_snapshot
+
+	var state_percent := to_visible_hp_percent(
+		int(state_snapshot.get("hp", 0)),
+		int(state_snapshot.get("max_hp", 0))
+	)
+	var state_is_between_damage := current_percent < state_percent and state_percent < previous_percent
+	var state_is_between_heal := previous_percent < state_percent and state_percent < current_percent
+	if state_is_between_damage or state_is_between_heal:
+		return state_snapshot.duplicate(true)
+
+	return previous_snapshot
+
 func get_event_status(event: Dictionary, use_previous_hp: bool) -> String:
 	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
 	return get_status_from_condition(str(event.get(condition_key, "")))

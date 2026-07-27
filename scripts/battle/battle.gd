@@ -7829,7 +7829,11 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	if player_id == "":
 		return
 
-	var hp_data: Dictionary = hp_event_helper.get_event_hp_snapshot(event, use_previous_hp)
+	var hp_data: Dictionary
+	if use_previous_hp:
+		hp_data = hp_event_helper.get_rewind_hp_snapshot(event, _get_active_state_hp_snapshot(player_id))
+	else:
+		hp_data = hp_event_helper.get_event_hp_snapshot(event, false)
 	if hp_data.is_empty():
 		hp_data = _get_event_hp_snapshot_with_state_fallback(event, player_id, use_previous_hp)
 	if hp_data.is_empty() and not use_previous_hp:
@@ -8375,6 +8379,8 @@ func _can_open_pvp_local_force_switch_ui() -> bool:
 		return true
 	if pvp_last_phase == "awaiting_force_switch":
 		return true
+	if pvp_last_phase == "waiting_for_opponent":
+		return _pvp_local_request_allows_choice(_get_local_state_player_id())
 	if pvp_last_phase == "":
 		return true
 	return pvp_last_phase == "rendering_events" and pvp_last_next_phase == "awaiting_force_switch"
@@ -9098,6 +9104,22 @@ func _open_pvp_released_phase(phase: String) -> void:
 	if phase == "turn_open":
 		_set_battle_input_locked(false)
 		_show_moves()
+		return
+
+	if phase == "waiting_for_opponent":
+		var local_state_player_id := _get_local_state_player_id()
+		if _pvp_local_request_allows_choice(local_state_player_id):
+			_trace_pvp_flow("phase_release.local_choice", {}, "globalPhase=waiting_for_opponent")
+			pvp_idle_wait_recovery_active = false
+			_set_battle_input_locked(false)
+			if _local_player_needs_force_switch_ui():
+				_show_force_switch_if_needed()
+			else:
+				_show_moves()
+			return
+		pvp_idle_wait_recovery_active = true
+		_set_battle_input_locked(true)
+		current_action_panel.set_message("Waiting for opponent...")
 		return
 
 	if phase == "awaiting_force_switch":

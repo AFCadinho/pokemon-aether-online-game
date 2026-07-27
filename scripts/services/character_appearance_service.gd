@@ -365,7 +365,7 @@ static func get_default_eye_color(gender: String = "") -> String:
 
 static func resolve_hair_color(color_text: String, gender: String = "") -> String:
 	var normalized_color: String = color_text.strip_edges()
-	if normalized_color == "" or normalized_color.to_lower() == LEGACY_DEFAULT_HAIR_COLOR:
+	if normalized_color == "" or normalized_color.to_lower() in [LEGACY_DEFAULT_HAIR_COLOR, "<null>"]:
 		return get_default_hair_color(gender)
 	return normalized_color
 

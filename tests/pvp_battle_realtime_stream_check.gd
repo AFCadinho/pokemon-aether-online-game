@@ -50,6 +50,12 @@ func _init() -> void:
 		true,
 		"missing render batches recover from the canonical room snapshot"
 	)
+	_check_equal(
+		battle_source.contains('if phase == "waiting_for_opponent":') \
+			and battle_source.contains("if _pvp_local_request_allows_choice(local_state_player_id):"),
+		true,
+		"a room-wide waiting phase keeps an unsubmitted local decision actionable"
+	)
 
 	_check_equal(
 		realtime_source.contains('if joined:\n\t\t\tconnection_heartbeat_timer -= delta'),

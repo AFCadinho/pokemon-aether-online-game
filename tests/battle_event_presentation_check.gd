@@ -9,6 +9,8 @@ var failed := false
 
 func _init() -> void:
 	_check_previous_condition_uses_visible_scale()
+	_check_stale_previous_condition_rewinds_from_authoritative_state()
+	_check_legitimate_full_hp_rewind_is_preserved()
 	_check_full_hp_reveal_damage_has_no_damage_target()
 	_check_real_damage_keeps_damage_target()
 	_check_damage_after_hazard_uses_numeric_delta_when_previous_condition_is_stale()
@@ -80,6 +82,49 @@ func _check_previous_condition_uses_visible_scale() -> void:
 
 	_check_equal(snapshot.get("hp", 0), 100, "previous snapshot keeps visible HP")
 	_check_equal(snapshot.get("max_hp", 0), 100, "previous snapshot keeps visible max HP")
+
+
+func _check_stale_previous_condition_rewinds_from_authoritative_state() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	var snapshot: Dictionary = helper.get_rewind_hp_snapshot({
+		"type": "damage",
+		"previousCondition": "100/100",
+		"condition": "42/100",
+		"previousHp": 272,
+		"hp": 168,
+		"maxHp": 400,
+	}, {})
+
+	_check_equal(snapshot.get("hp", 0), 272, "canonical HP repairs a stale full-HP rewind without a state lookup")
+	_check_equal(snapshot.get("max_hp", 0), 400, "stale rewind keeps the canonical HP scale")
+
+	snapshot = helper.get_rewind_hp_snapshot({
+		"type": "damage",
+		"previousCondition": "100/100",
+		"condition": "42/100",
+	}, {
+		"hp": 68,
+		"max_hp": 100,
+	})
+
+	_check_equal(snapshot.get("hp", 0), 68, "stale full-HP rewind uses the intermediate authoritative HP")
+
+
+func _check_legitimate_full_hp_rewind_is_preserved() -> void:
+	var helper = BattleHpEventHelperScript.new()
+	var snapshot: Dictionary = helper.get_rewind_hp_snapshot({
+		"type": "damage",
+		"previousCondition": "100/100",
+		"condition": "68/100",
+		"previousHp": 400,
+		"hp": 272,
+		"maxHp": 400,
+	}, {
+		"hp": 272,
+		"max_hp": 400,
+	})
+
+	_check_equal(snapshot.get("hp", 0), 100, "a genuine full-to-damaged event still starts at full HP")
 
 
 func _check_full_hp_reveal_damage_has_no_damage_target() -> void:

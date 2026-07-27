@@ -11,6 +11,7 @@ func _init() -> void:
 	_check_empty_species_uses_details()
 	_check_duplicate_species_requires_stable_identity()
 	_check_valid_declared_slot_is_preserved()
+	_check_mimikyu_battle_form_resolves_to_canonical_slot()
 	quit(1 if failed else 0)
 
 
@@ -69,6 +70,22 @@ func _check_valid_declared_slot_is_preserved() -> void:
 		"canonicalPartySlot": 2,
 	}
 	_check_equal(Resolver.resolve_selected_slot(selected, _canonical_roster()), 2, "compatible battle form keeps its canonical slot")
+
+
+func _check_mimikyu_battle_form_resolves_to_canonical_slot() -> void:
+	var roster := [
+		{"species": "Mimikyu-Disguised", "instanceId": "mimikyu", "canonicalPartySlot": 3},
+	]
+	_check_equal(
+		Resolver.resolve_selected_slot({"species": "Mimikyu", "instanceId": "mimikyu"}, roster),
+		3,
+		"Showdown base Mimikyu resolves to its canonical disguised-form slot"
+	)
+	_check_equal(
+		Resolver.resolve_selected_slot({"species": "Mimikyu-Busted", "instanceId": "mimikyu"}, roster),
+		3,
+		"Mimikyu's in-battle busted form keeps the same canonical slot"
+	)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
