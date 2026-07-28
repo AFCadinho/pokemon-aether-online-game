@@ -6474,6 +6474,8 @@ func _run_pvp_spectator_team_preview() -> Dictionary:
 			continue
 		if not _apply_initial_battle_response(display_response):
 			continue
+		_seed_spectator_leads_from_team_preview_events(display_response)
+		_remember_spectator_canonical_response(display_response)
 
 		team_preview_lead_selection_active = false
 		_hide_team_preview_layers()
@@ -6484,6 +6486,60 @@ func _run_pvp_spectator_team_preview() -> Dictionary:
 		return display_response
 
 	return {}
+
+
+func _seed_spectator_leads_from_team_preview_events(response: Dictionary) -> void:
+	if not _is_spectator_battle():
+		return
+
+	var events_value: Variant = response.get("events", [])
+	if not (events_value is Array):
+		return
+
+	var lead_events: Array = []
+	for event_value: Variant in events_value as Array:
+		if not (event_value is Dictionary):
+			continue
+		var event_data := event_value as Dictionary
+		var event_type := str(event_data.get("type", ""))
+		if event_type == "turn":
+			break
+		if event_type == "switch" or event_type == "drag":
+			lead_events.append(event_data.duplicate(true))
+
+	if lead_events.is_empty():
+		return
+
+	battle_state.apply_event_conditions(lead_events)
+	_debug_spectator_loaded_state("team_preview_leads_seeded")
+
+
+func _remember_spectator_canonical_response(response: Dictionary) -> void:
+	if not _is_spectator_battle():
+		return
+
+	var canonical := spectator_latest_raw_response.duplicate(true)
+	for key in [
+		"success",
+		"viewerRole",
+		"battleId",
+		"formatId",
+		"players",
+		"phase",
+		"nextPhase",
+		"turn",
+		"eventSeq",
+		"eventBatches",
+		"batchSeq",
+		"field",
+		"state",
+		"timerState",
+		"pvpServerSeq",
+	]:
+		if response.has(key):
+			canonical[key] = response.get(key)
+	canonical["requests"] = battle_state.requests.duplicate(true)
+	spectator_latest_raw_response = canonical
 
 
 func _finish_pvp_team_preview_selection(lead_response: Dictionary) -> Dictionary:

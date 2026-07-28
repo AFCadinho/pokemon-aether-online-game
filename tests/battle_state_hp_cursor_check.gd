@@ -8,6 +8,7 @@ var failed := false
 func _init() -> void:
 	_check_historical_damage_does_not_rewind_an_undamaged_slot()
 	_check_percentage_damage_survives_a_quiet_turn()
+	_check_public_lead_switches_activate_team_preview_rosters()
 	quit(1 if failed else 0)
 
 
@@ -115,6 +116,67 @@ func _check_percentage_damage_survives_a_quiet_turn() -> void:
 		str(state.get_active_player_pokemon("p1").get("condition", "")),
 		"109/341",
 		"the canonical condition remains on the known HP scale"
+	)
+
+
+func _check_public_lead_switches_activate_team_preview_rosters() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "spectator-lead-seed-test",
+		"requests": {
+			"p1": {"side": {"pokemon": [
+				{"ident": "p1: Charizard", "species": "Charizard", "active": false, "condition": "100/100"},
+				{"ident": "p1: Alomomola", "species": "Alomomola", "active": false, "condition": "100/100"},
+			]}},
+			"p2": {"side": {"pokemon": [
+				{"ident": "p2: Slowking-Galar", "species": "Slowking-Galar", "active": false, "condition": "100/100"},
+				{"ident": "p2: Gengar", "species": "Gengar", "active": false, "condition": "100/100"},
+			]}},
+		},
+		"events": [],
+	})
+
+	state.apply_event_conditions([
+		{
+			"type": "switch",
+			"toIdent": "p1a: Charizard",
+			"details": "Charizard, L100",
+			"condition": "100/100",
+		},
+		{
+			"type": "switch",
+			"toIdent": "p2a: Slowking",
+			"details": "Slowking-Galar, L100",
+			"condition": "100/100",
+		},
+	])
+
+	_check_equal(
+		str(state.get_active_player_pokemon("p1").get("species", "")),
+		"Charizard",
+		"public p1 lead switch activates the Team Preview roster entry"
+	)
+	_check_equal(
+		str(state.get_active_player_pokemon("p2").get("species", "")),
+		"Slowking-Galar",
+		"public regional-form lead switch activates the exact Team Preview form"
+	)
+	_check_equal(
+		str(state.get_active_player_pokemon("p2").get("ident", "")),
+		"p2a: Slowking",
+		"public lead switch stores the live battle ident"
+	)
+
+	state.apply_event_conditions([{
+		"type": "damage",
+		"target": "p2a: Slowking",
+		"condition": "63/100",
+	}])
+	_check_equal(
+		state.get_active_pokemon_current_hp("p2"),
+		63,
+		"later public HP events resolve the seeded regional-form lead"
 	)
 
 

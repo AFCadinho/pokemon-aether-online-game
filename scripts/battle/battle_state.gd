@@ -518,6 +518,7 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 			return
 
 	var condition := _get_condition_from_event(event)
+	var event_species := _get_switch_event_species(event)
 	for index in range(team.size()):
 		var pokemon_value: Variant = team[index]
 		if not (pokemon_value is Dictionary):
@@ -526,7 +527,17 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 		var pokemon_data: Dictionary = pokemon_value as Dictionary
 		var is_target := index == target_index
 		pokemon_data["active"] = is_target
-		if not is_target or condition == "":
+		if not is_target:
+			continue
+
+		pokemon_data["ident"] = switch_ident
+		if event_species != "":
+			pokemon_data["species"] = event_species
+			pokemon_data["displaySpecies"] = event_species
+		var event_details := str(event.get("details", "")).strip_edges()
+		if event_details != "":
+			pokemon_data["details"] = event_details
+		if condition == "":
 			continue
 
 		pokemon_data["condition"] = condition
@@ -1036,6 +1047,15 @@ func _find_party_target_index(team: Array, target_ident: String, source_event: D
 			return slot_index
 		return -1
 
+	var event_species := _get_switch_event_species(source_event)
+	if event_species != "":
+		var event_species_index := _find_unique_team_index_by_pokemon_name(
+			team,
+			event_species.to_lower()
+		)
+		if event_species_index >= 0:
+			return event_species_index
+
 	var normalized_ident := _normalize_battle_ident(target_ident)
 	if normalized_ident != "":
 		var ident_index := _find_unique_team_index_by_ident(team, normalized_ident)
@@ -1053,6 +1073,19 @@ func _find_party_target_index(team: Array, target_ident: String, source_event: D
 
 	var species_index := _find_unique_team_index_by_pokemon_name(team, target_name)
 	return species_index if species_index >= 0 else -1
+
+
+func _get_switch_event_species(event_data: Dictionary) -> String:
+	for key in ["displaySpecies", "species"]:
+		var species := str(event_data.get(key, "")).strip_edges()
+		if species != "":
+			return species
+
+	var details := str(event_data.get("details", "")).strip_edges()
+	if details != "":
+		return str(details.split(",", false, 1)[0]).strip_edges()
+
+	return ""
 
 
 func _get_event_pokemon_key(event_data: Dictionary) -> String:

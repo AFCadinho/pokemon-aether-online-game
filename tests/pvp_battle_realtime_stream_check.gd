@@ -174,9 +174,11 @@ func _init() -> void:
 	_check_equal(
 		battle_source.contains("func _run_pvp_spectator_team_preview() -> Dictionary:") \
 			and battle_source.contains("Spectating team preview • waiting for both players") \
+			and battle_source.contains("_seed_spectator_leads_from_team_preview_events(display_response)") \
+			and battle_source.contains("_remember_spectator_canonical_response(display_response)") \
 			and battle_source.contains("if _is_spectator_battle():\n\t\treturn true"),
 		true,
-		"spectators observe team preview and continuously drain live battle updates"
+		"spectators seed public leads before the intro and continuously drain live battle updates"
 	)
 
 	service.active_room_code = "ROOM"
