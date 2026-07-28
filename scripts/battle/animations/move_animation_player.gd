@@ -218,7 +218,7 @@ func _animation_data_is_valid(animation_data: Dictionary) -> bool:
 
 func _build_nodes() -> void:
 	sheet_texture = sheet_texture_override
-	if sheet_texture == null:
+	if sheet_texture == null and sheet_path != "":
 		sheet_texture = load(sheet_path) as Texture2D
 	if sheet_texture == null and (show_sheet_sprites or _projectile_enabled()):
 		push_error("Could not load move animation sheet: %s" % sheet_path)
@@ -266,7 +266,7 @@ func _build_nodes() -> void:
 		var sound_key: String = str(sound_name)
 		var stream: AudioStream = sound_streams.get(sound_key, null) as AudioStream
 		var sound_path: String = str(sound_paths.get(sound_name, ""))
-		if stream == null:
+		if stream == null and sound_path != "":
 			stream = load(sound_path) as AudioStream
 		if stream == null:
 			push_warning("Could not load move animation sound: %s" % sound_path)
