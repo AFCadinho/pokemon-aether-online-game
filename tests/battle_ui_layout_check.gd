@@ -80,6 +80,7 @@ func _check_scene_structure() -> void:
 	_check_contains(enemy_hud_block, "offset_bottom = 146.0", "enemy HP HUD keeps its pill dimensions after moving up")
 	var sprite_box_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
 	_check_contains(sprite_box_source, "func anchor_stat_stage_panel_below", "stat badges support a HUD-relative anchor")
+	_check_contains(sprite_box_source, '"mimikyu-disguised": ["mimikyu"]', "Mimikyu Disguised resolves to its battle-sheet asset before the HOME-icon fallback")
 	var battle_modifier_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check_contains(
 		battle_modifier_source,

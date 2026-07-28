@@ -7008,7 +7008,13 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	_set_battle_input_locked(false)
 	_show_moves()
 
-func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_headers := true, source := "") -> bool:
+func _render_pvp_event_batch(
+	response: Dictionary,
+	events: Array,
+	render_turn_headers := true,
+	source := "",
+	post_render: Callable = Callable()
+) -> bool:
 	if not _is_pvp_battle():
 		await _render_battle_events(events, render_turn_headers, source)
 		return true
@@ -7030,6 +7036,8 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 						]
 					)
 				return false
+			if post_render.is_valid():
+				post_render.call(empty_batch_context)
 			_trace_pvp_flow("render_batch.empty_complete", response, "source=%s context=%s" % [source, JSON.stringify(empty_batch_context)])
 			pvp_event_queue.complete_render_batch(empty_batch_context, true)
 			return true
@@ -7079,6 +7087,11 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 	success = true
 	if success:
 		_mark_pvp_response_events_rendered(response)
+		# Canonical projection reconciliation may replace an active species. Keep
+		# that visible-state mutation in this batch, before its render cursor is
+		# released and the server receives the render acknowledgement.
+		if post_render.is_valid():
+			post_render.call(batch_context)
 		_update_battle_status_panels()
 		if _is_spectator_battle():
 			_remember_spectator_canonical_response(response)
@@ -11774,18 +11787,36 @@ func _render_pvp_opponent_response(
 	_update_battle_presentation_before_event_render(opponent_events)
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
-	var success := await _render_pvp_event_batch(render_response, opponent_events, true, source)
-	defer_force_switch_active_hide = false
-	_restore_pvp_authoritative_presentation(batch_response, opponent_events)
-	_update_active_sprites()
+	var post_render := Callable(self, "_restore_pvp_opponent_response_presentation").bind(batch_response, opponent_events)
+	var success := await _render_pvp_event_batch(render_response, opponent_events, true, source, post_render)
 	return success
 
-func _restore_pvp_authoritative_presentation(response: Dictionary, rendered_events: Array = []) -> void:
+func _restore_pvp_opponent_response_presentation(
+	response: Dictionary,
+	rendered_events: Array,
+	batch_context: Dictionary
+) -> void:
+	defer_force_switch_active_hide = false
+	_restore_pvp_authoritative_presentation(
+		response,
+		rendered_events,
+		_get_int_from_variant(batch_context.get("event_seq_end", -1), -1)
+	)
+	_update_active_sprites("pvp_authoritative_restore")
+
+func _restore_pvp_authoritative_presentation(
+	response: Dictionary,
+	rendered_events: Array = [],
+	render_cursor := -1
+) -> void:
 	if response.is_empty() or not bool(response.get("success", false)):
 		return
+	var canonical_render_cursor := render_cursor
+	if canonical_render_cursor < 0:
+		canonical_render_cursor = pvp_event_queue.last_rendered_seq
 	var canonical_response := pvp_response_order.canonical_snapshot_for_render_cursor(
 		response,
-		pvp_event_queue.last_rendered_seq
+		canonical_render_cursor
 	)
 	_preserve_terminal_presentation_requests(canonical_response)
 	battle_state.load_from_api_response(canonical_response, false)

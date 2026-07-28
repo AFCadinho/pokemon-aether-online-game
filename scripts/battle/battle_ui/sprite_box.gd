@@ -15,6 +15,12 @@ const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
 const PIXEL_SPRITE_STYLE_ORDER: Array[String] = ["gen5", "legacy_showdown", "showdown"]
 const HOME_SPRITE_RENDER_SCALE := 2.0
+const BATTLE_SPRITE_ASSET_ALIASES := {
+	# Battle payloads use this form name, while the battle-sheet directory is
+	# the base species. Without the alias the loader falls through to the HOME
+	# icon, then gets refreshed to the real battle sprite by later state data.
+	"mimikyu-disguised": ["mimikyu"],
+}
 const SPECIES_POSITION_OFFSETS := {
 	"back:charizard": Vector2(-46, -10),
 	"shiny_back:charizard": Vector2(-46, -10),
@@ -1037,6 +1043,13 @@ func _get_species_asset_id_candidates(species: String) -> Array[String]:
 	var compact_asset_id: String = asset_id.replace("-", "")
 	if compact_asset_id != asset_id:
 		candidates.append(compact_asset_id)
+
+	var aliases_value: Variant = BATTLE_SPRITE_ASSET_ALIASES.get(asset_id, [])
+	if aliases_value is Array:
+		for alias_value: Variant in aliases_value:
+			var alias_id := _normalize_species_asset_id(str(alias_value))
+			if alias_id != "" and not candidates.has(alias_id):
+				candidates.append(alias_id)
 
 	return candidates
 

@@ -16,6 +16,7 @@ func _init() -> void:
 	_check_initial_shiny_lead_uses_entrance_identity()
 	_check_stat_stage_events_normalize_drops()
 	_check_pvp_render_restores_canonical_party_state()
+	_check_pvp_sprite_restore_stays_inside_render_batch()
 	_check_local_force_switch_render_restores_canonical_party_state()
 	_check_api_response_uses_rendered_event_cursor()
 	_check_chained_force_switch_request_survives_entry_hazard_faint()
@@ -306,7 +307,7 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 	var render_index := source.find("func _render_pvp_opponent_response(")
 	var render_next_index := source.find("\nfunc ", render_index + 1)
 	var render_source := source.substr(render_index, render_next_index - render_index)
-	var restore_index := source.find("func _restore_pvp_authoritative_presentation(response: Dictionary, rendered_events: Array = []) -> void:")
+	var restore_index := source.find("func _restore_pvp_authoritative_presentation(")
 	var restore_next_index := source.find("\nfunc ", restore_index + 1)
 	var restore_source := source.substr(restore_index, restore_next_index - restore_index)
 	var temporary_index := source.find("func _set_temporary_switch_in_condition(")
@@ -314,11 +315,7 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 	var temporary_source := source.substr(temporary_index, temporary_next_index - temporary_index)
 
 	_check_equal(render_index >= 0, true, "PvP opponent render function exists")
-	_check_equal(
-		render_source.find("await _render_pvp_event_batch") < render_source.find("_restore_pvp_authoritative_presentation(batch_response, opponent_events)"),
-		true,
-		"PvP render restores the canonical response after presentation rewinds"
-	)
+	_check_equal(render_source.contains("Callable(self, \"_restore_pvp_opponent_response_presentation\").bind(batch_response, opponent_events)"), true, "PvP render schedules canonical restore after presentation rewinds")
 	_check_equal(restore_index >= 0, true, "canonical PvP presentation restore exists")
 	_check_equal(restore_source.contains("pvp_response_order.canonical_snapshot_for_render_cursor("), true, "restore cannot select a canonical PvP projection ahead of the rendered cursor")
 	_check_equal(restore_source.contains("battle_state.load_from_api_response(canonical_response, false)"), true, "canonical snapshot replaces temporary BattleState changes without replaying history")
@@ -327,6 +324,25 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 	_check_equal(restore_source.contains("_update_battle_status_panels()"), true, "canonical restore refreshes weather visuals and field timers")
 	_check_equal(restore_source.contains("_update_party_slots()"), true, "party rails refresh after canonical restore")
 	_check_equal(temporary_source.contains("target_is_fainted and not event_proves_alive"), true, "ambiguous switch presentation cannot revive a fainted target")
+
+
+func _check_pvp_sprite_restore_stays_inside_render_batch() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var batch_index := source.find("func _render_pvp_event_batch(")
+	var batch_next_index := source.find("\nfunc ", batch_index + 1)
+	var batch_source := source.substr(batch_index, batch_next_index - batch_index)
+	var render_index := source.find("func _render_pvp_opponent_response(")
+	var render_next_index := source.find("\nfunc ", render_index + 1)
+	var render_source := source.substr(render_index, render_next_index - render_index)
+	var restore_index := source.find("func _restore_pvp_opponent_response_presentation(")
+	var restore_next_index := source.find("\nfunc ", restore_index + 1)
+	var restore_source := source.substr(restore_index, restore_next_index - restore_index)
+
+	_check_equal(batch_index >= 0, true, "PvP batch renderer exists")
+	_check_equal(batch_source.contains("post_render.call(batch_context)"), true, "PvP batch invokes post-render reconciliation before completion")
+	_check_equal(render_source.contains("_render_pvp_event_batch(render_response, opponent_events, true, source, post_render)"), true, "opponent response supplies its restore callback to the active batch")
+	_check_equal(restore_source.contains("batch_context.get(\"event_seq_end\", -1)"), true, "canonical restore uses the active batch cursor before it completes")
+	_check_equal(restore_source.contains("_update_active_sprites(\"pvp_authoritative_restore\")"), true, "canonical sprite refresh occurs inside the active batch")
 
 
 func _check_local_force_switch_render_restores_canonical_party_state() -> void:
