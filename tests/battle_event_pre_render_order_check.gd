@@ -22,6 +22,7 @@ func _init() -> void:
 	_check_local_force_switch_render_restores_canonical_party_state()
 	_check_api_response_uses_rendered_event_cursor()
 	_check_chained_force_switch_request_survives_entry_hazard_faint()
+	_check_pivot_ko_wait_state_blocks_fainted_fallback()
 	_check_pvp_state_and_field_wait_for_render_cursor()
 	_check_pvp_restore_keeps_rendered_hp_and_field_events()
 	_check_authoritative_render_batch_survives_transport_reordering()
@@ -502,6 +503,30 @@ func _check_chained_force_switch_request_survives_entry_hazard_faint() -> void:
 	)
 
 
+func _check_pivot_ko_wait_state_blocks_fainted_fallback() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	for function_name in [
+		"_local_player_needs_force_switch_ui",
+		"_opponent_player_needs_force_switch_ui",
+	]:
+		var function_index := source.find("func %s() -> bool:" % function_name)
+		var next_function_index := source.find("\nfunc ", function_index + 1)
+		var function_source := source.substr(function_index, next_function_index - function_index)
+		var waiting_guard_index := function_source.find(
+			"if request_is_waiting or not decision_allows_choice:"
+		)
+		var fainted_fallback_index := function_source.find(
+			"should_infer_pvp_force_switch_from_fainted_active"
+		)
+
+		_check_equal(function_index >= 0, true, "%s exists" % function_name)
+		_check_equal(
+			waiting_guard_index >= 0 and waiting_guard_index < fainted_fallback_index,
+			true,
+			"%s honors wait/LOCKED before the fainted-active fallback" % function_name
+		)
+
+
 func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	var apply_index := source.find("func _apply_api_response(")
@@ -754,9 +779,31 @@ func _check_force_switch_phase_release_recovers() -> void:
 	_check_equal(completion_source.contains("pvp_pending_render_ack_completion = completion.duplicate(true)"), true, "successful render completion retains retryable ACK evidence")
 	_check_equal(reconciliation_source.contains("realtime_advanced_during_request"), true, "late room polling cannot overwrite a newer realtime phase")
 	_check_equal(reconciliation_source.contains("request_start_activity_seq"), true, "room polling also fences queued realtime activity")
-	_check_equal(reconciliation_source.contains("_apply_pvp_http_reconciliation_when_safe("), true, "room polling uses the render-safe HTTP snapshot boundary")
+	_check_equal(reconciliation_source.contains("await _apply_pvp_http_reconciliation_when_safe("), true, "room polling uses the render-safe HTTP snapshot boundary")
+	var http_reconciliation_index := source.find("func _apply_pvp_http_reconciliation_when_safe(")
+	var http_reconciliation_next_index := source.find("\nfunc ", http_reconciliation_index + 1)
+	var http_reconciliation_source := source.substr(
+		http_reconciliation_index,
+		http_reconciliation_next_index - http_reconciliation_index
+	)
+	_check_equal(
+		http_reconciliation_source.contains("_promote_pvp_battle_update_fallback_render(")
+			and http_reconciliation_source.contains("await _enqueue_pvp_battle_response("),
+		true,
+		"a canonical room poll promotes a missed realtime render batch into ordered catch-up"
+	)
+	_check_equal(
+		wait_source.contains("reconciled and pvp_event_queue.has_pending()"),
+		true,
+		"the pivoting client unwinds its wait so an HTTP-recovered batch can drain"
+	)
 	_check_equal(opponent_wait_source.contains("_retry_pending_pvp_render_ack()"), true, "the non-pivoting client also retries its barrier acknowledgement")
 	_check_equal(opponent_wait_source.contains('await _reconcile_pvp_battle_from_room("pvp_opponent_force_switch_barrier_recovery")'), true, "the non-pivoting client also recovers a missed barrier release")
+	_check_equal(
+		opponent_wait_source.contains("reconciled and pvp_event_queue.has_pending()"),
+		true,
+		"the non-pivoting client unwinds its wait so an HTTP-recovered switch can render"
+	)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

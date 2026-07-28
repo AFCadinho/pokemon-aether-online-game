@@ -15,12 +15,39 @@ var failed := false
 
 func _init() -> void:
 	_check_scene_structure()
+	_check_battle_scene_script_contract()
 	_check_world_battle_host()
 	_check_hp_hud_structure()
 	await _check_stage_scaling()
 	await _check_party_rail_interaction()
 	_check_battle_selection_policy_contract()
 	quit(1 if failed else 0)
+
+
+func _check_battle_scene_script_contract() -> void:
+	var scene_source := FileAccess.get_file_as_string(BATTLE_SCENE_PATH)
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
+	_check_contains(
+		scene_source,
+		"path=\"res://scripts/battle/battle.gd\"",
+		"battle scene root keeps the battle controller script attached"
+	)
+	_check_contains(
+		battle_source,
+		"func setup_pvp_battle_from_response(",
+		"battle controller exposes the PvP setup contract"
+	)
+	_check_contains(
+		world_source,
+		"not battle_instance.has_method(\"setup_pvp_battle_from_response\")",
+		"world validates the instantiated battle root before calling its setup contract"
+	)
+	_check_contains(
+		world_source,
+		"ResourceLoader.CACHE_MODE_REPLACE",
+		"world refreshes a stale battle scene cache after a detached-script instance"
+	)
 
 
 func _check_scene_structure() -> void:

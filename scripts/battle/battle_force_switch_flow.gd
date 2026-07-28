@@ -37,6 +37,20 @@ static func should_preserve_chained_request(next_phase: String, local_player_nee
 	return next_phase.strip_edges() == "awaiting_force_switch" and local_player_needs_force_switch
 
 
+static func should_infer_pvp_force_switch_from_fainted_active(
+	phase: String,
+	request_is_waiting: bool,
+	decision_allows_choice: bool,
+	active_fainted_with_available_switch: bool
+) -> bool:
+	return (
+		phase.strip_edges() == "awaiting_force_switch"
+		and not request_is_waiting
+		and decision_allows_choice
+		and active_fainted_with_available_switch
+	)
+
+
 func can_switch_to_slot(slot: int, player_id := "p1") -> bool:
 	if battle_state == null:
 		return false

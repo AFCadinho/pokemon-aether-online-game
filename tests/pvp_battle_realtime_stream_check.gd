@@ -121,6 +121,26 @@ func _init() -> void:
 		true,
 		"uncorrelated join failures cannot leave an open but unjoined socket"
 	)
+	var restart_start := realtime_source.find("func _restart_stalled_connection(reason: String) -> void:")
+	var restart_end := realtime_source.find("\nfunc ", restart_start + 1)
+	var restart_source := realtime_source.substr(restart_start, restart_end - restart_start)
+	_check_equal(
+		restart_source.contains("connection_attempt_generation += 1") \
+			and restart_source.contains("websocket = WebSocketPeer.new()"),
+		true,
+		"a render-barrier resync invalidates the old connection and deterministically reaches the reconnect loop"
+	)
+	var stalled_socket := service.websocket
+	var stalled_generation := service.connection_attempt_generation
+	service.should_reconnect = true
+	service.active_room_code = "ROOM"
+	service.request_resync("test render barrier")
+	_check_equal(service.websocket != stalled_socket, true, "resync replaces a stalled WebSocket peer")
+	_check_equal(
+		service.connection_attempt_generation,
+		stalled_generation + 1,
+		"resync invalidates an in-flight connection generation"
+	)
 	_check_equal(
 		realtime_source.contains("connection_attempt_generation += 1") \
 			and realtime_source.contains("attempt_generation != connection_attempt_generation"),

@@ -8974,9 +8974,14 @@ func _wait_for_pvp_force_switch_phase_release(source: String) -> bool:
 
 		if now_msec >= next_reconciliation_msec:
 			reconciliation_attempt += 1
-			await _reconcile_pvp_battle_from_room("pvp_force_switch_phase_release_recovery")
+			var reconciled := await _reconcile_pvp_battle_from_room("pvp_force_switch_phase_release_recovery")
 			if battle_state.is_battle_ended():
 				await _finish_if_battle_ended()
+				return false
+			if reconciled and pvp_event_queue.has_pending():
+				# The HTTP snapshot recovered a render batch that the realtime
+				# transport missed. Unwind the current queue entry so the
+				# recovered batch can render and expose its forced-switch request.
 				return false
 			var retry_delay_msec := mini(
 				PVP_FORCE_SWITCH_RECONCILE_INITIAL_MSEC + reconciliation_attempt * 500,
@@ -9104,19 +9109,25 @@ func _local_player_needs_force_switch_ui() -> bool:
 func _opponent_player_needs_force_switch_ui() -> bool:
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
 	for player_id in candidate_player_ids:
-		if (
-			_is_pvp_battle()
-			and pvp_last_phase == "awaiting_force_switch"
-			and _player_active_fainted_with_available_switch(player_id)
-		):
-			return true
-		if _is_pvp_battle() and _player_request_is_waiting(player_id):
-			return false
+		var request_is_waiting := false
+		var decision_allows_choice := true
+		if _is_pvp_battle():
+			request_is_waiting = _player_request_is_waiting(player_id)
+			decision_allows_choice = _pvp_local_decision_allows_choice(player_id)
+			if request_is_waiting or not decision_allows_choice:
+				return false
 
 		if force_switch_flow.player_needs_force_switch(player_id):
 			return true
 
 		if _is_pvp_battle():
+			if BattleForceSwitchFlow.should_infer_pvp_force_switch_from_fainted_active(
+				pvp_last_phase,
+				request_is_waiting,
+				decision_allows_choice,
+				_player_active_fainted_with_available_switch(player_id)
+			):
+				return true
 			continue
 
 		if _player_active_fainted_with_available_switch(player_id):
@@ -9888,7 +9899,11 @@ func _reconcile_pvp_battle_from_room(source: String) -> bool:
 		"serverSeq": response.get("serverSeq", pvp_last_phase_update_server_seq),
 		"response": response,
 	}
-	var applied := _apply_pvp_http_reconciliation_when_safe(message, mapped_response, source)
+	var applied := await _apply_pvp_http_reconciliation_when_safe(
+		message,
+		mapped_response,
+		source
+	)
 	if applied and DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
 			"Canonical room reconciliation applied",
@@ -10201,7 +10216,7 @@ func _recover_pvp_realtime_action_timeout(action: String, player_id: String, sub
 		"serverSeq": response.get("serverSeq", pvp_last_phase_update_server_seq),
 		"response": response,
 	}
-	var reconciliation_applied := _apply_pvp_http_reconciliation_when_safe(
+	var reconciliation_applied := await _apply_pvp_http_reconciliation_when_safe(
 		message,
 		mapped_response,
 		"pvp_action_timeout_recovery"
@@ -10675,9 +10690,13 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 				next_barrier_ack_retry_msec = now_msec + PVP_FORCE_SWITCH_ACK_RETRY_MSEC
 			if now_msec >= next_barrier_reconciliation_msec:
 				barrier_reconciliation_attempt += 1
-				await _reconcile_pvp_battle_from_room("pvp_opponent_force_switch_barrier_recovery")
+				var reconciled := await _reconcile_pvp_battle_from_room("pvp_opponent_force_switch_barrier_recovery")
 				if battle_state.is_battle_ended():
 					await _finish_if_battle_ended()
+					return true
+				if reconciled and pvp_event_queue.has_pending():
+					# Let the queue drain the recovered opponent switch before
+					# deciding which participant owns the next forced switch.
 					return true
 				if pvp_last_phase == "turn_open" and not _opponent_player_needs_force_switch_ui():
 					return true
@@ -11395,6 +11414,15 @@ func _apply_pvp_http_reconciliation_when_safe(
 		and snapshot_event_seq == 0
 		and pvp_rendered_event_count == 0
 	):
+		var catchup_response := _promote_pvp_battle_update_fallback_render(
+			_response_from_pvp_realtime_message(message)
+		)
+		if not catchup_response.is_empty():
+			return await _enqueue_pvp_battle_response(
+				catchup_response,
+				"%s_event_catchup" % source,
+				true
+			)
 		_buffer_pvp_reconciliation_snapshot(
 			message,
 			mapped_update,

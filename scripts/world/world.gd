@@ -1834,6 +1834,37 @@ func _mount_battle_ui() -> bool:
 
 	_clear_battle_ui_instance()
 	battle_instance = BATTLE_SCENE.instantiate()
+	if battle_instance == null or not battle_instance.has_method("setup_pvp_battle_from_response"):
+		if battle_instance != null:
+			battle_instance.free()
+			battle_instance = null
+		var refreshed_scene := ResourceLoader.load(
+			BATTLE_SCENE_PATH,
+			"PackedScene",
+			ResourceLoader.CACHE_MODE_REPLACE
+		) as PackedScene
+		if refreshed_scene != null:
+			battle_instance = refreshed_scene.instantiate()
+
+	if battle_instance == null or not battle_instance.has_method("setup_pvp_battle_from_response"):
+		var instantiated_class := "<null>"
+		var instantiated_script := "<none>"
+		if battle_instance != null:
+			instantiated_class = battle_instance.get_class()
+			var script: Script = battle_instance.get_script() as Script
+			if script != null:
+				instantiated_script = script.resource_path
+			battle_instance.free()
+		battle_instance = null
+		push_error(
+			"World._mount_battle_ui loaded an invalid battle root "
+			+ "class=%s script=%s expected=%s" % [
+				instantiated_class,
+				instantiated_script,
+				BATTLE_SCENE_PATH,
+			]
+		)
+		return false
 	battle_ui_host.add_child(battle_instance)
 	battle_ui_host.visible = true
 

@@ -705,6 +705,7 @@ func _handle_closed_socket() -> void:
 
 
 func _restart_stalled_connection(reason: String) -> void:
+	connection_attempt_generation += 1
 	joined = false
 	join_sent = false
 	join_sent_at_msec = 0
@@ -716,6 +717,12 @@ func _restart_stalled_connection(reason: String) -> void:
 	reconnect_timer = RECONNECT_DELAY_SECONDS
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close(1013, reason.left(120))
+	# A peer left in CLOSING can otherwise remain the active object forever and
+	# prevent the reconnect loop from reaching its CLOSED-state branch.
+	websocket = WebSocketPeer.new()
+	if connected:
+		connected = false
+		connection_changed.emit(false)
 
 
 func _handle_join_error(message: Dictionary) -> void:

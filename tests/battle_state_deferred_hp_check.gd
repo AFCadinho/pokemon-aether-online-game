@@ -15,6 +15,7 @@ func _init() -> void:
 	_check_pursuit_faint_keeps_pending_iron_treads_available()
 	_check_historical_switch_renders_before_its_faint()
 	_check_entry_hazard_faint_preserves_chained_force_switch()
+	_check_pivot_ko_waiting_player_does_not_infer_force_switch()
 	_check_status_event_normalizes_badly_poisoned()
 	_check_public_mimikyu_status_updates_disguised_roster_entry()
 	_check_public_mimikyu_forme_change_updates_active_sprite_species()
@@ -426,6 +427,39 @@ func _check_entry_hazard_faint_preserves_chained_force_switch() -> void:
 		),
 		false,
 		"an opponent-only forced switch does not retain a local request"
+	)
+
+
+func _check_pivot_ko_waiting_player_does_not_infer_force_switch() -> void:
+	_check_equal(
+		BattleForceSwitchFlowScript.should_infer_pvp_force_switch_from_fainted_active(
+			"awaiting_force_switch",
+			true,
+			false,
+			true
+		),
+		false,
+		"a fainted pivot target with wait=true cannot open a simultaneous switch prompt"
+	)
+	_check_equal(
+		BattleForceSwitchFlowScript.should_infer_pvp_force_switch_from_fainted_active(
+			"awaiting_force_switch",
+			false,
+			false,
+			true
+		),
+		false,
+		"a LOCKED fainted pivot target cannot open a simultaneous switch prompt"
+	)
+	_check_equal(
+		BattleForceSwitchFlowScript.should_infer_pvp_force_switch_from_fainted_active(
+			"awaiting_force_switch",
+			false,
+			true,
+			true
+		),
+		true,
+		"an ACTIVE fainted participant may recover a missing force-switch request"
 	)
 
 
