@@ -12,6 +12,9 @@ func _init() -> void:
 	var update_handler_start := battle_source.find("func _on_pvp_realtime_battle_update(message: Dictionary) -> void:")
 	var immediate_terminal_position := battle_source.find("if _should_apply_pvp_realtime_end_immediately(message):", update_handler_start)
 	var normal_queue_position := battle_source.find("pvp_realtime_updates.append(message.duplicate(true))", update_handler_start)
+	var opponent_force_wait_start := battle_source.find("func _wait_for_pvp_opponent_force_switch_and_render() -> bool:")
+	var opponent_force_wait_lock_position := battle_source.find("_show_pvp_opponent_force_switch_wait()", opponent_force_wait_start)
+	var opponent_force_wait_loop_position := battle_source.find("while true:", opponent_force_wait_start)
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(queue_cursor_position >= 0 and queue_cursor_position < send_position, true, "realtime response queue cursor is captured before sending")
 	_check_equal(
@@ -28,6 +31,12 @@ func _init() -> void:
 		immediate_terminal_position >= update_handler_start and immediate_terminal_position < normal_queue_position,
 		true,
 		"confirmed terminal actions finish before they can fall into the ordinary realtime queue"
+	)
+	_check_equal(
+		opponent_force_wait_lock_position >= opponent_force_wait_start \
+			and opponent_force_wait_lock_position < opponent_force_wait_loop_position,
+		true,
+		"opponent force-switch waiting locks and hides battle controls before polling"
 	)
 	_check_equal(
 		battle_source.contains('bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE"'),

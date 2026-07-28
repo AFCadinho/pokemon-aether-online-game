@@ -10442,8 +10442,8 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime("Waiting for opponent force-switch", "local_player_id=%s" % action_flow.local_player_id)
 
+	_show_pvp_opponent_force_switch_wait()
 	var wait_start_server_seq := pvp_last_phase_update_server_seq
-	current_action_panel.set_message("Waiting for opponent switch...")
 	_trace_pvp_flow("wait_force_switch.start", {}, "waitStartSeq=%d" % wait_start_server_seq)
 	var attempt := 0
 	var fallback_render_response: Dictionary = {}
