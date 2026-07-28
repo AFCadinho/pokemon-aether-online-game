@@ -6500,6 +6500,7 @@ func _seed_spectator_leads_from_team_preview_events(response: Dictionary) -> voi
 
 	var lead_events: Array = []
 	var seeded_players: Dictionary = {}
+	var public_setup_idents: Array[String] = []
 	for event_value: Variant in events_value as Array:
 		if not (event_value is Dictionary):
 			continue
@@ -6514,12 +6515,73 @@ func _seed_spectator_leads_from_team_preview_events(response: Dictionary) -> voi
 				seeded_players[player_id] = true
 				if seeded_players.size() >= 2:
 					break
+		for ident_key in ["target", "actor", "pokemon", "sourceTarget", "fromIdent", "toIdent"]:
+			var public_ident := str(event_data.get(ident_key, "")).strip_edges()
+			if _get_player_id_from_ident(public_ident) in ["p1", "p2"] and not public_setup_idents.has(public_ident):
+				public_setup_idents.append(public_ident)
+
+	for public_ident in public_setup_idents:
+		var player_id := _get_player_id_from_ident(public_ident)
+		if seeded_players.has(player_id):
+			continue
+		var inferred_lead_event := _build_spectator_lead_event_from_public_ident(player_id, public_ident)
+		if inferred_lead_event.is_empty():
+			continue
+		lead_events.append(inferred_lead_event)
+		seeded_players[player_id] = true
+		if seeded_players.size() >= 2:
+			break
 
 	if lead_events.is_empty():
 		return
 
 	battle_state.apply_event_conditions(lead_events)
 	_debug_spectator_loaded_state("team_preview_leads_seeded")
+
+
+func _build_spectator_lead_event_from_public_ident(player_id: String, public_ident: String) -> Dictionary:
+	var ident_species := public_ident
+	if ident_species.contains(": "):
+		ident_species = str(ident_species.split(": ", false, 1)[1]).strip_edges()
+	var ident_species_key := _normalize_species_for_compare(ident_species)
+	var ident_base_key := _normalize_species_base_for_compare(ident_species)
+	if ident_species_key == "":
+		return {}
+
+	var matched_pokemon: Dictionary = {}
+	for pokemon_value: Variant in battle_state.get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon := pokemon_value as Dictionary
+		var roster_species := str(pokemon.get(
+			"displaySpecies",
+			pokemon.get("species", str(pokemon.get("details", "")).split(",", false, 1)[0])
+		)).strip_edges()
+		var roster_species_key := _normalize_species_for_compare(roster_species)
+		if roster_species_key != ident_species_key \
+				and _normalize_species_base_for_compare(roster_species) != ident_base_key:
+			continue
+		if not matched_pokemon.is_empty():
+			return {}
+		matched_pokemon = pokemon
+
+	if matched_pokemon.is_empty():
+		return {}
+
+	var species := str(matched_pokemon.get(
+		"displaySpecies",
+		matched_pokemon.get("species", ident_species)
+	)).strip_edges()
+	var condition := str(matched_pokemon.get("condition", "100/100")).strip_edges()
+	return {
+		"type": "switch",
+		"target": public_ident,
+		"species": species,
+		"displaySpecies": species,
+		"details": species,
+		"condition": condition if condition != "" else "100/100",
+		"synthetic": true,
+	}
 
 
 func _remember_spectator_canonical_response(response: Dictionary) -> void:

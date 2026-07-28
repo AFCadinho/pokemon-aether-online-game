@@ -175,6 +175,9 @@ func _init() -> void:
 		battle_source.contains("func _run_pvp_spectator_team_preview() -> Dictionary:") \
 			and battle_source.contains("Spectating team preview • waiting for both players") \
 			and battle_source.contains("_seed_spectator_leads_from_team_preview_events(display_response)") \
+			and battle_source.contains("_build_spectator_lead_event_from_public_ident(player_id, public_ident)") \
+			and battle_source.contains('for ident_key in ["target", "actor", "pokemon", "sourceTarget", "fromIdent", "toIdent"]') \
+			and battle_source.contains("_normalize_species_base_for_compare(roster_species) != ident_base_key") \
 			and battle_source.contains("_remember_spectator_canonical_response(display_response)") \
 			and battle_source.contains('if event_type in ["move", "damage", "heal", "status", "cant", "fail", "miss", "faint"]') \
 			and battle_source.contains("if seeded_players.size() >= 2:") \
