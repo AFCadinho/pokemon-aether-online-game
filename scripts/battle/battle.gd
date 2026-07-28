@@ -5333,6 +5333,9 @@ func prepare_wild_battle_from_response(player_pokemon: Pokemon, enemy_pokemon: P
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(player_species, opponent_species))
 	_show_original_player_lead_before_initial_events(player_species, player_pokemon)
+	# The lead data must be ready for the summon target, but the player sprite
+	# itself must not flash before the Poké Ball release animation begins.
+	player_sprite_box.visible = false
 	_refresh_wild_opponent_owned_icon.call_deferred(
 		enemy_pokemon.species,
 		enemy_pokemon.shiny,

@@ -46,6 +46,13 @@ func _check_trade_context_action() -> void:
 		Vector2(400, 200)
 	)
 	await process_frame
+	await process_frame
+	await process_frame
+	_check_equal(
+		coordinator.context_menu.size.y < 300.0,
+		true,
+		"collapsed trainer context card shrinks to its rendered content on first open"
+	)
 
 	var trade_button := _find_player_action("Trade")
 	_check_equal(trade_button != null, true, "enabled trade capability renders a Trade action")
@@ -92,6 +99,7 @@ func _check_guild_invite_context_action() -> void:
 	coordinator.guild_membership_loaded = true
 	coordinator.social_state_loading = false
 	coordinator._render_context_menu()
+	coordinator._toggle_context_more_actions()
 	await process_frame
 	_check_equal(
 		_find_player_action("Invite to Guild") != null,

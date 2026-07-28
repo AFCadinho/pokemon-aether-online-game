@@ -42,6 +42,9 @@ var context_title: Label
 var context_username_label: Label
 var context_status_label: Label
 var context_actions: VBoxContainer
+var context_more_actions_expanded := false
+var context_requested_position := Vector2.ZERO
+var context_layout_serial := 0
 var current_target: Dictionary = {}
 var social_overview: Dictionary = {}
 var social_request_serial := 0
@@ -113,10 +116,12 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 	social_state_loading = true
 	social_status_message = ""
 	social_status_is_error = false
+	context_more_actions_expanded = false
+	context_requested_position = screen_position + Vector2(10.0, 10.0)
 	context_menu.visible = true
-	_position_panel(context_menu, screen_position + Vector2(10.0, 10.0))
-	context_menu.move_to_front()
 	_render_context_menu()
+	_position_panel(context_menu, context_requested_position)
+	context_menu.move_to_front()
 	_focus_first_context_action()
 	_refresh_social_overview_for_target(normalized)
 
@@ -463,10 +468,9 @@ func _render_context_menu() -> void:
 		initial_label.text = _player_initial(current_target)
 	_refresh_context_status()
 	_clear_children(context_actions)
-	context_actions.add_child(_context_section_label("TRAINER ACTIONS"))
-	_add_context_action("View Trainer Card", "Inspect profile, badges and stats", _on_trainer_card_pressed)
+	# Keep the default right-click card focused on the two actions trainers use
+	# most. Everything else stays one deliberate click away.
 	_add_context_action("Message", "Start a private conversation", _on_message_pressed)
-	_add_context_action("Send Mail", "Send a message or attachment", _on_mail_pressed)
 	var trade_enabled := bool(trade_capabilities.get("enabled", false))
 	_add_context_action(
 		"Trade",
@@ -475,27 +479,70 @@ func _render_context_menu() -> void:
 		"default",
 		trade_capabilities_loading or (trade_capabilities_loaded and not trade_enabled)
 	)
-	if _can_invite_to_guild():
-		context_actions.add_child(_context_section_label("GUILD"))
+	_add_context_more_actions_toggle()
+	if context_more_actions_expanded:
+		context_actions.add_child(_context_section_label("MORE ACTIONS"))
+		_add_context_action("View Trainer Card", "Inspect profile, badges and stats", _on_trainer_card_pressed)
+		_add_context_action("Send Mail", "Send a message or attachment", _on_mail_pressed)
+		if _can_invite_to_guild():
+			_add_context_action(
+				"Invite to Guild",
+				"Invite this trainer to join your guild",
+				_on_guild_invite_pressed,
+				"default",
+				guild_action_in_flight
+			)
 		_add_context_action(
-			"Invite to Guild",
-			"Invite this trainer to join your guild",
-			_on_guild_invite_pressed,
-			"default",
-			guild_action_in_flight
+			"Remove Friend" if _is_friend(current_target) else "Add Friend",
+			"Update your friends list",
+			_on_friend_pressed
 		)
-	context_actions.add_child(_context_section_label("SOCIAL"))
-	_add_context_action(
-		"Remove Friend" if _is_friend(current_target) else "Add Friend",
-		"Update your friends list",
-		_on_friend_pressed
-	)
-	_add_context_action(
-		"Unblock" if _is_blocked(current_target) else "Block",
-		"Restore contact" if _is_blocked(current_target) else "Prevent future contact",
-		_on_block_pressed,
-		"default" if _is_blocked(current_target) else "danger"
-	)
+		_add_context_action(
+			"Unblock" if _is_blocked(current_target) else "Block",
+			"Restore contact" if _is_blocked(current_target) else "Prevent future contact",
+			_on_block_pressed,
+			"default" if _is_blocked(current_target) else "danger"
+		)
+	_schedule_context_menu_content_fit()
+
+
+func _add_context_more_actions_toggle() -> void:
+	var button := Button.new()
+	button.set_meta("player_action", "More actions")
+	button.text = "More actions  %s" % ["▴" if context_more_actions_expanded else "▾"]
+	button.tooltip_text = "Show additional trainer actions"
+	button.custom_minimum_size = Vector2(0, 34)
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_color_override("font_color", UI_ACCENT)
+	button.add_theme_stylebox_override("normal", _button_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 8))
+	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, UI_ACCENT_SOFT, 8))
+	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8))
+	button.pressed.connect(_toggle_context_more_actions)
+	context_actions.add_child(button)
+
+
+func _toggle_context_more_actions() -> void:
+	context_more_actions_expanded = not context_more_actions_expanded
+	context_requested_position = context_menu.position
+	_render_context_menu()
+
+
+func _schedule_context_menu_content_fit() -> void:
+	context_layout_serial += 1
+	_fit_context_menu_to_content.call_deferred(context_layout_serial)
+
+
+func _fit_context_menu_to_content(layout_serial: int) -> void:
+	# Container minimum sizes update during the layout pass. Wait for it before
+	# reading the height, otherwise a first-open menu can retain a stale height.
+	await get_tree().process_frame
+	if layout_serial != context_layout_serial or context_menu == null or not context_menu.visible:
+		return
+	context_menu.reset_size()
+	_position_panel(context_menu, context_requested_position)
+	context_menu.move_to_front()
 
 
 func _refresh_context_status() -> void:
