@@ -9,6 +9,7 @@ func _init() -> void:
 	_check_historical_damage_does_not_rewind_an_undamaged_slot()
 	_check_percentage_damage_survives_a_quiet_turn()
 	_check_public_lead_switches_activate_team_preview_rosters()
+	_check_public_base_ident_resolves_unique_preview_form()
 	quit(1 if failed else 0)
 
 
@@ -194,6 +195,47 @@ func _check_public_lead_switches_activate_team_preview_rosters() -> void:
 		state.get_active_pokemon_current_hp("p2"),
 		63,
 		"later public HP events resolve the seeded regional-form lead"
+	)
+
+
+func _check_public_base_ident_resolves_unique_preview_form() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p2: Hatterene",
+							"species": "Hatterene",
+							"displaySpecies": "Hatterene",
+							"condition": "100/100",
+							"active": false,
+						},
+						{
+							"ident": "p2: Landorus Therian",
+							"species": "Landorus Therian",
+							"displaySpecies": "Landorus Therian",
+							"condition": "100/100",
+							"active": false,
+						},
+					],
+				},
+			},
+		},
+		"events": [],
+	})
+	var inferred_event := state.build_public_switch_event_for_ident("p2", "p2a: Landorus")
+	state.apply_event_conditions([inferred_event])
+	_check_equal(
+		str(state.get_active_player_pokemon("p2").get("displaySpecies", "")),
+		"Landorus Therian",
+		"a public base-form ident activates the unique Team Preview forme"
+	)
+	_check_equal(
+		str(state.get_active_player_pokemon("p2").get("ident", "")),
+		"p2a: Landorus",
+		"the inferred public lead preserves the live battle ident"
 	)
 
 

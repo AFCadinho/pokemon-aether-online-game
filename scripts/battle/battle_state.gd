@@ -371,6 +371,69 @@ func resolve_persisted_mega_species_for_ident(ident: String) -> String:
 
 	return str(mega_species_by_ident.get(mega_key, "")).strip_edges()
 
+
+func build_public_switch_event_for_ident(player_id: String, public_ident: String) -> Dictionary:
+	if player_id not in ["p1", "p2"] or _get_player_id_from_ident(public_ident) != player_id:
+		return {}
+	var ident_species := _get_pokemon_name_from_ident(public_ident)
+	var ident_species_key := _normalize_public_species_key(ident_species)
+	var ident_base_key := _normalize_public_species_base_key(ident_species)
+	if ident_species_key == "":
+		return {}
+
+	var matched_pokemon: Dictionary = {}
+	for pokemon_value: Variant in get_player_team(player_id):
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon := pokemon_value as Dictionary
+		var roster_species := str(pokemon.get("displaySpecies", pokemon.get("species", ""))).strip_edges()
+		if roster_species == "":
+			var details := str(pokemon.get("details", "")).strip_edges()
+			roster_species = str(details.split(",", false, 1)[0]).strip_edges() if details != "" else ""
+		var roster_species_key := _normalize_public_species_key(roster_species)
+		if roster_species_key != ident_species_key \
+				and _normalize_public_species_base_key(roster_species) != ident_base_key:
+			continue
+		if not matched_pokemon.is_empty():
+			return {}
+		matched_pokemon = pokemon
+
+	if matched_pokemon.is_empty():
+		return {}
+
+	var species := str(matched_pokemon.get(
+		"displaySpecies",
+		matched_pokemon.get("species", ident_species)
+	)).strip_edges()
+	var condition := str(matched_pokemon.get("condition", "100/100")).strip_edges()
+	return {
+		"type": "switch",
+		"target": public_ident,
+		"species": species,
+		"displaySpecies": species,
+		"details": species,
+		"condition": condition if condition != "" else "100/100",
+		"synthetic": true,
+	}
+
+
+func _normalize_public_species_key(species: String) -> String:
+	return species.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
+
+
+func _normalize_public_species_base_key(species: String) -> String:
+	var normalized := _normalize_public_species_key(species)
+	for suffix in [
+		"-alola", "-galar", "-hisui", "-paldea",
+		"-therian", "-incarnate", "-origin", "-altered",
+		"-wash", "-heat", "-frost", "-fan", "-mow",
+		"-sky", "-land", "-blade", "-shield",
+	]:
+		if normalized.ends_with(suffix):
+			return normalized.substr(0, normalized.length() - suffix.length())
+	return normalized
+
+
 func resolve_mega_species_for_event(event: Dictionary) -> String:
 	var event_species := str(event.get("species", "")).strip_edges()
 	if _is_mega_or_primal_species(event_species):

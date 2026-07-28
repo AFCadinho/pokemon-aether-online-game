@@ -1,6 +1,5 @@
 extends SceneTree
 
-
 func _init() -> void:
 	var service := PvpBattleRealtimeServiceNode.new()
 	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
@@ -177,7 +176,10 @@ func _init() -> void:
 			and battle_source.contains("_seed_spectator_leads_from_team_preview_events(display_response)") \
 			and battle_source.contains("_build_spectator_lead_event_from_public_ident(player_id, public_ident)") \
 			and battle_source.contains('for ident_key in ["target", "actor", "pokemon", "sourceTarget", "fromIdent", "toIdent"]') \
-			and battle_source.contains("_normalize_species_base_for_compare(roster_species) != ident_base_key") \
+			and battle_source.contains("battle_state.build_public_switch_event_for_ident(player_id, public_ident)") \
+			and battle_source.contains("_ensure_spectator_active_pokemon_for_event(event_data)") \
+			and battle_source.contains("battle_state.get_active_player_pokemon(player_id).is_empty()") \
+			and battle_source.contains("active_seeded_from_event") \
 			and battle_source.contains("_remember_spectator_canonical_response(display_response)") \
 			and battle_source.contains('if event_type in ["move", "damage", "heal", "status", "cant", "fail", "miss", "faint"]') \
 			and battle_source.contains("if seeded_players.size() >= 2:") \

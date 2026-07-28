@@ -5581,6 +5581,7 @@ func _debug_spectator_response(stage: String, response: Dictionary) -> void:
 		"turn": int(response.get("turn", 0)),
 		"eventSeq": int(response.get("eventSeq", -1)),
 		"serverSeq": _get_pvp_response_server_seq(response),
+		"events": _summarize_battle_events(response.get("events", [])),
 		"p1": _debug_spectator_request_side(response, "p1"),
 		"p2": _debug_spectator_request_side(response, "p2"),
 	}))
@@ -6540,48 +6541,7 @@ func _seed_spectator_leads_from_team_preview_events(response: Dictionary) -> voi
 
 
 func _build_spectator_lead_event_from_public_ident(player_id: String, public_ident: String) -> Dictionary:
-	var ident_species := public_ident
-	if ident_species.contains(": "):
-		ident_species = str(ident_species.split(": ", false, 1)[1]).strip_edges()
-	var ident_species_key := _normalize_species_for_compare(ident_species)
-	var ident_base_key := _normalize_species_base_for_compare(ident_species)
-	if ident_species_key == "":
-		return {}
-
-	var matched_pokemon: Dictionary = {}
-	for pokemon_value: Variant in battle_state.get_player_team(player_id):
-		if not (pokemon_value is Dictionary):
-			continue
-		var pokemon := pokemon_value as Dictionary
-		var roster_species := str(pokemon.get(
-			"displaySpecies",
-			pokemon.get("species", str(pokemon.get("details", "")).split(",", false, 1)[0])
-		)).strip_edges()
-		var roster_species_key := _normalize_species_for_compare(roster_species)
-		if roster_species_key != ident_species_key \
-				and _normalize_species_base_for_compare(roster_species) != ident_base_key:
-			continue
-		if not matched_pokemon.is_empty():
-			return {}
-		matched_pokemon = pokemon
-
-	if matched_pokemon.is_empty():
-		return {}
-
-	var species := str(matched_pokemon.get(
-		"displaySpecies",
-		matched_pokemon.get("species", ident_species)
-	)).strip_edges()
-	var condition := str(matched_pokemon.get("condition", "100/100")).strip_edges()
-	return {
-		"type": "switch",
-		"target": public_ident,
-		"species": species,
-		"displaySpecies": species,
-		"details": species,
-		"condition": condition if condition != "" else "100/100",
-		"synthetic": true,
-	}
+	return battle_state.build_public_switch_event_for_ident(player_id, public_ident)
 
 
 func _remember_spectator_canonical_response(response: Dictionary) -> void:
@@ -7213,6 +7173,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			continue
 
 		var event_data: Dictionary = event as Dictionary
+		_ensure_spectator_active_pokemon_for_event(event_data)
 		var fallback_knock_off_message := _get_fallback_knock_off_item_message(event_data) if not has_explicit_item_events else ""
 		_remember_battle_modifier_event(event_data)
 
@@ -7325,6 +7286,36 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 		last_rendered_event_seq,
 		_summarize_active_battle_state(),
 	])
+
+
+func _ensure_spectator_active_pokemon_for_event(event_data: Dictionary) -> void:
+	if not _is_spectator_battle():
+		return
+	var event_type := str(event_data.get("type", ""))
+	if event_type in ["turn", "switch", "drag", "win", "message", "fieldEffect"]:
+		return
+
+	var public_idents: Array[String] = []
+	for ident_key in ["target", "actor", "pokemon", "sourceTarget", "fromIdent", "toIdent"]:
+		var public_ident := str(event_data.get(ident_key, "")).strip_edges()
+		if _get_player_id_from_ident(public_ident) in ["p1", "p2"] and not public_idents.has(public_ident):
+			public_idents.append(public_ident)
+
+	for public_ident in public_idents:
+		var player_id := _get_player_id_from_ident(public_ident)
+		if not battle_state.get_active_player_pokemon(player_id).is_empty():
+			continue
+		var inferred_lead_event := _build_spectator_lead_event_from_public_ident(player_id, public_ident)
+		if inferred_lead_event.is_empty():
+			continue
+		battle_state.apply_event_conditions([inferred_lead_event])
+		_update_active_pokemon_presentation_for_ident(public_ident)
+		if DEBUG_PVP_SPECTATOR_PRESENTATION:
+			print(PVP_SPECTATOR_DEBUG_PREFIX, " active_seeded_from_event ", JSON.stringify({
+				"sourceEvent": _summarize_battle_event_dictionary(event_data),
+				"syntheticSwitch": inferred_lead_event,
+			}))
+
 
 func _get_move_animation_result_for_event(events: Array, event_index: int) -> String:
 	if event_index < 0 or event_index >= events.size():
