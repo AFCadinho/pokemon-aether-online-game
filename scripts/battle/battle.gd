@@ -5509,7 +5509,9 @@ func _build_spectator_active_pokemon(response: Dictionary, player_id: String) ->
 
 func _enter_spectator_controls() -> void:
 	_set_battle_input_locked(true)
-	action_buttons.visible = true
+	# RunButton lives in the stage utility row, outside ActionChoices. Keep the
+	# participant action panel hidden and expose only that standalone exit.
+	action_buttons.visible = false
 	if action_buttons.has_method("set_action_visible"):
 		action_buttons.set_action_visible("fight", false)
 		action_buttons.set_action_visible("party", false)
@@ -5552,8 +5554,6 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
 		enemy_hud_panel.set_owned_icon_visible(false)
 	if action_buttons.has_method("set_action_visible"):
-		action_buttons.set_action_visible("fight", true)
-		action_buttons.set_action_visible("party", true)
 		action_buttons.set_action_visible("bag", battle_type == BattleType.WILD)
 		action_buttons.set_action_visible("run", true)
 	if action_buttons.has_method("set_action_label"):

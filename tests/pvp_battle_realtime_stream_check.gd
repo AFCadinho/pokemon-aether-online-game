@@ -92,10 +92,14 @@ func _init() -> void:
 	_check_equal(
 		battle_source.contains("func _is_spectator_battle() -> bool:") \
 			and battle_source.contains('current_action_panel.set_message("Spectating • read-only")') \
+			and battle_source.contains("action_buttons.visible = false") \
+			and battle_source.contains('action_buttons.set_action_visible("run", true)') \
 			and battle_source.contains('action_buttons.set_action_label("run", "Leave Battle")') \
 			and battle_source.contains("func _leave_spectator_battle() -> void:") \
 			and battle_source.contains('"reason": "spectator_left"') \
-			and battle_source.contains('"skipPartyBattleSync": true'),
+			and battle_source.contains('"skipPartyBattleSync": true') \
+			and not battle_source.contains('action_buttons.set_action_visible("fight", true)') \
+			and not battle_source.contains('action_buttons.set_action_visible("party", true)'),
 		true,
 		"battle observer mode is read-only and provides a safe leave action"
 	)
