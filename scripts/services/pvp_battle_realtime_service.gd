@@ -403,6 +403,10 @@ func _process_packets() -> void:
 		if message_type == "pvp.phase_update":
 			battle_update_received.emit(message)
 			continue
+		if message_type in ["pvp.forfeit", "pvp.match_ended", "pvp.match_settled"]:
+			if active_viewer_role == "spectator":
+				battle_update_received.emit(message)
+			continue
 		if message_type.begins_with("battle.timer_"):
 			var timer_applied := _apply_timer_contract_message(message_type, message)
 			if timer_applied:

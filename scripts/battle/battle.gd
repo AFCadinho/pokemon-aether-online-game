@@ -5592,7 +5592,18 @@ func _swap_ident_keyed_dictionary_sides(source: Dictionary) -> Dictionary:
 
 
 func _leave_spectator_battle() -> void:
-	if not _is_spectator_battle() or battle_finished:
+	if not _is_spectator_battle():
+		return
+	if battle_finished:
+		battle_result_overlay.visible = false
+		var completed_result := pending_battle_end_result.duplicate(true)
+		if completed_result.is_empty():
+			completed_result = {
+				"reason": "spectator_left",
+				"localPartyDefeated": false,
+				"skipPartyBattleSync": true,
+			}
+		_emit_battle_ended(completed_result)
 		return
 	_finish_battle({
 		"reason": "spectator_left",
@@ -9101,6 +9112,9 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 	if message_type == "pvp.authoritative_terminal":
 		_finish_pvp_authoritative_terminal.call_deferred(message.duplicate(true))
 		return
+	if _is_spectator_terminal_message(message):
+		_finish_spectator_terminal_message.call_deferred(message.duplicate(true))
+		return
 
 	var is_snapshot_message := message_type == "pvp.snapshot"
 	if is_snapshot_message:
@@ -10677,6 +10691,35 @@ func _should_apply_pvp_realtime_end_immediately(message: Dictionary) -> bool:
 	if battle_finished:
 		return false
 	return PvpBattleRealtimeService.should_apply_terminal_action_immediately(message, action_flow.local_player_id)
+
+
+func _is_spectator_terminal_message(message: Dictionary) -> bool:
+	if not _is_spectator_battle() or battle_finished:
+		return false
+	return str(message.get("type", "")).strip_edges().to_lower() in [
+		"pvp.forfeit",
+		"pvp.match_ended",
+		"pvp.match_settled",
+	]
+
+
+func _finish_spectator_terminal_message(message: Dictionary) -> void:
+	if not _is_spectator_terminal_message(message):
+		return
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	var end_reason := str(message.get(
+		"endReason",
+		message.get("reason", "forfeit" if message_type == "pvp.forfeit" else "ended")
+	)).strip_edges().to_lower()
+	if end_reason == "":
+		end_reason = "forfeit" if message_type == "pvp.forfeit" else "ended"
+	_finish_battle({
+		"reason": end_reason,
+		"terminalSource": message_type,
+		"localPartyDefeated": false,
+		"skipPartyBattleSync": true,
+	})
+
 
 func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
 	if battle_finished or not PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
