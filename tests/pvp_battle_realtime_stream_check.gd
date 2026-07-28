@@ -15,6 +15,9 @@ func _init() -> void:
 	var opponent_force_wait_start := battle_source.find("func _wait_for_pvp_opponent_force_switch_and_render() -> bool:")
 	var opponent_force_wait_lock_position := battle_source.find("_show_pvp_opponent_force_switch_wait()", opponent_force_wait_start)
 	var opponent_force_wait_loop_position := battle_source.find("while true:", opponent_force_wait_start)
+	var preview_drain_position := battle_source.find("await _drain_pvp_team_preview_completion_updates()")
+	var initial_render_position := battle_source.rfind("await _render_initial_battle_events(lead_response)", preview_drain_position)
+	var initial_controls_position := battle_source.find("_show_battle_controls_after_initial_events()", preview_drain_position)
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(queue_cursor_position >= 0 and queue_cursor_position < send_position, true, "realtime response queue cursor is captured before sending")
 	_check_equal(
@@ -37,6 +40,14 @@ func _init() -> void:
 			and opponent_force_wait_lock_position < opponent_force_wait_loop_position,
 		true,
 		"opponent force-switch waiting locks and hides battle controls before polling"
+	)
+	_check_equal(
+		preview_drain_position > initial_render_position \
+			and preview_drain_position < initial_controls_position \
+			and battle_source.contains('message_action != "choose_lead"') \
+			and battle_source.contains('"post_team_preview_unapplied_lead"'),
+		true,
+		"late public Team Preview batches render before participant controls open"
 	)
 	_check_equal(
 		battle_source.contains('bool(response.get("requiresBattleResync", false)) or str(response.get("code", "")) == "BATTLE_COMMAND_STALE"'),

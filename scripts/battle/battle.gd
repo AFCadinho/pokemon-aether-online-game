@@ -5471,6 +5471,7 @@ func setup_pvp_battle_from_response(
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	if not restored_history_log:
 		await _render_initial_battle_events(lead_response)
+		await _drain_pvp_team_preview_completion_updates()
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(not _is_spectator_battle())
 	if _is_spectator_battle():
@@ -5825,6 +5826,7 @@ func _show_battle_controls_after_initial_events() -> void:
 	if _is_spectator_battle():
 		_enter_spectator_controls()
 		return
+	_set_battle_input_locked(false)
 	_show_moves()
 	if current_action_view == ActionView.MOVES and not battle_input_locked:
 		_show_current_action_prompt()
@@ -6581,9 +6583,28 @@ func _finish_pvp_team_preview_selection(lead_response: Dictionary) -> Dictionary
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
 	current_action_view = ActionView.NONE
-	_set_battle_input_locked(false)
+	_set_battle_input_locked(true)
 	_sync_action_panel_mode_visibility()
 	return lead_response
+
+
+func _drain_pvp_team_preview_completion_updates() -> void:
+	if not _is_pvp_battle():
+		return
+
+	while true:
+		var message := _pop_next_pvp_realtime_update(true, "after team preview intro")
+		if message.is_empty():
+			return
+		var message_type := str(message.get("type", "")).strip_edges()
+		var message_action := str(message.get("action", "")).strip_edges()
+		if message_type not in ["pvp.battle_update", "pvp.render_batch"] or message_action != "choose_lead":
+			_defer_pvp_realtime_update(message, "post_team_preview_non_lead")
+			return
+		if not await _apply_pvp_realtime_battle_update(message):
+			_defer_pvp_realtime_update(message, "post_team_preview_unapplied_lead")
+			return
+
 
 func _wait_for_pvp_team_preview_complete(local_player_id: String) -> Dictionary:
 	if pvp_room_code == "":
