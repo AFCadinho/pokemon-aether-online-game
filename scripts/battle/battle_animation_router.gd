@@ -8,6 +8,7 @@ const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/n
 const EFFECT_SOURCE_PLAYER_POSITION := Vector2(128, 224)
 const EFFECT_SOURCE_ENEMY_POSITION := Vector2(384, 96)
 const REVERSED_BATTLEFIELD_AXIS := Vector2(512, 320)
+const MAX_ANIMATION_WAIT_SECONDS := 8.0
 
 var player_sprite_box: Node
 var enemy_sprite_box: Node
@@ -1364,13 +1365,30 @@ func _get_effect_target_anchor_in_parent(player_id: String, parent_node: Node, a
 
 
 func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void:
-	if not animation_node.has_signal("animation_finished"):
-		await parent_node.get_tree().create_timer(3.0).timeout
-		if is_instance_valid(animation_node):
-			animation_node.queue_free()
+	if not is_instance_valid(animation_node):
+		return
+	var tree := parent_node.get_tree() if parent_node != null else null
+	if tree == null:
+		animation_node.queue_free()
 		return
 
-	await animation_node.tree_exited
+	var started_msec := Time.get_ticks_msec()
+	while is_instance_valid(animation_node) and animation_node.is_inside_tree():
+		var elapsed_seconds := float(Time.get_ticks_msec() - started_msec) / 1000.0
+		if elapsed_seconds >= MAX_ANIMATION_WAIT_SECONDS:
+			push_warning(
+				"Battle animation exceeded %.1f seconds and was stopped so presentation can continue. data=%s"
+				% [MAX_ANIMATION_WAIT_SECONDS, str(animation_node.get("data_path"))]
+			)
+			animation_node.queue_free()
+			await tree.process_frame
+			return
+		await tree.process_frame
+
+	if is_instance_valid(animation_node):
+		# A non-autofree animation may leave the tree through its parent. Dispose
+		# it here as well; callers only need the presentation boundary to finish.
+		animation_node.queue_free()
 
 
 func play_damage_tween_for_target(target_ident: String) -> void:

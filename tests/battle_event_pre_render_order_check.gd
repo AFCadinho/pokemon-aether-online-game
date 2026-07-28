@@ -1,6 +1,7 @@
 extends SceneTree
 
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
+const BATTLE_ANIMATION_ROUTER_PATH := "res://scripts/battle/battle_animation_router.gd"
 
 var failed := false
 
@@ -28,6 +29,8 @@ func _init() -> void:
 	_check_authoritative_terminal_waits_for_render()
 	_check_local_forfeit_terminal_unblocks_action_wait()
 	_check_force_switch_phase_release_recovers()
+	_check_animation_wait_has_render_barrier_watchdog()
+	_check_instant_prepare_events_render_as_one_action()
 	quit(1 if failed else 0)
 
 
@@ -53,6 +56,62 @@ func _check_non_pvp_switch_events_are_not_deduped_by_species() -> void:
 	_check_equal(function_source.contains("event_type == \"turn\""), true, "turn events are still deduped")
 	_check_equal(function_source.contains("event_type == \"switch\""), false, "repeat switch events are not deduped by species")
 	_check_equal(function_source.contains("event_type == \"drag\""), false, "repeat drag events are not deduped by species")
+
+
+func _check_animation_wait_has_render_barrier_watchdog() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_ANIMATION_ROUTER_PATH)
+	var function_index := source.find("func _wait_for_animation_node(")
+	var next_function_index := source.find("\nfunc ", function_index + 1)
+	var function_source := source.substr(function_index, next_function_index - function_index)
+
+	_check_equal(function_index >= 0, true, "animation wait function exists")
+	_check_equal(
+		function_source.contains("elapsed_seconds >= MAX_ANIMATION_WAIT_SECONDS"),
+		true,
+		"stalled animations cannot hold a PvP render barrier indefinitely"
+	)
+	_check_equal(
+		function_source.contains("await tree.process_frame"),
+		true,
+		"animation watchdog keeps presentation asynchronous while it waits"
+	)
+
+
+func _check_instant_prepare_events_render_as_one_action() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var render_index := source.find("func _render_battle_events(")
+	var render_next_index := source.find("\nfunc ", render_index + 1)
+	var render_source := source.substr(render_index, render_next_index - render_index)
+	var charge_index := source.find("func _move_event_starts_a_charge_turn(")
+	var charge_next_index := source.find("\nfunc ", charge_index + 1)
+	var charge_source := source.substr(charge_index, charge_next_index - charge_index)
+	var resolution_index := source.find("func _prepare_event_resolves_in_same_batch(")
+	var resolution_next_index := source.find("\nfunc ", resolution_index + 1)
+	var resolution_source := source.substr(
+		resolution_index,
+		resolution_next_index - resolution_index
+	)
+
+	_check_equal(
+		render_source.contains(
+			'event_type == "prepare" and _prepare_event_resolves_in_same_batch(ordered_events, event_index)'
+		),
+		true,
+		"instant Solar Beam prepare event is not rendered as a second action"
+	)
+	_check_equal(
+		charge_source.contains(
+			"matching_prepare and not _prepare_event_resolves_in_same_batch(events, next_index)"
+		),
+		true,
+		"same-batch prepare plus damage does not suppress the immediate move"
+	)
+	_check_equal(
+		resolution_source.contains('"damage"')
+			and resolution_source.contains('next_type in ["move", "switch", "drag", "turn"]'),
+		true,
+		"prepare classification distinguishes an immediate result from a real charge-turn boundary"
+	)
 
 
 func _check_initial_setup_switch_events_are_filtered_once() -> void:
@@ -355,7 +414,20 @@ func _check_pvp_sprite_restore_stays_inside_render_batch() -> void:
 
 	_check_equal(batch_index >= 0, true, "PvP batch renderer exists")
 	_check_equal(batch_source.contains("post_render.call(batch_context)"), true, "PvP batch invokes post-render reconciliation before completion")
+	_check_equal(batch_source.contains("_set_battle_input_locked(true)"), true, "PvP render batches lock input before their first animation")
+	_check_equal(batch_source.contains("mechanics_panel.visible = false"), true, "Mega and Z-Move controls remain hidden during PvP rendering")
 	_check_equal(render_source.contains("_render_pvp_event_batch(render_response, opponent_events, true, source, post_render)"), true, "opponent response supplies its restore callback to the active batch")
+	_check_equal(
+		restore_source.contains(
+			"func _restore_pvp_opponent_response_presentation(\n"
+			+ "\tbatch_context: Dictionary,\n"
+			+ "\tresponse: Dictionary,\n"
+			+ "\trendered_events: Array\n"
+			+ ") -> void:"
+		),
+		true,
+		"post-render callback accepts call-time batch context before bound response arguments"
+	)
 	_check_equal(restore_source.contains("batch_context.get(\"event_seq_end\", -1)"), true, "canonical restore uses the active batch cursor before it completes")
 	_check_equal(restore_source.contains("_update_active_sprites(\"pvp_authoritative_restore\")"), true, "canonical sprite refresh occurs inside the active batch")
 
@@ -458,10 +530,76 @@ func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 	_check_equal(barrier_source.contains("pvp_event_queue.last_rendered_seq < 0"), true, "Team Preview can establish its lead state before the first render cursor")
 	_check_equal(render_source.contains("if not _is_pvp_battle():\n\t\t_sync_presentation_field_from_battle_state()"), true, "PvP field effects are not overwritten before the render cursor advances")
 
+	var force_wait_index := source.find("func _pvp_should_wait_for_force_switch_phase_release(")
+	var force_wait_next_index := source.find("\nfunc ", force_wait_index + 1)
+	var force_wait_source := source.substr(force_wait_index, force_wait_next_index - force_wait_index)
+	_check_equal(
+		force_wait_source.contains("return _pvp_is_waiting_for_force_switch_phase_release()"),
+		true,
+		"rendering_events to awaiting_force_switch always waits for released participant requests"
+	)
+
+	var show_moves_index := source.find("func _show_moves() -> void:")
+	var show_moves_next_index := source.find("\nfunc ", show_moves_index + 1)
+	var show_moves_source := source.substr(show_moves_index, show_moves_next_index - show_moves_index)
+	_check_equal(
+		show_moves_source.contains("if _pvp_is_waiting_for_force_switch_phase_release():"),
+		true,
+		"move controls cannot reopen inside the force-switch render barrier"
+	)
+	_check_equal(
+		show_moves_source.contains('current_action_panel.set_message("Waiting for switch prompt...")'),
+		true,
+		"critical-hit text is replaced while waiting for the force-switch phase"
+	)
+	_check_equal(
+		show_moves_source.contains('str(pvp_event_queue.current_event_batch_id) != ""'),
+		true,
+		"phase updates cannot reopen move controls during an active render batch"
+	)
+
+	var ack_callback_index := source.find("func _on_pvp_render_batch_completed(")
+	var ack_callback_next_index := source.find("\nfunc ", ack_callback_index + 1)
+	var ack_callback_source := source.substr(
+		ack_callback_index,
+		ack_callback_next_index - ack_callback_index
+	)
+	var ack_retry_index := source.find("func _run_pvp_render_ack_retry() -> void:")
+	var ack_retry_next_index := source.find("\nfunc ", ack_retry_index + 1)
+	var ack_retry_source := source.substr(ack_retry_index, ack_retry_next_index - ack_retry_index)
+	_check_equal(
+		ack_callback_source.contains("_start_pvp_render_ack_retry()"),
+		true,
+		"successful renders start reliable ACK delivery"
+	)
+	_check_equal(
+		ack_retry_source.contains("_retry_pending_pvp_render_ack()"),
+		true,
+		"render ACK is retried until the released phase is observed"
+	)
+	_check_equal(
+		ack_retry_source.contains('pvp_last_phase == "rendering_events"'),
+		false,
+		"render ACK retry does not depend on a potentially stale local phase"
+	)
+
+	var realtime_update_index := source.find("func _on_pvp_realtime_battle_update(")
+	var realtime_update_next_index := source.find("\nfunc ", realtime_update_index + 1)
+	var realtime_update_source := source.substr(
+		realtime_update_index,
+		realtime_update_next_index - realtime_update_index
+	)
+	_check_equal(
+		realtime_update_source.find('if message_type == "pvp.phase_update":')
+			< realtime_update_source.find("var is_snapshot_message :="),
+		true,
+		"phase releases bypass the generic realtime stale filter"
+	)
+
 
 func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
-	var restore_index := source.find("func _restore_pvp_authoritative_presentation(response: Dictionary, rendered_events: Array = []) -> void:")
+	var restore_index := source.find("func _restore_pvp_authoritative_presentation(")
 	var restore_next_index := source.find("\nfunc ", restore_index + 1)
 	var restore_source := source.substr(restore_index, restore_next_index - restore_index)
 	var condition_index := source.find("func _reapply_rendered_condition_events(events: Array) -> void:")
@@ -476,8 +614,20 @@ func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
 
 	_check_equal(restore_source.contains("_reapply_rendered_condition_events(rendered_events)"), true, "canonical restore retains rendered hazard HP")
 	_check_equal(restore_source.contains("_reapply_rendered_field_effect_events(rendered_events)"), true, "canonical restore retains rendered weather changes")
-	_check_equal(condition_source.contains('"damage", "heal", "faint", "status":'), true, "restore replays only condition-changing events")
-	_check_equal(condition_source.contains('"switch"'), false, "restore never replays switch events over Pursuit canonical state")
+	_check_equal(condition_source.contains('"damage", "heal", "faint", "status":'), true, "restore replays condition-changing events")
+	_check_equal(condition_source.contains('"switch", "drag":'), true, "restore recognizes public spectator switch events")
+	_check_equal(condition_source.contains("if _is_spectator_battle():"), true, "only spectators replay switches over a request-free public batch")
+	_check_equal(condition_source.contains("Participant switch events deliberately remain canonical"), true, "participant Pursuit presentation keeps canonical switch state")
+	var render_events_index := source.find("func _render_battle_events(")
+	var render_events_next_index := source.find("\nfunc ", render_events_index + 1)
+	var render_events_source := source.substr(render_events_index, render_events_next_index - render_events_index)
+	_check_equal(render_events_source.contains("var defer_field_effect_end :="), true, "field-ending presentation has an explicit event boundary")
+	_check_equal(
+		render_events_source.find("await event_renderer.render_event(event_data, presentation)")
+			< render_events_source.find("if defer_field_effect_end:", render_events_source.find("await event_renderer.render_event(event_data, presentation)")),
+		true,
+		"weather and terrain disappear only after their ordered end event is presented"
+	)
 	_check_equal(field_source.contains('!= "fieldEffect"'), true, "field replay accepts only ordered field events")
 	_check_equal(sync_source.contains('if not battle_state.field.has("effects"):'), true, "omitted realtime field snapshot cannot erase active weather")
 
@@ -555,7 +705,24 @@ func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
 	_check_equal(recovery_source.contains("request_start_activity_seq"), true, "timeout recovery records realtime activity before starting its HTTP request")
 	_check_equal(recovery_source.contains("realtime_advanced_during_request"), true, "timeout recovery rejects an HTTP snapshot superseded by realtime")
 	_check_equal(recovery_source.contains("_apply_pvp_http_reconciliation_when_safe("), true, "timeout recovery uses the render-safe HTTP snapshot boundary")
+	_check_equal(recovery_source.contains("_build_pvp_action_timeout_recovery_response(response, recovery_status)"), true, "server-proven accepted actions survive temporarily unsafe visual reconciliation")
 	_check_equal(recovery_source.contains("await _finish_if_battle_ended"), true, "canonical timeout recovery only finishes from a terminal mechanical state")
+
+	var submit_index := source.find("func _submit_pvp_realtime_choice(")
+	var submit_next_index := source.find("\nfunc ", submit_index + 1)
+	var submit_source := source.substr(submit_index, submit_next_index - submit_index)
+	_check_equal(
+		submit_source.find("_show_pvp_move_confirmation(")
+			< submit_source.find("await _send_pvp_realtime_action_and_wait("),
+		true,
+		"move confirmation replaces the stale prompt before waiting on realtime transport"
+	)
+	_check_equal(
+		submit_source.find('current_action_panel.set_message("Waiting for opponent...")')
+			< submit_source.find("await _send_pvp_realtime_action_and_wait("),
+		true,
+		"participant waiting text appears immediately after submitting a choice"
+	)
 
 
 func _check_force_switch_phase_release_recovers() -> void:
