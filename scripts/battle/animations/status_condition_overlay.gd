@@ -103,6 +103,12 @@ func _apply_frozen_sprite_state() -> void:
 		_reset_frozen_sprite_state()
 		frozen_sprite = tinted_sprite
 		frozen_sprite_was_playing = frozen_sprite.is_playing()
+
+	# Sprite data can be refreshed after the condition is applied, which restarts
+	# AnimatedSprite2D playback. Keep frozen Pokemon paused for the entire time
+	# the condition remains active, including front sprites refreshed by PvP state.
+	if frozen_sprite.is_playing():
+		frozen_sprite_was_playing = true
 		frozen_sprite.pause()
 
 	var pulse := 0.5 + 0.5 * sin(elapsed * TAU * 0.35)
