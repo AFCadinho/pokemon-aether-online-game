@@ -118,6 +118,8 @@ var pvp_rendered_event_count := 0
 var pvp_allow_setup_animation := false
 var pvp_victory_message_added := false
 var pvp_switch_confirmation_active := false
+var spectator_sides_swapped := false
+var spectator_latest_raw_response: Dictionary = {}
 var pending_battle_end_result: Dictionary = {}
 var battle_end_signal_emitted := false
 var last_rendered_event_seq := -1
@@ -234,6 +236,10 @@ var wild_owned_request_id := 0
 @onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
 @onready var context_hint: Label = %ContextHint
 @onready var pvp_switch_confirmation_label: Label = %PvpSwitchConfirmationLabel
+@onready var spectator_action_panel: Control = %SpectatorActionPanel
+@onready var spectator_perspective_label: Label = %SpectatorPerspectiveLabel
+@onready var spectator_switch_sides_button: Button = %SpectatorSwitchSidesButton
+@onready var spectator_leave_button: Button = %SpectatorLeaveButton
 @onready var battle_party_rail: Control = %BattlePartyRail
 @onready var party_rail_state_label: Label = %PartyRailStateLabel
 @onready var mechanics_panel: Control = %MechanicsPanel
@@ -340,6 +346,10 @@ func _ready() -> void:
 		player_party_grid.party_selected.connect(_on_party_grid_party_selected)
 	if not player_party_grid.party_changed.is_connected(player_stage_party_grid.set_party):
 		player_party_grid.party_changed.connect(player_stage_party_grid.set_party)
+	if not spectator_switch_sides_button.pressed.is_connected(_on_spectator_switch_sides_pressed):
+		spectator_switch_sides_button.pressed.connect(_on_spectator_switch_sides_pressed)
+	if not spectator_leave_button.pressed.is_connected(_leave_spectator_battle):
+		spectator_leave_button.pressed.connect(_leave_spectator_battle)
 	player_stage_party_grid.set_selection_enabled(false)
 	opponent_party_grid.set_selection_enabled(false)
 	battle_log_toggle_button.pressed.connect(_on_battle_log_toggle_pressed)
@@ -5393,6 +5403,7 @@ func setup_pvp_battle_from_response(
 	pvp_viewer_role = "spectator" if str(api_response.get("viewerRole", "participant")).to_lower() == "spectator" else "participant"
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
 	pvp_match_id = str(api_response.get("matchId", "")).strip_edges()
+	_remember_spectator_raw_response(api_response)
 	var local_player_id := str(api_response.get("playerId", "p1"))
 	if _is_spectator_battle():
 		local_player_id = "p1"
@@ -5499,24 +5510,86 @@ func _build_spectator_active_pokemon(response: Dictionary, player_id: String) ->
 
 func _enter_spectator_controls() -> void:
 	_set_battle_input_locked(true)
-	# RunButton lives in the stage utility row, outside ActionChoices. Keep the
-	# participant action panel hidden and expose only that standalone exit.
 	action_buttons.visible = false
 	if action_buttons.has_method("set_action_visible"):
 		action_buttons.set_action_visible("bag", false)
-		action_buttons.set_action_visible("run", true)
-	if action_buttons.has_method("set_action_label"):
-		action_buttons.set_action_label("run", "Leave Battle")
+		action_buttons.set_action_visible("run", false)
 	if action_buttons.has_method("set_run_available_while_locked"):
-		action_buttons.set_run_available_while_locked(true)
+		action_buttons.set_run_available_while_locked(false)
 	moves_grid.visible = false
-	player_party_grid.visible = true
+	player_party_grid.visible = false
 	opponent_party_grid.visible = true
+	spectator_action_panel.visible = true
+	spectator_switch_sides_button.disabled = pvp_event_queue.is_rendering
+	_update_spectator_perspective_label()
 	bag_grid.visible = false
 	bag_drawer.visible = false
 	forfeit_confirm_dialog.visible = false
 	current_action_view = ActionView.NONE
 	current_action_panel.set_message("Spectating • read-only")
+
+
+func _on_spectator_switch_sides_pressed() -> void:
+	if not _is_spectator_battle() or battle_finished:
+		return
+	if pvp_event_queue.is_rendering:
+		current_action_panel.set_message("Finish the current animation before switching sides.")
+		return
+	if spectator_latest_raw_response.is_empty():
+		current_action_panel.set_message("Waiting for a spectator snapshot before switching sides.")
+		return
+
+	spectator_sides_swapped = not spectator_sides_swapped
+	action_flow.set_local_player_id("p2" if spectator_sides_swapped else "p1")
+	var mapped_snapshot: Dictionary = action_flow.map_response_for_local_player(
+		spectator_latest_raw_response.duplicate(true)
+	)
+	mapped_snapshot["events"] = []
+	mapped_snapshot["eventBatches"] = []
+	battle_state.load_from_api_response(mapped_snapshot, false)
+	_swap_spectator_public_knowledge_sides()
+	_sync_presentation_field_from_battle_state()
+	_update_battle_presentation("spectator_switch_sides")
+	if team_preview_lead_selection_active:
+		_show_team_preview_layers()
+	_enter_spectator_controls()
+
+
+func _remember_spectator_raw_response(response: Dictionary) -> void:
+	if not _is_spectator_battle():
+		return
+	var requests_value: Variant = response.get("requests", null)
+	if requests_value is Dictionary:
+		spectator_latest_raw_response = response.duplicate(true)
+
+
+func _update_spectator_perspective_label() -> void:
+	if not _is_spectator_battle():
+		return
+	spectator_perspective_label.text = "View: %s on the left" % _get_player_display_name("p1")
+
+
+func _swap_spectator_public_knowledge_sides() -> void:
+	public_confirmed_abilities_by_ident = _swap_ident_keyed_dictionary_sides(
+		public_confirmed_abilities_by_ident
+	)
+	public_confirmed_items_by_ident = _swap_ident_keyed_dictionary_sides(
+		public_confirmed_items_by_ident
+	)
+
+
+func _swap_ident_keyed_dictionary_sides(source: Dictionary) -> Dictionary:
+	var swapped: Dictionary = {}
+	for key_value: Variant in source.keys():
+		var key := str(key_value)
+		var swapped_key := key
+		if key.begins_with("p1"):
+			swapped_key = "p2%s" % key.substr(2)
+		elif key.begins_with("p2"):
+			swapped_key = "p1%s" % key.substr(2)
+		swapped[swapped_key] = source.get(key_value)
+	return swapped
+
 
 func _leave_spectator_battle() -> void:
 	if not _is_spectator_battle() or battle_finished:
@@ -5559,6 +5632,9 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_presentation_schedule_token = ""
 	pvp_response_order.reset()
 	pvp_local_canonical_roster.clear()
+	spectator_sides_swapped = false
+	spectator_latest_raw_response.clear()
+	spectator_action_panel.visible = false
 	pending_battle_end_result.clear()
 	battle_end_signal_emitted = false
 	battle_result_overlay.visible = false
@@ -6308,6 +6384,7 @@ func _run_pvp_spectator_team_preview() -> Dictionary:
 		var response: Dictionary = _response_from_pvp_realtime_message(message)
 		if response.is_empty():
 			continue
+		_remember_spectator_raw_response(response)
 		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
 		if display_response.is_empty() or _should_show_team_preview(display_response):
 			continue
@@ -10706,6 +10783,7 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 	if update_payload.is_empty():
 		return false
 
+	_remember_spectator_raw_response(update_payload)
 	var mapped_update := action_flow.map_response_for_local_player(update_payload)
 	if mapped_update.is_empty():
 		return false
@@ -12209,6 +12287,8 @@ func _get_vs_player_name(player_id: String) -> String:
 	return _get_player_display_name(player_id)
 
 func _get_active_display_species(player_id: String) -> String:
+	if _is_spectator_battle():
+		return battle_state.get_active_pokemon_species(player_id)
 	var display_species := display_data_presenter.get_active_display_species(player_id)
 	if _is_pvp_battle() and player_id == _get_local_state_player_id():
 		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
@@ -12237,9 +12317,14 @@ func _is_specific_battle_form_species(species: String) -> bool:
 	return false
 
 func _get_active_pokemon_is_shiny(player_id: String) -> bool:
+	if _is_spectator_battle():
+		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+		return bool(active_pokemon.get("shiny", active_pokemon.get("isShiny", active_pokemon.get("is_shiny", false))))
 	return display_data_presenter.get_active_pokemon_is_shiny(player_id)
 
 func _get_display_team_data(player_id: String) -> Array:
+	if _is_spectator_battle():
+		return battle_state.get_player_team(player_id).duplicate(true)
 	var display_team := display_data_presenter.get_display_team_data(player_id)
 	if _is_pvp_battle() and player_id == _get_local_state_player_id():
 		return _normalize_pvp_local_display_team_slots(display_team)

@@ -1945,6 +1945,48 @@ compact_mode = true
 layout_mode = 2
 compact_mode = true
 
+[node name="SpectatorActionPanel" type="HBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="SpectatorPerspectiveLabel" type="Label" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "View: Admin on the left"
+vertical_alignment = 1
+
+[node name="SpectatorSwitchSidesButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_bag_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_bag_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_bag_hover")
+text = "Switch Sides"
+
+[node name="SpectatorLeaveButton" type="Button" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent/ContextSection/ContextPanel/ContextStack/SpectatorActionPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 42)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_segment_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_exit_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_exit_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_exit_hover")
+text = "Leave Battle"
+
 [node name="UtilitySection" type="VBoxContainer" parent="HBoxContainer/CenterColumn/ActionsDock/MarginContainer/DockContent" unique_id=1895783644]
 unique_name_in_owner = true
 visible = false

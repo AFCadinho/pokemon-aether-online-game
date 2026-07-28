@@ -93,8 +93,8 @@ func _init() -> void:
 		battle_source.contains("func _is_spectator_battle() -> bool:") \
 			and battle_source.contains('current_action_panel.set_message("Spectating • read-only")') \
 			and battle_source.contains("action_buttons.visible = false") \
-			and battle_source.contains('action_buttons.set_action_visible("run", true)') \
-			and battle_source.contains('action_buttons.set_action_label("run", "Leave Battle")') \
+			and battle_source.contains('action_buttons.set_action_visible("run", false)') \
+			and battle_source.contains("spectator_action_panel.visible = true") \
 			and battle_source.contains("func _leave_spectator_battle() -> void:") \
 			and battle_source.contains('"reason": "spectator_left"') \
 			and battle_source.contains('"skipPartyBattleSync": true') \
@@ -102,6 +102,15 @@ func _init() -> void:
 			and not battle_source.contains('action_buttons.set_action_visible("party", true)'),
 		true,
 		"battle observer mode is read-only and provides a safe leave action"
+	)
+	_check_equal(
+		battle_source.contains("func _on_spectator_switch_sides_pressed() -> void:") \
+			and battle_source.contains('action_flow.set_local_player_id("p2" if spectator_sides_swapped else "p1")') \
+			and battle_source.contains("spectator_latest_raw_response") \
+			and battle_source.contains('mapped_snapshot["events"] = []') \
+			and battle_source.contains("func _swap_spectator_public_knowledge_sides() -> void:"),
+		true,
+		"spectator side switching remaps an authoritative snapshot without replaying events"
 	)
 	_check_equal(
 		battle_source.contains("func _run_pvp_spectator_team_preview() -> Dictionary:") \
