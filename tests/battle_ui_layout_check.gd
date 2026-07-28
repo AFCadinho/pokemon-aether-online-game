@@ -457,13 +457,18 @@ func _check_battle_selection_policy_contract() -> void:
 	_check_contains(source, "player_sprite_box.get_parent()", "move animations use the scaled stage as their parent")
 	_check_contains(
 		source,
-		"player_party_grid.pokemon_hovered.connect(_show_public_party_hover)",
-		"left party rail uses the public confirmed-information hover"
+		"player_party_grid.pokemon_hovered.connect(_show_party_hover)",
+		"interactive player party row keeps the full owned-party hover"
+	)
+	_check_contains(
+		source,
+		"player_stage_party_grid.pokemon_hovered.connect(_show_public_party_hover)",
+		"left stage party rail uses the public confirmed-information hover"
 	)
 	_check_contains(
 		source,
 		"opponent_party_grid.pokemon_hovered.connect(_show_public_party_hover)",
-		"right party rail uses the public confirmed-information hover"
+		"right stage party rail uses the public confirmed-information hover"
 	)
 	_check_contains(
 		source,

@@ -628,9 +628,13 @@ func _connect_move_hover_signals() -> void:
 
 func _connect_party_hover_signals() -> void:
 	if player_party_grid.has_signal("pokemon_hovered"):
-		player_party_grid.pokemon_hovered.connect(_show_public_party_hover)
+		player_party_grid.pokemon_hovered.connect(_show_party_hover)
 	if player_party_grid.has_signal("pokemon_unhovered"):
-		player_party_grid.pokemon_unhovered.connect(_hide_hud_pokemon_hover)
+		player_party_grid.pokemon_unhovered.connect(_hide_party_hover)
+	if player_stage_party_grid.has_signal("pokemon_hovered"):
+		player_stage_party_grid.pokemon_hovered.connect(_show_public_party_hover)
+	if player_stage_party_grid.has_signal("pokemon_unhovered"):
+		player_stage_party_grid.pokemon_unhovered.connect(_hide_hud_pokemon_hover)
 	if opponent_party_grid.has_signal("pokemon_hovered"):
 		opponent_party_grid.pokemon_hovered.connect(_show_public_party_hover)
 	if opponent_party_grid.has_signal("pokemon_unhovered"):
