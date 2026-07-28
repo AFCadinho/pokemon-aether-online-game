@@ -176,6 +176,8 @@ func _init() -> void:
 			and battle_source.contains("Spectating team preview • waiting for both players") \
 			and battle_source.contains("_seed_spectator_leads_from_team_preview_events(display_response)") \
 			and battle_source.contains("_remember_spectator_canonical_response(display_response)") \
+			and battle_source.contains('if event_type in ["move", "damage", "heal", "status", "cant", "fail", "miss", "faint"]') \
+			and battle_source.contains("if seeded_players.size() >= 2:") \
 			and battle_source.contains("if _is_spectator_battle():\n\t\treturn true"),
 		true,
 		"spectators seed public leads before the intro and continuously drain live battle updates"

@@ -6497,15 +6497,21 @@ func _seed_spectator_leads_from_team_preview_events(response: Dictionary) -> voi
 		return
 
 	var lead_events: Array = []
+	var seeded_players: Dictionary = {}
 	for event_value: Variant in events_value as Array:
 		if not (event_value is Dictionary):
 			continue
 		var event_data := event_value as Dictionary
 		var event_type := str(event_data.get("type", ""))
-		if event_type == "turn":
+		if event_type in ["move", "damage", "heal", "status", "cant", "fail", "miss", "faint"]:
 			break
 		if event_type == "switch" or event_type == "drag":
-			lead_events.append(event_data.duplicate(true))
+			var player_id := _get_switch_event_player_id(event_data)
+			if player_id in ["p1", "p2"] and not seeded_players.has(player_id):
+				lead_events.append(event_data.duplicate(true))
+				seeded_players[player_id] = true
+				if seeded_players.size() >= 2:
+					break
 
 	if lead_events.is_empty():
 		return
@@ -7027,6 +7033,8 @@ func _render_pvp_event_batch(response: Dictionary, events: Array, render_turn_he
 	if success:
 		_mark_pvp_response_events_rendered(response)
 		_update_battle_status_panels()
+		if _is_spectator_battle():
+			_remember_spectator_canonical_response(response)
 	_trace_pvp_flow("render_batch.complete", response, "source=%s success=%s context=%s" % [source, str(success), JSON.stringify(batch_context)])
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(

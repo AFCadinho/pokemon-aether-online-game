@@ -537,6 +537,13 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 		var event_details := str(event.get("details", "")).strip_edges()
 		if event_details != "":
 			pokemon_data["details"] = event_details
+		if event.has("shiny"):
+			pokemon_data["shiny"] = bool(event.get("shiny", false))
+		elif event_details.to_lower().contains(", shiny"):
+			pokemon_data["shiny"] = true
+		for public_field in ["gender", "level"]:
+			if event.has(public_field):
+				pokemon_data[public_field] = event.get(public_field)
 		if condition == "":
 			continue
 

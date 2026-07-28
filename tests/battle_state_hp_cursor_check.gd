@@ -141,8 +141,9 @@ func _check_public_lead_switches_activate_team_preview_rosters() -> void:
 		{
 			"type": "switch",
 			"toIdent": "p1a: Charizard",
-			"details": "Charizard, L100",
+			"details": "Charizard, M, shiny",
 			"condition": "100/100",
+			"shiny": true,
 		},
 		{
 			"type": "switch",
@@ -166,6 +167,22 @@ func _check_public_lead_switches_activate_team_preview_rosters() -> void:
 		str(state.get_active_player_pokemon("p2").get("ident", "")),
 		"p2a: Slowking",
 		"public lead switch stores the live battle ident"
+	)
+	_check_equal(
+		bool(state.get_active_player_pokemon("p1").get("shiny", false)),
+		true,
+		"public lead switch preserves the shiny form"
+	)
+
+	state.apply_event_conditions([{
+		"type": "mega",
+		"target": "p1a: Charizard",
+		"species": "Charizard-Mega-Y",
+	}])
+	_check_equal(
+		str(state.get_active_player_pokemon("p1").get("displaySpecies", "")),
+		"Charizard-Mega-Y",
+		"public Mega event updates the active display form"
 	)
 
 	state.apply_event_conditions([{
