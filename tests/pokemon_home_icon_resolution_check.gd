@@ -8,6 +8,7 @@ func _init() -> void:
 	_check_home_icon("Hakamo O")
 	_check_home_icon("Kommo O")
 	_check_home_icon("Necrozma Ultra")
+	_check_home_icon("Mimikyu")
 
 	if failed:
 		quit(1)

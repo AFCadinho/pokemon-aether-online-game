@@ -17,6 +17,7 @@ const HOME_SPRITE_ALIASES := {
 	"kommo-o": ["Kommo-o"],
 	"ninetales-alola": ["Ninetales-Alola"],
 	"vulpix-alola": ["Vulpix-Alola"],
+	"mimikyu": ["Mimikyu-Disguised"],
 	"oricorio": ["Oricorio"],
 	"oricorio-baile": ["Oricorio"],
 	"oricoriobaile": ["Oricorio"],
