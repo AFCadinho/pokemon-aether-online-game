@@ -6,6 +6,8 @@ const OVERWORLD_POKEMON_METADATA_SERVICE_SCRIPT := "res://scripts/services/overw
 const PROJECT_CONFIG := "res://project.godot"
 const MAP_CHARACTER_BLOCKING_SCRIPT := "res://scripts/world/map_character_blocking.gd"
 const ROUTE_1_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
+const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+const VIRIDIAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 
 var failed := false
 
@@ -16,6 +18,7 @@ func _init() -> void:
 	_check_overworld_pokemon_scene()
 	_check_pokemon_blocking_container()
 	_check_route_1_example_placement()
+	_check_town_placements()
 
 	quit(1 if failed else 0)
 
@@ -71,6 +74,23 @@ func _check_route_1_example_placement() -> void:
 	_check_true(text.contains("overworld_pokemon_id = \"kanto_route_1_lillipup_1\""), "Route 1 Lillipup uses backend metadata id")
 	_check_true(text.contains("overworld_pokemon_id = \"kanto_route_1_pidgey_1\""), "Route 1 Pidgey uses backend metadata id")
 	_check_true(text.contains("species_id = \"pidgey\""), "Route 1 Pidgey overrides species_id")
+
+func _check_town_placements() -> void:
+	var pallet_town_text := _read_text(PALLET_TOWN_SCENE)
+	_check_true(
+		pallet_town_text.contains('overworld_pokemon_id = "kanto_pallet_town_horsea_1"'),
+		"Pallet Town places its Horsea metadata id"
+	)
+	_check_true(
+		pallet_town_text.contains('overworld_pokemon_id = "kanto_pallet_town_pikachu_1"'),
+		"Pallet Town places its Pikachu metadata id"
+	)
+
+	var viridian_city_text := _read_text(VIRIDIAN_CITY_SCENE)
+	_check_true(
+		not viridian_city_text.contains('overworld_pokemon_id = "kanto_pallet_town_'),
+		"Viridian City does not reuse Pallet Town overworld Pokemon ids"
+	)
 
 
 func _read_text(path: String) -> String:

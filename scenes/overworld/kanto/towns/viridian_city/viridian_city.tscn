@@ -571,23 +571,6 @@ mugshot = ExtResource("12_flvrk")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1638304908]
 
-[node name="Horsea" parent="Entities/Pokemon" unique_id=164884002 instance=ExtResource("16_bddn7")]
-position = Vector2(432, 912)
-overworld_pokemon_id = "kanto_pallet_town_horsea_1"
-species_id = "horsea"
-display_name = "Horsea"
-npc_sprite_frames = SubResource("SpriteFrames_xi46n")
-movement_behavior = "pace_horizontal"
-
-[node name="Pikachu" parent="Entities/Pokemon" unique_id=1006194205 instance=ExtResource("16_bddn7")]
-position = Vector2(1136, 1008)
-overworld_pokemon_id = "kanto_pallet_town_pikachu_1"
-species_id = "pikachu"
-display_name = "Pikachu"
-npc_sprite_frames = SubResource("SpriteFrames_vc3ys")
-movement_behavior = "pace_vertical"
-movement_speed_pixels = 60.0
-
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=408927125]
