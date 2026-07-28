@@ -628,15 +628,15 @@ func _connect_move_hover_signals() -> void:
 
 func _connect_party_hover_signals() -> void:
 	if player_party_grid.has_signal("pokemon_hovered"):
-		player_party_grid.pokemon_hovered.connect(_show_party_hover)
+		player_party_grid.pokemon_hovered.connect(_show_public_party_hover)
 	if player_party_grid.has_signal("pokemon_unhovered"):
-		player_party_grid.pokemon_unhovered.connect(_hide_party_hover)
+		player_party_grid.pokemon_unhovered.connect(_hide_hud_pokemon_hover)
 	if opponent_party_grid.has_signal("pokemon_hovered"):
-		opponent_party_grid.pokemon_hovered.connect(_show_opponent_party_hover)
+		opponent_party_grid.pokemon_hovered.connect(_show_public_party_hover)
 	if opponent_party_grid.has_signal("pokemon_unhovered"):
 		opponent_party_grid.pokemon_unhovered.connect(_hide_hud_pokemon_hover)
 
-func _show_opponent_party_hover(pokemon_data: Dictionary, _slot_rect: Rect2) -> void:
+func _show_public_party_hover(pokemon_data: Dictionary, _slot_rect: Rect2) -> void:
 	_show_hud_pokemon_hover(pokemon_data)
 
 func _connect_forfeit_confirm_dialog_signals() -> void:
@@ -1163,7 +1163,7 @@ func _show_hud_pokemon_hover(pokemon_data: Dictionary) -> void:
 		source_pokemon_data = pokemon_data
 
 	var display_pokemon_data: Dictionary = _get_display_pokemon_data(player_id, source_pokemon_data)
-	await _show_pokemon_hover(source_pokemon_data, display_pokemon_data, player_id)
+	await _show_pokemon_hover(source_pokemon_data, display_pokemon_data, player_id, true)
 
 func _hide_hud_pokemon_hover() -> void:
 	hover_state.end_hud_hover()
@@ -1172,7 +1172,8 @@ func _hide_hud_pokemon_hover() -> void:
 func _show_pokemon_hover(
 	request_pokemon_data: Dictionary,
 	display_pokemon_data: Dictionary,
-	hover_owner_player_id: String
+	hover_owner_player_id: String,
+	public_confirmed_only := false
 ) -> void:
 	var hover_ident: String = str(request_pokemon_data.get("ident", ""))
 	var hover_lookup_ident := _get_hover_info_lookup_ident(request_pokemon_data, hover_owner_player_id)
@@ -1255,7 +1256,7 @@ func _show_pokemon_hover(
 
 	var local_hover_owner := _get_local_state_player_id()
 	var is_local_hover_owner := hover_owner_player_id == local_hover_owner
-	if is_local_hover_owner:
+	if is_local_hover_owner and not public_confirmed_only:
 		var own_hover_moves := _get_own_pokemon_hover_moves(hover_owner_player_id, display_data)
 		if not own_hover_moves.is_empty():
 			confirmed_moves = own_hover_moves
@@ -1268,6 +1269,10 @@ func _show_pokemon_hover(
 			])
 	else:
 		confirmed_moves = _filter_public_opponent_hover_moves(confirmed_moves)
+		if public_confirmed_only:
+			var public_ident_key := _normalize_battle_ident(str(request_pokemon_data.get("ident", "")))
+			confirmed_item = str(public_confirmed_items_by_ident.get(public_ident_key, "")).strip_edges()
+			confirmed_ability = str(public_confirmed_abilities_by_ident.get(public_ident_key, "")).strip_edges()
 		display_data.erase("moves")
 		display_data.erase("moveSlots")
 		display_data.erase("baseMoves")
@@ -12127,9 +12132,15 @@ func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String
 			sprite_box.call("clear_pokemon")
 		return
 
+	var active_species := _get_active_display_species(player_id).strip_edges()
+	if active_species == "":
+		if sprite_box.has_method("clear_pokemon"):
+			sprite_box.call("clear_pokemon")
+		return
+
 	_set_single_pokemon_species_with_pvp_warning(
 		sprite_box,
-		_get_active_display_species(player_id),
+		active_species,
 		side,
 		_get_active_pokemon_is_shiny(player_id),
 		context

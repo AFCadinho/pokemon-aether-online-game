@@ -455,6 +455,26 @@ func _check_battle_selection_policy_contract() -> void:
 	_check_contains(battle_scene_source, "position = Vector2(300, 412)", "player preview group follows the raised player field")
 	_check_contains(battle_scene_source, "position = Vector2(850, 268)", "opponent preview group shifts down as one unit")
 	_check_contains(source, "player_sprite_box.get_parent()", "move animations use the scaled stage as their parent")
+	_check_contains(
+		source,
+		"player_party_grid.pokemon_hovered.connect(_show_public_party_hover)",
+		"left party rail uses the public confirmed-information hover"
+	)
+	_check_contains(
+		source,
+		"opponent_party_grid.pokemon_hovered.connect(_show_public_party_hover)",
+		"right party rail uses the public confirmed-information hover"
+	)
+	_check_contains(
+		source,
+		"if is_local_hover_owner and not public_confirmed_only:",
+		"public party hover cannot fall through to private local move data"
+	)
+	_check_contains(
+		source,
+		'if active_species == "":',
+		"empty active species clears the sprite instead of loading an empty asset path"
+	)
 
 
 func _check_contains(source: String, expected: String, label: String) -> void:
