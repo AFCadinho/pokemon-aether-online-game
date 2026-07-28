@@ -53,13 +53,20 @@ func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, traine
 		}
 	)
 
-func create_pvp_room(request_node: HTTPRequest, player: Dictionary) -> Dictionary:
+func create_pvp_room(
+	request_node: HTTPRequest,
+	player: Dictionary,
+	allow_spectators: bool = false,
+	max_spectators: int = 8
+) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/rooms",
 		{
 			"player": player,
 			"formatId": FORMAT_ID,
+			"allowSpectators": allow_spectators,
+			"maxSpectators": clampi(max_spectators, 1, 32),
 		}
 	)
 
@@ -80,6 +87,19 @@ func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Diction
 			"player": player,
 			"formatId": FORMAT_ID,
 		}
+	)
+
+func cancel_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/pvp/rooms/%s/cancel" % room_code.strip_edges().uri_encode(),
+		{}
+	)
+
+func spectate_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictionary:
+	return await send_get_request(
+		request_node,
+		"/battle/pvp/rooms/%s/spectate" % room_code.strip_edges().uri_encode()
 	)
 
 func get_pvp_queues(request_node: HTTPRequest) -> Dictionary:

@@ -648,9 +648,20 @@ var pvp_history_list: VBoxContainer
 var pvp_history_refresh_button: Button
 var pvp_room_code_label: Label
 var pvp_room_status_label: Label
+var pvp_room_wait_spinner_label: Label
+var pvp_room_mode_selector: HBoxContainer
+var pvp_room_form: VBoxContainer
+var pvp_room_form_title: Label
+var pvp_room_create_mode_button: Button
+var pvp_room_join_mode_button: Button
+var pvp_room_spectate_mode_button: Button
+var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
 var pvp_create_room_button: Button
+var pvp_cancel_room_button: Button
 var pvp_join_room_button: Button
+var pvp_spectate_room_button: Button
+var pvp_allow_spectators_check: CheckBox
 var pvp_copy_code_button: Button
 var pvp_queue_status_spinner_label: Label
 var pvp_queue_status_label: Label
@@ -4664,62 +4675,172 @@ func _setup_pvp_room_popup() -> void:
 	var room_panel := PanelContainer.new()
 	room_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	room_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	room_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ee8"), Color("#315070"), 6, 1))
+	room_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#07111ef2"), Color("#42698d"), 10, 1))
 	room_tab.add_child(room_panel)
 
 	var room_margin := MarginContainer.new()
-	room_margin.add_theme_constant_override("margin_left", 12)
-	room_margin.add_theme_constant_override("margin_top", 10)
-	room_margin.add_theme_constant_override("margin_right", 12)
-	room_margin.add_theme_constant_override("margin_bottom", 10)
+	room_margin.add_theme_constant_override("margin_left", 16)
+	room_margin.add_theme_constant_override("margin_top", 16)
+	room_margin.add_theme_constant_override("margin_right", 16)
+	room_margin.add_theme_constant_override("margin_bottom", 16)
 	room_panel.add_child(room_margin)
 
 	var room_layout := VBoxContainer.new()
-	room_layout.add_theme_constant_override("separation", 9)
+	room_layout.add_theme_constant_override("separation", 12)
 	room_margin.add_child(room_layout)
 
+	var room_heading := Label.new()
+	room_heading.text = "Private battle room"
+	room_heading.add_theme_font_size_override("font_size", 19)
+	room_heading.add_theme_color_override("font_color", Color("#f3e1a5"))
+	room_layout.add_child(room_heading)
+
+	var room_intro := Label.new()
+	room_intro.text = "Create a room to battle a friend directly, or enter a code to join one."
+	room_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	room_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	room_layout.add_child(room_intro)
+
+	var room_separator := HSeparator.new()
+	room_separator.add_theme_constant_override("separation", 4)
+	room_layout.add_child(room_separator)
+
+	var room_status_card := PanelContainer.new()
+	room_status_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#0b1a2ce8"), Color("#294968"), 7, 1))
+	room_layout.add_child(room_status_card)
+
+	var room_status_margin := MarginContainer.new()
+	room_status_margin.add_theme_constant_override("margin_left", 12)
+	room_status_margin.add_theme_constant_override("margin_top", 10)
+	room_status_margin.add_theme_constant_override("margin_right", 12)
+	room_status_margin.add_theme_constant_override("margin_bottom", 10)
+	room_status_card.add_child(room_status_margin)
+
+	var room_status_layout := VBoxContainer.new()
+	room_status_layout.add_theme_constant_override("separation", 4)
+	room_status_margin.add_child(room_status_layout)
+
 	pvp_room_code_label = Label.new()
-	pvp_room_code_label.text = "Room Code"
-	pvp_room_code_label.add_theme_font_size_override("font_size", 16)
+	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_room_code_label.add_theme_font_size_override("font_size", 15)
 	pvp_room_code_label.add_theme_color_override("font_color", Color("#f5df9a"))
-	room_layout.add_child(pvp_room_code_label)
+	room_status_layout.add_child(pvp_room_code_label)
+
+	var room_status_row := HBoxContainer.new()
+	room_status_row.add_theme_constant_override("separation", 8)
+	room_status_layout.add_child(room_status_row)
 
 	pvp_room_status_label = Label.new()
 	pvp_room_status_label.text = "Ready."
 	pvp_room_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_room_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	room_layout.add_child(pvp_room_status_label)
+	pvp_room_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	room_status_row.add_child(pvp_room_status_label)
 
-	var room_note_label := Label.new()
-	room_note_label.text = "Use this for direct casual battles with another player. Matchmaking does not need a room code."
-	room_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	room_note_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	room_layout.add_child(room_note_label)
+	pvp_room_wait_spinner_label = Label.new()
+	pvp_room_wait_spinner_label.visible = false
+	pvp_room_wait_spinner_label.add_theme_font_size_override("font_size", 20)
+	pvp_room_wait_spinner_label.add_theme_color_override("font_color", Color("#79c8ff"))
+	room_status_row.add_child(pvp_room_wait_spinner_label)
+
+	var room_choice_label := Label.new()
+	room_choice_label.text = "WHAT WOULD YOU LIKE TO DO?"
+	room_choice_label.add_theme_font_size_override("font_size", 11)
+	room_choice_label.add_theme_color_override("font_color", Color("#87bce8"))
+	room_layout.add_child(room_choice_label)
+
+	pvp_room_mode_selector = HBoxContainer.new()
+	pvp_room_mode_selector.add_theme_constant_override("separation", 8)
+	room_layout.add_child(pvp_room_mode_selector)
+
+	pvp_room_create_mode_button = Button.new()
+	pvp_room_create_mode_button.text = "Create Room"
+	pvp_room_create_mode_button.custom_minimum_size = Vector2(130, 38)
+	pvp_room_create_mode_button.focus_mode = Control.FOCUS_NONE
+	pvp_room_create_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("create"))
+	pvp_room_mode_selector.add_child(pvp_room_create_mode_button)
+
+	pvp_room_join_mode_button = Button.new()
+	pvp_room_join_mode_button.text = "Join Room"
+	pvp_room_join_mode_button.custom_minimum_size = Vector2(118, 38)
+	pvp_room_join_mode_button.focus_mode = Control.FOCUS_NONE
+	pvp_room_join_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("join"))
+	pvp_room_mode_selector.add_child(pvp_room_join_mode_button)
+
+	pvp_room_spectate_mode_button = Button.new()
+	pvp_room_spectate_mode_button.text = "Spectate"
+	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(104, 38)
+	pvp_room_spectate_mode_button.focus_mode = Control.FOCUS_NONE
+	pvp_room_spectate_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("spectate"))
+	pvp_room_mode_selector.add_child(pvp_room_spectate_mode_button)
+
+	pvp_room_form = VBoxContainer.new()
+	pvp_room_form.add_theme_constant_override("separation", 10)
+	pvp_room_form.visible = false
+	room_layout.add_child(pvp_room_form)
+
+	pvp_room_form_title = Label.new()
+	pvp_room_form_title.add_theme_font_size_override("font_size", 11)
+	pvp_room_form_title.add_theme_color_override("font_color", Color("#87bce8"))
+	pvp_room_form.add_child(pvp_room_form_title)
 
 	pvp_room_code_input = LineEdit.new()
-	pvp_room_code_input.placeholder_text = "Room code"
+	pvp_room_code_input.placeholder_text = "Enter a room code"
 	pvp_room_code_input.max_length = 12
 	pvp_room_code_input.custom_minimum_size = Vector2(0, 34)
-	room_layout.add_child(pvp_room_code_input)
+	pvp_room_form.add_child(pvp_room_code_input)
 	_apply_line_edit_style(pvp_room_code_input)
+
+	pvp_allow_spectators_check = CheckBox.new()
+	pvp_allow_spectators_check.button_pressed = false
+	pvp_allow_spectators_check.tooltip_text = "Anyone with this room code may watch after the battle starts."
+	pvp_allow_spectators_check.add_theme_constant_override("h_separation", 8)
+	pvp_allow_spectators_check.add_theme_icon_override("unchecked", _pvp_spectators_checkbox_icon(false, false))
+	pvp_allow_spectators_check.add_theme_icon_override("unchecked_hover", _pvp_spectators_checkbox_icon(false, true))
+	pvp_allow_spectators_check.add_theme_icon_override("unchecked_pressed", _pvp_spectators_checkbox_icon(false, true))
+	pvp_allow_spectators_check.add_theme_icon_override("checked", _pvp_spectators_checkbox_icon(true, false))
+	pvp_allow_spectators_check.add_theme_icon_override("checked_hover", _pvp_spectators_checkbox_icon(true, true))
+	pvp_allow_spectators_check.add_theme_icon_override("checked_pressed", _pvp_spectators_checkbox_icon(true, true))
+	pvp_allow_spectators_check.toggled.connect(_on_pvp_allow_spectators_toggled)
+	_refresh_pvp_allow_spectators_checkbox(false)
+	pvp_room_form.add_child(pvp_allow_spectators_check)
 
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
-	room_layout.add_child(actions)
+	pvp_room_form.add_child(actions)
 
 	pvp_create_room_button = Button.new()
 	pvp_create_room_button.text = "Create Room"
 	pvp_create_room_button.custom_minimum_size = Vector2(112, 34)
+	pvp_create_room_button.tooltip_text = "Create a private room and share its code"
 	pvp_create_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_create_room_button.pressed.connect(_on_pvp_create_room_pressed)
 	actions.add_child(pvp_create_room_button)
 
+	pvp_cancel_room_button = Button.new()
+	pvp_cancel_room_button.text = "Cancel Room"
+	pvp_cancel_room_button.custom_minimum_size = Vector2(112, 34)
+	pvp_cancel_room_button.focus_mode = Control.FOCUS_NONE
+	pvp_cancel_room_button.tooltip_text = "Close your room and stop waiting for an opponent"
+	pvp_cancel_room_button.visible = false
+	pvp_cancel_room_button.pressed.connect(_on_pvp_cancel_room_pressed)
+	actions.add_child(pvp_cancel_room_button)
+
 	pvp_join_room_button = Button.new()
 	pvp_join_room_button.text = "Join Room"
 	pvp_join_room_button.custom_minimum_size = Vector2(100, 34)
+	pvp_join_room_button.tooltip_text = "Join the room code above"
 	pvp_join_room_button.focus_mode = Control.FOCUS_NONE
 	pvp_join_room_button.pressed.connect(_on_pvp_join_room_pressed)
 	actions.add_child(pvp_join_room_button)
+
+	pvp_spectate_room_button = Button.new()
+	pvp_spectate_room_button.text = "Spectate"
+	pvp_spectate_room_button.custom_minimum_size = Vector2(92, 34)
+	pvp_spectate_room_button.tooltip_text = "Watch a room that allows spectators"
+	pvp_spectate_room_button.focus_mode = Control.FOCUS_NONE
+	pvp_spectate_room_button.pressed.connect(_on_pvp_spectate_room_pressed)
+	actions.add_child(pvp_spectate_room_button)
 
 	pvp_copy_code_button = Button.new()
 	pvp_copy_code_button.text = "Copy"
@@ -5019,8 +5140,13 @@ func _setup_pvp_room_popup() -> void:
 	tabs.move_child(tournaments_tab, 1)
 
 	_apply_button_style(pvp_create_room_button, "primary")
+	_apply_button_style(pvp_cancel_room_button, "danger")
 	_apply_button_style(pvp_join_room_button)
+	_apply_button_style(pvp_spectate_room_button)
 	_apply_button_style(pvp_copy_code_button)
+	_apply_button_style(pvp_room_create_mode_button, "primary")
+	_apply_button_style(pvp_room_join_mode_button)
+	_apply_button_style(pvp_room_spectate_mode_button)
 	_apply_button_style(pvp_join_queue_button, "primary")
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
@@ -7836,6 +7962,7 @@ func _process(delta: float) -> void:
 	_refresh_personal_buffs_if_needed(delta)
 	_refresh_staff_tools_visibility_if_needed()
 	_refresh_pvp_room_polling(delta)
+	_refresh_pvp_room_wait_spinner(delta)
 	_refresh_player_action_cooldown(delta)
 
 func _refresh_pvp_room_polling(delta: float) -> void:
@@ -7848,6 +7975,14 @@ func _refresh_pvp_room_polling(delta: float) -> void:
 
 	pvp_poll_elapsed = 1.0
 	_request_pvp_room_poll()
+
+func _refresh_pvp_room_wait_spinner(delta: float) -> void:
+	if pvp_room_wait_spinner_label == null:
+		return
+	var is_waiting := pvp_polling_active and pvp_active_room_code != "" and not pvp_battle_starting
+	pvp_room_wait_spinner_label.visible = is_waiting
+	if is_waiting:
+		pvp_room_wait_spinner_label.text = _pvp_queue_spinner_frame(int(floor(Time.get_ticks_msec() / 125.0)))
 
 func _refresh_staff_tools_visibility_if_needed() -> void:
 	var next_key := _get_staff_tools_visibility_key()
@@ -29581,6 +29716,25 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	push_warning("UIOverlay: could not heal party before %s: %s" % [action_label, error])
 	return false
 
+func _on_pvp_room_mode_selected(mode: String) -> void:
+	pvp_room_selected_mode = mode
+	pvp_room_form.visible = true
+	pvp_room_code_input.visible = mode != "create"
+	pvp_allow_spectators_check.visible = mode == "create"
+	pvp_create_room_button.visible = mode == "create"
+	pvp_join_room_button.visible = mode == "join"
+	pvp_spectate_room_button.visible = mode == "spectate"
+	pvp_cancel_room_button.visible = false
+	pvp_copy_code_button.visible = false
+	match mode:
+		"create":
+			pvp_room_form_title.text = "CREATE A PRIVATE ROOM"
+		"join":
+			pvp_room_form_title.text = "ENTER A ROOM CODE TO JOIN"
+		"spectate":
+			pvp_room_form_title.text = "ENTER A ROOM CODE TO SPECTATE"
+	_set_pvp_status("Ready.")
+
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
 		return
@@ -29590,7 +29744,8 @@ func _on_pvp_create_room_pressed() -> void:
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.create_pvp_room(
 		request,
-		BattleApiPayloads.from_player_save(PlayerSave)
+		BattleApiPayloads.from_player_save(PlayerSave),
+		pvp_allow_spectators_check != null and pvp_allow_spectators_check.button_pressed
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -29600,11 +29755,74 @@ func _on_pvp_create_room_pressed() -> void:
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", "")).strip_edges()
-	pvp_room_code_label.text = "Room Code: %s" % pvp_active_room_code
+	pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
+	pvp_room_mode_selector.visible = false
+	pvp_room_form.visible = true
+	pvp_room_form_title.text = "YOUR ROOM IS READY TO SHARE"
+	pvp_room_code_input.visible = false
+	pvp_allow_spectators_check.visible = false
+	pvp_create_room_button.visible = false
+	pvp_join_room_button.visible = false
+	pvp_spectate_room_button.visible = false
+	pvp_cancel_room_button.visible = pvp_active_room_code != ""
+	pvp_copy_code_button.visible = pvp_active_room_code != ""
 	_set_pvp_status("Waiting for another player...")
 	if pvp_active_room_code != "":
 		_start_pvp_room_polling()
+
+func _on_pvp_allow_spectators_toggled(allowed: bool) -> void:
+	_refresh_pvp_allow_spectators_checkbox(allowed)
+
+func _refresh_pvp_allow_spectators_checkbox(allowed: bool) -> void:
+	if pvp_allow_spectators_check == null:
+		return
+	pvp_allow_spectators_check.text = "Allow private spectators  ·  %s" % ("ON" if allowed else "OFF")
+	pvp_allow_spectators_check.add_theme_color_override(
+		"font_color",
+		Color("#9be7b1") if allowed else Color("#f1c3a1")
+	)
+
+func _pvp_spectators_checkbox_icon(checked: bool, hovered: bool) -> ImageTexture:
+	var image := Image.create(22, 22, false, Image.FORMAT_RGBA8)
+	var border := Color("#7fb5e8") if hovered else (Color("#65d492") if checked else Color("#d19a63"))
+	var fill := Color("#256849") if checked else Color("#142236")
+	for y: int in range(22):
+		for x: int in range(22):
+			var is_border := x < 2 or x > 19 or y < 2 or y > 19
+			image.set_pixel(x, y, border if is_border else fill)
+	if checked:
+		var check_pixels := [
+			Vector2i(5, 11), Vector2i(6, 12), Vector2i(7, 13), Vector2i(8, 14),
+			Vector2i(9, 13), Vector2i(10, 12), Vector2i(11, 11), Vector2i(12, 10),
+			Vector2i(13, 9), Vector2i(14, 8), Vector2i(15, 7),
+		]
+		for point: Vector2i in check_pixels:
+			image.set_pixelv(point, Color.WHITE)
+			image.set_pixel(point.x, point.y + 1, Color.WHITE)
+	return ImageTexture.create_from_image(image)
+
+func _on_pvp_cancel_room_pressed() -> void:
+	if pvp_battle_starting or pvp_active_room_code == "":
+		return
+	_set_pvp_room_busy(true, "Cancelling room...")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.cancel_pvp_room(request, pvp_active_room_code)
+	request.queue_free()
+	_set_pvp_room_busy(false)
+	if not bool(response.get("success", false)):
+		_set_pvp_status("Could not cancel room: %s" % str(response.get("error", "Unknown error")))
+		return
+	pvp_polling_active = false
+	pvp_poll_in_flight = false
+	pvp_poll_elapsed = 0.0
+	pvp_active_room_code = ""
+	pvp_room_code_label.text = "ROOM CODE  ·  -"
+	pvp_copy_code_button.disabled = true
+	pvp_room_mode_selector.visible = true
+	pvp_room_form.visible = false
+	pvp_room_selected_mode = ""
+	_set_pvp_status("Room cancelled.")
 
 func _on_pvp_join_room_pressed() -> void:
 	if pvp_battle_starting:
@@ -29629,7 +29847,7 @@ func _on_pvp_join_room_pressed() -> void:
 	if not bool(response.get("success", false)):
 		if _can_reconnect_to_started_pvp_room(response):
 			pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
-			pvp_room_code_label.text = "Room Code: %s" % pvp_active_room_code
+			pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
 			pvp_copy_code_button.disabled = pvp_active_room_code == ""
 			_set_pvp_status("Room already started. Reconnecting...")
 			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
@@ -29638,9 +29856,50 @@ func _on_pvp_join_room_pressed() -> void:
 		return
 
 	pvp_active_room_code = str(response.get("roomCode", room_code)).strip_edges()
-	pvp_room_code_label.text = "Room Code: %s" % pvp_active_room_code
+	pvp_room_code_label.text = "ROOM CODE  ·  %s" % pvp_active_room_code
 	pvp_copy_code_button.disabled = pvp_active_room_code == ""
 	await _start_pvp_battle_from_response(response)
+
+func _on_pvp_spectate_room_pressed() -> void:
+	if pvp_battle_starting:
+		return
+	var room_code := pvp_room_code_input.text.strip_edges().to_upper()
+	if room_code == "":
+		_set_pvp_status("Enter a room code first.")
+		return
+	_set_pvp_room_busy(true, "Opening spectator view...")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.spectate_pvp_room(request, room_code)
+	request.queue_free()
+	_set_pvp_room_busy(false)
+	if not bool(response.get("success", false)):
+		_set_pvp_status("Could not spectate room: %s" % str(response.get("error", "Spectating is unavailable.")))
+		return
+	if not _spectator_response_has_public_teams(response):
+		_set_pvp_status("The public team preview is not available yet. Try again shortly.")
+		return
+	pvp_active_room_code = room_code
+	pvp_room_code_label.text = "SPECTATING  ·  %s" % room_code
+	pvp_copy_code_button.disabled = false
+	await _start_pvp_battle_from_response(response)
+
+
+func _spectator_response_has_public_teams(response: Dictionary) -> bool:
+	var requests_value: Variant = response.get("requests", {})
+	if not (requests_value is Dictionary):
+		return false
+	for player_id in ["p1", "p2"]:
+		var request_value: Variant = (requests_value as Dictionary).get(player_id, {})
+		if not (request_value is Dictionary):
+			return false
+		var side_value: Variant = (request_value as Dictionary).get("side", {})
+		if not (side_value is Dictionary):
+			return false
+		var team_value: Variant = (side_value as Dictionary).get("pokemon", [])
+		if not (team_value is Array) or (team_value as Array).is_empty():
+			return false
+	return true
+
 
 func _on_pvp_join_queue_pressed() -> void:
 	if pvp_battle_starting:
@@ -31497,7 +31756,7 @@ func _on_pvp_room_poll_completed(
 
 	var status := str(response.get("status", "waiting"))
 	if status != "started":
-		_set_pvp_status("Waiting for another player... (%s)" % status)
+		_set_pvp_status("Waiting for another player...")
 		return
 
 	_set_pvp_status("Opponent joined. Starting battle...")
@@ -31545,8 +31804,13 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	pvp_queue_auto_open_in_flight = false
 	pvp_polling_active = false
 	pvp_poll_elapsed = 0.0
-	pvp_room_code_label.text = "Room Code: -"
+	pvp_room_code_label.text = "ROOM CODE  ·  -"
 	pvp_copy_code_button.disabled = true
+	if pvp_room_mode_selector != null:
+		pvp_room_mode_selector.visible = true
+	if pvp_room_form != null:
+		pvp_room_form.visible = false
+	pvp_room_selected_mode = ""
 	_set_pvp_queue_status("Queue Status: idle")
 	_refresh_pvp_queue_buttons("idle")
 	_refresh_pvp_queue_compact_panel(0.0)
@@ -31559,7 +31823,19 @@ func _create_pvp_request_node() -> HTTPRequest:
 
 func _set_pvp_room_busy(is_busy: bool, message: String = "") -> void:
 	pvp_create_room_button.disabled = is_busy
+	if pvp_room_create_mode_button != null:
+		pvp_room_create_mode_button.disabled = is_busy
+	if pvp_room_join_mode_button != null:
+		pvp_room_join_mode_button.disabled = is_busy
+	if pvp_room_spectate_mode_button != null:
+		pvp_room_spectate_mode_button.disabled = is_busy
+	if pvp_cancel_room_button != null:
+		pvp_cancel_room_button.disabled = is_busy
 	pvp_join_room_button.disabled = is_busy
+	if pvp_spectate_room_button != null:
+		pvp_spectate_room_button.disabled = is_busy
+	if pvp_allow_spectators_check != null:
+		pvp_allow_spectators_check.disabled = is_busy
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
