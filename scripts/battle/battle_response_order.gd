@@ -24,6 +24,14 @@ func reset(initial_response: Dictionary = {}) -> void:
 		remember(initial_response)
 
 
+func reset_transport_cursor() -> void:
+	if latest_cursor.is_empty():
+		return
+	latest_cursor["server_seq"] = 0
+	latest_response.erase("pvpServerSeq")
+	latest_response.erase("serverSeq")
+
+
 func is_stale(response: Dictionary) -> bool:
 	if response.is_empty() or latest_cursor.is_empty():
 		return false

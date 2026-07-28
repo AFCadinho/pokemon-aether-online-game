@@ -14,6 +14,8 @@ signal timer_state_changed(timer_projection: RefCounted)
 
 const RECONNECT_DELAY_SECONDS := 3.0
 const CONNECTION_HEARTBEAT_SECONDS := 5.0
+const CONNECTION_PONG_TIMEOUT_MSEC := 12000
+const JOIN_ACK_TIMEOUT_MSEC := 10000
 const SESSION_INVALID_CLOSE_CODE := 1008
 const DEBUG_PVP_REALTIME := false
 const WEBSOCKET_BUFFER_BYTES := 1024 * 1024
@@ -30,6 +32,11 @@ var connecting := false
 var should_reconnect := false
 var reconnect_timer := 0.0
 var connection_heartbeat_timer := 0.0
+var connection_attempt_generation := 0
+var join_sent := false
+var join_sent_at_msec := 0
+var awaiting_pong := false
+var ping_sent_at_msec := 0
 var session_invalid_handled := false
 var active_room_code := ""
 var active_player_id := "p1"
@@ -68,11 +75,27 @@ func _process(delta: float) -> void:
 	if ready_state == WebSocketPeer.STATE_OPEN:
 		connecting = false
 		session_invalid_handled = false
-		if joined:
-			connection_heartbeat_timer -= delta
-			if connection_heartbeat_timer <= 0.0:
-				var heartbeat_error := websocket.send_text(JSON.stringify({"type":"ping"}))
-				connection_heartbeat_timer = CONNECTION_HEARTBEAT_SECONDS if heartbeat_error == OK else 0.5
+		if not joined:
+			if not join_sent:
+				_send_join()
+			elif (
+				join_sent_at_msec > 0
+				and Time.get_ticks_msec() - join_sent_at_msec >= JOIN_ACK_TIMEOUT_MSEC
+			):
+				_restart_stalled_connection("PvP room join timed out.")
+			return
+		if awaiting_pong and Time.get_ticks_msec() - ping_sent_at_msec >= CONNECTION_PONG_TIMEOUT_MSEC:
+			_restart_stalled_connection("PvP heartbeat timed out.")
+			return
+		connection_heartbeat_timer -= delta
+		if connection_heartbeat_timer <= 0.0 and not awaiting_pong:
+			var heartbeat_error := websocket.send_text(JSON.stringify({"type":"ping"}))
+			if heartbeat_error != OK:
+				_restart_stalled_connection("PvP heartbeat could not be sent.")
+				return
+			awaiting_pong = true
+			ping_sent_at_msec = Time.get_ticks_msec()
+			connection_heartbeat_timer = CONNECTION_HEARTBEAT_SECONDS
 		return
 
 	if ready_state == WebSocketPeer.STATE_CONNECTING:
@@ -111,7 +134,11 @@ func connect_room(
 	active_battle_id = normalized_battle_id
 	active_match_id = match_id.strip_edges()
 	joined = false
+	join_sent = false
+	join_sent_at_msec = 0
 	connection_heartbeat_timer = 0.0
+	awaiting_pong = false
+	ping_sent_at_msec = 0
 	room_is_ready = false
 	if active_room_code == "" or not _is_authenticated():
 		if DEBUG_PVP_REALTIME:
@@ -128,15 +155,21 @@ func connect_room(
 	should_reconnect = true
 	connecting = true
 	session_invalid_handled = false
-	_connect_room_async.call_deferred()
+	connection_attempt_generation += 1
+	_connect_room_async.call_deferred(connection_attempt_generation)
 
 
-func _connect_room_async() -> void:
+func _connect_room_async(attempt_generation: int) -> void:
 	var base_url: String = await _get_gateway_base_url()
-	if not _is_authenticated() or active_room_code == "":
+	if (
+		attempt_generation != connection_attempt_generation
+		or not _is_authenticated()
+		or active_room_code == ""
+	):
 		if DEBUG_PVP_REALTIME:
 			_log_realtime("connect_room_async aborted", "authenticated=%s room=%s" % [_is_authenticated(), active_room_code])
-		connecting = false
+		if attempt_generation == connection_attempt_generation:
+			connecting = false
 		return
 
 	websocket = WebSocketPeer.new()
@@ -155,23 +188,6 @@ func _connect_room_async() -> void:
 		push_warning("PvpBattleRealtimeService: could not connect websocket: %s" % error_string(error))
 		return
 
-	_send_join_when_open.call_deferred()
-
-
-func _send_join_when_open() -> void:
-	if DEBUG_PVP_REALTIME:
-		_log_realtime("Waiting for websocket open to send join", "room=%s player=%s" % [active_room_code, active_player_id])
-	var open_deadline_msec := Time.get_ticks_msec() + 3000
-	while Time.get_ticks_msec() < open_deadline_msec:
-		websocket.poll()
-		if websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:
-			_send_join()
-			return
-		if websocket.get_ready_state() == WebSocketPeer.STATE_CLOSED:
-			return
-		await get_tree().process_frame
-
-
 func _send_join() -> void:
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
@@ -182,7 +198,12 @@ func _send_join() -> void:
 		return
 
 	var payload := _build_join_payload()
-	websocket.send_text(JSON.stringify(payload))
+	var error := websocket.send_text(JSON.stringify(payload))
+	if error != OK:
+		_restart_stalled_connection("PvP room join could not be sent.")
+		return
+	join_sent = true
+	join_sent_at_msec = Time.get_ticks_msec()
 
 
 func _build_join_payload() -> Dictionary:
@@ -207,8 +228,13 @@ func _build_join_payload() -> Dictionary:
 func disconnect_room() -> void:
 	should_reconnect = false
 	connecting = false
+	connection_attempt_generation += 1
 	joined = false
+	join_sent = false
+	join_sent_at_msec = 0
 	connection_heartbeat_timer = 0.0
+	awaiting_pong = false
+	ping_sent_at_msec = 0
 	room_is_ready = false
 	active_room_code = ""
 	active_player_id = "p1"
@@ -227,6 +253,12 @@ func disconnect_room() -> void:
 	if connected:
 		connected = false
 		connection_changed.emit(false)
+
+
+func request_resync(reason: String = "PvP state resynchronization required.") -> void:
+	if not should_reconnect or active_room_code == "":
+		return
+	_restart_stalled_connection(reason)
 
 
 func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0, decision_kind := "", z_move := false) -> String:
@@ -351,7 +383,11 @@ func _process_packets() -> void:
 			_log_realtime("Incoming packet", "type=%s request=%s battle=%s player=%s action=%s room=%s" % [message_type, str(message.get("requestId", "")), str(message.get("battleId", "")), str(message.get("playerId", "")), str(message.get("action", "")), str(message.get("roomCode", ""))])
 		if message_type == "pvp.joined":
 			joined = true
+			join_sent = false
+			join_sent_at_msec = 0
 			connection_heartbeat_timer = 0.0
+			awaiting_pong = false
+			ping_sent_at_msec = 0
 			room_is_ready = false
 			active_room_code = str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
 			active_player_id = "p2" if str(message.get("playerId", active_player_id)) == "p2" else "p1"
@@ -361,6 +397,8 @@ func _process_packets() -> void:
 			room_joined.emit(active_room_code, active_player_id, active_battle_id)
 			continue
 		if message_type == "pong":
+			awaiting_pong = false
+			ping_sent_at_msec = 0
 			continue
 		if message_type == "pvp.room_ready":
 			var message_room := str(message.get("roomCode", active_room_code)).strip_edges().to_upper()
@@ -403,6 +441,9 @@ func _process_packets() -> void:
 		if message_type == "pvp.phase_update":
 			battle_update_received.emit(message)
 			continue
+		if message_type == "pvp.resync_required":
+			battle_update_received.emit(message)
+			continue
 		if message_type in ["pvp.forfeit", "pvp.match_ended", "pvp.match_settled"]:
 			if active_viewer_role == "spectator":
 				battle_update_received.emit(message)
@@ -430,6 +471,8 @@ func _process_packets() -> void:
 						"error": str(message.get("error", "PvP realtime error.")),
 					},
 				})
+			elif not joined:
+				_handle_join_error(message)
 			continue
 
 
@@ -632,6 +675,39 @@ func _handle_closed_socket() -> void:
 	session_invalid.emit("Your PvP battle session is no longer valid.")
 
 
+func _restart_stalled_connection(reason: String) -> void:
+	joined = false
+	join_sent = false
+	join_sent_at_msec = 0
+	room_is_ready = false
+	awaiting_pong = false
+	ping_sent_at_msec = 0
+	connection_heartbeat_timer = 0.0
+	connecting = false
+	reconnect_timer = RECONNECT_DELAY_SECONDS
+	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
+		websocket.close(1013, reason.left(120))
+
+
+func _handle_join_error(message: Dictionary) -> void:
+	var code := str(message.get("code", "")).strip_edges().to_lower()
+	var reason := str(message.get("error", "Unable to join the PvP battle room."))
+	if code in [
+		"pvp_identity_resolution_failed",
+		"pvp_invalid_viewer_role",
+		"pvp_room_already_joined",
+		"pvp_spectator_identity_required",
+		"pvp_spectator_not_allowed",
+	]:
+		should_reconnect = false
+		connecting = false
+		session_invalid.emit(reason)
+		if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
+			websocket.close(SESSION_INVALID_CLOSE_CODE, reason)
+		return
+	_restart_stalled_connection(reason)
+
+
 func _handle_battle_events_message(message: Dictionary) -> void:
 	var latest_seq := _nonnegative_int(message.get("battleEventLatestSeq", battle_event_latest_seq), battle_event_latest_seq)
 	var events_value: Variant = message.get("events", [])
@@ -698,6 +774,8 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 		timer_state_changed.emit(timer_projection)
 	if not terminal_message.is_empty():
 		battle_update_received.emit(terminal_message)
+	if latest_seq > last_battle_event_seq:
+		_restart_stalled_connection("Durable PvP event catch-up is required.")
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"Received battle event stream update",

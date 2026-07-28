@@ -15,6 +15,7 @@ func _init() -> void:
 	_check_durable_revision_orders_same_event_snapshots()
 	_check_equal_revision_requires_idempotent_fingerprint()
 	_check_unversioned_snapshot_cannot_win_by_transport_sequence()
+	_check_transport_epoch_reset_preserves_mechanics_and_accepts_new_sequence()
 	_check_render_cursor_rejects_future_canonical_projection()
 	_check_battle_controller_uses_order_guard()
 	quit(1 if failed else 0)
@@ -230,6 +231,26 @@ func _check_unversioned_snapshot_cannot_win_by_transport_sequence() -> void:
 	_check(
 		order.is_stale(unversioned),
 		"missing event sequence is rejected before its higher transport sequence is considered"
+	)
+
+
+func _check_transport_epoch_reset_preserves_mechanics_and_accepts_new_sequence() -> void:
+	var order = BattleResponseOrderScript.new()
+	var before := _response(18, 6, 2, 80, "Cinderace", false, true, [])
+	before["mechanicalRevision"] = 12
+	before["aggregateRevision"] = 20
+	before["battleEventSeq"] = 25
+	_check(order.remember(before), "pre-restart transport projection is remembered")
+
+	order.reset_transport_cursor()
+	var after := before.duplicate(true)
+	after["serverSeq"] = 1
+	after["pvpServerSeq"] = 1
+	_check(not order.is_stale(after), "new gateway epoch accepts a restarted transport sequence")
+	_check_equal(
+		int(order.latest_cursor.get("mechanical_revision", 0)),
+		12,
+		"transport reset preserves the authoritative mechanical cursor"
 	)
 
 

@@ -21,6 +21,8 @@ enum BattleActionsPanelMode {
 
 const DEBUG_TRAINER_TEAM_DISPLAY := false
 const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
+const DEBUG_PVP_SPECTATOR_PRESENTATION := true
+const PVP_SPECTATOR_DEBUG_PREFIX := "[PvPSpectatorDebug]"
 const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animations/status_condition_overlay.gd")
 const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_slot_resolver.gd")
 const CALC_DRAWER_FIELD_WIDTH_RATIO := 0.55
@@ -103,6 +105,7 @@ var pvp_pending_reconciliation_snapshot: Dictionary = {}
 var pvp_pending_authoritative_terminal: Dictionary = {}
 var pvp_pending_render_ack_completion: Dictionary = {}
 var pvp_retrying_reconciliation_snapshot := false
+var pvp_room_recovery_request_active := false
 var pvp_idle_realtime_drain_pending := false
 var pvp_idle_wait_recovery_active := false
 var pvp_last_applied_server_seq := 0
@@ -112,6 +115,8 @@ var pvp_last_next_phase := ""
 var pvp_last_phase_update_server_seq := 0
 var pvp_last_phase_update_batch_id := ""
 var pvp_last_phase_update_phase := ""
+var pvp_gateway_epoch := ""
+var pvp_last_connection_server_seq := 0
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
 var pvp_rendered_event_count := 0
@@ -147,6 +152,7 @@ var setup_flow := preload("res://scripts/battle/battle_setup_flow.gd").new()
 var presentation_state := preload("res://scripts/battle/battle_presentation_state.gd").new()
 var public_confirmed_abilities_by_ident := {}
 var public_confirmed_items_by_ident := {}
+var spectator_debug_last_sprite_signature: Dictionary = {}
 var status_condition_overlays: Dictionary = {}
 var volatile_conditions_by_ident: Dictionary = {}
 var pending_status_condition_overlay_players: Dictionary = {}
@@ -5403,6 +5409,7 @@ func setup_pvp_battle_from_response(
 	pvp_viewer_role = "spectator" if str(api_response.get("viewerRole", "participant")).to_lower() == "spectator" else "participant"
 	pvp_room_code = str(api_response.get("roomCode", "")).strip_edges()
 	pvp_match_id = str(api_response.get("matchId", "")).strip_edges()
+	_debug_spectator_response("setup_response", api_response)
 	_remember_spectator_raw_response(api_response)
 	var local_player_id := str(api_response.get("playerId", "p1"))
 	if _is_spectator_battle():
@@ -5563,6 +5570,68 @@ func _remember_spectator_raw_response(response: Dictionary) -> void:
 		spectator_latest_raw_response = response.duplicate(true)
 
 
+func _debug_spectator_response(stage: String, response: Dictionary) -> void:
+	if not DEBUG_PVP_SPECTATOR_PRESENTATION or not _is_spectator_battle():
+		return
+	print(PVP_SPECTATOR_DEBUG_PREFIX, " ", stage, " ", JSON.stringify({
+		"phase": str(response.get("phase", "")),
+		"nextPhase": str(response.get("nextPhase", response.get("next_phase", ""))),
+		"turn": int(response.get("turn", 0)),
+		"eventSeq": int(response.get("eventSeq", -1)),
+		"serverSeq": _get_pvp_response_server_seq(response),
+		"p1": _debug_spectator_request_side(response, "p1"),
+		"p2": _debug_spectator_request_side(response, "p2"),
+	}))
+
+
+func _debug_spectator_loaded_state(stage: String) -> void:
+	if not DEBUG_PVP_SPECTATOR_PRESENTATION or not _is_spectator_battle():
+		return
+	_debug_spectator_response(stage, {
+		"phase": pvp_last_phase,
+		"nextPhase": pvp_last_next_phase,
+		"turn": battle_state.get_turn(),
+		"eventSeq": pvp_event_queue.last_rendered_seq,
+		"requests": battle_state.requests,
+	})
+
+
+func _debug_spectator_request_side(response: Dictionary, player_id: String) -> Dictionary:
+	var requests_value: Variant = response.get("requests", {})
+	if not (requests_value is Dictionary):
+		return {"requestType": typeof(requests_value), "team": []}
+	var request_value: Variant = (requests_value as Dictionary).get(player_id, {})
+	if not (request_value is Dictionary):
+		return {"requestType": typeof(request_value), "team": []}
+	var side_value: Variant = (request_value as Dictionary).get("side", {})
+	if not (side_value is Dictionary):
+		return {"sideType": typeof(side_value), "team": []}
+	var team_value: Variant = (side_value as Dictionary).get("pokemon", [])
+	if not (team_value is Array):
+		return {"teamType": typeof(team_value), "team": []}
+
+	var team_summary: Array = []
+	for index in range((team_value as Array).size()):
+		var pokemon_value: Variant = (team_value as Array)[index]
+		if not (pokemon_value is Dictionary):
+			team_summary.append({"index": index, "valueType": typeof(pokemon_value)})
+			continue
+		var pokemon_data := pokemon_value as Dictionary
+		team_summary.append({
+			"index": index,
+			"active": bool(pokemon_data.get("active", false)),
+			"ident": str(pokemon_data.get("ident", "")),
+			"species": str(pokemon_data.get("species", "")),
+			"displaySpecies": str(pokemon_data.get("displaySpecies", "")),
+			"details": str(pokemon_data.get("details", "")),
+			"hp": pokemon_data.get("hp", null),
+			"maxHp": pokemon_data.get("maxHp", null),
+			"condition": str(pokemon_data.get("condition", "")),
+			"fainted": bool(pokemon_data.get("fainted", false)),
+		})
+	return {"team": team_summary}
+
+
 func _update_spectator_perspective_label() -> void:
 	if not _is_spectator_battle():
 		return
@@ -5639,6 +5708,8 @@ func _prepare_battle_setup(type: BattleType, player_pokemon: Pokemon, enemy_poke
 	pvp_last_phase_update_server_seq = 0
 	pvp_last_phase_update_batch_id = ""
 	pvp_last_phase_update_phase = ""
+	pvp_gateway_epoch = ""
+	pvp_last_connection_server_seq = 0
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_response_order.reset()
@@ -5663,6 +5734,7 @@ func _apply_initial_battle_response(api_response: Dictionary) -> bool:
 	if not _apply_api_response(api_response, false):
 		return false
 
+	_debug_spectator_loaded_state("initial_response_applied")
 	_update_battle_status_panels()
 	_update_party_slots()
 	_update_vs_panel_names()
@@ -6395,6 +6467,7 @@ func _run_pvp_spectator_team_preview() -> Dictionary:
 		var response: Dictionary = _response_from_pvp_realtime_message(message)
 		if response.is_empty():
 			continue
+		_debug_spectator_response("team_preview_realtime_response", response)
 		_remember_spectator_raw_response(response)
 		var display_response: Dictionary = action_flow.map_response_for_local_player(response)
 		if display_response.is_empty() or _should_show_team_preview(display_response):
@@ -6488,11 +6561,7 @@ func _recover_pvp_team_preview_from_room() -> void:
 	if not team_preview_lead_selection_active or pvp_room_code == "":
 		pvp_team_preview_recovery_requested = false
 		return
-	var response: Dictionary = await BattleApiClient.get_pvp_room(
-		battle_request,
-		pvp_room_code,
-		action_flow.local_player_id
-	)
+	var response: Dictionary = await _fetch_pvp_room_serialized(action_flow.local_player_id)
 	pvp_team_preview_recovery_requested = false
 	if not team_preview_lead_selection_active or not bool(response.get("success", false)):
 		return
@@ -6503,7 +6572,7 @@ func _recover_pvp_team_preview_from_room() -> void:
 	player_party_grid.party_selected.emit(0)
 
 func _get_pvp_team_preview_complete_room_response(local_player_id: String) -> Dictionary:
-	var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, local_player_id)
+	var response: Dictionary = await _fetch_pvp_room_serialized(local_player_id)
 	if not bool(response.get("success", false)):
 		return {}
 
@@ -9103,7 +9172,16 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 			)
 			return
 
+	_observe_pvp_gateway_epoch(message)
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "pvp.resync_required":
+		pvp_idle_wait_recovery_active = true
+		_set_battle_input_locked(true)
+		current_action_panel.set_message("Resynchronizing battle...")
+		PvpBattleRealtimeService.request_resync(
+			str(message.get("reason", "The PvP render boundary requires resynchronization."))
+		)
+		return
 	if _apply_pvp_connection_log_event(message_type, message):
 		return
 	if PvpBattleRealtimeService.is_infrastructure_no_contest_message(message):
@@ -9170,6 +9248,27 @@ func _on_pvp_realtime_battle_update(message: Dictionary) -> void:
 		_drain_idle_pvp_realtime_updates.call_deferred()
 
 func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:
+	if message_type not in [
+		"pvp.opponent_disconnected",
+		"pvp.reconnect_grace_started",
+		"pvp.opponent_reconnected",
+	]:
+		return false
+	var server_seq := _get_pvp_message_server_seq(message)
+	if server_seq > 0 and server_seq < pvp_last_connection_server_seq:
+		_trace_pvp_flow(
+			"connection_event.skip_stale",
+			{},
+			"type=%s serverSeq=%d lastSeq=%d" % [
+				message_type,
+				server_seq,
+				pvp_last_connection_server_seq,
+			]
+		)
+		return true
+	if server_seq > pvp_last_connection_server_seq:
+		pvp_last_connection_server_seq = server_seq
+
 	var log_message := ""
 	var player_name := _get_pvp_connection_event_display_name(message)
 	match message_type:
@@ -9198,6 +9297,30 @@ func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) 
 	_add_battle_log_message(log_message)
 	current_action_panel.set_message(log_message)
 	return true
+
+
+func _observe_pvp_gateway_epoch(message: Dictionary) -> void:
+	var incoming_epoch := str(message.get("gatewayEpoch", "")).strip_edges()
+	if incoming_epoch == "":
+		return
+	if pvp_gateway_epoch == "":
+		pvp_gateway_epoch = incoming_epoch
+		return
+	if incoming_epoch == pvp_gateway_epoch:
+		return
+
+	var previous_epoch := pvp_gateway_epoch
+	pvp_gateway_epoch = incoming_epoch
+	pvp_last_applied_server_seq = 0
+	pvp_last_applied_snapshot_server_seq = 0
+	pvp_last_phase_update_server_seq = 0
+	pvp_last_connection_server_seq = 0
+	pvp_response_order.reset_transport_cursor()
+	_trace_pvp_flow(
+		"gateway_epoch.changed",
+		{},
+		"previous=%s current=%s" % [previous_epoch, incoming_epoch]
+	)
 
 func _sync_pvp_reconnect_timer_pause() -> void:
 	if vs_panel_container.has_active_reconnect_timer():
@@ -9376,7 +9499,7 @@ func _queue_pvp_team_preview_completion_from_room() -> void:
 		return
 
 	var local_player_id := action_flow.local_player_id
-	var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, local_player_id)
+	var response: Dictionary = await _fetch_pvp_room_serialized(local_player_id)
 	if not bool(response.get("success", false)):
 		return
 
@@ -9399,6 +9522,28 @@ func _has_newer_pvp_phase_update(wait_start_server_seq: int, accepted_phases: Ar
 		return false
 	return pvp_last_phase_update_phase in accepted_phases
 
+
+func _fetch_pvp_room_serialized(player_id: String) -> Dictionary:
+	while pvp_room_recovery_request_active:
+		if battle_finished or pvp_room_code == "":
+			return {}
+		await get_tree().process_frame
+
+	if battle_finished or pvp_room_code == "" or player_id == "":
+		return {}
+	var requested_room_code := pvp_room_code
+	pvp_room_recovery_request_active = true
+	var response: Dictionary = await BattleApiClient.get_pvp_room(
+		battle_request,
+		requested_room_code,
+		player_id
+	)
+	pvp_room_recovery_request_active = false
+	if requested_room_code != pvp_room_code:
+		return {}
+	return response
+
+
 func _reconcile_pvp_battle_from_room(source: String) -> bool:
 	if pvp_room_code == "" or action_flow.local_player_id == "":
 		return false
@@ -9406,11 +9551,7 @@ func _reconcile_pvp_battle_from_room(source: String) -> bool:
 	var request_start_server_seq := pvp_last_applied_server_seq
 	var request_start_phase_seq := pvp_last_phase_update_server_seq
 	var request_start_activity_seq := pvp_realtime_activity_seq
-	var response: Dictionary = await BattleApiClient.get_pvp_room(
-		battle_request,
-		pvp_room_code,
-		action_flow.local_player_id
-	)
+	var response: Dictionary = await _fetch_pvp_room_serialized(action_flow.local_player_id)
 	if not bool(response.get("success", false)):
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime("Canonical room reconciliation failed", "source=%s" % source)
@@ -9708,7 +9849,7 @@ func _recover_pvp_realtime_action_timeout(action: String, player_id: String, sub
 	var request_start_server_seq := pvp_last_applied_server_seq
 	var request_start_phase_seq := pvp_last_phase_update_server_seq
 	var request_start_activity_seq := pvp_realtime_activity_seq
-	var response: Dictionary = await BattleApiClient.get_pvp_room(battle_request, pvp_room_code, player_id)
+	var response: Dictionary = await _fetch_pvp_room_serialized(player_id)
 	var response_server_seq := _get_pvp_response_server_seq(response)
 	var realtime_advanced_during_request := (
 		pvp_last_applied_server_seq > request_start_server_seq
@@ -9955,22 +10096,6 @@ func _is_matching_pvp_action_update_message(
 				_log_pvp_realtime(
 					"Match by requestId",
 					"request_id=%s action=%s player=%s" % [message_request_id, str(message.get("action", "")), str(message.get("playerId", ""))]
-				)
-			return true
-
-		# Fallback for rare request-id drift in live responses.
-		if str(message.get("action", "")) == action and str(message.get("playerId", "")) == expected_player_id:
-			if str(message.get("battleId", "")) != "" and expected_battle_id != "" and str(message.get("battleId", "")) != expected_battle_id:
-				if DEBUG_PVP_REALTIME:
-					_log_pvp_realtime(
-						"Match rejected: fallback action+player matched but battleId mismatch",
-						"request_id=%s expected_request_id=%s message_battle_id=%s expected_battle_id=%s action=%s player=%s" % [message_request_id, expected_request_id, str(message.get("battleId", "")), expected_battle_id, str(message.get("action", "")), str(message.get("playerId", ""))]
-					)
-				return false
-			if DEBUG_PVP_REALTIME:
-				_log_pvp_realtime(
-					"Match by fallback action+player",
-					"request_id=%s expected_request_id=%s action=%s player=%s" % [message_request_id, expected_request_id, str(message.get("action", "")), str(message.get("playerId", ""))]
 				)
 			return true
 
@@ -10798,7 +10923,7 @@ func _finish_pvp_realtime_battle_from_snapshot(message: Dictionary) -> void:
 	if mapped_update.is_empty():
 		return
 
-	if not _apply_pvp_realtime_snapshot_when_safe(message, mapped_update):
+	if not await _apply_pvp_realtime_snapshot_when_safe(message, mapped_update):
 		return
 
 	var finish_context := {
@@ -10846,7 +10971,12 @@ func _apply_pvp_realtime_battle_update(message: Dictionary) -> bool:
 		)
 		return false
 
-	_warn_if_pvp_battle_update_event_gap(mapped_update)
+	if _has_pvp_battle_update_event_gap(mapped_update):
+		pvp_idle_wait_recovery_active = true
+		_set_battle_input_locked(true)
+		current_action_panel.set_message("Resynchronizing battle events...")
+		PvpBattleRealtimeService.request_resync("A PvP render event gap was detected.")
+		return false
 	var queue_source := "pvp_realtime_update"
 	var queue_metadata: Dictionary = {}
 	var message_action := str(message.get("action", "")).strip_edges().to_lower()
@@ -10872,11 +11002,26 @@ func _apply_pvp_realtime_snapshot_when_safe(message: Dictionary, mapped_update: 
 
 	var snapshot_event_seq := _get_pvp_response_event_seq_end(mapped_update)
 	var last_rendered_seq := pvp_event_queue.last_rendered_seq
+	if (
+		not pvp_pending_render_ack_completion.is_empty()
+		and snapshot_event_seq >= 0
+		and snapshot_event_seq <= last_rendered_seq
+	):
+		_retry_pending_pvp_render_ack()
 	if _is_initial_pvp_snapshot(message, mapped_update):
 		pvp_pending_reconciliation_snapshot.clear()
 		return _apply_pvp_snapshot_reconciliation(message, mapped_update, "pvp_snapshot_bootstrap")
 
 	if snapshot_event_seq >= 0 and snapshot_event_seq > last_rendered_seq:
+		var catchup_response := _promote_pvp_battle_update_fallback_render(
+			_response_from_pvp_realtime_message(message)
+		)
+		if not catchup_response.is_empty():
+			return await _enqueue_pvp_battle_response(
+				catchup_response,
+				"pvp_snapshot_event_catchup",
+				true
+			)
 		_buffer_pvp_reconciliation_snapshot(message, mapped_update, snapshot_event_seq, last_rendered_seq)
 		return false
 
@@ -10929,6 +11074,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 	var reconciliation := mapped_update.duplicate(true)
 	reconciliation["events"] = []
 	reconciliation["eventBatches"] = []
+	_debug_spectator_response("%s_before_load" % source, reconciliation)
 
 	if not bool(reconciliation.get("success", false)):
 		if DEBUG_PVP_REALTIME:
@@ -10947,6 +11093,7 @@ func _apply_pvp_snapshot_reconciliation(message: Dictionary, mapped_update: Dict
 
 	_preserve_terminal_presentation_requests(reconciliation)
 	battle_state.load_from_api_response(reconciliation, false)
+	_debug_spectator_loaded_state("%s_after_load" % source)
 	pvp_response_order.remember(reconciliation)
 	_apply_party_state_from_api_response(reconciliation)
 	_remember_active_player_party_moves()
@@ -11083,26 +11230,25 @@ func _pvp_response_state_ended(response: Dictionary) -> bool:
 	var state_value: Variant = response.get("state", {})
 	return state_value is Dictionary and bool((state_value as Dictionary).get("ended", false))
 
-func _warn_if_pvp_battle_update_event_gap(response: Dictionary) -> void:
-	if not DEBUG_PVP_REALTIME:
-		return
+func _has_pvp_battle_update_event_gap(response: Dictionary) -> bool:
 	var last_rendered_seq := pvp_event_queue.last_rendered_seq
 	if last_rendered_seq < 0:
-		return
+		return false
 
 	var first_event_seq := _get_pvp_response_first_event_seq(response)
 	if first_event_seq < 0:
-		return
+		return false
 	if first_event_seq > last_rendered_seq + 1:
-		_log_pvp_realtime(
-			"PvP event gap warning",
-			"firstEventSeq=%d lastRenderedSeq=%d eventSeq=%d batchSeq=%d" % [
-				first_event_seq,
-				last_rendered_seq,
-				_get_pvp_response_event_seq_end(response),
-				_get_int_from_variant(response.get("batchSeq", -1), -1),
-			]
-		)
+		var details := "firstEventSeq=%d lastRenderedSeq=%d eventSeq=%d batchSeq=%d" % [
+			first_event_seq,
+			last_rendered_seq,
+			_get_pvp_response_event_seq_end(response),
+			_get_int_from_variant(response.get("batchSeq", -1), -1),
+		]
+		_trace_pvp_flow("event_gap.detected", response, details)
+		push_warning("PvP render event gap detected: %s" % details)
+		return true
+	return false
 
 func _is_stale_pvp_realtime_message(message: Dictionary) -> bool:
 	if _get_pvp_realtime_message_kind(message) == "snapshot":
@@ -12252,12 +12398,22 @@ func _update_active_sprites(context := "sprite_refresh") -> void:
 	_update_stat_stage_panels()
 
 func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String, context := "sprite_refresh") -> void:
-	if _active_field_slot_is_empty(player_id, context) or _should_hide_active_pokemon_for_force_switch(player_id):
+	var field_slot_empty := _active_field_slot_is_empty(player_id, context)
+	var force_switch_hidden := _should_hide_active_pokemon_for_force_switch(player_id)
+	var active_species := _get_active_display_species(player_id).strip_edges()
+	_debug_spectator_sprite_decision(
+		player_id,
+		side,
+		context,
+		field_slot_empty,
+		force_switch_hidden,
+		active_species
+	)
+	if field_slot_empty or force_switch_hidden:
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
 		return
 
-	var active_species := _get_active_display_species(player_id).strip_edges()
 	if active_species == "":
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
@@ -12270,6 +12426,41 @@ func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String
 		_get_active_pokemon_is_shiny(player_id),
 		context
 	)
+
+
+func _debug_spectator_sprite_decision(
+	player_id: String,
+	side: String,
+	context: String,
+	field_slot_empty: bool,
+	force_switch_hidden: bool,
+	active_species: String
+) -> void:
+	if not DEBUG_PVP_SPECTATOR_PRESENTATION or not _is_spectator_battle():
+		return
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	var summary := {
+		"player": player_id,
+		"side": side,
+		"context": context,
+		"fieldSlotEmpty": field_slot_empty,
+		"forceSwitchHidden": force_switch_hidden,
+		"resolvedSpecies": active_species,
+		"ident": str(active_pokemon.get("ident", "")),
+		"species": str(active_pokemon.get("species", "")),
+		"displaySpecies": str(active_pokemon.get("displaySpecies", "")),
+		"active": bool(active_pokemon.get("active", false)),
+		"hp": active_pokemon.get("hp", null),
+		"maxHp": active_pokemon.get("maxHp", null),
+		"condition": str(active_pokemon.get("condition", "")),
+		"fainted": bool(active_pokemon.get("fainted", false)),
+	}
+	var signature := JSON.stringify(summary)
+	if str(spectator_debug_last_sprite_signature.get(player_id, "")) == signature:
+		return
+	spectator_debug_last_sprite_signature[player_id] = signature
+	print(PVP_SPECTATOR_DEBUG_PREFIX, " sprite_decision ", signature)
+
 
 func _active_field_slot_is_empty(player_id: String, context := "sprite_refresh") -> bool:
 	if defer_force_switch_active_hide and context != "force_switch_transition":

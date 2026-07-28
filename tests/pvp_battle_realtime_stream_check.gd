@@ -58,14 +58,73 @@ func _init() -> void:
 	)
 
 	_check_equal(
-		realtime_source.contains('if joined:\n\t\t\tconnection_heartbeat_timer -= delta'),
+		realtime_source.contains("if not joined:") \
+			and realtime_source.contains("if not join_sent:") \
+			and realtime_source.contains("_send_join()") \
+			and not realtime_source.contains("func _send_join_when_open()"),
 		true,
-		"joined realtime sockets renew their server-owned connection lease"
+		"an open realtime socket always drives its join state machine without a three-second polling race"
 	)
 	_check_equal(
-		realtime_source.contains('websocket.send_text(JSON.stringify({"type":"ping"}))'),
+		realtime_source.contains('websocket.send_text(JSON.stringify({"type":"ping"}))') \
+			and realtime_source.contains("CONNECTION_PONG_TIMEOUT_MSEC") \
+			and realtime_source.contains('if message_type == "pong":') \
+			and realtime_source.contains('_restart_stalled_connection("PvP heartbeat timed out.")'),
 		true,
-		"connection heartbeat contains no authority or lease fencing data"
+		"connection heartbeat requires a pong and restarts half-open sockets"
+	)
+	_check_equal(
+		realtime_source.contains("JOIN_ACK_TIMEOUT_MSEC") \
+			and realtime_source.contains("func _handle_join_error(message: Dictionary) -> void:") \
+			and realtime_source.contains("elif not joined:") \
+			and realtime_source.contains("_handle_join_error(message)"),
+		true,
+		"uncorrelated join failures cannot leave an open but unjoined socket"
+	)
+	_check_equal(
+		realtime_source.contains("connection_attempt_generation += 1") \
+			and realtime_source.contains("attempt_generation != connection_attempt_generation"),
+		true,
+		"stale asynchronous connection attempts cannot replace the active socket"
+	)
+	_check_equal(
+		battle_source.contains("func _observe_pvp_gateway_epoch(message: Dictionary) -> void:") \
+			and battle_source.contains("pvp_response_order.reset_transport_cursor()") \
+			and battle_source.contains("pvp_last_applied_server_seq = 0"),
+		true,
+		"a new gateway epoch resets transport-only cursors after a gateway restart"
+	)
+	_check_equal(
+		battle_source.contains("pvp_last_connection_server_seq") \
+			and battle_source.contains('"connection_event.skip_stale"'),
+		true,
+		"late disconnect events cannot roll back a newer reconnect state"
+	)
+	_check_equal(
+		battle_source.contains("func _has_pvp_battle_update_event_gap(response: Dictionary) -> bool:") \
+			and battle_source.contains('PvpBattleRealtimeService.request_resync("A PvP render event gap was detected.")') \
+			and battle_source.contains('"pvp_snapshot_event_catchup"'),
+		true,
+		"mechanical event gaps fail closed and reconnect snapshots render the missing tail"
+	)
+	_check_equal(
+		realtime_source.contains('if message_type == "pvp.resync_required":') \
+			and realtime_source.contains('request_resync(reason: String = "PvP state resynchronization required.")'),
+		true,
+		"gateway render-boundary failures explicitly restart both clients"
+	)
+	_check_equal(
+		battle_source.contains("func _fetch_pvp_room_serialized(player_id: String) -> Dictionary:") \
+			and battle_source.contains("while pvp_room_recovery_request_active:") \
+			and battle_source.count("BattleApiClient.get_pvp_room(") == 1,
+		true,
+		"all canonical HTTP recovery shares one serialized request lane"
+	)
+	_check_equal(
+		not battle_source.contains("Fallback for rare request-id drift") \
+			and not battle_source.contains("Match by fallback action+player"),
+		true,
+		"non-empty action responses require their exact requestId"
 	)
 	_check_equal(
 		realtime_source.contains("websocket.inbound_buffer_size = WEBSOCKET_BUFFER_BYTES"),
@@ -140,6 +199,23 @@ func _init() -> void:
 	_check_equal(service.received_battle_event_count, 3, "counts valid received events")
 	service._apply_timer_projection_from_battle_response({"response":{"timerState":{"timerContractVersion":1,"authority":"BATTLE_BANK_V1_SHADOW","timerRevision":1,"battleEventSeq":41,"serverNowMs":1,"participants":{}}}})
 	_check_equal(service.last_battle_event_seq, 3, "newer timer snapshot cannot skip unapplied durable terminal events")
+
+	var gap_service := PvpBattleRealtimeServiceNode.new()
+	gap_service.active_room_code = "ROOM"
+	gap_service.should_reconnect = true
+	gap_service.joined = true
+	gap_service.join_sent = true
+	gap_service.awaiting_pong = true
+	gap_service._handle_battle_events_message({
+		"type": "pvp.battle_events",
+		"battleId": "battle-gap",
+		"battleEventLatestSeq": 2,
+		"events": [{"battleEventSeq": 2, "type": "battle.turn_resolved"}],
+	})
+	_check_equal(gap_service.last_battle_event_seq, 0, "durable stream never skips a missing event")
+	_check_equal(gap_service.joined, false, "durable event gap restarts the realtime join")
+	_check_equal(gap_service.awaiting_pong, false, "durable event gap clears the old heartbeat state")
+	gap_service.free()
 
 	var terminal_messages: Array[Dictionary] = []
 	service.battle_update_received.connect(func(message: Dictionary) -> void: terminal_messages.append(message))
