@@ -2503,29 +2503,18 @@ func _on_action_selected(action: String) -> void:
 		return
 
 	if _local_player_needs_force_switch_ui():
-		if action == "party":
-			_show_force_switch_if_needed()
-			return
-
 		current_action_panel.set_message("Choose a Pokemon!")
 		if not _show_force_switch_if_needed():
 			if not _is_pvp_battle():
 				_show_party(true)
 		return
 
-	if action == "fight":
-		_show_moves()
-	elif action == "bag":
+	if action == "bag":
 		if not _can_use_bag_in_current_battle():
 			current_action_panel.set_message("Bag cannot be used in this battle.")
 			_refresh_bag_action_disabled()
 			return
 		_open_bag()
-	elif action == "party":
-		if _is_pvp_opponent_force_switch_waiting():
-			_show_pvp_opponent_force_switch_wait()
-			return
-		_show_party()
 	elif action == "run":
 		_try_run()
 
@@ -2648,8 +2637,6 @@ func _show_moves() -> void:
 			_show_pvp_opponent_force_switch_wait()
 			return
 
-	action_buttons.set_action_disabled("fight", false)
-	action_buttons.set_action_disabled("party", false)
 	_refresh_bag_action_disabled()
 	action_buttons.set_action_disabled("run", false)
 	_update_move_slots()
@@ -2658,7 +2645,6 @@ func _show_moves() -> void:
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
 	_hide_party_hover()
-	action_buttons.set_selected_action("fight")
 	_show_current_action_prompt()
 	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
@@ -2782,7 +2768,6 @@ func _show_party(force_switch := false) -> void:
 
 	_clear_mega_evolution_selection()
 	_clear_z_move_selection()
-	action_buttons.set_action_disabled("fight", force_switch)
 	action_buttons.set_action_disabled("bag", force_switch or not _can_use_bag_in_current_battle())
 	action_buttons.set_action_disabled("run", force_switch)
 	current_action_view = ActionView.PARTY
@@ -2790,7 +2775,6 @@ func _show_party(force_switch := false) -> void:
 	moves_grid.visible = false
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
-	action_buttons.set_selected_action("party")
 	_sync_action_panel_mode_visibility()
 	_update_mechanic_button_states()
 
@@ -2800,11 +2784,8 @@ func _restore_team_preview_lead_selection_ui() -> void:
 	moves_grid.visible = false
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
-	action_buttons.set_action_disabled("fight", true)
-	action_buttons.set_action_disabled("party", false)
 	action_buttons.set_action_disabled("bag", true)
 	action_buttons.set_action_disabled("run", true)
-	action_buttons.set_selected_action("party")
 	_sync_action_panel_mode_visibility()
 
 ## Zet de UI in bag-modus.
@@ -5513,8 +5494,6 @@ func _enter_spectator_controls() -> void:
 	# participant action panel hidden and expose only that standalone exit.
 	action_buttons.visible = false
 	if action_buttons.has_method("set_action_visible"):
-		action_buttons.set_action_visible("fight", false)
-		action_buttons.set_action_visible("party", false)
 		action_buttons.set_action_visible("bag", false)
 		action_buttons.set_action_visible("run", true)
 	if action_buttons.has_method("set_action_label"):
@@ -6145,10 +6124,8 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	player_party_grid.set_party(_get_trainer_lead_selection_party_data())
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
-	action_buttons.set_action_disabled("fight", true)
 	action_buttons.set_action_disabled("bag", true)
 	action_buttons.set_action_disabled("run", true)
-	action_buttons.set_selected_action("party")
 	_sync_action_panel_mode_visibility()
 
 	while team_preview_lead_selection_active:
@@ -6242,10 +6219,8 @@ func _run_pvp_team_preview_lead_selection(local_player_id: String) -> Dictionary
 	player_party_grid.set_party(_get_lead_selection_team_data("p1"))
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
-	action_buttons.set_action_disabled("fight", true)
 	action_buttons.set_action_disabled("bag", true)
 	action_buttons.set_action_disabled("run", true)
-	action_buttons.set_selected_action("party")
 	_sync_action_panel_mode_visibility()
 
 	while team_preview_lead_selection_active:
@@ -8641,8 +8616,6 @@ func _show_pvp_opponent_force_switch_wait() -> void:
 	_hide_party_hover()
 	current_action_view = ActionView.NONE
 	current_action_panel.set_message("Waiting for opponent switch...")
-	action_buttons.set_action_disabled("fight", true)
-	action_buttons.set_action_disabled("party", true)
 	action_buttons.set_action_disabled("bag", true)
 	_set_battle_input_locked(true)
 	_sync_action_panel_mode_visibility()

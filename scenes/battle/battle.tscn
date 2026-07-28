@@ -7,9 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bt1b4mxyftlk7" path="res://scenes/battle/battle_platform.tscn" id="3_8eh2s"]
 [ext_resource type="PackedScene" uid="uid://3gsmmeerkva2" path="res://scenes/battle/party_slot.tscn" id="3_fh7rg"]
 [ext_resource type="PackedScene" uid="uid://dpltq23uv3kvb" path="res://scenes/battle/sprite_box.tscn" id="3_kd6yx"]
-[ext_resource type="Texture2D" uid="uid://b0mdtgfn4y3qi" path="res://assets/sprites/battle_buttons/fight.png" id="4_pll4o"]
 [ext_resource type="PackedScene" uid="uid://dp8he2r06cu2u" path="res://scenes/battle/current_action_panel.tscn" id="5_n6gaa"]
-[ext_resource type="Texture2D" uid="uid://cu0poykbyhlqy" path="res://assets/sprites/battle_buttons/party.png" id="6_agsc7"]
 [ext_resource type="PackedScene" uid="uid://dv3oowqse6sjb" path="res://scenes/battle/field_timers.tscn" id="6_mvulk"]
 [ext_resource type="PackedScene" uid="uid://c2lhyxer4tw6c" path="res://scenes/battle/battle_status_panel.tscn" id="7_mvulk"]
 [ext_resource type="Script" uid="uid://duo7cdw26ghjb" path="res://scripts/battle/action_choices.gd" id="8_t1kk3"]
@@ -650,34 +648,6 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
 toggle_mode = true
 text = "Damage Calc"
-
-[node name="FightButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer/TopActionRow" unique_id=1528178288]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(140, 75)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = "Fight"
-icon = ExtResource("4_pll4o")
-expand_icon = true
-
-[node name="PartyButton" type="Button" parent="HBoxContainer/BattleLogRail/ActionChoices/GridContainer" unique_id=564010331]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(140, 75)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_8h6bs")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dsauo")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ilhaa")
-text = "Party"
-icon = ExtResource("6_agsc7")
-expand_icon = true
 
 [node name="BattleLogPanel" parent="HBoxContainer/BattleLogRail" unique_id=2138858408 instance=ExtResource("17_6ofp8")]
 unique_name_in_owner = true
