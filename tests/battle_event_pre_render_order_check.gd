@@ -521,6 +521,9 @@ func _check_local_forfeit_terminal_unblocks_action_wait() -> void:
 	_check_equal(wait_source.contains("if battle_finished:"), true, "every action waiter exits when a durable terminal wins the race")
 	_check_equal(wait_source.contains('"terminalConfirmed": true'), true, "action waiter returns a successful terminal confirmation")
 	_check_equal(wait_source.contains("await _recover_pvp_realtime_action_timeout(action, player_id, decision)"), true, "lost action responses are classified from the canonical room")
+	_check_equal(recovery_source.contains("request_start_activity_seq"), true, "timeout recovery records realtime activity before starting its HTTP request")
+	_check_equal(recovery_source.contains("realtime_advanced_during_request"), true, "timeout recovery rejects an HTTP snapshot superseded by realtime")
+	_check_equal(recovery_source.contains("_apply_pvp_http_reconciliation_when_safe("), true, "timeout recovery uses the render-safe HTTP snapshot boundary")
 	_check_equal(recovery_source.contains("await _finish_if_battle_ended"), true, "canonical timeout recovery only finishes from a terminal mechanical state")
 
 
@@ -545,6 +548,8 @@ func _check_force_switch_phase_release_recovers() -> void:
 	_check_equal(wait_source.contains("PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC"), true, "canonical pivot recovery uses a bounded polling interval")
 	_check_equal(completion_source.contains("pvp_pending_render_ack_completion = completion.duplicate(true)"), true, "successful render completion retains retryable ACK evidence")
 	_check_equal(reconciliation_source.contains("realtime_advanced_during_request"), true, "late room polling cannot overwrite a newer realtime phase")
+	_check_equal(reconciliation_source.contains("request_start_activity_seq"), true, "room polling also fences queued realtime activity")
+	_check_equal(reconciliation_source.contains("_apply_pvp_http_reconciliation_when_safe("), true, "room polling uses the render-safe HTTP snapshot boundary")
 	_check_equal(opponent_wait_source.contains("_retry_pending_pvp_render_ack()"), true, "the non-pivoting client also retries its barrier acknowledgement")
 	_check_equal(opponent_wait_source.contains('await _reconcile_pvp_battle_from_room("pvp_opponent_force_switch_barrier_recovery")'), true, "the non-pivoting client also recovers a missed barrier release")
 

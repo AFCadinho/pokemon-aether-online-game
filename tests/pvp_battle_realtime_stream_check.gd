@@ -77,6 +77,35 @@ func _init() -> void:
 		true,
 		"realtime sockets increase their queued packet capacity before connecting"
 	)
+	_check_equal(
+		realtime_source.contains('"viewerRole": active_viewer_role') \
+			and realtime_source.contains('"spectatorCursorValid": spectator_cursor_valid'),
+		true,
+		"spectator joins carry a separate role and reconnect cursor contract"
+	)
+	_check_equal(
+		realtime_source.contains('if active_viewer_role == "spectator":\n\t\tpush_warning("PvpBattleRealtimeService: spectator action was blocked locally.")') \
+			and realtime_source.contains('if active_viewer_role == "spectator":\n\t\treturn false'),
+		true,
+		"spectator actions and render acknowledgements are blocked locally"
+	)
+	_check_equal(
+		battle_source.contains("func _is_spectator_battle() -> bool:") \
+			and battle_source.contains('current_action_panel.set_message("Spectating • read-only")') \
+			and battle_source.contains('action_buttons.set_action_label("run", "Leave Battle")') \
+			and battle_source.contains("func _leave_spectator_battle() -> void:") \
+			and battle_source.contains('"reason": "spectator_left"') \
+			and battle_source.contains('"skipPartyBattleSync": true'),
+		true,
+		"battle observer mode is read-only and provides a safe leave action"
+	)
+	_check_equal(
+		battle_source.contains("func _run_pvp_spectator_team_preview() -> Dictionary:") \
+			and battle_source.contains("Spectating team preview • waiting for both players") \
+			and battle_source.contains("if _is_spectator_battle():\n\t\treturn true"),
+		true,
+		"spectators observe team preview and continuously drain live battle updates"
+	)
 
 	service.active_room_code = "ROOM"
 	service.active_player_id = "p1"

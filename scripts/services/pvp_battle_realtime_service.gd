@@ -33,6 +33,7 @@ var connection_heartbeat_timer := 0.0
 var session_invalid_handled := false
 var active_room_code := ""
 var active_player_id := "p1"
+var active_viewer_role := "participant"
 var active_battle_id := ""
 var active_match_id := ""
 var request_counter := 0
@@ -40,6 +41,8 @@ var joined := false
 var room_is_ready := false
 var battle_event_latest_seq := 0
 var last_battle_event_seq := 0
+var last_spectator_event_seq := 0
+var spectator_cursor_valid := false
 var received_battle_event_count := 0
 var timer_projection := BattleTimerProjectionClass.new()
 
@@ -82,19 +85,28 @@ func _process(delta: float) -> void:
 	reconnect_timer -= delta
 	if reconnect_timer <= 0.0:
 		reconnect_timer = RECONNECT_DELAY_SECONDS
-		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id)
+		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
 
 
-func connect_room(room_code: String, player_id: String, battle_id: String, match_id: String = "") -> void:
+func connect_room(
+	room_code: String,
+	player_id: String,
+	battle_id: String,
+	match_id: String = "",
+	viewer_role: String = "participant"
+) -> void:
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("connect_room called", "room_code=%s player_id=%s battle_id=%s match_id=%s" % [room_code, player_id, battle_id, match_id])
 	var normalized_battle_id := battle_id.strip_edges()
 	if active_battle_id != "" and normalized_battle_id != active_battle_id:
 		battle_event_latest_seq = 0
 		last_battle_event_seq = 0
+		last_spectator_event_seq = 0
+		spectator_cursor_valid = false
 		received_battle_event_count = 0
 		timer_projection.reset()
 	active_room_code = room_code.strip_edges().to_upper()
+	active_viewer_role = "spectator" if viewer_role.strip_edges().to_lower() == "spectator" else "participant"
 	active_player_id = "p2" if player_id == "p2" else "p1"
 	active_battle_id = normalized_battle_id
 	active_match_id = match_id.strip_edges()
@@ -176,10 +188,13 @@ func _send_join() -> void:
 func _build_join_payload() -> Dictionary:
 	var payload := {
 		"type": "join",
+		"viewerRole": active_viewer_role,
 		"roomCode": active_room_code,
 		"playerId": active_player_id,
 		"battleId": active_battle_id,
 		"lastBattleEventSeq": last_battle_event_seq,
+		"lastSpectatorEventSeq": last_spectator_event_seq,
+		"spectatorCursorValid": spectator_cursor_valid,
 		"timerContractVersions": [1],
 		"decisionContractVersions": [1],
 		"battleCommandContractVersions": [1],
@@ -197,10 +212,13 @@ func disconnect_room() -> void:
 	room_is_ready = false
 	active_room_code = ""
 	active_player_id = "p1"
+	active_viewer_role = "participant"
 	active_battle_id = ""
 	active_match_id = ""
 	battle_event_latest_seq = 0
 	last_battle_event_seq = 0
+	last_spectator_event_seq = 0
+	spectator_cursor_valid = false
 	received_battle_event_count = 0
 	timer_projection.reset()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
@@ -212,13 +230,16 @@ func disconnect_room() -> void:
 
 
 func send_action(action: String, battle_id: String, player_id: String, slot: int, mega := false, decision_id := "", decision_generation := 0, decision_kind := "", z_move := false) -> String:
+	if active_viewer_role == "spectator":
+		push_warning("PvpBattleRealtimeService: spectator action was blocked locally.")
+		return ""
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
 				"send_action blocked because socket is not open",
 				"state=%s room=%s player=%s action=%s slot=%s" % [websocket.get_ready_state(), active_room_code, player_id, action, slot]
 			)
-		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id)
+		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
 		return ""
 
 	request_counter += 1
@@ -264,6 +285,8 @@ func send_render_ack(
 	turn := -1,
 	phase := ""
 ) -> bool:
+	if active_viewer_role == "spectator":
+		return false
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		if DEBUG_PVP_REALTIME:
 			_log_realtime(
@@ -277,7 +300,7 @@ func send_render_ack(
 					last_rendered_seq,
 				]
 			)
-		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id)
+		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
 		return false
 
 	var normalized_player_id := "p2" if player_id == "p2" else "p1"
@@ -334,6 +357,7 @@ func _process_packets() -> void:
 			active_player_id = "p2" if str(message.get("playerId", active_player_id)) == "p2" else "p1"
 			active_battle_id = str(message.get("battleId", active_battle_id)).strip_edges()
 			active_match_id = str(message.get("matchId", active_match_id)).strip_edges()
+			active_viewer_role = "spectator" if str(message.get("viewerRole", active_viewer_role)).to_lower() == "spectator" else "participant"
 			room_joined.emit(active_room_code, active_player_id, active_battle_id)
 			continue
 		if message_type == "pong":
@@ -349,6 +373,7 @@ func _process_packets() -> void:
 			var request_id := str(message.get("requestId", ""))
 			_apply_timer_projection_from_battle_response(message)
 			battle_update_received.emit(message)
+			_remember_spectator_event_cursor(message)
 			if request_id != "":
 				action_response_received.emit(request_id, message)
 			continue
@@ -356,6 +381,7 @@ func _process_packets() -> void:
 			var request_id := str(message.get("requestId", ""))
 			_apply_timer_projection_from_battle_response(message)
 			battle_update_received.emit(message)
+			_remember_spectator_event_cursor(message)
 			if request_id != "":
 				action_response_received.emit(request_id, message)
 			continue
@@ -369,6 +395,7 @@ func _process_packets() -> void:
 				if timer_value is Dictionary and timer_projection.apply_snapshot(timer_value as Dictionary):
 					timer_state_changed.emit(timer_projection)
 			battle_update_received.emit(message)
+			_remember_spectator_event_cursor(message)
 			continue
 		if message_type == "pvp.battle_events":
 			_handle_battle_events_message(message)
@@ -413,6 +440,19 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 		return false
 	timer_state_changed.emit(timer_projection)
 	return true
+
+
+func _remember_spectator_event_cursor(message: Dictionary) -> void:
+	if active_viewer_role != "spectator":
+		return
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return
+	last_spectator_event_seq = max(
+		last_spectator_event_seq,
+		_nonnegative_int((response_value as Dictionary).get("eventSeq", 0))
+	)
+	spectator_cursor_valid = true
 
 
 func _apply_timer_contract_message(message_type: String, message: Dictionary) -> bool:

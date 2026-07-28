@@ -27,7 +27,11 @@ func reset(initial_response: Dictionary = {}) -> void:
 func is_stale(response: Dictionary) -> bool:
 	if response.is_empty() or latest_cursor.is_empty():
 		return false
-	return compare_cursors(cursor_for_response(response), latest_cursor) < 0
+	var incoming_cursor := cursor_for_response(response)
+	return (
+		compare_cursors(incoming_cursor, latest_cursor) < 0
+		or _has_conflicting_equal_authority_revision(incoming_cursor, latest_cursor)
+	)
 
 
 func remember(response: Dictionary) -> bool:
@@ -35,8 +39,11 @@ func remember(response: Dictionary) -> bool:
 		return false
 
 	var incoming_cursor := cursor_for_response(response)
-	if not latest_cursor.is_empty() and compare_cursors(incoming_cursor, latest_cursor) < 0:
-		return false
+	if not latest_cursor.is_empty():
+		if compare_cursors(incoming_cursor, latest_cursor) < 0:
+			return false
+		if _has_conflicting_equal_authority_revision(incoming_cursor, latest_cursor):
+			return false
 
 	latest_cursor = incoming_cursor
 	latest_response = response.duplicate(true)
@@ -124,6 +131,10 @@ static func cursor_for_response(response: Dictionary) -> Dictionary:
 		"event_seq": _response_event_seq(response),
 		"batch_seq": _response_batch_seq(response),
 		"turn": _response_turn(response),
+		"mechanical_revision": _safe_int(response.get("mechanicalRevision", 0), 0),
+		"aggregate_revision": _safe_int(response.get("aggregateRevision", 0), 0),
+		"battle_event_seq": _safe_int(response.get("battleEventSeq", 0), 0),
+		"snapshot_fingerprint": str(response.get("snapshotFingerprint", "")).strip_edges().to_lower(),
 		"timer_revision": _response_timer_revision(response),
 		"decision_generation": _response_decision_generation(response),
 		"server_seq": _response_server_seq(response),
@@ -136,6 +147,12 @@ static func compare_cursors(incoming: Dictionary, current: Dictionary) -> int:
 	if incoming_battle_id != "" and current_battle_id != "" and incoming_battle_id != current_battle_id:
 		return -1
 
+	# Missing monotone evidence must be rejected before any weaker transport
+	# cursor is compared. Otherwise an unversioned payload with a higher
+	# serverSeq can incorrectly displace a versioned battle projection.
+	for key in ["event_seq", "batch_seq", "turn"]:
+		if int(current.get(key, -1)) >= 0 and int(incoming.get(key, -1)) < 0:
+			return -1
 	# Mechanical progress is stronger than delivery order. A late transport
 	# message can have a newer server sequence while carrying an older battle
 	# projection, so event/batch/turn cursors are compared first.
@@ -144,23 +161,54 @@ static func compare_cursors(incoming: Dictionary, current: Dictionary) -> int:
 		if comparison != 0:
 			return comparison
 
-	# These cursors distinguish request/phase changes that do not produce a new
-	# rendered battle event.
+	# Durable/mechanical revisions distinguish canonical state changes which do
+	# not necessarily create a rendered event, such as the first submitted
+	# choice in a turn.
+	for key in ["mechanical_revision", "aggregate_revision", "battle_event_seq"]:
+		if int(current.get(key, 0)) > 0 and int(incoming.get(key, 0)) <= 0:
+			return -1
+	for key in ["mechanical_revision", "aggregate_revision", "battle_event_seq"]:
+		var comparison := _compare_known_ints(incoming, current, key, 0)
+		if comparison != 0:
+			return comparison
+
+	# These cursors distinguish request/phase changes and finally transport
+	# delivery order within one gateway incarnation.
+	for key in ["timer_revision", "decision_generation", "server_seq"]:
+		if int(current.get(key, 0)) > 0 and int(incoming.get(key, 0)) <= 0:
+			return -1
 	for key in ["timer_revision", "decision_generation", "server_seq"]:
 		var comparison := _compare_known_ints(incoming, current, key, 0)
 		if comparison != 0:
 			return comparison
 
-	# An unversioned response cannot displace a projection for which the client
-	# already has monotone evidence.
-	for key in ["event_seq", "batch_seq", "turn"]:
-		if int(current.get(key, -1)) >= 0 and int(incoming.get(key, -1)) < 0:
-			return -1
-	for key in ["timer_revision", "decision_generation", "server_seq"]:
-		if int(current.get(key, 0)) > 0 and int(incoming.get(key, 0)) <= 0:
-			return -1
-
 	return 0
+
+
+static func _has_conflicting_equal_authority_revision(
+	incoming: Dictionary,
+	current: Dictionary
+) -> bool:
+	var incoming_fingerprint := str(incoming.get("snapshot_fingerprint", ""))
+	var current_fingerprint := str(current.get("snapshot_fingerprint", ""))
+	if (
+		incoming_fingerprint == ""
+		or current_fingerprint == ""
+		or incoming_fingerprint == current_fingerprint
+	):
+		return false
+
+	var has_shared_authority_revision := false
+	for key in ["mechanical_revision", "aggregate_revision", "battle_event_seq"]:
+		var incoming_revision := int(incoming.get(key, 0))
+		var current_revision := int(current.get(key, 0))
+		if incoming_revision <= 0 and current_revision <= 0:
+			continue
+		if incoming_revision <= 0 or current_revision <= 0 or incoming_revision != current_revision:
+			return false
+		has_shared_authority_revision = true
+
+	return has_shared_authority_revision
 
 
 static func _compare_known_ints(incoming: Dictionary, current: Dictionary, key: String, unknown: int) -> int:

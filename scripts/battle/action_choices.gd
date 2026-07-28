@@ -22,6 +22,7 @@ const UTILITY_EXIT_ACTIVE_BG_HOVER := Color("#48130ff6")
 
 var disabled_actions := {}
 var all_actions_disabled := false
+var run_available_while_locked := false
 var selected_action := ""
 var base_button_styles: Dictionary = {}
 
@@ -79,6 +80,10 @@ func set_all_actions_disabled(is_disabled: bool) -> void:
 	all_actions_disabled = is_disabled
 	_apply_disabled_actions()
 
+func set_run_available_while_locked(is_available: bool) -> void:
+	run_available_while_locked = is_available
+	_apply_disabled_actions()
+
 func _apply_disabled_actions() -> void:
 	if base_button_styles.is_empty():
 		_capture_base_button_styles()
@@ -91,6 +96,9 @@ func _apply_disabled_actions() -> void:
 		for button in buttons:
 			button.disabled = true
 			_apply_button_disabled_state(button)
+		if run_available_while_locked and run_button != null:
+			run_button.disabled = false
+			_apply_button_default_state(run_button)
 
 		return
 

@@ -12,6 +12,9 @@ func _init() -> void:
 	_check_canonical_restore_does_not_replay_full_switch_history()
 	_check_deferred_rewind_does_not_mutate_canonical_response()
 	_check_newer_same_event_request_revision_is_retained()
+	_check_durable_revision_orders_same_event_snapshots()
+	_check_equal_revision_requires_idempotent_fingerprint()
+	_check_unversioned_snapshot_cannot_win_by_transport_sequence()
 	_check_render_cursor_rejects_future_canonical_projection()
 	_check_battle_controller_uses_order_guard()
 	quit(1 if failed else 0)
@@ -166,6 +169,68 @@ func _check_newer_same_event_request_revision_is_retained() -> void:
 	_check(order.remember(scheduled), "scheduled forced switch projection is remembered")
 	_check(order.remember(actionable), "newer timer revision advances same-event projection")
 	_check(order.is_stale(scheduled), "older same-event request revision is stale")
+
+
+func _check_durable_revision_orders_same_event_snapshots() -> void:
+	var order = BattleResponseOrderScript.new()
+	var submitted := _response(18, 6, 2, 40, "Cinderace", false, false, [])
+	var stale_waiting := _response(18, 6, 2, 41, "Cinderace", false, false, [])
+	submitted["aggregateRevision"] = 12
+	submitted["battleEventSeq"] = 28
+	stale_waiting["aggregateRevision"] = 11
+	stale_waiting["battleEventSeq"] = 27
+
+	_check(order.remember(submitted), "same-event submitted projection is remembered")
+	_check(
+		order.is_stale(stale_waiting),
+		"lower durable revision stays stale despite a higher transport sequence"
+	)
+
+
+func _check_equal_revision_requires_idempotent_fingerprint() -> void:
+	var order = BattleResponseOrderScript.new()
+	var canonical := _response(18, 6, 2, 40, "Cinderace", false, false, [])
+	var conflicting := _response(18, 6, 2, 41, "Cinderace", false, false, [])
+	var idempotent := conflicting.duplicate(true)
+	canonical.merge({
+		"aggregateRevision": 12,
+		"battleEventSeq": 28,
+		"snapshotFingerprint": "canonical-state",
+	})
+	conflicting.merge({
+		"aggregateRevision": 12,
+		"battleEventSeq": 28,
+		"snapshotFingerprint": "different-state",
+	})
+	idempotent.merge({
+		"aggregateRevision": 12,
+		"battleEventSeq": 28,
+		"snapshotFingerprint": "canonical-state",
+	})
+
+	_check(order.remember(canonical), "fingerprinted canonical projection is remembered")
+	_check(
+		order.is_stale(conflicting),
+		"same authority revision with different canonical content is rejected"
+	)
+	_check(
+		not order.is_stale(idempotent),
+		"same authority revision with the same fingerprint remains idempotent"
+	)
+
+
+func _check_unversioned_snapshot_cannot_win_by_transport_sequence() -> void:
+	var order = BattleResponseOrderScript.new()
+	var versioned := _response(18, 6, 2, 40, "Cinderace", false, false, [])
+	var unversioned := _response(18, 6, 2, 41, "Cinderace", false, false, [])
+	unversioned.erase("eventSeq")
+	unversioned["eventBatches"] = []
+
+	_check(order.remember(versioned), "versioned projection is remembered")
+	_check(
+		order.is_stale(unversioned),
+		"missing event sequence is rejected before its higher transport sequence is considered"
+	)
 
 
 func _check_render_cursor_rejects_future_canonical_projection() -> void:
