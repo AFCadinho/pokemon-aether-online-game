@@ -3,7 +3,9 @@ extends Node
 class_name PlayerInteractionCoordinator
 
 const TradeInvitationDialogScript := preload("res://scripts/ui/trade_invitation_dialog.gd")
+const GuildInvitationDialogScript := preload("res://scripts/ui/guild_invitation_dialog.gd")
 const NEARBY_TRAINERS_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
+const GUILD_INVITATION_POLL_SECONDS := 10.0
 
 signal private_message_requested(user: Dictionary)
 signal mail_requested(username: String)
@@ -52,6 +54,9 @@ var trade_capabilities_loaded := false
 var trade_capabilities_loading := false
 var trade_capabilities_error := ""
 var trade_invitation_dialog: Window
+var guild_invitation_dialog: Window
+var guild_invitation_poll_timer: Timer
+var guild_invitation_poll_in_flight := false
 var guild_membership: Dictionary = {}
 var guild_membership_loaded := false
 var guild_membership_loading := false
@@ -67,6 +72,7 @@ func setup(host_control: Control) -> void:
 	add_to_group("player_interaction_coordinator")
 	_build_ui()
 	_setup_trade_invitation_dialog()
+	_setup_guild_invitation_dialog()
 	var presence := get_node_or_null("/root/WorldPresenceService")
 	if presence != null and presence.has_signal("roster_changed"):
 		var roster_callable := Callable(self, "_on_roster_changed")
@@ -603,6 +609,42 @@ func _setup_trade_invitation_dialog() -> void:
 	trade_invitation_dialog.setup()
 
 
+func _setup_guild_invitation_dialog() -> void:
+	if host == null or guild_invitation_dialog != null:
+		return
+	guild_invitation_dialog = GuildInvitationDialogScript.new()
+	host.add_child(guild_invitation_dialog)
+	guild_invitation_dialog.setup()
+	guild_invitation_poll_timer = Timer.new()
+	guild_invitation_poll_timer.wait_time = GUILD_INVITATION_POLL_SECONDS
+	guild_invitation_poll_timer.one_shot = false
+	guild_invitation_poll_timer.timeout.connect(_poll_guild_invitations)
+	add_child(guild_invitation_poll_timer)
+	guild_invitation_poll_timer.start()
+	_poll_guild_invitations.call_deferred()
+
+
+func _poll_guild_invitations() -> void:
+	if guild_invitation_poll_in_flight or guild_invitation_dialog == null:
+		return
+	var auth := get_node_or_null("/root/AuthService")
+	if auth == null or not auth.has_method("is_authenticated") or not bool(auth.is_authenticated()):
+		return
+	var service := get_node_or_null("/root/GuildService")
+	if service == null or not service.has_method("load_invitations"):
+		return
+	if bool(service.get("membership_loaded")) and not _dictionary_from_value(
+		service.get("current_membership")
+	).is_empty():
+		guild_invitation_dialog.show_invitations([])
+		return
+	guild_invitation_poll_in_flight = true
+	var result: Dictionary = await service.load_invitations()
+	guild_invitation_poll_in_flight = false
+	if bool(result.get("success", false)) and is_instance_valid(guild_invitation_dialog):
+		guild_invitation_dialog.show_invitations(result.get("invitations", []))
+
+
 func _refresh_trade_capabilities() -> void:
 	if trade_capabilities_loading:
 		return
@@ -656,6 +698,15 @@ func _on_guild_membership_changed(membership: Dictionary) -> void:
 	guild_membership = membership.duplicate(true)
 	guild_membership_loaded = true
 	guild_membership_loading = false
+	if guild_invitation_poll_timer != null:
+		if guild_membership.is_empty():
+			if guild_invitation_poll_timer.is_stopped():
+				guild_invitation_poll_timer.start()
+			_poll_guild_invitations.call_deferred()
+		else:
+			guild_invitation_poll_timer.stop()
+			if guild_invitation_dialog != null:
+				guild_invitation_dialog.show_invitations([])
 	if context_menu != null and context_menu.visible:
 		_render_context_menu()
 

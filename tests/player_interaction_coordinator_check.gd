@@ -152,6 +152,8 @@ func _check_phase_scope_contract() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/ui/player_interaction_coordinator.gd")
 	_check_equal(source.contains("trade_capabilities.get(\"enabled\""), true, "trade action is capability gated")
 	_check_equal(source.contains("TradeInvitationDialog"), true, "dedicated invitation dialog")
+	_check_equal(source.contains("GuildInvitationDialog"), true, "dedicated guild invitation dialog")
+	_check_equal(source.contains("load_invitations"), true, "incoming guild invitations are polled independently")
 	_check_equal(source.contains("WorldPresenceService"), true, "canonical roster dependency")
 	_check_equal(source.contains("_social_action(\"load_socials\")"), true, "authoritative social refresh")
 	_check_equal(source.contains("service.invite_member(username)"), true, "guild action uses the authoritative invitation endpoint")

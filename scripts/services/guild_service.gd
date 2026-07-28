@@ -7,6 +7,7 @@ signal guild_changed(guild: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
+const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -67,6 +68,21 @@ func load_home() -> Dictionary:
 		_set_current_membership({})
 		_set_current_guild({})
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func load_invitations() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_INVITATIONS_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"invitations": _array(body.get("invitations", [])).duplicate(true),
+	}
 
 
 func update_settings(

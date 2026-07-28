@@ -13,6 +13,8 @@ func _init() -> void:
 	_check_contains(service_source, 'GUILDS_ENDPOINT := "/game/guilds"', "guild service uses the gateway guild endpoint")
 	_check_contains(service_source, '"requestId": pending_creation_request_id', "guild creation has an idempotency key")
 	_check_contains(service_source, "func load_directory", "guild service loads authoritative directory state")
+	_check_contains(service_source, "func load_invitations", "guild service loads incoming invitations independently")
+	_check_contains(service_source, 'GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"', "guild invitation polling avoids loading the directory")
 	_check_contains(service_source, "func create_guild", "guild service exposes creation")
 	_check_contains(service_source, "func load_home", "guild service loads the member dashboard")
 	_check_contains(service_source, "func update_settings", "guild service updates leader settings")
