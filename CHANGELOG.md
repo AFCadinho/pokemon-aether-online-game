@@ -1,5 +1,29 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Added spectator mode for private PvP battle rooms that allow viewers. Spectators can enter a room code, watch the battle without affecting it, switch which Trainer appears on the left, inspect publicly revealed party information, and leave at any time.
+- Added spectator support for Team Preview, live battle events, forfeits, and the final result screen.
+
+**Changed**
+
+- Redesigned private battle rooms with separate Create, Join, and Spectate flows, clearer waiting status, room-code sharing, an option to allow spectators, and a way for the host to cancel an open room.
+- Simplified the battle action area by removing retired Fight and Party image buttons and keeping the current contextual controls visible.
+
+**Fixed**
+
+- Fixed several PvP synchronization issues that could leave both players waiting, apply an outdated snapshot, briefly restore old HP, or stop the battle controls from responding after reconnecting.
+- Fixed Mimikyu's Disguised and Busted forms losing their party-slot identity in PvP, which could prevent its Trainer from selecting an action.
+- Fixed the battle controls remaining available while the opponent was choosing a forced replacement.
+- Fixed battle action controls appearing at the wrong time during or immediately after Team Preview, including when late lead events still needed to be shown.
+- Fixed spectators seeing missing, incorrect, or outdated active Pokémon during Team Preview, switching, form changes, reconnect recovery, and event playback.
+- Fixed spectator party hover cards targeting the wrong side and opposing Pokémon sprites sometimes freezing while status effects were shown.
+- Fixed spectator battles not finishing correctly after a forfeit or not showing the winning Trainer on the result screen.
+- Fixed the female Aether Blossom outfit failing to save when an older appearance still contained a null hair colour.
+- Removed misplaced Pallet Town signs and overworld Pokémon from Viridian City.
+
 ## 0.3.35 - 2026-07-27
 
 **Added**
