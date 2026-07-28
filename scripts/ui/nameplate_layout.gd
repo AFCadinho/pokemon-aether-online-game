@@ -6,7 +6,7 @@ const NAMEPLATE_STACK_BOTTOM := 63.0
 const NAMEPLATE_CARD_VERTICAL_INSET := 2.0
 const NAMEPLATE_CARD_HORIZONTAL_PADDING := 5.0
 const GUILD_EMBLEM_DISPLAY_SIZE := 24.0
-const GUILD_EMBLEM_NAME_GAP := 3.0
+const GUILD_EMBLEM_NAME_GAP := 1.0
 
 
 static func calculate_name_card(name_width: float, has_guild_emblem: bool) -> Dictionary:

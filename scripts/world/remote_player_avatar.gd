@@ -679,7 +679,7 @@ func _update_nameplate() -> void:
 func _apply_guild_emblem(emblem: Dictionary) -> void:
 	if guild_emblem == null:
 		return
-	guild_emblem.texture = GuildEmblemTexture.create_texture(emblem)
+	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
 
 

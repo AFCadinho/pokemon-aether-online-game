@@ -42,6 +42,20 @@ func _init() -> void:
 	if texture != null:
 		_check(texture.get_size() == Vector2(32.0, 32.0), "guild emblem preserves its 32 by 32 source")
 		_check_inline_nameplate_geometry(texture)
+	var thumbnail_pixels: Array = []
+	thumbnail_pixels.resize(32 * 32)
+	thumbnail_pixels.fill(-1)
+	thumbnail_pixels[8 + (8 * 32)] = 0
+	thumbnail_pixels[23 + (19 * 32)] = 0
+	var nameplate_texture := GuildEmblemTexture.create_nameplate_texture({
+		"size": 32,
+		"palette": ["#60d3ff"],
+		"pixels": thumbnail_pixels,
+	})
+	_check(
+		nameplate_texture != null and nameplate_texture.get_size() == Vector2(16.0, 16.0),
+		"nameplate emblem trims transparent margins into a square texture"
+	)
 	_check(
 		GuildEmblemTexture.create_texture({
 			"size": 32,
@@ -73,6 +87,10 @@ func _check_inline_nameplate_geometry(_texture: Texture2D) -> void:
 	)
 	_check(emblem.end.x < label.position.x, "guild emblem appears left of the Trainer name")
 	_check(
+		is_equal_approx(label.position.x - emblem.end.x, 1.0),
+		"guild emblem keeps a compact one pixel gap before the Trainer name"
+	)
+	_check(
 		is_equal_approx(background.get_center().x, 82.0),
 		"guild emblem and Trainer name remain centered as one card"
 	)
@@ -90,6 +108,7 @@ func _has_inline_guild_emblem(source: String) -> bool:
 	return (
 		source.contains('preload("res://scripts/ui/nameplate_layout.gd")')
 		and source.contains("NameplateLayout.calculate_name_card")
+		and source.contains("create_nameplate_texture")
 		and source.contains("nameplate_background.offset_left = background_rect.position.x")
 		and source.contains("guild_emblem.offset_left = emblem_rect.position.x")
 		and source.contains("role_badge_panel.offset_bottom = next_layer_bottom")

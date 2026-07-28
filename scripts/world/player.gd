@@ -441,7 +441,7 @@ func set_display_name(display_name: String, visible: bool = true) -> void:
 func set_guild_emblem(emblem: Dictionary) -> void:
 	if guild_emblem == null:
 		return
-	guild_emblem.texture = GuildEmblemTexture.create_texture(emblem)
+	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
 	_sync_nameplate_visibility(nameplate_label != null and nameplate_label.text != "")
 

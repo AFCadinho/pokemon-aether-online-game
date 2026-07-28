@@ -7,6 +7,31 @@ const EMBLEM_PIXEL_COUNT := EMBLEM_SIZE * EMBLEM_SIZE
 
 
 static func create_texture(emblem: Dictionary) -> Texture2D:
+	var image := _image_from_emblem(emblem)
+	return ImageTexture.create_from_image(image) if image != null else null
+
+
+static func create_nameplate_texture(emblem: Dictionary) -> Texture2D:
+	var image := _image_from_emblem(emblem)
+	if image == null:
+		return null
+	var used_rect := image.get_used_rect()
+	if used_rect.size.x <= 0 or used_rect.size.y <= 0:
+		return null
+	var crop_size := maxi(used_rect.size.x, used_rect.size.y)
+	var thumbnail := Image.create(crop_size, crop_size, false, Image.FORMAT_RGBA8)
+	thumbnail.blit_rect(
+		image,
+		used_rect,
+		Vector2i(
+			(crop_size - used_rect.size.x) / 2,
+			(crop_size - used_rect.size.y) / 2
+		)
+	)
+	return ImageTexture.create_from_image(thumbnail)
+
+
+static func _image_from_emblem(emblem: Dictionary) -> Image:
 	var palette_value: Variant = emblem.get("palette", [])
 	var pixels_value: Variant = emblem.get("pixels", [])
 	if not palette_value is Array or not pixels_value is Array:
@@ -29,4 +54,4 @@ static func create_texture(emblem: Dictionary) -> Texture2D:
 
 	if not has_visible_pixel:
 		return null
-	return ImageTexture.create_from_image(image)
+	return image
