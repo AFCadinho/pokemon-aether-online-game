@@ -5,6 +5,12 @@ func _init() -> void:
 	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
 	var realtime_source := FileAccess.get_file_as_string("res://scripts/services/pvp_battle_realtime_service.gd")
 	var action_wait_start := battle_source.find("func _send_pvp_realtime_action_and_wait")
+	var show_moves_start := battle_source.find("func _show_moves() -> void:")
+	var show_moves_decision_guard := battle_source.find("not _pvp_local_decision_allows_choice()", show_moves_start)
+	var timer_control_start := battle_source.find("func _pvp_timer_allows_control() -> bool:")
+	var timer_decision_guard := battle_source.find("not _pvp_local_decision_allows_choice()", timer_control_start)
+	var request_control_start := battle_source.find("func _pvp_local_request_allows_choice")
+	var request_decision_guard := battle_source.find("not _pvp_local_decision_allows_choice(local_state_player_id)", request_control_start)
 	var queue_cursor_position := battle_source.find("var queue_start := pvp_realtime_updates.size()", action_wait_start)
 	var local_decision_position := battle_source.find("battle_state.get_active_decision(_get_local_state_player_id())", action_wait_start)
 	var decision_kind_position := battle_source.find('str(decision.get("decisionKind", ""))', action_wait_start)
@@ -19,6 +25,21 @@ func _init() -> void:
 	var initial_render_position := battle_source.rfind("await _render_initial_battle_events(lead_response)", preview_drain_position)
 	var initial_controls_position := battle_source.find("_show_battle_controls_after_initial_events()", preview_drain_position)
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
+	_check_equal(
+		show_moves_decision_guard >= show_moves_start and show_moves_decision_guard < timer_control_start,
+		true,
+		"move controls stay closed while the local decision is locked"
+	)
+	_check_equal(
+		timer_decision_guard >= timer_control_start and timer_decision_guard < request_control_start,
+		true,
+		"PvP submissions reject locked decisions"
+	)
+	_check_equal(
+		request_decision_guard >= request_control_start,
+		true,
+		"stale request data cannot make a locked decision actionable"
+	)
 	_check_equal(queue_cursor_position >= 0 and queue_cursor_position < send_position, true, "realtime response queue cursor is captured before sending")
 	_check_equal(
 		local_decision_position >= action_wait_start and local_decision_position < send_position,

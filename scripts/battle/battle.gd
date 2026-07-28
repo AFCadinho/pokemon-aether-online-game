@@ -2620,6 +2620,17 @@ func _show_moves() -> void:
 		moves_grid.visible = false
 		mechanics_panel.visible = false
 		return
+	if _is_pvp_battle() and not _pvp_local_decision_allows_choice():
+		# Requests retain party and move data while a submitted or automatic
+		# action is locked. Never let that stale data reopen controls before the
+		# server publishes the next ACTIVE decision.
+		_set_battle_input_locked(true)
+		current_action_view = ActionView.NONE
+		moves_grid.visible = false
+		mechanics_panel.visible = false
+		current_action_panel.set_message("Waiting for opponent...")
+		_sync_action_panel_mode_visibility()
+		return
 	_clear_pvp_switch_confirmation()
 	pvp_idle_wait_recovery_active = false
 	if team_preview_lead_selection_active:
@@ -9033,6 +9044,8 @@ func _can_submit_pvp_switch_choice() -> bool:
 func _pvp_timer_allows_control() -> bool:
 	if _is_pvp_battle() and not battle_state.actions_enabled():
 		return false
+	if _is_pvp_battle() and not _pvp_local_decision_allows_choice():
+		return false
 	if not _is_pvp_battle() or not PvpBattleRealtimeService.timer_projection.contract_enabled:
 		return true
 	# Only the server-owned presentation hold disables controls. Displayed zero never blocks sending.
@@ -9041,11 +9054,23 @@ func _pvp_timer_allows_control() -> bool:
 func _pvp_local_request_allows_choice(local_state_player_id: String) -> bool:
 	if not _is_pvp_battle():
 		return false
+	if not _pvp_local_decision_allows_choice(local_state_player_id):
+		return false
 	if _player_request_is_waiting(local_state_player_id):
 		return false
 	if force_switch_flow.player_needs_force_switch(local_state_player_id):
 		return true
 	return not battle_state.get_player_request(local_state_player_id).is_empty()
+
+func _pvp_local_decision_allows_choice(local_state_player_id := "") -> bool:
+	if not _is_pvp_battle():
+		return true
+	var player_id := local_state_player_id
+	if player_id == "":
+		player_id = _get_local_state_player_id()
+	var decision := battle_state.get_active_decision(player_id)
+	# Legacy/non-authoritative snapshots may omit the decision contract.
+	return decision.is_empty() or str(decision.get("status", "")).strip_edges().to_upper() == "ACTIVE"
 
 func _local_player_needs_force_switch_ui() -> bool:
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
