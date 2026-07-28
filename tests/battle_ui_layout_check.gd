@@ -79,9 +79,18 @@ func _check_scene_structure() -> void:
 	_check_contains(enemy_hud_block, "offset_top = 64.0", "enemy HP HUD sits higher to clear persistent stat badges")
 	_check_contains(enemy_hud_block, "offset_bottom = 146.0", "enemy HP HUD keeps its pill dimensions after moving up")
 	var sprite_box_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
-	_check_contains(sprite_box_source, "func anchor_stat_stage_panel_below", "enemy stat badges support a HUD-relative anchor")
+	_check_contains(sprite_box_source, "func anchor_stat_stage_panel_below", "stat badges support a HUD-relative anchor")
 	var battle_modifier_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
-	_check_contains(battle_modifier_source, "anchor_stat_stage_panel_below", "battle anchors enemy stat badges below the enemy HUD")
+	_check_contains(
+		battle_modifier_source,
+		'player_sprite_box.call("anchor_stat_stage_panel_below", player_hud_panel)',
+		"battle anchors player stat badges below the player HUD"
+	)
+	_check_contains(
+		battle_modifier_source,
+		'enemy_sprite_box.call("anchor_stat_stage_panel_below", enemy_hud_panel)',
+		"battle anchors enemy stat badges below the enemy HUD"
+	)
 	_check_contains(battle_modifier_source, '_add_volatile_condition_for_ident(ident_key, "air_balloon", event)', "Air Balloon reveal adds a persistent Pokemon indicator")
 	_check_contains(battle_modifier_source, '_remove_volatile_condition_for_ident(ident_key, "air_balloon")', "Air Balloon end removes its Pokemon indicator")
 	_check_contains(battle_modifier_source, 'return "Air Balloon"', "Air Balloon indicator uses a readable label")

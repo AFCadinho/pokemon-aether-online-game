@@ -378,6 +378,8 @@ func _ready() -> void:
 		player_hud_panel.set_experience_bar_enabled(true)
 	if enemy_hud_panel.has_method("set_experience_bar_enabled"):
 		enemy_hud_panel.set_experience_bar_enabled(false)
+	if player_sprite_box.has_method("anchor_stat_stage_panel_below"):
+		player_sprite_box.call("anchor_stat_stage_panel_below", player_hud_panel)
 	if enemy_sprite_box.has_method("anchor_stat_stage_panel_below"):
 		enemy_sprite_box.call("anchor_stat_stage_panel_below", enemy_hud_panel)
 	if not capture_ball_animation_player.ball_thrown.is_connected(_on_capture_ball_thrown):
