@@ -801,6 +801,7 @@ var guild_chat_has_unread := false
 var guild_chat_membership: Dictionary = {}
 var guild_chat_membership_loading := true
 var chat_context_selector_button: Button
+var pm_context_selector_attention_badge: Panel
 var chat_context_popup: PanelContainer
 var chat_context_scroll: ScrollContainer
 var chat_context_options: VBoxContainer
@@ -20614,6 +20615,11 @@ func _setup_chat_context_selector_ui() -> void:
 	chat_input_row.add_child(chat_context_selector_button)
 	chat_input_row.move_child(chat_context_selector_button, 0)
 	_apply_chat_dock_button_style(chat_context_selector_button)
+	pm_context_selector_attention_badge = _create_attention_badge_for_button(
+		chat_context_selector_button,
+		5.0,
+		4.0
+	)
 
 	chat_context_popup = PanelContainer.new()
 	chat_context_popup.name = "ChatContextPopup"
@@ -20686,8 +20692,8 @@ func _rebuild_chat_context_options() -> void:
 		var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(user_id, {}))
 		var user := _dictionary_from_value(conversation.get("user", {}))
 		var unread := int(pm_unread_counts_by_user_id.get(user_id, 0))
-		var label := _pm_conversation_title(user, unread)
-		_add_pm_context_option(label, user_id, user_id == active_pm_user_id)
+		var label := _pm_conversation_title(user, 0)
+		_add_pm_context_option(label, user_id, user_id == active_pm_user_id, unread)
 	_refresh_chat_context_scroll_size()
 
 
@@ -20704,8 +20710,11 @@ func _add_chat_context_option(label_text: String, channel_tab_id: String, select
 	chat_context_options.add_child(button)
 
 
-func _add_pm_context_option(label_text: String, user_id: int, selected: bool) -> void:
+func _add_pm_context_option(label_text: String, user_id: int, selected: bool, unread: int) -> void:
 	var button := _create_chat_context_option_button(label_text, selected)
+	var attention_badge := _create_attention_badge_for_button(button, 6.0, 4.0)
+	if attention_badge != null:
+		attention_badge.visible = unread > 0
 	button.pressed.connect(_on_pm_chat_context_selected.bind(user_id))
 	chat_context_options.add_child(button)
 
@@ -21334,6 +21343,13 @@ func _refresh_pm_tab_label() -> void:
 	pm_tab_button.text = "PM"
 	if pm_tab_attention_badge != null:
 		pm_tab_attention_badge.visible = pm_total_unread_count > 0 and pm_tab_button.visible
+	if pm_context_selector_attention_badge != null:
+		pm_context_selector_attention_badge.visible = (
+			pm_total_unread_count > 0
+			and _active_primary_chat_tab_id() == CHAT_TAB_PM
+			and chat_context_selector_button != null
+			and chat_context_selector_button.visible
+		)
 	_refresh_hidden_chat_attention_badge()
 	_refresh_chat_context_selector()
 
