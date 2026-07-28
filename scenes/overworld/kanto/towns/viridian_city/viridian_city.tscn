@@ -11,8 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="16_bddn7"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="17_v4pkh"]
 [ext_resource type="Texture2D" uid="uid://by43kvi6o5e0g" path="res://assets/followers/PIKACHU.png" id="18_s7hp4"]
-[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_xx7su"]
-[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="20_unl0v"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_night_light"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
@@ -591,15 +589,6 @@ movement_behavior = "pace_vertical"
 movement_speed_pixels = 60.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
-
-[node name="TownSign" parent="Entities/Interactables" unique_id=921097315 instance=ExtResource("19_xx7su")]
-position = Vector2(1056, 304)
-sign_id = "kanto_pallet_town_town_sign"
-sign_type = "town"
-
-[node name="OaksLabSign" parent="Entities/Interactables" unique_id=1449815395 instance=ExtResource("20_unl0v")]
-position = Vector2(1200, 880)
-sign_id = "kanto_pallet_town_oaks_lab"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=408927125]
 visible = false

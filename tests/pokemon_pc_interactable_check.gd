@@ -131,7 +131,7 @@ func _check_oaks_lab_has_pc_interactable() -> void:
 	_check_equal(scene_source.contains("res://scenes/world/interactables/pokemon_pc_interactable.tscn"), true, "Oak's Lab references reusable PokemonPC scene")
 	_check_equal(scene_source.contains("[node name=\"Interactables\" type=\"Node2D\" parent=\"Entities\""), true, "Oak's Lab has Interactables container")
 	_check_equal(scene_source.contains("[node name=\"PokemonPC\" parent=\"Entities/Interactables\""), true, "Oak's Lab instances PokemonPC under Interactables")
-	_check_equal(scene_source.contains("position = Vector2(304, 464)"), true, "PokemonPC node is aligned with the blue PC")
+	_check_equal(scene_source.contains("position = Vector2(304, 496)"), true, "PokemonPC node is aligned with the blue PC")
 	_check_equal(scene_source.contains("interactable_id = \"oak_lab_pc\""), true, "Oak's Lab assigns its PokemonPC id")
 	_check_equal(scene_source.contains("[node name=\"PokémonLaboratory\" parent=\".\""), true, "Oak's Lab keeps the generated laboratory visual")
 

@@ -131,7 +131,7 @@ func _has_sign_instance(scene_text: String, sign_id: String, scene_file_name: St
 
 
 func _extract_quoted_attribute(line: String, attribute_name: String) -> String:
-	var marker := "%s=\"" % attribute_name
+	var marker := " %s=\"" % attribute_name
 	var start_index := line.find(marker)
 	if start_index == -1:
 		return ""

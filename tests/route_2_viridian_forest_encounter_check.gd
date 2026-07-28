@@ -36,11 +36,11 @@ func _check_map_encounter(map_case: Dictionary) -> void:
 	_check_true(scene_source.contains("grass_encounter_chance = 0.21"), "%s scene should configure its fallback encounter chance" % map_case["label"])
 	if str(map_case["area_id"]) == "kanto_route_2":
 		_check_true(
-			scene_source.contains('[node name="NPCs" type="Node2D" parent="Entities"]'),
+			scene_source.contains('[node name="NPCs" type="Node2D" parent="Entities"'),
 			"Route 2 should expose the Entities/NPCs container"
 		)
 		_check_true(
-			scene_source.contains('[node name="Players" type="Node2D" parent="Entities"]'),
+			scene_source.contains('[node name="Players" type="Node2D" parent="Entities"'),
 			"Route 2 should expose the Entities/Players container"
 		)
 

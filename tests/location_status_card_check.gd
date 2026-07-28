@@ -26,7 +26,11 @@ func _init() -> void:
 	_check(script_source.contains("region_label.text = _get_current_map_region_name().to_upper()"), "region badge refreshes with the map")
 	_check(script_source.contains("location_label.tooltip_text = display_name"), "the complete location remains available when a name must truncate")
 	_check(script_source.contains("WorldPresenceService.weather_changed.connect(_on_location_weather_changed)"), "weather changes refresh the card")
-	_check(script_source.contains('weather_controller.get_effective_weather()'), "developer weather previews refresh the card")
+	_check(
+		script_source.contains("weather_controller.set_server_weather")
+		and script_source.contains("_refresh_location_weather(weather_state)"),
+		"authoritative developer weather responses refresh the card"
+	)
 	_check(script_source.contains('time_of_day_label.text = "Morning"'), "morning has a readable status")
 	_check(script_source.contains('time_of_day_label.text = "Afternoon"'), "afternoon has a readable status")
 	_check(script_source.contains('time_of_day_label.text = "Evening"'), "evening has a readable status")
