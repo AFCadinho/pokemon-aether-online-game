@@ -107,6 +107,13 @@ func _init() -> void:
 		"stale asynchronous connection attempts cannot replace the active socket"
 	)
 	_check_equal(
+		realtime_source.contains("pending_render_ack_payload = payload.duplicate(true)") \
+			and realtime_source.contains("_send_pending_render_ack_after_join()") \
+			and realtime_source.contains('_retire_pending_render_ack(str(message.get("eventBatchId", "")))'),
+		true,
+		"a completed render acknowledgement survives a transient socket reconnect until its phase release arrives"
+	)
+	_check_equal(
 		battle_source.contains("func _observe_pvp_gateway_epoch(message: Dictionary) -> void:") \
 			and battle_source.contains("pvp_response_order.reset_transport_cursor()") \
 			and battle_source.contains("pvp_last_applied_server_seq = 0"),
@@ -199,7 +206,6 @@ func _init() -> void:
 			and battle_source.contains("battle_state.build_public_switch_event_for_ident(player_id, public_ident)") \
 			and battle_source.contains("_ensure_spectator_active_pokemon_for_event(event_data)") \
 			and battle_source.contains("battle_state.get_active_player_pokemon(player_id).is_empty()") \
-			and battle_source.contains("active_seeded_from_event") \
 			and battle_source.contains("_remember_spectator_canonical_response(display_response)") \
 			and battle_source.contains('if event_type in ["move", "damage", "heal", "status", "cant", "fail", "miss", "faint"]') \
 			and battle_source.contains("if seeded_players.size() >= 2:") \

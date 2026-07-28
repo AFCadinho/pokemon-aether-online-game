@@ -2,6 +2,7 @@ extends SceneTree
 
 const ACTION_FLOW_PATH := "res://scripts/battle/battle_action_flow.gd"
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
+const BattleEventQueueScript := preload("res://scripts/battle/battle_event_queue.gd")
 
 var failed := false
 
@@ -18,7 +19,51 @@ func _init() -> void:
 	_check(apply_source.find("ability_response_handler.call(display_response)") < apply_source.find("if load_battle_state:"), "public response metadata remains available while state is deferred")
 	_check(battle_source.contains("_should_defer_pvp_canonical_state_until_render(display_response)"), "PvP responses activate the canonical-state render barrier")
 	_check(battle_source.contains("response[\"requests\"] = battle_state.requests.duplicate(true)"), "terminal restore retains the event-applied winner presentation")
+	_check(
+		battle_source.contains("_acknowledge_already_rendered_pvp_batch(queue_response, source)"),
+		"an already rendered duplicate retries its idempotent render acknowledgement"
+	)
+	var duplicate_ack_index := battle_source.find(
+		"_acknowledge_already_rendered_pvp_batch(queue_response, source)"
+	)
+	var duplicate_process_index := battle_source.find(
+		"_process_pvp_choice_queue_entry(queue_response, source"
+	)
+	_check(
+		duplicate_ack_index >= 0 and duplicate_ack_index < duplicate_process_index,
+		"duplicate ACK is sent before any force-switch phase-release wait"
+	)
+	_check_duplicate_batch_retries_until_render_cursor_advances()
 	quit(1 if failed else 0)
+
+func _check_duplicate_batch_retries_until_render_cursor_advances() -> void:
+	var queue = BattleEventQueueScript.new()
+	var response := {
+		"eventSeq": 161,
+		"batchSeq": 30,
+		"eventBatchId": "volt-switch-ko:30",
+		"phase": "rendering_events",
+		"nextPhase": "awaiting_force_switch",
+		"state": {"turn": 20},
+		"events": [{"type": "switch", "to": "Kingambit"}],
+	}
+
+	var first: Dictionary = queue.enqueue_response(response, "first")
+	var duplicate: Dictionary = queue.enqueue_response(response, "duplicate")
+	_check(not bool(first.get("skip_render", false)), "first batch delivery remains renderable")
+	_check(bool(duplicate.get("skip_render", false)), "duplicate delivery starts as a skip candidate")
+	_check(
+		not queue.should_skip_duplicate_render(response, true),
+		"duplicate is promoted to a render retry while its cursor is still unrendered"
+	)
+
+	var context: Dictionary = queue.begin_render_batch(response, "first")
+	queue.complete_render_batch(context, true)
+	_check_equal(queue.last_rendered_seq, 161, "successful first render advances the batch cursor")
+	_check(
+		queue.should_skip_duplicate_render(response, true),
+		"duplicate can be skipped only after its render cursor is complete"
+	)
 
 
 func _check(condition: bool, label: String) -> void:
@@ -26,3 +71,7 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failed = true
 	push_error(label)
+
+
+func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
+	_check(actual == expected, "%s expected=%s actual=%s" % [label, var_to_str(expected), var_to_str(actual)])

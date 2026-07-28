@@ -4,14 +4,16 @@ class_name BattlePresentationState
 
 var field: Dictionary = {"effects": []}
 var has_field_snapshot := false
+var turn := 0
 
 
 func reset() -> void:
 	field = {"effects": []}
 	has_field_snapshot = false
+	turn = 0
 
 
-func sync_field_from_snapshot(field_snapshot: Variant) -> void:
+func sync_field_from_snapshot(field_snapshot: Variant, snapshot_turn := -1) -> void:
 	if field_snapshot is Dictionary:
 		field = (field_snapshot as Dictionary).duplicate(true)
 	else:
@@ -21,6 +23,17 @@ func sync_field_from_snapshot(field_snapshot: Variant) -> void:
 		field["effects"] = []
 
 	has_field_snapshot = true
+	if snapshot_turn >= 0:
+		turn = snapshot_turn
+
+
+func set_turn(next_turn: int) -> void:
+	if next_turn > 0:
+		turn = next_turn
+
+
+func get_turn() -> int:
+	return turn
 
 
 func get_field_effects() -> Array:
@@ -45,6 +58,9 @@ func apply_event(event: Dictionary, current_turn := 0) -> bool:
 			return true
 		"upkeep":
 			_apply_field_effect_upkeep(event)
+			return true
+		"swap":
+			_swap_side_conditions()
 			return true
 
 	return false
@@ -125,6 +141,24 @@ func _apply_field_effect_upkeep(event: Dictionary) -> void:
 			continue
 		existing_effect[key] = effect_data[key]
 	effects[existing_index] = existing_effect
+
+
+func _swap_side_conditions() -> void:
+	for effect_value: Variant in get_field_effects():
+		if not (effect_value is Dictionary):
+			continue
+
+		var effect_data: Dictionary = effect_value as Dictionary
+		if str(effect_data.get("scope", "")) != "side":
+			continue
+		if str(effect_data.get("effectType", "")) != "sideCondition":
+			continue
+
+		match str(effect_data.get("side", "")):
+			"p1":
+				effect_data["side"] = "p2"
+			"p2":
+				effect_data["side"] = "p1"
 
 
 func _field_effect_data_from_event(event: Dictionary, current_turn := 0) -> Dictionary:

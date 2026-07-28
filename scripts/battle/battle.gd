@@ -3560,7 +3560,7 @@ func _sync_presentation_field_from_battle_state() -> void:
 	# interpreted as an empty field and erase active weather or screens.
 	if not battle_state.field.has("effects"):
 		return
-	presentation_state.sync_field_from_snapshot(battle_state.field)
+	presentation_state.sync_field_from_snapshot(battle_state.field, battle_state.get_turn())
 
 func _update_pvp_phase_contract_from_response(response: Dictionary, source: String = "") -> void:
 	if not _is_pvp_battle():
@@ -3684,6 +3684,18 @@ func _drain_pvp_event_queue() -> bool:
 		var skip_render := bool(queue_entry.get("skip_render", false))
 		var source := str(queue_entry.get("source", ""))
 		var metadata: Variant = queue_entry.get("metadata", {})
+		var duplicate_skip_requested := skip_render
+		skip_render = pvp_event_queue.should_skip_duplicate_render(queue_response, skip_render)
+		if duplicate_skip_requested and not skip_render:
+			_trace_pvp_flow(
+				"drain.retry_unrendered_duplicate",
+				queue_response,
+				"source=%s eventSeqEnd=%d lastRenderedSeq=%d" % [
+					source,
+					pvp_event_queue.get_response_event_seq_end(queue_response),
+					pvp_event_queue.last_rendered_seq,
+				]
+			)
 		_trace_pvp_flow("drain.entry", queue_response, "source=%s skipRender=%s apply=%s metadata=%s" % [
 			source,
 			str(skip_render),
@@ -3691,6 +3703,11 @@ func _drain_pvp_event_queue() -> bool:
 			JSON.stringify(metadata) if metadata is Dictionary else str(metadata),
 		])
 		var success := _apply_api_response(queue_response, apply_event_conditions, source)
+		if success and skip_render and _is_authoritative_pvp_render_batch_response(queue_response):
+			# Phase-release waits below depend on this ACK. Send it before
+			# processing the duplicate response; otherwise a force-switch path
+			# can wait for the very release that this acknowledgement unlocks.
+			_acknowledge_already_rendered_pvp_batch(queue_response, source)
 		_trace_pvp_flow("drain.after_apply", queue_response, "source=%s success=%s skipRender=%s process=%s" % [
 			source,
 			str(success),
@@ -3906,6 +3923,11 @@ func _hold_pvp_moves_until_force_switch_phase_release(display_response: Dictiona
 	return _pvp_is_waiting_for_force_switch_phase_release()
 
 func _pvp_should_wait_for_force_switch_phase_release(display_response: Dictionary) -> bool:
+	# Spectators never submit render acknowledgements or receive actionable
+	# force-switch requests. Waiting here blocks their render queue, so later
+	# public batches can arrive but can never be processed.
+	if _is_spectator_battle():
+		return false
 	# Requests are intentionally released only after every participant has
 	# acknowledged the render batch. The phase contract itself is therefore the
 	# authoritative signal during this short request-free transition.
@@ -5177,7 +5199,8 @@ func _get_ability_name_from_source(source: String) -> String:
 
 ## Werkt turn en field timer status bij vanuit de presentatie-state.
 func _update_battle_status_panels() -> void:
-	battle_status_panel.set_turn(battle_state.get_turn())
+	var display_turn := _get_battle_presentation_turn()
+	battle_status_panel.set_turn(display_turn)
 	battle_status_panel.hide_timer()
 	vs_panel_container.hide_decision_timers()
 	if _should_show_bank_timer_projection():
@@ -5187,8 +5210,8 @@ func _update_battle_status_panels() -> void:
 		)
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
-	field_timers_panel.set_effects(field_effects, battle_state.get_turn())
-	_update_side_condition_ui(field_effects)
+	field_timers_panel.set_effects(field_effects, display_turn)
+	_update_side_condition_ui(field_effects, display_turn)
 	weather_presentation.update_weather(_get_active_weather_effect_id(field_effects))
 	weather_presentation.update_terrain(_get_active_terrain_effect_id(field_effects))
 	weather_presentation.update_trick_room(_is_trick_room_active(field_effects))
@@ -5205,10 +5228,20 @@ func _get_display_field_effects() -> Array:
 
 	return battle_state.get_field_effects()
 
-func _update_side_condition_ui(field_effects: Array) -> void:
+func _get_battle_presentation_turn() -> int:
+	var rendered_turn := presentation_state.get_turn()
+	if rendered_turn > 0:
+		return rendered_turn
+
+	return battle_state.get_turn()
+
+
+func _update_side_condition_ui(field_effects: Array, current_turn := -1) -> void:
+	if current_turn < 0:
+		current_turn = _get_battle_presentation_turn()
 	var player_side_effects: Array = _get_side_condition_effects("p1", field_effects)
 	var enemy_side_effects: Array = _get_side_condition_effects("p2", field_effects)
-	side_condition_presentation.update(player_side_effects, enemy_side_effects, battle_state.get_turn())
+	side_condition_presentation.update(player_side_effects, enemy_side_effects, current_turn)
 
 func _get_side_condition_effects(side_id: String, field_effects: Array) -> Array:
 	var side_effects: Array = []
@@ -7065,6 +7098,34 @@ func _render_pvp_event_batch(
 	pvp_event_queue.complete_render_batch(batch_context, success)
 	return success
 
+func _acknowledge_already_rendered_pvp_batch(response: Dictionary, source: String) -> void:
+	if _is_spectator_battle():
+		return
+
+	var event_batch_id := pvp_event_queue.get_response_event_batch_id(response)
+	var event_seq_end := pvp_event_queue.get_response_event_seq_end(response)
+	if (
+		event_batch_id == ""
+		or event_seq_end < 0
+		or pvp_event_queue.last_rendered_seq < event_seq_end
+	):
+		return
+
+	var render_batch_response := pvp_response_order.render_batch_projection_for(response)
+	_send_pvp_render_ack({
+		"event_batch_id": event_batch_id,
+		"batch_seq": pvp_event_queue.get_response_batch_seq(response),
+		"event_seq_end": event_seq_end,
+		"last_rendered_seq": pvp_event_queue.last_rendered_seq,
+		"turn": _get_int_from_variant(
+			render_batch_response.get("turn", battle_state.get_turn()),
+			battle_state.get_turn()
+		),
+		"phase": str(render_batch_response.get("phase", "rendering_events")),
+		"source": "%s:already_rendered_duplicate" % source,
+		"success": true,
+	})
+
 func _guard_pvp_render_runner(source := "") -> bool:
 	if not _is_pvp_battle():
 		return true
@@ -7207,8 +7268,10 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				presentation["move_animation_target_ident"] = str(direct_release_move.get("target", ""))
 		var turn := int(presentation.get("turn", 0))
 		if turn > 0:
+			presentation_state.set_turn(turn)
 			if render_turn_headers:
 				event_renderer.add_turn_header(turn)
+			_update_battle_status_panels()
 			_update_stat_stage_panels()
 			continue
 
@@ -7267,6 +7330,9 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 			battle_state.apply_event_conditions([event_data])
 			_update_hud_panels()
 			_update_active_sprites()
+		if event_type == "formeChange":
+			battle_state.apply_event_conditions([event_data])
+			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
 		if _should_debug_battle_start_event(event_data):
 			_debug_battle_start("render.event.after source=%s index=%d event=%s active=%s" % [
 				source,
@@ -7478,7 +7544,7 @@ func _is_move_animation_result_boundary_event(event_data: Dictionary) -> bool:
 			return false
 
 func _apply_field_presentation_event(event_data: Dictionary) -> void:
-	if presentation_state.apply_event(event_data, battle_state.get_turn()):
+	if presentation_state.apply_event(event_data, _get_battle_presentation_turn()):
 		_update_battle_status_panels()
 
 func _fill_mega_event_species(event_data: Dictionary) -> void:
@@ -11898,8 +11964,11 @@ func _restore_pvp_authoritative_presentation(
 	battle_state.load_from_api_response(canonical_response, false)
 	_reapply_rendered_condition_events(rendered_events)
 	_sync_player_save_party_status_from_battle_state()
-	_sync_presentation_field_from_battle_state()
-	_reapply_rendered_field_effect_events(rendered_events)
+	# PvP field presentation advances through the ordered fieldEffect stream.
+	# Re-seeding it from a transport projection after every rendered batch can
+	# restore a stale hazard or erase weather that is still mechanically active.
+	# Cursor-safe snapshot reconciliation remains the recovery/reconnect path
+	# that is allowed to replace the complete presentation field.
 	_update_battle_status_panels()
 	_update_hud_panels()
 	_update_party_slots()
@@ -11925,17 +11994,6 @@ func _reapply_rendered_condition_events(events: Array) -> void:
 		# Participant switch events deliberately remain canonical, which
 		# prevents Pursuit from reviving or fainting its intended switch target.
 		battle_state.apply_event_conditions(condition_events)
-
-func _reapply_rendered_field_effect_events(events: Array) -> void:
-	for event_value: Variant in events:
-		if not (event_value is Dictionary):
-			continue
-
-		var event_data: Dictionary = event_value as Dictionary
-		if str(event_data.get("type", "")) != "fieldEffect":
-			continue
-
-		presentation_state.apply_event(event_data, battle_state.get_turn())
 
 func _preserve_terminal_presentation_requests(response: Dictionary) -> void:
 	var state_value: Variant = response.get("state", {})
@@ -12763,6 +12821,7 @@ func _is_specific_battle_form_species(species: String) -> bool:
 		"-therian", "-incarnate", "-origin", "-altered",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
+		"-busted", "-disguised",
 	]:
 		if normalized.ends_with(suffix):
 			return true

@@ -16,6 +16,8 @@ func _init() -> void:
 	_check_historical_switch_renders_before_its_faint()
 	_check_entry_hazard_faint_preserves_chained_force_switch()
 	_check_status_event_normalizes_badly_poisoned()
+	_check_public_mimikyu_status_updates_disguised_roster_entry()
+	_check_public_mimikyu_forme_change_updates_active_sprite_species()
 	quit(1 if failed else 0)
 
 
@@ -109,6 +111,84 @@ func _check_status_event_normalizes_badly_poisoned() -> void:
 	}])
 
 	_check_equal(state.get_active_pokemon_status("p2"), "tox", "badly poisoned status normalizes to tox")
+
+
+func _check_public_mimikyu_status_updates_disguised_roster_entry() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "mimikyu-public-form-status-test",
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [{
+						"ident": "p1: Mimikyu Disguised",
+						"species": "Mimikyu Disguised",
+						"displaySpecies": "Mimikyu Disguised",
+						"active": true,
+						"condition": "100/100",
+						"hp": 100,
+						"maxHp": 100,
+					}],
+				},
+			},
+		},
+		"events": [],
+	}, false)
+
+	state.apply_event_conditions([{
+		"type": "status",
+		"target": "p1a: Mimikyu",
+		"status": "par",
+		"state": "start",
+	}])
+
+	var mimikyu: Dictionary = state.get_player_team("p1")[0]
+	_check_equal(mimikyu.get("status", ""), "par", "public base Mimikyu status updates disguised roster form")
+	_check_equal(mimikyu.get("condition", ""), "100/100 par", "Mimikyu roster condition retains public paralysis")
+
+	state.apply_event_conditions([{
+		"type": "switch",
+		"target": "p1a: Mimikyu",
+		"species": "Mimikyu-Busted",
+		"displaySpecies": "Mimikyu-Busted",
+		"condition": "88/100 par",
+	}])
+	mimikyu = state.get_player_team("p1")[0]
+	_check_equal(mimikyu.get("displaySpecies", ""), "Mimikyu-Busted", "public busted form keeps the same roster entry")
+	_check_equal(mimikyu.get("status", ""), "par", "public busted switch condition retains paralysis")
+
+
+func _check_public_mimikyu_forme_change_updates_active_sprite_species() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "mimikyu-public-forme-change-test",
+		"requests": {
+			"p1": {
+				"side": {
+					"pokemon": [
+						{
+							"ident": "p1: Mimikyu",
+							"species": "Mimikyu-Disguised",
+							"displaySpecies": "Mimikyu-Disguised",
+							"active": true,
+							"condition": "100/100",
+						},
+					],
+				},
+			},
+		},
+	}, true)
+	state.apply_event_conditions([
+		{
+			"type": "formeChange",
+			"target": "p1a: Mimikyu",
+			"species": "Mimikyu-Busted",
+		},
+	])
+
+	_check_equal(state.get_active_pokemon_species("p1"), "Mimikyu-Busted", "ordered forme change updates active Mimikyu display species")
 
 
 func _check_newer_damage_and_faint_override_hp_memory() -> void:

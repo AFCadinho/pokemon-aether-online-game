@@ -34,6 +34,7 @@ func load_from_api_response(
 		transformed_species_by_ident.clear()
 		mega_species_by_ident.clear()
 		hp_snapshot_by_ident.clear()
+		field.clear()
 
 	battle_id = next_battle_id
 	format_id = str(response.get("formatId", ""))
@@ -52,7 +53,10 @@ func load_from_api_response(
 		_debug_print_requests_snapshot("load_from_api_response after requests assignment")
 	battle_log = response.get("log", [])
 	battle_status_api = response.get("state", {})
-	field = response.get("field", {})
+	if response.has("field"):
+		var next_field_value: Variant = response.get("field", {})
+		if next_field_value is Dictionary:
+			field = (next_field_value as Dictionary).duplicate(true)
 	var next_timer: Variant = response.get("timerState", {})
 	if next_timer is Dictionary:
 		timer_state = (next_timer as Dictionary).duplicate(true)
@@ -428,6 +432,7 @@ func _normalize_public_species_base_key(species: String) -> String:
 		"-therian", "-incarnate", "-origin", "-altered",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
+		"-disguised", "-busted",
 	]:
 		if normalized.ends_with(suffix):
 			return normalized.substr(0, normalized.length() - suffix.length())
@@ -489,6 +494,10 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 
 		if event_type == "transform":
 			_apply_transform_event_to_requests(event)
+			continue
+
+		if event_type == "formeChange":
+			_apply_forme_change_event_to_requests(event)
 			continue
 
 		if event_type == "mega" or event_type == "primal":
@@ -847,6 +856,20 @@ func _apply_transform_event_to_requests(event: Dictionary) -> void:
 
 	pokemon_data["displaySpecies"] = species
 	pokemon_data["transformedSpecies"] = species
+
+func _apply_forme_change_event_to_requests(event: Dictionary) -> void:
+	var target_ident := str(event.get("target", ""))
+	var species := str(event.get("species", event.get("displaySpecies", ""))).strip_edges()
+	if target_ident == "" or species == "":
+		return
+
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+	if pokemon_data.is_empty():
+		return
+
+	pokemon_data["displaySpecies"] = species
 
 func _apply_mega_event_to_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))
@@ -1289,6 +1312,7 @@ func _find_unique_team_index_by_ident(team: Array, normalized_ident: String) -> 
 
 func _find_unique_active_team_index(team: Array, target_ident: String) -> int:
 	var target_name := _get_pokemon_name_from_ident(target_ident)
+	var target_base_name := _normalize_public_species_base_key(target_name)
 	var found_index := -1
 	for index in range(team.size()):
 		var pokemon_value: Variant = team[index]
@@ -1299,8 +1323,13 @@ func _find_unique_active_team_index(team: Array, target_ident: String) -> int:
 		if not bool(pokemon.get("active", false)):
 			continue
 
-		if target_name != "" and _get_pokemon_name_from_ident(str(pokemon.get("ident", ""))) != target_name:
-			continue
+		if target_name != "":
+			var pokemon_name := _get_pokemon_name_from_ident(str(pokemon.get("ident", "")))
+			if (
+				pokemon_name != target_name
+				and _normalize_public_species_base_key(pokemon_name) != target_base_name
+			):
+				continue
 
 		if found_index >= 0:
 			return -2
@@ -1311,6 +1340,7 @@ func _find_unique_active_team_index(team: Array, target_ident: String) -> int:
 
 
 func _find_unique_team_index_by_pokemon_name(team: Array, target_name: String) -> int:
+	var target_base_name := _normalize_public_species_base_key(target_name)
 	var found_index := -1
 	for index in range(team.size()):
 		var pokemon_value: Variant = team[index]
@@ -1318,7 +1348,11 @@ func _find_unique_team_index_by_pokemon_name(team: Array, target_name: String) -
 			continue
 
 		var pokemon: Dictionary = pokemon_value as Dictionary
-		if _get_pokemon_name_from_ident(str(pokemon.get("ident", ""))) != target_name:
+		var pokemon_name := _get_pokemon_name_from_ident(str(pokemon.get("ident", "")))
+		if (
+			pokemon_name != target_name
+			and _normalize_public_species_base_key(pokemon_name) != target_base_name
+		):
 			continue
 
 		if found_index >= 0:

@@ -485,6 +485,8 @@ func format_field_effect_event(event: Dictionary) -> String:
 		return ""
 
 	match state:
+		"swap":
+			return "The side conditions switched sides."
 		"start":
 			var source_message := _format_field_effect_start_source_message(event, effect_name)
 			if source_message != "":

@@ -104,6 +104,20 @@ func get_response_batch_seq(response: Dictionary) -> int:
 func get_response_event_seq_end(response: Dictionary) -> int:
 	return _get_event_seq(response)
 
+func should_skip_duplicate_render(response: Dictionary, requested_skip: bool) -> bool:
+	if not requested_skip:
+		return false
+
+	var event_seq_end := get_response_event_seq_end(response)
+	if event_seq_end < 0:
+		return true
+
+	# A duplicate delivery only proves that the batch was queued before. It does
+	# not prove that its render completed. If the first delivery failed or was
+	# interrupted before advancing the render cursor, promote this duplicate to
+	# a real retry instead of silently discarding the only recoverable copy.
+	return event_seq_end <= last_rendered_seq
+
 func enqueue_response(response: Dictionary, source: String, apply_event_conditions := true, metadata: Dictionary = {}) -> Dictionary:
 	var normalized_response: Dictionary = response.duplicate(true)
 	var entry_metadata: Dictionary = metadata.duplicate(true)

@@ -52,6 +52,7 @@ var last_spectator_event_seq := 0
 var spectator_cursor_valid := false
 var received_battle_event_count := 0
 var timer_projection := BattleTimerProjectionClass.new()
+var pending_render_ack_payload: Dictionary = {}
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_IN and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN and joined:
@@ -128,6 +129,7 @@ func connect_room(
 		spectator_cursor_valid = false
 		received_battle_event_count = 0
 		timer_projection.reset()
+		pending_render_ack_payload.clear()
 	active_room_code = room_code.strip_edges().to_upper()
 	active_viewer_role = "spectator" if viewer_role.strip_edges().to_lower() == "spectator" else "participant"
 	active_player_id = "p2" if player_id == "p2" else "p1"
@@ -247,6 +249,7 @@ func disconnect_room() -> void:
 	spectator_cursor_valid = false
 	received_battle_event_count = 0
 	timer_projection.reset()
+	pending_render_ack_payload.clear()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
 	websocket = WebSocketPeer.new()
@@ -319,21 +322,6 @@ func send_render_ack(
 ) -> bool:
 	if active_viewer_role == "spectator":
 		return false
-	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
-		if DEBUG_PVP_REALTIME:
-			_log_realtime(
-				"send_render_ack blocked because socket is not open",
-				"state=%s room=%s player=%s battle=%s batch=%s lastRenderedSeq=%d" % [
-					websocket.get_ready_state(),
-					active_room_code,
-					player_id,
-					battle_id,
-					event_batch_id,
-					last_rendered_seq,
-				]
-			)
-		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
-		return false
 
 	var normalized_player_id := "p2" if player_id == "p2" else "p1"
 	var payload := {
@@ -349,6 +337,25 @@ func send_render_ack(
 		payload["turn"] = turn
 	if phase.strip_edges() != "":
 		payload["phase"] = phase.strip_edges()
+	pending_render_ack_payload = payload.duplicate(true)
+
+	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN or not joined:
+		if DEBUG_PVP_REALTIME:
+			_log_realtime(
+				"send_render_ack deferred until socket rejoins",
+				"state=%s joined=%s room=%s player=%s battle=%s batch=%s lastRenderedSeq=%d" % [
+					websocket.get_ready_state(),
+					str(joined),
+					active_room_code,
+					player_id,
+					battle_id,
+					event_batch_id,
+					last_rendered_seq,
+				]
+			)
+		if websocket.get_ready_state() == WebSocketPeer.STATE_CLOSED and not connecting:
+			connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
+		return false
 
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
@@ -368,6 +375,26 @@ func send_render_ack(
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("send_render_ack result", "batch=%s error=%s" % [event_batch_id, error])
 	return error == OK
+
+
+func _send_pending_render_ack_after_join() -> void:
+	if pending_render_ack_payload.is_empty():
+		return
+	if active_viewer_role == "spectator" or not joined:
+		return
+	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		return
+
+	websocket.send_text(JSON.stringify(pending_render_ack_payload))
+
+
+func _retire_pending_render_ack(event_batch_id: String) -> void:
+	if event_batch_id.strip_edges() == "":
+		return
+	if str(pending_render_ack_payload.get("eventBatchId", "")).strip_edges() != event_batch_id.strip_edges():
+		return
+
+	pending_render_ack_payload.clear()
 
 
 func _process_packets() -> void:
@@ -395,6 +422,7 @@ func _process_packets() -> void:
 			active_match_id = str(message.get("matchId", active_match_id)).strip_edges()
 			active_viewer_role = "spectator" if str(message.get("viewerRole", active_viewer_role)).to_lower() == "spectator" else "participant"
 			room_joined.emit(active_room_code, active_player_id, active_battle_id)
+			_send_pending_render_ack_after_join()
 			continue
 		if message_type == "pong":
 			awaiting_pong = false
@@ -439,6 +467,7 @@ func _process_packets() -> void:
 			_handle_battle_events_message(message)
 			continue
 		if message_type == "pvp.phase_update":
+			_retire_pending_render_ack(str(message.get("eventBatchId", "")))
 			battle_update_received.emit(message)
 			continue
 		if message_type == "pvp.resync_required":

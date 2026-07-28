@@ -13,6 +13,8 @@ func _init() -> void:
 	_check_terrain_replacement_and_end()
 	_check_screen_start()
 	_check_snapshot_direct_sync_for_reconnect()
+	_check_rendered_turn_tracks_effect_start()
+	_check_court_change_swaps_side_conditions()
 
 	quit(1 if failed else 0)
 
@@ -229,7 +231,7 @@ func _check_snapshot_direct_sync_for_reconnect() -> void:
 				"effectId": "SunnyDay",
 			},
 		],
-	})
+	}, 11)
 
 	_check_equal(
 		_find_effect(state.get_field_effects(), "stealthrock").is_empty(),
@@ -241,6 +243,60 @@ func _check_snapshot_direct_sync_for_reconnect() -> void:
 		false,
 		"snapshot direct sync shows weather without animation batch"
 	)
+	_check_equal(state.get_turn(), 11, "snapshot direct sync restores presentation turn")
+
+
+func _check_rendered_turn_tracks_effect_start() -> void:
+	var state = BattlePresentationStateScript.new()
+	state.sync_field_from_snapshot({"effects": []}, 7)
+	state.apply_event({
+		"type": "fieldEffect",
+		"scope": "field",
+		"effectType": "weather",
+		"effect": "SunnyDay",
+		"effectId": "SunnyDay",
+		"state": "start",
+		"minDuration": 5,
+		"maxDuration": 8,
+	}, state.get_turn())
+	state.set_turn(8)
+
+	var sun := _find_effect(state.get_field_effects(), "sunnyday")
+	_check_equal(int(sun.get("startedTurn", 0)), 7, "weather start keeps the rendered turn")
+	_check_equal(state.get_turn(), 8, "turn cursor advances only at the rendered turn event")
+
+func _check_court_change_swaps_side_conditions() -> void:
+	var state = BattlePresentationStateScript.new()
+	state.sync_field_from_snapshot({
+		"effects": [
+			{
+				"scope": "side",
+				"side": "p1",
+				"effectType": "sideCondition",
+				"effect": "move: Stealth Rock",
+				"effectId": "stealthrock",
+			},
+			{
+				"scope": "side",
+				"side": "p2",
+				"effectType": "sideCondition",
+				"effect": "move: Spikes",
+				"effectId": "spikes",
+				"layers": 2,
+			},
+		],
+	}, 7)
+	state.apply_event({
+		"type": "fieldEffect",
+		"scope": "field",
+		"effectType": "sideCondition",
+		"effect": "sideConditions",
+		"state": "swap",
+	}, state.get_turn())
+
+	_check_equal(str(_find_effect(state.get_field_effects(), "stealthrock").get("side", "")), "p2", "Court Change moves Stealth Rock to p2")
+	_check_equal(str(_find_effect(state.get_field_effects(), "spikes").get("side", "")), "p1", "Court Change moves Spikes to p1")
+	_check_equal(int(_find_effect(state.get_field_effects(), "spikes").get("layers", 0)), 2, "Court Change preserves hazard layers")
 
 
 func _find_effect(effects: Array, effect_key: String) -> Dictionary:

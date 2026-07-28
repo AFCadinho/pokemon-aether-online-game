@@ -394,7 +394,7 @@ func _check_pvp_render_restores_canonical_party_state() -> void:
 	_check_equal(restore_source.contains("pvp_response_order.canonical_snapshot_for_render_cursor("), true, "restore cannot select a canonical PvP projection ahead of the rendered cursor")
 	_check_equal(restore_source.contains("battle_state.load_from_api_response(canonical_response, false)"), true, "canonical snapshot replaces temporary BattleState changes without replaying history")
 	_check_equal(restore_source.contains("_sync_player_save_party_status_from_battle_state()"), true, "canonical restore synchronizes local party HP and faint state")
-	_check_equal(restore_source.contains("_sync_presentation_field_from_battle_state()"), true, "canonical restore synchronizes weather and field state")
+	_check_equal(restore_source.contains("_sync_presentation_field_from_battle_state()"), false, "batch restore cannot overwrite ordered weather and hazard presentation")
 	_check_equal(restore_source.contains("_update_battle_status_panels()"), true, "canonical restore refreshes weather visuals and field timers")
 	_check_equal(restore_source.contains("_update_party_slots()"), true, "party rails refresh after canonical restore")
 	_check_equal(temporary_source.contains("target_is_fainted and not event_proves_alive"), true, "ambiguous switch presentation cannot revive a fainted target")
@@ -538,6 +538,11 @@ func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
 		true,
 		"rendering_events to awaiting_force_switch always waits for released participant requests"
 	)
+	_check_equal(
+		force_wait_source.contains("if _is_spectator_battle():\n\t\treturn false"),
+		true,
+		"spectators never block their render queue on participant force-switch prompts"
+	)
 
 	var show_moves_index := source.find("func _show_moves() -> void:")
 	var show_moves_next_index := source.find("\nfunc ", show_moves_index + 1)
@@ -605,15 +610,15 @@ func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
 	var condition_index := source.find("func _reapply_rendered_condition_events(events: Array) -> void:")
 	var condition_next_index := source.find("\nfunc ", condition_index + 1)
 	var condition_source := source.substr(condition_index, condition_next_index - condition_index)
-	var field_index := source.find("func _reapply_rendered_field_effect_events(events: Array) -> void:")
-	var field_next_index := source.find("\nfunc ", field_index + 1)
-	var field_source := source.substr(field_index, field_next_index - field_index)
 	var sync_index := source.find("func _sync_presentation_field_from_battle_state() -> void:")
 	var sync_next_index := source.find("\nfunc ", sync_index + 1)
 	var sync_source := source.substr(sync_index, sync_next_index - sync_index)
+	var reconciliation_index := source.find("func _apply_pvp_snapshot_reconciliation(")
+	var reconciliation_next_index := source.find("\nfunc ", reconciliation_index + 1)
+	var reconciliation_source := source.substr(reconciliation_index, reconciliation_next_index - reconciliation_index)
 
 	_check_equal(restore_source.contains("_reapply_rendered_condition_events(rendered_events)"), true, "canonical restore retains rendered hazard HP")
-	_check_equal(restore_source.contains("_reapply_rendered_field_effect_events(rendered_events)"), true, "canonical restore retains rendered weather changes")
+	_check_equal(restore_source.contains("_reapply_rendered_field_effect_events(rendered_events)"), false, "canonical restore cannot replay field starts against a future turn")
 	_check_equal(condition_source.contains('"damage", "heal", "faint", "status":'), true, "restore replays condition-changing events")
 	_check_equal(condition_source.contains('"switch", "drag":'), true, "restore recognizes public spectator switch events")
 	_check_equal(condition_source.contains("if _is_spectator_battle():"), true, "only spectators replay switches over a request-free public batch")
@@ -628,8 +633,10 @@ func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
 		true,
 		"weather and terrain disappear only after their ordered end event is presented"
 	)
-	_check_equal(field_source.contains('!= "fieldEffect"'), true, "field replay accepts only ordered field events")
 	_check_equal(sync_source.contains('if not battle_state.field.has("effects"):'), true, "omitted realtime field snapshot cannot erase active weather")
+	_check_equal(reconciliation_source.contains("_sync_presentation_field_from_battle_state()"), true, "cursor-safe snapshot reconciliation can recover complete field presentation")
+	_check_equal(render_events_source.contains("presentation_state.set_turn(turn)"), true, "turn UI advances at the ordered turn event")
+	_check_equal(render_events_source.contains("_update_battle_status_panels()"), true, "ordered turn events refresh the visible turn and effect counters")
 
 
 func _check_authoritative_render_batch_survives_transport_reordering() -> void:
